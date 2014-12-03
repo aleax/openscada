@@ -163,7 +163,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 
     if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->nodeRes(),false);
-	XMLNode *nd, *fnd, *el;
+	XMLNode *nd, *fnd = NULL, *el;
 	string vl, vl_tr;
 	vector<string> cf_el;
 
@@ -239,7 +239,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
 
     //Load from Config-file if tbl no present
     ResAlloc res(SYS->nodeRes(), false);
-    XMLNode *nd, *fnd, *el;
+    XMLNode *nd, *fnd = NULL, *el;
     string vl, vl_tr;
     vector<string> cf_el;
 

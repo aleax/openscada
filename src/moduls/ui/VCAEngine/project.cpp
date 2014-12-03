@@ -941,7 +941,7 @@ string Page::calcProg( )
 string Page::calcProgStors( const string &attr )
 {
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
-    if((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size()) && rez.find(ownerProj()->DB()) == string::npos)
+    if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerProj()->DB()) == string::npos)
 	rez = ownerProj()->DB() + ";" + rez;
     return rez;
 }
@@ -1482,7 +1482,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 PageWdg::PageWdg( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg())
 {
     cfg("ID").setS(id());
-    m_lnk = true;
+    mLnk = true;
     setParentNm(isrcwdg);
 }
 

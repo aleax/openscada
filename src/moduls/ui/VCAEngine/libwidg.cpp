@@ -541,7 +541,7 @@ string LWidget::calcProg( )
 string LWidget::calcProgStors( const string &attr )
 {
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
-    if((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size()) && rez.find(ownerLib().DB()) == string::npos)
+    if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerLib().DB()) == string::npos)
 	rez = ownerLib().DB() + ";" + rez;
     return rez;
 }
@@ -793,7 +793,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg())
 {
     cfg("ID").setS(id());
-    m_lnk = true;
+    mLnk = true;
     setParentNm(isrcwdg);
 }
 

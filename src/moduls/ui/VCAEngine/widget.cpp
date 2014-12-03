@@ -35,7 +35,7 @@ using namespace VCA;
 pthread_mutex_t Widget::mtxAttrCon = PTHREAD_MUTEX_INITIALIZER;
 
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), mEnable(false), m_lnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
+    mId(id), mEnable(false), mLnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
 
@@ -453,10 +453,28 @@ void Widget::wClear( )
     modif();
 }
 
-void Widget::wChDown( const string &ia )
+string Widget::wChDown( const string &ia )
 {
     AutoHD<Widget> parw = parent();
-    if(parw.freeStat()) return;
+
+    //Link process
+    if(isLink()) {
+	Widget *ownW = dynamic_cast<Widget*>(nodePrev(true));
+	parw = ownW->parent();
+	if(!parw.at().wdgPresent(id()))
+	    try {
+		// Add and copy from source
+		string pName = parentNm();
+		if(pName.find(parw.at().path()+"/") == 0) pName = parent().at().parentNm();
+		parw.at().wdgAdd(id(), "", pName);
+		(TCntrNode&)parw.at().wdgAt(id()).at() = (TCntrNode&)*this;
+	    }
+	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	parw = parw.at().wdgAt(id());
+	// Relink original to source
+	if(parentNm() != parw.at().path()) { setParentNm(parw.at().path()); setEnable(true); }
+    }
+    if(parw.freeStat()) return "";
 
     //Generic clear
     if(ia.empty() && ico() != parw.at().ico()) { parw.at().setIco(ico()); setIco(""); }
@@ -483,19 +501,11 @@ void Widget::wChDown( const string &ia )
 
     //Check for included widgets
     if(ia.empty() && isContainer() && !isLink()) {
-	//Check for widget's deletion
+	//Check for widget's upadte/add
 	wdgList(ls);
-	for(unsigned i_w = 0; i_w < ls.size(); i_w++) {
-	    if(!parw.at().wdgPresent(ls[i_w]))
-		try {
-		    parw.at().wdgAdd(ls[i_w],"","");
-		    (TCntrNode&)parw.at().wdgAt(ls[i_w]).at() = (TCntrNode&)wdgAt(ls[i_w]).at();
-		}
-		catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
-	    else wdgAt(ls[i_w]).at().wChDown();
-	}
+	for(unsigned i_w = 0; i_w < ls.size(); i_w++) wdgAt(ls[i_w]).at().wChDown();
 
-	//No present widget's add and clear call
+	//No present widget's delete
 	parw.at().wdgList(ls);
 	for(unsigned i_w = 0; i_w < ls.size(); i_w++)
 	    if(!wdgPresent(ls[i_w]))
@@ -503,6 +513,8 @@ void Widget::wChDown( const string &ia )
     }
 
     modif();
+
+    return parw.at().path();
 }
 
 void Widget::attrList( vector<string> &list )
@@ -930,7 +942,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    modif();
 	}
     }
-    else if(a_path == "/wdg/cfg/chDown" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID)) wChDown(opt->attr("attr"));
+    else if(a_path == "/wdg/cfg/chDown" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID))
+	opt->setAttr("chParent", wChDown(opt->attr("attr")));
     else if(a_path == "/wdg/u_lst" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);

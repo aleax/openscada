@@ -1372,6 +1372,7 @@ void VisDevelop::visualItDownParent( const string &elWa )
 	XMLNode req("set");
 	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fchDown")->setAttr("attr", workAttr);
 	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+	else emit modifiedItem(req.attr("chParent"));
     }
 }
 

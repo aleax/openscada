@@ -1,4 +1,6 @@
 2014-12-03 Roman
+- FIX:SYS: Some build warnings fixed
+- FIX:UI.{VCAEngine,Vision}: Changes down procedure mostly fixed and adapted for update the parent widget into open for edit state.
 - FIX:TConfig: extVal() processing to the copy is added.
 - FIX:TTransportIn: Early stop into postDisable() is added for prevent crash at stop into the destructor with freed data into heir object.
 

@@ -1033,7 +1033,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::Bin: {
 	    string svl, evl;
 	    sout.reserve(in.size()/2);
-	    for(unsigned iCh = 0; iCh < (int)in.size(); ++iCh)
+	    for(unsigned iCh = 0; iCh < in.size(); ++iCh)
 		if(isxdigit(in[iCh])) {
 		    sout += (char)strtol(in.substr(iCh,2).c_str(),NULL,16); iCh++;
 		}

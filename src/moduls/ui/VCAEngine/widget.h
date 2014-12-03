@@ -177,7 +177,7 @@ class Widget : public TCntrNode
 	virtual string calcProgStors( const string &attr = "" )	{ return ""; }	//Storages get
 	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
 	virtual bool   isContainer( );				//Is container (Is define of the terminator)
-	virtual bool   isLink( )	{ return m_lnk; }	//Widget as link
+	virtual bool   isLink( )	{ return mLnk; }	//Widget as link
 	bool stlLock( )			{ return mStlLock; }	//Style lock
 
 	virtual void setName( const string &inm );
@@ -195,7 +195,7 @@ class Widget : public TCntrNode
 	virtual void loadIO( )		{ }			//Load widget's IO
 	virtual void saveIO( )		{ }			//Save widget's IO
 	virtual void wClear( );					//Widget's changes clear
-	virtual void wChDown( const string &ia = "" );		//Widget's changes put down
+	virtual string wChDown( const string &ia = "" );	//Widget's changes put down
 
 	// Enable stat
 	bool enable( );
@@ -268,7 +268,7 @@ class Widget : public TCntrNode
 
 	unsigned char	inclWdg		:3;
 	unsigned char	mEnable		:1;	//Enable status
-	unsigned char	m_lnk		:1;	//Widget as link
+	unsigned char	mLnk		:1;	//Widget as link
 	unsigned char	mStlLock	:1;	//Style lock
 	unsigned char	BACrtHoldOvr	:1;	//Base attrs creation hold over to enable and inherit stage
 	unsigned char	ChldResrv	:1;	//Childs reserve attribute

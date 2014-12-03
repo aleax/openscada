@@ -568,7 +568,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));*/
 	c_el.cfg("CFG_VAL").setNoTransl(!attr.at().isTransl());
 		/*(attr.at().type() == TFld::String &&
-		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)))); /*&&
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)))); &&
 		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))));*/
 
 	if(!SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el,false,true)) continue;
