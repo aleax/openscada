@@ -64,9 +64,8 @@ void TVariant::setType( Type tp, bool fix )
     mFixedTp = fix;
     if(tp == type()) return;
 
-    //> Free
-    switch(mType)
-    {
+    //Free
+    switch(mType) {
 	case String:
 	    if(mSize >= sizeof(val.sMini))	free(val.sPtr);
 	    mSize = 0;
@@ -78,10 +77,9 @@ void TVariant::setType( Type tp, bool fix )
 	default: break;
     }
 
-    //> Create
+    //Create
     mType = tp;
-    switch(mType)
-    {
+    switch(mType) {
 	/*case Boolean:	setB(EVAL_BOOL);	break;
 	case Integer:	setI(EVAL_INT);		break;
 	case Real:	setR(EVAL_REAL);	break;*/
@@ -94,8 +92,7 @@ void TVariant::setType( Type tp, bool fix )
 bool TVariant::operator==( const TVariant &vr ) const
 {
     if(vr.type() == type())
-	switch(type())
-	{
+	switch(type()) {
 	    case Boolean:	return (vr.getB()==getB());
 	    case Integer:	return (vr.getI()==getI());
 	    case Real:		return (vr.getR()==getR());
@@ -111,8 +108,7 @@ bool TVariant::operator!=( const TVariant &vr ) const	{ return !operator==(vr); 
 
 TVariant &TVariant::operator=( const TVariant &vr )
 {
-    switch(vr.type())
-    {
+    switch(vr.type()) {
 	case Null:
 	    if(!mFixedTp) setType(Null);
 	    else setS("");
@@ -128,8 +124,7 @@ TVariant &TVariant::operator=( const TVariant &vr )
 
 bool TVariant::isEVal( ) const
 {
-    switch(type())
-    {
+    switch(type()) {
 	case String:	return (getS()==EVAL_STR);
 	case Integer:	return (getI()==EVAL_INT);
 	case Real:	return (getR()==EVAL_REAL);
@@ -142,10 +137,9 @@ bool TVariant::isEVal( ) const
 
 char TVariant::getB( ) const
 {
-    switch(type())
-    {
+    switch(type()) {
 	case Null:	return false;
-	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(tvl.c_str()); }
+	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_BOOL : (bool)s2i(tvl); }
 	case Integer:	{ int64_t tvl = getI(); return (tvl==EVAL_INT) ? EVAL_BOOL : (bool)tvl; }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_BOOL : (bool)tvl; }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_BOOL : true; }
@@ -157,9 +151,8 @@ char TVariant::getB( ) const
 
 int64_t TVariant::getI( ) const
 {
-    switch(type())
-    {
-	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_INT : atoll(tvl.c_str()); }
+    switch(type()) {
+	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_INT : s2ll(tvl); }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_INT : (int64_t)tvl; }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_INT : tvl; }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_INT : 1; }
@@ -171,9 +164,8 @@ int64_t TVariant::getI( ) const
 
 double TVariant::getR( ) const
 {
-    switch(type())
-    {
-	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_REAL : atof(tvl.c_str()); }
+    switch(type()) {
+	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_REAL : s2r(tvl); }
 	case Integer:	{ int64_t tvl = getI();return (tvl==EVAL_INT) ? EVAL_REAL : tvl; }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_REAL : tvl; }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_REAL : 1; }
@@ -185,8 +177,7 @@ double TVariant::getR( ) const
 
 string TVariant::getS( ) const
 {
-    switch(type())
-    {
+    switch(type()) {
 	case Integer:	{ int64_t tvl = getI();return (tvl==EVAL_INT) ? EVAL_STR : ll2s(tvl); }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_STR : r2s(tvl); }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_STR : i2s(tvl); }
@@ -209,8 +200,7 @@ AutoHD<TVarObj>	TVariant::getO( ) const
 void TVariant::setB( char ivl )
 {
     if(type() != Boolean && !mFixedTp) setType(Boolean);
-    switch(type())
-    {
+    switch(type()) {
 	case String:	setS((ivl==EVAL_BOOL) ? EVAL_STR : i2s(ivl));	break;
 	case Integer:	setI((ivl==EVAL_BOOL) ? EVAL_INT : ivl);	break;
 	case Real:	setR((ivl==EVAL_BOOL) ? EVAL_REAL : ivl);	break;
@@ -222,8 +212,7 @@ void TVariant::setB( char ivl )
 void TVariant::setI( int64_t ivl )
 {
     if(type() != Integer && !mFixedTp) setType(Integer);
-    switch(type())
-    {
+    switch(type()) {
 	case String:	setS((ivl==EVAL_INT) ? EVAL_STR : ll2s(ivl));	break;
 	case Integer:	val.i = ivl;					break;
 	case Real:	setR((ivl==EVAL_INT) ? EVAL_REAL : ivl);	break;
@@ -235,9 +224,8 @@ void TVariant::setI( int64_t ivl )
 void TVariant::setR( double ivl )
 {
     if(type() != Real && !mFixedTp) setType(Real);
-    switch(type())
-    {
-	case String:	setS((ivl==EVAL_REAL) ? EVAL_STR : r2s(ivl));	break;
+    switch(type()) {
+	case String:	setS((ivl==EVAL_REAL) ? EVAL_STR : r2s(ivl));		break;
 	case Integer:	setI((ivl==EVAL_REAL) ? EVAL_INT : (int64_t)ivl);	break;
 	case Real:	val.r = ivl;						break;
 	case Boolean:	setB((ivl==EVAL_REAL) ? EVAL_BOOL : (bool)ivl);		break;
@@ -248,22 +236,18 @@ void TVariant::setR( double ivl )
 void TVariant::setS( const string &ivl )
 {
     if(type() != String && !mFixedTp) setType(String);
-    switch(type())
-    {
+    switch(type()) {
 	case String:
 	    if(ivl.size() > 130000000)	throw TError("TVariant",_("Too big string length (> 130 MB)!"));
-	    if(ivl.size() < sizeof(val.sMini))
-	    {
+	    if(ivl.size() < sizeof(val.sMini)) {
 		if(mSize >= sizeof(val.sMini)) free(val.sPtr);
 		memcpy(val.sMini, ivl.data(), ivl.size());
 		val.sMini[ivl.size()] = 0;
 	    }
-	    else
-	    {
+	    else {
 		if(mSize < sizeof(val.sMini)) val.sPtr = (char*)malloc(ivl.size()+1);
 		else if(ivl.size() != mSize) val.sPtr = (char*)realloc(val.sPtr,ivl.size()+1);
-		if(!val.sPtr)
-		{
+		if(!val.sPtr) {
 		    mSize = 0;
 		    val.sMini[mSize] = 0;
 		    throw TError("TVariant",_("Memory alloc for big string length (%d) error!"),ivl.size());
@@ -273,9 +257,9 @@ void TVariant::setS( const string &ivl )
 	    }
 	    mSize = ivl.size();
 	    break;
-	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : atoll(ivl.c_str()));	break;
-	case Real:	setR((ivl==EVAL_STR) ? EVAL_REAL : atof(ivl.c_str()));	break;
-	case Boolean:	setB((ivl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(ivl.c_str()));	break;
+	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : s2ll(ivl));	break;
+	case Real:	setR((ivl==EVAL_STR) ? EVAL_REAL : s2r(ivl));	break;
+	case Boolean:	setB((ivl==EVAL_STR) ? EVAL_BOOL : (bool)s2i(ivl));	break;
 	case Object:	setO((ivl==EVAL_STR) ? AutoHD<TVarObj>(new TEValObj()) : TVarObj::parseStrXML(ivl,NULL,getO())); break;
 	default: break;
     }
@@ -384,13 +368,12 @@ string TVarObj::getStrXML( const string &oid )
 
     oRes.resRequestR();
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
-	switch(ip->second.type())
-	{
-	    case TVariant::String:	nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n"; break;
-	    case TVariant::Integer:	nd += "<int p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</int>\n"; break;
-	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</real>\n"; break;
-	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</bool>\n"; break;
-	    case TVariant::Object:	nd += ip->second.getO().at().getStrXML(ip->first); break;
+	switch(ip->second.type()) {
+	    case TVariant::String: nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n";	break;
+	    case TVariant::Integer:nd += "<int p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</int>\n";	break;
+	    case TVariant::Real:   nd += "<real p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</real>\n";	break;
+	    case TVariant::Boolean:nd += "<bool p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</bool>\n";	break;
+	    case TVariant::Object: nd += ip->second.getO().at().getStrXML(ip->first); break;
 	    default: break;
 	}
     oRes.resRelease();
@@ -402,23 +385,21 @@ string TVarObj::getStrXML( const string &oid )
 AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVarObj> prev )
 {
     XMLNode oTree;
-    if(!nd)
-    {
+    if(!nd) {
 	try { oTree.load(str, 0, Mess->charset()); }
 	catch(TError err) { return prev; }
 	nd = &oTree;
     }
-    //> Different objects process
-    if(nd->name() == "TVarObj")
-    {
+
+    //Different objects process
+    if(nd->name() == "TVarObj") {
 	TVarObj *rez = new TVarObj;
-	for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++)
-	{
+	for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++) {
 	    XMLNode *cNd = nd->childGet(i_ch);
 	    if(cNd->name() == "str")		rez->mProps[cNd->attr("p")] = cNd->text();
-	    else if(cNd->name() == "int")	rez->mProps[cNd->attr("p")] = (int64_t)atoll(cNd->text().c_str());
-	    else if(cNd->name() == "real")	rez->mProps[cNd->attr("p")] = atof(cNd->text().c_str());
-	    else if(cNd->name() == "bool")	rez->mProps[cNd->attr("p")] = (char)atoi(cNd->text().c_str());
+	    else if(cNd->name() == "int")	rez->mProps[cNd->attr("p")] = (int64_t)s2ll(cNd->text());
+	    else if(cNd->name() == "real")	rez->mProps[cNd->attr("p")] = s2r(cNd->text());
+	    else if(cNd->name() == "bool")	rez->mProps[cNd->attr("p")] = (char)s2i(cNd->text());
 	    else if(cNd->name() == "TVarObj")	rez->mProps[cNd->attr("p")] = TVarObj::parseStrXML("", cNd);
 	    else if(cNd->name() == "TEValObj")	rez->mProps[cNd->attr("p")] = TEValObj::parseStrXML(cNd);
 	    else if(cNd->name() == "TArrayObj")	rez->mProps[cNd->attr("p")] = TArrayObj::parseStrXML(cNd);
@@ -472,10 +453,7 @@ string TEValObj::getStrXML( const string &oid )
     return nd;
 }
 
-AutoHD<TVarObj> TEValObj::parseStrXML( XMLNode *nd )
-{
-    return new TEValObj;
-}
+AutoHD<TVarObj> TEValObj::parseStrXML( XMLNode *nd )	{ return new TEValObj; }
 
 //***********************************************************
 //* TArrayObj                                                *
@@ -483,14 +461,14 @@ AutoHD<TVarObj> TEValObj::parseStrXML( XMLNode *nd )
 //***********************************************************
 TVariant TArrayObj::propGet( const string &id )
 {
-    if(id == "length") return (int)mEls.size();
-    if(id.size() && isdigit(id[0]))	return arGet(atoi(id.c_str()));
+    if(id == "length")			return (int)mEls.size();
+    if(id.size() && isdigit(id[0]))	return arGet(s2i(id));
     return TVarObj::propGet(id);
 }
 
 void TArrayObj::propSet( const string &id, TVariant val )
 {
-    if(id.size() && isdigit(id[0]))	arSet(atoi(id.c_str()), val);
+    if(id.size() && isdigit(id[0]))	arSet(s2i(id), val);
     else TVarObj::propSet(id,val);
 }
 
@@ -501,26 +479,24 @@ string TArrayObj::getStrXML( const string &oid )
     nd = nd + ">\n";
 
     oRes.resRequestR();
-    //> Array items process
+    //Array items process
     for(unsigned ip = 0; ip < mEls.size(); ip++)
-	switch(mEls[ip].type())
-	{
-	    case TVariant::String:	nd += "<str>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</str>\n"; break;
-	    case TVariant::Integer:	nd += "<int>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</int>\n"; break;
-	    case TVariant::Real:	nd += "<real>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</real>\n"; break;
-	    case TVariant::Boolean:	nd += "<bool>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</bool>\n"; break;
-	    case TVariant::Object:	nd += mEls[ip].getO().at().getStrXML(); break;
+	switch(mEls[ip].type()) {
+	    case TVariant::String: nd += "<str>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</str>\n";	break;
+	    case TVariant::Integer:nd += "<int>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</int>\n";	break;
+	    case TVariant::Real:   nd += "<real>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</real>\n";	break;
+	    case TVariant::Boolean:nd += "<bool>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</bool>\n";	break;
+	    case TVariant::Object: nd += mEls[ip].getO().at().getStrXML(); break;
 	    default: break;
 	}
-    //> Object's properties process
+    //Object's properties process
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
-	switch(ip->second.type())
-	{
-	    case TVariant::String:	nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n"; break;
-	    case TVariant::Integer:	nd += "<int p='"+ip->first+"'>"+ip->second.getS()+"</int>\n"; break;
-	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+ip->second.getS()+"</real>\n"; break;
-	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+ip->second.getS()+"</bool>\n"; break;
-	    case TVariant::Object:	nd += ip->second.getO().at().getStrXML(ip->first); break;
+	switch(ip->second.type()) {
+	    case TVariant::String: nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n"; break;
+	    case TVariant::Integer:nd += "<int p='"+ip->first+"'>"+ip->second.getS()+"</int>\n";	break;
+	    case TVariant::Real:   nd += "<real p='"+ip->first+"'>"+ip->second.getS()+"</real>\n";	break;
+	    case TVariant::Boolean:nd += "<bool p='"+ip->first+"'>"+ip->second.getS()+"</bool>\n";	break;
+	    case TVariant::Object: nd += ip->second.getO().at().getStrXML(ip->first);			break;
 	    default: break;
 	}
     oRes.resRelease();
@@ -533,18 +509,16 @@ string TArrayObj::getStrXML( const string &oid )
 AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
 {
     TArrayObj *rez = new TArrayObj;
-    for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++)
-    {
+    for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++) {
 	XMLNode *cNd = nd->childGet(i_ch);
 	string p = cNd->attr("p");
 	TVariant vl;
 	if(cNd->name() == "str")		vl = cNd->text();
-	else if(cNd->name() == "int")		vl = (int64_t)atoll(cNd->text().c_str());
-	else if(cNd->name() == "real")		vl = atof(cNd->text().c_str());
-	else if(cNd->name() == "bool")		vl = (char)atoi(cNd->text().c_str());
+	else if(cNd->name() == "int")		vl = (int64_t)s2ll(cNd->text());
+	else if(cNd->name() == "real")		vl = s2r(cNd->text());
+	else if(cNd->name() == "bool")		vl = (char)s2i(cNd->text());
 	else vl = TVarObj::parseStrXML("", cNd);
-	if(!vl.isNull())
-	{
+	if(!vl.isNull()) {
 	    if(p.size()) rez->mProps[p] = vl;
 	    else rez->mEls.push_back(vl);
 	}
@@ -556,8 +530,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     // string join(string sep = ",") - join items to string
     //  sep - items separator
-    if(id == "join" || id == "toString" || id == "valueOf")
-    {
+    if(id == "join" || id == "toString" || id == "valueOf") {
 	string rez, sep = prms.size() ? prms[0].getS() : ",";
 	oRes.resRequestR();
 	for(unsigned i_e = 0; i_e < mEls.size(); i_e++)
@@ -567,8 +540,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // TArrayObj concat(TArrayObj arr) - concatenate array
     //  arr - source array
-    if(id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat())
-    {
+    if(id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat()) {
 	oRes.resRequestW();
 	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
 	for(unsigned i_p = 0; i_p < sArr->mEls.size(); i_p++) mEls.push_back(sArr->mEls[i_p]);
@@ -577,16 +549,14 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // int push(ElTp var, ...) - push variables to array
     //  var - variable
-    if(id == "push" && prms.size())
-    {
+    if(id == "push" && prms.size()) {
 	oRes.resRequestW();
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.push_back(prms[i_p]);
 	oRes.resRelease();
 	return (int)mEls.size();
     }
     // ElTp pop( ) - pop variable from array
-    if(id == "pop")
-    {
+    if(id == "pop") {
 	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
 	oRes.resRequestW();
 	TVariant val = mEls.back();
@@ -595,16 +565,14 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	return val;
     }
     // Array reverse( ) - reverse array's items order
-    if(id == "reverse")
-    {
+    if(id == "reverse") {
 	oRes.resRequestW();
 	reverse(mEls.begin(),mEls.end());
 	oRes.resRelease();
 	return this;
     }
     // ElTp shift( ) - shift array's items upward
-    if(id == "shift")
-    {
+    if(id == "shift") {
 	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
 	oRes.resRequestW();
 	TVariant val = mEls.front();
@@ -614,8 +582,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // int unshift(ElTp var, ...) - shift items to array upward
     //  var - variable
-    if(id == "unshift" && prms.size())
-    {
+    if(id == "unshift" && prms.size()) {
 	oRes.resRequestW();
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.insert(mEls.begin()+i_p, prms[i_p]);
 	oRes.resRelease();
@@ -624,8 +591,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     // Array slice(int beg, int end) - get array part from positon <beg> to <end> (exclude)
     //  beg - begin position
     //  end - end position
-    if(id == "slice" && prms.size())
-    {
+    if(id == "slice" && prms.size()) {
 	oRes.resRequestR();
 	int beg = prms[0].getI();
 	if(beg < 0) beg = mEls.size()+beg;
@@ -644,19 +610,17 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     //  beg - start position
     //  remN - removed items number
     //  val1, val2, ... - values for insert
-    if(id == "splice" && prms.size() >= 1)
-    {
+    if(id == "splice" && prms.size() >= 1) {
 	oRes.resRequestW();
 	int beg = vmax(0, prms[0].getI());
 	int cnt = (prms.size()>1) ? prms[1].getI() : mEls.size();
-	//> Delete elements
+	//  Delete elements
 	TArrayObj *rez = new TArrayObj();
-	for(int i_c = 0; i_c < cnt && beg < (int)mEls.size(); i_c++)
-	{
+	for(int i_c = 0; i_c < cnt && beg < (int)mEls.size(); i_c++) {
 	    rez->arSet(i_c, mEls[beg]);
 	    mEls.erase(mEls.begin()+beg);
 	}
-	//> Insert elements
+	//  Insert elements
 	for(unsigned i_c = 2; i_c < prms.size() && beg <= (int)mEls.size(); i_c++)
 	    mEls.insert(mEls.begin()+beg+i_c-2,prms[i_c]);
 	oRes.resRelease();
@@ -711,25 +675,23 @@ TRegExp::~TRegExp( )
 
 void TRegExp::setPattern( const string &rule, const string &flg )
 {
-    //> Global properties init
+    //Global properties init
     global = (flg.find('g')!=string::npos);
     ignoreCase = (flg.find('i')!=string::npos);
     multiline = (flg.find('m')!=string::npos);
     isSimplePat = false;
     pattern = rule;
-    if(flg.find('p') != string::npos)
-    {
+    if(flg.find('p') != string::npos) {
 	isSimplePat = !(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/');
 	if(!isSimplePat) pattern = rule.substr(1,rule.size()-2);
     }
 
-    //> Check for free
+    //Check for free
     if(isSimplePat && capv)	{ delete [] capv; capv = NULL; }
     if(regex)			{ pcre_free((pcre*)regex); regex = NULL; }
 
-    //> Alloc for regexp
-    if(!isSimplePat && pattern.size())
-    {
+    //Alloc for regexp
+    if(!isSimplePat && pattern.size()) {
 	const char *terr;
 	int erroff;
 	regex = pcre_compile(pattern.c_str(),PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),&terr,&erroff,NULL);
@@ -746,14 +708,14 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
     if(all && global)
 	for(int curPos = 0, i_n = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], i_n++)
 	    rez->arSet(i_n, string(vl.data()+capv[0],capv[1]-capv[0]));
-    else
-    {
+    else {
 	int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
 	for(int i_n = 0; i_n < n; i_n++)
 	    rez->arSet(i_n, string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
 	if(global) lastIndex = (n>0) ? capv[1] : 0;
 	if(n > 0) { rez->propSet("index", capv[0]); rez->propSet("input", vl); }
     }
+
     return rez;
 }
 
@@ -761,7 +723,8 @@ string TRegExp::replace( const string &vl, const string &str )
 {
     string rez = vl, repl;
     if(!regex) return rez;
-    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0; curPos = capv[0]+repl.size())
+    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0;
+	curPos = capv[0]+repl.size())
     {
 	repl = substExprRepl(str,rez,capv,n);
 	rez.replace(capv[0],capv[1]-capv[0],repl);
@@ -786,38 +749,33 @@ TArrayObj *TRegExp::split( const string &vl, int limit )
 
 bool TRegExp::test( const string &vl )
 {
-    //> Check by simple pattern
-    if(isSimplePat)
-    {
+    //Check by simple pattern
+    if(isSimplePat) {
 	bool mult_s = false;
 	int v_cnt = 0, p_cnt = 0;
 	int v_bck = -1, p_bck = -1;
 
-	while(true)
-        {
-            if(p_cnt >= (int)pattern.size() ) return true;
-            if(pattern[p_cnt] == '?')	{ v_cnt++; p_cnt++; mult_s = false; continue; }
-            if(pattern[p_cnt] == '*')	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
-            if(pattern[p_cnt] == '\\')	p_cnt++;
-            if(v_cnt >= (int)vl.size())  break;
-            if(pattern[p_cnt] == vl[v_cnt])
-            {
-                if(mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
-                v_cnt++; p_cnt++;
-            }
-            else
-            {
-                if(mult_s)
-        	{
-                    if(v_bck >= 0) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
-                    else v_cnt++;
-                }
-                else break;
-            }
-        }
-        return false;
+	while(true) {
+	    if(p_cnt >= (int)pattern.size() ) return true;
+	    if(pattern[p_cnt] == '?')	{ v_cnt++; p_cnt++; mult_s = false; continue; }
+	    if(pattern[p_cnt] == '*')	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
+	    if(pattern[p_cnt] == '\\')	p_cnt++;
+	    if(v_cnt >= (int)vl.size())  break;
+	    if(pattern[p_cnt] == vl[v_cnt]) {
+		if(mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
+		v_cnt++; p_cnt++;
+	    }
+	    else {
+		if(mult_s) {
+		    if(v_bck >= 0) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
+		    else v_cnt++;
+		}
+		else break;
+	    }
+	}
+	return false;
     }
-    //> Check by regular expression
+    //Check by regular expression
     if(!regex) return false;
     int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
     if(global) lastIndex = (n>0) ? capv[1] : 0;
@@ -835,17 +793,15 @@ string TRegExp::substExprRepl( const string &str, const string &val, int *capv, 
 {
     string rez = str;
     for(size_t cpos = 0; n > 0 && (cpos=rez.find("$",cpos)) != string::npos && cpos < (rez.size()-1); )
-	switch(rez[cpos+1])
-	{
+	switch(rez[cpos+1]) {
 	    case '$':	rez.replace(cpos,2,"$"); cpos++; break;
 	    case '`':	rez.replace(cpos,2,val,0,capv[0]); cpos += capv[0]; break;
 	    case '\'':	rez.replace(cpos,2,val,capv[1],val.size()-capv[1]);cpos += (val.size()-capv[1]); break;
 	    case '&':	rez.replace(cpos,2,val,capv[0],(capv[1]-capv[0])); cpos += capv[1]; break;
-	    default:
-	    {
+	    default: {
 		int nd = isdigit(rez[cpos+1]) ? 1 : 0;
 		if(nd && cpos < (rez.size()-2) && isdigit(rez[cpos+2])) nd++;
-		int subexp = atoi(string(rez.data()+cpos+1,nd).c_str());
+		int subexp = s2i(string(rez.data()+cpos+1,nd));
 		string replVl;
 		if(subexp > 0 && subexp < n) replVl.assign(val,capv[subexp*2],capv[subexp*2+1]-capv[subexp*2]);
 		rez.replace(cpos,nd+1,replVl);
@@ -1010,13 +966,13 @@ AutoHD<TVarObj> XMLNodeObj::parseStrXML( XMLNode *nd )
     XMLNodeObj *rez = new XMLNodeObj(TSYS::strParse(nd->name(),1,":"));
     rez->mText = nd->text();
 
-    //> Attributes process
+    //Attributes process
     vector<string> lst;
     nd->attrList(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	rez->mProps[lst[i_l]] = nd->attr(lst[i_l]);
 
-    //> Child nodes process
+    //Child nodes process
     for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++)
 	rez->mChilds.push_back(XMLNodeObj::parseStrXML(nd->childGet(i_ch)));
 
@@ -1031,8 +987,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     if(id == "text")	return text();
     // string attr(string id) - get node attribute
     //  id - attribute identifier
-    if(id == "attr" && prms.size())
-    {
+    if(id == "attr" && prms.size()) {
 	TVariant avl = propGet(prms[0].getS());
 	if(avl.isEVal() || avl.isNull()) return "";
 	return avl;
@@ -1052,8 +1007,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     // XMLNodeObj childAdd(ElTp no = XMLNodeObj) - add node <no> as child to the node
     // XMLNodeObj childAdd(string nd) - add node with name <nd>
     //  no - node object or name for new node
-    if(id == "childAdd")
-    {
+    if(id == "childAdd") {
 	AutoHD<XMLNodeObj> no;
 	if(prms.size() && prms[0].type() == TVariant::Object && !(no=prms[0].getO()).freeStat()) ;
 	else if(prms.size()) no = new XMLNodeObj(prms[0].getS());
@@ -1065,8 +1019,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     // XMLNodeObj childIns(int id, string nd) - insert node with name <nd>
     //  id - insert position
     //  no - node object or name for new node
-    if(id == "childIns" && prms.size())
-    {
+    if(id == "childIns" && prms.size()) {
 	AutoHD<XMLNodeObj> no;
 	if(prms.size() > 1 && prms[1].type() == TVariant::Object && !(no=prms[1].getO()).freeStat()) ;
 	else if(prms.size() > 1) no = new XMLNodeObj(prms[1].getS());
@@ -1082,8 +1035,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //  id - child node position;
     //  name - node/tag name;
     //  num - node/tag number <num>.
-    if(id == "childGet" && prms.size())
-    {
+    if(id == "childGet" && prms.size()) {
 	if(prms[0].type() == TVariant::String)
 	    return AutoHD<TVarObj>(childGet(prms[0].getS(), (prms.size()>1)?prms[1].getI():0));
 	return AutoHD<TVarObj>(childGet(prms[0].getI()));
@@ -1097,19 +1049,16 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //    0x01 - text and comments load into separated nodes "<*>" and "<!>";
     //    0x02 - no remove spaces for begin and end tag's text.
     //  cp - source codepage.
-    if(id == "load" && prms.size())
-    {
+    if(id == "load" && prms.size()) {
 	XMLNode nd;
-	//> Load from file
-	if(prms.size() >= 2 && prms[1].getB())
-	{
+	//  Load from file
+	if(prms.size() >= 2 && prms[1].getB()) {
 	    string s_buf;
 	    int hd = open(prms[0].getS().c_str(), O_RDONLY);
 	    if(hd < 0) return TSYS::strMess(_("2:Open file '%s' error: %s"), prms[0].getS().c_str(), strerror(errno));
 	    bool fOK = true;
 	    int cf_sz = lseek(hd, 0, SEEK_END);
-	    if(cf_sz > 0)
-	    {
+	    if(cf_sz > 0) {
 		lseek(hd, 0, SEEK_SET);
 		char *buf = (char *)malloc(cf_sz+1);
 		fOK = (read(hd,buf,cf_sz) == cf_sz);
@@ -1123,7 +1072,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getI():0), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
 	    catch(TError err) { return "1:"+err.mess; }
 	}
-	//> Load from string
+	//  Load from string
 	else
 	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getI():0), Mess->charset()); }
 	    catch(TError err) { return "1:"+err.mess; }
@@ -1140,14 +1089,12 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //   0x1E - interrupt the string after all.
     //  path - file path for save to file
     //  cp - target codepage
-    if(id == "save")
-    {
+    if(id == "save") {
 	XMLNode nd;
 	toXMLNode(nd);
 	string s_buf = nd.save(((prms.size()>=1)?prms[0].getI():0), (prms.size()>=3)?prms[2].getS():Mess->charset());
-	//> Save to file
-	if(prms.size() >= 2)
-	{
+	//  Save to file
+	if(prms.size() >= 2) {
 	    int hd = open(prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0664);
 	    if(hd < 0)	return "";
 	    bool fOK = (write(hd,s_buf.data(),s_buf.size()) == (int)s_buf.size());
@@ -1159,8 +1106,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     // XMLNodeObj getElementBy( string val, string attr = "id" ) - get element from the tree by attribute <attr> value <val>.
     //  val - attribute value for find;
     //  attr - attribute name for find it value.
-    if(id == "getElementBy" && prms.size())
-    {
+    if(id == "getElementBy" && prms.size()) {
 	AutoHD<XMLNodeObj> rez = getElementBy(((prms.size() >= 2) ? prms[1].getS() : "id"), prms[0].getS());
 	if(rez.freeStat()) return TVariant();
 	return AutoHD<TVarObj>(rez);
@@ -1193,8 +1139,7 @@ void XMLNodeObj::fromXMLNode(XMLNode &nd)
     for(unsigned i_a = 0; i_a < alst.size(); i_a++)
 	propSet(alst[i_a], nd.attr(alst[i_a]));
 
-    for(unsigned i_ch = 0; i_ch < nd.childSize(); i_ch++)
-    {
+    for(unsigned i_ch = 0; i_ch < nd.childSize(); i_ch++) {
 	XMLNodeObj *xn = new XMLNodeObj();
 	childAdd(xn);
 	xn->fromXMLNode(*nd.childGet(i_ch));
@@ -1230,8 +1175,7 @@ string TCntrNodeObj::objName( )
 TVariant TCntrNodeObj::propGet( const string &id )
 {
     if(cnd.freeStat()) return TVariant();
-    try
-    {
+    try {
 	AutoHD<TCntrNode> nnd = cnd.at().nodeAt(id);
 	return new TCntrNodeObj(nnd,user());
     }

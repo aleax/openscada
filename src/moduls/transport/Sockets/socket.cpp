@@ -480,7 +480,7 @@ void *TSocketIn::Task( void *sock_in )
     if(sock->type == SOCK_UDP) delete []buf;
     //Client tasks stop command
     sock->endrun_cl = true;
-    ResAlloc res(sock->sock_res,false);
+    ResAlloc res(sock->sock_res, false);
     //Find already registry
     for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
 	pthread_kill(sock->cl_id[i_id].cl_id, SIGALRM);

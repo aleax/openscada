@@ -64,7 +64,11 @@ TConfig &TConfig::exclCopy( TConfig &config, const string &passCpLs )
 	TCfg &s_cfg = config.cfg(list_el[i_el]);
 	TCfg &d_cfg = cfg(list_el[i_el]);
 	switch(d_cfg.fld().type()) {
-	    case TFld::String:	d_cfg.setS(s_cfg.getS());break;
+	    case TFld::String:
+		d_cfg.setExtVal(s_cfg.extVal());
+		if(s_cfg.extVal()) d_cfg.TVariant::operator=(s_cfg);
+		d_cfg.setS(s_cfg.getS());
+		break;
 	    case TFld::Real:	d_cfg.setR(s_cfg.getR());break;
 	    case TFld::Integer:	d_cfg.setI(s_cfg.getI());break;
 	    case TFld::Boolean:	d_cfg.setB(s_cfg.getB());break;

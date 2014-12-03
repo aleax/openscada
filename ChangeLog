@@ -1,3 +1,8 @@
+2014-12-03 Roman
+- FIX:TConfig: extVal() processing to the copy is added.
+- FIX:TTransportIn: Early stop into postDisable() is added for prevent crash at stop into the destructor with freed data into heir object.
+
+
 2014-11-30 Roman
 - !:UI.VCAEngine: Inheritance support is added for owner and permition of the widgets.
 

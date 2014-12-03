@@ -587,14 +587,15 @@ TTransportIn::~TTransportIn( )
     try{ stop(); }catch(...){ }
 }
 
-void TTransportIn::preEnable(int flag)
+void TTransportIn::preEnable( int flag )
 {
     cfg("MODULE").setS(owner().modId());
     try{ load(); }catch(...){ }
 }
 
-void TTransportIn::postDisable(int flag)
+void TTransportIn::postDisable( int flag )
 {
+    try { stop(); }catch(...){ }		//Stop at any disabling
     if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
 }
 
