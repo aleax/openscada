@@ -550,6 +550,10 @@ INSERT INTO "lib_Controllers_io" VALUES('test','rez','Result',0,1,'',0,7,'Рез
 INSERT INTO "lib_Controllers_io" VALUES('test1','clc','Clock',2,0,'',0,0,'Часы','','Годинник','');
 INSERT INTO "lib_Controllers_io" VALUES('test1','p_tm','Previous time (s)',1,1,'0',0,1,'Предыдущее время (с)','','Попередній час (с)','');
 INSERT INTO "lib_Controllers_io" VALUES('test1','rez','Result',2,1,'0',0,2,'Результат','','Результат','');
+INSERT INTO "lib_Controllers_io" VALUES('prescr','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('prescr','f_start','Function start flag',3,0,'0',0,1,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('prescr','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('prescr','this','This controller object link',4,0,'0',0,3,'','','','');
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalc','',600,'using Special.FLibSYS;
 
@@ -5705,7 +5709,7 @@ if(curMode == 1 || curMode == 2) {
 		}
 	}
 }
-mode = curMode;','','',1416656600);
+mode = curMode;','','',1417806670);
 INSERT INTO "lib_Controllers" VALUES('test','test','','test','','','',10,0,'using Special.FLibSYS;
 
 out+=10;

@@ -236,6 +236,7 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 	func.at().setUsings(usings);
 	((TFunction&)func.at()).operator=(fnc_cfg);
 	func.at().setStart(true);
+	func.at().modifClr();
     }
     catch(TError err) {
 	if(!func.at().use()) {
@@ -452,10 +453,10 @@ void Contr::loadFunc( bool onlyVl )
 	if(!onlyVl) ((Func*)func())->load();
 
 	//Creating special IO
-	if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);
-	if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,Func::SysAttr,"0",false),1);
-	if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,Func::SysAttr,"0",false),2);
-	if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("This controller object link"),IO::Object,Func::SysAttr,"0",false),3);
+	if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,0,"1000",false),0);
+	if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
+	if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
+	if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("This controller object link"),IO::Object,0,"0",false),3);
 
 	//Load values
 	TConfig cfg(&mod->elVal());
@@ -620,8 +621,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calculation"))) {
-	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","15"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","15")) {
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
@@ -648,8 +648,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
-	switch(c_lv)
-	{
+	switch(c_lv) {
 	    case 0:	mod->lbList(lst); break;
 	    case 1:
 		if(mod->lbPresent(TSYS::strSepParse(fnc(),0,'.')))
@@ -695,8 +694,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if(func()->io(row)->flg()&Func::SysAttr)
 		throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
-	    switch(col)
-	    {
+	    switch(col) {
 		case 0:	func()->io(row)->setId(opt->text());	break;
 		case 1:	func()->io(row)->setName(opt->text());	break;
 		case 2:
@@ -763,8 +761,7 @@ void Prm::enable()
     //Init elements
     vector<string> pls;
     string mio, ionm, aid, anm;
-    for(int io_off = 0; (mio=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
-    {
+    for(int io_off = 0; (mio=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); ) {
 	ionm	= TSYS::strSepParse(mio,0,':');
 	aid	= TSYS::strSepParse(mio,1,':');
 	anm	= TSYS::strSepParse(mio,2,':');
@@ -777,8 +774,7 @@ void Prm::enable()
 	if(((Contr &)owner()).ioFlg(io_id)&IO::FullText)		flg |= TFld::FullText;
 	if(!(((Contr &)owner()).ioFlg(io_id) & (IO::Output|IO::Return)))flg |= TFld::NoWrite;
 	TFld::Type	tp  = TFld::type(((Contr &)owner()).ioType(io_id));
-	if(!v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg)
-	{
+	if(!v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg) {
 	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
 	    v_el.fldAdd(new TFld(aid.c_str(),"",tp,flg));
 	}
