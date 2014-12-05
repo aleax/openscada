@@ -50,8 +50,7 @@ TTipDAQ::~TTipDAQ( )
 {
     nodeDelAll();
 
-    while(paramt.size())
-    {
+    while(paramt.size()) {
 	delete paramt[0];
 	paramt.erase(paramt.begin());
     }
@@ -67,10 +66,9 @@ void TTipDAQ::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
-    if(redntAllow())
-    {
+    if(redntAllow()) {
 	fldAdd(new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selected,"1","0",
-	    (TSYS::int2str(TController::Off)+";"+TSYS::int2str(TController::Asymmetric)/*+";"+TSYS::int2str(TController::Symmetric)*/).c_str(),
+	    (i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
 	    _("Off;Asymmetric"/*;Symmetric"*/)));
 	fldAdd(new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>"));
     }
@@ -84,8 +82,7 @@ void TTipDAQ::modStart( )
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	if(at(lst[i_l]).at().toStart())
 	    try{ at(lst[i_l]).at().start(); }
-	    catch(TError err)
-	    {
+	    catch(TError err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Start controller '%s' error."),(modId()+"."+lst[i_l]).c_str());
 	    }
@@ -97,7 +94,7 @@ void TTipDAQ::modStop( )
     //Stop all controllers
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-	at(lst[i_l]).at().stop( );
+	at(lst[i_l]).at().stop();
 }
 
 void TTipDAQ::add( const string &name, const string &daq_db )	{ chldAdd(m_cntr, ContrAttach(name,daq_db)); }
@@ -149,8 +146,7 @@ string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 void TTipDAQ::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
@@ -160,17 +156,14 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/br/cntr_" || a_path == "/tctr/ctr")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	{
+    if(a_path == "/br/cntr_" || a_path == "/tctr/ctr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> c_list;
 	    list(c_list);
 	    for(unsigned i_a=0; i_a < c_list.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    add(vid); at(vid).at().setName(opt->text());
 	    opt->setAttr("id", vid);

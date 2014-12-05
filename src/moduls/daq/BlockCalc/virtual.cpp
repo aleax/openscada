@@ -380,8 +380,8 @@ void *Contr::Task( void *icontr )
 	cntr.hdRes.resRequestR();
 	MtxAlloc sres(cntr.calcRes, true);
 	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
-	    for(unsigned i_blk = 0; i_blk < cntr.calcBlks.size(); i_blk++) {
-		try{ cntr.calcBlks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+	    for(unsigned i_blk = 0; i_blk < cntr.calcBlks.size(); i_blk++)
+		try { cntr.calcBlks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    string blck = cntr.calcBlks[i_blk].at().id();
@@ -392,7 +392,6 @@ void *Contr::Task( void *icontr )
 		    cntr.blkAt(blck).at().setProcess(false);
 		    cntr.hdRes.resRequestR();
 		}
-	    }
 	sres.unlock();
 	cntr.hdRes.resRelease();
 

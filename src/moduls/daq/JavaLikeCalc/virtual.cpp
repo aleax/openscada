@@ -264,13 +264,19 @@ void TipContr::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(db_ls,true);
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),nodePath()+"lib",lib_cnt++,c_el); )
-	    {
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),nodePath()+"lib",lib_cnt++,c_el); ) {
 		string l_id = c_el.cfg("ID").getS();
-		if(!lbPresent(l_id)) lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
+		if(!lbPresent(l_id)) {
+		    lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
+		    try {
+			lbAt(l_id).at().load();
+			lbAt(l_id).at().setStart(true);
+		    }
+		    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		}
 		itReg[l_id] = true;
 	    }
 
@@ -303,7 +309,7 @@ void TipContr::modStart( )
     for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
 	lbAt(lst[i_lb]).at().setStart(true);
 
-    TTipDAQ::modStart( );
+    TTipDAQ::modStart();
 }
 
 void TipContr::modStop( )
@@ -312,7 +318,7 @@ void TipContr::modStop( )
     vector<string> lst;
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-	at(lst[i_l]).at().disable( );
+	at(lst[i_l]).at().disable();
 
     //Stop functions
     lbList(lst);
@@ -416,13 +422,12 @@ void Contr::enable_( )
     string wfnc = fnc();
     if(!mod->lbPresent(TSYS::strSepParse(wfnc,0,'.')))
 	throw TError(nodePath().c_str(),_("Functions library '%s' is not present. Please, create functions library!"),TSYS::strSepParse(wfnc,0,'.').c_str());
-    if(!mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().present(TSYS::strSepParse(wfnc,1,'.')))
-    {
+    if(!mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().present(TSYS::strSepParse(wfnc,1,'.'))) {
 	mess_info(nodePath().c_str(),_("Create new function '%s'."),wfnc.c_str());
 	mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().add(TSYS::strSepParse(wfnc,1,'.').c_str());
     }
     setFunc(&mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().at(TSYS::strSepParse(wfnc,1,'.')).at());
-    try{ loadFunc( ); }
+    try{ loadFunc(); }
     catch(TError err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Load function and its IO error."));
@@ -457,8 +462,7 @@ void Contr::loadFunc( bool onlyVl )
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
-	{
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
 	    if(ioId < 0 || func()->io(ioId)->flg()&Func::SysAttr) continue;
 	    setS(ioId,cfg.cfg("VAL").getS());

@@ -96,8 +96,7 @@ class TDAQS : public TSubSYS
 
     private:
 	//Private data
-	class SStat
-	{
+	class SStat {
 	    public:
 		SStat( ) : isLive(false), cnt(0), lev(0) { }
 

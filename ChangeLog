@@ -1,3 +1,7 @@
+2014-12-05 Roman
+- FIX:DAQ.JavaLikeCalc: Early start, at load, for function's libraries is added. Mostly for make allow the functions before DAQ.BlockCalc start.
+
+
 2014-12-03 Roman
 - FIX:SYS: Some build warnings fixed
 - FIX:UI.{VCAEngine,Vision}: Changes down procedure mostly fixed and adapted for update the parent widget into open for edit state.

@@ -312,7 +312,7 @@ void Block::calc( bool first, bool last, double frq )
     if(id_stop >= 0)	setB(id_stop, last);
 
     //Get values from input links
-    lnk_res.resRequestR( );
+    lnk_res.resRequestR();
     try {
 	// Get input links
 	for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++)
@@ -350,7 +350,7 @@ void Block::calc( bool first, bool last, double frq )
 
     //Calc function
     try {
-	TValFunc::calc( );
+	TValFunc::calc();
 	modif();
     }
     catch(TError err) { err_cnt++; throw; }
