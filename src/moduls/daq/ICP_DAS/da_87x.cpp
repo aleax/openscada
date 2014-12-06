@@ -53,6 +53,8 @@ da_87x::da_87x( )
     devs["I-87024"]	= DevFeature( 0,	4 );
     devs["I-87026"]	= DevFeature( 0,	2 );
     devs["I-87026PW"]	= DevFeature( 0x0006,	2,	0x0101,	0x0101 );
+    devs["I-87026PW"].aiTypes = string("7;8;9;10;11;12;13;26\n")+
+	_("4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to 150mV;-20mA to 20mA;0mA to 20mA;");
     devs["I-87028"]	= DevFeature( 0,	8 );
     devs["I-87037"]	= DevFeature( 0,	0,	0,	0x0002 );
     devs["I-87040"]	= DevFeature( 0,	0,	0x0004,	0,	32 );
@@ -203,28 +205,36 @@ void da_87x::getVal( TMdPrm *p )
 
     //DI and DO back processing processing
     if(ePrm->dev.DI || ePrm->dev.DO) {
-	if(!rez.empty() && (ePrm->dev.DI>>8) == 0)	//@AA
+	unsigned DOsz = ePrm->dev.DO&0xFF, DIsz = ePrm->dev.DI&0xFF;
+	bool isDOErr = false, isDIErr = false;
+	uint32_t diVal;
+
+	if(!rez.empty() && (ePrm->dev.DI>>8) == 0) {		//@AA
 	    rez = p->owner().serReq(TSYS::strMess("@%02X",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-	else if(!rez.empty() && (ePrm->dev.DI>>8) == 1)	//@AADI
+	    isDOErr = ((1+DOsz*2) > rez.size() || rez[0] != '>');
+	    ePrm->doVal = isDOErr ? 0 : strtoul(rez.substr(1,DOsz*2).c_str(),NULL,16);
+	    isDIErr = ((1+(DOsz+DIsz)*2) > rez.size() || rez[0] != '>');
+	    diVal = isDIErr ? 0 : strtoul(rez.substr(1+DOsz*2,DIsz*2).c_str(),NULL,16);
+	}
+	else if(!rez.empty() && (ePrm->dev.DI>>8) == 1) {	//@AADI
 	    rez = p->owner().serReq(TSYS::strMess("@%02XDI",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+	    isDOErr = ((3+DOsz*2) > rez.size() || rez[0] != '!');
+	    ePrm->doVal = isDOErr ? 0 : strtoul(rez.substr(3,DOsz*2).c_str(),NULL,16);
+	    isDIErr = ((3+(DOsz+DIsz)*2) > rez.size() || rez[0] != '!');
+	    diVal = isDIErr ? 0 : strtoul(rez.substr(3+DOsz*2,DIsz*2).c_str(),NULL,16);
+	}
 	else rez = "";
 
 	// DO
-	unsigned DOsz = (ePrm->dev.DO && (ePrm->dev.DO>>8) == 0) ? ePrm->dev.DO&0xFF : 0;
-	bool isErr = ((1+DOsz*2) > rez.size() || rez[0] != '>');
-	ePrm->doVal = isErr ? 0 : strtoul(rez.substr(1,DOsz*2).c_str(),NULL,16);
 	for(unsigned i_ch = 0; i_ch < DOsz; i_ch++)
 	    for(unsigned i_d = 0; i_d < 8; i_d++)
-		p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_d)).at().setB(isErr ? EVAL_BOOL :
+		p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_d)).at().setB(isDOErr ? EVAL_BOOL :
 		    (((ePrm->doVal>>(i_ch*8))^p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch])>>i_d)&1, 0, true);
 
 	// DI
-	unsigned DIsz = (ePrm->dev.DI && (ePrm->dev.DI>>8) == 0) ? ePrm->dev.DI&0xFF : 0;
-	isErr = ((1+(DOsz+DIsz)*2) > rez.size() || rez[0] != '>');
-	uint32_t diVal = isErr ? 0 : strtoul(rez.substr(1+DOsz*2,DIsz*2).c_str(),NULL,16);
 	for(unsigned i_ch = 0; i_ch < DIsz; i_ch++)
 	    for(unsigned i_d = 0; i_d < 8; i_d++)
-		p->vlAt(TSYS::strMess("di%d_%d",i_ch,i_d)).at().setB(isErr ? EVAL_BOOL :
+		p->vlAt(TSYS::strMess("di%d_%d",i_ch,i_d)).at().setB(isDIErr ? EVAL_BOOL :
 		    (((diVal>>(i_ch*8))^p->dInOutRev[i_ch])>>i_d)&1, 0, true);
     }
 
@@ -300,22 +310,25 @@ void da_87x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
 	}*/
 
 	string cmd;
-	if((ePrm->dev.DO>>8) == 0)
+	char rezOK = '>';
+	if((ePrm->dev.DO>>8) == 0) {
 	    cmd = TSYS::strMess(TSYS::strMess("@%%02X%%0%dX",(ePrm->dev.DO&0xFF)*2).c_str(),(int)((p->owner().bus()==0)?0:p->modAddr),tvl);
-	else if((ePrm->dev.DO>>8) == 1)
-	    cmd = TSYS::strMess(TSYS::strMess("@%%02XDO%%0%dX",(ePrm->dev.DO&0xFF)*2).c_str(),(int)((p->owner().bus()==0)?0:p->modAddr),tvl);
-
-	repDO:
-	rez = p->owner().serReq(cmd, p->modSlot, CRC);
-	// Set watchdog flag is process
-	if((ePrm->dev.DO>>8) == 0 && !rez.empty() && rez[0] == '!') {
-	    p->owner().serReq(TSYS::strMess("~%02X1",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-	    goto repDO;
+	    repDO:
+	    rez = p->owner().serReq(cmd, p->modSlot, CRC);
+	    // Set watchdog flag is process
+	    if(!rez.empty() && rez[0] == '!') {
+		p->owner().serReq(TSYS::strMess("~%02X1",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+		goto repDO;
+	    }
 	}
-
-	vo.setB((rez.empty() || rez[0] != '>') ? EVAL_BOOL : tvl, 0, true);
-	if(rez.size() || rez[0] == '>') ePrm->doVal = tvl;
-	p->acq_err.setVal(rez.empty()?_("10:Request to module error."):((rez[0]!='>')?_("11:Respond from module error."):""));
+	else if((ePrm->dev.DO>>8) == 1) {
+	    rezOK = '!';
+	    cmd = TSYS::strMess(TSYS::strMess("@%%02XDO%%0%dX",(ePrm->dev.DO&0xFF)*2).c_str(),(int)((p->owner().bus()==0)?0:p->modAddr),tvl);
+	    rez = p->owner().serReq(cmd, p->modSlot, CRC);
+	}
+	if(rez.size() && rez[0] == rezOK) ePrm->doVal = tvl;
+	else vo.setB(EVAL_BOOL, 0, true);
+	p->acq_err.setVal(rez.empty()?_("10:Request to module error."):((rez[0]!=rezOK)?_("11:Respond from module error."):""));
     }
 }
 
@@ -418,6 +431,10 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
+    bool isAI = ePrm && ePrm->dev.AI,
+	 isAO = ePrm && ePrm->dev.AO,
+	 isD = dev.DI || dev.DO,
+	 isDO = isD && ePrm && ePrm->dev.DO && (ePrm->dev.DO>>8) == 0;
     // Generic "I-87xxx" and AI CNTR channels processing limit set configuration
     if(a_path == "/prm/cfg/modCRC") {
 	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(p->modPrm("CRC","0"));
@@ -429,7 +446,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	p->setModPrm(a_path.substr(9),opt->text());
     }
     // AI processing
-    else if(ePrm && ePrm->dev.AI && p->owner().startStat() && a_path.compare(0,9,"/cfg/inTp") == 0) {
+    else if(isAI && p->owner().startStat() && a_path.compare(0,9,"/cfg/inTp") == 0) {
 	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {	//$AA8Ci
 	    rez = p->owner().serReq(TSYS::strMess("$%02X8C%01X",(int)((p->owner().bus()==0)?0:p->modAddr),s2i(a_path.substr(9))), p->modSlot, CRC);
 	    opt->setText((rez.size()!=8||rez[0]!='!') ? "-1" : i2s(strtol(rez.data()+6,NULL,16)));
@@ -438,121 +455,112 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    p->owner().serReq(TSYS::strMess("$%02X7C%dR%02X",(int)((p->owner().bus()==0)?0:p->modAddr),s2i(a_path.substr(9)),s2i(opt->text())), p->modSlot, CRC);
     }
     // AO and watchdog processing
-    else if(ePrm && ePrm->dev.AO) {
-	if(a_path == "/cfg/wTm") {
-	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(r2s(p->wTm));
-	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))  p->setModPrm("wTm",r2s(p->wTm = s2r(opt->text())));
-	}
-	else if(p->owner().startStat() && a_path == "/cfg/mod/wSt" && p->ctrChkNode(opt)) {
-	    string wSt;
-
-	    //  ~AA0
-	    rez = p->owner().serReq(TSYS::strMess("~%02X0",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-	    if(rez.size() == 5 && rez[0] == '!') {
-		wSt += (bool)strtol(rez.data()+3,NULL,16) ? _("Set. ") : _("Clear. ");
-
-		//  ~AA2
-		rez = p->owner().serReq(TSYS::strMess("~%02X2",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-		if(rez.size() == 6 && rez[0] == '!') {
-		    wSt += (bool)strtol(string(rez.data()+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
-		    wSt += r2s(0.1*strtol(rez.data()+4,NULL,16))+_(" s.");
-		}
-	    }
-	    opt->setText(wSt);
-	}
-	else if(p->owner().startStat() && a_path == "/cfg/mod/vPon" && p->ctrChkNode(opt)) {
-	    string cnt;
-	    for(unsigned i_c = 0; i_c < dev.AO; i_c++) {
-		//  $AA7N
-		rez = p->owner().serReq(TSYS::strMess("$%02X7%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
-		if(rez.size() != 10 || rez[0] != '!') { cnt = _("Error"); break; }
-		cnt = cnt + (rez.data()+3) + " ";
-	    }
-	    opt->setText(cnt);
-	}
-	else if(p->owner().startStat() && a_path == "/cfg/mod/vPonSet" && p->ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-	    for(unsigned i_c = 0; i_c < dev.AO; i_c++)	// $AA4N
-		p->owner().serReq(TSYS::strMess("$%02X4%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
-	else if(p->owner().startStat() && a_path == "/cfg/mod/vSf" && p->ctrChkNode(opt)) {
-	    string cnt;
-	    for(unsigned i_c = 0; i_c < dev.AO; i_c++) {
-		//  ~AA4N
-		rez = p->owner().serReq(TSYS::strMess("~%02X4%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
-		if(rez.size() != 10 || rez[0] != '!') { cnt = _("Error"); break; }
-		cnt = cnt + (rez.data()+3) + " ";
-	    }
-	    opt->setText(cnt);
-	}
-	else if(p->owner().startStat() && a_path == "/cfg/mod/vSfSet" && p->ctrChkNode(opt,"seet",RWRW__,"root",SDAQ_ID,SEC_WR))
-	    for(unsigned i_c = 0; i_c < dev.AO; i_c++)	// ~AA5N
-		p->owner().serReq(TSYS::strMess("~%02X5%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
-	else return false;
+    else if(isAO && a_path == "/cfg/wTm") {
+	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(r2s(p->wTm));
+	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) p->setModPrm("wTm",r2s(p->wTm = s2r(opt->text())));
     }
+    else if(isAO && p->owner().startStat() && a_path == "/cfg/mod/wSt" && p->ctrChkNode(opt)) {
+	string wSt;
+
+	//  ~AA0
+	rez = p->owner().serReq(TSYS::strMess("~%02X0",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+	if(rez.size() == 5 && rez[0] == '!') {
+	    wSt += (bool)strtol(rez.data()+3,NULL,16) ? _("Set. ") : _("Clear. ");
+
+	    //  ~AA2
+	    rez = p->owner().serReq(TSYS::strMess("~%02X2",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+	    if(rez.size() == 6 && rez[0] == '!') {
+		wSt += (bool)strtol(string(rez.data()+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
+		wSt += r2s(0.1*strtol(rez.data()+4,NULL,16))+_(" s.");
+	    }
+	}
+	opt->setText(wSt);
+    }
+    else if(isAO && p->owner().startStat() && a_path == "/cfg/mod/vPon" && p->ctrChkNode(opt)) {
+	string cnt;
+	for(unsigned i_c = 0; i_c < dev.AO; i_c++) {
+	    //  $AA7N
+	    rez = p->owner().serReq(TSYS::strMess("$%02X7%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
+	    if(rez.size() != 10 || rez[0] != '!') { cnt = _("Error"); break; }
+	    cnt = cnt + (rez.data()+3) + " ";
+	}
+	opt->setText(cnt);
+    }
+    else if(isAO && p->owner().startStat() && a_path == "/cfg/mod/vPonSet" && p->ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	for(unsigned i_c = 0; i_c < dev.AO; i_c++)	// $AA4N
+	    p->owner().serReq(TSYS::strMess("$%02X4%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
+    else if(isAO && p->owner().startStat() && a_path == "/cfg/mod/vSf" && p->ctrChkNode(opt)) {
+	string cnt;
+	for(unsigned i_c = 0; i_c < dev.AO; i_c++) {
+	    //  ~AA4N
+	    rez = p->owner().serReq(TSYS::strMess("~%02X4%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
+	    if(rez.size() != 10 || rez[0] != '!') { cnt = _("Error"); break; }
+	    cnt = cnt + (rez.data()+3) + " ";
+	}
+	opt->setText(cnt);
+    }
+    else if(isAO && p->owner().startStat() && a_path == "/cfg/mod/vSfSet" && p->ctrChkNode(opt,"seet",RWRW__,"root",SDAQ_ID,SEC_WR))
+	for(unsigned i_c = 0; i_c < dev.AO; i_c++)	// ~AA5N
+	    p->owner().serReq(TSYS::strMess("~%02X5%d",(int)((p->owner().bus()==0)?0:p->modAddr),i_c), p->modSlot, CRC);
     // DI and DO reverse processing
-    else if(dev.DI || dev.DO) {
-	if(a_path.compare(0,10,"/cfg/nRevs") == 0) {
-	    int i_ch = 0, i_n = 0;
-	    sscanf(a_path.c_str(),"/cfg/nRevs%d_%d",&i_ch,&i_n);
-	    int chVl = s2i(p->modPrm("dIORev"+i2s(i_ch)));
-	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((chVl&(1<<i_n))?"1":"0");
-	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		p->setModPrm("dIORev"+i2s(i_ch), i2s(s2i(opt->text()) ? (chVl|(1<<i_n)) : (chVl & ~(1<<i_n))));
-	}
-	//  DO and watchdog processing
-	else if(ePrm && ePrm->dev.DO && (ePrm->dev.DO>>8) == 0) {
-	    if(a_path == "/cfg/wTm") {
-		if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(r2s(p->wTm));
-		if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) p->setModPrm("wTm",r2s(p->wTm = s2r(opt->text())));
-	    }
-	    else if(p->owner().startStat() && a_path == "/cfg/mod/wSt" && p->ctrChkNode(opt)) {
-		string wSt;
-
-		//   ~AA0
-		rez = p->owner().serReq(TSYS::strMess("~%02X0",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-		if(rez.size() == 5 && rez[0] == '!') {
-		    wSt += (bool)strtol(rez.data()+3,NULL,16) ? _("Set. ") : _("Clear. ");
-
-		    //   ~AA2
-		    rez = p->owner().serReq(TSYS::strMess("~%02X2",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-		    if(rez.size() == 6 && rez[0]=='!') {
-			wSt += (bool)strtol(string(rez.data()+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
-			wSt += r2s(0.1*strtol(rez.data()+4,NULL,16))+_(" s.");
-		    }
-		}
-		opt->setText(wSt);
-	    }
-	    else if(p->owner().startStat() && a_path == "/cfg/mod/vPon" && p->ctrChkNode(opt)) {
-		//   ~AA4P
-		rez = p->owner().serReq(TSYS::strMess("~%02X4P",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-		if(rez.size() < 7 || rez[0] != '!') opt->setText(_("Error"));
-		else {
-		    string cnt;
-		    uint32_t vl = strtol(rez.data()+3,NULL,16);
-		    for(unsigned i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
-		    opt->setText(cnt);
-		}
-	    }
-	    else if(p->owner().startStat() && a_path == "/cfg/mod/vPonSet" && p->ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-		//   ~AA5P
-		p->owner().serReq(TSYS::strMess("~%02X5P",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-	    else if(p->owner().startStat() && a_path == "/cfg/mod/vSf" && p->ctrChkNode(opt)) {
-		//   ~AA4S
-		rez = p->owner().serReq(TSYS::strMess("~%02X4S",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-		if(rez.size() < 7 || rez[0] != '!') opt->setText(_("Error"));
-		else {
-		    string cnt;
-		    int vl = strtol(rez.data()+3,NULL,16);
-		    for(unsigned i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
-		    opt->setText(cnt);
-		}
-	    }
-	    else if(p->owner().startStat() && a_path == "/cfg/mod/vSfSet" && p->ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-		//   ~AA5S
-		p->owner().serReq(TSYS::strMess("~%02X5S",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-	    else return false;
-	}
-	else return false;
+    else if(isD && a_path.compare(0,10,"/cfg/nRevs") == 0) {
+	int i_ch = 0, i_n = 0;
+	sscanf(a_path.c_str(), "/cfg/nRevs%d_%d", &i_ch, &i_n);
+	int chVl = s2i(p->modPrm("dIORev"+i2s(i_ch)));
+	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((chVl&(1<<i_n))?"1":"0");
+	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    p->setModPrm("dIORev"+i2s(i_ch), i2s(s2i(opt->text()) ? (chVl|(1<<i_n)) : (chVl & ~(1<<i_n))));
     }
+    //  DO and watchdog processing
+    else if(isDO && a_path == "/cfg/wTm") {
+	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(r2s(p->wTm));
+	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) p->setModPrm("wTm",r2s(p->wTm = s2r(opt->text())));
+    }
+    else if(isDO && p->owner().startStat() && a_path == "/cfg/mod/wSt" && p->ctrChkNode(opt)) {
+	string wSt;
+
+	//   ~AA0
+	rez = p->owner().serReq(TSYS::strMess("~%02X0",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+	if(rez.size() == 5 && rez[0] == '!') {
+	    wSt += (bool)strtol(rez.data()+3,NULL,16) ? _("Set. ") : _("Clear. ");
+
+	    //   ~AA2
+	    rez = p->owner().serReq(TSYS::strMess("~%02X2",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+	    if(rez.size() == 6 && rez[0]=='!') {
+		wSt += (bool)strtol(string(rez.data()+3,1).c_str(),NULL,16) ? _("Enabled, ") : _("Disabled, ");
+		wSt += r2s(0.1*strtol(rez.data()+4,NULL,16))+_(" s.");
+	    }
+	}
+	opt->setText(wSt);
+    }
+    else if(isDO && p->owner().startStat() && a_path == "/cfg/mod/vPon" && p->ctrChkNode(opt)) {
+	//   ~AA4P
+	rez = p->owner().serReq(TSYS::strMess("~%02X4P",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+	if(rez.size() < 7 || rez[0] != '!') opt->setText(_("Error"));
+	else {
+	    string cnt;
+	    uint32_t vl = strtol(rez.data()+3,NULL,16);
+	    for(unsigned i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    opt->setText(cnt);
+	}
+    }
+    else if(isDO && p->owner().startStat() && a_path == "/cfg/mod/vPonSet" && p->ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	//   ~AA5P
+	p->owner().serReq(TSYS::strMess("~%02X5P",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+    else if(isDO && p->owner().startStat() && a_path == "/cfg/mod/vSf" && p->ctrChkNode(opt)) {
+	//   ~AA4S
+	rez = p->owner().serReq(TSYS::strMess("~%02X4S",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
+	if(rez.size() < 7 || rez[0] != '!') opt->setText(_("Error"));
+	else {
+	    string cnt;
+	    int vl = strtol(rez.data()+3,NULL,16);
+	    for(unsigned i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+	    opt->setText(cnt);
+	}
+    }
+    else if(isDO && p->owner().startStat() && a_path == "/cfg/mod/vSfSet" && p->ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	//   ~AA5S
+	p->owner().serReq(TSYS::strMess("~%02X5S",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
     else return false;
 
     return true;

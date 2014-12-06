@@ -1,3 +1,7 @@
+2014-12-06 Roman
+- !!!!:FIX:DAQ.ICP_DAS: Adapting to complex module I-87026PW.
+
+
 2014-12-05 Roman
 - LibsDB.OscadaLibs.db: JavaLikeCalcLib.Controllers.prescr direct appended by IOs: "f_frq", "f_start", "f_stop", "this".
 - Function,DAQ.JavaLikeCalc: Modify flag set for function object's ioAdd(), ioIns(), ioDel(), ioMove().
