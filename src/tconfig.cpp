@@ -432,7 +432,7 @@ void TCfg::setS( const string &val, uint8_t RqFlg )
 {
     if(!extVal() && (RqFlg&(ExtValTwo|ExtValOne|ExtValThree))) { mExtVal = true; setType(TVariant::String); }
     if(!extVal()) setS(val);
-    else setS(((RqFlg&ExtValOne)?val:getS(ExtValOne))+string(1,0)+
+    else setS(((RqFlg&ExtValOne || !(RqFlg&(ExtValTwo|ExtValThree)))?val:getS(ExtValOne))+string(1,0)+
 		((RqFlg&ExtValTwo)?val:getS(ExtValTwo))+string(1,0)+
 		((RqFlg&ExtValThree)?val:getS(ExtValThree)));
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }

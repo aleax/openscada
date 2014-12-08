@@ -1,3 +1,15 @@
+2014-12-08 Roman
+- LibsDB.OscadaLibs.db: To DAQ templates base.{anUnif,manInUnif} new visual behaviour attribute "log" is added,
+	for mark display the variable into logarithmic scale.
+    Some translations cleaned and updated.
+- LibsDB.vcaBase.db: Name using as label into the graphics groups is fixed for project archBrowser.
+    Main.{grpGraph,grpGraph10}: Disable the elements by default set.
+    !!!:Main.{ElViewGraph,grpGraph,grpGraph10,graphSelPrm,cntrPaspExt}: Logarithmic scale's attribute "log" and the support for select is added.
+- !!:FIX:TConfig.setS(): For default value set into ExtVal mode to ExtValOn.
+- !!:FIX:UI.VCAEngine: Double set the pages to processing and the firstinited context lost prevented.
+    Double call the pages to first execution from processing procedure and cascade from the top-level page is prevented.
+
+
 2014-12-06 Roman
 - !!!!:FIX:DAQ.ICP_DAS: Adapting to complex module I-87026PW.
 

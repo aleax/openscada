@@ -415,7 +415,7 @@ void *Session::Task( void *icontr )
     while(!ses.endrun_req) {
 	//Calc session pages and all other items at recursion
 	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
-	    try { ses.at(pls[i_l]).at().calc(false,false); }
+	    try { ses.at(pls[i_l]).at().calc(false, false); }
 	    catch(TError err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
@@ -837,10 +837,12 @@ void SessPage::calc( bool first, bool last )
     if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 
     //Put calculate to include pages
-    vector<string> ls;
-    pageList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	pageAt(ls[i_l]).at().calc(first, last);
+    if(!first && !last) {	//Only for ordinal calls by first's and last's calls direct from setProcess() gone.
+	vector<string> ls;
+	pageList(ls);
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	    pageAt(ls[i_l]).at().calc(first, last);
+    }
 }
 
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
@@ -911,8 +913,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			size_t aPos = prm_lnk.rfind("/");
 			if(aPos != string::npos) prm_lnk.erase(aPos);
 			AutoHD<TValue> prml = SYS->daq().at().prmAt(prm_lnk,0,true);
-			for(unsigned i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++)
-			{
+			for(unsigned i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++) {
 			    AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
 			    if(!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 				  TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
@@ -1164,7 +1165,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 
     //Prepare process function value level
     bool diff = (val!=process());
-    if(val && !TSYS::strNoSpace(calcProg()).empty()) {
+    if(val && diff && !TSYS::strNoSpace(calcProg()).empty()) {
 	// Prepare function io structure
 	TFunction fio(parent().at().calcId());
 	fio.setStor(calcProgStors());
@@ -1248,7 +1249,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     if(val) prcElListUpdate();
 
     // First calc, after all set
-    if(diff && val && lastFirstCalc) calc(true, false);
+    if(val && diff && lastFirstCalc) calc(true, false);
 }
 
 string SessWdg::ico( )		{ return parent().freeStat() ? "" : parent().at().ico(); }

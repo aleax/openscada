@@ -2234,12 +2234,12 @@ INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMax','Border up alarm',2,32,'0
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMin','Border down warning',2,32,'0',10,'Границя нижня попереджув.','','Граница нижняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMax','Border up warning',2,32,'0',11,'Границя верхня попереджув.','','Граница верхняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','speed','Motion speed',2,32,'0',13,'Швидкість зміни','','Скорость изменения','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','Tf','Filter time (s)',2,32,'0',15,'Час фільтру (с)','','Время фильтрации (с)','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','iAdd','Input addon',2,64,'0',16,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','iMult','Input multiplication',2,64,'1',17,'Множник входу','','Множитель ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',18,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',19,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',20,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','Tf','Filter time (s)',2,32,'0',16,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','iAdd','Input addon',2,64,'0',17,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMin','Minimum module scale',2,64,'0',19,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcMax','Maximum module scale',2,64,'0',20,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',21,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','ed','Dimension',0,32,' ',3,'Од. виміру',' ','Ед. измерения',' ');
@@ -2252,14 +2252,14 @@ INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'
 INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',13,'Границя верхня попереджув.','','Граница верхняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed',2,32,'0',15,'Швидкість зміни','','Скорость изменения','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',16,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time (s)',2,32,'0',17,'Час фільтру (с)','','Время фильтрации (с)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addon',2,64,'0',18,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',19,'Множник входу','','Множитель ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',20,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',21,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',22,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImit','PLC imitation',3,64,'0',23,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',24,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time (s)',2,32,'0',18,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addon',2,64,'0',19,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',20,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',21,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',22,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',23,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImit','PLC imitation',3,64,'0',24,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',25,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','','Команда "Открыть"','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','close','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','','Команда "Закрыть"','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','','Команда "Стоп"','');
@@ -2394,12 +2394,12 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','this','Object',4,1,'',30,'Об''
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','SHIFR','Code',0,0,'',31,'Шифр','','Шифр','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','NAME','Name',0,0,'',32,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','DESCR','Description',0,0,'',33,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','this','Object',4,1,'',25,'Об''єкт','','Объект','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','this','Object',4,1,'',26,'Об''єкт','','Объект','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','NAME','Name',0,0,'',46,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','this','Object',4,1,'',44,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','SHIFR','Code',0,0,'',26,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','NAME','Name',0,0,'',27,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','DESCR','Description',0,0,'',28,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','SHIFR','Code',0,0,'',27,'Шифр','','Шифр','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','NAME','Name',0,0,'',28,'Ім''я','','Имя','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','DESCR','Description',0,0,'',29,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','DESCR','Description',0,0,'',47,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','this','Object',4,1,'',50,'Об''єкт','','Объект','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','SHIFR','Code',0,0,'',51,'Шифр','','Шифр','');
@@ -2417,10 +2417,10 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alSup','Alarms suppress',3,32,'0
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','alSup','Alarms suppress',3,32,'0',7,'Придушення порушень','','Подавление нарушений','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','HystBnd','Hysteresis of boders violation',2,32,'1',12,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','prec','Precision (signs)',1,32,'2',14,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','this','Object',4,1,'',21,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','SHIFR','Code',0,0,'',22,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','NAME','Name',0,0,'',23,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','DESCR','Description',0,0,'',24,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','this','Object',4,1,'',22,'Об''єкт','','Объект','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','SHIFR','Code',0,0,'',23,'Шифр','','Шифр','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','NAME','Name',0,0,'',24,'Ім''я','','Имя','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','DESCR','Description',0,0,'',25,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','manTables','Manual tables',0,64,'',1,'Ручні таблиці','','Ручные таблицы','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','items','All items',4,33,'',2,'Всі елементи','','Все элементы','');
@@ -2433,6 +2433,8 @@ INSERT INTO "tmplib_base_io" VALUES('digAlarm','SHIFR','Code',0,0,'',2,'','','',
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','NAME','Name',0,0,'',3,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',4,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',5,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','log','Logarithmic scale',3,32,'0',17,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Рецепты','Рецепти','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
 CREATE TABLE 'LogLevPrm_prescription' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
@@ -3662,118 +3664,7 @@ if(HTTPreq == "GET")
 	return "200 OK";
 }
 
-return "404 Not Found";','JavaLikeCalc.JavaScript
-var pgDir = "Web/";
-var firstEl = url.parsePath(0);
-var procPg = false;
-var tmplPg = "";
-var tmplPrcPg = false;
-var pgTree = false;
-var treeEl = false;
-var err = false;
-var isUser = SYS.Security.access(user,4,"root","Web",0440);
-var isRootUser = SYS.Security.access(user,4,"root","WebRoot",0440);
-
-//> Pages requests process
-if(!firstEl.length || (tmplPg=SYS.fileRead(pgDir+firstEl+".html")).length)
-{
-	//> Early call page''s script
-	if(tmplPg.length)
-	{
-		procPg = SYS.DAQ.JavaLikeCalc.lib_web[(URLprms["script"].isEVal() ? firstEl : URLprms["script"])];
-		if(typeof(procPg) == "TCntrNode")
-		{
-			tmplPrcPg = procPg.call(URLprms,tmplPg,cnts,user);
-			//>> Check for full XML or resource request
-			var poff = 0;
-			if(tmplPrcPg.parse(0,"\n",poff) == "200 OK")
-			{
-				while((pEl=tmplPrcPg.parse(0,"\n",poff)).length) HTTPvars[pEl.parse(0,":")] = pEl.parse(1,":");
-				page = tmplPrcPg.slice(poff);
-				return "200 OK";
-			}
-		}
-		else tmplPrcPg = tmplPg;
-	}
-
-	//> Parse template
-	pgTree = SYS.XMLNode();
-	err = pgTree.load(pgDir+"main.html",true,true);
-
-	//> Page time place
-	pgTree.getElementBy("time_vl").setAttr("value",SYS.time());
-	var sessLife = SYS.XMLNode("get").setAttr("path","/sub_Protocol/mod_HTTP/%2fprm%2flf_tm");
-	SYS.cntrReq(sessLife);
-	pgTree.getElementBy("ses_vl").setAttr("value",sessLife.text().toInt()*60);
-
-	//> Check access to WEB resource
-	if(!user.length || !isUser)
-	{
-		pgTree.getElementBy("ses_vl").setAttr("value",10);
-		pgTree.getElementBy("menu_l").setAttr("style","visibility : hidden;");
-		pgTree.getElementBy("menu_r").setAttr("style","visibility : hidden;");
-		pgTree.getElementBy("status").setAttr("style","visibility : hidden;");
-		tmplPrcPg = SYS.fileRead(pgDir+"loginError.html");
-	}
-	//> Process include page template
-	else if(tmplPg.length)
-	{
-		//>> Select page display
-		treeEl = pgTree.getElementBy(firstEl);
-		if(typeof(treeEl) == "XMLNode")
-			treeEl.setAttr("class",treeEl.attr("class").replace(new RegExp("menu([^\"]*)"),"menuSel$1"));
-	}
-	else tmplPrcPg = SYS.fileRead(pgDir+"welcome.html");
-
-	//> Status make
-	pgTree.getElementBy("path").setText("/"+firstEl);
-	pgTree.getElementBy("user_st").childIns(0,"span").setText(user+"("+(isRootUser?"суперпользователь":"пользователь")+")      ");
-
-	//> Super user access
-	if(isUser && !isRootUser)
-	{
-		pgTree.getElementBy("cfg").parent().setAttr("style","visibility : hidden;");
-		pgTree.getElementBy("devices").parent().setAttr("style","visibility : hidden;");
-
-		treeEl = SYS.XMLNode("get").setAttr("path","/sub_Security/usr_"+user+"/%2fprm%2fldscr");
-		SYS.cntrReq(treeEl);
-		//>> Report disable
-		re=treeEl.text().match("Report:\\s+([^\\n]*)");
-		if(!re.length || re[1] != "true") pgTree.getElementBy("report").parent().setAttr("style","visibility : hidden;");
-		//>> Subsystem''s permition
-		var catLs = SYS.XMLNode("get").setAttr("path","/DAQ/ModBus/ZegBee/%2fprm%2fprm");
-		SYS.cntrReq(catLs);
-		for(var i = 0; i < catLs.childSize(); i++)
-		{
-			re=treeEl.text().match("sub_"+catLs.childGet(i).attr("id")+":\\s+([^\\n]*)");
-			if(!re.length || re[1] == "--") pgTree.getElementBy(catLs.childGet(i).attr("id")).parent().setAttr("style","visibility : hidden;");
-		}
-	}
-
-	//> Save template
-	page = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
-			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"+
-			pgTree.save();
-	page = page.replace("#####CONTEXT#####",tmplPrcPg);
-	return "200 OK";
-}
-
-//> Resources get process
-if(HTTPreq == "GET")
-{
-	page = SYS.fileRead(pgDir+url);
-	if(!page.length) { page = "Resource ''"+url+"'' call error!"; return "404 Not Found"; }
-	//>> Extesion types processing
-	var fext = url.lastIndexOf(".");
-	fext = (fext > 0) ? url.slice(fext+1) : "";
-	if(fext == "png" || fext == "jpg" || fext == "ico") HTTPvars["Content-Type"] = "image/"+fext;
-	else if(fext == "css" || fext == "html" || fext == "xml") HTTPvars["Content-Type"] = "text/"+fext;
-	else if(fext == "js") HTTPvars["Content-Type"] = "text/javascript";
-	//SYS.messDebug("TEST Web","TEST 10: ''"+fext+"'' .");
-	return "200 OK";
-}
-
-return "404 Not Found";',1377264714,'Сайт из XHTML шаблона.','XHTML-шаблон');
+return "404 Not Found";','',1377264714,'Сайт из XHTML шаблона.','XHTML-шаблон');
 CREATE TABLE 'Trs' ("base" TEXT DEFAULT '' ,"uk#base" TEXT DEFAULT '' ,"ru#base" TEXT DEFAULT '' , PRIMARY KEY ("base"));
 INSERT INTO "Trs" VALUES('No data or connection with source','Немає даних або зв''язку із джерелом','Нет данных или связи с источником');
 INSERT INTO "Trs" VALUES('The signal exceed to upper hardware border','Сигнал перевищив верхню апаратну границю','Выход сигнала за верхнюю аппаратную границу');
@@ -3835,19 +3726,19 @@ INSERT INTO "Trs" VALUES('Request for day archive values.','','');
 INSERT INTO "Trs" VALUES('Request for results month archive values.','','');
 INSERT INTO "Trs" VALUES('Request for data read.','','');
 INSERT INTO "Trs" VALUES('Set current','','');
-INSERT INTO "Trs" VALUES('Write to hour archive for time','','');
-INSERT INTO "Trs" VALUES('Write to day archive for time','','');
-INSERT INTO "Trs" VALUES('Write to result month archive for time','','');
+INSERT INTO "Trs" VALUES('Write to hour archive for time','Запис до архіву годин на час','Запись в архив часов за время');
+INSERT INTO "Trs" VALUES('Write to day archive for time','Запис до архіву днів на час','Запись в архив дней за время');
+INSERT INTO "Trs" VALUES('Write to result month archive for time','Запис до результуючого архіву місяців на час','Запись в результирующий архив месяцев за время');
 INSERT INTO "Trs" VALUES('Error response','Помилка відповіді','Ошибка ответа');
 INSERT INTO "Trs" VALUES('Quality errors','Помилки якості','Ошибки качетсва');
 INSERT INTO "Trs" VALUES('Transport ''%1'' error.','','');
 INSERT INTO "Trs" VALUES('No connection','Нема підключення','Нет подключения');
-INSERT INTO "Trs" VALUES('Data list for request empty.','','');
+INSERT INTO "Trs" VALUES('Data list for request empty.','Перелік даних запиту порожній.','Список данных запроса пустой.');
 INSERT INTO "Trs" VALUES('Unknown','Невідомий','Неизвестный');
 INSERT INTO "Trs" VALUES('Deceleration','Гальмування','Торможение');
 INSERT INTO "Trs" VALUES('Stop operation failure','Невдача операції зупинки','Неудача операции останова');
 INSERT INTO "Trs" VALUES('Idling failure','Невдача простою','Неудача простоя');
-INSERT INTO "Trs" VALUES('Regeneration breaking failure','','');
+INSERT INTO "Trs" VALUES('Regeneration breaking failure','Збій регенерації гальмування','Сбой регенерации торможения');
 INSERT INTO "Trs" VALUES('Deceleration failure','Помилка гальмування','Ошибка торможения');
 INSERT INTO "Trs" VALUES('Request for service info.','','');
 INSERT INTO "Trs" VALUES('Request for counter time and hour archive begin.','','');
@@ -4813,7 +4704,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','','',1416765781);
+}','','',1418027381);
 INSERT INTO "tmplib_base" VALUES('anUnif','Analog sign. (Unif)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -4897,7 +4788,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','','',1416765630);
+}','','',1418027386);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,1,'JavaLikeCalc.JavaScript
 set=false;
 if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
@@ -5401,7 +5292,7 @@ else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1416765601);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','prescr','','','',10,0,'clcCnt++;
+INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','','','','',10,0,'clcCnt++;
 
 if(f_start)	work = SYS.XMLNode("prg");
 
@@ -5710,7 +5601,7 @@ if(curMode == 1 || curMode == 2) {
 	}
 }
 mode = curMode;','','',1417806670);
-INSERT INTO "lib_Controllers" VALUES('test','test','','test','','','',10,0,'using Special.FLibSYS;
+INSERT INTO "lib_Controllers" VALUES('test','test','','','','','',10,0,'using Special.FLibSYS;
 
 out+=10;
 if(out>100) out=0;
@@ -5837,7 +5728,7 @@ for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
     rec += DBTbl[i_rw][i_fld]+"\t";
   SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
 }*/','','',1416656627);
-INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',10,0,'//clc=0;
+INSERT INTO "lib_Controllers" VALUES('test1','test1','','','','','',10,0,'//clc=0;
 //First getting previous time
 //if(!p_tm){ p_tm = Special.FLibSYS.tmTime(); break; }
 
