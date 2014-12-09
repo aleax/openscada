@@ -353,7 +353,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
     else if(a_path == "/obj/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
@@ -399,7 +399,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	string idcol  = opt->attr("col");
 
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    if(!idmime.empty() && idcol == "dt" && atoi(opt->attr("data").c_str())) {
+	    if(!idmime.empty() && idcol == "dt" && s2i(opt->attr("data"))) {
 		string mimeType, mimeData;
 		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) opt->setText(mimeData);
 	    }
@@ -455,9 +455,10 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //* LWidget: Library stored widget               *
 //************************************************
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
-	Widget(iid), TConfig(&mod->elWdg()), enableByNeed(false), m_proc_per(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
+	Widget(iid), TConfig(&mod->elWdg()), enableByNeed(false), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     cfg("ID").setS(id());
+    cfg("PROC").setExtVal(true);
 
     setParentNm(isrcwdg);
     setNodeFlg(TCntrNode::SelfSaveForceOnChild);
@@ -527,6 +528,8 @@ string LWidget::calcLang( )
     return iprg.substr(0,iprg.find("\n"));
 }
 
+bool LWidget::calcProgTr( )	{ return (!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() : cfg("PR_TR"); }
+
 string LWidget::calcProg( )
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcProg();
@@ -546,35 +549,22 @@ string LWidget::calcProgStors( const string &attr )
     return rez;
 }
 
-int LWidget::calcPer( )
+int LWidget::calcPer( )	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
+
+void LWidget::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
+
+void LWidget::setCalcProgTr( bool vl )
 {
-    if(m_proc_per < 0 && !parent().freeStat())	return parent().at().calcPer();
-    return m_proc_per;
+    if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
+    else cfg("PR_TR") = vl;
 }
 
-void LWidget::setCalcLang( const string &ilng )
-{
-    cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg());
-    modif();
-}
-
-void LWidget::setCalcProg( const string &iprg )
-{
-    cfg("PROC").setS(calcLang()+"\n"+iprg);
-    modif();
-}
-
-void LWidget::setCalcPer( int vl )
-{
-    m_proc_per = vl;
-    modif();
-}
+void LWidget::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+iprg); }
 
 void LWidget::setParentNm( const string &isw )
 {
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
-    modif();
 }
 
 void LWidget::setEnable( bool val )
@@ -766,6 +756,13 @@ void LWidget::inheritAttr( const string &attr )
     bool mdf = isModify();
     Widget::inheritAttr( attr );
     if(!mdf)	modifClr( );
+}
+
+bool LWidget::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
+    modif();
+    return true;
 }
 
 void LWidget::cntrCmdProc( XMLNode *opt )

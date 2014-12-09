@@ -120,6 +120,7 @@ class LWidget : public Widget, public TConfig
 	string	type( )		{ return "LibWidget"; }
 	string	calcId( );
 	string	calcLang( );
+	bool	calcProgTr( );
 	string	calcProg( );
 	string	calcProgStors( const string &attr = "" );
 	int	calcPer( );
@@ -130,8 +131,9 @@ class LWidget : public Widget, public TConfig
 	void setEnable( bool val );
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
 	void setCalcLang( const string &ilng );
+	void setCalcProgTr( bool vl );
 	void setCalcProg( const string &iprg );
-	void setCalcPer( int vl );
+	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
 	void setParentNm( const string &isw );
 	void setEnableByNeed( );
 
@@ -156,7 +158,7 @@ class LWidget : public Widget, public TConfig
     protected:
 	//Methods
 	void postDisable( int flag );
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	// Storing
@@ -168,7 +170,7 @@ class LWidget : public Widget, public TConfig
 
     private:
 	//Attributes
-	int64_t	&m_proc_per,	//Widget period
+	int64_t	&mProcPer,	//Widget period
 		&mTimeStamp;
 	string	mParentNmPrev;	//Previous parent name after successful enable
 };

@@ -173,6 +173,7 @@ class Widget : public TCntrNode
 	short  permit( );					//Permission for access to widget
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( )	{ return ""; }		//Calc procedure language
+	virtual bool   calcProgTr( )	{ return true; }	//Calc procedure translation
 	virtual string calcProg( )	{ return ""; }		//Calc procedure
 	virtual string calcProgStors( const string &attr = "" )	{ return ""; }	//Storages get
 	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
@@ -187,6 +188,7 @@ class Widget : public TCntrNode
 	void setGrp( const string &igrp );
 	void setPermit( short iperm );
 	virtual void setCalcLang( const string &ilng )	{ };
+	virtual void setCalcProgTr( bool vl )		{ };
 	virtual void setCalcProg( const string &iprg )	{ };
 	virtual void setCalcPer( int vl )		{ };
 	void setStlLock( bool vl )	{ mStlLock = vl; }

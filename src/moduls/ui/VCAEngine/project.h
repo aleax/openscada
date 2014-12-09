@@ -168,8 +168,9 @@ class Page : public Widget, public TConfig
 	string	type( )		{ return "ProjPage"; }
 	string	calcId( );
 	string	calcLang( );
+	bool	calcProgTr( );
 	string	calcProg( );
-	string calcProgStors( const string &attr = "" );
+	string	calcProgStors( const string &attr = "" );
 	int	calcPer( );
 	string	ownerFullId( bool contr = false );
 	int	prjFlags( )	{ return mFlgs; }
@@ -179,8 +180,9 @@ class Page : public Widget, public TConfig
 
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
 	void setCalcLang( const string &ilng );
+	void setCalcProgTr( bool vl );
 	void setCalcProg( const string &iprg );
-	void setCalcPer( int vl );
+	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
 	void setParentNm( const string &isw );
 	void setPrjFlags( int val );
 
@@ -215,6 +217,7 @@ class Page : public Widget, public TConfig
 	//Methods
 	void postEnable( int flag );
 	void postDisable( int flag );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	// Storing
 	void load_( );

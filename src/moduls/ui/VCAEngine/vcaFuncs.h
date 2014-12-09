@@ -83,8 +83,8 @@ class wdgList : public TFunction
 		else if(dynamic_cast<Widget*>(&nd.at()) && !val->getB(2))	((Widget*)&nd.at())->wdgList(ls);
 	    }
 	    catch(TError err) { }
-	    for(unsigned i_l = 0; i_l < ls.size(); i_l++) rez->propSet(TSYS::int2str(i_l),ls[i_l]);
-	    val->setO(0,rez);
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++) rez->arSet(i_l, ls[i_l]);
+	    val->setO(0, rez);
 	}
 };
 
@@ -179,7 +179,7 @@ class attrGet : public TFunction
 	    XMLNode req("get");
 	    req.setAttr("user",val->user())->setAttr("path",addr+"/%2fattr%2f"+a);
 	    mod->cntrCmd(&req);
-	    if(!atoi(req.attr("rez").c_str())) val->setS(0,req.text());
+	    if(!s2i(req.attr("rez"))) val->setS(0, req.text());
 
 	    /*try {
 		AutoHD<TCntrNode> nd = nodePrev()->nodeAt(val->getS(1));

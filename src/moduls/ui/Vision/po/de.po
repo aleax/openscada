@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-26 10:27+0300\n"
+"POT-Creation-Date: 2014-12-09 12:46+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1159,6 +1159,9 @@ msgstr "Verfahrenssprache:"
 
 msgid "Procedure calculate (ms):"
 msgstr "Rechenzeit der Funktion (ms):"
+
+msgid "Translation:"
+msgstr "Übersetzung:"
 
 msgid "Links"
 msgstr "Links"

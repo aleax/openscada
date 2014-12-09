@@ -125,7 +125,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    //wdg_el.fldAdd(new TFld("PROC_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    wdg_el.fldAdd(new TFld("PR_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
     wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
     wdg_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
     wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
@@ -175,7 +175,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     page_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    //page_el.fldAdd(new TFld("PROC_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    page_el.fldAdd(new TFld("PR_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
     page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
     page_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
     page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));

@@ -8308,21 +8308,21 @@ gHHCdwV+L192OCksyn4l6uJO4wJK+CbFSmhpcQMOhIOARtlX4jtGPQ0BWTSbH+PODzIGDApFDPgx
 /s5eJwuMvYUsMEgLKLJA77gs8Cq/9m+hDhgk8lfVAUMMMcQQQwwxxBBDDDHEHxP/B1Hz9F2ngzPW
 AAAAAElFTkSuQmCC');
 CREATE TABLE 'wlb_Main_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','max','Parameter:maximum',131076,'100||',10,'Parameter|max','','','Параметр:максимум','','','Параметр:максимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','min','Parameter:minimum',131076,'0||',10,'Parameter|min','','','Параметр:мінімум','','','Параметр:минимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAuto','Parameter:automate',131072,'0||',14,'Parameter|auto','','','Параметр:автомат','','','Параметр:автомат','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmCasc','Parameter:cascad',131072,'0||',14,'Parameter|casc','','','Параметр:каскад','','','Параметр:каскад','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmDemention','Parameter:dimension',131077,'||',10,'Parameter|ed','','','Параметр:одиниця виміру','','','Параметр:единица измерения','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmOut','Parameter:output',131076,'0||',14,'Parameter|out','','','Параметр:вихід','','','Параметр:выход','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmShifr','Parameter:code',131077,'||',10,'Parameter|NAME','','','Параметр:шифр','','','Параметр:шифр','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmSp','Parameter:set point',131076,'0||',14,'Parameter|sp','','','Параметр:завдання','','','Параметр:задание','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVar','Parameter:variable',131076,'0||',14,'Parameter|var','','','Параметр:змінна','','','Параметр:переменная','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','max','Parameter:maximum',131076,'100||',10,'Parameter|max','','','Параметр:максимум','','Parameter|max','Параметр:максимум','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','min','Parameter:minimum',131076,'0||',10,'Parameter|min','','','Параметр:мінімум','','Parameter|min','Параметр:минимум','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAuto','Parameter:automate',131072,'0||',14,'Parameter|auto','','','Параметр:автомат','','Parameter|auto','Параметр:автомат','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmCasc','Parameter:cascad',131072,'0||',14,'Parameter|casc','','','Параметр:каскад','','Parameter|casc','Параметр:каскад','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmDemention','Parameter:dimension',131077,'||',10,'Parameter|ed','','','Параметр:одиниця виміру','ВІДКР;ЗАКР;СТОП||','Parameter|ed','Параметр:единица измерения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmOut','Parameter:output',131076,'0||',14,'Parameter|out','','','Параметр:вихід','','Parameter|out','Параметр:выход','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmShifr','Parameter:code',131077,'||',10,'Parameter|NAME','','','Параметр:шифр','ВІДКР;ЗАКР;СТОП||','Parameter|NAME','Параметр:шифр','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmSp','Parameter:set point',131076,'0||',14,'Parameter|sp','','','Параметр:завдання','','Parameter|sp','Параметр:задание','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVar','Parameter:variable',131076,'0||',14,'Parameter|var','','','Параметр:змінна','','Parameter|var','Параметр:переменная','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','grpName','Group name',131077,'||',9,'','','','Ім''я групи','','','Имя группы','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el8','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el8','Максимум','','','Максимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','ed','Dimension',131077,'||',10,'Parameter|ed','','el8','Од. виміру','','','Ед. измерения','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclVer','Vertical scale',131076,'<EVAL>||',14,'<page>|sclVerScl','','','Вертикальний масштаб','','','Вертикальный масштаб','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclVerOff','Vertical scale offset',131076,'<EVAL>||',14,'<page>|sclVerSclOff','','','Зміщення вертикального масштабу','','','Смещение вертикального масштаба','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclVer','Vertical scale',131076,'<EVAL>||',14,'<page>|sclVerScl','','','Вертикальний масштаб','','<page>|sclVerScl','Вертикальный масштаб','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclVerOff','Vertical scale offset',131076,'<EVAL>||',14,'<page>|sclVerSclOff','','','Зміщення вертикального масштабу','','<page>|sclVerSclOff','Смещение вертикального масштаба','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','addr','Address',196613,'||',10,'Parameter|var','','el8','Адреса','','','Адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','min','Minimum',131076,'0|0;0|',10,'Parameter|min','','el7','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph','max','Maximum',131076,'0|0;0|',10,'Parameter|max','','el7','Максимум','','','Максимум','','','','');
@@ -8374,16 +8374,16 @@ INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_name','Parameter1:name',13
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','calcCnt','Calc counter',131073,'1||',8,'','','','Лічильник обчислень','','','Счётчик вычислений','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_addr','Parameter1:address',196613,'<EVAL>||',10,'Parameter 1|var','','','Параметр1:адреса','','','Параметр1:адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','aCur','Archive cursor',131073,'0||',10,'<page>|aCur','','','Курсор архіву','','','Курсор архива','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmCloseSt','Parameter:state - "Closed"',131072,'<EVAL>||',10,'Parameter|st_close','','','Параметр:стан - "Закрито"','','','Параметр:состояние - "Закрыто"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmCloseSt','Parameter:state - "Closed"',131072,'<EVAL>||',10,'Parameter|st_close','','','Параметр:стан - "Закрито"','','Parameter|st_close','Параметр:состояние - "Закрыто"','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','Zi','Parameter:Insensitivity area',131076,'<EVAL>|0;0|',14,'Parameter|Zi','','','Параметр:зона нечутливості','','','Параметр:зона нечувствительности','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','var_addr','Parameter:Variable address',196613,'<EVAL>||',10,'Parameter|var','','','Параметр:адреса змінної','','','Параметр:адрес переменной','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','var','Parameter:Variable',131076,'<EVAL>|0;0|',10,'Parameter|var','','','Параметр:змінна','','','Параметр:переменная','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','Ti','Parameter:Time integration',131076,'<EVAL>|0;0|',14,'Parameter|Ti','','','Параметр:час інтегрування','','','Параметр:время интегрирования','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','Td','Parameter:Time differentiation',131076,'<EVAL>|0;0|',14,'Parameter|Td','','','Параметр:час диференцювання','','','Параметр:время дифференцирования','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmOpenSt','Parameter:state - "Opened"',131072,'<EVAL>||',10,'Parameter|st_open','','','Параметр:стан - "Відкрито"','','','Параметр:состояние - "Открыто"','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmClose','Parameter:command - "Close"',131072,'<EVAL>||',14,'Parameter|close','','','Параметр:команда - "Закрити"','','','Параметр:команда - "Закрыть"','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmStop','Parameter:command - "Stop"',131072,'<EVAL>||',14,'Parameter|stop','','','Параметр:команда - "Стоп"','','','Параметр:команда - "Стоп"','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmCom','Parameter:command - "Open"',131072,'<EVAL>||',14,'Parameter|com','','','Параметр:команда - "Відкрити"','','','Параметр:команда - "Открыть"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmOpenSt','Parameter:state - "Opened"',131072,'<EVAL>||',10,'Parameter|st_open','','','Параметр:стан - "Відкрито"','','Parameter|st_open','Параметр:состояние - "Открыто"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmClose','Parameter:command - "Close"',131072,'<EVAL>||',14,'Parameter|close','','','Параметр:команда - "Закрити"','','Parameter|close','Параметр:команда - "Закрыть"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmStop','Parameter:command - "Stop"',131072,'<EVAL>||',14,'Parameter|stop','','','Параметр:команда - "Стоп"','','Parameter|stop','Параметр:команда - "Стоп"','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmCom','Parameter:command - "Open"',131072,'<EVAL>||',14,'Parameter|com','','','Параметр:команда - "Відкрити"','','Parameter|com','Параметр:команда - "Открыть"','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','SHIFR','Parameter:code',131077,'<EVAL>||',10,'Parameter|SHIFR','','','Параметр:шифр','','','Параметр:шифр','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','DESCR','Parameter:Description',131077,'<EVAL>||',10,'Parameter|DESCR','','','Параметр:опис','','','Параметр:описание','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','ed','Parameter:Dimension variable',131077,'<EVAL>||',10,'Parameter|ed','','','Параметр:одиниця виміру','','','Параметр:единица измерения','','','','');
@@ -8430,34 +8430,34 @@ INSERT INTO "wlb_Main_uio" VALUES('doc_panel','doc','Document',131077,'<EVAL>||'
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','n','Archive size',131073,'<EVAL>||',10,'<page>|n','','','Розмір архіву','','','Размер архива','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','time','Document time',139265,'0||',14,'<page>|time','','','Час документа','','','Время документа','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','vCur','View cursor',131073,'<EVAL>||',14,'<page>|vCur','','','Курсор відображення','','','Курсор отображения','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','trcPer','Trace period',131073,'0||',14,'<page>|trcPer','','','Період слідкування','','','Период слежения','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','tSek','Trend time',139265,'0||',14,'<page>|tSek','','','Час тренду','','','Время тренда','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','tSize','Trend size',131076,'0||',14,'<page>|tSize','','','Розмір тренду','','','Размер тренда','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','valArch','Archiver',131077,'<EVAL>||',14,'<page>|valArch','','','Архіватор','','','Архиватор','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','curSek','Cursor',139265,'<EVAL>||',14,'<page>|curSek','','','Курсор','','','Курсор','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','type','Type',131077,'<EVAL>||',14,'<page>|type','','','Тип','','','Тип','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('grph_panel','curUSek','Cursor, usec',131073,'<EVAL>||',14,'<page>|curUSek','','','Курсор, мкс','','','Курсор, мкс','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','trcPer','Trace period',131073,'0||',14,'<page>|trcPer','','','Період слідкування','','<page>|trcPer','Период слежения','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','tSek','Trend time',139265,'0||',14,'<page>|tSek','','','Час тренду','','<page>|tSek','Время тренда','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','tSize','Trend size',131076,'0||',14,'<page>|tSize','','','Розмір тренду','','<page>|tSize','Размер тренда','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','valArch','Archiver',131077,'<EVAL>||',14,'<page>|valArch','','','Архіватор','<EVAL>||','<page>|valArch','Архиватор','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','curSek','Cursor',139265,'<EVAL>||',14,'<page>|curSek','','','Курсор','','<page>|curSek','Курсор','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','type','Type',131077,'<EVAL>||',14,'<page>|type','','','Тип','<EVAL>||','<page>|type','Тип','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grph_panel','curUSek','Cursor, usec',131073,'<EVAL>||',14,'<page>|curUSek','','','Курсор, мкс','','<page>|curUSek','Курсор, мкс','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','lastView','Last view',131077,'<EVAL>||',8,'','','','Останній вигляд','','','Последний вид','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmManIn','Parameter:manual input',131076,'<EVAL>||',14,'Parameter|manIn','','','Параметр:ручний ввід','','','Параметр:ручной ввод','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmManIn','Parameter:manual input',131076,'<EVAL>||',14,'Parameter|manIn','','','Параметр:ручний ввід','','Parameter|manIn','Параметр:ручной ввод','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeA','Regulator mode (auto)',131072,'<EVAL>||',10,'Parameter|auto','','','Режим регулятору (автомат)','','','Режим регулятора (автомат)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeC','Regulator mode (cascad)',131072,'<EVAL>||',10,'Parameter|casc','','','Режим регулятору (каскад)','','','Режим регулятора (каскад)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','pPrec','Precision',131073,'1||',10,'Parameter|prec','','','Точність','','','Точность','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','redEVAL','Speech message generation on reject',131072,'<EVAL>||',9,'','','','Генерація мовного повідомлення у разі відмови','','','Генерация речевого сообщения при отказе','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow','spName','Speech name',131077,'<EVAL>||',9,'','','','Ім’я для синтезу','','','Имя для синтеза','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPasp','pName','Parameter name',196613,'<EVAL>||',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digComs','Parameter:digital commands',131077,'OPEN;CLOSE;STOP||',10,'Parameter|digComs','','','Параметр:дискр. команди','ВІДКР;ЗАКР;СТОП||','','Параметр:дискр. команды','ОТКР;ЗАКР;СТОП||','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digStts','Parameter:digital stats',131077,'<EVAL>||',10,'Parameter|digStts','','','Параметр:дискр. стани','','','Параметр:дискр. состояния','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAMax','Parameter:border up alarm',131076,'<EVAL>||',10,'Parameter|aMax','','','Параметр:границя верхня аварійна','','','Параметр:граница верхн. аварийная','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAMin','Parameter:border down alarm',131076,'<EVAL>||',10,'Parameter|aMin','','','Параметр:границя нижня аварійна','','','Параметр:граница нижн. аварийная','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAnalog','Parameter:analog regulator',131072,'<EVAL>||',10,'Parameter|analog','','','Параметр:аналоговий регулятор','','','Параметр:аналоговый регулятор','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmColor','Parameter:border color',131077,'<EVAL>||',10,'Parameter|color','','','Параметр:колір границі','','','Параметр:цвет бордюра','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmDescr','Parameter:description',131077,'<EVAL>||',10,'Parameter|DESCR','','','Параметр:опис','','','Параметр:описание','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmId','Parameter:identifier',131077,'<EVAL>||',10,'Parameter|SHIFR','','','Параметр:ідентифікатор','','','Параметр:идентификатор','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmImpQdwnTm','Parameter:imp. out down',131072,'<EVAL>||',10,'Parameter|impQdwn','','','Параметр:імпульсний вихід вниз','','','Параметр:выходной импульс вниз','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmImpQupTm','Parameter:imp. out up',131072,'<EVAL>||',10,'Parameter|impQup','','','Параметр:імпульсний вихід вгору','','','Параметр:выходной импульс вверх','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmPrec','Parameter:precision (signs)',131073,'<EVAL>||',10,'Parameter|prec','','','Параметр:точність (знаків)','','','Параметр:точность (знаков)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmWMax','Parameter:border up warning',131076,'<EVAL>||',10,'Parameter|wMax','','','Параметр:границя верхня попереджув.','','','Параметр:граница верхняя предупр.','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmWMin','Parameter:border down warning',131076,'<EVAL>||',10,'Parameter|wMin','','','Параметр:границя нижня попереджув.','','','Параметр:граница нижняя предупр.','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digComs','Parameter:digital commands',131077,'OPEN;CLOSE;STOP||',10,'Parameter|digComs','','','Параметр:дискр. команди','ВІДКР;ЗАКР;СТОП||','Parameter|digComs','Параметр:дискр. команды','ОТКР;ЗАКР;СТОП||','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digStts','Parameter:digital stats',131077,'<EVAL>||',10,'Parameter|digStts','','','Параметр:дискр. стани','ВІДКР;ЗАКР;СТОП||','Parameter|digStts','Параметр:дискр. состояния','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAMax','Parameter:border up alarm',131076,'<EVAL>||',10,'Parameter|aMax','','','Параметр:границя верхня аварійна','','Parameter|aMax','Параметр:граница верхн. аварийная','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAMin','Parameter:border down alarm',131076,'<EVAL>||',10,'Parameter|aMin','','','Параметр:границя нижня аварійна','','Parameter|aMin','Параметр:граница нижн. аварийная','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmAnalog','Parameter:analog regulator',131072,'<EVAL>||',10,'Parameter|analog','','','Параметр:аналоговий регулятор','','Parameter|analog','Параметр:аналоговый регулятор','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmColor','Parameter:border color',131077,'<EVAL>||',10,'Parameter|color','','','Параметр:колір границі','ВІДКР;ЗАКР;СТОП||','Parameter|color','Параметр:цвет бордюра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmDescr','Parameter:description',131077,'<EVAL>||',10,'Parameter|DESCR','','','Параметр:опис','ВІДКР;ЗАКР;СТОП||','Parameter|DESCR','Параметр:описание','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmId','Parameter:identifier',131077,'<EVAL>||',10,'Parameter|SHIFR','','','Параметр:ідентифікатор','ВІДКР;ЗАКР;СТОП||','Parameter|SHIFR','Параметр:идентификатор','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmImpQdwnTm','Parameter:imp. out down',131072,'<EVAL>||',10,'Parameter|impQdwn','','','Параметр:імпульсний вихід вниз','','Parameter|impQdwn','Параметр:выходной импульс вниз','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmImpQupTm','Parameter:imp. out up',131072,'<EVAL>||',10,'Parameter|impQup','','','Параметр:імпульсний вихід вгору','','Parameter|impQup','Параметр:выходной импульс вверх','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmPrec','Parameter:precision (signs)',131073,'<EVAL>||',10,'Parameter|prec','','','Параметр:точність (знаків)','','Parameter|prec','Параметр:точность (знаков)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmWMax','Parameter:border up warning',131076,'<EVAL>||',10,'Parameter|wMax','','','Параметр:границя верхня попереджув.','','Parameter|wMax','Параметр:граница верхняя предупр.','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmWMin','Parameter:border down warning',131076,'<EVAL>||',10,'Parameter|wMin','','','Параметр:границя нижня попереджув.','','Parameter|wMin','Параметр:граница нижняя предупр.','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_out','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_sp','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','prExtComLs','Available commands list',131078,'<TVarObj>
@@ -8501,7 +8501,7 @@ INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','varEl','Value',131076,'<EVAL>||
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMax','Border up warning',131076,'<EVAL>||',10,'Parameter|wMax','','','Границя верхня попереджув.','','Parameter|wMax','Граница верхняя пред.','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMin','Border down warning',131076,'<EVAL>||',10,'Parameter|wMin','','','Границя нижня попереджув.','','Parameter|wMin','Граница нижняя пред.','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','prec','Precision',131073,'1||',10,'Parameter|prec','','','Точність','','','Точность','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVarIn','Parameter:variable input',131076,'<EVAL>||',14,'Parameter|varIn','','','Параметр:ввід змінної','','','Параметр:ввод переменной','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVarIn','Parameter:variable input',131076,'<EVAL>||',14,'Parameter|varIn','','','Параметр:ввід змінної','','Parameter|varIn','Параметр:ввод переменной','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_var','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prCnt','Cycles counter',131073,'0||',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prEndRun','Program:ending',131072,'0||',8,'','','','Програма:закінчення','','','Программа:завершение','','','','');
@@ -16530,3683 +16530,6 @@ INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','st_open','Parameter:status-open',
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','st_close','Parameter:status-close',131072,'0||',10,'Parameter|st_close','','','','','','','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'||',9,'','','','','','','','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','digStts','Statuses',131077,'||',10,'Parameter|digStts','','','','','','','','','','');
-CREATE TABLE 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "wlb_Main" VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
-z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
-DkY7UWgLbYdaorqO7diOf8S+e4hhxrHTUqZpnKfknOOPv9f33HvuZe7d+0XXdXyCybJMdF3X9eO0
-d3Nzk+d5lmUBCILgeR7P8/1+XxAEnucZhul0OhkQO84mhFBKXdeNoiiKItu2WZallA4GA8dxKKU5
-j4y7lpaW0n9nZ2cBtNvtCYPK0XIGIwC0GY0MSc2ojYf71T435AI+iLhI8IWKXSmkcBFHmZzRAghL
-YVAKYjYeiAM2LhROANSNelG4rtcBgAEoGDCTKHing1IqSVJRatpcdzAz0wTQ71sJpRt2a6QmMMK1
-a9fm5uaWl5efP38uy/K5c+eq1Wou5cmTjbdve6urv9669eP6+m8EQIxYH+rtUhvA/v5+HMf7+/uE
-ENM0L1++nEsxTYMQ9saN79682U20CIxQ4ZKPv7y8LIqiIAjlcrnZbBaNaHq6dnCgPX788ObNH3q9
-twSAQpRRbGdnp1QqvU/d2toqomxtvarX1YWFpfX13xMtfUACOEDTtJWVlXR2CEQAD4RADIipULd7
-MPqhKA0CYAdQgPmxFx4Be0AdkAALiICvAC5PGgGgAFN5sQqgAhxQAqYBvwCRUMZVjEwE5gpCGUuK
-OgKCDwOUpQEfjJdrhChClE/5C9j4MGDUDLNmRlz2AXNo7ng7GWeyv1SQfavgC+JAZGhWDAWtcdnV
-n1BmgJkPA5KTv6AapDHuzNnr0jYcDi3LCoKAUkoIkSRJluWPpgA4PDwcFTTLssfHx4uLi+n6zlIs
-y8qsYMdxLMtaXFz0fZ9SKsvy0dERx+UUzT8U27bHKc1mkxBSLpffO0cdJmP/zu79f6KcPEemaYZh
-yHFcvV64yZ+gpdvt6rq+vb3tuu7Ztaiq6nleo9FgmMI2cjIFQKWS3w/T9tnNURAEHMcpinJGSrfb
-dV3XsqxWq3V2LaqqBkHQbrdzj1CnpQA4Tf9Pvu4WsJry2lP2s2+fvfzyZSZ7EA/uG/dX+6sZf0I5
-BF6kvF7Z253fPegcZLJDGq7Za5veZsZ/8oiCIDAMgxDySXPkeZ6maaOT5hkpqqpyHNfpdKIo25g+
-ggKAYRhRFCfnfF7ryDCMwWDA83yjkdMVT6Wl2+3Gcazruud5Z9eiqqpt27Ozs4RMyjx5RLVazv0g
-Y//VHFFK9/b24jj+JEocx47j+L4/ISf5LheAZqppVa3qlbUrkR1pmtZqtRYWFkYN/3zj/F3mrshm
-SzmhNIFmqsx5n+8cdACgBQDvzwxT0tRFXMzXIstTp5mItAVByPMlAIbRSyjXr39v2870dG1+/gsA
-DIM4juOY2ralKDO5lF5Pr9cVAC9e/Pn06UMCYDgc7u6+Yll2Y+OPft/iOM7zPMexFaVx587PBVqC
-R49WVlYe3L79U6IlDMOrV6+HYRgEQaVSGQ6HruvEcVytTnuezzCgFJk27fv+pUvfXLjw9evX2wll
-fX2tVitcabnmed7ok/d6GiEgAExTM01tPNV1XUqpKIqO41QqlaJjQ3KzKTJN03RdF0XRNM12uz03
-V3i3mESRJIllWUmSqtXq1FTu5ecdRZblogPOhG0pbSzL/Q2YovM7l7aYfgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-ev_wrk = ev_rez = "";
-off = 0;
-if(f_start) cntr = prevCntr = holdCntr = 0;
-cntr++;
-
-if(!prmColor.isEVal()) { bordColor = prmColor; bordWidth = 2; }
-else { bordColor = "black"; bordWidth = 1; } 
-
-//Disable all mutable widgets
-info_ed_en = info_var_en = info_sp_en = info_out_en = spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = lev_out_en = lev_var_en = lev_sp_en = mode_en = modMan_en = modAuto_en =
-	modCasc_en = pnl_pid_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = 
-	com_open_en = com_stop_en = com_close_en = st_open_en = st_close_en = Ramka_en = moveUp_en = moveDwn_en = false;
-
-info_name_text = prmShifr.isEVal() ? "" : prmShifr;
-
-//Impulse processing
-if(!prmAnalog.isEVal() && prmAnalog == false) {
-	lev_out_en = info_out_en = false; 
-	moveUp_en = moveDwn_en = true; 
-	moveUp_fillColor = (!prmImpQupTm.isEVal() && prmImpQupTm) ? "cyan" : "black-0"; 
-	moveDwn_fillColor = (!prmImpQdwnTm.isEVal() && prmImpQdwnTm) ? "cyan" : "black-0"; 
-}
-
-//Check for analog
-if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
-	info_ed_en = info_var_en = lev_var_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = true;
-	info_ed_text = prmDemention.isEVal() ? "" : prmDemention;
-	pVar = prmVar.isEVal() ? prmVarIn : prmVar;
-	if(prmVarIn.isEVal()) info_var_bordWidth = 0;
-	if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else info_var_clearCnt--; 
-	lev_var_p1y = max(0,min(140,140*(1-(pVar-min)/(max-min))));
-	if(prmPrec.isEVal())	info_var_arg0cfg = "10;f;2";
-	else if(prmPrec >= 0)	info_var_arg0cfg = "10;f;"+prmPrec;
-	else	info_var_arg0cfg = "10;g;"+abs(prmPrec);
-
-	info_var_color = lev_var_c3 = "#3EFF3E";
-	//Warning borders process
-	if(!prmWMin.isEVal() && !prmWMax.isEVal() && prmWMax > prmWMin) {
-		lev_var_c2 = "yellow";
-		lev_var_p6y = lev_var_p7y = 140*(1-(prmWMax-min)/(max-min));
-		lev_var_p8y = lev_var_p9y = 140*(1-(prmWMin-min)/(max-min));
-		if(pVar >= prmWMax || pVar <= prmWMin) info_var_color = lev_var_c3 = "yellow";
-	}
-	else lev_var_c2 = "black-0";
-	//Alarm borders process
-	if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) {
-		lev_var_c1 = "red";
-		lev_var_p2y = lev_var_p3y = 140*(1-(prmAMax-min)/(max-min));
-		lev_var_p4y = lev_var_p5y = 140*(1-(prmAMin-min)/(max-min));
-		if( pVar >= prmAMax || pVar <= prmAMin ) info_var_color = lev_var_c3 = "red";
-	}
-	else lev_var_c1 = "black-0";
-
-	//EVAL
-	if(pVar > max || pVar < min) info_var_color = lev_var_c3 = "lightgray";
-
-	// Check an process PID regulator
-	if(!prmVar.isEVal() && !prmSp.isEVal()) {
-		lev_out_en = info_out_en = !prmOut.isEVal() && (prmAnalog.isEVal() || prmAnalog == true);
-		info_sp_en = lev_sp_en = mode_en = modMan_en = modAuto_en = pnl_pid_en = true;
-
-		modCasc_en = !prmCasc.isEVal();
-		spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = (prmCasc != true);
-		lev_out_p1y = 140*(1-prmOut/100);
-		lev_sp_p1y = max(0,min(140,140*(1-(prmSp-min)/(max-min))));
-		if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else info_sp_clearCnt--; 
-		if(prmPrec.isEVal())	info_sp_arg0cfg = "10;f;2";
-		else if(prmPrec >= 0)	info_sp_arg0cfg = "10;f;"+prmPrec;
-		else info_sp_arg0cfg = "10;g;"+abs(prmPrec);
-
-		if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else info_out_clearCnt--;
-		appToVl = 0;
-
-		//Event process
-		while((ev_wrk=event.parse(0,"\n",off)).length) {
-			prevMode = prmAuto ? ((prmCasc==true)?tr("Cascade"):tr("Automate")) : tr("Manual");      
-			if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) {  
-				prmAuto = false; if(prmCasc==true) prmCasc = false;
-				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Manual"));
-			}
-			else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) {  
-				prmAuto = true; if(prmCasc==true) prmCasc = false;
-				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Automate"));
-			}
-			else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) {  
-        	prmAuto = prmCasc = true;
-        	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Cascade"));
-			}
-			else if(ev_wrk == "key_mousePresLeft:/info_sp") {
-				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Setpoint")+" : "+prmDescr+" : "+real2str(prmSp,abs(prmPrec))+" : "+real2str(info_sp_arg0val,abs(prmPrec)));
-				prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
-			}
-			else if(ev_wrk == "key_mousePresLeft:/info_out") {
-				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Output")+" : "+prmDescr+" : "+real2str(prmManIn,1)+" : "+real2str(info_out_arg0val,1));
-				prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
-			}
-			else if(ev_wrk == "ws_BtPress:/spToVar") {
-				info_sp_arg0val = info_var_arg0val;
-				info_sp_backColor = "darkslategray";
-				info_sp_clearCnt = 25;
-			}
-			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-			else if(ev_wrk == "ws_BtPress:/down")			appToVl = -1;
-			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
-			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-			else if(ev_wrk == "ws_BtPress:/pnl_pid") {
-				sessNm = strParsePath(path,0);
-				pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
-				if(vcaNodePresent(pidPg)) vcaAttrSet(pidPg+"/a_pgOpen",1);
-				else ev_rez += "usr_PidCntrCall\n"; 
-			} 
-			else ev_rez += ev_wrk+"\n";
-		}
-		event = ev_rez;
-
-		if(appToVl && (prmAuto || prmOut.isEVal())) {
-			if(prmPrec.isEVal())	newVl = ((info_sp_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else {
-				if((cntr-prevCntr)/f_frq > 0.2)	{ holdCntr = cntr; levUp = 0; }
-				prevCntr = cntr;
-				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
-				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
-				newVl = info_sp_arg0val + sign(appToVl) *										//direction
-														pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
-														pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-														pow(10,-prmPrec);										//precision base
-			}
-			newVl = max(min,min(max,newVl));
-			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin ) newVl = max(prmAMin,min(prmAMax,newVl));
-			info_sp_arg0val = newVl; info_sp_backColor = "darkslategray"; info_sp_clearCnt = 25;
-		}
-   	else if(appToVl && !prmAuto) {
-			if(prmAnalog==false) {
-				prmManIn = 50+2.5*appToVl;
-				if(appToVl == -1)			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( < )");
-				else if(appToVl == 1)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( > )");
-				else if(appToVl == -10)messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( << )");
-				else if(appToVl == 10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( >> )");
-			}
-			else {
-				newVl = max(0,min(100,info_out_arg0val+appToVl));
-				info_out_arg0val = newVl; info_out_backColor = "darkslategray"; info_out_clearCnt = 25;
-			}
-		}
-
-		if(prmAuto && prmCasc) { mode_text = tr("Cascade"); info_sp_bordWidth = info_out_bordWidth = 0; }
-		else if(prmAuto) {
-			mode_text = tr("Automate");
-			info_sp_bordWidth = 1; info_out_bordWidth = 0;
-		}
-		else {
-			mode_text = tr("Manual");
-			info_out_bordWidth = 1; info_sp_bordWidth = prmOut.isEVal() ? 1 : 0;
-		}
-	}
-	// Manual variable input
-	else if(!prmVarIn.isEVal()) {
-		up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = true;
-		info_var_bordWidth = 1;
-		appToVl = 0;
-
-		//Event process
-		while((ev_wrk=event.parse(0,"\n",off)).length) {
-			if(ev_wrk == "key_mousePresLeft:/info_var") {
-				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Variable")+" : "+prmDescr+" : "+real2str(prmVarIn,abs(prmPrec))+" : "+real2str(info_var_arg0val,abs(prmPrec)));
-				prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
-			}
-			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-			else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
-			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
-			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-			else ev_rez += ev_wrk + "\n";
-		}
-		event = ev_rez;
-
-		if(appToVl) {
-			if(prmPrec.isEVal()) newVl = ((info_var_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else {
-				if((cntr-prevCntr)/f_frq > 0.2)	{ holdCntr = cntr; levUp = 0; }
-				prevCntr = cntr;
-				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
-				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
-				newVl = info_var_arg0val +	sign(appToVl) *										//direction
-															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
-															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-															pow(10,-prmPrec);										//precision base
-			}
-			newVl = max(min,min(max,newVl));
-			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) newVl = max(prmAMin,min(prmAMax,newVl));
-			info_var_arg0val = newVl; info_var_backColor = "darkslategray"; info_var_clearCnt = 25;
-		}
-	}
-}
-else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmCloseSt.isEVal()) {
-	Ramka_en = true;
-	com_open_en = com_close_en = (!prmCom.isEVal() || !prmClose.isEVal());
-	st_open_en = st_close_en = (!prmOpenSt.isEVal() || !prmCloseSt.isEVal());
-	com_stop_en = !prmStop.isEVal();
-
-	if(com_open_en) {
-		com_open_name = !digComs.isEVal() ? digComs.parse(0,";").parse(0,"-") : tr("OPEN");
-		com_open_color = (digComs.parse(0,";").parse(1,"-") != "") ? digComs.parse(0,";").parse(1,"-") : "green";
-		com_open_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(0,";").parse(0,"-") : tr("Command")+" "+tr("OPEN");
-		com_open_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(0,";").parse(0,"-") : tr("Press for")+" "+tr("OPEN");
-		com_open_en = com_open_name.length;
-	}
-	if(com_close_en) {
-		com_close_name = !digComs.isEVal() ? digComs.parse(1,";").parse(0,"-") : tr("CLOSE");
-		com_close_color = (digComs.parse(1,";").parse(1,"-") != "") ? digComs.parse(1,";").parse(1,"-") : "red";
-		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(1,";").parse(0,"-") : tr("Command")+" "+tr("CLOSE");
-		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(1,";").parse(0,"-") : tr("Press for")+" "+tr("CLOSE");
-		com_close_en = com_close_name.length;
-  }
-  if(com_stop_en) { 
-		com_stop_name = !digComs.isEVal() ? digComs.parse(2,";").parse(0,"-") : tr("STOP");
-		com_stop_color = (digComs.parse(2,";").parse(1,"-") != "") ? digComs.parse(2,";").parse(1,"-") : "yellow";
-		com_stop_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(2,";").parse(0,"-") : tr("Command")+" "+tr("STOP");
-		com_stop_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(2,";").parse(0,"-") : tr("Press for")+" "+tr("STOP");
-		com_stop_en = com_stop_name.length;
-  }
-  if(st_open_en) {
-		st_open_text = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
-		st_open_color = (digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green";
-		st_open_tipTool = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
-		st_open_tipStatus = !digStts.isEVal() ? tr("State")+" "+digStts.parse(0,";").parse(0,"-") : tr("State")+" "+tr("OPEN");
-  }
-	if(st_close_en) {
-		st_close_text = !digStts.isEVal() ? digStts.parse(1,";").parse(0,"-") : tr("CLOSE");
-		st_close_color = (digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red";
-		st_close_tipTool = !digStts.isEVal() ? digStts.parse(1,";").parse(0,"-") : tr("CLOSE");
-		st_close_tipStatus = !digStts.isEVal() ? tr("State")+" "+digStts.parse(1,";").parse(0,"-") : tr("State")+" "+tr("CLOSE");
-	}
-
-	//Event process
-	while((ev_wrk=event.parse(0,"\n",off)).length) {
-		if(ev_wrk == "ws_BtPress:/com_open") {
-			if(!prmCom.isEVal()) prmCom = true; prmClose = false;
-			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_open_name);
-		}
-		else if(ev_wrk == "ws_BtPress:/com_close") {
-			if(!prmClose.isEVal()) prmClose = true; prmCom = false;
-			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_close_name);
-		}
-		else if(ev_wrk == "ws_BtPress:/com_stop") {
-			prmStop = true;
-			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_stop_name);
-		}
-		else ev_rez+=ev_wrk+"\n";
-	}
-	event=ev_rez;
-
-	if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? (prmOpenSt ?
-		((digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green") : "gray") :
-			(prmCloseSt ? "gray" : ((digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green"));
-
-	if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? (prmCloseSt ?
-		((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red") : "gray") :
-			(prmOpenSt ? "gray" : ((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red"));
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1416768084);
-INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
-xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
-krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
-z6LVarFotQp6vXbbm83n0nGEEEGvt16vXSkBEQEKrV3X/fLly3q9/tkPfE+w828XRx8/1qnj42MA
-sNYi4l3Dv+KttQBwL4+IlFLGWJ03xpQJ34iHeMdxmFSOF4/RYuZnmZ9Vn3XtZH+PM2ImUXeWtir+
-7Kwv5TDP3TD8KMRtTkxggmEABOJPsU51SSqlLp4/l4zlUg4/fKB5XvJRFP3edRSgg/Cn5tUmURS9
-jl4zw5ZyebJ3UvFaz168UITYKHJOT/v1g+G7d+/yPAcLxBCaUbSoPFXu5fs+RSNZwYhGgEXmVrwx
-rCgcrTmilXJZ8UiROIQ61ChTrAulFAAIIQxjheOoVsuJY54kpRgAKFgJEKA5t1TfbEIsAQA3dwfr
-wVlwVm1OiAWAdjvrdLLJpAsAnHMGAGABAAw1SBFq2SZotSVpwSQDbW4zaC0hpCiTT0hR8UjQamsy
-g4hGmVs9IaQoKCJHJMWtngBowBxsBGh/rA2DJif5Sq42asYYVIquVk7FMBIRMRUWLRoEgHgYgwIA
-6PPZyI041QiQG3I8DwEUAEyn4XI5IkTnuStEPBicKgUAwIec9zkiIsU8ytN5WpbQ9MkTIYTmHADc
-xaIzm2mAPM8PirUFQAAO8LelqSUAUKji2V/PEp4QS9zcPRmclDkkJDk8nCcJl7JAtJ8+DW54gm/f
-vr24uJjP5+WBhBDlZ/fCrYLd2gkhhJCilrS6wPO8MAyZlK61djKZlKyUMk3TyrABtwp2ayeEMMbq
-R6oLgiBgjLGvXydHR0fGXJestbZa34VbBbu1I6Ix5iFB+RvNgqDv+/5qdX1dOOf1lG3ArYLd2iml
-lNLyQe8KOOeUUoYIxph64jaSvgG3CnZov1tCdUGSJEopdnV1FcexlLJkXdetqzfgVsFu7WUG6j24
-LnBdVwhB9vf3B4MBNDbYbDaL47jBJZRlmbW2wSXU6/XKsaShwdbr9XK5bHAJcc455w0uoW6322q1
-oLHBLi8vZ7NZg0tISul5XtWuG1dCrNVqUUq1vn4JLIqiWt+FWwW7tZdf60OCcs3Oz88Xi0WDp9Ew
-/KXf/1a90DRvGjVGJ0nS4Es8n8+VUg3uA2EYNnsajeO42X3AWssYa3AJdTqdTqcDjQ22WCym02mD
-S0gI4bpug0eJchXHcclqreudbwNuFezWDjfN+F5BuWZxHH///r1qb1rrei/cgFsFu7VTSgHgIcH1
-ATzP830/iqKSFULUh6cNuFWwW3tZQg/ZhRCMMSaEuLq6qosadomXy2XVBKCBl5j4/g9NYCPjG3Cr
-YLf2u9N4XZBlWVEURAgRBEF6E0+fPkXECo7H48FgUEEhhOd5Fcyy7ODgQClVMWEYlv+Al7G3t1ff
-3Pf90WhUQWPM4eFhlmUV8+jRI8dx6rt1u90Kep43Ho/TNGWMPX78uN1uD4dDfPny18+fT6E50W63
-R6MRAPR6vW63y968+ePVq99+9lP9x3Bd9x9FY7XqUFOtUwAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start) {
-	//Parameter selection enable
-	if(allowSelLst.length)
-		for(i_el = 0; i_el < 8; i_el++) {
-			cEl = this["el"+(i_el+1)];
-			cEl.attrSet("en",1);
-			if(cEl.attr("contextMenu").search(":select$") < 0)
-				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
-		}
-}
-
-curTm = SYS.time();
-if(!trnd1_tSek) trnd1_tSek = curTm;
-selSingle = 0;
-selAll = false;
-
-//Events process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length;  ) {
-	if(ev_cur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
-	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else if(ev_cur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
-	else if(ev_cur.search("usr_single:/el") == 0)	selSingle = ev_cur.slice(14).toInt();
-	else if(ev_cur.search("usr_all:/el") == 0)	selAll = true;
-	else ev_rez += (ev_cur+"\n");
-	//SYS.messDebug("Trend","Event: "+ev_cur);
-}
-event = ev_rez;
-
-//Trend time control
-//if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
-if(trnd1_tSek < curTm) trnd1_trcPer = 0;
-else { trnd1_trcPer = 1; trnd1_tSek = 0; }
-
-//Generic
-name_arg0val = name;
-
-//Scale
-cntrAct = cntrLog = 0;
-for(i_el = 0; i_el < 8; i_el++) {
-	cEl = this["el"+(i_el+1)];
-	if(!cEl.attr("en")) continue;
-	cntrAct++;
-	if(cEl.attr("log") == true)	cntrLog++;
-}
-trnd1_sclVer = (cntrLog > cntrAct/2) ? trnd1_sclVer|0x4 : trnd1_sclVer&(~0x4);
-
-//Trends
-arh_beg = 1e30, arh_end = 0;
-for(i_el = 0; i_el < 8; i_el++) {
-	cEl = this["el"+(i_el+1)];
-	if(selAll)	cEl.attrSet("bordStyle",3);
-	if(selSingle) cEl.attrSet("bordStyle",((i_el+1)==selSingle)?3:1);
-	cTr = this["trnd1"];
-	cTrPrm = "prm"+i_el;
-	if(!cEl.attr("en")) cTr.attrSet(cTrPrm+"addr","");
-	else {
-		cTr.attrSet(cTrPrm+"addr",cEl.attr("addr"));
-		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
-		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
-		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
-		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
-		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
-		//Enable/disable of the mode''s indication in the regulators ???
-		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
-		//Archive depth calculate
-		if(cEl.attr("bordStyle") == 3) {
-			arh_tmp = cTr.attr(cTrPrm+"prop");
-			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
-			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
-		}
-		if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
-		else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
-	}
-}
-//Set archive scroll
-if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
-	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
-	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
-	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
-	arh_active = true;
-	if(selSingle) trnd1_tSek = arh_end;
-}
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1418050193);
-INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAaCAYAAAAHfFpPAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAAOxAAADsQBlSsOGwAABJJJREFUWIXlmU1vG0UYx38znp19qeOXxE2cNJQmqdQGekPAl4Ar6g31
-I/ReiQtSv0K/AeoNcaWoElSIcuGARICivqRuyTp27NjOxt7ZneWQNjQ0idzYSVvxkyyvVuv//veZ
-eeZ5dixu3ryZVSoV/o80Gg3U1NQU09PTIwn99OMdco6H67ooJUnTDM9z2eq0Qfl4rmb6dJmN1iat
-dodicYKcAJNYpLAMYoPralx3AhNHJGlKFEWsrj5lcWGeQqGEifs01tfxJ4poRyFymuUL50fynWUZ
-aiSFZ7iuj5SCP+/dpxQIrPBxPU2r3ULIHOXJaUoTHisrK1gUqw8fcPbds5TLk/z+6y9UZucJwzoL
-5xZpNht0ehGe9igV89y+/T2LCwvMzkzy4OFjqlVDalMq1flxWEfcunUrm5mZGYvYcRBFEUEQHIt2
-GIaoLMtIkuRYbjAOtNbH5i/LMlQSD8j7+lhu8KbS7w9otTaIB32USRJarfbr9nSi9AcDEBJjElRw
-Ko8b5F+3pxPl+fPGid2pAlJKwjBECLDWkss5aNelWJgYSlBrTalUOj7HY6LVamGM2XNutwx6rqZW
-e4LSCplJ9Kn80AEoFosj9xInQRzHtNt70303AMVSmWKpfCThWq1GGIYjmXMcB4A0TbHWjqSllEII
-8dJ5YwxSyr3XPj9otzZASIQQWJviB3k8d7jqUCoWyCmNygmUo4lNQtRtYyyUSiXKh6THowf3eVJ7
-TLkyje/7aO3gahflaDzPpddpI5VLr9shTRPm3jmHVnJfrXq4xh8rv1GZruLv0zv89+H3BCBNEsJG
-E0dmNFo9lpaW8E5PDRWAODY4qSUiI9AWpR1SY0gyiaMc8vlDFlmxMzJZlgGgHcl239CurZKvVCn5
-ijSDLLOkJsbzfALP2Vdqo6mIX9AahrF0gsYYcrnckX476Pex1uIHAVJKkiTZd6SG8hHHJGmC1u5u
-Sh1GGIb/zoDNdguTWgoTeYTIARkCSG2GlOLAvAJwXffwUX5D6Ha7L82O3QBsRRGNRoNHScYg6qCD
-AlIYtrqGQjnP+8vvodT+705TU1O8ye8Tz6nVagdXgbm5M8zNnTmScLPZJIqi0dydAPt53A1AfzvC
-JHZnFXbdVxK+cmWNy5fH3wes1zfZjgR/h3DtWmHs+vBiGWxvEkVb1NfW2E7h4w8/IPD9oUTm5ye5
-evXS2M199+1d1tY6fP1Ndezaz9kNQHV2FoDFpVffZVldVdy40R2fq2f8dW+CXi8PjNYYHcZYdoSu
-X1/H2vo4pPawuLjzHQQecMwpMArV6ulxyLwWjtZxnDBxPEBigQSJpW97SOy+n16vi8SioiZyu4Ps
-NA68No4H45kBx06W4SjFD1t3uMvPfCo/IfcwJc0UjqsYRH0uLF9ECkFiDI5S5Po9Jr/6kvXPvuDx
-0xqDQYJ0cuRdl3q7w6Xli2TWvh0BSJKUbrfDeXOeSVNmLqhiKoZ6fR2bCLSr2ertLMKptXS7HVSj
-Qfejz8me1BHVGRwHtO+RpCmFfJ5ut0OSJIi34Y8Ra+3QG6OO47y06XEQ7XabfwAcxvNTAf+MkQAA
-AABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start) {
-	apply_active = false;
-	name_active = val_min_active = val_max_active = dim_active = log_active = false;
-	prm_items = prm_value = name_value = dim_value = "", log_value = false, val_min_value = val_max_value = 0;
-	//Connect to linked widget 
-	if(pgOpenSrc.length) lWdg = this.wdgAt(pgOpenSrc, true);
-	if(lWdg) {
-		//Get allowed graphic''s sources for selection
-		tmplLst = "";
-		if(lWdg.attrPresent("allowSelLst")) tmplLst = lWdg.attr("allowSelLst");
-		else if(lWdg.ownerWdg(true).attrPresent("allowSelLst")) tmplLst = lWdg.ownerWdg(true).attr("allowSelLst");
-		for(off = 0; (pIt=tmplLst.parse(0,"\n",off)).length; )
-			// Archives list template process
-			if(pIt == "<varhs>") {
-				aLs = SYS.Archive.nodeList("va_");
-				for(i_a = 0; i_a < aLs.length; i_a++) {
-					itNm = SYS.Archive[aLs[i_a]].cfg("NAME");
-					if(!itNm.length) itNm = SYS.Archive[aLs[i_a]].cfg("Source");
-					prm_items += tr("Archive")+" ''"+itNm+"'' (/Archive/"+aLs[i_a]+")\n";
-				}
-			}
-			// Direct items list process by form "{path}:{name}:{min}:{max}:{dim}"
-			else if(pIt.search("/(sub_|)Archive") >= 0) {
-				if(!(itObj=SYS.nodeAt(pIt.parse(0,":")))) continue;
-				prm_items += tr("Archive")+" ''"+pIt.parse(1,":")+"'' ("+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
-			}
-			else {
-				pathAbs = pIt.search("/(sub_|)DAQ") >= 0;
-				itObj = pathAbs ? SYS.nodeAt(pIt.parse(0,":")) : SYS.DAQ.nodeAt(pIt.parse(0,":"));
-				if(!itObj) continue;
-				itNm = pIt.parse(1,":");
-				if(!itNm.length && typeof(itObj).search("TCntrNode:TValue[:$]") == 0) itNm = itObj.NAME.get();
-				prm_items += "DAQ ''"+itNm+(pathAbs?"'' (":"'' (/DAQ")+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
-			}
-		//Current value process
-		itAddr = lWdg.link("addr").match("(prm|arh):([^ ]+) \\(\\+\\)");
-		if(itAddr.length == 3) {
-			//Get Name
-			if(lWdg.link("name").search("prm:[^ ]+ \\(\\+\\)") >= 0) name_value = lWdg.attr("name");
-			else if((itTmp=lWdg.link("name").match("val:(.+$)")).length == 2) name_value = itTmp[1];
-			else name_value = tr("Empty");
-			//Get Min and Max
-			if(lWdg.link("min").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_min_value = lWdg.attr("min");
-			else if((itTmp=lWdg.link("min").match("val:(.+$)")).length == 2) val_min_value = itTmp[1];
-			if(lWdg.link("max").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_max_value = lWdg.attr("max");
-			else if((itTmp=lWdg.link("max").match("val:(.+$)")).length == 2) val_max_value = itTmp[1];
-			//Logarithmic scale
-			if(lWdg.link("log").search("prm:[^ ]+ \\(\\+\\)") >= 0) log_value = lWdg.attr("log");
-			else if((itTmp=lWdg.link("log").match("val:(.+$)")).length == 2) log_value = itTmp[1];
-			//Dimension
-			if(lWdg.link("ed").search("prm:[^ ]+ \\(\\+\\)") >= 0) dim_value = lWdg.attr("ed");
-			else if((itTmp=lWdg.link("ed").match("val:(.+$)")).length == 2) dim_value = itTmp[1];
-			//Current prm name
-			if(itAddr[1] == "prm")	prm_value = "DAQ ''"+name_value+"'' (/DAQ"+(itAddr[2].replace(new RegExp("/var$"),"")+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
-			else if(itAddr[1] == "arh") prm_value = tr("Archive")+" ''"+name_value+"'' (/Archive/va_"+(itAddr[2]+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
-			if(prm_value.length) name_active = val_min_active = val_max_active = log_active = dim_active = true;
-		}
-
-		//Load current properties
-		color_value = lWdg.link("color");
-	}
-}
-
-colorBox_backColor = color_value;
-
-//Events for commands process
-evRez = "";
-for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+evCur);
-	if(evCur == "ws_CombChange:/prm") {	//Parametr selected
-		//Set properties
-		itTmp = prm_value.match(".+''(.*)'' \\((.+?)\\)");
-		if(itTmp.length == 3) {
-			if(itTmp[1].length)	name_value = itTmp[1];
-			off1 = 0;
-			itVal = itTmp[2].parse(0,":",off1);	//Path
-			//Connect to source and get main values for parameter
-			if(itVal.parsePath(0) == "DAQ" && typeof(itObj=SYS.nodeAt(itVal)).search("TCntrNode:TValue[:$]") == 0) {
-				val_min_value = itObj.min.get();
-				val_max_value = itObj.max.get();
-				log_value = itObj.log.get();
-				dim_value = itObj.ed.get();
-			}
-			
-			//Set direct values
-			if((itVal=itTmp[2].parse(0,":",off1)).length) val_min_value = itVal;
-			if((itVal=itTmp[2].parse(0,":",off1)).length) val_max_value = itVal;
-			if((itVal=itTmp[2].parse(0,":",off1)).length) dim_value = itVal;
-		}
-		apply_active = name_active = val_min_active = val_max_active = log_active = dim_active = true;
-	}
-	else if(evCur.search("ws_LnAccept:") == 0 || evCur == "ws_ChkChange:/log")	apply_active = true;
-	else if(evCur == "ws_BtPress:/apply") {
-		//Link addr set
-		itTmp = prm_value.match(".+\\((.+?)[:\\)]");
-		if(itTmp.length != 2) lWdg.linkSet("addr","");
-		else {
-			off1 = 0;
-			firstEl = itTmp[1].parsePath(0,off1);
-			if(firstEl == "Archive") {
-				lWdg.linkSet("addr","",true);	//Clear all othet values
-				lWdg.linkSet("addr","arh:"+itTmp[1].slice(off1+4));
-				lWdg.linkSet("name","val:"+name_value);
-				lWdg.linkSet("min","val:"+val_min_value);
-				lWdg.linkSet("max","val:"+val_max_value);
-				lWdg.linkSet("log","val:"+log_value);
-				lWdg.linkSet("ed","val:"+dim_value);
-			}
-			else if(firstEl == "DAQ") {
-				itObj = SYS.nodeAt(itTmp[1]);
-				isPrm = (typeof(itObj).search("TCntrNode:TValue[:$]") == 0);
-				lWdg.linkSet("addr", "", true);	//Clear all othet values
-				lWdg.linkSet("addr", "prm:"+itTmp[1].slice(off1).replace("/prm_","/"), isPrm);
-				if(!isPrm || name_value != itObj.NAME.get())		lWdg.linkSet("name", "val:"+name_value);
-				if(!isPrm || val_min_value != itObj.min.get())	lWdg.linkSet("min","val:"+val_min_value);
-				if(!isPrm || val_max_value != itObj.max.get())	lWdg.linkSet("max","val:"+val_max_value);
-				if(!isPrm || log_value != itObj.log.get())			lWdg.linkSet("log","val:"+log_value);
-				if(!isPrm || dim_value != itObj.ed.get())			lWdg.linkSet("ed","val:"+dim_value);
-			}
-		}
-		lWdg.linkSet("color", color_value);
-		lWdg.attrSet("event", "usr_set");
-
-		this.attrSet("pgOpen", false);
-	}
-	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
-	else evRez += evCur+"\n";
-}
-event = evRez;','','',500,'name;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1418047971);
-INSERT INTO "wlb_Main" VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
-aklEQVRYhe2WTU8TQRiA35nZbne7pdsWaGlrAVtEtBfxaGL8ZVz8DSZcjH+EkzEejHIhMWgQkK8G
-ast0l/2e2V0PTZqlxOBt2GSf45P3ME/mI4N2dj7peoVSms/nAUCW5UJBOzs7brcfA8BgcFUq6Yqi
-AMBUjkZ/FEXVtGJSUjoiRCqV9NvyGmOs6+WkHI9pHMeVSjUpDWMMADOTpmkEQbCwsAgA+/t7h4c/
-4Da5nCRRSoMgtG0LIUQIQQgVChqlVJYLAGBZN74fyLIMAFNp25bjeJZlJ6Xj2IRIruslpes6CGHP
-85PS89w4joOAzUiE0Myk7/ucszCMAMA0TcYCuIPUarUnuUdHv6rV+XK5AgCEoPX1Huf8/PxUUZSl
-peZUTiaLxblarT4jVVVtNFr3ypOTY4xxu72SlBcXZ4yx1dVOUvb7F45jr62tA4Bljfv933cD0Pb2
-+3xenbGGca3r1QclKR0ChADAOQ/DcHLgOedoa2sLY3y37KGhqtqb15sfP+/3nj1hjF0NBtUyzsl1
-SfTC/pcoil3XujGGplGXcpJhDGMezy9WUhPgOFb/km1sPOdhFDC31Zy8h4PUBGjanMvpi94r2/YJ
-kQghjLHR6DI1AbZtrcjdg4OfAGgqTZOm4PpO0LRis/Xo3Ye3tUZjebnbbK72epudztPU7IDnuafn
-J932Szq6VPI6AFiWMRym5wiNx9ff93abtfq3r1+mEmOcmgAAmHzJkkRRlJo78C+yANFkAaLJAkST
-BYgmCxBNFiCaLEA0WYBosgDRZAGiyQJEkwWIJgsQjUQICcNQ9DLuR1HUKIpmJCHkL1SdQQdv94Wv
-AAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-calcCnt++;
-
-if(f_start)
-{
-	play_en = demoPlayProc.length;
-	//> Checking to signal object''s presenting
-	soLst = this.nodeList("pg_");
-	for(i = 0; i < soLst.length; i++)
-	{
-		if(!(curSO=soLst[i].slice(3).toInt()))	continue;
-		soW = this["wdg_so"+curSO];
-		soW.attrSet("name",this["pg_"+curSO].attr("name"));
-		soDscr = this["pg_"+curSO].attr("dscr");
-		if(soDscr.length) soW.attrSet("tipTool",soDscr);
-		soW.attrSet("en",1);
-	}
-	//> Check for disable all SO and expand for need
-	var firstRow = 0; var secondRow = 0;
-	for(i = 0; i < 16; i++)
-		if(this["wdg_so"+(i+1)].attr("en"))
-		{ if(i < 8)	firstRow++;	else secondRow++; }
-	if(firstRow <= 1 && !secondRow)
-	{
-		soOff = this["wdg_so1"].attr("geomY");
-		soSize = this["pgCont"].attr("geomY")-soOff;
-		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
-	}
-	else if(!secondRow)
-	{
-		soOff = this["wdg_so9"].attr("geomY");
-		soSize = this["pgCont"].attr("geomY")-soOff;
-		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
-		if(firstRow < 8)
-		{
-			soOff = this["wdg_so1"].attr("geomX");
-			soWdth = this["wdg_so8"].attr("geomX")+this["wdg_so8"].attr("geomW");
-			soSize = soWdth/firstRow;
-			for(i = 0; i < 7; i++)
-			{
-				if(!this["wdg_so"+(i+1)].attr("en"))	continue;
-				this["wdg_so"+(i+1)].attrSet("geomX",soOff).attrSet("geomW",soSize-3);
-				soOff += soSize;
-			}
-		}
-	}
-
-	//> Result graphics present check
-	go_rg_active = this.nodeList("pg_","/pg_rg/pg_rg").length;
-}
-
-if(pgCont_pgOpenSrc != lastView)
-{
-  //> Checking for SO selection change
-  curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
-  lastSO = lastView.parsePath(2).slice(3);
-  if( curSO != lastSO )
-  {
-    if( lastSO.length ) this["wdg_so"+lastSO].attrSet("color","#555555");
-    if( curSO.length )
-    {
-      this["wdg_so"+curSO].attrSet("color","#777799");
-      //>> Check for view modes active
-      go_mn_active = this["pg_"+curSO]["pg_mn"].nodeList("pg_").length;
-      go_ggraph_active = this["pg_"+curSO]["pg_ggraph"].nodeList("pg_").length;
-      go_gcadr_active = this["pg_"+curSO]["pg_gcadr"].nodeList("pg_").length;
-      go_gview_active = this["pg_"+curSO]["pg_gview"].nodeList("pg_").length;
-      go_doc_active = this["pg_"+curSO]["pg_doc"].nodeList("pg_").length;
-    }
-  }
-  //> Checking for view selection change
-  curMode = pgCont_pgOpenSrc.parsePath(3).slice(3);
-  lastMode = lastView.parsePath(3).slice(3);
-  if( curMode != lastMode )
-  {
-    if( lastMode.length ) this["wdg_go_"+lastMode].attrSet("color","");
-    if( curMode.length ) this["wdg_go_"+curMode].attrSet("color","#777799");
-  }
-
-  //> Pages counter display
-  if( pgCont_pgOpenSrc.length && curMode.length )
-  {
-    elLst = this["pg_"+curSO]["pg_"+curMode].nodeList("pg_");
-    curEl = pgCont_pgOpenSrc.parsePath(4);
-    for( i_m = 0; i_m < elLst.length; i_m++ ) if( elLst[i_m] == curEl ) break;
-    pgCntr_text = ""+(i_m+1)+"\n("+elLst.length+")";
-    prev_active = next_active = (elLst.length>1);
-  }
-  else { pgCntr_text = "-"; prev_active = next_active = false; }
-
-  lastView = pgCont_pgOpenSrc;
-}
-
-//> Cvitation button''s
-cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
-cvt_light_active = alarmSt&0x10000; cvt_alarm_active = alarmSt&0x20000; cvt_sound_active = alarmSt&0x40000;
-
-//> One second''s calls
-if( (calcCnt%f_frq) == 0 )
-{
-  //> Alarms display
-  soLst = this.nodeList("pg_");
-  for( i = 0; i < soLst.length; i++ )
-  {
-    curSO = soLst[i].slice(3);
-    aSt = this["pg_"+curSO].attr("alarmSt");
-    aLev = aSt&0xFF;
-    if( aLev && aSt&0x100 )
-    {  
-      if( aLev > 30 ) wColor = "#ff0000";
-      else wColor = "#ffff00";
-      curColor = this["wdg_so"+curSO].attr("colorText");
-      this["wdg_so"+curSO].attrSet("colorText",(aSt&0x10000 && curColor==wColor)?"black":wColor);
-    }
-    else this["wdg_so"+curSO].attrSet("colorText","#00ff00");
-  }
-}
-
-//> Events process
-ev_rez = "";
-off = 0;
-while(true)
-{
-  sval = event.parse(0,"\n",off);
-  if( sval == "" ) break;
-  else if( sval == "ws_BtPress:/cvt_light" ) alarmSt = 0x1000001;
-  else if( sval == "ws_BtPress:/cvt_alarm" ) alarmSt = 0x1000002;
-  else if( sval == "ws_BtPress:/cvt_sound" ) alarmSt = 0x1000004;
-  else ev_rez+=sval+"\n";
-  //SYS.messDebug("MainPg","Event: "+sval);
-}
-event=ev_rez;
-
-//> Demo play process
-if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
-if(play_value)
-{
-	play_img = "stop";
-	if(stepTm > 0) stepTm -= 1/f_frq;
-	else
-	{
-		var args = new Object();
-		args.this = this;
-		args.stepTm = stepTm;
-		args.stepCur = stepCur;
-		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,demoPlayProc);
-		stepTm = args.stepTm;
-		stepCur = args.stepCur;
-	}
-}','JavaLikeCalc.JavaScript
-calcCnt++;
-
-if( f_start )
-{
-	play_en = demoPlayProc.length;
-  //> Checking to signal object''s presenting
-  soLst = this.nodeList("pg_");
-  for( i = 0; i < soLst.length; i++ )
-  {
-    if( !(curSO=soLst[i].slice(3).toInt()) ) continue;
-    soW = this["wdg_so"+curSO];
-    soW.attrSet("name",this["pg_"+curSO].attr("name"));
-    soDscr = this["pg_"+curSO].attr("dscr");
-    if( soDscr.length ) soW.attrSet("tipTool",soDscr);
-    soW.attrSet("en",1);
-  }
-	//> Check for disable all SO and expand for need
-	var firstRow = 0; var secondRow = 0;
-	for(i = 0; i < 16; i++)
-		if(this["wdg_so"+(i+1)].attr("en"))
-		{ if(i < 8)	firstRow++;	else secondRow++; }
-	if(firstRow <= 1 && !secondRow)
-	{
-		soOff = this["wdg_so1"].attr("geomY");
-		soSize = this["pgCont"].attr("geomY")-soOff;
-		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
-	}
-	else if(!secondRow)
-	{
-		soOff = this["wdg_so9"].attr("geomY");
-		soSize = this["pgCont"].attr("geomY")-soOff;
-		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
-		if(firstRow < 8)
-		{
-			soOff = this["wdg_so1"].attr("geomX");
-			soWdth = this["wdg_so8"].attr("geomX")+this["wdg_so8"].attr("geomW");
-			soSize = soWdth/firstRow;
-			for(i = 0; i < 7; i++)
-			{
-				if(!this["wdg_so"+(i+1)].attr("en"))	continue;
-				this["wdg_so"+(i+1)].attrSet("geomX",soOff).attrSet("geomW",soSize-3);
-				soOff += soSize;
-			}
-		}
-	}
-
-  //> Result graphics present check
-  go_rg_active = this.nodeList("pg_","/pg_rg/pg_rg").length;
-}
-
-if( pgCont_pgOpenSrc != lastView )
-{
-  //> Checking for SO selection change
-  curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
-  lastSO = lastView.parsePath(2).slice(3);
-  if( curSO != lastSO )
-  {
-    if( lastSO.length ) this["wdg_so"+lastSO].attrSet("color","#555555");
-    if( curSO.length )
-    {
-      this["wdg_so"+curSO].attrSet("color","#777799");
-      //>> Check for view modes active
-      go_mn_active = this["pg_"+curSO]["pg_mn"].nodeList("pg_").length;
-      go_ggraph_active = this["pg_"+curSO]["pg_ggraph"].nodeList("pg_").length;
-      go_gcadr_active = this["pg_"+curSO]["pg_gcadr"].nodeList("pg_").length;
-      go_gview_active = this["pg_"+curSO]["pg_gview"].nodeList("pg_").length;
-      go_doc_active = this["pg_"+curSO]["pg_doc"].nodeList("pg_").length;
-    }
-  }
-  //> Checking for view selection change
-  curMode = pgCont_pgOpenSrc.parsePath(3).slice(3);
-  lastMode = lastView.parsePath(3).slice(3);
-  if( curMode != lastMode )
-  {
-    if( lastMode.length ) this["wdg_go_"+lastMode].attrSet("color","");
-    if( curMode.length ) this["wdg_go_"+curMode].attrSet("color","#777799");
-  }
-
-  //> Pages counter display
-  if( pgCont_pgOpenSrc.length && curMode.length )
-  {
-    elLst = this["pg_"+curSO]["pg_"+curMode].nodeList("pg_");
-    curEl = pgCont_pgOpenSrc.parsePath(4);
-    for( i_m = 0; i_m < elLst.length; i_m++ ) if( elLst[i_m] == curEl ) break;
-    pgCntr_text = ""+(i_m+1)+"\n("+elLst.length+")";
-    prev_active = next_active = (elLst.length>1);
-  }
-  else { pgCntr_text = "-"; prev_active = next_active = false; }
-
-  lastView = pgCont_pgOpenSrc;
-}
-
-//> Cvitation button''s
-cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
-cvt_light_active = alarmSt&0x10000; cvt_alarm_active = alarmSt&0x20000; cvt_sound_active = alarmSt&0x40000;
-
-//> One second''s calls
-if( (calcCnt%f_frq) == 0 )
-{
-  //> Alarms display
-  soLst = this.nodeList("pg_");
-  for( i = 0; i < soLst.length; i++ )
-  {
-    curSO = soLst[i].slice(3);
-    aSt = this["pg_"+curSO].attr("alarmSt");
-    aLev = aSt&0xFF;
-    if( aLev && aSt&0x100 )
-    {  
-      if( aLev > 30 ) wColor = "#ff0000";
-      else wColor = "#ffff00";
-      curColor = this["wdg_so"+curSO].attr("colorText");
-      this["wdg_so"+curSO].attrSet("colorText",(aSt&0x10000 && curColor==wColor)?"black":wColor);
-    }
-    else this["wdg_so"+curSO].attrSet("colorText","#00ff00");
-  }
-}
-
-//> Events process
-ev_rez = "";
-off = 0;
-while(true)
-{
-  sval = event.parse(0,"\n",off);
-//  messPut("MainPg",1,"Event: "+sval);
-  if( sval == "" ) break;
-  else if( sval == "ws_BtPress:/cvt_light" ) alarmSt = 0x1000001;
-  else if( sval == "ws_BtPress:/cvt_alarm" ) alarmSt = 0x1000002;
-  else if( sval == "ws_BtPress:/cvt_sound" ) alarmSt = 0x1000004;
-  else ev_rez+=sval+"\n";
-}
-event=ev_rez;
-
-//> Demo play process
-if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
-if(play_value)
-{
-	play_img = "stop";
-	if(stepTm > 0) stepTm -= 1/f_frq;
-	else
-	{
-		var args = new Object();
-		args.this = this;
-		args.stepTm = stepTm;
-		args.stepCur = stepCur;
-		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,demoPlayProc);
-		stepTm = args.stepTm;
-		stepCur = args.stepCur;
-	}
-}','JavaLikeCalc.JavaScript
-calcCnt++;
-
-if(f_start)
-{
-	play_en = demoPlayProc.length;
-	//> Checking to signal object''s presenting
-	soLst = this.nodeList("pg_");
-	for(i = 0; i < soLst.length; i++)
-	{
-		if(!(curSO=soLst[i].slice(3).toInt()))	continue;
-		soW = this["wdg_so"+curSO];
-		soW.attrSet("name",this["pg_"+curSO].attr("name"));
-		soDscr = this["pg_"+curSO].attr("dscr");
-		if(soDscr.length) soW.attrSet("tipTool",soDscr);
-		soW.attrSet("en",1);
-	}
-	//> Check for disable all SO and expand for need
-	var firstRow = 0; var secondRow = 0;
-	for(i = 0; i < 16; i++)
-		if(this["wdg_so"+(i+1)].attr("en"))
-		{ if(i < 8)	firstRow++;	else secondRow++; }
-	if(firstRow <= 1 && !secondRow)
-	{
-		soOff = this["wdg_so1"].attr("geomY");
-		soSize = this["pgCont"].attr("geomY")-soOff;
-		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
-	}
-	else if(!secondRow)
-	{
-		soOff = this["wdg_so9"].attr("geomY");
-		soSize = this["pgCont"].attr("geomY")-soOff;
-		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
-		if(firstRow < 8)
-		{
-			soOff = this["wdg_so1"].attr("geomX");
-			soWdth = this["wdg_so8"].attr("geomX")+this["wdg_so8"].attr("geomW");
-			soSize = soWdth/firstRow;
-			for(i = 0; i < 7; i++)
-			{
-				if(!this["wdg_so"+(i+1)].attr("en"))	continue;
-				this["wdg_so"+(i+1)].attrSet("geomX",soOff).attrSet("geomW",soSize-3);
-				soOff += soSize;
-			}
-		}
-	}
-
-	//> Result graphics present check
-	go_rg_active = this.nodeList("pg_","/pg_rg/pg_rg").length;
-}
-
-if(pgCont_pgOpenSrc != lastView)
-{
-  //> Checking for SO selection change
-  curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
-  lastSO = lastView.parsePath(2).slice(3);
-  if( curSO != lastSO )
-  {
-    if( lastSO.length ) this["wdg_so"+lastSO].attrSet("color","#555555");
-    if( curSO.length )
-    {
-      this["wdg_so"+curSO].attrSet("color","#777799");
-      //>> Check for view modes active
-      go_mn_active = this["pg_"+curSO]["pg_mn"].nodeList("pg_").length;
-      go_ggraph_active = this["pg_"+curSO]["pg_ggraph"].nodeList("pg_").length;
-      go_gcadr_active = this["pg_"+curSO]["pg_gcadr"].nodeList("pg_").length;
-      go_gview_active = this["pg_"+curSO]["pg_gview"].nodeList("pg_").length;
-      go_doc_active = this["pg_"+curSO]["pg_doc"].nodeList("pg_").length;
-    }
-  }
-  //> Checking for view selection change
-  curMode = pgCont_pgOpenSrc.parsePath(3).slice(3);
-  lastMode = lastView.parsePath(3).slice(3);
-  if( curMode != lastMode )
-  {
-    if( lastMode.length ) this["wdg_go_"+lastMode].attrSet("color","");
-    if( curMode.length ) this["wdg_go_"+curMode].attrSet("color","#777799");
-  }
-
-  //> Pages counter display
-  if( pgCont_pgOpenSrc.length && curMode.length )
-  {
-    elLst = this["pg_"+curSO]["pg_"+curMode].nodeList("pg_");
-    curEl = pgCont_pgOpenSrc.parsePath(4);
-    for( i_m = 0; i_m < elLst.length; i_m++ ) if( elLst[i_m] == curEl ) break;
-    pgCntr_text = ""+(i_m+1)+"\n("+elLst.length+")";
-    prev_active = next_active = (elLst.length>1);
-  }
-  else { pgCntr_text = "-"; prev_active = next_active = false; }
-
-  lastView = pgCont_pgOpenSrc;
-}
-
-//> Cvitation button''s
-cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
-cvt_light_active = alarmSt&0x10000; cvt_alarm_active = alarmSt&0x20000; cvt_sound_active = alarmSt&0x40000;
-
-//> One second''s calls
-if( (calcCnt%f_frq) == 0 )
-{
-  //> Alarms display
-  soLst = this.nodeList("pg_");
-  for( i = 0; i < soLst.length; i++ )
-  {
-    curSO = soLst[i].slice(3);
-    aSt = this["pg_"+curSO].attr("alarmSt");
-    aLev = aSt&0xFF;
-    if( aLev && aSt&0x100 )
-    {  
-      if( aLev > 30 ) wColor = "#ff0000";
-      else wColor = "#ffff00";
-      curColor = this["wdg_so"+curSO].attr("colorText");
-      this["wdg_so"+curSO].attrSet("colorText",(aSt&0x10000 && curColor==wColor)?"black":wColor);
-    }
-    else this["wdg_so"+curSO].attrSet("colorText","#00ff00");
-  }
-}
-
-//> Events process
-ev_rez = "";
-off = 0;
-while(true)
-{
-  sval = event.parse(0,"\n",off);
-  if( sval == "" ) break;
-  else if( sval == "ws_BtPress:/cvt_light" ) alarmSt = 0x1000001;
-  else if( sval == "ws_BtPress:/cvt_alarm" ) alarmSt = 0x1000002;
-  else if( sval == "ws_BtPress:/cvt_sound" ) alarmSt = 0x1000004;
-  else ev_rez+=sval+"\n";
-  //SYS.messDebug("MainPg","Event: "+sval);
-}
-event=ev_rez;
-
-//> Demo play process
-if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
-if(play_value)
-{
-	play_img = "stop";
-	if(stepTm > 0) stepTm -= 1/f_frq;
-	else
-	{
-		var args = new Object();
-		args.this = this;
-		args.stepTm = stepTm;
-		args.stepCur = stepCur;
-		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,demoPlayProc);
-		stepTm = args.stepTm;
-		stepCur = args.stepCur;
-	}
-}',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1378142495);
-INSERT INTO "wlb_Main" VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
-xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
-XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
-d+58pQDG4/Ha2lruPG+I5A6wKEUgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0Ug
-N0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN6qq+/v76+vruZO8Nm3bqqo2TXP7y9s2NzpCYXPTy9r/
-3B97W1fV5matZcn6KpqmEQD1lZorlPdFP1RUcJ84VqSSQjakUIZSj2sZCRuSZEMZCCvmzg8AeuJo
-9VEl5yV1yU1cv93LSPSKooZrXPegG34x9FteBtJNu2TpHSc+xiubWAZSXagQoZe0u9eFWfA/+n67
-10saZsH/4DkkXf5NEAAgZCgckA1lRUAA0KvaP+oRkXyScyJnhWdYXajsuVXnKzkjUKSYeflx9AnF
-vaiXFQSIelKHWUiHyT/wdmD9kz7MQn29BqGran9afBoxgfvU+Yc+hdMh4B97PD7+IB5EAH7LA+im
-HW+x/6mPB1FWJO7Fdtq+86gnc3IT/5t/EtsLa785LenxfziJlzc1B2w+byjsvu/suQGor9X6gcZ5
-7Lf75mbDAf2Wj3/ERaoscQfcdRdmwT/y7oYDQGU9rttv2+piVV+rU5e677rmZrNglSUKyDmxZ2aH
-xiEBcEhrLfXJDk1XNc6jvTAsmn+ZAqlPUJDE0QUqgEIQrGh/GZUksfB/eIk9EJ4EN3GpS2EW9GO1
-uUFQX625Qv/Qu8+cvCfx14UaAMsVeBpSSBTG36OMJIXU3muri1W30VlrR5eR+NspFkBC3HuZ7+hY
-BBB+CS9H5hHzt1BEVavJ5MZbmCkHOzs7fwOvrhb+aFJiZAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-text_arg0val = name;
-text_arg1val = var;
-trnd_prm0addr = addr;
-bordColor = (focus&&bordColor!="white")?"white":"gray";','JavaLikeCalc.JavaScript
-text_arg0val = name;
-text_arg1val = var;
-trnd_prm0addr = addr;
-bordColor = (focus&&bordColor!="white")?"white":"gray";','',1000,'name;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;','');
-INSERT INTO "wlb_Main" VALUES('grpCadr','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','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-curTm = Special.FLibSYS.tmTime();
-if( !trnd1_tSek ) trnd1_tSek = curTm;
-//- Events process -
-ev_cur = ev_rez = "";
-off=0;
-while(true)
-{
-  ev_cur=Special.FLibSYS.strParse(event,0,"\n",off);
-  if( ev_cur == "" ) break;
-  //Special.FLibSYS.messPut("Trend",0,"Event: "+ev_cur);
-  if( ev_cur == "key_presSC#3b:/trnd1")  trnd1_tSek-=trnd1_tSize/2;
-  else if( ev_cur == "key_presSC#3c:/trnd1")  trnd1_tSek+=trnd1_tSize/2;
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
-
-//- Trend time control -
-if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
-if( trnd1_tSek < curTm ) trnd1_trcPer=0;
-else { trnd1_trcPer=1; trnd1_tSek=0;  }
-
-//- Generic -
-name_arg0val = grpName;
-
-//- Trend 1 -
-if( el1_prmAddr == EVAL_STR ) { el1_en = false; trnd1_prm0addr = ""; }
-else
-{
-  el1_en = true;
-  trnd1_prm0addr = el1_prmAddr; trnd1_prm0bordL = el1_min; trnd1_prm0bordU = el1_max; trnd1_prm0color = el1_bordColor;
-}
-
-//- Trend 2 -
-if( el2_prmAddr == EVAL_STR ) { el2_en = false; trnd1_prm1addr = ""; }
-else
-{
-  el2_en = true;
-  trnd1_prm1addr = el2_prmAddr; trnd1_prm1bordL = el2_min; trnd1_prm1bordU = el2_max; trnd1_prm1color = el2_bordColor;
-}
-
-//- Trend 3 -
-if( el3_prmAddr == EVAL_STR ) { el3_en = false; trnd1_prm2addr = ""; }
-else
-{
-  el3_en = true;
-  trnd1_prm2addr = el3_prmAddr; trnd1_prm2bordL = el3_min; trnd1_prm2bordU = el3_max; trnd1_prm2color = el3_bordColor;
-}
-
-//- Trend 4 -
-if( el4_prmAddr == EVAL_STR ) { el4_en = false; trnd1_prm3addr = ""; }
-else
-{
-  el4_en = true;
-  trnd1_prm3addr = el4_prmAddr; trnd1_prm3bordL = el4_min; trnd1_prm3bordU = el4_max; trnd1_prm3color = el4_bordColor;
-}
-
-//- Trend 5 -
-if( el5_prmAddr == EVAL_STR ) { el5_en = false; trnd1_prm4addr = ""; }
-else
-{
-  el5_en = true;
-  trnd1_prm4addr = el5_prmAddr; trnd1_prm4bordL = el5_min; trnd1_prm4bordU = el5_max; trnd1_prm4color = el5_bordColor;
-}
-
-//- Trend 6 -
-if( el6_prmAddr == EVAL_STR ) { el6_en = false; trnd1_prm5addr = ""; }
-else
-{
-  el6_en = true;
-  trnd1_prm5addr = el6_prmAddr; trnd1_prm5bordL = el6_min; trnd1_prm5bordU = el6_max; trnd1_prm5color = el6_bordColor;
-}
-
-//- Trend 7 -
-if( el7_prmAddr == EVAL_STR ) { el7_en = false; trnd1_prm6addr = ""; }
-else
-{
-  el7_en = true;
-  trnd1_prm6addr = el7_prmAddr; trnd1_prm6bordL = el7_min; trnd1_prm6bordU = el7_max; trnd1_prm6color = el7_bordColor;
-}
-
-//- Trend 8 -
-if( el8_prmAddr == EVAL_STR ) { el8_en = false; trnd1_prm7addr = ""; }
-else
-{
-  el8_en = true;
-  trnd1_prm7addr = el8_prmAddr; trnd1_prm7bordL = el8_min; trnd1_prm7bordU = el8_max; trnd1_prm7color = el8_bordColor;
-}','JavaLikeCalc.JavaScript
-curTm = Special.FLibSYS.tmTime();
-if( !trnd1_tSek ) trnd1_tSek = curTm;
-//- Events process -
-ev_cur = ev_rez = "";
-off=0;
-while(true)
-{
-  ev_cur=Special.FLibSYS.strParse(event,0,"\n",off);
-  if( ev_cur == "" ) break;
-  //Special.FLibSYS.messPut("Trend",0,"Event: "+ev_cur);
-  if( ev_cur == "key_presSC#3b:/trnd1")  trnd1_tSek-=trnd1_tSize/2;
-  else if( ev_cur == "key_presSC#3c:/trnd1")  trnd1_tSek+=trnd1_tSize/2;
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
-
-//- Trend time control -
-if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
-if( trnd1_tSek < curTm ) trnd1_trcPer=0;
-else { trnd1_trcPer=1; trnd1_tSek=0;  }
-
-//- Generic -
-name_arg0val = grpName;
-
-//- Trend 1 -
-if( el1_prmAddr == EVAL_STR ) { el1_en = false; trnd1_prm0addr = ""; }
-else
-{
-  el1_en = true;
-  trnd1_prm0addr = el1_prmAddr; trnd1_prm0bordL = el1_min; trnd1_prm0bordU = el1_max; trnd1_prm0color = el1_bordColor;
-}
-
-//- Trend 2 -
-if( el2_prmAddr == EVAL_STR ) { el2_en = false; trnd1_prm1addr = ""; }
-else
-{
-  el2_en = true;
-  trnd1_prm1addr = el2_prmAddr; trnd1_prm1bordL = el2_min; trnd1_prm1bordU = el2_max; trnd1_prm1color = el2_bordColor;
-}
-
-//- Trend 3 -
-if( el3_prmAddr == EVAL_STR ) { el3_en = false; trnd1_prm2addr = ""; }
-else
-{
-  el3_en = true;
-  trnd1_prm2addr = el3_prmAddr; trnd1_prm2bordL = el3_min; trnd1_prm2bordU = el3_max; trnd1_prm2color = el3_bordColor;
-}
-
-//- Trend 4 -
-if( el4_prmAddr == EVAL_STR ) { el4_en = false; trnd1_prm3addr = ""; }
-else
-{
-  el4_en = true;
-  trnd1_prm3addr = el4_prmAddr; trnd1_prm3bordL = el4_min; trnd1_prm3bordU = el4_max; trnd1_prm3color = el4_bordColor;
-}
-
-//- Trend 5 -
-if( el5_prmAddr == EVAL_STR ) { el5_en = false; trnd1_prm4addr = ""; }
-else
-{
-  el5_en = true;
-  trnd1_prm4addr = el5_prmAddr; trnd1_prm4bordL = el5_min; trnd1_prm4bordU = el5_max; trnd1_prm4color = el5_bordColor;
-}
-
-//- Trend 6 -
-if( el6_prmAddr == EVAL_STR ) { el6_en = false; trnd1_prm5addr = ""; }
-else
-{
-  el6_en = true;
-  trnd1_prm5addr = el6_prmAddr; trnd1_prm5bordL = el6_min; trnd1_prm5bordU = el6_max; trnd1_prm5color = el6_bordColor;
-}
-
-//- Trend 7 -
-if( el7_prmAddr == EVAL_STR ) { el7_en = false; trnd1_prm6addr = ""; }
-else
-{
-  el7_en = true;
-  trnd1_prm6addr = el7_prmAddr; trnd1_prm6bordL = el7_min; trnd1_prm6bordU = el7_max; trnd1_prm6color = el7_bordColor;
-}
-
-//- Trend 8 -
-if( el8_prmAddr == EVAL_STR ) { el8_en = false; trnd1_prm7addr = ""; }
-else
-{
-  el8_en = true;
-  trnd1_prm7addr = el8_prmAddr; trnd1_prm7bordL = el8_min; trnd1_prm7bordU = el8_max; trnd1_prm7color = el8_bordColor;
-}','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;','');
-INSERT INTO "wlb_Main" VALUES('anShow','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','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-name_text = pName.isEVal() ? tr("No data") : pName;
-val_arg0val = pVal;
-val_font = "Arial 24 1 0 0 0";
-if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
-if(pVal.isEVal()) {
-	val_color = name_color = "grey";
-	val_font = "Arial 24 0 1 0 1";
-	alarm = "";
-	pErrCode = 0;
-	bordColor = "grey", bordWidth = 1;
-	return;
-}
-
-//Notification create
-if(!pErr.isEVal() && pErrCode != pErr) {
-	pErrCode = pErr;
-	if(pErrCode == 1 || pErrCode == 2)	alarm = (redEVAL == true) ? "100|"+pName+"|"+spName+" - "+tr("reject")+".|7" : "100|"+pName+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" "+tr("above alarm border")+".|7";
-	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" "+tr("bellow alarm border")+".|7";
-	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" "+tr("above warning border")+".|7";
-	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" "+tr("bellow warning border")+".|7";
-	else if(alarmSt&0x100)	alarm = "1|"+pName+"||1";
-}
-if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
-
-//Notification color change
-alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100) {
-	blinkPr = true;
-	if(!pErrCode || alarmLev <= 1)	wColor = "lime";
-	else if(alarmLev < 30)	wColor = "yellow";
-	else if(alarmLev < 75)	wColor = "red";
-	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor;
-	else { 
-		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; name_color = (redEVAL==true) ? "red" : wColor; }
-		else name_color = val_color = wColor;
-	}
-}
-else name_color = val_color = "lime";
-
-//Blink focused or linked with ElCadr
-if(this.attr("focus") ||
-	(!pName.isEVal() && pName.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pName))
-{
-  bordColor = (bordColor == "white") ? "grey" : "white";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = 1; }
-
-//Check the regulator mode
-if(pModeC == true) mode_text = tr("C");
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1418050629);
-INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
-CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
-7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
-9zmnpmlijCmlq6urt1kAgDCmpKoAhs1murTuuunDqm27rgshXF5eHk02s7ZtLy4unqIPw6Cqi8Xi
-qYCJX5bl/+N770OMcfdVObqCuq6Xy+XRWRFp27ZpmqfSVVVVnwl4IV9E3FNz34tOBby2TgW8tkK4
-CCNHOOi1WrJH08G/96MbAchneZy//GE5Lkc42J3prT6Ydc65czcFzMEvyzIUKH32LGmlWTRWpKN2
-21ARqVBRyEitlZEIgMI226XkLldWQWHBrDaWZKANZmIAUkoKLXM5E78oipD7nHNCBwB0pCdJybK7
-QbpJJKchPZ13pqZ5u4I85vFm3D/yytFRVS0bgJyzjppkLr5zLvR9d/BWhsPRMIhIVVXb8Qjc7mdV
-db1eH/jovwfpfd+b2W5935yfcw4hhGecuOu6siyf2guIyPX19TM7hZTSV7cSL+GfnPgN6FTAa+u7
-LyDEd3HkSE/5LDY+dMoYo//ZjxxJ5r+OHMrO3p2l8wQH7VXbY0584cZmLn5VVSGm6MSxoEZFgFs4
-OOxMW0SqTUUjI2MdWZCRJmbDvVOuc7EpQACw2liRkXZnk9GklCRLeVfOxC+KIuQh55xxBwAgnDko
-9kaYc+oSySmAjgw02eYDyCmnLu0eCZVUWt4XoKrJ0kz8yYn7g7eyORxtNiJS1/V2PALr/ewRpxwP
-0vu+V1XnvvilfVN+SunrTlxV1axO/BL+yYnfgE4FvLa++wJC8VORmBAgV7I7yO0UY4y/xmQJRP7z
-iFM2l036McHB1ibXDw+13nv/3qezufhVVYfQBQgYad6wgFs6eOxMW0TiKhJkuHfKkpbN7rZLSbcp
-riIdYbDaXO1QwLovnLiTKHEmflEUQcVMtmdkEGqKDDPb3cCygZgCTI1K6D5ARffpgJpCYGqw+3Sb
-ka+qoW1XB2/l9mDU9/1ms9k75aFUtW1b7/3+0vogYDoTH7TmvynfORfKsny+O71YLJ7pHt/c3Lyw
-O/0S/smJ34BOBby2ArD/z3osu9dTs8+n7wgz8c0sVL9UI0dGyifR4Uj7t/qtEhU6pj8SHqHOP5zr
-BwWha5V/HjplCCF+iHImM/Grqg5cuSCBgR4eC7gzR0dZbUNzzv7K05GOvvQsyYrI2LWXx5vR/+3h
-4OFjFd3SIcI6mzrpKSVZSRjm4hdFDM5RlRCQhGHyuV071ntPkiB0CiAytsH3z3ibCICAAhmwbQDJ
-iTAT3wz/AQrXOAcOBXvwAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-name_arg0val = name;
-
-if( f_start )
-{
-  el1_1_en = (el1_1_addr!=EVAL_STR); el1_2_en = (el1_2_addr!=EVAL_STR); el1_3_en = (el1_3_addr!=EVAL_STR); 
-  el1_4_en = (el1_4_addr!=EVAL_STR); el1_5_en = (el1_5_addr!=EVAL_STR); el1_6_en = (el1_6_addr!=EVAL_STR);
-  el2_1_en = (el2_1_addr!=EVAL_STR); el2_2_en = (el2_2_addr!=EVAL_STR); el2_3_en = (el2_3_addr!=EVAL_STR); 
-  el2_4_en = (el2_4_addr!=EVAL_STR); el2_5_en = (el2_5_addr!=EVAL_STR); el2_6_en = (el2_6_addr!=EVAL_STR);
-  el3_1_en = (el3_1_addr!=EVAL_STR); el3_2_en = (el3_2_addr!=EVAL_STR); el3_3_en = (el3_3_addr!=EVAL_STR); 
-  el3_4_en = (el3_4_addr!=EVAL_STR); el3_5_en = (el3_5_addr!=EVAL_STR); el3_6_en = (el3_6_addr!=EVAL_STR);
-  el4_1_en = (el4_1_addr!=EVAL_STR); el4_2_en = (el4_2_addr!=EVAL_STR); el4_3_en = (el4_3_addr!=EVAL_STR); 
-  el4_4_en = (el4_4_addr!=EVAL_STR); el4_5_en = (el4_5_addr!=EVAL_STR); el4_6_en = (el4_6_addr!=EVAL_STR);
-
-  rows = new Array( (el1_1_en || el1_2_en || el1_3_en || el1_4_en || el1_5_en || el1_6_en),
-		        (el2_1_en || el2_2_en || el2_3_en || el2_4_en || el2_5_en || el2_6_en),
-		        (el3_1_en || el3_2_en || el3_3_en || el3_4_en || el3_5_en || el3_6_en),
-                                   (el4_1_en || el4_2_en || el4_3_en || el4_4_en || el4_5_en || el4_6_en) );
-  cols = new Array( (el1_1_en || el2_1_en || el3_1_en || el4_1_en), (el1_2_en || el2_2_en || el3_2_en || el4_2_en), (el1_3_en || el2_3_en || el3_3_en || el4_3_en),
-		      (el1_4_en || el2_4_en || el3_4_en || el4_4_en), (el1_5_en || el2_5_en || el3_5_en || el4_5_en), (el1_6_en || el2_6_en || el3_6_en || el4_6_en) );
-
-  xScale = 0; for( i = 0; i < 6; i++ ) xScale += cols[i]; if( xScale ) xScale = 6/xScale;
-  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
-  xScale = yScale = min(xScale,yScale);
-
-  if( xScale > 1 )
-    for( i = 1; i <= 4; i++ ) 
-    {
-      for( j = 1; j <= 6; j++ ) this["wdg_el"+i+"_"+j].attrSet("geomXsc",xScale);
-      this["wdg_el"+i+"_2"].attrSet( "geomX", 3 + 150*xScale*cols[0] );
-      this["wdg_el"+i+"_3"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]) );
-      this["wdg_el"+i+"_4"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]) );
-      this["wdg_el"+i+"_5"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]) );
-      this["wdg_el"+i+"_6"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]+cols[4]) );
-    }
-  if( yScale > 1 )
-    for( j = 1; j <= 6; j++ ) 
-    {
-      for( i = 1; i <= 4; i++ ) this["wdg_el"+i+"_"+j].attrSet("geomYsc",yScale);
-      this["wdg_el2_"+j].attrSet( "geomY", 30 + 142*yScale*rows[0] );
-      this["wdg_el3_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
-      this["wdg_el4_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
-    }
-}','JavaLikeCalc.JavaScript
-name_arg0val = name;
-
-if( f_start )
-{
-  el1_1_en = (el1_1_addr!=EVAL_STR); el1_2_en = (el1_2_addr!=EVAL_STR); el1_3_en = (el1_3_addr!=EVAL_STR); 
-  el1_4_en = (el1_4_addr!=EVAL_STR); el1_5_en = (el1_5_addr!=EVAL_STR); el1_6_en = (el1_6_addr!=EVAL_STR);
-  el2_1_en = (el2_1_addr!=EVAL_STR); el2_2_en = (el2_2_addr!=EVAL_STR); el2_3_en = (el2_3_addr!=EVAL_STR); 
-  el2_4_en = (el2_4_addr!=EVAL_STR); el2_5_en = (el2_5_addr!=EVAL_STR); el2_6_en = (el2_6_addr!=EVAL_STR);
-  el3_1_en = (el3_1_addr!=EVAL_STR); el3_2_en = (el3_2_addr!=EVAL_STR); el3_3_en = (el3_3_addr!=EVAL_STR); 
-  el3_4_en = (el3_4_addr!=EVAL_STR); el3_5_en = (el3_5_addr!=EVAL_STR); el3_6_en = (el3_6_addr!=EVAL_STR);
-  el4_1_en = (el4_1_addr!=EVAL_STR); el4_2_en = (el4_2_addr!=EVAL_STR); el4_3_en = (el4_3_addr!=EVAL_STR); 
-  el4_4_en = (el4_4_addr!=EVAL_STR); el4_5_en = (el4_5_addr!=EVAL_STR); el4_6_en = (el4_6_addr!=EVAL_STR);
-
-  rows = new Array( (el1_1_en || el1_2_en || el1_3_en || el1_4_en || el1_5_en || el1_6_en),
-		        (el2_1_en || el2_2_en || el2_3_en || el2_4_en || el2_5_en || el2_6_en),
-		        (el3_1_en || el3_2_en || el3_3_en || el3_4_en || el3_5_en || el3_6_en),
-                                   (el4_1_en || el4_2_en || el4_3_en || el4_4_en || el4_5_en || el4_6_en) );
-  cols = new Array( (el1_1_en || el2_1_en || el3_1_en || el4_1_en), (el1_2_en || el2_2_en || el3_2_en || el4_2_en), (el1_3_en || el2_3_en || el3_3_en || el4_3_en),
-		      (el1_4_en || el2_4_en || el3_4_en || el4_4_en), (el1_5_en || el2_5_en || el3_5_en || el4_5_en), (el1_6_en || el2_6_en || el3_6_en || el4_6_en) );
-
-  xScale = 0; for( i = 0; i < 6; i++ ) xScale += cols[i]; if( xScale ) xScale = 6/xScale;
-  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
-  xScale = yScale = min(xScale,yScale);
-
-  if( xScale > 1 )
-    for( i = 1; i <= 4; i++ ) 
-    {
-      for( j = 1; j <= 6; j++ ) this["wdg_el"+i+"_"+j].attrSet("geomXsc",xScale);
-      this["wdg_el"+i+"_2"].attrSet( "geomX", 3 + 150*xScale*cols[0] );
-      this["wdg_el"+i+"_3"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]) );
-      this["wdg_el"+i+"_4"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]) );
-      this["wdg_el"+i+"_5"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]) );
-      this["wdg_el"+i+"_6"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]+cols[4]) );
-    }
-  if( yScale > 1 )
-    for( j = 1; j <= 6; j++ ) 
-    {
-      for( i = 1; i <= 4; i++ ) this["wdg_el"+i+"_"+j].attrSet("geomYsc",yScale);
-      this["wdg_el2_"+j].attrSet( "geomY", 30 + 142*yScale*rows[0] );
-      this["wdg_el3_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
-      this["wdg_el4_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
-    }
-}','',1000,'name;geomW;geomH;backColor;bordWidth;','');
-INSERT INTO "wlb_Main" VALUES('anShow1','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAOCAIAAAAQWY2VAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAAEBElEQVRIicWVW0xbdRzHf+ecf6+nLdAeoEAppQXKxdFsDZciSsZlk7GN
-NTM6iYlv+qSJxvjc6JvxwTezmZCYxcy4h7niggZZNU6B4Zgy6dYy6axlXFrKeuXcjw/sgitoTDv9
-vH7/5/f7/v6//+93MI/HA3sTCATS6fTfHPh/sVgsCADGx8eXl5dz5cbGxmAwGA6H889EKMhinZrL
-JpMZ5nENI9QarVopA5HPplJZlt/5nU5fokTiZjTOSQCAyVWkVqPCBC6VSjKc6Ha7EQDEYrFIJJKb
-tby8PH/rAAC4rLn72FCXNXjlS69vfqdBwAhTc2d/T7uJ0gGXvrt04+IXExuMtC2qK5peHDlepU2O
-vv9ROCsoDTX9hw+32owYm7w9953Xdx0A0HaU6qb2dodVBgAivxm5+e30AiMWxrzGYGpxdvV22uU4
-l6vKVPr9rk6KSHhHPyHszx3pdvU9feeCL8hJgNRUT9/BCo3sQamo1TXQWqOZvjCaqjk06DrUEQph
-DwpAHcOvnnn3VDqyLiK5ErIfvn7sg4uBAtgnDEdHXrBq5PxWRiLluTpPJ34YO3cN5zbWE+aKlIBh
-SKkmADgMWRxdTQagBUGNAABwRJpsFSK7EgpFtvgQ01ZtbqhkMMAfxlpd+rqvydrSduT8Aj04cqIE
-FcA/YDKCic1Mjk3OLu5y/wCSyMbX7kaTwlM9Q33P7hNjd36avUlLoKtq6XHWzF/5fi17f2YwRFJa
-XBDpLCtxdJoDUBSVKnB4ZFOpqegdOp4u23fAWhn1huhCPCFjKT4/NcdxoqlKhwOuMxgb7DQvPX6M
-1Ju7uw6UIIlmRZKy2ClZU/vBIm45xshtBAEgN9saSNCTBBBIba5rkAwUAlAVGRGjwDwez9lPP99/
-8q2P33tZ2EzwHB2avfTmG+9Mh9NOpzMajeazhdxut8PhyOsO/olHHVj57dKw4+RizpbLh0AgkEgk
-AMNLTXX1taXx8OLi7+vCjg4gha6+2U5K6Vu/3iL0tc2NptRKiFWVGos1f43E/REMQnljpYpZ/GWO
-1tW32ss3Qj9LZGVBXvqe+P1+v98PQDR3q621+tWQ3+eb5xH10munDLDx2elz92QGZLQ6DEQmvopp
-6wguM3fZe32FlyECAADpT7zyvEXLnD99dimesblkR13VPJNmCSQx8R8nvqntGEAAABI/4z3z9g35
-6q6DVghEUeBYjhe2BwtXkSQJWRyA39qcmvhKcfAZ58CwkFq7Ojl29fYm+7BFBEEzLKtgkvcSW4wQ
-vHZ5qqi/va1XysRmJn0LqxkLAHg8HpvNtmtWp9NpNpufVE2F4P6fmKIomqZz5eLi4mg0+p+7+ncg
-ABgcHNxLLisre9JrJB9MJtOfuAmh/+/YRy0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-name_en = pName.length;
-name_text = pName;
-name_geomW = pNameSz;
-val_arg0val = pVal;
-val_font = "Arial 24 1 0 0 0"; 
-if(!prec.isEVal()) val_arg0cfg = ((prec>=0)?";f;":";g;")+abs(prec);
-if(pVal.isEVal()) {
-	val_color = "grey";
-	val_font = "Arial 24 0 1 0 1";
-	alarm = "";
-	pErrCode = 0;
-	bordColor = "gray", bordWidth = 1;
-	return;
-}
-
-//Notification create
-if(!pErr.isEVal() && pErrCode != pErr) {
-	pErrCode = pErr;
-	if(pErrCode == 1 || pErrCode == 2)	alarm = "100|"+pNAME+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" "+tr("above alarm border")+".|7";
-	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" "+tr("bellow alarm border")+".|7";
-	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" "+tr("above warning border")+".|7";
-	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" "+tr("bellow warning border")+".|7";
-	else if(alarmSt&0x100) alarm = "1|"+pNAME+"||1";
-}
-if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
-
-//Notification color change
-alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100) {
-	blinkPr = true;
-	if(!pErrCode || alarmLev <= 1) wColor = "lime";
-	else if(alarmLev < 30)	wColor = "yellow";
-	else if(alarmLev < 75)	wColor = "red";
-	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor;
-	else { 
-		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; }
-		else val_color = wColor;
-	}
-}
-else val_color = "lime";
-
-//Blink focused or linked with ElCadr
-if(this.attr("focus") ||
-	(!pName.isEVal() && pName.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pName))
-{
-  bordColor = (bordColor == "white") ? "grey" : "white";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1415294952);
-INSERT INTO "wlb_Main" VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
-DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
-OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6
-PYSJTikA+L5PKfH9kFKiouWck1ardX5eD4NQZ6xfzeVy09PTio/f39//9eULbphY0zDGADA1NZXP
-5xXl5XL55YtydnjEcXq9bi8QvhE3m22HCC81Muq0mqAhzwvjHLc7vmHGpYQvcjmMtasVCACc/PlH
-iGOc6YxqGo0Vs9lCoaDooFar+WEoWhfHJ6ePCo9OT+35+Xl1+cHBQT6fd13PNA2EtFqtlrAM0GjK
-Mjzf96meyWZcx+GxWCothAiCUHie239TAAAgCQDcfzjueZ6u67quA0C9Xj88PFR0cHZ2lrASIMVQ
-JksJnRjPVSoVdXmj0cCEckz6nkZHR5eXl9llL3wYIcTz5yUCAJRSSilCqD/R7XZt21Z00G63+7Ef
-jj3oVy4uLtTlruu+OvhtOJtNZEf+efPaSmUsy+oveCtSSk1DBACqdsXTCJaSM4ooKxaLs7Ozig4Q
-Qr/8/BOhRGcmQSFmfHJyUn0LVavViYlxKTWqaQ/Gcr7v27Ydi8VUtGEYCiEIACTTQ13Xo5TGeQwQ
-chxH/Vzq9Xoj9+6BlIAwYzog1O121eWO48QN62qoadrOzg4hSkeQEAL6m5hxzji/mjg+Pt7c3FR0
-UK1WOY9fr+zt7VUqFUW5bduHv78aHh4BjVAMhLLFxUX1FlpZWSEAUH1TIdzwXD+dNP1QFIvFhYUF
-RQfb29s//vA9AGI8bsRjGqYzMzPqLbS+vm6/PnW8IJm2AteBy8ZQ0QohpJQEAEwz0e51Ol03nTT7
-yaSUig6klMlUuttu0cvXdie5ECI1lPlvwPQwDFdXVzHGCKFbF5FSCiHQkyfftFoX1ycopZlM5n2y
-GzQaDdd1bxQVmxgAfN8/Of6Lc44pp1gSyh4//vrOLXRerzU7TiqZ0AlGmNy1hba2tm4UgyBQlCOE
-KCUIk8sz/M4QAKA6g3ZXhAIIvlXwyRm9P3Z1HQRBqVS69qH9EL7vh6EgAGCYlmG+PcuOjo42NjYU
-H6/+zXofterfLMZA0zGIRCq9tLSkKGw0GqVS6R3N2mw2m83mR9pSp3l+Thlj3GIEpNr5cx3V3fb5
-+PKrtz9dwzBYW1tTFDqOo2mYAMDu7m65XP4s7j41hUJhbm7uamhZCQIAjuPU6/XoXN2BTqdzo6K9
-877/EYMAUTMIEDWDAFEzCBA1gwBRMwgQNYMAUTMIEDWDAFEzCBA1gwBRQwAAY6z4x2DkUEpvVNDT
-p9/2er1I3Hw8lNJ/AdK3tNlT+3/SAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-txt_pnlTitle_arg0val = NAME;
-
-if( f_start ) clc = 0;
-clc++;
-if( clc == 3 ) event+="usr_ElCadr";
-ev_wrk=ev_rez="";
-off=0;
-while(true)
-{
-    ev_wrk=event.parse(0,"\n",off);
-    if( ev_wrk == "" ) break;
-    if( ev_wrk == "ws_LnAccept:/kp" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kp : "+DESCR+" : "+Kp+" : " +kp_value); Kp = kp_value; }
-    else if( ev_wrk == "ws_LnAccept:/ki" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ki : "+DESCR+" : "+Ki+" : " +ki_value); Ki = ki_value; }
-    else if( ev_wrk == "ws_LnAccept:/ti" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ti : "+DESCR+" : "+Ti/1000+" : " +ti_value); Ti = 1000*ti_value; }
-    else if( ev_wrk == "ws_LnAccept:/kd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kd : "+DESCR+" : "+Kd+" : " +kd_value); Kd = kd_value; }
-    else if( ev_wrk == "ws_LnAccept:/td" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Td : "+DESCR+" : "+Td/1000+" : " +td_value); Td = 1000*td_value; }
-    else if( ev_wrk == "ws_LnAccept:/tzd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Tzd : "+DESCR+" : "+Tzd+" : " +tzd_value); Tzd = 1000*tzd_value; }
-    else if( ev_wrk == "ws_LnAccept:/zn" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Zn : "+DESCR+" : "+Zi+" : " +zn_value); Zi = zn_value; }
-    else if( ev_wrk == "ws_LnAccept:/h1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H1 : "+DESCR+" : "+Hdwn+" : " +h1_value); Hdwn = h1_value; }
-    else if( ev_wrk == "ws_LnAccept:/h2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H2 : "+DESCR+" : "+Hup+" : " +h2_value); Hup = h2_value; }
-    else if( ev_wrk == "ws_LnAccept:/k1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K1 : "+DESCR+" : "+K1+" : " +k1_value); K1 = k1_value; }
-    else if( ev_wrk == "ws_LnAccept:/k2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K2 : "+DESCR+" : "+K2+" : " +k2_value); K2 = k2_value; }
-    else if( ev_wrk == "ws_LnAccept:/k3" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K3 : "+DESCR+" : "+K3+" : " +k3_value); K3 = k3_value; }
-    else if( ev_wrk == "ws_LnAccept:/k4" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K4 : "+DESCR+" : "+K4+" : " +k4_value); K4 = k4_value; }
-    else if( ev_wrk == "ws_LnAccept:/tiPer" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpPer : "+DESCR+" : "+TImpPer/1000+" : " +tiPer_value); TImpPer = 1000*tiPer_value; }
-    else if( ev_wrk == "ws_LnAccept:/tiMin" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpMin : "+DESCR+" : "+TImpMin/1000+" : " +tiMin_value); TImpMin = 1000*tiMin_value; }    
-    else if( ev_wrk == "ws_LnAccept:/rfct" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.KImpRfact : "+DESCR+" : "+KImpRfact+" : " +rfct_value); KImpRfact = rfct_value; }
-    else ev_rez+=ev_wrk+"\n";
-}
-event=ev_rez;
-
-kp_active = (Kp!=EVAL_REAL); kp_value = kp_active?Kp:0;
-ki_active = (Ki!=EVAL_REAL); ki_value = ki_active?Ki:0;
-ti_active = (Ti!=EVAL_REAL); ti_value = ti_active?Ti/1000:0;
-kd_active = (Kd!=EVAL_REAL); kd_value = kd_active?Kd:0;
-td_active = (Td!=EVAL_REAL); td_value = td_active?Td/1000:0;
-tzd_active = (Tzd!=EVAL_REAL); tzd_value = tzd_active?Tzd/1000:0;
-zn_active = (Zi!=EVAL_REAL); zn_value = zn_active?Zi:0;
-h1_active = (Hdwn!=EVAL_REAL); h1_value = h1_active?Hdwn:0;
-h2_active = (Hup!=EVAL_REAL); h2_value = h2_active?Hup:0;
-k1_active = (K1!=EVAL_REAL); k1_value = k1_active?K1:0;
-k2_active = (K2!=EVAL_REAL); k2_value = k2_active?K2:0;
-k3_active = (K3!=EVAL_REAL); k3_value = k3_active?K3:0;
-k4_active = (K4!=EVAL_REAL); k4_value = k4_active?K4:0;
-tiPer_active = (TImpPer!=EVAL_REAL); tiPer_value = tiPer_active?TImpPer/1000:0;
-tiMin_active = (TImpMin!=EVAL_REAL); tiMin_value = tiMin_active?TImpMin/1000:0;
-rfct_active = (KImpRfact!=EVAL_REAL); rfct_value = rfct_active?KImpRfact:0;
-
-doc_tmpl = "<body  bgcolor=''grey''><table style=''color: white'' border=''1'' cellpadding=''1'' cellspacing=''0'' width=''100%''>\n";
-doc_tmpl += "<tr><td>Id:</td><td>"+((EVAL_STR == SHIFR) ? "" : strEnc2HTML(SHIFR))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Name:</td><td>"+((EVAL_STR == NAME) ? "" : strEnc2HTML(NAME))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Description:</td><td>"+((EVAL_STR == DESCR) ? "" : strEnc2HTML(DESCR))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Dimension:</td><td>"+((EVAL_STR==ed) ? "" : strEnc2HTML(ed))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Setpoint:</td><td>"+ ((trnd_prm1val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm1val) : strEnc2HTML(real2str(trnd_prm1val,prec))) : "");
-doc_tmpl += ((trnd_prm1val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm1val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Variable:</td><td>"+ ((trnd_prm2val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm2val) :strEnc2HTML(real2str(trnd_prm2val,prec))) : "");
-doc_tmpl += ((trnd_prm2val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm2val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Output:</td><td>"+((trnd_prm0val != EVAL_REAL) ? strEnc2HTML(real2str(trnd_prm0val,1)) : "")+"</td></tr>\n";
-doc_tmpl += "<tr><td>Scale:</td><td>"+(min != EVAL_REAL ? strEnc2HTML(min) : "")+" ... "+(max != EVAL_REAL ? strEnc2HTML(max) : "")+"</td></tr>\n";
-doc_tmpl += "<tr><td>Mode:</td><td>"+((trnd_prm3val==EVAL_REAL)?" - ": (trnd_prm3val ? "Automat" : "Manual"))+"</td></tr>\n";
-doc_tmpl += "</table></body>";
-
-//Diagram
-trnd_prm0addr = out_addr;
-trnd_prm1addr = sp_addr;
-trnd_prm1bordL = min;
-trnd_prm1bordU = max;
-trnd_prm2addr = var_addr;
-trnd_prm2bordL = min;
-trnd_prm2bordU = max;
-trnd_prm3addr = auto_addr;
-trnd_prm4addr = impQup_addr;
-trnd_prm5addr = impQdwn_addr;','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-txt_pnlTitle_arg0val = NAME;
-
-if( f_start ) clc = 0;
-clc++;
-if( clc == 3 ) event+="usr_ElCadr";
-ev_wrk=ev_rez="";
-off=0;
-while(true)
-{
-    ev_wrk=event.parse(0,"\n",off);
-    if( ev_wrk == "" ) break;
-    if( ev_wrk == "ws_LnAccept:/kp" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kp : "+DESCR+" : "+Kp+" : " +kp_value); Kp = kp_value; }
-    else if( ev_wrk == "ws_LnAccept:/ki" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ki : "+DESCR+" : "+Ki+" : " +ki_value); Ki = ki_value; }
-    else if( ev_wrk == "ws_LnAccept:/ti" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ti : "+DESCR+" : "+Ti/1000+" : " +ti_value); Ti = 1000*ti_value; }
-    else if( ev_wrk == "ws_LnAccept:/kd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kd : "+DESCR+" : "+Kd+" : " +kd_value); Kd = kd_value; }
-    else if( ev_wrk == "ws_LnAccept:/td" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Td : "+DESCR+" : "+Td/1000+" : " +td_value); Td = 1000*td_value; }
-    else if( ev_wrk == "ws_LnAccept:/tzd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Tzd : "+DESCR+" : "+Tzd+" : " +tzd_value); Tzd = 1000*tzd_value; }
-    else if( ev_wrk == "ws_LnAccept:/zn" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Zn : "+DESCR+" : "+Zi+" : " +zn_value); Zi = zn_value; }
-    else if( ev_wrk == "ws_LnAccept:/h1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H1 : "+DESCR+" : "+Hdwn+" : " +h1_value); Hdwn = h1_value; }
-    else if( ev_wrk == "ws_LnAccept:/h2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H2 : "+DESCR+" : "+Hup+" : " +h2_value); Hup = h2_value; }
-    else if( ev_wrk == "ws_LnAccept:/k1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K1 : "+DESCR+" : "+K1+" : " +k1_value); K1 = k1_value; }
-    else if( ev_wrk == "ws_LnAccept:/k2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K2 : "+DESCR+" : "+K2+" : " +k2_value); K2 = k2_value; }
-    else if( ev_wrk == "ws_LnAccept:/k3" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K3 : "+DESCR+" : "+K3+" : " +k3_value); K3 = k3_value; }
-    else if( ev_wrk == "ws_LnAccept:/k4" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K4 : "+DESCR+" : "+K4+" : " +k4_value); K4 = k4_value; }
-    else if( ev_wrk == "ws_LnAccept:/tiPer" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpPer : "+DESCR+" : "+TImpPer/1000+" : " +tiPer_value); TImpPer = 1000*tiPer_value; }
-    else if( ev_wrk == "ws_LnAccept:/tiMin" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpMin : "+DESCR+" : "+TImpMin/1000+" : " +tiMin_value); TImpMin = 1000*tiMin_value; }    
-    else if( ev_wrk == "ws_LnAccept:/rfct" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.KImpRfact : "+DESCR+" : "+KImpRfact+" : " +rfct_value); KImpRfact = rfct_value; }
-    else ev_rez+=ev_wrk+"\n";
-}
-event=ev_rez;
-
-kp_active = (Kp!=EVAL_REAL); kp_value = kp_active?Kp:0;
-ki_active = (Ki!=EVAL_REAL); ki_value = ki_active?Ki:0;
-ti_active = (Ti!=EVAL_REAL); ti_value = ti_active?Ti/1000:0;
-kd_active = (Kd!=EVAL_REAL); kd_value = kd_active?Kd:0;
-td_active = (Td!=EVAL_REAL); td_value = td_active?Td/1000:0;
-tzd_active = (Tzd!=EVAL_REAL); tzd_value = tzd_active?Tzd/1000:0;
-zn_active = (Zi!=EVAL_REAL); zn_value = zn_active?Zi:0;
-h1_active = (Hdwn!=EVAL_REAL); h1_value = h1_active?Hdwn:0;
-h2_active = (Hup!=EVAL_REAL); h2_value = h2_active?Hup:0;
-k1_active = (K1!=EVAL_REAL); k1_value = k1_active?K1:0;
-k2_active = (K2!=EVAL_REAL); k2_value = k2_active?K2:0;
-k3_active = (K3!=EVAL_REAL); k3_value = k3_active?K3:0;
-k4_active = (K4!=EVAL_REAL); k4_value = k4_active?K4:0;
-tiPer_active = (TImpPer!=EVAL_REAL); tiPer_value = tiPer_active?TImpPer/1000:0;
-tiMin_active = (TImpMin!=EVAL_REAL); tiMin_value = tiMin_active?TImpMin/1000:0;
-rfct_active = (KImpRfact!=EVAL_REAL); rfct_value = rfct_active?KImpRfact:0;
-
-doc_tmpl = "<body  bgcolor=''grey''><table style=''color: white'' border=''1'' cellpadding=''1'' cellspacing=''0'' width=''100%''>\n";
-doc_tmpl += "<tr><td>Id:</td><td>"+((EVAL_STR == SHIFR) ? "" : strEnc2HTML(SHIFR))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Имя:</td><td>"+((EVAL_STR == NAME) ? "" : strEnc2HTML(NAME))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Описание:</td><td>"+((EVAL_STR == DESCR) ? "" : strEnc2HTML(DESCR))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Единица измерения:</td><td>"+((EVAL_STR==ed) ? "" : strEnc2HTML(ed))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Задание:</td><td>"+ ((trnd_prm1val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm1val) : strEnc2HTML(real2str(trnd_prm1val,prec))) : "");
-doc_tmpl += ((trnd_prm1val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm1val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Переменная:</td><td>"+ ((trnd_prm2val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm2val) :strEnc2HTML(real2str(trnd_prm2val,prec))) : "");
-doc_tmpl += ((trnd_prm2val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm2val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
-doc_tmpl += "<tr><td>Выход:</td><td>"+((trnd_prm0val != EVAL_REAL) ? strEnc2HTML(real2str(trnd_prm0val,1)) : "")+"</td></tr>\n";
-doc_tmpl += "<tr><td>Шкала:</td><td>"+(min != EVAL_REAL ? strEnc2HTML(min) : "")+" ... "+(max != EVAL_REAL ? strEnc2HTML(max) : "")+"</td></tr>\n";
-doc_tmpl += "<tr><td>Режим:</td><td>"+((trnd_prm3val==EVAL_REAL)?" - ": (trnd_prm3val ? "Автомат" : "Ручной"))+"</td></tr>\n";
-doc_tmpl += "</table></body>";
-
-//Diagram
-trnd_prm0addr = out_addr;
-trnd_prm1addr = sp_addr;
-trnd_prm1bordL = min;
-trnd_prm1bordU = max;
-trnd_prm2addr = var_addr;
-trnd_prm2bordL = min;
-trnd_prm2bordU = max;
-trnd_prm3addr = auto_addr;
-trnd_prm4addr = impQup_addr;
-trnd_prm5addr = impQdwn_addr;','',1000,'id;path;name;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;','');
-INSERT INTO "wlb_Main" VALUES('ResultGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
-OElEQVRYhc2YTW8TRxiA33fmnZnd9VcSO4EgQW+tVPVSCUGLAAHiQ6I3JISEOHLtpRfE36A/CSEq
-hdKEQogqVNoCdkJI7NiO7f2YeXtwQD2UHXMYtXsb6ZlnPZJ3n53BH+/dc84NBgPHnOd5nueRMXlR
-GGMQgIiyLHPOdXs9+P9dCwsL1O31xqOR1rpeq/WLorWwUFj79tWrz44ds9bGcZznOQK8e/fuv/61
-/37hrVu3mFkpNZlMlFKtVgsRP0YXRbG1tSWlVEplWUZEzWZTCFFyg83NTUQM5BdC0PLSclyNAYCZ
-nz19trGxUXIDKeXJ4yfr8/Upv/F848GDByW8UurUyVNB/aT3dZzFAOCUa//RXvll5WM0ACRJcvrL
-07GLAcEpt/nX5sqKhz/31bmgfsKk6yoZsgOUKuI4jksmRFGEyZ5rwHvezcCH9VMhNAA6oQAgK+x4
-PC6ZgIhWKABwQjFAPgMf2k87/aVhWgMAIWzh6t4V7/YXJ0ULkaW0mZ3z8qH91JjfrSbZdCzl0Lvi
-+lx3vnEwJBp4+dB+6jf6k/oEAKSVtmq9Kx7UB0WrQEZpZVErvHxoP+l0uTqMGAUg8MR4V6yzQ7VB
-nREBgCexnw/sJyjyVCTCObScGNNsNksmGGMgz1Mh0TnpbKJ0OR9FUWg/Xr9+/Z+lXFxcLC9lp9Mh
-IqVUmqZaa2+JO51OUD/e+eFOXI8BABjWVtde/vmyhCais9+erTfrU/7pr09f/P6ihFdKXThzIaif
-5FiazMC0lK/aq6urJROSJDn/9Xmzbaal3Hqz5eUvHb8U1E8i6nKSCnYopDbgfeqF6UHDAjMKqYy/
-lKH9VMjYCVWgQOZZSpnLyArNKGC2sob2085eazj5hFJ2+830fSnzWUoc2E/1hZ1afFBKMUP5avO7
-C/WDoVR9f1kD+2lYG6aNFACklVzxfy3uV/dty05L6Sr+/2hoP1GxnIxiJwQy2xlKScWhyn7DCSEc
-uzSagQ/st4PBGFE6BwwxSW8p7XA4NpFwFpkjIfx8YD/evHlTCKGUGo/HWmtvKdvttlJqWsrpHre8
-lO12O6ifji4dPSglwOOfHz969KiMJrp45uJBKQHWVtfKea31lXNXgvpJZtJ0DQM75bY2t9bX10sm
-JEly+ZvLZtcwMivefrvt5a+euhrUT1LvYDISwIhSa/9bgnQX64UAdkhG+98Sof2UqaqiiAEROCuc
-96lPqZJRhQERIC3Yy4f2026vuT/+hFL29hay/EMpG/49bmA/1Vrv6uaglEj+8lWbO83qwXCWUob2
-0ygeZfMZAEgrIfF/LU6iyXZre/ZShvaT4CPRJJ6Wz2b+UgIfiidzDlE4Z7MnXj60n1x3NytqwjkH
-UFHq8OHDJROUUtzrZkIIZx1ARcpyXmsd2o+3b9+engZ/2LOWlC/Lsk6n86GU0z2rlLLkHq9fvw7q
-x7vf342rMTAAwv2f7q//VhYOrfW1K9ca840p/3Dl4ZPnT0p4Y8yN724E9RMDy1QyMhP3B/03b96U
-TEiSBBA+8IP9gZcP7Scjd5QZAgCjNMp/cqbFrtYTQLQoI/KfnIX200jNoU4AEZgnVnif+rFq7JvG
-lB876eVD+6nXmx+/L6W1Ve+K9/bm8velLIqav6yB/RQf2qybESMDAOg974rjpbfz1WLKo+n5+cB+
-ctINaoNp+aSW3hU7ccBTQcIIPx/YT5k+EmHVSWR0qfWXMtOHlWgCAoBNnf/0OLSflsYjA4zMjPjF
-kWVz4kTJBCJaSieVQX/Kf760JEt5pVRo/988T/gZm+2WXgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-name_arg0val = (grpName!=EVAL_STR) ? grpName : "";
-
-if( f_start )
-{
-  rows = new Array();
-  cols = new Array();
-  for( i = 0; i < 4; i++ )
-  {
-    rows[i] = this["wdg_e"+(1+i)].attr("en") || this["wdg_e"+(5+i)].attr("en") || this["wdg_e"+(9+i)].attr("en") || this["wdg_e"+(13+i)].attr("en");
-    cols[i] = this["wdg_e"+(1+i*4)].attr("en") || this["wdg_e"+(2+i*4)].attr("en") || this["wdg_e"+(3+i*4)].attr("en") || this["wdg_e"+(4+i*4)].attr("en");
-  }
-
-  xScale = 0; for( i = 0; i < 4; i++ ) xScale += cols[i]; if( xScale ) xScale = 4/xScale;
-  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
-  xScale = yScale = min(xScale,yScale);
-
-  if( xScale > 1 )
-    for( i = 1; i <= 4; i++ ) 
-    {
-      for( j = 1; j <= 4; j++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomXsc",xScale);
-      this["wdg_e"+(4+i)].attrSet( "geomX", 1 + 224*xScale*cols[0] );
-      this["wdg_e"+(8+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]) );
-      this["wdg_e"+(12+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]+cols[2]) );
-    }
-  if( yScale > 1 )
-    for( j = 1; j <= 4; j++ ) 
-    {
-      for( i = 1; i <= 4; i++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomYsc",yScale);
-      this["wdg_e"+(2+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*rows[0] );
-      this["wdg_e"+(3+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
-      this["wdg_e"+(4+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
-    }
-}','JavaLikeCalc.JavaScript
-name_arg0val = (grpName!=EVAL_STR) ? grpName : "";
-
-if( f_start )
-{
-  rows = new Array();
-  cols = new Array();
-  for( i = 0; i < 4; i++ )
-  {
-    rows[i] = this["wdg_e"+(1+i)].attr("en") || this["wdg_e"+(5+i)].attr("en") || this["wdg_e"+(9+i)].attr("en") || this["wdg_e"+(13+i)].attr("en");
-    cols[i] = this["wdg_e"+(1+i*4)].attr("en") || this["wdg_e"+(2+i*4)].attr("en") || this["wdg_e"+(3+i*4)].attr("en") || this["wdg_e"+(4+i*4)].attr("en");
-  }
-
-  xScale = 0; for( i = 0; i < 4; i++ ) xScale += cols[i]; if( xScale ) xScale = 4/xScale;
-  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
-  xScale = yScale = min(xScale,yScale);
-
-  if( xScale > 1 )
-    for( i = 1; i <= 4; i++ ) 
-    {
-      for( j = 1; j <= 4; j++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomXsc",xScale);
-      this["wdg_e"+(4+i)].attrSet( "geomX", 1 + 224*xScale*cols[0] );
-      this["wdg_e"+(8+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]) );
-      this["wdg_e"+(12+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]+cols[2]) );
-    }
-  if( yScale > 1 )
-    for( j = 1; j <= 4; j++ ) 
-    {
-      for( i = 1; i <= 4; i++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomYsc",yScale);
-      this["wdg_e"+(2+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*rows[0] );
-      this["wdg_e"+(3+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
-      this["wdg_e"+(4+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
-    }
-}','JavaLikeCalc.JavaScript
-name_arg0val = (grpName!=EVAL_STR) ? grpName : "";
-
-if( f_start )
-{
-  rows = new Array();
-  cols = new Array();
-  for( i = 0; i < 4; i++ )
-  {
-    rows[i] = this["wdg_e"+(1+i)].attr("en") || this["wdg_e"+(5+i)].attr("en") || this["wdg_e"+(9+i)].attr("en") || this["wdg_e"+(13+i)].attr("en");
-    cols[i] = this["wdg_e"+(1+i*4)].attr("en") || this["wdg_e"+(2+i*4)].attr("en") || this["wdg_e"+(3+i*4)].attr("en") || this["wdg_e"+(4+i*4)].attr("en");
-  }
-
-  xScale = 0; for( i = 0; i < 4; i++ ) xScale += cols[i]; if( xScale ) xScale = 4/xScale;
-  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
-  xScale = yScale = min(xScale,yScale);
-
-  if( xScale > 1 )
-    for( i = 1; i <= 4; i++ ) 
-    {
-      for( j = 1; j <= 4; j++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomXsc",xScale);
-      this["wdg_e"+(4+i)].attrSet( "geomX", 1 + 224*xScale*cols[0] );
-      this["wdg_e"+(8+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]) );
-      this["wdg_e"+(12+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]+cols[2]) );
-    }
-  if( yScale > 1 )
-    for( j = 1; j <= 4; j++ ) 
-    {
-      for( i = 1; i <= 4; i++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomYsc",yScale);
-      this["wdg_e"+(2+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*rows[0] );
-      this["wdg_e"+(3+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
-      this["wdg_e"+(4+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
-    }
-}',1000,'name;geomW;geomH;backColor;bordWidth;',1410372267);
-INSERT INTO "wlb_Main" VALUES('ResultGraphEl','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAoCAIAAADBrGu+AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
-xUlEQVRYhdWYWW/bRhRG7ywkJZGUqFCKLC+J5TiIlwe3qQ3kB/RfB30uCkRNFQc2EnlRIsXWZpkU
-KZEccmb64CB2arSNVae0D/jCuRzgfOTgDjGo0Wjs7e0hhAzDgPvG3NwcPTw8fPnypeM4T548GQ6H
-xWLRcRzDMIQQmqZ1u93Hjx+fnp5WKpV2u23bNqU0CAJd14UQqqpmMpkUA+zs7FBN02zbDoLA9/3B
-YDAYDLa3t5vNppTy4rM0m81arXZ0dOS6rud5pmkKIXq9nhBia2srRfsLKGOs1WqFYSiEiOP44o0m
-ScIYS5LENE3DMD5+/KgoCsZYVVUppe/7lmUpihLHsaqqKQdQVXVzc/Mvo+vr66nYzACdYU69Xm+1
-WrdtMguaps0SgFK6u7t76zYzEAQBVTzFemtFdsQKTFIJEkCCpBLHWBKJOAIJSCCJJM9yEpJMP822
-cx2KGQ6qQfY0a9dtr+YhjgADSDCPzMnSRO/ow+2h6qjZXtbZcMJSiGOctvNX0NiMYzMWVMT5GDN8
-oShUEcwFPMPDchiWQ1ZkJCJhKQQCwXwAB2lbX4EKVVxccSG+Xk7MBAC4wkc/jj6P6Mn/Kvhv3K31
-MAP3PsAsbRRjXK1Wb11lBgghNMfO58//CBWTY5VRA0kBAByrmdhlJKfwQCJMBQMp3dyCEQ5y7OyN
-lK7rpi0PACCEoCCFk1sqBJ9KXqNvPsPAkeCAkDVpO/qi7R+9n/uZsLjkHzCawzLmWJUynE6nacsD
-AEgpaaA9mKrFQLX65lqWjSZaCYGUCHcLmxLhXmGTIyWipkBkopWxTJCUAPtpm19CJSBAWAJwQvzs
-HABIAACQiAAARwQAANA4twAAAimpmf4N974L3f8AnJPh0Gbsm9ZGFKmTSe57O90I6jiW55mjUZFz
-ms+POSeaFgFAt1spFp3xOF8ouEGQDYLs6urBdJo7OFjN5X5NW/sSSmlSLJ53u5XDw5Va7VhRkuHQ
-zmYD17UymbDTWVheblGanJzMM6YkCbWsc87J6upq2uYAAIqi0ELBtSzXsty1tffjsZnPexe19fV3
-APDsWRMADGOi65N83gNwq9Vuo8EPDu7EH2kcf/1z/8X+Ov9QSpf734XSFviv4EiL3j19NzbH3/K0
-BNl72PveTjeC+oZf2iudVk/rz+tLnSVOOOEEANpL7Uqvcrx8vLG/4Rmeb/rr++v9h/0Pjz6Ufymn
-rX0JzoSZTJjJBlnTMyM1yk1zAJAJM+V+2XKsleOV+ZP5xc5iQhIt0p42n2692cLiDi08qk90farr
-U/1R+xFTmBp/Pipc/LQIAPOn8wCgMe3Fby8uSpV+ZUAGd2gfuHr/xf46V0uc39V94D5y7wPQiW7s
-r23YZ0PLdTDnACARwkJwQrAQAmMAkAgDSJWxk4XFmFJoNNLWvoRGmlbpd3sP5+o/7Sy3jjkhWAoJ
-0KqtLHQ6naWlH17/7lrWsFTe2HsbK0qo3bGzUcP3dN+v8pNsME0orfTOEqqojNlnZ7np1D4bVnrd
-B6OzSNWKo5HCmMCknbb0VajKmMaYxpjlOl9VXACAvDcGACVJnr+uA4DlugBwtwLMMAchZFnWravM
-AMYYvXr1qtvt3mhau92Ooug7Od2IWq32J7gBUGA1eYbJAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-en=(p1_addr!=EVAL_STR || p2_addr!=EVAL_STR || p3_addr!=EVAL_STR || p4_addr!=EVAL_STR || p5_addr!=EVAL_STR);
-title_text = (title!=EVAL_STR) ? title : "";
-
-p1_text = (p1_name!=EVAL_STR) ? p1_name : ""; p1_color=p1_clr;
-p2_text = (p2_name!=EVAL_STR) ? p2_name : ""; p2_color=p2_clr;
-p3_text = (p3_name!=EVAL_STR) ? p3_name : ""; p3_color=p3_clr;
-p4_text = (p4_name!=EVAL_STR) ? p4_name : ""; p4_color=p4_clr;
-p5_text = (p5_name!=EVAL_STR) ? p5_name : ""; p5_color=p5_clr;
-
-trnd_prm0addr=p1_addr; trnd_prm0bordL = p1_min; trnd_prm0bordU = p1_max; trnd_prm0color = p1_clr;
-trnd_prm1addr=p2_addr; trnd_prm1bordL = p2_min; trnd_prm1bordU = p2_max; trnd_prm1color = p2_clr;
-trnd_prm2addr=p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_prm2color = p3_clr;
-trnd_prm3addr=p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
-trnd_prm4addr=p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','JavaLikeCalc.JavaScript
-en=(p1_addr!=EVAL_STR || p2_addr!=EVAL_STR || p3_addr!=EVAL_STR || p4_addr!=EVAL_STR || p5_addr!=EVAL_STR);
-title_text = (title!=EVAL_STR) ? title : "";
-
-p1_text = (p1_name!=EVAL_STR) ? p1_name : ""; p1_color=p1_clr;
-p2_text = (p2_name!=EVAL_STR) ? p2_name : ""; p2_color=p2_clr;
-p3_text = (p3_name!=EVAL_STR) ? p3_name : ""; p3_color=p3_clr;
-p4_text = (p4_name!=EVAL_STR) ? p4_name : ""; p4_color=p4_clr;
-p5_text = (p5_name!=EVAL_STR) ? p5_name : ""; p5_color=p5_clr;
-
-trnd_prm0addr=p1_addr; trnd_prm0bordL = p1_min; trnd_prm0bordU = p1_max; trnd_prm0color = p1_clr;
-trnd_prm1addr=p2_addr; trnd_prm1bordL = p2_min; trnd_prm1bordU = p2_max; trnd_prm1color = p2_clr;
-trnd_prm2addr=p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_prm2color = p3_clr;
-trnd_prm3addr=p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
-trnd_prm4addr=p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','',1000,'name;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;','');
-INSERT INTO "wlb_Main" VALUES('doc_panel','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
-ZklEQVRYhe1XS2/TShQ+45nYbhLXMU5MRCgRiSg0IVAhsUOw4LGrWPATWCDxH/gF/Ad2ZcE+EogV
-CAkqhEBIpUSUpChVDHnaztP2eOYurJsbQlrBfUh3wbew7ONvvplz5pwzNnr27JlpmvA96vV6LBY7
-cuQI/AQMwyCNRqNSqcy9eP/+PSEEY6woiuM4giBomtZqtTDGp0+fniNzzslBM4iiOBqNBEEYj8eq
-qjYajSAIBEFYSF6scu7cOQDo9Xqapv2MUyQajRYKhZ+hzmE4HOq6zjknhOB79+45jqMoysbGRuj5
-tWvXCCGTyeTEiROGYYiiKEnS8ePHOeeRSCSMy3g8LhaL1WrVtu1isUgAwDTNbDY7Go0cx2GMjUaj
-wWCgqqplWYQQ27aHw6EgCPV6XRTFRCLR6/Xq9bqiKGfPngWAVquFtre38/k8IQQAKKWEEIQQY2x6
-5Zxzzqc3GGPGGOf806dPW1tbnuddunQJPXr0qNfr/Y249Pt9SZIAIJVKkSAI5rLuw4cPqVQKIZRI
-JGzb/vbtWy6XEwQhXE6/39c0LdzywWAAAMlkcsFOq6rqeV4QBJZl2badyWSq1arruqIoYowppQCg
-6/rskAUqiqKMx2NFUUzTLBQKzWZT13VJkgRB8H3fsqylpaW5IcT3/eFwOGvCGMfj8dBhxlgymQzt
-CKGlpSVZljnns0N830evX7/WdV1RFMuy4vG4LMsIoVnRarV66tSpcrl8/fr1p0+f3rx5M7R3u92w
-XCuVColGo3t7e4lEotFo7O7u3r17NxKJzKpEo9Fardbr9fb390VRLJfLpVLp2LFjlNLHjx9TSs+c
-OSMAQCwWA4B4PH716tUf641zHgRBrVYDgCAINE3r9/uTycR13VKpdP78eUopsSwrk8kAQLi8/f39
-OZVms6lp2vr6uu/77Xb75MmTAPDlyxfHcZaXlwHAtm20ubm5s7Pz404thCAIjLE549raGhEEIUz/
-nxf60bK46/wq/gOVsGr/hsp3EWk0GgAgyzIAOI6TSCTCvosxxhhLkuT7PsZ4Mpl4nhfu7AKVXq/H
-Odc0rdPpMMY6nQ7G2DAMxlir1VJV1XEc13UBAGN8oEo+nweA0Wi0srLS7/cTiUQkEkEITSYTWZYH
-gwHGeHV11fd9URS/8ygIgrD2AGB6MwWl1LbtlZWVgyLCOaeUoq2trfX19UNIDx48uH379kEEACiX
-ywQAPM+bmt6+fZvL5VRVnarMEXZ2djRNS6fTswTCGAsDFsIwDErprIVzPvsoSVI8Hp8jEM757FRh
-gc1a5gipVGrOAgBoc3Oz2Wwe5HMQBN1uN5VKHUTgnKdSKaKqajabPYjk+/6LFy8uXrx4iEq9XieG
-YYRHXIjxeAwA0/7MOf/48eOFCxfCR9d1CSGU0vAkCtFutwljbOpkrVbb29sbDAYbGxtTldkofP36
-dXt727btW7duzS7nu+hmMpkwr6cWzvnsNLquX758eY7AOSeWZYU9dSGCILBt+xBCmAfo4cOHh3fM
-hV1yFmtrawQhhDE+hAQAhxMQQiQWi125cuVwlcPhOA5Jp9OlUgkA3rx5k0wmk8kkY0ySJM/zQl+C
-IFheXrYsCyEkiqLv+7Is+74Pf/aAd+/e/VVHnue9evXq8+fPxWIRIbS7u0spDb9U79y5c//+/dXV
-VdM0gyBIp9ODwSCfz9+4cQMAGGPo5cuXYXMaj8eu6zLGMMb9ft913W63m8vlfN83DMM0zU6nk81m
-Pc+TZZlSKstymJyVSgU9efLEMIx/EhfTNEm73X7+/Pk/USkUCkQQhLmPhF/F//ls/K3yW+W3ym+V
-f1GFHD16dO7n7Feh6/ofcaL0j+VDRbAAAAAASUVORK5CYII=','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-curTm = tmTime();
-if(n==0 && !time) { time = curTm; bTime = time-30; }
-size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = !n;
-szVal = time-bTime;
-
-//> Archive size
-if(n)
-{
-	cPos = aCur-vCur;
-	if(cPos < 0) cPos += aSize;
-	Text3_text = Text3_text.parse(0,"\n") + "\n"+(cPos+1)+"("+aSize+")";
-}
-else Text3_text = Text3_text.parse(0,"\n");
-
-//> Events process
-ev_cur = ev_rez = "";
-off=0;
-prevTime = time;
-while(true)
-{
-  ev_cur=strParse(event,0,"\n",off);
-  if(ev_cur == "") break;
-  //messPut("Trend control",0,"Event: "+ev_cur);
-  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
-  {
-    szVal = size_value;
-    if(tmTp_value=="m") szVal = szVal*60;
-    else if(tmTp_value=="h") szVal = szVal*60*60;
-    else if(tmTp_value=="d") szVal = szVal*24*60*60;
-    else if(tmTp_value.search("\\d+s") >= 0)	szVal = tmTp_value.toInt();
-    else if(tmTp_value.search("\\d+m") >= 0)	szVal = tmTp_value.toInt()*60;
-    else if(tmTp_value.search("\\d+h") >= 0)	szVal = tmTp_value.toInt()*60*60;
-    else if(tmTp_value.search("\\d+d") >= 0)	szVal = tmTp_value.toInt()*24*60*60;
-    time += 1;
-  }
-  else if(ev_cur == "ws_LnAccept:/date") time = min(curTm,max(szVal,date_value));
-  else if(ev_cur == "ws_BtPress:/curtime") 
-  {	
-	if(n==0) time = curTm;
-	else vCur = aCur;
-  }
-  else if(ev_cur == "ws_BtPress:/prev")
-  {
-    if(n==0) time = min(curTm,max(szVal,time-szVal));
-    else vCur = -2;
-  }
-  else if(ev_cur == "ws_BtPress:/next") 
-  {
-    if(n==0) time = min(curTm,max(szVal,time+szVal)); 
-    else vCur = -1;
-  }
-  else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm,max(5*szVal,time-5*szVal));
-  else if(ev_cur == "ws_BtPress:/next1") time = min(curTm,max(5*szVal,time+5*szVal));
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
-
-//> Time control
-date_value=time;
-if(n==0 && prevTime != time) { bTime = time-szVal; doc=""; }
-if(szVal < 60) { tmTp_value="s"; size_value = szVal; }
-else if(szVal < 60*60) { tmTp_value="m"; size_value = szVal/60; }
-else if(szVal < 24*60*60) { tmTp_value="h"; size_value = szVal/(60*60); }
-else { tmTp_value="d"; size_value = szVal/(24*60*60); }','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-curTm = tmTime();
-if(n==0 && !time) { time = curTm; bTime = time-30; }
-size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = !n;
-szVal = time-bTime;
-
-//> Archive size
-if(n)
-{
-	cPos = aCur-vCur;
-	if(cPos < 0) cPos += aSize;
-	Text3_text = Text3_text.parse(0,"\n") + "\n"+(cPos+1)+"("+aSize+")";
-}
-else Text3_text = Text3_text.parse(0,"\n");
-
-//> Events process
-ev_cur = ev_rez = "";
-off=0;
-prevTime = time;
-while(true)
-{
-  ev_cur=strParse(event,0,"\n",off);
-  if(ev_cur == "") break;
-  //messPut("Trend control",0,"Event: "+ev_cur);
-  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
-  {
-    szVal = size_value;
-    if(tmTp_value=="м") szVal = szVal*60;
-    else if(tmTp_value=="ч") szVal = szVal*60*60;
-    else if(tmTp_value=="д") szVal = szVal*24*60*60;
-    else if(tmTp_value.search("\\d+с") >= 0)	szVal = tmTp_value.toInt();
-    else if(tmTp_value.search("\\d+м") >= 0)	szVal = tmTp_value.toInt()*60;
-    else if(tmTp_value.search("\\d+ч") >= 0)	szVal = tmTp_value.toInt()*60*60;
-    else if(tmTp_value.search("\\d+д") >= 0)	szVal = tmTp_value.toInt()*24*60*60;
-    time += 1;
-  }
-  else if(ev_cur == "ws_LnAccept:/date") time = min(curTm,max(szVal,date_value));
-  else if(ev_cur == "ws_BtPress:/curtime") 
-  {	
-	if(n==0) time = curTm;
-	else vCur = aCur;
-  }
-  else if(ev_cur == "ws_BtPress:/prev")
-  {
-    if(n==0) time = min(curTm,max(szVal,time-szVal));
-    else vCur = -2;
-  }
-  else if(ev_cur == "ws_BtPress:/next") 
-  {
-    if(n==0) time = min(curTm,max(szVal,time+szVal)); 
-    else vCur = -1;
-  }
-  else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm,max(5*szVal,time-5*szVal));
-  else if(ev_cur == "ws_BtPress:/next1") time = min(curTm,max(5*szVal,time+5*szVal));
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
-
-//> Time control
-date_value=time;
-if(n==0 && prevTime != time) { bTime = time-szVal; doc=""; }
-if(szVal < 60) { tmTp_value="с"; size_value = szVal; }
-else if(szVal < 60*60) { tmTp_value="м"; size_value = szVal/60; }
-else if(szVal < 24*60*60) { tmTp_value="ч"; size_value = szVal/(60*60); }
-else { tmTp_value="д"; size_value = szVal/(24*60*60); }','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-curTm = tmTime();
-if(n==0 && !time) { time = curTm; bTime = time-30; }
-size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = !n;
-szVal = time-bTime;
-
-//> Archive size
-if(n)
-{
-	cPos = aCur-vCur;
-	if(cPos < 0) cPos += aSize;
-	Text3_text = Text3_text.parse(0,"\n") + "\n"+(cPos+1)+"("+aSize+")";
-}
-else Text3_text = Text3_text.parse(0,"\n");
-
-//> Events process
-ev_cur = ev_rez = "";
-off=0;
-prevTime = time;
-while(true)
-{
-  ev_cur=strParse(event,0,"\n",off);
-  if(ev_cur == "") break;
-  //messPut("Trend control",0,"Event: "+ev_cur);
-  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
-  {
-    szVal = size_value;
-    if(tmTp_value == "х") szVal = szVal*60;
-    else if(tmTp_value == "г") szVal = szVal*60*60;
-    else if(tmTp_value == "д") szVal = szVal*24*60*60;
-    else if(tmTp_value.search("\\d+с") >= 0)	szVal = tmTp_value.toInt();
-    else if(tmTp_value.search("\\d+х") >= 0)	szVal = tmTp_value.toInt()*60;
-    else if(tmTp_value.search("\\d+г") >= 0)	szVal = tmTp_value.toInt()*60*60;
-    else if(tmTp_value.search("\\d+д") >= 0)	szVal = tmTp_value.toInt()*24*60*60;
-    time += 1;
-  }
-  else if(ev_cur == "ws_LnAccept:/date") time = min(curTm,max(szVal,date_value));
-  else if(ev_cur == "ws_BtPress:/curtime") 
-  {	
-	if(n==0) time = curTm;
-	else vCur = aCur;
-  }
-  else if(ev_cur == "ws_BtPress:/prev")
-  {
-    if(n==0) time = min(curTm,max(szVal,time-szVal));
-    else vCur = -2;
-  }
-  else if(ev_cur == "ws_BtPress:/next") 
-  {
-    if(n==0) time = min(curTm,max(szVal,time+szVal)); 
-    else vCur = -1;
-  }
-  else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm,max(5*szVal,time-5*szVal));
-  else if(ev_cur == "ws_BtPress:/next1") time = min(curTm,max(5*szVal,time+5*szVal));
-  else ev_rez += (ev_cur+"\n");
-}
-event=ev_rez;
-
-//> Time control
-date_value=time;
-if(n == 0 && prevTime != time) { bTime = time-szVal; doc=""; }
-if(szVal < 60) { tmTp_value = "с"; size_value = szVal; }
-else if(szVal < 60*60) { tmTp_value = "х"; size_value = szVal/60; }
-else if(szVal < 24*60*60) { tmTp_value = "г"; size_value = szVal/(60*60); }
-else { tmTp_value = "д"; size_value = szVal/(24*60*60); }',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1374511505);
-INSERT INTO "wlb_Main" VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
-2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
-UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
-+9Zan+cJAIhIROu6aq2ttY/HOwJACAERvfdKKe/9cRwAQET7vjPzMAylFCLq+56ZY4whhFLKOI6l
-FGPMVxfvPQBYa2u9Ola9ct/L1+UPf2mPKKKIIooooogiiiii/GcFnXNKtRXp3l7PPUhJwkNfYgAA
-AABJRU5ErkJggg==','/wlb_originals/wdg_Box','','','',-1,'name;geomW;geomH;pgGrp;backColor;bordWidth;','');
-INSERT INTO "wlb_Main" VALUES('grph_panel','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','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-curTm = tmTime();
-tSek = tSek ? tSek : curTm;
-
-//Archivators real list forming
-if(f_start)
-{
-	arch_items = "All";
-	mods = SYS.Archive.nodeList("mod_");
-	for(i_m = 0; i_m < mods.length; i_m++)
-	{
-		vas = SYS.Archive[mods[i_m]].nodeList("val_");
-		for(i_va = 0; i_va < vas.length; i_va++)
-			arch_items += "\n"+mods[i_m].slice(4)+"."+vas[i_va].slice(4);
-	}
-}
-
-//> Events process
-ev_cur = ev_rez = "";
-off = 0;
-while(true)
-{
-  ev_cur = strParse(event,0,"\n",off);
-  if(ev_cur == "") break;
-  //messPut("Trend control",0,"Event: "+ev_cur);
-  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
-  {
-    tSzPrev = tSize;
-    tSize = size_value;
-    if(tmTp_value == "m")			tSize = tSize*60;
-    else if(tmTp_value == "h")	tSize = tSize*60*60;
-    else if(tmTp_value == "d")	tSize = tSize*24*60*60;
-    else if(tmTp_value.search("\\d+s") >= 0)	tSize = tmTp_value.toInt();
-    else if(tmTp_value.search("\\d+m") >= 0)	tSize = tmTp_value.toInt()*60;
-    else if(tmTp_value.search("\\d+h") >= 0)	tSize = tmTp_value.toInt()*60*60;
-    else if(tmTp_value.search("\\d+d") >= 0)	tSize = tmTp_value.toInt()*24*60*60;
-    if(tSize < tSzPrev) tSek = curSek;
-  }
-  else if(ev_cur == "ws_LnAccept:/date")		tSek = date_value;
-  else if(ev_cur == "ws_BtPress:/curtime")		tSek = curSek = curTm;
-  else if(ev_cur == "ws_BtPress:/prev")			tSek -= tSize/2;
-  else if(ev_cur == "ws_BtPress:/prev1")		tSek -= 5*tSize;
-  else if(ev_cur == "ws_BtPress:/next")			tSek += tSize/2;
-  else if(ev_cur == "ws_BtPress:/next1")		tSek += 5*tSize;
-  else if(ev_cur == "ws_CombChange:/arch")	valArch=(arch_value=="All")?"":arch_value;
-  else if(ev_cur == "ws_ChkChange:/spectr" )	type = spectr_value?1:0;
-  else if(ev_cur == "ws_BtPress:/zoomIn")		sclVer*=0.9;
-  else if(ev_cur == "ws_BtPress:/zoomOut")		sclVer*=1.1;
-  else if(ev_cur == "ws_BtPress:/zoomOffUp")	sclVerOff += sclVer/10;
-  else if(ev_cur == "ws_BtPress:/zoomOffDown") sclVerOff -= sclVer/10;
-  else if(ev_cur == "ws_BtPress:/zoomDef")		{ sclVer = 100; sclVerOff = 0; }
-  else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;
-
-//>scaleInfo
-scaleInfo_arg0val = 1e4/sclVer;
-scaleInfo_arg1val = sclVerOff;
-
-//> Trend time control
-date_value=tSek;
-if(tSek < curTm) trcPer=0; else { trcPer=1; tSek=0;  }
-if(tSize < 60) { tmTp_value = "s"; size_value = tSize; }
-else if(tSize < 60*60) { tmTp_value = "m"; size_value = tSize/60; }
-else if(tSize < 24*60*60) { tmTp_value = "h"; size_value = tSize/(60*60); }
-else { tmTp_value = "d"; size_value = tSize/(24*60*60); }
-
-arch_value = strSize(valArch) ? valArch : "All";
-cursor_en = (curSek != EVAL_INT);
-if(cursor_en && type == 0) cursor_arg0val = tmFStr(curSek,"%d.%m.%Y %H:%M:%S")+"."+curUSek;
-if(cursor_en && type == 1) cursor_arg0val = "Frequency: "+real2str(1e6/(1e6*curSek+curUSek),2)+" Hz";
-spectr_value = type;','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-curTm = tmTime();
-tSek = tSek ? tSek : curTm;
-
-//Archivators real list forming
-if(f_start)
-{
-	arch_items = "Все";
-	mods = SYS.Archive.nodeList("mod_");
-	for(i_m = 0; i_m < mods.length; i_m++)
-	{
-		vas = SYS.Archive[mods[i_m]].nodeList("val_");
-		for(i_va = 0; i_va < vas.length; i_va++)
-			arch_items += "\n"+mods[i_m].slice(4)+"."+vas[i_va].slice(4);
-	}
-}
-
-//> Events process
-ev_cur = ev_rez = "";
-off=0;
-while(true)
-{
-  ev_cur = strParse(event,0,"\n",off);
-  if(ev_cur == "") break;
-  //messPut("Trend control",0,"Event: "+ev_cur);
-  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
-  {
-    tSzPrev = tSize;
-    tSize = size_value;
-    if(tmTp_value == "м")			tSize = tSize*60;
-    else if(tmTp_value == "ч")	tSize = tSize*60*60;
-    else if(tmTp_value == "д")	tSize = tSize*24*60*60;
-    else if(tmTp_value.search("\\d+с") >= 0)	tSize = tmTp_value.toInt();
-    else if(tmTp_value.search("\\d+м") >= 0)	tSize = tmTp_value.toInt()*60;
-    else if(tmTp_value.search("\\d+ч") >= 0)	tSize = tmTp_value.toInt()*60*60;
-    else if(tmTp_value.search("\\d+д") >= 0)	tSize = tmTp_value.toInt()*24*60*60;
-    if(tSize < tSzPrev) tSek = curSek;
-  }
-  else if(ev_cur == "ws_LnAccept:/date")		tSek = date_value;
-  else if(ev_cur == "ws_BtPress:/curtime")		tSek = curSek = curTm;
-  else if(ev_cur == "ws_BtPress:/prev")			tSek -= tSize/2;
-  else if(ev_cur == "ws_BtPress:/prev1")		tSek -= 5*tSize;
-  else if(ev_cur == "ws_BtPress:/next")			tSek += tSize/2;
-  else if(ev_cur == "ws_BtPress:/next1")		tSek += 5*tSize;
-  else if(ev_cur == "ws_CombChange:/arch")	valArch=(arch_value=="Все")?"":arch_value;
-  else if(ev_cur == "ws_ChkChange:/spectr" )	type = spectr_value?1:0;
-  else if(ev_cur == "ws_BtPress:/zoomIn")		sclVer*=0.9;
-  else if(ev_cur == "ws_BtPress:/zoomOut")		sclVer*=1.1;
-  else if(ev_cur == "ws_BtPress:/zoomOffUp")	sclVerOff += sclVer/10;
-  else if(ev_cur == "ws_BtPress:/zoomOffDown") sclVerOff -= sclVer/10;
-  else if(ev_cur == "ws_BtPress:/zoomDef")		{ sclVer = 100; sclVerOff = 0; }
-  else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;
-
-//>scaleInfo
-scaleInfo_arg0val = 1e4/sclVer;
-scaleInfo_arg1val = sclVerOff;
-
-//> Trend time control
-date_value=tSek;
-if(tSek < curTm) trcPer=0; else { trcPer=1; tSek=0;  }
-if(tSize < 60) { tmTp_value = "с"; size_value = tSize; }
-else if(tSize < 60*60) { tmTp_value = "м"; size_value = tSize/60; }
-else if(tSize < 24*60*60) { tmTp_value = "ч"; size_value = tSize/(60*60); }
-else { tmTp_value = "д"; size_value = tSize/(24*60*60); }
-
-arch_value = strSize(valArch) ? valArch : "Все";
-cursor_en = (curSek != EVAL_INT);
-if(cursor_en && type == 0) cursor_arg0val = tmFStr(curSek,"%d.%m.%Y %H:%M:%S")+"."+curUSek;
-if(cursor_en && type == 1) cursor_arg0val = "Частота: "+real2str(1e6/(1e6*curSek+curUSek),2)+" Гц";
-spectr_value = type;','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-curTm = tmTime();
-tSek = tSek ? tSek : curTm;
-
-//Archivators real list forming
-if(f_start)
-{
-	arch_items = "Всі";
-	mods = SYS.Archive.nodeList("mod_");
-	for(i_m = 0; i_m < mods.length; i_m++)
-	{
-		vas = SYS.Archive[mods[i_m]].nodeList("val_");
-		for(i_va = 0; i_va < vas.length; i_va++)
-			arch_items += "\n"+mods[i_m].slice(4)+"."+vas[i_va].slice(4);
-	}
-}
-
-//> Events process
-ev_cur = ev_rez = "";
-off=0;
-while(true)
-{
-  ev_cur = strParse(event,0,"\n",off);
-  if(ev_cur == "") break;
-  //messPut("Trend control",0,"Event: "+ev_cur);
-  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
-  {
-    tSzPrev = tSize;
-    tSize = size_value;
-    if(tmTp_value == "х")			tSize = tSize*60;
-    else if(tmTp_value == "г")	tSize = tSize*60*60;
-    else if(tmTp_value == "д")	tSize = tSize*24*60*60;
-    else if(tmTp_value.search("\\d+с") >= 0)	tSize = tmTp_value.toInt();
-    else if(tmTp_value.search("\\d+х") >= 0)	tSize = tmTp_value.toInt()*60;
-    else if(tmTp_value.search("\\d+г") >= 0)	tSize = tmTp_value.toInt()*60*60;
-    else if(tmTp_value.search("\\d+д") >= 0)	tSize = tmTp_value.toInt()*24*60*60;
-    if(tSize < tSzPrev) tSek = curSek;
-  }
-  else if(ev_cur == "ws_LnAccept:/date")		tSek = date_value;
-  else if(ev_cur == "ws_BtPress:/curtime")		tSek = curSek = curTm;
-  else if(ev_cur == "ws_BtPress:/prev")			tSek -= tSize/2;
-  else if(ev_cur == "ws_BtPress:/prev1")		tSek -= 5*tSize;
-  else if(ev_cur == "ws_BtPress:/next")			tSek += tSize/2;
-  else if(ev_cur == "ws_BtPress:/next1")		tSek += 5*tSize;
-  else if(ev_cur == "ws_CombChange:/arch")	valArch=(arch_value=="Всі")?"":arch_value;
-  else if(ev_cur == "ws_ChkChange:/spectr" )	type = spectr_value?1:0;
-  else if(ev_cur == "ws_BtPress:/zoomIn")		sclVer*=0.9;
-  else if(ev_cur == "ws_BtPress:/zoomOut")		sclVer*=1.1;
-  else if(ev_cur == "ws_BtPress:/zoomOffUp")	sclVerOff += sclVer/10;
-  else if(ev_cur == "ws_BtPress:/zoomOffDown") sclVerOff -= sclVer/10;
-  else if(ev_cur == "ws_BtPress:/zoomDef")		{ sclVer = 100; sclVerOff = 0; }
-  else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;
-
-//>scaleInfo
-scaleInfo_arg0val = 1e4/sclVer;
-scaleInfo_arg1val = sclVerOff;
-
-//> Trend time control
-date_value=tSek;
-if(tSek < curTm) trcPer=0; else { trcPer=1; tSek=0;  }
-if(tSize < 60) { tmTp_value = "с"; size_value = tSize; }
-else if(tSize < 60*60) { tmTp_value = "х"; size_value = tSize/60; }
-else if(tSize < 24*60*60) { tmTp_value = "г"; size_value = tSize/(60*60); }
-else { tmTp_value = "д"; size_value = tSize/(24*60*60); }
-
-arch_value = strSize(valArch) ? valArch : "Всі";
-cursor_en = (curSek != EVAL_INT);
-if(cursor_en && type == 0) cursor_arg0val = tmFStr(curSek,"%d.%m.%Y %H:%M:%S")+"."+curUSek;
-if(cursor_en && type == 1) cursor_arg0val = "Frequency: "+real2str(1e6/(1e6*curSek+curUSek),2)+" Hz";
-spectr_value = type;',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1385999610);
-INSERT INTO "wlb_Main" VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
-A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
-A32hLxFWAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//if( f_start ) focus = true;
-//if( focus ) messPut("TEST",0,"TEST 00");
-
-wLst = aLst = EVAL_REAL;
-pwName = pName;
-pwName=pwName.slice(0,pwName.lastIndexOf("/"));
-req=xmlNode("info").setAttr("path",pwName+"/%2fval");
-doc_tmpl = "<body docProcLang=''JavaLikeCalc.JavaScript''><table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>";
-if( xmlCntrReq(req) == 0 && req.childSize() )
-{
-  chldRoot = req.childGet(0);
-  for( i = 0; i < chldRoot.childSize(); i++ )
-  {
-    aID = chldRoot.childGet(i).attr("id");
-    aDscr = chldRoot.childGet(i).attr("dscr");
-    reqVl=xmlNode("get").setAttr("path",pwName+"/%2fval%2f"+aID);
-    xmlCntrReq(reqVl);
-    aVl = reqVl.text();
-
-    //> Filter
-    if( aID == "com" || aID == "close" || aID == "stop" || aVl.isEVal() ) continue;
-    if( aID == "aMax" || aID == "aMin" )
-    {
-      if( aLst == EVAL_REAL ) { aLst = aVl; continue; }
-      aDscr = "Alarm border";
-      if( aID == "aMax" && aLst < aVl ) aVl = ""+aLst+" ... "+aVl;
-      else if( aID == "aMin" && aLst > aVl ) aVl = ""+aVl+" ... "+aLst;
-      else aVl = "not set";
-    }
-    else if( aID == "wMax" || aID == "wMin" )
-    {
-      if( wLst == EVAL_REAL ) { wLst = aVl; continue; }
-      aDscr = "Warning border";
-      if( aID == "wMax" && wLst < aVl ) aVl = ""+wLst+" ... "+aVl;
-      else if( aID == "wMin" && wLst > aVl ) aVl = ""+aVl+" ... "+wLst;
-      else aVl = "not set";
-    }    
-    //> Put record
-    doc_tmpl += "<tr><td>"+strEnc2HTML(aDscr)+"</td><td>"+strEnc2HTML(aVl)+"</td></tr>\n";
-  }
-}
-doc_tmpl += "</table></body>";','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//if( f_start ) focus = true;
-//if( focus ) messPut("TEST",0,"TEST 00");
-
-wLst = aLst = EVAL_REAL;
-pwName = pName;
-pwName=pwName.slice(0,pwName.lastIndexOf("/"));
-req=xmlNode("info").setAttr("path",pwName+"/%2fval");
-doc_tmpl = "<body docProcLang=''JavaLikeCalc.JavaScript''><table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>";
-if( xmlCntrReq(req) == 0 && req.childSize() )
-{
-  chldRoot = req.childGet(0);
-  for( i = 0; i < chldRoot.childSize(); i++ )
-  {
-    aID = chldRoot.childGet(i).attr("id");
-    aDscr = chldRoot.childGet(i).attr("dscr");
-    reqVl=xmlNode("get").setAttr("path",pwName+"/%2fval%2f"+aID);
-    xmlCntrReq(reqVl);
-    aVl = reqVl.text();
-
-    //> Filter
-    if( aID == "com" || aID == "close" || aID == "stop" || aVl.isEVal() ) continue;
-    if( aID == "aMax" || aID == "aMin" )
-    {
-      if( aLst == EVAL_REAL ) { aLst = aVl; continue; }
-      aDscr = "Аварийная граница";
-      if( aID == "aMax" && aLst < aVl ) aVl = ""+aLst+" ... "+aVl;
-      else if( aID == "aMin" && aLst > aVl ) aVl = ""+aVl+" ... "+aLst;
-      else aVl = "не установлена";
-    }
-    else if( aID == "wMax" || aID == "wMin" )
-    {
-      if( wLst == EVAL_REAL ) { wLst = aVl; continue; }
-      aDscr = "Предупредительная граница";
-      if( aID == "wMax" && wLst < aVl ) aVl = ""+wLst+" ... "+aVl;
-      else if( aID == "wMin" && wLst > aVl ) aVl = ""+aVl+" ... "+wLst;
-      else aVl = "не установлена";
-    }    
-    //> Put record
-    doc_tmpl += "<tr><td>"+strEnc2HTML(aDscr)+"</td><td>"+strEnc2HTML(aVl)+"</td></tr>\n";
-  }
-}
-doc_tmpl += "</table></body>";','',1000,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1403444608);
-INSERT INTO "wlb_Main" VALUES('ElViewGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAiCAIAAABgN0jYAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAAC30lEQVRYhe2XbU/aUBSAT1tAC4XCQFGYBeRF3ERwuKkzcYvzhTXbdGZL
-zH6BP88s+7CYZfNlIU6jMqMx07Hgy1BwceIoUKDtPkDMNMuYEWhI+ny7t+eee57b3OYUmZqaikQi
-UJtYrVagabpOpW112Ml6FADk9Wqb06JASqxUkg0U1SSrRpH/gqZpFAB0praJV5PDve0yBAi9bXzy
-iRYrsdLk8gdG+5TohUlcZ+rye/BS8uWleIgCArY7D5xbkaPzB7j2trfrJoluri7uHjNCcRo1WNr9
-t8yAEQhwgKDNDq/XZcon4yurOwPjYy491tJAzs5vuPzdRrU8Hl5f/vK9ogLFM8ym48HVo4HBfh2O
-AQAgmG/w+chdO25offnimYlUFMJURsfYGN2sUVmcbXIAFKtvMuk5HnN39/d0UPk8x/Mcy2bVDUa1
-AmSEcXQioCv1MssjAEJ+e/lDDLff77ShAIASNqtqIzg7PT2T0ugNJFGI0mj1OHb6/s3rxdA3DoDn
-2XjshOd4DlCFLPd15+AsEQ3OLcWOj8/SeZ7jBIWy5HUqkwAAn/kZXFgjbU4cAHj2JMG32B3tHW6c
-TTEZthCTTjN5UDncbRbKiALI6vTDT4eUeYbN8SiC8rwgryPMzTcsnp4+T0vqjBEQBEX/vnE5BXiO
-YzNZASAeDi1u7mczrCBk1uYXfmkcj/tdoY8L+z+YQnTiMLwU2vM9HGlEE+lsjsszu7snLl8HEz0k
-9bpEPMpiTUOP7qVi0Yyi0W0h9iJJs5GorAFN05XdoJIUP6M1jSQgNpKA2EgCYlP9jlhm9fjcZgNA
-bufzSvjw9LrpylLUFUAwk93d63MApFMH2zUoILArM9Nbc3IAIZ1MXj+fCD9VbCrJpsqWreYvsSQg
-NpKA2EgCYiMJiI0kIDaXeyECoEeUQv6PTwCXGsDLAq0A76pWztXxAqxfnJFRFBUIBM7HBoC3VS7q
-KnQCmP4YUhT1GyVO83OL1qsxAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start) { en = !name.isEVal(); loadFromSess = false; }
-if(en && name.isEVal()) {
-	name = tr("<No selected>");
-	//Load stored session''s assignments
-	if(!loadFromSess) {
-		for(off = 0; (lnA="addr;name;dscr;min;max;ed;log;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
-			if((wA=this.attr(lnA,true)).length) this.linkSet(lnA, wA);
-		//if((cVal=this.attr("color",true)).length) this.color = cVal;
-		loadFromSess = true;
-	}
-}
-lb_sfr_text = name;
-if(varEl.isEVal()) lb_val_arg0val = "-";
-else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
-else lb_val_arg0val = prec.isEVal() ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
-lb_val_color = lb_sfr_color = lb_ed_color = "limegreen";
-if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
-else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "red";
-else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || varEl <= wMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "yellow";
-
-lb_ed_text = ed.isEVal() ? "" : ed;
-
-//Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == name)
-{
-  bordColor = (bordColor == "white") ? "black" : "white";
-  bordWidth =  2;
-}
-else { bordWidth =  1; bordColor = "black"; }
-
-//Check the regulator mode
-if(!enMode.isEVal() && enMode) { 
-  mode_en = true; 
-  if(!pModeC.isEVal() && pModeC) mode_text = tr("C");
-  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M")); 
-}
-else mode_en = false;
-
-//Events process
-evRez = "";
-for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
-	//messPut("Trend en",0,"Event: "+evCur);
-	if(evCur == "key_mouseDblClick" || evCur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
-	//Store session''s assignments
-	else if(evCur == "usr_set")
-		for(off = 0; (lnA="addr;name;dscr;min;max;log;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
-			this.attrSet(lnA, this.link(lnA),true);
-	else evRez += evCur+"\n";
-}
-event = evRez;
-
-if(bordStyle == 1) color = "-";
-trClr_lineClr = color;
-
-tipTool = "";
-if(!name.isEVal())	tipTool += tr("Name")+": "+name+"\n";
-if(!min.isEVal() && !max.isEVal() && max > min) tipTool += tr("Scale")+": "+min+" ... "+max+"\n";
-if(!aMin.isEVal() && !aMax.isEVal() && aMax > aMin) tipTool += tr("Alarm border")+": "+aMin+" ... "+aMax+"\n";
-if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning border")+": "+wMin+" ... "+wMax+"\n";
-if(!dscr.isEVal()) {
-	tipTool += tr("Description")+": "+dscr+"\n";
-	tipStatus = dscr;
-}','','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1418050629);
-INSERT INTO "wlb_Main" VALUES('prescrEdit','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
-RK5CYII=','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start) save_active = false;
-progLbUpdt = progSelPrg = progSelCom = progSelTp = false;
-var comOp = "";
-
-//Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/progAdd") {
-		if(!progNm_value.length) progNm_value = tr("New program");
-		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
-		lib_value = progNm_value;
-		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
-	}
-	else if(ev_cur == "ws_BtPress:/progCopy") {
-		if(!progNm_value.length) progNm_value = tr("New program");
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-		if(rez.length > 1) {
-			SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name, prgTxt) VALUES (''"+progNm_value+"'', ''"+rez[1][0].replace("''","''''")+"'');");
-			lib_value = progNm_value;
-			progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
-		}
-	}
-	else if(ev_cur == "ws_BtPress:/progRename") {
-		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET name=''"+progNm_value+"'' WHERE name=''"+lib_value+"'';");
-		lib_value = progNm_value;
-		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
-	}
-	else if(ev_cur == "dlg_Apply:/progDel" && lib_value.length) {
-	//else if(ev_cur == "ws_BtPress:/progDel" && lib_value.length) {
-		SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-		lib_value = "";
-		progLbUpdt = progSelPrg = true;
-	}
-	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
-	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
-	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
-	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
-	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
-	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
-	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
-	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
-	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
-	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-		if(rez.length > 1) {
-			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
-			parentPath = "";
-			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
-				if(offPV < prog_value.length) parentPath += "/"+vIt;
-				selNd = selNd.childGet((i_c=vIt.toInt()));
-			}
-			if(selNd) {
-				selNd.setAttr("id",type_value);
-				selNd.setAttr("name",name_value);
-				selNd.setAttr("descr",descr_value);
-				for(i_a = 1; i_a <= 5; i_a++) {
-					argObj = this["arg"+i_a];
-					argVal = argObj.attr("value");
-					if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
-					if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
-					selNd.setAttr("arg"+i_a, argVal);
-				}
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
-				prog_value = parentPath+"/"+i_c+":"+(name_value.length?name_value:type_value);
-				SYS.messInfo(this.nodePath(),"prog_value: "+prog_value);
-				progSelPrg = true;
-			}
-		}
-		save_active = false;
-	}
-	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-		if(rez.length > 1) {
-			expTree = SYS.XMLNode("OpenSCADA_Prescr");
-			expTree.childAdd("prg").load(rez[1][0]);
-			expTree.childGet(0).setAttr("id",lib_value);
-			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
-		}
-	} 
-	//else if(ev_cur == "ws_BtPress:/progImport")
-	else if(ev_cur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
-	{
-		expTree = SYS.XMLNode("OpenSCADA_Prescr");
-		expTree.load(progImport_value.slice(pCtx+1));
-		progImport_value = progImport_value.slice(0,pCtx);
-		// Save all recors to DB
-		for(i_p = 0; i_p < expTree.childSize(); i_p++) {
-			treeNd = expTree.childGet(i_p);
-			if(treeNd.name() != "prg") continue;
-			if(lib_items.search(treeNd.attr("id")+"(\n|\\z)") < 0)
-				SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name,prgTxt) VALUES (''"+treeNd.attr("id")+"'',''"+treeNd.save().replace("''","''''")+"'');");
-			else
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+treeNd.save().replace("''","''''")+"'' WHERE name=''"+treeNd.attr("id")+"'';");	
-		}
-		progLbUpdt = progSelPrg = progSelCom = true;
-	}
-	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
-	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
-		argObj = this["arg"+rez[1]];
-		argVal = argObj.attr("value");
-		if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
-		if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
-		argObj.attrSet("value",argVal);
-	}
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;
-
-//Get programms into library list
-if(f_start || progLbUpdt) {
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
-	lib_items = "";
-	for(i_p = 1; i_p < rez.length; i_p++)
-		lib_items += ((i_p==1)?"":"\n")+rez[i_p][0];
-	lib_items = lib_items.split("\n").sort().join("\n");
-	progNm_cfg = lib_items;
-}
-progCopy_active = progRename_active = progDel_active = progExport_active = comAdd_active = lib_value.length;
-
-//Command operations process
-if(comOp.length && lib_value.length) {
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-	if(rez.length > 1) {
-		comTree = selNd = SYS.XMLNode("prg");
-		comTree.load(rez[1][0]);
-		parentPath = "";
-		if(prog_value.length) {
-			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
-				if(offPV < prog_value.length) parentPath += "/"+vIt;
-				selNd = selNd.childGet((i_c=vIt.toInt()));
-			}
-			selNd = selNd.parent();
-		}
-		if(comOp == "add") {
-			selNd.childAdd("com").setAttr("id",tr("New command"));
-			prog_value = parentPath+"/"+(selNd.childSize()-1)+":"+tr("New command");
-		}
-		else {
-			// Get selected command node and position
-			if(i_c < selNd.childSize()) {
-				if(comOp == "inAdd") {
-					selNd.childGet(i_c).childAdd("com").setAttr("id",tr("New command"));
-					prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id")+"/"+(selNd.childGet(i_c).childSize()-1)+":"+tr("New command");
-				}
-				else if(comOp == "ins") {
-					selNd.childIns(i_c,"com").setAttr("id",tr("New command"));
-					prog_value = parentPath+"/"+i_c+":"+tr("New command");
-				}
-				else if(comOp == "del") {
-					selNd.childDel(i_c);
-					if(!selNd.childSize())	prog_value = parentPath;
-					else {
-						if(i_c >= selNd.childSize()) i_c = selNd.childSize()-1;
-						prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id");
-					}
-				}
-				else if((comOp == "up" && i_c) || (comOp == "dwn" && i_c < (selNd.childSize()-1))) {
-					storeNd = selNd.childGet(i_c);
-					selNd.childDel(i_c);
-					if(comOp == "up") i_c--; else i_c++;
-					selNd.childIns(i_c,storeNd);
-					prog_value = parentPath+"/"+i_c+":"+storeNd.attr("id");
-				}
-			}
-		}
-
-		//Save changes
-		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
-		progSelPrg = progSelCom = true;
-	}
-}
-
-//Get commands of selected program into commands list
-if(f_start || progSelPrg) {
-	prog_items = "";
-	if(lib_value.length) {
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-		if(rez.length > 1) {
-			comTree = SYS.XMLNode("prg");
-			comTree.load(rez[1][0]);
-			curNd = comTree; curPos = 0; curPath = ""; comLevs = new Array();
-			for( ; true; curPos++) {
-				if(curPos >= curNd.childSize()) {
-					if(!comLevs.length) break;
-					stObj = comLevs.pop();
-					curNd = curNd.parent();
-					curPos = stObj.curPos; curPath = stObj.curPath;
-					continue;
-				}
-				prog_items += (prog_items.length?"\n":"")+(wPath=curPath+"/"+curPos+":"+curNd.childGet(curPos).attr(curNd.childGet(curPos).attr("name").length?"name":"id"));
-				if(curNd.childGet(curPos).childSize()) {
-					curNd = curNd.childGet(curPos);
-					comLevs.push((stObj=new Object()));
-					stObj.curPos = curPos; stObj.curPath = curPath;
-					curPos = -1; curPath = wPath;
-					continue;
-				}
-			}
-		}
-	}
-	labProg_arg0val = progNm_value = lib_value;
-}
-comIns_active = comInAdd_active = comDel_active = comUp_active = comDwn_active = prog_value.length;
-
-//Get command properties
-if(f_start || progSelCom || progSelTp) {
-	if(!progSelTp) name_value = type_value = descr_value = "";
-	for(i_a = 1; i_a <= 5; i_a++) {
-		this["labArg"+i_a].attrSet("en",false).attrSet("text","");
-		this["arg"+i_a].attrSet("en",false).attrSet("value","");
-	}
-
-	// Types/commands list load
-	if(f_start && !prExtComLs.isEVal()) {
-		type_items = descr_value = "";
-		for(var c_nm in prExtComLs)
-			if(c_nm != "Error" && c_nm != "Stop")
-				type_items += (type_items.length?"\n":"")+c_nm;
-	}
-
-	if(prog_value.length) {
-		selNd = false;
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-		if(rez.length > 1) {
-			selNd = SYS.XMLNode("prg"); selNd.load(rez[1][0]);
-			for(off = 0; (vIt=prog_value.parsePath(0,off)).length; ) selNd = selNd.childGet(vIt.toInt());
-		}
-		if(!progSelTp && selNd) {
-			name_value = selNd.attr("name");
-			type_value = selNd.attr("id");
-			descr_value = selNd.attr("descr");
-		}
-		// Load command argument''s names
-		if(!prExtComLs.isEVal() && !prExtComLs[type_value].isEVal()) {
-			if((progSelTp || !descr_value.length) && (descr_value=prExtComLs[type_value]["descr"]).isEVal()) descr_value = "";
-			for(i_a = 1; i_a <= 5; i_a++) {
-				argLab = prExtComLs[type_value]["arg"+i_a];
-				if(argLab.isEVal() || !argLab.length)	continue;
-				off = 0;
-				this["labArg"+i_a].attrSet("en",true).attrSet("text",argLab.parse(0,"|",off));
-				argBord = argLab.parse(0,"|",off);
-				this["arg"+i_a].attrSet("min",argBord.length?argBord.toReal():EVAL_REAL);
-				argBord = argLab.parse(0,"|",off);
-				this["arg"+i_a].attrSet("max",argBord.length?argBord.toReal():EVAL_REAL);
-				this["arg"+i_a].attrSet("en",true);
-			}
-		}
-
-		// Load arguments'' values
-		if(!progSelTp && selNd)
-			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
-	}
-}
-type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1413479593);
-INSERT INTO "wlb_Main" VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
-0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW
-apO5vEcJQiiesdb2BxBC1gJCYK1FCMXf0xRCCOJlAM55KpU6DcfJGGvjfP8OvxwxrB5jjAZBcIFA
-GKSq5TJCYCzCBButpBBK62wY9iKRCQNMCFgrlWI9dnOhWK/VuywKAl8bAKOk0gTjdBj8aLQmchNK
-CKUtJaANygS+wSQdpK9endmvlJnQFGMDWknj+ZRz7nu+lNKAWVy8R/D5DtZaGoZhEATDBObmi3Pz
-xWGrZykUCsYAIVgpRSntXzqdObs0NXV39CP64ZxTa+1cYXZgx2arpbXO56b6J62FnY+fut3uycmJ
-53lSSq2U53lBmKEYtTudlO9rrVgkCCG+7+Xz077vDTgMDP6STqdDAeDWQpFSWt47yOXynXZzrjBb
-3T+QUhbnb1Sqe7npmeOj+vXZa5SQdzs7KysrhBCMsTEGY3x202Hz/xyl1Pb2NgUAIeW3cuX+g4eb
-m5vLy8ssipRSWusoijJXJjc2NtbX13e/fL1ZnLcWlpaWMpnMf+j3WxhjW1tbGACklOl0sPv58+rq
-ar1+qGK0VkpVK5W1tbVms5nNZoUQrjufAwaAiPMwDI+PDt++eT2RDSPOhZSMsVa7nZua+PjhPY+6
-GKNWu+267TlQhNCLl68opdZajPHB9xoAxNdzubIXh44bP+LBBVeyKygAtFstpZW1gBEihERCBik/
-n8+77jYSVCm98PjJKFEjeeP503EXuiwUIXh0Z2aUqODRs+fj7nNpKADcnvZHiTKmx1zmT/gff5yx
-kgi4JhFwTSLgmkTANYmAaxIB1yQCrkkEXJMIuCYRcE0i4JpEwDWJgGsoADQajVGinEcIQAgx8CLo
-Cs45AKBSqTTwdn0xxpixVbo0vV7vJ+y1bVFUL+7MAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-//Get programms into library list
-if(f_start) {
-	prEndRun = true;
-	lib_value = "";
-	btStop_active = false;
-	prCnt = 0;
-}
-if(prExtMode.isEVal() || prExtProg.isEVal() || prExtStartTm.isEVal() || prExtCurCom.isEVal() || prExtWork.isEVal())
-	return;
-
-//Check for program list update
-if(f_start || (prCnt%max(1,f_frq)) == 0) {
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
-	curPrLst = "";
-	for(i_p = 1; i_p < rez.length; i_p++)
-		curPrLst += (curPrLst.length?"\n":"")+rez[i_p][0];
-	curPrLst = curPrLst.split("\n").sort().join("\n");
-	if(curPrLst != lib_items) lib_items = curPrLst;
-}
-
-//Check for ready
-btStart_active = prExtProg.length;
-
-if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
-else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
-else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = false; }
-
-//Prepare call status document
-pTxt = "";
-if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
-	pTxt = "<body>";
-	off = 0;
-	labProg_arg0val = prExtWork.attr("name");
-
-	if(prExtMode < 0 && !prEndRun) {
-		prEndRun = true;
-		prog_aCur = -1;	//Archiving
-	}
-
-	//Build result table
-	pTxt += "<i>"+tr("Program:")+" </i>"+Special.FLibSYS.strEnc2HTML(labProg_arg0val)+"<br/>\n";
-	if(prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)) {
-		pTxt += "<i>"+tr("Started:")+" </i>"+SYS.strftime(prExtStartTm)+"<br/>\n";
-		if(prog_aCur < 0) {
-			if(prExtMode == -1) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Error")+"<br/>\n";
-			else if(prExtMode == -2) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Successful finish")+"<br/>\n";
-			else if(prExtMode == -3) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Terminated")+"<br/>\n";
-			else pTxt += "<i>"+tr("Status:")+" </i>"+tr("Unknown")+"<br/>\n";
-		}
-	}
-	if(prExtMode == 1) {
-		wtm = max(0,prExtWork.attr("wtm").toInt()-(SYS.time()-prExtStartTm));
-		pTxt += "<i>"+tr("Remain:")+" </i>"+(wtm/3600).toString(10)+":"+((wtm/60)%60).toString(10,2)+":"+(wtm%60).toString(10,2)+"<br/>";
-	}
-	pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
-					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th>";
-	pTxt += "</tr>\n";
-
-	for(comElN = prExtWork, comPos = 0, comLev = 0, comCur = true, comAftCur = false, comN = "", comPath = ""; true; comPos++) {
-		if(comPos >= comElN.childSize()) {
-			if((comElN=comElN.parent())) {
-				comLev--;
-				comPos = comElN.attr("seekPos").toInt();
-				comCur = comElN.attr("comCur").toInt();
-				comN = comElN.attr("comN");
-				comPath = comElN.attr("comPath");
-				continue;
-			}
-			break;
-		}
-		comEl = comElN.childGet(comPos);
-		comN_ = (comN.length?comN+":":"") + comPos;
-		comPath_ = (comPath.length?comPath+": ":"") + (comEl.attr("name").length?comEl.attr("name"):comEl.attr("id"));
-		isCurCmd = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos && !prExtCurCom.parse(comLev+1,":").length;
-		if(isCurCmd) comAftCur = true;
-		rezVl = comEl.attr("rez");
-		toMark = true;
-		if(isCurCmd && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))				pTxt += "<tr class=''"+(prEndRun?"err":"run")+"''>";
-		else if(!comAftCur && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))	pTxt += "<tr class=''"+((rezVl.toInt()==-10)?"skip":((rezVl.toInt()<0)?"err":"pass"))+"''>";
-		else { pTxt += "<tr>"; toMark = false; }
-		pTxt += "<td>"+comN_+"</td>";
-		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath_)+"</td><td>";
-		if(toMark && rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
-		else {
-			//Arguments values
-			for(i_a = 1; i_a <= 5; i_a++)
-				if(comEl.attr("labArg"+i_a).length)
-					pTxt += Special.FLibSYS.strEnc2HTML(comEl.attr("labArg"+i_a).parse(0,"|")+" = "+comEl.attr("arg"+i_a)+"; ");
-		}
-		pTxt += "</td>";
-		comTm = comEl.attr("tm").toInt();
-		if(toMark && comTm) {
-			comTm -= prExtStartTm;
-			pTxt += "<td>"+(comTm/3600).toString(10)+":"+
-									((comTm/60)%60).toString(10,2)+":"+
-									(comTm%60).toString(10,2)+"</td>";
-		}
-		else pTxt += "<td>---</td>";
-		pTxt += "</tr>\n";
-
-		if(comEl.childSize()) {
-			comElN.setAttr("seekPos",comPos).setAttr("comCur",comCur).setAttr("comN",comN).setAttr("comPath",comPath);
-			comElN = comEl;
-			comCur = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos;
-			comPos = -1; comLev++; comN = comN_; comPath = comPath_;
-		}
-	}
-	pTxt += "</table></body>";
-}
-
-if(!prExtProg.length && f_start) pTxt = "<body><H1>"+tr("Select a program please")+"</H1></body>";
-
-if(pTxt.length) {
-	this.prog.attrSet("aDoc",pTxt);
-	if(this.prog.attr("aCur") == this.prog.attr("vCur")) prog_doc = pTxt;
-}
-
-prCnt++;
-
-//Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_TreeChange:/lib") {
-		prog_vCur = prog_aCur;
-		prExtProg = lib_value;
-	}
-	else if(ev_cur == "ws_BtPress:/btStart") {
-		if(prExtMode <= 0)	prExtMode = 1;
-		else if(prExtMode == 1)	prExtMode = 2;
-		prog_vCur = prog_aCur;
-	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0) {
-		prExtMode = prExtCurCom = 0;
-		prog_vCur = prog_aCur;
-	}
-	else if(ev_cur == "ws_BtPress:/btPass" && prExtMode == 1)	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;
-
-//Programm select process
-if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
-	prExtProg = lib_value;
-else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1413479593);
-INSERT INTO "wlb_Main" VALUES('prescrRunSimple','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAAE0ElEQVRoge2Vy28TVxSHz525nvG8HNtjO2+TEBJqAoEoJBREqSLooqrK
-gj1do6Z/BH9EkYBVoMuyYAeqIkpbYlKkQNqkOAlJbEwcO37FnhnP2PPsghRBFsVQpCmSv9Xo3qtz
-ft89Mxp0+/btSqUCHyeJRAJXKpVUKuV2kvckl8vhZs49mb2fq5nIqLV1HBja10ExLMd4CoVyOCxm
-t7IeiiJJ0ssKNGkXSjtBMShJNYGl6oalNwy/j1XqJk06St2MhPwzP82Mjh2nGZZnqEKhFIqIsqRi
-5NAcVymV/KJYym8blk1RlK7rvM/v9/H/nq0pAdtGJ06fIZXc/OL6vdSGB5N97XxVt5KZQGY9fXAg
-spaVSIDB3sDjP/7q7BtcW0mNDnftqLD6dP3MZ8PpbZNH1ZVk9suvvnAI4t79WcpD7u8U1jOFrv4h
-uSgHaANz3tVkJtTZK+e2/ALFRqIby4nJc+femo1oRuANY4omCTAti2UZQzf9wXB7KOihvASC7ex2
-uD1i6rrI40ylTgJ0BZlnWZki7GJZCQrsxtpG3/5+7KFIhHTdAJKiMKEqUlVWajUVEEF7MCv4u9sj
-Yrg9GAiGRf/b8zQTeuDQMEtjRIYG+7XVVPHo6EiAp9Kb2e7eruqOAlpR4LiRI8exreXLksDzjm07
-iCAQwOFDFiACkbbRrzZshvFytJPmuGNjRwM8HXi+2RPt5TBZKWVJX+94dzTU2a3KCkdjoFnu2JFm
-sqHp6enmP2JT16SaEQz4Xl9sqLJmkX6Bba5CvaroYvDNCpqiGcjv45qM8YpkMokBwLZthvHu2Ws0
-GggQRVOvL9I0hUhtz0maFeimW2LKKwb39qIZnmaaLrGnIAD0RXvGRo89XV6VZAUA2nx87JOD6xtJ
-nuN8PmHp6bJlO+DY0d6e3p7ue/d/oSkae5p69z44uq5T1O6dbmVzuwIIEbNzjw4fGfn8wAGWZRcW
-Fh7+/igSCjX0xuzDxNfnz0ciEVVVZ2ZmdF33YHzy0wlwHFcEJEn2+YSXz4/mH6+trWMAkBUFY8/4
-+Pj169ej0ejZs2cTiYSsKMVSeez4eD6fv3r1KsdxU1NTN2/c4DnGNE3Htl0RME1DURRJknied2wH
-Xk6gXq+LIk8QRDwev3v3biwWY1lWq8myLAmCsLS0dOfOnVgsxjCMaZq245im6bg0AcO0TEubvvnD
-Nxcv2o69K+AThOfpdKVSuXDhwuTkJEmSqVRyf/++DtQxPz8/MTFx+fLltra2ZDJJEMhxHNM0bbcm
-YJkCz3839S0A2C/+ESBJYnCg79q1a6dOnVpcXHwYjw/070OI6GiPrKw8i8fjIyMj+Xz+1q0fT588
-sfJsTdd1260JGIZuGLsyprUrUFPVrq5Omvb+ufAEEAwNDXAsu7mZsSxrePhQsVSMP/iN47nxsVHL
-tlVV+/nXBwR651/4B8F27FetTcvcFSgWy7SXBQCG4wGgVK6WylWCwFpdf5HJAoDQ5geArVwBAEKh
-MCLcSb8HRVGSG0kMAEFRvHTpktt53pnV1ZW5ubn/xV3+F1oCbtMScJuWgNu0BNymJeA2LQG3aQm4
-TUvAbVoCbtMScJuWgNt89AIYAHZ2yleufO92kndGUzWMMV5eXs5ms+n0C7fzvA+yLP8NrZUdC69n
-Pt0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-//Get programms into library list
-if(f_start) {
-	prEndRun = true;
-	lib_name = lib_selValue = "";
-	btStop_active = false;
-	prCnt = 0;
-}
-if(prExtMode.isEVal() || prExtProg.isEVal() || prExtStartTm.isEVal() || prExtCurCom.isEVal() || prExtWork.isEVal())
-	return;
-
-//Check for program list update
-if(f_start || (prCnt%max(1,f_frq)) == 0) {
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
-	curPrLst = "";
-	for(i_p = 1; i_p < rez.length; i_p++)
-		curPrLst += (curPrLst.length?"\n":"")+rez[i_p][0];
-	curPrLst = curPrLst.split("\n").sort().join("\n");
-	if(curPrLst != lib_items) lib_items = curPrLst;
-}
-
-//Check for ready
-btStart_active = prExtProg.length;
-
-if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
-else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
-else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = false; }
-
-//Prepare call status document
-pTxt = "";
-if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
-	pTxt = "<body>";
-	//off = 0;
-	labProg_arg0val = prExtWork.attr("name");
-
-	if(prExtMode < 0 && !prEndRun)	prEndRun = true;
-
-	//Build result
-	pTxt += "<i>"+tr("Program:")+" </i>"+Special.FLibSYS.strEnc2HTML(lib_name);
-	if(prExtMode > 0) pTxt += "\n<br/><i>"+tr("Started:")+" </i>"+SYS.strftime(prExtStartTm);
-	if(prExtMode == 1) {
-		wtm = max(0,prExtWork.attr("wtm").toInt()-(SYS.time()-prExtStartTm));
-		pTxt += "\n<br/><i>"+tr("Remain:")+" </i>"+(wtm/3600).toString(10)+":"+((wtm/60)%60).toString(10,2)+":"+(wtm%60).toString(10,2);
-	}
-	if(prExtMode > 0 && prExtCurCom.parse(0,":").toInt() < prExtWork.childSize()) {
-		pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
-					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th></tr>\n";
-		comN = 0;
-		if(prExtMode == 0)	comEl = prExtWork.childGet(0);
-		else {
-			comEl = prExtWork;
-			for(off = 0; comEl && (tVl=prExtCurCom.parse(0,":",off)).length; )	comEl = comEl.childGet(tVl.toInt());
-			if(!comEl) comEl = prExtWork.childGet(0); else comN = prExtCurCom;
-		}
-		for(comPath = "", comElI = comEl; comElI; comElI = comElI.parent())
-			if(comElI.name() == "com")
-				comPath = comElI.attr(comElI.attr("name").length?"name":"id")+(comPath.length?": ":"")+comPath;
-		rezVl = comEl.attr("rez");
-		if(prExtMode != 0) pTxt += "<tr class=''"+((prExtMode==-1)?"err":"run")+"''>";
-		else pTxt += "<tr>";
-		pTxt += "<td>"+comN+"</td>";
-		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath)+"</td><td>";
-		if(rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
-		else {
-			//Arguments values
-			for(i_a = 1; i_a <= 5; i_a++)
-				if(comEl.attr("labArg"+i_a).length)
-					pTxt += Special.FLibSYS.strEnc2HTML(comEl.attr("labArg"+i_a).parse(0,"|")+" = "+comEl.attr("arg"+i_a)+"; ");
-		}
-		pTxt += "</td>";
-		comTm = comEl.attr("tm").toInt();
-		if(!comTm) pTxt += "<td>---</td>";
-		else {
-			comTm -= prExtStartTm;
-			pTxt += "<td>"+(comTm/3600).toString(10)+":"+
-									((comTm/60)%60).toString(10,2)+":"+
-									(comTm%60).toString(10,2)+"</td>";
-		}
-		pTxt += "</tr>\n</table>";
-	}
-	pTxt += "</body>";
-}
-
-if(!prExtProg.length && f_start) pTxt = "<body><H1>"+tr("Select a program")+"</H1></body>";
-
-if(pTxt.length)	prog_doc = pTxt;
-
-prCnt++;
-
-//Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
-	//if(ev_cur == "ws_CombChange:/lib") prExtProg = lib_name;
-	//if(ev_cur.slice(0,11) == "ws_BtMenu=/")	prExtProg = ev_cur.slice(11).parse(0,":");
-	if(ev_cur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
-	else if(ev_cur == "ws_BtPress:/btStart") {
-		if(prExtMode <= 0)			prExtMode = 1;
-		else if(prExtMode == 1)	prExtMode = 2;
-	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
-	else if(ev_cur == "ws_BtPress:/btPass" && prExtMode == 1)	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;
-
-//Programm select process
-if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
-	prExtProg = lib_name;
-else lib_name = lib_selValue = prExtProg;','','',500,'name;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1413479593);
-INSERT INTO "wlb_Main" VALUES('accept','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
-LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
-sirld2HZR3re93l85HOOmVQq5fV64WiiaRqSZXlyctJpJzZJp9Os0x4OSzuA07QDOE07gNOgVgWV
-ncLMteuU4Sdee1VgDqah9M6tOSqFz5wcbbXdvrQcQOxUBsK+jr6TczOfbdUEXwcriq71RzklGr+3
-kHll4kpfUPjo05kLz5/9evbGC5demrv+xdip07Nf3jx38fy1z9cAAKglcrXVIgl7xIgi389turgS
-x/s3tv4cHBm/dP70/xuAYZqvPTM/bwihiJeJ9o+Wyub40HAxnz8xMrC6+G0glsivZiPd0YXvbsvB
-SHYl19Mbf/wwi6uWSSmHkP4kt1UT9ZC0UCjybpnS+tCwghCvqaVW/bQcAAAGxk6xbs9bqXe3K5bk
-4gAADydcnZ4LL15kAOJjZ1Tz3tPHR1d+Wx5JJn//5ef40PH1B8tKV/yP+z/VTev295k33k7li4ZX
-EkSBL2iaLHfqeiXSFS7rtVbNMNPT01NTUzZi2EbXdUmSmQN+P3uSTqftzMAhkWX5P6x25JfRdgCn
-aQdwmiMfACmKsrS05LQNmyiKgmKxWDKZdNqJTSilNjcyvVRiwbLd2KjXff6AVtx2CXxzyMTA8QAA
-BAPi99A2sChlEQ/2zkIAQKnlcvEAsInzmOJuIWZYxleluWfcJ2J8977yWr1OKeUR2wjAUBpb/Ljg
-HWU31/lHy+rU1f0NAFQMbD8AAGBCAECi0pvknXP47B02M829f4yJ3Prmpqqq0Xgfb2K9bnndqFgm
-PEPdbrF/cIhHLACYptm4NooAwFpwPJH5BG8UH1y+SnE9c/cucDxiGSSIpKyqhhn0yZhYsj84mOgB
-AKCUAoDtVYhSignBhLAWF9bDs8aND40P4iiOCYl093hEQatUtXKVAmsSgk0aCAa0wsbjzUJDZVom
-ABDTbDxijF0rPxhPdPprHs0vYNOUJMnjD/gVn1bYqJjQ4XYjgVfVnUql0pQQAkAPNwMYN25eN650
-uaMe5GmMhEKhgKIwHLd73OwFAIDQsdCu6u8ZaBShFFdqyy+/xz6ruX9cxJj09vVDUxXZ7fhUb+Kf
-fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
-7aywXTxkhaK6k81m/wJAAK2A/KcOawAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start) mess_text = elMess;
-
-//> Events for commands process
-off=0;
-ev_cur = ev_rez = "";
-while(true)
-{
-	ev_cur = event.parse(0,"\n",off);
-	if(ev_cur == "") break;
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply")
-	{
-		elEvent += "dlg_Apply\n";
-		this.attrSet("pgOpen",false);
-	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;','JavaLikeCalc.JavaScript
-if(f_start) mess_text = elMess;
-
-//> Events for commands process
-off=0;
-ev_cur = ev_rez = "";
-while(true)
-{
-	ev_cur = event.parse(0,"\n",off);
-	if(ev_cur == "") break;
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply")
-	{
-		elEvent += "dlg_Apply\n";
-		this.attrSet("pgOpen",false);
-	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;','JavaLikeCalc.JavaScript
-if(f_start) mess_text = elMess;
-
-//> Events for commands process
-off=0;
-ev_cur = ev_rez = "";
-while(true)
-{
-	ev_cur = event.parse(0,"\n",off);
-	if(ev_cur == "") break;
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply")
-	{
-		elEvent += "dlg_Apply\n";
-		this.attrSet("pgOpen",false);
-	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;',500,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1382883532);
-INSERT INTO "wlb_Main" VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
-LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
-sirld2HZR3re93l85HOOmVQq5fV64WiiaRqSZXlyctJpJzZJp9Os0x4OSzuA07QDOE07gNOgVgWV
-ncLMteuU4Sdee1VgDqah9M6tOSqFz5wcbbXdvrQcQOxUBsK+jr6TczOfbdUEXwcriq71RzklGr+3
-kHll4kpfUPjo05kLz5/9evbGC5demrv+xdip07Nf3jx38fy1z9cAAKglcrXVIgl7xIgi389turgS
-x/s3tv4cHBm/dP70/xuAYZqvPTM/bwihiJeJ9o+Wyub40HAxnz8xMrC6+G0glsivZiPd0YXvbsvB
-SHYl19Mbf/wwi6uWSSmHkP4kt1UT9ZC0UCjybpnS+tCwghCvqaVW/bQcAAAGxk6xbs9bqXe3K5bk
-4gAADydcnZ4LL15kAOJjZ1Tz3tPHR1d+Wx5JJn//5ef40PH1B8tKV/yP+z/VTev295k33k7li4ZX
-EkSBL2iaLHfqeiXSFS7rtVbNMNPT01NTUzZi2EbXdUmSmQN+P3uSTqftzMAhkWX5P6x25JfRdgCn
-aQdwmiMfACmKsrS05LQNmyiKgmKxWDKZdNqJTSilNjcyvVRiwbLd2KjXff6AVtx2CXxzyMTA8QAA
-BAPi99A2sChlEQ/2zkIAQKnlcvEAsInzmOJuIWZYxleluWfcJ2J8977yWr1OKeUR2wjAUBpb/Ljg
-HWU31/lHy+rU1f0NAFQMbD8AAGBCAECi0pvknXP47B02M829f4yJ3Prmpqqq0Xgfb2K9bnndqFgm
-PEPdbrF/cIhHLACYptm4NooAwFpwPJH5BG8UH1y+SnE9c/cucDxiGSSIpKyqhhn0yZhYsj84mOgB
-AKCUAoDtVYhSignBhLAWF9bDs8aND40P4iiOCYl093hEQatUtXKVAmsSgk0aCAa0wsbjzUJDZVom
-ABDTbDxijF0rPxhPdPprHs0vYNOUJMnjD/gVn1bYqJjQ4XYjgVfVnUql0pQQAkAPNwMYN25eN650
-uaMe5GmMhEKhgKIwHLd73OwFAIDQsdCu6u8ZaBShFFdqyy+/xz6ruX9cxJj09vVDUxXZ7fhUb+Kf
-fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
-7aywXTxkhaK6k81m/wJAAK2A/KcOawAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start) { select_items = elItems; select_value = selValue; }
-
-//> Events for commands process
-ev_cur = ev_rez = "";
-for(off = 0; true; )
-{
-	ev_cur = event.parse(0, "\n", off);
-	if(ev_cur == "") break;
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply")
-	{
-		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
-		this.attrSet("pgOpen",false);
-	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;','JavaLikeCalc.JavaScript
-if(f_start) { select_items = elItems; select_value = selValue; }
-
-//> Events for commands process
-ev_cur = ev_rez = "";
-for(off = 0; true; )
-{
-	ev_cur = event.parse(0, "\n", off);
-	if(ev_cur == "") break;
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply")
-	{
-		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
-		this.attrSet("pgOpen",false);
-	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;','JavaLikeCalc.JavaScript
-if(f_start) { select_items = elItems; select_value = selValue; }
-
-//> Events for commands process
-ev_cur = ev_rez = "";
-for(off = 0; true; )
-{
-	ev_cur = event.parse(0, "\n", off);
-	if(ev_cur == "") break;
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply")
-	{
-		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
-		this.attrSet("pgOpen",false);
-	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-}
-event = ev_rez;',500,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1384507960);
-INSERT INTO "wlb_Main" VALUES('TextLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAABHUlEQVRYhWNgGOKAkYGBIScnh5ube6BdQjL4+vXrlClTWBgYGDg4ODg5
-OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
-51fufUZRyqukI/ntybO3H778Rgiy8YtIKWkq8DOT7wQKPfDp4dXzZ64/QnIrt4S8ijGH6IUDB56i
-KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
-1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
-sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text','JavaLikeCalc.JavaScript
-if(f_start)	isErr = false, alBlnk = false;
-//Prepare context menu
-if(f_start && !digComs.isEVal() && digComs.length) {
-	contextMenu = "";
-	if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-")+":open\n";
-	if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-")+":close\n";
-	if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-")+":stop\n";
-}
-
-//Display label from st_text
-stCur = -1;
-if(!st_text.isEVal() && st_text.length) {
-	text = st_text.parse(0,":");
-	blink = st_text.parse(2,":").toInt();
-	backClr = st_text.parse(1,":").parse(0,"-");
-	if(blink) {
-		backClrBl = st_text.parse(1,":").parse(1,"-");
-		if(!backClrBl.length)	backClrBl = "gray";
-		backColor = (backColor!=backClr) ? backClr : backClrBl;
-	}
-	else	backColor = backClr;
-}
-//Display typical for st_open
-else if(st_open == true || st_close == false) {
-	backColor = (stVal=digStts.parse(0,";").parse(1,"-")).length ? stVal : "green";
-	text = (!digStts.isEVal() && (stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : tr("Enable");
-	stCur = 1;
-}
-else if(st_open == false || st_close == true) {
-	backColor = (stVal=digStts.parse(1,";").parse(1,"-")).length ? stVal : "blue";
-	text = (!digStts.isEVal() && (stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : tr("Disable");
-	stCur = 0;
-}
-else { backColor = "grey"; text = "---"; return; }
-
-//Blink linked with ElCadr
-if(this.attr("focus") ||
-	(!NAME.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == NAME))
-{
-  bordColor = (bordColor != "white") ? "white" : "black";
-  bordWidth = 2;
-}
-else { bordWidth = 1; bordColor = "black"; }
-
-//Notification create
-if(ntf.length && (ntf.toInt() == stCur) != isErr) {
-	if((isErr=(ntf.toInt()==stCur)))	alarm = "50|"+NAME+"|"+ntf.parse(2,":")+".|"+ntf.parse(1,":");
-	else if(alarmSt&0x100)	alarm = "1|"+NAME+"||1";
-}
-if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
-if(alarmSt&0x100) {
-	if(!(alarmSt&0x10000) || alBlnk)	backColor = isErr ? "red" : backColor;
-	else backColor = (backColor=="gray")?"#383838":"gray";
-	alBlnk = !alBlnk;
-}
-
-//Events process
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Kran","Event: "+sval);
-	if(sval == "usr_open") {
-		if(!com.isEVal())	com = true;
-		else close = false;
-		if((comVal=digComs.parse(0,";")).length) comVal = tr("ENABLE");
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-	}
-	else if(sval == "usr_close") {
-		if(!close.isEVal())	close = true;
-		else com = false;
-		if((comVal=digComs.parse(1,";")).length) comVal = tr("DISABLE");
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-	}
-	else if(sval == "usr_stop") {
-		if(!stop.isEVal())	stop = true;
-		if((comVal=digComs.parse(2,";")).length) comVal = tr("STOP");
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-	}
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1414589841);
-INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
-QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
-efbZ/293VnsZ9tEnn6bcHMaDiORwzz8xC4BIDodDIUzDMA4KpIw5PxzGcdTd3Ejq989EIYEJIQAi
-gIGN9o/jaKv+wLKsMfMAEFNZ3y2WD8a1+4uMM84NCcPPOTs7QfH0gmOnklnGWG9zwymWAIRB/+bn
-NwqlsudPM8Y3m81SpfJHreZlM5fevpaZMhPjIAiS+oQ7X30R7A0q8/ONei3ll9K289rly6NPqPn7
-/fHTAxDcMIQQB+PiTPbhUiMdtn6trZ4quY9bvfc/vCgEfzLP4igK9wYAwMy5hVeI0G2u7ewOvfzJ
-P+t1w+ArSw8XXr9iIg2AQIf1yfWcgRvry0utzZYd4q9+cOHVS4f5QUdKD4B9/Nl1J18cfQZSEgBJ
-kjEGYHSFkJTd1mPbnxmzO0m529k6Uv1w45FpmmPWh2Eo2mvL9259nWQ9XhDRfLUqer3elfc+yOZy
-xLhlmkQkpWSMc2N/2ZCUjPOn9xrndjKWAAOIj7zSSWiuN+q3vxQA4ij86fubbuHky2cvAHhw99vt
-Vgcik8mYs9Wz5VOz/8X7oeXffmmsrKQ9b9DtnHvras5zJuwYhUMAAkAUhi+dOU/cDIcDxvj8uTd6
-3a4wU4YBw8pEYUh05G/r35w4XbWz02CMCJZpDAeDZ1/zdIEo2he49ub5SqUyecT/mdXV1es/ficA
-eHbad23VeY5M104DmPzrVIwWUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0W
-UI0WUI0WUI0WUI0WUI0WUA13XTedTquO8TzYtu26Ls/n857nqQ7zPPi+XygUjv8SUh1gUrSAarSA
-arSAaoRlWe12e3Tv63FBSmmapnAce3urVShV8n623+85jptM12q1F/YPXV/beNQOAIriWFAcdrr9
-9bW7f3eDQta9+u47nAGA53nlcvlZrdSwvr378ze3SpW5KIwEY3xqKjXtz81EsFisOttYkJTVMxc5
-59sNiFa7c29x8WDu9g93kgMppW2/oFsZm+1Oux+ACHvBP2ylQnHYJpj5AAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-if(f_start) {
-	pAddr = pName.slice(0, pName.lastIndexOf("/"));
-	if(!(pObj=SYS.nodeAt(pAddr)))	return;
-	scLog = (pObj.nodeAt("a_log").get() == true);
-	aLst = pObj.nodeList("a_");
-
-	selTab = "view";
-
-	//View mode clean up
-	view_value = ""; view_geomH = geomH-view_geomY-5;
-
-	//Standard parameters
-	stdPrms = "var;sp;out;auto;aMin;aMax;wMin;wMax;com;close;stop;st_open;st_close;";
-	pColors = new Array("darkmagenta", "orange", "blue", "lightgreen", "cyan", "tomato", "magenta", "wheat", "lightyellow", "darkcyan");
-
-	//Trends prepare
-	trN = 0, trNMax = 10, trNClr = 0; trDigN = 0;
-	trendsList_items = "<tbl sel=''row'' colsWdthFit=''1''><h><s width=''1px''>"+tr("ID")+"</s><s width=''50%''>"+tr("Name")+"</s><s edit=''1''>"+tr("Minimum")+"</s><s edit=''1''>"+tr("Maximum")+"</s></h>";
-	trendsList_value = "";
-	trObj = this.wdgAt("trends");
-	trObj.attrSet("sclVer", scLog?6:2);
-	trObj.attrSet("parNum", trNMax);
-	// Clear previous trends
-	for(iTr = 0; iTr < trNMax; iTr++) trObj.attrSet("prm"+iTr+"addr", "");
-	for(off = 0; (sP=stdPrms.parse(0,";",off)).length && trN < trNMax; ) {
-		if(!(aObj=pObj.nodeAt("a_"+sP)) ||
-			(sP == "aMin" && ((tV=aObj.get()) >= pObj.nodeAt("a_aMax").get() || tV <= pObj.nodeAt("a_min").get())) ||
-			(sP == "aMax" && ((tV=aObj.get()) <= pObj.nodeAt("a_aMin").get() || tV >= pObj.nodeAt("a_max").get())) ||
-			(sP == "wMin" && ((tV=aObj.get()) >= pObj.nodeAt("a_wMax").get() || tV <= pObj.nodeAt("a_min").get())) ||
-			(sP == "wMax" && ((tV=aObj.get()) <= pObj.nodeAt("a_wMin").get() || tV >= pObj.nodeAt("a_max").get())))	continue;
-		isBool = (typeof(aObj.get())=="boolean");
-		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
-		trObj.attrSet("prm"+trN+"color", (trClr=pColors[trNClr])+(isBool?"-127":""));
-		trObj.attrSet("prm"+trN+"width", 1);
-		if((sP == "var" || sP == "sp" || sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax") && pObj.nodeAt("a_min"))
-		{
-			trObj.attrSet("prm"+trN+"bordL", pObj.nodeAt("a_min").get()).attrSet("prm"+trN+"bordU", pObj.nodeAt("a_max").get()).attrSet("prm"+trN+"scl",0);
-			if(sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax")
-				trObj.attrSet("prm"+trN+"addr","line:"+aObj.get()).attrSet("prm"+trN+"color",(trClr=(sP[0]=="a")?"red":"yellow"));
-		}
-		else if(sP == "out") trObj.attrSet("prm"+trN+"bordL",0).attrSet("prm"+trN+"bordU",100).attrSet("prm"+trN+"scl",2);
-		else if(isBool) { trObj.attrSet("prm"+trN+"bordL", -trDigN).attrSet("prm"+trN+"bordU", 20-trDigN).attrSet("prm"+trN+"scl",2); trDigN++; }
-		else trObj.attrSet("prm"+trN+"scl",2);
-		trendsList_items += "<r><s>"+trN+"</s>"
-											"<s color=''"+trClr+"''>"+strEnc2HTML(aObj.descr())+"</s>"
-											"<r>"+trObj.attr("prm"+trN+"bordL")+"</r>"
-											"<r>"+trObj.attr("prm"+trN+"bordU")+"</r></r>";
-		trN++; trNClr++;
-	}
-	for(iA = 0; iA < aLst.length && trN < trNMax; iA++) {
-		aId = aLst[iA].slice(2);
-		if(stdPrms.indexOf(aId+";") != -1 || !(aObj=pObj.nodeAt(aLst[iA])) || !aObj.arch()) continue;
-		isBool = (typeof(aObj.get())=="boolean");
-		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
-		trObj.attrSet("prm"+trN+"color", pColors[trNClr]+(isBool?"-127":""));
-		trObj.attrSet("prm"+trN+"width", 1);
-		if(isBool) { trObj.attrSet("prm"+trN+"bordL", -trDigN).attrSet("prm"+trN+"bordU", 20-trDigN); trDigN++; }
-		trendsList_items += "<r><s>"+trN+"</s>"
-											"<s color=''"+pColors[trNClr]+"''>"+strEnc2HTML(aObj.descr())+"</s>"
-											"<s>"+trObj.attr("prm"+trN+"bordL")+"</s>"
-											"<s>"+trObj.attr("prm"+trN+"bordU")+"</s></r>";
-		trN++; trNClr++;
-	}
-	trendsList_items += "</tbl>";
-	sel_trends_en = trN;
-
-	//Data table prepare
-	dtALst = new Array();
-	dtPeriod = 1;
-	for(off = 0; (sP=stdPrms.parse(0,";",off)).length; )
-		if((aObj=pObj.nodeAt("a_"+sP)) && aObj.arch()) {
-			dtALst.push(aObj);
-			dtPeriod = max(dtPeriod, ceil(aObj.cfg("BPER")));
-		}
-	for(iA = 0; iA < aLst.length; iA++) {
-		aId = aLst[iA].slice(2);
-		if(stdPrms.indexOf(aId+";") == -1 && (aObj=pObj.nodeAt(aLst[iA])) && aObj.arch())
-		{
-			dtALst.push(aObj);
-			dtPeriod = max(dtPeriod, ceil(aObj.cfg("BPER")));
-		}
-	}
-	sel_data_en = dtALst.length;
-}
-
-//View update
-if(pObj && view_en) {
-	view_items = "<tbl sel=''row'' colsWdthFit=''1''><h><s width=''1px''>"+tr("ID")+"</s><s width=''50%''>"+tr("Name")+"</s><s width=''10%''>"+tr("Value")+"</s></h>";
-	for(i_a = 0; i_a < aLst.length; i_a++) {
-		aObj = pObj.nodeAt(aLst[i_a]);
-		view_items += "<r><s>"+aLst[i_a]+"</s>"
-									"<s>"+strEnc2HTML(aObj.descr())+"</s>"
-									"<s>"+strEnc2HTML(aObj.get())+"</s></r>";
-	}
-	view_items += "</tbl>";
-}
-
-//Data update
-if(pObj && data_en) {
-	data_tmpl = "<body docProcLang=''JavaLikeCalc.JavaScript''>\n"
-		"<table class=''data'' cellpadding=''2'' cellspacing=''0'' export=''1'' valign=''middle'' width=''100%''>\n";
-	// Header
-	data_tmpl += "<tr><th>Date</th>";
-	for(i_a = 0; i_a < dtALst.length; i_a++)
-		data_tmpl += "<th>"+strEnc2HTML(dtALst[i_a].descr())+"</th>";
-	data_tmpl += "</tr>\n";
-
-	// Date
-	curTime = SYS.time();
-	for(i_rec = curTime; i_rec > (curTime-100*dtPeriod); i_rec-=dtPeriod) {
-		data_tmpl += "<tr><td>"+SYS.strftime(i_rec,"%d %m %H:%M:%S")+"</td>";
-		for(i_a = 0; i_a < dtALst.length; i_a++)
-			data_tmpl += "<td>"+strEnc2HTML(dtALst[i_a].get(i_rec))+"</td>";
-		data_tmpl += "</tr>\n";
-	}
-	data_tmpl += "</table></body>\n";
-}
-
-//Events process
-ev_rez = "";
-for(off = 0; true; ) {
-	sval = event.parse(0, "\n", off);
-	if(!sval.length) break;
-	//SYS.messInfo("ObjProps","Event: "+sval);
-	if(sval.slice(0,16) == "ws_BtPress:/sel_") selTab = sval.slice(16);
-	else if(sval == "ws_TableChangeSel:/view" && (aObj=pObj.nodeAt(view_value))) {
-		if(!(aObj.flg()&0x04)) {
-			view_geomH = viewSet_geomY-view_geomY-1;
-			viewSet_cfg = (aObj.flg()&0x01) ? aObj.values().split(";").join("\n") : "";
-			viewSet_value = aObj.get();
-		}
-		else view_geomH = geomH-view_geomY-5;
-	}
-	else if(sval == "ws_LnAccept:/viewSet" && (aObj=pObj.nodeAt(view_value))) aObj.set(viewSet_value);
-	else if(sval == "ws_TableChangeSel:/trendsList")
-		for(i_tr = 0; i_tr < trN; i_tr++)
-			trObj.attrSet("prm"+i_tr+"width", ((i_tr==trendsList_value)?3:1));
-	else if((reRez=sval.match("ws_TableEdit_(\\d+)_(\\d+)\\:\\/trendsList")).length)
-		trObj.attrSet("prm"+trendsList_value+((reRez[1]==2)?"bordL":"bordU"), trendsList_set);
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;
-
-//Tab selection process
-if(selTab != prevTab) {
-	wLs = this.nodeList("wdg_");
-	for(iW = 0; iW < wLs.length; iW++) {
-		wId = wLs[iW].slice(4);
-		wObj = this.wdgAt(wId);
-		if(wId.indexOf("sel_") != -1)	wObj.attrSet("color",(wId.slice(4)==selTab)?"#777799":"#555555");
-		else if(wId.indexOf(selTab) != -1) wObj.attrSet("en",true);
-		else if(wId.indexOf(prevTab) != -1) wObj.attrSet("en",false);
-	}
-	prevTab = selTab;
-}','','',1000,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1418050193);
-INSERT INTO "wlb_Main" VALUES('objProps','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAABvUlEQVRoge3av0rDUBTH8V9ubpNqrVrS+BcKWtFFpYidXBycHbvqSwhd
-fAHHvoEv4CIOLnHQRQcFETpYEPG/VVNtaaw1iUNRHDrJ1YNwPtMlwzn3O2S72tLy0tnoGdR6AQ4B
-C5j6/NIEQsBQucTSrVgxJq0+a311XeXgFgfIAAfABFAHjoEFwFa5YfJ5cnFtUagc+SUEAOwBAmgC
-DtAPJH9llTQixuz5rOKpIWACceAEiAMZoAqcA5rKJal6CoAM38OV/RWVg7+LARef5wP144tGUVqW
-lcvl1M/+E4VC4Xf+gT/EAdQ4gBoHUOMAahxAjQOocQA1DqDGAdQ4gBoHUOMAahxAjQOocQA1DqDG
-AdQ4gNq/D5CNRqNUKlFf44c8z5PJ3i7HcVKj43Yi/uZVX17DZKLbdV3TNCORCPUN27i6K5ebeuv8
-VH+Ttad79Aw+u+WdrY1eu0/vtOfnspqmZbPZaDRKe9e2jk6Kt6fXu9ubE9Mzng9hdnTFO6OVSiXZ
-P5xOj5hSqH3RoFyIUOi6PTBsDwz5vq/l8/mxdFroMgh8IUQQBELotVrVMAwpJfVt27gtP1w+Vlvv
-Ydybiw8wdHLT/ZDoJgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-if(f_start) {
-	props_value = "";
-	props_geomH = geomH-props_geomY;
-}
-
-tittle_text = objName.isEVal() ? tr("Unknown") : objName;
-tittle_tipTool = objDescr.isEVal() ? "" : objDescr;
-if(!objErr.isEVal()) {
-	if(objErr.toInt() == 0)			tittle_backColor = "lime";
-	else if(objErr.toInt() == 1)	tittle_backColor = "yellow";
-	else if(objErr.toInt() == 2)	tittle_backColor = "red";
-	else tittle_backColor = "gray";
-}
-else tittle_backColor = "gray";
-
-if(!objItems.isEVal()) {
-	//Load table with variables
-	tbl = "<tbl sel=''row'' colsWdthFit=''1''>\n"
-		"<h><s width=''1px''>"+tr("Property")+"</s><s width=''55%''>"+tr("Description")+"</s><s width=''30%''>"+tr("Value")+"</s></h>";
-	for(var aIt in objItems) {
-		it = objItems[aIt];
-		if(it.alarm == 1)	tbl += "<r color=''yellow''>";
-		else if(it.alarm == 2)	tbl += "<r color=''red''>";
-		else tbl += "<r>";
-		tbl += "<s>"+aIt+"</s><s>"+strEnc2HTML(it.descr)+"</s><s>"+strEnc2HTML(it.val)+"</s></r>\n";
-	}
-	tbl += "</tbl>";
-	props_items = tbl;
-}
-
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("ObjProps","Event: "+sval);
-	if(sval == "ws_TableChangeSel:/props" && (it=objItems[props_value])) {
-		if(it.wr != false) {
-			props_geomH = set_geomY-props_geomY-2;
-			set_cfg = it.wr.length ? it.wr.split(";").join("\n") : "";
-			set_value = it.val;
-		}
-		else props_geomH = geomH-props_geomY;
-		//SYS.messInfo("ObjProps","WR: "+it.wr+"; it="+it);
-	}
-	else if(sval == "ws_LnAccept:/set" && (it=objItems[props_value])) it.set = set_value;
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;','','',1000,'perm;name;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1414948504);
-INSERT INTO "wlb_Main" VALUES('grpGraph10','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
-xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
-krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
-z6LVarFotQp6vXbbm83n0nGEEEGvt16vXSkBEQEKrV3X/fLly3q9/tkPfE+w828XRx8/1qnj42MA
-sNYi4l3Dv+KttQBwL4+IlFLGWJ03xpQJ34iHeMdxmFSOF4/RYuZnmZ9Vn3XtZH+PM2ImUXeWtir+
-7Kwv5TDP3TD8KMRtTkxggmEABOJPsU51SSqlLp4/l4zlUg4/fKB5XvJRFP3edRSgg/Cn5tUmURS9
-jl4zw5ZyebJ3UvFaz168UITYKHJOT/v1g+G7d+/yPAcLxBCaUbSoPFXu5fs+RSNZwYhGgEXmVrwx
-rCgcrTmilXJZ8UiROIQ61ChTrAulFAAIIQxjheOoVsuJY54kpRgAKFgJEKA5t1TfbEIsAQA3dwfr
-wVlwVm1OiAWAdjvrdLLJpAsAnHMGAGABAAw1SBFq2SZotSVpwSQDbW4zaC0hpCiTT0hR8UjQamsy
-g4hGmVs9IaQoKCJHJMWtngBowBxsBGh/rA2DJif5Sq42asYYVIquVk7FMBIRMRUWLRoEgHgYgwIA
-6PPZyI041QiQG3I8DwEUAEyn4XI5IkTnuStEPBicKgUAwIec9zkiIsU8ytN5WpbQ9MkTIYTmHADc
-xaIzm2mAPM8PirUFQAAO8LelqSUAUKji2V/PEp4QS9zcPRmclDkkJDk8nCcJl7JAtJ8+DW54gm/f
-vr24uJjP5+WBhBDlZ/fCrYLd2gkhhJCilrS6wPO8MAyZlK61djKZlKyUMk3TyrABtwp2ayeEMMbq
-R6oLgiBgjLGvXydHR0fGXJestbZa34VbBbu1I6Ix5iFB+RvNgqDv+/5qdX1dOOf1lG3ArYLd2iml
-lNLyQe8KOOeUUoYIxph64jaSvgG3CnZov1tCdUGSJEopdnV1FcexlLJkXdetqzfgVsFu7WUG6j24
-LnBdVwhB9vf3B4MBNDbYbDaL47jBJZRlmbW2wSXU6/XKsaShwdbr9XK5bHAJcc455w0uoW6322q1
-oLHBLi8vZ7NZg0tISul5XtWuG1dCrNVqUUq1vn4JLIqiWt+FWwW7tZdf60OCcs3Oz88Xi0WDp9Ew
-/KXf/1a90DRvGjVGJ0nS4Es8n8+VUg3uA2EYNnsajeO42X3AWssYa3AJdTqdTqcDjQ22WCym02mD
-S0gI4bpug0eJchXHcclqreudbwNuFezWDjfN+F5BuWZxHH///r1qb1rrei/cgFsFu7VTSgHgIcH1
-ATzP830/iqKSFULUh6cNuFWwW3tZQg/ZhRCMMSaEuLq6qosadomXy2XVBKCBl5j4/g9NYCPjG3Cr
-YLf2u9N4XZBlWVEURAgRBEF6E0+fPkXECo7H48FgUEEhhOd5Fcyy7ODgQClVMWEYlv+Al7G3t1ff
-3Pf90WhUQWPM4eFhlmUV8+jRI8dx6rt1u90Kep43Ho/TNGWMPX78uN1uD4dDfPny18+fT6E50W63
-R6MRAPR6vW63y968+ePVq99+9lP9x3Bd9x9FY7XqUFOtUwAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start) {
-	//Parameter selection enable
-	if(allowSelLst.length)
-		for(i_el = 0; i_el < 10; i_el++) {
-			cEl = this["el"+(i_el+1)];
-			cEl.attrSet("en",1);
-			if(cEl.attr("contextMenu").search(":select$") < 0)
-				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
-		}
-}
-
-curTm = SYS.time();
-if(!trnd1_tSek) trnd1_tSek = curTm;
-selSingle = 0;
-selAll = false;
-
-//Events process
-evRez = "";
-for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
-	if(evCur == "key_presComma:/trnd1")		trnd1_tSek -= trnd1_tSize/2;
-	else if(evCur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else if(evCur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
-	else if(evCur.search("usr_single:/el") == 0)	selSingle = evCur.slice(14).toInt();
-	else if(evCur.search("usr_all:/el") == 0)		selAll = true;
-	else evRez += evCur+"\n";
-	//SYS.messDebug("Trend","Event: "+evCur);
-}
-event = evRez;
-
-//Trend time control
-//if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
-if(trnd1_tSek < curTm) trnd1_trcPer = 0;
-else { trnd1_trcPer = 1; trnd1_tSek = 0; }
-
-//Generic
-name_arg0val = name;
-
-//Scale
-cntrAct = cntrLog = 0;
-for(i_el = 0; i_el < 8; i_el++) {
-	cEl = this["el"+(i_el+1)];
-	if(!cEl.attr("en")) continue;
-	cntrAct++;
-	if(cEl.attr("log") == true)	cntrLog++;
-}
-trnd1_sclVer = (cntrLog > cntrAct/2) ? trnd1_sclVer|0x4 : trnd1_sclVer&(~0x4);
-
-//Trends
-arh_beg = 1e30, arh_end = 0;
-for(i_el = 0; i_el < 10; i_el++) {
-	cEl = this["el"+(i_el+1)];
-	if(selAll)	cEl.attrSet("bordStyle",3);
-	if(selSingle) cEl.attrSet("bordStyle",((i_el+1)==selSingle)?3:1);
-	cTr = this["trnd1"];
-	cTrPrm = "prm"+i_el;
-	if(!cEl.attr("en")) cTr.attrSet(cTrPrm+"addr","");
-	else {
-		cTr.attrSet(cTrPrm+"addr",cEl.attr("addr"));
-		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
-		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
-		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
-		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
-		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
-		//Enable/disable of the mode''s indication in the regulators ???
-		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
-		//Archive depth calculate
-		if(cEl.attr("bordStyle") == 3) {
-			arh_tmp = cTr.attr(cTrPrm+"prop");
-			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
-			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
-		}
-		if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
-		else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
-	}
-}
-//Set archive scroll
-if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
-	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
-	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
-	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
-	arh_active = true;
-	if(selSingle) trnd1_tSek = arh_end;
-}
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1418032108);
-INSERT INTO "wlb_Main" VALUES('anShow1s','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','/wlb_Main/wdg_anShow1','','','',-1,'name;geomW;',1415294944);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1414948968);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root','
@@ -21812,6 +18135,13 @@ INSERT INTO "Trs" VALUES('Minimum','Мінімум','Минимум');
 INSERT INTO "Trs" VALUES('Maximum','Максимум','Максимум');
 INSERT INTO "Trs" VALUES('Archive','Архів','Архив');
 INSERT INTO "Trs" VALUES('Empty','Порожньо','Пусто');
+INSERT INTO "Trs" VALUES('All','Всі','Все');
+INSERT INTO "Trs" VALUES('m','х','м');
+INSERT INTO "Trs" VALUES('h','г','ч');
+INSERT INTO "Trs" VALUES('d','д','д');
+INSERT INTO "Trs" VALUES('s','с','с');
+INSERT INTO "Trs" VALUES('Frequency','Частота','Частота');
+INSERT INTO "Trs" VALUES('Hz','Гц','Гц');
 CREATE TABLE 'prj_archBrowser_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','addr','arh:CPULoad_load (+)');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','name','val:CPULoad');
@@ -21827,4 +18157,3528 @@ INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','w
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','pModeA','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','pModeC','');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','color','#ae77c3');
+CREATE TABLE 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "wlb_Main" VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
+z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
+DkY7UWgLbYdaorqO7diOf8S+e4hhxrHTUqZpnKfknOOPv9f33HvuZe7d+0XXdXyCybJMdF3X9eO0
+d3Nzk+d5lmUBCILgeR7P8/1+XxAEnucZhul0OhkQO84mhFBKXdeNoiiKItu2WZallA4GA8dxKKU5
+j4y7lpaW0n9nZ2cBtNvtCYPK0XIGIwC0GY0MSc2ojYf71T435AI+iLhI8IWKXSmkcBFHmZzRAghL
+YVAKYjYeiAM2LhROANSNelG4rtcBgAEoGDCTKHing1IqSVJRatpcdzAz0wTQ71sJpRt2a6QmMMK1
+a9fm5uaWl5efP38uy/K5c+eq1Wou5cmTjbdve6urv9669eP6+m8EQIxYH+rtUhvA/v5+HMf7+/uE
+ENM0L1++nEsxTYMQ9saN79682U20CIxQ4ZKPv7y8LIqiIAjlcrnZbBaNaHq6dnCgPX788ObNH3q9
+twSAQpRRbGdnp1QqvU/d2toqomxtvarX1YWFpfX13xMtfUACOEDTtJWVlXR2CEQAD4RADIipULd7
+MPqhKA0CYAdQgPmxFx4Be0AdkAALiICvAC5PGgGgAFN5sQqgAhxQAqYBvwCRUMZVjEwE5gpCGUuK
+OgKCDwOUpQEfjJdrhChClE/5C9j4MGDUDLNmRlz2AXNo7ng7GWeyv1SQfavgC+JAZGhWDAWtcdnV
+n1BmgJkPA5KTv6AapDHuzNnr0jYcDi3LCoKAUkoIkSRJluWPpgA4PDwcFTTLssfHx4uLi+n6zlIs
+y8qsYMdxLMtaXFz0fZ9SKsvy0dERx+UUzT8U27bHKc1mkxBSLpffO0cdJmP/zu79f6KcPEemaYZh
+yHFcvV64yZ+gpdvt6rq+vb3tuu7Ztaiq6nleo9FgmMI2cjIFQKWS3w/T9tnNURAEHMcpinJGSrfb
+dV3XsqxWq3V2LaqqBkHQbrdzj1CnpQA4Tf9Pvu4WsJry2lP2s2+fvfzyZSZ7EA/uG/dX+6sZf0I5
+BF6kvF7Z253fPegcZLJDGq7Za5veZsZ/8oiCIDAMgxDySXPkeZ6maaOT5hkpqqpyHNfpdKIo25g+
+ggKAYRhRFCfnfF7ryDCMwWDA83yjkdMVT6Wl2+3Gcazruud5Z9eiqqpt27Ozs4RMyjx5RLVazv0g
+Y//VHFFK9/b24jj+JEocx47j+L4/ISf5LheAZqppVa3qlbUrkR1pmtZqtRYWFkYN/3zj/F3mrshm
+SzmhNIFmqsx5n+8cdACgBQDvzwxT0tRFXMzXIstTp5mItAVByPMlAIbRSyjXr39v2870dG1+/gsA
+DIM4juOY2ralKDO5lF5Pr9cVAC9e/Pn06UMCYDgc7u6+Yll2Y+OPft/iOM7zPMexFaVx587PBVqC
+R49WVlYe3L79U6IlDMOrV6+HYRgEQaVSGQ6HruvEcVytTnuezzCgFJk27fv+pUvfXLjw9evX2wll
+fX2tVitcabnmed7ok/d6GiEgAExTM01tPNV1XUqpKIqO41QqlaJjQ3KzKTJN03RdF0XRNM12uz03
+V3i3mESRJIllWUmSqtXq1FTu5ecdRZblogPOhG0pbSzL/Q2YovM7l7aYfgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+ev_wrk = ev_rez = "";
+off = 0;
+if(f_start) cntr = prevCntr = holdCntr = 0;
+cntr++;
+
+if(!prmColor.isEVal()) { bordColor = prmColor; bordWidth = 2; }
+else { bordColor = "black"; bordWidth = 1; } 
+
+//Disable all mutable widgets
+info_ed_en = info_var_en = info_sp_en = info_out_en = spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = lev_out_en = lev_var_en = lev_sp_en = mode_en = modMan_en = modAuto_en =
+	modCasc_en = pnl_pid_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = 
+	com_open_en = com_stop_en = com_close_en = st_open_en = st_close_en = Ramka_en = moveUp_en = moveDwn_en = false;
+
+info_name_text = prmShifr.isEVal() ? "" : prmShifr;
+
+//Impulse processing
+if(!prmAnalog.isEVal() && prmAnalog == false) {
+	lev_out_en = info_out_en = false; 
+	moveUp_en = moveDwn_en = true; 
+	moveUp_fillColor = (!prmImpQupTm.isEVal() && prmImpQupTm) ? "cyan" : "black-0"; 
+	moveDwn_fillColor = (!prmImpQdwnTm.isEVal() && prmImpQdwnTm) ? "cyan" : "black-0"; 
+}
+
+//Check for analog
+if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
+	info_ed_en = info_var_en = lev_var_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = true;
+	info_ed_text = prmDemention.isEVal() ? "" : prmDemention;
+	pVar = prmVar.isEVal() ? prmVarIn : prmVar;
+	if(prmVarIn.isEVal()) info_var_bordWidth = 0;
+	if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else info_var_clearCnt--; 
+	lev_var_p1y = max(0,min(140,140*(1-(pVar-min)/(max-min))));
+	if(prmPrec.isEVal())	info_var_arg0cfg = "10;f;2";
+	else if(prmPrec >= 0)	info_var_arg0cfg = "10;f;"+prmPrec;
+	else	info_var_arg0cfg = "10;g;"+abs(prmPrec);
+
+	info_var_color = lev_var_c3 = "#3EFF3E";
+	//Warning borders process
+	if(!prmWMin.isEVal() && !prmWMax.isEVal() && prmWMax > prmWMin) {
+		lev_var_c2 = "yellow";
+		lev_var_p6y = lev_var_p7y = 140*(1-(prmWMax-min)/(max-min));
+		lev_var_p8y = lev_var_p9y = 140*(1-(prmWMin-min)/(max-min));
+		if(pVar >= prmWMax || pVar <= prmWMin) info_var_color = lev_var_c3 = "yellow";
+	}
+	else lev_var_c2 = "black-0";
+	//Alarm borders process
+	if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) {
+		lev_var_c1 = "red";
+		lev_var_p2y = lev_var_p3y = 140*(1-(prmAMax-min)/(max-min));
+		lev_var_p4y = lev_var_p5y = 140*(1-(prmAMin-min)/(max-min));
+		if( pVar >= prmAMax || pVar <= prmAMin ) info_var_color = lev_var_c3 = "red";
+	}
+	else lev_var_c1 = "black-0";
+
+	//EVAL
+	if(pVar > max || pVar < min) info_var_color = lev_var_c3 = "lightgray";
+
+	// Check an process PID regulator
+	if(!prmVar.isEVal() && !prmSp.isEVal()) {
+		lev_out_en = info_out_en = !prmOut.isEVal() && (prmAnalog.isEVal() || prmAnalog == true);
+		info_sp_en = lev_sp_en = mode_en = modMan_en = modAuto_en = pnl_pid_en = true;
+
+		modCasc_en = !prmCasc.isEVal();
+		spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = (prmCasc != true);
+		lev_out_p1y = 140*(1-prmOut/100);
+		lev_sp_p1y = max(0,min(140,140*(1-(prmSp-min)/(max-min))));
+		if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else info_sp_clearCnt--; 
+		if(prmPrec.isEVal())	info_sp_arg0cfg = "10;f;2";
+		else if(prmPrec >= 0)	info_sp_arg0cfg = "10;f;"+prmPrec;
+		else info_sp_arg0cfg = "10;g;"+abs(prmPrec);
+
+		if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else info_out_clearCnt--;
+		appToVl = 0;
+
+		//Event process
+		while((ev_wrk=event.parse(0,"\n",off)).length) {
+			prevMode = prmAuto ? ((prmCasc==true)?tr("Cascade"):tr("Automate")) : tr("Manual");      
+			if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) {  
+				prmAuto = false; if(prmCasc==true) prmCasc = false;
+				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Manual"));
+			}
+			else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) {  
+				prmAuto = true; if(prmCasc==true) prmCasc = false;
+				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Automate"));
+			}
+			else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) {  
+        	prmAuto = prmCasc = true;
+        	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Cascade"));
+			}
+			else if(ev_wrk == "key_mousePresLeft:/info_sp") {
+				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Setpoint")+" : "+prmDescr+" : "+real2str(prmSp,abs(prmPrec))+" : "+real2str(info_sp_arg0val,abs(prmPrec)));
+				prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
+			}
+			else if(ev_wrk == "key_mousePresLeft:/info_out") {
+				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Output")+" : "+prmDescr+" : "+real2str(prmManIn,1)+" : "+real2str(info_out_arg0val,1));
+				prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
+			}
+			else if(ev_wrk == "ws_BtPress:/spToVar") {
+				info_sp_arg0val = info_var_arg0val;
+				info_sp_backColor = "darkslategray";
+				info_sp_clearCnt = 25;
+			}
+			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
+			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
+			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
+			else if(ev_wrk == "ws_BtPress:/down")			appToVl = -1;
+			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
+			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
+			else if(ev_wrk == "ws_BtPress:/pnl_pid") {
+				sessNm = strParsePath(path,0);
+				pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
+				if(vcaNodePresent(pidPg)) vcaAttrSet(pidPg+"/a_pgOpen",1);
+				else ev_rez += "usr_PidCntrCall\n"; 
+			} 
+			else ev_rez += ev_wrk+"\n";
+		}
+		event = ev_rez;
+
+		if(appToVl && (prmAuto || prmOut.isEVal())) {
+			if(prmPrec.isEVal())	newVl = ((info_sp_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
+			else {
+				if((cntr-prevCntr)/f_frq > 0.2)	{ holdCntr = cntr; levUp = 0; }
+				prevCntr = cntr;
+				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
+				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
+				newVl = info_sp_arg0val + sign(appToVl) *										//direction
+														pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
+														pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
+														pow(10,-prmPrec);										//precision base
+			}
+			newVl = max(min,min(max,newVl));
+			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin ) newVl = max(prmAMin,min(prmAMax,newVl));
+			info_sp_arg0val = newVl; info_sp_backColor = "darkslategray"; info_sp_clearCnt = 25;
+		}
+   	else if(appToVl && !prmAuto) {
+			if(prmAnalog==false) {
+				prmManIn = 50+2.5*appToVl;
+				if(appToVl == -1)			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( < )");
+				else if(appToVl == 1)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( > )");
+				else if(appToVl == -10)messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( << )");
+				else if(appToVl == 10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( >> )");
+			}
+			else {
+				newVl = max(0,min(100,info_out_arg0val+appToVl));
+				info_out_arg0val = newVl; info_out_backColor = "darkslategray"; info_out_clearCnt = 25;
+			}
+		}
+
+		if(prmAuto && prmCasc) { mode_text = tr("Cascade"); info_sp_bordWidth = info_out_bordWidth = 0; }
+		else if(prmAuto) {
+			mode_text = tr("Automate");
+			info_sp_bordWidth = 1; info_out_bordWidth = 0;
+		}
+		else {
+			mode_text = tr("Manual");
+			info_out_bordWidth = 1; info_sp_bordWidth = prmOut.isEVal() ? 1 : 0;
+		}
+	}
+	// Manual variable input
+	else if(!prmVarIn.isEVal()) {
+		up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = true;
+		info_var_bordWidth = 1;
+		appToVl = 0;
+
+		//Event process
+		while((ev_wrk=event.parse(0,"\n",off)).length) {
+			if(ev_wrk == "key_mousePresLeft:/info_var") {
+				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Variable")+" : "+prmDescr+" : "+real2str(prmVarIn,abs(prmPrec))+" : "+real2str(info_var_arg0val,abs(prmPrec)));
+				prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
+			}
+			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
+			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
+			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
+			else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
+			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
+			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
+			else ev_rez += ev_wrk + "\n";
+		}
+		event = ev_rez;
+
+		if(appToVl) {
+			if(prmPrec.isEVal()) newVl = ((info_var_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
+			else {
+				if((cntr-prevCntr)/f_frq > 0.2)	{ holdCntr = cntr; levUp = 0; }
+				prevCntr = cntr;
+				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
+				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
+				newVl = info_var_arg0val +	sign(appToVl) *										//direction
+															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
+															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
+															pow(10,-prmPrec);										//precision base
+			}
+			newVl = max(min,min(max,newVl));
+			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) newVl = max(prmAMin,min(prmAMax,newVl));
+			info_var_arg0val = newVl; info_var_backColor = "darkslategray"; info_var_clearCnt = 25;
+		}
+	}
+}
+else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmCloseSt.isEVal()) {
+	Ramka_en = true;
+	com_open_en = com_close_en = (!prmCom.isEVal() || !prmClose.isEVal());
+	st_open_en = st_close_en = (!prmOpenSt.isEVal() || !prmCloseSt.isEVal());
+	com_stop_en = !prmStop.isEVal();
+
+	if(com_open_en) {
+		com_open_name = !digComs.isEVal() ? digComs.parse(0,";").parse(0,"-") : tr("OPEN");
+		com_open_color = (digComs.parse(0,";").parse(1,"-") != "") ? digComs.parse(0,";").parse(1,"-") : "green";
+		com_open_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(0,";").parse(0,"-") : tr("Command")+" "+tr("OPEN");
+		com_open_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(0,";").parse(0,"-") : tr("Press for")+" "+tr("OPEN");
+		com_open_en = com_open_name.length;
+	}
+	if(com_close_en) {
+		com_close_name = !digComs.isEVal() ? digComs.parse(1,";").parse(0,"-") : tr("CLOSE");
+		com_close_color = (digComs.parse(1,";").parse(1,"-") != "") ? digComs.parse(1,";").parse(1,"-") : "red";
+		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(1,";").parse(0,"-") : tr("Command")+" "+tr("CLOSE");
+		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(1,";").parse(0,"-") : tr("Press for")+" "+tr("CLOSE");
+		com_close_en = com_close_name.length;
+  }
+  if(com_stop_en) { 
+		com_stop_name = !digComs.isEVal() ? digComs.parse(2,";").parse(0,"-") : tr("STOP");
+		com_stop_color = (digComs.parse(2,";").parse(1,"-") != "") ? digComs.parse(2,";").parse(1,"-") : "yellow";
+		com_stop_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(2,";").parse(0,"-") : tr("Command")+" "+tr("STOP");
+		com_stop_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(2,";").parse(0,"-") : tr("Press for")+" "+tr("STOP");
+		com_stop_en = com_stop_name.length;
+  }
+  if(st_open_en) {
+		st_open_text = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
+		st_open_color = (digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green";
+		st_open_tipTool = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
+		st_open_tipStatus = !digStts.isEVal() ? tr("State")+" "+digStts.parse(0,";").parse(0,"-") : tr("State")+" "+tr("OPEN");
+  }
+	if(st_close_en) {
+		st_close_text = !digStts.isEVal() ? digStts.parse(1,";").parse(0,"-") : tr("CLOSE");
+		st_close_color = (digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red";
+		st_close_tipTool = !digStts.isEVal() ? digStts.parse(1,";").parse(0,"-") : tr("CLOSE");
+		st_close_tipStatus = !digStts.isEVal() ? tr("State")+" "+digStts.parse(1,";").parse(0,"-") : tr("State")+" "+tr("CLOSE");
+	}
+
+	//Event process
+	while((ev_wrk=event.parse(0,"\n",off)).length) {
+		if(ev_wrk == "ws_BtPress:/com_open") {
+			if(!prmCom.isEVal()) prmCom = true; prmClose = false;
+			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_open_name);
+		}
+		else if(ev_wrk == "ws_BtPress:/com_close") {
+			if(!prmClose.isEVal()) prmClose = true; prmCom = false;
+			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_close_name);
+		}
+		else if(ev_wrk == "ws_BtPress:/com_stop") {
+			prmStop = true;
+			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_stop_name);
+		}
+		else ev_rez+=ev_wrk+"\n";
+	}
+	event=ev_rez;
+
+	if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? (prmOpenSt ?
+		((digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green") : "gray") :
+			(prmCloseSt ? "gray" : ((digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green"));
+
+	if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? (prmCloseSt ?
+		((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red") : "gray") :
+			(prmOpenSt ? "gray" : ((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red"));
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1418123625);
+INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
+xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
+krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
+z6LVarFotQp6vXbbm83n0nGEEEGvt16vXSkBEQEKrV3X/fLly3q9/tkPfE+w828XRx8/1qnj42MA
+sNYi4l3Dv+KttQBwL4+IlFLGWJ03xpQJ34iHeMdxmFSOF4/RYuZnmZ9Vn3XtZH+PM2ImUXeWtir+
+7Kwv5TDP3TD8KMRtTkxggmEABOJPsU51SSqlLp4/l4zlUg4/fKB5XvJRFP3edRSgg/Cn5tUmURS9
+jl4zw5ZyebJ3UvFaz168UITYKHJOT/v1g+G7d+/yPAcLxBCaUbSoPFXu5fs+RSNZwYhGgEXmVrwx
+rCgcrTmilXJZ8UiROIQ61ChTrAulFAAIIQxjheOoVsuJY54kpRgAKFgJEKA5t1TfbEIsAQA3dwfr
+wVlwVm1OiAWAdjvrdLLJpAsAnHMGAGABAAw1SBFq2SZotSVpwSQDbW4zaC0hpCiTT0hR8UjQamsy
+g4hGmVs9IaQoKCJHJMWtngBowBxsBGh/rA2DJif5Sq42asYYVIquVk7FMBIRMRUWLRoEgHgYgwIA
+6PPZyI041QiQG3I8DwEUAEyn4XI5IkTnuStEPBicKgUAwIec9zkiIsU8ytN5WpbQ9MkTIYTmHADc
+xaIzm2mAPM8PirUFQAAO8LelqSUAUKji2V/PEp4QS9zcPRmclDkkJDk8nCcJl7JAtJ8+DW54gm/f
+vr24uJjP5+WBhBDlZ/fCrYLd2gkhhJCilrS6wPO8MAyZlK61djKZlKyUMk3TyrABtwp2ayeEMMbq
+R6oLgiBgjLGvXydHR0fGXJestbZa34VbBbu1I6Ix5iFB+RvNgqDv+/5qdX1dOOf1lG3ArYLd2iml
+lNLyQe8KOOeUUoYIxph64jaSvgG3CnZov1tCdUGSJEopdnV1FcexlLJkXdetqzfgVsFu7WUG6j24
+LnBdVwhB9vf3B4MBNDbYbDaL47jBJZRlmbW2wSXU6/XKsaShwdbr9XK5bHAJcc455w0uoW6322q1
+oLHBLi8vZ7NZg0tISul5XtWuG1dCrNVqUUq1vn4JLIqiWt+FWwW7tZdf60OCcs3Oz88Xi0WDp9Ew
+/KXf/1a90DRvGjVGJ0nS4Es8n8+VUg3uA2EYNnsajeO42X3AWssYa3AJdTqdTqcDjQ22WCym02mD
+S0gI4bpug0eJchXHcclqreudbwNuFezWDjfN+F5BuWZxHH///r1qb1rrei/cgFsFu7VTSgHgIcH1
+ATzP830/iqKSFULUh6cNuFWwW3tZQg/ZhRCMMSaEuLq6qosadomXy2XVBKCBl5j4/g9NYCPjG3Cr
+YLf2u9N4XZBlWVEURAgRBEF6E0+fPkXECo7H48FgUEEhhOd5Fcyy7ODgQClVMWEYlv+Al7G3t1ff
+3Pf90WhUQWPM4eFhlmUV8+jRI8dx6rt1u90Kep43Ho/TNGWMPX78uN1uD4dDfPny18+fT6E50W63
+R6MRAPR6vW63y968+ePVq99+9lP9x3Bd9x9FY7XqUFOtUwAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start) {
+	//Parameter selection enable
+	if(allowSelLst.length)
+		for(i_el = 0; i_el < 8; i_el++) {
+			cEl = this["el"+(i_el+1)];
+			cEl.attrSet("en",1);
+			if(cEl.attr("contextMenu").search(":select$") < 0)
+				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
+		}
+}
+
+curTm = SYS.time();
+if(!trnd1_tSek) trnd1_tSek = curTm;
+selSingle = 0;
+selAll = false;
+
+//Events process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length;  ) {
+	if(ev_cur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
+	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else if(ev_cur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
+	else if(ev_cur.search("usr_single:/el") == 0)	selSingle = ev_cur.slice(14).toInt();
+	else if(ev_cur.search("usr_all:/el") == 0)	selAll = true;
+	else ev_rez += (ev_cur+"\n");
+	//SYS.messDebug("Trend","Event: "+ev_cur);
+}
+event = ev_rez;
+
+//Trend time control
+//if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
+if(trnd1_tSek < curTm) trnd1_trcPer = 0;
+else { trnd1_trcPer = 1; trnd1_tSek = 0; }
+
+//Generic
+name_arg0val = name;
+
+//Scale
+cntrAct = cntrLog = 0;
+for(i_el = 0; i_el < 8; i_el++) {
+	cEl = this["el"+(i_el+1)];
+	if(!cEl.attr("en")) continue;
+	cntrAct++;
+	if(cEl.attr("log") == true)	cntrLog++;
+}
+trnd1_sclVer = (cntrLog > cntrAct/2) ? trnd1_sclVer|0x4 : trnd1_sclVer&(~0x4);
+
+//Trends
+arh_beg = 1e30, arh_end = 0;
+for(i_el = 0; i_el < 8; i_el++) {
+	cEl = this["el"+(i_el+1)];
+	if(selAll)	cEl.attrSet("bordStyle",3);
+	if(selSingle) cEl.attrSet("bordStyle",((i_el+1)==selSingle)?3:1);
+	cTr = this["trnd1"];
+	cTrPrm = "prm"+i_el;
+	if(!cEl.attr("en")) cTr.attrSet(cTrPrm+"addr","");
+	else {
+		cTr.attrSet(cTrPrm+"addr",cEl.attr("addr"));
+		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
+		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
+		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
+		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
+		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
+		//Enable/disable of the mode''s indication in the regulators ???
+		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
+		//Archive depth calculate
+		if(cEl.attr("bordStyle") == 3) {
+			arh_tmp = cTr.attr(cTrPrm+"prop");
+			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
+			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
+		}
+		if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+		else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+	}
+}
+//Set archive scroll
+if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
+	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
+	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
+	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
+	arh_active = true;
+	if(selSingle) trnd1_tSek = arh_end;
+}
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1418050193);
+INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAaCAYAAAAHfFpPAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAABJJJREFUWIXlmU1vG0UYx38znp19qeOXxE2cNJQmqdQGekPAl4Ar6g31
+I/ReiQtSv0K/AeoNcaWoElSIcuGARICivqRuyTp27NjOxt7ZneWQNjQ0idzYSVvxkyyvVuv//veZ
+eeZ5dixu3ryZVSoV/o80Gg3U1NQU09PTIwn99OMdco6H67ooJUnTDM9z2eq0Qfl4rmb6dJmN1iat
+dodicYKcAJNYpLAMYoPralx3AhNHJGlKFEWsrj5lcWGeQqGEifs01tfxJ4poRyFymuUL50fynWUZ
+aiSFZ7iuj5SCP+/dpxQIrPBxPU2r3ULIHOXJaUoTHisrK1gUqw8fcPbds5TLk/z+6y9UZucJwzoL
+5xZpNht0ehGe9igV89y+/T2LCwvMzkzy4OFjqlVDalMq1flxWEfcunUrm5mZGYvYcRBFEUEQHIt2
+GIaoLMtIkuRYbjAOtNbH5i/LMlQSD8j7+lhu8KbS7w9otTaIB32USRJarfbr9nSi9AcDEBJjElRw
+Ko8b5F+3pxPl+fPGid2pAlJKwjBECLDWkss5aNelWJgYSlBrTalUOj7HY6LVamGM2XNutwx6rqZW
+e4LSCplJ9Kn80AEoFosj9xInQRzHtNt70303AMVSmWKpfCThWq1GGIYjmXMcB4A0TbHWjqSllEII
+8dJ5YwxSyr3XPj9otzZASIQQWJviB3k8d7jqUCoWyCmNygmUo4lNQtRtYyyUSiXKh6THowf3eVJ7
+TLkyje/7aO3gahflaDzPpddpI5VLr9shTRPm3jmHVnJfrXq4xh8rv1GZruLv0zv89+H3BCBNEsJG
+E0dmNFo9lpaW8E5PDRWAODY4qSUiI9AWpR1SY0gyiaMc8vlDFlmxMzJZlgGgHcl239CurZKvVCn5
+ijSDLLOkJsbzfALP2Vdqo6mIX9AahrF0gsYYcrnckX476Pex1uIHAVJKkiTZd6SG8hHHJGmC1u5u
+Sh1GGIb/zoDNdguTWgoTeYTIARkCSG2GlOLAvAJwXffwUX5D6Ha7L82O3QBsRRGNRoNHScYg6qCD
+AlIYtrqGQjnP+8vvodT+705TU1O8ye8Tz6nVagdXgbm5M8zNnTmScLPZJIqi0dydAPt53A1AfzvC
+JHZnFXbdVxK+cmWNy5fH3wes1zfZjgR/h3DtWmHs+vBiGWxvEkVb1NfW2E7h4w8/IPD9oUTm5ye5
+evXS2M199+1d1tY6fP1Ndezaz9kNQHV2FoDFpVffZVldVdy40R2fq2f8dW+CXi8PjNYYHcZYdoSu
+X1/H2vo4pPawuLjzHQQecMwpMArV6ulxyLwWjtZxnDBxPEBigQSJpW97SOy+n16vi8SioiZyu4Ps
+NA68No4H45kBx06W4SjFD1t3uMvPfCo/IfcwJc0UjqsYRH0uLF9ECkFiDI5S5Po9Jr/6kvXPvuDx
+0xqDQYJ0cuRdl3q7w6Xli2TWvh0BSJKUbrfDeXOeSVNmLqhiKoZ6fR2bCLSr2ertLMKptXS7HVSj
+Qfejz8me1BHVGRwHtO+RpCmFfJ5ut0OSJIi34Y8Ra+3QG6OO47y06XEQ7XabfwAcxvNTAf+MkQAA
+AABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start) {
+	apply_active = false;
+	name_active = val_min_active = val_max_active = dim_active = log_active = false;
+	prm_items = prm_value = name_value = dim_value = "", log_value = false, val_min_value = val_max_value = 0;
+	//Connect to linked widget 
+	if(pgOpenSrc.length) lWdg = this.wdgAt(pgOpenSrc, true);
+	if(lWdg) {
+		//Get allowed graphic''s sources for selection
+		tmplLst = "";
+		if(lWdg.attrPresent("allowSelLst")) tmplLst = lWdg.attr("allowSelLst");
+		else if(lWdg.ownerWdg(true).attrPresent("allowSelLst")) tmplLst = lWdg.ownerWdg(true).attr("allowSelLst");
+		for(off = 0; (pIt=tmplLst.parse(0,"\n",off)).length; )
+			// Archives list template process
+			if(pIt == "<varhs>") {
+				aLs = SYS.Archive.nodeList("va_");
+				for(i_a = 0; i_a < aLs.length; i_a++) {
+					itNm = SYS.Archive[aLs[i_a]].cfg("NAME");
+					if(!itNm.length) itNm = SYS.Archive[aLs[i_a]].cfg("Source");
+					prm_items += tr("Archive")+" ''"+itNm+"'' (/Archive/"+aLs[i_a]+")\n";
+				}
+			}
+			// Direct items list process by form "{path}:{name}:{min}:{max}:{dim}"
+			else if(pIt.search("/(sub_|)Archive") >= 0) {
+				if(!(itObj=SYS.nodeAt(pIt.parse(0,":")))) continue;
+				prm_items += tr("Archive")+" ''"+pIt.parse(1,":")+"'' ("+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
+			}
+			else {
+				pathAbs = pIt.search("/(sub_|)DAQ") >= 0;
+				itObj = pathAbs ? SYS.nodeAt(pIt.parse(0,":")) : SYS.DAQ.nodeAt(pIt.parse(0,":"));
+				if(!itObj) continue;
+				itNm = pIt.parse(1,":");
+				if(!itNm.length && typeof(itObj).search("TCntrNode:TValue[:$]") == 0) itNm = itObj.NAME.get();
+				prm_items += "DAQ ''"+itNm+(pathAbs?"'' (":"'' (/DAQ")+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
+			}
+		//Current value process
+		itAddr = lWdg.link("addr").match("(prm|arh):([^ ]+) \\(\\+\\)");
+		if(itAddr.length == 3) {
+			//Get Name
+			if(lWdg.link("name").search("prm:[^ ]+ \\(\\+\\)") >= 0) name_value = lWdg.attr("name");
+			else if((itTmp=lWdg.link("name").match("val:(.+$)")).length == 2) name_value = itTmp[1];
+			else name_value = tr("Empty");
+			//Get Min and Max
+			if(lWdg.link("min").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_min_value = lWdg.attr("min");
+			else if((itTmp=lWdg.link("min").match("val:(.+$)")).length == 2) val_min_value = itTmp[1];
+			if(lWdg.link("max").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_max_value = lWdg.attr("max");
+			else if((itTmp=lWdg.link("max").match("val:(.+$)")).length == 2) val_max_value = itTmp[1];
+			//Logarithmic scale
+			if(lWdg.link("log").search("prm:[^ ]+ \\(\\+\\)") >= 0) log_value = lWdg.attr("log");
+			else if((itTmp=lWdg.link("log").match("val:(.+$)")).length == 2) log_value = itTmp[1];
+			//Dimension
+			if(lWdg.link("ed").search("prm:[^ ]+ \\(\\+\\)") >= 0) dim_value = lWdg.attr("ed");
+			else if((itTmp=lWdg.link("ed").match("val:(.+$)")).length == 2) dim_value = itTmp[1];
+			//Current prm name
+			if(itAddr[1] == "prm")	prm_value = "DAQ ''"+name_value+"'' (/DAQ"+(itAddr[2].replace(new RegExp("/var$"),"")+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
+			else if(itAddr[1] == "arh") prm_value = tr("Archive")+" ''"+name_value+"'' (/Archive/va_"+(itAddr[2]+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
+			if(prm_value.length) name_active = val_min_active = val_max_active = log_active = dim_active = true;
+		}
+
+		//Load current properties
+		color_value = lWdg.link("color");
+	}
+}
+
+colorBox_backColor = color_value;
+
+//Events for commands process
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_CombChange:/prm") {	//Parametr selected
+		//Set properties
+		itTmp = prm_value.match(".+''(.*)'' \\((.+?)\\)");
+		if(itTmp.length == 3) {
+			if(itTmp[1].length)	name_value = itTmp[1];
+			off1 = 0;
+			itVal = itTmp[2].parse(0,":",off1);	//Path
+			//Connect to source and get main values for parameter
+			if(itVal.parsePath(0) == "DAQ" && typeof(itObj=SYS.nodeAt(itVal)).search("TCntrNode:TValue[:$]") == 0) {
+				val_min_value = itObj.min.get();
+				val_max_value = itObj.max.get();
+				log_value = itObj.log.get();
+				dim_value = itObj.ed.get();
+			}
+			
+			//Set direct values
+			if((itVal=itTmp[2].parse(0,":",off1)).length) val_min_value = itVal;
+			if((itVal=itTmp[2].parse(0,":",off1)).length) val_max_value = itVal;
+			if((itVal=itTmp[2].parse(0,":",off1)).length) dim_value = itVal;
+		}
+		apply_active = name_active = val_min_active = val_max_active = log_active = dim_active = true;
+	}
+	else if(evCur.search("ws_LnAccept:") == 0 || evCur == "ws_ChkChange:/log")	apply_active = true;
+	else if(evCur == "ws_BtPress:/apply") {
+		//Link addr set
+		itTmp = prm_value.match(".+\\((.+?)[:\\)]");
+		if(itTmp.length != 2) lWdg.linkSet("addr","");
+		else {
+			off1 = 0;
+			firstEl = itTmp[1].parsePath(0,off1);
+			if(firstEl == "Archive") {
+				lWdg.linkSet("addr","",true);	//Clear all othet values
+				lWdg.linkSet("addr","arh:"+itTmp[1].slice(off1+4));
+				lWdg.linkSet("name","val:"+name_value);
+				lWdg.linkSet("min","val:"+val_min_value);
+				lWdg.linkSet("max","val:"+val_max_value);
+				lWdg.linkSet("log","val:"+log_value);
+				lWdg.linkSet("ed","val:"+dim_value);
+			}
+			else if(firstEl == "DAQ") {
+				itObj = SYS.nodeAt(itTmp[1]);
+				isPrm = (typeof(itObj).search("TCntrNode:TValue[:$]") == 0);
+				lWdg.linkSet("addr", "", true);	//Clear all othet values
+				lWdg.linkSet("addr", "prm:"+itTmp[1].slice(off1).replace("/prm_","/"), isPrm);
+				if(!isPrm || name_value != itObj.NAME.get())		lWdg.linkSet("name", "val:"+name_value);
+				if(!isPrm || val_min_value != itObj.min.get())	lWdg.linkSet("min","val:"+val_min_value);
+				if(!isPrm || val_max_value != itObj.max.get())	lWdg.linkSet("max","val:"+val_max_value);
+				if(!isPrm || log_value != itObj.log.get())			lWdg.linkSet("log","val:"+log_value);
+				if(!isPrm || dim_value != itObj.ed.get())			lWdg.linkSet("ed","val:"+dim_value);
+			}
+		}
+		lWdg.linkSet("color", color_value);
+		lWdg.attrSet("event", "usr_set");
+
+		this.attrSet("pgOpen", false);
+	}
+	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
+	else evRez += evCur+"\n";
+}
+event = evRez;','','',500,'name;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1418047971);
+INSERT INTO "wlb_Main" VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
+aklEQVRYhe2WTU8TQRiA35nZbne7pdsWaGlrAVtEtBfxaGL8ZVz8DSZcjH+EkzEejHIhMWgQkK8G
+ast0l/2e2V0PTZqlxOBt2GSf45P3ME/mI4N2dj7peoVSms/nAUCW5UJBOzs7brcfA8BgcFUq6Yqi
+AMBUjkZ/FEXVtGJSUjoiRCqV9NvyGmOs6+WkHI9pHMeVSjUpDWMMADOTpmkEQbCwsAgA+/t7h4c/
+4Da5nCRRSoMgtG0LIUQIQQgVChqlVJYLAGBZN74fyLIMAFNp25bjeJZlJ6Xj2IRIruslpes6CGHP
+85PS89w4joOAzUiE0Myk7/ucszCMAMA0TcYCuIPUarUnuUdHv6rV+XK5AgCEoPX1Huf8/PxUUZSl
+peZUTiaLxblarT4jVVVtNFr3ypOTY4xxu72SlBcXZ4yx1dVOUvb7F45jr62tA4Bljfv933cD0Pb2
++3xenbGGca3r1QclKR0ChADAOQ/DcHLgOedoa2sLY3y37KGhqtqb15sfP+/3nj1hjF0NBtUyzsl1
+SfTC/pcoil3XujGGplGXcpJhDGMezy9WUhPgOFb/km1sPOdhFDC31Zy8h4PUBGjanMvpi94r2/YJ
+kQghjLHR6DI1AbZtrcjdg4OfAGgqTZOm4PpO0LRis/Xo3Ye3tUZjebnbbK72epudztPU7IDnuafn
+J932Szq6VPI6AFiWMRym5wiNx9ff93abtfq3r1+mEmOcmgAAmHzJkkRRlJo78C+yANFkAaLJAkST
+BYgmCxBNFiCaLEA0WYBosgDRZAGiyQJEkwWIJgsQjUQICcNQ9DLuR1HUKIpmJCHkL1SdQQdv94Wv
+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+calcCnt++;
+
+if(f_start)
+{
+	play_en = demoPlayProc.length;
+	//> Checking to signal object''s presenting
+	soLst = this.nodeList("pg_");
+	for(i = 0; i < soLst.length; i++)
+	{
+		if(!(curSO=soLst[i].slice(3).toInt()))	continue;
+		soW = this["wdg_so"+curSO];
+		soW.attrSet("name",this["pg_"+curSO].attr("name"));
+		soDscr = this["pg_"+curSO].attr("dscr");
+		if(soDscr.length) soW.attrSet("tipTool",soDscr);
+		soW.attrSet("en",1);
+	}
+	//> Check for disable all SO and expand for need
+	var firstRow = 0; var secondRow = 0;
+	for(i = 0; i < 16; i++)
+		if(this["wdg_so"+(i+1)].attr("en"))
+		{ if(i < 8)	firstRow++;	else secondRow++; }
+	if(firstRow <= 1 && !secondRow)
+	{
+		soOff = this["wdg_so1"].attr("geomY");
+		soSize = this["pgCont"].attr("geomY")-soOff;
+		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
+	}
+	else if(!secondRow)
+	{
+		soOff = this["wdg_so9"].attr("geomY");
+		soSize = this["pgCont"].attr("geomY")-soOff;
+		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
+		if(firstRow < 8)
+		{
+			soOff = this["wdg_so1"].attr("geomX");
+			soWdth = this["wdg_so8"].attr("geomX")+this["wdg_so8"].attr("geomW");
+			soSize = soWdth/firstRow;
+			for(i = 0; i < 7; i++)
+			{
+				if(!this["wdg_so"+(i+1)].attr("en"))	continue;
+				this["wdg_so"+(i+1)].attrSet("geomX",soOff).attrSet("geomW",soSize-3);
+				soOff += soSize;
+			}
+		}
+	}
+
+	//> Result graphics present check
+	go_rg_active = this.nodeList("pg_","/pg_rg/pg_rg").length;
+}
+
+if(pgCont_pgOpenSrc != lastView)
+{
+  //> Checking for SO selection change
+  curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
+  lastSO = lastView.parsePath(2).slice(3);
+  if( curSO != lastSO )
+  {
+    if( lastSO.length ) this["wdg_so"+lastSO].attrSet("color","#555555");
+    if( curSO.length )
+    {
+      this["wdg_so"+curSO].attrSet("color","#777799");
+      //>> Check for view modes active
+      go_mn_active = this["pg_"+curSO]["pg_mn"].nodeList("pg_").length;
+      go_ggraph_active = this["pg_"+curSO]["pg_ggraph"].nodeList("pg_").length;
+      go_gcadr_active = this["pg_"+curSO]["pg_gcadr"].nodeList("pg_").length;
+      go_gview_active = this["pg_"+curSO]["pg_gview"].nodeList("pg_").length;
+      go_doc_active = this["pg_"+curSO]["pg_doc"].nodeList("pg_").length;
+    }
+  }
+  //> Checking for view selection change
+  curMode = pgCont_pgOpenSrc.parsePath(3).slice(3);
+  lastMode = lastView.parsePath(3).slice(3);
+  if( curMode != lastMode )
+  {
+    if( lastMode.length ) this["wdg_go_"+lastMode].attrSet("color","");
+    if( curMode.length ) this["wdg_go_"+curMode].attrSet("color","#777799");
+  }
+
+  //> Pages counter display
+  if( pgCont_pgOpenSrc.length && curMode.length )
+  {
+    elLst = this["pg_"+curSO]["pg_"+curMode].nodeList("pg_");
+    curEl = pgCont_pgOpenSrc.parsePath(4);
+    for( i_m = 0; i_m < elLst.length; i_m++ ) if( elLst[i_m] == curEl ) break;
+    pgCntr_text = ""+(i_m+1)+"\n("+elLst.length+")";
+    prev_active = next_active = (elLst.length>1);
+  }
+  else { pgCntr_text = "-"; prev_active = next_active = false; }
+
+  lastView = pgCont_pgOpenSrc;
+}
+
+//> Cvitation button''s
+cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
+cvt_light_active = alarmSt&0x10000; cvt_alarm_active = alarmSt&0x20000; cvt_sound_active = alarmSt&0x40000;
+
+//> One second''s calls
+if( (calcCnt%f_frq) == 0 )
+{
+  //> Alarms display
+  soLst = this.nodeList("pg_");
+  for( i = 0; i < soLst.length; i++ )
+  {
+    curSO = soLst[i].slice(3);
+    aSt = this["pg_"+curSO].attr("alarmSt");
+    aLev = aSt&0xFF;
+    if( aLev && aSt&0x100 )
+    {  
+      if( aLev > 30 ) wColor = "#ff0000";
+      else wColor = "#ffff00";
+      curColor = this["wdg_so"+curSO].attr("colorText");
+      this["wdg_so"+curSO].attrSet("colorText",(aSt&0x10000 && curColor==wColor)?"black":wColor);
+    }
+    else this["wdg_so"+curSO].attrSet("colorText","#00ff00");
+  }
+}
+
+//> Events process
+ev_rez = "";
+off = 0;
+while(true)
+{
+  sval = event.parse(0,"\n",off);
+  if( sval == "" ) break;
+  else if( sval == "ws_BtPress:/cvt_light" ) alarmSt = 0x1000001;
+  else if( sval == "ws_BtPress:/cvt_alarm" ) alarmSt = 0x1000002;
+  else if( sval == "ws_BtPress:/cvt_sound" ) alarmSt = 0x1000004;
+  else ev_rez+=sval+"\n";
+  //SYS.messDebug("MainPg","Event: "+sval);
+}
+event=ev_rez;
+
+//> Demo play process
+if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
+if(play_value)
+{
+	play_img = "stop";
+	if(stepTm > 0) stepTm -= 1/f_frq;
+	else
+	{
+		var args = new Object();
+		args.this = this;
+		args.stepTm = stepTm;
+		args.stepCur = stepCur;
+		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,demoPlayProc);
+		stepTm = args.stepTm;
+		stepCur = args.stepCur;
+	}
+}','JavaLikeCalc.JavaScript
+calcCnt++;
+
+if( f_start )
+{
+	play_en = demoPlayProc.length;
+  //> Checking to signal object''s presenting
+  soLst = this.nodeList("pg_");
+  for( i = 0; i < soLst.length; i++ )
+  {
+    if( !(curSO=soLst[i].slice(3).toInt()) ) continue;
+    soW = this["wdg_so"+curSO];
+    soW.attrSet("name",this["pg_"+curSO].attr("name"));
+    soDscr = this["pg_"+curSO].attr("dscr");
+    if( soDscr.length ) soW.attrSet("tipTool",soDscr);
+    soW.attrSet("en",1);
+  }
+	//> Check for disable all SO and expand for need
+	var firstRow = 0; var secondRow = 0;
+	for(i = 0; i < 16; i++)
+		if(this["wdg_so"+(i+1)].attr("en"))
+		{ if(i < 8)	firstRow++;	else secondRow++; }
+	if(firstRow <= 1 && !secondRow)
+	{
+		soOff = this["wdg_so1"].attr("geomY");
+		soSize = this["pgCont"].attr("geomY")-soOff;
+		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
+	}
+	else if(!secondRow)
+	{
+		soOff = this["wdg_so9"].attr("geomY");
+		soSize = this["pgCont"].attr("geomY")-soOff;
+		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
+		if(firstRow < 8)
+		{
+			soOff = this["wdg_so1"].attr("geomX");
+			soWdth = this["wdg_so8"].attr("geomX")+this["wdg_so8"].attr("geomW");
+			soSize = soWdth/firstRow;
+			for(i = 0; i < 7; i++)
+			{
+				if(!this["wdg_so"+(i+1)].attr("en"))	continue;
+				this["wdg_so"+(i+1)].attrSet("geomX",soOff).attrSet("geomW",soSize-3);
+				soOff += soSize;
+			}
+		}
+	}
+
+  //> Result graphics present check
+  go_rg_active = this.nodeList("pg_","/pg_rg/pg_rg").length;
+}
+
+if( pgCont_pgOpenSrc != lastView )
+{
+  //> Checking for SO selection change
+  curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
+  lastSO = lastView.parsePath(2).slice(3);
+  if( curSO != lastSO )
+  {
+    if( lastSO.length ) this["wdg_so"+lastSO].attrSet("color","#555555");
+    if( curSO.length )
+    {
+      this["wdg_so"+curSO].attrSet("color","#777799");
+      //>> Check for view modes active
+      go_mn_active = this["pg_"+curSO]["pg_mn"].nodeList("pg_").length;
+      go_ggraph_active = this["pg_"+curSO]["pg_ggraph"].nodeList("pg_").length;
+      go_gcadr_active = this["pg_"+curSO]["pg_gcadr"].nodeList("pg_").length;
+      go_gview_active = this["pg_"+curSO]["pg_gview"].nodeList("pg_").length;
+      go_doc_active = this["pg_"+curSO]["pg_doc"].nodeList("pg_").length;
+    }
+  }
+  //> Checking for view selection change
+  curMode = pgCont_pgOpenSrc.parsePath(3).slice(3);
+  lastMode = lastView.parsePath(3).slice(3);
+  if( curMode != lastMode )
+  {
+    if( lastMode.length ) this["wdg_go_"+lastMode].attrSet("color","");
+    if( curMode.length ) this["wdg_go_"+curMode].attrSet("color","#777799");
+  }
+
+  //> Pages counter display
+  if( pgCont_pgOpenSrc.length && curMode.length )
+  {
+    elLst = this["pg_"+curSO]["pg_"+curMode].nodeList("pg_");
+    curEl = pgCont_pgOpenSrc.parsePath(4);
+    for( i_m = 0; i_m < elLst.length; i_m++ ) if( elLst[i_m] == curEl ) break;
+    pgCntr_text = ""+(i_m+1)+"\n("+elLst.length+")";
+    prev_active = next_active = (elLst.length>1);
+  }
+  else { pgCntr_text = "-"; prev_active = next_active = false; }
+
+  lastView = pgCont_pgOpenSrc;
+}
+
+//> Cvitation button''s
+cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
+cvt_light_active = alarmSt&0x10000; cvt_alarm_active = alarmSt&0x20000; cvt_sound_active = alarmSt&0x40000;
+
+//> One second''s calls
+if( (calcCnt%f_frq) == 0 )
+{
+  //> Alarms display
+  soLst = this.nodeList("pg_");
+  for( i = 0; i < soLst.length; i++ )
+  {
+    curSO = soLst[i].slice(3);
+    aSt = this["pg_"+curSO].attr("alarmSt");
+    aLev = aSt&0xFF;
+    if( aLev && aSt&0x100 )
+    {  
+      if( aLev > 30 ) wColor = "#ff0000";
+      else wColor = "#ffff00";
+      curColor = this["wdg_so"+curSO].attr("colorText");
+      this["wdg_so"+curSO].attrSet("colorText",(aSt&0x10000 && curColor==wColor)?"black":wColor);
+    }
+    else this["wdg_so"+curSO].attrSet("colorText","#00ff00");
+  }
+}
+
+//> Events process
+ev_rez = "";
+off = 0;
+while(true)
+{
+  sval = event.parse(0,"\n",off);
+//  messPut("MainPg",1,"Event: "+sval);
+  if( sval == "" ) break;
+  else if( sval == "ws_BtPress:/cvt_light" ) alarmSt = 0x1000001;
+  else if( sval == "ws_BtPress:/cvt_alarm" ) alarmSt = 0x1000002;
+  else if( sval == "ws_BtPress:/cvt_sound" ) alarmSt = 0x1000004;
+  else ev_rez+=sval+"\n";
+}
+event=ev_rez;
+
+//> Demo play process
+if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
+if(play_value)
+{
+	play_img = "stop";
+	if(stepTm > 0) stepTm -= 1/f_frq;
+	else
+	{
+		var args = new Object();
+		args.this = this;
+		args.stepTm = stepTm;
+		args.stepCur = stepCur;
+		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,demoPlayProc);
+		stepTm = args.stepTm;
+		stepCur = args.stepCur;
+	}
+}','JavaLikeCalc.JavaScript
+calcCnt++;
+
+if(f_start)
+{
+	play_en = demoPlayProc.length;
+	//> Checking to signal object''s presenting
+	soLst = this.nodeList("pg_");
+	for(i = 0; i < soLst.length; i++)
+	{
+		if(!(curSO=soLst[i].slice(3).toInt()))	continue;
+		soW = this["wdg_so"+curSO];
+		soW.attrSet("name",this["pg_"+curSO].attr("name"));
+		soDscr = this["pg_"+curSO].attr("dscr");
+		if(soDscr.length) soW.attrSet("tipTool",soDscr);
+		soW.attrSet("en",1);
+	}
+	//> Check for disable all SO and expand for need
+	var firstRow = 0; var secondRow = 0;
+	for(i = 0; i < 16; i++)
+		if(this["wdg_so"+(i+1)].attr("en"))
+		{ if(i < 8)	firstRow++;	else secondRow++; }
+	if(firstRow <= 1 && !secondRow)
+	{
+		soOff = this["wdg_so1"].attr("geomY");
+		soSize = this["pgCont"].attr("geomY")-soOff;
+		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
+	}
+	else if(!secondRow)
+	{
+		soOff = this["wdg_so9"].attr("geomY");
+		soSize = this["pgCont"].attr("geomY")-soOff;
+		this["pgCont"].attrSet("geomY",soOff).attrSet("geomH",this["pgCont"].attr("geomH")+soSize);
+		if(firstRow < 8)
+		{
+			soOff = this["wdg_so1"].attr("geomX");
+			soWdth = this["wdg_so8"].attr("geomX")+this["wdg_so8"].attr("geomW");
+			soSize = soWdth/firstRow;
+			for(i = 0; i < 7; i++)
+			{
+				if(!this["wdg_so"+(i+1)].attr("en"))	continue;
+				this["wdg_so"+(i+1)].attrSet("geomX",soOff).attrSet("geomW",soSize-3);
+				soOff += soSize;
+			}
+		}
+	}
+
+	//> Result graphics present check
+	go_rg_active = this.nodeList("pg_","/pg_rg/pg_rg").length;
+}
+
+if(pgCont_pgOpenSrc != lastView)
+{
+  //> Checking for SO selection change
+  curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
+  lastSO = lastView.parsePath(2).slice(3);
+  if( curSO != lastSO )
+  {
+    if( lastSO.length ) this["wdg_so"+lastSO].attrSet("color","#555555");
+    if( curSO.length )
+    {
+      this["wdg_so"+curSO].attrSet("color","#777799");
+      //>> Check for view modes active
+      go_mn_active = this["pg_"+curSO]["pg_mn"].nodeList("pg_").length;
+      go_ggraph_active = this["pg_"+curSO]["pg_ggraph"].nodeList("pg_").length;
+      go_gcadr_active = this["pg_"+curSO]["pg_gcadr"].nodeList("pg_").length;
+      go_gview_active = this["pg_"+curSO]["pg_gview"].nodeList("pg_").length;
+      go_doc_active = this["pg_"+curSO]["pg_doc"].nodeList("pg_").length;
+    }
+  }
+  //> Checking for view selection change
+  curMode = pgCont_pgOpenSrc.parsePath(3).slice(3);
+  lastMode = lastView.parsePath(3).slice(3);
+  if( curMode != lastMode )
+  {
+    if( lastMode.length ) this["wdg_go_"+lastMode].attrSet("color","");
+    if( curMode.length ) this["wdg_go_"+curMode].attrSet("color","#777799");
+  }
+
+  //> Pages counter display
+  if( pgCont_pgOpenSrc.length && curMode.length )
+  {
+    elLst = this["pg_"+curSO]["pg_"+curMode].nodeList("pg_");
+    curEl = pgCont_pgOpenSrc.parsePath(4);
+    for( i_m = 0; i_m < elLst.length; i_m++ ) if( elLst[i_m] == curEl ) break;
+    pgCntr_text = ""+(i_m+1)+"\n("+elLst.length+")";
+    prev_active = next_active = (elLst.length>1);
+  }
+  else { pgCntr_text = "-"; prev_active = next_active = false; }
+
+  lastView = pgCont_pgOpenSrc;
+}
+
+//> Cvitation button''s
+cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
+cvt_light_active = alarmSt&0x10000; cvt_alarm_active = alarmSt&0x20000; cvt_sound_active = alarmSt&0x40000;
+
+//> One second''s calls
+if( (calcCnt%f_frq) == 0 )
+{
+  //> Alarms display
+  soLst = this.nodeList("pg_");
+  for( i = 0; i < soLst.length; i++ )
+  {
+    curSO = soLst[i].slice(3);
+    aSt = this["pg_"+curSO].attr("alarmSt");
+    aLev = aSt&0xFF;
+    if( aLev && aSt&0x100 )
+    {  
+      if( aLev > 30 ) wColor = "#ff0000";
+      else wColor = "#ffff00";
+      curColor = this["wdg_so"+curSO].attr("colorText");
+      this["wdg_so"+curSO].attrSet("colorText",(aSt&0x10000 && curColor==wColor)?"black":wColor);
+    }
+    else this["wdg_so"+curSO].attrSet("colorText","#00ff00");
+  }
+}
+
+//> Events process
+ev_rez = "";
+off = 0;
+while(true)
+{
+  sval = event.parse(0,"\n",off);
+  if( sval == "" ) break;
+  else if( sval == "ws_BtPress:/cvt_light" ) alarmSt = 0x1000001;
+  else if( sval == "ws_BtPress:/cvt_alarm" ) alarmSt = 0x1000002;
+  else if( sval == "ws_BtPress:/cvt_sound" ) alarmSt = 0x1000004;
+  else ev_rez+=sval+"\n";
+  //SYS.messDebug("MainPg","Event: "+sval);
+}
+event=ev_rez;
+
+//> Demo play process
+if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
+if(play_value)
+{
+	play_img = "stop";
+	if(stepTm > 0) stepTm -= 1/f_frq;
+	else
+	{
+		var args = new Object();
+		args.this = this;
+		args.stepTm = stepTm;
+		args.stepCur = stepCur;
+		SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,demoPlayProc);
+		stepTm = args.stepTm;
+		stepCur = args.stepCur;
+	}
+}',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1378142495);
+INSERT INTO "wlb_Main" VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
+xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
+XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
+d+58pQDG4/Ha2lruPG+I5A6wKEUgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN0Ug
+N0UgN0UgN0UgN0UgN0UgN0UgN0UgN0UgN6qq+/v76+vruZO8Nm3bqqo2TXP7y9s2NzpCYXPTy9r/
+3B97W1fV5matZcn6KpqmEQD1lZorlPdFP1RUcJ84VqSSQjakUIZSj2sZCRuSZEMZCCvmzg8AeuJo
+9VEl5yV1yU1cv93LSPSKooZrXPegG34x9FteBtJNu2TpHSc+xiubWAZSXagQoZe0u9eFWfA/+n67
+10saZsH/4DkkXf5NEAAgZCgckA1lRUAA0KvaP+oRkXyScyJnhWdYXajsuVXnKzkjUKSYeflx9AnF
+vaiXFQSIelKHWUiHyT/wdmD9kz7MQn29BqGran9afBoxgfvU+Yc+hdMh4B97PD7+IB5EAH7LA+im
+HW+x/6mPB1FWJO7Fdtq+86gnc3IT/5t/EtsLa785LenxfziJlzc1B2w+byjsvu/suQGor9X6gcZ5
+7Lf75mbDAf2Wj3/ERaoscQfcdRdmwT/y7oYDQGU9rttv2+piVV+rU5e677rmZrNglSUKyDmxZ2aH
+xiEBcEhrLfXJDk1XNc6jvTAsmn+ZAqlPUJDE0QUqgEIQrGh/GZUksfB/eIk9EJ4EN3GpS2EW9GO1
+uUFQX625Qv/Qu8+cvCfx14UaAMsVeBpSSBTG36OMJIXU3muri1W30VlrR5eR+NspFkBC3HuZ7+hY
+BBB+CS9H5hHzt1BEVavJ5MZbmCkHOzs7fwOvrhb+aFJiZAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+text_arg0val = name;
+text_arg1val = var;
+trnd_prm0addr = addr;
+bordColor = (focus&&bordColor!="white")?"white":"gray";','JavaLikeCalc.JavaScript
+text_arg0val = name;
+text_arg1val = var;
+trnd_prm0addr = addr;
+bordColor = (focus&&bordColor!="white")?"white":"gray";','',1000,'name;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;','');
+INSERT INTO "wlb_Main" VALUES('grpCadr','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','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+curTm = Special.FLibSYS.tmTime();
+if( !trnd1_tSek ) trnd1_tSek = curTm;
+//- Events process -
+ev_cur = ev_rez = "";
+off=0;
+while(true)
+{
+  ev_cur=Special.FLibSYS.strParse(event,0,"\n",off);
+  if( ev_cur == "" ) break;
+  //Special.FLibSYS.messPut("Trend",0,"Event: "+ev_cur);
+  if( ev_cur == "key_presSC#3b:/trnd1")  trnd1_tSek-=trnd1_tSize/2;
+  else if( ev_cur == "key_presSC#3c:/trnd1")  trnd1_tSek+=trnd1_tSize/2;
+  else ev_rez += (ev_cur+"\n");
+}
+event=ev_rez;
+
+//- Trend time control -
+if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
+if( trnd1_tSek < curTm ) trnd1_trcPer=0;
+else { trnd1_trcPer=1; trnd1_tSek=0;  }
+
+//- Generic -
+name_arg0val = grpName;
+
+//- Trend 1 -
+if( el1_prmAddr == EVAL_STR ) { el1_en = false; trnd1_prm0addr = ""; }
+else
+{
+  el1_en = true;
+  trnd1_prm0addr = el1_prmAddr; trnd1_prm0bordL = el1_min; trnd1_prm0bordU = el1_max; trnd1_prm0color = el1_bordColor;
+}
+
+//- Trend 2 -
+if( el2_prmAddr == EVAL_STR ) { el2_en = false; trnd1_prm1addr = ""; }
+else
+{
+  el2_en = true;
+  trnd1_prm1addr = el2_prmAddr; trnd1_prm1bordL = el2_min; trnd1_prm1bordU = el2_max; trnd1_prm1color = el2_bordColor;
+}
+
+//- Trend 3 -
+if( el3_prmAddr == EVAL_STR ) { el3_en = false; trnd1_prm2addr = ""; }
+else
+{
+  el3_en = true;
+  trnd1_prm2addr = el3_prmAddr; trnd1_prm2bordL = el3_min; trnd1_prm2bordU = el3_max; trnd1_prm2color = el3_bordColor;
+}
+
+//- Trend 4 -
+if( el4_prmAddr == EVAL_STR ) { el4_en = false; trnd1_prm3addr = ""; }
+else
+{
+  el4_en = true;
+  trnd1_prm3addr = el4_prmAddr; trnd1_prm3bordL = el4_min; trnd1_prm3bordU = el4_max; trnd1_prm3color = el4_bordColor;
+}
+
+//- Trend 5 -
+if( el5_prmAddr == EVAL_STR ) { el5_en = false; trnd1_prm4addr = ""; }
+else
+{
+  el5_en = true;
+  trnd1_prm4addr = el5_prmAddr; trnd1_prm4bordL = el5_min; trnd1_prm4bordU = el5_max; trnd1_prm4color = el5_bordColor;
+}
+
+//- Trend 6 -
+if( el6_prmAddr == EVAL_STR ) { el6_en = false; trnd1_prm5addr = ""; }
+else
+{
+  el6_en = true;
+  trnd1_prm5addr = el6_prmAddr; trnd1_prm5bordL = el6_min; trnd1_prm5bordU = el6_max; trnd1_prm5color = el6_bordColor;
+}
+
+//- Trend 7 -
+if( el7_prmAddr == EVAL_STR ) { el7_en = false; trnd1_prm6addr = ""; }
+else
+{
+  el7_en = true;
+  trnd1_prm6addr = el7_prmAddr; trnd1_prm6bordL = el7_min; trnd1_prm6bordU = el7_max; trnd1_prm6color = el7_bordColor;
+}
+
+//- Trend 8 -
+if( el8_prmAddr == EVAL_STR ) { el8_en = false; trnd1_prm7addr = ""; }
+else
+{
+  el8_en = true;
+  trnd1_prm7addr = el8_prmAddr; trnd1_prm7bordL = el8_min; trnd1_prm7bordU = el8_max; trnd1_prm7color = el8_bordColor;
+}','JavaLikeCalc.JavaScript
+curTm = Special.FLibSYS.tmTime();
+if( !trnd1_tSek ) trnd1_tSek = curTm;
+//- Events process -
+ev_cur = ev_rez = "";
+off=0;
+while(true)
+{
+  ev_cur=Special.FLibSYS.strParse(event,0,"\n",off);
+  if( ev_cur == "" ) break;
+  //Special.FLibSYS.messPut("Trend",0,"Event: "+ev_cur);
+  if( ev_cur == "key_presSC#3b:/trnd1")  trnd1_tSek-=trnd1_tSize/2;
+  else if( ev_cur == "key_presSC#3c:/trnd1")  trnd1_tSek+=trnd1_tSize/2;
+  else ev_rez += (ev_cur+"\n");
+}
+event=ev_rez;
+
+//- Trend time control -
+if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
+if( trnd1_tSek < curTm ) trnd1_trcPer=0;
+else { trnd1_trcPer=1; trnd1_tSek=0;  }
+
+//- Generic -
+name_arg0val = grpName;
+
+//- Trend 1 -
+if( el1_prmAddr == EVAL_STR ) { el1_en = false; trnd1_prm0addr = ""; }
+else
+{
+  el1_en = true;
+  trnd1_prm0addr = el1_prmAddr; trnd1_prm0bordL = el1_min; trnd1_prm0bordU = el1_max; trnd1_prm0color = el1_bordColor;
+}
+
+//- Trend 2 -
+if( el2_prmAddr == EVAL_STR ) { el2_en = false; trnd1_prm1addr = ""; }
+else
+{
+  el2_en = true;
+  trnd1_prm1addr = el2_prmAddr; trnd1_prm1bordL = el2_min; trnd1_prm1bordU = el2_max; trnd1_prm1color = el2_bordColor;
+}
+
+//- Trend 3 -
+if( el3_prmAddr == EVAL_STR ) { el3_en = false; trnd1_prm2addr = ""; }
+else
+{
+  el3_en = true;
+  trnd1_prm2addr = el3_prmAddr; trnd1_prm2bordL = el3_min; trnd1_prm2bordU = el3_max; trnd1_prm2color = el3_bordColor;
+}
+
+//- Trend 4 -
+if( el4_prmAddr == EVAL_STR ) { el4_en = false; trnd1_prm3addr = ""; }
+else
+{
+  el4_en = true;
+  trnd1_prm3addr = el4_prmAddr; trnd1_prm3bordL = el4_min; trnd1_prm3bordU = el4_max; trnd1_prm3color = el4_bordColor;
+}
+
+//- Trend 5 -
+if( el5_prmAddr == EVAL_STR ) { el5_en = false; trnd1_prm4addr = ""; }
+else
+{
+  el5_en = true;
+  trnd1_prm4addr = el5_prmAddr; trnd1_prm4bordL = el5_min; trnd1_prm4bordU = el5_max; trnd1_prm4color = el5_bordColor;
+}
+
+//- Trend 6 -
+if( el6_prmAddr == EVAL_STR ) { el6_en = false; trnd1_prm5addr = ""; }
+else
+{
+  el6_en = true;
+  trnd1_prm5addr = el6_prmAddr; trnd1_prm5bordL = el6_min; trnd1_prm5bordU = el6_max; trnd1_prm5color = el6_bordColor;
+}
+
+//- Trend 7 -
+if( el7_prmAddr == EVAL_STR ) { el7_en = false; trnd1_prm6addr = ""; }
+else
+{
+  el7_en = true;
+  trnd1_prm6addr = el7_prmAddr; trnd1_prm6bordL = el7_min; trnd1_prm6bordU = el7_max; trnd1_prm6color = el7_bordColor;
+}
+
+//- Trend 8 -
+if( el8_prmAddr == EVAL_STR ) { el8_en = false; trnd1_prm7addr = ""; }
+else
+{
+  el8_en = true;
+  trnd1_prm7addr = el8_prmAddr; trnd1_prm7bordL = el8_min; trnd1_prm7bordU = el8_max; trnd1_prm7color = el8_bordColor;
+}','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;','');
+INSERT INTO "wlb_Main" VALUES('anShow','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','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+name_text = pName.isEVal() ? tr("No data") : pName;
+val_arg0val = pVal;
+val_font = "Arial 24 1 0 0 0";
+if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
+if(pVal.isEVal()) {
+	val_color = name_color = "grey";
+	val_font = "Arial 24 0 1 0 1";
+	alarm = "";
+	pErrCode = 0;
+	bordColor = "grey", bordWidth = 1;
+	return;
+}
+
+//Notification create
+if(!pErr.isEVal() && pErrCode != pErr) {
+	pErrCode = pErr;
+	if(pErrCode == 1 || pErrCode == 2)	alarm = (redEVAL == true) ? "100|"+pName+"|"+spName+" - "+tr("reject")+".|7" : "100|"+pName+"||1";
+	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" "+tr("above alarm border")+".|7";
+	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" "+tr("bellow alarm border")+".|7";
+	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" "+tr("above warning border")+".|7";
+	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" "+tr("bellow warning border")+".|7";
+	else if(alarmSt&0x100)	alarm = "1|"+pName+"||1";
+}
+if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
+
+//Notification color change
+alarmLev = alarmSt&0xFF;
+if(alarmLev && alarmSt&0x100) {
+	blinkPr = true;
+	if(!pErrCode || alarmLev <= 1)	wColor = "lime";
+	else if(alarmLev < 30)	wColor = "yellow";
+	else if(alarmLev < 75)	wColor = "red";
+	else { wColor = "grey"; blinkPr = false; }
+	if(blinkPr) name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor;
+	else { 
+		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; name_color = (redEVAL==true) ? "red" : wColor; }
+		else name_color = val_color = wColor;
+	}
+}
+else name_color = val_color = "lime";
+
+//Blink focused or linked with ElCadr
+if(this.attr("focus") ||
+	(!pName.isEVal() && pName.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pName))
+{
+  bordColor = (bordColor == "white") ? "grey" : "white";
+  bordWidth = 2;
+}
+else { bordColor = "grey"; bordWidth = 1; }
+
+//Check the regulator mode
+if(pModeC == true) mode_text = tr("C");
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1418050629);
+INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
+CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
+7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
+9zmnpmlijCmlq6urt1kAgDCmpKoAhs1murTuuunDqm27rgshXF5eHk02s7ZtLy4unqIPw6Cqi8Xi
+qYCJX5bl/+N770OMcfdVObqCuq6Xy+XRWRFp27ZpmqfSVVVVnwl4IV9E3FNz34tOBby2TgW8tkK4
+CCNHOOi1WrJH08G/96MbAchneZy//GE5Lkc42J3prT6Ydc65czcFzMEvyzIUKH32LGmlWTRWpKN2
+21ARqVBRyEitlZEIgMI226XkLldWQWHBrDaWZKANZmIAUkoKLXM5E78oipD7nHNCBwB0pCdJybK7
+QbpJJKchPZ13pqZ5u4I85vFm3D/yytFRVS0bgJyzjppkLr5zLvR9d/BWhsPRMIhIVVXb8Qjc7mdV
+db1eH/jovwfpfd+b2W5935yfcw4hhGecuOu6siyf2guIyPX19TM7hZTSV7cSL+GfnPgN6FTAa+u7
+LyDEd3HkSE/5LDY+dMoYo//ZjxxJ5r+OHMrO3p2l8wQH7VXbY0584cZmLn5VVSGm6MSxoEZFgFs4
+OOxMW0SqTUUjI2MdWZCRJmbDvVOuc7EpQACw2liRkXZnk9GklCRLeVfOxC+KIuQh55xxBwAgnDko
+9kaYc+oSySmAjgw02eYDyCmnLu0eCZVUWt4XoKrJ0kz8yYn7g7eyORxtNiJS1/V2PALr/ewRpxwP
+0vu+V1XnvvilfVN+SunrTlxV1axO/BL+yYnfgE4FvLa++wJC8VORmBAgV7I7yO0UY4y/xmQJRP7z
+iFM2l036McHB1ibXDw+13nv/3qezufhVVYfQBQgYad6wgFs6eOxMW0TiKhJkuHfKkpbN7rZLSbcp
+riIdYbDaXO1QwLovnLiTKHEmflEUQcVMtmdkEGqKDDPb3cCygZgCTI1K6D5ARffpgJpCYGqw+3Sb
+ka+qoW1XB2/l9mDU9/1ms9k75aFUtW1b7/3+0vogYDoTH7TmvynfORfKsny+O71YLJ7pHt/c3Lyw
+O/0S/smJ34BOBby2ArD/z3osu9dTs8+n7wgz8c0sVL9UI0dGyifR4Uj7t/qtEhU6pj8SHqHOP5zr
+BwWha5V/HjplCCF+iHImM/Grqg5cuSCBgR4eC7gzR0dZbUNzzv7K05GOvvQsyYrI2LWXx5vR/+3h
+4OFjFd3SIcI6mzrpKSVZSRjm4hdFDM5RlRCQhGHyuV071ntPkiB0CiAytsH3z3ibCICAAhmwbQDJ
+iTAT3wz/AQrXOAcOBXvwAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+name_arg0val = name;
+
+if( f_start )
+{
+  el1_1_en = (el1_1_addr!=EVAL_STR); el1_2_en = (el1_2_addr!=EVAL_STR); el1_3_en = (el1_3_addr!=EVAL_STR); 
+  el1_4_en = (el1_4_addr!=EVAL_STR); el1_5_en = (el1_5_addr!=EVAL_STR); el1_6_en = (el1_6_addr!=EVAL_STR);
+  el2_1_en = (el2_1_addr!=EVAL_STR); el2_2_en = (el2_2_addr!=EVAL_STR); el2_3_en = (el2_3_addr!=EVAL_STR); 
+  el2_4_en = (el2_4_addr!=EVAL_STR); el2_5_en = (el2_5_addr!=EVAL_STR); el2_6_en = (el2_6_addr!=EVAL_STR);
+  el3_1_en = (el3_1_addr!=EVAL_STR); el3_2_en = (el3_2_addr!=EVAL_STR); el3_3_en = (el3_3_addr!=EVAL_STR); 
+  el3_4_en = (el3_4_addr!=EVAL_STR); el3_5_en = (el3_5_addr!=EVAL_STR); el3_6_en = (el3_6_addr!=EVAL_STR);
+  el4_1_en = (el4_1_addr!=EVAL_STR); el4_2_en = (el4_2_addr!=EVAL_STR); el4_3_en = (el4_3_addr!=EVAL_STR); 
+  el4_4_en = (el4_4_addr!=EVAL_STR); el4_5_en = (el4_5_addr!=EVAL_STR); el4_6_en = (el4_6_addr!=EVAL_STR);
+
+  rows = new Array( (el1_1_en || el1_2_en || el1_3_en || el1_4_en || el1_5_en || el1_6_en),
+		        (el2_1_en || el2_2_en || el2_3_en || el2_4_en || el2_5_en || el2_6_en),
+		        (el3_1_en || el3_2_en || el3_3_en || el3_4_en || el3_5_en || el3_6_en),
+                                   (el4_1_en || el4_2_en || el4_3_en || el4_4_en || el4_5_en || el4_6_en) );
+  cols = new Array( (el1_1_en || el2_1_en || el3_1_en || el4_1_en), (el1_2_en || el2_2_en || el3_2_en || el4_2_en), (el1_3_en || el2_3_en || el3_3_en || el4_3_en),
+		      (el1_4_en || el2_4_en || el3_4_en || el4_4_en), (el1_5_en || el2_5_en || el3_5_en || el4_5_en), (el1_6_en || el2_6_en || el3_6_en || el4_6_en) );
+
+  xScale = 0; for( i = 0; i < 6; i++ ) xScale += cols[i]; if( xScale ) xScale = 6/xScale;
+  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
+  xScale = yScale = min(xScale,yScale);
+
+  if( xScale > 1 )
+    for( i = 1; i <= 4; i++ ) 
+    {
+      for( j = 1; j <= 6; j++ ) this["wdg_el"+i+"_"+j].attrSet("geomXsc",xScale);
+      this["wdg_el"+i+"_2"].attrSet( "geomX", 3 + 150*xScale*cols[0] );
+      this["wdg_el"+i+"_3"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]) );
+      this["wdg_el"+i+"_4"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]) );
+      this["wdg_el"+i+"_5"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]) );
+      this["wdg_el"+i+"_6"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]+cols[4]) );
+    }
+  if( yScale > 1 )
+    for( j = 1; j <= 6; j++ ) 
+    {
+      for( i = 1; i <= 4; i++ ) this["wdg_el"+i+"_"+j].attrSet("geomYsc",yScale);
+      this["wdg_el2_"+j].attrSet( "geomY", 30 + 142*yScale*rows[0] );
+      this["wdg_el3_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
+      this["wdg_el4_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
+    }
+}','JavaLikeCalc.JavaScript
+name_arg0val = name;
+
+if( f_start )
+{
+  el1_1_en = (el1_1_addr!=EVAL_STR); el1_2_en = (el1_2_addr!=EVAL_STR); el1_3_en = (el1_3_addr!=EVAL_STR); 
+  el1_4_en = (el1_4_addr!=EVAL_STR); el1_5_en = (el1_5_addr!=EVAL_STR); el1_6_en = (el1_6_addr!=EVAL_STR);
+  el2_1_en = (el2_1_addr!=EVAL_STR); el2_2_en = (el2_2_addr!=EVAL_STR); el2_3_en = (el2_3_addr!=EVAL_STR); 
+  el2_4_en = (el2_4_addr!=EVAL_STR); el2_5_en = (el2_5_addr!=EVAL_STR); el2_6_en = (el2_6_addr!=EVAL_STR);
+  el3_1_en = (el3_1_addr!=EVAL_STR); el3_2_en = (el3_2_addr!=EVAL_STR); el3_3_en = (el3_3_addr!=EVAL_STR); 
+  el3_4_en = (el3_4_addr!=EVAL_STR); el3_5_en = (el3_5_addr!=EVAL_STR); el3_6_en = (el3_6_addr!=EVAL_STR);
+  el4_1_en = (el4_1_addr!=EVAL_STR); el4_2_en = (el4_2_addr!=EVAL_STR); el4_3_en = (el4_3_addr!=EVAL_STR); 
+  el4_4_en = (el4_4_addr!=EVAL_STR); el4_5_en = (el4_5_addr!=EVAL_STR); el4_6_en = (el4_6_addr!=EVAL_STR);
+
+  rows = new Array( (el1_1_en || el1_2_en || el1_3_en || el1_4_en || el1_5_en || el1_6_en),
+		        (el2_1_en || el2_2_en || el2_3_en || el2_4_en || el2_5_en || el2_6_en),
+		        (el3_1_en || el3_2_en || el3_3_en || el3_4_en || el3_5_en || el3_6_en),
+                                   (el4_1_en || el4_2_en || el4_3_en || el4_4_en || el4_5_en || el4_6_en) );
+  cols = new Array( (el1_1_en || el2_1_en || el3_1_en || el4_1_en), (el1_2_en || el2_2_en || el3_2_en || el4_2_en), (el1_3_en || el2_3_en || el3_3_en || el4_3_en),
+		      (el1_4_en || el2_4_en || el3_4_en || el4_4_en), (el1_5_en || el2_5_en || el3_5_en || el4_5_en), (el1_6_en || el2_6_en || el3_6_en || el4_6_en) );
+
+  xScale = 0; for( i = 0; i < 6; i++ ) xScale += cols[i]; if( xScale ) xScale = 6/xScale;
+  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
+  xScale = yScale = min(xScale,yScale);
+
+  if( xScale > 1 )
+    for( i = 1; i <= 4; i++ ) 
+    {
+      for( j = 1; j <= 6; j++ ) this["wdg_el"+i+"_"+j].attrSet("geomXsc",xScale);
+      this["wdg_el"+i+"_2"].attrSet( "geomX", 3 + 150*xScale*cols[0] );
+      this["wdg_el"+i+"_3"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]) );
+      this["wdg_el"+i+"_4"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]) );
+      this["wdg_el"+i+"_5"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]) );
+      this["wdg_el"+i+"_6"].attrSet( "geomX", 3 + 150*xScale*(cols[0]+cols[1]+cols[2]+cols[3]+cols[4]) );
+    }
+  if( yScale > 1 )
+    for( j = 1; j <= 6; j++ ) 
+    {
+      for( i = 1; i <= 4; i++ ) this["wdg_el"+i+"_"+j].attrSet("geomYsc",yScale);
+      this["wdg_el2_"+j].attrSet( "geomY", 30 + 142*yScale*rows[0] );
+      this["wdg_el3_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
+      this["wdg_el4_"+j].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
+    }
+}','',1000,'name;geomW;geomH;backColor;bordWidth;','');
+INSERT INTO "wlb_Main" VALUES('anShow1','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAOCAIAAAAQWY2VAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAAEBElEQVRIicWVW0xbdRzHf+ecf6+nLdAeoEAppQXKxdFsDZciSsZlk7GN
+NTM6iYlv+qSJxvjc6JvxwTezmZCYxcy4h7niggZZNU6B4Zgy6dYy6axlXFrKeuXcjw/sgitoTDv9
+vH7/5/f7/v6//+93MI/HA3sTCATS6fTfHPh/sVgsCADGx8eXl5dz5cbGxmAwGA6H889EKMhinZrL
+JpMZ5nENI9QarVopA5HPplJZlt/5nU5fokTiZjTOSQCAyVWkVqPCBC6VSjKc6Ha7EQDEYrFIJJKb
+tby8PH/rAAC4rLn72FCXNXjlS69vfqdBwAhTc2d/T7uJ0gGXvrt04+IXExuMtC2qK5peHDlepU2O
+vv9ROCsoDTX9hw+32owYm7w9953Xdx0A0HaU6qb2dodVBgAivxm5+e30AiMWxrzGYGpxdvV22uU4
+l6vKVPr9rk6KSHhHPyHszx3pdvU9feeCL8hJgNRUT9/BCo3sQamo1TXQWqOZvjCaqjk06DrUEQph
+DwpAHcOvnnn3VDqyLiK5ErIfvn7sg4uBAtgnDEdHXrBq5PxWRiLluTpPJ34YO3cN5zbWE+aKlIBh
+SKkmADgMWRxdTQagBUGNAABwRJpsFSK7EgpFtvgQ01ZtbqhkMMAfxlpd+rqvydrSduT8Aj04cqIE
+FcA/YDKCic1Mjk3OLu5y/wCSyMbX7kaTwlM9Q33P7hNjd36avUlLoKtq6XHWzF/5fi17f2YwRFJa
+XBDpLCtxdJoDUBSVKnB4ZFOpqegdOp4u23fAWhn1huhCPCFjKT4/NcdxoqlKhwOuMxgb7DQvPX6M
+1Ju7uw6UIIlmRZKy2ClZU/vBIm45xshtBAEgN9saSNCTBBBIba5rkAwUAlAVGRGjwDwez9lPP99/
+8q2P33tZ2EzwHB2avfTmG+9Mh9NOpzMajeazhdxut8PhyOsO/olHHVj57dKw4+RizpbLh0AgkEgk
+AMNLTXX1taXx8OLi7+vCjg4gha6+2U5K6Vu/3iL0tc2NptRKiFWVGos1f43E/REMQnljpYpZ/GWO
+1tW32ss3Qj9LZGVBXvqe+P1+v98PQDR3q621+tWQ3+eb5xH10munDLDx2elz92QGZLQ6DEQmvopp
+6wguM3fZe32FlyECAADpT7zyvEXLnD99dimesblkR13VPJNmCSQx8R8nvqntGEAAABI/4z3z9g35
+6q6DVghEUeBYjhe2BwtXkSQJWRyA39qcmvhKcfAZ58CwkFq7Ojl29fYm+7BFBEEzLKtgkvcSW4wQ
+vHZ5qqi/va1XysRmJn0LqxkLAHg8HpvNtmtWp9NpNpufVE2F4P6fmKIomqZz5eLi4mg0+p+7+ncg
+ABgcHNxLLisre9JrJB9MJtOfuAmh/+/YRy0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+name_en = pName.length;
+name_text = pName;
+name_geomW = pNameSz;
+val_arg0val = pVal;
+val_font = "Arial 24 1 0 0 0"; 
+if(!prec.isEVal()) val_arg0cfg = ((prec>=0)?";f;":";g;")+abs(prec);
+if(pVal.isEVal()) {
+	val_color = "grey";
+	val_font = "Arial 24 0 1 0 1";
+	alarm = "";
+	pErrCode = 0;
+	bordColor = "gray", bordWidth = 1;
+	return;
+}
+
+//Notification create
+if(!pErr.isEVal() && pErrCode != pErr) {
+	pErrCode = pErr;
+	if(pErrCode == 1 || pErrCode == 2)	alarm = "100|"+pNAME+"||1";
+	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" "+tr("above alarm border")+".|7";
+	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" "+tr("bellow alarm border")+".|7";
+	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" "+tr("above warning border")+".|7";
+	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" "+tr("bellow warning border")+".|7";
+	else if(alarmSt&0x100) alarm = "1|"+pNAME+"||1";
+}
+if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
+
+//Notification color change
+alarmLev = alarmSt&0xFF;
+if(alarmLev && alarmSt&0x100) {
+	blinkPr = true;
+	if(!pErrCode || alarmLev <= 1) wColor = "lime";
+	else if(alarmLev < 30)	wColor = "yellow";
+	else if(alarmLev < 75)	wColor = "red";
+	else { wColor = "grey"; blinkPr = false; }
+	if(blinkPr) val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor;
+	else { 
+		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; }
+		else val_color = wColor;
+	}
+}
+else val_color = "lime";
+
+//Blink focused or linked with ElCadr
+if(this.attr("focus") ||
+	(!pName.isEVal() && pName.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pName))
+{
+  bordColor = (bordColor == "white") ? "grey" : "white";
+  bordWidth = 2;
+}
+else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1415294952);
+INSERT INTO "wlb_Main" VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
+DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
+OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6
+PYSJTikA+L5PKfH9kFKiouWck1ardX5eD4NQZ6xfzeVy09PTio/f39//9eULbphY0zDGADA1NZXP
+5xXl5XL55YtydnjEcXq9bi8QvhE3m22HCC81Muq0mqAhzwvjHLc7vmHGpYQvcjmMtasVCACc/PlH
+iGOc6YxqGo0Vs9lCoaDooFar+WEoWhfHJ6ePCo9OT+35+Xl1+cHBQT6fd13PNA2EtFqtlrAM0GjK
+Mjzf96meyWZcx+GxWCothAiCUHie239TAAAgCQDcfzjueZ6u67quA0C9Xj88PFR0cHZ2lrASIMVQ
+JksJnRjPVSoVdXmj0cCEckz6nkZHR5eXl9llL3wYIcTz5yUCAJRSSilCqD/R7XZt21Z00G63+7Ef
+jj3oVy4uLtTlruu+OvhtOJtNZEf+efPaSmUsy+oveCtSSk1DBACqdsXTCJaSM4ooKxaLs7Ozig4Q
+Qr/8/BOhRGcmQSFmfHJyUn0LVavViYlxKTWqaQ/Gcr7v27Ydi8VUtGEYCiEIACTTQ13Xo5TGeQwQ
+chxH/Vzq9Xoj9+6BlIAwYzog1O121eWO48QN62qoadrOzg4hSkeQEAL6m5hxzji/mjg+Pt7c3FR0
+UK1WOY9fr+zt7VUqFUW5bduHv78aHh4BjVAMhLLFxUX1FlpZWSEAUH1TIdzwXD+dNP1QFIvFhYUF
+RQfb29s//vA9AGI8bsRjGqYzMzPqLbS+vm6/PnW8IJm2AteBy8ZQ0QohpJQEAEwz0e51Ol03nTT7
+yaSUig6klMlUuttu0cvXdie5ECI1lPlvwPQwDFdXVzHGCKFbF5FSCiHQkyfftFoX1ycopZlM5n2y
+GzQaDdd1bxQVmxgAfN8/Of6Lc44pp1gSyh4//vrOLXRerzU7TiqZ0AlGmNy1hba2tm4UgyBQlCOE
+KCUIk8sz/M4QAKA6g3ZXhAIIvlXwyRm9P3Z1HQRBqVS69qH9EL7vh6EgAGCYlmG+PcuOjo42NjYU
+H6/+zXofterfLMZA0zGIRCq9tLSkKGw0GqVS6R3N2mw2m83mR9pSp3l+Thlj3GIEpNr5cx3V3fb5
++PKrtz9dwzBYW1tTFDqOo2mYAMDu7m65XP4s7j41hUJhbm7uamhZCQIAjuPU6/XoXN2BTqdzo6K9
+877/EYMAUTMIEDWDAFEzCBA1gwBRMwgQNYMAUTMIEDWDAFEzCBA1gwBRQwAAY6z4x2DkUEpvVNDT
+p9/2er1I3Hw8lNJ/AdK3tNlT+3/SAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+txt_pnlTitle_arg0val = NAME;
+
+if( f_start ) clc = 0;
+clc++;
+if( clc == 3 ) event+="usr_ElCadr";
+ev_wrk=ev_rez="";
+off=0;
+while(true)
+{
+    ev_wrk=event.parse(0,"\n",off);
+    if( ev_wrk == "" ) break;
+    if( ev_wrk == "ws_LnAccept:/kp" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kp : "+DESCR+" : "+Kp+" : " +kp_value); Kp = kp_value; }
+    else if( ev_wrk == "ws_LnAccept:/ki" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ki : "+DESCR+" : "+Ki+" : " +ki_value); Ki = ki_value; }
+    else if( ev_wrk == "ws_LnAccept:/ti" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ti : "+DESCR+" : "+Ti/1000+" : " +ti_value); Ti = 1000*ti_value; }
+    else if( ev_wrk == "ws_LnAccept:/kd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kd : "+DESCR+" : "+Kd+" : " +kd_value); Kd = kd_value; }
+    else if( ev_wrk == "ws_LnAccept:/td" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Td : "+DESCR+" : "+Td/1000+" : " +td_value); Td = 1000*td_value; }
+    else if( ev_wrk == "ws_LnAccept:/tzd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Tzd : "+DESCR+" : "+Tzd+" : " +tzd_value); Tzd = 1000*tzd_value; }
+    else if( ev_wrk == "ws_LnAccept:/zn" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Zn : "+DESCR+" : "+Zi+" : " +zn_value); Zi = zn_value; }
+    else if( ev_wrk == "ws_LnAccept:/h1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H1 : "+DESCR+" : "+Hdwn+" : " +h1_value); Hdwn = h1_value; }
+    else if( ev_wrk == "ws_LnAccept:/h2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H2 : "+DESCR+" : "+Hup+" : " +h2_value); Hup = h2_value; }
+    else if( ev_wrk == "ws_LnAccept:/k1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K1 : "+DESCR+" : "+K1+" : " +k1_value); K1 = k1_value; }
+    else if( ev_wrk == "ws_LnAccept:/k2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K2 : "+DESCR+" : "+K2+" : " +k2_value); K2 = k2_value; }
+    else if( ev_wrk == "ws_LnAccept:/k3" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K3 : "+DESCR+" : "+K3+" : " +k3_value); K3 = k3_value; }
+    else if( ev_wrk == "ws_LnAccept:/k4" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K4 : "+DESCR+" : "+K4+" : " +k4_value); K4 = k4_value; }
+    else if( ev_wrk == "ws_LnAccept:/tiPer" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpPer : "+DESCR+" : "+TImpPer/1000+" : " +tiPer_value); TImpPer = 1000*tiPer_value; }
+    else if( ev_wrk == "ws_LnAccept:/tiMin" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpMin : "+DESCR+" : "+TImpMin/1000+" : " +tiMin_value); TImpMin = 1000*tiMin_value; }    
+    else if( ev_wrk == "ws_LnAccept:/rfct" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.KImpRfact : "+DESCR+" : "+KImpRfact+" : " +rfct_value); KImpRfact = rfct_value; }
+    else ev_rez+=ev_wrk+"\n";
+}
+event=ev_rez;
+
+kp_active = (Kp!=EVAL_REAL); kp_value = kp_active?Kp:0;
+ki_active = (Ki!=EVAL_REAL); ki_value = ki_active?Ki:0;
+ti_active = (Ti!=EVAL_REAL); ti_value = ti_active?Ti/1000:0;
+kd_active = (Kd!=EVAL_REAL); kd_value = kd_active?Kd:0;
+td_active = (Td!=EVAL_REAL); td_value = td_active?Td/1000:0;
+tzd_active = (Tzd!=EVAL_REAL); tzd_value = tzd_active?Tzd/1000:0;
+zn_active = (Zi!=EVAL_REAL); zn_value = zn_active?Zi:0;
+h1_active = (Hdwn!=EVAL_REAL); h1_value = h1_active?Hdwn:0;
+h2_active = (Hup!=EVAL_REAL); h2_value = h2_active?Hup:0;
+k1_active = (K1!=EVAL_REAL); k1_value = k1_active?K1:0;
+k2_active = (K2!=EVAL_REAL); k2_value = k2_active?K2:0;
+k3_active = (K3!=EVAL_REAL); k3_value = k3_active?K3:0;
+k4_active = (K4!=EVAL_REAL); k4_value = k4_active?K4:0;
+tiPer_active = (TImpPer!=EVAL_REAL); tiPer_value = tiPer_active?TImpPer/1000:0;
+tiMin_active = (TImpMin!=EVAL_REAL); tiMin_value = tiMin_active?TImpMin/1000:0;
+rfct_active = (KImpRfact!=EVAL_REAL); rfct_value = rfct_active?KImpRfact:0;
+
+doc_tmpl = "<body  bgcolor=''grey''><table style=''color: white'' border=''1'' cellpadding=''1'' cellspacing=''0'' width=''100%''>\n";
+doc_tmpl += "<tr><td>Id:</td><td>"+((EVAL_STR == SHIFR) ? "" : strEnc2HTML(SHIFR))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Name:</td><td>"+((EVAL_STR == NAME) ? "" : strEnc2HTML(NAME))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Description:</td><td>"+((EVAL_STR == DESCR) ? "" : strEnc2HTML(DESCR))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Dimension:</td><td>"+((EVAL_STR==ed) ? "" : strEnc2HTML(ed))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Setpoint:</td><td>"+ ((trnd_prm1val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm1val) : strEnc2HTML(real2str(trnd_prm1val,prec))) : "");
+doc_tmpl += ((trnd_prm1val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm1val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Variable:</td><td>"+ ((trnd_prm2val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm2val) :strEnc2HTML(real2str(trnd_prm2val,prec))) : "");
+doc_tmpl += ((trnd_prm2val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm2val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Output:</td><td>"+((trnd_prm0val != EVAL_REAL) ? strEnc2HTML(real2str(trnd_prm0val,1)) : "")+"</td></tr>\n";
+doc_tmpl += "<tr><td>Scale:</td><td>"+(min != EVAL_REAL ? strEnc2HTML(min) : "")+" ... "+(max != EVAL_REAL ? strEnc2HTML(max) : "")+"</td></tr>\n";
+doc_tmpl += "<tr><td>Mode:</td><td>"+((trnd_prm3val==EVAL_REAL)?" - ": (trnd_prm3val ? "Automat" : "Manual"))+"</td></tr>\n";
+doc_tmpl += "</table></body>";
+
+//Diagram
+trnd_prm0addr = out_addr;
+trnd_prm1addr = sp_addr;
+trnd_prm1bordL = min;
+trnd_prm1bordU = max;
+trnd_prm2addr = var_addr;
+trnd_prm2bordL = min;
+trnd_prm2bordU = max;
+trnd_prm3addr = auto_addr;
+trnd_prm4addr = impQup_addr;
+trnd_prm5addr = impQdwn_addr;','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+txt_pnlTitle_arg0val = NAME;
+
+if( f_start ) clc = 0;
+clc++;
+if( clc == 3 ) event+="usr_ElCadr";
+ev_wrk=ev_rez="";
+off=0;
+while(true)
+{
+    ev_wrk=event.parse(0,"\n",off);
+    if( ev_wrk == "" ) break;
+    if( ev_wrk == "ws_LnAccept:/kp" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kp : "+DESCR+" : "+Kp+" : " +kp_value); Kp = kp_value; }
+    else if( ev_wrk == "ws_LnAccept:/ki" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ki : "+DESCR+" : "+Ki+" : " +ki_value); Ki = ki_value; }
+    else if( ev_wrk == "ws_LnAccept:/ti" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Ti : "+DESCR+" : "+Ti/1000+" : " +ti_value); Ti = 1000*ti_value; }
+    else if( ev_wrk == "ws_LnAccept:/kd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Kd : "+DESCR+" : "+Kd+" : " +kd_value); Kd = kd_value; }
+    else if( ev_wrk == "ws_LnAccept:/td" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Td : "+DESCR+" : "+Td/1000+" : " +td_value); Td = 1000*td_value; }
+    else if( ev_wrk == "ws_LnAccept:/tzd" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Tzd : "+DESCR+" : "+Tzd+" : " +tzd_value); Tzd = 1000*tzd_value; }
+    else if( ev_wrk == "ws_LnAccept:/zn" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.Zn : "+DESCR+" : "+Zi+" : " +zn_value); Zi = zn_value; }
+    else if( ev_wrk == "ws_LnAccept:/h1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H1 : "+DESCR+" : "+Hdwn+" : " +h1_value); Hdwn = h1_value; }
+    else if( ev_wrk == "ws_LnAccept:/h2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.H2 : "+DESCR+" : "+Hup+" : " +h2_value); Hup = h2_value; }
+    else if( ev_wrk == "ws_LnAccept:/k1" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K1 : "+DESCR+" : "+K1+" : " +k1_value); K1 = k1_value; }
+    else if( ev_wrk == "ws_LnAccept:/k2" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K2 : "+DESCR+" : "+K2+" : " +k2_value); K2 = k2_value; }
+    else if( ev_wrk == "ws_LnAccept:/k3" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K3 : "+DESCR+" : "+K3+" : " +k3_value); K3 = k3_value; }
+    else if( ev_wrk == "ws_LnAccept:/k4" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.K4 : "+DESCR+" : "+K4+" : " +k4_value); K4 = k4_value; }
+    else if( ev_wrk == "ws_LnAccept:/tiPer" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpPer : "+DESCR+" : "+TImpPer/1000+" : " +tiPer_value); TImpPer = 1000*tiPer_value; }
+    else if( ev_wrk == "ws_LnAccept:/tiMin" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.TImpMin : "+DESCR+" : "+TImpMin/1000+" : " +tiMin_value); TImpMin = 1000*tiMin_value; }    
+    else if( ev_wrk == "ws_LnAccept:/rfct" ) { messPut("OP:"+vcaSesUser(path),2,"''"+NAME+"''.KImpRfact : "+DESCR+" : "+KImpRfact+" : " +rfct_value); KImpRfact = rfct_value; }
+    else ev_rez+=ev_wrk+"\n";
+}
+event=ev_rez;
+
+kp_active = (Kp!=EVAL_REAL); kp_value = kp_active?Kp:0;
+ki_active = (Ki!=EVAL_REAL); ki_value = ki_active?Ki:0;
+ti_active = (Ti!=EVAL_REAL); ti_value = ti_active?Ti/1000:0;
+kd_active = (Kd!=EVAL_REAL); kd_value = kd_active?Kd:0;
+td_active = (Td!=EVAL_REAL); td_value = td_active?Td/1000:0;
+tzd_active = (Tzd!=EVAL_REAL); tzd_value = tzd_active?Tzd/1000:0;
+zn_active = (Zi!=EVAL_REAL); zn_value = zn_active?Zi:0;
+h1_active = (Hdwn!=EVAL_REAL); h1_value = h1_active?Hdwn:0;
+h2_active = (Hup!=EVAL_REAL); h2_value = h2_active?Hup:0;
+k1_active = (K1!=EVAL_REAL); k1_value = k1_active?K1:0;
+k2_active = (K2!=EVAL_REAL); k2_value = k2_active?K2:0;
+k3_active = (K3!=EVAL_REAL); k3_value = k3_active?K3:0;
+k4_active = (K4!=EVAL_REAL); k4_value = k4_active?K4:0;
+tiPer_active = (TImpPer!=EVAL_REAL); tiPer_value = tiPer_active?TImpPer/1000:0;
+tiMin_active = (TImpMin!=EVAL_REAL); tiMin_value = tiMin_active?TImpMin/1000:0;
+rfct_active = (KImpRfact!=EVAL_REAL); rfct_value = rfct_active?KImpRfact:0;
+
+doc_tmpl = "<body  bgcolor=''grey''><table style=''color: white'' border=''1'' cellpadding=''1'' cellspacing=''0'' width=''100%''>\n";
+doc_tmpl += "<tr><td>Id:</td><td>"+((EVAL_STR == SHIFR) ? "" : strEnc2HTML(SHIFR))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Имя:</td><td>"+((EVAL_STR == NAME) ? "" : strEnc2HTML(NAME))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Описание:</td><td>"+((EVAL_STR == DESCR) ? "" : strEnc2HTML(DESCR))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Единица измерения:</td><td>"+((EVAL_STR==ed) ? "" : strEnc2HTML(ed))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Задание:</td><td>"+ ((trnd_prm1val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm1val) : strEnc2HTML(real2str(trnd_prm1val,prec))) : "");
+doc_tmpl += ((trnd_prm1val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm1val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Переменная:</td><td>"+ ((trnd_prm2val != EVAL_REAL) ? ((prec==EVAL_INT) ? strEnc2HTML(trnd_prm2val) :strEnc2HTML(real2str(trnd_prm2val,prec))) : "");
+doc_tmpl += ((trnd_prm2val == EVAL_REAL || max == EVAL_REAL || min == EVAL_REAL || max == min) ? "" : ("("+strEnc2HTML(real2str(100*(trnd_prm2val-min)/(max-min),1))+"%)"))+"</td></tr>\n";
+doc_tmpl += "<tr><td>Выход:</td><td>"+((trnd_prm0val != EVAL_REAL) ? strEnc2HTML(real2str(trnd_prm0val,1)) : "")+"</td></tr>\n";
+doc_tmpl += "<tr><td>Шкала:</td><td>"+(min != EVAL_REAL ? strEnc2HTML(min) : "")+" ... "+(max != EVAL_REAL ? strEnc2HTML(max) : "")+"</td></tr>\n";
+doc_tmpl += "<tr><td>Режим:</td><td>"+((trnd_prm3val==EVAL_REAL)?" - ": (trnd_prm3val ? "Автомат" : "Ручной"))+"</td></tr>\n";
+doc_tmpl += "</table></body>";
+
+//Diagram
+trnd_prm0addr = out_addr;
+trnd_prm1addr = sp_addr;
+trnd_prm1bordL = min;
+trnd_prm1bordU = max;
+trnd_prm2addr = var_addr;
+trnd_prm2bordL = min;
+trnd_prm2bordU = max;
+trnd_prm3addr = auto_addr;
+trnd_prm4addr = impQup_addr;
+trnd_prm5addr = impQdwn_addr;','',1000,'id;path;name;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;','');
+INSERT INTO "wlb_Main" VALUES('ResultGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
+OElEQVRYhc2YTW8TRxiA33fmnZnd9VcSO4EgQW+tVPVSCUGLAAHiQ6I3JISEOHLtpRfE36A/CSEq
+hdKEQogqVNoCdkJI7NiO7f2YeXtwQD2UHXMYtXsb6ZlnPZJ3n53BH+/dc84NBgPHnOd5nueRMXlR
+GGMQgIiyLHPOdXs9+P9dCwsL1O31xqOR1rpeq/WLorWwUFj79tWrz44ds9bGcZznOQK8e/fuv/61
+/37hrVu3mFkpNZlMlFKtVgsRP0YXRbG1tSWlVEplWUZEzWZTCFFyg83NTUQM5BdC0PLSclyNAYCZ
+nz19trGxUXIDKeXJ4yfr8/Upv/F848GDByW8UurUyVNB/aT3dZzFAOCUa//RXvll5WM0ACRJcvrL
+07GLAcEpt/nX5sqKhz/31bmgfsKk6yoZsgOUKuI4jksmRFGEyZ5rwHvezcCH9VMhNAA6oQAgK+x4
+PC6ZgIhWKABwQjFAPgMf2k87/aVhWgMAIWzh6t4V7/YXJ0ULkaW0mZ3z8qH91JjfrSbZdCzl0Lvi
++lx3vnEwJBp4+dB+6jf6k/oEAKSVtmq9Kx7UB0WrQEZpZVErvHxoP+l0uTqMGAUg8MR4V6yzQ7VB
+nREBgCexnw/sJyjyVCTCObScGNNsNksmGGMgz1Mh0TnpbKJ0OR9FUWg/Xr9+/Z+lXFxcLC9lp9Mh
+IqVUmqZaa2+JO51OUD/e+eFOXI8BABjWVtde/vmyhCais9+erTfrU/7pr09f/P6ihFdKXThzIaif
+5FiazMC0lK/aq6urJROSJDn/9Xmzbaal3Hqz5eUvHb8U1E8i6nKSCnYopDbgfeqF6UHDAjMKqYy/
+lKH9VMjYCVWgQOZZSpnLyArNKGC2sob2085eazj5hFJ2+830fSnzWUoc2E/1hZ1afFBKMUP5avO7
+C/WDoVR9f1kD+2lYG6aNFACklVzxfy3uV/dty05L6Sr+/2hoP1GxnIxiJwQy2xlKScWhyn7DCSEc
+uzSagQ/st4PBGFE6BwwxSW8p7XA4NpFwFpkjIfx8YD/evHlTCKGUGo/HWmtvKdvttlJqWsrpHre8
+lO12O6ifji4dPSglwOOfHz969KiMJrp45uJBKQHWVtfKea31lXNXgvpJZtJ0DQM75bY2t9bX10sm
+JEly+ZvLZtcwMivefrvt5a+euhrUT1LvYDISwIhSa/9bgnQX64UAdkhG+98Sof2UqaqiiAEROCuc
+96lPqZJRhQERIC3Yy4f2026vuT/+hFL29hay/EMpG/49bmA/1Vrv6uaglEj+8lWbO83qwXCWUob2
+0ygeZfMZAEgrIfF/LU6iyXZre/ZShvaT4CPRJJ6Wz2b+UgIfiidzDlE4Z7MnXj60n1x3NytqwjkH
+UFHq8OHDJROUUtzrZkIIZx1ARcpyXmsd2o+3b9+engZ/2LOWlC/Lsk6n86GU0z2rlLLkHq9fvw7q
+x7vf342rMTAAwv2f7q//VhYOrfW1K9ca840p/3Dl4ZPnT0p4Y8yN724E9RMDy1QyMhP3B/03b96U
+TEiSBBA+8IP9gZcP7Scjd5QZAgCjNMp/cqbFrtYTQLQoI/KfnIX200jNoU4AEZgnVnif+rFq7JvG
+lB876eVD+6nXmx+/L6W1Ve+K9/bm8velLIqav6yB/RQf2qybESMDAOg974rjpbfz1WLKo+n5+cB+
+ctINaoNp+aSW3hU7ccBTQcIIPx/YT5k+EmHVSWR0qfWXMtOHlWgCAoBNnf/0OLSflsYjA4zMjPjF
+kWVz4kTJBCJaSieVQX/Kf760JEt5pVRo/988T/gZm+2WXgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+name_arg0val = (grpName!=EVAL_STR) ? grpName : "";
+
+if( f_start )
+{
+  rows = new Array();
+  cols = new Array();
+  for( i = 0; i < 4; i++ )
+  {
+    rows[i] = this["wdg_e"+(1+i)].attr("en") || this["wdg_e"+(5+i)].attr("en") || this["wdg_e"+(9+i)].attr("en") || this["wdg_e"+(13+i)].attr("en");
+    cols[i] = this["wdg_e"+(1+i*4)].attr("en") || this["wdg_e"+(2+i*4)].attr("en") || this["wdg_e"+(3+i*4)].attr("en") || this["wdg_e"+(4+i*4)].attr("en");
+  }
+
+  xScale = 0; for( i = 0; i < 4; i++ ) xScale += cols[i]; if( xScale ) xScale = 4/xScale;
+  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
+  xScale = yScale = min(xScale,yScale);
+
+  if( xScale > 1 )
+    for( i = 1; i <= 4; i++ ) 
+    {
+      for( j = 1; j <= 4; j++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomXsc",xScale);
+      this["wdg_e"+(4+i)].attrSet( "geomX", 1 + 224*xScale*cols[0] );
+      this["wdg_e"+(8+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]) );
+      this["wdg_e"+(12+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]+cols[2]) );
+    }
+  if( yScale > 1 )
+    for( j = 1; j <= 4; j++ ) 
+    {
+      for( i = 1; i <= 4; i++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomYsc",yScale);
+      this["wdg_e"+(2+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*rows[0] );
+      this["wdg_e"+(3+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
+      this["wdg_e"+(4+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
+    }
+}','JavaLikeCalc.JavaScript
+name_arg0val = (grpName!=EVAL_STR) ? grpName : "";
+
+if( f_start )
+{
+  rows = new Array();
+  cols = new Array();
+  for( i = 0; i < 4; i++ )
+  {
+    rows[i] = this["wdg_e"+(1+i)].attr("en") || this["wdg_e"+(5+i)].attr("en") || this["wdg_e"+(9+i)].attr("en") || this["wdg_e"+(13+i)].attr("en");
+    cols[i] = this["wdg_e"+(1+i*4)].attr("en") || this["wdg_e"+(2+i*4)].attr("en") || this["wdg_e"+(3+i*4)].attr("en") || this["wdg_e"+(4+i*4)].attr("en");
+  }
+
+  xScale = 0; for( i = 0; i < 4; i++ ) xScale += cols[i]; if( xScale ) xScale = 4/xScale;
+  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
+  xScale = yScale = min(xScale,yScale);
+
+  if( xScale > 1 )
+    for( i = 1; i <= 4; i++ ) 
+    {
+      for( j = 1; j <= 4; j++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomXsc",xScale);
+      this["wdg_e"+(4+i)].attrSet( "geomX", 1 + 224*xScale*cols[0] );
+      this["wdg_e"+(8+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]) );
+      this["wdg_e"+(12+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]+cols[2]) );
+    }
+  if( yScale > 1 )
+    for( j = 1; j <= 4; j++ ) 
+    {
+      for( i = 1; i <= 4; i++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomYsc",yScale);
+      this["wdg_e"+(2+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*rows[0] );
+      this["wdg_e"+(3+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
+      this["wdg_e"+(4+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
+    }
+}','JavaLikeCalc.JavaScript
+name_arg0val = (grpName!=EVAL_STR) ? grpName : "";
+
+if( f_start )
+{
+  rows = new Array();
+  cols = new Array();
+  for( i = 0; i < 4; i++ )
+  {
+    rows[i] = this["wdg_e"+(1+i)].attr("en") || this["wdg_e"+(5+i)].attr("en") || this["wdg_e"+(9+i)].attr("en") || this["wdg_e"+(13+i)].attr("en");
+    cols[i] = this["wdg_e"+(1+i*4)].attr("en") || this["wdg_e"+(2+i*4)].attr("en") || this["wdg_e"+(3+i*4)].attr("en") || this["wdg_e"+(4+i*4)].attr("en");
+  }
+
+  xScale = 0; for( i = 0; i < 4; i++ ) xScale += cols[i]; if( xScale ) xScale = 4/xScale;
+  yScale = 0; for( i = 0; i < 4; i++ ) yScale += rows[i]; if( yScale ) yScale = 4/yScale;
+  xScale = yScale = min(xScale,yScale);
+
+  if( xScale > 1 )
+    for( i = 1; i <= 4; i++ ) 
+    {
+      for( j = 1; j <= 4; j++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomXsc",xScale);
+      this["wdg_e"+(4+i)].attrSet( "geomX", 1 + 224*xScale*cols[0] );
+      this["wdg_e"+(8+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]) );
+      this["wdg_e"+(12+i)].attrSet( "geomX", 1 + 224*xScale*(cols[0]+cols[1]+cols[2]) );
+    }
+  if( yScale > 1 )
+    for( j = 1; j <= 4; j++ ) 
+    {
+      for( i = 1; i <= 4; i++ ) this["wdg_e"+((i-1)*4+j)].attrSet("geomYsc",yScale);
+      this["wdg_e"+(2+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*rows[0] );
+      this["wdg_e"+(3+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]) );
+      this["wdg_e"+(4+4*(j-1))].attrSet( "geomY", 30 + 142*yScale*(rows[0]+rows[1]+rows[2]) );
+    }
+}',1000,'name;geomW;geomH;backColor;bordWidth;',1410372267);
+INSERT INTO "wlb_Main" VALUES('ResultGraphEl','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAoCAIAAADBrGu+AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
+xUlEQVRYhdWYWW/bRhRG7ywkJZGUqFCKLC+J5TiIlwe3qQ3kB/RfB30uCkRNFQc2EnlRIsXWZpkU
+KZEccmb64CB2arSNVae0D/jCuRzgfOTgDjGo0Wjs7e0hhAzDgPvG3NwcPTw8fPnypeM4T548GQ6H
+xWLRcRzDMIQQmqZ1u93Hjx+fnp5WKpV2u23bNqU0CAJd14UQqqpmMpkUA+zs7FBN02zbDoLA9/3B
+YDAYDLa3t5vNppTy4rM0m81arXZ0dOS6rud5pmkKIXq9nhBia2srRfsLKGOs1WqFYSiEiOP44o0m
+ScIYS5LENE3DMD5+/KgoCsZYVVUppe/7lmUpihLHsaqqKQdQVXVzc/Mvo+vr66nYzACdYU69Xm+1
+WrdtMguaps0SgFK6u7t76zYzEAQBVTzFemtFdsQKTFIJEkCCpBLHWBKJOAIJSCCJJM9yEpJMP822
+cx2KGQ6qQfY0a9dtr+YhjgADSDCPzMnSRO/ow+2h6qjZXtbZcMJSiGOctvNX0NiMYzMWVMT5GDN8
+oShUEcwFPMPDchiWQ1ZkJCJhKQQCwXwAB2lbX4EKVVxccSG+Xk7MBAC4wkc/jj6P6Mn/Kvhv3K31
+MAP3PsAsbRRjXK1Wb11lBgghNMfO58//CBWTY5VRA0kBAByrmdhlJKfwQCJMBQMp3dyCEQ5y7OyN
+lK7rpi0PACCEoCCFk1sqBJ9KXqNvPsPAkeCAkDVpO/qi7R+9n/uZsLjkHzCawzLmWJUynE6nacsD
+AEgpaaA9mKrFQLX65lqWjSZaCYGUCHcLmxLhXmGTIyWipkBkopWxTJCUAPtpm19CJSBAWAJwQvzs
+HABIAACQiAAARwQAANA4twAAAimpmf4N974L3f8AnJPh0Gbsm9ZGFKmTSe57O90I6jiW55mjUZFz
+ms+POSeaFgFAt1spFp3xOF8ouEGQDYLs6urBdJo7OFjN5X5NW/sSSmlSLJ53u5XDw5Va7VhRkuHQ
+zmYD17UymbDTWVheblGanJzMM6YkCbWsc87J6upq2uYAAIqi0ELBtSzXsty1tffjsZnPexe19fV3
+APDsWRMADGOi65N83gNwq9Vuo8EPDu7EH2kcf/1z/8X+Ov9QSpf734XSFviv4EiL3j19NzbH3/K0
+BNl72PveTjeC+oZf2iudVk/rz+tLnSVOOOEEANpL7Uqvcrx8vLG/4Rmeb/rr++v9h/0Pjz6Ufymn
+rX0JzoSZTJjJBlnTMyM1yk1zAJAJM+V+2XKsleOV+ZP5xc5iQhIt0p42n2692cLiDi08qk90farr
+U/1R+xFTmBp/Pipc/LQIAPOn8wCgMe3Fby8uSpV+ZUAGd2gfuHr/xf46V0uc39V94D5y7wPQiW7s
+r23YZ0PLdTDnACARwkJwQrAQAmMAkAgDSJWxk4XFmFJoNNLWvoRGmlbpd3sP5+o/7Sy3jjkhWAoJ
+0KqtLHQ6naWlH17/7lrWsFTe2HsbK0qo3bGzUcP3dN+v8pNsME0orfTOEqqojNlnZ7np1D4bVnrd
+B6OzSNWKo5HCmMCknbb0VajKmMaYxpjlOl9VXACAvDcGACVJnr+uA4DlugBwtwLMMAchZFnWravM
+AMYYvXr1qtvt3mhau92Ooug7Od2IWq32J7gBUGA1eYbJAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+en=(p1_addr!=EVAL_STR || p2_addr!=EVAL_STR || p3_addr!=EVAL_STR || p4_addr!=EVAL_STR || p5_addr!=EVAL_STR);
+title_text = (title!=EVAL_STR) ? title : "";
+
+p1_text = (p1_name!=EVAL_STR) ? p1_name : ""; p1_color=p1_clr;
+p2_text = (p2_name!=EVAL_STR) ? p2_name : ""; p2_color=p2_clr;
+p3_text = (p3_name!=EVAL_STR) ? p3_name : ""; p3_color=p3_clr;
+p4_text = (p4_name!=EVAL_STR) ? p4_name : ""; p4_color=p4_clr;
+p5_text = (p5_name!=EVAL_STR) ? p5_name : ""; p5_color=p5_clr;
+
+trnd_prm0addr=p1_addr; trnd_prm0bordL = p1_min; trnd_prm0bordU = p1_max; trnd_prm0color = p1_clr;
+trnd_prm1addr=p2_addr; trnd_prm1bordL = p2_min; trnd_prm1bordU = p2_max; trnd_prm1color = p2_clr;
+trnd_prm2addr=p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_prm2color = p3_clr;
+trnd_prm3addr=p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
+trnd_prm4addr=p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','JavaLikeCalc.JavaScript
+en=(p1_addr!=EVAL_STR || p2_addr!=EVAL_STR || p3_addr!=EVAL_STR || p4_addr!=EVAL_STR || p5_addr!=EVAL_STR);
+title_text = (title!=EVAL_STR) ? title : "";
+
+p1_text = (p1_name!=EVAL_STR) ? p1_name : ""; p1_color=p1_clr;
+p2_text = (p2_name!=EVAL_STR) ? p2_name : ""; p2_color=p2_clr;
+p3_text = (p3_name!=EVAL_STR) ? p3_name : ""; p3_color=p3_clr;
+p4_text = (p4_name!=EVAL_STR) ? p4_name : ""; p4_color=p4_clr;
+p5_text = (p5_name!=EVAL_STR) ? p5_name : ""; p5_color=p5_clr;
+
+trnd_prm0addr=p1_addr; trnd_prm0bordL = p1_min; trnd_prm0bordU = p1_max; trnd_prm0color = p1_clr;
+trnd_prm1addr=p2_addr; trnd_prm1bordL = p2_min; trnd_prm1bordU = p2_max; trnd_prm1color = p2_clr;
+trnd_prm2addr=p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_prm2color = p3_clr;
+trnd_prm3addr=p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
+trnd_prm4addr=p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','',1000,'name;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;','');
+INSERT INTO "wlb_Main" VALUES('doc_panel','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
+ZklEQVRYhe1XS2/TShQ+45nYbhLXMU5MRCgRiSg0IVAhsUOw4LGrWPATWCDxH/gF/Ad2ZcE+EogV
+CAkqhEBIpUSUpChVDHnaztP2eOYurJsbQlrBfUh3wbew7ONvvplz5pwzNnr27JlpmvA96vV6LBY7
+cuQI/AQMwyCNRqNSqcy9eP/+PSEEY6woiuM4giBomtZqtTDGp0+fniNzzslBM4iiOBqNBEEYj8eq
+qjYajSAIBEFYSF6scu7cOQDo9Xqapv2MUyQajRYKhZ+hzmE4HOq6zjknhOB79+45jqMoysbGRuj5
+tWvXCCGTyeTEiROGYYiiKEnS8ePHOeeRSCSMy3g8LhaL1WrVtu1isUgAwDTNbDY7Go0cx2GMjUaj
+wWCgqqplWYQQ27aHw6EgCPV6XRTFRCLR6/Xq9bqiKGfPngWAVquFtre38/k8IQQAKKWEEIQQY2x6
+5Zxzzqc3GGPGGOf806dPW1tbnuddunQJPXr0qNfr/Y249Pt9SZIAIJVKkSAI5rLuw4cPqVQKIZRI
+JGzb/vbtWy6XEwQhXE6/39c0LdzywWAAAMlkcsFOq6rqeV4QBJZl2badyWSq1arruqIoYowppQCg
+6/rskAUqiqKMx2NFUUzTLBQKzWZT13VJkgRB8H3fsqylpaW5IcT3/eFwOGvCGMfj8dBhxlgymQzt
+CKGlpSVZljnns0N830evX7/WdV1RFMuy4vG4LMsIoVnRarV66tSpcrl8/fr1p0+f3rx5M7R3u92w
+XCuVColGo3t7e4lEotFo7O7u3r17NxKJzKpEo9Fardbr9fb390VRLJfLpVLp2LFjlNLHjx9TSs+c
+OSMAQCwWA4B4PH716tUf641zHgRBrVYDgCAINE3r9/uTycR13VKpdP78eUopsSwrk8kAQLi8/f39
+OZVms6lp2vr6uu/77Xb75MmTAPDlyxfHcZaXlwHAtm20ubm5s7Pz404thCAIjLE549raGhEEIUz/
+nxf60bK46/wq/gOVsGr/hsp3EWk0GgAgyzIAOI6TSCTCvosxxhhLkuT7PsZ4Mpl4nhfu7AKVXq/H
+Odc0rdPpMMY6nQ7G2DAMxlir1VJV1XEc13UBAGN8oEo+nweA0Wi0srLS7/cTiUQkEkEITSYTWZYH
+gwHGeHV11fd9URS/8ygIgrD2AGB6MwWl1LbtlZWVgyLCOaeUoq2trfX19UNIDx48uH379kEEACiX
+ywQAPM+bmt6+fZvL5VRVnarMEXZ2djRNS6fTswTCGAsDFsIwDErprIVzPvsoSVI8Hp8jEM757FRh
+gc1a5gipVGrOAgBoc3Oz2Wwe5HMQBN1uN5VKHUTgnKdSKaKqajabPYjk+/6LFy8uXrx4iEq9XieG
+YYRHXIjxeAwA0/7MOf/48eOFCxfCR9d1CSGU0vAkCtFutwljbOpkrVbb29sbDAYbGxtTldkofP36
+dXt727btW7duzS7nu+hmMpkwr6cWzvnsNLquX758eY7AOSeWZYU9dSGCILBt+xBCmAfo4cOHh3fM
+hV1yFmtrawQhhDE+hAQAhxMQQiQWi125cuVwlcPhOA5Jp9OlUgkA3rx5k0wmk8kkY0ySJM/zQl+C
+IFheXrYsCyEkiqLv+7Is+74Pf/aAd+/e/VVHnue9evXq8+fPxWIRIbS7u0spDb9U79y5c//+/dXV
+VdM0gyBIp9ODwSCfz9+4cQMAGGPo5cuXYXMaj8eu6zLGMMb9ft913W63m8vlfN83DMM0zU6nk81m
+Pc+TZZlSKstymJyVSgU9efLEMIx/EhfTNEm73X7+/Pk/USkUCkQQhLmPhF/F//ls/K3yW+W3ym+V
+f1GFHD16dO7n7Feh6/ofcaL0j+VDRbAAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+curTm = tmTime();
+if(n==0 && !time) { time = curTm; bTime = time-30; }
+size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = !n;
+szVal = time-bTime;
+
+//> Archive size
+if(n)
+{
+	cPos = aCur-vCur;
+	if(cPos < 0) cPos += aSize;
+	Text3_text = Text3_text.parse(0,"\n") + "\n"+(cPos+1)+"("+aSize+")";
+}
+else Text3_text = Text3_text.parse(0,"\n");
+
+//> Events process
+ev_cur = ev_rez = "";
+off=0;
+prevTime = time;
+while(true)
+{
+  ev_cur=strParse(event,0,"\n",off);
+  if(ev_cur == "") break;
+  //messPut("Trend control",0,"Event: "+ev_cur);
+  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
+  {
+    szVal = size_value;
+    if(tmTp_value=="m") szVal = szVal*60;
+    else if(tmTp_value=="h") szVal = szVal*60*60;
+    else if(tmTp_value=="d") szVal = szVal*24*60*60;
+    else if(tmTp_value.search("\\d+s") >= 0)	szVal = tmTp_value.toInt();
+    else if(tmTp_value.search("\\d+m") >= 0)	szVal = tmTp_value.toInt()*60;
+    else if(tmTp_value.search("\\d+h") >= 0)	szVal = tmTp_value.toInt()*60*60;
+    else if(tmTp_value.search("\\d+d") >= 0)	szVal = tmTp_value.toInt()*24*60*60;
+    time += 1;
+  }
+  else if(ev_cur == "ws_LnAccept:/date") time = min(curTm,max(szVal,date_value));
+  else if(ev_cur == "ws_BtPress:/curtime") 
+  {	
+	if(n==0) time = curTm;
+	else vCur = aCur;
+  }
+  else if(ev_cur == "ws_BtPress:/prev")
+  {
+    if(n==0) time = min(curTm,max(szVal,time-szVal));
+    else vCur = -2;
+  }
+  else if(ev_cur == "ws_BtPress:/next") 
+  {
+    if(n==0) time = min(curTm,max(szVal,time+szVal)); 
+    else vCur = -1;
+  }
+  else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm,max(5*szVal,time-5*szVal));
+  else if(ev_cur == "ws_BtPress:/next1") time = min(curTm,max(5*szVal,time+5*szVal));
+  else ev_rez += (ev_cur+"\n");
+}
+event=ev_rez;
+
+//> Time control
+date_value=time;
+if(n==0 && prevTime != time) { bTime = time-szVal; doc=""; }
+if(szVal < 60) { tmTp_value="s"; size_value = szVal; }
+else if(szVal < 60*60) { tmTp_value="m"; size_value = szVal/60; }
+else if(szVal < 24*60*60) { tmTp_value="h"; size_value = szVal/(60*60); }
+else { tmTp_value="d"; size_value = szVal/(24*60*60); }','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+curTm = tmTime();
+if(n==0 && !time) { time = curTm; bTime = time-30; }
+size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = !n;
+szVal = time-bTime;
+
+//> Archive size
+if(n)
+{
+	cPos = aCur-vCur;
+	if(cPos < 0) cPos += aSize;
+	Text3_text = Text3_text.parse(0,"\n") + "\n"+(cPos+1)+"("+aSize+")";
+}
+else Text3_text = Text3_text.parse(0,"\n");
+
+//> Events process
+ev_cur = ev_rez = "";
+off=0;
+prevTime = time;
+while(true)
+{
+  ev_cur=strParse(event,0,"\n",off);
+  if(ev_cur == "") break;
+  //messPut("Trend control",0,"Event: "+ev_cur);
+  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
+  {
+    szVal = size_value;
+    if(tmTp_value=="м") szVal = szVal*60;
+    else if(tmTp_value=="ч") szVal = szVal*60*60;
+    else if(tmTp_value=="д") szVal = szVal*24*60*60;
+    else if(tmTp_value.search("\\d+с") >= 0)	szVal = tmTp_value.toInt();
+    else if(tmTp_value.search("\\d+м") >= 0)	szVal = tmTp_value.toInt()*60;
+    else if(tmTp_value.search("\\d+ч") >= 0)	szVal = tmTp_value.toInt()*60*60;
+    else if(tmTp_value.search("\\d+д") >= 0)	szVal = tmTp_value.toInt()*24*60*60;
+    time += 1;
+  }
+  else if(ev_cur == "ws_LnAccept:/date") time = min(curTm,max(szVal,date_value));
+  else if(ev_cur == "ws_BtPress:/curtime") 
+  {	
+	if(n==0) time = curTm;
+	else vCur = aCur;
+  }
+  else if(ev_cur == "ws_BtPress:/prev")
+  {
+    if(n==0) time = min(curTm,max(szVal,time-szVal));
+    else vCur = -2;
+  }
+  else if(ev_cur == "ws_BtPress:/next") 
+  {
+    if(n==0) time = min(curTm,max(szVal,time+szVal)); 
+    else vCur = -1;
+  }
+  else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm,max(5*szVal,time-5*szVal));
+  else if(ev_cur == "ws_BtPress:/next1") time = min(curTm,max(5*szVal,time+5*szVal));
+  else ev_rez += (ev_cur+"\n");
+}
+event=ev_rez;
+
+//> Time control
+date_value=time;
+if(n==0 && prevTime != time) { bTime = time-szVal; doc=""; }
+if(szVal < 60) { tmTp_value="с"; size_value = szVal; }
+else if(szVal < 60*60) { tmTp_value="м"; size_value = szVal/60; }
+else if(szVal < 24*60*60) { tmTp_value="ч"; size_value = szVal/(60*60); }
+else { tmTp_value="д"; size_value = szVal/(24*60*60); }','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+curTm = tmTime();
+if(n==0 && !time) { time = curTm; bTime = time-30; }
+size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = !n;
+szVal = time-bTime;
+
+//> Archive size
+if(n)
+{
+	cPos = aCur-vCur;
+	if(cPos < 0) cPos += aSize;
+	Text3_text = Text3_text.parse(0,"\n") + "\n"+(cPos+1)+"("+aSize+")";
+}
+else Text3_text = Text3_text.parse(0,"\n");
+
+//> Events process
+ev_cur = ev_rez = "";
+off=0;
+prevTime = time;
+while(true)
+{
+  ev_cur=strParse(event,0,"\n",off);
+  if(ev_cur == "") break;
+  //messPut("Trend control",0,"Event: "+ev_cur);
+  if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp")
+  {
+    szVal = size_value;
+    if(tmTp_value == "х") szVal = szVal*60;
+    else if(tmTp_value == "г") szVal = szVal*60*60;
+    else if(tmTp_value == "д") szVal = szVal*24*60*60;
+    else if(tmTp_value.search("\\d+с") >= 0)	szVal = tmTp_value.toInt();
+    else if(tmTp_value.search("\\d+х") >= 0)	szVal = tmTp_value.toInt()*60;
+    else if(tmTp_value.search("\\d+г") >= 0)	szVal = tmTp_value.toInt()*60*60;
+    else if(tmTp_value.search("\\d+д") >= 0)	szVal = tmTp_value.toInt()*24*60*60;
+    time += 1;
+  }
+  else if(ev_cur == "ws_LnAccept:/date") time = min(curTm,max(szVal,date_value));
+  else if(ev_cur == "ws_BtPress:/curtime") 
+  {	
+	if(n==0) time = curTm;
+	else vCur = aCur;
+  }
+  else if(ev_cur == "ws_BtPress:/prev")
+  {
+    if(n==0) time = min(curTm,max(szVal,time-szVal));
+    else vCur = -2;
+  }
+  else if(ev_cur == "ws_BtPress:/next") 
+  {
+    if(n==0) time = min(curTm,max(szVal,time+szVal)); 
+    else vCur = -1;
+  }
+  else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm,max(5*szVal,time-5*szVal));
+  else if(ev_cur == "ws_BtPress:/next1") time = min(curTm,max(5*szVal,time+5*szVal));
+  else ev_rez += (ev_cur+"\n");
+}
+event=ev_rez;
+
+//> Time control
+date_value=time;
+if(n == 0 && prevTime != time) { bTime = time-szVal; doc=""; }
+if(szVal < 60) { tmTp_value = "с"; size_value = szVal; }
+else if(szVal < 60*60) { tmTp_value = "х"; size_value = szVal/60; }
+else if(szVal < 24*60*60) { tmTp_value = "г"; size_value = szVal/(60*60); }
+else { tmTp_value = "д"; size_value = szVal/(24*60*60); }',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1374511505);
+INSERT INTO "wlb_Main" VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
+2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
+UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
++9Zan+cJAIhIROu6aq2ttY/HOwJACAERvfdKKe/9cRwAQET7vjPzMAylFCLq+56ZY4whhFLKOI6l
+FGPMVxfvPQBYa2u9Ola9ct/L1+UPf2mPKKKIIooooogiiiii/GcFnXNKtRXp3l7PPUhJwkNfYgAA
+AABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'','','',-1,'name;geomW;geomH;pgGrp;backColor;bordWidth;','');
+INSERT INTO "wlb_Main" VALUES('grph_panel','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+curTm = SYS.time();
+tSek = tSek ? tSek : curTm;
+
+//Archivators real list forming
+if(f_start) {
+	arch_items = tr("All");
+	mods = SYS.Archive.nodeList("mod_");
+	for(i_m = 0; i_m < mods.length; i_m++) {
+		vas = SYS.Archive[mods[i_m]].nodeList("val_");
+		for(i_va = 0; i_va < vas.length; i_va++)
+			arch_items += "\n"+mods[i_m].slice(4)+"."+vas[i_va].slice(4);
+	}
+}
+
+//Events process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	//messPut("Trend control",0,"Event: "+ev_cur);
+	if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp") {
+		tSzPrev = tSize;
+		tSize = size_value;
+		if(tmTp_value == tr("m"))			tSize = tSize*60;
+		else if(tmTp_value == tr("h"))	tSize = tSize*60*60;
+		else if(tmTp_value == tr("d"))	tSize = tSize*24*60*60;
+		else if(tmTp_value.search("\\d+"+tr("s")) >= 0)	tSize = tmTp_value.toInt();
+		else if(tmTp_value.search("\\d+"+tr("m")) >= 0)	tSize = tmTp_value.toInt()*60;
+		else if(tmTp_value.search("\\d+"+tr("h")) >= 0)	tSize = tmTp_value.toInt()*60*60;
+		else if(tmTp_value.search("\\d+"+tr("d")) >= 0)	tSize = tmTp_value.toInt()*24*60*60;
+		if(tSize < tSzPrev) tSek = curSek;
+	}
+	else if(ev_cur == "ws_LnAccept:/date")		tSek = date_value;
+	else if(ev_cur == "ws_BtPress:/curtime")	tSek = curSek = curTm;
+	else if(ev_cur == "ws_BtPress:/prev")			tSek -= tSize/2;
+	else if(ev_cur == "ws_BtPress:/prev1")		tSek -= 5*tSize;
+	else if(ev_cur == "ws_BtPress:/next")			tSek += tSize/2;
+	else if(ev_cur == "ws_BtPress:/next1")		tSek += 5*tSize;
+	else if(ev_cur == "ws_CombChange:/arch")	valArch=(arch_value==tr("All")) ? "" : arch_value;
+	else if(ev_cur == "ws_ChkChange:/spectr" )	type = spectr_value ? 1 : 0;
+	else if(ev_cur == "ws_BtPress:/zoomIn")		sclVer *= 0.9;
+	else if(ev_cur == "ws_BtPress:/zoomOut")	sclVer *= 1.1;
+	else if(ev_cur == "ws_BtPress:/zoomOffUp")	sclVerOff += sclVer/10;
+	else if(ev_cur == "ws_BtPress:/zoomOffDown")	sclVerOff -= sclVer/10;
+	else if(ev_cur == "ws_BtPress:/zoomDef")	sclVer = 100, sclVerOff = 0;
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//scaleInfo
+scaleInfo_arg0val = 1e4/sclVer;
+scaleInfo_arg1val = sclVerOff;
+
+//Trend time control
+date_value = tSek;
+if(tSek < curTm) trcPer = 0; else trcPer = 1, tSek = 0;
+if(tSize < 60)						tmTp_value = tr("s"), size_value = tSize;
+else if(tSize < 60*60)			tmTp_value = tr("m"), size_value = tSize/60;
+else if(tSize < 24*60*60)	tmTp_value = tr("h"), size_value = tSize/(60*60);
+else										tmTp_value = tr("d"), size_value = tSize/(24*60*60);
+
+arch_value = valArch.length ? valArch : tr("All");
+cursor_en = !curSek.isEVal();
+if(cursor_en && type == 0) cursor_arg0val = SYS.strftime(curSek,"%d.%m.%Y %H:%M:%S")+"."+curUSek;
+if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curSek+curUSek)).toFixed(2)+" "+tr("Hz");
+spectr_value = type;','','',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1418127309);
+INSERT INTO "wlb_Main" VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
+A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
+A32hLxFWAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//if( f_start ) focus = true;
+//if( focus ) messPut("TEST",0,"TEST 00");
+
+wLst = aLst = EVAL_REAL;
+pwName = pName;
+pwName=pwName.slice(0,pwName.lastIndexOf("/"));
+req=xmlNode("info").setAttr("path",pwName+"/%2fval");
+doc_tmpl = "<body docProcLang=''JavaLikeCalc.JavaScript''><table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>";
+if( xmlCntrReq(req) == 0 && req.childSize() )
+{
+  chldRoot = req.childGet(0);
+  for( i = 0; i < chldRoot.childSize(); i++ )
+  {
+    aID = chldRoot.childGet(i).attr("id");
+    aDscr = chldRoot.childGet(i).attr("dscr");
+    reqVl=xmlNode("get").setAttr("path",pwName+"/%2fval%2f"+aID);
+    xmlCntrReq(reqVl);
+    aVl = reqVl.text();
+
+    //> Filter
+    if( aID == "com" || aID == "close" || aID == "stop" || aVl.isEVal() ) continue;
+    if( aID == "aMax" || aID == "aMin" )
+    {
+      if( aLst == EVAL_REAL ) { aLst = aVl; continue; }
+      aDscr = "Alarm border";
+      if( aID == "aMax" && aLst < aVl ) aVl = ""+aLst+" ... "+aVl;
+      else if( aID == "aMin" && aLst > aVl ) aVl = ""+aVl+" ... "+aLst;
+      else aVl = "not set";
+    }
+    else if( aID == "wMax" || aID == "wMin" )
+    {
+      if( wLst == EVAL_REAL ) { wLst = aVl; continue; }
+      aDscr = "Warning border";
+      if( aID == "wMax" && wLst < aVl ) aVl = ""+wLst+" ... "+aVl;
+      else if( aID == "wMin" && wLst > aVl ) aVl = ""+aVl+" ... "+wLst;
+      else aVl = "not set";
+    }    
+    //> Put record
+    doc_tmpl += "<tr><td>"+strEnc2HTML(aDscr)+"</td><td>"+strEnc2HTML(aVl)+"</td></tr>\n";
+  }
+}
+doc_tmpl += "</table></body>";','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//if( f_start ) focus = true;
+//if( focus ) messPut("TEST",0,"TEST 00");
+
+wLst = aLst = EVAL_REAL;
+pwName = pName;
+pwName=pwName.slice(0,pwName.lastIndexOf("/"));
+req=xmlNode("info").setAttr("path",pwName+"/%2fval");
+doc_tmpl = "<body docProcLang=''JavaLikeCalc.JavaScript''><table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>";
+if( xmlCntrReq(req) == 0 && req.childSize() )
+{
+  chldRoot = req.childGet(0);
+  for( i = 0; i < chldRoot.childSize(); i++ )
+  {
+    aID = chldRoot.childGet(i).attr("id");
+    aDscr = chldRoot.childGet(i).attr("dscr");
+    reqVl=xmlNode("get").setAttr("path",pwName+"/%2fval%2f"+aID);
+    xmlCntrReq(reqVl);
+    aVl = reqVl.text();
+
+    //> Filter
+    if( aID == "com" || aID == "close" || aID == "stop" || aVl.isEVal() ) continue;
+    if( aID == "aMax" || aID == "aMin" )
+    {
+      if( aLst == EVAL_REAL ) { aLst = aVl; continue; }
+      aDscr = "Аварийная граница";
+      if( aID == "aMax" && aLst < aVl ) aVl = ""+aLst+" ... "+aVl;
+      else if( aID == "aMin" && aLst > aVl ) aVl = ""+aVl+" ... "+aLst;
+      else aVl = "не установлена";
+    }
+    else if( aID == "wMax" || aID == "wMin" )
+    {
+      if( wLst == EVAL_REAL ) { wLst = aVl; continue; }
+      aDscr = "Предупредительная граница";
+      if( aID == "wMax" && wLst < aVl ) aVl = ""+wLst+" ... "+aVl;
+      else if( aID == "wMin" && wLst > aVl ) aVl = ""+aVl+" ... "+wLst;
+      else aVl = "не установлена";
+    }    
+    //> Put record
+    doc_tmpl += "<tr><td>"+strEnc2HTML(aDscr)+"</td><td>"+strEnc2HTML(aVl)+"</td></tr>\n";
+  }
+}
+doc_tmpl += "</table></body>";','',1000,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1403444608);
+INSERT INTO "wlb_Main" VALUES('ElViewGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAiCAIAAABgN0jYAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAAC30lEQVRYhe2XbU/aUBSAT1tAC4XCQFGYBeRF3ERwuKkzcYvzhTXbdGZL
+zH6BP88s+7CYZfNlIU6jMqMx07Hgy1BwceIoUKDtPkDMNMuYEWhI+ny7t+eee57b3OYUmZqaikQi
+UJtYrVagabpOpW112Ml6FADk9Wqb06JASqxUkg0U1SSrRpH/gqZpFAB0praJV5PDve0yBAi9bXzy
+iRYrsdLk8gdG+5TohUlcZ+rye/BS8uWleIgCArY7D5xbkaPzB7j2trfrJoluri7uHjNCcRo1WNr9
+t8yAEQhwgKDNDq/XZcon4yurOwPjYy491tJAzs5vuPzdRrU8Hl5f/vK9ogLFM8ym48HVo4HBfh2O
+AQAgmG/w+chdO25offnimYlUFMJURsfYGN2sUVmcbXIAFKtvMuk5HnN39/d0UPk8x/Mcy2bVDUa1
+AmSEcXQioCv1MssjAEJ+e/lDDLff77ShAIASNqtqIzg7PT2T0ugNJFGI0mj1OHb6/s3rxdA3DoDn
+2XjshOd4DlCFLPd15+AsEQ3OLcWOj8/SeZ7jBIWy5HUqkwAAn/kZXFgjbU4cAHj2JMG32B3tHW6c
+TTEZthCTTjN5UDncbRbKiALI6vTDT4eUeYbN8SiC8rwgryPMzTcsnp4+T0vqjBEQBEX/vnE5BXiO
+YzNZASAeDi1u7mczrCBk1uYXfmkcj/tdoY8L+z+YQnTiMLwU2vM9HGlEE+lsjsszu7snLl8HEz0k
+9bpEPMpiTUOP7qVi0Yyi0W0h9iJJs5GorAFN05XdoJIUP6M1jSQgNpKA2EgCYlP9jlhm9fjcZgNA
+bufzSvjw9LrpylLUFUAwk93d63MApFMH2zUoILArM9Nbc3IAIZ1MXj+fCD9VbCrJpsqWreYvsSQg
+NpKA2EgCYiMJiI0kIDaXeyECoEeUQv6PTwCXGsDLAq0A76pWztXxAqxfnJFRFBUIBM7HBoC3VS7q
+KnQCmP4YUhT1GyVO83OL1qsxAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start) { en = !name.isEVal(); loadFromSess = false; }
+if(en && name.isEVal()) {
+	name = tr("<No selected>");
+	//Load stored session''s assignments
+	if(!loadFromSess) {
+		for(off = 0; (lnA="addr;name;dscr;min;max;ed;log;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
+			if((wA=this.attr(lnA,true)).length) this.linkSet(lnA, wA);
+		//if((cVal=this.attr("color",true)).length) this.color = cVal;
+		loadFromSess = true;
+	}
+}
+lb_sfr_text = name;
+if(varEl.isEVal()) lb_val_arg0val = "-";
+else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
+else lb_val_arg0val = prec.isEVal() ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
+lb_val_color = lb_sfr_color = lb_ed_color = "limegreen";
+if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
+else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "red";
+else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || varEl <= wMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "yellow";
+
+lb_ed_text = ed.isEVal() ? "" : ed;
+
+//Blink focused or linked with ElCadr
+if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == name)
+{
+  bordColor = (bordColor == "white") ? "black" : "white";
+  bordWidth =  2;
+}
+else { bordWidth =  1; bordColor = "black"; }
+
+//Check the regulator mode
+if(!enMode.isEVal() && enMode) { 
+  mode_en = true; 
+  if(!pModeC.isEVal() && pModeC) mode_text = tr("C");
+  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M")); 
+}
+else mode_en = false;
+
+//Events process
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//messPut("Trend en",0,"Event: "+evCur);
+	if(evCur == "key_mouseDblClick" || evCur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
+	//Store session''s assignments
+	else if(evCur == "usr_set")
+		for(off = 0; (lnA="addr;name;dscr;min;max;log;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
+			this.attrSet(lnA, this.link(lnA),true);
+	else evRez += evCur+"\n";
+}
+event = evRez;
+
+if(bordStyle == 1) color = "-";
+trClr_lineClr = color;
+
+tipTool = "";
+if(!name.isEVal())	tipTool += tr("Name")+": "+name+"\n";
+if(!min.isEVal() && !max.isEVal() && max > min) tipTool += tr("Scale")+": "+min+" ... "+max+"\n";
+if(!aMin.isEVal() && !aMax.isEVal() && aMax > aMin) tipTool += tr("Alarm border")+": "+aMin+" ... "+aMax+"\n";
+if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning border")+": "+wMin+" ... "+wMax+"\n";
+if(!dscr.isEVal()) {
+	tipTool += tr("Description")+": "+dscr+"\n";
+	tipStatus = dscr;
+}','','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1418050629);
+INSERT INTO "wlb_Main" VALUES('prescrEdit','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
+RK5CYII=','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start) save_active = false;
+progLbUpdt = progSelPrg = progSelCom = progSelTp = false;
+var comOp = "";
+
+//Events for commands process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/progAdd") {
+		if(!progNm_value.length) progNm_value = tr("New program");
+		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
+		lib_value = progNm_value;
+		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
+	}
+	else if(ev_cur == "ws_BtPress:/progCopy") {
+		if(!progNm_value.length) progNm_value = tr("New program");
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name, prgTxt) VALUES (''"+progNm_value+"'', ''"+rez[1][0].replace("''","''''")+"'');");
+			lib_value = progNm_value;
+			progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
+		}
+	}
+	else if(ev_cur == "ws_BtPress:/progRename") {
+		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET name=''"+progNm_value+"'' WHERE name=''"+lib_value+"'';");
+		lib_value = progNm_value;
+		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
+	}
+	else if(ev_cur == "dlg_Apply:/progDel" && lib_value.length) {
+	//else if(ev_cur == "ws_BtPress:/progDel" && lib_value.length) {
+		SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		lib_value = "";
+		progLbUpdt = progSelPrg = true;
+	}
+	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
+	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
+	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
+	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
+	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
+	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
+	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
+	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
+	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
+	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
+			parentPath = "";
+			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
+				if(offPV < prog_value.length) parentPath += "/"+vIt;
+				selNd = selNd.childGet((i_c=vIt.toInt()));
+			}
+			if(selNd) {
+				selNd.setAttr("id",type_value);
+				selNd.setAttr("name",name_value);
+				selNd.setAttr("descr",descr_value);
+				for(i_a = 1; i_a <= 5; i_a++) {
+					argObj = this["arg"+i_a];
+					argVal = argObj.attr("value");
+					if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
+					if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
+					selNd.setAttr("arg"+i_a, argVal);
+				}
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
+				prog_value = parentPath+"/"+i_c+":"+(name_value.length?name_value:type_value);
+				SYS.messInfo(this.nodePath(),"prog_value: "+prog_value);
+				progSelPrg = true;
+			}
+		}
+		save_active = false;
+	}
+	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			expTree = SYS.XMLNode("OpenSCADA_Prescr");
+			expTree.childAdd("prg").load(rez[1][0]);
+			expTree.childGet(0).setAttr("id",lib_value);
+			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
+		}
+	} 
+	//else if(ev_cur == "ws_BtPress:/progImport")
+	else if(ev_cur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
+	{
+		expTree = SYS.XMLNode("OpenSCADA_Prescr");
+		expTree.load(progImport_value.slice(pCtx+1));
+		progImport_value = progImport_value.slice(0,pCtx);
+		// Save all recors to DB
+		for(i_p = 0; i_p < expTree.childSize(); i_p++) {
+			treeNd = expTree.childGet(i_p);
+			if(treeNd.name() != "prg") continue;
+			if(lib_items.search(treeNd.attr("id")+"(\n|\\z)") < 0)
+				SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name,prgTxt) VALUES (''"+treeNd.attr("id")+"'',''"+treeNd.save().replace("''","''''")+"'');");
+			else
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+treeNd.save().replace("''","''''")+"'' WHERE name=''"+treeNd.attr("id")+"'';");	
+		}
+		progLbUpdt = progSelPrg = progSelCom = true;
+	}
+	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
+		argObj = this["arg"+rez[1]];
+		argVal = argObj.attr("value");
+		if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
+		if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
+		argObj.attrSet("value",argVal);
+	}
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//Get programms into library list
+if(f_start || progLbUpdt) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
+	lib_items = "";
+	for(i_p = 1; i_p < rez.length; i_p++)
+		lib_items += ((i_p==1)?"":"\n")+rez[i_p][0];
+	lib_items = lib_items.split("\n").sort().join("\n");
+	progNm_cfg = lib_items;
+}
+progCopy_active = progRename_active = progDel_active = progExport_active = comAdd_active = lib_value.length;
+
+//Command operations process
+if(comOp.length && lib_value.length) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+	if(rez.length > 1) {
+		comTree = selNd = SYS.XMLNode("prg");
+		comTree.load(rez[1][0]);
+		parentPath = "";
+		if(prog_value.length) {
+			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
+				if(offPV < prog_value.length) parentPath += "/"+vIt;
+				selNd = selNd.childGet((i_c=vIt.toInt()));
+			}
+			selNd = selNd.parent();
+		}
+		if(comOp == "add") {
+			selNd.childAdd("com").setAttr("id",tr("New command"));
+			prog_value = parentPath+"/"+(selNd.childSize()-1)+":"+tr("New command");
+		}
+		else {
+			// Get selected command node and position
+			if(i_c < selNd.childSize()) {
+				if(comOp == "inAdd") {
+					selNd.childGet(i_c).childAdd("com").setAttr("id",tr("New command"));
+					prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id")+"/"+(selNd.childGet(i_c).childSize()-1)+":"+tr("New command");
+				}
+				else if(comOp == "ins") {
+					selNd.childIns(i_c,"com").setAttr("id",tr("New command"));
+					prog_value = parentPath+"/"+i_c+":"+tr("New command");
+				}
+				else if(comOp == "del") {
+					selNd.childDel(i_c);
+					if(!selNd.childSize())	prog_value = parentPath;
+					else {
+						if(i_c >= selNd.childSize()) i_c = selNd.childSize()-1;
+						prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id");
+					}
+				}
+				else if((comOp == "up" && i_c) || (comOp == "dwn" && i_c < (selNd.childSize()-1))) {
+					storeNd = selNd.childGet(i_c);
+					selNd.childDel(i_c);
+					if(comOp == "up") i_c--; else i_c++;
+					selNd.childIns(i_c,storeNd);
+					prog_value = parentPath+"/"+i_c+":"+storeNd.attr("id");
+				}
+			}
+		}
+
+		//Save changes
+		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
+		progSelPrg = progSelCom = true;
+	}
+}
+
+//Get commands of selected program into commands list
+if(f_start || progSelPrg) {
+	prog_items = "";
+	if(lib_value.length) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			comTree = SYS.XMLNode("prg");
+			comTree.load(rez[1][0]);
+			curNd = comTree; curPos = 0; curPath = ""; comLevs = new Array();
+			for( ; true; curPos++) {
+				if(curPos >= curNd.childSize()) {
+					if(!comLevs.length) break;
+					stObj = comLevs.pop();
+					curNd = curNd.parent();
+					curPos = stObj.curPos; curPath = stObj.curPath;
+					continue;
+				}
+				prog_items += (prog_items.length?"\n":"")+(wPath=curPath+"/"+curPos+":"+curNd.childGet(curPos).attr(curNd.childGet(curPos).attr("name").length?"name":"id"));
+				if(curNd.childGet(curPos).childSize()) {
+					curNd = curNd.childGet(curPos);
+					comLevs.push((stObj=new Object()));
+					stObj.curPos = curPos; stObj.curPath = curPath;
+					curPos = -1; curPath = wPath;
+					continue;
+				}
+			}
+		}
+	}
+	labProg_arg0val = progNm_value = lib_value;
+}
+comIns_active = comInAdd_active = comDel_active = comUp_active = comDwn_active = prog_value.length;
+
+//Get command properties
+if(f_start || progSelCom || progSelTp) {
+	if(!progSelTp) name_value = type_value = descr_value = "";
+	for(i_a = 1; i_a <= 5; i_a++) {
+		this["labArg"+i_a].attrSet("en",false).attrSet("text","");
+		this["arg"+i_a].attrSet("en",false).attrSet("value","");
+	}
+
+	// Types/commands list load
+	if(f_start && !prExtComLs.isEVal()) {
+		type_items = descr_value = "";
+		for(var c_nm in prExtComLs)
+			if(c_nm != "Error" && c_nm != "Stop")
+				type_items += (type_items.length?"\n":"")+c_nm;
+	}
+
+	if(prog_value.length) {
+		selNd = false;
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			selNd = SYS.XMLNode("prg"); selNd.load(rez[1][0]);
+			for(off = 0; (vIt=prog_value.parsePath(0,off)).length; ) selNd = selNd.childGet(vIt.toInt());
+		}
+		if(!progSelTp && selNd) {
+			name_value = selNd.attr("name");
+			type_value = selNd.attr("id");
+			descr_value = selNd.attr("descr");
+		}
+		// Load command argument''s names
+		if(!prExtComLs.isEVal() && !prExtComLs[type_value].isEVal()) {
+			if((progSelTp || !descr_value.length) && (descr_value=prExtComLs[type_value]["descr"]).isEVal()) descr_value = "";
+			for(i_a = 1; i_a <= 5; i_a++) {
+				argLab = prExtComLs[type_value]["arg"+i_a];
+				if(argLab.isEVal() || !argLab.length)	continue;
+				off = 0;
+				this["labArg"+i_a].attrSet("en",true).attrSet("text",argLab.parse(0,"|",off));
+				argBord = argLab.parse(0,"|",off);
+				this["arg"+i_a].attrSet("min",argBord.length?argBord.toReal():EVAL_REAL);
+				argBord = argLab.parse(0,"|",off);
+				this["arg"+i_a].attrSet("max",argBord.length?argBord.toReal():EVAL_REAL);
+				this["arg"+i_a].attrSet("en",true);
+			}
+		}
+
+		// Load arguments'' values
+		if(!progSelTp && selNd)
+			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
+	}
+}
+type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1413479593);
+INSERT INTO "wlb_Main" VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
+0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW
+apO5vEcJQiiesdb2BxBC1gJCYK1FCMXf0xRCCOJlAM55KpU6DcfJGGvjfP8OvxwxrB5jjAZBcIFA
+GKSq5TJCYCzCBButpBBK62wY9iKRCQNMCFgrlWI9dnOhWK/VuywKAl8bAKOk0gTjdBj8aLQmchNK
+CKUtJaANygS+wSQdpK9endmvlJnQFGMDWknj+ZRz7nu+lNKAWVy8R/D5DtZaGoZhEATDBObmi3Pz
+xWGrZykUCsYAIVgpRSntXzqdObs0NXV39CP64ZxTa+1cYXZgx2arpbXO56b6J62FnY+fut3uycmJ
+53lSSq2U53lBmKEYtTudlO9rrVgkCCG+7+Xz077vDTgMDP6STqdDAeDWQpFSWt47yOXynXZzrjBb
+3T+QUhbnb1Sqe7npmeOj+vXZa5SQdzs7KysrhBCMsTEGY3x202Hz/xyl1Pb2NgUAIeW3cuX+g4eb
+m5vLy8ssipRSWusoijJXJjc2NtbX13e/fL1ZnLcWlpaWMpnMf+j3WxhjW1tbGACklOl0sPv58+rq
+ar1+qGK0VkpVK5W1tbVms5nNZoUQrjufAwaAiPMwDI+PDt++eT2RDSPOhZSMsVa7nZua+PjhPY+6
+GKNWu+267TlQhNCLl68opdZajPHB9xoAxNdzubIXh44bP+LBBVeyKygAtFstpZW1gBEihERCBik/
+n8+77jYSVCm98PjJKFEjeeP503EXuiwUIXh0Z2aUqODRs+fj7nNpKADcnvZHiTKmx1zmT/gff5yx
+kgi4JhFwTSLgmkTANYmAaxIB1yQCrkkEXJMIuCYRcE0i4JpEwDWJgGsoADQajVGinEcIQAgx8CLo
+Cs45AKBSqTTwdn0xxpixVbo0vV7vJ+y1bVFUL+7MAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+//Get programms into library list
+if(f_start) {
+	prEndRun = true;
+	lib_value = "";
+	btStop_active = false;
+	prCnt = 0;
+}
+if(prExtMode.isEVal() || prExtProg.isEVal() || prExtStartTm.isEVal() || prExtCurCom.isEVal() || prExtWork.isEVal())
+	return;
+
+//Check for program list update
+if(f_start || (prCnt%max(1,f_frq)) == 0) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
+	curPrLst = "";
+	for(i_p = 1; i_p < rez.length; i_p++)
+		curPrLst += (curPrLst.length?"\n":"")+rez[i_p][0];
+	curPrLst = curPrLst.split("\n").sort().join("\n");
+	if(curPrLst != lib_items) lib_items = curPrLst;
+}
+
+//Check for ready
+btStart_active = prExtProg.length;
+
+if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
+else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
+else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = false; }
+
+//Prepare call status document
+pTxt = "";
+if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
+	pTxt = "<body>";
+	off = 0;
+	labProg_arg0val = prExtWork.attr("name");
+
+	if(prExtMode < 0 && !prEndRun) {
+		prEndRun = true;
+		prog_aCur = -1;	//Archiving
+	}
+
+	//Build result table
+	pTxt += "<i>"+tr("Program:")+" </i>"+Special.FLibSYS.strEnc2HTML(labProg_arg0val)+"<br/>\n";
+	if(prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)) {
+		pTxt += "<i>"+tr("Started:")+" </i>"+SYS.strftime(prExtStartTm)+"<br/>\n";
+		if(prog_aCur < 0) {
+			if(prExtMode == -1) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Error")+"<br/>\n";
+			else if(prExtMode == -2) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Successful finish")+"<br/>\n";
+			else if(prExtMode == -3) pTxt += "<i>"+tr("Status:")+" </i>"+tr("Terminated")+"<br/>\n";
+			else pTxt += "<i>"+tr("Status:")+" </i>"+tr("Unknown")+"<br/>\n";
+		}
+	}
+	if(prExtMode == 1) {
+		wtm = max(0,prExtWork.attr("wtm").toInt()-(SYS.time()-prExtStartTm));
+		pTxt += "<i>"+tr("Remain:")+" </i>"+(wtm/3600).toString(10)+":"+((wtm/60)%60).toString(10,2)+":"+(wtm%60).toString(10,2)+"<br/>";
+	}
+	pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
+					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th>";
+	pTxt += "</tr>\n";
+
+	for(comElN = prExtWork, comPos = 0, comLev = 0, comCur = true, comAftCur = false, comN = "", comPath = ""; true; comPos++) {
+		if(comPos >= comElN.childSize()) {
+			if((comElN=comElN.parent())) {
+				comLev--;
+				comPos = comElN.attr("seekPos").toInt();
+				comCur = comElN.attr("comCur").toInt();
+				comN = comElN.attr("comN");
+				comPath = comElN.attr("comPath");
+				continue;
+			}
+			break;
+		}
+		comEl = comElN.childGet(comPos);
+		comN_ = (comN.length?comN+":":"") + comPos;
+		comPath_ = (comPath.length?comPath+": ":"") + (comEl.attr("name").length?comEl.attr("name"):comEl.attr("id"));
+		isCurCmd = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos && !prExtCurCom.parse(comLev+1,":").length;
+		if(isCurCmd) comAftCur = true;
+		rezVl = comEl.attr("rez");
+		toMark = true;
+		if(isCurCmd && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))				pTxt += "<tr class=''"+(prEndRun?"err":"run")+"''>";
+		else if(!comAftCur && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))	pTxt += "<tr class=''"+((rezVl.toInt()==-10)?"skip":((rezVl.toInt()<0)?"err":"pass"))+"''>";
+		else { pTxt += "<tr>"; toMark = false; }
+		pTxt += "<td>"+comN_+"</td>";
+		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath_)+"</td><td>";
+		if(toMark && rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
+		else {
+			//Arguments values
+			for(i_a = 1; i_a <= 5; i_a++)
+				if(comEl.attr("labArg"+i_a).length)
+					pTxt += Special.FLibSYS.strEnc2HTML(comEl.attr("labArg"+i_a).parse(0,"|")+" = "+comEl.attr("arg"+i_a)+"; ");
+		}
+		pTxt += "</td>";
+		comTm = comEl.attr("tm").toInt();
+		if(toMark && comTm) {
+			comTm -= prExtStartTm;
+			pTxt += "<td>"+(comTm/3600).toString(10)+":"+
+									((comTm/60)%60).toString(10,2)+":"+
+									(comTm%60).toString(10,2)+"</td>";
+		}
+		else pTxt += "<td>---</td>";
+		pTxt += "</tr>\n";
+
+		if(comEl.childSize()) {
+			comElN.setAttr("seekPos",comPos).setAttr("comCur",comCur).setAttr("comN",comN).setAttr("comPath",comPath);
+			comElN = comEl;
+			comCur = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos;
+			comPos = -1; comLev++; comN = comN_; comPath = comPath_;
+		}
+	}
+	pTxt += "</table></body>";
+}
+
+if(!prExtProg.length && f_start) pTxt = "<body><H1>"+tr("Select a program please")+"</H1></body>";
+
+if(pTxt.length) {
+	this.prog.attrSet("aDoc",pTxt);
+	if(this.prog.attr("aCur") == this.prog.attr("vCur")) prog_doc = pTxt;
+}
+
+prCnt++;
+
+//Events for commands process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_TreeChange:/lib") {
+		prog_vCur = prog_aCur;
+		prExtProg = lib_value;
+	}
+	else if(ev_cur == "ws_BtPress:/btStart") {
+		if(prExtMode <= 0)	prExtMode = 1;
+		else if(prExtMode == 1)	prExtMode = 2;
+		prog_vCur = prog_aCur;
+	}
+	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0) {
+		prExtMode = prExtCurCom = 0;
+		prog_vCur = prog_aCur;
+	}
+	else if(ev_cur == "ws_BtPress:/btPass" && prExtMode == 1)	prExtMode = 3;
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//Programm select process
+if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
+	prExtProg = lib_value;
+else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1413479593);
+INSERT INTO "wlb_Main" VALUES('prescrRunSimple','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAAE0ElEQVRoge2Vy28TVxSHz525nvG8HNtjO2+TEBJqAoEoJBREqSLooqrK
+gj1do6Z/BH9EkYBVoMuyYAeqIkpbYlKkQNqkOAlJbEwcO37FnhnP2PPsghRBFsVQpCmSv9Xo3qtz
+ft89Mxp0+/btSqUCHyeJRAJXKpVUKuV2kvckl8vhZs49mb2fq5nIqLV1HBja10ExLMd4CoVyOCxm
+t7IeiiJJ0ssKNGkXSjtBMShJNYGl6oalNwy/j1XqJk06St2MhPwzP82Mjh2nGZZnqEKhFIqIsqRi
+5NAcVymV/KJYym8blk1RlK7rvM/v9/H/nq0pAdtGJ06fIZXc/OL6vdSGB5N97XxVt5KZQGY9fXAg
+spaVSIDB3sDjP/7q7BtcW0mNDnftqLD6dP3MZ8PpbZNH1ZVk9suvvnAI4t79WcpD7u8U1jOFrv4h
+uSgHaANz3tVkJtTZK+e2/ALFRqIby4nJc+femo1oRuANY4omCTAti2UZQzf9wXB7KOihvASC7ex2
+uD1i6rrI40ylTgJ0BZlnWZki7GJZCQrsxtpG3/5+7KFIhHTdAJKiMKEqUlVWajUVEEF7MCv4u9sj
+Yrg9GAiGRf/b8zQTeuDQMEtjRIYG+7XVVPHo6EiAp9Kb2e7eruqOAlpR4LiRI8exreXLksDzjm07
+iCAQwOFDFiACkbbRrzZshvFytJPmuGNjRwM8HXi+2RPt5TBZKWVJX+94dzTU2a3KCkdjoFnu2JFm
+sqHp6enmP2JT16SaEQz4Xl9sqLJmkX6Bba5CvaroYvDNCpqiGcjv45qM8YpkMokBwLZthvHu2Ws0
+GggQRVOvL9I0hUhtz0maFeimW2LKKwb39qIZnmaaLrGnIAD0RXvGRo89XV6VZAUA2nx87JOD6xtJ
+nuN8PmHp6bJlO+DY0d6e3p7ue/d/oSkae5p69z44uq5T1O6dbmVzuwIIEbNzjw4fGfn8wAGWZRcW
+Fh7+/igSCjX0xuzDxNfnz0ciEVVVZ2ZmdF33YHzy0wlwHFcEJEn2+YSXz4/mH6+trWMAkBUFY8/4
++Pj169ej0ejZs2cTiYSsKMVSeez4eD6fv3r1KsdxU1NTN2/c4DnGNE3Htl0RME1DURRJknied2wH
+Xk6gXq+LIk8QRDwev3v3biwWY1lWq8myLAmCsLS0dOfOnVgsxjCMaZq245im6bg0AcO0TEubvvnD
+Nxcv2o69K+AThOfpdKVSuXDhwuTkJEmSqVRyf/++DtQxPz8/MTFx+fLltra2ZDJJEMhxHNM0bbcm
+YJkCz3839S0A2C/+ESBJYnCg79q1a6dOnVpcXHwYjw/070OI6GiPrKw8i8fjIyMj+Xz+1q0fT588
+sfJsTdd1260JGIZuGLsyprUrUFPVrq5Omvb+ufAEEAwNDXAsu7mZsSxrePhQsVSMP/iN47nxsVHL
+tlVV+/nXBwR651/4B8F27FetTcvcFSgWy7SXBQCG4wGgVK6WylWCwFpdf5HJAoDQ5geArVwBAEKh
+MCLcSb8HRVGSG0kMAEFRvHTpktt53pnV1ZW5ubn/xV3+F1oCbtMScJuWgNu0BNymJeA2LQG3aQm4
+TUvAbVoCbtMScJuWgNt89AIYAHZ2yleufO92kndGUzWMMV5eXs5ms+n0C7fzvA+yLP8NrZUdC69n
+Pt0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+//Get programms into library list
+if(f_start) {
+	prEndRun = true;
+	lib_name = lib_selValue = "";
+	btStop_active = false;
+	prCnt = 0;
+}
+if(prExtMode.isEVal() || prExtProg.isEVal() || prExtStartTm.isEVal() || prExtCurCom.isEVal() || prExtWork.isEVal())
+	return;
+
+//Check for program list update
+if(f_start || (prCnt%max(1,f_frq)) == 0) {
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT name FROM "+dbProgs+";");
+	curPrLst = "";
+	for(i_p = 1; i_p < rez.length; i_p++)
+		curPrLst += (curPrLst.length?"\n":"")+rez[i_p][0];
+	curPrLst = curPrLst.split("\n").sort().join("\n");
+	if(curPrLst != lib_items) lib_items = curPrLst;
+}
+
+//Check for ready
+btStart_active = prExtProg.length;
+
+if(prExtMode <= 0)		{ btStart_img = "start"; btStart_value = false; btStop_active = btPass_active = false; }
+else if(prExtMode == 1){ btStart_img = "pause"; btStart_value = false; btStop_active = btPass_active = true; prEndRun = false; }
+else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_active = true; btPass_active = false; }
+
+//Prepare call status document
+pTxt = "";
+if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
+	pTxt = "<body>";
+	//off = 0;
+	labProg_arg0val = prExtWork.attr("name");
+
+	if(prExtMode < 0 && !prEndRun)	prEndRun = true;
+
+	//Build result
+	pTxt += "<i>"+tr("Program:")+" </i>"+Special.FLibSYS.strEnc2HTML(lib_name);
+	if(prExtMode > 0) pTxt += "\n<br/><i>"+tr("Started:")+" </i>"+SYS.strftime(prExtStartTm);
+	if(prExtMode == 1) {
+		wtm = max(0,prExtWork.attr("wtm").toInt()-(SYS.time()-prExtStartTm));
+		pTxt += "\n<br/><i>"+tr("Remain:")+" </i>"+(wtm/3600).toString(10)+":"+((wtm/60)%60).toString(10,2)+":"+(wtm%60).toString(10,2);
+	}
+	if(prExtMode > 0 && prExtCurCom.parse(0,":").toInt() < prExtWork.childSize()) {
+		pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
+					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th></tr>\n";
+		comN = 0;
+		if(prExtMode == 0)	comEl = prExtWork.childGet(0);
+		else {
+			comEl = prExtWork;
+			for(off = 0; comEl && (tVl=prExtCurCom.parse(0,":",off)).length; )	comEl = comEl.childGet(tVl.toInt());
+			if(!comEl) comEl = prExtWork.childGet(0); else comN = prExtCurCom;
+		}
+		for(comPath = "", comElI = comEl; comElI; comElI = comElI.parent())
+			if(comElI.name() == "com")
+				comPath = comElI.attr(comElI.attr("name").length?"name":"id")+(comPath.length?": ":"")+comPath;
+		rezVl = comEl.attr("rez");
+		if(prExtMode != 0) pTxt += "<tr class=''"+((prExtMode==-1)?"err":"run")+"''>";
+		else pTxt += "<tr>";
+		pTxt += "<td>"+comN+"</td>";
+		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath)+"</td><td>";
+		if(rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
+		else {
+			//Arguments values
+			for(i_a = 1; i_a <= 5; i_a++)
+				if(comEl.attr("labArg"+i_a).length)
+					pTxt += Special.FLibSYS.strEnc2HTML(comEl.attr("labArg"+i_a).parse(0,"|")+" = "+comEl.attr("arg"+i_a)+"; ");
+		}
+		pTxt += "</td>";
+		comTm = comEl.attr("tm").toInt();
+		if(!comTm) pTxt += "<td>---</td>";
+		else {
+			comTm -= prExtStartTm;
+			pTxt += "<td>"+(comTm/3600).toString(10)+":"+
+									((comTm/60)%60).toString(10,2)+":"+
+									(comTm%60).toString(10,2)+"</td>";
+		}
+		pTxt += "</tr>\n</table>";
+	}
+	pTxt += "</body>";
+}
+
+if(!prExtProg.length && f_start) pTxt = "<body><H1>"+tr("Select a program")+"</H1></body>";
+
+if(pTxt.length)	prog_doc = pTxt;
+
+prCnt++;
+
+//Events for commands process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
+	//if(ev_cur == "ws_CombChange:/lib") prExtProg = lib_name;
+	//if(ev_cur.slice(0,11) == "ws_BtMenu=/")	prExtProg = ev_cur.slice(11).parse(0,":");
+	if(ev_cur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
+	else if(ev_cur == "ws_BtPress:/btStart") {
+		if(prExtMode <= 0)			prExtMode = 1;
+		else if(prExtMode == 1)	prExtMode = 2;
+	}
+	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
+	else if(ev_cur == "ws_BtPress:/btPass" && prExtMode == 1)	prExtMode = 3;
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+//Programm select process
+if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
+	prExtProg = lib_name;
+else lib_name = lib_selValue = prExtProg;','','',500,'name;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1413479593);
+INSERT INTO "wlb_Main" VALUES('accept','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
+LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
+sirld2HZR3re93l85HOOmVQq5fV64WiiaRqSZXlyctJpJzZJp9Os0x4OSzuA07QDOE07gNOgVgWV
+ncLMteuU4Sdee1VgDqah9M6tOSqFz5wcbbXdvrQcQOxUBsK+jr6TczOfbdUEXwcriq71RzklGr+3
+kHll4kpfUPjo05kLz5/9evbGC5demrv+xdip07Nf3jx38fy1z9cAAKglcrXVIgl7xIgi389turgS
+x/s3tv4cHBm/dP70/xuAYZqvPTM/bwihiJeJ9o+Wyub40HAxnz8xMrC6+G0glsivZiPd0YXvbsvB
+SHYl19Mbf/wwi6uWSSmHkP4kt1UT9ZC0UCjybpnS+tCwghCvqaVW/bQcAAAGxk6xbs9bqXe3K5bk
+4gAADydcnZ4LL15kAOJjZ1Tz3tPHR1d+Wx5JJn//5ef40PH1B8tKV/yP+z/VTev295k33k7li4ZX
+EkSBL2iaLHfqeiXSFS7rtVbNMNPT01NTUzZi2EbXdUmSmQN+P3uSTqftzMAhkWX5P6x25JfRdgCn
+aQdwmiMfACmKsrS05LQNmyiKgmKxWDKZdNqJTSilNjcyvVRiwbLd2KjXff6AVtx2CXxzyMTA8QAA
+BAPi99A2sChlEQ/2zkIAQKnlcvEAsInzmOJuIWZYxleluWfcJ2J8977yWr1OKeUR2wjAUBpb/Ljg
+HWU31/lHy+rU1f0NAFQMbD8AAGBCAECi0pvknXP47B02M829f4yJ3Prmpqqq0Xgfb2K9bnndqFgm
+PEPdbrF/cIhHLACYptm4NooAwFpwPJH5BG8UH1y+SnE9c/cucDxiGSSIpKyqhhn0yZhYsj84mOgB
+AKCUAoDtVYhSignBhLAWF9bDs8aND40P4iiOCYl093hEQatUtXKVAmsSgk0aCAa0wsbjzUJDZVom
+ABDTbDxijF0rPxhPdPprHs0vYNOUJMnjD/gVn1bYqJjQ4XYjgVfVnUql0pQQAkAPNwMYN25eN650
+uaMe5GmMhEKhgKIwHLd73OwFAIDQsdCu6u8ZaBShFFdqyy+/xz6ruX9cxJj09vVDUxXZ7fhUb+Kf
+fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
+7aywXTxkhaK6k81m/wJAAK2A/KcOawAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start) mess_text = elMess;
+
+//> Events for commands process
+off=0;
+ev_cur = ev_rez = "";
+while(true)
+{
+	ev_cur = event.parse(0,"\n",off);
+	if(ev_cur == "") break;
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/apply")
+	{
+		elEvent += "dlg_Apply\n";
+		this.attrSet("pgOpen",false);
+	}
+	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;','JavaLikeCalc.JavaScript
+if(f_start) mess_text = elMess;
+
+//> Events for commands process
+off=0;
+ev_cur = ev_rez = "";
+while(true)
+{
+	ev_cur = event.parse(0,"\n",off);
+	if(ev_cur == "") break;
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/apply")
+	{
+		elEvent += "dlg_Apply\n";
+		this.attrSet("pgOpen",false);
+	}
+	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;','JavaLikeCalc.JavaScript
+if(f_start) mess_text = elMess;
+
+//> Events for commands process
+off=0;
+ev_cur = ev_rez = "";
+while(true)
+{
+	ev_cur = event.parse(0,"\n",off);
+	if(ev_cur == "") break;
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/apply")
+	{
+		elEvent += "dlg_Apply\n";
+		this.attrSet("pgOpen",false);
+	}
+	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;',500,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1382883532);
+INSERT INTO "wlb_Main" VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
+LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
+sirld2HZR3re93l85HOOmVQq5fV64WiiaRqSZXlyctJpJzZJp9Os0x4OSzuA07QDOE07gNOgVgWV
+ncLMteuU4Sdee1VgDqah9M6tOSqFz5wcbbXdvrQcQOxUBsK+jr6TczOfbdUEXwcriq71RzklGr+3
+kHll4kpfUPjo05kLz5/9evbGC5demrv+xdip07Nf3jx38fy1z9cAAKglcrXVIgl7xIgi389turgS
+x/s3tv4cHBm/dP70/xuAYZqvPTM/bwihiJeJ9o+Wyub40HAxnz8xMrC6+G0glsivZiPd0YXvbsvB
+SHYl19Mbf/wwi6uWSSmHkP4kt1UT9ZC0UCjybpnS+tCwghCvqaVW/bQcAAAGxk6xbs9bqXe3K5bk
+4gAADydcnZ4LL15kAOJjZ1Tz3tPHR1d+Wx5JJn//5ef40PH1B8tKV/yP+z/VTev295k33k7li4ZX
+EkSBL2iaLHfqeiXSFS7rtVbNMNPT01NTUzZi2EbXdUmSmQN+P3uSTqftzMAhkWX5P6x25JfRdgCn
+aQdwmiMfACmKsrS05LQNmyiKgmKxWDKZdNqJTSilNjcyvVRiwbLd2KjXff6AVtx2CXxzyMTA8QAA
+BAPi99A2sChlEQ/2zkIAQKnlcvEAsInzmOJuIWZYxleluWfcJ2J8977yWr1OKeUR2wjAUBpb/Ljg
+HWU31/lHy+rU1f0NAFQMbD8AAGBCAECi0pvknXP47B02M829f4yJ3Prmpqqq0Xgfb2K9bnndqFgm
+PEPdbrF/cIhHLACYptm4NooAwFpwPJH5BG8UH1y+SnE9c/cucDxiGSSIpKyqhhn0yZhYsj84mOgB
+AKCUAoDtVYhSignBhLAWF9bDs8aND40P4iiOCYl093hEQatUtXKVAmsSgk0aCAa0wsbjzUJDZVom
+ABDTbDxijF0rPxhPdPprHs0vYNOUJMnjD/gVn1bYqJjQ4XYjgVfVnUql0pQQAkAPNwMYN25eN650
+uaMe5GmMhEKhgKIwHLd73OwFAIDQsdCu6u8ZaBShFFdqyy+/xz6ruX9cxJj09vVDUxXZ7fhUb+Kf
+fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
+7aywXTxkhaK6k81m/wJAAK2A/KcOawAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start) { select_items = elItems; select_value = selValue; }
+
+//> Events for commands process
+ev_cur = ev_rez = "";
+for(off = 0; true; )
+{
+	ev_cur = event.parse(0, "\n", off);
+	if(ev_cur == "") break;
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/apply")
+	{
+		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
+		this.attrSet("pgOpen",false);
+	}
+	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;','JavaLikeCalc.JavaScript
+if(f_start) { select_items = elItems; select_value = selValue; }
+
+//> Events for commands process
+ev_cur = ev_rez = "";
+for(off = 0; true; )
+{
+	ev_cur = event.parse(0, "\n", off);
+	if(ev_cur == "") break;
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/apply")
+	{
+		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
+		this.attrSet("pgOpen",false);
+	}
+	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;','JavaLikeCalc.JavaScript
+if(f_start) { select_items = elItems; select_value = selValue; }
+
+//> Events for commands process
+ev_cur = ev_rez = "";
+for(off = 0; true; )
+{
+	ev_cur = event.parse(0, "\n", off);
+	if(ev_cur == "") break;
+	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/apply")
+	{
+		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
+		this.attrSet("pgOpen",false);
+	}
+	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;',500,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1384507960);
+INSERT INTO "wlb_Main" VALUES('TextLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAABHUlEQVRYhWNgGOKAkYGBIScnh5ube6BdQjL4+vXrlClTWBgYGDg4ODg5
+OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
+51fufUZRyqukI/ntybO3H778Rgiy8YtIKWkq8DOT7wQKPfDp4dXzZ64/QnIrt4S8ijGH6IUDB56i
+KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
+1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
+sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text',1,'JavaLikeCalc.JavaScript
+if(f_start)	isErr = false, alBlnk = false;
+//Prepare context menu
+if(f_start && !digComs.isEVal() && digComs.length) {
+	contextMenu = "";
+	if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-")+":open\n";
+	if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-")+":close\n";
+	if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-")+":stop\n";
+}
+
+//Display label from st_text
+stCur = -1;
+if(!st_text.isEVal() && st_text.length) {
+	text = st_text.parse(0,":");
+	blink = st_text.parse(2,":").toInt();
+	backClr = st_text.parse(1,":").parse(0,"-");
+	if(blink) {
+		backClrBl = st_text.parse(1,":").parse(1,"-");
+		if(!backClrBl.length)	backClrBl = "gray";
+		backColor = (backColor!=backClr) ? backClr : backClrBl;
+	}
+	else	backColor = backClr;
+}
+//Display typical for st_open
+else if(st_open == true || st_close == false) {
+	backColor = (stVal=digStts.parse(0,";").parse(1,"-")).length ? stVal : "green";
+	text = (!digStts.isEVal() && (stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : tr("Enable");
+	stCur = 1;
+}
+else if(st_open == false || st_close == true) {
+	backColor = (stVal=digStts.parse(1,";").parse(1,"-")).length ? stVal : "blue";
+	text = (!digStts.isEVal() && (stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : tr("Disable");
+	stCur = 0;
+}
+else { backColor = "grey"; text = "---"; return; }
+
+//Blink linked with ElCadr
+if(this.attr("focus") ||
+	(!NAME.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == NAME))
+{
+  bordColor = (bordColor != "white") ? "white" : "black";
+  bordWidth = 2;
+}
+else { bordWidth = 1; bordColor = "black"; }
+
+//Notification create
+if(ntf.length && (ntf.toInt() == stCur) != isErr) {
+	if((isErr=(ntf.toInt()==stCur)))	alarm = "50|"+NAME+"|"+ntf.parse(2,":")+".|"+ntf.parse(1,":");
+	else if(alarmSt&0x100)	alarm = "1|"+NAME+"||1";
+}
+if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
+if(alarmSt&0x100) {
+	if(!(alarmSt&0x10000) || alBlnk)	backColor = isErr ? "red" : backColor;
+	else backColor = (backColor=="gray")?"#383838":"gray";
+	alBlnk = !alBlnk;
+}
+
+//Events process
+for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Kran","Event: "+sval);
+	if(sval == "usr_open") {
+		if(!com.isEVal())	com = true;
+		else close = false;
+		if((comVal=digComs.parse(0,";")).length) comVal = tr("ENABLE");
+		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+	}
+	else if(sval == "usr_close") {
+		if(!close.isEVal())	close = true;
+		else com = false;
+		if((comVal=digComs.parse(1,";")).length) comVal = tr("DISABLE");
+		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+	}
+	else if(sval == "usr_stop") {
+		if(!stop.isEVal())	stop = true;
+		if((comVal=digComs.parse(2,";")).length) comVal = tr("STOP");
+		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+	}
+	else ev_rez += sval+"\n";
+}
+event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1414589841);
+INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
+QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
+efbZ/293VnsZ9tEnn6bcHMaDiORwzz8xC4BIDodDIUzDMA4KpIw5PxzGcdTd3Ejq989EIYEJIQAi
+gIGN9o/jaKv+wLKsMfMAEFNZ3y2WD8a1+4uMM84NCcPPOTs7QfH0gmOnklnGWG9zwymWAIRB/+bn
+NwqlsudPM8Y3m81SpfJHreZlM5fevpaZMhPjIAiS+oQ7X30R7A0q8/ONei3ll9K289rly6NPqPn7
+/fHTAxDcMIQQB+PiTPbhUiMdtn6trZ4quY9bvfc/vCgEfzLP4igK9wYAwMy5hVeI0G2u7ewOvfzJ
+P+t1w+ArSw8XXr9iIg2AQIf1yfWcgRvry0utzZYd4q9+cOHVS4f5QUdKD4B9/Nl1J18cfQZSEgBJ
+kjEGYHSFkJTd1mPbnxmzO0m529k6Uv1w45FpmmPWh2Eo2mvL9259nWQ9XhDRfLUqer3elfc+yOZy
+xLhlmkQkpWSMc2N/2ZCUjPOn9xrndjKWAAOIj7zSSWiuN+q3vxQA4ij86fubbuHky2cvAHhw99vt
+Vgcik8mYs9Wz5VOz/8X7oeXffmmsrKQ9b9DtnHvras5zJuwYhUMAAkAUhi+dOU/cDIcDxvj8uTd6
+3a4wU4YBw8pEYUh05G/r35w4XbWz02CMCJZpDAeDZ1/zdIEo2he49ub5SqUyecT/mdXV1es/ficA
+eHbad23VeY5M104DmPzrVIwWUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0WUI0W
+UI0WUI0WUI0WUI0WUI0WUA13XTedTquO8TzYtu26Ls/n857nqQ7zPPi+XygUjv8SUh1gUrSAarSA
+arSAaoRlWe12e3Tv63FBSmmapnAce3urVShV8n623+85jptM12q1F/YPXV/beNQOAIriWFAcdrr9
+9bW7f3eDQta9+u47nAGA53nlcvlZrdSwvr378ze3SpW5KIwEY3xqKjXtz81EsFisOttYkJTVMxc5
+59sNiFa7c29x8WDu9g93kgMppW2/oFsZm+1Oux+ACHvBP2ylQnHYJpj5AAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+if(f_start) {
+	pAddr = pName.slice(0, pName.lastIndexOf("/"));
+	if(!(pObj=SYS.nodeAt(pAddr)))	return;
+	scLog = (pObj.nodeAt("a_log").get() == true);
+	aLst = pObj.nodeList("a_");
+
+	selTab = "view";
+
+	//View mode clean up
+	view_value = ""; view_geomH = geomH-view_geomY-5;
+
+	//Standard parameters
+	stdPrms = "var;sp;out;auto;aMin;aMax;wMin;wMax;com;close;stop;st_open;st_close;";
+	pColors = new Array("darkmagenta", "orange", "blue", "lightgreen", "cyan", "tomato", "magenta", "wheat", "lightyellow", "darkcyan");
+
+	//Trends prepare
+	trN = 0, trNMax = 10, trNClr = 0; trDigN = 0;
+	trendsList_items = "<tbl sel=''row'' colsWdthFit=''1''><h><s width=''1px''>"+tr("ID")+"</s><s width=''50%''>"+tr("Name")+"</s><s edit=''1''>"+tr("Minimum")+"</s><s edit=''1''>"+tr("Maximum")+"</s></h>";
+	trendsList_value = "";
+	trObj = this.wdgAt("trends");
+	trObj.attrSet("sclVer", scLog?6:2);
+	trObj.attrSet("parNum", trNMax);
+	// Clear previous trends
+	for(iTr = 0; iTr < trNMax; iTr++) trObj.attrSet("prm"+iTr+"addr", "");
+	for(off = 0; (sP=stdPrms.parse(0,";",off)).length && trN < trNMax; ) {
+		if(!(aObj=pObj.nodeAt("a_"+sP)) ||
+			(sP == "aMin" && ((tV=aObj.get()) >= pObj.nodeAt("a_aMax").get() || tV <= pObj.nodeAt("a_min").get())) ||
+			(sP == "aMax" && ((tV=aObj.get()) <= pObj.nodeAt("a_aMin").get() || tV >= pObj.nodeAt("a_max").get())) ||
+			(sP == "wMin" && ((tV=aObj.get()) >= pObj.nodeAt("a_wMax").get() || tV <= pObj.nodeAt("a_min").get())) ||
+			(sP == "wMax" && ((tV=aObj.get()) <= pObj.nodeAt("a_wMin").get() || tV >= pObj.nodeAt("a_max").get())))	continue;
+		isBool = (typeof(aObj.get())=="boolean");
+		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
+		trObj.attrSet("prm"+trN+"color", (trClr=pColors[trNClr])+(isBool?"-127":""));
+		trObj.attrSet("prm"+trN+"width", 1);
+		if((sP == "var" || sP == "sp" || sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax") && pObj.nodeAt("a_min"))
+		{
+			trObj.attrSet("prm"+trN+"bordL", pObj.nodeAt("a_min").get()).attrSet("prm"+trN+"bordU", pObj.nodeAt("a_max").get()).attrSet("prm"+trN+"scl",0);
+			if(sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax")
+				trObj.attrSet("prm"+trN+"addr","line:"+aObj.get()).attrSet("prm"+trN+"color",(trClr=(sP[0]=="a")?"red":"yellow"));
+		}
+		else if(sP == "out") trObj.attrSet("prm"+trN+"bordL",0).attrSet("prm"+trN+"bordU",100).attrSet("prm"+trN+"scl",2);
+		else if(isBool) { trObj.attrSet("prm"+trN+"bordL", -trDigN).attrSet("prm"+trN+"bordU", 20-trDigN).attrSet("prm"+trN+"scl",2); trDigN++; }
+		else trObj.attrSet("prm"+trN+"scl",2);
+		trendsList_items += "<r><s>"+trN+"</s>"
+											"<s color=''"+trClr+"''>"+strEnc2HTML(aObj.descr())+"</s>"
+											"<r>"+trObj.attr("prm"+trN+"bordL")+"</r>"
+											"<r>"+trObj.attr("prm"+trN+"bordU")+"</r></r>";
+		trN++; trNClr++;
+	}
+	for(iA = 0; iA < aLst.length && trN < trNMax; iA++) {
+		aId = aLst[iA].slice(2);
+		if(stdPrms.indexOf(aId+";") != -1 || !(aObj=pObj.nodeAt(aLst[iA])) || !aObj.arch()) continue;
+		isBool = (typeof(aObj.get())=="boolean");
+		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
+		trObj.attrSet("prm"+trN+"color", pColors[trNClr]+(isBool?"-127":""));
+		trObj.attrSet("prm"+trN+"width", 1);
+		if(isBool) { trObj.attrSet("prm"+trN+"bordL", -trDigN).attrSet("prm"+trN+"bordU", 20-trDigN); trDigN++; }
+		trendsList_items += "<r><s>"+trN+"</s>"
+											"<s color=''"+pColors[trNClr]+"''>"+strEnc2HTML(aObj.descr())+"</s>"
+											"<s>"+trObj.attr("prm"+trN+"bordL")+"</s>"
+											"<s>"+trObj.attr("prm"+trN+"bordU")+"</s></r>";
+		trN++; trNClr++;
+	}
+	trendsList_items += "</tbl>";
+	sel_trends_en = trN;
+
+	//Data table prepare
+	dtALst = new Array();
+	dtPeriod = 1;
+	for(off = 0; (sP=stdPrms.parse(0,";",off)).length; )
+		if((aObj=pObj.nodeAt("a_"+sP)) && aObj.arch()) {
+			dtALst.push(aObj);
+			dtPeriod = max(dtPeriod, ceil(aObj.cfg("BPER")));
+		}
+	for(iA = 0; iA < aLst.length; iA++) {
+		aId = aLst[iA].slice(2);
+		if(stdPrms.indexOf(aId+";") == -1 && (aObj=pObj.nodeAt(aLst[iA])) && aObj.arch())
+		{
+			dtALst.push(aObj);
+			dtPeriod = max(dtPeriod, ceil(aObj.cfg("BPER")));
+		}
+	}
+	sel_data_en = dtALst.length;
+}
+
+//View update
+if(pObj && view_en) {
+	view_items = "<tbl sel=''row'' colsWdthFit=''1''><h><s width=''1px''>"+tr("ID")+"</s><s width=''50%''>"+tr("Name")+"</s><s width=''10%''>"+tr("Value")+"</s></h>";
+	for(i_a = 0; i_a < aLst.length; i_a++) {
+		aObj = pObj.nodeAt(aLst[i_a]);
+		view_items += "<r><s>"+aLst[i_a]+"</s>"
+									"<s>"+strEnc2HTML(aObj.descr())+"</s>"
+									"<s>"+strEnc2HTML(aObj.get())+"</s></r>";
+	}
+	view_items += "</tbl>";
+}
+
+//Data update
+if(pObj && data_en) {
+	data_tmpl = "<body docProcLang=''JavaLikeCalc.JavaScript''>\n"
+		"<table class=''data'' cellpadding=''2'' cellspacing=''0'' export=''1'' valign=''middle'' width=''100%''>\n";
+	// Header
+	data_tmpl += "<tr><th>Date</th>";
+	for(i_a = 0; i_a < dtALst.length; i_a++)
+		data_tmpl += "<th>"+strEnc2HTML(dtALst[i_a].descr())+"</th>";
+	data_tmpl += "</tr>\n";
+
+	// Date
+	curTime = SYS.time();
+	for(i_rec = curTime; i_rec > (curTime-100*dtPeriod); i_rec-=dtPeriod) {
+		data_tmpl += "<tr><td>"+SYS.strftime(i_rec,"%d %m %H:%M:%S")+"</td>";
+		for(i_a = 0; i_a < dtALst.length; i_a++)
+			data_tmpl += "<td>"+strEnc2HTML(dtALst[i_a].get(i_rec))+"</td>";
+		data_tmpl += "</tr>\n";
+	}
+	data_tmpl += "</table></body>\n";
+}
+
+//Events process
+ev_rez = "";
+for(off = 0; true; ) {
+	sval = event.parse(0, "\n", off);
+	if(!sval.length) break;
+	//SYS.messInfo("ObjProps","Event: "+sval);
+	if(sval.slice(0,16) == "ws_BtPress:/sel_") selTab = sval.slice(16);
+	else if(sval == "ws_TableChangeSel:/view" && (aObj=pObj.nodeAt(view_value))) {
+		if(!(aObj.flg()&0x04)) {
+			view_geomH = viewSet_geomY-view_geomY-1;
+			viewSet_cfg = (aObj.flg()&0x01) ? aObj.values().split(";").join("\n") : "";
+			viewSet_value = aObj.get();
+		}
+		else view_geomH = geomH-view_geomY-5;
+	}
+	else if(sval == "ws_LnAccept:/viewSet" && (aObj=pObj.nodeAt(view_value))) aObj.set(viewSet_value);
+	else if(sval == "ws_TableChangeSel:/trendsList")
+		for(i_tr = 0; i_tr < trN; i_tr++)
+			trObj.attrSet("prm"+i_tr+"width", ((i_tr==trendsList_value)?3:1));
+	else if((reRez=sval.match("ws_TableEdit_(\\d+)_(\\d+)\\:\\/trendsList")).length)
+		trObj.attrSet("prm"+trendsList_value+((reRez[1]==2)?"bordL":"bordU"), trendsList_set);
+	else ev_rez += sval+"\n";
+}
+event = ev_rez;
+
+//Tab selection process
+if(selTab != prevTab) {
+	wLs = this.nodeList("wdg_");
+	for(iW = 0; iW < wLs.length; iW++) {
+		wId = wLs[iW].slice(4);
+		wObj = this.wdgAt(wId);
+		if(wId.indexOf("sel_") != -1)	wObj.attrSet("color",(wId.slice(4)==selTab)?"#777799":"#555555");
+		else if(wId.indexOf(selTab) != -1) wObj.attrSet("en",true);
+		else if(wId.indexOf(prevTab) != -1) wObj.attrSet("en",false);
+	}
+	prevTab = selTab;
+}','','',1000,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1418050193);
+INSERT INTO "wlb_Main" VALUES('objProps','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
+AA7EAAAOxAGVKw4bAAABvUlEQVRoge3av0rDUBTH8V9ubpNqrVrS+BcKWtFFpYidXBycHbvqSwhd
+fAHHvoEv4CIOLnHQRQcFETpYEPG/VVNtaaw1iUNRHDrJ1YNwPtMlwzn3O2S72tLy0tnoGdR6AQ4B
+C5j6/NIEQsBQucTSrVgxJq0+a311XeXgFgfIAAfABFAHjoEFwFa5YfJ5cnFtUagc+SUEAOwBAmgC
+DtAPJH9llTQixuz5rOKpIWACceAEiAMZoAqcA5rKJal6CoAM38OV/RWVg7+LARef5wP144tGUVqW
+lcvl1M/+E4VC4Xf+gT/EAdQ4gBoHUOMAahxAjQOocQA1DqDGAdQ4gBoHUOMAahxAjQOocQA1DqDG
+AdQ4gNq/D5CNRqNUKlFf44c8z5PJ3i7HcVKj43Yi/uZVX17DZKLbdV3TNCORCPUN27i6K5ebeuv8
+VH+Ttad79Aw+u+WdrY1eu0/vtOfnspqmZbPZaDRKe9e2jk6Kt6fXu9ubE9Mzng9hdnTFO6OVSiXZ
+P5xOj5hSqH3RoFyIUOi6PTBsDwz5vq/l8/mxdFroMgh8IUQQBELotVrVMAwpJfVt27gtP1w+Vlvv
+Ydybiw8wdHLT/ZDoJgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+if(f_start) {
+	props_value = "";
+	props_geomH = geomH-props_geomY;
+}
+
+tittle_text = objName.isEVal() ? tr("Unknown") : objName;
+tittle_tipTool = objDescr.isEVal() ? "" : objDescr;
+if(!objErr.isEVal()) {
+	if(objErr.toInt() == 0)			tittle_backColor = "lime";
+	else if(objErr.toInt() == 1)	tittle_backColor = "yellow";
+	else if(objErr.toInt() == 2)	tittle_backColor = "red";
+	else tittle_backColor = "gray";
+}
+else tittle_backColor = "gray";
+
+if(!objItems.isEVal()) {
+	//Load table with variables
+	tbl = "<tbl sel=''row'' colsWdthFit=''1''>\n"
+		"<h><s width=''1px''>"+tr("Property")+"</s><s width=''55%''>"+tr("Description")+"</s><s width=''30%''>"+tr("Value")+"</s></h>";
+	for(var aIt in objItems) {
+		it = objItems[aIt];
+		if(it.alarm == 1)	tbl += "<r color=''yellow''>";
+		else if(it.alarm == 2)	tbl += "<r color=''red''>";
+		else tbl += "<r>";
+		tbl += "<s>"+aIt+"</s><s>"+strEnc2HTML(it.descr)+"</s><s>"+strEnc2HTML(it.val)+"</s></r>\n";
+	}
+	tbl += "</tbl>";
+	props_items = tbl;
+}
+
+for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("ObjProps","Event: "+sval);
+	if(sval == "ws_TableChangeSel:/props" && (it=objItems[props_value])) {
+		if(it.wr != false) {
+			props_geomH = set_geomY-props_geomY-2;
+			set_cfg = it.wr.length ? it.wr.split(";").join("\n") : "";
+			set_value = it.val;
+		}
+		else props_geomH = geomH-props_geomY;
+		//SYS.messInfo("ObjProps","WR: "+it.wr+"; it="+it);
+	}
+	else if(sval == "ws_LnAccept:/set" && (it=objItems[props_value])) it.set = set_value;
+	else ev_rez += sval+"\n";
+}
+event = ev_rez;','','',1000,'perm;name;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1414948504);
+INSERT INTO "wlb_Main" VALUES('grpGraph10','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
+xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
+krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
+z6LVarFotQp6vXbbm83n0nGEEEGvt16vXSkBEQEKrV3X/fLly3q9/tkPfE+w828XRx8/1qnj42MA
+sNYi4l3Dv+KttQBwL4+IlFLGWJ03xpQJ34iHeMdxmFSOF4/RYuZnmZ9Vn3XtZH+PM2ImUXeWtir+
+7Kwv5TDP3TD8KMRtTkxggmEABOJPsU51SSqlLp4/l4zlUg4/fKB5XvJRFP3edRSgg/Cn5tUmURS9
+jl4zw5ZyebJ3UvFaz168UITYKHJOT/v1g+G7d+/yPAcLxBCaUbSoPFXu5fs+RSNZwYhGgEXmVrwx
+rCgcrTmilXJZ8UiROIQ61ChTrAulFAAIIQxjheOoVsuJY54kpRgAKFgJEKA5t1TfbEIsAQA3dwfr
+wVlwVm1OiAWAdjvrdLLJpAsAnHMGAGABAAw1SBFq2SZotSVpwSQDbW4zaC0hpCiTT0hR8UjQamsy
+g4hGmVs9IaQoKCJHJMWtngBowBxsBGh/rA2DJif5Sq42asYYVIquVk7FMBIRMRUWLRoEgHgYgwIA
+6PPZyI041QiQG3I8DwEUAEyn4XI5IkTnuStEPBicKgUAwIec9zkiIsU8ytN5WpbQ9MkTIYTmHADc
+xaIzm2mAPM8PirUFQAAO8LelqSUAUKji2V/PEp4QS9zcPRmclDkkJDk8nCcJl7JAtJ8+DW54gm/f
+vr24uJjP5+WBhBDlZ/fCrYLd2gkhhJCilrS6wPO8MAyZlK61djKZlKyUMk3TyrABtwp2ayeEMMbq
+R6oLgiBgjLGvXydHR0fGXJestbZa34VbBbu1I6Ix5iFB+RvNgqDv+/5qdX1dOOf1lG3ArYLd2iml
+lNLyQe8KOOeUUoYIxph64jaSvgG3CnZov1tCdUGSJEopdnV1FcexlLJkXdetqzfgVsFu7WUG6j24
+LnBdVwhB9vf3B4MBNDbYbDaL47jBJZRlmbW2wSXU6/XKsaShwdbr9XK5bHAJcc455w0uoW6322q1
+oLHBLi8vZ7NZg0tISul5XtWuG1dCrNVqUUq1vn4JLIqiWt+FWwW7tZdf60OCcs3Oz88Xi0WDp9Ew
+/KXf/1a90DRvGjVGJ0nS4Es8n8+VUg3uA2EYNnsajeO42X3AWssYa3AJdTqdTqcDjQ22WCym02mD
+S0gI4bpug0eJchXHcclqreudbwNuFezWDjfN+F5BuWZxHH///r1qb1rrei/cgFsFu7VTSgHgIcH1
+ATzP830/iqKSFULUh6cNuFWwW3tZQg/ZhRCMMSaEuLq6qosadomXy2XVBKCBl5j4/g9NYCPjG3Cr
+YLf2u9N4XZBlWVEURAgRBEF6E0+fPkXECo7H48FgUEEhhOd5Fcyy7ODgQClVMWEYlv+Al7G3t1ff
+3Pf90WhUQWPM4eFhlmUV8+jRI8dx6rt1u90Kep43Ho/TNGWMPX78uN1uD4dDfPny18+fT6E50W63
+R6MRAPR6vW63y968+ePVq99+9lP9x3Bd9x9FY7XqUFOtUwAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start) {
+	//Parameter selection enable
+	if(allowSelLst.length)
+		for(i_el = 0; i_el < 10; i_el++) {
+			cEl = this["el"+(i_el+1)];
+			cEl.attrSet("en",1);
+			if(cEl.attr("contextMenu").search(":select$") < 0)
+				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
+		}
+}
+
+curTm = SYS.time();
+if(!trnd1_tSek) trnd1_tSek = curTm;
+selSingle = 0;
+selAll = false;
+
+//Events process
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "key_presComma:/trnd1")		trnd1_tSek -= trnd1_tSize/2;
+	else if(evCur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else if(evCur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
+	else if(evCur.search("usr_single:/el") == 0)	selSingle = evCur.slice(14).toInt();
+	else if(evCur.search("usr_all:/el") == 0)		selAll = true;
+	else evRez += evCur+"\n";
+	//SYS.messDebug("Trend","Event: "+evCur);
+}
+event = evRez;
+
+//Trend time control
+//if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
+if(trnd1_tSek < curTm) trnd1_trcPer = 0;
+else { trnd1_trcPer = 1; trnd1_tSek = 0; }
+
+//Generic
+name_arg0val = name;
+
+//Scale
+cntrAct = cntrLog = 0;
+for(i_el = 0; i_el < 8; i_el++) {
+	cEl = this["el"+(i_el+1)];
+	if(!cEl.attr("en")) continue;
+	cntrAct++;
+	if(cEl.attr("log") == true)	cntrLog++;
+}
+trnd1_sclVer = (cntrLog > cntrAct/2) ? trnd1_sclVer|0x4 : trnd1_sclVer&(~0x4);
+
+//Trends
+arh_beg = 1e30, arh_end = 0;
+for(i_el = 0; i_el < 10; i_el++) {
+	cEl = this["el"+(i_el+1)];
+	if(selAll)	cEl.attrSet("bordStyle",3);
+	if(selSingle) cEl.attrSet("bordStyle",((i_el+1)==selSingle)?3:1);
+	cTr = this["trnd1"];
+	cTrPrm = "prm"+i_el;
+	if(!cEl.attr("en")) cTr.attrSet(cTrPrm+"addr","");
+	else {
+		cTr.attrSet(cTrPrm+"addr",cEl.attr("addr"));
+		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
+		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
+		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
+		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
+		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
+		//Enable/disable of the mode''s indication in the regulators ???
+		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
+		//Archive depth calculate
+		if(cEl.attr("bordStyle") == 3) {
+			arh_tmp = cTr.attr(cTrPrm+"prop");
+			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
+			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
+		}
+		if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+		else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+	}
+}
+//Set archive scroll
+if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
+	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
+	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
+	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
+	arh_active = true;
+	if(selSingle) trnd1_tSek = arh_end;
+}
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1418032108);
+INSERT INTO "wlb_Main" VALUES('anShow1s','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','/wlb_Main/wdg_anShow1',1,'','','',-1,'name;geomW;',1415294944);
 COMMIT;

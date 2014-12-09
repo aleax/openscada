@@ -55,9 +55,9 @@ class TProtocolIn : public TCntrNode
 
 	int writeTo( const string &data );	//Backward request to source, for asynchronous responds to requests mostly
 
-	//> Process input messages
-	//* mess( ) - Send messages point from transports.
-	//            False return for full request came and true for need tail or just wait.
+	// Process input messages
+	//  * mess( ) - Send messages point from transports.
+	//              False return for full request came and true for need tail or just wait.
 	virtual bool mess( const string &request, string &answer )	{ answer = ""; return false; }
 
 	TProtocol &owner( );
@@ -85,17 +85,17 @@ class TProtocol: public TModule
 	TProtocol( const string &id );
 	virtual ~TProtocol( );
 
-	//> Addon items list for input protocol addressing
+	// Addon items list for input protocol addressing
 	virtual void itemListIn( vector<string> &ls, const string &curIt = "" );
 
-	//> Input protocol
+	// Input protocol
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
 	bool openStat( const string &name )		{ return chldPresent(m_pr,name); }
 	void open( const string &name, TTransportIn *tr = NULL, const string &sender = "" );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 
-	//> Output protocol
+	// Output protocol
 	virtual void outMess( XMLNode &io, TTransportOut &tro )
 	{ throw TError(nodePath().c_str(),"Function '%s' no support!","outMess"); }
 

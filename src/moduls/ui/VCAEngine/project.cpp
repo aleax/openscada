@@ -775,6 +775,7 @@ Page::Page( const string &iid, const string &isrcwdg ) :
     Widget(iid), TConfig(&mod->elPage()), mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     cfg("ID").setS(id());
+    cfg("PROC").setExtVal(true);
 
     mPage = grpAdd("pg_");
 
@@ -889,6 +890,13 @@ void Page::postDisable( int flag )
     }
 }
 
+bool Page::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "PR_TR") cfg("PROC").setNoTransl(!calcProgTr());
+    modif();
+    return true;
+}
+
 string Page::ico( )
 {
     if(cfg("ICO").getS().size())return cfg("ICO").getS();
@@ -927,6 +935,8 @@ string Page::calcLang( )
     return iprg.substr(0,iprg.find("\n"));
 }
 
+bool Page::calcProgTr( )	{ return (!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() : cfg("PR_TR"); }
+
 string Page::calcProg( )
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcProg();
@@ -948,23 +958,15 @@ string Page::calcProgStors( const string &attr )
 
 int Page::calcPer( )	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
-void Page::setCalcLang( const string &ilng )
+void Page::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
+
+void Page::setCalcProgTr( bool vl )
 {
-    cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg());
-    modif();
+    if(!proc().size() && !parent().freeStat())	parent().at().setCalcProgTr(vl);
+    else cfg("PR_TR") = vl;
 }
 
-void Page::setCalcProg( const string &iprg )
-{
-    cfg("PROC").setS(calcLang()+"\n"+iprg);
-    modif();
-}
-
-void Page::setCalcPer( int vl )
-{
-    mProcPer = vl;
-    modif();
-}
+void Page::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+iprg); }
 
 void Page::setPrjFlags( int val )
 {
@@ -1493,8 +1495,7 @@ PageWdg::~PageWdg( )
 
 TCntrNode &PageWdg::operator=( TCntrNode &node )
 {
-    if(ownerPage().parentNm() == ".." && ownerPage().parent().at().wdgPresent(id()))
-    {
+    if(ownerPage().parentNm() == ".." && ownerPage().parent().at().wdgPresent(id())) {
 	setParentNm(ownerPage().parent().at().path()+"/wdg_"+id());
 	setEnable(true);
     }

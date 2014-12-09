@@ -1,3 +1,9 @@
+2014-12-09 Roman
+- LibsDB.vcaBase.db: Main.{ElCadr,grph_panel}: procedures translation flag is added and set to false.
+    Main.grph_panel: Adapted for dynamic translation.
+- !!:UI.{VCAEngine,Vision}: Widget's procedure translation flag for the translation control is added.
+
+
 2014-12-08 Roman
 - LibsDB.OscadaLibs.db: To DAQ templates base.{anUnif,manInUnif} new visual behaviour attribute "log" is added,
 	for mark display the variable into logarithmic scale.

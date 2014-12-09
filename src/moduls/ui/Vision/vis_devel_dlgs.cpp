@@ -700,8 +700,7 @@ void LibProjProp::isModify( QObject *snd )
 
     XMLNode req("set");
 
-    if(oname == obj_enable->objectName() || oname == prj_keepAspRt->objectName())
-    {
+    if(oname == obj_enable->objectName() || oname == prj_keepAspRt->objectName()) {
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }
@@ -1096,24 +1095,34 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setSpacing(6);
 
     lab = new QLabel(_("Procedure language:"),wdg_proc_fr);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
     glay->addWidget(lab,1,0);
     proc_lang = new QComboBox(wdg_proc_fr);
-    proc_lang->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred) );
+    proc_lang->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
     proc_lang->setObjectName("/proc/calc/progLng");
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang,1,1);
+
     lab = new QLabel(_("Procedure calculate (ms):"),wdg_proc_fr);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
     glay->addWidget(lab,1,2);
     proc_per = new LineEdit(wdg_proc_fr);
     proc_per->setObjectName("/proc/calc/per");
-    connect( proc_per, SIGNAL(apply()), this, SLOT(isModify()));
+    connect(proc_per, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(proc_per,1,3);
+
+    lab = new QLabel(_("Translation:"),wdg_proc_fr);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab, 1, 4);
+    proc_text_tr = new QCheckBox(wdg_proc_fr);
+    proc_text_tr->setObjectName("/proc/calc/prog_tr");// "/wdg/st/en");
+    connect(proc_text_tr, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
+    glay->addWidget(proc_text_tr, 1, 5);
+
     proc_text = new TextEdit(wdg_proc_fr);
     proc_text->setObjectName("/proc/calc/prog");
     connect(proc_text, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(proc_text,2,0,1,4);
+    glay->addWidget(proc_text, 2, 0, 1, 6);
 
     //Add tab 'Links'
     wdg_tabs->addTab(new QWidget,_("Links"));
@@ -1345,11 +1354,9 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
 void VisItProp::tabChanged( int itb )
 {
-    switch(itb)
-    {
+    switch(itb) {
 	case 1:	obj_attr->setWdg(ed_it);	break;
-	case 2:
-	{
+	case 2: {
 	    show_init = true;
 
 	    XMLNode req("get");
@@ -1374,16 +1381,14 @@ void VisItProp::tabChanged( int itb )
 		    //wlst.push_back(req.childGet(i_w)->attr("id"));
 	    //  Fill table
 	    //  Delete no present root items
-	    for(int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++)
-	    {
+	    for(int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++) {
 		unsigned i_w;
 		for(i_w = 0; i_w < wlst.size(); i_w++)
 		    if(obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str()) break;
 		if(i_w >= wlst.size())	delete obj_attr_cfg->topLevelItem(i_r--);
 	    }
 	    //  Add root items
-	    for(unsigned i_w = 0; i_w < wlst.size(); i_w++)
-	    {
+	    for(unsigned i_w = 0; i_w < wlst.size(); i_w++) {
 		QTreeWidgetItem *root_it;
 		int i_r;
 		for(i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++)
@@ -1400,8 +1405,7 @@ void VisItProp::tabChanged( int itb )
 		obj_attr_cfg->addTopLevelItem(root_it);
 
 		//  Delete no presents widget's items
-		for(int i_r = 0; i_r < root_it->childCount(); i_r++)
-		{
+		for(int i_r = 0; i_r < root_it->childCount(); i_r++) {
 		    unsigned i_l;
 		    for(i_l = 0; i_l < req.childGet(0)->childSize(); i_l++)
 			if(root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str())
@@ -1410,8 +1414,7 @@ void VisItProp::tabChanged( int itb )
 		}
 
 		//  Add widget's items
-		for(unsigned i_l = 0; i_l < req.childGet(0)->childSize(); i_l++)
-		{
+		for(unsigned i_l = 0; i_l < req.childGet(0)->childSize(); i_l++) {
 		    QTreeWidgetItem *cur_it;
 		    int i_r;
 		    for(i_r = 0; i_r < root_it->childCount(); i_r++)
@@ -1466,6 +1469,13 @@ void VisItProp::tabChanged( int itb )
 		int cur_el = proc_lang->findText(sval.c_str());
 		if(cur_el < 0) proc_lang->addItem(sval.c_str());
 		proc_lang->setCurrentIndex(proc_lang->findText(sval.c_str()));
+	    }
+	    //  Calc procedure translation
+	    gnd = TCntrNode::ctrId(root, proc_text_tr->objectName().toStdString(), true);
+	    proc_text_tr->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+	    if(gnd) {
+		req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(proc_text_tr->objectName().toStdString(),TSYS::PathEl));
+		if(!owner()->cntrIfCmd(req)) proc_text_tr->setChecked(s2i(req.text()));
 	    }
 	    //  Calc procedure
 	    gnd = TCntrNode::ctrId(root,proc_text->objectName().toStdString(),true);
@@ -1548,7 +1558,7 @@ void VisItProp::isModify( QObject *snd )
     XMLNode req("set");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toStdString(),TSYS::PathEl));
 
-    if(oname == obj_enable->objectName()) {
+    if(oname == obj_enable->objectName() || oname == proc_text_tr->objectName()) {
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }

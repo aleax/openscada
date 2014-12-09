@@ -1417,6 +1417,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate"))) {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calculate period (ms)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/proc/calc/prog_tr",_("Procedure translation allow"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Program"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
 	    }
 	}
@@ -1559,6 +1560,10 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     else if(a_path == "/proc/calc/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(calcPer()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcPer(s2i(opt->text()));
+    }
+    else if(a_path == "/proc/calc/prog_tr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(calcProgTr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcProgTr(s2i(opt->text()));
     }
     else if(a_path == "/proc/calc/prog") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(calcProg());

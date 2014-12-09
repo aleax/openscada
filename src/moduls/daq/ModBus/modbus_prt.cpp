@@ -1133,8 +1133,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		    if(ir == data->regW.end()) noWrReg = true;
 		    else {
 			unsigned short val = (unsigned short)(pdu[6+i_r*2]<<8) | (unsigned char)pdu[6+i_r*2+1];
-			switch(ir->second.sTp)
-			{
+			switch(ir->second.sTp) {
 			    case 'i': {
 				union { uint16_t r[4]; int64_t i; } wl;
 				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);

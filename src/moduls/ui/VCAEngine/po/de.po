@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-30 15:27+0200\n"
+"POT-Creation-Date: 2014-12-09 12:08+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1366,6 +1366,9 @@ msgstr ""
 
 msgid "Parent widget"
 msgstr "Elternwidget"
+
+msgid "Procedure translation allow"
+msgstr "Programm Übersetzung ermöglichen"
 
 msgid "Procedure text and language"
 msgstr "Text und Sprache des Programms"
