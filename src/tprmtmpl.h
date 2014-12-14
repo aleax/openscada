@@ -158,8 +158,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	bool	run_st;
 	int	m_ptmpl;
 	TCfg	&mId;
-	//ResString 
-	string work_lib_db;
+	string	work_lib_db;
 };
 
 }

@@ -210,7 +210,7 @@ class Widget : public TCntrNode
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
-	vector< AutoHD<Widget> > &herit( ) { return m_herit; }
+	vector< AutoHD<Widget> > &herit( ) { return mHerit; }
 	virtual void setParentNm( const string &isw );
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
@@ -277,7 +277,7 @@ class Widget : public TCntrNode
 
 	string		mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget
-	vector< AutoHD<Widget> > m_herit;	//Heritators
+	vector< AutoHD<Widget> > mHerit;	//Heritators
 	map<string, Attr* >	mAttrs;
 	pthread_mutex_t	mtxAttrM;
 	static pthread_mutex_t	mtxAttrCon;

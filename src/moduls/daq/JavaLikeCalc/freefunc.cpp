@@ -2566,8 +2566,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,
 	    "tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program"))) {
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move")) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
@@ -2612,8 +2611,17 @@ void Func::cntrCmdProc( XMLNode *opt )
 		if(nDef)  nDef->childAdd("el")->setText(io(id)->def());
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
-	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), s2i(opt->attr("row")));
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
+	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)));
+	    else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
+	}
+	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	    int row = s2i(opt->attr("row"));
+	    IO *ioPrev = row ? io(row-1) : NULL;
+	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)), row);
+	    else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
+	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioDel(s2i(opt->attr("row")));
 	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioMove(s2i(opt->attr("row")), s2i(opt->attr("to")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {

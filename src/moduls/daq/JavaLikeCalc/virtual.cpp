@@ -674,10 +674,19 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{ ((Func *)func())->ioAdd( new IO("new","New IO",IO::Real,IO::Default) ); modif(); }
-	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{ ((Func *)func())->ioIns( new IO("new","New IO",IO::Real,IO::Default), s2i(opt->attr("row")) ); modif(); }
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	    IO *ioPrev = ((Func*)func())->ioSize() ? ((Func*)func())->io(((Func*)func())->ioSize()-1) : NULL;
+	    if(ioPrev) ((Func*)func())->ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~Func::SysAttr)));
+	    else ((Func*)func())->ioAdd(new IO("new","New IO",IO::Real,IO::Default));
+	    modif();
+	}
+	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	    int row = s2i(opt->attr("row"));
+	    IO *ioPrev = row ? ((Func*)func())->io(row-1) : NULL;
+	    if(ioPrev) ((Func*)func())->ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~Func::SysAttr)), row);
+	    else ((Func*)func())->ioIns(new IO("new","New IO",IO::Real,IO::Default), row);
+	    modif();
+	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    if(func()->io(row)->flg()&Func::SysAttr)

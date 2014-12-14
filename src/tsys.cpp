@@ -1558,7 +1558,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
     }
     catch(TError err) {
-	if(err.cod) {		//Remoe info for pthread_create() but left for other by possible start later
+	if(err.cod) {		//Remove info for pthread_create() but left for other by possible start later
 	    res.request(true);
 	    mTasks.erase(path);
 	    res.release();

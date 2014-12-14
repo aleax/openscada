@@ -185,6 +185,7 @@ class VisItProp : public QDialog
 	QLabel		*obj_id,	//Id
 			*obj_root,	//Root
 			*obj_path,	//Path
+			*obj_used,	//Used
 			*obj_tmstmp;	//TimeStamp
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat

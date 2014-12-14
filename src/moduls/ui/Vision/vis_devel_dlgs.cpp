@@ -931,7 +931,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_ico->setIconSize(QSize(60,60));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico,0,0,4,1);
+    glay->addWidget(obj_ico,0,0,5,1);
 
     lab = new QLabel(_("Enabled:"),tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
@@ -959,13 +959,21 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(pg_tp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(pg_tp,2,2);
 
-    lab = new QLabel(_("Date of modification:"),tab_w);
+    lab = new QLabel(_("Used:"),tab_w);
     glay->addWidget(lab,3,1);
+    obj_used = new QLabel(tab_w);
+    obj_used->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    obj_used->setObjectName("/wdg/st/use");
+    obj_used->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    glay->addWidget(obj_used,3,2,1,4);
+
+    lab = new QLabel(_("Date of modification:"),tab_w);
+    glay->addWidget(lab,4,1);
     obj_tmstmp = new QLabel(tab_w);
     obj_tmstmp->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_tmstmp->setObjectName("/wdg/st/timestamp");
     obj_tmstmp->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_tmstmp,3,2,1,4);
+    glay->addWidget(obj_tmstmp,4,2,1,4);
 
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
@@ -1195,6 +1203,12 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root,obj_parent->objectName().toStdString(),true);
 	obj_parent->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) selectParent();
+	// Used
+	gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
+	if(gnd) {
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_used->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) obj_used->setText(req.text().c_str());
+	}else obj_used->setText("");
 	// TimeStamp
 	gnd = TCntrNode::ctrId(root, obj_tmstmp->objectName().toStdString(), true);
 	if(gnd) {

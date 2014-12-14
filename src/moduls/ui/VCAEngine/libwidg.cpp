@@ -720,9 +720,9 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
     wdgAt(wid).at().setName(name);
 
     //Call heritors include widgets update
-    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
-	if(m_herit[i_h].at().enable())
-	    m_herit[i_h].at().inheritIncl(wid);
+    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
+	if(mHerit[i_h].at().enable())
+	    mHerit[i_h].at().inheritIncl(wid);
 }
 
 AutoHD<CWidget> LWidget::wdgAt( const string &wdg )	{ return Widget::wdgAt(wdg); }

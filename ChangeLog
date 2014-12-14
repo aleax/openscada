@@ -1,3 +1,12 @@
+2014-12-14 Roman
+- LibsDB.OscadaLibs.db: JavaLikeCalc.regEl.pidUnifD: expanded for limit contacts and the control mechanisme's position using for regulation.
+- LibsDB.vcaBase.db: Main.grpGraph10: fixed for accessing to need attributes.
+- SYS: To all desktop files appended "env TERM=" for double starting the console program "dialog" background execution and
+    storage space leak into ~/.xsession-errors prevent.
+- DAQ.JavaLikeCalc: "Add" and "Insert" operation to IOs table expanded for use previous IO as template for new.
+- UI.{VCAEngine,Vision}: Used the widget counter by the heirs is added to states of the main item control page.
+
+
 2014-12-09 Roman
 - LibsDB.vcaBase.db: Main.{ElCadr,grph_panel}: procedures translation flag is added and set to false.
     Main.grph_panel: Adapted for dynamic translation.
