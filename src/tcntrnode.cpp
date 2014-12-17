@@ -403,8 +403,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
     if(TSYS::strNoSpace(node->nodeName()).empty())
     { delete node; throw TError(nodePath().c_str(),_("Add child id is empty!")); }
 
-    if((p=(*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end())
-    {
+    if((p=(*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end()) {
 	delete node;
 	if(p->second->nodeMode() == Disable)	p->second->nodeEn(TCntrNode::NodeRestore);
 	if(!noExp) throw TError(nodePath().c_str(),_("Node '%s' is already present."),p->first);
@@ -429,7 +428,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool shDel )
 {
     if(tm < 0)	tm = DEF_TIMEOUT;
-    ResAlloc res(hd_res, false);
+    ResAlloc res(hd_res, true);		//Set for write mode for prevent first check and next connet at the relock time
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(), _("Group of childs %d error!"), igr);
     if(!(nodeMode() == Enable || nodeMode() == Disable))
 	throw TError(nodePath().c_str(),_("Node is begin processed now!"));
@@ -441,7 +440,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     if(p->second->nodeMode() == Enable) p->second->nodeDis(tm, (flag<<8)|(shDel?NodeShiftDel:0));
 
     if(!shDel) {
-	res.request(true);
+	//res.request(true);
 	p = (*chGrp)[igr].elem.find(name.c_str());
 	if(p == (*chGrp)[igr].elem.end()) return;
 	if((*chGrp)[igr].ordered) {
@@ -509,7 +508,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disable)
 	throw TError(nodePath().c_str(),_("Element '%s' is not present or disabled!"), name.c_str());
 
-    return AutoHD<TCntrNode>(p->second,user);
+    return AutoHD<TCntrNode>(p->second, user);
 }
 
 int TCntrNode::isModify( int f )

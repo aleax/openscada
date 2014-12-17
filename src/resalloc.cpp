@@ -51,8 +51,7 @@ void Res::resRequestW( unsigned short tm )
     else
 #endif
     if(!tm) rez = pthread_rwlock_wrlock(&rwc);
-    else
-    {
+    else {
 	timespec wtm;
 	clock_gettime(CLOCK_REALTIME,&wtm);
 	wtm.tv_nsec += 1000000*(tm%1000);
@@ -83,8 +82,7 @@ void Res::resRequestR( unsigned short tm )
     else
 #endif
     if(!tm) rez = pthread_rwlock_rdlock(&rwc);
-    else
-    {
+    else {
 	timespec wtm;
 	clock_gettime(CLOCK_REALTIME,&wtm);
 	wtm.tv_nsec += 1000000*(tm%1000);
@@ -124,15 +122,14 @@ void ResAlloc::request( bool write, unsigned short tm )
 {
     if(mAlloc) release();
     mAlloc = false;
-    try
-    {
+    try {
 	if(write) mId.resRequestW(tm);
 	else mId.resRequestR(tm);
 	mAlloc = true;
-    }catch(TError err) { if(err.cod!=10) throw; }
+    } catch(TError err) { if(err.cod!=10) throw; }
 }
 
-void ResAlloc::release()
+void ResAlloc::release( )
 {
     if(!mAlloc) return;
     mId.resRelease();

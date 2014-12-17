@@ -40,13 +40,11 @@ template <class ORes> class AutoHD
 {
     public:
 	AutoHD( ): m_node(NULL)		{  }
-	AutoHD(ORes *node, const string &who = "") : m_node(node)
-	{
+	AutoHD( ORes *node, const string &who = "" ) : m_node(node) {
 	    if(m_node)	m_node->AHDConnect();
 	}
-	AutoHD(const AutoHD &hd) : m_node(NULL)	{ operator=(hd); }
-	template <class ORes1> AutoHD(const AutoHD<ORes1> &hd_s) : m_node(NULL)
-	{
+	AutoHD( const AutoHD &hd ) : m_node(NULL)	{ operator=(hd); }
+	template <class ORes1> AutoHD( const AutoHD<ORes1> &hd_s ) : m_node(NULL) {
 	    if(hd_s.freeStat()) return;
 	    m_node = dynamic_cast<ORes*>(&hd_s.at());
 	    if(m_node) m_node->AHDConnect();
@@ -54,24 +52,21 @@ template <class ORes> class AutoHD
 	}
 	~AutoHD( )	{ free(); }
 
-	ORes &at( ) const
-	{
+	ORes &at( ) const {
 	    if(m_node) return *m_node;
 	    throw TError("AutoHD","No init!");
 	}
 
-	AutoHD &operator=(const AutoHD &hd)
-	{
+	AutoHD &operator=( const AutoHD &hd ) {
 	    free();
 	    m_node = hd.m_node;
 	    if(m_node)	m_node->AHDConnect();
 	    return *this;
 	}
 
-	bool operator==(const AutoHD &hd)	{ return (m_node == hd.m_node); }
+	bool operator==( const AutoHD &hd )	{ return (m_node == hd.m_node); }
 
-	void free( )
-	{
+	void free( ) {
 	    if(m_node && m_node->AHDDisConnect()) delete m_node;
 	    m_node = NULL;
 	}

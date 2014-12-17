@@ -209,13 +209,17 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 
     //Function id generation for "<auto>" or call nodePath() for it
     string funcId = fnc_cfg.id();
-    if(funcId == "<auto>")
-	for(int aId = 1; lbAt("sys_compile").at().present(funcId); aId++)
-	    funcId = TSYS::strMess("Auto_%d",aId);
+    ResAlloc res(parseRes(), true);
+    if(funcId == "<auto>") {
+	funcId = "Auto";
+	for(int iP = 1; lbAt("sys_compile").at().present(funcId); ++iP) funcId = TSYS::strMess("Auto%d",iP);
+    }
     else funcId = fnc_cfg.nodePath('_',true);
 
-    //Connect or use allowed compiled function object
+    // Connect or use allowed compiled function object
     if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId.c_str(),"");
+    res.release();
+
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
     if(maxCalcTm > 0) func.at().setMaxCalcTm(maxCalcTm);
 
@@ -738,7 +742,7 @@ Prm::Prm( string name, TTipParam *tp_prm ) :
 
 }
 
-Prm::~Prm()
+Prm::~Prm( )
 {
     nodeDelAll();
 }
@@ -749,7 +753,7 @@ void Prm::postEnable( int flag )
     if(!vlElemPresent(&v_el)) vlElemAtt(&v_el);
 }
 
-void Prm::enable()
+void Prm::enable( )
 {
     if(enableStat())  return;
 

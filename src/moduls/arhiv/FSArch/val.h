@@ -105,7 +105,7 @@ class VFileArch
 	// Base parameters
 	string	mName;		//Name Archive file
 	int	mSize;		//Archive size
-	TFld::Type mTp;		//Value typ
+	TFld::Type mTp;		//Value type
 	int64_t	mBeg;		//Begin of archive file
 	int64_t	mEnd;		//End of archive file
 	int64_t	mPer;		//Values period

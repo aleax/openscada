@@ -311,7 +311,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	    //Remove compiled function object
 	    wCtx.setFunc(NULL);
 	    wFnc.free();
-	    SYS->nodeDel(faddr);
+	    try{ SYS->nodeDel(faddr); } catch (TError) { }
 
 	    return true;
 	}

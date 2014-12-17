@@ -1,3 +1,8 @@
+2014-12-17 Roman
+- !!!!:FIX:TCntrNode,DAQ.JavaLikeCalc: Write resource into TCntrNode::childDel() moved global for prevent attach to removing now node.
+    To function compileFunc() of DAQ.JavaLikeCalc resource added at "<auto>" function ID generation and prevent multiple attach to one.
+
+
 2014-12-14 Roman
 - LibsDB.OscadaLibs.db: JavaLikeCalc.regEl.pidUnifD: expanded for limit contacts and the control mechanisme's position using for regulation.
 - LibsDB.vcaBase.db: Main.grpGraph10: fixed for accessing to need attributes.
