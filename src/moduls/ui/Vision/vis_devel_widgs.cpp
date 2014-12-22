@@ -1262,7 +1262,7 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 	    QTreeWidgetItem *cur_el = item;
 	    while(cur_el) {
 		work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toStdString());
-		cur_el=cur_el->parent();
+		cur_el = cur_el->parent();
 		w_lev++;
 	    }
 	    //Prepare for drag and drop operation
@@ -1308,7 +1308,7 @@ void WdgTree::selectItem( bool force )
     QTreeWidgetItem *cur_el = sel_ls.at(0);
     while(cur_el) {
 	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toStdString());
-	cur_el=cur_el->parent();
+	cur_el = cur_el->parent();
     }
 
     emit selectItem(work_wdg,force);

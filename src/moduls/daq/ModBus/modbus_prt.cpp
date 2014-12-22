@@ -978,8 +978,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		for(int i_r = r_addr; i_r < (r_addr+r_sz); i_r++) {
 		    unsigned short val = 0;
 		    if((itr=blk.find(i_r)) != blk.end()) {
-			switch(itr->second.sTp)
-			{
+			switch(itr->second.sTp) {
 			    case 'i': {
 				union { uint16_t r[4]; int64_t i; } wl;
 				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);

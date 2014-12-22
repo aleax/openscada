@@ -386,7 +386,7 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name )
     if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
-    if(p != (*chGrp)[igr].elem.end() && p->second->nodeMode() == Enable) return true;
+    if(p != (*chGrp)[igr].elem.end() /*&& p->second->nodeMode() == Enable*/) return true;
 
     return false;
 }
@@ -428,7 +428,8 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool shDel )
 {
     if(tm < 0)	tm = DEF_TIMEOUT;
-    ResAlloc res(hd_res, true);		//Set for write mode for prevent first check and next connet at the relock time
+    ResAlloc res(hd_res, false);		//???? Need set for write mode for prevent first check and next attach at the relock time by chldAt()
+						//But race-condition possibility into UI.VCAEngine session stop then need for work out!
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(), _("Group of childs %d error!"), igr);
     if(!(nodeMode() == Enable || nodeMode() == Disable))
 	throw TError(nodePath().c_str(),_("Node is begin processed now!"));
@@ -440,7 +441,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     if(p->second->nodeMode() == Enable) p->second->nodeDis(tm, (flag<<8)|(shDel?NodeShiftDel:0));
 
     if(!shDel) {
-	//res.request(true);
+	res.request(true);
 	p = (*chGrp)[igr].elem.find(name.c_str());
 	if(p == (*chGrp)[igr].elem.end()) return;
 	if((*chGrp)[igr].ordered) {

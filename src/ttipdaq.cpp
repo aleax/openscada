@@ -181,7 +181,7 @@ TTipParam::TTipParam( const char *iid, const char *iname, const char *idb, bool 
 {
     //Add typical structure fields
     fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(atoi(OBJ_ID_SZ)*5).c_str()));
+    fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key|TCfg::NoVal|TFld::NoWrite,i2s(atoi(OBJ_ID_SZ)*5).c_str()));
     fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
     fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));

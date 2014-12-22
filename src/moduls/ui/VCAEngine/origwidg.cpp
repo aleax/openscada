@@ -1290,7 +1290,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	string tVl;
 	// Archive position load
 	if((tVl=sw->sessAttr("aCur")).size()) cfg.owner()->attrAt("aCur").at().setS(tVl, false, true);
-	// Current archive socuments load
+	// Current archive documents load
 	if((tVl=sw->sessAttr("doc"+cfg.owner()->attrAt("aCur").at().getS())).size())
 	    cfg.owner()->attrAt("aDoc").at().setS(tVl, false, true);
 	// Set current document

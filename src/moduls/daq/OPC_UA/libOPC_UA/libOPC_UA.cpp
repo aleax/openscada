@@ -2321,8 +2321,7 @@ nextReq:
 	    EP *wep = epEnAt(scHd.endPoint);
 	    if(!wep) throw OPCError(OpcUa_BadTcpEndpointUrlInvalid, "No propper Endpoint present");
 	    // Decrypt message block and signature check
-	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)
-	    {
+	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt) {
 		if(scHd.secMessMode == MS_SignAndEncrypt)
 		    rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),scHd.servKey,scHd.secPolicy));
 		if(rb.substr(rb.size()-20) != symmetricSign(rb.substr(0,rb.size()-20),scHd.servKey,scHd.secPolicy))    //Check Signature
@@ -2354,10 +2353,8 @@ nextReq:
 
 	    // Prepare respond message
 	    string respEp;
-	    switch(reqTp)
-	    {
-		case OpcUa_FindServersRequest:
-		{
+	    switch(reqTp) {
+		case OpcUa_FindServersRequest: {
 		    //  Request
 		    iS(rb, off);				//endpointUrl
 		    iS(rb, off);				//localeIds []
@@ -2381,8 +2378,7 @@ nextReq:
 			oS(respEp, duLs[i_du]);			//discoveryUrl
 		    break;
 		}
-		case OpcUa_GetEndpointsRequest:
-		{
+		case OpcUa_GetEndpointsRequest: {
 		    //  Request
 		    iS(rb, off);				//endpointUrl
 		    iS(rb, off);				//localeIds []
@@ -2447,8 +2443,7 @@ nextReq:
 
 		    break;
 		}
-		case OpcUa_CreateSessionRequest:
-		{
+		case OpcUa_CreateSessionRequest: {
 		    //  Request
 								//> clientDescription (Application Description)
 		    iS(rb, off);				//applicationUri
@@ -2552,8 +2547,7 @@ nextReq:
 		    oNu(respEp, 0, 4);				//maxRequest MessageSize
 		    break;
 		}
-		case OpcUa_ActivateSessionRequest:
-		{
+		case OpcUa_ActivateSessionRequest: {
 		    //  Request
 								//>clientSignature
 		    string alg = iS(rb, off);			//> algorithm
@@ -2605,8 +2599,7 @@ nextReq:
 		    oS(respEp, "");				//diagnosticInfos []
 		    break;
 		}
-		case OpcUa_CloseSessionRequest:
-		{
+		case OpcUa_CloseSessionRequest: {
 		    //  Request
 		    bool subScrDel = iNu(rb, off, 1);		//deleteSubscriptions
 		    wep->sessClose(sesTokId);
@@ -3110,8 +3103,7 @@ nextReq:
 
 		    break;
 		}
-		case OpcUa_PublishRequest:
-		{
+		case OpcUa_PublishRequest: {
 		    pthread_mutex_lock(&wep->mtxData);
 
 		    //  The publish request queue and/or process
@@ -3190,13 +3182,11 @@ nextReq:
 				    oN(respEp, 0, 4);				//<  monitoredItems []
 				    unsigned i_mIt = 0;
 				    bool maxNotPerPublLim = false;
-				    for(unsigned i_m = 0; !maxNotPerPublLim && i_m < ss.mItems.size(); i_m++)
-				    {
+				    for(unsigned i_m = 0; !maxNotPerPublLim && i_m < ss.mItems.size(); i_m++) {
 					Subscr::MonitItem &mIt = ss.mItems[i_m];
 					if(!(mIt.md == MM_REPORTING && mIt.vQueue.size())) continue;
 					uint8_t eMsk = 0x01;
-					switch(mIt.tmToRet)
-					{
+					switch(mIt.tmToRet) {
 					    case TS_SOURCE: eMsk |= 0x04;	break;
 					    case TS_SERVER: eMsk |= 0x08;	break;
 					    case TS_BOTH:   eMsk |= 0x0C;	break;
@@ -3243,8 +3233,7 @@ nextReq:
 
 		    break;
 		}
-		case OpcUa_RepublishRequest:
-		{
+		case OpcUa_RepublishRequest: {
 		    //  Request
 		    uint32_t prSS = iNu(rb, off, 4);			//> subscriptionId
 		    uint32_t seqN = iNu(rb, off, 4);			//> retransmitSequenceNumber
@@ -3299,8 +3288,7 @@ nextReq:
 	    out.append(respEp);
 	    oNu(out, out.size(), 4, 4);				//Real message size
 
-	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)
-	    {
+	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt) {
 		//Padding place
 		if(scHd.secMessMode == MS_SignAndEncrypt) {
 		    int kSz = scHd.clKey.size()/3;

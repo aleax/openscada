@@ -274,7 +274,7 @@ QMainWindow *TVision::openWindow( )
 	if(iSep != string::npos) screen = s2i(sprj.substr(iSep+1));
 	sprj = sprj.substr(0,iSep);
 
-	// Check and extract for "sess_" or "proj_" prefixes
+	// Check and extract for "ses_" or "proj_" prefixes
 	bool isSess = false;
 	if(sprj.compare(0,4,"ses_") == 0) { isSess = true; sprj.erase(0,4); }
 	else if(sprj.compare(0,4,"prj_") == 0) sprj.erase(0,4);

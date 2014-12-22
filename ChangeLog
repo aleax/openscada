@@ -1,5 +1,11 @@
+2014-12-22 Roman
+- !!:FIX:TCntrNode::chldPresent() set to detect as present all nodes, and disabled now also. Mostly for detection by name set correct.
+    Global resource allocation into TCntrNode::chldDel() restored for prevent race-condition into UI.VCAEngine at the session stop.
+- DAQ: Parameter's config field "OWNER" set to TCfg::NoVal for prevent that appears into attributes.
+
+
 2014-12-17 Roman
-- !!!!:FIX:TCntrNode,DAQ.JavaLikeCalc: Write resource into TCntrNode::childDel() moved global for prevent attach to removing now node.
+- !!!!:FIX:TCntrNode,DAQ.JavaLikeCalc: Write resource into TCntrNode::chldDel() moved global for prevent attach to removing now node.
     To function compileFunc() of DAQ.JavaLikeCalc resource added at "<auto>" function ID generation and prevent multiple attach to one.
 
 
@@ -172,7 +178,7 @@
 2014-10-01 Roman
 - SYS: To task status maximum call lag and consume is added for RT properties problems detect better.
 - DAQ.LogicLev: enRes moved from Res to mutex.
-- UI.VCAEngine: Attr::isTransl() separated to static varaint and used also into generic attributes loading and saving function.
+- UI.VCAEngine: Attr::isTransl() separated to static variant and used also into generic attributes loading and saving function.
 
 
 2014-09-30 Roman
@@ -201,10 +207,10 @@
 2014-09-22 Roman
 - FIX:DAQ.OneWire: Busses and devices list prepare fix.
 - UI:WebCfgD: Expanded for loading files WebCfgDVCA.html and WebCfgDVCA.js from work directory try.
-    Images cache expanded clean up like to UI.Vision and translations.
     JavaScript code mostly clean up and Table expanded for simplify control and exit from cells edit mode.
     Source code mostly clean up.
-- UI:WebVision: Source code some clean up.
+- UI:WebVision: Images cache expanded clean up like to UI.Vision and translations.
+    Source code some clean up.
 
 
 2014-09-19 Roman
