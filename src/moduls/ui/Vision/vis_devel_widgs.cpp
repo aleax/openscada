@@ -121,8 +121,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 
 	//Check for delete widgets from group
 	bool masterWdg = !isChange && (rootItem->childCount() && rootItem->child(0)->id() == "<*>");
-	for(int i_it = (masterWdg?1:0); i_it < rootItem->childCount(); i_it++)
-	{
+	for(int i_it = (masterWdg?1:0); i_it < rootItem->childCount(); i_it++) {
 	    unsigned i_w;
 	    for(i_w = 0; i_w < wdg_ls.size(); i_w++)
 		if(rootItem->child(i_it)->id() == wdg_ls[i_w])
@@ -151,7 +150,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 		row = rootItem->childInsert(wdg_ls[i_w],i_w+1,Item::Wdg);
 		endInsertRows();
 	    }
-	    wdgAttrUpdate(index(i_w+1,0,QModelIndex()), index(0,0,QModelIndex()));
+	    wdgAttrUpdate(index(i_w+1,0,QModelIndex()), index(0,0,QModelIndex()), !i_w);
 	}
     }
 
@@ -165,7 +164,7 @@ void ModInspAttr::setWdg( const string &iwdg )
     else emit layoutChanged();
 }
 
-void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &grp_it )
+void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &grp_it, bool first )
 {
     vector<int> idst;
     bool grpW = false;
@@ -204,8 +203,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		    if(root->childGet(i_a)->attr("id") == it_id)
 			break;
 		//  Remove no present item
-		if(i_a >= root->childSize() && (!grpW || !curit->child(idst[it_lev])->setWdgs(itId,true)))
-		{
+		if(i_a >= root->childSize() && (!grpW || !curit->child(idst[it_lev])->setWdgs(itId,true))) {
 		    beginRemoveRows(curmod,idst[it_lev],idst[it_lev]);
 		    curit->childDel(idst[it_lev]);
 		    endRemoveRows();
@@ -213,7 +211,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		}
 	    }
 	    // Enter to group
-	    else if(curit->child(idst[it_lev])->type( ) == Item::AttrGrp) {
+	    else if(curit->child(idst[it_lev])->type() == Item::AttrGrp) {
 		curmod = index(idst[it_lev],0,curmod);
 		curit = static_cast<Item*>(curmod.internalPointer());
 
@@ -266,7 +264,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    }
 	    // Check attribute item
 	    int ga_id = cur_it->childGet(a_id);
-	    if(grpW && ga_id >= 0) { cur_it->child(ga_id)->setWdgs(itId); continue; }
+	    if(grpW && ga_id >= 0 && !first) { cur_it->child(ga_id)->setWdgs(itId); continue; }
 	    if(ga_id < 0) ga_id = cur_it->childInsert(a_id, -1, Item::Attr);
 	    cur_it->child(ga_id)->setName(a_nm);
 	    cur_it->child(ga_id)->setEdited(s2i(gnd->attr("acs"))&SEC_WR);
@@ -508,6 +506,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 
 	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
 	XMLNode req("set"), reqPrev("get");
+	bool toSetWdg = false;
 	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); ) {
 	    req.setAttr("path",swdg+"/%2fattr%2f"+nattr)->setText(val);
 	    DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
@@ -542,9 +541,10 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
 		emit dataChanged(index, index);
-		if(it->flag()&(Item::Active|Item::Select|Item::SelEd)) setWdg(cur_wdg);
+		if(it->flag()&(Item::Active|Item::Select|Item::SelEd)) toSetWdg = true;
 	    }
 	}
+	if(toSetWdg || (TSYS::strSepParse(cur_wdg,1,';').size() && (isGrp || nwdg == TSYS::strSepParse(cur_wdg,0,';')))) setWdg(cur_wdg);
     }catch(...){ return false; }
 
     return true;

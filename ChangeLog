@@ -1,3 +1,15 @@
+2014-12-24 Roman
+- LibsDB.OscadaLibs.db: JavaLikeCalc.regEl.pidUnifD expanded new attributes translation, operation limits for main parameters,
+    and some fixes for work with real crane's position present.
+- LibsDB.vcaBase.db: mnEls.El_Kran_polozh some expanded for enveronment color set and procedure limits for [0...100].
+    Main.anShow1 fixed for the selection blink by it's control panel set.
+- FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Fixed for prevent load translation from no empty translation's DB field
+    but disabled to translation.
+- FIX:UI.VCAEngine: Unpropper syntax highlighting rules apply into primitive "FormEl" fixed.
+- FIX:UI.Vision: Changes update after that apply into attributes manager of the widgets into group mode fixed
+    to update different widget's attributes into the group and on the contrary for first widget into the group.
+
+
 2014-12-22 Roman
 - !!:FIX:TCntrNode::chldPresent() set to detect as present all nodes, and disabled now also. Mostly for detection by name set correct.
     Global resource allocation into TCntrNode::chldDel() restored for prevent race-condition into UI.VCAEngine at the session stop.

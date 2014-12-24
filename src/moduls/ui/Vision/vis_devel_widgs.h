@@ -150,7 +150,7 @@ class ModInspAttr: public QAbstractTableModel
 
     private:
 	//Private methods
-	void wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &grp_it = QModelIndex() );
+	void wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &grp_it = QModelIndex(), bool first = false );
 
 	//Private attributes
 	string cur_wdg;

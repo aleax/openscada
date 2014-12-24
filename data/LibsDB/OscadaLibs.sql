@@ -334,8 +334,8 @@ INSERT INTO "flb_regEl_io" VALUES('pidImp','difer','Differential accumulation','
 INSERT INTO "flb_regEl_io" VALUES('pidImp','dlag','Differential lag accumulation','Фільтр диференціалу',2,1,'0','',1,43,'Накопление задержки производной','');
 INSERT INTO "flb_regEl_io" VALUES('pidImp','err1','Error step back','Помилка крок назад',2,1,'0','',1,44,'Ошибка шаг назад','');
 INSERT INTO "flb_regEl_io" VALUES('pidImp','err2','Error two step back','Помилка два кроки назад',2,1,'0','',1,45,'Ошибка два шага назад','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','QO','Open state of control mechanism','',3,0,'0','',0,31,'','');
-INSERT INTO "flb_regEl_io" VALUES('pidUnifD','QZ','Close state of control mechanism','',3,0,'0','',0,32,'','');
+INSERT INTO "flb_regEl_io" VALUES('pidUnifD','QO','Open state of control mechanism','Відкритий стан виконавчого механізму',3,0,'0','',0,31,'Открытое состояние исполнительного механизма','');
+INSERT INTO "flb_regEl_io" VALUES('pidUnifD','QZ','Close state of control mechanism','Закритий стан виконавчого механізму',3,0,'0','',0,32,'Закрытое состояние исполнительного механизма','');
 CREATE TABLE 'lib_Controllers_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "lib_Controllers_io" VALUES('prescr','dbDB','DB:DB with tables name',0,1,'',0,4,'БД:Имя БД с таблицами','','БД:Ім''я БД з таблицями','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','dbComs','DB:Table with commands',0,1,'',0,5,'БД:Таблица с коммандами','','БД:Таблиця з командами','');
@@ -5596,7 +5596,7 @@ if( impAnImit )
   return max(0,min(100,out));
 }
 return impAnOut;','','','');
-INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply by editing it.','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',10,0,'if(f_start) outA = 0;
+INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply by editing it.','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',10,0,'if(f_start) outA = out;
 
 //Call standard analog PID
 Kzd = min(1e3/(f_frq*Tzd),1);
@@ -5604,7 +5604,8 @@ Kint = min(1e3/(f_frq*Ti),1);
 Kdif = min(1e3/(f_frq*Td),1);
 
 //Scale error
-if(max <= min) return 0;
+if(var.isEVal() || max <= min) return out;
+sp = max(min,min(max,sp));
 
 //Prepare values
 spv = 100*(sp-min)/(max-min);
@@ -5646,7 +5647,7 @@ if(analog) return outA;
 if(f_start || f_stop) { impQup = impQdwn = false; return 0; }
 
 //Call impuls generator
-outA_ = (impAnOut < 0) ? 2*(outA-50) : impAnOut-outA;
+outA_ = (impAnOut < 0) ? 2*(outA-50) : (outA-impAnOut);
 if(perLag <= 0 && ((outA_*KImpRfact) >= (100*TImpMin/TImpPer) || (-outA_/KImpRfact) >= (100*TImpMin/TImpPer) || (!auto && abs(outA_) > 0.1)))
 {
 	impLag = max(abs(outA_)*TImpPer/100,TImpMin);
@@ -5662,7 +5663,7 @@ else if(perLag > 0) {
 	}
 }
 
-if(!auto) manIn = 50;
+if(!auto && impAnOut < 0) manIn = 50;
 
 if(impQupTm > 1 || (impQupTm && !impQup)) impQupTm--;
 if(impQup && !impQupTm) impQupTm = 2*f_frq;
@@ -5674,7 +5675,7 @@ if(impAnImit > 0) {
 	if(impQdwn)	out -= 100/(impAnImit*f_frq);
 	return max(0,min(100,out));
 }
-return max(0,min(100,impAnOut));','','',1418553053);
+return max(0,min(100,impAnOut));','','',1419242640);
 INSERT INTO "flb_regEl" VALUES('pidImp','PID pulse','ПІД імпульсний','ПИД импульсный','Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.','Спеціалізований імпульсний ПІД регулятор реалізований за особливим алгоритмом з компенсацією подвійного інтегрування.','Специализированный импульсный ПИД регулятор реализованный по особому алгоритму с компенсацией двойного интегрирования.',10,1,'//> Call standard analog PID
 Kzd = min(1e3/(f_frq*Tzd),1);
 Kint = min(1e3/(f_frq*Ti),1);

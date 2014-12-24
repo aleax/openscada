@@ -724,7 +724,7 @@ string MTable::getVal( TCfg &cfg, bool toEnc, uint8_t RqFlg )
 void MTable::setVal( TCfg &cf, const string &val, bool tr )
 {
     if(!cf.extVal()) {
-	cf.setS(val);
+	if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
 	if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
     }
     else {
