@@ -728,7 +728,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc prmRes(cntr.enRes, true);
-		for(unsigned i_p=0; i_p < cntr.pHd.size(); i_p++)
+		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		    cntr.pHd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
 		prmRes.unlock();
 

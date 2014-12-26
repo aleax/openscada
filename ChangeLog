@@ -1,3 +1,10 @@
+2014-12-26 Roman
+- LibsDB.OscadaLibs.db: JavaLikeCalc.regEl.pidUnifD fixed for holded by up to 2 seconds pulse outputs "impQupTm" and "impQdwnTm" for GUI.
+- !!:FIX:DAQ.Siemens: Resources allocation mostly revised and added global API resource for prevent crashes at the reconnection
+	by parallel access and remaping the connections index.
+    Source code mostly cleaned.
+
+
 2014-12-24 Roman
 - LibsDB.OscadaLibs.db: JavaLikeCalc.regEl.pidUnifD expanded new attributes translation, operation limits for main parameters,
     and some fixes for work with real crane's position present.

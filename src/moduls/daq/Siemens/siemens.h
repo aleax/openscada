@@ -49,8 +49,7 @@ namespace Siemens
 class SValData
 {
     public:
-	SValData( int idb, int ioff, int isz ) :
-	    db(idb), off(ioff), sz(isz) { }
+	SValData( int idb, int ioff, int isz ) : db(idb), off(ioff), sz(isz) { }
 
 	int db;		//DB
 	int off;	//Data offset
@@ -81,14 +80,13 @@ class TMdPrm : public TParamContr, public TValFunc
 {
     public:
 	//Data
-	class SLnk
-	{
+	class SLnk {
 	    public:
-		SLnk(int iid, const string &idb_addr = "") : io_id(iid), db_addr(idb_addr), val(-1,-1,0) { }
+		SLnk( int iid, const string &idbAddr = "" ) : ioId(iid), dbAddr(idbAddr), val(-1, -1, 0) { }
 
-		int	io_id;		//Template function io index
-		string	db_addr;	//DB full address: DB1.20.1
-		SValData val;		//Value address data
+		int	ioId;	//Template function io index
+		string	dbAddr;	//DB full address: DB1.20.1
+		SValData val;	//Value address data
 	};
 
 	//Methods
@@ -100,7 +98,7 @@ class TMdPrm : public TParamContr, public TValFunc
 
 	void calc( bool first, bool last, double frq );	//Calc template's algoritmes
 
-	//> Template link operations
+	// Template link operations
 	int lnkSize( );
 	int lnkId( int id );
 	int lnkId( const string &id );
@@ -129,13 +127,13 @@ class TMdPrm : public TParamContr, public TValFunc
 	void initLnks( );
 
 	//Attributes
-	TElem	p_el;				//Work atribute elements
+	TElem	pEl;				//Work atribute elements
 
-	int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
+	int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 	vector<SLnk>	plnk;			//Parameter's links
 
-	ResString	acq_err;
-	time_t	acq_err_tm;
+	ResString	acqErr;
+	time_t		acqErrTm;
 };
 
 //************************************************
@@ -174,8 +172,6 @@ class TMdContr: public TController
 
 	TTpContr &owner( );
 
-	Res &nodeRes( )		{ return nRes; }
-
     protected:
 	//Methods
 	void load_( );
@@ -209,16 +205,14 @@ class TMdContr: public TController
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 	int valSize( IO::Type itp, int iv_sz );			//Prepare value sizes
-	string revers( const string &ibuf )
-	{
+	string revers( const string &ibuf ) {
 	    if(type() == ADS) return ibuf;
 	    string obuf;
-	    for(int i=ibuf.size()-1; i >= 0; i--) obuf += ibuf[i];
+	    for(int i = ibuf.size()-1; i >= 0; i--) obuf += ibuf[i];
 	    return obuf;
 	}
 	//Data
-	class SDataRec
-	{
+	class SDataRec {
 	    public:
 		SDataRec( int idb, int ioff, int v_rez );
 
@@ -236,9 +230,9 @@ class TMdContr: public TController
 		&mDev;			// CIF device number
 	char	&mAssincWR;		// Asynchronous write mode
 
-	bool	prc_st,			// Process task active
-		call_st,        	// Calc now stat
-		endrun_req,		// Request to stop of the Process task
+	bool	prcSt,			// Process task active
+		callSt,			// Calc now stat
+		endrunReq,		// Request to stop of the Process task
 		isReload;
 	ResString errCon;
 	vector< AutoHD<TMdPrm> > pHd;	// Parameter's process list
@@ -248,9 +242,10 @@ class TMdContr: public TController
 	daveInterface	*di;
 	daveConnection	*dc;
 
-	Res	nRes, reqRes;
+	pthread_mutex_t	enRes, reqAPIRes;
+	Res	reqDataRes;
 
-	double	mPer, tm_calc;		// Template functions calc time
+	double	mPer, tmCalc;		// Template functions calc time
 };
 
 //************************************************
@@ -264,15 +259,18 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	//- Devices -
+	// Devices
 	bool drvCIFOK( );
 	void initCIF( int dev );
 
-	TElem	&prmIOE( )	{ return el_prm_io; }
-	TElem	&CIFDevE( )	{ return el_cif_dev; }
+	TElem	&prmIOE( )	{ return elPrmIO; }
+	TElem	&CIFDevE( )	{ return elCifDev; }
 
-	//- Life list of PB stations -
+	// Life list of PB stations
 	void getLifeListPB( unsigned board, string &buffer );
+
+	//Attributes
+	Res	resAPI;
 
     protected:
 	//Methods
@@ -288,11 +286,10 @@ class TTpContr: public TTipDAQ
 	TController *ContrAttach( const string &name, const string &daq_db );
 
 	//Attributes
-	bool	drv_CIF_OK;
-	TElem	el_cif_dev, el_prm_io;
+	bool	drvCIF_OK;
+	TElem	elCifDev, elPrmIO;
 
-	struct SCifDev
-	{
+	struct SCifDev {
 	    Res		res;		//Device resource
 	    bool	present;	//Present flag
 	    int		board;		//Board number
