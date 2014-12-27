@@ -129,7 +129,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    opt->setAttr("path",s_br);
 	    cntrCmdProc(opt);
 	    if( opt->attr("rez") != "0" )
-		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
+		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),(nodePath()+path).c_str(),s_br.c_str());
 	}
     }
     catch(TError err) {
@@ -287,7 +287,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 		s2i(branch->childGet(i_b)->attr("acs"))&SEC_WR)
 	    break;
     if(i_b >= branch->childSize())
-        throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
+	throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
     bool idm = s2i(branch->childGet(i_b)->attr("idm"));
     string n_grp = branch->childGet(i_b)->attr("id");
     d_el = d_el.substr(n_grp.size());
@@ -375,7 +375,7 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name )
     if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
-    if(p != (*chGrp)[igr].elem.end() && p->second->nodeMode() == Enable) return true;
+    if(p != (*chGrp)[igr].elem.end() /*&& p->second->nodeMode() == Enable*/) return true;
 
     return false;
 }
@@ -392,8 +392,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
     if(TSYS::strNoSpace(node->nodeName()).empty())
     { delete node; throw TError(nodePath().c_str(),_("Add child id is empty!")); }
 
-    if((p=(*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end())
-    {
+    if((p=(*chGrp)[igr].elem.find(node->nodeName())) != (*chGrp)[igr].elem.end()) {
 	delete node;
 	if(p->second->nodeMode() == Disable)	p->second->nodeEn(TCntrNode::NodeRestore);
 	if(!noExp) throw TError(nodePath().c_str(),_("Node '%s' is already present."),p->first);
@@ -491,7 +490,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disable)
 	throw TError(nodePath().c_str(),_("Element '%s' is not present or disabled!"), name.c_str());
 
-    return AutoHD<TCntrNode>(p->second,user);
+    return AutoHD<TCntrNode>(p->second, user);
 }
 
 int TCntrNode::isModify( int f )
@@ -501,8 +500,7 @@ int TCntrNode::isModify( int f )
 
     if(f&Self && mFlg&SelfModify) rflg |= Self;
     if(f&Child)
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	{
+	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++) {
 	    TMap::iterator p;
 	    for( p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
 		if( p->second->isModify(Self|Child) )	{ rflg |= Child; break; }

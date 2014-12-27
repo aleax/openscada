@@ -35,6 +35,7 @@
 #define STR_BUF_LEN	10000	// Length of string buffers (no string class)
 #define NSTR_BUF_LEN	100	// Length of string buffers for number
 #define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
+#define STD_CACHE_LIM	100	// Standard caches limit
 #define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
 #define STD_INTERF_TM	5	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
@@ -165,7 +166,7 @@ class TSYS : public TCntrNode
 	static bool taskEndRun( );      // Check for the task endrun by signal SIGUSR1
 
 	//> Sleep task for period grid <per> on ns or to cron time.
-	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
+	static int sysSleep( float tm );			//System sleep in seconds up to nanoseconds (1e-9)
 	static void taskSleep( int64_t per, time_t cron = 0 );
 	static time_t cron( const string &vl, time_t base = 0 );
 
@@ -298,9 +299,11 @@ class TSYS : public TCntrNode
 		enum Flgs	{ Detached = 0x01, FinishTask = 0x02 };
 
 		//Methods
-		STask( ) : thr(0), policy(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0)		{ }
+		STask( ) : thr(0), policy(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		    cycleLost(0), lagMax(0), consMax(0)	{ }
 		STask( pthread_t ithr, char ipolicy, char iprior ) :
-		    thr(ithr), policy(ipolicy), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0)	{ }
+		    thr(ithr), policy(ipolicy), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		    cycleLost(0), lagMax(0), consMax(0)	{ }
 
 		//Attributes
 		string		path;
@@ -311,7 +314,8 @@ class TSYS : public TCntrNode
 		void *(*task) (void *);
 		void		*taskArg;
 		unsigned	flgs;
-		int64_t		tm_beg, tm_end, tm_per, tm_pnt;
+		int64_t		tm_beg, tm_end, tm_per, tm_pnt, cycleLost;
+		int		lagMax, consMax;
 	};
 
 	//Private methods

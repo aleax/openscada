@@ -59,7 +59,8 @@ class Attr
 	    IsUser	= 0x02000,	//User created element
 	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
 	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
-	    DirRead	= 0x20000	//Direct read attribute, through widget
+	    OnlyRead	= 0x20000,	//Only read attribute, through widget, no the attribute storing location
+	    PreRead	= 0x40000	//Preprocessed read
 	};
 
 	// Link types
@@ -75,7 +76,7 @@ class Attr
 	};
 
 	//Methods
-	//> Main
+	// Main
 	Attr( TFld *fld, bool inher );
 	~Attr( );
 
@@ -87,6 +88,12 @@ class Attr
 	unsigned modif( )	{ return mModif; }
 	string cfgTempl( );
 	string cfgVal( );
+	static bool isTransl( TFld::Type tp, int flgGlb, int flgSelf = -1 ) {
+	    return (tp == TFld::String &&
+		!(flgGlb&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		(flgSelf == -1 || flgSelf&(Attr::CfgConst|Attr::CfgLnkIn)));
+	}
+	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 
 	void setFlgSelf( SelfAttrFlgs flg );
 	void setModif( unsigned set )	{ mModif = set; }
@@ -170,7 +177,7 @@ class Widget : public TCntrNode
 	virtual string calcProg( )	{ return ""; }		//Calc procedure
 	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
 	virtual bool   isContainer( );				//Is container (Is define of the terminator)
-	virtual bool   isLink( )	{ return m_lnk; }	//Widget as link
+	virtual bool   isLink( )	{ return mLnk; }	//Widget as link
 	bool stlLock( )			{ return mStlLock; }	//Style lock
 
 	virtual void setName( const string &inm );
@@ -188,7 +195,7 @@ class Widget : public TCntrNode
 	virtual void loadIO( )		{ }			//Load widget's IO
 	virtual void saveIO( )		{ }			//Save widget's IO
 	virtual void wClear( );					//Widget's changes clear
-	virtual void wChDown( const string &ia = "" );		//Widget's changes put down
+	virtual string wChDown( const string &ia = "" );	//Widget's changes put down
 
 	// Enable stat
 	bool enable( );
@@ -201,7 +208,7 @@ class Widget : public TCntrNode
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
-	vector< AutoHD<Widget> > &herit( ) { return m_herit; }
+	vector< AutoHD<Widget> > &herit( ) { return mHerit; }
 	virtual void setParentNm( const string &isw );
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
@@ -247,6 +254,7 @@ class Widget : public TCntrNode
 	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 	virtual TVariant vlGet( Attr &a );
 	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
+	virtual bool eventProc( const string &ev, Widget *src = NULL );	//Return "true" for terminate next processing
 
 	virtual void calc( Widget *base );
 	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
@@ -259,14 +267,14 @@ class Widget : public TCntrNode
 
 	unsigned char	inclWdg		:3;
 	unsigned char	mEnable		:1;	//Enable status
-	unsigned char	m_lnk		:1;	//Widget as link
+	unsigned char	mLnk		:1;	//Widget as link
 	unsigned char	mStlLock	:1;	//Style lock
 	unsigned char	BACrtHoldOvr	:1;	//Base attrs creation hold over to enable and inherit stage
 	unsigned char	ChldResrv	:1;	//Childs reserve attribute
 
 	string		mParentNm;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget
-	vector< AutoHD<Widget> > m_herit;	//Heritators
+	vector< AutoHD<Widget> > mHerit;	//Heritators
 	map<string, Attr* >	mAttrs;
 	pthread_mutex_t	mtxAttrM;
 	static pthread_mutex_t	mtxAttrCon;

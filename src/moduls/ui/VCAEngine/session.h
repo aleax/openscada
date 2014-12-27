@@ -92,6 +92,9 @@ class Session : public TCntrNode
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
+	string sessAttr( const string &idw, const string &id, bool onlyAllow = false );
+	void sessAttrSet( const string &idw, const string &id, const string &val );
+
 	// Alarms process
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
@@ -116,8 +119,7 @@ class Session : public TCntrNode
 
     private:
 	//Data
-	class Alarm
-	{
+	class Alarm {
 	    public:
 		//Methods
 		Alarm(const string &ipath, uint8_t ilev, uint8_t itp, const string &icat, const string &imess,
@@ -127,14 +129,14 @@ class Session : public TCntrNode
 		Alarm( ) : lev(0), tp(0), qtp(0)	{ }
 
 		//Attributes
-		uint8_t	    lev,	//Level
-			    tp,		//Type
-			    qtp;	//Quittance type
-		string	    path,	//Widget path
-			    cat,	//Category
-			    mess,	//Message
-			    tpArg;	//Type argument
-		unsigned    clc;	//Clock
+		uint8_t	lev,	//Level
+			tp,	//Type
+			qtp;	//Quittance type
+		string	path,	//Widget path
+			cat,	//Category
+			mess,	//Message
+			tpArg;	//Type argument
+		unsigned clc;	//Clock
 	};
 
 	//Methods
@@ -201,6 +203,9 @@ class SessWdg : public Widget, public TValFunc
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 	void pgClose( );
 
+	string sessAttr( const string &id, bool onlyAllow = false );
+	void sessAttrSet( const string &id, const string &val );
+
 	// Events process
 	void eventAdd( const string &ev );
 	string eventGet( bool clear = false );
@@ -265,8 +270,8 @@ class SessPage : public SessWdg
 	SessPage( const string &id, const string &page, Session *sess );
 	~SessPage( );
 
-	string path( );
-	string type( )		{ return "SessPage"; }
+	string	path( );
+	string	type( )		{ return "SessPage"; }
 
 	void setEnable( bool val, bool force = false );
 	void setProcess( bool val, bool lastFirstCalc = true );
@@ -296,6 +301,7 @@ class SessPage : public SessWdg
 	bool cntrCmdGeneric( XMLNode *opt );
 
 	bool attrChange( Attr &cfg, TVariant prev );
+	TVariant vlGet( Attr &a );
 	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
     private:

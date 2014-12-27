@@ -220,7 +220,7 @@ class TArchiveS : public TSubSYS
 	TElem &aValE( )		{ return elAval; }
 
 	//Public attributes
-	bool	SubStarting;
+	bool	subStarting;
 
     protected:
 	//Protected methods

@@ -480,8 +480,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","pg_","idSz","30");
 	}
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
-	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
@@ -490,8 +489,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/style/style",_("Style"),RWRWR_,"root",SUI_ID,3,"tp","dec","dest","select","select","/style/stLst");
 	    if(stlCurent() >= 0 && stlCurent() < stlSize()) {
 		ctrMkNode("fld",opt,-1,"/style/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		if(ctrMkNode("table",opt,-1,"/style/props",_("Properties"),RWRWR_,"root",SUI_ID,2,"s_com","del","key","id"))
-		{
+		if(ctrMkNode("table",opt,-1,"/style/props",_("Properties"),RWRWR_,"root",SUI_ID,2,"s_com","del","key","id")) {
 		    ctrMkNode("list",opt,-1,"/style/props/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/style/props/vl",_("Value"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		}
@@ -544,8 +542,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(opt->text());
     }
-    else if(a_path == "/obj/cfg/per")
-    {
+    else if(a_path == "/obj/cfg/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(period()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPeriod(s2i(opt->text()));
     }
@@ -625,22 +622,26 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    // Request data
 	    if(idcol == "id") {
 		string mimeType, mimeData;
-		//  Copy mime data to new record
+		// Copy mime data to new record
 		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) {
 		    mimeDataSet(opt->text(), mimeType, mimeData);
-		    mimeDataDel(idmime );
+		    mimeDataDel(idmime);
 		}
 	    }
 	    else if(idcol == "tp") {
 		string mimeType;
-		//  Copy mime data to new record
+		// Copy mime data to new record
 		if(mimeDataGet("res:"+idmime, mimeType))
 		    mimeDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
 	    else if(idcol == "dt") {
 		string mimeType;
-		if(mimeDataGet("res:"+idmime, mimeType))
-		    mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024.,6),opt->text());
+		if(!mimeDataGet("res:"+idmime, mimeType)) {
+		    size_t extP = idmime.rfind(".");
+		    if(extP == string::npos || extP == 0 || extP == (idmime.size()-1)) mimeType = "media/unknown";
+		    else { mimeType = "media/"+idmime.substr(extP+1); idmime = idmime.substr(0,extP); }
+		}
+		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
 	    }
 	}
     }
@@ -983,8 +984,7 @@ void Page::loadIO( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_incl";
     c_el.cfg("IDW").setS(path(),true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); ) {
 	string sid  = c_el.cfg("ID").getS();
 	if(c_el.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
@@ -1106,9 +1106,9 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
     wdgAt(wid).at().setName(name);
 
     //Call heritors include widgets update
-    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
-	if(m_herit[i_h].at().enable())
-	    m_herit[i_h].at().inheritIncl(wid);
+    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
+	if(mHerit[i_h].at().enable())
+	    mHerit[i_h].at().inheritIncl(wid);
 }
 
 AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off )
@@ -1180,6 +1180,25 @@ void Page::inheritAttr( const string &attr )
     if(!mdf) modifClr( );
 }
 
+TVariant Page::vlGet( Attr &a )
+{
+    if(a.owner() == this) {
+	if(a.id() == "owner") {
+	    short perm = attrAt("perm").at().getI(true);
+	    if(!(perm&01000)) return a.getS(true);
+	    Page *oP = ownerPage();
+	    return oP ? oP->attrAt("owner").at().getS() : ownerProj()->owner()+":"+ownerProj()->grp();
+	}
+	else if(a.id() == "perm") {
+	    short perm = a.getI(true);
+	    if(!(perm&01000)) return perm;
+	    Page *oP = ownerPage();
+	    return (oP?oP->attrAt("perm").at().getI():ownerProj()->permit())|01000;
+	}
+    }
+    return Widget::vlGet(a);
+}
+
 TVariant Page::stlReq( Attr &a, const TVariant &vl, bool wr )
 {
     if(stlLock()) return vl;
@@ -1196,8 +1215,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     if(opt->name() == "info") {
 	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path(),RWRWR_,"root",SUI_ID);
-	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration")))
-	{
+	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
 	    if(prjFlags()&Page::Empty || (ownerPage() && ownerPage()->prjFlags()&(Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,10,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
@@ -1386,7 +1404,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 PageWdg::PageWdg( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg())
 {
     cfg("ID").setS(id());
-    m_lnk = true;
+    mLnk = true;
     setParentNm(isrcwdg);
 }
 
@@ -1510,8 +1528,7 @@ void PageWdg::load_( )
     for(unsigned i_a = 0; i_a < als.size(); i_a++) {
 	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos)
-	{
+	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
 	}

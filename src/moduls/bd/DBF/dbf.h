@@ -62,6 +62,7 @@ class TBasaDBF
 	TBasaDBF( );
 	~TBasaDBF( );
 
+	bool isEmpty( );
 	int LoadFields( db_str_rec * fields, int number );
 	int addField( int pos, db_str_rec * field_ptr );
 	int DelField( int pos );
@@ -84,7 +85,7 @@ class TBasaDBF
 
     protected:
 	//Attributes
-	db_head * db_head_ptr;		//pointer to header
+	db_head *db_head_ptr;		//pointer to header
 	db_str_rec *db_field_ptr;	//pointer to db fields
 	void **items;			//records
 };

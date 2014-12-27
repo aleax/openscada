@@ -119,19 +119,18 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
 
 void LineEdit::viewApplyBt( bool view )
 {
-    if( view == (bool)bt_fld ) return;
+    if(view == (bool)bt_fld) return;
 
-    if( view && !bt_fld )
-    {
+    if(view && !bt_fld) {
 	bt_fld = new QPushButton(this);
 	bt_fld->setIcon( QIcon(":/images/ok.png") );
 	bt_fld->setIconSize( QSize(12,12) );
 	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
-	//bt_fld->setMaximumWidth( 15 );
+	//bt_fld->setMaximumWidth(15);
 	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
 	layout()->addWidget( bt_fld );
     }
-    if( !view && bt_fld ) { bt_fld->deleteLater(); bt_fld = NULL; }
+    if(!view && bt_fld) { bt_fld->deleteLater(); bt_fld = NULL; }
 }
 
 bool LineEdit::isEdited( )	{ return bt_fld; }
@@ -298,7 +297,7 @@ void LineEdit::setCfg(const QString &cfg)
     if(ed_fld) ed_fld->blockSignals(false);
 }
 
-QString LineEdit::value()
+QString LineEdit::value( )
 {
     switch(type())
     {
@@ -355,6 +354,21 @@ SyntxHighl::SyntxHighl(QTextDocument *parent) : QSyntaxHighlighter(parent)
 void SyntxHighl::setSnthHgl(XMLNode nd)
 {
     rules = nd;
+
+    //> Set current font settings
+    QFont rez;
+
+    char family[101]; strcpy(family,"Arial");
+    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
+    sscanf(nd.attr("font").c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+    rez.setFamily(QString(family).replace(QRegExp("_")," "));
+    rez.setPointSize(size);
+    rez.setBold(bold);
+    rez.setItalic(italic);
+    rez.setUnderline(underline);
+    rez.setStrikeOut(strike);
+    document()->setDefaultFont(rez);
+
     rehighlight();
 }
 
@@ -645,6 +659,13 @@ CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 #endif
 }
 
+void CfgTable::resizeRowsToContentsLim( )
+{
+    QTableView::resizeRowsToContents();
+    for(int i_rw = 0; i_rw < rowCount(); i_rw++)
+	setRowHeight(i_rw, vmin(rowHeight(i_rw), size().height()/1.3));
+}
+
 bool CfgTable::event( QEvent *e )
 {
     if(e->type() == QEvent::MouseButtonPress)
@@ -888,7 +909,7 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
     }
 }
 
-QString DlgUser::user()
+QString DlgUser::user( )
 {
     return users->currentText();
 }
@@ -926,10 +947,7 @@ UserStBar::UserStBar( const QString &iuser, QWidget * parent ) : QLabel(parent)
     setUser(iuser);
 }
 
-QString UserStBar::user( )
-{
-    return user_txt;
-}
+QString UserStBar::user( )	{ return user_txt; }
 
 void UserStBar::setUser( const QString &val )
 {
@@ -939,21 +957,21 @@ void UserStBar::setUser( const QString &val )
 
 bool UserStBar::event( QEvent *event )
 {
-    if( event->type() == QEvent::MouseButtonDblClick )  userSel();
-    return QLabel::event( event );
+    if(event->type() == QEvent::MouseButtonDblClick) userSel();
+    return QLabel::event(event);
 }
 
 bool UserStBar::userSel( )
 {
     DlgUser d_usr(parentWidget());
     int rez = d_usr.exec();
-    if( rez == DlgUser::SelOK && d_usr.user() != user() )
+    if(rez == DlgUser::SelOK && d_usr.user() != user())
     {
-	setUser( d_usr.user() );
+	setUser(d_usr.user());
 	emit userChanged();
 	return true;
     }
-    else if( rez == DlgUser::SelErr )
+    else if(rez == DlgUser::SelErr)
         mod->postMess(mod->nodePath().c_str(),_("Auth is wrong!!!"),TUIMod::Warning,this);
 
     return false;
@@ -962,26 +980,35 @@ bool UserStBar::userSel( )
 //*************************************************
 //* TableDelegate: Combobox table delegate.       *
 //*************************************************
-TableDelegate::TableDelegate(QObject *parent) : QItemDelegate(parent)
+TableDelegate::TableDelegate( QObject *parent ) : QItemDelegate(parent)
 {
 
 }
 
-void TableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+/*QSize TableDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    QSize rez = QItemDelegate::sizeHint(option, index);
+    QWidget *w = dynamic_cast<QWidget*>(parent());
+    return w ? QSize(rez.width(),vmin(rez.height(),w->height()*0.9)) : rez;
+}*/
+
+void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     drawFocus(painter,option,option.rect.adjusted(+1,+1,-1,-1));
 
     QVariant value = index.data(Qt::DisplayRole);
-    switch(value.type())
-    {
+    switch(value.type()) {
 	case QVariant::Bool:
 	    //painter->save();
-	    if(value.toBool())
-	    {
+	    if(value.toBool()) {
 		QImage img(":/images/ok.png");
 		painter->drawImage(option.rect.center().x()-img.width()/2,option.rect.center().y()-img.height()/2,img);
 	    }
 	    //painter->restore();
+	    break;
+	case QVariant::String:
+	    //!!!! Append correct eliding
+	    painter->drawText(option.rect, Qt::AlignLeft|Qt::AlignVCenter|Qt::TextWordWrap, value.toString());
 	    break;
 	default:
 	    drawDisplay(painter,option,option.rect,value.toString());
@@ -989,7 +1016,7 @@ void TableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     }
 }
 
-QWidget *TableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     QWidget *w_del;
     if(!index.isValid()) return 0;

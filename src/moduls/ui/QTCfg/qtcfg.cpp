@@ -75,7 +75,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) :
-    pg_info("info"), genReqs("CntrReqs"), root(&pg_info), copy_buf("0"), que_sz(20), tbl_init(false)
+    pg_info("info"), genReqs("CntrReqs"), root(&pg_info), copy_buf("0"), que_sz(20), tbl_init(false), mWaitCursorSet(false)
 {
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -407,12 +407,18 @@ ConfApp::ConfApp( string open_user ) :
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
+    // Wait cursor clean up timer
+    waitCursorClear = new QTimer(this);
+    waitCursorClear->setSingleShot(true);
+    waitCursorClear->setInterval(50);
+    connect(waitCursorClear, SIGNAL(timeout()), SLOT(waitCursorSet()));
 
     menuBar()->setVisible(true);
 
     // Display root page and init external pages
     initHosts();
-    try{ pageDisplay("/"+SYS->id()+"/"+mod->startPath()); } catch(TError err) { pageDisplay("/"+SYS->id()); }
+    try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
+    catch(TError err) { pageDisplay("/"+SYS->id()); }
 }
 
 ConfApp::~ConfApp( )
@@ -421,6 +427,7 @@ ConfApp::~ConfApp( )
     autoUpdTimer->stop();
 
     mod->unregWin(this);
+    waitCursorSet(-1);
 }
 
 void ConfApp::quitSt( )
@@ -464,6 +471,20 @@ bool ConfApp::exitModifChk( )
 	}
     }
     return true;
+}
+
+void ConfApp::waitCursorSet( int val )
+{
+    //Set
+    if(val == 1) {
+	if(!mWaitCursorSet) QApplication::setOverrideCursor(Qt::WaitCursor);
+	mWaitCursorSet = true;
+	waitCursorClear->stop();
+    }
+    //Clear cursor command
+    else if(val == 0 && mWaitCursorSet) waitCursorClear->start();
+    //Real clear after the timer shot
+    else if(val == -1 && mWaitCursorSet) { QApplication::restoreOverrideCursor(); mWaitCursorSet = false; }
 }
 
 void ConfApp::endRunChk( )
@@ -792,11 +813,11 @@ void ConfApp::treeUpdate( )
 	    viewChildRecArea(CtrTree->topLevelItem(i_t),true);
 }
 
-void ConfApp::userSel()
+void ConfApp::userSel( )
 {
     pg_info.setAttr("path","");
 
-    try{ pageDisplay("/"+SYS->id()+"/"+mod->startPath()); }
+    try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError err) { pageDisplay("/"+SYS->id()); }
 
     initHosts();
@@ -1103,6 +1124,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl = new CfgTable(widget);
 		tbl->setItemDelegate(new TableDelegate);
 		tbl->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+		tbl->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+		//tbl->setTextElideMode(Qt::ElideNone);
 		tbl->setStatusTip((sel_path+"/"+br_path).c_str());
 		tbl->setObjectName(br_path.c_str());
 		QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -1111,6 +1134,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
+		connect(tbl->horizontalHeader(), SIGNAL(sectionClicked(int)/*sectionResized(int,int,int)*/), tbl, SLOT(resizeRowsToContentsLim()));
 		tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
 
 		widget->layout()->addWidget(new QLabel((t_s.attr("dscr")+":").c_str(),widget));
@@ -1236,9 +1260,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				tbl->setColumnWidth(i_c, busyColsWdth);
 		    }
 
-		    tbl->resizeRowsToContents();
-		    for(int i_rw = 0; i_rw < tbl->rowCount(); i_rw++)
-			tbl->setRowHeight(i_rw, vmin(tbl->rowHeight(i_rw), tbl->size().height()/1.3));
+		    tbl->resizeRowsToContentsLim();
 		}
 
 		tbl_init = false;
@@ -1469,9 +1491,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_r = new QLabel(widget);
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
-		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
-		    sp.setHorizontalStretch(1);
-		    val_r->setSizePolicy(sp);
+		    //QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
+		    //sp.setHorizontalStretch(1);
+		    //val_r->setSizePolicy(sp);
 		}
 		// View edit
 		else {
@@ -2189,7 +2211,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
     }
 
     //Direct request
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    waitCursorSet(1); //QApplication::setOverrideCursor(Qt::WaitCursor);
     try {
 	int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString());
 
@@ -2206,11 +2228,11 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		    if(sel_ls.at(i_el)->text(2).toStdString() != reqPath)
 			selNds += sel_ls.at(i_el)->text(2).toStdString()+"\n";
 		if(selNds.size()) {
-		    QApplication::restoreOverrideCursor();
+		    waitCursorSet(0);		//QApplication::restoreOverrideCursor();
 		    int questRes = QMessageBox::question(this,_("Send changes to selections"),
 			    TSYS::strMess(_("Send current command '%s' to other selected nodes \"%s\"?"),node.name().c_str(),selNds.c_str()).c_str(),
 			    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply);
-		    QApplication::setOverrideCursor(Qt::WaitCursor);
+		    waitCursorSet(1);		//QApplication::setOverrideCursor(Qt::WaitCursor);
 		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); )
 		    {
 			node.setAttr("path", reqPath+"/"+reqPathEl);
@@ -2219,11 +2241,11 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		}
 	    }
 	}
-	QApplication::restoreOverrideCursor();
+	waitCursorSet(0);	//QApplication::restoreOverrideCursor();
 	return rez;
     }
     catch(TError err) {
-	QApplication::restoreOverrideCursor();
+	waitCursorSet(0);	//QApplication::restoreOverrideCursor();
 	node.childClear();
 	node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
     }
@@ -2235,8 +2257,7 @@ string ConfApp::getPrintVal( const string &vl )
 {
     bool isBool = false;
     for(unsigned iCh = 0; !isBool && iCh < vl.size(); ++iCh)
-	switch(vl[iCh])
-	{
+	switch(vl[iCh]) {
 	    case 0: isBool = true; break;
 	}
 
@@ -2768,6 +2789,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 void ConfApp::tableSet( int row, int col )
 {
+    bool noReload = false;
     string value;
     if(tbl_init || row < 0 || col < 0) return;
 
@@ -2836,10 +2858,12 @@ void ConfApp::tableSet( int row, int col )
 	mess_info(mod->nodePath().c_str(),_("%s| Set '%s' cell ('%s':%s) to: %s."),
 	    w_user->user().toStdString().c_str(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());
+	noReload = s2i(n_el1.attr("noReload"));
+	if(noReload) n_el->childGet(col)->childGet(row)->setText(value);
     }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    pageRefresh(true);
+    if(!noReload) pageRefresh(true);
 }
 
 void ConfApp::listBoxGo( QListWidgetItem* item )

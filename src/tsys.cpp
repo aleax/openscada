@@ -305,8 +305,7 @@ string TSYS::strNoSpace( const string &val )
     int beg = -1, end = -1;
 
     for(unsigned i_s = 0; i_s < val.size(); i_s++)
-	if(val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t')
-	{
+	if(val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t') {
 	    if(beg < 0) beg = i_s;
 	    end = i_s;
 	}
@@ -337,7 +336,7 @@ string TSYS::strMess( unsigned len, const char *fmt, ... )
     int lenRez = vsnprintf(str, sizeof(str), fmt, argptr);
     va_end(argptr);
 
-    return (lenRez < len) ? string(str) : string(str)+"...";
+    return (lenRez < (int)len) ? string(str) : string(str)+"...";
 }
 
 string TSYS::strLabEnum( const string &base )
@@ -520,8 +519,8 @@ void TSYS::cfgPrmLoad( )
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
     setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
     setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
-    setSaveAtExit(atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()));
-    setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
+    setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit","0")));
+    setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod","0")));
 }
 
 void TSYS::load_( )
@@ -971,7 +970,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		unsigned i_smb;
 		for(i_smb = 0; i_smb < opt1.size(); i_smb++)
 		    if(in[i_sz] == opt1[i_smb]) {
-			sprintf(buf,"%%%02X",(unsigned char)in[i_sz]);
+			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[i_sz]);
 			sout += buf;
 			break;
 		    }
@@ -1026,7 +1025,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::Bin: {
 	    string svl, evl;
 	    sout.reserve(in.size()/2);
-	    for(unsigned iCh = 0; iCh < (int)in.size(); ++iCh)
+	    for(unsigned iCh = 0; iCh < in.size(); ++iCh)
 		if(isxdigit(in[iCh])) {
 		    sout += (char)strtol(in.substr(iCh,2).c_str(),NULL,16); iCh++;
 		}
@@ -1124,7 +1123,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size()*2);
 	    char buf[3+opt1.size()];
 	    for(i_sz = 0; i_sz < in.size(); i_sz++) {
-		sprintf(buf, "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
+		snprintf(buf, sizeof(buf), "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
 		sout += buf;
 	    }
 	    break;
@@ -1358,7 +1357,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	res.release();
 	//Error by this active task present
-	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
+	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' already present!"),path.c_str());
 	sysSleep(0.01);
 	res.request(true);
     }
@@ -1387,7 +1386,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     if(priority > 0)	policy = SCHED_RR;
     pthread_attr_setschedpolicy(pthr_attr, policy);
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
-    pthread_attr_setschedparam(pthr_attr,&prior);
+    pthread_attr_setschedparam(pthr_attr, &prior);
 
     try {
 	pthread_attr_getdetachstate(pthr_attr,&detachStat);
@@ -1403,21 +1402,22 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	if(!pAttr) pthread_attr_destroy(pthr_attr);
 
-	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
+	if(rez) throw TError(1, nodePath().c_str(), _("Task creation error %d."), rez);
 
 	//Wait for thread structure initialization finish for not detachable tasks
 	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority
 	//Wait for start status
-	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); )
-	{
+	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); ) {
 	    if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' start timeouted!"),path.c_str());
 	    sysSleep(STD_WAIT_DELAY*1e-3);
 	}
     }
-    catch(TError) {
-	res.request(true);
-	mTasks.erase(path);
-	res.release();
+    catch(TError err) {
+	if(err.cod) {		//Remove info for pthread_create() but left for other by possible start later
+	    res.request(true);
+	    mTasks.erase(path);
+	    res.release();
+	}
 	throw;
     }
 }
@@ -1484,7 +1484,7 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    //tsk->prior = param.sched_priority;
+    //tsk->prior = param.sched_priority;	//!!!! Commented for nice
 
 #if __GLIBC_PREREQ(2,4)
     //Load and init CPU set
@@ -1494,8 +1494,7 @@ void *TSYS::taskWrap( void *stas )
 	CPU_ZERO(&cpuset);
 	string sval;
 	bool cpuSetOK = false;
-	for(int off = 0; (sval=TSYS::strParse(tsk->cpuSet,0,":",&off)).size(); cpuSetOK = true)
-	    CPU_SET(atoi(sval.c_str()),&cpuset);
+	for(int off = 0; (sval=TSYS::strParse(tsk->cpuSet,0,":",&off)).size(); cpuSetOK = true) CPU_SET(s2i(sval), &cpuset);
 	if(cpuSetOK) pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
     }
     else if(SYS->multCPU() && (tsk->flgs & STask::Detached)) tsk->cpuSet = "NA";
@@ -1575,10 +1574,13 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 	}while(((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm);
 
 	if(stsk) {
+	    if(stsk->tm_pnt) stsk->cycleLost += vmax(0, pnt_tm/per-stsk->tm_pnt/per-1);
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = cur_tm;
 	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
 	    stsk->tm_pnt = pnt_tm;
+	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
+	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
 	}
     }
     else {
@@ -1589,6 +1591,8 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 	    stsk->tm_end = 1000000000ll*end_tm;
 	    stsk->tm_per = 1000000000ll*time(NULL);
 	    stsk->tm_pnt = 1000000000ll*cron;
+	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
+	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
 	}
     }
 }
@@ -2123,7 +2127,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/clk_res" && ctrChkNode(opt)) {
 	struct timespec tmval;
 	clock_getres(CLOCK_REALTIME,&tmval);
-	opt->setText(TSYS::time2str(1e-3*tmval.tv_nsec));
+	opt->setText(tm2s(1e-3*tmval.tv_nsec));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
     else if(a_path == "/gen/config") {
@@ -2136,11 +2140,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/saveExit") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(saveAtExit()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit(s2i(opt->text()));
     }
     else if(a_path == "/gen/savePeriod") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(savePeriod()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(s2i(opt->text()));
     }
     else if(a_path == "/gen/workdir") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());
@@ -2174,23 +2178,23 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/mess/lev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->messLevel()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(s2i(opt->text()));
     }
     else if(a_path == "/gen/mess/log_sysl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x01)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01));
     }
     else if(a_path == "/gen/mess/log_stdo") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x02)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02));
     }
     else if(a_path == "/gen/mess/log_stde") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x04)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04));
     }
     else if(a_path == "/gen/mess/log_arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x08)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08));
     }
     else if((a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD))
     {
@@ -2209,26 +2213,31 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_prior	= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
 	    XMLNode *n_cpuSet	= (multCPU() ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL);
 
-	    ResAlloc res(taskRes,false);
+	    ResAlloc res(taskRes, false);
 	    for(map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++)
 	    {
 		if(n_path)	n_path->childAdd("el")->setText(it->first);
 		if(n_thr)	n_thr->childAdd("el")->setText(u2s(it->second.thr));
 		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
 		if(n_stat) {
-		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0;
+		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0, lagMax = 0, consMax = 0;
 		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
-		    { tm_beg = it->second.tm_beg; tm_end = it->second.tm_end; tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt; }
+		    {
+			tm_beg = it->second.tm_beg; tm_end = it->second.tm_end;
+			tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt;
+			lagMax = it->second.lagMax; consMax = it->second.consMax;
+		    }
 		    XMLNode *cn = n_stat->childAdd("el");
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
-			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consume: %3.1f%% (%s from %s). Lag: %s."),
-			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
-			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_pnt)).c_str()));
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."),
+			    tm2s((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
+			    100*(double)consMax/(double)(tm_per-tm_beg), tm2s(1e-3*(tm_end-tm_beg)).c_str(), tm2s(1e-3*(tm_per-tm_beg)).c_str(),
+			    tm2s(1e-3*(tm_per-tm_pnt)).c_str(), tm2s(1e-3*lagMax).c_str(), (double)it->second.cycleLost));
 		}
 		if(n_plc) {
 		    string plcVl = _("Standard");
-		    if(it->second.policy == SCHED_RR) plcVl = _("Round-robin");
+		    if(it->second.policy == SCHED_RR) plcVl = _("RT Round-robin");
 #if __GLIBC_PREREQ(2,4)
 		    if(it->second.policy == SCHED_BATCH) plcVl = _("Style \"batch\"");
 #endif
@@ -2251,8 +2260,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    cpu_set_t cpuset;
 	    CPU_ZERO(&cpuset);
 	    string sval;
-	    for(int off = 0; (sval=TSYS::strParse(it->second.cpuSet,0,":",&off)).size(); )
-		CPU_SET(atoi(sval.c_str()),&cpuset);
+	    for(int off = 0; (sval=TSYS::strParse(it->second.cpuSet,0,":",&off)).size(); ) CPU_SET(s2i(sval), &cpuset);
 	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
 	    res.release();
 	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first,opt->text());

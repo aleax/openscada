@@ -1,16 +1,15 @@
 # OpenSCADA.DAQ.System translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-23 20:12+0300\n"
+"POT-Creation-Date: 2014-09-12 11:13+0300\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -42,7 +41,7 @@ msgstr "10:Das Gerät ist."
 msgid "Full CPU Load"
 msgstr "Auslastung des Prozessors"
 
-msgid "CPU Load :"
+msgid "CPU Load: "
 msgstr "Auslastung des Prozessors: "
 
 msgid "Read (B)"
@@ -129,8 +128,28 @@ msgstr "Schnittstellenstatistik: "
 msgid "Data sensors"
 msgstr "Datesensoren"
 
-msgid "HD smart: "
-msgstr ""
+msgid "HDD SMART: "
+msgstr "HDD SMART: "
+
+msgid "UPS"
+msgstr "USV"
+
+#, c-format
+msgid "REQ -> '%s'"
+msgstr "ANF -> '%s'"
+
+#, c-format
+msgid "RESP -> '%s'"
+msgstr "ANTW -> '%s'"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "UPS: "
+msgstr "USV: "
 
 msgid "Full seconds"
 msgstr "Volle Sekunden"
@@ -167,10 +186,10 @@ msgstr "Roman Savotschenko"
 
 msgid ""
 "Allow operation system data acquisition. Support OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU and other."
+"HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other."
 msgstr ""
 "Ermöglicht die Datenerfassung des Betriebssystems. Unterstützt werden die ОС "
-"Linux Datenquellen: HDDTemp, Sensors, Uptime, Memory, CPU und andere."
+"Linux Datenquellen: HDDTemp, Sensors, Uptime, Memory, CPU, UPS und andere."
 
 msgid "Auto create active DA"
 msgstr "Automatisches Erstellen ist aktiv - DA"
@@ -193,6 +212,9 @@ msgstr "Standard"
 msgid "System part"
 msgstr "Systemteil"
 
+msgid "Additional parameters"
+msgstr "Zusätzlichen Parametern"
+
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
@@ -214,6 +236,10 @@ msgstr "2:Controller ist angehalten"
 msgid "1:Parameter disabled"
 msgstr "1:Parameter ist abgeschaltet"
 
+#, c-format
+msgid "Write value to attribute '%s' error: %s"
+msgstr "Schreiben Sie Wert auf das Attribut '%s' Fehler: %s"
+
 msgid "CPU"
 msgstr "Prozessor"
 
@@ -231,6 +257,9 @@ msgstr "Netzstatistik"
 
 msgid "Sensors"
 msgstr "Sensoren"
+
+msgid "UPS (NUT)"
+msgstr "USV (NUT)"
 
 msgid "Up time"
 msgstr "Betriebszeit"

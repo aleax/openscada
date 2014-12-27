@@ -46,8 +46,7 @@ class TModule : public TCntrNode
 	//Data
 	//*****************************************
 	//* SAt: Attach module struct             *
-	class SAt
-	{
+	class SAt {
 	    public:
 		//Methods
 		SAt( )	{ }
@@ -60,15 +59,14 @@ class TModule : public TCntrNode
 		}
 
 		//Attributes
-		string id;          //id module
-		string type;        //Type module
-		int    t_ver;       //Type version module
+		string	id;		//id module
+		string	type;		//Type module
+		int	t_ver;		//Type version module
 	};
 
 	//*****************************************
 	//* ExpFunc                               *
-	class ExpFunc
-	{
+	class ExpFunc {
 	    public:
 		ExpFunc( const string &iprot, const string &idscr, void (TModule::*iptr)() ) :
 		    prot(iprot), dscr(idscr), ptr(iptr)	{ };
@@ -94,13 +92,13 @@ class TModule : public TCntrNode
 
 	virtual void perSYSCall( unsigned int cnt )	{ }
 
-	//> Export functions
+	// Export functions
 	void modFuncList( vector<string> &list );
 	bool modFuncPresent( const string &prot );
 	ExpFunc &modFunc( const string &prot );
 	void modFunc( const string &prot, void (TModule::**offptr)() );
 
-	//> Translate functions
+	// Translate functions
 	const char *I18N( const char *mess );
 
 	TSubSYS &owner( );
@@ -110,7 +108,7 @@ class TModule : public TCntrNode
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//> Reg export function
+	// Reg export function
 	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
 
 	//Attributes

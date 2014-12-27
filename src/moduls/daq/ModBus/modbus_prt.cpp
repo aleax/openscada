@@ -298,14 +298,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += crc;
 
 	    //Send request
-	    for(int i_tr = 0; i_tr < reqTry; i_tr++) {
-		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
-		rez.assign(buf, resp_len);
-		//Wait tail
-		while(resp_len) {
-		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-		    rez.append(buf, resp_len);
-		}
+	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
+		try {
+		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		    rez.assign(buf, resp_len);
+		    //Wait tail
+		    while(resp_len) {
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+			rez.append(buf, resp_len);
+		    }
+		} catch(TError er) { err = _("14:Device error: ") + er.mess; continue; } //By possible the send request breakdown and no response
 
 		if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
 		if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
@@ -323,15 +325,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap = ":"+DataToASCII(mbap)+"\x0D\x0A";
 
 	    //Send request
-	    for(int i_tr = 0; i_tr < reqTry; i_tr++) {
-		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
-		rez.assign(buf, resp_len);
-		//Wait tail
-		while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A"))
-		{
-		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-		    rez.append(buf, resp_len);
-		}
+	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
+		try {
+		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		    rez.assign(buf, resp_len);
+		    //Wait tail
+		    while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A")) {
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+			rez.append(buf, resp_len);
+		    }
+		} catch(TError er) { err = _("14:Device error: ") + er.mess; continue; } //By possible the send request breakdown and no response
 
 		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\x0D\x0A")
 		{ err = _("13:Error respond: Error format."); continue; }
@@ -349,8 +352,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if(err.empty()) {
 	    if(pdu.size() < 2) err = _("13:Error respond");
 	    if(pdu[0]&0x80)
-		switch(pdu[1])
-		{
+		switch(pdu[1]) {
 		    case 0x1: err = TSYS::strMess(_("1:%02X:Function is not supported."),(unsigned char)(pdu[0]&(~0x80)));	break;
 		    case 0x2: err = _("2:Requested address not allow or request area too long.");	break;
 		    case 0x3: err = _("3:Illegal data value into request.");		break;
@@ -362,7 +364,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
 	}
-    }catch(TError er) { err = _("14:Device error: ") + er.mess; }
+    } catch(TError er) { err = _("14:Device error: ") + er.mess; }
 
     io.setText(err.empty()?pdu:"");
     if(!err.empty()) io.setAttr("err",err);
@@ -671,8 +673,7 @@ bool Node::cfgChange( TCfg &co, const TVariant &pc )
 	cfg("TO_TR").setView(false); cfg("TO_PRT").setView(false); cfg("TO_ADDR").setView(false);
 
 	//Show selected
-	switch(co.getI())
-	{
+	switch(co.getI()) {
 	    case 0:	cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
 	    case 1:	cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
 	    case 2:	cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true);	break;
@@ -767,6 +768,7 @@ void Node::save_( )
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("FLAGS").setI(io(i_io)->flg());
 	cfg.cfg("POS").setI(i_io);
+	cfg.cfg("VALUE").setNoTransl((io(i_io)->type()!=IO::String));
 	if(io(i_io)->flg()&Node::IsLink) cfg.cfg("VALUE").setS(io(i_io)->rez());
 	else if(data && data->val.func()) cfg.cfg("VALUE").setS(data->val.getS(i_io));
 	else cfg.cfg("VALUE").setS(io(i_io)->def());
@@ -829,7 +831,7 @@ void Node::setEnable( bool vl )
 		}
 		//  Specific mode
 		else {
-		    for(off = 0; off < ioId.size() && !isdigit(ioId[off]); off++) ;
+		    for(off = 0; off < (int)ioId.size() && !isdigit(ioId[off]); off++) ;
 		    atp = ioId.substr(0,off);
 		    ai  = ioId.substr(off);
 		    if(tolower(ioId[ioId.size()-1])=='w') mode = "w";
@@ -903,7 +905,7 @@ string Node::getStatus( )
 	    case MD_DATA:
 		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
 					"Writed registers %.4g, coils %.4g."),
-		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rRegI, data->rCoilI, data->rRegI, data->wReg, data->wCoil);
+		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rRegI, data->rCoilI, data->wReg, data->wCoil);
 		break;
 	    case MD_GT_ND: case MD_GT_NET:
 		rez += TSYS::strMess(_("Requests %.4g."), cntReq);

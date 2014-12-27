@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 20:49+0300\n"
+"POT-Creation-Date: 2014-12-14 13:06+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -41,9 +41,11 @@ msgid ""
 "UserPass    <pass>    User password for no local start.\n"
 "RunPrjs     <list>    Run projects list on the module start.\n"
 "RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
+"WinPosCntrSave {0;1}  Windows position control and save (default = 1).\n"
 "ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
 "CachePgLife <hours>   Cached pages lifetime.\n"
 "VCAstation  <id>      VCA station id ('.' - local).\n"
+"RestoreTime <seconds> Restore connection time.\n"
 "PlayCom     <cmd>     Audio alarms' files play command.\n"
 "\n"
 msgstr ""
@@ -55,10 +57,12 @@ msgstr ""
 "RunPrjs       <list>  Liste von aktivierten Projekte beim Starten .\n"
 "RunPrjsSt      {0;1}  Zeigt den Status der laufenden Projekte (standardmäßig "
 "= 1).\n"
+"WinPosCntrSave {0;1}  Windows-Lageregelung und sparen (standardmäßig = 1).\n"
 "ExitLstRunPrjCls {0;1}Beenden, wenn der letzte der Ablauf des Projekts "
 "(standardmäßig = 1).\n"
 "CachePgLife    <uhr>  Die Lebensdauer der Seiten im Cache.\n"
 "VCAstation      <id>  Station mit der VCA Maschine ('.' - local).\n"
+"RestoreTime <Sekunden> Wiederherstellen Verbindungszeit.\n"
 "PlayCom     <befehl>  Audio-Alarme Dateien abspielen Befehl.\n"
 "\n"
 
@@ -89,11 +93,17 @@ msgstr "Optionen des Moduls"
 msgid "VCA engine station"
 msgstr "Station der VCA Maschine"
 
+msgid "Go to remote stations list configuration"
+msgstr "Konfiguration der entfernten Stationen"
+
 msgid "Start user"
 msgstr "Start Benutzer"
 
 msgid "User password"
 msgstr "Kennwort des Benutzers"
+
+msgid "Restore connection timeout, s"
+msgstr "Wiederherstellen Verbindungszeit, s"
 
 msgid "Cached pages lifetime"
 msgstr "Gespeicherte Seiten Lebensdauer"
@@ -109,22 +119,25 @@ msgid "Run projects list"
 msgstr "Liste von aktivierten Projekten"
 
 msgid ""
-"Automatic started project's list separated by symbol ';'.\n"
-"For opening a project's window to need display (1) use project's name "
-"format: 'PrjName-1'."
+"Automatic started projects separated by symbol ';'.\n"
+"For opening a project's window to need display (1) use the project name "
+"format: 'PrjName-1'.\n"
+"For connect to background or other opened session use \"ses_{SesID}\"."
 msgstr ""
-"Liste der automatisch gestarteten Projekte, getrennt mit dem Symbol ';'.\n"
+"Der automatisch gestarteten Projekte, getrennt mit dem Symbol ';'.\n"
 "Für das Laden eines Projektfensters (1) verwenden Sie den Namen des Projekts "
-"im Format: 'PrjName-1'."
+"im Format: 'PrjName-1'.\n"
+"Für eine Verbindung zum Hintergrund oder anderen geöffnet Sitzung Einsatz "
+"\"ses_{SesID}\"."
 
 msgid "Run projects status display"
 msgstr "Zeigt den Status von aktivierten Projekten"
 
+msgid "Windows position control and save"
+msgstr "Windows-Lageregelung und sparen"
+
 msgid "Exit on last run project close"
 msgstr "Beenden, wenn der letzte der Ablauf des Projekts"
-
-msgid "Go to remote stations list configuration"
-msgstr "Konfiguration der entfernten Stationen"
 
 msgid "Alarms"
 msgstr "Störungen"
@@ -1008,6 +1021,33 @@ msgstr "Erase Stil"
 msgid "Value"
 msgstr "Wert"
 
+msgid "Diagnostics"
+msgstr "Diagnostik"
+
+msgid "Time:"
+msgstr "Zeit:"
+
+msgid "Refresh"
+msgstr "Erfrischen"
+
+msgid "Size:"
+msgstr "Grösse:"
+
+msgid "Time"
+msgstr "Zeit"
+
+msgid "mcsec"
+msgstr "msek"
+
+msgid "Category"
+msgstr "Kategorie"
+
+msgid "Lev."
+msgstr "Ebene"
+
+msgid "Message"
+msgstr "Nachricht"
+
 msgid "Close"
 msgstr "Schliessen"
 
@@ -1062,6 +1102,9 @@ msgstr "Elternwidget:"
 
 msgid "Page type:"
 msgstr "Seitentyp:"
+
+msgid "Used:"
+msgstr "Verwendet:"
 
 msgid "Root:"
 msgstr "Root:"
@@ -1473,8 +1516,21 @@ msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 msgid "Double click for style change."
 msgstr "Zweimal klicken für Stil zu ändern."
 
-msgid "Connection to visualization server '%1' error: %2"
-msgstr "Der Anschluss an Visualisierungs-Server '%1' Fehler: %2"
+msgid "Project '%1' manual"
+msgstr "Handbuch von Projekt '%1'"
+
+msgid "The button for getting the using project '%1' manual"
+msgstr "Schaltfläche für Projekt '%1' Handbuch"
+
+msgid "Press to get the using project '%1' manual."
+msgstr "Betätigen um Projekt '%1' Handbuch."
+
+msgid ""
+"Connection to visualization server '%1' error: %2.\n"
+"Will restore try after %3s!"
+msgstr ""
+"Der Anschluss an Visualisierungs-Server '%1' Fehler: %2.\n"
+"Wird wiederherzustellen versuchen nach %3s!"
 
 #, c-format
 msgid "Root page scale [%f:%f]."
@@ -2014,17 +2070,8 @@ msgstr "Trend zu ziehen: %f ms."
 msgid "Date and time"
 msgstr "Datum und Uhrzeit"
 
-msgid "mcsec"
-msgstr "msek"
-
 msgid "Level"
 msgstr "Stufe"
-
-msgid "Category"
-msgstr "Kategorie"
-
-msgid "Message"
-msgstr "Nachricht"
 
 #, c-format
 msgid "Document parsing error: %s"
@@ -2056,9 +2103,6 @@ msgstr "Schrift auswählen"
 
 msgid "Font:"
 msgstr "Schrift:"
-
-msgid "Size:"
-msgstr "Grösse:"
 
 msgid "Bold"
 msgstr "Fett"

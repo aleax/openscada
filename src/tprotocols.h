@@ -51,7 +51,7 @@ class TProtocolIn : public TCntrNode
 
 	void setSrcTr( const string &vl )	{ mSrcTr = vl; }
 
-	//> Process input messages
+	// Process input messages
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; return false; }
 
@@ -77,17 +77,17 @@ class TProtocol: public TModule
 	TProtocol( const string &id );
 	virtual ~TProtocol( );
 
-	//> Addon items list for input protocol addressing
+	// Addon items list for input protocol addressing
 	virtual void itemListIn( vector<string> &ls, const string &curIt = "" );
 
-	//> Input protocol
+	// Input protocol
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
 	bool openStat( const string &name )		{ return chldPresent(m_pr,name); }
 	void open( const string &name, const string &tr );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 
-	//> Output protocol
+	// Output protocol
 	virtual void outMess( XMLNode &io, TTransportOut &tro )
 	{ throw TError(nodePath().c_str(),"Function '%s' no support!","outMess"); }
 

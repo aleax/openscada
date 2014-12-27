@@ -1,16 +1,15 @@
 # OpenSCADA.Archive.FSArch translate to German.
-# Copyright (C) 2008-2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Archive.FSArch module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-15 18:08+0200\n"
+"POT-Creation-Date: 2014-11-09 21:56+0200\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -103,6 +102,9 @@ msgid ""
 "download file,\n"
 "XML-parsing and storing in memory at the time of use."
 msgstr ""
+"Aktiviert die Archivierung von Nachrichten in XML-Format-Dateien, anstatt Klartext.\n"
+"Die Verwendung von XML-Format Archivierung erfordert mehr RAM, da ist volle Download-Datei erforderlich,\n"
+"XML-Parsing und Speichern im Speicher zum Zeitpunkt der Verwendung."
 
 msgid "Maximum archive file size (kB)"
 msgstr "Maximale Dateigrösse des Archivs (kB)"
@@ -111,6 +113,8 @@ msgid ""
 "Sets a limit on the size of one archive file.\n"
 "Disable the restriction can be by setting the parameter to zero."
 msgstr ""
+"Setzt eine Obergrenze für die Größe von einem Archivdatei.\n"
+"Deaktivieren Sie die Einschränkung kann durch Einstellung des Parameters auf Null sein."
 
 msgid "Maximum files number"
 msgstr "Maximale Dateianzahl"
@@ -121,12 +125,15 @@ msgid ""
 "determines the size of archive on disk. Completely remove this restriction "
 "can be set to zero."
 msgstr ""
+"Begrenzt die maximale Anzahl von Archivdateien und Aktien mit der Größe\n"
+"der einzelnen Datei bestimmt die Größe des Archivs auf der Festplatte.\n"
+"Vollständig zu entfernen diese Einschränkung kann auf Null gesetzt werden."
 
 msgid "File's time size (days)"
 msgstr "Dateiumfang (Tage)"
 
 msgid "Sets a limit on the size of a single archive file on time."
-msgstr ""
+msgstr "Setzt eine Grenze für die Größe einer Archivdatei auf Zeit."
 
 msgid "Pack files timeout (min)"
 msgstr "Zeitüberschreitung beim Packen der Dateien (min)"
@@ -136,6 +143,8 @@ msgid ""
 "packaged in gzip archiver.\n"
 "Set to zero for disable packing by gzip."
 msgstr ""
+"Setzt die Zeit, nach der bei Fehlen von Rechts wird Archivdateien im gzip Archivierungs verpackt werden.\n"
+"Auf Null gesetzt für disable Verpackung durch gzip."
 
 msgid "Check archives period (min)"
 msgstr "Zyklus Prüfung der Archive (min)"
@@ -146,6 +155,8 @@ msgid ""
 "in a directory of archives, as well as exceeding the limits and removing old "
 "archive files."
 msgstr ""
+"Legt die Häufigkeit der Überprüfung der Archive für die Entstehung oder neue Dateien\n"
+"löschen in einem Verzeichnis von Archiven, sowie oberhalb der Grenzwerte und das Entfernen alter Archivdateien."
 
 msgid "Use info files for packed archives"
 msgstr "Verwenden Sie Info-Dateien für gepackten Archiven"
@@ -158,6 +169,9 @@ msgid ""
 "process of first run by eliminating the need to decompress by gzip-archives "
 "in order to obtain information."
 msgstr ""
+"Gibt an, ob Dateien mit Informationen zu den gepackten Archivdateien durch gzip-Archivierungs erstellen.\n"
+"Beim Kopieren von Dateien des Archivs auf einer anderen Station können diese Info-Dateien beschleunigen\n"
+"die Zielstation Prozess der erste Lauf, indem die Notwendigkeit von gzip-Archiven, um Informationen zu erhalten dekomprimieren."
 
 msgid "Prevent duplicates"
 msgstr "Verhindern Duplikate"
@@ -170,6 +184,10 @@ msgid ""
 "placing messages in the archive by past time from external sources it allows "
 "to eliminate duplication."
 msgstr ""
+"Aktiviert prüft auf doppelte Nachrichten zu der Zeit legte eine Nachricht in das Archiv.\n"
+"Wenn es sich um ein Duplikat der Nachricht nicht in das Archiv zu passen.\n"
+"Diese Funktion einige verlängert die Aufnahmezeit zu archivieren, aber in Fällen des Vergebens\n"
+"Nachrichten im Archiv von vergangenen Zeit aus anderen Quellen ermöglicht es, um Doppelarbeit zu vermeiden."
 
 msgid "Check archivator directory now"
 msgstr "Archivarverzeichnis prüfen"
@@ -178,14 +196,15 @@ msgid ""
 "The command, which allows you to immediately start checking the archives,\n"
 "for example, after manual changes to the directory archiver."
 msgstr ""
+"Der Befehl, mit dem Sie sofort starten Überprüfung der Archive, beispielsweise\n"
+"nach der manuellen Änderungen an der Verzeichnis Archiver ermöglicht."
 
 #, c-format
 msgid "Can not create file: '%s'!"
 msgstr "Kann die Datei: '%s' nicht erstellen!"
 
-#, c-format
-msgid "Write to file error: %s"
-msgstr "Fehler: %s beim Schreiben in die Datei"
+msgid "Write to file '%s' error"
+msgstr "Schreiben in die Datei '%s' Fehler"
 
 #, c-format
 msgid "File '%s' header error!"
@@ -200,17 +219,23 @@ msgid "Archive '%s' file error."
 msgstr "Archiv '%s' Dateifehler."
 
 msgid "Inserting message to an error Archive file!"
-msgstr "Hinzufügen einer Nachricht in das Fehler-Archivdatei"
+msgstr "Hinzufügen einer Nachricht in das Fehler-Archivdatei!"
 
 #, c-format
 msgid "Archive file '%s' isn't attached!"
 msgstr "Archivdatei '%s' ist nicht verbunden!"
+
+msgid "File access to '%s' error."
+msgstr "Dateizugriff auf '%s' Fehler."
 
 msgid "Getting messages from an error Archive file!"
 msgstr "Empfange Nachrichten aus der Fehler-Archivdatei!"
 
 msgid "Archive file isn't attached!"
 msgstr "Archivdatei ist nicht verbunden!"
+
+msgid "Write to '%s' error!"
+msgstr "Schreiben in die Datei '%s' Fehler!"
 
 #, c-format
 msgid "Unpack '%s' for information get."
@@ -234,6 +259,10 @@ msgid ""
 "and the primary indexing, when accessing to parts of deep in the archives of "
 "history."
 msgstr ""
+"Der Parameter wird automatisch gesetzt, wenn Sie die Frequenzwerte von Archivierungs\n"
+"ändern und in der Regel proportional zur Frequenz Werte des Archivierungs.\n"
+"Achtung! Große Archivdateien wird noch lange durch lange Auspacken gzip-Dateien und die\n"
+"Primär Indexierung, beim Zugriff auf Teile der tief in den Archiven der Geschichte verarbeitet werden."
 
 msgid "Maximum files number for one archive"
 msgstr "Maximale Dateianzahl pro Archiv"
@@ -249,6 +278,9 @@ msgid ""
 "removes the oldest files of all archives. Completely remove this restriction "
 "can be set to zero."
 msgstr ""
+"Setzt eine Grenze für die maximale Menge an Speicherplatz von allen Archivdateien occupied by Archivierungs.\n"
+"Die Prüfung erfolgt durch die Periodizität der Überprüfung der Archive, die in Folge, auf die Überschreitung der Grenze,\n"
+"entfernt die ältesten Dateien aller Archive getan. Vollständig zu entfernen diese Einschränkung kann auf Null gesetzt werden."
 
 msgid "Numeric values rounding (%)"
 msgstr "Rundung der numerischen Werte (%)"
@@ -261,6 +293,10 @@ msgid ""
 "parameters\n"
 "which outside certainty. Disable this property can be set to zero."
 msgstr ""
+"Legt den Prozentsatz der Grenzdifferenzwertedifference values der Parameter integer und echte Typen,\n"
+"wo sie als identisch angesehen werden und werden als Einzelwert durch sequentielle Verpackungsarchiviert werden.\n"
+"Ermöglicht gut verpackt leicht verändert Parameter, die außerhalb Gewissheit.\n"
+"Deaktivieren Sie diese Eigenschaft auf null gesetzt werden."
 
 msgid "Files size"
 msgstr "Dateiumfang"
@@ -295,12 +331,22 @@ msgid "Archive file error!"
 msgstr "Fehler in der Archivdatei!"
 
 #, c-format
+msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
+msgstr "Achtung! Zugeteilt Puffergröße %d für Indizes geringerem verwendet %d."
+
+#, c-format
 msgid ""
 "Write data block to archive file '%s' error. Will structure break. mSize=%d, "
 "foff_end=%d, vSize=%d"
 msgstr ""
 "Fehler beim Schreiben Datenblöcke in die Archiv-Datei '%s'. Die Struktur "
 "wird aufgebrochen werden. mGröße=%d, foff_end=%d, VSIZE=%d"
+
+msgid "Read file '%s' for offset %d error!"
+msgstr "Lesen Datei '%s' für Offset %d Fehler!"
+
+msgid "Write to file '%s' error!"
+msgstr "Schreiben in Datei '%s' Fehler!"
 
 #, c-format
 msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"
@@ -310,14 +356,3 @@ msgstr ""
 msgid "Error open new archive file for copy."
 msgstr ""
 "Fehler beim Erstellen einer neuen Archivdatei für das Backup zu öffnen."
-
-#~ msgid "Use zero for limit disable"
-#~ msgstr "Verwenden Sie Null, um die Einschränkung zu deaktivieren."
-
-#~ msgid ""
-#~ "Allow fast archives append to other station by prevent long unpack for "
-#~ "info get."
-#~ msgstr ""
-#~ "Damit können Sie schnell hinzufügen, Dateien auf einen anderen "
-#~ "Arbeitsplatz \n"
-#~ "durch die Verhinderung längerer Extraktion, um Informationen zu erhalten."

@@ -42,8 +42,7 @@ class TController : public TCntrNode, public TConfig
 {
     public:
 	//Public Data
-	enum Redundant
-	{
+	enum Redundant {
 	    Off		= 0,
 	    Asymmetric	= 1,
 	    Symmetric	= 2
@@ -51,7 +50,7 @@ class TController : public TCntrNode, public TConfig
 
 	//Public methods
 	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
-	virtual ~TController(  );
+	virtual ~TController( );
 
 	string objName( );
 
@@ -75,22 +74,22 @@ class TController : public TCntrNode, public TConfig
 
 	bool toEnable( )	{ return mAEn; }
 	bool toStart( )		{ return mAStart; }
-	bool enableStat( )	{ return en_st; }
-	bool startStat( )	{ return run_st; }
+	bool enableStat( )	{ return enSt; }
+	bool startStat( )	{ return runSt; }
 
 	void start( );
 	void stop( );
 	void enable( );
 	void disable( );
 
-	//> Parameters
+	// Parameters
 	void list( vector<string> &list )	{ chldList(mPrm,list); }
 	bool present( const string &name )	{ return chldPresent(mPrm,name); }
 	void add( const string &name, unsigned type );
 	void del( const string &name, bool full = false )	{ chldDel(mPrm,name,-1,full); }
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )	{ return chldAt(mPrm,name); }
 
-	//> Redundancy
+	// Redundancy
 	bool redntUse( )			{ return mRedntUse; }
 	void setRedntUse( bool vl );
 	Redundant redntMode( );
@@ -105,11 +104,10 @@ class TController : public TCntrNode, public TConfig
 
     protected:
 	//Protected attributes
-	bool	en_st;
-	bool	run_st;
+	bool	enSt, runSt;
 
 	//Methods
-	//> User methods
+	// User methods
 	void load_( );
 	void save_( );
 	virtual void enable_( )		{ }

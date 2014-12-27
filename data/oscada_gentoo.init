@@ -1,0 +1,41 @@
+#!/sbin/runscript
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+#
+# Init file for OpenSCADA system demon.
+#
+# description: Open SCADA System server daemon
+#
+# processname: openscada
+# config: /etc/oscada.xml
+#
+
+WITHOUT_RC_COMPAT=1
+
+OPENSCADA=/usr/bin/openscada
+DNAME="OpenSCADA"
+LOCALE="en_US.UTF-8"
+
+depend() {
+	use logger net
+}
+
+start() {
+  ebegin "Starting "$DNAME
+	start-stop-daemon --start -b \
+	--exec ${OPENSCADA} -- --demon
+	eend $? "Failed to start"$DNAME
+}
+
+stop() {
+  ebegin "Stopping "$DNAME
+	start-stop-daemon --stop \
+	--exec ${OPENSCADA}
+	eend $?
+}
+
+restart() {
+  stop
+	start
+}

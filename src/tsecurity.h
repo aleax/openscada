@@ -48,8 +48,8 @@ class TUser : public TCntrNode, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	string	name( )		{ return mName; }
-	string	lName( )	{ return cfg("DESCR").getS(); }
-	string	descr( )	{ return cfg("LONGDESCR").getS(); }
+	string	descr( )	{ return cfg("DESCR").getS(); }
+	string	longDescr( )	{ return cfg("LONGDESCR").getS(); }
 	string	picture( )	{ return cfg("PICTURE").getS(); }
 	bool sysItem( )		{ return m_sysIt; }
 
@@ -59,8 +59,8 @@ class TUser : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )		{ return DB()+'.'+tbl(); }
 
-	void setLName( const string &nm )	{ cfg("DESCR").setS(nm); }
-	void setDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
+	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
+	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
 	void setPicture( const string &pct )	{ cfg("PICTURE").setS(pct); }
 	void setPass( const string &n_pass );
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
@@ -102,8 +102,8 @@ class TGroup : public TCntrNode, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	string	name( )		{ return mName; }
-	string	lName( )	{ return cfg("DESCR").getS(); }
-	string	descr( )	{ return cfg("LONGDESCR").getS(); }
+	string	descr( )	{ return cfg("DESCR").getS(); }
+	string	longDescr( )	{ return cfg("LONGDESCR").getS(); }
 	string	users( )	{ return cfg("USERS").getS(); }
 	bool	sysItem( )	{ return m_sysIt; }
 
@@ -111,8 +111,8 @@ class TGroup : public TCntrNode, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setLName( const string &nm )	{ cfg("DESCR").setS(nm); }
-	void setDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
+	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
+	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
 	void setSysItem( bool vl )		{ m_sysIt = vl; }
 
 	void setDB( const string &vl )		{ m_db = vl; modifG(); }

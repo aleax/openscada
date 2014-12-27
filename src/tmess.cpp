@@ -97,7 +97,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     if(abs(level) < messLevel()) return;
 
     int64_t ctm = TSYS::curTime();
-    string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
+    string s_mess = i2s(level) + "|" + categ + " | " + mess;
 
     if(mLogDir & DIR_SYSLOG) {
 	int level_sys;
@@ -228,19 +228,19 @@ void TMess::load( )
 	    int i = atoi(optarg);
 	    if(i >= Debug && i <= Emerg) setMessLevel(i);
 	}
-	else if(argCom == "log") setLogDirect(atoi(argVl.c_str()));
+	else if(argCom == "log") setLogDirect(s2i(argVl));
 
     //Load params config-file
-    setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));
-    setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg).c_str()));
+    setMessLevel(s2i(TBDS::genDBGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));
+    setLogDirect(s2i(TBDS::genDBGet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg)));
     setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
     mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
 }
 
-void TMess::save()
+void TMess::save( )
 {
-    TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
     if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
 }

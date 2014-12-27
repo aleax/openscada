@@ -151,9 +151,8 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
 		el = root->childGet(i_ch);
-		int p = atoi(el->attr("p").c_str());
-		switch(p)
-		{
+		int p = s2i(el->attr("p"));
+		switch(p) {
 		    case A_ElFigLineClr: case A_ElFigBordClr: case A_ElFigFillClr: el->setAttr("help",Widget::helpColor());	break;
 		    case A_ElFigFillImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_ElFigElLst: el->setAttr("SnthHgl","1")->setAttr("help",
@@ -183,8 +182,7 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		      "  fill:(25|50):(25|50):c2:i2\n"
 		      "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
 		    default:
-			switch((p-A_ElFigIts)%A_ElFigItsSz)
-			{
+			switch((p-A_ElFigIts)%A_ElFigItsSz) {
 			    case A_ElFigItClr:	el->setAttr("help",Widget::helpColor());	break;
 			    case A_ElFigItImg:	el->setAttr("help",Widget::helpImg());		break;
 			}
@@ -196,8 +194,7 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/attr/elLst" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
-    {
+    if(a_path == "/attr/elLst" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	opt->childAdd("rule")->setAttr("expr","^(arc|line|fill|bezier):")->setAttr("color","darkorange")->setAttr("font_weight","1");
 	opt->childAdd("rule")->setAttr("expr","\\(\\d*\\.?\\d+\\|\\d*\\.?\\d+\\)")->setAttr("color","#3D87FF")->
@@ -224,25 +221,23 @@ bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 	    map<int,char> &clrls_w = (i_p == 0) ? clrls_prev : clrls;
 	    map<int,char> &imgls_w = (i_p == 0) ? imgls_prev : imgls;
 	    map<int,char> &lstls_w = (i_p == 0) ? lstls_prev : lstls;
-	    for(int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); )
-	    {
+	    for(int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); ) {
 		int offe = 0;
 		string fTp = TSYS::strSepParse(sel,0,':',&offe);
 		if(fTp == "line" || fTp == "arc" || fTp == "bezier") {
 		    int np = (fTp=="arc") ? 5 : ((fTp=="bezier") ? 4 : 2);
-		    for(int i = 0; i < np; i++) pntls_w[atoi(TSYS::strSepParse(sel,0,':',&offe).c_str())] = true;
-		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w') wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c') clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w') wls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c') clrls_w[atoi(sel1.substr(1).c_str())] = true;
-		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 's') lstls_w[atoi(sel1.substr(1).c_str())] = true;
+		    for(int i = 0; i < np; i++) pntls_w[s2i(TSYS::strSepParse(sel,0,':',&offe))] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w') wls_w[s2i(sel1.substr(1))] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c') clrls_w[s2i(sel1.substr(1))] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'w') wls_w[s2i(sel1.substr(1))] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 'c') clrls_w[s2i(sel1.substr(1))] = true;
+		    if((sel1=TSYS::strSepParse(sel,0,':',&offe)).size() && sel1[0] == 's') lstls_w[s2i(sel1.substr(1))] = true;
 		}
 		else if(fTp == "fill")
-		    for(int zPnt = 0; !(sel1=TSYS::strSepParse(sel,0,':',&offe)).empty() || zPnt < 2; )
-		    {
+		    for(int zPnt = 0; !(sel1=TSYS::strSepParse(sel,0,':',&offe)).empty() || zPnt < 2; ) {
 			if(sel1.empty())	zPnt++;
-			if(sel1[0] == 'c')	clrls_w[atoi(sel1.substr(1).c_str())] = true;
-			else if(sel1[0] == 'i')	imgls_w[atoi(sel1.substr(1).c_str())] = true;
+			if(sel1[0] == 'c')	clrls_w[s2i(sel1.substr(1))] = true;
+			else if(sel1[0] == 'i')	imgls_w[s2i(sel1.substr(1))] = true;
 		    }
 	    }
 	}
@@ -334,8 +329,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
     if((cfg.flgGlob()&Attr::Active) && cfg.id() == "elType") {
 	//Delete specific attributes
 	if(cfg.getI() != prev.getI())
-	    switch(prev.getI())
-	    {
+	    switch(prev.getI()) {
 		case F_LINE_ED:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("view");
@@ -361,7 +355,9 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("checkable");
 		    cfg.owner()->attrDel("font");
 		    break;
-		case F_COMBO: case F_LIST: case F_TREE: case F_TABLE:
+		case F_TABLE:
+		    cfg.owner()->attrDel("set");
+		case F_COMBO: case F_LIST: case F_TREE:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("items");
 		    cfg.owner()->attrDel("font");
@@ -373,8 +369,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	    }
 
 	//Create specific attributes
-	switch(cfg.getI())
-	{
+	switch(cfg.getI()) {
 	    case F_LINE_ED:
 		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,"1","0",
@@ -402,14 +397,16 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_FormElMixP3).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
-	    case F_COMBO: case F_LIST: case F_TREE: case F_TABLE:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));
+	    case F_TABLE:
+		cfg.owner()->attrAdd(new TFld("set",_("Set value"),TFld::String,Attr::Mutable|TFld::NoStrTransl,"255","","","",i2s(A_FormElMixP2).c_str()));
+	    case F_COMBO: case F_LIST: case F_TREE:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
 	    case F_SLIDER: case F_SCROLL_BAR:
 		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","",i2s(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable|TFld::NoStrTransl,"100","0:0:100:1:10","","",i2s(A_FormElMixP1).c_str()));
 		break;
 	}
     }
@@ -421,8 +418,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	string		val = cfg.owner()->attrAt("value").at().getS();
 	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl();
 	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal();
-	switch(cfg.getI())
-	{
+	switch(cfg.getI()) {
 	    case FL_INTEGER: case FL_TIME:	ntp = TFld::Integer;	break;
 	    case FL_REAL:			ntp = TFld::Real;	break;
 	    case FL_DATE: case FL_DATE_TM:	ntp = TFld::Integer; flg |= Attr::DateTime;	break;
@@ -449,13 +445,11 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	XMLNode *root, *el;
 	int elTp = 0;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	    switch((elTp=src->attrAt("elType").at().getI()))
-	    {
+	    switch((elTp=src->attrAt("elType").at().getI())) {
 		case F_LINE_ED:
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    if(!(el=ctrId(root,"/cfg",true)))	break;
-		    switch(src->attrAt("view").at().getI())
-		    {
+		    switch(src->attrAt("view").at().getI()) {
 			case FL_TEXT:
 			    el->setAttr("help",_("Enter text line by template with the char items:\n"
 				"  'A' - ASCII alphabetic character required. A-Z, a-z.\n"
@@ -544,7 +538,8 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
     }
 
     //Process command to page
-    if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
+    string a_path = opt->attr("path");
+    if(a_path == "/attr/items" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
 	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
@@ -557,6 +552,36 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
     else return Widget::cntrCmdAttributes(opt, src);
 
     return true;
+}
+
+bool OrigFormEl::eventProc( const string &ev, Widget *src )
+{
+    int elTp = 0;
+    switch((elTp=src->attrAt("elType").at().getI())) {
+	case F_TABLE: {
+	    if(ev.compare(0,13,"ws_TableEdit_") != 0)	break;
+	    bool setOK = false;
+	    int col = s2i(TSYS::strParse(ev,2,"_"));
+	    int row = s2i(TSYS::strParse(ev,3,"_"));
+	    XMLNode items("tbl");
+	    items.load(src->attrAt("items").at().getS(), XMLNode::LD_Full);
+	    for(int i_chR = 0, i_r = 0; i_chR < (int)items.childSize() && !setOK; i_chR++) {
+		XMLNode *chRN = items.childGet(i_chR);
+		if(chRN->name() != "r") continue;
+		for(int i_chC = 0, i_c = 0; i_chC < (int)chRN->childSize() && !setOK; i_chC++) {
+		    XMLNode *chCN = chRN->childGet(i_chC);
+		    if(!(chCN->name() == "s" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
+		    if(i_c == col && i_r == row) { chCN->setText(src->attrAt("set").at().getS(),true); setOK = true; }
+		    i_c++;
+		}
+		i_r++;
+	    }
+	    if(setOK) src->attrAt("items").at().setS(items.save());
+	    break;
+	}
+    }
+
+    return false;
 }
 
 //************************************************
@@ -598,7 +623,7 @@ void OrigText::postEnable( int flag )
 bool OrigText::attrChange( Attr &cfg, TVariant prev )
 {
     if(cfg.flgGlob()&Attr::Active) {
-	int aid = atoi(cfg.fld().reserve().c_str());
+	int aid = s2i(cfg.fld().reserve());
 	if(cfg.id() == "numbArg") {
 	    string fid("arg"), fnm(_("Argument ")), fidp, fnmp;
 	    //Delete specific unnecessary attributes of parameters
@@ -623,11 +648,10 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
 		    TFld::Integer,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsVal+A_TextArsSz*i_p).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"cfg").c_str(),(fnmp+_(":config")).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsCfg+A_TextArsSz*i_p).c_str()));
+		    TFld::String,Attr::Mutable|TFld::NoStrTransl,"","","","",i2s(A_TextArs+A_TextArsCfg+A_TextArsSz*i_p).c_str()));
 	    }
 	}
-	else if(aid >= A_TextArs && (aid%A_TextArsSz) == A_TextArsTp && prev.getI() != cfg.getI())
-	{
+	else if(aid >= A_TextArs && (aid%A_TextArsSz) == A_TextArsTp && prev.getI() != cfg.getI()) {
 	    int narg = (aid-A_TextArs)/A_TextArsSz;
 	    string fid = "arg"+i2s(narg)+"val";
 	    string fnm = _("Argument ")+i2s(narg)+_(":value");
@@ -654,20 +678,17 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
 		el = root->childGet(i_ch);
-		int p = atoi(el->attr("p").c_str());
-		switch(p)
-		{
+		int p = s2i(el->attr("p"));
+		switch(p) {
 		    case A_BackColor: case A_BordColor: case A_TextColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_TextFont: el->setAttr("help",Widget::helpFont());	break;
 		    case A_BackImg:  el->setAttr("help",Widget::helpImg());	break;
 		    case A_TextText: el->setAttr("help",_("Text value. Use \"%{n}\" for argument {n} (from 1) value insert.")); break;
 		}
 	    }
-	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
-	    {
+	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++) {
 		if(!(el=ctrId(root,"/arg"+i2s(i_arg)+"cfg",true))) continue;
-		switch(src->attrAt("arg"+i2s(i_arg)+"tp").at().getI())
-		{
+		switch(src->attrAt("arg"+i2s(i_arg)+"tp").at().getI()) {
 		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
 		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
 							     "Where \"form\" that 'g', 'e' or 'f'."));			break;
@@ -703,7 +724,7 @@ void OrigMedia::postEnable( int flag )
 	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
-	attrAdd(new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","",i2s(A_MediaSrc).c_str()));
+	attrAdd(new TFld("src",_("Source"),TFld::String,TFld::NoStrTransl,"50","","","",i2s(A_MediaSrc).c_str()));
 	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0",
 	    TSYS::strMess("%d;%d;%d",FM_IMG,FM_ANIM,FM_FULL_VIDEO).c_str(),_("Image;Animation;Full video"),i2s(A_MediaType).c_str()));
 	attrAdd(new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;20","",i2s(A_MediaAreas).c_str()));
@@ -715,8 +736,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
     if(cfg.flgGlob()&Attr::Active) {
 	if(cfg.id() == "type") {
 	    //Delete specific attributes
-	    switch(prev.getI())
-	    {
+	    switch(prev.getI()) {
 		case FM_IMG:
 		    cfg.owner()->attrDel("fit");
 		    break;
@@ -735,8 +755,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	    }
 
 	    //Create specific attributes
-	    switch(cfg.getI())
-	    {
+	    switch(cfg.getI()) {
 		case FM_IMG:
 		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
 		    break;
@@ -773,7 +792,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		if(cfg.owner()->attrPresent(fidp+"shp")) continue;
 		cfg.owner()->attrAdd(new TFld((fidp+"shp").c_str(),(fnmp+_(":shape")).c_str(),TFld::Integer,TFld::Selected|Attr::Mutable,"1","0",
 		    TSYS::strMess("%d;%d;%d",FM_RECT,FM_POLY,FM_CIRCLE).c_str(),_("Rect;Poly;Circle"),i2s(A_MediaArs+A_MediaArShape+A_MediaArsSz*i_p).c_str()));
-		cfg.owner()->attrAdd(new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),TFld::String,Attr::Mutable,"","",
+		cfg.owner()->attrAdd(new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),TFld::String,Attr::Mutable|TFld::NoStrTransl,"","",
 		    "","",i2s(A_MediaArs+A_MediaArCoord+A_MediaArsSz*i_p).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"title").c_str(),(fnmp+_(":title")).c_str(),TFld::String,Attr::Mutable,"","",
 		    "","",i2s(A_MediaArs+A_MediaArTitle+A_MediaArsSz*i_p).c_str()));
@@ -795,9 +814,8 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
 		el = root->childGet(i_ch);
-		int p = atoi(el->attr("p").c_str());
-		switch(p)
-		{
+		int p = s2i(el->attr("p"));
+		switch(p) {
 		    case A_BackColor: case A_BordColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());		break;
 		    case A_MediaSrc: el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+el->attr("id"))->setAttr("help",
@@ -821,12 +839,10 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			break;
 		}
 	    }
-	    for(int i_a = 0; i_a < src->attrAt("areas").at().getI(); i_a++)
-	    {
+	    for(int i_a = 0; i_a < src->attrAt("areas").at().getI(); i_a++) {
 		el = ctrId(root,TSYS::strMess("/area%dcoord",i_a),true);
 		if(!el) continue;
-		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI())
-		{
+		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI()) {
 		    case FM_RECT: el->setAttr("help",_("Rectangle area in form \"x1,y1,x2,y2\"."));	break;
 		    case FM_POLY: el->setAttr("help",_("Polygon area in form \"x1,y1,x2,y2,xN,yN\"."));	break;
 		    case FM_CIRCLE: el->setAttr("help",_("Circle area in form \"x,y,r\"."));		break;
@@ -885,8 +901,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     }
     else if(cfg.id() == "type") {
 	//Delete specific attributes
-	switch(prev.getI())
-	{
+	switch(prev.getI()) {
 	    case FD_TRND:
 		if(cfg.getI() != prev.getI())	cfg.owner()->attrDel("sclHorPer");
 	    case FD_SPECTR:
@@ -909,8 +924,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	}
 
 	//> Create specific attributes
-	switch(cfg.getI())
-	{
+	switch(cfg.getI()) {
 	    case FD_TRND:
 		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale:horizontal grid size, sek"),TFld::Real,Attr::Mutable,
 		    "","0","0;3e6","",i2s(A_DiagramSclHorPer).c_str()));
@@ -918,8 +932,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
 		cfg.owner()->attrAdd(new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
 		cfg.owner()->attrAdd(new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;3e6","",i2s(A_DiagramTSize).c_str()));
-		if(cfg.owner()->attrAt("active").at().getB())
-		{
+		if(cfg.owner()->attrAt("active").at().getB()) {
 		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
@@ -935,7 +948,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld("sclVerSclOff",_("Scale:vertical scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","",i2s(A_DiagramSclVerSclOff).c_str()));
 		cfg.owner()->attrAdd(new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramSclMarkColor).c_str()));
 		cfg.owner()->attrAdd(new TFld("sclMarkFont",_("Scale:Markers:font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","",i2s(A_DiagramSclMarkFont).c_str()));
-		cfg.owner()->attrAdd(new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramValArch).c_str()));
+		cfg.owner()->attrAdd(new TFld("valArch",_("Value archivator"),TFld::String,Attr::Mutable|TFld::NoStrTransl,"","","","",i2s(A_DiagramValArch).c_str()));
 		cfg.owner()->attrAdd(new TFld("valsForPix",_("Values for pixel"),TFld::Integer,Attr::Mutable,"","1","1;100","",i2s(A_DiagramValsForPix).c_str()));
 		cfg.owner()->attrAdd(new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"","1","0;100","",i2s(A_DiagramParNum).c_str()));
 		break;
@@ -980,7 +993,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
 		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"prop").c_str(),(fnmp+_(":properties")).c_str(),
-		TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrProp+A_DiagramTrsSz*i_p).c_str()));
+		TFld::String,Attr::Mutable|TFld::NoStrTransl,"","","","",i2s(A_DiagramTrs+A_DiagramTrProp+A_DiagramTrsSz*i_p).c_str()));
 	}
     }
 
@@ -998,9 +1011,8 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
 		el = root->childGet(i_ch);
-		int p = atoi(el->attr("p").c_str());
-		switch(p)
-		{
+		int p = s2i(el->attr("p"));
+		switch(p) {
 		    case A_BackColor: case A_BordColor: case A_DiagramSclColor: case A_DiagramSclMarkColor:
 			el->setAttr("help",Widget::helpColor());	break;
 		    case A_DiagramSclMarkFont: el->setAttr("help",Widget::helpFont());	break;
@@ -1062,13 +1074,13 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd(new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
 	attrAdd(new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
 	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
-	attrAdd(new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","",i2s(A_ProtArch).c_str()));
-	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","",i2s(A_ProtTmpl).c_str()));
+	attrAdd(new TFld("arch",_("Archivator"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_ProtArch).c_str()));
+	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_ProtTmpl).c_str()));
 	attrAdd(new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","",i2s(A_ProtLev).c_str()));
 	attrAdd(new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",FP_ON_TM,FP_ON_LEV,FP_ON_CAT,FP_ON_MESS,FP_ON_TM_REV,FP_ON_LEV_REV,FP_ON_CAT_REV,FP_ON_MESS_REV).c_str(),
 	    _("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),i2s(A_ProtViewOrd).c_str()));
-	attrAdd(new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;utm;lev;cat;mess","","",i2s(A_ProtCol).c_str()));
+	attrAdd(new TFld("col",_("View columns"),TFld::String,TFld::NoStrTransl,"","pos;tm;utm;lev;cat;mess","","",i2s(A_ProtCol).c_str()));
 	attrAdd(new TFld("itProp",_("Item properties"),TFld::Integer,Attr::Active,"","","","",i2s(A_ProtItProp).c_str()));
     }
 }
@@ -1099,7 +1111,7 @@ bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld((fidp+"lev").c_str(),(fnmp+_(":level")).c_str(),
 		    TFld::Integer,Attr::Mutable,"","0","0;7","",i2s(A_ProtProps+A_ProtPropLev+A_ProtPropsSz*i_p).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"tmpl").c_str(),(fnmp+_(":template")).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropTmpl+A_ProtPropsSz*i_p).c_str()));
+		    TFld::String,Attr::Mutable|TFld::NoStrTransl,"","","","",i2s(A_ProtProps+A_ProtPropTmpl+A_ProtPropsSz*i_p).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"fnt").c_str(),(fnmp+_(":font")).c_str(),
 		    TFld::String,Attr::Font|Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropFnt+A_ProtPropsSz*i_p).c_str()));
 		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
@@ -1122,9 +1134,8 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
 		el = root->childGet(i_ch);
-		int p = atoi(el->attr("p").c_str());
-		switch(p)
-		{
+		int p = s2i(el->attr("p"));
+		switch(p) {
 		    case A_BackColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_ProtFont: el->setAttr("help",Widget::helpFont());	break;
@@ -1184,7 +1195,7 @@ void OrigDocument::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","",i2s(A_DocStyle).c_str()));
+	attrAdd(new TFld("style",_("CSS"),TFld::String,TFld::FullText|TFld::NoStrTransl,"","","","",i2s(A_DocStyle).c_str()));
 	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","",i2s(A_DocTmpl).c_str()));
 	attrAdd(new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","",i2s(A_DocDoc).c_str()));
 	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_DocFont).c_str()));
@@ -1224,8 +1235,6 @@ void OrigDocument::calc( Widget *base )
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
-    int off = 0;
-
     //Document's number change process
     if(cfg.id() == "n" && cfg.getI() != prev.getI()) {
 	if(!cfg.getI()) {
@@ -1246,7 +1255,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->inheritAttr("aCur");
 	    }
 	    if(!cfg.owner()->attrPresent("aDoc")) {
-		cfg.owner()->attrAdd(new TFld("aDoc",_("Archive:current document"),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active));
+		cfg.owner()->attrAdd(new TFld("aDoc",_("Archive:current document"),TFld::String,TFld::FullText|Attr::Mutable|Attr::Active|TFld::NoStrTransl));
 		cfg.owner()->inheritAttr("aDoc");
 	    }
 	    if(!cfg.owner()->attrPresent("aSize")) {
@@ -1259,28 +1268,19 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     SessWdg *sw = dynamic_cast<SessWdg*>(cfg.owner());
     if(!sw) return Widget::attrChange(cfg,prev);
 
-    string db  = sw->ownerSess()->parent().at().DB();
-    string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
     //Make document after time set
-    if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI())))
-    {
+    if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI()))) {
 	if(!cfg.getI() && prev.getI()) cfg.setI(prev.getI(),false,true);
 	cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
     }
     //Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI()) {
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
+	string tVl;
 	// Archive position load
-	c_el.cfg("ID").setS("aCur");
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true))
-	    cfg.owner()->attrAt("aCur").at().setI(c_el.cfg("IO_VAL").getI(),false,true);
-	// Current archive socuments load
-	c_el.cfg("ID").setS("doc"+i2s(cfg.owner()->attrAt("aCur").at().getI()));
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true))
-	    cfg.owner()->attrAt("aDoc").at().setS(c_el.cfg("IO_VAL").getS(),false,true);
+	if((tVl=sw->sessAttr("aCur")).size()) cfg.owner()->attrAt("aCur").at().setS(tVl, false, true);
+	// Current archive documents load
+	if((tVl=sw->sessAttr("doc"+cfg.owner()->attrAt("aCur").at().getS())).size())
+	    cfg.owner()->attrAt("aDoc").at().setS(tVl, false, true);
 	// Set current document
 	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
 	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("aDoc").at().getS(),false,true);
@@ -1304,33 +1304,15 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
 	    // Save cursor to document to project's DB
-	    if(prev.getI() < n && prev.getI() >= 0) {
-		TConfig c_el(&mod->elPrjSes());
-		TSYS::pathLev(sw->path(),0,true,&off);
-		c_el.cfg("IDW").setS(sw->path().substr(off));
-		c_el.cfg("ID").setS(cfg.id());
-		c_el.cfg("IO_VAL").setI(cfg.getI());
-		SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true);
-	    }
+	    if(prev.getI() < n && prev.getI() >= 0) sw->sessAttrSet(cfg.id(), cfg.getS());
 	}
 	sizeUpdate(sw);
     }
     //Document save
-    else if(cfg.id() == "aDoc" && cfg.getS() != prev.getS()) {
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("ID").setS("doc"+i2s(cfg.owner()->attrAt("aCur").at().getI()));
-	c_el.cfg("IO_VAL").setS(cfg.getS());
-	SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, c_el, false, true);
-    }
+    else if(cfg.id() == "aDoc" && cfg.getS() != prev.getS())
+	sw->sessAttrSet("doc"+cfg.owner()->attrAt("aCur").at().getS(), cfg.getS());
     //Move archive view cursor
     else if(cfg.id() == "vCur" && cfg.getI() != prev.getI()) {
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("IO_VAL").setView(false);
-
 	int aCur = cfg.owner()->attrAt("aCur").at().getI();
 	int n = cfg.owner()->attrAt("n").at().getI();
 
@@ -1339,26 +1321,19 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    // Search next document
 	    if(cfg.getI() == -1)
 		while(docN != aCur) {
-		    c_el.cfg("ID").setS("doc"+i2s(docN));
-		    if(docN != prev.getI() && SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) break;
+		    if(docN != prev.getI() && sw->sessAttr("doc"+i2s(docN),true).size()) break;
 		    if(++docN >= n) docN = 0;
 		}
 	    // Search previous document
 	    else {
 		if(--docN < 0) docN = n-1;
 		if(docN == aCur) docN = prev.getI();
-		c_el.cfg("ID").setS("doc"+i2s(docN));
-		if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) docN = prev.getI();
+		if(!sw->sessAttr("doc"+i2s(docN),true).size()) docN = prev.getI();
 	    }
 	    if(docN != cfg.getI())	cfg.setI(docN,false,true);
 	}
 	else if(cfg.getI() >= n)	cfg.setI(cfg.owner()->attrAt("aCur").at().getI(), false, true);
-	if(cfg.getI() != prev.getI()) {
-	    c_el.cfg("ID").setS("doc"+i2s(cfg.getI()));
-	    c_el.cfg("IO_VAL").setView(true);
-	    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true);
-	    cfg.owner()->attrAt("doc").at().setS(c_el.cfg("IO_VAL").getS());
-	}
+	if(cfg.getI() != prev.getI())	cfg.owner()->attrAt("doc").at().setS(sw->sessAttr("doc"+cfg.getS()));
     }
 
     return Widget::attrChange(cfg,prev);
@@ -1375,9 +1350,8 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
 		el = root->childGet(i_ch);
-		int p = atoi(el->attr("p").c_str());
-		switch(p)
-		{
+		int p = s2i(el->attr("p"));
+		switch(p) {
 		    case A_DocStyle: el->setAttr("SnthHgl","1")->setAttr("help",
 			_("CSS rules in rows like \"body { background-color:#818181; }\""));
 			break;
@@ -1422,8 +1396,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	opt->childAdd("rule")->setAttr("expr","<\\/[\\w]+>")->setAttr("font_weight","1");
 	opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
     }
-    else if(a_path == "/attr/style" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
-    {
+    else if(a_path == "/attr/style" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	opt->childAdd("blk")->setAttr("beg","\\{")->setAttr("end","\\}")->setAttr("color","#666666")->
 	    childAdd("rule")->setAttr("expr",":[^;]+")->setAttr("color","blue");
 	opt->childAdd("rule")->setAttr("expr","(\\.|#)\\w+\\s")->setAttr("color","darkorange");
@@ -1435,25 +1408,10 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
 void OrigDocument::sizeUpdate( SessWdg *sw )
 {
-    string db  = sw->ownerSess()->parent().at().DB();
-    string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
     int aCur = sw->attrAt("aCur").at().getI();
     int n = sw->attrAt("n").at().getI();
     int rSz = n;
-    if(aCur < n) {
-	int off = 0;
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("ID").setS("doc"+i2s(aCur+1));
-	c_el.cfg("IO_VAL").setView(false);
-	if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) rSz = aCur+1;
-	else {
-	    c_el.cfg("ID").setS("doc"+i2s(n-1));
-	    if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) rSz = aCur+1;
-	}
-    }
+    if(aCur < n && (!sw->sessAttr("doc"+i2s(aCur+1),true).size() || !sw->sessAttr("doc"+i2s(n-1),true).size())) rSz = aCur+1;
     sw->attrAt("aSize").at().setI(rSz);
 }
 
@@ -1471,17 +1429,7 @@ TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms,
 	aCur -= nDoc;
 	if(aCur < 0) aCur += aSize;
 
-	string db  = sw->ownerSess()->parent().at().DB();
-	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
-	int off = 0;
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("ID").setS("doc"+i2s(aCur));
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) return c_el.cfg("IO_VAL").getS();
-
-	return "";
+	return sw->sessAttr("doc"+i2s(aCur));
     }
 
     return TVariant();
@@ -1510,7 +1458,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     //Prepare call instructions environment
     if(strcasecmp(xdoc.name().c_str(),"body") == 0) {
 	iLang = xdoc.attr("docProcLang");
-	lstTime = atoi(xdoc.attr("docTime").c_str());
+	lstTime = s2i(xdoc.attr("docTime"));
     }
     if(TSYS::strNoSpace(iLang).empty())	iLang = "JavaLikeCalc.JavaScript";
     if(!lstTime) lstTime = wdg->attrAt("bTime").at().getI();
@@ -1568,7 +1516,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 
     //Process instructions
     if(xcur->childGet("<?dp",0,true)) {
-	if(!atoi(xcur->attr("docAppend").c_str()))
+	if(!s2i(xcur->attr("docAppend")))
 	    for(unsigned i_t = 0; i_t < xcur->childSize(); )
 		if(xcur->childGet(i_t)->name().compare(0,4,"<?dp") != 0) xcur->childDel(i_t);
 		else i_t++;
@@ -1605,11 +1553,10 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	XMLNode *reptN = xcur->childGet(i_c);
 	if(reptN->name().size() && reptN->name()[0] == '<') continue;
 	// Repeat tags
-	if(funcV.getI(A_DocCalcPrmBTime) && (dRpt=atof(reptN->attr("docRept").c_str())) > 1e-6)
-	{
+	if(funcV.getI(A_DocCalcPrmBTime) && (dRpt=s2r(reptN->attr("docRept"))) > 1e-6) {
 	    int rCnt = 0;
 
-	    bool docRevers = atoi(reptN->attr("docRevers").c_str());
+	    bool docRevers = s2i(reptN->attr("docRevers"));
 	    funcV.setR(A_DocCalcPrmRPer, dRpt);
 	    int64_t wTime = (int64_t)funcV.getI(A_DocCalcPrmTime)*1000000;
 	    int64_t bTime = (int64_t)funcV.getI(A_DocCalcPrmBTime)*1000000;
@@ -1618,10 +1565,8 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    int64_t rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
 	    if(lstTime && lstTime < bTime) rTime -= perRpt;
 	    //if(((time-rTime)/perRpt) > 1000) continue;
-	    while(rTime < wTime && time(NULL) < upTo)
-	    {
-		if(atoi(reptN->attr("docRptEnd").c_str()))
-		{
+	    while(rTime < wTime && time(NULL) < upTo) {
+		if(s2i(reptN->attr("docRptEnd"))) {
 		    int i_n = docRevers?(i_c+1):i_c;
 		    *(xcur->childIns(i_n)) = *reptN;
 		    nodeClear(xcur->childGet(i_n));
@@ -1642,22 +1587,20 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    if(docRevers) i_c += rCnt;
 	}
 	// Repeat messages
-	else if(!(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty())
-	{
+	else if(!(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty()) {
 	    int rCnt = 0;
 	    XMLNode *reptN = xcur->childGet(i_c);
-	    bool docRevers = atoi(xcur->childGet(i_c)->attr("docRevers").c_str());
+	    bool docRevers = s2i(xcur->childGet(i_c)->attr("docRevers"));
 
 	    int off = 0;
-	    int dACat = atoi(TSYS::strSepParse(dAMess,0,':',&off).c_str());
+	    int dACat = s2i(TSYS::strSepParse(dAMess,0,':',&off));
 	    string dATmpl = dAMess.substr(off);
 
 	    vector<TMess::SRec> mess;
 	    SYS->archive().at().messGet(funcV.getI(A_DocCalcPrmLTime), funcV.getI(A_DocCalcPrmTime), mess, dATmpl, (TMess::Type)dACat);
 
-	    for(unsigned i_r = 0; i_r < mess.size(); i_r++)
-	    {
-		if(atoi(reptN->attr("docRptEnd").c_str())) {
+	    for(unsigned i_r = 0; i_r < mess.size(); i_r++) {
+		if(s2i(reptN->attr("docRptEnd"))) {
 		    unsigned i_n = (docRevers ? (i_c+1) : i_c);
 		    *(xcur->childIns(i_n)) = *reptN;
 		    nodeClear(xcur->childGet(i_n));
@@ -1718,8 +1661,8 @@ void OrigBox::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
-	attrAdd(new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_GRP).c_str()));
+	attrAdd(new TFld("pgOpenSrc",_("Page:open source"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
+	attrAdd(new TFld("pgGrp",_("Page:group"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_PG_GRP).c_str()));
 	attrAdd(new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF","","",i2s(A_BackColor).c_str()));
 	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
 	attrAdd(new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
@@ -1741,9 +1684,8 @@ bool OrigBox::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
 		el = root->childGet(i_ch);
-		int p = atoi(el->attr("p").c_str());
-		switch(p)
-		{
+		int p = s2i(el->attr("p"));
+		switch(p) {
 		    case A_BackColor:
 		    case A_BordColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;

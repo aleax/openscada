@@ -74,6 +74,7 @@ class ConfApp: public QMainWindow
 	//Slots
 	void quitSt( );
 	bool exitModifChk( );
+	void waitCursorSet( int val = -1 );		//Set global wait cursor (-1 - real clear from timer, 0 - clear after timer shot, 1 - set)
 
 	void pageUp( );
 	void pagePrev( );
@@ -148,7 +149,7 @@ class ConfApp: public QMainWindow
 	string getPrintVal( const string &vl );
 
 	//Attributes
-	QTimer		*endRunTimer, *autoUpdTimer;
+	QTimer		*endRunTimer, *autoUpdTimer, *waitCursorClear;
 
 	QTreeWidget	*CtrTree;
 	QLabel		*titleIco;
@@ -177,7 +178,7 @@ class ConfApp: public QMainWindow
 
 	map<string, QWidget* >	noApplyWdgs;
 
-	bool		tbl_init;
+	bool		tbl_init, mWaitCursorSet;
     };
 }
 

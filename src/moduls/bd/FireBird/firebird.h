@@ -59,12 +59,13 @@ class MTable : public TTable
 
     private:
 	//Private methods
+	bool isEmpty( );
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 	void getStructDB( vector< vector<string> > &tblStrct );
 
 	string getVal( TCfg &cfg );
-	void   setVal( TCfg &cfg, const string &vl );
+	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	//Private attributes
 	vector< vector<string> > tblStrct;
@@ -98,7 +99,7 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
 
 	string getErr( ISC_STATUS_ARRAY status );

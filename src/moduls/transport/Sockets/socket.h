@@ -63,7 +63,7 @@ class SSockIn
 //************************************************
 struct SSockCl
 {
-    pthread_t	cl_id;    // Client's thread id
+    pthread_t	cl_id;		//Client's thread id
     int		cl_sock;
 };
 
@@ -109,8 +109,8 @@ class TSocketIn: public TTransportIn
 
     private:
 	//Methods
-	static void *Task( void * );
-	static void *ClTask( void * );
+	static void *Task( void* );
+	static void *ClTask( void* );
 
 	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
 

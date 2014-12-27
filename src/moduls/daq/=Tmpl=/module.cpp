@@ -167,7 +167,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
 //!!! Destructor for DAQ-subsystem controller object.
 TMdContr::~TMdContr( )
 {
-    if(run_st) stop();
+    if(startStat()) stop();
 }
 
 //!!! Status processing function for DAQ-controllers
