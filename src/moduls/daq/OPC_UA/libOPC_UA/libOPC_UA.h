@@ -408,7 +408,7 @@ class UA
 	class SecuritySetting
 	{
 	    public:
-		SecuritySetting( const string &iplc, char imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
+		SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
 		SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
 
 	    string		policy;
