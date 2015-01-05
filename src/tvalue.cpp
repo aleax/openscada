@@ -514,9 +514,9 @@ string TVal::getS( int64_t *tm, bool sys )
 	    //Get current value
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
-	    nodeRes().resRequestR();
+	    pthread_mutex_lock(&dataRes());
 	    string rez(val.s->data(), val.s->size());
-	    nodeRes().resRelease();
+	    pthread_mutex_unlock(&dataRes());
 	    return rez;
 	}
 	default: break;
@@ -617,9 +617,9 @@ AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
     //Get current value
     if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
     if(tm) *tm = time();
-    nodeRes().resRequestR();
+    pthread_mutex_lock(&dataRes());
     AutoHD<TVarObj> rez = *val.o;
-    nodeRes().resRelease();
+    pthread_mutex_unlock(&dataRes());
 
     return rez;
 }
@@ -663,10 +663,10 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
 	    //Set current value and time
-	    nodeRes().resRequestW();
+	    pthread_mutex_lock(&dataRes());
 	    string pvl = *val.s;
 	    val.s->assign(value.data(), value.size());
-	    nodeRes().resRelease();
+	    pthread_mutex_unlock(&dataRes());
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, value, pvl);
@@ -772,10 +772,10 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     //Check to write
     if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
     //Set current value and time
-    nodeRes().resRequestW();
+    pthread_mutex_lock(&dataRes());
     AutoHD<TVarObj> pvl = *val.o;
     *val.o = value;
-    nodeRes().resRelease();
+    pthread_mutex_unlock(&dataRes());
     mTime = tm;
     if(!mTime) mTime = TSYS::curTime();
     if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);

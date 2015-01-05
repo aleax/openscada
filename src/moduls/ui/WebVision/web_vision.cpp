@@ -407,7 +407,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		ResAlloc sesRes(nodeRes(),false);
+		ResAlloc sesRes(mSesRes, false);
 		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
 			    (req.childGet(i_ch)->attr("user") != user ||
@@ -460,7 +460,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		ResAlloc sesRes(nodeRes(),false);
+		ResAlloc sesRes(mSesRes, false);
 		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 		    if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
 			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
@@ -496,7 +496,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HttpGet("", page, sender, vars, user); return; }
 		}
 		// Call to session
-		ResAlloc sesRes(nodeRes(),false);
+		ResAlloc sesRes(mSesRes, false);
 		try { vcaSesAt(sesnm).at().getReq(ses); }
 		catch(...) {
 		    if(!vcaSesPresent(sesnm)) {
@@ -566,7 +566,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	string sesnm = TSYS::pathLev(ses.url,0);
 	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0) page = httpHead("404 Not Found");
 	else {
-	    ResAlloc sesRes(nodeRes(),false);
+	    ResAlloc sesRes(mSesRes, false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);
 	    page = ses.page;
 	}

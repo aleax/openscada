@@ -1,3 +1,15 @@
+2015-01-05 Roman
+- !!!!:SYS: Generic node resources locking separated to the childs (function) and the common data methods and the moved to mutex from RW-locks
+	for prevent some locks workaraund and dead locks at try relock Read after lock as Write or contrary from the complex node accessing.
+    TCntrNode::nodeRes() moved and for generic resources locking access new dataRes() provided.
+    Removed static resource locking "TCntrNode::connM" and instead used new TCntrNode::dataRes().
+    Config resource moved to different cfgRes().
+    ModSched: Moved to different resources locking "schM".
+- DAQ: mRedntSt moved from ResString to MtxString.
+    For redundancy processing different resources locking "mRdRes" is added.
+- UI.VCAEngine: Automatic sessions control moved to resources locking "mSesRes".
+
+
 2015-01-02 Roman
 - DAQ.OPC_UA: Object's SecuritySetting argument "imMod" set force to signed char by "int8_t", for some ARMs.
 

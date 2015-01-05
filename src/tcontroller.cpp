@@ -31,7 +31,7 @@ using namespace OSCADA;
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
     TConfig(cfgelem), enSt(false), runSt(false),
     mId(cfg("ID")), mMessLev(cfg("MESS_LEV")), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
-    mDB(daq_db), mRedntUse(false)
+    mDB(daq_db), mRedntSt(dataRes()), mRedntUse(false)
 {
     mId = id_c;
     mPrm = grpAdd("prm_");

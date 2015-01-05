@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -112,11 +112,12 @@ TSYS::~TSYS( )
     pthread_key_delete(sTaskKey);
 
     if(mLev == TMess::Debug) {
-	ResAlloc res(nodeRes(), false);
 	string cntrsStr;
+	pthread_mutex_lock(&dataRes());
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	    cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
-	printf(_("System counters on exit: %s"),cntrsStr.c_str());
+	pthread_mutex_unlock(&dataRes());
+	printf(_("System counters on exit: %s"), cntrsStr.c_str());
     }
 }
 
@@ -474,8 +475,8 @@ bool TSYS::cfgFileLoad( )
 	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());
 
 	try {
-	    ResAlloc res(nodeRes(),true);
-	    rootN.load(s_buf,true);
+	    ResAlloc res(cfgRes(), true);
+	    rootN.load(s_buf, true);
 	    if(rootN.name() == "OpenSCADA") {
 		XMLNode *stat_n = NULL;
 		for(int i_st = rootN.childSize()-1; i_st >= 0; i_st--)
@@ -503,7 +504,7 @@ bool TSYS::cfgFileLoad( )
 
 void TSYS::cfgFileSave( )
 {
-    ResAlloc res(nodeRes(), true);
+    ResAlloc res(cfgRes(), true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
@@ -1461,13 +1462,13 @@ long TSYS::HZ( )	{ return sysconf(_SC_CLK_TCK); }
 
 bool TSYS::cntrEmpty( )
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     return mCntrs.empty();
 }
 
 double TSYS::cntrGet( const string &id )
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     map<string,double>::iterator icnt = mCntrs.find(id);
     if(icnt == mCntrs.end())	return 0;
     return icnt->second;
@@ -1475,13 +1476,13 @@ double TSYS::cntrGet( const string &id )
 
 void TSYS::cntrSet( const string &id, double vl )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     mCntrs[id] = vl;
 }
 
 void TSYS::cntrIter( const string &id, double vl )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     mCntrs[id] += vl;
 }
 
@@ -1609,7 +1610,7 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 
 double TSYS::taskUtilizTm( const string &path )
 {
-    ResAlloc res(taskRes,false);
+    ResAlloc res(taskRes, false);
     map<string,STask>::iterator it = mTasks.find(path);
     if(it == mTasks.end()) return 0;
     int64_t tm_beg = 0, tm_end = 0, tm_per = 0;
@@ -2410,8 +2411,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
 		if(n_stat) {
 		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0, lagMax = 0, consMax = 0;
-		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
-		    {
+		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
 			tm_beg = it->second.tm_beg; tm_end = it->second.tm_end;
 			tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt;
 			lagMax = it->second.lagMax; consMax = it->second.consMax;
@@ -2438,7 +2438,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 #if __GLIBC_PREREQ(2,4)
 	if(multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
-	    ResAlloc res(taskRes,true);
+	    ResAlloc res(taskRes, true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
 	    if(it == mTasks.end()) throw TError(nodePath().c_str(),_("No present task '%s'."));
 	    if(it->second.flgs & STask::Detached) return;
@@ -2580,7 +2580,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/debug/cntr/id","",R_R_R_,"root","root");
 	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/debug/cntr/vl","",R_R_R_,"root","root");
 
-	ResAlloc res(nodeRes(), false);
+	MtxAlloc res(dataRes(), true);
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++) {
 	    if(n_id)	n_id->childAdd("el")->setText(icnt->first);
 	    if(n_vl)	n_vl->childAdd("el")->setText(r2s(icnt->second));

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -69,7 +69,6 @@ using std::vector;
 
 namespace OSCADA
 {
-
 //*************************************************
 //* TSYS					  *
 //*************************************************
@@ -83,7 +82,7 @@ class TSYS : public TCntrNode
 	enum IntView	{ Dec, Oct, Hex };
 
 	//Public methods
-	TSYS( int argi, char ** argb, char **env );
+	TSYS( int argi, char **argb, char **env );
 	~TSYS( );
 
 	int	start( );
@@ -98,11 +97,11 @@ class TSYS : public TCntrNode
 	string	user( )		{ return mUser; }	//Run user name
 	string	host( );
 
-	void	list( vector<string> &list )	{ chldList(mSubst,list); }
-	bool	present( const string &name )	{ return chldPresent(mSubst,name); }
-	void	add( TSubSYS *sub )		{ chldAdd(mSubst,sub); }
-	void	del( const string &name )	{ chldDel(mSubst,name); }
-	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst,name); }
+	void	list( vector<string> &list )	{ chldList(mSubst, list); }
+	bool	present( const string &name )	{ return chldPresent(mSubst, name); }
+	void	add( TSubSYS *sub )		{ chldAdd(mSubst, sub); }
+	void	del( const string &name )	{ chldDel(mSubst, name); }
+	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst, name); }
 
 	AutoHD<TUIS>		ui( )		{ return at("UI"); }
 	AutoHD<TArchiveS>	archive( )	{ return at("Archive"); }
@@ -270,13 +269,13 @@ class TSYS : public TCntrNode
 	//  System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
+	Res &cfgRes( )		{ return mCfgRes; }
+
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources
 	const int argc;		//Comand line seting counter.
 	const char **argv;	//Comand line seting buffer.
 	const char **envp;	//System environment.
-
-	Res &nodeRes( )		{ return nRes; }
 
     protected:
 	//Protected methods
@@ -354,13 +353,13 @@ class TSYS : public TCntrNode
 	map<string,STask>	mTasks;
 	static pthread_key_t	sTaskKey;
 
-	Res	nRes, taskRes;
+	Res	taskRes, mCfgRes;
 
 	bool	mMultCPU;
 	uint64_t mSysclc;
 	volatile time_t	mSysTm;
 
-	map<string,double>	mCntrs;
+	map<string, double>	mCntrs;
 };
 
 //*************************************************

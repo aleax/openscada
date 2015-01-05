@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -144,7 +144,9 @@ class TCntrNode
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
 	//Methods
-	virtual Res &nodeRes( )		{ return hd_res; }
+	pthread_mutex_t &dataRes( )	{ return mDataM; }	//Generic node's data mutex
+								//Allowed for using by heirs into data resources allocation
+								//  not for long-term functions-tasks resources allocation!
 	virtual const char *nodeName( ) = 0;
 	string nodePath( char sep = 0, bool from_root = true );
 
@@ -227,10 +229,9 @@ class TCntrNode
 	} prev;
 
 	//Attributes
-	// Childs
-	Res			hd_res;	//Resource HD
-	static pthread_mutex_t	connM;	//Connection mutex
+	pthread_mutex_t	mChM, mDataM;	//Childs and generic data mutexes
 
+	// Childs
 	vector<GrpEl>		*chGrp;	//Child groups
 
 	// Curent node

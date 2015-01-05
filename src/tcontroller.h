@@ -140,7 +140,7 @@ class TController : public TCntrNode, public TConfig
 	char	&mAEn, &mAStart;
 
 	string	mDB;
-	ResString mRedntSt;
+	MtxString mRedntSt;
 
 	unsigned mPrm		: 2;
 	unsigned mRedntUse	: 1;

@@ -135,7 +135,7 @@ class Engine : public TUI
 		prjStl_el;	//The table structure of styles of project
 	string	mSynthCom, mSynthCode;	//Synth parameters
 
-	Res	mSynthRes;	//Synth resource
+	Res	mSynthRes, mSesRes;	//Synth, and sessions resource
 
 	map<string,string>	mSessAuto;
 };

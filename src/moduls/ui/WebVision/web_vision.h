@@ -142,6 +142,8 @@ class TWEB: public TUI
 	int		id_vcases;			//VCA session's container identifier
 	string		mCSStables;			//CSS tables
 	map<string,int> colors;				//Named colors
+
+	Res		mSesRes;			//Sessions resource
 };
 
 extern TWEB *mod;

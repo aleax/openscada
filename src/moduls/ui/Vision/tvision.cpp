@@ -190,7 +190,7 @@ void TVision::postEnable( int flag )
 
 string TVision::uiPropGet( const string &prop, const string &user )
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
 
     XMLNode prmNd;
     try {
@@ -204,7 +204,7 @@ string TVision::uiPropGet( const string &prop, const string &user )
 
 void TVision::uiPropSet( const string &prop, const string &vl, const string &user )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
 
     XMLNode prmNd("UI");
     try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }

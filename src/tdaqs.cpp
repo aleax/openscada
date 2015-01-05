@@ -84,7 +84,7 @@ void TDAQS::setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(12,vmax(0.01,vl)); mo
 
 void TDAQS::rdStList( vector<string> &ls )
 {
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(mRdRes, false);
     ls.clear();
     for(map<string,SStat>::iterator sti = mSt.begin(); sti != mSt.end(); sti++)
 	ls.push_back(sti->first);
@@ -225,25 +225,23 @@ void TDAQS::load_( )
     setRdRestConnTm(s2i(TBDS::genDBGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
     string stLs = TBDS::genDBGet(nodePath()+"RdStList"), stId;
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(mRdRes, true);
     for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
 	if(mSt.find(stId) == mSt.end()) mSt[stId] = SStat();
-    res.release();
 }
 
 void TDAQS::save_( )
 {
     //Save parameters to SYS DB
-    TBDS::genDBSet(nodePath()+"RdStLevel",i2s(rdStLevel()));
-    TBDS::genDBSet(nodePath()+"RdTaskPer",r2s(rdTaskPer()));
-    TBDS::genDBSet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()));
-    TBDS::genDBSet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()));
-    ResAlloc res(nodeRes(),false);
+    TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()));
+    TBDS::genDBSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()));
+    TBDS::genDBSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()));
+    TBDS::genDBSet(nodePath()+"RdRestDtTm", r2s(rdRestDtTm()));
+    ResAlloc res(mRdRes, false);
     string stLs;
     for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
 	stLs += sit->first+";";
-    TBDS::genDBSet(nodePath()+"RdStList",stLs);
-    res.release();
+    TBDS::genDBSet(nodePath()+"RdStList", stLs);
 }
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -469,7 +467,7 @@ AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
 
 bool TDAQS::rdActive( )
 {
-    ResAlloc res(nodeRes(), false);
+    ResAlloc res(mRdRes, false);
     for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
 	if(sit->second.isLive) return true;
     return false;
@@ -482,7 +480,7 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
     map<string,bool>::iterator cit;
 
     string lcPath = req.attr("path");
-    ResAlloc res(nodeRes(), false);
+    ResAlloc res(mRdRes, false);
     for(sit = mSt.begin(); sit != mSt.end(); sit++) {
 	if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && (!toRun || cit->second))
 	{
@@ -531,7 +529,7 @@ void *TDAQS::RdTask( void *param )
 					//Possible the will create problem with first sync
 
 	//Update wait time for dead stations and process connections to stations
-	ResAlloc res(daq.nodeRes(),false);
+	ResAlloc res(daq.mRdRes, false);
 	for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++) {
 	    // Live stations and connect to new station process
 	    if(sit->second.isLive || (!sit->second.isLive && sit->second.cnt <= 0)) {
@@ -728,7 +726,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdRestDtTm(s2r(opt->text()));
     }
     else if(a_path == "/redund/sts") {
-	ResAlloc res(nodeRes(),true);
+	ResAlloc res(mRdRes, true);
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    XMLNode *n_st	= ctrMkNode("list",opt,-1,"/redund/sts/st","",RWRWR_,"root",SDAQ_ID);
 	    XMLNode *n_name	= ctrMkNode("list",opt,-1,"/redund/sts/name","",R_R_R_,"root",SDAQ_ID);

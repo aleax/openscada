@@ -382,7 +382,7 @@ void Engine::load_( )
     passAutoEn = false;
 
     //Auto-sessions load and enable
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(mSesRes, true);
     XMLNode aSess("Sess");
     try {
 	aSess.load(TBDS::genDBGet(nodePath()+"AutoSess"));
@@ -399,12 +399,12 @@ void Engine::load_( )
 		    sesAt(sId).at().setBackgrnd(true);
 		    sesAt(sId).at().setEnable(true);
 		}
-	    }catch(...){ }
+	    } catch(...){ }
 	}
-    }catch(...){ }
+    } catch(...){ }
     res.release();
 
-    modifGClr( );
+    modifGClr();
 }
 
 void Engine::save_( )
@@ -416,7 +416,7 @@ void Engine::save_( )
     TBDS::genDBSet(nodePath()+"SynthCode", synthCode());
 
     //Auto-sessions save
-    ResAlloc res(nodeRes(),false);
+    ResAlloc res(mSesRes, false);
     XMLNode aSess("Sess");
     for(map<string,string>::iterator ias = mSessAuto.begin(); ias != mSessAuto.end(); ias++)
 	aSess.childAdd("it")->setAttr("id",ias->first)->
@@ -432,7 +432,7 @@ void Engine::modStart( )
     vector<string> ls;
 
     //Auto-sessions enable
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(mSesRes, true);
     for(map<string,string>::iterator si = mSessAuto.begin(); si != mSessAuto.end(); ++si)
 	try {
 	    string sId = si->first,
@@ -897,16 +897,15 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_proj	= ctrMkNode("list",opt,-1,"/ses/ast/proj","");
 	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/ses/ast/user","");
 
-	    ResAlloc res(nodeRes(),false);
-	    for(map<string,string>::iterator isa = mSessAuto.begin(); isa != mSessAuto.end(); isa++)
-	    {
+	    ResAlloc res(mSesRes, false);
+	    for(map<string,string>::iterator isa = mSessAuto.begin(); isa != mSessAuto.end(); isa++) {
 		if(n_id)	n_id->childAdd("el")->setText(isa->first);
 		if(n_proj)	n_proj->childAdd("el")->setText(TSYS::strParse(isa->second,0,":"));
 		if(n_user)	n_user->childAdd("el")->setText(TSYS::strParse(isa->second,1,":"));
 	    }
 	    return;
 	}
-	ResAlloc res(nodeRes(),true);
+	ResAlloc res(mSesRes, true);
 	modif();
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))		mSessAuto["NewSessId"] = "";
 	else if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	mSessAuto.erase(idvl);

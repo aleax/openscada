@@ -176,7 +176,7 @@ void TFunction::postIOCfgChange( )
 
 void TFunction::valAtt( TValFunc *vfnc )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     for(unsigned i = 0; i < used.size(); i++)
 	if(used[i] == vfnc)
 	    throw TError(nodePath().c_str(), _("Value '%s' is already attached!"), vfnc->vfName().c_str());
@@ -185,10 +185,11 @@ void TFunction::valAtt( TValFunc *vfnc )
 
 void TFunction::valDet( TValFunc *vfnc )
 {
-    ResAlloc res(nodeRes(), true);
+    pthread_mutex_lock(&dataRes());
     for(unsigned i = 0; i < used.size() ;i++)
 	if(used[i] == vfnc)
 	{ used.erase(used.begin()+i); break; }
+    pthread_mutex_unlock(&dataRes());
 }
 
 TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -291,7 +292,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",grp,SEC_RD))	opt->setText(run_st?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",grp,SEC_WR))	setStart(s2i(opt->text()));
     }
-    else if(a_path == "/func/st/use" && ctrChkNode(opt))	{ ResAlloc res(nodeRes(),false); opt->setText(i2s(used.size())); }
+    else if(a_path == "/func/st/use" && ctrChkNode(opt))	opt->setText(i2s(used.size()));
     else if(a_path == "/func/cfg/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/func/cfg/name" && ctrChkNode(opt))	opt->setText(name());
     else if(a_path == "/func/cfg/descr" && ctrChkNode(opt))	opt->setText(descr());

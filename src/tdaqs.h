@@ -117,6 +117,7 @@ class TDAQS : public TSubSYS
 	TElem	el_err, lb_el, el_tmpl, el_tmpl_io;
 	int	mTmplib;
 
+	Res		mRdRes;
 	unsigned char	mRdStLevel,		//Current station level
 			mRdRestConnTm;		//Redundant restore connection to reserve stations timeout in seconds
 	float		mRdTaskPer,		//Redundant task period in seconds

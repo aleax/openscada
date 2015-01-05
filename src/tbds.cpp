@@ -162,7 +162,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     string bdn = realDBName(ibdn);
 
     if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG)) {
-	ResAlloc res(SYS->nodeRes(),false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd, *fnd = NULL, *el;
 	string vl, vl_tr;
 	vector<string> cf_el;
@@ -238,7 +238,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
     }
 
     //Load from Config-file if tbl no present
-    ResAlloc res(SYS->nodeRes(), false);
+    ResAlloc res(SYS->cfgRes(), false);
     XMLNode *nd, *fnd = NULL, *el;
     string vl, vl_tr;
     vector<string> cf_el;
@@ -309,7 +309,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 
     //Save to config
     if(forceCfg || TSYS::strParse(bdn,0,".") == DB_CFG) {
-	ResAlloc res(SYS->nodeRes(),false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd, *wel = NULL, *fnd;
 	vector<string> cf_el;
 	string vnm;
@@ -411,7 +411,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 
     //Delete from config
     if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG || !db_true)) {
-	ResAlloc res(SYS->nodeRes(),false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
 	// Search present field
@@ -462,7 +462,7 @@ void TBDS::genDBSet( const string &path, const string &val, const string &user, 
     //Set to config
     if(!bd_ok && (SYS->workDB() == DB_CFG || rFlg&TBDS::OnlyCfg)) {
 	if(genDBGet(path,"",user,(rFlg|OnlyCfg)) == val) return;
-	ResAlloc res(SYS->nodeRes(), true);
+	ResAlloc res(SYS->cfgRes(), true);
 	XMLNode *tgtN = NULL;
 	if((rFlg&TBDS::UseTranslate) && Mess->lang2Code().size())
 	    tgtN = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code(), true);
@@ -496,7 +496,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
 
     if(!bd_ok) {
 	//Get from config-file
-	ResAlloc res(SYS->nodeRes(), false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *tgtN = NULL;
 	if(rFlg&TBDS::UseTranslate) {
 	    //if((tgtN=SYS->cfgNode(SYS->id()+"/"+path))) Mess->translReg(tgtN->text(true), "cfgSYS:"+path);

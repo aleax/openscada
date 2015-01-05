@@ -37,12 +37,18 @@ using namespace OSCADA;
 //*************************************************
 //* TCntrNode                                     *
 //*************************************************
-pthread_mutex_t TCntrNode::connM = PTHREAD_MUTEX_INITIALIZER;
 
 //*************************************************
 //* Controll scenaries language section           *
 TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mChM, &attrM);
+    pthread_mutex_init(&mDataM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     setNodeMode(Disable);
     prev.node = iprev;
     prev.grp = -1;
@@ -53,6 +59,9 @@ TCntrNode::~TCntrNode( )
 {
     nodeDelAll();
     if(chGrp) delete chGrp;
+
+    pthread_mutex_destroy(&mChM);
+    pthread_mutex_destroy(&mDataM);
 }
 
 TCntrNode &TCntrNode::operator=( TCntrNode &node )	{ return *this; }
@@ -63,8 +72,7 @@ void TCntrNode::nodeDelAll( )
 
     TMap::iterator p;
     for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	while((p = (*chGrp)[i_g].elem.begin()) != (*chGrp)[i_g].elem.end())
-	{
+	while((p = (*chGrp)[i_g].elem.begin()) != (*chGrp)[i_g].elem.end()) {
 	    delete p->second;
 	    (*chGrp)[i_g].elem.erase(p);
 	}
@@ -72,9 +80,9 @@ void TCntrNode::nodeDelAll( )
 
 void TCntrNode::setNodeMode( char mode )
 {
-    pthread_mutex_lock(&connM);
+    pthread_mutex_lock(&mDataM);
     mFlg = (mFlg&(~0x03))|(mode&0x03);
-    pthread_mutex_unlock(&connM);
+    pthread_mutex_unlock(&mDataM);
 }
 
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
@@ -232,7 +240,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 	    if(nodeMode() == Disable) throw TError(nodePath().c_str(),_("Node is disabled!"));
 	    return this;
 	}
-	ResAlloc res(hd_res,false);
+	MtxAlloc res(mChM, true);
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	    if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0)
 		return chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().nodeAt(path,0,sep,off,noex);
@@ -352,7 +360,7 @@ void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
 {
     list.clear();
 
-    ResAlloc res(hd_res, false);
+    MtxAlloc res(mChM, true);
     if(!chGrp || igr < 0 || igr >= (int)chGrp->size()) {
 	if(noex) return;
 	else throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
@@ -381,7 +389,7 @@ void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
 
 bool TCntrNode::chldPresent( int8_t igr, const string &name )
 {
-    ResAlloc res(hd_res,false);
+    MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
@@ -393,7 +401,7 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name )
 
 void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
-    ResAlloc res(hd_res,false);
+    MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size())
     { delete node; throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr); }
     if(nodeMode() != Enable)
@@ -410,7 +418,6 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 	return;
     }
 
-    res.request(true);
     node->prev.node = this;
     node->prev.grp = igr;
     if((*chGrp)[igr].ordered) {
@@ -420,7 +427,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 	    if(p->second->mOi >= pos) p->second->mOi++;
     }
     (*chGrp)[igr].elem.insert(std::pair<const char *,TCntrNode*>(node->nodeName(),node));
-    res.release();
+    res.unlock();
 
     if(node->nodeMode() == Disable)	node->nodeEn(TCntrNode::NodeConnect);
 }
@@ -428,8 +435,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool shDel )
 {
     if(tm < 0)	tm = DEF_TIMEOUT;
-    ResAlloc res(hd_res, false);		//???? Need set for write mode for prevent first check and next attach at the relock time by chldAt()
-						//But race-condition possibility into UI.VCAEngine session stop then need for work out!
+    MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(), _("Group of childs %d error!"), igr);
     if(!(nodeMode() == Enable || nodeMode() == Disable))
 	throw TError(nodePath().c_str(),_("Node is begin processed now!"));
@@ -441,7 +447,6 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     if(p->second->nodeMode() == Enable) p->second->nodeDis(tm, (flag<<8)|(shDel?NodeShiftDel:0));
 
     if(!shDel) {
-	res.request(true);
 	p = (*chGrp)[igr].elem.find(name.c_str());
 	if(p == (*chGrp)[igr].elem.end()) return;
 	if((*chGrp)[igr].ordered) {
@@ -456,22 +461,26 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
 
 void TCntrNode::setNodeFlg( char flg )
 {
-    pthread_mutex_lock(&connM);
+    pthread_mutex_lock(&mDataM);
     mFlg |= flg&(SelfModify|SelfModifyS|SelfSaveForceOnChild);
-    pthread_mutex_unlock(&connM);
+    pthread_mutex_unlock(&mDataM);
 }
 
 unsigned TCntrNode::nodeUse( bool selfOnly )
 {
-    ResAlloc res(hd_res,false);
+    MtxAlloc res1(mDataM, true);
     //if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
     unsigned i_use = mUse;
+    res1.unlock();
+
     TMap::iterator p;
+    MtxAlloc res2(mChM, true);
     for(unsigned i_g = 0; !selfOnly && chGrp && i_g < chGrp->size(); i_g++)
 	for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 	    if(p->second->nodeMode() != Disable)
 		i_use += p->second->nodeUse();
+    res2.unlock();
 
     return i_use;
 }
@@ -501,7 +510,7 @@ TCntrNode *TCntrNode::nodePrev( bool noex )
 
 AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const string &user )
 {
-    ResAlloc res(hd_res, false);
+    MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
@@ -514,39 +523,44 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
 
 int TCntrNode::isModify( int f )
 {
-    ResAlloc res(hd_res, false);
     int rflg = 0;
-
+    MtxAlloc res1(mDataM, true);
     if(f&Self && mFlg&SelfModify) rflg |= Self;
-    if(f&Child)
+    if(f&Child) {
+	res1.unlock();
+
+	MtxAlloc res2(mChM, true);
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++) {
 	    TMap::iterator p;
 	    for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 		if(p->second->isModify(Self|Child))	{ rflg |= Child; break; }
 	    if(p != (*chGrp)[i_g].elem.end())	break;
 	}
+	res2.unlock();
+    }
 
     return rflg;
 }
 
 void TCntrNode::modif( bool save )
 {
-    pthread_mutex_lock(&connM);
+    pthread_mutex_lock(&mDataM);
     mFlg |= (save?(SelfModifyS|SelfModify):SelfModify);
-    pthread_mutex_unlock(&connM);
+    pthread_mutex_unlock(&mDataM);
 }
 
 void TCntrNode::modifClr( bool save )
 {
-    pthread_mutex_lock(&connM);
+    pthread_mutex_lock(&mDataM);
     mFlg &= ~(save?SelfModifyS:SelfModify);
-    pthread_mutex_unlock(&connM);
+    pthread_mutex_unlock(&mDataM);
 }
 
 void TCntrNode::modifG( )
 {
-    ResAlloc res(hd_res, false);
     modif();
+
+    MtxAlloc res(mChM, true);
     for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 	    p->second->modifG();
@@ -554,8 +568,9 @@ void TCntrNode::modifG( )
 
 void TCntrNode::modifGClr( )
 {
-    ResAlloc res(hd_res, false);
     modifClr();
+
+    MtxAlloc res(mChM, true);
     for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 	    p->second->modifGClr();
@@ -579,7 +594,7 @@ void TCntrNode::load( bool force, string *errs )
 
     //Childs load process
     if((isModify(Child)&Child) || force) {
-	ResAlloc res(hd_res, false);
+	MtxAlloc res(mChM, true);
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 		if(p->second->isModify(Self|Child) || force) p->second->load(force, errs);
@@ -612,7 +627,7 @@ void TCntrNode::save( unsigned lev, string *errs )
 
     //Childs save process
     if(mdfFlg&Child) {
-	ResAlloc res(hd_res, false);
+	MtxAlloc res(mChM, true);
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 		if(p->second->isModify(Self|Child)) p->second->save(lev+1, errs);
@@ -620,19 +635,20 @@ void TCntrNode::save( unsigned lev, string *errs )
     if(!isError) modifClr();
 }
 
-void TCntrNode::AHDConnect()
+void TCntrNode::AHDConnect( )
 {
-    pthread_mutex_lock(&connM);
+    pthread_mutex_lock(&mDataM);
     mUse++;
-    pthread_mutex_unlock(&connM);
+    pthread_mutex_unlock(&mDataM);
     if(mUse > 65000) mess_err(nodePath().c_str(),_("Too more users for node!!!"));
 }
 
-bool TCntrNode::AHDDisConnect()
+bool TCntrNode::AHDDisConnect( )
 {
-    pthread_mutex_lock(&connM);
+    pthread_mutex_lock(&mDataM);
     mUse--;
-    pthread_mutex_unlock(&connM);
+    pthread_mutex_unlock(&mDataM);
+
     return false;
 }
 

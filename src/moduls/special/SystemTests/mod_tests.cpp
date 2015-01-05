@@ -217,7 +217,7 @@ void *TTest::Task( void *CfgM )
 	    if(++count == 1000000) count = 0;
 
 	    //Get All fields
-	    ResAlloc res(SYS->nodeRes(), false);
+	    ResAlloc res(SYS->cfgRes(), false);
 	    XMLNode *mn = SYS->cfgNode(tst->nodePath(0,false)), *t_n = NULL;
 	    for(int nd_cnt = 0; mn && (t_n=mn->childGet("prm",nd_cnt++,true)); )
 		if(tst->testPresent(t_n->attr("id")) && t_n->attr("on") == "1" &&

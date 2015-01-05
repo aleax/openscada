@@ -123,7 +123,7 @@ TTransportOut *TTr::Out( const string &name, const string &idb ){ return new TTr
 
 bool TTr::devLock( const string &dn, bool check )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
 
     if(check) return mDevLock[dn];
     if(mDevLock[dn]) return false;
@@ -133,7 +133,7 @@ bool TTr::devLock( const string &dn, bool check )
 
 void TTr::devUnLock( const string &dn )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     mDevLock[dn] = false;
 }
 
