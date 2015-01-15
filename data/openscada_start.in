@@ -93,10 +93,12 @@ cd $WorkDir/$ProjName
 
 # Programm command and lock file
 pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=$CfgFile --StatName=$ProjName"
-pLock=".openscada.lock"
+#pLock=".openscada.lock"
 
+# Possible need using "flock" for race condition prevent
 # Check for already started programm present
-if [ -f $pLock ] && ps -Ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
+if ps -C $TEXTDOMAIN -o command | grep "^${pCmd}" > /dev/null; then
+#if [ -f $pLock ] && ps -Ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
     echo "OpenSCADA station \"$ProjName\" already started!";
     if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --msgbox "\"$ProjName\" $(gettext "already started.")" 10 30;
     elif test -n "$(which kdialog)"; then kdialog --title "$(gettext "OpenSCADA start")" --msgbox "\"$ProjName\" $(gettext "already started.")";
@@ -110,7 +112,7 @@ $pCmd $@ &
 pPid=$!
 
 # Create lock file
-echo $pPid > $pLock
+#echo $pPid > $pLock
 
 # Wait for programm stop
 wait $pPid
@@ -127,4 +129,4 @@ if [ -n "$(which gdb 2> /dev/null)" ]; then
 fi
 
 # Remove lock file
-rm -f $pLock
+#rm -f $pLock

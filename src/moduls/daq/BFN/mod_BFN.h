@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BFN file: mod_BFN.h
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -180,8 +180,8 @@ class TTpContr: public TTipDAQ
 	map<unsigned,string>	mSymbCode;
 	map<unsigned,AlrmSymb>	mSymbAlrm;
 
-	TElem	symbCode_el,	//> Make Symbols of codes container structure
-		symbAlrm_el;	//> Make Symbols of alarms container structure
+	TElem	symbCode_el,	//Make Symbols of codes container structure
+		symbAlrm_el;	//Make Symbols of alarms container structure
 };
 
 extern TTpContr *mod;

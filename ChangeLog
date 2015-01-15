@@ -1,3 +1,16 @@
+2015-01-15 Roman
+- DB: LibsDB.vcaBase.db: mnEls: All gradient's figures of mnemos expanded to 100 pixels, for exclude unstick from edges at the scaling.
+    mnEls.Compressor: Spare arc figure removed.
+- DB: ModelsDB.Boiler.St.db: Fixed for the graphics groups using for the title into attribute "name".
+- SYS: Main start script openscada_start some updated for multiple starts prevent only by check into "ps -C | grep", and without lock file with PID.
+    Short global function-link rRnd() (into namespace OSCADA) to TSYS::realRound() is added.
+- DAQ.BFN: Adapted to new node's resources locking scheme.
+- !:UI.{VCAEngine,Vision}: To primitive ElFigure attribute "mirror" is added for allow the primitive's shapes mirroring.
+    Into UI.Vision implemented only main funtions and some problems present now for arcs.
+- !!:UI.Vision: TSYS::realRound() everywhere replaced to short variant rRnd().
+    !!:FIX:ElFigure's source code significant cleaned for next step. Some bugs fixed. Starting implement for mirroring.
+
+
 2015-01-05 Roman
 - !!!!:SYS: Generic node resources locking separated to the childs (function) and the common data methods and the moved to mutex from RW-locks
 	for prevent some locks workaraund and dead locks at try relock Read after lock as Write or contrary from the complex node accessing.

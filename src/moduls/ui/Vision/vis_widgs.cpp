@@ -1022,7 +1022,7 @@ string WdgView::root( )	{ return shape ? shape->id() : ""; }
 void WdgView::moveF( const QPointF &pos )
 {
     mWPos = pos;
-    move(QPoint((int)TSYS::realRound(pos.x()),(int)TSYS::realRound(pos.y())));
+    move(pos.toPoint());	//Equal to rRnd()
 }
 
 void WdgView::resizeF( const QSizeF &isz )
@@ -1030,7 +1030,7 @@ void WdgView::resizeF( const QSizeF &isz )
     mWSize = isz;
     mWSize.setWidth(vmax(mWSize.width(),3));
     mWSize.setHeight(vmax(mWSize.height(),3));
-    resize(QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())));
+    resize(mWSize.toSize());	//Equal to rRnd()
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )	{ return new WdgView(iwid,wLevel()+1,mainWin(),this); }

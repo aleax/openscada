@@ -2005,12 +2005,12 @@ int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )	{ return mainWin()->cntr
 void DevelWdgView::saveGeom( const string& item )
 {
     if(item.empty() || item == id()) {
-	chGeomCtx.setAttr("x", r2s(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("y", r2s(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("w", r2s(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("h", r2s(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("xSc", r2s(TSYS::realRound(x_scale,POS_PREC_DIG)));
-	chGeomCtx.setAttr("ySc", r2s(TSYS::realRound(y_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("x", r2s(rRnd((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("y", r2s(rRnd((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("w", r2s(rRnd(sizeF().width()/xScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("h", r2s(rRnd(sizeF().height()/yScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("xSc", r2s(rRnd(x_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("ySc", r2s(rRnd(y_scale,POS_PREC_DIG)));
 	chGeomCtx.setAttr("z", i2s(z()) /*i2s(parent()->children().indexOf(this))*/);
 	chRecord(chGeomCtx);
 	setAllAttrLoad(true);

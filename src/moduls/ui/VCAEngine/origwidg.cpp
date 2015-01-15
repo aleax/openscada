@@ -133,6 +133,7 @@ void OrigElFigure::postEnable( int flag )
 	attrAdd(new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","",i2s(A_ElFigFillClr).c_str()));
 	attrAdd(new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"","","","",i2s(A_ElFigFillImg).c_str()));
 	attrAdd(new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","",i2s(A_ElFigOrient).c_str()));
+	attrAdd(new TFld("mirror",_("Mirroring"),TFld::Boolean,TFld::NoFlag,"","0","","",i2s(A_ElFigMirror).c_str()));
 	attrAdd(new TFld("elLst",_("Elements list"),TFld::String,TFld::NoStrTransl|TFld::FullText|Attr::Active,"","","","",i2s(A_ElFigElLst).c_str()));
     }
 }

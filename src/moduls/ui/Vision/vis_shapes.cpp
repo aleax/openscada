@@ -2015,7 +2015,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth(vmax(1,TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
+	grdPen.setWidth(vmax(1,rRnd(vmin(w->xScale(true),w->yScale(true)))));
 	// Set markers font and color
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    mrkPen.setColor(shD->sclMarkColor);
@@ -2244,7 +2244,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	//  Set trend's pen
 	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
+	trpen.setWidth(vmax(1,vmin(10,(int)rRnd(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
 #if QT_VERSION < 0x050000
 	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
 #else
@@ -2345,7 +2345,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	// Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth(vmax(1,(int)TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
+	grdPen.setWidth(vmax(1,(int)rRnd(vmin(w->xScale(true),w->yScale(true)))));
 
 	// Set markers font and color
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
@@ -2671,7 +2671,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	// Set trend's pen
 	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
+	trpen.setWidth(vmax(1,vmin(10,(int)rRnd(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
 #if QT_VERSION < 0x050000
 	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
 #else

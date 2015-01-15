@@ -724,7 +724,7 @@ double VisDevelop::wdgVisScale( )	{ return s2r(mWVisScale->text().toStdString())
 
 void VisDevelop::setWdgVisScale( double val )
 {
-    mWVisScale->setText((r2s(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
+    mWVisScale->setText((r2s(rRnd(val*100,POS_PREC_DIG,true))+"%").c_str());
 }
 
 void VisDevelop::closeEvent( QCloseEvent* ce )

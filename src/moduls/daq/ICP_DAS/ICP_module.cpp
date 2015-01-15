@@ -420,7 +420,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if(mBus <= 0 || trOscd() != TrIcpDasNm) ctrRemoveNode(opt,"/cntr/cfg/BAUD");
 	if(mBus < 0) ctrRemoveNode(opt,"/cntr/cfg/REQ_TRY");
 	if(mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC"))
-	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,2,
+	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,
 		"tp","real","help",_("Set to zero for the watchdog disable."));
 	return;
     }
