@@ -1,0 +1,413 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:54+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Properties no supported by the object."
+msgstr ""
+
+#, c-format
+msgid "Function '%s' error or not enough parameters."
+msgstr ""
+
+msgid "System API functions"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow system API functions library of the user programming area."
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "1:Request is not object!"
+msgstr ""
+
+#, c-format
+msgid "1:Request error: %s"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "From file"
+msgstr ""
+
+msgid "LibGD2"
+msgstr ""
+
+msgid "Graphical library GD2 images processing."
+msgstr ""
+
+msgid "File name or data (for string stream)"
+msgstr ""
+
+msgid "File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"
+msgstr ""
+
+msgid "Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"
+msgstr ""
+
+msgid "String encoding in file"
+msgstr ""
+
+msgid "IO"
+msgstr ""
+
+msgid "Input/Output to: file, string stream."
+msgstr ""
+
+msgid "Command"
+msgstr ""
+
+msgid "Sys: Call"
+msgstr ""
+
+msgid "System call commands."
+msgstr ""
+
+msgid "DB address"
+msgstr ""
+
+msgid "SQL request"
+msgstr ""
+
+msgid "Transaction"
+msgstr ""
+
+msgid "DB: SQL request"
+msgstr ""
+
+msgid "Send SQL request to DB."
+msgstr ""
+
+msgid "Begin time"
+msgstr ""
+
+msgid "End time"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Archivator"
+msgstr ""
+
+msgid "Mess: Get"
+msgstr ""
+
+msgid "Get messages from system."
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Mess: Put"
+msgstr ""
+
+msgid "Put message to system."
+msgstr ""
+
+msgid "String"
+msgstr ""
+
+msgid "String: Get size"
+msgstr ""
+
+msgid "Use for string size getting."
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "String: Get substring"
+msgstr ""
+
+msgid "Use for substring getting."
+msgstr ""
+
+msgid "Insert string"
+msgstr ""
+
+msgid "String: Insert string to other string"
+msgstr ""
+
+msgid "Use for insertion string to other string."
+msgstr ""
+
+msgid "Replace string"
+msgstr ""
+
+msgid "String: Replace part string on other string"
+msgstr ""
+
+msgid "Use for replacing part string on other string."
+msgstr ""
+
+msgid "Separator"
+msgstr ""
+
+msgid "Offset"
+msgstr ""
+
+msgid "String: Parse on separator"
+msgstr ""
+
+msgid "Use for parse string on separator."
+msgstr ""
+
+msgid "Path"
+msgstr ""
+
+msgid "String: Path parse"
+msgstr ""
+
+msgid "Use for parse path on elements."
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "String: Path to separated string"
+msgstr ""
+
+msgid "Use for convert path to separated string."
+msgstr ""
+
+msgid "String: Encode string to HTML"
+msgstr ""
+
+msgid "Use for encode string for use into HTML source."
+msgstr ""
+
+msgid "String: Encode text to bin"
+msgstr ""
+
+msgid "Use for encode text to bin, from format <00 A0 FA DE>."
+msgstr ""
+
+msgid "String: Decode text from bin"
+msgstr ""
+
+msgid "Use for decode text from bin to format <00 A0 FA DE>."
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Precision"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "String: Real to string"
+msgstr ""
+
+msgid "Convert real to string."
+msgstr ""
+
+msgid "Base"
+msgstr ""
+
+msgid "String: Integer to string"
+msgstr ""
+
+msgid "Convert integer to string."
+msgstr ""
+
+msgid "String: String to real"
+msgstr ""
+
+msgid "Convert string to real."
+msgstr ""
+
+msgid "String: String to integer"
+msgstr ""
+
+msgid "Convert string to integer."
+msgstr ""
+
+msgid "Word 1"
+msgstr ""
+
+msgid "Word 2"
+msgstr ""
+
+msgid "Float: Split to words"
+msgstr ""
+
+msgid "Split float (4 byte) to words (2 byte)."
+msgstr ""
+
+msgid "Float: Merge from words"
+msgstr ""
+
+msgid "Merge float (4 byte) from words (2 byte)."
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Polynomial (reversion)"
+msgstr ""
+
+msgid "Width"
+msgstr ""
+
+msgid "Initial"
+msgstr ""
+
+msgid "Cyclic Redundancy Code (CRC)"
+msgstr ""
+
+msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
+msgstr ""
+
+msgid "Date and time string"
+msgstr ""
+
+msgid "Seconds"
+msgstr ""
+
+msgid "Date and time format"
+msgstr ""
+
+msgid "Time: String time"
+msgstr ""
+
+msgid "Formatted string time."
+msgstr ""
+
+msgid "Full seconds"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "Hours"
+msgstr ""
+
+msgid "Day of the month"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Day of the week"
+msgstr ""
+
+msgid "Day of the year"
+msgstr ""
+
+msgid "Daylight saving time"
+msgstr ""
+
+msgid "Time: Date"
+msgstr ""
+
+msgid "Full date."
+msgstr ""
+
+msgid "Microseconds"
+msgstr ""
+
+msgid "Time: Time"
+msgstr ""
+
+msgid "Full time (since 01.01.1970)."
+msgstr ""
+
+msgid "Time: String to time"
+msgstr ""
+
+msgid "Convert a string representation of time to a time."
+msgstr ""
+
+msgid "Result, seconds"
+msgstr ""
+
+msgid "Cron"
+msgstr ""
+
+msgid "Base time, seconds"
+msgstr ""
+
+msgid "Time: Cron plane time"
+msgstr ""
+
+msgid "Plane time by cron standard."
+msgstr ""
+
+msgid "Val: Archive"
+msgstr ""
+
+msgid "Get value archive object."
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Period (us)"
+msgstr ""
+
+msgid "Hard grid"
+msgstr ""
+
+msgid "High resolution"
+msgstr ""
+
+msgid "Val: Archive buffer"
+msgstr ""
+
+msgid "Get value buffer object for temporary values storing."
+msgstr ""
+
+msgid "XML: Node"
+msgstr ""
+
+msgid "XML node object creation."
+msgstr ""
+
+msgid "Request"
+msgstr ""
+
+msgid "Station"
+msgstr ""
+
+msgid "XML: Control request"
+msgstr ""
+
+msgid "Control request to system by XML."
+msgstr ""

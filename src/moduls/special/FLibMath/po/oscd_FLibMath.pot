@@ -1,0 +1,168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Math function's lib"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow mathematical static function library."
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "Y(rad.)"
+msgstr ""
+
+msgid "X"
+msgstr ""
+
+msgid "ArcCos"
+msgstr ""
+
+msgid "Arc cosine math function."
+msgstr ""
+
+msgid "ArcSin"
+msgstr ""
+
+msgid "Arc sine math function."
+msgstr ""
+
+msgid "ArcTan"
+msgstr ""
+
+msgid "Arc tangent math function."
+msgstr ""
+
+msgid "Y"
+msgstr ""
+
+msgid "X(rad.)"
+msgstr ""
+
+msgid "Cosine"
+msgstr ""
+
+msgid "Cosine math function."
+msgstr ""
+
+msgid "Cosine hyperbolic"
+msgstr ""
+
+msgid "Cosine hyperbolic math function."
+msgstr ""
+
+msgid "Exponent"
+msgstr ""
+
+msgid "Exponent math function."
+msgstr ""
+
+msgid "Natural logarithm"
+msgstr ""
+
+msgid "Natural logarithm math function."
+msgstr ""
+
+msgid "Decimal logarithm"
+msgstr ""
+
+msgid "Decimal logarithm math function."
+msgstr ""
+
+msgid "Power"
+msgstr ""
+
+msgid "Power math function."
+msgstr ""
+
+msgid "Sine"
+msgstr ""
+
+msgid "Sine math function."
+msgstr ""
+
+msgid "Sine hyperbolic"
+msgstr ""
+
+msgid "Sine hyperbolic math function."
+msgstr ""
+
+msgid "Square root"
+msgstr ""
+
+msgid "Square root math function."
+msgstr ""
+
+msgid "Tangent"
+msgstr ""
+
+msgid "Tangent math function."
+msgstr ""
+
+msgid "Tangent hyperbolic"
+msgstr ""
+
+msgid "Tangent hyperbolic math function."
+msgstr ""
+
+msgid "Ceil"
+msgstr ""
+
+msgid "Ceil math function."
+msgstr ""
+
+msgid "Absolute"
+msgstr ""
+
+msgid "Absolute math function."
+msgstr ""
+
+msgid "Floor"
+msgstr ""
+
+msgid "Floor math function."
+msgstr ""
+
+msgid "Rand"
+msgstr ""
+
+msgid "Rand math function."
+msgstr ""
+
+msgid "Condition"
+msgstr ""
+
+msgid "True value"
+msgstr ""
+
+msgid "False value"
+msgstr ""
+
+msgid "IF condition"
+msgstr ""
+
+msgid "Function's type 'if'-condition."
+msgstr ""

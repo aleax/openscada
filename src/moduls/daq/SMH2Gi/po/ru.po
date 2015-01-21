@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-03 12:26+0300\n"
+"POT-Creation-Date: 2015-01-21 10:50+0200\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -76,6 +76,9 @@ msgstr "Затрачено времени: %s."
 
 msgid "Error GPIO PC30 open for MC reset."
 msgstr "Ошибка открытия GPIO PC30 для сброса MC."
+
+msgid "Write to gpio94 error!"
+msgstr ""
 
 #, c-format
 msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"

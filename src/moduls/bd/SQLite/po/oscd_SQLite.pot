@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "DB SQLite"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "BD module. Provides support of the BD SQLite."
+msgstr ""
+
+#, c-format
+msgid "Delete bd error: %s"
+msgstr ""
+
+#, c-format
+msgid "Open DB file error: %s"
+msgstr ""
+
+#, c-format
+msgid "Error open table '%s'. DB is disabled."
+msgstr ""
+
+msgid "Unknown error"
+msgstr ""
+
+#, c-format
+msgid "Request \"%s\" error: %s"
+msgstr ""
+
+msgid ""
+"SQLite DB address must be written as: [<FileDBPath>].\n"
+"Where:\n"
+"  FileDBPath - full path to DB file (./oscada/Main.db).\n"
+"               Use empty path for a private, temporary on-disk database create.\n"
+"               Use \":memory:\" for a private, temporary in-memory database create."
+msgstr ""
+
+msgid "Close opened transaction"
+msgstr ""
+
+msgid "Table is empty."
+msgstr ""
+
+#, c-format
+msgid "Row \"%s\" is not present."
+msgstr ""

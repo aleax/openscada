@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-04 16:40+0300\n"
+"POT-Creation-Date: 2015-01-21 10:55+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -20,272 +20,206 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: qtcfg.cpp:85
 #, c-format
 msgid "OpenSCADA QTCfg: %s"
 msgstr ""
 
-#: qtcfg.cpp:107
 msgid "Name"
 msgstr "Name"
 
-#: qtcfg.cpp:107
 msgid "Type"
 msgstr "Typ"
 
-#: qtcfg.cpp:107
 msgid "Path"
 msgstr "Pfad"
 
-#: qtcfg.cpp:116
 msgid "The main navigation tree of the configurator."
 msgstr "Hauptbaumansicht der Systemeinstellungen"
 
-#: qtcfg.cpp:132
 msgid "The main configurator frame."
 msgstr "Hauptfeld der Systemeinstellungen."
 
-#: qtcfg.cpp:155
 msgid "Tabulated configuration pages."
 msgstr "Konfigurationsseiten in Tabellenform."
 
-#: qtcfg.cpp:170
 msgid "&Close"
 msgstr "&Schliessen"
 
-#: qtcfg.cpp:172
 msgid "Close configurator window"
 msgstr "Fenster der Systemeinstellungen schliessen"
 
-#: qtcfg.cpp:173
 msgid "The button for closing OpenSCADA configurator window"
 msgstr "Schaltfläche zum Schliessen der Systemeinstellungen von OpenSCADA"
 
-#: qtcfg.cpp:174
 msgid "Press to close OpenSCADA configurator window"
 msgstr "Betätigen um Systemeinstellungen von OpenSCADA zu schliessen"
 
-#: qtcfg.cpp:178
 msgid "&Quit"
 msgstr "&Beenden"
 
-#: qtcfg.cpp:180
 msgid "Quit OpenSCADA"
 msgstr "OpenSCADA beenden"
 
-#: qtcfg.cpp:181
 msgid "The button for full quit from OpenSCADA"
 msgstr "Schaltfläche zum Beenden von OpenSCADA"
 
-#: qtcfg.cpp:182
 msgid "Press for full quit from OpenSCADA"
 msgstr "Betätigen um OpenSCADA zu beenden"
 
-#: qtcfg.cpp:186
 msgid "&Up"
 msgstr "&Nach oben"
 
-#: qtcfg.cpp:188
 msgid "Up page"
 msgstr "Eine Stufe nach oben"
 
-#: qtcfg.cpp:189
 msgid "The button for going to level up"
 msgstr "Schaltfläche für eine Stufe nach oben"
 
-#: qtcfg.cpp:190
 msgid "Press for going to level up"
 msgstr "Betätigen für eine Stufe nach oben"
 
-#: qtcfg.cpp:195
 msgid "&Previous"
 msgstr "&Eine Seite zurück"
 
-#: qtcfg.cpp:197
 msgid "Previous page"
 msgstr "Vorhergehende Seite"
 
-#: qtcfg.cpp:198
 msgid "The button for going to previous page"
 msgstr "Schaltfläche für die vorhergehende Seite"
 
-#: qtcfg.cpp:199
 msgid "Press for going to previous page"
 msgstr "Betätigen um zur vorhergehenden Seite zu kommen"
 
-#: qtcfg.cpp:204
 msgid "&Next"
 msgstr "&Nächste Seite"
 
-#: qtcfg.cpp:206
 msgid "Next page"
 msgstr "Nächste Seite"
 
-#: qtcfg.cpp:207
 msgid "The button for going to next page"
 msgstr "Schaltfläche für die nächste Seite "
 
-#: qtcfg.cpp:208
 msgid "Press for going to next page"
 msgstr "Betätigen um zur nächsten Seite zu kommen"
 
-#: qtcfg.cpp:213
 msgid "Load from DB"
 msgstr "Datenbank laden"
 
-#: qtcfg.cpp:214
 msgid "Load item data from DB"
 msgstr "Elemente aus der Datenbank laden"
 
-#: qtcfg.cpp:215
 msgid "The button for loading item data from DB"
 msgstr "Schaltfläche für das Laden der Elemente aus der Datenbank"
 
-#: qtcfg.cpp:216
 msgid "Press for loading item data from DB."
 msgstr "Betätigen um die Elemente aus der Datenbank zu laden."
 
-#: qtcfg.cpp:221
 msgid "Save to DB"
 msgstr "Datenbank speichern"
 
-#: qtcfg.cpp:222
 msgid "Save item data to DB"
 msgstr "Elemente in die Datenbank speichern"
 
-#: qtcfg.cpp:223
 msgid "The button for saving item data to DB"
 msgstr "Schaltfläche für das Speichern der Elemente in die Datenbank"
 
-#: qtcfg.cpp:224
 msgid "Press for saving item data to DB."
 msgstr "Betätigen um die Elemente in die Datenbank zu speichern."
 
-#: qtcfg.cpp:230
 msgid "&Add"
 msgstr "&Hinzufügen"
 
-#: qtcfg.cpp:231
 msgid "Add item"
 msgstr "Element hinzufügen"
 
-#: qtcfg.cpp:232
 msgid "The button for adding new item"
 msgstr "Schaltfläche für das Hinzufügen des neuen Elements"
 
-#: qtcfg.cpp:233
 msgid "Press for adding new item."
 msgstr "Betätigen um das neue Element hinzuzufügen"
 
-#: qtcfg.cpp:238
 msgid "&Delete"
 msgstr "&Löschen"
 
-#: qtcfg.cpp:239
 msgid "Delete item"
 msgstr "Element löschen"
 
-#: qtcfg.cpp:240
 msgid "The button for deleting item"
 msgstr "Schaltfläche für das Löschen des Elements"
 
-#: qtcfg.cpp:241
 msgid "Press for deleting item."
 msgstr "Betätigen um das Element zu löschen"
 
-#: qtcfg.cpp:247
 msgid "Item cut"
 msgstr "Element ausschneiden"
 
-#: qtcfg.cpp:248
 msgid "Cutting of the item"
 msgstr "Ausschneiden des Elements"
 
-#: qtcfg.cpp:249
 msgid "The button for cutting of the item"
 msgstr "Schaltfläche zum Ausschneiden des Elements"
 
-#: qtcfg.cpp:250
 msgid "Press to cut the item."
 msgstr "Betätigen um das Element auszuschneiden"
 
-#: qtcfg.cpp:256
 msgid "Item copy"
 msgstr "Element kopieren"
 
-#: qtcfg.cpp:257
 msgid "Copying of the item"
 msgstr "Kopieren des Elements"
 
-#: qtcfg.cpp:258
 msgid "The button for copying of the item"
 msgstr "Schaltfläche zum Kopieren des Elements"
 
-#: qtcfg.cpp:259
 msgid "Press to copy the item."
 msgstr "Betätigen um das Element zu kopieren."
 
-#: qtcfg.cpp:265
 msgid "Item paste"
 msgstr "Element einfügen"
 
-#: qtcfg.cpp:266
 msgid "Pasting of the item"
 msgstr "Einfügen des Elements"
 
-#: qtcfg.cpp:267
 msgid "The button for pasting of the item"
 msgstr "Schaltfläche zum Einfügen des Elements"
 
-#: qtcfg.cpp:268
 msgid "Press to paste the item."
 msgstr "Betätigen um das Element einzufügen"
 
-#: qtcfg.cpp:274
 msgid "&Refresh"
 msgstr "&Aktualisieren"
 
-#: qtcfg.cpp:276
 msgid "Refresh current page"
 msgstr "Seite aktualisieren"
 
-#: qtcfg.cpp:277
 msgid "The button for refreshing of the content of the current page."
 msgstr "Schaltfläche zum Aktualisieren des Inhaltes der aktuellen Seite."
 
-#: qtcfg.cpp:278
 msgid "Press for refreshing of the content of the current page."
 msgstr "Betätigen um den Inhalt der laufenden Seite zu aktualisieren."
 
-#: qtcfg.cpp:282
 msgid "&Start"
 msgstr "&Starten"
 
-#: qtcfg.cpp:284
 msgid "Start cycled refresh"
 msgstr "Periodische Aktualisierung starten"
 
-#: qtcfg.cpp:285
 msgid ""
 "The button for starting of the cycled refresh of the content of the current "
 "page."
 msgstr ""
 "Schaltfläche zum Starten der periodischen Aktualisierung der laufendenSeite"
 
-#: qtcfg.cpp:286
 msgid "Press to start the cycled refresh of the content of the current page."
 msgstr ""
 "Betätigen um die periodische Aktualisierung der laufenden Seite zu starten"
 
-#: qtcfg.cpp:290
 msgid "&Stop"
 msgstr "&Anhalten"
 
-#: qtcfg.cpp:292
 msgid "Stop cycled refresh"
 msgstr "Periodische Aktualisierung anhalten"
 
-#: qtcfg.cpp:293
 msgid ""
 "The button for stopping of the cycled refresh of the content of the current "
 "page."
@@ -293,146 +227,111 @@ msgstr ""
 "Schaltfläche zum Anhalten der periodischen Aktualisierung der laufenden "
 "Seite."
 
-#: qtcfg.cpp:294
 msgid "Press to stop the cycled refresh of the content of the current page."
 msgstr ""
 "Betätigen um die periodische Aktualisierung der laufenden Seite anzuhalten"
 
-#: qtcfg.cpp:299
 msgid "&About"
 msgstr "&Über"
 
-#: qtcfg.cpp:300
 msgid "Program and OpenSCADA information"
 msgstr "Programm und OpenSCADA Information"
 
-#: qtcfg.cpp:301
 msgid "The button for display program and OpenSCADA information"
 msgstr "Schaltfläche für Informationen über Programm und OpenSCADA"
 
-#: qtcfg.cpp:302
 msgid "Press to display program and OpenSCADA information"
 msgstr "Betätigen um Informationen über Programm und OpenSCADA zu erhalten"
 
-#: qtcfg.cpp:305
 msgid "About &Qt"
 msgstr "Über &Qt"
 
-#: qtcfg.cpp:306
 msgid "Qt information"
 msgstr "Qt Information"
 
-#: qtcfg.cpp:307
 msgid "The button for getting the using Qt information"
 msgstr "Schaltfläche für Informationen über Qt"
 
-#: qtcfg.cpp:308
 msgid "Press to get the using Qt information."
 msgstr "Betätigen um Informationen über Qt zu erhalten."
 
-#: qtcfg.cpp:312 qtcfg.cpp:319
 msgid "%1 manual"
 msgstr "%1 Handbuch"
 
-#: qtcfg.cpp:315 qtcfg.cpp:321
 msgid "The button for getting the using %1 manual"
 msgstr "Schaltfläche für %1 Handbuch"
 
-#: qtcfg.cpp:316 qtcfg.cpp:322
 msgid "Press to get the using %1 manual."
 msgstr "Betätigen um %1 Handbuch."
 
-#: qtcfg.cpp:325
 msgid "The page manual"
 msgstr "Die Seiten-Handbuch"
 
-#: qtcfg.cpp:326
 msgid "Selected page manual"
 msgstr "Ausgewählte Seiten-Handbuch"
 
-#: qtcfg.cpp:327
 msgid "The button for getting the using selected page manual."
 msgstr ""
 "Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
 
-#: qtcfg.cpp:328
 msgid "Press to get the using selected page manual."
 msgstr "Klicken um das Verwendung ausgewählter Seiten-Handbuch zu bekommen."
 
-#: qtcfg.cpp:333
 msgid "What's &This"
 msgstr "Was ist &das"
 
-#: qtcfg.cpp:335
 msgid "Question about GUI elements"
 msgstr "Hilfe über die Elemente der Benutzerschnittstelle"
 
-#: qtcfg.cpp:336
 msgid "The button for requesting the information about user interface elements"
 msgstr "Schaltfläche für Informationen über die Benutzerschnittstelle"
 
-#: qtcfg.cpp:337
 msgid "Press for requesting about user interface elements"
 msgstr "Betätigen um Informationen über die Benutzerschnittstelle zu erhalten"
 
-#: qtcfg.cpp:342
 msgid "&File"
 msgstr "&Datei"
 
-#: qtcfg.cpp:349
 msgid "&Edit"
 msgstr "&Bearbeiten"
 
-#: qtcfg.cpp:357
 msgid "&View"
 msgstr "&Ansicht"
 
-#: qtcfg.cpp:366
 msgid "&Help"
 msgstr "&Hilfe"
 
-#: qtcfg.cpp:377
 msgid "OpenSCADA toolbar"
 msgstr "OpenSCADA Toolbar"
 
-#: qtcfg.cpp:404
 msgid "This label displays current user."
 msgstr "Dieses Feld zeigt den aktuellen Benutzer an"
 
-#: qtcfg.cpp:405
 msgid "Field for display of the current user."
 msgstr "Das Feld für die Anzeige des aktuellen Benutzers"
 
-#: qtcfg.cpp:406
 msgid "Double click to change user."
 msgstr "Zweimal betätigen um den Benutzers zu wechseln."
 
-#: qtcfg.cpp:411
 msgid "This label displays the local station modifying."
 msgstr "Dieses Feld zeigt den bearbeitenden lokalen Bedienrechner an"
 
-#: qtcfg.cpp:412
 msgid "Field for display of the local station modifying."
 msgstr "Das Feld für die Anzeige des bearbeitenden lokalen Bedienrechners"
 
-#: qtcfg.cpp:417
 msgid "This button for call status bar history."
 msgstr ""
 "Diese Schaltfläche ist für den Aufruf der Geschichte der Zeile des Statuts"
 
-#: qtcfg.cpp:418
 msgid "Button for call status bar history."
 msgstr "Schaltfläche für den Aufruf der Geschichte der Zeile des Statuts"
 
-#: qtcfg.cpp:424
 msgid "Ready"
 msgstr "Fertig"
 
-#: qtcfg.cpp:469
 msgid "Changes save"
 msgstr "Speichern der Änderungen"
 
-#: qtcfg.cpp:470
 msgid ""
 "Some changes made.\n"
 "Save the changes to DB on exit?"
@@ -440,67 +339,51 @@ msgstr ""
 "Einige Änderungen vorgenommen.\n"
 "Speichern Sie die Änderungen an der Ausfahrt DB?"
 
-#: qtcfg.cpp:600
 msgid "No one editable container is present."
 msgstr "Kein veränderbarer Container ist vorhanden."
 
-#: qtcfg.cpp:602
 msgid "Add item to node: '%1'."
 msgstr "Element hinzufügen in den Knoten: '%1'."
 
-#: qtcfg.cpp:602
 msgid "Add node"
 msgstr "Knoten hinzufügen"
 
-#: qtcfg.cpp:614
 msgid "Node '%1' is already present."
 msgstr "Der Knoten '%1' ist schon vorhanden."
 
-#: qtcfg.cpp:644
 msgid "Are you sure of deleting nodes: '%1'?"
 msgstr "Wollen Sie wirklich den Knoten: '%1' löschen?"
 
-#: qtcfg.cpp:644
 msgid "Delete node"
 msgstr "Knoten löschen"
 
-#: qtcfg.cpp:724
 msgid "Copy is impossible."
 msgstr "Kopieren ist nicht möglich."
 
-#: qtcfg.cpp:733
 msgid "Selected"
 msgstr "Gewählt"
 
-#: qtcfg.cpp:745 qtcfg.cpp:771
 msgid "Move or copy node"
 msgstr "Verschieben oder Kopieren des Knotens"
 
-#: qtcfg.cpp:747
 msgid "Move node '%1' to '%2'.\n"
 msgstr "Verschieben des Knotens '%1' nach '%2'.\n"
 
-#: qtcfg.cpp:747
 msgid "Copy node '%1' to '%2'.\n"
 msgstr "Kopieren des Knotens '%1' nach '%2'.\n"
 
-#: qtcfg.cpp:750 qtcfg.cpp:774
 msgid "Do not the question anymore."
 msgstr "Mehr nicht fragen."
 
-#: qtcfg.cpp:771
 msgid "Node '%1' is already present. Continue?"
 msgstr "Der Knoten '%1' ist schon vorhanden. Weiter?"
 
-#: qtcfg.cpp:893
 msgid "Status bar messages list:"
 msgstr "Statusleiste Nachrichten-Liste:"
 
-#: qtcfg.cpp:893
 msgid "Status messages"
 msgstr "Statusmeldungen"
 
-#: qtcfg.cpp:912
 #, c-format
 msgid ""
 "%s v%s.\n"
@@ -525,31 +408,24 @@ msgstr ""
 "Autor: %s\n"
 "Web Seite: %s"
 
-#: qtcfg.cpp:929
 msgid "Manual"
 msgstr "Handbuch"
 
-#: qtcfg.cpp:930
 msgid "No the manual '%1' found offline or online!"
 msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
 
-#: qtcfg.cpp:1624
 msgid "<EVAL>"
 msgstr ""
 
-#: qtcfg.cpp:1625
 msgid "On"
 msgstr ""
 
-#: qtcfg.cpp:1625
 msgid "Off"
 msgstr ""
 
-#: qtcfg.cpp:1934
 msgid "Changes apply"
 msgstr "Änderungen gelten"
 
-#: qtcfg.cpp:1934
 msgid ""
 "Some changes you don't apply!\n"
 "Apply now or lost the?"
@@ -557,321 +433,248 @@ msgstr ""
 "Einige Änderungen nicht gelten!\n"
 "Bewerben Sie sich jetzt oder verloren das?"
 
-#: qtcfg.cpp:2114
 msgid "Refresh items tree"
 msgstr "Elementenbaum aktualisieren"
 
-#: qtcfg.cpp:2257
 #, c-format
 msgid "Expand/update branch '%s' time %f ms."
 msgstr "Zeit der Erweiterung/Aktualisierung des Zweiges '%s' %f msek."
 
-#: qtcfg.cpp:2302
 msgid "Send changes to selections"
 msgstr "Senden Sie Änderungen an Selektionen"
 
-#: qtcfg.cpp:2303
+#, c-format
 msgid "Send current command '%s' to other selected nodes \"%s\"?"
 msgstr "Senden aktuellen Befehl '%s' zu anderen ausgewählten Knoten \"%s\"?"
 
-#: qtcfg.cpp:2355
 msgid "Local station"
 msgstr "Lokaler Bedienrechner"
 
-#: qtcfg.cpp:2361
 msgid "Remote station"
 msgstr "Entfernter Bedienrechner"
 
-#: qtcfg.cpp:2418
 #, c-format
 msgid "%s| Set '%s' to '%s'!"
 msgstr "%s| Installieren '%s' in '%s'!"
 
-#: qtcfg.cpp:2444
 #, c-format
 msgid "%s| Go to link '%s'!"
 msgstr "%s| Geh zum Link '%s'!"
 
-#: qtcfg.cpp:2454
 #, c-format
 msgid "%s| Press '%s'!"
 msgstr "%s| Betätigen '%s'!"
 
-#: qtcfg.cpp:2506
 msgid "Value no valid: "
 msgstr "Der Wert ist ungültig: "
 
-#: qtcfg.cpp:2517
 #, c-format
 msgid "%s| Change '%s' from '%s' to '%s'!"
 msgstr "%s| Ändern '%s' aus '%s' in '%s'!"
 
-#: qtcfg.cpp:2545
 msgid "Go"
 msgstr "Ändern"
 
-#: qtcfg.cpp:2553
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: qtcfg.cpp:2558
 msgid "Insert"
 msgstr "Einfügen"
 
-#: qtcfg.cpp:2563
 msgid "Edit"
 msgstr "Ändern"
 
-#: qtcfg.cpp:2569
 msgid "Delete"
 msgstr "Löschen"
 
-#: qtcfg.cpp:2575
 msgid "Up"
 msgstr "Nach oben"
 
-#: qtcfg.cpp:2577
 msgid "Down"
 msgstr "Nach unten"
 
-#: qtcfg.cpp:2614
 msgid "Item name set"
 msgstr "Installieren des Elementsnamen"
 
-#: qtcfg.cpp:2618
 msgid "Add new element."
 msgstr "Ein neues Element hinzufügen s."
 
-#: qtcfg.cpp:2619
 msgid "Insert new element."
 msgstr "Ein neues Element einfügen."
 
-#: qtcfg.cpp:2622
 msgid "Rename element."
 msgstr "Umbenennen des Elements."
 
-#: qtcfg.cpp:2641
 #, c-format
 msgid "%s| Add '%s' element <%s:%s>!"
 msgstr "%s| Hinzufügen '%s' Element <%s:%s>!"
 
-#: qtcfg.cpp:2649
 #, c-format
 msgid "%s| Insert '%s' element <%s:%s> to %d!"
 msgstr "%s| Einfügen '%s' des Elements <%s:%s> in %d!"
 
-#: qtcfg.cpp:2657
 #, c-format
 msgid "%s| Set '%s' element %d to <%s:%s>!"
 msgstr "%s| Installieren '%s' des Element %d in <%s:%s>!"
 
-#: qtcfg.cpp:2665
 #, c-format
 msgid "%s| Delete '%s' element <%s:%s>!"
 msgstr "%s| Löschen '%s' des Elements <%s:%s>!"
 
-#: qtcfg.cpp:2672
 #, c-format
 msgid "%s| Move '%s' from %d to %d!"
 msgstr "%s| Verschieben '%s' von %d nach %d!"
 
-#: qtcfg.cpp:2715
 msgid "Add record"
 msgstr "Datensatz hinzufügen"
 
-#: qtcfg.cpp:2720
 msgid "Insert record"
 msgstr "Datensatz einfügen"
 
-#: qtcfg.cpp:2725
 msgid "Delete record"
 msgstr "Datensatz löschen"
 
-#: qtcfg.cpp:2731
 msgid "Move Up"
 msgstr "Nach oben verschieben"
 
-#: qtcfg.cpp:2733
 msgid "Move Down"
 msgstr "Nach unten verschieben"
 
-#: qtcfg.cpp:2740
 msgid "Copy"
 msgstr "Kopieren"
 
-#: qtcfg.cpp:2778
 #, c-format
 msgid "%s| Add '%s' record."
 msgstr "%s| Hinzufügen '%s' Datensatz."
 
-#: qtcfg.cpp:2785
 #, c-format
 msgid "%s| Insert '%s' record %d."
 msgstr "%s| Einfügen '%s' des Datensatzes %d."
 
-#: qtcfg.cpp:2810
 #, c-format
 msgid "%s| Delete '%s' record '%s'."
 msgstr "%s| Löschen '%s' des Datensatzes '%s'."
 
-#: qtcfg.cpp:2819
 #, c-format
 msgid "%s| Move '%s' record from %d to %d."
 msgstr "%s| Verschieben '%s' des Datensatzes aus %d in %d."
 
-#: qtcfg.cpp:2845
 msgid "Save image"
 msgstr "Abbildung speichern"
 
-#: qtcfg.cpp:2850
 msgid "Load image"
 msgstr "Abbildung laden"
 
-#: qtcfg.cpp:2860
 msgid "Save picture"
 msgstr "Das Bild speichern"
 
-#: qtcfg.cpp:2861
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Abbildungen (*.png *.xpm *.jpg)"
 
-#: qtcfg.cpp:2863
 #, c-format
 msgid "Save to file %s error\n"
 msgstr "Fehler beim Speichern in die Datei %s\n"
 
-#: qtcfg.cpp:2868
 msgid "Load picture"
 msgstr "Bild laden"
 
-#: qtcfg.cpp:2868
 msgid "Images (*.png *.jpg)"
 msgstr "Abbildungen (*.png *.jpg)"
 
-#: qtcfg.cpp:2876
 #, c-format
 msgid "Open file %s error\n"
 msgstr "Fehler beim Öffnen der Datei %s\n"
 
-#: qtcfg.cpp:2884
 #, c-format
 msgid "Image file %s error\n"
 msgstr "Fehler in der Bilddatei %s\n"
 
-#: qtcfg.cpp:2889
 #, c-format
 msgid "%s| Upload picture '%s' to: %s."
 msgstr "%s| Speichern des Bildes '%s' nach %s."
 
-#: qtcfg.cpp:2947
 #, c-format
 msgid "Value '%s' is not valid!"
 msgstr "Wert '%s' ist ungültig"
 
-#: qtcfg.cpp:2979
 #, c-format
 msgid "%s| Set '%s' cell ('%s':%s) to: %s."
 msgstr "%s| Installieren '%s' der Zelle ('%s':%s) in %s."
 
-#: qtcfg.cpp:3013
 #, c-format
 msgid "Selective element '%s' is not present!"
 msgstr "Ausgewähltes Element '%s' fehlt!"
 
-#: qtcfg.cpp:3048
 #, c-format
 msgid "%s| Change '%s' to: '%s'!"
 msgstr "%s| Ändern '%s' in: '%s'!"
 
-#: selfwidg.cpp:94
 msgid "Picture is not set!"
 msgstr "Es ist kein Bild hinterlegt!"
 
-#: selfwidg.cpp:496
 msgid "Find"
 msgstr "Suche"
 
-#: selfwidg.cpp:501
 msgid "Find next"
 msgstr "Weitersuchen"
 
-#: selfwidg.cpp:511
 msgid "Apply"
 msgstr "Übernehmen"
 
-#: selfwidg.cpp:515 selfwidg.cpp:751 selfwidg.cpp:884
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: selfwidg.cpp:569
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"
 
-#: selfwidg.cpp:617
 msgid "Enter text string for search:"
 msgstr "Geben Sie den Text-String für Suche:"
 
-#: selfwidg.cpp:617
 msgid "String search"
 msgstr "String-Suche"
 
-#: selfwidg.cpp:620
 msgid "Backward"
 msgstr "Rückwärts"
 
-#: selfwidg.cpp:623
 msgid "Case sensitively"
 msgstr "Case sensibel"
 
-#: selfwidg.cpp:626
 msgid "Whole words"
 msgstr "Ganze Wörter"
 
-#: selfwidg.cpp:714
 msgid "ID:"
 msgstr ""
 
-#: selfwidg.cpp:722
 msgid "Name:"
 msgstr "Name:"
 
-#: selfwidg.cpp:744 selfwidg.cpp:880
 msgid "Ok"
 msgstr ""
 
-#: selfwidg.cpp:806
 msgid "Item type:"
 msgstr "Typ des Elements:"
 
-#: selfwidg.cpp:853
 msgid "Select user"
 msgstr "Benutzer auswählen"
 
-#: selfwidg.cpp:861
 msgid "User:"
 msgstr "Benutzer:"
 
-#: selfwidg.cpp:864
 msgid "Password:"
 msgstr "Kennwort:"
 
-#: selfwidg.cpp:971 tuimod.cpp:166
 msgid "Auth is wrong!!!"
 msgstr "Falsches Kennwort"
 
-#: tuimod.cpp:36
 msgid "System configurator (Qt)"
 msgstr "Systemeinstellung (Qt)"
 
-#: tuimod.cpp:41
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: tuimod.cpp:42
 msgid "Allow the Qt based OpenSCADA system configurator."
 msgstr "Ermöglicht die Qt-basierte Systemeinstellung von OpenSCADA."
 
-#: tuimod.cpp:113
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -887,43 +690,33 @@ msgstr ""
 "StartUser  <user>    Start, ohne Kennwort, Benutzer.\n"
 "\n"
 
-#: tuimod.cpp:122
 msgid "Load module."
 msgstr "Modul laden."
 
-#: tuimod.cpp:136
 msgid "Save module."
 msgstr "Modul speichern."
 
-#: tuimod.cpp:177
 msgid "Start module."
 msgstr "Starten des Moduls."
 
-#: tuimod.cpp:185
 msgid "Stop module."
 msgstr "Anhalten des Moduls."
 
-#: tuimod.cpp:217
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-#: tuimod.cpp:219
 msgid "Configurator start path"
 msgstr "Verzeichnispfad der Systemeinstellungen"
 
-#: tuimod.cpp:220
 msgid "Configurator start user"
 msgstr "Benutzer für die Systemeinstellungen"
 
-#: tuimod.cpp:221
 msgid "Go to remote stations list configuration"
 msgstr "Konfiguration der entfernten Stationen"
 
-#: selfwidg.h:218
 msgid "QTCfg dialog"
 msgstr "QTCfg Dialog"
 
-#: selfwidg.h:250
 msgid "Node id and/or name select"
 msgstr "Auswahl des Bezeichners und/oder des Namens"
 

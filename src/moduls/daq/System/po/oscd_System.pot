@@ -1,0 +1,258 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Load (%)"
+msgstr ""
+
+msgid "System (%)"
+msgstr ""
+
+msgid "User (%)"
+msgstr ""
+
+msgid "Idle (%)"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "10:Device is not available."
+msgstr ""
+
+msgid "Full CPU Load"
+msgstr ""
+
+msgid "CPU Load: "
+msgstr ""
+
+msgid "Read (B)"
+msgstr ""
+
+msgid "Read speed (B/s)"
+msgstr ""
+
+msgid "Write (B)"
+msgstr ""
+
+msgid "Write speed (B/s)"
+msgstr ""
+
+msgid "Disk(part)"
+msgstr ""
+
+msgid "HD statistic: "
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Measure unit"
+msgstr ""
+
+msgid "Temperature"
+msgstr ""
+
+msgid "Disk"
+msgstr ""
+
+msgid "Parameter Hddtemp"
+msgstr ""
+
+msgid "HD temperature: "
+msgstr ""
+
+msgid "Free (kB)"
+msgstr ""
+
+msgid "Total (kB)"
+msgstr ""
+
+msgid "Use (kB)"
+msgstr ""
+
+msgid "Buffers (kB)"
+msgstr ""
+
+msgid "Cached (kB)"
+msgstr ""
+
+msgid "Swap free (kB)"
+msgstr ""
+
+msgid "Swap total (kB)"
+msgstr ""
+
+msgid "Swap use (kB)"
+msgstr ""
+
+msgid "Memory info"
+msgstr ""
+
+msgid "Receive (B)"
+msgstr ""
+
+msgid "Receive speed (B/s)"
+msgstr ""
+
+msgid "Transmit (B)"
+msgstr ""
+
+msgid "Transmit speed (B/s)"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Interface statistic: "
+msgstr ""
+
+msgid "Data sensors"
+msgstr ""
+
+msgid "HDD SMART: "
+msgstr ""
+
+msgid "UPS"
+msgstr ""
+
+#, c-format
+msgid "REQ -> '%s'"
+msgstr ""
+
+#, c-format
+msgid "RESP -> '%s'"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "UPS: "
+msgstr ""
+
+msgid "Full seconds"
+msgstr ""
+
+msgid "Seconds"
+msgstr ""
+
+msgid "Minutes"
+msgstr ""
+
+msgid "Hours"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "Station"
+msgstr ""
+
+msgid "System up time"
+msgstr ""
+
+msgid "Station up time"
+msgstr ""
+
+msgid "System DA"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other."
+msgstr ""
+
+msgid "Auto create active DA"
+msgstr ""
+
+msgid "System parameters table"
+msgstr ""
+
+msgid "Request data period (ms)"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Request task priority"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "System part"
+msgstr ""
+
+msgid "Additional parameters"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr ""
+
+msgid "2:Controller stopped"
+msgstr ""
+
+msgid "1:Parameter disabled"
+msgstr ""
+
+#, c-format
+msgid "Write value to attribute '%s' error: %s"
+msgstr ""
+
+msgid "CPU"
+msgstr ""
+
+msgid "HDD statistic"
+msgstr ""
+
+msgid "HDD temperature"
+msgstr ""
+
+msgid "Memory"
+msgstr ""
+
+msgid "Net statistic"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "UPS (NUT)"
+msgstr ""
+
+msgid "Up time"
+msgstr ""

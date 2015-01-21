@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-22 21:09+0300\n"
+"POT-Creation-Date: 2015-01-21 10:51+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -16,98 +16,75 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: snmp_client.cpp:48
 msgid "SNMP client"
 msgstr "SNMP клієнт"
 
-#: snmp_client.cpp:52
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: snmp_client.cpp:53
 msgid "Allow realization of SNMP client service."
 msgstr "Надає реалізацію клієнтського SNMP сервісу."
 
-#: snmp_client.cpp:108
 msgid "Parameteres table"
 msgstr "Таблиця параметрів"
 
-#: snmp_client.cpp:109
 msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
-#: snmp_client.cpp:110
 msgid "Gather task priority"
 msgstr "Рівень пріоритету задачі збору даних"
 
-#: snmp_client.cpp:111
 msgid "Remote host address"
 msgstr "Адреса віддаленого хосту"
 
-#: snmp_client.cpp:112
 msgid "Retries"
 msgstr "Спроб"
 
-#: snmp_client.cpp:113
 msgid "Timeout (sec)"
 msgstr "Час очікування (сек)"
 
-#: snmp_client.cpp:114
 msgid "SNMP version"
 msgstr "SNMP версія"
 
-#: snmp_client.cpp:115
 msgid "Server community/user"
 msgstr "Співтовариство/користувач серверу"
 
-#: snmp_client.cpp:116
 msgid "V3 parameters"
 msgstr "V3 параметри"
 
-#: snmp_client.cpp:117
 msgid "Parameter's attributes limit"
 msgstr "Обмеження на кількість атрибутів"
 
-#: snmp_client.cpp:120
 msgid "Standard"
 msgstr "Стандарт"
 
-#: snmp_client.cpp:121
 msgid "OID list (next line separated)"
 msgstr "Перелік OID (поділено наступним рядком)"
 
-#: snmp_client.cpp:160
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
-#: snmp_client.cpp:161
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
-#: snmp_client.cpp:162
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
-#: snmp_client.cpp:163
 #, c-format
 msgid "Spent time: %s."
 msgstr "Витрачено часу: %s."
 
-#: snmp_client.cpp:215
 msgid "Error generating Ku from authentication pass phrase."
 msgstr "Помилка генерації Ku з паролю автентифікації."
 
-#: snmp_client.cpp:237
 msgid "Error generating Ku from privacy pass phrase."
 msgstr "Помилка генерації Ku з паролю приватності."
 
-#: snmp_client.cpp:320
 msgid "Error SNMP session open."
 msgstr "Помилка відкриття SNMP сесії."
 
-#: snmp_client.cpp:379
 msgid ""
 "SNMP agent host in IP address or domain host name.\n"
 "Also you can set port like \"localhost:161\""
@@ -115,37 +92,29 @@ msgstr ""
 "SNMP хост агенту у IP адресі або доменній назві хоста.\n"
 "Також ви можете встановити порт, наприклад \"localhost:161\""
 
-#: snmp_client.cpp:383
 msgid "Community group or user."
 msgstr "Група спільноти або користувач."
 
-#: snmp_client.cpp:388
 msgid "Security level"
 msgstr "Рівень безпеки"
 
-#: snmp_client.cpp:389
 msgid "No auth/No privacy;Auth/No privacy;Auth/Privacy"
 msgstr "Немає автент./Немає приватн.;Автент./Немає приватн.;Автент./Приватн."
 
-#: snmp_client.cpp:392
 msgid "Auth"
 msgstr "Автентифікація"
 
-#: snmp_client.cpp:402
 msgid "Privacy"
 msgstr "Приватність"
 
-#: snmp_client.cpp:637
 #, c-format
 msgid "ASN type '%d' do not handled."
 msgstr "ASN тип '%d' не підтримується."
 
-#: snmp_client.cpp:651 snmp_client.cpp:809
 #, c-format
 msgid "10:Timeout: No Response from %s."
 msgstr "10:Перевищено час очікування відповіді від %s."
 
-#: snmp_client.cpp:702
 msgid ""
 "SNMP OID list, include directories for get all subitems. OID can write in "
 "the methods:\n"
@@ -167,14 +136,11 @@ msgstr ""
 "  \"SNMPv2-MIB::sysDescr.0\" - адресація з MIB бази від назви модуля для "
 "\"system.sysDescr.0\"."
 
-#: snmp_client.cpp:708
 msgid "MIB Tree"
 msgstr "MIB Дерево"
 
-#: snmp_client.cpp:720 snmp_client.cpp:744
 msgid "<<Append current>>"
 msgstr "<<Додати поточний>>"
 
-#: snmp_client.cpp:811
 msgid "11:No authorized name."
 msgstr "11:Неавторизована назва."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-01 20:41+0200\n"
+"POT-Creation-Date: 2015-01-21 10:54+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,15 +16,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: modssl.cpp:42
 msgid "SSL"
 msgstr ""
 
-#: modssl.cpp:46
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: modssl.cpp:47
 msgid ""
 "Allow security socket layer based transport. Used OpenSSL and supported "
 "SSLv2, SSLv3 and TLSv1."
@@ -32,15 +29,12 @@ msgstr ""
 "Предоставляет транспорт основанный на слое безопасных сокетов. Используется "
 "OpenSSL и поддерживаются SSLv2, SSLv3 и TLSv1."
 
-#: modssl.cpp:125 modssl.cpp:126
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
 
-#: modssl.cpp:196
 msgid "Start error: "
 msgstr "Ошибка запуска: "
 
-#: modssl.cpp:198
 #, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
@@ -49,54 +43,43 @@ msgstr ""
 "Подключений %d, открыто %d. Трафик входящий %s, исходящий %s. Закрыто "
 "соединений из-за лимита %d."
 
-#: modssl.cpp:310 modssl.cpp:817
 #, c-format
 msgid "Open temporary file '%s' error: '%s'"
 msgstr "Ошибка открытия временного файла '%s': '%s'"
 
-#: modssl.cpp:313 modssl.cpp:820
 #, c-format
 msgid "Error write to file '%s'."
 msgstr "Ошибка записи в файл '%s'."
 
-#: modssl.cpp:371
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Закрытие входного транспорта по ошибке: %s"
 
-#: modssl.cpp:399
 msgid "Error creation of the thread!"
 msgstr "Ошибка создания потока!"
 
-#: modssl.cpp:408
 msgid " client tasks is stopping...."
 msgstr " клиентская задача остановлена...."
 
-#: modssl.cpp:437
 #, c-format
 msgid "Socket has been connected by '%s'!"
 msgstr "Сокет был подключен из '%s'!"
 
-#: modssl.cpp:480 modssl.cpp:968
 #, c-format
 msgid "The message is received with the size '%d'."
 msgstr "Получено сообщение размером '%d'."
 
-#: modssl.cpp:490
 #, c-format
 msgid "The message is replied with the size '%d'."
 msgstr "Отвечено сообщением размера '%d'."
 
-#: modssl.cpp:522
 #, c-format
 msgid "Socket has been disconnected (%d)."
 msgstr "Отключение от сокета (%d)."
 
-#: modssl.cpp:559
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
 
-#: modssl.cpp:611
 msgid ""
 "SSL input transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"
@@ -111,31 +94,24 @@ msgstr ""
 "    port - сетевой порт (/etc/services);\n"
 "    mode - SSL режим и версия (SSLv2, SSLv3, SSLv23 и TLSv1)."
 
-#: modssl.cpp:617 modssl.cpp:985
 msgid "Certificates and private key"
 msgstr "Сертификаты и приватный ключ"
 
-#: modssl.cpp:618 modssl.cpp:986
 msgid "SSL PAM certificates chain and private key."
 msgstr "Цепь SSL PAM сертификатов и приватный ключ."
 
-#: modssl.cpp:619 modssl.cpp:987
 msgid "Private key password"
 msgstr "Пароль приватного ключа"
 
-#: modssl.cpp:620
 msgid "Clients maximum"
 msgstr "Максимум клиентов"
 
-#: modssl.cpp:621
 msgid "Input buffer (kbyte)"
 msgstr "Входной буфер (кбайт)"
 
-#: modssl.cpp:622
 msgid "Keep alive requests"
 msgstr "Keep alive запросов"
 
-#: modssl.cpp:623
 msgid ""
 "Close the connection after specified requests.\n"
 "Zero value for disable (not close ever)."
@@ -143,74 +119,60 @@ msgstr ""
 "Закрытие подключения после указанного количества запросов.\n"
 "Нулевое значение для отключения (не закрывается никогда)."
 
-#: modssl.cpp:624
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive время ожидания (с)"
 
-#: modssl.cpp:625
 msgid ""
 "Close the connection after no requests at specified timeout.\n"
 "Zero value for disable (not close ever)."
 msgstr ""
-"Закрытие подключения после отсутствия запросов в течении указанного времени.\n"
+"Закрытие подключения после отсутствия запросов в течении указанного "
+"времени.\n"
 "Нулевое значение для отключения (не закрывается никогда)."
 
-#: modssl.cpp:626
 msgid "Priority"
 msgstr "Приоритет"
 
-#: modssl.cpp:696
 #, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Трафик входящий %s, исходящий %s."
 
-#: modssl.cpp:773
 #, c-format
 msgid "Socket name '%s' error!"
 msgstr "Ошибка имени '%s' сокета!"
 
-#: modssl.cpp:784
 #, c-format
 msgid "Error creation TCP socket: %s!"
 msgstr "Ошибка создания TCP сокета: %s!"
 
-#: modssl.cpp:802
 #, c-format
 msgid "Connect to Internet socket error: %s!"
 msgstr "Ошибка подключения к Internet сокету: %s!"
 
-#: modssl.cpp:828
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"
 msgstr ""
 
-#: modssl.cpp:834
 #, c-format
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
-#: modssl.cpp:910
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-#: modssl.cpp:913
 msgid "Connection error"
 msgstr "Ошибка подключения"
 
-#: modssl.cpp:931
 #, c-format
 msgid "The message is sent with the size '%d'."
 msgstr "Отправлено сообщение размером '%d'."
 
-#: modssl.cpp:955
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
 
-#: modssl.cpp:956
 msgid "Socket error!"
 msgstr "Ошибка сокета!"
 
-#: modssl.cpp:980
 msgid ""
 "SSL output transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"
@@ -224,11 +186,9 @@ msgstr ""
 "    port - сетевой порт (/etc/services);\n"
 "    mode - режим SSL и версия (SSLv2, SSLv3, SSLv23 и TLSv1)."
 
-#: modssl.cpp:988
 msgid "Timings"
 msgstr "Временные интервалы"
 
-#: modssl.cpp:989
 msgid ""
 "Connection timings in format: \"[conn]:[next]\". Where:\n"
 "    conn - maximum time for connection respond wait, in seconds;\n"

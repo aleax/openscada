@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-02 22:37+0300\n"
+"POT-Creation-Date: 2015-01-21 10:44+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -20,63 +20,50 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: my_sql.cpp:35
 msgid "DB MySQL"
 msgstr "DB MySQL"
 
-#: my_sql.cpp:39
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: my_sql.cpp:40
 msgid "BD module. Provides support of the BD MySQL."
 msgstr "Modul unterstützt die MySQL Datenbank."
 
-#: my_sql.cpp:119 my_sql.cpp:149
 msgid "Error initializing client."
 msgstr "Fehler beim Initialisieren des Clients."
 
-#: my_sql.cpp:122 my_sql.cpp:163
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Fehler: %s beim Verbinden mit der Datenbank"
 
-#: my_sql.cpp:125
 #, c-format
 msgid "Query to DB error: %s"
 msgstr "Fehler bei der Abfrage an Datenbank: %s"
 
-#: my_sql.cpp:197
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 
-#: my_sql.cpp:226
 #, c-format
 msgid "Connect to DB error %d: %s"
 msgstr "Fehler beim Verbinden mit der Datenbank %d: %s"
 
-#: my_sql.cpp:235
 #, c-format
 msgid "Query '%s' is error."
 msgstr "Fehler bei der Abfrage '%s'."
 
-#: my_sql.cpp:236
 #, c-format
 msgid "Query to DB error %d: %s"
 msgstr "Fehler %d bei der Abfrage an Datenbank: %s"
 
-#: my_sql.cpp:242
 #, c-format
 msgid "Store result error: %s"
 msgstr "Fehler beim Speichern des Ergebnisses: %s"
 
-#: my_sql.cpp:264
 #, c-format
 msgid "Could not execute statement: %s"
 msgstr "Aussage konnte nicht ausgeführt: %s"
 
-#: my_sql.cpp:305
 msgid ""
 "MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;"
 "{u_sock}[;{names}[;{tms}]]]\".\n"
@@ -111,14 +98,12 @@ msgstr ""
 "utf8;5,2,2\".\n"
 "Für entfernte Datenbank: \"server.nm.org;roman;123456;OpenSCADA;3306\"."
 
-#: my_sql.cpp:318
 msgid "Close opened transaction"
 msgstr "Geöffnete Transaktion schlissen"
 
-#: my_sql.cpp:364 my_sql.cpp:401 my_sql.cpp:471 my_sql.cpp:525 my_sql.cpp:653
 msgid "Table is empty!"
 msgstr "Tabelle ist leer!"
 
-#: my_sql.cpp:506
+#, c-format
 msgid "Row \"%s\" is not present."
 msgstr "Datensatz \"%s\" ist nicht vorhanden!"

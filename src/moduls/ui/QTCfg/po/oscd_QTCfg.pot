@@ -1,0 +1,687 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:55+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#, c-format
+msgid "OpenSCADA QTCfg: %s"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Path"
+msgstr ""
+
+msgid "The main navigation tree of the configurator."
+msgstr ""
+
+msgid "The main configurator frame."
+msgstr ""
+
+msgid "Tabulated configuration pages."
+msgstr ""
+
+msgid "&Close"
+msgstr ""
+
+msgid "Close configurator window"
+msgstr ""
+
+msgid "The button for closing OpenSCADA configurator window"
+msgstr ""
+
+msgid "Press to close OpenSCADA configurator window"
+msgstr ""
+
+msgid "&Quit"
+msgstr ""
+
+msgid "Quit OpenSCADA"
+msgstr ""
+
+msgid "The button for full quit from OpenSCADA"
+msgstr ""
+
+msgid "Press for full quit from OpenSCADA"
+msgstr ""
+
+msgid "&Up"
+msgstr ""
+
+msgid "Up page"
+msgstr ""
+
+msgid "The button for going to level up"
+msgstr ""
+
+msgid "Press for going to level up"
+msgstr ""
+
+msgid "&Previous"
+msgstr ""
+
+msgid "Previous page"
+msgstr ""
+
+msgid "The button for going to previous page"
+msgstr ""
+
+msgid "Press for going to previous page"
+msgstr ""
+
+msgid "&Next"
+msgstr ""
+
+msgid "Next page"
+msgstr ""
+
+msgid "The button for going to next page"
+msgstr ""
+
+msgid "Press for going to next page"
+msgstr ""
+
+msgid "Load from DB"
+msgstr ""
+
+msgid "Load item data from DB"
+msgstr ""
+
+msgid "The button for loading item data from DB"
+msgstr ""
+
+msgid "Press for loading item data from DB."
+msgstr ""
+
+msgid "Save to DB"
+msgstr ""
+
+msgid "Save item data to DB"
+msgstr ""
+
+msgid "The button for saving item data to DB"
+msgstr ""
+
+msgid "Press for saving item data to DB."
+msgstr ""
+
+msgid "&Add"
+msgstr ""
+
+msgid "Add item"
+msgstr ""
+
+msgid "The button for adding new item"
+msgstr ""
+
+msgid "Press for adding new item."
+msgstr ""
+
+msgid "&Delete"
+msgstr ""
+
+msgid "Delete item"
+msgstr ""
+
+msgid "The button for deleting item"
+msgstr ""
+
+msgid "Press for deleting item."
+msgstr ""
+
+msgid "Item cut"
+msgstr ""
+
+msgid "Cutting of the item"
+msgstr ""
+
+msgid "The button for cutting of the item"
+msgstr ""
+
+msgid "Press to cut the item."
+msgstr ""
+
+msgid "Item copy"
+msgstr ""
+
+msgid "Copying of the item"
+msgstr ""
+
+msgid "The button for copying of the item"
+msgstr ""
+
+msgid "Press to copy the item."
+msgstr ""
+
+msgid "Item paste"
+msgstr ""
+
+msgid "Pasting of the item"
+msgstr ""
+
+msgid "The button for pasting of the item"
+msgstr ""
+
+msgid "Press to paste the item."
+msgstr ""
+
+msgid "&Refresh"
+msgstr ""
+
+msgid "Refresh current page"
+msgstr ""
+
+msgid "The button for refreshing of the content of the current page."
+msgstr ""
+
+msgid "Press for refreshing of the content of the current page."
+msgstr ""
+
+msgid "&Start"
+msgstr ""
+
+msgid "Start cycled refresh"
+msgstr ""
+
+msgid "The button for starting of the cycled refresh of the content of the current page."
+msgstr ""
+
+msgid "Press to start the cycled refresh of the content of the current page."
+msgstr ""
+
+msgid "&Stop"
+msgstr ""
+
+msgid "Stop cycled refresh"
+msgstr ""
+
+msgid "The button for stopping of the cycled refresh of the content of the current page."
+msgstr ""
+
+msgid "Press to stop the cycled refresh of the content of the current page."
+msgstr ""
+
+msgid "&About"
+msgstr ""
+
+msgid "Program and OpenSCADA information"
+msgstr ""
+
+msgid "The button for display program and OpenSCADA information"
+msgstr ""
+
+msgid "Press to display program and OpenSCADA information"
+msgstr ""
+
+msgid "About &Qt"
+msgstr ""
+
+msgid "Qt information"
+msgstr ""
+
+msgid "The button for getting the using Qt information"
+msgstr ""
+
+msgid "Press to get the using Qt information."
+msgstr ""
+
+msgid "%1 manual"
+msgstr ""
+
+msgid "The button for getting the using %1 manual"
+msgstr ""
+
+msgid "Press to get the using %1 manual."
+msgstr ""
+
+msgid "The page manual"
+msgstr ""
+
+msgid "Selected page manual"
+msgstr ""
+
+msgid "The button for getting the using selected page manual."
+msgstr ""
+
+msgid "Press to get the using selected page manual."
+msgstr ""
+
+msgid "What's &This"
+msgstr ""
+
+msgid "Question about GUI elements"
+msgstr ""
+
+msgid "The button for requesting the information about user interface elements"
+msgstr ""
+
+msgid "Press for requesting about user interface elements"
+msgstr ""
+
+msgid "&File"
+msgstr ""
+
+msgid "&Edit"
+msgstr ""
+
+msgid "&View"
+msgstr ""
+
+msgid "&Help"
+msgstr ""
+
+msgid "OpenSCADA toolbar"
+msgstr ""
+
+msgid "This label displays current user."
+msgstr ""
+
+msgid "Field for display of the current user."
+msgstr ""
+
+msgid "Double click to change user."
+msgstr ""
+
+msgid "This label displays the local station modifying."
+msgstr ""
+
+msgid "Field for display of the local station modifying."
+msgstr ""
+
+msgid "This button for call status bar history."
+msgstr ""
+
+msgid "Button for call status bar history."
+msgstr ""
+
+msgid "Ready"
+msgstr ""
+
+msgid "Changes save"
+msgstr ""
+
+msgid ""
+"Some changes made.\n"
+"Save the changes to DB on exit?"
+msgstr ""
+
+msgid "No one editable container is present."
+msgstr ""
+
+msgid "Add item to node: '%1'."
+msgstr ""
+
+msgid "Add node"
+msgstr ""
+
+msgid "Node '%1' is already present."
+msgstr ""
+
+msgid "Are you sure of deleting nodes: '%1'?"
+msgstr ""
+
+msgid "Delete node"
+msgstr ""
+
+msgid "Copy is impossible."
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid "Move or copy node"
+msgstr ""
+
+msgid "Move node '%1' to '%2'.\n"
+msgstr ""
+
+msgid "Copy node '%1' to '%2'.\n"
+msgstr ""
+
+msgid "Do not the question anymore."
+msgstr ""
+
+msgid "Node '%1' is already present. Continue?"
+msgstr ""
+
+msgid "Status bar messages list:"
+msgstr ""
+
+msgid "Status messages"
+msgstr ""
+
+#, c-format
+msgid ""
+"%s v%s.\n"
+"%s\n"
+"Author: %s\n"
+"License: %s\n"
+"\n"
+"%s v%s.\n"
+"%s\n"
+"License: %s\n"
+"Author: %s\n"
+"Web site: %s"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "No the manual '%1' found offline or online!"
+msgstr ""
+
+msgid "<EVAL>"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid "Off"
+msgstr ""
+
+msgid "Changes apply"
+msgstr ""
+
+msgid ""
+"Some changes you don't apply!\n"
+"Apply now or lost the?"
+msgstr ""
+
+msgid "Refresh items tree"
+msgstr ""
+
+#, c-format
+msgid "Expand/update branch '%s' time %f ms."
+msgstr ""
+
+msgid "Send changes to selections"
+msgstr ""
+
+#, c-format
+msgid "Send current command '%s' to other selected nodes \"%s\"?"
+msgstr ""
+
+msgid "Local station"
+msgstr ""
+
+msgid "Remote station"
+msgstr ""
+
+#, c-format
+msgid "%s| Set '%s' to '%s'!"
+msgstr ""
+
+#, c-format
+msgid "%s| Go to link '%s'!"
+msgstr ""
+
+#, c-format
+msgid "%s| Press '%s'!"
+msgstr ""
+
+msgid "Value no valid: "
+msgstr ""
+
+#, c-format
+msgid "%s| Change '%s' from '%s' to '%s'!"
+msgstr ""
+
+msgid "Go"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Insert"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Up"
+msgstr ""
+
+msgid "Down"
+msgstr ""
+
+msgid "Item name set"
+msgstr ""
+
+msgid "Add new element."
+msgstr ""
+
+msgid "Insert new element."
+msgstr ""
+
+msgid "Rename element."
+msgstr ""
+
+#, c-format
+msgid "%s| Add '%s' element <%s:%s>!"
+msgstr ""
+
+#, c-format
+msgid "%s| Insert '%s' element <%s:%s> to %d!"
+msgstr ""
+
+#, c-format
+msgid "%s| Set '%s' element %d to <%s:%s>!"
+msgstr ""
+
+#, c-format
+msgid "%s| Delete '%s' element <%s:%s>!"
+msgstr ""
+
+#, c-format
+msgid "%s| Move '%s' from %d to %d!"
+msgstr ""
+
+msgid "Add record"
+msgstr ""
+
+msgid "Insert record"
+msgstr ""
+
+msgid "Delete record"
+msgstr ""
+
+msgid "Move Up"
+msgstr ""
+
+msgid "Move Down"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+#, c-format
+msgid "%s| Add '%s' record."
+msgstr ""
+
+#, c-format
+msgid "%s| Insert '%s' record %d."
+msgstr ""
+
+#, c-format
+msgid "%s| Delete '%s' record '%s'."
+msgstr ""
+
+#, c-format
+msgid "%s| Move '%s' record from %d to %d."
+msgstr ""
+
+msgid "Save image"
+msgstr ""
+
+msgid "Load image"
+msgstr ""
+
+msgid "Save picture"
+msgstr ""
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr ""
+
+#, c-format
+msgid "Save to file %s error\n"
+msgstr ""
+
+msgid "Load picture"
+msgstr ""
+
+msgid "Images (*.png *.jpg)"
+msgstr ""
+
+#, c-format
+msgid "Open file %s error\n"
+msgstr ""
+
+#, c-format
+msgid "Image file %s error\n"
+msgstr ""
+
+#, c-format
+msgid "%s| Upload picture '%s' to: %s."
+msgstr ""
+
+#, c-format
+msgid "Value '%s' is not valid!"
+msgstr ""
+
+#, c-format
+msgid "%s| Set '%s' cell ('%s':%s) to: %s."
+msgstr ""
+
+#, c-format
+msgid "Selective element '%s' is not present!"
+msgstr ""
+
+#, c-format
+msgid "%s| Change '%s' to: '%s'!"
+msgstr ""
+
+msgid "Picture is not set!"
+msgstr ""
+
+msgid "Find"
+msgstr ""
+
+msgid "Find next"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Cursor = (%1:%2)"
+msgstr ""
+
+msgid "Enter text string for search:"
+msgstr ""
+
+msgid "String search"
+msgstr ""
+
+msgid "Backward"
+msgstr ""
+
+msgid "Case sensitively"
+msgstr ""
+
+msgid "Whole words"
+msgstr ""
+
+msgid "ID:"
+msgstr ""
+
+msgid "Name:"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Item type:"
+msgstr ""
+
+msgid "Select user"
+msgstr ""
+
+msgid "User:"
+msgstr ""
+
+msgid "Password:"
+msgstr ""
+
+msgid "Auth is wrong!!!"
+msgstr ""
+
+msgid "System configurator (Qt)"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow the Qt based OpenSCADA system configurator."
+msgstr ""
+
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
+"StartPath  <path>    Configurator start path.\n"
+"StartUser  <user>    No password requested start user.\n"
+"\n"
+msgstr ""
+
+msgid "Load module."
+msgstr ""
+
+msgid "Save module."
+msgstr ""
+
+msgid "Start module."
+msgstr ""
+
+msgid "Stop module."
+msgstr ""
+
+msgid "Module options"
+msgstr ""
+
+msgid "Configurator start path"
+msgstr ""
+
+msgid "Configurator start user"
+msgstr ""
+
+msgid "Go to remote stations list configuration"
+msgstr ""
+
+msgid "QTCfg dialog"
+msgstr ""
+
+msgid "Node id and/or name select"
+msgstr ""

@@ -1,0 +1,353 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:51+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Siemens DAQ"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other."
+msgstr ""
+
+msgid "Parameters table"
+msgstr ""
+
+msgid "Request data period (ms)"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Request task priority"
+msgstr ""
+
+msgid "Asynchronous write mode"
+msgstr ""
+
+msgid "Connection type"
+msgstr ""
+
+msgid "Remote controller address"
+msgstr ""
+
+msgid "Output transport"
+msgstr ""
+
+msgid "Slot CPU"
+msgstr ""
+
+msgid "CIF board"
+msgstr ""
+
+msgid "Logical"
+msgstr ""
+
+msgid "Parameter template"
+msgstr ""
+
+msgid "Parameter ID"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Speed"
+msgstr ""
+
+msgid "No device"
+msgstr ""
+
+#, c-format
+msgid "CIF device %d or device driver error!"
+msgstr ""
+
+#, c-format
+msgid "CIF device %d running (DevSetHostState(HOST_READY)) error!"
+msgstr ""
+
+#, c-format
+msgid "CIF device %d. DevPutTaskParameter() error!"
+msgstr ""
+
+#, c-format
+msgid "CIF device %d. DevPutMessage() error!"
+msgstr ""
+
+#, c-format
+msgid "CIF device %d. DevGetMessage() error!"
+msgstr ""
+
+#, c-format
+msgid "Sending request error: %d."
+msgstr ""
+
+#, c-format
+msgid "Getting request error: %d."
+msgstr ""
+
+#, c-format
+msgid "15:Board %d is not present."
+msgstr ""
+
+#, c-format
+msgid "12:Sending request error %d."
+msgstr ""
+
+#, c-format
+msgid "13:Getting request error %d."
+msgstr ""
+
+msgid "CIF"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "CIF driver"
+msgstr ""
+
+msgid "CIF devices"
+msgstr ""
+
+msgid "Board"
+msgstr ""
+
+msgid "Firmware name"
+msgstr ""
+
+msgid "Firmware version"
+msgstr ""
+
+msgid "Physical address"
+msgstr ""
+
+msgid "IRQ"
+msgstr ""
+
+msgid "PB address"
+msgstr ""
+
+msgid "PB speed"
+msgstr ""
+
+msgid "Profibus"
+msgstr ""
+
+msgid "CIF device"
+msgstr ""
+
+msgid "Life stations list"
+msgstr ""
+
+#, c-format
+msgid "Board number %d error!"
+msgstr ""
+
+msgid "9600Baud"
+msgstr ""
+
+msgid "19.2kBaud"
+msgstr ""
+
+msgid "93.75kBaud"
+msgstr ""
+
+msgid "187.5kBaud"
+msgstr ""
+
+msgid "500kBaud"
+msgstr ""
+
+msgid "1.5MBaud"
+msgstr ""
+
+msgid "3MBaud"
+msgstr ""
+
+msgid "6MBaud"
+msgstr ""
+
+msgid "12MBaud"
+msgstr ""
+
+msgid " : -------"
+msgstr ""
+
+msgid " : Active station"
+msgstr ""
+
+msgid " : Passive station"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr ""
+
+msgid "-1:No data"
+msgstr ""
+
+msgid "No one driver or board are present."
+msgstr ""
+
+msgid "Open socket of remote PLC error."
+msgstr ""
+
+msgid "10:Connection error."
+msgstr ""
+
+msgid "Connection to PLC error."
+msgstr ""
+
+#, c-format
+msgid "Connection type '%d' is not supported."
+msgstr ""
+
+msgid "14:Request block is too big."
+msgstr ""
+
+msgid "12:Sending request is timeouted."
+msgstr ""
+
+#, c-format
+msgid "19:Request to DB error %d."
+msgstr ""
+
+msgid "13:Get request is timeouted."
+msgstr ""
+
+msgid "17:There is no response from the remote station."
+msgstr ""
+
+msgid "18:Master is out of the logical token ring."
+msgstr ""
+
+msgid "20:Specified offset address or DB error."
+msgstr ""
+
+#, c-format
+msgid "Read block '%d' error: %s"
+msgstr ""
+
+#, c-format
+msgid "12:Read DB '%d' from controller error: %s"
+msgstr ""
+
+msgid "13:Error server respond"
+msgstr ""
+
+msgid "13:Not full respond"
+msgstr ""
+
+#, c-format
+msgid "13:Error server respond: %d"
+msgstr ""
+
+#, c-format
+msgid "13:Error server '%s' respond"
+msgstr ""
+
+#, c-format
+msgid "13:Error server '%s' respond: %d"
+msgstr ""
+
+msgid "16:Transmitted block is too big."
+msgstr ""
+
+msgid "13:Getting request is timeouted."
+msgstr ""
+
+#, c-format
+msgid "Write block '%d' error: %s"
+msgstr ""
+
+#, c-format
+msgid "12:Write DB '%d' to controller error: %s"
+msgstr ""
+
+msgid "11:Value is not gathered."
+msgstr ""
+
+msgid "Value type error."
+msgstr ""
+
+msgid "11:Value not gathered."
+msgstr ""
+
+msgid ""
+"Connection type:\n"
+"  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
+"  ISO_TCP, ISO_TCP243 - connection to controllers series S7, by firm Siemens, by Ethernet network (TCP243 by CP243);\n"
+"  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."
+msgstr ""
+
+msgid ""
+"Remote controller address. For connections:\n"
+"  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
+"  ISO_TCP, ISO_TCP243 - IP-address into Ethernet network;\n"
+"  ADS - Network identifier and port for target and source stations, in view\n"
+"      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
+"      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"
+"    AMSNetId - network identifier, write into view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
+"    AMSPort - port, write into view digit 0-65535."
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Controller is stopped."
+msgstr ""
+
+msgid "Parameter is disabled."
+msgstr ""
+
+msgid "Parameter is disabled or id error."
+msgstr ""
+
+msgid "Error calculate template."
+msgstr ""
+
+msgid "Parameter disabled or error."
+msgstr ""
+
+msgid "Template configuration"
+msgstr ""
+
+msgid "Only DB offsets are to be shown"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""

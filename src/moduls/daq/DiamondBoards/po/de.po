@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-25 20:30+0300\n"
+"POT-Creation-Date: 2015-01-21 10:48+0200\n"
 "PO-Revision-Date: 2009-08-17 14:02+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org> <>\n"
@@ -136,11 +136,13 @@ msgstr "1:Parameter ist abgeschaltet."
 msgid "2:Acquisition is stopped."
 msgstr "2:Erfassung ist angehalten."
 
+#, c-format
 msgid ""
 "0:AI acquisition into interrupt mode; SampleRate=%g; Drift=%gs; Overflows="
 "%u; LostCycles=%u; SRateCor=%u."
-msgstr "0:Poll AI Interrupt; SampleRate=%g; Drift=%gs; Overflows="
-"%u; LostCycles=%u; SRateCor=%u."
+msgstr ""
+"0:Poll AI Interrupt; SampleRate=%g; Drift=%gs; Overflows=%u; LostCycles=%u; "
+"SRateCor=%u."
 
 msgid "DSC driver is not initialized!"
 msgstr "DSC-Treiber ist nicht initialisiert!"
@@ -186,6 +188,7 @@ msgid "Interrupt mode disabled by dscADScanInt error: %s %s"
 msgstr ""
 "Funktionsweise des Interrupt deaktiviert für Fehler dscADScanInt: %s %s"
 
+#, c-format
 msgid ""
 "AI interrupt: Cycle: ConvRate=%g; transfers=%lu; prev_transfers=%lu; "
 "total_transfers=%lu; overflows=%lu; lag=%lld; drift=%gs."
@@ -193,12 +196,17 @@ msgstr ""
 "Unterbrechung AI: Zyklus: ConvRate=%g; transfers=%lu; prev_transfers=%lu; "
 "total_transfers=%lu; overflows=%lu; lag=%lld; drift=%gs."
 
+#, c-format
 msgid "AI interrupt: Overflows '%d' corrected to %lld! Drift=%gs."
 msgstr "Unterbrechung AI: Overflows '%d' korrigiert für %lld! Drift=%gs."
 
+#, c-format
 msgid "AI interrupt: Lost cycles '%d'. Fast data time corrected! Drift=%gs."
-msgstr "Unterbrechung AI: Verlorene Zyklen '%d'. Schnellen Daten zeitkorrigierten! Drift=%gs."
+msgstr ""
+"Unterbrechung AI: Verlorene Zyklen '%d'. Schnellen Daten zeitkorrigierten! "
+"Drift=%gs."
 
+#, c-format
 msgid "AI interrupt: Correction: dt=%gs; dtSz=%lld; per=%d; crmult=%g."
 msgstr "Unterbrechung AI: Korrektur: dt=%gs; dtSz=%lld; per=%d; crmult=%g."
 

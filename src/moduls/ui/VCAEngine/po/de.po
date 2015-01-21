@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-09 12:08+0200\n"
+"POT-Creation-Date: 2015-01-21 10:56+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -152,6 +152,9 @@ msgstr "Ausfüllen:Bild"
 
 msgid "Orientation angle"
 msgstr "Drehwinkel"
+
+msgid "Mirroring"
+msgstr ""
 
 msgid "Elements list"
 msgstr "Liste von Elementen"
@@ -1693,6 +1696,9 @@ msgstr ""
 
 msgid "Widget: "
 msgstr "Widget: "
+
+msgid "Used"
+msgstr ""
 
 msgid "Go to parent"
 msgstr "Zum Eltern"

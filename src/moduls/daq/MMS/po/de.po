@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-23 10:51+0300\n"
+"POT-Creation-Date: 2015-01-21 10:49+0200\n"
 "PO-Revision-Date: 2013-10-20 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -16,114 +16,92 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "X-Generator: Lokalize 1.0\n"
 
-#: module.cpp:38
 msgid "MMS(IEC-9506)"
 msgstr "MMS(IEC-9506)"
 
-#: module.cpp:42
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: module.cpp:43
 msgid "MMS(IEC-9506) client implementation."
 msgstr "MMS(IEC-9506) Client-Implementierung"
 
-#: module.cpp:90
 msgid "Parameteres table"
 msgstr "Parametertabelle"
 
-#: module.cpp:91
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-#: module.cpp:92
 msgid "Gather task priority"
 msgstr "Niveau der Priorität der Datenempfangaufgabe"
 
-#: module.cpp:93
 msgid "Sync inter remote station period (s)"
 msgstr "Periode der Sznchronisierung mit der entfernten Station (sek)"
 
-#: module.cpp:94
 msgid "Server address"
 msgstr "Server-Adresse"
 
-#: module.cpp:95
 msgid "Variables into read request"
 msgstr "Variablen in Leseanforderung"
 
-#: module.cpp:96
 msgid "Destination TSAP"
 msgstr "Destination TSAP"
 
-#: module.cpp:99
 msgid "Standard"
 msgstr "Standard"
 
-#: module.cpp:100
 msgid "Variables list (next line separated)"
 msgstr "Variablen-Liste (nächste Zeile getrennt)"
 
-#: module.cpp:182
 msgid "No activity data."
 msgstr "Keine Aktivitätsdaten."
 
-#: module.cpp:182
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
-#: module.cpp:187
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
-#: module.cpp:188
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Aufruf mit einer Periode: %s. "
 
-#: module.cpp:189
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#: module.cpp:190
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Verbrauchte Zeit: %s. Anfragen %.6g."
 
-#: module.cpp:225
 msgid "Remote host error"
 msgstr "Remote-Host-Fehler"
 
-#: module.cpp:246
 #, c-format
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "MMS erstellt automatische Transport für '%s' Controller."
 
-#: module.cpp:291 module.cpp:346 module.cpp:353
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
 
-#: module.cpp:291
 msgid "STOP"
 msgstr "STOP"
 
-#: module.cpp:353
 msgid "OK"
 msgstr "OK"
 
-#: module.cpp:420
+#, c-format
 msgid "Value '%s' type '%s' read is not implemented."
 msgstr "Wert '%s' Typ '%s' lesen nicht implementiert ist."
 
-#: module.cpp:613
-#, c-format
-msgid "Value type %s is not implemented for '%s'."
+msgid "No data"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Value type '%s' is not implemented for '%s'."
 msgstr "Werttyp %s ist nicht für '%s' implementiert."
 
-#: module.cpp:656
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
@@ -144,8 +122,8 @@ msgid ""
 "  {id} - force attribute ID.\n"
 "  {name} - force attribute name."
 msgstr ""
-"Attribute Konfigurationsliste. Liste muss von Linien im Format geschrieben werden: "
-"\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
+"Attribute Konfigurationsliste. Liste muss von Linien im Format geschrieben "
+"werden: \"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
 "Wo:\n"
 "  {MMS_domain} - MMS-Domäne oder '*' für globale.\n"
 "  {MMS_var} - MMS Variablenname in Domäne oder global.\n"
@@ -163,19 +141,15 @@ msgstr ""
 "  {id} - Kraft-Attribut ID.\n"
 "  {name} - Kraft Attributnamen."
 
-#: module.cpp:673
 msgid "Variable append"
 msgstr "Variable anhängen"
 
-#: module.cpp:751
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-#: module.cpp:752
 msgid "2:Acquisition is stopped."
 msgstr "2:Anfrage ist angehalten."
 
-#: module.cpp:838
 #, c-format
 msgid "Write to '%s' error: %s."
 msgstr "Schreiben Sie '%s' Fehler: %s."

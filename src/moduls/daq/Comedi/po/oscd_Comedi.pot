@@ -1,0 +1,106 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "DAQ boards by Comedi"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org)."
+msgstr ""
+
+msgid "Parameteres table"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Gather task priority"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Board's device address"
+msgstr ""
+
+msgid "Asynchronous read"
+msgstr ""
+
+msgid "Addition parameters"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Acquisition is stopped."
+msgstr ""
+
+#, c-format
+msgid "Comedi device file open: %s"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+#, c-format
+msgid "Analog input %d"
+msgstr ""
+
+#, c-format
+msgid "Analog output %d"
+msgstr ""
+
+#, c-format
+msgid "Digital input %d"
+msgstr ""
+
+#, c-format
+msgid "Digital output %d"
+msgstr ""
+
+#, c-format
+msgid "Digital input-output %d"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Analog input settle timeout (us)"
+msgstr ""
+
+#, c-format
+msgid "Channel %d.%d range"
+msgstr ""

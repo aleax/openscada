@@ -1,0 +1,381 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Complex1 function's lib"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow static function library Complex1 (SCADA Complex1 functions)."
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "Command \"Open\""
+msgstr ""
+
+msgid "Command \"Close\""
+msgstr ""
+
+msgid "Command \"Stop\""
+msgstr ""
+
+msgid "Stat \"Opened\""
+msgstr ""
+
+msgid "Stat \"Closed\""
+msgstr ""
+
+msgid "Command hold time (s)"
+msgstr ""
+
+msgid "Calculation period (ms)"
+msgstr ""
+
+msgid "Process command clock"
+msgstr ""
+
+msgid "Last command"
+msgstr ""
+
+msgid "Digital block"
+msgstr ""
+
+msgid "Digital assemble block."
+msgstr ""
+
+msgid "Output"
+msgstr ""
+
+#, c-format
+msgid "Input %d.1"
+msgstr ""
+
+#, c-format
+msgid "Input %d.2"
+msgstr ""
+
+msgid "Simple summator"
+msgstr ""
+
+msgid ""
+"Simple summator per formula:\n"
+"out=in1_1*in1_2+in2_1*in2_2+in3_1*in3_2+in4_1*in4_2+\n"
+"    in5_1*in5_2+in6_1*in6_2+in7_1*in7_2+in8_1*in8_2;"
+msgstr ""
+
+msgid "Input 1."
+msgstr ""
+
+msgid "Input 2."
+msgstr ""
+
+msgid "Simple multiplier"
+msgstr ""
+
+msgid ""
+"Simple multiplier per formula:\n"
+"out=(in1_1*in1_2*in1_3*in1_4*in1_5*in1_6)/(in2_1*in2_2*in2_3*in2_4);"
+msgstr ""
+
+msgid "Input 3."
+msgstr ""
+
+msgid "Input 4."
+msgstr ""
+
+msgid "Multiplier+divider"
+msgstr ""
+
+msgid ""
+"Multiplier+divider per formula:\n"
+"out=in1_1*in1_2*in1_3*in1_4*in1_5*(in2_1*in2_2*in2_3*in2_4*in2_5+\n"
+"          (in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
+msgstr ""
+
+msgid "Input 3"
+msgstr ""
+
+msgid "Input 5"
+msgstr ""
+
+msgid "Exponent"
+msgstr ""
+
+msgid ""
+"Exponent per formula:\n"
+"out=exp (in1_1*in1_2*in1_3*in1_4*in1_5 +\n"
+"         (in2_1*in2_2*in2_3*in2_4*in2_5+in3) / (in4_1*in4_2*in4_3*in4_4*in4_5+in5) );"
+msgstr ""
+
+msgid "Power"
+msgstr ""
+
+msgid ""
+"Power per formula:\n"
+"out=(in1_1*in1_2*in1_3*in1_4*in1_5)^(in2_1*in2_2*in2_3*in2_4*in2_5 +\n"
+"\t(in3_1*in3_2*in3_3*in3_4*in3_5)/(in4_1*in4_2*in4_3*in4_4*in4_5));"
+msgstr ""
+
+msgid "Input 1"
+msgstr ""
+
+msgid "Condition '<'"
+msgstr ""
+
+msgid ""
+"Condition '<' per formula:\n"
+"out=if( in1<(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
+"    else in4_1*in4_2*in4_3*in4_4;"
+msgstr ""
+
+msgid "Condition '>'"
+msgstr ""
+
+msgid ""
+"Condition '>' per formula:\n"
+"out=if( in1>(in2_1*in2_2*in2_3*in2_4) ) then in3_1*in3_2*in3_3*in3_4;\n"
+"    else in4_1*in4_2*in4_3*in4_4;"
+msgstr ""
+
+msgid "Input 5."
+msgstr ""
+
+msgid "Input 6."
+msgstr ""
+
+msgid "Full condition"
+msgstr ""
+
+msgid ""
+"Full condition per formula:\n"
+"out = if( in1<(in2_1*in2_2*in2_3*in2_4) )    then in3_1*in3_2*in3_3*in3_4;\n"
+"      else if( in1>(in4_1*in4_2*in4_3*in4_4) then in5_1*in5_2*in5_3*in5_4;\n"
+"      else in6_1*in6_2*in6_3*in6_4;"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Selector"
+msgstr ""
+
+msgid ""
+"Selector per formula:\n"
+"out = if( sel = 1 )  then in1_1*in1_2*in1_3*in1_4;\n"
+"      if( sel = 2 )  then in2_1*in2_2*in2_3*in2_4;\n"
+"      if( sel = 3 )  then in3_1*in3_2*in3_3*in3_4;\n"
+"      if( sel = 4 )  then in4_1*in4_2*in4_3*in4_4;"
+msgstr ""
+
+msgid "Input"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Positive coefficient"
+msgstr ""
+
+msgid "Negative coefficient"
+msgstr ""
+
+msgid "Increment"
+msgstr ""
+
+msgid ""
+"Increment per formula:\n"
+"out = if( in > prev ) then prev + (k+)*(in-prev); else prev - (k-)*(prev-in);"
+msgstr ""
+
+msgid "Input 6"
+msgstr ""
+
+msgid "Divider"
+msgstr ""
+
+msgid ""
+"Divider per formula:\n"
+"out = (in1_1*in1_2*in1_3*in1_4*in1_5 + in2_1*in2_2*in2_3*in2_4*in2_5 + in3) /\n"
+"      (in4_1*in4_2*in4_3*in4_4*in4_5 + in5_1*in5_2*in5_3*in5_4*in5_5 + in6);"
+msgstr ""
+
+msgid "Variable"
+msgstr ""
+
+msgid "Set-point"
+msgstr ""
+
+msgid "Max scale"
+msgstr ""
+
+msgid "Min scale"
+msgstr ""
+
+msgid "Manual input (%)"
+msgstr ""
+
+msgid "Output (%)"
+msgstr ""
+
+msgid "Auto mode"
+msgstr ""
+
+msgid "Cascade mode"
+msgstr ""
+
+msgid "Kp"
+msgstr ""
+
+msgid "Ti (ms)"
+msgstr ""
+
+msgid "Kd"
+msgstr ""
+
+msgid "Td (ms)"
+msgstr ""
+
+msgid "Td lag (ms)"
+msgstr ""
+
+msgid "Out up limit (%)"
+msgstr ""
+
+msgid "Out down limit (%)"
+msgstr ""
+
+msgid "Insensibility (%)"
+msgstr ""
+
+msgid "Follow sp from var on manual"
+msgstr ""
+
+msgid "K input 1"
+msgstr ""
+
+msgid "K input 2"
+msgstr ""
+
+msgid "Input 2"
+msgstr ""
+
+msgid "K input 3"
+msgstr ""
+
+msgid "K input 4"
+msgstr ""
+
+msgid "Input 4"
+msgstr ""
+
+msgid "Calculate frequency (Hz)"
+msgstr ""
+
+msgid "Integral value"
+msgstr ""
+
+msgid "Differential value"
+msgstr ""
+
+msgid "Differential lag"
+msgstr ""
+
+msgid "PID regulator"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Alarm"
+msgstr ""
+
+msgid ""
+"Scale parameter alarm:\n"
+"out = if (val>max || val<min) then true; else false;"
+msgstr ""
+
+msgid "Flow"
+msgstr ""
+
+msgid "X position"
+msgstr ""
+
+msgid "K1"
+msgstr ""
+
+msgid "K2"
+msgstr ""
+
+msgid "K3"
+msgstr ""
+
+msgid "K4"
+msgstr ""
+
+msgid ""
+"Flow calculate per formula:\n"
+"f = K1*((K3+K4*x)^K2);"
+msgstr ""
+
+msgid "Summation and multiplication"
+msgstr ""
+
+msgid ""
+"Summation and multiplication per formula:\n"
+"out = in1_1*in1_2*(in1_3*in1_4+in1_5) + in2_1*in2_2*(in2_3*in2_4+in2_5) +\n"
+"      in3_1*in3_2*(in3_3*in3_4+in3_5) + in4_1*in4_2*(in4_3*in4_4+in4_5);"
+msgstr ""
+
+msgid "Summation and divide"
+msgstr ""
+
+msgid ""
+"Summation and divide per formula:\n"
+"out = in1_1*in1_2*(in1_3+in1_4/in1_5) + in2_1*in2_2*(in2_3+in2_4/in2_5) +\n"
+"      in3_1*in3_2*(in3_3+in3_4/in3_5) + in4_1*in4_2*(in4_3+in4_4/in4_5);"
+msgstr ""
+
+msgid "Y"
+msgstr ""
+
+msgid "X"
+msgstr ""
+
+msgid "Klag"
+msgstr ""
+
+msgid "Lag"
+msgstr ""
+
+msgid ""
+"Lag per formula:\n"
+"y = y - Klag*( y - x );"
+msgstr ""

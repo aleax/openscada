@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-23 21:12+0300\n"
+"POT-Creation-Date: 2015-01-21 10:52+0200\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -86,9 +86,6 @@ msgstr "Adresse"
 
 msgid "User"
 msgstr "Benutzername"
-
-msgid "Module help"
-msgstr "Modul helfen"
 
 #, c-format
 msgid ""
@@ -177,3 +174,6 @@ msgstr "Enter"
 
 msgid "Clean"
 msgstr "Bereinigen"
+
+#~ msgid "Module help"
+#~ msgstr "Modul helfen"

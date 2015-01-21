@@ -1,0 +1,592 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:55+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Qt GUI starter"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow Qt GUI starter. It is single for all Qt GUI modules!"
+msgstr ""
+
+msgid "Could not read image data"
+msgstr ""
+
+msgid "&Yes"
+msgstr ""
+
+msgid "&No"
+msgstr ""
+
+msgid "&Cancel"
+msgstr ""
+
+msgid "&OK"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Forward"
+msgstr ""
+
+msgid "Parent Directory"
+msgstr ""
+
+msgid "Look in:"
+msgstr ""
+
+msgid "Computer"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Folder"
+msgstr ""
+
+msgid "File &name:"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "&Open"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "&Save"
+msgstr ""
+
+msgid "Save As"
+msgstr ""
+
+msgid "Date Modified"
+msgstr ""
+
+msgid "All Files (*)"
+msgstr ""
+
+msgid "Create New Folder"
+msgstr ""
+
+msgid "List View"
+msgstr ""
+
+msgid "Detail View"
+msgstr ""
+
+msgid "Files of type:"
+msgstr ""
+
+msgid "New Folder"
+msgstr ""
+
+msgid "&New Folder"
+msgstr ""
+
+msgid "Show &hidden files"
+msgstr ""
+
+msgid "&Delete"
+msgstr ""
+
+msgid "&Rename"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "&Undo"
+msgstr ""
+
+msgid "&Redo"
+msgstr ""
+
+msgid "Cu&t"
+msgstr ""
+
+msgid "&Copy"
+msgstr ""
+
+msgid "&Paste"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Select All"
+msgstr ""
+
+msgid "Insert Unicode control character"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Drive"
+msgstr ""
+
+msgid "Go back"
+msgstr ""
+
+msgid "Go forward"
+msgstr ""
+
+msgid "Go to the parent directory"
+msgstr ""
+
+msgid "Create a New Folder"
+msgstr ""
+
+msgid "Change to list view mode"
+msgstr ""
+
+msgid "Change to detail view mode"
+msgstr ""
+
+msgid "Destination file exists"
+msgstr ""
+
+msgid "%1 bytes"
+msgstr ""
+
+msgid "%1 KB"
+msgstr ""
+
+msgid "%1 MB"
+msgstr ""
+
+msgid "Are sure you want to delete '%1'?"
+msgstr ""
+
+msgid ""
+"%1 already exists.\n"
+"Do you want to replace it?"
+msgstr ""
+
+msgid "Recent Places"
+msgstr ""
+
+msgid "<h3>About Qt</h3><p>This program uses Qt version %1.</p>"
+msgstr ""
+
+msgid "<p>Qt is a C++ toolkit for cross-platform application development.</p><p>Qt provides single-source portability across MS&nbsp;Windows, Mac&nbsp;OS&nbsp;X, Linux, and all major commercial Unix variants. Qt is also available for embedded devices as Qt for Embedded Linux and Qt for Windows CE.</p><p>Qt is available under three different licensing options designed to accommodate the needs of our various users.</p><p>Qt licensed under our commercial license agreement is appropriate for development of proprietary/commercial software where you do not want to share any source code with third parties or otherwise cannot comply with the terms of the GNU LGPL version 2.1 or GNU GPL version 3.0.</p><p>Qt licensed under the GNU LGPL version 2.1 is appropriate for the development of Qt applications (proprietary or open source) provided you can comply with the terms and conditions of the GNU LGPL version 2.1.</p><p>Qt licensed under the GNU General Public License version 3.0 is appropriate for the development of Qt applications where you wish to use such applications in combination with software subject to the terms of the GNU GPL version 3.0 or where you are otherwise willing to comply with the terms of the GNU GPL version 3.0.</p><p>Please see <a href=\"http://qt.digia.com/product/licensing\">qt.digia.com/product/licensing</a> for an overview of Qt licensing.</p><p>Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).</p><p>Qt is a Digia product. See <a href=\"http://qt.digia.com/\">qt.digia.com</a> for more information.</p>"
+msgstr ""
+
+msgid "Hu&e:"
+msgstr ""
+
+msgid "&Sat:"
+msgstr ""
+
+msgid "&Val:"
+msgstr ""
+
+msgid "&Red:"
+msgstr ""
+
+msgid "&Green:"
+msgstr ""
+
+msgid "Bl&ue:"
+msgstr ""
+
+msgid "A&lpha channel:"
+msgstr ""
+
+msgid "&Basic colors"
+msgstr ""
+
+msgid "&Custom colors"
+msgstr ""
+
+msgid "&Add to Custom Colors"
+msgstr ""
+
+msgid "Select color"
+msgstr ""
+
+msgid "&Restore"
+msgstr ""
+
+msgid "&Move"
+msgstr ""
+
+msgid "&Size"
+msgstr ""
+
+msgid "Mi&nimize"
+msgstr ""
+
+msgid "Ma&ximize"
+msgstr ""
+
+msgid "Stay on &Top"
+msgstr ""
+
+msgid "&Close"
+msgstr ""
+
+msgid "Select Color"
+msgstr ""
+
+msgid "Form"
+msgstr ""
+
+msgid "Printer"
+msgstr ""
+
+msgid "&Name:"
+msgstr ""
+
+msgid "P&roperties"
+msgstr ""
+
+msgid "Location:"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Type:"
+msgstr ""
+
+msgid "Output &file:"
+msgstr ""
+
+msgid "Print range"
+msgstr ""
+
+msgid "Print all"
+msgstr ""
+
+msgid "Current Page"
+msgstr ""
+
+msgid "Pages from"
+msgstr ""
+
+msgid "to"
+msgstr ""
+
+msgid "Selection"
+msgstr ""
+
+msgid "Output Settings"
+msgstr ""
+
+msgid "Copies:"
+msgstr ""
+
+msgid "Collate"
+msgstr ""
+
+msgid "Reverse"
+msgstr ""
+
+msgid "Copies"
+msgstr ""
+
+msgid "Color Mode"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Grayscale"
+msgstr ""
+
+msgid "Duplex Printing"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Long side"
+msgstr ""
+
+msgid "Short side"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "&Options >>"
+msgstr ""
+
+msgid "&Options <<"
+msgstr ""
+
+msgid "&Print"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "Print to File (PDF)"
+msgstr ""
+
+msgid "Print to File (Postscript)"
+msgstr ""
+
+msgid "Local file"
+msgstr ""
+
+msgid "Write %1 file"
+msgstr ""
+
+msgid "Paper"
+msgstr ""
+
+msgid "Page size:"
+msgstr ""
+
+msgid "Width:"
+msgstr ""
+
+msgid "Height:"
+msgstr ""
+
+msgid "Paper source:"
+msgstr ""
+
+msgid "Orientation"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
+
+msgid "Reverse landscape"
+msgstr ""
+
+msgid "Reverse portrait"
+msgstr ""
+
+msgid "Margins"
+msgstr ""
+
+msgid "top margin"
+msgstr ""
+
+msgid "left margin"
+msgstr ""
+
+msgid "right margin"
+msgstr ""
+
+msgid "bottom margin"
+msgstr ""
+
+msgid "Points (pt)"
+msgstr ""
+
+msgid "Inches (in)"
+msgstr ""
+
+msgid "Executive"
+msgstr ""
+
+msgid "Folio"
+msgstr ""
+
+msgid "Ledger"
+msgstr ""
+
+msgid "Legal"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "Tabloid"
+msgstr ""
+
+msgid "US Common #10 Envelope"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "Millimeters (mm)"
+msgstr ""
+
+msgid "Centimeters (cm)"
+msgstr ""
+
+msgid "Page"
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+msgid "Load module."
+msgstr ""
+
+msgid "Save module."
+msgstr ""
+
+msgid "Start module."
+msgstr ""
+
+msgid "Stop module."
+msgstr ""
+
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"----------- Qt debug commandline options ----------\n"
+"    --sync                 Switches to synchronous mode X11 for debugging.\n"
+"    --widgetcount          Prints debug message at the end about number of widgets\n"
+"                           left undestroyed and maximum number of widgets existed at\n"
+"                           the same time.\n"
+"----------- Qt commandline options ----------------\n"
+"    --qws                  With Qt for Embedded Linux makes this application the server.\n"
+"    --style=<nm>           Sets GUI style to <nm> (windows, platinum, plastique, ...).\n"
+"    --stylesheet=<path>    Sets styleSheet by <path> to file that contains.\n"
+"    --session=<nm>         Restores from an earlier session <nm>.\n"
+"    --reverse              Sets layout direction to Qt::RightToLeft.\n"
+"    --graphicssystem=<nm>  Sets the backend to be used for on-screen widgets and QPixmaps (raster, opengl).\n"
+"    --display=<nm>         Sets the X display (default is $DISPLAY).\n"
+"    --geometry=<geom>      Sets the client geometry of the first window that is shown.\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
+"StartMod  <moduls>    Start modules list (sep - ';').\n"
+"\n"
+msgstr ""
+
+msgid "Module options"
+msgstr ""
+
+msgid "Start Qt modules (sep - ';')"
+msgstr ""
+
+msgid "OpenSCADA system Qt-starter"
+msgstr ""
+
+msgid "&About"
+msgstr ""
+
+msgid "Program and OpenSCADA information"
+msgstr ""
+
+msgid "The button for display program and OpenSCADA information"
+msgstr ""
+
+msgid "Press to display program and OpenSCADA information"
+msgstr ""
+
+msgid "About &Qt"
+msgstr ""
+
+msgid "Qt information"
+msgstr ""
+
+msgid "The button for getting the using Qt information"
+msgstr ""
+
+msgid "Press to get the using Qt information."
+msgstr ""
+
+msgid "%1 manual"
+msgstr ""
+
+msgid "The button for getting the using %1 manual"
+msgstr ""
+
+msgid "Press to get the using %1 manual."
+msgstr ""
+
+msgid "What's &This"
+msgstr ""
+
+msgid "Question about GUI elements"
+msgstr ""
+
+msgid "The button for requesting the information about user interface elements"
+msgstr ""
+
+msgid "Press for requesting about user interface elements"
+msgstr ""
+
+msgid "&Help"
+msgstr ""
+
+msgid "Call the Qt-based UI module '%1'"
+msgstr ""
+
+msgid ""
+"Module: %1\n"
+"Name: %2\n"
+"Source: %3\n"
+"Version: %4\n"
+"Author: %5\n"
+"Description: %6\n"
+"License: %7"
+msgstr ""
+
+msgid "Exit from system"
+msgstr ""
+
+msgid "Exit from the program"
+msgstr ""
+
+msgid "The button for exit from the program"
+msgstr ""
+
+#, c-format
+msgid ""
+"%s v%s.\n"
+"%s\n"
+"Author: %s\n"
+"License: %s\n"
+"\n"
+"%s v%s.\n"
+"%s\n"
+"License: %s\n"
+"Author: %s\n"
+"Web site: %s"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "No the manual '%1' found offline or online!"
+msgstr ""
+
+#, c-format
+msgid "No translated Qt message: '%s'"
+msgstr ""

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 11:53+0300\n"
+"POT-Creation-Date: 2015-01-21 10:27+0200\n"
 "PO-Revision-Date: 2009-08-17 10:37+0200\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: de <>\n"
@@ -49,6 +49,10 @@ msgstr "Stufe"
 
 msgid "Value"
 msgstr "Wert"
+
+#, c-format
+msgid "Enable target DB error: %s"
+msgstr "Aktivieren Sie Ziel-DB-Fehler: %s"
 
 msgid "Archive is not started!"
 msgstr "Archiv ist nicht gestartet!"

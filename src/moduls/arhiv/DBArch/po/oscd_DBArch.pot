@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:27+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "To DB archivator"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "The Archive module. Allow functions for messages and values archiving to DB."
+msgstr ""
+
+msgid "Time (s)"
+msgstr ""
+
+msgid "Time (us)"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+#, c-format
+msgid "Enable target DB error: %s"
+msgstr ""
+
+msgid "Archive is not started!"
+msgstr ""
+
+msgid "Archiving time (msek)"
+msgstr ""
+
+msgid "Archive size (hours)"
+msgstr ""

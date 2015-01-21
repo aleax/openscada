@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 21:49+0200\n"
+"POT-Creation-Date: 2015-01-21 10:54+0200\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -257,6 +257,14 @@ msgstr "Поле идентификатора"
 msgid "Field stat"
 msgstr "Поле состояния"
 
+#, fuzzy
+msgid "Request's key"
+msgstr "Текст запроса"
+
+#, fuzzy
+msgid "Request's value"
+msgstr "Текст запроса"
+
 msgid "Create records."
 msgstr "Создание записей."
 
@@ -269,6 +277,14 @@ msgstr "Обновление записей."
 
 #, c-format
 msgid "Updated %d records for time %f sec."
+msgstr "Обновлено %d записей в течении %f секунд."
+
+#, c-format
+msgid "Update records, by request key, for %d records."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Updated %d records, by request key, for time %f sec."
 msgstr "Обновлено %d записей в течении %f секунд."
 
 msgid "Check records."
@@ -293,6 +309,14 @@ msgstr "Ошибка поля <id> %d != %d."
 #, c-format
 msgid "Field <stat> %d != %d error."
 msgstr "Ошибка поля <stat> %d != %d."
+
+#, fuzzy, c-format
+msgid "Field <reqKey> '%s' != '%s' error."
+msgstr "Ошибка поля <Sh> '%s' != '%s'."
+
+#, fuzzy, c-format
+msgid "Field <reqVal> '%s' != '%s' error."
+msgstr "Ошибка поля <Sh> '%s' != '%s'."
 
 #, c-format
 msgid "Got %d records for time %f sec."
@@ -362,7 +386,8 @@ msgid "Parameter"
 msgstr "Параметр"
 
 msgid ""
-"DAQ parameters test. Make read a parameter's attributes and configuration fields."
+"DAQ parameters test. Make read a parameter's attributes and configuration "
+"fields."
 msgstr ""
 "Тест DAQ параметров. Вычитывает атрибуты и конфигурационные поля параметра."
 
@@ -668,6 +693,14 @@ msgstr ""
 #, c-format
 msgid "Open file '%s' error."
 msgstr "Ошибка открытия файла '%s'."
+
+#, fuzzy, c-format
+msgid "Read file '%s' error: %s."
+msgstr "Ошибка открытия файла '%s'."
+
+#, c-format
+msgid "Read file '%s' only %d from %d."
+msgstr ""
 
 #, c-format
 msgid "Test: Passed: %f ms."

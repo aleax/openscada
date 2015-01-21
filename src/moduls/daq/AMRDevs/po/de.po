@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-13 20:00+0200\n"
+"POT-Creation-Date: 2015-01-21 10:46+0200\n"
 "PO-Revision-Date: 2011-07-19 20:33+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -20,28 +20,22 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: da_Ergomera.cpp:166 da_Kontar.cpp:251
 msgid "13:Error respond: Too short."
 msgstr "13:Fehler der Antwort: Zu kurz."
 
-#: da_Ergomera.cpp:168
 msgid "13:Error respond: CRC check error."
 msgstr "13:Fehler der Antwort :Der CRC Checkfehler."
 
-#: da_Ergomera.cpp:173 da_Kontar.cpp:288
 #, c-format
 msgid "14:Connection error - %s"
 msgstr "14:Fehler der Verbindung - %s"
 
-#: da_Ergomera.cpp:194
 msgid "15:Response PDU size error."
 msgstr "15:Fehler in der Grösse der PDU - Antwort."
 
-#: da_Ergomera.cpp:240
 msgid "Attributes list"
 msgstr "Die Attributenliste"
 
-#: da_Ergomera.cpp:241
 msgid ""
 "Attributes configuration list. List must be written by lines in format: [dt:"
 "numb:id:name]\n"
@@ -69,204 +63,157 @@ msgstr ""
 "und 201;\n"
 "  'LI:300:int32:Int32' -das Erhalten von int32 aus den Registern 300 und 301."
 
-#: da_Ergomera.cpp:251
 msgid "Registers' fragments merge"
 msgstr "Die Verbindung der Registerfragmente"
 
-#: da_FlowTEC.cpp:41
 msgid "Value"
 msgstr "Die Bedeutung"
 
-#: da_FlowTEC.cpp:42
 msgid "Pressure"
 msgstr "Der Druck"
 
-#: da_FlowTEC.cpp:43
 msgid "Temperature"
 msgstr "Die Temperatur"
 
-#: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54
 msgid "Current flow"
 msgstr "Laufender Verbrauch"
 
-#: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55
 msgid "Quantity for start day"
 msgstr "Die Quantität seit dem Tagesanfang"
 
-#: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56
 msgid "Quantity for last day"
 msgstr "Die Quantität für die letzten vierundzwanzig Stunden"
 
-#: da_FlowTEC.cpp:49 da_FlowTEC.cpp:57
 msgid "Quantity for start"
 msgstr "Die Quantität nach dem Starten der Kontrolle"
 
-#: da_FlowTEC.cpp:53
 msgid "Caloric"
 msgstr "Kaloriengehalt"
 
-#: da_FlowTEC.cpp:112
 msgid "14:Connection error or respond size short."
 msgstr "14:Fehler der Verbindung oder die Antwort ist kurz."
 
-#: da_FlowTEC.cpp:113
 msgid "10:Respond error."
 msgstr "10:Fehler der Antwort."
 
-#: da_FlowTEC.cpp:114
 msgid "11:Request broken."
 msgstr "11:Requestfehler."
 
-#: da_FlowTEC.cpp:115
 msgid "15:Respond thread broken."
 msgstr "15:Fehler des Antwortsfadens."
 
-#: da_FlowTEC.cpp:144
 msgid "Thread number"
 msgstr "Nummer des Fadens"
 
-#: da_FlowTEC.cpp:145
 msgid "Firmware version"
 msgstr "Die Firmwareversion"
 
-#: da_Kontar.cpp:36
 msgid "Kontar"
 msgstr ""
 
-#: da_Kontar.cpp:38
 msgid "Input transport"
 msgstr ""
 
-#: da_Kontar.cpp:39
 msgid "Master password"
 msgstr ""
 
-#: da_Kontar.cpp:40
 msgid "Master PLC serial number"
 msgstr ""
 
-#: da_Kontar.cpp:41
 msgid "Controllers network config-file"
 msgstr ""
 
-#: da_Kontar.cpp:42
 #, fuzzy
 msgid "PLC serial number"
 msgstr "Nummer des Fadens"
 
-#: da_Kontar.cpp:43
 msgid "Set PLC clock on different for more (s)"
 msgstr ""
 
-#: da_Kontar.cpp:44
 msgid "PLC clock's zone"
 msgstr ""
 
-#: da_Kontar.cpp:80
 msgid "List"
 msgstr ""
 
-#: da_Kontar.cpp:87
 #, fuzzy
 msgid "Parameter"
 msgstr "Parametertabelle"
 
-#: da_Kontar.cpp:196
 #, fuzzy, c-format
 msgid "Master PLC ID Request: '%s'"
 msgstr "Anfrageversuche"
 
-#: da_Kontar.cpp:201
 #, c-format
 msgid "Connection from PLC Kontar %xh."
 msgstr ""
 
-#: da_Kontar.cpp:207 da_Kontar.cpp:265
 #, c-format
 msgid "Password sequence set: '%s'."
 msgstr ""
 
-#: da_Kontar.cpp:212
 #, c-format
 msgid "Master PLC ID Response: '%s'"
 msgstr ""
 
-#: da_Kontar.cpp:218
 msgid "No a propper connection from PLC."
 msgstr ""
 
-#: da_Kontar.cpp:230
 #, fuzzy, c-format
 msgid "Request: '%s'"
 msgstr "Anfrageversuche"
 
-#: da_Kontar.cpp:237
 #, fuzzy, c-format
 msgid "Request (enc): '%s'"
 msgstr "Anfrageversuche"
 
-#: da_Kontar.cpp:255
 #, c-format
 msgid "13:Unapt MasterPLC ID: %xh != %xh"
 msgstr ""
 
-#: da_Kontar.cpp:268
 msgid "12:PLC: The password encripted by master key."
 msgstr ""
 
-#: da_Kontar.cpp:270
 msgid "12:PLC: Error."
 msgstr ""
 
-#: da_Kontar.cpp:271
 msgid "12:PLC: Unknown command."
 msgstr ""
 
-#: da_Kontar.cpp:272
 msgid "12:PLC: Wrong command format."
 msgstr ""
 
-#: da_Kontar.cpp:273
 msgid "12:PLC: Error read from slave."
 msgstr ""
 
-#: da_Kontar.cpp:274
 msgid "12:PLC: Network update in process."
 msgstr ""
 
-#: da_Kontar.cpp:277
 #, fuzzy, c-format
 msgid "Response (enc): '%s'"
 msgstr "Anfrageversuche"
 
-#: da_Kontar.cpp:284
 #, fuzzy, c-format
 msgid "Response: '%s'"
 msgstr "Anfrageversuche"
 
-#: da_Kontar.cpp:291
 #, c-format
 msgid "Error: '%s': '%s'"
 msgstr ""
 
-#: da_Kontar.cpp:347
 #, fuzzy, c-format
 msgid "15:Response PDU size (%d from %d) error."
 msgstr "15:Fehler in der Grösse der PDU - Antwort."
 
-#: da_Kontar.cpp:530
 msgid "<No select>"
 msgstr ""
 
-#: mod_amr.cpp:40
 msgid "AMR devices"
 msgstr "Die AMR-Devices"
 
-#: mod_amr.cpp:44
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: mod_amr.cpp:45
 msgid ""
 "Allow access to automatic meter reading devices. Supported devices: Kontar "
 "(http://www.mzta.ru)."
@@ -274,54 +221,42 @@ msgstr ""
 "Ermöglicht den Zugang zu den Zählerwerken der kommerziellen Inventur. Es "
 "werden die Anlagen unterstützt: Kontar (http://www.mzta.ru)."
 
-#: mod_amr.cpp:149
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-#: mod_amr.cpp:150
 msgid "Gather task priority"
 msgstr "Prioritätsniveau der Aufgabe des Datenempfangs"
 
-#: mod_amr.cpp:151
 msgid "Restore timeout (s)"
 msgstr "Wiederaufbauzeit (s)"
 
-#: mod_amr.cpp:152
 msgid "Request tries"
 msgstr "Anfrageversuche"
 
-#: mod_amr.cpp:184
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Anrufung mit der Periode: %s. "
 
-#: mod_amr.cpp:185
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Anrufung nach dem Plan '%s'. "
 
-#: mod_amr.cpp:186
 #, c-format
 msgid "Spent time: %s."
 msgstr "Zeit genommen: %s."
 
-#: mod_amr.cpp:341
 msgid "Status"
 msgstr "Status"
 
-#: mod_amr.cpp:351
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: mod_amr.cpp:352
 msgid "Enabled"
 msgstr "Eingeschaltet"
 
-#: mod_amr.cpp:353 mod_amr.cpp:355
 msgid "Processed"
 msgstr "Bearbeitung"
 
-#: da_Ergomera.h:52 da_Kontar.h:48
 msgid "11:Value not gathered."
 msgstr "11:Der Wert ist nicht empfangen."
 

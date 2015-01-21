@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:44+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "DB MySQL"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "BD module. Provides support of the BD MySQL."
+msgstr ""
+
+msgid "Error initializing client."
+msgstr ""
+
+#, c-format
+msgid "Connect to DB error: %s"
+msgstr ""
+
+#, c-format
+msgid "Query to DB error: %s"
+msgstr ""
+
+#, c-format
+msgid "Error open table '%s'. DB is disabled."
+msgstr ""
+
+#, c-format
+msgid "Connect to DB error %d: %s"
+msgstr ""
+
+#, c-format
+msgid "Query '%s' is error."
+msgstr ""
+
+#, c-format
+msgid "Query to DB error %d: %s"
+msgstr ""
+
+#, c-format
+msgid "Store result error: %s"
+msgstr ""
+
+#, c-format
+msgid "Could not execute statement: %s"
+msgstr ""
+
+msgid ""
+"MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{names}[;{tms}]]]\".\n"
+"Where:\n"
+"  host - MySQL server hostname;\n"
+"  user - DB user name;\n"
+"  pass - user's password for DB access;\n"
+"  db - DB name;\n"
+"  port - DB server port (default 3306);\n"
+"  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
+"  names - MySQL SET NAMES charset;\n"
+"  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
+"For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8;5,2,2\".\n"
+"For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."
+msgstr ""
+
+msgid "Close opened transaction"
+msgstr ""
+
+msgid "Table is empty!"
+msgstr ""
+
+#, c-format
+msgid "Row \"%s\" is not present."
+msgstr ""

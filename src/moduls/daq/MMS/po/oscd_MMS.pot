@@ -1,0 +1,137 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:49+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "MMS(IEC-9506)"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "MMS(IEC-9506) client implementation."
+msgstr ""
+
+msgid "Parameteres table"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Gather task priority"
+msgstr ""
+
+msgid "Sync inter remote station period (s)"
+msgstr ""
+
+msgid "Server address"
+msgstr ""
+
+msgid "Variables into read request"
+msgstr ""
+
+msgid "Destination TSAP"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Variables list (next line separated)"
+msgstr ""
+
+msgid "No activity data."
+msgstr ""
+
+#, c-format
+msgid "Connection error. Restoring in %.6g s."
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. Requests %.6g."
+msgstr ""
+
+msgid "Remote host error"
+msgstr ""
+
+#, c-format
+msgid "MMS automatic created transport for '%s' controller."
+msgstr ""
+
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr ""
+
+msgid "STOP"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+#, c-format
+msgid "Value '%s' type '%s' read is not implemented."
+msgstr ""
+
+msgid "No data"
+msgstr ""
+
+#, c-format
+msgid "Value type '%s' is not implemented for '%s'."
+msgstr ""
+
+msgid ""
+"Attributes configuration list. List must be written by lines in format: \"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
+"Where:\n"
+"  {MMS_domain} - MMS domain or '*' for global.\n"
+"  {MMS_var} - MMS variable name into domain or global.\n"
+"  {opt} - Options:\n"
+"    w - writable;\n"
+"    s - single request;\n"
+"    /{NN} - call at cycle even to number {N} [2...99].\n"
+"  {tp} - force type:\n"
+"    bool - boolean;\n"
+"    real - real;\n"
+"    int - integer;\n"
+"    string - string;\n"
+"    struct - structure;\n"
+"    array - array;\n"
+"  {id} - force attribute ID.\n"
+"  {name} - force attribute name."
+msgstr ""
+
+msgid "Variable append"
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Acquisition is stopped."
+msgstr ""
+
+#, c-format
+msgid "Write to '%s' error: %s."
+msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 19:29+0200\n"
+"POT-Creation-Date: 2015-01-21 10:53+0200\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -26,6 +26,17 @@ msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Власний протокол OpenSCADA, підтримує основні функції."
 
 #, c-format
+msgid "SES_OPEN request: %d"
+msgstr ""
+
+msgid "Not full respond."
+msgstr "Неповна відповідь."
+
+#, c-format
+msgid "SES_OPEN response: %d"
+msgstr ""
+
+#, c-format
 msgid "Station '%s' error: %s!"
 msgstr "Помилка станції '%s': %s!"
 
@@ -34,11 +45,24 @@ msgid "Station '%s' error: Respond format error!"
 msgstr "Помилка станції '%s': Відповідь помилкова!"
 
 #, c-format
+msgid "REQ send: %d"
+msgstr ""
+
+#, c-format
+msgid "REQ response first %d"
+msgstr ""
+
+#, c-format
 msgid "Station respond '%s' error!"
 msgstr "Помилка відповіді станції '%s'!"
 
-msgid "Not full respond."
-msgstr "Неповна відповідь."
+#, c-format
+msgid "REQ response full %d"
+msgstr ""
+
+#, c-format
+msgid "Request error: %s"
+msgstr ""
 
 msgid "Parameters"
 msgstr "Параметри"
@@ -69,9 +93,9 @@ msgstr "Нижня межа компресії"
 msgid "Value in bytes."
 msgstr "Значення у байтах."
 
-#, c-format
-msgid "Get request: '%s': %d"
-msgstr "Запит Get: '%s': %d"
+#, fuzzy, c-format
+msgid "Get request: '%s': %d, time: %f ms."
+msgstr "Обробка запиту: '%s', час: %f мс."
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
@@ -84,3 +108,6 @@ msgstr "Обробка запиту: '%s', час: %f мс."
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
 msgstr "Збереження відповіді до потоку та пакування: '%s': %d, час: %f мс."
+
+#~ msgid "Get request: '%s': %d"
+#~ msgstr "Запит Get: '%s': %d"

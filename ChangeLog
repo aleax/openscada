@@ -1,3 +1,8 @@
+2015-01-21 Roman
+- !:SYS: POT files generated and left into the source tree for allow fast translation start to different languages.
+- FIX:Transport.Serial: The source code cleaned from doubles TSYS::strNoSpace() and some other.
+
+
 2015-01-15 Roman
 - DB: LibsDB.vcaBase.db: mnEls: All gradient's figures of mnemos expanded to 100 pixels, for exclude unstick from edges at the scaling.
     mnEls.Compressor: Spare arc figure removed.

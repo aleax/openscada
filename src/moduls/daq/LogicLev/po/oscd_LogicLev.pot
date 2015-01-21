@@ -1,0 +1,108 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:49+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Logic level"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow logic level parameters."
+msgstr ""
+
+msgid "Parameters table by template"
+msgstr ""
+
+msgid "Parameters table for reflection"
+msgstr ""
+
+msgid "Request data period (ms)"
+msgstr ""
+
+msgid "Calculate schedule"
+msgstr ""
+
+msgid "Request task priority"
+msgstr ""
+
+msgid "Logical"
+msgstr ""
+
+msgid "Parameter template"
+msgstr ""
+
+msgid "Parameter ID"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Parameter reflection"
+msgstr ""
+
+msgid "Source parameter"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Controller is stopped."
+msgstr ""
+
+msgid "Parameter is disabled or is not based on the template."
+msgstr ""
+
+msgid "Parameter id error."
+msgstr ""
+
+msgid "Error calculate template."
+msgstr ""
+
+msgid "No template parameter or error."
+msgstr ""
+
+msgid "Template configuration"
+msgstr ""
+
+msgid "Only attributes are to be shown"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Self to self linking error."
+msgstr ""

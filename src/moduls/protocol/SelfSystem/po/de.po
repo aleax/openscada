@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 19:29+0200\n"
+"POT-Creation-Date: 2015-01-21 10:53+0200\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -31,6 +31,17 @@ msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Allgemeine Hauptfunktionen für das Systemprotokoll OpenSCADA."
 
 #, c-format
+msgid "SES_OPEN request: %d"
+msgstr ""
+
+msgid "Not full respond."
+msgstr "Partielles Ansprechen."
+
+#, c-format
+msgid "SES_OPEN response: %d"
+msgstr ""
+
+#, c-format
 msgid "Station '%s' error: %s!"
 msgstr "Station '%s' Fehler: %s!"
 
@@ -39,11 +50,24 @@ msgid "Station '%s' error: Respond format error!"
 msgstr "Station '%s' Fehler: Antwort ist falsch!"
 
 #, c-format
+msgid "REQ send: %d"
+msgstr ""
+
+#, c-format
+msgid "REQ response first %d"
+msgstr ""
+
+#, c-format
 msgid "Station respond '%s' error!"
 msgstr "Station antwortet mit '%s' Fehler!"
 
-msgid "Not full respond."
-msgstr "Partielles Ansprechen."
+#, c-format
+msgid "REQ response full %d"
+msgstr ""
+
+#, c-format
+msgid "Request error: %s"
+msgstr ""
 
 msgid "Parameters"
 msgstr "Optionen"
@@ -74,9 +98,9 @@ msgstr "Untere Kompressionsgrenze"
 msgid "Value in bytes."
 msgstr "Wert in Bytes."
 
-#, c-format
-msgid "Get request: '%s': %d"
-msgstr "Get-Anfrage: '%s': %d"
+#, fuzzy, c-format
+msgid "Get request: '%s': %d, time: %f ms."
+msgstr "Prozess Anfrage: '%s', Zeit: %f ms."
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
@@ -89,3 +113,6 @@ msgstr "Prozess Anfrage: '%s', Zeit: %f ms."
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
 msgstr "Sparen reagieren zu Strom und zu verpacken: '%s': %d, Zeit: %f ms."
+
+#~ msgid "Get request: '%s': %d"
+#~ msgstr "Get-Anfrage: '%s': %d"

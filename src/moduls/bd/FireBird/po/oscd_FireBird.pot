@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:44+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "DB FireBird"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "DB module. Provides support of the DB FireBird."
+msgstr ""
+
+#, c-format
+msgid "Drop DB '%s' error: %s"
+msgstr ""
+
+#, c-format
+msgid "Create DB '%s' error: %s"
+msgstr ""
+
+#, c-format
+msgid "Error open table '%s'. DB is disabled."
+msgstr ""
+
+#, c-format
+msgid "Start transaction error: %s"
+msgstr ""
+
+#, c-format
+msgid "DSQL close transaction error: %s"
+msgstr ""
+
+#, c-format
+msgid "Allocate statement error: (%d)%s"
+msgstr ""
+
+#, c-format
+msgid "Start transaction error: (%d)%s"
+msgstr ""
+
+#, c-format
+msgid "DSQL prepare error: (%d)%s"
+msgstr ""
+
+#, c-format
+msgid "DSQL describe error: (%d)%s"
+msgstr ""
+
+#, c-format
+msgid "Connect to DB error: %s"
+msgstr ""
+
+#, c-format
+msgid "Request error: %s"
+msgstr ""
+
+#, c-format
+msgid "DSQL execute error: %s"
+msgstr ""
+
+#, c-format
+msgid "DSQL free statement error: %s"
+msgstr ""
+
+msgid ""
+"FireBird address to DB must be written as: \"{file};{user};{pass}[;{conTm}]\".\n"
+"Where:\n"
+"  file - full path to DB file in form: \"[{host}:]{filePath}\";\n"
+"  user - DB user;\n"
+"  pass - password of DB user;\n"
+"  conTm- connection timeout (s)."
+msgstr ""
+
+#, c-format
+msgid "Table '%s' is not present."
+msgstr ""
+
+msgid "Table is empty."
+msgstr ""
+
+#, c-format
+msgid "Row \"%s\" is not present."
+msgstr ""

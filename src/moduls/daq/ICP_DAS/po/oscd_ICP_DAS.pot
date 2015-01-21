@@ -1,0 +1,323 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:48+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to 150mV;-20mA to 20mA;0mA to 20mA;"
+msgstr ""
+
+msgid "-15mV to +15mV;-50mV to +50mV;-100mV to +100mV;-500mV to +500mV;-1V to +1V;-2.5V to +2.5V;-20mA to +20mA (with 125 ohms resistor);-10V to +10V;-5V to +5V;-1V to +1V;-500mV to +500mV;-150mV to +150mV;-20mA to +20mA (with 125 ohms resistor);J Type;K Type;T Type;E Type;R Type;S Type;B Type;N Type;C Type;L Type;M Type;L Type (DIN43710C Type)"
+msgstr ""
+
+msgid "Cold-Junction Compensation(CJC) temperature"
+msgstr ""
+
+#, c-format
+msgid "Input %d"
+msgstr ""
+
+#, c-format
+msgid "Out %d"
+msgstr ""
+
+#, c-format
+msgid "Digital input %d.%d"
+msgstr ""
+
+#, c-format
+msgid "Digital out %d.%d"
+msgstr ""
+
+#, c-format
+msgid "Counter %d"
+msgstr ""
+
+msgid "10:Request to module error."
+msgstr ""
+
+msgid "11:Respond from module error."
+msgstr ""
+
+msgid "CRC control"
+msgstr ""
+
+msgid "AI number"
+msgstr ""
+
+msgid "AO number, #AAN(Data)"
+msgstr ""
+
+msgid "DI number (ports x8)"
+msgstr ""
+
+msgid "DO number (ports x8)"
+msgstr ""
+
+msgid "Counters number, #AAN"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+#, c-format
+msgid "Input %d type"
+msgstr ""
+
+msgid "Error;"
+msgstr ""
+
+msgid "Host watchdog timeout (s)"
+msgstr ""
+
+msgid "Module"
+msgstr ""
+
+msgid "Host watchdog status"
+msgstr ""
+
+msgid "Power on values"
+msgstr ""
+
+msgid "Set power on values from current"
+msgstr ""
+
+msgid "Safe values"
+msgstr ""
+
+msgid "Set safe values from current"
+msgstr ""
+
+#, c-format
+msgid "DI %d reverse"
+msgstr ""
+
+#, c-format
+msgid "DO %d reverse"
+msgstr ""
+
+msgid "Set. "
+msgstr ""
+
+msgid "Clear. "
+msgstr ""
+
+msgid "Enabled, "
+msgstr ""
+
+msgid "Disabled, "
+msgstr ""
+
+msgid " s."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+#, c-format
+msgid "Analog input %d"
+msgstr ""
+
+#, c-format
+msgid "Analog output %d"
+msgstr ""
+
+msgid "Analog input settle timeout (us)"
+msgstr ""
+
+#, c-format
+msgid "AI %d gain"
+msgstr ""
+
+#, c-format
+msgid "Channel %d out"
+msgstr ""
+
+#, c-format
+msgid "IO %d reverse"
+msgstr ""
+
+msgid "Serial number"
+msgstr ""
+
+msgid "SDK version"
+msgstr ""
+
+msgid "DIP switch"
+msgstr ""
+
+msgid "Rotary switch"
+msgstr ""
+
+#, c-format
+msgid "H/A %d"
+msgstr ""
+
+#, c-format
+msgid "L/A %d"
+msgstr ""
+
+#, c-format
+msgid "Output %d"
+msgstr ""
+
+msgid "Process parameters"
+msgstr ""
+
+msgid "Fast data get period (s)"
+msgstr ""
+
+msgid "Use 0 for disable"
+msgstr ""
+
+msgid "Mode"
+msgstr ""
+
+msgid "-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with 125 ohms resistor)"
+msgstr ""
+
+msgid "ICP DAS hardware"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow implementation for 'ICP DAS' hardware support. Include main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus."
+msgstr ""
+
+msgid "Parameteres table"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Gather task priority"
+msgstr ""
+
+msgid "Bus"
+msgstr ""
+
+msgid "ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10"
+msgstr ""
+
+msgid "Transport"
+msgstr ""
+
+msgid "Baudrate"
+msgstr ""
+
+msgid "LinPAC parameters"
+msgstr ""
+
+msgid "Serial request tries"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Module type"
+msgstr ""
+
+msgid "Module address"
+msgstr ""
+
+msgid "Module slot"
+msgstr ""
+
+msgid "Module addition parameters"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. Serial requests %g, errors %g. "
+msgstr ""
+
+msgid "Open All LP-slots error."
+msgstr ""
+
+msgid "Open LP-slot 9 error."
+msgstr ""
+
+#, c-format
+msgid "Open COM%d port error."
+msgstr ""
+
+#, c-format
+msgid "Set watchdog to %d ms."
+msgstr ""
+
+#, c-format
+msgid "REQ -> '%s'"
+msgstr ""
+
+msgid "13:Error respond: Not full."
+msgstr ""
+
+msgid "21:Invalid module CRC."
+msgstr ""
+
+#, c-format
+msgid "RESP -> '%s'"
+msgstr ""
+
+#, c-format
+msgid "ERR -> '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "13:Send_Receive_Cmd() error: %d."
+msgstr ""
+
+msgid "Watchdog timeout (s)"
+msgstr ""
+
+msgid "Set to zero for the watchdog disable."
+msgstr ""
+
+msgid "No a device selected."
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Acquisition is stopped."
+msgstr ""
+
+#, c-format
+msgid "Write value to attribute '%s' error: %s"
+msgstr ""
+
+msgid "<No select>"
+msgstr ""
+
+msgid "I-8700, I-7000 serial bus"
+msgstr ""
+
+msgid "ISA DAQ boards"
+msgstr ""
+
+msgid "LP-8000, I-8000 parallel bus"
+msgstr ""

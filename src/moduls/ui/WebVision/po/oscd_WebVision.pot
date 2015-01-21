@@ -1,0 +1,154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#, c-format
+msgid "Unknown command: %s."
+msgstr ""
+
+msgid "Fill image type is not supported."
+msgstr ""
+
+msgid "At least one of the elementary figures from each the 'fill' consists of is out of drawing area."
+msgstr ""
+
+#, c-format
+msgid "gdImageStringFTex for font '%s' error: %s."
+msgstr ""
+
+#, c-format
+msgid "gdImageStringFTEx for font '%s' error: %s."
+msgstr ""
+
+#, c-format
+msgid "%ds"
+msgstr ""
+
+#, c-format
+msgid "%gs"
+msgstr ""
+
+#, c-format
+msgid "%gms"
+msgstr ""
+
+#, c-format
+msgid "Trend creation time %gms"
+msgstr ""
+
+#, c-format
+msgid "+ PNG-image(%d) creation time %gms"
+msgstr ""
+
+msgid "kHz"
+msgstr ""
+
+msgid "Hz"
+msgstr ""
+
+#, c-format
+msgid "Document '%s' parsing is error: %s"
+msgstr ""
+
+msgid "Operation user interface (WEB)"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
+msgstr ""
+
+msgid "Web operation user interface for visual control area (VCA) projects playing."
+msgstr ""
+
+msgid "Date and time"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "mcsec"
+msgstr ""
+
+msgid "Ready"
+msgstr ""
+
+msgid "Developers"
+msgstr ""
+
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"---------- Parameters of the module section '%s' in config-file ----------\n"
+"SessTimeLife <time>      Time of the session life, minutes (default 10).\n"
+"\n"
+msgstr ""
+
+msgid "Connect to opened session"
+msgstr ""
+
+msgid "Create new session for present project"
+msgstr ""
+
+msgid "No one sessions and projects of VCA engine are present for user!"
+msgstr ""
+
+msgid "Sorry, opened sessions number reach limit!"
+msgstr ""
+
+#, c-format
+msgid "An inaccessible request is received: '%s'"
+msgstr ""
+
+msgid "Name: "
+msgstr ""
+
+msgid "License: "
+msgstr ""
+
+msgid "Author: "
+msgstr ""
+
+msgid "Description: "
+msgstr ""
+
+msgid "Module options"
+msgstr ""
+
+msgid "Life time of session (min)"
+msgstr ""
+
+msgid "Sessions limit"
+msgstr ""
+
+msgid "PNG compression level"
+msgstr ""
+
+msgid ""
+"PNG (ZLib) compression level:\n"
+"  -1  - optimal speed-size;\n"
+"  0   - disable;\n"
+"  1-9 - direct level."
+msgstr ""

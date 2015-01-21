@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-09 21:56+0200\n"
+"POT-Creation-Date: 2015-01-21 10:41+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -209,6 +209,7 @@ msgstr ""
 msgid "Can not create file: '%s'!"
 msgstr "Не могу создать файл: '%s'!"
 
+#, c-format
 msgid "Write to file '%s' error"
 msgstr "Ошибка записи в файл '%s'"
 
@@ -231,6 +232,7 @@ msgstr "Вставка сообщения в архивный файл с оши
 msgid "Archive file '%s' isn't attached!"
 msgstr "Файл архива '%s' не подключен!"
 
+#, c-format
 msgid "File access to '%s' error."
 msgstr "Ошибка доступа к файлу '%s'."
 
@@ -240,6 +242,7 @@ msgstr "Получение сообщений из архивного файла
 msgid "Archive file isn't attached!"
 msgstr "Файл архива не подключен!"
 
+#, c-format
 msgid "Write to '%s' error!"
 msgstr "Ошибка записи в файл '%s'!"
 
@@ -347,7 +350,9 @@ msgstr "Ошибка в файле архива!"
 
 #, c-format
 msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
-msgstr "Предупреждение! Выделенный размер буфера %d для индексов меньше использованого %d."
+msgstr ""
+"Предупреждение! Выделенный размер буфера %d для индексов меньше "
+"использованого %d."
 
 #, c-format
 msgid ""
@@ -357,9 +362,11 @@ msgstr ""
 "Ошибка записи блока данных в файл архива '%s'. Структура будет сломана. "
 "mSize=%d, foff_end=%d, vSize=%d"
 
+#, c-format
 msgid "Read file '%s' for offset %d error!"
 msgstr "Ошибка чтения файла '%s' для смещения %d!"
 
+#, c-format
 msgid "Write to file '%s' error!"
 msgstr "Ошибка записи в файл '%s'!"
 

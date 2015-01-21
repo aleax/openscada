@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 21:49+0200\n"
+"POT-Creation-Date: 2015-01-21 10:54+0200\n"
 "PO-Revision-Date: 2010-10-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -262,6 +262,14 @@ msgstr "Feld des Bezeichners"
 msgid "Field stat"
 msgstr "Feld des Zustandes"
 
+#, fuzzy
+msgid "Request's key"
+msgstr "Text der Anfrage"
+
+#, fuzzy
+msgid "Request's value"
+msgstr "Text der Anfrage"
+
 msgid "Create records."
 msgstr "Erschaffung von Aufschreibungen."
 
@@ -274,6 +282,14 @@ msgstr "Erneuerung der Aufschreibungen."
 
 #, c-format
 msgid "Updated %d records for time %f sec."
+msgstr "Erneut %d der Aufschreibungen im Laufe von %f Sekunden."
+
+#, c-format
+msgid "Update records, by request key, for %d records."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Updated %d records, by request key, for time %f sec."
 msgstr "Erneut %d der Aufschreibungen im Laufe von %f Sekunden."
 
 msgid "Check records."
@@ -299,6 +315,14 @@ msgstr "Fehler des Feldes <id> %d != %d"
 #, c-format
 msgid "Field <stat> %d != %d error."
 msgstr "Fehler des Feldes <stat> %d != %d."
+
+#, fuzzy, c-format
+msgid "Field <reqKey> '%s' != '%s' error."
+msgstr "Fehler des Feldes <Sh> '%s' != '%s'."
+
+#, fuzzy, c-format
+msgid "Field <reqVal> '%s' != '%s' error."
+msgstr "Fehler des Feldes <Sh> '%s' != '%s'."
 
 #, c-format
 msgid "Got %d records for time %f sec."
@@ -368,7 +392,8 @@ msgid "Parameter"
 msgstr "Parameter"
 
 msgid ""
-"DAQ parameters test. Make read a parameter's attributes and configuration fields."
+"DAQ parameters test. Make read a parameter's attributes and configuration "
+"fields."
 msgstr ""
 "Test der DAQ-Parameter. Liest Attribute und Konfigurationsfelder des "
 "Parameters."
@@ -534,13 +559,12 @@ msgstr "%s: Verfall des Puffer."
 
 #, c-format
 msgid "%s: Fill and check hard time grid string buffer."
-msgstr ""
-"%s: Füllen und Prüfung des Zeilenbuffers mit dem harten Zeitgitter."
+msgstr "%s: Füllen und Prüfung des Zeilenbuffers mit dem harten Zeitgitter."
 
 msgid "Buffer begin or/and end error, at filling half buffer."
 msgstr ""
-"Abfall des Beginns und/oder der Ende des Puffer, bei der Füllen der "
-"Hälfte des Puffer."
+"Abfall des Beginns und/oder der Ende des Puffer, bei der Füllen der Hälfte "
+"des Puffer."
 
 msgid "Write a half buffer values error."
 msgstr "Abfall der Aufname der Hälfte der Pufferswerte."
@@ -574,20 +598,19 @@ msgstr "1000 Aufschreibungen gelesen im Laufe von %f usek."
 #, c-format
 msgid "%s: Fill and check hard time grid integer buffer."
 msgstr ""
-"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen "
-"Zeitgitter."
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen Zeitgitter."
 
 #, c-format
 msgid "%s: Fill and check soft time grid string buffer (high time)."
 msgstr ""
-"%s: Füllen und Prüfung des Zeilenbuffers mit dem weichen Zeitgitter "
-"(hohe Zeitauflösung)."
+"%s: Füllen und Prüfung des Zeilenbuffers mit dem weichen Zeitgitter (hohe "
+"Zeitauflösung)."
 
 #, c-format
 msgid "%s: Fill and check soft time grid integer buffer (high time)."
 msgstr ""
-"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen "
-"Zeitgitter (hohe Zeitauflösung)."
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen Zeitgitter "
+"(hohe Zeitauflösung)."
 
 #, c-format
 msgid "%s: Fill and check soft time grid string buffer (low time)."
@@ -598,8 +621,8 @@ msgstr ""
 #, c-format
 msgid "%s: Fill and check soft time grid integer buffer (low time)."
 msgstr ""
-"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen "
-"Zeitgitter (niedrige Zeitauflösung)."
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit dem weichen Zeitgitter "
+"(niedrige Zeitauflösung)."
 
 #, c-format
 msgid "%s: Fill and check free time string buffer (high time)."
@@ -622,8 +645,8 @@ msgstr ""
 #, c-format
 msgid "%s: Fill and check free time integer buffer (low time)."
 msgstr ""
-"%s: Füllen und Prüfung des ganzzahligen Puffer mit der freien Zeit "
-"(niedrige Zeitauflösung)."
+"%s: Füllen und Prüfung des ganzzahligen Puffer mit der freien Zeit (niedrige "
+"Zeitauflösung)."
 
 #, c-format
 msgid "%s: Failed: %s"
@@ -681,7 +704,14 @@ msgstr ""
 msgid "Open file '%s' error."
 msgstr "Fehler der Eröffnung der Datei '%s'."
 
+#, fuzzy, c-format
+msgid "Read file '%s' error: %s."
+msgstr "Fehler der Eröffnung der Datei '%s'."
+
+#, c-format
+msgid "Read file '%s' only %d from %d."
+msgstr ""
+
 #, c-format
 msgid "Test: Passed: %f ms."
 msgstr "Test: Gemacht: %f ms."
-

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-23 10:48+0300\n"
+"POT-Creation-Date: 2015-01-21 10:50+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -16,278 +16,210 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "X-Generator: Lokalize 1.0\n"
 
-#: mod_daq.cpp:66
 msgid "Parameters table"
 msgstr "Parametertabelle"
 
-#: mod_daq.cpp:67
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-#: mod_daq.cpp:68
 msgid "Gather task priority"
 msgstr "Niveau der Priorität der Datenempfangaufgabe"
 
-#: mod_daq.cpp:69
 msgid "Sync inter remote station period (s)"
 msgstr "Periode der Sznchronisierung mit der entfernten Station (sek)"
 
-#: mod_daq.cpp:70 mod_prt.cpp:205 mod_prt.cpp:678
 msgid "End point"
 msgstr "Endknoten"
 
-#: mod_daq.cpp:71
 msgid "Security policy"
 msgstr "Politik der Sicherheit"
 
-#: mod_daq.cpp:71
 msgid "None;Basic128Rsa15;Basic256"
 msgstr "Keine;Basic128Rsa15;Basic256"
 
-#: mod_daq.cpp:72
 msgid "Message security mode"
 msgstr "Regime der Sicherheit der Nachricht"
 
-#: mod_daq.cpp:73 mod_prt.cpp:696
 msgid "None;Sign;Sign&Encrypt"
 msgstr "Keine;Unterschrift;Unterschrift&Kodierung"
 
-#: mod_daq.cpp:74
 msgid "Certificate (PEM)"
 msgstr "Zertifikat (PEM)"
 
-#: mod_daq.cpp:75
 msgid "Private key (PEM)"
 msgstr "Privatschlüssel (PEM)"
 
-#: mod_daq.cpp:76
 msgid "Auth: user"
 msgstr "Auth: Benutzer"
 
-#: mod_daq.cpp:77
 msgid "Auth: password"
 msgstr "Auth: Passwort"
 
-#: mod_daq.cpp:78
 msgid "Parameter attributes number limit"
 msgstr "Beschränkung der Quantität der Parameterattribute"
 
-#: mod_daq.cpp:81
 msgid "Standard"
 msgstr "Standard"
 
-#: mod_daq.cpp:82
 msgid "Nodes list"
 msgstr "Liste von den Knoten"
 
-#: mod_daq.cpp:94 mod_daq.cpp:546 mod_daq.cpp:550 mod_daq.cpp:564
-#: mod_daq.cpp:784 mod_daq.cpp:793 mod_daq.cpp:796 mod_daq.cpp:810
 msgid "Root folder (84)"
 msgstr "Wurzeldirektorie (84)"
 
-#: mod_daq.cpp:122
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
-#: mod_daq.cpp:127
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
-#: mod_daq.cpp:128
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Aufruf mit einer Periode: %s. "
 
-#: mod_daq.cpp:129
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#: mod_daq.cpp:130
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Verbrauchte Zeit: %s. Anfragen %.6g."
 
-#: mod_daq.cpp:164
 #, c-format
 msgid "OPC UA automatic created transport for '%s' controller."
 msgstr "OPC UA automatische erstellt Transportmittel für '%s' Controller."
 
-#: mod_daq.cpp:195 mod_daq.cpp:299 mod_daq.cpp:307
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
 
-#: mod_daq.cpp:195
 msgid "STOP"
 msgstr "STOP"
 
-#: mod_daq.cpp:204
 msgid "Remote host error"
 msgstr "Fehler des entfernten Hostes"
 
-#: mod_daq.cpp:307
 msgid "OK"
 msgstr "OK"
 
-#: mod_daq.cpp:408
 msgid "Server nodes browser"
 msgstr "Übersicht der Knoten des Servers"
 
-#: mod_daq.cpp:410
 msgid "Node"
 msgstr "Knoten"
 
-#: mod_daq.cpp:411
 msgid "Attributes"
 msgstr "Attribute"
 
-#: mod_daq.cpp:413
 msgid "Attribute"
 msgstr "Attribut"
 
-#: mod_daq.cpp:414 mod_daq.cpp:488
 msgid "Value"
 msgstr "Wert"
 
-#: mod_daq.cpp:459
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: mod_daq.cpp:463
 msgid "NodeId"
 msgstr "Knoten ID"
 
-#: mod_daq.cpp:465
 msgid "NodeClass"
 msgstr "Klasse des Knotens"
 
-#: mod_daq.cpp:468
 msgid "Object"
 msgstr "Objekt"
 
-#: mod_daq.cpp:469
 msgid "Variable"
 msgstr "Variable"
 
-#: mod_daq.cpp:470
 msgid "Method"
 msgstr "Methode"
 
-#: mod_daq.cpp:471
 msgid "ObjectType"
 msgstr "ObjektTyp"
 
-#: mod_daq.cpp:472
 msgid "VariableType"
 msgstr "Typ der Variable"
 
-#: mod_daq.cpp:473
 msgid "ReferenceType"
 msgstr "Typ der Verweisung"
 
-#: mod_daq.cpp:474 mod_daq.cpp:491
 msgid "DataType"
 msgstr "DatenTyp"
 
-#: mod_daq.cpp:475
 msgid "View"
 msgstr "Form"
 
-#: mod_daq.cpp:478
 msgid "BrowseName"
 msgstr "ÜbersichtsName"
 
-#: mod_daq.cpp:479
 msgid "DisplayName"
 msgstr "AbbildungsName"
 
-#: mod_daq.cpp:480 mod_prt.cpp:58
 msgid "Description"
 msgstr "Beschreibung"
 
-#: mod_daq.cpp:481
 msgid "WriteMask"
 msgstr "Maske der Einschreibung"
 
-#: mod_daq.cpp:482
 msgid "UserWriteMask"
 msgstr "Maske der Einschreibung des Nutzers"
 
-#: mod_daq.cpp:483
 msgid "IsAbstract"
 msgstr "Abstrakt"
 
-#: mod_daq.cpp:484
 msgid "Symmetric"
 msgstr "Symmetrisch"
 
-#: mod_daq.cpp:485
 msgid "InverseName"
 msgstr "InversName"
 
-#: mod_daq.cpp:486
 msgid "ContainsNoLoops"
 msgstr "EnthältKeineWindungen"
 
-#: mod_daq.cpp:487
 msgid "EventNotifier"
 msgstr "Benachrichtigung der Ereignisse"
 
-#: mod_daq.cpp:500
 msgid "ValueRank"
 msgstr "WerteRang"
 
-#: mod_daq.cpp:501
 msgid "ArrayDimensions"
 msgstr "DimensionDesMassivs"
 
-#: mod_daq.cpp:504
 msgid "AccessLevel"
 msgstr "ZugangsNiveau"
 
-#: mod_daq.cpp:507 mod_daq.cpp:519
 msgid "Readable, "
 msgstr "Lesen, "
 
-#: mod_daq.cpp:508 mod_daq.cpp:520
 msgid "Writable, "
 msgstr "Einschreiben, "
 
-#: mod_daq.cpp:509 mod_daq.cpp:521
 msgid "History readable, "
 msgstr "LesenDesArchivs, "
 
-#: mod_daq.cpp:510 mod_daq.cpp:522
 msgid "History writable, "
 msgstr "EinschreibungDesArchivs, "
 
-#: mod_daq.cpp:511
 msgid "Semantic change, "
 msgstr "Semantische Veränderungen,"
 
-#: mod_daq.cpp:516
 msgid "UserAccessLevel"
 msgstr "ZugangsNiveauDesNutzers"
 
-#: mod_daq.cpp:525
 msgid "MinimumSamplingInterval"
 msgstr "MinimIntervalBefragung"
 
-#: mod_daq.cpp:526
 msgid "Historizing"
 msgstr "Archivierung"
 
-#: mod_daq.cpp:527
 msgid "Executable"
 msgstr "Ausgeübt"
 
-#: mod_daq.cpp:528
 msgid "UserExecutable"
 msgstr "AusgeübterNutzer"
 
-#: mod_daq.cpp:734
 msgid ""
 "Variables and it containers (Objects) list. All variables will put into the "
 "parameter attributes list.\n"
@@ -317,129 +249,98 @@ msgstr ""
 "  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - Knoten im Namenbereich 4 und "
 "als GUID."
 
-#: mod_daq.cpp:744
 msgid "Node append"
 msgstr "Node Append"
 
-#: mod_daq.cpp:831
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter abgeschaltet."
 
-#: mod_daq.cpp:832
 msgid "2:Acquisition is stopped."
 msgstr "2:Befragung ist gestoppt."
 
-#: mod_daq.cpp:852
 #, c-format
 msgid "0x%x: Attribute's errors %s"
 msgstr "0x%x: Fehler der Attribute %s"
 
-#: mod_prt.cpp:56
 msgid "ID"
 msgstr "ID"
 
-#: mod_prt.cpp:57
 msgid "Name"
 msgstr "Name"
 
-#: mod_prt.cpp:59
 msgid "To enable"
 msgstr "Einschalten"
 
-#: mod_prt.cpp:60
 msgid "Serializer type"
 msgstr "KodierungsTyp"
 
-#: mod_prt.cpp:60
 msgid "Binary"
 msgstr "Binär"
 
-#: mod_prt.cpp:61
 msgid "URL"
 msgstr "URL"
 
-#: mod_prt.cpp:62
 msgid "Security policies"
 msgstr "Sicherheitspolitik"
 
-#: mod_prt.cpp:63
 msgid "Server certificate (PEM)"
 msgstr "Zertifikat des Servers (PEM)"
 
-#: mod_prt.cpp:64
 msgid "Server private key (PEM)"
 msgstr "Privatschlüssel des Servers (PEM)"
 
-#: mod_prt.cpp:174
 msgid "Search and create new server error."
 msgstr "Fehler der Suche und der Schaffung des neuen Servers."
 
-#: mod_prt.cpp:206 mod_prt.cpp:207
 msgid "End points"
 msgstr "Endknoten"
 
-#: mod_prt.cpp:366
 msgid "Disabled. "
 msgstr "Ausgeschaltet. "
 
-#: mod_prt.cpp:369
 msgid "Enabled. "
 msgstr "Eingeschaltet. "
 
-#: mod_prt.cpp:370
 #, c-format
 msgid "Requests %.4g."
 msgstr "Anfragen %.4g."
 
-#: mod_prt.cpp:677
 msgid "End point: "
 msgstr "Endknoten: "
 
-#: mod_prt.cpp:680
 msgid "State"
 msgstr "Zustand"
 
-#: mod_prt.cpp:682
 msgid "Status"
 msgstr "Status"
 
-#: mod_prt.cpp:683
 msgid "Enable"
 msgstr "Eingeschaltet"
 
-#: mod_prt.cpp:684
 msgid "DB"
 msgstr "DB"
 
-#: mod_prt.cpp:687
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: mod_prt.cpp:695
 msgid "Policy"
 msgstr "Politik"
 
-#: mod_prt.cpp:696
 msgid "Message mode"
 msgstr "Regime der Nachricht"
 
-#: mod_prt.cpp:743
 msgid "No present selected row."
 msgstr "Gewählte Zeile fehlt."
 
-#: mod_daq.h:45 mod_prt.h:45
 msgid "OPC UA"
 msgstr ""
 
-#: mod_daq.h:49 mod_prt.h:49
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: mod_daq.h:50
 msgid "OPC UA client service implementation."
 msgstr "OPC UA Client Service-Implementierung."
 
-#: mod_prt.h:50
 msgid "OPC UA protocol implementation."
 msgstr "OPC UA-Protokoll-Implementierung."
 

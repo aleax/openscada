@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-23 10:51+0300\n"
+"POT-Creation-Date: 2015-01-21 10:49+0200\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -15,114 +15,92 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: module.cpp:38
 msgid "MMS(IEC-9506)"
 msgstr "MMS(IEC-9506)"
 
-#: module.cpp:42
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: module.cpp:43
 msgid "MMS(IEC-9506) client implementation."
 msgstr "Реалізація клієнта MMS(IEC-9506)"
 
-#: module.cpp:90
 msgid "Parameteres table"
 msgstr "Таблиця параметрів"
 
-#: module.cpp:91
 msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
-#: module.cpp:92
 msgid "Gather task priority"
 msgstr "Рівень пріоритету задачі збору даних"
 
-#: module.cpp:93
 msgid "Sync inter remote station period (s)"
 msgstr "Період синхронізації з віддаленою станцією (сек)"
 
-#: module.cpp:94
 msgid "Server address"
 msgstr "Адреса серверу"
 
-#: module.cpp:95
 msgid "Variables into read request"
 msgstr "Змінних у запиті читання"
 
-#: module.cpp:96
 msgid "Destination TSAP"
 msgstr "TSAP призначення"
 
-#: module.cpp:99
 msgid "Standard"
 msgstr "Стандарт"
 
-#: module.cpp:100
 msgid "Variables list (next line separated)"
 msgstr "Перелік змінних (поділено наступним рядком)"
 
-#: module.cpp:182
 msgid "No activity data."
 msgstr "Немає активності даних."
 
-#: module.cpp:182
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Помилка з'єднання. Відновлення за %.6g с."
 
-#: module.cpp:187
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
-#: module.cpp:188
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
-#: module.cpp:189
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
-#: module.cpp:190
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Витрачено часу: %s. Запитів %.6g."
 
-#: module.cpp:225
 msgid "Remote host error"
 msgstr "Помилка віддаленого хосту"
 
-#: module.cpp:246
 #, c-format
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "Автоматично створений транспорт MMS для контролеру '%s'."
 
-#: module.cpp:291 module.cpp:346 module.cpp:353
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: підключення до джерела даних: %s."
 
-#: module.cpp:291
 msgid "STOP"
 msgstr "ЗУПИНЕНО"
 
-#: module.cpp:353
 msgid "OK"
 msgstr "НОРМА"
 
-#: module.cpp:420
+#, c-format
 msgid "Value '%s' type '%s' read is not implemented."
 msgstr "Читання значення '%s' типу '%s' не реалізовано."
 
-#: module.cpp:613
-#, c-format
-msgid "Value type %s is not implemented for '%s'."
+msgid "No data"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Value type '%s' is not implemented for '%s'."
 msgstr "Тип значення %s не реалізовано для '%s'."
 
-#: module.cpp:656
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
@@ -162,19 +140,15 @@ msgstr ""
 "  {id} - примусовий ID атрибуту.\n"
 "  {name} - примусове ім'я атрибуту."
 
-#: module.cpp:673
 msgid "Variable append"
 msgstr "Додавання змінної"
 
-#: module.cpp:751
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-#: module.cpp:752
 msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."
 
-#: module.cpp:838
 #, c-format
 msgid "Write to '%s' error: %s."
 msgstr "Помилка запису до '%s': %s."

@@ -297,7 +297,7 @@ void TTrIn::connect( )
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
 	tio.c_cc[VMIN] = 0;            ///< blocking read until 0 character arrives*/
 	// Set speed
-	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':').c_str());
+	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
 	    switch(s2i(speed)) {
@@ -322,7 +322,7 @@ void TTrIn::connect( )
 	    cfsetospeed(&tio, tspd);
 	}
 	// Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':')));
+	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
 	if(!format.empty()) {
 	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 	    //  Set byte length
@@ -829,7 +829,7 @@ void TTrOut::start( int tmCon )
 	tio.c_cc[VMIN] = 0;		///< blocking read until 0 character arrives
 
 	// Set speed
-	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':').c_str());
+	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
 	    switch(s2i(speed))
@@ -856,7 +856,7 @@ void TTrOut::start( int tmCon )
 	}
 
 	// Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':')));
+	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
 	if(!format.empty()) {
 	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 

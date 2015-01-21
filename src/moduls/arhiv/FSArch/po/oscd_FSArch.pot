@@ -1,0 +1,286 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:41+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "File system archivator"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "The Archive module. Allow functions for messages and values archiving to file system."
+msgstr ""
+
+msgid "Compress error!"
+msgstr ""
+
+#, c-format
+msgid "Decompress error: '%s'!"
+msgstr ""
+
+#, c-format
+msgid ""
+"======================= The module <%s:%s> options =======================\n"
+"    --noArchLimit        Disable archives limit to file number. Use for see archives mode, not work.\n"
+"    --copyErrValFiles    Copy sourced error value archive's files before it restore.\n"
+"                         Used for debug value archive's errors and correct restore.\n"
+"\n"
+msgstr ""
+
+#, c-format
+msgid "Check message archivator '%s' error."
+msgstr ""
+
+#, c-format
+msgid "Check value archivator '%s' error."
+msgstr ""
+
+msgid "Archive is not started!"
+msgstr ""
+
+#, c-format
+msgid "Error create new archive file '%s'!"
+msgstr ""
+
+#, c-format
+msgid "Can not create directory '%s'."
+msgstr ""
+
+msgid "Archivator files size"
+msgstr ""
+
+msgid "Archiving time"
+msgstr ""
+
+msgid "Path to directory for archivator's of messages files."
+msgstr ""
+
+msgid "Additional options"
+msgstr ""
+
+msgid "XML archive files"
+msgstr ""
+
+msgid ""
+"Enables archiving of messages in XML-format files, rather than plain text.\n"
+"The use of XML-format archiving requires more RAM because is needed full download file,\n"
+"XML-parsing and storing in memory at the time of use."
+msgstr ""
+
+msgid "Maximum archive file size (kB)"
+msgstr ""
+
+msgid ""
+"Sets a limit on the size of one archive file.\n"
+"Disable the restriction can be by setting the parameter to zero."
+msgstr ""
+
+msgid "Maximum files number"
+msgstr ""
+
+msgid ""
+"Limits the maximum number of archive files and share with the size of single file\n"
+"determines the size of archive on disk. Completely remove this restriction can be set to zero."
+msgstr ""
+
+msgid "File's time size (days)"
+msgstr ""
+
+msgid "Sets a limit on the size of a single archive file on time."
+msgstr ""
+
+msgid "Pack files timeout (min)"
+msgstr ""
+
+msgid ""
+"Sets the time after which, in the absence of appeals, archive files will be packaged in gzip archiver.\n"
+"Set to zero for disable packing by gzip."
+msgstr ""
+
+msgid "Check archives period (min)"
+msgstr ""
+
+msgid ""
+"Sets the frequency of checking the archives for the emergence or delete new files\n"
+"in a directory of archives, as well as exceeding the limits and removing old archive files."
+msgstr ""
+
+msgid "Use info files for packed archives"
+msgstr ""
+
+msgid ""
+"Specifies whether to create files with information about the packed archive files by gzip-archiver.\n"
+"When copying files of archive on another station, these info files can speed up the target station\n"
+"process of first run by eliminating the need to decompress by gzip-archives in order to obtain information."
+msgstr ""
+
+msgid "Prevent duplicates"
+msgstr ""
+
+msgid ""
+"Enables checks for duplicate messages at the time put a message in the archive.\n"
+"If there is a duplicate the message does not fit into the archive.\n"
+"This feature some increases the recording time to archive, but in cases of\n"
+"placing messages in the archive by past time from external sources it allows to eliminate duplication."
+msgstr ""
+
+msgid "Check archivator directory now"
+msgstr ""
+
+msgid ""
+"The command, which allows you to immediately start checking the archives,\n"
+"for example, after manual changes to the directory archiver."
+msgstr ""
+
+#, c-format
+msgid "Can not create file: '%s'!"
+msgstr ""
+
+#, c-format
+msgid "Write to file '%s' error"
+msgstr ""
+
+#, c-format
+msgid "File '%s' header error!"
+msgstr ""
+
+#, c-format
+msgid "Archive file: '%s' is not mine."
+msgstr ""
+
+#, c-format
+msgid "Archive '%s' file error."
+msgstr ""
+
+msgid "Inserting message to an error Archive file!"
+msgstr ""
+
+#, c-format
+msgid "Archive file '%s' isn't attached!"
+msgstr ""
+
+#, c-format
+msgid "File access to '%s' error."
+msgstr ""
+
+msgid "Getting messages from an error Archive file!"
+msgstr ""
+
+msgid "Archive file isn't attached!"
+msgstr ""
+
+#, c-format
+msgid "Write to '%s' error!"
+msgstr ""
+
+#, c-format
+msgid "Unpack '%s' for information get."
+msgstr ""
+
+msgid "Full archives size"
+msgstr ""
+
+msgid "Path to directory for archivator's of values files."
+msgstr ""
+
+msgid "Archive's file time size (hours)"
+msgstr ""
+
+msgid ""
+"The parameter is set automatically when you change the frequency values by archiver\n"
+"and generally proportional to the frequency values of the archiver.\n"
+"Attention! Large archive files will be processed long by long unpacking gzip-files\n"
+"and the primary indexing, when accessing to parts of deep in the archives of history."
+msgstr ""
+
+msgid "Maximum files number for one archive"
+msgstr ""
+
+msgid "Maximum capacity by all archives (MB)"
+msgstr ""
+
+msgid ""
+"Sets a limit on the maximum amount of disk space occupied by all archive files by archiver.\n"
+"Testing is done by periodicity checking the archives, which resulted in, on exceeding the limit,\n"
+"removes the oldest files of all archives. Completely remove this restriction can be set to zero."
+msgstr ""
+
+msgid "Numeric values rounding (%)"
+msgstr ""
+
+msgid ""
+"Sets the percentage of boundary difference values of parameters integer and real types\n"
+"where they are considered identical and will be archived as a single value\n"
+"through sequential packaging. Allows well-packaged slightly changing parameters\n"
+"which outside certainty. Disable this property can be set to zero."
+msgstr ""
+
+msgid "Files size"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Archive"
+msgstr ""
+
+msgid "Begin"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "To file"
+msgstr ""
+
+#, c-format
+msgid "Archive file '%s' no opened!"
+msgstr ""
+
+#, c-format
+msgid "Attach file '%s' error."
+msgstr ""
+
+msgid "Archive file error!"
+msgstr ""
+
+#, c-format
+msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
+msgstr ""
+
+#, c-format
+msgid "Write data block to archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"
+msgstr ""
+
+#, c-format
+msgid "Read file '%s' for offset %d error!"
+msgstr ""
+
+#, c-format
+msgid "Write to file '%s' error!"
+msgstr ""
+
+#, c-format
+msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"
+msgstr ""
+
+msgid "Error open new archive file for copy."
+msgstr ""

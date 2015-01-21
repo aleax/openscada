@@ -1,0 +1,153 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "DCON client"
+msgstr ""
+
+msgid "Roman Savochenko, Almaz Karimov"
+msgstr ""
+
+msgid "Allow realization of DCON client service. Supported I-7000 DCON protocol."
+msgstr ""
+
+msgid "Parameters table"
+msgstr ""
+
+msgid "Gather data period (s)"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Gather task priority"
+msgstr ""
+
+msgid "Transport"
+msgstr ""
+
+msgid "Request tries"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Module address"
+msgstr ""
+
+msgid "CRC control"
+msgstr ""
+
+msgid "Host signal"
+msgstr ""
+
+msgid "No signal;HostOK"
+msgstr ""
+
+msgid "AI method"
+msgstr ""
+
+msgid "No AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI (#AA);10AI (#AA);20AI (#AA);16AI (#AA^AA);1AI (#AAN);2AI (#AAN);3AI (#AAN);4AI (#AAN);6AI (#AAN);8AI (#AAN);10AI (#AANN);20AI (#AANN);16AI (#AAN^AAN)"
+msgstr ""
+
+msgid "Engineer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)"
+msgstr ""
+
+msgid "AO method"
+msgstr ""
+
+msgid "No AO;1AO (#AA);2AO (#AAN);4AO (#AAN);4AO (#AACN)"
+msgstr ""
+
+msgid "Engineer (00.000 20.000);Engineer (04.000 20.000);Engineer (00.000 10.000);Engineer (+00.000 +20.000);Engineer (+04.000 +20.000);Engineer (+00.000 +10.000);Engineer (-10.000 +10.000);Engineer (+00.000 +05.000);Engineer (-05.000 +05.000);Percent (+000.00 +100.00);Hexadecimal (000 FFF)"
+msgstr ""
+
+msgid "DI method"
+msgstr ""
+
+msgid "No DI;3DI ($AA6);4DI ($AA6);7DI ($AA6);8DI ($AA6);14DI ($AA6);16DI ($AA6);1DI (@AADI);8DI ($AA6,FF00)"
+msgstr ""
+
+msgid "DO method"
+msgstr ""
+
+msgid "No DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO (@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO (^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO (@(^)AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO (#AA000FFF)"
+msgstr ""
+
+msgid "CI method"
+msgstr ""
+
+msgid "No CI;2CI (#AA);3CI (#AA)"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr ""
+
+#, c-format
+msgid "REQ -> '%s'"
+msgstr ""
+
+msgid "10:Transport error: "
+msgstr ""
+
+msgid "13:Error respond: Not full."
+msgstr ""
+
+msgid "20:Respond length error."
+msgstr ""
+
+msgid "21:Invalid module CRC."
+msgstr ""
+
+msgid "22:Invalid module response."
+msgstr ""
+
+#, c-format
+msgid "RESP -> '%s'"
+msgstr ""
+
+#, c-format
+msgid "ERR -> '%s': %s"
+msgstr ""
+
+msgid "23:Undefined range"
+msgstr ""
+
+msgid "24:Module out of range"
+msgstr ""
+
+msgid "25:Command ignored (host watchdog)."
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Acquisition is stopped."
+msgstr ""

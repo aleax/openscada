@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-14 13:06+0200\n"
+"POT-Creation-Date: 2015-01-21 10:56+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1875,6 +1875,12 @@ msgstr "Зробити усі величини віджета статичним
 msgid "Press to make all values of the widget static ones"
 msgstr "Натисніть, щоб зробити усі величини віджета статичними."
 
+msgid "Point coordinates(x,y): (%1, %2)"
+msgstr "Координати точки(x,y): (%1, %2)"
+
+msgid "Coordinates(x,y): (%1, %2)"
+msgstr "Координати(x,y): (%1, %2)"
+
 msgid "Properties for the %1 figures."
 msgstr "Властивості для фігур: %1."
 
@@ -2045,12 +2051,6 @@ msgstr "Пунктир"
 
 msgid "Dotted"
 msgstr "Крапкова"
-
-msgid "Point coordinates(x,y): (%1, %2)"
-msgstr "Координати точки(x,y): (%1, %2)"
-
-msgid "Coordinates(x,y): (%1, %2)"
-msgstr "Координати(x,y): (%1, %2)"
 
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Образ віджету '%1' ще не реалізовано!"

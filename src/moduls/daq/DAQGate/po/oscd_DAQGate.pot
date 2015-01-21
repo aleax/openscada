@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Data sources gate"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station."
+msgstr ""
+
+msgid "Parameters cache table"
+msgstr ""
+
+msgid "Gather data period (s)"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Gather task priority"
+msgstr ""
+
+msgid "Restore timeout (s)"
+msgstr ""
+
+msgid "Restore data depth time (hour)"
+msgstr ""
+
+msgid "Gather messages level"
+msgstr ""
+
+msgid "==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"
+msgstr ""
+
+msgid "Sync inter remote station period (s)"
+msgstr ""
+
+msgid "Remote stations list"
+msgstr ""
+
+msgid "Remote cotrollers and parameters list"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Remote parameter address"
+msgstr ""
+
+msgid "Attributes configuration cache"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr ""
+
+#, c-format
+msgid "Station '%s' error, restoring in %.3g s."
+msgstr ""
+
+#, c-format
+msgid "Requests to station '%s': %.6g."
+msgstr ""
+
+#, c-format
+msgid "Deletion parameter '%s' is error but it no present on configuration or remote station."
+msgstr ""
+
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr ""
+
+msgid "STOP"
+msgstr ""
+
+msgid "10:Data not allow."
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+#, c-format
+msgid "DAQ.%s: connect to data source '%s': %s."
+msgstr ""
+
+msgid "Zero for disable archive access."
+msgstr ""
+
+msgid "Zero for disable periodic sync."
+msgstr ""
+
+msgid "Remote OpenSCADA stations' identifiers list used into it controller."
+msgstr ""
+
+msgid "Append station"
+msgstr ""
+
+msgid "Go to remote stations list configuration"
+msgstr ""
+
+msgid ""
+"Remote OpenSCADA full controller's or separated controller's parameters list. Address example:\n"
+"  System.AutoDA - for controller;\n"
+"  System.AutoDA.UpTimeStation - for controller's parameter."
+msgstr ""
+
+msgid "Parameters tree"
+msgstr ""
+
+msgid "<<Append current>>"
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Id"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Remote station configuration"
+msgstr ""
+
+msgid "Controller is not started!"
+msgstr ""

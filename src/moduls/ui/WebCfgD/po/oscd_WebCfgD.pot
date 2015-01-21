@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Dynamic WEB configurator"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies."
+msgstr ""
+
+msgid "OpenSCADA. Dynamic WEB configurator"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "Load"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Up"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Add item"
+msgstr ""
+
+msgid "Delete item"
+msgstr ""
+
+msgid "Copy item"
+msgstr ""
+
+msgid "Cut item"
+msgstr ""
+
+msgid "Paste item"
+msgstr ""
+
+msgid "Reload item and tree"
+msgstr ""
+
+msgid "Start periodic update"
+msgstr ""
+
+msgid "Stop periodic update"
+msgstr ""
+
+msgid "Ready"
+msgstr ""
+
+msgid "Go"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Insert"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Item up"
+msgstr ""
+
+msgid "Item down"
+msgstr ""
+
+msgid "Add new element."
+msgstr ""
+
+msgid "Insert new element."
+msgstr ""
+
+msgid "Rename element."
+msgstr ""
+
+msgid "Select image file for download to picture field."
+msgstr ""
+
+msgid "Add row"
+msgstr ""
+
+msgid "Insert row"
+msgstr ""
+
+msgid "Delete row"
+msgstr ""
+
+msgid "Up row"
+msgstr ""
+
+msgid "Down row"
+msgstr ""
+
+msgid "No one editable container present."
+msgstr ""
+
+msgid "Add item to node '%1'."
+msgstr ""
+
+msgid "Item '%1' already present."
+msgstr ""
+
+msgid "You sure for delete node '%1'?"
+msgstr ""
+
+msgid "Copy is impossible."
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid "Move node '%1' to '%2'."
+msgstr ""
+
+msgid "Copy node '%1' to '%2'."
+msgstr ""
+
+msgid "Node '%1' already present. Continue?"
+msgstr ""
+
+msgid "Element type:"
+msgstr ""
+
+msgid "Name:"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Page loaded."
+msgstr ""
+
+msgid "Node id and/or name select"
+msgstr ""
+
+msgid "Item name set"
+msgstr ""
+
+msgid "Image set"
+msgstr ""
+
+msgid "Add node"
+msgstr ""
+
+msgid "Move or copy node"
+msgstr ""
+
+#, c-format
+msgid "Unknown command: %s."
+msgstr ""
+
+msgid "Name: "
+msgstr ""
+
+msgid "Description: "
+msgstr ""
+
+msgid "License: "
+msgstr ""
+
+msgid "Author: "
+msgstr ""
+
+msgid "Web site: "
+msgstr ""
+
+msgid "Module options"
+msgstr ""
+
+msgid "Go to remote stations list configuration"
+msgstr ""

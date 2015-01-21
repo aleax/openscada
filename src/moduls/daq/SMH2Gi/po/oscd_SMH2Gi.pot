@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:50+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Segnetics SMH2Gi"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules."
+msgstr ""
+
+msgid "Shared memory parameters"
+msgstr ""
+
+msgid "MR and MC bus parameters"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Gather task priority"
+msgstr ""
+
+msgid "Shared memory variables file"
+msgstr ""
+
+msgid "MR bus device"
+msgstr ""
+
+msgid "MC bus device"
+msgstr ""
+
+msgid "Request tries"
+msgstr ""
+
+msgid "Re-enable by Reinit flag for MC/MR module."
+msgstr ""
+
+msgid "MR/MC devices *.ini files directry"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s."
+msgstr ""
+
+msgid "Error GPIO PC30 open for MC reset."
+msgstr ""
+
+msgid "Write to gpio94 error!"
+msgstr ""
+
+#, c-format
+msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
+msgstr ""
+
+#, c-format
+msgid "ModBUS REQ -> '%s': %s"
+msgstr ""
+
+msgid "13:Error respond: Too short."
+msgstr ""
+
+msgid "13:Error respond: CRC check error."
+msgstr ""
+
+#, c-format
+msgid "ModBUS RESP -> '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "ModBUS ERR -> %s: %s"
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Acquisition is stopped."
+msgstr ""
+
+msgid "Variables list"
+msgstr ""
+
+#, c-format
+msgid "SHM Get vals: %s"
+msgstr ""
+
+#, c-format
+msgid "SHM Set value '%s' to '%s' error."
+msgstr ""
+
+#, c-format
+msgid "SHM Set val: %s='%s': %d"
+msgstr ""
+
+msgid "Module type"
+msgstr ""
+
+msgid "Module slot/address"
+msgstr ""
+
+msgid "Module addition parameters"
+msgstr ""
+
+#, c-format
+msgid "No selected any module type or type '%d' error."
+msgstr ""
+
+#, c-format
+msgid "Parameters request error: %s."
+msgstr ""
+
+#, c-format
+msgid "Configure device %d but set %d."
+msgstr ""
+
+#, c-format
+msgid "Send tune request error: %s."
+msgstr ""
+
+msgid "20:PDU short."
+msgstr ""
+
+msgid "21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgstr ""
+
+msgid "Analog output overload; "
+msgstr ""
+
+msgid "No tunes get; "
+msgstr ""
+
+msgid "High voltage; "
+msgstr ""
+
+msgid "Low voltage; "
+msgstr ""
+
+msgid "Internal power supply overvoltage; "
+msgstr ""
+
+msgid "Unknown MR module type; "
+msgstr ""
+
+msgid ""
+"-1  - for MC;\n"
+"0-7 - for MR."
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Digital signals reverse"
+msgstr ""
+
+#, c-format
+msgid "DI %d"
+msgstr ""
+
+#, c-format
+msgid "DO %d"
+msgstr ""
+
+msgid "<No select>"
+msgstr ""

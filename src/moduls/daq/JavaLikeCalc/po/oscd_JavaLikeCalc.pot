@@ -1,0 +1,328 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-21 10:48+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#, c-format
+msgid "Variable '%s' is used but undefined"
+msgstr ""
+
+msgid "Array have more 255 items."
+msgstr ""
+
+msgid "RegExp require one or two parameters."
+msgstr ""
+
+#, c-format
+msgid "Don't support operation code %d."
+msgstr ""
+
+#, c-format
+msgid "More than %d(%d) parameters are specified for function '%s'"
+msgstr ""
+
+#, c-format
+msgid "Function is requested '%s', but it doesn't have return of IO"
+msgstr ""
+
+msgid "No object variable for function"
+msgstr ""
+
+msgid "Object's function have more 255 parameters."
+msgstr ""
+
+msgid "Get object from no object's register"
+msgstr ""
+
+msgid "Function execution terminated by error"
+msgstr ""
+
+#, c-format
+msgid "Timeouted function calculation %d > %d+%d"
+msgstr ""
+
+msgid "Not supported type for operation 'Add'."
+msgstr ""
+
+msgid "Call object's function for no object or function name is empty."
+msgstr ""
+
+#, c-format
+msgid "Operation %c(%xh) error. Function '%s' is stopped."
+msgstr ""
+
+msgid "Function: "
+msgstr ""
+
+msgid "Date of modification"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Maximum calculate time (sec)"
+msgstr ""
+
+msgid "Program"
+msgstr ""
+
+msgid "IO"
+msgstr ""
+
+msgid "Id"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Real;Integer;Boolean;String;Text;Object"
+msgstr ""
+
+msgid "Mode"
+msgstr ""
+
+msgid "Input;Output;Return"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "New IO"
+msgstr ""
+
+msgid "Empty value is not valid."
+msgstr ""
+
+msgid "Function's library: "
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Library"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Accessing"
+msgstr ""
+
+msgid "Library DB"
+msgstr ""
+
+msgid ""
+"DB address in format [<DB module>.<DB name>.<Table name>].\n"
+"For use main work DB set '*.*'."
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "Java-like based calculator"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
+msgstr ""
+
+msgid "Parameters table"
+msgstr ""
+
+msgid "Controller's function"
+msgstr ""
+
+msgid "Calculation schedule"
+msgstr ""
+
+msgid "Calculation task priority"
+msgstr ""
+
+msgid "Iteration number in single calculation"
+msgstr ""
+
+msgid "IO ID"
+msgstr ""
+
+msgid "IO value"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Data fields"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Data base"
+msgstr ""
+
+msgid "Program translation allow"
+msgstr ""
+
+msgid "Formula"
+msgstr ""
+
+msgid "Function ID"
+msgstr ""
+
+msgid "Default value"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+#, c-format
+msgid "Compilation with the help of the program language %s is not supported."
+msgstr ""
+
+#, c-format
+msgid "Compile error: %s"
+msgstr ""
+
+msgid "Load function's libraries error."
+msgstr ""
+
+msgid "Safe timeout (sec)"
+msgstr ""
+
+msgid "Functions' Libraries"
+msgstr ""
+
+msgid "Libraries"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s."
+msgstr ""
+
+#, c-format
+msgid "Functions library '%s' is not present. Please, create functions library!"
+msgstr ""
+
+#, c-format
+msgid "Create new function '%s'."
+msgstr ""
+
+msgid "Load function and its IO error."
+msgstr ""
+
+msgid "Function calculate frequency (Hz)"
+msgstr ""
+
+msgid "Function start flag"
+msgstr ""
+
+msgid "Function stop flag"
+msgstr ""
+
+msgid "This controller object link"
+msgstr ""
+
+msgid "Calculation controller's function error."
+msgstr ""
+
+msgid "No started or no present function."
+msgstr ""
+
+msgid "Calculation"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Attribute mode"
+msgstr ""
+
+msgid "Read only;Read and Write;Read and Write"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Deleting lock attribute in not allow."
+msgstr ""
+
+msgid "Changing locked attribute is not allowed."
+msgstr ""
+
+msgid "2:Controller is stopped"
+msgstr ""
+
+msgid "1:Parameter is disabled"
+msgstr ""
+
+msgid ""
+"Attributes configuration list. List must be written by lines in format: [<io>:<aid>:<anm>]\n"
+"Where:\n"
+"  io - calculation function's IO;\n"
+"  aid - created attribute identifier;\n"
+"  anm - created attribute name.\n"
+"If 'aid' or 'anm' are not set they will be generated from selected function's IO."
+msgstr ""
+
+msgid "Error constant after constant"
+msgstr ""
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr ""
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr ""
+
+msgid "The next line symbol failed into string, "
+msgstr ""
+
+msgid "Using namespace is error or empty, "
+msgstr ""
+
+msgid "Build in function has too much parameters, "
+msgstr ""
+
+msgid "Function error, "
+msgstr ""
+
+msgid "Symbol error, "
+msgstr ""
+
+msgid "Object's properties too long, "
+msgstr ""

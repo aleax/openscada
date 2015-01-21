@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-03 12:26+0300\n"
+"POT-Creation-Date: 2015-01-21 10:50+0200\n"
 "PO-Revision-Date: 2012-10-31 10:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -77,6 +77,9 @@ msgstr "Abgelaufene Zeit: %s."
 msgid "Error GPIO PC30 open for MC reset."
 msgstr "Fehler beim Öffnen GPIO PC30 zurückzusetzen MC."
 
+msgid "Write to gpio94 error!"
+msgstr ""
+
 #, c-format
 msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
 msgstr "Automatische Erstellung Verkehr Segnetics SMH2Gi für Bus '%s'"
@@ -95,6 +98,7 @@ msgstr "13:Fehler in der Antwort: Fehler der CRC-Prüfung."
 msgid "ModBUS RESP -> '%s': %s"
 msgstr "ModBUS Antwort -> '%s': %s"
 
+#, c-format
 msgid "ModBUS ERR -> %s: %s"
 msgstr "ModBUS Fehler -> %s: %s"
 
@@ -150,7 +154,8 @@ msgstr "20: PDU kurz."
 msgid ""
 "21:Position lost. Need reload MR/MC bus - re-enable the controller object."
 msgstr ""
-"21:Position verloren. Brauchen nachladen MR/MC-Bus - reaktivieren das Controller-Objekt."
+"21:Position verloren. Brauchen nachladen MR/MC-Bus - reaktivieren das "
+"Controller-Objekt."
 
 msgid "Analog output overload; "
 msgstr "Analoge Ausgang ist überlastet; "
