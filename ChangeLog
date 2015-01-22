@@ -1,3 +1,10 @@
+2015-01-22 Roman 0.8.12.1
+- DB: LibsDB.vcaBase.db: mnEls: All gradient's figures of mnemos expanded to 100 pixels, for exclude unstick from edges at the scaling.
+    mnEls.Compressor: Spare arc figure removed.
+- FIX:DB: Radial image mnEls.rad_l_127 fixed for edge and make equal to mnEls.rad_r_127.
+- !:FIX:DAQ.JavaLikeCalc: Zero value divizer for operation '%' processing is fixed, for crash prevent.
+
+
 2014-12-27 Roman 0.8.12
 - API:
     !!!!:Changes:
