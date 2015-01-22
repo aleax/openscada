@@ -731,7 +731,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	switch(op1->vType(this)) {
 	    case Reg::Int:
 		switch(cod) {
-		    case Reg::RstI:	*op1 = op1->val().i % op2->val().i;	break;
+		    case Reg::RstI:	*op1 = op2->val().i ? (op1->val().i % op2->val().i) : INT64_MAX;	break;
 		    case Reg::BitOr:	*op1 = op1->val().i | op2->val().i;	break;
 		    case Reg::BitAnd:	*op1 = op1->val().i & op2->val().i;	break;
 		    case Reg::BitXor:	*op1 = op1->val().i ^ op2->val().i;	break;
@@ -1936,7 +1936,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d %% %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
-		reg[ptr->rez] = getValI(val,reg[ptr->a1]) % getValI(val,reg[ptr->a2]);
+		int64_t div = getValI(val, reg[ptr->a2]);
+		reg[ptr->rez] = div ? (getValI(val,reg[ptr->a1]) % div) : INT64_MAX;
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitOr: {

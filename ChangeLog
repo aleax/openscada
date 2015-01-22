@@ -1,6 +1,7 @@
 2015-01-22 Roman
 - FIX:DB: Radial image mnEls.rad_l_127 fixed for edge and make equal to mnEls.rad_r_127.
 - SYS.TCntrNode: Set for original message print at exception into chldDel() or mostly into heir's postDisable().
+- !:FIX:DAQ.JavaLikeCalc: Zero value divizer for operation '%' processing is fixed, for crash prevent.
 - UI.QTStarter: For main UI task destroy set timeout to 60 seconds and an execution generation allowed at the destroying timeout.
 - UI.Vision: ElFigure's source code next some cleaned.
     Append remnant from the widget placing into parent container temporary removed from scaleRotate() and unScaleRotate()
