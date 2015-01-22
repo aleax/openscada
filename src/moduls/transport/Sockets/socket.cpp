@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -159,12 +159,12 @@ void TSocketIn::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("MaxQueue");	if(!vl.empty()) setMaxQueue(atoi(vl.c_str()));
-	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(atoi(vl.c_str()));
-	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(atoi(vl.c_str()));
-	vl = prmNd.attr("KeepAliveReqs");if(!vl.empty()) setKeepAliveReqs(atoi(vl.c_str()));
-	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(atoi(vl.c_str()));
-	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(atoi(vl.c_str()));
+	vl = prmNd.attr("MaxQueue");	if(!vl.empty()) setMaxQueue(s2i(vl));
+	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(s2i(vl));
+	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(s2i(vl));
+	vl = prmNd.attr("KeepAliveReqs");if(!vl.empty()) setKeepAliveReqs(s2i(vl));
+	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
+	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
     } catch(...){ }
 }
 
@@ -233,11 +233,11 @@ void TSocketIn::start( )
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;
 	if(type == SOCK_TCP) {
-	    mode = atoi(TSYS::strSepParse(addr(),3,':').c_str());
+	    mode = s2i(TSYS::strSepParse(addr(),3,':'));
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
-	    if(sptr != NULL)                       name_in.sin_port = sptr->s_port;
-	    else if(htons(atol(port.c_str())) > 0) name_in.sin_port = htons(atol(port.c_str()));
+	    if(sptr != NULL)			name_in.sin_port = sptr->s_port;
+	    else if(htons(s2i(port)) > 0)	name_in.sin_port = htons(s2i(port));
 	    else name_in.sin_port = 10001;
 
 	    if(bind(sock_fd,(sockaddr*)&name_in,sizeof(name_in)) == -1) {
@@ -250,8 +250,8 @@ void TSocketIn::start( )
 	else if(type == SOCK_UDP) {
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(), "udp");
-	    if(sptr != NULL)                       name_in.sin_port = sptr->s_port;
-	    else if(htons(atol(port.c_str())) > 0) name_in.sin_port = htons(atol(port.c_str()));
+	    if(sptr != NULL)			name_in.sin_port = sptr->s_port;
+	    else if(htons(s2i(port)) > 0)	name_in.sin_port = htons(s2i(port));
 	    else name_in.sin_port = 10001;
 
 	    if(bind(sock_fd,(sockaddr*)&name_in,sizeof(name_in)) == -1) {
@@ -263,7 +263,7 @@ void TSocketIn::start( )
     }
     else if(type == SOCK_UNIX) {
 	path	= TSYS::strSepParse(addr(), 1, ':');
-	mode	= atoi(TSYS::strSepParse(addr(),2,':').c_str());
+	mode	= s2i(TSYS::strSepParse(addr(),2,':'));
 	if(!path.size()) path = "/tmp/oscada";
 	remove(path.c_str());
 	struct sockaddr_un  name_un;
@@ -327,7 +327,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 
     switch(type) {
 	case SOCK_TCP: case SOCK_UNIX: {
-	    int sId = atoi(TSYS::strLine(sender,1).c_str());
+	    int sId = s2i(TSYS::strLine(sender,1));
 	    if(sId < 0) return -1;
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Socket write message '%d'."), data.size());
 	    ssize_t wL = 1;
@@ -386,7 +386,7 @@ void *TSocketIn::Task( void *sock_in )
 	if(kz <= 0 || !FD_ISSET(sock->sock_fd, &rd_fd)) continue;
 
 	struct sockaddr_in name_cl;
-	socklen_t          name_cl_len = sizeof(name_cl);
+	socklen_t	   name_cl_len = sizeof(name_cl);
 	if(sock->type == SOCK_TCP) {
 	    int sock_fd_CL = accept(sock->sock_fd, (sockaddr *)&name_cl, &name_cl_len);
 	    if(sock_fd_CL != -1) {
@@ -468,7 +468,7 @@ void *TSocketIn::Task( void *sock_in )
 		    frame.can_id, frame.can_dlc, frame.data[0], frame.data[1], frame.data[2], frame.data[3], frame.data[4],
 		    frame.data[5], frame.data[6], frame.data[7]);
 
-	    sock->messPut(sock->sock_fd, req, answ, TSYS::uint2str(frame.can_id), prot_in);
+	    sock->messPut(sock->sock_fd, req, answ, u2s(frame.can_id), prot_in);
 	    if(!prot_in.freeStat()) continue;
 
 	    r_len = send(sock->sock_fd, answ.c_str(), answ.size(), 0);
@@ -669,27 +669,27 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/qLn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxQueue()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxQueue(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxQueue(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/clMax") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxFork()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxFork(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxFork(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/bfLn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(bufLen()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setBufLen(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setBufLen(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/keepAliveReqs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveReqs()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveReqs(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveReqs(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/keepAliveTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveTm()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/taskPrior") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -708,9 +708,9 @@ TSocketOut::~TSocketOut( )	{ }
 
 void TSocketOut::setTimings( const string &vl )
 {
-    mTmCon = vmax(1, vmin(60000,(int)(atof(TSYS::strParse(vl,0,":").c_str())*1e3)));
-    mTmNext = vmax(1, vmin(60000,(int)(atof(TSYS::strParse(vl,1,":").c_str())*1e3)));
-    mTmRep = vmax(0, vmin(10000,(int)(atof(TSYS::strParse(vl,2,":").c_str())*1e3)));
+    mTmCon = vmax(1, vmin(60000,(int)(s2r(TSYS::strParse(vl,0,":"))*1e3)));
+    mTmNext = vmax(1, vmin(60000,(int)(s2r(TSYS::strParse(vl,1,":"))*1e3)));
+    mTmRep = vmax(0, vmin(10000,(int)(s2r(TSYS::strParse(vl,2,":"))*1e3)));
     mTimings = mTmRep ? TSYS::strMess("%g:%g:%g",(1e-3*mTmCon),(1e-3*mTmNext),(1e-3*mTmRep)) :
 			TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
     modif();
@@ -773,7 +773,7 @@ void TSocketOut::start( int itmCon )
     else throw TError(nodePath().c_str(),_("Type socket '%s' error!"),s_type.c_str());
 
     if(type == SOCK_FORCE) {
-	sock_fd = atoi(TSYS::strSepParse(addr(),1,':').c_str());
+	sock_fd = s2i(TSYS::strSepParse(addr(),1,':'));
 	int rez;
 	if((rez=fcntl(sock_fd,F_GETFL,0)) < 0 || fcntl(sock_fd,F_SETFL,rez|O_NONBLOCK) < 0) {
 	    close(sock_fd);
@@ -795,8 +795,8 @@ void TSocketOut::start( int itmCon )
 	else name_in.sin_addr.s_addr = INADDR_ANY;
 	//Get system port for "oscada" /etc/services
 	struct servent *sptr = getservbyname(port.c_str(), (type == SOCK_TCP)?"tcp":"udp");
-	if(sptr != NULL)                       name_in.sin_port = sptr->s_port;
-	else if(htons(atol(port.c_str())) > 0) name_in.sin_port = htons(atol(port.c_str()));
+	if(sptr != NULL)		name_in.sin_port = sptr->s_port;
+	else if(htons(s2i(port)) > 0)	name_in.sin_port = htons(s2i(port));
 	else name_in.sin_port = 10001;
 
 	//Create socket

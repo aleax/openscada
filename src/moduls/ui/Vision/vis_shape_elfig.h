@@ -81,19 +81,16 @@ class inundationItem
 {
     public:
 	//Methods
-	inundationItem( )   { }
-	inundationItem( const QPainterPath &ipath, const short &ibrush, const short &ibrush_img,
-			const QVector<int> &inumber_shape, const QVector<int> &inumber_point ) :
-	    path(ipath), brush(ibrush), brush_img(ibrush_img), number_shape(inumber_shape), number_point(inumber_point)
+	inundationItem( )	{ }
+	inundationItem( const QPainterPath &ipath, const QVector<int> &in, const short &ibrush, const short &ibrushImg ) :
+	    path(ipath), n(in), brush(ibrush), brushImg(ibrushImg)
 	{ };
 
 	//Attributes
 	QPainterPath	path;
-	short		brush, brush_img;
-	QVector<int>	number_shape;
-	QVector<int>	number_point;
+	QVector<int>	n;
+	short		brush, brushImg;
 };
-
 
 //************************************************
 //* RectItem					 *

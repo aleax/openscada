@@ -5,6 +5,7 @@
 - UI.Vision: ElFigure's source code next some cleaned.
     Append remnant from the widget placing into parent container temporary removed from scaleRotate() and unScaleRotate()
 	for prevent flaws between inundations into some cases.
+	inundationItem() some cleaned.
 	createInundationPath() some prepared for the source next convolution.
 
 

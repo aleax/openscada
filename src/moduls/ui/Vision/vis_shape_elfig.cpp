@@ -293,7 +293,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    else img = SpI_DefFillImg;
 
 		    //   Make elements
-		    if(p.size() > 1) inundItems.push_back(inundationItem(newPath,color,img,p,p));
+		    if(p.size() > 1) inundItems.push_back(inundationItem(newPath,p,color,img));
 		    break;
 	    }
 	}
@@ -327,7 +327,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	for(ImageMap::iterator pi = images.begin(); pi != images.end(); ) {
 	    bool unDel = false;
 	    for(int i = 0; !unDel && i < inundItems.size(); i++)
-		unDel = pi->first > 0 && (pi->first == inundItems[i].brush_img);
+		unDel = pi->first > 0 && (pi->first == inundItems[i].brushImg);
 	    if(pi->first > 0 && !unDel) images.erase(pi++); else ++pi;
 	}
 	for(StyleMap::iterator pi = styles.begin(); pi != styles.end(); ) {
@@ -372,7 +372,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	// Detecting the difference beetwen inundItems
 	if(inundItems.size() != inundItems_temp.size()) { flag_all = paint = true; in_build = inundItems; }
 	else for(int i_f = 0; i_f < inundItems.size(); i_f++) {
-	    if(inundItems[i_f].number_shape != inundItems_temp[i_f].number_point || fill_build) {
+	    if(inundItems[i_f].n != inundItems_temp[i_f].n || fill_build) {
 		in_build.push_back(inundItems[i_f]);
 		fill_number.push_back(i_f);
 		paint = true;
@@ -384,10 +384,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		inundItems_temp[i_f].brush = inundItems[i_f].brush;
 		paint = true;
 	    }
-	    if(images[inundItems[i_f].brush_img] != images_temp[inundItems_temp[i_f].brush_img] ||
-		inundItems[i_f].brush_img != inundItems_temp[i_f].brush_img)
+	    if(images[inundItems[i_f].brushImg] != images_temp[inundItems_temp[i_f].brushImg] ||
+		inundItems[i_f].brushImg != inundItems_temp[i_f].brushImg)
 	    {
-		inundItems_temp[i_f].brush_img = inundItems[i_f].brush_img;
+		inundItems_temp[i_f].brushImg = inundItems[i_f].brushImg;
 		paint = true;
 	    }
 	}
@@ -396,11 +396,11 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	//Building fills
 	if(shapeItems.size())
 	    for(int i = 0; i < inundItems.size(); i++) {
-		if(inundItems[i].number_shape.size() > 2) {
-		    for(int k = 0; k < inundItems[i].number_shape.size()-1; k++)
+		if(inundItems[i].n.size() > 2) {
+		    for(int k = 0; k < inundItems[i].n.size()-1; k++)
 			for(int j = 0; j < shapeItems.size(); j++)
-			    if((shapeItems[j].n1 == inundItems[i].number_shape[k] && shapeItems[j].n2 == inundItems[i].number_shape[k+1]) ||
-				(shapeItems[j].n1 == inundItems[i].number_shape[k+1] && shapeItems[j].n2 == inundItems[i].number_shape[k]))
+			    if((shapeItems[j].n1 == inundItems[i].n[k] && shapeItems[j].n2 == inundItems[i].n[k+1]) ||
+				(shapeItems[j].n1 == inundItems[i].n[k+1] && shapeItems[j].n2 == inundItems[i].n[k]))
 			    {
 				flag_push_back = true;
 				for(int p = 0; p < inundation_fig_num.size(); p++)
@@ -416,8 +416,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				if(flag_push_back) inundation_fig_num.push_back(j);
 			    }
 		    for(int j = 0; j < shapeItems.size(); j++)
-			if((shapeItems[j].n1 == inundItems[i].number_shape[inundItems[i].number_shape.size()-1] && shapeItems[j].n2 == inundItems[i].number_shape[0]) ||
-			    (shapeItems[j].n1 == inundItems[i].number_shape[0] && shapeItems[j].n2 == inundItems[i].number_shape[inundItems[i].number_shape.size()-1]))
+			if((shapeItems[j].n1 == inundItems[i].n[inundItems[i].n.size()-1] && shapeItems[j].n2 == inundItems[i].n[0]) ||
+			    (shapeItems[j].n1 == inundItems[i].n[0] && shapeItems[j].n2 == inundItems[i].n[inundItems[i].n.size()-1]))
 			{
 			    flag_push_back = true;
 			    for(int p = 0; p < inundation_fig_num.size(); p++)
@@ -435,19 +435,19 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    QPainterPath temp_path = createInundationPath(inundation_fig_num, pnts, w);
 		    inundation_fig_num = inundationSort(temp_path, inundation_fig_num, w);
 		    inundItems[i].path = createInundationPath(inundation_fig_num, pnts, w);
-		    inundItems[i].number_shape = inundation_fig_num;
-		    if(inundation_fig_num.size() > inundItems[inundItems.size()-1].number_shape.size())
+		    inundItems[i].n = inundation_fig_num;
+		    if(inundation_fig_num.size() > inundItems[inundItems.size()-1].n.size())
 			inundItems[inundItems.size()-1].path = newPath;
 		}
-		if(inundItems[i].number_shape.size() == 2) {
+		if(inundItems[i].n.size() == 2) {
 		    for(int j = 0; j < shapeItems.size(); j++) {
-			if(((shapeItems[j].n1 == inundItems[i].number_shape[0]) && (shapeItems[j].n2 == inundItems[i].number_shape[1])) ||
-				((shapeItems[j].n1 == inundItems[i].number_shape[1]) && (shapeItems[j].n2 == inundItems[i].number_shape[0])))
+			if(((shapeItems[j].n1 == inundItems[i].n[0]) && (shapeItems[j].n2 == inundItems[i].n[1])) ||
+				((shapeItems[j].n1 == inundItems[i].n[1]) && (shapeItems[j].n2 == inundItems[i].n[0])))
 			    inundation_fig_num.push_back(j);
 			if(inundation_fig_num.size() == 2) break;
 		    }
 		    inundItems[i].path = createInundationPath(inundation_fig_num, pnts, w);
-		    inundItems[i].number_shape = inundation_fig_num;
+		    inundItems[i].n = inundation_fig_num;
 		}
 		inundation_fig_num.clear();
 	    }
@@ -548,237 +548,212 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	elList += "\n";
     }
 
-    //!!!! Continue for the code cleun up from here !!!!
-    //--for fills--
-    for( int i=0; i < inundItems.size(); i++ )
-    {
-	if( !inundItems[i].number_shape.size() ) continue;
-	bool flag_n1 = false;
-	bool flag_n2 = false;
+    //!!!! Rethink for the code roll from here !!!!
+    //For fills
+    for(int i = 0; i < inundItems.size(); i++) {
+	if(!inundItems[i].n.size()) continue;
+	bool flag_n1 = false, flag_n2 = false;
 	QVector<int> temp;
 	elList += "fill:";
 
-	for( int k=0; k < inundItems[i].number_shape.size()-1; k++ )
-	{
-    	    if( inundItems[i].number_shape.size() > 2 )
-	    {
-		if( k==0 )
-		{
-		    if( (shapeItems[inundItems[i].number_shape[k]].n1 == shapeItems[inundItems[i].number_shape[k+1]].n1) ||
-			(shapeItems[inundItems[i].number_shape[k]].n1 == shapeItems[inundItems[i].number_shape[k+1]].n2) )
+	// Points process
+	for(int k = 0; k < inundItems[i].n.size()-1; k++) {
+	    if(inundItems[i].n.size() > 2) {
+		if(k == 0) {
+		    if((shapeItems[inundItems[i].n[k]].n1 == shapeItems[inundItems[i].n[k+1]].n1) ||
+			(shapeItems[inundItems[i].n[k]].n1 == shapeItems[inundItems[i].n[k+1]].n2))
 		    {
-			if( shapeItems[inundItems[i].number_shape[k]].n2 > 0 )
-			    elList += i2s(shapeItems[inundItems[i].number_shape[k]].n2)+":";
-			else if( shapeItems[inundItems[i].number_shape[k]].n2 <= -10 )
-			    elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
-					+ r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
-			if( shapeItems[inundItems[i].number_shape[k]].n1 > 0 )
-			    elList += i2s(shapeItems[inundItems[i].number_shape[k]].n1)+":";
-			else if( shapeItems[inundItems[i].number_shape[k]].n1 <= -10 )
-			    elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
-					+ r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+			if(shapeItems[inundItems[i].n[k]].n2 > 0) elList += i2s(shapeItems[inundItems[i].n[k]].n2) + ":";
+			else if(shapeItems[inundItems[i].n[k]].n2 <= SpI_StatIts)
+			    elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n2].x(),POS_PREC_DIG)) + "|"
+					  + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n2].y(),POS_PREC_DIG)) + "):";
+			if(shapeItems[inundItems[i].n[k]].n1 > 0) elList += i2s(shapeItems[inundItems[i].n[k]].n1) + ":";
+			else if(shapeItems[inundItems[i].n[k]].n1 <= SpI_StatIts)
+			    elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n1].x(),POS_PREC_DIG)) + "|"
+					  + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n1].y(),POS_PREC_DIG)) + "):";
 		    }
-		    else
-		    {
-			if( shapeItems[inundItems[i].number_shape[k]].n1 > 0 )
-			    elList += i2s(shapeItems[inundItems[i].number_shape[k]].n1)+":";
-			else if( shapeItems[inundItems[i].number_shape[k]].n1 <= -10 )
-			    elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
-					+ r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
-			if( shapeItems[inundItems[i].number_shape[k]].n2 > 0 )
-			    elList += i2s(shapeItems[inundItems[i].number_shape[k]].n2)+":";
-			else if( shapeItems[inundItems[i].number_shape[k]].n2 <= -10 )
-			    elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
-					+ r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+		    else {
+			if(shapeItems[inundItems[i].n[k]].n1 > 0) elList += i2s(shapeItems[inundItems[i].n[k]].n1) + ":";
+			else if(shapeItems[inundItems[i].n[k]].n1 <= SpI_StatIts)
+			    elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n1].x(),POS_PREC_DIG)) + "|"
+					  + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n1].y(),POS_PREC_DIG)) + "):";
+			if(shapeItems[inundItems[i].n[k]].n2 > 0) elList += i2s(shapeItems[inundItems[i].n[k]].n2) + ":";
+			else if(shapeItems[inundItems[i].n[k]].n2 <= SpI_StatIts)
+			    elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n2].x(),POS_PREC_DIG)) + "|"
+					  + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n2].y(),POS_PREC_DIG)) + "):";
 		    }
-		    temp.push_back( shapeItems[inundItems[i].number_shape[k]].n1 );
-		    temp.push_back( shapeItems[inundItems[i].number_shape[k]].n2 );
+		    temp.push_back(shapeItems[inundItems[i].n[k]].n1);
+		    temp.push_back(shapeItems[inundItems[i].n[k]].n2);
 		}
-		else
-		{
-		    for( int p=0; p < temp.size(); p++ )
-		    {
-			if( shapeItems[inundItems[i].number_shape[k]].n1 == temp[p] )
-			{ flag_n1 = true; flag_n2 = false; break; }
-			else { flag_n2=true; flag_n1=false; }
+		else {
+		    for(int p = 0; p < temp.size(); p++) {
+			if(shapeItems[inundItems[i].n[k]].n1 == temp[p]) { flag_n1 = true; flag_n2 = false; break; }
+			else { flag_n2 = true; flag_n1 = false; }
 		    }
-		    if( flag_n1 && temp.size()<inundItems[i].number_shape.size() )
-		    {
-			if( shapeItems[inundItems[i].number_shape[k]].n2 > 0 )
-			    elList += i2s(shapeItems[inundItems[i].number_shape[k]].n2)+":";
-			else if( shapeItems[inundItems[i].number_shape[k]].n2 <= -10 )
-			    elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
-					+ r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+		    if(flag_n1 && temp.size() < inundItems[i].n.size()) {
+			if(shapeItems[inundItems[i].n[k]].n2 > 0) elList += i2s(shapeItems[inundItems[i].n[k]].n2) + ":";
+			else if(shapeItems[inundItems[i].n[k]].n2 <= SpI_StatIts)
+			    elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n2].x(),POS_PREC_DIG)) + "|"
+					  + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n2].y(),POS_PREC_DIG)) + "):";
 
-			temp.push_back( shapeItems[inundItems[i].number_shape[k]].n2 );
+			temp.push_back(shapeItems[inundItems[i].n[k]].n2);
 		    }
-		    if( flag_n2 && temp.size()<inundItems[i].number_shape.size() )
-		    {
-			if( shapeItems[inundItems[i].number_shape[k]].n1 > 0 )
-			    elList += i2s(shapeItems[inundItems[i].number_shape[k]].n1)+":";
-			else if( shapeItems[inundItems[i].number_shape[k]].n1 <= -10 )
-			    elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
-					+ r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
-			temp.push_back(shapeItems[inundItems[i].number_shape[k]].n1);
+		    if(flag_n2 && temp.size() < inundItems[i].n.size()) {
+			if(shapeItems[inundItems[i].n[k]].n1 > 0) elList += i2s(shapeItems[inundItems[i].n[k]].n1) + ":";
+			else if(shapeItems[inundItems[i].n[k]].n1 <= SpI_StatIts)
+			    elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n1].x(),POS_PREC_DIG)) + "|"
+					  + r2s(rRnd(pnts[shapeItems[inundItems[i].n[k]].n1].y(),POS_PREC_DIG)) + "):";
+			temp.push_back(shapeItems[inundItems[i].n[k]].n1);
 		    }
 		}
 	    }
 	}
-	if( inundItems[i].number_shape.size() <= 2 )
-	{
-	    if( shapeItems[inundItems[i].number_shape[0]].n1 > 0 )
-		elList += i2s(shapeItems[inundItems[i].number_shape[0]].n1)+":";
-	    else if( shapeItems[inundItems[i].number_shape[0]].n1 <= -10 )
-		elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[0]].n1].x(),POS_PREC_DIG) ) + "|"
-			     + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[0]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
-	    if( shapeItems[inundItems[i].number_shape[0]].n2 > 0 )
-		elList += i2s(shapeItems[inundItems[i].number_shape[0]].n2)+":";
-	    else if( shapeItems[inundItems[i].number_shape[0]].n2 <= -10 )
-		elList +="(" + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[0]].n2].x(),POS_PREC_DIG) ) + "|"
-			     + r2s( rRnd(pnts[shapeItems[inundItems[i].number_shape[0]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+	if(inundItems[i].n.size() <= 2) {
+	    if(shapeItems[inundItems[i].n[0]].n1 > 0) elList += i2s(shapeItems[inundItems[i].n[0]].n1) + ":";
+	    else if(shapeItems[inundItems[i].n[0]].n1 <= SpI_StatIts)
+		elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[0]].n1].x(),POS_PREC_DIG)) + "|"
+			      + r2s(rRnd(pnts[shapeItems[inundItems[i].n[0]].n1].y(),POS_PREC_DIG)) + "):";
+	    if(shapeItems[inundItems[i].n[0]].n2 > 0) elList += i2s(shapeItems[inundItems[i].n[0]].n2) + ":";
+	    else if(shapeItems[inundItems[i].n[0]].n2 <= SpI_StatIts)
+		elList += "(" + r2s(rRnd(pnts[shapeItems[inundItems[i].n[0]].n2].x(),POS_PREC_DIG)) + "|"
+			      + r2s(rRnd(pnts[shapeItems[inundItems[i].n[0]].n2].y(),POS_PREC_DIG)) + "):";
 	}
 
-	if( inundItems[i].brush <= -10 || inundItems[i].brush == -7 )
-	{
-	    if( colors[inundItems[i].brush].alpha() < 255 )
-	    {
-		if( colors[inundItems[i].brush].rgba() == colors[-7].rgba() )
-		    elList = elList + "" + ":";
-		else
-		    elList = elList + colors[inundItems[i].brush].name().toStdString()+"-"+
-				      i2s(colors[inundItems[i].brush].alpha())+":";
+	// Brush-color process
+	if(inundItems[i].brush <= SpI_StatIts || inundItems[i].brush == SpI_DefFill) {
+	    if(colors[inundItems[i].brush].alpha() < 255) {
+		if(colors[inundItems[i].brush].rgba() == colors[SpI_DefFill].rgba()) elList += ":";
+		else elList += colors[inundItems[i].brush].name().toStdString() + "-" +
+				      i2s(colors[inundItems[i].brush].alpha()) + ":";
 	    }
-	    else elList = elList + ((colors[inundItems[i].brush].name() == colors[-7].name()) ? "" :
-				     colors[inundItems[i].brush].name().toStdString())+":";
+	    else elList += ((colors[inundItems[i].brush].name() == colors[SpI_DefFill].name()) ? "" :
+				      colors[inundItems[i].brush].name().toStdString()) + ":";
 
 	}
-	else if( inundItems[i].brush > 0  ) elList = elList + "c" + i2s(inundItems[i].brush) + ":";
+	else if(inundItems[i].brush > 0) elList += "c" + i2s(inundItems[i].brush) + ":";
 
-	if( inundItems[i].brush_img <= -10 || inundItems[i].brush_img == -5 )
-		    elList = elList + ((images[inundItems[i].brush_img] == images[-5]) ? "" :
-		    images[inundItems[i].brush_img].c_str())+"\n";
-	else if( inundItems[i].brush_img > 0  ) elList = elList + "i" +  i2s(inundItems[i].brush_img)+"\n";
+	// Brush-image process
+	if(inundItems[i].brushImg <= SpI_StatIts || inundItems[i].brushImg == SpI_DefFillImg)
+	    elList += ((images[inundItems[i].brushImg] == images[SpI_DefFillImg]) ? string("") :
+		    images[inundItems[i].brushImg].c_str()) + "\n";
+	else if(inundItems[i].brushImg > 0) elList += "i" + i2s(inundItems[i].brushImg) + "\n";
     }
     XMLNode chCtx("attr");
-    chCtx.setAttr("name",_("Elementary figure"));
-    if(devW && elList != elFD->elLst)
-    {
-	chCtx.setAttr("id","elLst")->setAttr("noMerge","1")->setAttr("prev",elFD->elLst)->setText(elList);
+    chCtx.setAttr("name", _("Elementary figure"));
+    if(devW && elList != elFD->elLst) {
+	chCtx.setAttr("id", "elLst")->setAttr("noMerge", "1")->setAttr("prev", elFD->elLst)->setText(elList);
 	devW->chLoadCtx(chCtx, "", "elLst");
     }
     stAttrs.push_back(std::make_pair("elLst",elList));
     elFD->elLst = elList;
     //devW->chRecord(*XMLNode("attr").setAttr("id","elLst")->setAttr("noMerge","1")->setAttr("prev",elFD->elLst)->setText(elList));
 
-    //- Write shapes points to data model -
-    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++ )
-	if(pi->first > 0 )
-	{
-	    PntMap::iterator pt = elFD->shapePnts_temp.find(pi->first);
-	    QPointF pnt_next = QPointF(rRnd(pi->second.x(),POS_PREC_DIG), rRnd(pi->second.y(),POS_PREC_DIG));
-	    if( pt != elFD->shapePnts_temp.end() )
-	    {
-		QPointF pnt_prev = QPointF(rRnd(pt->second.x(),POS_PREC_DIG), rRnd(pt->second.y(),POS_PREC_DIG));
-		if( pnt_prev != pnt_next )
-		{
-		    chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"x")->setAttr("prev",r2s(pnt_prev.x(),POS_PREC_DIG))->setText(r2s(pnt_next.x(),POS_PREC_DIG));
-		    chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"y")->setAttr("prev",r2s(pnt_prev.y(),POS_PREC_DIG))->setText(r2s(pnt_next.y(),POS_PREC_DIG));
-		}
+    //Write dynamic shapes points to the data model
+    for(PntMap::iterator pi = pnts.begin(); pi != pnts.end(); pi++) {
+	if(pi->first <= 0) continue;
+	PntMap::iterator pt = elFD->shapePnts_temp.find(pi->first);
+	QPointF pnt_next = QPointF(rRnd(pi->second.x(),POS_PREC_DIG), rRnd(pi->second.y(),POS_PREC_DIG));
+	if(pt != elFD->shapePnts_temp.end()) {
+	    QPointF pnt_prev = QPointF(rRnd(pt->second.x(),POS_PREC_DIG), rRnd(pt->second.y(),POS_PREC_DIG));
+	    if(pnt_prev != pnt_next) {
+		chCtx.childAdd("attr")->setAttr("id", "p"+i2s(pi->first)+"x")->setAttr("prev", r2s(pnt_prev.x(),POS_PREC_DIG))->setText(r2s(pnt_next.x(),POS_PREC_DIG));
+		chCtx.childAdd("attr")->setAttr("id", "p"+i2s(pi->first)+"y")->setAttr("prev", r2s(pnt_prev.y(),POS_PREC_DIG))->setText(r2s(pnt_next.y(),POS_PREC_DIG));
 	    }
-	    else
-	    {
-		chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"x")->setAttr("prev","0")->setText(r2s(pnt_next.x(),POS_PREC_DIG));
-		chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"y")->setAttr("prev","0")->setText(r2s(pnt_next.y(),POS_PREC_DIG));
-	    }
-	    stAttrs.push_back(std::make_pair("p"+i2s(pi->first)+"x",r2s(pnt_next.x())));
-	    stAttrs.push_back(std::make_pair("p"+i2s(pi->first)+"y",r2s(pnt_next.y())));
 	}
-	elFD->shapePnts_temp = elFD->shapePnts;
-    //- Write shapes widths to data model -
-    for( WidthMap::iterator pi = widths.begin(); pi != widths.end(); pi++ )
-	if(pi->first > 0 )
-	{
-	    WidthMap::iterator pt = elFD->shapeWidths_temp.find(pi->first);
-	    float wdt_next = rRnd(pi->second, POS_PREC_DIG);
+	else {
+	    chCtx.childAdd("attr")->setAttr("id", "p"+i2s(pi->first)+"x")->setAttr("prev", "0")->setText(r2s(pnt_next.x(),POS_PREC_DIG));
+	    chCtx.childAdd("attr")->setAttr("id", "p"+i2s(pi->first)+"y")->setAttr("prev", "0")->setText(r2s(pnt_next.y(),POS_PREC_DIG));
+	}
+	stAttrs.push_back(std::make_pair("p"+i2s(pi->first)+"x",r2s(pnt_next.x())));
+	stAttrs.push_back(std::make_pair("p"+i2s(pi->first)+"y",r2s(pnt_next.y())));
+    }
+    elFD->shapePnts_temp = elFD->shapePnts;
 
-	    if( pt != elFD->shapeWidths_temp.end() )
-	    {
-		float wdt_prev = rRnd(pt->second, POS_PREC_DIG);
-		if( wdt_prev != wdt_next )
-		    chCtx.childAdd("attr")->setAttr("id","w"+i2s(pi->first))->setAttr("prev",r2s(wdt_prev,POS_PREC_DIG))->setText(r2s(wdt_next,POS_PREC_DIG));
-	    }
-	    else
-		chCtx.childAdd("attr")->setAttr("id","w"+i2s(pi->first))->setAttr("prev","0")->setText(r2s(wdt_next,POS_PREC_DIG));
+    //Write dynamic shapes widths to the data model
+    for(WidthMap::iterator pi = widths.begin(); pi != widths.end(); pi++) {
+	if(pi->first <= 0) continue;
+	WidthMap::iterator pt = elFD->shapeWidths_temp.find(pi->first);
+	float wdt_next = rRnd(pi->second, POS_PREC_DIG);
+
+	if(pt != elFD->shapeWidths_temp.end()) {
+	    float wdt_prev = rRnd(pt->second, POS_PREC_DIG);
+	    if(wdt_prev != wdt_next)
+		chCtx.childAdd("attr")->setAttr("id", "w"+i2s(pi->first))->setAttr("prev", r2s(wdt_prev,POS_PREC_DIG))->setText(r2s(wdt_next,POS_PREC_DIG));
+	}
+	else
+	    chCtx.childAdd("attr")->setAttr("id", "w"+i2s(pi->first))->setAttr("prev", "0")->setText(r2s(wdt_next,POS_PREC_DIG));
 	    stAttrs.push_back(std::make_pair("w"+i2s(pi->first),r2s(rRnd(pi->second,POS_PREC_DIG))));
-	}
+    }
     elFD->shapeWidths_temp = elFD->shapeWidths;
-     //- Write shapes colors to data model -
-    for( ColorMap::iterator pi = colors.begin(); pi != colors.end(); pi++ )
-	if(pi->first > 0 )
-	{
-	    ColorMap::iterator pt = elFD->shapeColors_temp.find(pi->first);
-	    QColor clr_next = pi->second;
 
-	    if( pt != elFD->shapeColors_temp.end() )
-	    {
-		QColor clr_prev = pt->second;
-		if( clr_prev != clr_next )
-		{
-		    if( clr_next.alpha() < 255 )
-			chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev",clr_prev.name().toStdString() + "-" + i2s(clr_prev.alpha()))->setText(clr_next.name().toStdString() + "-" + i2s(clr_next.alpha()));
-		    else chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev",clr_prev.name().toStdString())->setText(clr_next.name().toStdString());
-		}
+    //Write dynamic shapes colors to the data model
+    for(ColorMap::iterator pi = colors.begin(); pi != colors.end(); pi++) {
+	if(pi->first <= 0) continue;
+	ColorMap::iterator pt = elFD->shapeColors_temp.find(pi->first);
+	QColor clr_next = pi->second;
+
+	if(pt != elFD->shapeColors_temp.end()) {
+	    QColor clr_prev = pt->second;
+	    if(clr_prev != clr_next) {
+		if(clr_next.alpha() < 255)
+		    chCtx.childAdd("attr")->setAttr("id", "c"+i2s(pi->first))->
+			setAttr("prev", clr_prev.name().toStdString() + "-" + i2s(clr_prev.alpha()))->
+			setText(clr_next.name().toStdString() + "-" + i2s(clr_next.alpha()));
+		else chCtx.childAdd("attr")->setAttr("id", "c"+i2s(pi->first))->
+			setAttr("prev", clr_prev.name().toStdString())->setText(clr_next.name().toStdString());
 	    }
-	    else
-	    {
-		if( clr_next.alpha() < 255 )
-		    chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString() + "-" + i2s(clr_next.alpha()));
-		else chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString());
+	}
+	else {
+	    if(clr_next.alpha() < 255)
+		chCtx.childAdd("attr")->setAttr("id", "c"+i2s(pi->first))->
+		    setAttr("prev", "black")->setText(clr_next.name().toStdString() + "-" + i2s(clr_next.alpha()));
+		else chCtx.childAdd("attr")->setAttr("id", "c"+i2s(pi->first))->setAttr("prev", "black")->setText(clr_next.name().toStdString());
 	    }
-	    if( pi->second.alpha() < 255 )
+	    if(pi->second.alpha() < 255)
 		stAttrs.push_back(std::make_pair("c"+i2s(pi->first),pi->second.name().toStdString()+"-"+i2s(pi->second.alpha())));
 	    else stAttrs.push_back(std::make_pair("c"+i2s(pi->first),pi->second.name().toStdString()));
-	}
+    }
     elFD->shapeColors_temp = elFD->shapeColors;
-     //- Write fills images to data model -
-    for( ImageMap::iterator pi = images.begin(); pi != images.end(); pi++ )
-	if(pi->first > 0 )
-	{
-	    ImageMap::iterator pt = elFD->shapeImages_temp.find(pi->first);
-	    string img_next = pi->second;
 
-	    if( pt != elFD->shapeImages_temp.end() )
-	    {
-		string img_prev = pt->second;
-		if( img_prev != img_next )
-		    chCtx.childAdd("attr")->setAttr("id","i"+i2s(pi->first))->setAttr("prev",img_prev)->setText(img_next);
-	    }
-	    else chCtx.childAdd("attr")->setAttr("id","i"+i2s(pi->first))->setAttr("prev","")->setText(img_next);
-	    stAttrs.push_back(std::make_pair("i"+i2s(pi->first),pi->second.c_str()));
+    //Write dynamic fills images to the data model
+    for(ImageMap::iterator pi = images.begin(); pi != images.end(); pi++) {
+	if(pi->first <= 0) continue;
+	ImageMap::iterator pt = elFD->shapeImages_temp.find(pi->first);
+	string img_next = pi->second;
+
+	if(pt != elFD->shapeImages_temp.end()) {
+	    string img_prev = pt->second;
+	    if(img_prev != img_next)
+		chCtx.childAdd("attr")->setAttr("id", "i"+i2s(pi->first))->setAttr("prev", img_prev)->setText(img_next);
 	}
+	else chCtx.childAdd("attr")->setAttr("id", "i"+i2s(pi->first))->setAttr("prev", "")->setText(img_next);
+	stAttrs.push_back(std::make_pair("i"+i2s(pi->first),pi->second.c_str()));
+    }
     elFD->shapeImages_temp = elFD->shapeImages;
-     //- Write shapes styles to data model -
-    for( StyleMap::iterator pi = styles.begin(); pi != styles.end(); pi++ )
-	if(pi->first > 0 )
-	{
-	    StyleMap::iterator pt = elFD->shapeStyles_temp.find(pi->first);
-	    Qt::PenStyle stl_next = pi->second;
 
-	    if( pt != elFD->shapeStyles_temp.end() )
-	    {
-		Qt::PenStyle stl_prev = pt->second;
-		if( stl_prev != stl_next )
-		    chCtx.childAdd("attr")->setAttr("id","s"+i2s(pi->first))->setAttr("prev",i2s(stl_prev-1))->setText(i2s(stl_next-1));
-	    }
-	    else chCtx.childAdd("attr")->setAttr("id","s"+i2s(pi->first))->setAttr("prev","0")->setText(i2s(stl_next-1));
-	    stAttrs.push_back(std::make_pair("s"+i2s(pi->first),i2s(pi->second-1)));
+    //Write dynamic shapes styles to the data model
+    for(StyleMap::iterator pi = styles.begin(); pi != styles.end(); pi++) {
+	if(pi->first <= 0) continue;
+	StyleMap::iterator pt = elFD->shapeStyles_temp.find(pi->first);
+	Qt::PenStyle stl_next = pi->second;
+
+	if(pt != elFD->shapeStyles_temp.end()) {
+	    Qt::PenStyle stl_prev = pt->second;
+	    if(stl_prev != stl_next)
+		chCtx.childAdd("attr")->setAttr("id", "s"+i2s(pi->first))->setAttr("prev", i2s(stl_prev-1))->setText(i2s(stl_next-1));
 	}
+	else chCtx.childAdd("attr")->setAttr("id", "s"+i2s(pi->first))->setAttr("prev", "0")->setText(i2s(stl_next-1));
+	stAttrs.push_back(std::make_pair("s"+i2s(pi->first),i2s(pi->second-1)));
+    }
+
     if(stAttrs.size()) w->attrsSet(stAttrs);
     elFD->shapeStyles_temp = elFD->shapeStyles;
     if(devW && (chCtx.attr("id").size() || chCtx.childSize())) devW->chRecord(chCtx);
-    devW->setSelect(true,false);
+    devW->setSelect(true, false);
 }
 
+
+//!!!! Continue for the code cleun up from here !!!!
 void ShapeElFigure::initShapeItems( const QPointF &pos, QVector<int> &items_array, WdgView *w )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
@@ -1152,7 +1127,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 			connect( actDynamicFillColor, SIGNAL(triggered()), elFD, SLOT(dynamic()) );
 			menu.addAction(actDynamicFillColor);
 		    }
-		    if( inundItems[i].brush_img <= -5 )
+		    if( inundItems[i].brushImg <= -5 )
 		    {
 			QAction *actDynamicFillImage = new QAction( _("Make fill image dynamic"), w->mainWin() );
 			actDynamicFillImage->setObjectName("d_fill_image");
@@ -1160,7 +1135,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 			connect( actDynamicFillImage, SIGNAL(triggered()), elFD, SLOT(dynamic()) );
 			menu.addAction(actDynamicFillImage);
 		    }
-		    else if( inundItems[i].brush_img > 0 )
+		    else if( inundItems[i].brushImg > 0 )
 		    {
 			QAction *actDynamicFillImage = new QAction( _("Make fill image static"), w->mainWin() );
 			actDynamicFillImage->setObjectName("s_fill_image");
@@ -1298,20 +1273,20 @@ void ShapeElFigure::toolAct( QAction *act )
 		}
 	    for(int i = 0; i < inundItems.size(); i++)
 	    {
-		for(int j = 0; j < inundItems[i].number_shape.size(); j++)
+		for(int j = 0; j < inundItems[i].n.size(); j++)
 		    for(int k = 0; k < copy_index.size(); k++)
-			if(inundItems[i].number_shape[j] == copy_index[k])
+			if(inundItems[i].n[j] == copy_index[k])
 		    	    inund_figs.push_back(index_array[k]);
-		if(inund_figs.size() == inundItems[i].number_shape.size())	inund_map[i] = inund_figs;
+		if(inund_figs.size() == inundItems[i].n.size())	inund_map[i] = inund_figs;
 		inund_figs.clear();
 	    }
 	    for(map<int, QVector<int> >::iterator pi = inund_map.begin(); pi != inund_map.end(); pi++)
 	    {
-		inundItems.push_back(inundationItem(createInundationPath(pi->second,pnts,w),
-			inundItems[pi->first].brush, inundItems[pi->first].brush_img,	pi->second,pi->second));
+		inundItems.push_back(inundationItem(createInundationPath(pi->second,pnts,w),pi->second,
+			inundItems[pi->first].brush,inundItems[pi->first].brushImg));
 		inundationItem &newIt = inundItems[inundItems.size()-1];
 		if(!vrng(newIt.brush,SpI_StatIts+1,0)) newIt.brush = elFD->appendColor(clrs[newIt.brush],(newIt.brush <= SpI_StatIts));
-		if(!vrng(newIt.brush_img,SpI_StatIts+1,0)) newIt.brush_img = elFD->appendImage(imgs[newIt.brush_img],(newIt.brush_img <= SpI_StatIts));
+		if(!vrng(newIt.brushImg,SpI_StatIts+1,0)) newIt.brushImg = elFD->appendImage(imgs[newIt.brushImg],(newIt.brushImg <= SpI_StatIts));
 	    }
 	    flag_copy = flag_A = true;
 	    if(rect_array.size())
@@ -1341,10 +1316,10 @@ void ShapeElFigure::toolAct( QAction *act )
 	    for(int j = 0; j < inundItems.size(); j++)
 	    {
 		fig_col = 0;
-		for(int p = 0; p < inundItems[j].number_shape.size(); p++)
+		for(int p = 0; p < inundItems[j].n.size(); p++)
 		    for(int i = 0; i < index_array.size(); i++)
-			if(inundItems[j].number_shape[p] == index_array[i]) fig_col++;
-		if(fig_col == inundItems[j].number_shape.size())	// addition the fill to the container
+			if(inundItems[j].n[p] == index_array[i]) fig_col++;
+		if(fig_col == inundItems[j].n.size())	// addition the fill to the container
 		    rise_fill.push_back(j);
 	    }
 	    //>> Replacing the fills
@@ -1367,11 +1342,11 @@ void ShapeElFigure::toolAct( QAction *act )
 		    }
 		    shapeItems[shapeItems.size()-1] = item_temp;
 		    for(int j = 0; j < inundItems.size(); j++)
-			for(int p = 0; p < inundItems[j].number_shape.size(); p++)
-			    if(inundItems[j].number_shape[p] == index_array_inund)
-				inundItems[j].number_shape[p] = shapeItems.size()-1;
-			    else if(inundItems[j].number_shape[p] > index_array_inund)
-				inundItems[j].number_shape[p]--;
+			for(int p = 0; p < inundItems[j].n.size(); p++)
+			    if(inundItems[j].n[p] == index_array_inund)
+				inundItems[j].n[p] = shapeItems.size()-1;
+			    else if(inundItems[j].n[p] > index_array_inund)
+				inundItems[j].n[p]--;
 		}
 	}
 	else if(status_hold && (index_array_copy.size() || (index_array_copy.size() == 0 && (index_array.size() && index_array[0] != -1))))
@@ -1384,10 +1359,10 @@ void ShapeElFigure::toolAct( QAction *act )
 	    for(int j = 0; j < inundItems.size(); j++)
 	    {
 		fig_col = 0;
-		for(int p = 0; p < inundItems[j].number_shape.size(); p++)
+		for(int p = 0; p < inundItems[j].n.size(); p++)
 		    for(int i = 0; i < index_array_copy.size(); i++)
-			if(inundItems[j].number_shape[p] == index_array_copy[i]) fig_col++;
-		if(fig_col == inundItems[j].number_shape.size()) rise_fill.push_back(j);
+			if(inundItems[j].n[p] == index_array_copy[i]) fig_col++;
+		if(fig_col == inundItems[j].n.size()) rise_fill.push_back(j);
 	    }
 	    for(unsigned i = 0; i < rise_fill.size(); i++) inundItems.push_back(inundItems[rise_fill[i]]);
 	    for(unsigned i = 0, off = 0; i < rise_fill.size(); i++, off++) inundItems.remove(rise_fill[i] - off);
@@ -1408,11 +1383,9 @@ void ShapeElFigure::toolAct( QAction *act )
 		    }
 		    shapeItems[shapeItems.size()-1] = item_temp;
 		    for(int j = 0; j < inundItems.size(); j++)
-			for(int p = 0; p < inundItems[j].number_shape.size(); p++)
-			    if(inundItems[j].number_shape[p] == index_array_inund)
-				inundItems[j].number_shape[p] = shapeItems.size()-1;
-			    else if(inundItems[j].number_shape[p] > index_array_inund)
-				inundItems[j].number_shape[p]--;
+			for(int p = 0; p < inundItems[j].n.size(); p++)
+			    if(inundItems[j].n[p] == index_array_inund)		inundItems[j].n[p] = shapeItems.size()-1;
+			    else if(inundItems[j].n[p] > index_array_inund)	inundItems[j].n[p]--;
 		}
 	}
 	else if(index_temp != -1)
@@ -1420,9 +1393,9 @@ void ShapeElFigure::toolAct( QAction *act )
 	    shapeItems.push_back(shapeItems[index_temp]);
 	    shapeItems.remove(index_temp);
 	    for(int j = 0; j < inundItems.size(); j++)
-		for(int p = 0; p < inundItems[j].number_shape.size(); p++)
-		    if(inundItems[j].number_shape[p] == index_temp)	inundItems[j].number_shape[p] = shapeItems.size()-1;
-		    else if(inundItems[j].number_shape[p] > index_temp)	inundItems[j].number_shape[p]--;
+		for(int p = 0; p < inundItems[j].n.size(); p++)
+		    if(inundItems[j].n[p] == index_temp)	inundItems[j].n[p] = shapeItems.size()-1;
+		    else if(inundItems[j].n[p] > index_temp)	inundItems[j].n[p]--;
 	}
 	shapeSave(w);
 	itemInMotion = 0;
@@ -1447,10 +1420,10 @@ void ShapeElFigure::toolAct( QAction *act )
 	    for(int j = 0; j < inundItems.size(); j++)
 	    {
 		fig_col = 0;
-		for(int p = 0; p < inundItems[j].number_shape.size(); p++)
+		for(int p = 0; p < inundItems[j].n.size(); p++)
 		    for(int i = 0; i < index_array.size(); i++)
-			if(inundItems[j].number_shape[p] == index_array[i]) fig_col++;
-		if(fig_col == inundItems[j].number_shape.size()) low_fill.push_back(j);
+			if(inundItems[j].n[p] == index_array[i]) fig_col++;
+		if(fig_col == inundItems[j].n.size()) low_fill.push_back(j);
 	    }
 	    for(int i = low_fill.size()-1, off = 0; i > -1; i--, off++)   inundItems.prepend(inundItems[low_fill[i] + off]);
 	    for(unsigned i = 0, off = 0; i < low_fill.size(); i++, off++) inundItems.remove(low_fill[i] + low_fill.size() - off);
@@ -1471,11 +1444,9 @@ void ShapeElFigure::toolAct( QAction *act )
 		    }
 		    shapeItems[0] = item_temp;
 		    for(int j = 0; j < inundItems.size(); j++)
-			for(int p = 0; p < inundItems[j].number_shape.size(); p++)
-			    if(inundItems[j].number_shape[p] == index_array_inund)
-				inundItems[j].number_shape[p] = 0;
-			    else if(inundItems[j].number_shape[p] < index_array_inund)
-				inundItems[j].number_shape[p]++;
+			for(int p = 0; p < inundItems[j].n.size(); p++)
+			    if(inundItems[j].n[p] == index_array_inund)		inundItems[j].n[p] = 0;
+			    else if(inundItems[j].n[p] < index_array_inund)	inundItems[j].n[p]++;
 		}
 	}
 	else if(status_hold && (index_array_copy.size() || (index_array_copy.size() == 0 && (index_array.size() && index_array[0] != -1))))
@@ -1488,10 +1459,10 @@ void ShapeElFigure::toolAct( QAction *act )
 	    for(int j = 0; j < inundItems.size(); j++)
 	    {
 		fig_col = 0;
-		for(int p = 0; p < inundItems[j].number_shape.size(); p++)
+		for(int p = 0; p < inundItems[j].n.size(); p++)
 		    for(int i = 0; i < index_array_copy.size(); i++)
-			if(inundItems[j].number_shape[p] == index_array_copy[i]) fig_col++;
-		if(fig_col == inundItems[j].number_shape.size()) low_fill.push_back(j);
+			if(inundItems[j].n[p] == index_array_copy[i]) fig_col++;
+		if(fig_col == inundItems[j].n.size()) low_fill.push_back(j);
 	    }
 	    for(int i = low_fill.size()-1, off = 0; i > -1; i--, off++)   inundItems.prepend(inundItems[low_fill[i] + off]);
 	    for(unsigned i = 0, off = 0; i < low_fill.size(); i++, off++) inundItems.remove(low_fill[i] + low_fill.size() - off);
@@ -1512,11 +1483,9 @@ void ShapeElFigure::toolAct( QAction *act )
 		    }
 		    shapeItems[0] = item_temp;
 		    for(int j = 0; j < inundItems.size(); j++)
-			for(int p = 0; p < inundItems[j].number_shape.size(); p++)
-			    if(inundItems[j].number_shape[p] == index_array_inund)
-				inundItems[j].number_shape[p] = 0;
-			    else if(inundItems[j].number_shape[p] < index_array_inund)
-				inundItems[j].number_shape[p]++;
+			for(int p = 0; p < inundItems[j].n.size(); p++)
+			    if(inundItems[j].n[p] == index_array_inund)		inundItems[j].n[p] = 0;
+			    else if(inundItems[j].n[p] < index_array_inund)	inundItems[j].n[p]++;
 		}
 	}
 	else if(index_temp != -1)
@@ -1524,9 +1493,9 @@ void ShapeElFigure::toolAct( QAction *act )
 	    shapeItems.push_front(shapeItems[index_temp]);
 	    shapeItems.remove(index_temp + 1);
 	    for(int j = 0; j < inundItems.size(); j++)
-		for(int p = 0; p < inundItems[j].number_shape.size(); p++)
-		    if(inundItems[j].number_shape[p] == index_temp)	inundItems[j].number_shape[p] = 0;
-		    else if(inundItems[j].number_shape[p] < index_temp)	inundItems[j].number_shape[p]++;
+		for(int p = 0; p < inundItems[j].n.size(); p++)
+		    if(inundItems[j].n[p] == index_temp)	inundItems[j].n[p] = 0;
+		    else if(inundItems[j].n[p] < index_temp)	inundItems[j].n[p]++;
 	}
 	shapeSave(w);
 	itemInMotion = 0;
@@ -1925,7 +1894,7 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 				    }
 				    if( !fl_brk && status_hold )
 				    {
-					inundItems.push_back(inundationItem(inundationPath,-7,-5, inundation_vector, inundation_vector));
+					inundItems.push_back(inundationItem(inundationPath,inundation_vector,SpI_DefFill,SpI_DefFillImg));
 					fl_shapeSave = true;
 					paintImage(w);
 					w->repaint();
@@ -2106,15 +2075,15 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 				QVector<int> inund_Rebuild;
 				//>> Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array
 				for( int i = 0; i < inundItems.size(); i++ )
-				    for( int p = 0; p < inundItems[i].number_shape.size(); p++ )
+				    for( int p = 0; p < inundItems[i].n.size(); p++ )
 					for( int z = 0; z < init_array.size(); z++ )
-					    if( (inundItems[i].number_shape[p] == init_array[z]) && !inund_Rebuild.contains(i) )
+					    if( (inundItems[i].n[p] == init_array[z]) && !inund_Rebuild.contains(i) )
 						inund_Rebuild.push_back(i);
 				fl_orto_disable = true;
 				initShapeItems( ev->pos(), init_array, w );
 				fl_orto_disable = false;
 				for( int i = 0; i < inund_Rebuild.size(); i++ )
-				    inundItems[inund_Rebuild[i]].path = createInundationPath(inundItems[inund_Rebuild[i]].number_shape, pnts, w);
+				    inundItems[inund_Rebuild[i]].path = createInundationPath(inundItems[inund_Rebuild[i]].n, pnts, w);
 				index = index_temp; itemInMotion = &shapeItems[index];
 				rectItems.clear(); init_array.clear();
 			    }
@@ -2286,12 +2255,12 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 			    num_vector.clear();
 			    moveItemTo(ev->pos(), w);
 			    for(int i = 0; i < inundItems.size(); i++)
-				for(int j = 0; j < inundItems[i].number_shape.size(); j++)
+				for(int j = 0; j < inundItems[i].n.size(); j++)
 				{
 				    flag_break_move = false;
-				    if(inundItems[i].number_shape[j] == index)
+				    if(inundItems[i].n[j] == index)
 				    {
-					inundationPath = createInundationPath(inundItems[i].number_shape, pnts, w);
+					inundationPath = createInundationPath(inundItems[i].n, pnts, w);
 					inundItems[i].path = inundationPath;
 					flag_break_move = true;
 					break;
@@ -2346,7 +2315,7 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 			    if(inundItems.size() && newIt.type == ShT_Arc)
 				for(int i = 0; i < inundItems.size(); i++)
 				{
-				    if(inundItems[i].number_shape.size() == 1 && inundItems[i].number_shape[0] == index)
+				    if(inundItems[i].n.size() == 1 && inundItems[i].n[0] == index)
 				    {
 					if( rect_num == 0 || rect_num == 1 )
 					{
@@ -2356,7 +2325,7 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 					}
 					else
 					{
-					    inundItems[i].path = createInundationPath( inundItems[i].number_shape, pnts, w );
+					    inundItems[i].path = createInundationPath( inundItems[i].n, pnts, w );
 					    flag_arc_inund = true;
 					}
 				    }
@@ -2559,12 +2528,12 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 				if(index_array_copy[0] != -1 && status_hold && index_array.size() == 0)
 				    index_array = index_array_copy;//!!!!
 			    for(int i = 0; i < inundItems.size(); i++)
-				for(int j = 0; j < inundItems[i].number_shape.size(); j++)
+				for(int j = 0; j < inundItems[i].n.size(); j++)
 				{
 				    flag_in_break = false;
 				    for(int p = 0; p < index_array.size(); p++)
 				    {
-					if(index_array[p] != -1 && inundItems[i].number_shape[j] == index_array[p])
+					if(index_array[p] != -1 && inundItems[i].n[j] == index_array[p])
 					{
 					    drop_inunds.push_back(i);
 					    flag_in_break = true;
@@ -2591,9 +2560,8 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 				    elFD->dropPoint(shapeItems[index_array[p]].n5, index_array[p]);
 				    shapeItems.remove(index_array[p]);
 				    for(int j = 0; j < inundItems.size(); j++)
-					for(int k = 0; k < inundItems[j].number_shape.size(); k++)
-					    if(inundItems[j].number_shape[k] > index_array[p])
-						inundItems[j].number_shape[k]--;
+					for(int k = 0; k < inundItems[j].n.size(); k++)
+					    if(inundItems[j].n[k] > index_array[p])	inundItems[j].n[k]--;
 				    for(int i = p+1; i < index_array.size(); i++)
 					if(index_array[i] > index_array[p]) index_array[i]--;
 				}
@@ -2620,8 +2588,8 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 
 			//> deleting fill if deleted figure was in the fill's path
 			for(int i = 0; i < inundItems.size(); i++)
-			    if(shapeItems[index_del].type == 2 && inundItems[i].number_shape.size() == 1 &&
-				inundItems[i].number_shape[0] == index_del)
+			    if(shapeItems[index_del].type == 2 && inundItems[i].n.size() == 1 &&
+				inundItems[i].n[0] == index_del)
 			    {
 				inundItems.remove(i);
 				flag_arc_inund = true;
@@ -2630,9 +2598,8 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 			ind_array.push_back(index_del);
 			if(!flag_arc_inund) removeFill(ind_array, 1, w);
 			for(int i = 0; i < inundItems.size(); i++)
-			    for(int j = 0; j < inundItems[i].number_shape.size(); j++)
-				if(inundItems[i].number_shape[j] > index_del)
-				    inundItems[i].number_shape[j] -= 1;
+			    for(int j = 0; j < inundItems[i].n.size(); j++)
+				if(inundItems[i].n[j] > index_del)	inundItems[i].n[j] -= 1;
 			shapeItems.remove(index_del);
 			rectItems.clear();
 			shapeSave(w);
@@ -3280,17 +3247,17 @@ void ShapeElFigure::moveUpDown( WdgView *w )
 	    {
 		bool flag_single_arc = false;
 		for(int p = 0; newIt.type == ShT_Arc && p < inundItems.size(); p++)
-		    if(inundItems[p].number_shape.size() == 1 && inundItems[p].number_shape[0] == index)
+		    if(inundItems[p].n.size() == 1 && inundItems[p].n[0] == index)
 			flag_single_arc = true;
 		if((newIt.type == ShT_Arc && (rect_num == 3 || rect_num == 4 || rect_num == -1) && (flag_single_arc || status_hold)) ||
 			(newIt.type == ShT_Bezier && (rect_num == 2 || rect_num == 3) && status_hold))
 		    for(int i = 0; i < inundItems.size(); i++)
 		    {
 			flag_break_move = false;
-			for(int j = 0; j < inundItems[i].number_shape.size(); j++)
+			for(int j = 0; j < inundItems[i].n.size(); j++)
 			{
-			    if(inundItems[i].number_shape[j] != index) continue;
-			    inundationPath = createInundationPath(inundItems[i].number_shape, pnts, w);
+			    if(inundItems[i].n[j] != index) continue;
+			    inundationPath = createInundationPath(inundItems[i].n, pnts, w);
 			    inundItems[i].path = inundationPath;
 			    flag_break_move = true;
 			    break;
@@ -3524,23 +3491,23 @@ void ShapeElFigure::moveAll( const QPointF &pos, WdgView *w )
     if( inundItems.size() )
     {
 	for( int i = 0; i < inundItems.size(); i++ )
-	    for(int j = 0; j < inundItems[i].number_shape.size(); j++ )
+	    for(int j = 0; j < inundItems[i].n.size(); j++ )
 	    {
 		flag_break = false;
 		for(int k = 0; k < index_array.size(); k++ )
-		    if( inundItems[i].number_shape[j] == index_array[k] )
+		    if( inundItems[i].n[j] == index_array[k] )
 		    {
 			bool fl_buildPath = true;
-			if( !images[inundItems[i].brush_img].empty() )
+			if( !images[inundItems[i].brushImg].empty() )
 			{
 			    QImage img;
-			    string backimg = w->resGet(images[inundItems[i].brush_img]);
+			    string backimg = w->resGet(images[inundItems[i].brushImg]);
 			    img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
 			    if( !img.isNull() ) fl_buildPath = false;
 			}
 			if( fl_buildPath )
 			{
-			    inundationPath = createInundationPath(inundItems[i].number_shape, pnts, w);
+			    inundationPath = createInundationPath(inundItems[i].n, pnts, w);
 			    inundItems[i].path = inundationPath;
 			}
 			flag_break = true;
@@ -3561,10 +3528,10 @@ void ShapeElFigure::removeFill( QVector<int> ind_array, int count, WdgView *w )
     bool flag_ravno;
     for( int i = 0; i < count; i++ )
 	for( int j = 0; j < inundItems.size(); j++ )
-	    for( int k = 0; k < inundItems[j].number_shape.size(); k++ )
+	    for( int k = 0; k < inundItems[j].n.size(); k++ )
 	    {
 		fl_in_brk = false;
-		if( ind_array[i] == inundItems[j].number_shape[k] )
+		if( ind_array[i] == inundItems[j].n[k] )
 		{
 		    if( rem_inund.size() )
 		    {
@@ -3592,12 +3559,12 @@ void ShapeElFigure::removeFill( QVector<int> ind_array, int count, WdgView *w )
 	for( int p = 0; p < real_rem_inund.size(); p++ )
 	    if( rem_inund[j] > real_rem_inund[p] ) tmp_inund++;
 
-	for( int k = 0; k < inundItems[rem_inund[j]-tmp_inund].number_shape.size(); k++ )
+	for( int k = 0; k < inundItems[rem_inund[j]-tmp_inund].n.size(); k++ )
 	{
 	    flag_exist = false;
 	    for( int i = 0; i < count; i++ )
 	    {
-		if( inundItems[rem_inund[j]-tmp_inund].number_shape[k] == ind_array[i] )
+		if( inundItems[rem_inund[j]-tmp_inund].n[k] == ind_array[i] )
 		{
 		    flag_exist = true;
 		    break;
@@ -4116,8 +4083,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, int number, WdgView *w 
 			    w->repaint();
 			    return true;
 			}
-		    if( number == -1 )
-			inundItems.push_back( inundationItem( inundationPath_1_2, -7, -5, in_fig_num, in_fig_num ) );
+		    if(number == -1) inundItems.push_back(inundationItem(inundationPath_1_2,in_fig_num,SpI_DefFill,SpI_DefFillImg));
 		    else
 		    {
 			if(!fTransl)
@@ -4128,7 +4094,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, int number, WdgView *w 
 			else
 			{
 			    inundItems[number].path = inundationPath_1_2;
-			    inundItems[number].number_shape = in_fig_num;
+			    inundItems[number].n = in_fig_num;
 			}
 		    }
 		    return true;
@@ -4158,10 +4124,8 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, int number, WdgView *w 
 				    w->repaint();
 				    return true;
 				}
-			    if( number == -1 )
-				inundItems.push_back( inundationItem( inundationPath_1_2, -7, -5, in_fig_num, in_fig_num ) );
-			    else
-			    {
+			    if(number == -1) inundItems.push_back(inundationItem(inundationPath_1_2,in_fig_num,SpI_DefFill,SpI_DefFillImg));
+			    else {
 				if(!fTransl)
 				{
 				    inundation_vector = in_fig_num;
@@ -4170,7 +4134,7 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, int number, WdgView *w 
 				else
 				{
 				    inundItems[number].path = inundationPath_1_2;
-				    inundItems[number].number_shape = in_fig_num;
+				    inundItems[number].n = in_fig_num;
 				}
 			    }
 			    return true;
@@ -4264,23 +4228,23 @@ void ShapeElFigure::paintImage( WdgView *w )
     //Drawing all fills(inundations)
     for(int i = 0; i < inundItems.size(); i++) {
 	QImage img;
-	string backimg = w->resGet(images[inundItems[i].brush_img]);
+	string backimg = w->resGet(images[inundItems[i].brushImg]);
 	img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
 	if(shapeItems.size() == 0 || ((inundItems[i].path == newPath) && img.isNull())) continue;
 
 	//printf("TEST 10: %d: '%s'\n", i, w->id().c_str());
 
 	// Sorting the figures in each fill(inundation)
-	QVector<int> number_shape;
-	number_shape = inundItems[i].number_shape;
-	std::sort(number_shape.begin(), number_shape.end());
+	QVector<int> n;
+	n = inundItems[i].n;
+	std::sort(n.begin(), n.end());
 
 	// Making the array of the figures to be drawn before the each fill
 	vector<int> draw_before;
 	bool fl_numb;
 	for(int k = 0; k < shapeItems.size(); k++) {
 	    fl_numb = false;
-	    for(int j = 0; !fl_numb && j < number_shape.size(); j++) fl_numb = (k >= number_shape[j]);
+	    for(int j = 0; !fl_numb && j < n.size(); j++) fl_numb = (k >= n[j]);
 	    if(!fl_numb) draw_before.push_back(k);
 	}
 	//  Drawing the figures and push_bask them into the array of the already drawn figures
@@ -4317,8 +4281,8 @@ void ShapeElFigure::paintImage( WdgView *w )
 	    PntMap tmp_pnts;
 	    QVector<int> number_vector;
 	    bool fl_;
-	    for(int p = 0; p < inundItems[i].number_shape.size(); p++) {
-		const ShapeItem &cShIt = shapeItems[inundItems[i].number_shape[p]];
+	    for(int p = 0; p < inundItems[i].n.size(); p++) {
+		const ShapeItem &cShIt = shapeItems[inundItems[i].n[p]];
 		switch(cShIt.type) {
 		    case ShT_Line:
 			fl_ = false;
@@ -4378,7 +4342,7 @@ void ShapeElFigure::paintImage( WdgView *w )
 	    }
 	    number_vector.clear();
 	    fTransl = false;
-	    in_path = createInundationPath(inundItems[i].number_shape, tmp_pnts, w);
+	    in_path = createInundationPath(inundItems[i].n, tmp_pnts, w);
 	    fTransl = true;
 	    tmp_pnts.clear();
 
@@ -4396,7 +4360,7 @@ void ShapeElFigure::paintImage( WdgView *w )
 	    xMax = rRnd(xMax, POS_PREC_DIG, true); yMax = rRnd(yMax, POS_PREC_DIG, true);
 	    //xMin = floor(xMin); xMax = ceil(xMax); yMin = floor(yMin); yMax = ceil(yMax);
 
-	    in_path_rot = createInundationPath(inundItems[i].number_shape, pnts, w);
+	    in_path_rot = createInundationPath(inundItems[i].n, pnts, w);
 	    pnt_ = in_path_rot.pointAtPercent(0);
 	    double xMax_rot = pnt_.x(), xMin_rot = pnt_.x(), yMax_rot = pnt_.y(), yMin_rot = pnt_.y();
 	    t = 0.01;
@@ -4478,10 +4442,10 @@ void ShapeElFigure::paintImage( WdgView *w )
 	}
 
 	// Drawing the fills' figures
-	for(int j = 0; j < number_shape.size(); j++) {
+	for(int j = 0; j < n.size(); j++) {
 	    //  Making the resulting arrary of all figures which take part in all fills(inundations)
-	    const ShapeItem &cShIt = shapeItems[number_shape[j]];
-	    shape_inund_all.push_back(number_shape[j]);
+	    const ShapeItem &cShIt = shapeItems[n[j]];
+	    shape_inund_all.push_back(n[j]);
 	    if(widths[cShIt.borderWidth] > 0.01) {
 		int curWdth = (int)rRnd(vmin(1000,vmax(1,scaleW*widths[cShIt.borderWidth])));
 		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
@@ -5056,16 +5020,16 @@ void ElFigDt::dynamic( )
 	case 8:
 	    if( elF->index == -1 && elF->fill_index != -1 )
 	    {
-		if( inundItems[elF->fill_index].brush_img == -5 || inundItems[elF->fill_index].brush_img <= -10 )
+		if( inundItems[elF->fill_index].brushImg == -5 || inundItems[elF->fill_index].brushImg <= -10 )
 		{
-		    temp_fi = images[inundItems[elF->fill_index].brush_img];
-		    tmp = inundItems[elF->fill_index].brush_img;
+		    temp_fi = images[inundItems[elF->fill_index].brushImg];
+		    tmp = inundItems[elF->fill_index].brushImg;
 		    real = appendImage( temp_fi, false );
 		}
-		else if( inundItems[elF->fill_index].brush_img > 0 )
+		else if( inundItems[elF->fill_index].brushImg > 0 )
 		{
-		    temp_fi = images[inundItems[elF->fill_index].brush_img];
-		    tmp = inundItems[elF->fill_index].brush_img;
+		    temp_fi = images[inundItems[elF->fill_index].brushImg];
+		    tmp = inundItems[elF->fill_index].brushImg;
 		    real = appendImage( temp_fi, true );
 		}
 	    }
@@ -5127,8 +5091,8 @@ void ElFigDt::dynamic( )
 	    {
 		if( inundItems[i].brush > 0 )
 		    inundItems[i].brush = appendColor(colors[inundItems[i].brush], true );
-		if( inundItems[i].brush_img > 0 )
-		    inundItems[i].brush_img = appendImage( images[inundItems[i].brush_img], true );
+		if( inundItems[i].brushImg > 0 )
+		    inundItems[i].brushImg = appendImage( images[inundItems[i].brushImg], true );
 	    }
 	    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); )
 	    {
@@ -5246,7 +5210,7 @@ void ElFigDt::dynamic( )
 		    colors.erase(tmp);
 		break;
 	    case 8:
-		inundItems[elF->fill_index].brush_img = real;
+		inundItems[elF->fill_index].brushImg = real;
 		if( tmp != -5 )
 		    images.erase(tmp);
 		break;
@@ -5396,11 +5360,11 @@ void ElFigDt::properties( )
 	f_color->setValue((*colors)[inundItems[elF->fill_index].brush].name() + "-" +
 			    QString(i2s( (*colors)[inundItems[elF->fill_index].brush].alpha() ).c_str()));
 	if(inundItems[elF->fill_index].brush == -7) fc_check->setChecked(true);
-	f_image->setText(QString( (*images)[inundItems[elF->fill_index].brush_img].c_str()));
-	if(inundItems[elF->fill_index].brush_img == -5) fi_check->setChecked(true);
+	f_image->setText(QString( (*images)[inundItems[elF->fill_index].brushImg].c_str()));
+	if(inundItems[elF->fill_index].brushImg == -5) fi_check->setChecked(true);
 	if( inundItems[elF->fill_index].brush > 0 ) fc_c->setChecked(true);
 	else fc_c->setChecked(false);
-	if( inundItems[elF->fill_index].brush_img > 0 ) fi_c->setChecked(true);
+	if( inundItems[elF->fill_index].brushImg > 0 ) fi_c->setChecked(true);
 	else fi_c->setChecked(false);
 	propDlg.edLay()->setColumnMinimumWidth ( 2, 100 );
 	propDlg.edLay()->setColumnStretch ( 2, 1 );
@@ -5625,9 +5589,9 @@ void ElFigDt::properties( )
 	    }
 	    //>> Detecting if there is a necessity to rebuild the fill's path and if it is so push_back the fill to the array
 	    for( int i = 0; i < inundItems.size(); i++ )
-		for( int p = 0; p < inundItems[i].number_shape.size(); p++ )
+		for( int p = 0; p < inundItems[i].n.size(); p++ )
 		    for( int z = 0; z < items_array_up.size(); z++ )
-			if( (inundItems[i].number_shape[p] == items_array_up[z]) && !inund_Rebuild.contains(i) )
+			if( (inundItems[i].n[p] == items_array_up[z]) && !inund_Rebuild.contains(i) )
 			    inund_Rebuild.push_back(i);
 	    p1_x->setReadOnly( fl_n1Block );p1_y->setReadOnly( fl_n1Block );
 	    p2_x->setReadOnly( fl_n2Block );p2_y->setReadOnly( fl_n2Block );
@@ -5695,26 +5659,26 @@ void ElFigDt::properties( )
 	    {
 		if(!f_image->text().isEmpty())
 		{
-		    if(inundItems[elF->fill_index].brush_img == -5)
+		    if(inundItems[elF->fill_index].brushImg == -5)
 		    {
 			k = -10;
 			while((*images).find(k) != (*images).end()) k--;
 			(*images).insert(std::pair<int, string>(k,f_image->text().toStdString()));
-			inundItems[elF->fill_index].brush_img = k;
+			inundItems[elF->fill_index].brushImg = k;
 		    }
-		    else (*images)[inundItems[elF->fill_index].brush_img] = f_image->text().toStdString();
+		    else (*images)[inundItems[elF->fill_index].brushImg] = f_image->text().toStdString();
 		}
-		else if(f_image->text().isEmpty() && !(*images)[inundItems[elF->fill_index].brush_img].empty())
+		else if(f_image->text().isEmpty() && !(*images)[inundItems[elF->fill_index].brushImg].empty())
 		{
-		    (*images).erase(inundItems[elF->fill_index].brush_img);
-		    inundItems[elF->fill_index].brush_img = -5;
-		    inundItems[elF->fill_index].path = elF->createInundationPath(inundItems[elF->fill_index].number_shape, pnts, w);
+		    (*images).erase(inundItems[elF->fill_index].brushImg);
+		    inundItems[elF->fill_index].brushImg = -5;
+		    inundItems[elF->fill_index].path = elF->createInundationPath(inundItems[elF->fill_index].n, pnts, w);
 		}
 	    }
-	    else if(fi_en->isChecked() && fi_check->isChecked() && inundItems[elF->fill_index].brush_img != -5)
+	    else if(fi_en->isChecked() && fi_check->isChecked() && inundItems[elF->fill_index].brushImg != -5)
 	    {
-		(*images).erase(inundItems[elF->fill_index].brush_img);
-		inundItems[elF->fill_index].brush_img = -5;
+		(*images).erase(inundItems[elF->fill_index].brushImg);
+		inundItems[elF->fill_index].brushImg = -5;
 	    }
 	    if(fc_en->isChecked() &&  fc_c->isEnabled() && ((fc_c->isChecked() &&
 		(inundItems[elF->fill_index].brush <= -10 || inundItems[elF->fill_index].brush == -7)) ||
@@ -5724,8 +5688,8 @@ void ElFigDt::properties( )
 		dynamic();
 	    }
 	    if(fi_en->isChecked() && fi_c->isEnabled() && ((fi_c->isChecked() &&
-		(inundItems[elF->fill_index].brush_img <= -10 || inundItems[elF->fill_index].brush_img == -5)) ||
-		(!fi_c->isChecked() && inundItems[elF->fill_index].brush_img > 0)))
+		(inundItems[elF->fill_index].brushImg <= -10 || inundItems[elF->fill_index].brushImg == -5)) ||
+		(!fi_c->isChecked() && inundItems[elF->fill_index].brushImg > 0)))
 	    {
 		elF->rect_dyn = -1; elF->dyn_num = 8;
 		dynamic();
@@ -6386,7 +6350,7 @@ void ElFigDt::properties( )
 	    //>> Rebuilding the fills' paths if the current figure is included to it
 	    for(int i = 0; i < inund_Rebuild.size(); i++)
 		if(elF->status_hold)
-		    inundItems[inund_Rebuild[i]].path = elF->createInundationPath(inundItems[inund_Rebuild[i]].number_shape, pnts, w);
+		    inundItems[inund_Rebuild[i]].path = elF->createInundationPath(inundItems[inund_Rebuild[i]].n, pnts, w);
 		else	//>> Removing the fills if the current figure is included to their paths
 		{
 		    inundItems.remove(inund_Rebuild[i]);
