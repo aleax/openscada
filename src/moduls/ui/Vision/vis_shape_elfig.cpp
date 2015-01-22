@@ -3755,22 +3755,28 @@ QPainterPath ShapeElFigure::painterPath( float width, float bWidth, int type, do
     QPainterPath circlePath = newPath;
     width = rRnd(vmax(1,width));
     bWidth = rRnd(vmax(1,bWidth));
+    pBeg = QPointF(rRnd(pBeg.x(),POS_PREC_DIG,true), rRnd(pBeg.y(),POS_PREC_DIG,true));
+    pEnd = QPointF(rRnd(pEnd.x(),POS_PREC_DIG,true), rRnd(pEnd.y(),POS_PREC_DIG,true));
 
     switch(type) {
 	case ShT_Line:
 	    bWidth = bWidth/2;
-	    circlePath.moveTo(rRnd(pBeg.x()+rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).x(),POS_PREC_DIG,true),
-			      rRnd(pBeg.y()-rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).y(),POS_PREC_DIG,true));
-	    circlePath.lineTo(rRnd(pBeg.x()+rotate(QPointF(length(pEnd,pBeg)+bWidth,-(width/2+bWidth)),ang).x(),POS_PREC_DIG,true),
-			      rRnd(pBeg.y()-rotate(QPointF(length(pEnd,pBeg)+bWidth,-(width/2+bWidth)),ang).y(),POS_PREC_DIG,true));
-	    circlePath.lineTo(rRnd(pBeg.x()+rotate(QPointF(length(pEnd,pBeg)+bWidth,(width/2+bWidth)),ang).x(),POS_PREC_DIG,true),
-			      rRnd(pBeg.y()-rotate(QPointF(length(pEnd,pBeg)+bWidth,(width/2+bWidth)),ang).y(),POS_PREC_DIG,true));
-	    circlePath.lineTo(rRnd(pBeg.x()+rotate(QPointF(-bWidth,(width/2+bWidth)),ang).x(),POS_PREC_DIG,true),
-			      rRnd(pBeg.y()-rotate(QPointF(-bWidth,(width/2+bWidth)),ang).y(),POS_PREC_DIG,true));
+	    circlePath.moveTo(pBeg.x() + rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).x(),
+			      pBeg.y() - rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).y());
+	    circlePath.lineTo(pBeg.x() + rotate(QPointF(length(pEnd,pBeg)+bWidth,-(width/2+bWidth)),ang).x(),
+			      pBeg.y() - rotate(QPointF(length(pEnd,pBeg)+bWidth,-(width/2+bWidth)),ang).y());
+	    circlePath.lineTo(pBeg.x() + rotate(QPointF(length(pEnd,pBeg)+bWidth,(width/2+bWidth)),ang).x(),
+			      pBeg.y() - rotate(QPointF(length(pEnd,pBeg)+bWidth,(width/2+bWidth)),ang).y());
+	    circlePath.lineTo(pBeg.x() + rotate(QPointF(-bWidth,(width/2+bWidth)),ang).x(),
+			      pBeg.y() - rotate(QPointF(-bWidth,(width/2+bWidth)),ang).y());
 	    circlePath.closeSubpath();
 	    circlePath.setFillRule(Qt::WindingFill);
 	    break;
 	case ShT_Arc: {
+	    /*pCntr1 = QPointF(rRnd(pCntr1.x(),POS_PREC_DIG,true), rRnd(pCntr1.y(),POS_PREC_DIG,true));
+	    pCntr2 = QPointF(rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.y(),POS_PREC_DIG,true));
+	    pCntr3 = QPointF(rRnd(pCntr3.x(),POS_PREC_DIG,true), rRnd(pCntr3.y(),POS_PREC_DIG,true));*/
+
 	    //!!!! RealRound function using removed by painting low quality arcs.
 	    // Possible need RealRound apply only to all source points or only to begin and end points.
 	    double arc_a = length(pCntr3, pCntr1) + width/2 + bWidth/2,
@@ -3799,26 +3805,29 @@ QPainterPath ShapeElFigure::painterPath( float width, float bWidth, int type, do
 	    break;
 	}
 	case ShT_Bezier:
+	    pCntr1 = QPointF(rRnd(pCntr1.x(),POS_PREC_DIG,true), rRnd(pCntr1.y(),POS_PREC_DIG,true));
+	    pCntr2 = QPointF(rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.y(),POS_PREC_DIG,true));
+
 	    bWidth = bWidth/2;
 	    QPointF pCntr1_tmp = unRotate(pCntr1, ang, pBeg),
 		    pCntr2_tmp = unRotate(pCntr2, ang, pBeg),
-		    pEnd_tmp = QPointF( length(pEnd, pBeg) + bWidth, 0 );
-	    circlePath.moveTo(rRnd(pBeg.x()+rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).x(),POS_PREC_DIG,true),
-			      rRnd(pBeg.y()-rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).y(),POS_PREC_DIG,true));
-	    circlePath.cubicTo(QPointF(rRnd(pBeg.x()+rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()-(width/2+bWidth)),ang).x(),POS_PREC_DIG,true),
-				       rRnd(pBeg.y()-rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()-(width/2 + bWidth)),ang).y(),POS_PREC_DIG,true)),
-			       QPointF(rRnd(pBeg.x()+rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()-(width/2 + bWidth)),ang).x(),POS_PREC_DIG,true),
-				       rRnd(pBeg.y()-rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()-(width/2 + bWidth)),ang).y(),POS_PREC_DIG,true)),
-			       QPointF(rRnd(pBeg.x()+rotate(QPointF(pEnd_tmp.x(),pEnd_tmp.y()-(width/2+bWidth)),ang).x(),POS_PREC_DIG,true),
-				       rRnd(pBeg.y()-rotate(QPointF(pEnd_tmp.x(),pEnd_tmp.y()-(width/2+bWidth)),ang).y(),POS_PREC_DIG,true)));
-	    circlePath.lineTo(rRnd(pBeg.x()+rotate(QPointF(pEnd_tmp.x(),width/2+bWidth),ang).x(),POS_PREC_DIG,true),
-			      rRnd(pBeg.y()-rotate(QPointF(pEnd_tmp.x(),width/2+bWidth),ang).y(),POS_PREC_DIG,true));
-	    circlePath.cubicTo(QPointF(rRnd(pBeg.x()+rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()+width/2+bWidth),ang).x(),POS_PREC_DIG,true),
-				       rRnd(pBeg.y()-rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()+width/2+bWidth),ang).y(),POS_PREC_DIG,true)),
-			       QPointF(rRnd(pBeg.x()+rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()+width/2+bWidth),ang).x(),POS_PREC_DIG,true),
-				       rRnd(pBeg.y()-rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()+width/2+bWidth),ang).y(),POS_PREC_DIG,true)),
-			       QPointF(rRnd(pBeg.x()+rotate(QPointF(-bWidth,width/2+bWidth),ang).x(),POS_PREC_DIG,true),
-				       rRnd(pBeg.y()-rotate(QPointF(-bWidth,width/2+bWidth),ang).y(),POS_PREC_DIG,true)));
+		    pEnd_tmp = QPointF(length(pEnd,pBeg)+bWidth, 0);
+	    circlePath.moveTo(pBeg.x() + rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).x(),
+			      pBeg.y() - rotate(QPointF(-bWidth,-(width/2+bWidth)),ang).y());
+	    circlePath.cubicTo(QPointF(pBeg.x() + rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()-(width/2+bWidth)),ang).x(),
+				       pBeg.y() - rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()-(width/2+bWidth)),ang).y()),
+			       QPointF(pBeg.x() + rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()-(width/2+bWidth)),ang).x(),
+				       pBeg.y() - rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()-(width/2+bWidth)),ang).y()),
+			       QPointF(pBeg.x() + rotate(QPointF(pEnd_tmp.x(),pEnd_tmp.y()-(width/2+bWidth)),ang).x(),
+				       pBeg.y() - rotate(QPointF(pEnd_tmp.x(),pEnd_tmp.y()-(width/2+bWidth)),ang).y()));
+	    circlePath.lineTo(pBeg.x() + rotate(QPointF(pEnd_tmp.x(),width/2+bWidth),ang).x(),
+			      pBeg.y() - rotate(QPointF(pEnd_tmp.x(),width/2+bWidth),ang).y());
+	    circlePath.cubicTo(QPointF(pBeg.x() + rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()+width/2+bWidth),ang).x(),
+				       pBeg.y() - rotate(QPointF(pCntr2_tmp.x(),pCntr2_tmp.y()+width/2+bWidth),ang).y()),
+			       QPointF(pBeg.x() + rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()+width/2+bWidth),ang).x(),
+				       pBeg.y() - rotate(QPointF(pCntr1_tmp.x(),pCntr1_tmp.y()+width/2+bWidth),ang).y()),
+			       QPointF(pBeg.x() + rotate(QPointF(-bWidth,width/2+bWidth),ang).x(),
+				       pBeg.y() - rotate(QPointF(-bWidth,width/2+bWidth),ang).y()));
 	    circlePath.closeSubpath();
 	    circlePath.setFillRule(Qt::WindingFill);
 	break;
@@ -3834,31 +3843,36 @@ QPainterPath ShapeElFigure::painterPathSimple( int type, double ang, QPointF pBe
     QPointF pCntr1, QPointF pCntr2, QPointF pCntr3, QPointF aT )
 {
     QPainterPath circlePath = newPath;
+    pBeg = QPointF(rRnd(pBeg.x(),POS_PREC_DIG,true), rRnd(pBeg.y(),POS_PREC_DIG,true));
+    pEnd = QPointF(rRnd(pEnd.x(),POS_PREC_DIG,true), rRnd(pEnd.y(),POS_PREC_DIG,true));
 
+    circlePath.moveTo(pBeg);
     switch(type) {
-	case ShT_Line:
-	    circlePath.moveTo(rRnd(pBeg.x(),POS_PREC_DIG,true), rRnd(pBeg.y(),POS_PREC_DIG,true));
-	    circlePath.lineTo(rRnd(pEnd.x(),POS_PREC_DIG,true), rRnd(pEnd.y(),POS_PREC_DIG,true));
-	    break;
+	case ShT_Line: circlePath.lineTo(pEnd);	break;
 	case ShT_Arc: {
+	    /*pCntr1 = QPointF(rRnd(pCntr1.x(),POS_PREC_DIG,true), rRnd(pCntr1.y(),POS_PREC_DIG,true));
+	    pCntr2 = QPointF(rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.y(),POS_PREC_DIG,true));
+	    pCntr3 = QPointF(rRnd(pCntr3.x(),POS_PREC_DIG,true), rRnd(pCntr3.y(),POS_PREC_DIG,true));*/
+
 	    //!!!! RealRound function using removed by painting low quality arcs.
 	    // Possible need RealRound apply only to all source points or only to begin and end points.
 	    double arc_a = length(pCntr3, pCntr1), arc_b = length(pCntr1, pCntr2),
 		   t_start = aT.x(), t_end = aT.y();
 	    QPointF rotArc = rotate(arc(t_start,arc_a,arc_b), ang);
-	    circlePath.moveTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
+	    //circlePath.moveTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
 	    for(double t = t_start; true; t += ARC_STEP) {
 		rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
 		circlePath.lineTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
 		if(t >= t_end) break;
 	    }
+	    circlePath.lineTo(pEnd);
 	    break;
 	}
 	case ShT_Bezier:
-	    circlePath.moveTo(rRnd(pBeg.x(),POS_PREC_DIG,true), rRnd(pBeg.y(),POS_PREC_DIG,true));
-	    circlePath.cubicTo(rRnd(pCntr1.x(),POS_PREC_DIG,true), rRnd(pCntr1.y(),POS_PREC_DIG,true),
-			       rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.y(),POS_PREC_DIG,true),
-			       rRnd(pEnd.x(),POS_PREC_DIG,true), rRnd(pEnd.y(),POS_PREC_DIG,true));
+	    pCntr1 = QPointF(rRnd(pCntr1.x(),POS_PREC_DIG,true), rRnd(pCntr1.y(),POS_PREC_DIG,true));
+	    pCntr2 = QPointF(rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.y(),POS_PREC_DIG,true));
+
+	    circlePath.cubicTo(pCntr1, pCntr2, pEnd);
 	    break;
     }
 
@@ -4187,19 +4201,20 @@ QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *w, int8_t toS
     if(toScale > 0 || (toScale < 0 && fTransl)) rpnt = QPointF(rpnt.x()*w->xScale(true), rpnt.y()*w->yScale(true));
 
     //Append remnant
-    QPointF add((w->posF().x()+0.5)-floor(w->posF().x()+0.5)-0.5, (w->posF().y()+0.5)-floor(w->posF().y()+0.5)-0.5);
+    //!!!!: Disabled now for mostly prevent flaws between inundations.
+    //QPointF add((w->posF().x()+0.5)-floor(w->posF().x()+0.5)-0.5, (w->posF().y()+0.5)-floor(w->posF().y()+0.5)-0.5);
 
-    return rpnt + add;
+    return rpnt;// + add;
 }
 
 QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *w, int8_t toScale, int8_t toTrans )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
 
-    QPointF sub((w->posF().x()+0.5)-floor(w->posF().x()+0.5)-0.5, (w->posF().y()+0.5)-floor(w->posF().y()+0.5)-0.5);
-
     //Append remnant
-    QPointF rpnt = point - sub;
+    //!!!!: Disabled now for mostly prevent flaws between inundations.
+    //QPointF sub((w->posF().x()+0.5)-floor(w->posF().x()+0.5)-0.5, (w->posF().y()+0.5)-floor(w->posF().y()+0.5)-0.5);
+    QPointF rpnt = point;// - sub;
 
     //Scale
     if(toScale > 0 || (toScale < 0 && fTransl)) rpnt = QPointF(rpnt.x()/w->xScale(true), rpnt.y()/w->yScale(true));
@@ -4217,16 +4232,21 @@ QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *w, int8_t t
     return rpnt;
 }
 
+/******************************************************************************
+* paintImage() - Paint the result shape image for follow paint to display     *
+* !!!!: Needs for next observing to flaws between inundations, mostly for     *
+*  widget "Rounded rectangle(valuable)" rotation 45 deg and scaling 1.1       *
+*******************************************************************************/
 void ShapeElFigure::paintImage( WdgView *w )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     QVector<inundationItem> &inundItems = elFD->inundItems;
-    PntMap  	&pnts = elFD->shapePnts;
+    PntMap	&pnts = elFD->shapePnts;
     WidthMap	&widths = elFD->shapeWidths;
     ColorMap	&colors = elFD->shapeColors;
     ImageMap	&images = elFD->shapeImages;
-    StyleMap 	&styles = elFD->shapeStyles;
+    StyleMap	&styles = elFD->shapeStyles;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     elFD->pictObj = QPixmap(w->width(), w->height());
     //elF-D>pictObj = QImage(w->width(), w->height(), QImage::Format_ARGB32_Premultiplied);
@@ -4234,56 +4254,53 @@ void ShapeElFigure::paintImage( WdgView *w )
     elFD->pictObj.fill(Qt::transparent);
     QPainter pnt(&elFD->pictObj);
 
-    //> Prepare draw area
+    //Prepare draw area
     int margin = elFD->geomMargin;
     QRect draw_area = w->rect().adjusted(0, 0, -2*margin, -2*margin);
     pnt.setWindow(draw_area);
     pnt.setViewport(w->rect().adjusted(margin,margin,-margin,-margin));
     vector<int> shape_inund_all;
 
-    //> Drawing all fills(inundations)
-    for(int i = 0; i < inundItems.size(); i++)
-    {
+    //Drawing all fills(inundations)
+    for(int i = 0; i < inundItems.size(); i++) {
 	QImage img;
 	string backimg = w->resGet(images[inundItems[i].brush_img]);
 	img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
 	if(shapeItems.size() == 0 || ((inundItems[i].path == newPath) && img.isNull())) continue;
 
-	//>> Sorting the figures in each fill(inundation)
+	//printf("TEST 10: %d: '%s'\n", i, w->id().c_str());
+
+	// Sorting the figures in each fill(inundation)
 	QVector<int> number_shape;
 	number_shape = inundItems[i].number_shape;
 	std::sort(number_shape.begin(), number_shape.end());
 
-	//>> Making the array of the figures to be drawn before the each fill
+	// Making the array of the figures to be drawn before the each fill
 	vector<int> draw_before;
 	bool fl_numb;
-	for(int k = 0; k < shapeItems.size(); k++)
-	{
+	for(int k = 0; k < shapeItems.size(); k++) {
 	    fl_numb = false;
 	    for(int j = 0; !fl_numb && j < number_shape.size(); j++) fl_numb = (k >= number_shape[j]);
 	    if(!fl_numb) draw_before.push_back(k);
 	}
-	//>>> Drawing the figures and push_bask them into the array of the already drawn figures
+	//  Drawing the figures and push_bask them into the array of the already drawn figures
 	bool flag_dr;
-	for(unsigned k = 0; k < draw_before.size(); k++)
-	{
+	for(unsigned k = 0; k < draw_before.size(); k++) {
 	    flag_dr = true;
 	    for(unsigned j = 0; flag_dr && j < shape_inund_all.size(); j++) flag_dr = (draw_before[k] != shape_inund_all[j]);
-	    //>> If the figure is out of this array, then draw it (it is the figures which are lower than the current fill)
+	    // If the figure is out of this array, then draw it (it is the figures which are lower than the current fill)
 	    if(!flag_dr) continue;
 
 	    const ShapeItem &cShIt = shapeItems[draw_before[k]];
 	    shape_inund_all.push_back(k);
-	    if(widths[cShIt.borderWidth] > 0.01)
-	    {
+	    if(widths[cShIt.borderWidth] > 0.01) {
 		int curWdth = (int)rRnd(vmin(1000,vmax(1,scaleW*widths[cShIt.borderWidth])));
 		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
 		pnt.setBrush(QBrush(colors[cShIt.lineColor],Qt::SolidPattern));
 		pnt.setPen(QPen(colors[cShIt.borderColor],curWdth,styles[cShIt.style],Qt::FlatCap,Qt::MiterJoin));
 		pnt.drawPath(cShIt.path);
 	    }
-	    else if(widths[cShIt.borderWidth] >= 0 && fabs(widths[cShIt.borderWidth]-0) < 0.01)
-	    {
+	    else if(widths[cShIt.borderWidth] >= 0 && fabs(widths[cShIt.borderWidth]-0) < 0.01) {
 		int curWdth = (int)rRnd(vmin(1000,vmax(1,scaleW*widths[cShIt.width])));
 		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
 		pnt.setBrush(Qt::NoBrush);
@@ -4291,34 +4308,29 @@ void ShapeElFigure::paintImage( WdgView *w )
 		pnt.drawPath(cShIt.pathSimple);
 	    }
 	}
-	if(!img.isNull())
-	{
+	if(!img.isNull()) {
 	    QPainterPath in_path, in_path_rot;
 	    in_path = newPath;
 
-	    //>> Building the scaled and unrotated inundation path
+	    // Building the scaled and unrotated inundation path
 	    QPointF p1;
 	    PntMap tmp_pnts;
 	    QVector<int> number_vector;
 	    bool fl_;
-	    for(int p = 0; p < inundItems[i].number_shape.size(); p++)
-	    {
+	    for(int p = 0; p < inundItems[i].number_shape.size(); p++) {
 		const ShapeItem &cShIt = shapeItems[inundItems[i].number_shape[p]];
-		switch(cShIt.type)
-		{
+		switch(cShIt.type) {
 		    case ShT_Line:
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
-			if(!fl_)
-			{
+			if(!fl_) {
 			    p1 = scaleRotate(pnts[cShIt.n1], w, true, true);
 			    tmp_pnts[cShIt.n1] = unScaleRotate(p1, w, false, true);
 			    number_vector.push_back(cShIt.n1);
 			}
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n2 == number_vector[k]);
-			if(!fl_)
-			{
+			if(!fl_) {
 			    p1 = scaleRotate(pnts[cShIt.n2], w, true, true);
 			    tmp_pnts[cShIt.n2] = unScaleRotate(p1, w, false, true);
 			    number_vector.push_back(cShIt.n2);
@@ -4327,16 +4339,14 @@ void ShapeElFigure::paintImage( WdgView *w )
 		    case ShT_Arc:
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
-			if(!fl_)
-			{
+			if(!fl_) {
 			    p1 = scaleRotate(pnts[cShIt.n1], w, true, true);
 			    tmp_pnts[cShIt.n1] = unScaleRotate(p1, w, false, true);
 			    number_vector.push_back(cShIt.n1);
 			}
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n2 == number_vector[k]);
-			if(!fl_)
-			{
+			if(!fl_) {
 			    p1 = scaleRotate(pnts[cShIt.n2], w, true, true);
 			    tmp_pnts[cShIt.n2] = unScaleRotate(p1, w, false, true);
 			    number_vector.push_back(cShIt.n2);
@@ -4349,16 +4359,14 @@ void ShapeElFigure::paintImage( WdgView *w )
 		    case ShT_Bezier:
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
-			if(!fl_)
-			{
+			if(!fl_) {
 			    p1 = scaleRotate(pnts[cShIt.n1], w, true, true);
 			    tmp_pnts[cShIt.n1] = unScaleRotate(p1, w, false, true);
 			    number_vector.push_back(cShIt.n1);
 			}
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n2 == number_vector[k]);
-			if(!fl_)
-			{
+			if(!fl_) {
 			    p1 = scaleRotate(pnts[cShIt.n2], w, true, true);
 			    tmp_pnts[cShIt.n2] = unScaleRotate(p1, w, false, true);
 			    number_vector.push_back(cShIt.n2);
@@ -4377,37 +4385,38 @@ void ShapeElFigure::paintImage( WdgView *w )
 	    QPointF pnt_ = in_path.pointAtPercent(0);
 	    double xMax = pnt_.x(), xMin = pnt_.x(), yMax = pnt_.y(), yMin = pnt_.y();
 	    double t = 0.01;
-	    do
-	    {
+	    do {
 		pnt_ = in_path.pointAtPercent(t);
 		xMin = vmin(xMin, pnt_.x()); yMin = vmin(yMin, pnt_.y());
 		xMax = vmax(xMax, pnt_.x()); yMax = vmax(yMax, pnt_.y());
 		t += 0.01;
-	    }
-	    while(t < 1);
-
+	    } while(t < 1);
+	    //printf("TEST 11a: min[%g,%g]; max[%g,%g]\n", xMin, yMin, xMax, yMax);
 	    xMin = rRnd(xMin, POS_PREC_DIG, true); yMin = rRnd(yMin, POS_PREC_DIG, true);
 	    xMax = rRnd(xMax, POS_PREC_DIG, true); yMax = rRnd(yMax, POS_PREC_DIG, true);
+	    //xMin = floor(xMin); xMax = ceil(xMax); yMin = floor(yMin); yMax = ceil(yMax);
+
 	    in_path_rot = createInundationPath(inundItems[i].number_shape, pnts, w);
 	    pnt_ = in_path_rot.pointAtPercent(0);
 	    double xMax_rot = pnt_.x(), xMin_rot = pnt_.x(), yMax_rot = pnt_.y(), yMin_rot = pnt_.y();
 	    t = 0.01;
-	    do
-	    {
-		pnt_ = in_path_rot.pointAtPercent ( t );
+	    do {
+		pnt_ = in_path_rot.pointAtPercent(t);
 		xMin_rot = vmin(xMin_rot, pnt_.x()); yMin_rot = vmin(yMin_rot, pnt_.y());
 		xMax_rot = vmax(xMax_rot, pnt_.x()); yMax_rot = vmax(yMax_rot, pnt_.y());
 		t += 0.01;
-	    }
-	    while(t < 1);
-
+	    } while(t < 1);
+	    //printf("TEST 11b: minR[%g,%g]; maxR[%g,%g]\n", xMin_rot, yMin_rot, xMax_rot, yMax_rot);
 	    xMin_rot = rRnd(xMin_rot, POS_PREC_DIG, true); yMin_rot = rRnd(yMin_rot, POS_PREC_DIG, true);
 	    xMax_rot = rRnd(xMax_rot, POS_PREC_DIG, true); yMax_rot = rRnd(yMax_rot, POS_PREC_DIG, true);
+	    //xMin_rot = floor(xMin_rot); xMax_rot = ceil(xMax_rot); yMin_rot = floor(yMin_rot); yMax_rot = ceil(yMax_rot);
 
-	    //>> Scaling image for filling
-	    img = img.scaled(QSize((int)rRnd(xMax-xMin)+1,(int)rRnd(yMax-yMin)+1), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	    // Scaling image for filling
+	    img = img.scaled(QSize((int)rRnd(xMax-xMin)+1,(int)rRnd(yMax-yMin)+1), Qt::IgnoreAspectRatio);//, Qt::SmoothTransformation);
 
-	    //>>Creating the composition of the fill color and fill image
+	    //printf("TEST 11: min[%g,%g]; minR[%g,%g]; max[%g,%g]; maxR[%g,%g]; pat[%d,%d]\n", xMin, yMin, xMin_rot, yMin_rot, xMax, yMax, xMax_rot, yMax_rot, img.width(), img.height());
+
+	    // Creating the composition of the fill color and fill image
 	    /*QPainter img_pnt(&img);
 	    img_pnt.setCompositionMode(QPainter::CompositionMode_DestinationOver);
 	    QPixmap clr_img(img.size());
@@ -4424,7 +4433,8 @@ void ShapeElFigure::paintImage( WdgView *w )
 	    double alpha, alpha_rez, color_r, color_g, color_b;
 	    double alpha_col = (double)colors[inundItems[i].brush].alpha()/255;
 	    QRgb rgb;
-	    QPointF drw_pnt,drw_pnt1;
+	    QPointF drw_pnt;
+	    QPoint drw_pnt1;
 	    QPen im_pen;
 	    im_y = (int)yMin_rot;
 	    //QImage draw_img( (int)rRnd( xMax_rot - xMin_rot )+1, (int)rRnd( yMax_rot - yMin_rot )+1, QImage::Format_ARGB32_Premultiplied  );
@@ -4432,66 +4442,54 @@ void ShapeElFigure::paintImage( WdgView *w )
 	    draw_img.fill(0);
 	    QPainter draw_pnt(&draw_img);
 
-	    //>> Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path
-	    do
-	    {
+	    // Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path
+	    do {
 		im_x = (int)xMin_rot;
-		do
-		{
+		do {
 		    if(im_x >= 0 && im_x < clr_img.width() && im_y >= 0 && im_y < clr_img.height() &&
 			clr_img.pixel(QPoint(im_x,im_y)) == qRgb(255,255,255))
 		    {
 			drw_pnt = unScaleRotate(QPoint(im_x,im_y), w, false, true);
-			if(img.valid((int)rRnd(drw_pnt.x()-xMin,POS_PREC_DIG,true), (int)rRnd(drw_pnt.y()-yMin,POS_PREC_DIG,true)))
-			{
-			    rgb = img.pixel((int)rRnd(drw_pnt.x()-xMin,POS_PREC_DIG,true), (int)rRnd(drw_pnt.y()-yMin,POS_PREC_DIG,true));
+			drw_pnt1 = QPoint((int)rRnd(drw_pnt.x()-xMin,POS_PREC_DIG,true), (int)rRnd(drw_pnt.y()-yMin,POS_PREC_DIG,true));
+			if(img.valid(drw_pnt1)) {
+			    rgb = img.pixel(drw_pnt1);
 			    alpha = (double)((rgb>>24)&0xff)/255;
 			    color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].red();
 			    color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].green();
 			    color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*colors[inundItems[i].brush].blue();
 			    alpha_rez = (1-alpha_col) * (1-alpha);
 			    im_pen.setColor(QColor(color_r,color_g,color_b,rRnd(255*(1-alpha_rez),POS_PREC_DIG,true)));
-			    //pnt.setPen( im_pen );
 			    draw_pnt.setPen(im_pen);
-			    drw_pnt1 = scaleRotate(drw_pnt, w, false, true);
-			    //draw_pnt.drawPoint( QPointF( (int)rRnd( drw_pnt.x() - xMin, POS_PREC_DIG, true),
-			    //			(int)rRnd( drw_pnt.y() - yMin, POS_PREC_DIG, true) ) );
-			    draw_pnt.drawPoint(QPointF(rRnd(drw_pnt1.x(),POS_PREC_DIG,true),rRnd(drw_pnt1.y(),POS_PREC_DIG,true)));
+			    drw_pnt = scaleRotate(drw_pnt, w, false, true);
+			    drw_pnt1 = QPoint((int)rRnd(drw_pnt.x(),POS_PREC_DIG,true), (int)rRnd(drw_pnt.y(),POS_PREC_DIG,true));
+			    draw_pnt.drawPoint(drw_pnt1);
 			}
 		    }
-		    im_x += 1;
-		}
-		while(im_x > xMin_rot && im_x < xMax_rot);
-		im_y += 1;
-	    }
-	    while(im_y > yMin_rot && im_y < yMax_rot);
-	    //pnt.drawImage(QPoint( (int)rRnd( xMin_rot, POS_PREC_DIG, true ),
-	    //		      (int)rRnd( yMin_rot, POS_PREC_DIG, true ) ), draw_img);
+		    im_x++;
+		} while(im_x > xMin_rot && im_x <= xMax_rot);
+		im_y++;
+	    } while(im_y > yMin_rot && im_y <= yMax_rot);
 	    pnt.drawImage(QPoint(), draw_img);
 	}
-	else
-	{
+	else {
 	    pnt.setBrush(colors[inundItems[i].brush]);
 	    pnt.setPen(Qt::NoPen);
 	    pnt.drawPath(inundItems[i].path);
 	}
 
-	//>> Drawing the fills' figures
-	for(int j = 0; j < number_shape.size(); j++)
-	{
-	    //>>> Making the resulting arrary of all figures which take part in all fills(inundations)
+	// Drawing the fills' figures
+	for(int j = 0; j < number_shape.size(); j++) {
+	    //  Making the resulting arrary of all figures which take part in all fills(inundations)
 	    const ShapeItem &cShIt = shapeItems[number_shape[j]];
 	    shape_inund_all.push_back(number_shape[j]);
-	    if(widths[cShIt.borderWidth] > 0.01)
-	    {
+	    if(widths[cShIt.borderWidth] > 0.01) {
 		int curWdth = (int)rRnd(vmin(1000,vmax(1,scaleW*widths[cShIt.borderWidth])));
 		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
 		pnt.setBrush(QBrush(colors[cShIt.lineColor],Qt::SolidPattern));
 		pnt.setPen(QPen(colors[cShIt.borderColor],curWdth,styles[cShIt.style],Qt::FlatCap,Qt::MiterJoin));
 		pnt.drawPath(cShIt.path);
 	    }
-	    else if(widths[cShIt.borderWidth] >= 0 && fabs(widths[cShIt.borderWidth] - 0) < 0.01)
-	    {
+	    else if(widths[cShIt.borderWidth] >= 0 && fabs(widths[cShIt.borderWidth] - 0) < 0.01) {
 		int curWdth = (int)rRnd(vmin(1000,vmax(1,scaleW*widths[cShIt.width])));
 		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
 		pnt.setBrush(Qt::NoBrush);
@@ -4503,25 +4501,22 @@ void ShapeElFigure::paintImage( WdgView *w )
     bool flag_draw;
 
     //pnt.setRenderHint(QPainter::Antialiasing);
-    //> Drawing all el_figures
-    //>> Checking if the figure is inside the array of figures which take part in all fills
-    for(int k = 0; k < shapeItems.size(); k++)
-    {
+    //Drawing all el_figures
+    // Checking if the figure is inside the array of figures which take part in all fills
+    for(int k = 0; k < shapeItems.size(); k++) {
 	flag_draw = true;
 	for(unsigned j = 0; flag_draw && j < shape_inund_all.size(); j++) flag_draw = (k!=shape_inund_all[j]);
-	//>> If the figure is out of this array, then draw it (it is the figures which take part in none fill)
+	//  If the figure is out of this array, then draw it (it is the figures which take part in none fill)
 	if(!flag_draw)	continue;
 	const ShapeItem &cShIt = shapeItems[k];
-	if(widths[cShIt.borderWidth] > 0.01)
-	{
+	if(widths[cShIt.borderWidth] > 0.01) {
 	    int curWdth = (int)rRnd(vmin(1000,vmax(1,scaleW*widths[cShIt.borderWidth])));
 	    pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
 	    pnt.setBrush(QBrush(colors[cShIt.lineColor],Qt::SolidPattern));
 	    pnt.setPen(QPen(colors[cShIt.borderColor],curWdth,styles[cShIt.style],Qt::FlatCap,Qt::MiterJoin));
 	    pnt.drawPath(cShIt.path);
 	}
-	else if(widths[cShIt.borderWidth] >= 0 && fabs(widths[cShIt.borderWidth]) < 0.01)
-	{
+	else if(widths[cShIt.borderWidth] >= 0 && fabs(widths[cShIt.borderWidth]) < 0.01) {
 	    int curWdth = (int)rRnd(vmin(1000,vmax(1,scaleW*widths[cShIt.width])));
 	    pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
 	    pnt.setBrush(Qt::NoBrush);
@@ -4530,12 +4525,10 @@ void ShapeElFigure::paintImage( WdgView *w )
 	}
     }
 
-    //> Drawing all rects for choosen el_figures
+    //Drawing all rects for choosen el_figures
     pnt.setRenderHint(QPainter::Antialiasing, false);
-    if(devW && devW->edit())
-    {
-	for(int k = 0; k < rectItems.size(); k++)
-	{
+    if(devW && devW->edit()) {
+	for(int k = 0; k < rectItems.size(); k++) {
 	    pnt.setBrush(rectItems[k].brush);
 	    pnt.setPen(rectItems[k].pen);
 	    pnt.drawPath(rectItems[k].path);
@@ -4553,304 +4546,251 @@ void ShapeElFigure::paintImage( WdgView *w )
     pnt.end();
 }
 
-//- Building the path for fill -
+//**********************************************************
+//* Building the path for fill				   *
+//**********************************************************
 QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num, PntMap &pnts, WdgView *w )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
 
+    if(in_fig_num.size() < 2 && !(in_fig_num.size() == 1 && shapeItems[in_fig_num[0]].type == ShT_Arc)) return newPath;
+
     QPainterPath path = newPath;
-    QPointF rotArc, scRtTmp;
+    QPointF rotArc, scRtTmp, scRtEnd;
     int flag = -1, in_index = -1;
     bool flag_n1, flag_n2, flag_break;
     double arc_a, arc_b, t_start, t_end, t, ang;
     QLineF line1, line2;
-    if(in_fig_num.size() >= 2 || (in_fig_num.size() == 1 && shapeItems[in_fig_num[0]].type == 2))
-    {
-	const ShapeItem &curShIt = shapeItems[in_fig_num[0]];
-	if(curShIt.n1 < curShIt.n2)
-	{
-	    scRtTmp = scaleRotate(pnts[curShIt.n1],w);
-	    path.moveTo(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
-	    switch(curShIt.type)
-	    {
-		case 1:
-		    scRtTmp = scaleRotate(pnts[curShIt.n2], w);
-		    path.lineTo(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
-		    break;
-		case 2:
-		{
-		    if((flag_angle_temp && fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001)
-			|| !fTransl)
-		    {
-			line2 = QLineF(pnts[curShIt.n3], QPointF(pnts[curShIt.n3].x()+10,pnts[curShIt.n3].y()));
-			line1 = QLineF(pnts[curShIt.n3], pnts[curShIt.n5]);
-			ang = angle(line1, line2);
-			if(pnts[curShIt.n5].y() > pnts[curShIt.n3].y()) ang = 360-ang;
-		    }
-		    else ang = curShIt.angle_temp;
-		    ang += curShIt.ang_t;
 
-		    //!!!! RealRound function using removed by painting low quality arcs.
-    		    // Possible need RealRound apply only to all source points or only to begin and end points.
-		    if(!fTransl) {
-			arc_a = length(pnts[curShIt.n3], pnts[curShIt.n5]);
-			arc_b = length(pnts[curShIt.n3], pnts[curShIt.n4]);
-		    }
-		    else
-		    {
-			arc_a = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n5],w));
-			arc_b = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n4],w));
-		    }
-		    t_start = curShIt.ctrlPos4.x();
-		    t_end = curShIt.ctrlPos4.y();
-		    for(t = t_start; true; t += ARC_STEP)
-		    {
-			scRtTmp = scaleRotate(pnts[curShIt.n3], w);
-			rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
-			path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-			if(t >= t_end) break;
-		    }
-		    break;
-		}
-		case 3:
+    const ShapeItem &curShIt = shapeItems[in_fig_num[0]];
+    if(curShIt.n1 < curShIt.n2) {
+	scRtTmp = scaleRotate(pnts[curShIt.n1], w);
+	scRtTmp = QPointF(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
+	//printf("TEST 100: Beg fig=%d(type=%d) pnt[%g,%g]\n", in_fig_num[0], curShIt.type, scRtTmp.x(), scRtTmp.y());
+	path.moveTo(scRtTmp);
+	scRtEnd = scaleRotate(pnts[curShIt.n2], w);
+	scRtEnd = QPointF(rRnd(scRtEnd.x(),POS_PREC_DIG,true), rRnd(scRtEnd.y(),POS_PREC_DIG,true));
+	//printf("TEST 101: End fig=%d(type=%d) pnt[%g,%g]\n", in_fig_num[0], curShIt.type, scRtEnd.x(), scRtEnd.y());
+	switch(curShIt.type) {
+	    case ShT_Line: path.lineTo(scRtEnd);	break;
+	    case ShT_Arc: {
+		if((flag_angle_temp && fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001) || !fTransl)
 		{
-		    QPointF scRtN2 = scaleRotate(pnts[curShIt.n2], w),
-			    scRtN3 = scaleRotate(pnts[curShIt.n3], w),
-			    scRtN4 = scaleRotate(pnts[curShIt.n4], w);
-		    path.cubicTo(rRnd(scRtN3.x(),POS_PREC_DIG,true), rRnd(scRtN3.y(),POS_PREC_DIG,true),
-				 rRnd(scRtN4.x(),POS_PREC_DIG,true), rRnd(scRtN4.y(),POS_PREC_DIG,true),
-				 rRnd(scRtN2.x(),POS_PREC_DIG,true), rRnd(scRtN2.y(),POS_PREC_DIG,true));
-		    break;
+		    line2 = QLineF(pnts[curShIt.n3], QPointF(pnts[curShIt.n3].x()+10,pnts[curShIt.n3].y()));
+		    line1 = QLineF(pnts[curShIt.n3], pnts[curShIt.n5]);
+		    ang = angle(line1, line2);
+		    if(pnts[curShIt.n5].y() > pnts[curShIt.n3].y()) ang = 360-ang;
 		}
+		else ang = curShIt.angle_temp;
+		ang += curShIt.ang_t;
+
+		//!!!! RealRound function using removed by painting low quality arcs.
+		// Possible need RealRound apply only to all source points or only to begin and end points.
+		arc_a = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n5],w));
+		arc_b = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n4],w));
+		t_start = curShIt.ctrlPos4.x();
+		t_end = curShIt.ctrlPos4.y();
+		for(t = t_start; true; t += ARC_STEP) {
+		    scRtTmp = scaleRotate(pnts[curShIt.n3], w);
+		    rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+		    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+		    if(t >= t_end) break;
+		}
+		path.lineTo(scRtEnd);
+		break;
 	    }
-	    flag_n2 = true;
-	    flag_n1 = false;
-	}
-	else
-	{
-	    scRtTmp = scaleRotate(pnts[curShIt.n2], w);
-	    path.moveTo(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
-	    switch(curShIt.type)
-	    {
-		case 1:
-		    scRtTmp = scaleRotate(pnts[curShIt.n1], w);
-		    path.lineTo(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
-		    break;
-		case 2:
-		{
-		    if((flag_angle_temp && fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001)
-			|| !fTransl)
-		    {
-			line2 = QLineF(scaleRotate(pnts[curShIt.n3],w),
-				       scaleRotate(QPointF(pnts[curShIt.n3].x()+10,pnts[curShIt.n3].y()),w));
-			line1 = QLineF(scaleRotate(pnts[curShIt.n3],w),
-				       scaleRotate(pnts[curShIt.n5],w));
-			ang = angle(line1, line2);
-			if(scaleRotate(pnts[curShIt.n5],w).y() > scaleRotate(pnts[curShIt.n3],w).y())
-		    	    ang = 360 - ang;
-		    }
-		    else ang = curShIt.angle_temp;
-		    ang += curShIt.ang_t;
-
-		    //!!!! RealRound function using removed by painting low quality arcs.
-		    // Possible need RealRound apply only to all source points or only to begin and end points.
-		    if(!fTransl) {
-			arc_a = length(pnts[curShIt.n3], pnts[curShIt.n5]);
-			arc_b = length(pnts[curShIt.n3], pnts[curShIt.n4]);
-		    }
-		    else
-		    {
-			arc_a = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n5],w));
-			arc_b = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n4],w));
-		    }
-		    t_start = curShIt.ctrlPos4.x();
-		    t_end = curShIt.ctrlPos4.y();
-		    for(t = t_end; true; t -= ARC_STEP)
-		    {
-			scRtTmp = scaleRotate(pnts[curShIt.n3], w);
-			rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
-			path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-			if(t <= t_start) break;
-		    }
-		    break;
-		}
-		case 3:
-		{
-		    QPointF scRtN1 = scaleRotate(pnts[curShIt.n1], w),
-			    scRtN3 = scaleRotate(pnts[curShIt.n3], w),
-			    scRtN4 = scaleRotate(pnts[curShIt.n4], w);
-		    path.cubicTo(rRnd(scRtN4.x(),POS_PREC_DIG,true), rRnd(scRtN4.y(),POS_PREC_DIG,true),
-				 rRnd(scRtN3.x(),POS_PREC_DIG,true), rRnd(scRtN3.y(),POS_PREC_DIG,true),
-				 rRnd(scRtN1.x(),POS_PREC_DIG,true), rRnd(scRtN1.y(),POS_PREC_DIG,true));
-		    break;
-		}
-	    }
-	    flag_n2 = false;
-	    flag_n1 = true;
-	}
-	for(int i = 0, k = 0; i < (in_fig_num.size()-1); i++)
-	{
-	    if(flag_n2)
-	    {
-		flag_break = false;
-		for(int j = 0; j < in_fig_num.size(); j++)
-		{
-		    if((k != j) && (shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n1))
-		    {
-			flag = 1;
-			in_index = in_fig_num[j];
-			k = j;
-			flag_break = true;
-		    }
-		    if(flag_break) break;
-		    if((k != j) && ( shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n2))
-		    {
-			flag = 2;
-			in_index = in_fig_num[j];
-			k = j;
-			flag_break = true;
-		    }
-		    if(flag_break) break;
-		}
-	    }
-	    if(flag_n1)
-	    {
-		flag_break = false;
-		for(int j = 0; j < in_fig_num.size(); j++)
-		{
-		    if((k != j) && (shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n1))
-		    {
-			flag = 1;
-			in_index = in_fig_num[j];
-			k = j;
-			flag_break = true;
-		    }
-		    if(flag_break) break;
-		    if((k != j) && (shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n2))
-		    {
-			flag = 2;
-			in_index = in_fig_num[j];
-			k = j;
-			flag_break = true;
-		    }
-		    if(flag_break) break;
-		}
-	    }
-	    if(in_index < 0 || in_index >= shapeItems.size()) continue;
-	    const ShapeItem &inShIt = shapeItems[in_index];
-	    switch(flag) {
-		case 1:
-		    switch(inShIt.type) {
-			case 1:
-			    scRtTmp = scaleRotate(pnts[inShIt.n2], w);
-			    path.lineTo(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
-			    break;
-			case 2: {
-			    if((flag_angle_temp && fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001)
-				|| !fTransl)
-			    {
-				line2 = QLineF(pnts[inShIt.n3], QPointF(pnts[inShIt.n3].x()+10,pnts[inShIt.n3].y()));
-				line1 = QLineF(pnts[inShIt.n3], pnts[inShIt.n5]);
-				ang = angle(line1, line2);
-				if(pnts[inShIt.n5].y() > pnts[inShIt.n3].y()) ang = 360 - ang;
-			    }
-			    else ang = inShIt.angle_temp;
-			    ang += inShIt.ang_t;
-
-			    //!!!! RealRound function using removed by painting low quality arcs.
-			    // Possible need RealRound apply only to all source points or only to begin and end points.
-			    if(!fTransl) {
-				arc_a = length(pnts[inShIt.n3], pnts[inShIt.n5]);
-				arc_b = length(pnts[inShIt.n3], pnts[inShIt.n4]);
-			    }
-			    else {
-				arc_a = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n5],w));
-				arc_b = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n4],w));
-			    }
-			    t_start = inShIt.ctrlPos4.x();
-			    t_end = inShIt.ctrlPos4.y();
-			    for(t = t_start; true; t += ARC_STEP) {
-				scRtTmp = scaleRotate(pnts[inShIt.n3], w);
-				rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
-				path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-				if(t >= t_end) break;
-			    }
-			    break;
-			}
-			case 3:
-			{
-			    QPointF scRtN2 = scaleRotate(pnts[inShIt.n2], w),
-				    scRtN3 = scaleRotate(pnts[inShIt.n3], w),
-				    scRtN4 = scaleRotate(pnts[inShIt.n4], w);
-			    path.cubicTo(rRnd(scRtN3.x(),POS_PREC_DIG,true), rRnd(scRtN3.y(),POS_PREC_DIG,true),
-					 rRnd(scRtN4.x(),POS_PREC_DIG,true), rRnd(scRtN4.y(),POS_PREC_DIG,true),
-					 rRnd(scRtN2.x(),POS_PREC_DIG,true), rRnd(scRtN2.y(),POS_PREC_DIG,true));
-			    break;
-			}
-		    }
-		    flag_n2 = true;
-		    flag_n1 = false;
-		    break;
-		case 2:
-		    switch(inShIt.type) {
-			case 1:
-			    scRtTmp = scaleRotate(pnts[inShIt.n1], w);
-			    path.lineTo(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
-			    break;
-			case 2: {
-			    if((flag_angle_temp &&  fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient-0) < 0.001)
-				|| !fTransl)
-			    {
-				line2 = QLineF(pnts[inShIt.n3], QPointF(pnts[inShIt.n3].x()+10,pnts[inShIt.n3].y()));
-				line1 = QLineF(pnts[inShIt.n3], pnts[inShIt.n5]);
-				ang = angle(line1, line2);
-				if(pnts[inShIt.n5].y() > pnts[inShIt.n3].y()) ang = 360 - ang;
-			    }
-			    else ang = inShIt.angle_temp;
-			    ang += inShIt.ang_t;
-
-			    //!!!! RealRound function using removed by painting low quality arcs.
-			    // Possible need RealRound apply only to all source points or only to begin and end points.
-			    if(!fTransl) {
-				arc_a = length(pnts[inShIt.n3], pnts[inShIt.n5]);
-				arc_b = length(pnts[inShIt.n3], pnts[inShIt.n4]);
-			    }
-			    else {
-				arc_a = length(scaleRotate(pnts[inShIt.n3],w),
-					       scaleRotate(pnts[inShIt.n5],w));
-				arc_b = length(scaleRotate(pnts[inShIt.n3],w),
-					       scaleRotate(pnts[inShIt.n4],w));
-			    }
-
-			    t_start = inShIt.ctrlPos4.x();
-			    t_end = inShIt.ctrlPos4.y();
-			    for(t = t_end; true; t -= ARC_STEP) {
-				scRtTmp = scaleRotate(pnts[inShIt.n3], w);
-				rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
-				path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-				if(t <= t_start) break;
-			    }
-			    break;
-			}
-			case 3: {
-			    QPointF scRtN1 = scaleRotate(pnts[inShIt.n1], w),
-				    scRtN3 = scaleRotate(pnts[inShIt.n3], w),
-				    scRtN4 = scaleRotate(pnts[inShIt.n4], w);
-			    path.cubicTo(rRnd(scRtN4.x(),POS_PREC_DIG,true), rRnd(scRtN4.y(),POS_PREC_DIG,true),
-					 rRnd(scRtN3.x(),POS_PREC_DIG,true), rRnd(scRtN3.y(),POS_PREC_DIG,true),
-					 rRnd(scRtN1.x(),POS_PREC_DIG,true), rRnd(scRtN1.y(),POS_PREC_DIG,true));
-			    break;
-			}
-		    }
-		    flag_n2 = false;
-		    flag_n1 = true;
-		    break;
+	    case ShT_Bezier: {
+		QPointF pCntr1 = scaleRotate(pnts[curShIt.n3], w),
+			pCntr2 = scaleRotate(pnts[curShIt.n4], w);
+		//pCntr1 = QPointF(rRnd(pCntr1.x(),POS_PREC_DIG,true), rRnd(pCntr1.x(),POS_PREC_DIG,true));
+		//pCntr2 = QPointF(rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.x(),POS_PREC_DIG,true));
+		path.cubicTo(pCntr1, pCntr2, scRtEnd);
+		break;
 	    }
 	}
-	return path;
+	flag_n2 = true;
+	flag_n1 = false;
     }
-    else return newPath;
+    else {
+	scRtTmp = scaleRotate(pnts[curShIt.n2], w);
+	scRtTmp = QPointF(rRnd(scRtTmp.x(),POS_PREC_DIG,true), rRnd(scRtTmp.y(),POS_PREC_DIG,true));
+	//printf("TEST 110: Beg fig=%d(type=%d) pnt[%g,%g]\n", in_fig_num[0], curShIt.type, scRtTmp.x(), scRtTmp.y());
+	path.moveTo(scRtTmp);
+	scRtEnd = scaleRotate(pnts[curShIt.n1], w);
+	scRtEnd = QPointF(rRnd(scRtEnd.x(),POS_PREC_DIG,true), rRnd(scRtEnd.y(),POS_PREC_DIG,true));
+	//printf("TEST 111: End fig=%d(type=%d) pnt[%g,%g]\n", in_fig_num[0], curShIt.type, scRtEnd.x(), scRtEnd.y());
+	switch(curShIt.type) {
+	    case ShT_Line: path.lineTo(scRtEnd);	break;
+	    case ShT_Arc: {
+		if((flag_angle_temp && fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001) || !fTransl)
+		{
+		    line2 = QLineF(scaleRotate(pnts[curShIt.n3],w), scaleRotate(QPointF(pnts[curShIt.n3].x()+10,pnts[curShIt.n3].y()),w));
+		    line1 = QLineF(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n5],w));
+		    ang = angle(line1, line2);
+		    if(scaleRotate(pnts[curShIt.n5],w).y() > scaleRotate(pnts[curShIt.n3],w).y()) ang = 360 - ang;
+		}
+		else ang = curShIt.angle_temp;
+		ang += curShIt.ang_t;
+
+		//!!!! RealRound function using removed by painting low quality arcs.
+		// Possible need RealRound apply only to all source points or only to begin and end points.
+		arc_a = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n5],w));
+		arc_b = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n4],w));
+		t_start = curShIt.ctrlPos4.x();
+		t_end = curShIt.ctrlPos4.y();
+		for(t = t_end; true; t -= ARC_STEP) {
+		    scRtTmp = scaleRotate(pnts[curShIt.n3], w);
+		    rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
+		    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+		    if(t <= t_start) break;
+		}
+		path.lineTo(scRtEnd);
+		break;
+	    }
+	    case ShT_Bezier: {
+		QPointF pCntr1 = scaleRotate(pnts[curShIt.n4], w),
+			pCntr2 = scaleRotate(pnts[curShIt.n3], w);
+		path.cubicTo(pCntr1, pCntr2, scRtEnd);
+		break;
+	    }
+	}
+	flag_n2 = false;
+	flag_n1 = true;
+    }
+    for(int i = 0, k = 0; i < (in_fig_num.size()-1); i++) {
+	if(flag_n2) {
+	    flag_break = false;
+	    for(int j = 0; j < in_fig_num.size(); j++) {
+		if(k != j && shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n1) {
+		    flag = 1;
+		    in_index = in_fig_num[j];
+		    k = j;
+		    flag_break = true;
+		}
+		if(flag_break) break;
+		if(k != j && shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n2) {
+		    flag = 2;
+		    in_index = in_fig_num[j];
+		    k = j;
+		    flag_break = true;
+		}
+		if(flag_break) break;
+	    }
+	}
+	if(flag_n1) {
+	    flag_break = false;
+	    for(int j = 0; j < in_fig_num.size(); j++) {
+		if(k != j && shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n1) {
+		    flag = 1;
+		    in_index = in_fig_num[j];
+		    k = j;
+		    flag_break = true;
+		}
+		if(flag_break) break;
+		if(k != j && shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n2) {
+		    flag = 2;
+		    in_index = in_fig_num[j];
+		    k = j;
+		    flag_break = true;
+		}
+		if(flag_break) break;
+	    }
+	}
+	if(in_index < 0 || in_index >= shapeItems.size()) continue;
+	const ShapeItem &inShIt = shapeItems[in_index];
+	switch(flag) {
+	    case 1:
+		scRtEnd = scaleRotate(pnts[inShIt.n2], w);
+		scRtEnd = QPointF(rRnd(scRtEnd.x(),POS_PREC_DIG,true), rRnd(scRtEnd.y(),POS_PREC_DIG,true));
+		//printf("TEST 101: Next fig=%d(type=%d) pnt[%g,%g]\n", in_index, inShIt.type, scRtEnd.x(), scRtEnd.y());
+		switch(inShIt.type) {
+		    case ShT_Line: path.lineTo(scRtEnd);	break;
+		    case ShT_Arc: {
+			if((flag_angle_temp && fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001)
+			    || !fTransl)
+			{
+			    line2 = QLineF(pnts[inShIt.n3], QPointF(pnts[inShIt.n3].x()+10,pnts[inShIt.n3].y()));
+			    line1 = QLineF(pnts[inShIt.n3], pnts[inShIt.n5]);
+			    ang = angle(line1, line2);
+			    if(pnts[inShIt.n5].y() > pnts[inShIt.n3].y()) ang = 360 - ang;
+			}
+			else ang = inShIt.angle_temp;
+			ang += inShIt.ang_t;
+
+			//!!!! RealRound function using removed by painting low quality arcs.
+			// Possible need RealRound apply only to all source points or only to begin and end points.
+			arc_a = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n5],w));
+			arc_b = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n4],w));
+			t_start = inShIt.ctrlPos4.x();
+			t_end = inShIt.ctrlPos4.y();
+			for(t = t_start; true; t += ARC_STEP) {
+			    scRtTmp = scaleRotate(pnts[inShIt.n3], w);
+			    rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+			    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+			    if(t >= t_end) break;
+			}
+			path.lineTo(scRtEnd);
+			break;
+		    }
+		    case ShT_Bezier: {
+			QPointF pCntr1 = scaleRotate(pnts[inShIt.n3], w),
+				pCntr2 = scaleRotate(pnts[inShIt.n4], w);
+			path.cubicTo(pCntr1, pCntr2, scRtEnd);
+			break;
+		    }
+		}
+		flag_n2 = true;
+		flag_n1 = false;
+		break;
+	    case 2:
+		scRtEnd = scaleRotate(pnts[inShIt.n1], w);
+		scRtEnd = QPointF(rRnd(scRtEnd.x(),POS_PREC_DIG,true), rRnd(scRtEnd.y(),POS_PREC_DIG,true));
+		//printf("TEST 111: Next fig=%d(type=%d) pnt[%g,%g]\n", in_index, inShIt.type, scRtEnd.x(), scRtEnd.y());
+		switch(inShIt.type) {
+		    case ShT_Line: path.lineTo(scRtEnd);	break;
+		    case ShT_Arc: {
+			if((flag_angle_temp &&  fabs(w->xScale(true)-1) < 0.001 && fabs(w->yScale(true)-1) < 0.001 && fabs(elFD->orient-0) < 0.001)
+			    || !fTransl)
+			{
+			    line2 = QLineF(pnts[inShIt.n3], QPointF(pnts[inShIt.n3].x()+10,pnts[inShIt.n3].y()));
+			    line1 = QLineF(pnts[inShIt.n3], pnts[inShIt.n5]);
+			    ang = angle(line1, line2);
+			    if(pnts[inShIt.n5].y() > pnts[inShIt.n3].y()) ang = 360 - ang;
+			}
+			else ang = inShIt.angle_temp;
+			ang += inShIt.ang_t;
+
+			//!!!! RealRound function using removed by painting low quality arcs.
+			// Possible need RealRound apply only to all source points or only to begin and end points.
+			arc_a = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n5],w));
+			arc_b = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n4],w));
+
+			t_start = inShIt.ctrlPos4.x();
+			t_end = inShIt.ctrlPos4.y();
+			for(t = t_end; true; t -= ARC_STEP) {
+			    scRtTmp = scaleRotate(pnts[inShIt.n3], w);
+			    rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
+			    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+			    if(t <= t_start) break;
+			}
+			path.lineTo(scRtEnd);
+			break;
+		    }
+		    case ShT_Bezier: {
+			QPointF pCntr1 = scaleRotate(pnts[inShIt.n4], w),
+				pCntr2 = scaleRotate(pnts[inShIt.n3], w);
+			path.cubicTo(pCntr1, pCntr2, scRtEnd);
+			break;
+		    }
+		}
+		flag_n2 = false;
+		flag_n1 = true;
+		break;
+	}
+    }
+
+    return path;
 }
 
 //*************************************************

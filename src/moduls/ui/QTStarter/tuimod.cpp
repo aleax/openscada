@@ -165,9 +165,9 @@ void TUIMod::postEnable( int flag )
 
 void TUIMod::postDisable( int flag )
 {
-    if(run_st)
-	try { SYS->taskDestroy(nodePath('.',true), &end_run); }
-	catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(run_st) SYS->taskDestroy(nodePath('.',true), &end_run, 60);
+    /*try { 
+    catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 }
 
 void TUIMod::load_( )

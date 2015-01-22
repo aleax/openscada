@@ -1,3 +1,13 @@
+2015-01-22 Roman
+- FIX:DB: Radial image mnEls.rad_l_127 fixed for edge and make equal to mnEls.rad_r_127.
+- SYS.TCntrNode: Set for original message print at exception into chldDel() or mostly into heir's postDisable().
+- UI.QTStarter: For main UI task destroy set timeout to 60 seconds and an execution generation allowed at the destroying timeout.
+- UI.Vision: ElFigure's source code next some cleaned.
+    Append remnant from the widget placing into parent container temporary removed from scaleRotate() and unScaleRotate()
+	for prevent flaws between inundations into some cases.
+	createInundationPath() some prepared for the source next convolution.
+
+
 2015-01-21 Roman
 - !:SYS: POT files generated and left into the source tree for allow fast translation start to different languages.
 - FIX:Transport.Serial: The source code cleaned from doubles TSYS::strNoSpace() and some other.
