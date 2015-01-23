@@ -659,10 +659,31 @@ void TTransportIn::stop( )
     }
 }
 
-vector<AutoHD<TTransportOut> > TTransportIn::assTrs( )
+vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanClosed )
 {
     vector<AutoHD<TTransportOut> > rez;
-    ResAlloc resN(nodeRes(), false);
+
+    ResAlloc resN(nodeRes(), true);
+
+    //Find proper for clean up stopped transports
+    if(checkForCleanClosed)
+	for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++) {
+	    bool isFree = mAssTrO[i_ass].freeStat();
+	    if(!isFree && mAssTrO[i_ass].at().startStat()) continue;
+	    if(!isFree) {
+		string oTrId = mAssTrO[i_ass].at().id();
+		mAssTrO[i_ass].free();
+		try { owner().outDel(oTrId); }
+		catch(TError er) {
+		    mAssTrO[i_ass] = owner().outAt(oTrId);
+		    mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str());
+		    continue;
+		}
+	    }
+	    mAssTrO.erase(mAssTrO.begin()+i_ass);
+	    i_ass--;
+	}
+
     rez = mAssTrO;
     resN.unlock();
 
@@ -672,25 +693,24 @@ vector<AutoHD<TTransportOut> > TTransportIn::assTrs( )
 string TTransportIn::assTrO( const string &addr )
 {
     ResAlloc resN(nodeRes(), true);
-    string oTrId;
     int trFor = -1;
     //Find proper for replace and clean up stopped transports
     for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++) {
-	if(!mAssTrO[i_ass].freeStat() && mAssTrO[i_ass].at().startStat()) continue;
-	if(trFor < 0) trFor = i_ass;
-	else {
-	    oTrId = mAssTrO[i_ass].at().id();
+	bool isFree = mAssTrO[i_ass].freeStat();
+	if(!isFree && mAssTrO[i_ass].at().startStat()) continue;
+	if(!isFree && trFor < 0) { trFor = i_ass; continue; }
+	if(!isFree) {
+	    string oTrId = mAssTrO[i_ass].at().id();
 	    mAssTrO[i_ass].free();
-	    try {
-		owner().outDel(oTrId);
-		mAssTrO.erase(mAssTrO.begin()+i_ass);
-		i_ass--;
-	    }
+	    try { owner().outDel(oTrId); }
 	    catch(TError er) {
 		mAssTrO[i_ass] = owner().outAt(oTrId);
 		mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str());
+		continue;
 	    }
 	}
+	mAssTrO.erase(mAssTrO.begin()+i_ass);
+	i_ass--;
     }
 
     //Create new assigned transport

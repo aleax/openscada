@@ -1,3 +1,8 @@
+2015-01-23 Roman
+- Transports,Transports::Sockets: TTransportIn::assTrs() expanded by argument "checkForCleanClosed" for allow checking to clean up and
+    used for force clean up into achiving to limits, possible for unstick from the limit.
+
+
 2015-01-22 Roman
 - FIX:DB: Radial image mnEls.rad_l_127 fixed for edge and make equal to mnEls.rad_r_127.
 - SYS.TCntrNode: Set for original message print at exception into chldDel() or mostly into heir's postDisable().

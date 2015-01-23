@@ -396,7 +396,7 @@ void *TSocketIn::Task( void *sock_in )
 		    continue;
 		}
 		//Create presenting the client connection output transport
-		if(sock->protocol().empty() && (int)sock->assTrs().size() <= sock->maxFork()) {
+		if(sock->protocol().empty() && (int)sock->assTrs(true).size() <= sock->maxFork()) {
 		    sock->assTrO("SOCK:"+i2s(sock_fd_CL));
 		    sock->connNumb++;
 		    continue;

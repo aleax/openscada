@@ -76,7 +76,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual void stop( );
 	virtual int writeTo( const string &sender, const string &data )	{ return 0; }
 
-	vector<AutoHD<TTransportOut> > assTrs( );	//Assigned transports
+	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanClosed = false );	//Assigned transports
 
 	TTipTransport &owner( );
 
@@ -129,7 +129,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	name( );
 	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
 	string	addr( )		{ return cfg("ADDR").getS(); }
-	virtual string timings( ) { return ""; }
+	virtual	string timings( ) { return ""; }
 	int64_t	prm1( )		{ return mPrm1; }
 	int64_t	prm2( )		{ return mPrm2; }
 	bool	toStart( )	{ return mStart; }
