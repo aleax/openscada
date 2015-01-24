@@ -1,3 +1,7 @@
+2015-01-24 Roman
+- UI.WebVision: root user or users into group "root" allowed for multiple sessions open into any cases.
+
+
 2015-01-23 Roman
 - Transports,Transports::Sockets: TTransportIn::assTrs() expanded by argument "checkForCleanClosed" for allow checking to clean up and
     used for force clean up into achiving to limits, possible for unstick from the limit.

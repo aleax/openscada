@@ -456,15 +456,16 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    //New session create
 	    else if(zero_lev.compare(0,4,"prj_") == 0) {
 		string sName;
-		// Find for early created session for user and sender
+		// Find for early created session for the user and the sender
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
-		cntrIfCmd(req,ses.user);
+		cntrIfCmd(req, ses.user);
 		ResAlloc sesRes(mSesRes, false);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-		    if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
+		if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
+		    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
+			if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
 			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
-		    { sName = req.childGet(i_ch)->text(); break; }
+			{ sName = req.childGet(i_ch)->text(); break; }
 		if(sName.empty()) {
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);

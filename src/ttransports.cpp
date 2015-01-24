@@ -659,14 +659,14 @@ void TTransportIn::stop( )
     }
 }
 
-vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanClosed )
+vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanDisabled )
 {
     vector<AutoHD<TTransportOut> > rez;
 
     ResAlloc resN(nodeRes(), true);
 
     //Find proper for clean up stopped transports
-    if(checkForCleanClosed)
+    if(checkForCleanDisabled)
 	for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++) {
 	    bool isFree = mAssTrO[i_ass].freeStat();
 	    if(!isFree && mAssTrO[i_ass].at().startStat()) continue;

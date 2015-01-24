@@ -76,7 +76,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual void stop( );
 	virtual int writeTo( const string &sender, const string &data )	{ return 0; }
 
-	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanClosed = false );	//Assigned transports
+	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanDisabled = false );	//Assigned transports
 
 	TTipTransport &owner( );
 
