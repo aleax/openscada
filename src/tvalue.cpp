@@ -62,7 +62,7 @@ void TValue::addFld( TElem *el, unsigned id_val )
 
 void TValue::delFld( TElem *el, unsigned id_val )
 {
-    if(nodeMode() == TCntrNode::Enable && chldPresent(m_vl,el->fldAt(id_val).name()))
+    if(nodeMode() == TCntrNode::Enabled && chldPresent(m_vl,el->fldAt(id_val).name()))
 	chldDel(m_vl, el->fldAt(id_val).name());
 }
 

@@ -773,10 +773,10 @@ void ShapeElFigure::initShapeItems( const QPointF &pos, QVector<int> &items_arra
 		    shapeItems[j].n2 = elFD->appendPoint(pnts[shapeItems[j].n2], true);
 	    }
 	    count_moveItemTo	= 1;
-	    count_Shapes    	= 1;
-	    flag_ctrl_move  	= false;
+	    count_Shapes	= 1;
+	    flag_ctrl_move	= false;
 	    flag_ctrl		= true;
-	    offset 		= QPointF( );
+	    offset		= QPointF( );
 	    index		= items_array[i];
 	    itemInMotion	= &shapeItems[index];
 	    moveItemTo(pos, w);
@@ -2726,12 +2726,8 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
     double a = 0, b = 0, ang = 0, ang_t = 0;
     itemInMotion->ang_t = 0;
     QPointF StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
-    //int mN[5] = { itemInMotion->n1, itemInMotion->n2, itemInMotion->n3, itemInMotion->n4, itemInMotion->n5 },
-    int MotionNum_1 = itemInMotion->n1,
-	MotionNum_2 = itemInMotion->n2,
-	MotionNum_3 = itemInMotion->n3,
-	MotionNum_4 = itemInMotion->n4,
-	MotionNum_5 = itemInMotion->n5,
+    int MotionNum_1 = itemInMotion->n1, MotionNum_2 = itemInMotion->n2,
+	MotionNum_3 = itemInMotion->n3, MotionNum_4 = itemInMotion->n4, MotionNum_5 = itemInMotion->n5,
 	MotionLineColor = itemInMotion->lineColor,
 	MotionBorderColor = itemInMotion->borderColor,
 	MotionStyle = itemInMotion->style,
@@ -2739,29 +2735,20 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	MotionBorderWidth = itemInMotion->borderWidth;
     shapeType = itemInMotion->type;
     QPointF EndMotionPos_temp, CtrlMotionPos_1_temp, CtrlMotionPos_2_temp;
-    //bool f_mN[5] = { false, false, false, false, false },
-    bool flag_MotionNum_1 = false,
-	 flag_MotionNum_2 = false,
-	 flag_MotionNum_3 = false,
-	 flag_MotionNum_4 = false,
-	 flag_MotionNum_5 = false,
+    bool flag_MotionNum_1 = false, flag_MotionNum_2 = false,
+	 flag_MotionNum_3 = false, flag_MotionNum_4 = false, flag_MotionNum_5 = false,
 	 fl_orto = false;
-    for(int i = 0; i < num_vector.size(); i++)
-    {
+    for(int i = 0; i < num_vector.size(); i++) {
 	if(num_vector[i] == MotionNum_1) flag_MotionNum_1 = true;
 	if(num_vector[i] == MotionNum_2) flag_MotionNum_2 = true;
 	if(num_vector[i] == MotionNum_3) flag_MotionNum_3 = true;
 	if(num_vector[i] == MotionNum_4) flag_MotionNum_4 = true;
 	if(num_vector[i] == MotionNum_5) flag_MotionNum_5 = true;
     }
-	//for(i_p = 0; i_p < 5; i_p++)
-	//    if(num_vector[i] == mN[i_p]) f_mN[i_p] = true;
 
-    //> moving the whole figure
-    if(rect_num == -1)
-    {
-	if((status_hold && count_holds > 1) || (flag_ctrl && count_Shapes > 1))
-	{
+    //Moving the whole figure
+    if(rect_num == PntNull) {
+	if((status_hold && count_holds > 1) || (flag_ctrl && count_Shapes > 1)) {
 	    StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w);
 	    if(!flag_MotionNum_1) { StartMotionPos += offset; num_vector.append(MotionNum_1); }
 	    EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w);
@@ -2773,19 +2760,15 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    CtrlMotionPos_3 = scaleRotate(pnts[itemInMotion->n5], w);
 	    if(!flag_MotionNum_5) { CtrlMotionPos_3 += offset; num_vector.append(MotionNum_5); }
 	}
-	else
-	{
+	else {
 	    StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w) + offset;
 	    EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w) + offset;
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w) + offset;
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w) + offset;
 	}
-	if(shapeType == ShT_Arc)
-	{
-	    CtrlMotionPos_4 = itemInMotion->ctrlPos4;
-	    //CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w) + offset;
-	    //CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w) + offset;
+	if(shapeType == ShT_Arc) {
 	    CtrlMotionPos_3 = scaleRotate(pnts[itemInMotion->n5], w) + offset;
+	    CtrlMotionPos_4 = itemInMotion->ctrlPos4;
 	    a = length(CtrlMotionPos_3, CtrlMotionPos_1); b = length(CtrlMotionPos_2, CtrlMotionPos_1);
 	    ang = angle(QLineF(CtrlMotionPos_1,CtrlMotionPos_3), QLineF(CtrlMotionPos_1,QPointF(CtrlMotionPos_1.x()+10, CtrlMotionPos_1.y())));
 	    if(CtrlMotionPos_3.y() > CtrlMotionPos_1.y()) ang = 360 - ang;
@@ -2796,15 +2779,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    EndMotionPos = QPointF(CtrlMotionPos_1.x()+rotate(arc(t_end,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(t_end,a,b),ang).y());
 	}
     }
-    //> moving the start point of the figure
-    if(rect_num == 0)
-    {
+    //Moving the start point of the figure
+    if(rect_num == PntStart) {
 	w->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
 		arg(rRnd(pnts[itemInMotion->n1].x(),POS_PREC_DIG)).arg(rRnd(pnts[itemInMotion->n1].y(),POS_PREC_DIG)), 10000);
 	EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w);
 
-	if(shapeType == ShT_Arc)
-	{
+	if(shapeType == ShT_Arc) {
 	    StartMotionPos = Mouse_pos;
 	    if(flag_up || flag_down || flag_right || flag_left) StartMotionPos = pnts[itemInMotion->n1]+offset;
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
@@ -2823,38 +2804,29 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    if(StartMotionPos.y() > 0)	t_start = 1 - t_start;
 	    if(t_start < 0)		t_start = 1 + t_start;
 	    if(t_start > t_end)		t_end += 1;
-	    if((t_end-1) > t_start) 	t_end -= 1;
+	    if((t_end-1) > t_start)	t_end -= 1;
 	    if(t_start == t_end) 	t_end += 1;
 	    if(t_end > t_start && t_start >= 1 && t_end > 1)	{ t_start -= 1; t_end -= 1; }
 	    StartMotionPos = QPointF(CtrlMotionPos_1.x()+rotate(arc(t_start,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(t_start,a,b),ang).y());
 	    EndMotionPos = QPointF(CtrlMotionPos_1.x() + rotate(arc(t_end,a,b),ang).x(), CtrlMotionPos_1.y() - rotate(arc(t_end,a,b),ang).y());
 	}
-	else
-	{
-	    if(!flag_hold_arc && !flag_arc_rect_3_4)		// if the figure is not connected to the arc
-	    {
+	else {
+	    if(!flag_hold_arc && !flag_arc_rect_3_4) {		// if the figure is not connected to the arc
 		StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w);
-		if(status_hold && count_holds && flag_rect)
-		{
+		if(status_hold && count_holds && flag_rect) {
 		    if(!flag_MotionNum_1) { StartMotionPos += offset; num_vector.append(MotionNum_1); }
 		}
-		else
-		{
-		    StartMotionPos += offset;
-		}
+		else StartMotionPos += offset;
 		CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 		CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
 	    }
-	    if(flag_hold_arc || flag_arc_rect_3_4)	// if the figure is connected to the arc
-	    {
-		if(arc_rect == 0)
-		{
+	    if(flag_hold_arc || flag_arc_rect_3_4) {	// if the figure is connected to the arc
+		if(arc_rect == 0) {
 		    StartMotionPos = scaleRotate(pnts[shapeItems[index_array[0]].n1], w);
 		    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 		    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
 		}
-		if(arc_rect == 1)
-		{
+		if(arc_rect == 1) {
 		    StartMotionPos = scaleRotate(pnts[shapeItems[index_array[0]].n2], w);
 		    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 		    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
@@ -2862,18 +2834,15 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    }
 	}
     }
-    //> moving the end point of the figure
-    if(rect_num == 1)
-    {
+    //Moving the end point of the figure
+    if(rect_num == PntEnd) {
 	w->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
 		arg(rRnd(pnts[itemInMotion->n2].x(),POS_PREC_DIG)).arg(rRnd(pnts[itemInMotion->n2].y(),POS_PREC_DIG)), 10000);
 	StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w);
 
-	if(shapeType == ShT_Arc)
-	{
+	if(shapeType == ShT_Arc) {
 	    EndMotionPos = Mouse_pos;
-	    if(flag_up || flag_down || flag_right || flag_left)
-	    {
+	    if(flag_up || flag_down || flag_right || flag_left) {
 		EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w);
 		EndMotionPos += offset;
 	    }
@@ -2896,20 +2865,15 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    if((t_end > t_start) && t_start >= 1 && t_end > 1) { t_start -= 1; t_end -= 1; }
 	    EndMotionPos = QPointF(CtrlMotionPos_1.x()+rotate(arc(t_end,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(t_end,a,b),ang).y());
 	}
-	else
-	{
-	    if(!flag_hold_arc && !flag_arc_rect_3_4)
-	    {
+	else {
+	    if(!flag_hold_arc && !flag_arc_rect_3_4) {
 		EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w);
-		if(status_hold && count_holds && flag_rect)
-		{
+		if(status_hold && count_holds && flag_rect) {
 		    if(!flag_MotionNum_2) { EndMotionPos += offset; num_vector.append(MotionNum_2); }
 		}
-		else
-		{
+		else {
 		    EndMotionPos += offset;
-		    if((QApplication::keyboardModifiers()&Qt::ShiftModifier) && status && !fl_orto_disable)
-		    {
+		    if((QApplication::keyboardModifiers()&Qt::ShiftModifier) && status && !fl_orto_disable) {
 			fl_orto = true;
 			if(fl_orto_move) { CtrlMotionPos_4 = EndMotionPos; fl_orto_move = false; }
 			else CtrlMotionPos_4 = itemInMotion->ctrlPos4 + offset;
@@ -2919,8 +2883,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 			else EndMotionPos.setX(StartMotionPos.x());
 		    }
 		}
-		if(fl_status_move)
-		{
+		if(fl_status_move) {
 		    double ang_bezier = 0;
 		    QLineF ln1, ln2;
 		    CtrlMotionPos_1 = QPointF(length(EndMotionPos,StartMotionPos)/3, 0);
@@ -2932,22 +2895,18 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 		    CtrlMotionPos_1 = QPointF(StartMotionPos.x()+rotate(CtrlMotionPos_1,ang_bezier).x(), StartMotionPos.y()-rotate(CtrlMotionPos_1,ang_bezier).y());
 		    CtrlMotionPos_2 = QPointF(StartMotionPos.x()+rotate(CtrlMotionPos_2,ang_bezier).x(), StartMotionPos.y()-rotate(CtrlMotionPos_2,ang_bezier).y());
 		}
-		else
-		{
+		else {
 		    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 		    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
 		}
 	    }
-	    if(flag_hold_arc || flag_arc_rect_3_4)
-	    {
-		if(arc_rect == 0)
-		{
+	    if(flag_hold_arc || flag_arc_rect_3_4) {
+		if(arc_rect == 0) {
 		    EndMotionPos = scaleRotate(pnts[shapeItems[index_array[0]].n1], w);
 		    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 		    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
 		}
-		if(arc_rect == 1)
-		{
+		if(arc_rect == 1) {
 		    EndMotionPos = scaleRotate(pnts[shapeItems[index_array[0]].n2], w);
 		    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 		    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
@@ -2955,15 +2914,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    }
 	}
     }
-    //> moving the first control point of the figure
-    if(rect_num == 2)
-    {
+    //Moving the first control point of the figure
+    if(rect_num == PntCntr1) {
 	w->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
 		arg(rRnd(pnts[itemInMotion->n3].x(),POS_PREC_DIG)).arg(rRnd(pnts[itemInMotion->n3].y(),POS_PREC_DIG)), 10000);
 	StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w);
 	EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w);
-	if(shapeType == ShT_Arc)
-	{
+	if(shapeType == ShT_Arc) {
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
 	    CtrlMotionPos_3 = scaleRotate(pnts[itemInMotion->n5], w);
@@ -2975,22 +2932,19 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    t_start = CtrlMotionPos_4.x();
 	    t_end = CtrlMotionPos_4.y();
 	}
-	else
-	{
+	else {
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w);
 	    CtrlMotionPos_1 += offset;
 	}
     }
-    //> moving the second control point of the figure
-    if(rect_num == 3)
-    {
+    //Moving the second control point of the figure
+    if(rect_num == PntCntr2) {
 	w->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
 		arg(rRnd(pnts[itemInMotion->n4].x(),POS_PREC_DIG)).arg(rRnd(pnts[itemInMotion->n4].y()),POS_PREC_DIG), 10000);
 	StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w);
 	EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w);
-	if(shapeType == ShT_Arc)
-	{
+	if(shapeType == ShT_Arc) {
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w) + offset;
 	    CtrlMotionPos_3 = scaleRotate(pnts[itemInMotion->n5], w);
@@ -3008,15 +2962,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    StartMotionPos = QPointF(CtrlMotionPos_1.x()+rotate(arc(t_start,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(t_start,a,b),ang).y());
 	    EndMotionPos = QPointF(CtrlMotionPos_1.x()+rotate(arc(t_end,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(t_end,a,b),ang).y());
 	}
-	else
-	{
+	else {
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w) + offset;
 	}
     }
-    //> moving the third control point of the figure
-    if(rect_num == 4)
-    {
+    //Moving the third control point of the figure
+    if(rect_num == PntCntr3) {
 	w->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
 		arg(rRnd(pnts[itemInMotion->n5].x(),POS_PREC_DIG)).arg(rRnd(pnts[itemInMotion->n5].y(),POS_PREC_DIG)), 10000);
 	CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w);
@@ -3035,17 +2987,15 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
     shapeItems.remove(index);
     if(!flag_ctrl || (!flag_ctrl_move && count_Shapes == (count_moveItemTo+count_Shapes-1))) rectItems.clear();
 
-    //> building the line
-    if(shapeType == ShT_Line)
-    {
+    //Building the line
+    if(shapeType == ShT_Line) {
 	ang = angle(QLineF(StartMotionPos, EndMotionPos), QLineF(StartMotionPos, QPointF(StartMotionPos.x()+10,StartMotionPos.y())));
 	if(StartMotionPos.y() <= EndMotionPos.y()) ang = 360 - ang;
 	QPointF orto_pnt = fl_orto ? CtrlMotionPos_4 : QPointF();
 	shapeItems.append(ShapeItem(painterPath(widths[MotionWidth]*scaleW,widths[MotionBorderWidth],1,ang,StartMotionPos,EndMotionPos),
 			            painterPathSimple(1,ang,StartMotionPos,EndMotionPos),
 				    MotionNum_1,MotionNum_2,-1,-1,-1,orto_pnt,MotionLineColor,MotionBorderColor,MotionStyle,MotionWidth,MotionBorderWidth,1,angle_temp));
-	if(devW && devW->edit())
-	{
+	if(devW && devW->edit()) {
 	    rectItems.append(RectItem(MotionNum_1)); rectItems.last().path.addRect(QRectF(StartMotionPos,QSize(6,6)).translated(-3,-3));
 	    rectItems.append(RectItem(MotionNum_2)); rectItems.last().path.addRect(QRectF(EndMotionPos,QSize(6,6)).translated(-3,-3));
 	}
@@ -3054,25 +3004,31 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	pnts[MotionNum_1] = StartMotionPos;
 	pnts[MotionNum_2] = EndMotionPos;
     }
-    //> building the arc
-    if(shapeType == ShT_Arc)
-    {
+    //Building the arc
+    if(shapeType == ShT_Arc) {
 	CtrlMotionPos_2 = QPointF(CtrlMotionPos_1.x()+rotate(arc(0.25,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(0.25,a,b),ang).y());
 	CtrlMotionPos_4 = QPointF(t_start, t_end);
 	CtrlMotionPos_3 = QPointF(CtrlMotionPos_1.x()+rotate(arc(0,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(0,a,b),ang).y());
 	shapeItems.append(ShapeItem(painterPath(widths[MotionWidth]*scaleW,widths[MotionBorderWidth],2,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2,CtrlMotionPos_3,CtrlMotionPos_4),
 				    painterPathSimple(2,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2,CtrlMotionPos_3,CtrlMotionPos_4),
 				    MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4,MotionLineColor,MotionBorderColor,MotionStyle,MotionWidth,MotionBorderWidth,2,angle_temp,ang_t));
-	if(devW && devW->edit())
-	{
-	    rectItems.append(RectItem(MotionNum_1)); rectItems.last().path.addRect(QRectF(StartMotionPos,QSize(6,6)).translated(-3,-3));
-	    rectItems.append(RectItem(MotionNum_2)); rectItems.last().path.addRect(QRectF(EndMotionPos,QSize(6,6)).translated(-3,-3));
-	    rectItems.append(RectItem(MotionNum_3,QPainterPath(),QBrush(QColor(127,127,127,128),Qt::SolidPattern)));
+	if(devW && devW->edit()) {
+	    rectItems.append(RectItem(MotionNum_1));
+	    rectItems.last().path.addRect(QRectF(StartMotionPos,QSize(6,6)).translated(-3,-3));
+
+	    rectItems.append(RectItem(MotionNum_2));
+	    rectItems.last().path.addRect(QRectF(EndMotionPos,QSize(6,6)).translated(-3,-3));
+
+	    rectItems.append(RectItem(MotionNum_3,QPainterPath(),QBrush(QColor(50,50,50,128),Qt::SolidPattern)));
 	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_1,QSize(6,6)).translated(-3,-3));
+
 	    rectItems.append(RectItem(MotionNum_4,QPainterPath(),QBrush(QColor(127,127,127,128),Qt::SolidPattern)));
-	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_2,QSize(6,6)).translated(-3,-3));
-	    rectItems.append(RectItem(MotionNum_5,QPainterPath(),QBrush(QColor(50,50,50,128),Qt::SolidPattern)));
-	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_3,QSize(6,6)).translated(-20,-3));
+	    int xSh = ((CtrlMotionPos_2-StartMotionPos).manhattanLength() < 5 || (CtrlMotionPos_2-EndMotionPos).manhattanLength() < 5) ? 10*w->xScale(true) : 0;
+	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_2,QSize(6,6)).translated(-3-xSh,-3));
+
+	    rectItems.append(RectItem(MotionNum_5,QPainterPath(),QBrush(QColor(127,127,127,128),Qt::SolidPattern)));
+	    xSh = ((CtrlMotionPos_3-StartMotionPos).manhattanLength() < 5 || (CtrlMotionPos_3-EndMotionPos).manhattanLength() < 5) ? 10*w->xScale(true) : 0;
+	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_3,QSize(6,6)).translated(-3-xSh,-3));
 	}
 
 	StartMotionPos = unScaleRotate(StartMotionPos, w);
@@ -3086,17 +3042,15 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	pnts[MotionNum_4] = CtrlMotionPos_2;
 	pnts[MotionNum_5] = CtrlMotionPos_3;
     }
-    //> building the bezier curve
-    if(shapeType == ShT_Bezier)
-    {
-	ang = angle(QLineF(StartMotionPos, EndMotionPos), QLineF(StartMotionPos, QPointF(StartMotionPos.x()+10,StartMotionPos.y())));
+    //Building the bezier curve
+    if(shapeType == ShT_Bezier) {
+	ang = angle(QLineF(StartMotionPos,EndMotionPos), QLineF(StartMotionPos,QPointF(StartMotionPos.x()+10,StartMotionPos.y())));
 	if(StartMotionPos.y() <= EndMotionPos.y()) ang = 360 - ang;
 	shapeItems.append(ShapeItem(painterPath(widths[MotionWidth]*scaleW,widths[MotionBorderWidth],3,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2),
 			            painterPathSimple(3,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2),
 				    MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,-1,CtrlMotionPos_4,MotionLineColor,MotionBorderColor,MotionStyle,MotionWidth,MotionBorderWidth,3,angle_temp));
 
-	if(devW && devW->edit())
-	{
+	if(devW && devW->edit()) {
 	    rectItems.append(RectItem(MotionNum_1)); rectItems.last().path.addRect(QRectF(StartMotionPos,QSize(6,6)).translated(-3,-3));
 	    rectItems.append(RectItem(MotionNum_2)); rectItems.last().path.addRect(QRectF(EndMotionPos,QSize(6,6)).translated(-3,-3));
 	    rectItems.append(RectItem(MotionNum_3,QPainterPath(),QBrush(QColor(127,127,127,128),Qt::SolidPattern)));
@@ -3114,8 +3068,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	pnts[MotionNum_4] = CtrlMotionPos_2;
     }
 
-    for(int i = shapeItems.size() - 1; i > index; i--)
-    {
+    for(int i = (shapeItems.size()-1); i > index; i--) {
 	temp_shape = shapeItems[i-1];
 	shapeItems[i-1] = shapeItems[i];
 	shapeItems[i] = temp_shape;
@@ -3744,8 +3697,6 @@ QPainterPath ShapeElFigure::painterPath( float width, float bWidth, int type, do
 	    pCntr2 = QPointF(rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.y(),POS_PREC_DIG,true));
 	    pCntr3 = QPointF(rRnd(pCntr3.x(),POS_PREC_DIG,true), rRnd(pCntr3.y(),POS_PREC_DIG,true));*/
 
-	    //!!!! RealRound function using removed by painting low quality arcs.
-	    // Possible need RealRound apply only to all source points or only to begin and end points.
 	    double arc_a = length(pCntr3, pCntr1) + width/2 + bWidth/2,
 		   arc_b = length(pCntr1, pCntr2) + width/2 + bWidth/2,
 		   arc_a_small = arc_a - width - bWidth,
@@ -3817,16 +3768,11 @@ QPainterPath ShapeElFigure::painterPathSimple( int type, double ang, QPointF pBe
     switch(type) {
 	case ShT_Line: circlePath.lineTo(pEnd);	break;
 	case ShT_Arc: {
-	    /*pCntr1 = QPointF(rRnd(pCntr1.x(),POS_PREC_DIG,true), rRnd(pCntr1.y(),POS_PREC_DIG,true));
-	    pCntr2 = QPointF(rRnd(pCntr2.x(),POS_PREC_DIG,true), rRnd(pCntr2.y(),POS_PREC_DIG,true));
-	    pCntr3 = QPointF(rRnd(pCntr3.x(),POS_PREC_DIG,true), rRnd(pCntr3.y(),POS_PREC_DIG,true));*/
-
-	    //!!!! RealRound function using removed by painting low quality arcs.
-	    // Possible need RealRound apply only to all source points or only to begin and end points.
 	    double arc_a = length(pCntr3, pCntr1), arc_b = length(pCntr1, pCntr2),
 		   t_start = aT.x(), t_end = aT.y();
-	    QPointF rotArc = rotate(arc(t_start,arc_a,arc_b), ang);
-	    //circlePath.moveTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
+	    QPointF rotArc;// = rotate(arc(t_start,arc_a,arc_b), ang);
+	    //printf("TEST 00 Arc: ang=%g; t_start=%g; t_end=%g; pCntr1=[%g:%g]; pCntr2=[%g:%g]; pCntr3=[%g:%g]; arc_a=%g; arc_b=%g\n",
+	    //	ang, t_start, t_end, pCntr1.x(), pCntr1.y(), pCntr2.x(), pCntr2.y(), pCntr3.x(), pCntr3.y(), arc_a, arc_b);
 	    for(double t = t_start; true; t += ARC_STEP) {
 		rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
 		circlePath.lineTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());

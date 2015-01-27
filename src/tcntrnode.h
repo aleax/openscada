@@ -127,10 +127,10 @@ class TCntrNode
 	//Data
 	enum Flag {
 	    // Modes
-	    MkDisable	= 0x00,		//Node make disable
-	    Disable	= 0x01,		//Node disabled
-	    MkEnable	= 0x02,		//Node make enable
-	    Enable	= 0x03,		//Node enabled
+	    DoDisable	= 0x00,		//Node do disable
+	    Disabled	= 0x01,		//Node disabled
+	    DoEnable	= 0x02,		//Node do enable
+	    Enabled	= 0x03,		//Node enabled
 	    // Flags
 	    SelfModify	= 0x04,		//Self modify
 	    SelfModifyS	= 0x08,		//Self modify store
@@ -138,8 +138,7 @@ class TCntrNode
 	};
 	enum EnFlag {
 	    NodeConnect	= 0x01,		//Connect node to control tree
-	    NodeRestore	= 0x02,		//Restore node enabling after broken disabling.
-	    NodeShiftDel= 0x04
+	    NodeRestore	= 0x02		//Restore node enabling after broken disabling.
 	};
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
@@ -152,7 +151,7 @@ class TCntrNode
 
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0, bool noex = false );	//Get node for full path
-	void nodeDel( const string &path, char sep = 0, int flag = 0, bool shDel = false );	//Delete node at full path
+	void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 
 	TCntrNode *nodePrev( bool noex = false );
@@ -200,7 +199,7 @@ class TCntrNode
 	void nodeEn( int flag = 0 );
 	void nodeDis( long tm = 0, int flag = 0 );
 
-	void nodeDelAll( );	//For hard link objects
+	void nodeDelAll( );	//For hard link objects call from destructor
 
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
 	void setNodeMode( char mode );
@@ -210,7 +209,7 @@ class TCntrNode
 	unsigned grpAdd( const string &id, bool ordered = false );
 	void	grpDel( int8_t id );
 	virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
-	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
+	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0 );
 
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }
@@ -232,7 +231,7 @@ class TCntrNode
 	pthread_mutex_t	mChM, mDataM;	//Childs and generic data mutexes
 
 	// Childs
-	vector<GrpEl>		*chGrp;	//Child groups
+	vector<GrpEl>		*chGrp;	//Childs groups
 
 	// Curent node
 	unsigned short int	mUse;	//Use counter

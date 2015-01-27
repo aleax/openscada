@@ -1,5 +1,5 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
-# Copyright (C) 2003-2014 Roman Savochenko
+# Copyright (C) 2003-2015 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Roman Savochenko <rom_as@oscada.org>, 2003-2014.
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-27 13:56+0200\n"
+"POT-Creation-Date: 2015-01-26 23:05+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -166,20 +166,23 @@ msgstr ""
 "    name - Имя файла UNIX-сокета;\n"
 "    mode - режим работы (0 - разрывать соединение; 1 - сохранять соединение)."
 
-msgid "Queue length"
-msgstr "Длина очереди"
-
-msgid "Used for TCP and UNIX sockets."
-msgstr "Используется для TCP и UNIX сокетов."
-
-msgid "Clients maximum"
-msgstr "Максимум клиентов"
-
 msgid "Input buffer (kbyte)"
 msgstr "Входной буфер (кбайт)"
 
 msgid "Priority"
 msgstr "Приоритет"
+
+msgid "Maximum segment size (MSS)"
+msgstr "Максимальный размер сегмента (MSS)"
+
+msgid "Set 0 for system MSS."
+msgstr "Установить 0 для системного MSS."
+
+msgid "Queue length"
+msgstr "Длина очереди"
+
+msgid "Clients maximum"
+msgstr "Максимум клиентов"
 
 msgid "Keep alive requests"
 msgstr "Keep alive запросов"

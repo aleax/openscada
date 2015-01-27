@@ -22,6 +22,7 @@
 #include <sys/un.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/wait.h>
@@ -133,7 +134,7 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), cl_free(true)
+    TTransportIn(name,idb,el), mMSS(0), mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), cl_free(true)
 {
     setAddr("TCP:localhost:10002:0");
 }
@@ -159,6 +160,7 @@ void TSocketIn::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
+	vl = prmNd.attr("MSS");		if(!vl.empty()) setMSS(s2i(vl));
 	vl = prmNd.attr("MaxQueue");	if(!vl.empty()) setMaxQueue(s2i(vl));
 	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(s2i(vl));
 	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(s2i(vl));
@@ -171,6 +173,7 @@ void TSocketIn::load_( )
 void TSocketIn::save_( )
 {
     XMLNode prmNd("prms");
+    prmNd.setAttr("MSS", i2s(MSS()));
     prmNd.setAttr("MaxQueue", i2s(maxQueue()));
     prmNd.setAttr("MaxClients", i2s(maxFork()));
     prmNd.setAttr("BufLen", i2s(bufLen()));
@@ -191,13 +194,13 @@ void TSocketIn::start( )
     connNumb = clsConnByLim = 0;
 
     //Socket init
-    string s_type = TSYS::strSepParse(addr(),0,':');
+    string s_type = TSYS::strSepParse(addr(), 0, ':');
 
     if(s_type == S_NM_TCP) {
 	if((sock_fd=socket(PF_INET,SOCK_STREAM,0)) == -1)
 	    throw TError(nodePath().c_str(),_("Error create '%s' socket!"),s_type.c_str());
-	int vl = 1;
-	setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+	int vl = 1; setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+	if(MSS()) { vl = MSS(); setsockopt(sock_fd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 	type = SOCK_TCP;
     }
     else if(s_type == S_NM_UDP) {
@@ -652,22 +655,29 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","dec",
-	    "help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),RWRWR_,"root",STR_ID,2,"tp","dec",
-	    "help",_("Used for TCP and UNIX sockets."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/bfLn",_("Input buffer (kbyte)"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
             "tp","dec","min","-1","max","99","help",TMess::labTaskPrior());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveReqs",_("Keep alive requests"),RWRWR_,"root",STR_ID,2,"tp","dec",
-	    "help",_("Close the connection after specified requests.\nZero value for disable (not close ever)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,2,"tp","dec",
-	    "help",_("Close the connection after no requests at specified timeout.\nZero value for disable (not close ever)."));
+	if(addr().compare(0,4,"TCP:") == 0)
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/MSS",_("Maximum segment size (MSS)"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
+		"tp","str","help",_("Set 0 for system MSS."));
+	if(addr().compare(0,4,"TCP:") == 0 || addr().compare(0,5,"UNIX:") == 0 || addr().compare(0,7,"RAWCAN:") == 0) {
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveReqs",_("Keep alive requests"),RWRWR_,"root",STR_ID,2,"tp","dec",
+		"help",_("Close the connection after specified requests.\nZero value for disable (not close ever)."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,2,"tp","dec",
+		"help",_("Close the connection after no requests at specified timeout.\nZero value for disable (not close ever)."));
+	}
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/qLn") {
+    if(a_path == "/prm/cfg/MSS") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMSS(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/qLn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxQueue()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxQueue(s2i(opt->text()));
     }
@@ -698,7 +708,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //* TSocketOut                                   *
 //************************************************
 TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), sock_fd(-1), mLstReqTm(0)
+    TTransportOut(name,idb,el), sock_fd(-1), mMSS(0), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");
@@ -734,14 +744,16 @@ void TSocketOut::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("tms");	if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("tms"); if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("MSS"); if(!vl.empty()) setMSS(s2i(vl));
     } catch(...){ }
 }
 
 void TSocketOut::save_( )
 {
     XMLNode prmNd("prms");
-    prmNd.setAttr("tms",timings());
+    prmNd.setAttr("tms", timings());
+    prmNd.setAttr("MSS", i2s(MSS()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
@@ -765,11 +777,11 @@ void TSocketOut::start( int itmCon )
     //Connect to remote host
     string s_type = TSYS::strSepParse(addr(), 0, ':');
 
-    if(s_type == S_NM_SOCK)	type = SOCK_FORCE;
-    else if(s_type == S_NM_TCP)	type = SOCK_TCP;
-    else if(s_type == S_NM_UDP)	type = SOCK_UDP;
-    else if(s_type == S_NM_UNIX)type = SOCK_UNIX;
-    else if(s_type == S_NM_RAWCAN) type = SOCK_RAWCAN;
+    if(s_type == S_NM_SOCK)		type = SOCK_FORCE;
+    else if(s_type == S_NM_TCP)		type = SOCK_TCP;
+    else if(s_type == S_NM_UDP)		type = SOCK_UDP;
+    else if(s_type == S_NM_UNIX)	type = SOCK_UNIX;
+    else if(s_type == S_NM_RAWCAN)	type = SOCK_RAWCAN;
     else throw TError(nodePath().c_str(),_("Type socket '%s' error!"),s_type.c_str());
 
     if(type == SOCK_FORCE) {
@@ -803,8 +815,8 @@ void TSocketOut::start( int itmCon )
 	if(type == SOCK_TCP) {
 	    if((sock_fd=socket(PF_INET,SOCK_STREAM,0)) == -1)
 		throw TError(nodePath().c_str(), _("Error creation TCP socket: %s!"), strerror(errno));
-	    int vl = 1;
-	    setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+	    int vl = 1; setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+	    if(MSS()) { vl = MSS(); setsockopt(sock_fd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 	}
 	else if(type == SOCK_UDP) {
 	    if((sock_fd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
@@ -859,7 +871,7 @@ void TSocketOut::start( int itmCon )
 	if(!path.size()) path = "can0";
 	struct ifreq ifr;
 	strcpy(ifr.ifr_name, path.c_str());
-	ioctl(sock_fd, SIOCGIFINDEX, &ifr); 
+	ioctl(sock_fd, SIOCGIFINDEX, &ifr);
 	struct sockaddr_can name_can;
 	name_can.can_family = AF_CAN;
 	name_can.can_ifindex = ifr.ifr_ifindex;
@@ -998,6 +1010,9 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "    id - CAN id.\n"
 	    "  UNIX:{name} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name."));
+	if(addr().compare(0,4,"TCP:") == 0)
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/MSS",_("Maximum segment size (MSS)"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
+		"tp","str","help",_("Set 0 for system MSS."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"conn:next[:rep]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in seconds;\n"
@@ -1008,7 +1023,11 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/TMS") {
+    if(a_path == "/prm/cfg/MSS") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMSS(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }

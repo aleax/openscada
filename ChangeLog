@@ -1,3 +1,12 @@
+2015-01-27 Roman
+- !!!!:FIX:SYS: For prevent race condition the functions preEnable(), postEnable(), preDisable() and postDisable() sets to lock free.
+    Disabled nodes allowed to list also as checking for present.
+    Flags MkDisable, Disable, MkEnable, Enable renamed to DoDisable, Disabled, DoEnable, Enabled.
+    Flag NodeRestore removed.
+- Transport.Sockets: Property MSS is added for control TCP-segment size for bad channels.
+- UI.Vision: ElFig: next stage for clean up; Some smarter control for control point 1 and 2 of Arc is added.
+
+
 2015-01-24 Roman
 - UI.WebVision: root user or users into group "root" allowed for multiple sessions open into any cases.
 

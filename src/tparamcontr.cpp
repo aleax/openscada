@@ -377,7 +377,7 @@ void TParamContr::setType( const string &tpId )
     }
 
     type().destroy(this);
-    setNodeMode(TCntrNode::Disable);
+    setNodeMode(TCntrNode::Disabled);
 
     try
     {
@@ -400,7 +400,7 @@ void TParamContr::setType( const string &tpId )
 
     if(mPrm < 0 && tipparm->isPrmCntr) mPrm = grpAdd("prm_");
 
-    setNodeMode(TCntrNode::Enable);
+    setNodeMode(TCntrNode::Enabled);
 
     setVlCfg(this);
 

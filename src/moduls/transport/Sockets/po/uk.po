@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-27 13:56+0200\n"
+"POT-Creation-Date: 2015-01-26 23:05+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -165,20 +165,23 @@ msgstr ""
 "    name - Ім'я файлу UNIX-сокета;\n"
 "    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання)."
 
-msgid "Queue length"
-msgstr "Довжина черги"
-
-msgid "Used for TCP and UNIX sockets."
-msgstr "Використовується для TCP та UNIX сокетів."
-
-msgid "Clients maximum"
-msgstr "Максимум клієнтів"
-
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
 msgid "Priority"
 msgstr "Пріоритет"
+
+msgid "Maximum segment size (MSS)"
+msgstr "Максимальний розмір сегменту (MSS)"
+
+msgid "Set 0 for system MSS."
+msgstr "Встановити 0 для системного MSS."
+
+msgid "Queue length"
+msgstr "Довжина черги"
+
+msgid "Clients maximum"
+msgstr "Максимум клієнтів"
 
 msgid "Keep alive requests"
 msgstr "Keep alive запитів"

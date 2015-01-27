@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:55+0200\n"
+"POT-Creation-Date: 2015-01-26 23:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,19 +135,22 @@ msgid ""
 "    mode - work mode (0 - break connection; 1 - keep alive)."
 msgstr ""
 
-msgid "Queue length"
-msgstr ""
-
-msgid "Used for TCP and UNIX sockets."
-msgstr ""
-
-msgid "Clients maximum"
-msgstr ""
-
 msgid "Input buffer (kbyte)"
 msgstr ""
 
 msgid "Priority"
+msgstr ""
+
+msgid "Maximum segment size (MSS)"
+msgstr ""
+
+msgid "Set 0 for system MSS."
+msgstr ""
+
+msgid "Queue length"
+msgstr ""
+
+msgid "Clients maximum"
 msgstr ""
 
 msgid "Keep alive requests"
