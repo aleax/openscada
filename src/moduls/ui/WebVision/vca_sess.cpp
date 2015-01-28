@@ -5955,7 +5955,18 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     }
     else	//Data direct into address field by searilised XML string or horizontal line
 	try {
-	    if(addr().compare(0,5,"data:") == 0) req.load(addr().substr(5));
+	    if(addr().compare(0,5,"data:") == 0) {
+		req.load(addr().substr(5));
+		bool inSec = s2i(req.attr("s"));
+		arh_beg = s2ll(req.attr("tm_grnd")) * (inSec?1000000ll:1ll);
+		if(!arh_beg) arh_beg = tTimeGrnd;
+		req.setAttr("tm_grnd", ll2s(arh_beg));
+		arh_end = s2ll(req.attr("tm")) * (inSec?1000000ll:1ll);
+		if(!arh_end) arh_end = tTime;
+		req.setAttr("tm", ll2s(arh_end));
+		arh_per = s2ll(req.attr("per")) * (inSec?1000000ll:1ll);
+		req.setAttr("per", ll2s(arh_per));
+	    }
 	    else if(addr().compare(0,5,"line:") == 0)
 		req.setAttr("vtp", i2s(TFld::Real))->
 		    setAttr("tm", ll2s(tTime))->
@@ -6037,7 +6048,8 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     }
 
     //Append buffer to values deque
-    if(toEnd) {
+    if(isDataDir) vals.assign(buf.begin(), buf.end());
+    else if(toEnd) {
 	vals.insert(vals.end()-endBlks, buf.begin(), buf.end());
 	while(vals.size() > bufLim) vals.pop_front();
 	endBlks += buf.size();

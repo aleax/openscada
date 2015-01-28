@@ -1,3 +1,9 @@
+2015-01-28 Roman
+- FIX:UI.{Vision,WebVision}: For primitive "Diagram" expanded address variant "data:{XMLNodeData}" for allow pass "tm", "tm_grnd" and
+	possibility set in seconds by attribute 's'.
+    Assign loaded values but not the append to the values buffer for direct address variants "line:{value}" and "data:{XMLNodeData}" is fixed.
+
+
 2015-01-27 Roman
 - !!!!:FIX:SYS: For prevent race condition the functions preEnable(), postEnable(), preDisable() and postDisable() sets to lock free.
     Disabled nodes allowed to list also as checking for present.
