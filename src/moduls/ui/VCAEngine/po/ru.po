@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:56+0200\n"
+"POT-Creation-Date: 2015-01-29 18:35+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -701,8 +701,8 @@ msgstr "Виджет диаграммы конечной визуализаци�
 msgid "Tracing period (s)"
 msgstr "Период слежения (с)"
 
-msgid "Trend;Spectrum"
-msgstr "График;Спектр"
+msgid "Trend;Spectrum;XY"
+msgstr "График;Спектр;XY"
 
 msgid "Cursor:sek"
 msgstr "Курсор:сек"
@@ -731,18 +731,24 @@ msgstr "Шкала:цвет"
 msgid "Scale:horizontal"
 msgstr "Шкала:горизонтальная"
 
-msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Не рисовать;Решетка;Маркеры;Решетка и маркеры"
-
-msgid "Scale:vertical"
-msgstr "Шкала:вертикальная"
-
 msgid ""
 "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
 msgstr ""
 "Не рисовать;Решетка;Маркеры;Решетка и маркеры;Решетка (лог);Маркеры (лог);"
 "Решетка и маркеры (лог)"
+
+msgid "No draw;Grid;Markers;Grid and markers"
+msgstr "Не рисовать;Решетка;Маркеры;Решетка и маркеры"
+
+msgid "Scale:horizontal scale (%)"
+msgstr "Шкала:гориз. масштаб (%)"
+
+msgid "Scale:horizontal scale offset (%)"
+msgstr "Шкала:смещ. гориз. масштаба (%)"
+
+msgid "Scale:vertical"
+msgstr "Шкала:вертикальная"
 
 msgid "Scale:vertical scale (%)"
 msgstr "Шкала:верт. масштаб (%)"

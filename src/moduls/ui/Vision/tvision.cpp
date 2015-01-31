@@ -462,9 +462,9 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
     message(cat.toStdString().c_str(), (type==TVision::Crit) ? TMess::Crit :
 			(type==TVision::Error)?TMess::Error:
 			(type==TVision::Warning)?TMess::Warning:TMess::Info,"%s",mess.toStdString().c_str());
+
     //QT message
-    switch(type)
-    {
+    switch(type) {
 	case TVision::Info:	QMessageBox::information(parent,_(MOD_NAME),mess);	break;
 	case TVision::Warning:	QMessageBox::warning(parent,_(MOD_NAME),mess);		break;
 	case TVision::Error:	QMessageBox::critical(parent,_(MOD_NAME),mess);		break;

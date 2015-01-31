@@ -372,9 +372,9 @@ bool UserStBar::event( QEvent *event )
     return QLabel::event( event );
 }
 
-bool UserStBar::userSel()
+bool UserStBar::userSel( )
 {
-    DlgUser d_usr(user(),pass(),VCAStation(),parentWidget());
+    DlgUser d_usr(user(), pass(), VCAStation(), parentWidget());
     int rez = d_usr.exec();
     if(rez == DlgUser::SelOK && d_usr.user() != user()) {
 	QString old_user = user(), old_pass = pass();

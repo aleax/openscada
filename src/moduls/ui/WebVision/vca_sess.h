@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2013 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2015 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -112,7 +112,7 @@ class ShapeItem
 
 	Point	ctrlPos4;
 	double	ang;
-	int 	n1, n2, n3, n4, n5,
+	int	n1, n2, n3, n4, n5,
 		style,
 		width,
 		border_width,
@@ -168,19 +168,19 @@ class VCAElFigure : public VCAObj
 	Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale, bool flag_rotate );
 	int drawElF( SSess &ses, double xSc, double ySc, Point clickPnt );
 	//Attributes
-	double	width,	  //Widget geometry
+	double	width,		//Widget geometry
 		height,
 		geomX,
 		geomY;
-	int	geomMargin,     //Margin
+	int	geomMargin,	//Margin
 		lineClr,	//The color of the line
-		bordWdth,       //The border's width
+		bordWdth,	//The border's width
 		bordClr,	//The border's color
-		lineWdth,       //The line's width
+		lineWdth,	//The line's width
 		fillClr,	//The fill's color
-		lineStyle,      //The style of the line
-		scaleHeight,    //The vertical scale
-		scaleWidth;     //The horizontal scale
+		lineStyle,	//The style of the line
+		scaleHeight,	//The vertical scale
+		scaleWidth;	//The horizontal scale
 	string	elLst;
 	double	orient;		//The orientation angle
 	bool	active,		//Active diagram
@@ -223,9 +223,9 @@ class VCAText : public VCAObj
 
 	    private:
 		//Attributes
-		string		m_val;
-		string  	m_cfg;
-		int	     m_type;
+		string	m_val;
+		string	m_cfg;
+		int	m_type;
 	};
 
     public:
@@ -245,17 +245,17 @@ class VCAText : public VCAObj
 	bool	active;		//Active diagram
 
 	double	width, height;	 //Widget geometry
-	int     scaleHeight,	//Vertical scale
+	int	scaleHeight,	//Vertical scale
 		scaleWidth;	//Horizontal scale
-	int     textFontSize,	//The font's size of the text
+	int	textFontSize,	//The font's size of the text
 		textColor;	//The color of the text
-	short   alignHor :4;	//Horizontal align
-	short   alignVer :3;	//Vertical align
-	bool    wordWrap,	//Word wrap flag
+	short	alignHor :4;	//Horizontal align
+	short	alignVer :3;	//Vertical align
+	bool	wordWrap,	//Word wrap flag
 		underline,	//Underline text flag
 		strikeout,	//Strikeout text flag
 		bold;		//Bold text flag ( for calculating the underline and strikeout width )
-	string  text,		//The result text
+	string	text,		//The result text
 		text_tmpl,	//The text without the arguments
 		textFont;	//The text's font
 	vector<ArgObj>	args;	//The argument's vector
@@ -279,6 +279,7 @@ class VCADiagram : public VCAObj
 
 	void makeTrendsPicture( SSess &ses );
 	void makeSpectrumPicture( SSess &ses );
+	void makeXYPicture( SSess &ses );
 
 	//Attributes
 	int	width, height,		//Widget geometry
@@ -295,7 +296,7 @@ class VCADiagram : public VCAObj
 	int64_t	tTime, curTime, tPict, sclHorPer;	//Trend time, trend cursor's time position and picture time
 	float	tSize;			//Trend size (s)
 	float	fftBeg, fftEnd;
-	float	sclVerScl, sclVerSclOff;
+	float	sclVerScl, sclVerSclOff, sclHorScl, sclHorSclOff;
 	int	curColor, 		//Cursor line color
 		sclColor,		//Scale grid color
 		sclMarkColor,		//Scale markers color

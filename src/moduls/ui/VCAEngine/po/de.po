@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:56+0200\n"
+"POT-Creation-Date: 2015-01-29 18:35+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -695,8 +695,8 @@ msgstr "Widget für das Diagramm der Visualisierung."
 msgid "Tracing period (s)"
 msgstr "Trackingszeit (s)"
 
-msgid "Trend;Spectrum"
-msgstr "Plan;Spektrum"
+msgid "Trend;Spectrum;XY"
+msgstr "Plan;Spektrum;XY"
 
 msgid "Cursor:sek"
 msgstr "Cursor:sek"
@@ -725,18 +725,24 @@ msgstr "Skala:Farbe"
 msgid "Scale:horizontal"
 msgstr "Skala:waagerecht"
 
-msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung"
-
-msgid "Scale:vertical"
-msgstr "Skala:senkrecht"
-
 msgid ""
 "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
 msgstr ""
 "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung;Gitter (log);"
 "Markierung (log);Gitter und Markierung (log)"
+
+msgid "No draw;Grid;Markers;Grid and markers"
+msgstr "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung"
+
+msgid "Scale:horizontal scale (%)"
+msgstr "Skala:horizontalen Maßstab (%)"
+
+msgid "Scale:horizontal scale offset (%)"
+msgstr "Skala:senkrecht. Maßstab horizontalen (%)"
+
+msgid "Scale:vertical"
+msgstr "Skala:senkrecht"
 
 msgid "Scale:vertical scale (%)"
 msgstr "Skala:senkrechter Maßstab (%)"

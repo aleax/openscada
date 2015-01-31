@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -316,7 +316,7 @@ class ShapeDiagram : public WdgShape
     Q_OBJECT
 
     public:
-	//> Trend object's class
+	// Trend object's class
 	class TrendObj
 	{
 	    friend class ShapeDiagram;
@@ -366,7 +366,7 @@ class ShapeDiagram : public WdgShape
 		bool	isIndiv;		//Individual scale
 		char	wScale;
 #if HAVE_FFTW3_H
-		//> FFT
+		// FFT
 		int		fftN;		//Spectrum samples number
 		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
 #endif
@@ -379,23 +379,23 @@ class ShapeDiagram : public WdgShape
 		QColor		mColor;		//Values line color
 		char		mWidth;		//Line width in pixels
 		char		mScale;		//Separted scale
-		//> Archive
+		// Archive
 		int64_t		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time
 		int64_t		arh_end;	//Archive end time
-		//> Values
+		// Values
 		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
 
 		WdgView 	*view;
 	};
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1),
-		    tTime(0), tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0)	{ }
+		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1), tTime(0),
+		    tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
 
 		int64_t	arhEnd( int64_t def = 0 );
 
@@ -422,7 +422,7 @@ class ShapeDiagram : public WdgShape
 		int64_t	tTime, tPict, curTime, sclHorPer;
 		float	tSize;
 		float	fftBeg, fftEnd;
-		float	sclVerScl, sclVerSclOff;
+		float	sclVerScl, sclVerSclOff, sclHorScl, sclHorSclOff;
 		string	valArch;
 	};
 
@@ -443,6 +443,7 @@ class ShapeDiagram : public WdgShape
 	void makePicture( WdgView *view );
 	void makeTrendsPicture( WdgView *view );
 	void makeSpectrumPicture( WdgView *view );
+	void makeXYPicture( WdgView *view );
 
 	void loadData( WdgView *view, bool full = false );
 	void setCursor( WdgView *view, int64_t itm );

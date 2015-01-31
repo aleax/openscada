@@ -34,7 +34,7 @@ using namespace OSCADA;
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm), mPrm(-1), mEn(false), tipparm(tpprm)
 {
-    cfg("SHIFR") = mId = name;	//!! For prevent ID location change on parameter type change
+    cfg("SHIFR") = mId = name;	//!! For prevent ID location change on the parameter type change
 
     setName(name);
     if(type().isPrmCntr) mPrm = grpAdd("prm_");

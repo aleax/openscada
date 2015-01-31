@@ -273,8 +273,8 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display of the current user."));
     mWUser->setStatusTip(_("Double click to change user."));
-    connect( mWUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)) );
-    statusBar()->insertPermanentWidget(0,mWUser);
+    connect(mWUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)));
+    statusBar()->insertPermanentWidget(0, mWUser);
     mWStat = new QLabel(VCAStation().c_str(), this);
     mWStat->setWhatsThis(_("This label displays used VCA engine station."));
     mWStat->setToolTip(_("Field for display of the used VCA engine station."));
@@ -961,9 +961,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     XMLNode req("connect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     if(cntrIfCmd(req)) {
-	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	mWUser->setUser(oldUser);
 	mWUser->setPass(oldPass);
+	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	return;
     }
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());

@@ -1,3 +1,8 @@
+2015-01-31 Roman
+- !!!!:UI.{VCAEngine,Vision,WebVision}: Type "XY" to primitive "Diagram" support is added, by Y into unpair and X into pair parameters.
+- FIX:UI.Vision: Double free by later restoring user and the password after changing user to unalowed for reading user for the project's session.
+
+
 2015-01-28 Roman
 - FIX:UI.{Vision,WebVision}: For primitive "Diagram" expanded address variant "data:{XMLNodeData}" for allow pass "tm", "tm_grnd" and
 	possibility set in seconds by attribute 's'.

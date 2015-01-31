@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2013 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2015 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -404,12 +404,11 @@ double VCAElFigure::length( const Point pt1, const Point pt2 )
 //- Scaling and rotating the point -
 Point VCAElFigure::scaleRotate( const Point point, double xScale, double yScale,  bool flag_scale, bool flag_rotate )
 {
-    Point rpnt = Point( point.x, point.y );
+    Point rpnt = Point(point.x, point.y);
     Point center;
-    if( flag_rotate )
-    {
-	if( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/2 ) );
-	else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
+    if(flag_rotate) {
+	if(!flag_scale) center = Point(rRnd(width*xScale/2), rRnd(height*yScale/2));
+	else center = Point(rRnd(width/2), rRnd(height/2));
 	rpnt.x = rpnt.x - center.x;
 	rpnt.y = rpnt.y - center.y;
 	rpnt = rotate( rpnt, orient);
@@ -431,8 +430,8 @@ Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double ySc
     if( flag_scale ) rpnt = Point( rpnt.x/xScale, rpnt.y/yScale );
     if( flag_rotate )
     {
-	if( !flag_scale ) center = Point( TSYS::realRound( width*xScale/2 ), TSYS::realRound( height*yScale/ 2 ) );
-	else center = Point( TSYS::realRound( width/2 ), TSYS::realRound( height/2 ) );
+	if( !flag_scale ) center = Point(rRnd(width*xScale/2), rRnd(height*yScale/2));
+	else center = Point(rRnd(width/2), rRnd(height/2));
 	rpnt.x = rpnt.x - center.x;
 	rpnt.y = rpnt.y - center.y;
 	rpnt = rotate( rpnt, 360 - orient );
@@ -447,8 +446,7 @@ void VCAElFigure::paintFill( gdImagePtr im, Point pnt, InundationItem &in_item )
 {
     int fill_clr = gdImageColorResolveAlpha( im, (uint8_t)(in_item.P_color>>16), (uint8_t)(in_item.P_color>>8), (uint8_t)in_item.P_color, 127 - (uint8_t)(in_item.P_color>>24) );
     in_item.index_color = fill_clr;
-    gdImageFill( im, (int) TSYS::realRound(pnt.x),
-		     (int) TSYS::realRound(pnt.y),  fill_clr );
+    gdImageFill(im, (int)rRnd(pnt.x), (int)rRnd(pnt.y), fill_clr);
 }
 
 //- Detecting if any point of the figure is out of the borders of the image -
@@ -547,8 +545,8 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
 					el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ),
 				 Point( el_p3.x + rotate( arc( t_start+0.00277777777778, arc_a, arc_b ), ang ).x,
 					el_p3.y - rotate( arc( t_start+0.00277777777778, arc_a, arc_b ), ang ).y ) );
-	    int kol = (int)TSYS::realRound( wdt/len, POS_PREC_DIG, true) ;
-	    int kol_1 = (int)TSYS::realRound( wdt_1/len, POS_PREC_DIG, true );
+	    int kol = (int)rRnd(wdt/len, POS_PREC_DIG, true) ;
+	    int kol_1 = (int)rRnd(wdt_1/len, POS_PREC_DIG, true);
 	    if( kol_1 < 1 ) kol_1 = 1;
 	    double t = t_start;
 	    do
@@ -581,8 +579,8 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
 					bezier( 0.0, el_p1, el_p3, el_p4, el_p2).y ),
 				 Point( bezier( 0.0 + delta, el_p1, el_p3, el_p4, el_p2).x,
 					bezier( 0.0 + delta, el_p1, el_p3, el_p4, el_p2).y ) );
-	    int kol = (int)TSYS::realRound( wdt/len, POS_PREC_DIG, true);
-	    int kol_1 = (int)TSYS::realRound( wdt_1/len, POS_PREC_DIG, true);
+	    int kol = (int)rRnd(wdt/len, POS_PREC_DIG, true);
+	    int kol_1 = (int)rRnd(wdt_1/len, POS_PREC_DIG, true);
 	    if( kol_1 < 1 ) kol_1 = 1;
 
 	    double t = 0.0;
@@ -619,22 +617,22 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    if( el_p1.y <= el_p2.y ) el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 	    else el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 
-	    gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( -el_border_width, - (el_width/2+el_border_width)), el_ang ).y, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( length( el_p2, el_p1) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
-	    gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, ( el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
-	    gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.x + rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( -el_border_width, (el_width/2+el_border_width)), el_ang ).y, POS_PREC_DIG, true ), clr_el );
-	    gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y - rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
+	    gdImageLine( im, (int)rRnd(el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
+			     (int)rRnd(el_p1.y - rotate( Point( -el_border_width, - (el_width/2+el_border_width)), el_ang ).y, POS_PREC_DIG, true),
+			     (int)rRnd(el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
+			     (int)rRnd(el_p1.y - rotate( Point( length( el_p2, el_p1) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el);
+	    gdImageLine( im, (int)rRnd(el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
+			     (int)rRnd(el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true),
+			     (int)rRnd( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, ( el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
+	    gdImageLine( im, (int)rRnd( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p1.x + rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p1.y - rotate( Point( -el_border_width, (el_width/2+el_border_width)), el_ang ).y, POS_PREC_DIG, true ), clr_el );
+	    gdImageLine( im, (int)rRnd( el_p1.x + rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p1.y - rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p1.y - rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
 	    x_center = (el_p1.x + el_p2.x)/2;
 	    y_center = (el_p1.y + el_p2.y)/2;
 	    if( (int)(x_center + 0.5) < s_width && (int)(y_center + 0.5) < s_height )
@@ -653,27 +651,27 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    p4 = unrotate( el_p2, el_ang, el_p1.x, el_p1.y );
 	    t_start = el_p5.x;
 	    t_end = el_p5.y;
-	    p_center = Point( (int)TSYS::realRound( el_p1.x + rotate( bezier( t_start + (t_end - t_start)/2, p1, p2, p3, p4 ), el_ang ).x, POS_PREC_DIG, true ),
-			      (int)TSYS::realRound( el_p1.y  - rotate( bezier( t_start + (t_end - t_start)/2, p1, p2, p3, p4 ), el_ang ).y, POS_PREC_DIG, true ) );
+	    p_center = Point( (int)rRnd( el_p1.x + rotate( bezier( t_start + (t_end - t_start)/2, p1, p2, p3, p4 ), el_ang ).x, POS_PREC_DIG, true ),
+			      (int)rRnd( el_p1.y  - rotate( bezier( t_start + (t_end - t_start)/2, p1, p2, p3, p4 ), el_ang ).y, POS_PREC_DIG, true ) );
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)TSYS::realRound(el_p1.x + rotate( bezier( t,
+		gdImageLine( im, (int)rRnd(el_p1.x + rotate( bezier( t,
 				 Point( p1.x, p1.y+(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y+(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y+(el_width/2+el_border_width/2) ),
 				 Point( p4.x, p4.y+(el_width/2+el_border_width/2) ) ), el_ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound(el_p1.y - rotate( bezier( t,
+				 (int)rRnd(el_p1.y - rotate( bezier( t,
 				 Point( p1.x, p1.y+(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y+(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y+(el_width/2+el_border_width/2) ),
 				 Point( p4.x, p4.y+(el_width/2+el_border_width/2) ) ), el_ang ).y, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p1.x + rotate( bezier( t+delta,
+				 (int)rRnd( el_p1.x + rotate( bezier( t+delta,
 				 Point( p1.x, p1.y+(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y+(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y+(el_width/2+el_border_width/2) ),
 				 Point( p4.x, p4.y+(el_width/2+el_border_width/2) ) ), el_ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p1.y - rotate( bezier( t+delta,
+				 (int)rRnd( el_p1.y - rotate( bezier( t+delta,
 				 Point( p1.x, p1.y+(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y+(el_width/2+el_border_width/2) ),
 				 Point( p3.x,p3.y+(el_width/2+el_border_width/2) ),
@@ -684,22 +682,22 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( bezier( t,
+		gdImageLine( im, (int)rRnd( el_p1.x + rotate( bezier( t,
 				 Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y-(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y-(el_width/2+el_border_width/2) ),
 				 Point( p4.x, p4.y-(el_width/2+el_border_width/2) ) ), el_ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p1.y - rotate( bezier( t,
+				 (int)rRnd( el_p1.y - rotate( bezier( t,
 				 Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y-(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y-(el_width/2+el_border_width/2) ),
 				 Point( p4.x, p4.y-(el_width/2+el_border_width/2) ) ), el_ang ).y, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p1.x + rotate( bezier( t+delta,
+				 (int)rRnd( el_p1.x + rotate( bezier( t+delta,
 				 Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y-(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y-(el_width/2+el_border_width/2) ),
 				 Point( p4.x, p4.y-(el_width/2+el_border_width/2) ) ), el_ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound(el_p1.y - rotate( bezier( t+delta,
+				 (int)rRnd(el_p1.y - rotate( bezier( t+delta,
 				 Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y-(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y-(el_width/2+el_border_width/2) ),
@@ -708,24 +706,24 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    }
 	    while( t < t_end );
 	    pb1 = Point(
-		    (int)TSYS::realRound( el_p1.x + rotate( bezier( t,
+		    (int)rRnd( el_p1.x + rotate( bezier( t,
 		    Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
 		    Point( p2.x, p2.y-(el_width/2+el_border_width/2) ),
 		    Point( p3.x, p3.y-(el_width/2+el_border_width/2) ),
 		    Point( p4.x, p4.y-(el_width/2+el_border_width/2) ) ), el_ang ).x, POS_PREC_DIG, true ),
-		    (int)TSYS::realRound(el_p1.y - rotate( bezier( t,
+		    (int)rRnd(el_p1.y - rotate( bezier( t,
 		    Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
 		    Point( p2.x, p2.y-(el_width/2+el_border_width/2) ),
 		    Point( p3.x, p3.y-(el_width/2+el_border_width/2) ),
 		    Point( p4.x, p4.y-(el_width/2+el_border_width/2) ) ), el_ang ).y, POS_PREC_DIG, true )
 		  );
 	    pb2 = Point(
-		    (int)TSYS::realRound( el_p1.x + rotate( bezier( t,
+		    (int)rRnd( el_p1.x + rotate( bezier( t,
 		    Point( p1.x, p1.y+(el_width/2+el_border_width/2) ),
 		    Point( p2.x, p2.y+(el_width/2+el_border_width/2) ),
 		    Point( p3.x, p3.y+(el_width/2+el_border_width/2) ),
 		    Point( p4.x, p4.y+(el_width/2+el_border_width/2) ) ), el_ang ).x, POS_PREC_DIG, true ),
-		    (int)TSYS::realRound( el_p1.y - rotate( bezier( t,
+		    (int)rRnd( el_p1.y - rotate( bezier( t,
 		    Point( p1.x, p1.y+(el_width/2+el_border_width/2) ),
 		    Point( p2.x, p2.y+(el_width/2+el_border_width/2) ),
 		    Point( p3.x,p3.y+(el_width/2+el_border_width/2) ),
@@ -735,13 +733,13 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    if( t_start > 0.0 || t_end < 1.0 )
 		p1 = Point( bezier( t_start, p1, p2, p3, p4 ).x,
 			    bezier( t_start, p1, p2, p3, p4 ).y );
-	    gdImageLine( im, (int)TSYS::realRound(el_p1.x +
+	    gdImageLine( im, (int)rRnd(el_p1.x +
 			     rotate( Point( p1.x, p1.y+el_width/2+el_border_width/2 ), el_ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y -
+			     (int)rRnd( el_p1.y -
 			     rotate( Point( p1.x, p1.y+el_width/2+el_border_width/2 ), el_ang ).y, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.x +
+			     (int)rRnd( el_p1.x +
 			     rotate( Point( p1.x, p1.y - (el_width/2+el_border_width/2) ), el_ang).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p1.y -
+			     (int)rRnd( el_p1.y -
 			     rotate( Point( p1.x, p1.y - (el_width/2+el_border_width/2) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
 	    if( (int)(p_center.x+0.5) < s_width && (int)(p_center.y+0.5) < s_height )
 		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el, clr_el_line );
@@ -759,33 +757,33 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
+		gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+				 (int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+				 (int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+				 (int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
 		t += 0.00277777777778;
 	    }
 	    while( t < t_end );
-	    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p3.x + rotate( arc( t_end, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p3.y - rotate( arc( t_end, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ), clr_el );
+	    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p3.x + rotate( arc( t_end, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p3.y - rotate( arc( t_end, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ), clr_el );
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-				 (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ),clr_el );
+		gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+				 (int)rRnd( el_p3.y - rotate( arc( t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ),
+				 (int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+				 (int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ),clr_el );
 		t += 0.00277777777778;
 	    }
 	    while( t < t_end );
-	    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p3.x + rotate( arc( t_start, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-			     (int)TSYS::realRound( el_p3.y - rotate( arc( t_start, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ), clr_el );
-	    p_center = Point( TSYS::realRound( el_p3.x +rotate( arc( (t_end + t_start)/2, arc_a - el_width/2-1, arc_b - el_width/2-1 ), ang ).x, POS_PREC_DIG, true ),
-			      TSYS::realRound( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a - el_width/2-1, arc_b - el_width/2-1 ), ang ).y, POS_PREC_DIG, true ) );
+	    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p3.x + rotate( arc( t_start, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+			     (int)rRnd( el_p3.y - rotate( arc( t_start, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ), clr_el );
+	    p_center = Point( rRnd( el_p3.x +rotate( arc( (t_end + t_start)/2, arc_a - el_width/2-1, arc_b - el_width/2-1 ), ang ).x, POS_PREC_DIG, true ),
+			      rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a - el_width/2-1, arc_b - el_width/2-1 ), ang ).y, POS_PREC_DIG, true ) );
 	    if( (int)(p_center.x+0.5) < s_width && (int)(p_center.y+0.5) < s_height )
 		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el, clr_el_line );
 	    break;
@@ -837,18 +835,18 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 	    {
 		if( un_p1.x + wdt + wdt_1 <= un_p2.x )
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p1.y - rotate( un_p1, el_ang ).y, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p1.x + rotate( Point( un_p1.x + wdt, un_p1.y ), el_ang ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p1.y - rotate( Point ( un_p1.x + wdt, un_p1.y ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
+		    gdImageLine( im, (int)rRnd( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p1.y - rotate( un_p1, el_ang ).y, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p1.x + rotate( Point( un_p1.x + wdt, un_p1.y ), el_ang ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p1.y - rotate( Point ( un_p1.x + wdt, un_p1.y ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
 		    un_p1.x += wdt + wdt_1;
 		}
 		else
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p1.y - rotate( un_p1, el_ang ).y, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p1.x + rotate( un_p2, el_ang ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p1.y - rotate( un_p2, el_ang ).y, POS_PREC_DIG, true ), clr_el );
+		    gdImageLine( im, (int)rRnd( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p1.y - rotate( un_p1, el_ang ).y, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p1.x + rotate( un_p2, el_ang ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p1.y - rotate( un_p2, el_ang ).y, POS_PREC_DIG, true ), clr_el );
 		    break;
 		}
 	    }
@@ -897,8 +895,8 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 		    wdt_1 = 2*el_width+1;
 		}
 	    }
-	    int kol = (int)TSYS::realRound( wdt/len, POS_PREC_DIG, true);
-	    int kol_1 = (int)TSYS::realRound( wdt_1/len, POS_PREC_DIG, true);
+	    int kol = (int)rRnd( wdt/len, POS_PREC_DIG, true);
+	    int kol_1 = (int)rRnd( wdt_1/len, POS_PREC_DIG, true);
 	    if( kol_1 < 1 ) kol_1 = 1;
 	    t = t_start;
 	    int calc=0;
@@ -908,10 +906,10 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 		if( calc_1 == kol_1 ) { calc = 0; calc_1=0; }
 		if( calc < kol )
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
 		    calc++;
 		}
 		else
@@ -942,8 +940,8 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 		wdt_1 = 2*el_width;
 		wdt = el_width;
 	    }
-	    int kol = (int)TSYS::realRound( wdt/len, POS_PREC_DIG, true);
-	    int kol_1 = (int)TSYS::realRound( wdt_1/len, POS_PREC_DIG, true);
+	    int kol = (int)rRnd( wdt/len, POS_PREC_DIG, true);
+	    int kol_1 = (int)rRnd( wdt_1/len, POS_PREC_DIG, true);
 	    if( kol_1 < 1 ) kol_1 = 1;
 	    t = 0;
 	    int calc=0;
@@ -954,10 +952,10 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 		if( calc_1 == kol_1 ) { calc = 0; calc_1=0; }
 		if( calc < kol )
 		{
-		    gdImageLine( im, (int)TSYS::realRound( bezier( t, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( bezier( t, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( bezier( t+delta, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-				     (int)TSYS::realRound( bezier( t+delta, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ), clr_el );
+		    gdImageLine( im, (int)rRnd( bezier( t, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( bezier( t, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ),
+				     (int)rRnd( bezier( t+delta, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+				     (int)rRnd( bezier( t+delta, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ), clr_el );
 		    calc++;
 		}
 		else  calc_1++;
@@ -1011,10 +1009,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
 		    t += 0.00277777777778;
 		}
 		while( t < t_end );
@@ -1083,10 +1081,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += 0.00277777777778;
 		}
 		while( t < t_end );
@@ -1102,10 +1100,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += 0.00277777777778;
 		}
 		while( t < t_end );
@@ -1115,23 +1113,23 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb4 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
 
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb3.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb3.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
 
-		gdImageLine( im, (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb4.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb4.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
 
 
 		arc_a = length( el_p5, el_p3 );
 		arc_b = length( el_p3, el_p4 );
 
-		Point p_center = Point( TSYS::realRound( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					TSYS::realRound( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)TSYS::realRound( p_center.x ), (int)TSYS::realRound( p_center.y ), clr_el_line, clr_el_line );
+		Point p_center = Point( rRnd( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+		gdImageFillToBorder( im, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
 		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1225,10 +1223,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += 0.00277777777778;
 		}
 		while ( t < t_end );
@@ -1244,10 +1242,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += 0.00277777777778;
 		}
 		while ( t < t_end );
@@ -1257,21 +1255,21 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb4 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
 
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb3.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
-		gdImageLine( im, (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb4.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb3.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb4.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
 
 		arc_a = length( el_p5, el_p3 );
 		arc_b = length( el_p3, el_p4 );
 
-		Point p_center = Point( TSYS::realRound( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					TSYS::realRound( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)TSYS::realRound( p_center.x ), (int)TSYS::realRound( p_center.y ), clr_el_line, clr_el_line );
+		Point p_center = Point( rRnd( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+		gdImageFillToBorder( im, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
 		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1349,10 +1347,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += 0.00277777777778;
 		}
 		while( t < t_end );
@@ -1368,10 +1366,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += 0.00277777777778;
 		}
 		while( t < t_end );
@@ -1381,22 +1379,22 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb4 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
 
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb3.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
-		gdImageLine( im, (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb4.x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb3.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb4.x, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
 
 
 		arc_a = length( el_p5, el_p3 );
 		arc_b = length( el_p3, el_p4 );
 
-		Point p_center = Point( TSYS::realRound( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-					TSYS::realRound( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)TSYS::realRound( p_center.x ), (int)TSYS::realRound( p_center.y ), clr_el_line, clr_el_line );
+		Point p_center = Point( rRnd( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+					rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+		gdImageFillToBorder( im, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
 		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1518,19 +1516,19 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true),
+		    gdImageLine( im, (int)rRnd( bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true),
 		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true),
 		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true)).x, POS_PREC_DIG, true ),
-		    (int)TSYS::realRound(bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
+		    (int)rRnd(bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true )).y, POS_PREC_DIG, true ),
-		    (int)TSYS::realRound(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
+		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true )).x, POS_PREC_DIG, true ),
-		    (int)TSYS::realRound(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
+		    (int)rRnd(bezier(t+delta,scaleRotate((pnts)[item.n1],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true )).y, POS_PREC_DIG, true ),clr_el );
@@ -1602,10 +1600,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += delta;
 		}
 		while( t < 1 );
@@ -1621,10 +1619,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += delta;
 		}
 		while( t < 1 );
@@ -1633,19 +1631,19 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				(int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				(int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		gdImageAlphaBlending(im, 1);
-		Point p_center = Point( (int)TSYS::realRound(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
+		Point p_center = Point( (int)rRnd(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
 		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
 		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1735,10 +1733,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += delta;
 		}
 		while( t < 1 );
@@ -1754,10 +1752,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += delta;
 		}
 		while( t < 1 );
@@ -1766,19 +1764,19 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				(int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				(int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		gdImageAlphaBlending(im, 1);
-		Point p_center = Point( (int)TSYS::realRound(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
+		Point p_center = Point( (int)rRnd(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
 		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
 		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1850,10 +1848,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += delta;
 		}
 		while( t < 1 );
@@ -1869,10 +1867,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
+		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
 		    t += delta;
 		}
 		while( t < 1 );
@@ -1881,19 +1879,19 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				(int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				(int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		gdImageAlphaBlending(im, 1);
-		Point p_center = Point( (int)TSYS::realRound(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
-					(int)TSYS::realRound( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
+		Point p_center = Point( (int)rRnd(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
+					(int)rRnd( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
 		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
 		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
@@ -1959,10 +1957,10 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 	    }
 	    else//---- Drawing the solid line with borders' width == 0 ----
 	    {
-		gdImageLine( im, (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),  clr_el );
+		gdImageLine( im, (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
+				    (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),
+				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
+				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),  clr_el );
 	    }
 	}
 	else//--- Drawing the line with borders' width > 0 ---
@@ -2011,28 +2009,28 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 		gdImageAlphaBlending(im, 1);
 
 		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
@@ -2101,29 +2099,29 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).y );
 		gdImageSetThickness( im, 1 );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		gdImageAlphaBlending(im, 1);
 		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
@@ -2187,29 +2185,29 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)TSYS::realRound( el_pb1.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb1.y, POS_PREC_DIG, true ),
-				    (int)TSYS::realRound( el_pb2.x, POS_PREC_DIG, true ),(int)TSYS::realRound( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
+		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 		gdImageAlphaBlending(im, 1);
 		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
 		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y)/2;
@@ -2269,8 +2267,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
     double border_width;
     bool flag_min;
     bool flag_push_back;
-    scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
-    scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
+    scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
+    scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
     if( xSc < ySc ) scale = xSc;
     else scale = ySc;
     if( scale != 1.0 )
@@ -2281,7 +2279,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	    {
 		border_width = shapeItems[i].border_width;
 		border_width = border_width*scale;
-		shapeItems[i].border_width = (int)TSYS::realRound(border_width);
+		shapeItems[i].border_width = (int)rRnd(border_width);
 		if( shapeItems[i].border_width < 1 ) shapeItems[i].border_width = 1;
 	    }
 
@@ -2289,7 +2287,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	    if( shapeItems[i].flag_brd ) shapeItems[i].width += 2;
 	    el_width = shapeItems[i].width;
 	    el_width = el_width*scale;
-	    shapeItems[i].width = (int)TSYS::realRound(el_width);
+	    shapeItems[i].width = (int)rRnd(el_width);
 	    if( shapeItems[i].width > 3 && shapeItems[i].flag_brd )
 	    {
 		shapeItems[i].width -= 2;
@@ -2639,14 +2637,14 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
 					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
 					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).y );
-			    P1 = Point( TSYS::realRound( P1.x, POS_PREC_DIG, true ), TSYS::realRound( P1.y, POS_PREC_DIG, true ) );
-			    P2 = Point( TSYS::realRound( P2.x, POS_PREC_DIG, true ), TSYS::realRound( P2.y, POS_PREC_DIG, true ) );
-			    P3 = Point( TSYS::realRound( P3.x, POS_PREC_DIG, true ), TSYS::realRound( P3.y, POS_PREC_DIG, true ) );
-			    P4 = Point( TSYS::realRound( P4.x, POS_PREC_DIG, true ), TSYS::realRound( P4.y, POS_PREC_DIG, true ) );
-			    P5 = Point( TSYS::realRound( P5.x, POS_PREC_DIG, true ), TSYS::realRound( P5.y, POS_PREC_DIG, true ) );
-			    P6 = Point( TSYS::realRound( P6.x, POS_PREC_DIG, true ), TSYS::realRound( P6.y, POS_PREC_DIG, true ) );
-			    P7 = Point( TSYS::realRound( P7.x, POS_PREC_DIG, true ), TSYS::realRound( P7.y, POS_PREC_DIG, true ) );
-			    P8 = Point( TSYS::realRound( P8.x, POS_PREC_DIG, true ), TSYS::realRound( P8.y, POS_PREC_DIG, true ) );
+			    P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
+			    P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
+			    P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
+			    P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
+			    P5 = Point( rRnd( P5.x, POS_PREC_DIG, true ), rRnd( P5.y, POS_PREC_DIG, true ) );
+			    P6 = Point( rRnd( P6.x, POS_PREC_DIG, true ), rRnd( P6.y, POS_PREC_DIG, true ) );
+			    P7 = Point( rRnd( P7.x, POS_PREC_DIG, true ), rRnd( P7.y, POS_PREC_DIG, true ) );
+			    P8 = Point( rRnd( P8.x, POS_PREC_DIG, true ), rRnd( P8.y, POS_PREC_DIG, true ) );
 			    bool flag_vert1 = true;
 			    bool flag_vert2 = true;
 			    if( lineIntersect( P1.x, P1.y, P3.x, P3.y,P5.x, P5.y, P7.x, P7.y ) )
@@ -2805,10 +2803,10 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
 					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
 					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).y );
-			    P1 = Point( TSYS::realRound( P1.x, POS_PREC_DIG, true ), TSYS::realRound( P1.y, POS_PREC_DIG, true ) );
-			    P2 = Point( TSYS::realRound( P2.x, POS_PREC_DIG, true ), TSYS::realRound( P2.y, POS_PREC_DIG, true ) );
-			    P3 = Point( TSYS::realRound( P3.x, POS_PREC_DIG, true ), TSYS::realRound( P3.y, POS_PREC_DIG, true ) );
-			    P4 = Point( TSYS::realRound( P4.x, POS_PREC_DIG, true ), TSYS::realRound( P4.y, POS_PREC_DIG, true ) );
+			    P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
+			    P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
+			    P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
+			    P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
 			    //--- Line ---
 			    t_start = shapeItems[fig[0]].ctrlPos4.x;
 			    t_end = shapeItems[fig[0]].ctrlPos4.y;
@@ -2824,13 +2822,13 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				inc_delta = -0.001;
 			    }
 			    Point arc_pnt, arc_pnt_pred;
-			    arc_pnt_pred = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			    arc_pnt_pred = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 			    do
 			    {
 				delta_t += inc_delta;
-				arc_pnt = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+				arc_pnt = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( el_p3.y - rotate( arc( delta_t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 				if( lineIntersect( arc_pnt_pred.x, arc_pnt_pred.y, arc_pnt.x, arc_pnt.y,P1.x, P1.y, P3.x, P3.y ) )
 				{
 				    new_pnt = Point( arc_pnt.x, arc_pnt.y );
@@ -2846,8 +2844,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    while ( ((delta_t<t_end) && (inc_delta>0)) || ((delta_t>t_start) && (inc_delta<0)) );
 			    if( inc_delta > 0 ) delta = (t_end - delta_t)/2 + scale;
 			    else delta =- ( (delta_t - t_start)/2 + scale );
-			    delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( el_p3.y - rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 			}
 			else
 			{
@@ -2856,8 +2854,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/2 + scale;
 			    else delta_real = t_end - (t_end-t_start)/2 + scale;
 			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-			    delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
 			}
 			delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
 			delta_point_2.x = delta_point_2.x + length( new_pnt, scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) * (0.15 + scale);
@@ -2921,10 +2919,10 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ), -W2 ), ang1 ).x,
 					scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true ).y -
 					rotate( Point( length( scaleRotate( (pnts)[num_pnt], xSc, ySc, true , true ), scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true) ), -W2 ), ang1 ).y );
-			    P1 = Point( TSYS::realRound( P1.x, POS_PREC_DIG, true ), TSYS::realRound( P1.y, POS_PREC_DIG, true ) );
-			    P2 = Point( TSYS::realRound( P2.x, POS_PREC_DIG, true ), TSYS::realRound( P2.y, POS_PREC_DIG, true ) );
-			    P3 = Point( TSYS::realRound( P3.x, POS_PREC_DIG, true ), TSYS::realRound( P3.y, POS_PREC_DIG, true ) );
-			    P4 = Point( TSYS::realRound( P4.x, POS_PREC_DIG, true ), TSYS::realRound( P4.y, POS_PREC_DIG, true ) );
+			    P1 = Point( rRnd( P1.x, POS_PREC_DIG, true ), rRnd( P1.y, POS_PREC_DIG, true ) );
+			    P2 = Point( rRnd( P2.x, POS_PREC_DIG, true ), rRnd( P2.y, POS_PREC_DIG, true ) );
+			    P3 = Point( rRnd( P3.x, POS_PREC_DIG, true ), rRnd( P3.y, POS_PREC_DIG, true ) );
+			    P4 = Point( rRnd( P4.x, POS_PREC_DIG, true ), rRnd( P4.y, POS_PREC_DIG, true ) );
 			    //--- Line ---
 			    double inc_delta;
 			    if( num_pnt == shapeItems[fig[0]].n1 )
@@ -2948,23 +2946,23 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    el_p4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ), ang,
 				    scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
 
-			    bezier_pnt_pred_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
+			    bezier_pnt_pred_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1) ), ang ).y, POS_PREC_DIG, true ) );
 
-			    bezier_pnt_pred_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
+			    bezier_pnt_pred_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y-W1 ),
 						Point( el_p2.x, el_p2.y-W1 ),
 						Point( el_p3.x, el_p3.y-W1 ),
 						Point( el_p4.x, el_p4.y-W1 ) ), ang).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y-W1 ),
 						Point( el_p2.x, el_p2.y-W1 ),
 						Point( el_p3.x, el_p3.y-W1 ),
@@ -2975,23 +2973,23 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    do
 			    {
 				delta_t += inc_delta;
-				bezier_pnt_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
+				bezier_pnt_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
 				if( W1 != 0 )
-				    bezier_pnt_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
+				    bezier_pnt_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y-W1 ),
 						Point( el_p2.x, el_p2.y-W1 ),
 						Point( el_p3.x, el_p3.y-W1 ),
 						Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate((pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
+						(int)rRnd( scaleRotate((pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t,
 						Point( el_p1.x, el_p1.y-W1 ),
 						Point( el_p2.x, el_p2.y-W1 ),
 						Point( el_p3.x, el_p3.y-W1 ),
@@ -3034,8 +3032,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
 				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.25 + scale;
 				else delta_real = 0.75 - scale;
-				delta_point_1 = Point( (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+				delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+							(int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
 			    }
 			    else
 			    {
@@ -3055,23 +3053,23 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				else delta = -((delta_t)/3 + scale);
 
 				if( num_bezier == 2 )
-				    delta_point_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
+				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
 						    Point( el_p1.x, el_p1.y-W1 ),
 						    Point( el_p2.x, el_p2.y-W1 ),
 						    Point( el_p3.x, el_p3.y-W1 ),
 						    Point( el_p4.x, el_p4.y-W1 ) ), ang).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
+						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
 						    Point( el_p1.x, el_p1.y-W1 ),
 						    Point( el_p2.x, el_p2.y-W1 ),
 						    Point( el_p3.x, el_p3.y-W1 ),
 						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
 				if( num_bezier == 1 )
-				    delta_point_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
+				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
 						    Point( el_p1.x, el_p1.y+W1 ),
 						    Point( el_p2.x, el_p2.y+W1 ),
 						    Point( el_p3.x, el_p3.y+W1 ),
 						    Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
+						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
 						    Point( el_p1.x, el_p1.y+W1 ),
 						    Point( el_p2.x, el_p2.y+W1 ),
 						    Point( el_p3.x, el_p3.y+W1 ),
@@ -3083,8 +3081,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
 			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
 			    else delta_real = 0.8 - scale;
-			    delta_point_1 = Point( (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+			    delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
 			}
 			delta_point_2 = unrotate( new_pnt, ang1, new_pnt.x, new_pnt.y );
 			delta_point_2.x = delta_point_2.x + length( new_pnt, scaleRotate( (pnts)[point_num[1]], xSc, ySc, true, true ) ) * (0.2 + scale);
@@ -3158,8 +3156,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				inc_delta_arc = -1/Len_arc;
 			    }
 			    Point arc_pnt, arc_pnt_pred;
-			    arc_pnt_pred = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+			    arc_pnt_pred = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( el_p3.y - rotate( arc( delta_t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 			    //--- bezier ---
 			    double Len = length( (pnts)[shapeItems[fig[1]].n1], (pnts)[shapeItems[fig[1]].n3] ) +
 					length( (pnts)[shapeItems[fig[1]].n3], (pnts)[shapeItems[fig[1]].n4] ) +
@@ -3186,23 +3184,23 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    P4 = unrotate( scaleRotate( (pnts)[item.n2], xSc, ySc, true, true ), ang1,
 					scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x, scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y );
 
-			    bezier_pnt_pred_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
+			    bezier_pnt_pred_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
 						Point( P1.x, P1.y+W1 ),
 						Point( P2.x, P2.y+W1 ),
 						Point( P3.x, P3.y+W1 ),
 						Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
 						Point( P1.x, P1.y+W1 ),
 						Point( P2.x, P2.y+W1 ),
 						Point( P3.x, P3.y+W1 ),
 						Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 
-			    bezier_pnt_pred_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
+			    bezier_pnt_pred_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
 						Point( P1.x, P1.y-W1 ),
 						Point( P2.x, P2.y-W1 ),
 						Point( P3.x, P3.y-W1 ),
 						Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
 						Point( P1.x, P1.y-W1 ),
 						Point( P2.x, P2.y-W1 ),
 						Point( P3.x, P3.y-W1 ),
@@ -3213,23 +3211,23 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    f_brk_2 = false;
 			    do
 			    {
-				bezier_pnt_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
+				bezier_pnt_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
 					    Point( P1.x, P1.y+W1 ),
 					    Point( P2.x, P2.y+W1 ),
 					    Point( P3.x, P3.y+W1 ),
 					    Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-					    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
+					    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
 					    Point( P1.x, P1.y+W1 ),
 					    Point( P2.x, P2.y+W1 ),
 					    Point( P3.x, P3.y+W1 ),
 					    Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 				if( W1 != 0 )
-				    bezier_pnt_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
+				    bezier_pnt_2 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez,
 						Point( P1.x, P1.y-W1 ),
 						Point( P2.x, P2.y-W1 ),
 						Point( P3.x, P3.y-W1 ),
 						Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez,
 						Point( P1.x, P1.y-W1 ),
 						Point( P2.x, P2.y-W1 ),
 						Point( P3.x, P3.y-W1 ),
@@ -3238,8 +3236,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				double t_arc = delta_t_arc;
 				do
 				{
-				    arc_pnt = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( el_p3.y - rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+				    arc_pnt = Point( (int)rRnd( el_p3.x + rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+							(int)rRnd( el_p3.y - rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 				    if( ( ABS(arc_pnt.x - bezier_pnt_1.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_1.y) < 1 ) && !f_brk_1 )
 				    {
 					new_pnt_1 = Point( arc_pnt.x, arc_pnt.y );
@@ -3267,8 +3265,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
 				else delta_real = t_end - (t_end-t_start)/4 + scale;
 				new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-				delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+				delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+							(int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 				//--- bezier ---
 				P1 = scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true );
 				P2 = scaleRotate( (pnts)[shapeItems[fig[1]].n2], xSc, ySc, true, true );
@@ -3277,7 +3275,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
 				else delta_real = 0.8 - scale;
 				delta_point_2 = Point( (int)TSYS::realRound (bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+							(int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
 			    }
 			    else
 			    {
@@ -3311,31 +3309,31 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				else delta = -((delta_t)/3 + scale);
 
 				if(num_bezier == 1)
-				    delta_point_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
+				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
 						    Point( P1.x, P1.y+W1 ),
 						    Point( P2.x, P2.y+W1 ),
 						    Point( P3.x, P3.y+W1 ),
 						    Point( P4.x, P4.y+W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
+						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
 						    Point( P1.x, P1.y+W1 ),
 						    Point( P2.x, P2.y+W1 ),
 						    Point( P3.x, P3.y+W1 ),
 						    Point( P4.x, P4.y+W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 				if( num_bezier == 2 )
-				    delta_point_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
+				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[shapeItems[fig[1]].n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t + delta,
 						    Point( P1.x, P1.y-W1 ),
 						    Point( P2.x, P2.y-W1 ),
 						    Point( P3.x, P3.y-W1 ),
 						    Point( P4.x, P4.y-W1 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
+						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t + delta,
 						    Point( P1.x, P1.y-W1 ),
 						    Point( P2.x, P2.y-W1 ),
 						    Point( P3.x, P3.y-W1 ),
 						    Point( P4.x, P4.y-W1 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
 				else delta_real = t_end - (t_end-t_start)/4 + scale;
-				delta_point_2 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
+				delta_point_2 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+							(int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 			    }
 			}
 			else
@@ -3346,13 +3344,13 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = t_start + (t_end-t_start)/4 + scale;
 			    else delta_real = t_end - (t_end-t_start)/4 + scale;
 			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
-			    delta_point_1 = Point( (int)TSYS::realRound( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
+			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_real, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( el_p3.y - rotate( arc( delta_real, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
 			    //--- bezier ---
 			    if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
 			    else delta_real = 0.8 - scale;
-			    delta_point_2 = Point( (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+			    delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
 			}
 		    }
 		    //- bezier curve and bezier curve -
@@ -3452,24 +3450,24 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    f_brk_4 = false;
 			    do
 			    {
-				bezier_pnt_1_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_1,
+				bezier_pnt_1_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_1,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						(int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_1,
+						(int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_1,
 						Point( el_p1.x, el_p1.y+W1 ),
 						Point( el_p2.x, el_p2.y+W1 ),
 						Point( el_p3.x, el_p3.y+W1 ),
 						Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
 				if( W1 != 0 )
 				{
-				    bezier_pnt_1_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_1,
+				    bezier_pnt_1_2 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_1,
 						    Point( el_p1.x, el_p1.y-W1 ),
 						    Point( el_p2.x, el_p2.y-W1 ),
 						    Point( el_p3.x, el_p3.y-W1 ),
 						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_1,
+						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_1,
 						    Point( el_p1.x, el_p1.y-W1 ),
 						    Point( el_p2.x, el_p2.y-W1 ),
 						    Point( el_p3.x, el_p3.y-W1 ),
@@ -3479,24 +3477,24 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				double delta_t_bez_2_do = delta_t_bez_2;
 				do
 				{
-				    bezier_pnt_2_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_2_do,
+				    bezier_pnt_2_1 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_2_do,
 						    Point( P1.x, P1.y+W2 ),
 						    Point( P2.x, P2.y+W2 ),
 						    Point( P3.x, P3.y+W2 ),
 						    Point( P4.x, P4.y+W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_2_do,
+						    (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_2_do,
 						    Point( P1.x, P1.y+W2 ),
 						    Point( P2.x, P2.y+W2 ),
 						    Point( P3.x, P3.y+W2 ),
 						    Point( P4.x, P4.y+W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 				    if( W2 != 0 )
 				    {
-					bezier_pnt_2_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_2_do,
+					bezier_pnt_2_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_bez_2_do,
 							Point( P1.x, P1.y-W2 ),
 							Point( P2.x, P2.y-W2 ),
 							Point( P3.x, P3.y-W2 ),
 							Point( P4.x, P4.y-W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_2_do,
+							(int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_bez_2_do,
 							Point( P1.x, P1.y-W2 ),
 							Point( P2.x, P2.y-W2 ),
 							Point( P3.x, P3.y-W2 ),
@@ -3559,12 +3557,12 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
 				if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
 				else delta_real = 0.8 - scale;
-				delta_point_1 = Point( (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+				delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+							(int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
 				if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
 				else delta_real = 0.8 - scale;
-				delta_point_2 = Point( (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-							(int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+				delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
+							(int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
 			    }
 			    else
 			    {
@@ -3592,46 +3590,46 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				if( inc_delta_bez_2 > 0 ) delta_2 = (1-delta_t_2)/3 + scale;
 				else delta_2 = -((delta_t_2)/3 + scale);
 				if( num_bez_1 == 1 )
-				    delta_point_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_1 + delta_1,
+				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_1 + delta_1,
 						    Point( el_p1.x, el_p1.y+W1 ),
 						    Point( el_p2.x, el_p2.y+W1 ),
 						    Point( el_p3.x, el_p3.y+W1 ),
 						    Point( el_p4.x, el_p4.y+W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_1 + delta_1,
+						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_1 + delta_1,
 						    Point( el_p1.x, el_p1.y+W1 ),
 						    Point( el_p2.x, el_p2.y+W1 ),
 						    Point( el_p3.x, el_p3.y+W1 ),
 						    Point( el_p4.x, el_p4.y+W1 ) ), ang ).y, POS_PREC_DIG, true ) );
 				if( num_bez_1 == 0 )
-				    delta_point_1 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_1 + delta_1,
+				    delta_point_1 = Point( (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_1 + delta_1,
 						    Point( el_p1.x, el_p1.y-W1 ),
 						    Point( el_p2.x, el_p2.y-W1 ),
 						    Point( el_p3.x, el_p3.y-W1 ),
 						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_1 + delta_1,
+						    (int)rRnd( scaleRotate( (pnts)[item.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_1 + delta_1,
 						    Point( el_p1.x, el_p1.y-W1 ),
 						    Point( el_p2.x, el_p2.y-W1 ),
 						    Point( el_p3.x, el_p3.y-W1 ),
 						    Point( el_p4.x, el_p4.y-W1 ) ), ang ).y, POS_PREC_DIG, true ) );
 
 				if( num_bez_2 == 1 )
-				    delta_point_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_2 + delta_2,
+				    delta_point_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_2 + delta_2,
 						    Point( P1.x, P1.y+W2 ),
 						    Point( P2.x, P2.y+W2 ),
 						    Point( P3.x, P3.y+W2 ),
 						    Point( P4.x, P4.y+W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_2 + delta_2,
+						    (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_2 + delta_2,
 						    Point( P1.x, P1.y+W2 ),
 						    Point( P2.x, P2.y+W2 ),
 						    Point( P3.x, P3.y+W2 ),
 						    Point( P4.x, P4.y+W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 				if( num_bez_2 == 0 )
-				    delta_point_2 = Point( (int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_2 + delta_2,
+				    delta_point_2 = Point( (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).x + rotate( bezier( delta_t_2 + delta_2,
 						    Point( P1.x, P1.y-W2 ),
 						    Point( P2.x, P2.y-W2 ),
 						    Point( P3.x, P3.y-W2 ),
 						    Point( P4.x, P4.y-W2 ) ), ang1 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_2 + delta_2,
+						    (int)rRnd( scaleRotate( (pnts)[item_1.n1], xSc, ySc, true, true ).y - rotate( bezier( delta_t_2 + delta_2,
 						    Point( P1.x, P1.y-W2 ),
 						    Point( P2.x, P2.y-W2 ),
 						    Point( P3.x, P3.y-W2 ),
@@ -3643,12 +3641,12 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    new_pnt = scaleRotate( (pnts)[num_pnt], xSc, ySc, true, true );
 			    if( num_pnt == shapeItems[fig[0]].n1 ) delta_real = 0.2 + scale;
 			    else delta_real = 0.8 - scale;
-			    delta_point_1 = Point( (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
+			    delta_point_1 = Point( (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( bezier( delta_real, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ) );
 			    if( num_pnt == shapeItems[fig[1]].n1 ) delta_real = 0.2 + scale;
 			    else delta_real = 0.8 - scale;
-			    delta_point_2 = Point( (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
-						    (int)TSYS::realRound( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
+			    delta_point_2 = Point( (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).x, POS_PREC_DIG, true ),
+						    (int)rRnd( bezier( delta_real, P1, P3, P4, P2 ).y, POS_PREC_DIG, true ) );
 			}
 		    }
 		    //-- Detecting the real "fill" point as the middle of the distance between two points on the figures --
@@ -3656,8 +3654,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 		    delta_point_center.y = (delta_point_1.y+delta_point_2.y)/2;
 		}
 		//-- Calling fill procedure for each fill with the real "fill" point --
-		if( (((int) TSYS::realRound(delta_point_center.x)) > 0) && (((int) TSYS::realRound(delta_point_center.x)) <= scaleWidth) &&
-		    (((int) TSYS::realRound(delta_point_center.y)) > 0) && (((int) TSYS::realRound(delta_point_center.y)) <= scaleHeight) )
+		if( (((int) rRnd(delta_point_center.x)) > 0) && (((int) rRnd(delta_point_center.x)) <= scaleWidth) &&
+		    (((int) rRnd(delta_point_center.y)) > 0) && (((int) rRnd(delta_point_center.y)) <= scaleHeight) )
 		{
 		    if( inundationItems[i].imgFill.size() )
 		    {
@@ -3803,7 +3801,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			paintFill( im1, delta_point_center, inundationItems[i] );
 			if( clickPnt.x > -1 && clickPnt.y > -1 )
 			{
-			    if( gdImageGetPixel( im1, (int)TSYS::realRound(clickPnt.x,POS_PREC_DIG,true), (int)TSYS::realRound(clickPnt.y,POS_PREC_DIG,true) )
+			    if( gdImageGetPixel( im1, (int)rRnd(clickPnt.x,POS_PREC_DIG,true), (int)rRnd(clickPnt.y,POS_PREC_DIG,true) )
 				!= gdImageColorResolveAlpha(im1,0,0,0,127) )
 			    {
 				if(im1) gdImageDestroy(im1);
@@ -3812,10 +3810,10 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			}
 			else
 			{
-			    xMin = (int)TSYS::realRound( xMin, POS_PREC_DIG, true );
-			    yMin = (int)TSYS::realRound( yMin, POS_PREC_DIG, true );
-			    xMax = (int)TSYS::realRound( xMax, POS_PREC_DIG, true );
-			    yMax = (int)TSYS::realRound( yMax, POS_PREC_DIG, true );
+			    xMin = (int)rRnd( xMin, POS_PREC_DIG, true );
+			    yMin = (int)rRnd( yMin, POS_PREC_DIG, true );
+			    xMax = (int)rRnd( xMax, POS_PREC_DIG, true );
+			    yMax = (int)rRnd( yMax, POS_PREC_DIG, true );
 
 			    gdImagePtr im_fill_in = NULL;
 			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill,path(),ses.user);
@@ -3823,7 +3821,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				!(im_fill_in = gdImageCreateFromGifPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) )
 				mess_debug(nodePath().c_str(),_("Fill image type is not supported."));
-			    gdImagePtr im_fill_out = gdImageCreateTrueColor((int)TSYS::realRound( xMax - xMin ) + 1, (int)TSYS::realRound( yMax - yMin ) + 1 );
+			    gdImagePtr im_fill_out = gdImageCreateTrueColor((int)rRnd( xMax - xMin ) + 1, (int)rRnd( yMax - yMin ) + 1 );
 			    gdImageAlphaBlending(im_fill_out, 0);
 			    int alpha;
 			    double alpha_pr, alpha_rez;
@@ -3834,10 +3832,10 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    }
 			    int im_x, im_y;
 			    Point drw_pnt,drw_pnt1;
-			    xMin_rot = (int)TSYS::realRound( xMin_rot, POS_PREC_DIG, true );
-			    yMin_rot = (int)TSYS::realRound( yMin_rot, POS_PREC_DIG, true );
-			    xMax_rot = (int)TSYS::realRound( xMax_rot, POS_PREC_DIG, true );
-			    yMax_rot = (int)TSYS::realRound( yMax_rot, POS_PREC_DIG, true );
+			    xMin_rot = (int)rRnd( xMin_rot, POS_PREC_DIG, true );
+			    yMin_rot = (int)rRnd( yMin_rot, POS_PREC_DIG, true );
+			    xMax_rot = (int)rRnd( xMax_rot, POS_PREC_DIG, true );
+			    yMax_rot = (int)rRnd( yMax_rot, POS_PREC_DIG, true );
 
 			    double alpha_col = (double)(uint8_t)(inundationItems[i].P_color>>24)/127;
 			    double color_r, color_g, color_b;
@@ -3853,14 +3851,14 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				    if(  gdImageGetPixel( im1, im_x, im_y ) == tmp_clr )
 				    {
 					Point drw_pnt = unscaleUnrotate( Point( im_x, im_y ), xSc, ySc, false, true );
-					rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin, POS_PREC_DIG, true ),
-									    (int)TSYS::realRound( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
-					if( ((int)TSYS::realRound( drw_pnt.x - xMin, POS_PREC_DIG, true ) == (int)TSYS::realRound( xMax - xMin ) + 1) && rgb == 0 )
-					    rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin - 1, POS_PREC_DIG, true ),
-										(int)TSYS::realRound( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
-					else if( ((int)TSYS::realRound( drw_pnt.y - yMin, POS_PREC_DIG, true ) == (int)TSYS::realRound( yMax - yMin ) + 1) && rgb == 0 )
-					    rgb = gdImageGetPixel( im_fill_out, (int)TSYS::realRound( drw_pnt.x - xMin, POS_PREC_DIG, true ),
-										(int)TSYS::realRound( drw_pnt.y - yMin - 1, POS_PREC_DIG, true ) );
+					rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
+									    (int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
+					if( ((int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ) == (int)rRnd( xMax - xMin ) + 1) && rgb == 0 )
+					    rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin - 1, POS_PREC_DIG, true ),
+										(int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) );
+					else if( ((int)rRnd( drw_pnt.y - yMin, POS_PREC_DIG, true ) == (int)rRnd( yMax - yMin ) + 1) && rgb == 0 )
+					    rgb = gdImageGetPixel( im_fill_out, (int)rRnd( drw_pnt.x - xMin, POS_PREC_DIG, true ),
+										(int)rRnd( drw_pnt.y - yMin - 1, POS_PREC_DIG, true ) );
 
 					alpha = gdImageAlpha( im_fill_out, rgb );
 					alpha_pr = 1 - (double)alpha / 127;
@@ -3872,14 +3870,14 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 					color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>8 ) );
 					color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)inundationItems[i].P_color );
 					alpha_rez = (1 - alpha_col) * (1 - alpha_pr);
-					/*int color = gdImageColorResolve( im1, (int)TSYS::realRound( color_r, POS_PREC_DIG, true ),
-									    (int)TSYS::realRound( color_g, POS_PREC_DIG, true ),
-									    (int)TSYS::realRound( color_b, POS_PREC_DIG, true ) );*/
-					int color = gdImageColorResolveAlpha( im1, (int)TSYS::realRound( color_r, POS_PREC_DIG, true ),
-										   (int)TSYS::realRound( color_g, POS_PREC_DIG, true ),
-										   (int)TSYS::realRound( color_b, POS_PREC_DIG, true ),
-										   127 - (int)TSYS::realRound( 127*(1 - alpha_rez), POS_PREC_DIG, true ) );
-					gdImageSetPixel( im1, (int)TSYS::realRound( drw_pnt1.x, POS_PREC_DIG, true ) , (int)TSYS::realRound( drw_pnt1.y, POS_PREC_DIG, true ), color );
+					/*int color = gdImageColorResolve( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
+									    (int)rRnd( color_g, POS_PREC_DIG, true ),
+									    (int)rRnd( color_b, POS_PREC_DIG, true ) );*/
+					int color = gdImageColorResolveAlpha( im1, (int)rRnd( color_r, POS_PREC_DIG, true ),
+										   (int)rRnd( color_g, POS_PREC_DIG, true ),
+										   (int)rRnd( color_b, POS_PREC_DIG, true ),
+										   127 - (int)rRnd( 127*(1 - alpha_rez), POS_PREC_DIG, true ) );
+					gdImageSetPixel( im1, (int)rRnd( drw_pnt1.x, POS_PREC_DIG, true ) , (int)rRnd( drw_pnt1.y, POS_PREC_DIG, true ), color );
 				    }
 				    im_x += 1;
 				}
@@ -3897,8 +3895,8 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			paintFill( im1, delta_point_center, inundationItems[i] );
 			if( clickPnt.x > -1 && clickPnt.y > -1 )
 			{
-			    if( gdImageGetPixel(im1, (int)TSYS::realRound(clickPnt.x,POS_PREC_DIG,true),
-							(int)TSYS::realRound(clickPnt.y,POS_PREC_DIG,true) ) != gdImageColorResolveAlpha(im1,0,0,0,127) )
+			    if( gdImageGetPixel(im1, (int)rRnd(clickPnt.x,POS_PREC_DIG,true),
+							(int)rRnd(clickPnt.y,POS_PREC_DIG,true) ) != gdImageColorResolveAlpha(im1,0,0,0,127) )
 			    {
 				if( im1 ) gdImageDestroy(im1);
 				return i;
@@ -3909,7 +3907,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 		}
 		else mess_debug(nodePath().c_str(),_("At least one of the elementary figures from each the 'fill' consists of is out of drawing area."));
 	    }
-	if( (int)TSYS::realRound( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)TSYS::realRound( clickPnt.y, POS_PREC_DIG, true ) == -1 )
+	if( (int)rRnd( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)rRnd( clickPnt.y, POS_PREC_DIG, true ) == -1 )
 	{
 	    for(unsigned j = 0; j < shape_temp.size(); j++)
 		shape_temp_all.push_back(shape_temp[j]);
@@ -3945,7 +3943,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	}
 	if( im1 ) gdImageDestroy(im1);
     }
-    if( (int)TSYS::realRound( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)TSYS::realRound( clickPnt.y, POS_PREC_DIG, true ) == -1 )
+    if( (int)rRnd( clickPnt.x, POS_PREC_DIG, true ) == -1 && (int)rRnd( clickPnt.y, POS_PREC_DIG, true ) == -1 )
     {
 	for(unsigned j = 0; j < shapeItems.size(); j++)
 	{
@@ -3988,8 +3986,8 @@ void VCAElFigure::getReq( SSess &ses )
     prmEl = ses.prm.find("geomY");
     geomY = (prmEl!=ses.prm.end()) ? s2r(prmEl->second) : 0;
 
-    scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
-    scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
+    scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
+    scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
     if(im) { gdImageDestroy(im); im = NULL; }
     im = gdImageCreateTrueColor(scaleWidth, scaleHeight);
     if(!im) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
@@ -4063,7 +4061,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 	    case A_GEOM_MARGIN: geomMargin = s2i(req_el->text()); break;
 	    case A_GEOM_X_SC: rel_list = true;	break;
 	    case A_GEOM_Y_SC: rel_list = true;	break;
-	    case A_ElFigLineW: lineWdth = (int)TSYS::realRound(s2r(req_el->text())); rel_list = true;	break;
+	    case A_ElFigLineW: lineWdth = (int)rRnd(s2r(req_el->text())); rel_list = true;	break;
 	    case A_ElFigLineClr:
 		lineClr = mod->colorParse(req_el->text());
 		if(lineClr == -1) lineClr = (127<<24)+(0<<16)+(0<<8)+0;
@@ -4071,7 +4069,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		rel_list = true;
 		break;
 	    case A_ElFigLineStl: lineStyle = s2i(req_el->text()); rel_list = true;	break;
-	    case A_ElFigBordW: bordWdth = (int)TSYS::realRound(s2r(req_el->text())); rel_list = true;	break;
+	    case A_ElFigBordW: bordWdth = (int)rRnd(s2r(req_el->text())); rel_list = true;	break;
 	    case A_ElFigBordClr:
 		bordClr = mod->colorParse(req_el->text());
 		if(bordClr == -1) bordClr = 0x7F000000;
@@ -4097,7 +4095,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		    {
 			case A_ElFigItPntX: pnt_.x = s2r(req_el->text()); pnts[pnt] = pnt_; rel_list = true;	break;
 			case A_ElFigItPntY: pnt_.y = s2r(req_el->text()); pnts[pnt] = pnt_; rel_list = true;	break;
-			case A_ElFigItW: widths[pnt] = (int)TSYS::realRound(s2r(req_el->text())); rel_list = true;	break;
+			case A_ElFigItW: widths[pnt] = (int)rRnd(s2r(req_el->text())); rel_list = true;	break;
 			case A_ElFigItClr:
 			    colors[pnt] = mod->colorParse(req_el->text());
 			    if(colors[pnt] == -1) colors[pnt] = 0x7F000000;
@@ -4140,18 +4138,18 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 	    int w_s;
 	    bool pnts_ok = true;
 	    p.clear();
-	    for(int i_p = 0, off_last = 0; pnts_ok && (nPnts < 0 || i_p < nPnts); i_p++)
+	    for(int iP = 0, off_last = 0; pnts_ok && (nPnts < 0 || iP < nPnts); iP++)
 	    {
 		el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		if(sscanf(el_s.c_str(),"(%f|%f)",&x_s,&y_s) == 2)
 		{
 		    bool fl = false;
 		    //>>> Detecting if there is a point with same coordinates in the map
-		    for(PntMap::reverse_iterator pi = pnts.rbegin(); (servPnts < 0 || i_p < servPnts) && !fl && pi != pnts.rend(); ++pi)
-			if(pi->first <= ShapeItem::StatIts && fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
-			    fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01)
+		    for(PntMap::reverse_iterator pi = pnts.rbegin(); (servPnts < 0 || iP < servPnts) && !fl && pi != pnts.rend(); ++pi)
+			if(pi->first <= ShapeItem::StatIts && fabs(rRnd(x_s,POS_PREC_DIG) - rRnd(pi->second.x,POS_PREC_DIG)) < 0.01 &&
+			    fabs(rRnd(y_s,POS_PREC_DIG) - rRnd(pi->second.y,POS_PREC_DIG)) < 0.01)
 			{ p.push_back(pi->first); fl = true; }
-		    if(!fl) { p.push_back(map_index--); pnts[p[i_p]] = Point(x_s, y_s); }
+		    if(!fl) { p.push_back(map_index--); pnts[p[iP]] = Point(x_s, y_s); }
 		}
 		else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) p.push_back(w_s);
 		else { pnts_ok = false; el_off = off_last; }
@@ -4202,7 +4200,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		    else style = lineStyle;
 
 		    //>> Reading coordinates for the points of the line
-		    for(unsigned i_p = 0; i_p < p.size(); i_p++) ip[i_p] = pnts[p[i_p]];
+		    for(unsigned iP = 0; iP < p.size(); iP++) ip[iP] = pnts[p[iP]];
 
 		    if(elTp == ShapeItem::Arc)
                     {
@@ -4350,7 +4348,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
     Point p1_rot = rot(Point(x1,y1), ang, center); Point p2_rot = rot(Point(x2,y2), ang, center);
     Point p3_rot = rot(Point(x3,y3), ang, center); Point p4_rot = rot(Point(x4,y4), ang, center);
     if(ang > 0 && ang < 90) {
-	if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x),
 		    k2Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x);
@@ -4359,10 +4357,10 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p1Rez.y - k1Rot*p1Rez.x;
 	    double B2 = p3Rez.y - k2Rot*p3Rez.x;
 	    Point p4Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot)+B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p4Rez,p3Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p4Rez,p3Rez), POS_PREC_DIG, true);
 	}
-	else if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x);
@@ -4371,16 +4369,16 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p2Rez.y - k1Rot*p2Rez.x;
 	    double B2 = p4Rez.y - k2Rot*p4Rez.x;
 	    Point p1Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot) + B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
 	}
 	else {
-	    int ln = (int)TSYS::realRound(VCAElFigure::length(Point(x1,p1_rot.y),Point(p2_rot.x,y2)), POS_PREC_DIG, true);
+	    int ln = (int)rRnd(VCAElFigure::length(Point(x1,p1_rot.y),Point(p2_rot.x,y2)), POS_PREC_DIG, true);
 	    wh[0] = wh[1] = ln;
 	}
     }
     else if(ang > 90 && ang < 180) {
-	if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x),
 		    k2Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x);
@@ -4389,10 +4387,10 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p4Rez.y - k1Rot*p4Rez.x;
 	    double B2 = p2Rez.y - k2Rot*p2Rez.x;
 	    Point p1Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot)+B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
 	}
-	else if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4401,16 +4399,16 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p1Rez.y - k1Rot*p1Rez.x;
 	    double B2 = p3Rez.y - k2Rot*p3Rez.x;
 	    Point p2Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot) + B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p1Rez, p2Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p1Rez, p2Rez), POS_PREC_DIG, true);
 	}
 	else {
-	    int ln = (int)TSYS::realRound(VCAElFigure::length(Point(p1_rot.x,y2),Point(x3,p2_rot.y)), POS_PREC_DIG, true);
+	    int ln = (int)rRnd(VCAElFigure::length(Point(p1_rot.x,y2),Point(x3,p2_rot.y)), POS_PREC_DIG, true);
 	    wh[0] = wh[1] = ln;
 	}
     }
     else if(ang > 180 && ang < 270) {
-	if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4419,10 +4417,10 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p1Rez.y - k1Rot*p1Rez.x;
 	    double B2 = p3Rez.y - k2Rot*p3Rez.x;
 	    Point p2Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot) + B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
 	}
-	else if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x),
 		    k2Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x);
@@ -4431,16 +4429,16 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p2Rez.y - k1Rot*p2Rez.x;
 	    double B2 = p4Rez.y - k2Rot*p4Rez.x;
 	    Point p3Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot) + B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p3Rez,p4Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p3Rez,p4Rez), POS_PREC_DIG, true);
 	}
 	else {
-	    int ln = (int)TSYS::realRound(VCAElFigure::length(Point(x3,p1_rot.y),Point(p2_rot.x,y4)), POS_PREC_DIG, true);
+	    int ln = (int)rRnd(VCAElFigure::length(Point(x3,p1_rot.y),Point(p2_rot.x,y4)), POS_PREC_DIG, true);
 	    wh[0] = wh[1] = ln;
 	}
     }
     else if(ang > 270 && ang < 360) {
-	if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4449,10 +4447,10 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p4Rez.y - k1Rot*p4Rez.x;
 	    double B2 = p2Rez.y - k2Rot*p2Rez.x;
 	    Point p3Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot) + B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p3Rez,p4Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p3Rez,p4Rez), POS_PREC_DIG, true);
 	}
-	else if((int)TSYS::realRound(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)TSYS::realRound(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4461,11 +4459,11 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    double B1 = p1Rez.y - k1Rot*p1Rez.x;
 	    double B2 = p3Rez.y - k2Rot*p3Rez.x;
 	    Point p2Rez = Point((B2-B1)/(k1Rot-k2Rot), k1Rot*(B2-B1)/(k1Rot-k2Rot) + B1);
-	    wh[0] = (int)TSYS::realRound(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
-	    wh[1] = (int)TSYS::realRound(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
+	    wh[0] = (int)rRnd(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
+	    wh[1] = (int)rRnd(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
 	}
 	else {
-	    int ln = (int)TSYS::realRound(VCAElFigure::length(Point(p1_rot.x,y1),Point(x1,p2_rot.y)), POS_PREC_DIG, true);
+	    int ln = (int)rRnd(VCAElFigure::length(Point(p1_rot.x,y1),Point(x1,p2_rot.y)), POS_PREC_DIG, true);
 	    wh[0] = wh[1] = ln;
 	}
     }
@@ -4481,8 +4479,8 @@ void VCAText::getReq( SSess &ses )
     double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1;
     prmEl = ses.prm.find("ySc");
     double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1;
-    scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
-    scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
+    scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
+    scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
     int txtFontSize = 0;
     txtFontSize = (int)((float)textFontSize*vmin(xSc, ySc));
     if(im) gdImageDestroy(im);
@@ -4671,7 +4669,7 @@ void VCAText::getReq( SSess &ses )
 	    char *rez = gdImageStringFTEx(im_txt, &brect[0], clr_txt, (char*)textFont.c_str(), txtFontSize, 0, offsetX, realY, (char*)str_wrap[k].c_str(), &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTex for font '%s' error: %s."),textFont.c_str(),rez);
 	    else {
-		int wdt = bold ? (int)TSYS::realRound(txtFontSize/6,POS_PREC_DIG,true) : (int)TSYS::realRound(txtFontSize/12,POS_PREC_DIG,true);
+		int wdt = bold ? (int)rRnd(txtFontSize/6,POS_PREC_DIG,true) : (int)rRnd(txtFontSize/12,POS_PREC_DIG,true);
 		gdImageSetThickness(im_txt, wdt);
 		if(underline && !str_wrap[k].empty())
 		    gdImageLine(im_txt, offsetX, realY+(int)lnSpace/2, offsetX+(brect[4]-brect[0]), realY+(int)lnSpace/2, clr_txt);
@@ -4803,8 +4801,8 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 //*************************************************
 //* VCADiagram					  *
 //*************************************************
-VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), type(0),
-    tTimeCurent(false), holdCur(false), tTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
+VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0),
+    sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0), lstTrc(false)
 {
 
 }
@@ -4812,8 +4810,9 @@ VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), type(0),
 void VCADiagram::getReq( SSess &ses )
 {
     switch(type) {
-	case FD_TRND: makeTrendsPicture(ses);		break;
-	case FD_SPECTR: makeSpectrumPicture(ses);	break;
+	case FD_TRND:	makeTrendsPicture(ses);		break;
+	case FD_SPECTR:	makeSpectrumPicture(ses);	break;
+	case FD_XY:	makeXYPicture(ses);		break;
     }
 }
 
@@ -4841,7 +4840,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     else if(trcPer && lstTrc < time(NULL)) { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
     if(rld) {
-	for(unsigned i_p = 0; i_p < trnds.size(); i_p++) trnds[i_p].loadData(ses.user);
+	for(unsigned iP = 0; iP < trnds.size(); iP++) trnds[iP].loadData(ses.user);
 	//Trace cursors value
 	if(active) {
 	    int64_t tTimeGrnd = tTime - (int64_t)(1e6*tSize);
@@ -4852,7 +4851,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     int mrkFontSize = 0;
     int mrkHeight = 0, mrkWidth = 0;
-    int clr_grid = 0, clr_mrk = 0;				//Colors
+    int clrGrid = 0, clrMrk = 0;				//Colors
 
     //Get generic parameters
     int64_t tSz  = (int64_t)(1e6*tSize);			//Trends size (us)
@@ -4865,8 +4864,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     float xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     prmEl = ses.prm.find("ySc");
     float ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
-    int imW = (int)TSYS::realRound((float)width*xSc,POS_PREC_DIG,true);
-    int imH = (int)TSYS::realRound((float)height*ySc,POS_PREC_DIG,true);
+    int imW = (int)rRnd((float)width*xSc,POS_PREC_DIG,true);
+    int imH = (int)rRnd((float)height*ySc,POS_PREC_DIG,true);
 
     //Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW,imH);
@@ -4890,14 +4889,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     strex.hdpi = 72;
 
     if(sclHor&FD_GRD_MARKS || sclVer&FD_GRD_MARKS) {
-	gdImageSetThickness(im, vmax(1,(int)TSYS::realRound(vmin(xSc,ySc))));
+	gdImageSetThickness(im, vmax(1,(int)rRnd(vmin(xSc,ySc))));
 	// Set grid color
-	clr_grid = TWEB::colorResolve(im, sclColor);
+	clrGrid = TWEB::colorResolve(im, sclColor);
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    //>> Set markers font and color
 	    mrkFontSize = (float)sclMarkFontSize * vmin(xSc,ySc);
-	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
@@ -4920,8 +4919,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     // Get main scale for non individual parameters
     int prmInGrp = 0, prmGrpLast = -1;
-    for(unsigned i_p = 0, mainPerc = false; i_p < trnds.size(); i_p++) {
-	TrendObj &cP = trnds[i_p];
+    for(unsigned iP = 0, mainPerc = false; iP < trnds.size(); iP++) {
+	TrendObj &cP = trnds[iP];
 	if(!cP.val().size() || ((cP.color()>>31)&0x01))	continue;
 
 	cP.adjU = -3e300, cP.adjL = 3e300;
@@ -4962,15 +4961,15 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	{ vsMin = vmin(vsMin,cP.adjL); vsMax = vmax(vsMax,cP.adjU); }
 	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
 
-	prmInGrp++; prmGrpLast = i_p;
+	prmInGrp++; prmGrpLast = iP;
     }
 
     // Check for individual parameters and for possibility to merge it to group or create new for no group
     int prmIndiv = 0;
     int prmIndivSc = -1;
     vector<int> prmsInd;
-    for(unsigned i_p = 0; i_p < trnds.size(); i_p++) {
-	TrendObj &cP = trnds[i_p];
+    for(unsigned iP = 0; iP < trnds.size(); iP++) {
+	TrendObj &cP = trnds[iP];
 	cP.isIndiv = false;
 	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&FD_GRD_MARKS)) continue;
 	// Check for include to present or create new group and exclude from individual
@@ -4978,13 +4977,13 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    (cP.mScale&FD_LOG) == (sclVer&FD_LOG))
 	{
 	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
-	    prmInGrp++; prmGrpLast = i_p;
+	    prmInGrp++; prmGrpLast = iP;
 	    continue;
 	}
 	cP.isIndiv = true;
 	prmIndiv++;
-	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = i_p;
-	else prmsInd.push_back(i_p);
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = iP;
+	else prmsInd.push_back(iP);
 	if(cP.mScale&FD_LOG) {
 	    cP.adjU = log10(vmax(1e-100,cP.adjU)); cP.adjL = log10(vmax(1e-100,cP.adjL));
 	    if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001) {
@@ -5002,7 +5001,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
 
     // Final main scale adapting
-    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMax = 100, vsMin = isLog ? pow(10,vmin(0,2-(tArH/150))) : 0; }
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog ? pow(10,vmin(0,2-(tArH/150))) : 0; }
     else vsPerc = false;
     if(isLog) {
 	vsMax = log10(vmax(1e-100,vsMax)); vsMin = log10(vmax(1e-100,vsMin));
@@ -5019,21 +5018,21 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //Draw main and individual vertical scales
     float vmax_ln = tArH / ((sclVer&FD_MARKS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
-    for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++) {	//prmsInd[i]=-1 - for main scale
+    for(unsigned iP = 0; vmax_ln >= 2 && iP < prmsInd.size(); iP++) {	//prmsInd[i]=-1 - for main scale
 	bool	isLogT, vsPercT;
 	char	sclVerT;
 	int	clrGridT = TWEB::colorResolve(im, sclColor);
 	double	vsMinT, vsMaxT;
 	double	vDiv = 1;
-	if(prmsInd[i_p] < 0) {	//Main scale process
+	if(prmsInd[iP] < 0) {	//Main scale process
 	    // Draw environment
 	    vsPercT = vsPerc;
 	    isLogT = isLog;
 	    sclVerT = sclVer;
 	    clrGridT = TWEB::colorResolve(im, sclColor);
-	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    if(prmInGrp == 1 && prmGrpLast >= 0)	//Set color for single parameter in main group
-		clrGridT = clr_mrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
+		clrGridT = clrMrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
 	    // Rounding
 	    double v_len = vsMax - vsMin;
 	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
@@ -5043,12 +5042,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    vsMinT = vsMin; vsMaxT = vsMax;
 	}
 	else {	//Individual scale process
-	    TrendObj &cP = trnds[prmsInd[i_p]];
+	    TrendObj &cP = trnds[prmsInd[iP]];
 	    // Draw environment
 	    vsPercT = false;
 	    isLogT = cP.mScale&FD_LOG;
 	    sclVerT = cP.wScale;
-	    clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
+	    clrGridT = clrMrk = TWEB::colorResolve(im, cP.color());
 	    // Rounding
 	    double v_len = cP.adjU - cP.adjL;
 	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
@@ -5057,32 +5056,32 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(i_p < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
+	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
 
 	// Draw vertical grid and markers
 	int markWdth = 0;
 	if(sclVerT&FD_GRD_MARKS) {
 	    string labVal;
 	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
-	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv) {
+	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		//  Draw grid
-		int v_pos = tArY + tArH - (int)((double)tArH*(i_v-vsMinT)/(vsMaxT-vsMinT));
-		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
+		int v_pos = tArY + tArH - (int)((double)tArH*(iV-vsMinT)/(vsMaxT-vsMinT));
+		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clrGrid);
 		else gdImageLine(im, tArX-3, v_pos, tArX+3, v_pos, clrGridT);
 		//  Draw markers
 		if(sclVerT&FD_MARKS && mrkHeight) {
-		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
+		    bool isPerc = vsPercT && ((vsMaxT-iV-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
-		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,i_v):i_v)) + (isPerc?" %":"");
-		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,iV):iV)) + (isPerc?" %":"");
+		    gdImageStringFTEx(im, &brect[0], clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
 			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);
 		    markWdth = vmax(markWdth, brect[2]-brect[6]);
 		}
 	    }
 	}
-	if(i_p < (prmsInd.size()-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
+	if(iP < (prmsInd.size()-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
     }
-    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 
     //Calc horizontal scale
     int64_t hDiv = 1;					//Horisontal scale divisor
@@ -5114,7 +5113,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
 
 	    //  Draw generic grid line
-	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clr_grid);
+	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clrGrid);
 	    //  Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tArX+tArW;
@@ -5128,11 +5127,11 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str(), &strex);
 		int markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = markBrd;
-		gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str(), &strex);
+		gdImageStringFTEx(im,NULL,clrMrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str(), &strex);
 		gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str(), &strex);
 		markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd,markBrd);
-		gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str(), &strex);
+		gdImageStringFTEx(im,NULL,clrMrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str(), &strex);
 	    }
 
 	    //  Draw grid and/or markers
@@ -5140,8 +5139,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    for(int64_t i_h = tBeg; true; ) {
 		//   Draw grid
 		int h_pos = tArX + tArW*(i_h-tBeg)/(tPict-tBeg);
-		if(sclHor&FD_GRD) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
-		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
+		if(sclHor&FD_GRD) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clrGrid);
+		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clrGrid);
 		//   Draw markers
 		if(sclHor&FD_MARKS && mrkHeight && !((i_h+UTChourDt)%hDiv) && i_h != tPict) {
 		    tm_t = i_h/1000000;
@@ -5178,7 +5177,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2, 0);
 			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+(brect[3]-brect[7]), (char*)lab_tm.c_str(), &strex);
+			    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+(brect[3]-brect[7]), (char*)lab_tm.c_str(), &strex);
 			    endPosTm = tpos+wdth;
 			}
 		    }
@@ -5187,7 +5186,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 			wdth = brect[2]-brect[6];
 			tpos = vmax(h_pos-wdth/2, 0);
 			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3)) {
-			    gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+2*(brect[3]-brect[7]), (char*)lab_dt.c_str(), &strex);
+			    gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+2*(brect[3]-brect[7]), (char*)lab_dt.c_str(), &strex);
 			    endPosDt = tpos+wdth;
 			}
 		    }
@@ -5204,11 +5203,11 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     //Draw trends
-    for(unsigned i_t = 0; i_t < trnds.size(); i_t++) {
-	TrendObj &cP = trnds[i_t];
+    for(unsigned iT = 0; iT < trnds.size(); iT++) {
+	TrendObj &cP = trnds[iT];
 
 	// Set trend's pen
-	int lnWdth = vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(xSc,ySc))));
+	int lnWdth = vmax(1,vmin(10,(int)rRnd(cP.width()*vmin(xSc,ySc))));
 	gdImageSetThickness(im, lnWdth);
 	int clr_t = TWEB::colorResolve(im, cP.color());
 
@@ -5321,11 +5320,11 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     if(tTimeCurent)	tTime = (int64_t)time(NULL)*1000000;
     else if(trcPer && lstTrc < time(NULL)) { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
-    if(rld) for(unsigned i_p = 0; i_p < trnds.size(); i_p++) trnds[i_p].loadData(ses.user);
+    if(rld) for(unsigned iP = 0; iP < trnds.size(); iP++) trnds[iP].loadData(ses.user);
 
     int mrkFontSize = 0;
     int mrkHeight = 0, mrkWidth = 0;
-    int clr_grid = 0, clr_mrk = 0;					//Colors
+    int clrGrid = 0, clrMrk = 0;					//Colors
 
     //Get generic parameters
     int64_t tSz  = (int64_t)(1e6*tSize);				//Time size (us)
@@ -5335,8 +5334,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     prmEl = ses.prm.find("ySc");
     double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
-    int imW = (int)TSYS::realRound((double)width*xSc,POS_PREC_DIG,true);
-    int imH = (int)TSYS::realRound((double)height*ySc,POS_PREC_DIG,true);
+    int imW = (int)rRnd((double)width*xSc,POS_PREC_DIG,true);
+    int imH = (int)rRnd((double)height*ySc,POS_PREC_DIG,true);
 
     //Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW, imH);
@@ -5361,14 +5360,14 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //Process scale
     if(sclHor&FD_GRD_MARKS || sclVer&FD_GRD_MARKS) {
-	gdImageSetThickness(im, vmax(1,TSYS::realRound(vmin(xSc,ySc))));
+	gdImageSetThickness(im, vmax(1,rRnd(vmin(xSc,ySc))));
 	// Set grid color
-	clr_grid = TWEB::colorResolve(im, sclColor);
+	clrGrid = TWEB::colorResolve(im, sclColor);
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
 	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
 	    // Set markers font and color
 	    mrkFontSize = (double)sclMarkFontSize*vmin(xSc, ySc);
-	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
@@ -5389,16 +5388,16 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     // Get main scale for non individual parameters
     int prmInGrp = 0, prmGrpLast = -1;
-    for(unsigned i_p = 0, mainPerc = false; i_p < trnds.size(); i_p++) {
-	TrendObj &cP = trnds[i_p];
+    for(unsigned iP = 0, mainPerc = false; iP < trnds.size(); iP++) {
+	TrendObj &cP = trnds[iP];
 	if(!cP.fftN || ((cP.color()>>31)&0x01))	continue;
 
 	cP.adjU = -3e300; cP.adjL = 3e300;
 	if(cP.bordU() <= cP.bordL()) {
 	    //  Calc value borders
 	    double vlOff = cP.fftOut[0][0]/cP.fftN;
-	    for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++) {
-		curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+	    for(int iV = 1; iV < (cP.fftN/2+1); iV++) {
+		curVl = vlOff + pow(pow(cP.fftOut[iV][0],2)+pow(cP.fftOut[iV][1],2),0.5)/(cP.fftN/2+1);
 		cP.adjL = vmin(cP.adjL, curVl);
 		cP.adjU = vmax(cP.adjU, curVl);
 	    }
@@ -5419,28 +5418,28 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	{ vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU); }
 	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
 
-	prmInGrp++; prmGrpLast = i_p;
+	prmInGrp++; prmGrpLast = iP;
     }
 
     // Check for individual parameters and for possibility to merge it to group or create new for no group
     int prmIndiv = 0;
     int prmIndivSc = -1;
     vector<int> prmsInd;
-    for(unsigned i_p = 0; i_p < trnds.size(); i_p++) {
-	TrendObj &cP = trnds[i_p];
+    for(unsigned iP = 0; iP < trnds.size(); iP++) {
+	TrendObj &cP = trnds[iP];
 	cP.isIndiv = false;
 	if(!cP.fftN || ((cP.color()>>31)&0x01) || !(cP.wScale&FD_GRD_MARKS)) continue;
 	// Check for include to present or create new group and exclude from individual
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
 	{
 	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
-	    prmInGrp++; prmGrpLast = i_p;
+	    prmInGrp++; prmGrpLast = iP;
 	    continue;
 	}
 	cP.isIndiv = true;
 	prmIndiv++;
-	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = i_p;
-	else prmsInd.push_back(i_p);
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = iP;
+	else prmsInd.push_back(iP);
 	if(isScale) {	//Vertical scale and offset apply
 	    float vsDif = cP.adjU - cP.adjL;
 	    cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
@@ -5461,20 +5460,20 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //Draw main and individual vertical scales
     double vmax_ln = tArH / ((sclVer&FD_MARKS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
-    for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++) {	//prmsInd[i]=-1 - for main scale
+    for(unsigned iP = 0; vmax_ln >= 2 && iP < prmsInd.size(); iP++) {	//prmsInd[i]=-1 - for main scale
 	bool	vsPercT;
 	char	sclVerT;
 	int	clrGridT = TWEB::colorResolve(im, sclColor);
 	double	vsMinT, vsMaxT;
 	double	vDiv = 1;
-	if(prmsInd[i_p] < 0) {	//Main scale process
+	if(prmsInd[iP] < 0) {	//Main scale process
 	    // Draw environment
 	    vsPercT = vsPerc;
 	    sclVerT = sclVer;
 	    clrGridT = TWEB::colorResolve(im, sclColor);
-	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 	    if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
-		clrGridT = clr_mrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
+		clrGridT = clrMrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
 	    // Rounding
 	    double v_len = vsMax - vsMin;
 	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
@@ -5484,11 +5483,11 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    vsMinT = vsMin; vsMaxT = vsMax;
 	}
 	else {	//Individual scale process
-	    TrendObj &cP = trnds[prmsInd[i_p]];
+	    TrendObj &cP = trnds[prmsInd[iP]];
 	    // Draw environment
 	    vsPercT = false;
 	    sclVerT = cP.wScale;
-	    clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
+	    clrGridT = clrMrk = TWEB::colorResolve(im, cP.color());
 	    // Rounding
 	    double v_len = cP.adjU - cP.adjL;
 	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
@@ -5497,30 +5496,30 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    while(((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(i_p < (prmsInd.size()-1)) sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
+	if(iP < (prmsInd.size()-1)) sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
 
 	//  Draw vertical grid and markers
 	int markWdth = 0;
 	if(sclVerT&FD_GRD_MARKS) {
 	    string labVal;
 	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
-	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv) {
-		int v_pos = tArY + tArH - (int)((double)tArH*(i_v-vsMinT)/(vsMaxT-vsMinT));
-		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
+	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+		int v_pos = tArY + tArH - (int)((double)tArH*(iV-vsMinT)/(vsMaxT-vsMinT));
+		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clrGrid);
 		else gdImageLine(im, tArX-3, v_pos, tArX+3, v_pos, clrGridT);
 		if(sclVerT&FD_MARKS && mrkHeight) {
-		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
+		    bool isPerc = vsPercT && ((vsMaxT-iV-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
-		    labVal = TSYS::strMess("%0.5g",i_v)+(isPerc?" %":"");
-		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+		    labVal = TSYS::strMess("%0.5g",iV)+(isPerc?" %":"");
+		    gdImageStringFTEx(im, &brect[0], clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
 			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Check for correct work combining mode
 		    markWdth = vmax(markWdth, brect[2]-brect[6]);
 		}
 	    }
 	}
-	if(i_p < (prmsInd.size()-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
+	if(iP < (prmsInd.size()-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
     }
-    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+    clrMrk = TWEB::colorResolve(im, sclMarkColor);
 #endif
 
     //Calc horizontal scale
@@ -5543,7 +5542,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    double labDiv = 1;
 	    if(fftEnd > 1000) labDiv = 1000;
 	    //  Draw generic grid line
-	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clr_grid);
+	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clrGrid);
 	    //  Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tArX + tArW;
@@ -5552,14 +5551,14 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
 		int markBrd = tArX + tArW - (brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd, markBrd);
-		gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, markBrd, tArY+tArH+3+(brect[3]-brect[7]), (char*)labH.c_str(), &strex);
+		gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, markBrd, tArY+tArH+3+(brect[3]-brect[7]), (char*)labH.c_str(), &strex);
 	    }
 	    //  Draw grid and/or markers
 	    for(double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h += hDiv) {
 		//   Draw grid
 		int h_pos = tArX + (int)((double)tArW*(i_h-fftBeg)/(fftEnd-fftBeg));
-		if(sclHor&FD_GRD) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
-		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
+		if(sclHor&FD_GRD) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clrGrid);
+		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clrGrid);
 
 		if(sclHor&FD_MARKS && mrkHeight) {
 		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
@@ -5567,7 +5566,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		    int wdth = brect[2]-brect[6];
 		    int tpos = vmax(h_pos-wdth/2,0);
 		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
-			gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+(brect[3]-brect[7]), (char*)labH.c_str(), &strex);
+			gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+(brect[3]-brect[7]), (char*)labH.c_str(), &strex);
 		    begMarkBrd = vmax(begMarkBrd, tpos+wdth);
 		}
 	    }
@@ -5575,13 +5574,13 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     }
 
 #if HAVE_FFTW3_H
-    // Draw trends trnds[i_t];
-    for(unsigned i_t = 0; i_t < trnds.size(); i_t++) {
-	TrendObj &cP = trnds[i_t];
+    // Draw trends trnds[iT];
+    for(unsigned iT = 0; iT < trnds.size(); iT++) {
+	TrendObj &cP = trnds[iT];
 	if(!cP.fftN || (cP.color()>>31)&0x01) continue;
 
 	// Set trend's pen
-	gdImageSetThickness(im,vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(xSc,ySc)))));
+	gdImageSetThickness(im,vmax(1,vmin(10,(int)rRnd(cP.width()*vmin(xSc,ySc)))));
 	int clr_t = TWEB::colorResolve(im, cP.color());
 	//gdImageColorAllocate(im,(uint8_t)(cP.color()>>16),(uint8_t)(cP.color()>>8),(uint8_t)cP.color());
 	double vlOff = cP.fftOut[0][0]/cP.fftN;
@@ -5596,8 +5595,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	double bordU = cP.bordU();
 	if(vsPercT && bordL >= bordU) {
 	    bordU = -3e300, bordL = 3e300;
-	    for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++) {
-		curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+	    for(int iV = 1; iV < (cP.fftN/2+1); iV++) {
+		curVl = vlOff + pow(pow(cP.fftOut[iV][0],2)+pow(cP.fftOut[iV][1],2),0.5)/(cP.fftN/2+1);
 		bordL = vmin(bordL, curVl);
 		bordU = vmax(bordU, curVl);
 	    }
@@ -5609,10 +5608,10 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	//  Draw trend
 	double prevVl = EVAL_REAL;
 	int curPos = 0, prevPos = 0;
-	for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++) {
-	    curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+	for(int iV = 1; iV < (cP.fftN/2+1); iV++) {
+	    curVl = vlOff + pow(pow(cP.fftOut[iV][0],2)+pow(cP.fftOut[iV][1],2),0.5)/(cP.fftN/2+1);
 	    if(vsPercT) curVl = 100*(curVl-bordL)/(bordU-bordL);
-	    curPos = tArX + (int)((double)tArW*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
+	    curPos = tArX + (int)((double)tArW*(fftDt*iV-fftBeg)/(fftEnd-fftBeg));
 
 	    int c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,(curVl-vsMinT)/(vsMaxT-vsMinT))));
 	    if(prevVl == EVAL_REAL) gdImageSetPixel(im, curPos, c_vpos, clr_t);
@@ -5632,7 +5631,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
 		XMLNode req("set");
 		req.setAttr("path",path()+"/%2fserv%2fattr")->
-		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_t))->setText(r2s(val,6));
+		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT))->setText(r2s(val,6));
 		mod->cntrIfCmd(req,ses.user);
 	    }
 	}
@@ -5650,6 +5649,544 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //Get image and transfer it
     makeImgPng(ses, im);
+}
+
+void VCADiagram::makeXYPicture( SSess &ses )
+{
+    ResAlloc res(mRes, true);
+
+    int64_t dbTm = 0;
+    if(mess_lev() == TMess::Debug) dbTm = TSYS::curTime();
+
+    //Check for trend's data reload
+    bool rld = true;
+    if(tTimeCurent)	tTime = (int64_t)time(NULL)*1000000;
+    else if(trcPer && lstTrc < time(NULL)) { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
+    else rld = false;
+    if(rld)
+	for(unsigned iP = 0; iP < trnds.size(); iP++) trnds[iP].loadData(ses.user);
+
+    int mrkFontSize = 0;
+    int mrkHeight = 0, mrkWidth = 0;
+    int clrGrid = 0, clrMrk = 0;				//Colors
+
+    //Get generic parameters
+    int64_t tSz  = (int64_t)(1e6*tSize);			//Trends size (us)
+    int64_t tEnd = tTime;					//Trends end point (us)
+    tPict = tEnd;
+    int64_t tBeg = tEnd - tSz;					//Trends begin point (us)
+
+    //Get scale
+    map<string,string>::iterator prmEl = ses.prm.find("xSc");
+    float xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1;
+    prmEl = ses.prm.find("ySc");
+    float ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1;
+    int imW = (int)rRnd((float)width*xSc, POS_PREC_DIG, true);
+    int imH = (int)rRnd((float)height*ySc, POS_PREC_DIG, true);
+
+    //Prepare picture
+    gdImagePtr im = gdImageCreateTrueColor(imW, imH);
+    if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png") + ses.page; return; }
+    gdImageAlphaBlending(im, 0);
+    gdImageFilledRectangle(im, 0, 0, imW-1, imH-1, gdImageColorResolveAlpha(im,0,0,0,127));
+    gdImageAlphaBlending(im, 1);
+    int brect[8];
+
+    if(!trnds.size() || tSz <= 0)	{ makeImgPng(ses, im); return; }
+
+    //Make decoration and prepare trends area
+    tArX = 1, tArY = 1;						//Curves of trends area rect
+    tArW = imW - 2*(geomMargin+bordWidth+1), tArH = imH - 2*(geomMargin+bordWidth+1);
+
+    //Setting the resolution for the text's font
+    gdFTStringExtra strex;
+    strex.flags =  gdFTEX_RESOLUTION;
+    strex.vdpi = 72;
+    strex.hdpi = 72;
+
+    if(sclHor&FD_GRD_MARKS || sclVer&FD_GRD_MARKS) {
+	gdImageSetThickness(im, vmax(1,(int)rRnd(vmin(xSc,ySc))));
+	// Set grid color
+	clrGrid = TWEB::colorResolve(im, sclColor);
+	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
+	if(sclHor&FD_MARKS || sclVer&FD_MARKS) {
+	    // Set markers font and color
+	    mrkFontSize = (float)sclMarkFontSize * vmin(xSc, ySc);
+	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
+	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
+	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
+	    if(rez) mess_err(nodePath().c_str(), _("gdImageStringFTEx for font '%s' error: %s."), sclMarkFont.c_str(), rez);
+	    else { mrkHeight = brect[3] - brect[7]; mrkWidth = brect[2] - brect[6]; }
+	    if(sclHor&FD_MARKS) {
+		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
+		else tArH -= mrkHeight + 2;
+	    }
+	    if(sclVer&FD_MARKS && tArW < (int)(100*vmin(xSc,ySc))) sclVer &= ~(FD_MARKS);
+	}
+    }
+
+    //Calc vertical scale
+    int64_t	aVbeg, aVend;				//Corrected for allow data the trend begin and end point
+    bool	vsPerc = true,				//Vertical scale percent mode
+		isLog = sclVer&FD_LOG,			//Logarithmic scale
+		isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
+    double	curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
+
+    // Get main scale for non individual parameters
+    int prmInGrp = 0, prmGrpLast = -1;
+    for(unsigned iP = 0, mainPerc = false; iP < trnds.size(); iP += 2) {
+	TrendObj &cP = trnds[iP];
+	if(!cP.val().size() || ((cP.color()>>31)&0x01) || (iP+1) >= trnds.size() ||
+	    !trnds[iP+1].val().size() || ((trnds[iP+1].color()>>31)&0x01)) continue;
+
+	cP.adjU = -3e300, cP.adjL = 3e300;
+	if(cP.bordU() <= cP.bordL() && cP.valTp() != TFld::Boolean) {
+	    // Check trend for valid data
+	    aVbeg = vmax(tBeg, cP.valBeg());
+	    aVend = vmin(tEnd, cP.valEnd());
+
+	    if(aVbeg >= aVend)	{ makeImgPng(ses, im); return; }
+	    // Calc value borders
+	    bool end_vl = false;
+	    int ipos = cP.val(aVbeg);
+	    if(ipos && cP.val()[ipos].tm > aVbeg) ipos--;
+	    while(true) {
+		if(ipos >= (int)cP.val().size() || end_vl)	break;
+		if(cP.val()[ipos].tm >= aVend) end_vl = true;
+		if(cP.val()[ipos].val != EVAL_REAL) {
+		    curVl = cP.val()[ipos].val;
+		    cP.adjL = vmin(cP.adjL, curVl); cP.adjU = vmax(cP.adjU, curVl);
+		}
+		ipos++;
+	    }
+	    if(cP.adjU == -3e300)	{ cP.adjU = 1; cP.adjL = 0; }
+	    else if((cP.adjU-cP.adjL) < 1e-30 && fabs(cP.adjU) < 1e-30) { cP.adjU += 0.5; cP.adjL -= 0.5; }
+	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001) {
+		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+	    }
+	}
+	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
+	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
+
+	cP.wScale = cP.mScale&(sclVer|FD_LOG);
+	if(cP.wScale&FD_GRD_MARKS)	continue;
+
+	//  Check for value border allow
+	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
+	{ vsMin = vmin(vsMin,cP.adjL); vsMax = vmax(vsMax,cP.adjU); }
+	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = iP;
+    }
+
+    // Check for individual parameters and for possibility to merge it to group or create new for no group
+    int prmIndiv = 0, prmIndivSc = -1;
+    vector<int> prmsInd;
+    for(unsigned iP = 0; iP < trnds.size(); iP += 2) {
+	TrendObj &cP = trnds[iP];
+	cP.isIndiv = false;
+	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&FD_GRD_MARKS) || (iP+1) >= trnds.size() ||
+	    !trnds[iP+1].val().size() || ((trnds[iP+1].color()>>31)&0x01)) continue;
+
+	// Check for include to present or create new group and exclude from individual
+	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
+	    (cP.mScale&FD_LOG) == (sclVer&FD_LOG))
+	{
+	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
+	    prmInGrp++; prmGrpLast = iP;
+	    continue;
+	}
+	cP.isIndiv = true;
+	prmIndiv++;
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = iP;
+	else prmsInd.push_back(iP);
+	if(cP.mScale&FD_LOG) {
+	    cP.adjU = log10(vmax(1e-100,cP.adjU)); cP.adjL = log10(vmax(1e-100,cP.adjL));
+	    if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001) {
+		double wnt_dp = 0.0001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+	    }
+	}
+	if(isScale) {	//Vertical scale and offset apply
+	    float vsDif = cP.adjU - cP.adjL;
+	    cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
+	    cP.adjU += (sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (sclVerScl*vsDif/100-vsDif)/2;
+	}
+    }
+    if(prmInGrp) prmsInd.push_back(-1);
+    if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
+
+    // Final main scale adapting
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog ? pow(10,vmin(0,2-(tArH/150))) : 0; }
+    else vsPerc = false;
+    if(isLog) {
+	vsMax = log10(vmax(1e-100,vsMax)); vsMin = log10(vmax(1e-100,vsMin));
+	if((vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.0001) {
+	    double wnt_dp = 0.0001*fabs(vsMin+(vsMax-vsMin)/2) - (vsMax-vsMin);
+	    vsMin -= wnt_dp/2; vsMax += wnt_dp/2;
+	}
+    }
+    if(isScale) {	//Vertical scale and offset apply
+	float vsDif = vsMax - vsMin;
+	vsMax += sclVerSclOff*vsDif/100;	vsMin += sclVerSclOff*vsDif/100;
+	vsMax += (sclVerScl*vsDif/100-vsDif)/2;	vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+    }
+
+    //Draw main and individual vertical scales
+    float vmax_ln = tArH / ((sclVer&FD_MARKS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
+    for(unsigned iP = 0; vmax_ln >= 2 && iP < prmsInd.size(); iP++) {	//prmsInd[i]=-1 - for main scale
+	bool	isLogT, vsPercT;
+	char	sclVerT;
+	int	clrGridT = TWEB::colorResolve(im, sclColor);
+	double	vsMinT, vsMaxT;
+	double	vDiv = 1;
+	if(prmsInd[iP] < 0) {	//Main scale process
+	    // Draw environment
+	    vsPercT = vsPerc;
+	    isLogT = isLog;
+	    sclVerT = sclVer;
+	    clrGridT = TWEB::colorResolve(im, sclColor);
+	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
+	    if(prmInGrp == 1 && prmGrpLast >= 0)	//Set color for single parameter in main group
+		clrGridT = clrMrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
+	    // Rounding
+	    double v_len = vsMax - vsMin;
+	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
+	    while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale) { vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+	    while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = vsMin; vsMaxT = vsMax;
+	}
+	else {	//Individual scale process
+	    TrendObj &cP = trnds[prmsInd[iP]];
+	    // Draw environment
+	    vsPercT = false;
+	    isLogT = cP.mScale&FD_LOG;
+	    sclVerT = cP.wScale;
+	    clrGridT = clrMrk = TWEB::colorResolve(im, cP.color());
+	    // Rounding
+	    double v_len = cP.adjU - cP.adjL;
+	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
+	    while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale) { cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
+	}
+	if(iP < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
+
+	// Draw vertical grid and markers
+	int markWdth = 0;
+	if(sclVerT&FD_GRD_MARKS) {
+	    string labVal;
+	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
+	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+		//  Draw grid
+		int v_pos = tArY + tArH - (int)((double)tArH*(iV-vsMinT)/(vsMaxT-vsMinT));
+		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clrGrid);
+		else gdImageLine(im, tArX-3, v_pos, tArX+3, v_pos, clrGridT);
+		//  Draw markers
+		if(sclVerT&FD_MARKS && mrkHeight) {
+		    bool isPerc = vsPercT && ((vsMaxT-iV-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-1-mrkHeight) < tArY;
+		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,iV):iV)) + (isPerc?" %":"");
+		    gdImageStringFTEx(im, &brect[0], clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);
+		    markWdth = vmax(markWdth, brect[2]-brect[6]);
+		}
+	    }
+	}
+	if(iP < (prmsInd.size()-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
+    }
+    clrMrk = TWEB::colorResolve(im, sclMarkColor);
+
+    //Calc horizontal scale for main and individual
+    int64_t	aHbeg, aHend;				//Corrected for allow data the trend begin and end point
+    bool	hsPerc = true,				//Vertical scale percent mode
+		isHLog = sclHor&FD_LOG,			//Logarithmic scale
+		isHScale = (fabs(sclHorSclOff) > 1 || fabs(sclHorScl-100) > 1);
+    double	hsMax = -3e300, hsMin = 3e300;		//Trend's vertical scale border
+
+    // Get main scale for non individual parameters
+    prmInGrp = 0, prmGrpLast = -1;
+    for(unsigned iP = 1, mainPerc = false; iP < trnds.size(); iP += 2) {
+	TrendObj &cP = trnds[iP];
+	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !trnds[iP-1].val().size() || ((trnds[iP-1].color()>>31)&0x01)) continue;
+
+	cP.adjU = -3e300, cP.adjL = 3e300;
+	if(cP.bordU() <= cP.bordL() && cP.valTp() != TFld::Boolean) {
+	    // Check trend for valid data
+	    aHbeg = vmax(tBeg, cP.valBeg());
+	    aHend = vmin(tEnd, cP.valEnd());
+
+	    if(aHbeg >= aHend)	{ makeImgPng(ses, im); return; }
+	    // Calc value borders
+	    bool end_vl = false;
+	    int ipos = cP.val(aHbeg);
+	    if(ipos && cP.val()[ipos].tm > aHbeg) ipos--;
+	    while(true) {
+		if(ipos >= (int)cP.val().size() || end_vl)	break;
+		if(cP.val()[ipos].tm >= aHend) end_vl = true;
+		if(cP.val()[ipos].val != EVAL_REAL) {
+		    curVl = cP.val()[ipos].val;
+		    cP.adjL = vmin(cP.adjL, curVl); cP.adjU = vmax(cP.adjU, curVl);
+		}
+		ipos++;
+	    }
+	    if(cP.adjU == -3e300)	{ cP.adjU = 1; cP.adjL = 0; }
+	    else if((cP.adjU-cP.adjL) < 1e-30 && fabs(cP.adjU) < 1e-30) { cP.adjU += 0.5; cP.adjL -= 0.5; }
+	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001) {
+		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+	    }
+	}
+	else if(cP.bordU() <= cP.bordL() && cP.valTp() == TFld::Boolean) { cP.adjU = 1.5; cP.adjL = -0.5; }
+	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
+
+	cP.wScale = cP.mScale&(sclHor|FD_LOG);
+	if(cP.wScale&FD_GRD_MARKS)	continue;
+
+	//  Check for value border allow
+	if(!mainPerc && (hsMin > hsMax || vmax(fabs((hsMax-cP.adjL)/(hsMax-hsMin)-1),fabs((cP.adjU-hsMin)/(hsMax-hsMin)-1)) < 0.2))
+	{ hsMin = vmin(hsMin,cP.adjL); hsMax = vmax(hsMax,cP.adjU); }
+	else { hsMax = -3e300; hsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = iP;
+    }
+
+    // Check for individual parameters and for possibility to merge it to group or create new for no group
+    prmIndiv = 0, prmIndivSc = -1;
+    prmsInd.clear();
+    for(unsigned iP = 1; iP < trnds.size(); iP += 2) {
+	TrendObj &cP = trnds[iP];
+	cP.isIndiv = false;
+	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&FD_GRD_MARKS) ||
+	    !trnds[iP-1].val().size() || ((trnds[iP-1].color()>>31)&0x01)) continue;
+
+	// Check for include to present or create new group and exclude from individual
+	if((!prmInGrp || (hsMin < hsMax && vmax(fabs((hsMax-cP.adjL)/(hsMax-hsMin)-1),fabs((cP.adjU-hsMin)/(hsMax-hsMin)-1)) < 0.2)) &&
+	    (cP.mScale&FD_LOG) == (sclHor&FD_LOG))
+	{
+	    hsMin = vmin(hsMin, cP.adjL); hsMax = vmax(hsMax, cP.adjU);
+	    prmInGrp++; prmGrpLast = iP;
+	    continue;
+	}
+	cP.isIndiv = true;
+	prmIndiv++;
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = iP;
+	else prmsInd.push_back(iP);
+	if(cP.mScale&FD_LOG) {
+	    cP.adjU = log10(vmax(1e-100,cP.adjU)); cP.adjL = log10(vmax(1e-100,cP.adjL));
+	    if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001) {
+		double wnt_dp = 0.0001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+	    }
+	}
+	if(isHScale) {	//Horizontal scale and offset apply
+	    float hsDif = cP.adjU - cP.adjL;
+	    cP.adjU += sclHorSclOff*hsDif/100;		cP.adjL += sclHorSclOff*hsDif/100;
+	    cP.adjU += (sclHorScl*hsDif/100-hsDif)/2;	cP.adjL -= (sclHorScl*hsDif/100-hsDif)/2;
+	}
+    }
+    if(prmInGrp) prmsInd.push_back(-1);
+    if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
+
+    // Final main scale adapting
+    if(hsMin > hsMax) { hsPerc = true; hsMax = 100; hsMin = isHLog ? pow(10,vmin(0,2-(tArW/150))) : 0; }
+    else hsPerc = false;
+    if(isHLog) {
+	hsMax = log10(vmax(1e-100,hsMax)); hsMin = log10(vmax(1e-100,hsMin));
+	if((hsMax-hsMin) / fabs(hsMin+(hsMax-hsMin)/2) < 0.0001) {
+	    double wnt_dp = 0.0001*fabs(hsMin+(hsMax-hsMin)/2)-(hsMax-hsMin);
+	    hsMin -= wnt_dp/2; hsMax += wnt_dp/2;
+	}
+    }
+    if(isHScale) {	//Horizontal scale and offset apply
+	float hsDif = hsMax - hsMin;
+	hsMax += sclHorSclOff*hsDif/100;	hsMin += sclHorSclOff*hsDif/100;
+	hsMax += (sclHorScl*hsDif/100-hsDif)/2;	hsMin -= (sclHorScl*hsDif/100-hsDif)/2;
+    }
+
+    //Draw main and individual horizontal scales
+    float hmax_ln = tArW / ((sclHor&FD_MARKS && mrkWidth)?mrkWidth:15*vmin(xSc,ySc));
+    for(unsigned iP = 0; hmax_ln >= 2 && iP < prmsInd.size(); iP++) {	//prmsInd[i]=-1 - for main scale
+	bool	isLogT, hsPercT;
+	char	sclHorT;
+	int	clrGridT = TWEB::colorResolve(im, sclColor);
+	double	hsMinT, hsMaxT;
+	double	hDiv = 1;
+	if(prmsInd[iP] < 0) {	//Main scale process
+	    // Draw environment
+	    hsPercT = hsPerc;
+	    isLogT = isHLog;
+	    sclHorT = sclHor;
+	    clrGridT = TWEB::colorResolve(im, sclColor);
+	    clrMrk = TWEB::colorResolve(im, sclMarkColor);
+	    if(prmInGrp == 1 && prmGrpLast >= 0)	//Set color for single parameter in main group
+		clrGridT = clrMrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
+	    // Rounding
+	    double h_len = hsMax - hsMin;
+	    while(h_len > hmax_ln)		{ hDiv *= 10; h_len /= 10; }
+	    while(h_len && h_len < hmax_ln/10)	{ hDiv /= 10; h_len *= 10; }
+	    if(!isHScale) { hsMin = floor(hsMin/hDiv)*hDiv; hsMax = ceil(hsMax/hDiv)*hDiv; }
+	    while(!isLogT && ((hsMax-hsMin)/hDiv) < hmax_ln/2) hDiv /= 2;
+	    hsMinT = hsMin; hsMaxT = hsMax;
+	}
+	else {	//Individual scale process
+	    TrendObj &cP = trnds[prmsInd[iP]];
+	    // Draw environment
+	    hsPercT = false;
+	    isLogT = cP.mScale&FD_LOG;
+	    sclHorT = cP.wScale;
+	    clrGridT = clrMrk = TWEB::colorResolve(im, cP.color());
+	    // Rounding
+	    double h_len = cP.adjU - cP.adjL;
+	    while(h_len > hmax_ln)		{ hDiv *= 10; h_len /= 10; }
+	    while(h_len && h_len < hmax_ln/10)	{ hDiv /= 10; h_len *= 10; }
+	    if(!isHScale) { cP.adjL = floor(cP.adjL/hDiv)*hDiv; cP.adjU = ceil(cP.adjU/hDiv)*hDiv; }
+	    while(!isLogT && ((cP.adjU-cP.adjL)/hDiv) < hmax_ln/2) hDiv /= 2;
+	    hsMinT = cP.adjL; hsMaxT = cP.adjU;
+	}
+	if(iP < (prmsInd.size()-1))	sclHorT &= ~(FD_GRD);	//Hide grid for no last scale
+
+	// Draw horizontal grid and markers
+	if(sclHorT&FD_GRD_MARKS) {
+	    string labVal;
+	    int begMarkBrd = -5, endMarkBrd = tArX + tArW + 5;
+	    gdImageLine(im, tArX, tArY+tArH+1, tArX+tArW, tArY+tArH+1, clrGridT);
+	    for(double iH = ceil(hsMinT/hDiv)*hDiv; (hsMaxT-iH)/hDiv > -0.1; iH += hDiv) {
+		//  Draw grid
+		int h_pos = tArY + (int)((double)tArW*(iH-hsMinT)/(hsMaxT-hsMinT));
+		if(sclHorT&FD_GRD) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clrGrid);
+		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clrGridT);
+		//  Draw markers
+		if(sclHorT&FD_MARKS && mrkHeight) {
+		    bool isPerc = hsPercT && ((hsMaxT-iH-hDiv)/hDiv <= -0.1);
+		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,iH):iH)) + (isPerc?" %":"");
+		    gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labVal.c_str(), &strex);
+		    int wdth = brect[2] - brect[6];
+		    int tpos = vmax(0, vmin(endMarkBrd-3-wdth,h_pos-wdth/2));
+		    if((tpos+wdth) <= (endMarkBrd-3) && tpos >= (begMarkBrd+3)) {
+			gdImageStringFTEx(im, NULL, clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+			    tpos, tArY+tArH+mrkHeight, (char*)labVal.c_str(), &strex);
+			begMarkBrd = vmax(begMarkBrd, tpos+wdth);
+		    }
+		}
+	    }
+	}
+	if(iP < (prmsInd.size()-1)) { tArY += mrkHeight ? (mrkHeight+5) : 0; tArH -= mrkHeight ? (mrkHeight+5) : 0; }
+    }
+    clrMrk = TWEB::colorResolve(im, sclMarkColor);
+
+    //Draw curves
+    for(unsigned iT = 0; (iT+1) < trnds.size(); iT += 2) {
+	TrendObj &cP = trnds[iT], &cPX = trnds[iT+1];
+
+	// Set trend's pen
+	int lnWdth = vmax(1, vmin(10,(int)rRnd(cP.width()*vmin(xSc,ySc))));
+	gdImageSetThickness(im, lnWdth);
+	int clr_t = TWEB::colorResolve(im, cP.color());
+
+	// Prepare generic parameters
+	aVbeg = vmax(tBeg, vmax(cP.valBeg(),cPX.valBeg()));
+	aVend = vmin(tEnd, vmin(cP.valEnd(),cPX.valEnd()));
+
+	if(aVbeg >= aVend || (cP.color()>>31)&0x01 || (cPX.color()>>31)&0x01) continue;
+	int aPosBeg = cP.val(aVbeg);
+	if(aPosBeg && cP.val()[aPosBeg].tm > aVbeg) aPosBeg--;
+	bool vsPercT = cP.isIndiv ? false : vsPerc;
+	bool isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;
+	double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+	double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
+
+	int aPosBegX = cPX.val(aVbeg);
+	if(aPosBegX && cPX.val()[aPosBegX].tm > aVbeg) aPosBegX--;
+	bool hsPercT = cPX.isIndiv ? false : hsPerc;
+	bool isHLogT = cPX.isIndiv ? (cPX.wScale&FD_LOG) : isHLog;
+	double hsMaxT = cPX.isIndiv ? cPX.adjU : hsMax;
+	double hsMinT = cPX.isIndiv ? cPX.adjL : hsMin;
+
+	// Y: Prepare border for percent trend, ONLY!
+	float bordL = cP.bordL();
+	float bordU = cP.bordU();
+	if(vsPercT && bordL >= bordU) {
+	    bordU = -3e300, bordL = 3e300;
+	    bool end_vl = false;
+	    for(int ipos = aPosBeg; true; ipos++) {
+		if(ipos >= (int)cP.val().size() || end_vl)      break;
+		if(cP.val()[ipos].tm >= aVend) end_vl = true;
+		if(cP.val()[ipos].val != EVAL_REAL) {
+		    bordL = vmin(bordL, cP.val()[ipos].val);
+		    bordU = vmax(bordU, cP.val()[ipos].val);
+		}
+	    }
+	    float vMarg = (bordU-bordL)/10;
+	    bordL -= vMarg;
+	    bordU += vMarg;
+	}
+
+	// X: Prepare XY data buffer sorted by X data and prepare border for percent trend, ONLY!
+	float xBordL = cPX.bordL();
+	float xBordU = cPX.bordU();
+	std::multimap<double,double> dBuf;
+	{
+	    bool xNeedRngChk = (hsPercT && xBordL >= xBordU);
+	    if(xNeedRngChk) xBordU = -3e300, xBordL = 3e300;
+	    bool end_vl = false;
+	    for(int ipos = aPosBegX, iVpos = 0; true; ipos++) {
+		if(ipos >= (int)cPX.val().size() || end_vl)     break;
+		if(cPX.val()[ipos].tm >= aVend) end_vl = true;
+		if(cPX.val()[ipos].val != EVAL_REAL) {
+		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < cP.val().size() && cP.val()[iVpos].val != EVAL_REAL)
+			dBuf.insert(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
+		    if(xNeedRngChk) {
+			xBordL = vmin(xBordL, cPX.val()[ipos].val);
+			xBordU = vmax(xBordU, cPX.val()[ipos].val);
+		    }
+		}
+	    }
+	    if(xNeedRngChk) {
+		float vMarg = (xBordU-xBordL)/10;
+		xBordL -= vMarg;
+		xBordU += vMarg;
+	    }
+	}
+
+	// Draw curve
+	int c_vpos, c_hpos, c_vposPrev = -1, c_hposPrev;
+	double curVl, curVlX;
+	for(std::multimap<double,double>::iterator iD = dBuf.begin(); iD != dBuf.end(); ++iD) {
+	    curVl = vsPercT ? 100*(iD->second-bordL)/(bordU-bordL) : iD->second;
+	    curVlX = hsPercT ? 100*(iD->first-xBordL)/(xBordU-xBordL) : iD->first;
+	    c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,curVl)):curVl)-vsMinT)/(vsMaxT-vsMinT))));
+	    c_hpos = tArX + (int)((double)tArW*vmax(0,vmin(1,((isHLogT?log10(vmax(1e-100,curVlX)):curVlX)-hsMinT)/(hsMaxT-hsMinT))));
+	    if(c_vposPrev < 0 || c_hposPrev < 0) gdImageSetPixel(im, c_hpos, c_vpos, clr_t);
+	    else if(c_hposPrev != c_hpos || c_vposPrev != c_vpos) gdImageLine(im, c_hposPrev, c_vposPrev, c_hpos, c_vpos, clr_t);
+	    c_hposPrev = c_hpos; c_vposPrev = c_vpos;
+	}
+
+	// Draw curent point
+	int iVpos = cP.val(aVend);
+	int iVposX = cPX.val(aVend);
+	if(iVpos < cP.val().size() && iVposX < cPX.val().size() && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
+	{
+	    curVl = vsPercT ? 100*(cP.val()[iVpos].val-bordL)/(bordU-bordL) : cP.val()[iVpos].val;
+	    curVlX = hsPercT ? 100*(cPX.val()[iVposX].val-xBordL)/(xBordU-xBordL) : cPX.val()[iVposX].val;
+	    c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,curVl)):curVl)-vsMinT)/(vsMaxT-vsMinT))));
+	    c_hpos = tArX + (int)((double)tArW*vmax(0,vmin(1,((isHLogT?log10(vmax(1e-100,curVlX)):curVlX)-hsMinT)/(hsMaxT-hsMinT))));
+	    gdImageLine(im, c_hpos-lnWdth*5, c_vpos-lnWdth*5, c_hpos+lnWdth*5, c_vpos+lnWdth*5, clr_t);
+	    gdImageLine(im, c_hpos-lnWdth*5, c_vpos+lnWdth*5, c_hpos+lnWdth*5, c_vpos-lnWdth*5, clr_t);
+	}
+    }
+
+    if(mess_lev() == TMess::Debug)
+	mess_debug(nodePath().c_str(), _("Trend creation time %gms"), 1e-3*(TSYS::curTime()-dbTm));
+
+    //Get image and transfer it
+    makeImgPng(ses, im);
+
+    if(mess_lev() == TMess::Debug)
+	mess_debug(nodePath().c_str(), _("+ PNG-image(%d) creation time %gms"), ses.page.size(), 1e-3*(TSYS::curTime()-dbTm));
 }
 
 void VCADiagram::postReq( SSess &ses )
@@ -5749,9 +6286,11 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		while(parNum > trnds.size())	trnds.push_back(TrendObj(this));
 		break;
 	    }
-	    case A_DiagramSclVerScl: sclVerScl = s2r(req_el->text());		break;
-	    case A_DiagramSclVerSclOff: sclVerSclOff = s2r(req_el->text());	break;
-	    case A_DiagramSclHorPer: sclHorPer = vmax(0,s2r(req_el->text()))*1e6;	break;
+	    case A_DiagramSclVerScl:    sclVerScl = s2r(req_el->text());		break;
+	    case A_DiagramSclVerSclOff: sclVerSclOff = s2r(req_el->text());		break;
+	    case A_DiagramSclHorScl:    sclHorScl = s2r(req_el->text());		break;
+	    case A_DiagramSclHorSclOff: sclHorSclOff = s2r(req_el->text());		break;
+	    case A_DiagramSclHorPer:    sclHorPer = vmax(0,s2r(req_el->text()))*1e6;	break;
 	    default:
 		//> Individual trend's attributes process
 		if(uiPrmPos >= A_DiagramTrs) {
@@ -5775,12 +6314,12 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
     if(reld_tr_dt) {
 	XMLNode req("set");
 	req.setAttr("path", path()+"/%2fserv%2fattr");
-	for(unsigned i_p = 0; i_p < trnds.size(); i_p++) {
-	    trnds[i_p].loadData(user, reld_tr_dt==2);
-	    if(trnds[i_p].arh_beg && trnds[i_p].arh_end)
-		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dprop",i_p))->
+	for(unsigned iP = 0; iP < trnds.size(); iP++) {
+	    trnds[iP].loadData(user, reld_tr_dt==2);
+	    if(trnds[iP].arh_beg && trnds[iP].arh_end)
+		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dprop",iP))->
 		    setText(TSYS::strMess("%.15g:%.15g:%.15g",
-			(double)trnds[i_p].arh_beg*1e-6,(double)trnds[i_p].arh_end*1e-6,(double)trnds[i_p].arh_per*1e-6));
+			(double)trnds[iP].arh_beg*1e-6,(double)trnds[iP].arh_end*1e-6,(double)trnds[iP].arh_per*1e-6));
 	}
 	if(req.childSize()) mod->cntrIfCmd(req,user);
     }
@@ -5800,18 +6339,18 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(curTime%1000000));
 
 	//Update trend's current values
-	for(unsigned i_p = 0; i_p < trnds.size(); i_p++) {
-	    int vpos = trnds[i_p].val(curTime);
+	for(unsigned iP = 0; iP < trnds.size(); iP++) {
+	    int vpos = trnds[iP].val(curTime);
 	    double val = EVAL_REAL;
-	    if(!(!trnds[i_p].val().size() || curTime < trnds[i_p].valBeg() ||
-		(!tTimeCurent && vpos >= (int)trnds[i_p].val().size())))
+	    if(!(!trnds[iP].val().size() || curTime < trnds[iP].valBeg() ||
+		(!tTimeCurent && vpos >= (int)trnds[iP].val().size())))
 	    {
-		vpos = vmax(0,vmin((int)trnds[i_p].val().size()-1,vpos));
-		if( vpos && trnds[i_p].val()[vpos].tm > curTime ) vpos--;
-		val = trnds[i_p].val()[vpos].val;
+		vpos = vmax(0,vmin((int)trnds[iP].val().size()-1,vpos));
+		if( vpos && trnds[iP].val()[vpos].tm > curTime ) vpos--;
+		val = trnds[iP].val()[vpos].val;
 	    }
-	    if(val != trnds[i_p].curVal())
-		req.childAdd("el")->setAttr("id","prm"+i2s(i_p)+"val")->setText(r2s(val,6));
+	    if(val != trnds[iP].curVal())
+		req.childAdd("el")->setAttr("id","prm"+i2s(iP)+"val")->setText(r2s(val,6));
 	}
 	mod->cntrIfCmd(req,user);
     }
@@ -5825,15 +6364,15 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 
 #if HAVE_FFTW3_H
 	//Update trend's current values
-	for(unsigned i_p = 0; i_p < trnds.size(); i_p++) {
-	    if(!trnds[i_p].fftN) continue;
-	    float fftDt = (1/tSize)*(float)width/trnds[i_p].fftN;
+	for(unsigned iP = 0; iP < trnds.size(); iP++) {
+	    if(!trnds[iP].fftN) continue;
+	    float fftDt = (1/tSize)*(float)width/trnds[iP].fftN;
 	    int vpos = (int)(curFrq/fftDt);
 	    double val = EVAL_REAL;
-	    if(vpos >= 1 && vpos < (trnds[i_p].fftN/2+1))
-		val = trnds[i_p].fftOut[0][0]/trnds[i_p].fftN +
-		    pow(pow(trnds[i_p].fftOut[vpos][0],2)+pow(trnds[i_p].fftOut[vpos][1],2),0.5)/(trnds[i_p].fftN/2+1);
-	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_p))->setText(r2s(val,6));
+	    if(vpos >= 1 && vpos < (trnds[iP].fftN/2+1))
+		val = trnds[iP].fftOut[0][0]/trnds[iP].fftN +
+		    pow(pow(trnds[iP].fftOut[vpos][0],2)+pow(trnds[iP].fftOut[vpos][1],2),0.5)/(trnds[iP].fftN/2+1);
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val,6));
 	}
 #endif
 	mod->cntrIfCmd(req,user);
@@ -5867,11 +6406,11 @@ int64_t VCADiagram::TrendObj::valEnd( )		{ return vals.empty() ? 0 : vals[vals.s
 
 int VCADiagram::TrendObj::val( int64_t tm )
 {
-    unsigned i_p = 0;
+    unsigned iP = 0;
     for(unsigned d_win = vals.size()/2; d_win > 10; d_win /= 2)
-	if(tm > vals[i_p+d_win].tm) i_p += d_win;
-    for( ; i_p < vals.size(); i_p++)
-	if(vals[i_p].tm >= tm) return i_p;
+	if(tm > vals[iP+d_win].tm) iP += d_win;
+    for( ; iP < vals.size(); iP++)
+	if(vals[iP].tm >= tm) return iP;
     return vals.size();
 }
 
@@ -5885,8 +6424,9 @@ void VCADiagram::TrendObj::setAddr( const string &vl )
 void VCADiagram::TrendObj::loadData( const string &user, bool full )
 {
     switch(owner().type) {
-	case FD_TRND: loadTrendsData(user,full);	break;
-	case FD_SPECTR:	loadSpectrumData(user,full);	break;
+	case FD_TRND:
+	case FD_XY:	loadTrendsData(user, full);	break;
+	case FD_SPECTR:	loadSpectrumData(user, full);	break;
     }
 }
 
@@ -6145,4 +6685,3 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 	}
     }
 }
-

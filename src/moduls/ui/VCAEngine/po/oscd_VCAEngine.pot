@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:56+0200\n"
+"POT-Creation-Date: 2015-01-29 18:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -525,7 +525,7 @@ msgstr ""
 msgid "Tracing period (s)"
 msgstr ""
 
-msgid "Trend;Spectrum"
+msgid "Trend;Spectrum;XY"
 msgstr ""
 
 msgid "Cursor:sek"
@@ -555,13 +555,19 @@ msgstr ""
 msgid "Scale:horizontal"
 msgstr ""
 
+msgid "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"
+msgstr ""
+
 msgid "No draw;Grid;Markers;Grid and markers"
 msgstr ""
 
-msgid "Scale:vertical"
+msgid "Scale:horizontal scale (%)"
 msgstr ""
 
-msgid "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"
+msgid "Scale:horizontal scale offset (%)"
+msgstr ""
+
+msgid "Scale:vertical"
 msgstr ""
 
 msgid "Scale:vertical scale (%)"
