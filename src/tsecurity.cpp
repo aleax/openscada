@@ -264,7 +264,7 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    vector<string> list;
 	    grpList(list);
-	    for(unsigned i_a=0; i_a < list.size(); i_a++)
+	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
 		opt->childAdd("el")->setText(list[i_a]);
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	grpAdd(TSYS::strEncode(opt->text(),TSYS::oscdID));

@@ -2509,6 +2509,13 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    c_hpos = tAr.x() + (int)((double)tAr.width()*vmax(0,vmin(1,((isHLogT?log10(vmax(1e-100,curVlX)):curVlX)-hsMinT)/(hsMaxT-hsMinT))));
 	    pnt.drawLine(c_hpos-trpen.width()*5, c_vpos-trpen.width()*5, c_hpos+trpen.width()*5, c_vpos+trpen.width()*5);
 	    pnt.drawLine(c_hpos-trpen.width()*5, c_vpos+trpen.width()*5, c_hpos+trpen.width()*5, c_vpos-trpen.width()*5);
+
+	    AttrValS attrs;
+	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT),r2s(cP.val()[iVpos].val,6)));
+	    attrs.push_back(std::make_pair(TSYS::strMess("prm%dval",iT+1),r2s(cPX.val()[iVposX].val,6)));
+	    attrs.push_back(std::make_pair("curSek",i2s(aVend/1000000)));
+	    attrs.push_back(std::make_pair("curUSek",i2s(aVend%1000000)));
+	    w->attrsSet(attrs);
 	}
     }
 
@@ -2829,7 +2836,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    curPos = (int)(curFrq/fftDt);
 	    if(curPos >= 1 && curPos < (cP.fftN/2+1)) {
 		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
-		w->attrSet(TSYS::strMess("prm%dval",iT),r2s(val,6),54+10*iT);
+		w->attrSet(TSYS::strMess("prm%dval",iT), r2s(val,6), A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iT);
 	    }
 	}
     }

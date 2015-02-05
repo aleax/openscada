@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-29 18:35+0200\n"
+"POT-Creation-Date: 2015-02-05 11:21+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -737,9 +737,6 @@ msgid ""
 msgstr ""
 "Не рисовать;Решетка;Маркеры;Решетка и маркеры;Решетка (лог);Маркеры (лог);"
 "Решетка и маркеры (лог)"
-
-msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Не рисовать;Решетка;Маркеры;Решетка и маркеры"
 
 msgid "Scale:horizontal scale (%)"
 msgstr "Шкала:гориз. масштаб (%)"
@@ -1945,6 +1942,9 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "No draw;Grid;Markers;Grid and markers"
+#~ msgstr "Не рисовать;Решетка;Маркеры;Решетка и маркеры"
 
 #~ msgid ""
 #~ "No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"

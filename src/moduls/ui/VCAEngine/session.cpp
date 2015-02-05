@@ -1729,7 +1729,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  attr - readed attribute;
     //  fromSess - read attribute from session table.
     if(iid == "attr" && prms.size()) {
-	if(prms.size() > 1 && prms[1].getB()) return sessAttr(prms[0].getS());
+	if(prms.size() > 1 && prms[1].getB())	return sessAttr(prms[0].getS());
 	else if(attrPresent(prms[0].getS()))	return attrAt(prms[0].getS()).at().get();
 	return string("");
     }

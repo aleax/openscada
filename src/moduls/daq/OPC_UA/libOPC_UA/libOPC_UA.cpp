@@ -2876,12 +2876,15 @@ nextReq:
 							//> browsePaths []
 		    uint32_t ip = iNu(rb, off, 4); 	//paths number
 
+		    if(dbg) debugMess(strMess("TranslateBrowsePathsToNodeIdsRequest: paths=%d; off=%d(%d).",ip,off,rb.size()));
+
 		    //  Respond
 		    reqTp = OpcUa_TranslateBrowsePathsToNodeIdsResponse;
 		    oNu(respEp, ip, 4);			//results []
 
 		    //  Pathes list process and request form
 		    for(unsigned i_p = 0; i_p < ip; i_p++) {
+			if(dbg) debugMess(strMess("TranslateBrowsePathsToNodeIdsRequest: path=%d; off=%d.",i_p,off));
 			NodeId sN = iNodeId(rb, off);	//startingNode
 							//>> relativePath
 			uint32_t irp = iNu(rb, off, 4);	//rpaths number

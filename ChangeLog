@@ -1,3 +1,13 @@
+2015-02-05 Roman
+- DB: LibsDB.vcaBase.db: Control panel for graphs Main.grph_panel expanded for XY type select allow and the scaling by X allow.
+- DAQ.OPC_UA: Addition debug messages is added to service TranslateBrowsePathsToNodeIdsRequest.
+- UI.VCAEngine.Diagram: Cursor attributes "curSek", "curUSek", "curColor" set allowed for all types.
+    Attribute "sclHor" set to generic for all types.
+- UI.{Vision,WebVision}.Diagram: Attribute "prm{N}val" set to curent value for type XY is added.
+    Also set "curSek" and "curUSek" to curent value time.
+- FIX:UI.WebVision: Resource lock replaced to mutex and some potential bugs fixed.
+
+
 2015-01-31 Roman
 - !!!!:UI.{VCAEngine,Vision,WebVision}: Type "XY" to primitive "Diagram" support is added, by Y into unpair and X into pair parameters.
 - FIX:UI.Vision: Double free by later restoring user and the password after changing user to unalowed for reading user for the project's session.

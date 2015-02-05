@@ -196,7 +196,7 @@ class VCAElFigure : public VCAObj
 	vector<ShapeItem> shapeItems;
 	vector<InundationItem> inundationItems;
 
-	Res	mRes;
+	pthread_mutex_t	mRes;
 };
 
 //*************************************************
@@ -260,7 +260,7 @@ class VCAText : public VCAObj
 		textFont;	//The text's font
 	vector<ArgObj>	args;	//The argument's vector
 
-	Res	mRes;
+	pthread_mutex_t	mRes;
 };
 
 //*************************************************
@@ -271,6 +271,7 @@ class VCADiagram : public VCAObj
     public:
 	//Methods
 	VCADiagram( const string &iid );
+	~VCADiagram( );
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
@@ -386,7 +387,7 @@ class VCADiagram : public VCAObj
 	//Attributes
 	vector<TrendObj> trnds;			//Trends container
 
-	Res	mRes;
+	pthread_mutex_t	mRes;
 };
 
 //*************************************************

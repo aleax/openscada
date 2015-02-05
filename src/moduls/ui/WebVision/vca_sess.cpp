@@ -289,12 +289,18 @@ VCASess &VCAObj::owner( ) { return *(VCASess*)nodePrev(); }
 //*************************************************
 VCAElFigure::VCAElFigure( const string &iid ) : VCAObj(iid), im(NULL)
 {
-
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 VCAElFigure::~VCAElFigure( )
 {
     if(im) { gdImageDestroy(im); im = NULL; }
+
+    pthread_mutex_destroy(&mRes);
 }
 
 #define SAME_SIGNS(a, b) ((a) * (b) >= 0)
@@ -3975,7 +3981,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 
 void VCAElFigure::getReq( SSess &ses )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
     //> Prepare picture
     map<string, string>::iterator prmEl = ses.prm.find("xSc");
     double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
@@ -4010,11 +4016,10 @@ void VCAElFigure::getReq( SSess &ses )
 
 void VCAElFigure::postReq( SSess &ses )
 {
-    ResAlloc res(mRes,true);
+    MtxAlloc res(mRes, true);
 
     map< string, string >::iterator prmEl = ses.prm.find("sub");
-    if( prmEl != ses.prm.end() && prmEl->second == "point");
-    {
+    if(prmEl != ses.prm.end() && prmEl->second == "point") {
 	prmEl = ses.prm.find("xSc");
 	double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
 	prmEl = ses.prm.find("ySc");
@@ -4028,8 +4033,7 @@ void VCAElFigure::postReq( SSess &ses )
 	if( x_coord < 0 || y_coord < 0 ) return;
 
 	int clickFillNum = drawElF( ses, xSc, ySc, Point(x_coord,y_coord) );
-	if( clickFillNum != -1 )
-	{
+	if(clickFillNum != -1) {
 	    XMLNode req("set");
 	    req.setAttr("path",ses.url+"/%2fserv%2fattr");
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+key);
@@ -4043,12 +4047,11 @@ void VCAElFigure::postReq( SSess &ses )
 
 void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
     XMLNode *req_el;
     Point StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     rel_list = false;
-    for(unsigned i_a = 0; i_a < node.childSize(); i_a++)
-    {
+    for(unsigned i_a = 0; i_a < node.childSize(); i_a++) {
 	req_el = node.childGet(i_a);
 	if(req_el->name() != "el") continue;
 
@@ -4325,12 +4328,18 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 //*************************************************
 VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL)
 {
-
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 VCAText::~VCAText( )
 {
     if(im) { gdImageDestroy(im); im = NULL; }
+
+    pthread_mutex_destroy(&mRes);
 }
 
 Point VCAText::rot( const Point pnt, double alpha, const Point center )
@@ -4472,7 +4481,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 
 void VCAText::getReq( SSess &ses )
 {
-    ResAlloc res(mRes,false);
+    MtxAlloc res(mRes, true);
 
     //Prepare picture
     map< string, string >::iterator prmEl = ses.prm.find("xSc");
@@ -4693,7 +4702,7 @@ void VCAText::getReq( SSess &ses )
 
 void VCAText::setAttrs( XMLNode &node, const string &user )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
     XMLNode *req_el;
     bool reform = false;
     for(unsigned i_a = 0; i_a < node.childSize(); i_a++) {
@@ -4804,7 +4813,16 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0),
     sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0), lstTrc(false)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+}
 
+VCADiagram::~VCADiagram( )
+{
+    pthread_mutex_destroy(&mRes);
 }
 
 void VCADiagram::getReq( SSess &ses )
@@ -4829,7 +4847,7 @@ void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
 
 void VCADiagram::makeTrendsPicture( SSess &ses )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
 
     int64_t dbTm = 0;
     if(mess_lev() == TMess::Debug) dbTm = TSYS::curTime();
@@ -5313,7 +5331,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
 void VCADiagram::makeSpectrumPicture( SSess &ses )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
 
     //Check for trend's data reload
     bool rld = true;
@@ -5632,7 +5650,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		XMLNode req("set");
 		req.setAttr("path",path()+"/%2fserv%2fattr")->
 		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT))->setText(r2s(val,6));
-		mod->cntrIfCmd(req,ses.user);
+		mod->cntrIfCmd(req, ses.user);
 	    }
 	}
     }
@@ -5653,7 +5671,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
 void VCADiagram::makeXYPicture( SSess &ses )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
 
     int64_t dbTm = 0;
     if(mess_lev() == TMess::Debug) dbTm = TSYS::curTime();
@@ -6176,6 +6194,14 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	    c_hpos = tArX + (int)((double)tArW*vmax(0,vmin(1,((isHLogT?log10(vmax(1e-100,curVlX)):curVlX)-hsMinT)/(hsMaxT-hsMinT))));
 	    gdImageLine(im, c_hpos-lnWdth*5, c_vpos-lnWdth*5, c_hpos+lnWdth*5, c_vpos+lnWdth*5, clr_t);
 	    gdImageLine(im, c_hpos-lnWdth*5, c_vpos+lnWdth*5, c_hpos+lnWdth*5, c_vpos-lnWdth*5, clr_t);
+
+	    XMLNode req("set");
+	    req.setAttr("path",path()+"/%2fserv%2fattr");
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT))->setText(r2s(cP.val()[iVpos].val,6));
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iT+1))->setText(r2s(cPX.val()[iVposX].val,6));
+	    req.childAdd("el")->setAttr("id","curSek")->setText(i2s(aVend/1000000));
+	    req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(aVend%1000000));
+	    mod->cntrIfCmd(req, ses.user);
 	}
     }
 
@@ -6191,7 +6217,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 
 void VCADiagram::postReq( SSess &ses )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
 
     map<string, string>::iterator prmEl = ses.prm.find("sub");
     if(prmEl != ses.prm.end() && prmEl->second == "point") {	//;????
@@ -6213,7 +6239,7 @@ void VCADiagram::postReq( SSess &ses )
 
 void VCADiagram::setAttrs( XMLNode &node, const string &user )
 {
-    ResAlloc res(mRes, true);
+    MtxAlloc res(mRes, true);
 
     int	reld_tr_dt = 0;	//Reload trend's data (1-reload addons, 2-full reload)
 

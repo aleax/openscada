@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-29 18:35+0200\n"
+"POT-Creation-Date: 2015-02-05 11:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -556,9 +556,6 @@ msgid "Scale:horizontal"
 msgstr ""
 
 msgid "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"
-msgstr ""
-
-msgid "No draw;Grid;Markers;Grid and markers"
 msgstr ""
 
 msgid "Scale:horizontal scale (%)"

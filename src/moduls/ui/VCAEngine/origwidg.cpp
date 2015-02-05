@@ -938,30 +938,6 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	switch(prev.getI()) {
 	    case FD_TRND:
 		if(!(cfg.getI() == FD_TRND))	cfg.owner()->attrDel("sclHorPer");
-	    case FD_SPECTR:
-		if(!(cfg.getI() == FD_TRND || cfg.getI() == FD_SPECTR)) {
-		    cfg.owner()->attrDel("curSek");
-		    cfg.owner()->attrDel("curUSek");
-		    cfg.owner()->attrDel("curColor");
-		}
-		if(cfg.getI() == FD_XY)		cfg.owner()->attrDel("sclHor");
-		break;
-	    case FD_XY:
-		if(cfg.getI() != FD_XY)		cfg.owner()->attrDel("sclHor");
-		break;
-	    /*!!!!: Ever need for delete by present everywhere
-		cfg.owner()->attrDel("tSek");
-		cfg.owner()->attrDel("tUSek");
-		cfg.owner()->attrDel("tSize");
-		cfg.owner()->attrDel("sclColor");
-		cfg.owner()->attrDel("sclHor");
-		cfg.owner()->attrDel("sclVer");
-		cfg.owner()->attrDel("sclMarkColor");
-		cfg.owner()->attrDel("sclMarkFont");
-		cfg.owner()->attrDel("valArch");
-		cfg.owner()->attrDel("valsForPix");
-		cfg.owner()->attrDel("parNum");
-		break;*/
 	}
 
 	//> Create specific attributes
@@ -973,19 +949,15 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
 		cfg.owner()->attrAdd(new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
 		cfg.owner()->attrAdd(new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;3e6","",i2s(A_DiagramTSize).c_str()));
-		if(cfg.owner()->attrAt("active").at().getB() && cfg.getI() != FD_XY) {
+		if(cfg.owner()->attrAt("active").at().getB()) {
 		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 		}
 		cfg.owner()->attrAdd(new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","",i2s(A_DiagramSclColor).c_str()));
-		if(cfg.getI() == FD_XY)
-		    cfg.owner()->attrAdd(new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,"1",i2s(FD_NO).c_str(),
-			TSYS::strMess("%d;%d;%d;%d;%d;%d;%d",FD_NO,FD_GRD,FD_MARKS,FD_GRD_MARKS,FD_GRD_LOG,FD_MARKS_LOG,FD_GRD_MARKS_LOG).c_str(),
-			_("No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"),i2s(A_DiagramSclHor).c_str()));
-		else cfg.owner()->attrAdd(new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,"1",i2s(FD_NO).c_str(),
-			TSYS::strMess("%d;%d;%d;%d",FD_NO,FD_GRD,FD_MARKS,FD_GRD_MARKS).c_str(),
-			_("No draw;Grid;Markers;Grid and markers"),i2s(A_DiagramSclHor).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,"1",i2s(FD_NO).c_str(),
+		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d",FD_NO,FD_GRD,FD_MARKS,FD_GRD_MARKS,FD_GRD_LOG,FD_MARKS_LOG,FD_GRD_MARKS_LOG).c_str(),
+		    _("No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"),i2s(A_DiagramSclHor).c_str()));
 		cfg.owner()->attrAdd(new TFld("sclHorScl",_("Scale:horizontal scale (%)"),TFld::Real,Attr::Mutable,"","100","10;1000","",i2s(A_DiagramSclHorScl).c_str()));
 		cfg.owner()->attrAdd(new TFld("sclHorSclOff",_("Scale:horizontal scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","",i2s(A_DiagramSclHorSclOff).c_str()));
 		cfg.owner()->attrAdd(new TFld("sclVer",_("Scale:vertical"),TFld::Integer,Attr::Mutable|TFld::Selected,"1",i2s(FD_NO).c_str(),
