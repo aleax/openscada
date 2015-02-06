@@ -564,7 +564,6 @@ INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','curtim
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','value;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date','value;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','spectr','/wlb_Main/wdg_grph_panel/wdg_spectr','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','next','/wlb_Main/wdg_doc_panel/wdg_next','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_doc_panel','Text1','/wlb_Main/wdg_doc_panel/wdg_Text1','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','txt_k4','/wlb_Main/wdg_cntrRegul/wdg_txt_k4','',2);

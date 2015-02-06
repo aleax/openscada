@@ -1550,7 +1550,7 @@ INSERT INTO "wlb_Main_incl" VALUES('grpGraph','el6','/wlb_Main/wdg_ElViewGraph',
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph','el7','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;addr;color;enMode;max;min;varEl;',2);
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph','el8','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;addr;color;enMode;max;min;varEl;',2);
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph','ElFigure1','/wlb_originals/wdg_ElFigure','name;geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;',2);
-INSERT INTO "wlb_Main_incl" VALUES('grpGraph','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;trcPer;tSek;tSize;sclColor;sclHor;sclVer;sclMarkFont;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0val;curSek;curUSek;prm1addr;prm1bordL;prm1bordU;prm1color;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7val;',2);
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;trcPer;type;tSek;tSize;sclColor;sclHor;sclVer;sclMarkFont;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0val;curSek;curUSek;prm1addr;prm1bordL;prm1bordU;prm1color;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7val;',2);
 INSERT INTO "wlb_Main_incl" VALUES('RootPgSo','so1','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;color;colorText;font;',2);
 INSERT INTO "wlb_Main_incl" VALUES('RootPgSo','so2','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;color;colorText;font;',2);
 INSERT INTO "wlb_Main_incl" VALUES('RootPgSo','so3','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;color;colorText;font;',2);
@@ -1847,7 +1847,7 @@ INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el7','/wlb_Main/wdg_ElViewGraph
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el8','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;','');
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el9','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;','');
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;','');
-INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;trcPer;tSek;tSize;sclColor;sclHor;sclVer;sclMarkFont;parNum;prm0color;prm0val;curSek;curUSek;prm1color;prm1val;prm2color;prm2val;prm3color;prm3val;prm4color;prm4val;prm5color;prm5val;prm6color;prm6val;prm7color;prm7val;prm8color;prm8val;prm9color;prm9val;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;trcPer;type;tSek;tSize;sclColor;sclHor;sclVer;sclMarkFont;parNum;prm0color;prm0val;curSek;curUSek;prm1color;prm1val;prm2color;prm2val;prm3color;prm3val;prm4color;prm4val;prm5color;prm5val;prm6color;prm6val;prm7color;prm7val;prm8color;prm8val;prm9color;prm9val;','');
 INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','comInAdd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','labName','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','name','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;confirm;font;','');
@@ -3678,7 +3678,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','active','1',32,'','','trnd1','','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','trcPer','1',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','tSek','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','tSize','600',40,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','sclHor','3',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','sclHor','3',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','sclVer','3',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','parNum','8',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0addr','',32,'','','trnd1','','','','','','');
@@ -3686,7 +3686,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1423068186',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1423146286',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','curUSek','0',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','');
@@ -3818,7 +3818,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0addr','',40,'','','trnd1','','',
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0bordL','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0bordU','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm0color','',40,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpCadr','curSek','1295026600',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpCadr','curSek','1423146291',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1addr','',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1bordL','0',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpCadr','prm1bordU','0',8,'','','trnd1','','','','','','');
@@ -5969,13 +5969,13 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph10','trcPer','1',40,'','','trnd1','','
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','tSek','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','tSize','600',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclColor','#3d3d3d',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclHor','3',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclHor','3',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclVer','3',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclMarkFont','Arial 14',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','parNum','10',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curSek','1417976081',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curSek','1423147434',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curUSek','0',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm1color','darkgoldenrod',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm1val','<EVAL>',0,'','','trnd1','','','','','','');
@@ -6168,6 +6168,8 @@ INSERT INTO "wlb_Main_io" VALUES('grph_panel','tipStatus','Press for move upward
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','active','1',32,'','','xZoomOffRight','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','elType','3',32,'','','xZoomOffRight','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','font','Arial 18 1',0,'','','xZoomOffRight','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','type','0',40,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','type','0',40,'','','trnd1','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.83301','iVBORw0KGgoAAAANSUhEUgAAAGQAAABaCAYAAABOkvOJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAAMdQAADHUBLXiUdQAAAAd0SU1FB9kCGxAwD1fi7KsAAAAZdEVYdENv
@@ -17063,14 +17065,22 @@ else { trnd1_trcPer = 1; trnd1_tSek = 0; }
 name_arg0val = name;
 
 //Scale
-cntrAct = cntrLog = 0;
-for(i_el = 0; i_el < 8; i_el++) {
+typeXY = (trnd1_type==2);
+cntrAct = cntrLog = xCntrAct = xCntrLog = 0;
+for(i_el = 0; i_el < 10; i_el++) {
 	cEl = this["el"+(i_el+1)];
 	if(!cEl.attr("en")) continue;
-	cntrAct++;
-	if(cEl.attr("log") == true)	cntrLog++;
+	if(!typeXY || !(i_el%2)) {
+		cntrAct++;
+		if(cEl.attr("log") == true)	cntrLog++;
+	}
+	else {
+		xCntrAct++;
+		if(cEl.attr("log") == true)	xCntrLog++;
+	}
 }
 trnd1_sclVer = (cntrLog > cntrAct/2) ? trnd1_sclVer|0x4 : trnd1_sclVer&(~0x4);
+trnd1_sclHor = (xCntrLog > xCntrAct/2) ? trnd1_sclHor|0x4 : trnd1_sclHor&(~0x4);
 
 //Trends
 arh_beg = 1e30, arh_end = 0;
@@ -17096,8 +17106,14 @@ for(i_el = 0; i_el < 8; i_el++) {
 			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
 			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
 		}
-		if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
-		else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+		if(!typeXY || !(i_el%2)) {
+			if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+			else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+		}
+		else {
+			if((cEl.attr("log")==true) == (xCntrLog > xCntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+			else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+		}
 	}
 }
 //Set archive scroll
@@ -17108,7 +17124,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1423079893);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1423148289);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAaCAYAAAAHfFpPAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABJJJREFUWIXlmU1vG0UYx38znp19qeOXxE2cNJQmqdQGekPAl4Ar6g31
 I/ReiQtSv0K/AeoNcaWoElSIcuGARICivqRuyTp27NjOxt7ZneWQNjQ0idzYSVvxkyyvVuv//veZ
@@ -17962,7 +17978,7 @@ else
 {
   el8_en = true;
   trnd1_prm7addr = el8_prmAddr; trnd1_prm7bordL = el8_min; trnd1_prm7bordU = el8_max; trnd1_prm7color = el8_bordColor;
-}','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;','');
+}','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1423147261);
 INSERT INTO "wlb_Main" VALUES('anShow','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAZCAIAAAAOir+2AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAF/0lEQVRYhdWW/08bdRjHn8/n7nrXu2tpy1ootmUtDChsK2snk62AsMnG
 5pj1a6LRH4w/+cMS/xT/g4lLNJkxxmjinIvFKduy4QbKgCJQ+pUCLdD1rndt784f6jadQxMDmL1/
@@ -20171,14 +20187,22 @@ else { trnd1_trcPer = 1; trnd1_tSek = 0; }
 name_arg0val = name;
 
 //Scale
-cntrAct = cntrLog = 0;
-for(i_el = 0; i_el < 8; i_el++) {
+typeXY = (trnd1_type==2);
+cntrAct = cntrLog = xCntrAct = xCntrLog = 0;
+for(i_el = 0; i_el < 10; i_el++) {
 	cEl = this["el"+(i_el+1)];
 	if(!cEl.attr("en")) continue;
-	cntrAct++;
-	if(cEl.attr("log") == true)	cntrLog++;
+	if(!typeXY || !(i_el%2)) {
+		cntrAct++;
+		if(cEl.attr("log") == true)	cntrLog++;
+	}
+	else {
+		xCntrAct++;
+		if(cEl.attr("log") == true)	xCntrLog++;
+	}
 }
 trnd1_sclVer = (cntrLog > cntrAct/2) ? trnd1_sclVer|0x4 : trnd1_sclVer&(~0x4);
+trnd1_sclHor = (xCntrLog > xCntrAct/2) ? trnd1_sclHor|0x4 : trnd1_sclHor&(~0x4);
 
 //Trends
 arh_beg = 1e30, arh_end = 0;
@@ -20204,8 +20228,14 @@ for(i_el = 0; i_el < 10; i_el++) {
 			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
 			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
 		}
-		if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
-		else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+		if(!typeXY || !(i_el%2)) {
+			if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+			else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+		}
+		else {
+			if((cEl.attr("log")==true) == (xCntrLog > xCntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+			else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
+		}
 	}
 }
 //Set archive scroll
@@ -20216,7 +20246,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1423079717);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1423147659);
 INSERT INTO "wlb_Main" VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ

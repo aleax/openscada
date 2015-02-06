@@ -1,3 +1,8 @@
+2015-02-06 Roman
+- DB: LibsDB.vcaBase.db: Main.{grpGraph,grpGraph10}: Adapted for Logical scale control for individual parameters to Diagram type "XY" specific.
+    Model.{AGLKS,Boiler}: Control panel's copy for graphs Main.grph_panel some fixed into the project.
+
+
 2015-02-05 Roman
 - DB: LibsDB.vcaBase.db: Control panel for graphs Main.grph_panel expanded for XY type select allow and the scaling by X allow.
 - DAQ.OPC_UA: Addition debug messages is added to service TranslateBrowsePathsToNodeIdsRequest.
