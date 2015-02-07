@@ -109,6 +109,7 @@ namespace OPC
 #define OpcUa_BadWriteNotSupported	0x80730000
 #define OpcUa_BadTooManySubscriptions	0x80770000
 #define OpcUa_BadSequenceNumberUnknown	0x807A0000
+#define OpcUa_BadMessageNotAvailable	0x807B0000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000

@@ -1,3 +1,7 @@
+2015-02-07 Roman
+- DAQ.OPC_UA: OpcUa_BadMessageNotAvailable service error is added and used for service "RepublishRequest".
+
+
 2015-02-06 Roman
 - DB: LibsDB.vcaBase.db: Main.{grpGraph,grpGraph10}: Adapted for Logical scale control for individual parameters to Diagram type "XY" specific.
     Model.{AGLKS,Boiler}: Control panel's copy for graphs Main.grph_panel some fixed into the project.

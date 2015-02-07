@@ -3250,7 +3250,7 @@ nextReq:
 			if(iNu(*iRQ,rOff,4) == seqN)	break;
 		    }
 		    if(iRQ == ss.retrQueue.end()) {
-			stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault;
+			stCode = OpcUa_BadMessageNotAvailable; reqTp = OpcUa_ServiceFault;
 			pthread_mutex_unlock(&wep->mtxData);
 			break;
 		    }
@@ -3315,7 +3315,7 @@ nextReq:
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
     }
     catch(OPCError er) {
-	if(dbg) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
+	if(dbg && !er.cod) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
 	if(er.cod) { out = mkError(er.cod, er.mess); holdConn = false; }
 	mSz = rba.size();	//Drop request for prevent broken requests hang
     }
