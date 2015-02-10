@@ -1,3 +1,8 @@
+2015-02-10 Roman
+- DB: LibsDB.vcaBase.db: Main.cntrPaspExt expanded for allow text's attributes edit into multiline.
+- FIX:UI.Vision: Prevented hang at zero length from center to first radius. Some trivial fixes.
+
+
 2015-02-07 Roman
 - DAQ.OPC_UA: OpcUa_BadMessageNotAvailable service error is added and used for service "RepublishRequest".
 

@@ -193,7 +193,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	string sel;
 	QVector<int> p;
 	int width, bord_width, color, img, bord_color, style;
-	QPointF ip[5];
 	map<int, bool> pntsServ;
 	for(int off = 0, el_off = 0; (sel=TSYS::strSepParse(elFD->elLst,0,'\n',&off)).size(); el_off = 0) {
 	    string el = TSYS::strSepParse(sel, 0, ':', &el_off), el_s;
@@ -251,7 +250,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    //   Border width
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) bord_width = w_s;
-		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) widths[(bord_width=w_index--)] = (fabs(w_s) < 1) ? 0 : vmin(1000, vmax(1,w_s));
+		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) widths[(bord_width=w_index--)] = (fabs(w_s) < 1) ? 0 : vmin(1000,vmax(1,w_s));
 		    else bord_width = SpI_DefBord;
 
 		    //   Border color
@@ -267,15 +266,13 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			styles[(style=s_index--)] = (Qt::PenStyle)(w_s+1);
 		    else style = SpI_DefLine;
 
-		    if(elTp == ShT_Arc) {
-			//   Building the current arc
-			//   Reading coordinates for the points of the line
-			for(int i_p = 0; i_p < p.size(); i_p++) ip[i_p] = pnts[p[i_p]];
-			CtrlMotionPos_4 = getArcStartEnd(ip[0], ip[1], ip[2], ip[3], ip[4]);
-		    }
+		    p.resize(5);
+
+		    //   Prebuild the current arc.
+		    if(elTp == ShT_Arc)
+			CtrlMotionPos_4 = getArcStartEnd(pnts[p[0]], pnts[p[1]], pnts[p[2]], pnts[p[3]], pnts[p[4]]);
 
 		    //   Building the path of the line and adding it to container
-		    p.resize(5);
 		    shapeItems.push_back(ShapeItem(newPath,newPath,p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,
 					    color,bord_color,style,width,bord_width,elTp,angle_temp));
 		    break;
@@ -334,7 +331,6 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    bool unDel = false;
 	    for(int i = 0; !unDel && i < shapeItems.size(); i++)
 		unDel = pi->first > 0 && (pi->first == shapeItems[i].style);
-		    unDel = true;
 	    if(pi->first > 0 && !unDel) styles.erase(pi++); else ++pi;
 	}
 
@@ -800,6 +796,7 @@ QPointF ShapeElFigure::getArcStartEnd( QPointF pBeg, QPointF pEnd, QPointF pCntr
     double a = length(pCntr3, pCntr1),
 	   //b = length(pCntr2, pCntr1),
 	   ang = angle(QLineF(pCntr1,pCntr3), QLineF(pCntr1,QPointF(pCntr1.x()+10,pCntr1.y())));
+    if(!a) return QPointF(0, 0);
     if(pCntr3.y() >= pCntr1.y()) ang = 360 - ang;
 
     //pCntr2 = QPointF(pCntr1.x()+rotate(arc(0.25,a,b),ang).x(), pCntr1.y()-rotate(arc(0.25,a,b),ang).y());
@@ -2800,7 +2797,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    StartMotionPos = unRotate(StartMotionPos, ang, CtrlMotionPos_1);
 	    if(StartMotionPos.x() >= a)	StartMotionPos = QPointF(a, (StartMotionPos.y()/StartMotionPos.x())*a);
 	    if(StartMotionPos.x() < -a)	StartMotionPos = QPointF(-a, (StartMotionPos.y()/StartMotionPos.x())*(-a));
-	    t_start = acos(StartMotionPos.x()/a)/(2*M_PI);
+	    t_start = a ? acos(StartMotionPos.x()/a)/(2*M_PI) : 0;
 	    if(StartMotionPos.y() > 0)	t_start = 1 - t_start;
 	    if(t_start < 0)		t_start = 1 + t_start;
 	    if(t_start > t_end)		t_end += 1;
@@ -2857,7 +2854,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    EndMotionPos = unRotate(EndMotionPos, ang, CtrlMotionPos_1);
 	    if(EndMotionPos.x() <= -a)	{ EndMotionPos.setY((EndMotionPos.y()/EndMotionPos.x())*(-a));	EndMotionPos.setX(-a); }
 	    if(EndMotionPos.x() > a)	{ EndMotionPos.setY((EndMotionPos.y()/EndMotionPos.x())*(a));	EndMotionPos.setX(a); }
-	    t_end = acos(EndMotionPos.x()/a)/(2*M_PI);
+	    t_end = a ? acos(EndMotionPos.x()/a)/(2*M_PI) : 0;
 	    if(EndMotionPos.y() > 0)	t_end = 1 - t_end;
 	    if(t_start > t_end)		t_end += 1;
 	    if((t_end-1) > t_start)	t_end -= 1;
@@ -3010,7 +3007,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	CtrlMotionPos_4 = QPointF(t_start, t_end);
 	CtrlMotionPos_3 = QPointF(CtrlMotionPos_1.x()+rotate(arc(0,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(0,a,b),ang).y());
 	shapeItems.append(ShapeItem(painterPath(widths[MotionWidth]*scaleW,widths[MotionBorderWidth],2,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2,CtrlMotionPos_3,CtrlMotionPos_4),
-				    painterPathSimple(2,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2,CtrlMotionPos_3,CtrlMotionPos_4),
+				    painterPathSimple(ShT_Arc,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2,CtrlMotionPos_3,CtrlMotionPos_4),
 				    MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,MotionNum_5,CtrlMotionPos_4,MotionLineColor,MotionBorderColor,MotionStyle,MotionWidth,MotionBorderWidth,2,angle_temp,ang_t));
 	if(devW && devW->edit()) {
 	    rectItems.append(RectItem(MotionNum_1));
