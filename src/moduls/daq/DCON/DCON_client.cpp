@@ -29,7 +29,7 @@
 #include <string.h>
 
 #include <tsys.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 
 #include "DCON_client.h"
 
@@ -75,7 +75,7 @@ using namespace DCONDAQ;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr(string name) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr(string name) : TTypeDAQ(MOD_ID)
 {
     mod = this;
 
@@ -95,7 +95,7 @@ TTpContr::~TTpContr( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable( flag );
+    TTypeDAQ::postEnable( flag );
 
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
@@ -687,7 +687,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr( name, tp_prm ), p_el("w_attr"), mod_addr(cfg("MOD_ADDR").getId()), crc_ctrl(cfg("CRC_CTRL").getBd()),
     host_signal(cfg("HOST_SIGNAL").getId()), ai_method(cfg("AI_METHOD").getId()), ai_range(cfg("AI_RANGE").getId()), ao_method(cfg("AO_METHOD").getId()),
     ao_range(cfg("AO_RANGE").getId()), di_method(cfg("DI_METHOD").getId()), do_method(cfg("DO_METHOD").getId()), ci_method(cfg("CI_METHOD").getId())

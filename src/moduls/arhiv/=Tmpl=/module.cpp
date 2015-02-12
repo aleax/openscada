@@ -81,7 +81,7 @@ using namespace ModTmpl;
 //* ModTmpl::ModArch                               *
 //*************************************************
 //!!! Constructor for module's root object. Append into for your need.
-ModArch::ModArch( const string &name ) : TTipArchivator(MOD_ID)
+ModArch::ModArch( const string &name ) : TTypeArchivator(MOD_ID)
 {
     //!!! Init shortcut to module's root object. No change it.
     mod		= this;

@@ -70,7 +70,7 @@ using namespace BDMySQL;
 //************************************************
 //* BDMySQL::BDMod				 *
 //************************************************
-BDMod::BDMod( string name ) : TTipBD(MOD_ID)
+BDMod::BDMod( string name ) : TTypeBD(MOD_ID)
 {
     mod		= this;
 

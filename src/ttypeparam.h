@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: ttiparam.h
+//OpenSCADA system file: ttypeparam.h
 /***************************************************************************
  *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -34,16 +34,16 @@ namespace OSCADA
 {
 
 //*************************************************
-//* TTipParam                                     *
+//* TTypeParam                                     *
 //*************************************************
 class TController;
 class TParamContr;
 
-class TTipParam : public TElem
+class TTypeParam : public TElem
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb = "", bool i_isPrmCntr = false );
+	TTypeParam( const char *iid, const char *iname, const char *idb = "", bool i_isPrmCntr = false );
 
 	virtual void create( TParamContr *prm )			{ }
 	virtual void destroy( TParamContr *prm )		{ }

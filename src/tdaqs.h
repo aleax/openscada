@@ -21,14 +21,14 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	7	//ControllerS type modules version
+#define SDAQ_VER	8	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>
 
 #include "tprmtmpl.h"
 #include "tsubsys.h"
-#include "ttipdaq.h"
+#include "ttypedaq.h"
 
 using std::string;
 
@@ -39,7 +39,7 @@ namespace OSCADA
 //* TDAQS                                         *
 //*************************************************
 class TController;
-class TTipDAQ;
+class TTypeDAQ;
 
 class TDAQS : public TSubSYS
 {
@@ -54,7 +54,7 @@ class TDAQS : public TSubSYS
 	void subStart(  );
 	void subStop( );
 
-	AutoHD<TTipDAQ> at( const string &name )		{ return modAt(name); }
+	AutoHD<TTypeDAQ> at( const string &name )		{ return modAt(name); }
 	AutoHD<TCntrNode> daqAt( const string &path, char sep = 0, bool noex = false, bool waitForAttr = false );
 	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false );
 	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false );

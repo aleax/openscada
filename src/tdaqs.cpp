@@ -183,7 +183,7 @@ void TDAQS::load_( )
 
     //Load parameters
     try {
-	AutoHD<TTipDAQ> wmod;
+	AutoHD<TTypeDAQ> wmod;
 	vector<string> mod_ls, db_ls;
 
 	modList(mod_ls);

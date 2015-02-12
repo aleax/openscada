@@ -35,13 +35,13 @@ namespace OSCADA
 //* TParamContr                                   *
 //*************************************************
 class TController;
-class TTipParam;
+class TTypeParam;
 
 class TParamContr : public TConfig, public TValue
 {
     public:
 	//Methods
-	TParamContr( const string &name, TTipParam *tpprm );
+	TParamContr( const string &name, TTypeParam *tpprm );
 	virtual ~TParamContr( );
 
 	string objName( );
@@ -69,7 +69,7 @@ class TParamContr : public TConfig, public TValue
 	void del( const string &name, bool full = false );
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" );
 
-	TTipParam &type( )	{ return *tipparm; }
+	TTypeParam &type( )	{ return *tipparm; }
 
 	virtual void enable( );			// Enable parameter and open access to value
 	virtual void disable( );		// Disable parameter and close access to value
@@ -112,7 +112,7 @@ class TParamContr : public TConfig, public TValue
 	string	mId;
 	TElem	el_err;		//Error atributes
 
-	TTipParam	*tipparm;
+	TTypeParam	*tipparm;
 };
 
 }

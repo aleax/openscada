@@ -32,7 +32,7 @@ using namespace AMRDevs;
 //*************************************************
 //* Kontar					  *
 //*************************************************
-Kontar::Kontar( ) : TTipParam("kontar", _("Kontar"))
+Kontar::Kontar( ) : TTypeParam("kontar", _("Kontar"))
 {
     fldAdd(new TFld("ADDR",_("Input transport"),TFld::String,TCfg::NoVal,"30"));
     fldAdd(new TFld("PASS",_("Master password"),TFld::String,TCfg::NoVal,"30","00 00 00 00 00 00 00 00"));

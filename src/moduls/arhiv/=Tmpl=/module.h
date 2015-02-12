@@ -45,7 +45,7 @@ namespace ModTmpl
 //*************************************************
 //* ModTmpl::ModArch                              *
 //*************************************************
-class ModArch: public TTipArchivator
+class ModArch: public TTypeArchivator
 {
     public:
 	//!!! Constructor for root module's object.
@@ -53,8 +53,8 @@ class ModArch: public TTipArchivator
 	//!!! Destructor for root module's object.
 	~ModArch();
 
-	//AutoHD<ModMArch> messAt( const string &iid )	{ return TTipArchivator::messAt(iid); }
-	//AutoHD<ModVArch> valAt( const string &iid )	{ return TTipArchivator::valAt(iid); }
+	//AutoHD<ModMArch> messAt( const string &iid )	{ return TTypeArchivator::messAt(iid); }
+	//AutoHD<ModVArch> valAt( const string &iid )	{ return TTypeArchivator::valAt(iid); }
 
     protected:
 	//Methods

@@ -41,14 +41,14 @@ namespace FSArch
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
-class ModArch: public TTipArchivator
+class ModArch: public TTypeArchivator
 {
     public:
 	ModArch( const string &name );
 	~ModArch( );
 
-	AutoHD<ModMArch> messAt( const string &iid )	{ return TTipArchivator::messAt(iid); }
-	AutoHD<ModVArch> valAt( const string &iid )	{ return TTipArchivator::valAt(iid); }
+	AutoHD<ModMArch> messAt( const string &iid )	{ return TTypeArchivator::messAt(iid); }
+	AutoHD<ModVArch> valAt( const string &iid )	{ return TTypeArchivator::valAt(iid); }
 
 	//> Packing archives
 	bool filePack( const string &anm );

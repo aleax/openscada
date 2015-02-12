@@ -145,7 +145,7 @@ class MBD : public TBD
 //************************************************
 //* BDTmpl::BDMod                                *
 //************************************************
-class BDMod: public TTipBD
+class BDMod: public TTypeBD
 {
     public:
 	//Public methods

@@ -27,7 +27,7 @@
 #include <errno.h>
 
 #include <tsys.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 
 #include "diamond.h"
 
@@ -65,7 +65,7 @@ using namespace Diamond;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), mInit(false)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), mInit(false)
 {
     mod		= this;
 
@@ -166,7 +166,7 @@ TTpContr::~TTpContr()
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //> Init DSCAD
     if(dscInit(DSC_VERSION) != DE_NONE)	mess_err(mod->nodePath().c_str(), _("dscInit error."));
@@ -178,7 +178,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //> Parameter type bd structure
-    TTipParam &tPrm = tpPrmAt(tpParmAdd("std", "PRM_BD", _("Standard")));
+    TTypeParam &tPrm = tpPrmAt(tpParmAdd("std", "PRM_BD", _("Standard")));
     tPrm.fldAdd(new TFld("TP",_("Board: type"),TFld::Integer,TCfg::NoVal,"3","25"));
     tPrm.fldAdd(new TFld("ADDR",_("Board: address"),TFld::Integer,TCfg::NoVal|TFld::HexDec,"3","640"));
     tPrm.fldAdd(new TFld("INT",_("Board: interrupt"),TFld::Integer,TCfg::NoVal,"2","5"));
@@ -306,7 +306,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), pEl("w_attr"), mTP(cfg("TP").getId()), mADDR(cfg("ADDR").getId()), mINT(cfg("INT").getId()),
     mS_RATE(cfg("S_RATE").getId()), mAImode(cfg("AI_VAL").getId()), asynchRd(cfg("ASYNCH_RD").getBd()), aiScInt(0), prevTrans(0)
 {

@@ -361,7 +361,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
     switch(reqTp) {
 	case OpcUa_BrowseRequest: case OpcUa_BrowseNextRequest: {
 	    TDAQS *nDAQ = NULL;
-	    TTipDAQ *nTpDAQ = NULL;
+	    TTypeDAQ *nTpDAQ = NULL;
 	    TController *nCntr = NULL;
 	    TParamContr *nPrm = NULL;
 
@@ -389,7 +389,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH) && !dynamic_cast<TDAQS*>(&cNd.at()))
 	    {
 		XML_N *ndTpDef = ndMap[NodeId(OpcUa_BaseDataVariableType).toAddr()];
-		if(dynamic_cast<TTipDAQ*>(&cNd.at()))		ndTpDef = ndMap[NodeId("DAQModuleObjectType",NS_OpenSCADA_DAQ).toAddr()];
+		if(dynamic_cast<TTypeDAQ*>(&cNd.at()))		ndTpDef = ndMap[NodeId("DAQModuleObjectType",NS_OpenSCADA_DAQ).toAddr()];
 		else if(dynamic_cast<TController*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQControllerObjectType",NS_OpenSCADA_DAQ).toAddr()];
 		else if(dynamic_cast<TParamContr*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr()];
 		unsigned cnClass = 0;
@@ -411,7 +411,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		    rN->setAttr("NodeId", NodeId("DAQ",NS_OpenSCADA_DAQ).toAddr())->setAttr("name", nDAQ->subName())->
 		    setAttr("typeDefinition", ndTpDef?ndTpDef->attr("typeDefinition"):"");
 		}
-		else if((nTpDAQ=dynamic_cast<TTipDAQ*>(ndUp))) {
+		else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(ndUp))) {
 		    ndTpDef = ndMap[NodeId("DAQModuleObjectType",NS_OpenSCADA_DAQ).toAddr()];
 		    rN->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->DAQPath(),NS_OpenSCADA_DAQ).toAddr())->setAttr("name", nTpDAQ->modName())->
 			setAttr("typeDefinition", ndTpDef?ndTpDef->attr("typeDefinition"):"");
@@ -441,7 +441,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nDAQ->at(chLs[i_ch]).at().modName())->
 			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId(OpcUa_FolderType).toAddr());
 		}
-		else if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at()))) {
+		else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at()))) {
 		    nTpDAQ->list(chLs);
 		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
 			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
@@ -484,7 +484,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	}
 	case OpcUa_ReadRequest: {
 	    TDAQS *nDAQ = NULL;
-	    TTipDAQ *nTpDAQ = NULL;
+	    TTypeDAQ *nTpDAQ = NULL;
 	    TController *nCntr = NULL;
 	    TParamContr *nPrm = NULL;
 	    TVal *nVal = NULL;
@@ -520,7 +520,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		case AId_BrowseName: {
 		    req.setAttr("type", i2s(OpcUa_QualifiedName));
 		    if((nDAQ=dynamic_cast<TDAQS*>(&cNd.at())))			req.setText(nDAQ->subName());
-		    else if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modName());
+		    else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modName());
 		    else if((nCntr=dynamic_cast<TController*>(&cNd.at())))	req.setText(nCntr->name());
 		    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))	req.setText(nPrm->name());
 		    else if((nVal=dynamic_cast<TVal*>(&cNd.at())))		req.setText(nVal->name());
@@ -575,7 +575,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 			case AId_NodeClass: req.setAttr("type", i2s(OpcUa_Int32))->setText(i2s(NC_Object));			return 0;
 			case AId_DisplayName: {
 			    req.setAttr("type", i2s(OpcUa_LocalizedText));
-			    if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modName());
+			    if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modName());
 			    else if((nCntr=dynamic_cast<TController*>(&cNd.at())))	req.setText(nCntr->name());
 			    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))	req.setText(nPrm->name());
 			    else if((nVal=dynamic_cast<TVal*>(&cNd.at())))		req.setText(nVal->name());
@@ -584,7 +584,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 			}
 			case AId_Descr:
 			    req.setAttr("type", i2s(OpcUa_LocalizedText));
-			    if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modInfo("Description"));
+			    if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modInfo("Description"));
 			    else if((nCntr=dynamic_cast<TController*>(&cNd.at())))	req.setText(nCntr->descr());
 			    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))	req.setText(nPrm->descr());
 			    else return OpcUa_BadAttributeIdInvalid;

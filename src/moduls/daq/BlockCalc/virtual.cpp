@@ -33,7 +33,7 @@
 #include <tmess.h>
 #include <tconfig.h>
 #include <tvalue.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include "virtual.h"
 
 //************************************************
@@ -78,7 +78,7 @@ using namespace Virtual;
 //************************************************
 //* TipContr - BlockCalc type controller         *
 //************************************************
-TipContr::TipContr( string name ) : TTipDAQ(MOD_ID)
+TipContr::TipContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -105,7 +105,7 @@ void TipContr::load_()
 
 void TipContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable( flag );
+    TTypeDAQ::postEnable( flag );
 
     //Controllers BD structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
@@ -526,7 +526,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 //* Prm - parameters for access to data          *
 //*       of calculate blocks                    *
 //************************************************
-Prm::Prm( string name, TTipParam *tp_prm ) :
+Prm::Prm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), v_el(name)
 {
 

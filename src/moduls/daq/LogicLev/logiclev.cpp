@@ -27,7 +27,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 #include "logiclev.h"
@@ -74,7 +74,7 @@ using namespace LogicLev;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -100,7 +100,7 @@ void TTpContr::load_( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable( flag );
+    TTypeDAQ::postEnable( flag );
 
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table by template"),TFld::String,TFld::NoFlag,"40",""));
@@ -294,7 +294,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), prmRefl(NULL), pEl("w_attr"), chkLnkNeed(false),
     idFreq(-1), idStart(-1), idStop(-1), idSh(-1), idNm(-1), idDscr(-1)
 {

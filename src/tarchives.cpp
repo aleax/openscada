@@ -284,7 +284,7 @@ void TArchiveS::subStart( )
     modList(t_lst);
     //Start no started early archivators and check for already started
     for(unsigned i_t = 0; i_t < t_lst.size(); i_t++) {
-	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
+	AutoHD<TTypeArchivator> mod = modAt(t_lst[i_t]);
 	//Messages
 	mod.at().messList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++) {
@@ -325,7 +325,7 @@ void TArchiveS::subStart( )
 
     //Start already started for update
     for(unsigned i_t = 0; i_t < t_lst.size() && (stArchM || stArchV); i_t++) {
-	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
+	AutoHD<TTypeArchivator> mod = modAt(t_lst[i_t]);
 	//Messages
 	mod.at().messList(o_lst);
 	for(unsigned i_o = 0; stArchM && i_o < o_lst.size(); i_o++) {
@@ -374,7 +374,7 @@ void TArchiveS::subStop( )
     //Archivators stop
     modList(t_lst);
     for(unsigned i_t = 0; i_t < t_lst.size(); i_t++) {
-	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
+	AutoHD<TTypeArchivator> mod = modAt(t_lst[i_t]);
 	// Value archives stop
 	mod.at().valList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++) {
@@ -895,23 +895,23 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* TTipArchivator                               *
+//* TTypeArchivator                               *
 //************************************************
-TTipArchivator::TTipArchivator( const string &id ) : TModule(id)
+TTypeArchivator::TTypeArchivator( const string &id ) : TModule(id)
 {
     mVal = grpAdd("val_");
     mMess = grpAdd("mess_");
 }
 
-TTipArchivator::~TTipArchivator( )	{ nodeDelAll(); }
+TTypeArchivator::~TTypeArchivator( )	{ nodeDelAll(); }
 
-TArchiveS &TTipArchivator::owner( )	{ return (TArchiveS &)TModule::owner(); }
+TArchiveS &TTypeArchivator::owner( )	{ return (TArchiveS &)TModule::owner(); }
 
-void TTipArchivator::messAdd(const string &name, const string &idb )	{ chldAdd(mMess, AMess(name,idb)); }
+void TTypeArchivator::messAdd(const string &name, const string &idb )	{ chldAdd(mMess, AMess(name,idb)); }
 
-void TTipArchivator::valAdd( const string &iid, const string &idb )	{ chldAdd(mVal, AVal(iid,idb)); }
+void TTypeArchivator::valAdd( const string &iid, const string &idb )	{ chldAdd(mVal, AVal(iid,idb)); }
 
-void TTipArchivator::cntrCmdProc( XMLNode *opt )
+void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
@@ -997,7 +997,7 @@ void TMArchivator::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
 }
 
-TTipArchivator &TMArchivator::owner( )	{ return *(TTipArchivator*)nodePrev(); }
+TTypeArchivator &TMArchivator::owner( )	{ return *(TTypeArchivator*)nodePrev(); }
 
 string TMArchivator::workId( )		{ return string(owner().modId())+"."+id(); }
 

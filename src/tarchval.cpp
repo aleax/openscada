@@ -2212,7 +2212,7 @@ void TVArchivator::archiveRemove( const string &iid, bool full )
 
 TVArchEl *TVArchivator::getArchEl( TVArchive &arch )	{ return new TVArchEl(arch, *this); }
 
-TTipArchivator &TVArchivator::owner( )			{ return *(TTipArchivator *)nodePrev(); }
+TTypeArchivator &TVArchivator::owner( )			{ return *(TTypeArchivator *)nodePrev(); }
 
 void TVArchivator::load_( )
 {

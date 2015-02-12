@@ -26,7 +26,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 #include <owcapi.h>
@@ -75,7 +75,7 @@ using namespace ModOneWire;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), OW_initOK(false)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), OW_initOK(false)
 {
     mod		= this;
 
@@ -95,7 +95,7 @@ TTpContr::~TTpContr( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
@@ -165,7 +165,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
-	TTipDAQ::cntrCmdProc(opt);
+	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm","OWFS")) {
 	    ctrMkNode("fld",opt,-1,"/prm/OW_initOK",_("OWFS OK"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/OWFSPrms",_("OWFS parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
@@ -179,7 +179,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(OWFSPrms());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOWFSPrms(opt->text());
     }
-    else TTipDAQ::cntrCmdProc(opt);
+    else TTypeDAQ::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -316,7 +316,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr"), mDev(cfg("DEV"))
 {
 

@@ -23,7 +23,7 @@
 
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 #include "rcsdef.h"
@@ -68,7 +68,7 @@ using namespace Siemens;
 //************************************************
 //* TTpContr                                     *
 //************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), drvCIF_OK(false)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), drvCIF_OK(false)
 {
     mod		= this;
 
@@ -90,7 +90,7 @@ TTpContr::~TTpContr( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Controler's DB structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
@@ -353,7 +353,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
-	TTipDAQ::cntrCmdProc(opt);
+	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/mod",_("CIF"))) {
 	    if(ctrMkNode("area",opt,-1,"/mod/st",_("Status")))
 		ctrMkNode("fld",opt,-1,"/mod/st/drv",_("CIF driver"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
@@ -441,7 +441,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		}
 	} catch(TError err) { opt->childAdd("el")->setText(err.mess); }
     }
-    else TTipDAQ::cntrCmdProc(opt);
+    else TTypeDAQ::cntrCmdProc(opt);
 }
 
 //************************************************
@@ -1470,7 +1470,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TMdPrm                                       *
 //************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), TValFunc(name+"SiemensPrm"), pEl("cif_attr"),
     idFreq(-1), idStart(-1), idStop(-1), idErr(-1), idSh(-1), idNm(-1), idDscr(-1), acqErrTm(0)
 {

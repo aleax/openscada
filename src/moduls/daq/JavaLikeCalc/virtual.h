@@ -81,7 +81,7 @@ class Prm : public TParamContr
 {
     public:
 	//Methods
-	Prm( string name, TTipParam *tp_prm );
+	Prm( string name, TTypeParam *tp_prm );
 	~Prm( );
 
 	void enable( );
@@ -161,7 +161,7 @@ class Contr: public TController, public TValFunc
 //*************************************************
 //* Type DAQ object                               *
 //*************************************************
-class TipContr : public TTipDAQ
+class TipContr : public TTypeDAQ
 {
     public:
 	//Methods

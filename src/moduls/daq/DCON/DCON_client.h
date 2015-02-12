@@ -23,7 +23,7 @@
 #define DCON_CLIENT_H
 
 #include <tcontroller.h>
-#include <ttipdaq.h>
+#include <ttypedaq.h>
 #include <tparamcontr.h>
 
 #include <string>
@@ -52,7 +52,7 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
 	void enable( );
@@ -150,7 +150,7 @@ class TMdContr: public TController
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

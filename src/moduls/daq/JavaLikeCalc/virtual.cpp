@@ -24,7 +24,7 @@
 
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 
 #include "freefunc.h"
 #include "virtual.h"
@@ -72,7 +72,7 @@ using namespace JavaLikeCalc;
 //*************************************************
 //* TipContr                                      *
 //*************************************************
-TipContr::TipContr( string src ) : TTipDAQ(MOD_ID), mSafeTm(10)
+TipContr::TipContr( string src ) : TTypeDAQ(MOD_ID), mSafeTm(10)
 {
     mod		= this;
 
@@ -94,7 +94,7 @@ TipContr::~TipContr( )
 
 void TipContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable( flag );
+    TTypeDAQ::postEnable( flag );
 
     //Controller db structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
@@ -314,7 +314,7 @@ void TipContr::modStart( )
     for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
 	lbAt(lst[i_lb]).at().setStart(true);
 
-    TTipDAQ::modStart();
+    TTypeDAQ::modStart();
 }
 
 void TipContr::modStop( )
@@ -335,7 +335,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
-	TTipDAQ::cntrCmdProc(opt);
+	TTypeDAQ::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/prm",MOD_ID))
 	    ctrMkNode("fld",opt,-1,"/prm/safeTm",_("Safe timeout (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
@@ -361,7 +361,7 @@ void TipContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbUnreg(opt->attr("id"),1);
     }
-    else TTipDAQ::cntrCmdProc(opt);
+    else TTypeDAQ::cntrCmdProc(opt);
 }
 
 NConst *TipContr::constGet( const char *nm )
@@ -736,7 +736,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* Prm                                           *
 //*************************************************
-Prm::Prm( string name, TTipParam *tp_prm ) :
+Prm::Prm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), v_el(name)
 {
 

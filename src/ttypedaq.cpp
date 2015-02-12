@@ -1,5 +1,5 @@
 
-//OpenSCADA system file: ttipdaq.cpp
+//OpenSCADA system file: ttypedaq.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
@@ -26,15 +26,15 @@
 #include "tmess.h"
 #include "tbds.h"
 #include "tdaqs.h"
-#include "ttiparam.h"
-#include "ttipdaq.h"
+#include "ttypeparam.h"
+#include "ttypedaq.h"
 
 using namespace OSCADA;
 
 //*************************************************
-//* TTipDAQ                                       *
+//* TTypeDAQ                                      *
 //*************************************************
-TTipDAQ::TTipDAQ( const string &id ) : TModule(id)
+TTypeDAQ::TTypeDAQ( const string &id ) : TModule(id)
 {
     m_cntr = grpAdd("cntr_");
 
@@ -46,7 +46,7 @@ TTipDAQ::TTipDAQ( const string &id ) : TModule(id)
     fldAdd(new TFld("MESS_LEV",_("Messages level"),TFld::Integer,0,"1","3"));
 }
 
-TTipDAQ::~TTipDAQ( )
+TTypeDAQ::~TTypeDAQ( )
 {
     nodeDelAll();
 
@@ -56,13 +56,13 @@ TTipDAQ::~TTipDAQ( )
     }
 }
 
-string TTipDAQ::objName( )	{ return TModule::objName()+":TTipDAQ"; }
+string TTypeDAQ::objName( )	{ return TModule::objName()+":TTypeDAQ"; }
 
-string TTipDAQ::DAQPath( )	{ return modId(); }
+string TTypeDAQ::DAQPath( )	{ return modId(); }
 
-TDAQS &TTipDAQ::owner( )	{ return *(TDAQS*)nodePrev(); }
+TDAQS &TTypeDAQ::owner( )	{ return *(TDAQS*)nodePrev(); }
 
-void TTipDAQ::postEnable( int flag )
+void TTypeDAQ::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
@@ -74,7 +74,7 @@ void TTipDAQ::postEnable( int flag )
     }
 }
 
-void TTipDAQ::modStart( )
+void TTypeDAQ::modStart( )
 {
     vector<string> lst;
     //Start all controllers
@@ -88,7 +88,7 @@ void TTipDAQ::modStart( )
 	    }
 }
 
-void TTipDAQ::modStop( )
+void TTypeDAQ::modStop( )
 {
     vector<string> lst;
     //Stop all controllers
@@ -97,28 +97,28 @@ void TTipDAQ::modStop( )
 	at(lst[i_l]).at().stop();
 }
 
-void TTipDAQ::add( const string &name, const string &daq_db )	{ chldAdd(m_cntr, ContrAttach(name,daq_db)); }
+void TTypeDAQ::add( const string &name, const string &daq_db )	{ chldAdd(m_cntr, ContrAttach(name,daq_db)); }
 
-TTipParam &TTipDAQ::tpPrmAt( unsigned id )
+TTypeParam &TTypeDAQ::tpPrmAt( unsigned id )
 {
     if(id >= paramt.size() || id < 0)
 	throw TError(nodePath().c_str(),_("Id of parameter type error!"));
     return *paramt[id];
 }
 
-bool TTipDAQ::tpPrmPresent( const string &name_t )
+bool TTypeDAQ::tpPrmPresent( const string &name_t )
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name == name_t) return true;
     return false;
 }
 
-int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name, bool isPrmCntr )
+int TTypeDAQ::tpParmAdd( const char *id, const char *n_db, const char *name, bool isPrmCntr )
 {
-    return tpParmAdd(new TTipParam(id,name,n_db,isPrmCntr));
+    return tpParmAdd(new TTypeParam(id,name,n_db,isPrmCntr));
 }
 
-int TTipDAQ::tpParmAdd( TTipParam *tp )
+int TTypeDAQ::tpParmAdd( TTypeParam *tp )
 {
     if(tpPrmPresent(tp->name)) { delete tp; return tpPrmToId(tp->name); }
     paramt.push_back(tp);
@@ -126,24 +126,24 @@ int TTipDAQ::tpParmAdd( TTipParam *tp )
     return paramt.size()-1;
 }
 
-int TTipDAQ::tpPrmToId( const string &name_t )
+int TTypeDAQ::tpPrmToId( const string &name_t )
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name == name_t) return i_t;
     throw TError(nodePath().c_str(),_("Parameter type '%s' is not present."),name_t.c_str());
 }
 
-TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )
+TController *TTypeDAQ::ContrAttach( const string &name, const string &daq_db )
 {
     throw TError(nodePath().c_str(),_("Error attach new controller %s."),name.c_str());
 }
 
-string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
+string TTypeDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
     throw TError(nodePath().c_str(),_("Module doesn't support the function for compilation programming languages."));
 }
 
-void TTipDAQ::cntrCmdProc( XMLNode *opt )
+void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
@@ -174,9 +174,9 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 }
 
 //*************************************************
-//* TTipParam                                     *
+//* TTypeParam                                     *
 //*************************************************
-TTipParam::TTipParam( const char *iid, const char *iname, const char *idb, bool i_isPrmCntr ) :
+TTypeParam::TTypeParam( const char *iid, const char *iname, const char *idb, bool i_isPrmCntr ) :
     name(iid), descr(iname), mDB(idb), isPrmCntr(i_isPrmCntr)
 {
     //Add typical structure fields
@@ -187,6 +187,6 @@ TTipParam::TTipParam( const char *iid, const char *iname, const char *idb, bool 
     fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
 }
 
-string TTipParam::DB( TController *cntr )	{ return mDB.size() ? cntr->cfg(mDB).getS() : ""; }
+string TTypeParam::DB( TController *cntr )	{ return mDB.size() ? cntr->cfg(mDB).getS() : ""; }
 
-void TTipParam::setDB( TController *cntr, const string &vl )	{ if(mDB.size()) cntr->cfg(mDB).setS(vl); }
+void TTypeParam::setDB( TController *cntr, const string &vl )	{ if(mDB.size()) cntr->cfg(mDB).setS(vl); }

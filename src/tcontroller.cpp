@@ -20,7 +20,7 @@
 
 #include "tsys.h"
 #include "tmess.h"
-#include "ttiparam.h"
+#include "ttypeparam.h"
 #include "tcontroller.h"
 
 using namespace OSCADA;
@@ -101,7 +101,7 @@ void TController::postDisable( int flag )
     }
 }
 
-TTipDAQ &TController::owner( )	{ return *(TTipDAQ*)nodePrev(); }
+TTypeDAQ &TController::owner( )	{ return *(TTypeDAQ*)nodePrev(); }
 
 string TController::workId( )	{ return owner().modId()+"."+id(); }
 

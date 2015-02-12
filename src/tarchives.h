@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	6		//ArchiveS type modules version
+#define SARH_VER	7		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <string>
@@ -43,7 +43,7 @@ namespace OSCADA
 //************************************************
 //* TMArchivator                                 *
 //************************************************
-class TTipArchivator;
+class TTypeArchivator;
 
 class TMArchivator : public TCntrNode, public TConfig
 {
@@ -85,7 +85,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	virtual bool put( vector<TMess::SRec> &mess )	{ return false; };
 	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
 
-	TTipArchivator &owner( );
+	TTypeArchivator &owner( );
 
     protected:
 	//Protected methods
@@ -123,26 +123,26 @@ class TMArchivator : public TCntrNode, public TConfig
 //************************************************
 
 //************************************************
-//* TTipArchivator                               *
+//* TTypeArchivator                               *
 //************************************************
 class TArchiveS;
 class TVArchivator;
 
-class TTipArchivator: public TModule
+class TTypeArchivator: public TModule
 {
     public:
 	//Public methods
-	TTipArchivator( const string &id );
-	virtual ~TTipArchivator( );
+	TTypeArchivator( const string &id );
+	virtual ~TTypeArchivator( );
 
-	//> Messages
+	// Messages
 	void messList( vector<string> &list )	{ chldList(mMess,list); }
 	bool messPresent( const string &iid )	{ return chldPresent(mMess,iid); }
 	void messAdd( const string &iid, const string &idb = "*.*" );
 	void messDel( const string &iid, bool full = false )	{ chldDel(mMess,iid,-1,full); }
 	AutoHD<TMArchivator> messAt( const string &iid )	{ return chldAt(mMess,iid); }
 
-	//> Values
+	// Values
 	void valList( vector<string> &list )	{ chldList(mVal,list); }
 	bool valPresent( const string &iid )	{ return chldPresent(mVal,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
@@ -193,7 +193,7 @@ class TArchiveS : public TSubSYS
 
 	void perSYSCall( unsigned int cnt );
 
-	//> Value archives functions
+	// Value archives functions
 	void valList( vector<string> &list )			{ chldList(mAval,list); }
 	bool valPresent( const string &iid )			{ return chldPresent(mAval,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
@@ -203,10 +203,10 @@ class TArchiveS : public TSubSYS
 	void setActMess( TMArchivator *a, bool val );
 	void setActVal( TVArchive *a, bool val );
 
-	//> Archivators
-	AutoHD<TTipArchivator> at( const string &name )		{ return modAt(name); }
+	// Archivators
+	AutoHD<TTypeArchivator> at( const string &name )		{ return modAt(name); }
 
-	//> Message archive function
+	// Message archive function
 	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess );
 	void messPut( const vector<TMess::SRec> &recs );
 	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
@@ -244,17 +244,17 @@ class TArchiveS : public TSubSYS
 		elVal,			//Value archivator's DB elements
 		elAval;			//Value archives DB elements
 
-	//> Messages archiving
+	// Messages archiving
 	char	bufErr;			//Buffer error
 	int	mMessPer;		//Message archiving period
 	bool	prcStMess;		//Process messages flag
-	//> Messages buffer
+	// Messages buffer
 	pthread_mutex_t	mRes;		//Mess access resource
 	unsigned headBuf;		//Head of messages buffer
 	vector<TMess::SRec> mBuf;	//Messages buffer
 	map<string,TMess::SRec> mAlarms;//Alarms buffer
 
-	//> Value archiving
+	// Value archiving
 	pthread_mutex_t	vRes;		//Value access resource
 	int	mValPer;		//Value archiving period
 	int	mValPrior;		//Value archive task priority

@@ -61,7 +61,7 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
 	string ndList( )			{ return cfg("ND_LS").getS(); }
@@ -192,7 +192,7 @@ class TMdContr: public TController, public Client
 //*************************************************
 //* OPC_UA::TTpContr                              *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

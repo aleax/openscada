@@ -21,7 +21,7 @@
 #ifndef DA_KONTAR_H
 #define DA_KONTAR_H
 
-#include "ttiparam.h"
+#include "ttypeparam.h"
 #include "mod_amr.h"
 
 #define MaxLenReq 1024
@@ -35,7 +35,7 @@ namespace AMRDevs
 //*************************************************
 //* Kontar                                        *
 //*************************************************
-class Kontar: public TTipParam
+class Kontar: public TTypeParam
 {
     public:
 	//Data

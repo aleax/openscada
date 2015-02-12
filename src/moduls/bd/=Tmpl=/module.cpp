@@ -75,7 +75,7 @@ using namespace BDTmpl;
 //************************************************
 //* BDTmpl::BDMod				 *
 //************************************************
-BDMod::BDMod(string name) : TTipBD(MOD_ID)
+BDMod::BDMod(string name) : TTypeBD(MOD_ID)
 {
     //!!! Init shortcut to module root object. Don't change it!
     mod		= this;

@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		6		//BDS type modules version
+#define SDB_VER		7		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -94,7 +94,7 @@ class TTable : public TCntrNode
 //************************************************
 //* TBD                                          *
 //************************************************
-class TTipBD;
+class TTypeBD;
 
 class TBD : public TCntrNode, public TConfig
 {
@@ -139,7 +139,7 @@ class TBD : public TCntrNode, public TConfig
 
 	virtual void transCloseCheck( )		{ }
 
-	TTipBD &owner( );
+	TTypeBD &owner( );
 
     protected:
 	//Protected methods
@@ -179,16 +179,16 @@ class TBD : public TCntrNode, public TConfig
 };
 
 //************************************************
-//* TTipBD                                       *
-//************************************************ 
+//* TTypeBD                                      *
+//************************************************
 class TBDS;
 
-class TTipBD : public TModule
+class TTypeBD : public TModule
 {
     public:
 	//Public methods
-	TTipBD( const string &id );
-	virtual ~TTipBD( );
+	TTypeBD( const string &id );
+	virtual ~TTypeBD( );
 
 	bool fullDeleteDB( )	{ return full_db_del; }
 
@@ -256,7 +256,7 @@ class TBDS : public TSubSYS, public TElem
 
 	TElem &openDB_E( )	{ return el_db; }
 
-	AutoHD<TTipBD> at( const string &iid )	{ return modAt(iid); }
+	AutoHD<TTypeBD> at( const string &iid )	{ return modAt(iid); }
 
 	string optDescr( );
 

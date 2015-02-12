@@ -115,7 +115,7 @@ class MBD : public TBD
 //*************************************************
 //* FireBird::BDMod				  *
 //*************************************************
-class BDMod: public TTipBD
+class BDMod: public TTypeBD
 {
     public:
 	//Public methods

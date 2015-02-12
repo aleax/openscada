@@ -25,7 +25,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 //#include "da_FlowTEC.h"
@@ -67,7 +67,7 @@ using namespace AMRDevs;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -142,7 +142,7 @@ uint16_t TTpContr::CRC16( const string &mbap )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Controler's bd generic structure
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
@@ -264,7 +264,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), mErr(dataM), numBytes(0)
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), mErr(dataM), numBytes(0)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);

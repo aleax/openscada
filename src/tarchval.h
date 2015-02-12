@@ -281,7 +281,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 //*************************************************
 //* TVArchivator                                  *
 //*************************************************
-class TTipArchivator;
+class TTypeArchivator;
 
 class TVArchivator : public TCntrNode, public TConfig
 {
@@ -330,7 +330,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void archiveList( vector<string> &ls );
 	bool archivePresent( const string &iid );
 
-	TTipArchivator &owner( );
+	TTypeArchivator &owner( );
 
     protected:
 	//Protected methods

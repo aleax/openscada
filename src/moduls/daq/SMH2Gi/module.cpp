@@ -30,7 +30,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 #include "module.h"
@@ -78,7 +78,7 @@ using namespace SMH2Gi;
 //*************************************************
 //* SMH2Gi::TTpContr                              *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), mMRCDirDevs(oscd_datadir_full"/SegneticsMRC")
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), mMRCDirDevs(oscd_datadir_full"/SegneticsMRC")
 {
     mod		= this;
 
@@ -98,7 +98,7 @@ TTpContr::~TTpContr()
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //> Controler's bd structure
     fldAdd(new TFld("PRM_BD_SHM",_("Shared memory parameters"),TFld::String,TFld::NoFlag,"30",""));
@@ -186,7 +186,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-	TTipDAQ::cntrCmdProc(opt);
+	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm","SMH2Gi"))
 	    ctrMkNode("fld",opt,-1,"/prm/dirMRC",_("MR/MC devices *.ini files directry"),RWRWR_,"root",SDAQ_ID,3,
 		"tp","str","dest","sel_ed","select","/prm/dirMRCList");
@@ -200,7 +200,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMRCDirDevs(opt->text());
     }
     else if(a_path == "/prm/dirMRCList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, MRCDirDevs());
-    else TTipDAQ::cntrCmdProc(opt);
+    else TTypeDAQ::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -504,7 +504,7 @@ uint16_t TMdContr::CRC16( const string &mbap )
 //*************************************************
 //* SMH2Gi::TMdPrm                                *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr"), extPrms(NULL)
 {
 
@@ -668,7 +668,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 //****************************************************
 //* SMH2Gi::SHMParam - shared memory parameter type  *
 //****************************************************
-SHMParam::SHMParam( ) : TTipParam("SHM", _("Shared memory parameters"), "PRM_BD_SHM")
+SHMParam::SHMParam( ) : TTypeParam("SHM", _("Shared memory parameters"), "PRM_BD_SHM")
 {
     fldAdd(new TFld("VAR_LS",_("Variables list"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
@@ -791,7 +791,7 @@ struct Inquired_t
     unsigned long	AlarmsInID:1;		// Alarms into struct Alarms
 }__attribute__((packed));
 
-MRCParam::MRCParam( ) : TTipParam("MRC", _("MR and MC bus parameters"), "PRM_BD_MRC")
+MRCParam::MRCParam( ) : TTypeParam("MRC", _("MR and MC bus parameters"), "PRM_BD_MRC")
 {
     fldAdd(new TFld("MOD_TP",_("Module type"),TFld::Integer,TCfg::NoVal,"10","0"));
     fldAdd(new TFld("MOD_SLOT",_("Module slot/address"),TFld::Integer,TCfg::NoVal,"2","-1","-1;7"));

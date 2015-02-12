@@ -29,7 +29,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 //!!! Self your module's includings. Add need for your module includings.
@@ -83,7 +83,7 @@ using namespace ModTmpl;
 //* TTpContr                                      *
 //*************************************************
 //!!! Constructor for Root module object.
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     //!!! Init shortcut to module root object. Don't change it!
     mod		= this;
@@ -135,7 +135,7 @@ void TTpContr::save_( )
 //!!! Post-enable processing virtual function
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //> Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
@@ -276,7 +276,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 //!!! Constructor for DAQ-subsystem parameter object.
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr")
 {
 

@@ -117,7 +117,7 @@ class MBD : public TBD
 //************************************************
 //* BDMySQL::BDMod                               *
 //************************************************ 
-class BDMod: public TTipBD
+class BDMod: public TTypeBD
 {
     public:
 	//Public methods

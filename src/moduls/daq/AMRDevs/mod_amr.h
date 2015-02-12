@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <tcontroller.h>
-#include <ttipdaq.h>
+#include <ttypedaq.h>
 #include <tparamcontr.h>
 
 //#include "da.h"
@@ -51,7 +51,7 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
 	TElem &elem( )		{ return els; }
@@ -129,7 +129,7 @@ class TMdContr: public TController
 //*************************************************
 //* AMRDevs::TTpContr                             *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

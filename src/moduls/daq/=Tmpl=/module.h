@@ -30,7 +30,7 @@
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.
 #include <tcontroller.h>
-#include <ttipdaq.h>
+#include <ttypedaq.h>
 #include <tparamcontr.h>
 
 //!!! Individual module's translation function define. Don't change it!
@@ -56,7 +56,7 @@ class TMdPrm : public TParamContr
     public:
 	//Methods
 	//!!! Constructor for DAQ-subsystem parameter object.
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	//!!! Destructor for DAQ-subsystem parameter object.
 	~TMdPrm( );
 
@@ -156,7 +156,7 @@ class TMdContr: public TController
 //*************************************************
 //* ModTmpl::TTpContr                             *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

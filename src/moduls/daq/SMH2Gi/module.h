@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <tcontroller.h>
-#include <ttipdaq.h>
+#include <ttypedaq.h>
 #include <tparamcontr.h>
 
 #undef _
@@ -40,7 +40,7 @@ namespace SMH2Gi
 //****************************************************
 //* SMH2Gi::SHMParam - shared memory parameter type  *
 //****************************************************
-class SHMParam : public TTipParam
+class SHMParam : public TTypeParam
 {
     public:
 	//Methods
@@ -89,7 +89,7 @@ class DevMRCFeature
 //****************************************************
 //* SMH2Gi::MRCParam - MR and MC bus modules         *
 //****************************************************
-class MRCParam : public TTipParam
+class MRCParam : public TTypeParam
 {
     public:
 	//Data
@@ -132,7 +132,7 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
 	TElem &elem( )		{ return p_el; }
@@ -232,7 +232,7 @@ class TMdContr: public TController
 //*************************************************
 //* SMH2Gi::TTpContr                              *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

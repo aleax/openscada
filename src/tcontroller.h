@@ -35,7 +35,7 @@ namespace OSCADA
 //*************************************************
 //* TController                                   *
 //*************************************************
-class TTipDAQ;
+class TTypeDAQ;
 
 class TController : public TCntrNode, public TConfig
 {
@@ -103,7 +103,7 @@ class TController : public TCntrNode, public TConfig
 	virtual string catsPat( );	//Individual the controller messages' categories pattern
 	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "" );
 
-	TTipDAQ &owner( );
+	TTypeDAQ &owner( );
 
     protected:
 	//Protected attributes

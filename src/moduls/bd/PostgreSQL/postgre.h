@@ -116,8 +116,8 @@ class MBD : public TBD
 
 //************************************************
 //* BDPostgreSQL::BDMod                          *
-//************************************************ 
-class BDMod: public TTipBD
+//************************************************
+class BDMod: public TTypeBD
 {
     public:
 	//Public methods

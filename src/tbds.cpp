@@ -576,27 +576,27 @@ void TBDS::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* TTipBD                                       *
+//* TTypeBD                                      *
 //************************************************
-TTipBD::TTipBD( const string &id ) : TModule(id), full_db_del(false)
+TTypeBD::TTypeBD( const string &id ) : TModule(id), full_db_del(false)
 {
     m_db = grpAdd("db_");
 }
 
-TTipBD::~TTipBD( )
+TTypeBD::~TTypeBD( )
 {
     nodeDelAll();
 }
 
-void TTipBD::open( const string &iid )
+void TTypeBD::open( const string &iid )
 {
     if(openStat(iid)) return;
     chldAdd(m_db,openBD(iid));
 }
 
-TBDS &TTipBD::owner( )	{ return (TBDS&)TModule::owner(); }
+TBDS &TTypeBD::owner( )	{ return (TBDS&)TModule::owner(); }
 
-void TTipBD::cntrCmdProc( XMLNode *opt )
+void TTypeBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
@@ -685,7 +685,7 @@ void TBD::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
 }
 
-TTipBD &TBD::owner( )	{ return *(TTipBD*)nodePrev(); }
+TTypeBD &TBD::owner( )	{ return *(TTypeBD*)nodePrev(); }
 
 string TBD::fullDBName( )	{ return owner().modId()+"."+id(); }
 

@@ -23,7 +23,7 @@
 
 #include <tmodule.h>
 #include <tcontroller.h>
-#include <ttipdaq.h>
+#include <ttypedaq.h>
 #include <tparamcontr.h>
 
 #include <string>
@@ -82,7 +82,7 @@ class TMdPrm : public TParamContr
 	enum AIMode	{ AIM_CODE = 0, AIM_PERC, AIM_VOLT };
 
 	//Methods
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
 	TElem &elem( )          { return pEl; }
@@ -181,7 +181,7 @@ class TMdContr: public TController
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

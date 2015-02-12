@@ -1,5 +1,12 @@
 2015-02-12 Roman
-- SYS: Class TTipTransport renamed to TTypeTransport at last.
+- !!!!:SYS:
+    Classes TTipBD, TTipDAQ, TTipParam, TTipArchivator, TTipTransport  renamed to TTypeBD, TTypeDAQ, TTypeParam, TTypeArchivator, TTypeTransport at last.
+    Source tree's files ttipdaq.h, ttipdaq.cpp, ttiparam.h renamed to ttypedaq.h, ttypedaq.cpp, ttypeparam.h.
+    Core library version rised to 3:3:0.
+    DB subsystem type modules version rised to 7.
+    DAQ subsystem type modules version rised to 8.
+    Archive subsystem type modules version rised to 7.
+    Transports subsystem type modules version rised to 7.
 - !!!!:Transport.Sockets: Initiative connection for input transport types TCP and UNIX support is added
     when the input transport do not wait a connection from remote but self connected and continue waiting request by the established connection.
 

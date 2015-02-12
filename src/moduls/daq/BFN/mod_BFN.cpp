@@ -25,7 +25,7 @@
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 #include "mod_BFN.h"
@@ -64,7 +64,7 @@ using namespace ModBFN;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr(string name) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr(string name) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -84,7 +84,7 @@ TTpContr::~TTpContr( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
     //fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
@@ -198,7 +198,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
-	TTipDAQ::cntrCmdProc(opt);
+	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/symbs",_("Symbols"))) {
 	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
@@ -278,7 +278,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	}
 	modif();
     }
-    else TTipDAQ::cntrCmdProc(opt);
+    else TTypeDAQ::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -662,7 +662,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm(string name, TTipParam *tp_prm) : TParamContr(name,tp_prm), curAlrmsId(0), p_el("w_attr")
+TMdPrm::TMdPrm(string name, TTypeParam *tp_prm) : TParamContr(name,tp_prm), curAlrmsId(0), p_el("w_attr")
 {
     setToEnable(true);
 }

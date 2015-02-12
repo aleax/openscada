@@ -63,7 +63,7 @@ class TestDB : public TFunction
 		string n_tbl = val->getS(3);
 		int experem = val->getI(4);
 
-		AutoHD<TTipBD> bd = SYS->db().at().modAt(t_bd);
+		AutoHD<TTypeBD> bd = SYS->db().at().modAt(t_bd);
 
 		mod->mess(id(),_("Open DB '%s'."),n_bd.c_str());
 		bd.at().open(n_bd);

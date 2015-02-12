@@ -28,7 +28,7 @@
 #include <string.h>
 #include <stdint.h>
 
-#include <ttiparam.h>
+#include <ttypeparam.h>
 
 #include "modbus_daq.h"
 
@@ -39,7 +39,7 @@ using namespace ModBus;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(DAQ_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(DAQ_ID)
 {
     mod		= this;
 
@@ -59,7 +59,7 @@ TTpContr::~TTpContr( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
@@ -965,7 +965,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name, tp_prm), p_el("w_attr"), lCtx(NULL)
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), p_el("w_attr"), lCtx(NULL)
 {
     acq_err.setVal("");
     if(isLogic()) lCtx = new TLogCtx(name+"_ModBusPrm");

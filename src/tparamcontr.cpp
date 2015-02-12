@@ -23,8 +23,8 @@
 #include "tmess.h"
 #include "tdaqs.h"
 #include "tcontroller.h"
-#include "ttipdaq.h"
-#include "ttiparam.h"
+#include "ttypedaq.h"
+#include "ttypeparam.h"
 #include "tparamcontr.h"
 
 using namespace OSCADA;
@@ -32,7 +32,7 @@ using namespace OSCADA;
 //*************************************************
 //* TParamContr                                   *
 //*************************************************
-TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm), mPrm(-1), mEn(false), tipparm(tpprm)
+TParamContr::TParamContr( const string &name, TTypeParam *tpprm ) : TConfig(tpprm), mPrm(-1), mEn(false), tipparm(tpprm)
 {
     cfg("SHIFR") = mId = name;	//!! For prevent ID location change on the parameter type change
 

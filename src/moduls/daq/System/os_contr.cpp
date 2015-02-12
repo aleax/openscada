@@ -28,7 +28,7 @@
 #include <tsys.h>
 #include <tmess.h>
 #include <ttransports.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 #include <tdaqs.h>
 
 #include "da_cpu.h"
@@ -85,7 +85,7 @@ using namespace SystemCntr;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -113,7 +113,7 @@ void TTpContr::load_( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Init DA sources
     daReg(new CPU());
@@ -312,7 +312,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), daData(NULL), mAuto(false), mDA(NULL)
 {
 

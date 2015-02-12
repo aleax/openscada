@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <tcontroller.h>
-#include <ttipdaq.h>
+#include <ttypedaq.h>
 #include <tparamcontr.h>
 
 #include "libMMS/libMMS.h"
@@ -49,7 +49,7 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
 	string varList( )			{ return cfg("VAR_LS").getS(); }
@@ -180,7 +180,7 @@ class TMdContr: public TController, public MMS::Client
 //*************************************************
 //* ModMMS::TTpContr                              *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include <ttipdaq.h>
+#include <ttypedaq.h>
 #include <tparamcontr.h>
 
 #include "block.h"
@@ -49,7 +49,7 @@ class Prm : public TParamContr
 {
     public:
 	//Public methods
-	Prm( string name, TTipParam *tp_prm );
+	Prm( string name, TTypeParam *tp_prm );
 	~Prm( );
 
 	void enable( );
@@ -145,7 +145,7 @@ class Contr: public TController
 //************************************************
 //* TipContr - BlockCalc type controller         *
 //************************************************
-class TipContr: public TTipDAQ
+class TipContr: public TTypeDAQ
 {
     public:
 	//Public methods
@@ -157,7 +157,7 @@ class TipContr: public TTipDAQ
 	TElem &blockE( )	{ return blk_el; }
 	TElem &blockIOE( )	{ return blkio_el; }
 
-	AutoHD<Contr> at( const string &name, const string &who = "" )	{ return TTipDAQ::at(name,who); }
+	AutoHD<Contr> at( const string &name, const string &who = "" )	{ return TTypeDAQ::at(name,who); }
 	void copy( const string &src, const string &dst );
 
     protected:

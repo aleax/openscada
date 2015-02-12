@@ -72,7 +72,7 @@ using namespace FSArch;
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), noArchLimit(false), copyErrValFiles(false)
+ModArch::ModArch( const string &name) : TTypeArchivator(MOD_ID), noArchLimit(false), copyErrValFiles(false)
 {
     mod		= this;
 

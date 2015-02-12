@@ -21,7 +21,7 @@
 #include <signal.h>
 
 #include <tsys.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 
 #include "daq_gate.h"
 
@@ -67,7 +67,7 @@ using namespace DAQGate;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -90,7 +90,7 @@ void TTpContr::load_( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Controler's DB structure
     fldAdd(new TFld("PRM_BD",_("Parameters cache table"),TFld::String,TFld::NoFlag,"30",""));
@@ -697,7 +697,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), isPrcOK(false), isEVAL(true), isSynced(false), p_el("w_attr"),
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), isPrcOK(false), isEVAL(true), isSynced(false), p_el("w_attr"),
     mPrmAddr(cfg("PRM_ADDR"))
 {
     setToEnable(true);

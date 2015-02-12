@@ -61,7 +61,7 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-	TMdPrm( string name, TTipParam *tp_prm );
+	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
 	TCntrNode &operator=( TCntrNode &node );
@@ -235,7 +235,7 @@ class TMdContr: public TController
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-class TTpContr: public TTipDAQ
+class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods

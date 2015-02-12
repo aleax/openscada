@@ -21,7 +21,7 @@
 #include <signal.h>
 
 #include <tsys.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 
 extern "C"
 {
@@ -68,7 +68,7 @@ using namespace ICP_DAS_DAQ;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -90,7 +90,7 @@ TTpContr::~TTpContr( )
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     //Init DA sources
     daReg(new da_LP_8x());
@@ -443,7 +443,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name, tp_prm),
     p_el("w_attr"), extPrms(NULL), modTp(cfg("MOD_TP")), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()),
     endRunReq(false), prcSt(false), wTm(0), clcCnt(0), da(NULL)

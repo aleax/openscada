@@ -110,7 +110,7 @@ class MBD : public TBD
 //*************************************************
 //* BDSQLite::BDMod				  *
 //*************************************************
-class BDMod: public TTipBD
+class BDMod: public TTypeBD
 {
     public:
 	//Public methods
@@ -119,7 +119,7 @@ class BDMod: public TTipBD
 
 	static string sqlReqCode( const string &req, char symb = '\'' );
 
-	AutoHD<MBD> at( const string &name )	{ return TTipBD::at(name); }
+	AutoHD<MBD> at( const string &name )	{ return TTypeBD::at(name); }
 
     protected:
 	//Methods

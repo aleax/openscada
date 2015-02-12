@@ -25,7 +25,7 @@
 #include <portaudio.h>
 
 #include <tsys.h>
-#include <ttiparam.h>
+#include <ttypeparam.h>
 
 #include <sound.h>
 
@@ -63,7 +63,7 @@ using namespace SoundCard;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -84,7 +84,7 @@ TTpContr::~TTpContr()
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable(flag);
+    TTypeDAQ::postEnable(flag);
 
     PaError err = Pa_Initialize();
     if(err != paNoError) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));
@@ -407,7 +407,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), mCnl(cfg("CHANNEL").getId())
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), mCnl(cfg("CHANNEL").getId())
 {
 
 }

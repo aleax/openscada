@@ -70,7 +70,7 @@ using namespace DBArch;
 //*************************************************
 //* DBArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name ) : TTipArchivator(MOD_ID)
+ModArch::ModArch( const string &name ) : TTypeArchivator(MOD_ID)
 {
     mod		= this;
 
