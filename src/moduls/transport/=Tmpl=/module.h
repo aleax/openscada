@@ -112,7 +112,7 @@ class TTrOut: public TTransportOut
 //************************************************
 //* ModTmpl::TTr				 *
 //************************************************
-class TTr: public TTipTransport
+class TTr: public TTypeTransport
 {
     public:
 	//!!! Constructor for root module's object.

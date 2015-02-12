@@ -89,6 +89,8 @@ class TSocketIn: public TTransportIn
 
 	string getStatus( );
 
+	int lastConn( )			{ return connTm; }
+	unsigned mode( )		{ return mMode; }
 	unsigned MSS( )			{ return mMSS; }
 	unsigned maxQueue( )		{ return mMaxQueue; }
 	unsigned maxFork( )		{ return mMaxFork; }
@@ -97,7 +99,7 @@ class TSocketIn: public TTransportIn
 	unsigned keepAliveTm( )		{ return mKeepAliveTm; }
 	int taskPrior( )		{ return mTaskPrior; }
 
-	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(1000000,vl)) : 0; modif(); }
+	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 	void setMaxQueue( int vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
 	void setMaxFork( int vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
 	void setBufLen( int vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
@@ -111,6 +113,8 @@ class TSocketIn: public TTransportIn
 
     protected:
 	//Methods
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void load_( );
 	void save_( );
 
@@ -137,9 +141,9 @@ class TSocketIn: public TTransportIn
 	string		path;			//Path to file socket for UNIX socket
 	string		host;			//Host for TCP/UDP sockets
 	string		port;			//Port for TCP/UDP sockets
-	int		mode;			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
 
-	unsigned short	mMSS,			//MSS
+	unsigned short	mMode,			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect; 2 - initiative connection)
+			mMSS,			//MSS
 			mMaxQueue,		//Max queue for TCP, UNIX sockets
 			mMaxFork,		//Maximum forking (opened sockets)
 			mBufLen,		//Input buffer length
@@ -152,7 +156,7 @@ class TSocketIn: public TTransportIn
 
 	// Status atributes
 	uint64_t	trIn, trOut;		// Traffic in and out counter
-	int		connNumb, clsConnByLim;	// Connections number
+	int		connNumb, connTm, clsConnByLim;	// Connections number
 };
 
 //************************************************
@@ -219,7 +223,7 @@ class TSocketOut: public TTransportOut
 //************************************************
 //* Sockets::TTransSock				 *
 //************************************************
-class TTransSock: public TTipTransport
+class TTransSock: public TTypeTransport
 {
     public:
 	TTransSock( string name );
@@ -227,6 +231,8 @@ class TTransSock: public TTipTransport
 
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	void perSYSCall( unsigned int cnt );
 
     protected:
 	void load_( );

@@ -195,7 +195,7 @@ class TTrOut: public TTransportOut
 //************************************************
 //* Serial::TTr					*
 //************************************************
-class TTr: public TTipTransport
+class TTr: public TTypeTransport
 {
     public:
 	TTr( string name );

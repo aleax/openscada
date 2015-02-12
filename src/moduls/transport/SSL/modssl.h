@@ -180,7 +180,7 @@ class TSocketOut: public TTransportOut
 //************************************************
 //* SSL::TTransSock				 *
 //************************************************
-class TTransSock: public TTipTransport
+class TTransSock: public TTypeTransport
 {
     public:
 	TTransSock( string name );

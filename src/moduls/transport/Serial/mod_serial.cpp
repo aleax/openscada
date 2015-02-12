@@ -79,7 +79,7 @@ using namespace Serial;
 //************************************************
 //* TTr						 *
 //************************************************
-TTr::TTr( string name ) : TTipTransport(MOD_ID)
+TTr::TTr( string name ) : TTypeTransport(MOD_ID)
 {
     mod		= this;
 
@@ -107,9 +107,9 @@ void TTr::postEnable( int flag )
     }
 }
 
-AutoHD<TTrIn> TTr::inAt( const string &name )	{ return TTipTransport::inAt(name); }
+AutoHD<TTrIn> TTr::inAt( const string &name )	{ return TTypeTransport::inAt(name); }
 
-AutoHD<TTrOut> TTr::outAt( const string &name )	{ return TTipTransport::outAt(name); }
+AutoHD<TTrOut> TTr::outAt( const string &name )	{ return TTypeTransport::outAt(name); }
 
 void TTr::load_( )
 {

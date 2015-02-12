@@ -39,8 +39,8 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 Hddtemp::~Hddtemp( )
 {
     try {
-	if(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr))
-	    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
+	if(((TTypeTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr))
+	    ((TTypeTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
     }catch(TError err) { }
 }
 

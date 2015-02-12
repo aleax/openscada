@@ -77,7 +77,7 @@ using namespace MSSL;
 //************************************************
 //* TTransSock					 *
 //************************************************
-TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
+TTransSock::TTransSock( string name ) : TTypeTransport(MOD_ID)
 {
     mod		= this;
 

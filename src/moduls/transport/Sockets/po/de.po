@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-26 23:05+0200\n"
+"POT-Creation-Date: 2015-02-11 21:23+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -34,11 +34,14 @@ msgid "Addition parameters"
 msgstr "Weitere Optionen"
 
 #, c-format
+msgid "Restart by no ingoing activity to '%s'."
+msgstr "Neu zu starten auf keinen eingehenden Aktivität '%s'."
+
 msgid ""
-"Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
-"limit %d."
+"Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
+"connections by limit %d."
 msgstr ""
-"Verbindungen %d, eröffnet %d. Eingangstraffik %s, Ausgangs %s. Verbindungen "
+"Verbindungen %d, eröffnet %d, letzte %s. Eingangstraffik %s, Ausgangs %s. Verbindungen "
 "geschlossen nach dem Limit %d."
 
 #, c-format
@@ -54,12 +57,20 @@ msgid "Socket name '%s' error!"
 msgstr "Fehler des Namens '%s' des Sockets!"
 
 #, c-format
+msgid "Connect to Internet socket error: %s!"
+msgstr "Fehler der Internet Verbidung mit dem Socket: %s!"
+
+#, c-format
 msgid "TCP socket doesn't bind to '%s'!"
 msgstr "TCP Socket ist nicht verbunden mit '%s'!"
 
 #, c-format
 msgid "UDP socket doesn't bind to '%s'!"
 msgstr "UDP Socket ist nicht verbunden mit '%s'!"
+
+#, c-format
+msgid "Connect to UNIX error: %s!"
+msgstr "Fehler der Verbindung mit dem UNIX Socket: %s!"
 
 #, c-format
 msgid "UNIX socket doesn't bind to '%s'!"
@@ -135,7 +146,8 @@ msgid ""
 "    addr - address for socket to be opened, empty address opens socket for "
 "all interfaces;\n"
 "    port - network port (/etc/services);\n"
-"    mode - work mode (0 - break connection; 1 - keep alive).\n"
+"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
+"connection).\n"
 "  UDP:{addr}:{port} - UDP socket:\n"
 "    addr - address for socket to be opened, empty address opens socket for "
 "all interfaces;\n"
@@ -146,7 +158,8 @@ msgid ""
 "    id - CAN id.\n"
 "  UNIX:{name}:{mode} - UNIX socket:\n"
 "    name - UNIX-socket's file name;\n"
-"    mode - work mode (0 - break connection; 1 - keep alive)."
+"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
+"connection)."
 msgstr ""
 "Eingangstransport Socket hat das Format der Adresse:\n"
 "  TCP:{addr}:{port}:{mode} - TCP Socket:\n"
@@ -154,7 +167,7 @@ msgstr ""
 "Socket in allen Interfaces;\n"
 "    port - Netzwerk Port (/etc/services);\n"
 "    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - speichern die "
-"Verbidung).\n"
+"Verbidung; 2 - Initiative Verbindung).\n"
 "  UDP:{addr}:{port} - UDP Socket:\n"
 "    addr - die Adresse der Eröffnung des Sockets, leere Adresse eröffnet den "
 "Socket in allen Interfaces;\n"
@@ -166,7 +179,7 @@ msgstr ""
 "  UNIX:{name}:{mode} - UNIX Socket:\n"
 "    name - Name der Datei des UNIX-Sockets;\n"
 "    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - die Verbindung "
-"speichern)."
+"speichern; 2 - Initiative Verbindung)."
 
 msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
@@ -227,16 +240,8 @@ msgid "Error creation UDP socket: %s!"
 msgstr "Fehler der Schaffung des UDP Sockets: %s!"
 
 #, c-format
-msgid "Connect to Internet socket error: %s!"
-msgstr "Fehler der Internet Verbidung mit dem Socket: %s!"
-
-#, c-format
 msgid "Error creation UNIX socket: %s!"
 msgstr "Fehler der Schaffung des UNIX Sockets: %s!"
-
-#, c-format
-msgid "Connect to UNIX error: %s!"
-msgstr "Fehler der Verbindung mit dem UNIX Socket: %s!"
 
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"

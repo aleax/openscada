@@ -59,7 +59,7 @@ class TestTrOut : public TFunction
 
 		int64_t stTm = TSYS::curTime();
 
-		AutoHD<TTipTransport> tr = SYS->transport().at().modAt(type);
+		AutoHD<TTypeTransport> tr = SYS->transport().at().modAt(type);
 		if( !tr.at().outPresent(addr) )
 		{
 		    tr.at().outAdd(addr);

@@ -82,7 +82,7 @@ using namespace ModTmpl;
 //* TTr						 *
 //************************************************
 //!!! Constructor for module's root object. Append into for your need.
-TTr::TTr( string name ) : TTipTransport(MOD_ID)
+TTr::TTr( string name ) : TTypeTransport(MOD_ID)
 {
     //!!! Init shortcut to module's root object. No change it.
     mod		= this;
@@ -146,13 +146,13 @@ void TTr::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-	TTipTransport::cntrCmdProc(opt);
+	TTypeTransport::cntrCmdProc(opt);
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    TTipTransport::cntrCmdProc(opt);
+    TTypeTransport::cntrCmdProc(opt);
 }
 
 //************************************************

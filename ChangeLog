@@ -1,3 +1,9 @@
+2015-02-12 Roman
+- SYS: Class TTipTransport renamed to TTypeTransport at last.
+- !!!!:Transport.Sockets: Initiative connection for input transport types TCP and UNIX support is added
+    when the input transport do not wait a connection from remote but self connected and continue waiting request by the established connection.
+
+
 2015-02-10 Roman
 - DB: LibsDB.vcaBase.db: Main.cntrPaspExt expanded for allow text's attributes edit into multiline.
 - FIX:UI.Vision: Prevented hang at zero length from center to first radius. Some trivial fixes.

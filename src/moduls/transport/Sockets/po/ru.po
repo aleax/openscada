@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-26 23:05+0200\n"
+"POT-Creation-Date: 2015-02-11 21:23+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -33,11 +33,14 @@ msgid "Addition parameters"
 msgstr "Дополнительные параметры"
 
 #, c-format
+msgid "Restart by no ingoing activity to '%s'."
+msgstr "Перезапуск по причине отсутствия активности по '%s'."
+
 msgid ""
-"Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
-"limit %d."
+"Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
+"connections by limit %d."
 msgstr ""
-"Соединений %d, открыто %d. Трафик входящий %s, исходящий %s. Закрыто "
+"Соединений %d, открыто %d, последний %s. Трафик входящий %s, исходящий %s. Закрыто "
 "соединений по лимиту %d."
 
 #, c-format
@@ -53,12 +56,20 @@ msgid "Socket name '%s' error!"
 msgstr "Ошибка имени '%s' сокета!"
 
 #, c-format
+msgid "Connect to Internet socket error: %s!"
+msgstr "Ошибка подключения к Internet сокету: %s!"
+
+#, c-format
 msgid "TCP socket doesn't bind to '%s'!"
 msgstr "TCP сокет не подключился к '%s'!"
 
 #, c-format
 msgid "UDP socket doesn't bind to '%s'!"
 msgstr "UDP сокет не подключился к '%s'!"
+
+#, c-format
+msgid "Connect to UNIX error: %s!"
+msgstr "Ошибка подключения к UNIX сокету: %s!"
 
 #, c-format
 msgid "UNIX socket doesn't bind to '%s'!"
@@ -134,7 +145,8 @@ msgid ""
 "    addr - address for socket to be opened, empty address opens socket for "
 "all interfaces;\n"
 "    port - network port (/etc/services);\n"
-"    mode - work mode (0 - break connection; 1 - keep alive).\n"
+"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
+"connection).\n"
 "  UDP:{addr}:{port} - UDP socket:\n"
 "    addr - address for socket to be opened, empty address opens socket for "
 "all interfaces;\n"
@@ -145,7 +157,8 @@ msgid ""
 "    id - CAN id.\n"
 "  UNIX:{name}:{mode} - UNIX socket:\n"
 "    name - UNIX-socket's file name;\n"
-"    mode - work mode (0 - break connection; 1 - keep alive)."
+"    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative "
+"connection)."
 msgstr ""
 "Входной транспорт Socket имеет формат адреса:\n"
 "  TCP:{addr}:{port}:{mode} - TCP сокет:\n"
@@ -153,7 +166,7 @@ msgstr ""
 "интерфейсах;\n"
 "    port - сетевой порт (/etc/services);\n"
 "    mode - режим работы (0 - разрывать соединение; 1 - сохранять "
-"соединение).\n"
+"соединение; 2 - инициативное подключение).\n"
 "  UDP:{addr}:{port} - UDP сокет:\n"
 "    addr - адрес открытия сокета, пустой адрес открывает сокет на всех "
 "интерфейсах;\n"
@@ -164,7 +177,7 @@ msgstr ""
 "    id - идентификатор CAN.\n"
 "  UNIX:{name}:{mode} - UNIX сокет:\n"
 "    name - Имя файла UNIX-сокета;\n"
-"    mode - режим работы (0 - разрывать соединение; 1 - сохранять соединение)."
+"    mode - режим работы (0 - разрывать соединение; 1 - сохранять соединение; 2 - инициативное подключение)."
 
 msgid "Input buffer (kbyte)"
 msgstr "Входной буфер (кбайт)"
@@ -226,16 +239,8 @@ msgid "Error creation UDP socket: %s!"
 msgstr "Ошибка создания UDP сокета: %s!"
 
 #, c-format
-msgid "Connect to Internet socket error: %s!"
-msgstr "Ошибка подключения к Internet сокету: %s!"
-
-#, c-format
 msgid "Error creation UNIX socket: %s!"
 msgstr "Ошибка создания UNIX сокета: %s!"
-
-#, c-format
-msgid "Connect to UNIX error: %s!"
-msgstr "Ошибка подключения к UNIX сокету: %s!"
 
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"

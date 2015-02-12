@@ -36,7 +36,7 @@ namespace OSCADA
 //************************************************
 //* TTransportIn				 *
 //************************************************
-class TTipTransport;
+class TTypeTransport;
 class TTransportOut;
 
 class TTransportIn : public TCntrNode, public TConfig
@@ -55,7 +55,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	string	addr( )		{ return cfg("ADDR").getS(); }
 	string	protocolFull( )	{ return cfg("PROT").getS(); }
 	string	protocol( );
-	virtual string getStatus( );
+	virtual	string getStatus( );
 
 	bool toStart( )		{ return mStart; }
 	bool startStat( )	{ return run_st; }
@@ -78,7 +78,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanDisabled = false );	//Assigned transports
 
-	TTipTransport &owner( );
+	TTypeTransport &owner( );
 
 	Res &nodeRes( )			{ return nRes; }
 
@@ -158,7 +158,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void messProtIO( XMLNode &io, const string &prot );
 
-	TTipTransport &owner( );
+	TTypeTransport &owner( );
 
 	Res &nodeRes( )			{ return nRes; }
 
@@ -193,25 +193,25 @@ class TTransportOut : public TCntrNode, public TConfig
 };
 
 //************************************************
-//* TTipTransport				 *
+//* TTypeTransport				 *
 //************************************************
 class TTransportS;
 
-class TTipTransport: public TModule
+class TTypeTransport: public TModule
 {
     public:
 	//Methods
-	TTipTransport( const string &id );
-	virtual ~TTipTransport( );
+	TTypeTransport( const string &id );
+	virtual ~TTypeTransport( );
 
-	//> Input transports
+	// Input transports
 	void inList( vector<string> &list )			{ chldList(mIn,list); }
 	bool inPresent( const string &name )			{ return chldPresent(mIn,name); }
 	void inAdd( const string &name, const string &db = "*.*" );
 	void inDel( const string &name, bool complete = false )	{ chldDel(mIn,name,-1,complete); }
 	AutoHD<TTransportIn> inAt( const string &name )		{ return chldAt(mIn,name); }
 
-	//> Output transports
+	// Output transports
 	void outList( vector<string> &list )			{ chldList(mOut,list); }
 	bool outPresent( const string &name )			{ return chldPresent(mOut,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
@@ -273,7 +273,7 @@ class TTransportS : public TSubSYS
 	void inTrList( vector<string> &ls );
 	void outTrList( vector<string> &ls );
 
-	//> External hosts
+	// External hosts
 	string extHostsDB( );
 	void extHostList( const string &user, vector<string> &list, bool andSYS = false );
 	bool extHostPresent( const string &user, const string &id );
@@ -282,7 +282,7 @@ class TTransportS : public TSubSYS
 	void extHostSet( const ExtHost &host, bool andSYS = false );
 	void extHostDel( const string &user, const string &id, bool andSYS = false );
 
-	//> Request to remote or local OpenSCADA control interface
+	// Request to remote or local OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, const string &senderPref, const string &user = "" );
 
 	void subStart( );
@@ -291,7 +291,7 @@ class TTransportS : public TSubSYS
 	TElem &inEl( )			{ return el_in; }
 	TElem &outEl( ) 		{ return el_out; }
 
-	AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
+	AutoHD<TTypeTransport> at( const string &iid )	{ return modAt(iid); }
 
     protected:
 	void load_( );

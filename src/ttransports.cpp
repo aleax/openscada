@@ -232,7 +232,7 @@ void TTransportS::subStart( )
     vector<string> t_lst, o_lst;
     modList(t_lst);
     for(unsigned i_t = 0; i_t < t_lst.size(); i_t++) {
-	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
+	AutoHD<TTypeTransport> mod = modAt(t_lst[i_t]);
 	o_lst.clear();
 	mod.at().inList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
@@ -269,7 +269,7 @@ void TTransportS::subStop( )
     vector<string> t_lst, o_lst;
     modList(t_lst);
     for(unsigned i_t = 0; i_t < t_lst.size(); i_t++) {
-	AutoHD<TTipTransport> mod = modAt(t_lst[i_t]);
+	AutoHD<TTypeTransport> mod = modAt(t_lst[i_t]);
 	o_lst.clear();
 	mod.at().inList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
@@ -509,26 +509,26 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* TTipTransport                                *
+//* TTypeTransport                               *
 //************************************************
-TTipTransport::TTipTransport( const string &id ) : TModule(id)
+TTypeTransport::TTypeTransport( const string &id ) : TModule(id)
 {
     mIn = grpAdd("in_");
     mOut = grpAdd("out_");
 }
 
-TTipTransport::~TTipTransport()
+TTypeTransport::~TTypeTransport()
 {
     nodeDelAll();
 }
 
-TTransportS &TTipTransport::owner( )	{ return (TTransportS&)TModule::owner(); }
+TTransportS &TTypeTransport::owner( )	{ return (TTransportS&)TModule::owner(); }
 
-void TTipTransport::inAdd( const string &name, const string &idb )	{ chldAdd(mIn, In(name,idb)); }
+void TTypeTransport::inAdd( const string &name, const string &idb )	{ chldAdd(mIn, In(name,idb)); }
 
-void TTipTransport::outAdd( const string &name, const string &idb )	{ chldAdd(mOut, Out(name,idb)); }
+void TTypeTransport::outAdd( const string &name, const string &idb )	{ chldAdd(mOut, Out(name,idb)); }
 
-void TTipTransport::cntrCmdProc( XMLNode *opt )
+void TTypeTransport::cntrCmdProc( XMLNode *opt )
 {
     vector<string> list;
     //Get page info
@@ -619,7 +619,7 @@ TCntrNode &TTransportIn::operator=( TCntrNode &node )
     return *this;
 }
 
-TTipTransport &TTransportIn::owner( )	{ return *(TTipTransport*)nodePrev(); }
+TTypeTransport &TTransportIn::owner( )	{ return *(TTypeTransport*)nodePrev(); }
 
 string TTransportIn::name( )
 {
@@ -831,7 +831,7 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
     return *this;
 }
 
-TTipTransport &TTransportOut::owner( )	{ return *(TTipTransport*)nodePrev(); }
+TTypeTransport &TTransportOut::owner( )	{ return *(TTypeTransport*)nodePrev(); }
 
 string TTransportOut::name( )
 {

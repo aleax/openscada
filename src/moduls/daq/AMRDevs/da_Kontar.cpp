@@ -167,7 +167,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
     try
     {
 	//Try connect to previous transport
-	AutoHD<TTipTransport> ttr = SYS->transport().at().at("Sockets");
+	AutoHD<TTypeTransport> ttr = SYS->transport().at().at("Sockets");
 	AutoHD<TTransportOut> trO;
 	if(!(ePrm->prevTr.size() && ttr.at().outPresent(ePrm->prevTr) &&
 		(trO=ttr.at().outAt(ePrm->prevTr)).at().startStat() && trO.at().prm1() == cntrMN))
