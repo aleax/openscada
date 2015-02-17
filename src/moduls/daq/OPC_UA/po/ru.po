@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:50+0200\n"
+"POT-Creation-Date: 2015-02-17 19:59+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -288,6 +288,9 @@ msgstr "Сертификат сервера (PEM)"
 msgid "Server private key (PEM)"
 msgstr "Приватный ключ сервера (PEM)"
 
+msgid "Addition parameters"
+msgstr "Дополнительные параметры"
+
 msgid "Search and create new server error."
 msgstr "Ошибка поиска и создания нового сервера."
 
@@ -327,6 +330,24 @@ msgstr "Политика"
 
 msgid "Message mode"
 msgstr "Режим сообщения"
+
+msgid "Data"
+msgstr "Данные"
+
+msgid "Limits"
+msgstr "Ограничения"
+
+msgid "Subscriptions"
+msgstr "Подписки"
+
+msgid "Monitored items"
+msgstr "Элементы мониторинга"
+
+msgid "Retransmission queue time, sek."
+msgstr "Время очереди повторной передачи, сек."
+
+msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
+msgstr "Установить в 0 для автоматического по cntrKeepAlive*publInterv"
 
 msgid "No present selected row."
 msgstr "Выбранная строка отсутствует."

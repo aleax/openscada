@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -96,7 +96,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string url( )		{ return mURL; }
 	string cert( );
 	string pvKey( );
-	double subscrProcPer( ) { return 100; }
+	double subscrProcPer( )	{ return 100; }
 
 	string getStatus( );
 
@@ -112,6 +112,15 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
 	uint32_t reqData( int reqTp, XML_N &req );
+
+	// Limits
+	uint32_t limSubScr( )			{ return mLimSubScr; }
+	uint32_t limMonitItms( )		{ return mLimMonitItms; }
+	uint32_t limRetrQueueTm( )		{ return mLimRetrQueueTm; }
+
+	void setLimSubScr( uint32_t vl )	{ mLimSubScr = vmax(1,vmin(vl,1000)); modif(); }
+	void setLimMonitItms( uint32_t vl )	{ mLimMonitItms = vmax(10,vmin(1000000,vl)); modif(); }
+	void setLimRetrQueueTm( uint32_t vl )	{ mLimRetrQueueTm = vmax(0,vmin(3600,vl)); modif(); }
 
 	TProt &owner( );
 
@@ -139,6 +148,8 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	int64_t	&mSerType;
 	char	&mAEn;
 	string	mDB;
+
+	uint32_t mLimSubScr, mLimMonitItms, mLimRetrQueueTm;
 };
 
 //*************************************************

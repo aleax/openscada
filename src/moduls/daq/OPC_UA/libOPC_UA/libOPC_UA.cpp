@@ -2891,12 +2891,13 @@ nextReq:
 
 			bool nOK = true;
 			XML_N req("data");
-			for(unsigned i_rp = 0; nOK && i_rp < irp; i_rp++) {
+			for(unsigned i_rp = 0; i_rp < irp; i_rp++) {
 			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
 			    bool inv = iNu(rb, off, 1);		//isInverse
 			    iNu(rb, off, 1);			//includeSubtypes
 			    string tNm = iSqlf(rb, off);	//targetName
 
+			    if(!nOK) continue;
 			    //    Browse request for nodes
 			    req.clear()->setAttr("node", sN.toAddr())->
 					 setAttr("BrDir", uint2str(inv?BD_INVERSE:BD_FORWARD))->
@@ -3158,7 +3159,7 @@ nextReq:
 					uint32_t rSeq = iNu(*iRQ, rOff, 4);	//>sequenceNumber
 					int64_t rPblTm = iTm(*iRQ, rOff);	//>publishTime
 					//Check for remove from queue by long age
-					if((curTime()-rPblTm) > ((int64_t)ss.cntrKeepAlive*ss.publInterv*1000))
+					if((curTime()-rPblTm) > (wep->limRetrQueueTm()?1000000ll*wep->limRetrQueueTm():(int64_t)ss.cntrKeepAlive*ss.publInterv*1000))
 					{
 					    iRQ = ss.retrQueue.erase(iRQ);
 					    continue;

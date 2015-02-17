@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: moduls.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,16 +25,16 @@ extern "C"
 {
     TModule::SAt module( int nMod )
     {
-	if(nMod == 0)		return TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER);
-	else if(nMod == 1)	return TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER);
+	if(nMod == 0)		return TModule::SAt(PRT_ID, PRT_TYPE, PRT_SUBVER);
+	else if(nMod == 1)	return TModule::SAt(DAQ_ID, DAQ_TYPE, DAQ_SUBVER);
 
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if(AtMod == TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER))		return new OPC_UA::TTpContr( source );
-	else if(AtMod == TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER))	return new OPC_UA::TProt( source );
+	if(AtMod == TModule::SAt(DAQ_ID,DAQ_TYPE,DAQ_SUBVER))		return new OPC_UA::TTpContr(source);
+	else if(AtMod == TModule::SAt(PRT_ID,PRT_TYPE,PRT_SUBVER))	return new OPC_UA::TProt(source);
 	return NULL;
     }
 }

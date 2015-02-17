@@ -679,8 +679,9 @@ class Server: public UA
 		virtual double subscrProcPer( ) = 0;	//Generic minimum cycle period of publishes and the data processing
 
 		// Limits
-		virtual uint32_t limSubScr( )	{ return 10; }
-		virtual uint32_t limMonitItms( ){ return 1000; }
+		virtual uint32_t limSubScr( )		{ return 10; }
+		virtual uint32_t limMonitItms( )	{ return 1000; }
+		virtual uint32_t limRetrQueueTm( )	{ return 0; }	//Time limit (seconds) for retransmission queue
 
 		bool enableStat( )	{ return mEn; }
 

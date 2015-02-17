@@ -403,18 +403,20 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	string rPrjs = runPrjs();
 	// Sessions and projects list request
 	XMLNode req("CntrReqs");
-	req.childAdd("get")->setAttr("path","%2fses%2fses")->setAttr("chkUserPerm","1");
-	req.childAdd("get")->setAttr("path","%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
+	req.childAdd("get")->setAttr("path", "%2fses%2fses")->setAttr("chkUserPerm", "1");
+	req.childAdd("get")->setAttr("path", "%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm", "1");
 	cntrIfCmd(req, startUser(), userPass(), VCAStation());
 	XMLNode *reqN = req.childGet(0);
 	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
-	    if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_) ||
+	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());
+	    /*if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_) ||
 		    reqN->childGet(i_ch)->attr("user") == startUser())
-		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());
+		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());*/
 	reqN = req.childGet(1);
 	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
-	    if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_))
-		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));
+	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));
+	    /*if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_))
+		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));*/
     }
     else if(a_path == "/prm/cfg/winPos_cntr_save") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(winPosCntrSave()));
@@ -475,25 +477,25 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob )
 {
     //Check for local VCAEngine path
-    if(!glob) node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
+    if(!glob) node.setAttr("path", "/UI/VCAEngine"+node.attr("path"));
 
     //Local station request
     if(VCAStat.empty() || VCAStat == ".") {
-	node.setAttr("user",user);
+	node.setAttr("user", user);
 	SYS->cntrCmd(&node);
 	return s2i(node.attr("rez"));
     }
 
     //Request remote host
     try {
-	TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",VCAStat);
-	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"UIVision");
+	TTransportS::ExtHost host = SYS->transport().at().extHostGet("*", VCAStat);
+	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host, "UIVision");
 	if(!tr.at().startStat()) tr.at().start();
 
-	bool trUser = (user.empty()||user==host.user);
-	node.setAttr("rqDir",trUser?"0":"1")->
-	    setAttr("rqUser",trUser?host.user:user)->
-	    setAttr("rqPass",trUser?host.pass:password);
+	bool trUser = (user.empty() || user == host.user);
+	node.setAttr("rqDir", trUser?"0":"1")->
+	    setAttr("rqUser", trUser?host.user:user)->
+	    setAttr("rqPass", trUser?host.pass:password);
 	tr.at().messProtIO(node,"SelfSystem");
 
 	return s2i(node.attr("rez"));

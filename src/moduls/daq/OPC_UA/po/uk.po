@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:50+0200\n"
+"POT-Creation-Date: 2015-02-17 19:59+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -287,6 +287,9 @@ msgstr "Сертифікат серверу (PEM)"
 msgid "Server private key (PEM)"
 msgstr "Приватний ключ серверу (PEM)"
 
+msgid "Addition parameters"
+msgstr "Додаткові параметри"
+
 msgid "Search and create new server error."
 msgstr "Помилка пошуку та створення нового серверу."
 
@@ -326,6 +329,24 @@ msgstr "Політика"
 
 msgid "Message mode"
 msgstr "Режим повідомлення"
+
+msgid "Data"
+msgstr "Дані"
+
+msgid "Limits"
+msgstr "Ліміти"
+
+msgid "Subscriptions"
+msgstr "Підписки"
+
+msgid "Monitored items"
+msgstr "Елементи моніторингу"
+
+msgid "Retransmission queue time, sek."
+msgstr "Час черги повторної передачі, сек."
+
+msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
+msgstr "Встановити у 0 для автоматичного за cntrKeepAlive*publInterv"
 
 msgid "No present selected row."
 msgstr "Обраний рядок відсутній."

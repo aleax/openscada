@@ -460,12 +460,11 @@ void VisRun::resizeEvent( QResizeEvent *ev )
     if(ev && ev->oldSize().isValid() && masterPg()) {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
-	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)
-	{
+	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)masterPg()->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)masterPg()->size().height();
-	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
-	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
+	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
+	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
 	}else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();

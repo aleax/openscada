@@ -1,3 +1,10 @@
+2015-02-17 Roman
+- FIX:DAQ.OPC_UA.libOPC_UA: TranslateBrowsePathsToNodeIdsRequest service fixed for processing no OK paths.
+- DAQ.OPC_UA: Limit limRetrQueueTm() for retransmission queue time control. For all limits control tab "Data" with limits is added.
+- FIX:UI.Vision: Remote projects and sessions list obtain fixed to proper users for started user's field.
+    Scale margin for runtime session decreased from 5% to 2%.
+
+
 2015-02-12 Roman
 - !!!!:SYS:
     Classes TTipBD, TTipDAQ, TTipParam, TTipArchivator, TTipTransport  renamed to TTypeBD, TTypeDAQ, TTypeParam, TTypeArchivator, TTypeTransport at last.

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:50+0200\n"
+"POT-Creation-Date: 2015-02-17 19:59+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -289,6 +289,9 @@ msgstr "Zertifikat des Servers (PEM)"
 msgid "Server private key (PEM)"
 msgstr "Privatschlüssel des Servers (PEM)"
 
+msgid "Addition parameters"
+msgstr "Zusatz Parametern"
+
 msgid "Search and create new server error."
 msgstr "Fehler der Suche und der Schaffung des neuen Servers."
 
@@ -328,6 +331,24 @@ msgstr "Politik"
 
 msgid "Message mode"
 msgstr "Regime der Nachricht"
+
+msgid "Data"
+msgstr "Daten"
+
+msgid "Limits"
+msgstr "Limits"
+
+msgid "Subscriptions"
+msgstr "Abonnements"
+
+msgid "Monitored items"
+msgstr "Überwachte Elemente"
+
+msgid "Retransmission queue time, sek."
+msgstr "Retransmission Warteschlangenzeit, sek."
+
+msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
+msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 
 msgid "No present selected row."
 msgstr "Gewählte Zeile fehlt."

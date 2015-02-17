@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:50+0200\n"
+"POT-Creation-Date: 2015-02-17 19:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,6 +274,9 @@ msgstr ""
 msgid "Server private key (PEM)"
 msgstr ""
 
+msgid "Addition parameters"
+msgstr ""
+
 msgid "Search and create new server error."
 msgstr ""
 
@@ -312,6 +315,24 @@ msgid "Policy"
 msgstr ""
 
 msgid "Message mode"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Limits"
+msgstr ""
+
+msgid "Subscriptions"
+msgstr ""
+
+msgid "Monitored items"
+msgstr ""
+
+msgid "Retransmission queue time, sek."
+msgstr ""
+
+msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr ""
 
 msgid "No present selected row."
