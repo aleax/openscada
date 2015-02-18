@@ -1,3 +1,7 @@
+2015-02-18 fido_max
+- New module DAQ.Fastwell implement for Fastwell IO FBUS client implementation.
+
+
 2015-02-17 Roman
 - FIX:DAQ.OPC_UA.libOPC_UA: TranslateBrowsePathsToNodeIdsRequest service fixed for processing no OK paths.
 - DAQ.OPC_UA: Limit limRetrQueueTm() for retransmission queue time control. For all limits control tab "Data" with limits is added.
