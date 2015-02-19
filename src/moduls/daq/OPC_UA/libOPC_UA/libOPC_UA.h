@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /******************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -388,8 +388,7 @@ class NodeId
 	uint16_t mNs;
 	Type	mTp;
 #ifdef DEBUG_SPEC
-	union
-	{
+	union {
 	    uint32_t	numb;
 	    string	*str;
 	};

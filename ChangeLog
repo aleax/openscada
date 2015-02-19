@@ -1,3 +1,8 @@
+2015-02-19 Roman
+- DAQ.OPC_UA: Debug error messages for input requests fixed. Sequence number is added to "MSG Req:" messages for sync allow.
+- DAQ.Siemens: LibnoDave version updated to 0.8.5 (last from 05/17/13).
+
+
 2015-02-18 fido_max
 - New module DAQ.Fastwell implement for Fastwell IO FBUS client implementation.
 
