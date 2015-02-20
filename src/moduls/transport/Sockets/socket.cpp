@@ -130,20 +130,10 @@ void TTransSock::perSYSCall( unsigned int cnt )
 {
     vector<string> trls;
 
-    try {
-	//Iniciative input protocols check for restart/reconnect need.
-	inList(trls);
-	for(unsigned iTr = 0; iTr < trls.size(); iTr++) {
-	    AutoHD<TSocketIn> tr = inAt(trls[iTr]);
-	    if((tr.at().toStart() || tr.at().startStat()) && tr.at().mode() == 2 &&
-		(!tr.at().startStat() || time(NULL) > (tr.at().lastConn()+tr.at().keepAliveTm())))
-	    {
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Restart by no ingoing activity to '%s'."), tr.at().addr().c_str());
-		if(tr.at().startStat()) tr.at().stop();
-		tr.at().start();
-	    }
-	}
-    } catch(...){ }
+    //Iniciative input protocols check for restart/reconnect need.
+    inList(trls);
+    for(unsigned iTr = 0; iTr < trls.size(); iTr++)
+	((AutoHD<TSocketIn>)inAt(trls[iTr])).at().check();
 }
 
 TTransportIn *TTransSock::In( const string &name, const string &idb )	{ return new TSocketIn(name, idb, &owner().inEl()); }
@@ -374,6 +364,33 @@ void TSocketIn::stop( )
     if(type == SOCK_UNIX) remove(path.c_str());
 
     TTransportIn::stop();
+}
+
+void TSocketIn::check( )
+{
+    try {
+	//Check for activity for initiative mode
+	if(mode() == 2 && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Restart by no ingoing activity to '%s'."), addr().c_str());
+	    if(startStat()) stop();
+	    start();
+	}
+
+	//Check the assigned to that output transports for inactivity
+	/*vector<AutoHD<TTransportOut> > aTrLs = assTrs(true);
+	for(unsigned iTr = 0; iTr < aTrLs.size(); iTr++) {
+	    if(!aTrLs[iTr].at().startStat() || aTrLs[iTr].at().addr().compare(0,5,"SOCK:") != 0) continue;
+	    int oSockFd = s2i(TSYS::strSepParse(aTrLs[iTr].at().addr(),1,':'));
+	    //struct sockaddr aNm;
+	    //socklen_t aLn = sizeof(aNm);
+	    //int fRes = getpeername(oSockFd, &aNm, &aLn);
+
+	    int error = 0;
+	    socklen_t slen = sizeof(error);
+	    int fRes = getsockopt(oSockFd, SOL_SOCKET, SO_ERROR, &error, &slen);
+	    printf("TEST 01: fRes=%d; error=%d\n", fRes, error);
+	}*/
+    } catch(...){ }
 }
 
 int TSocketIn::writeTo( const string &sender, const string &data )

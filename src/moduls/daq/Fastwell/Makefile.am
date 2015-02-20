@@ -1,4 +1,4 @@
-EXTRA_DIST = *.h
+EXTRA_DIST = *.h fbus/libfbus.so fbus/*.h fbus/stdlib/*.h
 # po/*
 
 oscd_modul_LTLIBRARIES = daq_Fastwell.la

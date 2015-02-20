@@ -67,7 +67,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getVal(&ttm).getI();
+		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && val != pow(10,i_el)) || (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test1: Failed."));
 		}
@@ -80,7 +80,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getVal(&ttm).getI();
+		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
 			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
 			    (i_el >= buf_sz && val != EVAL_INT))
@@ -95,7 +95,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getVal(&ttm).getI();
+		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
 			    (i_el < buf_sz && i_el == 3 && val != pow(10,4)) ||
 			    (i_el >= buf_sz && val != EVAL_INT))
@@ -110,7 +110,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getVal(&ttm).getI();
+		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
 			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
 			    (i_el >= buf_sz && val != EVAL_INT))
@@ -125,7 +125,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getVal(&ttm).getI();
+		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && i_el != 1 && val != pow(10,i_el)) ||
 			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
 			    (i_el < buf_sz && i_el == 1 && val != pow(10,9)) ||
@@ -141,7 +141,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getVal(&ttm).getI();
+		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && i_el != 1 && val != pow(10,i_el)) ||
 			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
 			    (i_el < buf_sz && i_el == 1 && val != pow(10,2)) ||
@@ -157,7 +157,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++)
 		{
 		    ttm = wtm+i_el*per;
-		    int val = o_arch.at().getVal(&ttm).getI();
+		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 1 && val != pow(10,i_el)) ||
 			    (i_el < buf_sz && i_el == 1 && val != pow(10,2)) ||
 			    (i_el >= buf_sz && val != EVAL_INT))

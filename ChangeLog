@@ -1,5 +1,10 @@
 2015-02-20 Roman
+- DAQ.Fastwell: Addition headers included to distribution.
+- FIX:DAQ.Siemens: Into Libnodave file nodave.h #pragma pack(1) is replaced to #pragma pack(push,1) ... #pragma pack(pop).
+- FIX:DAQ.Siemens,Special.SystemTests: Integer type expanded next to int64_t.
 - UI.{VCAEngine,Vision}: Some warnings added for try add already present items and paste, after copy or cut, to already present item.
+- Transport.Sockets: Checking for activity for initiative mode moved to the input protocol function check()
+    and unsuccess checking for lost TCP connection tried.
 
 
 2015-02-19 Roman

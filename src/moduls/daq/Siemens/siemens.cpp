@@ -1221,7 +1221,7 @@ string TMdContr::getValS( SValData ival, ResString &err )
 
 void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
 {
-    int val = getValI(SValData(ival.db,ival.off,1), err);
+    int64_t val = getValI(SValData(ival.db,ival.off,1), err);
     if(val == EVAL_INT || (bool)(val&(0x01<<ival.sz)) == ivl) return;
     //Write data to controller or write data block
     val ^= (0x01<<ival.sz);
@@ -1246,7 +1246,7 @@ void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
 
 void TMdContr::setValI( int64_t ivl, SValData ival, ResString &err )
 {
-    int val = getValI(ival, err);
+    int64_t val = getValI(ival, err);
     if(val == EVAL_INT || val == ivl) return;
     //Write data to controller or write data block
     val = ivl;

@@ -109,6 +109,7 @@ class TSocketIn: public TTransportIn
 
 	void start( );
 	void stop( );
+	void check( );			//Some periodic tests and checkings like initiative connection and assigned to that output transports
 	int writeTo( const string &sender, const string &data );
 
     protected:
