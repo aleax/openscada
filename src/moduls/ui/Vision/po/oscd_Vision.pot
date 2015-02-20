@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:56+0200\n"
+"POT-Creation-Date: 2015-02-20 12:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -871,6 +871,11 @@ msgid "Copy/move scheme from '%1' to '%2' is not supported."
 msgstr ""
 
 msgid "Inherit:"
+msgstr ""
+
+msgid ""
+"Target item '%1' already present!\n"
+"Any way paste to?"
 msgstr ""
 
 msgid "Try copy/move self to self for \"%1/%1\"!"
@@ -1960,6 +1965,10 @@ msgstr ""
 msgid "Write file '%1' is fail."
 msgstr ""
 
+#, c-format
+msgid "Trend build: %f ms."
+msgstr ""
+
 msgid "kHz"
 msgstr ""
 
@@ -1976,10 +1985,6 @@ msgstr ""
 
 #, c-format
 msgid "%gms"
-msgstr ""
-
-#, c-format
-msgid "Trend build: %f ms."
 msgstr ""
 
 #, c-format

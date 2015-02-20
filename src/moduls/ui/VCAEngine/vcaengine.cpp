@@ -847,7 +847,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    prjAdd(vid,opt->text()); prjAt(vid).at().setOwner(opt->attr("user"));
+	    if(prjPresent(vid)) throw TError(nodePath().c_str(), _("Project '%s' already present!"), vid.c_str());
+	    prjAdd(vid, opt->text()); prjAt(vid).at().setOwner(opt->attr("user"));
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	prjDel(opt->attr("id"),true);
@@ -861,6 +862,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
+	    if(wlbPresent(vid)) throw TError(nodePath().c_str(), _("Widgets library '%s' already present!"), vid.c_str());
 	    wlbAdd(vid, opt->text()); opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wlbDel(opt->attr("id"),true);
@@ -885,6 +887,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->text(),TSYS::oscdID);
+	    if(sesPresent(vid)) throw TError(nodePath().c_str(), _("Session '%s' already present!"), vid.c_str());
 	    sesAdd(vid); sesAt(vid).at().setUser(opt->attr("user")); sesAt(vid).at().setBackgrnd(true);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	sesDel(opt->text(),true);

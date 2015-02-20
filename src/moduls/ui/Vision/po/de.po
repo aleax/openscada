@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:56+0200\n"
+"POT-Creation-Date: 2015-02-20 12:19+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -948,6 +948,13 @@ msgstr ""
 
 msgid "Inherit:"
 msgstr "Vererben:"
+
+msgid ""
+"Target item '%1' already present!\n"
+"Any way paste to?"
+msgstr ""
+"Zielpunkt '%1' ist bereits vorhanden!\n"
+"Jeder Weg eine Paste auf?"
 
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Versuchen Sie kopieren / verschieben Selbstselbst für \"%1/%1\"!"
@@ -2077,6 +2084,10 @@ msgstr "Datei laden"
 msgid "Write file '%1' is fail."
 msgstr "Fehler beim Schreiben in die Datei '%1'."
 
+#, c-format
+msgid "Trend build: %f ms."
+msgstr "Trend zu bauen: %f ms."
+
 msgid "kHz"
 msgstr "kHz"
 
@@ -2094,10 +2105,6 @@ msgstr "%gs"
 #, c-format
 msgid "%gms"
 msgstr "%gms"
-
-#, c-format
-msgid "Trend build: %f ms."
-msgstr "Trend zu bauen: %f ms."
 
 #, c-format
 msgid "Trend draw: %f ms."

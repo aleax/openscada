@@ -1007,8 +1007,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string sid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    wdgAdd(sid.c_str(),opt->text(),"");
+	    string sid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
+	    if(wdgPresent(sid)) throw TError(nodePath().c_str(), _("Widget '%s' already present!"), sid.c_str());
+	    wdgAdd(sid, opt->text(), "");
 	    opt->setAttr("id", sid);
 	    //GeomZ set to include widgets number
 	    if(wdgPresent(sid)) {
@@ -1515,7 +1516,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 
 		if(idcol == "id") {
 		    tid = opt->text();
-		    if(wdg.at().attrPresent(tid)) throw TError(nodePath().c_str(),_("New attribute's ID '%s' already present."),tid.c_str());
+		    if(wdg.at().attrPresent(tid)) throw TError(nodePath().c_str(),_("New attribute's ID '%s' already present!"),tid.c_str());
 		}
 		else if(idcol == "type") {
 		    ttp = (TFld::Type)(s2i(opt->text())&0x0f);

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-05 11:21+0200\n"
+"POT-Creation-Date: 2015-02-20 12:26+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -85,6 +85,9 @@ msgstr "Mime тип"
 
 msgid "Data"
 msgstr "Дані"
+
+msgid "Widget '%s' already present!"
+msgstr "Віджет '%s' вже присутній!"
 
 msgid "Widget is not container!"
 msgstr "Віджет не контейнер!"
@@ -1192,6 +1195,9 @@ msgstr "Рів."
 msgid "Message"
 msgstr "Повідомлення"
 
+msgid "Page '%s' already present!"
+msgstr "Сторінка '%s' вже присутня!"
+
 #, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Взагалі: %d; Включено: %d"
@@ -1541,6 +1547,15 @@ msgstr "Кодування тексту"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодування тексту рушія для перекодування у неї."
 
+msgid "Project '%s' already present!"
+msgstr "Проект '%s' вже присутній!"
+
+msgid "Widgets library '%s' already present!"
+msgstr "Бібліотека віджетів '%s' вже присутня!"
+
+msgid "Session '%s' already present!"
+msgstr "Сеанс '%s' вже присутній!"
+
 #, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Атрибут '%s' не звільнено. Примусове видалення!"
@@ -1819,9 +1834,8 @@ msgstr "Помилка. Видалення елементу не користу�
 msgid "Changing of not user attribute is no permitted"
 msgstr "Модифікація атрибутів не користувача не дозволена"
 
-#, c-format
-msgid "New attribute's ID '%s' already present."
-msgstr "Новий ідентифікатор атрибуту '%s' вже присутній."
+msgid "New attribute's ID '%s' already present!"
+msgstr "Новий ідентифікатор атрибуту '%s' вже присутній!"
 
 msgid "Boolean"
 msgstr "Логічний"

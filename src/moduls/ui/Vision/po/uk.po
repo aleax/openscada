@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:56+0200\n"
+"POT-Creation-Date: 2015-02-20 12:19+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -939,6 +939,13 @@ msgstr "Схема копіювання/переміщення з '%1' до '%2'
 
 msgid "Inherit:"
 msgstr "Наслідувати:"
+
+msgid ""
+"Target item '%1' already present!\n"
+"Any way paste to?"
+msgstr ""
+"Цільовий елемент '%1' вже присутній!\n"
+"Всеодно вставити до нього?"
 
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Спроба копіювання/пересунення себе у себе для \"%1/%1\"!"
@@ -2064,6 +2071,10 @@ msgstr "Завантаження файлу."
 msgid "Write file '%1' is fail."
 msgstr "Помилка запису до файлу '%1'."
 
+#, c-format
+msgid "Trend build: %f ms."
+msgstr "Час формування тренду: %f мс."
+
 msgid "kHz"
 msgstr "кГц"
 
@@ -2081,10 +2092,6 @@ msgstr "%gс"
 #, c-format
 msgid "%gms"
 msgstr "%gмс"
-
-#, c-format
-msgid "Trend build: %f ms."
-msgstr "Час формування тренду: %f мс."
 
 #, c-format
 msgid "Trend draw: %f ms."

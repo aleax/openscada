@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-05 11:21+0200\n"
+"POT-Creation-Date: 2015-02-20 12:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,6 +84,10 @@ msgid "Mime type"
 msgstr ""
 
 msgid "Data"
+msgstr ""
+
+#, c-format
+msgid "Widget '%s' already present!"
 msgstr ""
 
 msgid "Widget is not container!"
@@ -943,6 +947,10 @@ msgid "Message"
 msgstr ""
 
 #, c-format
+msgid "Page '%s' already present!"
+msgstr ""
+
+#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr ""
 
@@ -1284,6 +1292,18 @@ msgid "Engine text codepage for text encode into it."
 msgstr ""
 
 #, c-format
+msgid "Project '%s' already present!"
+msgstr ""
+
+#, c-format
+msgid "Widgets library '%s' already present!"
+msgstr ""
+
+#, c-format
+msgid "Session '%s' already present!"
+msgstr ""
+
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr ""
 
@@ -1496,7 +1516,7 @@ msgid "Changing of not user attribute is no permitted"
 msgstr ""
 
 #, c-format
-msgid "New attribute's ID '%s' already present."
+msgid "New attribute's ID '%s' already present!"
 msgstr ""
 
 msgid "Boolean"

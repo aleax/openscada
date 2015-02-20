@@ -467,9 +467,9 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 
     //QT message
     switch(type) {
-	case TVision::Info:	QMessageBox::information(parent,_(MOD_NAME),mess);	break;
-	case TVision::Warning:	QMessageBox::warning(parent,_(MOD_NAME),mess);		break;
-	case TVision::Error:	QMessageBox::critical(parent,_(MOD_NAME),mess);		break;
+	case TVision::Info:	QMessageBox::information(parent, _(MOD_NAME), mess);	break;
+	case TVision::Warning:	QMessageBox::warning(parent, _(MOD_NAME), mess);	break;
+	case TVision::Error:	QMessageBox::critical(parent, _(MOD_NAME), mess);	break;
 	case TVision::Crit:	QErrorMessage::qtHandler()->showMessage(mess);		break;
     }
 }

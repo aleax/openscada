@@ -388,7 +388,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
+	    if(present(vid)) throw TError(nodePath().c_str(), _("Widget '%s' already present!"), vid.c_str());
+	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) del(opt->attr("id"),true);
@@ -699,8 +700,8 @@ void LWidget::wClear( )
 
 void LWidget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
-    if(!isContainer())  throw TError(nodePath().c_str(),_("Widget is not container!"));
-    if(wdgPresent(wid)) return;
+    if(!isContainer())	throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(wdgPresent(wid))	return;
 
     //Check for label <deleted>
     if(!force) {

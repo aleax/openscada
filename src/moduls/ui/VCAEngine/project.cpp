@@ -585,7 +585,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
+	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
+	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	del(opt->attr("id"),true);
@@ -1335,8 +1336,10 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trU(pageAt(lst[i_f]).at().name(),u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    pageAdd(opt->attr("id").c_str(),opt->text().c_str());
-	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
+	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
+	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
+	    pageAdd(vid, opt->text()); pageAt(vid).at().setOwner(opt->attr("user"));
+	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
     }

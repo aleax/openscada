@@ -1,3 +1,7 @@
+2015-02-20 Roman
+- UI.{VCAEngine,Vision}: Some warnings added for try add already present items and paste, after copy or cut, to already present item.
+
+
 2015-02-19 Roman
 - DAQ.OPC_UA: Debug error messages for input requests fixed. Sequence number is added to "MSG Req:" messages for sync allow.
 - DAQ.Siemens: LibnoDave version updated to 0.8.5 (last from 05/17/13).
