@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-11 21:23+0200\n"
+"POT-Creation-Date: 2015-02-21 19:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,14 +23,10 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols."
+msgid "Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols."
 msgstr ""
 
 msgid "Addition parameters"
-msgstr ""
-
-#, c-format
-msgid "Restart by no ingoing activity to '%s'."
 msgstr ""
 
 #, c-format
@@ -75,6 +71,10 @@ msgstr ""
 
 #, c-format
 msgid "RAWCAN socket binded '%s'!"
+msgstr ""
+
+#, c-format
+msgid "Restart by no ingoing activity to '%s'."
 msgstr ""
 
 #, c-format
@@ -145,6 +145,11 @@ msgid ""
 "  UNIX:{name}:{mode} - UNIX socket:\n"
 "    name - UNIX-socket's file name;\n"
 "    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative connection)."
+msgstr ""
+
+msgid ""
+"Empty value for the protocol selection switchs the transport to mode\n"
+"of creation associated output transports for each connection to one."
 msgstr ""
 
 msgid "Input buffer (kbyte)"

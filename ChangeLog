@@ -1,3 +1,8 @@
+2015-02-21 Roman
+- Transport.Sockets: Help message to input protocol selection about the empty value is added.
+- FIX:UI.VCAEngine: Link to widget's attribute from the wiget by "wdg:a_XXX" fixed.
+
+
 2015-02-20 Roman
 - DAQ.Fastwell: Addition headers included to distribution.
 - FIX:DAQ.Siemens: Into Libnodave file nodave.h #pragma pack(1) is replaced to #pragma pack(push,1) ... #pragma pack(pop).

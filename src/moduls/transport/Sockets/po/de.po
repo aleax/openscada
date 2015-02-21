@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-11 21:23+0200\n"
+"POT-Creation-Date: 2015-02-21 19:09+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -24,25 +24,22 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow sockets based transport. Support inet and unix sockets. Inet socket "
-"use TCP and UDP protocols."
+"Provides sockets based transport. Support inet and unix sockets. Inet socket "
+"uses TCP, UDP and RAWCAN protocols."
 msgstr ""
 "Gewährt den auf Sockets gebauten Transport. Internet und UNIX Sockets werden "
-"unterstützt. Internet Socket benutzt die TCP und UDP Protokolle."
+"unterstützt. Internet Socket benutzt die TCP, UDP und RAWCAN Protokolle."
 
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
 
 #, c-format
-msgid "Restart by no ingoing activity to '%s'."
-msgstr "Neu zu starten auf keinen eingehenden Aktivität '%s'."
-
 msgid ""
 "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
 "connections by limit %d."
 msgstr ""
-"Verbindungen %d, eröffnet %d, letzte %s. Eingangstraffik %s, Ausgangs %s. Verbindungen "
-"geschlossen nach dem Limit %d."
+"Verbindungen %d, eröffnet %d, letzte %s. Eingangstraffik %s, Ausgangs %s. "
+"Verbindungen geschlossen nach dem Limit %d."
 
 #, c-format
 msgid "Error create '%s' socket!"
@@ -83,6 +80,10 @@ msgstr "RAWCAN Socket ist nicht verbunden mit '%s'!"
 #, c-format
 msgid "RAWCAN socket binded '%s'!"
 msgstr "RAWCAN Socket ist verbunden mit '%s'!"
+
+#, c-format
+msgid "Restart by no ingoing activity to '%s'."
+msgstr "Neu zu starten auf keinen eingehenden Aktivität '%s'."
 
 #, c-format
 msgid "Socket write message '%d'."
@@ -180,6 +181,13 @@ msgstr ""
 "    name - Name der Datei des UNIX-Sockets;\n"
 "    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - die Verbindung "
 "speichern; 2 - Initiative Verbindung)."
+
+msgid ""
+"Empty value for the protocol selection switchs the transport to mode\n"
+"of creation associated output transports for each connection to one."
+msgstr ""
+"Leer Wert für die Protokollauswahl switchs den Transport nach Art der\n"
+"Schaffung zugehörige Ausgangstransporte für jede Verbindung zu einem."
 
 msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"

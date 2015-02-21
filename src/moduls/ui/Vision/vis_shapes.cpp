@@ -1188,8 +1188,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    switch(uiPrmPos)
-    {
+    switch(uiPrmPos) {
 	case A_COM_LOAD: up = reform = true;	break;
 	case A_EN:
 	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
@@ -1242,15 +1241,13 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case A_TextAlignment:
 	    shD->text_flg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignJustify|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
-	    switch(s2i(val)&0x3)
-	    {
+	    switch(s2i(val)&0x3) {
 		case 0: shD->text_flg |= Qt::AlignLeft;		break;
 		case 1: shD->text_flg |= Qt::AlignRight;	break;
 		case 2: shD->text_flg |= Qt::AlignHCenter;	break;
 		case 3: shD->text_flg |= Qt::AlignJustify;	break;
 	    }
-	    switch(s2i(val)>>2)
-	    {
+	    switch(s2i(val)>>2) {
 		case 0: shD->text_flg |= Qt::AlignTop;		break;
 		case 1: shD->text_flg |= Qt::AlignBottom;	break;
 		case 2: shD->text_flg |= Qt::AlignVCenter;	break;
@@ -1273,14 +1270,12 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if(uiPrmPos >= A_TextArs) {
 		int argN = (uiPrmPos-A_TextArs)/A_TextArsSz;
 		if(argN >= (int)shD->args.size()) break;
-		if((uiPrmPos%A_TextArsSz) == A_TextArsVal || (uiPrmPos%A_TextArsSz) == A_TextArsTp)
-		{
+		if((uiPrmPos%A_TextArsSz) == A_TextArsVal || (uiPrmPos%A_TextArsSz) == A_TextArsTp) {
 		    QVariant gval = shD->args[argN].val();
 		    int tp = (gval.type()==QVariant::Double) ? 1 : ((gval.type()==QVariant::String) ? 2 : 0);
 		    if((uiPrmPos%A_TextArsSz) == A_TextArsVal)	gval = val.c_str();
 		    if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	tp = s2i(val);
-		    switch(tp)
-		    {
+		    switch(tp) {
 			case FT_INT:  shD->args[argN].setVal(gval.toInt());	break;
 			case FT_REAL: shD->args[argN].setVal(gval.toDouble());	break;
 			case FT_STR:  shD->args[argN].setVal(gval.toString());	break;
@@ -1295,8 +1290,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
     if(reform && !w->allAttrLoad()) {
 	QString text = shD->text_tmpl.c_str();
 	for(unsigned i_a = 0; i_a < shD->args.size(); i_a++) {
-	    switch(shD->args[i_a].val().type())
-	    {
+	    switch(shD->args[i_a].val().type()) {
 		case QVariant::String:
 		    text = text.arg(shD->args[i_a].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[i_a].cfg()))));
 		    break;
@@ -1326,8 +1320,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(!shD->en) return false;
-    switch(event->type())
-    {
+    switch(event->type()) {
 	case QEvent::Paint: {
 	    QPainter pnt(w);
 

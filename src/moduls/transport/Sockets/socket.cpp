@@ -61,7 +61,7 @@
 #define VER_TYPE	STR_VER
 #define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow sockets based transport. Support inet and unix sockets. Inet socket use TCP and UDP protocols.")
+#define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -737,7 +737,9 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:{name}:{mode} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive; 2 - initiative connection)."));
-	ctrMkNode("fld", opt, -1, "/prm/cfg/PROT", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID);
+	ctrMkNode("fld", opt, -1, "/prm/cfg/PROT", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1,
+	    "help",_("Empty value for the protocol selection switchs the transport to mode\n"
+		     "of creation associated output transports for each connection to one."));
 	ctrMkNode("fld", opt, -1, "/prm/cfg/bfLn", _("Input buffer (kbyte)"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "tp","dec");
 	ctrMkNode("fld", opt, -1, "/prm/cfg/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 4,
 	    "tp","dec", "min","-1", "max","99", "help",TMess::labTaskPrior());
