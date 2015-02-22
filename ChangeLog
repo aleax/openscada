@@ -1,3 +1,8 @@
+2015-02-22 Roman
+- DB: LibsDB.OscadaLibs.db: User protocols and the data templates some make unified for: SCU750, TMH, TM510x, SMS, DCON.
+- DB: ModelsDB.AGLKS.St.db: User protocols DCON and TM510x moved to LibsDB.OscadaLibs.db.
+
+
 2015-02-21 Roman
 - Transport.Sockets: Help message to input protocol selection about the empty value is added.
 - FIX:UI.VCAEngine: Link to widget's attribute from the wiget by "wdg:a_XXX" fixed.
