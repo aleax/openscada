@@ -1,3 +1,8 @@
+2015-02-23 Roman
+- FIX:SYS: Debian's init script fixed by remove force LC_ALL set and that break down individual LC_NUMERIC=C setting
+    for different to C,POSIX or English locales.
+
+
 2015-02-22 Roman
 - DB: LibsDB.OscadaLibs.db: User protocols and the data templates some make unified for: SCU750, TMH, TM510x, SMS, DCON.
 - DB: ModelsDB.AGLKS.St.db: User protocols DCON and TM510x moved to LibsDB.OscadaLibs.db.

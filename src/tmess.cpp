@@ -56,8 +56,9 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
     pthread_mutex_init(&mRes, &attrM);
     pthread_mutexattr_destroy(&attrM);
 
-    setenv("LC_NUMERIC","C",1);
-    openlog(PACKAGE,0,LOG_USER);
+    openlog(PACKAGE, 0, LOG_USER);
+
+    setenv("LC_NUMERIC", "C", 1);
     setlocale(LC_ALL,"");
     IOCharSet = nl_langinfo(CODESET);
 
