@@ -1898,7 +1898,7 @@ float DECL2 daveGetKGAt(daveConnection * dc,int pos) {
 
 float DECL2 daveGetKG(daveConnection * dc) {
     float f;
-    f=daveGetKGAt(dc, ((int)dc->resultPointer-(int)dc->_resultPointer));
+    f=daveGetKGAt(dc, ((long)dc->resultPointer-(long)dc->_resultPointer));
     dc->resultPointer+=4;
     return f;
 }

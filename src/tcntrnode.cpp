@@ -170,7 +170,7 @@ void TCntrNode::nodeEn( int flag )
 	vector<string> chLs;
 	TMap::iterator p;
 	chldList(iG, chLs, true);
-	for(int iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
+	for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 	    if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 	    AutoHD<TCntrNode> ndO(p->second);
 	    if(ndO.at().nodeMode() != Disabled)	continue;
@@ -210,7 +210,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	    vector<string> chLs;
 	    TMap::iterator p;
 	    chldList(iG, chLs, true);
-	    for(int iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
+	    for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 		AutoHD<TCntrNode> ndO(p->second);
 		if(ndO.at().nodeMode() != Enabled)	continue;
@@ -642,7 +642,7 @@ void TCntrNode::load( bool force, string *errs )
 	    vector<string> chLs;
 	    TMap::iterator p;
 	    chldList(iG, chLs, true);
-	    for(int iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
+	    for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 		AutoHD<TCntrNode> ndO(p->second);
 		if(!(ndO.at().isModify(Self|Child) || force))	continue;
@@ -690,7 +690,7 @@ void TCntrNode::save( unsigned lev, string *errs )
 	    vector<string> chLs;
 	    TMap::iterator p;
 	    chldList(iG, chLs, true);
-	    for(int iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
+	    for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 		AutoHD<TCntrNode> ndO(p->second);
 		if(!ndO.at().isModify(Self|Child))	continue;

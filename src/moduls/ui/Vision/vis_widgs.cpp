@@ -1005,17 +1005,9 @@ void WdgView::childsClear( )
     }
 }
 
-float WdgView::xScale( bool full )
-{
-    if(full && wLevel( ) > 0)	return x_scale*((WdgView*)parentWidget())->xScale(full);
-    return x_scale;
-}
+float WdgView::xScale( bool full )	{ return (full && wLevel() > 0) ? x_scale*((WdgView*)parentWidget())->xScale(full) : x_scale; }
 
-float WdgView::yScale( bool full )
-{
-    if(full && wLevel( ) > 0)	return y_scale*((WdgView*)parentWidget())->yScale(full);
-    return y_scale;
-}
+float WdgView::yScale( bool full )	{ return (full && wLevel() > 0) ? y_scale*((WdgView*)parentWidget())->yScale(full) : y_scale; }
 
 string WdgView::root( )	{ return shape ? shape->id() : ""; }
 
@@ -1058,25 +1050,25 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case A_GEOM_X:
 	    //if(wLevel() == 0)	break;
 	    if(wLevel() == 0) mWPos = QPointF(s2r(val),posF().y());
-	    else mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*s2r(val),posF().y());
+	    else mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*s2r(val), posF().y());
 	    up = true;
 	    break;
 	case A_GEOM_Y:
 	    //if(wLevel() == 0)	break;
 	    if(wLevel() == 0) mWPos = QPointF(posF().x(),s2r(val));
-	    else mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*s2r(val));
+	    else mWPos = QPointF(posF().x(), ((WdgView*)parentWidget())->yScale(true)*s2r(val));
 	    up = true;
 	    break;
-	case A_GEOM_W: mWSize = QSizeF(xScale(true)*s2r(val),sizeF().height()); up = true;	break;
-	case A_GEOM_H: mWSize = QSizeF(sizeF().width(),yScale(true)*s2r(val)); up = true;	break;
+	case A_GEOM_W: mWSize = QSizeF(xScale(true)*s2r(val), sizeF().height()); up = true;	break;
+	case A_GEOM_H: mWSize = QSizeF(sizeF().width(), yScale(true)*s2r(val)); up = true;	break;
 	case A_GEOM_Z: if(wLevel() > 0) z_coord = s2i(val);	break;
 	case A_GEOM_X_SC:
-	    mWSize = QSizeF((s2r(val)/x_scale)*sizeF().width(),sizeF().height());
+	    mWSize = QSizeF((s2r(val)/x_scale)*sizeF().width(), sizeF().height());
 	    x_scale = s2r(val);
 	    up = upChlds = true;
 	    break;
 	case A_GEOM_Y_SC:
-	    mWSize = QSizeF(sizeF().width(),(s2r(val)/y_scale)*sizeF().height());
+	    mWSize = QSizeF(sizeF().width(), (s2r(val)/y_scale)*sizeF().height());
 	    y_scale = s2r(val);
 	    up = upChlds = true;
 	    break;

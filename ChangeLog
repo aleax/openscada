@@ -1,4 +1,7 @@
 2015-02-23 Roman
+- FIX:SYS,Transport.Sockets,UI.{Vision,WebVision}: Some warnings about comparing signed and unsigned fix.
+- FIX:DAQ.MMS: RejectErrs and ConfirmErrs obtain fixed.
+- FIX:DAQ.Siemens: LibnoDave: Pointer to int cast fixed by replace the cast to long.
 - FIX:SYS: Debian's init script fixed by remove force LC_ALL set and that break down individual LC_NUMERIC=C setting
     for different to C,POSIX or English locales.
 

@@ -6155,7 +6155,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 		if(ipos >= (int)cPX.val().size() || end_vl)     break;
 		if(cPX.val()[ipos].tm >= aVend) end_vl = true;
 		if(cPX.val()[ipos].val != EVAL_REAL) {
-		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < cP.val().size() && cP.val()[iVpos].val != EVAL_REAL)
+		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < (int)cP.val().size() && cP.val()[iVpos].val != EVAL_REAL)
 			dBuf.insert(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
 		    if(xNeedRngChk) {
 			xBordL = vmin(xBordL, cPX.val()[ipos].val);
@@ -6171,7 +6171,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	}
 
 	// Draw curve
-	int c_vpos, c_hpos, c_vposPrev = -1, c_hposPrev;
+	int c_vpos, c_hpos, c_vposPrev = -1, c_hposPrev = -1;
 	double curVl, curVlX;
 	for(std::multimap<double,double>::iterator iD = dBuf.begin(); iD != dBuf.end(); ++iD) {
 	    curVl = vsPercT ? 100*(iD->second-bordL)/(bordU-bordL) : iD->second;
@@ -6186,7 +6186,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	// Draw curent point
 	int iVpos = cP.val(aVend);
 	int iVposX = cPX.val(aVend);
-	if(iVpos < cP.val().size() && iVposX < cPX.val().size() && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
+	if(iVpos < (int)cP.val().size() && iVposX < (int)cPX.val().size() && cP.val()[iVpos].val != EVAL_REAL && cPX.val()[iVposX].val != EVAL_REAL)
 	{
 	    curVl = vsPercT ? 100*(cP.val()[iVpos].val-bordL)/(bordU-bordL) : cP.val()[iVpos].val;
 	    curVlX = hsPercT ? 100*(cPX.val()[iVposX].val-xBordL)/(xBordU-xBordL) : cPX.val()[iVposX].val;

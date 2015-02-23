@@ -2960,8 +2960,7 @@ bool DevelWdgView::event( QEvent *event )
 
 		// New widget inserting
 		QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
-		if(act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton)
-		{
+		if(act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton) {
 		    mainWin()->visualItAdd(act,QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
 		    setCursor(Qt::ArrowCursor);
 		    event->accept();

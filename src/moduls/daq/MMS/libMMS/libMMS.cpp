@@ -926,7 +926,7 @@ void Client::protIO( XML_N &io )
 				    map<uint8_t, vector<string> >::iterator iErr;
 				    if((errTp=ASN_iTAG(tpkt,offC1)) == 0x80) chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));
 				    else if((iErr=RejectErrs.find(errTp)) != RejectErrs.end())
-					chErr += iErr->second[errCode] + " :" +
+					chErr += iErr->second[0] + " :" +
 					    (((errCode=ASN_iN(tpkt,off,szC1))+1 >= (int)iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
 					    ". ";
 				    else off += szC1;
@@ -952,7 +952,7 @@ void Client::protIO( XML_N &io )
 							map<uint8_t, vector<string> >::iterator iErr;
 							int errTp = ASN_iTAG(tpkt, offC3), errCode;
 							if((iErr=ConfirmErrs.find(errTp)) != ConfirmErrs.end())
-							    chErr += iErr->second[errCode] + " :" +
+							    chErr += iErr->second[0] + " :" +
 								(((errCode=ASN_iN(tpkt,off,szC3))+1 >= (int)iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
 								". ";
 							else { chErr += "unknown"; off += szC3; }

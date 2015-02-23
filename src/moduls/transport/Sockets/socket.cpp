@@ -476,13 +476,13 @@ void *TSocketIn::Task( void *sock_in )
 	if(sock->type == SOCK_TCP) {
 	    int sock_fd_CL = accept(sock->sock_fd, (sockaddr *)&name_cl, &name_cl_len);
 	    if(sock_fd_CL != -1) {
-		if(sock->maxFork() <= (int)sock->cl_id.size()) {
+		if(sock->maxFork() <= sock->cl_id.size()) {
 		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
 		    continue;
 		}
 		//Create presenting the client connection output transport
-		if(sock->protocol().empty() && (int)sock->assTrs(true).size() <= sock->maxFork()) {
+		if(sock->protocol().empty() && sock->assTrs(true).size() <= sock->maxFork()) {
 		    sock->assTrO("SOCK:"+i2s(sock_fd_CL));
 		    sock->connNumb++;
 		    continue;
@@ -504,7 +504,7 @@ void *TSocketIn::Task( void *sock_in )
 	else if(sock->type == SOCK_UNIX) {
 	    int sock_fd_CL = accept(sock->sock_fd, NULL, NULL);
 	    if(sock_fd_CL != -1) {
-		if(sock->maxFork() <= (int)sock->cl_id.size()) {
+		if(sock->maxFork() <= sock->cl_id.size()) {
 		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
 		    continue;
@@ -581,7 +581,7 @@ void *TSocketIn::Task( void *sock_in )
 void *TSocketIn::ClTask( void *s_inf )
 {
     SSockIn &s = *(SSockIn*)s_inf;
-    int cnt = 0;		//Requests counter
+    unsigned cnt = 0;		//Requests counter
     int tm = s.s->connTm = time(NULL);	//Last connection time
 
     if(mess_lev() == TMess::Debug)
@@ -640,8 +640,8 @@ void *TSocketIn::ClTask( void *s_inf )
 	cnt++;
 	tm = s.s->connTm = time(NULL);
 	sessOk = true;
-    } while(!s.s->endrun_cl && (s.s->mode() == 2 || (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
-	    (!sessOk || ((s.s->mode() == 1 || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs())))));
+    } while(!s.s->endrun_cl && (s.s->mode() == 2 || ((!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
+	    (!sessOk || ((s.s->mode() == 1 || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))))));
 
     //Close protocol on broken connection
     if(!prot_in.freeStat()) {
@@ -795,7 +795,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //* TSocketOut                                   *
 //************************************************
 TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), sock_fd(-1), mMSS(0), mLstReqTm(0)
+    TTransportOut(name,idb,el), mMSS(0), sock_fd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");
