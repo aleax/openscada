@@ -639,7 +639,7 @@ void MTable::fieldSet( TConfig &cfg )
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!u_cfg.isKey()) continue;
 	req_where += (next?"AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "\"='" +
-					    TSYS::strEncode(u_cfg.getS(TCfg::ExtValTwo)/*getVal(u_cfg)*/,TSYS::SQL) + "' ";
+					    TSYS::strEncode(getVal(u_cfg,TCfg::ExtValTwo),TSYS::SQL) + "' ";
 	next = true;
 
 	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
@@ -848,16 +848,21 @@ void MTable::fieldFix( TConfig &cfg )
     }
 }
 
-string MTable::getVal( TCfg &cfg )
+string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    switch(cfg.fld().type()) {
+    string rez = cfg.getS(RqFlg);
+    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
+    if(cfg.fld().type() == TFld::String && cfg.fld().len() > 0) return cfg.getS().substr(0,cfg.fld().len());
+    return rez;
+
+    /*switch(cfg.fld().type()) {
 	case TFld::String:	return (cfg.fld().len() > 0) ? cfg.getS().substr(0,cfg.fld().len()) : cfg.getS();
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
 	    else		return cfg.getS();
 	default: return cfg.getS();
     }
-    return "";
+    return "";*/
 }
 
 void MTable::setVal( TCfg &cf, const string &val, bool tr )

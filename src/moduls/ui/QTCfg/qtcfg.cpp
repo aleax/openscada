@@ -1057,14 +1057,57 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    //  Mark last drawed tabs
 		    t_s.setAttr("qview", "1");
 		}
-		else {
-		    selectChildRecArea(t_s, a_path+t_s.attr("id")+"/");
+		else selectChildRecArea(t_s, a_path+t_s.attr("id")+"/");
 
-		    // Get scalable by vertical elements and grow its up to scroll appear into the container
-		    //QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
-		    //QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
-		    //QList<CfgTable*> tbls = scrl->findChildren<CfgTable*>();
-		    //printf("TEST 01: '%ph'; texts=%d; tbls=%d; vScrl=%d\n", scrl, texts.length(), tbls.length(), scrl->verticalScrollBar()->value());
+		// Get scalable by vertical elements and grow its up to scroll appear into the container
+		QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
+		QWidget *lstFitWdg = NULL;
+		QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
+		//QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
+		//QList<QListWidget*> lsts = scrl->findChildren<QListWidget*>();
+		bool sclCnt = true;
+		for(int fitStp = 10, safeCntr = 0; safeCntr < scrl->maximumViewportSize().height() && sclCnt; safeCntr += fitStp) {
+		    QAbstractScrollArea *tEl = NULL;
+		    sclCnt = false;
+		    //  Texts
+		    for(int iEl = 0; iEl < texts.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
+			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(texts[iEl]->edit()))) break;
+			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
+			lstFitWdg = texts[iEl];
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
+			qApp->processEvents();
+			sclCnt = true;
+		    }
+		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
+			break;
+		    }
+		    //  Tables
+		    /*for(int iEl = 0; iEl < tbls.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
+			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(tbls[iEl]))) break;
+			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
+			lstFitWdg = tbls[iEl];
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
+			qApp->processEvents();
+			sclCnt = true;
+		    }
+		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
+			break;
+		    }
+		    //  Lists
+		    for(int iEl = 0; iEl < lsts.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
+			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(lsts[iEl]))) break;
+			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
+			lstFitWdg = lsts[iEl];
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
+			qApp->processEvents();
+			sclCnt = true;
+		    }
+		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
+			break;
+		    }*/
 		}
 	    }
 	    //else t_s.attr("qview","0");	//Mark no view tabs
@@ -1588,8 +1631,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }
 	}
 	//View edit fields
-	else if(t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size()))
-	{
+	else if(t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size())) {
 	    QLabel *lab;
 	    TextEdit *edit;
 
@@ -1598,24 +1640,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		widget->layout()->addWidget(lab);
 
-		edit = new TextEdit(widget,br_path.c_str());
+		edit = new TextEdit(widget, br_path.c_str());
 		edit->setStatusTip((sel_path+"/"+br_path).c_str());
-		if(s2i(t_s.attr("rows")) < 10) {
-		    edit->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
-		    edit->edit()->setFixedHeight(2*edit->edit()->currentFont().pointSize()*s2i(t_s.attr("rows")));
-		}
-		else {
-		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Expanding);
-		    sp.setVerticalStretch(2);
-		    edit->setSizePolicy(sp);
-		    edit->edit()->setMinimumHeight(2*edit->edit()->currentFont().pointSize()*s2i(t_s.attr("rows")));
-		}
-		if(s2i(t_s.attr("cols"))) {
-		    edit->edit()->setWordWrapMode(QTextOption::WordWrap);
-		    edit->edit()->setLineWrapMode(QTextEdit::FixedColumnWidth);
-		    edit->edit()->setLineWrapColumnOrWidth(s2i(t_s.attr("cols")));
-		}
-		else edit->edit()->setLineWrapMode(QTextEdit::NoWrap);
+		edit->setRowsCols(s2i(t_s.attr("cols")), s2i(t_s.attr("rows")));
 		widget->layout()->addWidget(edit);
 
 		if(!wr)	edit->edit()->setReadOnly(true);

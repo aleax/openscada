@@ -64,7 +64,7 @@ class MTable : public TTable
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 	void getStructDB( string name, vector< vector<string> > &tblStrct );
 
-	string getVal( TCfg &cfg );
+	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	string UTCtoSQL( time_t val );

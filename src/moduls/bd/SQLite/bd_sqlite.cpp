@@ -702,7 +702,21 @@ void MTable::fieldFix( TConfig &cfg )
 
 string MTable::getVal( TCfg &cfg, bool toEnc, uint8_t RqFlg )
 {
-    switch(cfg.fld().type()) {
+    string rez = cfg.getS(RqFlg);
+    if(cfg.fld().type() == TFld::String && toEnc) {
+	string prntRes = rez;
+	bool isBin = false;
+	for(unsigned iCh = 0; !isBin && iCh < prntRes.size(); ++iCh)
+	    switch(prntRes[iCh]) {
+		case 0: isBin = true; break;
+		case '\'': prntRes.insert(iCh, 1, prntRes[iCh]); ++iCh; break;
+	    }
+	return isBin ? "X'"+TSYS::strDecode(rez, TSYS::Bin)+"'" : "'"+prntRes+"'";
+    }
+
+    return toEnc ? "'"+rez+"'" : rez;
+
+    /*switch(cfg.fld().type()) {
 	case TFld::String: {
 	    if(!toEnc) return cfg.getS(RqFlg);
 	    string prntRes = cfg.getS(RqFlg);
@@ -718,7 +732,7 @@ string MTable::getVal( TCfg &cfg, bool toEnc, uint8_t RqFlg )
 	default: return toEnc ? "'"+cfg.getS(RqFlg)+"'" : cfg.getS(RqFlg);
     }
 
-    return "";
+    return "";*/
 }
 
 void MTable::setVal( TCfg &cf, const string &val, bool tr )

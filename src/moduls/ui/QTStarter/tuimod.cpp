@@ -63,7 +63,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -98,8 +98,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID),
 
     //Qt massages not for compile but for indexing by gettext
 #if 0
-    char mess[][100] =
-    {
+    char mess[][100] = {
 	_("Could not read image data"),
 	_("&Yes"),_("&No"),_("&Cancel"),_("&OK"),_("Apply"),_("Close"),_("Back"),_("Forward"),_("Parent Directory"),
 	_("Look in:"),_("Computer"),_("File"),_("Folder"),_("File &name:"),_("Open"),_("&Open"),_("Cancel"),_("Save"),_("&Save"),_("Save As"),_("Date Modified"),_("All Files (*)"),
@@ -439,8 +438,7 @@ bool WinControl::callQtModule( const string &nm )
 	AutoHD<TModule> QtMod = mod->owner().modAt(list[i_l]);
 
 	QIcon icon;
-	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();"))
-	{
+	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();")) {
 	    QIcon(TModule::*iconGet)();
 	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
 	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );

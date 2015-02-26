@@ -449,9 +449,6 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     QWidget(parent), isInit(false), snt_hgl(NULL), but_box(NULL)
 {
     setObjectName(name);
-    QVBoxLayout *box = new QVBoxLayout(this);
-    box->setContentsMargins(0,0,0,2);
-    box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
 #if QT_VERSION < 0x050000
@@ -465,7 +462,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()));
     connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()));
     connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
-    box->addWidget(ed_fld);
+    ed_fld->move(0, 0); ed_fld->resize(width(), height());
 
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
@@ -492,15 +489,19 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 	but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
 	connect(but_box, SIGNAL(rejected()), this, SLOT(btCancel()));
 	but_box->setVisible(false);
-	box->addWidget(but_box);
     }
 }
 
-bool TextEdit::isChanged( )	{ return (but_box && but_box->isVisible()); }
+QSize TextEdit::sizeHint( ) const
+{
+    return QSize(ed_fld->sizeHint().width(), 2*ed_fld->currentFont().pointSize()*mRowCol.height());
+}
 
-QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
+bool TextEdit::isChanged( )		{ return (but_box && but_box->isVisible()); }
 
-bool TextEdit::hasFocus( ) const{ return ed_fld->hasFocus(); }
+QString TextEdit::text( )		{ return ed_fld->toPlainText(); }
+
+bool TextEdit::hasFocus( ) const	{ return ed_fld->hasFocus(); }
 
 void TextEdit::setText( const QString &text )
 {
@@ -519,10 +520,28 @@ void TextEdit::setSnthHgl( XMLNode nd )
     ed_fld->verticalScrollBar()->setValue(scrollPos);
 }
 
+void TextEdit::setRowsCols( int w, int h )
+{
+    mRowCol = QSize(w, h);
+
+    if(mRowCol.width()) {
+	ed_fld->setWordWrapMode(QTextOption::WordWrap);
+	ed_fld->setLineWrapMode(QTextEdit::FixedColumnWidth);
+	ed_fld->setLineWrapColumnOrWidth(mRowCol.width());
+    }
+    else ed_fld->setLineWrapMode(QTextEdit::NoWrap);
+}
+
 void TextEdit::changed( )
 {
     if(isInit) return;
-    if(but_box) but_box->setVisible(ed_fld->document()->isModified());
+    if(but_box) {
+	but_box->setVisible(ed_fld->document()->isModified());
+	if(but_box->isVisible()) {
+	    but_box->move(width()-but_box->width(), height()-but_box->height());
+	    ed_fld->resize(ed_fld->width(), height()-but_box->height());
+	}
+    }
     if(ed_fld->document()->isModified()) emit textChanged(text());
 }
 
@@ -530,12 +549,14 @@ void TextEdit::btApply( )
 {
     emit textChanged(text());
     but_box->setVisible(false);
+    ed_fld->resize(size());
     emit apply();
 }
 
 void TextEdit::btCancel( )
 {
     but_box->setVisible(false);
+    ed_fld->resize(size());
     emit cancel();
 }
 
@@ -543,6 +564,15 @@ void TextEdit::curPosChange( )
 {
     ((QMainWindow*)window())->statusBar()->showMessage(QString(_("Cursor = (%1:%2)"))
 	.arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
+}
+
+void TextEdit::resizeEvent( QResizeEvent *e )
+{
+    if(but_box && but_box->isVisible()) {
+	but_box->move(width()-but_box->width(), height()-but_box->height());
+	ed_fld->resize(ed_fld->width(), height()-but_box->height());
+    }
+    else ed_fld->resize(size());
 }
 
 bool TextEdit::event( QEvent *e )
@@ -561,8 +591,7 @@ bool TextEdit::event( QEvent *e )
     else if(e->type() == QEvent::MouseButtonPress) holdPnt = mapFromGlobal(cursor().pos());
     else if(e->type() == QEvent::MouseMove) {
 	QPoint curp = mapFromGlobal(cursor().pos());
-	int hg = vmax(50,edit()->size().height()+(curp-holdPnt).y());
-	edit()->setMinimumHeight(hg); edit()->setMaximumHeight(hg);
+	setFixedHeight(vmax(50,size().height()+(curp-holdPnt).y()));
 	holdPnt = curp;
     }
 

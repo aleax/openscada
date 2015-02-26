@@ -3174,8 +3174,8 @@ nextReq:
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
     }
     catch(OPCError er) {
-	if(dbg && er.cod) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
 	if(er.cod) {
+	    if(dbg) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
 	    out = mkError(er.cod, er.mess);
 	    holdConn = false;
 	    mSz = rba.size();	//Drop request for prevent broken requests hang, only for er.cod != 0

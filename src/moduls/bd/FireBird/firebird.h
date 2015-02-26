@@ -63,7 +63,7 @@ class MTable : public TTable
 	void fieldFix( TConfig &cfg );
 	void getStructDB( vector< vector<string> > &tblStrct );
 
-	string getVal( TCfg &cfg );
+	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	//Private attributes

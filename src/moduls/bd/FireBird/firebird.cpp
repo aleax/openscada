@@ -671,7 +671,7 @@ void MTable::fieldSet( TConfig &cfg )
 	if(!u_cfg.isKey()) continue;
 	if(!next) next = true; else req_where = req_where + "AND ";
 	req_where += "\"" + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" +
-			    mod->sqlReqCode(u_cfg.getS(TCfg::ExtValTwo)/*getVal(u_cfg)*/) + "' ";
+			    mod->sqlReqCode(getVal(u_cfg,TCfg::ExtValTwo)) + "' ";
 
 	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
 
@@ -856,7 +856,7 @@ void MTable::fieldFix( TConfig &cfg )
     }
 }
 
-string MTable::getVal( TCfg &cfg )	{ return cfg.getS(); }
+string MTable::getVal( TCfg &cfg, uint8_t RqFlg )	{ return cfg.getS(RqFlg); }
 
 void MTable::setVal( TCfg &cf, const string &val, bool tr )
 {

@@ -125,7 +125,9 @@ class TextEdit : public QWidget
 
     public:
 	//Methods
-	TextEdit(QWidget *parent, const char * name = 0, bool prev_dis = false);
+	TextEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
+
+	QSize sizeHint( ) const;
 
 	QString text( );
 	bool hasFocus( ) const;
@@ -133,6 +135,7 @@ class TextEdit : public QWidget
 
 	void setText( const QString& );
 	void setSnthHgl( XMLNode nd );
+	void setRowsCols( int w, int h );
 
 	QTextEdit *edit( )	{ return ed_fld; }
 
@@ -143,6 +146,7 @@ class TextEdit : public QWidget
 	void textChanged( const QString& );
 
     protected:
+	void resizeEvent( QResizeEvent *e );
 	bool event( QEvent *e );
 
     private slots:
@@ -162,6 +166,7 @@ class TextEdit : public QWidget
 	SyntxHighl	*snt_hgl;
 	QDialogButtonBox *but_box;
 	QPoint		holdPnt;
+	QSize		mRowCol;
 };
 
 //************************************************

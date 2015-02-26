@@ -1,3 +1,8 @@
+2015-02-27 Roman
+- FIX:DB.{FireBird,MySQL,PostgreSQL,SQLite}: getVal() expanded by RqFlg for TCfg::ExtValTwo into key and TFld::DateTimeDec using fix.
+- UI.QTCfg: Expanded for TextEdit fields fit to full page, for busy. TextEdit rewrote for internal layout remove.
+
+
 2015-02-26 Roman
 - DB: LibsDB.OscadaLibs.db: User protocols and the data templates some make unified for: UPS, VKT7.
 - FIX:DAQ.OPC_UA: Input: Possible spare requests part drop after no need for now and no error requests fix.
