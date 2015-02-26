@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,18 +63,16 @@ ImgView::~ImgView( )	{ }
 
 bool ImgView::setImage( const string &imgdata )
 {
-    bool rez = m_img.loadFromData((const uchar*)imgdata.c_str(),imgdata.size());
+    bool rez = m_img.loadFromData((const uchar*)imgdata.c_str(), imgdata.size());
 
-    if(rez)
-    {
+    if(rez) {
 	m_img = m_img.scaled(QSize(h_sz?vmin(h_sz,m_img.width()):m_img.width(),
 				   v_sz?vmin(v_sz,m_img.height()):m_img.height()),Qt::KeepAspectRatio);
-	setMinimumSize(m_img.width(),m_img.height());
+	setMinimumSize(m_img.width(), m_img.height());
     }
-    else
-    {
+    else {
 	m_img = QImage();
-	setMinimumSize(200,40);
+	setMinimumSize(200, 40);
     }
 
     update();
@@ -84,17 +82,15 @@ bool ImgView::setImage( const string &imgdata )
 
 void ImgView::paintEvent( QPaintEvent * )
 {
-    QPainter pnt( this );
-    if(m_img.isNull())
-    {
+    QPainter pnt(this);
+    if(m_img.isNull()) {
 	pnt.setWindow(0,0,rect().width(),rect().height());
 	pnt.setPen(QColor(255,0,0));
 	pnt.setBackground(QBrush(QColor(210,237,234)));
 	pnt.drawRect(0,0,199,39);
 	pnt.drawText(3,3,194,34,Qt::AlignCenter,_("Picture is not set!"));
     }
-    else
-    {
+    else {
 	pnt.setWindow( 0, 0, rect().width(), rect().height() );
 	pnt.drawImage(QPoint(0,0),m_img);
 	pnt.setPen(QColor(0,0,255));
@@ -142,8 +138,7 @@ void LineEdit::setType( LType tp )
     if(tp >= 0 && ed_fld) delete ed_fld;
 
     //Create new widget
-    switch(tp)
-    {
+    switch(tp) {
 	case Text:
 	    ed_fld = new QLineEdit(this);
 	    connect((QLineEdit*)ed_fld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
@@ -189,7 +184,7 @@ void LineEdit::setType( LType tp )
 
 void LineEdit::changed( )
 {
-    //> Enable apply
+    //Enable for apply
     if(mPrev && !bt_fld) viewApplyBt(true);
 
     emit valChanged(value());
@@ -198,8 +193,7 @@ void LineEdit::changed( )
 void LineEdit::setValue(const QString &txt)
 {
     if(ed_fld) ed_fld->blockSignals(true);
-    switch(type())
-    {
+    switch(type()) {
 	case Text:
 	    if(txt == ((QLineEdit*)ed_fld)->text()) break;
 	    ((QLineEdit*)ed_fld)->setText(txt);
@@ -237,18 +231,15 @@ void LineEdit::setValue(const QString &txt)
 void LineEdit::setCfg( const QString &cfg )
 {
     if(ed_fld) ed_fld->blockSignals(true);
-    switch(type())
-    {
+    switch(type()) {
 	case Text:	((QLineEdit*)ed_fld)->setInputMask(cfg);	break;
-	case Integer:
-	{
+	case Integer: {
 	    int		minv = 0, maxv = 100, sstep = 1;
 	    string	pref, suff;
-	    if(!cfg.isEmpty())
-	    {
-		minv  = atoi(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
-		maxv  = atoi(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
-		sstep = atoi(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+	    if(!cfg.isEmpty()) {
+		minv  = s2i(TSYS::strSepParse(cfg.toStdString(),0,':'));
+		maxv  = s2i(TSYS::strSepParse(cfg.toStdString(),1,':'));
+		sstep = s2i(TSYS::strSepParse(cfg.toStdString(),2,':'));
 		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
 		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
 	    }
@@ -258,19 +249,17 @@ void LineEdit::setCfg( const QString &cfg )
 	    ((QSpinBox*)ed_fld)->setSuffix(suff.c_str());
 	    break;
 	}
-	case Real:
-	{
+	case Real: {
 	    double minv = 0, maxv = 100, sstep = 1;
 	    string pref, suff;
 	    int    dec = 2;
-	    if( !cfg.isEmpty() )
-	    {
-		minv  = atof(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
-		maxv  = atof(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
-		sstep = atof(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+	    if(!cfg.isEmpty()) {
+		minv  = s2r(TSYS::strSepParse(cfg.toStdString(),0,':'));
+		maxv  = s2r(TSYS::strSepParse(cfg.toStdString(),1,':'));
+		sstep = s2r(TSYS::strSepParse(cfg.toStdString(),2,':'));
 		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
 		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
-		dec   = atoi(TSYS::strSepParse(cfg.toStdString(),5,':').c_str());
+		dec   = s2i(TSYS::strSepParse(cfg.toStdString(),5,':'));
 	    }
 	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
 	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
@@ -282,12 +271,11 @@ void LineEdit::setCfg( const QString &cfg )
 	case Time: case Date: case DateTime:
 	    ((QDateTimeEdit*)ed_fld)->setDisplayFormat(cfg);
 	    break;
-	case Combo:
-	{
+	case Combo: {
 	    QString ctext = ((QComboBox*)ed_fld)->currentText();
 	    ((QComboBox*)ed_fld)->clear();
 	    ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
-	    if( ((QComboBox*)ed_fld)->findText(ctext) < 0 ) ((QComboBox*)ed_fld)->addItem(ctext);
+	    if(((QComboBox*)ed_fld)->findText(ctext) < 0) ((QComboBox*)ed_fld)->addItem(ctext);
 	    ((QComboBox*)ed_fld)->setEditText(ctext);
 	    break;
 	}
@@ -298,8 +286,7 @@ void LineEdit::setCfg( const QString &cfg )
 
 QString LineEdit::value( )
 {
-    switch(type())
-    {
+    switch(type()) {
 	case Text:	return ((QLineEdit*)ed_fld)->text();
 	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
 	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
@@ -324,16 +311,13 @@ void LineEdit::applySlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyRelease && bt_fld)
-    {
+    if(e->type() == QEvent::KeyRelease && bt_fld) {
 	QKeyEvent *keyEvent = (QKeyEvent*)e;
-	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
-	{
+	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
 	    bt_fld->animateClick();
 	    return true;
 	}
-	else if(keyEvent->key() == Qt::Key_Escape)
-	{
+	else if(keyEvent->key() == Qt::Key_Escape) {
 	    emit cancel();
 	    setValue(m_val);
 	    return true;
@@ -354,7 +338,7 @@ void SyntxHighl::setSnthHgl(XMLNode nd)
 {
     rules = nd;
 
-    //> Set current font settings
+    //Set current font settings
     QFont rez;
 
     char family[101]; strcpy(family,"Arial");
@@ -381,27 +365,25 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 
     if(lev > 3) return;
 
-    //> Init previous block continue
+    //Init previous block continue
     int curBlk = (currentBlockState()>>(lev*8))&0xFF;
 
-    //> Stream process by rules
-    for(int i_t = 0; i_t < text.length(); )
-    {
+    //Stream process by rules
+    for(int i_t = 0; i_t < text.length(); ) {
 	if(curBlk && !i_t) { minRule = curBlk-1; minPos = 0; }
 	else minRule = -1;
 
-	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++)
-	{
+	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++) {
 	    if(!(minPos < i_t || rul_pos[i_ch] < i_t || rul_pos[i_ch] < minPos)) continue;
 	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos)	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
 	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos)	{ minRule = i_ch; break; }
 
-	    //> Call rule
+	    //Call rule
 	    rl = irl->childGet(i_ch);
 	    if(rl->name() == "rule")	expr.setPattern(rl->attr("expr").c_str());
 	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
 	    else continue;
-	    expr.setMinimal(atoi(rl->attr("min").c_str()));
+	    expr.setMinimal(s2i(rl->attr("min")));
 	    rul_pos[i_ch] = expr.indexIn(text,i_t);
 	    if(expr.matchedLength() <= 0) continue;
 	    if(rul_pos[i_ch] < 0) rul_pos[i_ch] = text.length();
@@ -409,48 +391,43 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 	}
 	if(minRule < 0)	break;
 
-	//> Process minimal rule
+	//Process minimal rule
 	rl = irl->childGet(minRule);
 	kForm.setForeground(QColor(rl->attr("color").c_str()));
-	kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
-	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
+	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
+	kForm.setFontItalic(s2i(rl->attr("font_italic")));
 
-	if(rl->name() == "rule")
-	{
+	if(rl->name() == "rule") {
 	    expr.setPattern(rl->attr("expr").c_str());
-	    expr.setMinimal(atoi(rl->attr("min").c_str()));
+	    expr.setMinimal(s2i(rl->attr("min")));
 	    if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
 	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
-	    //> Call include rules
+	    //Call include rules
 	    if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
 	    i_t = rul_pos[minRule]+expr.matchedLength();
 	}
-	else if(rl->name() == "blk")
-	{
+	else if(rl->name() == "blk") {
 	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
-	    else
-	    {
+	    else {
 		expr.setPattern(rl->attr("beg").c_str());
-		expr.setMinimal(atoi(rl->attr("min").c_str()));
+		expr.setMinimal(s2i(rl->attr("min")));
 		if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
 		startBlk = rul_pos[minRule]+expr.matchedLength();
 	    }
 	    QRegExp eExpr(rl->attr("end").c_str());
-	    eExpr.setMinimal(atoi(rl->attr("min").c_str()));
+	    eExpr.setMinimal(s2i(rl->attr("min")));
 	    endIndex = eExpr.indexIn(text, startBlk);
-	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
-	    {
+	    if(endIndex == -1 || eExpr.matchedLength() <= 0) {
 		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
 		sizeBlk = text.length()-startBlk;
 		i_t = text.length();
 	    }
-	    else
-	    {
+	    else {
 		setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
 		sizeBlk = endIndex-startBlk;
 		i_t = endIndex + eExpr.matchedLength();
 	    }
-	    //> Call include rules
+	    //Call include rules
 	    if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
 	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
 		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
@@ -478,9 +455,9 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 
     ed_fld = new QTextEdit(this);
 #if QT_VERSION < 0x050000
-    ed_fld->setStyle(new QPlastiqueStyle());	//> Force style set for resize allow everywhere
+    ed_fld->setStyle(new QPlastiqueStyle());	//Force style set for resize allow everywhere
 #else
-    ed_fld->setStyle(new QCommonStyle());	//> Force style set for resize allow everywhere
+    ed_fld->setStyle(new QCommonStyle());	//Force style set for resize allow everywhere
 #endif
     ed_fld->setContextMenuPolicy(Qt::CustomContextMenu);
     ed_fld->setTabStopWidth(20);
@@ -503,8 +480,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFindNext);
 
-    if(!prev_dis)
-    {
+    if(!prev_dis) {
 	but_box = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel, Qt::Horizontal, this);
 	QImage ico_t;
 	but_box->button(QDialogButtonBox::Apply)->setText(_("Apply"));
@@ -565,28 +541,25 @@ void TextEdit::btCancel( )
 
 void TextEdit::curPosChange( )
 {
-    ((QMainWindow*)window())->statusBar()->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
+    ((QMainWindow*)window())->statusBar()->showMessage(QString(_("Cursor = (%1:%2)"))
+	.arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1),10000);
 }
 
 bool TextEdit::event( QEvent *e )
 {
-    if(but_box && e->type() == QEvent::KeyRelease)
-    {
+    if(but_box && e->type() == QEvent::KeyRelease) {
 	QKeyEvent *keyEvent = (QKeyEvent*)e;
-	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier)
-	{
+	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier) {
 	    but_box->button(QDialogButtonBox::Apply)->animateClick();
 	    return true;
 	}
-	else if(keyEvent->key() == Qt::Key_Escape)
-	{
+	else if(keyEvent->key() == Qt::Key_Escape) {
 	    but_box->button(QDialogButtonBox::Cancel)->animateClick();
 	    return true;
 	}
     }
     else if(e->type() == QEvent::MouseButtonPress) holdPnt = mapFromGlobal(cursor().pos());
-    else if(e->type() == QEvent::MouseMove)
-    {
+    else if(e->type() == QEvent::MouseMove) {
 	QPoint curp = mapFromGlobal(cursor().pos());
 	int hg = vmax(50,edit()->size().height()+(curp-holdPnt).y());
 	edit()->setMinimumHeight(hg); edit()->setMaximumHeight(hg);
@@ -611,8 +584,7 @@ void TextEdit::find( )
     bool isFind = false;
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',0,0).toInt();
     QString fstr = actFind->objectName().section(':',1);
-    if(sender() == actFind)
-    {
+    if(sender() == actFind) {
 	InputDlg dlg(this,actFind->icon(),QString(_("Enter text string for search:")),_("String search"),0,0);
 	QLineEdit *le = new QLineEdit(fstr,&dlg);
 	dlg.ed_lay->addWidget(le, 0, 0);
@@ -627,8 +599,7 @@ void TextEdit::find( )
 	dlg.ed_lay->addWidget(ww, 3, 0);
 	le->setFocus(Qt::OtherFocusReason);
 	dlg.resize(400,210);
-	if(dlg.exec() == QDialog::Accepted && !le->text().isEmpty())
-	{
+	if(dlg.exec() == QDialog::Accepted && !le->text().isEmpty()) {
 	    fopt = (QTextDocument::FindFlag)0;
 	    if(bw->checkState() == Qt::Checked) fopt |= QTextDocument::FindBackward;
 	    if(cs->checkState() == Qt::Checked) fopt |= QTextDocument::FindCaseSensitively;
@@ -639,8 +610,7 @@ void TextEdit::find( )
     }
     else if(sender() == actFindNext && !fstr.isEmpty()) isFind = true;
 
-    if(isFind)
-    {
+    if(isFind) {
 	ed_fld->find(fstr,(QTextDocument::FindFlag)fopt);
 	actFind->setObjectName(QString::number(fopt)+":"+fstr);
     }
@@ -652,9 +622,9 @@ void TextEdit::find( )
 CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 {
 #if QT_VERSION < 0x050000
-    setStyle(new QPlastiqueStyle());	//> Force style set for resize allow everywhere
+    setStyle(new QPlastiqueStyle());	//Force style set for resize allow everywhere
 #else
-    setStyle(new QCommonStyle());	//> Force style set for resize allow everywhere
+    setStyle(new QCommonStyle());	//Force style set for resize allow everywhere
 #endif
 }
 
@@ -669,8 +639,7 @@ bool CfgTable::event( QEvent *e )
 {
     if(e->type() == QEvent::MouseButtonPress)
 	holdPnt = mapFromGlobal(cursor().pos());
-    else if(e->type() == QEvent::MouseMove)
-    {
+    else if(e->type() == QEvent::MouseMove) {
 	QPoint curp = mapFromGlobal(cursor().pos());
 	int hg = vmax(50,size().height()+(curp-holdPnt).y());
 	setMinimumHeight(hg); setMaximumHeight(hg);
@@ -696,12 +665,12 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
 
-    //- Icon label and text message -
+    //Icon label and text message
     QHBoxLayout *intr_lay = new QHBoxLayout;
     intr_lay->setSpacing(6);
 
     QLabel *icon_lab = new QLabel(this);
-    icon_lab->setSizePolicy( QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum) );
+    icon_lab->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
     icon_lab->setPixmap(icon.pixmap(48));
     intr_lay->addWidget(icon_lab);
 
@@ -710,91 +679,66 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     intr_lay->addWidget(inpLab);
     dlg_lay->addItem(intr_lay);
 
-    //- Id and name fields -
+    //Id and name fields
     ed_lay = new QGridLayout;
-    if( with_nm || with_id )
-    {
+    if(with_nm || with_id) {
 	ed_lay->setSpacing(6);
-	if( with_id )
-	{
-	    mIdLab = new QLabel(_("ID:"),this);
-	    ed_lay->addWidget( mIdLab, 3, 0 );
+	if(with_id) {
+	    mIdLab = new QLabel(_("ID:"), this);
+	    ed_lay->addWidget(mIdLab, 3, 0);
 	    mId = new QLineEdit(this);
 	    mId->setMaxLength(with_id);
-	    ed_lay->addWidget( mId, 3, 1 );
+	    ed_lay->addWidget(mId, 3, 1);
 	}
-	if( with_nm )
-	{
-	    mNameLab = new QLabel(_("Name:"),this);
-	    ed_lay->addWidget( mNameLab, 4, 0 );
+	if(with_nm) {
+	    mNameLab = new QLabel(_("Name:"), this);
+	    ed_lay->addWidget(mNameLab, 4, 0);
 	    mName = new QLineEdit(this);
 	    mName->setMaxLength(with_nm);
-	    ed_lay->addWidget( mName, 4, 1 );
+	    ed_lay->addWidget(mName, 4, 1);
 	}
     }
 
-    ed_lay->addItem(new QSpacerItem(10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding),100,0,1,-1);
+    ed_lay->addItem(new QSpacerItem(10,0,QSizePolicy::Minimum,QSizePolicy::Expanding), 100, 0, 1, -1);
 
     dlg_lay->addItem(ed_lay);
 
-    //- Qk and Cancel buttons -
+    //Qk and Cancel buttons
     QFrame *sep = new QFrame(this);
-    sep->setFrameShape( QFrame::HLine );
-    sep->setFrameShadow( QFrame::Raised );
-    dlg_lay->addWidget( sep );
+    sep->setFrameShape(QFrame::HLine);
+    sep->setFrameShadow(QFrame::Raised);
+    dlg_lay->addWidget(sep);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox( buttons, Qt::Horizontal, this );
+    QDialogButtonBox *but_box = new QDialogButtonBox(buttons, Qt::Horizontal, this);
     QImage ico_t;
-    if( buttons & QDialogButtonBox::Ok )
-    {
+    if(buttons & QDialogButtonBox::Ok) {
 	but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
 	if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
 	but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
 	connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
     }
-    if( buttons & QDialogButtonBox::Cancel )
-    {
+    if(buttons & QDialogButtonBox::Cancel) {
 	but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
 	if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
 	but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
 	connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     }
-    dlg_lay->addWidget( but_box );
+    dlg_lay->addWidget(but_box);
 
-    resize(400,150+(35*(with_nm?1:0))+(35*(with_id?1:0)));
+    resize(400, 150+(35*(with_nm?1:0))+(35*(with_id?1:0)));
 }
 
-QString InputDlg::id()
-{
-    if( mId )  return mId->text();
-    return "";
-}
+QString InputDlg::id( )		{ return mId ? mId->text() : ""; }
 
-QString InputDlg::name()
-{
-    if( mName )return mName->text();
-    return "";
-}
+QString InputDlg::name( )	{ return mName ? mName->text() : ""; }
 
-QString InputDlg::mess( )
-{
-    return inpLab->text();
-}
+QString InputDlg::mess( )	{ return inpLab->text(); }
 
-void InputDlg::setId(const QString &val)
-{
-    if( mId )  mId->setText(val);
-}
+void InputDlg::setId( const QString &val )	{ if(mId) mId->setText(val); }
 
-void InputDlg::setName(const QString &val)
-{
-    if( mName ) mName->setText(val);
-}
+void InputDlg::setName( const QString &val )	{ if(mName) mName->setText(val); }
 
-void InputDlg::setMess( const QString &val )
-{
-    inpLab->setText( val );
-}
+void InputDlg::setMess( const QString &val )	{ inpLab->setText(val); }
 
 void InputDlg::showEvent( QShowEvent * event )
 {
@@ -809,7 +753,7 @@ void InputDlg::showEvent( QShowEvent * event )
 ReqIdNameDlg::ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg ) :
     InputDlg(parent, icon, mess, ndlg , 20, 500)
 {
-    itTpLab = new QLabel(_("Item type:"),this);
+    itTpLab = new QLabel(_("Item type:"), this);
     ed_lay->addWidget(itTpLab, 0, 0);
     itTp = new QComboBox(this);
     itTp->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -828,10 +772,9 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
 {
     itTp->clear();
     int defPos = 0;
-    for(unsigned i_t = 0; i_t < tgs.size(); i_t++)
-    {
+    for(unsigned i_t = 0; i_t < tgs.size(); i_t++) {
 	itTp->addItem(TSYS::strSepParse(tgs[i_t],3,'\n').c_str(), tgs[i_t].c_str());
-	if(atoi(TSYS::strSepParse(tgs[i_t],4,'\n').c_str())) defPos = itTp->count()-1;
+	if(s2i(TSYS::strSepParse(tgs[i_t],4,'\n'))) defPos = itTp->count()-1;
     }
     if(tgs.size()) itTp->setCurrentIndex(defPos);
     bool tpView = !(itTp->count()==1 && itTp->itemText(0).isEmpty());
@@ -843,10 +786,10 @@ void ReqIdNameDlg::selectItTp( int it )
 {
     if(it < 0) return;
     string its = itTp->itemData(it).toString().toStdString();
-    int idSz = atoi(TSYS::strSepParse(its,0,'\n').c_str());
+    int idSz = s2i(TSYS::strSepParse(its,0,'\n'));
     if(idSz > 0) mId->setMaxLength(idSz);
     mIdLab->setVisible(idSz>=0); mId->setVisible(idSz>=0);
-    int idm = atoi(TSYS::strSepParse(its,1,'\n').c_str());	//Default idm is boolean for id-mode, enable name
+    int idm = s2i(TSYS::strSepParse(its,1,'\n'));	//Default idm is boolean for id-mode, enable name
     if(idm > 1)	mName->setMaxLength(idm);
     mNameLab->setVisible(idm); mName->setVisible(idm);
 }
@@ -864,24 +807,23 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 
     QGridLayout *ed_lay = new QGridLayout;
     ed_lay->setSpacing(6);
-    ed_lay->addWidget( new QLabel(_("User:"),this), 0, 0 );
+    ed_lay->addWidget(new QLabel(_("User:"),this), 0, 0);
     users = new QComboBox(this);
-    ed_lay->addWidget( users, 0, 1 );
-    ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );
+    ed_lay->addWidget(users, 0, 1);
+    ed_lay->addWidget(new QLabel(_("Password:"),this), 1, 0);
     passwd = new QLineEdit(this);
-    passwd->setEchoMode( QLineEdit::Password );
-    ed_lay->addWidget( passwd, 1, 1 );
+    passwd->setEchoMode(QLineEdit::Password);
+    ed_lay->addWidget(passwd, 1, 1);
     dlg_lay->addItem(ed_lay);
 
-    dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    dlg_lay->addItem(new QSpacerItem(20,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
 
     QFrame *sep = new QFrame(this);
-    sep->setFrameShape( QFrame::HLine );
-    sep->setFrameShadow( QFrame::Raised );
-    dlg_lay->addWidget( sep );
+    sep->setFrameShape(QFrame::HLine);
+    sep->setFrameShadow(QFrame::Raised);
+    dlg_lay->addWidget(sep);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox( QDialogButtonBox::Ok|
-						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
@@ -895,12 +837,11 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
-    //- Fill users list -
+    //Fill users list
     vector<string> u_list;
     SYS->security().at().usrList(u_list);
-    for(unsigned i_l = 0; i_l < u_list.size(); i_l++)
-    {
-	string simg = TSYS::strDecode(SYS->security().at().usrAt(u_list[i_l]).at().picture(),TSYS::base64);
+    for(unsigned i_l = 0; i_l < u_list.size(); i_l++) {
+	string simg = TSYS::strDecode(SYS->security().at().usrAt(u_list[i_l]).at().picture(), TSYS::base64);
 	QImage img;
 	if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 	    users->addItem(QPixmap::fromImage(img),u_list[i_l].c_str());
@@ -908,20 +849,13 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
     }
 }
 
-QString DlgUser::user( )
-{
-    return users->currentText();
-}
+QString DlgUser::user( )	{ return users->currentText(); }
 
-QString DlgUser::password()
-{
-    return passwd->text();
-}
+QString DlgUser::password( )	{ return passwd->text(); }
 
 void DlgUser::finish( int result )
 {
-    if( result )
-    {
+    if(result) {
 	//Check user
 	if(SYS->security().at().usrPresent(user().toStdString()) &&
 		SYS->security().at().usrAt(user().toStdString()).at().auth(password().toStdString()))
@@ -964,14 +898,13 @@ bool UserStBar::userSel( )
 {
     DlgUser d_usr(parentWidget());
     int rez = d_usr.exec();
-    if(rez == DlgUser::SelOK && d_usr.user() != user())
-    {
+    if(rez == DlgUser::SelOK && d_usr.user() != user()) {
 	setUser(d_usr.user());
 	emit userChanged();
 	return true;
     }
     else if(rez == DlgUser::SelErr)
-        mod->postMess(mod->nodePath().c_str(),_("Auth is wrong!!!"),TUIMod::Warning,this);
+	mod->postMess(mod->nodePath().c_str(),_("Auth is wrong!!!"),TUIMod::Warning,this);
 
     return false;
 }
@@ -1024,21 +957,20 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
     QVariant val_user = index.data(Qt::UserRole);
 
     if(val_user.isValid()) w_del = new QComboBox(parent);
-    else if(value.type() == QVariant::String)
-    {
-        w_del = new QTextEdit(parent);
-        ((QTextEdit*)w_del)->setTabStopWidth(40);
-        ((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
-        ((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        ((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        //((QTextEdit*)w_del)->resize(50,50);
+    else if(value.type() == QVariant::String) {
+	w_del = new QTextEdit(parent);
+	((QTextEdit*)w_del)->setTabStopWidth(40);
+	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
+	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	//((QTextEdit*)w_del)->resize(50,50);
     }
-    else
-    {
+    else {
 	QItemEditorFactory factory;
 	w_del = factory.createEditor(value.type(), parent);
     }
     w_del->installEventFilter(const_cast<TableDelegate*>(this));
+
     return w_del;
 }
 
@@ -1047,12 +979,10 @@ void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) c
     QVariant value = index.data(Qt::DisplayRole);
     QVariant val_user = index.data(Qt::UserRole);
 
-    if(dynamic_cast<QComboBox*>(editor))
-    {
+    if(dynamic_cast<QComboBox*>(editor)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	if(value.type() == QVariant::Bool) comb->setCurrentIndex(value.toBool());
-	else if(val_user.isValid())
-	{
+	else if(val_user.isValid()) {
 	    comb->clear();
 	    comb->addItems(val_user.toStringList());
 	    comb->setCurrentIndex(comb->findText(value.toString()));
@@ -1065,16 +995,15 @@ void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) c
 
 void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
 {
-    if(dynamic_cast<QComboBox*>(editor))
-    {
+    if(dynamic_cast<QComboBox*>(editor)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	QVariant val_user = index.data(Qt::UserRole);
 	if(!val_user.isValid())
-	    model->setData(index,(bool)comb->currentIndex(),Qt::EditRole);
-	else model->setData(index,comb->currentText(),Qt::EditRole);
+	    model->setData(index, (bool)comb->currentIndex(), Qt::EditRole);
+	else model->setData(index, comb->currentText(), Qt::EditRole);
     }
-    else if(dynamic_cast<QTextEdit*>(editor))	model->setData(index, ((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
-    else if(dynamic_cast<QLineEdit*>(editor))	model->setData(index, ((QLineEdit*)editor)->text(),Qt::EditRole);
+    else if(dynamic_cast<QTextEdit*>(editor))	model->setData(index, ((QTextEdit*)editor)->toPlainText(), Qt::EditRole);
+    else if(dynamic_cast<QLineEdit*>(editor))	model->setData(index, ((QLineEdit*)editor)->text(), Qt::EditRole);
     else QItemDelegate::setModelData(editor, model, index);
 }
 
@@ -1085,12 +1014,10 @@ void TableDelegate::updateEditorGeometry( QWidget *editor, const QStyleOptionVie
 
 bool TableDelegate::eventFilter( QObject *object, QEvent *event )
 {
-    if( dynamic_cast<QComboBox*>(object) )
-    {
+    if(dynamic_cast<QComboBox*>(object)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(object);
-	if( event->type() == QEvent::KeyRelease )
-	    switch( static_cast<QKeyEvent *>(event)->key() )
-	    {
+	if(event->type() == QEvent::KeyRelease)
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
 		    emit commitData(comb);
@@ -1103,25 +1030,22 @@ bool TableDelegate::eventFilter( QObject *object, QEvent *event )
 		    return false;
 	    }
     }
-    else if(dynamic_cast<QTextEdit*>(object))
-    {
-        QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
-        if(event->type() == QEvent::KeyPress)
-            switch(static_cast<QKeyEvent *>(event)->key())
-            {
-                case Qt::Key_Enter:
-                case Qt::Key_Return:
-                    if( QApplication::keyboardModifiers()&Qt::ControlModifier )
-                    {
-                        emit commitData(ted);
-                        emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
-                        return true;
-                    }
-                    else return false;
-                case Qt::Key_Escape:
-                    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
-                    return true;
-            }
+    else if(dynamic_cast<QTextEdit*>(object)) {
+	QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
+	if(event->type() == QEvent::KeyPress)
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
+		case Qt::Key_Enter:
+		case Qt::Key_Return:
+		    if(QApplication::keyboardModifiers()&Qt::ControlModifier) {
+			emit commitData(ted);
+			emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
+			return true;
+		    }
+		    else return false;
+		case Qt::Key_Escape:
+		    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
+		    return true;
+	    }
     }
 
     return QItemDelegate::eventFilter(object,event);

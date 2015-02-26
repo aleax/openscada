@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,10 +60,10 @@ class LineEdit : public QWidget
     Q_OBJECT
 
     public:
-	//> Data
+	//Data
 	enum LType { Text, Integer, Real, Time, Date, DateTime, Combo };
 
-	//> Methods
+	//Methods
 	LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
 
 	LType type( )		{ return m_tp; }
@@ -335,7 +335,7 @@ class TableDelegate : public QItemDelegate
     Q_OBJECT
 
     public:
-	//> Public attributes
+	//Public attributes
 	TableDelegate( QObject *parent = 0 );
 
 	//QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
@@ -350,7 +350,7 @@ class TableDelegate : public QItemDelegate
 	void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 
     private:
-	//> Private attributes
+	//Private attributes
 	bool eventFilter( QObject *object, QEvent *event );
 };
 

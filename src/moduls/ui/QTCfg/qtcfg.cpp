@@ -990,16 +990,16 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	// Set node icon
 	if(node.childGet("id","ico",true)) {
 	    XMLNode req("get");
-	    req.setAttr("path",TSYS::strEncode(a_path+"ico",TSYS::PathEl));
-	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
+	    req.setAttr("path", TSYS::strEncode(a_path+"ico",TSYS::PathEl));
+	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    else if(rez == 0) {
-		string simg = TSYS::strDecode(req.text(),TSYS::base64);
+		string simg = TSYS::strDecode(req.text(), TSYS::base64);
 		QImage img;
 		if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 		    titleIco->setPixmap(QPixmap::fromImage(img.scaled(32,32,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
 		else titleIco->clear();
 	    }
-	}else titleIco->clear();
+	} else titleIco->clear();
 
 	// Set title
 	titleLab->setText((string("<p align='center'><i><b>")+TSYS::strEncode(node.attr("dscr"),TSYS::Html)+"</b></i></p>").c_str());
@@ -1055,9 +1055,17 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    //tabs->showPage(tabs->currentWidget());
 
 		    //  Mark last drawed tabs
-		    t_s.setAttr("qview","1");
+		    t_s.setAttr("qview", "1");
 		}
-		else selectChildRecArea(t_s,a_path+t_s.attr("id")+"/");
+		else {
+		    selectChildRecArea(t_s, a_path+t_s.attr("id")+"/");
+
+		    // Get scalable by vertical elements and grow its up to scroll appear into the container
+		    //QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
+		    //QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
+		    //QList<CfgTable*> tbls = scrl->findChildren<CfgTable*>();
+		    //printf("TEST 01: '%ph'; texts=%d; tbls=%d; vScrl=%d\n", scrl, texts.length(), tbls.length(), scrl->verticalScrollBar()->value());
+		}
 	    }
 	    //else t_s.attr("qview","0");	//Mark no view tabs
 	    i_area++;
@@ -1083,7 +1091,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		//w_lay->setAlignment( Qt::AlignTop );
 		widget->layout()->addWidget(wdg);
 	    }
-	    selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg);
+	    selectChildRecArea(t_s, a_path+t_s.attr("id")+'/', wdg);
 	}
 	// View list elements
 	else if(t_s.name() == "list") {
@@ -1111,15 +1119,15 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		vbox->setAlignment(Qt::AlignLeft);
 		lab = new QLabel(widget);
 		vbox->addWidget(lab);
-                vbox->addWidget(lstbox);
+		vbox->addWidget(lstbox);
 		widget->layout()->addItem(vbox);
 
-		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
-		t_s.setAttr("addr_el",TSYS::addr2str(lstbox));
+		t_s.setAttr("addr_lab", TSYS::addr2str(lab));
+		t_s.setAttr("addr_el", TSYS::addr2str(lstbox));
 	    }
 	    else {
-		lab    = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
-		lstbox = (QListWidget *)TSYS::str2addr(t_s.attr("addr_el"));
+		lab	= (QLabel*)TSYS::str2addr(t_s.attr("addr_lab"));
+		lstbox	= (QListWidget*)TSYS::str2addr(t_s.attr("addr_el"));
 		lstbox->clear();
 	    }
 	    //  Fill list
@@ -1137,7 +1145,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	}
 	// View table elements
 	else if(t_s.name() == "table") {
-	    string br_path = TSYS::strEncode(a_path+t_s.attr("id"),TSYS::PathEl);
+	    string br_path = TSYS::strEncode(a_path+t_s.attr("id"), TSYS::PathEl);
 
 	    //QLabel *lab;
 	    CfgTable *tbl;
@@ -1603,6 +1611,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    edit->edit()->setMinimumHeight(2*edit->edit()->currentFont().pointSize()*s2i(t_s.attr("rows")));
 		}
 		if(s2i(t_s.attr("cols"))) {
+		    edit->edit()->setWordWrapMode(QTextOption::WordWrap);
 		    edit->edit()->setLineWrapMode(QTextEdit::FixedColumnWidth);
 		    edit->edit()->setLineWrapColumnOrWidth(s2i(t_s.attr("cols")));
 		}

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.UserProtocol file: user_prt.h
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -82,6 +82,7 @@ class UserPrt : public TCntrNode, public TConfig
 	string outProg( );
 	string workInProg( )	{ return mWorkInProg; }
 	string workOutProg( )	{ return mWorkOutProg; }
+	int64_t timeStamp( )	{ return mTimeStamp; }
 
 	string getStatus( );
 
@@ -124,6 +125,7 @@ class UserPrt : public TCntrNode, public TConfig
 	//Attributes
 	TCfg	&mId;
 	char	&mAEn, mEn;
+	int64_t	&mTimeStamp;
 	string	mDB, mWorkInProg, mWorkOutProg;
 };
 

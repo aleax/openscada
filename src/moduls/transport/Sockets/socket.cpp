@@ -416,6 +416,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 			FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
 			int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
+			//???? May be some flush ????
 		    }
 		    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
@@ -627,6 +628,7 @@ void *TSocketIn::ClTask( void *s_inf )
 			FD_ZERO(&rw_fd); FD_SET(s.cSock, &rw_fd);
 			kz = select(s.cSock+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(s.cSock,&rw_fd)) { wL = 0; continue; }
+			//???? May be some flush ????
 		    }
 		    mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
@@ -671,12 +673,16 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 	    n_pr = id() + i2s(sock);
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	    prot_in = proto.at().at(n_pr);
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
 	}
 	if(prot_in.at().mess(request,answer)) return;
 	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	n_pr = prot_in.at().name();
 	prot_in.free();
 	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(nodePath().c_str(), _("Input protocol's object '%s' closed by self!"), n_pr.c_str());
     }
     catch(TError err) {
 	if(!prot_in.freeStat()) {

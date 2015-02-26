@@ -327,7 +327,7 @@ namespace VISION
 	    bool	allAttrLoad( )	{ return mAllAttrLoad; }
 
 	    void	moveF( const QPointF &pos );
-	    void	resizeF( const QSizeF &size );
+	    virtual void resizeF( const QSizeF &size );
 	    void	setZ( int vl )	{ z_coord = vl; }
 	    void	setAllAttrLoad( bool vl )	{ mAllAttrLoad = vl; }
 

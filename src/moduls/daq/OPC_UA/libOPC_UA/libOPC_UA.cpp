@@ -3175,8 +3175,11 @@ nextReq:
     }
     catch(OPCError er) {
 	if(dbg && er.cod) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
-	if(er.cod) { out = mkError(er.cod, er.mess); holdConn = false; }
-	mSz = rba.size();	//Drop request for prevent broken requests hang
+	if(er.cod) {
+	    out = mkError(er.cod, er.mess);
+	    holdConn = false;
+	    mSz = rba.size();	//Drop request for prevent broken requests hang, only for er.cod != 0
+	}
     }
 
     if(answ) answ->append(out);

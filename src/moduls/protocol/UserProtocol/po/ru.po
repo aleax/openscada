@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:53+0200\n"
+"POT-Creation-Date: 2015-02-25 17:48+0200\n"
 "PO-Revision-Date: 2010-03-04 21:26+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -39,13 +39,16 @@ msgid "To enable"
 msgstr "Включать"
 
 msgid "Program translation allow"
-msgstr ""
+msgstr "Переводить программу"
 
 msgid "Input program"
 msgstr "Входная программа"
 
 msgid "Output program"
 msgstr "Выходная программа"
+
+msgid "Date of modification"
+msgstr "Дата модификации"
 
 msgid "Search and create new user protocol error."
 msgstr "Ошибка поиска и создания нового пользовательского протокола."

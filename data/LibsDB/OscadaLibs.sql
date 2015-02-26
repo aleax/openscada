@@ -25,7 +25,7 @@ INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','error','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','abort','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','rez','1','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','arg1','10','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','9.4','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_frq','5','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_start','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_stop','0','','');
@@ -37,7 +37,7 @@ INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','stop','1','','');
 CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ParamTemplLibs" VALUES('S7','S7','','Templates library of parameters for PLC series S7 of firm Siemens.','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.');
 INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Allow realisation of the main templates.','Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Предоставляет реализацию базовых шаблонов.');
-INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','Library for realization acquisition from various devices.','Бібліотека реалізації опитування для різноманітних пристроїв.','tmplib_DevLib','Библиотека устройств','Библиотека реализации сбора с различных устройств.');
+INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -1092,14 +1092,14 @@ INSERT INTO "prescr_val" VALUES('curMode','-2');
 INSERT INTO "prescr_val" VALUES('prog','abcd');
 INSERT INTO "prescr_val" VALUES('startTm','1413479709');
 INSERT INTO "prescr_val" VALUES('curCom','3');
-INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg comCur="1" comN="" comPath="" name="abcd" seekPos="1" wtm="52">
-<XMLNodeObj:com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;" rez="1:Waiting 5s expired" tm="1413479709">
+INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg name="abcd" seekPos="1" wtm="52">
+<XMLNodeObj:com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
 </XMLNodeObj:com>
-<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.1" proc="&lt;EVAL&gt;" rez="1:Waiting 10s expired" tm="1413479715">
-<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.2" proc="&lt;EVAL&gt;" rez="1:Waiting 15s expired" tm="1413479725">
+<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.1" proc="&lt;EVAL&gt;">
+<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.2" proc="&lt;EVAL&gt;">
 </XMLNodeObj:com>
 </XMLNodeObj:com>
-<XMLNodeObj:com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;" rez="1:Waiting 20s expired" tm="1413479741">
+<XMLNodeObj:com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
 </XMLNodeObj:com>
 </XMLNodeObj:prg>
 ');
@@ -1117,7 +1117,11 @@ INSERT INTO "prescr_val" VALUES('comLs','<TVarObj>
 </TVarObj>
 </TVarObj>
 ');
-INSERT INTO "prescr_val" VALUES('clcCnt','10281614');
+INSERT INTO "prescr_val" VALUES('clcCnt','10314183');
+INSERT INTO "prescr_val" VALUES('f_frq','5');
+INSERT INTO "prescr_val" VALUES('f_start','0');
+INSERT INTO "prescr_val" VALUES('f_stop','0');
+INSERT INTO "prescr_val" VALUES('this','<TCntrNodeObj path="/sub_DAQ/mod_JavaLikeCalc/cntr_prescr/"/>');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
 значений датчиков.
@@ -1743,7 +1747,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','trAddr','Transport',0,64,'Transpor
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhH','Archiver: hours',0,64,'',2,'Архиватор: часы','','Архіватор: години','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhD','Archiver: days',0,64,'',3,'Архиватор: дни','','Архіватор: дні','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhRes','Archiver: results-month',0,64,'',4,'Архиватор: результаты-месяцы','','Архіватор: результати-місяці','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','maxDayDepth','Archiver: maximum readed depth for no hours archiver, days',1,64,'366',5,'Архиватор: максимум читаемой глубины для нечасового архиватора, дней','','Архіватор: максимум глибини читання для негодинного архіватора, днів','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','maxDayDepth','Archiver: maximum read depth for no hours archiver, days',1,64,'366',5,'Архиватор: максимум читаемой глубины для нечасового архиватора, дней','','Архіватор: максимум глибини читання для негодинного архіватора, днів','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastResTm','Last result months read time (s)',1,33,'0',6,'Время последнего чтения результирующих месяцев (с)','','Час останього читання результуючих місяців (с)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftResTm','Left result months for read from archive',1,17,'',7,'Осталось результ. месяцев для чтения из архива','','Залишилося результ. місяців для читання із архіву','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastDTm','Last days read time (s)',1,33,'0',8,'Время последнего чтения дней (с)','','Час останього читання днів (с)','');
@@ -1752,10 +1756,10 @@ INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastHTm','Last hours read time (s)
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftHTm','Left hours for read from archive',1,17,'',11,'Осталось часов для чтения из архива','','Залишилося годин для читання із архіву','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','diffTm','Difference time (server-counter), hours',1,16,'',12,'Разница времени (сервер-счётчик), часы','','Різниця часу (сервер-лічильник), години','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','firmVer','Firmware version',2,16,'',13,'Версия прошивки','','Версія прошивки','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','abonId','Abonent ID',0,16,'',14,'ID абонента','','ID абоненту','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','abonId','Subscriber ID',0,16,'',14,'ID абонента','','ID абоненту','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','repDay','Report day',1,16,'',15,'День отчёта','','День звіту','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','netNum','Network number',1,16,'',16,'Сетевой номер','','Мережевий номер','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','modelImpl','Model implementaton',1,16,'',17,'Реализация модели','','Реалізація моделі','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','modelImpl','Model implementation',1,16,'',17,'Реализация модели','','Реалізація моделі','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','tTypeM','t: dimension',0,16,'',18,'t: ед. измерения','','t: од. виміру','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','GTypeM','G: dimension',0,16,'',19,'G: ед. измерения','','G: од. виміру','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','VTypeM','V: dimension',0,16,'',20,'V: ед. измерения','','V: од. виміру','');
@@ -3724,7 +3728,8 @@ else {
 }
 
 f_err = t_err;','','',1424633101);
-INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','','','',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
+Author: Roman Savochenko <rom_as@oscada.org>','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 
 alLev = 0;
@@ -3829,8 +3834,10 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1416765527);
-INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','VKT-7','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,0,'JavaLikeCalc.JavaScript
+f_err = tErr;','','',1424792709);
+INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','VKT-7','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed. The template implement acquisition for all significant parameters, get history by hours, days and result months. Also you can simple enough append for process other left parameters.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vladislav Chubuk','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
 if(f_start) {
@@ -4182,7 +4189,7 @@ if(t_err.length) {
 	f_err = t_err;
 	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
 }
-else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1416766326);
+else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1424878121);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -5580,7 +5587,7 @@ if( impAnImit )
   return max(0,min(100,out));
 }
 return impAnOut;','','','');
-CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
 Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,'','','JavaLikeCalc.JavaScript
 //Request form:
@@ -5622,11 +5629,10 @@ if(io.name() == "send") {
 	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error sent SMS PDU")); return; }
 	io.setAttr("err", "0");
 	//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
-}','');
+}','',1424879673);
 INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vacuum technologies laboratory (http://e-beam.ru).','','',1,0,'JavaLikeCalc.JavaScript
-','','JavaLikeCalc.JavaScript
+Sponsored: Vacuum technologies laboratory (http://e-beam.ru).','','',1,0,'','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -5689,11 +5695,10 @@ for(i_k = 1; i_k <= k; i_k++) {
 		io.setAttr("err","8:"+tr("Unknown block end."));
 		return;
 	}
-}','');
+}','',1424879664);
 INSERT INTO "UserProtocol_uPrt" VALUES('TMH','Power supply for turbomolecular pumps','','','Protocol level of power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vacuum technologies laboratory (http://e-beam.ru).','','',1,0,'JavaLikeCalc.JavaScript
-','','JavaLikeCalc.JavaScript
+Sponsored: Vacuum technologies laboratory (http://e-beam.ru).','','',1,0,'','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;
@@ -5723,51 +5728,51 @@ if(resp.length < 6 || resp[resp.length-1] != "\r" || resp.slice(0,2) != "MJ" || 
 CRC = 0;
 for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
 if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:"+tr("CRC error.")); return; }
-io.setText(resp.slice(4,resp.length-3));','');
-INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',1,1,'','','JavaLikeCalc.JavaScript
+io.setText(resp.slice(4,resp.length-3));','',1424879695);
+INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vladislav Chubuk','','',1,0,'','','JavaLikeCalc.JavaScript
 //Request form:
-//<mess addr="1">{req}</mess> - message tag
-//  addr - remote station address (0...254)
-
-io.setAttr("err","");
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (0...254);
+//  err - sets for the request result.
+io.setAttr("err", "");
 addr = io.attr("addr").toInt();
-if(addr < 0 || addr > 254) { io.setAttr("err","1:Device address out of range 0...254"); return; }
-request = SYS.strFromCharCode(addr)+io.text();
-//> Calc KS
+if(addr < 0 || addr > 254) { io.setAttr("err", "1:"+tr("Device address out of range 0...254")); return; }
+request = SYS.strFromCharCode(addr) + io.text();
+//Calc KS
 KS = 0xFFFF;
-for(i = 0; i < request.length; i++)
-{
+for(i = 0; i < request.length; i++) {
 	KS = KS ^ request.charCodeAt(i);
 	for(j = 0; j < 8; j++)
 		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
 }
-request = SYS.strFromCharCode(0xFF,0xFF)+request+SYS.strFromCharCode(KS,KS>>8);
+request = SYS.strFromCharCode(0xFF,0xFF) + request + SYS.strFromCharCode(KS,KS>>8);
 SYS.messDebug("/VKT7/PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
 
 //Send request
 resp = tr.messIO(request);
-while(resp.length)
-{
+while(resp.length) {
 	tresp = tr.messIO("");
 	if(!tresp.length) break;
   	resp += tresp;
 }
-if(resp.length < 4 || resp.charCodeAt(0) != addr)	{ io.setAttr("err","2:No or error respond"); return; }
+if(resp.length < 4 || resp.charCodeAt(0) != addr)	{ io.setAttr("err", "2:"+tr("No or error respond")); return; }
 SYS.messDebug("/VKT7/PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
 
-//> Calc KS
+//Calc KS
 KS = 0xFFFF;
-for(i = 0; i < (resp.length-2); i++)
-{
+for(i = 0; i < (resp.length-2); i++) {
 	KS = KS ^ resp.charCodeAt(i);
 	for(j = 0; j < 8; j++)
 		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
 }
 if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
-{ io.setAttr("err","6:KS error "+KS.toString(16,4)+"=="+((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)).toString(16,4)); return; }
+{ io.setAttr("err","6:"+tr("KS error")+" "+KS.toString(16,4)+"=="+((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)).toString(16,4)); return; }
 if(resp.charCodeAt(1)&0x80)
-{ io.setAttr("err","7:"+resp.charCodeAt(2)+":Request error."); return; }
-io.setText(resp.slice(1,-2));','');
+{ io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
+io.setText(resp.slice(1,-2));','',1424879706);
 INSERT INTO "UserProtocol_uPrt" VALUES('DCON','DCON','','','Mostly aimed for example implement user protocols into OpenSCADA and contains only main functions into the protocol part.
 Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,'JavaLikeCalc.JavaScript
 //Processing: test implements only processing for requests ''#'' and ''@'' with fixed reply data.
@@ -5832,7 +5837,7 @@ else if(resp.length < 2 || resp[resp.length-1] != "\r") { io.setAttr("err","10:"
 if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
 //The result return
 io.setAttr("err","");
-io.setText(resp.slice(1,resp.length-3));','');
+io.setText(resp.slice(1,resp.length-3));','',1424879498);
 INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
 Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,'','','JavaLikeCalc.JavaScript
 //Request form:
@@ -5875,5 +5880,5 @@ for(i = 1; i < min(KSpos+1,resp.length); i++) {
 		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
 }
 if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:"+tr("KS error.")); return; }
-io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','');
+io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','',1424879686);
 COMMIT;

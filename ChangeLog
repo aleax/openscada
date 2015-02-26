@@ -1,3 +1,14 @@
+2015-02-26 Roman
+- DB: LibsDB.OscadaLibs.db: User protocols and the data templates some make unified for: UPS, VKT7.
+- FIX:DAQ.OPC_UA: Input: Possible spare requests part drop after no need for now and no error requests fix.
+- Protocol.UserProtocol: Timestamp for last the user object modification is added.
+- Transport.Sockets: Some debug messages about the input protocol interaction (create and close) is added.
+- UI.QTCfg: Strong words wrap set to TextEdit widget, mostly for long descriptions.
+    Some preparings to fit widgets like to TextEdit, CfgTable and List to full page size by vertical.
+- UI.{Vision,WebVision}: True include widgets size scaling is added by scale edged point, for correct fit each to other at any scale.
+    The new size scale policy excluded and used minimal for pages, to UI.Vision, for allow fit to containers without the scroll appear.
+
+
 2015-02-23 Roman
 - FIX:SYS,Transport.Sockets,UI.{Vision,WebVision}: Some warnings about comparing signed and unsigned fix.
 - FIX:DAQ.MMS: RejectErrs and ConfirmErrs obtain fixed.

@@ -595,8 +595,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	var xSc = this.xScale(true);
 	var ySc = this.yScale(true);
-	var geomW = realRound(parseFloat(this.attrs['geomW'])*xSc);
-	var geomH = realRound(parseFloat(this.attrs['geomH'])*ySc);
+	var geomW = parseFloat(this.attrs['geomW'])*xSc;
+	var geomH = parseFloat(this.attrs['geomH'])*ySc;
 
 	this.mousedown = new Array;
 	this.mouseup = new Array;
@@ -609,6 +609,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    geomH = Math.max(geomH, geomHpar);
 	}
 	//else elStyle += 'overflow: hidden; ';
+
+	geomW = realRound(geomX+geomW-xSc) - realRound(geomX) + 1;
+	geomH = realRound(geomY+geomH-ySc) - realRound(geomY) + 1;
 
 	geomW -= 2*(elMargin+elBorder);
 	geomH -= 2*(elMargin+elBorder);

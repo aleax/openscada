@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:53+0200\n"
+"POT-Creation-Date: 2015-02-25 17:48+0200\n"
 "PO-Revision-Date: 2010-03-04 21:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -38,13 +38,16 @@ msgid "To enable"
 msgstr "Вмикати"
 
 msgid "Program translation allow"
-msgstr ""
+msgstr "Перекладати програму"
 
 msgid "Input program"
 msgstr "Вхідна програма"
 
 msgid "Output program"
 msgstr "Вихідна програма"
+
+msgid "Date of modification"
+msgstr "Дата модифікації"
 
 msgid "Search and create new user protocol error."
 msgstr "Помилка пошуку та створення протоколу користувача."

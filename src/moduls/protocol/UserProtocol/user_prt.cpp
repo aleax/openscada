@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -91,6 +91,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("PR_TR",_("Program translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
     mUPrtEl.fldAdd(new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
+    mUPrtEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 }
 
 TProt::~TProt( )
@@ -258,7 +259,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	funcV.setS(2, "");
 	funcV.setS(3, srcAddr());
 	//Call processing
-	funcV.calc( );
+	funcV.calc();
 	//Get outputs
 	bool rez = funcV.getB(0);
 	if(!rez) funcV.setS(1,"");
@@ -267,8 +268,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	up.at().cntInReq++;
 
 	return rez;
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     return false;
 }
@@ -277,7 +277,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 //* UserPrt                                       *
 //*************************************************
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
+    TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb)
 {
     mId = iid;
     cfg("InPROG").setExtVal(true);
@@ -381,6 +381,7 @@ void UserPrt::load_( )
 
 void UserPrt::save_( )
 {
+    mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
@@ -451,11 +452,13 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
 		ctrRemoveNode(opt,"/up/cfg/InPROG");
 		ctrRemoveNode(opt,"/up/cfg/OutPROG");
+		ctrRemoveNode(opt,"/up/cfg/TIMESTAMP");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),RWRW__,"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
@@ -482,20 +485,19 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
     if(a_path == "/up/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
     else if(a_path == "/up/st/en_st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
     else if(a_path == "/up/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
-    else if((a_path == "/up/cfg/plangIls" || a_path == "/up/cfg/plangOls") && ctrChkNode(opt))
-    {
+    else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
+    else if((a_path == "/up/cfg/plangIls" || a_path == "/up/cfg/plangOls") && ctrChkNode(opt)) {
 	string tplng = (a_path=="/up/cfg/plangIls") ? inProgLang() : outProgLang();
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
-	{
+	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
