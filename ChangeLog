@@ -1,4 +1,5 @@
 2015-02-27 Roman
+- FIX:DAQ.OPC_UA: Big message's parts into the input protocol's part merge and wait fix.
 - FIX:DB.{FireBird,MySQL,PostgreSQL,SQLite}: getVal() expanded by RqFlg for TCfg::ExtValTwo into key and TFld::DateTimeDec using fix.
 - UI.QTCfg: Expanded for TextEdit fields fit to full page, for busy. TextEdit rewrote for internal layout remove.
 

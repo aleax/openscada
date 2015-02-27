@@ -1975,14 +1975,14 @@ nextReq:
     off = 4;
 
     try {
-	if(rba.size() < 8) return false;
+	if(rba.size() < 8) return holdConn;
 	mSz = iNu(rba, off, 4);
 	rb = rba.substr(0, std::min(mSz,(uint32_t)rba.size()));
 
 	//Check for hello message type
 	if(rb.compare(0,4,"HELF") == 0) {
 	    if(rb.size() > 4096) throw OPCError(OpcUa_BadTcpMessageTooLarge, "", "");
-	    if(rb.size() < mSz) return false;
+	    if(rb.size() < mSz) return holdConn;
 
 	    if(dbg) debugMess("HELLO Req");
 
@@ -2013,7 +2013,7 @@ nextReq:
 	}
 	//Check for Open SecureChannel message type
 	else if(rb.compare(0,4,"OPNF") == 0) {
-	    if(rb.size() < mSz) return false;
+	    if(rb.size() < mSz) return holdConn;
 	    if(dbg) debugMess("OPN Req");
 
 	    off = 8;
@@ -2145,7 +2145,7 @@ nextReq:
 	}
 	//Check for Close SecureChannel message type
 	else if(rb.compare(0,4,"CLOF") == 0) {
-	    if(rb.size() < mSz) return false;
+	    if(rb.size() < mSz) return holdConn;
 	    if(dbg) debugMess("CLO Req");
 
 	    off = 8;
@@ -2188,7 +2188,7 @@ nextReq:
 	}
 	//Check for SecureChannel message type
 	else if(rb.compare(0,4,"MSGF") == 0) {
-	    if(rb.size() < mSz) return false;
+	    if(rb.size() < mSz) return holdConn;
 	    off = 8;
 	    uint32_t stCode = 0;
 	    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
