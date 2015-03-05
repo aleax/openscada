@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -97,11 +97,11 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6","0","0;100"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;1000"));
+    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour)"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
     fldAdd(new TFld("GATH_MESS_LEV",_("Gather messages level"),TFld::Integer,TFld::Selected,"1","1",
 	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","0","0;1000"));
+    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200"));
 
@@ -121,9 +121,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem),
-    mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mSync(cfg("SYNCPER").getRd()),
-    mRestDtTm(cfg("TM_REST_DT").getRd()), mPerOld(cfg("PERIOD").getId()),
-    mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
+    mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
+    mSync(cfg("SYNCPER").getId()), mPerOld(cfg("PERIOD").getId()), mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     prcSt(false), call_st(false), endrunReq(false), alSt(-1), mPer(1e9), tmGath(0)
 {
     pthread_mutexattr_t attrM;
@@ -337,7 +336,7 @@ void TMdContr::start_( )
     //enable_();	//Comment for prevent long time start in no connection present case
 
     //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     //Clear stations request counter
     for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second.cntr = -1;
@@ -363,7 +362,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     TController::cfgChange(co, pc);
 
     if(co.fld().name() == "SCHEDULE" && startStat())
-	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     return true;
 }
@@ -410,7 +409,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    if(!isAccess) { t_prev = t_cnt; TSYS::sysSleep(1); continue; }
 	    else {
-		if(cntr.syncPer() > 0.1) {	//Enable sync
+		if(cntr.syncPer()) {	//Enable sync
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
 		    if(syncCnt <= 0) syncCnt = cntr.syncPer();
 		    syncCnt = vmax(0, syncCnt-1e-6*(t_cnt-t_prev));
@@ -500,18 +499,18 @@ void *TMdContr::Task( void *icntr )
 		    //Result process
 		    for(unsigned i_r = 0; i_r < req.childSize(); ++i_r) {
 			XMLNode *prmNd = req.childGet(i_r);
-			if(atoi(prmNd->attr("err").c_str())) continue;
+			if(s2i(prmNd->attr("err"))) continue;
 			string aMod	= TSYS::pathLev(prmNd->attr("path"), 0);
 			string aCntr	= TSYS::pathLev(prmNd->attr("path"), 1);
 			string pId	= TSYS::pathLev(prmNd->attr("path"), 2);
 			if(pId == "/serv/mess") {
 			    for(unsigned i_m = 0; i_m < prmNd->childSize(); i_m++) {
 				XMLNode *m = prmNd->childGet(i_m);
-				SYS->archive().at().messPut(atoi(m->attr("time").c_str()), atoi(m->attr("utime").c_str()),
-				    cntr.mStatWork[i_st].first+":"+m->attr("cat"), atoi(m->attr("lev").c_str()), m->text());
+				SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")),
+				    cntr.mStatWork[i_st].first+":"+m->attr("cat"), s2i(m->attr("lev")), m->text());
 			    }
 			    cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] =
-				cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] ? atoi(prmNd->attr("tm").c_str()) :
+				cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm")) :
 										    SYS->sysTm() - 3600*cntr.restDtTm();
 			}
 			else {
@@ -618,7 +617,7 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 	    }
 	}
 
-    return atoi(node.attr("err").c_str());
+    return s2i(node.attr("err"));
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
@@ -628,22 +627,22 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),RWRWR_,"root",SDAQ_ID,
-	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON(),NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"help",TMess::labTaskPrior(),NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID,"help",_("Zero for disable archive access."),NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID,"help",_("Zero for disable periodic sync."),NULL);
+	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON(), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior(), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable archive access."), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable periodic sync."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/STATIONS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
-	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."),NULL);
+	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."), NULL);
 	ctrMkNode2("fld",opt,-2,"/cntr/cfg/SEL_STAT",_("Append station"),enableStat()?0:RWRW__,"root",SDAQ_ID,
-	    "dest","select","select","/cntr/cfg/SEL_STAT_lst",NULL);
+	    "dest","select", "select","/cntr/cfg/SEL_STAT_lst", NULL);
 	ctrMkNode2("comm",opt,-2,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),enableStat()?0:RWRW__,"root",SDAQ_ID,
-	    "tp","lnk",NULL);
+	    "tp","lnk", NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/CNTRPRM",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "help",_("Remote OpenSCADA full controller's or separated controller's parameters list. Address example:\n"
 		     "  System.AutoDA - for controller;\n"
-		     "  System.AutoDA.UpTimeStation - for controller's parameter."),NULL);
+		     "  System.AutoDA.UpTimeStation - for controller's parameter."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/CPRM_TREE",_("Parameters tree"),(enableStat()&&(!startStat()))?RWRW__:0,"root",SDAQ_ID,
-	    "dest","select","select","/cntr/cfg/CPRM_lst",NULL);
+	    "dest","select", "select","/cntr/cfg/CPRM_lst", NULL);
 	return;
     }
 
@@ -763,8 +762,8 @@ void TMdPrm::load_( )
 	for(unsigned i_el = 0; i_el < attrsNd.childSize(); i_el++) {
 	    XMLNode *aEl = attrsNd.childGet(i_el);
 	    if(vlPresent(aEl->attr("id"))) continue;
-	    p_el.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)atoi(aEl->attr("tp").c_str()),
-		atoi(aEl->attr("flg").c_str()),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
+	    p_el.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
+		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
     }
@@ -818,9 +817,9 @@ void TMdPrm::sync( )
 		XMLNode *ael = req.childGet(2)->childGet(i_a);
 		als.push_back(ael->attr("id"));
 		if(vlPresent(ael->attr("id")))	continue;
-		TFld::Type tp = (TFld::Type)atoi(ael->attr("tp").c_str());
+		TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
 		p_el.fldAdd( new TFld( ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
-		    (atoi(ael->attr("flg").c_str())&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
+		    (s2i(ael->attr("flg"))&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
 		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()) );
 		modif(true);
 	    }
@@ -927,7 +926,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    if(!owner().enableStat()) throw TError(nodePath().c_str(),_("Controller is not started!"));
-	    else atoi(opt->text().c_str())?enable():disable();
+	    else s2i(opt->text())?enable():disable();
 	}
     }
     else if(a_path == "/prm/st/id" && ctrChkNode(opt))	opt->setText(id());

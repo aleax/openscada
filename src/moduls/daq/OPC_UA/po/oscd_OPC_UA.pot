@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-17 19:59+0200\n"
+"POT-Creation-Date: 2015-03-04 18:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,9 @@ msgid "Acquisition schedule"
 msgstr ""
 
 msgid "Gather task priority"
+msgstr ""
+
+msgid "Restore timeout (s)"
 msgstr ""
 
 msgid "Sync inter remote station period (s)"
@@ -102,6 +105,9 @@ msgid "Remote host error"
 msgstr ""
 
 msgid "OK"
+msgstr ""
+
+msgid "Zero for disable periodic sync."
 msgstr ""
 
 msgid "Server nodes browser"

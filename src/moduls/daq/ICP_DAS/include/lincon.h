@@ -12,6 +12,8 @@ extern int GetBackPlaneID(); //getport 9 0
 extern int GetSlotCount();   //getport 9 35
 extern int GetDIPswitch();   //getport 9 1 
 extern int GetRotaryID(int slot);
+extern int GetATOMRotaryID(void);
+extern int SetATOMLED(unsigned int led, unsigned int flag);
 extern float GetSDKversion(void);
 
 extern unsigned char inb(unsigned int slot,unsigned int offset);
@@ -24,6 +26,8 @@ extern int GetNameOfModule(int slot);
 extern unsigned int getSystemStatus(void);
 extern unsigned char Read_SRAM(int offset);
 extern void Write_SRAM(int offset, unsigned char data);
+extern void EnableSysWDT(unsigned int msecond);
+extern void DisableSysWDT(void);
 extern void EnableWDT(unsigned int msecond);
 extern void DisableWDT(void);
 extern unsigned int WatchDogSWEven(void);

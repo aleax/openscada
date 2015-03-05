@@ -15,6 +15,7 @@
 
 #include <stdio.h>				/* Standard input/output definitions */
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>				/* UNIX standard function definitions */
 #include <fcntl.h>				/* File control definitions */
 #include <errno.h>				/* Error number definitions */
@@ -32,7 +33,7 @@
 
 /* sio devices */
 /* sio devices */
-#ifdef LX800
+#ifdef x86
 #define SIO_DEV0     "/dev/ttySA0"
 #else
 #define SIO_DEV0     "/dev/ttySA2"

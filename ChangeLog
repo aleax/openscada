@@ -1,3 +1,18 @@
+2015-03-05 Roman
+- DB: LibsDB.OscadaLibs.db: User protocols and the data templates were appended by protocol SMDP.
+- DB: LibsDB.vcaBase.db: Main.{ElCadr,TextLab}: expanded by free commands into "digComs" and writing to "com_text".
+    For Main.ElCadr also appened "st_text" for current state.
+- DAQ.DAQGate: Configuration "SYNCPER" type changed from real to int.
+- !!!!:DAQ.ICP_DAS: libi8k.a and the headers updated to one wich I-8014 support and for all.
+    Watchdog for I-8x81 by EnableWDT() replaced by EnableSysWDT().
+- !!:DAQ.MMS: Expanded for prevent requests to no connOK(), getNameList service caching.
+    Configuration "SYNCPER" type changed from real to int.
+    For dataRes used dataRes() allowed for the node core.
+- DAQ.{OPC_UA,MMS}: Synchronization time "SYNCPER" seprated to Restore timeout "TM_REST" which used for same restoring control.
+- FIX:DAQ.{ModBus,DAQGate}: Configuration "TM_REST" size fixed to maximum limit.
+- DAQ.MMS: enRes moved to mutex. Generic resources set unified.
+
+
 2015-02-27 Roman
 - FIX:DAQ.OPC_UA: Big message's parts into the input protocol's part merge and wait fix.
 - FIX:DB.{FireBird,MySQL,PostgreSQL,SQLite}: getVal() expanded by RqFlg for TCfg::ExtValTwo into key and TFld::DateTimeDec using fix.

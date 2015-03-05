@@ -1,7 +1,7 @@
 
 //OpenSCADA MMS(IEC-9506) implementation library file: libMMS.cpp
 /******************************************************************************
- *   Copyright (C) 2014 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2014-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -45,6 +45,7 @@ int64_t curTime( )
 {
     timeval cur_tm;
     gettimeofday(&cur_tm, NULL);
+
     return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
 }
 
@@ -52,6 +53,7 @@ string int2s( int val )
 {
     char buf[250];
     snprintf(buf, sizeof(buf), "%d", val);
+
     return buf;
 }
 
@@ -59,6 +61,7 @@ string uint2s( unsigned val )
 {
     char buf[250];
     snprintf(buf, sizeof(buf), "%u", val);
+
     return buf;
 }
 
@@ -66,6 +69,7 @@ string ll2s( int64_t val )
 {
     char buf[250];
     snprintf(buf, sizeof(buf), "%lld", (long long int)val);
+
     return buf;
 }
 
@@ -73,12 +77,12 @@ string r2s( double val, int prec, char tp )
 {
     char buf[250];
     prec = std::max(0, prec);
-    switch(tp)
-    {
+    switch(tp) {
 	case 'g': snprintf(buf, sizeof(buf), "%.*g", prec, val);	break;
 	case 'e': snprintf(buf, sizeof(buf), "%.*e", prec, val);	break;
 	default:  snprintf(buf, sizeof(buf), "%.*f", prec, val);	break;
     }
+
     return buf;
 }
 
@@ -89,16 +93,13 @@ string strParse( const string &path, int level, const string &sep, int *off, boo
     size_t t_dir;
 
     if(an_dir >= (int)path.size() || sep.empty()) return "";
-    while(true)
-    {
+    while(true) {
 	t_dir = path.find(sep, an_dir);
-	if(t_dir == string::npos)
-	{
+	if(t_dir == string::npos) {
 	    if(off) *off = path.size();
 	    return (t_lev == level) ? path.substr(an_dir) : "";
 	}
-	else if(t_lev == level)
-	{
+	else if(t_lev == level) {
 	    if(off) *off = t_dir+sep.size();
 	    return path.substr(an_dir, t_dir-an_dir);
 	}
@@ -140,7 +141,6 @@ uint16_t i16_LE( uint16_t in )
 #if __BYTE_ORDER == __BIG_ENDIAN
     return bswap_16(in);
 #endif
-
     return in;
 }
 
@@ -149,7 +149,6 @@ uint32_t i32_LE( uint32_t in )
 #if __BYTE_ORDER == __BIG_ENDIAN
     return bswap_32(in);
 #endif
-
     return in;
 }
 
@@ -158,7 +157,6 @@ uint64_t i64_LE( uint64_t in )
 #if __BYTE_ORDER == __BIG_ENDIAN
     return bswap_64(in);
 #endif
-
     return in;
 }
 
@@ -173,6 +171,7 @@ const char *Core::iVal( const string &rb, int &off, char vSz )
 {
     off += vSz;
     if(off > (int)rb.size()) throw Error("Buffer size is lesser requested value.");
+
     return rb.data()+off-vSz;
 }
 
@@ -236,16 +235,14 @@ double Core::ASN_iR( const string &rb, int &off, int sz )
     if(sz < 0) sz = ASN_i(rb, off);
     if(sz < 5) throw Error("Size too little for real.");
     char exp = rb[off++]; sz--;
-    if(exp == 8 && sz == 4)
-    {
+    if(exp == 8 && sz == 4) {
 	union { float v; char c[4]; uint32_t vi; } dt;
 	dt.v = 0;
 	while(sz) dt.c[--sz] = rb[off++];
 	dt.vi = i32_LE(dt.vi);
 	return dt.v;
     }
-    else if(exp == 11 && sz == 8)
-    {
+    else if(exp == 11 && sz == 8) {
 	union { double v; char c[8]; uint64_t vi; } dt;
 	dt.v = 0;
 	while(sz) dt.c[--sz] = rb[off++];
@@ -260,6 +257,7 @@ string Core::ASN_iS( const string &rb, int &off, int sz )
 {
     if(sz < 0) sz = ASN_i(rb, off);
     off += sz;
+
     return rb.substr(off-sz,sz);
 }
 
@@ -275,16 +273,13 @@ string Core::ASN_iBS( const string &rb, int &off, int sz, char *unUsBits )
 void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 {
     const char *errS;
-    for(int offC = off, i_it = 0, err, vTp; (offC+sz) != off; i_it++)
-    {
+    for(int offC = off, i_it = 0, err, vTp; (offC+sz) != off; i_it++) {
 	int offC1 = off, szC1 = ASN_i(buf, off, offC+sz);
 	while(i_it >= (int)io.childSize()) io.childAdd("itC");
 	XML_N *chN = io.childGet(i_it);
-	switch((vTp=ASN_iTAG(buf,offC1)&~(0x20)))
-	{
+	switch((vTp=ASN_iTAG(buf,offC1)&~(0x20))) {
 	    case VT_Error:
-		switch((err=ASN_iN(buf,off,szC1)))
-		{
+		switch((err=ASN_iN(buf,off,szC1))) {
 		    case 0: errS = "object-invalidated";	break;
 		    case 1: errS = "hardware-fault";		break;
 		    case 2: errS = "temporarily-unavailable";	break;
@@ -305,8 +300,7 @@ void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 		ASN_iAccessResult(buf, off, szC1, *chN);
 		break;
 	    case VT_Bool: chN->setAttr("tp",int2s(vTp))->setText(int2s(ASN_iN(buf,off,szC1)));	break;
-	    case VT_BitString:	//!!!! Need for test
-	    {
+	    case VT_BitString: {	//!!!! Need for test
 		char unUsBits = 0;
 		string vl, value = ASN_iBS(buf, off, szC1, &unUsBits);
 		for(int i_vl = 0; i_vl < std::max(0,int(value.size()*8-std::max(0,int(unUsBits)))); i_vl++)
@@ -314,8 +308,7 @@ void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 		chN->setAttr("tp",int2s(vTp))->setText(vl);
 		break;
 	    }
-	    case VT_OctString:	//!!!! Need for test
-	    {
+	    case VT_OctString: {	//!!!! Need for test
 		string vl, value = ASN_iS(buf, off, szC1);
 		for(unsigned i_vl = 0; i_vl < value.size(); i_vl++)
 		    vl += strMess("%0.2x",value[i_vl]);
@@ -355,8 +348,7 @@ void Core::ASN_o( string &buf, uint16_t tag, uint32_t sz )
     buf += char(tag&0xFF);
     //Size
     if(!extB) buf += char(sz);
-    else
-    {
+    else {
 	buf += char(0x80|extB);
 	for(int i_ex = 0; i_ex < extB; i_ex++) buf += char((sz>>(extB-i_ex)*8)&0xFF);
     }
@@ -370,8 +362,7 @@ int Core::ASN_oC( string &buf, uint16_t tag, int off )
     //Size extend
     int extB = 4;
     if(sz < 128) extB = 0;
-    else
-    {
+    else {
 	union { uint32_t v; char c[4]; } dt; dt.v = i32_LE(sz);
 	while(!dt.c[extB-1]) extB--;
     }
@@ -383,8 +374,7 @@ int Core::ASN_oC( string &buf, uint16_t tag, int off )
     buf[off++] = char(tag&0xFF);
     //Size
     if(!extB) buf[off++] = sz;
-    else
-    {
+    else {
 	buf[off++] = 0x80|extB;
 	union { uint32_t v; char c[4]; } dt; dt.v = i32_LE(sz);
 	while(extB) buf[off++] = dt.c[--extB];
@@ -406,8 +396,7 @@ void Core::ASN_oN( string &buf, uint8_t tag, uint32_t val, uint8_t szMin )
 void Core::ASN_oR( string &buf, uint8_t tag, double val, char exp )
 {
     int sz = 0;
-    if(exp == 8)
-    {
+    if(exp == 8) {
 	sz = 4;
 	ASN_o(buf, tag, sz+1);
 	buf += exp;
@@ -416,8 +405,7 @@ void Core::ASN_oR( string &buf, uint8_t tag, double val, char exp )
 	dt.vi = i32_LE(dt.vi);
 	while(sz) buf += dt.c[--sz];
     }
-    else if(exp == 11)	//!!!!
-    {
+    else if(exp == 11) {	//!!!!
 	sz = 8;
 	ASN_o(buf, tag, sz+1);
 	buf += exp;
@@ -446,8 +434,7 @@ void Core::ASN_oNmObj( string &buf, uint8_t tag, const string &vl, const string 
 {
     int off = buf.size();
     if(!domain.size())	ASN_oS(buf, 0x80, vl);	// vmd-specific
-    else					// domain-specific
-    {
+    else {					// domain-specific
 	ASN_oS(buf, 0x1A, domain);		//  domainId
 	ASN_oS(buf, 0x1A, vl);			//  itemId
 	ASN_oC(buf, 0xA1, off);			// domain-specific
@@ -459,28 +446,22 @@ void Core::ASN_oNmObj( string &buf, uint8_t tag, const string &vl, const string 
 
 void Core::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 {
-    for(int offC = off, i_it = 0, vTp; (offC+sz) != off; i_it++)
-    {
+    for(int offC = off, i_it = 0, vTp; (offC+sz) != off; i_it++) {
 	int offC1 = off, szC1 = ASN_i(buf, off, offC+sz);
-	switch((vTp=ASN_iTAG(buf,offC1)))
-	{
+	switch((vTp=ASN_iTAG(buf,offC1))) {
 	    case 0x80: io.setAttr("typeName", ASN_iS(buf,off,szC1));	break;
 	    case VT_Array:
 		off += szC1;
 		io.setAttr("tp", int2s(vTp));
-		for(offC1 = off; (offC1+szC1) != off; )
-		{
+		for(offC1 = off; (offC1+szC1) != off; ) {
 		    int offC2 = off, szC2 = ASN_i(buf, off, offC1+szC1);
-		    switch(ASN_iTAG(buf,offC2))
-		    {
+		    switch(ASN_iTAG(buf,offC2)) {
 			case 0x80: io.setAttr("packed",int2s(ASN_iN(buf,off,szC2)));	break;	//  packed
 			case 0xA1:
-			    for(offC2 = off; (offC2+szC2) != off; )
-			    {
+			    for(offC2 = off; (offC2+szC2) != off; ) {
 				int offC3 = off, szC3 = ASN_i(buf, off, offC2+szC2);
 				if(ASN_iTAG(buf,offC3) == 0xA1)
-				    for(offC3 = off; (offC3+szC3) != off; )
-				    {
+				    for(offC3 = off; (offC3+szC3) != off; ) {
 					int offC4 = off, szC4 = ASN_i(buf, off, offC3+szC3);
 					if(ASN_iTAG(buf,offC4) == 0x81) io.setAttr("numberOfElements",int2s(ASN_iN(buf,off,szC4)));
 					else off += szC4;
@@ -495,25 +476,20 @@ void Core::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 		break;
 	    case VT_Struct:
 		io.setAttr("tp",int2s(vTp));
-		for(offC1 = off; (offC1+szC1) != off; )
-		{
+		for(offC1 = off; (offC1+szC1) != off; ) {
 		    int offC2 = off, szC2 = ASN_i(buf, off, offC1+szC1);
-		    switch(ASN_iTAG(buf,offC2))
-		    {
+		    switch(ASN_iTAG(buf,offC2)) {
 			case 0x80: io.setAttr("packed",int2s(ASN_iN(buf,off,szC2)));	break;	//  packed
 			case 0xA1:								//  components
-			    for(offC2 = off; (offC2+szC2) != off; )
-			    {
+			    for(offC2 = off; (offC2+szC2) != off; ) {
 				int offC3 = off, i_it = 0, szC3 = ASN_i(buf, off, offC2+szC2);
 				if(ASN_iTAG(buf,offC3) == 0x30)					//   item
-				    for(offC3 = off; (offC3+szC3) != off; i_it++)
-				    {
+				    for(offC3 = off; (offC3+szC3) != off; i_it++) {
 					while(i_it < (int)io.childSize()) io.childAdd("stIt");
 					XML_N *chN = io.childGet(i_it);
 
 					int szC4 = ASN_i(buf, off, offC3+szC3);
-					switch(ASN_iTAG(buf,offC3))
-					{
+					switch(ASN_iTAG(buf,offC3)) {
 					    case 0x80: chN->setAttr("id",ASN_iS(buf,off,szC4));	break;	//componentName
 					    case 0xA1: ASN_iTypeSpec(buf, off, szC4, *chN);	break;	//componentType
 					    default: off += szC4;				break;
@@ -616,8 +592,7 @@ void Client::protIO( XML_N &io )
     int sCd = 0;
     char buf[1000];
 
-    try
-    {
+    try {
 	//bool debug = (bool)atoi(io.attr("debug").c_str());
 	if(io.name() != "MMS")	throw Error("Unknown target protocol '%s'.", io.name().c_str());
 
@@ -628,8 +603,7 @@ void Client::protIO( XML_N &io )
 	oN(tpkt, 0, 2);				// Length
 
 	//Service's requests prepare
-	if(io.attr("id") == "connect")
-	{
+	if(io.attr("id") == "connect") {
 						//>COTP ConnRequest (ISO-8073)
 	    oN(rez, 0, 1);			// Length
 	    oN(rez, COTP_CR, 1);		// PDU Type
@@ -637,8 +611,7 @@ void Client::protIO( XML_N &io )
 	    oN(rez, 0, 2);			// Source reference
 	    oN(rez, 0, 1);			// Class
 						// Options
-	    if(COTP_SzTPDU() > 0)		//  TPDU size
-	    {
+	    if(COTP_SzTPDU() > 0) {		//  TPDU size
 		oN(rez, COTP_O_SzTPDU, 1);	//   Code
 		oN(rez, 1, 1);			//   Length
 		oN(rez, COTP_SzTPDU(), 1);	//   Value
@@ -656,8 +629,7 @@ void Client::protIO( XML_N &io )
 	    tpkt += rez;
 	    //if(debug) debugMess(strMess("ConnRequest Req(%d)",rez.size());
 	}
-	else
-	{
+	else {
 	    if(io.attr("id") == "initiate")			sCd = MMS_InitiateReq;
 	    else if(io.attr("id") == "identify")		sCd = Conf_Identify;
 	    else if(io.attr("id") == "getNameList")		sCd = Conf_getNameList;
@@ -666,8 +638,7 @@ void Client::protIO( XML_N &io )
 	    else if(io.attr("id") == "getVariableAccessAttributes")	sCd = Conf_getVariableAccessAttributes;
 	    else if(io.attr("id") == "getCapabilityList")	sCd = Conf_getCapabilityList;
 
-	    if(sCd)
-	    {
+	    if(sCd) {
 												//>COTP ConnRequest (ISO-8073)
 		oN(rez, 0, 1);									// Length
 		oN(rez, COTP_DT, 1);								// PDU Type
@@ -676,10 +647,8 @@ void Client::protIO( XML_N &io )
 		tpkt += rez;
 	    }
 	    rez = "";										//>MMS
-	    switch(sCd)
-	    {
-		case MMS_InitiateReq:
-		{
+	    switch(sCd) {
+		case MMS_InitiateReq: {
 												//InitiateReq
 		    ASN_oN(rez, 0x80, 8187);							// localDetailCalling
 
@@ -702,11 +671,9 @@ void Client::protIO( XML_N &io )
 		case Conf_Write:
 		case Conf_getVariableAccessAttributes:
 		    ASN_oN(rez, 0x02, mInvokeID++);						// invokeID
-		    switch(sCd)
-		    {
+		    switch(sCd) {
 			case Conf_Identify: ASN_o(rez, Conf_Identify); break;			// Identify
-			case Conf_getNameList:							// getNameList
-			{
+			case Conf_getNameList: {						// getNameList
 			    int offTmp = rez.size();						//  extendedObjectClass
 			    ASN_oN(rez, 0x80, atoi(io.attr("objectClass").c_str()));		//   objectClass
 			    ASN_oC(rez, 0xA0, offTmp);						//  extendedObjectClass
@@ -718,14 +685,12 @@ void Client::protIO( XML_N &io )
 			    ASN_oC(rez, Conf_getNameList, offTmp);				// getNameList
 			    break;
 			}
-			case Conf_Read:
-			{
+			case Conf_Read: {
 			    int offTmp = rez.size();						// ReadService
 			    if(atoi(io.attr("withResult").c_str())) ASN_oN(rez, 0x80, 1);	//  specificationWithResult
 												//  variableSpecification
 			    int offTmp1 = rez.size();						//   listOfVariable
-			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++)
-			    {
+			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++) {
 				XML_N *itN = io.childGet(i_it)->setAttr("err","");
 				int offTmp2 = rez.size();					//    VariableSpecification
 				ASN_oNmObj(rez, 0xA0, itN->attr("itemId"), itN->attr("domainId"));//     name
@@ -741,12 +706,10 @@ void Client::protIO( XML_N &io )
 			    ASN_oC(rez, sCd, offTmp);						// ReadWriteService
 			    break;
 			}
-			case Conf_Write:
-			{
+			case Conf_Write: {
 			    int offTmp = rez.size();						// WriteService
 												//  listOfVariable
-			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++)
-			    {
+			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++) {
 				XML_N *itN = io.childGet(i_it)->setAttr("err","");
 				int offTmp1 = rez.size();					//   VariableSpecification
 				ASN_oNmObj(rez, 0xA0, itN->attr("itemId"), itN->attr("domainId"));//     name
@@ -758,17 +721,14 @@ void Client::protIO( XML_N &io )
 			    }
 			    ASN_oC(rez, 0xA0, offTmp);						//  listOfVariable
 			    int offTmp1 = rez.size();						//  listOfData
-			    for(unsigned i_it = 0, dTp = 0; i_it < io.childSize(); i_it++)
-			    {
+			    for(unsigned i_it = 0, dTp = 0; i_it < io.childSize(); i_it++) {
 				XML_N *itN = io.childGet(i_it);
-				switch((dTp=atoi(itN->attr("dataType").c_str())))
-				{
+				switch((dTp=atoi(itN->attr("dataType").c_str()))) {
 				    case VT_Bool: ASN_oN(rez, dTp, (bool)atoi(itN->text().c_str()));	break;
 				    case VT_Int: ASN_oN(rez, dTp, atoi(itN->text().c_str()));		break;
 				    case VT_UInt: ASN_oN(rez, dTp, (unsigned)atoi(itN->text().c_str()));break;
 				    case VT_Float: ASN_oR(rez, dTp, atof(itN->text().c_str()));		break;
-				    case VT_BitString:	//!!!! Need for test
-				    {
+				    case VT_BitString: {	//!!!! Need for test
 					string srcS = itN->text(), rezBS;
 					for(unsigned i_s = 0; i_s < srcS.size(); i_s++)
 					    if(srcS[i_s] == '1') setBS(rezBS, i_s);
@@ -776,8 +736,7 @@ void Client::protIO( XML_N &io )
 					ASN_oBS(rez, dTp, rezBS, atoi(itN->attr("unUsBits").c_str()));
 					break;
 				    }
-				    case VT_OctString:	//!!!! Need for test
-				    {
+				    case VT_OctString: {	//!!!! Need for test
 					string srcS = itN->text(), rezBS;
 					for(unsigned i_s = 0; i_s < srcS.size(); i_s += 2)
 					    rezBS += (char)strtol(srcS.substr(i_s,2).c_str(),NULL,16);
@@ -785,13 +744,10 @@ void Client::protIO( XML_N &io )
 					break;
 				    }
 				    case VT_VisString: ASN_oS(rez, dTp, itN->text());			break;
-				    case VT_Array: case VT_Struct:	//!!!! Test implement
-				    {
-					for(unsigned i_c = 0, dTp1; i_c < itN->childSize(); i_c++)
-					{
+				    case VT_Array: case VT_Struct: {	//!!!! Test implement
+					for(unsigned i_c = 0, dTp1; i_c < itN->childSize(); i_c++) {
 					    XML_N *icN = itN->childGet(i_c);
-					    switch((dTp1=atoi(icN->attr("dataType").c_str())))
-					    {
+					    switch((dTp1=atoi(icN->attr("dataType").c_str()))) {
 						case VT_Bool: ASN_oN(rez, dTp1, (bool)atoi(icN->text().c_str()));	break;
 						case VT_Int: ASN_oN(rez, dTp1, atoi(icN->text().c_str()));		break;
 						case VT_UInt: ASN_oN(rez, dTp1, (unsigned)atoi(icN->text().c_str()));break;
@@ -808,8 +764,7 @@ void Client::protIO( XML_N &io )
 			    ASN_oC(rez, sCd, offTmp);						// WriteService
 			    break;
 			}
-			case Conf_getVariableAccessAttributes:
-			{
+			case Conf_getVariableAccessAttributes: {
 			    int offTmp = rez.size();
 			    ASN_oNmObj(rez, 0xA0, io.attr("itemId"), io.attr("domainId"));	// name
 			    //ASN_oAddr(rez, 0xA1, offTmp);					// address
@@ -835,8 +790,7 @@ void Client::protIO( XML_N &io )
 	int resp_len = messIO(tpkt.data(), tpkt.size(), buf, sizeof(buf));
 	tpkt.assign(buf, resp_len);
 	int off = 2;
-	for( ; tpkt.size() < 4 || tpkt.size() < iN(tpkt,off,2); off = 2)
-	{
+	for( ; tpkt.size() < 4 || tpkt.size() < iN(tpkt,off,2); off = 2) {
 	    resp_len = messIO(NULL, 0, buf, sizeof(buf));
 	    if(!resp_len) throw Error("Not full respond.");
 	    rez.append(buf, resp_len);
@@ -853,47 +807,38 @@ void Client::protIO( XML_N &io )
 	uint8_t tpPDU = iN(tpkt, off, 1);			// PDU Type
 
 	//Service's response process
-	if(io.attr("id") == "connect")
-	{
+	if(io.attr("id") == "connect") {
 	    if(tpPDU != COTP_CC)	throw Error("ConnResponse error.");
 	    iN(tpkt, off, 2);					// Dest reference
 	    iN(tpkt, off, 2);					// Source reference
 	    iN(tpkt, off, 1);					// Class
-	    while((off-begCOTP) < lenCOTP)			// Options
-	    {
+	    while((off-begCOTP) < lenCOTP) {			// Options
 		iN(tpkt, off, 1);				//  Code
 		uint8_t oLen = iN(tpkt, off, 1);		//  Length
 		iVal(tpkt, off, oLen);
 	    }
 	    if((off-begCOTP) != lenCOTP)	throw Error("Malformed COTP.");
 	}
-	else if(sCd)
-	{
+	else if(sCd) {
 	    if(tpPDU != COTP_DT)	throw Error("Response error.");
 	    iN(tpkt, off, 1);					// Class
 
 								//<MMS
-	    switch(sCd)
-	    {
-		case MMS_InitiateReq:
-		{
+	    switch(sCd) {
+		case MMS_InitiateReq: {
 		    int offC = off, szC = ASN_i(tpkt, off);		// initiate_ResponsePDU
 		    if(ASN_iTAG(tpkt,offC) != MMS_initiateResp)	throw Error("Initiate error.");
-		    for(offC = off; (offC+szC) != off; )
-		    {
+		    for(offC = off; (offC+szC) != off; ) {
 			int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC);
-			switch(ASN_iTAG(tpkt,offC1))
-			{
+			switch(ASN_iTAG(tpkt,offC1)) {
 			    case 0x80:	ASN_iN(tpkt, off, szC1);	break;	//  localDetailCalled
 			    case 0x81:	ASN_iN(tpkt, off, szC1);	break;	//  negociatedMaxServOutstandingCalling
 			    case 0x82:	ASN_iN(tpkt, off, szC1);	break;	//  negociatedMaxServOutstandingCalled
 			    case 0x83:	ASN_iN(tpkt, off, szC1);	break;	//  negociatedDataStructureNestingLevel
 			    case 0xA4:						//  mmsInitResponseDetail
-				for(offC1 = off; (offC1+szC1) != off; )
-				{
+				for(offC1 = off; (offC1+szC1) != off; ) {
 				    int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
-				    switch(ASN_iTAG(tpkt,offC2))
-				    {
+				    switch(ASN_iTAG(tpkt,offC2)) {
 					case 0x80: ASN_iN(tpkt, off, szC2); break;				//negociatedVersionNumber
 					case 0x81: m_parameterCBB = ASN_iBS(tpkt, off, szC2); break;		//negociatedParameterCBB
 					case 0x82: m_servicesSupported = ASN_iBS(tpkt, off, szC2); break;	//servicesSupportedCalled
@@ -911,17 +856,13 @@ void Client::protIO( XML_N &io )
 		case Conf_getNameList:
 		case Conf_Read:
 		case Conf_Write:
-		case Conf_getVariableAccessAttributes:
-		{
+		case Conf_getVariableAccessAttributes: {
 		    int offC = off, szC = ASN_i(tpkt, off);		// ConfirmedRespPDU
-		    if(ASN_iTAG(tpkt,offC) != MMS_ConfirmedResp)
-		    {
+		    if(ASN_iTAG(tpkt,offC) != MMS_ConfirmedResp) {
 			string chErr;
-			switch(ASN_iTAG(tpkt,offC))
-			{
+			switch(ASN_iTAG(tpkt,offC)) {
 			    case MMS_Reject:
-				for(offC = off; (offC+szC) != off; )
-				{
+				for(offC = off; (offC+szC) != off; ) {
 				    int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC), errTp, errCode;
 				    map<uint8_t, vector<string> >::iterator iErr;
 				    if((errTp=ASN_iTAG(tpkt,offC1)) == 0x80) chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));
@@ -933,21 +874,16 @@ void Client::protIO( XML_N &io )
 				}
 				break;
 			    case MMS_ConfirmedErr:
-				for(offC = off; (offC+szC) != off; )
-				{
+				for(offC = off; (offC+szC) != off; ) {
 				    int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC);
-				    switch(ASN_iTAG(tpkt,offC1))
-				    {
+				    switch(ASN_iTAG(tpkt,offC1)) {
 					case 0x80: chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));	break;
-					case 0xA2:	//serviceError
-					{
+					case 0xA2: {	//serviceError
 					    chErr += "Service error: ";
-					    for(offC1 = off; (offC1+szC1) != off; )
-					    {
+					    for(offC1 = off; (offC1+szC1) != off; ) {
 						int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
 						if(ASN_iTAG(tpkt,offC2) == 0xA0)		//errorClass
-						    for(offC2 = off; (offC2+szC2) != off; )
-						    {
+						    for(offC2 = off; (offC2+szC2) != off; ) {
 							int offC3 = off, szC3 = ASN_i(tpkt, off, offC2+szC2);
 							map<uint8_t, vector<string> >::iterator iErr;
 							int errTp = ASN_iTAG(tpkt, offC3), errCode;
@@ -972,23 +908,18 @@ void Client::protIO( XML_N &io )
 			}
 			throw Error("ConfirmedRequest error: %s", chErr.c_str());
 		    }
-		    for(offC = off; (offC+szC) != off; )
-		    {
+		    for(offC = off; (offC+szC) != off; ) {
 			int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC);
-			switch(ASN_iTAG(tpkt,offC1))
-			{
-			    case 0x02:					// invokeID
-			    {
+			switch(ASN_iTAG(tpkt,offC1)) {
+			    case 0x02: {				// invokeID
 				uint32_t invokeID = ASN_iN(tpkt, off, szC1);
 				if(invokeID != (mInvokeID-1)) throw Error("Inconsistent invokeID.");
 				break;
 			    }
 			    case Conf_IdentifyResp:			// Identify
-				for(offC1 = off; (offC1+szC1) != off; )
-				{
+				for(offC1 = off; (offC1+szC1) != off; ) {
 				    int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
-				    switch(ASN_iTAG(tpkt,offC2))
-				    {
+				    switch(ASN_iTAG(tpkt,offC2)) {
 					case 0x80: io.setAttr("vendorName", ASN_iS(tpkt,off,szC2)); break;	//  vendorName
 					case 0x81: io.setAttr("modelName", ASN_iS(tpkt,off,szC2)); break;	//  modelName
 					case 0x82: io.setAttr("revision", ASN_iS(tpkt,off,szC2)); break;	//  revision
@@ -997,17 +928,13 @@ void Client::protIO( XML_N &io )
 				}
 				break;
 			    case Conf_getNameList:			// getNameList
-			    case Conf_getCapabilityList:		// getCapabilityList
-			    {
+			    case Conf_getCapabilityList: {		// getCapabilityList
 				bool moreFollows = true;
-				for(offC1 = off; (offC1+szC1) != off; )
-				{
+				for(offC1 = off; (offC1+szC1) != off; ) {
 				    int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
-				    switch(ASN_iTAG(tpkt,offC2))
-				    {
+				    switch(ASN_iTAG(tpkt,offC2)) {
 					case 0xA0:			//  listOfCapabilities
-					    for(offC2 = off; (offC2+szC2) != off; )
-					    {
+					    for(offC2 = off; (offC2+szC2) != off; ) {
 						int offC3 = off, szC3 = ASN_i(tpkt, off, offC2+szC2);
 						if(ASN_iTAG(tpkt,offC3) == 0x1a) io.childAdd("it")->setText(ASN_iS(tpkt,off,szC3));
 						else off += szC3;
@@ -1022,22 +949,18 @@ void Client::protIO( XML_N &io )
 			    }
 			    case Conf_Read:
 			    case Conf_Write:
-				for(offC1 = off; (offC1+szC1) != off; )
-				{
+				for(offC1 = off; (offC1+szC1) != off; ) {
 				    int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
-				    switch(ASN_iTAG(tpkt,offC2))
-				    {
+				    switch(ASN_iTAG(tpkt,offC2)) {
 					case 0xA1: ASN_iAccessResult(tpkt, off, szC2, io); break;	//  listOfAccessResult
 					default: off += szC2;	break;
 				    }
 				}
 				break;
 			    case Conf_getVariableAccessAttributes:
-				for(offC1 = off; (offC1+szC1) != off; )
-				{
+				for(offC1 = off; (offC1+szC1) != off; ) {
 				    int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
-				    switch(ASN_iTAG(tpkt,offC2))
-				    {
+				    switch(ASN_iTAG(tpkt,offC2)) {
 					case 0x80: io.setAttr("mmsDeletable", int2s((bool)ASN_iN(tpkt,off,szC2))); break;	//  mmsDeletable
 					case 0xA2: ASN_iTypeSpec(tpkt, off, szC2, io); break;		//  typeSpecification
 					default: off += szC2;	break;
@@ -1060,8 +983,7 @@ void Client::protIO( XML_N &io )
 void Client::reqService( XML_N &io )
 {
     io.setAttr("err", "");
-    if(!isInitiated)
-    {
+    if(!isInitiated) {
 	XML_N req("MMS"); req.setAttr("id","connect");
 	protIO(req);
 	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
@@ -1072,8 +994,7 @@ void Client::reqService( XML_N &io )
 
 	isInitiated = true;
     }
-    if(id_vName.empty())
-    {
+    if(id_vName.empty()) {
 	XML_N req("MMS"); req.setAttr("id","identify");
 	protIO(req);
 	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
@@ -1141,8 +1062,7 @@ void XML_N::childDel( const unsigned id )
 void XML_N::childDel( XML_N *nd )
 {
     for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	if(mChildren[i_ch] == nd)
-	{
+	if(mChildren[i_ch] == nd) {
 	    delete mChildren[i_ch];
 	    mChildren.erase(mChildren.begin()+i_ch);
 	    break;
@@ -1237,8 +1157,7 @@ XML_N* XML_N::setText( const string &s, bool childs )
 
     int i_ch = -1;
     for(int i_f = 0; i_f < (int)childSize(); i_f++)
-	if(childGet(i_f)->name() == "<*>")
-	{
+	if(childGet(i_f)->name() == "<*>") {
 	    if(i_ch < 0) childGet(i_f)->mText = s;
 	    else childDel(i_f--);
 	    i_ch = i_f;
@@ -1268,8 +1187,7 @@ void XML_N::attrClear( )	{ mAttr.clear(); }
 
 string XML_N::attr( const string &name, bool caseSens ) const
 {
-    if(caseSens)
-    {
+    if(caseSens) {
 	for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
 	    if(mAttr[i_a].first == name) return mAttr[i_a].second;
     }
@@ -1282,8 +1200,7 @@ string XML_N::attr( const string &name, bool caseSens ) const
 XML_N* XML_N::setAttr( const string &name, const string &val )
 {
     for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(mAttr[i_a].first == name)
-	{
+	if(mAttr[i_a].first == name) {
 	    mAttr[i_a].second = val;
 	    return this;
 	}

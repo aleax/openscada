@@ -67,7 +67,7 @@ class TMdPrm : public TParamContr
 	string ndList( )			{ return cfg("ND_LS").getS(); }
 	void setNdList( const string &vl )	{ cfg("ND_LS").setS(vl); }
 
-	TElem &elem( )		{ return p_el; }
+	TElem &elem( )		{ return pEl; }
 
 	void enable( );
 	void disable( );
@@ -75,8 +75,6 @@ class TMdPrm : public TParamContr
 	TMdContr &owner( );
 
 	string attrPrc( );
-
-	Res &nodeRes( )		{ return prmRes; }
 
     protected:
 	//Methods
@@ -92,9 +90,7 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &vo );
 
 	//Attributes
-	TElem	p_el;			//Work atribute elements
-
-	Res	prmRes;
+	TElem	pEl;			//Work atribute elements
 };
 
 //*************************************************
@@ -113,7 +109,8 @@ class TMdContr: public TController, public Client
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	double	syncPer( )	{ return mSync; }
+	int	restTm( )	{ return mRestTm; }
+	int	syncPer( )	{ return mSync; }
 	string	endPoint( )	{ return mEndP; }
 	string	secPolicy( )	{ return mSecPol; }
 	int	secMessMode( )	{ return mSecMessMode; }
@@ -157,9 +154,11 @@ class TMdContr: public TController, public Client
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	enRes, cntrRes;	//Resource for enable params
+	pthread_mutex_t	enRes;
+	Res	cntrRes;	//Resource for enable params
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
+		&mRestTm,	//Restore timeout in s
 		&mSync,		//Synchronization inter remote station: attributes list update.
 		&mEndP,		//Target endpoint
 		&mSecPol,	//Security policy
@@ -176,14 +175,14 @@ class TMdContr: public TController, public Client
 	int8_t	alSt;		//Alarm state
 
 	AutoHD<TTransportOut>	tr;
-	vector< AutoHD<TMdPrm> > p_hd;
+	vector< AutoHD<TMdPrm> > pHd;
 
 	string		mBrwsVar;
 
-	ResString	acq_err;
+	MtxString	acqErr;
 	map<string, SecuritySetting> epLst;
 
-	double		tm_gath;	//Gathering time
+	double		tmGath;		//Gathering time
 	float		tmDelay;	//Delay time for next try connect
 
 	uint32_t	servSt;

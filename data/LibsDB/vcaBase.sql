@@ -446,6 +446,8 @@ INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_p
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomOut','/wlb_Main/wdg_grph_panel/wdg_xZoomOut','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomOffLeft','/wlb_Main/wdg_grph_panel/wdg_xZoomOffLeft','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_panel','xZoomOffRight','/wlb_Main/wdg_grph_panel/wdg_xZoomOffRight','');
+INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','com_text','/wlb_Main/wdg_ElCadr/wdg_com_text','');
+INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_ElCadr','st_text','/wlb_Main/wdg_ElCadr/wdg_st_text','');
 CREATE TABLE 'prj_archBrowser_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control','name','','Control panels',0,'','','Панели управления','','','Панелі керування','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','value','color','',8,'','','','','','','','');
@@ -918,6 +920,8 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZo
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomOut','/wlb_Main/wdg_grph_panel/wdg_xZoomOut','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomOffLeft','/wlb_Main/wdg_grph_panel/wdg_xZoomOffLeft','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','xZoomOffRight','/wlb_Main/wdg_grph_panel/wdg_xZoomOffRight','','');
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','com_text','/wlb_Main/wdg_ElCadr/wdg_com_text','','');
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','st_text','/wlb_Main/wdg_ElCadr/wdg_st_text','','');
 CREATE TABLE 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -1862,6 +1866,8 @@ INSERT INTO "wlb_Main_incl" VALUES('grph_panel','xZoomIn','/wlb_originals/wdg_Fo
 INSERT INTO "wlb_Main_incl" VALUES('grph_panel','xZoomOut','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('grph_panel','xZoomOffLeft','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('grph_panel','xZoomOffRight','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('ElCadr','com_text','/wlb_originals/wdg_FormEl','en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('ElCadr','st_text','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;bordWidth;font;color;alignment;text;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -6171,6 +6177,31 @@ INSERT INTO "wlb_Main_io" VALUES('grph_panel','font','Arial 18 1',0,'','','xZoom
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','type','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','type','0',40,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','0',32,'','','viewSet','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','en','0',40,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomX','6',32,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','161',32,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','98',32,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomH','30',32,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomZ','1',32,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','active','1',32,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','elType','4',32,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','value','',8,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','items','',8,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','en','0',40,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomX','6',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','112',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','98',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomH','30',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomZ','1',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','tipTool','Opened',40,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','tipStatus','The crane state "Opened"',40,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','bordWidth','0',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','font','Arial 13 1 0 0 0',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','color','green',40,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','alignment','10',32,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','text','Free status',40,'','','st_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','font','Arial 15',0,'','','com_text','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.83301','iVBORw0KGgoAAAANSUhEUgAAAGQAAABaCAYAAABOkvOJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAAMdQAADHUBLXiUdQAAAAd0SU1FB9kCGxAwD1fi7KsAAAAZdEVYdENv
@@ -8678,6 +8709,9 @@ INSERT INTO "wlb_Main_uio" VALUES('TextLab','ntf','Notification "{st}:{modes}:{S
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','log','Logarithmic scale',131072,'0||',10,'Parameter|log','','','Логарифмічна шкала','','','Логарифмическая шкала','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclHor','Horizontal scale',131076,'0||',14,'<page>|sclHorScl','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclHorOff','Horizontal scale offset',131076,'0||',14,'<page>|sclHorSclOff','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','com_text','Command text (from digComs)',131077,'||',12,'Parameter|com_text','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmStText','Parameter:status text',131077,'||',10,'Parameter|st_text','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmComText','Parameter:command text',131077,'||',12,'Parameter|com_text','','','','','','','','','','');
 CREATE TABLE 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc','JavaLikeCalc.JavaScript
 using Special.FLibSYS;
@@ -16704,6 +16738,8 @@ INSERT INTO "Trs" VALUES('Hz','Гц','Гц');
 INSERT INTO "Trs" VALUES('Spectrum','Спектр','Спектр');
 INSERT INTO "Trs" VALUES('XY','','');
 INSERT INTO "Trs" VALUES('Graph','Графік','График');
+INSERT INTO "Trs" VALUES('Select command','','');
+INSERT INTO "Trs" VALUES('Press for command select','','');
 CREATE TABLE 'prj_archBrowser_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','addr','arh:CPULoad_load (+)');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','name','val:CPULoad');
@@ -16743,9 +16779,8 @@ DIM4juOY2ralKDO5lF5Pr9cVAC9e/Pn06UMCYDgc7u6+Yll2Y+OPft/iOM7zPMexFaVx587PBVqC
 R49WVlYe3L79U6IlDMOrV6+HYRgEQaVSGQ6HruvEcVytTnuezzCgFJk27fv+pUvfXLjw9evX2wll
 fX2tVitcabnmed7ok/d6GiEgAExTM01tPNV1XUqpKIqO41QqlaJjQ3KzKTJN03RdF0XRNM12uz03
 V3i3mESRJIllWUmSqtXq1FTu5ecdRZblogPOhG0pbSzL/Q2YovM7l7aYfgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
+//using Special.FLibSYS;
 ev_wrk = ev_rez = "";
-off = 0;
 if(f_start) cntr = prevCntr = holdCntr = 0;
 cntr++;
 
@@ -16755,7 +16790,7 @@ else { bordColor = "black"; bordWidth = 1; }
 //Disable all mutable widgets
 info_ed_en = info_var_en = info_sp_en = info_out_en = spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = lev_out_en = lev_var_en = lev_sp_en = mode_en = modMan_en = modAuto_en =
 	modCasc_en = pnl_pid_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = 
-	com_open_en = com_stop_en = com_close_en = st_open_en = st_close_en = Ramka_en = moveUp_en = moveDwn_en = false;
+	com_open_en = com_stop_en = com_close_en = com_text_en = st_open_en = st_close_en = st_text_en = Ramka_en = moveUp_en = moveDwn_en = false;
 
 info_name_text = prmShifr.isEVal() ? "" : prmShifr;
 
@@ -16818,26 +16853,26 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 		appToVl = 0;
 
 		//Event process
-		while((ev_wrk=event.parse(0,"\n",off)).length) {
+		for(off = 0; (ev_wrk=event.parse(0,"\n",off)).length; ) {
 			prevMode = prmAuto ? ((prmCasc==true)?tr("Cascade"):tr("Automate")) : tr("Manual");      
 			if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) {  
 				prmAuto = false; if(prmCasc==true) prmCasc = false;
-				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Manual"));
+				SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Manual"));
 			}
 			else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) {  
 				prmAuto = true; if(prmCasc==true) prmCasc = false;
-				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Automate"));
+				SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Automate"));
 			}
 			else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) {  
         	prmAuto = prmCasc = true;
-        	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Cascade"));
+        	SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Cascade"));
 			}
 			else if(ev_wrk == "key_mousePresLeft:/info_sp") {
-				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Setpoint")+" : "+prmDescr+" : "+real2str(prmSp,abs(prmPrec))+" : "+real2str(info_sp_arg0val,abs(prmPrec)));
+				SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Setpoint")+" : "+prmDescr+" : "+prmSp.toFixed(abs(prmPrec))+" : "+info_sp_arg0val.toFixed(abs(prmPrec)));
 				prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
 			}
 			else if(ev_wrk == "key_mousePresLeft:/info_out") {
-				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Output")+" : "+prmDescr+" : "+real2str(prmManIn,1)+" : "+real2str(info_out_arg0val,1));
+				SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Output")+" : "+prmDescr+" : "+prmManIn.toFixed(1)+" : "+info_out_arg0val.toFixed(1));
 				prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
 			}
 			else if(ev_wrk == "ws_BtPress:/spToVar") {
@@ -16852,7 +16887,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
 			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
 			else if(ev_wrk == "ws_BtPress:/pnl_pid") {
-				sessNm = strParsePath(path,0);
+				sessNm = path.parsePath(0);
 				pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
 				if(vcaNodePresent(pidPg)) vcaAttrSet(pidPg+"/a_pgOpen",1);
 				else ev_rez += "usr_PidCntrCall\n"; 
@@ -16880,10 +16915,10 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
    	else if(appToVl && !prmAuto) {
 			if(prmAnalog==false) {
 				prmManIn = 50+2.5*appToVl;
-				if(appToVl == -1)			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( < )");
-				else if(appToVl == 1)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( > )");
-				else if(appToVl == -10)messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( << )");
-				else if(appToVl == 10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( >> )");
+				if(appToVl == -1)			SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( < )");
+				else if(appToVl == 1)	SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( > )");
+				else if(appToVl == -10)SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( << )");
+				else if(appToVl == 10)	SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( >> )");
 			}
 			else {
 				newVl = max(0,min(100,info_out_arg0val+appToVl));
@@ -16908,9 +16943,9 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 		appToVl = 0;
 
 		//Event process
-		while((ev_wrk=event.parse(0,"\n",off)).length) {
+		for(off = 0; (ev_wrk=event.parse(0,"\n",off)).length; ) {
 			if(ev_wrk == "key_mousePresLeft:/info_var") {
-				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Variable")+" : "+prmDescr+" : "+real2str(prmVarIn,abs(prmPrec))+" : "+real2str(info_var_arg0val,abs(prmPrec)));
+				SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Variable")+" : "+prmDescr+" : "+prmVarIn.toFixed(abs(prmPrec))+" : "+info_var_arg0val.toFixed(abs(prmPrec)));
 				prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
 			}
 			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
@@ -16960,20 +16995,20 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(1,";").parse(0,"-") : tr("Command")+" "+tr("CLOSE");
 		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(1,";").parse(0,"-") : tr("Press for")+" "+tr("CLOSE");
 		com_close_en = com_close_name.length;
-  }
-  if(com_stop_en) { 
+	}
+	if(com_stop_en) { 
 		com_stop_name = !digComs.isEVal() ? digComs.parse(2,";").parse(0,"-") : tr("STOP");
 		com_stop_color = (digComs.parse(2,";").parse(1,"-") != "") ? digComs.parse(2,";").parse(1,"-") : "yellow";
 		com_stop_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(2,";").parse(0,"-") : tr("Command")+" "+tr("STOP");
 		com_stop_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(2,";").parse(0,"-") : tr("Press for")+" "+tr("STOP");
 		com_stop_en = com_stop_name.length;
-  }
-  if(st_open_en) {
+	}
+	if(st_open_en) {
 		st_open_text = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
 		st_open_color = (digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green";
 		st_open_tipTool = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
 		st_open_tipStatus = !digStts.isEVal() ? tr("State")+" "+digStts.parse(0,";").parse(0,"-") : tr("State")+" "+tr("OPEN");
-  }
+	}
 	if(st_close_en) {
 		st_close_text = !digStts.isEVal() ? digStts.parse(1,";").parse(0,"-") : tr("CLOSE");
 		st_close_color = (digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red";
@@ -16982,22 +17017,22 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 	}
 
 	//Event process
-	while((ev_wrk=event.parse(0,"\n",off)).length) {
+	for(off = 0; (ev_wrk=event.parse(0,"\n",off)).length; ) {
 		if(ev_wrk == "ws_BtPress:/com_open") {
 			if(!prmCom.isEVal()) prmCom = true; prmClose = false;
-			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_open_name);
+			SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_open_name);
 		}
 		else if(ev_wrk == "ws_BtPress:/com_close") {
 			if(!prmClose.isEVal()) prmClose = true; prmCom = false;
-			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_close_name);
+			SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_close_name);
 		}
 		else if(ev_wrk == "ws_BtPress:/com_stop") {
 			prmStop = true;
-			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_stop_name);
+			SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_stop_name);
 		}
 		else ev_rez+=ev_wrk+"\n";
 	}
-	event=ev_rez;
+	event = ev_rez;
 
 	if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? (prmOpenSt ?
 		((digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green") : "gray") :
@@ -17006,7 +17041,37 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 	if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? (prmCloseSt ?
 		((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red") : "gray") :
 			(prmOpenSt ? "gray" : ((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red"));
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1418123625);
+}
+else if(!prmComText.isEVal() || !prmStText.isEVal()) {
+	Ramka_en = true;
+	com_text_en = !prmComText.isEVal();
+	st_text_en = !prmStText.isEVal();
+
+	if(com_text_en) {
+		com_text_items = "";
+		for(off = 0; !digComs.isEVal() && (vIt=digComs.parse(0,";",off)).length; ) com_text_items += vIt + "\n";
+		com_text_tipTool = !digComs.isEVal() ? tr("Select command") : "";
+		com_text_tipStatus = !digComs.isEVal() ? tr("Press for command select") : "";
+		com_text_en = com_text_items.length;
+	}
+	if(st_text_en) {
+		com_text_value = st_text_text = !prmStText.isEVal() ? prmStText.parse(0,"-") : "";
+		st_text_color = (prmStText.parse(1,"-") != "") ? prmStText.parse(1,"-") : "green";
+		st_text_tipTool = !prmStText.isEVal() ? prmStText.parse(0,"-") : "";
+		st_text_tipStatus = !prmStText.isEVal() ? tr("State")+" "+prmStText.parse(0,"-") : "";
+		st_text_en = st_text_text.length;
+	}
+	//Event process
+	for(off = 0; (ev_wrk=event.parse(0,"\n",off)).length; ) {
+		if(ev_wrk == "ws_CombChange:/com_text") {
+			prmComText = com_text_value;
+			SYS.messNote("OP:"+this.ownerSess().user(),"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+prmComText);
+			com_text_value = "";
+		}
+		else ev_rez += ev_wrk+"\n";
+	}
+	event = ev_rez;
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1425577083);
 INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -17979,7 +18044,7 @@ else
 {
   el8_en = true;
   trnd1_prm7addr = el8_prmAddr; trnd1_prm7bordL = el8_min; trnd1_prm7bordU = el8_max; trnd1_prm7color = el8_bordColor;
-}','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1423147261);
+}','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1425573624);
 INSERT INTO "wlb_Main" VALUES('anShow','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAZCAIAAAAOir+2AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAF/0lEQVRYhdWW/08bdRjHn8/n7nrXu2tpy1ootmUtDChsK2snk62AsMnG
 5pj1a6LRH4w/+cMS/xT/g4lLNJkxxmjinIvFKduy4QbKgCJQ+pUCLdD1rndt784f6jadQxMDmL1/
@@ -19817,14 +19882,19 @@ OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
 51fufUZRyqukI/ntybO3H778Rgiy8YtIKWkq8DOT7wQKPfDp4dXzZ64/QnIrt4S8ijGH6IUDB56i
 KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
 1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
-sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text',1,'JavaLikeCalc.JavaScript
+sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text',0,'JavaLikeCalc.JavaScript
 if(f_start)	isErr = false, alBlnk = false;
 //Prepare context menu
 if(f_start && !digComs.isEVal() && digComs.length) {
 	contextMenu = "";
-	if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-")+":open\n";
-	if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-")+":close\n";
-	if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-")+":stop\n";
+	if(!com_text.isEVal())
+		for(off = 0; (comVal=digComs.parse(0,";",off)).length; )
+			contextMenu += comVal.parse(0,"-") + ":" + comVal.parse(0,"-") + "\n";
+	else {
+		if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-") + ":open\n";
+		if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-") + ":close\n";
+		if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-") + ":stop\n";
+	}
 }
 
 //Display label from st_text
@@ -19876,8 +19946,12 @@ if(alarmSt&0x100) {
 
 //Events process
 for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Kran","Event: "+sval);
-	if(sval == "usr_open") {
+	//SYS.messInfo("TextLab","Event: "+sval);
+	if(!com_text.isEVal() && sval.indexOf("usr_") == 0) {
+		com_text = comVal = sval.slice(4);
+		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+	}
+	else if(sval == "usr_open") {
 		if(!com.isEVal())	com = true;
 		else close = false;
 		if((comVal=digComs.parse(0,";")).length) comVal = tr("ENABLE");
@@ -19896,7 +19970,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1414589841);
+event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1425577083);
 INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -21736,9 +21810,9 @@ CREATE TABLE 'prj_archBrowser' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser','control','','root',1,'
 ','
 ','
-',-1,5,'name;',1423079041);
+',-1,5,'name;',1425573625);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm',1,'','','',-1,0,'',1418046751);
-INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;','');
+INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1425573625);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','cntrPasp','','/wlb_Main/wdg_cntrPasp',1,'','','',-1,0,'pName;','');
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'',1423079041);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
@@ -21769,11 +21843,11 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','3','','..',1,''
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','4','','..',1,'','','',-1,0,'name;grpName;',1417969139);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt',1,'','','',-1,0,'geomZ;pName;',1404219070);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1414948968);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1425573625);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;geomX;',1414948968);
+',-1,5,'name;dscr;geomX;',1425573625);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/ggraph','1','','..',1,'','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','doc','','root',1,'
@@ -21786,8 +21860,8 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','mn','','root',1,'
 ','
 ',-1,5,'name;dscr;',1414948968);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1414948968);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'pgGrp;','');
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gcadr','1','','..',1,'','','',-1,0,'name;grpName;','');
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'pgGrp;',1425573625);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gcadr','1','','..',1,'','','',-1,0,'name;grpName;',1425573625);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gview','','/wlb_Main/wdg_ViewCadr',1,'','','',-1,2,'evProc;pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gview','1','','..',1,'','','',-1,0,'name;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','2','','root',1,'
@@ -21805,8 +21879,8 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/rg','rg','','/wlb_Main/wdg_ResultGra
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/rg/rg','1','','..',1,'','','',-1,0,'name;grpName;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO','control','','root',1,'
 ','
-','',-1,5,'name;',1423079041);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;','');
+','',-1,5,'name;',1425573625);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1425573625);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrRegul','','/wlb_Main/wdg_cntrRegul',1,'','','',-1,0,'DESCR;Hdwn;Hup;K1;K2;K3;K4;Kp;NAME;SHIFR;Td;Ti;Zi;ed;max;min;out;out_addr;sp;sp_addr;var;var_addr;KImpRfact;Kd;Ki;TImpMin;TImpPer;Tzd;auto_addr;impQdwn_addr;impQup_addr;prec;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'',1423079041);

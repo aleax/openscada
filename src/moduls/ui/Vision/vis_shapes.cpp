@@ -4490,8 +4490,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if(!runW || runP)	{ up = false; break; }
 
 	    //Put previous include widget to page cache
-	    if((shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()))
-	    {
+	    if((shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty())) {
 		if(shD->inclWidget) {
 		    shD->inclWidget->setReqTm(shD->inclWidget->mainWin()->reqTm());
 		    runW->mainWin()->pgCacheAdd(shD->inclWidget);

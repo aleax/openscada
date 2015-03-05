@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:49+0200\n"
+"POT-Creation-Date: 2015-03-04 17:57+0200\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -32,6 +32,9 @@ msgstr "Планування опитування"
 
 msgid "Gather task priority"
 msgstr "Рівень пріоритету задачі збору даних"
+
+msgid "Restore timeout (s)"
+msgstr "Час відновлення (с)"
 
 msgid "Sync inter remote station period (s)"
 msgstr "Період синхронізації з віддаленою станцією (сек)"
@@ -95,11 +98,13 @@ msgid "Value '%s' type '%s' read is not implemented."
 msgstr "Читання значення '%s' типу '%s' не реалізовано."
 
 msgid "No data"
-msgstr ""
+msgstr "Немає даних"
 
-#, fuzzy, c-format
+msgid "Zero for disable periodic sync."
+msgstr "Нуль для виключення періодичної синхронізації."
+
 msgid "Value type '%s' is not implemented for '%s'."
-msgstr "Тип значення %s не реалізовано для '%s'."
+msgstr "Тип значення '%s' не реалізовано для '%s'."
 
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "

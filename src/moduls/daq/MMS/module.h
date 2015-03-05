@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.MMS file: module.h
 /***************************************************************************
- *   Copyright (C) 2013-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -91,8 +91,7 @@ class TMdContr: public TController, public MMS::Client
     friend class TMdPrm;
     public:
 	//Data
-	struct StackTp
-	{
+	struct StackTp {
 	    StackTp( TArrayObj *iarr, MMS::XML_N *ivl, int iInPos ) : arr(iarr), vl(ivl), inPos(iInPos) { }
 
 	    TArrayObj *arr;
@@ -106,10 +105,12 @@ class TMdContr: public TController, public MMS::Client
 
 	string	getStatus( );
 
+	bool	connOK( )	{ return startStat() && tmDelay <= 0; }
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	double	syncPer( )	{ return mSync; }
+	int	restTm( )	{ return mRestTm; }
+	int	syncPer( )	{ return mSync; }
 	string	addr( )		{ return mAddr; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -122,6 +123,8 @@ class TMdContr: public TController, public MMS::Client
 	void protIO( MMS::XML_N &io );
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
 	void debugMess( const string &mess );
+
+	string getNameList( const string &domain = "" );
 
     protected:
 	//Methods
@@ -148,14 +151,24 @@ class TMdContr: public TController, public MMS::Client
 	    unsigned	div	: 7;
 	};
 
+	class NamesCacheEl
+	{
+	    public:
+		NamesCacheEl( time_t itm, const string &inms ) : tm(itm), nms(inms)	{ }
+		NamesCacheEl( ) : tm(0)	{ }
+		time_t	tm;
+		string	nms;
+	};
+
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 
 	//Attributes
-	pthread_mutex_t	enRes, cntrRes, dataRes;	//Resource for enable params, controller DAQ API and data
+	pthread_mutex_t	enRes, cntrRes;	//Resource for enable params, controller DAQ API
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
+		&mRestTm,	//Restore timeout in s
 		&mSync,		//Synchronization inter remote station: attributes list update.
 		&mAddr,		//MMS server address
 		&mVarsRdReq;	//Variables into single request
@@ -175,6 +188,8 @@ class TMdContr: public TController, public MMS::Client
 
 	AutoHD<TTransportOut>	tr;
 	map<string, VarStr>	mVars;
+
+	map<string, NamesCacheEl> namesCache;
 };
 
 //*************************************************

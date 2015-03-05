@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-17 19:59+0200\n"
+"POT-Creation-Date: 2015-03-04 18:53+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,6 +23,9 @@ msgstr "Планирование опроса"
 
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
+
+msgid "Restore timeout (s)"
+msgstr "Интервал восстановления (с)"
 
 msgid "Sync inter remote station period (s)"
 msgstr "Период синхронизации с удалённой станцией (сек)"
@@ -101,6 +104,9 @@ msgstr "Ошибка удалённого хоста"
 
 msgid "OK"
 msgstr "НОРМА"
+
+msgid "Zero for disable periodic sync."
+msgstr "Ноль для отключения периодической синхронизации."
 
 msgid "Server nodes browser"
 msgstr "Обзор узлов сервера"

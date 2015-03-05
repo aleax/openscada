@@ -124,7 +124,7 @@ class TMdContr: public TController
 	double	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	double	syncPer( )	{ return mSync; }
+	int	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }
 
 	string	catsPat( );
@@ -173,10 +173,10 @@ class TMdContr: public TController
 	pthread_mutex_t	enRes;			//Resource for enable params and request to remote OpenSCADA station
 	TCfg	&mSched,			//Calc schedule
 		&mMessLev;			//Messages level for gather
-	double	&mSync,				//Synchronization inter remote OpenSCADA station:
+	double	&mRestDtTm;			//Restore data maximum length time (hour)
+	int64_t	&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
-		&mRestDtTm;			//Restore data maximum length time (hour)
-	int64_t	&mPerOld,			//Acquisition task (seconds)
+		&mPerOld,			//Acquisition task (seconds)
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
 

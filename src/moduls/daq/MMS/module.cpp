@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -88,7 +88,8 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
+    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
+    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
     fldAdd(new TFld("ADDR",_("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
     fldAdd(new TFld("VARS_RD_REQ",_("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
     fldAdd(new TFld("COTP_DestTSAP",_("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
@@ -121,15 +122,14 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
-    prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes), tmGath(0), tmDelay(0)
+    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
+    prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes()), tmGath(0), tmDelay(0)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
     pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init(&enRes, &attrM);
     pthread_mutex_init(&cntrRes, &attrM);
-    pthread_mutex_init(&dataRes, &attrM);
     pthread_mutexattr_destroy(&attrM);
 
     cfg("PRM_BD").setS("MMSPrm_"+name_c);
@@ -163,7 +163,6 @@ TMdContr::~TMdContr( )
 
     pthread_mutex_destroy(&enRes);
     pthread_mutex_destroy(&cntrRes);
-    pthread_mutex_destroy(&dataRes);
 }
 
 string TMdContr::getStatus( )
@@ -224,6 +223,43 @@ int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 
 void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
 
+string TMdContr::getNameList( const string &domain )
+{
+    string rez;
+
+    //Check cache
+    MtxAlloc res(dataRes(), true);
+    map<string, NamesCacheEl>::iterator cEl = namesCache.find(domain);
+    if(cEl != namesCache.end() && (!syncPer() || SYS->sysTm() < (cEl->second.tm+syncPer()) && (cEl->second.nms.size() || (startStat() && !connOK()))))
+	return cEl->second.nms;
+    res.unlock();
+
+    if(domain.empty()) {	//Get domains list
+	MMS::XML_N reqDom("MMS");
+	reqDom.setAttr("id", "getNameList")->setAttr("objectClass", i2s(MMS::OCL_Domain));
+	reqService(reqDom);
+	for(unsigned i_d = 0; reqDom.attr("err").empty() && i_d < reqDom.childSize(); i_d++)
+	    rez += reqDom.childGet(i_d)->text() + "\n";
+    }
+    else {			//Get names list
+	MMS::XML_N reqVar("MMS");
+	reqVar.setAttr("moreFollows", "");
+	string continueAfter;
+	do {
+	    reqVar.clear()->setAttr("id", "getNameList")->setAttr("objectClass", i2s(MMS::OCL_NmVar))->setAttr("continueAfter", continueAfter);
+	    if(domain != "*") reqVar.setAttr("domainSpecific", domain);
+	    reqService(reqVar);
+	    for(unsigned i_v = 0; reqVar.attr("err").empty() && i_v < reqVar.childSize(); i_v++)
+		rez += domain + "/" + (continueAfter=reqVar.childGet(i_v)->text()) + "\n";
+	} while(s2i(reqVar.attr("moreFollows")));
+    }
+
+    res.lock();
+    namesCache[domain] = NamesCacheEl(SYS->sysTm(), rez);
+
+    return rez;
+}
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )
@@ -244,6 +280,9 @@ void TMdContr::disable_( )
 {
     tr.free();
     mVars.clear();
+
+    MtxAlloc res(dataRes(), true);
+    namesCache.clear();
 }
 
 void TMdContr::start_( )
@@ -307,8 +346,7 @@ void *TMdContr::Task( void *icntr )
     bool firstCall = true;
     cntr.prcSt = true;
 
-    for(unsigned int it_cnt = cntr.pHD.size(); !TSYS::taskEndRun(); it_cnt++)
-    {
+    for(unsigned int it_cnt = cntr.pHD.size(); !TSYS::taskEndRun(); it_cnt++) {
 	if(cntr.redntUse()) { TSYS::sysSleep(1); continue; }
 	if(cntr.tmDelay > 0){ TSYS::sysSleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
@@ -320,8 +358,7 @@ void *TMdContr::Task( void *icntr )
 	MtxAlloc res(cntr.enRes, true);
 	bool isErr = valCtr.attr("err").size();
 	unsigned viCnt = 0;
-	for(map<string,VarStr>::iterator vi = cntr.mVars.begin(); true; ++vi, ++viCnt)
-	{
+	for(map<string,VarStr>::iterator vi = cntr.mVars.begin(); true; ++vi, ++viCnt) {
 	    // Send request
 	    if(vi == cntr.mVars.end() || valCtr.childSize() >= cntr.mVarsRdReq.getI() ||
 		(valCtr.childSize() && (vi->second.single || s2i(valCtr.childGet(valCtr.childSize()-1)->attr("single")))))
@@ -337,7 +374,7 @@ void *TMdContr::Task( void *icntr )
 			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
 						cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
 			}
-			cntr.tmDelay = cntr.syncPer();
+			cntr.tmDelay = cntr.restTm();
 		    }
 		    else {
 			cntr.acq_err.setVal("");
@@ -354,8 +391,7 @@ void *TMdContr::Task( void *icntr )
 		    nId = (value->attr("domainId").size()?value->attr("domainId"):"*")+"/"+value->attr("itemId");
 		    if(isErr || value->attr("err").size()) value = NULL;
 		    if(!value) { cntr.mVars[nId] = TVariant(EVAL_REAL); continue; }
-		    switch(s2i(value->attr("tp")))
-		    {
+		    switch(s2i(value->attr("tp"))) {
 			case MMS::VT_Bool: case MMS::VT_Int: case MMS::VT_UInt:
 			case MMS::VT_Float:
 			case MMS::VT_BitString: case MMS::VT_OctString: case MMS::VT_VisString:
@@ -379,8 +415,7 @@ void *TMdContr::Task( void *icntr )
 				}
 
 				MMS::XML_N *itValue = curValue->childGet(i_v);
-				switch(s2i(itValue->attr("tp")))
-				{
+				switch(s2i(itValue->attr("tp"))) {
 				    case MMS::VT_Bool: curArr->arSet(i_v, bool(s2i(itValue->text())));	break;
 				    case MMS::VT_Int: case MMS::VT_UInt:
 					curArr->arSet(i_v, (int64_t)atoll(itValue->text().c_str()));
@@ -424,10 +459,11 @@ void *TMdContr::Task( void *icntr )
 	//Update controller's data
 	cntr.callSt = true;
 	unsigned int div = cntr.period() ? (unsigned int)(cntr.syncPer()/(1e-9*cntr.period())) : 0;
+	bool forceUpd = (firstCall || cntr.tmDelay == 0);
 	for(unsigned i_p = 0; i_p < cntr.pHD.size() && !cntr.redntUse() && !TSYS::taskEndRun(); i_p++)
 	    try {
 		cntr.pHD[i_p].at().vlList(als);
-		if(firstCall || (div && (it_cnt%div) < cntr.pHD.size())) {
+		if((forceUpd && (i_p == 0 || cntr.tmDelay < 0)) || (div && (it_cnt%div) < cntr.pHD.size())) {
 		    string aPrcErr = cntr.pHD[i_p].at().attrPrc();
 		    if(!cntr.mVars.size()) {
 			cntr.acq_err.setVal(aPrcErr);
@@ -436,7 +472,7 @@ void *TMdContr::Task( void *icntr )
 			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
 				cntr.id().c_str(), (aPrcErr.size()?TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str():_("No data"))));
 			}
-			cntr.tmDelay = cntr.syncPer();
+			cntr.tmDelay = cntr.restTm();
 		    }
 		}
 
@@ -479,9 +515,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON(), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior(), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable periodic sync."), NULL);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
@@ -536,6 +573,8 @@ void TMdPrm::save_( )	{ TParamContr::save_(); }
 
 string TMdPrm::attrPrc( )
 {
+    if(owner().startStat() && !owner().connOK()) return "";
+
     vector<string> als;
 
     string conErr;
@@ -656,7 +695,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	      "    array - array;\n"
 	      "  {id} - force attribute ID.\n"
 	      "  {name} - force attribute name."),NULL);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable append"),enableStat()?0:RWRW__,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/SEL_VAR_lst");
+	if(!owner().startStat() || owner().connOK())
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable append"),enableStat()?0:RWRW__,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/SEL_VAR_lst");
 	return;
     }
 
@@ -682,8 +722,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/prm/cfg/SEL_VAR_lst" && ctrChkNode(opt)) {
-	string selVAR = TSYS::pathLev(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")),0);
-	if(selVAR.empty()) {	//Get domain list
+	string	selVAR = TSYS::pathLev(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")), 0);
+	string	lst = owner().getNameList(selVAR), lstEl;
+	opt->childAdd("el")->setText(selVAR.empty()?"*":"");
+	for(int off = 0; (lstEl=TSYS::strLine(lst,0,&off)).size(); ) opt->childAdd("el")->setText(lstEl);
+
+	/*if(selVAR.empty()) {	//Get domain list
 	    MMS::XML_N reqDom("MMS");
 	    reqDom.setAttr("id", "getNameList")->setAttr("objectClass", i2s(MMS::OCL_Domain));
 	    owner().reqService(reqDom);
@@ -694,17 +738,16 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	else {			//Get names list
 	    opt->childAdd("el")->setText("");
 	    MMS::XML_N reqVar("MMS");
-	    reqVar.setAttr("moreFollows","");
+	    reqVar.setAttr("moreFollows", "");
 	    string continueAfter;
 	    do {
-		reqVar.clear()->setAttr("id","getNameList")->setAttr("objectClass", i2s(MMS::OCL_NmVar))->setAttr("continueAfter", continueAfter);
-		if(selVAR != "*") reqVar.setAttr("domainSpecific",selVAR);
+		reqVar.clear()->setAttr("id", "getNameList")->setAttr("objectClass", i2s(MMS::OCL_NmVar))->setAttr("continueAfter", continueAfter);
+		if(selVAR != "*") reqVar.setAttr("domainSpecific", selVAR);
 		owner().reqService(reqVar);
 		for(unsigned i_v = 0; reqVar.attr("err").empty() && i_v < reqVar.childSize(); i_v++)
 		    opt->childAdd("el")->setText(selVAR+"/"+(continueAfter=reqVar.childGet(i_v)->text()));
-	    }
-	    while(s2i(reqVar.attr("moreFollows")));
-	}
+	    } while(s2i(reqVar.attr("moreFollows")));
+	}*/
     }
     else TParamContr::cntrCmdProc(opt);
 }
@@ -758,8 +801,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     MMS::XML_N *value = valCtr.setAttr("id", "write")->
 		    childAdd("it")->setAttr("itemId", TSYS::pathLev(nId,1))->setAttr("dataType", i2s(vTp));
     if(TSYS::pathLev(nId,0) != "*") value->setAttr("domainId", TSYS::pathLev(nId,0));
-    switch(vTp)
-    {
+    switch(vTp) {
 	case MMS::VT_Array: case MMS::VT_Struct: {	//!!!! Need for test
 	    TArrayObj *curArr = NULL;
 	    if(vl.type() != TVariant::Object || !(curArr=dynamic_cast<TArrayObj*>(&vl.getO().at()))) break;

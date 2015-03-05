@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-17 19:59+0200\n"
+"POT-Creation-Date: 2015-03-04 18:53+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -24,6 +24,9 @@ msgstr "Planung der Befragung"
 
 msgid "Gather task priority"
 msgstr "Niveau der Priorität der Datenempfangaufgabe"
+
+msgid "Restore timeout (s)"
+msgstr "Zeitüberschreitung bei der Wiederherstellung (s)"
 
 msgid "Sync inter remote station period (s)"
 msgstr "Periode der Sznchronisierung mit der entfernten Station (sek)"
@@ -102,6 +105,9 @@ msgstr "Fehler des entfernten Hostes"
 
 msgid "OK"
 msgstr "OK"
+
+msgid "Zero for disable periodic sync."
+msgstr "Zero deaktivieren periodische Synchronisation."
 
 msgid "Server nodes browser"
 msgstr "Übersicht der Knoten des Servers"

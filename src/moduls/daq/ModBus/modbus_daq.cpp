@@ -73,7 +73,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("WR_MULTI",_("Use multi-items write functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("WR_ASYNCH",_("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;3600"));
+    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
     fldAdd(new TFld("MAX_BLKSZ",_("Maximum request block size (bytes)"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 

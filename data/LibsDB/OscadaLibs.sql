@@ -1807,6 +1807,35 @@ INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BOC_2','ВОС (Tв2)',2,32,'',61,
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G1_2','G1 (Tв2)',2,32,'',62,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G2_2','G2 (Tв2)',2,32,'',63,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','this','This parameter object',4,0,'',64,'Объект параметра','','Об''єкт параметру','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','transport','Transport',0,64,'SMDP',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','addr','Device address (16...254)',1,64,'16',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','perGet','Period data getting (s)',2,64,'10',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','version','Firmware Version',0,16,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','CfgPrmSSID','Configuration parameter session ID',1,16,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Srlno','Measurement serial number',1,16,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RawFreq','Channel freq.',2,16,'',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','GoodFreq','Last used, good channel freq. (Hz)',2,16,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RawThick','Computed raw thickness, from frequency. (A)',2,16,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalThick','Computed material related thickness, can be zeroed. (A)',2,16,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalThick_F','Filtered computed material related thickness, can be zeroed. (A)',2,16,'',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalRate','Rate, angstroms per second.',2,16,'',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalRate_F','Rate, angstroms per second, filtered.',2,16,'',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalLife','XtalLife (%)',2,16,'',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalQual','Quality level (0-9).',1,16,'',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalQualPeak','Highest quality level seen (0-9).',1,16,'',15,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStab','Stability level (0-9).',1,16,'',16,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStabPeak','Highest stability level seen (0-9).',1,16,'',17,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStat','Channel status.',0,16,'',18,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalLife_C','XtalLife (%).',1,16,'',19,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SessId','Session ID',1,32,'',20,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Fq','Xtal start freq. (Hz)',2,32,'',21,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Fm','Xtal min freq. (Hz)',2,32,'',22,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Density','Material density (gm/cc).',2,32,'',23,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Zratio','Material Z ratio. Not scaled or unitized.',2,32,'',24,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Tooling','1.000 is 100 % tooling (unity).',2,32,'',25,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RateReq','Requested rate (A/S).',2,32,'',26,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','QlvlTrip','Quality threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',27,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SlvlTrip','Stability threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',28,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -3367,6 +3396,13 @@ INSERT INTO "Trs" VALUES('Deceleration failure','Помилка гальмува
 INSERT INTO "Trs" VALUES('Request for service info.','','');
 INSERT INTO "Trs" VALUES('Request for counter time and hour archive begin.','','');
 INSERT INTO "Trs" VALUES('Request for dimensions and precisions.','','');
+INSERT INTO "Trs" VALUES('No connect','','');
+INSERT INTO "Trs" VALUES('No Problems. The rest below are prioritized.','','');
+INSERT INTO "Trs" VALUES('Frequency of xtal is > Fq or < Fm. Halts all other calculations.','','');
+INSERT INTO "Trs" VALUES('Frequency was bad (previous XtalStat was XPROB_FREQ) and frequency is now in range, but life is less than 3%.','','');
+INSERT INTO "Trs" VALUES('Stability level XtalStab of xtal >= SlvlTrip.','','');
+INSERT INTO "Trs" VALUES('Unable to determine rate because of a computation error, most likely caused by a parameter (density, z-ratio, etc) having a zero or otherwise invalid (non numeric or infinity) value.','','');
+INSERT INTO "Trs" VALUES('XtalQual of xtal >= QlvlTrip.','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -4190,6 +4226,252 @@ if(t_err.length) {
 	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
 }
 else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1424878121);
+INSERT INTO "tmplib_DevLib" VALUES('SMDP','Sycon Multi Drop Protocol','','','STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com).
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vacuum technologies laboratory (http://e-beam.ru).','','',10,0,'JavaLikeCalc.JavaScript
+if(f_stop) return;
+if(f_start) {
+	cnt = 0;
+	version = "";
+	SessId_ = SessId = QlvlTrip_ = QlvlTrip = SlvlTrip_ = SlvlTrip = EVAL_INT;
+	Fq_ = Fq = Fm_ = Fm = Density_ = Density = Zratio_ = Zratio = Tooling_ = Tooling = RateReq_ = RateReq = EVAL_REAL;
+}
+
+tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+req = SYS.XMLNode("mess").setAttr("ProtIt","SMDP").setAttr("addr",addr).setAttr("try",3);
+
+t_err = "";
+
+//Configurations first write
+// Session ID.
+if(SessId != SessId_) {
+	SYS.messDebug("/SMDP/tmpl",""+SessId+"!="+SessId_);	
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x41"+SessId); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) SessId_ = SessId; else SessId = SessId_;
+}
+// Xtal start freq. (Hz)
+if(Fq != Fq_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x42"+Fq); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) Fq_ = Fq; else Fq = Fq_;
+}
+// Xtal min freq. (Hz)
+if(Fm != Fm_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x43"+Fm); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) Fm_ = Fm; else Fm = Fm_;
+}
+// Material density (gm/cc).
+if(Density != Density_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x44"+Density); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) Density_ = Density; else Density = Density_;
+}
+// Material Z ratio. Not scaled or unitized.
+if(Zratio != Zratio_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x45"+Zratio); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) Zratio_ = Zratio; else Zratio = Zratio_;
+}
+// 1.000 is 100 % tooling (unity).
+if(Tooling != Tooling_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x46"+Tooling); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) Tooling_ = Tooling; else Tooling = Tooling_;
+}
+// Requested rate (A/S).
+if(RateReq != RateReq_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x47"+RateReq); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) RateReq_ = RateReq; else RateReq = RateReq_;
+}
+// Quality threshold, if non 0 and exceeded, xtal fail occurs.
+if(QlvlTrip != QlvlTrip_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x48"+QlvlTrip); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) QlvlTrip_ = QlvlTrip; else QlvlTrip = QlvlTrip_;
+}
+// Stability threshold, if non 0 and exceeded, xtal fail occurs.
+if(SlvlTrip != SlvlTrip_) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xD0\x49"+SlvlTrip); tr.messIO(req,"UserProtocol");
+	if(!(t_err=req.attr("err")).length) SlvlTrip_ = SlvlTrip; else SlvlTrip = SlvlTrip_;
+}
+
+//======= Data getting (by self bigger period) ========
+if((cnt++)%max(1,perGet*f_frq))	return;
+
+//Configurations first read
+// Session ID.
+if(!t_err.length && SessId.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x41"); tr.messIO(req,"UserProtocol");
+	SessId = SessId_ = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+}
+// Xtal start freq. (Hz)
+if(!t_err.length && Fq.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x42"); tr.messIO(req,"UserProtocol");
+	Fq = Fq_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+// Xtal min freq. (Hz)
+if(!t_err.length && Fm.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x43"); tr.messIO(req,"UserProtocol");
+	Fm = Fm_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+// Material density (gm/cc).
+if(!t_err.length && Density.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x44"); tr.messIO(req,"UserProtocol");
+	Density = Density_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+// Material Z ratio. Not scaled or unitized.
+if(!t_err.length && Zratio.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x45"); tr.messIO(req,"UserProtocol");
+	Zratio = Zratio_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+// 1.000 is 100 % tooling (unity).
+if(!t_err.length && Tooling.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x46"); tr.messIO(req,"UserProtocol");
+	Tooling = Tooling_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+// Requested rate (A/S).
+if(!t_err.length && RateReq.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x47"); tr.messIO(req,"UserProtocol");
+	RateReq = RateReq_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+// Quality threshold, if non 0 and exceeded, xtal fail occurs.
+if(!t_err.length && QlvlTrip.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x48"); tr.messIO(req,"UserProtocol");
+	QlvlTrip = QlvlTrip_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toInt(10);
+}
+// Stability threshold, if non 0 and exceeded, xtal fail occurs.
+if(!t_err.length && SlvlTrip.isEVal()) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x49"); tr.messIO(req,"UserProtocol");
+	SlvlTrip = SlvlTrip_ = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toInt(10);
+}
+
+//Runtime variables
+// Read version, single
+if(!t_err.length && (!version.length || version.isEVal())) {
+	req.setAttr("err","1:"+tr("No connect")).setText("\x40"); tr.messIO(req,"UserProtocol");
+	version = (t_err=req.attr("err")).length ? EVAL_STR : req.text().slice(1);
+}
+
+// Read Configuration parameter session ID
+if(t_err.length) CfgPrmSSID = EVAL_INT;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x61"); tr.messIO(req,"UserProtocol");
+	CfgPrmSSID = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+	//SYS.messDebug("/SMDP/tmpl","CfgPrmSSID: "+req.text());
+}
+
+// Read Measurement serial number
+if(t_err.length) Srlno = EVAL_INT;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x62"); tr.messIO(req,"UserProtocol");
+	Srlno = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+}
+
+// Read Channel freq.
+if(t_err.length) RawFreq = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x63"); tr.messIO(req,"UserProtocol");
+	RawFreq = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read Last used, good channel freq. (Hz)
+if(t_err.length) GoodFreq = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x64"); tr.messIO(req,"UserProtocol");
+	GoodFreq = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read Computed raw thickness, from frequency. (A)
+if(t_err.length) RawThick = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x65"); tr.messIO(req,"UserProtocol");
+	RawThick = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read Computed material related thickness, can be zeroed. (A)
+if(t_err.length) XtalThick = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x66"); tr.messIO(req,"UserProtocol");
+	XtalThick = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read Filtered computed material related thickness, can be zeroed. (A)
+if(t_err.length) XtalThick_F = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x67"); tr.messIO(req,"UserProtocol");
+	XtalThick_F = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read Rate, angstroms per second.
+if(t_err.length) XtalRate = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x68"); tr.messIO(req,"UserProtocol");
+	XtalRate = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read Rate, angstroms per second, filtered.
+if(t_err.length) XtalRate_F = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x69"); tr.messIO(req,"UserProtocol");
+	XtalRate_F = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read XtalLife (%)
+if(t_err.length) XtalLife = EVAL_REAL;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x6A"); tr.messIO(req,"UserProtocol");
+	XtalLife = (t_err=req.attr("err")).length ? EVAL_REAL : req.text().slice(2).toReal();
+}
+
+// Read Quality level (0-9).
+if(t_err.length) XtalQual = EVAL_INT;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x6B"); tr.messIO(req,"UserProtocol");
+	XtalQual = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+}
+
+// Read Highest quality level seen (0-9).
+if(t_err.length) XtalQualPeak = EVAL_INT;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x6C"); tr.messIO(req,"UserProtocol");
+	XtalQualPeak = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+}
+
+// Read Stability level (0-9).
+if(t_err.length) XtalStab = EVAL_INT;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x6D"); tr.messIO(req,"UserProtocol");
+	XtalStab = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+}
+
+// Read Highest stability level seen (0-9).
+if(t_err.length) XtalStabPeak = EVAL_INT;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x6E"); tr.messIO(req,"UserProtocol");
+	XtalStabPeak = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+}
+
+// Read Channel status.
+if(t_err.length) XtalStat = EVAL_STR;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x6F"); tr.messIO(req,"UserProtocol");
+	if((t_err=req.attr("err")).length) XtalStat = EVAL_STR;
+	else {
+		stCd = req.text().slice(2).toInt(10);
+		stLab = tr("Unknown");
+		if(stCd == 0)			stLab = "XPROB_NONE: "+tr("No Problems. The rest below are prioritized.");
+		else if(stCd == 1)	stLab = "XPROB_FREQ: "+tr("Frequency of xtal is > Fq or < Fm. Halts all other calculations.");
+		else if(stCd == 2)	stLab = "XPROB_LOWLIFE: "+tr("Frequency was bad (previous XtalStat was XPROB_FREQ) and frequency is now in range, but life is less than 3%.");
+		else if(stCd == 3)	stLab = "XPROB_S_FAIL: "+tr("Stability level XtalStab of xtal >= SlvlTrip.");
+		else if(stCd == 4)	stLab = "XPROB_MATH: "+tr("Unable to determine rate because of a computation error, most likely caused by a parameter (density, z-ratio, etc) having a zero or otherwise invalid (non numeric or infinity) value.");
+		else if(stCd == 5)	stLab = "XPROB_Q_FAIL: "+tr("XtalQual of xtal >= QlvlTrip.");
+		XtalStat = ""+stCd+":"+stLab;
+	}
+}
+
+// Read XtalLife (%).
+if(t_err.length) XtalLife_C = EVAL_INT;
+else {
+	req.setAttr("err","1:"+tr("No connect")).setText("\xC0\x70"); tr.messIO(req,"UserProtocol");
+	XtalLife_C = (t_err=req.attr("err")).length ? EVAL_INT : req.text().slice(2).toInt(10);
+}
+
+f_err = t_err.length ? t_err : "0";','','',1425146566);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -5881,4 +6163,54 @@ for(i = 1; i < min(KSpos+1,resp.length); i++) {
 }
 if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:"+tr("KS error.")); return; }
 io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','',1424879686);
+INSERT INTO "UserProtocol_uPrt" VALUES('SMDP','Sycon Multi Drop Protocol','','','Protocol level of STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com)
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vacuum technologies laboratory (http://e-beam.ru).','','',1,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="16" try="1" err="1:Error">{req}</mess> - message tag
+//req - request/respond data;
+//addr - remote device address [16...254];
+//try - tries for the request;
+//err - sets for the request result.
+
+if(!io.text().length) { io.setAttr("err","1:"+tr("Message empty")); return; }
+addr = io.attr("addr").toInt();
+try = min(5,max(1,io.attr("try").toInt()));
+request = "\x02"+SYS.strFromCharCode(addr) + io.text();
+//Calc CHKSUM
+CRC = 0;
+for(i = 1; i < request.length; i++) CRC += request.charCodeAt(i);
+request += SYS.strFromCharCode((CRC>>4&0xF)+0x30,(CRC&0xF)+0x30,0x0D);
+
+SYS.messDebug("/UserProt/SMDP",tr("Request:")+" "+Special.FLibSYS.strDec4Bin(request));
+
+for( ; try > 0; try--) {
+	//Send the request
+	resp = tr.messIO(request);
+	while(resp.length && resp.charCodeAt(resp.length-1) != 0x0D)
+		if((tresp=tr.messIO("")).length) resp += tresp;
+		else break;
+
+	if(!resp.length)	{ io.setAttr("err","2:"+tr("No respond")); continue; }
+	if(resp.length < 6 || resp.charCodeAt(resp.length-1) != 0x0D)	{ io.setAttr("err","3:"+tr("Not full respond")); continue; }
+	if(resp.charCodeAt(0) != 0x02 || resp.charCodeAt(1) != addr)	{ io.setAttr("err","4:"+tr("Wrong respond")); continue; }
+
+	SYS.messDebug("/UserProt/SMDP",tr("Respond:")+" "+Special.FLibSYS.strDec4Bin(resp));
+
+	CRC = 0;
+	for(i = 1; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
+	if((CRC&0xFF) != (((resp.charCodeAt(resp.length-3)-0x30)<<4)|(resp.charCodeAt(resp.length-2)-0x30)))
+	{ io.setAttr("err","6:"+tr("CRC error.")); continue; }
+	break;
+}
+if(try <= 0)	return;
+
+errCd = resp.charCodeAt(2)&0x7;
+if(errCd == 1) io.setAttr("err","").setText(resp.slice(2,-2));
+else if(errCd == 2) io.setAttr("err",""+(10+errCd)+":Err_inv_cmd: "+tr("Illegal command (CMD code not valid)."));
+else if(errCd == 3) io.setAttr("err",""+(10+errCd)+":Err_syntax: "+tr("Syntax error. (Too many bytes in data field, not enough bytes, etc)."));
+else if(errCd == 4) io.setAttr("err",""+(10+errCd)+":Err_range: "+tr("Data range error."));
+else if(errCd == 5) io.setAttr("err",""+(10+errCd)+":Err_inhibited: "+tr("Inhibited."));
+else if(errCd == 6) io.setAttr("err",""+(10+errCd)+":Err_obso: "+tr("Obsolete command. No action taken, but not really an error."));
+else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));','',1425141878);
 COMMIT;
