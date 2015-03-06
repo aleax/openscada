@@ -409,7 +409,7 @@ void *Session::Task( void *icontr )
     Session &ses = *(Session *)icontr;
 
     ses.endrun_req = false;
-    ses.mStart    = true;
+    ses.mStart	   = true;
 
     ses.list(pls);
     while(!ses.endrun_req) {
@@ -610,8 +610,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root",SUI_ID,3,"tp","br","idm","1","br_pref","pg_");
 	if(ctrMkNode("area",opt,-1,"/alarm",_("Alarms")))
-	    if(ctrMkNode("table",opt,-1,"/alarm/alarm",_("Alarms list"),R_R_R_,"root",SUI_ID))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/alarm/alarm",_("Alarms list"),R_R_R_,"root",SUI_ID)) {
 		ctrMkNode("list",opt,-1,"/alarm/alarm/wdg",_("Widget"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/lev",_("Level"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/cat",_("Category"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -1497,7 +1496,7 @@ void SessWdg::calc( bool first, bool last )
 		attr = attrAt(mAttrLnkLs[i_a]);
 		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(attr.at().cfgVal());
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty()) {
-		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
 		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if(obj_tp == "prm:") {
 			int detOff = obj_tp.size();	//Links subdetail process
@@ -1525,6 +1524,13 @@ void SessWdg::calc( bool first, bool last )
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
 		    else if(obj_tp == "arh:" && attr.at().flgGlob()&Attr::Address)
 			attr.at().setS("/Archive/va_"+attr.at().cfgVal().substr(obj_tp.size()));
+		}
+		else if(attr.at().flgSelf()&Attr::CfgLnkOut) {
+		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
+		    if(!attr.at().cfgVal().size() ||
+			    (obj_tp == "prm:" && SYS->daq().at().attrAt(TSYS::strParse(attr.at().cfgVal().substr(obj_tp.size()),0,"#"),0,true).freeStat()) ||
+			    (obj_tp == "wdg:" && attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).freeStat()))
+			attr.at().setS(EVAL_STR, false, true);
 		}
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);
 		attr.free();

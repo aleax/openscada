@@ -231,8 +231,7 @@ class TValFunc
 
     protected:
 	//Data
-	struct SVl
-	{
+	struct SVl {
 	    unsigned short	tp	: 4;
 	    unsigned short	mdf	: 1;
 	    union {
@@ -241,7 +240,7 @@ class TValFunc
 		int64_t	i;
 		char	b;
 		AutoHD<TVarObj>	*o;
-	    }val;
+	    } val;
 	};
 
 	//Attributes

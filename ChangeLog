@@ -1,3 +1,10 @@
+2015-03-06 Roman
+- DB: LibsDB.OscadaLibs.db, FIX:Protocol.UserProtocol: Translation for user protocols fixed and appended.
+- DB: LibsDB.vcaBase.db, Model.AGLKS.vca.db, Model.Boiler.St.db:
+    Main.ElCadr for "digComs" and writing to "com_text" tested, fixed and adapted into all projects.
+- UI.VCAEngine: Checking for accessibility output links for allow the check into user's script by EVAL.
+
+
 2015-03-05 Roman
 - DB: LibsDB.OscadaLibs.db: User protocols and the data templates were appended by protocol SMDP.
 - DB: LibsDB.vcaBase.db: Main.{ElCadr,TextLab}: expanded by free commands into "digComs" and writing to "com_text".

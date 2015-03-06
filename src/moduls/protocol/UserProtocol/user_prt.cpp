@@ -415,9 +415,10 @@ void UserPrt::setEnable( bool vl )
 	    mWorkInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
 	} else mWorkInProg = "";
-	//Prepare and compile input transport function
+	//Prepare and compile output transport function
 	if(!outProg().empty()) {
 	    TFunction funcIO("uprt_"+id()+"_out");
+	    funcIO.setStor(DB());
 	    funcIO.ioIns(new IO("io",_("IO"),IO::Object,IO::Default), 0);
 	    funcIO.ioIns(new IO("tr",_("Transport"),IO::Object,IO::Default), 1);
 

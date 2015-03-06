@@ -4027,6 +4027,8 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','Pages group: "KM202"',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','Pages group: "KM301"',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','Pages group: "KM302"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','prmComText','',44,'<page>|com_text','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','prmStText','',42,'<page>|st_text','','','','','','','','');
 CREATE TABLE 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "prj_AGLKS_stl" VALUES('<Styles>','Default;root;UI;0444','Ivory','','','','','','','','');
 INSERT INTO "prj_AGLKS_stl" VALUES('backColor','gray','ivory','','','','','','','','');
@@ -6498,102 +6500,6 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','47',32,'','','El_angleTR_gr
 CREATE TABLE 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 CREATE TABLE 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO "wlb_AGLKS_uio" VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
-CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;demoPlayProc;',1415550169);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root','','','',-1,5,'name;dscr;geomX;',1414589842);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','doc','','root','
-','
-','
-',-1,5,'name;dscr;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docGasNodeMgn','','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet','','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA','','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA','','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder','','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root','','','',-1,5,'name;dscr;',1414521219);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1414518565);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen','','','',-1,0,'pgNoOpenProc;pgGrp;',1414521219);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr','','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gcadr','1','','..','','','',-1,0,'name;grpName;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','rg','','root','','','',-1,5,'name;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg','rg','','/wlb_Main/wdg_ResultGraph','','','',-1,2,'name;geomYsc;pgGrp;grpName;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gview','','/wlb_Main/wdg_ViewCadr','','','',-1,2,'dscr;geomYsc;evProc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gview','1','','..','','','',-1,0,'name;dscr;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','2','','root','','','',-1,5,'name;dscr;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','mn','','root','','','',-1,5,'name;dscr;',1397927358);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/mn','KM101','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'pgGrp;',1397927358);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','control','','root','','','',-1,5,'name;',1405531810);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','ElCadr','','/wlb_Main/wdg_ElCadr','','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1377525838);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','terminator','','/wlb_Main/wdg_terminator','','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','doc_panel','','/wlb_Main/wdg_doc_panel','','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrRegul','','/wlb_Main/wdg_cntrRegul','','','',-1,0,'geomYsc;DESCR;Hdwn;Hup;K1;K2;K3;K4;KImpRfact;Kd;Ki;Kp;NAME;SHIFR;TImpMin;TImpPer;Td;Ti;Tzd;Zi;auto_addr;ed;impQdwn_addr;impQup_addr;max;min;out;out_addr;prec;sp;sp_addr;var;var_addr;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','grph_panel','','/wlb_Main/wdg_grph_panel','','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg/rg','1','','..','','','',-1,0,'name;grpName;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','3','','root','
-','
-','
-',-1,5,'name;dscr;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','mn','','root','
-','
-','
-',-1,5,'name;dscr;',1397926992);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/mn','KM101','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'name;pgGrp;',1397926992);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cntrPasp','','','',-1,0,'pName;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','4','','root','
-','
-','
-',-1,5,'name;dscr;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','mn','','root','
-','
-','
-',-1,5,'name;dscr;',1397923273);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/mn','1','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'name;pgGrp;',1397923273);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/mn','KM101','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'name;pgGrp;',1397926992);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','5','','root','
-','
-','
-',-1,5,'name;dscr;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','mn','','root','
-','
-','
-',-1,5,'name;dscr;',1397926992);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','6','','root','
-','
-','
-',-1,5,'name;dscr;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','mn','','root','
-','
-','
-',-1,5,'name;dscr;',1397923273);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/mn','KM101','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'name;pgGrp;',1397923273);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','7','','root','
-','
-','
-',-1,5,'name;dscr;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','mn','','root','
-','
-','
-',-1,5,'name;dscr;',1397926564);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/mn','KM101','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'name;pgGrp;',1397926564);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','accept','','/wlb_Main/wdg_accept','','','',-1,0,'','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','6','','/wlb_doc/wdg_docAlarmsRep','','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','treeSelect','','/wlb_Main/wdg_treeSelect','','','',-1,0,'',1383147124);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt','','','',-1,0,'geomZ;pName;',1405531810);
 CREATE TABLE 'wlb_AGLKS' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_AGLKS" VALUES('KM101','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAI
 pklEQVRYhdVYzXMcxRV//THfM7szsiytLAsZ2bIRjmSoFAaKVLlwRMEh4ZCqHFKcUuSQCpfc+VNy
@@ -6704,4 +6610,100 @@ if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";','JavaLikeCalc.JavaScript
 if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1;','');
+CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1415550169);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;grpName;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','doc','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docGasNodeMgn',1,'','','',-1,0,'geomYsc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet',1,'','','',-1,0,'geomYsc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA',1,'','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA',1,'','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder',1,'','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1414521219);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1414518565);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1414521219);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gcadr','1','','..',1,'','','',-1,0,'name;grpName;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','rg','','root',1,'','','',-1,5,'name;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg','rg','','/wlb_Main/wdg_ResultGraph',1,'','','',-1,2,'name;geomYsc;pgGrp;grpName;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gview','','/wlb_Main/wdg_ViewCadr',1,'','','',-1,2,'dscr;geomYsc;evProc;pgGrp;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gview','1','','..',1,'','','',-1,0,'name;dscr;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','2','','root',1,'','','',-1,5,'name;dscr;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','mn','','root',1,'','','',-1,5,'name;dscr;',1397927358);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'pgGrp;',1397927358);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','control','','root',1,'','','',-1,5,'name;',1425661614);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1425661574);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrRegul','','/wlb_Main/wdg_cntrRegul',1,'','','',-1,0,'geomYsc;DESCR;Hdwn;Hup;K1;K2;K3;K4;KImpRfact;Kd;Ki;Kp;NAME;SHIFR;TImpMin;TImpPer;Td;Ti;Tzd;Zi;auto_addr;ed;impQdwn_addr;impQup_addr;max;min;out;out_addr;prec;sp;sp_addr;var;var_addr;',1400851728);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','grph_panel','','/wlb_Main/wdg_grph_panel',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg/rg','1','','..',1,'','','',-1,0,'name;grpName;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','3','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1397926992);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1397926992);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cntrPasp',1,'','','',-1,0,'pName;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','4','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1397923273);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/mn','1','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1397923273);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1397926992);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','5','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1397926992);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','6','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1397923273);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1397923273);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','7','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','mn','','root',1,'
+','
+','
+',-1,5,'name;dscr;',1397926564);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1397926564);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','accept','','/wlb_Main/wdg_accept',1,'','','',-1,0,'','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','6','','/wlb_doc/wdg_docAlarmsRep',1,'','','',-1,0,'geomYsc;',1400852515);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','treeSelect','','/wlb_Main/wdg_treeSelect',1,'','','',-1,0,'',1383147124);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt',1,'','','',-1,0,'geomZ;pName;',1405531810);
 COMMIT;
