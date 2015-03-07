@@ -1,3 +1,7 @@
+2015-03-07 Roman
+- DB: LibsDB.OscadaLibs.db: User protocols were appended by protocol OWEN, from IrmIngeneer and refactoring by me.
+
+
 2015-03-06 Roman
 - DB: LibsDB.OscadaLibs.db, FIX:Protocol.UserProtocol: Translation for user protocols fixed and appended.
 - DB: LibsDB.vcaBase.db, Model.AGLKS.vca.db, Model.Boiler.St.db:

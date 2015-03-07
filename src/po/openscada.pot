@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:26+0200\n"
+"POT-Creation-Date: 2015-03-07 11:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -473,7 +473,7 @@ msgstr ""
 msgid "Tables which are in the DB, tables which are not opened at that moment."
 msgstr ""
 
-msgid "Load system from this DB"
+msgid "Load the system from this DB"
 msgstr ""
 
 msgid "Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."
@@ -581,10 +581,6 @@ msgid "Node '%s' is already present."
 msgstr ""
 
 msgid "Node is begin processed now!"
-msgstr ""
-
-#, c-format
-msgid "Child '%s' is not present!"
 msgstr ""
 
 msgid "Node is the root or is not connected!"
@@ -1786,33 +1782,6 @@ msgstr ""
 msgid "<<<Unmatched sources!!!>>>\n"
 msgstr ""
 
-msgid "Redundant"
-msgstr ""
-
-msgid "Preferable run"
-msgstr ""
-
-#, c-format
-msgid "Start controller '%s' error."
-msgstr ""
-
-msgid "Id of parameter type error!"
-msgstr ""
-
-#, c-format
-msgid "Parameter type '%s' is not present."
-msgstr ""
-
-#, c-format
-msgid "Error attach new controller %s."
-msgstr ""
-
-msgid "Module doesn't support the function for compilation programming languages."
-msgstr ""
-
-msgid "Owner"
-msgstr ""
-
 msgid "Transport type"
 msgstr ""
 
@@ -1918,6 +1887,33 @@ msgid ""
 msgstr ""
 
 msgid "Answer"
+msgstr ""
+
+msgid "Redundant"
+msgstr ""
+
+msgid "Preferable run"
+msgstr ""
+
+#, c-format
+msgid "Start controller '%s' error."
+msgstr ""
+
+msgid "Id of parameter type error!"
+msgstr ""
+
+#, c-format
+msgid "Parameter type '%s' is not present."
+msgstr ""
+
+#, c-format
+msgid "Error attach new controller %s."
+msgstr ""
+
+msgid "Module doesn't support the function for compilation programming languages."
+msgstr ""
+
+msgid "Owner"
 msgstr ""
 
 msgid "User interfaces"

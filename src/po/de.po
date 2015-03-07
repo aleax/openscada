@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:26+0200\n"
+"POT-Creation-Date: 2015-03-07 11:43+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -539,7 +539,7 @@ msgstr "Verfügbare Tabellen"
 msgid "Tables which are in the DB, tables which are not opened at that moment."
 msgstr "Tabellen sind in der Datenbank aber nicht geöffnet."
 
-msgid "Load system from this DB"
+msgid "Load the system from this DB"
 msgstr "System aus der Datenbank laden"
 
 msgid "Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."
@@ -658,10 +658,6 @@ msgstr "Der Knoten '%s' ist schon vorhanden."
 
 msgid "Node is begin processed now!"
 msgstr "Knoten wird jetzt bearbeitet!"
-
-#, c-format
-msgid "Child '%s' is not present!"
-msgstr "Kindknoten '%s' fehlt!"
 
 msgid "Node is the root or is not connected!"
 msgstr "Knoten ist 'root' oder nicht verbunden!"
@@ -2027,34 +2023,6 @@ msgstr "Fehler bei der Installation von Prozessoren für den Strom."
 msgid "<<<Unmatched sources!!!>>>\n"
 msgstr "<<<Unerreichte Quelle>>>!!!\n"
 
-msgid "Redundant"
-msgstr "Überflüssig"
-
-msgid "Preferable run"
-msgstr "Prioritätsstufe"
-
-#, c-format
-msgid "Start controller '%s' error."
-msgstr "Fehler beim Starten des Controllers '%s'."
-
-msgid "Id of parameter type error!"
-msgstr "Fehler Typ des Parameterbezeichners!"
-
-#, c-format
-msgid "Parameter type '%s' is not present."
-msgstr "Parametertyp '%s' ist nicht vorhanden."
-
-#, c-format
-msgid "Error attach new controller %s."
-msgstr "Fehler beim Anbinden des neuen Controllers %s."
-
-msgid ""
-"Module doesn't support the function for compilation programming languages."
-msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
-
-msgid "Owner"
-msgstr "Eigentümer"
-
 msgid "Transport type"
 msgstr "Übertragungstypen"
 
@@ -2171,6 +2139,34 @@ msgstr ""
 
 msgid "Answer"
 msgstr "Antwort"
+
+msgid "Redundant"
+msgstr "Überflüssig"
+
+msgid "Preferable run"
+msgstr "Prioritätsstufe"
+
+#, c-format
+msgid "Start controller '%s' error."
+msgstr "Fehler beim Starten des Controllers '%s'."
+
+msgid "Id of parameter type error!"
+msgstr "Fehler Typ des Parameterbezeichners!"
+
+#, c-format
+msgid "Parameter type '%s' is not present."
+msgstr "Parametertyp '%s' ist nicht vorhanden."
+
+#, c-format
+msgid "Error attach new controller %s."
+msgstr "Fehler beim Anbinden des neuen Controllers %s."
+
+msgid ""
+"Module doesn't support the function for compilation programming languages."
+msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
+
+msgid "Owner"
+msgstr "Eigentümer"
 
 msgid "User interfaces"
 msgstr "Benutzerschnittstellen"
@@ -2382,3 +2378,6 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "Child '%s' is not present!"
+#~ msgstr "Kindknoten '%s' fehlt!"

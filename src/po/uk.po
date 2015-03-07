@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-22 11:09+0200\n"
+"POT-Creation-Date: 2015-03-07 11:43+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -530,7 +530,7 @@ msgstr "Наявні таблиці"
 msgid "Tables which are in the DB, tables which are not opened at that moment."
 msgstr "Таблиці у БД, але не відкриті на цей час."
 
-msgid "Load system from this DB"
+msgid "Load the system from this DB"
 msgstr "Завантажити систему з цієї БД"
 
 msgid "Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."
@@ -645,10 +645,6 @@ msgstr "Вузол '%s' вже присутній."
 
 msgid "Node is begin processed now!"
 msgstr "Вузол оброблюється зараз!"
-
-#, c-format
-msgid "Child '%s' is not present!"
-msgstr "Нащадок '%s' відсутній!"
 
 msgid "Node is the root or is not connected!"
 msgstr "Вузол кореневий або не підключений!"
@@ -2009,34 +2005,6 @@ msgstr "Помилка встановлення CPU для потоку."
 msgid "<<<Unmatched sources!!!>>>\n"
 msgstr "<<<Незбіг джерел!!!>>>\n"
 
-msgid "Redundant"
-msgstr "Резервування"
-
-msgid "Preferable run"
-msgstr "Уподобання виконання"
-
-#, c-format
-msgid "Start controller '%s' error."
-msgstr "Помилка запуску контролера '%s'."
-
-msgid "Id of parameter type error!"
-msgstr "Id параметру помилкове!"
-
-#, c-format
-msgid "Parameter type '%s' is not present."
-msgstr "Тип параметру '%s' відсутній."
-
-#, c-format
-msgid "Error attach new controller %s."
-msgstr "Помилка підключення нового контролера %s."
-
-msgid ""
-"Module doesn't support the function for compilation programming languages."
-msgstr "Модуль не підтримує функцію компіляції мови програмування."
-
-msgid "Owner"
-msgstr "Власник"
-
 msgid "Transport type"
 msgstr "Тип транспорту"
 
@@ -2153,6 +2121,34 @@ msgstr ""
 
 msgid "Answer"
 msgstr "Відповідь"
+
+msgid "Redundant"
+msgstr "Резервування"
+
+msgid "Preferable run"
+msgstr "Уподобання виконання"
+
+#, c-format
+msgid "Start controller '%s' error."
+msgstr "Помилка запуску контролера '%s'."
+
+msgid "Id of parameter type error!"
+msgstr "Id параметру помилкове!"
+
+#, c-format
+msgid "Parameter type '%s' is not present."
+msgstr "Тип параметру '%s' відсутній."
+
+#, c-format
+msgid "Error attach new controller %s."
+msgstr "Помилка підключення нового контролера %s."
+
+msgid ""
+"Module doesn't support the function for compilation programming languages."
+msgstr "Модуль не підтримує функцію компіляції мови програмування."
+
+msgid "Owner"
+msgstr "Власник"
 
 msgid "User interfaces"
 msgstr "Інтерфейси користувача"
@@ -2363,3 +2359,6 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "Child '%s' is not present!"
+#~ msgstr "Нащадок '%s' відсутній!"
