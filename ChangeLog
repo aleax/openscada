@@ -1,3 +1,9 @@
+2015-03-10 Roman
+- DB: LibsDB.vcaBase.db, Model.AGLKS.vca.db, Model.Boiler.St.db: "com_text" of Main.ElCadr and TextLab link changed to "Full link".
+- DB: LibsDB.vcaBase.db: To elements mnEls.{Compressor,El_Kran_Sh} attribute "DESCR" is added for forming more informative messages at the actions.
+- UI.VCAEngine: Checking for accessibility output links removed as inconsistent at all.
+
+
 2015-03-07 Roman
 - DB: LibsDB.OscadaLibs.db: User protocols were appended by protocol OWEN, from IrmIngeneer and refactoring by me.
 

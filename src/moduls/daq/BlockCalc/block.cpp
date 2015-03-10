@@ -322,10 +322,10 @@ void Block::calc( bool first, bool last, double frq )
 		    if(m_lnk[i_ln].iblk->w_bl.at().enable()) {
 			//  Early disconnected link init try
 			if(m_lnk[i_ln].iblk->w_id == -100) {
-			    lnk_res.resRelease( );
+			    lnk_res.resRelease();
 			    try{ setLink(i_ln, INIT); } catch(...) { setLink(i_ln, DEINIT); }
-			    lnk_res.resRequestR( );
-			    if( m_lnk[i_ln].iblk->w_bl.freeStat() ) break;
+			    lnk_res.resRequestR();
+			    if(m_lnk[i_ln].iblk->w_bl.freeStat()) break;
 			}
 			//  Use link
 			set(i_ln,m_lnk[i_ln].iblk->w_bl.at().get(m_lnk[i_ln].iblk->w_id));

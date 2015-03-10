@@ -1525,13 +1525,13 @@ void SessWdg::calc( bool first, bool last )
 		    else if(obj_tp == "arh:" && attr.at().flgGlob()&Attr::Address)
 			attr.at().setS("/Archive/va_"+attr.at().cfgVal().substr(obj_tp.size()));
 		}
-		else if(attr.at().flgSelf()&Attr::CfgLnkOut) {
+		/*else if(attr.at().flgSelf()&Attr::CfgLnkOut) {
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
 		    if(!attr.at().cfgVal().size() ||
 			    (obj_tp == "prm:" && SYS->daq().at().attrAt(TSYS::strParse(attr.at().cfgVal().substr(obj_tp.size()),0,"#"),0,true).freeStat()) ||
 			    (obj_tp == "wdg:" && attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).freeStat()))
 			attr.at().setS(EVAL_STR, false, true);
-		}
+		}*/
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);
 		attr.free();
 	    }
