@@ -1,4 +1,5 @@
 2015-03-13 Roman
+- FIX:DAQ.MMS: Wrong value's special acquisition flags clear at write EVAL here prevented.
 - FIX:DB: LibsDB.vcaBase.db: Text label's "Y:%1%(%2%)" for Main.grph_panel fixed.
 - LibsDB.vcaBase.db: Main.TextLab expanded context menu periodic 10s update.
 - TRegExp: expanded by option 'u' for UTF-8 symbols allow and sets the force for UTF-8 locale.

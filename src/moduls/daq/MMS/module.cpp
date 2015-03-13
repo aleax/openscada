@@ -359,7 +359,7 @@ void *TMdContr::Task( void *icntr )
 	bool isErr = valCtr.attr("err").size();
 	unsigned viCnt = 0;
 	for(map<string,VarStr>::iterator vi = cntr.mVars.begin(); true; ++vi, ++viCnt) {
-	    // Send request
+	    // Send the request
 	    if(vi == cntr.mVars.end() || valCtr.childSize() >= cntr.mVarsRdReq.getI() ||
 		(valCtr.childSize() && (vi->second.single || s2i(valCtr.childGet(valCtr.childSize()-1)->attr("single")))))
 	    {
@@ -390,7 +390,7 @@ void *TMdContr::Task( void *icntr )
 		    value = valCtr.childGet(i_ch);
 		    nId = (value->attr("domainId").size()?value->attr("domainId"):"*")+"/"+value->attr("itemId");
 		    if(isErr || value->attr("err").size()) value = NULL;
-		    if(!value) { cntr.mVars[nId] = TVariant(EVAL_REAL); continue; }
+		    if(!value) { cntr.mVars[nId].val = TVariant(EVAL_REAL); continue; }
 		    switch(s2i(value->attr("tp"))) {
 			case MMS::VT_Bool: case MMS::VT_Int: case MMS::VT_UInt:
 			case MMS::VT_Float:
@@ -628,8 +628,7 @@ string TMdPrm::attrPrc( )
 	    if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
 	    owner().reqService(valCntr);
 	    if((conErr=valCntr.attr("err")).size() || value->attr("err").size()) continue;
-	    switch((vMMStp=s2i(value->attr("tp"))))
-	    {
+	    switch((vMMStp=s2i(value->attr("tp")))) {
 		case MMS::VT_Bool:	vtp = TFld::Boolean;		break;
 		case MMS::VT_Int: case MMS::VT_UInt: vtp = TFld::Integer;	break;
 		case MMS::VT_Float:	vtp = TFld::Real;		break;
