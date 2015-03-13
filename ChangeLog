@@ -1,3 +1,9 @@
+2015-03-13 Roman
+- FIX:DB: LibsDB.vcaBase.db: Text label's "Y:%1%(%2%)" for Main.grph_panel fixed.
+- LibsDB.vcaBase.db: Main.TextLab expanded context menu periodic 10s update.
+- TRegExp: expanded by option 'u' for UTF-8 symbols allow and sets the force for UTF-8 locale.
+
+
 2015-03-10 Roman
 - DB: LibsDB.vcaBase.db, Model.AGLKS.vca.db, Model.Boiler.St.db: "com_text" of Main.ElCadr and TextLab link changed to "Full link".
 - DB: LibsDB.vcaBase.db: To elements mnEls.{Compressor,El_Kran_Sh} attribute "DESCR" is added for forming more informative messages at the actions.

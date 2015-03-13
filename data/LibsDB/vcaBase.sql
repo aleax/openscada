@@ -4647,9 +4647,7 @@ INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomZ','17',32,'','','scaleInfo',
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','geomMargin','0',32,'','','scaleInfo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','font','Arial 15 0 0  0',32,'','','scaleInfo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','alignment','10',32,'','','scaleInfo','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grph_panel','text','Y:%1%(%2%)',32,'','','scaleInfo','Шкала
-%1 % (%2 %)','','Шкала
-%1 % (%2 %)','','','');
+INSERT INTO "wlb_Main_io" VALUES('grph_panel','text','Y:%1%(%2%)',32,'','','scaleInfo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','numbArg','2',32,'','','scaleInfo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','arg0val','0',8,'','','scaleInfo','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','arg1val','0',8,'','','scaleInfo','','','','','','');
@@ -19891,17 +19889,20 @@ OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
 KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
 1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
 sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text',0,'JavaLikeCalc.JavaScript
-if(f_start)	isErr = false, alBlnk = false;
-//Prepare context menu
-if(f_start && !digComs.isEVal() && digComs.length) {
+if(f_start)	isErr = false, alBlnk = false, cnt = 0;
+
+//Prepare/update the context menu
+if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
 	contextMenu = "";
-	if(!com_text.isEVal())
-		for(off = 0; (comVal=digComs.parse(0,";",off)).length; )
-			contextMenu += comVal.parse(0,"-") + ":" + comVal.parse(0,"-") + "\n";
-	else {
-		if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-") + ":open\n";
-		if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-") + ":close\n";
-		if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-") + ":stop\n";
+	if(!digComs.isEVal() && digComs.length) {
+		if(!com_text.isEVal())
+			for(off = 0; (comVal=digComs.parse(0,";",off)).length; )
+				contextMenu += comVal.parse(0,"-") + ":" + comVal.parse(0,"-") + "\n";
+		else {
+			if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-") + ":open\n";
+			if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-") + ":close\n";
+			if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-") + ":stop\n";
+		}
 	}
 }
 
@@ -19978,7 +19979,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1426000566);
+event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1426234455);
 INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ

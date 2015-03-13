@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvariant.h
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -262,6 +262,7 @@ class TRegExp : public TVarObj
 	unsigned ignoreCase	: 1;
 	unsigned multiline	: 1;
 	unsigned isSimplePat	: 1;
+	unsigned UTF8		: 1;
 
 	void	*regex;
 	int	vSz, *capv;

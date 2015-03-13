@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -662,7 +662,8 @@ bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )	{ return v
 //*   Regular expression object                             *
 //***********************************************************
 TRegExp::TRegExp( const string &rule, const string &flg ) :
-    lastIndex(0), pattern(rule), global(false), ignoreCase(false), multiline(false), isSimplePat(false), regex(NULL), vSz(90), capv(NULL)
+    lastIndex(0), pattern(rule), global(false), ignoreCase(false), multiline(false), isSimplePat(false), UTF8(false),
+    regex(NULL), vSz(90), capv(NULL)
 {
     setPattern(rule, flg);
 }
@@ -679,6 +680,7 @@ void TRegExp::setPattern( const string &rule, const string &flg )
     global = (flg.find('g')!=string::npos);
     ignoreCase = (flg.find('i')!=string::npos);
     multiline = (flg.find('m')!=string::npos);
+    UTF8 = Mess->isUTF8() || (flg.find('u')!=string::npos);
     isSimplePat = false;
     pattern = rule;
     if(flg.find('p') != string::npos) {
@@ -694,7 +696,8 @@ void TRegExp::setPattern( const string &rule, const string &flg )
     if(!isSimplePat && pattern.size()) {
 	const char *terr;
 	int erroff;
-	regex = pcre_compile(pattern.c_str(),PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),&terr,&erroff,NULL);
+	regex = pcre_compile(pattern.c_str(), PCRE_DOTALL|(UTF8?PCRE_UTF8:0)|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),
+	    &terr, &erroff, NULL);
 	if(!regex) err = terr;
 	else if(!capv) capv = new int[90];
     }
@@ -817,6 +820,7 @@ TVariant TRegExp::propGet( const string &id )
     if(id == "global")		return (bool)global;
     if(id == "ignoreCase")	return (bool)ignoreCase;
     if(id == "multiline")	return (bool)multiline;
+    if(id == "UTF8")		return (bool)UTF8;
     if(id == "lastIndex")	return lastIndex;
     return TVariant();
 }
