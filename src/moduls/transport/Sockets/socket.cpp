@@ -253,9 +253,8 @@ void TSocketIn::start( )
 	struct sockaddr_un  name_un;
 	memset(&name_un,0,sizeof(name_un));
 	name_un.sun_family = AF_UNIX;
-	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
-	if( bind(sock_fd,(sockaddr *)&name_un,sizeof(name_un) ) == -1)
-	{
+	strncpy(name_un.sun_path, path.c_str(), sizeof(name_un.sun_path));
+	if(bind(sock_fd,(sockaddr*)&name_un,sizeof(name_un)) == -1) {
 	    close( sock_fd );
 	    throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to '%s'!"),addr().c_str());
 	}
@@ -383,7 +382,7 @@ void *TSocketIn::Task( void *sock_in )
     if(sock->type == SOCK_UDP) delete []buf;
     //Client tasks stop command
     sock->endrun_cl = true;
-    ResAlloc res(sock->sock_res,false);
+    ResAlloc res(sock->sock_res, false);
     //Find already registry
     for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
         pthread_kill(sock->cl_id[i_id].cl_id, SIGALRM);
@@ -437,8 +436,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message '%d' to '%s'."), answ.size(), s.sender.c_str());
 #endif
 	    ssize_t wL = 1;
-	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
-	    {
+	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL) {
 		wL = write(s.cSock, answ.data()+wOff, answ.size()-wOff);
 		if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
 		else if(wL < 0) {
@@ -460,7 +458,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	cnt++;
 	tm = time(NULL);
 	sessOk = true;
-    }while(!s.s->endrun_cl && (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
+    } while(!s.s->endrun_cl && (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
 	    (!sessOk || ((s.s->mode || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))));
 
     //Close protocol on broken connection

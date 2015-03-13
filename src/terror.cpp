@@ -31,7 +31,7 @@ using namespace OSCADA;
 //*************************************************
 TError::TError( const char *icat, const char *fmt, ... )
 {
-    char str[1024];                  //!!!!
+    char str[1024];			//!!!!
     va_list argptr;
 
     va_start(argptr,fmt);
@@ -45,7 +45,7 @@ TError::TError( const char *icat, const char *fmt, ... )
 
 TError::TError( int icod, const char *icat, const char *fmt, ... )
 {
-    char str[1024];                  //!!!!
+    char str[1024];			//!!!!
     va_list argptr;
 
     va_start(argptr,fmt);

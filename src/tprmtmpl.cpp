@@ -475,7 +475,7 @@ void TPrmTmplLib::postDisable(int flag)
 {
     if(flag) {
 	//Delete libraries record
-	SYS->db().at().dataDel(work_lib_db.getVal()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
+	SYS->db().at().dataDel(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
 
 	//Delete temlate librarie's DBs
 	SYS->db().at().open(fullDB());

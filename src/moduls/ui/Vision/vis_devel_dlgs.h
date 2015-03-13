@@ -179,7 +179,8 @@ class VisItProp : public QDialog
 	QTabWidget	*wdg_tabs;	//Tabs
 	QLabel		*obj_id,	//Id
 			*obj_root,	//Root
-			*obj_path;	//Path
+			*obj_path,	//Path
+			*obj_used;	//Used
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
 	QComboBox	*obj_parent,	//Parent widget

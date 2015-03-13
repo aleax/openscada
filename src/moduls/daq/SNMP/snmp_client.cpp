@@ -143,7 +143,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 
 TMdContr::~TMdContr( )
 {
-    if(run_st) stop();
+    if(startStat()) stop();
 
     pthread_mutex_destroy(&enRes);
     pthread_mutex_destroy(&dataRes);
@@ -697,8 +697,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		oid oidn[MAX_OID_LEN];
 		size_t oidn_len = MAX_OID_LEN;
 		string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user"));
-		if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len))
-		{
+		if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len)) {
 		    string vLs = OIDList(), vS;
 		    for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size() && vS != baseIt; ) ;
 		    if(vS.empty()) setOIDList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+baseIt);
@@ -707,8 +706,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    else TBDS::genDBSet(nodePath()+"selOID", opt->text(), opt->attr("user"));
 	}
     }
-    else if(a_path == "/prm/cfg/MIB_lst" && ctrChkNode(opt))
-    {
+    else if(a_path == "/prm/cfg/MIB_lst" && ctrChkNode(opt)) {
 	oid oidn[MAX_OID_LEN];
 	size_t oidn_len = MAX_OID_LEN;
 	string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user")), baseIt_, baseIt_s;

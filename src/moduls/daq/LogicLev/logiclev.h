@@ -79,29 +79,26 @@ class TMdPrm : public TParamContr
 
     private:
 	//Data
-	class SLnk
-	{
+	class SLnk {
 	    public:
-		SLnk( int iid, const string &iprm_attr = "" ) : io_id(iid), prm_attr(iprm_attr) { }
-		int	io_id;
-		string	prm_attr;
+		SLnk( int iid, const string &iprmAttr = "" ) : ioId(iid), detOff(0), prmAttr(iprmAttr) { }
+		int	ioId, detOff;
+		string	prmAttr;
 		AutoHD<TVal> aprm;
 	};
 
-	struct STmpl
-	{
+	struct STmpl {
 	    TValFunc	val;
 	    vector<SLnk> lnk;
 	};
 
-	union
-	{
-	    AutoHD<TValue> *prm_refl;		//Direct reflection
+	union {
+	    AutoHD<TValue> *prmRefl;		//Direct reflection
 	    STmpl *tmpl;			//Template
 	};
 
 	//Methods
-	//> Template link operations
+	// Template link operations
 	int lnkSize( );
 	int lnkId( int id );
 	int lnkId( const string &id );
@@ -112,11 +109,11 @@ class TMdPrm : public TParamContr
 	void initTmplLnks( bool checkNoLink = false );
 
 	//Attributes
-	TElem	p_el;				//Work atribute elements
+	TElem	pEl;				//Work atribute elements
 
-	bool	chk_lnk_need;			//Check lnk need flag
+	bool	chkLnkNeed;			//Check lnk need flag
 	Res	calcRes;			//Resource
-	int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
+	int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 };
 
 //*************************************************
@@ -154,14 +151,14 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;				//Resource for enable params
+	pthread_mutex_t	enRes;			//Resource for enable params
 	int	&mPerOld,			// ms
 		&mPrior;			// Process task priority
 
-	bool	prc_st,				// Process task active
-		call_st,        		// Calc now stat
-		endrun_req;			// Request to stop of the Process task
-	vector< AutoHD<TMdPrm> >  p_hd;
+	bool	prcSt,				// Process task active
+		callSt,				// Calc now stat
+		endrunReq;			// Request to stop of the Process task
+	vector< AutoHD<TMdPrm> > pHd;
 
 	double	mPer, tm_calc;			// Template functions calc time
 };
@@ -176,7 +173,7 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	TElem	&prmIOE( )	{ return el_prm_io; }
+	TElem	&prmIOE( )	{ return elPrmIO; }
 
     protected:
 	//Methods
@@ -190,7 +187,7 @@ class TTpContr: public TTipDAQ
 	TController *ContrAttach( const string &name, const string &daq_db );
 
 	//Attributes
-	TElem	el_prm_io;
+	TElem	elPrmIO;
 };
 
 extern TTpContr *mod;

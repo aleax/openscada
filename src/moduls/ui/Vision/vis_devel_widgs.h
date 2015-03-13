@@ -64,8 +64,7 @@ class ModInspAttr: public QAbstractTableModel
 	    public:
 		//Public data
 		enum Type { WdgGrp, Wdg, AttrGrp, Attr };
-		enum Flag
-		{
+		enum Flag {
 		    Select	= 0x0001,
 		    FullText	= 0x0008,
 		    Active	= 0x0100,
@@ -106,13 +105,13 @@ class ModInspAttr: public QAbstractTableModel
 
 		void clean( );
 
-		Item *child(int row) const;
+		Item *child( int row ) const;
 		int  childGet( const string &id ) const;
-		int  childCount() const;
+		int  childCount( ) const;
 		int  childInsert( const string &id, int row, Type tp );
 		void childDel( int row );
 
-		Item *parent()		{ return parentItem; }
+		Item *parent( )		{ return parentItem; }
 
 	    private:
 		string	idItem, nameItem, wdgsItem, helpItem, snthHglItem;
@@ -152,7 +151,7 @@ class ModInspAttr: public QAbstractTableModel
 
     private:
 	//Private methods
-	void wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &grp_it = QModelIndex() );
+	void wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &grp_it = QModelIndex(), bool first = false );
 
 	//Private attributes
 	string cur_wdg;
@@ -277,11 +276,11 @@ class LinkItemDelegate: public QItemDelegate
 
     public:
 	//Public methods
-	LinkItemDelegate(InspLnk *parent = 0);
+	LinkItemDelegate( InspLnk *parent = 0 );
 
-	QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	void setEditorData(QWidget *editor, const QModelIndex &index) const;
-	void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+	QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+	void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+	void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
 
 	InspLnk *owner( ) const;
 
@@ -323,7 +322,7 @@ class WdgTree: public QDockWidget
     public:
 	//Public methods
 	WdgTree( VisDevelop *parent = 0 );
-	~WdgTree();
+	~WdgTree( );
 
 	VisDevelop *owner( );
 
@@ -361,7 +360,7 @@ class ProjTree: public QDockWidget
     public:
 	//Public methods
 	ProjTree( VisDevelop * parent = 0 );
-	~ProjTree();
+	~ProjTree( );
 
 	bool hasFocus( );
 
@@ -396,13 +395,13 @@ class LineEditProp : public QWidget
     Q_OBJECT
 
     public:
-	//> Data
+	//Data
 	enum DType { Font, Color };
 
-	//> Methods
+	//Methods
 	LineEditProp( QWidget *parent, DType tp = Font, bool m_toClose = true );
 
-	DType type( )       { return m_tp; }
+	DType type( )	{ return m_tp; }
 	QString value( );
 
 	void setType( DType tp )	{ m_tp = tp; }
@@ -412,7 +411,7 @@ class LineEditProp : public QWidget
 	void callDlg( );
 
     private:
-	//> Attributes
+	//Attributes
 	DType		m_tp;
 	QLineEdit	*ed_fld;
 	bool		toClose;
@@ -428,7 +427,7 @@ class WScaleStBar : public QLabel
     public:
 	WScaleStBar( QWidget *parent = 0 );
 
-	bool scale()			{ return isScale; }
+	bool scale( )			{ return isScale; }
 	void setScale( bool val );
 
     protected:
@@ -468,9 +467,9 @@ class SizePntWdg : public QWidget
 	//Methods
 	SizePntWdg( QWidget* parent = 0 );
 
-	QPointF posF( )             { return mWPos; }
-	QSizeF  sizeF( )            { return mWSize; }
-	QRectF geometryF( )         { return QRectF(mWPos,mWSize); }
+	QPointF posF( )		{ return mWPos; }
+	QSizeF  sizeF( )	{ return mWSize; }
+	QRectF geometryF( )	{ return QRectF(mWPos,mWSize); }
 
 	void setSelArea( const QRectF &geom, WView view = SizeDots );
 	bool event( QEvent *event );
@@ -579,15 +578,15 @@ class DevelWdgView: public WdgView
 	uint8_t	fFocus		:1;	//Edition window of the widget in focus
 	uint8_t	fMakeIco	:1;	//Make icon flag for background disable
 
-	float		mVisScale;		//Visual scale value of root widget.
+	float		mVisScale;	//Visual scale value of root widget.
 
-	QPoint		holdPnt;		//Hold move point
-	SizePntWdg	*pntView;		//Point view
+	QPoint		holdPnt;	//Hold move point
+	SizePntWdg	*pntView;	//Point view
 	DevelWdgView	*editWdg;
-	XMLNode		*chTree;		//Changes tree
-	XMLNode 	chGeomCtx;		//Change geometry context
+	XMLNode		*chTree;	//Changes tree
+	XMLNode 	chGeomCtx;	//Change geometry context
 	QPoint		dragStartPos;
-	map<string,string>	mCacheRes;	//Resources cache
+	map<string,string>	mCacheRes; //Resources cache
 	QScrollArea	*mMdiWin;
 };
 

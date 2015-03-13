@@ -108,31 +108,31 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_COM_LOAD: rel_list = true;	break;
 	case A_EN:
 	    if(!runW)	break;
-	    elFD->en = (bool)atoi(val.c_str());
+	    elFD->en = (bool)s2i(val);
 	    w->setVisible(elFD->en && runW->permView());
 	    break;
 	case A_ACTIVE:
 	    if(!runW)	break;
-	    elFD->active = (bool)atoi(val.c_str());
+	    elFD->active = (bool)s2i(val);
 	    w->setFocusPolicy((elFD->active && runW->permCntr()) ? Qt::TabFocus : Qt::NoFocus);
 	    break;
 	case A_GEOM_W:
-	    if(geomW == atoi(val.c_str()))	break;
-	    geomW = atoi(val.c_str());
+	    if(geomW == s2i(val))	break;
+	    geomW = s2i(val);
 	    flag_geom = rel_list = true;
 	    break;
 	case A_GEOM_H:
-	    if(geomH == atoi(val.c_str()))	break;
-	    geomH = atoi(val.c_str());
+	    if(geomH == s2i(val))	break;
+	    geomH = s2i(val);
 	    flag_geom = rel_list = true;
 	    break;
-	case A_GEOM_MARGIN: elFD->geomMargin = atoi(val.c_str()); up = true;	break;
+	case A_GEOM_MARGIN: elFD->geomMargin = s2i(val); up = true;	break;
 	case A_GEOM_X_SC: rel_list = true;	break;
 	case A_GEOM_Y_SC: rel_list = true;	break;
-	case A_ElFigLineW: widths[SpI_DefLine] = atof(val.c_str()); rel_list = true;	break;
+	case A_ElFigLineW: widths[SpI_DefLine] = s2r(val); rel_list = true;	break;
 	case A_ElFigLineClr: colors[SpI_DefLine] = getColor(val); rel_list = true;	break;
 	case A_ElFigLineStl:
-	    switch(atoi(val.c_str()))
+	    switch(s2i(val))
 	    {
 		case EF_SOLID:	styles[SpI_DefLine] = Qt::SolidLine;	break;
 		case EF_DASH:	styles[SpI_DefLine] = Qt::DashLine;	break;
@@ -140,7 +140,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    }
 	    rel_list = true;
 	    break;
-	case A_ElFigBordW: widths[SpI_DefBord] = atof(val.c_str()); rel_list = true;	break;
+	case A_ElFigBordW: widths[SpI_DefBord] = s2r(val); rel_list = true;	break;
 	case A_ElFigBordClr: colors[SpI_DefBord] = getColor(val); rel_list = true;	break;
 	case A_ElFigFillClr: colors[SpI_DefFill] = getColor(val); rel_list = true;	break;
 	case A_ElFigFillImg:
@@ -148,8 +148,8 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    images[SpI_DefFillImg] = (!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size())) ? val : "";
 	    rel_list = true;
 	    break;
-	case A_ElFigOrient: elFD->orient = atof(val.c_str()); rel_list = true;	break;
-	case A_ElFigElLst: elFD->elLst = val.c_str(); rel_list = true;		break;
+	case A_ElFigOrient: elFD->orient = s2r(val); rel_list = true;	break;
+	case A_ElFigElLst: elFD->elLst = val.c_str(); rel_list = true;	break;
 	default:
 	    if(uiPrmPos >= A_ElFigIts)
 	    {
@@ -158,9 +158,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		QPointF pnt_ = pnts[pnt];
 		switch(patr)
 		{
-		    case A_ElFigItPntX:	pnt_.setX(atof(val.c_str()));	pnts[pnt] = pnt_;	break;
-		    case A_ElFigItPntY:	pnt_.setY(atof(val.c_str()));	pnts[pnt] = pnt_;	break;
-		    case A_ElFigItW:	widths[pnt] = atof(val.c_str());	break;
+		    case A_ElFigItPntX:	pnt_.setX(s2r(val));	pnts[pnt] = pnt_;	break;
+		    case A_ElFigItPntY:	pnt_.setY(s2r(val));	pnts[pnt] = pnt_;	break;
+		    case A_ElFigItW:	widths[pnt] = s2r(val);	break;
 		    case A_ElFigItClr:	colors[pnt] = getColor(val);		break;
 		    case A_ElFigItImg:
 			backimg = w->resGet(val);
@@ -169,7 +169,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			else images[pnt] = "";
 			break;
 		    case A_ElFigItStl:
-			switch(atoi(val.c_str()))
+			switch(s2i(val))
 			{
 			    case EF_SOLID:	styles[pnt] = Qt::SolidLine;	break;
 			    case EF_DASH:	styles[pnt] = Qt::DashLine;	break;

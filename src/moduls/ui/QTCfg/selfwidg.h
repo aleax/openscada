@@ -195,9 +195,14 @@ class ImgView : public QWidget
 //************************************************
 class CfgTable : public QTableWidget
 {
+    Q_OBJECT
     public:
 	//Methods
 	CfgTable( QWidget *parent = 0 );
+
+    public slots:
+	//Public slots
+	void resizeRowsToContentsLim( );
 
     protected:
 	//Methods
@@ -333,6 +338,8 @@ class TableDelegate : public QItemDelegate
     public:
 	//> Public attributes
 	TableDelegate( QObject *parent = 0 );
+
+	//QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 
 	void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 

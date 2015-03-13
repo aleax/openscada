@@ -106,6 +106,7 @@ void TFunction::ioAdd( IO *io )
     mIO.push_back(io);
     io->owner = this;
     postIOCfgChange();
+    modif();
 }
 
 int TFunction::ioIns( IO *io, int pos )
@@ -116,6 +117,7 @@ int TFunction::ioIns( IO *io, int pos )
     mIO.insert(mIO.begin()+pos,io);
     io->owner = this;
     postIOCfgChange();
+    modif();
 
     return pos;
 }
@@ -128,6 +130,7 @@ void TFunction::ioDel( int pos )
     preIOCfgChange();
     mIO.erase(mIO.begin()+pos);
     postIOCfgChange();
+    modif();
 }
 
 void TFunction::ioMove( int pos, int to )
@@ -140,6 +143,7 @@ void TFunction::ioMove( int pos, int to )
     mIO[to] = mIO[pos];
     mIO[pos] = io;
     postIOCfgChange();
+    modif();
 }
 
 void TFunction::preIOCfgChange()
@@ -731,8 +735,7 @@ void TValFunc::postIOCfgChange( )	{ setFunc(mFunc, false); }
 TValFunc *TValFunc::ctxGet( int key )
 {
     map<int,TValFunc* >::iterator vc = vctx.find(key);
-    if( vc == vctx.end() ) return NULL;
-    return vc->second;
+    return (vc == vctx.end()) ? NULL : vc->second;
 }
 
 void TValFunc::ctxSet( int key, TValFunc *val )

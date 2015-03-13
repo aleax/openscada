@@ -70,6 +70,7 @@ class TCfg : public TVariant
 	bool	view( )			{ return mView; }
 	bool	keyUse( )		{ return mKeyUse; }
 	bool	noTransl( )		{ return mNoTransl; }
+	bool	isKey( );							//Whether real or request key test
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if( fld().flg()&Key ) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
@@ -87,15 +88,15 @@ class TCfg : public TVariant
 	int	&getId( );
 	char	&getBd( );
 
-	void	setSEL( const string &val, char RqFlg = 0 );
+	void	setSEL( const string &val, uint8_t RqFlg = 0 );
 	void	setS( const string &val );
-	void	setS( const string &val, char RqFlg );
+	void	setS( const string &val, uint8_t RqFlg );
 	void	setR( double val );
-	void	setR( double val, char RqFlg );
+	void	setR( double val, uint8_t RqFlg );
 	void	setI( int val );
-	void	setI( int val, char RqFlg );
+	void	setI( int val, uint8_t RqFlg );
 	void	setB( char val );
-	void	setB( char val, char RqFlg );
+	void	setB( char val, uint8_t RqFlg );
 
 	TCfg	&operator=( const string &vl )	{ setS(vl); return *this; }
 	TCfg	&operator=( const char *vl )	{ setS(vl); return *this; }
@@ -138,16 +139,13 @@ class TConfig: public TValElem
 	void cfgViewAll( bool val = true );	// Show/Hide all no key elements
 	void cfgKeyUseAll( bool val );
 
-	TElem &elem( );
+	TElem &elem( )			{ return *mElem; }
 	void setElem( TElem *Elements, bool first = false );
 
 	void cntrCmdMake( XMLNode *fld, const string &path, int pos,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
         void cntrCmdProc( XMLNode *fld, const string &elem,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
-
-	bool noTransl( )	{ return mNoTransl; }
-	void setNoTransl( bool vl )		{ mNoTransl = vl; }
 
 	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -165,9 +163,8 @@ class TConfig: public TValElem
     private:
 	//Attributes
 	TCfgMap		value;
-	TElem		*m_elem;
-	char		single		: 1;
-	char		mNoTransl	: 1;
+	TElem		*mElem;
+	uint8_t		single		: 1;
 };
 
 }

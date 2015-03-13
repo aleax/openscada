@@ -37,20 +37,22 @@ TElem::TElem( const string &name ) : m_name(name)
 TElem::~TElem( )
 {
     while(cont.size())	cont[0]->detElem(this);
-    while(elem.size())	fldDel(0);
+    fldClear();
 }
 
 int TElem::fldAdd( TFld *fld, int id )
 {
     ResAlloc res(mResEl, false);
-    //> Find dublicates
+
+    //Find dublicates
     for(unsigned i_f = 0; i_f < elem.size(); i_f++)
 	if(elem[i_f]->name() == fld->name())
 	{ delete fld; return i_f; }
     res.request(true);
     if(id > (int)elem.size() || id < 0) id = elem.size();
     elem.insert(elem.begin()+id,fld);
-    //> Add value and set them default
+
+    //Add value and set them default
     res.request(false);
     for(unsigned cfg_i = 0; cfg_i < cont.size(); cfg_i++)
 	cont[cfg_i]->addFld(this, id);
@@ -116,21 +118,26 @@ TFld &TElem::fldAt( unsigned int id )
     return *elem[id];
 }
 
+void TElem::fldClear( )
+{
+    while(elem.size())	fldDel(0);
+}
+
 //*************************************************
 //* TFld - field of element                       *
 //*************************************************
 TFld::TFld( ) : m_type(TFld::Integer), m_flg(0)
 {
     m_sel = NULL;
-    m_val.v_s = NULL;
+    m_val.s = NULL;
 }
 
-TFld::TFld( TFld &ifld ) : m_len(0), m_dec(0), m_type(TFld::Integer), m_flg(0)
+TFld::TFld( TFld &ifld, const char *name ) : m_len(0), m_dec(0), m_type(TFld::Integer), m_flg(0)
 {
     m_sel	= NULL;
-    m_val.v_s	= NULL;
+    m_val.s	= NULL;
 
-    m_name	= ifld.name();
+    m_name	= name ? string(name) : ifld.name();
     m_descr	= ifld.descr();
     m_type	= ifld.type();
     m_flg	= ifld.flg();
@@ -148,7 +155,7 @@ TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg
     m_type(TFld::Integer), m_flg(0)
 {
     m_sel   = NULL;
-    m_val.v_s = NULL;
+    m_val.s = NULL;
 
     m_name  = name;
     m_descr = descr;
@@ -169,21 +176,19 @@ TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg
 TFld::~TFld( )
 {
     if( m_sel )	delete m_sel;
-    if( m_val.v_s != NULL )
-	switch(type())
-	{
-	    case TFld::String:	delete m_val.v_s;	break;
-	    case TFld::Integer:	delete m_val.v_i;	break;
-	    case TFld::Real:	delete m_val.v_r;	break;
-	    case TFld::Boolean:	delete m_val.v_b;	break;
+    if( m_val.s != NULL )
+	switch(type()) {
+	    case TFld::String:	delete m_val.s;	break;
+	    case TFld::Integer:	delete m_val.i;	break;
+	    case TFld::Real:	delete m_val.r;	break;
+	    case TFld::Boolean:	delete m_val.b;	break;
 	    default: break;
 	}
 }
 
-TFld::Type TFld::type(IO::Type tp)
+TFld::Type TFld::type( IO::Type tp )
 {
-    switch(tp)
-    {
+    switch(tp) {
         case IO::String:	return String;
         case IO::Integer:       return Integer;
         case IO::Real:          return Real;
@@ -196,8 +201,7 @@ TFld::Type TFld::type(IO::Type tp)
 
 IO::Type TFld::typeIO( )
 {
-    switch(type())
-    {
+    switch(type()) {
         case Boolean:	return IO::Boolean;
         case Integer:	return IO::Integer;
         case Real:	return IO::Real;
@@ -218,28 +222,27 @@ void TFld::setFlg( unsigned iflg )
 
 string TFld::values( )
 {
-    if(m_val.v_s == NULL) return "";
+    if(m_val.s == NULL) return "";
 
     string rez;
-    switch(type())
-    {
+    switch(type()) {
 	case TFld::String:
-	    for(unsigned i_el = 0; i_el < m_val.v_s->size(); i_el++)
-		rez = rez+(*m_val.v_s)[i_el]+";";
+	    for(unsigned i_el = 0; i_el < m_val.s->size(); i_el++)
+		rez = rez+(*m_val.s)[i_el]+";";
 	    break;
 	case TFld::Integer:
-	    if(flg()&TFld::Selected || (m_val.v_i->size() == 2 && (*m_val.v_i)[0] < (*m_val.v_i)[1]))
-		for(unsigned i_el = 0; i_el < m_val.v_i->size(); i_el++)
-		    rez = rez+TSYS::int2str((*m_val.v_i)[i_el])+";";
+	    if(flg()&TFld::Selected || (m_val.i->size() == 2 && (*m_val.i)[0] < (*m_val.i)[1]))
+		for(unsigned i_el = 0; i_el < m_val.i->size(); i_el++)
+		    rez = rez+TSYS::int2str((*m_val.i)[i_el])+";";
 	    break;
 	case TFld::Real:
-	    if(flg()&TFld::Selected || (m_val.v_i->size() == 2 && (*m_val.v_i)[0] < (*m_val.v_i)[1]))
-		for(unsigned i_el = 0; i_el < m_val.v_r->size(); i_el++)
-		    rez = rez+TSYS::real2str((*m_val.v_r)[i_el],6)+";";
+	    if(flg()&TFld::Selected || (m_val.i->size() == 2 && (*m_val.i)[0] < (*m_val.i)[1]))
+		for(unsigned i_el = 0; i_el < m_val.r->size(); i_el++)
+		    rez = rez+TSYS::real2str((*m_val.r)[i_el],6)+";";
 	    break;
 	case TFld::Boolean:
-	    for(unsigned i_el = 0; i_el < m_val.v_b->size(); i_el++)
-		rez = rez+TSYS::int2str((*m_val.v_b)[i_el])+";";
+	    for(unsigned i_el = 0; i_el < m_val.b->size(); i_el++)
+		rez = rez+TSYS::int2str((*m_val.b)[i_el])+";";
 	    break;
 	default: break;
     }
@@ -259,60 +262,56 @@ string TFld::selNames( )
 
 void TFld::setValues( const string &vls )
 {
-    //> Set value list
+    //Set value list
     if(flg()&TFld::Selected) {
-	//> Count alements amount
+	//Count alements amount
 	int i_lvl = 0, i_off = 0;
 	while( TSYS::strSepParse(vls,0,';',&i_off).size() ) i_lvl++;
 
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::String:
-		if(!m_val.v_s)	m_val.v_s = new vector<string>; 
-		m_val.v_s->resize(i_lvl,"");
+		if(!m_val.s)	m_val.s = new vector<string>;
+		m_val.s->resize(i_lvl,"");
 		break;
 	    case TFld::Integer:
-		if(!m_val.v_i)	m_val.v_i = new vector<int>;
-		m_val.v_i->resize(i_lvl,0);
+		if(!m_val.i)	m_val.i = new vector<int>;
+		m_val.i->resize(i_lvl,0);
 		break;
 	    case TFld::Real:
-		if(!m_val.v_r)	m_val.v_r = new vector<double>;
-		m_val.v_r->resize(i_lvl,0);
+		if(!m_val.r)	m_val.r = new vector<double>;
+		m_val.r->resize(i_lvl,0);
 		break;
 	    case TFld::Boolean:
-		if(!m_val.v_b)	m_val.v_b = new vector<bool>;
-		m_val.v_b->resize(i_lvl,false);
+		if(!m_val.b)	m_val.b = new vector<bool>;
+		m_val.b->resize(i_lvl,false);
 		break;
 	    default: break;
 	}
-	//> Get elements
-	for( int i = 0, i_off=0; i < i_lvl; i++ )
-	{
+	//Get elements
+	for(int i = 0, i_off = 0; i < i_lvl; i++) {
 	    string s_el = TSYS::strSepParse(vls,0,';',&i_off);
-	    switch(type())
-	    {
-		case TFld::String:	(*m_val.v_s)[i] = s_el; break;
-		case TFld::Integer:	(*m_val.v_i)[i] = strtol(s_el.c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));	break;
-		case TFld::Real:	(*m_val.v_r)[i] = atof(s_el.c_str());	break;
-		case TFld::Boolean:	(*m_val.v_b)[i] = atoi(s_el.c_str());	break;
+	    switch(type()) {
+		case TFld::String:  (*m_val.s)[i] = s_el;		break;
+		case TFld::Integer: (*m_val.i)[i] = strtol(s_el.c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));	break;
+		case TFld::Real:    (*m_val.r)[i] = s2r(s_el);	break;
+		case TFld::Boolean: (*m_val.b)[i] = s2i(s_el);	break;
 		default: break;
 	    }
 	}
     }
     else
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::Integer:
-		if(!m_val.v_i)	m_val.v_i = new vector<int>;
-		m_val.v_i->resize(2,0);
-		(*m_val.v_i)[0] = strtol(TSYS::strSepParse(vls,0,';').c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));
-		(*m_val.v_i)[1] = strtol(TSYS::strSepParse(vls,1,';').c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));
+		if(!m_val.i)	m_val.i = new vector<int>;
+		m_val.i->resize(2,0);
+		(*m_val.i)[0] = strtol(TSYS::strSepParse(vls,0,';').c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));
+		(*m_val.i)[1] = strtol(TSYS::strSepParse(vls,1,';').c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));
 		break;
 	    case TFld::Real:
-		if(!m_val.v_r)	m_val.v_r = new vector<double>;
-		m_val.v_r->resize(2,0);
-		(*m_val.v_r)[0] = atof(TSYS::strSepParse(vls,0,';').c_str());
-		(*m_val.v_r)[1] = atof(TSYS::strSepParse(vls,1,';').c_str());
+		if(!m_val.r)	m_val.r = new vector<double>;
+		m_val.r->resize(2,0);
+		(*m_val.r)[0] = s2r(TSYS::strSepParse(vls,0,';'));
+		(*m_val.r)[1] = s2r(TSYS::strSepParse(vls,1,';'));
 		break;
 	    default: break;
 	}
@@ -320,7 +319,7 @@ void TFld::setValues( const string &vls )
 
 void TFld::setSelNames( const string &slnms )
 {
-    //> Set value list
+    //Set value list
     if( !(flg()&TFld::Selected) ) return;
 
     int i_lvl = 0;
@@ -336,28 +335,28 @@ void TFld::setSelNames( const string &slnms )
 const vector<string> &TFld::selValS()
 {
     if(flg()&TFld::Selected && type() == TFld::String)
-	return *m_val.v_s;
+	return *m_val.s;
     throw TError("Field",_("Field is not String."));
 }
 
 const vector<int> &TFld::selValI()
 {
     if(type() == TFld::Integer)
-	return *m_val.v_i;
+	return *m_val.i;
     throw TError("Field",_("Field is not Integer."));
 }
 
 const vector<double> &TFld::selValR()
 {
     if(type() == TFld::Real)
-	return *m_val.v_r;
+	return *m_val.r;
     throw TError("Field",_("Field is not Real."));
 }
 
 const vector<bool> &TFld::selValB()
 {
     if(flg()&TFld::Selected && type() == TFld::Boolean)
-	return *m_val.v_b;
+	return *m_val.b;
     throw TError("Field",_("Field is not Boolean."));
 }
 
@@ -369,18 +368,17 @@ const vector<string> &TFld::selNm()
 
 TFld &TFld::operator=( TFld &fld )
 {
-    //> Free old
+    //Free old
     if( m_sel )	delete m_sel;
-    if( m_val.v_s != NULL )
-	switch(type())
-	{
-	    case TFld::String:	delete m_val.v_s;	break;
-	    case TFld::Integer:	delete m_val.v_i;	break;
-	    case TFld::Real:	delete m_val.v_r;	break;
-	    case TFld::Boolean:	delete m_val.v_b;	break;
+    if( m_val.s != NULL )
+	switch(type()) {
+	    case TFld::String:	delete m_val.s;	break;
+	    case TFld::Integer:	delete m_val.i;	break;
+	    case TFld::Real:	delete m_val.r;	break;
+	    case TFld::Boolean:	delete m_val.b;	break;
 	    default: break;
 	}
-    //> Create new
+    //Create new
     m_name	= fld.name();
     m_descr	= fld.descr();
     m_len	= fld.len();
@@ -389,42 +387,39 @@ TFld &TFld::operator=( TFld &fld )
     m_def	= fld.def();
     //m_vals  = fld.vals();
 
-    //> Copy select and values border
-    if( flg()&TFld::Selected )
-    {
+    //Copy select and values border
+    if(flg()&TFld::Selected) {
 	m_sel  = new vector<string>;
 	*m_sel = fld.selNm();
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::String:
-		m_val.v_s = new vector<string>;
-		*(m_val.v_s) = fld.selValS();
+		m_val.s = new vector<string>;
+		*(m_val.s) = fld.selValS();
 		break;
 	    case TFld::Integer:
-		m_val.v_i = new vector<int>;
-		*(m_val.v_i) = fld.selValI();
+		m_val.i = new vector<int>;
+		*(m_val.i) = fld.selValI();
 		break;
 	    case TFld::Real:
-		m_val.v_r = new vector<double>;
-		*(m_val.v_r) = fld.selValR();
+		m_val.r = new vector<double>;
+		*(m_val.r) = fld.selValR();
 		break;
 	    case TFld::Boolean:
-		m_val.v_b = new vector<bool>;
-		*(m_val.v_b) = fld.selValB();
+		m_val.b = new vector<bool>;
+		*(m_val.b) = fld.selValB();
 		break;
 	    default: break;
 	}
     }
     else
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::Integer:
-		m_val.v_i = new vector<int>;
-		*(m_val.v_i) = fld.selValI();
+		m_val.i = new vector<int>;
+		*(m_val.i) = fld.selValI();
 		break;
 	    case TFld::Real:
-		m_val.v_r = new vector<double>;
-		*(m_val.v_r) = fld.selValR();
+		m_val.r = new vector<double>;
+		*(m_val.r) = fld.selValR();
 		break;
 	    default: break;
 	}
@@ -433,13 +428,12 @@ TFld &TFld::operator=( TFld &fld )
 
 string TFld::selVl2Nm( const string &val )
 {
-    if( flg()&TFld::Selected && type() == TFld::String )
-    {
-	int sz = vmin(m_sel->size(), m_val.v_s->size());
+    if(flg()&TFld::Selected && type() == TFld::String) {
+	int sz = vmin(m_sel->size(), m_val.s->size());
 	if( !sz ) return _("Empty");
 	int i_val = 0;
 	for(i_val = 0; i_val < sz; i_val++)
-	    if((*m_val.v_s)[i_val] == val) break;
+	    if((*m_val.s)[i_val] == val) break;
 	if( i_val >= sz ) return val;
 	return (*m_sel)[i_val];
     }
@@ -448,13 +442,12 @@ string TFld::selVl2Nm( const string &val )
 
 string TFld::selVl2Nm( int val )
 {
-    if( flg()&TFld::Selected && type() == TFld::Integer )
-    {
-	int sz = vmin(m_sel->size(), m_val.v_i->size());
+    if(flg()&TFld::Selected && type() == TFld::Integer) {
+	int sz = vmin(m_sel->size(), m_val.i->size());
 	if( !sz ) return _("Empty");
 	int i_val = 0;
 	for(i_val = 0; i_val < sz; i_val++)
-	    if((*m_val.v_i)[i_val] == val) break;
+	    if((*m_val.i)[i_val] == val) break;
 	if( i_val >= sz ) return TSYS::int2str(val);
 	return (*m_sel)[i_val];
     }
@@ -463,13 +456,12 @@ string TFld::selVl2Nm( int val )
 
 string TFld::selVl2Nm( double val )
 {
-    if( flg()&TFld::Selected && type() == TFld::Real )
-    {
-	int sz = vmin(m_sel->size(), m_val.v_r->size());
+    if(flg()&TFld::Selected && type() == TFld::Real) {
+	int sz = vmin(m_sel->size(), m_val.r->size());
 	if( !sz ) return _("Empty");
 	int i_val = 0;
 	for(i_val = 0; i_val < sz; i_val++)
-	    if((*m_val.v_r)[i_val] == val) break;
+	    if((*m_val.r)[i_val] == val) break;
 	if( i_val >= sz ) return TSYS::real2str(val);
 	return (*m_sel)[i_val];
     }
@@ -478,13 +470,12 @@ string TFld::selVl2Nm( double val )
 
 string TFld::selVl2Nm( bool val )
 {
-    if( flg()&TFld::Selected && type() == TFld::Boolean )
-    {
-	int sz = vmin(m_sel->size(), m_val.v_b->size());
+    if(flg()&TFld::Selected && type() == TFld::Boolean) {
+	int sz = vmin(m_sel->size(), m_val.b->size());
 	if( !sz ) return _("Empty");
 	int i_val;
 	for(i_val = 0; i_val < sz; i_val++)
-	    if( (*m_val.v_b)[i_val] == val ) break;
+	    if( (*m_val.b)[i_val] == val ) break;
 	if( i_val >= sz ) return TSYS::int2str(val);
 	return (*m_sel)[i_val];
     }
@@ -494,9 +485,9 @@ string TFld::selVl2Nm( bool val )
 string TFld::selNm2VlS( const string &name )
 {
     if(flg()&TFld::Selected && type() == TFld::String)
-	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_s->size()); i_val++)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.s->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
-		return (*m_val.v_s)[i_val];
+		return (*m_val.s)[i_val];
     return name;
     //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
@@ -504,30 +495,30 @@ string TFld::selNm2VlS( const string &name )
 int TFld::selNm2VlI( const string &name )
 {
     if(flg()&TFld::Selected && type() == TFld::Integer)
-	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_i->size()); i_val++)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.i->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
-		return (*m_val.v_i)[i_val];
-    return atoi(name.c_str());
+		return (*m_val.i)[i_val];
+    return s2i(name);
     //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
 
 double TFld::selNm2VlR( const string &name )
 {
     if(flg()&TFld::Selected && type() == TFld::Real)
-	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_r->size()); i_val++)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.r->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
-		return (*m_val.v_r)[i_val];
-    return atof(name.c_str());
+		return (*m_val.r)[i_val];
+    return s2r(name);
     //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
 
 bool TFld::selNm2VlB( const string &name )
 {
     if(flg()&TFld::Selected && type() == TFld::Boolean)
-	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_b->size()); i_val++)
+	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.b->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
-		return (*m_val.v_b)[i_val];
-    return atoi(name.c_str());
+		return (*m_val.b)[i_val];
+    return s2i(name);
     //throw TError("Field",_("Select error! Name: '%s'."),name.c_str());
 }
 
@@ -535,13 +526,11 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
 {
     XMLNode *n_e = TCntrNode::ctrMkNode("fld",opt,pos,(path+"/"+name()).c_str(),descr(),
 	    (flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),1,"len",TSYS::int2str(len()).c_str());
-    if(n_e)
-    {
+    if(n_e) {
 	if(flg()&TFld::Selected)
 	    n_e->setAttr("tp","str")->setAttr("len","")->setAttr("dest",(flg()&TFld::SelEdit)?"sel_ed":"select")->
 		setAttr("sel_id",values())->setAttr("sel_list",selNames());
-	else switch(type())
-	{
+	else switch(type()) {
 	    case TFld::String:
 		n_e->setAttr("tp","str");
 		if(flg()&FullText)	n_e->setAttr("cols","100")->setAttr("rows","4");

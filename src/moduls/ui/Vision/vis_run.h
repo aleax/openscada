@@ -53,8 +53,8 @@ class VisRun : public QMainWindow
     Q_OBJECT
     public:
 	//Public methods
-	VisRun( const string &prj_it, const string &open_user, const string &user_pass,
-	    const string &VCAstat, bool crSessForce = false, QWidget * parent = 0 );
+	VisRun( const string &prjSes_it, const string &open_user, const string &user_pass,
+	    const string &VCAstat, bool crSessForce = false, unsigned screen = 0 );
 	~VisRun( );
 
 	string user( );
@@ -62,6 +62,7 @@ class VisRun : public QMainWindow
 	string VCAStation( );
 	int period( )		{ return mPeriod; }
 	string workSess( )	{ return work_sess; }
+	unsigned screen( )	{ return mScreen; }
 
 	string srcProject( )	{ return src_prj; }
 	float  xScale( )	{ return x_scale; }
@@ -74,18 +75,18 @@ class VisRun : public QMainWindow
 	void setReqTm( unsigned rt )	{ reqtm = rt; }
 	void setStyle( int istl );
 
-	void initSess( const string &prj_it, bool crSessForce = false );	//Init session for project's item path
+	void initSess( const string &prjSes_it, bool crSessForce = false );	//Init session for project's item path
 	void callPage( const string &ses_it, bool updWdg = false );		//Call session page
 	void fullUpdatePgs( );
 
-	//> Page cache commands
+	// Page cache commands
 	void pgCacheClear( );
 	void pgCacheAdd( RunPageView *wdg );
 	RunPageView *pgCacheGet( const string &id );
 
-	//> Attributes commands
-	string wAttrGet( const string &path, const string &attr );
-	bool wAttrSet( const string &path, const string &attr, const string &val );
+	// Attributes commands
+	string wAttrGet( const string &path, const string &attr, bool sess = false );
+	bool wAttrSet( const string &path, const string &attr, const string &val, bool sess = false );
 
 	RunPageView *masterPg( )				{ return master_pg; }
 	RunPageView *findOpenPage( const string &pg );
@@ -95,11 +96,11 @@ class VisRun : public QMainWindow
 
 	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
 
-	//> Resource cache commands
+	// Resource cache commands
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
 
-	//> Alarms commands
+	// Alarms commands
 	unsigned alarmSt( )					{ return mAlrmSt; }
 	char alarmTp( char tmpl, bool quittance = false )	{ return (mAlrmSt>>(quittance?16:8)) & tmpl; }
 	int  alarmLev( )					{ return mAlrmSt & 0xFF; }
@@ -141,29 +142,29 @@ class VisRun : public QMainWindow
 	{
 	    public:
 		CacheEl( time_t itm, const string &ival ) : tm(itm), val(ival)	{ }
-		CacheEl( )	{ }
+		CacheEl( ) : tm(0)	{ }
 		time_t	tm;
 		string	val;
 	};
 	//Private attributes
-	//> Menu root items
+	// Menu root items
 	QMenu	*mn_file,			//Menu "File"
 		*mn_alarm,			//Menu "Alarm"
 		*mn_view,			//Menu "View"
 		*mn_help;			//Menu "Help"
 
-	//> Tool bars
+	// Tool bars
 	QToolBar	*toolBarStatus;		//Status toolbar
 
-	//> Actions
+	// Actions
 	QAction *actFullScr,			//Full screen action
-	//>> Alarms actions
+	//  Alarms actions
 		*actAlrmLev,			//Alarm level
 		*actAlrmLight,			//Alarm by Light
 		*actAlrmAlarm,			//Alarm by mono sound (PC speaker)
 		*actAlrmSound;			//Alarm by sound or synthesis of speech
 
-	//> Main components
+	// Main components
 	QTimer		*endRunTimer, *updateTimer;
 	QPrinter	*prPg, *prDiag, *prDoc;
 	QFileDialog	*fileDlg;
@@ -172,27 +173,28 @@ class VisRun : public QMainWindow
 	StylesStBar	*mStlBar;		//Style status widget
 	QLabel		*mWStat;		//VCA engine station
 	QLabel		*mWTime;		//Run-time time display for fullscreen
+	QLabel		*conErr;		//Connection error label
 	bool		crSessForce;		//Force session creation flag
 	bool		keepAspectRatio;	//Keep aspect ratio on scale
-	string 		prj_it, work_sess, src_prj;//Work session and source project
+	string 		prjSes_it, work_sess, src_prj;//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period
-	unsigned	wPrcCnt;		//Process counter
+	unsigned	mScreen,		//Work screen, possible virtual
+			wPrcCnt;		//Process counter
 	float		upd_tm;
 	unsigned	reqtm;			//Requested time
 	unsigned	expDiagCnt, expDocCnt;
 
 	float		x_scale, y_scale;	//RunTime scaling
 
-	//> Alarm attributes
+	// Alarm attributes
 	unsigned	mAlrmSt;		//Alarm status
 	SndPlay		*alrmPlay;		//Alarm play widget
-	bool		alrLevSet,		//Use for no quittance lamp blinking
-			isConErr;		//Connection error flag
+	bool		alrLevSet;		//Use for no quittance lamp blinking
 
 	vector<string>	pgList;			//Pages list
 
-	//> Page and resource cache
+	// Page and resource cache
 	deque<RunPageView*>	cache_pg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 };

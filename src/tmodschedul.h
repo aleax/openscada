@@ -38,8 +38,7 @@ class TModSchedul : public TSubSYS
 {
     public:
 	//Data
-	class SHD
-	{
+	class SHD {
 	    public:
 		//Methods
 		SHD( ) : hd(NULL), tm(0)	{ }

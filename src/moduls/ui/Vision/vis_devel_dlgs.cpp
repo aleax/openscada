@@ -87,88 +87,88 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/obj/cfg/ico");
     obj_ico->setToolTip(_("Item's icon. Click for download other."));
-    obj_ico->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
+    obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
     obj_ico->setIconSize(QSize(60,60));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico,0,0,2,1);
+    glay->addWidget(obj_ico, 0, 0, 2, 1);
 
-    lab = new QLabel(_("Enabled:"),tab_w);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
-    glay->addWidget(lab,0,1);
+    lab = new QLabel(_("Enabled:"), tab_w);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab, 0, 1);
     obj_enable = new QCheckBox(tab_w);
     obj_enable->setObjectName("/obj/st/en");
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_enable,0,2);
+    glay->addWidget(obj_enable, 0, 2);
 
-    lab = new QLabel(_("Container DB:"),tab_w);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
-    glay->addWidget(lab,1,1);
+    lab = new QLabel(_("Container DB:"), tab_w);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab, 1, 1);
     obj_db = new LineEdit(tab_w, LineEdit::Combo);
-    obj_db->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+    obj_db->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed));
     obj_db->setObjectName("/obj/st/db");
     connect(obj_db, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(obj_db,1,2);
+    glay->addWidget(obj_db, 1, 2);
 
     grp->setLayout(glay);
-    dlg_lay->addWidget(grp,0,0);
+    dlg_lay->addWidget(grp, 0, 0);
 
     //Configuration parameters
-    grp = new QGroupBox(_("Configuration"),tab_w);
+    grp = new QGroupBox(_("Configuration"), tab_w);
     glay = new QGridLayout;
     glay->setMargin(4);
     glay->setSpacing(6);
 
-    glay->addWidget(new QLabel(_("Id:"),tab_w),0,0);
+    glay->addWidget(new QLabel(_("Id:"),tab_w), 0, 0);
     obj_id = new QLabel(tab_w);
     obj_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_id->setObjectName("/obj/cfg/id");
     obj_id->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    glay->addWidget(obj_id,0,1,1,3);
+    glay->addWidget(obj_id, 0, 1, 1, 3);
 
-    glay->addWidget(new QLabel(_("Name:"),tab_w),1,0);
+    glay->addWidget(new QLabel(_("Name:"),tab_w), 1, 0);
     obj_name = new LineEdit(this);
     obj_name->setObjectName("/obj/cfg/name");
     connect(obj_name, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(obj_name,1,1,1,3);
+    glay->addWidget(obj_name, 1, 1, 1, 3);
 
-    glay->addWidget(new QLabel(_("Description:"),tab_w),2,0);
+    glay->addWidget(new QLabel(_("Description:"),tab_w), 2, 0);
     obj_descr = new TextEdit(this);
     obj_descr->setObjectName("/obj/cfg/descr");
     connect(obj_descr, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(obj_descr,3,0,1,4);
+    glay->addWidget(obj_descr, 3, 0, 1, 4);
 
-    lab = new QLabel(_("Owner, group:"),tab_w);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
-    glay->addWidget(lab,4,0);
+    lab = new QLabel(_("Owner, group:"), tab_w);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab, 4, 0);
     obj_user = new QComboBox(tab_w);
     obj_user->setObjectName("/obj/cfg/owner");
     connect(obj_user, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_user,4,1);
+    glay->addWidget(obj_user, 4, 1);
     obj_grp = new QComboBox(tab_w);
     obj_grp->setObjectName("/obj/cfg/grp");
     connect(obj_grp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_grp,4,2);
-    lab = new QLabel(_("Access:"),tab_w);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
-    glay->addWidget(lab,5,0);
+    lab = new QLabel(_("Access:"), tab_w);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab, 5, 0);
     obj_accuser = new QComboBox(tab_w);
     obj_accuser->setObjectName("/obj/cfg/u_a");
     connect(obj_accuser, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accuser,5,1);
+    glay->addWidget(obj_accuser, 5, 1);
     obj_accgrp  = new QComboBox(tab_w);
     obj_accgrp->setObjectName("/obj/cfg/g_a");
     connect(obj_accgrp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accgrp,5,2);
+    glay->addWidget(obj_accgrp, 5, 2);
     obj_accother= new QComboBox(tab_w);
     obj_accother->setObjectName("/obj/cfg/o_a");
     connect(obj_accother, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accother,5,3);
+    glay->addWidget(obj_accother, 5, 3);
 
     // Specific parameter: project calc time
-    lab = new QLabel(_("Calculate period (ms):"),tab_w);
-    glay->addWidget(lab,6,0);
-    prj_ctm = new LineEdit(tab_w,LineEdit::Integer,false,false);
+    lab = new QLabel(_("Calculate period (ms):"), tab_w);
+    glay->addWidget(lab, 6, 0);
+    prj_ctm = new LineEdit(tab_w, LineEdit::Integer, false, false);
     prj_ctm->setCfg("0:10000:10");
     prj_ctm->setObjectName("/obj/cfg/per");
     prj_ctm->setWindowIconText(TSYS::addr2str(lab).c_str());
@@ -201,13 +201,11 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     dlg_lay->setMargin(9);
     dlg_lay->setSpacing(6);
 
-    mimeDataTable = new QTableWidget(0,3,tab_w);
+    mimeDataTable = new QTableWidget(0, 3, tab_w);
     mimeDataTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(mimeDataTable, SIGNAL(cellChanged(int,int)), this, SLOT(mimeDataChange(int,int)));
-    QStringList headLabels;
-    headLabels << _("Id") << _("Mime type") << _("Data size");
-    mimeDataTable->setHorizontalHeaderLabels(headLabels);
-    dlg_lay->addWidget(mimeDataTable,0,0,1,4);
+    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Id") << _("Mime type") << _("Data size"));
+    dlg_lay->addWidget(mimeDataTable, 0, 0, 1, 4);
 
     buttDataAdd = new QPushButton(_("Add record"),tab_w);
     connect(buttDataAdd, SIGNAL(clicked()), this, SLOT(addMimeData()));
@@ -250,14 +248,12 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     connect(stl_name, SIGNAL(apply()), this, SLOT(isModify()));
     dlg_lay->addWidget(stl_name, 1, 1, 1, 2);
 
-    stl_table = new QTableWidget(0,2,tab_w);
+    stl_table = new QTableWidget(0, 2, tab_w);
     stl_table->setObjectName("/style/props");
     stl_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(stl_table, SIGNAL(cellChanged(int,int)), this, SLOT(stlTableChange(int,int)));
-    headLabels.clear();
-    headLabels << _("Id") << _("Value");
-    stl_table->setHorizontalHeaderLabels(headLabels);
-    dlg_lay->addWidget(stl_table,4,0,1,4);
+    stl_table->setHorizontalHeaderLabels(QStringList() << _("Id") << _("Value"));
+    dlg_lay->addWidget(stl_table, 4, 0, 1, 4);
 
     buttStlTableDel = new QPushButton(_("Delete record"),tab_w);
     connect(buttStlTableDel, SIGNAL(clicked()), this, SLOT(delStlItem()));
@@ -344,8 +340,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/u_lst",TSYS::PathEl));
 	    obj_user->clear();
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
-		{
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++) {
 		    obj_user->addItem(req.childGet(i_l)->text().c_str());
 		    if(sval == req.childGet(i_l)->text()) obj_user->setCurrentIndex(i_l);
 		}
@@ -360,8 +355,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/g_lst",TSYS::PathEl));
 	    obj_grp->clear();
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
-		{
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++) {
 		    obj_grp->addItem(req.childGet(i_l)->text().c_str());
 		    if(sval == req.childGet(i_l)->text()) obj_grp->setCurrentIndex(i_l);
 		}
@@ -475,8 +469,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    stl_select->clear();
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
-		{
+		for(unsigned i_l = 0; i_l < req.childSize(); i_l++) {
 		    stl_select->addItem(req.childGet(i_l)->text().c_str(),req.childGet(i_l)->attr("id").c_str());
 		    if(sval == req.childGet(i_l)->attr("id"))	stl_select->setCurrentIndex(i_l);
 		}
@@ -501,11 +494,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	if(gnd) {
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(stl_table->objectName().toStdString(),TSYS::PathEl));
 	    owner()->cntrIfCmd(req);
-	    for(unsigned i_c = 0; i_c < req.childSize() && i_c < 2; i_c++)
-	    {
+	    for(unsigned i_c = 0; i_c < req.childSize() && i_c < 2; i_c++) {
 		stl_table->setRowCount(req.childGet(i_c)->childSize());
-		for(unsigned i_r = 0; i_r < req.childGet(i_c)->childSize(); i_r++)
-		{
+		for(unsigned i_r = 0; i_r < req.childGet(i_c)->childSize(); i_r++) {
 		    stl_table->setItem(i_r, i_c, new QTableWidgetItem(req.childGet(i_c)->childGet(i_r)->text().c_str()));
 		    stl_table->item(i_r, i_c)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((i_c==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
 		}
@@ -529,8 +520,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
 void LibProjProp::tabChanged( int itb )
 {
-    if(itb == 1)
-    {
+    if(itb == 1) {
 	show_init = true;
 
 	//Load mime data
@@ -539,8 +529,7 @@ void LibProjProp::tabChanged( int itb )
 	if(!owner()->cntrIfCmd(req)) {
 	    XMLNode *id_col = req.childGet(0);
 	    mimeDataTable->setRowCount(id_col->childSize());
-	    for(unsigned i_l = 0; i_l < id_col->childSize(); i_l++)
-	    {
+	    for(unsigned i_l = 0; i_l < id_col->childSize(); i_l++) {
 		if(!mimeDataTable->item(i_l,0)) {
 		    mimeDataTable->setItem(i_l,0,new QTableWidgetItem());
 		    mimeDataTable->item(i_l,0)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
@@ -601,7 +590,6 @@ void LibProjProp::isModify( QObject *snd )
     QString oname = snd->objectName();
 
     XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toStdString(),TSYS::PathEl));
 
     if(oname == obj_enable->objectName() || oname == prj_keepAspRt->objectName())
     {
@@ -628,6 +616,7 @@ void LibProjProp::isModify( QObject *snd )
     else if(oname == buttStlDel->objectName()) update = true;
     else return;
 
+    req.setAttr("path",ed_it+"/"+TSYS::strEncode(oname.toStdString(),TSYS::PathEl));
     if(owner()->cntrIfCmd(req)) {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	showDlg(ed_it,true);
@@ -831,7 +820,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_ico->setIconSize(QSize(60,60));
     obj_ico->setAutoDefault(false);
     connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico,0,0,3,1);
+    glay->addWidget(obj_ico,0,0,4,1);
 
     lab = new QLabel(_("Enabled:"),tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
@@ -858,6 +847,14 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     pg_tp->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(pg_tp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(pg_tp,2,2);
+
+    lab = new QLabel(_("Used:"),tab_w);
+    glay->addWidget(lab,3,1);
+    obj_used = new QLabel(tab_w);
+    obj_used->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    obj_used->setObjectName("/wdg/st/use");
+    obj_used->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    glay->addWidget(obj_used,3,2,1,4);
 
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,0,0);
@@ -966,9 +963,8 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     obj_attr_cfg->setSelectionBehavior(QAbstractItemView::SelectRows);
     obj_attr_cfg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     connect(obj_attr_cfg, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeAttr(QTreeWidgetItem*,int)));
-    QStringList headLabels;
-    headLabels << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc.") << _("Configuration") << _("Configuration template");
-    obj_attr_cfg->setHeaderLabels(headLabels);
+    obj_attr_cfg->setHeaderLabels(QStringList() << _("Id") << _("Name") << _("Data type") << _("Work area") << _("Proc.")
+						<< _("Configuration") << _("Configuration template"));
     glay->addWidget(obj_attr_cfg,0,0,1,2);
 
     buttAttrAdd = new QPushButton(_("Add attribute"),attr_cf_fr); 
@@ -1078,6 +1074,12 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root,obj_parent->objectName().toStdString(),true);
 	obj_parent->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) selectParent();
+	// Used
+	gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
+	if(gnd) {
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_used->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) obj_used->setText(req.text().c_str());
+	}else obj_used->setText("");
 
 	// User
 	gnd = TCntrNode::ctrId(root,obj_user->objectName().toStdString(),true);

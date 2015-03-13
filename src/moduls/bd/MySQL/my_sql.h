@@ -46,7 +46,7 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable(string name, MBD *iown, bool create);
+	MTable( string name, MBD *iown, bool create );
 	~MTable( );
 
 	//> Field's functions
@@ -61,11 +61,12 @@ class MTable : public TTable
     private:
 	//Private methods
 	void postDisable( int flag );
+	bool isEmpty( );
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt = 1 );
 
 	string getVal( TCfg &cfg );
-	void   setVal( TCfg &cfg, const string &vl );
+	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	string UTCtoSQL( time_t val );
 	time_t SQLtoUTC( const string &val );

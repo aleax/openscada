@@ -75,15 +75,15 @@ namespace VISION
 	    void setMess( const QString &val );
 	    void setIdLen( int len );
 
-	    QGridLayout *edLay( )	{ return ed_lay; }
+	    QGridLayout *edLay( )	{ return mEdLay; }
 
 	protected:
 	    void showEvent( QShowEvent * event );
 
 	private:
-	    QGridLayout *ed_lay;
-	    QLabel	*inp_lab;
-	    QLineEdit	*m_id, *m_name;
+	    QGridLayout *mEdLay;
+	    QLabel	*inpLab;
+	    QLineEdit	*mId, *mName;
     };
 
     //*********************************************
@@ -232,13 +232,13 @@ namespace VISION
 	Q_OBJECT
 
 	public:
-	    SyntxHighl(QTextDocument *parent = 0);
+	    SyntxHighl( QTextDocument *parent = 0 );
 
-	    void setSnthHgl(XMLNode nd);
+	    void setSnthHgl( XMLNode nd );
 
 	protected:
-	    void highlightBlock(const QString &text);
-	    void rule(XMLNode *irl, const QString &text, int off = 0, char lev = 0);
+	    void highlightBlock( const QString &text );
+	    void rule( XMLNode *irl, const QString &text, int off = 0, char lev = 0 );
 
 	    XMLNode rules;
     };
@@ -257,7 +257,7 @@ namespace VISION
 	    QString text( );
 
 	    void setText( const QString & );
-	    void setSnthHgl(XMLNode nd);
+	    void setSnthHgl( XMLNode nd );
 
 	    QTextEdit *workWdg( )	{ return ed_fld; }
 
@@ -293,9 +293,9 @@ namespace VISION
     //*********************************************
     /*class TreeComboDelegate: public QItemDelegate
     {
-        public:
-            //Public methods
-            TreeComboDelegate( QObject *parent = 0 );
+	public:
+	    //Public methods
+	    TreeComboDelegate( QObject *parent = 0 );
 
 	    void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
     };*/

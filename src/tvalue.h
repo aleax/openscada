@@ -113,19 +113,18 @@ class TVal: public TCntrNode
 
 	//Attributes
 	union {
-	    string	*val_s;		//String value
-	    double	val_r;		//Real value
-	    int		val_i;		//Integer value
-	    char	val_b;		//Boolean value
-	    AutoHD<TVarObj> *val_o;	//Object value
+	    string	*s;	//String value
+	    double	r;	//Real value
+	    int		i;	//Integer value
+	    char	b;	//Boolean value
+	    AutoHD<TVarObj> *o;	//Object value
 	} val;
 
 	unsigned char	mCfg	: 1;		//Configuration id
 	unsigned char	mReqFlg	: 1;		//Request to attribute flag
 	unsigned char	mResB1	: 1;		//Reserve Boolean
 	unsigned char	mResB2	: 1;		//Reserve Boolean
-	union
-	{
+	union {
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;
@@ -179,8 +178,8 @@ class TValue: public TCntrNode, public TValElem
 	//Methods
 	// TElem commands
 	void detElem( TElem *el );
-	void addFld( TElem *el, unsigned id_val);
-	void delFld( TElem *el, unsigned id_val);
+	void addFld( TElem *el, unsigned id_val );
+	void delFld( TElem *el, unsigned id_val );
 
 	//Attributes
 	char		m_vl;

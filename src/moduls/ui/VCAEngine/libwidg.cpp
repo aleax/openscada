@@ -119,8 +119,7 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
     AutoHD<TCntrNode> nd = TCntrNode::chldAt(igr, name, user);
     if(igr == m_wdg && !nd.freeStat()) {
 	AutoHD<LWidget> lwdg = nd;
-	if(!lwdg.freeStat() && !lwdg.at().enable() && !passAutoEn && lwdg.at().enableByNeed)
-	{
+	if(!lwdg.freeStat() && !lwdg.at().enable() && !passAutoEn && lwdg.at().enableByNeed) {
 	    lwdg.at().enableByNeed = false;
 	    try {
 		lwdg.at().load(true);
@@ -162,8 +161,7 @@ void WidgetLib::load_( )
     map<string, bool>   itReg;
     TConfig c_el(&mod->elWdg());
     c_el.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); ) {
 	string f_id = c_el.cfg("ID").getS();
 	if(!present(f_id)) { add(f_id,"",""); at(f_id).at().setEnableByNeed(); }
 	itReg[f_id] = true;
@@ -250,8 +248,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	TConfig c_el(&mod->elWdgData());
 	if(!mimeData) c_el.cfg("DATA").setView(false);
 	c_el.cfg("ID").setS( dbid );
-	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el,false,true))
-	{
+	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el,false,true)) {
 	    mimeType = c_el.cfg("MIME").getS();
 	    if(mimeData) *mimeData = c_el.cfg("DATA").getS();
 	    return true;
@@ -344,8 +341,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
 	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
-	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
@@ -529,7 +525,7 @@ string LWidget::calcProg( )
 
     string iprg = proc();
     size_t lng_end = iprg.find("\n");
-    if(lng_end == string::npos) lng_end=0;
+    if(lng_end == string::npos) lng_end = 0;
     else lng_end++;
     return iprg.substr(lng_end);
 }
@@ -579,8 +575,7 @@ void LWidget::setEnable( bool val )
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		try {
 		    AutoHD<Widget> iw = wdgAt(lst[i_l]);
-		    if(iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0)
-		    {
+		    if(iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0) {
 			iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
 			iw.at().setEnable(true);
 		    }
@@ -640,8 +635,7 @@ void LWidget::loadIO( )
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_incl";
     c_el.cfg("IDW").setS(id(),true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); ) {
 	string sid  = c_el.cfg("ID").getS();
 	if(c_el.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
@@ -708,8 +702,7 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	TConfig c_el( &mod->elInclWdg() );
 	c_el.cfg("IDW").setS(id());
 	c_el.cfg("ID").setS(wid);
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>")
-	{
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>") {
 	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true, false, true);
 	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
@@ -720,9 +713,9 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
     wdgAt(wid).at().setName(name);
 
     //Call heritors include widgets update
-    for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
-	if(m_herit[i_h].at().enable())
-	    m_herit[i_h].at().inheritIncl(wid);
+    for(unsigned i_h = 0; i_h < mHerit.size(); i_h++)
+	if(mHerit[i_h].at().enable())
+	    mHerit[i_h].at().inheritIncl(wid);
 }
 
 AutoHD<CWidget> LWidget::wdgAt( const string &wdg )	{ return Widget::wdgAt(wdg); }
@@ -755,7 +748,7 @@ void LWidget::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr( attr );
-    if( !mdf )	modifClr( );
+    if(!mdf)	modifClr( );
 }
 
 void LWidget::cntrCmdProc( XMLNode *opt )
@@ -765,7 +758,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	cntrCmdGeneric(opt);
-	cntrCmdAttributes(opt );
+	cntrCmdAttributes(opt);
 	cntrCmdLinks(opt);
 	cntrCmdProcess(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id());
@@ -781,7 +774,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg())
 {
     cfg("ID").setS(id());
-    m_lnk = true;
+    mLnk = true;
     setParentNm(isrcwdg);
 }
 
@@ -940,7 +933,7 @@ string CWidget::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if((mimeData=ownerLWdg().resourceGet( id, &mimeType )).empty() && !parent().freeStat())
+    if((mimeData=ownerLWdg().resourceGet(id,&mimeType)).empty() && !parent().freeStat())
 	mimeData = parent().at().resourceGet(id, &mimeType);
     if(mime) *mime = mimeType;
 

@@ -98,7 +98,7 @@ class Contr: public TController
 	string cron( )				{ return cfg("SCHEDULE").getS(); }
 	int iterate( )				{ return mIter; }
 
-	//> Scheme's functions
+	// Scheme's functions
 	void blkList( vector<string> &ls )	{ chldList(mBl,ls); }
 	bool blkPresent( const string &id )	{ return chldPresent(mBl,id); }
 	void blkAdd( const string &id );
@@ -118,7 +118,7 @@ class Contr: public TController
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//> Process stat
+	// Process stat
 	void blkProc( const string & id, bool val );
 
 	void postDisable(int flag);
@@ -128,19 +128,19 @@ class Contr: public TController
 	static void *Task( void *contr );
 
 	//Private attributes
-	bool	prc_st,		// Calc status
-		call_st,        // Calc now stat
-		endrun_req,	// Endrun calc request
-		sync_st;	// Sync DB status
-	int	&mPerOld,	// Clock period (ms)
-		&mPrior,	// Process data task priority
-		&mIter;		// Iteration into clock
+	bool	prcSt,		//Calc status
+		callSt,		//Calc now stat
+		endrunReq;	//Endrun calc request
+	int	&mPerOld,	//Clock period (ms)
+		&mPrior,	//Process data task priority
+		&mIter;		//Iteration into clock
 
 	int	mBl;
-	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
+	vector< AutoHD<Block> > calcBlks;	// Calc blocks HD
 	double	mPer, tm_calc;			// Scheme's calc time
 
-	Res	hd_res, calcRes;		// Resource for process block
+	pthread_mutex_t calcRes;	// Resource for process block
+	Res	hdRes;
 };
 
 //************************************************
@@ -158,8 +158,7 @@ class TipContr: public TTipDAQ
 	TElem &blockE( )	{ return blk_el; }
 	TElem &blockIOE( )	{ return blkio_el; }
 
-	AutoHD<Contr> at( const string &name, const string &who = "" )
-	{ return TTipDAQ::at(name,who); }
+	AutoHD<Contr> at( const string &name, const string &who = "" )	{ return TTipDAQ::at(name,who); }
 	void copy( const string &src, const string &dst );
 
     protected:

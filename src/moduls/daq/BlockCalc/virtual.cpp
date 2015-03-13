@@ -69,8 +69,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
-	    return new Virtual::TipContr(source);
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new Virtual::TipContr(source);
 	return NULL;
     }
 }
@@ -100,9 +99,9 @@ TipContr::~TipContr()
 
 void TipContr::load_()
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
-    //> Load parameters from config-file
+    //Load parameters from config-file
 }
 
 void TipContr::postEnable( int flag )
@@ -151,19 +150,22 @@ void TipContr::preDisable(int flag)
 	    at(lst[i_cnt]).at().disable();
 }
 
-TController *TipContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new Contr(name,daq_db,this);
-}
+TController *TipContr::ContrAttach( const string &name, const string &daq_db )	{ return new Contr(name,daq_db,this); }
 
 //************************************************
 //* Contr - Blocks and parameters container      *
 //************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), prc_st(false), call_st(false), endrun_req(false), sync_st(false),
+    TController(name_c, daq_db, cfgelem), prcSt(false), callSt(false), endrunReq(false),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()),
     mPer(1e9), tm_calc(0)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&calcRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
     cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
     mBl = grpAdd("blk_");
@@ -171,24 +173,22 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 
 Contr::~Contr( )
 {
-
+    pthread_mutex_destroy(&calcRes);
 }
 
 TCntrNode &Contr::operator=( TCntrNode &node )
 {
+    string storBlkShTbl = cfg("BLOCK_SH");
     Contr *src_n = dynamic_cast<Contr*>(&node);
-    if(src_n)
-    {
-	//> Blocks copy
-	if(src_n->enableStat())
-	{
+    if(src_n) {
+	//Blocks copy
+	if(src_n->enableStat()) {
 	    if(!enableStat())	enable();
 
-	    //>> Blocks copy
+	    // Blocks copy
 	    vector<string> ls;
 	    src_n->blkList(ls);
-	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    {
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++) {
 		if(!blkPresent(ls[i_l])) blkAdd(ls[i_l]);
 		(TCntrNode&)blkAt(ls[i_l]).at() = (TCntrNode&)src_n->blkAt(ls[i_l]).at();
 	    }
@@ -197,15 +197,17 @@ TCntrNode &Contr::operator=( TCntrNode &node )
 
     TController::operator=(node);
 
+    //Blocks DB table propose instead copy
+    cfg("BLOCK_SH") = storBlkShTbl;
+
     return *this;
 }
 
 string Contr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if(startStat() && !redntUse())
-    {
-	if(call_st)	rez += TSYS::strMess(_("Call now. "));
+    if(startStat() && !redntUse()) {
+	if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
 	else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "), tm2s(tm_calc).c_str());
@@ -213,13 +215,11 @@ string Contr::getStatus( )
     return rez;
 }
 
-void Contr::postDisable(int flag)
+void Contr::postDisable( int flag )
 {
-    if(run_st) stop();
-    try
-    {
-	if(flag)
-	{
+    if(startStat()) stop();
+    try {
+	if(flag) {
 	    //Delete parameter's tables
 	    string wbd = DB()+"."+cfg("BLOCK_SH").getS();
 	    SYS->db().at().open(wbd);
@@ -243,20 +243,18 @@ void Contr::load_( )
 
     TController::load_( );
 
-    //> Check for get old period method value
+    //Check for get old period method value
     if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
 
-    //> Load block's configuration
+    //Load block's configuration
     TConfig c_el(&mod->blockE());
     c_el.cfgViewAll(false);
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     map<string, bool>	itReg;
 
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); ) {
 	string id = c_el.cfg("ID").getS();
-	if(!chldPresent(mBl,id))
-	{
+	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);
 	    ((TConfig &)blkAt(id).at()) = c_el;
 	}
@@ -264,14 +262,13 @@ void Contr::load_( )
 	itReg[id] = true;
     }
 
-    //>>> Check for remove items removed from DB
-    if(!SYS->selDB().empty())
-    {
+    // Check for remove items removed from DB
+    if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
-        blkList(it_ls);
-        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-            if(itReg.find(it_ls[i_it]) == itReg.end())
-        	blkDel(it_ls[i_it]);
+	blkList(it_ls);
+	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+	    if(itReg.find(it_ls[i_it]) == itReg.end())
+		blkDel(it_ls[i_it]);
     }
 }
 
@@ -282,9 +279,8 @@ void Contr::enable_( )
     blkList(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	if(blkAt(lst[i_l]).at().toEnable())
-	    try{ blkAt(lst[i_l]).at().setEnable(true); }
-	    catch(TError err)
-	    {
+	    try { blkAt(lst[i_l]).at().setEnable(true); }
+	    catch(TError err) {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_warning(nodePath().c_str(),_("Enable block '%s' error."),lst[i_l].c_str());
 	    }
@@ -298,63 +294,67 @@ void Contr::disable_( )
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	if(blkAt(lst[i_l]).at().enable())
 	    try{ blkAt(lst[i_l]).at().setEnable(false); }
-		catch(TError err)
-		{
-		    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_warning(nodePath().c_str(),_("Enable block '%s' error."),lst[i_l].c_str());
-		}
+	    catch(TError err) {
+		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_warning(nodePath().c_str(),_("Enable block '%s' error."),lst[i_l].c_str());
+	    }
 }
 
 void Contr::start_( )
 {
-    //> Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
+    //Schedule process
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
 
-    //> Make process all bloks
+    //if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Start stage 1: set all blocks to process."));
+
+    //Make process all bloks
     vector<string> lst;
     blkList(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	if(blkAt(lst[i_l]).at().enable() && blkAt(lst[i_l]).at().toProcess())
-	    try{ blkAt(lst[i_l]).at().setProcess(true); }
-	    catch(TError err)
-	    {
+	    try { blkAt(lst[i_l]).at().setProcess(true); }
+	    catch(TError err) {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_warning(nodePath().c_str(),_("Process block '%s' error."),lst[i_l].c_str());
 	    }
 
-    //> Sort blocks
-    ResAlloc res(hd_res,true);
+    //if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Start stage 2: sort blocks for need sequence."));
+
+    //Sort blocks
+    ResAlloc res(hdRes, true);
     string pvl;
-    for(int i_be = 0, permCnt = 0, i_blk = 0; i_be < (int)clc_blks.size() && permCnt < (int)clc_blks.size()/2; i_be++)
-    {
-	AutoHD<Block> cBlk = clc_blks[i_be];
-	for(int off = 0; (pvl=TSYS::strSepParse(cBlk.at().prior(),0,';',&off)).size(); )
-	{
-	    for(i_blk = i_be; i_blk < (int)clc_blks.size(); i_blk++)
-		if(pvl == clc_blks[i_blk].at().id())
-		{
-		    clc_blks[i_be] = clc_blks[i_blk];
-		    clc_blks[i_blk] = cBlk;
-		    permCnt++;
+    for(int iBe = 0, mvCnt = 0, iBlk = 0; iBe < (int)calcBlks.size(); ) {
+	AutoHD<Block> cBlk = calcBlks[iBe];
+	bool isMoved = false;
+	for(int off = 0, curPos = iBe; (pvl=TSYS::strSepParse(cBlk.at().prior(),0,';',&off)).size(); ) {
+	    for(iBlk = curPos+1; iBlk < (int)calcBlks.size(); iBlk++)
+		if(pvl == calcBlks[iBlk].at().id()) {
+		    //if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Reshuffle blocks '%s'(%d) <-> '%s'(%d)."),
+		    //	calcBlks[curPos].at().id().c_str(), curPos, calcBlks[iBlk].at().id().c_str(), iBlk);
+		    calcBlks[curPos] = calcBlks[iBlk];
+		    calcBlks[iBlk] = cBlk;
+		    curPos = iBlk;
+		    isMoved = true;
 		    break;
 		}
-	    if(i_blk < (int)clc_blks.size()) break;
 	}
-	if(!pvl.empty()) i_be = -1;
+	if(isMoved) mvCnt++;
+	if(!isMoved || mvCnt >= (int)(calcBlks.size()/2)) { iBe++; mvCnt = 0; }
     }
     res.release();
 
-    //> Start the request and calc data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
+    //if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Start stage 3: task create: prcSt=%d."), prcSt);
+
+    //Start the request and calc data task
+    if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
 }
 
 void Contr::stop_( )
 {
-    //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
-    run_st = false;
+    //Stop the request and calc data task
+    if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
-    //> Make deprocess all blocks
+    //Make deprocess all blocks
     vector<string> lst;
     blkList(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
@@ -364,55 +364,51 @@ void Contr::stop_( )
 
 void *Contr::Task( void *icontr )
 {
-    Contr &cntr = *(Contr *)icontr;
+    Contr &cntr = *(Contr*)icontr;
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.endrunReq = false;
+    cntr.prcSt = true;
 
     bool is_start = true;
     bool is_stop  = false;
     int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
-    while(true)
-    {
+    while(true) {
 	//Check calk time
-	cntr.call_st = true;
+	cntr.callSt = true;
 	t_cnt = TSYS::curTime();
 
-	cntr.hd_res.resRequestR( );
-	ResAlloc sres(cntr.calcRes,true);
+	cntr.hdRes.resRequestR();
+	MtxAlloc sres(cntr.calcRes, true);
 	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
-	    for( unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++ )
-	    {
-		try{ cntr.clc_blks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
-		catch(TError err)
-		{
+	    for(unsigned i_blk = 0; i_blk < cntr.calcBlks.size(); i_blk++)
+		try { cntr.calcBlks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+		catch(TError err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    string blck = cntr.clc_blks[i_blk].at().id();
+		    string blck = cntr.calcBlks[i_blk].at().id();
 		    mess_err(cntr.nodePath().c_str(),_("Block '%s' calc error."),blck.c_str());
-		    if( cntr.clc_blks[i_blk].at().errCnt() < 10 ) continue;
-		    cntr.hd_res.resRelease( );
+		    if(cntr.calcBlks[i_blk].at().errCnt() < 10) continue;
+		    cntr.hdRes.resRelease( );
 		    mess_err(cntr.nodePath().c_str(),_("Block '%s' is stopped."),blck.c_str());
 		    cntr.blkAt(blck).at().setProcess(false);
-		    cntr.hd_res.resRequestR( );
+		    cntr.hdRes.resRequestR();
 		}
-	    }
-	sres.release();
-	cntr.hd_res.resRelease( );
+	sres.unlock();
+	cntr.hdRes.resRelease();
 
 	t_prev = t_cnt;
 	cntr.tm_calc = TSYS::curTime()-t_cnt;
-	cntr.call_st = false;
+	cntr.callSt = false;
 
 	if(is_stop) break;
 
 	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
-	if(cntr.endrun_req)	is_stop = true;
+	if(cntr.endrunReq)	is_stop = true;
 	if(!cntr.redntUse())	is_start = false;
     }
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }
@@ -423,22 +419,20 @@ void Contr::redntDataUpdate( )
 
     vector<string> bls; blkList(bls);
 
-    //> Request for template's attributes values
+    //Request for template's attributes values
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
-    for(unsigned i_b = 0; i_b < bls.size(); i_b++)
-    {
+    for(unsigned i_b = 0; i_b < bls.size(); i_b++) {
 	if(!blkAt(bls[i_b]).at().enable()) continue;
 	req.childAdd("get")->setAttr("path","/blk_"+bls[i_b]+"/%2fserv%2fattr");
     }
 
-    //> Send request to first active station for this controller
+    //Send request to first active station for this controller
     if(owner().owner().rdStRequest(workId(),req).empty()) return;
 
-    //> Redirect respond to local parameters
+    //Redirect respond to local parameters
     req.setAttr("path","/");
-    for(unsigned i_b = 0; i_b < req.childSize(); )
-    {
-	if(atoi(req.childGet(i_b)->attr("err").c_str())) { req.childDel(i_b); continue; }
+    for(unsigned i_b = 0; i_b < req.childSize(); ) {
+	if(s2i(req.childGet(i_b)->attr("err"))) { req.childDel(i_b); continue; }
 	req.childGet(i_b)->setName("set");
 	i_b++;
     }
@@ -446,10 +440,7 @@ void Contr::redntDataUpdate( )
 }
 
 
-TParamContr *Contr::ParamAttach( const string &name, int type )
-{
-    return new Prm(name,&owner().tpPrmAt(type));
-}
+TParamContr *Contr::ParamAttach( const string &name, int type )	{ return new Prm(name,&owner().tpPrmAt(type)); }
 
 void Contr::blkAdd( const string &iid )
 {
@@ -460,27 +451,25 @@ void Contr::blkProc( const string &id, bool val )
 {
     unsigned i_blk;
 
-    ResAlloc res(hd_res,true);
-    for( i_blk = 0; i_blk < clc_blks.size(); i_blk++ )
-	if( clc_blks[i_blk].at().id() == id ) break;
+    ResAlloc res(hdRes, true);
+    for(i_blk = 0; i_blk < calcBlks.size(); i_blk++)
+	if(calcBlks[i_blk].at().id() == id) break;
 
-    if( val && i_blk >= clc_blks.size() ) clc_blks.push_back(blkAt(id));
-    if( !val && i_blk < clc_blks.size() ) clc_blks.erase(clc_blks.begin()+i_blk);
+    if(val && i_blk >= calcBlks.size()) calcBlks.push_back(blkAt(id));
+    if(!val && i_blk < calcBlks.size()) calcBlks.erase(calcBlks.begin()+i_blk);
 }
 
 void Contr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
-	{
+	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme"))) {
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),RWRWR_,"root",SDAQ_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","blk_","idSz",OBJ_ID_SZ);
@@ -489,54 +478,44 @@ void Contr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/br/blk_")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	{
+    if(a_path == "/br/blk_") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    blkList(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
-    else if(a_path == "/scheme/sch")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	{
-	    if(!startStat())
-	    {
+    else if(a_path == "/scheme/sch") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	    if(!startStat()) {
 		vector<string> lst;
 		blkList(lst);
-		for(unsigned i_f=0; i_f < lst.size(); i_f++)
+		for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	    }
-	    else
-	    {
-		ResAlloc sres(hd_res,false);
-		for(unsigned i_b=0; i_b < clc_blks.size(); i_b++)
-		    opt->childAdd("el")->setAttr("id",clc_blks[i_b].at().id())->setText(clc_blks[i_b].at().name());
+	    else {
+		ResAlloc sres(hdRes, false);
+		for(unsigned i_b = 0; i_b < calcBlks.size(); i_b++)
+		    opt->childAdd("el")->setAttr("id",calcBlks[i_b].at().id())->setText(calcBlks[i_b].at().name());
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    blkAdd(vid); blkAt(vid).at().setName(opt->text());
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
     }
-    else if(a_path == "/scheme/nmb" && ctrChkNode(opt))
-    {
+    else if(a_path == "/scheme/nmb" && ctrChkNode(opt)) {
 	vector<string> lst;
 	blkList(lst);
 	unsigned enCnt = 0, prcCnt = 0;
-	for(unsigned i_b = 0; i_b < lst.size(); i_b++)
-	{
+	for(unsigned i_b = 0; i_b < lst.size(); i_b++) {
 	    if(blkAt(lst[i_b]).at().enable())	enCnt++;
 	    if(blkAt(lst[i_b]).at().process())	prcCnt++;
 	}
@@ -555,25 +534,25 @@ Prm::Prm( string name, TTipParam *tp_prm ) :
 
 }
 
-Prm::~Prm()
+Prm::~Prm( )
 {
     nodeDelAll();
 }
 
 void Prm::postEnable( int flag )
 {
-    TParamContr::postEnable( flag );
+    TParamContr::postEnable(flag);
     if(!vlElemPresent(&v_el))	vlElemAtt(&v_el);
 }
 
 Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
 
-void Prm::enable()
+void Prm::enable( )
 {
     if(enableStat())	return;
     string ioLs = cfg("IO").getS();
 
-    //> Check and delete no used fields
+    //Check and delete no used fields
     /*for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
     {
 	if(v_el.fldAt(i_fld).reserve().empty()) continue;
@@ -588,13 +567,13 @@ void Prm::enable()
 	}
     }*/
 
-    //> Init elements
+    //Init elements
     vector<string> pls;
     AutoHD<Block> blk;
     int io, if_off, id_off;
     string mio, ioaddr, ioblk, ioid, aid, anm;
-    for(int io_off = 0; (mio=TSYS::strParse(ioLs,0,"\n",&io_off)).size(); )
-    {
+    for(int io_off = 0; (mio=TSYS::strParse(ioLs,0,"\n",&io_off)).size(); ) {
+	if(mio[0] == '#') continue;
 	if_off = id_off = 0;
 	ioaddr = TSYS::strParse(mio,0,":",&if_off);
 	ioblk  = TSYS::strParse(ioaddr,0,".",&id_off);
@@ -608,14 +587,12 @@ void Prm::enable()
 	TFld::Type	tp  = TFld::String;
 	string		reserve;
 
-	//>> Constant attributes
-	if(ioblk[0] == '*')
-	{
+	// Constant attributes
+	if(ioblk[0] == '*') {
 	    if(aid.empty()) continue;
 	    if(anm.empty()) anm = aid;
 	    if(ioblk.size() > 1)
-		switch(ioblk[1])
-		{
+		switch(ioblk[1]) {
 		    case 's': case 'S':	tp = TFld::String;	break;
 		    case 'i': case 'I':	tp = TFld::Integer;	break;
 		    case 'r': case 'R':	tp = TFld::Real;	break;
@@ -623,9 +600,8 @@ void Prm::enable()
 		}
 	    flg = TFld::NoWrite;
 	}
-	//>> Links to block's io
-	else
-	{
+	// Links to block's io
+	else {
 	    if(aid.empty()) aid = ioblk+"_"+ioid;
 	    if(!((Contr&)owner()).blkPresent(ioblk)) continue;
 	    blk = ((Contr&)owner()).blkAt(ioblk);
@@ -636,7 +612,7 @@ void Prm::enable()
 	    reserve = ioaddr;
 	}
 
-	//>> Attribute creation
+	// Attribute creation
 	if(!v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg)
 	{
 	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
@@ -650,9 +626,8 @@ void Prm::enable()
 	pls.push_back(aid);
     }
 
-    //> Check and delete no used attrs
-    for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
-    {
+    //Check and delete no used attrs
+    for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++) {
 	int i_p;
 	for(i_p = 0; i_p < (int)pls.size(); i_p++)
 	    if(pls[i_p] == v_el.fldAt(i_fld).name())	break;
@@ -664,9 +639,9 @@ void Prm::enable()
     TParamContr::enable();
 }
 
-void Prm::disable()
+void Prm::disable( )
 {
-    if( !enableStat() )  return;
+    if(!enableStat())  return;
 
     TParamContr::disable();
 }
@@ -675,9 +650,8 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     if(!enableStat() || !owner().startStat())	return;
 
-    //> Send to active reserve station
-    if(owner().redntUse())
-    {
+    //Send to active reserve station
+    if(owner().redntUse()) {
 	if(vl == pvl) return;
 	XMLNode req("set");
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
@@ -685,15 +659,13 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	return;
     }
 
-    //> Direct write
-    try
-    {
+    //Direct write
+    try {
 	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(vo.fld().reserve(),0,'.'));
 	int io_id = blk.at().ioId(TSYS::strSepParse(vo.fld().reserve(),1,'.'));
-	if( io_id < 0 ) disable();
-	else
-	{
-	    ResAlloc sres(owner().calcRes,true);
+	if(io_id < 0) disable();
+	else {
+	    MtxAlloc sres(owner().calcRes, true);
 	    blk.at().set(io_id, vl);
 	}
     }catch(TError err) { disable(); }
@@ -701,8 +673,7 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 
 void Prm::vlGet( TVal &val )
 {
-    if(val.name() == "err")
-    {
+    if(val.name() == "err") {
 	if(!enableStat()) val.setS(_("1:Parameter is disabled."),0,true);
 	else if(!owner().startStat()) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
@@ -711,8 +682,7 @@ void Prm::vlGet( TVal &val )
 
     if(owner().redntUse()) return;
 
-    try
-    {
+    try {
 	//if( !enableStat() ) return;
 	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
 	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
@@ -735,8 +705,7 @@ void Prm::vlArchMake( TVal &val )
 void Prm::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [<blk>.<blk_io>:<aid>:<anm>]\n"
@@ -754,8 +723,8 @@ void Prm::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/IO" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
-    {
+    if(a_path == "/prm/cfg/IO" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr","^\\*[sirb]\\.[^\\:]*")->setAttr("color","darkorange");
 	opt->childAdd("rule")->setAttr("expr","^.*\\.[^\\:]*")->setAttr("color","darkblue");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");

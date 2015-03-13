@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,16 +43,14 @@ class TFld
 {
     public:
 	//Data
-	enum Type	//Field's types
-	{
+	enum Type {	//Field's types
 	    Boolean	= 0,
 	    Integer	= 1,
 	    Real	= 4,
 	    String	= 5,
 	    Object	= 6
 	};
-	enum AttrFlg	//Base field's flags
-	{
+	enum AttrFlg {	//Base field's flags
 	    NoFlag	= 0x00,		//No flag
 	    Selected	= 0x01,		//Connnect to simple elements
 	    SelEdit	= 0x40,		//Editable list
@@ -68,7 +65,7 @@ class TFld
 
 	//Methods
 	TFld( );
-	TFld( TFld &ifld );
+	TFld( TFld &ifld, const char *name = NULL );
 	TFld( const char *name, const char *descr, Type type, unsigned flg,
 	    const char *valLen = "", const char *valDef = "",
 	    const char *vals = "", const char *nSel = "", const char *res = "" );
@@ -76,13 +73,13 @@ class TFld
 
 	TFld &operator=( TFld &fld );
 
-	//> Main
+	// Main
 	const string &name( )	{ return m_name; }	//Name
 	const string &descr( )	{ return m_descr; }	//Description
 	int len( )		{ return m_len; }	//Length
 	int dec( )		{ return m_dec; }	//Float dec
 	Type type( )		{ return (Type)m_type; }//Value type
-	static Type type(IO::Type tp);			//Field type from IO
+	static Type type( IO::Type tp );		//Field type from IO
 	IO::Type typeIO( );				//Type to IO
 	unsigned flg( )		{ return m_flg; }	//Flags
 	const string &def( )	{ return m_def; }	//Default value
@@ -99,13 +96,13 @@ class TFld
 	void setSelNames( const string &slnms );
 	void setReserve( const string &ires )	{ m_res = ires; }
 
-	//> Selected
-	const vector<string>	&selValS();
-	const vector<int>	&selValI();
-	const vector<double>	&selValR();
-	const vector<bool>	&selValB();
-	//> selectable element's name
-	const vector<string> &selNm();
+	// Selected
+	const vector<string>	&selValS( );
+	const vector<int>	&selValI( );
+	const vector<double>	&selValR( );
+	const vector<bool>	&selValB( );
+	// selectable element's name
+	const vector<string> &selNm( );
 
 	string selVl2Nm( const string &val );
 	string selVl2Nm( int val );
@@ -117,7 +114,7 @@ class TFld
 	double	selNm2VlR( const string &name );
 	bool	selNm2VlB( const string &name );
 
-	//> Addition
+	// Addition
 	XMLNode *cntrCmdMake( XMLNode *opt, const string &path, int pos,
 				const string &user = "root", const string &grp = "root", int perm = 0664 );
 
@@ -132,12 +129,11 @@ class TFld
 	string		m_def;		// default value;
 	string		m_res;		// reserve attribut
 
-	union
-	{
-	    vector<string>	*v_s;
-	    vector<double>	*v_r;
-	    vector<int>		*v_i;
-	    vector<bool>	*v_b;
+	union {
+	    vector<string>	*s;
+	    vector<double>	*r;
+	    vector<int>		*i;
+	    vector<bool>	*b;
 	}m_val;
 	vector<string>     *m_sel;
 };
@@ -164,6 +160,7 @@ class TElem
 	int fldAdd( TFld *fld, int id = -1 );
 	void fldDel( unsigned int id );
 	TFld &fldAt( unsigned int id );
+	void fldClear( );
 
 	void valAtt( TValElem *cnt );
 	void valDet( TValElem *cnt );

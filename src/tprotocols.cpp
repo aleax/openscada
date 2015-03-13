@@ -28,7 +28,7 @@ using namespace OSCADA;
 //************************************************
 //* TProtocolS                                   *
 //************************************************
-TProtocolS::TProtocolS( ) : TSubSYS("Protocol",_("Transport protocols"),true)
+TProtocolS::TProtocolS( ) : TSubSYS("Protocol", _("Transport protocols"), true)
 {
 
 }
@@ -46,24 +46,24 @@ string TProtocolS::optDescr(  )
 
 void TProtocolS::load_()
 {
-    //> Load parameters from command line
+    //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    //> Load parameters from config-file
+    //Load parameters from config-file
 }
 
 void TProtocolS::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SPRT_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SPRT_ID))	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
@@ -78,7 +78,7 @@ TProtocol::TProtocol( const string &id ) : TModule(id)
     m_pr = grpAdd("pr_");
 }
 
-TProtocol::~TProtocol()
+TProtocol::~TProtocol( )
 {
 
 }
@@ -104,11 +104,9 @@ TProtocolIn::TProtocolIn( const string &name ) : mName(name)
     modifClr( );
 }
 
-TProtocolIn::~TProtocolIn()
+TProtocolIn::~TProtocolIn( )
 {
 
 }
-
-
 
 TProtocol &TProtocolIn::owner( )	{ return *(TProtocol*)nodePrev(); }

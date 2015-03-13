@@ -49,8 +49,7 @@ class UFunc
 {
     public:
 	//Methods
-	UFunc( const string &path ) : mPath(path)
-	{
+	UFunc( const string &path ) : mPath(path) {
 	    if(dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at())) mFunc = SYS->nodeAt(path,0,'.');
 	}
 	const string &path( )		{ return mPath; }
@@ -71,8 +70,7 @@ class Reg
 {
     public:
 	//Data
-	enum Type
-	{
+	enum Type {
 	    Free,	//Free
 	    Bool,	//Boolean
 	    Int,	//Integer
@@ -84,8 +82,7 @@ class Reg
 	    PrmAttr	//Parameter attribute
 	};
 
-	enum Code	//Byte codes
-	{
+	enum Code {	//Byte codes
 	    End,	//[E]: End program.
 	    EndFull,	//[E]: Full end from program.
 	    MviB,	//[CRRB]: Load Boolean <B> to register <R>.
@@ -151,20 +148,20 @@ class Reg
 	    FCeil,	//[CRRrr]: Function ceil.
 	    FFloor,	//[CRRrr]: Function floor.
 	    FTypeOf,	//[CRRrr]: Function for get type of value.
+	    FTr,	//[CRRrr]: Function for get translation of base message.
 	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
 	    CFunc,	//[CFnRR____]: Function.
 	    CFuncObj	//[CRRnRR____]: Object's function
 	};
 
-	union El
-	{
-	    char	b_el;	//Boolean for constant and local variable
-	    int		i_el;	//Integer for constant and local variable
-	    double	r_el;	//Real for constant and local variable
-	    string	*s_el;	//String for constant and local variable
-	    AutoHD<TVarObj>	*o_el;	//Object for constant and local variable
+	union El {
+	    char	b;	//Boolean for constant and local variable
+	    int		i;	//Integer for constant and local variable
+	    double	r;	//Real for constant and local variable
+	    string	*s;	//String for constant and local variable
+	    AutoHD<TVarObj> *o;	//Object for constant and local variable
 	    int		io;	//IO id for IO variable
-	    AutoHD<TVal>*p_attr;//Parameter attribute
+	    AutoHD<TVal> *pA;	//Parameter attribute
 	};
 
 	//Methods
@@ -173,12 +170,12 @@ class Reg
 	~Reg( );
 
 	Reg &operator=( Reg &irg );
-	void operator=( bool ivar )		{ setType(Bool);	el.b_el = ivar; }
-	void operator=( char ivar )		{ setType(Bool);	el.b_el = ivar; }
-	void operator=( int ivar )		{ setType(Int);		el.i_el = ivar; }
-	void operator=( double ivar )		{ setType(Real);	el.r_el = ivar; }
-	void operator=( const string &ivar )	{ setType(String);	*el.s_el = ivar;}
-	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);		*el.o_el = ivar;}
+	void operator=( bool ivar )		{ setType(Bool);	el.b = ivar; }
+	void operator=( char ivar )		{ setType(Bool);	el.b = ivar; }
+	void operator=( int ivar )		{ setType(Int);		el.i = ivar; }
+	void operator=( double ivar )		{ setType(Real);	el.r = ivar; }
+	void operator=( const string &ivar )	{ setType(String);	*el.s = ivar;}
+	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);		*el.o = ivar;}
 
 	string name( ) const			{ return mNm; }
 	Type type( ) const			{ return mTp; }
@@ -192,7 +189,7 @@ class Reg
 	void setLock( bool vl )			{ mLock = vl; }
 	void setObjEl( )			{ mObjEl = true; }
 	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
-	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.p_attr = ivattr; }
+	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.pA = ivattr; }
 
 	void free( );
 
@@ -217,11 +214,11 @@ class RegW
 	RegW( ) : mTp(Reg::Free)		{  }
 	~RegW( )				{ setType(Reg::Free); }
 
-	void operator=( char ivar )		{ setType(Reg::Bool);	el.b_el = ivar; }
-	void operator=( int ivar )		{ setType(Reg::Int);	el.i_el = ivar; }
-	void operator=( double ivar )		{ setType(Reg::Real);	el.r_el = ivar; }
-	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
-	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);    *el.o_el = ivar;}
+	void operator=( char ivar )		{ setType(Reg::Bool);	el.b = ivar; }
+	void operator=( int ivar )		{ setType(Reg::Int);	el.i = ivar; }
+	void operator=( double ivar )		{ setType(Reg::Real);	el.r = ivar; }
+	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s = ivar;}
+	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);    *el.o = ivar;}
 	void operator=( const TVariant &ivar );
 
 	Reg::Type type( ) const			{ return mTp; }
@@ -249,9 +246,8 @@ class Func : public TConfig, public TFunction
     friend int yyparse( );
     friend void yyerror(const char*);
     public:
-	//> Addition flags for IO
-	enum IOSpecFlgs
-	{
+	// Addition flags for IO
+	enum IOSpecFlgs {
 	    SysAttr	= 0x10	//Lock attribute
 	};
 
@@ -280,26 +276,26 @@ class Func : public TConfig, public TFunction
 
 	void calc( TValFunc *val );
 
-	//> Functins` list functions
+	// Functins`list functions
 	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return mFncs.at(id); }
 	void funcClear( );
 
-	//> Registers` list functions
+	// Registers`list functions
 	int regNew( bool var = false );
 	int regGet( const string &nm );
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
 	void regClear( );
 
-	//> Temporary registers` list functions
+	// Temporary registers`list functions
 	Reg *regTmpNew( );
 	void regTmpClean( );
 
-	//> Parse function
+	// Parse function
 	void progCompile( );
 
-	//> Code functions
+	// Code functions
 	Reg *cdTypeConv( Reg *opi, Reg::Type tp, bool no_code = false );
 	Reg *cdMvi( Reg *op, bool no_code = false );
 	Reg *cdMviObject( );
@@ -318,11 +314,11 @@ class Func : public TConfig, public TFunction
 	Reg *cdObjFnc( Reg *obj, int p_cnt );
 	Reg *cdProp( Reg *obj, const string &sprp, Reg *dprp = NULL );
 
-	//> Properties and functions for base object's process
+	// Properties and functions for base object's process
 	TVariant oPropGet( TVariant vl, const string &prop );
 	TVariant oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &parms );
 
-	//> Variable access
+	// Variable access
 	TVariant getVal( TValFunc *io, RegW &rg, bool fObj = false );
 	string	getValS( TValFunc *io, RegW &rg );
 	int	getValI( TValFunc *io, RegW &rg );
@@ -337,7 +333,7 @@ class Func : public TConfig, public TFunction
 	void setValB( TValFunc *io, RegW &rg, char val );
 	void setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val );
 
-	//> IO operations
+	// IO operations
 	void ioAdd( IO *io );
 	void ioIns( IO *io, int pos );
 	void ioDel( int pos );
@@ -347,8 +343,7 @@ class Func : public TConfig, public TFunction
 
     protected:
 	//Data
-	struct ExecData
-	{
+	struct ExecData {
 	    unsigned	com_cnt;	//Command counter;
 	    time_t	start_tm;	//Start time
 	    unsigned char flg;		//0x01 - recursive exit stat;
@@ -360,7 +355,7 @@ class Func : public TConfig, public TFunction
 	void postEnable( int flag );
 	void postDisable( int flag );
 	bool cfgChange( TCfg & )        { modif(); return true; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
 	void save_( );
@@ -375,7 +370,7 @@ class Func : public TConfig, public TFunction
 	//Attributes
 	int	&mMaxCalcTm;
 
-	//> Parser's data
+	// Parser's data
 	string		sprg, prg;	//Build prog
 	unsigned	la_pos;		//LA position
 	string		p_err;		//Parse error

@@ -36,8 +36,7 @@ namespace FLibSYS
 class tmFStr : public TFunction
 {
     public:
-	tmFStr( ) : TFunction("tmFStr",SSPC_ID)
-	{
+	tmFStr( ) : TFunction("tmFStr",SSPC_ID) {
 	    ioAdd(new IO("val",_("Date and time string"),IO::String,IO::Return,""));
 	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Default,"0"));
 	    ioAdd(new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S"));
@@ -46,8 +45,7 @@ class tmFStr : public TFunction
 	string name( )	{ return _("Time: String time"); }
 	string descr( )	{ return _("Formatted string time."); }
 
-	void calc( TValFunc *val )
-	{
+	void calc( TValFunc *val ) {
 	    time_t tm_t = val->getI(1);
 	    struct tm tm_tm;
 	    localtime_r(&tm_t,&tm_tm);
@@ -63,8 +61,7 @@ class tmFStr : public TFunction
 class tmDate : public TFunction
 {
     public:
-	tmDate( ) : TFunction("tmDate",SSPC_ID)
-	{
+	tmDate( ) : TFunction("tmDate",SSPC_ID) {
 	    ioAdd(new IO("fullsec",_("Full seconds"),IO::Integer,IO::Default,"0"));
 	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Output,"0"));
 	    ioAdd(new IO("min",_("Minutes"),IO::Integer,IO::Output,"0"));
@@ -80,8 +77,7 @@ class tmDate : public TFunction
 	string name( )	{ return _("Time: Date"); }
 	string descr( )	{ return _("Full date."); }
 
-	void calc( TValFunc *val )
-	{
+	void calc( TValFunc *val ) {
 	    time_t tm_t = val->getI(0);
 	    struct tm tm_tm;
 	    localtime_r(&tm_t, &tm_tm);
@@ -104,8 +100,7 @@ class tmDate : public TFunction
 class tmTime : public TFunction
 {
     public:
-	tmTime( ) : TFunction("tmTime",SSPC_ID)
-	{
+	tmTime( ) : TFunction("tmTime",SSPC_ID) {
 	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0"));
 	    ioAdd(new IO("usec",_("Microseconds"),IO::Integer,IO::Output,"-1"));
 	}
@@ -113,11 +108,9 @@ class tmTime : public TFunction
 	string name( )	{ return _("Time: Time"); }
 	string descr( )	{ return _("Full time (since 01.01.1970)."); }
 
-	void calc( TValFunc *val )
-	{
+	void calc( TValFunc *val ) {
 	    if(val->getI(1) < 0) val->setI(0, time(NULL));
-	    else
-	    {
+	    else {
 		int64_t tm = TSYS::curTime();
 		val->setI(0, tm/1000000);
 		val->setI(1, tm%1000000);
@@ -131,8 +124,7 @@ class tmTime : public TFunction
 class tmStr2Tm : public TFunction
 {
     public:
-	tmStr2Tm( ) : TFunction("tmStrPTime",SSPC_ID)
-	{
+	tmStr2Tm( ) : TFunction("tmStrPTime",SSPC_ID) {
 	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0"));
 	    ioAdd(new IO("str",_("Date and time string"),IO::String,IO::Default,""));
 	    ioAdd(new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S"));
@@ -141,8 +133,7 @@ class tmStr2Tm : public TFunction
 	string name( )	{ return _("Time: String to time"); }
 	string descr( )	{ return _("Convert a string representation of time to a time."); }
 
-	void calc( TValFunc *val )
-	{
+	void calc( TValFunc *val ) {
 	    struct tm stm;
 	    stm.tm_isdst = -1;
 	    strptime(val->getS(1).c_str(), val->getS(2).c_str(), &stm);
@@ -156,8 +147,7 @@ class tmStr2Tm : public TFunction
 class tmCron : public TFunction
 {
     public:
-	tmCron( ) : TFunction("tmCron",SSPC_ID)
-	{
+	tmCron( ) : TFunction("tmCron",SSPC_ID) {
 	    ioAdd(new IO("res",_("Result, seconds"),IO::Integer,IO::Return,"0"));
 	    ioAdd(new IO("str",_("Cron"),IO::String,IO::Default,"* * * * *"));
 	    ioAdd(new IO("base",_("Base time, seconds"),IO::Integer,IO::Default,"0"));
