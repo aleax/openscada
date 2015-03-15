@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -184,15 +184,15 @@ class ModVArch: public TVArchivator
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
-	double curCapacity();
+	double curCapacity( );
 
-	double	fileTimeSize()	{ return time_size; }
-	unsigned numbFiles()	{ return mNumbFiles; }
-	double	maxCapacity()	{ return mMaxCapacity; }
-	double	roundProc()	{ return round_proc; }
-	int	checkTm()	{ return mChkTm; }
-	int	packTm()	{ return mPackTm; }
-	bool	packInfoFiles()	{ return mPackInfoFiles; }
+	double	fileTimeSize( )	{ return time_size; }
+	unsigned numbFiles( )	{ return mNumbFiles; }
+	double	maxCapacity( )	{ return mMaxCapacity; }
+	double	roundProc( )	{ return round_proc; }
+	int	checkTm( )	{ return mChkTm; }
+	int	packTm( )	{ return mPackTm; }
+	bool	packInfoFiles( ){ return mPackInfoFiles; }
 
 	void setFileTimeSize( double vl )	{ time_size = vl; modif(); }
 	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
@@ -207,10 +207,10 @@ class ModVArch: public TVArchivator
 
 	void checkArchivator( bool now = false );
 
-	//> Packing archives
+	// Packing archives
 	bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper );
 
-	//> Export archive data
+	// Export archive data
 	void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm);
 
     public:

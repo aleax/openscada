@@ -1,14 +1,13 @@
 # OpenSCADA.Special.SystemTests translate to Ukrainian.
-# Copyright (C) 2003-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Special.SystemTests package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:54+0200\n"
+"POT-Creation-Date: 2015-03-15 17:58+0200\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -72,6 +71,9 @@ msgstr "Архів значень"
 
 msgid "Values period (us)"
 msgstr "Період значень (мкс)"
+
+msgid "Archivator"
+msgstr "Архіватор"
 
 msgid ""
 "Value archive allocation tests.\n"
@@ -256,13 +258,11 @@ msgstr "Поле ідентифікатору"
 msgid "Field stat"
 msgstr "Поле стану"
 
-#, fuzzy
 msgid "Request's key"
-msgstr "Текст запиту"
+msgstr "Ключ запиту"
 
-#, fuzzy
 msgid "Request's value"
-msgstr "Текст запиту"
+msgstr "Значення запиту"
 
 msgid "Create records."
 msgstr "Створення записів."
@@ -280,11 +280,10 @@ msgstr "Оновлено %d записів за час %f сек."
 
 #, c-format
 msgid "Update records, by request key, for %d records."
-msgstr ""
+msgstr "Оновлення записів, за ключем запиту, для %d записів."
 
-#, fuzzy, c-format
 msgid "Updated %d records, by request key, for time %f sec."
-msgstr "Оновлено %d записів за час %f сек."
+msgstr "Оновлено %d записів, за ключем запиту, за час %f сек."
 
 msgid "Check records."
 msgstr "Перевірка записів."
@@ -309,13 +308,11 @@ msgstr "Помилка поля <id> %d != %d."
 msgid "Field <stat> %d != %d error."
 msgstr "Помилка поля <stat> %d != %d."
 
-#, fuzzy, c-format
 msgid "Field <reqKey> '%s' != '%s' error."
-msgstr "Помилка поля <Sh> '%s' != '%s'."
+msgstr "Помилка поля <reqKey> '%s' != '%s'."
 
-#, fuzzy, c-format
 msgid "Field <reqVal> '%s' != '%s' error."
-msgstr "Помилка поля <Sh> '%s' != '%s'."
+msgstr "Помилка поля <reqVal> '%s' != '%s'."
 
 #, c-format
 msgid "Got %d records for time %f sec."
@@ -354,9 +351,6 @@ msgstr "Закриття та видалення таблиці '%s'."
 #, c-format
 msgid "Close and delete DB '%s'."
 msgstr "Закриття та видалення БД '%s'."
-
-msgid "Archivator"
-msgstr "Архіватор"
 
 msgid "Messages category pattern"
 msgstr "Шаблон категорії повідомлення"
@@ -693,13 +687,12 @@ msgstr ""
 msgid "Open file '%s' error."
 msgstr "Помилка відкриття файлу '%s'."
 
-#, fuzzy, c-format
 msgid "Read file '%s' error: %s."
-msgstr "Помилка відкриття файлу '%s'."
+msgstr "Помилка читання файлу '%s': %s."
 
 #, c-format
 msgid "Read file '%s' only %d from %d."
-msgstr ""
+msgstr "Читання файлу '%s' тільки для %d із %d."
 
 #, c-format
 msgid "Test: Passed: %f ms."

@@ -1160,16 +1160,15 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     vector<pair<float,TVArchEl*> >	propArchs;
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++) {
 	TVArchivator &archPr = arch_el[i_a]->archivator();
-	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&
-		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend > arch_el[i_a]->begin())) && ibeg <= iend)
+	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&		//!!!! iend >= arch_el[i_a]->begin() need for request beside to the border
+		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend >= arch_el[i_a]->begin())) && ibeg <= iend)
 	    propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), arch_el[i_a]));
     }
     std::sort(propArchs.begin(), propArchs.end());
 
     //Process the range by priority
-    for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA)
-    {
-	if(iA->second->begin() >= iend)	continue;	//Try the block from next archivator
+    for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
+	if(iA->second->begin() > iend)	continue;	//Try the block from next archivator, !!!!
 
 	// Decrease the range begin to the limit
 	int prevSz = buf.realSize();
@@ -1204,8 +1203,7 @@ void TVArchive::getActiveData( )
 
     int64_t tm = TSYS::curTime();
     TVariant vl = pattr_src.at().get(&tm);
-    switch(valType())
-    {
+    switch(valType()) {
 	case TFld::Boolean: setB(vl, tm);	break;
 	case TFld::Integer: setI(vl, tm);	break;
 	case TFld::Real:    setR(vl, tm);	break;
@@ -2249,7 +2247,7 @@ void *TVArchivator::Task( void *param )
 	    for(map<string,TVArchEl*>::iterator iel = arch.archEl.begin(); iel != arch.archEl.end(); ++iel)
 		if(iel->second->archive().startStat()) {
 		    TVArchEl *arch_el = iel->second;
-		    beg = vmax(arch_el->mLastGet,arch_el->archive().begin());
+		    beg = vmax(arch_el->mLastGet, arch_el->archive().begin());
 		    end = arch_el->archive().end();
 		    if(!beg || !end || beg > end) continue;
 		    arch_el->setVals(arch_el->archive(), beg, end);
@@ -2506,8 +2504,8 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 
     if(!beg || !end || beg/a_per > end/a_per) return;
 
-    //Check for put to buffer
-    if(&archive() != &ibuf && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size())
+    //Check for put to the buffer
+    if(&archive() != &ibuf && archivator().archPeriod() && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size())
     { archive().TValBuf::setVals(ibuf,vmax(archive().end(),beg),end); return; }
 
     //Put direct to archive
@@ -2522,8 +2520,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
     if(a_per > ibuf.period()) {
 	TValBuf obuf(ibuf.valType(), 0, a_per, true, true);
 	for(int64_t c_tm = beg; c_tm <= end; ) {
-	    switch(ibuf.valType())
-	    {
+	    switch(ibuf.valType()) {
 		case TFld::Boolean: {
 		    float c_val = ibuf.getB(&c_tm, true);
 		    if(combM == TVArchive::LastVal) { obuf.setB((char)c_val,c_tm); c_tm += a_per; break; }
@@ -2634,7 +2631,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
     else setOK = setValsProc(ibuf, beg, end);
 
     if(setOK) {
-	if(end > mLastGet) mLastGet = end+1;
+	if(mLastGet && end > mLastGet) mLastGet = end+1;
 	if(&archive() == &ibuf || end > archive().end()) { prev_tm = wPrevTm; prev_val = wPrevVal; }
     }
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,12 +46,12 @@ FSArch::ModArch *FSArch::mod;
 extern "C"
 {
 #ifdef MOD_INCL
-    TModule::SAt arh_FSArch_module(int n_mod)
+    TModule::SAt arh_FSArch_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 ) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -61,8 +61,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) ) 
-	    return new FSArch::ModArch( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new FSArch::ModArch(source);
 	return NULL;
     }
 }
@@ -72,7 +71,7 @@ using namespace FSArch;
 //*************************************************
 //* FSArch::ModArch                               *
 //*************************************************
-ModArch::ModArch( const string &name) : TTypeArchivator(MOD_ID), noArchLimit(false), copyErrValFiles(false)
+ModArch::ModArch( const string &name) : TTypeArchivator(MOD_ID), noArchLimit(false)
 {
     mod		= this;
 
@@ -89,13 +88,12 @@ void ModArch::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
-    if(flag&TCntrNode::NodeConnect)
-    {
-	//> Add self DB-fields for archives
+    if(flag&TCntrNode::NodeConnect) {
+	//Add self DB-fields for archives
 	owner().messE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
 	owner().valE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
 
-	//> Pack files DB structure
+	//Pack files DB structure
 	elPackfl.fldAdd(new TFld("FILE","File",TFld::String,TCfg::Key,"100"));
 	elPackfl.fldAdd(new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20"));
 	elPackfl.fldAdd(new TFld("END","End",TFld::String,TFld::NoFlag,"20"));
@@ -107,7 +105,7 @@ void ModArch::postEnable( int flag )
 
 ModArch::~ModArch( )
 {
-    try{ modStop(); }catch(...){}
+    try { modStop(); }catch(...){}
 }
 
 string ModArch::filesDB( )	{ return SYS->workDB()+"."+modId()+"_Pack"; }
@@ -151,9 +149,7 @@ string ModArch::optDescr( )
     return TSYS::strMess(_(
 	"======================= The module <%s:%s> options =======================\n"
 	"    --noArchLimit        Disable archives limit to file number. Use for see archives mode, not work.\n"
-	"    --copyErrValFiles    Copy sourced error value archive's files before it restore.\n"
-	"                         Used for debug value archive's errors and correct restore.\n"
-        "\n"),MOD_TYPE,MOD_ID);
+	"\n"),MOD_TYPE,MOD_ID);
 }
 
 void ModArch::load_( )
@@ -163,13 +159,11 @@ void ModArch::load_( )
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
         if(argCom == "h" || argCom == "help")	fprintf(stdout, "%s", optDescr().c_str());
 	else if(argCom == "noArchLimit")	noArchLimit = true;
-	else if(argCom == "copyErrValFiles")	copyErrValFiles = true;
 }
 
 void ModArch::perSYSCall( unsigned int cnt )
 {
-    try
-    {
+    try {
 	if(cnt%60) return;
 
 	vector<string> a_list;
@@ -205,11 +199,9 @@ void ModArch::perSYSCall( unsigned int cnt )
 		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",c_el,true,false,true))	break;
 		fld_cnt--;
 	    }
-    }
-    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    } catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 }
 
 TMArchivator *ModArch::AMess( const string &iid, const string &idb )	{ return new ModMArch(iid,idb,&owner().messE()); }
-
 
 TVArchivator *ModArch::AVal( const string &iid, const string &idb )	{ return new ModVArch(iid,idb,&owner().valE()); }

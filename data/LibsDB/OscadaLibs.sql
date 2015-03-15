@@ -370,6 +370,11 @@ INSERT INTO "lib_servProc_io" VALUES('crc16','out','Result',1,1,'',0,1,'Резу
 INSERT INTO "lib_servProc_io" VALUES('releaseTests','sub','Subsystem (-1:All;0:SYS;1:Security;2:Transport;3:A',1,0,'-1',0,0,'Підсистема (-1:Всі;0:SYS;1:Безпека;2:Транспорти;...)','','Подсистема (-1:Все;0:SYS;1:Безопасность;2:Транспорты;...)','');
 INSERT INTO "lib_servProc_io" VALUES('releaseTests','rez','Result',0,1,'',0,1,'Результат','','Результат','');
 INSERT INTO "lib_servProc_io" VALUES('crc16','poly','Polynomial (reversion)',1,0,'40961',0,2,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('archPackFStests','tm','Start time (14.03.2015 21:37)',1,0,'1426361839',0,0,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('archPackFStests','per','Period, seconds',1,0,'60',0,1,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
+INSERT INTO "lib_servProc_io" VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
 CREATE TABLE 'prescr_val' ("ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "prescr_val" VALUES('dbDB','SQLite.vcaBase');
 INSERT INTO "prescr_val" VALUES('dbComs','PrescrComs');
@@ -5728,7 +5733,7 @@ for(i = 0; i < in.length; i++) {
   out = out^in.charCodeAt(i);
   for(j = 0; j < 8; j++) out = (out&1) ? ((out>>1)^poly) : out >> 1;
 }','','',1425726090);
-INSERT INTO "lib_servProc" VALUES('releaseTests','Release tests','Тести випуску','Тесты выпуска','','','',10,1,'nNm = "testNode";
+INSERT INTO "lib_servProc" VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','','','',10,1,'nNm = "testNode";
 node  = false;		//Process node
 testREZ = "";		//Test rezult
 rez = "";
@@ -6310,5 +6315,62 @@ SYS.fileWrite("ReleaseTests.html", "<?xml version=''1.0'' ?>\n"
 	rez+
 	"</TABLE>\n"
 	"</body>"
-	"</html>");','','','');
+	"</html>");','','',1426404078);
+INSERT INTO "lib_servProc" VALUES('archPackFStests','TEST: FS archiver pack','','','','','',10,0,'using Special.FLibSYS;
+arh = vArh("Archive.va_"+addr);
+
+//Stage 0: Main values fill: "1,1,10,10,100,100,1000,1000,10000,10000,EVAL"
+if(step < 0 || step == 0) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	for(iV = 0; iV < 10; iV++) buf.set(pow(10,floor(iV/2)), tm+iV*per, 0);
+	arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+//Stage 1: Change to different value 20: "1,1,20,10,100,100,1000,1000,10000,10000,EVAL"
+if(step < 0 || step == 1) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(20, tm+2*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+// Stage 2: Set value for merge, equal, to up 10: "1,1,20,10,10,100,1000,1000,10000,10000,EVAL"
+if(step < 0 || step == 2) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(10, tm+4*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+// Stage 3: Set value for merge, equal, to down 1000: "1,1,20,10,10,1000,1000,1000,10000,10000,EVAL"
+if(step < 0 || step == 3) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(1000, tm+5*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+// Stage 4: Set different value to end 20000: "1,1,20,10,10,1000,1000,1000,10000,10000,20000,EVAL"
+if(step < 0 || step == 4) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(20000, tm+10*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+// Stage 5: Change end value for merge to up 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
+if(step < 0 || step == 5) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(10000, tm+10*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+// Stage 6: Set value to end for merge to up 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,10000,EVAL"
+if(step < 0 || step == 6) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(10000, tm+11*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+// Stage 7: Set to end value EVAL: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
+if(step < 0 || step == 7) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(EVAL_INT, tm+11*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}
+
+// Stage 8: Set equal value to insert 10000: "1,1,20,10,10,1000,1000,1000,10000,10000,10000,EVAL"
+if(step < 0 || step == 8) {
+	buf = vArhBuf(1, 10, per*1000000, true, true);
+	buf.set(10000, tm+9*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
+}','','',1426404595);
 COMMIT;

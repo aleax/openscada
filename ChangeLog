@@ -1,3 +1,15 @@
+2015-03-15 Roman
+- LibsDB.OscadaLibs.db: Tests for Archive.FSArch packing mechanism is added as servProc.archPackFStests.
+- !!:FIX:Archive: iend > arch_el[i_a]->begin() set to iend >= arch_el[i_a]->begin() for allow strong and single end value get.
+    mLastGet processing fixed for inactive (without buffer) archives for only direct writing here.
+- !!:FIX.Archive.FSArch: repairFile() mostly fixed for the cache clean up after and no EVAL last value for actual archives checking appended.
+    copyErrValFiles replaced by directory "errors" present for copy the errors here.
+    Last real value getting from active archives some expanded for unmerged EVAL values pass.
+    Full tests chain passed for the packing mechanism.
+- FIX:Special.SystemTests: Tests "Archive" mostly fixed and some expanded.
+- UI.QTCfg: Fixed for LineEdit view "Integer" to allowed values limit [147483647:2147483647]
+
+
 2015-03-13 Roman
 - FIX:DAQ.MMS: Wrong value's special acquisition flags clear at write EVAL here prevented.
 - FIX:DB: LibsDB.vcaBase.db: Text label's "Y:%1%(%2%)" for Main.grph_panel fixed.

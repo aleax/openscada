@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <dirent.h>
-#include <errno.h>
 #include <string.h>
 
 #include <tsys.h>
@@ -132,8 +131,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 	int i_arh;
 	for(i_arh = 0; i_arh < (int)arh_s.size(); i_arh++)
-	    if(!arh_s[i_arh]->err() && mess[i_m].time >= arh_s[i_arh]->begin())
-	    {
+	    if(!arh_s[i_arh]->err() && mess[i_m].time >= arh_s[i_arh]->begin()) {
 		if(mess[i_m].time > arh_s[i_arh]->end() &&
 		    ((mMaxSize && i_arh == 0 && arh_s[i_arh]->size() > mMaxSize*1024) ||
 		    (mess[i_m].time >= arh_s[i_arh]->begin()+mTimeSize*24*60*60))) break;
@@ -205,8 +203,7 @@ void ModMArch::checkArchivator( bool now )
 	for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++) arh_s[i_arh]->scan = false;
 	res.release();
 
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
-	{
+	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
 	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
 	    string NameArhFile = addr() + "/" + scan_rez->d_name;
 	    stat(NameArhFile.c_str(), &file_stat);

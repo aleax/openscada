@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_archive.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,9 +34,10 @@ class TestArchive : public TFunction
     public:
 	TestArchive( ) : TFunction("Archive",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("arch",_("Value archive"),IO::String,IO::Default) );
-	    ioAdd( new IO("period",_("Values period (us)"),IO::Integer,IO::Default,"1000000") );
+	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
+	    ioAdd(new IO("arch",_("Value archive"),IO::String,IO::Default));
+	    ioAdd(new IO("period",_("Values period (us)"),IO::Integer,IO::Default,"1000000"));
+	    ioAdd(new IO("archtor",_("Archivator"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("Value archive"); }
@@ -45,28 +46,26 @@ class TestArchive : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    try
-	    {
+	    try {
 		mod->mess(id(),_("Test: Start"));
 
-		string arch = val->getS(1);
+		string arch = val->getS(1), archtor = val->getS(3);
 		int64_t per = val->getI(2);
 
 		AutoHD<TVArchive> o_arch = SYS->archive().at().valAt(arch);
 
 		int buf_sz = 5;
-		int64_t wtm = per*(TSYS::curTime()/per);
+		int64_t wtm = per*(TSYS::curTime()/per)-per*buf_sz;
 		int64_t ttm;
 
-		TValBuf buf(TFld::Integer, buf_sz, per, true, false );
+		TValBuf buf(TFld::Integer, buf_sz, per, true, false);
 		//--------------------------- Test 1 ----------------------------------
 		mod->mess(id(),_("Test1: Simple fill and check archive."));
-		for( int i_el = 0; i_el < buf_sz; i_el++)
+		for(int i_el = 0; i_el < buf_sz; i_el++)
 		    buf.setI((int)pow(10,i_el),wtm+i_el*per);
-		o_arch.at().setVals(buf,buf.begin(),buf.end(),"");
-		for(int i_el = 0; i_el < buf_sz+2; i_el++)
-		{
-		    ttm = wtm+i_el*per;
+		o_arch.at().setVals(buf, buf.begin(), buf.end(), archtor);
+		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
+		    ttm = wtm + i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && val != pow(10,i_el)) || (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test1: Failed."));
@@ -76,13 +75,13 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test2: Internal insert double value (down)."));
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+3*per);
-		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for(int i_el = 0; i_el < buf_sz+2; i_el++)
-		{
-		    ttm = wtm+i_el*per;
+		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
+		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
+		    ttm = wtm + i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
+		    printf("TEST 00: %d: %d\n", i_el, val);
 		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
-			    (i_el < buf_sz && i_el == 3 && val != pow(10,2)) ||
+			    (i_el == 3 && val != pow(10,2)) ||
 			    (i_el >= buf_sz && val != EVAL_INT))
 			throw TError(nodePath().c_str(),_("Test2: Failed."));
 		}
@@ -91,9 +90,8 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test3: Internal insert double value (up)."));
 		buf.clear();
 		buf.setI((int)pow(10,4),wtm+3*per);
-		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for(int i_el = 0; i_el < buf_sz+2; i_el++)
-		{
+		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
+		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
 		    ttm = wtm+i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
@@ -106,9 +104,8 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test4: Internal insert double value (down)."));
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+3*per);
-		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for(int i_el = 0; i_el < buf_sz+2; i_el++)
-		{
+		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
+		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
 		    ttm = wtm+i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
@@ -121,9 +118,8 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test5: Internal insert no double value."));
 		buf.clear();
 		buf.setI((int)pow(10,9),wtm+per);
-		o_arch.at().setVals(buf,wtm+per,wtm+per,"");
-		for(int i_el = 0; i_el < buf_sz+2; i_el++)
-		{
+		o_arch.at().setVals(buf,wtm+per,wtm+per,archtor);
+		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
 		    ttm = wtm+i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && i_el != 1 && val != pow(10,i_el)) ||
@@ -137,9 +133,8 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test6: Internal insert double value (up)."));
 		buf.clear();
 		buf.setI((int)pow(10,2),wtm+per);
-		o_arch.at().setVals(buf,wtm+per,wtm+per,"");
-		for(int i_el = 0; i_el < buf_sz+2; i_el++)
-		{
+		o_arch.at().setVals(buf,wtm+per,wtm+per,archtor);
+		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
 		    ttm = wtm+i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 3 && i_el != 1 && val != pow(10,i_el)) ||
@@ -153,9 +148,8 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test7: Internal insert value instead double value."));
 		buf.clear();
 		buf.setI((int)pow(10,3),wtm+3*per);
-		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");
-		for(int i_el = 0; i_el < buf_sz+2; i_el++)
-		{
+		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,archtor);
+		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
 		    ttm = wtm+i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
 		    if((i_el < buf_sz && i_el != 1 && val != pow(10,i_el)) ||
@@ -171,7 +165,7 @@ class TestArchive : public TFunction
 		buf.clear();
 		for( int i_el = -1; i_el <= 1; i_el++ )
 		    buf.setI(i_el,wtm+i_el*per);
-		o_arch.at().setVals(buf,buf.begin(),buf.end(),"");
+		o_arch.at().setVals(buf,buf.begin(),buf.end(),archtor);
 		for( int i_el = -1; i_el <= 1; i_el++)
 		{
 		    ttm = wtm+i_el*per;
@@ -183,8 +177,7 @@ class TestArchive : public TFunction
 		mod->mess(id(),_("Test: Passed"));
 		val->setS(0,_("Passed"));
 	    }
-	    catch( TError err )
-	    {
+	    catch(TError err) {
 		mod->mess(id(),_("Test: Failed: %s"),err.mess.c_str());
 		val->setS(0,TSYS::strMess(_("Failed: %s"),err.mess.c_str()));
 	    }

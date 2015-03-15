@@ -62,7 +62,6 @@ class ModArch: public TTypeArchivator
 
 	//> Attributes
 	bool	noArchLimit;
-	bool	copyErrValFiles;
 
     protected:
 	//Methods

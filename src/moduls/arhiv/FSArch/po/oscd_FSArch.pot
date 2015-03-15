@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:41+0200\n"
+"POT-Creation-Date: 2015-03-15 17:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,8 +37,6 @@ msgstr ""
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "    --noArchLimit        Disable archives limit to file number. Use for see archives mode, not work.\n"
-"    --copyErrValFiles    Copy sourced error value archive's files before it restore.\n"
-"                         Used for debug value archive's errors and correct restore.\n"
 "\n"
 msgstr ""
 
@@ -267,7 +265,7 @@ msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
 msgstr ""
 
 #, c-format
-msgid "Write data block to archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"
+msgid "Write data block to the archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"
 msgstr ""
 
 #, c-format
@@ -279,8 +277,13 @@ msgid "Write to file '%s' error!"
 msgstr ""
 
 #, c-format
-msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"
+msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
 msgstr ""
 
-msgid "Error open new archive file for copy."
+#, c-format
+msgid "Error open/create archive file for copy here: %s"
+msgstr ""
+
+#, c-format
+msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""

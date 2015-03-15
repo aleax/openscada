@@ -1790,8 +1790,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    else if(tp == "dec") {
 			val_w->setFixedWidth(5*15+30);
 			val_w->setType(LineEdit::Integer);
-			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
-			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
+			QString	max = t_s.attr("max").empty() ? "2147483647" : t_s.attr("max").c_str();
+			QString	min = t_s.attr("min").empty() ? "-2147483647" : t_s.attr("min").c_str();
 			val_w->setCfg(min+":"+max+":1");
 		    }
 		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);

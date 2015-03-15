@@ -221,7 +221,7 @@ void *TTest::Task( void *CfgM )
 	    XMLNode *mn = SYS->cfgNode(tst->nodePath(0,false)), *t_n = NULL;
 	    for(int nd_cnt = 0; mn && (t_n=mn->childGet("prm",nd_cnt++,true)); )
 		if(tst->testPresent(t_n->attr("id")) && t_n->attr("on") == "1" &&
-		    atoi(t_n->attr("per").c_str()) && !(count%atoi(t_n->attr("per").c_str())))
+		    s2i(t_n->attr("per")) && !(count%s2i(t_n->attr("per"))))
 		{
 		    AutoHD<TFunction> fnc = tst->testAt(t_n->attr("id"));
 		    TValFunc fc("stdcalc", &fnc.at());

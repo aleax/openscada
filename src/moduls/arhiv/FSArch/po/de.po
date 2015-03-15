@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:41+0200\n"
+"POT-Creation-Date: 2015-03-15 17:20+0200\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -40,26 +40,16 @@ msgstr "Fehler bei der Komprimierung"
 msgid "Decompress error: '%s'!"
 msgstr "Fehler '%s' beim Entpacken!"
 
-#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "    --noArchLimit        Disable archives limit to file number. Use for see "
 "archives mode, not work.\n"
-"    --copyErrValFiles    Copy sourced error value archive's files before it "
-"restore.\n"
-"                         Used for debug value archive's errors and correct "
-"restore.\n"
 "\n"
 msgstr ""
 "======================= Optionen des Moduls <%s:%s> "
 "========================\n"
 "    --noArchLimit        Deaktivieren Limit für die Anzahl der Dateien.\n"
-"                         Verwenden Sie den Anzeigemodus von Archiven, nicht "
-"für die Arbeit.\n"
-"    --copyErrValFiles    Kopieren Sie die Quelldateien in das Archiv der "
-"fehlerhaften Werte zu erholen.\n"
-"                         Wird für Debugging-Fehler-Wert Archiven und "
-"Richtigkeit der Erholung.\n"
+"                         Verwenden Sie den Anzeigemodus von Archiven, nicht für die Arbeit.\n"
 "\n"
 
 #, c-format
@@ -359,10 +349,9 @@ msgstr "Fehler in der Archivdatei!"
 msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
 msgstr "Achtung! Zugeteilt Puffergröße %d für Indizes geringerem verwendet %d."
 
-#, c-format
 msgid ""
-"Write data block to archive file '%s' error. Will structure break. mSize=%d, "
-"foff_end=%d, vSize=%d"
+"Write data block to the archive file '%s' error. Will structure break. mSize="
+"%d, foff_end=%d, vSize=%d"
 msgstr ""
 "Fehler beim Schreiben Datenblöcke in die Archiv-Datei '%s'. Die Struktur "
 "wird aufgebrochen werden. mGröße=%d, foff_end=%d, VSIZE=%d"
@@ -375,11 +364,14 @@ msgstr "Lesen Datei '%s' für Offset %d Fehler!"
 msgid "Write to file '%s' error!"
 msgstr "Schreiben in Datei '%s' Fehler!"
 
-#, c-format
-msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"
+msgid ""
+"Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
 msgstr ""
 "Fehler in der Dateistruktur: '%s'. Differenz = %d byte. Reparaturversuch!"
 
-msgid "Error open new archive file for copy."
-msgstr ""
-"Fehler beim Erstellen einer neuen Archivdatei für das Backup zu öffnen."
+msgid "Error open/create archive file for copy here: %s"
+msgstr "Fehler öffnen/erstellen Archivdatei für die Kopie hier: %s"
+
+#, c-format
+msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
+msgstr "Letzter Wert für die tatsächliche Archivdatei '%s' ist nicht EVAL. Reparaturversuch!"
