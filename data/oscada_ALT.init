@@ -29,7 +29,7 @@ start()
 
 stop()
 {
-	stop_daemon --lockfile "$LOCKFILE" --expect-user root -- $OPENSCADA
+	stop_daemon --lockfile "$LOCKFILE" --expect-user root --retry TERM/30/KILL/5 -- $OPENSCADA
 	RETVAL=$?
 	return $RETVAL
 }

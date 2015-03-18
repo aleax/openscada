@@ -150,10 +150,10 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		int patr = (uiPrmPos-A_ElFigIts)%A_ElFigItsSz;
 		QPointF pnt_ = pnts[pnt];
 		switch(patr) {
-		    case A_ElFigItPntX:	pnt_.setX(s2r(val));	pnts[pnt] = pnt_;	break;
-		    case A_ElFigItPntY:	pnt_.setY(s2r(val));	pnts[pnt] = pnt_;	break;
-		    case A_ElFigItW:	widths[pnt] = s2r(val);	break;
-		    case A_ElFigItClr:	colors[pnt] = getColor(val);		break;
+		    case A_ElFigItPntX:	pnt_.setX(vmax(XY_MIN,vmin(XY_MAX,s2r(val)))); pnts[pnt] = pnt_;	break;
+		    case A_ElFigItPntY:	pnt_.setY(vmax(XY_MIN,vmin(XY_MAX,s2r(val)))); pnts[pnt] = pnt_;	break;
+		    case A_ElFigItW:	widths[pnt] = s2r(val);		break;
+		    case A_ElFigItClr:	colors[pnt] = getColor(val);	break;
 		    case A_ElFigItImg:
 			backimg = w->resGet(val);
 			if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
@@ -747,7 +747,6 @@ void ShapeElFigure::shapeSave( WdgView *w )
     if(devW && (chCtx.attr("id").size() || chCtx.childSize())) devW->chRecord(chCtx);
     devW->setSelect(true, false);
 }
-
 
 //!!!! Continue for the code cleun up from here !!!!
 void ShapeElFigure::initShapeItems( const QPointF &pos, QVector<int> &items_array, WdgView *w )
@@ -1528,8 +1527,6 @@ void ShapeElFigure::toolAct( QAction *act )
 	w->repaint();
     }
 }
-
-
 
 bool ShapeElFigure::event( WdgView *w, QEvent *event )
 {
@@ -3763,7 +3760,7 @@ QPainterPath ShapeElFigure::painterPathSimple( int type, double ang, QPointF pBe
 
     circlePath.moveTo(pBeg);
     switch(type) {
-	case ShT_Line: circlePath.lineTo(pEnd);	break;
+	case ShT_Line: circlePath.lineTo(pEnd); break;
 	case ShT_Arc: {
 	    double arc_a = length(pCntr3, pCntr1), arc_b = length(pCntr1, pCntr2),
 		   t_start = aT.x(), t_end = aT.y();

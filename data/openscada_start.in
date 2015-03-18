@@ -31,7 +31,7 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
 	fi
 	# Projects list obtaine from preinstalled projects
 	for fit in `ls $StartWorkDir`; do
-	    if test -d $StartWorkDir/$fit && test -f $StartOrigCfgPref/oscada_$fit.xml; then prjList=("${prjList[@]}" "$fit" "$fit"); fi
+	    if test -d $StartWorkDir/$fit && test -f $StartOrigCfgPref/oscada_$fit.xml -o -f $StartWorkDir/$fit/oscada.xml; then prjList=("${prjList[@]}" "$fit" "$fit"); fi
 	done
 
 	rez=
@@ -81,6 +81,7 @@ if test ! -w $WorkDir/$ProjName; then
     CfgFile=$WorkDir/$ProjName/oscada.xml
     if test ! -e $CfgFile -a -f $StartCfgFile; then cp $StartCfgFile $CfgFile; fi
 fi
+if test -f $WorkDir/$ProjName/oscada.xml; then CfgFile=$WorkDir/$ProjName/oscada.xml; fi
 if test ! -e $CfgFile -a -f $StartOrigCfgFile; then cp $StartOrigCfgFile $CfgFile; fi
 ## Check for local copy need for libraries DBs directory
 if test -d $StartWorkDir/LibsDB -a ! -d $WorkDir/LibsDB; then cp -R $StartWorkDir/LibsDB $WorkDir; fi

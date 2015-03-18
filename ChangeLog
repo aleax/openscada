@@ -1,3 +1,11 @@
+2015-03-18 Roman
+- SYS: The main start script openscada_start improved for using config file "oscada.xml" into the project work directory.
+    Init script for ALTLinux expanded by argument "--retry TERM/30/KILL/5" for stop and wait to correct finish.
+    Init script for Gentoo mostly cleaned.
+    User API function SYS.strDecode() fixed for argument 2 using by default.
+- FIX:UI.Vision: Allowed coordinates value limited to [-1000000:1000000] by figures updating freeze by Qt for too big the values.
+
+
 2015-03-15 Roman
 - LibsDB.OscadaLibs.db: Tests for Archive.FSArch packing mechanism is added as servProc.archPackFStests.
 - !!:FIX:Archive: iend > arch_el[i_a]->begin() set to iend >= arch_el[i_a]->begin() for allow strong and single end value get.

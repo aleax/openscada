@@ -2126,7 +2126,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  src - source;
     //  tp  - encode type: "PathEl", "HttpURL", "Custom", "Base64", "Bin"
     //  opt1 - option 1, separator for "Bin"
-    if(iid == "strDecode" && prms.size() >= 2) {
+    if(iid == "strDecode" && prms.size() >= 1) {
 	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
 	Code tp = (Code)0;
 	if(stp == "PathEl")		tp = PathEl;

@@ -15,27 +15,26 @@ WITHOUT_RC_COMPAT=1
 
 OPENSCADA=/usr/bin/openscada
 DNAME="OpenSCADA"
-LOCALE="en_US.UTF-8"
 
 depend() {
-	use logger net
+    use logger net
 }
 
 start() {
-  ebegin "Starting "$DNAME
-	start-stop-daemon --start -b \
-	--exec ${OPENSCADA} -- --demon
-	eend $? "Failed to start"$DNAME
+    ebegin "Starting $DNAME"
+    export LANG=en_US.UTF-8
+    export LANGUAGE=en_US.UTF-8
+    start-stop-daemon --start -b --exec ${OPENSCADA} -- --demon
+    eend $? "Failed to start $DNAME"
 }
 
 stop() {
-  ebegin "Stopping "$DNAME
-	start-stop-daemon --stop \
-	--exec ${OPENSCADA}
-	eend $?
+    ebegin "Stopping $DNAME"
+    start-stop-daemon --stop --retry=0/30/KILL/5 --exec ${OPENSCADA}
+    eend $?
 }
 
 restart() {
-  stop
-	start
+    stop
+    start
 }

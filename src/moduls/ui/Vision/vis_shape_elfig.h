@@ -41,6 +41,8 @@ typedef map<int,string> ImageMap;
 typedef map<int,Qt::PenStyle> StyleMap;
 
 #define ARC_STEP	1.0/360.0	// Arc build sted 1/360 = 1 degree
+#define XY_MIN		-1000000	// Canva's XY coordinats value minimum
+#define XY_MAX		1000000		// Canva's XY coordinats value maximum
 
 namespace VISION
 {
