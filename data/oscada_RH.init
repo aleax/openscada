@@ -38,14 +38,14 @@ start()
 	if [ $pidproc ]; then
 	echo "$pidproc" > $pidfile
 	touch $lockfile
-        fi
+	fi
     fi
 }
 
 stop()
 {
 	echo -n $"Stopping OpenSCADA daemon: "
-	killproc -p $pidfile $servicename
+	killproc -p $pidfile -d 30 $servicename
 	RETVAL=$?
 	echo
 	if [ $RETVAL -eq 0 ]; then

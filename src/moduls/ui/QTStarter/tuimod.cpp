@@ -575,7 +575,7 @@ StartDialog::StartDialog( WinControl *wcntr )
     gFrame->setFrameShadow(QFrame::Raised);
     wnd_lay->addWidget(gFrame,0,0);
 
-    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), centralWidget());
+    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from the system"), centralWidget());
     butt->setObjectName("*exit*");
     butt->setToolTip(_("Exit from the program"));
     butt->setWhatsThis(_("The button for exit from the program"));
