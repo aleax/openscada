@@ -1,4 +1,5 @@
 2015-03-21 Roman
+- FIX:SYS: Init scripts for RH tested and some fixed.
 - !!!!:SYS: Main start program "openscada" mostly rewrote for preferable demon mode produce:
     - static function TSYS::getCmdOpt_() variant is added for the using allow from the main start program;
     - check and switch to the demon mode first;
