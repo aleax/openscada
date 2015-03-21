@@ -98,7 +98,7 @@ TUIMod::~TUIMod( )
 string TUIMod::modInfo( const string &name )
 {
     if(name == "SubType") return SUB_TYPE;
-    else return TModule::modInfo(name);
+    return TModule::modInfo(name);
 }
 
 void TUIMod::modInfo( vector<string> &list )

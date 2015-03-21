@@ -140,7 +140,7 @@ void TTest::mess( const string &testNm, const char *fmt,  ... )
 string TTest::modInfo( const string &name )
 {
     if(name == "SubType") return SUB_TYPE;
-    else return TModule::modInfo(name);
+    return TModule::modInfo(name);
 }
 
 void TTest::modInfo( vector<string> &list )

@@ -265,6 +265,7 @@ class TSYS : public TCntrNode
 
 	// Reentrant commandline processing
 	string getCmdOpt( int &curPos, string *argVal = NULL );
+	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
 	//  System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing

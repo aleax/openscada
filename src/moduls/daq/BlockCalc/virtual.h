@@ -76,7 +76,7 @@ class Prm : public TParamContr
 //*************************************************
 //* Contr: Blocks and parameters container        *
 //*************************************************
-class TipContr;
+class TpContr;
 
 class Contr: public TController
 {
@@ -104,7 +104,7 @@ class Contr: public TController
 	void blkDel( const string &id )		{ chldDel(mBl,id); }
 	AutoHD<Block> blkAt( const string &id )	{ return chldAt(mBl,id); }
 
-	TipContr &owner( );
+	TpContr &owner( );
 
 	void redntDataUpdate( );
 
@@ -143,14 +143,14 @@ class Contr: public TController
 };
 
 //************************************************
-//* TipContr - BlockCalc type controller         *
+//* TpContr - BlockCalc type controller         *
 //************************************************
-class TipContr: public TTypeDAQ
+class TpContr: public TTypeDAQ
 {
     public:
 	//Public methods
-	TipContr( string name );
-	~TipContr( );
+	TpContr( string name );
+	~TpContr( );
 
 	TController *ContrAttach( const string &name, const string &daq_db );
 
@@ -176,7 +176,7 @@ class TipContr: public TTypeDAQ
 	TElem	blkio_el;
 };
 
-extern TipContr *mod;
+extern TpContr *mod;
 
 } //End namespace virtual
 

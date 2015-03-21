@@ -37,7 +37,7 @@ namespace JavaLikeCalc
 //*************************************************
 //* Lib: Free library                             *
 //*************************************************
-class TipContr;
+class TpContr;
 
 class Lib : public TCntrNode, public TConfig
 {

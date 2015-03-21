@@ -10,11 +10,11 @@
 # Description: Start OpenSCADA
 ### END INIT INFO
 
-DESC="openscada"
+DESC="OpenSCADA"
 NAME=openscada
-DAEMON=/usr/bin/$NAME
-DAEMON_ARGS="--demon"
 PIDFILE=/var/run/$NAME.pid
+DAEMON=/usr/bin/$NAME
+DAEMON_ARGS="--demon --pid-file=$PIDFILE"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -32,13 +32,9 @@ PIDFILE=/var/run/$NAME.pid
 #
 do_start()
 {
-    export LANG=en_US.UTF-8
-    export LANGUAGE=en_US.UTF-8
-    start-stop-daemon --start --oknodo --exec $DAEMON -- $DAEMON_ARGS
-    RETVAL=$?
-    pidproc=$(pidof $NAME)
-    if [ $pidproc ]; then echo "$pidproc" > $PIDFILE; fi
-    return $RETVAL
+    LANG=en_US.UTF-8
+    log_action_begin_msg "Starting $DESC"
+    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS && log_action_end_msg $?
 }
 
 #
@@ -46,31 +42,23 @@ do_start()
 #
 do_stop()
 {
-    start-stop-daemon --stop --oknodo --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
-    RETVAL=$?
-    rm -f $PIDFILE
-    return $RETVAL
+    log_action_begin_msg "Stopping $DESC"
+    start-stop-daemon --stop --pidfile $PIDFILE --retry=TERM/30/KILL/5 --name $NAME && log_action_end_msg $?
 }
 
 case "$1" in
     start)
-	log_daemon_msg "Starting $DESC"
 	do_start
-	log_end_msg $?
 	;;
     stop)
-	log_daemon_msg "Stopping $DESC"
 	do_stop
-	log_end_msg $?
 	;;
     status)
 	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
 	;;
     restart|reload|force-reload)
-	log_daemon_msg "Restarting $DESC"
 	do_stop
 	do_start
-	log_end_msg $?
 	;;
     *)
 	echo "Usage: $0 {start|stop|status|restart|force-reload}"

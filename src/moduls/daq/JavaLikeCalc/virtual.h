@@ -161,13 +161,15 @@ class Contr: public TController, public TValFunc
 //*************************************************
 //* Type DAQ object                               *
 //*************************************************
-class TipContr : public TTypeDAQ
+class TpContr : public TTypeDAQ
 {
     public:
 	//Methods
-	TipContr( string src );
-	~TipContr( );
+	TpContr( string src );
+	~TpContr( );
 
+	void modInfo( vector<string> &list );
+	string modInfo( const string &name );
 	void modStart( );
 	void modStop( );
 
@@ -222,7 +224,7 @@ class TipContr : public TTypeDAQ
 	vector<BFunc>	mBFunc;		//Buildin functions
 };
 
-extern TipContr *mod;
+extern TpContr *mod;
 
 } //End namespace StatFunc
 

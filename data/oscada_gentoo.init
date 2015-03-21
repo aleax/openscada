@@ -10,8 +10,11 @@
 
 WITHOUT_RC_COMPAT=1
 
-OPENSCADA=/usr/bin/openscada
 DNAME="OpenSCADA"
+NAME=openscada
+PIDFILE=/var/run/$NAME.pid
+DAEMON=/usr/bin/$NAME
+DAEMON_ARGS="--demon --pid-file=$PIDFILE"
 
 depend() {
     use logger net
@@ -19,15 +22,14 @@ depend() {
 
 start() {
     ebegin "Starting $DNAME"
-    export LANG=en_US.UTF-8
-    export LANGUAGE=en_US.UTF-8
-    start-stop-daemon --start -b --exec ${OPENSCADA} -- --demon
+    LANG=en_US.UTF-8
+    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
     eend $? "Failed to start $DNAME"
 }
 
 stop() {
     ebegin "Stopping $DNAME"
-    start-stop-daemon --stop --retry=0/30/KILL/5 --exec ${OPENSCADA}
+    start-stop-daemon --stop --pidfile $PIDFILE --retry=TERM/30/KILL/5 --name $NAME
     eend $?
 }
 

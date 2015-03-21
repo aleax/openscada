@@ -1,7 +1,21 @@
+2015-03-21 Roman
+- !!!!:SYS: Main start program "openscada" mostly rewrote for preferable demon mode produce:
+    - static function TSYS::getCmdOpt_() variant is added for the using allow from the main start program;
+    - check and switch to the demon mode first;
+    - CoreDumpAllow process for left for the work process;
+    - check and create pid-file for the work process;
+    - same OpenSCADA core start.
+- SYS: Init scripts for ALT, RH, Gentoo, Debian mostly improved, simplified and adapted to PID using.
+    The scripts for ALT and Debian tested and for RH will testing later.
+- !!:FIX:SYS,DAQ.JavaLikeCalc: The functions libraries early starting into load_() prevented by crashing at "openscada --help". For DAQ.JavaLikeCalc
+    priority at first starting the modules of subsystems set to ordered and to modules property "HighPriority" added to place the first.
+- DAQ.{BlockCalc,JavaLikeCalc}: Object TipContr renamed to TpContr.
+
+
 2015-03-19 Roman
-- SYS: Configure template AX_LIB_FIREBIRD some adapted for cinfigure and build FireBird with headers into */include/firebird, like SuSE.
-- Init script for RH expanded by argument -d 30 for stop and wait to correct finish.
-- Init script for Debian some simplified, will further test.
+- SYS: Configure template AX_LIB_FIREBIRD some adapted for configure and build FireBird with headers into */include/firebird, like SuSE.
+    Init script for RH expanded by argument -d 30 for stop and wait to correct finish.
+    Init script for Debian some simplified, will further test.
 - FIX:QTStarter: Some original text messages fixed.
 
 

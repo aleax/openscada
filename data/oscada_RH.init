@@ -13,82 +13,66 @@ WITHOUT_RC_COMPAT=1
 # Source function library.
 . /etc/init.d/functions
 
-bindir=/usr/bin
-lockfile=/var/lock/subsys/openscadad
-OPENSCADA_BIN=/usr/bin/openscada
-ARGS="--demon &> /dev/null"
+NAME=openscada
+PIDFILE=/var/run/openscada.pid
+LOCKFILE=/var/lock/subsys/openscada
+OPENSCADA_PATH=/usr/bin/openscada
+ARGS="--demon --pid-file=$PIDFILE"
 RETVAL=0
 
 # Sanity checks.
-[ -x $OPENSCADA_BIN ] || exit 1
-
-# so we can rearrange this easily
-servicename=openscada
-pidfile=/var/run/openscada.pid
+[ -x $OPENSCADA_PATH ] || exit 1
 
 RETVAL=0
 
 start()
 {
-	echo $"Starting OpenSCADA daemon: "
-	daemon $servicename $ARGS --pid-file=$pidfile
-	RETVAL=$?
-	if [ $RETVAL -eq 0 ]; then
-	pidproc=$(ps -C $servicename -o pid=|sed 's/ //g')
-	if [ $pidproc ]; then
-	echo "$pidproc" > $pidfile
-	touch $lockfile
-	fi
-    fi
+    echo $"Starting OpenSCADA daemon: "
+    daemon --pidfile $PIDFILE --check $SERVICE $NAME $NAME $ARGS
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch $LOCKFILE
 }
 
 stop()
 {
-	echo -n $"Stopping OpenSCADA daemon: "
-	killproc -p $pidfile -d 30 $servicename
-	RETVAL=$?
-	echo
-	if [ $RETVAL -eq 0 ]; then
-		rm -f $lockfile
-		rm -f $pidfile
-	fi
-}
-
-restart()
-{
-	stop
-	start
+    echo -n $"Stopping OpenSCADA daemon: "
+    killproc -d 30 -p $PIDFILE $NAME
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $LOCKFILE
 }
 
 # See how we were called.
 case "$1" in
-	start)
-		start
-		;;
-	stop)
-		stop
-		;;
-	restart|reload)
-		restart
-		;;
-	condstop)
-		if [ -e "$LOCKFILE" ]; then
-			stop
-		fi
-		;;
-	condrestart)
-		if [ -f $lockfile ]; then
-			stop
-			start
-		fi
-		;;
-	status)
-		status $servicename
-		RETVAL=$?
-		;;
-		*)
-		echo $"Usage: $0 {start|stop|restart|condstop|condrestart|status}"
-		RETVAL=2
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    restart|reload)
+	stop
+	start
+	;;
+    condstop)
+	if [ -e "$LOCKFILE" ]; then
+	    stop
+	fi
+	;;
+    condrestart)
+	if [ -f $LOCKFILE ]; then
+	    stop
+	    start
+	fi
+	;;
+    status)
+	status $NAME
+	RETVAL=$?
+	;;
+    *)
+	echo $"Usage: $0 {start|stop|restart|condstop|condrestart|status}"
+	RETVAL=2
+	;;
 esac
 
 exit $RETVAL

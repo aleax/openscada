@@ -40,8 +40,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModule                                       *
 //*************************************************
-const char *TModule::l_info[] =
-    {"Module","Name","Type","Source","Version","Author","Description","License"};
+const char *TModule::l_info[] = {"Module", "Name", "Type", "Source", "Version", "Author", "Description", "License"};
 
 TModule::TModule( const string &id ) : mId(id)
 {

@@ -48,7 +48,7 @@
 #define LICENSE		"GPL2"
 //************************************************
 
-Virtual::TipContr *Virtual::mod;
+Virtual::TpContr *Virtual::mod;
 
 extern "C"
 {
@@ -68,7 +68,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new Virtual::TipContr(source);
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new Virtual::TpContr(source);
 	return NULL;
     }
 }
@@ -76,9 +76,9 @@ extern "C"
 using namespace Virtual;
 
 //************************************************
-//* TipContr - BlockCalc type controller         *
+//* TpContr - BlockCalc type controller         *
 //************************************************
-TipContr::TipContr( string name ) : TTypeDAQ(MOD_ID)
+TpContr::TpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     mod		= this;
 
@@ -91,19 +91,19 @@ TipContr::TipContr( string name ) : TTypeDAQ(MOD_ID)
     mSource	= name;
 }
 
-TipContr::~TipContr()
+TpContr::~TpContr()
 {
     nodeDelAll();
 }
 
-void TipContr::load_()
+void TpContr::load_()
 {
     //Load parameters from command line
 
     //Load parameters from config-file
 }
 
-void TipContr::postEnable( int flag )
+void TpContr::postEnable( int flag )
 {
     TTypeDAQ::postEnable( flag );
 
@@ -137,7 +137,7 @@ void TipContr::postEnable( int flag )
     blkio_el.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"10000"));
 }
 
-void TipContr::preDisable(int flag)
+void TpContr::preDisable(int flag)
 {
     vector<string> lst;
     list(lst);
@@ -149,7 +149,7 @@ void TipContr::preDisable(int flag)
 	    at(lst[i_cnt]).at().disable();
 }
 
-TController *TipContr::ContrAttach( const string &name, const string &daq_db )	{ return new Contr(name,daq_db,this); }
+TController *TpContr::ContrAttach( const string &name, const string &daq_db )	{ return new Contr(name,daq_db,this); }
 
 //************************************************
 //* Contr - Blocks and parameters container      *
@@ -234,7 +234,7 @@ void Contr::postDisable( int flag )
     TController::postDisable(flag);
 }
 
-TipContr &Contr::owner( )	{ return (TipContr&)TController::owner( ); }
+TpContr &Contr::owner( )	{ return (TpContr&)TController::owner( ); }
 
 void Contr::load_( )
 {

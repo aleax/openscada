@@ -374,18 +374,19 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"========================= The general system options ======================\n"
 	"===========================================================================\n"
-	"-h, --help             Info message about system options.\n"
-	"    --Config=<path>    Config-file path.\n"
-	"    --Station=<id>     The station identifier.\n"
-	"    --StatName=<name>  The station name.\n"
-	"    --demon            Start into demon mode.\n"
+	"-h, --help		Info message about system options.\n"
+	"    --Config=<path>	Config-file path.\n"
+	"    --Station=<id>	The station identifier.\n"
+	"    --StatName=<name>	The station name.\n"
+	"    --demon		Start into demon mode.\n"
+	"    --pid-file=<file>	the file for the programm process ID place here.\n"
 	"    --CoreDumpAllow	Set limits for core dump creation allow on crash.\n"
-	"    --MessLev=<level>  Process messages <level> (0-7).\n"
-	"    --log=<direct>     Direct messages to:\n"
-	"                         <direct> & 1 - syslogd;\n"
-	"                         <direct> & 2 - stdout;\n"
-	"                         <direct> & 4 - stderr;\n"
-	"                         <direct> & 8 - archive.\n"
+	"    --MessLev=<level>	Process messages <level> (0-7).\n"
+	"    --log=<direct>	Direct messages to:\n"
+	"			  <direct> & 1 - syslogd;\n"
+	"			  <direct> & 2 - stdout;\n"
+	"			  <direct> & 4 - stderr;\n"
+	"			  <direct> & 8 - archive.\n"
 	"----------- The config-file station '%s' parameters -----------\n"
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
@@ -396,18 +397,20 @@ string TSYS::optDescr( )
 	"MessLev    <level>     Messages <level> (0-7).\n"
 	"SelDebCats <list>	Debug categories list (separated by ';').\n"
 	"LogTarget  <direction> Direct messages to:\n"
-	"                           <direct> & 1 - syslogd;\n"
-	"                           <direct> & 2 - stdout;\n"
-	"                           <direct> & 4 - stderr;\n"
-	"                           <direct> & 8 - archive.\n"
+	"			  <direct> & 1 - syslogd;\n"
+	"			  <direct> & 2 - stdout;\n"
+	"			  <direct> & 4 - stderr;\n"
+	"			  <direct> & 8 - archive.\n"
 	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
-	"SaveAtExit <true>      Save system at exit.\n"
+	"SaveAtExit <true>	Save system at exit.\n"
 	"SavePeriod <sec>	Save system period.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 
-string TSYS::getCmdOpt( int &curPos, string *argVal )
+string TSYS::getCmdOpt( int &curPos, string *argVal )	{ return getCmdOpt_(curPos, argVal, argc, (char **)argv); }
+
+string TSYS::getCmdOpt_( int &curPos, string *argVal, int argc, char **argv )
 {
     size_t fPos;
     int argI = curPos&0xFF;
@@ -451,12 +454,12 @@ bool TSYS::cfgFileLoad( )
 	    Mess->setMessLevel(7);
 	    cmd_help = true;
 	}
-	else if(argCom == "Config") 	mConfFile = argVl;
+	else if(argCom == "Config")	mConfFile = argVl;
 	else if(argCom == "Station")	mId = argVl;
 	else if(argCom == "StatName")	mName = argVl;
 
     //Load config-file
-    int hd = open(mConfFile.c_str(),O_RDONLY);
+    int hd = open(mConfFile.c_str(), O_RDONLY);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
     else {
 	bool fOK = true;

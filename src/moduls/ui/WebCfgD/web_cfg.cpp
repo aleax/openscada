@@ -130,8 +130,8 @@ TWEB::~TWEB( )
 string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
-    else if(name == "Auth")	return "1";
-    else return TModule::modInfo(name);
+    if(name == "Auth")		return "1";
+    return TModule::modInfo(name);
 }
 
 void TWEB::modInfo( vector<string> &list )
