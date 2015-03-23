@@ -75,14 +75,14 @@ int main( int argc, char *argv[], char *envp[] )
 	if(!state && mode == NC_Variable)
 	{
 	    uint32_t accs = atoi(req.childGet(2)->text().c_str());
-	    uint8_t eMask = atoi(req.childGet(1)->attr("EncodingMask").c_str());
+	    uint8_t eMask = atoi(req.childGet(1)->attr("VarTp").c_str());
 	    if(accs&ACS_Read) printf(" value='%s', timeStamp=%s\n",
 		req.childGet(1)->text().c_str(), req.childGet(1)->attr("SourceTimestamp").c_str());
 	    if(accs&ACS_Write)
 	    {
 		req.clear()->setAttr("id", "Write")->
 		    childAdd("node")->setAttr("nodeId", argv[2])->setAttr("attributeId", int2str(AId_Value))->
-				      setAttr("EncodingMask", int2str(eMask))->setText("3.14159265");
+				      setAttr("VarTp", int2str(eMask))->setText("3.14159265");
 		clnt.reqService(req);
 	    }
 	}

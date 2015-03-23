@@ -1,3 +1,11 @@
+2015-03-23 Roman
+- {DAQ,Protocol}.OPC_UA: Array for simple types support added.
+    Main integer changed from OpcUa_Int32 to OpcUa_Int64.
+    FIX:OpcUa_Int64 type fixed by expand iN{u}() and oN{u}().
+    Some direct indexes replaced by the symbol definitions.
+    Some definitions unified.
+
+
 2015-03-21 Roman
 - FIX:SYS: Init scripts for RH tested and some fixed.
 - !!!!:SYS: Main start program "openscada" mostly rewrote for preferable demon mode produce:

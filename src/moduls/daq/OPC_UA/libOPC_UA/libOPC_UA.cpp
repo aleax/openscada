@@ -490,7 +490,7 @@ const char *UA::iVal( const string &rb, int &off, char vSz )
     return rb.data()+off-vSz;
 }
 
-int32_t UA::iN( const string &rb, int &off, char vSz )
+int64_t UA::iN( const string &rb, int &off, char vSz )
 {
     off += vSz;
     if(off > (int)rb.size())
@@ -499,11 +499,12 @@ int32_t UA::iN( const string &rb, int &off, char vSz )
 	case 1: return *(int8_t*)(rb.data()+off-vSz);
 	case 2: return (int16_t)getUnalign16(rb.data()+off-vSz);
 	case 4: return (int32_t)getUnalign32(rb.data()+off-vSz);
+	case 8: return (int64_t)getUnalign64(rb.data()+off-vSz);
     }
     throw OPCError(OpcUa_BadDecodingError, "Number size '%d' error.", vSz);
 }
 
-uint32_t UA::iNu( const string &rb, int &off, char vSz )
+uint64_t UA::iNu( const string &rb, int &off, char vSz )
 {
     off += vSz;
     if(off > (int)rb.size())
@@ -512,6 +513,7 @@ uint32_t UA::iNu( const string &rb, int &off, char vSz )
 	case 1: return *(uint8_t*)(rb.data()+off-vSz);
 	case 2: return getUnalign16(rb.data()+off-vSz);
 	case 4: return getUnalign32(rb.data()+off-vSz);
+	case 8: return getUnalign64(rb.data()+off-vSz);
     }
     throw OPCError(OpcUa_BadDecodingError, "Number size '%d' error.", vSz);
 }
@@ -598,14 +600,14 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
     uint8_t em = iNu(buf, off, 1);			//Encoding Mask
     if(em&0x01) {					//Value
 	// Variant
-	uint8_t emv = iNu(buf, off, 1);			//Encoding Mask
-	nd.setAttr("EncodingMask", uint2str(emv));
+	uint8_t emv = iNu(buf, off, 1);			//Variable type
+	nd.setAttr("VarTp", uint2str(emv));
 	int32_t arrL = 1;
-	if(emv&0x80)	arrL = iNu(buf, off, 4);	//ArrayLength
+	if(emv&OpcUa_Array) arrL = iNu(buf, off, 4);	//ArrayLength
 	string rezVl;
 	for(int i_v = 0; i_v < arrL; i_v++) {
 	    if(arrL > 1 && i_v) rezVl += "\n";
-	    switch(emv&0x3F) {
+	    switch(emv&OpcUa_VarMask) {
 		case OpcUa_Boolean:
 		case OpcUa_SByte:	rezVl += int2str(iN(buf,off,1));	break;
 		case OpcUa_Byte:	rezVl += int2str(iNu(buf,off,1));	break;
@@ -613,8 +615,8 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
 		case OpcUa_UInt16:	rezVl += uint2str(iNu(buf,off,2));	break;
 		case OpcUa_Int32:	rezVl += int2str(iN(buf,off,4));	break;
 		case OpcUa_UInt32:	rezVl += uint2str(iNu(buf,off,4));	break;
-		case OpcUa_Int64:	rezVl += strMess("%lld", (int64_t)getUnalign64(iVal(buf,off,8)));	break;
-		case OpcUa_UInt64:	rezVl += strMess("%llu", getUnalign64(iVal(buf,off,8)));	break;
+		case OpcUa_Int64:	rezVl += ll2str(iN(buf,off,8));		break;
+		case OpcUa_UInt64:	rezVl += strMess("%llu", iNu(buf,off,8));	break;
 		case OpcUa_Float:	rezVl += real2str(iR(buf,off,4));	break;
 		case OpcUa_Double:	rezVl += real2str(iR(buf,off,8));	break;
 		case OpcUa_String:
@@ -633,12 +635,12 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
 		    rezVl += loc+":"+vl;
 		    break;
 		}
-		default: throw OPCError(OpcUa_BadDecodingError, "Data type '%d' isn't supported.", emv&0x3F);
+		default: throw OPCError(OpcUa_BadDecodingError, "Data type '%d' do not support.", emv&OpcUa_VarMask);
 	    }
 	}
 	nd.setText(rezVl);
 	// ArrayDimension
-	if(emv&0x40) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supported.");
+	if(emv&OpcUa_ArrayDimension) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field do not support.");
 	//????
     }
     if(em&0x02)	nd.setAttr("Status", strMess("0x%x",iNu(buf,off,4)));
@@ -648,13 +650,13 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
     if(em&0x20)	nd.setAttr("ServerPicoseconds", uint2str(iNu(buf,off,2)));
 }
 
-void UA::oN( string &buf, int32_t val, char sz, int off )
+void UA::oN( string &buf, int64_t val, char sz, int off )
 {
     if(off < 0 || (off+sz) > (int)buf.size()) buf.append((char*)&val, sz);
     else buf.replace(off, sz, (char*)&val, sz);
 }
 
-void UA::oNu( string &buf, uint32_t val, char sz, int off )
+void UA::oNu( string &buf, uint64_t val, char sz, int off )
 {
     if(off < 0 || (off+sz) > (int)buf.size()) buf.append((char*)&val, sz);
     else buf.replace(off, sz, (char*)&val, sz);
@@ -753,14 +755,14 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
     if(eMsk&0x01) {		//Variant
 	oNu(buf, vEMsk, 1);	//Encoding Mask
 	int32_t arrL = 1;
-	if(vEMsk&0x80) {	//Array process
+	if(vEMsk&OpcUa_Array) {	//Array process
 	    arrL = 0;
 	    for(int off = 0; strParse(vl,0,"\n",&off).size(); ) arrL++;
 	    oNu(buf, arrL, 4);	//ArrayLength
 	}
 	for(int i_v = 0, off = 0; i_v < arrL; i_v++) {
 	    string setVl = (arrL==1) ? vl : strParse(vl,0,"\n",&off);
-	    switch(vEMsk&0x3F) {
+	    switch(vEMsk&OpcUa_VarMask) {
 		case OpcUa_Boolean:
 		case OpcUa_SByte:	oN(buf, atoi(setVl.c_str()), 1);	break;
 		case OpcUa_Byte:	oNu(buf, atoi(setVl.c_str()), 1);	break;
@@ -779,11 +781,11 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 		case OpcUa_QualifiedName: oSqlf(buf, setVl);			break;
 		case OpcUa_LocalizedText: oSl(buf, setVl, lang2CodeSYS());	break;
 		default: //oS(buf, setVl);	break;
-		    throw OPCError(OpcUa_BadDecodingError, "Data type '%d' isn't supported.", vEMsk&0x3F);
+		    throw OPCError(OpcUa_BadDecodingError, "Data type '%d' do not support.", vEMsk&OpcUa_VarMask);
 	    }
 	}
 	//ArrayDimension
-	if(vEMsk&0x40) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supporteded.");
+	if(vEMsk&OpcUa_ArrayDimension) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supporteded.");
 	//????
     }
     if(eMsk&0x02) oN(buf, strtoul(vl.c_str(),NULL,10), 4);	//Status
@@ -1453,7 +1455,7 @@ void Client::protIO( XML_N &io )
 			oNodeId(mReq, NodeId::fromAddr(nd->attr("nodeId")));			//nodeId
 			oNu(mReq, strtoul(nd->attr("attributeId").c_str(),NULL,0), 4);		//attributeId (Value)
 			oS(mReq, "");								//indexRange
-			oDataValue(mReq, 0x0D, nd->text(), atoi(nd->attr("EncodingMask").c_str()));//value
+			oDataValue(mReq, 0x0D, nd->text(), atoi(nd->attr("VarTp").c_str()));	//value
 		    }
 		}
 		else if(io.attr("id") == "Browse") {
@@ -2954,7 +2956,10 @@ nextReq:
 			XML_N nVal;
 			iDataValue(rb, off, nVal);	//value
 
-			req.setAttr("node", nid.toAddr())->setAttr("aid",uint2str(aid))->setText(nVal.text());
+			req.setAttr("node", nid.toAddr())->
+			    setAttr("aid", uint2str(aid))->
+			    setAttr("VarTp", nVal.attr("VarTp"))->
+			    setText(nVal.text());
 			int rez = wep->reqData(reqTp, req);
 
 			//   Write result status code
@@ -3296,9 +3301,9 @@ void Server::EP::setEnable( bool vl )
 	 nodeReg(OpcUa_Server_ServerStatus,OpcUa_Server_ServerStatus_State,"State",NC_Variable,OpcUa_HasComponent,OpcUa_BaseDataVariableType)->
 	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
 	nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
-	    setAttr("ValueRank","1")->setAttr("Value","http://opcfoundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
+	    setAttr("ValueRank","1")->setAttr("Value","http://opcfoundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(OpcUa_Array|OpcUa_String));
 	nodeReg(OpcUa_Server,OpcUa_Server_ServerArray,"ServerArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
-	    setAttr("ValueRank","1")->setAttr("Value",serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
+	    setAttr("ValueRank","1")->setAttr("Value",serv->applicationUri())->setAttr("DataType",int2str(OpcUa_Array|OpcUa_String));
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_TypesFolder,OpcUa_ObjectTypesFolder,"ObjectTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
 	nodeReg(OpcUa_ObjectTypesFolder,OpcUa_BaseObjectType,"BaseObjectType",NC_ObjectType,OpcUa_Organizes);
@@ -3753,7 +3758,7 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 			case AId_Value:
 			    req.setAttr("type", dtType)->setText(req.attr("Value").empty()?ndX->second->attr("Value"):req.attr("Value"));
 			    return 0;
-			case AId_DataType: req.setAttr("type", int2str(OpcUa_NodeId))->setText(int2str(atoi(dtType.c_str())&(~0x80)));	return 0;
+			case AId_DataType: req.setAttr("type", int2str(OpcUa_NodeId))->setText(int2str(atoi(dtType.c_str())&(~OpcUa_Array)));	return 0;
 			case AId_ValueRank: {
 			    string val = ndX->second->attr("ValueRank");
 			    req.setAttr("type", int2str(OpcUa_Int32))->setText(val.empty()?"-1":val);
@@ -3762,9 +3767,9 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 			case AId_ArrayDimensions: {
 			    string val = ndX->second->attr("Value");
 			    int cnt = 0;
-			    if(atoi(dtType.c_str())&0x80)	//Array flag
+			    if(atoi(dtType.c_str())&OpcUa_Array)
 				for(int off = 0; strParse(val,0,"\n",&off).size(); cnt++) ;
-			    req.setAttr("type", int2str(0x80|OpcUa_Int32))->setText(int2str(cnt));
+			    req.setAttr("type", int2str(OpcUa_Array|OpcUa_Int32))->setText(int2str(cnt));
 			    return 0;
 			}
 			case AId_AccessLevel: {

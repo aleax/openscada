@@ -561,9 +561,34 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				bool dtOK = true;
 				switch(nVal->fld().type()) {
 				    case TFld::Boolean:	req.setAttr("type", i2s(OpcUa_Boolean))->setText(nVal->getS(&tm));	break;
-				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int32))->setText(nVal->getS(&tm));	break;
+				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int64))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
+				    case TFld::Object: {	//!!!! With structures support append detect ones
+					AutoHD<TArrayObj> arr = nVal->getO(&tm);
+					string rVl;
+					if(arr.freeStat()) { dtOK = false; break; }
+					switch(arr.at().arGet(0).type()) {
+					    case TVariant::Boolean:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Boolean))->setText(rVl);
+						break;
+					    case TVariant::Integer:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Int64))->setText(rVl);
+						break;
+					    case TVariant::Real:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Double))->setText(rVl);
+						break;
+					    case TVariant::String:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_String))->setText(rVl);
+						break;
+					    default: dtOK = false;
+					}
+					break;
+				    }
 				    default: dtOK = false;
 				}
 				if(dtOK) { if(s2i(req.attr("dtTmGet"))) req.setAttr("dtTm",ll2s(tm)); return 0; }
@@ -579,7 +604,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				}
 				break;
 			    case AId_ValueRank: req.setAttr("type", i2s(OpcUa_Int32))->setText("-1");				return 0;
-			    case AId_ArrayDimensions: req.setAttr("type", i2s(0x80|OpcUa_Int32))->setText("");			return 0;
+			    case AId_ArrayDimensions: req.setAttr("type", i2s(OpcUa_Array|OpcUa_Int32))->setText("");		return 0;
 			    case AId_AccessLevel: case AId_UserAccessLevel:
 				req.setAttr("type", i2s(OpcUa_Byte))->setText(i2s(ACS_Read | (nVal->fld().flg()&TFld::NoWrite ? 0 : ACS_Write)));
 				return 0;
@@ -623,6 +648,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    // OpenSCADA DAQ parameter's attribute
 	    if(nid.ns() != NS_OpenSCADA_DAQ)	return OpcUa_BadNodeIdUnknown;
 	    uint32_t aid = s2i(req.attr("aid"));
+	    unsigned vTp = s2i(req.attr("VarTp"));
 
 	    // Connect to DAQ node
 	    int addrOff = 0;
@@ -631,7 +657,32 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    if(cNd.freeStat()) return OpcUa_BadNodeIdUnknown;
 
 	    if(aid != AId_Value || !dynamic_cast<TVal*>(&cNd.at())) return OpcUa_BadNothingToDo;
-	    ((AutoHD<TVal>)cNd).at().setS(req.text());
+	    AutoHD<TVal> vNd = cNd;
+	    if(vNd.at().fld().type() == TFld::Object && (vTp&OpcUa_Array)) {
+		TArrayObj *arr = new TArrayObj();
+		string vEl;
+		switch(vTp&OpcUa_VarMask) {
+		    case OpcUa_Boolean:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, bool(s2i(vEl)));
+			break;
+		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
+		    case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, (int64_t)atoll(vEl.c_str()));
+			break;
+		    case OpcUa_Float: case OpcUa_Double:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, s2r(vEl));
+			break;
+		    default:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, vEl);
+			break;
+		}
+		vNd.at().setO(arr);
+	    }
+	    else vNd.at().setS(req.text());
 
 	    return 0;
 	}

@@ -77,7 +77,16 @@ namespace OPC
 #define OpcUa_LocalizedText	21
 #define OpcUa_Structure		22
 #define OpcUa_DataValue		23
+#define OpcUa_BaseDataType	24
 #define OpcUa_DiagnosticInfo	25
+#define OpcUa_Number		26
+#define OpcUa_Integer		27
+#define OpcUa_UInteger		28
+#define OpcUa_Enumeration	29
+#define OpcUa_VarMask		0x3F
+#define OpcUa_ArrayDimension	0x40
+#define OpcUa_Array		0x80
+#define OpcUa_ServerStatusDataType	862
 
 //Status codes
 #define OpcUa_BadUnexpectedError	0x80010000
@@ -232,26 +241,6 @@ namespace OPC
 #define OpcUa_HasProperty		46
 #define OpcUa_HasComponent		47
 #define OpcUa_HasModelParent		50
-
-//DataType Identifiers
-#define OpcUa_BaseDataType		24
-#define OpcUa_Number			26
-#define OpcUa_Integer			27
-#define OpcUa_UInteger			28
-#define OpcUa_Enumeration		29
-#define OpcUa_Boolean			1
-#define OpcUa_SByte			2
-#define OpcUa_Byte			3
-#define OpcUa_Int16			4
-#define OpcUa_UInt16			5
-#define OpcUa_Int32			6
-#define OpcUa_UInt32			7
-#define OpcUa_Int64			8
-#define OpcUa_UInt64			9
-#define OpcUa_Float			10
-#define OpcUa_Double			11
-#define OpcUa_String			12
-#define OpcUa_ServerStatusDataType	862
 
 //VariableType Identifiers
 #define OpcUa_ServerStatusType		2138
@@ -426,8 +415,8 @@ class UA
 	//----------------------------------------------------
 	static string iErr( const string &buf, int &off );
 	static const char *iVal( const string &buf, int &off, char vSz );
-	static int32_t iN( const string &rb, int &off, char vSz );
-	static uint32_t iNu( const string &rb, int &off, char vSz );
+	static int64_t iN( const string &rb, int &off, char vSz );
+	static uint64_t iNu( const string &rb, int &off, char vSz );
 	static double iR( const string &rb, int &off, char vSz = 4 );
 	static string iS( const string &buf, int &off );
 	static string iSl( const string &buf, int &off, string *locale = NULL );
@@ -436,8 +425,8 @@ class UA
 	static NodeId iNodeId( const string &buf, int &off );
 	static void iDataValue( const string &buf, int &off, XML_N &nVal );
 
-	static void oN( string &buf, int32_t val, char sz, int off = -1 );
-	static void oNu( string &buf, uint32_t val, char sz, int off = -1 );
+	static void oN( string &buf, int64_t val, char sz, int off = -1 );
+	static void oNu( string &buf, uint64_t val, char sz, int off = -1 );
 	static void oR( string &buf, double val, char sz = 4 );
 	static void oS( string &buf, const string &val, int off = -1 );
 	static void oSl( string &buf, const string &val, const string &locale = "" );
