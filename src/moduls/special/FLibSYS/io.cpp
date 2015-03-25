@@ -299,7 +299,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	//Char stream
 	if(tpD.szBt == 1 && vals.type() == TVariant::String) {
 	    string outCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
-	    string sval = Mess->codeConvOut(outCd, prms[0].getS());
+	    string sval = outCd.size() ? Mess->codeConvOut(outCd, prms[0].getS()) : prms[0].getS();
 	    if(!fhd) {
 		if(pos >= str.size()) str.append(sval);
 		else str.replace(pos, vmax(0,vmin(str.size()-pos,sval.size())), sval);

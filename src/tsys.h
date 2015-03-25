@@ -157,8 +157,8 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
-	time_t	sysTm( ) volatile	{ return mSysTm; }	//> System time fast access, from updated cell
-	static int64_t curTime( );	//> Current system time (usec)
+	time_t	sysTm( ) volatile	{ return mSysTm; }	//System time fast access, from updated cell
+	static int64_t curTime( );	//Current system time (usec)
 
 	// Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );

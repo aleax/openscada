@@ -1,14 +1,13 @@
 # OpenSCADA.Protocol.SelfSystem translate to Russian.
-# Copyright (C) 2007-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:53+0200\n"
+"POT-Creation-Date: 2015-03-25 16:45+0200\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -25,16 +24,23 @@ msgstr "Роман Савоченко"
 msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Собственный протокол OpenSCADA, поддерживает основные функции."
 
+msgid ""
+"Connections from the user '%s' and the source '%s' reached to limit %d. "
+"Erasing spare!"
+msgstr ""
+"Подключения от пользователя '%s' и источника '%s' достигли лимита %d. "
+"Удаление лишних!"
+
 #, c-format
 msgid "SES_OPEN request: %d"
-msgstr ""
+msgstr "SES_OPEN запрос: %d"
 
 msgid "Not full respond."
 msgstr "Неполный ответ."
 
 #, c-format
 msgid "SES_OPEN response: %d"
-msgstr ""
+msgstr "SES_OPEN ответ: %d"
 
 #, c-format
 msgid "Station '%s' error: %s!"
@@ -46,11 +52,11 @@ msgstr "Ошибка станции '%s': Ответ не корректен!"
 
 #, c-format
 msgid "REQ send: %d"
-msgstr ""
+msgstr "REQ отправка: %d"
 
 #, c-format
 msgid "REQ response first %d"
-msgstr ""
+msgstr "REQ первый ответ %d"
 
 #, c-format
 msgid "Station respond '%s' error!"
@@ -58,11 +64,11 @@ msgstr "Ошибка ответа станции '%s'!"
 
 #, c-format
 msgid "REQ response full %d"
-msgstr ""
+msgstr "REQ весь ответ %d"
 
 #, c-format
 msgid "Request error: %s"
-msgstr ""
+msgstr "Ошибка запроса: %s"
 
 msgid "Parameters"
 msgstr "Параметры"
@@ -72,6 +78,9 @@ msgstr "Опции модуля"
 
 msgid "Life time of auth session(min)"
 msgstr "Время жизни сессии (мин)"
+
+msgid "Single user and host connections limit"
+msgstr "Предел подключений одного пользователя и хоста"
 
 msgid "Compression level"
 msgstr "Уровень компрессии"
@@ -93,9 +102,9 @@ msgstr "Нижняя граница компрессии"
 msgid "Value in bytes."
 msgstr "Значение в байтах."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Get request: '%s': %d, time: %f ms."
-msgstr "Обработка запроса: '%s', время: %f мс."
+msgstr "Получение запроса: '%s': %d, время: %f мс."
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
@@ -108,6 +117,3 @@ msgstr "Обработка запроса: '%s', время: %f мс."
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
 msgstr "Сохранение ответа в поток и упаковка: '%s': %d, время: %f мс."
-
-#~ msgid "Get request: '%s': %d"
-#~ msgstr "Запрос Get: '%s': %d"

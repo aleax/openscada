@@ -1,16 +1,15 @@
 # OpenSCADA.Protocol.SelfSystem translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:53+0200\n"
+"POT-Creation-Date: 2015-03-25 16:45+0200\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -31,15 +30,21 @@ msgid "Self OpenSCADA protocol, support generic functions."
 msgstr "Allgemeine Hauptfunktionen für das Systemprotokoll OpenSCADA."
 
 #, c-format
+msgid ""
+"Connections from the user '%s' and the source '%s' reached to limit %d. "
+"Erasing spare!"
+msgstr "Verbindung vom Benutzer '%s' und die Quelle '%s' erreichte auf %d begrenzen. Erasing Überschuss!"
+
+#, c-format
 msgid "SES_OPEN request: %d"
-msgstr ""
+msgstr "SES_OPEN Antrag: %d"
 
 msgid "Not full respond."
 msgstr "Partielles Ansprechen."
 
 #, c-format
 msgid "SES_OPEN response: %d"
-msgstr ""
+msgstr "SES_OPEN Antwort: %d"
 
 #, c-format
 msgid "Station '%s' error: %s!"
@@ -51,11 +56,11 @@ msgstr "Station '%s' Fehler: Antwort ist falsch!"
 
 #, c-format
 msgid "REQ send: %d"
-msgstr ""
+msgstr "REQ senden: %d"
 
 #, c-format
 msgid "REQ response first %d"
-msgstr ""
+msgstr "REQ Antwort zuerst %d"
 
 #, c-format
 msgid "Station respond '%s' error!"
@@ -63,11 +68,11 @@ msgstr "Station antwortet mit '%s' Fehler!"
 
 #, c-format
 msgid "REQ response full %d"
-msgstr ""
+msgstr "REQ Antwort voll %d"
 
 #, c-format
 msgid "Request error: %s"
-msgstr ""
+msgstr "Anforderungsfehler: %s"
 
 msgid "Parameters"
 msgstr "Optionen"
@@ -77,6 +82,9 @@ msgstr "Optionen des Moduls"
 
 msgid "Life time of auth session(min)"
 msgstr "Lebensdauer der Sitzung (min)"
+
+msgid "Single user and host connections limit"
+msgstr "Single-User und Host-Verbindungen Grenze"
 
 msgid "Compression level"
 msgstr "Kompressionsstufe"
@@ -98,9 +106,8 @@ msgstr "Untere Kompressionsgrenze"
 msgid "Value in bytes."
 msgstr "Wert in Bytes."
 
-#, fuzzy, c-format
 msgid "Get request: '%s': %d, time: %f ms."
-msgstr "Prozess Anfrage: '%s', Zeit: %f ms."
+msgstr "Holen Antrag: '%s': %d, Zeit: %f ms."
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
@@ -113,6 +120,3 @@ msgstr "Prozess Anfrage: '%s', Zeit: %f ms."
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
 msgstr "Sparen reagieren zu Strom und zu verpacken: '%s': %d, Zeit: %f ms."
-
-#~ msgid "Get request: '%s': %d"
-#~ msgstr "Get-Anfrage: '%s': %d"

@@ -1,3 +1,9 @@
+2015-03-25 Roman
+- TMess: Time mark added to messages for stdout and stderr, and the messages format mostly changed to "{tm}: {lev}[{cat}] {mess}".
+- Protocol.SelfSystem: SingleUserHostLimit property added for the limit control. Error message for SingleUserHostLimit reach is added.
+- FIX:Special.FLibSYS: codeConvOut() prevented at write raw string for empty encoding name.
+
+
 2015-03-23 Roman
 - {DAQ,Protocol}.OPC_UA: Array for simple types support added.
     Main integer changed from OpcUa_Int32 to OpcUa_Int64.
