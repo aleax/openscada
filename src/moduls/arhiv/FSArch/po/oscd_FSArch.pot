@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-15 17:20+0200\n"
+"POT-Creation-Date: 2015-03-28 09:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,7 +200,7 @@ msgid "Archive's file time size (hours)"
 msgstr ""
 
 msgid ""
-"The parameter is set automatically when you change the frequency values by archiver\n"
+"The parameter is set automatically when you change the values period by the archiver\n"
 "and generally proportional to the frequency values of the archiver.\n"
 "Attention! Large archive files will be processed long by long unpacking gzip-files\n"
 "and the primary indexing, when accessing to parts of deep in the archives of history."
@@ -215,7 +215,7 @@ msgstr ""
 msgid ""
 "Sets a limit on the maximum amount of disk space occupied by all archive files by archiver.\n"
 "Testing is done by periodicity checking the archives, which resulted in, on exceeding the limit,\n"
-"removes the oldest files of all archives. Completely remove this restriction can be set to zero."
+"removes the oldest files of all archives. Completely remove this restriction can be set to < 1."
 msgstr ""
 
 msgid "Numeric values rounding (%)"
@@ -262,10 +262,6 @@ msgstr ""
 
 #, c-format
 msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
-msgstr ""
-
-#, c-format
-msgid "Write data block to the archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"
 msgstr ""
 
 #, c-format

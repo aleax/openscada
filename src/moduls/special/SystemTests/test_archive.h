@@ -79,7 +79,7 @@ class TestArchive : public TFunction
 		for(int i_el = 0; i_el < buf_sz+2; i_el++) {
 		    ttm = wtm + i_el*per;
 		    int64_t val = o_arch.at().getVal(&ttm).getI();
-		    printf("TEST 00: %d: %d\n", i_el, val);
+		    printf("TEST 00: %d: %lld\n", i_el, val);
 		    if((i_el < buf_sz && i_el != 3 && val != pow(10,i_el)) ||
 			    (i_el == 3 && val != pow(10,2)) ||
 			    (i_el >= buf_sz && val != EVAL_INT))

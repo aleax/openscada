@@ -194,12 +194,12 @@ class ModVArch: public TVArchivator
 	int	packTm( )	{ return mPackTm; }
 	bool	packInfoFiles( ){ return mPackInfoFiles; }
 
-	void setFileTimeSize( double vl )	{ time_size = vl; modif(); }
-	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
-	void setMaxCapacity( double vl )	{ mMaxCapacity = vl; modif(); }
-	void setRoundProc( double vl )		{ round_proc = vl; modif(); }
-	void setCheckTm( int vl )		{ mChkTm = vl; modif(); }
-	void setPackTm( int vl )		{ mPackTm = vl; modif(); }
+	void setFileTimeSize( double vl )	{ time_size = vmax(100*valPeriod()/3600,vl); modif(); }
+	void setNumbFiles( unsigned vl )	{ mNumbFiles = vmax(0,vl); modif(); }
+	void setMaxCapacity( double vl )	{ mMaxCapacity = vmax(0,vl); modif(); }
+	void setRoundProc( double vl )		{ round_proc = vmax(0,vmin(50,vl)); modif(); }
+	void setCheckTm( int vl )		{ mChkTm = vmax(0,vl); modif(); }
+	void setPackTm( int vl )		{ mPackTm = vmax(0,vl); modif(); }
 	void setPackInfoFiles( bool vl )	{ mPackInfoFiles = vl; modif(); }
 
 	void start( );

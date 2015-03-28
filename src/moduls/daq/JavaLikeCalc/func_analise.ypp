@@ -2,7 +2,7 @@
 %{
 //OpenSCADA system module DAQ.JavaLikeCalc file: func_analise.ypp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -127,28 +127,32 @@ assign: assign ',' assign
 	    {
 		try {
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Add,$1,$3));
+		    p_fnc->cdBinaryOp(Reg::AddAss, $1, $3, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Add,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var SUBEQ expr
 	    {
 		try {
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Sub,$1,$3));
+		    p_fnc->cdBinaryOp(Reg::SubAss, $1, $3, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Sub,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var MULEQ expr
 	    {
 		try {
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Mul,$1,$3));
+		    p_fnc->cdBinaryOp(Reg::MulAss, $1, $3, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Mul,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var DIVEQ expr
 	    {
 		try {
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Div,$1,$3));
+		    p_fnc->cdBinaryOp(Reg::DivAss, $1, $3, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Div,$1,$3));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var INCREM
@@ -156,7 +160,8 @@ assign: assign ',' assign
 		try {
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Add,$1,reg));
+		    p_fnc->cdBinaryOp(Reg::AddAss, $1, reg, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Add,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var DECREM
@@ -164,7 +169,8 @@ assign: assign ',' assign
 		try {
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Sub,$1,reg));
+		    p_fnc->cdBinaryOp(Reg::SubAss, $1, reg, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Sub,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| /*empty*/
@@ -201,7 +207,8 @@ expr:	CONST	{ $$ = $1; }
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    $$ = p_fnc->cdMove(NULL, $1);
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Add,$1,reg));
+		    p_fnc->cdBinaryOp(Reg::AddAss, $1, reg, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Add,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var DECREM
@@ -210,7 +217,8 @@ expr:	CONST	{ $$ = $1; }
 		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    $$ = p_fnc->cdMove(NULL, $1);
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Sub,$1,reg));
+		    p_fnc->cdBinaryOp(Reg::SubAss, $1, reg, $1);
+		    //p_fnc->cdAssign($1, p_fnc->cdBinaryOp(Reg::Sub,$1,reg));
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| INCREM var
@@ -218,7 +226,8 @@ expr:	CONST	{ $$ = $1; }
 		try {
 		    if($2->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $2->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($2, p_fnc->cdBinaryOp(Reg::Add,$2,reg));
+		    p_fnc->cdBinaryOp(Reg::AddAss, $2, reg, $2);
+		    //p_fnc->cdAssign($2, p_fnc->cdBinaryOp(Reg::Add,$2,reg));
 		    $$ = $2;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -227,7 +236,8 @@ expr:	CONST	{ $$ = $1; }
 		try {
 		    if($2->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $2->name().c_str());
 		    Reg *reg = p_fnc->regTmpNew(); *reg = 1;
-		    p_fnc->cdAssign($2, p_fnc->cdBinaryOp(Reg::Sub,$2,reg));
+		    p_fnc->cdBinaryOp(Reg::SubAss, $2, reg, $2);
+		    //p_fnc->cdAssign($2, p_fnc->cdBinaryOp(Reg::Sub,$2,reg));
 		    $$ = $2;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
@@ -483,8 +493,7 @@ retry:
 	NConst *cnst_v;
 	if((cnst_v = mod->constGet(smb_nm.c_str())) != NULL) {
 	    yylval.reg = p_fnc->regTmpNew();
-	    switch(cnst_v->tp)
-	    {
+	    switch(cnst_v->tp) {
 		case TFld::Real:	*yylval.reg = TSYS::getUnalignDbl(cnst_v->val.data());	break;
 		case TFld::Integer:	*yylval.reg = (int64_t)TSYS::getUnalign64(cnst_v->val.data());	break;
 		case TFld::Boolean:	*yylval.reg = (char)cnst_v->val[0];	break;
@@ -555,7 +564,7 @@ retry:
 		yylval.reg->setPAttr(vl);
 		yylval.reg->setLock(true);
 		return VAR;
-	    }catch(...){ }
+	    } catch(...){ }
 
 	    // Check for object's parameters
 	    //string sel = TSYS::strSepParse(smb_nm,0,'.');

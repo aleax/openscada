@@ -1,3 +1,17 @@
+2015-03-28 Roman
+- DB: LibsDB.OscadaLibs.db: Elements of protocol "Temperature measurement IT-3 (IT3)" are added to the user protocols library.
+- FIX:DB: Model.Boiler.st.db: Links to element mnEls.Compressor on all mnemos fixed.
+    Achivator's 1s and 1m storage limit set from 0.0001 to 0 for disable and the files removing prevent.
+- !!:FIX:Archive:FSArch: To the specific parameters set limits for work range.
+    FIX: Processing for remove the files by limits fixed for prevent fresh-new archive file removing for two archive files.
+    FIX: Later cache dropping at values set fixed by removing call to owner().end() to after. Detected for new created files without early allowed
+	any current files, no realEnd yet set.
+    Some debug messages by OSC_DEBUG definition is added.
+    maxCapacity() disabling set for the value < 1.
+- !!!!:DAQ.JavaLikeCalc: Expanded by VM commands AddAss, SubAss, MulAss, DivAss for make optimal operations ++, --, +=, -=, *=, /=, with assigning.
+    Mostly for the operations to type "String" and spare memory realocation prevent here for any appends, cause significant performance rise here.
+
+
 2015-03-25 Roman
 - TMess: Time mark added to messages for stdout and stderr, and the messages format mostly changed to "{tm}: {lev}[{cat}] {mess}".
 - Protocol.SelfSystem: SingleUserHostLimit property added for the limit control. Error message for SingleUserHostLimit reach is added.
@@ -43,7 +57,7 @@
 
 
 2015-03-15 Roman
-- LibsDB.OscadaLibs.db: Tests for Archive.FSArch packing mechanism is added as servProc.archPackFStests.
+- DB: LibsDB.OscadaLibs.db: Tests for Archive.FSArch packing mechanism is added as servProc.archPackFStests.
 - !!:FIX:Archive: iend > arch_el[i_a]->begin() set to iend >= arch_el[i_a]->begin() for allow strong and single end value get.
     mLastGet processing fixed for inactive (without buffer) archives for only direct writing here.
 - !!:FIX.Archive.FSArch: repairFile() mostly fixed for the cache clean up after and no EVAL last value for actual archives checking appended.

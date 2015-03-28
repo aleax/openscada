@@ -97,10 +97,10 @@ class Reg
 	    Mov,	//[CRRrr]: Move from register to register.
 	    OPrpSt,	//[CRRn_____]: Load string of object's properties len <n>  to register <R>.
 	    OPrpDin,	//[CRRrr]: Load register's value of object's properties to register <R>.
-	    Add,	//[CRRrrRR]: Real, string add.
-	    Sub,	//[CRRrrRR]: Real subtract.
-	    Mul,	//[CRRrrRR]: Real multiply.
-	    Div,	//[CRRrrRR]: Real divide.
+	    Add, AddAss,//[CRRrrRR]: Real, string add.
+	    Sub, SubAss,//[CRRrrRR]: Real subtract.
+	    Mul, MulAss,//[CRRrrRR]: Real multiply.
+	    Div, DivAss,//[CRRrrRR]: Real divide.
 	    RstI,	//[CRRrrRR]: Integer divide rest.
 	    BitOr,	//[CRRrrRR]: Integer bit or.
 	    BitAnd,	//[CRRrrRR]: Integer bit and.
@@ -315,7 +315,7 @@ class Func : public TConfig, public TFunction
 	Reg *cdMviRegExp( int p_cnt );
 	void cdAssign( Reg *rez, Reg *op );
 	Reg *cdMove( Reg *rez, Reg *op, bool force = true );
-	Reg *cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 );
+	Reg *cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez = NULL );
 	Reg *cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end );
 	Reg *cdUnaryOp( Reg::Code cod, Reg *op );
 	Reg *cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn = NULL, Reg *els = NULL);

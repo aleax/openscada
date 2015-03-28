@@ -1128,6 +1128,12 @@ INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Tooling','1.000 is 100 % tooling (
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RateReq','Requested rate (A/S).',2,32,'',26,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','QlvlTrip','Quality threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',27,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SlvlTrip','Stability threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',28,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','transport','Transport',0,64,'IT3',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','addr','Device address',1,64,'1',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','H','Upper border',3,16,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','L','Lower border',3,16,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',9,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2732,6 +2738,15 @@ INSERT INTO "Trs" VALUES('KS error','','');
 INSERT INTO "Trs" VALUES('Request error.','','');
 INSERT INTO "Trs" VALUES('Device address out of range 0...2047','','');
 INSERT INTO "Trs" VALUES('Wrong or no a respond.','','');
+INSERT INTO "Trs" VALUES('Request','','');
+INSERT INTO "Trs" VALUES('No or short respond','','');
+INSERT INTO "Trs" VALUES('Header error','','');
+INSERT INTO "Trs" VALUES('Header CRC error','','');
+INSERT INTO "Trs" VALUES('Info block size error','','');
+INSERT INTO "Trs" VALUES('Info block CRC error.','','');
+INSERT INTO "Trs" VALUES('Request error','','');
+INSERT INTO "Trs" VALUES('Serial output transport ''%1'' error.','','');
+INSERT INTO "Trs" VALUES('Request: TRANSL_TEMP.','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -3801,6 +3816,31 @@ else {
 }
 
 f_err = t_err.length ? t_err : "0";','','',1425737232);
+INSERT INTO "tmplib_DevLib" VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start)	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+if(!tr)	t_err = "1:"+tr("Serial output transport ''%1'' error.").replace("%1",transport);
+
+req = SYS.XMLNode("mess").setAttr("ProtIt","IT3").setAttr("addr",addr);
+
+SYS.messDebug("/IT3/TMPL",tr("Request: TRANSL_TEMP."));
+req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0xC3));
+tr.messIO(req, "UserProtocol");
+if(!(t_err=req.attr("err")).length && req.text().charCodeAt(0) == 0x85) {
+	cntrB = req.text().charCodeAt(3);
+	T = (req.text().charCodeAt(2)<<8)+req.text().charCodeAt(1);
+	T = T/((cntrB&0x8)?100:10);
+	relSt = (cntrB&0x1);
+	L = (cntrB&0x2);
+	H = (cntrB&0x4);
+	//SYS.messDebug("/IT3/TMPL",tr("Request: TRANSL_TEMP: "+req.text().length));
+}
+else T = H = L = EVAL_STR;
+
+if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
+else f_err = "0";','','',1427533354);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -5603,6 +5643,54 @@ if(CRC != ((resp.charCodeAt(resp.length-2)<<8)+resp.charCodeAt(resp.length-1))) 
 
 //Return result
 io.setText(resp.slice(0,resp.length-2));','',1425737955);
+INSERT INTO "UserProtocol_uPrt" VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (1...32);
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 1 || addr > 32) { io.setAttr("err","1:"+tr("Device address out of range 1...32")); return; }
+//Header
+reqHdr = SYS.strFromCharCode(0x16,0x03,addr,0x00);
+for(KS = 0, i = 1; i < reqHdr.length; i++)	KS += reqHdr.charCodeAt(i);
+KS = ~(KS+1);
+reqHdr += SYS.strFromCharCode(KS, KS>>8);
+//Body
+reqBody = io.text();
+for(KS = 0, i = 0; i < reqBody.length; i++)	KS += reqBody.charCodeAt(i);
+KS = ~(KS+1);
+reqBody += SYS.strFromCharCode(KS, KS>>8);
+request = reqHdr+reqBody;
+SYS.messDebug("/IT3/PRT",tr("Request")+": "+SYS.strDecode(request,"Bin"," "));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length) {
+	if(!(tresp=tr.messIO("")).length) break;
+  	resp += tresp;
+}
+if(resp.length == 0) { io.setAttr("err","2:"+tr("No or short respond")); return; }
+SYS.messDebug("/IT3/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
+	if(resp.charCodeAt(blkOff) != 0x16){ io.setAttr("err","3:"+tr("Header error")); return; }
+	for(KS = 0, i = (blkOff+1); i < (blkOff+4); i++) KS += resp.charCodeAt(i);
+	KS = (~(KS+1))&0xFFFF;
+	if(((resp.charCodeAt(blkOff+5)<<8)+resp.charCodeAt(blkOff+4)) != KS)
+	{ io.setAttr("err","3:"+tr("Header CRC error")); return; }
+	blkLen = resp.charCodeAt(blkOff+1);
+	if(blkOff+6+blkLen > resp.length) { io.setAttr("err","4:"+tr("Info block size error")); return; }
+	for(KS = 0, i = (blkOff+6); i < (blkOff+6+blkLen-2); i++) KS += resp.charCodeAt(i);
+	KS = (~(KS+1))&0xFFFF;
+	if(((resp.charCodeAt(blkOff+6+blkLen-1)<<8)+resp.charCodeAt(blkOff+6+blkLen-2)) != KS)
+	{ io.setAttr("err","4:"+tr("Info block CRC error.")); return; }
+	if(resp.charCodeAt(blkOff+6) == 0x80 && resp.charCodeAt(blkOff+7))
+	{ io.setAttr("err","5:"+resp.charCodeAt(blkOff+7)+":"+tr("Request error")); return; }
+	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
+}','',1427532674);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalc','Перерахунок архівів','Пересчёт архивов','','','',600,1,'using Special.FLibSYS;
 

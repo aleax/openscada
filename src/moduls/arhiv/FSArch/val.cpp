@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -181,6 +181,9 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     if(vtp)	*vtp  = (TFld::Type)(head.vtp|(head.vtpExt<<4));
 
     if(unpck) {
+#ifdef OSC_DEBUG
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Remove file '%s' after the unpack.", a_fnm.c_str());
+#endif
 	remove(a_fnm.c_str());
 
 	if(!packInfoFiles()) {
@@ -267,7 +270,7 @@ void ModVArch::checkArchivator( bool now )
     // Scan files of attached archives
     ResAlloc res(archRes, false);
     for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
-	((ModVArchEl*)iel->second)->checkArchivator(now, maxCapacity() && (curCapacity()/1048576) > maxCapacity());
+	((ModVArchEl*)iel->second)->checkArchivator(now, (maxCapacity() > 1) && (curCapacity()/1048576) > maxCapacity());
 
     chkANow = false;
     if(isTm)	mLstCheck = time(NULL);
@@ -412,7 +415,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Archive's file time size (hours)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
-		_("The parameter is set automatically when you change the frequency values by archiver\n"
+		_("The parameter is set automatically when you change the values period by the archiver\n"
 		  "and generally proportional to the frequency values of the archiver.\n"
 		  "Attention! Large archive files will be processed long by long unpacking gzip-files\n"
 		  "and the primary indexing, when accessing to parts of deep in the archives of history."));
@@ -422,7 +425,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/add/maxCpct",_("Maximum capacity by all archives (MB)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
 		_("Sets a limit on the maximum amount of disk space occupied by all archive files by archiver.\n"
 		  "Testing is done by periodicity checking the archives, which resulted in, on exceeding the limit,\n"
-		  "removes the oldest files of all archives. Completely remove this restriction can be set to zero."));
+		  "removes the oldest files of all archives. Completely remove this restriction can be set to < 1."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Numeric values rounding (%)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
 		_("Sets the percentage of boundary difference values of parameters integer and real types\n"
 		  "where they are considered identical and will be archived as a single value\n"
@@ -591,12 +594,17 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
     ResAlloc res(mRes, true);
     //Check file count for delete old files
     if(now && !mod->noArchLimit && ((((ModVArch &)archivator()).numbFiles() && arh_f.size() > ((ModVArch &)archivator()).numbFiles()) || cpctLim))
-	for(unsigned i_arh = 1; i_arh < arh_f.size(); ) {
+	for(int i_arh = 0; i_arh < (int)arh_f.size()-1; ) {	//Up to last fresh
 	    if(!(arh_f.size() > ((ModVArch &)archivator()).numbFiles() || cpctLim))	break;
 	    else if(!arh_f[i_arh]->err()) {
 		string f_nm = arh_f[i_arh]->name();
 		delete arh_f[i_arh];
 		arh_f.erase(arh_f.begin() + i_arh);
+
+#ifdef OSC_DEBUG
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Remove file '%s' by limit.", f_nm.c_str());
+#endif
+
 		remove(f_nm.c_str());
 		remove((f_nm+".info").c_str());
 		if(cpctLim) break;
@@ -658,7 +666,7 @@ int64_t ModVArchEl::end( )
     return realEnd;
 }
 
-int64_t ModVArchEl::begin()
+int64_t ModVArchEl::begin( )
 {
     ResAlloc res(mRes,false);
     for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
@@ -1537,14 +1545,14 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     lseek(hd, foff_beg, SEEK_SET);
     fOK = fOK && (write(hd,val_b.data(),val_b.size()) == (int)val_b.size());
 
-    //Check for write to end correct
-    if(fOK && fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
-		((mSize-foff_end) == 0 && (int)val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
-	mess_debug(mod->nodePath().c_str(), _("Write data block to the archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"),name().c_str(),mSize,foff_end,vSize);
-
-    //Drop cache
+    //Drop cache, before any owner().end() call by the cache using
     cacheDrop(vpos_beg);
     cacheSet(vpos_end, foff_beg+val_b.size()-value_end.size(), value_end.size(), true, true);
+
+    //Check for write to end correct
+    /*if(fOK && fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
+		((mSize-foff_end) == 0 && (int)val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
+	mess_debug(mod->nodePath().c_str(), _("Write data block to the archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"),name().c_str(),mSize,foff_end,vSize);*/
 
     mSize = lseek(hd, 0, SEEK_END);
 
