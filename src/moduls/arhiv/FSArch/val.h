@@ -92,7 +92,7 @@ class VFileArch
 	void cacheSet( int pos, int off, int vsz, bool last = false, bool wr = false );
 	void cacheDrop( int pos );
 
-	int calcVlOff( int hd, int pos, int *vsz = NULL, bool wr = false );
+	int calcVlOff( int hd, int vpos, int *vsz = NULL, bool wr = false, int *rvpos = NULL );
 	string getValue( int hd, int ioff, int vsz );
 	void setValue( int hd, int ioff, const string &ival );
 	void moveTail( int hd, int old_st, int new_st );

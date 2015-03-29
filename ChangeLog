@@ -1,3 +1,12 @@
+2015-03-29 Roman
+- DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were apended by checking and init the device code.
+- !!!!:FIX:Archive:FSArch: Strings archiving final fixed after last the string archiving fix into last value.
+    Repair values file's procedure fixed for fix value types and appended at last by not fixed type (like string) repairing code.
+    For all the archiving types executed values placing tests (0...8) and the files errors immitations tests (1...3).
+    All the tests passed.
+- FIX:UI.QTCfg: Crashes at some wrong reply after the network negotiations fixed.
+
+
 2015-03-28 Roman
 - DB: LibsDB.OscadaLibs.db: Elements of protocol "Temperature measurement IT-3 (IT3)" are added to the user protocols library.
 - FIX:DB: Model.Boiler.st.db: Links to element mnEls.Compressor on all mnemos fixed.

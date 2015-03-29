@@ -659,8 +659,7 @@ void ConfApp::itDel( const string &iit )
     }
 
     bool toTreeUpdate = false;
-    for(int roff = 0; (rmit=TSYS::strSepParse(rmits,0,'\n',&roff)).size(); )
-    {
+    for(int roff = 0; (rmit=TSYS::strSepParse(rmits,0,'\n',&roff)).size(); ) {
 	string t_el, sel_own, sel_el;
 	int n_obj = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(rmit,0,true,&off)).empty(); n_obj++)
@@ -721,8 +720,7 @@ void ConfApp::itPaste( )
     bool isCut = (copy_buf[0] == '1');
     bool isMult = !TSYS::strParse(copy_buf,1,"\n").empty();
 
-    for(int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); )
-    {
+    for(int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); ) {
 	rootW = root;
 	to_path = sel_path;
 
@@ -1930,7 +1928,8 @@ void ConfApp::pageDisplay( const string &path )
 	// Request new page tree
 	XMLNode n_node("info");
 	n_node.setAttr("path",path);
-	if(cntrIfCmd(n_node)) { throw TError(s2i(n_node.attr("rez")),n_node.attr("mcat").c_str(),"%s",n_node.text().c_str()); }
+	if(cntrIfCmd(n_node) || !n_node.childGet(0,true))
+	    throw TError(s2i(n_node.attr("rez")),n_node.attr("mcat").c_str(),"%s",n_node.text().c_str());
 	sel_path = path;
 	pg_info = n_node;
 	root = pg_info.childGet(0);

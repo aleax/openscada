@@ -3837,7 +3837,13 @@ if(!(t_err=req.attr("err")).length && req.text().charCodeAt(0) == 0x85) {
 	H = (cntrB&0x4);
 	//SYS.messDebug("/IT3/TMPL",tr("Request: TRANSL_TEMP: "+req.text().length));
 }
-else T = H = L = EVAL_STR;
+else {
+	T = H = L = EVAL_STR;
+	if(t_err.parse(1,":").toInt() == 8) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x00));
+		tr.messIO(req, "UserProtocol");
+	}
+}
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
 else f_err = "0";','','',1427533354);
