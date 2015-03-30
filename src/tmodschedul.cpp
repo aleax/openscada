@@ -221,9 +221,9 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    }
 
 	    //Get allow modules from library and start it
-	    int n_mod=0, add_mod=0;
+	    int n_mod = 0, add_mod = 0;
 	    TModule::SAt AtMod;
-	    while((AtMod = (module)(n_mod++)).id.size()) {
+	    while((AtMod=(module)(n_mod++)).id.size()) {
 		vector<string> list;
 		owner().list(list);
 		for(unsigned i_sub = 0; i_sub < list.size(); i_sub++) {
@@ -239,7 +239,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 			    mess_warning(nodePath().c_str(),_("Module '%s' is already present!"),AtMod.id.c_str());
 			else {
 			    // Attach new module
-			    TModule *LdMod = (attach)( AtMod, iname );
+			    TModule *LdMod = (attach)(AtMod, iname);
 			    if(LdMod == NULL) {
 				mess_warning(nodePath().c_str(),_("Attach module '%s' error!"),AtMod.id.c_str());
 				break;

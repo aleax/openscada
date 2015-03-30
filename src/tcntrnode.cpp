@@ -473,7 +473,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 	for(p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); p++)
 	    if(p->second->mOi >= pos) p->second->mOi++;
     }
-    (*chGrp)[igr].elem.insert(std::pair<const char *,TCntrNode*>(node->nodeName(),node));
+    (*chGrp)[igr].elem.insert(std::pair<const char*,TCntrNode*>(node->nodeName(),node));
     res.unlock();
 
     if(node->nodeMode() == Disabled) node->nodeEn(TCntrNode::NodeConnect);

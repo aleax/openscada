@@ -1,6 +1,6 @@
 SUBDIRS = src src_call
 
-EXTRA_DIST = I18N.mk openscada.pc.in *.spec README* TODO* debian/*
+EXTRA_DIST = I18N.mk openscada.pc.in README* TODO*
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = openscada.pc

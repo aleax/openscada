@@ -1,3 +1,9 @@
+2015-03-30 Roman
+- SYS: *.spec files and directory "debian" moved to directory "data".
+    File data/openscada_mod_RH.spec is added for modules separated packages build for RH-based, from Aleksey Popkov.
+    File data/openscada.ebuild is added for build to Gentoo from, Constantine (IrmIngeneer).
+
+
 2015-03-29 Roman
 - DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were apended by checking and init the device code.
 - !!!!:FIX:Archive:FSArch: Strings archiving final fixed after last the string archiving fix into last value.
