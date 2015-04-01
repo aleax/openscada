@@ -41,7 +41,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"0.5.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
+#define DESCRIPTION	_("Provides access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
 #define LICENSE		"GPL2"
 //*************************************************
 

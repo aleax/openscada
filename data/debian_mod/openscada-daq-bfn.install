@@ -1,0 +1,3 @@
+debian/tmp/usr/lib/openscada/daq_BFN.so
+debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_BFN.mo
+debian/tmp/usr/share/openscada/BFN/*.db

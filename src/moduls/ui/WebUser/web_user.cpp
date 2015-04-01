@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow creation self-user web-interfaces on any OpenSCADA language.")
+#define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -348,7 +348,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	funcV.setO(7,new TVarObj());
 	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
 	    funcV.getO(7).at().propSet(prmEl->first,prmEl->second);
-	funcV.setO(8,new TArrayObj());
+	funcV.setO(8, new TArrayObj());
 	for(unsigned ic = 0; ic < ses.cnt.size(); ic++) {
 	    XMLNodeObj *xo = new XMLNodeObj();
 	    xo->fromXMLNode(ses.cnt[ic]);

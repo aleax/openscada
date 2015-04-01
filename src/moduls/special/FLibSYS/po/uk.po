@@ -1,14 +1,13 @@
 # OpenSCADA.Special.FLibSYS translate to Ukrainian.
-# Copyright (C) 2005-2014 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:54+0200\n"
+"POT-Creation-Date: 2015-04-01 20:13+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -29,7 +28,7 @@ msgstr "Функції системного API"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow system API functions library of the user programming area."
+msgid "Provides the library of system API functions of user programming area."
 msgstr ""
 "Надає в систему бібліотеку системного API середовища програмування "
 "користувача."

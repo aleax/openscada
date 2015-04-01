@@ -1,0 +1,2 @@
+debian/tmp/usr/lib/openscada/daq_OPC_UA.so
+debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_OPC_UA.mo

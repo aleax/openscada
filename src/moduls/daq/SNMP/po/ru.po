@@ -1,14 +1,13 @@
 # OpenSCADA.DAQ.SNMP translate to Russian.
-# Copyright (C) 2006-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SNMP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:51+0200\n"
+"POT-Creation-Date: 2015-04-01 17:46+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,7 +21,7 @@ msgstr "SNMP клиент"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow realization of SNMP client service."
+msgid "Provides an implementation of the client of SNMP-service."
 msgstr "Предоставляет реализацию клиентского сервиса протокола SNMP."
 
 msgid "Parameteres table"

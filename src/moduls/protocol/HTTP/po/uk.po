@@ -1,14 +1,13 @@
 # OpenSCADA.Protocol.HTTP translate to Ukrainian.
-# Copyright (C) 2003-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:52+0200\n"
+"POT-Creation-Date: 2015-04-01 18:09+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -22,7 +21,7 @@ msgstr "HTTP-реалізація"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow support HTTP for WWW based UIs."
+msgid "Provides support for the HTTP protocol for WWW-based user interfaces."
 msgstr "Надає підтримку HTTP для WWW базованих користувацьких інтерфейсів."
 
 #, c-format
@@ -172,6 +171,3 @@ msgstr "Прийняти"
 
 msgid "Clean"
 msgstr "Очистити"
-
-#~ msgid "Module help"
-#~ msgstr "Допомога по модулю"

@@ -1,15 +1,14 @@
 # OpenSCADA.Transport.SSL translate to German.
-# Copyright (C) 2009-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:54+0200\n"
+"POT-Creation-Date: 2015-04-01 20:25+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -24,11 +23,11 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow security socket layer based transport. Used OpenSSL and supported "
-"SSLv2, SSLv3 and TLSv1."
+"Provides transport based on the secure sockets' layer. OpenSSL is used and "
+"SSLv2, SSLv3 and TLSv1 are supported."
 msgstr ""
-"Gewährt den auf der Schicht von sicheren Sockets begründeten Transport. Es "
-"werden benutzt OpenSSL und unterstützt SSLv2, SSLv3 und TLSv1."
+"Gewährt den auf der Schicht von sicheren Sockets begründeten Transport. "
+"Es werden benutzt OpenSSL und unterstützt SSLv2, SSLv3 und TLSv1."
 
 msgid "Addition parameters"
 msgstr "Weitere Optionen"

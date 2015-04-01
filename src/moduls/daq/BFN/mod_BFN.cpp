@@ -38,7 +38,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"0.5.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BFN modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
+#define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
 //*************************************************
 

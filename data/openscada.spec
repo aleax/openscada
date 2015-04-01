@@ -1,8 +1,8 @@
 #===== Generic Info ======
-Summary: Open SCADA system.
-Summary(ru_RU.UTF8): Открытая SCADA система.
-Summary(uk_UA.UTF8): Відкрита SCADA система.
-Summary(de_DE.UTF8): Open SCADA-System.
+Summary: Open SCADA system
+Summary(ru_RU.UTF8): Открытая SCADA система
+Summary(uk_UA.UTF8): Відкрита SCADA система
+Summary(de_DE.UTF8): Open SCADA-System
 Name: openscada
 Version: 0.9
 Release: r2150
@@ -46,10 +46,10 @@ Das offene SCADA System. Fuer den Zugang die Aufzeichnung "root" und das Kennwor
 /sbin/chkconfig --del oscadad
 
 %package docEN
-Summary: Open SCADA documents (EN).
-Summary(ru_RU.UTF8): Документация открытой SCADA (EN).
-Summary(uk_UA.UTF8): Документація відкритої SCADA (EN).
-Summary(de_DE.UTF8): Open SCADA Dokumente (EN).
+Summary: Open SCADA documents (EN)
+Summary(ru_RU.UTF8): Документация открытой SCADA (EN)
+Summary(uk_UA.UTF8): Документація відкритої SCADA (EN)
+Summary(de_DE.UTF8): Open SCADA Dokumente (EN)
 Group: Documentation
 BuildArch: noarch
 %description docEN
@@ -62,10 +62,10 @@ The %name-docEN package include documents files (English).
 Das Paket %name-docEN enthaelt Dokumentationsdateien (Englisch).
 
 %package docRU
-Summary: Open SCADA documents (RU).
-Summary(ru_RU.UTF8): Документация открытой SCADA (RU).
-Summary(uk_UA.UTF8): Документація відкритої SCADA (RU).
-Summary(de_DE.UTF8): Open SCADA Dokumente (RU).
+Summary: Open SCADA documents (RU)
+Summary(ru_RU.UTF8): Документация открытой SCADA (RU)
+Summary(uk_UA.UTF8): Документація відкритої SCADA (RU)
+Summary(de_DE.UTF8): Open SCADA Dokumente (RU)
 Group: Documentation
 BuildArch: noarch
 %description docRU
@@ -78,10 +78,10 @@ The %name-docRU package include documents files (Russian).
 Das Paket %name-docRU enthaelt Dokumentationsdateien (Russisch).
 
 %package docUK
-Summary: Open SCADA documents (UK).
-Summary(ru_RU.UTF8): Документация открытой SCADA (UK).
-Summary(uk_UA.UTF8): Документація відкритої SCADA (UK).
-Summary(de_DE.UTF8): Open SCADA Dokumente (UK).
+Summary: Open SCADA documents (UK)
+Summary(ru_RU.UTF8): Документация открытой SCADA (UK)
+Summary(uk_UA.UTF8): Документація відкритої SCADA (UK)
+Summary(de_DE.UTF8): Open SCADA Dokumente (UK)
 Group: Documentation
 BuildArch: noarch
 %description docUK
@@ -94,10 +94,10 @@ The %name-docUK package include documents files (Ukraine).
 Das Paket %name-docUK enthaelt Dokumentationsdateien (Ukrainisch).
 
 %package devel
-Summary: Open SCADA development.
-Summary(ru_RU.UTF8): Разработка открытой SCADA.
-Summary(uk_UA.UTF8): Розробка відкритої SCADA.
-Summary(de_DE.UTF8): Open SCADA Entwicklung.
+Summary: Open SCADA development
+Summary(ru_RU.UTF8): Разработка открытой SCADA
+Summary(uk_UA.UTF8): Розробка відкритої SCADA
+Summary(de_DE.UTF8): Open SCADA Entwicklung
 Group: Development/C++
 Requires: %name = %version-%release
 %description devel
@@ -110,10 +110,10 @@ The %name-devel package includes library archives and include files.
 Das Paket %name-devel enthaelt die Bibliotheken und Archive Include-Dateien.
 
 %package LibDB.Main
-Summary: Main OpenSCADA libraries for DAQ and other into SQLite DB.
-Summary(ru_RU.UTF8): Основные библиотеки OpenSCADA для сбора данных и другого в БД SQLite.
-Summary(uk_UA.UTF8): Основні бібліотеки OpenSCADA для збору даних та іншого у БД SQLite.
-Summary(de_DE.UTF8): Hauptbibliothek OpenSCADA für die Datenerhebung und die anderen in der Datenbank SQLite.
+Summary: Main OpenSCADA libraries for DAQ and other into SQLite DB
+Summary(ru_RU.UTF8): Основные библиотеки OpenSCADA для сбора данных и другого в БД SQLite
+Summary(uk_UA.UTF8): Основні бібліотеки OpenSCADA для збору даних та іншого у БД SQLite
+Summary(de_DE.UTF8): Hauptbibliothek OpenSCADA für die Datenerhebung und die anderen in der Datenbank SQLite
 Group: Graphics
 BuildArch: noarch
 Requires: %name
@@ -131,10 +131,10 @@ Das Paket %{name}-LibDB.Main enthaelt die Hauptbibliothek OpenSCADA die Datenban
 So verwenden, verbinden Sie die Datei Datenbank SQLite LibsDB/OscadaLibs.db.
 
 %package LibDB.VCA
-Summary: Visual components libraries into SQLite DB.
-Summary(ru_RU.UTF8): Библиотеки визуальных компонетов в БД SQLite.
-Summary(uk_UA.UTF8): Бібліотеки візуальних компонентів у БД SQLite.
-Summary(de_DE.UTF8): Visuelle Komponente in einer Bibliothek Datenbank SQLite.
+Summary: Visual components libraries into SQLite DB
+Summary(ru_RU.UTF8): Библиотеки визуальных компонетов в БД SQLite
+Summary(uk_UA.UTF8): Бібліотеки візуальних компонентів у БД SQLite
+Summary(de_DE.UTF8): Visuelle Komponente in einer Bibliothek Datenbank SQLite
 Group: Graphics
 BuildArch: noarch
 Requires: %name
@@ -152,10 +152,10 @@ Das Paket %{name}-LibDB.VCA enthaelt Visuelle Komponente in einer Bibliothek Dat
 So verwenden, verbinden Sie die Datei Datenbank SQLite LibsDB/vcaBase.db und LibsDB/vcaTest.db.
 
 %package Model.AGLKS
-Summary: Model "AGLKS" data bases and config (Demo: EN,RU,UK).
-Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" (Демо: EN,RU,UK).
-Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,RU,UK).
-Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,RU,UK).
+Summary: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
+Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" (Демо: EN,RU,UK)
+Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,RU,UK)
+Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,RU,UK)
 Group: Graphics
 BuildArch: noarch
 Requires: %name %name-LibDB.Main %name-LibDB.VCA
@@ -181,10 +181,10 @@ Fuers Starten wird Kommando <openscada_AGLKS> benutzt.
 Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package Model.Boiler
-Summary: Model "Boiler" data bases and config (EN,RU,UK).
-Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (EN,RU,UK).
-Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,RU,UK).
-Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,RU,UK).
+Summary: Model "Boiler" data bases and config (EN,RU,UK)
+Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" (EN,RU,UK)
+Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,RU,UK)
+Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,RU,UK)
 Group: Graphics
 BuildArch: noarch
 Requires: %name %name-LibDB.Main %name-LibDB.VCA

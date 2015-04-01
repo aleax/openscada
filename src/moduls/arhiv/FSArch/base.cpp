@@ -37,7 +37,7 @@
 #define VER_TYPE	SARH_VER
 #define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("The Archive module. Allow functions for messages and values archiving to file system.")
+#define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
 #define LICENSE		"GPL2"
 //*************************************************
 

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.ICP_DAS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2009-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2009-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-16 20:50+0300\n"
+"POT-Creation-Date: 2015-04-01 21:45+0200\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -212,8 +212,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow implementation for 'ICP DAS' hardware support. Include main I-87xxx "
-"DCON modules, I-8xxx fast modules and boards on ISA bus."
+"Provides implementation for 'ICP DAS' hardware support. Includes main "
+"I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus."
 msgstr ""
 "Надає реалізацію підтримки обладнання 'ICP DAS'. Включає підтримку основних "
 "I-87xxx DCON модулів, I-8xxx швидких модулів та плат на шині ISA."

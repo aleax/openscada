@@ -49,7 +49,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"0.7.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow realization of SNMP client service.")
+#define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
 //*************************************************
 

@@ -1,0 +1,4 @@
+debian/tmp/usr/lib/openscada/ui_QTStarter.so
+debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_QTStarter.mo
+debian/tmp/usr/share/applications/openscada.desktop
+debian/tmp/usr/share/icons/openscada.png

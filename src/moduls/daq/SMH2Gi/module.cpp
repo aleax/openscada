@@ -1271,36 +1271,32 @@ DevMRCFeature::DevMRCFeature( const string &iniFile ) : HardID(0)
 
 bool DevMRCFeature::load( const string &iniFile )
 {
-    //> Clear all
+    //Clear all
     HardID = 0;
     name = descr = "";
     sects.clear();
     vars.clear();
 
-    //> Parse file
+    //Parse file
     char buf[STR_BUF_LEN];
     TRegExp re("^\\s*\\[([^\\]]+)|^\\s*([^\\s;]+)\\s*=\\s*([^\\r\\n]+)"  /* "\\[([^\\]]+)\\]|(\\S+)\\s*=\\s*([^\n\r]+)" */);
     FILE *fp = fopen(iniFile.c_str(),"r");
     if(fp == NULL) return false;
     string iniGroup, iniGroupLC, propNm, propVal;
     map<string, SVal>::iterator cVar;
-    while(fgets(buf,sizeof(buf),fp) != NULL)
-    {
+    while(fgets(buf,sizeof(buf),fp) != NULL) {
 	TArrayObj *reRez = re.match(string(buf,sizeof(buf)));
-	//> Group change
-	if(reRez->size() == 2)
-	{
-	    iniGroup = reRez->propGet("1").getS();
+	//Group change
+	if(reRez->size() == 2) {
+	    iniGroup = reRez->arGet(1).getS();
 	    iniGroupLC.resize(iniGroup.length());
 	    std::transform(iniGroup.begin(), iniGroup.end(), iniGroupLC.begin(), ::tolower);
 	}
-	//> Property process
-	else if(reRez->size() == 4 && iniGroup.size())
-	{
-	    propNm = reRez->propGet("2").getS(); propVal = Mess->codeConvIn("cp1251",reRez->propGet("3").getS());
+	//Property process
+	else if(reRez->size() == 4 && iniGroup.size()) {
+	    propNm = reRez->arGet(2).getS(); propVal = Mess->codeConvIn("cp1251",reRez->arGet(3).getS());
 	    sects[iniGroup][propNm] = propVal;
-	    if(iniGroupLC == "common")
-	    {
+	    if(iniGroupLC == "common") {
 		if(propNm == "name") 		name = propVal;
 		else if(propNm == "descr")	descr = propVal;
 		else if(propNm == "ID")		HardID = atoi(propVal.c_str());
@@ -1310,13 +1306,11 @@ bool DevMRCFeature::load( const string &iniFile )
 		    vars[propVal] = SVal();
 		}
 	    }
-	    //>> Variables parsing
-	    else if((cVar=vars.find(iniGroupLC)) != vars.end())
-	    {
+	    // Variables parsing
+	    else if((cVar=vars.find(iniGroupLC)) != vars.end()) {
 		if(propNm == "descr" /*|| propNm == "dop_descr"*/)	cVar->second.descr = propVal;
 		else if(propNm == "addr") cVar->second.addr = atoi(propVal.c_str());
-		else if(propNm == "type")
-		{
+		else if(propNm == "type") {
 		    cVar->second.tp = TFld::Integer;
 		    if(propVal == "real")	cVar->second.tp = TFld::Real;
 		    else if(propVal == "bool")	cVar->second.tp = TFld::Boolean;

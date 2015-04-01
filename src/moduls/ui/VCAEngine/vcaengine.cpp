@@ -37,7 +37,7 @@
 #define MOD_SUBTYPE	"VCAEngine"
 #define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Generic visual control area engine.")
+#define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
 //*************************************************
 

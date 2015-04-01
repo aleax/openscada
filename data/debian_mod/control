@@ -1,0 +1,414 @@
+Source: openscada
+Section: graphics
+Priority: optional
+Maintainer: Roman Savochenko <rom_as@oscada.org>
+Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg-config, gettext, libgd2-xpm-dev | libgd2-noxpm-dev, libpcre3-dev,
+ libmysqlclient-dev, libsqlite3-dev, firebird2.5-dev, libpq-dev,
+ libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libcomedi-dev,
+ libssl-dev,
+ libfftw3-dev, libqt4-dev, libphonon-dev, libqtwebkit-dev
+Standards-Version: 3.7.3
+Homepage: <http://oscada.org>
+
+Package: openscada
+Architecture: all
+Depends: openscada-db-sqlite, openscada-db-mysql,
+ openscada-daq-blockcalc, openscada-daq-daqgate, openscada-daq-dcon, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-modbus,
+ openscada-daq-opcua, openscada-daq-snmp, openscada-daq-siemens, openscada-daq-soundcard, openscada-daq-system,
+ openscada-arh-dbarch, openscada-arh-fsarch,
+ openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-selfsystem, openscada-prot-http, openscada-prot-userprotocol,
+ openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vcaengine, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd, openscada-ui-webuser,
+ openscada-spec-flibcomplex1, openscada-spec-flibsys, openscada-spec-flibmath
+Description: Open SCADA system
+ Open SCADA system. Typical installation.
+
+Package: openscada-core
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Open SCADA system core
+ Open SCADA system core. For access use default account "root" and password "openscada".
+
+Package: openscada-dbg
+Section: libdevel
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Debug symbols for OpenSCADA
+ Debug symbols to provide extra debug info in case of crash.
+
+Package: openscada-doc-en
+Section: doc
+Architecture: all
+Description: OpenSCADA documents (EN)
+ The openscada-doc-en package include documents files (English).
+
+Package: openscada-doc-ru
+Section: doc
+Architecture: all
+Description: OpenSCADA documents (RU)
+ The openscada-doc-ru package include documents files (Russian).
+
+Package: openscada-doc-uk
+Section: doc
+Architecture: all
+Description: OpenSCADA documents (UK)
+ The openscada-doc-uk package include documents files (Ukraine).
+
+Package: openscada-dev
+Section: devel
+Architecture: any
+Depends: openscada-core (= ${binary:Version})
+Description: OpenSCADA development
+ The openscada-dev package includes library archives and include files.
+
+Package: openscada-libdb-main
+Architecture: all
+Depends: openscada-core, openscada-db-sqlite, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-spec-flibcomplex1, openscada-spec-flibsys
+Description: Main OpenSCADA libraries for DAQ and other into SQLite DB
+ The openscada-libdb-main package includes main OpenSCADA libraries into SQLite DB.
+ For use connect SQLite DB file LibsDB/OscadaLibs.db.
+
+Package: openscada-libdb-vca
+Architecture: all
+Depends: openscada-core, openscada-db-sqlite, openscada-daq-javalikecalc, openscada-spec-flibsys, openscada-ui-VCAEngine
+Description: Visual components libraries into SQLite DB
+ The openscada-libdb-vca package includes visual components libraries into SQLite DB.
+ For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
+
+Package: openscada-model-aglks
+Architecture: all
+Depends: openscada-core, openscada-libdb-main, openscada-libdb-vca,
+ openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-http, openscada-prot-selfsystem, openscada-prot-userprotocol,
+ openscada-daq-blockcalc, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
+ openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd,
+ openscada-spec-flibmath
+Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
+ The openscada-model-aglks package includes model "AGLKS" data bases and config.
+ The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
+ For start use command <openscada_demo> or <openscada_AGLKS>.
+ For access use account "root" and password "openscada" or account "user" and password "user".
+
+Package: openscada-model-boiler
+Architecture: all
+Depends: openscada-core, openscada-libdb-main, openscada-libdb-vca,
+ openscada-daq-blockbalc, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
+ openscada-daq-blockcalc, openscada-daq-system, openscada-arh-fsarch,
+ openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd,
+ openscada-spec-flibmath
+Description: Model "Boiler" data bases and config (EN,RU,UK)
+ The openscada-model-boiler package model "Boiler" data bases and config.
+ The Model is allowed for English, Russian and Ukrainian languages.
+ For start use command <openscada_Boiler>.
+ For access use account "root" and password "openscada" or account "user" and password "user".
+
+Package: openscada-plc
+Architecture: all
+Depends: openscada-db-sqlite,
+ openscada-daq-javalikecalc, openscada-daq-blockcalc, openscada-daq-logiclev, openscada-daq-modbus, openscada-daq-system, openscada-daq-dcon, openscada-arh-fsarch,
+ openscada-tr-serial, openscada-tr-sockets, openscada-tr-ssl, openscada-prot-http, openscada-prot-selfsystem, openscada-prot-userprotocol, 
+ openscada-ui-vcaengine, openscada-ui-webcfgd, openscada-ui-webvision,
+ openscada-spec-flibcomplex1, openscada-spec-flibmath, openscada-spec-flibsys
+Description: OpenSCADA - PLC virtual package
+ The openscada-plc is virtual package for PLC.
+
+Package: openscada-server
+Architecture: all
+Depends: openscada-db-sqlite, openscada-db-mysql, openscada-db-firebird, openscada-db-postgresql,
+ openscada-daq-system, openscada-daq-blockcalc, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-snmp, openscada-daq-siemens,
+ openscada-daq-modbus, openscada-daq-dcon, openscada-daq-daqgate, openscada-daq-soundcard,
+ openscada-arh-fsarch, openscada-arh-dbarch,
+ openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-http, openscada-prot-selfsystem,
+ openscada-ui-vcaengine, openscada-ui-webcfg, openscada-ui-webcfgd, openscada-ui-webvision,
+ openscada-spec-flibcomplex1, openscada-spec-flibmath, openscada-spec-flibsys
+Description: OpenSCADA - server virtual package
+ The openscada-server is virtual package for SCADA-server.
+
+Package: openscada-vis-station
+Architecture: all
+Depends: openscada-db-sqlite, openscada-db-mysql,
+ openscada-daq-system, openscada-daq-blockcalc, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-snmp, openscada-daq-siemens,
+ openscada-daq-modbus, openscada-daq-dcon, openscada-daq-daqgate, openscada-daq-soundcard,
+ openscada-arh-fsarch, openscada-arh-dbarch,
+ openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-selfsystem,
+ openscada-ui-vcaengine, openscada-ui-vision, openscada-ui-qtstarter, openscada-ui-qtcfg,
+ openscada-spec-flibcomplex1, openscada-spec-flibmath, openscada-spec-flibsys
+Description: OpenSCADA - visual station virtual package
+ The openscada-vis-station is virtual package for visual station (SCADA).
+
+#===== DB subsystem modules ======
+Package: openscada-db-dbf
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: DB DBF support
+ The openscada-db-dbf package - provides support of the *.dbf files, version 3.0.
+
+Package: openscada-db-sqlite
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: DB SQLite support
+ The openscada-db-sqlite package - provides support of the BD SQLite.
+
+Package: openscada-db-mysql
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: DB MySQL support
+ The openscada-db-mysql package - provides support of the BD MySQL.
+
+Package: openscada-db-firebird
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: DB FireBird support
+ The openscada-db-firebird package - provides support of the DB FireBird.
+
+Package: openscada-db-postgresql
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: DB PostgreSQL support
+ The openscada-db-postgresql package - provides support of the DB PostgreSQL.
+
+#===== DAQ subsystem modules =====
+Package: openscada-daq-javalikecalc
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Java-like based calculator
+ The openscada-daq-javalikecalc package - provides based on java like language calculator
+ and engine of libraries. The user can create and modify functions and libraries.
+
+Package: openscada-daq-logiclev
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Logic level
+ The openscada-daq-logiclev package - provides the logical level of parameters.
+
+Package: openscada-daq-blockcalc
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Block based calculator
+ The openscada-daq-blockcalc package - provides block based calculator.
+
+Package: openscada-daq-daqgate
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Data sources gate
+ The openscada-daq-daqgate package - allows you to perform the locking of the data sources
+ of the remote OpenSCADA stations in the local ones.
+
+Package: openscada-daq-system
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: System DA
+ The openscada-daq-system package - provides data acquisition from the OS.
+ Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.
+
+Package: openscada-daq-soundcard
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Sound card
+ The openscada-daq-soundcard package - provides access to sound card data.
+
+Package: openscada-daq-modbus
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: ModBus protocol and DAQ
+ The openscada-daq-modbus package - provides realisation of ModBus client service.
+ Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.
+
+Package: openscada-daq-dcon
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: DCON client
+ The openscada-daq-dcon package - provides an implementation of DCON-client protocol.
+ Supports I-7000 DCON protocol.
+
+Package: openscada-daq-snmp
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: SNMP client
+ The openscada-daq-snmp package - provides an implementation of the client of SNMP-service.
+
+Package: openscada-daq-opcua
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: OPC UA protocol and DAQ
+ The openscada-daq-opcua package - provides realisation of OPC UA protocol.
+
+Package: openscada-daq-mms
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: MMS(IEC-9506)
+ The openscada-daq-mms package - provides MMS(IEC-9506) client implementation.
+
+Package: openscada-daq-diamondboards
+Architecture: i386
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Diamond DA boards
+ The openscada-daq-diamondboards package - provides an access to "Diamond Systems" DAQ boards.
+ Includes main support for all generic boards.
+
+Package: openscada-daq-comedi
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: DAQ boards by Comedi
+ The openscada-daq-comedi package - provides ISA, PCI, PCMCIA, USB DAQ boards collection
+ by Comedi(http://www.comedi.org).
+
+Package: openscada-daq-siemens
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Siemens DAQ
+ The openscada-daq-siemens package - provides a data source PLC Siemens by means of Hilscher CIF cards,
+ by using the MPI protocol, and Libnodave library for the rest.
+
+Package: openscada-daq-icpdas
+Architecture: i386 arm
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: ICP DAS hardware
+ The openscada-daq-icpdas - provides implementation for "ICP DAS" hardware support.
+ Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.
+
+Package: openscada-daq-amrdevs
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: AMR devices
+ The openscada-daq-amrdevs package - provides access to automatic meter reading devices.
+ Supported devices: Kontar (http://www.mzta.ru).
+
+Package: openscada-daq-bfn
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Big Farm Net
+ The openscada-daq-bfn package - provides Big Farm Net (BFN) modules support for
+ Viper CT/BAS and other from "Big Dutchman" (http://www.bigdutchman.com).
+
+#===== Archiver subsystem modules =====
+Package: openscada-arh-fsarch
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: To file system archiver
+ The openscada-arh-fsarch package - provides functions for messages and values archiving to file system.
+
+Package: openscada-arh-dbarch
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: To DB archiver
+ The openscada-arh-dbarch package - provides functions for messages and values archiving to DB.
+
+#===== Transport subsystem modules =====
+Package: openscada-tr-sockets
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Transport: Sockets
+ The openscada-tr-sockets package - provides sockets based transport.
+ Supports inet and unix sockets. Inet socket uses TCP and UDP protocols.
+
+Package: openscada-tr-serial
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Transport: Serial interfaces
+ The openscada-tr-serial package - provides a serial interface.
+ It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.
+
+Package: openscada-tr-ssl
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Transport: SSL
+ The openscada-tr-ssl package - provides transport based on the secure sockets' layer.
+ OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.
+
+#===== Transport protocol subsystem modules =====
+Package: openscada-prot-selfsystem
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Self system OpenSCADA protocol
+ The openscada-prot-selfsystem package - provides own OpenSCADA protocol based at XML
+ and one's control interface.
+
+Package: openscada-prot-http
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Protocol: HTTP-realisation
+ The openscada-prot-http package - provides support for the HTTP protocol for
+ WWW-based user interfaces.
+
+Package: openscada-prot-userprotocol
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: User protocol
+ The openscada-prot-userprotocol package - allows you to create your own user
+ protocols on any OpenSCADA's language.
+
+#===== UI subsystem modules =====
+Package: openscada-ui-webcfg
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), openscada-prot-http, ${shlibs:Depends}, ${misc:Depends}
+Description: System configurator (WEB)
+ The openscada-ui-webcfg package - provides the WEB-based configurator of the OpenSCADA system.
+
+Package: openscada-ui-webcfgd
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), openscada-prot-http, ${shlibs:Depends}, ${misc:Depends}
+Description: Dynamic WEB configurator
+ The openscada-ui-webcfgd package - provides dynamic WEB based configurator.
+ Uses XHTML, CSS and JavaScript technology.
+
+Package: openscada-ui-vcaengine
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Visual Control Area (VCA) engine
+ The openscada-ui-vcaengine package - the main visual control area engine.
+
+Package: openscada-ui-webvision
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), openscada-prot-http, ${shlibs:Depends}, ${misc:Depends}
+Description: Operation user interface (WEB)
+ The openscada-ui-webvision package - visual operation user interface, based on WEB - front-end to VCA engine.
+
+Package: openscada-ui-webuser
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), openscada-prot-http, ${shlibs:Depends}, ${misc:Depends}
+Description: Web interface from user
+ The openscada-ui-webuser package - allows you to create your own user web-interfaces in any language of OpenSCADA.
+
+Package: openscada-ui-qtstarter
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Qt-based GUI starter
+ The openscada-ui-qtstarter package - provides the Qt GUI starter.
+ Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.
+
+Package: openscada-ui-qtcfg
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), openscada-ui-qtstarter, ${shlibs:Depends}, ${misc:Depends}
+Description: OpenSCADA system configurator (Qt)
+ The openscada-ui-qtcfg package - provides the Qt—based configurator of the OpenSCADA system.
+
+Package: openscada-ui-vision
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), openscada-ui-qtstarter, ${shlibs:Depends}, ${misc:Depends}
+Description: Operation user interface (Qt)
+ The openscada-ui-vision package - visual operation user interface, based on Qt library - front-end to VCA engine.
+
+#===== Special subsystem modules =====
+Package: openscada-spec-systemtests
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: OpenSCADA system's tests
+ The openscada-spec-systemtests package - provides the group of tests to the OpenSCADA system.
+
+Package: openscada-spec-flibcomplex1
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Complex1 function's library
+ The openscada-spec-flibcomplex1 package - provides the library of functions compatible with
+ SCADA Complex1 of the firm SIC "DIYA".
+
+Package: openscada-spec-flibmath
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Math function's library
+ The openscada-spec-flibmath package - provides the library of standard mathematical functions.
+
+Package: openscada-spec-flibsys
+Architecture: any
+Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: System API functions
+ The openscada-spec-flibsys package - provides the library of system API of user programming area.

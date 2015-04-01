@@ -45,7 +45,7 @@
 #define VER_TYPE	STR_VER
 #define MOD_VER		"0.8.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other.")
+#define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
 //************************************************
 

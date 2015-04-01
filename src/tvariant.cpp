@@ -543,7 +543,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     if(id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat()) {
 	oRes.resRequestW();
 	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
-	for(unsigned i_p = 0; i_p < sArr->mEls.size(); i_p++) mEls.push_back(sArr->mEls[i_p]);
+	for(unsigned iP = 0; iP < sArr->mEls.size(); iP++) mEls.push_back(sArr->mEls[iP]);
 	oRes.resRelease();
 	return this;
     }

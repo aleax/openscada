@@ -1,14 +1,13 @@
 # OpenSCADA.Special.FLibMath translate to Russian.
-# Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Special.FLibMath package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibMath 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-06 17:05+0300\n"
+"POT-Creation-Date: 2015-04-01 20:08+0300\n"
 "PO-Revision-Date: 2007-10-24 18:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,7 +21,7 @@ msgstr "Библиотека математических функций"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow mathematical static function library."
+msgid "Provides the library of standard mathematical functions."
 msgstr "Предоставляет библиотеку стандартных математические функций."
 
 msgid "Function"

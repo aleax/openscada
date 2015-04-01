@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTStarter translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-19 12:18+0200\n"
+"POT-Creation-Date: 2015-04-01 20:55+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,8 +21,12 @@ msgstr "Qt GUI пускач"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow Qt GUI starter. It is single for all Qt GUI modules!"
-msgstr "Надає Qt GUI пускач. Він є один для усіх Qt GUI модулів!"
+msgid ""
+"Provides the Qt GUI starter. Qt-starter is the only and compulsory component "
+"for all GUI modules based on the Qt library."
+msgstr ""
+"Надає Qt GUI пускач. Qt-starter єдиний та обов'язковий компонент для всіх "
+"GUI модулів заснованих на Qt."
 
 msgid "Could not read image data"
 msgstr "Не вдалося прочитати дані зображення"
@@ -659,9 +663,6 @@ msgstr "Не знайдено підручника локально та у ме
 #, c-format
 msgid "No translated Qt message: '%s'"
 msgstr "Неперекладене Qt повідомлення: '%s'"
-
-#~ msgid "Options help"
-#~ msgstr "Допомога по опціям"
 
 #~ msgid ""
 #~ "<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open "

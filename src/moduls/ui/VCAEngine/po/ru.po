@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-20 12:26+0200\n"
+"POT-Creation-Date: 2015-04-01 21:01+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -86,6 +86,7 @@ msgstr "Mime тип"
 msgid "Data"
 msgstr "Данные"
 
+#, c-format
 msgid "Widget '%s' already present!"
 msgstr "Виджет '%s' уже присутствует!"
 
@@ -1196,6 +1197,7 @@ msgstr "Ур."
 msgid "Message"
 msgstr "Сообщение"
 
+#, c-format
 msgid "Page '%s' already present!"
 msgstr "Страница '%s' уже присутствует!"
 
@@ -1370,14 +1372,14 @@ msgstr "Движок среды визуализации и управления
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Generic visual control area engine."
+msgid "The main visual control area engine."
 msgstr "Общий движок среды визуализации и управления."
 
 msgid "ID"
 msgstr ""
 
 msgid "DB table"
-msgstr ""
+msgstr "Таблица БД"
 
 msgid "Parent widget"
 msgstr "Родительский виджет"
@@ -1548,12 +1550,15 @@ msgstr "Кодировка текста"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодировка текста движка для перекодирования в неё."
 
+#, c-format
 msgid "Project '%s' already present!"
 msgstr "Проект '%s' уже присутствует!"
 
+#, c-format
 msgid "Widgets library '%s' already present!"
 msgstr "Библиотека виджетов '%s' уже присутствует!"
 
+#, c-format
 msgid "Session '%s' already present!"
 msgstr "Сеанс '%s' уже присутствует!"
 
@@ -1835,6 +1840,7 @@ msgstr "Ошибка. Удаление не пользовательского �
 msgid "Changing of not user attribute is no permitted"
 msgstr "Модификация не пользовательских атрибутов не допустима"
 
+#, c-format
 msgid "New attribute's ID '%s' already present!"
 msgstr "Новый идентификатор атрибута '%s' уже присутствует!"
 

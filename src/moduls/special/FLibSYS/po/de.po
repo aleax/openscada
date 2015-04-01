@@ -1,15 +1,15 @@
 # OpenSCADA.Special.FLibSYS translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009 - 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+# Roman Savochenko <rom_as@oscada.org>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:54+0200\n"
+"POT-Creation-Date: 2015-04-01 20:13+0300\n"
 "PO-Revision-Date: 2011-07-19 20:52+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,9 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#, fuzzy
 msgid "Properties no supported by the object."
-msgstr "Eigenschaften werden vom Objekt nicht unterstützt."
+msgstr "Eigenschaften nicht durch das Objekt unterstützt."
 
 #, c-format
 msgid "Function '%s' error or not enough parameters."
@@ -31,7 +30,7 @@ msgstr "System-API Bibliothek"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow system API functions library of the user programming area."
+msgid "Provides the library of system API functions of user programming area."
 msgstr "Bibliothek mit System-API für spezifische Programmierung."
 
 msgid "Function"

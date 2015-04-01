@@ -33,7 +33,7 @@
 #define SUB_TYPE	"LIB"
 #define MOD_VER		"0.6.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow mathematical static function library.")
+#define DESCRIPTION	_("Provides the library of standard mathematical functions.")
 #define LICENSE		"GPL2"
 //*************************************************
 

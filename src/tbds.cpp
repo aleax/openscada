@@ -746,13 +746,13 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 	try {
 	    vector< vector<string> > rtbl;
 	    sqlReq(prms[0].getS(), &rtbl, ((prms.size()>=2)?prms[1].getB():EVAL_BOOL));
-	    for(unsigned i_r = 0; i_r < rtbl.size(); i_r++) {
+	    for(unsigned iR = 0; iR < rtbl.size(); iR++) {
 		TArrayObj *row = new TArrayObj();
-		for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++) {
-		    row->arSet(i_c, rtbl[i_r][i_c]);
-		    if(i_r) row->TVarObj::propSet(rtbl[0][i_c], rtbl[i_r][i_c]);
+		for(unsigned iC = 0; iC < rtbl[iR].size(); iC++) {
+		    row->arSet(iC, rtbl[iR][iC]);
+		    if(iR) row->TVarObj::propSet(rtbl[0][iC], rtbl[iR][iC]);
 		}
-		rez->arSet(i_r, row);
+		rez->arSet(iR, row);
 	    }
 	}
 	catch(...){ }

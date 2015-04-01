@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2013.
+# Roman Savochenko <rom_as@oscada.org>, 2013-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:56+0200\n"
+"POT-Creation-Date: 2015-04-01 21:29+0300\n"
 "PO-Revision-Date: 2009-08-26 08:08+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -26,7 +26,7 @@ msgstr "Systemkonfigurator (WEB)"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow the WEB based OpenSCADA system configurator."
+msgid "Provides the WEB-based configurator of the OpenSCADA system."
 msgstr "Ermöglicht die WEB-basierten Systemeinstellungen OpenSCADA."
 
 msgid "Name: "

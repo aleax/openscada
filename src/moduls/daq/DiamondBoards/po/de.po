@@ -25,11 +25,9 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow access to 'Diamond Systems' DAQ boards. Include main support for "
-"generic boards."
+"Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards."
 msgstr ""
-"Bietet Zugriff auf die 'Diamond Systems Messkarten. Verfügt über ein Haupt "
-"Trägergrundplatte."
+"Bietet Zugriff auf die \"Diamond Systems\" Messkarten. Inklusive Haupt Unterstützung für alle generischen Platten."
 
 msgid ""
 "[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;"

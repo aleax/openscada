@@ -35,7 +35,7 @@
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow creation self-user protocols on any OpenSCADA language.")
+#define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
 //*************************************************
 

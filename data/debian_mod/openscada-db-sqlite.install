@@ -1,0 +1,2 @@
+debian/tmp/usr/lib/openscada/bd_SQLite.so
+debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_SQLite.mo

@@ -33,7 +33,7 @@
 #define SUB_TYPE	"LIB"
 #define MOD_VER		"1.1.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow static function library Complex1 (SCADA Complex1 functions).")
+#define DESCRIPTION	_("Provides the library of functions compatible with SCADA Complex1 of the firm SIC \"DIYA\".")
 #define LICENSE		"GPL2"
 //*************************************************
 

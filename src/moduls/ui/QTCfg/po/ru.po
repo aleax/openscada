@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTCfg translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2004-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2004-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:55+0200\n"
+"POT-Creation-Date: 2015-04-01 20:37+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -666,8 +666,8 @@ msgstr "Системный конфигуратор (Qt)"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow the Qt based OpenSCADA system configurator."
-msgstr "Предоставляет Qt основанный конфигуратор системы OpenSCADA."
+msgid "Provides the Qt-based configurator of the OpenSCADA system."
+msgstr "Предоставляет основанный на Qt конфигуратор системы OpenSCADA."
 
 #, c-format
 msgid ""
@@ -712,6 +712,3 @@ msgstr "QTCfg диалог"
 
 msgid "Node id and/or name select"
 msgstr "Выбор идентификатора и/или имени"
-
-#~ msgid "Options help"
-#~ msgstr "Помощь по опциям"

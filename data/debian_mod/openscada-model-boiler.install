@@ -1,0 +1,5 @@
+debian/tmp/etc/oscada_Boiler.xml
+debian/tmp/usr/share/openscada/Boiler/*.db
+debian/tmp/usr/share/icons/openscada_Boiler.png
+# debian/tmp/usr/share/openscada/icons/Boiler.png
+debian/tmp/usr/share/applications/openscada_Boiler.desktop

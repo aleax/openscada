@@ -699,7 +699,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    am->propSet("categ", recs[i_m].categ);
 	    am->propSet("level", recs[i_m].level);
 	    am->propSet("mess", recs[i_m].mess);
-	    rez->propSet(i2s(i_m), am);
+	    rez->arSet(i_m, am);
 	}
 	return rez;
     }

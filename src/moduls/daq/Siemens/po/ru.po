@@ -1,14 +1,13 @@
 # OpenSCADA.DAQ.Siemens translate to Russian.
-# Copyright (C) 2006-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.Siemens package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0Report-Msgid-Bugs-To: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-07 13:36+0200\n"
+"POT-Creation-Date: 2015-04-01 17:53+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,8 +22,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol "
-"and library Libnodave for other."
+"Provides a data source PLC Siemens by means of Hilscher CIF cards, by using "
+"the MPI protocol, and Libnodave library for the rest."
 msgstr ""
 "Предоставляет источник данных ПЛК Siemens посредством карт Hilscher CIF с "
 "использованием протокола MPI и библиотеки Libnodave для остального."
@@ -321,8 +320,8 @@ msgstr ""
 "Тип соединения. Поддерживаются:\n"
 "  CIF_PB - подключение к контроллерам серии S7, фирмы Siemens, посредством "
 "коммуникационного процессора CIF-50PB или похожего;\n"
-"  ISO_TCP, ISO_TCP243 - подключение к контроллерам серии S7, фирмы Siemens, посредством "
-"сети Ethernet (TCP243 для CP243);\n"
+"  ISO_TCP, ISO_TCP243 - подключение к контроллерам серии S7, фирмы Siemens, "
+"посредством сети Ethernet (TCP243 для CP243);\n"
 "  ADS - TwinCAT ADS/AMS протокол для подключения к контроллерам фирмы "
 "Beckhoff."
 

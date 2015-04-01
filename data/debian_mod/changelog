@@ -1,0 +1,6 @@
+openscada (0.9-r2237) experimental; urgency=low
+
+  * Work version scheme naming 0.9-rNNNN.
+  * LTS version naming 0.8.N.
+
+ -- Roman Savochenko <rom_as@oscada.org>  Mon, 30 Mar 2015 22:00:00 +0200

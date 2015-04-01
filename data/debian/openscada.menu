@@ -1,2 +1,0 @@
-?package(openscada):command="/usr/bin/openscada_start" icon="/usr/share/icons/openscada.png" \
-	needs="X11|text|vc|wm" section="Applications/Graphics" title="Open SCADA system"

@@ -600,6 +600,23 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Integer: req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Int32));	return 0;
 				    case TFld::Real:    req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Double));	return 0;
 				    case TFld::String:  req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_String));	return 0;
+				    case TFld::Object: {	//!!!! With structures support append detect ones
+					int64_t tm = 0;
+					AutoHD<TArrayObj> arr = nVal->getO(&tm);
+					if(arr.freeStat()) break;
+					switch(arr.at().arGet(0).type()) {
+					    case TVariant::Boolean:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_Boolean));return 0;
+					    case TVariant::Integer:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_Int64));	return 0;
+					    case TVariant::Real:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_Double));	return 0;
+					    case TVariant::String:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_String));	return 0;
+					    default: break;
+					}
+					break;
+				    }
 				    default: break;
 				}
 				break;

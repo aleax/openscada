@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2014.
+# Roman Savochenko <rom_as@oscada.org>, 2014-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-19 12:18+0200\n"
+"POT-Creation-Date: 2015-04-01 20:55+0300\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -23,8 +23,12 @@ msgstr "Qt GUI Starter"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow Qt GUI starter. It is single for all Qt GUI modules!"
-msgstr "Qt GUI-Starter für die Qt GUI Module!"
+msgid ""
+"Provides the Qt GUI starter. Qt-starter is the only and compulsory component "
+"for all GUI modules based on the Qt library."
+msgstr ""
+"Bietet die Qt GUI Starter. Qt-Starter ist die einzige und verpflichtender "
+"Bestandteil für alle GUI-Module basierend auf der Qt-Bibliothek."
 
 msgid "Could not read image data"
 msgstr "Konnte nicht gelesen werden Bilddaten"
@@ -665,9 +669,6 @@ msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
 #, c-format
 msgid "No translated Qt message: '%s'"
 msgstr "Keine übersetzt Qt Nachricht: '%s'"
-
-#~ msgid "Options help"
-#~ msgstr "Optionen Hilfe"
 
 #~ msgid ""
 #~ "<p>This program uses Qt Open Source Edition version %1.</p><p>Qt Open "

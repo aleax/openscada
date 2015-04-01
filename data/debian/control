@@ -22,20 +22,20 @@ Depends: openscada (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Description: Debug symbols for OpenSCADA
  Debug symbols to provide extra debug info in case of crash.
 
-Package: openscada-doc.en
+Package: openscada-doc-en
 Architecture: all
-Description: OpenSCADA documents (EN).
- The openscada-doc.en package include documents files (English).
+Description: OpenSCADA documents (EN)
+ The openscada-doc-en package include documents files (English).
 
-Package: openscada-doc.ru
+Package: openscada-doc-ru
 Architecture: all
-Description: OpenSCADA documents (RU).
- The openscada-doc.ru package include documents files (Russian).
+Description: OpenSCADA documents (RU)
+ The openscada-doc-ru package include documents files (Russian).
 
-Package: openscada-doc.uk
+Package: openscada-doc-uk
 Architecture: all
-Description: OpenSCADA documents (UK).
- The openscada-doc.uk package include documents files (Ukraine).
+Description: OpenSCADA documents (UK)
+ The openscada-doc-uk package include documents files (Ukraine).
 
 Package: openscada-dev
 Architecture: any
@@ -43,34 +43,34 @@ Depends: openscada
 Description: OpenSCADA development
  The openscada-dev package includes library archives and include files.
 
-Package: openscada-libdb.main
+Package: openscada-libdb-main
 Architecture: all
 Depends: openscada
-Description: Main OpenSCADA libraries for DAQ and other into SQLite DB.
- The openscada-libdb.main package includes main OpenSCADA libraries into SQLite DB.
+Description: Main OpenSCADA libraries for DAQ and other into SQLite DB
+ The openscada-libdb-main package includes main OpenSCADA libraries into SQLite DB.
  For use connect SQLite DB file LibsDB/OscadaLibs.db.
 
-Package: openscada-libdb.vca
+Package: openscada-libdb-vca
 Architecture: all
 Depends: openscada
-Description: Visual components libraries into SQLite DB.
- The openscada-libdb.vca package includes visual components libraries into SQLite DB.
+Description: Visual components libraries into SQLite DB
+ The openscada-libdb-vca package includes visual components libraries into SQLite DB.
  For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
 
-Package: openscada-model.aglks
+Package: openscada-model-aglks
 Architecture: all
-Depends: openscada, openscada-libdb.main, openscada-libdb.vca
-Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK).
- The openscada-model.aglks package includes model "AGLKS" data bases and config.
+Depends: openscada, openscada-libdb-main, openscada-libdb-vca
+Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
+ The openscada-model-aglks package includes model "AGLKS" data bases and config.
  The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
  For start use command <openscada_demo> or <openscada_AGLKS>.
  For access use account "root" and password "openscada" or account "user" and password "user".
 
-Package: openscada-model.boiler
+Package: openscada-model-boiler
 Architecture: all
-Depends: openscada, openscada-libdb.main, openscada-libdb.vca
-Description: Model "Boiler" data bases and config (EN,RU,UK).
- The openscada-model.boiler package model "Boiler" data bases and config.
+Depends: openscada, openscada-libdb-main, openscada-libdb-vca
+Description: Model "Boiler" data bases and config (EN,RU,UK)
+ The openscada-model-boiler package model "Boiler" data bases and config.
  The Model is allowed for English, Russian and Ukrainian languages.
  For start use command <openscada_Boiler>.
  For access use account "root" and password "openscada" or account "user" and password "user".

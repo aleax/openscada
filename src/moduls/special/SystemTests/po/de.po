@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-15 17:58+0200\n"
+"POT-Creation-Date: 2015-04-01 20:20+0300\n"
 "PO-Revision-Date: 2010-10-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -23,7 +23,7 @@ msgstr "Teste des Systems OpenSCADA"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow the group tests for OpenSCADA system."
+msgid "Provides the group of tests to the OpenSCADA system."
 msgstr "Gewährt die Gruppe von Testen für das System OpenSCADA."
 
 #, c-format
@@ -288,6 +288,7 @@ msgstr "Erneut %d der Aufschreibungen im Laufe von %f Sekunden."
 msgid "Update records, by request key, for %d records."
 msgstr "Aktualisieren Sie Datensätze, auf Anfrage Schlüssel für %d Datensätze."
 
+#, c-format
 msgid "Updated %d records, by request key, for time %f sec."
 msgstr "Aktualisiert %d Aufzeichnungen, auf Anfrage Schlüssel für Zeit %f sec."
 
@@ -315,9 +316,11 @@ msgstr "Fehler des Feldes <id> %d != %d"
 msgid "Field <stat> %d != %d error."
 msgstr "Fehler des Feldes <stat> %d != %d."
 
+#, c-format
 msgid "Field <reqKey> '%s' != '%s' error."
 msgstr "Fehler des Feldes <reqKey> '%s' != '%s'."
 
+#, c-format
 msgid "Field <reqVal> '%s' != '%s' error."
 msgstr "Fehler des Feldes <reqVal> '%s' != '%s'."
 
@@ -698,6 +701,7 @@ msgstr ""
 msgid "Open file '%s' error."
 msgstr "Fehler der Eröffnung der Datei '%s'."
 
+#, c-format
 msgid "Read file '%s' error: %s."
 msgstr "Lesen Datei '%s' Fehler: %s."
 

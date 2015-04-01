@@ -2,13 +2,13 @@
 # Copyright (C) 2008-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-14 14:53+0300\n"
+"POT-Creation-Date: 2015-04-01 21:33+0300\n"
 "PO-Revision-Date: 2007-10-29 15:28+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -23,8 +23,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS "
-"and JavaScript technologies."
+"Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript "
+"technology."
 msgstr ""
 "Надає динамічний WEB базований конфігуратор. Використано XHTML, CSS та "
 "JavaScript технології."

@@ -43,7 +43,7 @@
 #define VER_TYPE	STR_VER
 #define MOD_VER		"1.0.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1.")
+#define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
 //************************************************
 

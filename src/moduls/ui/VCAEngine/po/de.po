@@ -3,12 +3,12 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-20 12:26+0200\n"
+"POT-Creation-Date: 2015-04-01 21:01+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -90,6 +90,7 @@ msgstr "Mime Typ"
 msgid "Data"
 msgstr "Daten"
 
+#, c-format
 msgid "Widget '%s' already present!"
 msgstr "Widget '%s' ist vorhanden!"
 
@@ -1192,6 +1193,7 @@ msgstr "Ebene"
 msgid "Message"
 msgstr "Nachricht"
 
+#, c-format
 msgid "Page '%s' already present!"
 msgstr "Seite '%s' ist vorhanden!"
 
@@ -1367,14 +1369,14 @@ msgstr "Visualisierungssteuerung"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Generic visual control area engine."
+msgid "The main visual control area engine."
 msgstr "Allgemeine Visualisierungssteuerung."
 
 msgid "ID"
 msgstr "ID"
 
 msgid "DB table"
-msgstr ""
+msgstr "DB-Tabelle"
 
 msgid "Parent widget"
 msgstr "Elternwidget"
@@ -1546,12 +1548,15 @@ msgstr "Kodierung des Textes"
 msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
 
+#, c-format
 msgid "Project '%s' already present!"
 msgstr "Projekt '%s' ist vorhanden!"
 
+#, c-format
 msgid "Widgets library '%s' already present!"
 msgstr "Widgets Bibliothek '%s' ist vorhanden!"
 
+#, c-format
 msgid "Session '%s' already present!"
 msgstr "Sitzung '%s' ist vorhanden!"
 
@@ -1832,6 +1837,7 @@ msgstr "Fehler beim Löschen des nicht benutzerdefinierten Elements."
 msgid "Changing of not user attribute is no permitted"
 msgstr "Ändern der nicht benutzerdefinierten Attribute ist nicht zulässig "
 
+#, c-format
 msgid "New attribute's ID '%s' already present!"
 msgstr "Neuer Bezeichner des Attributs '%s' ist vorhanden!"
 

@@ -38,7 +38,8 @@
 #define SUB_TYPE	"LIB"
 #define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries.")
+#define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
+ The user can create and modify functions and libraries.")
 #define LICENSE		"GPL2"
 //*************************************************
 

@@ -37,7 +37,7 @@
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow support HTTP for WWW based UIs.")
+#define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
 //*************************************************
 

@@ -1,3 +1,14 @@
+2015-04-01 Roman
+- SYS: "Summary" of data/*.spec mostly cleaned.
+    data/openscada_mod_ALT.spec: The requires some reordered and packages descriptions some fixed and appended.
+    data/openscada_mod_RH.spec: Significant cleaned, updated to Work (0.9) version and descriptions some appended. Cleaning is not finished yet.
+    !!:data/debian_mod added for allow build separated modules packages.
+- TArchives, TCntrNode, DAQ.SMH2Gi, UI.VCAEngine: All remains operations with TArrayObj moved to arGet() and arSet().
+- Transports: To input transport object added User API function assTrsList() for assigned output transports to the input.
+- !!:SYS.*: For almost all modules the description updated.
+- DAQ.OPC_UA: AId_DataType processing for Array into the server part is added.
+
+
 2015-03-30 Roman
 - SYS: *.spec files and directory "debian" moved to directory "data".
     File data/openscada_mod_RH.spec is added for modules separated packages build for RH-based, from Aleksey Popkov.

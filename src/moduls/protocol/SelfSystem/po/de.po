@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-25 16:45+0200\n"
+"POT-Creation-Date: 2015-04-01 18:16+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -26,14 +26,17 @@ msgstr "Systemprotokoll OpenSCADA"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Self OpenSCADA protocol, support generic functions."
-msgstr "Allgemeine Hauptfunktionen für das Systemprotokoll OpenSCADA."
+msgid ""
+"Provides own OpenSCADA protocol based at XML and one's control interface."
+msgstr "Bietet Selbst OpenSCADA Protokoll Basis auf XML und OpenSCADA Steuerschnittstelle."
 
 #, c-format
 msgid ""
 "Connections from the user '%s' and the source '%s' reached to limit %d. "
 "Erasing spare!"
-msgstr "Verbindung vom Benutzer '%s' und die Quelle '%s' erreichte auf %d begrenzen. Erasing Überschuss!"
+msgstr ""
+"Verbindung vom Benutzer '%s' und die Quelle '%s' erreichte auf %d begrenzen. "
+"Erasing Überschuss!"
 
 #, c-format
 msgid "SES_OPEN request: %d"
@@ -106,6 +109,7 @@ msgstr "Untere Kompressionsgrenze"
 msgid "Value in bytes."
 msgstr "Wert in Bytes."
 
+#, c-format
 msgid "Get request: '%s': %d, time: %f ms."
 msgstr "Holen Antrag: '%s': %d, Zeit: %f ms."
 

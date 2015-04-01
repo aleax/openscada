@@ -33,7 +33,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"0.9.5"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow to make gate data sources of remote OpenSCADA station to local OpenSCADA station.")
+#define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
 //******************************************************
 

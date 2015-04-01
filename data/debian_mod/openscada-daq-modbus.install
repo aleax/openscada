@@ -1,0 +1,2 @@
+debian/tmp/usr/lib/openscada/daq_ModBus.so
+debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_ModBus.mo

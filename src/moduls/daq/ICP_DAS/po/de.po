@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-16 20:50+0300\n"
+"POT-Creation-Date: 2015-04-01 21:45+0200\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -218,8 +218,8 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow implementation for 'ICP DAS' hardware support. Include main I-87xxx "
-"DCON modules, I-8xxx fast modules and boards on ISA bus."
+"Provides implementation for 'ICP DAS' hardware support. Includes main "
+"I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus."
 msgstr ""
 "Lassen Realisierung von 'ICP DAS' Hardware-Unterstützung. Umfasst "
 "Unterstützung für grundlegende I-87xxx DCON Module, I-8xxx schnelle Module "

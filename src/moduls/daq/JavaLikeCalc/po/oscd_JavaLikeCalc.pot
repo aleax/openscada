@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:48+0200\n"
+"POT-Creation-Date: 2015-04-01 17:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,8 @@ msgstr ""
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr ""
 
-msgid "Not supported type for operation 'Add'."
+#, c-format
+msgid "Not supported type %d for operation 'Add'."
 msgstr ""
 
 msgid "Call object's function for no object or function name is empty."
@@ -148,7 +149,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Allow java-like based calculator and function's libraries engine. User can create and modify function and libraries."
+msgid "Provides based on java like language calculator and engine of libraries.  The user can create and modify functions and libraries."
 msgstr ""
 
 msgid "Parameters table"

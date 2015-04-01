@@ -45,8 +45,7 @@ Sensors::Sensors( ) : libsensor_ok(false)
     if(sensors_init(NULL) == 0) libsensor_ok = true;
 #else
     FILE *f = fopen("/etc/sensors.conf", "r");
-    if(f)
-    {
+    if(f) {
 	if(sensors_init(f) == 0) libsensor_ok = true;
 	fclose(f);
     }

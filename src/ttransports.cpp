@@ -742,6 +742,13 @@ TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, c
 	try { return writeTo(prms[0].getS(), prms[1].getS()); }	catch(TError) { }
 	return 0;
     }
+    // TArrayObj assTrsList() - assigned output transports list to the input
+    else if(iid == "assTrsList") {
+	TArrayObj *rez = new TArrayObj();
+	vector<AutoHD<TTransportOut> > trs = assTrs();
+	for(unsigned iTr = 0; iTr < trs.size(); iTr++) rez->arSet(iTr, trs[iTr].at().id());
+	return rez;
+    }
 
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
@@ -786,8 +793,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	vector<string> list;
 	int c_lv = 0;
 	string c_path = "", c_el;
-	for(int c_off = 0; (c_el=TSYS::strSepParse(protocolFull(),0,'.',&c_off)).size(); c_lv++)
-	{
+	for(int c_off = 0; (c_el=TSYS::strSepParse(protocolFull(),0,'.',&c_off)).size(); c_lv++) {
 	    opt->childAdd("el")->setText(c_path);
 	    c_path += c_lv ? "."+c_el : c_el;
 	}

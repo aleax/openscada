@@ -43,7 +43,8 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol and library Libnodave for other.")
+#define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
+ and Libnodave library for the rest.")
 #define LICENSE		"GPL2"
 //************************************************
 

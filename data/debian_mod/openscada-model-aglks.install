@@ -1,0 +1,5 @@
+debian/tmp/etc/oscada_AGLKS.xml
+debian/tmp/usr/share/openscada/AGLKS/*.db
+debian/tmp/usr/share/icons/openscada_AGLKS.png
+# debian/tmp/usr/share/openscada/icons/AGLKS.png
+debian/tmp/usr/share/applications/openscada_AGLKS.desktop

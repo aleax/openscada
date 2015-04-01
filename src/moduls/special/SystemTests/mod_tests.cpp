@@ -51,7 +51,7 @@
 #define SUB_TYPE	"TEST"
 #define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow the group tests for OpenSCADA system.")
+#define DESCRIPTION	_("Provides the group of tests to the OpenSCADA system.")
 #define LICENSE		"GPL2"
 //*************************************************
 

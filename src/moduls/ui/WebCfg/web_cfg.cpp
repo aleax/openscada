@@ -37,7 +37,7 @@
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"1.5.6"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow the WEB based OpenSCADA system configurator.")
+#define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
 //*************************************************
 

@@ -41,8 +41,8 @@ extern "C"
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"1.0.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow implementation for 'ICP DAS' hardware support.\
- Include main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
+#define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
+ Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
 #define LICENSE		"GPL2"
 //*************************************************
 

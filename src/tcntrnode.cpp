@@ -740,7 +740,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    TArrayObj *rez = new TArrayObj();
 	    vector<string> nls;
 	    nd.at().nodeList(nls, (prms.size() >= 1) ? prms[0].getS() : string(""));
-	    for(unsigned i_l = 0; i_l < nls.size(); i_l++) rez->propSet(i2s(i_l), nls[i_l]);
+	    for(unsigned iN = 0; iN < nls.size(); iN++) rez->arSet(iN, nls[iN]);
 	    return rez;
 	}
 	catch(TError)	{ }

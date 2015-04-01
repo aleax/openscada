@@ -1,14 +1,13 @@
 # OpenSCADA.UI.WebVision translate to Ukrainian.
-# Copyright (C) 2007-2013 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:57+0200\n"
+"POT-Creation-Date: 2015-04-01 21:46+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -78,10 +77,8 @@ msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 msgstr "Роман Савоченко, Лисенко Максим, Яшина Ксенія"
 
 msgid ""
-"Web operation user interface for visual control area (VCA) projects playing."
-msgstr ""
-"Web робочий інтерфейс користувача для виконання візуального середовища "
-"керування (СВК)."
+"Visual operation user interface, based on WEB - front-end to VCA engine."
+msgstr "Робочий інтерфейс користувача, заснований на WEB - зовнішній інтерфейс до рущія візуалізації."
 
 msgid "Date and time"
 msgstr "Дата та час"
@@ -166,6 +163,3 @@ msgstr ""
 "  -1  - оптимальна швидкість-розмір;\n"
 "  0   - вимкнено;\n"
 "  1-9 - прямий рівень."
-
-#~ msgid "Options help"
-#~ msgstr "Допомога по опціям"

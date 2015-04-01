@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-15 17:58+0200\n"
+"POT-Creation-Date: 2015-04-01 20:20+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,7 +21,7 @@ msgstr "Тести системи OpenSCADA"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow the group tests for OpenSCADA system."
+msgid "Provides the group of tests to the OpenSCADA system."
 msgstr "Надає групу тестів для системи OpenSCADA."
 
 #, c-format
@@ -282,6 +282,7 @@ msgstr "Оновлено %d записів за час %f сек."
 msgid "Update records, by request key, for %d records."
 msgstr "Оновлення записів, за ключем запиту, для %d записів."
 
+#, c-format
 msgid "Updated %d records, by request key, for time %f sec."
 msgstr "Оновлено %d записів, за ключем запиту, за час %f сек."
 
@@ -308,9 +309,11 @@ msgstr "Помилка поля <id> %d != %d."
 msgid "Field <stat> %d != %d error."
 msgstr "Помилка поля <stat> %d != %d."
 
+#, c-format
 msgid "Field <reqKey> '%s' != '%s' error."
 msgstr "Помилка поля <reqKey> '%s' != '%s'."
 
+#, c-format
 msgid "Field <reqVal> '%s' != '%s' error."
 msgstr "Помилка поля <reqVal> '%s' != '%s'."
 
@@ -687,6 +690,7 @@ msgstr ""
 msgid "Open file '%s' error."
 msgstr "Помилка відкриття файлу '%s'."
 
+#, c-format
 msgid "Read file '%s' error: %s."
 msgstr "Помилка читання файлу '%s': %s."
 

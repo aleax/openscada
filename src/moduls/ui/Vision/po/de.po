@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-20 12:19+0200\n"
+"POT-Creation-Date: 2015-04-01 21:23+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -27,8 +27,11 @@ msgstr "Roman Savotschenko"
 msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 msgstr "Roman Savotschenko, Maxim Lysjenko, Ksenija Jaschina"
 
-msgid "Visual operation user interface."
-msgstr "Benutzerschnittstelle"
+msgid ""
+"Visual operation user interface, based on Qt library - front-end to VCA "
+"engine."
+msgstr ""
+"Visuelle Betrieb Benutzeroberfläche basierend auf Qt-Bibliothek - Front-End für VCA-Motor."
 
 msgid "Developers"
 msgstr "Entwickler"
@@ -2203,6 +2206,3 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
-
-#~ msgid "Options help"
-#~ msgstr "Optionen Hilfe"

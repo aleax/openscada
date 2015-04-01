@@ -40,7 +40,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow logic level parameters.")
+#define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
 //*************************************************
 

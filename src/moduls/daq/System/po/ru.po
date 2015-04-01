@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 11:13+0300\n"
+"POT-Creation-Date: 2015-04-01 18:02+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -180,8 +180,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow operation system data acquisition. Support OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other."
+"Provides data acquisition from the OS. Supported OS Linux data sources: "
+"HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
 msgstr ""
 "Предоставляет сбор данных операционной системы. Поддерживаются источники "
 "данных ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU, UPS и другие."

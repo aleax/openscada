@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
-# Roman Savochenko <rom_as@oscada.org>, 2010,2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010,2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 16:14+0300\n"
+"POT-Creation-Date: 2015-04-01 21:38+0300\n"
 "PO-Revision-Date: 2010-10-25 09:57+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -23,7 +23,9 @@ msgstr "Web-Interface des Nutzers"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow creation self-user web-interfaces on any OpenSCADA language."
+msgid ""
+"Allows you to create your own user web-interfaces in any language of "
+"OpenSCADA."
 msgstr ""
 "Ermöglicht das Schaffen der eigenen Nuttzersweb-Interfaces auf beliebiger "
 "OpenSCADA - Sprache."

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-20 12:26+0200\n"
+"POT-Creation-Date: 2015-04-01 21:01+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -86,6 +86,7 @@ msgstr "Mime тип"
 msgid "Data"
 msgstr "Дані"
 
+#, c-format
 msgid "Widget '%s' already present!"
 msgstr "Віджет '%s' вже присутній!"
 
@@ -1195,6 +1196,7 @@ msgstr "Рів."
 msgid "Message"
 msgstr "Повідомлення"
 
+#, c-format
 msgid "Page '%s' already present!"
 msgstr "Сторінка '%s' вже присутня!"
 
@@ -1369,14 +1371,14 @@ msgstr "Рушій середовища візуалізації та керув
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Generic visual control area engine."
+msgid "The main visual control area engine."
 msgstr "Загальний рушій середовища візуалізації та керування."
 
 msgid "ID"
 msgstr ""
 
 msgid "DB table"
-msgstr ""
+msgstr "Таблиця БД"
 
 msgid "Parent widget"
 msgstr "Батьківський віджет"
@@ -1547,12 +1549,15 @@ msgstr "Кодування тексту"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодування тексту рушія для перекодування у неї."
 
+#, c-format
 msgid "Project '%s' already present!"
 msgstr "Проект '%s' вже присутній!"
 
+#, c-format
 msgid "Widgets library '%s' already present!"
 msgstr "Бібліотека віджетів '%s' вже присутня!"
 
+#, c-format
 msgid "Session '%s' already present!"
 msgstr "Сеанс '%s' вже присутній!"
 
@@ -1834,6 +1839,7 @@ msgstr "Помилка. Видалення елементу не користу�
 msgid "Changing of not user attribute is no permitted"
 msgstr "Модифікація атрибутів не користувача не дозволена"
 
+#, c-format
 msgid "New attribute's ID '%s' already present!"
 msgstr "Новий ідентифікатор атрибуту '%s' вже присутній!"
 

@@ -50,8 +50,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"1.7.5"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow operation system data acquisition. Support OS Linux data sources:\
- HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other.")
+#define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
 //*************************************************
 

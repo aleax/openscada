@@ -1383,7 +1383,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	try {
 	    string dcLng;
 	    TArrayObj *reRez = TRegExp(".*<body\\s+.*\\s*docProcLang=\"([^\"]+)\".*>.*","").match(src->attrAt(a_path.substr(6)).at().getS());
-	    if(reRez->propGet("length").getI() >= 2) dcLng = reRez->propGet("1").getS();
+	    if(reRez->propGet("length").getI() >= 2) dcLng = reRez->arGet(1).getS();
 	    delete reRez;
 	    if(dcLng.size())
 		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);

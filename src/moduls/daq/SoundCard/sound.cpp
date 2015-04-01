@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow access to sound card data.")
+#define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
 //*************************************************
 

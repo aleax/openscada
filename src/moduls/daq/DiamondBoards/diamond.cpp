@@ -39,7 +39,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow access to 'Diamond Systems' DAQ boards. Include main support for generic boards.")
+#define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
 //*************************************************
 

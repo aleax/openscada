@@ -203,29 +203,25 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	double *fftIn = NULL;
 
 	TArrayObj *ao = new TArrayObj();
-	if(isArch())
-	{
+	if(isArch()) {
 	    string archivator = (prms.size()>=3) ? prms[2].getS() : "";
 	    TValBuf tb(TFld::Real, 0, arch().at().period(archivator), true, true);
 	    arch().at().getVals(tb,btm,etm,archivator,600000);
 	    fftN = tb.realSize();
-	    if(fftN > 10)
-	    {
+	    if(fftN > 10) {
 		fftIn = (double*)malloc(sizeof(double)*fftN);
 		for(btm = tb.begin(); btm <= tb.end() && iN < fftN; btm++, iN++)
 		    fftIn[iN] = tb.getR(&btm, true);
 	    }
 	}
-	else if(buf() && buf()->realSize() > 10)
-	{
+	else if(buf() && buf()->realSize() > 10) {
 	    fftN = buf()->realSize();
 	    fftIn = (double*)malloc(sizeof(double)*fftN);
 	    for(btm = buf()->begin(); btm <= buf()->end() && iN < fftN; btm++, iN++)
 		fftIn[iN] = buf()->getR(&btm, true);
 	}
 
-	if(fftN)
-	{
+	if(fftN) {
 	    fftw_complex *fftOut = (fftw_complex*)malloc(sizeof(fftw_complex)*(fftN/2+1));
 	    fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
 	    fftw_execute(p);
