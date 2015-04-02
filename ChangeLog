@@ -1,3 +1,7 @@
+2015-04-02 Roman
+- FIX:DAQ.OPC_UA: Array type publish fixed.
+
+
 2015-04-01 Roman
 - SYS: "Summary" of data/*.spec mostly cleaned.
     data/openscada_mod_ALT.spec: The requires some reordered and packages descriptions some fixed and appended.

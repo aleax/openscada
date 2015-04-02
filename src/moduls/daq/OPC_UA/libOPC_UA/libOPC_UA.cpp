@@ -3384,7 +3384,7 @@ void Server::EP::subScrCycle( unsigned cntr )
 	    //  Read data
 	    req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtTmGet","1");
 		//setAttr("dtTmGet",(mIt.tmToRet==TS_SOURCE||mIt.tmToRet==TS_BOTH)?"1":"0");
-	    if(!reqData(OpcUa_ReadRequest, req) && (vTm=strtoll(req.attr("dtTm").c_str(),NULL,10)) > mIt.dtTm) {
+	    if(!reqData(OpcUa_ReadRequest,req) && (vTm=strtoll(req.attr("dtTm").c_str(),NULL,10)) > mIt.dtTm) {
 		mIt.vTp = atoi(req.attr("type").c_str());
 		mIt.dtTm = vTm;
 		mIt.vQueue.push_back(Subscr::MonitItem::Val(req.text(),vTm));

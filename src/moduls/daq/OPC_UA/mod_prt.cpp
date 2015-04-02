@@ -570,19 +570,19 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 					if(arr.freeStat()) { dtOK = false; break; }
 					switch(arr.at().arGet(0).type()) {
 					    case TVariant::Boolean:
-						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
 						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Boolean))->setText(rVl);
 						break;
 					    case TVariant::Integer:
-						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
 						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Int64))->setText(rVl);
 						break;
 					    case TVariant::Real:
-						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
 						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Double))->setText(rVl);
 						break;
 					    case TVariant::String:
-						for(size_t iA = 0; iA < arr.at().arSize(); iA++, tm = 0) rVl += arr.at().arGet(iA).getS() + "\n";
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
 						req.setAttr("type", i2s(OpcUa_Array|OpcUa_String))->setText(rVl);
 						break;
 					    default: dtOK = false;
@@ -591,7 +591,10 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    }
 				    default: dtOK = false;
 				}
-				if(dtOK) { if(s2i(req.attr("dtTmGet"))) req.setAttr("dtTm",ll2s(tm)); return 0; }
+				if(dtOK) {
+				    if(s2i(req.attr("dtTmGet"))) req.setAttr("dtTm",ll2s(tm));
+				    return 0;
+				}
 				break;
 			    }
 			    case AId_DataType:
