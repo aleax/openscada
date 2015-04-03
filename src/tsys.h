@@ -40,6 +40,7 @@
 #define BUF_ARCH_NM	"<buffer>"
 #define DB_CFG		"<cfg>"
 
+#include <signal.h>
 #include <unistd.h>
 #include <stdint.h>
 #include <math.h>
@@ -140,7 +141,7 @@ class TSYS : public TCntrNode
 
 	string	optDescr( );	//print comand line options
 
-	static void sighandler( int signal );
+	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
 	// Short time dimensions
 	bool	multCPU( )	{ return mMultCPU; }
@@ -361,6 +362,8 @@ class TSYS : public TCntrNode
 	volatile time_t	mSysTm;
 
 	map<string, double>	mCntrs;
+
+	struct sigaction	sigActOrig;
 };
 
 //*************************************************

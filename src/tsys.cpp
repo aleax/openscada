@@ -34,7 +34,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <signal.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <langinfo.h>
@@ -81,15 +80,19 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 #endif
 
     //Set signal handlers
-    signal(SIGINT,sighandler);
-    signal(SIGTERM,sighandler);
-    //signal(SIGCHLD,sighandler);
-    signal(SIGALRM,sighandler);
-    signal(SIGPIPE,sighandler);
-    //signal(SIGFPE,sighandler);
-    //signal(SIGSEGV,sighandler);
-    signal(SIGABRT,sighandler);
-    signal(SIGUSR1,sighandler);
+    struct sigaction sHdr;
+    memset(&sHdr, 0, sizeof(sHdr));
+    sHdr.sa_sigaction = sighandler;
+    sHdr.sa_flags = SA_SIGINFO;
+    sigaction(SIGINT, &sHdr, &sigActOrig);
+    sigaction(SIGTERM, &sHdr, &sigActOrig);
+    //sigaction(SIGCHLD, &sHdr, &sigActOrig);
+    sigaction(SIGALRM, &sHdr, &sigActOrig);
+    sigaction(SIGPIPE, &sHdr, &sigActOrig);
+    //sigaction(SIGFPE, &sHdr, &sigActOrig);
+    //sigaction(SIGSEGV, &sHdr, &sigActOrig);
+    sigaction(SIGABRT, &sHdr, &sigActOrig);
+    sigaction(SIGUSR1, &sHdr, &sigActOrig);
 }
 
 TSYS::~TSYS( )
@@ -119,6 +122,17 @@ TSYS::~TSYS( )
 	pthread_mutex_unlock(&dataRes());
 	printf(_("System counters on exit: %s"), cntrsStr.c_str());
     }
+
+    //Signal handlers restore
+    sigaction(SIGINT, &sigActOrig, NULL);
+    sigaction(SIGTERM, &sigActOrig, NULL);
+    //sigaction(SIGCHLD, &sigActOrig, NULL);
+    sigaction(SIGALRM, &sigActOrig, NULL);
+    sigaction(SIGPIPE, &sigActOrig, NULL);
+    //sigaction(SIGFPE, &sigActOrig, NULL);
+    //sigaction(SIGSEGV, &sigActOrig, NULL);
+    sigaction(SIGABRT, &sigActOrig, NULL);
+    sigaction(SIGUSR1, &sigActOrig, NULL);
 }
 
 string TSYS::host( )
@@ -680,41 +694,38 @@ bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
     return false;
 }
 
-void TSYS::sighandler( int signal )
+void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 {
     switch(signal) {
 	case SIGINT:
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGTERM:
-	    mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received. Server is being stopped!"));
+	    mess_warning(SYS->nodePath().c_str(), _("The Terminate signal is received. Server is being stopped!"));
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGFPE:
-	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is caught!"));
+	    mess_warning(SYS->nodePath().c_str(), _("Floating point exception is caught!"));
 	    exit(1);
 	    break;
 	case SIGCHLD: {
 	    int status;
 	    pid_t pid = wait(&status);
-	    if(!WIFEXITED(status) && pid > 0)
-		mess_info(SYS->nodePath().c_str(),_("Free child process %d!"),pid);
+	    if(!WIFEXITED(status) && pid > 0) mess_info(SYS->nodePath().c_str(), _("Free child process %d!"), pid);
 	    break;
 	}
 	case SIGPIPE:
 	    //mess_warning(SYS->nodePath().c_str(),_("Broken PIPE signal!"));
 	    break;
 	case SIGSEGV:
-	    mess_emerg(SYS->nodePath().c_str(),_("Segmentation fault signal!"));
+	    mess_emerg(SYS->nodePath().c_str(), _("Segmentation fault signal!"));
 	    break;
 	case SIGABRT:
-	    mess_emerg(SYS->nodePath().c_str(),_("OpenSCADA is aborted!"));
+	    mess_emerg(SYS->nodePath().c_str(), _("OpenSCADA is aborted!"));
 	    break;
-	case SIGALRM:
-	case SIGUSR1:
-	    break;
+	case SIGALRM: case SIGUSR1: break;
 	default:
-	    mess_warning(SYS->nodePath().c_str(),_("Unknown signal %d!"),signal);
+	    mess_warning(SYS->nodePath().c_str(), _("Unknown signal %d!"), signal);
     }
 }
 
