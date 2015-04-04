@@ -12,13 +12,13 @@ Homepage: <http://oscada.org>
 
 Package: openscada
 Architecture: all
-Depends: openscada-db-sqlite, openscada-db-mysql,
- openscada-daq-blockcalc, openscada-daq-daqgate, openscada-daq-dcon, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-modbus,
+Depends: openscada-db-mysql,
+ openscada-daq-blockcalc, openscada-daq-daqgate, openscada-daq-dcon, openscada-daq-modbus,
  openscada-daq-opcua, openscada-daq-snmp, openscada-daq-siemens, openscada-daq-soundcard, openscada-daq-system,
  openscada-arh-dbarch, openscada-arh-fsarch,
- openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-selfsystem, openscada-prot-http, openscada-prot-userprotocol,
+ openscada-tr-ssl, openscada-prot-http,
  openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vcaengine, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd, openscada-ui-webuser,
- openscada-spec-flibcomplex1, openscada-spec-flibsys, openscada-spec-flibmath
+ openscada-spec-flibmath
 Description: Open SCADA system
  Open SCADA system. Typical installation.
 
@@ -31,7 +31,7 @@ Description: Open SCADA system core
 Package: openscada-dbg
 Section: libdevel
 Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Depends: openscada-core (= ${binary:Version}), ${misc:Depends}
 Description: Debug symbols for OpenSCADA
  Debug symbols to provide extra debug info in case of crash.
 
@@ -62,14 +62,14 @@ Description: OpenSCADA development
 
 Package: openscada-libdb-main
 Architecture: all
-Depends: openscada-core, openscada-db-sqlite, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-spec-flibcomplex1, openscada-spec-flibsys
+Depends: openscada-core
 Description: Main OpenSCADA libraries for DAQ and other into SQLite DB
  The openscada-libdb-main package includes main OpenSCADA libraries into SQLite DB.
  For use connect SQLite DB file LibsDB/OscadaLibs.db.
 
 Package: openscada-libdb-vca
 Architecture: all
-Depends: openscada-core, openscada-db-sqlite, openscada-daq-javalikecalc, openscada-spec-flibsys, openscada-ui-VCAEngine
+Depends: openscada-core, openscada-ui-VCAEngine
 Description: Visual components libraries into SQLite DB
  The openscada-libdb-vca package includes visual components libraries into SQLite DB.
  For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
@@ -77,7 +77,7 @@ Description: Visual components libraries into SQLite DB
 Package: openscada-model-aglks
 Architecture: all
 Depends: openscada-core, openscada-libdb-main, openscada-libdb-vca,
- openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-http, openscada-prot-selfsystem, openscada-prot-userprotocol,
+ openscada-tr-ssl, openscada-prot-http,
  openscada-daq-blockcalc, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
  openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd,
  openscada-spec-flibmath
@@ -90,7 +90,7 @@ Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
 Package: openscada-model-boiler
 Architecture: all
 Depends: openscada-core, openscada-libdb-main, openscada-libdb-vca,
- openscada-daq-blockbalc, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
+ openscada-daq-blockbalc, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
  openscada-daq-blockcalc, openscada-daq-system, openscada-arh-fsarch,
  openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd,
  openscada-spec-flibmath
@@ -102,50 +102,49 @@ Description: Model "Boiler" data bases and config (EN,RU,UK)
 
 Package: openscada-plc
 Architecture: all
-Depends: openscada-db-sqlite,
- openscada-daq-javalikecalc, openscada-daq-blockcalc, openscada-daq-logiclev, openscada-daq-modbus, openscada-daq-system, openscada-daq-dcon, openscada-arh-fsarch,
- openscada-tr-serial, openscada-tr-sockets, openscada-tr-ssl, openscada-prot-http, openscada-prot-selfsystem, openscada-prot-userprotocol, 
+Depends: openscada-core, openscada-daq-blockcalc, openscada-daq-modbus, openscada-daq-system, openscada-daq-dcon, openscada-arh-fsarch,
+ openscada-tr-ssl, openscada-prot-http,
  openscada-ui-vcaengine, openscada-ui-webcfgd, openscada-ui-webvision,
- openscada-spec-flibcomplex1, openscada-spec-flibmath, openscada-spec-flibsys
+ openscada-spec-flibmath
 Description: OpenSCADA - PLC virtual package
  The openscada-plc is virtual package for PLC.
 
 Package: openscada-server
 Architecture: all
-Depends: openscada-db-sqlite, openscada-db-mysql, openscada-db-firebird, openscada-db-postgresql,
- openscada-daq-system, openscada-daq-blockcalc, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-snmp, openscada-daq-siemens,
+Depends: openscada-core, openscada-db-mysql, openscada-db-firebird, openscada-db-postgresql,
+ openscada-daq-system, openscada-daq-blockcalc, openscada-daq-snmp, openscada-daq-siemens,
  openscada-daq-modbus, openscada-daq-dcon, openscada-daq-daqgate, openscada-daq-soundcard,
  openscada-arh-fsarch, openscada-arh-dbarch,
- openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-http, openscada-prot-selfsystem,
+ openscada-tr-ssl, openscada-prot-http,
  openscada-ui-vcaengine, openscada-ui-webcfg, openscada-ui-webcfgd, openscada-ui-webvision,
- openscada-spec-flibcomplex1, openscada-spec-flibmath, openscada-spec-flibsys
+ openscada-spec-flibmath
 Description: OpenSCADA - server virtual package
  The openscada-server is virtual package for SCADA-server.
 
 Package: openscada-vis-station
 Architecture: all
-Depends: openscada-db-sqlite, openscada-db-mysql,
- openscada-daq-system, openscada-daq-blockcalc, openscada-daq-javalikecalc, openscada-daq-logiclev, openscada-daq-snmp, openscada-daq-siemens,
+Depends: openscada-core, openscada-db-mysql,
+ openscada-daq-system, openscada-daq-blockcalc, openscada-daq-snmp, openscada-daq-siemens,
  openscada-daq-modbus, openscada-daq-dcon, openscada-daq-daqgate, openscada-daq-soundcard,
  openscada-arh-fsarch, openscada-arh-dbarch,
- openscada-tr-sockets, openscada-tr-ssl, openscada-tr-serial, openscada-prot-selfsystem,
+ openscada-tr-ssl,
  openscada-ui-vcaengine, openscada-ui-vision, openscada-ui-qtstarter, openscada-ui-qtcfg,
- openscada-spec-flibcomplex1, openscada-spec-flibmath, openscada-spec-flibsys
+ openscada-spec-flibmath
 Description: OpenSCADA - visual station virtual package
  The openscada-vis-station is virtual package for visual station (SCADA).
 
 #===== DB subsystem modules ======
-Package: openscada-db-dbf
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: DB DBF support
- The openscada-db-dbf package - provides support of the *.dbf files, version 3.0.
+#Package: openscada-db-dbf
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: DB DBF support
+# The openscada-db-dbf package - provides support of the *.dbf files, version 3.0.
 
-Package: openscada-db-sqlite
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: DB SQLite support
- The openscada-db-sqlite package - provides support of the BD SQLite.
+#Package: openscada-db-sqlite
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: DB SQLite support
+# The openscada-db-sqlite package - provides support of the BD SQLite.
 
 Package: openscada-db-mysql
 Architecture: any
@@ -166,18 +165,18 @@ Description: DB PostgreSQL support
  The openscada-db-postgresql package - provides support of the DB PostgreSQL.
 
 #===== DAQ subsystem modules =====
-Package: openscada-daq-javalikecalc
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Java-like based calculator
- The openscada-daq-javalikecalc package - provides based on java like language calculator
- and engine of libraries. The user can create and modify functions and libraries.
+#Package: openscada-daq-javalikecalc
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: Java-like based calculator
+# The openscada-daq-javalikecalc package - provides based on java like language calculator
+# and engine of libraries. The user can create and modify functions and libraries.
 
-Package: openscada-daq-logiclev
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Logic level
- The openscada-daq-logiclev package - provides the logical level of parameters.
+#Package: openscada-daq-logiclev
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: Logic level
+# The openscada-daq-logiclev package - provides the logical level of parameters.
 
 Package: openscada-daq-blockcalc
 Architecture: any
@@ -293,19 +292,19 @@ Description: To DB archiver
  The openscada-arh-dbarch package - provides functions for messages and values archiving to DB.
 
 #===== Transport subsystem modules =====
-Package: openscada-tr-sockets
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Transport: Sockets
- The openscada-tr-sockets package - provides sockets based transport.
- Supports inet and unix sockets. Inet socket uses TCP and UDP protocols.
+#Package: openscada-tr-sockets
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: Transport: Sockets
+# The openscada-tr-sockets package - provides sockets based transport.
+# Supports inet and unix sockets. Inet socket uses TCP and UDP protocols.
 
-Package: openscada-tr-serial
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Transport: Serial interfaces
- The openscada-tr-serial package - provides a serial interface.
- It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.
+#Package: openscada-tr-serial
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: Transport: Serial interfaces
+# The openscada-tr-serial package - provides a serial interface.
+# It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.
 
 Package: openscada-tr-ssl
 Architecture: any
@@ -315,12 +314,12 @@ Description: Transport: SSL
  OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.
 
 #===== Transport protocol subsystem modules =====
-Package: openscada-prot-selfsystem
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Self system OpenSCADA protocol
- The openscada-prot-selfsystem package - provides own OpenSCADA protocol based at XML
- and one's control interface.
+#Package: openscada-prot-selfsystem
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: Self system OpenSCADA protocol
+# The openscada-prot-selfsystem package - provides own OpenSCADA protocol based at XML
+# and one's control interface.
 
 Package: openscada-prot-http
 Architecture: any
@@ -329,12 +328,12 @@ Description: Protocol: HTTP-realisation
  The openscada-prot-http package - provides support for the HTTP protocol for
  WWW-based user interfaces.
 
-Package: openscada-prot-userprotocol
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: User protocol
- The openscada-prot-userprotocol package - allows you to create your own user
- protocols on any OpenSCADA's language.
+#Package: openscada-prot-userprotocol
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: User protocol
+# The openscada-prot-userprotocol package - allows you to create your own user
+# protocols on any OpenSCADA's language.
 
 #===== UI subsystem modules =====
 Package: openscada-ui-webcfg
@@ -394,12 +393,12 @@ Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends
 Description: OpenSCADA system's tests
  The openscada-spec-systemtests package - provides the group of tests to the OpenSCADA system.
 
-Package: openscada-spec-flibcomplex1
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Complex1 function's library
- The openscada-spec-flibcomplex1 package - provides the library of functions compatible with
- SCADA Complex1 of the firm SIC "DIYA".
+#Package: openscada-spec-flibcomplex1
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: Complex1 function's library
+# The openscada-spec-flibcomplex1 package - provides the library of functions compatible with
+# SCADA Complex1 of the firm SIC "DIYA".
 
 Package: openscada-spec-flibmath
 Architecture: any
@@ -407,8 +406,8 @@ Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends
 Description: Math function's library
  The openscada-spec-flibmath package - provides the library of standard mathematical functions.
 
-Package: openscada-spec-flibsys
-Architecture: any
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: System API functions
- The openscada-spec-flibsys package - provides the library of system API of user programming area.
+#Package: openscada-spec-flibsys
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: System API functions
+# The openscada-spec-flibsys package - provides the library of system API of user programming area.

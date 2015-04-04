@@ -20,11 +20,18 @@ CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
 build: build-arch build-indep
-build-arch: build-stamp
-build-indep: build-stamp
+build-arch: configure-stamp build-stamp
+build-indep: configure-stamp build-stamp
+configure-stamp:
+	dh_testdir
+	./configure $(CROSS) --prefix=/usr --sysconfdir=/etc \
+	    --enable-DBF=incl --enable-SQLite=incl --enable-JavaLikeCalc=incl --enable-LogicLev=incl \
+	    --enable-Sockets=incl --enable-Serial=incl --enable-SelfSystem=incl --enable-UserProtocol=incl \
+	    --enable-FLibComplex1=incl --enable-FLibSYS=incl \
+	    --enable-MMS --enable-DiamondBoards --enable-Comedi --enable-ICP_DAS --enable-BFN
+	touch $@
 build-stamp:
 	dh_testdir
-	./configure $(CROSS) --prefix=/usr --sysconfdir=/etc --enable-MMS --enable-DiamondBoards --enable-Comedi --enable-ICP_DAS --enable-BFN
 	$(MAKE)
 	touch $@
 
@@ -44,7 +51,7 @@ install-stamp:
 	$(MAKE) DESTDIR=$(DESTDIR) install
 	touch $@
 
-binary: binary-arch binary-indep
+binary: clean-install binary-arch binary-indep
 binary-indep: build-indep install-indep
 	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
 binary-arch: build-arch install-arch
@@ -56,13 +63,10 @@ binary-common:
 	dh_installchangelogs ChangeLog
 	dh_installdocs
 #	dh_installexamples
-	dh_installmenu
+#	dh_installmenu
 #	dh_installdebconf
 #	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
 #	dh_installmime
-#	dh_python
 	dh_installinit -popenscada --restart-after-upgrade -- start 90 2 3 4 5 .
 #	dh_installcron
 #	dh_installinfo
@@ -71,7 +75,6 @@ binary-common:
 	dh_strip --dbg-package=openscada-dbg
 #	dh_compress
 	dh_fixperms
-#	dh_perl
 	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
@@ -79,10 +82,15 @@ binary-common:
 	dh_md5sums
 	dh_builddeb
 
+clean-install:
+	dh_clean
+	rm -f install-stamp
+
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp install-stamp
+
+	rm -f configure-stamp build-stamp install-stamp
 
 	[ ! -f Makefile ] || $(MAKE) distclean
 

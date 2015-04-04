@@ -1,3 +1,14 @@
+2015-04-04 Roman
+- SYS: debian/control: Build depends added libcomedi-dev.
+    {debian|debian_mod}/control: ${shlibs:Depends} removed from *-dbg.
+    {debian|debian_mod}/rules, debian_mod/control: Set the modules for build-in (include) to OpenSCADA core library:
+	    DBF, SQLite, JavaLikeCalc, LogicLev, Sockets, Serial, SelfSystem, UserProtocol, FLibComplex1, FLibSYS.
+	Configure stage moved to different with the stamp touch.
+	clean-install (for dh_clean) target is added as first for the target "binary".
+    debian_mod/*.init: Adapted for simultaneously the starting.
+- !!:FIX: Protocol.*: Including the modules call-external functions like "prt_HTTP_module" renamed to "prot_HTTP_module".
+
+
 2015-04-03 Roman
 - SYS: debian/rules made simplify and unified.
     signal() replaced by sigaction() and restore original handlers at the TSYS destroy is added.

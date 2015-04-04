@@ -44,7 +44,7 @@ UserProtocol::TProt *UserProtocol::mod;
 extern "C"
 {
 #ifdef MOD_INCL
-    TModule::SAt prt_UserProtocol_module( int n_mod )
+    TModule::SAt prot_UserProtocol_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
 #endif
@@ -54,7 +54,7 @@ extern "C"
     }
 
 #ifdef MOD_INCL
-    TModule *prt_UserProtocol_attach( const TModule::SAt &AtMod, const string &source )
+    TModule *prot_UserProtocol_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
