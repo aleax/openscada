@@ -27,6 +27,8 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Open SCADA system core
  Open SCADA system core. For access use default account "root" and password "openscada".
+ Includes the most used modules into the core: DB.DBF, DB.SQLite, DAQ.JavaLikeCalc, DAQ.LogicLev,
+ Transport.Sockets, Transport.Serial, Protocol.SelfSystem, Protocol.UserProtocol, Special.FLibComplex1, Special.FLibSYS.
 
 Package: openscada-dbg
 Section: libdevel
@@ -78,7 +80,8 @@ Package: openscada-model-aglks
 Architecture: all
 Depends: openscada-core, openscada-libdb-main, openscada-libdb-vca,
  openscada-tr-ssl, openscada-prot-http,
- openscada-daq-blockcalc, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
+ openscada-daq-blockcalc, openscada-daq-modbus, openscada-daq-system, openscada-daq-daqgate, openscada-daq-opcua,
+ openscada-arh-fsarch,
  openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd,
  openscada-spec-flibmath
 Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
@@ -90,8 +93,7 @@ Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
 Package: openscada-model-boiler
 Architecture: all
 Depends: openscada-core, openscada-libdb-main, openscada-libdb-vca,
- openscada-daq-blockbalc, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
- openscada-daq-blockcalc, openscada-daq-system, openscada-arh-fsarch,
+ openscada-daq-blockcalc, openscada-daq-modbus, openscada-daq-system, openscada-arh-fsarch,
  openscada-ui-qtstarter, openscada-ui-qtcfg, openscada-ui-vision, openscada-ui-webvision, openscada-ui-webcfgd,
  openscada-spec-flibmath
 Description: Model "Boiler" data bases and config (EN,RU,UK)

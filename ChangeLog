@@ -1,3 +1,10 @@
+2015-04-06 Roman
+- FIX:SYS: {debian|debian_mod}/* are appended by links to LibsDB and ARCHIVES/{VAL,MESS} for Model.{AGLKS,Boiler} for the models call into demon mode.
+    FIX:{debian|debian_mod}/control: Fixed for depends and openscada-core appended by the included modules to list.
+- Transport: User API objects are appended by functions: In::{status,addr}, Out::{status,addr,timings}.
+- UI.WebVision: ElFigure images scaling prevented by possible diferent child's size for send and process real "geomW" and "geomH".
+
+
 2015-04-04 Roman
 - SYS: debian/control: Build depends added libcomedi-dev.
     {debian|debian_mod}/control: ${shlibs:Depends} removed from *-dbg.

@@ -742,8 +742,16 @@ TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, c
 	try { return writeTo(prms[0].getS(), prms[1].getS()); }	catch(TError) { }
 	return 0;
     }
+    // string status() - the transport status
+    if(iid == "status") return getStatus();
+    // string addr( string vl = "" ) - the transport address return, set the to no empty <vl>
+    if(iid == "addr") {
+	if(prms.size() && prms[0].getS().size())
+	    try{ setAddr(prms[0].getS()); } catch(TError) { }
+	return addr();
+    }
     // TArrayObj assTrsList() - assigned output transports list to the input
-    else if(iid == "assTrsList") {
+    if(iid == "assTrsList") {
 	TArrayObj *rez = new TArrayObj();
 	vector<AutoHD<TTransportOut> > trs = assTrs();
 	for(unsigned iTr = 0; iTr < trs.size(); iTr++) rez->arSet(iTr, trs[iTr].at().id());
@@ -908,15 +916,29 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     //      session through the transport by means of protocol.
     //  req - request into XML-tree
     //  prt - protocol name
-    else if(iid == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat()) {
+    if(iid == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat()) {
 	try {
 	    XMLNode req;
 	    if(!startStat()) start();
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().toXMLNode(req);
-	    messProtIO(req,prms[1].getS());
+	    messProtIO(req, prms[1].getS());
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().fromXMLNode(req);
 	} catch(TError err) { return err.mess; }
 	return 0;
+    }
+    // string status( ) - the transport status
+    if(iid == "status")	return getStatus();
+    // string addr( string vl = "" ) - the transport address return, set the to no empty <vl>
+    if(iid == "addr") {
+	if(prms.size() && prms[0].getS().size())
+	    try{ setAddr(prms[0].getS()); } catch(TError) { }
+	return addr();
+    }
+    // string timings( string vl = "" ) - the transport timings return, set the to no empty <vl>
+    if(iid == "timings") {
+	if(prms.size() && prms[0].getS().size())
+	    try{ setTimings(prms[0].getS()); } catch(TError) { }
+	return timings();
     }
 
     //Configuration functions call

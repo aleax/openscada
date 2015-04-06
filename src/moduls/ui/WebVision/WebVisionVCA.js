@@ -642,6 +642,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    figObj.width = geomW; figObj.height = geomH;
 	    // Src update always therefore for any changes is shape update
 	    figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
+						    '&geomW='+geomW.toFixed(3)+'&geomH='+geomH.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
 	    if(elWr != this.place.elWr) {
 		figObj.onclick = !elWr ? '' : function(e) {

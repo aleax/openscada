@@ -3985,15 +3985,13 @@ void VCAElFigure::getReq( SSess &ses )
     //> Prepare picture
     map<string, string>::iterator prmEl = ses.prm.find("xSc");
     double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
-    prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
-    prmEl = ses.prm.find("geomX");
-    geomX = (prmEl!=ses.prm.end()) ? s2r(prmEl->second) : 0;
-    prmEl = ses.prm.find("geomY");
-    geomY = (prmEl!=ses.prm.end()) ? s2r(prmEl->second) : 0;
-
-    scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
-    scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
+    double ySc = ((prmEl=ses.prm.find("ySc"))!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
+    geomX = ((prmEl=ses.prm.find("geomX"))!=ses.prm.end()) ? s2r(prmEl->second) : 0;
+    geomY = ((prmEl=ses.prm.find("geomY"))!=ses.prm.end()) ? s2r(prmEl->second) : 0;
+    scaleWidth = ((prmEl=ses.prm.find("geomW"))!=ses.prm.end()) ? s2r(prmEl->second) : (int)rRnd(width*xSc, POS_PREC_DIG, true);
+    scaleHeight = ((prmEl=ses.prm.find("geomH"))!=ses.prm.end()) ? s2r(prmEl->second) : (int)rRnd(height*ySc, POS_PREC_DIG, true);
+    //scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
+    //scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
     if(im) { gdImageDestroy(im); im = NULL; }
     im = gdImageCreateTrueColor(scaleWidth, scaleHeight);
     if(!im) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
