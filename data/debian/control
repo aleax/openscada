@@ -15,6 +15,17 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: OpenSCADA system project
  Open SCADA system. For access use account "root" and password "openscada".
+ .
+ Includes the most used modules into the OpenSCADA core library: DB.DBF, DB.SQLite, DAQ.JavaLikeCalc, DAQ.LogicLev,
+ Transport.Sockets, Transport.Serial, Protocol.SelfSystem, Protocol.UserProtocol, Special.FLibComplex1, Special.FLibSYS.
+ .
+ External modules (as the shared libraries) builded and included to the package: DB.MySQL, DB.PostgreSQL, DB.FireBird,
+ DAQ.BlockCalc, DAQ.DAQGate, DAQ.System, DAQ.ModBus, DAQ.DCON, DAQ.MMS, DAQ.OPC_UA, DAQ.SNMP, DAQ.DiamondBoards(i386),
+ DAQ.Comedi, DAQ.ICP_DAS(i386,arm), DAQ.Siemens, DAQ.AMRDevs, DAQ.BFN, DAQ.SoundCard,
+ Archiver.FSArch, Archiver.DBArch,
+ Transport.SSL, Protocol.HTTP,
+ UI.VCAEngine, UI.QTStarter, UI.QTCfg, UI.Vision, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.WebVision,
+ Special.FLibMath, Special.SystemTests
 
 Package: openscada-dbg
 Architecture: any

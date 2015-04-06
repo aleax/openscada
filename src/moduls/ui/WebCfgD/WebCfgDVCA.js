@@ -1273,520 +1273,462 @@ function selectChildRecArea( node, aPath, cBlk )
  ***************************************************/
 function basicFields( t_s, aPath, cBlk, wr, comm )
 {
-  var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
+    var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
 
-  var dataReq = document.createElement('get');
-  if(!comm)
-  {
-    dataReq = servGet(brPath,'com=get');
-    if(!dataReq) dataReq = document.createElement('get');
-    else if(parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); setNodeText(dataReq,''); }
-  }
+    var dataReq = document.createElement('get');
+    if(!comm) {
+	dataReq = servGet(brPath,'com=get');
+	if(!dataReq) dataReq = document.createElement('get');
+	else if(parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); setNodeText(dataReq,''); }
+    }
 
-  //> View select fields
-  if( t_s.getAttribute('dest') == 'select' )
-  {
-    var lab = null; var val_r = null; var val_w = null;
-    if( cBlk )
-    {
-      //>> View info
-      if( !wr )
-      {
-	val_r = document.createElement('span'); val_r.className = 'const';
-	val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
-      }
-      //>> View edit
-      else
-      {
-	val_w = document.createElement('span');	val_w.className = 'line';
-	val_w.appendChild(document.createElement('select'));
-	val_w.childNodes[0].itPath = selPath+'/'+brPath;
-	val_w.childNodes[0].srcNode = t_s;
-	val_w.childNodes[0].itComm = comm;
-	val_w.childNodes[0].onchange = function( )
-	{
-	  if( this.selectedIndex < 0 ) return;
-	  var selId = this.options[this.selectedIndex].getAttribute('vid');
-	  var selVal = nodeText(this.options[this.selectedIndex]);
-	  if( this.itComm ) setNodeText(this.srcNode,(selId?selId:selVal));
-	  else
-	  {
-	    var rez = servSet(this.itPath,'com=com','<set>'+strEncode(selId?selId:selVal)+'</set>',true);
-	    if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	    setTimeout('pageRefresh()',500);
-	  }
-	  return false;
-	}
-	val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
-      }
-      //>> Check use label
-      if( t_s.getAttribute('dscr') )
-      {
-	lab = document.createElement('span'); lab.className = 'label';
-	cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
-	if( val_w ) cBlk.dBlk.appendChild(val_w);
-	if( val_r ) cBlk.dBlk.appendChild(val_r);
-	cBlk.appendChild(cBlk.dBlk);
-      }
-      else
-      {
-	if( val_w ) { if( cBlk.dBlk ) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
-	if( val_r ) { if( cBlk.dBlk ) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
-      }
-      t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
-    }
-    else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
-    //>> Fill combo
-    if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
-    if( val_w || val_r )
-    {
-      (val_r||val_w).title = t_s.getAttribute('help');
-      var sel_ok = false, c_el = 0;
-      if( !t_s.getAttribute('select') )
-      {
-	var ind_ls = t_s.getAttribute('sel_id') ? t_s.getAttribute('sel_id').split(';') : new Array();
-	var val_ls = t_s.getAttribute('sel_list').split(';');
-	var valWCfg = '';
-	for( var ls_i = 0; ls_i < val_ls.length; ls_i++ )
-	{
-	  if(val_w) valWCfg+="<option "+
-		(ind_ls.length ? ("vid='"+strEncode(ind_ls[ls_i])+"' "+((ind_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))
-			       : ((val_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))+">"+strEncode(val_ls[ls_i])+"</option>";
-	  if( (ind_ls.length && ind_ls[ls_i] == nodeText(dataReq) ) || (!ind_ls.length && val_ls[ls_i] == nodeText(dataReq)) )
-	  { sel_ok = true; if(val_r) setNodeText(val_r,val_ls[ls_i]); }
-	}
-      }
-      else
-      {
-	var x_lst = servGet(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
-	if(x_lst)
-	{
-	  for(var i_el = 0; i_el < x_lst.childNodes.length; i_el++)
-	  {
-	    if( x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el' ) continue;
-	    var curElId = x_lst.childNodes[i_el].getAttribute('id');
-	    var curElVl = nodeText(x_lst.childNodes[i_el]);
-	    if( val_w ) valWCfg+="<option "+
-		(curElId ? ("vid='"+strEncode(curElId)+"' "+((curElId==nodeText(dataReq))?"selected='true'":""))
-			 : ((curElVl==nodeText(dataReq))?"selected='true'":""))+">"+strEncode(curElVl)+"</option>";
-	    if( (curElId && curElId == nodeText(dataReq)) || (!curElId && curElVl == nodeText(dataReq)) )
-	    { sel_ok = true; if(val_r) setNodeText(val_r,curElVl); }
-	  }
-	}
-      }
-      ///>>> Insert empty field if none selected
-      if( !sel_ok )
-      {
-	if(val_w) valWCfg+="<option selected='true'>"+nodeText(dataReq)+"</option>";
-	if(val_r) setNodeText(val_r,nodeText(dataReq));
-      }
-      if( val_w ) val_w.childNodes[0].innerHTML = valWCfg;
-    }
-  }
-  else
-  {
-    //> View Boolean fields
-    if( t_s.getAttribute('tp') == 'bool' )
-    {
-      var lab = null; var val_r = null; var val_w = null;
-      if( cBlk )
-      {
-	//>> View info
-	if( !wr )
-	{
-	  val_r = document.createElement('span'); val_r.className = 'const';
-	  val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
-	}
-	//>> View edit
-	else
-	{
-	  val_w = document.createElement('span'); val_w.className = 'line';
-	  val_w.appendChild(document.createElement('input'));
-	  val_w.childNodes[0].type = 'checkbox';
-	  val_w.childNodes[0].itPath = selPath+'/'+brPath;
-	  val_w.childNodes[0].srcNode = t_s;
-	  val_w.childNodes[0].itComm = comm;
-	  val_w.childNodes[0].onclick = function( )
-	  {
-	    if( this.itComm ) setNodeText(this.srcNode,(this.checked?'1':'0'));
-	    else
-	    {
-	      var rez = servSet(this.itPath,'com=com','<set>'+(this.checked?'1':'0')+'</set>',true);
-	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	      setTimeout('pageRefresh()',500);
+    //View select fields
+    if(t_s.getAttribute('dest') == 'select') {
+	var lab = null; var val_r = null; var val_w = null;
+	if(cBlk) {
+	    // View info
+	    if(!wr) {
+		val_r = document.createElement('span'); val_r.className = 'const';
+		val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
 	    }
-	    return false;
-	  }
-	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
-	}
-	//>> Check use label
-	if( t_s.getAttribute('dscr') )
-	{
-	  lab = document.createElement('span'); lab.className = 'label';
-	  cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
-	  if( val_w ) cBlk.dBlk.appendChild(val_w);
-	  if( val_r ) cBlk.dBlk.appendChild(val_r);
-	  cBlk.appendChild(cBlk.dBlk);
-	}
-	else
-	{
-	  if( val_w ) { if( cBlk.dBlk ) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
-	  if( val_r ) { if( cBlk.dBlk ) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
-	}
-	t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
-      }
-      else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
-      //>> Fill CheckBox
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
-      if( val_w )
-      {
-	val_w.title = t_s.getAttribute('help');
-	val_w.childNodes[0].checked = parseInt(nodeText(dataReq));
-      }
-      if( val_r )
-      {
-	val_r.title = t_s.getAttribute('help');
-	setNodeText(val_r,nodeText(dataReq)=='<EVAL>'?'<EVAL>':(parseInt(nodeText(dataReq))?'On ':'Off '));
-      }
-    }
-    //> View edit fields
-    else if( t_s.getAttribute('tp') == 'str' && (t_s.getAttribute('rows') || t_s.getAttribute('cols')) )
-    {
-      var lab = null; var edit = null;
-      if( cBlk )
-      {
-	dBlk = document.createElement('div'); dBlk.className = 'elem';
-	lab = document.createElement('span'); lab.className = 'label';
-	edit = document.createElement('textarea');
-	edit.itPath = selPath+'/'+brPath;
-	edit.srcNode = t_s;
-	edit.itComm = comm;
-	edit.readOnly = !wr;
-	if( t_s.getAttribute('cols') ) edit.setAttribute('cols',parseInt(t_s.getAttribute('cols')));
-	else edit.setAttribute('wrap','off');
-	edit.setAttribute('rows',parseInt(t_s.getAttribute('rows')) ? parseInt(t_s.getAttribute('rows')):5);
-	edit.onkeyup = function()
-	{
-	  if( this.itComm ) setNodeText(this.srcNode,this.value);
-	  else if( !this.isChanged && this.value != this.defaultValue )
-	  {
-	    var btBlk = document.createElement('div'); btBlk.style.textAlign = 'right';
-	    var btApply = document.createElement('input'); btApply.type = 'button'; btApply.value = 'Apply';
-	    btApply.onclick = function()
-	    {
-	      var wEl = this.parentNode.parentNode;
-	      var rez = servSet(wEl.childNodes[2].itPath,'com=com','<set>'+strEncode(wEl.childNodes[2].value,'html')+'</set>',true);
-	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	      setTimeout('pageRefresh()',500);
-	      wEl.removeChild(this.parentNode);
-	      wEl.childNodes[2].isChanged = false;
-	      return false;
-	    }
-	    var btCancel = document.createElement('input'); btCancel.type = 'button'; btCancel.value = 'Cancel';
-	    btCancel.onclick = function()
-	    {
-	      var wEl = this.parentNode.parentNode;
-	      wEl.childNodes[2].value = wEl.childNodes[2].defaultValue;
-	      wEl.removeChild(this.parentNode);
-	      wEl.childNodes[2].isChanged = false;
-	      return false;
-	    }
-	    btBlk.appendChild(btApply); btBlk.appendChild(btCancel); this.parentNode.appendChild(btBlk);
-	    this.isChanged = true;
-	  }
-	  else if( this.isChanged && this.value == this.defaultValue && this.parentNode.childNodes[3] )
-	  { this.parentNode.removeChild(this.parentNode.childNodes[3]); this.isChanged = false; }
-	  return true;
-	}
-	edit.StatusTip = selPath+'/'+brPath;
-	edit.onmouseover = function() { setStatus(this.StatusTip,10000); }
-	dBlk.appendChild(lab); dBlk.appendChild(document.createElement('br')); dBlk.appendChild(edit); cBlk.appendChild(dBlk);
-	t_s.addr_lab = lab; t_s.addr_edit = edit;
-      }
-      else { lab = t_s.addr_lab; edit = t_s.addr_edit; }
-      //>> Fill Edit
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
-      if( edit && !edit.isChanged )
-      {
-	edit.title = t_s.getAttribute('help');
-	edit.value = edit.defaultValue = nodeText(dataReq);
-      }
-    }
-    //> View Data-Time fields
-    else if( t_s.getAttribute('tp') == 'time' )
-    {
-      var lab = null; var val_r = null; var val_w = null;
-      if( cBlk )
-      {
-	//>> View info
-	if( !wr )
-	{
-	  val_r = document.createElement('span'); val_r.className = 'const';
-	  val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
-	}
-	//>> View edit
-	else
-	{
-	  val_w = document.createElement('span'); val_w.className = 'line number';
-	  val_w.itPath = selPath+'/'+brPath;
-	  val_w.srcNode = t_s;
-	  val_w.itComm = comm;
-	  val_w.innerHTML = "<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='4' style='width: 60px;'/>"+
-			    "&nbsp;<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/>";
-	  val_w.childNodes[0].onkeyup = val_w.childNodes[1].onkeyup = val_w.childNodes[2].onkeyup =
-		val_w.childNodes[4].onkeyup = val_w.childNodes[5].onkeyup = val_w.childNodes[6].onkeyup = function(e)
-	  {
-	    if( this.parentNode.itComm )
-	    {
-	      var val_w = this.parentNode;
-	      var dt = new Date(0);
-	      dt.setDate(parseInt(val_w.childNodes[0].value)); dt.setMonth(parseInt(val_w.childNodes[1].value)-1); dt.setFullYear(parseInt(val_w.childNodes[2].value));
-	      dt.setHours(parseInt(val_w.childNodes[4].value)); dt.setMinutes(parseInt(val_w.childNodes[5].value)); dt.setSeconds(parseInt(val_w.childNodes[6].value));
-	      setNodeText(val_w.srcNode,Math.floor(dt.getTime()/1000));
-	      return true;
-	    }
-	    if( !e ) e = window.event;
-	    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.childNodes[7].onclick(); return true; }
-	    if( this.parentNode.isEdited && e.keyCode == 27 )
-	    {
-	      var val_w = this.parentNode;
-	      for( var i_ch = 0; i_ch < val_w.childNodes.length; i_ch++ )
-	        if( val_w.childNodes[i_ch].defaultValue )
-	          val_w.childNodes[i_ch].value = val_w.childNodes[i_ch].defaultValue;
-	      val_w.removeChild(this.parentNode.childNodes[7]);
-	      val_w.isEdited = false;
-	      return true;
-	    }
-	    if( this.parentNode.isEdited || this.value == this.defaultValue ) return true;
-	    var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
-	    btOk.onclick = function( )
-	    {
-	      var val_w = this.parentNode;
-	      var dt = new Date(0);
-	      dt.setDate(parseInt(val_w.childNodes[0].value)); dt.setMonth(parseInt(val_w.childNodes[1].value)-1); dt.setFullYear(parseInt(val_w.childNodes[2].value));
-	      dt.setHours(parseInt(val_w.childNodes[4].value)); dt.setMinutes(parseInt(val_w.childNodes[5].value)); dt.setSeconds(parseInt(val_w.childNodes[6].value));
-	      var rez = servSet(val_w.itPath,'com=com','<set>'+Math.floor(dt.getTime()/1000)+'</set>',true);
-	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	      setTimeout('pageRefresh()',500);
-	      val_w.removeChild(this);
-	      val_w.isEdited = false;
-	      return false;
-	    }
-	    this.parentNode.appendChild(btOk);
-	    this.parentNode.isEdited = true;
-	    return true;
-	  }
-	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
-	}
-	//>> Check use label
-	if( t_s.getAttribute('dscr') )
-	{
-	  lab = document.createElement('span'); lab.className = 'label';
-	  cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
-	  if( val_w ) cBlk.dBlk.appendChild(val_w);
-	  if( val_r ) cBlk.dBlk.appendChild(val_r);
-	  cBlk.appendChild(cBlk.dBlk);
-	}
-	else
-	{
-	  if( val_w ) { if( cBlk.dBlk ) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
-	  if( val_r ) { if( cBlk.dBlk ) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
-	}
-	t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
-      }
-      else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
-      //>> Fill data
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
-      if( val_w && !val_w.isEdited )
-      {
-	val_w.title = t_s.getAttribute('help');
-	var dt_time_t = parseInt(nodeText(dataReq));
-	var dt = new Date(dt_time_t?(dt_time_t*1000):0);
-	val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = dt.getDate();
-	val_w.childNodes[1].value = val_w.childNodes[1].defaultValue = dt.getMonth()+1;
-	val_w.childNodes[2].value = val_w.childNodes[2].defaultValue = dt.getFullYear();
-	val_w.childNodes[4].value = val_w.childNodes[4].defaultValue = dt.getHours();
-	val_w.childNodes[5].value = val_w.childNodes[5].defaultValue = dt.getMinutes();
-	val_w.childNodes[6].value = val_w.childNodes[6].defaultValue = dt.getSeconds();
-      }
-      if( val_r )
-      {
-	val_r.title = t_s.getAttribute('help');
-	var dt = new Date(parseInt(nodeText(dataReq))*1000);
-	setNodeText(val_r,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
-			  ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
-      }
-    }
-    //> View other string and numberic fields
-    else
-    {
-      var lab = null; var val_r = null; var val_w = null;
-      if( cBlk )
-      {
-	//>> View info
-	if( !wr )
-	{
-	  val_r = document.createElement('span'); val_r.className = 'const';
-	  val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
-	}
-	//>> View edit
-	else
-	{
-	  val_w = document.createElement('span'); val_w.className = 'line';
-	  val_w.itPath = selPath+'/'+brPath;
-	  val_w.srcNode = t_s;
-	  val_w.itComm = comm;
-	  val_w.appendChild(document.createElement('input')); val_w.childNodes[0].type = 'text';
-	  val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
-
-	  var tp = t_s.getAttribute('tp');
-	  if( t_s.getAttribute('dest') == 'sel_ed' )
-	  {
-	    val_w.childNodes[0].size = 50;
-	    var cmbImg = document.createElement('img'); cmbImg.src = '/'+MOD_ID+'/img_combar';
-	    cmbImg.onclick = function( )
-	    {
-	      if( !this.parentNode.sel_list || !this.parentNode.sel_list.length ) return false;
-	      var combMenu = getCombo();
-	      var optHTML = '';
-	      for( var i_l = 0; i_l < this.parentNode.sel_list.length; i_l++ )
-		optHTML += '<option>'+this.parentNode.sel_list[i_l]+'</option>';
-	      var edFld = this.parentNode.childNodes[0];
-	      combMenu.childNodes[0].edFld = edFld;
-	      combMenu.childNodes[0].innerHTML = optHTML;
-	      combMenu.childNodes[0].size = Math.max(3,this.parentNode.sel_list.length);
-	      combMenu.style.cssText = 'visibility: visible; left: '+posGetX(edFld,true)+'px; '+
-				       'top: '+(posGetY(edFld,true)+edFld.offsetHeight)+'px; '+
-				       'width: '+edFld.offsetWidth+'px';
-	      combMenu.childNodes[0].focus();
-	      combMenu.childNodes[0].onclick = function()
-	      {
-		this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
-		if( this.selectedIndex < 0 ) return;
-		this.edFld.value = nodeText(this.options[this.selectedIndex]);
-		if( this.edFld.parentNode.itComm ) setNodeText(this.edFld.parentNode.srcNode,this.edFld.value);
-		else
-		{
-		  var rez = servSet(this.edFld.parentNode.itPath,'com=com','<set>'+this.edFld.value+'</set>',true);
-		  if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-		  setTimeout('pageRefresh()',500);
+	    // View edit
+	    else {
+		val_w = document.createElement('span');	val_w.className = 'line';
+		val_w.appendChild(document.createElement('select'));
+		val_w.childNodes[0].itPath = selPath+'/'+brPath;
+		val_w.childNodes[0].srcNode = t_s;
+		val_w.childNodes[0].itComm = comm;
+		val_w.childNodes[0].onchange = function( ) {
+		    if(this.selectedIndex < 0) return;
+		    var selId = this.options[this.selectedIndex].getAttribute('vid');
+		    var selVal = nodeText(this.options[this.selectedIndex]);
+		    if(this.itComm) setNodeText(this.srcNode, (selId?selId:selVal));
+		    else {
+			var rez = servSet(this.itPath, 'com=com', '<set>'+strEncode(selId?selId:selVal)+'</set>', true);
+			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			setTimeout('pageRefresh()', 500);
+		    }
+		    return false;
 		}
-		return false;
-	      }
-	      return false;
+		val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
 	    }
-	    val_w.appendChild(cmbImg);
-	  }
-	  else if( tp == 'dec' )
-	  {
-	    val_w.className += ' number';
-	    val_w.childNodes[0].size = 7;
-	    var spinImg = document.createElement('img'); spinImg.src = '/'+MOD_ID+'/img_spinar';
-	    spinImg.onclick = function(e)
-	    {
-	      if(!e) e = window.event;
-	      var val_w = this.parentNode.childNodes[0];
-	      val_w.value = parseInt(val_w.value)+(((e.clientY-posGetY(this))<10)?1:-1);
-	      val_w.onkeyup();
-	      return false;
+	    // Check use label
+	    if(t_s.getAttribute('dscr')) {
+		lab = document.createElement('span'); lab.className = 'label';
+		cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
+		if(val_w) cBlk.dBlk.appendChild(val_w);
+		if(val_r) cBlk.dBlk.appendChild(val_r);
+		cBlk.appendChild(cBlk.dBlk);
 	    }
-	    val_w.appendChild(spinImg);
-	  }
-	  else if( tp == 'hex' || tp == 'oct' || tp == 'real' ) { val_w.className += ' number'; val_w.childNodes[0].size = 10; }
-	  else
-	  {
-	    val_w.childNodes[0].size = 30;
-	    val_w.childNodes[0].maxLength = t_s.getAttribute('len');
-	    if( !val_w.childNodes[0].maxLength ) val_w.childNodes[0].maxLength = 1000;
-	  }
-
-	  val_w.childNodes[0].onkeyup = function(e)
-	  {
-	    if( this.parentNode.itComm )
-	    {
-	      var curVal = this.value;
-	      if( this.parentNode.srcNode.getAttribute('tp') == 'hex' ) curVal = parseInt(curVal,16);
-	      else if( this.parentNode.srcNode.getAttribute('tp') == 'oct' ) curVal = parseInt(curVal,8);
-	      setNodeText(this.parentNode.srcNode,curVal);
-	      return true;
+	    else {
+		if(val_w) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
+		if(val_r) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
 	    }
-	    if( !e ) e = window.event;
-	    if( this.parentNode.isEdited && e.keyCode == 13 ) { this.parentNode.lastChild.onclick(); return true; }
-	    if( this.parentNode.isEdited && e.keyCode == 27 )
-	    {
-	      this.value = this.defaultValue;
-	      this.parentNode.isEdited = false;
-	      this.parentNode.removeChild(this.parentNode.lastChild);
-	      return true;
-	    }
-	    if( this.parentNode.isEdited || this.value == this.defaultValue ) return true;
-	    var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
-	    btOk.onclick = function( )
-	    {
-	      var curVal = this.parentNode.childNodes[0].value;
-	      if( this.parentNode.srcNode.getAttribute('tp') == 'hex' ) curVal = parseInt(curVal,16);
-	      else if( this.parentNode.srcNode.getAttribute('tp') == 'oct' ) curVal = parseInt(curVal,8);
-	      var rez = servSet(this.parentNode.itPath,'com=com','<set>'+curVal+'</set>',true);
-	      if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	      setTimeout('pageRefresh()',500);
-	      this.parentNode.isEdited = false;
-	      this.parentNode.removeChild(this);
-	      return false;
-	    }
-	    this.parentNode.appendChild(btOk);
-	    this.parentNode.isEdited = true;
-	    return true;
-	  }
+	    t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
 	}
-	//>> Check use label
-	if( t_s.getAttribute('dscr') )
-	{
-	  lab = document.createElement('span'); lab.className = 'label';
-	  cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
-	  if( val_w ) cBlk.dBlk.appendChild(val_w);
-	  if( val_r ) cBlk.dBlk.appendChild(val_r);
-	  cBlk.appendChild(cBlk.dBlk);
+	else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
+	// Fill combo
+	if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	if(val_w || val_r) {
+	    (val_r||val_w).title = t_s.getAttribute('help');
+	    var sel_ok = false, c_el = 0;
+	    if(!t_s.getAttribute('select')) {
+		var ind_ls = t_s.getAttribute('sel_id') ? t_s.getAttribute('sel_id').split(';') : new Array();
+		var val_ls = t_s.getAttribute('sel_list').split(';');
+		var valWCfg = '';
+		for(var ls_i = 0; ls_i < val_ls.length && val_ls[ls_i].length && (!ind_ls.length || ls_i < ind_ls.length); ls_i++) {
+		    if(val_w) valWCfg += "<option "+
+			(ind_ls.length ? ("vid='"+strEncode(ind_ls[ls_i])+"' "+((ind_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))
+			    : ((val_ls[ls_i]==nodeText(dataReq))?"selected='true'":"")) + ">" + strEncode(val_ls[ls_i]) + "</option>";
+		    if((ind_ls.length && ind_ls[ls_i] == nodeText(dataReq)) || (!ind_ls.length && val_ls[ls_i] == nodeText(dataReq)))
+		    { sel_ok = true; if(val_r) setNodeText(val_r, val_ls[ls_i]); }
+		}
+	    }
+	    else {
+		var x_lst = servGet(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
+		if(x_lst) {
+		    for(var i_el = 0; i_el < x_lst.childNodes.length; i_el++) {
+			if(x_lst.childNodes[i_el].nodeName.toLowerCase() != 'el') continue;
+			var curElId = x_lst.childNodes[i_el].getAttribute('id');
+			var curElVl = nodeText(x_lst.childNodes[i_el]);
+			if(val_w) valWCfg += "<option " +
+			    (curElId ? ("vid='"+strEncode(curElId)+"' "+((curElId==nodeText(dataReq))?"selected='true'":""))
+				     : ((curElVl==nodeText(dataReq))?"selected='true'":"")) + ">" + strEncode(curElVl) + "</option>";
+			if((curElId && curElId == nodeText(dataReq)) || (!curElId && curElVl == nodeText(dataReq)))
+			{ sel_ok = true; if(val_r) setNodeText(val_r, curElVl); }
+		    }
+		}
+	    }
+	    //  Insert empty field if none selected
+	    if(!sel_ok) {
+		if(val_w) valWCfg += "<option selected='true'>" + nodeText(dataReq) + "</option>";
+		if(val_r) setNodeText(val_r, nodeText(dataReq));
+	    }
+	    if(val_w) val_w.childNodes[0].innerHTML = valWCfg;
 	}
-	else
-	{
-	  if( val_w ) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
-	  if( val_r ) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
-	}
-	t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
-      }
-      else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
-      //>> Fill line
-      var sval = nodeText(dataReq);
-      if( t_s.getAttribute('tp') == 'hex' ) sval = '0x'+parseInt(sval).toString(16);
-      else if( t_s.getAttribute('tp') == 'oct' ) sval = '0'+parseInt(sval).toString(8);
-
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
-      if( val_r )
-      {
-	val_r.title = t_s.getAttribute('help');
-	setNodeText(val_r,sval);
-      }
-      if( val_w && !val_w.isEdited )
-      {
-	val_w.title = t_s.getAttribute('help');
-	val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = sval;
-	//>> Load combo list
-	if( t_s.getAttribute('dest') == 'sel_ed' )
-	{
-	  if( !t_s.getAttribute('select') ) val_w.sel_list = t_s.getAttribute('sel_list').split(';');
-	  else
-	  {
-	    val_w.sel_list = new Array();
-	    var x_lst = servGet(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
-	    if(x_lst)
-	      for(var i_el = 0; i_el < x_lst.childNodes.length; i_el++)
-		if(x_lst.childNodes[i_el].nodeName.toLowerCase() == 'el')
-		  val_w.sel_list.push(nodeText(x_lst.childNodes[i_el]));
-	  }
-	}
-      }
     }
-  }
+    else {
+	//View Boolean fields
+	if(t_s.getAttribute('tp') == 'bool') {
+	    var lab = null; var val_r = null; var val_w = null;
+	    if(cBlk) {
+		// View info
+		if(!wr) {
+		    val_r = document.createElement('span'); val_r.className = 'const';
+		    val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
+		}
+		// View edit
+		else {
+		    val_w = document.createElement('span'); val_w.className = 'line';
+		    val_w.appendChild(document.createElement('input'));
+		    val_w.childNodes[0].type = 'checkbox';
+		    val_w.childNodes[0].itPath = selPath+'/'+brPath;
+		    val_w.childNodes[0].srcNode = t_s;
+		    val_w.childNodes[0].itComm = comm;
+		    val_w.childNodes[0].onclick = function( ) {
+			if(this.itComm) setNodeText(this.srcNode, (this.checked?'1':'0'));
+			else {
+			    var rez = servSet(this.itPath, 'com=com', '<set>'+(this.checked?'1':'0')+'</set>', true);
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    setTimeout('pageRefresh()', 500);
+			}
+			return false;
+		    }
+		    val_w.StatusTip = selPath + '/' + brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
+		}
+		// Check use label
+		if(t_s.getAttribute('dscr')) {
+		    lab = document.createElement('span'); lab.className = 'label';
+		    cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
+		    if(val_w) cBlk.dBlk.appendChild(val_w);
+		    if(val_r) cBlk.dBlk.appendChild(val_r);
+		    cBlk.appendChild(cBlk.dBlk);
+		}
+		else {
+		    if(val_w) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
+		    if(val_r) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
+		}
+		t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
+	    }
+	    else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
+	    // Fill CheckBox
+	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(val_w) {
+		val_w.title = t_s.getAttribute('help');
+		val_w.childNodes[0].checked = parseInt(nodeText(dataReq));
+	    }
+	    if(val_r) {
+		val_r.title = t_s.getAttribute('help');
+		setNodeText(val_r, nodeText(dataReq)=='<EVAL>'?'<EVAL>':(parseInt(nodeText(dataReq))?'On ':'Off '));
+	    }
+	}
+	//View edit fields
+	else if(t_s.getAttribute('tp') == 'str' && (t_s.getAttribute('rows') || t_s.getAttribute('cols'))) {
+	    var lab = null; var edit = null;
+	    if(cBlk) {
+		dBlk = document.createElement('div'); dBlk.className = 'elem';
+		lab = document.createElement('span'); lab.className = 'label';
+		edit = document.createElement('textarea');
+		edit.itPath = selPath+'/'+brPath;
+		edit.srcNode = t_s;
+		edit.itComm = comm;
+		edit.readOnly = !wr;
+		if(t_s.getAttribute('cols')) edit.setAttribute('cols', parseInt(t_s.getAttribute('cols')));
+		else edit.setAttribute('wrap', 'off');
+		edit.setAttribute('rows',parseInt(t_s.getAttribute('rows')) ? parseInt(t_s.getAttribute('rows')):5);
+		edit.onkeyup = function( ) {
+		    if(this.itComm) setNodeText(this.srcNode,this.value);
+		    else if(!this.isChanged && this.value != this.defaultValue) {
+			var btBlk = document.createElement('div'); btBlk.style.textAlign = 'right';
+			var btApply = document.createElement('input'); btApply.type = 'button'; btApply.value = 'Apply';
+			btApply.onclick = function( ) {
+			    var wEl = this.parentNode.parentNode;
+			    var rez = servSet(wEl.childNodes[2].itPath, 'com=com', '<set>'+strEncode(wEl.childNodes[2].value,'html')+'</set>', true);
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    setTimeout('pageRefresh()',500);
+			    wEl.removeChild(this.parentNode);
+			    wEl.childNodes[2].isChanged = false;
+			    return false;
+			}
+			var btCancel = document.createElement('input'); btCancel.type = 'button'; btCancel.value = 'Cancel';
+			btCancel.onclick = function( ) {
+			    var wEl = this.parentNode.parentNode;
+			    wEl.childNodes[2].value = wEl.childNodes[2].defaultValue;
+			    wEl.removeChild(this.parentNode);
+			    wEl.childNodes[2].isChanged = false;
+			    return false;
+			}
+			btBlk.appendChild(btApply); btBlk.appendChild(btCancel); this.parentNode.appendChild(btBlk);
+			this.isChanged = true;
+		    }
+		    else if(this.isChanged && this.value == this.defaultValue && this.parentNode.childNodes[3])
+		    { this.parentNode.removeChild(this.parentNode.childNodes[3]); this.isChanged = false; }
+		    return true;
+		}
+		edit.StatusTip = selPath + '/' + brPath;
+		edit.onmouseover = function() { setStatus(this.StatusTip,10000); }
+		dBlk.appendChild(lab); dBlk.appendChild(document.createElement('br')); dBlk.appendChild(edit); cBlk.appendChild(dBlk);
+		t_s.addr_lab = lab; t_s.addr_edit = edit;
+	    }
+	    else { lab = t_s.addr_lab; edit = t_s.addr_edit; }
+	    // Fill Edit
+	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(edit && !edit.isChanged) {
+		edit.title = t_s.getAttribute('help');
+		edit.value = edit.defaultValue = nodeText(dataReq);
+	    }
+	}
+	//View Data-Time fields
+	else if(t_s.getAttribute('tp') == 'time') {
+	    var lab = null; var val_r = null; var val_w = null;
+	    if(cBlk) {
+		// View info
+		if(!wr) {
+		    val_r = document.createElement('span'); val_r.className = 'const';
+		    val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
+		}
+		// View edit
+		else {
+		    val_w = document.createElement('span'); val_w.className = 'line number';
+		    val_w.itPath = selPath+'/'+brPath;
+		    val_w.srcNode = t_s;
+		    val_w.itComm = comm;
+		    val_w.innerHTML = "<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='4' style='width: 60px;'/>"+
+			"&nbsp;<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/>";
+		    val_w.childNodes[0].onkeyup = val_w.childNodes[1].onkeyup = val_w.childNodes[2].onkeyup =
+			val_w.childNodes[4].onkeyup = val_w.childNodes[5].onkeyup = val_w.childNodes[6].onkeyup = function(e)
+			{
+			    if(this.parentNode.itComm) {
+				var val_w = this.parentNode;
+				var dt = new Date(0);
+				dt.setDate(parseInt(val_w.childNodes[0].value));
+				dt.setMonth(parseInt(val_w.childNodes[1].value)-1);
+				dt.setFullYear(parseInt(val_w.childNodes[2].value));
+				dt.setHours(parseInt(val_w.childNodes[4].value));
+				dt.setMinutes(parseInt(val_w.childNodes[5].value));
+				dt.setSeconds(parseInt(val_w.childNodes[6].value));
+				setNodeText(val_w.srcNode,Math.floor(dt.getTime()/1000));
+				return true;
+			    }
+			    if(!e) e = window.event;
+			    if(this.parentNode.isEdited && e.keyCode == 13) { this.parentNode.childNodes[7].onclick(); return true; }
+			    if(this.parentNode.isEdited && e.keyCode == 27) {
+				var val_w = this.parentNode;
+				for(var i_ch = 0; i_ch < val_w.childNodes.length; i_ch++)
+				    if(val_w.childNodes[i_ch].defaultValue)
+					val_w.childNodes[i_ch].value = val_w.childNodes[i_ch].defaultValue;
+				val_w.removeChild(this.parentNode.childNodes[7]);
+				val_w.isEdited = false;
+				return true;
+			    }
+			    if(this.parentNode.isEdited || this.value == this.defaultValue) return true;
+			    var btOk = document.createElement('img'); btOk.src = '/' + MOD_ID + '/img_button_ok';
+			    btOk.onclick = function( ) {
+				var val_w = this.parentNode;
+				var dt = new Date(0);
+				dt.setDate(parseInt(val_w.childNodes[0].value));
+				dt.setMonth(parseInt(val_w.childNodes[1].value)-1);
+				dt.setFullYear(parseInt(val_w.childNodes[2].value));
+				dt.setHours(parseInt(val_w.childNodes[4].value));
+				dt.setMinutes(parseInt(val_w.childNodes[5].value));
+				dt.setSeconds(parseInt(val_w.childNodes[6].value));
+				var rez = servSet(val_w.itPath, 'com=com', '<set>'+Math.floor(dt.getTime()/1000)+'</set>', true);
+				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+				setTimeout('pageRefresh()', 500);
+				val_w.removeChild(this);
+				val_w.isEdited = false;
+				return false;
+			    }
+			    this.parentNode.appendChild(btOk);
+			    this.parentNode.isEdited = true;
+			    return true;
+			}
+		    val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
+		}
+		// Check for the label using
+		if(t_s.getAttribute('dscr')) {
+		    lab = document.createElement('span'); lab.className = 'label';
+		    cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
+		    if(val_w) cBlk.dBlk.appendChild(val_w);
+		    if(val_r) cBlk.dBlk.appendChild(val_r);
+		    cBlk.appendChild(cBlk.dBlk);
+		}
+		else {
+		    if(val_w) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
+		    if(val_r) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
+		}
+		t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
+	    }
+	    else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
+	    // Fill data
+	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(val_w && !val_w.isEdited) {
+		val_w.title = t_s.getAttribute('help');
+		var dt_time_t = parseInt(nodeText(dataReq));
+		var dt = new Date(dt_time_t?(dt_time_t*1000):0);
+		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = dt.getDate();
+		val_w.childNodes[1].value = val_w.childNodes[1].defaultValue = dt.getMonth()+1;
+		val_w.childNodes[2].value = val_w.childNodes[2].defaultValue = dt.getFullYear();
+		val_w.childNodes[4].value = val_w.childNodes[4].defaultValue = dt.getHours();
+		val_w.childNodes[5].value = val_w.childNodes[5].defaultValue = dt.getMinutes();
+		val_w.childNodes[6].value = val_w.childNodes[6].defaultValue = dt.getSeconds();
+	    }
+	    if(val_r) {
+		val_r.title = t_s.getAttribute('help');
+		var dt = new Date(parseInt(nodeText(dataReq))*1000);
+		setNodeText(val_r, dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
+		    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
+	    }
+	}
+	//View other string and numberic fields
+	else {
+	    var lab = null; var val_r = null; var val_w = null;
+	    if(cBlk) {
+		// View info
+		if(!wr) {
+		    val_r = document.createElement('span'); val_r.className = 'const';
+		    val_r.StatusTip = selPath+'/'+brPath; val_r.onmouseover = function() { setStatus(this.StatusTip,10000); }
+		}
+		// View edit
+		else {
+		    val_w = document.createElement('span'); val_w.className = 'line';
+		    val_w.itPath = selPath+'/'+brPath;
+		    val_w.srcNode = t_s;
+		    val_w.itComm = comm;
+		    val_w.appendChild(document.createElement('input')); val_w.childNodes[0].type = 'text';
+		    val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
+
+		    var tp = t_s.getAttribute('tp');
+		    if(t_s.getAttribute('dest') == 'sel_ed') {
+			val_w.childNodes[0].size = 50;
+			var cmbImg = document.createElement('img'); cmbImg.src = '/'+MOD_ID+'/img_combar';
+			cmbImg.onclick = function( ) {
+			    if(!this.parentNode.sel_list || !this.parentNode.sel_list.length) return false;
+			    var combMenu = getCombo();
+			    var optHTML = '';
+			    for(var i_l = 0; i_l < this.parentNode.sel_list.length; i_l++)
+				optHTML += '<option>' + this.parentNode.sel_list[i_l] + '</option>';
+			    var edFld = this.parentNode.childNodes[0];
+			    combMenu.childNodes[0].edFld = edFld;
+			    combMenu.childNodes[0].innerHTML = optHTML;
+			    combMenu.childNodes[0].size = Math.max(3,this.parentNode.sel_list.length);
+			    combMenu.style.cssText = 'visibility: visible; left: '+posGetX(edFld,true)+'px; '+
+						     'top: '+(posGetY(edFld,true)+edFld.offsetHeight)+'px; '+
+						     'width: '+edFld.offsetWidth+'px';
+			    combMenu.childNodes[0].focus();
+			    combMenu.childNodes[0].onclick = function( ) {
+				this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
+				if(this.selectedIndex < 0) return;
+				this.edFld.value = nodeText(this.options[this.selectedIndex]);
+				if(this.edFld.parentNode.itComm) setNodeText(this.edFld.parentNode.srcNode, this.edFld.value);
+				else {
+				    var rez = servSet(this.edFld.parentNode.itPath, 'com=com', '<set>'+this.edFld.value+'</set>', true);
+				    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+				    setTimeout('pageRefresh()', 500);
+				}
+				return false;
+			    }
+			    return false;
+			}
+			val_w.appendChild(cmbImg);
+		    }
+		    else if(tp == 'dec') {
+			val_w.className += ' number';
+			val_w.childNodes[0].size = 7;
+			var spinImg = document.createElement('img'); spinImg.src = '/'+MOD_ID+'/img_spinar';
+			spinImg.onclick = function(e) {
+			    if(!e) e = window.event;
+			    var val_w = this.parentNode.childNodes[0];
+			    val_w.value = parseInt(val_w.value)+(((e.clientY-posGetY(this))<10)?1:-1);
+			    val_w.onkeyup();
+			    return false;
+			}
+			val_w.appendChild(spinImg);
+		    }
+		    else if(tp == 'hex' || tp == 'oct' || tp == 'real') { val_w.className += ' number'; val_w.childNodes[0].size = 10; }
+		    else {
+			val_w.childNodes[0].size = 30;
+			val_w.childNodes[0].maxLength = t_s.getAttribute('len');
+			if(!val_w.childNodes[0].maxLength) val_w.childNodes[0].maxLength = 1000;
+		    }
+
+		    val_w.childNodes[0].onkeyup = function(e) {
+			if(this.parentNode.itComm) {
+			    var curVal = this.value;
+			    if(this.parentNode.srcNode.getAttribute('tp') == 'hex') curVal = parseInt(curVal, 16);
+			    else if(this.parentNode.srcNode.getAttribute('tp') == 'oct') curVal = parseInt(curVal, 8);
+			    setNodeText(this.parentNode.srcNode,curVal);
+			    return true;
+			}
+			if(!e) e = window.event;
+			if(this.parentNode.isEdited && e.keyCode == 13) { this.parentNode.lastChild.onclick(); return true; }
+			if(this.parentNode.isEdited && e.keyCode == 27) {
+			    this.value = this.defaultValue;
+			    this.parentNode.isEdited = false;
+			    this.parentNode.removeChild(this.parentNode.lastChild);
+			    return true;
+			}
+			if(this.parentNode.isEdited || this.value == this.defaultValue) return true;
+			var btOk = document.createElement('img'); btOk.src = '/' + MOD_ID + '/img_button_ok';
+			btOk.onclick = function( ) {
+			    var curVal = this.parentNode.childNodes[0].value;
+			    if(this.parentNode.srcNode.getAttribute('tp') == 'hex') curVal = parseInt(curVal, 16);
+			    else if(this.parentNode.srcNode.getAttribute('tp') == 'oct') curVal = parseInt(curVal, 8);
+			    var rez = servSet(this.parentNode.itPath, 'com=com', '<set>'+curVal+'</set>', true);
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    setTimeout('pageRefresh()', 500);
+			    this.parentNode.isEdited = false;
+			    this.parentNode.removeChild(this);
+			    return false;
+			}
+			this.parentNode.appendChild(btOk);
+			this.parentNode.isEdited = true;
+			return true;
+		    }
+		}
+		// Check use label
+		if(t_s.getAttribute('dscr')) {
+		    lab = document.createElement('span'); lab.className = 'label';
+		    cBlk.dBlk = document.createElement('div'); cBlk.dBlk.className = 'elem'; cBlk.dBlk.appendChild(lab);
+		    if(val_w) cBlk.dBlk.appendChild(val_w);
+		    if(val_r) cBlk.dBlk.appendChild(val_r);
+		    cBlk.appendChild(cBlk.dBlk);
+		}
+		else {
+		    if(val_w) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_w); else { delete val_w; val_w = null; } }
+		    if(val_r) { if(cBlk.dBlk) cBlk.dBlk.appendChild(val_r); else { delete val_r; val_r = null; } }
+		}
+		t_s.addr_lab = lab; t_s.addr_val_r = val_r; t_s.addr_val_w = val_w;
+	    }
+	    else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
+	    // Fill line
+	    var sval = nodeText(dataReq);
+	    if(t_s.getAttribute('tp') == 'hex') sval = '0x' + parseInt(sval).toString(16);
+	    else if(t_s.getAttribute('tp') == 'oct') sval = '0' + parseInt(sval).toString(8);
+
+	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(val_r) {
+		val_r.title = t_s.getAttribute('help');
+		setNodeText(val_r,sval);
+	    }
+	    if(val_w && !val_w.isEdited) {
+		val_w.title = t_s.getAttribute('help');
+		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = sval;
+		// Load combo list
+		if(t_s.getAttribute('dest') == 'sel_ed') {
+		    if(!t_s.getAttribute('select')) val_w.sel_list = t_s.getAttribute('sel_list').split(';');
+		    else {
+			val_w.sel_list = new Array();
+			var x_lst = servGet(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
+			if(x_lst)
+			    for(var i_el = 0; i_el < x_lst.childNodes.length; i_el++)
+				if(x_lst.childNodes[i_el].nodeName.toLowerCase() == 'el')
+				    val_w.sel_list.push(nodeText(x_lst.childNodes[i_el]));
+		    }
+		}
+	    }
+	}
+    }
 }
 /***************************************************
  * actEnable - Actions enable.                     *

@@ -1,4 +1,7 @@
 2015-04-06 Roman
+- FIX:DAQ.ICP_DAS: aiTypes translation for I-87017ZW and I-87026PW fixed.
+- FIX:UI.WebCfgD: Function basicFields() of WebCfgDVCA.js cleaned.
+    Static selected lists into "ind_ls" and "val_ls" processing some improved for empty items pass and other.
 - FIX:SYS: {debian|debian_mod}/* are appended by links to LibsDB and ARCHIVES/{VAL,MESS} for Model.{AGLKS,Boiler} for the models call into demon mode.
     FIX:{debian|debian_mod}/control: Fixed for depends and openscada-core appended by the included modules to list.
 - Transport: User API objects are appended by functions: In::{status,addr}, Out::{status,addr,timings}.

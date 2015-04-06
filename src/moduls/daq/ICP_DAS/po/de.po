@@ -22,10 +22,10 @@ msgstr ""
 
 msgid ""
 "4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to "
-"150mV;-20mA to 20mA;0mA to 20mA;"
+"150mV;-20mA to 20mA;0mA to 20mA"
 msgstr ""
 "4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to "
-"150mV;-20mA to 20mA;0mA to 20mA;"
+"150mV;-20mA to 20mA;0mA to 20mA"
 
 msgid ""
 "-15mV to +15mV;-50mV to +50mV;-100mV to +100mV;-500mV to +500mV;-1V to "

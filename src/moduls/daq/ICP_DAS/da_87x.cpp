@@ -39,7 +39,7 @@ da_87x::da_87x( )
     devs["I-87017DW"]	= DevFeature( 0x0010 );
     devs["I-87017ZW"]	= DevFeature( 0x0014 );
     devs["I-87017ZW"].aiTypes = string("7;8;9;10;11;12;13;26\n")+
-	_("4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to 150mV;-20mA to 20mA;0mA to 20mA;");
+	_("4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to 150mV;-20mA to 20mA;0mA to 20mA");
     devs["I-87018"]	= DevFeature( 0x0108 );
     devs["I-87018ZW"]	= DevFeature( 0x010A );
     devs["I-87019RW"]	= DevFeature( 0x0108 );
@@ -54,7 +54,7 @@ da_87x::da_87x( )
     devs["I-87026"]	= DevFeature( 0,	2 );
     devs["I-87026PW"]	= DevFeature( 0x0006,	2,	0x0101,	0x0101 );
     devs["I-87026PW"].aiTypes = string("7;8;9;10;11;12;13;26\n")+
-	_("4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to 150mV;-20mA to 20mA;0mA to 20mA;");
+	_("4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to 150mV;-20mA to 20mA;0mA to 20mA");
     devs["I-87028"]	= DevFeature( 0,	8 );
     devs["I-87037"]	= DevFeature( 0,	0,	0,	0x0002 );
     devs["I-87040"]	= DevFeature( 0,	0,	0x0004,	0,	32 );
