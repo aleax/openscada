@@ -29,7 +29,7 @@ msgstr "Roman Savotschenko"
 msgid ""
 "Provides the library of functions compatible with SCADA Complex1 of the firm "
 "SIC \"DIYA\"."
-msgstr "Bietet die Bibliothek von Funktionen mit SCADA Complex1 der Firma SIC "DIYA" kompatibel."
+msgstr "Bietet die Bibliothek von Funktionen mit SCADA Complex1 der Firma SIC \"DIYA\" kompatibel."
 
 msgid "Function"
 msgstr "Funktion"
