@@ -27,6 +27,7 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Open SCADA system core
  Open SCADA system core. For access use default account "root" and password "openscada".
+ .
  Includes the most used modules into the core: DB.DBF, DB.SQLite, DAQ.JavaLikeCalc, DAQ.LogicLev,
  Transport.Sockets, Transport.Serial, Protocol.SelfSystem, Protocol.UserProtocol, Special.FLibComplex1, Special.FLibSYS.
 

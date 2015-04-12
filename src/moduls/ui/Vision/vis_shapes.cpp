@@ -1479,8 +1479,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	case A_MediaSpeedPlay:
-	    switch(shD->mediaType)
-	    {
+	    switch(shD->mediaType) {
 		case FM_IMG: case FM_ANIM: shD->mediaSpeed = s2i(val);	break;
 		case FM_FULL_VIDEO: shD->videoPlay = (bool)s2i(val);	break;
 	    }
@@ -1527,8 +1526,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if(uiPrmPos >= A_MediaArs) {
 		int areaN = (uiPrmPos-A_MediaArs)/A_MediaArsSz;
 		if(areaN >= (int)shD->maps.size()) break;
-		switch((uiPrmPos-A_MediaArs)%A_MediaArsSz)
-		{
+		switch((uiPrmPos-A_MediaArs)%A_MediaArsSz) {
 		    case A_MediaArShape: shD->maps[areaN].shp = s2i(val);	break;
 		    case A_MediaArCoord: {
 			string stmp;

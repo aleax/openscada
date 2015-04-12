@@ -1055,11 +1055,11 @@ bool TMArchivator::chkMessOK( const string &icateg, int8_t ilvl )
 
 TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool status() - get archivator status.
+    // bool status( ) - get the archivator start status.
     if(iid == "status")	return startStat();
-    // int end() - get archivator data end time.
+    // int end( ) - get the archivator data end time.
     if(iid == "end")	return (int64_t)end();
-    // int begin() - get archivator data begin time.
+    // int begin( ) - get the archivator data begin time.
     if(iid == "begin")	return (int64_t)begin();
 
     //Configuration functions call

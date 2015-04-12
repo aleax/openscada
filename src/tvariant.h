@@ -152,6 +152,7 @@ class TVarObj
 	TVariant propGet( const string &ids, char sep );		//Get hierarchical by separator or path for <sep>=0
 	virtual void propSet( const string &id, TVariant val );
 	void propSet( const string &ids, char sep, TVariant val );	//Set hierarchical by separator or path for <sep>=0
+	void propClear( );
 
 	virtual string getStrXML( const string &oid = "" );
 	static AutoHD<TVarObj> parseStrXML( const string &str, XMLNode *nd = NULL, AutoHD<TVarObj> prev = NULL );
@@ -160,10 +161,9 @@ class TVarObj
 
     protected:
 	//Attributes
-	map<string,TVariant> mProps;
+	map<string, TVariant> mProps;
 	unsigned int mUseCnt;
-	static pthread_mutex_t	connM;	//Connection mutex
-	Res oRes;
+	pthread_mutex_t	dataM;
 };
 
 //*****************************************************************

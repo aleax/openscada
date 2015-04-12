@@ -1,3 +1,16 @@
+2015-04-12 Roman
+- FIX:SYS: The internationalisation  files for included to the core modules also placed to the package debian_mod/openscada-core.install.
+    User API object XMLNodeObj expanded by function clear() for allow fast a node clean up from childs, text and/or attributes.
+    The User API generic object's data resource Res replaced by pthread_mutex_t and the also used for connections to objects.
+- !!:TVArchive: User API functions for the object are added: status(), end(), begin(), period(), archivatorList(), getVal().
+- TVArchivator: User API function status() for the object is added.
+- !!:DAQ.JavaLikeCalc: Set for binary operations like "a = b+c+d+e;" using single temporary register and allow speed optimization
+    for strings append mostly.
+- FIX:UI.QTCfg: Edited now text element horizontal resizing fix.
+- FIX:UI.VCAEngine: User API operations mime() and mimeSet() used, tested and fixed for primitive "Diagram" source edition,
+    storing into the session table and the result display, for SVG.
+
+
 2015-04-06 Roman
 - FIX:DAQ.ICP_DAS: aiTypes translation for I-87017ZW and I-87026PW fixed.
 - FIX:UI.WebCfgD: Function basicFields() of WebCfgDVCA.js cleaned.

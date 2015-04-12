@@ -1261,15 +1261,16 @@ string SessWdg::calcProgStors( const string &attr ){ return parent().freeStat() 
 
 int SessWdg::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
-string SessWdg::resourceGet( const string &id, string *mime )
+string SessWdg::resourceGet( const string &iid, string *mime )
 {
-    string  mimeType,
-	    mimeData = sessAttr("media://"+id);		//Try load from the session attribute
+    string  id = TSYS::strParse(iid, 0, "?"),
+	    mimeType,
+	    mimeData = sessAttr("media://"+id);	//Try load from the session attribute
     if(mimeData.size()) {
 	int off = 0;
 	mimeType = TSYS::strLine(mimeData, 0, &off);
 	if(mime) *mime = mimeType;
-	return TSYS::strDecode(mimeData.substr(off), TSYS::base64);
+	return mimeData.substr(off);
     }
 
     //Load original
@@ -1281,7 +1282,7 @@ string SessWdg::resourceGet( const string &id, string *mime )
 
 void SessWdg::resourceSet( const string &id, const string &data, const string &mime )
 {
-    sessAttrSet("media://"+id, data.empty() ? "" : mime+"\n"+TSYS::strEncode(data,TSYS::base64));
+    sessAttrSet("media://"+id, data.empty() ? "" : mime+"\n"+data);
 }
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
@@ -1774,21 +1775,21 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // string mime(string addr, string type = "") - read mime data from the session table or primal source
     //  addr - address to mime by link attribute to mime or direct mime address
     //  type - return attribute for mime type store
-    if(iid == "mime" && prms.size() >= 1) {
+    if(iid == "mime" && prms.size()) {
 	string addr = prms[0], rez, tp;
 	//Check for likely attribute
 	if(attrPresent(addr)) {
 	    AutoHD<Attr> a = attrAt(addr);
-	    if(a.at().type() == TFld::String && a.at().flgGlob()&Attr::Image) addr = a.at().getS();
+	    if(a.at().type() == TFld::String /*&& a.at().flgGlob()&Attr::Image*/) addr = a.at().getS();
 	}
 	rez = resourceGet(addr, &tp);
 	if(prms.size() >= 2) { prms[1].setS(tp); prms[1].setModify(); }
 
-	return rez;
+	return TSYS::strDecode(rez, TSYS::base64);
     }
     // int mimeSet(string addr, string data, string type = "") - set or clear data to the session table
     //  addr - address to mime by link attribute to mime or direct mime address
-    //  data - set to the mime data, empty for clear into 
+    //  data - set to the mime data, empty for clear into
     //  type - mime type for store data
     if(iid == "mimeSet" && prms.size() >= 2) {
 	string addr = prms[0];
@@ -1796,11 +1797,11 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	AutoHD<Attr> a;
 	if(attrPresent(addr)) {
 	    a = attrAt(addr);
-	    if(a.at().type() == TFld::String && a.at().flgGlob()&Attr::Image) addr = a.at().getS();
+	    if(a.at().type() == TFld::String /*&& a.at().flgGlob()&Attr::Image*/) addr = a.at().getS();
 	    else a.free();
 	}
-	resourceSet(addr, prms[1], (prms.size()>=3)?prms[2]:"");	//???? Store to the session's context table
-	if(!a.freeStat()) a.at().setS(a.at().getS(), false, true);	//Mark the attribute to modify state
+	resourceSet(TSYS::strParse(addr,0,"?"), TSYS::strEncode(prms[1],TSYS::base64), (prms.size()>=3)?prms[2]:"");
+	if(!a.freeStat()) a.at().setS(TSYS::strParse(addr,1,"?").size()?TSYS::strLabEnum(addr):addr+"?0");	//Mark the attribute to modify state
 
 	return (int)prms[1].getS().size();
     }

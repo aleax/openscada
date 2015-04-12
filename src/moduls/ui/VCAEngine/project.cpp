@@ -1245,7 +1245,7 @@ string Page::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if(!ownerProj()->mimeDataGet(id, mimeType, &mimeData ) && !parent().freeStat())
+    if(!ownerProj()->mimeDataGet(id,mimeType,&mimeData) && !parent().freeStat())
 	mimeData = parent().at().resourceGet(id, &mimeType);
     if(mime) *mime = mimeType;
 

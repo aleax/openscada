@@ -570,7 +570,7 @@ void TextEdit::resizeEvent( QResizeEvent *e )
 {
     if(but_box && but_box->isVisible()) {
 	but_box->move(width()-but_box->width(), height()-but_box->height());
-	ed_fld->resize(ed_fld->width(), height()-but_box->height());
+	ed_fld->resize(width(), height()-but_box->height());
     }
     else ed_fld->resize(size());
 }

@@ -796,8 +796,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    }
 	    // Scan last window
 	    while(true) {
-		if(c_pos >= (int)buf.tm_high->size() || tm < (*buf.tm_high)[c_pos].tm)
-		{
+		if(c_pos >= (int)buf.tm_high->size() || tm < (*buf.tm_high)[c_pos].tm) {
 		    if(b_el.val == eval) mEvalCnt++;
 		    if(c_pos == (int)buf.tm_high->size()) buf.tm_high->push_back(b_el);
 		    else buf.tm_high->insert(buf.tm_high->begin()+c_pos,b_el);
@@ -829,8 +828,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    }
 	    // Scan last window
 	    while(true) {
-		if(c_pos >= (int)buf.tm_low->size() || tm/1000000 < (*buf.tm_low)[c_pos].tm)
-		{
+		if(c_pos >= (int)buf.tm_low->size() || tm/1000000 < (*buf.tm_low)[c_pos].tm) {
 		    if(b_el.val == eval) mEvalCnt++;
 		    if(c_pos == (int)buf.tm_low->size()) buf.tm_low->push_back(b_el);
 		    else buf.tm_low->insert(buf.tm_low->begin()+c_pos,b_el);
@@ -955,8 +953,7 @@ int64_t TVArchive::end( const string &arch )
 
     ResAlloc res(aRes, false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->end() > rez)
-	{
+	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->end() > rez) {
 	    rez = arch_el[i_a]->end();
 	    if(!arch.empty())	break;
 	}
@@ -976,8 +973,7 @@ int64_t TVArchive::begin( const string &arch )
 
     ResAlloc res(aRes, false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->begin() < rez)
-	{
+	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->begin() < rez) {
 	    rez = arch_el[i_a]->begin();
 	    if(!arch.empty())	break;
 	}
@@ -1061,8 +1057,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     bool stOnCh = runSt;
 
     //Disable all links
-    if(!pattr_src.freeStat() && (!runSt || vl == Passive || vl != srcMode() || src != srcData()))
-    {
+    if(!pattr_src.freeStat() && (!runSt || vl == Passive || vl != srcMode() || src != srcData())) {
 	owner().setActVal(this, false);
 	srcPAttr().at().setArch(AutoHD<TVArchive>());
 	pattr_src.free();
@@ -1074,8 +1069,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
 	else {
 	    //Double link prevent
-	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this)
-	    {
+	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this) {
 		if(!noex) {
 		    pattr_src.free();
 		    throw TError(nodePath().c_str(), _("The archive '%s' was already connected to target parameter '%s'."),
@@ -1090,12 +1084,11 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     }
 
     if(runSt && vl == PassiveAttr) {
-	pattr_src = srcPAttr(true,src);
+	pattr_src = srcPAttr(true, src);
 	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
 	else {
 	    //Double link prevent
-	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this)
-	    {
+	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this) {
 		if(!noex) {
 		    pattr_src.free();
 		    throw TError(nodePath().c_str(), _("The archive '%s' was already connected to target parameter '%s'."),
@@ -1116,8 +1109,7 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
 {
     //Get from buffer
     if((arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())))
-	switch(TValBuf::valType())
-	{
+	switch(TValBuf::valType()) {
 	    case TFld::Integer:	return TValBuf::getI(tm, up_ord);
 	    case TFld::String:	return TValBuf::getS(tm, up_ord);
 	    case TFld::Real:	return TValBuf::getR(tm, up_ord);
@@ -1178,7 +1170,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 	if(buf.realSize() != prevSz) {			// Request good
 	    iend = buf.begin()-1;
 	    if(iend <= ibeg)	break;	//All data requested
-	    iA = propArchs.rbegin();	//Next block check 
+	    iA = propArchs.rbegin();	//Next block check
 	}
     }
 }
@@ -1276,8 +1268,7 @@ void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
 	    arch_el.erase(arch_el.begin()+i_l);
 	} else i_l++;
 
-    if(toModify && TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
-    {
+    if(toModify && TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS())) {
 	string als;
 	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
 	    als += arch_el[i_l]->archivator().workId()+";";
@@ -1294,15 +1285,13 @@ void TVArchive::archivatorSort()
     do {
 	rep_try = false;
 	for(unsigned i_l = 1; i_l < arch_el.size(); i_l++)
-	    if(arch_el[i_l-1]->archivator().valPeriod() > arch_el[i_l]->archivator().valPeriod())
-	    {
+	    if(arch_el[i_l-1]->archivator().valPeriod() > arch_el[i_l]->archivator().valPeriod()) {
 		TVArchEl *t_el = arch_el[i_l-1];
 		arch_el[i_l-1] = arch_el[i_l];
 		arch_el[i_l] = t_el;
 		rep_try = true;
 	    }
-    }
-    while(rep_try);
+    } while(rep_try);
 }
 
 string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch, int hsz, int vsz, double valmax, double valmin, string *tp )
@@ -1541,11 +1530,10 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	return rez;
     }
     else if((v_max-v_min) < 1e-30 && fabs(v_max) < 1e-30)	{ v_max += 0.5; v_min -= 0.5; }
-    else if((v_max-v_min) / fabs(v_min+(v_max-v_min)/2) < 0.001)
-    {
-        double wnt_dp = 0.001*fabs(v_min+(v_max-v_min)/2)-(v_max-v_min);
-        v_min -= wnt_dp/2;
-        v_max += wnt_dp/2;
+    else if((v_max-v_min) / fabs(v_min+(v_max-v_min)/2) < 0.001) {
+	double wnt_dp = 0.001*fabs(v_min+(v_max-v_min)/2)-(v_max-v_min);
+	v_min -= wnt_dp/2;
+	v_max += wnt_dp/2;
     }
     if(valmax > valmin) {
 	v_max = vmax(v_max, valmax);
@@ -1561,8 +1549,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     v_max = ceil(v_max/v_div)*v_div;
     while(((v_max-v_min)/v_div) < 5) v_div /= 2;
     //  Draw vertical grid and symbols
-    for(double i_v = v_min; (v_max-i_v)/v_div > -0.1; i_v += v_div)
-    {
+    for(double i_v = v_min; (v_max-i_v)/v_div > -0.1; i_v += v_div) {
 	int v_pos = v_w_start + v_w_size - (int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
 #if HAVE_GD_CORE
 	gdImageLine(im, h_w_start, v_pos, h_w_start+h_w_size, v_pos, clr_grid);
@@ -1591,7 +1578,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	if(c_tm <= buf.end()) {
 	    c_val = buf.getR(&c_tm, true);
 	    c_pos = h_w_start+h_w_size*(vmax(vmin(c_tm,h_max),h_min)-h_min)/(h_max-h_min);
-	}else c_pos = 0;
+	} else c_pos = 0;
 	//Square Average
 	if(aver_pos == c_pos) {
 	    if(aver_vl == EVAL_REAL)	aver_vl = c_val;
@@ -1636,7 +1623,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 #if HAVE_GD_CORE
     int img_sz;
     char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, 1);
-    rez.assign(img_ptr,img_sz);
+    rez.assign(img_ptr, img_sz);
     gdFree(img_ptr);
     gdImageDestroy(im);
 
@@ -1651,6 +1638,38 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
 TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // bool status() - get the archive start status.
+    if(iid == "status")	return startStat();
+    // int end(string arch = "") - get the archive data end time for the archiver <arch>, in microseconds.
+    if(iid == "end")	return (int64_t)end(prms.size()?prms[0].getS():string(""));
+    // int begin(string arch = "") - get the archive data begin time for the archiver <arch>, in microseconds.
+    if(iid == "begin")	return (int64_t)begin(prms.size()?prms[0].getS():string(""));
+    // int period(string arch = "") - get the archive data period for the archiver <arch>, in microseconds.
+    if(iid == "period")	return (int64_t)period(prms.size()?prms[0].getS():string(""));
+    // TArrayObj archivatorList() - get the archivers list which using the archive as source.
+    if(iid == "archivatorList") {
+	TArrayObj *rez = new TArrayObj();
+	vector<string> ls; archivatorList(ls);
+	for(unsigned iA = 0; iA < ls.size(); iA++) rez->arSet(iA, ls[iA]);
+	return rez;
+    }
+    // VarType getVal(int tm, bool up_ord = false, string arch = "") -
+    //         get one value from the archive for the time <tm>, up order <up_ord> and the archiver <arch>.
+    //  tm - the time for requested value, in microseconds. Set to 0 for end().
+    //  up_ord - fit the requested value time to up for the grid.
+    //  arch - the archiver for the request. Set to empty for buffer and all archivers try.
+    //         Set to "<buffer>" for the buffer only process.
+    if(iid == "getVal" && prms.size()) {
+	int64_t tm = prms[0].getI();
+	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
+	if(!tm) tm = end(arch);
+	TVariant rez = getVal(&tm, (prms.size()>=2)?prms[1].getB():false, arch);
+	prms[0].setI(tm); prms[0].setModify();
+	return rez;
+    }
+    //!!!! getVals() - append after internal represent object to TValBuf append.
+    //!!!! setVals() - append after internal represent object to TValBuf append.
+
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
@@ -2270,6 +2289,9 @@ void *TVArchivator::Task( void *param )
 
 TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // bool status( ) - get the archivator start status.
+    if(iid == "status")	return startStat();
+
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
@@ -2327,8 +2349,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
 
 	ResAlloc res(archRes,false);
-	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
-	{
+	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel) {
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
 	    if(n_per)	n_per->childAdd("el")->setText(r2s((double)iel->second->archive().period()/1000000.,6));
 	    if(n_size)	n_size->childAdd("el")->setText(i2s(iel->second->archive().size()));
@@ -2360,8 +2381,7 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 	string lstStat;
 	AutoHD<TVal> paVl = archive().srcPAttr();
 	AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&paVl.at().owner()));
-	if(sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode() != TController::Off)
-	{
+	if(sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode() != TController::Off) {
 	    XMLNode req("get");
 	    req.clear()->setAttr("local","1")->
 		setAttr("path", paVl.at().nodePath(0,true)+"/%2fserv%2fval")->
@@ -2378,7 +2398,8 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 		TValBuf buf(archive().valType(), 0, 0, false, true);
 		buf.setS(vl.getS(), remTm);
 		setVals(buf);
-	    }else if(!lstStat.empty()) goto reqCall;
+	    }
+	    else if(!lstStat.empty()) goto reqCall;
 	}
     }
 
@@ -2404,8 +2425,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
     {
 	AutoHD<TVal> paVl = archive().srcPAttr();
 	AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&paVl.at().owner()));
-	if(sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode() != TController::Off)
-	{
+	if(sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode() != TController::Off) {
 	    // Holes process
 	    int64_t firstEval = 0, curEval = 0;
 	    int64_t cbeg = buf.begin();
@@ -2431,8 +2451,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 
 		    lstStat = SYS->daq().at().rdStRequest(sPrm.at().owner().workId(), req, lstStat, false);
 		    bool evalOk = false, noEvalOk = false;
-		    if(!lstStat.empty() && !s2i(req.attr("rez")) && s2ll(req.attr("tm_grnd")) && s2ll(req.attr("tm")))
-		    {
+		    if(!lstStat.empty() && !s2i(req.attr("rez")) && s2ll(req.attr("tm_grnd")) && s2ll(req.attr("tm"))) {
 			// Get values and put to buffer
 			int64_t bbeg = s2ll(req.attr("tm_grnd"));
 			int64_t bend = s2ll(req.attr("tm"));
@@ -2449,31 +2468,26 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 				curVal = TSYS::strParse(svl, 0, " ", &var_off, true);
 			    }
 			    else curPos = ((bend-bbeg)/bper)+1;
-			    switch(val_tp)
-			    {
-				case TFld::Boolean:
-				{
+			    switch(val_tp) {
+				case TFld::Boolean: {
 				    char vl = s2i(prevVal);
 				    if(prevVal == EVAL_STR || vl == EVAL_BOOL) { evalOk = true; prevPos = curPos; }
 				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setB(vl, bbeg+prevPos*bper); }
 				    break;
 				}
-				case TFld::Integer:
-				{
+				case TFld::Integer: {
 				    int64_t vl = s2ll(prevVal);
 				    if(prevVal == EVAL_STR || vl == EVAL_INT) { evalOk = true; prevPos = curPos; }
 				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setI(vl, bbeg+prevPos*bper); }
 				    break;
 				}
-				case TFld::Real:
-				{
+				case TFld::Real: {
 				    double vl = s2r(prevVal);
 				    if(prevVal == EVAL_STR || vl == EVAL_REAL) { evalOk = true; prevPos = curPos; }
 				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setR(vl, bbeg+prevPos*bper); }
 				    break;
 				}
-				case TFld::String:
-				{
+				case TFld::String: {
 				    if(prevVal == EVAL_STR) { evalOk = true; prevPos = curPos; }
 				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setS(prevVal, bbeg+prevPos*bper); }
 				    break;
@@ -2490,7 +2504,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 		    lstStat = "";
 		    firstEval = 0;
 		}
-	    }while(cbeg <= iend);
+	    } while(cbeg <= iend);
 	}
     }
 }
@@ -2530,8 +2544,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 			float v_o = *(float*)wPrevVal.c_str();
 			if(c_val == EVAL_BOOL) c_val = v_o;
 			if(c_val != EVAL_BOOL && v_o != EVAL_BOOL)
-			    switch(combM)
-			    {
+			    switch(combM) {
 				case TVArchive::MovAver:
 				    s_k = c_tm-a_per*(c_tm/a_per);
 				    n_k = ibuf.period();
@@ -2570,8 +2583,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 			int64_t v_o = *(int64_t*)wPrevVal.c_str();
 			if(c_val == EVAL_INT) c_val = v_o;
 			if(c_val != EVAL_INT && v_o != EVAL_INT)
-			    switch(combM)
-			    {
+			    switch(combM) {
 				case TVArchive::MovAver:
 				    s_k = c_tm-a_per*(c_tm/a_per);
 				    n_k = ibuf.period();
@@ -2601,8 +2613,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 			double v_o = *(double*)wPrevVal.c_str();
 			if(c_val == EVAL_REAL) c_val = v_o;
 			if(c_val != EVAL_REAL && v_o != EVAL_REAL)
-			    switch(combM)
-			    {
+			    switch(combM) {
 				case TVArchive::MovAver:
 				    s_k = c_tm-a_per*(c_tm/a_per);
 				    n_k = ibuf.period();

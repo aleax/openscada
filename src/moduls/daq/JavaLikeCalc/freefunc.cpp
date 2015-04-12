@@ -390,14 +390,16 @@ void Func::funcClear( )
     mFncs.clear();
 }
 
-int Func::regNew( bool sep )
+int Func::regNew( bool sep, int recom )
 {
     //Get new register
     unsigned i_rg = mRegs.size();
-    if(!sep)
-	for(i_rg = 0; i_rg < mRegs.size(); i_rg++)
+    if(!sep) {
+	if(recom >= 0 && recom < mRegs.size() && !mRegs[recom]->lock() && mRegs[recom]->type() == Reg::Free) i_rg = recom;
+	else for(i_rg = 0; i_rg < mRegs.size(); i_rg++)
 	    if(!mRegs[i_rg]->lock() && mRegs[i_rg]->type() == Reg::Free)
 		break;
+    }
     if(i_rg >= mRegs.size()) mRegs.push_back(new Reg(i_rg));
 
     return i_rg;
@@ -796,14 +798,17 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
     if(op1_tp != Reg::Dynamic) op2 = cdTypeConv(op2, op1_tp);
     else if(op2->pos() < 0) op2 = cdMvi(op2);
     int op2_pos = op2->pos();
+
+    if(rez != op1) op1->free();
+    if(rez != op2) op2->free();
     // Prepare rezult
     if(!rez) {
-	rez = regAt(regNew());
+	rez = regAt(regNew(false,op1_pos));	//Set recomend to op1_pos for appending fast, mostly for strings.
 	rez->setType(rez_tp);
     }
     //!!!! Free operands after alloc rezult for prevent operations from self by some problems with object
-    if(rez != op1) op1->free();
-    if(rez != op2) op2->free();
+    //if(rez != op1) op1->free();
+    //if(rez != op2) op2->free();
     // Add code
     switch(cod) {
 	case Reg::Add: case Reg::AddAss:
@@ -1874,7 +1879,9 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			case Reg::Bool: case Reg::Int: case Reg::Real:
 			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) + getValR(val,reg[ptr->a2]);	break;
 			case Reg::String:
-			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);	break;
+			    if(ptr->rez == ptr->a1 && reg[ptr->rez].type() == Reg::String)
+				reg[ptr->rez].val().s->append(getValS(val,reg[ptr->a2]));
+			    else reg[ptr->rez] = getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]);	break;
 			default:
 			    throw TError(nodePath().c_str(), _("Not supported type %d for operation 'Add'."), reg[ptr->a1].vType(this));
 		    }

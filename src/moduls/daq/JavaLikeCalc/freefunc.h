@@ -294,7 +294,7 @@ class Func : public TConfig, public TFunction
 	void funcClear( );
 
 	// Registers`list functions
-	int regNew( bool sep = false );
+	int regNew( bool sep = false, int recom = -1 );
 	int regGet( const string &nm );
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
