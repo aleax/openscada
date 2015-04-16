@@ -1,4 +1,6 @@
 2015-04-16 Roman
+- !!:FIX:DB.MySQL: Address field "names" expanded to "charset-collation" and used as "CREATE db CHARACTER SET charset COLLATE collation"
+    into the DB creation and for connection set as "SET NAMES charset COLLATE collation".
 - !!!!:FIX:DB.PostgreSQL: Entries dublicates and other ones miss for request fieldSeek() workaround is added by "ORDER BY" to the request append
 	and the entries force sort.
     DateTimeDec processing fix twice: for check to type change (the row recreation) and the value for flag TCfg::ExtValTwo request.

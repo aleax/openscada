@@ -134,15 +134,17 @@ void MBD::enable( )
 
     //Address parse
     int off = 0;
-    host = TSYS::strParse(addr(),0,";",&off);
-    user = TSYS::strParse(addr(),0,";",&off);
-    pass = TSYS::strParse(addr(),0,";",&off);
-    bd   = TSYS::strParse(addr(),0,";",&off);
-    port = s2i(TSYS::strParse(addr(),0,";",&off));
-    u_sock = TSYS::strParse(addr(),0,";",&off);
-    names = TSYS::strParse(addr(),0,";",&off);
+    host = TSYS::strParse(addr(), 0, ";", &off);
+    user = TSYS::strParse(addr(), 0, ";", &off);
+    pass = TSYS::strParse(addr(), 0, ";", &off);
+    bd   = TSYS::strParse(addr(), 0, ";", &off);
+    port = s2i(TSYS::strParse(addr(), 0, ";", &off));
+    u_sock = TSYS::strParse(addr(), 0, ";", &off);
+    string names = TSYS::strParse(addr(), 0, ";", &off),
+	nmChar = TSYS::strParse(names, 0, "-"),
+	nmColl = TSYS::strParse(names, 1, "-");
     string tms = TSYS::strParse(addr(),0,";",&off);
-    cd_pg  = codePage().size()?codePage():Mess->charset();
+    cd_pg  = codePage().size() ? codePage() : Mess->charset();
 
     //API init
     if(!mysql_init(&connect)) throw TError(nodePath().c_str(), _("Error initializing client."));
@@ -163,9 +165,18 @@ void MBD::enable( )
 
     TBD::enable();
 
-    try { sqlReq("CREATE DATABASE IF NOT EXISTS `" + TSYS::strEncode(bd,TSYS::SQL) + "`"); }
+    try {
+	string tvl, req = "CREATE DATABASE IF NOT EXISTS `" + TSYS::strEncode(bd,TSYS::SQL) + "`";
+	if(nmChar.size()) req += " CHARACTER SET '"+nmChar+"'";
+	if(nmColl.size()) req += " COLLATE '"+nmColl+"'";
+	sqlReq(req);
+    }
     catch(...) { }
-    if(!names.empty()) sqlReq("SET NAMES '" + names + "'");
+    if(nmChar.size()) {
+	string req = "SET NAMES '"+nmChar+"'";
+	if(nmColl.size()) req += " COLLATE '"+nmColl+"'";
+	sqlReq(req);
+    }
 }
 
 void MBD::disable( )
@@ -300,7 +311,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{names}[;{tms}]]]\".\n"
+	    _("MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation}[;{tms}]]]\".\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
 	      "  user - DB user name;\n"
@@ -308,9 +319,9 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  db - DB name;\n"
 	      "  port - DB server port (default 3306);\n"
 	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
-	      "  names - MySQL SET NAMES charset;\n"
+	      "  charset-collation - MySQL 'SET NAMES charset' and for the DB (scheme) creation;\n"
 	      "  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
-	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8;5,2,2\".\n"
+	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci;5,2,2\".\n"
 	      "For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."));
 	if(reqCnt)
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRWRW,"root",SDB_ID);
