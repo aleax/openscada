@@ -2,7 +2,7 @@
 //OpenSCADA system module BD.PostgreSQL file: postgre.h
 /***************************************************************************
  *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
- *                 2013-2014 by Roman Savochenko, rom_as@oscada.org        *
+ *                 2013-2015 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@ class MTable : public TTable
 	MTable( string name, MBD *iown, bool create );
 	~MTable( );
 
-	//> Field's functions
+	// Field's functions
 	void fieldStruct( TConfig &cfg );
 	bool fieldSeek( int row, TConfig &cfg );
 	void fieldGet( TConfig &cfg );

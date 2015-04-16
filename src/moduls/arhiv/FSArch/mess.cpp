@@ -791,8 +791,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	//Check mess records
 	int pass_cnt = 0;
 	time_t last_tm = 0;
-	while((rdOK=(fgets(buf,sizeof(buf),f)!=NULL)) && time(NULL) < upTo)
-	{
+	while((rdOK=(fgets(buf,sizeof(buf),f)!=NULL)) && time(NULL) < upTo) {
 	    char stm[51]; int off = 0, bLev;
 	    sscanf(buf, "%50s %d", stm, &bLev);
 	    b_rec.level = (TMess::Type)bLev;
@@ -801,8 +800,8 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	    if(b_rec.time >= e_tm) break;
 	    if(b_rec.time >= b_tm) {
 		if(abs(b_rec.level) < level) continue;
-		char m_cat[1001], m_mess[1001];
-		sscanf(buf,"%*x:%*d %*d %1000s %1000s",m_cat,m_mess);
+		char m_cat[1001], m_mess[100001];
+		sscanf(buf, "%*x:%*d %*d %1000s %100000s", m_cat, m_mess);
 		b_rec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat),TSYS::HttpURL);
 		b_rec.mess  = TSYS::strDecode(Mess->codeConvIn(mChars,m_mess),TSYS::HttpURL);
 		if(!re.test(b_rec.categ)) continue;

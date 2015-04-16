@@ -593,8 +593,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    //Count width params
 		    for(int i_c = 0; i_c < wdg->columnCount(); i_c++) {
 			fullColsWdth += wdg->columnWidth(i_c);
-			if(wdg->horizontalHeaderItem(i_c) && (tVl=wdg->horizontalHeaderItem(i_c)->data(Qt::UserRole).toInt()))
-			{
+			if(wdg->horizontalHeaderItem(i_c) && (tVl=wdg->horizontalHeaderItem(i_c)->data(Qt::UserRole).toInt())) {
 			    niceForceColsWdth += tVl;
 			    wdg->setColumnWidth(i_c, tVl);
 			}
@@ -947,7 +946,7 @@ void ShapeFormEl::buttonReleased( )
 	    }
 	    shD->wordWrap = false;
 
-	    int off = 0;//, hd;
+	    int off = 0;
 	    string  fHead	= TSYS::strLine(shD->value, 0, &off);
 	    string  fCtx	= shD->value.substr(off);
 	    off = 0;
@@ -1050,8 +1049,6 @@ void ShapeFormEl::treeChange( )
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
 
-
-
     AttrValS attrs;
     attrs.push_back(std::make_pair("value",el->selectedItems()[0]->data(0,Qt::UserRole).toString().toStdString()));
     attrs.push_back(std::make_pair("event","ws_TreeChange"));
@@ -1127,13 +1124,13 @@ void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
 }
 
-void ShapeFormEl::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
+void ShapeFormEl::setFocus( WdgView *w, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
 
     //Set up current widget
     if(en) {
-	if(isFocus && !devel)	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+	if(isFocus && !devel) wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else {
 	if(wdg->focusPolicy() != Qt::NoFocus) {
@@ -1146,7 +1143,7 @@ void ShapeFormEl::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
     //Process childs
     for(int i_c = 0; i_c < wdg->children().size(); i_c++)
 	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
-	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
+	    setFocus(w,(QWidget*)wdg->children().at(i_c),en,devel);
 }
 
 //************************************************
@@ -4357,9 +4354,10 @@ string ShapeDocument::ShpDt::toHtml( )
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	"  <style type='text/css'>\n"+
 	" * { font-family: "+web->font().family().toStdString()+"; "
-	    "font-size: "+i2s(web->font().pointSize())+"pt; "
-	    "font-weight: "+(web->font().bold()?"bold":"normal")+"; "
-	    "font-style: "+(web->font().italic()?"italic":"normal")+"; }\n"
+	    "font-size: "+i2s(web->font().pointSize())+"pt; "+
+	    (TSYS::strParse(font,2," ",NULL,true).size()?(string("font-weight: ")+(web->font().bold()?"bold":"normal")+"; "):"")+
+	    (TSYS::strParse(font,3," ",NULL,true).size()?(string("font-style: ")+(web->font().bold()?"italic":"normal")+"; "):"")+
+	    "}\n"
 	" big { font-size: 120%; }\n"+
 	" small { font-size: 90%; }\n"+
 	" h1 { font-size: 200%; }\n"+
@@ -4368,7 +4366,7 @@ string ShapeDocument::ShpDt::toHtml( )
 	" h4 { font-size: 105%; }\n"+
 	" h5 { font-size: 95%; }\n"+
 	" h6 { font-size: 70%; }\n"+
-	" u,b,i { font-size : inherit; }\n"+
+	" u,b,i { font-size: inherit; }\n"+
 	" sup,sub { font-size: 80%; }\n"+
 	" th { font-weight: bold; }\n"+style+"</style>\n"
 	"</head>\n"+
@@ -4419,8 +4417,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
     RunWdgView	*runW = qobject_cast<RunWdgView*>(w);
     RunPageView	*runP = runW ? qobject_cast<RunPageView*>(w) : NULL;
 
-    switch(uiPrmPos)
-    {
+    switch(uiPrmPos) {
 	case A_COM_LOAD:
 	    up = true;
 	    if(runW && shD->inclWidget)	shD->inclWidget->setMinimumSize(w->size());

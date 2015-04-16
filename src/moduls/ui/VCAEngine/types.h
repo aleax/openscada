@@ -24,8 +24,7 @@
 namespace VCA
 {
     //Attributes preset indexes
-    enum AttrID
-    {
+    enum AttrID {
 	// Generic
 	A_PG_NAME	= -4,
 	A_PERM		= -3,

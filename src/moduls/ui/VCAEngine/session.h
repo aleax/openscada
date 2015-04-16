@@ -174,6 +174,9 @@ class Session : public TCntrNode
 class SessWdg : public Widget, public TValFunc
 {
     public:
+	//Data
+	enum SpecIdIO { SpIO_Sz = 4, SpIO_Frq = 0, SpIO_Start = 1, SpIO_Stop = 2, SpIO_This = 3 };
+
 	//Methods
 	SessWdg( const string &id, const string &parent, Session *sess );
 	~SessWdg( );

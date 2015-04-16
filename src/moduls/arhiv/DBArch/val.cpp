@@ -166,15 +166,13 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 
     //Get values
     for(int64_t c_tm = ibegIn; c_tm < ibeg; c_tm += period()) buf.setR(EVAL_REAL, c_tm);
-    switch(archive().valType())
-    {
+    switch(archive().valType()) {
 	case TFld::Boolean: case TFld::Integer: {
 	    TConfig cfg(&mod->vlIntEl());
 	    for(int64_t c_tm = ibeg; c_tm <= iend; c_tm += period()) {
 		cfg.cfg("TM").setI(c_tm/1000000);
 		cfg.cfg("TMU").setI(c_tm%1000000);
-		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true))
-		{
+		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true)) {
 		    if(archive().valType() == TFld::Integer)	buf.setI(cfg.cfg("VAL").getI(), c_tm);
 		    else buf.setB(cfg.cfg("VAL").getI(), c_tm);
 		}
@@ -224,8 +222,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 
     TConfig cf(NULL);
 
-    switch(archive().valType())
-    {
+    switch(archive().valType()) {
 	case TFld::Boolean: case TFld::Integer:
 			    cf.setElem(&mod->vlIntEl());	break;
 	case TFld::Real:    cf.setElem(&mod->vlRealEl());	break;
@@ -234,8 +231,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     }
     cf.cfg("TM").setI(itm/1000000);
     cf.cfg("TMU").setI(itm%1000000);
-    if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cf,false,true))
-    {
+    if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cf,false,true)) {
 	if(tm) *tm = itm;
 	switch(archive().valType())
 	{

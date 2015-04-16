@@ -1,3 +1,13 @@
+2015-04-16 Roman
+- !!!!:FIX:DB.PostgreSQL: Entries dublicates and other ones miss for request fieldSeek() workaround is added by "ORDER BY" to the request append
+	and the entries force sort.
+    DateTimeDec processing fix twice: for check to type change (the row recreation) and the value for flag TCfg::ExtValTwo request.
+- Archive.FSArch: The messages limits into the plain format archive expanded to 100000 symbols.
+- UI.VCAEngine: Special IOs naming to the execution session's context is added.
+- FIX:UI.Vision: The primitive "Document" text global styles "font-weight" and "font-style" forcing removed and set only for the properties allowes
+    into the font widget's attribute, for allow working tags "<B>" and "<I>".
+
+
 2015-04-12 Roman
 - FIX:SYS: The internationalisation  files for included to the core modules also placed to the package debian_mod/openscada-core.install.
     User API object XMLNodeObj expanded by function clear() for allow fast a node clean up from childs, text and/or attributes.

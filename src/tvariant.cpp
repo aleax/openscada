@@ -1019,7 +1019,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
     //  id - attribute identifier
     //  vl - value for attribute
     if(id == "setAttr" && prms.size() >= 2)	{ propSet(prms[0].getS(),prms[1].getS()); return this; }
-    // XMLNodeObj clear( bool full = false ) - clear the node for the childs remove and attributes for <full>.
+    // XMLNodeObj clear( bool full = false ) - clear the node for the childs remove, text and attributes for <full>.
     //  full - full clear include attributes.
     if(id == "clear") {
 	while(childSize()) childDel(0);

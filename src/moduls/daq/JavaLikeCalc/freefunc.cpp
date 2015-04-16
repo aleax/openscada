@@ -395,7 +395,7 @@ int Func::regNew( bool sep, int recom )
     //Get new register
     unsigned i_rg = mRegs.size();
     if(!sep) {
-	if(recom >= 0 && recom < mRegs.size() && !mRegs[recom]->lock() && mRegs[recom]->type() == Reg::Free) i_rg = recom;
+	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() && mRegs[recom]->type() == Reg::Free) i_rg = recom;
 	else for(i_rg = 0; i_rg < mRegs.size(); i_rg++)
 	    if(!mRegs[i_rg]->lock() && mRegs[i_rg]->type() == Reg::Free)
 		break;

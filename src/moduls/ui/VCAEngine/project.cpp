@@ -166,14 +166,13 @@ void Project::load_( )
     TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
     c_el.cfg("OWNER").setS("/"+id(), true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fld_cnt++,c_el); ) {
 	string f_id = c_el.cfg("ID").getS();
 	if(!present(f_id)) add(f_id,"","");
 	itReg[f_id] = true;
     }
 
-    //Check for remove items removed from DB
+    //Check for remove items removed from the DB
     if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	list(it_ls);
@@ -189,8 +188,7 @@ void Project::load_( )
     TConfig c_stl(&mod->elPrjStl());
     string svl;
     vector<string> vlst;
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fld_cnt++,c_stl); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fld_cnt++,c_stl); ) {
 	vlst.clear();
 	for(int i_s = 0; i_s < 10; i_s++) {
 	    svl = c_stl.cfg(TSYS::strMess("V_%d",i_s)).getS();
@@ -1076,7 +1074,7 @@ void Page::loadIO( )
 	itReg[sid] = true;
     }
 
-    // Check for remove items removed from DB
+    // Check for remove items removed from the DB
     if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	wdgList(it_ls);
@@ -1603,7 +1601,7 @@ void PageWdg::load_( )
     //Load generic widget's data
     string db  = ownerPage().ownerProj()->DB();
     string tbl = ownerPage().ownerProj()->tbl()+"_incl";
-    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Inherit modify attributes
     vector<string> als;
@@ -1631,7 +1629,7 @@ void PageWdg::loadIO( )
 {
     if(!enable()) return;
 
-    //> Load widget's work attributes
+    //Load widget's work attributes
     mod->attrsLoad(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id(), cfg("ATTRS").getS());
 }
 

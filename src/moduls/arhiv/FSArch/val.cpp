@@ -1629,7 +1629,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr, int *rvpos )
 	}
     }
     else {
-	int cachPos = vpos, lstPkPos, lstPkVl, cachOff = cacheGet(cachPos, &lstPkVl);
+	int cachPos = vpos, lstPkPos = 0, lstPkVl, cachOff = cacheGet(cachPos, &lstPkVl);
 	if(cachOff)	{ vOff = cachOff; cachPos++; }
 	else vOff = sizeof(FHead) + mpos*vSize;
 	lseek(hd, sizeof(FHead)+cachPos*vSize, SEEK_SET);
@@ -1799,7 +1799,7 @@ void VFileArch::repairFile( int hd )
 		}
 		else {
 		    string fillBlk(mSize-fSz, 'R');
-		    fOK = (write(hd,fillBlk.data(),fillBlk.size()) == fillBlk.size());
+		    fOK = (write(hd,fillBlk.data(),fillBlk.size()) == (int)fillBlk.size());
 		}
 	    }
 

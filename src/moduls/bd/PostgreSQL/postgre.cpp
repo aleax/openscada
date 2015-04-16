@@ -2,7 +2,7 @@
 //OpenSCADA system module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
  *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
- *                 2013-2014 by Roman Savochenko, rom_as@oscada.org        *
+ *                 2013-2015 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -517,8 +517,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
     string sid;
     //Make SELECT and WHERE
-    string req = "SELECT ";
-    string req_where = "WHERE ";
+    string req_sel = "", req_where = "WHERE ";
     //Add use keys to list
     bool first_sel = true, next = false, trPresent = false;
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
@@ -536,14 +535,14 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	    next = true;
 	}
 	else if(u_cfg->isKey() || u_cfg->view()) {
-	    req += (first_sel?"\"":",\"") + TSYS::strEncode(sid,TSYS::SQL) + "\"";
+	    req_sel += (first_sel?"\"":",\"") + TSYS::strEncode(sid,TSYS::SQL) + "\"";
 	    first_sel = false;
 	}
     }
 
     //Request
     if(first_sel) return false;
-    req += " FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" " + (next?req_where:"") + " LIMIT 1 OFFSET " + i2s(row);
+    string req = "SELECT "+req_sel+" FROM \""+TSYS::strEncode(name(),TSYS::SQL)+"\" "+(next?req_where:"")+" ORDER BY "+req_sel+" LIMIT 1 OFFSET "+i2s(row);
     owner().sqlReq(req, &tbl, false);
     if(tbl.size() < 2) return false;
     for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++) {
@@ -701,7 +700,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try{ owner().sqlReq(req, NULL, true); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq(req, NULL, true); }
+    catch(TError err) { fieldFix(cfg); owner().sqlReq(req, NULL, true); }
 }
 
 void MTable::fieldDel( TConfig &cfg )
@@ -769,7 +768,7 @@ void MTable::fieldFix( TConfig &cfg )
 			break;
 		    }
 		    case TFld::Integer:
-			if(u_cfg.fld().flg()&TFld::DateTimeDec && rwTp == "timestamp with time zone") isEqual = true;
+			if(u_cfg.fld().flg()&TFld::DateTimeDec)	isEqual = (rwTp=="timestamp with time zone");
 			else if(rwTp == "bigint") isEqual = true;
 			break;
 		    case TFld::Real:	if(rwTp == "double precision") isEqual = true;	break;
@@ -801,8 +800,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    if(cf_el[i_cf] == tblStrct[i_fld][0]) break;
 
 	string f_tp;
-	switch(u_cfg.fld().type())
-	{
+	switch(u_cfg.fld().type()) {
 	    case TFld::String:
 		if((u_cfg.fld().len() && u_cfg.fld().len() < 256) || u_cfg.fld().flg()&TCfg::Key)
 		    f_tp = "CHARACTER VARYING(" + i2s(vmax(10,vmin(255,u_cfg.fld().len()))) + ") DEFAULT '" + u_cfg.fld().def() + "' ";
@@ -852,7 +850,7 @@ string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
     string rez = cfg.getS(RqFlg);
     if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
-    if(cfg.fld().type() == TFld::String && cfg.fld().len() > 0) return cfg.getS().substr(0,cfg.fld().len());
+    if(cfg.fld().type() == TFld::String && cfg.fld().len() > 0) return rez.substr(0,cfg.fld().len());
     return rez;
 
     /*switch(cfg.fld().type()) {

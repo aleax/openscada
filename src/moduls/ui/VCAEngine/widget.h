@@ -83,7 +83,7 @@ class Attr
 	string name( );
 	TFld::Type type( );
 	int flgGlob( );		//Global attribite's flags
-	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)self_flg; }
+	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)mFlgSelf; }
 	unsigned modif( )	{ return mModif; }
 	string cfgTempl( );
 	string cfgVal( );
@@ -134,11 +134,11 @@ class Attr
 	    int64_t	i;		//Integer
 	    char	b;		//Boolean
 	    AutoHD<TVarObj>	*o;	//Object
-	}mVal;
+	} mVal;
 	// Attributes
 	TFld		*mFld;		//Base field
 	unsigned	mModif;		//Modify counter
-	unsigned short	self_flg;	//Self attributes flags
+	unsigned short	mFlgSelf;	//Self attributes flags
 	unsigned short	mOi	:ATTR_OI_DEPTH;		//Order index, up to 256 attributes
 	unsigned short	mConn	:ATTR_CON_DEPTH;	//Connections counter
 

@@ -1635,7 +1635,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Attr: Widget attribute                       *
 //************************************************
-Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), mModif(0), self_flg((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
+Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), mModif(0), mFlgSelf((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
 {
     setFld(ifld, inher);
 }
@@ -1690,7 +1690,7 @@ void Attr::setFld( TFld *fld, bool inher )
     mFld = fld;
     if(mFld && !inher)	mFld->setLen(1);
     else if(mFld && inher)	mFld->setLen(mFld->len()+1);
-    self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
+    mFlgSelf = inher ? mFlgSelf|Attr::IsInher : mFlgSelf & ~Attr::IsInher;
     if(owner()) pthread_mutex_unlock(&owner()->mtxAttr());
 }
 
@@ -2025,10 +2025,10 @@ void Attr::setCfgVal( const string &vl )
 
 void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
-    if(self_flg == flg)	return;
-    SelfAttrFlgs t_flg = (SelfAttrFlgs)self_flg;
-    self_flg = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
-    if(!owner()->attrChange(*this,TVariant()))	self_flg = t_flg;
+    if(mFlgSelf == flg)	return;
+    SelfAttrFlgs t_flg = (SelfAttrFlgs)mFlgSelf;
+    mFlgSelf = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
+    if(!owner()->attrChange(*this,TVariant()))	mFlgSelf = t_flg;
     else {
 	unsigned imdf = owner()->modifVal(*this);
 	mModif = imdf ? imdf : mModif+1;

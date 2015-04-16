@@ -472,7 +472,7 @@ class ShapeProtocol : public WdgShape
 
     private:
 	//Data
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -505,7 +505,7 @@ class ShapeProtocol : public WdgShape
 	};
 	//Private methods
 	void loadData( WdgView *view, bool full = false );
-	//> Recursively widgets process for disable focusable and events filter set
+	// Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
 };
@@ -519,7 +519,7 @@ class ShapeDocument : public WdgShape
 
     public:
 	//Data
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -572,7 +572,7 @@ class ShapeBox : public WdgShape
 {
     public:
 	//Data
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
