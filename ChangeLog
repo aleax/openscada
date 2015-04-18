@@ -1,3 +1,8 @@
+2015-04-18 Roman
+- FIX:DB.FireBird: Prevent a table fix for key row as blr_varying.
+- !!:DB.MySQL: Address field "sets" (charset-collation-engine) appended to the storage engine set for next created tables.
+
+
 2015-04-16 Roman
 - !!:FIX:DB.MySQL: Address field "names" expanded to "charset-collation" and used as "CREATE db CHARACTER SET charset COLLATE collation"
     into the DB creation and for connection set as "SET NAMES charset COLLATE collation".

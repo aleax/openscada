@@ -272,7 +272,7 @@ msgid "Created %d records for time %f sec."
 msgstr "Створено %d записів за час %f сек."
 
 msgid "Update records."
-msgstr "Оновлено записів."
+msgstr "Оновлення записів."
 
 #, c-format
 msgid "Updated %d records for time %f sec."

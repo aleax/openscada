@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -291,8 +291,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	    mess_debug(nodePath().c_str(), _("DSQL describe error: (%d)%s"), rez, getErr(status).c_str());
 	//Reconnect try for error
 	if(rez)
-	    switch(rez)
-	    {
+	    switch(rez) {
 		case isc_network_error:
 		case isc_net_connect_err:
 		case isc_net_connect_listen_err:
@@ -334,8 +333,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	    //  throw TError(nodePath().c_str(),_("DSQL open cursor error: %s"),getErr(status).c_str());
 	    vector<string> row;
 	    long  fetch_stat;
-	    while((fetch_stat=isc_dsql_fetch(status,&stmt,1,out_sqlda)) == 0)
-	    {
+	    while((fetch_stat=isc_dsql_fetch(status,&stmt,1,out_sqlda)) == 0) {
 		//  Add head
 		if(row.empty()) {
 		    for(int i = 0; i < out_sqlda->sqld; i++)
@@ -348,8 +346,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		    XSQLVAR &var = out_sqlda->sqlvar[i];
 		    // Null handling.  If the column is nullable and null
 		    if((var.sqltype&1) && (*var.sqlind < 0)) row.push_back("");
-		    switch(var.sqltype & (~1))
-		    {
+		    switch(var.sqltype & (~1)) {
 			case SQL_TEXT:
 			    row.push_back(Mess->codeConvIn(cd_pg.c_str(),clrEndSpace(string(var.sqldata,var.sqllen))));
 			    break;
@@ -361,8 +358,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 			case SQL_INT64:	row.push_back(ll2s(*(ISC_INT64 *)var.sqldata));	break;
 			case SQL_FLOAT:	row.push_back(r2s(*(float *)var.sqldata));	break;
 			case SQL_DOUBLE:row.push_back(r2s(*(double *)var.sqldata));	break;
-			case SQL_BLOB:
-			{
+			case SQL_BLOB: {
 			    //> Read blob data
 			    ISC_QUAD blob_id = *((ISC_QUAD*)var.sqldata);
 			    ISC_STATUS blob_stat;
@@ -464,7 +460,7 @@ void MTable::postDisable( int flag )
     }
 }
 
-MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
+MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
 
 void MTable::getStructDB( vector< vector<string> > &tblStrct )
 {
@@ -499,8 +495,7 @@ void MTable::fieldStruct( TConfig &cfg )
 	if(cfg.cfgPresent(sid)) continue;
 
 	int flg = (tblStrct[i_fld][3]=="PRIMARY KEY") ? (int)TCfg::Key : (int)TFld::NoFlag;
-	switch(s2i(tblStrct[i_fld][1]))
-	{
+	switch(s2i(tblStrct[i_fld][1])) {
 	    case blr_varying:
 	    case blr_varying2:
 		cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,tblStrct[i_fld][2].c_str()));
@@ -782,8 +777,7 @@ void MTable::fieldFix( TConfig &cfg )
 		int rwTp = s2i(tblStrct[i_fld][1]);
 		switch(u_cfg.fld().type()) {
 		    case TFld::String:
-			if(rwTp == blr_varying && (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) &&
-				u_cfg.fld().len() == s2i(tblStrct[i_fld][2]))
+			if(rwTp == blr_varying && ((u_cfg.fld().len() <= 255 && u_cfg.fld().len() == s2i(tblStrct[i_fld][2])) || u_cfg.fld().flg()&TCfg::Key))
 			    isEqual = true;
 			else if(rwTp == blr_blob && u_cfg.fld().len() > 255)	isEqual = true;
 			break;
