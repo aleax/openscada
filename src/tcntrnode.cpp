@@ -573,11 +573,23 @@ int TCntrNode::isModify( int f )
 	res1.unlock();
 
 	MtxAlloc res2(mChM, true);
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++) {
+	for(unsigned iG = 0, iN; chGrp && iG < chGrp->size(); iG++) {
+	    vector<string> chLs;
 	    TMap::iterator p;
-	    for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+	    chldList(iG, chLs, true);
+	    for(iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
+		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
+		AutoHD<TCntrNode> ndO(p->second);
+		res2.unlock();
+		int chRflg = p->second->isModify(Self|Child);
+		res2.lock();
+		if(chRflg) { rflg |= Child; break; }
+	    }
+	    if(iN < chLs.size()) break;
+
+	    /*for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 		if(p->second->isModify(Self|Child))	{ rflg |= Child; break; }
-	    if(p != (*chGrp)[i_g].elem.end())	break;
+	    if(p != (*chGrp)[i_g].elem.end())	break;*/
 	}
 	res2.unlock();
     }

@@ -1872,6 +1872,59 @@ INSERT INTO "wlb_Main_incl" VALUES('grph_panel','xZoomOffLeft','/wlb_originals/w
 INSERT INTO "wlb_Main_incl" VALUES('grph_panel','xZoomOffRight','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('ElCadr','com_text','/wlb_originals/wdg_FormEl','en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('ElCadr','st_text','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;bordWidth;font;color;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','curDay','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','labFri','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','labMon','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','labSat','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','labSun','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','labThr','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','labTue','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','labWed','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','month','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','monthBox','/wlb_originals/wdg_Box','geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w0_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w0_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w0_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w0_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w0_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w0_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w0_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w1_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w1_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w1_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w1_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w1_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w1_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w1_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w2_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w2_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w2_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w2_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w2_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w2_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w2_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w3_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w3_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w3_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w3_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w3_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w3_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w3_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w4_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w4_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w4_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w4_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w4_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w4_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w4_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w5_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w5_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w5_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w5_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w5_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w5_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','w5_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('calendar','year','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -6204,6 +6257,613 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','color','green',40,'','','st_text','',
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','alignment','10',32,'','','st_text','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','text','Free status',40,'','','st_text','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','font','Arial 15',0,'','','com_text','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','240',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','190',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','backColor','gray',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','Today',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','1',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','1',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','68',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','22',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','1',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','elType','3',32,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',0,'','','curDay','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','139',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','27',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','8',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15 1',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','Fri',32,'','','labFri','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','4',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','27',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','4',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15 1',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','Mon',32,'','','labMon','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','169',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','27',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','9',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15 1',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','Sat',32,'','','labSat','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','204',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','27',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','10',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15 1',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','Sun',32,'','','labSun','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','109',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','27',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','7',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15 1',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','Thr',32,'','','labThr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','39',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','27',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','5',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15 1',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','Tue',32,'','','labTue','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','74',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','27',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','6',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15 1',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','Wed',32,'','','labWed','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','Today',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','129',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','1',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','110',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','22',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','3',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','elType','4',32,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','value','May (5)',8,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','items','January (1)
+February (2)
+Marth (3)
+April (4)
+May (5)
+July (6)
+Juny (7)
+August (8)
+September (9)
+October (10)
+November (11)
+December (12)',0,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',0,'','','month','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','1',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','24',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','239',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','166',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','backColor','lightgray',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','bordWidth','2',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','bordColor','lightgray',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','bordStyle','6',32,'','','monthBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','4',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','50',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','11',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','39',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','50',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','12',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','74',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','50',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','13',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','1',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','109',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','50',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','14',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','2',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','139',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','50',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','15',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','3',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','169',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','50',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','16',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','4',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','204',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','50',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','17',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','5',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','4',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','73',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','18',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','6',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','39',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','73',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','19',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','7',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','74',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','73',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','20',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','8',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','109',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','73',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','21',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','9',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','139',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','73',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','22',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','10',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','169',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','73',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','23',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','11',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','204',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','73',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','24',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','12',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','4',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','96',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','25',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','13',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','39',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','96',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','29',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','14',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','74',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','96',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','30',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','15',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','109',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','96',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','31',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','16',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','139',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','96',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','32',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','17',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','169',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','96',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','33',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','18',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','204',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','96',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','34',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','19',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','4',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','119',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','26',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','20',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','39',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','119',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','35',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','21',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','74',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','119',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','36',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','22',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','109',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','119',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','37',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','23',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','139',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','119',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','38',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','24',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','169',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','119',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','39',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','25',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','204',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','119',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','40',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','26',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','4',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','142',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','27',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','27',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','39',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','142',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','41',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','28',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','74',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','142',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','42',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','29',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','109',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','142',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','43',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','30',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','139',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','142',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','44',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','31',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','169',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','142',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','45',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','199',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','142',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','46',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','4',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','165',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','28',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','39',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','165',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','47',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','74',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','165',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','48',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','109',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','165',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','49',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','139',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','165',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','50',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','169',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','165',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','51',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','204',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','165',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','35',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','23',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','52',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','color','red',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','wordWrap','0',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','alignment','10',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','text','',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','Today',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomX','69',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomY','1',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomW','60',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomH','22',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','geomZ','2',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','elType','4',32,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','value','2013',0,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','items','2015
+2014
+2013
+2012
+2011
+2010
+2009
+2008
+2007',8,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','font','Arial 15',0,'','','year','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w0_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w0_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w0_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w0_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w0_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w0_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w0_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w1_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w1_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w1_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w1_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w1_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w1_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w1_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w2_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w2_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w2_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w2_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w2_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w2_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w2_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w3_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w3_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w3_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w3_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w3_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w3_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w3_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w4_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w4_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w4_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w4_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w4_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w4_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w4_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_0','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','Calendar',32,'','','','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.83301','iVBORw0KGgoAAAANSUhEUgAAAGQAAABaCAYAAABOkvOJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAAMdQAADHUBLXiUdQAAAAd0SU1FB9kCGxAwD1fi7KsAAAAZdEVYdENv
@@ -8714,474 +9374,6 @@ INSERT INTO "wlb_Main_uio" VALUES('grph_panel','sclHorOff','Horizontal scale off
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','com_text','Command text (from digComs)',131077,'||',14,'Parameter|com_text','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmStText','Parameter:status text',131077,'||',10,'Parameter|st_text','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmComText','Parameter:command text',131077,'||',14,'Parameter|com_text','','','','','','','','','','');
-CREATE TABLE 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-//  messPut("Average for hour",1,"The no closed document is closing "+doc_bTime+":"+doc_time);
-  closeDoc = true;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-//  messPut("Agerage for hour",1,"The finished document is closing");
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-  //messPut("Agerage for hour",1,"Document generation ("+doc_bTime+":"+doc_time+")");
-}',1000,'name;',2,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  //messPut("Середній за годину",1,"Закриття не закритого документа "+doc_bTime+":"+doc_time);
-  closeDoc = true;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-  //messPut("Середній за годину",1,"Закриття завершеного документа");
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-  //messPut("Середній за годину",1,"Генерація документа ("+doc_bTime+":"+doc_time+")");
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  //messPut("Среднечасовой",1,"Закрытие не закрытого документа "+doc_bTime+":"+doc_time);
-  closeDoc = true;  
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-  //messPut("Среднечасовой",1,"Закрытие законченного документа");
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-  //messPut("Среднечасовой",1,"Генерация документа ("+doc_bTime+":"+doc_time+")");
-}
-//messPut("Среднечасовой",1,"doc_aCur: "+doc_aCur);');
-INSERT INTO "wlb_doc" VALUES('docGasNodeMonthA','','/wlb_doc/wdg_doc','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-  {
-    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-  else
-  {
-    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-}
-//>> Archive document
-else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastMonth = curMonth;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}',1000,'name;',2,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-  {
-    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-  else
-  {
-    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-}
-//>> Archive document
-else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastMonth = curMonth;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-  {
-    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-  else
-  {
-    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-}
-//>> Archive document
-else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastMonth = curMonth;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}');
-INSERT INTO "wlb_doc" VALUES('docUsersSet','','/wlb_doc/wdg_docDin','JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }',-1,'name;',2,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }');
-INSERT INTO "wlb_doc" VALUES('doc','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','/wlb_originals/wdg_Box','
-',-1,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',2,'
-','
-');
-INSERT INTO "wlb_doc" VALUES('docGasNodeMgn','','/wlb_doc/wdg_docDin','',-1,'name;',2,'','');
-INSERT INTO "wlb_doc" VALUES('docGasNodeDayOrder','','/wlb_doc/wdg_doc','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}',1000,'name;dscr;',2,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}');
-INSERT INTO "wlb_doc" VALUES('docDin','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
-b0lEQVRYhe1W3W4TOxC2d73OOslusomSE6LwU0RIoQipVELcIN6BF+CVOG/CI/SCShVXtAhEWiWI
-qIV287de7Z93vd5zYZ0oJ2mrFqGTc6R8V9aMPTPfjD0e+Ofbt5RSxpjIMk3T4jhGCDmOA/5jaLfb
-r169iuP4/Pycc95qtRBCnz9/RowxCKGiKBghAICG0HA0cl131QEvwvM8znmapmEYpmnKOQcAhGGI
-/mg0LMuq1Wq2bdfr9X85LBkHQug6m5MkAQDcvn17dtY0TdRsNvv9/sHBQb1ePzw8zOVyW1tbJycn
-nU6n1+uFYej7/v37909PT8vlchiGnPPpdFqtVi3LKhQKP3/+bLfbx8fHYRgahsEYo5RalkUIOT8/
-hxA+efKk2+2+efPm3bt3YRgyxnRdD8PQNM0gCHzf73Q6r1+//jX+EEK4v79frVbjOI7jWNd1RVE8
-z3McZ2NjQwjheR7GOEkSQkgcx8Vi0fM8RVEQQr7vY4whhKVSiVKKEMIYU0rjOCaEFIvFIAiyLJMR
-l8tl27YLhYLrurVazXVdQkiapnEcl8tlwzAAAFmWQQgvi/VC7cePH5F8E4QQ3/eTJNnY2Hj48KFU
-u67ruu54PE6SxDCMIAjq9frdu3elyjTNmaFmsykXvV7PdV2ZAkJIEAQIIUJIv9/P5XIPHjwAAFBK
-u92uzIWu65PJ5OXLl9Lm169fZ65zuZyUS3S73U6ns0CAMQZ3d3efPn2qqioAIE1TuZCQHQlCuEx9
-Op2WSqUsy+b3yyMYY2kniiJd14UQMn+znZ7n+b5fKBSkWZnaXC4nhMAYL4cxb3lBuLe3hzRNsywL
-3BD9fv/s7Mz3fVVVEUJJkty6dcu2bV3XIYSNRqPVas2XaAGDwYBzPhwOm82moihRFLXbbU3TbhoG
-kr5/oWkKIUzTJIRgjBVFAQDkcrl6va5pGmMsiqLJZHJZbwnD8MWLFwCAR48e3dTvMq7Vv5ZBCBFC
-JEnCOYcQcs4rlUoQBPl8Pk1T+WYuIyCE+F3/DOccUUoPDg40TdN13XVdjHGlUhmNRoqicM5VVTVN
-M5/Pf/v2rdVqxXHMGDNNk1Kq63qhUNjc3Lyp1yuu1k2BEEKGYXQ6HV3X5xWNRgMAIBNMCAEAVKtV
-qeKcI4QQQlKykMs4jgEAGOMgCDRNgxAu1yFJkguve5IkjLFisXhhrI7jlEqlhXbCOUeu63758iWf
-zz9//nzhjOu6h4eHxWLR9/3t7e1SqTRTDQaDs7MzVVVVVd3Z2ZnJv3//TiltNBq9Xi+fzzuOs7Oz
-s5Byx3H29/cLhcLW1la5XJ53N51Oe72efFSKoggh2u22nA9OTk76/T5CSNO0SqXSbrcBAAghuLu7
-u729fSFpIYS0tYzT09NisSiEyLKsUqnM5OPxGCEkhAjDcPY5LED+ErI+8z3Q87wwDFVVTdPUsqyF
-0g0Gg3w+Lys8s7y3t3dxfBKXRQ8AgBDatk0pXdgj5XLiuMKyqqpJkniel2XZvDwIguFwGEXRghz8
-PQilacoYm5cjSumnT58wxqPR6M6dOwCAKIqePXsGIXRd9+joSA4FGGPTNOUGAMDR0REhZDweB0Ew
-EwIAKKWapo1Go1qtdsVjnUwmtm1blnXv3r15ueM4nPPxePz48eOF656m6Y8fPwzD8H3ftm35qSOE
-4Pv37zc3NxFC88OGXDDGZq9Namf5jqJI3gHwz0JFUYQxzrJMUZTLBhvGmPzgF87Ou1su/szjvPEP
-Hz6gUqk06zDXx2XZ/Y0t8jqWDcO46g38L7AmsGqsCawaawKrxprAqrEmsGqsCawaawKrxprAqrEm
-sGqsCawaawKrBjo+PrZte9Vh/CKGw+Fflb/jwUM8RdYAAAAASUVORK5CYII=','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }',1000,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',2,'JavaLikeCalc.JavaScript
-if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','JavaLikeCalc.JavaScript
-if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }');
-INSERT INTO "wlb_doc" VALUES('docRepSm2','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA2wAAANYQHlRq2kAAAE
-kUlEQVRYhe1Yy24UORS9frvc1dR0EiYiA0uWrIcVEvNx/FF+IF/ASC1YIEEklKwiIrqqq+yyfT2L
-m9QUITCjWUyD1Eetlts+Pr4vX0vNXr169ezZM2st/IRYr9eyaZqFcxeXl8MwHB//enLy25+vXwsh
-cs4FoGmaJ08eD8Pw8uUfu7b2HjDGZNM0B4eHRw8fGmOklCGE358/11qH4BEL59w5xxh7+/Zt8N5W
-9vHjJ7s2+29sNhtprT05Obn+9Onw8JAxdnV1pZXCUpxbOOeMMduuw4LHx8cAcHV1dXl5eXR0hIht
-2xbEX1arnLP3XimltfbexxibpkHE7XabUmqaBgC6rqNY9H2fc67rmjHWti0ROOftZiOVqqqKlK21
-xhgiHBwcAMD19XUpuFodpJRCCDHG5XJZSpEAwBirXMUYA4DlcgkApRQAMFozxrgQiivOOSKuVisA
-4JwzxpbLZc4ZAIQQlD3GmJRSCEFkrbXWmvSttUqpUoq1FhGVUjlnMpdzLoSonCMCKQshSilVVdFx
-iOic45wDgFKKxOmnBABrLV1iWpjnCBEphPNVck8pRZOcc5ony4gspZwmOedz8iQ+n3TO3SHMjbmj
-MJ0CABwA2rb9+PFjCOH9+/dv3rw5Pz+/uLig5RACAJx/+AAAVB4hhJzzlEfvPQD0fV9KCSGklLz3
-NL5DQETvPSL2fU/KpEaEYRioFEsppOa9/5YabbyJlBCirms/DMvlcuGcUso5J6Ws65oYdV0v6gX9
-NFrn2yAhouA8jONisWCMVVXFGDPGpJSMMVQYRKjrmjNmrOWcV1UlhXCLBQBorUspMca6roXgSmkh
-xGKxINpcjcqScz6OY13X4ziWUmhe5py7rtv2fdu2276nNSFE13UUGADYdtuu6/q+jzEiIhUoZTPG
-OA9wuoX3no6cCClnyoD3HksZhoHU6CINw6B1DCGUUoZhQMRhGCa1EAJjbFKjjTHGnPPNJZZSUMys
-tVIKpb64CZVz325lO4YEAM65MXZqJlprRJyT6NYCADUKipnWmjFGIaGMAwB1ISLfS6DyuDlbSrhN
-srWWCFM1fkeNNhL4xEPEgjiOY855sphAcgCQUiIJAIgxppRoTFcNAHLO4zh+TQghUFAQcbp/KaV0
-q0bn/ku1uRmceJ8/f6bQbjabtm2Hvp87EOM4pWLy7c74+4R5Sr8Yf0X4zhHzsE5jyTmXUjpX0Uth
-rbHWGHPzMuScrbVCSGttzpmqi3NOcnRNjTGImV6oqW9QJyACLVlr6SEDAFKjgkwp0RJ1fWttKXhH
-DQD4Lay1ZAD1OkkSw+C99zGlGOnTUb6o5U/gnOecpy4khKD5GJNSicgxRpqfE2h++k4p5ZwZY3Q6
-gTE2V0spCSFijJxzWp2rUYBKKez09PTFixdTXqZy/3rm3vH/QPgWGQDOzs5uHjL4OWGMkdvt9t27
-d0IIKeU4jgDl0aOTnNO9G6SQ9Ij+OJAPHjx4+vTprs347+D/TPmxsXdg19g7sGvsHdg19g7sGnsH
-do29A7vG3oFdY+/ArrF3YNeQ6/X6zl8pPxHW6/Vf51IEmfDmKAQAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin','JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }',-1,'name;geomXsc;geomYsc;',2,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }');
-INSERT INTO "wlb_doc" VALUES('docAlarmsRep','','/wlb_doc/wdg_docDin','JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }',-1,'name;',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }');
 CREATE TABLE 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
@@ -9198,7 +9390,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','geomZ','1',32,'','','doc','','
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of average over hour values</h1>
 
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
+<TABLE class="data" width="100%">
   <TR align="left" valign="center"><TH colspan="7">The operation date over XXX Calculator # Pipeline #.<?dp return "The operation date over "+Special.FLibSYS.tmFStr(time,"%d %m %Y")+" Calculator # Pipeline #.";?>
   </TH></TR>
   <TR><TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
@@ -9270,7 +9462,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','geomZ','1',32,'','','doc',''
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Table of average over day values</h1>
 
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
+<TABLE class="data" width="100%">
   <TR align="left" valign="center"><TH colspan="7">
 Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+Special.FLibSYS.tmFStr(time,"%m %Y")+" Calculator # Pipeline #.";?>
   </TH></TR>
@@ -9341,7 +9533,7 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','aCur','0',40,'','','doc','',
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','name','Log of interruptions',32,'','','','Журнал дій','','Журнал вмешательств','','','');
 INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Log of interruptions</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
+<TABLE class="data" width="100%">
   <TR><TH colspan="6" align="left">Interruptions at <?dp return "Interruptions at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Date</TH><TH>Time</TH><TH>Parameter</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH></TR>
   <TR docAMess="2:OP*">
@@ -9385,15 +9577,16 @@ INSERT INTO "wlb_doc_io" VALUES('docUsersSet','tmpl','<body docProcLang="JavaLik
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','process','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','process','0',40,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','process','0',40,'','','doc','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','style','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }',32,'','','doc','TH { background-color: #e6e6e6; }
+INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','style','TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','name','Protocol of violations',32,'','','','Протокол порушень','','Протокол нарушений','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','perm','438',32,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Protocol of violations</h1>
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
+<TABLE class="data" width="100%">
   <TR><TH colspan="5" align="left">Violations at <?dp return "Violations at "+SYS.strftime(bTime)+" — "+SYS.strftime(time);?></TH></TR>
   <TR><TH>Date</TH><TH>Time</TH><TH>Parameter</TH><TH>Violation</TH><TH>Value</TH></TR>
   <TR docAMess="1:al*:*">
@@ -10566,24 +10759,27 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','perm','438',32,'','','doc','',
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','perm','438',32,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','perm','438',32,'','','doc','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docRepSm2','perm','438',32,'','','doc','','','','','','');
-INSERT INTO "wlb_doc_io" VALUES('docUsersSet','style','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }',32,'','','doc','TH { background-color: #e6e6e6; }
+INSERT INTO "wlb_doc_io" VALUES('docUsersSet','style','TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMgn','style','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','style','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }',32,'','','doc','TH { background-color: #e6e6e6; }
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','style','TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayOrder','style','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
-INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','style','TH { background-color: #e6e6e6; }
-TD { white-space: nowrap; }',32,'','','doc','TH { background-color: #e6e6e6; }
+INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','style','TABLE.data { border-collapse: collapse; }
+TABLE.data TH { background-color: #e6e6e6; border: 1px solid black; }
+TABLE.data TD { white-space: nowrap; border: 1px solid black;}',32,'','','doc','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','TH { background-color: #e6e6e6; }
 TD { white-space: nowrap; }','','','');
 CREATE TABLE 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
@@ -20376,6 +20572,123 @@ uz8eHdMKe6HqnXWNULj0RnBK4Qv9fV1NDa7WBqmUSSw9CM4HlzfT7PNa2MMUbCL4wW2MOzfoc7ua
 RDiYS67P0xSBI0US+VI+X2QF8RnttLg7/Y+JEEViIDApZr9NAqm0uzZ7L7U6oyFxBHKZK+ayOfYg
 /j8rIVlgc8nt3NODEldgEgXmOFcR+WKWL2arZ1WEbCr5LJ7E5dPciXOlgqot8f86CADAcfzq1atV
 qTiOJ5O11dhXCPT//lP/b42CIxloislxAAAAAElFTkSuQmCC','/wlb_Main/wdg_anShow1',1,'','','',-1,'name;geomW;',1415294944);
+INSERT INTO "wlb_Main" VALUES('calendar','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	selDay = selMonth = selYear = selWDay = isDst = 0;	//Selected data parts
+	maxDayInMonth = 30;			//Maximum days into selected month
+	selTime = SYS.time();		//Selected time, ordered to days
+	prevTime = 0;					//Previous time for detect time selection change
+	cntr = 0;							//Global counter for update period limit for some parts
+}
+
+//Years list update
+if(f_start || (cntr%(f_frq*3600*24)) == 0)	{	//By day
+	curYear = 0;
+	SYS.localtime(SYS.time(), 0, 0, 0, 0, 0, curYear);
+	year_items = "";
+	for(i_y = 0; i_y < 10; i_y++)	year_items += (i_y?"\n":"")+(curYear-i_y);
+}
+
+//Events process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("MnCntr","Event: "+ev_cur);
+	if(ev_cur == "ws_BtPress:/curDay")	selTime = SYS.time();
+	else if(ev_cur == "ws_CombChange:/year")
+		selTime = SYS.mktime(0, 0, 0, selDay, selMonth, year_value, 0, 0, isDst);
+	else if(ev_cur == "ws_CombChange:/month")
+		selTime = SYS.mktime(0, 0, 0, selDay, (month_value.match("\\((\\d+)\\)","")[1].toInt()-1), selYear, 0, 0, isDst);
+	else if(ev_cur.indexOf("key_mousePresLeft:/w") == 0) {
+		weekWdg = this.wdgAt(ev_cur.slice(19));
+		if(weekWdg.attr("text").length)
+			selTime = SYS.mktime(0, 0, 0, weekWdg.attr("text"), selMonth, selYear, 0, 0, isDst);
+	}
+	else ev_rez += (ev_cur+"\n");
+}
+event = ev_rez;
+
+if(selTime != prevTime) {
+	selTime = min(selTime, SYS.time());
+	SYS.localtime(selTime, 0, 0, 0, selDay, selMonth, selYear, 0, 0, isDst);
+	selTime = SYS.mktime(0, 0, 0, selDay, selMonth, selYear, 0, 0, isDst);
+	selWDay = 0;
+	selTimeMonth = SYS.mktime(0, 0, 0, 1, selMonth, selYear, selWDay, 0, isDst);
+	title_arg0val = SYS.strftime(selTime, "%d.%m.%Y");
+
+	year_value = selYear;
+	month_value = month_items.match("([^\n]*\\("+(selMonth+1)+"\\))","m")[0];
+
+	//Days number into selected month
+	tMonth = selMonth, tYear = selYear, tisDst = isDst;
+	for(maxDayInMonth = 29; true; maxDayInMonth++) {
+		tDayInMonth = maxDayInMonth;
+		SYS.mktime(0, 0, 0, tDayInMonth, tMonth, tYear, 0, 0, tisDst);
+		if(tDayInMonth != maxDayInMonth)	{ maxDayInMonth--; break; }
+		if(maxDayInMonth >= 31)	break;
+	}
+
+	//Week box update
+	for(i_w = 0, i_d = 1; i_w < 6; i_w++)
+		for(i_wd = 0; i_wd < 7; i_wd++)
+			if((i_w == 0 && i_wd < (selWDay-1)) || i_d > maxDayInMonth)	//Clear cell
+				this.wdgAt("w"+i_w+"_"+i_wd).attrSet("text","").attrSet("bordWidth","0").attrSet("backColor","");
+			else {
+				this.wdgAt("w"+i_w+"_"+i_wd).attrSet("text",i_d).attrSet("bordWidth","0").attrSet("backColor","lightgray");
+				if(i_d == selDay)						//Selected day
+					this.wdgAt("w"+i_w+"_"+i_wd).attrSet("text",i_d).attrSet("bordWidth","1").attrSet("backColor","lightgreen");
+				i_d++;
+			}
+	prevTime = selTime;
+}
+
+cntr++;','','',-1,'name;geomW;geomH;backColor;',1429388056);
 CREATE TABLE 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_mnEls" VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -21911,4 +22224,472 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','11','','/wlb_Main/wdg_prescrE
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm',1,'','','',-1,0,'',1418046751);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg_treeSelect',1,'','','',-1,0,'',1382881863);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt',1,'','','',-1,0,'geomZ;pName;',1404219070);
+CREATE TABLE 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+//  messPut("Average for hour",1,"The no closed document is closing "+doc_bTime+":"+doc_time);
+  closeDoc = true;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+}
+//> Archive document
+else if( curDay != lastDay && curHour==9 && curMin >= 3 )
+{
+//  messPut("Agerage for hour",1,"The finished document is closing");
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastDay = curDay;
+}
+//> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+  //messPut("Agerage for hour",1,"Document generation ("+doc_bTime+":"+doc_time+")");
+}','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  //messPut("Середній за годину",1,"Закриття не закритого документа "+doc_bTime+":"+doc_time);
+  closeDoc = true;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+}
+//> Archive document
+else if( curDay != lastDay && curHour==9 && curMin >= 3 )
+{
+  //messPut("Середній за годину",1,"Закриття завершеного документа");
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastDay = curDay;
+}
+//> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+  //messPut("Середній за годину",1,"Генерація документа ("+doc_bTime+":"+doc_time+")");
+}','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  //messPut("Среднечасовой",1,"Закрытие не закрытого документа "+doc_bTime+":"+doc_time);
+  closeDoc = true;  
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+}
+//> Archive document
+else if( curDay != lastDay && curHour==9 && curMin >= 3 )
+{
+  //messPut("Среднечасовой",1,"Закрытие законченного документа");
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastDay = curDay;
+}
+//> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+  //messPut("Среднечасовой",1,"Генерация документа ("+doc_bTime+":"+doc_time+")");
+}
+//messPut("Среднечасовой",1,"doc_aCur: "+doc_aCur);',1000,'name;',1429384724);
+INSERT INTO "wlb_doc" VALUES('docGasNodeMonthA','','/wlb_doc/wdg_doc',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  if( curDay == 1 && curHour < 9 )
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  closeDoc = true;
+  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
+  if( curDay == 1 && curHour < 9 )
+  {
+    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  }
+  else
+  {
+    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  }
+}
+//>> Archive document
+else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
+{
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastMonth = curMonth;
+}
+//>> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  if( curDay == 1 && curHour < 9 )
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+}','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  if( curDay == 1 && curHour < 9 )
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  closeDoc = true;
+  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
+  if( curDay == 1 && curHour < 9 )
+  {
+    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  }
+  else
+  {
+    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  }
+}
+//>> Archive document
+else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
+{
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastMonth = curMonth;
+}
+//>> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  if( curDay == 1 && curHour < 9 )
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+}','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  if( curDay == 1 && curHour < 9 )
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  closeDoc = true;
+  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
+  if( curDay == 1 && curHour < 9 )
+  {
+    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  }
+  else
+  {
+    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  }
+}
+//>> Archive document
+else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
+{
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastMonth = curMonth;
+}
+//>> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  if( curDay == 1 && curHour < 9 )
+    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
+}',1000,'name;',1429384724);
+INSERT INTO "wlb_doc" VALUES('docUsersSet','','/wlb_doc/wdg_docDin',1,'JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }',-1,'name;',1429384724);
+INSERT INTO "wlb_doc" VALUES('doc','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','/wlb_originals/wdg_Box',1,'
+','
+','
+',-1,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;','');
+INSERT INTO "wlb_doc" VALUES('docGasNodeMgn','','/wlb_doc/wdg_docDin',1,'','','',-1,'name;','');
+INSERT INTO "wlb_doc" VALUES('docGasNodeDayOrder','','/wlb_doc/wdg_doc',1,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  closeDoc = true;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+}
+//> Archive document
+else if( curDay != lastDay && curHour==9 && curMin >= 3 )
+{
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastDay = curDay;
+}
+//>> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  closeDoc = true;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+}
+//> Archive document
+else if( curDay != lastDay && curHour==9 && curMin >= 3 )
+{
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastDay = curDay;
+}
+//>> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}','JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//> Document generation one in hour
+curMin=curHour=curDay=curMonth=curYear=0;
+tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
+if( !doc_bTime )
+{
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}
+if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
+
+//> Archive last no closed document
+if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
+else if( doc_time && doc_time < doc_bTime )
+{
+  closeDoc = true;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+}
+//> Archive document
+else if( curDay != lastDay && curHour==9 && curMin >= 3 )
+{
+  closeDoc = true;
+  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  lastDay = curDay;
+}
+//>> Periodic notfull update
+else if( curMin != lastMin && !(curMin%5) )
+{
+  lastMin = curMin;
+  doc_time = tmTime()-5*60;
+  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
+  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
+  if( curHour < 9 ) doc_bTime -= 24*60*60;
+}',1000,'name;dscr;','');
+INSERT INTO "wlb_doc" VALUES('docDin','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','/wlb_originals/wdg_Box',1,'JavaLikeCalc.JavaScript
+if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }',1000,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;','');
+INSERT INTO "wlb_doc" VALUES('docRepSm2','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA2wAAANYQHlRq2kAAAE
+kUlEQVRYhe1Yy24UORS9frvc1dR0EiYiA0uWrIcVEvNx/FF+IF/ASC1YIEEklKwiIrqqq+yyfT2L
+m9QUITCjWUyD1Eetlts+Pr4vX0vNXr169ezZM2st/IRYr9eyaZqFcxeXl8MwHB//enLy25+vXwsh
+cs4FoGmaJ08eD8Pw8uUfu7b2HjDGZNM0B4eHRw8fGmOklCGE358/11qH4BEL59w5xxh7+/Zt8N5W
+9vHjJ7s2+29sNhtprT05Obn+9Onw8JAxdnV1pZXCUpxbOOeMMduuw4LHx8cAcHV1dXl5eXR0hIht
+2xbEX1arnLP3XimltfbexxibpkHE7XabUmqaBgC6rqNY9H2fc67rmjHWti0ROOftZiOVqqqKlK21
+xhgiHBwcAMD19XUpuFodpJRCCDHG5XJZSpEAwBirXMUYA4DlcgkApRQAMFozxrgQiivOOSKuVisA
+4JwzxpbLZc4ZAIQQlD3GmJRSCEFkrbXWmvSttUqpUoq1FhGVUjlnMpdzLoSonCMCKQshSilVVdFx
+iOic45wDgFKKxOmnBABrLV1iWpjnCBEphPNVck8pRZOcc5ony4gspZwmOedz8iQ+n3TO3SHMjbmj
+MJ0CABwA2rb9+PFjCOH9+/dv3rw5Pz+/uLig5RACAJx/+AAAVB4hhJzzlEfvPQD0fV9KCSGklLz3
+NL5DQETvPSL2fU/KpEaEYRioFEsppOa9/5YabbyJlBCirms/DMvlcuGcUso5J6Ws65oYdV0v6gX9
+NFrn2yAhouA8jONisWCMVVXFGDPGpJSMMVQYRKjrmjNmrOWcV1UlhXCLBQBorUspMca6roXgSmkh
+xGKxINpcjcqScz6OY13X4ziWUmhe5py7rtv2fdu2276nNSFE13UUGADYdtuu6/q+jzEiIhUoZTPG
+OA9wuoX3no6cCClnyoD3HksZhoHU6CINw6B1DCGUUoZhQMRhGCa1EAJjbFKjjTHGnPPNJZZSUMys
+tVIKpb64CZVz325lO4YEAM65MXZqJlprRJyT6NYCADUKipnWmjFGIaGMAwB1ISLfS6DyuDlbSrhN
+srWWCFM1fkeNNhL4xEPEgjiOY855sphAcgCQUiIJAIgxppRoTFcNAHLO4zh+TQghUFAQcbp/KaV0
+q0bn/ku1uRmceJ8/f6bQbjabtm2Hvp87EOM4pWLy7c74+4R5Sr8Yf0X4zhHzsE5jyTmXUjpX0Uth
+rbHWGHPzMuScrbVCSGttzpmqi3NOcnRNjTGImV6oqW9QJyACLVlr6SEDAFKjgkwp0RJ1fWttKXhH
+DQD4Lay1ZAD1OkkSw+C99zGlGOnTUb6o5U/gnOecpy4khKD5GJNSicgxRpqfE2h++k4p5ZwZY3Q6
+gTE2V0spCSFijJxzWp2rUYBKKez09PTFixdTXqZy/3rm3vH/QPgWGQDOzs5uHjL4OWGMkdvt9t27
+d0IIKeU4jgDl0aOTnNO9G6SQ9Ij+OJAPHjx4+vTprs347+D/TPmxsXdg19g7sGvsHdg19g7sGnsH
+do29A7vG3oFdY+/ArrF3YNeQ6/X6zl8pPxHW6/Vf51IEmfDmKAQAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',1,'JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }',-1,'name;geomXsc;geomYsc;','');
+INSERT INTO "wlb_doc" VALUES('docAlarmsRep','','/wlb_doc/wdg_docDin',1,'JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }',-1,'name;',1429384724);
 COMMIT;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -383,7 +383,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	return 10;
     }
 
-    int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    int rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
     //Display error message about connection error
     if(rez == 10 && masterPg()) {
 	if(!conErr) {
@@ -889,18 +889,16 @@ void VisRun::exportDoc( const string &idoc )
 		    curNode = curNode->childGet(treeStk.back());
 		    treeStk.push_back(0);
 		    //  Check for marked table and process it
-		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && s2i(curNode->attr("export")))
-		    {
+		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && s2i(curNode->attr("export"))) {
 			map<int,int>	rowSpn;
 			XMLNode *tblN = NULL, *tblRow;
 			string val;
 			for(int i_st = 0; i_st < 4; i_st++) {
-			    switch(i_st)
-			    {
+			    switch(i_st) {
 				case 0:	tblN = curNode->childGet("thead", 0, true);	break;
-				case 1: tblN = curNode->childGet("tbody", 0, true);	break;
-				case 2: tblN = curNode->childGet("tfoot", 0, true);	break;
-				case 3: tblN = curNode;					break;
+				case 1:	tblN = curNode->childGet("tbody", 0, true);	break;
+				case 2:	tblN = curNode->childGet("tfoot", 0, true);	break;
+				case 3:	tblN = curNode;					break;
 				default: tblN = NULL;
 			    }
 			    if(!tblN)	continue;
@@ -1053,8 +1051,7 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     //Get opened sessions list for our page and put dialog for connection
     XMLNode req("list");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
-    if(!isSess && !crSessForce && !cntrIfCmd(req) && req.childSize())
-    {
+    if(!isSess && !crSessForce && !cntrIfCmd(req) && req.childSize()) {
 	// Prepare and execute a session selection dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("vision_prj_run",NULL,true).c_str())) ico_t.load(":/images/prj_run.png");
@@ -1078,8 +1075,10 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     if(work_sess.empty()) req.setAttr("prj",src_prj);
     else req.setAttr("sess",work_sess);
     if(cntrIfCmd(req)) {
-	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-	close();
+	if(!(conErr && s2i(req.attr("rez")) == 10)) {	//Need check for prevent the warning dialog and the run closing by the session creation wait
+	    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+	    close();
+	}
 	return;
     }
 
@@ -1280,8 +1279,7 @@ void VisRun::alarmSet( unsigned alarm )
     //Check for early this session running equalent project
     bool isMaster = true;
     for(unsigned i_w = 0; i_w < mod->mn_winds.size(); i_w++)
-	if(qobject_cast<VisRun*>(mod->mn_winds[i_w]) && ((VisRun*)mod->mn_winds[i_w])->srcProject() == srcProject())
-	{
+	if(qobject_cast<VisRun*>(mod->mn_winds[i_w]) && ((VisRun*)mod->mn_winds[i_w])->srcProject() == srcProject()) {
 	    if(((VisRun*)mod->mn_winds[i_w])->workSess() != workSess()) isMaster = false;
 	    break;
 	}
@@ -1308,8 +1306,7 @@ void VisRun::alarmSet( unsigned alarm )
 
     //Alarm action indicators update
     // Alarm level icon update
-    if(ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet)
-    {
+    if(ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet) {
 	int alarmLev = alarm&0xFF;
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
 
@@ -1324,8 +1321,7 @@ void VisRun::alarmSet( unsigned alarm )
 	painter.fillRect(levImage.rect(),Qt::transparent);
 	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-	if(!((alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) && alrLevSet))
-	{
+	if(!((alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) && alrLevSet)) {
 	    for(int i_x = 0; i_x < lens.size().width(); i_x++)
 		for(int i_y = 0; i_y < lens.size().height(); i_y++)
 		    if(lens.pixel(i_x,i_y)&0xFF000000)	levImage.setPixel(i_x,i_y,lclr.rgba());
@@ -1464,8 +1460,7 @@ void VisRun::updatePage( )
     }
 
     //Time update
-    if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1)))
-    {
+    if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1))) {
 	QDateTime dtm = QDateTime::currentDateTime();
 	mWTime->setText( locale().toString(dtm,"hh:mm:ss\nddd, d MMM") );
 	mWTime->setToolTip( locale().toString(dtm,"dddd, dd-MMM-yyyy") );

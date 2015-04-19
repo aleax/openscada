@@ -496,7 +496,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 	node.setAttr("rqDir", trUser?"0":"1")->
 	    setAttr("rqUser", trUser?host.user:user)->
 	    setAttr("rqPass", trUser?host.pass:password);
-	tr.at().messProtIO(node,"SelfSystem");
+	tr.at().messProtIO(node, "SelfSystem");
 
 	return s2i(node.attr("rez"));
     }

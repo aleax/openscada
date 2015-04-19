@@ -204,8 +204,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN response: %d"), resp_len);
 
 		off = 0;
-		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ")
-		{
+		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ") {
 		    rez = s2i(TSYS::strParse(header,0," ",&off));
 		    if(rez > 0 || off >= (int)header.size())
 			throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),header.substr(off).c_str());
@@ -223,12 +222,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
 
-	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),conTm,true);
-	    resp.assign(buf,resp_len);
+	    resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf), conTm, true);
+	    resp.assign(buf, resp_len);
 
 	    // Wait tail
-	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A')
-	    {
+	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
 		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf, resp_len);
 	    }

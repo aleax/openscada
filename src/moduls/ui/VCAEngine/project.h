@@ -109,6 +109,7 @@ class Project : public TCntrNode, public TConfig
 
 	//Attributes
 	bool	enableByNeed;	//Load and enable by need
+	pthread_mutex_t &funcM( )	{ return mFuncM; }
 
     protected:
 	//Methods
@@ -140,6 +141,8 @@ class Project : public TCntrNode, public TConfig
 	// Styles
 	Res	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
+
+	pthread_mutex_t	mFuncM;
 };
 
 //************************************************

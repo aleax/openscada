@@ -38,6 +38,12 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
     mPer(cfg("PER").getId()), mFlgs(cfg("FLGS").getId()), mStyleIdW(cfg("STYLE").getId()),
     mEnable(false)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mFuncM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     mId = id;
     cfg("NAME").setS(name);
     cfg("DB_TBL").setS(string("prj_")+id);
@@ -46,7 +52,7 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
 
 Project::~Project( )
 {
-
+    pthread_mutex_destroy(&mFuncM);
 }
 
 TCntrNode &Project::operator=( TCntrNode &node )
@@ -155,6 +161,8 @@ void Project::setFullDB( const string &it )
 
 void Project::load_( )
 {
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+
     if(!SYS->chkSelDB(DB())) throw TError();
 
     mess_info(nodePath().c_str(), _("Load project."));
@@ -225,8 +233,7 @@ void Project::save_( )
     //Save styles
     ResAlloc res( mStRes, false );
     TConfig c_stl( &mod->elPrjStl() );
-    for(map< string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-    {
+    for(map< string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
 	c_stl.cfg("ID").setS(iStPrp->first);
 	for(unsigned i_s = 0; i_s < iStPrp->second.size() && i_s < 10; i_s++)
 	    c_stl.cfg(TSYS::strMess("V_%d",i_s)).setS(iStPrp->second[i_s]);
@@ -246,6 +253,8 @@ void Project::save_( )
 void Project::setEnable( bool val )
 {
     if(val == enable()) return;
+
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     mess_info(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 
@@ -274,7 +283,7 @@ void Project::add( const string &id, const string &name, const string &orig )
 void Project::add( Page *iwdg )
 {
     if(present(iwdg->id())) delete iwdg;
-    else chldAdd(mPage,iwdg);
+    else chldAdd(mPage, iwdg);
 }
 
 AutoHD<Page> Project::at( const string &id )	{ return chldAt(mPage,id); }

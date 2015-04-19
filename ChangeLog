@@ -1,3 +1,13 @@
+2015-04-19 Roman
+- DB: LibsDB.vcaBase.db: New widget "Calendar", from the project Krasna, to the library "Main" is added.
+    Condensed "TABLE.data" style for mostly document's tables apply, for thin to one pixel borders set.
+- !!:FIX:UI.VCAEngine: The function resource to a widgets library and a project loading and enabling by need multiple entry and perform prevent.
+    Some crashes and not full the data access prevent for the remote players.
+- !!:FIX:SYS: TCntrNode::isModify() rewrote for race-condition prevent by the chain locking from the parent to all childs, mostly by previous case.
+- FIX:UI.Vision: "Timeouted" messages at the running session restoring try, by the background project's data loading wait,
+    oppressed and the window closing ceased.
+
+
 2015-04-18 Roman
 - FIX:DB.FireBird: Prevent a table fix for key row as blr_varying.
 - !!:DB.MySQL: Address field "sets" (charset-collation-engine) appended to the storage engine set for next created tables.

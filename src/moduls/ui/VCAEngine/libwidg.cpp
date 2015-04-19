@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,12 @@ using namespace VCA;
 //* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), mId(cfg("ID")), work_lib_db(lib_db), mEnable(false), passAutoEn(false)
+    TConfig(&mod->elWdgLib()), mId(cfg("ID")), workLibDB(lib_db), mEnable(false), passAutoEn(false)
 {
     mId = id;
     cfg("NAME").setS(name);
     cfg("DB_TBL").setS(string("wlb_")+id);
-    m_wdg = grpAdd("wdg_",(id=="originals")?true:false);
+    mWdg = grpAdd("wdg_",(id=="originals")?true:false);
 }
 
 WidgetLib::~WidgetLib( )
@@ -54,7 +54,7 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
     //Copy generic configuration
     exclCopy(*src_n, "ID;");
     cfg("DB_TBL").setS("wlb_"+id());
-    work_lib_db = src_n->work_lib_db;
+    workLibDB = src_n->workLibDB;
 
     if(!src_n->enable()) return *this;
     if(!enable()) setEnable(true);
@@ -116,7 +116,7 @@ void WidgetLib::postDisable( int flag )
 AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const string &user )
 {
     AutoHD<TCntrNode> nd = TCntrNode::chldAt(igr, name, user);
-    if(igr == m_wdg && !nd.freeStat()) {
+    if(igr == mWdg && !nd.freeStat()) {
 	AutoHD<LWidget> lwdg = nd;
 	if(!lwdg.freeStat() && !lwdg.at().enable() && !passAutoEn && lwdg.at().enableByNeed) {
 	    lwdg.at().enableByNeed = false;
@@ -141,7 +141,7 @@ string WidgetLib::name( )
 void WidgetLib::setFullDB( const string &it )
 {
     size_t dpos = it.rfind(".");
-    work_lib_db = (dpos!=string::npos) ? it.substr(0,dpos) : "";
+    workLibDB = (dpos!=string::npos) ? it.substr(0,dpos) : "";
     cfg("DB_TBL").setS((dpos!=string::npos) ? it.substr(dpos+1) : "");
     modifG();
 }
@@ -302,17 +302,17 @@ void WidgetLib::mimeDataDel( const string &iid, const string &idb )
 void WidgetLib::add( const string &id, const string &name, const string &orig )
 {
     if(present(id))	return;
-    chldAdd(m_wdg,new LWidget(id,orig));
+    chldAdd(mWdg, new LWidget(id,orig));
     at(id).at().setName(name);
 }
 
 void WidgetLib::add( LWidget *iwdg )
 {
     if(present(iwdg->id()))	delete iwdg;
-    else chldAdd(m_wdg,iwdg);
+    else chldAdd(mWdg, iwdg);
 }
 
-AutoHD<LWidget> WidgetLib::at( const string &id )	{ return chldAt(m_wdg,id); }
+AutoHD<LWidget> WidgetLib::at( const string &id )	{ return chldAt(mWdg, id); }
 
 void WidgetLib::cntrCmdProc( XMLNode *opt )
 {
@@ -458,6 +458,13 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elWdg()), enableByNeed(false), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mFuncM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
+
     cfg("ID").setS(id());
     cfg("PROC").setExtVal(true);
 
@@ -467,7 +474,7 @@ LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 
 LWidget::~LWidget( )
 {
-
+    pthread_mutex_destroy(&mFuncM);
 }
 
 WidgetLib &LWidget::ownerLib( )	{ return *(WidgetLib*)nodePrev(); }
@@ -572,6 +579,8 @@ void LWidget::setEnable( bool val )
 {
     if(enable() == val) return;
 
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+
     Widget::setEnable(val);
 
     //Include widgets link update on the parrent change
@@ -601,6 +610,8 @@ void LWidget::setEnableByNeed( )
 
 void LWidget::load_( )
 {
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+
     if(!SYS->chkSelDB(ownerLib().DB())) throw TError();
 
     //Load generic widget's data
