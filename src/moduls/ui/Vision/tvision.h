@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: tvision.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2014 by Roman Savochenko (rom_as@oscada.org)
+ *                 2006-2015 by Roman Savochenko (rom_as@oscada.org)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ class TVision : public TUI
 	int cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob = false );
 
 	//Attributes
-	vector<QMainWindow*>	mn_winds;
+	vector<QMainWindow*>	mnWinds;
 
     protected:
 	//Methods

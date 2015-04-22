@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:09+0300\n"
+"POT-Creation-Date: 2015-04-22 13:21+0300\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -64,6 +64,15 @@ msgstr "Nicht voll zu reagieren."
 msgid "Protocol"
 msgstr "Protokoll"
 
+msgid "State"
+msgstr "Zustand"
+
+msgid "Active authentication sessions"
+msgstr "Aktive Authentifizierung Sitzungen"
+
+msgid "Module options"
+msgstr "Moduloptionen"
+
 msgid "Life time of the authentication (min)"
 msgstr "Lebensdauer der Authentifizierung (Min)"
 
@@ -85,6 +94,10 @@ msgstr "Adresse"
 
 msgid "User"
 msgstr "Benutzername"
+
+#, c-format
+msgid "%s %s(%s), by \"%s\""
+msgstr "%s %s(%s), durch \"%s\""
 
 #, c-format
 msgid ""

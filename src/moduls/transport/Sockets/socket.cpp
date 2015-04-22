@@ -260,7 +260,7 @@ void TSocketIn::start( )
 		    struct timeval tv;
 		    socklen_t slen = sizeof(res);
 		    fd_set fdset;
-		    tv.tv_sec = 10; tv.tv_usec = 0;
+		    tv.tv_sec = 5; tv.tv_usec = 0;
 		    FD_ZERO(&fdset); FD_SET(sock_fd, &fdset);
 		    if((res=select(sock_fd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
 		    else res = -1;

@@ -213,7 +213,7 @@ void TVision::uiPropSet( const string &prop, const string &vl, const string &use
     TBDS::genDBSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
 }
 
-QIcon TVision::icon()
+QIcon TVision::icon( )
 {
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("UI.Vision",NULL,true).c_str())) ico_t.load(":/images/vision.png");
@@ -281,13 +281,15 @@ QMainWindow *TVision::openWindow( )
 
 	//QDesktopWidget().screen(1)
 	// Find for already opened run window
-	unsigned i_w;
-	for(i_w = 0; i_w < mn_winds.size(); i_w++)
-	    if(qobject_cast<VisRun*>(mn_winds[i_w]) &&
-		    ((isSess && ((VisRun*)mn_winds[i_w])->workSess() == sprj) || (!isSess && ((VisRun*)mn_winds[i_w])->srcProject() == sprj)) &&
-		    ((VisRun*)mn_winds[i_w])->screen() == screen)
-		break;
-	if(i_w < mn_winds.size()) continue;
+	MtxAlloc res(dataRes(), true);
+	bool openRunOK = false;
+	for(unsigned iW = 0; !openRunOK && iW < mnWinds.size(); iW++)
+	    openRunOK = (qobject_cast<VisRun*>(mnWinds[iW]) &&
+		    ((isSess && ((VisRun*)mnWinds[iW])->workSess() == sprj) || (!isSess && ((VisRun*)mnWinds[iW])->srcProject() == sprj)) &&
+		    ((VisRun*)mnWinds[iW])->screen() == screen);
+	res.unlock();
+	if(openRunOK) continue;
+
 	VisRun *sess = new VisRun((isSess?"/ses_":"/prj_")+sprj, user_open, user_pass, VCAStation(), true, screen);
 	sess->show();
 	sess->raise();
@@ -312,8 +314,13 @@ void TVision::modStop( )
 
     end_run = true;
 
-    for(unsigned i_w = 0; i_w < mn_winds.size(); i_w++)
-	while(mn_winds[i_w]) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+    MtxAlloc res(dataRes(), true);
+    for(unsigned i_w = 0; i_w < mnWinds.size(); i_w++)
+	while(mnWinds[i_w]) {
+	    res.unlock();
+	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	    res.lock();
+	}
     TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
     run_st = false;
@@ -330,17 +337,19 @@ WdgShape *TVision::getWdgShape( const string &iid )
 
 void TVision::regWin( QMainWindow *mwd )
 {
+    MtxAlloc res(dataRes(), true);
     unsigned i_w;
-    for(i_w = 0; i_w < mn_winds.size(); i_w++)
-	if(mn_winds[i_w] == NULL) break;
-    if(i_w == mn_winds.size()) mn_winds.push_back((QMainWindow*)NULL);
-    mn_winds[i_w] = mwd;
+    for(i_w = 0; i_w < mnWinds.size(); i_w++)
+	if(mnWinds[i_w] == NULL) break;
+    if(i_w == mnWinds.size()) mnWinds.push_back((QMainWindow*)NULL);
+    mnWinds[i_w] = mwd;
 }
 
 void TVision::unregWin( QMainWindow *mwd )
 {
-    for(unsigned i_w = 0; i_w < mn_winds.size(); i_w++)
-	if(mn_winds[i_w] == mwd) mn_winds[i_w] = NULL;
+    MtxAlloc res(dataRes(), true);
+    for(unsigned i_w = 0; i_w < mnWinds.size(); i_w++)
+	if(mnWinds[i_w] == mwd) mnWinds[i_w] = NULL;
 }
 
 void TVision::cntrCmdProc( XMLNode *opt )
@@ -349,6 +358,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/disp_n",_("Display number"),R_R_R_,"root",SUI_ID,1,"tp","dec");
+	ctrMkNode("list",opt,-1,"/prm/st/mnWinds",_("Main windows"),R_R_R_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
@@ -379,6 +389,18 @@ void TVision::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/disp_n" && ctrChkNode(opt))		opt->setText(i2s(mScrnCnt));
+    else if(a_path == "/prm/st/mnWinds" && ctrChkNode(opt)) {
+	string rez;
+	MtxAlloc res(dataRes(), true);
+	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
+	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development"),iW));
+	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{
+		opt->childAdd("el")->setText(TSYS::strMess(_("%d: Running \"%s:%s\" - %s"),iW,
+		    ((VisRun*)mnWinds[iW])->workSess().c_str(),
+		    ((VisRun*)mnWinds[iW])->srcProject().c_str(),
+		    ((VisRun*)mnWinds[iW])->connOK()?_("Connected"):_("Disconnected")));
+	    }
+    }
     else if(a_path == "/prm/cfg/start_user") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());

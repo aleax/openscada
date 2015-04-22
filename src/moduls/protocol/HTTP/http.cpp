@@ -71,7 +71,7 @@ using namespace PrHTTP;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), lst_ses_chk(0)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), mTmpl(dataRes()), lstSesChk(0)
 {
     mod		= this;
 
@@ -112,7 +112,7 @@ void TProt::load_( )
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     // Load auto-login config
-    ResAlloc res(nodeRes(),true);
+    MtxAlloc res(dataRes(), true);
     XMLNode aLogNd("aLog");
     try {
 	aLogNd.load(TBDS::genDBGet(nodePath()+"AutoLogin"));
@@ -127,33 +127,33 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
 
     //Save auto-login config
-    ResAlloc res(nodeRes(),false);
+    MtxAlloc res(dataRes(), true);
     XMLNode aLogNd("aLog");
     for(unsigned i_n = 0; i_n < mALog.size(); i_n++)
-	aLogNd.childAdd("it")->setAttr("addrs",mALog[i_n].addrs)->setAttr("user",mALog[i_n].user);
-    TBDS::genDBSet(nodePath()+"AutoLogin",aLogNd.save());
+	aLogNd.childAdd("it")->setAttr("addrs", mALog[i_n].addrs)->setAttr("user", mALog[i_n].user);
+    TBDS::genDBSet(nodePath()+"AutoLogin", aLogNd.save());
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
 
-int TProt::sesOpen( const string &name )
+int TProt::sesOpen( const string &name, const string &srcAddr, const string &userAgent )
 {
     int sess_id;
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
 
     //Get free identifier
     do{ sess_id = rand(); }
     while(sess_id == 0 || mAuth.find(sess_id) != mAuth.end());
 
     //Add new session authentification
-    mAuth[sess_id] = SAuth(name,time(NULL));
+    mAuth[sess_id] = SAuth(name, time(NULL), srcAddr, userAgent);
 
     return sess_id;
 }
 
 void TProt::sesClose( int sid )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     map<int,SAuth>::iterator authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
 	mess_info(nodePath().c_str(),_("Auth exit from user '%s'."),authEl->second.name.c_str());
@@ -167,18 +167,17 @@ string TProt::sesCheck( int sid )
     map<int,SAuth>::iterator authEl;
 
     //Check for close old sessions
-    ResAlloc res(nodeRes(),true);
-    if(cur_tm > lst_ses_chk+10) {
+    MtxAlloc res(dataRes(), true);
+    if(cur_tm > lstSesChk+10) {
 	for(authEl = mAuth.begin(); authEl != mAuth.end(); )
 	    if(cur_tm > authEl->second.tAuth+authTime()*60) {
 		mess_info(nodePath().c_str(),_("Auth session for user '%s' expired."),authEl->second.name.c_str());
 		mAuth.erase(authEl++);
 	    } else authEl++;
-	lst_ses_chk = cur_tm;
+	lstSesChk = cur_tm;
     }
 
     //Check for session
-    res.request(false);
     authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
 	authEl->second.tAuth = cur_tm;
@@ -191,7 +190,7 @@ string TProt::sesCheck( int sid )
 string TProt::autoLogGet( const string &sender )
 {
     string addr;
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     for(unsigned i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
 	for(int aoff = 0; (addr=TSYS::strParse(mALog[i_a].addrs,0,";",&aoff)).size(); )
 	    if(TRegExp(addr, "p").test(sender)) return mALog[i_a].user;
@@ -329,13 +328,17 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/prm",_("Protocol"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/prm/tmplList");
-	    if(ctrMkNode("table",opt,-1,"/prm/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
-		"help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
-	    {
-		ctrMkNode("list",opt,-1,"/prm/alog/addrs",_("Address"),RWRWR_,"root",SPRT_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/alog/user",_("User"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","select","select","/prm/usr_ls");
+	    if(ctrMkNode("area",opt,1,"/prm/st",_("State")))
+		ctrMkNode("list",opt,-1,"/prm/st/auths",_("Active authentication sessions"),R_R_R_,"root",SPRT_ID);
+	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/prm/tmplList");
+		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
+		    "help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
+		{
+		    ctrMkNode("list",opt,-1,"/prm/cfg/alog/addrs",_("Address"),RWRWR_,"root",SPRT_ID,1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/prm/cfg/alog/user",_("User"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","select","select","/prm/cfg/usr_ls");
+		}
 	    }
 	}
 	return;
@@ -343,43 +346,48 @@ void TProt::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/lf_tm") {
+    if(a_path == "/prm/st/auths" && ctrChkNode(opt)) {
+	MtxAlloc res(dataRes(), true);
+	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s), by \"%s\""),
+		tm2s(authEl->second.tAuth,"").c_str(),authEl->second.name.c_str(),authEl->second.addr.c_str(),authEl->second.agent.c_str()));
+    }
+    else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));
     }
-    else if(a_path == "/prm/alog") {
+    else if(a_path == "/prm/cfg/alog") {
 	int idrow = s2i(opt->attr("row"));
 	string idcol = opt->attr("col");
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
-	    XMLNode *n_addrs	= ctrMkNode("list",opt,-1,"/prm/alog/addrs","");
-	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/prm/alog/user","");
+	    XMLNode *n_addrs	= ctrMkNode("list",opt,-1,"/prm/cfg/alog/addrs","");
+	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/prm/cfg/alog/user","");
 
-	    ResAlloc res(nodeRes(),false);
+	    MtxAlloc res(dataRes(), true);
 	    for(unsigned i_a = 0; i_a < mALog.size(); i_a++) {
 		if(n_addrs)	n_addrs->childAdd("el")->setText(mALog[i_a].addrs);
 		if(n_user)	n_user->childAdd("el")->setText(mALog[i_a].user);
 	    }
 	    return;
 	}
-	ResAlloc res(nodeRes(),true);
+	MtxAlloc res(dataRes(), true);
 	modif();
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	mALog.push_back(SAutoLogin());
 	else if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))
 	    mALog.insert(mALog.begin()+idrow, SAutoLogin());
 	else if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))
 	    mALog.erase(mALog.begin()+idrow);
-	else if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))
-	{
+	else if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size())) {
 	    if(idcol == "addrs")mALog[idrow].addrs = opt->text();
 	    if(idcol == "user")	mALog[idrow].user = opt->text();
 	}
     }
-    else if(a_path == "/prm/tmpl") {
+    else if(a_path == "/prm/cfg/tmpl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(tmpl());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setTmpl(opt->text());
     }
-    else if(a_path == "/prm/tmplList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, tmpl(), "html;xhtml;xml;");
-    else if(a_path == "/prm/usr_ls" && ctrChkNode(opt)) {
+    else if(a_path == "/prm/cfg/tmplList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, tmpl(), "html;xhtml;xml;");
+    else if(a_path == "/prm/cfg/usr_ls" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
@@ -392,7 +400,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn(name), m_nofull(false)
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mNoFull(false)
 {
 
 }
@@ -420,12 +428,12 @@ bool TProtIn::mess( const string &reqst, string &answer )
     string sender = TSYS::strLine(srcAddr(),0);
 
     //Continue for full reqst
-    if(m_nofull) {
-	m_buf.append(reqst);
-	m_nofull = false;
-    }else m_buf = reqst;  //Save request to buffer
+    if(mNoFull) {
+	mBuf.append(reqst);
+	mNoFull = false;
+    }else mBuf = reqst;  //Save request to buffer
 
-    string request = m_buf;
+    string request = mBuf;
 
     answer = "";
     if(request.size() > 0) {
@@ -434,7 +442,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 
 	//Parse first record
 	req = TSYS::strLine(request,0,&pos);
-	if(req == request) { m_nofull = true; return m_nofull; }	//HTTP header is not full
+	if(req == request) { mNoFull = true; return mNoFull; }	//HTTP header is not full
 	string method   = TSYS::strSepParse(req,0,' ');
 	string urls     = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
@@ -465,8 +473,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	}
 
 	//Check content length
-	if((c_lng >= 0 && c_lng > (int)(request.size()-pos)) || (c_lng < 0 && method == "POST")) m_nofull = true;
-	if(m_nofull) return m_nofull;
+	if((c_lng >= 0 && c_lng > (int)(request.size()-pos)) || (c_lng < 0 && method == "POST")) mNoFull = true;
+	if(mNoFull) return mNoFull;
 
 	//Check protocol version
 	if(protocol != "HTTP/1.0" && protocol != "HTTP/1.1") {
@@ -477,7 +485,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		     " </body>\n"
 		     "</html>\n";
 	    answer = httpHead("400 Bad Request",answer.size())+answer;
-	    return m_nofull||KeepAlive;
+	    return mNoFull||KeepAlive;
 	}
 
 	int url_pos = 0;
@@ -490,7 +498,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    if(method == "GET") {
 		if(sesId) mod->sesClose(sesId);
 		answer = getAuth(url);
-		return m_nofull||KeepAlive;
+		return mNoFull||KeepAlive;
 	    }
 	    else if(method == "POST") {
 		map<string,string>	cnt;
@@ -505,18 +513,18 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
 			mess_info(owner().nodePath().c_str(), _("Auth OK from user '%s'. Host: %s. User agent: %s."),
-			    user.c_str(),sender.c_str(),userAgent.c_str());
+			    user.c_str(), sender.c_str(), userAgent.c_str());
 			answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n",
 			    "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>");
-			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;
-			return m_nofull||KeepAlive;
+			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;\x0D\x0A")+answer;
+			return mNoFull||KeepAlive;
 		    }
 		}
 
 		mess_warning(owner().nodePath().c_str(),_("Auth wrong from user '%s'. Host: %s. User agent: %s."),
-		    user.c_str(),sender.c_str(),userAgent.c_str());
+		    user.c_str(), sender.c_str(), userAgent.c_str());
 		answer = getAuth(url,_("<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"));
-		return m_nofull||KeepAlive;
+		return mNoFull||KeepAlive;
 	    }
 	}
 	else if(name_mod == "logout" && method == "GET") {
@@ -524,12 +532,12 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),"/")+"</h2>\n",
 		"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
 	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
-	    return m_nofull||KeepAlive;
+	    return mNoFull||KeepAlive;
 	}
 	else if(name_mod == "robots.txt" && method == "GET") {
 	    answer = "User-Agent: *\nDisallow: /";
 	    answer = httpHead("200 OK",answer.size(),"Content-Type: text/plain;charset=us-ascii\x0D\x0A",false)+answer;
-	    return m_nofull||KeepAlive;
+	    return mNoFull||KeepAlive;
 	}
 
 	//Send request to module
@@ -540,17 +548,18 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		// Check for auto-login
 		user = mod->autoLogGet(sender);
 		if(!user.empty()) {
-		    mess_info(owner().nodePath().c_str(),_("Auto auth from user '%s'. Host: %s. User agent: %s."),user.c_str(),sender.c_str(),userAgent.c_str());
+		    mess_info(owner().nodePath().c_str(), _("Auto auth from user '%s'. Host: %s. User agent: %s."),
+			user.c_str(), sender.c_str(), userAgent.c_str());
 		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n",
 			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>");
-		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user))+"; path=/;\x0D\x0A")+answer;
+		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;\x0D\x0A")+answer;
 		}
 		else {
 		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n",
 			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>");
 		    answer = httpHead("200 OK",answer.size())+answer;
 		}
-		return m_nofull||KeepAlive;
+		return mNoFull||KeepAlive;
 	    }
 
 	    // Check metods
@@ -602,14 +611,14 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			answer = httpHead("200 OK",answer.size(),"Content-Type: text/"+fext+"\x0D\x0A",false)+answer;
 		    else if(fext == "js") answer = httpHead("200 OK",answer.size(),"Content-Type: text/javascript\x0D\x0A",false)+answer;
 		    else answer = httpHead("200 OK",answer.size())+answer;
-		    return m_nofull||KeepAlive;
+		    return mNoFull||KeepAlive;
 		}
 	    }
 	    answer = getIndex(user,sender);
 	}
     }
 
-    return m_nofull||KeepAlive;
+    return mNoFull || KeepAlive;
 }
 
 string TProtIn::pgHead( const string &head_els )
@@ -638,7 +647,7 @@ string TProtIn::pgHead( const string &head_els )
 	"<hr/><br/>\n";
 }
 
-string TProtIn::pgTail()
+string TProtIn::pgTail( )
 {
     return
 	"<hr/>\n"
@@ -646,7 +655,7 @@ string TProtIn::pgTail()
 	"</html>\n";
 }
 
-string TProtIn::pgTmpl(const string &cnt, const string &head_els)
+string TProtIn::pgTmpl( const string &cnt, const string &head_els )
 {
     string answer;
     int hd = open(mod->tmpl().c_str(),O_RDONLY);
@@ -680,7 +689,7 @@ string TProtIn::pgTmpl(const string &cnt, const string &head_els)
     return answer.replace(tmplPos,strlen("#####CONTEXT#####"),cnt);
 }
 
-string TProtIn::getIndex(const string &user, const string &sender)
+string TProtIn::getIndex( const string &user, const string &sender )
 {
     string answer = string("<table class='work' width='50%'>\n")+
 	"<tr><th>"+_("Login")+"</th></tr>"
@@ -764,8 +773,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
 	    pos += c_head.size()+strlen(c_term);
 	    if(c_head.empty()) break;
 	    if((spos=c_head.find(":")) == string::npos) return;
-	    if(c_head.compare(0,spos,c_fd) == 0 && (i_bnd=c_head.find(c_name,spos)) != string::npos)
-	    {
+	    if(c_head.compare(0,spos,c_fd) == 0 && (i_bnd=c_head.find(c_name,spos)) != string::npos) {
 		i_bnd += strlen(c_name);
 		p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
 	    }

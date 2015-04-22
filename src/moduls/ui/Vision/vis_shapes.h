@@ -201,7 +201,7 @@ class ShapeText : public WdgShape
 
     private:
 	//Data
-	//- Argument object's class -
+	// Argument object's class
 	class ArgObj
 	{
 	    public:
@@ -219,7 +219,7 @@ class ShapeText : public WdgShape
 		QVariant	m_val;
 		string		m_cfg;
 	};
-	//- Shape node date -
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -585,7 +585,7 @@ class ShapeBox : public WdgShape
 		QPen		border;
 		QBrush		backGrnd;
 		RunPageView	*inclWidget;
-		QScrollArea 	*inclScrl;
+		QScrollArea	*inclScrl;
 	};
 
 	//Methods

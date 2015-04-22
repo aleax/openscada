@@ -1278,11 +1278,13 @@ void VisRun::alarmSet( unsigned alarm )
 
     //Check for early this session running equalent project
     bool isMaster = true;
-    for(unsigned i_w = 0; i_w < mod->mn_winds.size(); i_w++)
-	if(qobject_cast<VisRun*>(mod->mn_winds[i_w]) && ((VisRun*)mod->mn_winds[i_w])->srcProject() == srcProject()) {
-	    if(((VisRun*)mod->mn_winds[i_w])->workSess() != workSess()) isMaster = false;
+    MtxAlloc res(mod->dataRes(), true);
+    for(unsigned i_w = 0; i_w < mod->mnWinds.size(); i_w++)
+	if(qobject_cast<VisRun*>(mod->mnWinds[i_w]) && ((VisRun*)mod->mnWinds[i_w])->srcProject() == srcProject()) {
+	    if(((VisRun*)mod->mnWinds[i_w])->workSess() != workSess()) isMaster = false;
 	    break;
 	}
+    res.unlock();
 
     //Alarm types init
     // Set momo sound alarm

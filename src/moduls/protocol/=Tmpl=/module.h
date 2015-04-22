@@ -1,9 +1,8 @@
 
-//!!! Module name, file name and module's license. Change for your need.
+//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA system module Protocol.Tmpl file: module.h
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily                                 *
- *   my@email.org                                                          *
+ *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +38,7 @@ using std::string;
 using std::map;
 using namespace OSCADA;
 
-//!!! All module's objects you must include into self (individual) namespace. Change namespace for your module.
+//!!! All the module's objects you should include into self (individual) namespace. Change the namespace for your module.
 namespace ModTmpl
 {
 

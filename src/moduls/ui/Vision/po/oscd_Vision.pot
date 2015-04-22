@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:23+0300\n"
+"POT-Creation-Date: 2015-04-22 12:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,6 +70,9 @@ msgstr ""
 msgid "Display number"
 msgstr ""
 
+msgid "Main windows"
+msgstr ""
+
 msgid "Module options"
 msgstr ""
 
@@ -124,6 +127,20 @@ msgstr ""
 msgid ""
 "Command line for call sounds play.\n"
 "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."
+msgstr ""
+
+#, c-format
+msgid "%d: Development"
+msgstr ""
+
+#, c-format
+msgid "%d: Running \"%s:%s\" - %s"
+msgstr ""
+
+msgid "Connected"
+msgstr ""
+
+msgid "Disconnected"
 msgstr ""
 
 #, c-format

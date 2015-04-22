@@ -1982,7 +1982,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	else {
 	    req.setAttr("path","/"+prms[1].getS()+path);
-	    transport().at().cntrIfCmd(req,"cntrReq");
+	    transport().at().cntrIfCmd(req, "cntrReq");
 	    req.setAttr("path",path);
 	}
 	xnd.at().fromXMLNode(req);

@@ -319,6 +319,7 @@ namespace VISION
 	    QMainWindow	*mainWin( )	{ return main_win; }
 	    QPointF	posF( )		{ return mWPos; }
 	    QSizeF	sizeF( )	{ return mWSize; }
+	    QSizeF	sizeOrigF( )	{ return mWSizeOrig; }
 	    QRectF	geometryF( )	{ return QRectF(mWPos,mWSize); }
 	    virtual float xScale( bool full = false );
 	    virtual float yScale( bool full = false );
@@ -356,8 +357,8 @@ namespace VISION
 	    //Protected attributes
 	    bool		mAllAttrLoad;	//All attributes load
 	    int			mWLevel;	//Widget level
-	    QPointF		mWPos;		//Widget position into real;
-	    QSizeF		mWSize;		//Widget size into real;
+	    QPointF		mWPos;		//Widget position into real
+	    QSizeF		mWSize, mWSizeOrig;	//Widget real and original (unscaled) size into real
 	    float		x_scale, 	//Widget x scale
 				y_scale;	//	 y scale
 	    int			z_coord;	//Z coordinate

@@ -496,12 +496,6 @@ float RunPageView::xScale( bool full )	{ return full ? mainWin()->xScale()*WdgVi
 
 float RunPageView::yScale( bool full )	{ return full ? mainWin()->yScale()*WdgView::yScale() : WdgView::yScale(); }
 
-void RunPageView::resizeF( const QSizeF &size )
-{
-    WdgView::resizeF(size);
-    resize(sizeF().width(), sizeF().height());	//Fit to minimal for guaranty to include without scroll
-}
-
 RunPageView *RunPageView::parent( )	{ return qobject_cast<RunPageView*>(parentWidget()); }
 
 RunPageView *RunPageView::findOpenPage( const string &ipg )

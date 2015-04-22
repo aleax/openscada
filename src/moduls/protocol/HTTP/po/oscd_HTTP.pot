@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:09+0300\n"
+"POT-Creation-Date: 2015-04-22 13:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,6 +55,15 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
+msgid "State"
+msgstr ""
+
+msgid "Active authentication sessions"
+msgstr ""
+
+msgid "Module options"
+msgstr ""
+
 msgid "Life time of the authentication (min)"
 msgstr ""
 
@@ -71,6 +80,10 @@ msgid "Address"
 msgstr ""
 
 msgid "User"
+msgstr ""
+
+#, c-format
+msgid "%s %s(%s), by \"%s\""
 msgstr ""
 
 #, c-format

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,8 +62,8 @@ class TProtIn: public TProtocolIn
 	string pgTmpl( const string &cnt, const string &head_els = "" );
 
 	//Attributes
-	bool m_nofull;
-	string m_buf;
+	bool mNoFull;
+	string mBuf;
 };
 
 //*************************************************
@@ -84,15 +84,13 @@ class TProt: public TProtocol
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
-	//> Auth session manipulation functions
-	int sesOpen( const string &name );
+	// Auth session manipulation functions
+	int sesOpen( const string &name, const string &srcAddr = "", const string &userAgent = "" );
 	void sesClose( int sid );
 	string sesCheck( int sid );
 
-	//> Auto-login
+	// Auto-login
 	string autoLogGet( const string &sender );
-
-	Res &nodeRes( )			{ return nRes; }
 
     protected:
 	//Methods
@@ -108,12 +106,13 @@ class TProt: public TProtocol
 	{
 	    public:
 		//Methods
-		SAuth( ) : tAuth(0), name("")	{ }
-		SAuth( string inm, time_t itAuth ) : tAuth(itAuth), name(inm)	{ }
+		SAuth( ) : tAuth(0)	{ }
+		SAuth( string inm, time_t itAuth, const string &srcAddr, const string &userAgent ) :
+		    tAuth(itAuth), name(inm), addr(srcAddr), agent(userAgent)	{ }
 
 		//Attributes
 		time_t tAuth;
-		string name;
+		string name, addr, agent;
 	};
 
 	//*************************************************
@@ -124,7 +123,7 @@ class TProt: public TProtocol
 	    public:
 		//Methods
 		SAutoLogin( ) : addrs(""), user("")	{ }
-		SAutoLogin(string iaddrs, string iuser) : addrs(iaddrs), user(iuser)	{ }
+		SAutoLogin( string iaddrs, string iuser ) : addrs(iaddrs), user(iuser)	{ }
 
 		//Attributes
 		string addrs, user;
@@ -137,14 +136,12 @@ class TProt: public TProtocol
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	map<int,SAuth>	mAuth;
+	map<int, SAuth>	mAuth;
 	int		mTAuth;
-	ResString	mTmpl;
-	time_t		lst_ses_chk;
+	MtxString	mTmpl;
+	time_t		lstSesChk;
 
 	vector<SAutoLogin>	mALog;
-
-	Res		nRes;
 };
 
 extern TProt *mod;

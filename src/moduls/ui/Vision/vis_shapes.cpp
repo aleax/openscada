@@ -1,3 +1,4 @@
+
 //OpenSCADA system module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
@@ -247,7 +248,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    setActive(w, shD->active && runW->permCntr());
 	    break;
 	case A_GEOM_W: case A_GEOM_X_SC: rel_cfg = (shD->elType==F_TABLE);	break;
-	case A_GEOM_MARGIN:	w->layout()->setMargin(s2i(val));	break;
+	case A_GEOM_MARGIN:
+	    w->layout()->setMargin(s2i(val));
+	    rel_cfg = (shD->elType==F_BUTTON);
+	    break;
 	case A_FormElType:
 	    if(shD->elType == s2i(val)) break;
 	    shD->elType = s2i(val);
@@ -373,8 +377,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		QImage img;
 		string backimg = w->resGet(shD->img);
 		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size())) {
-		    int ic_sz = vmin(w->size().width(), w->size().height()) - w->layout()->margin() - 5;
-		    wdg->setIconSize(QSize(ic_sz,ic_sz));
+		    int icSzW = w->width() - w->layout()->margin();
+		    int icSzH = w->height() - w->layout()->margin();
+		    img = img.scaled(w->width()-w->layout()->margin(), w->height()-w->layout()->margin(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+		    wdg->setIconSize(QSize(icSzW,icSzH));
 		    wdg->setIcon(QPixmap::fromImage(img));
 		} else wdg->setIcon(QPixmap());
 		//Color
@@ -4544,6 +4551,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclWidget->setProperty("cntPg", TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setMinimumSize(w->size());
+			if(shD->inclWidget->sizeOrigF().width() <= w->sizeOrigF().width() &&
+				shD->inclWidget->sizeOrigF().height() <= w->sizeOrigF().height())
+			    shD->inclWidget->setMaximumSize(w->size());
 			//shD->inclWidget->load("");
 
 			shD->inclWidget->setAttribute(Qt::WA_WindowPropagation, true);

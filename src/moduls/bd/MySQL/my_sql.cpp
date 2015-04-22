@@ -381,8 +381,7 @@ void MTable::fieldStruct( TConfig &cfg )
     if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
     mLstUse = SYS->sysTm();
 
-    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
-    {
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 	int pr1, pr2;
 	string sid = tblStrct[i_fld][0];
 	if(cfg.cfgPresent(sid)) continue;

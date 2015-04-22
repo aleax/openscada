@@ -1274,9 +1274,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
 			    if(!imgObj.hidden) {
-				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW-6,geomH-6)+(!elWr?"&filtr=unact":"");
-				imgObj.width = Math.min(geomW-6,geomH-6);
-				imgObj.height = Math.min(geomW-6,geomH-6);
+				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW,geomH)+(!elWr?"&filtr=unact":"");
+				imgObj.width = Math.min(geomW, geomH);
+				imgObj.height = Math.min(geomW, geomH);
 				imgObj.float = 'left';
 				imgObj.style.marginRight = this.attrs['name'].length ? "2px" : "0px";
 			    }
@@ -1327,7 +1327,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			formObj.appendChild(imgObj);
 			formObj.appendChild(spanObj);
-			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
+
+			formObj.style.position = "absolute";
+			formObj.style.top = "-2px"; formObj.style.left = "-2px";
+			formObj.style.width = (geomW+4)+'px'; formObj.style.height = (geomH+4)+'px';
+			formObj.style.overflow = "hidden";
 			this.place.appendChild(formObj);
 		    }
 		    else {

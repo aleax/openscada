@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:23+0300\n"
+"POT-Creation-Date: 2015-04-22 12:09+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -28,7 +28,8 @@ msgid ""
 "Visual operation user interface, based on Qt library - front-end to VCA "
 "engine."
 msgstr ""
-"Рабочий пользовательский интерфейс, основанный на библиотеке Qt - внешний интерфейс к движку визуализации."
+"Рабочий пользовательский интерфейс, основанный на библиотеке Qt - внешний "
+"интерфейс к движку визуализации."
 
 msgid "Developers"
 msgstr "Разработчики"
@@ -86,6 +87,9 @@ msgstr "Останов модуля."
 
 msgid "Display number"
 msgstr "Количество экранов"
+
+msgid "Main windows"
+msgstr "Основные окна"
 
 msgid "Module options"
 msgstr "Опции модуля"
@@ -155,6 +159,19 @@ msgstr ""
 "Командная строка для вызова проигрывания звука.\n"
 "Используйте %f для вставки имени файла источника. Если файл источника не "
 "указан то данные направляются в канал."
+
+msgid "%d: Development"
+msgstr "%d: Разработка"
+
+#, c-format
+msgid "%d: Running \"%s:%s\" - %s"
+msgstr "%d: Исполнение \"%s:%s\" - %s"
+
+msgid "Connected"
+msgstr "Подключен"
+
+msgid "Disconnected"
+msgstr "Отключен"
 
 #, c-format
 msgid "OpenSCADA Vision developing: %s"

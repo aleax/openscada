@@ -67,7 +67,7 @@ binary-common:
 #	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installmime
-	dh_installinit -popenscada --restart-after-upgrade -- start 90 2 3 4 5 .
+	dh_installinit --no-start
 #	dh_installcron
 #	dh_installinfo
 #	dh_installman

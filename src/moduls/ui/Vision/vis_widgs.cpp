@@ -1060,8 +1060,16 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    else mWPos = QPointF(posF().x(), ((WdgView*)parentWidget())->yScale(true)*s2r(val));
 	    up = true;
 	    break;
-	case A_GEOM_W: mWSize = QSizeF(xScale(true)*s2r(val), sizeF().height()); up = true;	break;
-	case A_GEOM_H: mWSize = QSizeF(sizeF().width(), yScale(true)*s2r(val)); up = true;	break;
+	case A_GEOM_W:
+	    mWSizeOrig = QSizeF(s2r(val), sizeOrigF().height());
+	    mWSize = QSizeF(xScale(true)*s2r(val), sizeF().height());
+	    up = true;
+	    break;
+	case A_GEOM_H:
+	    mWSizeOrig = QSizeF(sizeOrigF().width(), s2r(val));
+	    mWSize = QSizeF(sizeF().width(), yScale(true)*s2r(val));
+	    up = true;
+	    break;
 	case A_GEOM_Z: if(wLevel() > 0) z_coord = s2i(val);	break;
 	case A_GEOM_X_SC:
 	    mWSize = QSizeF((s2r(val)/x_scale)*sizeF().width(), sizeF().height());

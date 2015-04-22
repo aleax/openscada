@@ -1,3 +1,15 @@
+2015-04-22 Roman
+- SYS: debian/rules: "dh_installinit --no-start" set for prevent the service automatic start.
+- SYS.*.=Tmpl=: configure.in renamed to configure.ac. Mostly cleared.
+    SYS.BD.=Tmpl=: Mostly adapted to actual, for follow BD.ODBC append.
+- Protocol.HTTP: Expanded by status - Active authentication sessions.
+- Transport.Sockets: The connection timeout for an initiative input transport set to 5 seconds.
+- UI.Vision: Main oppened windows list to the module configure page status added, for remote control.
+- FIX:UI.Vision: Pages including for equal the container and the included widget size fixed to oppress the scrolls for big scale.
+- FIX:UI.{Vision,WebVision}: View "Button" of primitive FormEl adapted to the image scale for all the widget size.
+    Allow cover all the button space by the image.
+
+
 2015-04-19 Roman
 - DB: LibsDB.vcaBase.db: New widget "Calendar", from the project Krasna, to the library "Main" is added.
     Condensed "TABLE.data" style for mostly document's tables apply, for thin to one pixel borders set.

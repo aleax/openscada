@@ -96,8 +96,6 @@ namespace VISION
 	    float  xScale( bool full = false );
 	    float  yScale( bool full = false );
 
-	    void resizeF( const QSizeF &size );
-
 	    void setReqTm( unsigned vl )	{ reqtm = vl; }
 
 	    RunPageView *findOpenPage( const string &pg );
