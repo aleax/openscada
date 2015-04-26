@@ -439,7 +439,7 @@ void Kontar::vlSet( TParamContr *ip, TVal &vo, const TVariant &vl, const TVarian
     TMdPrm *p = (TMdPrm *)ip;
     //tval *ePrm = (tval*)p->extPrms;
 
-    if(!p->enableStat() || !p->owner().startStat())	vo.setS(EVAL_STR, 0, true);
+    if(!p->enableStat() || !p->owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     if(vl.isEVal() || vl == pvl) return;
 

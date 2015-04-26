@@ -259,7 +259,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    rel_cfg = true;
 	    break;
 	case A_FormElValue:
-	    if(shD->value != val) setValue(w, val);
+	    //if(shD->value != val)	//For prevent to possibility the value difference into the widget and the model.
+					//Check for equal into setValue()!
+	    setValue(w, val);
 	    break;
 	case A_FormElName:
 	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
@@ -514,8 +516,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if(tX.name() != "tbl") wdg->clear();
 		else {
 		    // Items
-		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++)
-		    {
+		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++) {
 			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
 			bool isH = false;
 			QTableWidgetItem *hit = NULL, *tit = NULL;
@@ -697,7 +698,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	case F_LINE_ED:
 	    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
 	    break;
-	case F_TEXT_ED:	  ((TextEdit*)shD->addrWdg)->setText(val.c_str());	break;
+	case F_TEXT_ED: ((TextEdit*)shD->addrWdg)->setText(val.c_str());	break;
 	case F_CHECK_BOX: ((QCheckBox*)shD->addrWdg)->setChecked(s2i(val));	break;
 	case F_BUTTON: {
 	    QPushButton *wdg = (QPushButton*)shD->addrWdg;
@@ -761,6 +762,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    break;
 	}
 	case F_COMBO:
+	    if(((QComboBox*)shD->addrWdg)->currentText().toStdString() == val) break;
 	    if(((QComboBox*)shD->addrWdg)->findText(val.c_str()) < 0) ((QComboBox*)shD->addrWdg)->addItem(val.c_str());
 	    ((QComboBox*)shD->addrWdg)->setCurrentIndex(((QComboBox*)shD->addrWdg)->findText(val.c_str()));
 	    break;
@@ -978,7 +980,7 @@ void ShapeFormEl::buttonReleased( )
 	    break;
 	}
 	case FBT_LOAD: {
-	    int off = 0;//, hd;
+	    int off = 0;
 	    string  fHead	= TSYS::strLine(shD->value, 0, &off);
 	    string  fCtx	= shD->value.substr(off);
 	    off = 0;
@@ -1026,7 +1028,7 @@ void ShapeFormEl::buttonMenuTrig( )
     w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString());
 }
 
-void ShapeFormEl::comboChange(const QString &val)
+void ShapeFormEl::comboChange( const QString &val )
 {
     WdgView *w = (WdgView *)((QWidget*)sender())->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
@@ -4557,9 +4559,6 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			//shD->inclWidget->load("");
 
 			shD->inclWidget->setAttribute(Qt::WA_WindowPropagation, true);
-			//QPalette plt = shD->inclWidget->palette();
-			//plt.setBrush(QPalette::Window, w->palette().brush(QPalette::Window)/*shD->backGrnd /*QColor(0,0,0,0)*/);
-			//shD->inclWidget->setPalette(plt);*/
 		    }
 		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
 		}

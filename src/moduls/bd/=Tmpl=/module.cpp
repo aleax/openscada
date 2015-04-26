@@ -140,6 +140,8 @@ void MBD::enable( )
     //!!! - establishing of the connection to the db server;
     //!!! - creating the database if it is not exist;
     //!!! - process the errors.
+
+    TBD::enable();
 }
 
 //!!! Disable the database object processing virtual functions
@@ -186,7 +188,7 @@ void MBD::transCommit( )
 }
 
 //!!! SQL request processing main virtual function
-void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl )
+void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans );
 {
     if(tbl) tbl->clear();
     if(!enableStat())	return;

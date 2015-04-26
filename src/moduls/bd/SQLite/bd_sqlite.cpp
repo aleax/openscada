@@ -186,7 +186,7 @@ TTable *MBD::openTable( const string &inm, bool create )
     return new MTable(inm, this, create);
 }
 
-void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
+void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTrans )
 {
     char *zErrMsg = NULL;
     int rc, nrow = 0, ncol = 0;
@@ -196,8 +196,6 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(!enableStat())	return;
 
     //Commit set
-    string req = ireq;
-
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 

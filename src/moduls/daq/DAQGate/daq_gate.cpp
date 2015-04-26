@@ -846,7 +846,7 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	vo.setI(EVAL_INT, 0, true);
+    if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
     if(vl.isEVal() || vl == pvl) return;
 
     XMLNode req("set");

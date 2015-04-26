@@ -1,3 +1,13 @@
+2015-04-26 Roman
+- !!!!:DB: New module "ODBC", based on iodbc, is added. At first there works only SQL statements request to the connected DB.
+- SYS.BD.=Tmpl=: Some next adapted to actual.
+- FIX:DAQ.{AMRDevs,Comedi,DAQGate,DiamondBoards,EPICS,MMS,ModBus,OPC_UA,SMH2Gi}:
+    Fix for return after the condition "!p->enableStat() || !p->owner().startStat()" into the value set function, for next and real writing prevent.
+    Thanks for the note from Maxim Kochetkov(fido_max)!
+- DAQ.{Comedi,DiamondBoards,SMH2Gi}: Significant the code cleaned.
+- !!:FIX:UI.Vision: For primitive "FormEl" fixed sometime difference between real and seen value, mostly for discrete views ComboBox and CheckBox.
+
+
 2015-04-22 Roman
 - SYS: debian/rules: "dh_installinit --no-start" set for prevent the service automatic start.
 - SYS.*.=Tmpl=: configure.in renamed to configure.ac. Mostly cleared.

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,9 +49,9 @@ class DevFeature
 	//Data
 	struct rng { float min, max; };
 	//Functions
-        DevFeature( const string &inm, unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0 ) :
+	DevFeature( const string &inm, unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0 ) :
 	    name(inm), AI(iAI), AO(iAO), DIO(iDIO), DI(iDI), DO(iDO), aiSzFIFO(48)	{ }
-        DevFeature( ) : AI(0), AO(0), DIO(0), DI(0), DO(0), aiSzFIFO(46)		{ }
+	DevFeature( ) : AI(0), AO(0), DIO(0), DI(0), DO(0), aiSzFIFO(46)		{ }
 
 	void setAITypes( const string &vl );
 	void setAOTypes( const string &vl )	{ aoTypes = vl; }
@@ -61,8 +61,8 @@ class DevFeature
 	unsigned AI;	//[res][smpl][cnls]	0x6410	smpl:interrupted samplerate into ksml/s; res:A/D resolution (bits), default 16
 	unsigned AO;	//[res][cnls]		res:D/A resolution (bits), default 12
 	unsigned DIO;	//[ports]	0x0002  ports*8
-        unsigned DI;    //[ports]	0x0002  ports*8
-        unsigned DO;    //[ports]	0x0002  ports*8
+	unsigned DI;	//[ports]	0x0002  ports*8
+	unsigned DO;	//[ports]	0x0002  ports*8
 
 	string	aiTypes,	//Two string with modes indexes and names. Indexes code: [diff|range|polar][gain]
 		aoTypes;	//Two string with modes indexes and names. Indexes code: [daPol|range|polar][gain]
@@ -85,15 +85,15 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
-	TElem &elem( )          { return pEl; }
+	TElem &elem( )		{ return pEl; }
 
-        void enable( );
-        void disable( );
+	void enable( );
+	void disable( );
 
-        void getVals( const string &atr = "", bool start = false, bool stop = false );
-        string modPrm( const string &prm, const string &def = "" );
+	void getVals( const string &atr = "", bool start = false, bool stop = false );
+	string modPrm( const string &prm, const string &def = "" );
 
-        void setModPrm( const string &prm, const string &val );
+	void setModPrm( const string &prm, const string &val );
 
 	TMdContr &owner( );
 
@@ -109,20 +109,20 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	pEl;		//Work atribute elements
-        int64_t	&mTP,		//Board type
+	int64_t	&mTP,		//Board type
 		&mADDR,		//Board address
 		&mINT,		//Board interrupt
 		&mS_RATE,	//Sample rate
 		&mAImode;	//AI values mode
 	char	&asynchRd;	//Asynchronous reading
 
-        Res	devRes;		//Resource for access to device
+	Res	devRes;		//Resource for access to device
 	DevFeature dev;		//Device info
 	DSCB	dscb;		//Board descriptor
 	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
 	ResString acqErr;	//Acquisition error status
 
-	//> Interrupt AI mode
+	// Interrupt AI mode
 	int	aiScInt;	//Analog inputs scan period. Too big will drop sample rate for some values
 	DSCS	dscs;		//Sample structure
 	DSCAIOINT dscaioint;	//Interrupt IO mode description
@@ -147,10 +147,10 @@ class TMdContr: public TController
 
 	string	getStatus( );
 
-        int64_t	period( )	{ return mPer; }
-        string	cron( )		{ return mSched; }
-        int64_t	prior( )	{ return mPrior; }
-        int64_t lag( )		{ return mLag; }
+	int64_t	period( )	{ return mPer; }
+	string	cron( )		{ return mSched; }
+	int64_t	prior( )	{ return mPrior; }
+	int64_t	lag( )		{ return mLag; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -173,9 +173,9 @@ class TMdContr: public TController
 	TCfg	&mSched;		//Calc schedule
 	int64_t	mPer, mLag;
 
-        bool	prcSt,			//Process task active
+	bool	prcSt,			//Process task active
 		callSt;			//Calc now stat
-        vector< AutoHD<TMdPrm> > pHd;
+	vector< AutoHD<TMdPrm> > pHd;
 };
 
 //*************************************************

@@ -513,8 +513,7 @@ void LineEdit::changed( )
 void LineEdit::setValue( const QString &txt )
 {
     if(ed_fld) ed_fld->blockSignals(true);
-    switch(type())
-    {
+    switch(type()) {
 	case Text:
 	    if(txt == value())	break;
 	    ((QLineEdit*)ed_fld)->setText(txt);
@@ -1092,7 +1091,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 		((WdgView*)children().at(i_c))->load("");
     }
 
-    if(shape)	return shape->attrSet(this,uiPrmPos,val);
+    if(shape)	return shape->attrSet(this, uiPrmPos, val);
 
     return true;
 }

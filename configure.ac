@@ -136,7 +136,7 @@ AC_ARG_ENABLE(AllModuls,AC_HELP_STRING([--enable-AllModuls], [all modules enable
 [ ],[ enable_AllModuls=individual; ])
 
 AC_MSG_RESULT(========== Core libraries check =============)
-# Check for libraries
+# Check for core-system libraries
 if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
@@ -152,7 +152,7 @@ AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE([LibCrypt: Pass global library using
 AC_CHECK_LIB([z],[deflate],[AC_MSG_NOTICE([LibZ: Pass global library using])],
     [AC_MSG_ERROR(Z library not found. Install or check libz package!)])
 
-#> Check for GD library use in OpenSCADA core
+# Check for GD library using in the OpenSCADA core
 if test $enable_LibGD = yes; then
     AC_CHECK_HEADERS([gd.h],
 	[
@@ -165,7 +165,7 @@ if test $enable_LibGD = yes; then
 	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
 fi
 
-#> Check for PCRE library use in OpenSCADA core
+# Check for PCRE library using in the OpenSCADA core
 CXXFLAGS="$CXXFLAGS $(pkg-config --cflags libpcre)"
 AC_CHECK_HEADERS([pcre.h],[],
     [AC_MSG_ERROR(PCRE header not found. Install or check PCRE developing package!)])
@@ -183,7 +183,7 @@ AC_SUBST(UISub_mod)
 AC_SUBST(SpecSub_mod)
 
 AC_MSG_RESULT(========== Build modules check =============)
-#> DB modules
+# DB modules
 AX_MOD_DB_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl)
 AX_MOD_DB_EN(MySQL,[disable or enable[=incl] build module DB.MySQL],disable,incl,[
     AX_LIB_MYSQL
@@ -202,7 +202,14 @@ AX_MOD_DB_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],di
     AX_LIB_POSTGRESQL([8.3.0])
     if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
 ])
-#> DAQ modules
+AX_MOD_DB_EN(ODBC,[disable or enable[=incl] build module DB.ODBC],disable,incl,[
+    iODBC_CFLAGS=$(iodbc-config --cflags)
+    iODBC_LDLAGS=$(iodbc-config --libs)
+    AC_SUBST(iODBC_CFLAGS)
+    AC_SUBST(iODBC_LDLAGS)
+
+])
+# DAQ modules
 AX_MOD_DAQ_EN(System,[disable or enable[=incl] build module DAQ.System],disable,incl,[
     AX_LIB_SENSORS()
 ])
@@ -270,10 +277,10 @@ AX_MOD_DAQ_EN(MMS,[enable build module DAQ.MMS],enable,[],[],
 AX_MOD_DAQ_EN(EPICS,[enable build module DAQ.EPICS],enable,[],[],[])
 if test $ix86 != yes -a $target_cpu != "ix86"; then enable_Fastwell=no; fi
 AX_MOD_DAQ_EN(Fastwell,[enable build module DAQ.Fastwell],enable,[],[],[])
-#> Archive modules
+# Archive modules
 AX_MOD_Archive_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl)
 AX_MOD_Archive_EN(DBArch,[disable or enable[=incl] build module Archive.DBArch],disable,incl)
-#> Transport modules
+# Transport modules
 AX_MOD_Transport_EN(Sockets,[disable or enable[=incl] build module Transport.Sockets],disable,incl,[
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
 	[AC_MSG_ERROR(Transport.Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
@@ -282,11 +289,11 @@ AX_MOD_Transport_EN(SSL,[disable or enable[=incl] build module Transport.SSL],di
     AX_LIB_OpenSSL()
 ])
 AX_MOD_Transport_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl)
-#> Transport protocol modules
+# Transport protocol modules
 AX_MOD_TrProt_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl)
 AX_MOD_TrProt_EN(SelfSystem,[disable or enable[=incl] build module Protocol.SelfSystem],disable,incl)
 AX_MOD_TrProt_EN(UserProtocol,[disable or enable[=incl] build module Protocol.UserProtocol],disable,incl)
-#> UI modules
+# UI modules
 AX_MOD_UI_EN(VCAEngine,[disable or enable[=incl] build module UI.VCAEngine],disable,incl)
 AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,[
     AX_LIB_FFTW3()
@@ -336,7 +343,7 @@ AX_MOD_UI_EN(WebVision,[disable or enable[=incl] build module UI.WebVision],disa
     AX_LIB_FFTW3()
 ])
 AX_MOD_UI_EN(WebUser,[disable or enable[=incl] build module UI.WebUser],disable,incl)
-#> Special modules
+# Special modules
 AX_MOD_Special_EN(SystemTests,[disable build module Special.SystemTests],disable)
 AX_MOD_Special_EN(FLibComplex1,[disable or enable[=incl] build module Special.FLibComplex1],disable,incl)
 AX_MOD_Special_EN(FLibMath,[disable or enable[=incl] build module Special.FLibMath],disable,incl)

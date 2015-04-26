@@ -535,7 +535,7 @@ void TMdPrm::vlArchMake( TVal &val )
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat())	vo.setS(EVAL_STR, 0, true);
+    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //> Send to active reserve station
     if(owner().redntUse())

@@ -112,7 +112,7 @@ class MBD : public TBD
 	//!!! Get the list of tables availabled in the database processing virtual function
 	void allowList( vector<string> &list );
 	//!!! SQL request processing main virtual function
-	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL );
+	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
 	//!!! BEGIN and COMMIT a transaction processing functions
 	void transOpen( );
