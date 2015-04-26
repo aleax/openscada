@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.Fastwell file: module.h
+//OpenSCADA system module DAQ.Fastwel file: module.h
 /***************************************************************************
  *   Copyright (C) 2014 by Maxim Kochetkov                                 *
  *   fido_max@inbox.ru                                                     *
@@ -28,7 +28,7 @@
 #include <ttypedaq.h>
 #include <tparamcontr.h>
 
-#include <fbus.h>
+#include "../Fastwel/fbus/fbus.h"
 #undef _
 #define _(mess) mod->I18N(mess)
 
@@ -38,10 +38,10 @@ using namespace OSCADA;
 
 #define FBUS_MAX_NET 64
 
-namespace ModFastwell {
+namespace ModFastwel {
 
 //*************************************************
-//* ModFastwell::TMdPrm                           *
+//* ModFastwel::TMdPrm                           *
 //*************************************************
     class TMdContr;
 
@@ -65,6 +65,7 @@ namespace ModFastwell {
 	int getVals();
 
 	TMdContr & owner();
+	bool InitDI(DIM_CONFIGURATION* pConfigDIM);
 
       protected:
 	//Methods
@@ -96,7 +97,7 @@ namespace ModFastwell {
     };
 
 //*************************************************
-//* ModFastwell::TMdContr                             *
+//* ModFastwel::TMdContr                             *
 //*************************************************
     class TMdContr:public TController {
 	friend class TMdPrm;
@@ -161,7 +162,7 @@ namespace ModFastwell {
     };
 
 //*************************************************
-//* ModFastwell::TTpContr                             *
+//* ModFastwel::TTpContr                             *
 //*************************************************
     class TTpContr:public TTypeDAQ {
       public:
@@ -211,6 +212,6 @@ namespace ModFastwell {
 
     extern TTpContr *mod;
 
-}				//End namespace ModFastwell
+}				//End namespace ModFastwel
 
 #endif //MODULE_H

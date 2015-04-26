@@ -1,4 +1,4 @@
-//OpenSCADA system module DAQ.Fastwell file: module.cpp
+//OpenSCADA system module DAQ.Fastwel file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2014 by Maxim Kochetkov                                 *
  *   fido_max@inbox.ru                                                     *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+
+
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -28,29 +30,30 @@
 #include <ttypeparam.h>
 #include <tdaqs.h>
 
+#include "module.h"
+
 //#include <fbus.h>
 
-#include "module.h"
 
 //*************************************************
 //* Module info!                                  *
-#define MOD_ID		"Fastwell"
-#define MOD_NAME	_("Fastwell IO")
+#define MOD_ID		"Fastwel"
+#define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.0.1"
+#define MOD_VER		"0.0.2"
 #define AUTHORS		_("Maxim Kochetkov")
-#define DESCRIPTION	_("Fastwell IO FBUS client implementation")
+#define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
 //*************************************************
 
-ModFastwell::TTpContr * ModFastwell::mod;	//Pointer for direct access to the module
+ModFastwel::TTpContr * ModFastwel::mod;	//Pointer for direct access to the module
 
 //!!! Required section for binding OpenSCADA core to this module. It provides information and create module root object.
 //!!! Do not remove this section!
 extern "C" {
 #ifdef MOD_INCL
-    TModule::SAt daq_Fastwell_module(int n_mod)
+    TModule::SAt daq_Fastwel_module(int n_mod)
 #else
     TModule::SAt module(int n_mod)
 #endif
@@ -60,18 +63,18 @@ extern "C" {
 	return TModule::SAt("");
     }
 #ifdef MOD_INCL
-    TModule *daq_Fastwell_attach(const TModule::SAt & AtMod, const string & source)
+    TModule *daq_Fastwel_attach(const TModule::SAt & AtMod, const string & source)
 #else
     TModule *attach(const TModule::SAt & AtMod, const string & source)
 #endif
     {
 	if(AtMod == TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE))
-	    return new ModFastwell::TTpContr(source);
+	    return new ModFastwel::TTpContr(source);
 	return NULL;
     }
 }
 
-using namespace ModFastwell;
+using namespace ModFastwel;
 
 //*************************************************
 //* TTpContr                                      *
@@ -233,6 +236,9 @@ void TTpContr::postEnable(int flag)
 	   TFld("PRM_BD_DIM762", _("DIM762 Parameteres table"), TFld::String, TFld::NoFlag, "30",
 		""));
     fldAdd(new
+	   TFld("PRM_BD_DIM716", _("DIM716 Parameteres table"), TFld::String, TFld::NoFlag, "30",
+		""));
+    fldAdd(new
 	   TFld("PRM_BD_DIM718", _("DIM718 Parameteres table"), TFld::String, TFld::NoFlag, "30",
 		""));
     fldAdd(new
@@ -252,6 +258,18 @@ void TTpContr::postEnable(int flag)
 
     //> Parameter DIM762 bd structure
     int t_prm = tpParmAdd("DIM762", "PRM_BD_DIM762", _("DIM762"), true);
+    tpPrmAt(t_prm).
+	fldAdd(new
+	       TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
+    tpPrmAt(t_prm).
+	fldAdd(new
+	       TFld("DI_DEBOUNCE", _("Debounce"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1",
+		    "0", "0;1;2", _("No;200us;3ms")));
+    tpPrmAt(t_prm).
+	fldAdd(new TFld("DI_COUNT", _("Enable counting"), TFld::Boolean, TCfg::NoVal, "1", "0"));
+
+    //> Parameter DIM716 bd structure
+    t_prm = tpParmAdd("DIM716", "PRM_BD_DIM716", _("DIM716"), true);
     tpPrmAt(t_prm).
 	fldAdd(new
 	       TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
@@ -318,6 +336,7 @@ TMdContr::TMdContr(string name_c, const string & daq_db,::TElem * cfgelem):
 mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mNet(cfg("NET_ID"))
 {
     cfg("PRM_BD_DIM762").setS("FBUSPrmDIM762_" + name_c);
+    cfg("PRM_BD_DIM716").setS("FBUSPrmDIM716_" + name_c);
     cfg("PRM_BD_DIM718").setS("FBUSPrmDIM718_" + name_c);
     cfg("PRM_BD_AIM791").setS("FBUSPrmAIM791_" + name_c);
     cfg("PRM_BD_AIM726").setS("FBUSPrmAIM726_" + name_c);
@@ -517,6 +536,27 @@ TMdContr & TMdPrm::owner()
     return (TMdContr &) TParamContr::owner();
 }
 
+bool TMdPrm::InitDI(DIM_CONFIGURATION* pConfigDIM)
+{
+    bool fConfig;
+    for(unsigned i_p = 0; i_p < nDI; i_p++) {
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("DI%d", i_p).c_str(), TSYS::strMess("DI%d", i_p).c_str(), TFld::Boolean, TFld::NoWrite | TVal::DirRead, "", "", "", "",
+			""));
+    }
+    p_el.fldAdd(new TFld("C0", "C0", TFld::Integer, TFld::NoWrite | TVal::DirRead, "", "", "", "", ""));
+    p_el.fldAdd(new TFld("C1", "C1", TFld::Integer, TFld::NoWrite | TVal::DirRead, "", "", "", "", ""));
+    if(pConfigDIM->debounce != cfg("DI_DEBOUNCE").getI()) {
+	fConfig = true;
+	pConfigDIM->debounce = cfg("DI_DEBOUNCE").getI();
+    }
+    if(pConfigDIM->enableCounting != cfg("DI_COUNT").getI()) {
+	fConfig = true;
+	pConfigDIM->enableCounting = cfg("DI_COUNT").getI();
+    }
+    return fConfig;
+}
+
 void TMdPrm::enable()
 {
     if(enableStat())
@@ -536,7 +576,6 @@ void TMdPrm::enable()
     AIM72X_2_CONFIGURATION *pConfig72X_2;
     AIM7912_CONFIGURATION *pConfig7912;
     AIM730_CONFIGURATION *pConfig730;
-    DIM_CONFIGURATION *pConfigDIM;
     bool fConfig = false;
     owner().prmEn(id(), true);
     try {
@@ -559,33 +598,14 @@ void TMdPrm::enable()
 	    switch (mModDesc.type) {
 	    case FIO_MODULE_DIM762:
 		nDI = 8;
-		for(unsigned i_p = 0; i_p < nDI; i_p++) {
-		    p_el.
-			fldAdd(new
-			       TFld(TSYS::strMess("DI%d", i_p).c_str(),
-				    TSYS::strMess("DI%d", i_p).c_str(), TFld::Boolean,
-				    TFld::NoWrite | TVal::DirRead, "", "", "", "", ""));
-		}
-		p_el.
-		    fldAdd(new
-			   TFld("C0", "C0", TFld::Integer, TFld::NoWrite | TVal::DirRead, "", "",
-				"", "", ""));
-		p_el.
-		    fldAdd(new
-			   TFld("C1", "C1", TFld::Integer, TFld::NoWrite | TVal::DirRead, "", "",
-				"", "", ""));
-		pConfigDIM = (DIM_CONFIGURATION *) mModConfig;
-		if(pConfigDIM->debounce != cfg("DI_DEBOUNCE").getI()) {
-		    fConfig = true;
-		    pConfigDIM->debounce = cfg("DI_DEBOUNCE").getI();
-		}
-		if(pConfigDIM->enableCounting != cfg("DI_COUNT").getI()) {
-		    fConfig = true;
-		    pConfigDIM->enableCounting = cfg("DI_COUNT").getI();
-		}
+		fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
+		break;
+	    case FIO_MODULE_DIM716:
+		nDI = 2;
+		fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
 		break;
 	    case FIO_MODULE_DIM718:
-		nDO = 4;
+		nDO = 8;
 		mDOState = 0;
 		for(unsigned i_p = 0; i_p < nDO; i_p++) {
 		    p_el.
@@ -754,7 +774,7 @@ int TMdPrm::getVals()
     if(mState == StateWork) {
 	if(owner().ReadInputs(mID, buf, 0, mModDesc.inputsSize) == FBUS_RES_OK) {
 	    switch (mModDesc.type) {
-	    case FIO_MODULE_DIM762:
+	    case FIO_MODULE_DIM762:case FIO_MODULE_DIM716:
 		for(unsigned i_p = 0; i_p < nDI; i_p++) {
 		    vlAt(TSYS::strMess("DI%d", i_p).c_str()).at().
 			setB(((((DIM_INPUTS_COUNTERS *) buf)->inputStates) >> i_p) & 1, 0, true);

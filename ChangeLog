@@ -1,3 +1,10 @@
+2015-04-26 fido_max
+- DAQ.FastWel: Support the module DIM716 added.
+    Channels number of the module DIM718 fixed.
+    The module renamed to the correct "Fastwel".
+    The module translation to Russian is added.
+
+
 2015-04-26 Roman
 - !!!!:DB: New module "ODBC", based on iodbc, is added. At first there works only SQL statements request to the connected DB.
 - SYS.BD.=Tmpl=: Some next adapted to actual.
