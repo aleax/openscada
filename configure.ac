@@ -202,7 +202,7 @@ AX_MOD_DB_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],di
     AX_LIB_POSTGRESQL([8.3.0])
     if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
 ])
-AX_MOD_DB_EN(ODBC,[disable or enable[=incl] build module DB.ODBC],disable,incl,[
+AX_MOD_DB_EN(ODBC,[disable or enable[=incl] build module DB.ODBC],enable,incl,[
     iODBC_CFLAGS=$(iodbc-config --cflags)
     iODBC_LDLAGS=$(iodbc-config --libs)
     AC_SUBST(iODBC_CFLAGS)

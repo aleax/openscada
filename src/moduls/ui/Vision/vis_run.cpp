@@ -1287,7 +1287,7 @@ void VisRun::alarmSet( unsigned alarm )
     res.unlock();
 
     //Alarm types init
-    // Set momo sound alarm
+    // Set monotonic sound alarm
     if(isMaster && (ch_tp>>16)&TVision::Alarm) {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
@@ -1380,7 +1380,7 @@ void VisRun::updatePage( )
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
 
     if(!(rez=cntrIfCmd(req))) {
-	// Check for delete pages
+	// Check for delete the pages
 	RunPageView *pg;
 	for(unsigned i_p = 0, i_ch; i_p < pgList.size(); i_p++) {
 	    for(i_ch = 0; i_ch < req.childSize(); i_ch++)
@@ -1398,7 +1398,7 @@ void VisRun::updatePage( )
 	    }
 	}
 
-	// Process opened pages
+	// Process the opened pages
 	pgList.clear();
 	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 	    pgList.push_back(req.childGet(i_ch)->text());
