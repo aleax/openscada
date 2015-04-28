@@ -32,8 +32,6 @@
 
 #include "module.h"
 
-//#include <fbus.h>
-
 
 //*************************************************
 //* Module info!                                  *

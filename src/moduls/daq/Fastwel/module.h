@@ -28,7 +28,7 @@
 #include <ttypedaq.h>
 #include <tparamcontr.h>
 
-#include "../Fastwel/fbus/fbus.h"
+#include <fbus.h>
 #undef _
 #define _(mess) mod->I18N(mess)
 

@@ -1,7 +1,7 @@
 #ifndef __FBUS_API_H__
 #define __FBUS_API_H__
 
-#include "../../Fastwel/fbus/fb_node.h"
+#include <fb_node.h>
 
 // Результ
 typedef enum _FBUS_RESULT

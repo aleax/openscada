@@ -16,7 +16,7 @@
 #ifndef __FIOM_H__
 #define __FIOM_H__
 
-#include "../../Fastwel/fbus/stdlib/f_pack.h"
+#include <stdlib/f_pack.h>
 
 typedef struct _OM751 OM751;
 

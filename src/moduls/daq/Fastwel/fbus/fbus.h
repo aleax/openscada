@@ -1,7 +1,7 @@
 #ifndef __FBUS_H__
 #define __FBUS_H__
 
-#include "../../Fastwel/fbus/stdlib/f_types.h"
+#include <stdlib/f_types.h>
 
 #if defined(_MSC_VER)
   #define FDLL_EXPORT __declspec(dllimport)
