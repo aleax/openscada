@@ -1,3 +1,20 @@
+2015-05-05 Roman
+- SYS: {debian,debian_mod}/control: Depends for build with Qt5 is added.
+- !!:BD.ODBC: The build dependencies checking is added to configure, by new macros AX_LIB_IODBC and iodbc-config.
+    Transactions generic processing and the tables list getting added.
+    Generic, ODBC internal, requests "tables", "qualifiers", "owners", "datatypes" to generic sqlReq() function is added.
+- FIX:BD.PostgreSQL: The build dependencies checking macros AX_LIB_POSTGRESQL some fixed for the results.
+- !!:DB: LibsDB.vcaBase.db: All left widgets of the widgets library "Main" moved to the dynamic translation by function tr().
+    Widget's "grpCadr", "cntrRegul", "ResultGraph", "doc_panel", "cntrPasp" code significant cleaned and refactored.
+- FIX:DAQ.JavaLikeCalc: Equal and NotEqual the virtual machine functions adjusted for undefined object's properties correct
+    processing by the processing generic as Real for not String types.
+- Protocol.UserProtocol: Restore starting a function added for stopped early by safety timeout.
+- UI.Vision: Default printing and exporting set for the big (not lesser twice to main page) and the single documents.
+    Primitive "Document" printing and exporting allowed from the context menu.
+    Apply/Cancel buttons of the text edition elements set to adaptive for the labels present or either depends from allowed
+	size of the widget container.
+
+
 2015-04-26 fido_max
 - DAQ.FastWel: Support the module DIM716 added.
     Channels number of the module DIM718 fixed.

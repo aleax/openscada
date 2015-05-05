@@ -1076,7 +1076,7 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
         fi
 
         if test ! -x "$PG_CONFIG"; then
-            AC_MSG_ERROR([$PG_CONFIG does not exist or it is not an exectuable file])
+#            AC_MSG_ERROR([$PG_CONFIG does not exist or it is not an exectuable file])
             PG_CONFIG="no"
             found_postgresql="no"
         fi
@@ -1086,7 +1086,6 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
 
             POSTGRESQL_CFLAGS="-I`$PG_CONFIG --includedir`"
             POSTGRESQL_LDFLAGS="-L`$PG_CONFIG --libdir` -lpq"
-
             POSTGRESQL_VERSION=`$PG_CONFIG --version | sed -e 's#PostgreSQL ##'`
 
             AC_DEFINE([HAVE_POSTGRESQL], [1],
@@ -1148,6 +1147,112 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
     AC_SUBST([POSTGRESQL_VERSION])
     AC_SUBST([POSTGRESQL_CFLAGS])
     AC_SUBST([POSTGRESQL_LDFLAGS])
+])
+
+# ===========================================================================
+#     http://oscada.org
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_LIB_IODBC([MINIMUM-VERSION])
+#
+# DESCRIPTION
+#
+#   This macro provides tests of availability of iODBC 'libiodbc' library
+#   of particular version or newer.
+#
+#   AX_LIB_IODBC macro takes only one argument which is optional. If
+#   there is no required version passed, then macro does not run version
+#   test.
+#
+#   The --with-iodbc option takes one of three possible values:
+#     no - do not check for iODBC client library
+#     yes - do check for iODBC library in standard locations (iodbc-config should be in the PATH)
+#     path - complete path to iodbc-config utility, use this option if iodbc-config can't be found in the PATH
+#
+#   This macro calls:
+#
+#     AC_SUBST(IODBC_CFLAGS)
+#     AC_SUBST(IODBC_LDFLAGS)
+#     AC_SUBST(IODBC_VERSION)
+#
+#   And sets:
+#
+#     HAVE_IODBC
+#
+# LICENSE
+#
+#   Copyright (c) 2015 Roman Savochenko <rom_as@oscada.org>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+
+AC_DEFUN([AX_LIB_IODBC],
+[
+    AC_ARG_WITH([iodbc],
+	AS_HELP_STRING([--with-iodbc=@<:@ARG@:>@],
+	    [use iODBC library @<:@default=yes@:>@, optionally specify path to iodbc-config]
+	), [
+	    if test "$withval" = "no"; then want_iodbc="no";
+	    elif test "$withval" = "yes"; then want_iodbc="yes";
+	    else want_iodbc="yes"; IODBC_CONFIG="$withval"; fi
+	], [want_iodbc="yes"]
+    )
+
+    IODBC_CFLAGS=""
+    IODBC_LDFLAGS=""
+    IODBC_VERSION=""
+
+    dnl
+    dnl Check iODBC libraries (libiodbc)
+    dnl
+
+    if test "$want_iodbc" = "yes"; then
+	if test -z "$IODBC_CONFIG" -o test; then
+	    AC_PATH_PROG([IODBC_CONFIG], [iodbc-config], [])
+	fi
+
+	if test ! -x "$IODBC_CONFIG"; then
+	    IODBC_CONFIG="no"
+	    found_iodbc="no"
+	fi
+
+	if test "$IODBC_CONFIG" != "no"; then
+	    AC_MSG_CHECKING([for iODBC libraries])
+
+	    IODBC_CFLAGS=`$IODBC_CONFIG --cflags`
+	    IODBC_LDFLAGS=`$IODBC_CONFIG --libs`
+	    IODBC_VERSION=`$IODBC_CONFIG --odbcversion`
+
+	    AC_DEFINE([HAVE_IODBC], [1], [Define to 1 if iODBC libraries are available])
+
+	    found_iodbc="yes"
+	    AC_MSG_RESULT([yes])
+	else
+	    found_iodbc="no"
+	    AC_MSG_RESULT([no])
+	fi
+    fi
+
+    dnl
+    dnl Check if required version of iODBC is available
+    dnl
+    iodbc_version_req=ifelse([$1], [], [], [$1])
+    if test "$found_iodbc" = "yes" -a -n "$iodbc_version_req"; then
+	AC_MSG_CHECKING([if iODBC version is >= $iodbc_version_req])
+	if test "`expr $IODBC_VERSION \>\= $iodbc_version_req`"; then
+	    AC_MSG_RESULT([yes])
+	else
+	    AC_MSG_RESULT([no])
+	fi
+    fi
+
+    AC_SUBST([IODBC_VERSION])
+    AC_SUBST([IODBC_CFLAGS])
+    AC_SUBST([IODBC_LDFLAGS])
 ])
 
 # ===========================================================================

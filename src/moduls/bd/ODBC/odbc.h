@@ -89,6 +89,7 @@ class MBD : public TBD
 
 	void transOpen( );
 	void transCommit( );
+	void transCloseCheck( );
 
     protected:
 	//Protected methods
@@ -110,6 +111,8 @@ class MBD : public TBD
 	HSTMT	hstmt;
 	SQLTCHAR outdsn[4096];
 
+	int	reqCnt;
+	time_t	reqCntTm, trOpenTm;
 	pthread_mutex_t	connRes;
 };
 

@@ -273,7 +273,7 @@ namespace VISION
 	    void applySlot( );
 	    void cancelSlot( );
 	    void curPosChange( );
-	    void ctrTreePopup( );
+	    void custContextMenu( );
 	    void find( );
 
 	private:

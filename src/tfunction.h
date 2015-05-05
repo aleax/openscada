@@ -105,9 +105,9 @@ class TFunction : public TCntrNode
 	virtual string name( )		{ return ""; }
 	virtual string descr( )		{ return ""; }
 	virtual string stor( )		{ return mStor; }
-	bool startStat( )		{ return run_st; }
-	int use( )			{ return used.size(); }
-	Res &fRes( )			{ return f_res; }
+	bool	startStat( )		{ return run_st; }
+	int	use( )			{ return used.size(); }
+	Res	&fRes( )		{ return f_res; }
 
 	void setId( const string &vl );
 	void setStor( const string &istor )	{ mStor = istor; }

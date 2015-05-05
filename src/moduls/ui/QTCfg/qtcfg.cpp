@@ -937,8 +937,7 @@ void ConfApp::enterManual( )
 
 void ConfApp::closeEvent( QCloseEvent* ce )
 {
-    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && !exitModifChk())
-    {
+    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && !exitModifChk()) {
 	ce->ignore();
 	return;
     }

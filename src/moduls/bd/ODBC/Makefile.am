@@ -13,8 +13,8 @@ db_ODBC_la_LIBTOOLFLAGS = --tag=disable-static
 db_ODBC_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
-db_ODBC_la_CXXFLAGS += $(iODBC_CFLAGS)
-db_ODBC_la_LDFLAGS += $(iODBC_LDLAGS)
+db_ODBC_la_CXXFLAGS += $(IODBC_CFLAGS)
+db_ODBC_la_LDFLAGS += $(IODBC_LDFLAGS)
 db_ODBC_la_SOURCES = odbc.cpp
 
 

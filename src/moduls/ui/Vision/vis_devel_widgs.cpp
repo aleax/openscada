@@ -870,8 +870,7 @@ bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
     if(dynamic_cast<QComboBox*>(object)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(object);
 	if(event->type() == QEvent::KeyPress)
-	    switch(static_cast<QKeyEvent *>(event)->key())
-	    {
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
 		    emit commitData(comb);
@@ -887,8 +886,7 @@ bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
     else if(dynamic_cast<QTextEdit*>(object)) {
 	QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
 	if(event->type() == QEvent::KeyPress)
-	    switch(static_cast<QKeyEvent *>(event)->key())
-	    {
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
 		    if(QApplication::keyboardModifiers()&Qt::ControlModifier) {

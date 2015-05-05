@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-22 12:09+0300\n"
+"POT-Creation-Date: 2015-05-04 18:08+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -162,6 +162,7 @@ msgstr ""
 "Verwenden Sie %f für Dateinamen. Falls Dateiname nicht verwendet wird, "
 "werden die Dateien in den Kanal gesendet."
 
+#, c-format
 msgid "%d: Development"
 msgstr "%d: Entwicklung"
 
@@ -2136,6 +2137,12 @@ msgstr "Datum und Uhrzeit"
 msgid "Level"
 msgstr "Stufe"
 
+msgid "Print"
+msgstr "Drucken"
+
+msgid "Export"
+msgstr "Export"
+
 #, c-format
 msgid "Document parsing error: %s"
 msgstr "Fehler der Dokumentanalyse: %s"
@@ -2147,7 +2154,7 @@ msgid "ID:"
 msgstr "ID:"
 
 msgid "Ok"
-msgstr "Annehmen"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -2190,6 +2197,9 @@ msgstr "Suche"
 
 msgid "Find next"
 msgstr "Weitersuchen"
+
+msgid "Apply"
+msgstr "Annehmen"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"

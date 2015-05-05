@@ -485,7 +485,20 @@ void VisRun::quitSt( )
 
 void VisRun::print( )
 {
-    if(masterPg()) printPg(masterPg()->id());
+    if(masterPg()) {
+	//Check for the single and big document present for default the printing
+	RunPageView *rpg;
+	RunWdgView *rwdg;
+	vector<string> lst;
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
+		rpg->shapeList("Document",lst);
+	if(lst.size() == 1 && (rwdg=findOpenWidget(lst[0])) &&
+		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
+	    printDoc(rwdg->id());
+	//Print master page
+	else printPg(masterPg()->id());
+    }
 }
 
 void VisRun::printPg( const string &ipg )
@@ -500,10 +513,10 @@ void VisRun::printPg( const string &ipg )
 	//Make select page dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
-	InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select page for print."), _("Page print."), false, false );
-	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
+	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select page for print."), _("Page print."), false, false);
+	sdlg.edLay()->addWidget(new QLabel(_("Pages:"),&sdlg), 2, 0);
 	QComboBox *spg = new QComboBox(&sdlg);
-	sdlg.edLay()->addWidget( spg, 2, 1 );
+	sdlg.edLay()->addWidget(spg, 2, 1);
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
@@ -571,13 +584,13 @@ void VisRun::printDiag( const string &idg )
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
 	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for print."), _("Diagram print."), false, false);
-	    sdlg.edLay()->addWidget( new QLabel(_("Diagrams:"),&sdlg), 2, 0 );
+	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
-	    sdlg.edLay()->addWidget( spg, 2, 1 );
+	    sdlg.edLay()->addWidget(spg, 2, 1);
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
-	    if( sdlg.exec() != QDialog::Accepted )	return;
+	    if(sdlg.exec() != QDialog::Accepted) return;
 	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
@@ -654,10 +667,10 @@ void VisRun::printDoc( const string &idoc )
 	    //Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
-	    InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select document for print."), _("Document print."), false, false );
-	    sdlg.edLay()->addWidget( new QLabel(_("Document:"),&sdlg), 2, 0 );
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select document for print."), _("Document print."), false, false);
+	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
-	    sdlg.edLay()->addWidget( spg, 2, 1 );
+	    sdlg.edLay()->addWidget(spg, 2, 1);
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
@@ -672,17 +685,25 @@ void VisRun::printDoc( const string &idoc )
     if(!prDoc) prDoc = new QPrinter(QPrinter::HighResolution);
     QPrintDialog dlg(prDoc, this);
     dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
-    if(dlg.exec() == QDialog::Accepted)
-#ifdef HAVE_WEBKIT
-	((ShapeDocument::ShpDt*)rwdg->shpData)->web->print(prDoc);
-#else
-	((ShapeDocument::ShpDt*)rwdg->shpData)->web->document()->print(prDoc);
-#endif
+    if(dlg.exec() == QDialog::Accepted) ((ShapeDocument::ShpDt*)rwdg->shpData)->print(prDoc);
 }
 
 void VisRun::exportDef( )
 {
-    if(master_pg) exportPg(master_pg->id());
+    if(master_pg) {
+	//Check for the single and big document present for default the exporting
+	RunPageView *rpg;
+	RunWdgView *rwdg;
+	vector<string> lst;
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
+		rpg->shapeList("Document",lst);
+	if(lst.size() == 1 && (rwdg=findOpenWidget(lst[0])) &&
+		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
+	    exportDoc(rwdg->id());
+	//Print master page
+	else exportPg(master_pg->id());
+    }
 }
 
 void VisRun::exportPg( const string &ipg )

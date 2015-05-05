@@ -178,16 +178,18 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     if(!uPrtPresent(pIt)) return;
     AutoHD<UserPrt> up = uPrtAt(pIt);
     funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workOutProg())).at());
+    // Restore starting the function for stopped early by safety timeout
+    if(funcV.func() && !funcV.func()->startStat()) funcV.func()->setStart(true);
 
-    ResAlloc res( tro.nodeRes(), true );
+    ResAlloc res(tro.nodeRes(), true);
 
     //Load inputs
     AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
-    funcV.setO(0,xnd);
+    funcV.setO(0, xnd);
     xnd.at().fromXMLNode(io);
-    funcV.setO(1,new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
+    funcV.setO(1, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
     //Call processing
-    funcV.calc( );
+    funcV.calc();
     //Get outputs
     xnd.at().toXMLNode(io);
 

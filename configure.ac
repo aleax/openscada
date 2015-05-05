@@ -203,11 +203,8 @@ AX_MOD_DB_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],di
     if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
 ])
 AX_MOD_DB_EN(ODBC,[disable or enable[=incl] build module DB.ODBC],enable,incl,[
-    iODBC_CFLAGS=$(iodbc-config --cflags)
-    iODBC_LDLAGS=$(iodbc-config --libs)
-    AC_SUBST(iODBC_CFLAGS)
-    AC_SUBST(iODBC_LDLAGS)
-
+    AX_LIB_IODBC([1])
+    if test "$found_iodbc" != "yes"; then AC_MSG_ERROR(DB.ODBC: iODBC development resources not found. Install or check iODBC development package!); fi
 ])
 # DAQ modules
 AX_MOD_DAQ_EN(System,[disable or enable[=incl] build module DAQ.System],disable,incl,[

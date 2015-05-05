@@ -4201,10 +4201,14 @@ void ShapeDocument::init( WdgView *w )
     shD->web = new QTextBrowser(w);
 #endif
 
+    if(qobject_cast<RunWdgView*>(w)) {
+	shD->web->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(shD->web, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
+    }
+
     eventFilterSet(w, shD->web, true);
     w->setFocusProxy(shD->web);
-    if(qobject_cast<DevelWdgView*>(w))
-	setFocus(w, shD->web, false, true);
+    if(qobject_cast<DevelWdgView*>(w)) setFocus(w, shD->web, false, true);
 
     lay->addWidget(shD->web);
 }
@@ -4320,6 +4324,29 @@ void ShapeDocument::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
 }
 
+void ShapeDocument::custContextMenu( )
+{
+    QObject *web = sender();
+    RunWdgView *w = dynamic_cast<RunWdgView*>(web->parent());
+#ifdef HAVE_WEBKIT
+    QMenu *menu = ((QWebView*)web)->page()->createStandardContextMenu();
+#else
+    QMenu *menu = ((QTextBrowser*)web)->createStandardContextMenu();
+#endif
+    menu->addSeparator();
+    QImage ico_t;
+    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
+    QAction *actPrint = new QAction(QPixmap::fromImage(ico_t),_("Print"),this);
+    menu->addAction(actPrint);
+    if(!ico_t.load(TUIS::icoGet("export",NULL,true).c_str())) ico_t.load(":/images/export.png");
+    QAction *actExp = new QAction(QPixmap::fromImage(ico_t),_("Export"),this);
+    menu->addAction(actExp);
+    QAction *rez = menu->exec(QCursor::pos());
+    if(rez == actPrint) w->mainWin()->printDoc(w->id());
+    else if(rez == actExp) w->mainWin()->exportDoc(w->id());
+    delete menu;
+}
+
 void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
@@ -4395,6 +4422,15 @@ void ShapeDocument::ShpDt::nodeProcess( XMLNode *xcur )
 	nodeProcess(xcur->childGet(i_c));
 	i_c++;
     }
+}
+
+void ShapeDocument::ShpDt::print( QPrinter * printer )
+{
+#ifdef HAVE_WEBKIT
+    web->print(printer);
+#else
+    web->document()->print(printer);
+#endif
 }
 
 //************************************************

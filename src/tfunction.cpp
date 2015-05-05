@@ -171,7 +171,7 @@ void TFunction::postIOCfgChange( )
     //Start for restore
     if(be_start) setStart(true);
 
-    for(unsigned i=0; i < used.size(); i++) used[i]->postIOCfgChange();
+    for(unsigned i = 0; i < used.size(); i++) used[i]->postIOCfgChange();
 }
 
 void TFunction::valAtt( TValFunc *vfnc )

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-22 12:09+0300\n"
+"POT-Creation-Date: 2015-05-04 18:08+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -132,8 +132,8 @@ msgstr ""
 "Автоматически запускаемые проекты, разделённые символом ';'.\n"
 "Для открытия окна проекта на нужном дисплее (1) используйте имя проекта в "
 "формате: 'PrjName-1'.\n"
-"Для подключения к фоновому или другому открытому сеансу использовать \"ses_"
-"{SesID}\"."
+"Для подключения к фоновому или другому открытому сеансу использовать "
+"\"ses_{SesID}\"."
 
 msgid "Run projects status display"
 msgstr "Отображение статуса запускаемых проектов"
@@ -160,6 +160,7 @@ msgstr ""
 "Используйте %f для вставки имени файла источника. Если файл источника не "
 "указан то данные направляются в канал."
 
+#, c-format
 msgid "%d: Development"
 msgstr "%d: Разработка"
 
@@ -2115,6 +2116,12 @@ msgstr "Дата и время"
 msgid "Level"
 msgstr "Уровень"
 
+msgid "Print"
+msgstr "Печать"
+
+msgid "Export"
+msgstr "Экспорт"
+
 #, c-format
 msgid "Document parsing error: %s"
 msgstr "Ошибка разбора документа: %s"
@@ -2126,7 +2133,7 @@ msgid "ID:"
 msgstr ""
 
 msgid "Ok"
-msgstr "Принять"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Отмена"
@@ -2169,6 +2176,9 @@ msgstr "Поиск"
 
 msgid "Find next"
 msgstr "Поиск следующего"
+
+msgid "Apply"
+msgstr "Принять"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"

@@ -547,8 +547,7 @@ void LineEdit::setValue( const QString &txt )
 void LineEdit::setCfg( const QString &cfg )
 {
     if(ed_fld) ed_fld->blockSignals(true);
-    switch(type())
-    {
+    switch(type()) {
 	case Text:
 	    ((QLineEdit*)ed_fld)->setInputMask(cfg);
 	    break;
@@ -783,7 +782,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     setFocusProxy(ed_fld);
     connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()) );
     connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()) );
-    connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
+    connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
     box->addWidget(ed_fld);
 
     QImage ico_t;
@@ -855,6 +854,11 @@ void TextEdit::changed( )
     if(but_box && !but_box->isEnabled() && text() != m_text) {
 	but_box->setVisible(true);
 	but_box->setEnabled(true);
+
+	string labApply = _("Apply"), labCncl = _("Cancel");
+	bool noLab = (QFontMetrics(but_box->font()).width((labApply+labCncl).c_str())+30) > width();
+	but_box->button(QDialogButtonBox::Apply)->setText(noLab?"":labApply.c_str());
+	but_box->button(QDialogButtonBox::Cancel)->setText(noLab?"":labCncl.c_str());
     }
 
     if(!but_box) bt_tm->start(500);
@@ -910,7 +914,7 @@ bool TextEdit::event( QEvent * e )
     return QWidget::event(e);
 }
 
-void TextEdit::ctrTreePopup( )
+void TextEdit::custContextMenu( )
 {
     QMenu *menu = ed_fld->createStandardContextMenu();
     menu->addSeparator();

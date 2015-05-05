@@ -2127,30 +2127,14 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #endif
 		if(!reg[ptr->a1].props().size())
 		    switch(reg[ptr->a1].vType(this)) {
-			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) == getValR(val,reg[ptr->a2]);
-			    break;
-			case Reg::String:
-			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) == getValS(val,reg[ptr->a2]);
-			    break;
-			default:
-			    reg[ptr->rez] = false;
-			    break;
-			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
+			case Reg::String: reg[ptr->rez] = getValS(val,reg[ptr->a1]) == getValS(val,reg[ptr->a2]);	break;
+			default: reg[ptr->rez] = getValR(val,reg[ptr->a1]) == getValR(val,reg[ptr->a2]);		break;
 		    }
 		else {
 		    TVariant op1 = getVal(val,reg[ptr->a1]);
 		    switch(op1.type()) {
-			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[ptr->rez] = op1.getR() == getValR(val,reg[ptr->a2]);
-			    break;
-			case TVariant::String:
-			    reg[ptr->rez] = op1.getS() == getValS(val,reg[ptr->a2]);
-			    break;
-			default:
-			    reg[ptr->rez] = false;
-			    break;
-			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
+			case TVariant::String: reg[ptr->rez] = op1.getS() == getValS(val,reg[ptr->a2]);	break;
+			default: reg[ptr->rez] = op1.getR() == getValR(val,reg[ptr->a2]);		break;
 		    }
 		}
 		cprg += sizeof(SCode); continue;
@@ -2163,28 +2147,14 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #endif
 		if(!reg[ptr->a1].props().size())
 		    switch(reg[ptr->a1].vType(this)) {
-			case Reg::Bool: case Reg::Int: case Reg::Real:
-			    reg[ptr->rez] = getValR(val,reg[ptr->a1]) != getValR(val,reg[ptr->a2]);
-			    break;
-			case Reg::String:
-			    reg[ptr->rez] = getValS(val,reg[ptr->a1]) != getValS(val,reg[ptr->a2]);
-			    break;
-			default:
-			    reg[ptr->rez] = false;
-			    break;
-			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
+			case Reg::String: reg[ptr->rez] = getValS(val,reg[ptr->a1]) != getValS(val,reg[ptr->a2]);	break;
+			default: reg[ptr->rez] = getValR(val,reg[ptr->a1]) != getValR(val,reg[ptr->a2]);		break;
 		    }
 		else {
 		    TVariant op1 = getVal(val,reg[ptr->a1]);
 		    switch(op1.type()) {
-			case TVariant::Boolean: case TVariant::Integer: case TVariant::Real:
-			    reg[ptr->rez] = op1.getR() != getValR(val,reg[ptr->a2]); break;
-			case TVariant::String:
-			    reg[ptr->rez] = op1.getS() != getValS(val,reg[ptr->a2]); break;
-			default:
-			    reg[ptr->rez] = false;
-			    break;
-			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
+			case TVariant::String: reg[ptr->rez] = op1.getS() != getValS(val,reg[ptr->a2]);	break;
+			default: reg[ptr->rez] = op1.getR() != getValR(val,reg[ptr->a2]);		break;
 		    }
 		}
 		cprg += sizeof(SCode); continue;

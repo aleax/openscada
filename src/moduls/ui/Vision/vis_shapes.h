@@ -528,6 +528,7 @@ class ShapeDocument : public WdgShape
 
 		string	toHtml( );
 		void	nodeProcess( XMLNode *xcur );
+		void	print( QPrinter * printer );
 
 		//Attributes
 		short	en	:1;
@@ -552,6 +553,9 @@ class ShapeDocument : public WdgShape
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
+
+    private slots:
+	void custContextMenu( );
 
     private:
 	//Methods

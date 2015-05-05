@@ -93,7 +93,8 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //************************************************
 //* BD_ODBC::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), henv(SQL_NULL_HANDLE), hdbc(SQL_NULL_HANDLE), hstmt(SQL_NULL_HANDLE)
+MBD::MBD( string iid, TElem *cf_el ) :
+    TBD(iid, cf_el), henv(SQL_NULL_HANDLE), hdbc(SQL_NULL_HANDLE), hstmt(SQL_NULL_HANDLE), reqCnt(0), reqCntTm(0), trOpenTm(0)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -225,6 +226,10 @@ void MBD::enable( )
 void MBD::disable( )
 {
     MtxAlloc resource(connRes, true);
+
+    //Last commit
+    if(reqCnt) try{ transCommit(); } catch(...) { }
+
     TBD::disable();
 
 #if (ODBCVER < 0x0300)
@@ -251,6 +256,12 @@ void MBD::disable( )
 void MBD::allowList( vector<string> &list )
 {
     if(!enableStat())	return;
+    list.clear();
+    vector< vector<string> > tbl;
+    sqlReq("tables", &tbl, false);
+    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
+	if(tbl[i_t].size() >= 4 && tbl[i_t][3] == "TABLE")
+	    list.push_back(tbl[i_t][2]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )
@@ -262,18 +273,42 @@ TTable *MBD::openTable( const string &inm, bool create )
 
 void MBD::transOpen( )
 {
-    MtxAlloc resource(connRes, true);
+    //Check for limit into one trinsaction
+    if(reqCnt > 1000) transCommit();
+
+    pthread_mutex_lock(&connRes);
+    bool begin = !reqCnt;
+    if(begin) trOpenTm = SYS->sysTm();
+    reqCnt++;
+    reqCntTm = SYS->sysTm();
+    pthread_mutex_unlock(&connRes);
+
+    if(begin) sqlReq("BEGIN;");
 }
 
 void MBD::transCommit( )
 {
-    MtxAlloc resource(connRes, true);
+    pthread_mutex_lock(&connRes);
+    bool commit = reqCnt;
+    reqCnt = reqCntTm = 0;
+    pthread_mutex_unlock(&connRes);
+
+    if(commit) sqlReq("COMMIT;");
+}
+
+void MBD::transCloseCheck( )
+{
+    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > 60 || (SYS->sysTm()-trOpenTm) > 10*60)) transCommit();
+    if(!enableStat() && toEnable()) enable();
 }
 
 void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTrans )
 {
     if(tbl) tbl->clear();
     if(!enableStat())	return;
+
+    if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
+    else if(!intoTrans && reqCnt) transCommit();
 
     MtxAlloc resource(connRes, true);
     string err;
@@ -285,12 +320,31 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 	SQLLEN colIndicator;
 	SQLULEN colPrecision;
 
-	//Prepare & Execute the statement
-	if(SQLPrepare(hstmt,(SQLTCHAR*)Mess->codeConvOut(codePage().c_str(),req).c_str(),SQL_NTS) != SQL_SUCCESS)
-	    throw TError("", "SQLPrepare: %s", errors().c_str());
-	if((sts=SQLExecute(hstmt)) != SQL_SUCCESS && sts != SQL_SUCCESS_WITH_INFO)	//!!!! Get details for SQL_SUCCESS_WITH_INFO about RO and other
-	    throw TError("", "SQLExecute: %s", errors().c_str());
+	if(req == "tables") {
+	    if(SQLTables(hstmt,NULL,0,NULL,0,NULL,0,NULL,0) != SQL_SUCCESS)
+		throw TError("", "SQLTables(tables): %s", errors().c_str());
+	}
+	else if(req == "qualifiers") {
+	    if(SQLTables(hstmt,(SQLCHAR*)("%"),SQL_NTS,(SQLCHAR*)(""),0,(SQLCHAR*)(""),0,(SQLCHAR*)(""),0) != SQL_SUCCESS)
+		throw TError("", "SQLTables(owners): %s", errors().c_str());
+	}
+	else if(req == "owners") {
+	    if(SQLTables(hstmt,(SQLCHAR*)(""),0,(SQLCHAR*)(""),0,(SQLCHAR*)(""),0,(SQLCHAR*)("%"),SQL_NTS) != SQL_SUCCESS)
+		throw TError("", "SQLTables(types): %s", errors().c_str());
+	}
+	else if(req == "datatypes") {
+	    if(SQLGetTypeInfo(hstmt,0) != SQL_SUCCESS)
+		throw TError("", "SQLGetTypeInfo: %s", errors().c_str());
+	}
+	else {
+	    //Prepare & Execute the statement
+	    if(SQLPrepare(hstmt,(SQLTCHAR*)Mess->codeConvOut(codePage().c_str(),req).c_str(),SQL_NTS) != SQL_SUCCESS)
+		throw TError("", "SQLPrepare: %s", errors().c_str());
+	    if((sts=SQLExecute(hstmt)) != SQL_SUCCESS && sts != SQL_SUCCESS_WITH_INFO)	//!!!! Get details for SQL_SUCCESS_WITH_INFO about RO and other
+		throw TError("", "SQLExecute: %s", errors().c_str());
+	}
 
+	//Result processing
 	if(SQLNumResultCols(hstmt,&numCols) != SQL_SUCCESS)
 	    throw TError("", "SQLNumResultCols: %s", errors().c_str());
 	if(numCols) {
@@ -346,9 +400,15 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,
 	    "help",_("!!! Type here the help information about the db address of your module"));
+	if(reqCnt)
+	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRWRW,"root",SDB_ID);
 	return;
     }
-    TBD::cntrCmdProc(opt);
+
+    //Process command to page
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR) && reqCnt) transCommit();
+    else TBD::cntrCmdProc(opt);
 }
 
 //************************************************
