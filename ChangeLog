@@ -1,4 +1,5 @@
 2015-05-05 Roman
+- Protocol.SelfSystem: Expanded by status - Active authentication sessions.
 - SYS: {debian,debian_mod}/control: Depends for build with Qt5 is added.
 - !!:BD.ODBC: The build dependencies checking is added to configure, by new macros AX_LIB_IODBC and iodbc-config.
     Transactions generic processing and the tables list getting added.

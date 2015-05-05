@@ -1,4 +1,4 @@
-openscada (0.9-r2240) experimental; urgency=low
+openscada (0.9-rNNNN) experimental; urgency=low
 
   * Work version scheme naming 0.9-rNNNN.
   * LTS version naming 0.8.N.

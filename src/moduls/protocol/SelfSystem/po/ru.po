@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:16+0300\n"
+"POT-Creation-Date: 2015-05-05 17:08+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,7 +23,9 @@ msgstr "Роман Савоченко"
 
 msgid ""
 "Provides own OpenSCADA protocol based at XML and one's control interface."
-msgstr "Предоставляет cобственный протокол основанный на XML и интерфейсе управления OpenSCADA."
+msgstr ""
+"Предоставляет cобственный протокол основанный на XML и интерфейсе управления "
+"OpenSCADA."
 
 #, c-format
 msgid ""
@@ -75,6 +77,12 @@ msgstr "Ошибка запроса: %s"
 msgid "Parameters"
 msgstr "Параметры"
 
+msgid "State"
+msgstr "Статус"
+
+msgid "Active authentication sessions"
+msgstr "Активные сеансы аутентификации"
+
 msgid "Module options"
 msgstr "Опции модуля"
 
@@ -103,6 +111,10 @@ msgstr "Нижняя граница компрессии"
 
 msgid "Value in bytes."
 msgstr "Значение в байтах."
+
+#, c-format
+msgid "%s %s(%s)"
+msgstr ""
 
 #, c-format
 msgid "Get request: '%s': %d, time: %f ms."

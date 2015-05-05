@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg
  libmysqlclient-dev, libsqlite3-dev, firebird-dev, libpq-dev,
  libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libcomedi-dev,
  libssl-dev,
- libfftw3-dev, libqt4-dev libphonon-dev libqtwebkit-dev | qtbase5-dev libqt5webkit5-dev
+ libfftw3-dev, libqt4-dev | qtbase5-dev, libqtwebkit-dev | libqt5webkit5-dev, libphonon-dev
 Standards-Version: 3.7.3
 Homepage: <http://oscada.org>
 

@@ -70,12 +70,6 @@ using namespace SelfPr;
 //*************************************************
 TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80), mSingleUserHostLimit(10)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&sesRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     mod		= this;
 
     mName	= MOD_NAME;
@@ -89,56 +83,56 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComp
 
 TProt::~TProt( )
 {
-    pthread_mutex_destroy(&sesRes);
+
 }
 
 int TProt::sesOpen( const string &user, const string &pass, const string &src )
 {
     if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass)) return -1;
 
-    MtxAlloc res(sesRes, true);
+    MtxAlloc res(dataRes(), true);
 
     //Check sesions for close old and reuse more other
     unsigned i_oCnt = 0;
-    map<int, SAuth>::iterator aOldI = auths.end();
-    for(map<int, SAuth>::iterator aI = auths.begin(); aI != auths.end(); )
-	if(time(NULL) > (aI->second.tAuth+authTime()*60)) auths.erase(aI++);	//Long unused
+    map<int, SAuth>::iterator aOldI = mAuth.end();
+    for(map<int, SAuth>::iterator aI = mAuth.begin(); aI != mAuth.end(); )
+	if(time(NULL) > (aI->second.tAuth+authTime()*60)) mAuth.erase(aI++);	//Long unused
 	else {
 	    if(aI->second.name == user && aI->second.src == src) {	//More opened
-		if(aOldI == auths.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
+		if(aOldI == mAuth.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
 		++i_oCnt;
 	    }
 	    ++aI;
 	}
-    if(i_oCnt > singleUserHostLimit() && aOldI != auths.end()) {
+    if(i_oCnt > singleUserHostLimit() && aOldI != mAuth.end()) {
 	mess_err(nodePath().c_str(), _("Connections from the user '%s' and the source '%s' reached to limit %d. Erasing spare!"),
 	    user.c_str(), TSYS::strLine(src,0).c_str(), singleUserHostLimit());
-	auths.erase(aOldI);
+	mAuth.erase(aOldI);
     }
 
     //New session ID generation
     int idSes = rand();
-    while(auths.find(idSes) != auths.end()) idSes = rand();
+    while(mAuth.find(idSes) != mAuth.end()) idSes = rand();
 
     //Make new sesion
-    auths[idSes] = TProt::SAuth(time(NULL), user, src);
+    mAuth[idSes] = TProt::SAuth(time(NULL), user, src);
 
     return idSes;
 }
 
 void TProt::sesClose( int idSes )
 {
-    MtxAlloc res(sesRes, true);
-    auths.erase(idSes);
+    MtxAlloc res(dataRes(), true);
+    mAuth.erase(idSes);
 }
 
 TProt::SAuth TProt::sesGet( int idSes )
 {
-    MtxAlloc res(sesRes, true);
-    map<int, SAuth>::iterator aI = auths.find(idSes);
-    if(aI != auths.end()) {
+    MtxAlloc res(dataRes(), true);
+    map<int, SAuth>::iterator aI = mAuth.find(idSes);
+    if(aI != mAuth.end()) {
 	time_t cur_tm = time(NULL);
-	if(cur_tm > (aI->second.tAuth+authTime()*60)) auths.erase(aI);
+	if(cur_tm > (aI->second.tAuth+authTime()*60)) mAuth.erase(aI);
 	else {
 	    aI->second.tAuth = cur_tm;
 	    return aI->second;
@@ -272,7 +266,9 @@ void TProt::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm",_("Parameters")))
+	if(ctrMkNode("area",opt,1,"/prm",_("Parameters"))) {
+	    if(ctrMkNode("area",opt,1,"/prm/st",_("State")))
+		ctrMkNode("list",opt,-1,"/prm/st/auths",_("Active authentication sessions"),R_R_R_,"root",SPRT_ID);
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth session(min)"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/sUserHostLim",_("Single user and host connections limit"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
@@ -284,12 +280,19 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),RWRWR_,"root",SPRT_ID,3,"tp","dec","min","10",
 		    "help",_("Value in bytes."));
 	    }
+	}
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/lf_tm") {
+    if(a_path == "/prm/st/auths" && ctrChkNode(opt)) {
+	MtxAlloc res(dataRes(), true);
+	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s)"),
+		tm2s(authEl->second.tAuth,"").c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));
+    }
+    else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));
     }

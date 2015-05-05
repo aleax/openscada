@@ -1,4 +1,4 @@
-openscada (0.9-r2052) experimental; urgency=low
+openscada (0.9-rNNNN) experimental; urgency=low
 
   * Move to new Work version scheme naming 0.9-rNNNN.
   * Next LTS version will 0.9.N.

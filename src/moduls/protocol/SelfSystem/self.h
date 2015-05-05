@@ -100,7 +100,7 @@ class TProt: public TProtocol
 
 	//Attributes
 	pthread_mutex_t	sesRes;
-	map<int, SAuth>	auths;
+	map<int, SAuth>	mAuth;
 	int		mTAuth, mComprLev, mComprBrd, mSingleUserHostLimit;
 };
 
