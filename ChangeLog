@@ -1,3 +1,7 @@
+2015-05-06 Roman
+- UI.Vision: Default exporting set for the big (not lesser twice to main page) and the single documents or the diagram.
+
+
 2015-05-05 Roman
 - Protocol.SelfSystem: Expanded by status - Active authentication sessions.
 - SYS: {debian,debian_mod}/control: Depends for build with Qt5 is added.
@@ -263,7 +267,7 @@
 - Transport.Sockets: Some debug messages about the input protocol interaction (create and close) is added.
 - UI.QTCfg: Strong words wrap set to TextEdit widget, mostly for long descriptions.
     Some preparings to fit widgets like to TextEdit, CfgTable and List to full page size by vertical.
-- UI.{Vision,WebVision}: True include widgets size scaling is added by scale edged point, for correct fit each to other at any scale.
+- !!!!:UI.{Vision,WebVision}: True include widgets size scaling is added by scale edged point, for correct fit each to other at any scale.
     The new size scale policy excluded and used minimal for pages, to UI.Vision, for allow fit to containers without the scroll appear.
 
 
@@ -362,7 +366,7 @@
 - !!!!:FIX:SYS: For prevent race condition the functions preEnable(), postEnable(), preDisable() and postDisable() sets to lock free.
     Disabled nodes allowed to list also as checking for present.
     Flags MkDisable, Disable, MkEnable, Enable renamed to DoDisable, Disabled, DoEnable, Enabled.
-    Flag NodeRestore removed.
+    Flag NodeShiftDel removed.
 - Transport.Sockets: Property MSS is added for control TCP-segment size for bad channels.
 - UI.Vision: ElFig: next stage for clean up; Some smarter control for control point 1 and 2 of Arc is added.
 

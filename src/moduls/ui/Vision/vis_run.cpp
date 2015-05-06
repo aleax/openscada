@@ -694,14 +694,19 @@ void VisRun::exportDef( )
 	//Check for the single and big document present for default the exporting
 	RunPageView *rpg;
 	RunWdgView *rwdg;
-	vector<string> lst;
+	vector<string> lstDoc, lstDiagr;
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
-	    if((rpg=findOpenPage(pgList[i_p])))
-		rpg->shapeList("Document",lst);
-	if(lst.size() == 1 && (rwdg=findOpenWidget(lst[0])) &&
+	    if((rpg=findOpenPage(pgList[i_p]))) {
+		rpg->shapeList("Document", lstDoc);
+		rpg->shapeList("Diagram", lstDiagr);
+	    }
+	if(lstDoc.size() == 1 && (rwdg=findOpenWidget(lstDoc[0])) &&
 		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
 	    exportDoc(rwdg->id());
-	//Print master page
+	else if(lstDiagr.size() == 1 && (rwdg=findOpenWidget(lstDiagr[0])) &&
+		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
+	    exportDiag(rwdg->id());
+	//Export master page
 	else exportPg(master_pg->id());
     }
 }

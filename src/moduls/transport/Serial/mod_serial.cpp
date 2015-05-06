@@ -832,8 +832,7 @@ void TTrOut::start( int tmCon )
 	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
-	    switch(s2i(speed))
-	    {
+	    switch(s2i(speed)) {
 		case 300:	tspd = B300;	break;
 		case 600:	tspd = B600;	break;
 		case 1200:	tspd = B1200;	break;
@@ -864,8 +863,7 @@ void TTrOut::start( int tmCon )
 	    int len =  format[0]-'0';
 	    if(len < 5 || len > 8) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
 	    tio.c_cflag &= ~CSIZE;
-	    switch(len)
-	    {
+	    switch(len) {
 		case 5:	tio.c_cflag |= CS5;	break;
 		case 6:	tio.c_cflag |= CS6;	break;
 		case 7:	tio.c_cflag |= CS7;	break;
@@ -874,8 +872,7 @@ void TTrOut::start( int tmCon )
 
 	    //  Set parity
 	    char parity = tolower(format[1]);
-	    switch(parity)
-	    {
+	    switch(parity) {
 		case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;break;
 		case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
 		case 'n': tio.c_cflag &= ~PARENB;			break;
@@ -1183,8 +1180,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    conn - maximum time for connection respond wait, in ms;\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    KeepAliveTm - keep alive timeout in seconds for restart transport."));
-	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
-	{
+	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");

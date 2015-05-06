@@ -371,7 +371,7 @@ void MTable::postDisable( int flag )
     owner().transCommit();
     if(flag)
 	try { owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
-	catch(TError err){ mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
+	catch(TError err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }

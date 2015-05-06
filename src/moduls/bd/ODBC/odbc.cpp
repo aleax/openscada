@@ -420,21 +420,25 @@ MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
 
     setNodePrev(iown);
 
+    if(create) {
+	/*req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
+	    TSYS::strEncode(name,TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
+	owner().sqlReq(req);*/
+    }
 
-    //getStructDB(name, tblStrct);
+    //Get table structure description
+    //req = "DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name,TSYS::SQL) + "`";
+    //owner().sqlReq(req, &tblStrct);
 }
 
-MTable::~MTable( )
-{
-
-}
+MTable::~MTable( )	{ }
 
 void MTable::postDisable( int flag )
 {
     owner().transCommit();
-    if(flag) {
-
-    }
+    /*if(flag)
+	try { owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
+	catch(TError err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }*/
 }
 
 MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }

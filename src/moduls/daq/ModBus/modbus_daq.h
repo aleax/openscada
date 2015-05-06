@@ -204,8 +204,8 @@ class TMdContr: public TController
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size
 	TCfg	&mSched,			//Calc schedule
-		&mPrt,                          //Protocol
-		&mAddr;                         //Transport device address
+		&mPrt,				//Protocol
+		&mAddr;				//Transport device address
 	char	&mMerge,			//Fragments of register merge
 		&mMltWr,			//Use multi-write functions(15,16)
 		&mAsynchWr;			//Asynchronous write
@@ -223,7 +223,7 @@ class TMdContr: public TController
 	vector<SDataRec>	acqBlksIn;	//Acquisition data blocks for input registers
 	vector<SDataRec>	acqBlksCoil;	//Acquisition data blocks for coils
 	vector<SDataRec>	acqBlksCoilIn;	//Acquisition data blocks for input coils
-	map<string,string>	asynchWrs;	//Asynchronous writers list
+	map<string, string>	asynchWrs;	//Asynchronous writers list
 
 	float	tmDelay;			//Delay time for next try connect
 

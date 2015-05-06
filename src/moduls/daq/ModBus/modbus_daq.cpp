@@ -698,7 +698,7 @@ string TMdContr::modBusReq( string &pdu )
 	setAttr("debugCat", (messLev()==TMess::Debug) ? nodePath() : string(""))->
 	setText(pdu);
 
-    tr.at().messProtIO(req,"ModBus");
+    tr.at().messProtIO(req, "ModBus");
 
     if(!req.attr("err").empty()) {
 	if(s2i(req.attr("err")) == 14) numErrCon++;
