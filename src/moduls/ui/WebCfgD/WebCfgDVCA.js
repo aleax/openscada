@@ -765,7 +765,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    else { lab = t_s.addr_lab; val = t_s.addr_val; }
 	    //  Fill list
 	    setNodeText(lab,t_s.getAttribute('dscr')+': ');
-	    val.title = t_s.getAttribute('help');
+	    val.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 
 	    while(val.childNodes.length) val.removeChild(val.childNodes[0]);
 	    var dataReq = servGet(brPath,'com=get');
@@ -827,7 +827,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    //  Set image
 	    if(lab) setNodeText(lab,t_s.getAttribute('dscr')+':');
 	    if(val) {
-		val.title = t_s.getAttribute('help');
+		val.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		val.src = '/'+MOD_ID+selPath+'/'+brPath+'?com=img&rnd='+Math.floor(Math.random()*1000);
 	    }
 	}
@@ -930,7 +930,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    //  Fill table
 	    if(lab) setNodeText(lab,t_s.getAttribute('dscr')+':');
 	    if(table) {
-		table.title = t_s.getAttribute('help');
+		table.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 
 		var dataReq = servGet(brPath,'com=get');
 		if(dataReq && parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); continue; }
@@ -1263,7 +1263,7 @@ function selectChildRecArea( node, aPath, cBlk )
 
 	    //  Fill command
 	    button.value = t_s.getAttribute('dscr');
-	    button.title = t_s.getAttribute('help');
+	    button.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 	}
     }
 }
@@ -1330,7 +1330,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	// Fill combo
 	if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
 	if(val_w || val_r) {
-	    (val_r||val_w).title = t_s.getAttribute('help');
+	    (val_r||val_w).title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 	    var sel_ok = false, c_el = 0;
 	    if(!t_s.getAttribute('select')) {
 		var ind_ls = t_s.getAttribute('sel_id') ? t_s.getAttribute('sel_id').split(';') : new Array();
@@ -1414,11 +1414,11 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    // Fill CheckBox
 	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
 	    if(val_w) {
-		val_w.title = t_s.getAttribute('help');
+		val_w.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		val_w.childNodes[0].checked = parseInt(nodeText(dataReq));
 	    }
 	    if(val_r) {
-		val_r.title = t_s.getAttribute('help');
+		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		setNodeText(val_r, nodeText(dataReq)=='<EVAL>'?'<EVAL>':(parseInt(nodeText(dataReq))?'On ':'Off '));
 	    }
 	}
@@ -1474,7 +1474,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    // Fill Edit
 	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
 	    if(edit && !edit.isChanged) {
-		edit.title = t_s.getAttribute('help');
+		edit.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		edit.value = edit.defaultValue = nodeText(dataReq);
 	    }
 	}
@@ -1563,7 +1563,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    // Fill data
 	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
 	    if(val_w && !val_w.isEdited) {
-		val_w.title = t_s.getAttribute('help');
+		val_w.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		var dt_time_t = parseInt(nodeText(dataReq));
 		var dt = new Date(dt_time_t?(dt_time_t*1000):0);
 		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = dt.getDate();
@@ -1574,7 +1574,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		val_w.childNodes[6].value = val_w.childNodes[6].defaultValue = dt.getSeconds();
 	    }
 	    if(val_r) {
-		val_r.title = t_s.getAttribute('help');
+		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		var dt = new Date(parseInt(nodeText(dataReq))*1000);
 		setNodeText(val_r, dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
 		    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
@@ -1708,11 +1708,11 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 
 	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
 	    if(val_r) {
-		val_r.title = t_s.getAttribute('help');
+		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		setNodeText(val_r,sval);
 	    }
 	    if(val_w && !val_w.isEdited) {
-		val_w.title = t_s.getAttribute('help');
+		val_w.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = sval;
 		// Load combo list
 		if(t_s.getAttribute('dest') == 'sel_ed') {

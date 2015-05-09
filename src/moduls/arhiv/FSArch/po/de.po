@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 14:02+0300\n"
+"POT-Creation-Date: 2015-05-09 18:10+0300\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -30,8 +30,8 @@ msgid ""
 "The archiver module. Provides functions for messages and values archiving to "
 "file system."
 msgstr ""
-"Das Archivierungsmodul. Funktionen zum Archivieren von Nachrichten und Werten in "
-"dasDateisystem"
+"Das Archivierungsmodul. Funktionen zum Archivieren von Nachrichten und "
+"Werten in dasDateisystem"
 
 msgid "Compress error!"
 msgstr "Fehler bei der Komprimierung"
@@ -204,13 +204,35 @@ msgstr ""
 "beispielsweise\n"
 "nach der manuellen Änderungen an der Verzeichnis Archiver ermöglicht."
 
-#, c-format
-msgid "Can not create file: '%s'!"
-msgstr "Kann die Datei: '%s' nicht erstellen!"
+msgid "Files"
+msgstr "Dateien"
 
-#, c-format
-msgid "Write to file '%s' error"
-msgstr "Schreiben in die Datei '%s' Fehler"
+msgid "Name"
+msgstr "Name"
+
+msgid "Begin"
+msgstr "Beginn"
+
+msgid "End"
+msgstr "Ende"
+
+msgid "Charset"
+msgstr "Zeichensatz"
+
+msgid "Size"
+msgstr "Größe"
+
+msgid "XML"
+msgstr "XML"
+
+msgid "Pack"
+msgstr "Pack"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "File '%s' creation error: %s(%d)."
+msgstr "Datei '%s' Schöpfung Fehler: %s(%d)."
 
 #, c-format
 msgid "File '%s' header error!"
@@ -231,9 +253,8 @@ msgstr "Hinzufügen einer Nachricht in das Fehler-Archivdatei!"
 msgid "Archive file '%s' isn't attached!"
 msgstr "Archivdatei '%s' ist nicht verbunden!"
 
-#, c-format
-msgid "File access to '%s' error."
-msgstr "Dateizugriff auf '%s' Fehler."
+msgid "Write to the archive file '%s' error: %s(%d)"
+msgstr "Schreiben Sie in die Archivdatei '%s' Fehler: %s(%d)"
 
 msgid "Getting messages from an error Archive file!"
 msgstr "Empfange Nachrichten aus der Fehler-Archivdatei!"
@@ -324,17 +345,38 @@ msgstr "Export"
 msgid "Archive"
 msgstr "Archiv"
 
-msgid "Begin"
-msgstr "Beginn"
-
-msgid "End"
-msgstr "Ende"
-
 msgid "Type"
 msgstr "Typ"
 
 msgid "To file"
 msgstr "Zur Datei"
+
+msgid "Period, us"
+msgstr "Zeit uns"
+
+msgid "Unknown"
+msgstr "Unbekannt"
+
+msgid "Boolean"
+msgstr "Boolean"
+
+msgid "Int16"
+msgstr "Int16"
+
+msgid "Int32"
+msgstr "Int32"
+
+msgid "Int64"
+msgstr "Int64"
+
+msgid "Float"
+msgstr "Float"
+
+msgid "Double"
+msgstr "Double"
+
+msgid "String"
+msgstr "String"
 
 #, c-format
 msgid "Archive file '%s' no opened!"
@@ -350,6 +392,9 @@ msgstr "Fehler in der Archivdatei!"
 #, c-format
 msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
 msgstr "Achtung! Zugeteilt Puffergröße %d für Indizes geringerem verwendet %d."
+
+msgid "Write to the archive '%s' file '%s' error: %s(%d)"
+msgstr "Schreiben Sie in das Archiv '%s' Datei '%s' Fehler: %s(%d)"
 
 #, c-format
 msgid "Read file '%s' for offset %d error!"
@@ -374,10 +419,3 @@ msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 "Letzter Wert für die tatsächliche Archivdatei '%s' ist nicht EVAL. "
 "Reparaturversuch!"
-
-#~ msgid ""
-#~ "Write data block to the archive file '%s' error. Will structure break. "
-#~ "mSize=%d, foff_end=%d, vSize=%d"
-#~ msgstr ""
-#~ "Fehler beim Schreiben Datenblöcke in die Archiv-Datei '%s'. Die Struktur "
-#~ "wird aufgebrochen werden. mGröße=%d, foff_end=%d, VSIZE=%d"

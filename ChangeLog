@@ -1,4 +1,7 @@
 2015-05-09 Roman
+- !!:FIX:Archiver.FSArch: Removing *.info files for different pack mode is fixed.
+    Tab "Files" is added for the messages and the values with information about the archive's files.
+- FIX:UI.WebCfgD: Title's null value fix for helps.
 - SYS: *.spec: Field "Release" set to template rNNNN.
 - DB: DB object's fields "DESCR" and "ADDR" size rose to 2000 and 1000, respectively.
 - !!:FIX:Archiver.FSArch: Free storage space lack checking added for prevent hang and data lost for messages and values.

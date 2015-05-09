@@ -451,6 +451,18 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/arch/exp/tfl",_("Type"),RWRW__,"root",SARH_ID,3,"tp","str","dest","select","select","/arch/tpflst");
 	    ctrMkNode("fld",opt,-1,"/arch/exp/file",_("To file"),RWRW__,"root",SARH_ID,1,"tp","str");
 	}
+	if(ctrMkNode("area",opt,-1,"/files",_("Files"),R_R___,"root",SARH_ID))
+	    if(ctrMkNode("table",opt,-1,"/files/files",_("Files"),R_R___,"root",SARH_ID)) {
+		ctrMkNode("list",opt,-1,"/files/files/arch",_("Archive"),R_R___,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/files/files/nm",_("Name"),R_R___,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/files/files/beg",_("Begin"),R_R___,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/files/files/end",_("End"),R_R___,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/files/files/per",_("Period, us"),R_R___,"root",SARH_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/files/files/tp",_("Type"),R_R___,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/files/files/sz",_("Size"),R_R___,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/files/files/pack",_("Pack"),R_R___,"root",SARH_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/files/files/err",_("Error"),R_R___,"root",SARH_ID,1,"tp","bool");
+	    }
 	return;
     }
     //Process command to page
@@ -493,7 +505,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
 	XMLNode *f_size = ctrMkNode("list",opt,-1,"/arch/arch/3","");
 
-	ResAlloc res(archRes,false);
+	ResAlloc res(archRes, false);
 	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel) {
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
 	    if(n_per)	n_per->childAdd("el")->setText(r2s((double)iel->second->archive().period()/1e6,6));
@@ -517,6 +529,48 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		s2i(ctrId(opt,"end")->text()),
 		ctrId(opt,"tfl")->text(),
 		ctrId(opt,"file")->text());
+    else if(a_path == "/files/files" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD)) {
+	XMLNode *rwArch	= ctrMkNode("list",opt,-1,"/files/files/arch","",R_R___,"root",SARH_ID);
+	XMLNode *rwNm	= ctrMkNode("list",opt,-1,"/files/files/nm","",R_R___,"root",SARH_ID);
+	XMLNode *rwBeg	= ctrMkNode("list",opt,-1,"/files/files/beg","",R_R___,"root",SARH_ID);
+	XMLNode *rwEnd	= ctrMkNode("list",opt,-1,"/files/files/end","",R_R___,"root",SARH_ID);
+	XMLNode *rwPer	= ctrMkNode("list",opt,-1,"/files/files/per","",R_R___,"root",SARH_ID);
+	XMLNode *rwTp	= ctrMkNode("list",opt,-1,"/files/files/tp","",R_R___,"root",SARH_ID);
+	XMLNode *rwSz	= ctrMkNode("list",opt,-1,"/files/files/sz","",R_R___,"root",SARH_ID);
+	XMLNode *rwPack	= ctrMkNode("list",opt,-1,"/files/files/pack","",R_R___,"root",SARH_ID);
+	XMLNode *rwErr	= ctrMkNode("list",opt,-1,"/files/files/err","",R_R___,"root",SARH_ID);
+
+	ResAlloc res(archRes, false);
+	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel) {
+	    ModVArchEl *el = dynamic_cast<ModVArchEl*>(iel->second);
+	    if(!el) continue;
+	    ResAlloc res1(el->mRes, false);
+	    for(unsigned iF = 0; iF < el->files.size(); iF++) {
+		if(rwArch)	rwArch->childAdd("el")->setText(el->archive().id());
+		if(rwNm)	rwNm->childAdd("el")->setText(el->files[iF]->name());
+		if(rwBeg)	rwBeg->childAdd("el")->setText(tm2s(el->files[iF]->begin()/1000000,"")+"."+i2s(el->files[iF]->begin()%1000000));
+		if(rwEnd)	rwEnd->childAdd("el")->setText(tm2s(el->files[iF]->end()/1000000,"")+"."+i2s(el->files[iF]->end()%1000000));
+		if(rwPer)	rwPer->childAdd("el")->setText(ll2s(el->files[iF]->period()));
+		if(rwTp) {
+		    string stp = _("Unknown");
+		    switch(el->files[iF]->type()) {
+			case TFld::Boolean:	stp = _("Boolean");	break;
+			case TFld::Int16:	stp = _("Int16");	break;
+			case TFld::Int32:	stp = _("Int32");	break;
+			case TFld::Int64:	stp = _("Int64");	break;
+			case TFld::Float:	stp = _("Float");	break;
+			case TFld::Double:	stp = _("Double");	break;
+			case TFld::String:	stp = _("String");	break;
+			default: break;
+		    }
+		    rwTp->childAdd("el")->setText(stp);
+		}
+		if(rwSz)	rwSz->childAdd("el")->setText(TSYS::cpct2str(el->files[iF]->size()));
+		if(rwPack)	rwPack->childAdd("el")->setText(i2s(el->files[iF]->isPack()));
+		if(rwErr)	rwErr->childAdd("el")->setText(i2s(el->files[iF]->err()));
+	    }
+	}
+    }
     else TVArchivator::cntrCmdProc(opt);
 }
 
@@ -532,9 +586,9 @@ ModVArchEl::~ModVArchEl( )
 {
     //Clear a files list
     ResAlloc res(mRes, true);
-    while(arh_f.size()) {
-	delete arh_f[0];
-	arh_f.pop_front();
+    while(files.size()) {
+	delete files[0];
+	files.pop_front();
     }
     res.release();
 }
@@ -543,10 +597,10 @@ void ModVArchEl::fullErase( )
 {
     //Remove archive's files
     ResAlloc res(mRes, true);
-    while(arh_f.size()) {
-	arh_f[0]->delFile();
-	delete arh_f[0];
-	arh_f.pop_front();
+    while(files.size()) {
+	files[0]->delFile();
+	delete files[0];
+	files.pop_front();
     }
     res.release();
 }
@@ -555,8 +609,8 @@ int ModVArchEl::size( )
 {
     int rez = 0;
     ResAlloc res(mRes, false);
-    for(unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++)
-	rez += arh_f[i_arh]->size();
+    for(unsigned i_arh = 0; i_arh < files.size(); i_arh++)
+	rez += files[i_arh]->size();
 
     return rez;
 }
@@ -591,13 +645,13 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
 
     ResAlloc res(mRes, true);
     //Check file count for delete old files
-    if(now && !mod->noArchLimit && ((((ModVArch &)archivator()).numbFiles() && arh_f.size() > ((ModVArch &)archivator()).numbFiles()) || cpctLim))
-	for(int i_arh = 0; i_arh < (int)arh_f.size()-1; ) {	//Up to last fresh
-	    if(!(arh_f.size() > ((ModVArch &)archivator()).numbFiles() || cpctLim))	break;
-	    else if(!arh_f[i_arh]->err()) {
-		string f_nm = arh_f[i_arh]->name();
-		delete arh_f[i_arh];
-		arh_f.erase(arh_f.begin() + i_arh);
+    if(now && !mod->noArchLimit && ((((ModVArch &)archivator()).numbFiles() && files.size() > ((ModVArch &)archivator()).numbFiles()) || cpctLim))
+	for(int i_arh = 0; i_arh < (int)files.size()-1; ) {	//Up to last fresh
+	    if(!(files.size() > ((ModVArch &)archivator()).numbFiles() || cpctLim))	break;
+	    else if(!files[i_arh]->err()) {
+		string f_nm = files[i_arh]->name();
+		delete files[i_arh];
+		files.erase(files.begin() + i_arh);
 
 		if(mess_lev() == TMess::Debug) mess_debug(archive().nodePath().c_str(), "Remove file '%s' by limit.", f_nm.c_str());
 
@@ -611,15 +665,15 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
 
     //Check the archive's files for pack
     res.request(false);
-    for(unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++) arh_f[i_arh]->check();
+    for(unsigned i_arh = 0; i_arh < files.size(); i_arh++) files[i_arh]->check();
 }
 
 void ModVArchEl::fileAdd( const string &file )
 {
     //Check to present archive files
     ResAlloc res(mRes, false);
-    for(unsigned i_arh = 0; i_arh < arh_f.size(); i_arh++)
-	if(arh_f[i_arh]->name() == file) return;
+    for(unsigned i_arh = 0; i_arh < files.size(); i_arh++)
+	if(files[i_arh]->name() == file) return;
     res.release();
 
     //Attach a new archive file
@@ -631,12 +685,12 @@ void ModVArchEl::fileAdd( const string &file )
     else {
 	res.request(true);
 	int i_arh;
-	for(i_arh = (int)arh_f.size()-1; i_arh >= 0; i_arh--)
-	    if(arh_f[i_arh]->err() || f_arh->begin() >= arh_f[i_arh]->begin()) {
-		arh_f.insert(arh_f.begin()+i_arh+1,f_arh);
+	for(i_arh = (int)files.size()-1; i_arh >= 0; i_arh--)
+	    if(files[i_arh]->err() || f_arh->begin() >= files[i_arh]->begin()) {
+		files.insert(files.begin()+i_arh+1,f_arh);
 		break;
 	    }
-	if(i_arh < 0) arh_f.push_front(f_arh);
+	if(i_arh < 0) files.push_front(f_arh);
 	realEnd = 0;	//Reset real end position
     }
 }
@@ -649,9 +703,9 @@ int64_t ModVArchEl::end( )
     ResAlloc res(mRes, false);
     int64_t curTm = TSYS::curTime();
     VFileArch *lstFile = NULL;
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++) {
-	if(arh_f[i_a]->err()) continue;
-	lstFile = arh_f[i_a];
+    for(unsigned i_a = 0; i_a < files.size(); i_a++) {
+	if(files[i_a]->err()) continue;
+	lstFile = files[i_a];
 	if(curTm <= lstFile->end()) {
 	    if(!realEnd) realEnd = lstFile->endData();
 	    break;
@@ -665,9 +719,9 @@ int64_t ModVArchEl::end( )
 int64_t ModVArchEl::begin( )
 {
     ResAlloc res(mRes,false);
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
-	if(!arh_f[i_a]->err())
-	    return arh_f[i_a]->begin();
+    for(unsigned i_a = 0; i_a < files.size(); i_a++)
+	if(!files[i_a]->err())
+	    return files[i_a]->begin();
 
     return 0;
 }
@@ -686,12 +740,12 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
     }
 
     ResAlloc res(mRes, false);
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
+    for(unsigned i_a = 0; i_a < files.size(); i_a++)
 	if(ibeg > iend) break;
-	else if(!arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin()) {
-	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += arh_f[i_a]->period()) buf.setI(EVAL_INT,ibeg);
-	    arh_f[i_a]->getVals(buf, ibeg, vmin(iend,arh_f[i_a]->end()));
-	    ibeg = arh_f[i_a]->end()+arh_f[i_a]->period();
+	else if(!files[i_a]->err() && ibeg <= files[i_a]->end() && iend >= files[i_a]->begin()) {
+	    for( ; ibeg < files[i_a]->begin(); ibeg += files[i_a]->period()) buf.setI(EVAL_INT,ibeg);
+	    files[i_a]->getVals(buf, ibeg, vmin(iend,files[i_a]->end()));
+	    ibeg = files[i_a]->end()+files[i_a]->period();
 	}
     for( ; ibeg <= iend; ibeg += (int64_t)(archivator().valPeriod()*1e6)) buf.setI(EVAL_INT, ibeg);
 }
@@ -701,13 +755,13 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     int64_t itm = tm ? *tm : SYS->curTime();
     int64_t per;
     ResAlloc res(mRes, false);
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
-	if(!arh_f[i_a]->err() && (
-		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
-		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin())))
+    for(unsigned i_a = 0; i_a < files.size(); i_a++)
+	if(!files[i_a]->err() && (
+		(up_ord && itm <= files[i_a]->end() && itm > files[i_a]->begin()-files[i_a]->period()) ||
+		(!up_ord && itm < files[i_a]->end()+files[i_a]->period() && itm >= files[i_a]->begin())))
 	{
-	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
-	    return arh_f[i_a]->getVal(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
+	    if(tm) { per = files[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
+	    return files[i_a]->getVal(up_ord?files[i_a]->maxPos()-(files[i_a]->end()-itm)/files[i_a]->period():(itm-files[i_a]->begin())/files[i_a]->period());
 	}
     if(tm) { per = (int64_t)(archivator().valPeriod()*1e6); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_REAL;
@@ -728,16 +782,16 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     //Put values to files
     ResAlloc res(mRes, true);
     bool wrOK = true, wrCurOK = false;	//check for all writes OK else repeate
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
-	if(!arh_f[i_a]->err() && beg <= end) {
+    for(unsigned i_a = 0; i_a < files.size(); i_a++)
+	if(!files[i_a]->err() && beg <= end) {
 	    // Create new file for old data
-	    if(beg < arh_f[i_a]->begin()) {
+	    if(beg < files[i_a]->begin()) {
 		if(!mChecked)	return false;	//Wait for checking
 
 		//  Calc file limits
 		int64_t n_end, n_beg;	//New file end position
-		if((arh_f[i_a]->begin()-beg) > f_sz) n_end = beg+f_sz;
-		else n_end = arh_f[i_a]->begin()-v_per;
+		if((files[i_a]->begin()-beg) > f_sz) n_end = beg+f_sz;
+		else n_end = files[i_a]->begin()-v_per;
 		n_beg = vmax(b_prev, n_end-f_sz);
 
 		//  Create file name
@@ -748,26 +802,26 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 		strftime(c_buf, sizeof(c_buf)," %F %T.val",&tm_tm);
 		string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
-		arh_f.insert(arh_f.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
+		files.insert(files.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
 		//Remove new error created file mostly by store space lack
-		if(arh_f[i_a]->err()) {
-		    arh_f[i_a]->delFile();
-		    delete arh_f[i_a];
-		    arh_f.erase(arh_f.begin()+i_a);
+		if(files[i_a]->err()) {
+		    files[i_a]->delFile();
+		    delete files[i_a];
+		    files.erase(files.begin()+i_a);
 		    return false;
 		}
 	    }
 
 	    // Insert values to the archive
-	    if(beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin()) {
-		int64_t n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
+	    if(beg <= files[i_a]->end() && end >= files[i_a]->begin()) {
+		int64_t n_end = (end > files[i_a]->end())?files[i_a]->end():end;
 		res.release();
-		if((wrCurOK=arh_f[i_a]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
+		if((wrCurOK=files[i_a]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
 		wrOK = wrOK && wrCurOK;
 		beg = n_end + v_per;
 		res.request(true);
 	    }
-	    b_prev = arh_f[i_a]->end() + v_per;
+	    b_prev = files[i_a]->end() + v_per;
 	}
     //Create new file for new data
     while(end >= beg) {
@@ -780,18 +834,18 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	string AName = archivator().addr() + "/" + archive().id() + c_buf;
 
 	int64_t n_end = beg + f_sz;
-	arh_f.push_back(new VFileArch(AName,beg,n_end,v_per,archive().valType(true),this));
+	files.push_back(new VFileArch(AName,beg,n_end,v_per,archive().valType(true),this));
 	//Remove new error created file mostly by store space lack
-	if(arh_f.back()->err()) {
-	    arh_f.back()->delFile();
-	    delete arh_f.back();
-	    arh_f.pop_back();
+	if(files.back()->err()) {
+	    files.back()->delFile();
+	    delete files.back();
+	    files.pop_back();
 	    return false;
 	}
 	n_end = (end > n_end) ? n_end : end;
 
 	res.release();
-	if((wrCurOK=arh_f[arh_f.size()-1]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
+	if((wrCurOK=files[files.size()-1]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
 	wrOK = wrOK && wrCurOK;
 	beg = n_end + v_per;
     }
@@ -976,7 +1030,7 @@ void VFileArch::delFile( )
 {
     ResAlloc res(mRes, true);
     remove(name().c_str());
-    remove((name()+".info").c_str());
+    remove((name()+(isPack()?".info":".gz.info")).c_str());
     mErr = true;
 }
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 14:02+0300\n"
+"POT-Creation-Date: 2015-05-09 18:10+0300\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -25,8 +25,8 @@ msgid ""
 "The archiver module. Provides functions for messages and values archiving to "
 "file system."
 msgstr ""
-"Модуль архиватора. Предоставляет функции архивирования сообщений и значений на "
-"файловую систему."
+"Модуль архиватора. Предоставляет функции архивирования сообщений и значений "
+"на файловую систему."
 
 msgid "Compress error!"
 msgstr "Ошибка сжатия!"
@@ -197,13 +197,35 @@ msgstr ""
 "Команда, которая позволяет запустить проверку архивов немедленно,\n"
 "например, после ручного изменения в директории архиватора."
 
-#, c-format
-msgid "Can not create file: '%s'!"
-msgstr "Не могу создать файл: '%s'!"
+msgid "Files"
+msgstr "Файлы"
 
-#, c-format
-msgid "Write to file '%s' error"
-msgstr "Ошибка записи в файл '%s'"
+msgid "Name"
+msgstr "Имя"
+
+msgid "Begin"
+msgstr "Начало"
+
+msgid "End"
+msgstr "Конец"
+
+msgid "Charset"
+msgstr "Кодировка"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "XML"
+msgstr "XML"
+
+msgid "Pack"
+msgstr "Упак."
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "File '%s' creation error: %s(%d)."
+msgstr "Ошибка создания файла '%s': %s(%d)."
 
 #, c-format
 msgid "File '%s' header error!"
@@ -224,9 +246,8 @@ msgstr "Вставка сообщения в архивный файл с оши
 msgid "Archive file '%s' isn't attached!"
 msgstr "Файл архива '%s' не подключен!"
 
-#, c-format
-msgid "File access to '%s' error."
-msgstr "Ошибка доступа к файлу '%s'."
+msgid "Write to the archive file '%s' error: %s(%d)"
+msgstr "Ошибка записи в файл '%s': %s(%d)"
 
 msgid "Getting messages from an error Archive file!"
 msgstr "Получение сообщений из архивного файла с ошибкой!"
@@ -317,17 +338,38 @@ msgstr "Экспорт"
 msgid "Archive"
 msgstr "Архив"
 
-msgid "Begin"
-msgstr "Начало"
-
-msgid "End"
-msgstr "Конец"
-
 msgid "Type"
 msgstr "Тип"
 
 msgid "To file"
 msgstr "В файл"
+
+msgid "Period, us"
+msgstr "Период, мкс"
+
+msgid "Unknown"
+msgstr "Неизвестный"
+
+msgid "Boolean"
+msgstr "Логический"
+
+msgid "Int16"
+msgstr "Целый16"
+
+msgid "Int32"
+msgstr "Целый32"
+
+msgid "Int64"
+msgstr "Целый64"
+
+msgid "Float"
+msgstr "Веществ."
+
+msgid "Double"
+msgstr "Двойной, вещ."
+
+msgid "String"
+msgstr "Строка"
 
 #, c-format
 msgid "Archive file '%s' no opened!"
@@ -345,6 +387,9 @@ msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
 msgstr ""
 "Предупреждение! Выделенный размер буфера %d для индексов меньше "
 "использованого %d."
+
+msgid "Write to the archive '%s' file '%s' error: %s(%d)"
+msgstr "Ошибка записи в архивный '%s' файл '%s': %s(%d)"
 
 #, c-format
 msgid "Read file '%s' for offset %d error!"
@@ -369,10 +414,3 @@ msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 "Последнее значение актуального файла архива '%s' не EVAL. Попробую исправить "
 "это!"
-
-#~ msgid ""
-#~ "Write data block to the archive file '%s' error. Will structure break. "
-#~ "mSize=%d, foff_end=%d, vSize=%d"
-#~ msgstr ""
-#~ "Ошибка записи блока данных в файл архива '%s'. Структура будет сломана. "
-#~ "mSize=%d, foff_end=%d, vSize=%d"

@@ -60,6 +60,7 @@ class MFileArch
 	time_t	end( )		{ return mEnd; }
 	string	charset( )	{ return mChars; }
 	bool	err( )		{ return mErr; }
+	bool	isPack( )	{ return mPack; }
 
 	ModMArch &owner( )	{ return *mOwner; }
 
@@ -161,7 +162,7 @@ class ModMArch: public TMArchivator
 	double	tmCalc;		// Archiving time
 	time_t	mLstCheck;	// Last check directory time
 
-	deque<MFileArch *>  arh_s;
+	deque<MFileArch *>	files;
 };
 
 }

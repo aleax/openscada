@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 14:02+0300\n"
+"POT-Creation-Date: 2015-05-09 18:10+0300\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -197,13 +197,35 @@ msgstr ""
 "Команда, яка дозволяє запустити перевірку архівів негайно,\n"
 "наприклад, після ручних змін у теці архіватору."
 
-#, c-format
-msgid "Can not create file: '%s'!"
-msgstr "Не можу створити файл: '%s'!"
+msgid "Files"
+msgstr "Файли"
 
-#, c-format
-msgid "Write to file '%s' error"
-msgstr "Помилка запису до файлу '%s'"
+msgid "Name"
+msgstr "Ім'я"
+
+msgid "Begin"
+msgstr "Початок"
+
+msgid "End"
+msgstr "Кінець"
+
+msgid "Charset"
+msgstr "Кодування"
+
+msgid "Size"
+msgstr "Розмір"
+
+msgid "XML"
+msgstr "XML"
+
+msgid "Pack"
+msgstr "Пак."
+
+msgid "Error"
+msgstr "Помилка"
+
+msgid "File '%s' creation error: %s(%d)."
+msgstr "Помилка створення файлу '%s': %s(%d)."
 
 #, c-format
 msgid "File '%s' header error!"
@@ -224,9 +246,8 @@ msgstr "Вставлення повідомлення до архівного ф
 msgid "Archive file '%s' isn't attached!"
 msgstr "Файл архіву '%s' не під'єднано!"
 
-#, c-format
-msgid "File access to '%s' error."
-msgstr "Помилка доступу до файлу '%s'."
+msgid "Write to the archive file '%s' error: %s(%d)"
+msgstr "Помилка запису до файлу '%s': %s(%d)"
 
 msgid "Getting messages from an error Archive file!"
 msgstr "Отримання повідомлень з файлу архіву з помилкою!"
@@ -318,17 +339,38 @@ msgstr "Експорт"
 msgid "Archive"
 msgstr "Архів"
 
-msgid "Begin"
-msgstr "Початок"
-
-msgid "End"
-msgstr "Кінець"
-
 msgid "Type"
 msgstr "Тип"
 
 msgid "To file"
 msgstr "До файлу"
+
+msgid "Period, us"
+msgstr "Період, мкс"
+
+msgid "Unknown"
+msgstr "Невідомий"
+
+msgid "Boolean"
+msgstr "Логічний"
+
+msgid "Int16"
+msgstr "Цілий16"
+
+msgid "Int32"
+msgstr "Цілий32"
+
+msgid "Int64"
+msgstr "Цілий64"
+
+msgid "Float"
+msgstr "Реальний"
+
+msgid "Double"
+msgstr "Подвіний, реал."
+
+msgid "String"
+msgstr "Рядок"
 
 #, c-format
 msgid "Archive file '%s' no opened!"
@@ -345,6 +387,9 @@ msgstr "Помилка у файлі архіву!"
 msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
 msgstr ""
 "Попередження! Виділений розмір %d буферу індексу менше використаного %d."
+
+msgid "Write to the archive '%s' file '%s' error: %s(%d)"
+msgstr "Помилка запису до архівного '%s' файлу '%s': %s(%d)"
 
 #, c-format
 msgid "Read file '%s' for offset %d error!"
@@ -368,10 +413,3 @@ msgstr "Помилка відкриття/створення нового фай
 msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 "Останнє значення актуального файлу архіву '%s' не EVAL. Спробую виправити це!"
-
-#~ msgid ""
-#~ "Write data block to the archive file '%s' error. Will structure break. "
-#~ "mSize=%d, foff_end=%d, vSize=%d"
-#~ msgstr ""
-#~ "Помилка запису блока до файлу архіву '%s'. Структуру буде зламано. mSize="
-#~ "%d, foff_end=%d, vSize=%d"

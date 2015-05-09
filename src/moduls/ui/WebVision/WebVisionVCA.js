@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -747,7 +747,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    case 1: spanStyle += 'vertical-align: bottom; ';	break;
 		    case 2: spanStyle += 'vertical-align: middle; ';	break;
 		}
-		spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
+		spanStyle += getFont(this.attrs['font'], Math.min(xSc,ySc));
 		spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
 		var txtVal = this.attrs['text'];
 		for(var i = 0; i < parseInt(this.attrs['numbArg']); i++) {
