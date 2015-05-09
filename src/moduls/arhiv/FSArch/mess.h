@@ -44,11 +44,12 @@ class MFileArch
 	MFileArch( ModMArch *owner );
 	MFileArch( const string &name, time_t beg, ModMArch *owner, const string &charset = "UTF-8", bool ixml = true);
 	~MFileArch( );
+	void delFile();
 
 	void attach( const string &name, bool full = true );
-	void put( TMess::SRec mess );
+	bool put( TMess::SRec mess );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo = 0 );
-	//> Write changes to Archive file
+	// Write changes to Archive file
 	//  free - surely free used memory
 	void check( bool free = false );
 
@@ -66,17 +67,17 @@ class MFileArch
 	bool	scan;		// Archive scaned (for check deleted files). Use from ModMArch
 
     private:
-	//> Cache methods
+	// Cache methods
 	long	cacheGet( time_t tm );
 	void	cacheSet( time_t tm, long off, bool last = false );
 	void	cacheUpdate( time_t tm, long v_add );
 
-	//> Base parameters
+	// Base parameters
 	string	mName;		// name Archive file;
 	bool	mXML;		// XML mode file
 	int	mSize;		// Archive size
-	string	mChars;	// Archive charset;
-	//> State parameters
+	string	mChars;		// Archive charset;
+	// State parameters
 	bool	mErr;		// Archive err
 	bool	mWrite;		// Archive had changed but no wrote to file
 	bool	mLoad;		// Archive load to mNode
@@ -84,17 +85,16 @@ class MFileArch
 	time_t	mAcces;		// last of time acces to Archive file
 	time_t	mBeg;		// begin Archive file;
 	time_t	mEnd;		// end Archive file;
-	//> XML-mode parametrs
+	// XML-mode parametrs
 	XMLNode	*mNode;		// XML-file tree
-	//> Cache parameters
-	struct CacheEl
-	{
+	// Cache parameters
+	struct CacheEl {
 	    time_t tm;
 	    long   off;
 	};
 	vector<CacheEl> cache;
 	CacheEl cach_pr;
-	//> Specific parameters
+	// Specific parameters
 	Res	mRes;		// resource to access;
 	ModMArch *mOwner;
     };

@@ -319,8 +319,8 @@ msgid "ERR -> '%s': %s"
 msgstr "Fehler -> '%s': %s"
 
 #, c-format
-msgid "13:Send_Receive_Cmd() error: %d."
-msgstr "13:Send_Receive_Cmd() Fehler: %d."
+msgid "13:Send_Receive_Cmd: error: %d."
+msgstr "13:Send_Receive_Cmd: Fehler: %d."
 
 msgid "Watchdog timeout (s)"
 msgstr "Zeit des Watchdogs (s)"

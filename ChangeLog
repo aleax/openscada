@@ -1,3 +1,13 @@
+2015-05-09 Roman
+- SYS: *.spec: Field "Release" set to template rNNNN.
+- DB: DB object's fields "DESCR" and "ADDR" size rose to 2000 and 1000, respectively.
+- !!:FIX:Archiver.FSArch: Free storage space lack checking added for prevent hang and data lost for messages and values.
+- FIX:DB.SQLite: Adapted to the keys description as the key position number.
+- DAQ.{DCON,ICP_DAS,ModBus}: Error messages expanded to addition different errors per tries.
+- Transport.Serial: Some expanded by debug messages and the minuteness.
+- UI.QTCfg: List element expanded horizontal to all page, for wide items.
+
+
 2015-05-06 Roman
 - UI.Vision: Default exporting set for the big (not lesser twice to main page) and the single documents or the diagram.
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1153,7 +1153,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    connect(lstbox, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(listBoxGo(QListWidgetItem*)));
 
 		lstbox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
-		lstbox->setMaximumWidth(300);
+		//lstbox->setMaximumWidth(300);
 
 		QVBoxLayout *vbox = new QVBoxLayout;
 		vbox->setAlignment(Qt::AlignLeft);
@@ -1991,7 +1991,7 @@ loadGenReqDate:
     editToolUpdate();
 }
 
-bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
+bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
 {
     bool str_ch = false;
 
@@ -2323,15 +2323,15 @@ void ConfApp::initHosts( )
 		{ nit = CtrTree->topLevelItem(i_top); break; }
 	if(!nit) nit = new QTreeWidgetItem(CtrTree);
 	if(stls[i_st] == SYS->id()) {
-	    nit->setText(0,trU(SYS->name(),w_user->user().toStdString()).c_str());
-	    nit->setText(1,_("Local station"));
-	    nit->setText(2,("/"+SYS->id()).c_str());
+	    nit->setText(0, trU(SYS->name(),w_user->user().toStdString()).c_str());
+	    nit->setText(1, _("Local station"));
+	    nit->setText(2, ("/"+SYS->id()).c_str());
 	}
 	else {
 	    TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toStdString(),stls[i_st]);
-	    nit->setText(0,trU(host.name,w_user->user().toStdString()).c_str());
-	    nit->setText(1,_("Remote station"));
-	    nit->setText(2,("/"+host.id).c_str());
+	    nit->setText(0, trU(host.name,w_user->user().toStdString()).c_str());
+	    nit->setText(1, _("Remote station"));
+	    nit->setText(2, ("/"+host.id).c_str());
 	}
 	//? Used for rechange status for fix indicator hide after all childs remove on bad connection
 	nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);

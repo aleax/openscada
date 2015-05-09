@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:31+0300\n"
+"POT-Creation-Date: 2015-05-07 11:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,7 +98,7 @@ msgid "Write: reply for zero bytes."
 msgstr ""
 
 #, c-format
-msgid "Write: error '%s (%d)'!"
+msgid "Write: error '%s (%d)'."
 msgstr ""
 
 msgid ""
@@ -165,6 +165,9 @@ msgstr ""
 msgid "Device '%s' is used now."
 msgstr ""
 
+msgid "Starting."
+msgstr ""
+
 msgid "Modem busy"
 msgstr ""
 
@@ -177,7 +180,14 @@ msgstr ""
 msgid "Modem no connected"
 msgstr ""
 
+msgid "Stopping."
+msgstr ""
+
 msgid "Transport is not started!"
+msgstr ""
+
+#, c-format
+msgid "Restart by KeepAliveTm %gs."
 msgstr ""
 
 msgid "Writing request error."
@@ -187,6 +197,10 @@ msgid "Timeouted!"
 msgstr ""
 
 msgid "Echo request reading error."
+msgstr ""
+
+#, c-format
+msgid "Read: error '%s (%d)'."
 msgstr ""
 
 msgid "Serial error!"

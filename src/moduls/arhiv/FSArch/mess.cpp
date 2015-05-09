@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <errno.h>
 #include <string.h>
 
 #include <tsys.h>
@@ -127,6 +128,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 
     if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
+    bool wrOK = true;
     for(unsigned i_m = 0; i_m < mess.size(); i_m++) {
 	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 	int i_arh;
@@ -135,9 +137,10 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 		if(mess[i_m].time > arh_s[i_arh]->end() &&
 		    ((mMaxSize && i_arh == 0 && arh_s[i_arh]->size() > mMaxSize*1024) ||
 		    (mess[i_m].time >= arh_s[i_arh]->begin()+mTimeSize*24*60*60))) break;
-		try{ arh_s[i_arh]->put(mess[i_m]); }
-		catch(TError err)
-		{ mess_err(err.cat.c_str(),err.mess.c_str()); continue; }
+		try {
+		    wrOK = arh_s[i_arh]->put(mess[i_m]) && wrOK;
+		}
+		catch(TError err) { mess_err(err.cat.c_str(),err.mess.c_str()); continue; }
 		i_arh = -1;
 		break;
 	    }
@@ -153,9 +156,16 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 	    string f_name = TSYS::time2str(f_beg,"/%F %T.msg");
 	    try {
 		MFileArch *f_obj = new MFileArch(addr()+f_name, f_beg, this, Mess->charset(), useXML());
+		//Remove new error created file mostly by store space lack
+		if(f_obj->err()) {
+		    f_obj->delFile();
+		    delete f_obj;
+		    return false;
+		}
+
 		if(i_arh == (int)arh_s.size()) arh_s.push_back(f_obj);
-		else if(i_arh < (int)arh_s.size()) arh_s.insert(arh_s.begin()+i_arh,f_obj);
-		else return true;
+		else if(i_arh < (int)arh_s.size()) arh_s.insert(arh_s.begin()+i_arh, f_obj);
+		else { delete f_obj; return true; }
 	    }
 	    catch(TError err) {
 		mess_crit(nodePath().c_str(),_("Error create new archive file '%s'!"),(addr()+f_name).c_str() );
@@ -163,12 +173,12 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 	    }
 	    // Allow parallel read access
 	    res.request(false);
-	    arh_s[i_arh]->put(mess[i_m]);
+	    wrOK = arh_s[i_arh]->put(mess[i_m]) && wrOK;
 	}
     }
     tmCalc = TSYS::curTime()-t_cnt;
 
-    return true;
+    return wrOK;
 }
 
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
@@ -264,13 +274,10 @@ void ModMArch::checkArchivator( bool now )
 		// Delete oldest files
 		for(int i_arh = arh_s.size()-1; i_arh >= 0; i_arh--)
 		    if(f_cnt <= mNumbFiles)	break;
-		    else if(!arh_s[i_arh]->err())
-		    {
-			string f_nm = arh_s[i_arh]->name();	//Deleted file name
+		    else if(!arh_s[i_arh]->err()) {
+			arh_s[i_arh]->delFile();
 			delete arh_s[i_arh];
-			arh_s.erase(arh_s.begin() + i_arh);
-			remove(f_nm.c_str());
-			remove((f_nm+".info").c_str());
+			arh_s.erase(arh_s.begin()+i_arh);
 			f_cnt--;
 		    }
 	    }
@@ -399,7 +406,11 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     cach_pr.tm = cach_pr.off = 0;
 
     int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
-    if(hd <= 0) throw TError(owner().nodePath().c_str(),_("Can not create file: '%s'!"),name().c_str());
+    if(hd <= 0) {
+	mess_err(owner().nodePath().c_str(), _("File '%s' creation error: %s(%d)."), name().c_str(), strerror(errno), errno);
+	mErr = true;
+	return;
+    }
     bool fOK = true;
 
     if(xmlM()) {
@@ -422,10 +433,12 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
 	fOK = (write(hd,s_buf,strlen(s_buf)) == (int)strlen(s_buf));
     }
     close(hd);
-    if(!fOK) throw TError(owner().nodePath().c_str(), _("Write to file '%s' error"), name().c_str());
-
-    mLoad = true;
-    mAcces = time(NULL);
+    //if(!fOK) throw TError(owner().nodePath().c_str(), _("Write to file '%s' error"), name().c_str());
+    if(fOK) {
+	mLoad = true;
+	mAcces = time(NULL);
+    }
+    else mErr = true;
 }
 
 MFileArch::~MFileArch( )
@@ -433,6 +446,14 @@ MFileArch::~MFileArch( )
     check();	//Check XML-archive
 
     if(mNode) delete mNode;
+}
+
+void MFileArch::delFile( )
+{
+    ResAlloc res(mRes, true);
+    remove(name().c_str());
+    remove((name()+".info").c_str());
+    mErr = true;
 }
 
 void MFileArch::attach( const string &iname, bool full )
@@ -593,7 +614,7 @@ void MFileArch::attach( const string &iname, bool full )
     }
 }
 
-void MFileArch::put( TMess::SRec mess )
+bool MFileArch::put( TMess::SRec mess )
 {
     if(mErr) throw TError(owner().nodePath().c_str(),_("Inserting message to an error Archive file!"));
 
@@ -622,7 +643,7 @@ void MFileArch::put( TMess::SRec mess )
 	    if(xTm > mess.time)	break;
 	    else if(owner().prevDbl() && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime &&
 		    xIt->attr("cat") == mess.categ && xIt->text() == mess.mess)
-		return;
+		return true;
 	}
 
 	XMLNode *cl_node = mNode->childIns(i_ch,"m");
@@ -636,6 +657,7 @@ void MFileArch::put( TMess::SRec mess )
 	    mNode->setAttr("End",i2s(mEnd,TSYS::Hex));
 	}
 	mWrite = true;
+	return true;
     }
     else {
 	unsigned int tTm;
@@ -646,7 +668,7 @@ void MFileArch::put( TMess::SRec mess )
 	if(!mess.mess.size())	mess.mess = " ";
 	//Open file
 	FILE *f = fopen(mName.c_str(), "r+");
-	if(f == NULL) { mErr = true; return; }
+	if(f == NULL) { mErr = true; return false; }
 	bool fOK = true;
 
 	//Prepare mess
@@ -663,7 +685,7 @@ void MFileArch::put( TMess::SRec mess )
 	    while((fOK=fOK&&(fgets(buf,sizeof(buf),f)!=NULL))) {
 		sscanf(buf, "%x %*d", &tTm);
 		if((int)tTm > mess.time) { mv_beg = ftell(f)-strlen(buf); break; }
-		if((int)tTm == mess.time && s_buf == buf) { fclose(f); return; }
+		if((int)tTm == mess.time && s_buf == buf) { fclose(f); return true; }
 	    }
 	    fseek(f, 0, SEEK_SET);
 	}
@@ -727,8 +749,12 @@ void MFileArch::put( TMess::SRec mess )
 	fseek(f, 0, SEEK_END);
 	mSize = ftell(f);
 	fclose(f);
-	if(!fOK) mess_err(mod->nodePath().c_str(), _("File access to '%s' error."), mName.c_str());
+	if(!fOK) mess_err(owner().nodePath().c_str(), _("Write to the archive file '%s' error: %s(%d)"), mName.c_str(), strerror(errno), errno);
+
+	return fOK;
     }
+
+    return true;
 }
 
 void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
@@ -755,16 +781,14 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
     TRegExp re(category, "p");
 
     if(xmlM()) {
-	for(unsigned i_ch = 0; i_ch < mNode->childSize() && time(NULL) < upTo; i_ch++)
-	{
+	for(unsigned i_ch = 0; i_ch < mNode->childSize() && time(NULL) < upTo; i_ch++) {
 	    //Find messages
 	    b_rec.time  = strtol(mNode->childGet(i_ch)->attr("tm").c_str(), (char**)NULL, 16);
 	    b_rec.utime  = s2i(mNode->childGet(i_ch)->attr("tmu"));
 	    b_rec.categ = mNode->childGet(i_ch)->attr("cat");
 	    b_rec.level = (TMess::Type)s2i(mNode->childGet(i_ch)->attr("lv"));
 	    b_rec.mess  = mNode->childGet(i_ch)->text();
-	    if(b_rec.time >= b_tm && b_rec.time <= e_tm && abs(b_rec.level) >= level && re.test(b_rec.categ))
-	    {
+	    if(b_rec.time >= b_tm && b_rec.time <= e_tm && abs(b_rec.level) >= level && re.test(b_rec.categ)) {
 		bool equal = false;
 		int i_p = mess.size();
 		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {
@@ -864,8 +888,7 @@ void MFileArch::check( bool free )
 	    c_el.cfg("PRM2").setS(i2s(xmlM()));
 	    SYS->db().at().dataSet(mod->filesDB(), mod->nodePath()+"Pack/", c_el, false, true);
 	}
-	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0)
-	{
+	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0) {
 	    // Write info to info file
 	    string si = TSYS::strMess("%lx %lx %s %d",begin(),end(),charset().c_str(),xmlM());
 	    if(write(hd,si.data(),si.size()) != (int)si.size())

@@ -233,8 +233,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     cf.cfg("TMU").setI(itm%1000000);
     if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cf,false,true)) {
 	if(tm) *tm = itm;
-	switch(archive().valType())
-	{
+	switch(archive().valType()) {
 	    case TFld::Boolean:	return (char)cf.cfg("VAL").getI();
 	    case TFld::Integer:	return cf.cfg("VAL").getI();
 	    case TFld::Real:	return cf.cfg("VAL").getR();
@@ -266,8 +265,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 
     //Write data to table
     for(int64_t ctm; beg <= end; beg++) {
-	switch(archive().valType())
-	{
+	switch(archive().valType()) {
 	    case TFld::Boolean:	cfg.cfg("VAL").setI(buf.getB(&beg,true));	break;
 	    case TFld::Integer:	cfg.cfg("VAL").setI(buf.getI(&beg,true));	break;
 	    case TFld::Real:	cfg.cfg("VAL").setR(buf.getR(&beg,true));	break;
@@ -286,8 +284,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     //Archive size limit process
     if((mEnd-mBeg) > (int64_t)(archivator().maxSize()*3600e6)) {
 	int64_t n_end = ((mEnd-(int64_t)(archivator().maxSize()*3600e6))/period())*period();
-	for(int64_t t_c = vmax(mBeg,n_end-3600ll*period()); t_c < n_end; t_c += period())
-	{
+	for(int64_t t_c = vmax(mBeg,n_end-3600ll*period()); t_c < n_end; t_c += period()) {
 	    cfg.cfg("TM").setI(t_c/1000000, true);
 	    cfg.cfg("TMU").setI(t_c%1000000, true);
 	    tbl.at().fieldDel(cfg);

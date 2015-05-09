@@ -727,11 +727,13 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 
     //Put values to files
     ResAlloc res(mRes, true);
+    bool wrOK = true, wrCurOK = false;	//check for all writes OK else repeate
     for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
 	if(!arh_f[i_a]->err() && beg <= end) {
 	    // Create new file for old data
 	    if(beg < arh_f[i_a]->begin()) {
 		if(!mChecked)	return false;	//Wait for checking
+
 		//  Calc file limits
 		int64_t n_end, n_beg;	//New file end position
 		if((arh_f[i_a]->begin()-beg) > f_sz) n_end = beg+f_sz;
@@ -742,22 +744,30 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 		char c_buf[30];
 		time_t tm = n_beg/1000000;
 		struct tm tm_tm;
-		localtime_r(&tm,&tm_tm);
-		strftime(c_buf,sizeof(c_buf)," %F %T.val",&tm_tm);
+		localtime_r(&tm, &tm_tm);
+		strftime(c_buf, sizeof(c_buf)," %F %T.val",&tm_tm);
 		string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
 		arh_f.insert(arh_f.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
+		//Remove new error created file mostly by store space lack
+		if(arh_f[i_a]->err()) {
+		    arh_f[i_a]->delFile();
+		    delete arh_f[i_a];
+		    arh_f.erase(arh_f.begin()+i_a);
+		    return false;
+		}
 	    }
 
-	    // Insert values to archive
+	    // Insert values to the archive
 	    if(beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin()) {
 		int64_t n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
 		res.release();
-		arh_f[i_a]->setVals(buf,beg,n_end);
-		beg = n_end+v_per;
+		if((wrCurOK=arh_f[i_a]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
+		wrOK = wrOK && wrCurOK;
+		beg = n_end + v_per;
 		res.request(true);
 	    }
-	    b_prev = arh_f[i_a]->end()+v_per;
+	    b_prev = arh_f[i_a]->end() + v_per;
 	}
     //Create new file for new data
     while(end >= beg) {
@@ -771,16 +781,22 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 
 	int64_t n_end = beg + f_sz;
 	arh_f.push_back(new VFileArch(AName,beg,n_end,v_per,archive().valType(true),this));
+	//Remove new error created file mostly by store space lack
+	if(arh_f.back()->err()) {
+	    arh_f.back()->delFile();
+	    delete arh_f.back();
+	    arh_f.pop_back();
+	    return false;
+	}
 	n_end = (end > n_end) ? n_end : end;
 
 	res.release();
-	arh_f[arh_f.size()-1]->setVals(buf,beg,n_end);
-	beg = n_end+v_per;
+	if((wrCurOK=arh_f[arh_f.size()-1]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
+	wrOK = wrOK && wrCurOK;
+	beg = n_end + v_per;
     }
 
-    realEnd = vmax(realEnd, end);
-
-    return true;
+    return wrOK;
 }
 
 //*************************************************
@@ -790,14 +806,14 @@ string VFileArch::afl_id = "OpenSCADA Val Arch.";
 
 VFileArch::VFileArch( ModVArchEl *owner ) :
     mSize(0), mTp(TFld::Real), mBeg(0), mEnd(0), mPer(1000000), mErr(true), mPack(false),
-    fixVl(true), vSize(sizeof(double)), mpos(0), mOwner(owner)
+    fixVl(true), vSize(sizeof(double)), mpos(0), intoRep(false), mOwner(owner)
 {
     cach_pr_rd.pos = cach_pr_rd.off = cach_pr_wr.pos = cach_pr_wr.off = 0;
     mAcces = time(NULL);
 }
 
 VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t iper, TFld::Type itp, ModVArchEl *iowner) :
-    mName(iname), mSize(0), mTp(itp), mBeg(ibeg), mEnd(iend), mPer(iper), mErr(false), mPack(false), mOwner(iowner)
+    mName(iname), mSize(0), mTp(itp), mBeg(ibeg), mEnd(iend), mPer(iper), mErr(false), mPack(false), intoRep(false), mOwner(iowner)
 {
     char buf[1000];
     cach_pr_rd.pos = cach_pr_rd.off = cach_pr_wr.pos = cach_pr_wr.off = 0;
@@ -808,7 +824,11 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 
     //Open/create new archive file
     int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
-    if(hd <= 0) throw TError(owner().archivator().nodePath().c_str(),_("Can not create file: '%s'!"),name().c_str());
+    if(hd <= 0) {
+	mess_err(owner().archivator().nodePath().c_str(), _("File '%s' creation error: %s(%d)."), name().c_str(), strerror(errno), errno);
+	mErr = true;
+	return;
+    }
     bool fOK = true;
 
     //Prepare and write the file archive header
@@ -947,6 +967,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     mSize = lseek(hd, 0, SEEK_END);
     close(hd);
     mAcces = time(NULL);
+    mErr = !fOK;
 }
 
 VFileArch::~VFileArch( )	{ }
@@ -955,7 +976,7 @@ void VFileArch::delFile( )
 {
     ResAlloc res(mRes, true);
     remove(name().c_str());
-    remove((name()+(isPack()?".info":".gz.info")).c_str());
+    remove((name()+".info").c_str());
     mErr = true;
 }
 
@@ -1151,7 +1172,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     char *pid_b, *val_b = NULL;
 
     ResAlloc res(mRes, false);
-    if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
+    if(mErr) throw TError(owner().archivator().nodePath().c_str(), _("Archive file error!"));
 
     //Get values block character
     vpos_beg = vmax(0, (beg-begin())/period());
@@ -1347,23 +1368,24 @@ TVariant VFileArch::getVal( int vpos )
     return EVAL_REAL;
 }
 
-void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
+bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     int vpos_beg, vpos_end;
     string val_b, value, value_first, value_end;	//Set value
 
     ResAlloc res(mRes, false);
-    if(mErr) throw TError(owner().archivator().nodePath().c_str(), _("Archive file error!"));
+    if(mErr) return false;	//throw TError(owner().archivator().nodePath().c_str(), _("Archive file error!"));
 
     ibeg = vmax(ibeg, begin());
     iend = vmin(iend, end());
-    if(ibeg > iend)	return;
+    if(ibeg > iend) return false;
 
     mAcces = time(NULL);
 
     if(mPack) {
 	res.request(true);
-	try { mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
+	try { mName = mod->unPackArch(mName); } catch(TError)
+	{ mErr = true; return false; /*throw;*/ }
 	mPack = false;
 	res.request(false);
     }
@@ -1456,7 +1478,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     res.request(true);
     //Open archive file
     int hd = open(name().c_str(), O_RDWR);
-    if(hd <= 0) { mErr = true; return; }
+    if(hd <= 0) { mErr = true; return false; }
     bool fOK = true;
 
     //Get block geometry from file
@@ -1523,7 +1545,12 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	    }
 	}
     }
-    //Write pack id buffer and value buffer
+    //Write the values buffer before for writability and allowed store space detect
+    moveTail(hd, foff_end, foff_end+(val_b.size()-(foff_end-foff_beg)));
+    lseek(hd, foff_beg, SEEK_SET);
+    fOK = fOK && (write(hd,val_b.data(),val_b.size()) == (int)val_b.size());
+
+    //Write the pack id buffer
     int pid_b_sz;
     if(fixVl) {
 	lseek(hd, sizeof(FHead)+vpos_beg/8, SEEK_SET);
@@ -1536,9 +1563,6 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     if((int)pid_b.size() < pid_b_sz)
 	mess_err(mod->nodePath().c_str(),_("Warning! Allocated buffer size %d for indexes lesser for used %d."),pid_b.size(),pid_b_sz);
     fOK = fOK && (write(hd,pid_b.data(),pid_b_sz) == pid_b_sz);
-    moveTail(hd, foff_end, foff_end+(val_b.size()-(foff_end-foff_beg)));
-    lseek(hd, foff_beg, SEEK_SET);
-    fOK = fOK && (write(hd,val_b.data(),val_b.size()) == (int)val_b.size());
 
     //Drop cache, before any owner().end() call by the cache using
     cacheDrop(vpos_beg);
@@ -1552,6 +1576,11 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     mSize = lseek(hd, 0, SEEK_END);
 
     close(hd);
+
+    if(!fOK) mess_err(owner().archivator().nodePath().c_str(), _("Write to the archive '%s' file '%s' error: %s(%d)"),
+			owner().archive().id().c_str(), name().c_str(), strerror(errno), errno);
+
+    return fOK;
 }
 
 string VFileArch::getValue( int hd, int voff, int vsz )
@@ -1568,7 +1597,10 @@ string VFileArch::getValue( int hd, int voff, int vsz )
 		get_vl.append((char *)&tbt,sizeof(char));
     }
 
-    if(!fOK) mess_err(mod->nodePath().c_str(), _("Read file '%s' for offset %d error!"), mName.c_str(), voff);
+    if(!fOK) {
+	mess_err(mod->nodePath().c_str(), _("Read file '%s' for offset %d error!"), mName.c_str(), voff);
+	if(!intoRep) repairFile(hd);
+    }
 
     return get_vl;
 }
@@ -1757,6 +1789,10 @@ void VFileArch::repairFile( int hd )
 {
     if(mPack)	return;
 
+    intoRep = true;
+
+    cacheDrop(0);
+
     bool fOK = true;
     int vSz, lstMpos,
 	fSz = lseek(hd, 0, SEEK_END),
@@ -1821,6 +1857,8 @@ void VFileArch::repairFile( int hd )
 	}
 	cacheDrop(0);
     }
+
+    intoRep = false;
 }
 
 int VFileArch::cacheGet( int &pos, int *vsz )

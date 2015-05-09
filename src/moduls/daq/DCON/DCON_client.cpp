@@ -267,7 +267,12 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
 		    rez.append(buf, resp_len);
 		}
-	    } catch(TError er) { err = _("10:Transport error: ")+er.mess; continue; }	//By possible the send request breakdown and no response
+	    }
+	    catch(TError er) {	//By possible the send request breakdown and no response
+		if(err.empty()) err = _("10:Transport error: ") + er.mess;
+		else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		continue;
+	    }
 	    if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
 	    pdu = rez.substr(0,rez.size()-1);
 	    if(!pdu.size() || (CRC && pdu.size() < 3)) { err = _("20:Respond length error."); break; }

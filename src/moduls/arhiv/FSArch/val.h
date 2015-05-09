@@ -60,7 +60,7 @@ class VFileArch
 	bool	err( )		{ return mErr; }
 	bool	isPack( )	{ return mPack; }
 
-	void	setVals( TValBuf &buf, int64_t beg, int64_t end );
+	bool	setVals( TValBuf &buf, int64_t beg, int64_t end );
 	void	getVals( TValBuf &buf, int64_t beg, int64_t end );
 	TVariant getVal( int pos );
 
@@ -122,6 +122,7 @@ class VFileArch
 	string	eVal;		//Eval data type value
 	int	mpos;		//Maximum value position into file
 	char	tbt;		//Temporary byte
+	bool	intoRep;	//Into repaire
 
 	// Cache parameters
 	struct CacheEl {

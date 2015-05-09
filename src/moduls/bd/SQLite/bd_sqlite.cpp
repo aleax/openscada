@@ -321,7 +321,7 @@ void MTable::fieldStruct( TConfig &cfg )
 	string sid = tblStrct[i_fld][1];
 	if(cfg.cfgPresent(sid)) continue;
 
-	int flg = (tblStrct[i_fld][5] == "1") ? (int)TCfg::Key : (int)TFld::NoFlag;
+	int flg = s2i(tblStrct[i_fld][5]) ? (int)TCfg::Key : (int)TFld::NoFlag;
 	if(tblStrct[i_fld][2] == "TEXT")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
 	else if(tblStrct[i_fld][2] == "INTEGER")
@@ -601,7 +601,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    crtReq += (next?",\"":"\"") + mod->sqlReqCode(tblStrct[i_fld][1],'"') + "\" "+
 		tblStrct[i_fld][2]+" DEFAULT " + tblStrct[i_fld][4] + " ";
 	    next = true;
-	    if(tblStrct[i_fld][5] == "1") {
+	    if(s2i(tblStrct[i_fld][5])) {
 		pr_keys += (next_key?",\"":"\"") + mod->sqlReqCode(tblStrct[i_fld][1],'"') + "\"";
 		next_key = true;
 	    }

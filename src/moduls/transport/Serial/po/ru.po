@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:31+0300\n"
+"POT-Creation-Date: 2015-05-07 11:59+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -100,9 +100,8 @@ msgstr "Serial ответил сообщением '%d'."
 msgid "Write: reply for zero bytes."
 msgstr "Запись: ответ ноль байт."
 
-#, c-format
-msgid "Write: error '%s (%d)'!"
-msgstr "Запись: ошибка '%s (%d)'!"
+msgid "Write: error '%s (%d)'."
+msgstr "Запись: ошибка '%s (%d)'."
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
@@ -192,6 +191,9 @@ msgstr "Трафик входящий %s, исходящий %s. "
 msgid "Device '%s' is used now."
 msgstr "Устройство '%s' использовано сейчас."
 
+msgid "Starting."
+msgstr "Запуск."
+
 msgid "Modem busy"
 msgstr "Модем занят"
 
@@ -204,8 +206,15 @@ msgstr "Модем, нет гудка"
 msgid "Modem no connected"
 msgstr "Модем не подключился"
 
+msgid "Stopping."
+msgstr "Останов."
+
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
+
+#, c-format
+msgid "Restart by KeepAliveTm %gs."
+msgstr "Перезапуск по KeepAliveTm %gс."
 
 msgid "Writing request error."
 msgstr "Ошибка отправки запроса."
@@ -215,6 +224,9 @@ msgstr "Время исчерпано!"
 
 msgid "Echo request reading error."
 msgstr "Ошибка чтения эхо запроса."
+
+msgid "Read: error '%s (%d)'."
+msgstr "Чтение: ошибка '%s (%d)'."
 
 msgid "Serial error!"
 msgstr "Ошибка последовательного интерфейса!"

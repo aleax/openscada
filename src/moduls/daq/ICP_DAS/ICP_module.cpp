@@ -367,7 +367,12 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 			try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
 			rez.append(buf, resp_len);
 		    }
-		} catch(TError er) { err = "10:" + er.mess; continue; } //By possible the send request breakdown and no response
+		}
+		catch(TError er) {	//By possible the send request breakdown and no response
+		    if(err.empty()) err = "10:" + er.mess;
+		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		    continue;
+		}
 		if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
 		rez = rez.substr(0,rez.size()-1);
 		if(CRC) {
@@ -397,7 +402,7 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 	    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("RESP -> '%s'"), szReceive);
 	    return szReceive;
 	}
-	else err = TSYS::strMess(_("13:Send_Receive_Cmd() error: %d."), rez);
+	else err = TSYS::strMess(_("13:Send_Receive_Cmd: error: %d."), rez);
 
     if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("ERR -> '%s': %s"), szReceive, err.c_str());
 

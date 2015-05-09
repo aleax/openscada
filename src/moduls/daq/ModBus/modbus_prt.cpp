@@ -308,7 +308,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
 			rez.append(buf, resp_len);
 		    }
-		} catch(TError er) { err = _("14:Device error: ") + er.mess; continue; } //By possible the send request breakdown and no response
+		}
+		catch(TError er) {	//By possible the send request breakdown and no response
+		    if(err.empty()) err = _("14:Device error: ") + er.mess;
+		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		    continue;
+		}
 
 		if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
 		if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
@@ -335,7 +340,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
 			rez.append(buf, resp_len);
 		    }
-		} catch(TError er) { err = _("14:Device error: ") + er.mess; continue; } //By possible the send request breakdown and no response
+		}
+		catch(TError er) {	//By possible the send request breakdown and no response
+		    if(err.empty()) err = _("14:Device error: ") + er.mess;
+		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		    continue;
+		}
 
 		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\x0D\x0A")
 		{ err = _("13:Error respond: Error format."); continue; }

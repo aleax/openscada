@@ -325,8 +325,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     if((res=PQexec(connection,req.c_str())) == NULL)
 	throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
-    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK)
-    {
+    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 	string  err = PQresStatus(PQresultStatus(res)),
 		err1 = PQresultErrorMessage(res);
 	PQclear(res);
