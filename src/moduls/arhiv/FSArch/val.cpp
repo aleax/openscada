@@ -649,14 +649,11 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
 	for(int i_arh = 0; i_arh < (int)files.size()-1; ) {	//Up to last fresh
 	    if(!(files.size() > ((ModVArch &)archivator()).numbFiles() || cpctLim))	break;
 	    else if(!files[i_arh]->err()) {
-		string f_nm = files[i_arh]->name();
+		if(mess_lev() == TMess::Debug) mess_debug(archive().nodePath().c_str(), "Remove file '%s' by limit.", files[i_arh]->name().c_str());
+		files[i_arh]->delFile();
 		delete files[i_arh];
 		files.erase(files.begin() + i_arh);
 
-		if(mess_lev() == TMess::Debug) mess_debug(archive().nodePath().c_str(), "Remove file '%s' by limit.", f_nm.c_str());
-
-		remove(f_nm.c_str());
-		remove((f_nm+".info").c_str());
 		if(cpctLim) break;
 		continue;
 	    }

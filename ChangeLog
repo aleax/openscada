@@ -1,3 +1,9 @@
+2015-05-11 Roman
+- Archiver.FSArch: Yet one place using delFile() set.
+- DAQ.{DAQGate,JavaLikeCalc,OPC_UA,SoundCard}: Some translations fixed.
+- FIX:UI.VCAEngine: Link to widget's attribute from the wiget by "wdg:a_XXX" prevented from crash into generic status.
+
+
 2015-05-09 Roman
 - !!:FIX:Archiver.FSArch: Removing *.info files for different pack mode is fixed.
     Tab "Files" is added for the messages and the values with information about the archive's files.
@@ -225,7 +231,7 @@
     Last real value getting from active archives some expanded for unmerged EVAL values pass.
     Full tests chain passed for the packing mechanism.
 - FIX:Special.SystemTests: Tests "Archive" mostly fixed and some expanded.
-- UI.QTCfg: Fixed for LineEdit view "Integer" to allowed values limit [147483647:2147483647]
+- UI.QTCfg: Fixed for LineEdit view "Integer" to allowed values limit [-2147483647:2147483647]
 
 
 2015-03-13 Roman

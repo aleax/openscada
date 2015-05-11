@@ -689,7 +689,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
 		    case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:
 			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
-			    arr->arSet(iEl, (int64_t)atoll(vEl.c_str()));
+			    arr->arSet(iEl, (int64_t)s2ll(vEl));
 			break;
 		    case OpcUa_Float: case OpcUa_Double:
 			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)

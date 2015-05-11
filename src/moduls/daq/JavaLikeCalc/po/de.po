@@ -58,9 +58,8 @@ msgstr "Funktion Ausführung abgebrochen durch Fehler"
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr "Zeitüberschreitung Berechnung der Funktion %d > %d+%d"
 
-#, fuzzy, c-format
 msgid "Not supported type %d for operation 'Add'."
-msgstr "Typ wird nicht unterstützt für Operation 'Add' (Hinzufügen)."
+msgstr "Nicht unterstützt Typ %d für den Betrieb auf 'Hinzufügen'."
 
 msgid "Call object's function for no object or function name is empty."
 msgstr "Funktion ruft kein Objekt auf oder Funktionsname ist leer."
@@ -152,13 +151,12 @@ msgstr "Rechner in Java-ähnlicher Sprache"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#, fuzzy
 msgid ""
 "Provides based on java like language calculator and engine of libraries.  "
 "The user can create and modify functions and libraries."
 msgstr ""
-"Java-ähnlicher Rechner und Bibliotheken. Der Benutzer kann Funktionen und "
-"Bibliotheken erstellen und modifizieren."
+"Bietet auf Basis von Java ähnlichen Sprache Rechner und Motor der Bibliotheken. "
+"Der Anwender kann erstellen und Funktionen und Bibliotheken zu modifizieren."
 
 msgid "Parameters table"
 msgstr "Tabelle der Parameter"

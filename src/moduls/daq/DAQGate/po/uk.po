@@ -21,12 +21,11 @@ msgstr "Шлюз джерел даних"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#, fuzzy
 msgid ""
 "Allows you to perform the locking of the data sources of the remote "
 "OpenSCADA stations in the local ones."
 msgstr ""
-"Дозволяє шлюзувати джерела даних віддалених OpenSCADA станцій до локальних."
+"Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій до локальних."
 
 msgid "Parameters cache table"
 msgstr "Таблиця кеша параметрів"

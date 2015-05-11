@@ -26,11 +26,10 @@ msgstr "OpenSCADA Datenquellen"
 msgid "Roman Savochenko"
 msgstr "Roman Savotscheko"
 
-#, fuzzy
 msgid ""
 "Allows you to perform the locking of the data sources of the remote "
 "OpenSCADA stations in the local ones."
-msgstr "Verbindung mit Datenquellen von entfernten OpenSCADA-Stationen."
+msgstr "Hier können Sie die Verriegelung der Datenquellen der Fern OpenSCADA Stationen in der lokalen diejenigen durchzuführen."
 
 msgid "Parameters cache table"
 msgstr "Einflussgrößen Cache-Tabelle"

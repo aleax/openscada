@@ -1241,9 +1241,10 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	    bool custom = false, lnkOK = false;
 	    if(obj_tp == "prm:" || obj_tp == "wdg:") {
-		if((obj_tp == "prm:" && !SYS->daq().at().attrAt(cfg_val.substr(4),0,true).freeStat()) ||
-		    (obj_tp == "wdg:" && !srcwdg.at().attrAt(cfg_val.substr(4),0).freeStat()))
-		    { cfg_val.resize(cfg_val.rfind("/")); lnkOK = true; }
+		if(cfg_val.rfind("/") != string::npos &&
+		    ((obj_tp == "prm:" && !SYS->daq().at().attrAt(cfg_val.substr(4),0,true).freeStat()) ||
+		    (obj_tp == "wdg:" && !srcwdg.at().attrAt(cfg_val.substr(4),0).freeStat())))
+		{ cfg_val.resize(cfg_val.rfind("/")); lnkOK = true; }
 	    }else custom = true;
 
 	    string sel;
