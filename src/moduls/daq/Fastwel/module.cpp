@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.0.2"
+#define MOD_VER		"0.1.0"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -656,36 +656,31 @@ void TMdPrm::enable()
 		    break;
 		}
 		break;
-	    case FIO_MODULE_UNKNOWN:
+	    case FIO_MODULE_AIM791:
+		nAI = 8;
+		owner().ReadConfig(mID);
+		owner().GetNodeSpecificParameters(mID, mModConfig, 0, mModDesc.specificRwSize);
+		pConfig7912 = (AIM7912_CONFIGURATION *) mModConfig;
+		for(unsigned i_p = 0; i_p < nAI; i_p++) {
+		    if(pConfig7912->channelRanges[i_p] != cfg("AI_RANGE").getI()) {
+			fConfig = true;
+			pConfig7912->channelRanges[i_p] = cfg("AI_RANGE").getI();
+		    }
+		}
 
-		if(mTypeName == "AIM791") {
-		    nAI = 8;
-		    owner().ReadConfig(mID);
-		    owner().GetNodeSpecificParameters(mID, mModConfig, 0, mModDesc.specificRwSize);
-		    pConfig7912 = (AIM7912_CONFIGURATION *) mModConfig;
-		    for(unsigned i_p = 0; i_p < nAI; i_p++) {
-			if(pConfig7912->channelRanges[i_p] != cfg("AI_RANGE").getI()) {
-			    fConfig = true;
-			    pConfig7912->channelRanges[i_p] = cfg("AI_RANGE").getI();
-			}
-		    }
-
-		    switch (cfg("AI_RANGE").getI()) {
-		    case 0:
-			kAI = 5.125 / 65535;
-			break;
-		    case 1:
-		    case 2:
-			kAI = 20.5 / 65535;
-			break;
-		    }
-		    for(unsigned i_p = 0; i_p < nAI; i_p++) {
-			p_el.
-			    fldAdd(new
-				   TFld(TSYS::strMess("AI%d", i_p).c_str(),
-					TSYS::strMess("AI%d", i_p).c_str(), TFld::Double,
-					TFld::NoWrite | TVal::DirRead, "", "", "", "", ""));
-		    }
+		switch(cfg("AI_RANGE").getI()) {
+		case 0:
+		    kAI = 5.125 / 65535;
+		    break;
+		case 1:
+		case 2:
+		    kAI = 20.5 / 65535;
+		    break;
+		}
+		for(unsigned i_p = 0; i_p < nAI; i_p++) {
+		    p_el.fldAdd(
+			    new TFld(TSYS::strMess("AI%d", i_p).c_str(), TSYS::strMess("AI%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "",
+				    "", "", "", ""));
 		}
 		break;
 
@@ -781,24 +776,21 @@ int TMdPrm::getVals()
 		vlAt("C1").at().setI((((DIM_INPUTS_COUNTERS *) buf)->counter1), 0, true);
 		break;
 	    case FIO_MODULE_AIM726:
-		vlAt(TSYS::strMess("AI0").c_str()).at().setR(((AIM72X_2_INPUTS *) buf)->input0 *
+		vlAt(TSYS::strMess("AI0").c_str()).at().setR(((AIM726_INPUTS *) buf)->input0 *
 							     kAI, 0, true);
-		vlAt(TSYS::strMess("AI1").c_str()).at().setR(((AIM72X_2_INPUTS *) buf)->input1 *
+		vlAt(TSYS::strMess("AI1").c_str()).at().setR(((AIM726_INPUTS *) buf)->input1 *
 							     kAI, 0, true);
 
 		break;
 	    case FIO_MODULE_AIM730:
-		vlAt(TSYS::strMess("AO0").c_str()).at().setR(((AIM73X_INPUTS *) buf)->outputValue0 *
+		vlAt(TSYS::strMess("AO0").c_str()).at().setR(((AIM730_INPUTS *) buf)->outputValue0 *
 							     kAO + dAO, 0, true);
-		vlAt(TSYS::strMess("AO1").c_str()).at().setR(((AIM73X_INPUTS *) buf)->outputValue1 *
+		vlAt(TSYS::strMess("AO1").c_str()).at().setR(((AIM730_INPUTS *) buf)->outputValue1 *
 							     kAO + dAO, 0, true);
 		break;
-	    case FIO_MODULE_UNKNOWN:
-		if(mTypeName == "AIM791") {
-		    for(unsigned i_p = 0; i_p < nAI; i_p++) {
-			vlAt(TSYS::strMess("AI%d", i_p).c_str()).at().
-			    setR(((AIM7912_INPUTS *) buf)->values[i_p] * kAI, 0, true);
-		    }
+	    case FIO_MODULE_AIM791:
+		for(unsigned i_p = 0; i_p < nAI; i_p++) {
+		    vlAt(TSYS::strMess("AI%d", i_p).c_str()).at().setR(((AIM791_INPUTS *) buf)->values[i_p] * kAI, 0, true);
 		}
 		break;
 
@@ -813,8 +805,10 @@ void TMdPrm::vlSet(TVal & vo, const TVariant & vl, const TVariant & pvl)
 {
     uint8_t buf[256];
     uint16_t i;
-    if(!enableStat() || !owner().startStat())
+    if(!enableStat() || !owner().startStat()) {
 	vo.setS(EVAL_STR, 0, true);
+	return;
+    }
 
     if(vl.isEVal() || vl == pvl)
 	return;
@@ -849,19 +843,19 @@ void TMdPrm::vlSet(TVal & vo, const TVariant & vl, const TVariant & pvl)
 		switch (i) {
 		case 0:
 		    if(s2i(vo.name().substr(2, vo.name().size() - 2)) == 0) {
-			((AIM73X_OUTPUTS *) buf)->output0 = (vl.getR() - dAO) / kAO;
+			((AIM730_OUTPUTS *) buf)->output0 = (vl.getR() - dAO) / kAO;
 		    }
 		    else {
-			((AIM73X_OUTPUTS *) buf)->output0 =
+			((AIM730_OUTPUTS *) buf)->output0 =
 			    (vlAt(TSYS::strMess("AO0").c_str()).at().getR() - dAO) / kAO;
 		    }
 		    break;
 		case 1:
 		    if(s2i(vo.name().substr(2, vo.name().size() - 2)) == 1) {
-			((AIM73X_OUTPUTS *) buf)->output1 = (vl.getR() - dAO) / kAO;
+			((AIM730_OUTPUTS *) buf)->output1 = (vl.getR() - dAO) / kAO;
 		    }
 		    else {
-			((AIM73X_OUTPUTS *) buf)->output1 =
+			((AIM730_OUTPUTS *) buf)->output1 =
 			    (vlAt(TSYS::strMess("AO1").c_str()).at().getR() - dAO) / kAO;
 		    }
 		    break;
@@ -893,11 +887,6 @@ void TMdPrm::cntrCmdProc(XMLNode * opt)
     }
 
     //> Process command to page
-    //if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-    // {
-//      if(enableStat()) throw TError(nodePath().c_str(),"Parameter is enabled.");
-//      parseOIDList(opt->text());
-    //   }
     else
 	TParamContr::cntrCmdProc(opt);
 }

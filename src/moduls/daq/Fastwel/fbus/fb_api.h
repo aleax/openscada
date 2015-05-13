@@ -1,12 +1,14 @@
 #ifndef __FBUS_API_H__
 #define __FBUS_API_H__
 
-#include <fb_node.h>
+#include <fbus/fb_node.h>
 
 // Результ
 typedef enum _FBUS_RESULT
 {
   FBUS_RES_OK = 0,
+  FBUS_RES_NOERROR = FBUS_RES_OK,
+
   FBUS_RES_INVALID_STATE,
   FBUS_RES_NO_SYSTEM_RESOURCE,
   FBUS_RES_INCORRECT_PARAM,
@@ -22,7 +24,13 @@ typedef enum _FBUS_RESULT
   FBUS_RES_RPC_ERROR,
   FBUS_RES_TIMEOUT,
 
+  FBUS_RES_NET_NOT_RESCANED_OR_ZERO_MODULES,
+
   // Hardware errors
+  FBUS_RES_TRANSPORT_ERROR,     /* базовая ошибка транспортного уровня */
+  FBUS_RES_HWFRAME_ERROR,
+  FBUS_RES_INVALID_CONFIG,
+
   FBUS_RES_FRAME_ERROR,
   FBUS_RES_MODULE_NOT_ANSWER,
   FBUS_RES_MODULE_SAY_BAD_CRC,
@@ -34,6 +42,8 @@ typedef enum _FBUS_RESULT
   // Unspecified
   FBUS_RES_SYSTEM_ERROR,
 
+  /* break */
+  FBUS_RES_MAX
 } FBUS_RESULT;
 
 // Handle объекта
@@ -84,6 +94,14 @@ typedef enum
   // Модули питания
   FIO_MODULE_OM751,
 
+  // Аналоговые модули
+  FIO_MODULE_AIM72503,
+  FIO_MODULE_AIM791, 
+  FIO_MODULE_AIM792, 
+
+  // Цифровые модули
+  FIO_MODULE_DIM765, 
+  FIO_MODULE_DIM766, 
 }
 FIO_MODULE_TYPE;
 

@@ -7,7 +7,7 @@
 #if defined(__GNUC__) || (defined (__MSC_VER) && __MSC_VER >= 1600)
 # include <stdint.h>
 #else
-# include <stdlib/pstdint.h>
+# include <fbus/stdlib/pstdint.h>
 # if !defined(_UINTPTR_T_DEFINED)
    typedef unsigned long uintptr_t;
 # endif
