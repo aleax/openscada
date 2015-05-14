@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: types.h
 /***************************************************************************
- *   Copyright (C) 2014 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2013-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,8 +24,7 @@
 namespace VCA
 {
     //Attributes preset indexes
-    enum AttrID
-    {
+    enum AttrID {
 	// Generic
 	A_PG_NAME	= -4,
 	A_PERM		= -3,
@@ -65,8 +63,9 @@ namespace VCA
 	A_ElFigBordClr	= 24,
 	A_ElFigFillClr	= 25,
 	A_ElFigFillImg	= 26,
-	A_ElFigOrient	= 28,
 	A_ElFigElLst	= 27,
+	A_ElFigOrient	= 28,
+	A_ElFigMirror	= 29,
 	A_ElFigIts	= 30,
 	A_ElFigItsSz	= 6,
 	A_ElFigItPntX	= 0,
@@ -137,6 +136,8 @@ namespace VCA
 	A_DiagramSclVerSclOff	= 41,
 	A_DiagramValsForPix	= 42,
 	A_DiagramSclHorPer	= 43,
+	A_DiagramSclHorScl	= 44,
+	A_DiagramSclHorSclOff	= 45,
 	A_DiagramTrs	= 50,
 	A_DiagramTrsSz	= 10,
 	A_DiagramTrAddr = 0,
@@ -214,7 +215,7 @@ namespace VCA
     enum Media_ArShapes	{ FM_RECT = 0, FM_POLY, FM_CIRCLE };
 
     //Diagram preset indexes
-    enum Diagram_Types	{ FD_TRND = 0, FD_SPECTR };
+    enum Diagram_Types	{ FD_TRND = 0, FD_SPECTR, FD_XY };
     enum Diagram_Scale	{ FD_NO = 0, FD_GRD, FD_MARKS, FD_GRD_MARKS, FD_LOG, FD_GRD_LOG, FD_MARKS_LOG, FD_GRD_MARKS_LOG };
 
     enum Prot_ViewOrd	{ FP_ON_TM = 0, FP_ON_LEV, FP_ON_CAT, FP_ON_MESS, FP_ON_TM_REV, FP_ON_LEV_REV, FP_ON_CAT_REV, FP_ON_MESS_REV };

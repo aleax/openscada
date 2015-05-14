@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 18:15+0300\n"
+"POT-Creation-Date: 2015-05-10 16:38+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -317,6 +317,9 @@ msgstr "13:Помилка відповіді серверу"
 msgid "Not full respond"
 msgstr "Неповна відповідь"
 
+msgid "14:Device error: "
+msgstr "14:Помилка пристрою: "
+
 msgid "13:Error respond: Too short."
 msgstr "13:Помилка відповіді: Дуже коротка."
 
@@ -362,9 +365,6 @@ msgstr "10:Помилка у шлюзі."
 msgid "12:%02X:Unknown error."
 msgstr "12:%02X:Невідома помилка."
 
-msgid "14:Device error: "
-msgstr "14:Помилка пристрою: "
-
 msgid "REQ -> "
 msgstr "Запит -> "
 
@@ -403,8 +403,8 @@ msgid ""
 "Coil(%s) %d already registered for IO%d. IO%d will be disabled for process "
 "coil %d!"
 msgstr ""
-"Біт(%s) %d вже зареєстровано для IO%d. IO%d буде виключено із обробки біта"
-"(coil) %d!"
+"Біт(%s) %d вже зареєстровано для IO%d. IO%d буде виключено із обробки "
+"біта(coil) %d!"
 
 #, c-format
 msgid ""

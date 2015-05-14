@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,6 +61,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPntEl.fldAdd(new TFld("SecPolicies",_("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1"));
     mEndPntEl.fldAdd(new TFld("ServCert",_("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
     mEndPntEl.fldAdd(new TFld("ServPvKey",_("Server private key (PEM)"),TFld::String,TFld::FullText,"10000"));
+    mEndPntEl.fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
 }
 
 TProt::~TProt( )			{ nodeDelAll(); }
@@ -238,7 +238,7 @@ bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
 OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), EP(modPrt), mId(cfg("ID")), mName(cfg("NAME")), mDescr(cfg("DESCR")), mURL(cfg("URL")),
     mSerType(cfg("SerialzType").getId()), mAEn(cfg("EN").getBd()),
-    mDB(idb)
+    mDB(idb), mLimSubScr(10), mLimMonitItms(1000), mLimRetrQueueTm(0)
 {
     mId = iid;
     mURL = "opc.tcp://"+SYS->host();
@@ -297,6 +297,16 @@ void OPCEndPoint::load_( )
     mSec.clear();
     for(int off = 0; (spi=TSYS::strParse(sp,0,"\n",&off)).size(); )
 	mSec.push_back(UA::SecuritySetting(TSYS::strParse(spi,0,":"),s2i(TSYS::strParse(spi,1,":"))));
+
+    //Addition parameters load
+    try {
+	XMLNode	prmNd;
+	string	vl;
+	prmNd.load(cfg("A_PRMS").getS());
+	vl = prmNd.attr("LimSubScr");		if(!vl.empty()) setLimSubScr(s2i(vl));
+	vl = prmNd.attr("LimMonitItms");	if(!vl.empty()) setLimMonitItms(s2i(vl));
+	vl = prmNd.attr("LimRetrQueueTm");	if(!vl.empty()) setLimRetrQueueTm(s2i(vl));
+    } catch(...){ }
 }
 
 void OPCEndPoint::save_( )
@@ -307,6 +317,13 @@ void OPCEndPoint::save_( )
     for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
 	sp += mSec[i_p].policy + ":" + i2s(mSec[i_p].messageMode)+"\n";
     cfg("SecPolicies").setS(sp);
+
+    //Addition parameters save
+    XMLNode prmNd("prms");
+    prmNd.setAttr("LimSubScr", i2s(limSubScr()));
+    prmNd.setAttr("LimMonitItms", i2s(limMonitItms()));
+    prmNd.setAttr("LimRetrQueueTm", i2s(limRetrQueueTm()));
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
@@ -523,9 +540,37 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int32))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
+				    case TFld::Object: {	//!!!! With structures support append detect ones
+					AutoHD<TArrayObj> arr = nVal->getO(&tm);
+					string rVl;
+					if(arr.freeStat()) { dtOK = false; break; }
+					switch(arr.at().arGet(0).type()) {
+					    case TVariant::Boolean:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Boolean))->setText(rVl);
+						break;
+					    case TVariant::Integer:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Int64))->setText(rVl);
+						break;
+					    case TVariant::Real:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_Double))->setText(rVl);
+						break;
+					    case TVariant::String:
+						for(size_t iA = 0; iA < arr.at().arSize(); iA++) rVl += arr.at().arGet(iA).getS() + "\n";
+						req.setAttr("type", i2s(OpcUa_Array|OpcUa_String))->setText(rVl);
+						break;
+					    default: dtOK = false;
+					}
+					break;
+				    }
 				    default: dtOK = false;
 				}
-				if(dtOK) { if(s2i(req.attr("dtTmGet"))) req.setAttr("dtTm",ll2s(tm)); return 0; }
+				if(dtOK) {
+				    if(s2i(req.attr("dtTmGet"))) req.setAttr("dtTm",ll2s(tm));
+				    return 0;
+				}
 				break;
 			    }
 			    case AId_DataType:
@@ -534,11 +579,28 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Integer: req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Int32));	return 0;
 				    case TFld::Real:    req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Double));	return 0;
 				    case TFld::String:  req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_String));	return 0;
+				    case TFld::Object: {	//!!!! With structures support append detect ones
+					int64_t tm = 0;
+					AutoHD<TArrayObj> arr = nVal->getO(&tm);
+					if(arr.freeStat()) break;
+					switch(arr.at().arGet(0).type()) {
+					    case TVariant::Boolean:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_Boolean));return 0;
+					    case TVariant::Integer:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_Int64));	return 0;
+					    case TVariant::Real:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_Double));	return 0;
+					    case TVariant::String:
+						req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Array|OpcUa_String));	return 0;
+					    default: break;
+					}
+					break;
+				    }
 				    default: break;
 				}
 				break;
 			    case AId_ValueRank: req.setAttr("type", i2s(OpcUa_Int32))->setText("-1");				return 0;
-			    case AId_ArrayDimensions: req.setAttr("type", i2s(0x80|OpcUa_Int32))->setText("");			return 0;
+			    case AId_ArrayDimensions: req.setAttr("type", i2s(OpcUa_Array|OpcUa_Int32))->setText("");		return 0;
 			    case AId_AccessLevel: case AId_UserAccessLevel:
 				req.setAttr("type", i2s(OpcUa_Byte))->setText(i2s(ACS_Read | (nVal->fld().flg()&TFld::NoWrite ? 0 : ACS_Write)));
 				return 0;
@@ -582,6 +644,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    // OpenSCADA DAQ parameter's attribute
 	    if(nid.ns() != NS_OpenSCADA_DAQ)	return OpcUa_BadNodeIdUnknown;
 	    uint32_t aid = s2i(req.attr("aid"));
+	    unsigned vTp = s2i(req.attr("VarTp"));
 
 	    // Connect to DAQ node
 	    int addrOff = 0;
@@ -590,7 +653,32 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    if(cNd.freeStat()) return OpcUa_BadNodeIdUnknown;
 
 	    if(aid != AId_Value || !dynamic_cast<TVal*>(&cNd.at())) return OpcUa_BadNothingToDo;
-	    ((AutoHD<TVal>)cNd).at().setS(req.text());
+	    AutoHD<TVal> vNd = cNd;
+	    if(vNd.at().fld().type() == TFld::Object && (vTp&OpcUa_Array)) {
+		TArrayObj *arr = new TArrayObj();
+		string vEl;
+		switch(vTp&OpcUa_VarMask) {
+		    case OpcUa_Boolean:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, bool(s2i(vEl)));
+			break;
+		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
+		    case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, (int)s2ll(vEl));
+			break;
+		    case OpcUa_Float: case OpcUa_Double:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, s2r(vEl));
+			break;
+		    default:
+			for(int off = 0, iEl = 0; (vEl=TSYS::strLine(req.text(),0,&off)).size(); iEl++)
+			    arr->arSet(iEl, vEl);
+			break;
+		}
+		vNd.at().setO(arr);
+	    }
+	    else vNd.at().setS(req.text());
 
 	    return 0;
 	}
@@ -614,6 +702,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);
+		ctrRemoveNode(opt, "/ep/cfg/A_PRMS");
 		ctrMkNode("fld",opt,-1,"/ep/cfg/ServCert",cfg("ServCert").fld().descr(),RWRW__,"root",SPRT_ID,3,"tp","str","cols","90","rows","7");
 		ctrMkNode("fld",opt,-1,"/ep/cfg/ServPvKey",cfg("ServPvKey").fld().descr(),RWRW__,"root",SPRT_ID,3,"tp","str","cols","90","rows","7");
 		ctrRemoveNode(opt,"/ep/cfg/SecPolicies");
@@ -623,6 +712,13 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),RWRWR_,"root",SPRT_ID,4,"tp","dec","dest","select","sel_id","1;2;3","sel_list",_("None;Sign;Sign&Encrypt"));
 		}
 	    }
+	    if(ctrMkNode("area",opt,-1,"/data",_("Data")))
+		if(ctrMkNode("area",opt,-1,"/data/lim",_("Limits"))) {
+		    ctrMkNode("fld",opt,-1,"/data/lim/subScr",_("Subscriptions"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		    ctrMkNode("fld",opt,-1,"/data/lim/monitItms",_("Monitored items"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
+		    ctrMkNode("fld",opt,-1,"/data/lim/retrQueueTm",_("Retransmission queue time, sek."),RWRWR_,"root",SPRT_ID,2,
+			"tp","dec", "help",_("Set to 0 for automatic by cntrKeepAlive*publInterv"));
+		}
 	}
 	return;
     }
@@ -669,5 +765,17 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path.compare(0,7,"/ep/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
+    else if(a_path == "/data/lim/subScr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(limSubScr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setLimSubScr(s2i(opt->text()));
+    }
+    else if(a_path == "/data/lim/monitItms") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(limMonitItms()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setLimMonitItms(s2i(opt->text()));
+    }
+    else if(a_path == "/data/lim/retrQueueTm") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(limRetrQueueTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setLimRetrQueueTm(s2i(opt->text()));
+    }
     else TCntrNode::cntrCmdProc(opt);
 }

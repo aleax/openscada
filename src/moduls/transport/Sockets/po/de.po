@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-02 16:28+0300\n"
+"POT-Creation-Date: 2015-05-10 17:49+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -24,8 +24,8 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow sockets based transport. Support inet and unix sockets. Inet socket "
-"use TCP and UDP protocols."
+"Provides sockets based transport. Support inet and unix sockets. Inet socket "
+"uses TCP, and UDP protocols."
 msgstr ""
 "Gewährt den auf Sockets gebauten Transport. Internet und UNIX Sockets werden "
 "unterstützt. Internet Socket benutzt die TCP und UDP Protokolle."
@@ -65,9 +65,6 @@ msgstr "UDP Socket ist nicht verbunden mit '%s'!"
 msgid "UNIX socket doesn't bind to '%s'!"
 msgstr "UNIX ist nicht verbunden mit '%s'!"
 
-msgid "Socket write message '%d'."
-msgstr "Buchse Nachricht schreiben '%d'."
- 
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Close-Eingang Transport durch Fehler: %s!"
@@ -97,6 +94,13 @@ msgstr "Socket hat die Nachricht bekommen '%d' aus '%s'."
 #, c-format
 msgid "Socket replied message '%d' to '%s'."
 msgstr "Socket hat mit der Nachricht geantwortet '%d' auf '%s'."
+
+msgid "Write: reply for zero bytes."
+msgstr "Schreiben: Antwort für Null-Bytes."
+
+#, c-format
+msgid "Write: error '%s (%d)'!"
+msgstr "Schreiben: Fehler '%s (%d)'!"
 
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
@@ -136,24 +140,27 @@ msgstr ""
 "    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - die Verbindung "
 "speichern)."
 
-msgid "Queue length"
-msgstr "Reihenlänge "
-
-msgid "Used for TCP and UNIX sockets."
-msgstr "Wird benutzt für die TCP und UNIX Sockets."
-
-msgid "Clients maximum"
-msgstr "Kunden Maximum"
-
 msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
 
 msgid "Priority"
 msgstr "Priorität"
- 
+
+msgid "Maximum segment size (MSS)"
+msgstr "Maximale Segmentgröße (MSS)"
+
+msgid "Set 0 for system MSS."
+msgstr "Stellen Sie 0 für System MSS."
+
+msgid "Queue length"
+msgstr "Reihenlänge "
+
+msgid "Clients maximum"
+msgstr "Kunden Maximum"
+
 msgid "Keep alive requests"
 msgstr "Keep alive Anfragen"
- 
+
 msgid ""
 "Close the connection after specified requests.\n"
 "Zero value for disable (not close ever)."
@@ -251,3 +258,6 @@ msgstr ""
 "    next - Maximale Zeit der Erwartung der Fortsetzung der Antwort, in "
 "Sekunden;\n"
 "    rep  - Minimum repeate Timeout, in Sekunden."
+
+#~ msgid "Socket write message '%d'."
+#~ msgstr "Buchse Nachricht schreiben '%d'."

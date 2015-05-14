@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
  *   Copyright (C) 2006-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -871,8 +871,7 @@ bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
     if(dynamic_cast<QComboBox*>(object)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(object);
 	if(event->type() == QEvent::KeyPress)
-	    switch(static_cast<QKeyEvent *>(event)->key())
-	    {
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
 		    emit commitData(comb);
@@ -888,8 +887,7 @@ bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
     else if(dynamic_cast<QTextEdit*>(object)) {
 	QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
 	if(event->type() == QEvent::KeyPress)
-	    switch(static_cast<QKeyEvent *>(event)->key())
-	    {
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
 		    if(QApplication::keyboardModifiers()&Qt::ControlModifier) {
@@ -2015,12 +2013,12 @@ int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )	{ return mainWin()->cntr
 void DevelWdgView::saveGeom( const string& item )
 {
     if(item.empty() || item == id()) {
-	chGeomCtx.setAttr("x", r2s(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("y", r2s(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("w", r2s(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("h", r2s(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("xSc", r2s(TSYS::realRound(x_scale,POS_PREC_DIG)));
-	chGeomCtx.setAttr("ySc", r2s(TSYS::realRound(y_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("x", r2s(rRnd((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("y", r2s(rRnd((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("w", r2s(rRnd(sizeF().width()/xScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("h", r2s(rRnd(sizeF().height()/yScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("xSc", r2s(rRnd(x_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("ySc", r2s(rRnd(y_scale,POS_PREC_DIG)));
 	chGeomCtx.setAttr("z", i2s(z()) /*i2s(parent()->children().indexOf(this))*/);
 	chRecord(chGeomCtx);
 	setAllAttrLoad(true);
@@ -2970,8 +2968,7 @@ bool DevelWdgView::event( QEvent *event )
 
 		// New widget inserting
 		QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
-		if(act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton)
-		{
+		if(act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton) {
 		    mainWin()->visualItAdd(act,QPointF((float)curp.x()/xScale(true),(float)curp.y()/yScale(true)));
 		    setCursor(Qt::ArrowCursor);
 		    event->accept();

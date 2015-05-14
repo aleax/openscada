@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 11:13+0300\n"
+"POT-Creation-Date: 2015-05-10 17:05+0300\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -134,14 +134,6 @@ msgstr "HDD SMART: "
 msgid "UPS"
 msgstr "USV"
 
-#, c-format
-msgid "REQ -> '%s'"
-msgstr "ANF -> '%s'"
-
-#, c-format
-msgid "RESP -> '%s'"
-msgstr "ANTW -> '%s'"
-
 msgid "User"
 msgstr "Benutzer"
 
@@ -185,8 +177,8 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow operation system data acquisition. Support OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other."
+"Provides data acquisition from the OS. Supported OS Linux data sources: "
+"HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
 msgstr ""
 "Ermöglicht die Datenerfassung des Betriebssystems. Unterstützt werden die ОС "
 "Linux Datenquellen: HDDTemp, Sensors, Uptime, Memory, CPU, UPS und andere."
@@ -263,3 +255,9 @@ msgstr "USV (NUT)"
 
 msgid "Up time"
 msgstr "Betriebszeit"
+
+#~ msgid "REQ -> '%s'"
+#~ msgstr "ANF -> '%s'"
+
+#~ msgid "RESP -> '%s'"
+#~ msgstr "ANTW -> '%s'"

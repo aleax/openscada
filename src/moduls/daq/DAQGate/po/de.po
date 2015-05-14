@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 07:57+0300\n"
+"POT-Creation-Date: 2015-05-10 16:10+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -27,9 +27,9 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotscheko"
 
 msgid ""
-"Allow to make gate data sources of remote OpenSCADA station to local "
-"OpenSCADA station."
-msgstr "Verbindung mit Datenquellen von entfernten OpenSCADA-Stationen."
+"Allows you to perform the locking of the data sources of the remote "
+"OpenSCADA stations in the local ones."
+msgstr "Hier können Sie die Verriegelung der Datenquellen der Fern OpenSCADA Stationen in der lokalen diejenigen durchzuführen."
 
 msgid "Parameters cache table"
 msgstr "Einflussgrößen Cache-Tabelle"
@@ -48,16 +48,6 @@ msgstr "Zeitüberschreitung bei der Wiederherstellung (s)"
 
 msgid "Restore data depth time (hour)"
 msgstr "Wiederherstellen von Daten Tiefe der Zeit (Stunde)"
-
-msgid "Gather messages level"
-msgstr "Sammeln Meldungen Ebene"
-
-msgid ""
-"==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);"
-"Critical (5);Alert (6);Emergency (7)"
-msgstr ""
-"==Deaktivieren==;Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
-"(5);Wach (6);Notfall (7)"
 
 msgid "Sync inter remote station period (s)"
 msgstr "Wiederholungsrate Synchronisierung entfernte Station (sek)"
@@ -99,14 +89,6 @@ msgstr "Fehler der Station '%s', Wiederherstellung in %.6g s."
 #, c-format
 msgid "Requests to station '%s': %.6g."
 msgstr "Anfragen an die Station '%s': %.6g."
-
-#, c-format
-msgid ""
-"Deletion parameter '%s' is error but it no present on configuration or "
-"remote station."
-msgstr ""
-"Löschen des Parameters '%s' ist falsch, er fehlt in der Konfiguration oder "
-"in der entfernten Station."
 
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
@@ -183,3 +165,20 @@ msgstr "Konfiguration einer entfernten Station"
 
 msgid "Controller is not started!"
 msgstr "Controller ist nicht gestartet!"
+
+#~ msgid "Gather messages level"
+#~ msgstr "Sammeln Meldungen Ebene"
+
+#~ msgid ""
+#~ "==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);"
+#~ "Critical (5);Alert (6);Emergency (7)"
+#~ msgstr ""
+#~ "==Deaktivieren==;Debuggen (0);Information (1);Bemerkung (2);Warnung (3);"
+#~ "Fehler (4);Kritisch (5);Wach (6);Notfall (7)"
+
+#~ msgid ""
+#~ "Deletion parameter '%s' is error but it no present on configuration or "
+#~ "remote station."
+#~ msgstr ""
+#~ "Löschen des Parameters '%s' ist falsch, er fehlt in der Konfiguration "
+#~ "oder in der entfernten Station."

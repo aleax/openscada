@@ -1,14 +1,13 @@
 # OpenSCADA.Transport.SSL translate to Russian.
-# Copyright (C) 2008-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2008-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 15:56+0200\n"
+"POT-Creation-Date: 2015-05-10 17:32+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,8 +22,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow security socket layer based transport. Used OpenSSL and supported "
-"SSLv2, SSLv3 and TLSv1."
+"Provides transport based on the secure sockets' layer. OpenSSL is used and "
+"SSLv2, SSLv3 and TLSv1 are supported."
 msgstr ""
 "Предоставляет транспорт основанный на слое безопасных сокетов. Используется "
 "OpenSSL и поддерживаются SSLv2, SSLv3 и TLSv1."
@@ -47,6 +46,7 @@ msgstr ""
 msgid "Open temporary file '%s' error: '%s'"
 msgstr "Ошибка открытия временного файла '%s': '%s'"
 
+#, c-format
 msgid "Error write to file '%s'."
 msgstr "Ошибка записи в файл '%s'."
 
@@ -125,7 +125,8 @@ msgid ""
 "Close the connection after no requests at specified timeout.\n"
 "Zero value for disable (not close ever)."
 msgstr ""
-"Закрытие подключения после отсутствия запросов в течении указанного времени.\n"
+"Закрытие подключения после отсутствия запросов в течении указанного "
+"времени.\n"
 "Нулевое значение для отключения (не закрывается никогда)."
 
 msgid "Priority"
@@ -135,13 +136,14 @@ msgstr "Приоритет"
 msgid "Traffic in %s, out %s."
 msgstr "Трафик входящий %s, исходящий %s."
 
+#, c-format
 msgid "Socket name '%s' error!"
 msgstr "Ошибка имени '%s' сокета!"
- 
+
 #, c-format
 msgid "Error creation TCP socket: %s!"
 msgstr "Ошибка создания TCP сокета: %s!"
- 
+
 #, c-format
 msgid "Connect to Internet socket error: %s!"
 msgstr "Ошибка подключения к Internet сокету: %s!"

@@ -3,12 +3,12 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-30 15:27+0200\n"
+"POT-Creation-Date: 2015-05-10 20:09+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -87,6 +87,10 @@ msgstr "Mime Typ"
 msgid "Data"
 msgstr "Daten"
 
+#, c-format
+msgid "Widget '%s' already present!"
+msgstr "Widget '%s' ist vorhanden!"
+
 msgid "Widget is not container!"
 msgstr "Widget ist kein Container!"
 
@@ -150,6 +154,9 @@ msgstr "Ausfüllen:Bild"
 msgid "Orientation angle"
 msgstr "Drehwinkel"
 
+msgid "Mirroring"
+msgstr ""
+
 msgid "Elements list"
 msgstr "Liste von Elementen"
 
@@ -161,8 +168,8 @@ msgid ""
 "The list of elements can contain:\n"
 "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|"
 "c{n}]:[line_stl|s{n}]\n"
-"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c"
-"{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|"
+"c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:"
 "[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
@@ -191,8 +198,8 @@ msgstr ""
 "Die Liste der Elemente enthalten kann:\n"
 "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|"
 "c{n}]:[line_stl|s{n}]\n"
-"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c"
-"{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|"
+"c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:"
 "[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
@@ -614,8 +621,8 @@ msgstr "Widget für das Diagramm der Visualisierung."
 msgid "Tracing period (s)"
 msgstr "Trackingszeit (s)"
 
-msgid "Trend;Spectrum"
-msgstr "Plan;Spektrum"
+msgid "Trend;Spectrum;XY"
+msgstr "Plan;Spektrum;XY"
 
 msgid "Cursor:sek"
 msgstr "Cursor:sek"
@@ -644,18 +651,21 @@ msgstr "Skala:Farbe"
 msgid "Scale:horizontal"
 msgstr "Skala:waagerecht"
 
-msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung"
-
-msgid "Scale:vertical"
-msgstr "Skala:senkrecht"
-
 msgid ""
 "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
 msgstr ""
 "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung;Gitter (log);"
 "Markierung (log);Gitter und Markierung (log)"
+
+msgid "Scale:horizontal scale (%)"
+msgstr "Skala:horizontalen Maßstab (%)"
+
+msgid "Scale:horizontal scale offset (%)"
+msgstr "Skala:senkrecht. Maßstab horizontalen (%)"
+
+msgid "Scale:vertical"
+msgstr "Skala:senkrecht"
 
 msgid "Scale:vertical scale (%)"
 msgstr "Skala:senkrechter Maßstab (%)"
@@ -1047,6 +1057,10 @@ msgid "Erase"
 msgstr "Löschen"
 
 #, c-format
+msgid "Page '%s' already present!"
+msgstr "Seite '%s' ist vorhanden!"
+
+#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Alle: %d; Aktiviert: %d"
 
@@ -1227,14 +1241,14 @@ msgstr "Visualisierungssteuerung"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Generic visual control area engine."
+msgid "The main visual control area engine."
 msgstr "Allgemeine Visualisierungssteuerung."
 
 msgid "ID"
 msgstr "ID"
 
 msgid "DB table"
-msgstr ""
+msgstr "DB-Tabelle"
 
 msgid "Parent widget"
 msgstr "Elternwidget"
@@ -1404,6 +1418,18 @@ msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
 
 #, c-format
+msgid "Project '%s' already present!"
+msgstr "Projekt '%s' ist vorhanden!"
+
+#, c-format
+msgid "Widgets library '%s' already present!"
+msgstr "Widgets Bibliothek '%s' ist vorhanden!"
+
+#, c-format
+msgid "Session '%s' already present!"
+msgstr "Sitzung '%s' ist vorhanden!"
+
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Das Attribut '%s' wird nicht freigegeben. Zwangsräumung!"
 
@@ -1417,9 +1443,9 @@ msgid ""
 "Inherit.(RWRWRW)"
 msgstr ""
 "Kein Zugang;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW;"
-"Erbschaft;Erbschaft(R_____);Erbschaft(R_R___);Erbschaft(R_R_R_);Erbschaft"
-"(RW____);Erbschaft(RWR___);Erbschaft(RWR_R_);Erbschaft(RWRW__);Erbschaft"
-"(RWRWR_);Erbschaft(RWRWRW)"
+"Erbschaft;Erbschaft(R_____);Erbschaft(R_R___);Erbschaft(R_R_R_);"
+"Erbschaft(RW____);Erbschaft(RWR___);Erbschaft(RWR_R_);Erbschaft(RWRW__);"
+"Erbschaft(RWRWR_);Erbschaft(RWRWRW)"
 
 msgid "Root"
 msgstr "Ursprung"
@@ -1563,6 +1589,9 @@ msgstr ""
 msgid "Widget: "
 msgstr "Widget: "
 
+msgid "Used"
+msgstr ""
+
 msgid "Go to parent"
 msgstr "Zum Eltern"
 
@@ -1678,8 +1707,8 @@ msgid "Changing of not user attribute is no permitted"
 msgstr "Ändern der nicht benutzerdefinierten Attribute ist nicht zulässig "
 
 #, c-format
-msgid "New attribute's ID '%s' already present."
-msgstr "Neuer Bezeichner des Attributs '%s' ist vorhanden."
+msgid "New attribute's ID '%s' already present!"
+msgstr "Neuer Bezeichner des Attributs '%s' ist vorhanden!"
 
 msgid "Boolean"
 msgstr "Logisch"
@@ -1799,3 +1828,6 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "No draw;Grid;Markers;Grid and markers"
+#~ msgstr "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung"

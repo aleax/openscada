@@ -48,8 +48,9 @@ using namespace OSCADA;
 //*************************************************
 TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE), mConvCode(true), mIsUTF8(true)
 {
-    setenv("LC_NUMERIC","C",1);
-    openlog(PACKAGE,0,LOG_USER);
+    openlog(PACKAGE, 0, LOG_USER);
+
+    setenv("LC_NUMERIC", "C", 1);
     setlocale(LC_ALL,"");
     IOCharSet = nl_langinfo(CODESET);
 
@@ -97,7 +98,8 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     if(abs(level) < messLevel()) return;
 
     int64_t ctm = TSYS::curTime();
-    string s_mess = i2s(level) + "|" + categ + " | " + mess;
+    //string sMess = i2s(level) + "|" + categ + " | " + mess;
+    string sMess = i2s(level) + "[" + categ + "] " + mess;
 
     if(mLogDir & DIR_SYSLOG) {
 	int level_sys;
@@ -113,10 +115,10 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 	    case Emerg:		level_sys = LOG_EMERG;	break;
 	    default: 		level_sys = LOG_DEBUG;
 	}
-	syslog(level_sys, "%s", s_mess.c_str());
+	syslog(level_sys, "%s", sMess.c_str());
     }
-    if(mLogDir & DIR_STDOUT)	fprintf(stdout, "%s \n", s_mess.c_str());
-    if(mLogDir & DIR_STDERR)	fprintf(stderr, "%s \n", s_mess.c_str());
+    if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", tm2s(time(NULL),"").c_str(), sMess.c_str());
+    if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", tm2s(time(NULL),"").c_str(), sMess.c_str());
     if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
 	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
 }

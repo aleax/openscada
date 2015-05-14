@@ -1,16 +1,15 @@
 # OpenSCADA.DAQ.Siemens translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.Siemens package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-07 13:36+0200\n"
+"POT-Creation-Date: 2015-04-01 17:53+0300\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -28,8 +27,8 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow data source Siemens PLC by CP of Hilscher CIF cards use MPI protocol "
-"and library Libnodave for other."
+"Provides a data source PLC Siemens by means of Hilscher CIF cards, by using "
+"the MPI protocol, and Libnodave library for the rest."
 msgstr ""
 "Ermöglicht Datenquelle Siemens PLC-Karten mit Hilscher CIF. Für Andere "
 "werden MPI-Protokoll und Bibliothek Libnodave verwendet."

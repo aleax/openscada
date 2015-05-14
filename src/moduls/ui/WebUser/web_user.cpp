@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +37,7 @@
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow creation self-user web-interfaces on any OpenSCADA language.")
+#define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -108,8 +107,8 @@ TWEB::~TWEB( )
 string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
-    else if(name == "Auth")	return "0";
-    else return TModule::modInfo(name);
+    if(name == "Auth")		return "0";
+    return TModule::modInfo(name);
 }
 
 void TWEB::modInfo( vector<string> &list )
@@ -348,7 +347,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	funcV.setO(7,new TVarObj());
 	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
 	    funcV.getO(7).at().propSet(prmEl->first,prmEl->second);
-	funcV.setO(8,new TArrayObj());
+	funcV.setO(8, new TArrayObj());
 	for(unsigned ic = 0; ic < ses.cnt.size(); ic++) {
 	    XMLNodeObj *xo = new XMLNodeObj();
 	    xo->fromXMLNode(ses.cnt[ic]);

@@ -287,8 +287,13 @@ void *TMdContr::Task( void *icntr )
 		cntr.call_st = false;
 	    }
 
-	    //> Watchdog timer process
-	    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res( cntr.reqRes, true ); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
+	    //Watchdog timer process
+	    if(cntr.mBus == 0 && cntr.period() && wTm > 0) {
+		ResAlloc res(cntr.reqRes, true);
+		int wTmSet = 1e3*vmax(1.5e-9*cntr.period(), wTm);
+		EnableSysWDT(wTmSet);
+		res.release();
+	    }
 
 	    cntr.prcSt = true;
 
@@ -298,8 +303,8 @@ void *TMdContr::Task( void *icntr )
     }
     catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
 
-    //> Watchdog timer disable
-    if( cntr.mBus == 0 && wTm > 0 ) { ResAlloc res( cntr.reqRes, true ); DisableWDT(); res.release(); }
+    //Watchdog timer disable
+    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); DisableSysWDT(); res.release(); }
 
     cntr.prcSt = false;
 

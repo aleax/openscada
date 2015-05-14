@@ -4,13 +4,13 @@ Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.8.12
+Version: 0.8.13
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
 License: GPLv2
 Group: Applications/Engineering
-Packager: Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>
+Packager: Roman Savochenko <rom_as@oscada.org>
 URL: http://oscada.org
 
 %define srcname openscada-%version
@@ -336,44 +336,49 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/Boiler/*.db
 
 %changelog
+* Sun May 10 2015 Roman Savochenko <rom_as@oscada.org>
+- The build of 0.8.13 main update to the production release.
+
 * Sun Dec 14 2014 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.12 update to production release.
+- The build of 0.8.12 main update to the production release.
 
 * Mon Jul 21 2014 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.11 update to production release.
+- The build of 0.8.11 main update to the production release.
+- Moving to the LTS version numbering 0.8.U.S
+  Where {U} - the main update, {S} - the service update.
 
 * Fri May 09 2014 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.10 update to production release.
+- The build of 0.8.0.10 main update to the production release.
 
 * Mon Dec 09 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.9 update to production release.
+- The build of 0.8.0.9 main update to the production release.
 
 * Mon Sep 16 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.8 update to production release.
+- The build of 0.8.0.8 main update to the production release.
 
 * Thu Jul 11 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.7 update to production release.
+- The build of 0.8.0.7 main update to the production release.
 
 * Sat May 11 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.6 update to production release.
+- The build of 0.8.0.6 main update to the production release.
 
 * Sat Feb 02 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.5 update to production release.
+- The build of 0.8.0.5 main update to the production release.
 
 * Tue Nov 13 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.4 update to production release.
+- The build of 0.8.0.4 main update to the production release.
 
 * Sat Sep 08 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.3 update to production release.
+- The build of 0.8.0.3 main update to the production release.
 
 * Mon Jul 09 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.2 update to production release.
+- The build of 0.8.0.2 main update to the production release.
 
 * Sat Jun 09 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.1 update to production release.
+- The build of 0.8.0.1 main update to the production release.
 
 * Fri Apr 06 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0 release.
+- The build of 0.8.0 production release.
 
 * Mon Dec 05 2011 Roman Savochenko <rom_as@oscada.org>
 - Build 0.7.2 release.
@@ -399,49 +404,49 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 * Mon Oct 12 2009 Roman Savochenko <rom_as@oscada.org>
 - Build 0.6.4 release.
 
-* Mon Jun 08 2009 Roman Savochenko <rom_as@oscada.org.ua>
+* Mon Jun 08 2009 Roman Savochenko <rom_as@oscada.org>
 - Build 0.6.3.3 release.
 
-* Mon May 25 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Mon May 25 2009 Roman Savochenko <rom_as@oscada.org>
 - Merge demo DB from different languages to one multilanguage (Russian,English and Ukrainian) DB.
 
-* Wed Mar 18 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Wed Mar 18 2009 Roman Savochenko <rom_as@oscada.org>
 - OpenSCADA update 0.6.3.2 release build.
 
-* Mon Feb 2 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Mon Feb 2 2009 Roman Savochenko <rom_as@oscada.org>
 - OpenSCADA update 0.6.3.1 release build.
 
-* Mon Dec 22 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Mon Dec 22 2008 Roman Savochenko <rom_as@oscada.org>
 - Documentation pack is unified and separated to project info files and documentation.
 - Dynamic librarie's links packing into main package and development is fixed.
 
-* Thu Oct 02 2008 Roman Savochenko <rom_as@fromru.com>
+* Thu Oct 02 2008 Roman Savochenko <rom_as@oscada.org>
 - Package name simple changing allow is added.
 
-* Thu Sep 18 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Thu Sep 18 2008 Roman Savochenko <rom_as@oscada.org>
 - Update spec to build for ALTLinux Sisyphus.
 
-* Wed Mar 26 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Wed Mar 26 2008 Roman Savochenko <rom_as@oscada.org>
 - Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
 
-* Sun Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Sun Mar 23 2008 Roman Savochenko <rom_as@oscada.org>
 - menu files included
 
-* Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>
+* Fri Sep 02 2005 Roman Savochenko <rom_as@oscada.org>
 - replace testdate whith demo package
 - rename xinetd script from openscada to oscadad
 - add xinetd script to generic package
 
-* Wed Mar 16 2005 Roman Savochenko <rom_as@fromru.com>
+* Wed Mar 16 2005 Roman Savochenko <rom_as@oscada.org>
 - add Athena board specific build
 
-* Wed Nov 03 2004 Roman Savochenko <rom_as@fromru.com>
+* Wed Nov 03 2004 Roman Savochenko <rom_as@oscada.org>
 - move the message arhives data to /var/spool/%{name}/ARHIVE/MESS
 
-* Tue Apr 06 2004 Roman Savochenko <rom_as@fromru.com>
+* Tue Apr 06 2004 Roman Savochenko <rom_as@oscada.org>
 - make 3 packages: OpenScada, OpenScada-devel, OpenScada-testdata
 - add languages: ru, uk
 - make packages from 'make -dist' package;
 
-* Wed Oct 15 2003 Roman Savochenko <rom_as@fromru.com>
+* Wed Oct 15 2003 Roman Savochenko <rom_as@oscada.org>
 - Starting

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 18:15+0300\n"
+"POT-Creation-Date: 2015-05-10 16:38+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -325,6 +325,9 @@ msgstr "13:Fehler in der Antwort des Server"
 msgid "Not full respond"
 msgstr "Nicht voll antworten"
 
+msgid "14:Device error: "
+msgstr "14:Fehler im Baustein: "
+
 msgid "13:Error respond: Too short."
 msgstr "13:Fehler in der Antwort: Zu kurz."
 
@@ -370,9 +373,6 @@ msgstr "10:Schnittstellenproblem."
 #, c-format
 msgid "12:%02X:Unknown error."
 msgstr "12:%02X:Unbekannter Fehler."
-
-msgid "14:Device error: "
-msgstr "14:Fehler im Baustein: "
 
 msgid "REQ -> "
 msgstr "Anfrage -> "

@@ -108,7 +108,7 @@ class MBD : public TBD
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-	string	host, user, pass, bd, u_sock, cd_pg, names;
+	string	host, user, pass, bd, u_sock, cd_pg;
 	int	port;
 
 	int	reqCnt;
@@ -119,7 +119,7 @@ class MBD : public TBD
 
 //************************************************
 //* BDMySQL::BDMod                               *
-//************************************************ 
+//************************************************
 class BDMod: public TTipBD
 {
     public:

@@ -84,7 +84,7 @@ typedef struct slot_reg {
 	unsigned int addr_first;
 	unsigned int addr_second;
 	unsigned int offset;			/* register's offset */
-#ifdef LX800
+#ifdef x86
         unsigned int addr;
 #endif
 } slot_reg_t;
@@ -132,7 +132,9 @@ enum {
         SLOT_IOCTL_ID_GPIO_DIRINPUT,
         SLOT_IOCTL_ID_GPIO_DIROUTPUT,
         SLOT_IOCTL_ID_GPIO_ALTFUNC,
-	SLOT_IOCTL_ID_LAST
+	SLOT_IOCTL_ID_LAST,
+	SLOT_IOCTL_ID_READ_ATOM_RS,
+	SLOT_IOCTL_ID_SET_ATOM_LED,
 };
 
 
@@ -319,4 +321,6 @@ system_type sys;
 #define GPIO_DIRINPUT   _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIRINPUT, slot_reg_t *)
 #define GPIO_DIROUTPUT  _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIROUTPUT ,slot_reg_t *)
 #define GPIO_ALTFUNC    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_ALTFUNC ,slot_reg_t *)
+#define READ_ATOM_RS    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_READ_ATOM_RS, slot_reg_t *)
+#define SET_ATOM_LED    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_SET_ATOM_LED, slot_reg_t *)
 

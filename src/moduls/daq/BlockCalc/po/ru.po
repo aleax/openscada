@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-30 18:44+0200\n"
+"POT-Creation-Date: 2015-05-10 16:06+0300\n"
 "PO-Revision-Date: 2007-10-28 08:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -135,7 +135,7 @@ msgstr "Блочный вычислитель"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow block based calculator."
+msgid "Provides a block based calculator."
 msgstr "Предоставляет блочный вычислитель."
 
 msgid "Parameters table"
@@ -202,23 +202,9 @@ msgstr "Затрачено времени: %s. "
 msgid "Enable block '%s' error."
 msgstr "Ошибка включения блока '%s'."
 
-msgid "Start stage 1: set all blocks to process."
-msgstr ""
-
 #, c-format
 msgid "Process block '%s' error."
 msgstr "Ошибка обработки блока '%s'."
-
-msgid "Start stage 2: sort blocks for need sequence."
-msgstr ""
-
-#, c-format
-msgid "Reshuffle blocks '%s'(%d) <-> '%s'(%d)."
-msgstr ""
-
-#, c-format
-msgid "Start stage 3: task create: prcSt=%d."
-msgstr ""
 
 #, c-format
 msgid "Block '%s' calc error."

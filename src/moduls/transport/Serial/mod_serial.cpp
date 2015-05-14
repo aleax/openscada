@@ -46,7 +46,7 @@
 #define VER_TYPE	STR_VER
 #define MOD_VER		"0.8.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other.")
+#define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -298,7 +298,7 @@ void TTrIn::connect( )
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
 	tio.c_cc[VMIN] = 0;            ///< blocking read until 0 character arrives*/
 	// Set speed
-	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':').c_str());
+	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
 	    switch(s2i(speed)) {
@@ -323,7 +323,7 @@ void TTrIn::connect( )
 	    cfsetospeed(&tio, tspd);
 	}
 	// Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':')));
+	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
 	if(!format.empty()) {
 	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 	    //  Set byte length
@@ -564,7 +564,7 @@ void *TTrIn::Task( void *tr_in )
 			kz = select(tr->fd+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(tr->fd,&rw_fd)) { wL = 0; continue; }
 		    }
-		    mess_err(tr->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+		    mess_err(tr->nodePath().c_str(), _("Write: error '%s (%d)'."), strerror(errno), errno);
 		    break;
 		}
 		tr->trOut += vmax(0,wL);
@@ -816,6 +816,10 @@ void TTrOut::start( int tmCon )
 	// Lock device for all serial transports
 	if(!(isLock=mod->devLock(mDevPort))) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
 
+#if OSC_DEBUG >= 5
+	mess_debug(nodePath().c_str(), _("Starting."));
+#endif
+
 	// Serial port open
 	//  O_NONBLOCK is used for prevent function open() hang on several USB->RS485 converters
 	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
@@ -832,11 +836,10 @@ void TTrOut::start( int tmCon )
 	tio.c_cc[VMIN] = 0;		///< blocking read until 0 character arrives
 
 	// Set speed
-	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':').c_str());
+	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
-	    switch(s2i(speed))
-	    {
+	    switch(s2i(speed)) {
 		case 300:	tspd = B300;	break;
 		case 600:	tspd = B600;	break;
 		case 1200:	tspd = B1200;	break;
@@ -859,7 +862,7 @@ void TTrOut::start( int tmCon )
 	}
 
 	// Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':')));
+	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
 	if(!format.empty()) {
 	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 
@@ -867,8 +870,7 @@ void TTrOut::start( int tmCon )
 	    int len =  format[0]-'0';
 	    if(len < 5 || len > 8) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
 	    tio.c_cflag &= ~CSIZE;
-	    switch(len)
-	    {
+	    switch(len) {
 		case 5:	tio.c_cflag |= CS5;	break;
 		case 6:	tio.c_cflag |= CS6;	break;
 		case 7:	tio.c_cflag |= CS7;	break;
@@ -877,8 +879,7 @@ void TTrOut::start( int tmCon )
 
 	    //  Set parity
 	    char parity = tolower(format[1]);
-	    switch(parity)
-	    {
+	    switch(parity) {
 		case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;break;
 		case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
 		case 'n': tio.c_cflag &= ~PARENB;			break;
@@ -983,6 +984,10 @@ void TTrOut::stop( )
     ResAlloc res(nodeRes(), true);
     if(!run_st) return;
 
+#if OSC_DEBUG >= 5
+    mess_debug(nodePath().c_str(), _("Stopping."));
+#endif
+
     if(mMdmDataMode) {
 	TTr::writeLine(fd, mdmExit(), true);
 	if(mdmPreInit() > 0) TSYS::sysSleep(mdmPreInit());
@@ -1030,6 +1035,9 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     double wCharTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
     double wKeepAliveTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
     if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
+#if OSC_DEBUG >= 5
+	mess_debug(nodePath().c_str(), _("Restart by KeepAliveTm %gs."), wKeepAliveTm);
+#endif
 	stop();
 	start();
 	mKeepAliveLstTm = TSYS::curTime();
@@ -1057,8 +1065,9 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 		    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
 		}
 		mLstReqTm = TSYS::curTime();
+		string err = TSYS::strMess(_("Write: error '%s (%d)'."), strerror(errno), errno);
 		stop();
-		throw TError(nodePath().c_str(),_("Writing request error."));
+		throw TError(nodePath().c_str(), err.c_str());
 	    }
 	    else trOut += kz;
 	}
@@ -1089,7 +1098,12 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
 	kz = select(fd+1, &rw_fd, NULL, NULL, &tv);
 	if(kz == 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
-	else if(kz < 0)	{ mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Serial error!")); }
+	else if(kz < 0)	{
+	    mLstReqTm = TSYS::curTime();
+	    string err = TSYS::strMess(_("Read: error '%s (%d)'."), strerror(errno), errno);
+	    stop();
+	    throw TError(nodePath().c_str(), err.c_str());
+	}
 	else if(FD_ISSET(fd,&rw_fd)) {
 	    blen = read(fd, ibuf, len_ib);
 	    trIn += vmax(0, blen);
@@ -1186,8 +1200,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    conn - maximum time for connection respond wait, in ms;\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    KeepAliveTm - keep alive timeout in seconds for restart transport."));
-	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
-	{
+	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");

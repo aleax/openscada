@@ -610,12 +610,13 @@ AutoHD<Attr> Widget::attrAt( const string &attr, int lev )
 	pthread_mutex_unlock(&mtxAttr());
 	return rez;
     }
+
     //Process by full path
     AutoHD<Attr> an;
     size_t waSep = attr.rfind("/");
-    if(waSep == string::npos) return attrPresent(attr) ? attrAt(attr) : an;
-    string anm = attr.substr(waSep+1);
+    string anm = (waSep == string::npos) ? attr : attr.substr(waSep+1);
     if(anm.compare(0,2,"a_") == 0) anm = anm.substr(2);
+    if(waSep == string::npos) return attrPresent(anm) ? attrAt(anm) : an;
     AutoHD<Widget> wn = wdgAt(attr.substr(0,waSep),lev);
     if(wn.freeStat() || !wn.at().attrPresent(anm)) return an;
     return wn.at().attrAt(anm);
@@ -1002,8 +1003,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string sid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    wdgAdd(sid.c_str(),opt->text(),"");
+	    string sid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
+	    if(wdgPresent(sid)) throw TError(nodePath().c_str(), _("Widget '%s' already present!"), sid.c_str());
+	    wdgAdd(sid, opt->text(), "");
 	    opt->setAttr("id", sid);
 	    //GeomZ set to include widgets number
 	    if(wdgPresent(sid)) {
@@ -1235,9 +1237,13 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	    bool custom = false, lnkOK = false;
 	    if(obj_tp == "prm:" || obj_tp == "wdg:") {
-		if((obj_tp == "prm:" && !SYS->daq().at().attrAt(cfg_val.substr(4),0,true).freeStat()) ||
-		    (obj_tp == "wdg:" && !srcwdg.at().attrAt(cfg_val.substr(4),0).freeStat()))
-		    { cfg_val.resize(cfg_val.rfind("/")); lnkOK = true; }
+		if(cfg_val.rfind("/") != string::npos &&
+		    ((obj_tp == "prm:" && !SYS->daq().at().attrAt(cfg_val.substr(4),0,true).freeStat()) ||
+		    (obj_tp == "wdg:" && !srcwdg.at().attrAt(cfg_val.substr(4),0).freeStat())))
+		{
+		    cfg_val.resize(cfg_val.rfind("/"));
+		    lnkOK = true;
+		}
 	    }else custom = true;
 
 	    string sel;
@@ -1509,7 +1515,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 
 		if(idcol == "id") {
 		    tid = opt->text();
-		    if(wdg.at().attrPresent(tid)) throw TError(nodePath().c_str(),_("New attribute's ID '%s' already present."),tid.c_str());
+		    if(wdg.at().attrPresent(tid)) throw TError(nodePath().c_str(),_("New attribute's ID '%s' already present!"),tid.c_str());
 		}
 		else if(idcol == "type") {
 		    ttp = (TFld::Type)(s2i(opt->text())&0x0f);
@@ -1624,7 +1630,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Attr: Widget attribute                       *
 //************************************************
-Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), mModif(0), self_flg((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
+Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), mModif(0), mFlgSelf((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
 {
     setFld(ifld, inher);
 }
@@ -1679,7 +1685,7 @@ void Attr::setFld( TFld *fld, bool inher )
     mFld = fld;
     if(mFld && !inher)	mFld->setLen(1);
     else if(mFld && inher)	mFld->setLen(mFld->len()+1);
-    self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
+    mFlgSelf = inher ? mFlgSelf|Attr::IsInher : mFlgSelf & ~Attr::IsInher;
     if(owner()) pthread_mutex_unlock(&owner()->mtxAttr());
 }
 
@@ -2014,10 +2020,10 @@ void Attr::setCfgVal( const string &vl )
 
 void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
-    if(self_flg == flg)	return;
-    SelfAttrFlgs t_flg = (SelfAttrFlgs)self_flg;
-    self_flg = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
-    if(!owner()->attrChange(*this,TVariant()))	self_flg = t_flg;
+    if(mFlgSelf == flg)	return;
+    SelfAttrFlgs t_flg = (SelfAttrFlgs)mFlgSelf;
+    mFlgSelf = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
+    if(!owner()->attrChange(*this,TVariant()))	mFlgSelf = t_flg;
     else {
 	unsigned imdf = owner()->modifVal(*this);
 	mModif = imdf ? imdf : mModif+1;

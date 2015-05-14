@@ -1,14 +1,13 @@
 # OpenSCADA.Special.SystemTests translate to Ukrainian.
-# Copyright (C) 2003-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Special.SystemTests package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 21:49+0200\n"
+"POT-Creation-Date: 2015-05-10 17:31+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -22,7 +21,7 @@ msgstr "Тести системи OpenSCADA"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow the group tests for OpenSCADA system."
+msgid "Provides the group of tests to the OpenSCADA system."
 msgstr "Надає групу тестів для системи OpenSCADA."
 
 #, c-format
@@ -72,6 +71,9 @@ msgstr "Архів значень"
 
 msgid "Values period (us)"
 msgstr "Період значень (мкс)"
+
+msgid "Archivator"
+msgstr "Архіватор"
 
 msgid ""
 "Value archive allocation tests.\n"
@@ -264,7 +266,7 @@ msgid "Created %d records for time %f sec."
 msgstr "Створено %d записів за час %f сек."
 
 msgid "Update records."
-msgstr "Оновлено записів."
+msgstr "Оновлення записів."
 
 #, c-format
 msgid "Updated %d records for time %f sec."
@@ -331,9 +333,6 @@ msgstr "Закриття та видалення таблиці '%s'."
 msgid "Close and delete DB '%s'."
 msgstr "Закриття та видалення БД '%s'."
 
-msgid "Archivator"
-msgstr "Архіватор"
-
 msgid "Messages category pattern"
 msgstr "Шаблон категорії повідомлення"
 
@@ -361,7 +360,8 @@ msgid "Parameter"
 msgstr "Параметр"
 
 msgid ""
-"DAQ parameters test. Make read a parameter's attributes and configuration fields."
+"DAQ parameters test. Make read a parameter's attributes and configuration "
+"fields."
 msgstr ""
 "Тест DAQ параметрів. Вичитує атрибути та конфігураційні поля параметру."
 
@@ -669,5 +669,31 @@ msgid "Open file '%s' error."
 msgstr "Помилка відкриття файлу '%s'."
 
 #, c-format
+msgid "Read file '%s' error: %s."
+msgstr "Помилка читання файлу '%s': %s."
+
+#, c-format
+msgid "Read file '%s' only %d from %d."
+msgstr "Читання файлу '%s' тільки для %d із %d."
+
+#, c-format
 msgid "Test: Passed: %f ms."
 msgstr "Тест1: Виконано: %f ms."
+
+#~ msgid "Request's key"
+#~ msgstr "Ключ запиту"
+
+#~ msgid "Request's value"
+#~ msgstr "Значення запиту"
+
+#~ msgid "Update records, by request key, for %d records."
+#~ msgstr "Оновлення записів, за ключем запиту, для %d записів."
+
+#~ msgid "Updated %d records, by request key, for time %f sec."
+#~ msgstr "Оновлено %d записів, за ключем запиту, за час %f сек."
+
+#~ msgid "Field <reqKey> '%s' != '%s' error."
+#~ msgstr "Помилка поля <reqKey> '%s' != '%s'."
+
+#~ msgid "Field <reqVal> '%s' != '%s' error."
+#~ msgstr "Помилка поля <reqVal> '%s' != '%s'."

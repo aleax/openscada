@@ -39,6 +39,12 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
     mPer(cfg("PER").getId()), mFlgs(cfg("FLGS").getId()), mStyleIdW(cfg("STYLE").getId()),
     mEnable(false)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mFuncM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     mId = id;
     cfg("NAME").setS(name);
     cfg("DB_TBL").setS(string("prj_")+id);
@@ -47,7 +53,7 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
 
 Project::~Project( )
 {
-
+    pthread_mutex_destroy(&mFuncM);
 }
 
 TCntrNode &Project::operator=( TCntrNode &node )
@@ -156,6 +162,8 @@ void Project::setFullDB( const string &it )
 
 void Project::load_( )
 {
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+
     if(!SYS->chkSelDB(DB())) throw TError();
 
     mess_info(nodePath().c_str(), _("Load project."));
@@ -167,14 +175,13 @@ void Project::load_( )
     TConfig c_el(&mod->elPage());
     c_el.cfgViewAll(false);
     c_el.cfg("OWNER").setS("/"+id(), true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fld_cnt++,c_el); ) {
 	string f_id = c_el.cfg("ID").getS();
 	if(!present(f_id)) add(f_id,"","");
 	itReg[f_id] = true;
     }
 
-    //Check for remove items removed from DB
+    //Check for remove items removed from the DB
     if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	list(it_ls);
@@ -190,8 +197,7 @@ void Project::load_( )
     TConfig c_stl(&mod->elPrjStl());
     string svl;
     vector<string> vlst;
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fld_cnt++,c_stl); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fld_cnt++,c_stl); ) {
 	vlst.clear();
 	for(int i_s = 0; i_s < 10; i_s++) {
 	    svl = c_stl.cfg(TSYS::strMess("V_%d",i_s)).getS();
@@ -228,8 +234,7 @@ void Project::save_( )
     //Save styles
     ResAlloc res( mStRes, false );
     TConfig c_stl( &mod->elPrjStl() );
-    for(map< string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-    {
+    for(map< string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
 	c_stl.cfg("ID").setS(iStPrp->first);
 	for(unsigned i_s = 0; i_s < iStPrp->second.size() && i_s < 10; i_s++)
 	    c_stl.cfg(TSYS::strMess("V_%d",i_s)).setS(iStPrp->second[i_s]);
@@ -249,6 +254,8 @@ void Project::save_( )
 void Project::setEnable( bool val )
 {
     if(val == enable()) return;
+
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     mess_info(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 
@@ -277,7 +284,7 @@ void Project::add( const string &id, const string &name, const string &orig )
 void Project::add( Page *iwdg )
 {
     if(present(iwdg->id())) delete iwdg;
-    else chldAdd(mPage,iwdg);
+    else chldAdd(mPage, iwdg);
 }
 
 AutoHD<Page> Project::at( const string &id )	{ return chldAt(mPage,id); }
@@ -565,7 +572,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-	    add(vid,opt->text().c_str()); at(vid).at().setOwner(opt->attr("user"));
+	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
+	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	del(opt->attr("id"),true);
@@ -998,7 +1006,7 @@ void Page::loadIO( )
 	itReg[sid] = true;
     }
 
-    // Check for remove items removed from DB
+    // Check for remove items removed from the DB
     if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	wdgList(it_ls);
@@ -1166,7 +1174,7 @@ string Page::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if(!ownerProj()->mimeDataGet(id, mimeType, &mimeData ) && !parent().freeStat())
+    if(!ownerProj()->mimeDataGet(id,mimeType,&mimeData) && !parent().freeStat())
 	mimeData = parent().at().resourceGet(id, &mimeType);
     if(mime) *mime = mimeType;
 
@@ -1255,8 +1263,10 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    pageAdd(opt->attr("id").c_str(),opt->text().c_str());
-	    pageAt(opt->attr("id")).at().setOwner(opt->attr("user"));
+	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
+	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
+	    pageAdd(vid, opt->text()); pageAt(vid).at().setOwner(opt->attr("user"));
+	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
     }
@@ -1519,7 +1529,7 @@ void PageWdg::load_( )
     //Load generic widget's data
     string db  = ownerPage().ownerProj()->DB();
     string tbl = ownerPage().ownerProj()->tbl()+"_incl";
-    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Inherit modify attributes
     vector<string> als;
@@ -1547,7 +1557,7 @@ void PageWdg::loadIO( )
 {
     if(!enable()) return;
 
-    //> Load widget's work attributes
+    //Load widget's work attributes
     mod->attrsLoad(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id(), cfg("ATTRS").getS());
 }
 

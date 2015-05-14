@@ -33,7 +33,7 @@ using namespace OSCADA;
 //*************************************************
 TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : mStart(false), mModSys(modi), mMod(-1), mId(id), mName(name)
 {
-    if(subModule()) mMod = grpAdd("mod_");
+    if(subModule()) mMod = grpAdd("mod_", true);
 }
 
 TSubSYS::~TSubSYS( )
@@ -63,10 +63,10 @@ void TSubSYS::modAdd( TModule *modul )
 {
     if(!subModule()) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
     if(chldPresent(mMod,modul->modId())) return;
-    chldAdd(mMod,modul);
+    chldAdd(mMod, modul, s2i(modul->modInfo("HighPriority"))?0:-1);
 #if OSC_DEBUG >= 1
     vector<string> list;
-    modul->modInfo( list );
+    modul->modInfo(list);
     for(unsigned i_opt = 0; i_opt < list.size(); i_opt++)
 	mess_info(nodePath().c_str(),"-> %s: %s",_(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
 #endif

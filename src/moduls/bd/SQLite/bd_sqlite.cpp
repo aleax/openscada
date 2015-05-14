@@ -187,7 +187,7 @@ TTable *MBD::openTable( const string &inm, bool create )
     return new MTable(inm, this, create);
 }
 
-void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
+void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTrans )
 {
     char *zErrMsg = NULL;
     int rc, nrow = 0, ncol = 0;
@@ -197,8 +197,6 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(!enableStat())	return;
 
     //Commit set
-    string req = ireq;
-
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
 
@@ -324,7 +322,7 @@ void MTable::fieldStruct( TConfig &cfg )
 	string sid = tblStrct[i_fld][1];
 	if(cfg.cfgPresent(sid)) continue;
 
-	int flg = (tblStrct[i_fld][5] == "1") ? (int)TCfg::Key : (int)TFld::NoFlag;
+	int flg = s2i(tblStrct[i_fld][5]) ? (int)TCfg::Key : (int)TFld::NoFlag;
 	if(tblStrct[i_fld][2] == "TEXT")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
 	else if(tblStrct[i_fld][2] == "INTEGER")
@@ -675,7 +673,21 @@ void MTable::fieldFix( TConfig &cfg )
 
 string MTable::getVal( TCfg &cfg, bool toEnc )
 {
-    switch(cfg.fld().type()) {
+    string rez = cfg.getS();
+    if(cfg.fld().type() == TFld::String && toEnc) {
+	string prntRes = rez;
+	bool isBin = false;
+	for(unsigned iCh = 0; !isBin && iCh < prntRes.size(); ++iCh)
+	    switch(prntRes[iCh]) {
+		case 0: isBin = true; break;
+		case '\'': prntRes.insert(iCh, 1, prntRes[iCh]); ++iCh; break;
+	    }
+	return isBin ? "X'"+TSYS::strDecode(rez, TSYS::Bin)+"'" : "'"+prntRes+"'";
+    }
+
+    return toEnc ? "'"+rez+"'" : rez;
+
+    /*switch(cfg.fld().type()) {
 	case TFld::String: {
 	    if(!toEnc) return cfg.getS();
 	    string prntRes = cfg.getS();
@@ -691,7 +703,7 @@ string MTable::getVal( TCfg &cfg, bool toEnc )
 	default: return toEnc ? "'"+cfg.getS()+"'" : cfg.getS();
     }
 
-    return "";
+    return "";*/
 }
 
 void MTable::setVal( TCfg &cf, const string &val, bool tr )

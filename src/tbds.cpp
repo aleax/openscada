@@ -42,8 +42,8 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
     el_db.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     el_db.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     el_db.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_db.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
-    el_db.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    el_db.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"2000"));
+    el_db.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"1000"));
     el_db.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
     el_db.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
 }
@@ -163,7 +163,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     string bdn = realDBName(ibdn);
 
     if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG)) {
-	ResAlloc res(SYS->nodeRes(),false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd, *fnd = NULL, *el;
 	string vl, vl_tr;
 	vector<string> cf_el;
@@ -233,7 +233,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
     }
 
     //Load from Config-file if tbl no present
-    ResAlloc res(SYS->nodeRes(), false);
+    ResAlloc res(SYS->cfgRes(), false);
     XMLNode *nd, *fnd = NULL, *el;
     string vl, vl_tr;
     vector<string> cf_el;
@@ -298,7 +298,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 
     //Save to config
     if(forceCfg || TSYS::strParse(bdn,0,".") == DB_CFG) {
-	ResAlloc res(SYS->nodeRes(),false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd, *wel = NULL, *fnd;
 	vector<string> cf_el;
 	string vnm;
@@ -400,7 +400,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 
     //Delete from config
     if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG || !db_true)) {
-	ResAlloc res(SYS->nodeRes(),false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(path,true);
 	vector<string> cf_el;
 	// Search present field
@@ -457,7 +457,7 @@ void TBDS::genDBSet( const string &path, const string &val, const string &user, 
     //Set to config
     if(!bd_ok && (SYS->workDB() == DB_CFG || rFlg&TBDS::OnlyCfg)) {
 	if(genDBGet(path,"",user,(rFlg|OnlyCfg)) == val) return;
-	ResAlloc res(SYS->nodeRes(), true);
+	ResAlloc res(SYS->cfgRes(), true);
 	XMLNode *tgtN = NULL;
 	if((rFlg&TBDS::UseTranslate) && Mess->lang2Code().size())
 	    tgtN = SYS->cfgNode(path+"_"+Mess->lang2Code(),true);
@@ -497,7 +497,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
 
     if(!bd_ok) {
 	//Get from config-file
-	ResAlloc res(SYS->nodeRes(), false);
+	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *tgtN = NULL;
 	if(rFlg&TBDS::UseTranslate && Mess->lang2Code().size())
 	    tgtN = SYS->cfgNode(path+"_"+Mess->lang2Code());
@@ -745,13 +745,13 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 	try {
 	    vector< vector<string> > rtbl;
 	    sqlReq(prms[0].getS(), &rtbl, ((prms.size()>=2)?prms[1].getB():EVAL_BOOL));
-	    for(unsigned i_r = 0; i_r < rtbl.size(); i_r++) {
+	    for(unsigned iR = 0; iR < rtbl.size(); iR++) {
 		TArrayObj *row = new TArrayObj();
-		for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++) {
-		    row->arSet(i_c, rtbl[i_r][i_c]);
-		    if(i_r) row->TVarObj::propSet(rtbl[0][i_c], rtbl[i_r][i_c]);
+		for(unsigned iC = 0; iC < rtbl[iR].size(); iC++) {
+		    row->arSet(iC, rtbl[iR][iC]);
+		    if(iR) row->TVarObj::propSet(rtbl[0][iC], rtbl[iR][iC]);
 		}
-		rez->arSet(i_r, row);
+		rez->arSet(iR, row);
 	    }
 	}
 	catch(...){ }
@@ -791,7 +791,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),RWRWR_,"root",SDB_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),RWRWR_,"root",SDB_ID,4,
 		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
-		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load system from this DB"),RWRW__,"root","root");
+		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the system from this DB"),RWRW__,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);

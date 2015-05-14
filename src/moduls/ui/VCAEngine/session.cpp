@@ -416,7 +416,7 @@ void *Session::Task( void *icontr )
     Session &ses = *(Session *)icontr;
 
     ses.endrun_req = false;
-    ses.mStart    = true;
+    ses.mStart	   = true;
 
     ses.list(pls);
     while(!ses.endrun_req) {
@@ -628,8 +628,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root",SUI_ID,3,"tp","br","idm","1","br_pref","pg_");
 	if(ctrMkNode("area",opt,-1,"/alarm",_("Alarms")))
-	    if(ctrMkNode("table",opt,-1,"/alarm/alarm",_("Alarms list"),R_R_R_,"root",SUI_ID))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/alarm/alarm",_("Alarms list"),R_R_R_,"root",SUI_ID)) {
 		ctrMkNode("list",opt,-1,"/alarm/alarm/wdg",_("Widget"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/lev",_("Level"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/cat",_("Category"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -1186,14 +1185,16 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     if(val && diff && !TSYS::strNoSpace(calcProg()).empty()) {
 	// Prepare function io structure
 	TFunction fio(parent().at().calcId());
+
 	//  Add generic io
-	fio.ioIns(new IO("f_frq","Function calculate frequency (Hz)",IO::Real,IO::Default,"1000",false), 0);
-	fio.ioIns(new IO("f_start","Function start flag",IO::Boolean,IO::Default,"0",false), 1);
-	fio.ioIns(new IO("f_stop","Function stop flag",IO::Boolean,IO::Default,"0",false), 2);
-	fio.ioIns(new IO("this","This widget's object for access to user's API",IO::Object,IO::Default), 3);
+	fio.ioIns(new IO("f_frq","Function calculate frequency (Hz)",IO::Real,IO::Default,"1000",false), SpIO_Frq);
+	fio.ioIns(new IO("f_start","Function start flag",IO::Boolean,IO::Default,"0",false), SpIO_Start);
+	fio.ioIns(new IO("f_stop","Function stop flag",IO::Boolean,IO::Default,"0",false), SpIO_Stop);
+	fio.ioIns(new IO("this","This widget's object for access to user's API",IO::Object,IO::Default), SpIO_This);
+
 	//  Add calc widget's attributes
 	vector<string> iwls, als;
-	//  Self attributes check
+	//   Self attributes check
 	attrList(als);
 	AutoHD<Widget> fulw = parentNoLink();
 	for(unsigned i_a = 0; i_a < als.size(); i_a++) {
@@ -1201,8 +1202,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	    if((fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus")
 		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output,"",false,("./"+als[i_a]).c_str()));
 	}
-
-	//  Include attributes check
+	//   Include attributes check
 	wdgList(iwls);
 	for(unsigned i_w = 0; i_w < iwls.size(); i_w++) {
 	    AutoHD<Widget> curw = wdgAt(iwls[i_w]);
@@ -1277,15 +1277,16 @@ string SessWdg::calcProg( )	{ return (!parent().freeStat()) ? parent().at().calc
 
 int SessWdg::calcPer( )		{ return (!parent().freeStat()) ? parent().at().calcPer() : 0; }
 
-string SessWdg::resourceGet( const string &id, string *mime )
+string SessWdg::resourceGet( const string &iid, string *mime )
 {
-    string  mimeType,
-	    mimeData = sessAttr("media://"+id);		//Try load from the session attribute
+    string  id = TSYS::strParse(iid, 0, "?"),
+	    mimeType,
+	    mimeData = sessAttr("media://"+id);	//Try load from the session attribute
     if(mimeData.size()) {
 	int off = 0;
 	mimeType = TSYS::strLine(mimeData, 0, &off);
 	if(mime) *mime = mimeType;
-	return TSYS::strDecode(mimeData.substr(off), TSYS::base64);
+	return mimeData.substr(off);
     }
 
     //Load original
@@ -1297,7 +1298,7 @@ string SessWdg::resourceGet( const string &id, string *mime )
 
 void SessWdg::resourceSet( const string &id, const string &data, const string &mime )
 {
-    sessAttrSet("media://"+id, data.empty() ? "" : mime+"\n"+TSYS::strEncode(data,TSYS::base64));
+    sessAttrSet("media://"+id, data.empty() ? "" : mime+"\n"+data);
 }
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
@@ -1512,7 +1513,7 @@ void SessWdg::calc( bool first, bool last )
 		attr = attrAt(mAttrLnkLs[i_a]);
 		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(attr.at().cfgVal());
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty()) {
-		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
+		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
 		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if(obj_tp == "prm:") {
 			int detOff = obj_tp.size();	//Links subdetail process
@@ -1541,6 +1542,13 @@ void SessWdg::calc( bool first, bool last )
 		    else if(obj_tp == "arh:" && attr.at().flgGlob()&Attr::Address)
 			attr.at().setS("/Archive/va_"+attr.at().cfgVal().substr(obj_tp.size()));
 		}
+		/*else if(attr.at().flgSelf()&Attr::CfgLnkOut) {
+		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
+		    if(!attr.at().cfgVal().size() ||
+			    (obj_tp == "prm:" && SYS->daq().at().attrAt(TSYS::strParse(attr.at().cfgVal().substr(obj_tp.size()),0,"#"),0,true).freeStat()) ||
+			    (obj_tp == "wdg:" && attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).freeStat()))
+			attr.at().setS(EVAL_STR, false, true);
+		}*/
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);
 		attr.free();
 	    }
@@ -1551,24 +1559,24 @@ void SessWdg::calc( bool first, bool last )
 		int evId = ioId("event");
 		if(evId >= 0)	setS(evId, wevent);
 
-		// Load data to calc area
-		setR(0, 1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
-		setB(1, first);
-		setB(2, last);
-		for(int i_io = 4; i_io < ioSize( ); i_io++) {
+		// Load the data to the calc area
+		setR(SpIO_Frq, 1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
+		setB(SpIO_Start, first);
+		setB(SpIO_Stop, last);
+		for(int i_io = SpIO_Sz; i_io < ioSize(); i_io++) {
 		    if(func()->io(i_io)->rez().empty()) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(), 0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(), 1);
 		    attr = (sw_attr==".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
-		    set(i_io,attr.at().get());
+		    set(i_io, attr.at().get());
 		}
 
 		// Calc
 		setMdfChk(true);
 		TValFunc::calc();
 
-		// Save data from calc area
-		for(int i_io = 4; i_io < ioSize( ); i_io++) {
+		// Save the data from the calc area
+		for(int i_io = SpIO_Sz; i_io < ioSize(); i_io++) {
 		    if(func()->io(i_io)->rez().empty() || !ioMdf(i_io)) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(), 0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(), 1);
@@ -1744,7 +1752,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  attr - readed attribute;
     //  fromSess - read attribute from session table.
     if(iid == "attr" && prms.size()) {
-	if(prms.size() > 1 && prms[1].getB()) return sessAttr(prms[0].getS());
+	if(prms.size() > 1 && prms[1].getB())	return sessAttr(prms[0].getS());
 	else if(attrPresent(prms[0].getS()))	return attrAt(prms[0].getS()).at().get();
 	return string("");
     }
@@ -1783,21 +1791,21 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // string mime(string addr, string type = "") - read mime data from the session table or primal source
     //  addr - address to mime by link attribute to mime or direct mime address
     //  type - return attribute for mime type store
-    if(iid == "mime" && prms.size() >= 1) {
+    if(iid == "mime" && prms.size()) {
 	string addr = prms[0], rez, tp;
 	//Check for likely attribute
 	if(attrPresent(addr)) {
 	    AutoHD<Attr> a = attrAt(addr);
-	    if(a.at().type() == TFld::String && a.at().flgGlob()&Attr::Image) addr = a.at().getS();
+	    if(a.at().type() == TFld::String /*&& a.at().flgGlob()&Attr::Image*/) addr = a.at().getS();
 	}
 	rez = resourceGet(addr, &tp);
 	if(prms.size() >= 2) { prms[1].setS(tp); prms[1].setModify(); }
 
-	return rez;
+	return TSYS::strDecode(rez, TSYS::base64);
     }
     // int mimeSet(string addr, string data, string type = "") - set or clear data to the session table
     //  addr - address to mime by link attribute to mime or direct mime address
-    //  data - set to the mime data, empty for clear into 
+    //  data - set to the mime data, empty for clear into
     //  type - mime type for store data
     if(iid == "mimeSet" && prms.size() >= 2) {
 	string addr = prms[0];
@@ -1805,11 +1813,11 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	AutoHD<Attr> a;
 	if(attrPresent(addr)) {
 	    a = attrAt(addr);
-	    if(a.at().type() == TFld::String && a.at().flgGlob()&Attr::Image) addr = a.at().getS();
+	    if(a.at().type() == TFld::String /*&& a.at().flgGlob()&Attr::Image*/) addr = a.at().getS();
 	    else a.free();
 	}
-	resourceSet(addr, prms[1], (prms.size()>=3)?prms[2]:"");	//???? Store to the session's context table
-	if(!a.freeStat()) a.at().setS(a.at().getS(), false, true);	//Mark the attribute to modify state
+	resourceSet(TSYS::strParse(addr,0,"?"), TSYS::strEncode(prms[1],TSYS::base64), (prms.size()>=3)?prms[2]:"");
+	if(!a.freeStat()) a.at().setS(TSYS::strParse(addr,1,"?").size()?TSYS::strLabEnum(addr):addr+"?0");	//Mark the attribute to modify state
 
 	return (int)prms[1].getS().size();
     }

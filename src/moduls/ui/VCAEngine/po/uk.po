@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-30 15:28+0200\n"
+"POT-Creation-Date: 2015-05-10 20:09+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -83,6 +83,10 @@ msgstr "Mime тип"
 msgid "Data"
 msgstr "Дані"
 
+#, c-format
+msgid "Widget '%s' already present!"
+msgstr "Віджет '%s' вже присутній!"
+
 msgid "Widget is not container!"
 msgstr "Віджет не контейнер!"
 
@@ -146,6 +150,9 @@ msgstr "Заповнення:зображення"
 msgid "Orientation angle"
 msgstr "Кут оберту"
 
+msgid "Mirroring"
+msgstr ""
+
 msgid "Elements list"
 msgstr "Перелік елементів"
 
@@ -157,8 +164,8 @@ msgid ""
 "The list of elements can contain:\n"
 "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|"
 "c{n}]:[line_stl|s{n}]\n"
-"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c"
-"{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|"
+"c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:"
 "[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
@@ -187,8 +194,8 @@ msgstr ""
 "Перелік елементів може містити:\n"
 "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|"
 "c{n}]:[line_stl|s{n}]\n"
-"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c"
-"{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|"
+"c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:"
 "[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
@@ -616,8 +623,8 @@ msgstr "Віджет діаграми кінцевої візуалізації.
 msgid "Tracing period (s)"
 msgstr "Період слідкування (с)"
 
-msgid "Trend;Spectrum"
-msgstr "Графік;Спектр"
+msgid "Trend;Spectrum;XY"
+msgstr "Графік;Спектр;XY"
 
 msgid "Cursor:sek"
 msgstr "Курсор:сек"
@@ -646,18 +653,21 @@ msgstr "Шкала:колір"
 msgid "Scale:horizontal"
 msgstr "Шкала:горизонтальна"
 
-msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Не малювати;Ґратка;Маркери;Ґратка та маркери"
-
-msgid "Scale:vertical"
-msgstr "Шкала:вертикальна"
-
 msgid ""
 "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
 msgstr ""
 "Не малювати;Ґратка;Маркери;Ґратка та маркери;Ґратка (лог);Маркери (лог);"
 "Ґратка та маркери (лог)"
+
+msgid "Scale:horizontal scale (%)"
+msgstr "Шкала:гориз. масштаб (%)"
+
+msgid "Scale:horizontal scale offset (%)"
+msgstr "Шкала:зміщ. гориз. масштабу (%)"
+
+msgid "Scale:vertical"
+msgstr "Шкала:вертикальна"
 
 msgid "Scale:vertical scale (%)"
 msgstr "Шкала:верт. масштаб (%)"
@@ -1046,6 +1056,10 @@ msgid "Erase"
 msgstr "Видалити"
 
 #, c-format
+msgid "Page '%s' already present!"
+msgstr "Сторінка '%s' вже присутня!"
+
+#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Взагалі: %d; Включено: %d"
 
@@ -1225,14 +1239,14 @@ msgstr "Рушій середовища візуалізації та керув
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Generic visual control area engine."
+msgid "The main visual control area engine."
 msgstr "Загальний рушій середовища візуалізації та керування."
 
 msgid "ID"
 msgstr ""
 
 msgid "DB table"
-msgstr ""
+msgstr "Таблиця БД"
 
 msgid "Parent widget"
 msgstr "Батьківський віджет"
@@ -1401,6 +1415,18 @@ msgid "Engine text codepage for text encode into it."
 msgstr "Кодування тексту рушія для перекодування у неї."
 
 #, c-format
+msgid "Project '%s' already present!"
+msgstr "Проект '%s' вже присутній!"
+
+#, c-format
+msgid "Widgets library '%s' already present!"
+msgstr "Бібліотека віджетів '%s' вже присутня!"
+
+#, c-format
+msgid "Session '%s' already present!"
+msgstr "Сеанс '%s' вже присутній!"
+
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Атрибут '%s' не звільнено. Примусове видалення!"
 
@@ -1561,6 +1587,9 @@ msgstr ""
 msgid "Widget: "
 msgstr "Віджет: "
 
+msgid "Used"
+msgstr ""
+
 msgid "Go to parent"
 msgstr "Перейти до батька"
 
@@ -1676,8 +1705,8 @@ msgid "Changing of not user attribute is no permitted"
 msgstr "Модифікація атрибутів не користувача не дозволена"
 
 #, c-format
-msgid "New attribute's ID '%s' already present."
-msgstr "Новий ідентифікатор атрибуту '%s' вже присутній."
+msgid "New attribute's ID '%s' already present!"
+msgstr "Новий ідентифікатор атрибуту '%s' вже присутній!"
 
 msgid "Boolean"
 msgstr "Логічний"
@@ -1796,3 +1825,6 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
+
+#~ msgid "No draw;Grid;Markers;Grid and markers"
+#~ msgstr "Не малювати;Ґратка;Маркери;Ґратка та маркери"

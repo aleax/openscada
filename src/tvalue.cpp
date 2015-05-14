@@ -2,7 +2,7 @@
 //OpenSCADA system file: tvalue.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,7 +63,7 @@ void TValue::addFld( TElem *el, unsigned id_val )
 
 void TValue::delFld( TElem *el, unsigned id_val )
 {
-    if(nodeMode() == TCntrNode::Enable && chldPresent(m_vl,el->fldAt(id_val).name()))
+    if(nodeMode() == TCntrNode::Enabled && chldPresent(m_vl,el->fldAt(id_val).name()))
 	chldDel(m_vl, el->fldAt(id_val).name());
 }
 
@@ -785,7 +785,7 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
 TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // ElTp get(int tm = 0, int utm = 0, bool sys = false) - get attribute value at time <tm:utm> and system access flag <sys>.
-    //  tm, utm - time for requested value
+    //  tm, utm - the time for requested value
     //  sys - system request, direct from object
     if(iid == "get") {
 	try {
@@ -796,8 +796,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    bool isSys = false;
 	    if(prms.size() >= 3) isSys = prms[2].getB();
 	    rez = get(&tm,isSys);
-	    if(prms.size() >= 1)	{ prms[0].setI(tm/1000000); prms[0].setModify(); }
-	    if(prms.size() >= 2)	{ prms[1].setI(tm%1000000); prms[1].setModify(); }
+	    if(prms.size() >= 1) { prms[0].setI(tm/1000000); prms[0].setModify(); }
+	    if(prms.size() >= 2) { prms[1].setI(tm%1000000); prms[1].setModify(); }
 
 	    return rez;
 	}catch(...){ }

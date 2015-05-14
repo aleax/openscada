@@ -2,7 +2,7 @@
 //OpenSCADA system file: tmodule.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,8 +41,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModule                                       *
 //*************************************************
-const char *TModule::l_info[] =
-    {"Module","Name","Type","Source","Version","Author","Description","License"};
+const char *TModule::l_info[] = {"Module", "Name", "Type", "Source", "Version", "Author", "Description", "License"};
 
 TModule::TModule( const string &id ) : mId(id)
 {

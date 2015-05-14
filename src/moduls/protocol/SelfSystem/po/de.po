@@ -1,16 +1,15 @@
 # OpenSCADA.Protocol.SelfSystem translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 19:29+0200\n"
+"POT-Creation-Date: 2015-05-10 17:23+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -27,8 +26,22 @@ msgstr "Systemprotokoll OpenSCADA"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Self OpenSCADA protocol, support generic functions."
-msgstr "Allgemeine Hauptfunktionen für das Systemprotokoll OpenSCADA."
+msgid ""
+"Provides own OpenSCADA protocol based at XML and one's control interface."
+msgstr ""
+"Bietet Selbst OpenSCADA Protokoll Basis auf XML und OpenSCADA "
+"Steuerschnittstelle."
+
+#, c-format
+msgid ""
+"Connections from the user '%s' and the source '%s' reached to limit %d. "
+"Erasing spare!"
+msgstr ""
+"Verbindung vom Benutzer '%s' und die Quelle '%s' erreichte auf %d begrenzen. "
+"Erasing Überschuss!"
+
+msgid "Not full respond."
+msgstr "Partielles Ansprechen."
 
 #, c-format
 msgid "Station '%s' error: %s!"
@@ -42,17 +55,23 @@ msgstr "Station '%s' Fehler: Antwort ist falsch!"
 msgid "Station respond '%s' error!"
 msgstr "Station antwortet mit '%s' Fehler!"
 
-msgid "Not full respond."
-msgstr "Partielles Ansprechen."
-
 msgid "Parameters"
 msgstr "Optionen"
+
+msgid "State"
+msgstr "Zustand"
+
+msgid "Active authentication sessions"
+msgstr "Aktive Authentifizierung Sitzungen"
 
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
 msgid "Life time of auth session(min)"
 msgstr "Lebensdauer der Sitzung (min)"
+
+msgid "Single user and host connections limit"
+msgstr "Single-User und Host-Verbindungen Grenze"
 
 msgid "Compression level"
 msgstr "Kompressionsstufe"
@@ -75,8 +94,11 @@ msgid "Value in bytes."
 msgstr "Wert in Bytes."
 
 #, c-format
+msgid "%s %s(%s)"
+msgstr ""
+
 msgid "Get request: '%s': %d"
-msgstr "Get-Anfrage: '%s': %d"
+msgstr "Holen Antrag: '%s': %d"
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
@@ -89,3 +111,21 @@ msgstr "Prozess Anfrage: '%s', Zeit: %f ms."
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
 msgstr "Sparen reagieren zu Strom und zu verpacken: '%s': %d, Zeit: %f ms."
+
+#~ msgid "SES_OPEN request: %d"
+#~ msgstr "SES_OPEN Antrag: %d"
+
+#~ msgid "SES_OPEN response: %d"
+#~ msgstr "SES_OPEN Antwort: %d"
+
+#~ msgid "REQ send: %d"
+#~ msgstr "REQ senden: %d"
+
+#~ msgid "REQ response first %d"
+#~ msgstr "REQ Antwort zuerst %d"
+
+#~ msgid "REQ response full %d"
+#~ msgstr "REQ Antwort voll %d"
+
+#~ msgid "Request error: %s"
+#~ msgstr "Anforderungsfehler: %s"

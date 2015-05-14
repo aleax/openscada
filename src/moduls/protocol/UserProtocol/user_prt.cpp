@@ -36,7 +36,7 @@
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow creation self-user protocols on any OpenSCADA language.")
+#define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -177,16 +177,18 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     if(!uPrtPresent(pIt)) return;
     AutoHD<UserPrt> up = uPrtAt(pIt);
     funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workOutProg())).at());
+    // Restore starting the function for stopped early by safety timeout
+    if(funcV.func() && !funcV.func()->startStat()) funcV.func()->setStart(true);
 
-    ResAlloc res( tro.nodeRes(), true );
+    ResAlloc res(tro.nodeRes(), true);
 
     //Load inputs
     AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
-    funcV.setO(0,xnd);
+    funcV.setO(0, xnd);
     xnd.at().fromXMLNode(io);
-    funcV.setO(1,new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
+    funcV.setO(1, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
     //Call processing
-    funcV.calc( );
+    funcV.calc();
     //Get outputs
     xnd.at().toXMLNode(io);
 
