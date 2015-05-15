@@ -626,7 +626,7 @@ int TSYS::start( )
     list(lst);
 
     mess_info(nodePath().c_str(),_("Start!"));
-    for(unsigned i_a=0; i_a < lst.size(); i_a++)
+    for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().subStart(); }
 	catch(TError err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());

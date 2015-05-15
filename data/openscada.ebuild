@@ -13,8 +13,8 @@ inherit eutils autotools qt4-r2
 
 DESCRIPTION="Open SCADA system"
 HOMEPAGE="http://oscada.org"
-SRC_URI="ftp://ftp.oscada.org/OpenSCADA/Work/${PF}.tar.lzma
-ftp://ftp.oscada.org/OpenSCADA/Work/${PN}-res-${PVR}.tar.lzma"
+SRC_URI="ftp://ftp.oscada.org/OpenSCADA/Work/${PF}.tar.xz
+ftp://ftp.oscada.org/OpenSCADA/Work/${PN}-res-${PVR}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
@@ -71,9 +71,9 @@ pkg_setup() {
 }
 
 src_unpack() {
-	unpack ${PF}.tar.lzma
+	unpack ${PF}.tar.xz
 	cd "${WORKDIR}/${PF}"
-	unpack ${PN}-res-${PVR}.tar.lzma
+	unpack ${PN}-res-${PVR}.tar.xz
 }
 
 src_configure() {

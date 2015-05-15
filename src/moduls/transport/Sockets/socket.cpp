@@ -132,7 +132,7 @@ void TTransSock::perSYSCall( unsigned int cnt )
 
     //Iniciative input protocols check for restart/reconnect need.
     inList(trls);
-    for(unsigned iTr = 0; iTr < trls.size(); iTr++)
+    for(unsigned iTr = 0; !SYS->stopSignal() && iTr < trls.size(); iTr++)
 	((AutoHD<TSocketIn>)inAt(trls[iTr])).at().check();
 }
 
@@ -255,6 +255,8 @@ void TSocketIn::start( )
 	    else name_in.sin_port = 10001;
 
 	    if(mode() == 2) {							//Initiate connection
+		int flags = fcntl(sock_fd, F_GETFL, 0);
+		fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
 		int res = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
 		if(res == -1 && errno == EINPROGRESS) {
 		    struct timeval tv;

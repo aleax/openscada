@@ -49,8 +49,16 @@ distSrc-lzma: distdir
 	tar --exclude=".svn" --lzma -cvf $(PACKAGE)-$(PACKAGE_VERSION).tar.lzma $(distdir)
 	$(am__remove_distdir)
 
+distSrc-xz: distdir
+	rm -rf $(distdir)/data $(distdir)/doc
+	tar --exclude=".svn" -J -cvf $(PACKAGE)-$(PACKAGE_VERSION).tar.xz $(distdir)
+	$(am__remove_distdir)
+
 distRes:
 	tar --exclude=".svn" -cvzf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.gz doc data
 
 distRes-lzma:
 	tar --exclude=".svn" --lzma -cvf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.lzma doc data
+
+distRes-xz:
+	tar --exclude=".svn" -J -cvf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.xz doc data

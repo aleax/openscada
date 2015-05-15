@@ -6,8 +6,8 @@ Summary(de_DE.UTF8): Open SCADA-System
 Name: openscada
 Version: 0.9
 Release: rNNNN
-Source: openscada-%version.tar.lzma
-Source1: openscada-res-%version.tar.lzma
+Source: openscada-%version.tar.xz
+Source1: openscada-res-%version.tar.xz
 License: GPLv2
 Group: Applications/Engineering
 Packager: Roman Savochenko <rom_as@oscada.org>

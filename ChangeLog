@@ -1,3 +1,12 @@
+2015-05-15 Roman
+- SYS: Source distributive build targets distSrc-xz and distRes-xz added. All build's files moved to using source packeges packed XZ.
+- FIX.Transport.Sockets: Wait the connection timeout into the initiative mode fixed by the socket switch to O_NONBLOCK.
+
+
+2015-05-13 fido_max
+- DAQ.Fastwel: FBUS SDK updated to 2.301
+
+
 2015-05-11 Roman
 - Archiver.FSArch: Yet one place using delFile() set.
 - DAQ.{DAQGate,JavaLikeCalc,OPC_UA,SoundCard}: Some translations fixed.
