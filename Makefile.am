@@ -13,8 +13,13 @@ pkgconfig_DATA = openscada.pc
 
 CLEANFILES = openscada.pc
 
+dist-lzma: distdir
+	rm -rf $(distdir)/data $(distdir)/doc
+	tar --exclude=".svn" --use-compress-program=lzma -cvf $(PACKAGE)-$(PACKAGE_VERSION).tar.lzma $(distdir)
+	$(am__remove_distdir)
+
 dist-res:
 	tar --exclude=".svn" -cvzf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.gz doc data
 
 dist-reslzma:
-	tar --exclude=".svn" --lzma -cvf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.lzma doc data
+	tar --exclude=".svn" --use-compress-program=lzma -cvf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.lzma doc data

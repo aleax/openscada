@@ -24,6 +24,7 @@ build-arch: configure-stamp build-stamp
 build-indep: configure-stamp build-stamp
 configure-stamp:
 	dh_testdir
+	dh_autoreconf
 	./configure $(CROSS) --prefix=/usr --sysconfdir=/etc --enable-DiamondBoards --enable-ICP_DAS --enable-BFN
 	touch $@
 build-stamp:
