@@ -1,3 +1,12 @@
+2015-05-22 Roman
+- SYS: Targets "*-lzma" into Makefile.am fixed for force using LZMA by --use-compress-program=lzma but argument --lzma often uses XZ.
+    {debian,debian_mod}/changelog, *.spec: Work version scheme naming set to 0.9+rNNNN for adapt to the AutoBuilder,
+	allow next update to 0.9.N and the Work version's SVN revision present into the program binary.
+    {debian,debian_mod}/rules: Autoreconf call by dh_autoreconf restored.
+    data/openscada_start.in: "subst" command using, as the ALTLinux specific, replaced to generic "sed".
+- FIX:DB.FireBird: Configure template AX_LIB_FIREBIRD adapted for configure and build that with 64bit libraries, like Mandriva64.
+
+
 2015-05-15 Roman
 - SYS: Source distributive build targets distSrc-xz and distRes-xz added. All build's files moved to using source packeges packed XZ.
 - FIX.Transport.Sockets: Wait the connection timeout into the initiative mode fixed by the socket switch to O_NONBLOCK.

@@ -230,7 +230,7 @@ AC_DEFUN([AX_LIB_FIREBIRD],
 		if test -r "$ac_firebird_path_tmp/include/$ac_firebird_header" -o -r "$ac_firebird_path_tmp/include/firebird/$ac_firebird_header"; then
 		    ac_firebird_path=$ac_firebird_path_tmp
 		    ac_firebird_cppflags="-I$ac_firebird_path_tmp/include -I$ac_firebird_path_tmp/include/firebird"
-		    ac_firebird_ldflags="-L$ac_firebird_path_tmp/lib"
+		    if test $ac_firebird_path_tmp = /opt; then ac_firebird_ldflags="-L$ac_firebird_path_tmp/lib"; fi
 		    ac_firebird_header_path=$ac_firebird_path/include
 		    if test -r "$ac_firebird_path/include/firebird/$ac_firebird_header"; then ac_firebird_header_path="$ac_firebird_path/include/firebird"; fi
 		    break;

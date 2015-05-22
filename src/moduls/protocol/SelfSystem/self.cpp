@@ -104,7 +104,7 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
 	    }
 	    ++aI;
 	}
-    if(i_oCnt > singleUserHostLimit() && aOldI != mAuth.end()) {
+    if((int)i_oCnt > singleUserHostLimit() && aOldI != mAuth.end()) {
 	mess_err(nodePath().c_str(), _("Connections from the user '%s' and the source '%s' reached to limit %d. Erasing spare!"),
 	    user.c_str(), TSYS::strLine(src,0).c_str(), singleUserHostLimit());
 	mAuth.erase(aOldI);

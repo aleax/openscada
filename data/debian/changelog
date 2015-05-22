@@ -1,7 +1,14 @@
-openscada (0.9-rNNNN) experimental; urgency=low
+openscada (0.9-1) experimental; urgency=low
+
+  * Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
+  * LTS version naming 0.8.N.
+
+ -- Roman Savochenko <rom_as@oscada.org>  Fri, 22 May 2015 22:00:00 +0200
+
+openscada (0.9.rNNNN-1) experimental; urgency=low
 
   * Move to new Work version scheme naming 0.9-rNNNN.
-  * Next LTS version will 0.9.N.
+  * Next LTS version will 0.8.N.
 
  -- Roman Savochenko <rom_as@oscada.org>  Sat, 22 Feb 2014 10:00:00 +0200
 

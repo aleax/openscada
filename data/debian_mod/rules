@@ -24,6 +24,7 @@ build-arch: configure-stamp build-stamp
 build-indep: configure-stamp build-stamp
 configure-stamp:
 	dh_testdir
+	dh_autoreconf
 	./configure $(CROSS) --prefix=/usr --sysconfdir=/etc \
 	    --enable-DBF=incl --enable-SQLite=incl --enable-JavaLikeCalc=incl --enable-LogicLev=incl \
 	    --enable-Sockets=incl --enable-Serial=incl --enable-SelfSystem=incl --enable-UserProtocol=incl \

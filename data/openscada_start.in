@@ -53,8 +53,8 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
 	    # Move and prepare start ico to desktop
 	    elif [ -n "$DESKTOP_DIR" ] && [ ! -f "$DESKTOP_DIR/openscada_$ProjName.desktop" ]; then
 		cp @datadir_full@/applications/openscada.desktop "$DESKTOP_DIR/openscada_$ProjName.desktop";
-		subst "s/Exec=/Exec=env OSCADA_ProjName=$ProjName /" "$DESKTOP_DIR/openscada_$ProjName.desktop"
-		subst "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $ProjName/" "$DESKTOP_DIR/openscada_$ProjName.desktop"
+		sed -i "s/Exec=/Exec=env OSCADA_ProjName=$ProjName /" "$DESKTOP_DIR/openscada_$ProjName.desktop"
+		sed -i "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $ProjName/" "$DESKTOP_DIR/openscada_$ProjName.desktop"
 	    fi
 	fi
     else ProjName=start; fi

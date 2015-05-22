@@ -818,9 +818,9 @@ void TMdPrm::sync( )
 		als.push_back(ael->attr("id"));
 		if(vlPresent(ael->attr("id")))	continue;
 		TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
-		p_el.fldAdd( new TFld( ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
+		p_el.fldAdd(new TFld(ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
 		    (s2i(ael->attr("flg"))&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
-		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()) );
+		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()));
 		modif(true);
 	    }
 
