@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 18:10+0300\n"
+"POT-Creation-Date: 2015-05-22 11:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,7 +110,7 @@ msgid ""
 "Set to zero for disable packing by gzip."
 msgstr ""
 
-msgid "Check archives period (min)"
+msgid "Checking the archives period (min)"
 msgstr ""
 
 msgid ""
@@ -118,7 +118,7 @@ msgid ""
 "in a directory of archives, as well as exceeding the limits and removing old archive files."
 msgstr ""
 
-msgid "Use info files for packed archives"
+msgid "Using info files for the packed archives"
 msgstr ""
 
 msgid ""
@@ -249,6 +249,15 @@ msgid ""
 "where they are considered identical and will be archived as a single value\n"
 "through sequential packaging. Allows well-packaged slightly changing parameters\n"
 "which outside certainty. Disable this property can be set to zero."
+msgstr ""
+
+msgid "Packing files timeout (min)"
+msgstr ""
+
+msgid "Checking archives period (min)"
+msgstr ""
+
+msgid "Using info files for packed archives"
 msgstr ""
 
 msgid "Files size"

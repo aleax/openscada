@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 18:10+0300\n"
+"POT-Creation-Date: 2015-05-22 11:22+0300\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -137,7 +137,7 @@ msgstr ""
 "файли архівів будуть пакуватися gzip архіватором.\n"
 "Встановити в нуль для виключення упакування gzip."
 
-msgid "Check archives period (min)"
+msgid "Checking the archives period (min)"
 msgstr "Період перевірки архівів (хвил)"
 
 msgid ""
@@ -150,7 +150,7 @@ msgstr ""
 "у теці нових файлів архівів, а також перевищення лімітів та видалення старих "
 "файлів архівів."
 
-msgid "Use info files for packed archives"
+msgid "Using info files for the packed archives"
 msgstr "Використовувати інф. файли для упакованих архівів"
 
 msgid ""
@@ -224,6 +224,7 @@ msgstr "Пак."
 msgid "Error"
 msgstr "Помилка"
 
+#, c-format
 msgid "File '%s' creation error: %s(%d)."
 msgstr "Помилка створення файлу '%s': %s(%d)."
 
@@ -246,6 +247,7 @@ msgstr "Вставлення повідомлення до архівного ф
 msgid "Archive file '%s' isn't attached!"
 msgstr "Файл архіву '%s' не під'єднано!"
 
+#, c-format
 msgid "Write to the archive file '%s' error: %s(%d)"
 msgstr "Помилка запису до файлу '%s': %s(%d)"
 
@@ -330,6 +332,15 @@ msgstr ""
 "за межами дійсності, параметри. Виключити цю властивість можна встановивши "
 "параметр у нуль."
 
+msgid "Packing files timeout (min)"
+msgstr "Таймаут пакування файлів (хвил)"
+
+msgid "Checking archives period (min)"
+msgstr "Період перевірки архівів (хвил)"
+
+msgid "Using info files for packed archives"
+msgstr "Використовувати інф. файли для упакованих архівів"
+
 msgid "Files size"
 msgstr "Розмір файлів"
 
@@ -388,6 +399,7 @@ msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
 msgstr ""
 "Попередження! Виділений розмір %d буферу індексу менше використаного %d."
 
+#, c-format
 msgid "Write to the archive '%s' file '%s' error: %s(%d)"
 msgstr "Помилка запису до архівного '%s' файлу '%s': %s(%d)"
 
@@ -413,3 +425,6 @@ msgstr "Помилка відкриття/створення нового фай
 msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 "Останнє значення актуального файлу архіву '%s' не EVAL. Спробую виправити це!"
+
+#~ msgid "Use info files for packed archives"
+#~ msgstr "Використовувати інф. файли для упакованих архівів"

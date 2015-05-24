@@ -429,13 +429,13 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		  "where they are considered identical and will be archived as a single value\n"
 		  "through sequential packaging. Allows well-packaged slightly changing parameters\n"
 		  "which outside certainty. Disable this property can be set to zero."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Packing files timeout (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the time after which, in the absence of appeals, archive files will be packaged in gzip archiver.\n"
 		 "Set to zero for disable packing by gzip."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Checking archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the frequency of checking the archives for the emergence or delete new files\n"
 		  "in a directory of archives, as well as exceeding the limits and removing old archive files."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Using info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
 		_("Specifies whether to create files with information about the packed archive files by gzip-archiver.\n"
 		  "When copying files of archive on another station, these info files can speed up the target station\n"
 		  "process of first run by eliminating the need to decompress by gzip-archives in order to obtain information."));

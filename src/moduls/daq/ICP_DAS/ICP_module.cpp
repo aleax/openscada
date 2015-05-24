@@ -315,7 +315,11 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.mBus == 0 && cntr.period() && wTm > 0) {
 		ResAlloc res(cntr.reqRes, true);
 		int wTmSet = 1e3*vmax(1.5e-9*cntr.period(), wTm);
+#ifdef __i386__
 		EnableSysWDT(wTmSet);
+#else
+		EnableWDT(wTmSet);
+#endif
 		if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), _("Set watchdog to %d ms."), wTmSet);
 		res.release();
 	    }
@@ -329,7 +333,15 @@ void *TMdContr::Task( void *icntr )
     catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     //Watchdog timer disable
-    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); DisableSysWDT(); res.release(); }
+    if(cntr.mBus == 0 && wTm > 0) {
+	ResAlloc res(cntr.reqRes, true);
+#ifdef __i386__
+	DisableSysWDT();
+#else
+	DisableWDT();
+#endif
+	res.release();
+    }
 
     cntr.prcSt = false;
 
