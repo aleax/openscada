@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +48,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	string descr( ) 	{ return cfg("DESCR").getS(); }	//Description
 	string ico( )		{ return cfg("ICO").getS(); }	//Icon
 
-	string DB( )		{ return work_lib_db; }		//Current library DB
+	string DB( )		{ return workLibDB; }		//Current library DB
 	string tbl( )		{ return cfg("DB_TBL").getS(); }//Table of storing library data
 	string fullDB( )	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
@@ -71,12 +70,12 @@ class WidgetLib : public TCntrNode, public TConfig
 	void mimeDataDel( const string &id, const string &idb = "" );
 
 	// Widgets
-	void list( vector<string> &ls ) 	{ chldList(m_wdg,ls); }
-	bool present( const string &id )	{ return chldPresent(m_wdg,id); }
+	void list( vector<string> &ls ) 	{ chldList(mWdg,ls); }
+	bool present( const string &id )	{ return chldPresent(mWdg,id); }
 	AutoHD<LWidget> at( const string &id );
 	void add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
-	void del( const string &id, bool full = false )	{ chldDel( m_wdg, id, -1, full ); }
+	void del( const string &id, bool full = false )	{ chldDel(mWdg, id, -1, full); }
 
     protected:
 	//Methods
@@ -94,12 +93,12 @@ class WidgetLib : public TCntrNode, public TConfig
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
 
 	//Attributes
-	int	m_wdg;
+	int	mWdg;
 
     private:
 	//Attributes
 	TCfg	&mId;
-	string work_lib_db, mOldDB;
+	string	workLibDB, mOldDB;
 	bool	mEnable;
 	bool	passAutoEn;
 };
@@ -151,6 +150,7 @@ class LWidget : public Widget, public TConfig
 	WidgetLib &ownerLib( );
 
 	bool	enableByNeed;	//Load and enable by need
+	pthread_mutex_t &funcM( )	{ return mFuncM; }
 
     protected:
 	//Methods
@@ -169,6 +169,7 @@ class LWidget : public Widget, public TConfig
 	//Attributes
 	int	&m_proc_per;	//Widget period
 	string	mParentNmPrev;	//Previous parent name after successful enable
+	pthread_mutex_t	mFuncM;
 };
 
 //************************************************

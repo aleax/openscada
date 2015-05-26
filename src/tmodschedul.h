@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,6 +53,7 @@ class TModSchedul : public TSubSYS
 
 	//Methods
 	TModSchedul( );
+	~TModSchedul( );
 
 	string allowList( )	{ return mAllow; }
 	string denyList( )	{ return mDeny; }
@@ -70,8 +70,6 @@ class TModSchedul : public TSubSYS
 	int libLoad( const string &path, bool full );	// Load share libs for <dest> from <path> whith call gmdInit if set <full>
 	void libAtt( const string &name, bool full = false);	// Attach share libs
 	void libDet( const string &name );		// Detach share libs
-
-	Res &nodeRes( )		{ return nRes; }
 
     protected:
 	//Methods
@@ -96,9 +94,9 @@ class TModSchedul : public TSubSYS
 	string	mAllow, mDeny;
 
 	int		mPer;				//Check to new modules period
-	vector<SHD>	SchHD;
 
-	Res		nRes;
+	pthread_mutex_t	schM;
+	vector<SHD>	schHD;
 };
 
 }

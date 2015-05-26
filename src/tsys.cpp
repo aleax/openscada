@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +33,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <signal.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <langinfo.h>
@@ -80,15 +78,19 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 #endif
 
     //Set signal handlers
-    signal(SIGINT,sighandler);
-    signal(SIGTERM,sighandler);
-    //signal(SIGCHLD,sighandler);
-    signal(SIGALRM,sighandler);
-    signal(SIGPIPE,sighandler);
-    //signal(SIGFPE,sighandler);
-    //signal(SIGSEGV,sighandler);
-    signal(SIGABRT,sighandler);
-    signal(SIGUSR1,sighandler);
+    struct sigaction sHdr;
+    memset(&sHdr, 0, sizeof(sHdr));
+    sHdr.sa_sigaction = sighandler;
+    sHdr.sa_flags = SA_SIGINFO;
+    sigaction(SIGINT, &sHdr, &sigActOrig);
+    sigaction(SIGTERM, &sHdr, &sigActOrig);
+    //sigaction(SIGCHLD, &sHdr, &sigActOrig);
+    sigaction(SIGALRM, &sHdr, &sigActOrig);
+    sigaction(SIGPIPE, &sHdr, &sigActOrig);
+    //sigaction(SIGFPE, &sHdr, &sigActOrig);
+    //sigaction(SIGSEGV, &sHdr, &sigActOrig);
+    sigaction(SIGABRT, &sHdr, &sigActOrig);
+    sigaction(SIGUSR1, &sHdr, &sigActOrig);
 }
 
 TSYS::~TSYS( )
@@ -114,8 +116,20 @@ TSYS::~TSYS( )
     string cntrsStr;
     for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
+    res.release();
     printf(_("System counters on exit: %s"),cntrsStr.c_str());
 #endif
+
+    //Signal handlers restore
+    sigaction(SIGINT, &sigActOrig, NULL);
+    sigaction(SIGTERM, &sigActOrig, NULL);
+    //sigaction(SIGCHLD, &sigActOrig, NULL);
+    sigaction(SIGALRM, &sigActOrig, NULL);
+    sigaction(SIGPIPE, &sigActOrig, NULL);
+    //sigaction(SIGFPE, &sigActOrig, NULL);
+    //sigaction(SIGSEGV, &sigActOrig, NULL);
+    sigaction(SIGABRT, &sigActOrig, NULL);
+    sigaction(SIGUSR1, &sigActOrig, NULL);
 }
 
 string TSYS::host( )
@@ -369,18 +383,19 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"========================= The general system options ======================\n"
 	"===========================================================================\n"
-	"-h, --help             Info message about system options.\n"
-	"    --Config=<path>    Config-file path.\n"
-	"    --Station=<id>     The station identifier.\n"
-	"    --StatName=<name>  The station name.\n"
-	"    --demon            Start into demon mode.\n"
+	"-h, --help		Info message about system options.\n"
+	"    --Config=<path>	Config-file path.\n"
+	"    --Station=<id>	The station identifier.\n"
+	"    --StatName=<name>	The station name.\n"
+	"    --demon		Start into demon mode.\n"
+	"    --pid-file=<file>	the file for the programm process ID place here.\n"
 	"    --CoreDumpAllow	Set limits for core dump creation allow on crash.\n"
-	"    --MessLev=<level>  Process messages <level> (0-7).\n"
-	"    --log=<direct>     Direct messages to:\n"
-	"                         <direct> & 1 - syslogd;\n"
-	"                         <direct> & 2 - stdout;\n"
-	"                         <direct> & 4 - stderr;\n"
-	"                         <direct> & 8 - archive.\n"
+	"    --MessLev=<level>	Process messages <level> (0-7).\n"
+	"    --log=<direct>	Direct messages to:\n"
+	"			  <direct> & 1 - syslogd;\n"
+	"			  <direct> & 2 - stdout;\n"
+	"			  <direct> & 4 - stderr;\n"
+	"			  <direct> & 8 - archive.\n"
 	"----------- The config-file station '%s' parameters -----------\n"
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
@@ -389,18 +404,20 @@ string TSYS::optDescr( )
 	"ModDir     <path>	Modules directory.\n"
 	"MessLev    <level>     Messages <level> (0-7).\n"
 	"LogTarget  <direction> Direct messages to:\n"
-	"                           <direct> & 1 - syslogd;\n"
-	"                           <direct> & 2 - stdout;\n"
-	"                           <direct> & 4 - stderr;\n"
-	"                           <direct> & 8 - archive.\n"
+	"			  <direct> & 1 - syslogd;\n"
+	"			  <direct> & 2 - stdout;\n"
+	"			  <direct> & 4 - stderr;\n"
+	"			  <direct> & 8 - archive.\n"
 	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
-	"SaveAtExit <true>      Save system at exit.\n"
+	"SaveAtExit <true>	Save system at exit.\n"
 	"SavePeriod <sec>	Save system period.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 
-string TSYS::getCmdOpt( int &curPos, string *argVal )
+string TSYS::getCmdOpt( int &curPos, string *argVal )	{ return getCmdOpt_(curPos, argVal, argc, (char **)argv); }
+
+string TSYS::getCmdOpt_( int &curPos, string *argVal, int argc, char **argv )
 {
     size_t fPos;
     int argI = curPos&0xFF;
@@ -444,12 +461,12 @@ bool TSYS::cfgFileLoad( )
 	    Mess->setMessLevel(7);
 	    cmd_help = true;
 	}
-	else if(argCom == "Config") 	mConfFile = argVl;
+	else if(argCom == "Config")	mConfFile = argVl;
 	else if(argCom == "Station")	mId = argVl;
 	else if(argCom == "StatName")	mName = argVl;
 
     //Load config-file
-    int hd = open(mConfFile.c_str(),O_RDONLY);
+    int hd = open(mConfFile.c_str(), O_RDONLY);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
     else {
 	bool fOK = true;
@@ -468,8 +485,8 @@ bool TSYS::cfgFileLoad( )
 	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());
 
 	try {
-	    ResAlloc res(nodeRes(),true);
-	    rootN.load(s_buf,true);
+	    ResAlloc res(cfgRes(), true);
+	    rootN.load(s_buf, true);
 	    if(rootN.name() == "OpenSCADA") {
 		XMLNode *stat_n = NULL;
 		for(int i_st = rootN.childSize()-1; i_st >= 0; i_st--)
@@ -497,7 +514,7 @@ bool TSYS::cfgFileLoad( )
 
 void TSYS::cfgFileSave( )
 {
-    ResAlloc res(nodeRes(), true);
+    ResAlloc res(cfgRes(), true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
@@ -658,7 +675,7 @@ bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
     return false;
 }
 
-void TSYS::sighandler( int signal )
+void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 {
     switch(signal)
     {
@@ -666,35 +683,32 @@ void TSYS::sighandler( int signal )
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGTERM:
-	    mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received. Server is being stopped!"));
+	    mess_warning(SYS->nodePath().c_str(), _("The Terminate signal is received. Server is being stopped!"));
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGFPE:
-	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is caught!"));
+	    mess_warning(SYS->nodePath().c_str(), _("Floating point exception is caught!"));
 	    exit(1);
 	    break;
 	case SIGCHLD:
 	{
 	    int status;
 	    pid_t pid = wait(&status);
-	    if(!WIFEXITED(status) && pid > 0)
-		mess_info(SYS->nodePath().c_str(),_("Free child process %d!"),pid);
+	    if(!WIFEXITED(status) && pid > 0) mess_info(SYS->nodePath().c_str(), _("Free child process %d!"), pid);
 	    break;
 	}
 	case SIGPIPE:
 	    //mess_warning(SYS->nodePath().c_str(),_("Broken PIPE signal!"));
 	    break;
 	case SIGSEGV:
-	    mess_emerg(SYS->nodePath().c_str(),_("Segmentation fault signal!"));
+	    mess_emerg(SYS->nodePath().c_str(), _("Segmentation fault signal!"));
 	    break;
 	case SIGABRT:
-	    mess_emerg(SYS->nodePath().c_str(),_("OpenSCADA is aborted!"));
+	    mess_emerg(SYS->nodePath().c_str(), _("OpenSCADA is aborted!"));
 	    break;
-	case SIGALRM:
-	case SIGUSR1:
-            break;
+	case SIGALRM: case SIGUSR1: break;
 	default:
-	    mess_warning(SYS->nodePath().c_str(),_("Unknown signal %d!"),signal);
+	    mess_warning(SYS->nodePath().c_str(), _("Unknown signal %d!"), signal);
     }
 }
 
@@ -1314,13 +1328,13 @@ long TSYS::HZ()
 
 bool TSYS::cntrEmpty( )
 {
-    ResAlloc res( nodeRes(), false );
+    ResAlloc res(nodeRes(), false);
     return mCntrs.empty();
 }
 
 double TSYS::cntrGet( const string &id )
 {
-    ResAlloc res( nodeRes(), false );
+    ResAlloc res(nodeRes(), false);
     map<string,double>::iterator icnt = mCntrs.find(id);
     if(icnt == mCntrs.end())	return 0;
     return icnt->second;
@@ -1328,13 +1342,13 @@ double TSYS::cntrGet( const string &id )
 
 void TSYS::cntrSet( const string &id, double vl )
 {
-    ResAlloc res( nodeRes(), true );
+    ResAlloc res(nodeRes(), true);
     mCntrs[id] = vl;
 }
 
 void TSYS::cntrIter( const string &id, double vl )
 {
-    ResAlloc res( nodeRes(), true );
+    ResAlloc res(nodeRes(), true);
     mCntrs[id] += vl;
 }
 
@@ -1799,7 +1813,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	else {
 	    req.setAttr("path","/"+prms[1].getS()+path);
-	    transport().at().cntrIfCmd(req,"cntrReq");
+	    transport().at().cntrIfCmd(req, "cntrReq");
 	    req.setAttr("path",path);
 	}
 	xnd.at().fromXMLNode(req);
@@ -1957,7 +1971,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  src - source;
     //  tp  - encode type: "PathEl", "HttpURL", "Custom", "Base64", "Bin"
     //  opt1 - option 1, separator for "Bin"
-    if(iid == "strDecode" && prms.size() >= 2) {
+    if(iid == "strDecode" && prms.size() >= 1) {
 	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
 	Code tp = (Code)0;
 	if(stp == "PathEl")		tp = PathEl;
@@ -2221,8 +2235,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
 		if(n_stat) {
 		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0, lagMax = 0, consMax = 0;
-		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
-		    {
+		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
 			tm_beg = it->second.tm_beg; tm_end = it->second.tm_end;
 			tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt;
 			lagMax = it->second.lagMax; consMax = it->second.consMax;
@@ -2250,7 +2263,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 #if __GLIBC_PREREQ(2,4)
 	if(multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet")
 	{
-	    ResAlloc res(taskRes,true);
+	    ResAlloc res(taskRes, true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
 	    if(it == mTasks.end()) throw TError(nodePath().c_str(),_("No present task '%s'."));
 	    if(it->second.flgs & STask::Detached) return;
@@ -2269,14 +2282,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 #endif
     }
-    if(!cntrEmpty() && a_path == "/cntr/cntr" && ctrChkNode(opt,"get",R_R___,"root","root"))
-    {
+    if(!cntrEmpty() && a_path == "/cntr/cntr" && ctrChkNode(opt,"get",R_R___,"root","root")) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/cntr/cntr/id","",R_R___,"root","root");
 	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/cntr/cntr/vl","",R_R___,"root","root");
 
-	ResAlloc res( nodeRes(), false );
-	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
-	{
+	ResAlloc res(nodeRes(), false);
+	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++) {
 	    if(n_id)	n_id->childAdd("el")->setText(icnt->first);
 	    if(n_vl)	n_vl->childAdd("el")->setText(r2s(icnt->second));
 	}

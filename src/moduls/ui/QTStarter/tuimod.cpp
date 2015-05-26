@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2013 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +46,7 @@
 #define VER_TYPE	SUI_VER
 #define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow Qt GUI starter. It is single for all Qt GUI modules!")
+#define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -61,7 +60,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -97,8 +96,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID),
 
     //> Qt massages not for compile but for indexing by gettext
 #if 0
-    char mess[][100] =
-    {
+    char mess[][100] = {
 	_("Could not read image data"),
 	_("&Yes"),_("&No"),_("&Cancel"),_("&OK"),_("Apply"),_("Close"),_("Back"),_("Forward"),_("Parent Directory"),
 	_("Look in:"),_("Computer"),_("File"),_("Folder"),_("File &name:"),_("Open"),_("&Open"),_("Cancel"),_("Save"),_("&Save"),_("Save As"),_("Date Modified"),_("All Files (*)"),
@@ -167,9 +165,9 @@ void TUIMod::postEnable( int flag )
 
 void TUIMod::postDisable( int flag )
 {
-    if(run_st)
-	try { SYS->taskDestroy(nodePath('.',true), &end_run); }
-	catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(run_st) SYS->taskDestroy(nodePath('.',true), &end_run, 60);
+    /*try { 
+    catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 }
 
 void TUIMod::load_( )
@@ -458,8 +456,7 @@ bool WinControl::callQtModule( const string &nm )
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
 
 	QIcon icon;
-	if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
-	{
+	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();")) {
 	    QIcon(TModule::*iconGet)();
 	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
 	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
@@ -531,7 +528,7 @@ StartDialog::StartDialog( WinControl *wcntr )
     gFrame->setFrameShadow(QFrame::Raised);
     wnd_lay->addWidget(gFrame,0,0);
 
-    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), centralWidget());
+    QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from the system"), centralWidget());
     butt->setObjectName("*exit*");
     QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
     wnd_lay->addWidget( butt, 0, 0 );

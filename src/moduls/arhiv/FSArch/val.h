@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,8 +45,8 @@ class VFileArch
 	//Methods
 	VFileArch( ModVArchEl *owner );
 	VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t iper, TFld::Type itp, ModVArchEl *owner);
-	~VFileArch();
-	void delFile();
+	~VFileArch( );
+	void delFile( );
 
 	void attach( const string &name );
 
@@ -61,7 +60,7 @@ class VFileArch
 	bool	err( )		{ return mErr; }
 	bool	isPack( )	{ return mPack; }
 
-	void	setVals( TValBuf &buf, int64_t beg, int64_t end );
+	bool	setVals( TValBuf &buf, int64_t beg, int64_t end );
 	void	getVals( TValBuf &buf, int64_t beg, int64_t end );
 	TVariant getVal( int pos );
 
@@ -92,7 +91,7 @@ class VFileArch
 	void cacheSet( int pos, int off, int vsz, bool last = false, bool wr = false );
 	void cacheDrop( int pos );
 
-	int calcVlOff( int hd, int pos, int *vsz = NULL, bool wr = false );
+	int calcVlOff( int hd, int vpos, int *vsz = NULL, bool wr = false, int *rvpos = NULL );
 	string getValue( int hd, int ioff, int vsz );
 	void setValue( int hd, int ioff, const string &ival );
 	void moveTail( int hd, int old_st, int new_st );
@@ -122,6 +121,7 @@ class VFileArch
 	string	eVal;		//Eval data type value
 	int	mpos;		//Maximum value position into file
 	char	tbt;		//Temporary byte
+	bool	intoRep;	//Into repaire
 
 	// Cache parameters
 	struct CacheEl {
@@ -144,6 +144,7 @@ class ModVArch;
 class ModVArchEl: public TVArchEl
 {
     friend class VFileArch;
+    friend class ModVArch;
     public:
 	//Methods
 	ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
@@ -170,7 +171,7 @@ class ModVArchEl: public TVArchEl
 	//Attributes
 	bool	mChecked;	//The present archive files checked, for prevent doubles create at the new data place
 	Res	mRes;		//Resource to access;
-	deque<VFileArch *>	arh_f;
+	deque<VFileArch*>	files;
 	int64_t	realEnd;
 };
 
@@ -184,22 +185,22 @@ class ModVArch: public TVArchivator
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
-	double curCapacity();
+	double curCapacity( );
 
-	double	fileTimeSize()	{ return time_size; }
-	unsigned numbFiles()	{ return mNumbFiles; }
-	double	maxCapacity()	{ return mMaxCapacity; }
-	double	roundProc()	{ return round_proc; }
-	int	checkTm()	{ return mChkTm; }
-	int	packTm()	{ return mPackTm; }
-	bool	packInfoFiles()	{ return mPackInfoFiles; }
+	double	fileTimeSize( )	{ return time_size; }
+	unsigned numbFiles( )	{ return mNumbFiles; }
+	double	maxCapacity( )	{ return mMaxCapacity; }
+	double	roundProc( )	{ return round_proc; }
+	int	checkTm( )	{ return mChkTm; }
+	int	packTm( )	{ return mPackTm; }
+	bool	packInfoFiles( ){ return mPackInfoFiles; }
 
-	void setFileTimeSize( double vl )	{ time_size = vl; modif(); }
-	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
-	void setMaxCapacity( double vl )	{ mMaxCapacity = vl; modif(); }
-	void setRoundProc( double vl )		{ round_proc = vl; modif(); }
-	void setCheckTm( int vl )		{ mChkTm = vl; modif(); }
-	void setPackTm( int vl )		{ mPackTm = vl; modif(); }
+	void setFileTimeSize( double vl )	{ time_size = vmax(100*valPeriod()/3600,vl); modif(); }
+	void setNumbFiles( unsigned vl )	{ mNumbFiles = vmax(0,vl); modif(); }
+	void setMaxCapacity( double vl )	{ mMaxCapacity = vmax(0,vl); modif(); }
+	void setRoundProc( double vl )		{ round_proc = vmax(0,vmin(50,vl)); modif(); }
+	void setCheckTm( int vl )		{ mChkTm = vmax(0,vl); modif(); }
+	void setPackTm( int vl )		{ mPackTm = vmax(0,vl); modif(); }
 	void setPackInfoFiles( bool vl )	{ mPackInfoFiles = vl; modif(); }
 
 	void start();
@@ -207,10 +208,10 @@ class ModVArch: public TVArchivator
 
 	void checkArchivator( bool now = false );
 
-	//> Packing archives
+	// Packing archives
 	bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper );
 
-	//> Export archive data
+	// Export archive data
 	void expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm);
 
     public:

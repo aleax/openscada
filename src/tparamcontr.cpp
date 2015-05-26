@@ -35,7 +35,7 @@ using namespace OSCADA;
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm), m_en(false), tipparm(tpprm)
 {
-    cfg("SHIFR") = mId = name;	//!! For prevent ID location change on parameter type change
+    cfg("SHIFR") = mId = name;	//!! For prevent ID location change on the parameter type change
     setName(name);
 
 #if OSC_DEBUG >= 1
@@ -198,7 +198,7 @@ void TParamContr::setType( const string &tpId )
 {
     if(enableStat() || tpId == type().name || !owner().owner().tpPrmPresent(tpId))	return;
 
-    setNodeMode(TCntrNode::Disable);
+    setNodeMode(TCntrNode::Disabled);
 
     try
     {
@@ -219,7 +219,7 @@ void TParamContr::setType( const string &tpId )
 	*(TConfig*)this = tCfg;
     }catch(...) { }
 
-    setNodeMode(TCntrNode::Enable);
+    setNodeMode(TCntrNode::Enabled);
 
     setVlCfg(this);
 

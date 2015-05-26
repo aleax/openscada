@@ -2,7 +2,7 @@
 //OpenSCADA system file: tfunction.cpp
 /***************************************************************************
  *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -170,7 +170,7 @@ void TFunction::postIOCfgChange()
     //Start for restore
     if(be_start) setStart(true);
 
-    for(unsigned i=0; i < used.size(); i++) used[i]->postIOCfgChange();
+    for(unsigned i = 0; i < used.size(); i++) used[i]->postIOCfgChange();
 }
 
 void TFunction::valAtt( TValFunc *vfnc )
@@ -291,7 +291,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",grp,SEC_RD))	opt->setText(run_st?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",grp,SEC_WR))	setStart(s2i(opt->text()));
     }
-    else if(a_path == "/func/st/use" && ctrChkNode(opt))	{ ResAlloc res(nodeRes(),false); opt->setText(i2s(used.size())); }
+    else if(a_path == "/func/st/use" && ctrChkNode(opt))	opt->setText(i2s(used.size()));
     else if(a_path == "/func/cfg/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/func/cfg/name" && ctrChkNode(opt))	opt->setText(name());
     else if(a_path == "/func/cfg/descr" && ctrChkNode(opt))	opt->setText(descr());

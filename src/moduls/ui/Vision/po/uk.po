@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-14 13:06+0200\n"
+"POT-Creation-Date: 2015-05-10 20:45+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -24,8 +24,12 @@ msgstr "Роман Савоченко"
 msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 msgstr "Роман Савоченко, Лисенко Максим, Яшина Ксенія"
 
-msgid "Visual operation user interface."
-msgstr "Робочий інтерфейс користувача."
+msgid ""
+"Visual operation user interface, based on Qt library - front-end to VCA "
+"engine."
+msgstr ""
+"Робочий інтерфейс користувача, заснований на бібліотеці Qt - зовнішній "
+"інтерфейс до рущія візуалізації."
 
 msgid "Developers"
 msgstr "Розробники"
@@ -85,6 +89,9 @@ msgstr "Зупинка модуля."
 msgid "Display number"
 msgstr "Кількість екранів"
 
+msgid "Main windows"
+msgstr "Основні вікна"
+
 msgid "Module options"
 msgstr "Опції модуля"
 
@@ -126,8 +133,8 @@ msgstr ""
 "Автоматично виконувані проекти, поділені символом ';'.\n"
 "Для відкриття вікна проекту на потрібному дисплеї (1) використовуйте формат "
 "ім'я проекту: 'PrjName-1'.\n"
-"Для підключення до фонового або іншого відкритого сеансу використати \"ses_"
-"{SesID}\"."
+"Для підключення до фонового або іншого відкритого сеансу використати "
+"\"ses_{SesID}\"."
 
 msgid "Run projects status display"
 msgstr "Відображення статусу проектів для пуску"
@@ -156,6 +163,20 @@ msgstr ""
 
 msgid "Options help"
 msgstr "Допомога по опціям"
+
+#, c-format
+msgid "%d: Development"
+msgstr "%d: Розробка"
+
+#, c-format
+msgid "%d: Running \"%s:%s\" - %s"
+msgstr "%d: Виконання \"%s:%s\" - %s"
+
+msgid "Connected"
+msgstr "Під'єднаний"
+
+msgid "Disconnected"
+msgstr "Від'єднаний"
 
 #, c-format
 msgid "OpenSCADA Vision developing: %s"
@@ -928,6 +949,13 @@ msgstr "Схема копіювання/переміщення з '%1' до '%2'
 msgid "Inherit:"
 msgstr "Наслідувати:"
 
+msgid ""
+"Target item '%1' already present!\n"
+"Any way paste to?"
+msgstr ""
+"Цільовий елемент '%1' вже присутній!\n"
+"Всеодно вставити до нього?"
+
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Спроба копіювання/пересунення себе у себе для \"%1/%1\"!"
 
@@ -1011,33 +1039,6 @@ msgstr "Видалити стиль"
 
 msgid "Value"
 msgstr "Значення"
-
-msgid "Diagnostics"
-msgstr "Діагностика"
-
-msgid "Time:"
-msgstr "Час:"
-
-msgid "Refresh"
-msgstr "Оновити"
-
-msgid "Size:"
-msgstr "Розмір:"
-
-msgid "Time"
-msgstr "Час"
-
-msgid "mcsec"
-msgstr "мкс"
-
-msgid "Category"
-msgstr "Категорія"
-
-msgid "Lev."
-msgstr "Рів."
-
-msgid "Message"
-msgstr "Повідомлення"
 
 msgid "Close"
 msgstr "Закрити"
@@ -1507,15 +1508,6 @@ msgstr "Поле для відображення використаного ст
 msgid "Double click for style change."
 msgstr "Подвійно клацнути для зміни стилю."
 
-msgid "Project '%1' manual"
-msgstr "Підручник проекту '%1'"
-
-msgid "The button for getting the using project '%1' manual"
-msgstr "Кнопка для отримання підручника проекту '%1'"
-
-msgid "Press to get the using project '%1' manual."
-msgstr "Натиснути для отримання підручника проекту '%1'."
-
 msgid ""
 "Connection to visualization server '%1' error: %2.\n"
 "Will restore try after %3s!"
@@ -1845,6 +1837,12 @@ msgstr "Зробити усі величини віджета статичним
 msgid "Press to make all values of the widget static ones"
 msgstr "Натисніть, щоб зробити усі величини віджета статичними."
 
+msgid "Point coordinates(x,y): (%1, %2)"
+msgstr "Координати точки(x,y): (%1, %2)"
+
+msgid "Coordinates(x,y): (%1, %2)"
+msgstr "Координати(x,y): (%1, %2)"
+
 msgid "Properties for the %1 figures."
 msgstr "Властивості для фігур: %1."
 
@@ -2016,17 +2014,15 @@ msgstr "Пунктир"
 msgid "Dotted"
 msgstr "Крапкова"
 
-msgid "Point coordinates(x,y): (%1, %2)"
-msgstr "Координати точки(x,y): (%1, %2)"
-
-msgid "Coordinates(x,y): (%1, %2)"
-msgstr "Координати(x,y): (%1, %2)"
-
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Образ віджету '%1' ще не реалізовано!"
 
 msgid "Write file '%1' is fail."
 msgstr "Помилка запису до файлу '%1'."
+
+#, c-format
+msgid "Trend build: %f ms."
+msgstr "Час формування тренду: %f мс."
 
 msgid "kHz"
 msgstr "кГц"
@@ -2047,18 +2043,29 @@ msgid "%gms"
 msgstr "%gмс"
 
 #, c-format
-msgid "Trend build: %f ms."
-msgstr "Час формування тренду: %f мс."
-
-#, c-format
 msgid "Trend draw: %f ms."
 msgstr "Час відображення тренду: %f мс."
 
 msgid "Date and time"
 msgstr "Дата та час"
 
+msgid "mcsec"
+msgstr "мкс"
+
 msgid "Level"
 msgstr "Рівень"
+
+msgid "Category"
+msgstr "Категорія"
+
+msgid "Message"
+msgstr "Повідомлення"
+
+msgid "Print"
+msgstr "Друк"
+
+msgid "Export"
+msgstr "Експорт"
 
 #, c-format
 msgid "Document parsing error: %s"
@@ -2071,7 +2078,7 @@ msgid "ID:"
 msgstr ""
 
 msgid "Ok"
-msgstr "Прийняти"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Скасувати"
@@ -2090,6 +2097,9 @@ msgstr "Вибір шрифту"
 
 msgid "Font:"
 msgstr "Шрифт:"
+
+msgid "Size:"
+msgstr "Розмір:"
 
 msgid "Bold"
 msgstr "Підсилений"
@@ -2114,6 +2124,9 @@ msgstr "Пошук"
 
 msgid "Find next"
 msgstr "Пошук наступного"
+
+msgid "Apply"
+msgstr "Прийняти"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
@@ -2147,3 +2160,27 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
+
+#~ msgid "Diagnostics"
+#~ msgstr "Діагностика"
+
+#~ msgid "Time:"
+#~ msgstr "Час:"
+
+#~ msgid "Refresh"
+#~ msgstr "Оновити"
+
+#~ msgid "Time"
+#~ msgstr "Час"
+
+#~ msgid "Lev."
+#~ msgstr "Рів."
+
+#~ msgid "Project '%1' manual"
+#~ msgstr "Підручник проекту '%1'"
+
+#~ msgid "The button for getting the using project '%1' manual"
+#~ msgstr "Кнопка для отримання підручника проекту '%1'"
+
+#~ msgid "Press to get the using project '%1' manual."
+#~ msgstr "Натиснути для отримання підручника проекту '%1'."

@@ -1,9 +1,8 @@
 
-//!!! Module name, file name and module's license. Change for your need.
+//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA system module UI.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily                                 *
- *   my@email.org                                                          *
+ *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -117,8 +116,8 @@ void TWEB::modInfo( vector<string> &list )
 //!!! Get an append module's info attribute. In this example get attribute "SubType" for HTTP module allow bind inform.
 string TWEB::modInfo( const string &name )
 {
-    if( name == "SubType" ) return SUB_TYPE;
-    else return TModule::modInfo(name);
+    if(name == "SubType") return SUB_TYPE;
+    return TModule::modInfo(name);
 }
 
 //!!! Module's comandline options the print help function. Add your module commandline parameters info.

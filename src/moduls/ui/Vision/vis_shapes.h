@@ -1,23 +1,22 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko
- *   rom_as@diyaorg.dp.ua
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
 #ifndef VIS_SHAPES_H
@@ -196,7 +195,7 @@ class ShapeText : public WdgShape
 
     private:
 	//Data
-	//- Argument object's class -
+	// Argument object's class
 	class ArgObj
 	{
 	    public:
@@ -214,7 +213,7 @@ class ShapeText : public WdgShape
 		QVariant	m_val;
 		string		m_cfg;
 	};
-	//- Shape node date -
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -311,7 +310,7 @@ class ShapeDiagram : public WdgShape
     Q_OBJECT
 
     public:
-	//> Trend object's class
+	// Trend object's class
 	class TrendObj
 	{
 	    friend class ShapeDiagram;
@@ -361,7 +360,7 @@ class ShapeDiagram : public WdgShape
 		bool	isIndiv;		//Individual scale
 		char	wScale;
 #if HAVE_FFTW3_H
-		//> FFT
+		// FFT
 		int		fftN;		//Spectrum samples number
 		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
 #endif
@@ -374,23 +373,23 @@ class ShapeDiagram : public WdgShape
 		QColor		mColor;		//Values line color
 		char		mWidth;		//Line width in pixels
 		char		mScale;		//Separted scale
-		//> Archive
+		// Archive
 		int64_t		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time
 		int64_t		arh_end;	//Archive end time
-		//> Values
+		// Values
 		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
 
 		WdgView 	*view;
 	};
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1),
-		    tTime(0), tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0)	{ }
+		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1), tTime(0),
+		    tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
 
 		int64_t	arhEnd( int64_t def = 0 );
 
@@ -417,7 +416,7 @@ class ShapeDiagram : public WdgShape
 		int64_t	tTime, tPict, curTime, sclHorPer;
 		float	tSize;
 		float	fftBeg, fftEnd;
-		float	sclVerScl, sclVerSclOff;
+		float	sclVerScl, sclVerSclOff, sclHorScl, sclHorSclOff;
 		string	valArch;
 	};
 
@@ -438,6 +437,7 @@ class ShapeDiagram : public WdgShape
 	void makePicture( WdgView *view );
 	void makeTrendsPicture( WdgView *view );
 	void makeSpectrumPicture( WdgView *view );
+	void makeXYPicture( WdgView *view );
 
 	void loadData( WdgView *view, bool full = false );
 	void setCursor( WdgView *view, int64_t itm );
@@ -466,7 +466,7 @@ class ShapeProtocol : public WdgShape
 
     private:
 	//Data
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -499,7 +499,7 @@ class ShapeProtocol : public WdgShape
 	};
 	//Private methods
 	void loadData( WdgView *view, bool full = false );
-	//> Recursively widgets process for disable focusable and events filter set
+	// Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
 };
@@ -513,7 +513,7 @@ class ShapeDocument : public WdgShape
 
     public:
 	//Data
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -522,6 +522,7 @@ class ShapeDocument : public WdgShape
 
 		string	toHtml( );
 		void	nodeProcess( XMLNode *xcur );
+		void	print( QPrinter * printer );
 
 		//Attributes
 		short	en	:1;
@@ -543,6 +544,9 @@ class ShapeDocument : public WdgShape
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
+    private slots:
+	void custContextMenu( );
+
     private:
 	//Methods
 	//Recursively widgets process for disable focusable and events filter set
@@ -562,7 +566,7 @@ class ShapeBox : public WdgShape
 {
     public:
 	//Data
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -575,7 +579,7 @@ class ShapeBox : public WdgShape
 		QPen		border;
 		QBrush		backGrnd;
 		RunPageView	*inclWidget;
-		QScrollArea 	*inclScrl;
+		QScrollArea	*inclScrl;
 	};
 
 	//Methods

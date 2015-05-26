@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -253,8 +252,8 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display of the current user."));
     mWUser->setStatusTip(_("Double click to change user."));
-    connect( mWUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)) );
-    statusBar()->insertPermanentWidget(0,mWUser);
+    connect(mWUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)));
+    statusBar()->insertPermanentWidget(0, mWUser);
     mWStat = new QLabel(VCAStation().c_str(), this);
     mWStat->setWhatsThis(_("This label displays used VCA engine station."));
     mWStat->setToolTip(_("Field for display of the used VCA engine station."));
@@ -356,7 +355,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	return 10;
     }
 
-    int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    int rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
     //Display error message about connection error
     if(rez == 10 && masterPg()) {
 	if(!conErr) {
@@ -433,12 +432,11 @@ void VisRun::resizeEvent( QResizeEvent *ev )
     if(ev && ev->oldSize().isValid() && masterPg()) {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
-	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)
-	{
+	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)masterPg()->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)masterPg()->size().height();
-	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
-	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
+	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
+	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
 	}else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
@@ -459,7 +457,20 @@ void VisRun::quitSt( )
 
 void VisRun::print( )
 {
-    if(masterPg()) printPg(masterPg()->id());
+    if(masterPg()) {
+	//Check for the single and big document present for default the printing
+	RunPageView *rpg;
+	RunWdgView *rwdg;
+	vector<string> lst;
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p])))
+		rpg->shapeList("Document",lst);
+	if(lst.size() == 1 && (rwdg=findOpenWidget(lst[0])) &&
+		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
+	    printDoc(rwdg->id());
+	//Print master page
+	else printPg(masterPg()->id());
+    }
 }
 
 void VisRun::printPg( const string &ipg )
@@ -474,10 +485,10 @@ void VisRun::printPg( const string &ipg )
 	//Make select page dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
-	InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select page for print."), _("Page print."), false, false );
-	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
+	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select page for print."), _("Page print."), false, false);
+	sdlg.edLay()->addWidget(new QLabel(_("Pages:"),&sdlg), 2, 0);
 	QComboBox *spg = new QComboBox(&sdlg);
-	sdlg.edLay()->addWidget( spg, 2, 1 );
+	sdlg.edLay()->addWidget(spg, 2, 1);
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
@@ -545,13 +556,13 @@ void VisRun::printDiag( const string &idg )
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
 	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for print."), _("Diagram print."), false, false);
-	    sdlg.edLay()->addWidget( new QLabel(_("Diagrams:"),&sdlg), 2, 0 );
+	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
-	    sdlg.edLay()->addWidget( spg, 2, 1 );
+	    sdlg.edLay()->addWidget(spg, 2, 1);
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
-	    if( sdlg.exec() != QDialog::Accepted )	return;
+	    if(sdlg.exec() != QDialog::Accepted) return;
 	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
@@ -628,10 +639,10 @@ void VisRun::printDoc( const string &idoc )
 	    //Make select diagrams dialog
 	    QImage ico_t;
 	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
-	    InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select document for print."), _("Document print."), false, false );
-	    sdlg.edLay()->addWidget( new QLabel(_("Document:"),&sdlg), 2, 0 );
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select document for print."), _("Document print."), false, false);
+	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
-	    sdlg.edLay()->addWidget( spg, 2, 1 );
+	    sdlg.edLay()->addWidget(spg, 2, 1);
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
@@ -646,13 +657,30 @@ void VisRun::printDoc( const string &idoc )
     if(!prDoc) prDoc = new QPrinter(QPrinter::HighResolution);
     QPrintDialog dlg(prDoc, this);
     dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
-    if(dlg.exec() == QDialog::Accepted)
-	((ShapeDocument::ShpDt*)rwdg->shpData)->web->document()->print(prDoc);
+    if(dlg.exec() == QDialog::Accepted) ((ShapeDocument::ShpDt*)rwdg->shpData)->print(prDoc);
 }
 
 void VisRun::exportDef( )
 {
-    if(master_pg) exportPg(master_pg->id());
+    if(master_pg) {
+	//Check for the single and big document present for default the exporting
+	RunPageView *rpg;
+	RunWdgView *rwdg;
+	vector<string> lstDoc, lstDiagr;
+	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
+	    if((rpg=findOpenPage(pgList[i_p]))) {
+		rpg->shapeList("Document", lstDoc);
+		rpg->shapeList("Diagram", lstDiagr);
+	    }
+	if(lstDoc.size() == 1 && (rwdg=findOpenWidget(lstDoc[0])) &&
+		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
+	    exportDoc(rwdg->id());
+	else if(lstDiagr.size() == 1 && (rwdg=findOpenWidget(lstDiagr[0])) &&
+		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
+	    exportDiag(rwdg->id());
+	//Export master page
+	else exportPg(master_pg->id());
+    }
 }
 
 void VisRun::exportPg( const string &ipg )
@@ -859,18 +887,16 @@ void VisRun::exportDoc( const string &idoc )
 		    curNode = curNode->childGet(treeStk.back());
 		    treeStk.push_back(0);
 		    //  Check for marked table and process it
-		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && s2i(curNode->attr("export")))
-		    {
+		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && s2i(curNode->attr("export"))) {
 			map<int,int>	rowSpn;
 			XMLNode *tblN = NULL, *tblRow;
 			string val;
 			for(int i_st = 0; i_st < 4; i_st++) {
-			    switch(i_st)
-			    {
+			    switch(i_st) {
 				case 0:	tblN = curNode->childGet("thead", 0, true);	break;
-				case 1: tblN = curNode->childGet("tbody", 0, true);	break;
-				case 2: tblN = curNode->childGet("tfoot", 0, true);	break;
-				case 3: tblN = curNode;					break;
+				case 1:	tblN = curNode->childGet("tbody", 0, true);	break;
+				case 2:	tblN = curNode->childGet("tfoot", 0, true);	break;
+				case 3:	tblN = curNode;					break;
 				default: tblN = NULL;
 			    }
 			    if(!tblN)	continue;
@@ -930,9 +956,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     XMLNode req("connect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     if(cntrIfCmd(req)) {
-	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	mWUser->setUser(oldUser);
 	mWUser->setPass(oldPass);
+	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	return;
     }
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
@@ -1022,8 +1048,7 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     //Get opened sessions list for our page and put dialog for connection
     XMLNode req("list");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
-    if(!isSess && !crSessForce && !cntrIfCmd(req) && req.childSize())
-    {
+    if(!isSess && !crSessForce && !cntrIfCmd(req) && req.childSize()) {
 	// Prepare and execute a session selection dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
@@ -1047,8 +1072,10 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     if(work_sess.empty()) req.setAttr("prj",src_prj);
     else req.setAttr("sess",work_sess);
     if(cntrIfCmd(req)) {
-	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-	close();
+	if(!(conErr && s2i(req.attr("rez")) == 10)) {	//Need check for prevent the warning dialog and the run closing by the session creation wait
+	    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+	    close();
+	}
 	return;
     }
 
@@ -1248,15 +1275,16 @@ void VisRun::alarmSet( unsigned alarm )
 
     //Check for early this session running equalent project
     bool isMaster = true;
-    for(unsigned i_w = 0; i_w < mod->mn_winds.size(); i_w++)
-	if(qobject_cast<VisRun*>(mod->mn_winds[i_w]) && ((VisRun*)mod->mn_winds[i_w])->srcProject() == srcProject())
-	{
-	    if(((VisRun*)mod->mn_winds[i_w])->workSess() != workSess()) isMaster = false;
+    ResAlloc res(mod->nodeRes(), false);
+    for(unsigned i_w = 0; i_w < mod->mnWinds.size(); i_w++)
+	if(qobject_cast<VisRun*>(mod->mnWinds[i_w]) && ((VisRun*)mod->mnWinds[i_w])->srcProject() == srcProject()) {
+	    if(((VisRun*)mod->mnWinds[i_w])->workSess() != workSess()) isMaster = false;
 	    break;
 	}
+    res.release();
 
     //Alarm types init
-    // Set momo sound alarm
+    // Set monotonic sound alarm
     if(isMaster && (ch_tp>>16)&TVision::Alarm) {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
@@ -1277,8 +1305,7 @@ void VisRun::alarmSet( unsigned alarm )
 
     //Alarm action indicators update
     // Alarm level icon update
-    if(ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet)
-    {
+    if(ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet) {
 	int alarmLev = alarm&0xFF;
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
 
@@ -1293,8 +1320,7 @@ void VisRun::alarmSet( unsigned alarm )
 	painter.fillRect(levImage.rect(),Qt::transparent);
 	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-	if(!((alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) && alrLevSet))
-	{
+	if(!((alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) && alrLevSet)) {
 	    for(int i_x = 0; i_x < lens.size().width(); i_x++)
 		for(int i_y = 0; i_y < lens.size().height(); i_y++)
 		    if(lens.pixel(i_x,i_y)&0xFF000000)	levImage.setPixel(i_x,i_y,lclr.rgba());
@@ -1352,7 +1378,7 @@ void VisRun::updatePage( )
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
 
     if(!(rez=cntrIfCmd(req))) {
-	// Check for delete pages
+	// Check for delete the pages
 	RunPageView *pg;
 	for(unsigned i_p = 0, i_ch; i_p < pgList.size(); i_p++) {
 	    for(i_ch = 0; i_ch < req.childSize(); i_ch++)
@@ -1370,7 +1396,7 @@ void VisRun::updatePage( )
 	    }
 	}
 
-	// Process opened pages
+	// Process the opened pages
 	pgList.clear();
 	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 	    pgList.push_back(req.childGet(i_ch)->text());
@@ -1435,8 +1461,7 @@ void VisRun::updatePage( )
 #endif
 
     //Time update
-    if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1)))
-    {
+    if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1))) {
 	QDateTime dtm = QDateTime::currentDateTime();
 	mWTime->setText( locale().toString(dtm,"hh:mm:ss\nddd, d MMM") );
 	mWTime->setToolTip( locale().toString(dtm,"dddd, dd-MMM-yyyy") );

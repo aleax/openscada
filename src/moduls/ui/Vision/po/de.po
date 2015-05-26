@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-14 13:06+0200\n"
+"POT-Creation-Date: 2015-05-10 20:45+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -27,8 +27,12 @@ msgstr "Roman Savotschenko"
 msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 msgstr "Roman Savotschenko, Maxim Lysjenko, Ksenija Jaschina"
 
-msgid "Visual operation user interface."
-msgstr "Benutzerschnittstelle"
+msgid ""
+"Visual operation user interface, based on Qt library - front-end to VCA "
+"engine."
+msgstr ""
+"Visuelle Betrieb Benutzeroberfläche basierend auf Qt-Bibliothek - Front-End "
+"für VCA-Motor."
 
 msgid "Developers"
 msgstr "Entwickler"
@@ -86,6 +90,9 @@ msgstr "Modul anhalten."
 
 msgid "Display number"
 msgstr "Anzeige der Anzahl"
+
+msgid "Main windows"
+msgstr "Hauptfenster"
 
 msgid "Module options"
 msgstr "Optionen des Moduls"
@@ -157,6 +164,20 @@ msgstr ""
 
 msgid "Options help"
 msgstr "Optionen Hilfe"
+
+#, c-format
+msgid "%d: Development"
+msgstr "%d: Entwicklung"
+
+#, c-format
+msgid "%d: Running \"%s:%s\" - %s"
+msgstr "%d: Laufen \"%s:%s\" - %s"
+
+msgid "Connected"
+msgstr "Verbunden"
+
+msgid "Disconnected"
+msgstr "Getrennt"
 
 #, c-format
 msgid "OpenSCADA Vision developing: %s"
@@ -937,6 +958,13 @@ msgstr ""
 msgid "Inherit:"
 msgstr "Vererben:"
 
+msgid ""
+"Target item '%1' already present!\n"
+"Any way paste to?"
+msgstr ""
+"Zielpunkt '%1' ist bereits vorhanden!\n"
+"Jeder Weg eine Paste auf?"
+
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Versuchen Sie kopieren / verschieben Selbstselbst für \"%1/%1\"!"
 
@@ -1020,33 +1048,6 @@ msgstr "Erase Stil"
 
 msgid "Value"
 msgstr "Wert"
-
-msgid "Diagnostics"
-msgstr "Diagnostik"
-
-msgid "Time:"
-msgstr "Zeit:"
-
-msgid "Refresh"
-msgstr "Erfrischen"
-
-msgid "Size:"
-msgstr "Grösse:"
-
-msgid "Time"
-msgstr "Zeit"
-
-msgid "mcsec"
-msgstr "msek"
-
-msgid "Category"
-msgstr "Kategorie"
-
-msgid "Lev."
-msgstr "Ebene"
-
-msgid "Message"
-msgstr "Nachricht"
 
 msgid "Close"
 msgstr "Schliessen"
@@ -1516,15 +1517,6 @@ msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 msgid "Double click for style change."
 msgstr "Zweimal klicken für Stil zu ändern."
 
-msgid "Project '%1' manual"
-msgstr "Handbuch von Projekt '%1'"
-
-msgid "The button for getting the using project '%1' manual"
-msgstr "Schaltfläche für Projekt '%1' Handbuch"
-
-msgid "Press to get the using project '%1' manual."
-msgstr "Betätigen um Projekt '%1' Handbuch."
-
 msgid ""
 "Connection to visualization server '%1' error: %2.\n"
 "Will restore try after %3s!"
@@ -1855,6 +1847,12 @@ msgstr "Alle Widgetsgrössen statisch machen"
 msgid "Press to make all values of the widget static ones"
 msgstr "Betätigen, um alle Widgetsgrössen statisch zu machen."
 
+msgid "Point coordinates(x,y): (%1, %2)"
+msgstr "Punkt koordinaten(x,y): (%1, %2)"
+
+msgid "Coordinates(x,y): (%1, %2)"
+msgstr "Koordinaten(x,y): (%1, %2)"
+
 msgid "Properties for the %1 figures."
 msgstr "Eigenschaften für Figuren: %1."
 
@@ -2029,17 +2027,15 @@ msgstr "Gestrichelte"
 msgid "Dotted"
 msgstr "Gepunktet"
 
-msgid "Point coordinates(x,y): (%1, %2)"
-msgstr "Punkt koordinaten(x,y): (%1, %2)"
-
-msgid "Coordinates(x,y): (%1, %2)"
-msgstr "Koordinaten(x,y): (%1, %2)"
-
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Widgetsgestalt '%1' ist nicht verfügbar!"
 
 msgid "Write file '%1' is fail."
 msgstr "Fehler beim Schreiben in die Datei '%1'."
+
+#, c-format
+msgid "Trend build: %f ms."
+msgstr "Trend zu bauen: %f ms."
 
 msgid "kHz"
 msgstr "kHz"
@@ -2060,18 +2056,29 @@ msgid "%gms"
 msgstr "%gms"
 
 #, c-format
-msgid "Trend build: %f ms."
-msgstr "Trend zu bauen: %f ms."
-
-#, c-format
 msgid "Trend draw: %f ms."
 msgstr "Trend zu ziehen: %f ms."
 
 msgid "Date and time"
 msgstr "Datum und Uhrzeit"
 
+msgid "mcsec"
+msgstr "msek"
+
 msgid "Level"
 msgstr "Stufe"
+
+msgid "Category"
+msgstr "Kategorie"
+
+msgid "Message"
+msgstr "Nachricht"
+
+msgid "Print"
+msgstr "Drucken"
+
+msgid "Export"
+msgstr "Export"
 
 #, c-format
 msgid "Document parsing error: %s"
@@ -2084,7 +2091,7 @@ msgid "ID:"
 msgstr "ID:"
 
 msgid "Ok"
-msgstr "Annehmen"
+msgstr ""
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -2103,6 +2110,9 @@ msgstr "Schrift auswählen"
 
 msgid "Font:"
 msgstr "Schrift:"
+
+msgid "Size:"
+msgstr "Grösse:"
 
 msgid "Bold"
 msgstr "Fett"
@@ -2127,6 +2137,9 @@ msgstr "Suche"
 
 msgid "Find next"
 msgstr "Weitersuchen"
+
+msgid "Apply"
+msgstr "Annehmen"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"
@@ -2160,3 +2173,27 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
+
+#~ msgid "Diagnostics"
+#~ msgstr "Diagnostik"
+
+#~ msgid "Time:"
+#~ msgstr "Zeit:"
+
+#~ msgid "Refresh"
+#~ msgstr "Erfrischen"
+
+#~ msgid "Time"
+#~ msgstr "Zeit"
+
+#~ msgid "Lev."
+#~ msgstr "Ebene"
+
+#~ msgid "Project '%1' manual"
+#~ msgstr "Handbuch von Projekt '%1'"
+
+#~ msgid "The button for getting the using project '%1' manual"
+#~ msgstr "Schaltfläche für Projekt '%1' Handbuch"
+
+#~ msgid "Press to get the using project '%1' manual."
+#~ msgstr "Betätigen um Projekt '%1' Handbuch."

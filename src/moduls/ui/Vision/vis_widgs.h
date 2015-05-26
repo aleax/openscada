@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_widgs.h
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -274,7 +274,7 @@ namespace VISION
 	    void applySlot( );
 	    void cancelSlot( );
 	    void curPosChange( );
-	    void ctrTreePopup( );
+	    void custContextMenu( );
 	    void find( );
 
 	private:
@@ -320,6 +320,7 @@ namespace VISION
 	    QMainWindow	*mainWin( )	{ return main_win; }
 	    QPointF	posF( )		{ return mWPos; }
 	    QSizeF	sizeF( )	{ return mWSize; }
+	    QSizeF	sizeOrigF( )	{ return mWSizeOrig; }
 	    QRectF	geometryF( )	{ return QRectF(mWPos,mWSize); }
 	    virtual float xScale( bool full = false );
 	    virtual float yScale( bool full = false );
@@ -328,7 +329,7 @@ namespace VISION
 	    bool	allAttrLoad( )	{ return mAllAttrLoad; }
 
 	    void	moveF( const QPointF &pos );
-	    void	resizeF( const QSizeF &size );
+	    virtual void resizeF( const QSizeF &size );
 	    void	setZ( int vl )	{ z_coord = vl; }
 	    void	setAllAttrLoad( bool vl )	{ mAllAttrLoad = vl; }
 
@@ -357,8 +358,8 @@ namespace VISION
 	    //Protected attributes
 	    bool		mAllAttrLoad;	//All attributes load
 	    int			mWLevel;	//Widget level
-	    QPointF		mWPos;		//Widget position into real;
-	    QSizeF		mWSize;		//Widget size into real;
+	    QPointF		mWPos;		//Widget position into real
+	    QSizeF		mWSize, mWSizeOrig;	//Widget real and original (unscaled) size into real
 	    float		x_scale, 	//Widget x scale
 				y_scale;	//	 y scale
 	    int			z_coord;	//Z coordinate

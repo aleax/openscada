@@ -1,8 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -135,15 +134,18 @@ void MBD::enable( )
 
     //Address parse
     int off = 0;
-    host = TSYS::strParse(addr(),0,";",&off);
-    user = TSYS::strParse(addr(),0,";",&off);
-    pass = TSYS::strParse(addr(),0,";",&off);
-    bd   = TSYS::strParse(addr(),0,";",&off);
-    port = s2i(TSYS::strParse(addr(),0,";",&off));
-    u_sock = TSYS::strParse(addr(),0,";",&off);
-    names = TSYS::strParse(addr(),0,";",&off);
+    host = TSYS::strParse(addr(), 0, ";", &off);
+    user = TSYS::strParse(addr(), 0, ";", &off);
+    pass = TSYS::strParse(addr(), 0, ";", &off);
+    bd   = TSYS::strParse(addr(), 0, ";", &off);
+    port = s2i(TSYS::strParse(addr(), 0, ";", &off));
+    u_sock = TSYS::strParse(addr(), 0, ";", &off);
+    string sets = TSYS::strParse(addr(), 0, ";", &off),
+	stChar = TSYS::strParse(sets, 0, "-"),
+	stColl = TSYS::strParse(sets, 1, "-"),
+	stEngine = TSYS::strParse(sets, 2, "-");
     string tms = TSYS::strParse(addr(),0,";",&off);
-    cd_pg  = codePage().size()?codePage():Mess->charset();
+    cd_pg  = codePage().size() ? codePage() : Mess->charset();
 
     //API init
     if(!mysql_init(&connect)) throw TError(nodePath().c_str(), _("Error initializing client."));
@@ -164,9 +166,23 @@ void MBD::enable( )
 
     TBD::enable();
 
-    try { sqlReq("CREATE DATABASE IF NOT EXISTS `" + TSYS::strEncode(bd,TSYS::SQL) + "`"); }
+    try {
+	string tvl, req = "CREATE DATABASE IF NOT EXISTS `" + TSYS::strEncode(bd,TSYS::SQL) + "`";
+	if(stChar.size()) req += " CHARACTER SET '"+stChar+"'";
+	if(stColl.size()) req += " COLLATE '"+stColl+"'";
+	sqlReq(req);
+    }
     catch(...) { }
-    if(!names.empty()) sqlReq("SET NAMES '" + names + "'");
+
+    //Sets prepare and perform
+    // Charcode and collation
+    if(stChar.size()) {
+	string req = "SET NAMES '"+stChar+"'";
+	if(stColl.size()) req += " COLLATE '"+stColl+"'";
+	sqlReq(req);
+    }
+    // Other direct
+    if(stEngine.size()) sqlReq("SET storage_engine='"+stEngine+"'");
 }
 
 void MBD::disable( )
@@ -300,7 +316,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{names}[;{tms}]]]\".\n"
+	    _("MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{charset-collation-engine}[;{tms}]]]\".\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
 	      "  user - DB user name;\n"
@@ -308,9 +324,9 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  db - DB name;\n"
 	      "  port - DB server port (default 3306);\n"
 	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
-	      "  names - MySQL SET NAMES charset;\n"
+	      "  charset-collation-engine - DB charset, collation and storage engine for CREATE DATABASE and SET;\n"
 	      "  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
-	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8;5,2,2\".\n"
+	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8-utf8_general_ci-MyISAM;5,2,2\".\n"
 	      "For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."));
 	if(reqCnt)
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRWRW,"root",SDB_ID);
@@ -354,7 +370,7 @@ void MTable::postDisable( int flag )
     owner().transCommit();
     if(flag)
 	try { owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
-	catch(TError err){ mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
+	catch(TError err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
@@ -364,8 +380,7 @@ void MTable::fieldStruct( TConfig &cfg )
     if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
     mLstUse = time(NULL);
 
-    for( unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
-    {
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 	int pr1, pr2;
 	string sid = tblStrct[i_fld][0];
 	if( cfg.cfgPresent(sid) ) continue;
@@ -779,7 +794,11 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 
 string MTable::getVal( TCfg &cfg )
 {
-    switch(cfg.fld().type()) {
+    string rez = cfg.getS();
+    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
+    return rez;
+
+    /*switch(cfg.fld().type()) {
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
 	    return cfg.getS();
@@ -790,7 +809,7 @@ string MTable::getVal( TCfg &cfg )
 	}
 	default: return cfg.getS();
     }
-    return "";
+    return "";*/
 }
 
 void MTable::setVal( TCfg &cf, const string &val, bool tr )

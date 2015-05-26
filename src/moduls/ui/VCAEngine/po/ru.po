@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-30 15:27+0200\n"
+"POT-Creation-Date: 2015-05-10 20:09+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -83,6 +83,10 @@ msgstr "Mime тип"
 msgid "Data"
 msgstr "Данные"
 
+#, c-format
+msgid "Widget '%s' already present!"
+msgstr "Виджет '%s' уже присутствует!"
+
 msgid "Widget is not container!"
 msgstr "Виджет не контейнер!"
 
@@ -146,6 +150,9 @@ msgstr "Заполнение:изображение"
 msgid "Orientation angle"
 msgstr "Угол поворота"
 
+msgid "Mirroring"
+msgstr ""
+
 msgid "Elements list"
 msgstr "Список элементов"
 
@@ -157,8 +164,8 @@ msgid ""
 "The list of elements can contain:\n"
 "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|"
 "c{n}]:[line_stl|s{n}]\n"
-"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c"
-"{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|"
+"c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:"
 "[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
@@ -187,8 +194,8 @@ msgstr ""
 "Список элементов может содержать:\n"
 "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|"
 "c{n}]:[line_stl|s{n}]\n"
-"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c"
-"{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+"  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|"
+"c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:"
 "[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
@@ -616,8 +623,8 @@ msgstr "Виджет диаграммы конечной визуализаци�
 msgid "Tracing period (s)"
 msgstr "Период слежения (с)"
 
-msgid "Trend;Spectrum"
-msgstr "График;Спектр"
+msgid "Trend;Spectrum;XY"
+msgstr "График;Спектр;XY"
 
 msgid "Cursor:sek"
 msgstr "Курсор:сек"
@@ -646,18 +653,21 @@ msgstr "Шкала:цвет"
 msgid "Scale:horizontal"
 msgstr "Шкала:горизонтальная"
 
-msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Не рисовать;Решетка;Маркеры;Решетка и маркеры"
-
-msgid "Scale:vertical"
-msgstr "Шкала:вертикальная"
-
 msgid ""
 "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
 msgstr ""
 "Не рисовать;Решетка;Маркеры;Решетка и маркеры;Решетка (лог);Маркеры (лог);"
 "Решетка и маркеры (лог)"
+
+msgid "Scale:horizontal scale (%)"
+msgstr "Шкала:гориз. масштаб (%)"
+
+msgid "Scale:horizontal scale offset (%)"
+msgstr "Шкала:смещ. гориз. масштаба (%)"
+
+msgid "Scale:vertical"
+msgstr "Шкала:вертикальная"
 
 msgid "Scale:vertical scale (%)"
 msgstr "Шкала:верт. масштаб (%)"
@@ -1047,6 +1057,10 @@ msgid "Erase"
 msgstr "Удалить"
 
 #, c-format
+msgid "Page '%s' already present!"
+msgstr "Страница '%s' уже присутствует!"
+
+#, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Всего: %d; Включено: %d"
 
@@ -1226,14 +1240,14 @@ msgstr "Движок среды визуализации и управления
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Generic visual control area engine."
+msgid "The main visual control area engine."
 msgstr "Общий движок среды визуализации и управления."
 
 msgid "ID"
 msgstr ""
 
 msgid "DB table"
-msgstr ""
+msgstr "Таблица БД"
 
 msgid "Parent widget"
 msgstr "Родительский виджет"
@@ -1402,6 +1416,18 @@ msgid "Engine text codepage for text encode into it."
 msgstr "Кодировка текста движка для перекодирования в неё."
 
 #, c-format
+msgid "Project '%s' already present!"
+msgstr "Проект '%s' уже присутствует!"
+
+#, c-format
+msgid "Widgets library '%s' already present!"
+msgstr "Библиотека виджетов '%s' уже присутствует!"
+
+#, c-format
+msgid "Session '%s' already present!"
+msgstr "Сеанс '%s' уже присутствует!"
+
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Атрибут '%s' не освобождён. Принудительное удаление!"
 
@@ -1562,6 +1588,9 @@ msgstr ""
 msgid "Widget: "
 msgstr "Виджет: "
 
+msgid "Used"
+msgstr ""
+
 msgid "Go to parent"
 msgstr "Перейти к родителю"
 
@@ -1677,8 +1706,8 @@ msgid "Changing of not user attribute is no permitted"
 msgstr "Модификация не пользовательских атрибутов не допустима"
 
 #, c-format
-msgid "New attribute's ID '%s' already present."
-msgstr "Новый идентификатор атрибута '%s' уже присутствует."
+msgid "New attribute's ID '%s' already present!"
+msgstr "Новый идентификатор атрибута '%s' уже присутствует!"
 
 msgid "Boolean"
 msgstr "Логический"
@@ -1798,6 +1827,9 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "No draw;Grid;Markers;Grid and markers"
+#~ msgstr "Не рисовать;Решетка;Маркеры;Решетка и маркеры"
 
 #~ msgid ""
 #~ "No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"

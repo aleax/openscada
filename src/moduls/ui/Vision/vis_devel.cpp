@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
  *   Copyright (C) 2006-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -704,7 +704,7 @@ double VisDevelop::wdgVisScale( )	{ return s2r(mWVisScale->text().toStdString())
 
 void VisDevelop::setWdgVisScale( double val )
 {
-    mWVisScale->setText((r2s(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
+    mWVisScale->setText((r2s(rRnd(val*100,POS_PREC_DIG,true))+"%").c_str());
 }
 
 void VisDevelop::closeEvent( QCloseEvent* ce )
@@ -1372,10 +1372,9 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
     QCheckBox *wInher = NULL;
     int zLev = 0;
 
-    InputDlg dlg(this,actVisItPaste->icon(),"",_("Visual items move or copy"),true,true);
+    InputDlg dlg(this, actVisItPaste->icon(), "", _("Visual items move or copy"), true, true);
     dlg.setIdLen(30);
-    for(int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf_w.substr(1),0,';',&w_off)).size(); )
-    {
+    for(int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf_w.substr(1),0,';',&w_off)).size(); ) {
 	string s_elp, d_elp, s_el, d_el, t_el, t1_el;
 	//Destination elements calc
 	int n_del = 0;
@@ -1444,7 +1443,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	// Prepare new widget identifier
 	//  Remove digits from end of new identifier
 	if(wdst.empty()) {
-	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    else {
 		zLev = req.childSize();
 		for(unsigned i_w = 0; i_w < req.childSize(); )
@@ -1462,6 +1461,15 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    dlg.edLay()->addWidget(wInher, 2, 1);
 	}
 	if(!wsrc.empty() || dlg.exec() == QDialog::Accepted) {
+	    if(wdst.empty() && dlg.id().toStdString() != t1_el) {
+		unsigned i_w = 0;
+		for( ; i_w < req.childSize() && req.childGet(i_w)->attr("id") != dlg.id().toStdString(); i_w++) ;
+		if(i_w < req.childSize() &&
+			QMessageBox::question(this,_("Visual items move or copy"),
+			    QString(_("Target item '%1' already present!\nAny way paste to?")).arg(dlg.id()),QMessageBox::Yes|QMessageBox::No) != QMessageBox::Yes)
+		    continue;
+	    }
+
 	    d_el += dlg.id().toStdString();
 	    string it_nm = wnm.empty() ? dlg.name().toStdString() : wnm;
 

@@ -10,13 +10,11 @@
 # Description: Start OpenSCADA
 ### END INIT INFO
 
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="openscada"
+DESC="OpenSCADA"
 NAME=openscada
-DAEMON=/usr/bin/$NAME
-DAEMON_ARGS="--demon"
 PIDFILE=/var/run/$NAME.pid
-SCRIPTNAME=/etc/init.d/$NAME
+DAEMON=/usr/bin/$NAME
+DAEMON_ARGS="--demon --pid-file=$PIDFILE"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -34,22 +32,9 @@ SCRIPTNAME=/etc/init.d/$NAME
 #
 do_start()
 {
-	export LANG=en_US.UTF-8
-	export LANGUAGE=en_US.UTF-8
-	export LC_ALL=en_US.UTF-8
-	# Return
-	#   0 if daemon has been started
-	#   1 if daemon was already running
-	#   2 if daemon could not be started
-	start-stop-daemon --start --make-pidfile --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
-		|| return 1
-	start-stop-daemon --start --make-pidfile --pidfile $PIDFILE --exec $DAEMON -- \
-		$DAEMON_ARGS \
-		|| return 2
-	pidproc=$(pidof $NAME)
-	if [ $pidproc ]; then
-	echo "$pidproc" > $PIDFILE
-	fi
+    LANG=en_US.UTF-8
+    log_action_begin_msg "Starting $DESC"
+    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS && log_action_end_msg $?
 }
 
 #
@@ -57,40 +42,26 @@ do_start()
 #
 do_stop()
 {
-	# Return
-	#   0 if daemon has been stopped
-	#   1 if daemon was already stopped
-	#   2 if daemon could not be stopped
-	#   other if a failure occurred
-	start-stop-daemon --stop --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
-	RETVAL="$?"
-	if [ "$RETVAL" -ne 0 ]; then
-	start-stop-daemon --stop --oknodo --retry=0/30/KILL/5 --exec $DAEMON
-	RETVAL="$?"
-	fi
-	rm -f $PIDFILE
-	return "$RETVAL"
+    log_action_begin_msg "Stopping $DESC"
+    start-stop-daemon --stop --pidfile $PIDFILE --retry=TERM/30/KILL/5 --name $NAME && log_action_end_msg $?
 }
 
 case "$1" in
-  start)
-	log_daemon_msg "Starting $DESC"
+    start)
 	do_start
 	;;
-  stop)
-	log_daemon_msg "Stopping $DESC"
+    stop)
 	do_stop
 	;;
-  status)
-       status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
-       ;;
-  restart|reload|force-reload)
-	log_daemon_msg "Restarting $DESC"
+    status)
+	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+	;;
+    restart|reload|force-reload)
 	do_stop
 	do_start
 	;;
-  *)
-	echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}"
+    *)
+	echo "Usage: $0 {start|stop|status|restart|force-reload}"
 	exit 3
 	;;
 esac

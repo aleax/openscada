@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -634,8 +633,7 @@ void ConfApp::itDel( const string &iit )
     }
 
     bool toTreeUpdate = false;
-    for(int roff = 0; (rmit=TSYS::strSepParse(rmits,0,'\n',&roff)).size(); )
-    {
+    for(int roff = 0; (rmit=TSYS::strSepParse(rmits,0,'\n',&roff)).size(); ) {
 	string t_el, sel_own, sel_el;
 	int n_obj = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(rmit,0,true,&off)).empty(); n_obj++)
@@ -696,8 +694,7 @@ void ConfApp::itPaste( )
     bool isCut = (copy_buf[0] == '1');
     bool isMult = !TSYS::strParse(copy_buf,1,"\n").empty();
 
-    for(int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); )
-    {
+    for(int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); ) {
 	rootW = root;
 	to_path = sel_path;
 
@@ -907,8 +904,7 @@ void ConfApp::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void ConfApp::closeEvent( QCloseEvent* ce )
 {
-    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && !exitModifChk())
-    {
+    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && !exitModifChk()) {
 	ce->ignore();
 	return;
     }
@@ -963,17 +959,17 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	if(node.childGet("id","ico",true))
 	{
 	    XMLNode req("get");
-	    req.setAttr("path",TSYS::strEncode(a_path+"ico",TSYS::PathEl));
-	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);
+	    req.setAttr("path", TSYS::strEncode(a_path+"ico",TSYS::PathEl));
+	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    else if(rez == 0)
 	    {
-		string simg = TSYS::strDecode(req.text(),TSYS::base64);
+		string simg = TSYS::strDecode(req.text(), TSYS::base64);
 		QImage img;
 		if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 		    titleIco->setPixmap(QPixmap::fromImage(img.scaled(32,32,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
 		else titleIco->clear();
 	    }
-	}else titleIco->clear();
+	} else titleIco->clear();
 
 	// Set title
 	titleLab->setText((string("<p align='center'><i><b>")+TSYS::strEncode(node.attr("dscr"),TSYS::Html)+"</b></i></p>").c_str());
@@ -1029,9 +1025,60 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    //tabs->showPage(tabs->currentWidget());
 
 		    //  Mark last drawed tabs
-		    t_s.setAttr("qview","1");
+		    t_s.setAttr("qview", "1");
 		}
-		else selectChildRecArea(t_s,a_path+t_s.attr("id")+"/");
+		else selectChildRecArea(t_s, a_path+t_s.attr("id")+"/");
+
+		// Get scalable by vertical elements and grow its up to scroll appear into the container
+		QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
+		QWidget *lstFitWdg = NULL;
+		QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
+		//QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
+		//QList<QListWidget*> lsts = scrl->findChildren<QListWidget*>();
+		bool sclCnt = true;
+		for(int fitStp = 10, safeCntr = 0; safeCntr < scrl->maximumViewportSize().height() && sclCnt; safeCntr += fitStp) {
+		    QAbstractScrollArea *tEl = NULL;
+		    sclCnt = false;
+		    //  Texts
+		    for(int iEl = 0; iEl < texts.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
+			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(texts[iEl]->edit()))) break;
+			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
+			lstFitWdg = texts[iEl];
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
+			qApp->processEvents();
+			sclCnt = true;
+		    }
+		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
+			break;
+		    }
+		    //  Tables
+		    /*for(int iEl = 0; iEl < tbls.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
+			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(tbls[iEl]))) break;
+			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
+			lstFitWdg = tbls[iEl];
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
+			qApp->processEvents();
+			sclCnt = true;
+		    }
+		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
+			break;
+		    }
+		    //  Lists
+		    for(int iEl = 0; iEl < lsts.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
+			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(lsts[iEl]))) break;
+			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
+			lstFitWdg = lsts[iEl];
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
+			qApp->processEvents();
+			sclCnt = true;
+		    }
+		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
+			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
+			break;
+		    }*/
+		}
 	    }
 	    //else t_s.attr("qview","0");	//Mark no view tabs
 	    i_area++;
@@ -1060,7 +1107,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		//w_lay->setAlignment( Qt::AlignTop );
 		widget->layout()->addWidget(wdg);
 	    }
-	    selectChildRecArea(t_s,a_path+t_s.attr("id")+'/',wdg);
+	    selectChildRecArea(t_s, a_path+t_s.attr("id")+'/', wdg);
 	}
 	// View list elements
 	else if(t_s.name() == "list")
@@ -1083,22 +1130,22 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    connect(lstbox, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(listBoxGo(QListWidgetItem*)));
 
 		lstbox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
-		lstbox->setMaximumWidth(300);
+		//lstbox->setMaximumWidth(300);
 
 		QVBoxLayout *vbox = new QVBoxLayout;
 		vbox->setAlignment(Qt::AlignLeft);
 		lab = new QLabel(widget);
 		vbox->addWidget(lab);
-                vbox->addWidget(lstbox);
+		vbox->addWidget(lstbox);
 		widget->layout()->addItem(vbox);
 
-		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
-		t_s.setAttr("addr_el",TSYS::addr2str(lstbox));
+		t_s.setAttr("addr_lab", TSYS::addr2str(lab));
+		t_s.setAttr("addr_el", TSYS::addr2str(lstbox));
 	    }
 	    else
 	    {
-		lab    = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
-		lstbox = (QListWidget *)TSYS::str2addr(t_s.attr("addr_el"));
+		lab	= (QLabel*)TSYS::str2addr(t_s.attr("addr_lab"));
+		lstbox	= (QListWidget*)TSYS::str2addr(t_s.attr("addr_el"));
 		lstbox->clear();
 	    }
 	    //  Fill list
@@ -1115,7 +1162,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	// View table elements
 	else if(t_s.name() == "table")
 	{
-	    string br_path = TSYS::strEncode(a_path+t_s.attr("id"),TSYS::PathEl);
+	    string br_path = TSYS::strEncode(a_path+t_s.attr("id"), TSYS::PathEl);
 
 	    //QLabel *lab;
 	    CfgTable *tbl;
@@ -1548,8 +1595,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }
 	}
 	//View edit fields
-	else if(t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size()))
-	{
+	else if(t_s.attr("tp") == "str" && (t_s.attr("rows").size() || t_s.attr("cols").size())) {
 	    QLabel *lab;
 	    TextEdit *edit;
 
@@ -1559,26 +1605,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		widget->layout()->addWidget(lab);
 
-		edit = new TextEdit(widget,br_path.c_str());
+		edit = new TextEdit(widget, br_path.c_str());
 		edit->setStatusTip((sel_path+"/"+br_path).c_str());
-		if(atoi(t_s.attr("rows").c_str()) < 10)
-		{
-		    edit->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
-		    edit->edit()->setFixedHeight(2*edit->edit()->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));
-		}
-		else
-		{
-		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Expanding);
-		    sp.setVerticalStretch(2);
-		    edit->setSizePolicy(sp);
-		    edit->edit()->setMinimumHeight(2*edit->edit()->currentFont().pointSize()*atoi(t_s.attr("rows").c_str()));
-		}
-		if(atoi(t_s.attr("cols").c_str()))
-		{
-		    edit->edit()->setLineWrapMode(QTextEdit::FixedColumnWidth);
-		    edit->edit()->setLineWrapColumnOrWidth(atoi(t_s.attr("cols").c_str()));
-		}
-		else edit->edit()->setLineWrapMode(QTextEdit::NoWrap);
+		edit->setRowsCols(s2i(t_s.attr("cols")), s2i(t_s.attr("rows")));
 		widget->layout()->addWidget(edit);
 
 		if(!wr)	edit->edit()->setReadOnly(true);
@@ -1741,8 +1770,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    {
 			val_w->setFixedWidth(5*15+30);
 			val_w->setType(LineEdit::Integer);
-			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
-			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
+			QString	max = t_s.attr("max").empty() ? "2147483647" : t_s.attr("max").c_str();
+			QString	min = t_s.attr("min").empty() ? "-2147483647" : t_s.attr("min").c_str();
 			val_w->setCfg(min+":"+max+":1");
 		    }
 		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);
@@ -1890,7 +1919,8 @@ void ConfApp::pageDisplay( const string &path )
 	// Request new page tree
 	XMLNode n_node("info");
 	n_node.setAttr("path",path);
-	if(cntrIfCmd(n_node)) { throw TError(atoi(n_node.attr("rez").c_str()),n_node.attr("mcat").c_str(),"%s",n_node.text().c_str()); }
+	if(cntrIfCmd(n_node) || !n_node.childGet(0,true))
+	    throw TError(s2i(n_node.attr("rez")),n_node.attr("mcat").c_str(),"%s",n_node.text().c_str());
 	sel_path = path;
 	pg_info = n_node;
 	root = pg_info.childGet(0);
@@ -1951,7 +1981,7 @@ loadGenReqDate:
     editToolUpdate();
 }
 
-bool ConfApp::upStruct(XMLNode &w_nd, const XMLNode &n_nd)
+bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
 {
     bool str_ch = false;
 
@@ -2291,15 +2321,15 @@ void ConfApp::initHosts( )
 		{ nit = CtrTree->topLevelItem(i_top); break; }
 	if(!nit) nit = new QTreeWidgetItem(CtrTree);
 	if(stls[i_st] == SYS->id()) {
-	    nit->setText(0,SYS->name().c_str());
-	    nit->setText(1,_("Local station"));
-	    nit->setText(2,("/"+SYS->id()).c_str());
+	    nit->setText(0, SYS->name().c_str());
+	    nit->setText(1, _("Local station"));
+	    nit->setText(2, ("/"+SYS->id()).c_str());
 	}
 	else {
 	    TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toStdString(),stls[i_st]);
-	    nit->setText(0,host.name.c_str());
-	    nit->setText(1,_("Remote station"));
-	    nit->setText(2,("/"+host.id).c_str());
+	    nit->setText(0, host.name.c_str());
+	    nit->setText(1, _("Remote station"));
+	    nit->setText(2, ("/"+host.id).c_str());
 	}
 	//? Used for rechange status for fix indicator hide after all childs remove on bad connection
 	nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);

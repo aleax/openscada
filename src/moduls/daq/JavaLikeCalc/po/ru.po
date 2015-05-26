@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 18:15+0300\n"
+"POT-Creation-Date: 2015-05-10 16:31+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -18,35 +18,6 @@ msgstr ""
 #, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Переменная '%s' не определена но использована"
-
-msgid "Error constant after constant"
-msgstr "Ошибка постоянной после постоянной"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиция: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr ""
-"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ перевода линии недопустим в строке, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Ошибка использования области имён или она пуста, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Встроенная функция имеет слишком много параметров, "
-
-msgid "Function error, "
-msgstr "Ошибка функции, "
-
-msgid "Symbol error, "
-msgstr "Ошибка символа, "
-
-msgid "Object's properties too long, "
-msgstr "Свойства объекта очень длинные, "
 
 msgid "Array have more 255 items."
 msgstr "Массив имеет более 255 элементов."
@@ -78,8 +49,9 @@ msgstr "Получение объекта из не объектного рег�
 msgid "Timeouted function calculation"
 msgstr "Исчерпано предельное время вычисления функции."
 
-msgid "Not supported type for operation 'Add'."
-msgstr "Не поддерживаемый тип для операции 'Add'."
+#, c-format
+msgid "Not supported type %d for operation 'Add'."
+msgstr "Не поддерживаемый тип %d для операции 'Add'."
 
 msgid "Call object's function for no object or function name is empty."
 msgstr "Вызов функции объекта для не объекта или имя функции пусто."
@@ -172,8 +144,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow java-like based calculator and function's libraries engine. User can "
-"create and modify function and libraries."
+"Provides based on java like language calculator and engine of libraries.  "
+"The user can create and modify functions and libraries."
 msgstr ""
 "Предоставляет основанные на java подобном языке вычислитель и движок "
 "библиотек. Пользователь может создавать и модифицировать функции и "
@@ -329,3 +301,32 @@ msgstr ""
 "  anm - имя создаваемого атрибута.\n"
 "Если 'aid' или 'anm' не установлены то они будут генерироваться из "
 "выбранного IO функции."
+
+msgid "Error constant after constant"
+msgstr "Ошибка постоянной после постоянной"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиция: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr ""
+"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ перевода линии недопустим в строке, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Ошибка использования области имён или она пуста, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Встроенная функция имеет слишком много параметров, "
+
+msgid "Function error, "
+msgstr "Ошибка функции, "
+
+msgid "Symbol error, "
+msgstr "Ошибка символа, "
+
+msgid "Object's properties too long, "
+msgstr "Свойства объекта очень длинные, "

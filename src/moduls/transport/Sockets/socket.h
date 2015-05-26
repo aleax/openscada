@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,22 +75,24 @@ class TSocketIn: public TTransportIn
 	/* Open input socket <name> for locale <address>
 	 * address : <type:<specific>>
 	 * type:
-	 *   TCP  - TCP socket with  "UDP:<host>:<port>"
-	 *   UDP  - UDP socket with  "TCP:<host>:<port>"
-	 *   UNIX - UNIX socket with "UNIX:<path>"
+	 *   TCP  - TCP socket with  "UDP:{host}:{port}"
+	 *   UDP  - UDP socket with  "TCP:{host}:{port}"
+	 *   UNIX - UNIX socket with "UNIX:{path}"
 	 */
 	TSocketIn( string name, const string &idb, TElem *el );
 	~TSocketIn( );
 
 	string getStatus( );
 
-	int maxQueue( )		{ return mMaxQueue; }
-	int maxFork( )		{ return mMaxFork; }
-	int bufLen( )		{ return mBufLen; }
-	int keepAliveReqs( )	{ return mKeepAliveReqs; }
-	int keepAliveTm( )	{ return mKeepAliveTm; }
-	int taskPrior( )	{ return mTaskPrior; }
+	unsigned MSS( )			{ return mMSS; }
+	unsigned maxQueue( )		{ return mMaxQueue; }
+	unsigned maxFork( )		{ return mMaxFork; }
+	unsigned bufLen( )		{ return mBufLen; }
+	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
+	unsigned keepAliveTm( )		{ return mKeepAliveTm; }
+	int taskPrior( )		{ return mTaskPrior; }
 
+	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(1000000,vl)) : 0; modif(); }
 	void setMaxQueue( int vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
 	void setMaxFork( int vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
 	void setBufLen( int vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
@@ -123,24 +124,25 @@ class TSocketIn: public TTransportIn
 	int		sock_fd;
 	Res		sock_res;
 
-	bool		endrun;			// Command for stop task
-	bool		endrun_cl;		// Command for stop client tasks
+	bool		endrun;			//Command for stop task
+	bool		endrun_cl;		//Command for stop client tasks
 
-	int		type;			// socket's types
-	string		path;			// path to file socket for UNIX socket
-	string		host;			// host for TCP/UDP sockets
-	string		port;			// port for TCP/UDP sockets
-	int		mode;			// mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
+	int		type;			//Socket's types
+	string		path;			//Path to file socket for UNIX socket
+	string		host;			//Host for TCP/UDP sockets
+	string		port;			//Port for TCP/UDP sockets
+	int		mode;			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect)
 
-	int		mMaxQueue,		// max queue for TCP, UNIX sockets
-			mMaxFork,		// maximum forking (opened sockets)
-			mBufLen,		// input buffer length
-			mKeepAliveReqs,		// KeepAlive requests
-			mKeepAliveTm,		// KeepAlive timeout
-			mTaskPrior;		// Requests processing task prioritet
+	unsigned short	mMSS,			//MSS
+			mMaxQueue,		//Max queue for TCP, UNIX sockets
+			mMaxFork,		//Maximum forking (opened sockets)
+			mBufLen,		//Input buffer length
+			mKeepAliveReqs,		//KeepAlive requests
+			mKeepAliveTm;		//KeepAlive timeout
+	int		mTaskPrior;		//Requests processing task prioritet
 
-	bool		cl_free;		// Clients stopped
-	vector<SSockCl>	cl_id;			// Client's pids
+	bool		cl_free;		//Clients stopped
+	vector<SSockCl>	cl_id;			//Client's pids
 
 	// Status atributes
 	uint64_t	trIn, trOut;		// Traffic in and out counter
@@ -156,9 +158,9 @@ class TSocketOut: public TTransportOut
 	/* Open output socket <name> for locale <address>
 	 * address : <type:<specific>>
 	 * type:
-	 *   TCP  - TCP socket with  "UDP:<host>:<port>"
-	 *   UDP  - UDP socket with  "TCP:<host>:<port>"
-	 *   UNIX - UNIX socket with "UNIX:<path>"
+	 *   TCP  - TCP socket with  "UDP:{host}:{port}"
+	 *   UDP  - UDP socket with  "TCP:{host}:{port}"
+	 *   UNIX - UNIX socket with "UNIX:{path}"
 	 */
 	TSocketOut( string name, const string &idb, TElem *el );
 	~TSocketOut( );
@@ -166,9 +168,11 @@ class TSocketOut: public TTransportOut
 	string getStatus( );
 
 	string timings( )		{ return mTimings; }
+	unsigned MSS( )			{ return mMSS; }
 	int tmCon( )			{ return mTmCon; }
 
 	void setTimings( const string &vl );
+	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(1000000,vl)) : 0; modif(); }
 	void setTmCon( int vl )		{ mTmCon = vmax(1,vmin(60000,vl)); }
 
 	void start( int time = 0 );
@@ -187,9 +191,10 @@ class TSocketOut: public TTransportOut
 
 	//Attributes
 	string		mTimings;
-	unsigned short	mTmCon;
-	unsigned short	mTmNext;
-	unsigned short	mTmRep;
+	unsigned short	mMSS,			// MSS
+			mTmCon,
+			mTmNext,
+			mTmRep;
 
 	int		sock_fd;
 

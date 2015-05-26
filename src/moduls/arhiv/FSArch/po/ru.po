@@ -1,13 +1,13 @@
 # OpenSCADA.Archive.FSArch translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Archive.FSArch package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-09 21:56+0200\n"
+"POT-Creation-Date: 2015-05-10 11:18+0300\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,11 +22,11 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"The Archive module. Allow functions for messages and values archiving to "
+"The archiver module. Provides functions for messages and values archiving to "
 "file system."
 msgstr ""
-"Модуль архива. Предоставляет функции архивирования сообщений и значений на "
-"файловую систему."
+"Модуль архиватора. Предоставляет функции архивирования сообщений и значений "
+"на файловую систему."
 
 msgid "Compress error!"
 msgstr "Ошибка сжатия!"
@@ -40,20 +40,12 @@ msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "    --noArchLimit        Disable archives limit to file number. Use for see "
 "archives mode, not work.\n"
-"    --copyErrValFiles    Copy sourced error value archive's files before it "
-"restore.\n"
-"                         Used for debug value archive's errors and correct "
-"restore.\n"
 "\n"
 msgstr ""
 "======================= Опции модуля <%s:%s> =============================\n"
 "    --noArchLimit        Отключить лимит на количество файлов.\n"
 "                         Используйте для режима просмотра архивов, не для "
 "работы.\n"
-"    --copyErrValFiles    Копирование исходных ошибочных файлов архива "
-"значений до восстановления.\n"
-"                         Используется для отладки ошибок архивов значений и "
-"корректности восстановления.\n"
 "\n"
 
 #, c-format
@@ -205,12 +197,36 @@ msgstr ""
 "Команда, которая позволяет запустить проверку архивов немедленно,\n"
 "например, после ручного изменения в директории архиватора."
 
-#, c-format
-msgid "Can not create file: '%s'!"
-msgstr "Не могу создать файл: '%s'!"
+msgid "Files"
+msgstr "Файлы"
 
-msgid "Write to file '%s' error"
-msgstr "Ошибка записи в файл '%s'"
+msgid "Name"
+msgstr "Имя"
+
+msgid "Begin"
+msgstr "Начало"
+
+msgid "End"
+msgstr "Конец"
+
+msgid "Charset"
+msgstr "Кодировка"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "XML"
+msgstr "XML"
+
+msgid "Pack"
+msgstr "Упак."
+
+msgid "Error"
+msgstr "Ошибка"
+
+#, c-format
+msgid "File '%s' creation error: %s(%d)."
+msgstr "Ошибка создания файла '%s': %s(%d)."
 
 #, c-format
 msgid "File '%s' header error!"
@@ -231,8 +247,9 @@ msgstr "Вставка сообщения в архивный файл с оши
 msgid "Archive file '%s' isn't attached!"
 msgstr "Файл архива '%s' не подключен!"
 
-msgid "File access to '%s' error."
-msgstr "Ошибка доступа к файлу '%s'."
+#, c-format
+msgid "Write to the archive file '%s' error: %s(%d)"
+msgstr "Ошибка записи в файл '%s': %s(%d)"
 
 msgid "Getting messages from an error Archive file!"
 msgstr "Получение сообщений из архивного файла с ошибкой!"
@@ -240,6 +257,7 @@ msgstr "Получение сообщений из архивного файла
 msgid "Archive file isn't attached!"
 msgstr "Файл архива не подключен!"
 
+#, c-format
 msgid "Write to '%s' error!"
 msgstr "Ошибка записи в файл '%s'!"
 
@@ -257,7 +275,7 @@ msgid "Archive's file time size (hours)"
 msgstr "Размер файла архива (часов)"
 
 msgid ""
-"The parameter is set automatically when you change the frequency values by "
+"The parameter is set automatically when you change the values period by the "
 "archiver\n"
 "and generally proportional to the frequency values of the archiver.\n"
 "Attention! Large archive files will be processed long by long unpacking gzip-"
@@ -285,14 +303,14 @@ msgid ""
 "Testing is done by periodicity checking the archives, which resulted in, on "
 "exceeding the limit,\n"
 "removes the oldest files of all archives. Completely remove this restriction "
-"can be set to zero."
+"can be set to < 1."
 msgstr ""
 "Устанавливает ограничение на максимально занимаемый объём дискового "
 "пространства файлами всех архивов архиватора.\n"
 "Проверка осуществляется с периодичностью проверки архивов, в результате "
 "которой, по превышению лимита,\n"
 "производится удаление самых старых файлов всех архивов. Полностью снять это "
-"ограничение можно установив параметр в ноль."
+"ограничение можно установив параметр в значение < 1."
 
 msgid "Numeric values rounding (%)"
 msgstr "Округление числовых значений (%)"
@@ -322,17 +340,29 @@ msgstr "Экспорт"
 msgid "Archive"
 msgstr "Архив"
 
-msgid "Begin"
-msgstr "Начало"
-
-msgid "End"
-msgstr "Конец"
-
 msgid "Type"
 msgstr "Тип"
 
 msgid "To file"
 msgstr "В файл"
+
+msgid "Period, us"
+msgstr "Период, мкс"
+
+msgid "Unknown"
+msgstr "Неизвестный"
+
+msgid "Boolean"
+msgstr "Логический"
+
+msgid "Integer"
+msgstr "Целый"
+
+msgid "Real"
+msgstr "Вещественный"
+
+msgid "String"
+msgstr "Строка"
 
 #, c-format
 msgid "Archive file '%s' no opened!"
@@ -347,26 +377,34 @@ msgstr "Ошибка в файле архива!"
 
 #, c-format
 msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
-msgstr "Предупреждение! Выделенный размер буфера %d для индексов меньше использованого %d."
+msgstr ""
+"Предупреждение! Выделенный размер буфера %d для индексов меньше "
+"использованого %d."
 
 #, c-format
-msgid ""
-"Write data block to archive file '%s' error. Will structure break. mSize=%d, "
-"foff_end=%d, vSize=%d"
-msgstr ""
-"Ошибка записи блока данных в файл архива '%s'. Структура будет сломана. "
-"mSize=%d, foff_end=%d, vSize=%d"
+msgid "Write to the archive '%s' file '%s' error: %s(%d)"
+msgstr "Ошибка записи в архивный '%s' файл '%s': %s(%d)"
 
+#, c-format
 msgid "Read file '%s' for offset %d error!"
 msgstr "Ошибка чтения файла '%s' для смещения %d!"
 
+#, c-format
 msgid "Write to file '%s' error!"
 msgstr "Ошибка записи в файл '%s'!"
 
 #, c-format
-msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"
+msgid ""
+"Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
 msgstr ""
 "Ошибка в структуре файла: '%s'. Разница = %d байт. Попробую исправить это!"
 
-msgid "Error open new archive file for copy."
-msgstr "Ошибка открытия нового файла архива для копирования."
+#, c-format
+msgid "Error open/create archive file for copy here: %s"
+msgstr "Ошибка открытия/создания нового файла архива для копирования: %s"
+
+#, c-format
+msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
+msgstr ""
+"Последнее значение актуального файла архива '%s' не EVAL. Попробую исправить "
+"это!"

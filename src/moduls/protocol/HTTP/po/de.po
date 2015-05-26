@@ -1,16 +1,15 @@
 # OpenSCADA.Protocol.HTTP translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-23 21:12+0300\n"
+"POT-Creation-Date: 2015-04-22 13:21+0300\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -27,7 +26,7 @@ msgstr "HTTP-Realisierung"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "Allow support HTTP for WWW based UIs."
+msgid "Provides support for the HTTP protocol for WWW-based user interfaces."
 msgstr "HTTP-Unterstützung für eine WWW basierte Benutzerschnittstelle."
 
 #, c-format
@@ -65,6 +64,15 @@ msgstr "Nicht voll zu reagieren."
 msgid "Protocol"
 msgstr "Protokoll"
 
+msgid "State"
+msgstr "Zustand"
+
+msgid "Active authentication sessions"
+msgstr "Aktive Authentifizierung Sitzungen"
+
+msgid "Module options"
+msgstr "Moduloptionen"
+
 msgid "Life time of the authentication (min)"
 msgstr "Lebensdauer der Authentifizierung (Min)"
 
@@ -89,6 +97,10 @@ msgstr "Benutzername"
 
 msgid "Module help"
 msgstr "Modul helfen"
+
+#, c-format
+msgid "%s %s(%s), by \"%s\""
+msgstr "%s %s(%s), durch \"%s\""
 
 #, c-format
 msgid ""

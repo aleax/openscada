@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
+# Roman Savochenko <rom_as@oscada.org>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-14 14:53+0300\n"
+"POT-Creation-Date: 2015-04-01 21:33+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de @li.org>\n"
@@ -23,8 +24,8 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS "
-"and JavaScript technologies."
+"Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript "
+"technology."
 msgstr ""
 "Gewährt den dynamischen WEB begründeten Configurator. Benutzt XHTML, CSS und "
 "JavaScript Technologien."

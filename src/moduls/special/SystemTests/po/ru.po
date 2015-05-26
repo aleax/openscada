@@ -1,14 +1,13 @@
 # OpenSCADA.Special.SystemTests translate to Russian.
-# Copyright (C) 2003-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Special.SystemTests package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 21:49+0200\n"
+"POT-Creation-Date: 2015-05-10 17:31+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -22,7 +21,7 @@ msgstr "Тесты системы OpenSCADA"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow the group tests for OpenSCADA system."
+msgid "Provides the group of tests to the OpenSCADA system."
 msgstr "Предоставляет группу тестов для системы OpenSCADA."
 
 #, c-format
@@ -72,6 +71,9 @@ msgstr "Архив значений"
 
 msgid "Values period (us)"
 msgstr "Период значений (мкс)"
+
+msgid "Archivator"
+msgstr "Архиватор"
 
 msgid ""
 "Value archive allocation tests.\n"
@@ -332,9 +334,6 @@ msgstr "Закрытие и удаление таблицы '%s'."
 msgid "Close and delete DB '%s'."
 msgstr "Закрытие и удаление БД '%s'."
 
-msgid "Archivator"
-msgstr "Архиватор"
-
 msgid "Messages category pattern"
 msgstr "Шаблон категории сообщения"
 
@@ -362,7 +361,8 @@ msgid "Parameter"
 msgstr "Параметр"
 
 msgid ""
-"DAQ parameters test. Make read a parameter's attributes and configuration fields."
+"DAQ parameters test. Make read a parameter's attributes and configuration "
+"fields."
 msgstr ""
 "Тест DAQ параметров. Вычитывает атрибуты и конфигурационные поля параметра."
 
@@ -670,5 +670,31 @@ msgid "Open file '%s' error."
 msgstr "Ошибка открытия файла '%s'."
 
 #, c-format
+msgid "Read file '%s' error: %s."
+msgstr "Ошибка чтения файла '%s': %s."
+
+#, c-format
+msgid "Read file '%s' only %d from %d."
+msgstr "Чтение файла '%s' только %d из %d."
+
+#, c-format
 msgid "Test: Passed: %f ms."
 msgstr "Тест: Пройден: %f ms."
+
+#~ msgid "Request's key"
+#~ msgstr "Ключ запроса"
+
+#~ msgid "Request's value"
+#~ msgstr "Значение запроса"
+
+#~ msgid "Update records, by request key, for %d records."
+#~ msgstr "Обновление записей, по ключу запроса, для %d записей."
+
+#~ msgid "Updated %d records, by request key, for time %f sec."
+#~ msgstr "Обновлено %d записей, по ключу запроса, в течении %f секунд."
+
+#~ msgid "Field <reqKey> '%s' != '%s' error."
+#~ msgstr "Ошибка поля <reqKey> '%s' != '%s'."
+
+#~ msgid "Field <reqVal> '%s' != '%s' error."
+#~ msgstr "Ошибка поля <reqVal> '%s' != '%s'."

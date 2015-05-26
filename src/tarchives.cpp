@@ -731,7 +731,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    am->propSet("categ", recs[i_m].categ);
 	    am->propSet("level", recs[i_m].level);
 	    am->propSet("mess", recs[i_m].mess);
-	    rez->propSet(i2s(i_m), am);
+	    rez->arSet(i_m, am);
 	}
 	return rez;
     }
@@ -1123,11 +1123,11 @@ bool TMArchivator::chkMessOK( const string &icateg, int8_t ilvl )
 
 TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool status() - get archivator status.
+    // bool status( ) - get the archivator start status.
     if(iid == "status")	return startStat();
-    // int end() - get archivator data end time.
+    // int end( ) - get the archivator data end time.
     if(iid == "end")	return (int)end();
-    // int begin() - get archivator data begin time.
+    // int begin( ) - get the archivator data begin time.
     if(iid == "begin")	return (int)begin();
 
     //Configuration functions call

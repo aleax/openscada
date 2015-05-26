@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 11:13+0300\n"
+"POT-Creation-Date: 2015-05-10 17:05+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -129,14 +129,6 @@ msgstr "SMART НЖМД: "
 msgid "UPS"
 msgstr "ИБП"
 
-#, c-format
-msgid "REQ -> '%s'"
-msgstr "ЗАПР. -> '%s'"
-
-#, c-format
-msgid "RESP -> '%s'"
-msgstr "ОТВ -> '%s'"
-
 msgid "User"
 msgstr "Пользователь"
 
@@ -180,8 +172,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow operation system data acquisition. Support OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other."
+"Provides data acquisition from the OS. Supported OS Linux data sources: "
+"HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
 msgstr ""
 "Предоставляет сбор данных операционной системы. Поддерживаются источники "
 "данных ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU, UPS и другие."
@@ -258,3 +250,9 @@ msgstr "ИБП (NUT)"
 
 msgid "Up time"
 msgstr "Время работы"
+
+#~ msgid "REQ -> '%s'"
+#~ msgstr "ЗАПР. -> '%s'"
+
+#~ msgid "RESP -> '%s'"
+#~ msgstr "ОТВ -> '%s'"

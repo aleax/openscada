@@ -52,7 +52,7 @@
 #define SUB_TYPE	"TEST"
 #define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow the group tests for OpenSCADA system.")
+#define DESCRIPTION	_("Provides the group of tests to the OpenSCADA system.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -141,7 +141,7 @@ void TTest::mess( const string &testNm, const char *fmt,  ... )
 string TTest::modInfo( const string &name )
 {
     if(name == "SubType") return SUB_TYPE;
-    else return TModule::modInfo(name);
+    return TModule::modInfo(name);
 }
 
 void TTest::modInfo( vector<string> &list )
@@ -218,11 +218,11 @@ void *TTest::Task( void *CfgM )
 	    if(++count == 1000000) count = 0;
 
 	    //Get All fields
-	    ResAlloc res(SYS->nodeRes(), false);
+	    ResAlloc res(SYS->cfgRes(), false);
 	    XMLNode *mn = SYS->cfgNode(tst->nodePath(0,false)), *t_n = NULL;
 	    for(int nd_cnt = 0; mn && (t_n=mn->childGet("prm",nd_cnt++,true)); )
 		if(tst->testPresent(t_n->attr("id")) && t_n->attr("on") == "1" &&
-		    atoi(t_n->attr("per").c_str()) && !(count%atoi(t_n->attr("per").c_str())))
+		    s2i(t_n->attr("per")) && !(count%s2i(t_n->attr("per"))))
 		{
 		    AutoHD<TFunction> fnc = tst->testAt(t_n->attr("id"));
 		    TValFunc fc("stdcalc", &fnc.at());

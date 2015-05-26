@@ -41,7 +41,7 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow logic level parameters.")
+#define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -614,8 +614,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	    if(id_lnk >= 0 && lnk(id_lnk).aprm.freeStat()) id_lnk = -1;
 	    ResAlloc cres(calcRes,true);
 	    if(id_lnk < 0) tmpl->val.set(tmpl->val.ioId(vo.name()), vl);
-	    else if(lnk(id_lnk).aprm.at().fld().type() == TFld::Object && lnk(id_lnk).detOff < (int)lnk(id_lnk).prmAttr.size())
-	    {
+	    else if(lnk(id_lnk).aprm.at().fld().type() == TFld::Object && lnk(id_lnk).detOff < (int)lnk(id_lnk).prmAttr.size()) {
 		lnk(id_lnk).aprm.at().getO().at().propSet(lnk(id_lnk).prmAttr.substr(lnk(id_lnk).detOff), '.', vl);
 		lnk(id_lnk).aprm.at().setO(lnk(id_lnk).aprm.at().getO());	//For modify object sign
 	    }
@@ -704,8 +703,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	    {
 		TVariant vl = tmpl->val.get(lnk(i_l).ioId);
 		if(!vl.isEVal()) {
-		    if(lnk(i_l).aprm.at().fld().type() == TFld::Object && lnk(i_l).detOff < (int)lnk(i_l).prmAttr.size())
-		    {
+		    if(lnk(i_l).aprm.at().fld().type() == TFld::Object && lnk(i_l).detOff < (int)lnk(i_l).prmAttr.size()) {
 			lnk(i_l).aprm.at().getO().at().propSet(lnk(i_l).prmAttr.substr(lnk(i_l).detOff), '.', vl);
 			lnk(i_l).aprm.at().setO(lnk(i_l).aprm.at().getO());	//For modify object sign
 		    }

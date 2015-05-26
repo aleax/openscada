@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +34,7 @@
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"0.9.5"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Self OpenSCADA protocol, support generic functions.")
+#define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -69,7 +68,7 @@ using namespace SelfPr;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80), mSingleUserHostLimit(10)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -95,33 +94,34 @@ TProt::~TProt( )
 
 int TProt::sesOpen( const string &user, const string &pass, const string &src )
 {
-    if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass))
-	return -1;
+    if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass)) return -1;
 
     MtxAlloc res(sesRes, true);
 
     //Check sesions for close old and reuse more other
     unsigned i_oCnt = 0;
-    map<int, SAuth>::iterator aOldI = auths.end();
-    for(map<int, SAuth>::iterator aI = auths.begin(); aI != auths.end(); )
-	if(time(NULL) > (aI->second.tAuth+authTime()*60)) auths.erase(aI++);	//Long unused
-	else
-	{
-	    if(aI->second.name == user && aI->second.src == src)	//More openned
-	    {
-		if(aOldI == auths.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
+    map<int, SAuth>::iterator aOldI = mAuth.end();
+    for(map<int, SAuth>::iterator aI = mAuth.begin(); aI != mAuth.end(); )
+	if(time(NULL) > (aI->second.tAuth+authTime()*60)) mAuth.erase(aI++);	//Long unused
+	else {
+	    if(aI->second.name == user && aI->second.src == src) {	//More opened
+		if(aOldI == mAuth.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
 		++i_oCnt;
 	    }
 	    ++aI;
 	}
-    if(i_oCnt > 10 && aOldI != auths.end()) auths.erase(aOldI);
+    if(i_oCnt > singleUserHostLimit() && aOldI != mAuth.end()) {
+	mess_err(nodePath().c_str(), _("Connections from the user '%s' and the source '%s' reached to limit %d. Erasing spare!"),
+	    user.c_str(), TSYS::strLine(src,0).c_str(), singleUserHostLimit());
+	mAuth.erase(aOldI);
+    }
 
     //New session ID generation
     int idSes = rand();
-    while(auths.find(idSes) != auths.end()) idSes = rand();
+    while(mAuth.find(idSes) != mAuth.end()) idSes = rand();
 
     //Make new sesion
-    auths[idSes] = TProt::SAuth(time(NULL), user, src);
+    mAuth[idSes] = TProt::SAuth(time(NULL), user, src);
 
     return idSes;
 }
@@ -129,17 +129,16 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
 void TProt::sesClose( int idSes )
 {
     MtxAlloc res(sesRes, true);
-    auths.erase(idSes);
+    mAuth.erase(idSes);
 }
 
 TProt::SAuth TProt::sesGet( int idSes )
 {
     MtxAlloc res(sesRes, true);
-    map<int, SAuth>::iterator aI = auths.find(idSes);
-    if(aI != auths.end())
-    {
+    map<int, SAuth>::iterator aI = mAuth.find(idSes);
+    if(aI != mAuth.end()) {
 	time_t cur_tm = time(NULL);
-	if(cur_tm > (aI->second.tAuth+authTime()*60)) auths.erase(aI);
+	if(cur_tm > (aI->second.tAuth+authTime()*60)) mAuth.erase(aI);
 	else
 	{
 	    aI->second.tAuth = cur_tm;
@@ -158,6 +157,7 @@ void TProt::load_( )
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(authTime()))));
     setComprLev(s2i(TBDS::genDBGet(nodePath()+"ComprLev",i2s(comprLev()))));
     setComprBrd(s2i(TBDS::genDBGet(nodePath()+"ComprBrd",i2s(comprBrd()))));
+    setSingleUserHostLimit(s2i(TBDS::genDBGet(nodePath()+"SingleUserHostLimit",i2s(singleUserHostLimit()))));
 }
 
 void TProt::save_( )
@@ -165,6 +165,7 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"SessTimeLife",i2s(authTime()));
     TBDS::genDBSet(nodePath()+"ComprLev",i2s(comprLev()));
     TBDS::genDBSet(nodePath()+"ComprBrd",i2s(comprBrd()));
+    TBDS::genDBSet(nodePath()+"SingleUserHostLimit",i2s(singleUserHostLimit()));
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
@@ -196,8 +197,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		resp.assign(buf,resp_len);
 
 		// Wait tail
-		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A')
-		{
+		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
 		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
 		    resp.append(buf, resp_len);
 		}
@@ -205,8 +205,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		//if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN response: %d"), resp_len);
 
 		off = 0;
-		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ")
-		{
+		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ") {
 		    rez = s2i(TSYS::strParse(header,0," ",&off));
 		    if(rez > 0 || off >= (int)header.size())
 			throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),header.substr(off).c_str());
@@ -224,12 +223,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    //if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
 
-	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),conTm,true);
-	    resp.assign(buf,resp_len);
+	    resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf), conTm, true);
+	    resp.assign(buf, resp_len);
 
 	    // Wait tail
-	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A')
-	    {
+	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
 		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf, resp_len);
 	    }
@@ -278,10 +276,13 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm",_("Parameters")))
+	if(ctrMkNode("area",opt,1,"/prm",_("Parameters"))) {
+	    if(ctrMkNode("area",opt,1,"/prm/st",_("State")))
+		ctrMkNode("list",opt,-1,"/prm/st/auths",_("Active authentication sessions"),R_R_R_,"root",SPRT_ID);
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth session(min)"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/sUserHostLim",_("Single user and host connections limit"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
 		    "help",_("ZLib compression level:\n"
 			     "  -1  - optimal speed-size;\n"
@@ -290,23 +291,31 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower compression border"),RWRWR_,"root",SPRT_ID,3,"tp","dec","min","10",
 		    "help",_("Value in bytes."));
 	    }
+	}
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/lf_tm")
-    {
+    if(a_path == "/prm/st/auths" && ctrChkNode(opt)) {
+	MtxAlloc res(sesRes, true);
+	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s)"),
+		tm2s(authEl->second.tAuth,"").c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));
+    }
+    else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/compr")
-    {
+    else if(a_path == "/prm/cfg/sUserHostLim") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(singleUserHostLimit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setSingleUserHostLimit(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/compr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(comprLev()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprLev(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/comprBrd")
-    {
+    else if(a_path == "/prm/cfg/comprBrd") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(comprBrd()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprBrd(s2i(opt->text()));
     }

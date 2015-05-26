@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -175,8 +175,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
     bool rez = WdgView::attrSet(attr, val, uiPrmPos);
 
-    switch(uiPrmPos)
-    {
+    switch(uiPrmPos) {
 	case A_COM_FOCUS:
 	    if((bool)s2i(val) == hasFocus())	break;
 	    if((bool)s2i(val))	setFocus(Qt::OtherFocusReason);
@@ -230,8 +229,7 @@ bool RunWdgView::isVisible( QPoint pos )
 bool RunWdgView::event( QEvent *event )
 {
     //Force event's process
-    switch(event->type())
-    {
+    switch(event->type()) {
 	case QEvent::Paint:
 	    if(permView())	break;
 	    //Paint message about access denied
@@ -285,8 +283,7 @@ bool RunWdgView::event( QEvent *event )
     string mod_ev, evs;
     AttrValS attrs;
     if(property("active").toBool() && permCntr())
-    switch(event->type())
-    {
+    switch(event->type()) {
 	case QEvent::Paint:	return true;
 	case QEvent::KeyPress:
 	    mod_ev = "key_pres";
@@ -297,8 +294,7 @@ bool RunWdgView::event( QEvent *event )
 	    if(QApplication::keyboardModifiers()&Qt::AltModifier)	mod_ev += "Alt";
 	    if(QApplication::keyboardModifiers()&Qt::ShiftModifier)	mod_ev += "Shift";
 	    if(((QKeyEvent*)event)->nativeScanCode()) evs = mod_ev+"SC#"+i2s(((QKeyEvent*)event)->nativeScanCode(),TSYS::Hex);
-	    switch(((QKeyEvent*)event)->key())
-	    {
+	    switch(((QKeyEvent*)event)->key()) {
 		case Qt::Key_Escape:	mod_ev += "Esc";	break;
 		case Qt::Key_Backspace:	mod_ev += "BackSpace";	break;
 		case Qt::Key_Return:	mod_ev += "Return";	break;
@@ -414,8 +410,7 @@ bool RunWdgView::event( QEvent *event )
 	    mod_ev = "key_mousePres";
 	case QEvent::MouseButtonRelease:
 	    if(mod_ev.empty()) mod_ev = "key_mouseRels";
-	    switch(((QMouseEvent*)event)->button())
-	    {
+	    switch(((QMouseEvent*)event)->button()) {
 		case Qt::LeftButton:	mod_ev += "Left";	break;
 		case Qt::RightButton:	mod_ev += "Right";	break;
 		case Qt::MidButton:	mod_ev += "Midle";	break;
@@ -444,7 +439,7 @@ bool RunWdgView::event( QEvent *event )
 	default: break;
     }
 
-    //> Try put mouse event to next level widget into same container
+    //Try put mouse event to next level widget into same container
     if(!qobject_cast<RunPageView*>(this) &&
 	(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick))
     {
@@ -477,7 +472,7 @@ bool RunWdgView::event( QEvent *event )
 //* Shape page view runtime mode                  *
 //*************************************************
 RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
-    RunWdgView(iwid,0,mainWind,parent,f), wx_scale(1.0), wy_scale(1.0)
+    RunWdgView(iwid, 0, mainWind, parent, f), wx_scale(1), wy_scale(1)
 {
     resize(50, 50);
     load("");
@@ -562,8 +557,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 		((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc))
 	    return true;
     //Check for open child page or for unknown and empty source pages open as master page child windows
-    if((pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg)
-    {
+    if((pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg) {
 	RunPageView *pg = new RunPageView(pg_it, mainWin(), this, Qt::Tool);
 	pg->setAttribute(Qt::WA_DeleteOnClose);
 	//pg->load("");

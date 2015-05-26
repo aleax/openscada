@@ -1,14 +1,13 @@
 # OpenSCADA.Transport.Serial translate to Russian.
-# Copyright (C) 2009-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2009-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2009-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-02 16:46+0300\n"
+"POT-Creation-Date: 2015-05-10 17:38+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,8 +22,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow serial based interfaces. Used for data exchanging through serial "
-"interfaces like RS232, RS485, GSM and other."
+"Provides a serial interface. It is used to data exchange via the serial "
+"interfaces of type RS232, RS485, GSM and more."
 msgstr ""
 "Предоставляет последовательный интерфейс. Используется для обмена данными "
 "через последовательные интерфейсы типа RS232, RS485, GSM и другое."
@@ -102,8 +101,8 @@ msgid "Write: reply for zero bytes."
 msgstr "Запись: ответ ноль байт."
 
 #, c-format
-msgid "Write: error '%s (%d)'!"
-msgstr "Запись: ошибка '%s (%d)'!"
+msgid "Write: error '%s (%d)'."
+msgstr "Запись: ошибка '%s (%d)'."
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". "
@@ -122,11 +121,15 @@ msgid ""
 "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 "    mdm - modem mode, listen for 'RING'."
 msgstr ""
-"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:mdm]]\". Где:\n"
+"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:"
+"mdm]]\". Где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
-"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
-"                                 230400, 460800, 500000, 576000 или 921600);\n"
-"    format - формат асинхронных данных '{размер}{чётность}{стоп}' (8N1, 7E1, 5O2);\n"
+"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
+"38400, 57600, 115200,\n"
+"                                 230400, 460800, 500000, 576000 или "
+"921600);\n"
+"    format - формат асинхронных данных '{размер}{чётность}{стоп}' (8N1, 7E1, "
+"5O2);\n"
 "    fc - управление потоком:\n"
 "      'h' - аппаратное (CRTSCTS);\n"
 "      's' - программное (IXON|IXOFF);\n"
@@ -189,6 +192,9 @@ msgstr "Трафик входящий %s, исходящий %s. "
 msgid "Device '%s' is used now."
 msgstr "Устройство '%s' использовано сейчас."
 
+msgid "Starting."
+msgstr "Запуск."
+
 msgid "Modem busy"
 msgstr "Модем занят"
 
@@ -201,11 +207,15 @@ msgstr "Модем, нет гудка"
 msgid "Modem no connected"
 msgstr "Модем не подключился"
 
+msgid "Stopping."
+msgstr "Останов."
+
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-msgid "Writing request error."
-msgstr "Ошибка отправки запроса."
+#, c-format
+msgid "Restart by KeepAliveTm %gs."
+msgstr "Перезапуск по KeepAliveTm %gс."
 
 msgid "Timeouted!"
 msgstr "Время исчерпано!"
@@ -213,8 +223,9 @@ msgstr "Время исчерпано!"
 msgid "Echo request reading error."
 msgstr "Ошибка чтения эхо запроса."
 
-msgid "Serial error!"
-msgstr "Ошибка последовательного интерфейса!"
+#, c-format
+msgid "Read: error '%s (%d)'."
+msgstr "Чтение: ошибка '%s (%d)'."
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". "
@@ -237,9 +248,12 @@ msgstr ""
 "Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:"
 "modTel]]\". Где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
-"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
-"                                 230400, 460800, 500000, 576000 или 921600 );\n"
-"    format - формат асинхронных данных '{размер}{чётность}{стоп}' (8N1, 7E1, 5O2);\n"
+"    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
+"38400, 57600, 115200,\n"
+"                                 230400, 460800, 500000, 576000 или "
+"921600 );\n"
+"    format - формат асинхронных данных '{размер}{чётность}{стоп}' (8N1, 7E1, "
+"5O2);\n"
 "    fc - управление потоком:\n"
 "      'h' - аппаратное (CRTSCTS);\n"
 "      's' - программное (IXON|IXOFF);\n"
@@ -288,3 +302,9 @@ msgstr "Повесить трубку"
 
 msgid "Hangup response"
 msgstr "Повесить трубку, результат"
+
+#~ msgid "Writing request error."
+#~ msgstr "Ошибка отправки запроса."
+
+#~ msgid "Serial error!"
+#~ msgstr "Ошибка последовательного интерфейса!"

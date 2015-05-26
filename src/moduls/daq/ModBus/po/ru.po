@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-21 18:15+0300\n"
+"POT-Creation-Date: 2015-05-10 16:38+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -317,6 +317,9 @@ msgstr "13:Ошибка в ответе сервера"
 msgid "Not full respond"
 msgstr "Неполный ответ"
 
+msgid "14:Device error: "
+msgstr "14:Ошибка устройства: "
+
 msgid "13:Error respond: Too short."
 msgstr "13:Ошибка ответа: Очень короткий."
 
@@ -361,9 +364,6 @@ msgstr "10:Проблема со шлюзом."
 #, c-format
 msgid "12:%02X:Unknown error."
 msgstr "12:%02X:Неизвестная ошибка."
-
-msgid "14:Device error: "
-msgstr "14:Ошибка устройства: "
 
 msgid "REQ -> "
 msgstr "Запрос -> "

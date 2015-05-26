@@ -1,15 +1,14 @@
 # OpenSCADA.Transport.SSL translate to German.
-# Copyright (C) 2009-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
-# Roman Savochenko <rom_as@oscada.org>, 2011.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 15:56+0200\n"
+"POT-Creation-Date: 2015-05-10 17:32+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -24,8 +23,8 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow security socket layer based transport. Used OpenSSL and supported "
-"SSLv2, SSLv3 and TLSv1."
+"Provides transport based on the secure sockets' layer. OpenSSL is used and "
+"SSLv2, SSLv3 and TLSv1 are supported."
 msgstr ""
 "Gewährt den auf der Schicht von sicheren Sockets begründeten Transport. Es "
 "werden benutzt OpenSSL und unterstützt SSLv2, SSLv3 und TLSv1."
@@ -41,12 +40,14 @@ msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
 "limit %d."
 msgstr ""
-"Verbindungen %d, eröffnet %d. Eingangstreffik %s, Ausgangs %s. Closed-Verbindungen aufgrund der Begrenzung %d."
+"Verbindungen %d, eröffnet %d. Eingangstreffik %s, Ausgangs %s. Closed-"
+"Verbindungen aufgrund der Begrenzung %d."
 
 #, c-format
 msgid "Open temporary file '%s' error: '%s'"
 msgstr "Fehler der Eröffnung der zeitweiligen Datei '%s': '%s'"
 
+#, c-format
 msgid "Error write to file '%s'."
 msgstr "Fehler Schreiben in '%s' einreichen."
 
@@ -136,13 +137,14 @@ msgstr "Priorität"
 msgid "Traffic in %s, out %s."
 msgstr "Eingangstraffik %s, Ausgangs %s."
 
+#, c-format
 msgid "Socket name '%s' error!"
 msgstr "Buchse Namen '%s' Fehler!"
- 
+
 #, c-format
 msgid "Error creation TCP socket: %s!"
 msgstr "Fehler Schaffung TCP-Socket: %s!"
- 
+
 #, c-format
 msgid "Connect to Internet socket error: %s!"
 msgstr "Verbindung zum Internet-Socket-Fehler: %s!"

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2013 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -114,6 +113,15 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	uint32_t reqData( int reqTp, XML_N &req );
 
+	// Limits
+	uint32_t limSubScr( )			{ return mLimSubScr; }
+	uint32_t limMonitItms( )		{ return mLimMonitItms; }
+	uint32_t limRetrQueueTm( )		{ return mLimRetrQueueTm; }
+
+	void setLimSubScr( uint32_t vl )	{ mLimSubScr = vmax(1,vmin(vl,1000)); modif(); }
+	void setLimMonitItms( uint32_t vl )	{ mLimMonitItms = vmax(10,vmin(1000000,vl)); modif(); }
+	void setLimRetrQueueTm( uint32_t vl )	{ mLimRetrQueueTm = vmax(0,vmin(3600,vl)); modif(); }
+
 	TProt &owner( );
 
     protected:
@@ -138,6 +146,8 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	int	&mSerType;
 	char	&mAEn;
 	string	mDB;
+
+	uint32_t mLimSubScr, mLimMonitItms, mLimRetrQueueTm;
 };
 
 //*************************************************

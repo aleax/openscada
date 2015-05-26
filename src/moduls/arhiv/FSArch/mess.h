@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,11 +44,12 @@ class MFileArch
 	MFileArch( ModMArch *owner );
 	MFileArch( const string &name, time_t beg, ModMArch *owner, const string &charset = "UTF-8", bool ixml = true);
 	~MFileArch( );
+	void delFile();
 
 	void attach( const string &name, bool full = true );
-	void put( TMess::SRec mess );
+	bool put( TMess::SRec mess );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo = 0 );
-	//> Write changes to Archive file
+	// Write changes to Archive file
 	//  free - surely free used memory
 	void check( bool free = false );
 
@@ -60,6 +60,7 @@ class MFileArch
 	time_t	end( )		{ return mEnd; }
 	string	charset( )	{ return mChars; }
 	bool	err( )		{ return mErr; }
+	bool	isPack( )	{ return mPack; }
 
 	ModMArch &owner( )	{ return *mOwner; }
 
@@ -67,17 +68,17 @@ class MFileArch
 	bool	scan;		// Archive scaned (for check deleted files). Use from ModMArch
 
     private:
-	//> Cache methods
+	// Cache methods
 	long	cacheGet( time_t tm );
 	void	cacheSet( time_t tm, long off, bool last = false );
 	void	cacheUpdate( time_t tm, long v_add );
 
-	//> Base parameters
+	// Base parameters
 	string	mName;		// name Archive file;
 	bool	mXML;		// XML mode file
 	int	mSize;		// Archive size
-	string	mChars;	// Archive charset;
-	//> State parameters
+	string	mChars;		// Archive charset;
+	// State parameters
 	bool	mErr;		// Archive err
 	bool	mWrite;		// Archive had changed but no wrote to file
 	bool	mLoad;		// Archive load to mNode
@@ -85,17 +86,16 @@ class MFileArch
 	time_t	mAcces;		// last of time acces to Archive file
 	time_t	mBeg;		// begin Archive file;
 	time_t	mEnd;		// end Archive file;
-	//> XML-mode parametrs
+	// XML-mode parametrs
 	XMLNode	*mNode;		// XML-file tree
-	//> Cache parameters
-	struct CacheEl
-	{
+	// Cache parameters
+	struct CacheEl {
 	    time_t tm;
 	    long   off;
 	};
 	vector<CacheEl> cache;
 	CacheEl cach_pr;
-	//> Specific parameters
+	// Specific parameters
 	Res	mRes;		// resource to access;
 	ModMArch *mOwner;
     };
@@ -162,7 +162,7 @@ class ModMArch: public TMArchivator
 	double	tmCalc;		// Archiving time
 	time_t	mLstCheck;	// Last check directory time
 
-	deque<MFileArch *>  arh_s;
+	deque<MFileArch *>	files;
 };
 
 }

@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1216,7 +1216,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
     if(gnd) wdg_tabs->setTabText(3,gnd->attr("dscr").c_str());
 
     //Process dialog's page
-    gnd=TCntrNode::ctrId(root,"/proc",true);
+    gnd = TCntrNode::ctrId(root,"/proc",true);
     wdg_tabs->setTabEnabled(2,gnd);
     if(gnd) wdg_tabs->setTabText(2,gnd->attr("dscr").c_str());
     is_modif = false;

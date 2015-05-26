@@ -1,16 +1,15 @@
 # OpenSCADA.UI.WebVision translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-01 16:30+0300\n"
+"POT-Creation-Date: 2015-05-10 20:51+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -55,6 +54,12 @@ msgstr "%gs"
 msgid "%gms"
 msgstr "%gms"
 
+msgid "kHz"
+msgstr "KHz"
+
+msgid "Hz"
+msgstr "Hz"
+
 #, c-format
 msgid "Trend creation time %gms"
 msgstr "Trend Erstellungszeit %gms"
@@ -62,12 +67,6 @@ msgstr "Trend Erstellungszeit %gms"
 #, c-format
 msgid "+ PNG-image(%d) creation time %gms"
 msgstr "+ PNG-Bild (%d) Erstellungszeit %gms"
-
-msgid "kHz"
-msgstr "KHz"
-
-msgid "Hz"
-msgstr "Hz"
 
 #, c-format
 msgid "Document '%s' parsing is error: %s"
@@ -83,9 +82,10 @@ msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
 msgstr "Roman Savotschenko, Maxim Lysjenko, Ksenija Jaschina"
 
 msgid ""
-"Web operation user interface for visual control area (VCA) projects playing."
+"Visual operation user interface, based on WEB - front-end to VCA engine."
 msgstr ""
-"Web Benutzerschnittstelle für die Steuerung der sichtbaren Bereiche (VCA)."
+"Visuelle Betrieb Benutzeroberfläche basierend auf WEB - Front-End für VCA-"
+"Motor."
 
 msgid "Date and time"
 msgstr "Datum und Uhrzeit"

@@ -75,10 +75,12 @@ class TProt: public TProtocol
 	~TProt( );
 
 	int authTime( )			{ return mTAuth; }
+	int singleUserHostLimit( )	{ return mSingleUserHostLimit; }
 	int comprLev( )			{ return mComprLev; }
 	int comprBrd( )			{ return mComprBrd; }
 
 	void setAuthTime( int vl )	{ mTAuth = vmax(1,vl); modif(); }
+	void setSingleUserHostLimit( int vl )	{ mSingleUserHostLimit = vmax(1,vmin(10000,vl)); modif(); }
 	void setComprLev( int vl )	{ mComprLev = vmax(-1,vmin(9,vl)); modif(); }
 	void setComprBrd( int vl )	{ mComprBrd = vmax(10,vl); modif(); }
 
@@ -99,8 +101,8 @@ class TProt: public TProtocol
 
 	//Attributes
 	pthread_mutex_t	sesRes;
-	map<int, SAuth>	auths;
-	int		mTAuth, mComprLev, mComprBrd;
+	map<int, SAuth>	mAuth;
+	int		mTAuth, mComprLev, mComprBrd, mSingleUserHostLimit;
 };
 
 extern TProt *mod;

@@ -2,7 +2,7 @@
 //OpenSCADA system file: tcntrnode.h
 /***************************************************************************
  *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,10 +129,10 @@ class TCntrNode
 	enum Flag
 	{
 	    // Modes
-	    MkDisable	= 0x00,		//Node make disable
-	    Disable	= 0x01,		//Node disabled
-	    MkEnable	= 0x02,		//Node make enable
-	    Enable	= 0x03,		//Node enabled
+	    DoDisable	= 0x00,		//Node do disable
+	    Disabled	= 0x01,		//Node disabled
+	    DoEnable	= 0x02,		//Node do enable
+	    Enabled	= 0x03,		//Node enabled
 	    // Flags
 	    SelfModify	= 0x04,		//Self modify
 	    SelfModifyS	= 0x08		//Self modify store
@@ -140,8 +140,7 @@ class TCntrNode
 	enum EnFlag
 	{
 	    NodeConnect	= 0x01,		//Connect node to control tree
-	    NodeRestore	= 0x02,		//Restore node enabling after broken disabling.
-	    NodeShiftDel= 0x04
+	    NodeRestore	= 0x02		//Restore node enabling after broken disabling.
 	};
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
@@ -152,7 +151,7 @@ class TCntrNode
 
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0, bool noex = false );	//Get node for full path
-	void nodeDel( const string &path, char sep = 0, int flag = 0, bool shDel = false );	//Delete node at full path
+	void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 
 	TCntrNode *nodePrev( bool noex = false );
@@ -209,7 +208,7 @@ class TCntrNode
 	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );
 	virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
-	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
+	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0 );
 
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }

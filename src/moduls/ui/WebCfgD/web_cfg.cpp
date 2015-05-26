@@ -40,7 +40,7 @@
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"0.8.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow the dynamic WEB based OpenSCADA system configurator. Use XHTML, CSS and JavaScript technologies.")
+#define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -131,8 +131,8 @@ TWEB::~TWEB( )
 string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
-    else if(name == "Auth")	return "1";
-    else return TModule::modInfo(name);
+    if(name == "Auth")		return "1";
+    return TModule::modInfo(name);
 }
 
 void TWEB::modInfo( vector<string> &list )

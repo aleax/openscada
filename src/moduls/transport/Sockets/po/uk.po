@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-02 16:28+0300\n"
+"POT-Creation-Date: 2015-05-10 17:49+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -23,8 +23,8 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow sockets based transport. Support inet and unix sockets. Inet socket "
-"use TCP and UDP protocols."
+"Provides sockets based transport. Support inet and unix sockets. Inet socket "
+"uses TCP, and UDP protocols."
 msgstr ""
 "Надає транспорт базований на сокетах. Підтримуються інтернет та UNIX сокети. "
 "Інтернет сокет використовує TCP та UDP протоколи."
@@ -64,9 +64,6 @@ msgstr "UDP сокет не під'єднався до '%s'!"
 msgid "UNIX socket doesn't bind to '%s'!"
 msgstr "UNIX сокет не під'єднався до '%s'!"
 
-msgid "Socket write message '%d'."
-msgstr "Сокет записав повідомлення '%d'."
- 
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Закриття вхідного транспорту за помилкою: %s!"
@@ -140,26 +137,27 @@ msgstr ""
 "    name - Ім'я файлу UNIX-сокета;\n"
 "    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання)."
 
-msgid "Queue length"
-msgstr "Довжина черги"
-
-msgid "Used for TCP and UNIX sockets."
-msgstr "Використовується для TCP та UNIX сокетів."
-
-msgid "Clients maximum"
-msgstr "Максимум клієнтів"
-
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
 msgid "Priority"
 msgstr "Пріоритет"
- 
-#: socket.cpp:643
+
+msgid "Maximum segment size (MSS)"
+msgstr "Максимальний розмір сегменту (MSS)"
+
+msgid "Set 0 for system MSS."
+msgstr "Встановити 0 для системного MSS."
+
+msgid "Queue length"
+msgstr "Довжина черги"
+
+msgid "Clients maximum"
+msgstr "Максимум клієнтів"
+
 msgid "Keep alive requests"
 msgstr "Keep alive запитів"
- 
-#: socket.cpp:644
+
 msgid ""
 "Close the connection after specified requests.\n"
 "Zero value for disable (not close ever)."
@@ -255,3 +253,6 @@ msgstr ""
 "    conn - максимальний час очікування відповіді з'єднання, у секундах;\n"
 "    next - максимальний час очікування продовження відповіді, у секундах;\n"
 "    rep  - мінімальний таймаут очікування повтору запиту, у секундах."
+
+#~ msgid "Socket write message '%d'."
+#~ msgstr "Сокет записав повідомлення '%d'."

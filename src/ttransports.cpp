@@ -651,6 +651,15 @@ void TTransportIn::save_( )
 
 TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // string status() - the transport status
+    if(iid == "status") return getStatus();
+    // string addr( string vl = "" ) - the transport address return, set the to no empty <vl>
+    if(iid == "addr") {
+	if(prms.size() && prms[0].getS().size())
+	    try{ setAddr(prms[0].getS()); } catch(TError) { }
+	return addr();
+    }
+
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
@@ -810,15 +819,29 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     //      session through the transport by means of protocol.
     //  req - request into XML-tree
     //  prt - protocol name
-    else if(iid == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat()) {
+    if(iid == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat()) {
 	try {
 	    XMLNode req;
 	    if(!startStat()) start();
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().toXMLNode(req);
-	    messProtIO(req,prms[1].getS());
+	    messProtIO(req, prms[1].getS());
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().fromXMLNode(req);
 	} catch(TError err) { return err.mess; }
 	return 0;
+    }
+    // string status( ) - the transport status
+    if(iid == "status")	return getStatus();
+    // string addr( string vl = "" ) - the transport address return, set the to no empty <vl>
+    if(iid == "addr") {
+	if(prms.size() && prms[0].getS().size())
+	    try{ setAddr(prms[0].getS()); } catch(TError) { }
+	return addr();
+    }
+    // string timings( string vl = "" ) - the transport timings return, set the to no empty <vl>
+    if(iid == "timings") {
+	if(prms.size() && prms[0].getS().size())
+	    try{ setTimings(prms[0].getS()); } catch(TError) { }
+	return timings();
     }
 
     //Configuration functions call

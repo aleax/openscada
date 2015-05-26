@@ -1,3 +1,159 @@
+2015-05-10 Roman 0.8.13
+- API:
+    !!!!:Changes:
+	SYS: Config resource moved to different cfgRes(). ModSched: Moved to different resources locking "schM".
+	FIX:SYS: User API function SYS.strDecode() fixed for argument 2 using by default.
+	TCntrNode: Flags MkDisable, Disable, MkEnable, Enable renamed to DoDisable, Disabled, DoEnable, Enabled.
+	    The shift delete mode removed as flag NodeShiftDel, functions nodeDel() and chldDel() last argument removing.
+    Appends:
+	SYS: Short global function-link rRnd() (into namespace OSCADA) to TSYS::realRound() is added.
+	    Static function TSYS::getCmdOpt_() variant is added for the using allow from the main start program.
+	    User API object XMLNodeObj expanded by function clear() for allow fast a node clean up from childs, text and/or attributes.
+	TRegExp: expanded by option 'u' for UTF-8 symbols allow and sets the force for UTF-8 locale.
+	Transport: User API objects are appended by functions: In::{status,addr}(), Out::{status,addr,timings}().
+	Archive: User API objects are appended by functions: TVArchive::{status,archivatorList,getVal}(), TVArchivator::status().
+- SYS:
+    !!!!: Switch to building by the OpenSCADA automatic packages builder and moving for the service updates providing "0.8.13.{S}"
+	to signed for the technical support users, http://oscada.org/en/services/technical-support.
+    !!!!: Main start program "openscada" mostly rewrote for preferable demon mode produce:
+	- check and switch to the demon mode first;
+	- CoreDumpAllow process for left for the work process;
+	- check and create PID-file for the work process;
+	- same OpenSCADA core start.
+    FIX:TCntrNode: For Disabled nodes allowed to list also as checking for present.
+	Set for original message print at exception into chldDel() or mostly into heir's postDisable().
+    FIX: The functions libraries early starting into load_() prevented by crashing at "openscada --help", into DAQ.JavaLikeCalc.
+	DAQ subsystem set to ordered and to the modules priority property "HighPriority" added to place the first allow.
+    FIX: openscada_mod.spec: The requires some reordered and the packages descriptions some fixed and appended.
+    FIX: debian/rules made simplify and unified. "dh_installinit --no-start" set for prevent the service automatic start.
+	debian/control: Depends for build with Qt5 is added.
+    !!:FIX:Init scripts:
+	FIX:Debian: mostly improved, simplified, adapted to PID and fixed by remove force LC_ALL set and that break down individual LC_NUMERIC=C setting
+	    for different to C, POSIX or English locales.
+	ALTLinux: mostly improved, simplified, adapted to PID using and expanded by argument "--retry TERM/30/KILL/5".
+	Gentoo: mostly improved, simplified, adapted to PID and cleaned.
+	RH: mostly improved, simplified, adapted to PID and expanded by argument "-d 30".
+    !:TVarObj: The User API generic object's data resource allocator Res replaced by pthread_mutex_t and the also used for connections to the objects.
+    !: signal() replaced by sigaction() and restoring original handlers at the TSYS destroy is added.
+    TArchives,TCntrNode,UI.VCAEngine: All remains operations with TArrayObj moved to arGet() and arSet().
+    Files configure.in renamed to configure.ac.
+    TMess: A time mark added to messages for stdout and stderr, and the messages format mostly changed to "{tm} {lev}[{cat}] {mess}".
+    For almost all modules the description updated.
+    Target "dist-lzma" is added to Makefile.am by the deprecated into AutoMake 1.14 but the needs for compatibility.
+    Targets "*-lzma" into Makefile.am fixed for force using LZMA by --use-compress-program=lzma but argument --lzma often uses XZ.
+- DB:
+    DB object's fields "DESCR" and "ADDR" size rose to 2000 and 1000, respectively.
+    FIX:FireBird: Prevent a table fix for key row as blr_varying. Configure template AX_LIB_FIREBIRD some adapted for configure and build that with
+	headers into */include/firebird, like SuSE, and 64bit libraries, like Mandriva64.
+    !!:MySQL: Address field "names" sense changed to "sets" (charset-collation-engine) for the append to DB creation and SET commands.
+    !!!!:FIX:PostgreSQL: Entries duplicates and other ones miss for request fieldSeek() workaround is added by "ORDER BY" to the request append
+	and the entries force sort. The build dependencies checking macros AX_LIB_POSTGRESQL some fixed for the results.
+    FIX:SQLite: Adapted to the keys description as the key position number.
+    =Tmpl=: Mostly adapted to actual.
+- DAQ:
+    For redundancy processing different resources locking "mRdRes" is added.
+    FIX:ModBus,DAQGate,OPC_UA: Configuration "TM_REST" size fixed to maximum limit.
+	Fix for return after the condition "!p->enableStat() || !p->owner().startStat()" into the value set function,
+	for next and real writing prevent.
+    BlockCalc,JavaLikeCalc: Object TipContr renamed to TpContr.
+    DCON,ModBus: Error messages expanded to addition different errors per tries.
+    !!!!:FIX:OPC_UA:
+	!!:FIX: libOPC_UA: TranslateBrowsePathsToNodeIdsRequest service fixed for processing not OK paths, addition debug messages are added.
+	!!:FIX: Big message's parts into the input protocol's part merge and wait fix.
+	FIX: Input: Possible spare requests part drop after no need for now and no error requests fix.
+	FIX: OpcUa_Int64 type fixed by expand iN{u}() and oN{u}().
+	!!: The type Array of simple types support added, AId_DataType processing for type Array into the server part is added.
+	!: For all limits control tab "Data" with the limits is added, limit limRetrQueueTm() for retransmission queue time control added.
+	Sequence number is added to "MSG Req:" messages for debugging sync allow.
+	OpcUa_BadMessageNotAvailable to the service "RepublishRequest" error is added and used.
+	Synchronization time "SYNCPER" seprated to Restore timeout "TM_REST" which used for same restoring control.
+	Main integer changed from OpcUa_Int32 to OpcUa_Int64.
+	Some direct indexes replaced by the symbol definitions and some definitions unified.
+    !!:FIX:Siemens: LibnoDave version updated to 0.8.5 (last from 05/17/13), pointer to int cast fixed by replace the cast to long.
+    ICP_DAS: libi8k.a and the headers updated, watchdog for LP-8x81 by EnableWDT() replaced by EnableSysWDT().
+    DAQGate: Configuration "SYNCPER" type changed from real to int.
+    !!!!:FIX:JavaLikeCalc: Expanded by VM commands AddAss, SubAss, MulAss, DivAss for make optimal operations ++, --, +=, -=, *=, /=, with assigning.
+	    Mostly for the operations to type "String" and spare memory realocation prevent here for any appends.
+	FIX: Equal and NotEqual the virtual machine functions adjusted for undefined object's properties correct processing by the processing
+	    generic as Real for not String types.
+	!!: Set for binary operations like "a = b+c+d+e;" using single temporary register and allow speed optimization for strings append mostly.
+- Transport:
+    FIX:Serial: The source code cleaned from doubles TSYS::strNoSpace(), some expanded by debug messages and the minuteness and other.
+    Sockets: Property MSS is added for control TCP-segment size for bad channels.
+- Archive:
+    !!:FIX: mLastGet of values processing fixed to inactive (without buffer) archives for only direct writing here.
+    !:FIX: iend > arch_el[i_a]->begin() set to iend >= arch_el[i_a]->begin() for allow strong and single end value get.
+    !!!!:FIX:FSArch: Repair values file's procedure fixed for fix value types and appended at last by not fixed type (like string) repairing code.
+	    Full tests chain passed for all fixing types to the sequential packing mechanism and the archive files errors repairing.
+	    The command line property "copyErrValFiles" replaced by directory "errors" present for copy the errors here.
+	!!:FIX: Processing for remove the files by limits fixed for prevent fresh-new archive file removing for two archive files.
+	!!:FIX: Strings archiving final fixed after last the string archiving fix into last value.
+	!!:FIX: Free storage space lack checking added for prevent hang and data lost for messages and values.
+	!:The messages limits into the plain format archive expanded to 100000 symbols.
+	!:Tab "Files" is added for the messages and the values with detailed information about the archive's files.
+	Last real value getting from the active archives some expanded for unmerged EVAL values pass.
+	To the specific parameters set limits for work range.
+	Some debug messages by OSC_DEBUG definition is added.
+	maxCapacity() disabling set for the value < 1.
+- Protocol:
+    SelfSystem: SingleUserHostLimit property added for the limit control and error message by the reach is added.
+	Expanded by status - Active authentication sessions.
+    HTTP: Expanded by status - Active authentication sessions.
+    UserProtocol: Restore starting a function added for the stopped early by safety timeout.
+- UI:
+    !:FIX:VCAEngine,Vision,WebVision:
+	FIX: For primitive "Diagram" expanded address variant "data:{XMLNodeData}" for allow miss "tm", "tm_grnd" and possibility
+	    set that in seconds by attribute 's'. Fix assigning loaded values but not the append to the values buffer for direct address
+	    variants "line:{value}" and "data:{XMLNodeData}".
+	FIX: View "Button" of the primitive FormEl adapted to the image scale for all the widget size and allowing cover all it space by the image.
+	!!!!: Type "XY" to primitive "Diagram" support is added, by Y into unpair and X into pair parameters.
+	!!!!: True included widgets size scaling is added by scale edged point, for correct fit each to other at any scale.
+	To primitive ElFigure attribute "mirror" is added for providing the primitive's shapes mirroring. For UI.Vision implemented only main
+	    funtions and some problems present now for arcs.
+	Some warnings added for try add already present items and paste, after copy or cut, to already present one.
+    FIX:QTStarter: For main UI task destroy set timeout to 60 seconds and an execution generation allowed at the destroying timeout.
+    FIX:QTCfg:
+	FIX:LineEdit: The view "Integer" fixed to set allowed values limit [-2147483647:2147483647]
+	FIX: Crashes at some wrong reply after the network negotiations fixed.
+	TextEdit: Strong words wrap set, mostly for long descriptions. The fields vertical fitting to full page added, for busy.
+	    Rewrote for internal layout remove.
+	List element expanded horizontal to all page, for wide items.
+    FIX:UI.WebCfgD: Function basicFields() of WebCfgDVCA.js cleaned.
+	FIX: Static selected lists into "ind_ls" and "val_ls" processing some improved for empty items pass and other.
+	FIX: Title's null value fix for helps.
+    FIX:VCAEngine:
+	FIX: Link to a widget's attribute from the wiget by "wdg:a_XXX" fixed and prevented from crash into generic status.
+	FIX: User API operations mime() and mimeSet() used, tested and fixed for primitive "Diagram" source edition,
+	    storing into the session table and the result display, for SVG.
+	!!: The function resource locking to a widgets library and a project loading and the enabling by need multiple entry and perform prevent.
+	    Some crashes and not full the data access prevent for the remote players.
+	Automatic sessions control moved to resources locking "mSesRes".
+	Special IOs naming to the execution session's context is added.
+    !!:FIX:Vision:
+	!!:FIX:FormEl: Fixed sometime difference between real and seen value, mostly for discrete views ComboBox and CheckBox.
+	FIX:ElFigure: Prevented hangs at zero length from center to first radius of Arcs.
+	    Appending remnant from the widget placing into parent container temporary removed from scaleRotate() and unScaleRotate()
+	    for prevent flaws between inundations into some cases. Source code significant cleaned for next step.
+	    Some bugs fixed. Starting implement for mirroring. Some smarter control for control point 1 and 2 of Arc is added.
+	FIX: Prevented double free by later restoring user and the password after changing an user to unallowed for reading an user for the project's session.
+	FIX: Remote projects and sessions list obtain fixed to proper users for the started user's field.
+	FIX: Allowed coordinates value limited to [-1000000:1000000] by figures updating freeze into Qt for too big the values.
+	FIX: The primitive "Document" text global styles "font-weight" and "font-style" forcing removed and set only for the properties allows
+	    into the font widget's attribute, for allow working tags "<B>" and "<I>".
+	FIX: "Timeouted" messages at the running session restoring try, by the background project's data loading wait,
+	    oppressed and the main window closing ceased.
+	FIX: Pages including for equal the container and the included widget size fixed to oppress the scrolls for big scale.
+	!!:Primitive "Document" printing and exporting allowed from the context menu.
+	Default printing set for alone and big (not lesser twice to main page) documents.
+	Default exporting set for alone and big (not lesser twice to main page) documents or diagrams.
+	Scale margin for runtime session decreased from 5% to 2%.
+	The main opened windows list to the module configure page status added, for remote control.
+	Apply/Cancel buttons of the text edition elements set to adaptive for the labels present or either depends from allowed
+	    size of the widget container.
+    WebVision: "root" user or users into group "root" allowed for multiple sessions open into any cases.
+- FIX:Special.SystemTests: Tests "Archive" mostly fixed and some expanded.
+
+
 2015-01-22 Roman 0.8.12.1
 - DB: LibsDB.vcaBase.db: mnEls: All gradient's figures of mnemos expanded to 100 pixels, for exclude unstick from edges at the scaling.
     mnEls.Compressor: Spare arc figure removed.
@@ -6816,7 +6972,7 @@ Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
 - FIX:/SYS: Default config file DB file name is fixed.
 - !!:/SYS: The source tree version changed to 0.6.0.
 - FIX:/Config: Automatic fields view mechanism fixed.
-- FIX:/Control: A dublicate childs object no deleting is fixed.
+- FIX:/Control: A duplicate childs object no deleting is fixed.
 - FIX:/DB/MySQL: Error structured DB filed process is fixed.
 - FIX:/DB/SQLite: Error structured DB filed process is fixed.
 - !:/DAQ/DiamondBoards: Diamond boards driver updated and multiboard bug detected.

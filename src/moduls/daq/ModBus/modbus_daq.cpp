@@ -74,7 +74,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("WR_MULTI",_("Use multi-items write functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("WR_ASYNCH",_("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;3600"));
+    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
     fldAdd(new TFld("MAX_BLKSZ",_("Maximum request block size (bytes)"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
@@ -672,7 +672,7 @@ string TMdContr::modBusReq( string &pdu )
 	setAttr("reqTry",TSYS::int2str(connTry))->
 	setText(pdu);
 
-    tr.at().messProtIO(req,"ModBus");
+    tr.at().messProtIO(req, "ModBus");
 
     if(!req.attr("err").empty()) {
 	if(s2i(req.attr("err")) == 14) numErrCon++;
@@ -1333,7 +1333,7 @@ void TMdPrm::vlGet( TVal &val )
 	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
 	}
-	else val.setS(EVAL_STR,0,true);
+	else val.setS(EVAL_STR, 0, true);
 	return;
     }
 
@@ -1348,7 +1348,7 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	vo.setS(EVAL_STR, 0, true);
+    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     if(vl.isEVal() || vl == pvl) return;
 

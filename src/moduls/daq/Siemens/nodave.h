@@ -42,7 +42,7 @@ extern "C" {
 typedef struct dost {
     int rfd;
     int wfd;
-//    int connectionType;
+//    int connectionType;	// remember whether this is a socket or a serial connection or a handle or whatever
 } _daveOSserialType;
 #include <stdlib.h>
 #define tmotype int
@@ -51,6 +51,7 @@ typedef struct dost {
 
 #ifdef BCCWIN
 #define WIN32_LEAN_AND_MEAN
+#include <winsock2.h>	// according to Jochen Kühner, this is needed to compile on Win64
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,7 +84,7 @@ typedef struct dost {
 typedef struct dost {
     int rfd;
     int wfd;
-    int connectionType;
+//    int connectionType;
 } _daveOSserialType;
 #define OS_KNOWN
 #endif
@@ -96,7 +97,7 @@ typedef struct dost {
 typedef struct dost {
     int rfd;
     int wfd;
-    int connectionType;
+//    int connectionType;
 } _daveOSserialType;
 #define tmotype long
 #define OS_KNOWN
@@ -132,7 +133,6 @@ typedef struct dost {
 
 #define daveProtoISOTCP	122	/* ISO over TCP */
 #define daveProtoISOTCP243 123	/* ISO over TCP with CP243 */
-#define daveProtoISOTCPR 124	/* ISO over TCP with Routing */
 
 #define daveProtoMPI_IBH 223	/* MPI with IBH NetLink MPI to ethernet gateway */
 #define daveProtoPPI_IBH 224	/* PPI with IBH NetLink PPI to ethernet gateway */
@@ -141,6 +141,14 @@ typedef struct dost {
 
 #define daveProtoUserTransport 255	/* Libnodave will pass the PDUs of S7 Communication to user */
 					/* defined call back functions. */
+
+/*
+    Communication types
+*/
+#define davePGCommunication 1	/* communication with programming device (PG) (default in Libnodave) */
+#define daveProgrammerCommunication 1	/* communication with programming device (PG) (default in Libnodave) */
+#define daveOPCommunication 2	/* communication with operator panel (OP)) */
+#define daveS7BasicCommunication 3	/* communication with another CPU ? */
 
 /*
  *    ProfiBus speed constants:
@@ -154,7 +162,7 @@ typedef struct dost {
 #define daveSpeed93k    6
 
 /*
-    Some MPI function codes (yet unused ones may be incorrect).
+    Some S7 communication function codes (yet unused ones may be incorrect).
 */
 #define daveFuncOpenS7Connection	0xF0
 #define daveFuncRead			0x04
@@ -454,10 +462,20 @@ typedef struct _daveS5cache {
     daveS5AreaInfo * first;
 } daveS5cache;
 
-/* 
+
+typedef struct _daveRoutingData {
+	int connectionType;
+	int destinationType; 	// destinationIsIP=DestinationIsIP;
+	int subnetID1;
+	int subnetID2;
+	int subnetID3;
+	int PLCadrsize;
+	uc  PLCadr[4];		// currently, IP is maximum. Maybe there could be MAC adresses for Industrial Ethernet?
+} daveRoutingData;
+
+/*
     This holds data for a PLC connection;
 */
-
 struct _daveConnection {
     int AnswLen;	/* length of last message */
     uc * resultPointer;	/* used to retrieve single values from the result byte array */
@@ -481,14 +499,50 @@ struct _daveConnection {
     uc	packetNumber;	/* packetNumber in transport layer */
     void * hook;	/* used in CPU/CP simulation: pointer to the rest we have to send if message doesn't fit in a single packet */
     daveS5cache * cache; /* used in AS511: We cache addresses of memory areas and datablocks here */
+    int TPDUsize; 		// size of TPDU for ISO over TCP
+    int partPos;  		// remember position for ISO over TCP fragmentation
+    int routing;		// nonzero means routing enabled
+    int communicationType;		// (1=PG Communication,2=OP Communication,3=Step7Basic Communication)
+    daveRoutingData routingData;
 }; 
 
+EXPORTSPEC void DECL2 daveSetRoutingDestination(daveConnection * dc, int subnet1,int subnet3,int adrsize, uc* plcadr);
 /* 
+	    void * Destination, 
+	    int DestinationIsIP, 
+	    int rack, int slot, 
+	    int routing, 
+	    int routingSubnetFirst, 
+	    int routingSubnetSecond, 
+	    int routingRack, 
+	    int routingSlot, 
+	    void * routingDestination, 
+	    int routingDestinationIsIP, 
+	    int ConnectionType, 
+	    int routingConnectionType) {
+*/
+
+EXPORTSPEC void DECL2 daveSetCommunicationType(daveConnection * dc,  int communicationType);
+/*
+EXPORTSPEC daveConnection * DECL2 daveNewEonnection(daveInterface * di, 
+	    void * Destination, 
+	    int DestinationIsIP, 
+	    int rack, int slot, 
+	    int routing, 
+	    int routingSubnetFirst, 
+	    int routingSubnetSecond, 
+	    int routingRack, 
+	    int routingSlot, 
+	    void * routingDestination, 
+	    int routingDestinationIsIP, 
+	    int ConnectionType, 
+	    int routingConnectionType) {
+*/
+/*
     Setup a new connection structure using an initialized
     daveInterface and PLC's MPI address.
 */
-EXPORTSPEC 
-daveConnection * DECL2 daveNewConnection(daveInterface * di, int MPI,int rack, int slot);
+EXPORTSPEC daveConnection * DECL2 daveNewConnection(daveInterface * di, int MPI,int rack, int slot);
 
 
 typedef struct {
@@ -531,6 +585,20 @@ typedef struct {
     us dlen;	/* length of data which follow the parameters */
     uc result[2]; /* only present in type 2 and 3 headers. This contains error information. */
 } PDUHeader;
+
+/*
+    same as above, but made up of single bytes only, so that every single byte can be adressed separately
+*/
+typedef struct {
+    uc P;	/* allways 0x32 */
+    uc type;	/* Header type, one of 1,2,3 or 7. type 2 and 3 headers are two bytes longer. */
+    uc a,b;	/* currently unknown. Maybe it can be used for long numbers? */
+    uc numberHi,numberLo;	/* A number. This can be used to make sure a received answer */
+		/* corresponds to the request with the same number. */
+    uc plenHi,plenLo;	/* length of parameters which follow this header */
+    uc dlenHi,dlenLo;	/* length of data which follow the parameters */
+    uc result[2]; /* only present in type 2 and 3 headers. This contains error information. */
+} PDUHeader2;
 /*
     set up the header. Needs valid header pointer in the struct p points to.
 */
@@ -1088,9 +1156,9 @@ extern _get_errnoFunc SCP_get_errno;
 typedef struct {
     us		unknown [2];
     uc		headerlength;
-    us		number;
+    us		user;
     uc		allways2;
-    uc		field5;
+    uc		priority;
     uc		unknown3 [3];
     uc		field6;
     uc		field7;
@@ -1100,9 +1168,9 @@ typedef struct {
     us          payloadLength;
     us		payloadStart;
     uc		unknown2[12];
-    uc		field10; 
-    us		id3; 
-    short 	functionCode;
+    uc		field10;
+    us		id3;
+    short 	application_block_service;
     uc		unknown4[2];
     uc          field13;
     uc          field11;
@@ -1115,6 +1183,7 @@ EXPORTSPEC int DECL2 _daveCP_send(int fd, int len, uc * reqBlock);
 EXPORTSPEC int DECL2 _daveSCP_send(int fd, uc * reqBlock);
 EXPORTSPEC int DECL2 _daveConnectPLCS7online (daveConnection * dc);
 EXPORTSPEC int DECL2 _daveSendMessageS7online(daveConnection * dc, PDU *p);
+EXPORTSPEC int DECL2 _daveDisconnectPLCS7online (daveConnection * dc);
 EXPORTSPEC int DECL2 _daveGetResponseS7online(daveConnection * dc);
 EXPORTSPEC int DECL2 _daveExchangeS7online(daveConnection * dc, PDU * p);
 EXPORTSPEC int DECL2 _daveListReachablePartnersS7online (daveInterface * di, char * buf);
@@ -1197,4 +1266,7 @@ EXPORTSPEC int DECL2 _daveListReachablePartnersNLpro(daveInterface * di, char * 
     09/11/05  added read/write functions for long blocks of data.	      
     09/17/05  incorporation of S5 functions
     09/18/05  implemented conversions from and to S5 KG format (old, propeiatary floating point format).
+Version 0.8.5:
+    05/17/13  added include winsock2 for 46 bit compatibility.
+    05/17/13  added conType field to daveOSserialType
 */

@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +40,7 @@
 #define BUF_ARCH_NM	"<buffer>"
 #define DB_CFG		"<cfg>"
 
+#include <signal.h>
 #include <unistd.h>
 #include <stdint.h>
 #include <math.h>
@@ -70,7 +70,6 @@ using std::vector;
 
 namespace OSCADA
 {
-
 //*************************************************
 //* TSYS					  *
 //*************************************************
@@ -84,7 +83,7 @@ class TSYS : public TCntrNode
 	enum IntView	{ Dec, Oct, Hex };
 
 	//Public methods
-	TSYS( int argi, char ** argb, char **env );
+	TSYS( int argi, char **argb, char **env );
 	~TSYS( );
 
 	int	start( );
@@ -99,11 +98,11 @@ class TSYS : public TCntrNode
 	string	user( )		{ return mUser; }	//Run user name
 	string	host( );
 
-	void	list( vector<string> &list )	{ chldList(mSubst,list); }
-	bool	present( const string &name )	{ return chldPresent(mSubst,name); }
-	void	add( TSubSYS *sub )		{ chldAdd(mSubst,sub); }
-	void	del( const string &name )	{ chldDel(mSubst,name); }
-	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst,name); }
+	void	list( vector<string> &list )	{ chldList(mSubst, list); }
+	bool	present( const string &name )	{ return chldPresent(mSubst, name); }
+	void	add( TSubSYS *sub )		{ chldAdd(mSubst, sub); }
+	void	del( const string &name )	{ chldDel(mSubst, name); }
+	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst, name); }
 
 	AutoHD<TUIS>		ui( )		{ return at("UI"); }
 	AutoHD<TArchiveS>	archive( )	{ return at("Archive"); }
@@ -140,7 +139,7 @@ class TSYS : public TCntrNode
 
 	string	optDescr( );	//print comand line options
 
-	static void sighandler( int signal );
+	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
 	//> Short time dimensions
 	bool	multCPU( )	{ return mMultCPU; }
@@ -158,7 +157,7 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
-	static int64_t curTime( );	//> Current system time (usec)
+	static int64_t curTime( );	//Current system time (usec)
 
 	//> Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
@@ -271,17 +270,18 @@ class TSYS : public TCntrNode
 
 	//> Reentrant commandline processing
 	string getCmdOpt( int &curPos, string *argVal = NULL );
+	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
 	//>> System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
+
+	Res &cfgRes( )		{ return mCfgRes; }
 
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources
 	const int argc;		//Comand line seting counter.
 	const char **argv;	//Comand line seting buffer.
 	const char **envp;	//System environment.
-
-	Res &nodeRes( )		{ return nRes; }
 
     protected:
 	//Protected methods
@@ -356,12 +356,14 @@ class TSYS : public TCntrNode
 	map<string,STask>	mTasks;
 	static pthread_key_t	sTaskKey;
 
-	Res	nRes, taskRes;
+	Res	taskRes, mCfgRes;
 
 	bool	mMultCPU;
 	uint64_t mSysclc;
 
-	map<string,double>	mCntrs;
+	map<string, double>	mCntrs;
+
+	struct sigaction	sigActOrig;
 };
 
 //*************************************************
@@ -370,6 +372,7 @@ inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2
 inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
 inline string ll2s( int64_t val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
+inline double rRnd( double val, int dig = 0, bool toint = false ){ return TSYS::realRound(val, dig, toint); }
 inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }
 inline string tm2s( double utm )				{ return TSYS::time2str(utm); }
 

@@ -1,14 +1,13 @@
 # OpenSCADA.Protocol.HTTP translate to Ukrainian.
-# Copyright (C) 2003-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-23 21:12+0300\n"
+"POT-Creation-Date: 2015-04-22 13:21+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -22,7 +21,7 @@ msgstr "HTTP-реалізація"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow support HTTP for WWW based UIs."
+msgid "Provides support for the HTTP protocol for WWW-based user interfaces."
 msgstr ""
 "Надає підтримку HTTP для WWW базованих користувацьких інтерфейсів."
 
@@ -59,6 +58,15 @@ msgstr "Неповна відповідь."
 msgid "Protocol"
 msgstr "Протокол"
 
+msgid "State"
+msgstr "Стан"
+
+msgid "Active authentication sessions"
+msgstr "Активні сеанси аутентифікації"
+
+msgid "Module options"
+msgstr "Опції модуля"
+
 msgid "Life time of the authentication (min)"
 msgstr "Час життя аутентифікації (хвил)"
 
@@ -83,6 +91,10 @@ msgstr "Користувач"
 
 msgid "Module help"
 msgstr "Допомога по модулю"
+
+#, c-format
+msgid "%s %s(%s), by \"%s\""
+msgstr "%s %s(%s), від \"%s\""
 
 #, c-format
 msgid ""

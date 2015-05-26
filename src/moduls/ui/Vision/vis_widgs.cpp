@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
  *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -373,9 +373,9 @@ bool UserStBar::event( QEvent *event )
     return QLabel::event( event );
 }
 
-bool UserStBar::userSel()
+bool UserStBar::userSel( )
 {
-    DlgUser d_usr(user(),pass(),VCAStation(),parentWidget());
+    DlgUser d_usr(user(), pass(), VCAStation(), parentWidget());
     int rez = d_usr.exec();
     if(rez == DlgUser::SelOK && d_usr.user() != user()) {
 	QString old_user = user(), old_pass = pass();
@@ -514,8 +514,7 @@ void LineEdit::changed( )
 void LineEdit::setValue( const QString &txt )
 {
     if(ed_fld) ed_fld->blockSignals(true);
-    switch(type())
-    {
+    switch(type()) {
 	case Text:
 	    if(txt == value())	break;
 	    ((QLineEdit*)ed_fld)->setText(txt);
@@ -549,8 +548,7 @@ void LineEdit::setValue( const QString &txt )
 void LineEdit::setCfg( const QString &cfg )
 {
     if(ed_fld) ed_fld->blockSignals(true);
-    switch(type())
-    {
+    switch(type()) {
 	case Text:
 	    ((QLineEdit*)ed_fld)->setInputMask(cfg);
 	    break;
@@ -785,7 +783,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     setFocusProxy(ed_fld);
     connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()) );
     connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()) );
-    connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
+    connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
     box->addWidget(ed_fld);
 
     QImage ico_t;
@@ -857,6 +855,11 @@ void TextEdit::changed( )
     if(but_box && !but_box->isEnabled() && text() != m_text) {
 	but_box->setVisible(true);
 	but_box->setEnabled(true);
+
+	string labApply = _("Apply"), labCncl = _("Cancel");
+	bool noLab = (QFontMetrics(but_box->font()).width((labApply+labCncl).c_str())+30) > width();
+	but_box->button(QDialogButtonBox::Apply)->setText(noLab?"":labApply.c_str());
+	but_box->button(QDialogButtonBox::Cancel)->setText(noLab?"":labCncl.c_str());
     }
 
     if(!but_box) bt_tm->start(500);
@@ -912,7 +915,7 @@ bool TextEdit::event( QEvent * e )
     return QWidget::event(e);
 }
 
-void TextEdit::ctrTreePopup( )
+void TextEdit::custContextMenu( )
 {
     QMenu *menu = ed_fld->createStandardContextMenu();
     menu->addSeparator();
@@ -1006,24 +1009,16 @@ void WdgView::childsClear( )
     }
 }
 
-float WdgView::xScale( bool full )
-{
-    if(full && wLevel( ) > 0)	return x_scale*((WdgView*)parentWidget())->xScale(full);
-    return x_scale;
-}
+float WdgView::xScale( bool full )	{ return (full && wLevel() > 0) ? x_scale*((WdgView*)parentWidget())->xScale(full) : x_scale; }
 
-float WdgView::yScale( bool full )
-{
-    if(full && wLevel( ) > 0)	return y_scale*((WdgView*)parentWidget())->yScale(full);
-    return y_scale;
-}
+float WdgView::yScale( bool full )	{ return (full && wLevel() > 0) ? y_scale*((WdgView*)parentWidget())->yScale(full) : y_scale; }
 
 string WdgView::root( )	{ return shape ? shape->id() : ""; }
 
 void WdgView::moveF( const QPointF &pos )
 {
     mWPos = pos;
-    move(QPoint((int)TSYS::realRound(pos.x()),(int)TSYS::realRound(pos.y())));
+    move(pos.toPoint());	//Equal to rRnd()
 }
 
 void WdgView::resizeF( const QSizeF &isz )
@@ -1031,7 +1026,8 @@ void WdgView::resizeF( const QSizeF &isz )
     mWSize = isz;
     mWSize.setWidth(vmax(mWSize.width(),3));
     mWSize.setHeight(vmax(mWSize.height(),3));
-    resize(QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())));
+    resize(rRnd(posF().x()+sizeF().width()-xScale(true))-rRnd(posF().x())+1,
+	   rRnd(posF().y()+sizeF().height()-yScale(true))-rRnd(posF().y())+1);
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )	{ return new WdgView(iwid,wLevel()+1,mainWin(),this); }
@@ -1059,25 +1055,33 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case A_GEOM_X:
 	    //if(wLevel() == 0)	break;
 	    if(wLevel() == 0) mWPos = QPointF(s2r(val),posF().y());
-	    else mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*s2r(val),posF().y());
+	    else mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*s2r(val), posF().y());
 	    up = true;
 	    break;
 	case A_GEOM_Y:
 	    //if(wLevel() == 0)	break;
 	    if(wLevel() == 0) mWPos = QPointF(posF().x(),s2r(val));
-	    else mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*s2r(val));
+	    else mWPos = QPointF(posF().x(), ((WdgView*)parentWidget())->yScale(true)*s2r(val));
 	    up = true;
 	    break;
-	case A_GEOM_W: mWSize = QSizeF(xScale(true)*s2r(val),sizeF().height()); up = true;	break;
-	case A_GEOM_H: mWSize = QSizeF(sizeF().width(),yScale(true)*s2r(val)); up = true;	break;
+	case A_GEOM_W:
+	    mWSizeOrig = QSizeF(s2r(val), sizeOrigF().height());
+	    mWSize = QSizeF(xScale(true)*s2r(val), sizeF().height());
+	    up = true;
+	    break;
+	case A_GEOM_H:
+	    mWSizeOrig = QSizeF(sizeOrigF().width(), s2r(val));
+	    mWSize = QSizeF(sizeF().width(), yScale(true)*s2r(val));
+	    up = true;
+	    break;
 	case A_GEOM_Z: if(wLevel() > 0) z_coord = s2i(val);	break;
 	case A_GEOM_X_SC:
-	    mWSize = QSizeF((s2r(val)/x_scale)*sizeF().width(),sizeF().height());
+	    mWSize = QSizeF((s2r(val)/x_scale)*sizeF().width(), sizeF().height());
 	    x_scale = s2r(val);
 	    up = upChlds = true;
 	    break;
 	case A_GEOM_Y_SC:
-	    mWSize = QSizeF(sizeF().width(),(s2r(val)/y_scale)*sizeF().height());
+	    mWSize = QSizeF(sizeF().width(), (s2r(val)/y_scale)*sizeF().height());
 	    y_scale = s2r(val);
 	    up = upChlds = true;
 	    break;
@@ -1092,7 +1096,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 		((WdgView*)children().at(i_c))->load("");
     }
 
-    if(shape)	return shape->attrSet(this,uiPrmPos,val);
+    if(shape)	return shape->attrSet(this, uiPrmPos, val);
 
     return true;
 }

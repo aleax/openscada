@@ -37,7 +37,7 @@
 #define MOD_VER		"1.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
-#define DESCRIPTION	_("Web operation user interface for visual control area (VCA) projects playing.")
+#define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -274,10 +274,10 @@ TWEB::~TWEB( )
 
 string TWEB::modInfo( const string &name )
 {
-    if(name == "SubType")		return SUB_TYPE;
-    else if(name == "Auth")		return "1";
-    else if(name == _("Developers"))	return DEVELOPERS;
-    else return TModule::modInfo(name);
+    if(name == "SubType")	return SUB_TYPE;
+    if(name == "Auth")		return "1";
+    if(name == _("Developers"))	return DEVELOPERS;
+    return TModule::modInfo(name);
 }
 
 void TWEB::modInfo( vector<string> &list )
@@ -408,7 +408,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		ResAlloc sesRes(nodeRes(),false);
+		ResAlloc sesRes(mSesRes, false);
 		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
 			    (req.childGet(i_ch)->attr("user") != user ||
@@ -457,15 +457,16 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    //New session create
 	    else if(zero_lev.compare(0,4,"prj_") == 0) {
 		string sName;
-		// Find for early created session for user and sender
+		// Find for early created session for the user and the sender
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
-		cntrIfCmd(req,ses.user);
-		ResAlloc sesRes(nodeRes(),false);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-		    if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
+		cntrIfCmd(req, ses.user);
+		ResAlloc sesRes(mSesRes, false);
+		if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
+		    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
+			if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
 			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
-		    { sName = req.childGet(i_ch)->text(); break; }
+			{ sName = req.childGet(i_ch)->text(); break; }
 		if(sName.empty()) {
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
@@ -497,7 +498,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HttpGet("", page, sender, vars, user); return; }
 		}
 		// Call to session
-		ResAlloc sesRes(nodeRes(),false);
+		ResAlloc sesRes(mSesRes, false);
 		try { vcaSesAt(sesnm).at().getReq(ses); }
 		catch(...) {
 		    if(!vcaSesPresent(sesnm)) {
@@ -567,7 +568,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	string sesnm = TSYS::pathLev(ses.url,0);
 	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0) page = httpHead("404 Not Found");
 	else {
-	    ResAlloc sesRes(nodeRes(),false);
+	    ResAlloc sesRes(mSesRes, false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);
 	    page = ses.page;
 	}
