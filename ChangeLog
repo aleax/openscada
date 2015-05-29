@@ -1,3 +1,11 @@
+2015-05-29 Roman
+- FIX:SYS:debian_mod/control,openscada_mod_ALT.spec,openscada_mod_RH.spec: No printable symbols into packages description fix.
+- !!:FIX:SYS: Only one processor, number 1, set at the multiprocessing checking fix by the real available processors get.
+    Main CPUs set appended as configuration field for allow generic processors select, include information about current processors set.
+    The information about current processors set to a task's thread is added, into generic tab "Tasks".
+    CPU information's field renamed from "CPU frequency" to "CPU" and is appended by present CPU number.
+
+
 2015-05-24 Roman
 - FIX:Archive.FSArch: Some original messages fixed.
 - FIX:DAQ.ICP_DAS: Build on ARM fixed.

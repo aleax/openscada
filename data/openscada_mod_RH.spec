@@ -747,7 +747,7 @@ Summary: OpenSCADA system configurator (Qt)
 Group: Applications/Engineering
 Requires: %{name} = %{version}-%{release}
 %description UI-QTCfg
-The %name-UI-QTCfg package, provides the Qt—based configurator of the OpenSCADA system.
+The %name-UI-QTCfg package, provides the Qt-based configurator of the OpenSCADA system.
 %description UI-QTCfg -l ru_RU.UTF8
 Пакет %name-UI-QTCfg, предоставляет Qt основанный конфигуратор
 системы OpenSCADA.

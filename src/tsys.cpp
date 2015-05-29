@@ -56,12 +56,14 @@ pthread_key_t TSYS::sTaskKey;
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
     mModDir(oscd_moddir_full), mIcoDir("icons;"oscd_datadir_full"/icons"), mDocDir("docs;"oscd_datadir_full"/docs"),
-    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mMultCPU(false), mSysTm(time(NULL))
+    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1),
+    mainPthr(0), mSysTm(time(NULL))
 {
     finalKill = false;
     SYS = this;		//Init global access value
     mSubst = grpAdd("sub_",true);
     nodeEn();
+    mainPthr = pthread_self();
     pthread_key_create(&sTaskKey, NULL);
 
     Mess = new TMess();
@@ -75,8 +77,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //Multi CPU allow check
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    CPU_SET(1,&cpuset);
-    mMultCPU = !pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+    pthread_getaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
+    mN_CPU = CPU_COUNT(&cpuset);
 #endif
 
     //Set signal handlers
@@ -417,6 +419,7 @@ string TSYS::optDescr( )
 	"			  <direct> & 8 - archive.\n"
 	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
+	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
 	"SaveAtExit <true>	Save system at exit.\n"
 	"SavePeriod <sec>	Save system period.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
@@ -546,6 +549,7 @@ void TSYS::cfgPrmLoad( )
     setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
     setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit","0")));
     setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod","0")));
+    setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
 }
 
 void TSYS::load_( )
@@ -558,6 +562,7 @@ void TSYS::load_( )
     Mess->load();	//Messages load
 
     if(first_load) {
+
 	//Create subsystems
 	add(new TBDS());
 	add(new TSecurity());
@@ -612,6 +617,7 @@ void TSYS::save_( )
     if(sysModifFlgs&MDF_DocDir)	TBDS::genDBSet(nodePath()+"DocDir", docDir(), "root", TBDS::OnlyCfg);
     TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
+    TBDS::genDBSet(nodePath()+"MainCPUs", mainCPUs());
 
     Mess->save();	//Messages load
 }
@@ -692,6 +698,31 @@ bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
     if(selDB().empty() && !isStrong) return true;
     if(SYS->selDB() == TBDS::realDBName(wDB)) return true;
     return false;
+}
+
+void TSYS::setMainCPUs( const string &vl )
+{
+    mMainCPUs = vl;
+
+#if __GLIBC_PREREQ(2,4)
+    if(nCPU() > 1) {
+	cpu_set_t cpuset;
+	CPU_ZERO(&cpuset);
+	string sval;
+	if(!vl.size()) for(int iCPU = 0; iCPU < nCPU(); iCPU++) CPU_SET(iCPU, &cpuset);
+	else {
+	    string prcVl;
+	    for(int off = 0; (sval=TSYS::strParse(vl,0,":",&off)).size(); ) {
+		if(s2i(sval) < nCPU()) CPU_SET(s2i(sval), &cpuset);
+		prcVl += (prcVl.size()?":":"") + i2s(s2i(sval));
+	    }
+	    mMainCPUs = prcVl;
+	}
+	pthread_setaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
+    }
+#endif
+
+    modif();
 }
 
 void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
@@ -1663,16 +1694,17 @@ void *TSYS::taskWrap( void *stas )
 
 #if __GLIBC_PREREQ(2,4)
     //Load and init CPU set
-    if(SYS->multCPU() && !(tsk->flgs & STask::Detached)) {
+    if(SYS->nCPU() > 1 && !(tsk->flgs&STask::Detached)) {
 	tsk->cpuSet = TBDS::genDBGet(SYS->nodePath()+"CpuSet:"+tsk->path);
 	cpu_set_t cpuset;
 	CPU_ZERO(&cpuset);
 	string sval;
 	bool cpuSetOK = false;
-	for(int off = 0; (sval=TSYS::strParse(tsk->cpuSet,0,":",&off)).size(); cpuSetOK = true) CPU_SET(s2i(sval), &cpuset);
+	for(int off = 0; (sval=TSYS::strParse(tsk->cpuSet,0,":",&off)).size(); cpuSetOK = true)
+	    if(s2i(sval) < SYS->nCPU()) CPU_SET(s2i(sval), &cpuset);
 	if(cpuSetOK) pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
     }
-    else if(SYS->multCPU() && (tsk->flgs & STask::Detached)) tsk->cpuSet = "NA";
+    else if(SYS->nCPU() > 1 && (tsk->flgs & STask::Detached)) tsk->cpuSet = "NA";
 #endif
 
     //Final set for init finish indicate
@@ -2229,7 +2261,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/host",_("Host name"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/user",_("System user"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/sys",_("Operation system"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/frq",_("Frequency (MHZ)"),R_R_R_,"root","root",1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/gen/CPU",_("CPU"),R_R_R_,"root","root",1,"tp","str");
+	    if(nCPU() > 1)
+		ctrMkNode("fld",opt,-1,"/gen/mainCPUs",_("Main CPUs set"),RWRWR_,"root","root",2,"tp","str",
+		    "help",_("For CPU set use processors numbers string separated by symbol ':'.\nCPU numbers started from 0."));
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
@@ -2261,7 +2296,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),R_R_R_,"root","root",3,"idm","1","tp","br","br_pref","sub_");
 	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
 	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",2,"key","path",
-		"help",!multCPU()?"":_("For CPU set use processors numbers string separated by symbol ':'.\n"
+		"help",(nCPU()<=1)?"":_("For CPU set use processors numbers string separated by symbol ':'.\n"
 				       "CPU numbers started from 0.")))
 	    {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
@@ -2271,8 +2306,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
 #if __GLIBC_PREREQ(2,4)
-		if(multCPU())
-		    ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
+		if(nCPU() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
 #endif
 	    }
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
@@ -2335,7 +2369,23 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trU(name(),u));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trSetU(name(),u,opt->text()));
     }
-    else if(a_path == "/gen/frq" && ctrChkNode(opt))	opt->setText(r2s((float)sysClk()/1000000.,6));
+    else if(a_path == "/gen/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
+    else if(a_path == "/gen/mainCPUs") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
+	    string vl = mainCPUs();
+#if __GLIBC_PREREQ(2,4)
+	    cpu_set_t cpuset;
+	    CPU_ZERO(&cpuset);
+	    pthread_getaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
+	    vl += "(";
+	    for(int iCPU = 0; iCPU < nCPU(); iCPU++)
+		if(CPU_ISSET(iCPU,&cpuset)) vl += string(vl[vl.size()-1]=='('?"":":")+i2s(iCPU);
+	    vl += ")";
+#endif
+	    opt->setText(vl);
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setMainCPUs(TSYS::strParse(opt->text(),0,"("));
+    }
     else if(a_path == "/gen/clk_res" && ctrChkNode(opt)) {
 	struct timespec tmval;
 	clock_getres(CLOCK_REALTIME,&tmval);
@@ -2416,7 +2466,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_stat	= ctrMkNode("list",opt,-1,"/tasks/tasks/stat","",R_R___,"root","root");
 	    XMLNode *n_plc	= ctrMkNode("list",opt,-1,"/tasks/tasks/plc","",R_R___,"root","root");
 	    XMLNode *n_prior	= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
-	    XMLNode *n_cpuSet	= (multCPU() ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL);
+	    XMLNode *n_cpuSet	= (nCPU()>1) ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL;
 
 	    ResAlloc res(taskRes, false);
 	    for(map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++) {
@@ -2447,27 +2497,48 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    n_plc->childAdd("el")->setText(plcVl);
 		}
 		if(n_prior)	n_prior->childAdd("el")->setText(i2s(it->second.prior));
-		if(n_cpuSet)	n_cpuSet->childAdd("el")->setText(it->second.cpuSet);
+		if(n_cpuSet) {
+		    string vl = it->second.cpuSet;
+#if __GLIBC_PREREQ(2,4)
+		    cpu_set_t cpuset;
+		    CPU_ZERO(&cpuset);
+		    pthread_getaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
+		    vl += "(";
+		    for(int iCPU = 0; iCPU < nCPU(); iCPU++)
+			if(CPU_ISSET(iCPU,&cpuset)) vl += string(vl[vl.size()-1]=='('?"":":")+i2s(iCPU);
+		    vl += ")";
+#endif
+		    n_cpuSet->childAdd("el")->setText(vl);
+		}
 	    }
 	}
 #if __GLIBC_PREREQ(2,4)
-	if(multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
+	if(nCPU() > 1 && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
 	    ResAlloc res(taskRes, true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
 	    if(it == mTasks.end()) throw TError(nodePath().c_str(),_("No present task '%s'."));
 	    if(it->second.flgs & STask::Detached) return;
 
-	    it->second.cpuSet = opt->text();
+	    it->second.cpuSet = TSYS::strParse(opt->text(),0,"(");
 
 	    cpu_set_t cpuset;
 	    CPU_ZERO(&cpuset);
 	    string sval;
-	    for(int off = 0; (sval=TSYS::strParse(it->second.cpuSet,0,":",&off)).size(); ) CPU_SET(s2i(sval), &cpuset);
+	    if(!it->second.cpuSet.size()) for(int iCPU = 0; iCPU < nCPU(); iCPU++) CPU_SET(iCPU, &cpuset);
+	    else {
+		string prcVl;
+		for(int off = 0; (sval=TSYS::strParse(it->second.cpuSet,0,":",&off)).size(); ) {
+		    if(s2i(sval) < nCPU()) CPU_SET(s2i(sval), &cpuset);
+		    prcVl += (prcVl.size()?":":"") + i2s(s2i(sval));
+		}
+		it->second.cpuSet = prcVl;
+	    }
+
 	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
 	    res.release();
-	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first,opt->text());
-	    if(rez == EINVAL && opt->text().size()) throw TError(nodePath().c_str(),_("Set no allowed processors."));
-	    if(rez && opt->text().size()) throw TError(nodePath().c_str(),_("CPU set for thread error."));
+	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first, it->second.cpuSet);
+	    if(rez == EINVAL) throw TError(nodePath().c_str(),_("Set not allowed processors try."));
+	    if(rez) throw TError(nodePath().c_str(),_("CPUs set for the thread error."));
 	}
 #endif
     }

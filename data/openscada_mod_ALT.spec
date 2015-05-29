@@ -1032,7 +1032,7 @@ Summary(de_DE.UTF8): System-Konfigurator OpenSCADA (Qt)
 Group: Graphics
 Requires: %name-core = %version-%release %name-UI.QTStarter
 %description UI.QTCfg
-The %{name}-UI.QTCfg package - provides the Qt—based configurator of the OpenSCADA system.
+The %{name}-UI.QTCfg package - provides the Qt-based configurator of the OpenSCADA system.
 %description UI.QTCfg -l ru_RU.UTF8
 Пакет %{name}-UI.QTCfg - предоставляет Qt основанный конфигуратор системы OpenSCADA.
 %description UI.QTCfg -l uk_UA.UTF8

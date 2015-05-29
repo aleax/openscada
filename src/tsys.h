@@ -131,9 +131,11 @@ class TSYS : public TCntrNode
 
 	string	workDB( )	{ return mWorkDB; }
 	string	selDB( )	{ return mSelDB; }
+	string	mainCPUs( )	{ return mMainCPUs; }
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
 	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
+	void	setMainCPUs( const string &vl );
 	bool	saveAtExit( )	{ return mSaveAtExit; }
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
 	int	savePeriod( )	{ return mSavePeriod; }
@@ -144,7 +146,7 @@ class TSYS : public TCntrNode
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
 	// Short time dimensions
-	bool	multCPU( )	{ return mMultCPU; }
+	int	nCPU( )		{ return mN_CPU; }
 	uint64_t sysClk( )	{ return mSysclc; }
 	void	clkCalc( );
 	uint64_t shrtCnt( ) {
@@ -339,7 +341,8 @@ class TSYS : public TCntrNode
 		mIcoDir,	// Icons directory
 		mDocDir;	// Icons directory
 
-	string	mWorkDB, mSelDB;// Work and selected DB
+	string	mWorkDB, mSelDB,// Work and selected DB
+		mMainCPUs;	// Main used processors set
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 
@@ -352,13 +355,14 @@ class TSYS : public TCntrNode
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id
 
-	map<string,STask>	mTasks;
+	map<string, STask>	mTasks;
 	static pthread_key_t	sTaskKey;
 
 	Res	taskRes, mCfgRes;
 
-	bool	mMultCPU;
-	uint64_t mSysclc;
+	int	mN_CPU;
+	pthread_t	mainPthr;
+	uint64_t	mSysclc;
 	volatile time_t	mSysTm;
 
 	map<string, double>	mCntrs;

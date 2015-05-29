@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-20 13:06+0200\n"
+"POT-Creation-Date: 2015-05-29 11:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1478,6 +1478,7 @@ msgid ""
 "\t\t\t  <direct> & 8 - archive.\n"
 "Lang       <lang>\tWork-internal language, like \"en_US.UTF-8\".\n"
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two symbols code.\n"
+"MainCPUs   <list>\tMain used CPUs list (separated by ':').\n"
 "SaveAtExit <true>\tSave system at exit.\n"
 "SavePeriod <sec>\tSave system period.\n"
 "\n"
@@ -1612,7 +1613,15 @@ msgstr ""
 msgid "Operation system"
 msgstr ""
 
-msgid "Frequency (MHZ)"
+msgid "CPU"
+msgstr ""
+
+msgid "Main CPUs set"
+msgstr ""
+
+msgid ""
+"For CPU set use processors numbers string separated by symbol ':'.\n"
+"CPU numbers started from 0."
 msgstr ""
 
 msgid "Real-time clock resolution"
@@ -1686,11 +1695,6 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid ""
-"For CPU set use processors numbers string separated by symbol ':'.\n"
-"CPU numbers started from 0."
-msgstr ""
-
 msgid "Thread"
 msgstr ""
 
@@ -1754,6 +1758,10 @@ msgstr ""
 msgid "See to messages"
 msgstr ""
 
+#, c-format
+msgid "%dx%0.3gGHz"
+msgstr ""
+
 msgid "Finished. "
 msgstr ""
 
@@ -1774,10 +1782,10 @@ msgstr ""
 msgid "No present task '%s'."
 msgstr ""
 
-msgid "Set no allowed processors."
+msgid "Set not allowed processors try."
 msgstr ""
 
-msgid "CPU set for thread error."
+msgid "CPUs set for the thread error."
 msgstr ""
 
 msgid "<<<Unmatched sources!!!>>>\n"

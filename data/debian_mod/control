@@ -381,7 +381,7 @@ Package: openscada-ui-qtcfg
 Architecture: any
 Depends: openscada-core (= ${binary:Version}), openscada-ui-qtstarter, ${shlibs:Depends}, ${misc:Depends}
 Description: OpenSCADA system configurator (Qt)
- The openscada-ui-qtcfg package - provides the Qt—based configurator of the OpenSCADA system.
+ The openscada-ui-qtcfg package - provides the Qt-based configurator of the OpenSCADA system.
 
 Package: openscada-ui-vision
 Architecture: any
