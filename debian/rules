@@ -19,6 +19,14 @@ else
 CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
+# These are used for support -j option of dpkg-buildpackage
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+PARALLEL = -j$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+else
+PARALLEL =
+endif
+MAKEFLAGS += $(PARALLEL)
+
 build: build-arch build-indep
 build-arch: configure-stamp build-stamp
 build-indep: configure-stamp build-stamp
@@ -95,3 +103,6 @@ clean:
 	dh_clean
 
 .PHONY: build build-arch build-indep install install-indep install-arch binary binary-indep binary-arch clean
+
+# This GNU make extensions disables parallel builds for the current Makefile but not for sub-Makefiles.
+.NOTPARALLEL:
