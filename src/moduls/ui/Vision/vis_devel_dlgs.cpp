@@ -419,7 +419,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
-		    ico_t.loadFromData((const uchar*)sval.c_str(),sval.size()))
+		    ico_t.loadFromData((const uchar*)sval.data(),sval.size()))
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
 	}
@@ -1253,7 +1253,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
-		    ico_t.loadFromData((const uchar*)sval.c_str(),sval.size()))
+		    ico_t.loadFromData((const uchar*)sval.data(),sval.size()))
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
 	}

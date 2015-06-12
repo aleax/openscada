@@ -138,7 +138,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_ElFigFillClr: colors[SpI_DefFill] = getColor(val); rel_list = true;	break;
 	case A_ElFigFillImg:
 	    backimg = w->resGet(val);
-	    images[SpI_DefFillImg] = (!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size())) ? val : "";
+	    images[SpI_DefFillImg] = (!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) ? val : "";
 	    rel_list = true;
 	    break;
 	case A_ElFigOrient: elFD->orient = s2r(val); rel_list = true;	break;
@@ -156,8 +156,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    case A_ElFigItClr:	colors[pnt] = getColor(val);	break;
 		    case A_ElFigItImg:
 			backimg = w->resGet(val);
-			if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-			    images[pnt] = val;
+			if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) images[pnt] = val;
 			else images[pnt] = "";
 			break;
 		    case A_ElFigItStl:
@@ -3449,7 +3448,7 @@ void ShapeElFigure::moveAll( const QPointF &pos, WdgView *w )
 			{
 			    QImage img;
 			    string backimg = w->resGet(images[inundItems[i].brushImg]);
-			    img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
+			    img.loadFromData((const uchar*)backimg.data(), backimg.size());
 			    if( !img.isNull() ) fl_buildPath = false;
 			}
 			if( fl_buildPath )
@@ -4169,7 +4168,7 @@ void ShapeElFigure::paintImage( WdgView *w )
     for(int i = 0; i < inundItems.size(); i++) {
 	QImage img;
 	string backimg = w->resGet(images[inundItems[i].brushImg]);
-	img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
+	img.loadFromData((const uchar*)backimg.data(), backimg.size());
 	if(shapeItems.size() == 0 || ((inundItems[i].path == newPath) && img.isNull())) continue;
 
 	//printf("TEST 10: %d: '%s'\n", i, w->id().c_str());

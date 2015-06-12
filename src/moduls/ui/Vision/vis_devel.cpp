@@ -1306,7 +1306,7 @@ void VisDevelop::visualItEdit( )
 	if(!cntrIfCmd(req)) {
 	    QImage ico_t;
 	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
-	    if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
+	    if(ico_t.loadFromData((const uchar*)simg.data(),simg.size()))
 		scrl->parentWidget()->setWindowIcon(QPixmap::fromImage(ico_t));	//parentWidget is QMdiSubWindow
 	}
     }

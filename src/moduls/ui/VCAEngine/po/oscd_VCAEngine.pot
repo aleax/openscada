@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:01+0300\n"
+"POT-Creation-Date: 2015-06-12 20:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1090,16 +1090,26 @@ msgstr ""
 msgid "Opened pages"
 msgstr ""
 
-msgid "Alarms"
+#, c-format
+msgid "Function of the notificator '%s' error: %s"
 msgstr ""
 
-msgid "Alarms list"
+msgid "Enabled notification"
 msgstr ""
 
-msgid "Quittance"
+msgid "Doing notification"
 msgstr ""
 
-msgid "Type argument"
+msgid "Doing resource"
+msgstr ""
+
+msgid "Resource stream"
+msgstr ""
+
+msgid "Notification message"
+msgstr ""
+
+msgid "Notification message's language"
 msgstr ""
 
 msgid "Session page: "
@@ -1268,27 +1278,6 @@ msgid "Sessions"
 msgstr ""
 
 msgid "Auto create and start"
-msgstr ""
-
-msgid "Speech text synthesis"
-msgstr ""
-
-msgid "Command"
-msgstr ""
-
-msgid ""
-"Command line for call of speech synthesis from the text engine.\n"
-"Use next words for replace:\n"
-"  %t - synthesis text;\n"
-"  %f - result file name.\n"
-"If result file name is not used result is read from pipe.\n"
-"If result file name is used and  %t is not used synthesis text is sent to pipe."
-msgstr ""
-
-msgid "Text code"
-msgstr ""
-
-msgid "Engine text codepage for text encode into it."
 msgstr ""
 
 #, c-format

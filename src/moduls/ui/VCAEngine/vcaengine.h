@@ -42,7 +42,7 @@ class Engine : public TUI
 {
     public:
 	//Data
-	enum Alarm	{ Light = 0x01, Alarm = 0x02, Sound = 0x04 };
+	//enum Alarm	{ Light = 0x01, Alarm = 0x02, Sound = 0x04 };
 
 	//Methods
 	Engine( string name );
@@ -54,16 +54,16 @@ class Engine : public TUI
 	void modStart( );
 	void modStop( );
 
-	string synthCom( )	{ return mSynthCom; }
-	string synthCode( )	{ return mSynthCode; }
+	//string synthCom( )	{ return mSynthCom; }
+	//string synthCode( )	{ return mSynthCode; }
 
 	string wlbTable( )	{ return "VCALibs"; }
 	string prjTable( )	{ return "VCAPrjs"; }
 
-	void setSynthCom( const string &vl )	{ mSynthCom = vl; modif(); }
-	void setSynthCode( const string &vl )	{ mSynthCode = vl; modif(); }
+	//void setSynthCom( const string &vl )	{ mSynthCom = vl; modif(); }
+	//void setSynthCode( const string &vl )	{ mSynthCode = vl; modif(); }
 
-	string callSynth( const string &txt );
+	//string callSynth( const string &txt );
 
 	// Widgets libraries
 	void wlbList( vector<string> &ls )			{ chldList( idWlb, ls ); }
@@ -133,9 +133,10 @@ class Engine : public TUI
 		page_el,	//The table structure of project's pages
 		prj_ses_el,	//The table structure of session's IO of project
 		prjStl_el;	//The table structure of styles of project
-	string	mSynthCom, mSynthCode;	//Synth parameters
+	//string	mSynthCom, mSynthCode;	//Synth parameters
 
-	Res	mSynthRes, mSesRes;	//Synth, and sessions resource
+	Res	//mSynthRes,	//Synth resource
+		mSesRes;	//Sessions resource
 
 	map<string,string>	mSessAuto;
 };

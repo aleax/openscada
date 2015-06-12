@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-04 18:36+0300\n"
+"POT-Creation-Date: 2015-06-12 18:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1428,39 +1428,6 @@ msgstr ""
 msgid "Press for all alarms quittance."
 msgstr ""
 
-msgid "Blink alarm"
-msgstr ""
-
-msgid "The button for all blink alarms quittance"
-msgstr ""
-
-msgid "Press for all blink alarms quittance."
-msgstr ""
-
-msgid "Speaker alarm"
-msgstr ""
-
-msgid "PC speaker alarm"
-msgstr ""
-
-msgid "The button for all PC speaker alarms quittance"
-msgstr ""
-
-msgid "Press for all PC speaker alarms quittance."
-msgstr ""
-
-msgid "Sound/speech alarm"
-msgstr ""
-
-msgid "Sound or speech alarm"
-msgstr ""
-
-msgid "The button for all sound or speech alarms quittance"
-msgstr ""
-
-msgid "Press for all sound or speech alarms quittance."
-msgstr ""
-
 msgid "&Alarm"
 msgstr ""
 
@@ -1658,14 +1625,6 @@ msgstr ""
 msgid "Running project: %1"
 msgstr ""
 
-#, c-format
-msgid "Error open: %s"
-msgstr ""
-
-#, c-format
-msgid "Error write to: %s"
-msgstr ""
-
 msgid "Alarm level: %1"
 msgstr ""
 
@@ -1675,6 +1634,44 @@ msgstr ""
 
 #, c-format
 msgid "Session '%s' update time %f ms."
+msgstr ""
+
+#, c-format
+msgid "Function of the notificator '%s' error: %s"
+msgstr ""
+
+msgid "Enabled notification"
+msgstr ""
+
+msgid "Doing notification, always 1"
+msgstr ""
+
+msgid "Doing resource, always 0"
+msgstr ""
+
+msgid "Resource stream"
+msgstr ""
+
+msgid "Notification message"
+msgstr ""
+
+msgid "Notification message's language"
+msgstr ""
+
+#, c-format
+msgid "Notyfier %d"
+msgstr ""
+
+msgid "The button for current \"%1\" quittance"
+msgstr ""
+
+msgid "Press for current \"%1\" quittance."
+msgstr ""
+
+msgid "The button for all \"%1\" quittance"
+msgstr ""
+
+msgid "Press for all \"%1\" quittance."
 msgstr ""
 
 msgid ""

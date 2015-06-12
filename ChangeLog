@@ -1,4 +1,6 @@
 2015-06-12 Roman
+- !!:DB: LibsDB.vcaBase.db: To the root page added notification attributes: notify2, notifyVisVision0, notifyVisVision1, notifyVisVision2.
+- !!!!:UI.{VCAEngine,Vision}: New flexible notification mechanism mostly implemented. Previous alarming mechanism commented for while.
 - SYS: data/debian/rules and data/debian_mod/rules:
 	some cleaned for rulles dependences;
 	parallel building by key -j2 is added, by Alexey Bondarchuk (aleax);

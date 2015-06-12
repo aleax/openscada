@@ -118,7 +118,7 @@ namespace VISION
     //*********************************************
     //* Play sound thread for RunTime session     *
     //*********************************************
-    class SndPlay: public QThread
+    /*class SndPlay: public QThread
     {
 	public:
 	    //Public methods
@@ -143,7 +143,7 @@ namespace VISION
 	    unsigned	mTm;		//Request last sound time
 	    string	mWdg;		//Play widget
 	    string	mPlayData;	//Play data
-    };
+    };*/
 
     //*********************************************
     //* Status bar styles                         *

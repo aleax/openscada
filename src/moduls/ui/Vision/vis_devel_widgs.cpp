@@ -460,7 +460,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			    QImage img;
 			    if(!const_cast<ModInspAttr*>(this)->mainWin()->cntrIfCmd(req)) {
 				req.setText(TSYS::strDecode(req.text(),TSYS::base64));
-				if(!req.text().empty() && img.loadFromData((const uchar*)req.text().c_str(),req.text().size()))
+				if(!req.text().empty() && img.loadFromData((const uchar*)req.text().data(),req.text().size()))
 				    val = QPixmap::fromImage(img).scaled(32,32,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 			    }
 			}
@@ -1396,7 +1396,7 @@ void WdgTree::updateTree( const string &vca_it )
 	// Update libraries data
 	img = QImage();
 	simg = TSYS::strDecode(wlbN->childGet("ico")->text(),TSYS::base64);
-	img.loadFromData((const uchar*)simg.c_str(),simg.size());
+	img.loadFromData((const uchar*)simg.data(),simg.size());
 	if(!img.isNull()) nit->setIcon(0,QPixmap::fromImage(img));
 	nit->setText(0,wlbN->text().c_str());
 	nit->setText(1,_("Library"));
@@ -1472,7 +1472,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    //  Update widget's data
 	    img = QImage();
 	    simg = TSYS::strDecode(wdgN->childGet("ico")->text(),TSYS::base64);
-	    img.loadFromData((const uchar*)simg.c_str(),simg.size());
+	    img.loadFromData((const uchar*)simg.data(),simg.size());
 	    if(!img.isNull()) nit_w->setIcon(0,QPixmap::fromImage(img));
 	    nit_w->setText(0,wdgN->text().c_str());
 	    nit_w->setText(1,_("Widget"));
@@ -1543,7 +1543,7 @@ void WdgTree::updateTree( const string &vca_it )
 		//   Update widget's data
 		img = QImage();
 		simg = TSYS::strDecode(cwdgN->childGet("ico")->text(),TSYS::base64);
-		img.loadFromData((const uchar*)simg.c_str(),simg.size());
+		img.loadFromData((const uchar*)simg.data(),simg.size());
 		if(!img.isNull()) nit_cw->setIcon(0,QPixmap::fromImage(img));
 		nit_cw->setText(0,cwdgN->text().c_str());
 		nit_cw->setText(1,_("Container's widget"));
@@ -1720,7 +1720,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	    req.clear()->setAttr("path","/prj_"+list_pr[i_l]+"/%2fico");
 	    if(!owner()->cntrIfCmd(req)) {
 		simg = TSYS::strDecode(req.text(),TSYS::base64);
-		if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
+		if(img.loadFromData((const uchar*)simg.data(),simg.size()))
 		    nit->setIcon(0,QPixmap::fromImage(img));
 	    }
 	    nit->setText(0, prj_req.childGet(i_l)->text().c_str());
@@ -1783,7 +1783,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	req.clear()->setAttr("path",work_wdg+"/pg_"+list_pg[i_p]+"/%2fico");
 	if(!owner()->cntrIfCmd(req)) {
 	    simg = TSYS::strDecode(req.text(),TSYS::base64);
-	    if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
+	    if(img.loadFromData((const uchar*)simg.data(),simg.size()))
 		nit_pg->setIcon(0,QPixmap::fromImage(img));
 	}
 	nit_pg->setText(0, pg_req.childGet(i_p)->text().c_str());

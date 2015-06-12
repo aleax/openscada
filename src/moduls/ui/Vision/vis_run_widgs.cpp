@@ -606,7 +606,7 @@ void RunPageView::closeEvent( QCloseEvent *event )
 //*********************************************
 //* Play sound thread for RunTime session     *
 //*********************************************
-SndPlay::SndPlay( QObject *parent ) : QThread(parent)
+/*SndPlay::SndPlay( QObject *parent ) : QThread(parent)
 {
 
 }
@@ -645,7 +645,7 @@ void SndPlay::run( )
     if(!srcToPipe) remove(srcFile.c_str());
 
     mPlayData.clear();
-};
+};*/
 
 //*********************************************
 //* Status bar styles                         *

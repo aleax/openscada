@@ -378,7 +378,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//Img
 		QImage img;
 		string backimg = w->resGet(shD->img);
-		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size())) {
+		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) {
 		    int icSzW = w->width() - w->layout()->margin();
 		    int icSzH = w->height() - w->layout()->margin();
 		    img = img.scaled(w->width()-w->layout()->margin(), w->height()-w->layout()->margin(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -1201,7 +1201,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case A_BackImg: {
 	    QImage img;
 	    string backimg = w->resGet(val);
-	    shD->backGrnd.setTextureImage((!backimg.empty()&&img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))?img:QImage());
+	    shD->backGrnd.setTextureImage((!backimg.empty()&&img.loadFromData((const uchar*)backimg.data(),backimg.size()))?img:QImage());
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
@@ -1449,7 +1449,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    shD->backGrnd.setTextureImage(QImage());
-	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
+	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size()))
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
@@ -1824,7 +1824,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    shD->backGrnd.setTextureImage(QImage());
-	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
+	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size()))
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
@@ -3801,7 +3801,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QPalette plt(shD->addrWdg->palette());
 	    QBrush brsh = plt.brush(QPalette::Base);
 	    string backimg = w->resGet(val);
-	    if(!backimg.empty()) img.loadFromData((const uchar*)backimg.c_str(),backimg.size());
+	    if(!backimg.empty()) img.loadFromData((const uchar*)backimg.data(),backimg.size());
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
 	    plt.setBrush(QPalette::Base, brsh);
@@ -4502,7 +4502,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    shD->backGrnd.setTextureImage(QImage());
-	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
+	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size()))
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());

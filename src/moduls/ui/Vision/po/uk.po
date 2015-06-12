@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-04 18:08+0300\n"
+"POT-Creation-Date: 2015-06-12 18:55+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1505,39 +1505,6 @@ msgstr "Кнопка для квітації всіх порушень"
 msgid "Press for all alarms quittance."
 msgstr "Натиснути для квітації всіх порушень."
 
-msgid "Blink alarm"
-msgstr "Квітація миготіння"
-
-msgid "The button for all blink alarms quittance"
-msgstr "Кнопка для квітації всіх порушень миготінням"
-
-msgid "Press for all blink alarms quittance."
-msgstr "Натиснути для квітації всіх порушень миготінням."
-
-msgid "Speaker alarm"
-msgstr "Квітація гудком"
-
-msgid "PC speaker alarm"
-msgstr "Квітація гудком"
-
-msgid "The button for all PC speaker alarms quittance"
-msgstr "Кнопка для квітації всіх порушень гудком"
-
-msgid "Press for all PC speaker alarms quittance."
-msgstr "Натиснути для квітації всіх порушень гудком."
-
-msgid "Sound/speech alarm"
-msgstr "Квітація звука/мови"
-
-msgid "Sound or speech alarm"
-msgstr "Квітація звука/мови"
-
-msgid "The button for all sound or speech alarms quittance"
-msgstr "Кнопка для квітації всіх порушень звуком або мовою"
-
-msgid "Press for all sound or speech alarms quittance."
-msgstr "Натиснути для квітації всіх порушень звуком або мовою."
-
 msgid "&Alarm"
 msgstr "Порушення"
 
@@ -1745,14 +1712,6 @@ msgstr "<Створити новий сеанс>"
 msgid "Running project: %1"
 msgstr "Виконання проекту: %1"
 
-#, c-format
-msgid "Error open: %s"
-msgstr "Помилка відкриття: %s"
-
-#, c-format
-msgid "Error write to: %s"
-msgstr "Помилка запису до: %s"
-
 msgid "Alarm level: %1"
 msgstr "Рівень порушення: %1"
 
@@ -1763,6 +1722,44 @@ msgstr "Відновлення створення сеансу для '%s'."
 #, c-format
 msgid "Session '%s' update time %f ms."
 msgstr "Час оновлення сеансу '%s' %f мс."
+
+#, c-format
+msgid "Function of the notificator '%s' error: %s"
+msgstr "Помилка функції повідомлювача '%s': %s"
+
+msgid "Enabled notification"
+msgstr "Сповіщення включено"
+
+msgid "Doing notification, always 1"
+msgstr "Здійснення сповіщення, завжди 1"
+
+msgid "Doing resource, always 0"
+msgstr "Формування ресурсу, завжди 0"
+
+msgid "Resource stream"
+msgstr "Поток ресурсу"
+
+msgid "Notification message"
+msgstr "Повідомлення сповіщення"
+
+msgid "Notification message's language"
+msgstr "Мова повідомлення сповіщення"
+
+#, c-format
+msgid "Notyfier %d"
+msgstr "Сповіщувач %d"
+
+msgid "The button for current \"%1\" quittance"
+msgstr "Кнопка для квітації поточного \"%1\""
+
+msgid "Press for current \"%1\" quittance."
+msgstr "Натиснути для квітації поточного \"%1\"."
+
+msgid "The button for all \"%1\" quittance"
+msgstr "Кнопка для квітації всіх \"%1\""
+
+msgid "Press for all \"%1\" quittance."
+msgstr "Натиснути для квітації всіх \"%1\"."
 
 msgid ""
 "Page: '%1'.\n"
@@ -2220,3 +2217,42 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
+
+#~ msgid "Blink alarm"
+#~ msgstr "Квітація миготіння"
+
+#~ msgid "The button for all blink alarms quittance"
+#~ msgstr "Кнопка для квітації всіх порушень миготінням"
+
+#~ msgid "Press for all blink alarms quittance."
+#~ msgstr "Натиснути для квітації всіх порушень миготінням."
+
+#~ msgid "Speaker alarm"
+#~ msgstr "Квітація гудком"
+
+#~ msgid "PC speaker alarm"
+#~ msgstr "Квітація гудком"
+
+#~ msgid "The button for all PC speaker alarms quittance"
+#~ msgstr "Кнопка для квітації всіх порушень гудком"
+
+#~ msgid "Press for all PC speaker alarms quittance."
+#~ msgstr "Натиснути для квітації всіх порушень гудком."
+
+#~ msgid "Sound/speech alarm"
+#~ msgstr "Квітація звука/мови"
+
+#~ msgid "Sound or speech alarm"
+#~ msgstr "Квітація звука/мови"
+
+#~ msgid "The button for all sound or speech alarms quittance"
+#~ msgstr "Кнопка для квітації всіх порушень звуком або мовою"
+
+#~ msgid "Press for all sound or speech alarms quittance."
+#~ msgstr "Натиснути для квітації всіх порушень звуком або мовою."
+
+#~ msgid "Error open: %s"
+#~ msgstr "Помилка відкриття: %s"
+
+#~ msgid "Error write to: %s"
+#~ msgstr "Помилка запису до: %s"

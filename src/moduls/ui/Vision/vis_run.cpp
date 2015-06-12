@@ -21,6 +21,7 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <algorithm>
 
@@ -60,7 +61,7 @@ using namespace VISION;
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, unsigned iScr ) :
     QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), conErr(NULL),
     crSessForce(icrSessForce), keepAspectRatio(false), prjSes_it(iprjSes_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1),
-    expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF)
+    expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0)
 {
     QImage ico_t;
 
@@ -201,7 +202,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actAlrmLev->setWhatsThis(_("The button for all alarms quittance"));
     actAlrmLev->setStatusTip(_("Press for all alarms quittance."));
     //  Alarm by Light
-    if(!ico_t.load(TUIS::icoGet("alarmLight",NULL,true).c_str())) ico_t.load(":/images/alarmLight.png");
+    /*if(!ico_t.load(TUIS::icoGet("alarmLight",NULL,true).c_str())) ico_t.load(":/images/alarmLight.png");
     actAlrmLight = new QAction(QPixmap::fromImage(ico_t), _("Blink alarm"), this);
     actAlrmLight->setObjectName("alarmLight");
     actAlrmLight->setToolTip(_("Blink alarm"));
@@ -223,30 +224,30 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actAlrmSound->setToolTip(_("Sound or speech alarm"));
     actAlrmSound->setWhatsThis(_("The button for all sound or speech alarms quittance"));
     actAlrmSound->setStatusTip(_("Press for all sound or speech alarms quittance."));
-    actAlrmSound->setVisible(false);
+    actAlrmSound->setVisible(false);*/
 
     //Create menu
-    mn_file = menuBar()->addMenu(_("&File"));
-    mn_file->addAction(menuPrint->menuAction());
-    mn_file->addAction(menuExport->menuAction());
-    mn_file->addSeparator();
-    mn_file->addAction(actClose);
-    mn_file->addAction(actQuit);
-    mn_alarm = menuBar()->addMenu(_("&Alarm"));
-    mn_alarm->addAction(actAlrmLev);
-    mn_alarm->addAction(actAlrmLight);
-    mn_alarm->addAction(actAlrmAlarm);
-    mn_alarm->addAction(actAlrmSound);
-    mn_view = menuBar()->addMenu(_("&View"));
-    mn_view->addAction(actFullScr);
-    mn_help = menuBar()->addMenu(_("&Help"));
-    mn_help->addAction(actAbout);
-    mn_help->addAction(actQtAbout);
-    mn_help->addAction(actProjManual);
-    mn_help->addAction(actManual);
-    mn_help->addAction(actManualSYS);
-    mn_help->addSeparator();
-    mn_help->addAction(actWhatIs);
+    menuFile = menuBar()->addMenu(_("&File"));
+    menuFile->addAction(menuPrint->menuAction());
+    menuFile->addAction(menuExport->menuAction());
+    menuFile->addSeparator();
+    menuFile->addAction(actClose);
+    menuFile->addAction(actQuit);
+    menuAlarm = menuBar()->addMenu(_("&Alarm"));
+    menuAlarm->addAction(actAlrmLev);
+    /*menuAlarm->addAction(actAlrmLight);
+    menuAlarm->addAction(actAlrmAlarm);
+    menuAlarm->addAction(actAlrmSound);*/
+    menuView = menuBar()->addMenu(_("&View"));
+    menuView->addAction(actFullScr);
+    menuHelp = menuBar()->addMenu(_("&Help"));
+    menuHelp->addAction(actAbout);
+    menuHelp->addAction(actQtAbout);
+    menuHelp->addAction(actProjManual);
+    menuHelp->addAction(actManual);
+    menuHelp->addAction(actManualSYS);
+    menuHelp->addSeparator();
+    menuHelp->addAction(actWhatIs);
 
     //Init tool bars
     // Alarms tools bar
@@ -259,9 +260,9 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     toolBarStatus->addAction(menuExport->menuAction());
     toolBarStatus->addSeparator();
     toolBarStatus->addAction(actAlrmLev);
-    toolBarStatus->addAction(actAlrmLight);
+    /*toolBarStatus->addAction(actAlrmLight);
     toolBarStatus->addAction(actAlrmAlarm);
-    toolBarStatus->addAction(actAlrmSound);
+    toolBarStatus->addAction(actAlrmSound);*/
 
     //Init status bar
     mWTime = new QLabel(this);
@@ -306,7 +307,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     updateTimer->setSingleShot(false);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
 
-    alrmPlay = new SndPlay(this);
+    //alrmPlay = new SndPlay(this);
 
     //actProjManual->setEnabled(TUIS::docGet(actProjManual->property("doc").toString().toStdString(),NULL,TUIS::GetFilePath).size());
     menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
@@ -346,7 +347,8 @@ VisRun::~VisRun( )
     updateTimer->stop();
 
     alarmSet(0);
-    alrmPlay->wait();
+    for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) delete iN->second;
+    //alrmPlay->wait();
 
     //Disconnect/delete session
     XMLNode req("disconnect");
@@ -1044,18 +1046,24 @@ void VisRun::alarmAct( QAction *alrm )
     int quittance = 0;
     string qwdg;
     if(alrm->objectName() == "alarmLev")	quittance = 0xFF;
-    else if(alrm->objectName() == "alarmLight")	quittance = 0x01;
+    else if(alrm->objectName().toStdString().compare(0,8,"alarmNtf") == 0) {
+	quittance = s2i(alrm->objectName().toStdString().substr(8));
+	map<uint8_t, Notify*>::iterator iN = mNotify.find(quittance);
+	if(iN != mNotify.end()) qwdg = iN->second->curQueueWdg();
+	quittance = (1<<quittance);
+    }
+    /*else if(alrm->objectName() == "alarmLight")	quittance = 0x01;
     else if(alrm->objectName() == "alarmAlarm")	quittance = 0x02;
     else if(alrm->objectName() == "alarmSound") {
 	quittance = 0x04;
 	qwdg = alrmPlay->widget( );
-    }
+    }*/
     else return;
 
     XMLNode req("quittance");
-    req.setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm")->
-	setAttr("tmpl",u2s(quittance))->
-	setAttr("wdg",qwdg);
+    req.setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm")->
+	setAttr("tmpl", u2s(quittance))->
+	setAttr("wdg", qwdg);
     cntrIfCmd(req);
 
     //Send event to master page
@@ -1130,7 +1138,7 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	pN = req.childGet(1);
 	QImage img;
 	string simg = TSYS::strDecode(pN->text(),TSYS::base64);
-	if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
+	if(img.loadFromData((const uchar*)simg.data(),simg.size()))
 	    setWindowIcon(QPixmap::fromImage(img));
 	// Period
 	pN = req.childGet(2);
@@ -1201,9 +1209,19 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	}
     }
 
+    //Place all needs atrributes to one request
+    XMLNode req("CntrReqs"), *chN; req.setAttr("path", pg_it);
+    req.childAdd("get")->setAttr("path", "/%2fattr%2fpgGrp");
+    req.childAdd("get")->setAttr("path", "/%2fattr%2fpgOpenSrc");
+    for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
+	req.childAdd("get")->setAttr("path", "/%2fattr%2fnotifyVis"+mod->modId()+i2s(iNtf));
+	req.childAdd("get")->setAttr("path", "/%2fattr%2fnotify"+i2s(iNtf));
+    }
+    cntrIfCmd(req);
+
     //Get group and parent page
-    string pgGrp = wAttrGet(pg_it,"pgGrp");
-    string pgSrc = wAttrGet(pg_it,"pgOpenSrc");
+    string pgGrp = (chN=req.getElementBy("path","/%2fattr%2fpgGrp")) ? chN->text() : "";	//wAttrGet(pg_it, "pgGrp");
+    string pgSrc = (chN=req.getElementBy("path","/%2fattr%2fpgOpenSrc")) ? chN->text() : "";	//wAttrGet(pg_it, "pgOpenSrc");
 
     //Check for master page replace
     if(!master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp) {
@@ -1226,6 +1244,12 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     }
     //Put to check for include
     else master_pg->callPage(pg_it,pgGrp,pgSrc);
+
+    //Get the notificators configuration and register thats
+    for(unsigned iNtf = 0; iNtf < 7; iNtf++)
+	if(((chN=req.getElementBy("path","/%2fattr%2fnotifyVis"+mod->modId()+i2s(iNtf))) && !s2i(chN->attr("rez"))) ||
+		((chN=req.getElementBy("path","/%2fattr%2fnotify"+i2s(iNtf))) && !s2i(chN->attr("rez"))))
+	    ntfReg(iNtf, chN->text());
 }
 
 void VisRun::pgCacheClear( )
@@ -1312,11 +1336,21 @@ void VisRun::alarmSet( unsigned alarm )
 	}
     res.unlock();
 
+    //Set notify to the alarm
+    for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); isMaster && iN != mNotify.end(); ++iN) iN->second->ntf(alarm);
+    for(int iAl = 0; iAl < menuAlarm->actions().size(); ++iAl) {
+	QAction *cO = menuAlarm->actions()[iAl];
+	if(!cO || cO->objectName().toStdString().compare(0,8,"alarmNtf") != 0)	continue;
+	unsigned nTp = s2i(cO->objectName().toStdString().substr(8));
+	if((ch_tp>>8)&(1<<nTp))		cO->setVisible((alarm>>8)&(1<<nTp));
+	if((ch_tp>>16)&(1<<nTp))	cO->setEnabled((alarm>>16)&(1<<nTp));
+    }
+
     //Alarm types init
     // Set monotonic sound alarm
-    if(isMaster && (ch_tp>>16)&TVision::Alarm) {
+    /*if(isMaster && (ch_tp>>16)&TVision::Alarm) {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
-	int hd = open(spkEvDev,O_WRONLY);
+	int hd = open(spkEvDev, O_WRONLY);
 	if(hd < 0) mess_warning(mod->nodePath().c_str(),_("Error open: %s"),spkEvDev);
 	else {
 	    input_event ev;
@@ -1330,11 +1364,11 @@ void VisRun::alarmSet( unsigned alarm )
 	}
     }
     // Set speach or sound alarm
-    if(isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty()) alrmPlay->start();
+    if(isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty()) alrmPlay->start();*/
 
     //Alarm action indicators update
     // Alarm level icon update
-    if(ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet) {
+    if(ch_tp&0xFF || (alarm>>16)&ntfSet /*|| (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound)*/ || !alrLevSet) {
 	int alarmLev = alarm&0xFF;
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
 
@@ -1343,13 +1377,13 @@ void VisRun::alarmSet( unsigned alarm )
 
 	QPainter painter(&levImage);
 	//QColor lclr( alarmLev ? 224 : 0, alarmLev ? 224-(int)(0.87*alarmLev) : 224, 0 );
-	QColor lclr( alarmLev ? 255 : 0, alarmLev ? 255-alarmLev : 255, 0 );
+	QColor lclr(alarmLev ? 255 : 0, alarmLev ? 255-alarmLev : 255, 0);
 
 	painter.setCompositionMode(QPainter::CompositionMode_Source);
 	painter.fillRect(levImage.rect(),Qt::transparent);
 	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-	if(!((alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) && alrLevSet)) {
+	if(!((alarm>>16)&ntfSet && /*(alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) &&*/ alrLevSet)) {
 	    for(int i_x = 0; i_x < lens.size().width(); i_x++)
 		for(int i_y = 0; i_y < lens.size().height(); i_y++)
 		    if(lens.pixel(i_x,i_y)&0xFF000000)	levImage.setPixel(i_x,i_y,lclr.rgba());
@@ -1361,13 +1395,22 @@ void VisRun::alarmSet( unsigned alarm )
 	actAlrmLev->setIcon(QPixmap::fromImage(levImage));
     }
     //Alarm buttons status process
-    for(int i_b = 0; i_b < 3; i_b++) {
+
+    /*for(int i_b = 0; i_b < 3; i_b++) {
 	QAction *actAlrm = (i_b==0) ? actAlrmLight : ((i_b==1) ? actAlrmAlarm : actAlrmSound);
 	if((ch_tp>>8)&(0x01<<i_b))	actAlrm->setVisible((alarm>>8)&(0x01<<i_b));
 	if((ch_tp>>16)&(0x01<<i_b))	actAlrm->setEnabled((alarm>>16)&(0x01<<i_b));
-    }
+    }*/
 
     mAlrmSt = alarm;
+}
+
+void VisRun::ntfReg( uint8_t tp, const string &props )
+{
+    map<uint8_t,Notify*>::iterator iN = mNotify.find(tp);
+    if(iN != mNotify.end()) return;
+    mNotify[tp] = new Notify(tp, props, this);
+    ntfSet |= (1<<tp);
 }
 
 string VisRun::cacheResGet( const string &res )
@@ -1452,7 +1495,7 @@ void VisRun::updatePage( )
 	if(!cntrIfCmd(req)) wAlrmSt = s2i(req.attr("alarmSt"));
 
 	// Get sound resources for play
-	if(alarmTp(TVision::Sound,true) && !alrmPlay->isRunning()) {
+	/*if(alarmTp(TVision::Sound,true) && !alrmPlay->isRunning()) {
 	    req.clear()->
 		setName("get")->
 		setAttr("mode", "sound")->
@@ -1464,7 +1507,7 @@ void VisRun::updatePage( )
 		alrmPlay->setWidget(req.attr("wdg"));
 		alrmPlay->setData(TSYS::strDecode(req.text(),TSYS::base64));
 	    }
-	}
+	}*/
 
 	// Set alarm
 	alarmSet(wAlrmSt);
@@ -1511,4 +1554,224 @@ void VisRun::updatePage( )
     }
 
     wPrcCnt++;
+}
+
+//* Notify: Generic notifying object.		 *
+//************************************************
+VisRun::Notify::Notify( uint8_t itp, const string &props, VisRun *iown ) :
+    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false),
+    toDo(false), alEn(false), comText(props), mQueueCurTm(0), mOwner(iown)
+{
+    //The resource allocation object init
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&dataM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
+    //Parse properties
+    string iLn, iOpt, ico, name;
+    bool hasLang  = false, hasFlags = false;
+    for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags || ico.empty() || name.empty()) && (iLn=TSYS::strLine(props,0,&off)).size(); lCnt++)
+	if(!hasLang && !lCnt && iLn.find("#!") == 0) { hasLang = comIsExtScript = true; continue; }
+	else if(!hasFlags && (fPos=iLn.find("flags=")) != string::npos)
+	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); ) {
+		if(iOpt.compare(0,6,"notify") == 0) {
+		    f_notify = true;
+		    repDelay = (iOpt.size() > 6) ? vmax(0,vmin(100,atoi(iOpt.c_str()+6))) : -1;
+		}
+		else if(iOpt == "resource")	f_resource = true;
+		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
+	    }
+	else if(ico.empty() && (fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
+	else if(name.empty() && (fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
+
+    //The command procedure prepare
+    if(comIsExtScript) {
+	// Prepare the external script
+	comProc = "sesRun_"+owner()->workSess()+"_ntf"+i2s(tp);
+	bool fOK = false;
+	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0775);
+	if(hd >= 0) {
+	    fOK = write(hd, comText.data(), comText.size()) == comText.size();
+	    ::close(hd);
+	}
+	if(!fOK) {
+	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Function of the notificator '%s' error: %s"), comProc.c_str(), strerror(errno));
+	    comProc = "";
+	}
+    }
+    else {
+	// Prepare internal procedure
+	TFunction funcIO("sesRun_"+owner()->workSess()+"_ntf"+i2s(tp));
+	//funcIO.setStor(DB());
+	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
+	funcIO.ioIns(new IO("doNtf",_("Doing notification, always 1"),IO::Boolean,IO::Default), IFA_doNtf);
+	funcIO.ioIns(new IO("doRes",_("Doing resource, always 0"),IO::Boolean,IO::Default), IFA_doRes);
+	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
+	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
+	funcIO.ioIns(new IO("lang",_("Notification message's language"),IO::String,IO::Default), IFA_lang);
+	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, comText); }
+	catch(TError er) {
+	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Function of the notificator '%s' error: %s"),
+		    funcIO.id().c_str(), er.mess.c_str());
+	}
+    }
+
+    if(f_notify) {
+	//Call conditional variable init
+	pthread_cond_init(&callCV, NULL);
+
+	//Notification task create
+	SYS->taskCreate(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), 0, VisRun::Notify::Task, this);
+    }
+
+    //The quittance action prepare and place
+    QImage ico_t;
+    if(!ico.empty()) {
+	ico = owner()->masterPg()->resGet(ico);
+	ico_t.loadFromData((const uchar*)ico.data(),ico.size());
+    }
+    if(ico_t.isNull() && !ico_t.load(TUIS::icoGet("alarmAlarm",NULL,true).c_str())) ico_t.load(":/images/alarmAlarm.png");
+    if(name.empty()) name = TSYS::strMess(_("Notyfier %d"), tp);
+    QAction *actAlrm = new QAction(QPixmap::fromImage(ico_t), name.c_str(), owner());
+    actAlrm->setObjectName(("alarmNtf"+i2s(tp)).c_str());
+    //actAlrm->setToolTip(_("Blink alarm"));
+    if(f_queue) {
+	actAlrm->setWhatsThis(QString(_("The button for current \"%1\" quittance")).arg(name.c_str()));
+	actAlrm->setStatusTip(QString(_("Press for current \"%1\" quittance.")).arg(name.c_str()));
+    }
+    else {
+	actAlrm->setWhatsThis(QString(_("The button for all \"%1\" quittance")).arg(name.c_str()));
+	actAlrm->setStatusTip(QString(_("Press for all \"%1\" quittance.")).arg(name.c_str()));
+    }
+    actAlrm->setVisible(false);
+    owner()->menuAlarm->addAction(actAlrm);
+    owner()->toolBarStatus->addAction(actAlrm);
+}
+
+VisRun::Notify::~Notify( )
+{
+    if(f_notify) {
+	SYS->taskDestroy(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), NULL, 10, false, &callCV);
+	pthread_cond_destroy(&callCV);
+    }
+
+    //The command procedure remove
+    if(comIsExtScript && comProc.size()) remove(comProc.c_str());
+
+    pthread_mutex_destroy(&dataM);
+}
+
+string VisRun::Notify::curQueueWdg( )
+{
+    if(!hasQueue()) return "";
+    pthread_mutex_lock(&dataM);
+    string rez = mQueueCurPath;
+    pthread_mutex_unlock(&dataM);
+
+    return rez;
+}
+
+void VisRun::Notify::ntf( int ialSt )
+{
+    //Check for the alarm state change
+    if(!f_notify || !(((ialSt^alSt)>>16)&(1<<tp)))	return;
+
+    alEn = (bool)((ialSt>>16)&(1<<tp));
+    pthread_mutex_lock(&dataM);
+    toDo = true;
+    pthread_cond_signal(&callCV);
+    pthread_mutex_unlock(&dataM);
+
+    alSt = ialSt;
+}
+
+string VisRun::Notify::ntfRes( string &mess, string &lang )
+{
+    string rez;
+    mess = lang = "";
+
+    //Call same request to the VCA server for resources
+    XMLNode req("get");
+    req.setAttr("path", "/ses_"+owner()->workSess()+"/%2fserv%2falarm")->
+	setAttr("mode", "resource")->
+	setAttr("tp", i2s(tp))->
+	setAttr("tm", u2s(mQueueCurTm))->
+	setAttr("wdg", mQueueCurPath);
+    if(!owner()->cntrIfCmd(req)) {
+	mQueueCurTm = strtoul(req.attr("tm").c_str(), NULL, 10);
+	mQueueCurPath = req.attr("wdg");
+	rez = TSYS::strDecode(req.text(), TSYS::base64);
+	mess = req.attr("mess");
+	lang = req.attr("lang");
+    }
+
+    return rez;
+}
+
+void VisRun::Notify::commCall( string &res, const string &mess, const string &lang )
+{
+    if(comProc.empty()) return;
+
+    //Shared data obtain
+    pthread_mutex_lock(&dataM);
+    string wcomProc = comProc;
+    pthread_mutex_unlock(&dataM);
+
+    if(comIsExtScript) {
+	string resFile = "sesRun_"+owner()->workSess()+"_res"+i2s(tp);
+	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664) : -1;
+	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); ::close(hdRes); }
+	// Prepare environment and execute the external script
+	system(("en="+i2s(alEn)+" doNtf=1 doRes=0 res="+resFile+
+	    " mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc).c_str());
+	if(hdRes >= 0) remove(resFile.c_str());
+    }
+    else {
+	// Prepare and execute internal procedure
+	TValFunc funcV;
+	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wcomProc)).at());
+
+	//  Load inputs
+	funcV.setB(IFA_en, alEn);
+	funcV.setB(IFA_doNtf, true);
+	funcV.setB(IFA_doRes, false);
+	funcV.setS(IFA_res, res);
+	funcV.setS(IFA_mess, mess);
+	funcV.setS(IFA_lang, lang);
+
+	//  Call to processing
+	funcV.calc();
+    }
+}
+
+void *VisRun::Notify::Task( void *intf )
+{
+    VisRun::Notify &ntf = *(VisRun::Notify*)intf;
+
+    pthread_mutex_lock(&ntf.dataM);
+    while(!TSYS::taskEndRun() || ntf.toDo) {
+	if(!ntf.toDo) pthread_cond_wait(&ntf.callCV, &ntf.dataM);
+	if(!ntf.toDo || ntf.comProc.empty()) { ntf.toDo = false; continue; }
+	ntf.toDo = false;
+	pthread_mutex_unlock(&ntf.dataM);
+
+	string ntfRes, ntfMess, ntfLang;
+	unsigned delayCnt = 0;
+	do {
+	    if(delayCnt) { TSYS::sysSleep(1); delayCnt--; continue; }
+
+	    //  Get the resources for the notification
+	    if((ntf.f_queue || ntf.f_resource) && ntf.alEn) ntfRes = ntf.ntfRes(ntfMess, ntfLang);
+
+	    //  Same notification
+	    ntf.commCall(ntfRes, ntfMess, ntfLang);
+
+	    delayCnt = ntf.repDelay;
+	} while((ntf.repDelay >= 0 || ntf.f_queue) && ntf.alEn && !TSYS::taskEndRun());
+
+	pthread_mutex_lock(&ntf.dataM);
+    }
+    pthread_mutex_unlock(&ntf.dataM);
 }

@@ -51,7 +51,7 @@ class TVision : public TUI
     public:
 	//Data
 	enum MessLev	{ Info, Warning, Error, Crit };
-	enum Alarm	{ Light = 0x01, Alarm = 0x02, Sound = 0x04 };
+	//enum Alarm	{ Light = 0x01, Alarm = 0x02, Sound = 0x04 };
 
 	//Methods
 	TVision( string name );
@@ -66,7 +66,7 @@ class TVision : public TUI
 	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
 	string VCAStation( )			{ return vca_station; }
 	int restoreTime( )			{ return mRestTime; }
-	string playCom( )			{ return mPlayCom; }
+	//string playCom( )			{ return mPlayCom; }
 	float cachePgLife( )			{ return mCachePgLife; }
 	string uiPropGet( const string &prop, const string &user = "root" );
 
@@ -78,7 +78,7 @@ class TVision : public TUI
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }
-	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
+	//void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
 	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
 	void uiPropSet( const string &prop, const string &vl, const string &user = "root" );
 
@@ -131,7 +131,7 @@ class TVision : public TUI
 
 	string		vca_station;		//VCA station id ('.' - for local station)
 
-	string		mPlayCom;		//Play command
+	//string		mPlayCom;		//Play command
 
 	int		mScrnCnt;
 };

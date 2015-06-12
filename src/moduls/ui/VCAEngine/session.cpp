@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <fcntl.h>
+#include <errno.h>
 #include <pthread.h>
 #include <signal.h>
 
@@ -33,12 +35,13 @@ using namespace VCA;
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
     mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataM), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
-    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mAlrmSndPlay(-1), mStyleIdW(-1)
+    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), /*mAlrmSndPlay(-1),*/ mStyleIdW(-1)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
     pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init(&dataM, &attrM);
+    pthread_mutex_init(&mAlrmRes, &attrM);
     pthread_mutex_init(&mCalcRes, &attrM);
     pthread_mutexattr_destroy(&attrM);
 
@@ -50,7 +53,10 @@ Session::Session( const string &iid, const string &iproj ) :
 
 Session::~Session( )
 {
+    for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) delete iN->second;
+
     pthread_mutex_destroy(&dataM);
+    pthread_mutex_destroy(&mAlrmRes);
     pthread_mutex_destroy(&mCalcRes);
 }
 
@@ -176,7 +182,7 @@ void Session::setStart( bool val )
 	    d_tm = TSYS::curTime();
 	}
 
-	//Process all pages is on
+	//Process all pages to on
 	list(pg_ls);
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(true);
@@ -185,6 +191,11 @@ void Session::setStart( bool val )
 	    mess_debug(nodePath().c_str(), _("Process on for all root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
+
+	//VCA server's force off
+	MtxAlloc resAl(mAlrmRes, true);
+	for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->ntf(0);
+	resAl.unlock();
 
 	//Start process task
 	if(!mStart) SYS->taskCreate(nodePath('.',true), 0, Session::Task, this);
@@ -197,7 +208,12 @@ void Session::setStart( bool val )
 	//Stop process task
 	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-	//Process all pages is off
+	//VCA server's force off
+	MtxAlloc resAl(mAlrmRes, true);
+	for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->ntf(0);
+	resAl.unlock();
+
+	//Process all pages to off
 	list(pg_ls);
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(false);
@@ -343,8 +359,12 @@ void Session::alarmSet( const string &wpath, const string &alrm )
 {
     if(wpath.empty()) return;
 
+    //Notifications queue update
+    MtxAlloc resAl(mAlrmRes, true);
+    for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->queueSet(wpath, alrm);
+
     //Alarms queue process
-    ResAlloc res(mAlrmRes, true);
+    /*ResAlloc res(mAlrmRes, true);
 
     Alarm aobj(wpath, alrm, calcClk());
 
@@ -368,7 +388,7 @@ void Session::alarmSet( const string &wpath, const string &alrm )
 	    if((int)i_q <= mAlrmSndPlay && mAlrmSndPlay >= 0) mAlrmSndPlay++;
 	}
 	else mAlrm.push_back(aobj);
-    }
+    }*/
 }
 
 int Session::alarmStat( )
@@ -396,11 +416,23 @@ void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl )
 	    at(ls[i_p]).at().alarmQuittance(quit_tmpl, true);
     }
 
+    //The notifications queue quittance
+    MtxAlloc resAl(mAlrmRes, true);
+    for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN)
+	iN->second->queueQuittance(wpath, quit_tmpl);
+
     //Queue alarms quittance
-    ResAlloc res(mAlrmRes, false);
-    for(unsigned i_q = 0; i_q < mAlrm.size(); i_q++)
+    /*for(unsigned i_q = 0; i_q < mAlrm.size(); i_q++)
 	if(mAlrm[i_q].path.substr(0,wpath.size()) == wpath)
-	    mAlrm[i_q].qtp &= quit_tmpl;
+	    mAlrm[i_q].qtp &= quit_tmpl;*/
+}
+
+void Session::ntfReg( uint8_t tp, const string &props )
+{
+    MtxAlloc res(mAlrmRes, true);
+    map<uint8_t,Notify*>::iterator iN = mNotify.find(tp);
+    if(iN != mNotify.end()) return;
+    mNotify[tp] = new Notify(tp, props, this);
 }
 
 void *Session::Task( void *icontr )
@@ -421,6 +453,13 @@ void *Session::Task( void *icontr )
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
 	    }
 
+	//VCA server's notifications processing
+	MtxAlloc resAl(ses.mAlrmRes, true);
+	int aSt = ses.alarmStat();
+	for(map<uint8_t,Notify*>::iterator iN = ses.mNotify.begin(); iN != ses.mNotify.end(); ++iN) iN->second->ntf(aSt);
+	resAl.unlock();
+
+	//Sleep to next cycle
 	TSYS::taskSleep((int64_t)ses.period()*1000000);
 	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;
     }
@@ -483,11 +522,11 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // string user( ) - the session user
     if(iid == "user")	return user();
     // string alrmSndPlay( ) - the widget's path for that on this time played the alarm message.
-    else if(iid == "alrmSndPlay") {
+    /*else if(iid == "alrmSndPlay") {
 	ResAlloc res(mAlrmRes, false);
 	if(mAlrmSndPlay < 0 || mAlrmSndPlay >= (int)mAlrm.size()) return string("");
 	return mAlrm[mAlrmSndPlay].path;
-    }
+    }*/
     // int alrmQuittance(int quit_tmpl, string wpath = "") - alarm quittance <wpath> with template <quit_tmpl>. If <wpath> is empty
     //        string then make global quittance.
     //  quit_tmpl - quittance template
@@ -540,8 +579,17 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    int aSt = alarmStat();
 	    opt->setAttr("alarmSt", i2s(aSt));
 
+	    // Get visualiser side notification's resource
+	    if(opt->attr("mode") == "resource") {
+		MtxAlloc resAl(mAlrmRes, true);
+		map<uint8_t,Notify*>::iterator iN = mNotify.find(s2i(opt->attr("tp")));
+		unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
+		string res, mess, lang, wdg = opt->attr("wdg");
+		if(iN != mNotify.end()) res = TSYS::strEncode(iN->second->ntfRes(tm,wdg,mess,lang), TSYS::base64);
+		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
+	    }
 	    // Get alarm from sound queue
-	    if(opt->attr("mode") == "sound") {
+	    /*else if(opt->attr("mode") == "sound") {
 		unsigned a_tm  = strtoul(opt->attr("tm").c_str(),NULL,10);
 		opt->setAttr("tm", u2s(calcClk()));
 
@@ -563,7 +611,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    else opt->setText(mod->callSynth(mAlrm[i_q].mess));
 		    mAlrmSndPlay = i_q;
 		} else mAlrmSndPlay = -1;
-	    } else if(!((aSt>>16) & Engine::Sound)) mAlrmSndPlay = -1;
+	    } else if(!((aSt>>16) & Engine::Sound)) mAlrmSndPlay = -1;*/
 	}
 	else if(ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
 	    alarmQuittance(opt->attr("wdg"),~s2i(opt->attr("tmpl")));
@@ -609,7 +657,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root",SUI_ID,3,"tp","br","idm","1","br_pref","pg_");
-	if(ctrMkNode("area",opt,-1,"/alarm",_("Alarms")))
+	/*if(ctrMkNode("area",opt,-1,"/alarm",_("Alarms")))
 	    if(ctrMkNode("table",opt,-1,"/alarm/alarm",_("Alarms list"),R_R_R_,"root",SUI_ID)) {
 		ctrMkNode("list",opt,-1,"/alarm/alarm/wdg",_("Widget"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/lev",_("Level"),R_R_R_,"root",SUI_ID,1,"tp","dec");
@@ -618,11 +666,11 @@ void Session::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tp",_("Type"),R_R_R_,"root",SUI_ID,1,"tp","hex");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/qtp",_("Quittance"),R_R_R_,"root",SUI_ID,1,"tp","hex");
 		ctrMkNode("list",opt,-1,"/alarm/alarm/tpArg",_("Type argument"),R_R_R_,"root",SUI_ID,1,"tp","str");
-	    }
+	    }*/
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     if(a_path == "/ico" && ctrChkNode(opt))	opt->setText(ico());
     else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(enable()));
@@ -681,7 +729,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_f=0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
-    else if(a_path == "/alarm/alarm" && ctrChkNode(opt)) {
+    /*else if(a_path == "/alarm/alarm" && ctrChkNode(opt)) {
 	//Fill Archivators table
 	XMLNode *n_wdg	= ctrMkNode("list", opt, -1, "/alarm/alarm/wdg", "", R_R_R_);
 	XMLNode *n_lev	= ctrMkNode("list", opt, -1, "/alarm/alarm/lev", "", R_R_R_);
@@ -701,13 +749,286 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    if(n_qtp)	n_qtp->childAdd("el")->setText(i2s(mAlrm[i_q].qtp));
 	    if(n_tpArg)	n_tpArg->childAdd("el")->setText(mAlrm[i_q].tpArg);
 	}
-    }
+    }*/
     else TCntrNode::cntrCmdProc(opt);
+}
+
+//* Notify: Generic notifying object.		 *
+//************************************************
+Session::Notify::Notify( uint8_t itp, const string &props, Session *iown ) :
+    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false),
+    toDo(false), alEn(false), comText(props), mQueueCurNtf(-1), mQueueCurTm(0), mOwner(iown)
+{
+    //The resource allocation object init
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&dataM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
+    //Parse properties
+    string iLn, iOpt;
+    bool hasLang  = false, hasFlags = false;
+    for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags) && (iLn=TSYS::strLine(props,0,&off)).size(); lCnt++)
+	if(!hasLang && !lCnt && iLn.find("#!") == 0) { hasLang = comIsExtScript = true; continue; }
+	else if(!hasFlags && (fPos=iLn.find("flags=")) != string::npos)
+	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); )
+		if(iOpt.compare(0,6,"notify") == 0) {
+		    f_notify = true;
+		    repDelay = (iOpt.size() > 6) ? vmax(0,vmin(100,atoi(iOpt.c_str()+6))) : -1;
+		}
+		else if(iOpt == "resource")	f_resource = true;
+		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
+
+    //The command procedure prepare
+    if(comIsExtScript) {
+	// Prepare the external script
+	comProc = "ses_"+owner()->id()+"_ntf"+i2s(tp);
+	bool fOK = false;
+	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0775);
+	if(hd >= 0) {
+	    fOK = write(hd, comText.data(), comText.size()) == comText.size();
+	    close(hd);
+	}
+	if(!fOK) {
+	    mess_err(owner()->nodePath().c_str(), _("Function of the notificator '%s' error: %s"), comProc.c_str(), strerror(errno));
+	    comProc = "";
+	}
+    }
+    else {
+	// Prepare internal procedure
+	TFunction funcIO("ses_"+owner()->id()+"_ntf"+i2s(tp));
+	//funcIO.setStor(DB());
+	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
+	funcIO.ioIns(new IO("doNtf",_("Doing notification"),IO::Boolean,IO::Default), IFA_doNtf);
+	funcIO.ioIns(new IO("doRes",_("Doing resource"),IO::Boolean,IO::Default), IFA_doRes);
+	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
+	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
+	funcIO.ioIns(new IO("lang",_("Notification message's language"),IO::String,IO::Default), IFA_lang);
+	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, comText); }
+	catch(TError er) {
+	    mess_err(owner()->nodePath().c_str(), _("Function of the notificator '%s' error: %s"), funcIO.id().c_str(), er.mess.c_str());
+	}
+    }
+
+    if(f_notify) {
+	//Call conditional variable init
+	pthread_cond_init(&callCV, NULL);
+
+	//Notification task create
+	SYS->taskCreate(owner()->nodePath('.',true)+".ntf"+i2s(tp), 0, Session::Notify::Task, this);
+    }
+}
+
+Session::Notify::~Notify( )
+{
+    if(f_notify) {
+	SYS->taskDestroy(owner()->nodePath('.',true)+".ntf"+i2s(tp), NULL, 10, false, &callCV);
+	pthread_cond_destroy(&callCV);
+    }
+
+    //The command procedure remove
+    if(comIsExtScript && comProc.size()) remove(comProc.c_str());
+
+    pthread_mutex_destroy(&dataM);
+}
+
+void Session::Notify::ntf( int ialSt )
+{
+    //Check for the alarm state change
+    if(!f_notify || !(((ialSt^alSt)>>16)&(1<<tp)))	return;
+
+    alEn = (bool)((ialSt>>16)&(1<<tp));
+    pthread_mutex_lock(&dataM);
+    toDo = true;
+    pthread_cond_signal(&callCV);
+    pthread_mutex_unlock(&dataM);
+
+    alSt = ialSt;
+}
+
+string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, string &lang )
+{
+    string rez;
+
+    lang = SYS->security().at().usrAt(owner()->user()).at().lang();
+
+    // Just the resource doing request
+    if(!f_queue && f_resource) commCall(false, true, rez, "", lang);
+
+    if(f_queue) {
+	unsigned tm = itm;
+	itm = owner()->calcClk();
+
+	// Find entry, return it and the resource
+	MtxAlloc res(dataM, true);
+	int iQ, iFirst = -1, iNext = -1;
+	for(iQ = mQueue.size()-1; iQ >= 0; iQ--) {
+	    if(mQueue[iQ].quittance) continue;
+	    if(wpath.empty() || owner()->modifChk(tm,mQueue[iQ].clc) || iNext > 0)	break;	//First, new and next entries break
+	    if(iFirst < 0) iFirst = iQ;
+	    if(wpath == mQueue[iQ].path) iNext = iQ;
+	}
+	if(iQ < 0 && iFirst >= 0) iQ = iFirst;	//Return to first entry
+	if(iQ >= 0) {
+	    wpath = mQueue[iQ].path;
+	    mess = mQueue[iQ].mess;
+	    //  Get the resource direct
+	    if(!mQueue[iQ].tpArg.empty())
+		rez = TSYS::strDecode(((AutoHD<SessWdg>)mod->nodeAt(mQueue[iQ].path)).at().resourceGet(mQueue[iQ].tpArg), TSYS::base64);
+	    //  Call the resource producing procedure
+	    else commCall(false, true, rez, mQueue[iQ].mess, lang);
+	    mQueueCurNtf = iQ;
+	} else { mQueueCurNtf = -1; wpath = mess = ""; }
+    }
+
+    return rez;
+}
+
+void Session::Notify::queueSet( const string &wpath, const string &alrm )
+{
+    //Calls to the queue update from alarmSet()
+    if(!f_queue) return;
+
+    int aOff = 0;
+    uint8_t	aLev = s2i(TSYS::strParse(alrm,0,"|",&aOff));
+    string	aCat = TSYS::strParse(alrm, 0, "|", &aOff),
+		aMess= TSYS::strParse(alrm, 0, "|", &aOff);
+    uint8_t	aTp  = s2i(TSYS::strParse(alrm,0,"|",&aOff));
+    string	aArg = TSYS::strParse(alrm,0,"|",&aOff);
+
+    if(!(aTp&(1<<tp)))	return;
+
+    QueueIt qIt(wpath, aLev, aCat, aMess, aArg, owner()->calcClk());
+
+    MtxAlloc res(dataM, true);
+
+    unsigned iQ = 0;
+    // Check for the entry to present
+    while(iQ < mQueue.size() && mQueue[iQ].path != qIt.path) iQ++;
+    // Clean up the entry from queue
+    if(!qIt.lev) {
+	if(iQ < mQueue.size()) mQueue.erase(mQueue.begin()+iQ);
+	return;
+    }
+    // Update presented and same level entry
+    if(iQ < mQueue.size() && qIt.lev == mQueue[iQ].lev) mQueue[iQ] = qIt;
+    else {
+	// Remove presented by different level entry
+	if(iQ < mQueue.size()) {
+	    mQueue.erase(mQueue.begin()+iQ);
+	    //  Entry into the notification update
+	    if((int)iQ == mQueueCurNtf) mQueueCurNtf = -1;
+	    if((int)iQ < mQueueCurNtf && mQueueCurNtf >= 0) mQueueCurNtf--;
+	}
+	//  Place the entry to the queue
+	unsigned iQ1 = 0;
+	while(iQ1 < mQueue.size() && qIt.lev >= mQueue[iQ].lev) iQ1++;
+	if(iQ1 < mQueue.size()) {
+	    mQueue.insert(mQueue.begin()+iQ1, qIt);
+	    if((int)iQ <= mQueueCurNtf && mQueueCurNtf >= 0) mQueueCurNtf++;
+	}
+	else mQueue.push_back(qIt);
+    }
+}
+
+void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl )
+{
+    //Calls to the queue update from alarmQuittance()
+    if(!f_queue) return;
+
+    pthread_mutex_lock(&dataM);
+    for(unsigned iQ = 0; iQ < mQueue.size(); iQ++)
+	if(mQueue[iQ].path.substr(0,wpath.size()) == wpath)
+	    mQueue[iQ].quittance = !(quitTmpl&(1<<tp));
+    pthread_mutex_unlock(&dataM);
+}
+
+void Session::Notify::commCall( bool doNtf, bool doRes, string &res, const string &mess, const string &lang )
+{
+    if(comProc.empty()) return;
+
+    //Shared data obtain
+    pthread_mutex_lock(&dataM);
+    string wcomProc = comProc;
+    pthread_mutex_unlock(&dataM);
+
+    if(comIsExtScript) {
+	string resFile = "ses_"+owner()->id()+"_res"+i2s(tp);
+	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664) : -1;
+	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); close(hdRes); }
+	// Prepare environment and execute the external script
+	system(("en="+i2s(alEn)+" doNtf="+i2s(doNtf)+" doRes="+i2s(doRes)+" res="+resFile+
+		" mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc).c_str());
+	if(doRes) {
+	    hdRes = open(resFile.c_str(), O_RDONLY);
+	    if(hdRes >= 0) {
+		char buf[STR_BUF_LEN];
+		res.clear();
+		if(lseek(hdRes,0,SEEK_END) < 100*1024*1024) {
+		    lseek(hdRes, 0, SEEK_SET);
+		    for(int len; (len=read(hdRes,buf,sizeof(buf))) > 0; ) res.append(buf, len);
+		}
+		close(hdRes);
+	    }
+	}
+	if(hdRes >= 0) remove(resFile.c_str());
+    }
+    else {
+	// Prepare and execute internal procedure
+	TValFunc funcV;
+	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wcomProc)).at());
+
+	//  Load inputs
+	funcV.setB(IFA_en, alEn);
+	funcV.setB(IFA_doNtf, doNtf);
+	funcV.setB(IFA_doRes, doRes);
+	funcV.setS(IFA_res, res);
+	funcV.setS(IFA_mess, mess);
+	funcV.setS(IFA_lang, lang);
+
+	//  Call to processing
+	funcV.calc();
+
+	//  Get outputs
+	if(doRes) res = funcV.getS(IFA_res);
+    }
+}
+
+void *Session::Notify::Task( void *intf )
+{
+    Session::Notify &ntf = *(Session::Notify*)intf;
+
+    pthread_mutex_lock(&ntf.dataM);
+    while(!TSYS::taskEndRun() || ntf.toDo) {
+	if(!ntf.toDo) pthread_cond_wait(&ntf.callCV, &ntf.dataM);
+	if(!ntf.toDo || ntf.comProc.empty()) { ntf.toDo = false; continue; }
+	ntf.toDo = false;
+	pthread_mutex_unlock(&ntf.dataM);
+
+	string ntfRes, ntfMess, ntfLang;
+	unsigned delayCnt = 0;
+	do {
+	    if(delayCnt) { TSYS::sysSleep(1); delayCnt--; continue; }
+
+	    //  Get the resources for the notification
+	    if((ntf.f_queue || ntf.f_resource) && ntf.alEn)
+		ntfRes = ntf.ntfRes(ntf.mQueueCurTm, ntf.mQueueCurPath, ntfMess, ntfLang);
+
+	    //  Same notification
+	    ntf.commCall(true, false, ntfRes, ntfMess, ntfLang);
+
+	    delayCnt = ntf.repDelay;
+	} while((ntf.repDelay >= 0 || ntf.f_queue) && ntf.alEn && !TSYS::taskEndRun());
+
+	pthread_mutex_lock(&ntf.dataM);
+    }
+    pthread_mutex_unlock(&ntf.dataM);
 }
 
 //* Alarm: Alarm object				 *
 //************************************************
-Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) : path(ipath), clc(iclc)
+/*Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) : path(ipath), clc(iclc)
 {
     int a_off = 0;
     lev   = s2i(TSYS::strSepParse(alrm,0,'|',&a_off));
@@ -715,7 +1036,7 @@ Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) 
     mess  = TSYS::strSepParse(alrm,0,'|',&a_off);
     qtp   = tp = s2i(TSYS::strSepParse(alrm,0,'|',&a_off));
     tpArg = TSYS::strSepParse(alrm,0,'|',&a_off);
-}
+}*/
 
 //************************************************
 //* SessPage: Page of Project's session          *
@@ -745,6 +1066,12 @@ void SessPage::setEnable( bool val, bool force )
 	if((pgOpen || force || parent().at().attrAt("pgNoOpenProc").at().getB()) && !enable()) {
 	    SessWdg::setEnable(true);
 	    if(pgOpen) ownerSess()->openReg(path());
+
+	    //  Check for notifiers register
+	    for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
+		string aNtf = TSYS::strMess("notify%d", iNtf);
+		if(attrPresent(aNtf)) ownerSess()->ntfReg(iNtf, attrAt(aNtf).at().getS());
+	    }
 	}
 	// Child pages process
 	if(!force) {

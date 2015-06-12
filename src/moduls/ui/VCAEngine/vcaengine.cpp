@@ -71,8 +71,8 @@ using namespace VCA;
 //************************************************
 //* Engine                                       *
 //************************************************
-Engine::Engine( string name ) : TUI(MOD_ID),
-    passAutoEn(false), mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mSynthCode("KOI8-R")
+Engine::Engine( string name ) : TUI(MOD_ID), passAutoEn(false)
+    //, mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mSynthCode("KOI8-R")
 {
     mod		= this;
 
@@ -258,8 +258,8 @@ void Engine::load_( )
     mess_info(nodePath().c_str(),_("Load module."));
 
     //Load parameters from config-file and DB
-    setSynthCom(TBDS::genDBGet(nodePath()+"SynthCom",synthCom()));
-    setSynthCode(TBDS::genDBGet(nodePath()+"SynthCode",synthCode()));
+    //setSynthCom(TBDS::genDBGet(nodePath()+"SynthCom",synthCom()));
+    //setSynthCode(TBDS::genDBGet(nodePath()+"SynthCode",synthCode()));
 
     if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
@@ -412,8 +412,8 @@ void Engine::save_( )
     mess_info(nodePath().c_str(),_("Save module."));
 
     //Save parameters to DB
-    TBDS::genDBSet(nodePath()+"SynthCom", synthCom());
-    TBDS::genDBSet(nodePath()+"SynthCode", synthCode());
+    //TBDS::genDBSet(nodePath()+"SynthCom", synthCom());
+    //TBDS::genDBSet(nodePath()+"SynthCode", synthCode());
 
     //Auto-sessions save
     ResAlloc res(mSesRes, false);
@@ -495,7 +495,7 @@ AutoHD<Session> Engine::sesAt( const string &id )	{ return chldAt(idSes,id); }
 
 AutoHD<TFunction> Engine::fAt( const string &id )	{ return chldAt(idFnc,id); }
 
-string Engine::callSynth( const string &itxt )
+/*string Engine::callSynth( const string &itxt )
 {
     size_t	comPos = 0;
     char	buf[STR_BUF_LEN];
@@ -542,7 +542,7 @@ string Engine::callSynth( const string &itxt )
     }
 
     return TSYS::strEncode(rez, TSYS::base64);
-}
+}*/
 
 void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen )
 {
@@ -824,7 +824,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/ses/ast/user",_("User"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/ses/usr_ls");
 	    }
 	}
-	if(ctrMkNode("area",opt,2,"/tts",_("Speech text synthesis"),R_R_R_,"root",SUI_ID)) {
+	/*if(ctrMkNode("area",opt,2,"/tts",_("Speech text synthesis"),R_R_R_,"root",SUI_ID)) {
 	    ctrMkNode("fld",opt,-1,"/tts/comm",_("Command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/tts/comm_ls","help",
 		_("Command line for call of speech synthesis from the text engine.\n"
 		  "Use next words for replace:\n"
@@ -834,7 +834,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		  "If result file name is used and  %t is not used synthesis text is sent to pipe."));
 	    ctrMkNode("fld",opt,-1,"/tts/code",_("Text code"),RWRWR_,"root",SUI_ID,2,
 		"tp","str","help",_("Engine text codepage for text encode into it."));
-	}
+	}*/
 	return;
     }
 
@@ -943,7 +943,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(fAt(lst[i_f]).at().name());
     }
-    else if(a_path == "/tts/code") {
+    /*else if(a_path == "/tts/code") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(synthCode());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSynthCode(opt->text());
     }
@@ -952,7 +952,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSynthCom(opt->text());
     }
     else if(a_path == "/tts/comm_ls" && ctrChkNode(opt))
-	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10000 -c 1 -v 0.8 - -t ogg -");
+	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10000 -c 1 -v 0.8 - -t ogg -");*/
     else TUI::cntrCmdProc(opt);
 }
 

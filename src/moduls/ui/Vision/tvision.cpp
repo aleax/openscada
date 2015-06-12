@@ -84,7 +84,7 @@ using namespace VISION;
 //* QTCFG::TVision                                *
 //*************************************************
 TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), mWinPosCntrSave(true), mExitLstRunPrjCls(true), end_run(false),
-    mRestTime(60), mCachePgLife(1), vca_station("."), mPlayCom("play -q %f"), mScrnCnt(0)
+    mRestTime(60), mCachePgLife(1), vca_station("."), /*mPlayCom("play -q %f"),*/ mScrnCnt(0)
 {
     mod		= this;
 
@@ -137,8 +137,8 @@ string TVision::optDescr( )
 	"ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
 	"CachePgLife <hours>   Cached pages lifetime.\n"
 	"VCAstation  <id>      VCA station id ('.' - local).\n"
-	"RestoreTime <seconds> Restore connection time.\n"
-	"PlayCom     <cmd>     Audio alarms' files play command.\n\n"),
+	"RestoreTime <seconds> Restore connection time.\n\n"),
+//	"PlayCom     <cmd>     Audio alarms' files play command.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -163,7 +163,7 @@ void TVision::load_( )
     setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setRestoreTime(s2i(TBDS::genDBGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
-    setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
+    //setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
 }
 
 void TVision::save_( )
@@ -180,7 +180,7 @@ void TVision::save_( )
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
     TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
     TBDS::genDBSet(nodePath()+"RestoreTime",i2s(restoreTime()));
-    TBDS::genDBSet(nodePath()+"PlayCom", playCom());
+    //TBDS::genDBSet(nodePath()+"PlayCom", playCom());
 }
 
 void TVision::postEnable( int flag )
@@ -379,10 +379,10 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/winPos_cntr_save",_("Windows position control and save"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit on last run project close"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	}
-	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),R_R_R_,"root",SUI_ID))
+	/*if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),R_R_R_,"root",SUI_ID))
 	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
 		    _("Command line for call sounds play.\n"
-		    "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."));
+		    "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."));*/
 	return;
     }
 
@@ -472,11 +472,11 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
 		setText(SYS->transport().at().extHostGet("*",lst[i_ls]).name);
     }
-    else if(a_path == "/alarm/plComm") {
+    /*else if(a_path == "/alarm/plComm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(playCom());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPlayCom(opt->text());
     }
-    else if(a_path == "/alarm/plComLs" && ctrChkNode(opt)) opt->childAdd("el")->setText("play %f");
+    else if(a_path == "/alarm/plComLs" && ctrChkNode(opt)) opt->childAdd("el")->setText("play %f");*/
     else TUI::cntrCmdProc(opt);
 }
 
