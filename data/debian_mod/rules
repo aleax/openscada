@@ -19,9 +19,14 @@ else
 CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
+# These are used for support -j option of dpkg-buildpackage
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+MAKEFLAGS += -j$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+endif
+
 build: build-arch build-indep
-build-arch: configure-stamp build-stamp
-build-indep: configure-stamp build-stamp
+build-arch: build-stamp
+build-indep: build-stamp
 configure-stamp:
 	dh_testdir
 	dh_autoreconf
@@ -31,15 +36,15 @@ configure-stamp:
 	    --enable-FLibComplex1=incl --enable-FLibSYS=incl \
 	    --enable-MMS --enable-DiamondBoards --enable-Comedi --enable-ICP_DAS --enable-BFN
 	touch $@
-build-stamp:
+build-stamp: configure-stamp
 	dh_testdir
 	$(MAKE)
 	touch $@
 
 install: install-indep install-arch
-install-arch:
+install-arch: build-arch
 	$(MAKE) -f debian/rules DH_OPTIONS=-s install-common
-install-indep:
+install-indep: build-indep
 	$(MAKE) -f debian/rules DH_OPTIONS=-i install-common
 install-common: install-stamp
 	dh_testdir
@@ -53,9 +58,9 @@ install-stamp:
 	touch $@
 
 binary: clean-install binary-arch binary-indep
-binary-indep: build-indep install-indep
+binary-indep: install-indep
 	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
-binary-arch: build-arch install-arch
+binary-arch: install-arch
 	$(MAKE) -f debian/rules DH_OPTIONS=-s binary-common
 binary-common:
 	dh_testdir
@@ -99,3 +104,4 @@ clean:
 	dh_clean
 
 .PHONY: build build-arch build-indep install install-indep install-arch binary binary-indep binary-arch clean
+.NOTPARALLEL:

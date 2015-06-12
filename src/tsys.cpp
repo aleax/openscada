@@ -420,8 +420,8 @@ string TSYS::optDescr( )
 	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
-	"SaveAtExit <true>	Save system at exit.\n"
-	"SavePeriod <sec>	Save system period.\n\n"),
+	"SaveAtExit <true>	Save the system at exit.\n"
+	"SavePeriod <sec>	Save the system period.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 
@@ -1613,7 +1613,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     }
 }
 
-void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSignal )
+void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSignal, pthread_cond_t *cv )
 {
     map<string,STask>::iterator it;
     ResAlloc res(taskRes, false);
@@ -1628,8 +1628,9 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     bool first = true;
     res.request(true);
     while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask)) {
-	if(first) pthread_kill(it->second.thr, SIGUSR1);	//> User's termination signal, check for it by function taskEndRun()
-	if(!noSignal) pthread_kill(it->second.thr, SIGALRM);	//> Sleep, select and other system calls termination
+	if(first) pthread_kill(it->second.thr, SIGUSR1);	//User's termination signal, check for it by function taskEndRun()
+	if(!noSignal) pthread_kill(it->second.thr, SIGALRM);	//Sleep, select and other system calls termination
+	if(cv) pthread_cond_signal(cv);
 	res.release();
 
 	time_t c_tm = time(NULL);
@@ -1996,6 +1997,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	return wcnt;
     }
+    // int fileRemove( string file ) - Remove <file>.
+    //	  Return the removing result.
+    if(iid == "fileRemove" && prms.size()) return remove(prms[0].getS().c_str());
     // XMLNodeObj XMLNode(string name = "") - creation of the XML node object with the name <name>
     //  name - XML node name
     if(iid == "XMLNode") return new XMLNodeObj((prms.size()>=1) ? prms[0].getS() : "");
@@ -2276,9 +2280,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		"help",_("Separate directory paths with documents by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
-	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),RWRWR_,"root","root",2,"tp","bool",
+	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the system at exit"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Select for automatic system saving to DB on exit."));
-	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),RWRWR_,"root","root",2,"tp","dec",
+	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save the system period"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
@@ -2324,7 +2328,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRWR_,"root","root",2,"tp","str",
 		    "help",_("Processed languages list by two symbols code and separated symbol ';'."));
 		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRWR_,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch",_("Check unmatch"),RWRWR_,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch",_("Check for mismatch"),RWRWR_,"root","root",1,"tp","bool");
 		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRWR_,"root","root",1,"key","base")) {
 		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->lang2CodeBase().c_str(),RWRWR_,"root","root",1,"tp","str");
 		    string lngEl;

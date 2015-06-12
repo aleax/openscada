@@ -256,17 +256,15 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
     if(!is_res) {
 	//Get resource file from file system
 	string filepath = is_file ? iid.substr(5) : iid;
-	int len;
 	char buf[STR_BUF_LEN];
 	string rez;
-	int hd = open(filepath.c_str(),O_RDONLY);
+	int hd = open(filepath.c_str(), O_RDONLY);
 	if(hd == -1)	return false;
 
 	//Check for size limit
 	if(lseek(hd,0,SEEK_END) > 100*1024*1024) { close(hd); return false; }
-	lseek(hd,0,SEEK_SET);
-
-	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
+	lseek(hd, 0, SEEK_SET);
+	for(int len; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf, len);
 	close(hd);
 
 	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+i2s(rez.size());

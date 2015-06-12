@@ -8,6 +8,7 @@ debian/tmp/usr/share/openscada/icons/*
 #debian/tmp/usr/share/applications/openscada.desktop
 #debian/tmp/usr/lib/openscada/*.so
 #debian/tmp/usr/share/locale/*
+debian/tmp/usr/share/locale/*/LC_MESSAGES/openscada.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_DBF.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_SQLite.mo
 debian/tmp/usr/share/locale/*/LC_MESSAGES/oscd_JavaLikeCalc.mo

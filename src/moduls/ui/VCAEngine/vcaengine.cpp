@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -533,15 +533,15 @@ string Engine::callSynth( const string &itxt )
 
     //Read result from result file
     if(!rezFromPipe) {
-	FILE *fp = fopen( synthRez, "r" );
+	FILE *fp = fopen(synthRez, "r");
 	if(!fp) return "";
 	while((comPos=fread(buf,1,sizeof(buf),fp)))
 	    rez.append(buf,comPos);
 	fclose(fp);
-	remove( synthRez );
+	remove(synthRez);
     }
 
-    return TSYS::strEncode( rez, TSYS::base64 );
+    return TSYS::strEncode(rez, TSYS::base64);
 }
 
 void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen )
@@ -602,9 +602,14 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) continue;
 	c_el.cfg("IO_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg));
 	string IO_VAL = c_el.cfg("IO_VAL").getS();
-	attr.at().setS(TSYS::strSepParse(IO_VAL,0,'|'));
-	attr.at().fld().setValues(TSYS::strSepParse(IO_VAL,1,'|'));
-	attr.at().fld().setSelNames(TSYS::strSepParse(IO_VAL,2,'|'));
+	attr.at().setS(IO_VAL);
+	if(type == TFld::Integer || type == TFld::Real || (flg&(TFld::Selected|TFld::SelEdit))) {
+	    attr.at().setS(TSYS::strSepParse(IO_VAL,0,'|'));
+	    attr.at().fld().setValues(TSYS::strSepParse(IO_VAL,1,'|'));
+	    if(flg&(TFld::Selected|TFld::SelEdit)) attr.at().fld().setSelNames(TSYS::strSepParse(IO_VAL,2,'|'));
+	}
+	//!!!! Temporary placed for existing DBs clean up to early fix from using Values and Names to unproper types.
+	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	c_el.cfg("CFG_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg,selfFlg));
@@ -630,8 +635,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	if(ldGen != (bool)(attr.at().flgGlob()&Attr::Generic)) continue;
 
 	//Main attributes store
-	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser))
-	{
+	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser)) {
 	    c_el.cfg("ID").setS( als[i_a] );
 	    c_el.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 		    /*(attr.at().type() == TFld::String &&
@@ -652,7 +656,11 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    c_elu.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 		    /*(attr.at().type() == TFld::String &&
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );*/
-	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+attr.at().fld().values()+"|"+attr.at().fld().selNames());
+	    c_elu.cfg("IO_VAL").setS(attr.at().getS());
+	    if(attr.at().type() == TFld::Integer || attr.at().type() == TFld::Real || (attr.at().flgGlob()&(TFld::Selected|TFld::SelEdit))) {
+		c_elu.cfg("IO_VAL").setS(c_elu.cfg("IO_VAL").getS()+"|"+attr.at().fld().values());
+		if(attr.at().flgGlob()&(TFld::Selected|TFld::SelEdit)) c_elu.cfg("IO_VAL").setS(c_elu.cfg("IO_VAL").getS()+"|"+attr.at().fld().selNames());
+	    }
 	    c_elu.cfg("NAME").setS(attr.at().name());
 	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
 	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());

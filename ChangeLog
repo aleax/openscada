@@ -1,3 +1,15 @@
+2015-06-12 Roman
+- SYS: data/debian/rules and data/debian_mod/rules:
+	some cleaned for rulles dependences;
+	parallel building by key -j2 is added, by Alexey Bondarchuk (aleax);
+    FIX:data/debian_mod/openscada-core.install for openscada.mo placing.
+    FIX: Some original messages fix.
+    TSYS::taskDestroy() expanded by condition variable argument pthread_cond_t for the unlock provide.
+    User API function SYS.fileRemove( string file ) is added.
+- FIX:UI.VCAEngine: Using into user attributes symbol '|' fixed for types no TFld::Integer, TFld::Real and selected.
+- FIX:UI.Vision: The sound alarm empty play command processing fix.
+
+
 2015-05-29 Roman
 - FIX:SYS:debian_mod/control,openscada_mod_ALT.spec,openscada_mod_RH.spec: No printable symbols into packages description fix.
 - !!:FIX:SYS: Only one processor, number 1, set at the multiprocessing checking fix by the real available processors get.

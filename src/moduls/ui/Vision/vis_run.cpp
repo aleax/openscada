@@ -195,14 +195,14 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     // Alarms actions
     //  Alarm level display button and full alarms quittance
     if(!ico_t.load(TUIS::icoGet("alarmLev",NULL,true).c_str())) ico_t.load(":/images/alarmLev.png");
-    actAlrmLev = new QAction( QPixmap::fromImage(ico_t), _("Alarm level"), this );
+    actAlrmLev = new QAction(QPixmap::fromImage(ico_t), _("Alarm level"), this);
     actAlrmLev->setObjectName("alarmLev");
     actAlrmLev->setToolTip(_("Alarm level"));
     actAlrmLev->setWhatsThis(_("The button for all alarms quittance"));
     actAlrmLev->setStatusTip(_("Press for all alarms quittance."));
     //  Alarm by Light
     if(!ico_t.load(TUIS::icoGet("alarmLight",NULL,true).c_str())) ico_t.load(":/images/alarmLight.png");
-    actAlrmLight = new QAction( QPixmap::fromImage(ico_t), _("Blink alarm"), this );
+    actAlrmLight = new QAction(QPixmap::fromImage(ico_t), _("Blink alarm"), this);
     actAlrmLight->setObjectName("alarmLight");
     actAlrmLight->setToolTip(_("Blink alarm"));
     actAlrmLight->setWhatsThis(_("The button for all blink alarms quittance"));
@@ -210,7 +210,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actAlrmLight->setVisible(false);
     //  Alarm by mono sound (PC speaker)
     if(!ico_t.load(TUIS::icoGet("alarmAlarm",NULL,true).c_str())) ico_t.load(":/images/alarmAlarm.png");
-    actAlrmAlarm = new QAction( QPixmap::fromImage(ico_t), _("Speaker alarm"), this );
+    actAlrmAlarm = new QAction(QPixmap::fromImage(ico_t), _("Speaker alarm"), this);
     actAlrmAlarm->setObjectName("alarmAlarm");
     actAlrmAlarm->setToolTip(_("PC speaker alarm"));
     actAlrmAlarm->setWhatsThis(_("The button for all PC speaker alarms quittance"));
@@ -218,7 +218,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actAlrmAlarm->setVisible(false);
     //  Alarm by sound or synthesis of speech
     if(!ico_t.load(TUIS::icoGet("alarmSound",NULL,true).c_str())) ico_t.load(":/images/alarmSound.png");
-    actAlrmSound = new QAction( QPixmap::fromImage(ico_t), _("Sound/speech alarm"), this );
+    actAlrmSound = new QAction(QPixmap::fromImage(ico_t), _("Sound/speech alarm"), this);
     actAlrmSound->setObjectName("alarmSound");
     actAlrmSound->setToolTip(_("Sound or speech alarm"));
     actAlrmSound->setWhatsThis(_("The button for all sound or speech alarms quittance"));
