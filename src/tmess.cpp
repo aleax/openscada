@@ -420,6 +420,7 @@ void TMess::setLang( const string &lng, bool init )
     char *prvLng = NULL;
     if((prvLng=getenv("LANGUAGE")) && strlen(prvLng)) setenv("LANGUAGE", lng.c_str(), 1);
     else setenv("LC_MESSAGES", lng.c_str(), 1);
+    //setenv("LANG", lng.c_str(), 1);	//!!!! May be use further for the miss environment force set
     setlocale(LC_ALL, "");
 
     IOCharSet = nl_langinfo(CODESET);

@@ -1044,12 +1044,15 @@ void VisRun::alarmAct( QAction *alrm )
     if(alrm == NULL) return;
 
     int quittance = 0;
+    bool quittanceRet = false;
     string qwdg;
     if(alrm->objectName() == "alarmLev")	quittance = 0xFF;
     else if(alrm->objectName().toStdString().compare(0,8,"alarmNtf") == 0) {
+	quittanceRet = alrm->property("quittanceRet").toBool();
+	quittanceRet = quittanceRet && !alrm->isChecked();
 	quittance = s2i(alrm->objectName().toStdString().substr(8));
 	map<uint8_t, Notify*>::iterator iN = mNotify.find(quittance);
-	if(iN != mNotify.end()) qwdg = iN->second->curQueueWdg();
+	if(!quittanceRet && iN != mNotify.end()) qwdg = iN->second->curQueueWdg();
 	quittance = (1<<quittance);
     }
     /*else if(alrm->objectName() == "alarmLight")	quittance = 0x01;
@@ -1063,6 +1066,7 @@ void VisRun::alarmAct( QAction *alrm )
     XMLNode req("quittance");
     req.setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm")->
 	setAttr("tmpl", u2s(quittance))->
+	setAttr("ret", i2s(quittanceRet))->
 	setAttr("wdg", qwdg);
     cntrIfCmd(req);
 
@@ -1342,8 +1346,13 @@ void VisRun::alarmSet( unsigned alarm )
 	QAction *cO = menuAlarm->actions()[iAl];
 	if(!cO || cO->objectName().toStdString().compare(0,8,"alarmNtf") != 0)	continue;
 	unsigned nTp = s2i(cO->objectName().toStdString().substr(8));
-	if((ch_tp>>8)&(1<<nTp))		cO->setVisible((alarm>>8)&(1<<nTp));
-	if((ch_tp>>16)&(1<<nTp))	cO->setEnabled((alarm>>16)&(1<<nTp));
+	bool newSt;
+	if((ch_tp>>8)&(1<<nTp) && (newSt=(alarm>>8)&(1<<nTp)) != cO->isVisible()) cO->setVisible(newSt);
+	if((ch_tp>>16)&(1<<nTp)) {
+	    newSt = (alarm>>16)&(1<<nTp);
+	    if(cO->property("quittanceRet").toBool() && !newSt != cO->isChecked()) cO->setChecked(!newSt);
+	    if(!cO->property("quittanceRet").toBool() && newSt != cO->isEnabled()) cO->setEnabled(newSt);
+	}
     }
 
     //Alarm types init
@@ -1559,7 +1568,7 @@ void VisRun::updatePage( )
 //* Notify: Generic notifying object.		 *
 //************************************************
 VisRun::Notify::Notify( uint8_t itp, const string &props, VisRun *iown ) :
-    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false),
+    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_quittanceRet(false),
     toDo(false), alEn(false), comText(props), mQueueCurTm(0), mOwner(iown)
 {
     //The resource allocation object init
@@ -1582,6 +1591,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &props, VisRun *iown ) :
 		}
 		else if(iOpt == "resource")	f_resource = true;
 		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
+		else if(iOpt == "quittanceRet")	f_quittanceRet = true;
 	    }
 	else if(ico.empty() && (fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
 	else if(name.empty() && (fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
@@ -1645,6 +1655,8 @@ VisRun::Notify::Notify( uint8_t itp, const string &props, VisRun *iown ) :
 	actAlrm->setWhatsThis(QString(_("The button for all \"%1\" quittance")).arg(name.c_str()));
 	actAlrm->setStatusTip(QString(_("Press for all \"%1\" quittance.")).arg(name.c_str()));
     }
+    actAlrm->setProperty("quittanceRet", (bool)f_quittanceRet);
+    actAlrm->setCheckable(f_quittanceRet);
     actAlrm->setVisible(false);
     owner()->menuAlarm->addAction(actAlrm);
     owner()->toolBarStatus->addAction(actAlrm);

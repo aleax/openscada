@@ -406,20 +406,20 @@ int Session::alarmStat( )
     return (aqtp<<16)|(atp<<8)|alev;
 }
 
-void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl )
+void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret )
 {
-    if(!wpath.empty()) ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance(quit_tmpl, true);
+    if(!wpath.empty()) ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance(quit_tmpl, true, ret);
     else {
 	vector<string> ls;
 	list(ls);
 	for(unsigned i_p = 0; i_p < ls.size(); i_p++)
-	    at(ls[i_p]).at().alarmQuittance(quit_tmpl, true);
+	    at(ls[i_p]).at().alarmQuittance(quit_tmpl, true, ret);
     }
 
     //The notifications queue quittance
     MtxAlloc resAl(mAlrmRes, true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN)
-	iN->second->queueQuittance(wpath, quit_tmpl);
+	iN->second->queueQuittance(wpath, quit_tmpl, ret);
 
     //Queue alarms quittance
     /*for(unsigned i_q = 0; i_q < mAlrm.size(); i_q++)
@@ -527,12 +527,13 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	if(mAlrmSndPlay < 0 || mAlrmSndPlay >= (int)mAlrm.size()) return string("");
 	return mAlrm[mAlrmSndPlay].path;
     }*/
-    // int alrmQuittance(int quit_tmpl, string wpath = "") - alarm quittance <wpath> with template <quit_tmpl>. If <wpath> is empty
-    //        string then make global quittance.
+    // int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false ) -
+    //        alarm quittance, or return for <ret>, <wpath> with template <quit_tmpl>. If <wpath> is empty string then make global quittance.
     //  quit_tmpl - quittance template
     //  wpath - path to widget
+    //  ret - return the quittance
     else if(iid == "alrmQuittance" && prms.size() >= 1) {
-	alarmQuittance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI());
+	alarmQuittance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI(), (prms.size()>=3) ? prms[2].getB() : false);
 	return 0;
     }
 
@@ -614,7 +615,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    } else if(!((aSt>>16) & Engine::Sound)) mAlrmSndPlay = -1;*/
 	}
 	else if(ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
-	    alarmQuittance(opt->attr("wdg"),~s2i(opt->attr("tmpl")));
+	    alarmQuittance(opt->attr("wdg"), ~s2i(opt->attr("tmpl")), s2i(opt->attr("ret")));
 	return;
     }
 
@@ -851,7 +852,7 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, stri
 {
     string rez;
 
-    lang = SYS->security().at().usrAt(owner()->user()).at().lang();
+    if((lang=SYS->security().at().usrAt(owner()->user()).at().lang()).empty()) lang = Mess->lang();
 
     // Just the resource doing request
     if(!f_queue && f_resource) commCall(false, true, rez, "", lang);
@@ -897,7 +898,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
     uint8_t	aTp  = s2i(TSYS::strParse(alrm,0,"|",&aOff));
     string	aArg = TSYS::strParse(alrm,0,"|",&aOff);
 
-    if(!(aTp&(1<<tp)))	return;
+    //if(!(aTp&(1<<tp)))	return;
 
     QueueIt qIt(wpath, aLev, aCat, aMess, aArg, owner()->calcClk());
 
@@ -906,8 +907,9 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
     unsigned iQ = 0;
     // Check for the entry to present
     while(iQ < mQueue.size() && mQueue[iQ].path != qIt.path) iQ++;
+
     // Clean up the entry from queue
-    if(!qIt.lev) {
+    if(!qIt.lev || !(aTp&(1<<tp))) {
 	if(iQ < mQueue.size()) mQueue.erase(mQueue.begin()+iQ);
 	return;
     }
@@ -932,7 +934,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
     }
 }
 
-void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl )
+void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl, bool ret )
 {
     //Calls to the queue update from alarmQuittance()
     if(!f_queue) return;
@@ -940,7 +942,7 @@ void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl )
     pthread_mutex_lock(&dataM);
     for(unsigned iQ = 0; iQ < mQueue.size(); iQ++)
 	if(mQueue[iQ].path.substr(0,wpath.size()) == wpath)
-	    mQueue[iQ].quittance = !(quitTmpl&(1<<tp));
+	    mQueue[iQ].quittance = !(quitTmpl&(1<<tp)) && !ret;
     pthread_mutex_unlock(&dataM);
 }
 
@@ -1293,24 +1295,26 @@ void SessPage::alarmSet( bool isSet )
     if(isSet) ownerSess()->alarmSet(path(), aCur);
 }
 
-void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet )
+void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet, bool ret )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
-    if(!((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF))) return;
+    if(!ret && !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)))return;
+    if(ret && !(((~(alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>8)&0xFF)))	return;
 
     //Self quittance
-    attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
+    if(!ret) attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
+    else attrAt("alarmSt").at().setI(alarmSt | (((~quit_tmpl)<<16)&(alarmSt<<8)&0xFF0000));
 
     vector<string> lst;
     //Included pages quittance
     pageList(lst);
     for(unsigned i_p = 0; i_p < lst.size(); i_p++)
-	pageAt(lst[i_p]).at().alarmQuittance(quit_tmpl);
+	pageAt(lst[i_p]).at().alarmQuittance(quit_tmpl, false, ret);
 
     //Include widgets quittance
     wdgList( lst );
     for(unsigned i_w = 0; i_w < lst.size(); i_w++)
-	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl);
+	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl, false, ret);
 
     if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
 }
@@ -1723,19 +1727,21 @@ void SessWdg::alarmSet( bool isSet )
     if(isSet) ownerSess()->alarmSet(path(), aCur);
 }
 
-void SessWdg::alarmQuittance( uint8_t quit_tmpl, bool isSet )
+void SessWdg::alarmQuittance( uint8_t quit_tmpl, bool isSet, bool ret )
 {
     int alarmSt = attrAt("alarmSt").at().getI();
-    if(!((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF))) return;
+    if(!ret && !((((alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>16)&0xFF)))return;
+    if(ret && !(((~(alarmSt>>16)&0xFF)^quit_tmpl)&((alarmSt>>8)&0xFF)))	return;
 
     //Self quittance
-    attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
+    if(!ret) attrAt("alarmSt").at().setI(alarmSt & (quit_tmpl<<16|0xFFFF));
+    else attrAt("alarmSt").at().setI(alarmSt | (((~quit_tmpl)<<16)&(alarmSt<<8)&0xFF0000));
 
     vector<string> lst;
     //Include widgets quittance
     wdgList( lst );
     for(unsigned i_w = 0; i_w < lst.size(); i_w++)
-	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl);
+	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl, false, ret);
 
     if(isSet && ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
 }
@@ -1983,7 +1989,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     else if(cfg.id() == "alarmSt" && cfg.getI()&0x1000000) {
 	int tmpl = ~(cfg.getI()&0xFF);
 	cfg.setI(prev.getI(), false, true);
-	ownerSess()->alarmQuittance(path(), tmpl);
+	ownerSess()->alarmQuittance(path(), tmpl, cfg.getI()&0x2000000);
     }
 
     //External link process

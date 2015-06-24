@@ -1,3 +1,19 @@
+2015-06-24 Roman
+- !!:DB.LibsDB.vcaBase.db: Notification's type 2 (TTS) attributes notify2 and notifyVisVision2 significant expanded
+	to checking and using TTS engines: ru_tts, espeak, festival into the priority and recheckig its into visualiser-notificator side
+	at the play resource miss on VCAEngine side.
+    Notification's type 1 (Buzzer) expanded by checking for program "beep" present to the call.
+    main.{anShow,anShow1}: expanded for check the text to speech presenting and the TTS notification disable for the miss.
+- !!:DB.AGLKS.vca.db: To all allowed alarming borders set the notification messages on English and Russian.
+- FIX:data.debian.openscada.init,data.debian_mod.{openscada-plc.init,openscada-server.init},data.{oscada_ALT.init,oscada_gentoo.init}:
+    "export" keyword miss before LANG=en_US.UTF-8 fixed, detected on PLC LP-8781 environment.
+- !!!!:FIX:SYS: User API function system() fixed for full reading popen's pipe, up to EOF.
+- DAQ.System.Sensors: Source code cleaned.
+- !:UI.{VCAEngine,Vision}: Alarm's notifications quittance return by flag 'quittanceRet' to the notificator is added.
+    Using global language for that user's miss is added to notification resource request.
+- FIX:UI.VCAEngine: The queued message removing fixed into the notification's resource part at the alarm real gone for the notification type.
+
+
 2015-06-12 Roman
 - !!:DB: LibsDB.vcaBase.db: To the root page added notification attributes: notify2, notifyVisVision0, notifyVisVision1, notifyVisVision2.
 - !!!!:UI.{VCAEngine,Vision}: New flexible notification mechanism mostly implemented. Previous alarming mechanism commented for while.

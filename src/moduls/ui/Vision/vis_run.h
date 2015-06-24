@@ -61,11 +61,13 @@ class VisRun : public QMainWindow
 		enum IntFuncAttrIdxs { IFA_en = 0, IFA_doNtf, IFA_doRes, IFA_res, IFA_mess, IFA_lang };
 
 		//Methods
-		explicit Notify( ) : tp(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), mOwner(NULL)	{ }
+		explicit Notify( ) : tp(-1), comIsExtScript(false),
+		    f_notify(false), f_resource(false), f_queue(false), f_quittanceRet(false), mOwner(NULL)	{ }
 		Notify( uint8_t tp, const string &props, VisRun *own );
 		~Notify( );
 
 		bool hasQueue( )	{ return f_queue; }
+		bool hasQuittanceRet( )	{ return f_quittanceRet; }
 		string curQueueWdg( );
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
@@ -88,6 +90,7 @@ class VisRun : public QMainWindow
 		unsigned f_notify	:1;	//Notification enabled
 		unsigned f_resource	:1;	//Request the resource for notification: sound file, text or other data
 		unsigned f_queue	:1;	//Use queue of notifications by the priority-level
+		unsigned f_quittanceRet	:1;	//Return quittance mode - enable/disable the notification
 
 		unsigned toDo		:1;	//Need to do some notification doings
 		unsigned alEn		:1;	//Alarm enabled

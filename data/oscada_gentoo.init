@@ -22,7 +22,7 @@ depend() {
 
 start() {
     ebegin "Starting $DNAME"
-    LANG=en_US.UTF-8
+    export LANG=en_US.UTF-8
     start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
     eend $? "Failed to start $DNAME"
 }

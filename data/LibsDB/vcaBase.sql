@@ -9160,12 +9160,12 @@ INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter:address',196613
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter:address',196613,'<EVAL>||',10,'Parameter|var','','el3','Параметр:адреса','','','Параметр:адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter:address',196613,'<EVAL>||',10,'Parameter|var','','el2','Параметр:адреса','','','Параметр:адрес','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpCadr','prmAddr','Parameter:address',196613,'<EVAL>||',10,'Parameter|var','','el1','Параметр:адреса','','','Параметр:адрес','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pErr','Error',131077,'<EVAL>||',10,'Parameter|err','','','Помилка','<EVAL>||','Parameter|err','Ошибка','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pErrCode','Error code',131073,'1||',8,'','','','Код помилки','','','Код ошибки','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pName','Parameter name',131077,'||',10,'Parameter|NAME','','','Ім''я параметру','||','Parameter|NAME','Имя параметра','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pVal','Parameter value',131076,'0||',10,'Parameter|var','','','Значення парметру','','Parameter|var','Значение парметра','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pName','Short name',131077,'||',9,'','','','Ім''я параметра','||','','Имя параметра','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pVal','Parameter:value',131076,'0||',10,'Parameter|var','','','Значення параметра','','Parameter|var','Значение парметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pErr','Error',131077,'<EVAL>',10,'Parameter|err','','','Помилка','<EVAL>||','Parameter|err','Ошибка','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pErrCode','Error code',131073,'1|',8,'','','','Код помилки','','','Код ошибки','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pName','Parameter name',131077,'',10,'Parameter|NAME','','','Ім''я параметру','||','Parameter|NAME','Имя параметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pVal','Parameter value',131076,'0|',10,'Parameter|var','','','Значення парметру','','Parameter|var','Значение парметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pName','Short name',131077,'',9,'','','','Ім''я параметра','||','','Имя параметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pVal','Parameter:value',131076,'0|',10,'Parameter|var','','','Значення параметра','','Parameter|var','Значение парметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_max','Parameter1:maximum',131076,'<EVAL>||',10,'Parameter 1|max','','','Параметр1:максимум','','','Параметр1:максимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_name','Parameter1:name',131077,'<EVAL>||',10,'Parameter 1|NAME','','','Параметр1:ім''я','','','Параметр1:имя','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','calcCnt','Calc counter',131073,'1|',8,'','','','Лічильник обчислень','','','Счётчик вычислений','','','','');
@@ -9236,11 +9236,11 @@ INSERT INTO "wlb_Main_uio" VALUES('grph_panel','type','Type',131073,'<EVAL>||',1
 INSERT INTO "wlb_Main_uio" VALUES('grph_panel','curUSek','Cursor, usec',131073,'<EVAL>||',14,'<page>|curUSek','','','Курсор, мкс','','<page>|curUSek','Курсор, мкс','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','lastView','Last view',131077,'<EVAL>',8,'','','','Останній вигляд','','','Последний вид','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmManIn','Parameter:manual input',131076,'<EVAL>||',14,'Parameter|manIn','','','Параметр:ручний ввід','','Parameter|manIn','Параметр:ручной ввод','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeA','Regulator mode (auto)',131072,'<EVAL>||',10,'Parameter|auto','','','Режим регулятору (автомат)','','Parameter|auto','Режим регулятора (автомат)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeC','Regulator mode (cascad)',131072,'<EVAL>||',10,'Parameter|casc','','','Режим регулятору (каскад)','','Parameter|casc','Режим регулятора (каскад)','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','pPrec','Precision',131073,'1||',10,'Parameter|prec','','','Точність','','Parameter|prec','Точность','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','redEVAL','Speech message generation on reject',131072,'<EVAL>||',9,'','','','Генерація мовного повідомлення у разі відмови','','','Генерация речевого сообщения при отказе','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow','spName','Speech name',131077,'<EVAL>||',9,'','','','Ім’я для синтезу','<EVAL>||','','Имя для синтеза','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeA','Regulator mode (auto)',131072,'<EVAL>',10,'Parameter|auto','','','Режим регулятору (автомат)','','Parameter|auto','Режим регулятора (автомат)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pModeC','Regulator mode (cascad)',131072,'<EVAL>',10,'Parameter|casc','','','Режим регулятору (каскад)','','Parameter|casc','Режим регулятора (каскад)','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','pPrec','Precision',131073,'1|',10,'Parameter|prec','','','Точність','','Parameter|prec','Точность','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','redEVAL','Speech message generation on reject',131072,'<EVAL>',9,'','','','Генерація мовного повідомлення у разі відмови','','','Генерация речевого сообщения при отказе','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow','spName','Speech name',131077,'<EVAL>',9,'','','','Ім’я для синтезу','<EVAL>||','','Имя для синтеза','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPasp','pName','Parameter name',196613,'<EVAL>||',10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digComs','Parameter:digital commands',131077,'OPEN;CLOSE;STOP||',10,'Parameter|digComs','','','Параметр:дискр. команди','ВІДКР;ЗАКР;СТОП||','Parameter|digComs','Параметр:дискр. команды','ОТКР;ЗАКР;СТОП||','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','digStts','Parameter:digital stats',131077,'<EVAL>||',10,'Parameter|digStts','','','Параметр:дискр. стани','ВІДКР;ЗАКР;СТОП||','Parameter|digStts','Параметр:дискр. состояния','','','','');
@@ -9297,7 +9297,7 @@ INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','prec','Precision',131073,'1||',
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','varEl','Value',131076,'<EVAL>||',8,'','','','Значення','','','Значение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMax','Border up warning',131076,'<EVAL>||',10,'Parameter|wMax','','','Границя верхня попереджув.','','Parameter|wMax','Граница верхняя пред.','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMin','Border down warning',131076,'<EVAL>||',10,'Parameter|wMin','','','Границя нижня попереджув.','','Parameter|wMin','Граница нижняя пред.','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','prec','Precision',131073,'1||',10,'Parameter|prec','','','Точність','','Parameter|prec','Точность','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','prec','Precision',131073,'1|',10,'Parameter|prec','','','Точність','','Parameter|prec','Точность','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmVarIn','Parameter:variable input',131076,'<EVAL>||',14,'Parameter|varIn','','','Параметр:ввід змінної','','Parameter|varIn','Параметр:ввод переменной','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_var','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prCnt','Cycles counter',131073,'0||',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
@@ -9352,11 +9352,11 @@ INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_close','Parameter:status-close',
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_open','Parameter:status-open',131072,'0||',10,'Parameter|st_open','','','Параметр:статус-відкрито','','','Параметр:статус-открыто','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_text','Parameter:status (text)',131077,'||',10,'Parameter|st_text','','','Параметр:статус (текст)','','','Параметр:статус (текст)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','stop','Parameter:stop',131072,'0||',14,'Parameter|stop','','','Параметр:стоп','','','Параметр:стоп','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNAME','Parameter:name',131077,'||',10,'Parameter|NAME','','','Параметр:ім''я','||','Parameter|NAME','Параметр:имя','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNameSz','Short name size',131073,'15||',9,'','','','Розмір короткого ім''я','','','Размер короткого имени','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErr','Error',131077,'||',10,'Parameter|err','','','Error','||','Parameter|err','Ошибка','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErrCode','Error code',131073,'0||',8,'','','','Error code','','','Код ошибки','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('anShow1','spName','Speech message generation on reject',131077,'||',9,'','','','Генерація мовного повідомлення у разі відмови','||','','Генерация речевого сообщения при отказе','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNAME','Parameter:name',131077,'',10,'Parameter|NAME','','','Параметр:ім''я','||','Parameter|NAME','Параметр:имя','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNameSz','Short name size',131073,'15|',9,'','','','Розмір короткого ім''я','','','Размер короткого имени','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErr','Error',131077,'',10,'Parameter|err','','','Error','||','Parameter|err','Ошибка','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErrCode','Error code',131073,'0|',8,'','','','Error code','','','Код ошибки','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('anShow1','spName','Speech message generation on reject',131077,'',9,'','','','Генерація мовного повідомлення у разі відмови','||','','Генерация речевого сообщения при отказе','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','pName','Parameter name',196613,'<EVAL>||',10,'Parameter|NAME','','','Ім''я параметру','','Parameter|NAME','Имя параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objDescr','Object:description',131205,'||',10,'Object|DESCR','','','Об''єкт:опис','','','Объект:описание','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objErr','Object:error',131077,'||',10,'Object|err','','','Об''єкт:помилка','','','Объект:ошибка','','','','');
@@ -9377,22 +9377,94 @@ INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmComText','Parameter:command text'
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notify2','Notification:type 2 (TextSpeech)',131205,'#!/bin/sh
 #flags=queue
 if test $doRes = 1 -a "x" != "x$mess"; then
- echo $mess > tmpText
- text2wave tmpText -o $res
- rm tmpText
+ #Specific TTS
+ case $lang in
+  ru_*)
+   iconv=$(which iconv)
+   ru_tts=$(which ru_tts)
+   sox=$(which sox)
+   if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
+    echo "$mess" | $iconv -f $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") -t KOI8-R | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res.wav
+   fi
+   ;;
+  *) > $res.wav; ;;
+ esac
+
+ #Generic TTS for mostly all
+ if test ! -s $res.wav; then
+  espeak=$(which espeak)
+  text2wave=$(which text2wave)
+  if test "x$espeak" != "x"; then
+   echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res.wav
+  elif test "x$text2wave" != "x"; then
+   case $lang in
+    uk_*) langFull="ukrainian"; ;;
+    ru_*) langFull="russian"; ;;
+    en_*) langFull="english"; ;;
+    #!!!! Append here needs
+   esac
+   echo $mess > $res.text; text2wave $res.text -o $res.wav -eval "(language_$langFull)"
+  fi
+ fi
+
+ #Encode before for that less to transfer
+ if test -s $res.wav; then
+  oggenc=$(which oggenc)
+  if test "x$oggenc" != "x"; then oggenc -Q $res.wav -o $res;
+  else mv -f $res.wav $res; fi
+  rm -f $res.wav $res.text
+ fi
 fi',0,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notifyVisVision0','Notification:Vision type 0 (Light)',131205,'//name=Light
 //ico=aLight',0,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notifyVisVision1','Notification:Vision type 1 (Buzzer)',131205,'//flags=notify
 //name=Buzzer
 //ico=aAlarm
-if(en) SYS.system("beep -f 1000 -l 1000000 &", true);
-else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID);',0,'','','','','','','','','','','');
+if(en && (beep=SYS.system("which beep")).length)
+	SYS.system(beep.parse(0,"\n")+" -f 1000 -l 1000000 &", true);
+else if((beepPID=SYS.system("pidof beep")).toInt())	SYS.system("kill "+beepPID);',0,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notifyVisVision2','Notification:Vision type 2 (TextSpeech)',131205,'#!/bin/sh
 #flags=notify2|queue
 #name=Text speech
 #ico=aSound
-if test $en = 1 -a -s $res; then play -q $res; fi',0,'','','','','','','','','','','');
+play=$(which play)
+if test $en = 1 -a "x$play" != "x"; then
+ #Try the resource create here by no that provide by VCAEngine
+ if test ! -s $res -a "x$mess" != "x" -a "x$lang" != "x"; then
+  #Specific TTS
+  case $lang in
+   ru_*)
+    iconv=$(which iconv)
+    ru_tts=$(which ru_tts)
+    sox=$(which sox)
+    if test "x$ru_tts" != "x" -a "x$iconv" != "x" -a "x$sox" != "x"; then
+     echo "$mess" | $iconv -f UTF-8 -t $(echo $lang | sed -n "/^[^.]*\.\(.*\)/s//\1/p") | $ru_tts -p 0.05 -r 0.4 -s /usr/share/ru_tts/lexicon | $sox -t raw -e signed-integer -b 8 -r 10k -c 1 -v 0.8 - -t wav $res
+    fi
+    ;;
+  esac
+
+  #Generic TTS for mostly all
+  if test ! -s $res; then
+   espeak=$(which espeak)
+   text2wave=$(which text2wave)
+   if test "x$espeak" != "x"; then
+    echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res
+   elif test "x$text2wave" != "x"; then
+    case $lang in
+     uk_*) langFull="ukrainian"; ;;
+     ru_*) langFull="russian"; ;;
+     en_*) langFull="english"; ;;
+     #!!!! Append here needs
+    esac
+    echo $mess > $res.text; text2wave $res.text -o $res -eval "(language_$langFull)"
+   fi
+  fi
+ fi
+
+ #Same play for the allowed resource
+ if test -s $res; then play -q $res; fi
+ rm -f $res
+fi',0,'','','','','','','','','','','');
 CREATE TABLE 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
@@ -17707,7 +17779,7 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1434129919);
+}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1435048653);
 INSERT INTO "wlb_Main" VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -17847,11 +17919,12 @@ if(pVal.isEVal()) {
 //Notification create
 if(!pErr.isEVal() && pErrCode != pErr) {
 	pErrCode = pErr;
+	alTp = (!spName.isEVal() && spName.length) ? 7 : 3;
 	if(pErrCode == 1 || pErrCode == 2)	alarm = (redEVAL == true) ? "100|"+pName+"|"+spName+" - "+tr("reject")+".|7" : "100|"+pName+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" "+tr("above alarm border")+".|7";
-	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" "+tr("bellow alarm border")+".|7";
-	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" "+tr("above warning border")+".|7";
-	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" "+tr("bellow warning border")+".|7";
+	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" "+tr("above alarm border")+".|"+alTp;
+	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" "+tr("bellow alarm border")+".|"+alTp;
+	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" "+tr("above warning border")+".|"+alTp;
+	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" "+tr("bellow warning border")+".|"+alTp;
 	else if(alarmSt&0x100)	alarm = "1|"+pName+"||1";
 }
 if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
@@ -17883,7 +17956,7 @@ else { bordColor = "grey"; bordWidth = 1; }
 
 //Check the regulator mode
 if(pModeC == true) mode_text = tr("C");
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1423559579);
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1435130642);
 INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
@@ -17986,11 +18059,12 @@ if(pVal.isEVal()) {
 //Notification create
 if(!pErr.isEVal() && pErrCode != pErr) {
 	pErrCode = pErr;
+	alTp = (!spName.isEVal() && spName.length) ? 7 : 3;
 	if(pErrCode == 1 || pErrCode == 2)	alarm = "100|"+pNAME+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" "+tr("above alarm border")+".|7";
-	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" "+tr("bellow alarm border")+".|7";
-	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" "+tr("above warning border")+".|7";
-	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" "+tr("bellow warning border")+".|7";
+	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" "+tr("above alarm border")+".|"+alTp;
+	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" "+tr("bellow alarm border")+".|"+alTp;
+	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" "+tr("above warning border")+".|"+alTp;
+	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" "+tr("bellow warning border")+".|"+alTp;
 	else if(alarmSt&0x100) alarm = "1|"+pNAME+"||1";
 }
 if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
@@ -18018,7 +18092,7 @@ if(this.attr("focus") ||
   bordColor = (bordColor == "white") ? "grey" : "white";
   bordWidth = 2;
 }
-else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1419427413);
+else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1435130642);
 INSERT INTO "wlb_Main" VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
 OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6

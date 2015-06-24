@@ -21,7 +21,7 @@ RETVAL=0
 
 start()
 {
-    LANG=en_US.UTF-8
+    export LANG=en_US.UTF-8
     start_daemon --lockfile "$LOCKFILE" --pidfile "$PIDFILE" --expect-user root -- $OPENSCADA $ARGS
     RETVAL=$?
     return $RETVAL

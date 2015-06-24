@@ -97,7 +97,7 @@ class Session : public TCntrNode
 	// Alarms-notification processing
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
-	void alarmQuittance( const string &wpath, uint8_t quit_tmpl );	//Alarm quittance send
+	void alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret = false );	//Alarm quittance send
 	void ntfReg( uint8_t tp, const string &props );
 
 	// Style
@@ -155,7 +155,7 @@ class Session : public TCntrNode
 		string ntfRes( unsigned &tm, string &wpath, string &mess, string &lang );	//The notification resource request
 
 		void queueSet( const string &wpath, const string &alrm );
-		void queueQuittance( const string &wpath, uint8_t quitTmpl );	//Notification quittance send
+		void queueQuittance( const string &wpath, uint8_t quitTmpl, bool ret = false );	//Notification quittance send
 
 	    private:
 		//Methods
@@ -285,7 +285,7 @@ class SessWdg : public Widget, public TValFunc
 
 	// Alarms process
 	virtual void alarmSet( bool isSet = false );
-	virtual void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
+	virtual void alarmQuittance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
 
 	// Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
@@ -364,7 +364,7 @@ class SessPage : public SessWdg
 
 	// Alarms process
 	void alarmSet( bool isSet = false );
-	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
+	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
 
 	bool attrPresent( const string &attr );
 	AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
