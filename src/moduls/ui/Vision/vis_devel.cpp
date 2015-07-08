@@ -983,13 +983,12 @@ void VisDevelop::itDBLoad( )
     if(own_wdg.empty()) return;
 
     //Request to confirm
-    InputDlg dlg(this,actDBLoad->icon(),
+    InputDlg dlg(this, actDBLoad->icon(),
 	    QString(_("Are you sure of loading visual items '%1' from DB?")).arg(QString(own_wdg.c_str()).replace(";","; ")),
-	    _("Load visual item's data from DB"),false,false);
+	    _("Load visual item's data from DB"), false, false);
     if(dlg.exec() == QDialog::Accepted) {
 	string cur_wdg;
-	for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
-	{
+	for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); ) {
 	    // Send load request
 	    XMLNode req("load");
 	    req.setAttr("path",cur_wdg+"/%2fobj");

@@ -158,7 +158,7 @@ TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), mInit(false)
 	  "[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"));
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {
     //Free DSCAD
     if(drvInitOk())	dscFree();

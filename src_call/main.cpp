@@ -37,7 +37,7 @@ int main( int argc, char *argv[], char *envp[] )
 
     //Check for the daemon mode and switch to at first
     for(int argPos = 0; (argCom=TSYS::getCmdOpt_(argPos,&argVl,argc,argv)).size(); )
-	if(argCom == "demon") {
+	if(argCom == "demon" || argCom == "daemon") {
 	    if((pid=fork()) == -1) { printf("Error: fork error!\n"); return -1; }
 	    if(pid != 0) return 0;	//Original process close
 
@@ -59,7 +59,7 @@ int main( int argc, char *argv[], char *envp[] )
 
     //Check for other system's command line parameters
     for(int argPos = 0; (argCom=TSYS::getCmdOpt_(argPos,&argVl,argc,argv)).size(); )
-	if(argCom == "CoreDumpAllow") {
+	if(strcasecmp(argCom.c_str(),"coredumpallow") == 0) {
 	    // Set the Dumpable state to be enabled
 	    prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
 	    // Set the core dump limitation to be unlimited
@@ -68,7 +68,8 @@ int main( int argc, char *argv[], char *envp[] )
 	    rlim.rlim_max = RLIM_INFINITY;
 	    setrlimit(RLIMIT_CORE, &rlim);
 	}
-	else if(argCom == "pid-file" && argVl.size() && (pid=open(argVl.c_str(),O_CREAT|O_TRUNC|O_WRONLY,0664)) >= 0) {
+	else if(strcasecmp(argCom.c_str(),"pidfile") == 0 && argVl.size() && (pid=open(argVl.c_str(),O_CREAT|O_TRUNC|O_WRONLY,0664)) >= 0)
+	{
 	    pidFile = argVl;
 	    argVl = i2s(getpid());
 	    write(pid, argVl.data(), argVl.size());

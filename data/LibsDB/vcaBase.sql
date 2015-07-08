@@ -9420,9 +9420,13 @@ INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notifyVisVision0','Notification:Vi
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notifyVisVision1','Notification:Vision type 1 (Buzzer)',131205,'//flags=notify
 //name=Buzzer
 //ico=aAlarm
-if(en && (beep=SYS.system("which beep")).length)
-	SYS.system(beep.parse(0,"\n")+" -f 1000 -l 1000000 &", true);
-else if((beepPID=SYS.system("pidof beep")).toInt())	SYS.system("kill "+beepPID);',0,'','','','','','','','','','','');
+if(en) {
+	if((beep=SYS.system("which beep")).length)
+		SYS.system(beep.parse(0,"\n")+" -f 1000 -l 1000000 &\necho $! > aAlarm.pid", true);
+	else if((play=SYS.system("which play")).length)
+		SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 &\necho $! > aAlarm.pid", true);
+}
+else SYS.system("if test -s aAlarm.pid; then kill $(cat aAlarm.pid); rm aAlarm.pid; fi");',0,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notifyVisVision2','Notification:Vision type 2 (TextSpeech)',131205,'#!/bin/sh
 #flags=notify2|queue
 #name=Text speech
@@ -17779,7 +17783,7 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1435048653);
+}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1436346896);
 INSERT INTO "wlb_Main" VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7

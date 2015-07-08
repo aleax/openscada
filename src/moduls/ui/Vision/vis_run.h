@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,6 @@ class VisRun : public QMainWindow
     public:
 	//Data
 	//* Notify: Generic notifying object.					*
-	//* Replaces the object SndPlay!					*
 	//***********************************************************************
 	class Notify {
 	    public:
@@ -217,9 +216,6 @@ class VisRun : public QMainWindow
 	QAction *actFullScr,			//Full screen action
 	//  Alarms actions
 		*actAlrmLev;			//Alarm level
-		//*actAlrmLight,			//Alarm by Light
-		//*actAlrmAlarm,			//Alarm by mono sound (PC speaker)
-		//*actAlrmSound;			//Alarm by sound or synthesis of speech
 
 	// Main components
 	QTimer		*endRunTimer, *updateTimer;
@@ -246,7 +242,6 @@ class VisRun : public QMainWindow
 
 	// Alarm attributes
 	unsigned	mAlrmSt;		//Alarm status
-	//SndPlay		*alrmPlay;		//Alarm play widget
 	bool		alrLevSet;		//For no quittance lamp blinking
 	unsigned	ntfSet;			//Allowed notificators set mask
 	map<uint8_t, Notify*>	mNotify;	//Notificators

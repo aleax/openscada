@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-12 18:55+0300\n"
+"POT-Creation-Date: 2015-06-28 19:22+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -37,7 +37,6 @@ msgstr ""
 msgid "Developers"
 msgstr "Entwickler"
 
-#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
@@ -50,7 +49,6 @@ msgid ""
 "CachePgLife <hours>   Cached pages lifetime.\n"
 "VCAstation  <id>      VCA station id ('.' - local).\n"
 "RestoreTime <seconds> Restore connection time.\n"
-"PlayCom     <cmd>     Audio alarms' files play command.\n"
 "\n"
 msgstr ""
 "======================== Optionen des Moduls <%s:%s> "
@@ -67,7 +65,6 @@ msgstr ""
 "CachePgLife    <uhr>  Die Lebensdauer der Seiten im Cache.\n"
 "VCAstation      <id>  Station mit der VCA Maschine ('.' - local).\n"
 "RestoreTime <Sekunden> Wiederherstellen Verbindungszeit.\n"
-"PlayCom     <befehl>  Audio-Alarme Dateien abspielen Befehl.\n"
 "\n"
 
 msgid "Load module."
@@ -145,22 +142,6 @@ msgstr "Windows-Lageregelung und sparen"
 
 msgid "Exit on last run project close"
 msgstr "Beenden, wenn der letzte der Ablauf des Projekts"
-
-msgid "Alarms"
-msgstr "Störungen"
-
-msgid "Play command"
-msgstr "Play Kommando"
-
-#, c-format
-msgid ""
-"Command line for call sounds play.\n"
-"Use %f for source file name inserting. If source file is not used play "
-"sample is sent to pipe."
-msgstr ""
-"Kommandozeile für Wiedergabe des Tons.\n"
-"Verwenden Sie %f für Dateinamen. Falls Dateiname nicht verwendet wird, "
-"werden die Dateien in den Kanal gesendet."
 
 #, c-format
 msgid "%d: Development"
@@ -1121,6 +1102,9 @@ msgstr ""
 
 msgid "No one row is selected."
 msgstr "Keine Zeile ist ausgewählt."
+
+msgid "Are you sure of loading a mime to selected item '%1'?"
+msgstr "Sind Sie sicher, der das Laden einer MIME, um ausgewählte Element '%1'?"
 
 msgid "All files (*.*)"
 msgstr "Alle Dateien (*.*)"
@@ -2230,6 +2214,21 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
+
+#~ msgid "Alarms"
+#~ msgstr "Störungen"
+
+#~ msgid "Play command"
+#~ msgstr "Play Kommando"
+
+#~ msgid ""
+#~ "Command line for call sounds play.\n"
+#~ "Use %f for source file name inserting. If source file is not used play "
+#~ "sample is sent to pipe."
+#~ msgstr ""
+#~ "Kommandozeile für Wiedergabe des Tons.\n"
+#~ "Verwenden Sie %f für Dateinamen. Falls Dateiname nicht verwendet wird, "
+#~ "werden die Dateien in den Kanal gesendet."
 
 #~ msgid "Blink alarm"
 #~ msgstr "Blinzalarme"

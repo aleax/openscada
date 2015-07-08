@@ -10,7 +10,7 @@
 	-->
 	<prm id="StName">Work station</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
-	<prm id="Workdir">@oscd_datadir_full@</prm>
+	<prm id="WorkDir">@oscd_datadir_full@</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="SaveAtExit">0</prm>
 	<prm id="SavePeriod">0</prm>

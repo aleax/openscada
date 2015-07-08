@@ -195,7 +195,7 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 	if(s_el.empty()) return t_node;
 	bool ok = false;
 	for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
-	    if(t_node->childGet(i_f)->attr("id") == s_el) {
+	    if(strcasecmp(t_node->childGet(i_f)->attr("id").c_str(),s_el.c_str()) == 0) {
 		t_node = t_node->childGet(i_f);
 		ok = true;
 	    }
@@ -388,35 +388,35 @@ string TSYS::optDescr( )
 	"********** %s v%s (%s-%s). *********\n"
 	"***************************************************************************\n\n"
 	"===========================================================================\n"
-	"========================= The general system options ======================\n"
+	"==================== Generic options ======================================\n"
 	"===========================================================================\n"
-	"-h, --help		Info message about system options.\n"
-	"    --Config=<path>	Config-file path.\n"
-	"    --Station=<id>	The station identifier.\n"
-	"    --StatName=<name>	The station name.\n"
-	"    --demon		Start into demon mode.\n"
-	"    --pid-file=<file>	the file for the programm process ID place here.\n"
-	"    --CoreDumpAllow	Set limits for core dump creation allow on crash.\n"
-	"    --MessLev=<level>	Process messages <level> (0-7).\n"
-	"    --log=<direct>	Direct messages to:\n"
-	"			  <direct> & 1 - syslogd;\n"
-	"			  <direct> & 2 - stdout;\n"
-	"			  <direct> & 4 - stderr;\n"
-	"			  <direct> & 8 - archive.\n"
+	"-h, --help		Info message about the system options.\n"
+	"    --config=<file>	The station configuration file.\n"
+	"    --station=<id>	The station identifier.\n"
+	"    --statName=<name>	The station name.\n"
+	"    --demon, --daemon	Start into the daemon mode.\n"
+	"    --pidFile=<file>	The file for the programm process ID place here.\n"
+	"    --coreDumpAllow	Set the limits for a core dump creation allow on the crash.\n"
+	"    --messLev=<level>	Process messages <level> (0-7).\n"
+	"    --log=<direct>	Direct messages to, by bitfield:\n"
+	"			  0x1 - syslogd;\n"
+	"			  0x2 - stdout;\n"
+	"			  0x4 - stderr;\n"
+	"			  0x8 - the messages archive.\n"
 	"----------- The config-file station '%s' parameters -----------\n"
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
-	"Workdir    <path>	Work directory.\n"
+	"WorkDir    <path>	Work directory.\n"
 	"ModDir     <path>	Modules directory.\n"
 	"IcoDir     <path>	Icons directory.\n"
 	"DocDir     <path>	Documents directory.\n"
 	"MessLev    <level>     Messages <level> (0-7).\n"
 	"SelDebCats <list>	Debug categories list (separated by ';').\n"
-	"LogTarget  <direction> Direct messages to:\n"
-	"			  <direct> & 1 - syslogd;\n"
-	"			  <direct> & 2 - stdout;\n"
-	"			  <direct> & 4 - stderr;\n"
-	"			  <direct> & 8 - archive.\n"
+	"LogTarget  <direction> Direct messages to, by bitfield:\n"
+	"			  0x1 - syslogd;\n"
+	"			  0x2 - stdout;\n"
+	"			  0x4 - stderr;\n"
+	"			  0x8 - the messages archive.\n"
 	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
@@ -466,14 +466,14 @@ bool TSYS::cfgFileLoad( )
     //================ Load parameters from commandline =========================
     string argCom, argVl;
     for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help") {
+	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) {
 	    fprintf(stdout,"%s",optDescr().c_str());
 	    Mess->setMessLevel(7);
 	    cmd_help = true;
 	}
-	else if(argCom == "Config")	mConfFile = argVl;
-	else if(argCom == "Station")	mId = argVl;
-	else if(argCom == "StatName")	mName = argVl;
+	else if(strcasecmp(argCom.c_str(),"config") == 0)	mConfFile = argVl;
+	else if(strcasecmp(argCom.c_str(),"station") == 0)	mId = argVl;
+	else if(strcasecmp(argCom.c_str(),"statname") == 0)	mName = argVl;
 
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
@@ -2268,7 +2268,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/CPU",_("CPU"),R_R_R_,"root","root",1,"tp","str");
 	    if(nCPU() > 1)
 		ctrMkNode("fld",opt,-1,"/gen/mainCPUs",_("Main CPUs set"),RWRWR_,"root","root",2,"tp","str",
-		    "help",_("For CPU set use processors numbers string separated by symbol ':'.\nCPU numbers started from 0."));
+		    "help",_("For using CPU set write processors numbers string separated by symbol ':'.\nCPU numbers started from 0."));
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
@@ -2300,7 +2300,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/subs/br",_("Subsystems"),R_R_R_,"root","root",3,"idm","1","tp","br","br_pref","sub_");
 	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
 	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",2,"key","path",
-		"help",(nCPU()<=1)?"":_("For CPU set use processors numbers string separated by symbol ':'.\n"
+		"help",(nCPU()<=1)?"":_("For an using CPU set write processors numbers string separated by symbol ':'.\n"
 				       "CPU numbers started from 0.")))
 	    {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");

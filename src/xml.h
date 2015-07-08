@@ -62,8 +62,8 @@ class XMLNode
 	};
 
 	//Methods
-	XMLNode(const string &name = "") : mName(name), mText(""), mParent(NULL)	{  }
-	XMLNode(const XMLNode &nd);
+	XMLNode( const string &name = "" ) : mName(name), mText(""), mParent(NULL)	{  }
+	XMLNode( const XMLNode &nd );
 	~XMLNode( )				{ clear(); }
 
 	XMLNode &operator=( const XMLNode &prm );

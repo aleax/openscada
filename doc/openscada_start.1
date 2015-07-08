@@ -1,0 +1,177 @@
+.\" Man page for openscada_start
+.\"
+.\" Copyright (C) 2015 Roman Savochenko.
+.\"
+.\" You may distribute under the terms of the GNU General Public
+.\" License as specified in the file COPYING that comes with the
+.\" OpenSCADA distribution.
+.\"
+.\" Wed Jul 01 12:22:00 EEST 2015 Roman Savochenko (rom_as@oscada.org)
+.\"
+.TH OPENSCADA 1 "2015-07-01" "0.9 Work" "Projects oriented OpenSCADA start"
+.SH NAME
+openscada_start \- Projects oriented \fBOpenSCADA\fP start script
+.SH SYNOPSIS
+\fBopenscada_start\fP [options]
+.SH DESCRIPTION
+\fBOpenSCADA\fP system is an open implementation of SCADA (Supervisory Control And Data Acquisition) and HMI (Human-Machine Interface) systems.
+The main properties of the system are: openness(GPL), multiplatform, modularity and scalability.
+.sp 1
+Heart of the system is the modular kernel.
+Depending on what modules are connected, the system can carry out both functions of various servers,
+and functions of clients of client-server architecture.
+Actually, the architecture of system allows you to realize the distributed client-server systems of any complexity and mixing.
+For achievement of high speed due to reduction of communications time, the architecture allows to unite functions of the distributed systems
+into one program.
+.sp 1
+The script \fBopenscada_start\fP is projects oriented wrapper to the main starter program \fBopenscada\fP which allows creation new projects and
+independent start its. Also the script perform tracing, processing and generation crash reports, if allowed \fBgdb\fP.
+.sp 1
+The project of \fBOpenSCADA\fP is directory named to the project name and placed to the \fBOpenSCADA\fP data directory \fI/usr/share/openscada/\fP,
+for preinstalled projects, and \fI~/.openscada/\fP for user-space projects.
+.sp 1
+The project name \fBProjName\fP can be passed into environment "\fBOSCADA_ProjName=ProjName\fP" or by symbol link name "\fIopenscada_\fP\fBProjName\fP"
+to the script.
+.sp 1
+Call the script without a project name \fBProjName\fP set will cause a dialog for select a new project creation or execute preinstalled and user-space projects.
+Execution a preinstalled project from the user space will cause the project's config file \fI/etc/oscada_\fP\fBProjName\fP\fI.xml\fP and directory copy
+to \fBOpenSCADA\fP user-space data directory \fI~/.openscada/\fP, for the user allow to modify the project.
+.sp 1
+For selection and new project name dialogs building supported the dialog programs, into the priority checking:
+\fBdialog\fP (for active terminal present), \fBkdialog\fP, \fBzenity\fP and \fBXdialog\fP.
+.sp 1
+For access to a new project (default configurations) use account "root" and password "openscada" or account "user" and password "user".
+.sp 1
+The script pass all options to \fBopenscada\fP but some it uses for the projects enviroment prepare!
+
+.SH OPTIONS
+.SS
+.SS Generic options:
+.TP
+.BR \-h ", " \-\-help
+Info message about the system \fBOpenSCADA\fP options.
+.TP
+.BI \-\-config= file
+The station configuration \fIfile\fP.
+.TP
+.BI \-\-station= id
+The station \fIidentifier\fP.
+.TP
+.BI \-\-statName= name
+The station \fIname\fP.
+.TP
+.BR \-\-demon ", " \-\-daemon
+Start into the daemon mode.
+.TP
+.BI \-\-pidFile= file
+The file for the programm process ID place here.
+.TP
+.BI \-\-coreDumpAllow
+Set limits for a core dump creation allow on the crash.
+.TP
+.BI --modPath= path
+Modules \fIpath\fP (/var/os/modules/).
+.TP
+.BI \-\-messLev= level
+Process messages \fIlevel\fP (0-7).
+.TP
+.BI \-\-log= direct
+Direct messages to, by bitfield:
+.RS 11
+0x1 \- syslogd;
+.br
+0x2 \- stdout;
+.br
+0x4 \- stderr;
+.br
+0x8 \- the messages archive.
+.br
+
+.SS The module <Archive:FSArch> options:
+.TP
+.BI \-\-noArchLimit
+Disable archives limit to the file number. Use for see archives mode, not work.
+
+.SS The module <UI:QTStarter> options:
+.TP
+.BI \-\-sync
+Switches to synchronous mode X11 for debugging.
+.TP
+.BI \-\-widgetcount
+Prints debug message at the end about number of widgets left undestroyed and maximum number of widgets existed at the same time.
+.TP
+.BI \-\-qws
+With Qt for Embedded Linux makes this application the server.
+.TP
+.BI \-\-style= nm
+Sets GUI style to \fInm\fP (windows, platinum, plastique, ...).
+.TP
+.BI \-\-stylesheet= path
+Sets styleSheet by \fIpath\fP to file that contains.
+.TP
+.BI \-\-session= nm
+Restores from an earlier session \fInm\fP.
+.TP
+.BI \-\-reverse
+Sets layout direction to Qt::RightToLeft.
+.TP
+.BI \-\-graphicssystem= nm
+Sets the backend to be used for on-screen widgets and QPixmaps (raster, opengl).
+.TP
+.BI \-\-display= nm
+Sets the X display \fIname\fP (default it is $DISPLAY).
+.TP
+.BI \-\-geometry= geom
+Sets the client \fIgeometry\fP of the first window that is shown.
+
+.SH ENVIRONMENT
+.TP
+.B OSCADA_ProjName
+Set \fBOSCADA_ProjName\fP environment to an executed project's name.
+
+.SH FILES
+.TP
+.I /etc/oscada.xml
+\fBOpenSCADA\fP default configuration file
+.TP
+.I /usr/share/openscada/
+Global data files and preinstaled projects directory of \fBOpenSCADA\fP
+.TP
+.I ~/.openscada/
+User-space projects directory of \fBOpenSCADA\fP
+.TP
+.I /etc/oscada_\fBProjName\fP.xml
+The preinstalled project \fBProjName\fP configuration file
+.TP
+.I \fBProjName\fP/oscada.xml
+The project \fBProjName\fP configuration file
+.TP
+.I \fBProjName\fP/*.db
+The project \fBProjName\fP SQLite DB local files
+.TP
+.I \fBProjName\fP/*.crash
+The project \fBProjName\fP crash reports
+.TP
+.I \fBProjName\fP/icons/*
+The project \fBProjName\fP specific media files
+.TP
+.I \fBProjName\fP/docs/*
+The project \fBProjName\fP specific documentation files
+
+.SH SEE ALSO
+.BR openscada (1),
+.BR dialog (1),
+.BR kdialog (1),
+.BR zenity (1)
+.TP
+.B http://oscada.org
+\fBOpenSCADA\fP project's main site
+.TP
+.B http://wiki.oscada.org
+WIKI -resource with all the documentation source
+.sp 1
+Full user documentation is available through the GUI configuration module like \fBQTCfg\fP
+.br
+.SH AUTHORS
+.nf
+Roman Savochenko <rom_as@oscada.org>

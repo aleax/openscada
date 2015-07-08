@@ -1,3 +1,19 @@
+2015-07-08 Roman
+- !!:DB.LibsDB.vcaBase.db: Notification's type 1 (Buzzer) expanded by checking for program "play" use to tone synth at "beep" miss.
+- !!!!:SYS: Command-line options set to not case sensitive, especially for: coreDumpAllow, pidFile, h, help, log, messLev, modPath, config,
+	station, statName, 
+    !!: Some command-line options renamed and appended by synonyms: demon + daemon, CoreDumpAllow to coreDumpAllow, pid-file to pidFile (!),
+	MessLev to messLev, ModPath to modPath, Config to config, Station to station, StatName to statName, 
+    !!: Addressing to the config file properties set not case sensitive for attribute "id" value, especially for: Workdir to WorkDir.
+    !!!!: Wrote and translated to Ukrainian and Russian man pages to generic binary "openscada" and script "openscada_start".
+    !!:data/*.spec, data/{debian,debian_mod}/*.manpages: Expanded for the man-pages include.
+    !!!!:data/{debian,debian_mod}/*.init,data/*.init: Adapted to command-line option renaming "pid-file" to "pidFile".
+    !!!!:data/{debian,debian_mod}: Significant cleaned for most lintian's errors and warnings resolve.
+- FIX:DAQ.SoundCard: Locked resources left prevented for not disabled parameters.
+- UI.Vision: Check and notify about mime loading try to a selected item.
+- UI.{VCAEngine,Vision}: Previous alarm-notify mechanisme's commented code removed.
+
+
 2015-06-24 Roman
 - !!:DB.LibsDB.vcaBase.db: Notification's type 2 (TTS) attributes notify2 and notifyVisVision2 significant expanded
 	to checking and using TTS engines: ru_tts, espeak, festival into the priority and recheckig its into visualiser-notificator side
@@ -11,6 +27,7 @@
 - DAQ.System.Sensors: Source code cleaned.
 - !:UI.{VCAEngine,Vision}: Alarm's notifications quittance return by flag 'quittanceRet' to the notificator is added.
     Using global language for that user's miss is added to notification resource request.
+    User API function of session of project alrmSndPlay() removed as deprecated and inconsistent for new notification concept.
 - FIX:UI.VCAEngine: The queued message removing fixed into the notification's resource part at the alarm real gone for the notification type.
 
 

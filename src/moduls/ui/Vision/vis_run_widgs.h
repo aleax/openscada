@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -114,36 +114,6 @@ namespace VISION
 	    //Private attributes
 	    unsigned	reqtm;		//Request values time
     };
-
-    //*********************************************
-    //* Play sound thread for RunTime session     *
-    //*********************************************
-    /*class SndPlay: public QThread
-    {
-	public:
-	    //Public methods
-	    SndPlay( QObject * parent = 0 );
-
-	    unsigned time( )	{ return mTm; }
-	    string widget( )	{ return mWdg; }
-	    string playData( )	{ return mPlayData; }
-
-	    void setTime( unsigned vl )	{ mTm = vl; }
-	    void setWidget( string vl )	{ mWdg = vl; }
-	    void setData( string vl )	{ mPlayData = vl; }
-
-	    VisRun *mainWin( );
-
-	protected:
-	    //Protected methods
-	    void run( );
-
-	private:
-	    //Private attributes
-	    unsigned	mTm;		//Request last sound time
-	    string	mWdg;		//Play widget
-	    string	mPlayData;	//Play data
-    };*/
 
     //*********************************************
     //* Status bar styles                         *

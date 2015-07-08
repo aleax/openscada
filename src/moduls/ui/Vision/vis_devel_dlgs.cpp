@@ -707,8 +707,7 @@ void LibProjProp::isModify( QObject *snd )
     else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName())
 	req.setText(((LineEdit*)snd)->value().toStdString());
     else if(oname == stl_name->objectName()) { req.setText(((LineEdit*)snd)->value().toStdString()); update = true; }
-    else if(oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == stl_select->objectName())
-    {
+    else if(oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == stl_select->objectName()) {
 	int cPos = ((QComboBox*)snd)->currentIndex();
 	req.setText(((QComboBox*)snd)->itemData(cPos).isNull() ? ((QComboBox*)snd)->itemText(cPos).toStdString() :
 								 ((QComboBox*)snd)->itemData(cPos).toString().toStdString());
@@ -791,8 +790,16 @@ void LibProjProp::delMimeData( )
 
 void LibProjProp::loadMimeData( )
 {
+    if(!mimeDataTable->selectedItems().empty()) {
+	InputDlg dlg(this, windowIcon(),
+	    QString(_("Are you sure of loading a mime to selected item '%1'?")).arg(mimeDataTable->selectedItems()[0]->text()),
+		    _("Load data"), false, false);
+	if(dlg.exec() != QDialog::Accepted) return;
+    }
+
     QString fileName = owner()->getFileName(_("Load data"),"",_("All files (*.*)"));
     if(fileName.isEmpty())	return;
+
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly)) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);

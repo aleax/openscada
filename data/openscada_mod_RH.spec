@@ -124,16 +124,13 @@ Obsoletes: %{name}-Special-FlibSys
 Obsoletes: %{name}-demo
 
 %description
-Open SCADA system. For access use account "root" and password "openscada".
+Open SCADA system.
 %description -l ru_RU.UTF8
-Открытая SCADA система. Для доступа используйте запись "root" и пароль
-"openscada".
+Открытая SCADA система.
 %description -l uk_UA.UTF8
-Відкрита SCADA система. Для доступу використовуйте запис "root" та пароль
-"openscada".
+Відкрита SCADA система.
 %description -l de_DE.UTF8
-Das offene SCADA System. Für den Zugang die Aufzeichnung "root" und das
-Kennwort "openscada" benutzen.
+Das offene SCADA System.
 
 %post
 /sbin/ldconfig
@@ -1096,29 +1093,22 @@ bases and config.
 The Model is used for OpenSCADA demo and allowed for English, Russian
 and Ukrainian languages.
 For start use command <openscada_demo> or <openscada_AGLKS>.
-For access use account "root" and password "openscada" or account "user" and
-password "user".
 %description Model-AGLKS -l ru_RU.UTF8
 Пакет %{name}-Model-AGLKS включает БД и конфигурацию модели "АГЛКС".
 Модель используется для демонстрации OpenSCADA и доступна на Английском,
 Русском и Украинском языках.
 Для старта используйте команду <openscada_demo> мли <openscada_AGLKS>.
-Для доступа используйте запись "root" и пароль "openscada" или запись
-"user" и пароль "user".
 %description Model-AGLKS -l uk_UA.UTF8
 Пакет %{name}-Model-AGLKS включає БД та конфігурацію моделі "АГЛКС".
 Модель використано для демонстрації OpenSCADA та доступно на Англійській,
 Російській та Українській мовах.
 Для старту використовуйте команду <openscada_demo> та <openscada_AGLKS>.
-Для доступу використовуйте запис "root" та пароль "openscada" або запис
-"user" та пароль "user".
 %description Model-AGLKS -l de_DE.UTF8
 Das Paket %{name}-Model-AGLKS enthaelt Datenbanken und
 Konfigurationsdateien Modell "AGLKS".
 Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar
 in Englisch, Russisch und Ukrainisch.
 Fuers Starten wird Kommando <openscada_demo> oder <openscada_AGLKS> benutzt.
-Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package Model-Boiler
 Summary: Model "Boiler" data bases and config (only Russian)
@@ -1154,26 +1144,19 @@ Requires: %{name}-UI-WebVision = %{version}-%{release}
 The %{name}-Model-Boiler package model "Boiler" data bases and config.
 The Model is allowed only for Russian language.
 For start use command <openscada_Boiler>.
-For access use account "root" and password "openscada" or account
-"user" and password "user".
 %description Model-Boiler -l ru_RU.UTF8
 Пакет %{name}-Model-Boiler включает БД и конфигурацию модели "Котёл".
 Модель доступна только на Русском языке.
 Для старта используйте команду <openscada_Boiler>.
-Для доступа используйте запись "root" и пароль "openscada" или запись
-"user" и пароль "user".
 %description Model-Boiler -l uk_UA.UTF8
 Пакет %{name}-Model-Boiler включає БД та конфігурацію моделі "Котел".
 Модель доступно тільки на Російській мові.
 Для старту використовуйте команду <openscada_Boiler>.
-Для доступу використовуйте запис "root" та пароль "openscada" або запис
-"user" та пароль "user".
 %description Model-Boiler -l de_DE.UTF8
 Das Paket %{name}-Model-Boiler enthaelt Datenbanken und
 Konfigurationsdateien Modell "Kessel".
 Das Modell ist nur in Russisch verfügbar.
 Fuers Starten wird Kommando <openscada_Boiler> benutzt.
-Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen. 
 
 # ############################### Virtual Packages ###################################
 %package plc

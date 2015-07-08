@@ -17,7 +17,7 @@ NAME=openscada
 PIDFILE=/var/run/openscada.pid
 LOCKFILE=/var/lock/subsys/openscada
 OPENSCADA_PATH=/usr/bin/openscada
-ARGS="--demon --pid-file=$PIDFILE"
+ARGS="--demon --pidFile=$PIDFILE"
 RETVAL=0
 
 # Sanity checks.

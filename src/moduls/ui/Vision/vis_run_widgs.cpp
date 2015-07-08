@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -602,50 +602,6 @@ void RunPageView::closeEvent( QCloseEvent *event )
 	    mainWin()->cntrIfCmd(req);
 	}*/
 }
-
-//*********************************************
-//* Play sound thread for RunTime session     *
-//*********************************************
-/*SndPlay::SndPlay( QObject *parent ) : QThread(parent)
-{
-
-}
-
-VisRun *SndPlay::mainWin( )	{ return (VisRun *)parent(); }
-
-void SndPlay::run( )
-{
-    if(mod->playCom().empty() || mPlayData.empty()) return;
-
-    size_t comPos = 0;
-    string com = mod->playCom();
-    string srcFile = "/var/tmp/oscadaPlayTmp_"+mainWin()->workSess( );
-
-    //Put source file name to command
-    bool srcToPipe = false;
-    if((comPos=com.find("%f")) != string::npos)	com.replace(comPos, 2, srcFile.c_str());
-    else srcToPipe = true;
-
-    //Write play data to file
-    if(!srcToPipe) {
-	FILE *fp = fopen(srcFile.c_str(), "w");
-	if(!fp)	{ mPlayData.clear(); return; }
-	if(fwrite(mPlayData.data(),1,mPlayData.size(),fp) != mPlayData.size())
-	    mess_err(mod->nodePath().c_str(), _("Error write to: %s"), srcFile.c_str());
-	fclose(fp);
-    }
-
-    //Call play command
-    FILE *fp = popen(com.c_str(), "w");
-    if(!fp) { mPlayData.clear(); return; }
-    //Write data to pipe
-    if(srcToPipe && fwrite(mPlayData.data(),mPlayData.size(),1,fp) != mPlayData.size())
-	mess_err(mod->nodePath().c_str(), _("Error write to: %s"), srcFile.c_str());
-    pclose(fp);
-    if(!srcToPipe) remove(srcFile.c_str());
-
-    mPlayData.clear();
-};*/
 
 //*********************************************
 //* Status bar styles                         *

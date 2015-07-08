@@ -201,30 +201,6 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actAlrmLev->setToolTip(_("Alarm level"));
     actAlrmLev->setWhatsThis(_("The button for all alarms quittance"));
     actAlrmLev->setStatusTip(_("Press for all alarms quittance."));
-    //  Alarm by Light
-    /*if(!ico_t.load(TUIS::icoGet("alarmLight",NULL,true).c_str())) ico_t.load(":/images/alarmLight.png");
-    actAlrmLight = new QAction(QPixmap::fromImage(ico_t), _("Blink alarm"), this);
-    actAlrmLight->setObjectName("alarmLight");
-    actAlrmLight->setToolTip(_("Blink alarm"));
-    actAlrmLight->setWhatsThis(_("The button for all blink alarms quittance"));
-    actAlrmLight->setStatusTip(_("Press for all blink alarms quittance."));
-    actAlrmLight->setVisible(false);
-    //  Alarm by mono sound (PC speaker)
-    if(!ico_t.load(TUIS::icoGet("alarmAlarm",NULL,true).c_str())) ico_t.load(":/images/alarmAlarm.png");
-    actAlrmAlarm = new QAction(QPixmap::fromImage(ico_t), _("Speaker alarm"), this);
-    actAlrmAlarm->setObjectName("alarmAlarm");
-    actAlrmAlarm->setToolTip(_("PC speaker alarm"));
-    actAlrmAlarm->setWhatsThis(_("The button for all PC speaker alarms quittance"));
-    actAlrmAlarm->setStatusTip(_("Press for all PC speaker alarms quittance."));
-    actAlrmAlarm->setVisible(false);
-    //  Alarm by sound or synthesis of speech
-    if(!ico_t.load(TUIS::icoGet("alarmSound",NULL,true).c_str())) ico_t.load(":/images/alarmSound.png");
-    actAlrmSound = new QAction(QPixmap::fromImage(ico_t), _("Sound/speech alarm"), this);
-    actAlrmSound->setObjectName("alarmSound");
-    actAlrmSound->setToolTip(_("Sound or speech alarm"));
-    actAlrmSound->setWhatsThis(_("The button for all sound or speech alarms quittance"));
-    actAlrmSound->setStatusTip(_("Press for all sound or speech alarms quittance."));
-    actAlrmSound->setVisible(false);*/
 
     //Create menu
     menuFile = menuBar()->addMenu(_("&File"));
@@ -235,9 +211,6 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     menuFile->addAction(actQuit);
     menuAlarm = menuBar()->addMenu(_("&Alarm"));
     menuAlarm->addAction(actAlrmLev);
-    /*menuAlarm->addAction(actAlrmLight);
-    menuAlarm->addAction(actAlrmAlarm);
-    menuAlarm->addAction(actAlrmSound);*/
     menuView = menuBar()->addMenu(_("&View"));
     menuView->addAction(actFullScr);
     menuHelp = menuBar()->addMenu(_("&Help"));
@@ -260,9 +233,6 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     toolBarStatus->addAction(menuExport->menuAction());
     toolBarStatus->addSeparator();
     toolBarStatus->addAction(actAlrmLev);
-    /*toolBarStatus->addAction(actAlrmLight);
-    toolBarStatus->addAction(actAlrmAlarm);
-    toolBarStatus->addAction(actAlrmSound);*/
 
     //Init status bar
     mWTime = new QLabel(this);
@@ -306,8 +276,6 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     updateTimer = new QTimer( this );
     updateTimer->setSingleShot(false);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
-
-    //alrmPlay = new SndPlay(this);
 
     //actProjManual->setEnabled(TUIS::docGet(actProjManual->property("doc").toString().toStdString(),NULL,TUIS::GetFilePath).size());
     menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
@@ -1055,12 +1023,6 @@ void VisRun::alarmAct( QAction *alrm )
 	if(!quittanceRet && iN != mNotify.end()) qwdg = iN->second->curQueueWdg();
 	quittance = (1<<quittance);
     }
-    /*else if(alrm->objectName() == "alarmLight")	quittance = 0x01;
-    else if(alrm->objectName() == "alarmAlarm")	quittance = 0x02;
-    else if(alrm->objectName() == "alarmSound") {
-	quittance = 0x04;
-	qwdg = alrmPlay->widget( );
-    }*/
     else return;
 
     XMLNode req("quittance");
@@ -1355,26 +1317,6 @@ void VisRun::alarmSet( unsigned alarm )
 	}
     }
 
-    //Alarm types init
-    // Set monotonic sound alarm
-    /*if(isMaster && (ch_tp>>16)&TVision::Alarm) {
-	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
-	int hd = open(spkEvDev, O_WRONLY);
-	if(hd < 0) mess_warning(mod->nodePath().c_str(),_("Error open: %s"),spkEvDev);
-	else {
-	    input_event ev;
-	    ev.time.tv_sec = time(NULL);
-	    ev.type = EV_SND;
-	    ev.code = SND_TONE;
-	    ev.value = ((alarm>>16)&TVision::Alarm) ? 1000 : 0;
-	    bool fOK = (write(hd,&ev,sizeof(ev)) == sizeof(ev));
-	    ::close(hd);
-	    if(!fOK) mess_warning(mod->nodePath().c_str(), _("Error write to: %s"), spkEvDev);
-	}
-    }
-    // Set speach or sound alarm
-    if(isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty()) alrmPlay->start();*/
-
     //Alarm action indicators update
     // Alarm level icon update
     if(ch_tp&0xFF || (alarm>>16)&ntfSet /*|| (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound)*/ || !alrLevSet) {
@@ -1403,13 +1345,6 @@ void VisRun::alarmSet( unsigned alarm )
 	painter.end();
 	actAlrmLev->setIcon(QPixmap::fromImage(levImage));
     }
-    //Alarm buttons status process
-
-    /*for(int i_b = 0; i_b < 3; i_b++) {
-	QAction *actAlrm = (i_b==0) ? actAlrmLight : ((i_b==1) ? actAlrmAlarm : actAlrmSound);
-	if((ch_tp>>8)&(0x01<<i_b))	actAlrm->setVisible((alarm>>8)&(0x01<<i_b));
-	if((ch_tp>>16)&(0x01<<i_b))	actAlrm->setEnabled((alarm>>16)&(0x01<<i_b));
-    }*/
 
     mAlrmSt = alarm;
 }
@@ -1502,21 +1437,6 @@ void VisRun::updatePage( )
 	    setAttr("mode", "stat")->
 	    setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm");
 	if(!cntrIfCmd(req)) wAlrmSt = s2i(req.attr("alarmSt"));
-
-	// Get sound resources for play
-	/*if(alarmTp(TVision::Sound,true) && !alrmPlay->isRunning()) {
-	    req.clear()->
-		setName("get")->
-		setAttr("mode", "sound")->
-		setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm")->
-		setAttr("tm", u2s(alrmPlay->time()))->
-		setAttr("wdg", alrmPlay->widget());
-	    if(!cntrIfCmd(req)) {
-		alrmPlay->setTime(strtoul(req.attr("tm").c_str(),NULL,10));
-		alrmPlay->setWidget(req.attr("wdg"));
-		alrmPlay->setData(TSYS::strDecode(req.text(),TSYS::base64));
-	    }
-	}*/
 
 	// Set alarm
 	alarmSet(wAlrmSt);

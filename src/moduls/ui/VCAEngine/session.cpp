@@ -35,7 +35,7 @@ using namespace VCA;
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
     mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataM), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
-    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), /*mAlrmSndPlay(-1),*/ mStyleIdW(-1)
+    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mStyleIdW(-1)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -362,33 +362,6 @@ void Session::alarmSet( const string &wpath, const string &alrm )
     //Notifications queue update
     MtxAlloc resAl(mAlrmRes, true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->queueSet(wpath, alrm);
-
-    //Alarms queue process
-    /*ResAlloc res(mAlrmRes, true);
-
-    Alarm aobj(wpath, alrm, calcClk());
-
-    unsigned i_q = 0;
-    while(i_q < mAlrm.size() && mAlrm[i_q].path != aobj.path) i_q++;
-    if(!aobj.lev) {
-	if(i_q < mAlrm.size()) mAlrm.erase(mAlrm.begin()+i_q);
-	return;
-    }
-    if(i_q < mAlrm.size() && aobj.lev == mAlrm[i_q].lev) mAlrm[i_q] = aobj;
-    else {
-	if(i_q < mAlrm.size()) {
-	    mAlrm.erase(mAlrm.begin()+i_q);
-	    if((int)i_q == mAlrmSndPlay) mAlrmSndPlay = -1;
-	    if((int)i_q < mAlrmSndPlay && mAlrmSndPlay >= 0) mAlrmSndPlay--;
-	}
-	unsigned i_q1 = 0;
-	while(i_q1 < mAlrm.size() && aobj.lev >= mAlrm[i_q].lev) i_q1++;
-	if(i_q1 < mAlrm.size()) {
-	    mAlrm.insert(mAlrm.begin()+i_q1, aobj);
-	    if((int)i_q <= mAlrmSndPlay && mAlrmSndPlay >= 0) mAlrmSndPlay++;
-	}
-	else mAlrm.push_back(aobj);
-    }*/
 }
 
 int Session::alarmStat( )
@@ -420,11 +393,6 @@ void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret )
     MtxAlloc resAl(mAlrmRes, true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN)
 	iN->second->queueQuittance(wpath, quit_tmpl, ret);
-
-    //Queue alarms quittance
-    /*for(unsigned i_q = 0; i_q < mAlrm.size(); i_q++)
-	if(mAlrm[i_q].path.substr(0,wpath.size()) == wpath)
-	    mAlrm[i_q].qtp &= quit_tmpl;*/
 }
 
 void Session::ntfReg( uint8_t tp, const string &props )
@@ -521,12 +489,6 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 {
     // string user( ) - the session user
     if(iid == "user")	return user();
-    // string alrmSndPlay( ) - the widget's path for that on this time played the alarm message.
-    /*else if(iid == "alrmSndPlay") {
-	ResAlloc res(mAlrmRes, false);
-	if(mAlrmSndPlay < 0 || mAlrmSndPlay >= (int)mAlrm.size()) return string("");
-	return mAlrm[mAlrmSndPlay].path;
-    }*/
     // int alrmQuittance( int quit_tmpl, string wpath = "", bool ret = false ) -
     //        alarm quittance, or return for <ret>, <wpath> with template <quit_tmpl>. If <wpath> is empty string then make global quittance.
     //  quit_tmpl - quittance template
@@ -589,30 +551,6 @@ void Session::cntrCmdProc( XMLNode *opt )
 		if(iN != mNotify.end()) res = TSYS::strEncode(iN->second->ntfRes(tm,wdg,mess,lang), TSYS::base64);
 		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
 	    }
-	    // Get alarm from sound queue
-	    /*else if(opt->attr("mode") == "sound") {
-		unsigned a_tm  = strtoul(opt->attr("tm").c_str(),NULL,10);
-		opt->setAttr("tm", u2s(calcClk()));
-
-		// Find event, return it and alarm resource
-		ResAlloc res(mAlrmRes, false);
-		string wdg = opt->attr("wdg");
-		int i_q, i_first = -1, i_next = -1;
-		for(i_q = mAlrm.size()-1; i_q >= 0; i_q--) {
-		    if(!(mAlrm[i_q].qtp & Engine::Sound)) continue;
-		    if(wdg.empty() || modifChk(a_tm,mAlrm[i_q].clc) || i_next > 0)	break;	//First, new and next alarms break
-		    if(i_first < 0) i_first = i_q;
-		    if(wdg == mAlrm[i_q].path) i_next = i_q;
-		}
-		if(i_q < 0 && i_first >= 0) i_q = i_first;
-		if(i_q >= 0) {
-		    opt->setAttr("wdg", mAlrm[i_q].path);
-		    if(!mAlrm[i_q].tpArg.empty())
-			opt->setText(((AutoHD<SessWdg>)mod->nodeAt(mAlrm[i_q].path)).at().resourceGet(mAlrm[i_q].tpArg));
-		    else opt->setText(mod->callSynth(mAlrm[i_q].mess));
-		    mAlrmSndPlay = i_q;
-		} else mAlrmSndPlay = -1;
-	    } else if(!((aSt>>16) & Engine::Sound)) mAlrmSndPlay = -1;*/
 	}
 	else if(ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
 	    alarmQuittance(opt->attr("wdg"), ~s2i(opt->attr("tmpl")), s2i(opt->attr("ret")));
@@ -658,16 +596,6 @@ void Session::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages")))
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root",SUI_ID,3,"tp","br","idm","1","br_pref","pg_");
-	/*if(ctrMkNode("area",opt,-1,"/alarm",_("Alarms")))
-	    if(ctrMkNode("table",opt,-1,"/alarm/alarm",_("Alarms list"),R_R_R_,"root",SUI_ID)) {
-		ctrMkNode("list",opt,-1,"/alarm/alarm/wdg",_("Widget"),R_R_R_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/lev",_("Level"),R_R_R_,"root",SUI_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/cat",_("Category"),R_R_R_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/mess",_("Messages"),R_R_R_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/tp",_("Type"),R_R_R_,"root",SUI_ID,1,"tp","hex");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/qtp",_("Quittance"),R_R_R_,"root",SUI_ID,1,"tp","hex");
-		ctrMkNode("list",opt,-1,"/alarm/alarm/tpArg",_("Type argument"),R_R_R_,"root",SUI_ID,1,"tp","str");
-	    }*/
 	return;
     }
 
@@ -730,27 +658,6 @@ void Session::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_f=0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
-    /*else if(a_path == "/alarm/alarm" && ctrChkNode(opt)) {
-	//Fill Archivators table
-	XMLNode *n_wdg	= ctrMkNode("list", opt, -1, "/alarm/alarm/wdg", "", R_R_R_);
-	XMLNode *n_lev	= ctrMkNode("list", opt, -1, "/alarm/alarm/lev", "", R_R_R_);
-	XMLNode *n_cat	= ctrMkNode("list", opt, -1, "/alarm/alarm/cat", "", R_R_R_);
-	XMLNode *n_mess	= ctrMkNode("list", opt, -1, "/alarm/alarm/mess", "", R_R_R_);
-	XMLNode *n_tp	= ctrMkNode("list", opt, -1, "/alarm/alarm/tp", "", R_R_R_);
-	XMLNode *n_qtp	= ctrMkNode("list", opt, -1, "/alarm/alarm/qtp", "", R_R_R_);
-	XMLNode *n_tpArg= ctrMkNode("list", opt, -1, "/alarm/alarm/tpArg", "", R_R_R_);
-
-	ResAlloc res(mAlrmRes, false);
-	for(int i_q = mAlrm.size()-1; i_q >= 0; i_q--) {
-	    if(n_wdg)	n_wdg->childAdd("el")->setText(mAlrm[i_q].path);
-	    if(n_lev)	n_lev->childAdd("el")->setText(i2s(mAlrm[i_q].lev));
-	    if(n_cat)	n_cat->childAdd("el")->setText(mAlrm[i_q].cat);
-	    if(n_mess)	n_mess->childAdd("el")->setText(mAlrm[i_q].mess);
-	    if(n_tp)	n_tp->childAdd("el")->setText(i2s(mAlrm[i_q].tp));
-	    if(n_qtp)	n_qtp->childAdd("el")->setText(i2s(mAlrm[i_q].qtp));
-	    if(n_tpArg)	n_tpArg->childAdd("el")->setText(mAlrm[i_q].tpArg);
-	}
-    }*/
     else TCntrNode::cntrCmdProc(opt);
 }
 
@@ -1027,18 +934,6 @@ void *Session::Notify::Task( void *intf )
     }
     pthread_mutex_unlock(&ntf.dataM);
 }
-
-//* Alarm: Alarm object				 *
-//************************************************
-/*Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) : path(ipath), clc(iclc)
-{
-    int a_off = 0;
-    lev   = s2i(TSYS::strSepParse(alrm,0,'|',&a_off));
-    cat   = TSYS::strSepParse(alrm,0,'|',&a_off);
-    mess  = TSYS::strSepParse(alrm,0,'|',&a_off);
-    qtp   = tp = s2i(TSYS::strSepParse(alrm,0,'|',&a_off));
-    tpArg = TSYS::strSepParse(alrm,0,'|',&a_off);
-}*/
 
 //************************************************
 //* SessPage: Page of Project's session          *
@@ -1368,8 +1263,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session page: ")+ownerFullId()+"/"+id());
 	if(enable() && !(parent().at().prjFlags( )&Page::Empty))
 	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Open"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
-	if(enable() && parent().at().prjFlags()&(Page::Template|Page::Container))
-	{
+	if(enable() && parent().at().prjFlags()&(Page::Template|Page::Container)) {
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))
 		ctrMkNode("list",opt,-1,"/page/page",_("Pages"),R_R_R_,"root","UI",3,"tp","br","idm","1","br_pref","pg_");
 	    if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
@@ -1380,15 +1274,13 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/wdg/st/open" && enable() && !(parent().at().prjFlags()&Page::Empty))
-    {
+    if(a_path == "/wdg/st/open" && enable() && !(parent().at().prjFlags()&Page::Empty)) {
 	if(ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEC_RD))
 	    opt->setText(i2s(attrAt("pgOpen").at().getB()));
 	if(ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR))
 	    attrAt("pgOpen").at().setB(s2i(opt->text()));
     }
-    else if((a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt))
-    {
+    else if((a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt)) {
 	vector<string> lst;
 	pageList(lst);
 	for(unsigned i_f=0; i_f < lst.size(); i_f++)

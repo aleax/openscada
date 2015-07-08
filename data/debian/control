@@ -8,26 +8,32 @@ Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg
  libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libcomedi-dev,
  libssl-dev,
  libfftw3-dev, libqt4-dev | qtbase5-dev, libqtwebkit-dev | libqt5webkit5-dev, libphonon-dev
-Homepage: <http://oscada.org>
+Homepage: http://oscada.org
 
 Package: openscada
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: OpenSCADA system project
- Open SCADA system. For access use account "root" and password "openscada".
+Description: Open SCADA system project
+ Includes the most used modules into the OpenSCADA core library:
+ DB.DBF, DB.SQLite, DAQ.JavaLikeCalc, DAQ.LogicLev,
+ Transport.Sockets, Transport.Serial,
+ Protocol.SelfSystem, Protocol.UserProtocol,
+ Special.FLibComplex1, Special.FLibSYS.
  .
- Includes the most used modules into the OpenSCADA core library: DB.DBF, DB.SQLite, DAQ.JavaLikeCalc, DAQ.LogicLev,
- Transport.Sockets, Transport.Serial, Protocol.SelfSystem, Protocol.UserProtocol, Special.FLibComplex1, Special.FLibSYS.
- .
- External modules (as the shared libraries) builded and included to the package: DB.MySQL, DB.PostgreSQL, DB.FireBird,
- DAQ.BlockCalc, DAQ.DAQGate, DAQ.System, DAQ.ModBus, DAQ.DCON, DAQ.MMS, DAQ.OPC_UA, DAQ.SNMP, DAQ.DiamondBoards(i386),
- DAQ.Comedi, DAQ.ICP_DAS(i386,arm), DAQ.Siemens, DAQ.AMRDevs, DAQ.BFN, DAQ.SoundCard,
+ External modules (as the shared libraries) builded and included to the package:
+ DB.MySQL, DB.PostgreSQL, DB.FireBird,
+ DAQ.BlockCalc, DAQ.DAQGate, DAQ.System, DAQ.ModBus, DAQ.DCON, DAQ.MMS,
+ DAQ.OPC_UA, DAQ.SNMP, DAQ.DiamondBoards(i386), DAQ.Comedi,
+ DAQ.ICP_DAS(i386,arm), DAQ.Siemens, DAQ.AMRDevs, DAQ.BFN, DAQ.SoundCard,
  Archiver.FSArch, Archiver.DBArch,
  Transport.SSL, Protocol.HTTP,
- UI.VCAEngine, UI.QTStarter, UI.QTCfg, UI.Vision, UI.WebCfg, UI.WebCfgD, UI.WebUser, UI.WebVision,
+ UI.VCAEngine, UI.QTStarter, UI.QTCfg, UI.Vision, UI.WebCfg, UI.WebCfgD,
+ UI.WebUser, UI.WebVision,
  Special.FLibMath, Special.SystemTests
 
 Package: openscada-dbg
+Section: debug
+Priority: extra
 Architecture: any
 Depends: openscada (= ${binary:Version}), ${misc:Depends}
 Description: Debug symbols for OpenSCADA
@@ -58,24 +64,25 @@ Package: openscada-libdb-main
 Architecture: all
 Depends: openscada
 Description: Main OpenSCADA libraries for DAQ and other into SQLite DB
- The openscada-libdb-main package includes main OpenSCADA libraries into SQLite DB.
- For use connect SQLite DB file LibsDB/OscadaLibs.db.
+ The openscada-libdb-main package includes main OpenSCADA libraries into
+ SQLite DB. For use connect SQLite DB file LibsDB/OscadaLibs.db.
 
 Package: openscada-libdb-vca
 Architecture: all
 Depends: openscada
 Description: Visual components libraries into SQLite DB
- The openscada-libdb-vca package includes visual components libraries into SQLite DB.
- For use connect SQLite DB file LibsDB/vcaBase.db and LibsDB/vcaTest.db.
+ The openscada-libdb-vca package includes visual components libraries into
+ SQLite DB. For use connect SQLite DB file LibsDB/vcaBase.db and
+ LibsDB/vcaTest.db.
 
 Package: openscada-model-aglks
 Architecture: all
 Depends: openscada, openscada-libdb-main, openscada-libdb-vca
 Description: Model "AGLKS" data bases and config (Demo: EN,RU,UK)
  The openscada-model-aglks package includes model "AGLKS" data bases and config.
- The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
- For start use command <openscada_demo> or <openscada_AGLKS>.
- For access use account "root" and password "openscada" or account "user" and password "user".
+ The Model is used for OpenSCADA demo and allowed for English, Russian and
+ Ukrainian languages. For start use command <openscada_demo> or
+ <openscada_AGLKS>.
 
 Package: openscada-model-boiler
 Architecture: all
@@ -84,4 +91,3 @@ Description: Model "Boiler" data bases and config (EN,RU,UK)
  The openscada-model-boiler package model "Boiler" data bases and config.
  The Model is allowed for English, Russian and Ukrainian languages.
  For start use command <openscada_Boiler>.
- For access use account "root" and password "openscada" or account "user" and password "user".

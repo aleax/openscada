@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -120,7 +120,6 @@ class Session : public TCntrNode
     private:
 	//Data
 	//* Notify: Generic notifying object.					*
-	//* Replaces the object Alarm!						*
 	//***********************************************************************
 	class Notify {
 	    public:
@@ -189,26 +188,6 @@ class Session : public TCntrNode
 		Session	*mOwner;
 	};
 
-	/*class Alarm {
-	    public:
-		//Methods
-		Alarm( const string &ipath, uint8_t ilev, uint8_t itp, const string &icat, const string &imess,
-			    const string &itpArg = "", unsigned iclc = 0 ) :
-		    lev(ilev), tp(itp), path(ipath), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
-		Alarm( const string &path, const string &alrm, unsigned clc );
-		Alarm( ) : lev(0), tp(0), qtp(0)	{ }
-
-		//Attributes
-		uint8_t	lev,	//Level
-			tp,	//Type
-			qtp;	//Quittance type
-		string	path,	//Widget path
-			cat,	//Category
-			mess,	//Message
-			tpArg;	//Type argument
-		unsigned clc;	//Clock
-	};*/
-
 	//Methods
 	static void *Task( void *contr );
 
@@ -232,8 +211,6 @@ class Session : public TCntrNode
 	vector<string>	mOpen;
 
 	map<uint8_t, Notify*>	mNotify;	//Notificators
-	//vector<Alarm>	mAlrm;			//Alarms queue
-	//int		mAlrmSndPlay;		//Now played sound alarm
 
 	// Styles
 	int		mStyleIdW;

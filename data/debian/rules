@@ -77,10 +77,10 @@ binary-common:
 	dh_installinit --no-start
 #	dh_installcron
 #	dh_installinfo
-#	dh_installman
+	dh_installman
 	dh_link
 	dh_strip --dbg-package=openscada-dbg
-#	dh_compress
+	dh_compress
 	dh_fixperms
 	dh_makeshlibs
 	dh_installdeb

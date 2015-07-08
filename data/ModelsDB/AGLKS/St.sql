@@ -1495,7 +1495,6 @@ INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_Vision/RunPrjs','','','
 INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_Vision/VCAstation','.','','');
 INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_Vision/PlayCom','play -q %f','','');
 INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_Vision/CachePgLife','1','','');
-INSERT INTO "SYS" VALUES('root','/Workdir','/mnt/home/roman/work/OScadaD/share/openscada_AGLKS','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/mod_DBArch/mess_test/messTm','0','','');
 INSERT INTO "SYS" VALUES('roman','/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test/ntCalc','1','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/mod_DBArch/mess_test/messCat','','','');

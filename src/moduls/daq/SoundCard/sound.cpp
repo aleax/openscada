@@ -118,7 +118,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 					 ((mSmplType==paFloat32)?r2s(EVAL_REAL).c_str():ll2s(EVAL_INT).c_str())));
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
     nodeDelAll();
 }
@@ -414,6 +414,7 @@ TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), mC
 
 TMdPrm::~TMdPrm( )
 {
+    disable();
     nodeDelAll();
 }
 
@@ -431,24 +432,26 @@ void TMdPrm::load_( )
     TParamContr::load_();
 }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
     TParamContr::enable();
 
     //Set to process
-    if(owner().startStat())	owner().prmEn(id(), true);
+    //if(owner().startStat())
+    owner().prmEn(id(), true);
 }
 
-void TMdPrm::disable()
+void TMdPrm::disable( )
 {
     if(!enableStat())	return;
 
     TParamContr::disable();
 
     //Set to process
-    if(owner().startStat())	owner().prmEn(id(), false);
+    //if(owner().startStat())
+    owner().prmEn(id(), false);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

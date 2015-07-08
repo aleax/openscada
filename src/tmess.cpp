@@ -493,12 +493,12 @@ void TMess::load( )
     //Load params from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	return;
-	else if(argCom == "MessLev") {
+	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) return;
+	else if(strcasecmp(argCom.c_str(),"messlev") == 0) {
 	    int i = atoi(optarg);
 	    if(i >= Debug && i <= Emerg) setMessLevel(i);
 	}
-	else if(argCom == "log") setLogDirect(s2i(argVl));
+	else if(strcasecmp(argCom.c_str(),"log") == 0) setLogDirect(s2i(argVl));
 
     //Load params config-file
     setMessLevel(s2i(TBDS::genDBGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));

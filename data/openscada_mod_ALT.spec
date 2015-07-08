@@ -116,13 +116,13 @@ AutoReq: noshell
 %endif
 Group: Graphics
 %description core
-Open SCADA system core. For access use default account "root" and password "openscada".
+Open SCADA system core.
 %description core -l ru_RU.UTF8
-Ядро открытой SCADA системы. Для доступа используйте типовую учётную запись "root" и пароль "openscada".
+Ядро открытой SCADA системы.
 %description core -l uk_UA.UTF8
-Ядро відкритої SCADA системи. Для доступу використовуйте типовий обліковий запис "root" та пароль "openscada".
+Ядро відкритої SCADA системи.
 %description core -l de_DE.UTF8
-Das offene SCADA System Core. Für den Zugriff Verwendung Standardkonto "root" und das Kennwort "openscada".
+Das offene SCADA System Core.
 
 %package docEN
 Summary: Open SCADA documents (EN)
@@ -249,22 +249,18 @@ Requires: %name-Special.FLibMath
 The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
 The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
 For start use command <openscada_AGLKS>.
-For access use account "root" and password "openscada" or account "user" and password "user".
 %description Model.AGLKS -l ru_RU.UTF8
 Пакет %{name}-Model.AGLKS включает БД и конфигурацию модели "АГЛКС".
 Модель используется для демонстрации OpenSCADA и доступна на Английском, Русском и Украинском языках.
 Для старта используйте команду <openscada_AGLKS>.
-Для доступа используйте запись "root" и пароль "openscada" или запись "user" и пароль "user".
 %description Model.AGLKS -l uk_UA.UTF8
 Пакет %{name}-Model.AGLKS включає БД та конфігурацію моделі "АГЛКС".
 Модель використано для демонстрації OpenSCADA та доступно на Англійській, Російській та Українській мовах.
 Для старту використовуйте команду <openscada_AGLKS>.
-Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" та пароль "user".
 %description Model.AGLKS -l de_DE.UTF8
 Das Paket %{name}-Model.AGLKS enthaelt Datenbanken und Konfigurationsdateien Modell "AGLKS".
 Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Russisch und Ukrainisch.
 Fuers Starten wird Kommando <openscada_AGLKS> benutzt.
-Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package Model.Boiler
 Summary: Model "Boiler" data bases and config (EN,RU,UK)
@@ -284,22 +280,18 @@ Requires: %name-Special.FLibMath
 The %{name}-Model.Boiler package model "Boiler" data bases and config.
 The Model is allowed for English, Russian and Ukrainian languages.
 For start use command <openscada_Boiler>.
-For access use account "root" and password "openscada" or account "user" and password "user".
 %description Model.Boiler -l ru_RU.UTF8
 Пакет %{name}-Model.Boiler включает БД и конфигурацию модели "Котёл".
 Модель доступна доступна на Английском, Русском и Украинском языках.
 Для старта используйте команду <openscada_Boiler>.
-Для доступа используйте запись "root" и пароль "openscada" или запись "user" и пароль "user".
 %description Model.Boiler -l uk_UA.UTF8
 Пакет %{name}-Model.Boiler включає БД та конфігурацію моделі "Котел".
 Модель доступно на Англійській, Російській та Українській мовах.
 Для старту використовуйте команду <openscada_Boiler>.
-Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" та пароль "user".
 %description Model.Boiler -l de_DE.UTF8
 Das Paket %{name}-Model.Boiler enthaelt Datenbanken und Konfigurationsdateien Modell "Kessel".
 Das Modell ist verfügbar in Englisch, Russisch und Ukrainisch.
 Fuers Starten wird Kommando <openscada_Boiler> benutzt.
-Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen. 
 
 %package plc
 Summary: OpenSCADA - PLC virtual package
@@ -1218,6 +1210,14 @@ rm -f %buildroot/%_libdir/openscada/*.la
 install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,docs,LibsDB,AGLKS,Boiler}
 install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 
+install -m 755 -d %buildroot/%_mandir/man1
+install -m 755 -d %buildroot/%_mandir/{uk,ru}/man1
+install -m 644 doc/{openscada.1,openscada_start.1} %buildroot/%_mandir/man1/
+install -m 644 doc/openscada.uk.1 %buildroot/%_mandir/uk/man1/openscada.1
+install -m 644 doc/openscada_start.uk.1 %buildroot/%_mandir/uk/man1/openscada_start.1
+install -m 644 doc/openscada.ru.1 %buildroot/%_mandir/ru/man1/openscada.1
+install -m 644 doc/openscada_start.ru.1 %buildroot/%_mandir/ru/man1/openscada_start.1
+
 ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
 ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 
@@ -1252,6 +1252,8 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 %_bindir/openscada
 %_bindir/openscada_start
 %doc README README_ru README_uk COPYING ChangeLog INSTALL TODO TODO_ru TODO_uk
+%_mandir/man1/*
+%_mandir/*/man1/*
 %_libdir/*.so.*
 #_libdir/openscada/*.so
 #exclude %_libdir/openscada/*.a
