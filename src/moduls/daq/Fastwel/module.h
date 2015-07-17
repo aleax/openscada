@@ -62,7 +62,7 @@ namespace ModFastwel {
 	} void enable();
 	void disable();
 
-	int getVals();
+	void getVals();
 
 	TMdContr & owner();
 	bool InitDI(DIM_CONFIGURATION* pConfigDIM);

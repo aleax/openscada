@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-16 08:37+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Fastwel IO"
+msgstr ""
+
+msgid "Maxim Kochetkov"
+msgstr ""
+
+msgid "Fastwel IO FBUS client implementation"
+msgstr ""
+
+msgid "FBUS init failed."
+msgstr ""
+
+#, c-format
+msgid "FBUS open net #%d failed."
+msgstr ""
+
+#, c-format
+msgid "FBUS rescan net #%d failed."
+msgstr ""
+
+#, c-format
+msgid "FBUS GetNodeDescription net #%d, #id%d  failed."
+msgstr ""
+
+msgid "DIM762 Parameteres table"
+msgstr ""
+
+msgid "DIM716 Parameteres table"
+msgstr ""
+
+msgid "DIM718 Parameteres table"
+msgstr ""
+
+msgid "AIM791 Parameteres table"
+msgstr ""
+
+msgid "AIM726 Parameteres table"
+msgstr ""
+
+msgid "AIM730 Parameteres table"
+msgstr ""
+
+msgid "AIM725 Parameteres table"
+msgstr ""
+
+msgid "Acquisition schedule"
+msgstr ""
+
+msgid "Gather task priority"
+msgstr ""
+
+msgid "Network number"
+msgstr ""
+
+msgid "DIM762"
+msgstr ""
+
+msgid "Device address"
+msgstr ""
+
+msgid "Debounce"
+msgstr ""
+
+msgid "No;200us;3ms"
+msgstr ""
+
+msgid "Enable counting"
+msgstr ""
+
+msgid "DIM716"
+msgstr ""
+
+msgid "DIM718"
+msgstr ""
+
+msgid "AIM791"
+msgstr ""
+
+msgid "Input range"
+msgstr ""
+
+msgid "0..5mA;0..20mA;4..20mA"
+msgstr ""
+
+msgid "Scan Rate"
+msgstr ""
+
+msgid "Filter depth"
+msgstr ""
+
+msgid "AIM726"
+msgstr ""
+
+msgid "AIM730"
+msgstr ""
+
+msgid "Output range"
+msgstr ""
+
+msgid "0..20mA;4..20mA"
+msgstr ""
+
+msgid "AIM725"
+msgstr ""
+
+msgid "Sensor range"
+msgstr ""
+
+msgid "PT50;PT100;PT200;PT500;PT1000;NI100;NI120;CU100;CU50;0-150 Ohm;0-300 Ohm;0-600 Ohm;0-1500 Ohm; 0-3000 Ohm"
+msgstr ""
+
+msgid "Sensor type"
+msgstr ""
+
+msgid "2-wire;3-wire"
+msgstr ""
+
+msgid "Call now. "
+msgstr ""
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr ""
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s."
+msgstr ""
+
+#, c-format
+msgid "typename %s"
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Acquisition is stopped."
+msgstr ""
+
+msgid "0: Normal"
+msgstr ""
+
+#, c-format
+msgid "3: Wrong type: %s"
+msgstr ""

@@ -1,3 +1,6 @@
+2015-07-17 fido_max
+- DAQ.Fastwel: AIM725 added. AIM791 high/low limit init on enable.
+
 2015-07-08 Roman
 - !!:DB.LibsDB.vcaBase.db: Notification's type 1 (Buzzer) expanded by checking for program "play" use to tone synth at "beep" miss.
 - !!!!:SYS: Command-line options set to not case sensitive, especially for: coreDumpAllow, pidFile, h, help, log, messLev, modPath, config,
