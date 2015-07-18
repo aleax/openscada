@@ -32,12 +32,14 @@ using namespace OSCADA;
 TFunction::TFunction( const string &iid, const char *igrp, const string &istor ) :
     mId(iid), mStor(istor), run_st(false), be_start(false), mTVal(NULL), grp(igrp)
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TFunction::~TFunction( )
 {
     for(unsigned i_io = 0; i_io < mIO.size(); i_io++) delete mIO[i_io];
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 TFunction &TFunction::operator=( TFunction &func )

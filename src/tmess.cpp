@@ -160,8 +160,8 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 	}
 	syslog(level_sys, "%s", sMess.c_str());
     }
-    if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", tm2s(SYS->sysTm(),"").c_str(), sMess.c_str());
-    if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", tm2s(SYS->sysTm(),"").c_str(), sMess.c_str());
+    if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", tm2s(SYS->sysTm(),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
+    if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", tm2s(SYS->sysTm(),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
     if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
 	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
 }

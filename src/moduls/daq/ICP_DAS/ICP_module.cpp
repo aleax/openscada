@@ -274,7 +274,7 @@ void TMdContr::setPrmLP( const string &prm, const string &vl )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res( en_res, true );
+    ResAlloc res(en_res, true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -382,7 +382,7 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 		}
 		catch(TError er) {	//By possible the send request breakdown and no response
 		    if(err.empty()) err = "10:" + er.mess;
-		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		    else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		    continue;
 		}
 		if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }

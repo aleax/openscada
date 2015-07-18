@@ -40,7 +40,7 @@ TParamContr::TParamContr( const string &name, TTypeParam *tpprm ) : TConfig(tppr
     if(type().isPrmCntr) mPrm = grpAdd("prm_");
     type().create(this);
 
-    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQParamCntr",1);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TParamContr::~TParamContr( )
@@ -48,7 +48,7 @@ TParamContr::~TParamContr( )
     type().destroy(this);
     nodeDelAll();
 
-    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQParamCntr",-1);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 string TParamContr::objName( )	{ return TValue::objName()+":TParamContr"; }

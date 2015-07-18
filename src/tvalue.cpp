@@ -33,11 +33,15 @@ using namespace OSCADA;
 TValue::TValue( ) : l_cfg(0), mCfg(NULL)
 {
     m_vl = grpAdd("a_", true);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TValue::~TValue( )
 {
     while(elem.size()) vlElemDet(elem[0]);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 string TValue::objName( )	{ return TCntrNode::objName() + ":TValue"; }

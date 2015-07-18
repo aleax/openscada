@@ -48,8 +48,8 @@
 using namespace OSCADA;
 
 //Continuously access variable
-TMess	*OSCADA::Mess;
-TSYS	*OSCADA::SYS;
+TMess	*OSCADA::Mess = NULL;
+TSYS	*OSCADA::SYS = NULL;
 bool TSYS::finalKill = false;
 pthread_key_t TSYS::sTaskKey;
 

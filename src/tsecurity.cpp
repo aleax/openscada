@@ -365,7 +365,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	if(picture().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/prm",_("User"))) {
 	    TConfig::cntrCmdMake(opt,"/prm",0,name().c_str(),SSEC_ID,RWRWR_);
-	    if(!Mess->translDyn()) ctrRemoveNode(opt,"/prm/LANG");
+	    //if(!Mess->translDyn()) ctrRemoveNode(opt,"/prm/LANG");
 	    ctrMkNode("img",opt,-1,"/prm/PICTURE",EVAL_STR,RWRWR_,name().c_str(),SSEC_ID,1,"v_sz","100");
 	    ctrMkNode("fld",opt,-1,"/prm/PASS",EVAL_STR,RWRW__,name().c_str(),SSEC_ID);
 	    if(ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root",SSEC_ID,1,"key","grp")) {

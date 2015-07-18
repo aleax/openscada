@@ -1422,7 +1422,7 @@ TVariant VFileArch::getVal( int vpos )
 bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     int vpos_beg, vpos_end;
-    string val_b, value, value_first, value_end;	//Set value
+    string val_b, value, value_first, value_end = eVal;	//Set value
 
     ResAlloc res(mRes, false);
     if(mErr) return false;	//throw TError(owner().archivator().nodePath().c_str(), _("Archive file error!"));

@@ -35,29 +35,76 @@ using namespace OSCADA;
 //*************************************************
 //* TVariant                                      *
 //*************************************************
-TVariant::TVariant( ) : mType(Null), mModify(false), mFixedTp(false)			{ }
+TVariant::TVariant( ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( bool ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setB(ivl); }
+TVariant::TVariant( bool ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setB(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setB(ivl); }
+TVariant::TVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setB(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setI(ivl); }
+TVariant::TVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setI(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( int64_t ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setI(ivl); }
+TVariant::TVariant( int64_t ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setI(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setR(ivl); }
+TVariant::TVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setR(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setS(ivl); }
+TVariant::TVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setS(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setS(ivl); }
+TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setS(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( AutoHD<TVarObj> ivl ) : mType(Null), mModify(false), mFixedTp(false){ setO(ivl); }
+TVariant::TVariant( AutoHD<TVarObj> ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setO(ivl);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setO(AutoHD<TVarObj>(ivl)); }
+TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    setO(AutoHD<TVarObj>(ivl));
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::TVariant( const TVariant &var ) : mType(Null), mModify(false), mFixedTp(false){ operator=(var); }
+TVariant::TVariant( const TVariant &var ) : mType(Null), mModify(false), mFixedTp(false)
+{
+    operator=(var);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-TVariant::~TVariant( )	{ setType(Null); }
+TVariant::~TVariant( )
+{
+    setType(Null);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
+}
 
 void TVariant::setType( Type tp, bool fix )
 {
@@ -288,14 +335,14 @@ TVarObj::TVarObj( ) : mUseCnt(0)
     pthread_mutex_init(&dataM, &attrM);
     pthread_mutexattr_destroy(&attrM);
 
-    if(mess_lev() == TMess::Debug) SYS->cntrIter("VarObjCntr",1);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TVarObj::~TVarObj( )
 {
-    if(mess_lev() == TMess::Debug) SYS->cntrIter("VarObjCntr",-1);
-
     pthread_mutex_destroy(&dataM);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 void TVarObj::AHDConnect( )
@@ -442,12 +489,12 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
 //*****************************************************************
 TEValObj::TEValObj( )
 {
-    if(mess_lev() == TMess::Debug) SYS->cntrIter("EValObjCntr",1);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), 1);
 }
 
 TEValObj::~TEValObj( )
 {
-    if(mess_lev() == TMess::Debug) SYS->cntrIter("EValObjCntr",-1);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), -1);
 }
 
 TVariant TEValObj::funcCall( const string &id, vector<TVariant> &prms )
@@ -472,6 +519,16 @@ AutoHD<TVarObj> TEValObj::parseStrXML( XMLNode *nd )	{ return new TEValObj; }
 //* TArrayObj                                                *
 //*   Array object included indexed properties               *
 //***********************************************************
+TArrayObj::TArrayObj( )
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), 1);
+}
+
+TArrayObj::~TArrayObj( )
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), -1);
+}
+
 TVariant TArrayObj::propGet( const string &id )
 {
     if(id == "length")			return (int)mEls.size();
@@ -679,12 +736,16 @@ TRegExp::TRegExp( const string &rule, const string &flg ) :
     regex(NULL), vSz(90), capv(NULL)
 {
     setPattern(rule, flg);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), 1);
 }
 
 TRegExp::~TRegExp( )
 {
     if(capv)	delete [] capv;
     if(regex)	pcre_free((pcre*)regex);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), -1);
 }
 
 void TRegExp::setPattern( const string &rule, const string &flg )
@@ -874,12 +935,14 @@ string TRegExp::getStrXML( const string &oid )
 //*************************************************
 XMLNodeObj::XMLNodeObj( const string &name ) : mName(name), parent(NULL)
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), 1);
 }
 
 XMLNodeObj::~XMLNodeObj( )
 {
     while(childSize()) childDel(0);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), -1);
 }
 
 string XMLNodeObj::name( )
@@ -1189,6 +1252,13 @@ AutoHD<XMLNodeObj> XMLNodeObj::getElementBy( const string &attr, const string &v
 TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind, const string &iuser ) : mUser(iuser)
 {
     cnd = ind;
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), 1);
+}
+
+TCntrNodeObj::~TCntrNodeObj( )
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), -1);
 }
 
 string TCntrNodeObj::objName( )

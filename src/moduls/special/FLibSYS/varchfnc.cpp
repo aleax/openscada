@@ -29,9 +29,16 @@ using namespace FLibSYS;
 //*************************************************
 //* VArchObj - Value archive object               *
 //*************************************************
-VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)	{ }
+VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)
+{
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
 
-VArchObj::~VArchObj( )	{ close(); }
+VArchObj::~VArchObj( )
+{
+    close();
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
+}
 
 bool VArchObj::open( const string &inm )
 {

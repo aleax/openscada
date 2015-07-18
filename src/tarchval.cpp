@@ -2536,7 +2536,9 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 	for(int64_t c_tm = beg; c_tm <= end; ) {
 	    switch(ibuf.valType()) {
 		case TFld::Boolean: {
-		    float c_val = ibuf.getB(&c_tm, true);
+		    float c_val = EVAL_BOOL;
+		    if(wPrevVal.empty()) wPrevVal.assign((char*)&c_val, sizeof(float));
+		    c_val = ibuf.getB(&c_tm, true);
 		    if(combM == TVArchive::LastVal) { obuf.setB((char)c_val,c_tm); c_tm += a_per; break; }
 
 		    int vdif = c_tm/a_per - wPrevTm/a_per;
@@ -2551,7 +2553,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 				    c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
 				    break;
 				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
-				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+				case TVArchive::MaxVal:	c_val = vmax(c_val,v_o); break;
 				default: break;
 			    }
 			wPrevVal.assign((char*)&c_val,sizeof(float));
@@ -2575,7 +2577,9 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		    break;
 		}
 		case TFld::Integer: {
-		    int64_t c_val = ibuf.getI(&c_tm, true);
+		    int64_t c_val = EVAL_INT;
+		    if(wPrevVal.empty()) wPrevVal.assign((char*)&c_val, sizeof(int64_t));
+		    c_val = ibuf.getI(&c_tm, true);
 		    if(combM == TVArchive::LastVal) { obuf.setI(c_val,c_tm); c_tm += a_per; break; }
 
 		    int vdif = c_tm/a_per - wPrevTm/a_per;
@@ -2605,7 +2609,9 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		    break;
 		}
 		case TFld::Real: {
-		    double c_val = ibuf.getR(&c_tm, true);
+		    double c_val = EVAL_REAL;
+		    if(wPrevVal.empty()) wPrevVal.assign((char*)&c_val, sizeof(double));
+		    c_val = ibuf.getR(&c_tm, true);
 		    if(combM == TVArchive::LastVal) { obuf.setR(c_val, c_tm); c_tm += a_per; break; }
 
 		    int vdif = c_tm/a_per - wPrevTm/a_per;

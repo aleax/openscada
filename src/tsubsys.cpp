@@ -33,11 +33,15 @@ using namespace OSCADA;
 TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : mStart(false), mModSys(modi), mMod(-1), mId(id), mName(name)
 {
     if(subModule()) mMod = grpAdd("mod_", true);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TSubSYS::~TSubSYS( )
 {
     nodeDelAll();
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 string TSubSYS::objName( )	{ return TCntrNode::objName()+":TSubSYS"; }

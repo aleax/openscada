@@ -130,7 +130,7 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
     if(!startStat()) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
     else if(!redntUse())
-	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost frames %g"),
+	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2g MB. Adjusted samplerate %d. Lost frames %g"),
 	    numChan, acqSize, sRt, lostFrmsCntr);
 
     return val;

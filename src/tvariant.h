@@ -86,6 +86,8 @@ class TVariant
 	bool operator!=( const TVariant &vr ) const;
 	TVariant &operator=( const TVariant &vr );
 
+	virtual string objName( )	{ return "TVariant"; }
+
 	bool isNull( ) const	{ return (type()==Null); }
 	bool isEVal( ) const;
 	Type type( ) const	{ return (Type)mType; }
@@ -193,7 +195,8 @@ class TArrayObj : public TVarObj
 {
     public:
 	//Methods
-	TArrayObj( )	{ };
+	TArrayObj( );
+	~TArrayObj( );
 
 	string objName( )	{ return "array"; }
 
@@ -319,6 +322,7 @@ class TCntrNodeObj: public TVarObj
     public:
 	//Methods
 	TCntrNodeObj( AutoHD<TCntrNode> nd, const string &user );
+	~TCntrNodeObj( );
 
 	string objName( );
 

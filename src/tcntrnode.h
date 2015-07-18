@@ -183,7 +183,7 @@ class TCntrNode
 	int8_t	grpSize( );
 	int8_t	grpId( const string &sid );
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-	void chldList( int8_t igr, vector<string> &list, bool noex = false );
+	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true );
 	bool chldPresent( int8_t igr, const string &name );
 
     protected:

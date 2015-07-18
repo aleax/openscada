@@ -270,7 +270,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	    }
 	    catch(TError er) {	//By possible the send request breakdown and no response
 		if(err.empty()) err = _("10:Transport error: ") + er.mess;
-		else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		continue;
 	    }
 	    if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }

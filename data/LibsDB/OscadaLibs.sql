@@ -1,39 +1,5 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
-CREATE TABLE 'JavaLikePrm_prescr' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"FLD" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
-INSERT INTO "JavaLikePrm_prescr" VALUES('cntr','Control','',1,'mode
-prog
-startTm
-curCom
-comLs
-work','Управление','','Контроль','');
-CREATE TABLE 'LogLevPrm_prescription_io' ("PRM_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("PRM_ID","ID"));
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','run','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','pause','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','error','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','abort','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','rez','1','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','arg1','20','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','tmp1','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_frq','5','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_start','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_stop','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_err','0','','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','run','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','pause','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','error','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','abort','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','rez','1','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','arg1','10','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_frq','5','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_start','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_stop','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_err','0','','0');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','start','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','stop','1','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','start','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','stop','1','','');
 CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ParamTemplLibs" VALUES('S7','S7','','Templates library of parameters for PLC series S7 of firm Siemens.','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.');
 INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Allow realisation of the main templates.','Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Предоставляет реализацию базовых шаблонов.');
@@ -375,45 +341,6 @@ INSERT INTO "lib_servProc_io" VALUES('archPackFStests','per','Period, seconds',1
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
 INSERT INTO "lib_servProc_io" VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
-CREATE TABLE 'prescr_val' ("ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "prescr_val" VALUES('dbDB','SQLite.vcaBase');
-INSERT INTO "prescr_val" VALUES('dbComs','PrescrComs');
-INSERT INTO "prescr_val" VALUES('dbProgs','PrescrProgs');
-INSERT INTO "prescr_val" VALUES('mode','-2');
-INSERT INTO "prescr_val" VALUES('curMode','-2');
-INSERT INTO "prescr_val" VALUES('prog','abcd');
-INSERT INTO "prescr_val" VALUES('startTm','1413479709');
-INSERT INTO "prescr_val" VALUES('curCom','3');
-INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg name="abcd" seekPos="1" wtm="52">
-<XMLNodeObj:com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
-</XMLNodeObj:com>
-<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.1" proc="&lt;EVAL&gt;">
-<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.2" proc="&lt;EVAL&gt;">
-</XMLNodeObj:com>
-</XMLNodeObj:com>
-<XMLNodeObj:com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
-</XMLNodeObj:com>
-</XMLNodeObj:prg>
-');
-INSERT INTO "prescr_val" VALUES('comsCntr','LogicLev.prescription');
-INSERT INTO "prescr_val" VALUES('comLs','<TVarObj>
-<TVarObj p=''Background timer''>
-<str p=''arg1''>Time (s)</str>
-<str p=''descr''>Background timer. Updating parallel with current command.</str>
-<str p=''prmID''>backTimer</str>
-</TVarObj>
-<TVarObj p=''Timer''>
-<str p=''arg1''>Time (s)</str>
-<str p=''descr''>Typical timer. Hold run up to time elapse.</str>
-<str p=''prmID''>timer</str>
-</TVarObj>
-</TVarObj>
-');
-INSERT INTO "prescr_val" VALUES('clcCnt','10314183');
-INSERT INTO "prescr_val" VALUES('f_frq','5');
-INSERT INTO "prescr_val" VALUES('f_start','0');
-INSERT INTO "prescr_val" VALUES('f_stop','0');
-INSERT INTO "prescr_val" VALUES('this','<TCntrNodeObj path="/sub_DAQ/mod_JavaLikeCalc/cntr_prescr/"/>');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
 значений датчиков.
@@ -1573,12 +1500,7 @@ INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',5,'','
 INSERT INTO "tmplib_base_io" VALUES('anUnif','log','Logarithmic scale',3,32,'0',17,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
-INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Рецепты','Рецепти','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
-CREATE TABLE 'LogLevPrm_prescription' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовой таймер. Удерживает выполнение до завершения времени.','Типовий таймер. Утримує виконання до завершення часу.',1,'PrescrTempl.timer');
-INSERT INTO "LogLevPrm_prescription" VALUES('backTimer','','Background timer','Фоновый таймер','Фоновий таймер','Background timer. Updating parallel with current command.','Фоновый таймер. Обновляется параллельно с текущей командой.','Фоновий таймер. Оновлюється паралельно з поточною командою.',1,'PrescrTempl.backTimer');
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "DAQ_LogicLev" VALUES('prescription','Prescription commands','Команды рецепта','Команди рецепту','','','',1,1,3,0,'<high>','LogLevPrm_prescription','LogLevPrmRefl_prescription',0,'0.2',0);
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '''''''''''''' ,"ID" TEXT DEFAULT '''''''''''''' ,"NAME" TEXT DEFAULT '''''''''''''' ,"TYPE" INTEGER DEFAULT '''''''''''''' ,"MODE" INTEGER DEFAULT '''''''''''''' ,"DEF" TEXT DEFAULT '''''''''''''' ,"HIDE" INTEGER DEFAULT '''''''''''''' ,"POS" INTEGER DEFAULT '''''''''''''' ,"ru#NAME" TEXT DEFAULT '''''' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "flb_web_io" VALUES('alarms','rules','Rules',0,1,'\n',0,0,'Правила','Правила');
 INSERT INTO "flb_web_io" VALUES('devMon','rez','Result',0,2,'',0,0,'Результат','Результат');

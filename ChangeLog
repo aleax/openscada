@@ -1,5 +1,19 @@
+2015-07-18 Roman
+- DB.{LibsDB.OscadaLibs,AGLKS.St}.db: Prescription's executed units JavaLikeCalc.prescr and LogLevPrm.prescription moved to DemoDB (AGLKS).
+- !!:SYS: OpenSCADA's objects counters list significant expanded and the naming set unified for wide debug ones lost.
+- SYS.TMess: Time mark format of messages for stdout and stderr set to ISO 8601.
+- FIX:SYS.TCntrNode: To function chldList() argument "onlyEn" is added and used by default for list only enabled node.
+    Some problems detected here on real-time systems when one high-priority task try access to disabled and going to remove nodes.
+- SYS.Security: User's language field allowed for configure allways.
+- FIX:Archive,Archive.FSArch: Early get empty, and request to unallocated memory, previous value in string prevented by EVAL assign here,
+    into valSet().
+- FIX:DAQ.{DCON,ICP_DAS,ModBus}: Error messages expanding to addition different errors per tries fixed.
+- DAQ.JavaLikeCalc: Commenting by symbol '#' allowed to the IO list into parameter object.
+
+
 2015-07-17 fido_max
 - DAQ.Fastwel: AIM725 added. AIM791 high/low limit init on enable.
+
 
 2015-07-08 Roman
 - !!:DB.LibsDB.vcaBase.db: Notification's type 1 (Buzzer) expanded by checking for program "play" use to tone synth at "beep" miss.

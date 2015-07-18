@@ -35,11 +35,15 @@ TController::TController( const string &id_c, const string &daq_db, TElem *cfgel
 {
     mId = id_c;
     mPrm = grpAdd("prm_");
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TController::~TController( )
 {
     nodeDelAll();
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 string TController::objName( )	{ return TCntrNode::objName()+":TController"; }

@@ -28,11 +28,13 @@ using namespace FLibSYS;
 IOObj::IOObj( const string &nm, const string &perm, const string &mFormat, const string &ienc ) : fhd(NULL), pos(0)
 {
     open(nm, perm, mFormat, ienc);
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 IOObj::~IOObj( )
 {
     close();
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 void IOObj::open( const string &nm, const string &perm, const string &imFormat, const string &ienc )

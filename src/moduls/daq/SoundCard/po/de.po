@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:04+0300\n"
+"POT-Creation-Date: 2015-07-18 09:09+0300\n"
 "PO-Revision-Date: 2011-07-19 20:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -60,12 +60,11 @@ msgstr "Variable"
 msgid "Allowed %d input channels"
 msgstr "Verfügbar %d Eingangskanäle"
 
-#, c-format
 msgid ""
-"Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost "
+"Gathering from %d channels. Recieved %.2g MB. Adjusted samplerate %d. Lost "
 "frames %g"
 msgstr ""
-"Erfassung von %d Kanälen. Empfangen %.2f MB. Customized Probenahme %d. "
+"Erfassung von %d Kanälen. Empfangen %.2g MB. Customized Probenahme %d. "
 "Verlorenen Frames %g"
 
 #, c-format

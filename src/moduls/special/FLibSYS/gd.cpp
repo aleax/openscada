@@ -27,12 +27,12 @@ using namespace FLibSYS;
 //*************************************************
 GDObj::GDObj( const string &inm, bool file )
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 GDObj::~GDObj( )
 {
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 bool GDObj::load( const string &inm, bool file )

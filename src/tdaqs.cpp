@@ -63,6 +63,8 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
 
     //Error attributes
     el_err.fldAdd(new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TDAQS::~TDAQS( )
@@ -70,6 +72,8 @@ TDAQS::~TDAQS( )
     if(prcStRd) subStop();
 
     nodeDelAll();
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 string TDAQS::objName( )		{ return TSubSYS::objName()+":TDAQS"; }

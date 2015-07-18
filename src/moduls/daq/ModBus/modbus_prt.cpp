@@ -311,7 +311,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		}
 		catch(TError er) {	//By possible the send request breakdown and no response
 		    if(err.empty()) err = _("14:Device error: ") + er.mess;
-		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		    else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		    continue;
 		}
 

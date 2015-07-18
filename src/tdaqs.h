@@ -60,7 +60,7 @@ class TDAQS : public TSubSYS
 	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false );
 	void ctrListPrmAttr( XMLNode *nd, const string &addrBase, bool toPrm = false, char sep = 0, const string &pref = "" );
 
-	//> Parameter's templates library
+	// Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }
 	void tmplLibList( vector<string> &list )		{ chldList(mTmplib,list); }
 	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmplib,id); }
@@ -68,7 +68,7 @@ class TDAQS : public TSubSYS
 	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmplib,id,-1,flg); }
 	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmplib,id); }
 
-	//> Redundancy
+	// Redundancy
 	bool rdActive( );
 	int rdStLevel( )		{ return mRdStLevel; }
 	void setRdStLevel( int vl );

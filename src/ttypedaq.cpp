@@ -44,6 +44,8 @@ TTypeDAQ::TTypeDAQ( const string &id ) : TModule(id)
     fldAdd(new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("MESS_LEV",_("Messages level"),TFld::Integer,0,"1","3"));
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TTypeDAQ::~TTypeDAQ( )
@@ -54,6 +56,8 @@ TTypeDAQ::~TTypeDAQ( )
 	delete paramt[0];
 	paramt.erase(paramt.begin());
     }
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 string TTypeDAQ::objName( )	{ return TModule::objName()+":TTypeDAQ"; }

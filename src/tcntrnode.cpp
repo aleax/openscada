@@ -53,6 +53,8 @@ TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX),
     prev.node = iprev;
     prev.grp = -1;
     modif();
+
+    if(SYS && mess_lev() == TMess::Debug && SYS != this) SYS->cntrIter(objName(), 1);
 }
 
 TCntrNode::~TCntrNode( )
@@ -62,6 +64,8 @@ TCntrNode::~TCntrNode( )
 
     pthread_mutex_destroy(&mChM);
     pthread_mutex_destroy(&mDataM);
+
+    if(mess_lev() == TMess::Debug && SYS != this) SYS->cntrIter(objName(), -1);
 }
 
 TCntrNode &TCntrNode::operator=( TCntrNode &node )	{ return *this; }
@@ -169,7 +173,7 @@ void TCntrNode::nodeEn( int flag )
     for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++) {
 	vector<string> chLs;
 	TMap::iterator p;
-	chldList(iG, chLs, true);
+	chldList(iG, chLs, true, false);
 	for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 	    if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 	    AutoHD<TCntrNode> ndO(p->second);
@@ -209,7 +213,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++) {
 	    vector<string> chLs;
 	    TMap::iterator p;
-	    chldList(iG, chLs, true);
+	    chldList(iG, chLs, true, false);
 	    for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 		AutoHD<TCntrNode> ndO(p->second);
@@ -411,7 +415,7 @@ TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
     return (*chGrp)[iid];
 }
 
-void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
+void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex, bool onlyEn )
 {
     list.clear();
 
@@ -424,11 +428,19 @@ void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
     }
     list.reserve((*chGrp)[igr].elem.size());
     if(!(*chGrp)[igr].ordered)
-	for(TMap::iterator p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); ++p)
+	for(TMap::iterator p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); ++p) {
+	    if(onlyEn && p->second->nodeMode() != Enabled) continue;
 	    list.push_back(p->first);
-    else for(TMap::iterator p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); ++p) {
-	while(p->second->mOi >= list.size()) list.push_back("");
-	list[p->second->mOi] = p->first;
+	}
+    else {
+	for(TMap::iterator p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); ++p) {
+	    if(onlyEn && p->second->nodeMode() != Enabled) continue;
+	    while(p->second->mOi >= list.size()) list.push_back("");
+	    list[p->second->mOi] = p->first;
+	}
+	if(onlyEn)	//Remove empty
+	    for(int iL = 0; iL < list.size(); iL++)
+		if(!list[iL].size()) list.erase(list.begin()+(iL--));
     }
 }
 
@@ -576,7 +588,7 @@ int TCntrNode::isModify( int f )
 	for(unsigned iG = 0, iN; chGrp && iG < chGrp->size(); iG++) {
 	    vector<string> chLs;
 	    TMap::iterator p;
-	    chldList(iG, chLs, true);
+	    chldList(iG, chLs, true, false);
 	    for(iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 		AutoHD<TCntrNode> ndO(p->second);
@@ -954,7 +966,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 			XMLNode *chB = chN->childAdd();
 			*chB = *brReq.childGet(0)->childGet(i_br);
 			int grpBrId = ch.at().grpId(chB->attr("id"));
-			ch.at().chldList(grpBrId,ls);
+			ch.at().chldList(grpBrId, ls);
 			chB->setAttr("chPresent",ls.size()?"1":"0");
 		    }
 		}
