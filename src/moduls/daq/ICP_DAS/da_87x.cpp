@@ -102,20 +102,20 @@ void da_87x::enable( TMdPrm *p, vector<string> &als )
     ePrm->dev = getDev(p, p->modTp.getS());
 
     /*chnId = "modInfo"; chnNm = _("Module information");
-    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::String,TFld::NoWrite)); als.push_back(chnId);*/
+    p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::String,TFld::NoWrite)); als.push_back(chnId);*/
 
     //AI processing
     if(ePrm->dev.AI) {
 	if((ePrm->dev.AI>>8) == 1) {
 	    chnId = "cvct"; chnNm = _("Cold-Junction Compensation(CJC) temperature");
-	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
+	    p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
 	}
 	for(int i_i = 0; i_i < (ePrm->dev.AI&0xFF); i_i++) {
 	    chnId = TSYS::strMess("ai%d",i_i); chnNm = TSYS::strMess(_("Input %d"),i_i);
-	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
-	    //p->p_el.fldAdd(new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite));
+	    p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
+	    //p->pEl.fldAdd(new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite));
 	    //als.push_back(TSYS::strMess("ha%d",i_i));
-	    //p->p_el.fldAdd(new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite));
+	    //p->pEl.fldAdd(new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite));
 	    //als.push_back(TSYS::strMess("la%d",i_i));
 	}
     }
@@ -123,7 +123,7 @@ void da_87x::enable( TMdPrm *p, vector<string> &als )
     //AO processing
     for(unsigned i_a = 0; i_a < ePrm->dev.AO; i_a++) {
 	chnId = TSYS::strMess("ao%d",i_a); chnNm = TSYS::strMess(_("Out %d"),i_a);
-	p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite)); als.push_back(chnId);
+	p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite)); als.push_back(chnId);
     }
 
     //DI and DO processing
@@ -135,20 +135,20 @@ void da_87x::enable( TMdPrm *p, vector<string> &als )
 	if(i_ch < (ePrm->dev.DI&0xFF))
 	    for(int i_i = 0; i_i < 8; i_i++) {
 		chnId = TSYS::strMess("di%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
-		p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite)); als.push_back(chnId);
+		p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite)); als.push_back(chnId);
 	    }
 	else
 	    for(int i_o = 0; i_o < 8; i_o++) {
 		chnId = TSYS::strMess("do%d_%d",i_ch-(ePrm->dev.DI&0xFF),i_o);
 		chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch-(ePrm->dev.DI&0xFF),i_o);
-		p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
+		p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
 	    }
     }
 
     //Counters processing
     for(unsigned i_c = 0; i_c < ePrm->dev.CNTR; i_c++) {
 	chnId = TSYS::strMess("cntr%d",i_c); chnNm = TSYS::strMess(_("Counter %d"),i_c);
-	p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
+	p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
     }
 
     //Watchdog timeout read
@@ -244,7 +244,7 @@ void da_87x::getVal( TMdPrm *p )
 	p->vlAt(TSYS::strMess("cntr%d",i_c)).at().setR((rez.size() != 8 || rez[0] != '!') ? EVAL_INT : atoi(rez.data()+3), 0, true);
     }
 
-    p->acq_err.setVal(rez.empty()?_("10:Request to module error."):"");
+    p->acqErr.setVal(rez.empty()?_("10:Request to module error."):"");
 }
 
 void da_87x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
@@ -274,7 +274,7 @@ void da_87x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
 	}
 
 	rez = p->owner().serReq(TSYS::strMess("@%02XL%02X%02X",(p->owner().bus()==0)?0:p->modAddr,lvl,hvl), p->modSlot, CRC);
-	p->acq_err.setVal(rez.empty()?_("10:Request to module error."):"");
+	p->acqErr.setVal(rez.empty()?_("10:Request to module error."):"");
     }*/
 
     //AO processing, #AAN(Data)
@@ -289,7 +289,7 @@ void da_87x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
 	    goto repAO;
 	}
 	vo.setR((rez.empty() || rez[0] != '>') ? EVAL_REAL : vl.getR(), 0, true);
-	p->acq_err.setVal(rez.empty()?_("10:Request to module error."):"");
+	p->acqErr.setVal(rez.empty()?_("10:Request to module error."):"");
     }
 
     //DO processing
@@ -328,7 +328,7 @@ void da_87x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
 	}
 	if(rez.size() && rez[0] == rezOK) ePrm->doVal = tvl;
 	else vo.setB(EVAL_BOOL, 0, true);
-	p->acq_err.setVal(rez.empty()?_("10:Request to module error."):((rez[0]!=rezOK)?_("11:Respond from module error."):""));
+	p->acqErr.setVal(rez.empty()?_("10:Request to module error."):((rez[0]!=rezOK)?_("11:Respond from module error."):""));
     }
 }
 

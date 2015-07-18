@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da_LP_8x.h
 /***************************************************************************
- *   Copyright (C) 2012-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -67,7 +67,7 @@ class da_LP_8x: public DA
 
 		DevFeature dev;
 
-		// I-8017
+		// I-8014, I-8017
 		bool	init;
 		char	prmNum;
 		float	fastPer;

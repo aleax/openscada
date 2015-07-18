@@ -164,8 +164,15 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()),
 	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE")), mTrOscd(cfg("TR_OSCD")),
-	mPer(100000000), prcSt(false), call_st(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
+	mPer(100000000), prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&reqRes, &attrM);
+    pthread_mutex_init(&pBusRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
 }
@@ -173,6 +180,9 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 TMdContr::~TMdContr()
 {
     if(startStat()) stop();
+
+    pthread_mutex_destroy(&reqRes);
+    pthread_mutex_destroy(&pBusRes);
 }
 
 string TMdContr::getStatus( )
@@ -180,10 +190,10 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
 
     if(startStat() && !redntUse()) {
-	if(call_st)	val += TSYS::strMess(_("Call now. "));
+	if(callSt)	val += TSYS::strMess(_("Call now. "));
 	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), tm2s(tm_gath).c_str(), numReq, numErr);
+	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), tm2s(tmGath).c_str(), numReq, numErr);
     }
 
     return val;
@@ -198,7 +208,7 @@ void TMdContr::start_( )
     if(prcSt)	return;
 
     if(mBus == 0) {
-	ResAlloc res(pBusRes, true);
+	MtxAlloc res(pBusRes, true);
 	if(Open_SlotAll() > 0) throw TError(nodePath().c_str(), _("Open All LP-slots error."));
 	if(Open_Slot(9) > 0) { Close_SlotAll(); throw TError(nodePath().c_str(), _("Open LP-slot 9 error.")); }
     }
@@ -236,7 +246,7 @@ void TMdContr::stop_( )
 	if(trOscd() == TrIcpDasNm) Close_Com(mBus?mBus:1);
 	else tr.free();
     }
-    if(mBus == 0) { pBusRes.resRequestW(); Close_Slot(9); Close_SlotAll(); pBusRes.resRelease(); }
+    if(mBus == 0) { pthread_mutex_lock(&pBusRes); Close_Slot(9); Close_SlotAll(); pthread_mutex_unlock(&pBusRes); }
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -274,14 +284,14 @@ void TMdContr::setPrmLP( const string &prm, const string &vl )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(en_res, true);
+    ResAlloc res(enRes, true);
 
-    unsigned i_prm;
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(p_hd[i_prm].at().id() == id) break;
+    unsigned iPrm;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(pHd[iPrm].at().id() == id) break;
 
-    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
-    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
+    if(val && iPrm >= pHd.size())	pHd.push_back(at(id));
+    if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -298,22 +308,22 @@ void *TMdContr::Task( void *icntr )
     try {
 	while(!cntr.endRunReq) {
 	    if(!cntr.redntUse()) {
-		cntr.call_st = true;
+		cntr.callSt = true;
 		int64_t t_cnt = TSYS::curTime();
 
 		//Update controller's data
-		ResAlloc res(cntr.en_res, false);
-		for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++) cntr.p_hd[i_p].at().getVals();
+		ResAlloc res(cntr.enRes, false);
+		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++) cntr.pHd[i_p].at().getVals();
 		res.release();
 
 		//Calc acquisition process time
-		cntr.tm_gath = TSYS::curTime()-t_cnt;
-		cntr.call_st = false;
+		cntr.tmGath = TSYS::curTime()-t_cnt;
+		cntr.callSt = false;
 	    }
 
 	    //Watchdog timer process
 	    if(cntr.mBus == 0 && cntr.period() && wTm > 0) {
-		ResAlloc res(cntr.reqRes, true);
+		MtxAlloc res(cntr.reqRes, true);
 		int wTmSet = 1e3*vmax(1.5e-9*cntr.period(), wTm);
 #ifdef __i386__
 		EnableSysWDT(wTmSet);
@@ -321,7 +331,7 @@ void *TMdContr::Task( void *icntr )
 		EnableWDT(wTmSet);
 #endif
 		if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), _("Set watchdog to %d ms."), wTmSet);
-		res.release();
+		res.unlock();
 	    }
 
 	    cntr.prcSt = true;
@@ -334,13 +344,13 @@ void *TMdContr::Task( void *icntr )
 
     //Watchdog timer disable
     if(cntr.mBus == 0 && wTm > 0) {
-	ResAlloc res(cntr.reqRes, true);
+	MtxAlloc res(cntr.reqRes, true);
 #ifdef __i386__
 	DisableSysWDT();
 #else
 	DisableWDT();
 #endif
-	res.release();
+	res.unlock();
     }
 
     cntr.prcSt = false;
@@ -355,10 +365,15 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 
     if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("REQ -> '%s'"), req.c_str());
 
-    ResAlloc res(reqRes, true);
+    MtxAlloc res(reqRes, true);
 
     //Request by ICP DAS serial API
-    if(mBus == 0 && mSlot != mCurSlot) { pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
+    if(mBus == 0 && mSlot != mCurSlot) {
+	pthread_mutex_lock(&pBusRes);
+	ChangeToSlot(mSlot);
+	mCurSlot = mSlot;
+	pthread_mutex_unlock(&pBusRes);
+    }
 
     //Request by OpenSCADA output transport
     if(bus() >= 0 && trOscd() != TrIcpDasNm) {
@@ -462,7 +477,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name, tp_prm),
-    p_el("w_attr"), extPrms(NULL), modTp(cfg("MOD_TP")), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()),
+    pEl("w_attr"), extPrms(NULL), modTp(cfg("MOD_TP")), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()),
     endRunReq(false), prcSt(false), wTm(0), clcCnt(0), da(NULL)
 {
     for(int i_c = 0; i_c < 10; i_c++) dInOutRev[i_c] = 0;
@@ -477,7 +492,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
+    if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -491,19 +506,19 @@ void TMdPrm::enable( )
     TParamContr::enable();
 
     wTm = vmin(25.5,vmax(0,s2r(modPrm("wTm"))));
-    acq_err = "";
+    acqErr = "";
 
     vector<string> als;
     da->enable(this, als);
 
     //Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++) {
+    for(int i_p = 0; i_p < (int)pEl.fldSize(); i_p++) {
 	unsigned i_l;
 	for(i_l = 0; i_l < als.size(); i_l++)
-	    if(p_el.fldAt(i_p).name() == als[i_l])
+	    if(pEl.fldAt(i_p).name() == als[i_l])
 		break;
 	if(i_l >= als.size())
-	    try{ p_el.fldDel(i_p); i_p--; }
+	    try{ pEl.fldDel(i_p); i_p--; }
 	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
@@ -588,18 +603,18 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
+	    if(!enableStat())			val.setS(_("1:Parameter is disabled."), 0, true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."), 0, true);
 	}
-	else val.setS(EVAL_STR,0,true);
+	else val.setS(EVAL_STR, 0, true);
 	return;
     }
 
     if(owner().redntUse()) return;
 
     if(val.name() == "err") {
-	if(acq_err.getVal().empty())	val.setS("0",0,true);
-	else				val.setS(acq_err.getVal(),0,true);
+	if(acqErr.getVal().empty())	val.setS("0", 0, true);
+	else				val.setS(acqErr.getVal(), 0, true);
     }
 }
 

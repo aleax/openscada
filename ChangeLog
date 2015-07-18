@@ -1,4 +1,7 @@
 2015-07-18 Roman
+- !!!!:DAQ.ICP_DAS: Module I-8014 generic and FIFO (Magic) mode support is added.
+    Resources allocators reqRes, pBusRes moved to pthread_mutex_t.
+    FIX: I-8017 some fixed for 16 channels support and to lost cycles correction.
 - DB.{LibsDB.OscadaLibs,AGLKS.St}.db: Prescription's executed units JavaLikeCalc.prescr and LogLevPrm.prescription moved to DemoDB (AGLKS).
 - !!:SYS: OpenSCADA's objects counters list significant expanded and the naming set unified for wide debug ones lost.
 - SYS.TMess: Time mark format of messages for stdout and stderr set to ISO 8601.

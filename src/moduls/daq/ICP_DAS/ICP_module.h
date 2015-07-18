@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: ICP_module.h
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,17 +61,17 @@ class TMdPrm : public TParamContr
 
 	void setModPrm( const string &prm, const string &val );
 
-	TElem &elem( )		{ return p_el; }
+	TElem &elem( )		{ return pEl; }
 	TMdContr &owner( );
 
 	//Attributes
-	TElem	p_el;		//Work atribute elements
+	TElem	pEl;		//Work atribute elements
 	void	*extPrms;
 	TCfg	&modTp;		//I-7000,I-8000 module type
 	int64_t	&modAddr;	//I-7000,I-8000 module address
 	int64_t	&modSlot;	//I-8000 module slot
 
-	ResString acq_err;
+	ResString acqErr;
 
 	bool	endRunReq, prcSt;
 	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
@@ -122,7 +122,7 @@ class TMdContr: public TController
 
 	string serReq( string req, char mSlot = 0, bool CRC = false );
 
-	Res	reqRes, pBusRes;	//Resource for request values and parallel bus devices
+	pthread_mutex_t	reqRes, pBusRes;	//Resource allocators for lock values and parallel bus devices
 
     protected:
 	//Methods
@@ -140,7 +140,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;				//Resource for enable params
+	Res	enRes;				//Resource for enable params
 	int64_t	&mPrior,			//Process task priority
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
 		&mBaud,				//Baudrate
@@ -150,12 +150,12 @@ class TMdContr: public TController
 	int64_t mPer;
 
 	bool	prcSt,				//Process task active
-		call_st,			//Calc now stat
+		callSt,			//Calc now stat
 		endRunReq;			//Request to stop of the Process task
-	vector< AutoHD<TMdPrm> > p_hd;
+	vector< AutoHD<TMdPrm> > pHd;
 	AutoHD<TTransportOut>	tr;
 
-	double	tm_gath;			//Gathering time
+	double	tmGath;			//Gathering time
 	int	mCurSlot;
 	float	numReq, numErr, numErrResp;
 };

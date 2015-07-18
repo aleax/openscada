@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:45+0200\n"
+"POT-Creation-Date: 2015-07-18 06:26+0000\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -180,6 +180,9 @@ msgstr "DIP-Umschalter"
 msgid "Rotary switch"
 msgstr "Drehschalter"
 
+msgid "Device"
+msgstr "Gerät"
+
 #, c-format
 msgid "H/A %d"
 msgstr ""
@@ -191,6 +194,10 @@ msgstr ""
 #, c-format
 msgid "Output %d"
 msgstr "Ausgang %d"
+
+#, c-format
+msgid "Version FPGA=%04X, Library=%04X, ISO=%04X; Build=%s; Jumper SE=%d"
+msgstr "Version FPGA=%04X, Bibliothek=%04X, ISO=%04X; Bauen=%s; Jumper SE=%d"
 
 msgid "Process parameters"
 msgstr "Parameterbearbeitung"
@@ -210,6 +217,13 @@ msgid ""
 msgstr ""
 "-10V bis +10V;-5V bis +5V;-2.5V bis +2.5V;-1.25V bis +1.25V;-20mA bis +20mA "
 "(mit dem Resistor 125 Om)"
+
+#, c-format
+msgid ""
+"0:FIFO gather: %.2gMB. Sample rate: %g(%g cor.). Overfulls: %g. Retry time: "
+"%gs."
+msgstr ""
+"0:FIFO sammeln: %.2gMB. Sample-Rate: %g(%g cor.). Overfulls: %g. Wiederholungszeit: %gs."
 
 msgid "ICP DAS hardware"
 msgstr "Ausstattung ICP DAS"

@@ -104,14 +104,14 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
     ePrm->devFd = open(("/dev/"+p->modTp.getS()).c_str(), O_RDWR);
     if(ePrm->devFd < 0)	return;
 
-    ResAlloc res(p->owner().pBusRes, true);
+    MtxAlloc res(p->owner().pBusRes, true);
 
     //AI processing
     if(ePrm->dev.AI) {
 	ePrm->dev.aiTm = s2i(p->modPrm("aiTm","200"));
 	for(unsigned i_a = 0; i_a < (ePrm->dev.AI&0xFF); i_a++) {
 	    chnId = TSYS::strMess("ai%d",i_a); chnNm = TSYS::strMess(_("Analog input %d"),i_a);
-	    p->p_el.fldAt(p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Integer,TFld::NoWrite))).
+	    p->pEl.fldAt(p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Integer,TFld::NoWrite))).
 		setReserve(p->modPrm(TSYS::strMess("aiGain.%d",i_a)));
 	    als.push_back(chnId);
 	}
@@ -124,7 +124,7 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
     //AO processing
     for(unsigned i_a = 0; i_a < ePrm->dev.AO; i_a++) {
 	chnId = TSYS::strMess("ao%d",i_a); chnNm = TSYS::strMess(_("Analog output %d"),i_a);
-	p->p_el.fldAt(p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Integer,TVal::DirWrite)));
+	p->pEl.fldAt(p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Integer,TVal::DirWrite)));
 	als.push_back(chnId);
     }
 
@@ -153,13 +153,13 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
 	    if((directDIO>>i_ch)&1)
 		for(int i_o = 0; i_o < 24; i_o++) {
 		    chnId = TSYS::strMess("o%d_%d",i_ch,i_o); chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch,i_o);
-		    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite));
+		    p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite));
 		    als.push_back(chnId);
 		}
 	    else
 		for(int i_i = 0; i_i < 24; i_i++) {
 		    chnId = TSYS::strMess("i%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
-		    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite));
+		    p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite));
 		    als.push_back(chnId);
 		}
 	}
@@ -174,13 +174,13 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
 	if(i_ch < (ePrm->dev.DI&0xFF))
 	    for(int i_i = 0; i_i < 8; i_i++) {
 		chnId = TSYS::strMess("i%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
-		p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite));
+		p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite));
 		als.push_back(chnId);
 	    }
 	else
 	    for(int i_o = 0; i_o < 8; i_o++) {
 		chnId = TSYS::strMess("o%d_%d",i_ch-(ePrm->dev.DI&0xFF),i_o); chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch-(ePrm->dev.DI&0xFF),i_o);
-		p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite));
+		p->pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite));
 		als.push_back(chnId);
 	    }
     }
@@ -201,7 +201,7 @@ void da_ISA::getVal( TMdPrm *p )
     tval *ePrm = (tval*)p->extPrms;
     if(ePrm->devFd < 0) return;
 
-    ResAlloc res(p->owner().pBusRes, true);
+    MtxAlloc res(p->owner().pBusRes, true);
 
     //AI processing
     if(ePrm->dev.AI) {
@@ -333,7 +333,7 @@ void da_ISA::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
     tval *ePrm = (tval*)p->extPrms;
     if(ePrm->devFd < 0) return;
 
-    ResAlloc res(p->owner().pBusRes, true);
+    MtxAlloc res(p->owner().pBusRes, true);
 
     //AO processing
     if(vo.name().compare(0,2,"ao") == 0 && ePrm->dev.AO) {
