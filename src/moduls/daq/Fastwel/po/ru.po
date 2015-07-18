@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fastwel 0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-16 08:37+0300\n"
+"POT-Creation-Date: 2015-07-18 12:26+0300\n"
 "PO-Revision-Date: 2015-04-23 09:36+0300\n"
 "Last-Translator: Maxim Kochetkov <fido_max@inbox.ru>\n"
 "Language-Team: \n"
@@ -62,9 +62,8 @@ msgstr "Таблица параметров AIM726"
 msgid "AIM730 Parameteres table"
 msgstr "Таблица параметров AIM730"
 
-#, fuzzy
 msgid "AIM725 Parameteres table"
-msgstr "Таблица параметров AIM726"
+msgstr "Таблица параметров AIM725"
 
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
@@ -123,11 +122,9 @@ msgstr "Диапазон выхода"
 msgid "0..20mA;4..20mA"
 msgstr "0..20мА;4..20мА"
 
-#, fuzzy
 msgid "AIM725"
-msgstr "AIM726"
+msgstr "AIM725"
 
-#, fuzzy
 msgid "Sensor range"
 msgstr "Диапазон входа"
 
@@ -135,8 +132,8 @@ msgid ""
 "PT50;PT100;PT200;PT500;PT1000;NI100;NI120;CU100;CU50;0-150 Ohm;0-300 "
 "Ohm;0-600 Ohm;0-1500 Ohm; 0-3000 Ohm"
 msgstr ""
-"PT50;PT100;PT200;PT500;PT1000;NI100;NI120;CU100;CU50;0-150 Ом;0-300 "
-"Ом;0-600 Ом;0-1500 Ом; 0-3000 Ом"
+"PT50;PT100;PT200;PT500;PT1000;NI100;NI120;CU100;CU50;0-150 Ом;0-300 Ом;0-600 "
+"Ом;0-1500 Ом; 0-3000 Ом"
 
 msgid "Sensor type"
 msgstr "Тип датчика"
@@ -158,10 +155,6 @@ msgstr "Следующий вызов по cron '%s'. "
 #, c-format
 msgid "Spent time: %s."
 msgstr "Spent time: %s."
-
-#, c-format
-msgid "typename %s"
-msgstr ""
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."

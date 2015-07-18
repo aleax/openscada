@@ -533,7 +533,6 @@ void TMdPrm::enable()
 	    mModComConfig.outputSync = FBUS_UNDEFINED_SYNC_ID;
 	}
 	mTypeName = mModDesc.typeName;
-	mess_debug(nodePath().c_str(), _("typename %s"), mModDesc.typeName);
 	if(type().name == mModDesc.typeName) {
 	    mState = StateWork;
 	    switch(mModDesc.type) {
@@ -761,13 +760,11 @@ void TMdPrm::getVals()
 		    vlAt(TSYS::strMess("AI0").c_str()).at().setR(((AIM725_INPUTS *) buf)->channel0, 0, true);
 		} else {
 		    vlAt(TSYS::strMess("AI0").c_str()).at().setR(EVAL_REAL, 0, true);
-		    mess_info(nodePath().c_str(), _("AIM725 0 %d"), ((AIM725_INPUTS *) buf)->diagnostics);
 		}
 		if(((((AIM725_INPUTS *) buf)->diagnostics) & 0x0E) == 0){
 		    vlAt(TSYS::strMess("AI1").c_str()).at().setR(((AIM725_INPUTS *) buf)->channel1, 0, true);
 		} else {
 		    vlAt(TSYS::strMess("AI1").c_str()).at().setR(EVAL_REAL, 0, true);
-		    mess_info(nodePath().c_str(), _("AIM725 1 %d"), ((AIM725_INPUTS *) buf)->diagnostics);
 		}
 		break;
 

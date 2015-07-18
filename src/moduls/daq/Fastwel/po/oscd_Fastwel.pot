@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-16 08:37+0300\n"
+"POT-Creation-Date: 2015-07-18 12:26+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,10 +147,6 @@ msgstr ""
 
 #, c-format
 msgid "Spent time: %s."
-msgstr ""
-
-#, c-format
-msgid "typename %s"
 msgstr ""
 
 msgid "1:Parameter is disabled."
