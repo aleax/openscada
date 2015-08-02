@@ -480,13 +480,12 @@ void *da_LP_8x::fastTask( void *ip )
 	    gainArr[iC] = ePrm->cnlMode[iC];
 	}
 
-	float cntOverFull = 0, cntCor = 0, acqSize = 0, curSRate = 0, retrTm = 0, retrTm1;
+	float cntOverFull = 0, cntCor = 0, acqSize = 0, curSRate = 0, retrTm;
 
 	pthread_mutex_lock(&p.owner().pBusRes);
 
 	//Magic scan configure
 	i8014W_ConfigMagicScan(p.modSlot, chArr, gainArr, cnls.size(), vmax(1,vmin(250000,1/ePrm->fastPer)), 2, 0, 0, &curSRate);
-
 	if(p.owner().messLev() == TMess::Debug)
 	    mess_debug_(p.nodePath().c_str(), "I-8014 Magic: cnls=%d; sr=%f->%f.", cnls.size(), vmax(1,vmin(250000,1/ePrm->fastPer)), curSRate);
 
@@ -501,6 +500,9 @@ void *da_LP_8x::fastTask( void *ip )
 	short	szFIFO = 4000,			//Oriented FIFO size
 		rdCnt, rdCnt1, rdRez, rdData[szFIFO+16];	//Set buffer to the device's FIFO size and spare to align
 	float vAI = 0;
+
+	retrTm = vmin(1, szFIFO/(curSRate*2*cnls.size()));
+
 	while(!p.endRunReq) {
 	    // Read available FIFO data
 	    pthread_mutex_lock(&p.owner().pBusRes);
@@ -574,9 +576,8 @@ void *da_LP_8x::fastTask( void *ip )
 	    }
 
 	    //Repeate after about half-size FIFO filling
-	    retrTm1 = vmin(1,szFIFO/(curSRate*2*cnls.size()));
-	    if(rdCnt) retrTm1 *= vmax(0,vmin(1,2-(float)rdCnt/((float)szFIFO/2)));
-	    retrTm += (retrTm1-retrTm)/10;
+	    if(rdCnt) retrTm = vmin(1, vmax(0,retrTm+0.1*(szFIFO/2-rdCnt)/(curSRate*cnls.size())));
+
 	    TSYS::sysSleep(retrTm);
 	}
 
@@ -609,7 +610,7 @@ void *da_LP_8x::fastTask( void *ip )
 	    if(abs(SYS->sysTm()-wTm/1000000) >= 3) wTm = 1000000ll*SYS->sysTm();
 
 	    //Calc next work time and sleep
-	    wTm += (int64_t)(1e6*ePrm->fastPer);
+	    wTm += 1000000ll*ePrm->fastPer;
 	    sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
 	    clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &sp_tm, NULL);
 	}

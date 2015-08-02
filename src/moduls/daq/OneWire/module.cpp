@@ -39,7 +39,7 @@
 #define MOD_NAME	_("1Wire devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.0"
+#define MOD_VER		"0.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("1Wire devices support by OWFS (http://owfs.org).")
 #define LICENSE		"GPL2"

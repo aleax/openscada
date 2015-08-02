@@ -1,3 +1,14 @@
+2015-08-02 Roman
+- SYS,Transport.Sockets: Checking to CAN for access to linux/can.h is added for build allow on old systems with GLIBC version lesser 3.6.
+- !!!:SYS: All modules version rose to actual changes and will next trace the changes.
+    data/debian/openscada.init: Default-Start levels set to 2 3 4 for autostart with GUI prevent, level 5.
+    data/debian_mod/rules: set just dh_installinit, no arguments.
+    For use CPU_COUNT() added checking to GLIBC version greater or equal 3.6.
+- DAQ.ICP_DAS: Retry time value for I-8014 magic processing task rewrote for achiver to real the half FIFO size.
+- UI.Vision: Previous alarm-notify mechanisme's commented code final removed.
+    QPointF::manhattanLength() replaced by needs Qt version greatter or equal to 4.6.
+
+
 2015-07-18 Roman
 - !!!!:DAQ.ICP_DAS: Module I-8014 generic and FIFO (Magic) mode support is added.
     Resources allocators reqRes, pBusRes moved to pthread_mutex_t.

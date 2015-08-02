@@ -30,17 +30,6 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 
-#include <linux/can.h>
-#include <linux/can/raw.h>
-
-#ifndef PF_CAN
-#define PF_CAN 29
-#endif
-
-#ifndef AF_CAN
-#define AF_CAN PF_CAN
-#endif
-
 #include <fcntl.h>
 #include <unistd.h>
 #include <getopt.h>
@@ -53,13 +42,27 @@
 #include <tmodule.h>
 #include "socket.h"
 
+#ifdef HAVE_LINUX_CAN_H
+#include <linux/can.h>
+#include <linux/can/raw.h>
+
+#ifndef PF_CAN
+#define PF_CAN 29
+#endif
+
+#ifndef AF_CAN
+#define AF_CAN PF_CAN
+#endif
+#endif
+
+
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Sockets"
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.5.1"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -225,11 +228,13 @@ void TSocketIn::start( )
 	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
 	type = SOCK_UNIX;
     }
+#ifdef HAVE_LINUX_CAN_H
     else if(s_type == S_NM_RAWCAN) {
 	if((sock_fd = socket(PF_CAN,SOCK_RAW,CAN_RAW)) == -1)
 	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
 	type = SOCK_RAWCAN;
     }
+#endif
     else throw TError(nodePath().c_str(), _("Socket type '%s' error!"), s_type.c_str());
 
     if(type == SOCK_TCP || type == SOCK_UDP) {
@@ -315,6 +320,7 @@ void TSocketIn::start( )
 	}
 	listen(sock_fd, maxQueue());
     }
+#ifdef HAVE_LINUX_CAN_H
     else if(type == SOCK_RAWCAN) {
 	path	= TSYS::strSepParse(addr(), 1, ':');
 	struct can_filter rfilter;
@@ -334,6 +340,7 @@ void TSocketIn::start( )
 	}
 	else if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("RAWCAN socket binded '%s'!"), addr().c_str());
     }
+#endif
 
     if(mode() == 2) {	//client task create for initiative connection
 	SSockIn *sin = new SSockIn(this, sock_fd, addr());
@@ -544,6 +551,7 @@ void *TSocketIn::Task( void *sock_in )
 	    r_len = sendto(sock->sock_fd, answ.c_str(), answ.size(), 0, (sockaddr *)&name_cl, name_cl_len);
 	    sock->trOut += vmax(0, r_len);
 	}
+#ifdef HAVE_LINUX_CAN_H
 	else if(sock->type == SOCK_RAWCAN) {
 	    struct can_frame frame;
 	    string req, answ;
@@ -563,6 +571,7 @@ void *TSocketIn::Task( void *sock_in )
 	    r_len = send(sock->sock_fd, answ.c_str(), answ.size(), 0);
 	    sock->trOut += vmax(0, r_len);
 	}
+#endif
     }
     pthread_attr_destroy(&pthr_attr);
 
@@ -876,7 +885,9 @@ void TSocketOut::start( int itmCon )
     else if(s_type == S_NM_TCP)		type = SOCK_TCP;
     else if(s_type == S_NM_UDP)		type = SOCK_UDP;
     else if(s_type == S_NM_UNIX)	type = SOCK_UNIX;
+#ifdef HAVE_LINUX_CAN_H
     else if(s_type == S_NM_RAWCAN)	type = SOCK_RAWCAN;
+#endif
     else throw TError(nodePath().c_str(),_("Type socket '%s' error!"),s_type.c_str());
 
     if(type == SOCK_FORCE) {
@@ -953,6 +964,7 @@ void TSocketOut::start( int itmCon )
 	}
 	fcntl(sock_fd, F_SETFL, fcntl(sock_fd,F_GETFL,0)|O_NONBLOCK);
     }
+#ifdef HAVE_LINUX_CAN_H
     else if(type == SOCK_RAWCAN) {
 	if((sock_fd = socket(PF_CAN, SOCK_RAW, CAN_RAW)) == -1)
 	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
@@ -975,6 +987,7 @@ void TSocketOut::start( int itmCon )
 	    throw TError(nodePath().c_str(), _("RAWCAN socket doesn't bind to '%s'!"), addr().c_str());
 	}
     }
+#endif
 
     mLstReqTm = TSYS::curTime();
 

@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"3.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
@@ -138,7 +138,6 @@ string TVision::optDescr( )
 	"CachePgLife <hours>   Cached pages lifetime.\n"
 	"VCAstation  <id>      VCA station id ('.' - local).\n"
 	"RestoreTime <seconds> Restore connection time.\n\n"),
-//	"PlayCom     <cmd>     Audio alarms' files play command.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -379,10 +378,6 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/winPos_cntr_save",_("Windows position control and save"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit on last run project close"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	}
-	/*if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),R_R_R_,"root",SUI_ID))
-	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
-		    _("Command line for call sounds play.\n"
-		    "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."));*/
 	return;
     }
 
@@ -472,11 +467,6 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
 		setText(SYS->transport().at().extHostGet("*",lst[i_ls]).name);
     }
-    /*else if(a_path == "/alarm/plComm") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(playCom());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPlayCom(opt->text());
-    }
-    else if(a_path == "/alarm/plComLs" && ctrChkNode(opt)) opt->childAdd("el")->setText("play %f");*/
     else TUI::cntrCmdProc(opt);
 }
 

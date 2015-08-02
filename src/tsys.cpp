@@ -78,7 +78,9 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     pthread_getaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
+#if __GLIBC_PREREQ(2,6)
     mN_CPU = CPU_COUNT(&cpuset);
+#endif
 #endif
 
     //Set signal handlers

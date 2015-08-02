@@ -243,7 +243,7 @@ void LineEdit::setCfg( const QString &cfg )
 		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
 		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
 	    }
-	    ((QSpinBox*)ed_fld)->setRange(minv,maxv);
+	    ((QSpinBox*)ed_fld)->setRange(minv, maxv);
 	    ((QSpinBox*)ed_fld)->setSingleStep(sstep);
 	    ((QSpinBox*)ed_fld)->setPrefix(pref.c_str());
 	    ((QSpinBox*)ed_fld)->setSuffix(suff.c_str());

@@ -1462,8 +1462,8 @@ void VisRun::updatePage( )
     //Time update
     if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1))) {
 	QDateTime dtm = QDateTime::currentDateTime();
-	mWTime->setText( locale().toString(dtm,"hh:mm:ss\nddd, d MMM") );
-	mWTime->setToolTip( locale().toString(dtm,"dddd, dd-MMM-yyyy") );
+	mWTime->setText(locale().toString(dtm,"hh:mm:ss\nddd, d MMM"));
+	mWTime->setToolTip(locale().toString(dtm,"dddd, dd-MMM-yyyy"));
     }
 
     //Scale for full screen check

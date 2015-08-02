@@ -58,6 +58,7 @@ AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     [AC_MSG_ERROR([Some standard template libs' STL headers not found. Install or check STL-StdC++ developing package!])])
 AC_CHECK_HEADERS([iconv.h],[ ],[AC_MSG_NOTICE(iconv.h header not found. Using is disabled!)])
 AC_CHECK_HEADERS([libintl.h],[ ],[AC_MSG_NOTICE(libintl.h header not found. Using is disabled!)])
+AC_CHECK_HEADERS([linux/can.h],[ ],[AC_MSG_NOTICE(linux/can.h header not found. Using is disabled!)])
 
 #Gettext utilites check
 if test $ac_cv_header_libintl_h = yes; then
