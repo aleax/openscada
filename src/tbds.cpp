@@ -414,6 +414,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
+
 	// Search present field
 	for(unsigned i_fld = 0, i_el; nd && i_fld < nd->childSize(); i_fld++) {
 	    XMLNode *el = nd->childGet(i_fld);
@@ -533,22 +534,21 @@ void TBDS::load_( )
 
     //DB open
     // Open, load and enable generic DB
-    string db_tp = TSYS::strSepParse(fullDB(),0,'.');
-    string db_nm = TSYS::strSepParse(fullDB(),1,'.');
+    string db_tp = TSYS::strSepParse(fullDB(), 0, '.');
+    string db_nm = TSYS::strSepParse(fullDB(), 1, '.');
     if(modPresent(db_tp) && !at(db_tp).at().openStat(db_nm)) {
 	at(db_tp).at().open(db_nm);
 	at(db_tp).at().at(db_nm).at().load();
 	at(db_tp).at().at(db_nm).at().enable();
     }
 
-    //>> Open other DB stored into table 'DB' and config-file
+    // Open other DB stored into table 'DB' and config-file
     try {
 	string id,type;
 	if(SYS->chkSelDB(fullDB())) {
 	    TConfig c_el(&el_db);
 	    c_el.cfgViewAll(false);
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el,true); )
-	    {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el,true); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
 		if((type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id))
@@ -682,7 +682,7 @@ void TBD::preDisable( int flag )	{ disable(); }
 
 void TBD::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+    if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true, true);
 }
 
 TTypeBD &TBD::owner( )	{ return *(TTypeBD*)nodePrev(); }

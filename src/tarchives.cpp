@@ -459,8 +459,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 
     //Get records from buffer
     unsigned i_buf = headBuf;
-    while(level >= 0 && (!arch.size() || arch == BUF_ARCH_NM) && time(NULL) < upTo)
-    {
+    while(level >= 0 && (!arch.size() || arch == BUF_ARCH_NM) && time(NULL) < upTo) {
 	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
 		abs(mBuf[i_buf].level) >= level && re.test(mBuf[i_buf].categ))
 	    recs.push_back(mBuf[i_buf]);
@@ -471,11 +470,9 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     //Get records from archives
     vector<string> t_lst, o_lst;
     modList(t_lst);
-    for(unsigned i_t = 0; level >= 0 && i_t < t_lst.size(); i_t++)
-    {
+    for(unsigned i_t = 0; level >= 0 && i_t < t_lst.size(); i_t++) {
 	at(t_lst[i_t]).at().messList(o_lst);
-	for(unsigned i_o = 0; i_o < o_lst.size() && time(NULL) < upTo; i_o++)
-	{
+	for(unsigned i_o = 0; i_o < o_lst.size() && time(NULL) < upTo; i_o++) {
 	    AutoHD<TMArchivator> archtor = at(t_lst[i_t]).at().messAt(o_lst[i_o]);
 	    if(archtor.at().startStat() && (!arch.size() || arch == archtor.at().workId()))
 		archtor.at().get(b_tm, e_tm, recs, category, level);
@@ -686,8 +683,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  cat - messages' category
     //  lev - messages level
     //  arch - messages archivator
-    if(iid == "messGet" && prms.size() >= 2)
-    {
+    if(iid == "messGet" && prms.size() >= 2) {
 	vector<TMess::SRec> recs;
 	messGet(prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
 	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")));
@@ -709,8 +705,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  cat - message' category
     //  lev - message level
     //  mess - message text
-    if(iid == "messPut" && prms.size() >= 5)
-    {
+    if(iid == "messPut" && prms.size() >= 5) {
 	messPut(prms[0].getI(), prms[1].getI(), prms[2].getS(), prms[3].getI(), prms[4].getS());
 	return true;
     }

@@ -1276,7 +1276,7 @@ void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
     }
 }
 
-void TVArchive::archivatorSort()
+void TVArchive::archivatorSort( )
 {
     int rep_try;
 
@@ -1958,7 +1958,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/Source") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(srcData()+(srcPAttr(true).freeStat()?"":" (+)"));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	mSrcMode = TSYS::strParse(opt->text(),0," ");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	mSource = TSYS::strParse(opt->text(), 0, " ");
     }
     else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData(), false, '.');
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);

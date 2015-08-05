@@ -584,7 +584,7 @@ void *da_LP_8x::fastTask( void *ip )
 	i8014W_StopMagicScan(p.modSlot);
     }
     else {				//I-8017
-	struct timespec sp_tm;
+	//struct timespec sp_tm;
 	int64_t	wTm = 1000000ll*SYS->sysTm(); //TSYS::curTime();
 
 	int c_mode;
@@ -611,8 +611,9 @@ void *da_LP_8x::fastTask( void *ip )
 
 	    //Calc next work time and sleep
 	    wTm += 1000000ll*ePrm->fastPer;
-	    sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
-	    clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &sp_tm, NULL);
+	    TSYS::taskSleep(int64_t(1e9*ePrm->fastPer));	//To prevent hang at wTm more lesser to current
+	    //sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
+	    //clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &sp_tm, NULL);
 	}
     }
 

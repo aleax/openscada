@@ -1,3 +1,11 @@
+2015-08-05 Roman
+- !!!!:FIX:Archive: Value's field "Source" set from the control interface (configurators) fixed.
+- !!!!:FIX:DB: DB remove from config file fixed, by set "ForceCfg".
+- !!:FIX:DAQ.ICP_DAS: I-8017 fast acquisition task turn to use TSYS::taskSleep() instead clock_nanosleep() for hangs prevent at wTm more
+    lesser to current.
+- Special.FLibSYS: VArchObj::FFT() potential crash prevented. Expand for check to EVAL and replace that to vlOnEVAL, new last argument.
+
+
 2015-08-02 Roman
 - SYS,Transport.Sockets: Checking to CAN for access to linux/can.h is added for build allow on old systems with GLIBC version lesser 3.6.
 - !!!:SYS: All modules version rose to actual changes and will next trace the changes.
