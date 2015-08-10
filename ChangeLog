@@ -1,3 +1,8 @@
+2015-08-10 Roman
+- FIX:DAQ.OPC_UA: Possible processing for wrong certificates writing fixed, thanks for Dmitry Likov (rxs5).
+- UI.VCAEngine: Inline helps for attributes of generic, primitives ElFigure, FormEl mostly updated.
+
+
 2015-08-05 Roman
 - !!!!:FIX:Archive: Value's field "Source" set from the control interface (configurators) fixed.
 - !!!!:FIX:DB: DB remove from config file fixed, by set "ForceCfg".

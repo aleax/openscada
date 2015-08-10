@@ -1053,9 +1053,9 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			setAttr("modif",u2s(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
-		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"[owner]:[group]\"."));
+		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"{owner}:{group}\"."));
 		    else if(list_a[i_el] == "perm")
-			el->setAttr("help",_("Permission to the widget in form \"[user][group][other]\".\n"
+			el->setAttr("help",_("Permission to the widget in form \"{user}{group}{other}\".\n"
 					     "Where \"user\", \"group\" and \"other\" is:\n"
 					     "  \"__\" - no any access;\n"
 					     "  \"R_\" - read only;\n"
@@ -1063,7 +1063,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    else if(list_a[i_el] == "evProc")
 			el->setAttr("SnthHgl","1")->
 			    setAttr("help",_("Direct events processing for pages manipulation in form:\n"
-					     "      \"[event]:[evSrc]:[com]:[prm]\". Where:\n"
+					     "      \"{event}:{evSrc}:{com}:{prm}\". Where:\n"
 					     "  \"event\" - waiting event;\n"
 					     "  \"evSrc\" - event source;\n"
 					     "  \"com\" - command of a session (open, next, prev);\n"
@@ -1083,10 +1083,10 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    break;
 			case A_CTX_MENU:
 			    el->setAttr("SnthHgl","1")->
-				setAttr("help",_("Context menu in form strings list: \"[ItName]:[Signal]\".\n"
+				setAttr("help",_("Context menu in form strings list: \"{ItName}:{Signal}\".\n"
 						 "Where:\n"
 						 "  \"ItName\" - item name;\n"
-						 "  \"Signal\" - signal name and result signal name is \"usr_[Signal]\"."));
+						 "  \"Signal\" - signal name and result signal name is \"usr_{Signal}\"."));
 			    break;
 		    }
 		    if(attr.at().type() == TFld::String && attr.at().flgGlob()&Attr::Image)

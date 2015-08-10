@@ -909,7 +909,7 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
     if(secPolicy.find("Rsa15") == string::npos) { paddSize = 42; padd = RSA_PKCS1_OAEP_PADDING; }
 
     if(!certPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
-    if(bm && BIO_write(bm,certPem.data(),certPem.size()) == (int)certPem.size());
+    if(bm && BIO_write(bm,certPem.data(),certPem.size()) == (int)certPem.size())
 	x = PEM_read_bio_X509_AUX(bm, NULL, NULL, NULL);
     if(x)	pkey = X509_get_pubkey(x);
     if(pkey)	rsa = EVP_PKEY_get1_RSA(pkey);
@@ -947,7 +947,7 @@ string UA::asymmetricDecrypt( const string &mess, const string &keyPem, const st
     string rez = "";
 
     if(!keyPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
-    if(bm && BIO_write(bm,keyPem.data(),keyPem.size()) == (int)keyPem.size());
+    if(bm && BIO_write(bm,keyPem.data(),keyPem.size()) == (int)keyPem.size())
 	pkey = PEM_read_bio_PrivateKey(bm, NULL, 0, (char*)"keypass");
     if(pkey)	rsa = EVP_PKEY_get1_RSA(pkey);
     if(rsa)	keysize = RSA_size(rsa);
@@ -984,7 +984,7 @@ bool UA::asymmetricVerify( const string &mess, const string &sign, const string 
     EVP_MD_CTX *ctx;
 
     if(!certPem.empty() && !sign.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
-    if(bm && BIO_write(bm,certPem.data(),certPem.size()) == (int)certPem.size());
+    if(bm && BIO_write(bm,certPem.data(),certPem.size()) == (int)certPem.size())
 	x = PEM_read_bio_X509_AUX(bm, NULL, NULL, NULL);
     if(x) pkey = X509_get_pubkey(x);
     if(pkey && (int)sign.size() == EVP_PKEY_size(pkey)) mdtmp = BIO_new(BIO_f_md());
@@ -1020,7 +1020,7 @@ string UA::asymmetricSign( const string &mess, const string &pvPem )
     unsigned int blen = 0;
 
     if(!pvPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
-    if(bm && BIO_write(bm,pvPem.data(),pvPem.size()) == (int)pvPem.size());
+    if(bm && BIO_write(bm,pvPem.data(),pvPem.size()) == (int)pvPem.size())
 	pkey = PEM_read_bio_PrivateKey(bm, NULL, 0, (char*)"keypass");
     if(pkey) mdtmp = BIO_new(BIO_f_md());
     if(mdtmp) {
@@ -1054,7 +1054,7 @@ int UA::asymmetricKeyLength( const string &keyCertPem )
     EVP_PKEY *pkey = NULL;
 
     if(!keyCertPem.empty()) bm = BIO_new(BIO_s_mem());
-    if(bm && BIO_write(bm,keyCertPem.data(),keyCertPem.size()) == (int)keyCertPem.size());
+    if(bm && BIO_write(bm,keyCertPem.data(),keyCertPem.size()) == (int)keyCertPem.size())
 	x = PEM_read_bio_X509_AUX(bm,NULL,NULL,NULL);
     if(x)	pkey = X509_get_pubkey(x);
     if(pkey)	rez = EVP_PKEY_size(pkey);
