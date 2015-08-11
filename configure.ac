@@ -273,6 +273,7 @@ AX_MOD_DAQ_EN(OneWire,[enable build module DAQ.OneWire],enable,incl,[
 AX_MOD_DAQ_EN(MMS,[enable build module DAQ.MMS],enable,[],[],
     [AC_CONFIG_FILES(src/moduls/daq/MMS/libMMS/Makefile)])
 AX_MOD_DAQ_EN(EPICS,[enable build module DAQ.EPICS],enable,[],[],[])
+AX_MOD_DAQ_EN(FT3,[enable build module DAQ.FT3],enable,[],[],[])
 if test $ix86 != yes -a $target_cpu != "ix86"; then enable_Fastwel=no; fi
 AX_MOD_DAQ_EN(Fastwel,[enable build module DAQ.Fastwel],enable,[],[],[])
 # Archive modules

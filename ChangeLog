@@ -1,3 +1,7 @@
+2015-08-11 fido_max
+- !!!!:DAQ: New module "FT3" for support FT3 devices protocol is added. It is initial implementation of GRS and SUAP implementation.
+
+
 2015-08-10 Roman
 - FIX:DAQ.OPC_UA: Possible processing for wrong certificates writing fixed, thanks for Dmitry Likov (rxs5).
 - UI.VCAEngine: Inline helps for attributes of generic, primitives ElFigure, FormEl mostly updated.

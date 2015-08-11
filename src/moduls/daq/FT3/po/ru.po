@@ -1,0 +1,799 @@
+# OpenSCADA.DAQ.FT3 translate to Russian.
+# Copyright (C) 2007-2015 Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya
+# This file is distributed under the same license as the OpenSCADA.DAQ.FT3 package module.
+#
+# Maxim Kothetkov, 2007-2015.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.FT3 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-11 16:48+0300\n"
+"PO-Revision-Date: 2007-10-29 10:21+0200\n"
+"Last-Translator: Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya\n"
+"Language-Team: \n"
+"Language: RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "State"
+msgstr "Состояние"
+
+#, c-format
+msgid "State %d"
+msgstr "Состояние %d"
+
+#, c-format
+msgid "Current flow %d"
+msgstr "Расход (Q) %d"
+
+#, c-format
+msgid "Measure period %d"
+msgstr "Период измерений %d"
+
+#, c-format
+msgid "Sensitivity %d"
+msgstr "Чувствительность %d"
+
+#, c-format
+msgid "Warning minimum %d"
+msgstr "Мин. предупред. %d"
+
+#, c-format
+msgid "Warning maximum %d"
+msgstr "Макс. предупред. %d"
+
+#, c-format
+msgid "Alarm minimum %d"
+msgstr "Мин. аварии ФВ %d"
+
+#, c-format
+msgid "Alarm maximum %d"
+msgstr "Макс. аварии ФВ %d"
+
+#, c-format
+msgid "Sensor 1 %d"
+msgstr "Номер датчика 1 %d"
+
+#, c-format
+msgid "Sensor 2 %d"
+msgstr "Номер датчика 2 %d"
+
+#, c-format
+msgid "Sensor T %d"
+msgstr "Номер датчика t %d"
+
+#, c-format
+msgid "Sensor P %d"
+msgstr "Номер датчика P %d"
+
+#, c-format
+msgid "Service flow %d"
+msgstr "Расход при нештатных ситуациях %d"
+
+#, c-format
+msgid "Contract hour %d"
+msgstr "Контрактный час %d"
+
+#, c-format
+msgid "Hourly flow %d"
+msgstr "Объем текущего часа %d"
+
+#, c-format
+msgid "Counter Q %d"
+msgstr "Счетчик объема %d"
+
+#, c-format
+msgid "Hour Q %d"
+msgstr "Среднее Q за предыдущий час %d"
+
+#, c-format
+msgid "Hour dP %d"
+msgstr "Среднее dP за предыдущий час %d"
+
+#, c-format
+msgid "Hour t %d"
+msgstr "Среднее t за предыдущий час %d"
+
+#, c-format
+msgid "Hour P %d"
+msgstr "Среднее P за предыдущий час %d"
+
+#, c-format
+msgid "Hour E %d"
+msgstr "Среднее E за предыдущий час %d"
+
+#, c-format
+msgid "Datetime %d"
+msgstr "Период %d"
+
+#, c-format
+msgid "Period %d"
+msgstr "Период %d"
+
+#, c-format
+msgid "Avg Q %d"
+msgstr "Среднее Q за период %d"
+
+#, c-format
+msgid "Avg dP %d"
+msgstr "Среднее dP за период %d"
+
+#, c-format
+msgid "Avg t %d"
+msgstr "Среднее t за период %d"
+
+#, c-format
+msgid "Avg P %d"
+msgstr "Среднее P за период %d"
+
+#, c-format
+msgid "Avg E %d"
+msgstr "Среднее E за период %d"
+
+#, c-format
+msgid "Periodicly Q %d"
+msgstr "Объем за период %d"
+
+#, c-format
+msgid "Density %d"
+msgstr "Плотность газа в НУ %d"
+
+#, c-format
+msgid "Equivalence asperity %d"
+msgstr "Эквивалентная шероховатость %d"
+
+#, c-format
+msgid "N concentration %d"
+msgstr "Молярная концентрация азота %d"
+
+#, c-format
+msgid "CO concentration %d"
+msgstr "Молярная концентрация углекислого газа %d"
+
+#, c-format
+msgid "Membrane diameter %d"
+msgstr "Диаметр диафрагмы %d"
+
+#, c-format
+msgid "Membrane factor %d"
+msgstr "Коэфф. телового расширения диафрагмы %d"
+
+#, c-format
+msgid "Pipe diameter %d"
+msgstr "Диаметр трубопровода %d"
+
+#, c-format
+msgid "Pipe factor %d"
+msgstr "Коэфф. телового расширения трубопровода %d"
+
+#, c-format
+msgid "Measure method %d"
+msgstr "Метод измерения %d"
+
+#, c-format
+msgid "Test dP/TI %d"
+msgstr "Тестовые значения dP/TI %d"
+
+#, c-format
+msgid "Test t %d"
+msgstr "Тестовые значения t %d"
+
+#, c-format
+msgid "Test P %d"
+msgstr "Тестовые значения P %d"
+
+#, c-format
+msgid "Test rate %d"
+msgstr "Тестовый расход %d"
+
+#, c-format
+msgid "Membrane radius %d"
+msgstr "Ср. радиус закругления кромки диаф. %d"
+
+#, c-format
+msgid "Atmospheric pressure %d"
+msgstr "Атмосферное давление %d"
+
+#, fuzzy, c-format
+msgid "dP %d"
+msgstr "Среднее dP за период %d"
+
+#, fuzzy, c-format
+msgid "t %d"
+msgstr "Среднее t за период %d"
+
+#, fuzzy, c-format
+msgid "P %d"
+msgstr "Среднее P за период %d"
+
+#, fuzzy, c-format
+msgid "E %d"
+msgstr "Среднее E за период %d"
+
+#, c-format
+msgid "Value %d"
+msgstr "Значение %d"
+
+#, c-format
+msgid "Dimension %d"
+msgstr "Размерность %d"
+
+#, c-format
+msgid "PV minimum %d"
+msgstr "Мин. ФВ %d"
+
+#, c-format
+msgid "PV maximum %d"
+msgstr "Макс. ФВ %d"
+
+#, c-format
+msgid "Minimum frequency %d"
+msgstr "Минимум частоты %d"
+
+#, c-format
+msgid "Maximum frequency %d"
+msgstr "Максимум частоты %d"
+
+#, c-format
+msgid "Factor %d"
+msgstr "Коэффициент (множитель) %d"
+
+#, fuzzy, c-format
+msgid "Alarms %d"
+msgstr "Мин. аварии ФВ %d"
+
+#, c-format
+msgid "Ki %d"
+msgstr ""
+
+#, c-format
+msgid "Ku %d"
+msgstr ""
+
+#, c-format
+msgid "A %d"
+msgstr ""
+
+msgid "Select TU"
+msgstr "Выбор ТУ"
+
+msgid "Execution"
+msgstr "Исполнение"
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+msgid "Modification"
+msgstr "Модификация"
+
+msgid "Timer state"
+msgstr "Состояние таймера"
+
+msgid "Current datetime"
+msgstr "Текущие дата-время"
+
+msgid "Stop datetime"
+msgstr "Дата-время последнего останова"
+
+msgid "Delay 1"
+msgstr "Величина задержки 1"
+
+msgid "Delay 2"
+msgstr "Величина задержки 2"
+
+#, c-format
+msgid "MakePacket one byte req %02X"
+msgstr "Создание пакета байтового опроса %02X"
+
+msgid "VerifyPacket one byte req"
+msgstr "Проверка пакета байтового опроса "
+
+#, c-format
+msgid ""
+"VerifyPacket bad packet pdu.size:%d raslen:%d VerCRC(pdu, pdu.size()):%d "
+"VerCRC(pdu, raslen):%d"
+msgstr "Плохой пакет pdu.size:%d raslen:%d VerCRC:%d VerCRC:%d"
+
+msgid "VerifyPacket bad tail"
+msgstr "Плохое окончание пакета"
+
+msgid "VerifyPacket no header"
+msgstr "Нет заголовка пакета"
+
+msgid "VerifyPacket no packet"
+msgstr "Не пакет"
+
+#, c-format
+msgid "ParsePacket one byte req C %02X A %02X"
+msgstr "Разбор пакета байтового опроса req C %02X A %02X"
+
+#, c-format
+msgid "new TProtIn %s"
+msgstr "Новое соединение %s"
+
+msgid "delete TProtIn"
+msgstr "Отключение"
+
+#, c-format
+msgid "request: %s"
+msgstr "запрос: %s"
+
+msgid "Correct packet found!"
+msgstr "Правильный пакет обнаружен"
+
+msgid "Packet parsed!"
+msgstr "Пакет разобран"
+
+#, c-format
+msgid "L:%02d C:%02X A:%02d B:%02d "
+msgstr "L:%02d C:%02X A:%02d B:%02d"
+
+#, c-format
+msgid "ProcessMessage one byte req A %02X"
+msgstr "Разбор пакета байтового опроса A %02X"
+
+msgid "ResetChan"
+msgstr "Сброс канала"
+
+msgid "ReqData BAD FCB!!!"
+msgstr "Запрос данных неверный FCB"
+
+#, c-format
+msgid "SetData FCB2 %02X newFCB2 %02X"
+msgstr "Установка данных FCB2 %02X newFCB2 %02X"
+
+msgid "SetData BAD FCB!!!"
+msgstr "Установка данных неверный FCB"
+
+msgid "AddrReq"
+msgstr "Адресный запрос"
+
+#, c-format
+msgid "AddrReq ID not found! %04X"
+msgstr "Адресный опрос ID не обнаружено %04X"
+
+msgid "ResData2"
+msgstr "Сброс данных класса 2"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Logic;DAQ"
+msgstr "Логический;Контроллер"
+
+msgid "Protocol"
+msgstr "Протокол"
+
+msgid "GRS;KA"
+msgstr "ГРС;КА"
+
+msgid "BUC Parameteres table"
+msgstr "Таблица параметров БУЦ"
+
+msgid "BVTS Parameteres table"
+msgstr "Таблица параметров БВТС"
+
+msgid "BVT Parameteres table"
+msgstr "Таблица параметров БВТ"
+
+msgid "BVI Parameteres table"
+msgstr "Таблица параметров БВИ"
+
+msgid "BIP Parameteres table"
+msgstr "Таблица параметров БИП"
+
+msgid "PAUK Parameteres table"
+msgstr "Таблица параметров ПАУК"
+
+msgid "BTU Parameteres table"
+msgstr "Таблица параметров БТУ"
+
+msgid "ACCOUNT Parameteres table"
+msgstr "Таблица параметров Узла учета"
+
+msgid "BTR Parameteres table"
+msgstr "Таблица параметров БТР"
+
+msgid "BTE Parameteres table"
+msgstr "Таблица параметров БТЭ"
+
+msgid "GZD Parameteres table"
+msgstr "Таблица параметров ГЗД"
+
+msgid "GNS Parameteres table"
+msgstr "Таблица параметров ГНС"
+
+msgid "Gather data period (s)"
+msgstr "Период сбора данных"
+
+msgid "Gather task priority"
+msgstr "Уровень приоритета задачи"
+
+msgid "Addres"
+msgstr "Адрес контроллера"
+
+msgid "Transport address"
+msgstr "Адрес транспорта"
+
+msgid "Channels count"
+msgstr "Число каналов"
+
+msgid "BUC"
+msgstr "БУЦ"
+
+msgid "Device address"
+msgstr "Адрес блока"
+
+msgid "BVTS"
+msgstr "БВТС"
+
+msgid "With parameters"
+msgstr "С параметрами"
+
+msgid "BVT"
+msgstr "БВТ"
+
+msgid "With correcting factor"
+msgstr "С корректирующим коэффициентом"
+
+msgid "With rate calculations"
+msgstr "С вычислением скорости"
+
+msgid "BVI"
+msgstr "БВИ"
+
+msgid "Ext period"
+msgstr ""
+
+msgid "BIP"
+msgstr "БИП"
+
+msgid "PAUK"
+msgstr "ПАУК"
+
+msgid "BTU"
+msgstr "БТУ"
+
+msgid "ACCOUNT"
+msgstr "Узел учета"
+
+msgid "BTR"
+msgstr "БТР"
+
+msgid "Channels count TU"
+msgstr "Число каналов ТУ"
+
+msgid "Channels count TR"
+msgstr "Число каналов ТР"
+
+msgid "BTE"
+msgstr "БТЭ"
+
+msgid "Channels count TE"
+msgstr "Число каналов ТЭ"
+
+msgid "GZD"
+msgstr "ГЗД"
+
+msgid "Channels count ZD"
+msgstr "Число задвижек"
+
+msgid "GNS"
+msgstr "ГНС"
+
+msgid "Channels count NS"
+msgstr "Число насосов"
+
+msgid "Parameter ID"
+msgstr "ID параметра"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "bad header found!"
+msgstr "неверный заголовок"
+
+#, c-format
+msgid "l %d"
+msgstr "l %d"
+
+#, c-format
+msgid "io_buf: %s"
+msgstr "io_buf: %s"
+
+#, c-format
+msgid "CRC %04X"
+msgstr "CRC %04X"
+
+#, c-format
+msgid "Parse error %d"
+msgstr "Ошибка разбора %d"
+
+#, c-format
+msgid "Verify error %d"
+msgstr "Ошибка при проверке %d"
+
+#, c-format
+msgid "Receive error %d"
+msgstr "Ошибка приема %d"
+
+msgid "messIO error"
+msgstr "Ошибка messIO"
+
+msgid "good header"
+msgstr "Правильный заголовок"
+
+msgid "bad packet"
+msgstr "Плохой пакет"
+
+msgid "cutting packet"
+msgstr "Обрезание пакета"
+
+#, c-format
+msgid "Gather data time %.6g ms. "
+msgstr "Время сбора данных %.6g мс. "
+
+#, c-format
+msgid "new event %d"
+msgstr "событие %d"
+
+#, c-format
+msgid "%d, %s"
+msgstr "%d, %s"
+
+#, c-format
+msgid "Unhandled event  %04X at %d"
+msgstr "Необработанное событие %04X в %d"
+
+msgid "No one device selected."
+msgstr "Ничего не выбрано"
+
+#, c-format
+msgid "TMdPrm::vlSet name %s "
+msgstr ""
+
+msgid "Parameters configuration"
+msgstr "Конфигурация параметров"
+
+msgid "Parameters"
+msgstr "Параметры"
+
+msgid "Valve select"
+msgstr "Выбор крана"
+
+msgid "Control"
+msgstr "Управление"
+
+msgid "Errors"
+msgstr "Ошибки"
+
+#, c-format
+msgid "Valve state %d"
+msgstr "Состояние крана %d"
+
+#, c-format
+msgid "Persistence time %d"
+msgstr "Время выжержки ТУ %d"
+
+#, c-format
+msgid "Persistence astime %d"
+msgstr "Доп. время выжержки ТУ %d"
+
+#, c-format
+msgid "Line %d"
+msgstr "Линия %d"
+
+#, c-format
+msgid "Time #%d %d"
+msgstr "Время #%d %d"
+
+#, c-format
+msgid "On %d"
+msgstr "Вкл %d"
+
+#, c-format
+msgid "Off %d"
+msgstr "Выкл %d"
+
+#, c-format
+msgid "Run %d"
+msgstr "Исполнить %d"
+
+#, c-format
+msgid "Reset %d"
+msgstr "Сброс %d"
+
+#, c-format
+msgid "Time %d"
+msgstr "Время %d"
+
+#, c-format
+msgid "TC %d"
+msgstr "ТС %d"
+
+#, c-format
+msgid "ExTime %d"
+msgstr "Доп. время %d"
+
+#, c-format
+msgid "Count %d"
+msgstr "Счетчик %d"
+
+#, c-format
+msgid "Range factor %d"
+msgstr "Коэффициент расширения диапазона %d"
+
+#, c-format
+msgid "Period TC %d"
+msgstr "Период TC %d"
+
+#, c-format
+msgid "Count TC %d"
+msgstr "Количество срабатываний %d"
+
+#, c-format
+msgid "Mask %d"
+msgstr "Маска %d"
+
+#, c-format
+msgid "Sensor minimum %d"
+msgstr "Мин. датчика %d"
+
+#, c-format
+msgid "Sensor maximum %d"
+msgstr "Макс. датчика %d"
+
+#, c-format
+msgid "Adjustment %d"
+msgstr "Смещение %d"
+
+#, c-format
+msgid "Correcting factor %d"
+msgstr "Корректирующий коэффициент %d"
+
+#, c-format
+msgid "Rate of change %d"
+msgstr "Средняя скорость изм. %d"
+
+#, c-format
+msgid "Calcs count %d"
+msgstr "Количество вычислений %d"
+
+#, c-format
+msgid "Rate sensitivity %d"
+msgstr "Чувствительность скорости %d"
+
+#, c-format
+msgid "Rate limit %d"
+msgstr "Предельная скорость %d"
+
+msgid "FT3"
+msgstr "АПСТМ (FT3)"
+
+msgid "Maxim Kochetkov"
+msgstr "Максим Кочетков"
+
+msgid "Allow realisation of FT3 protocols."
+msgstr "Предоставляет реализацию протокола FT3 для контроллеров АПСТМ"
+
+#, c-format
+msgid "Ban_MC %d"
+msgstr ""
+
+#, c-format
+msgid "Lubrication %d"
+msgstr "Смазка %d"
+
+#, c-format
+msgid "Time_Lub %d"
+msgstr "Время смазки %d"
+
+#, c-format
+msgid "Timeout_PO %d"
+msgstr "Таймаут предв. операции %d"
+
+#, c-format
+msgid "Function %d"
+msgstr "Функция %d"
+
+#, c-format
+msgid "TU on %d"
+msgstr "ТУ вкл %d"
+
+#, c-format
+msgid "TU off %d"
+msgstr "ТУ выкл %d"
+
+#, c-format
+msgid "TU stop %d"
+msgstr "ТУ стоп %d"
+
+#, c-format
+msgid "TU remote %d"
+msgstr "ТУ дистанционный %d"
+
+#, c-format
+msgid "TU manual %d"
+msgstr "ТУ ручной %d"
+
+#, c-format
+msgid "On time %d"
+msgstr "Время вкл. %d"
+
+#, c-format
+msgid "Off time %d"
+msgstr "Время выкл %d"
+
+#, c-format
+msgid "Stop time %d"
+msgstr "Время стоп %d"
+
+#, c-format
+msgid "Remote time %d"
+msgstr "Время дист.  %d"
+
+#, c-format
+msgid "Manual time %d"
+msgstr "Время ручн. %d"
+
+#, c-format
+msgid "On TC %d"
+msgstr "ТС вкл %d"
+
+#, c-format
+msgid "Off TC %d"
+msgstr "ТС выкл %d"
+
+#, c-format
+msgid "Mode TC %d"
+msgstr "ТС режим %d"
+
+#, c-format
+msgid "Work time %d"
+msgstr "Время работы %d"
+
+#, c-format
+msgid "TU open %d"
+msgstr "ТУ открыть %d"
+
+#, c-format
+msgid "TU close %d"
+msgstr "ТУ закрыть %d"
+
+#, c-format
+msgid "Open time %d"
+msgstr "Время открыть %d"
+
+#, c-format
+msgid "Close time %d"
+msgstr "Время закрыть %d"
+
+#, c-format
+msgid "Open TC %d"
+msgstr "ТС открыть %d"
+
+#, c-format
+msgid "Close TC %d"
+msgstr "ТС закрытия %d"
+
+#, c-format
+msgid "Open error TC %d"
+msgstr "ТС ошибка открытия %d"
+
+#, c-format
+msgid "Close error TC %d"
+msgstr "ТС ошибка закрытия"
+
+msgid "DAQ FT3"
+msgstr "АПСТМ (FT3)"
+
+msgid "Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya"
+msgstr "Максим Кочетков, Ольга Авдеева, Ольга Кузьмицкая"
+
+msgid "Allow realization of FT3 master/slave service"
+msgstr "Предоставляет реализацию протокола FT3 для контроллеров АПСТМ"
