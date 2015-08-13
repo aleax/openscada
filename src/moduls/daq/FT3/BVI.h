@@ -31,6 +31,7 @@ namespace FT3
 	~B_BVI();
 	uint16_t ID;
 	uint16_t count_n;
+	void AddChannel(uint8_t iid);
 	uint16_t Task(uint16_t);
 	uint16_t HandleEvent(uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
@@ -43,7 +44,7 @@ namespace FT3
 	class STIchannel
 	{
 	public:
-	    STIchannel(uint8_t iid) :
+	    STIchannel(uint8_t iid, DA* owner) : da(owner),
 		    id(iid), State(TSYS::strMess("state_%d", id + 1).c_str(), TSYS::strMess(_("State %d"), id + 1).c_str()),
 		    Value(TSYS::strMess("value_%d", id + 1).c_str(), TSYS::strMess(_("Value %d"), id + 1).c_str()),
 		    Period(TSYS::strMess("period_%d", id + 1).c_str(), TSYS::strMess(_("Measure period %d"), id + 1).c_str()),
@@ -54,6 +55,7 @@ namespace FT3
 
 	    {
 	    }
+	    DA* da;
 	    uint8_t id;
 
 	    ui8Data State, Dimension;

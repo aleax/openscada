@@ -33,25 +33,8 @@ B_BVI::B_BVI(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params, bool has_ext
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("0:0");
-
     for(int i = 0; i < count_n; i++) {
-	data.push_back(STIchannel(i));
-	mPrm.p_el.fldAdd(fld = new TFld(data[i].State.lnk.prmName.c_str(), data[i].State.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	fld->setReserve(TSYS::strMess("%d:0", i + 1));
-	mPrm.p_el.fldAdd(fld = new TFld(data[i].Value.lnk.prmName.c_str(), data[i].Value.lnk.prmDesc.c_str(), TFld::Real, TFld::NoWrite));
-	fld->setReserve(TSYS::strMess("%d:1", i + 1));
-	if(with_params) {
-	    mPrm.p_el.fldAdd(fld = new TFld(data[i].Period.lnk.prmName.c_str(), data[i].Period.lnk.prmDesc.c_str(), TFld::Integer, TVal::DirWrite));
-	    fld->setReserve(TSYS::strMess("%d:2", i + 1));
-	    mPrm.p_el.fldAdd(fld = new TFld(data[i].Sens.lnk.prmName.c_str(), data[i].Sens.lnk.prmDesc.c_str(), TFld::Real, TVal::DirWrite));
-	    fld->setReserve(TSYS::strMess("%d:3", i + 1));
-	    mPrm.p_el.fldAdd(fld = new TFld(data[i].Count.lnk.prmName.c_str(), data[i].Count.lnk.prmDesc.c_str(), TFld::Integer, TVal::DirWrite));
-	    fld->setReserve(TSYS::strMess("%d:4", i + 1));
-	    mPrm.p_el.fldAdd(fld = new TFld(data[i].Factor.lnk.prmName.c_str(), data[i].Factor.lnk.prmDesc.c_str(), TFld::Real, TVal::DirWrite));
-	    fld->setReserve(TSYS::strMess("%d:5", i + 1));
-	    mPrm.p_el.fldAdd(fld = new TFld(data[i].Dimension.lnk.prmName.c_str(), data[i].Dimension.lnk.prmDesc.c_str(), TFld::Integer, TVal::DirWrite));
-	    fld->setReserve(TSYS::strMess("%d:6", i + 1));
-	}
+	AddChannel(i);
     }
     loadIO(true);
 }
@@ -59,6 +42,20 @@ B_BVI::B_BVI(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params, bool has_ext
 B_BVI::~B_BVI()
 {
 
+}
+
+void B_BVI::AddChannel(uint8_t iid)
+{
+    data.push_back(STIchannel(iid, this));
+    AddAttr(data.back().State.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().Value.lnk, TFld::Real, TFld::NoWrite, TSYS::strMess("%d:1", iid + 1));
+    if(with_params) {
+	AddAttr(data.back().Period.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
+	AddAttr(data.back().Sens.lnk, TFld::Real, TVal::DirWrite, TSYS::strMess("%d:3", iid + 1));
+	AddAttr(data.back().Count.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:4", iid + 1));
+	AddAttr(data.back().Factor.lnk, TFld::Real, TVal::DirWrite, TSYS::strMess("%d:5", iid + 1));
+	AddAttr(data.back().Dimension.lnk, TFld::Real, TVal::DirWrite, TSYS::strMess("%d:6", iid + 1));
+    }
 }
 
 string B_BVI::getStatus(void)

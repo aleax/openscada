@@ -27,33 +27,16 @@
 
 using namespace FT3;
 
-B_GKR::B_GKR(TMdPrm& prm, uint16_t id, uint16_t nkr, bool has_params) :
-	DA(prm), ID(id), count_kr(nkr), with_params(has_params)
+B_GKR::B_GKR(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
+	DA(prm), ID(id), count_n(n), with_params(has_params)
 
 {
     TFld * fld;
     state = 0;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
-    //fld->setReserve("0:0");
-    for(int i = 0; i < count_kr; i++) {
-	KRdata.push_back(SKRchannel(i));
-	mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].State.lnk.prmName.c_str(), KRdata[i].State.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].On.lnk.prmName.c_str(), KRdata[i].On.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Off.lnk.prmName.c_str(), KRdata[i].Off.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Run.lnk.prmName.c_str(), KRdata[i].Run.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Reset.lnk.prmName.c_str(), KRdata[i].Reset.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Ban_MC.lnk.prmName.c_str(), KRdata[i].Ban_MC.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Lubrication.lnk.prmName.c_str(), KRdata[i].Lubrication.lnk.prmDesc.c_str(), TFld::Integer, TFld::NoWrite));
-	if(with_params) {
-	    mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Time.lnk.prmName.c_str(), KRdata[i].Time.lnk.prmDesc.c_str(), TFld::Real, TVal::DirWrite));
-	    //fld->setReserve(TSYS::strMess("%d:0", i + 1));
-	    mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].ExTime.lnk.prmName.c_str(), KRdata[i].ExTime.lnk.prmDesc.c_str(), TFld::Real, TVal::DirWrite));
-	    //fld->setReserve(TSYS::strMess("%d:2", i + 1));
-	    mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Time_Lub.lnk.prmName.c_str(), KRdata[i].Time_Lub.lnk.prmDesc.c_str(), TFld::Real, TVal::DirWrite));
-	    //fld->setReserve(TSYS::strMess("%d:0", i + 1));
-	    mPrm.p_el.fldAdd(fld = new TFld(KRdata[i].Timeout_PO.lnk.prmName.c_str(), KRdata[i].Timeout_PO.lnk.prmDesc.c_str(), TFld::Real, TVal::DirWrite));
-	    //fld->setReserve(TSYS::strMess("%d:2", i + 1));
-	}
+    fld->setReserve("0:0");
+    for(int i = 0; i < count_n; i++) {
+	AddChannel(i);
     }
     loadIO(true);
 }
@@ -63,6 +46,23 @@ B_GKR::~B_GKR()
 
 }
 
+void B_GKR::AddChannel(uint8_t iid)
+{
+    data.push_back(SKRchannel(iid, this));
+    AddAttr(data.back().State.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().On.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().Off.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().Run.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().Reset.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().Lock.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().Lubrication.lnk, TFld::Integer, TFld::NoWrite, TSYS::strMess("%d:0", iid + 1));
+    if(with_params) {
+	AddAttr(data.back().Time.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
+	AddAttr(data.back().ExTime.lnk, TFld::Real, TVal::DirWrite, TSYS::strMess("%d:3", iid + 1));
+	AddAttr(data.back().Time_Lub.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:4", iid + 1));
+	AddAttr(data.back().Timeout_PO.lnk, TFld::Real, TVal::DirWrite, TSYS::strMess("%d:5", iid + 1));
+    }
+}
 string B_GKR::getStatus(void)
 {
     string rez;
@@ -88,18 +88,18 @@ void B_GKR::loadIO(bool force)
     cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
     string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
     string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
-    for(int i = 0; i < count_kr; i++) {
-	loadLnk(KRdata[i].State.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].On.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Off.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Run.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Reset.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Ban_MC.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Lubrication.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Time.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].ExTime.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Time_Lub.lnk, io_bd, io_table, cfg);
-	loadLnk(KRdata[i].Timeout_PO.lnk, io_bd, io_table, cfg);
+    for(int i = 0; i < count_n; i++) {
+	loadLnk(data[i].State.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].On.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Off.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Run.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Reset.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Lock.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Lubrication.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Time.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].ExTime.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Time_Lub.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Timeout_PO.lnk, io_bd, io_table, cfg);
     }
 }
 
@@ -110,29 +110,29 @@ void B_GKR::saveIO()
     cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
     string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
     string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
-    for(int i = 0; i < count_kr; i++) {
-	saveLnk(KRdata[i].State.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].On.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Off.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Run.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Reset.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Ban_MC.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Lubrication.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Time.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].ExTime.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Time_Lub.lnk, io_bd, io_table, cfg);
-	saveLnk(KRdata[i].Timeout_PO.lnk, io_bd, io_table, cfg);
+    for(int i = 0; i < count_n; i++) {
+	saveLnk(data[i].State.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].On.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Off.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Run.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Reset.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Lock.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Lubrication.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Time.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].ExTime.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Time_Lub.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Timeout_PO.lnk, io_bd, io_table, cfg);
     }
 }
 
 void B_GKR::tmHandler(void)
 {
     NeedInit = false;
-    for(int i = 0; i < count_kr; i++) {
-	UpdateParamW(KRdata[i].Time, PackID(ID, i + 1, 5), 1);
-	UpdateParam8(KRdata[i].ExTime, PackID(ID, i + 1, 6), 1);
-	UpdateParamW(KRdata[i].Time_Lub, PackID(ID, i + 1, 7), 1);
-	UpdateParam8(KRdata[i].Timeout_PO, PackID(ID, i + 1, 8), 1);
+    for(int i = 0; i < count_n; i++) {
+	UpdateParamW(data[i].Time, PackID(ID, i + 1, 5), 1);
+	UpdateParam8(data[i].ExTime, PackID(ID, i + 1, 6), 1);
+	UpdateParamW(data[i].Time_Lub, PackID(ID, i + 1, 7), 1);
+	UpdateParam8(data[i].Timeout_PO, PackID(ID, i + 1, 8), 1);
     }
 }
 
@@ -162,61 +162,61 @@ uint8_t B_GKR::cmdGet(uint16_t prmID, uint8_t * out)
 	    l = 1;
 	    break;
 	case 1:
-	    for(i = 0; i <= count_kr; i++) {
-		out[i] = KRdata[i].State.vl;
+	    for(i = 0; i <= count_n; i++) {
+		out[i] = data[i].State.vl;
 	    }
-	    l = count_kr;
+	    l = count_n;
 	    break;
 	}
     } else {
-	if(count_kr && (ft3ID.k <= count_kr)) {
+	if(count_n && (ft3ID.k <= count_n)) {
 	    switch(ft3ID.n) {
 	    case 0:
-		out[0] = KRdata[ft3ID.k - 1].State.vl;
+		out[0] = data[ft3ID.k - 1].State.vl;
 		l = 1;
 		break;
 	    case 1:
-		out[0] = KRdata[ft3ID.k - 1].On.s;
-		out[1] = KRdata[ft3ID.k - 1].On.vl;
+		out[0] = data[ft3ID.k - 1].On.s;
+		out[1] = data[ft3ID.k - 1].On.vl;
 		l = 2;
 		break;
 	    case 2:
-		out[0] = KRdata[ft3ID.k - 1].Run.s;
-		out[1] = KRdata[ft3ID.k - 1].Run.vl;
+		out[0] = data[ft3ID.k - 1].Run.s;
+		out[1] = data[ft3ID.k - 1].Run.vl;
 		l = 2;
 		break;
 	    case 3:
-		out[0] = KRdata[ft3ID.k - 1].Ban_MC.s;
-		out[1] = KRdata[ft3ID.k - 1].Ban_MC.vl;
+		out[0] = data[ft3ID.k - 1].Lock.s;
+		out[1] = data[ft3ID.k - 1].Lock.vl;
 		l = 2;
 		break;
 	    case 4:
-		out[0] = KRdata[ft3ID.k - 1].Lubrication.s;
-		out[1] = KRdata[ft3ID.k - 1].Lubrication.vl;
+		out[0] = data[ft3ID.k - 1].Lubrication.s;
+		out[1] = data[ft3ID.k - 1].Lubrication.vl;
 		l = 2;
 		break;
 	    case 5:
-		out[0] = KRdata[ft3ID.k - 1].Time.s;
-		out[1] = ((uint16_t) KRdata[ft3ID.k - 1].Time.vl);	//msec
-		out[2] = ((uint16_t) KRdata[ft3ID.k - 1].Time.vl) >> 8;	//msec
+		out[0] = data[ft3ID.k - 1].Time.s;
+		out[1] = ((uint16_t) data[ft3ID.k - 1].Time.vl);	//msec
+		out[2] = ((uint16_t) data[ft3ID.k - 1].Time.vl) >> 8;	//msec
 		l = 3;
 		break;
 	    case 6:
-		out[0] = KRdata[ft3ID.k - 1].ExTime.s;
-		out[1] = ((uint16_t) KRdata[ft3ID.k - 1].ExTime.vl);	//msec
-		out[2] = ((uint16_t) KRdata[ft3ID.k - 1].ExTime.vl) >> 8;	//msec
+		out[0] = data[ft3ID.k - 1].ExTime.s;
+		out[1] = ((uint16_t) data[ft3ID.k - 1].ExTime.vl);	//msec
+		out[2] = ((uint16_t) data[ft3ID.k - 1].ExTime.vl) >> 8;	//msec
 		l = 3;
 		break;
 	    case 7:
-		out[0] = KRdata[ft3ID.k - 1].Time_Lub.s;
-		out[1] = ((uint16_t) KRdata[ft3ID.k - 1].Time_Lub.vl);	//msec
-		out[2] = ((uint16_t) KRdata[ft3ID.k - 1].Time_Lub.vl) >> 8;	//msec
+		out[0] = data[ft3ID.k - 1].Time_Lub.s;
+		out[1] = ((uint16_t) data[ft3ID.k - 1].Time_Lub.vl);	//msec
+		out[2] = ((uint16_t) data[ft3ID.k - 1].Time_Lub.vl) >> 8;	//msec
 		l = 3;
 		break;
 	    case 8:
-		out[0] = KRdata[ft3ID.k - 1].Timeout_PO.s;
-		out[1] = ((uint16_t) KRdata[ft3ID.k - 1].Timeout_PO.vl);	//msec
-		out[2] = ((uint16_t) KRdata[ft3ID.k - 1].Timeout_PO.vl) >> 8;	//msec
+		out[0] = data[ft3ID.k - 1].Timeout_PO.s;
+		out[1] = ((uint16_t) data[ft3ID.k - 1].Timeout_PO.vl);	//msec
+		out[2] = ((uint16_t) data[ft3ID.k - 1].Timeout_PO.vl) >> 8;	//msec
 		l = 3;
 		break;
 	    }
@@ -233,7 +233,7 @@ uint8_t B_GKR::cmdSet(uint8_t * req, uint8_t addr)
     uint l = 0;
 //    mess_info(mPrm.nodePath().c_str(), "cmdSet k %d n %d", ft3ID.k, ft3ID.n);
     if(ft3ID.k != 0) {
-	if(count_kr && (ft3ID.k <= count_kr)) {
+	if(count_n && (ft3ID.k <= count_n)) {
 	    switch(ft3ID.n) {
 	    case 1:
 		setTU(ft3ID.k, req[2], addr, prmID);
@@ -244,22 +244,22 @@ uint8_t B_GKR::cmdSet(uint8_t * req, uint8_t addr)
 		l = 3;
 		break;
 	    case 3:
-		l = SetNew8Val(KRdata[ft3ID.k - 1].Ban_MC, addr, prmID, req[2]);
+		l = SetNew8Val(data[ft3ID.k - 1].Lock, addr, prmID, req[2]);
 		break;
 	    case 4:
-		l = SetNew8Val(KRdata[ft3ID.k - 1].Lubrication, addr, prmID, req[2]);
+		l = SetNew8Val(data[ft3ID.k - 1].Lubrication, addr, prmID, req[2]);
 		break;
 	    case 5:
-		l = SetNewWVal(KRdata[ft3ID.k - 1].Time, addr, prmID, TSYS::getUnalign16(req + 2));
+		l = SetNewWVal(data[ft3ID.k - 1].Time, addr, prmID, TSYS::getUnalign16(req + 2));
 		break;
 	    case 6:
-		l = SetNew8Val(KRdata[ft3ID.k - 1].ExTime, addr, prmID, TSYS::getUnalign16(req + 2));
+		l = SetNew8Val(data[ft3ID.k - 1].ExTime, addr, prmID, TSYS::getUnalign16(req + 2));
 		break;
 	    case 7:
-		l = SetNewWVal(KRdata[ft3ID.k - 1].Time_Lub, addr, prmID, TSYS::getUnalign16(req + 2));
+		l = SetNewWVal(data[ft3ID.k - 1].Time_Lub, addr, prmID, TSYS::getUnalign16(req + 2));
 		break;
 	    case 8:
-		l = SetNew8Val(KRdata[ft3ID.k - 1].Timeout_PO, addr, prmID, TSYS::getUnalign16(req + 2));
+		l = SetNew8Val(data[ft3ID.k - 1].Timeout_PO, addr, prmID, TSYS::getUnalign16(req + 2));
 		break;
 	    }
 	}
@@ -269,8 +269,8 @@ uint8_t B_GKR::cmdSet(uint8_t * req, uint8_t addr)
 
 void B_GKR::setTU(uint8_t k, uint8_t val, uint8_t addr, uint16_t prmID)
 {
-    if((k > 0) && (k < count_kr)) {
-	SKRchannel & TU = KRdata[k - 1];
+    if((k > 0) && (k < count_n)) {
+	SKRchannel & TU = data[k - 1];
 	if(val) {
 	    if(TU.On.lnk.Connected()) {
 		//on
@@ -294,8 +294,8 @@ void B_GKR::setTU(uint8_t k, uint8_t val, uint8_t addr, uint16_t prmID)
 }
 void B_GKR::runTU(uint8_t k, uint8_t val, uint8_t addr, uint16_t prmID)
 {
-    if((k > 0) && (k < count_kr)) {
-	SKRchannel & TU = KRdata[k - 1];
+    if((k > 0) && (k < count_n)) {
+	SKRchannel & TU = data[k - 1];
 	if((val == 0x55) && (TU.Run.lnk.Connected())) {
 	    TU.Run.s = addr;
 	    TU.Run.lnk.aprm.at().setI(1);
