@@ -697,22 +697,22 @@ AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off )
 
 string Widget::helpImg( )
 {
-    return _("Image name in form \"[src:]name\", where:\n"
-	    "  \"src\" - image source:\n"
-	    "    file - direct from local file by path;\n"
-	    "    res - from DB mime resources table.\n"
-	    "  \"name\" - file path or resource mime Id.\n"
+    return _("Image name in form \"[{src}:]{name}\", where:\n"
+	    "  \"src\" - the image source:\n"
+	    "    file - direct from local file by the path;\n"
+	    "    res - from the DB mime resources table.\n"
+	    "  \"name\" - the file path or the resource mime Id.\n"
 	    "Examples:\n"
-	    "  \"res:backLogo\" - from DB mime resources table for Id \"backLogo\";\n"
+	    "  \"res:backLogo\" - from the DB mime resources table for Id \"backLogo\";\n"
 	    "  \"backLogo\" - like previous;\n"
-	    "  \"file:/var/tmp/backLogo.png\" - from local file by path \"/var/tmp/backLogo.png\".");
+	    "  \"file:/var/tmp/backLogo.png\" - from local file by the path \"/var/tmp/backLogo.png\".");
 }
 
 string Widget::helpColor( )
 {
-    return _("Color name form \"color[-alpha]\", where:\n"
+    return _("Color name form \"{color}[-{alpha}]\", where:\n"
 	    "  \"color\" - standard color name or digital view of three hexadecimal digit's number form \"#RRGGBB\";\n"
-	    "  \"alpha\" - alpha channel level (0-255).\n"
+	    "  \"alpha\" - alpha channel level [0...255], where 0 - full transparent.\n"
 	    "Examples:\n"
 	    "  \"red\" - solid red color;\n"
 	    "  \"#FF0000\" - solid red color by digital code;\n"

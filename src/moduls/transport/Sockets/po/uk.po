@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-21 19:09+0200\n"
+"POT-Creation-Date: 2015-08-20 18:12+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -137,6 +137,14 @@ msgstr "Сокет відповів повідомленням '%d' до '%s'."
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Від сокету від'єднався '%s'!"
 
+#, c-format
+msgid "New input protocol's object '%s' created!"
+msgstr ""
+
+#, c-format
+msgid "Input protocol's object '%s' closed by self!"
+msgstr ""
+
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
 
@@ -263,8 +271,8 @@ msgstr "Помилка запиту: %s"
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
-msgid "Socket error!"
-msgstr "Помилка сокету!"
+msgid "Socket error: %s"
+msgstr "Помилка сокету: %s"
 
 msgid ""
 "Socket's output transport has address format:\n"

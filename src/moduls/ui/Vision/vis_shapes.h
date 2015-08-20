@@ -42,6 +42,7 @@
 #include <QTableWidget>
 #include <QScrollArea>
 #include <QTextBrowser>
+#include <QPrinter>
 
 #ifdef HAVE_WEBKIT
 #include <QWebView>

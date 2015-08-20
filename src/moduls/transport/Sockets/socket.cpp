@@ -1076,8 +1076,18 @@ repeate:
 	tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
 	FD_ZERO(&rw_fd); FD_SET(sock_fd, &rw_fd);
 	kz = select(sock_fd+1, &rw_fd, NULL, NULL, &tv);
-	if(kz == 0)	{ res.release(); if(writeReq) stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
-	else if(kz < 0)	{ res.release(); stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Socket error!")); }
+	if(kz == 0) {
+	    res.release();
+	    if(writeReq) stop();
+	    mLstReqTm = TSYS::curTime();
+	    throw TError(nodePath().c_str(),_("Timeouted!"));
+	}
+	else if(kz < 0)	{
+	    err = strerror(errno);
+	    res.release(); stop();
+	    mLstReqTm = TSYS::curTime();
+	    throw TError(nodePath().c_str(),_("Socket error: %s"), err.c_str());
+	}
 	else if(FD_ISSET(sock_fd, &rw_fd)) {
 	    i_b = read(sock_fd, ibuf, len_ib);
 	    if(i_b <= 0 && obuf) {

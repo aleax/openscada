@@ -740,16 +740,16 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: case A_BordColor: case A_TextColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_TextFont: el->setAttr("help",Widget::helpFont());	break;
 		    case A_BackImg:  el->setAttr("help",Widget::helpImg());	break;
-		    case A_TextText: el->setAttr("help",_("Text value. Use \"%{n}\" for argument {n} (from 1) value insert.")); break;
+		    case A_TextText: el->setAttr("help",_("Text value. Use \"%{x}\" for argument \"x\" (from 1) value insert.")); break;
 		}
 	    }
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++) {
 		if(!(el=ctrId(root,"/arg"+i2s(i_arg)+"cfg",true))) continue;
 		switch(src->attrAt("arg"+i2s(i_arg)+"tp").at().getI()) {
-		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
-		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
-							     "Where \"form\" that 'g', 'e' or 'f'."));			break;
-		    case A_TextArsCfg:	el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
+		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in form \"{len}\"."));break;
+		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in form: \"{width};{form};{prec}\".\n"
+							     "Where \"form\" that 'g', 'e' or 'f'."));		break;
+		    case A_TextArsCfg:	el->setAttr("help",_("String value configuration in form \"{len}\"."));	break;
 		}
 	    }
 	}
@@ -876,16 +876,16 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: case A_BordColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());		break;
 		    case A_MediaSrc: el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+el->attr("id"))->setAttr("help",
-			_("Media source name in form \"[src:]name\", where:\n"
+			_("Media source name in form \"[{src}:]{name}\", where:\n"
 			"  \"src\" - source:\n"
-			"    file - direct from local (visualizator or engine) file by path;\n"
-			"    res - from DB mime resources table;\n"
+			"    file - direct from local (visualizator or engine) file by the path;\n"
+			"    res - from the DB mime resources table;\n"
 			"    stream - Stream URL for video and audio play.\n"
-			"  \"name\" - file path or resource mime Id.\n"
+			"  \"name\" - the file path or the resource mime Id.\n"
 			"Examples:\n"
-			"  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
+			"  \"res:workMedia\" - from the DB mime resources table for Id \"workMedia\";\n"
 			"  \"workMedia\" - like previous;\n"
-			"  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\";\n"
+			"  \"file:/var/tmp/workMedia.mng\" - from local file by the path \"/var/tmp/workMedia.mng\";\n"
 			"  \"stream:http://localhost.localhost:5050\" - video and audio stream play from URL."));
 			break;
 		    case A_MediaType: el->setAttr("help",
@@ -951,8 +951,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrDel("curColor");
 	}
 	else {
-	    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-	    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 	    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 	}
     }
@@ -966,15 +966,15 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	//> Create specific attributes
 	switch(cfg.getI()) {
 	    case FD_TRND:
-		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale:horizontal grid size, sek"),TFld::Real,Attr::Mutable,
+		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale:horizontal grid size, seconds"),TFld::Real,Attr::Mutable,
 		    "","0","0;3e6","",i2s(A_DiagramSclHorPer).c_str()));
 	    case FD_SPECTR: case FD_XY:
-		cfg.owner()->attrAdd(new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
-		cfg.owner()->attrAdd(new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
-		cfg.owner()->attrAdd(new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;3e6","",i2s(A_DiagramTSize).c_str()));
+		cfg.owner()->attrAdd(new TFld("tSek",_("Time:seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
+		cfg.owner()->attrAdd(new TFld("tUSek",_("Time:microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
+		cfg.owner()->attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Real,Attr::Mutable,"","60","0;3e6","",i2s(A_DiagramTSize).c_str()));
 		if(cfg.owner()->attrAt("active").at().getB()) {
-		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 		}
 		cfg.owner()->attrAdd(new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","",i2s(A_DiagramSclColor).c_str()));
@@ -1060,7 +1060,7 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_DiagramSclMarkFont: el->setAttr("help",Widget::helpFont());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_DiagramValArch:
-			el->setAttr("help",_("Value archivator in form \"ArchMod.ArchivatorId\"."));	break;
+			el->setAttr("help",_("Value archivator in form \"{ArchMod}.{ArchivatorId}\"."));	break;
 		    case A_DiagramValsForPix:
 			el->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
 			break;
@@ -1070,20 +1070,22 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if((el=ctrId(root,TSYS::strMess("/prm%dcolor",i_p),true))) el->setAttr("help",Widget::helpColor());
 		if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
 		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
-		      "Also support direct data set by prefixes:\n"
-		      "  \"data:{XMLNodeData}\" - draw from direct set data;\n"
-		      "  \"line:{value}\" - draw horizontal line by value.\n"
+		      "Also supported direct data set by the prefixes:\n"
+		      "  \"data:{XMLNodeData}\" - drawing from the direct set data;\n"
+		      "  \"line:{value}\" - drawing the horizontal line by the value, no sense have for type \"XY\".\n"
 		      "Example:\n"
 		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute \"use\" of parameter \"MemInfo\"\n"
-		      "	    of controller \"AutoDA\" of DAQ module \"System\";\n"
+		      "    of controller \"AutoDA\" of DAQ module \"System\";\n"
 		      "  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\";\n"
-		      "  \"data:<d tm=\"1369465209000000\" tm_grnd=\"1369465200000000\" per=\"1000000\">\n"
+		      "  \"data:<d s=\"1\" tm=\"1369465209\" tm_grnd=\"1369465200\" per=\"1\">\n"
 		      "    0 3.14\n"
 		      "    1 3.141\n"
 		      "    5 3.1415</d> - data for 10 seconds and period 1 second from \"25.05.2013 10:00:00\";\n"
+		      "      at pass \"tm\" and \"tm_grnd\" it will sets values from the diagram range,\n"
+		      "      and also by set attribute \"s\" it will allows the time set into seconds;\n"
 		      "  \"line:3.14159265\" - horizontal line into value \"3.14159265\"."));
 		if((el=ctrId(root,TSYS::strMess("/prm%dprop",i_p),true))) el->setAttr("help",
-		    _("Real archive properties in form \"BegArh:EndArh:DataPeriod\", where:\n"
+		    _("Real archive properties in form \"{BegArh}:{EndArh}:{DataPeriod}\", where:\n"
 		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's data in seconds,\n"
 		      "                  real up to microseconds (1e-6)."));
 	    }
@@ -1113,8 +1115,8 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
 	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_ProtFont).c_str()));
 	attrAdd(new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","",i2s(A_ProtHeadVis).c_str()));
-	attrAdd(new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
-	attrAdd(new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
+	attrAdd(new TFld("time",_("Time, seconds"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
+	attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
 	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
 	attrAdd(new TFld("arch",_("Archivator"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_ProtArch).c_str()));
 	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_ProtTmpl).c_str()));
@@ -1181,9 +1183,9 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_ProtFont: el->setAttr("help",Widget::helpFont());	break;
-		    case A_ProtArch: el->setAttr("help",_("Messages archivator in form \"ArchMod.ArchivatorId\"."));	break;
-		    case A_ProtLev: el->setAttr("help",_("Set value to < 0 for get current alarms."));	break;
-		    case A_ProtTSize: el->setAttr("help",_("Set value to '0' for get all alarms, for \"lev\" < 0."));	break;
+		    case A_ProtArch: el->setAttr("help",_("Messages archivator in form \"{ArchMod}.{ArchivatorId}\"."));	break;
+		    case A_ProtLev: el->setAttr("help",_("Set value to \"< 0\" for get the current alarms."));	break;
+		    case A_ProtTSize: el->setAttr("help",_("Set value to \"0\" for get all alarms, for \"lev\" < 0."));	break;
 		    case A_ProtTmpl: el->setAttr("help",
 			_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
 			"  '*' - any multiply symbols group;\n"

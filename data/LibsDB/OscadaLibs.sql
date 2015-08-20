@@ -1061,6 +1061,25 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',6,'','',''
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','H','Upper border',3,16,'',7,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','L','Lower border',3,16,'',8,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'','','Transport','Sockets.out_IVE');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','addr','Device address',1,64,'255',1,'','','Device address','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COIA','Output current level set-point',1,33,'',2,'','','Output current level set-point','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COUA','Output voltage level set-point',1,33,'',3,'','','Output voltage level set-point','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COPA','Output power level set-point',1,33,'',4,'','','Output power level set-point','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DIA','Output current',1,16,'',5,'','','Output current','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DUA','Output voltage',1,16,'',6,'','','Output voltage','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DPA','Output power',1,16,'',7,'','','Output power','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DFA','Electric arcs frequency',1,16,'',8,'','','Electric arcs frequency','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DAC','Electric arcs counter',1,16,'',9,'','','Electric arcs counter','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEW','Command: Blocking by SC and XX',3,32,'',10,'','','Command: Blocking by SC and XX','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_OUT','Command: Display on UI out block''s params',3,32,'',11,'','','Command: Display on UI out block''s params','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEP','Command: Enable MK',3,32,'',12,'','','Command: Enable MK','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEL','Command: Blocks #1,2 to net',3,32,'',13,'','','Command: Blocks #1,2 to line','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_UF','Command: Display on UI frequency and current',3,32,'',14,'','','Command: Display on UI frequency and current','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKW','MUBR of the block overheated',3,16,'',15,'','','MUBR of the block overheated','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'','','Short circuits on the block out','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DK','MK of the block overheated',3,16,'',17,'','','MK of the block overheated','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'','','Power and voltage on out present','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2669,6 +2688,13 @@ INSERT INTO "Trs" VALUES('Info block CRC error.','','');
 INSERT INTO "Trs" VALUES('Request error','','');
 INSERT INTO "Trs" VALUES('Serial output transport ''%1'' error.','','');
 INSERT INTO "Trs" VALUES('Request: TRANSL_TEMP.','','');
+INSERT INTO "Trs" VALUES('Device address out of range 0...255','','');
+INSERT INTO "Trs" VALUES('No a respond','','');
+INSERT INTO "Trs" VALUES('Respond too short or wrong','','');
+INSERT INTO "Trs" VALUES('CRC error','','');
+INSERT INTO "Trs" VALUES('Output transport ''%1'' error.','','');
+INSERT INTO "Trs" VALUES('Read all data.','','');
+INSERT INTO "Trs" VALUES('Reply is not full','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -3769,6 +3795,107 @@ else {
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
 else f_err = "0";','','',1427533354);
+INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','IVE-452HS-02','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	addr_ = addr;
+	transport_ = transport;
+	COIA = COIA_ = COUA = COUA_ = COPA = COPA_ = DIA = DUA = DPA = DFA = EVAL_INT;
+	COM_DEW = COM_DEW_ = COM_OUT = COM_OUT_ = COM_DEP	= COM_DEP_ = COM_DEL = COM_DEL_ = COM_UF = COM_UF_ =
+					DKW = DKZ = DK = DE = EVAL_BOOL;
+	tr = SYS.Transport.nodeAt(transport,".");
+}
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.nodeAt(transport,".");
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	req = SYS.XMLNode("mess").setAttr("ProtIt","IVE_452HS_02").setAttr("addr",addr);
+
+	//Check for the address need to change
+	if(addr != addr_) {
+		hwReg = 0x00;
+		req.setAttr("err","2:"+tr("No connection")).setAttr("addr",addr_)
+			.setText(SYS.strFromCharCode(0x57,0x04,0x00,hwReg,hwReg,0x06,addr));
+		tr.messIO(req, "UserProtocol");
+		req.setText(SYS.strFromCharCode(0x57,0x04,0x00,hwReg,hwReg,0x08,0x00));
+		tr.messIO(req, "UserProtocol");
+		req.setAttr("addr", addr);
+		addr_ = addr;
+	}
+
+	//Check and write commands
+	if(COIA != COIA_ && !(t_err=req.attr("err")).length)	{
+		hwReg = 0x01;
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x57,0x04,0x00,hwReg,hwReg,COIA&0xFF,(COIA>>8)&0xFF));
+		tr.messIO(req, "UserProtocol");
+	}
+	if(COUA != COUA_ && !(t_err=req.attr("err")).length) {
+		hwReg = 0x02;
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x57,0x04,0x00,hwReg,hwReg,COUA&0xFF,(COUA>>8)&0xFF));
+		tr.messIO(req, "UserProtocol");
+	}
+	if(COPA != COPA_ && !(t_err=req.attr("err")).length) {
+		hwReg = 0x03;
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x57,0x04,0x00,hwReg,hwReg,COPA&0xFF,(COPA>>8)&0xFF));
+		tr.messIO(req, "UserProtocol");
+	}
+	if((COM_DEW != COM_DEW_ || COM_OUT != COM_OUT_ || COM_DEP != COM_DEP_ || COM_DEL != COM_DEL_ || COM_UF != COM_UF_) && !(t_err=req.attr("err")).length) {
+		tmp = 0;
+		if(COM_DEW)	tmp = tmp | 0x8000;
+		if(COM_OUT)	tmp = tmp | 0x4000;
+		if(COM_DEP)	tmp = tmp | 0x1000;
+		if(COM_DEL)	tmp = tmp | 0x0800;
+		if(COM_UF)	tmp = tmp | 0x0004;
+		hwReg = 0x15;
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x57,0x04,0x00,hwReg,hwReg,tmp&0xFF,(tmp>>8)&0xFF));
+		tr.messIO(req, "UserProtocol");
+	}
+
+	//Read data
+	if(!(t_err=req.attr("err")).length) {
+		SYS.messDebug("/IVE452HS02/TMPL",tr("Read all data."));
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x52,0x02,0x00,0x01,0x16));
+		tr.messIO(req, "UserProtocol");
+		if(!(t_err=req.attr("err")).length) {
+			if(req.text().length < (0x16*2+5))	req.setAttr("err", "10:"+tr("Reply is not full"));
+			else {
+				hwReg = 0x01; COIA = COIA_ = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x02; COUA = COUA_ = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x03; COPA = COPA_ = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x07; DIA = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x08; DUA = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x0E; DAC = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x10; DPA = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x11; DFA = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				hwReg = 0x15; tmp = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				COM_DEW = COM_DEW_ = tmp&0x8000;
+				COM_OUT = COM_OUT_ = tmp&0x4000;
+				COM_DEP = COM_DEP_ = tmp&0x1000;
+				COM_DEL = COM_DEL_ = tmp&0x0800;
+				COM_UF = COM_UF_ = tmp&0x0004;
+				hwReg = 0x16; tmp = (req.text().charCodeAt((hwReg-1)*2+6)<<8)+req.text().charCodeAt((hwReg-1)*2+5);
+				DKW = !(tmp&0x8); DKZ = !(tmp&0x4); DK = !(tmp&0x2); DE = tmp&0x1;
+			}
+		}
+	}
+}
+
+if(t_err.length) {
+	COIA = COIA_ = COUA = COUA_ = COPA = COPA_ = DIA = DUA = DAC = DPA = DFA = EVAL_INT;
+	COM_DEW = COM_DEW_ = COM_OUT = COM_OUT_ = COM_DEP	= COM_DEP_ = COM_DEL = COM_DEL_ = COM_UF = COM_UF_ = 
+					DKW = DKZ = DK = DE = EVAL_BOOL;
+	SYS.messDebug("/IVE452HS02/TMPL",tr("Error response")+": "+t_err);
+	f_err = t_err;
+}
+else f_err = "0";','','',1440089815);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -5619,6 +5746,40 @@ for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
 	{ io.setAttr("err","5:"+resp.charCodeAt(blkOff+7)+":"+tr("Request error")); return; }
 	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
 }','',1427532674);
+INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','ИВЭ-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',1,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="255" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (0...255);
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 0 || addr > 255) { io.setAttr("err","1:"+tr("Device address out of range 0...255")); return; }
+//Request prepare
+req = SYS.strFromCharCode(addr)+io.text();
+for(KS = 0, i = 0; i < req.length; i++)	KS += req.charCodeAt(i);
+KS = 0x100-KS&0xFF;
+req += SYS.strFromCharCode(KS);
+SYS.messDebug("/IVE452HS02/PRT",tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+
+//Send request
+resp = tr.messIO(req);
+while(resp.length) {
+	if(!(tresp=tr.messIO("")).length) break;
+  	resp += tresp;
+}
+if(resp.length == 0) { io.setAttr("err","2:"+tr("No a respond")); return; }
+SYS.messDebug("/IVE452HS02/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+if(resp.length <= 3 || resp.charCodeAt(0) != addr || resp.charCodeAt(1) != req.charCodeAt(1))
+{ io.setAttr("err","3:"+tr("Respond too short or wrong")); return; }
+for(KS = 0, i = 0; i < resp.length-1; i++)	KS += resp.charCodeAt(i);
+KS = 0x100-KS&0xFF;
+if(resp.charCodeAt(resp.length-1) != KS )	{ io.setAttr("err","3:"+tr("CRC error")); return; }
+io.setText(resp.slice(1,resp.length-1));','',1439819778);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalc','Перерахунок архівів','Пересчёт архивов','','','',600,1,'using Special.FLibSYS;
 
