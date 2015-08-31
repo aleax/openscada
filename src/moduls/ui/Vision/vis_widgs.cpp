@@ -41,16 +41,15 @@
 #include <QApplication>
 #include <QStatusBar>
 #include <QToolTip>
+#include <QCompleter>
 
 #include <tsys.h>
 
-#include "../VCAEngine/types.h"
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
 
 using namespace VISION;
-using namespace VCA;
 
 //*************************************************
 //* Id and name input dialog                      *
@@ -176,15 +175,14 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     edLay->addWidget(passwd, 1, 1);
     dlg_lay->addItem(edLay);
 
-    dlg_lay->addItem(new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    dlg_lay->addItem(new QSpacerItem(20,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
 
     QFrame *sep = new QFrame(this);
     sep->setFrameShape(QFrame::HLine);
     sep->setFrameShadow(QFrame::Raised);
     dlg_lay->addWidget(sep);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox( QDialogButtonBox::Ok|
-						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
@@ -352,8 +350,7 @@ void FontDlg::showEvent( QShowEvent * event )
 //*********************************************
 //* Status bar user widget                    *
 //*********************************************
-UserStBar::UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent ) : 
-    QLabel(parent)
+UserStBar::UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent ) : QLabel(parent)
 {
     setUser(iuser);
     setPass(ipass);
@@ -369,7 +366,7 @@ void UserStBar::setUser( const QString &val )
 bool UserStBar::event( QEvent *event )
 {
     if(event->type() == QEvent::MouseButtonDblClick)	userSel();
-    return QLabel::event( event );
+    return QLabel::event(event);
 }
 
 bool UserStBar::userSel( )
@@ -597,6 +594,7 @@ void LineEdit::setCfg( const QString &cfg )
 		if(((QComboBox*)ed_fld)->findText(ctext) < 0) ((QComboBox*)ed_fld)->addItem(ctext);
 		((QComboBox*)ed_fld)->setEditText(ctext);
 	    }
+	    if(((QComboBox*)ed_fld)->completer()) ((QComboBox*)ed_fld)->completer()->setCaseSensitivity(Qt::CaseSensitive);
 	    break;
 	}
     }
@@ -1034,7 +1032,7 @@ WdgView *WdgView::newWdgItem( const string &iwid )	{ return new WdgView(iwid,wLe
 bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
     //Send value to model
-    if(!attr.empty()) {
+    if(!attr.empty() && uiPrmPos != A_NO_ID) {
 	XMLNode req("set");
 	req.setAttr("path",id()+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id",attr)->setText(val);
@@ -1044,7 +1042,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
     switch(uiPrmPos) {
 	case A_COM_LOAD: up = true;	break;
-	case 0:	return false;
+	case A_NO_ID:	return false;
 	case A_ROOT:
 	    if(shape && shape->id() == val)	break;
 	    if(shape) shape->destroy(this);
@@ -1133,7 +1131,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
     isReload = shape;
 
-    //Load from data model
+    //Load from the data model
     if(isLoad) {
 	bool reqBrCr = false;
 	if(!aBr) {
@@ -1147,9 +1145,10 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
 	setAllAttrLoad(true);
 	if(item.empty() || item == id())
-	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++)
-		if(aBr->childGet(i_el)->name() == "el")
-		    attrSet("",aBr->childGet(i_el)->text(),s2i(aBr->childGet(i_el)->attr("p")));
+	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++) {
+		XMLNode *cN = aBr->childGet(i_el);
+		if(cN->name() == "el") attrSet(cN->attr("id"), cN->text(), s2i(cN->attr("p")));
+	    }
 	setAllAttrLoad(false);
 
 	// Delete child widgets
@@ -1194,7 +1193,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	}
 
     //Init loaded data
-    if(isInit && (item.empty() || item == id()) && wLevel() > 0) attrSet("", "load", -1);
+    if(isInit && (item.empty() || item == id()) && wLevel() > 0) attrSet("", "load", A_COM_LOAD);
 
     //Post load init for root widget
     if(wLevel() == 0) {
@@ -1203,7 +1202,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    d_cnt = TSYS::curTime();
 	}
 
-	attrSet("", "load", -1);
+	attrSet("", "load", A_COM_LOAD);
 	for(int i_c = 0; i_c < children().size(); i_c++) {
 	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
 	    if(wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())))
@@ -1234,7 +1233,7 @@ void WdgView::orderUpdate( )
 
     /*make_heap(arr.begin(),arr.end());
     sort_heap(arr.begin(),arr.end());*/
-    sort(arr.begin(),arr.end());
+    sort(arr.begin(), arr.end());
     if(ols.size() && ols.size() == (int)arr.size()) {
 	bool endIt = false;
 	vector< pair<string,QObject*> > arrAftSrt;

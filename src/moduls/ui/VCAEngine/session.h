@@ -249,7 +249,7 @@ class SessWdg : public Widget, public TValFunc
 	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
 
 	// Include widgets
-	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on inherit
+	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on the inherit
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 	void pgClose( );
 

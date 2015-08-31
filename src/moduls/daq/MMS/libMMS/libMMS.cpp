@@ -911,7 +911,11 @@ void Client::protIO( XML_N &io )
 			switch(ASN_iTAG(tpkt,offC1)) {
 			    case 0x02: {				// invokeID
 				uint32_t invokeID = ASN_iN(tpkt, off, szC1);
-				if(invokeID != (mInvokeID-1)) throw Error("Inconsistent invokeID.");
+				if(invokeID != (mInvokeID-1)) {
+				    //The counter reset check by server
+				    if(invokeID < mInvokeID && (mInvokeID-invokeID) > 32768) mInvokeID = invokeID+1;
+				    else throw Error("Inconsistent invokeID: send=%u, get=%u.", mInvokeID-1, invokeID);
+				}
 				break;
 			    }
 			    case Conf_IdentifyResp:			// Identify

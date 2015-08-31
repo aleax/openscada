@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-28 19:22+0300\n"
+"POT-Creation-Date: 2015-08-31 07:52+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -34,6 +34,7 @@ msgstr ""
 msgid "Developers"
 msgstr "Разработчики"
 
+#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
@@ -1493,8 +1494,8 @@ msgstr "Нажать для квитации всех нарушений."
 msgid "&Alarm"
 msgstr "Н&арушение"
 
-msgid "Alarms (status)"
-msgstr "Нарушение (статус)"
+msgid "Generic (status)"
+msgstr "Общие (статус)"
 
 msgid "This label displays current system's time."
 msgstr "Эта метка показывает текущего системное время."
@@ -1696,6 +1697,9 @@ msgstr "<Создать новый сеанс>"
 
 msgid "Running project: %1"
 msgstr "Исполнение проекта: %1"
+
+msgid "Status line items"
+msgstr "Элементы строки статусов"
 
 msgid "Alarm level: %1"
 msgstr "Уровень нарушения: %1"

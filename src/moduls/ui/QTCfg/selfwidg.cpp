@@ -42,6 +42,7 @@
 #include <QCommonStyle>
 #endif
 #include <QScrollBar>
+#include <QCompleter>
 
 #include <tsys.h>
 
@@ -277,6 +278,7 @@ void LineEdit::setCfg( const QString &cfg )
 	    ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
 	    if(((QComboBox*)ed_fld)->findText(ctext) < 0) ((QComboBox*)ed_fld)->addItem(ctext);
 	    ((QComboBox*)ed_fld)->setEditText(ctext);
+	    if(((QComboBox*)ed_fld)->completer()) ((QComboBox*)ed_fld)->completer()->setCaseSensitivity(Qt::CaseSensitive);
 	    break;
 	}
     }

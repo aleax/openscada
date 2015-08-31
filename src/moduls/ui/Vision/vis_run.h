@@ -147,6 +147,8 @@ class VisRun : public QMainWindow
 
 	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
 
+	void usrStatus( const string &val, RunPageView *pg = NULL );
+
 	// Resource cache commands
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );

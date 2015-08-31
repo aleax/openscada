@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-28 19:22+0300\n"
+"POT-Creation-Date: 2015-08-31 07:52+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -34,6 +34,7 @@ msgstr ""
 msgid "Developers"
 msgstr "Розробники"
 
+#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
@@ -1095,7 +1096,8 @@ msgid "No one row is selected."
 msgstr "Жодної строки не вибрано."
 
 msgid "Are you sure of loading a mime to selected item '%1'?"
-msgstr "Ви дійсно бажаєте завантажити MIME до обраного візуального елементу '%1'?"
+msgstr ""
+"Ви дійсно бажаєте завантажити MIME до обраного візуального елементу '%1'?"
 
 msgid "All files (*.*)"
 msgstr "Всі файли (*.*)"
@@ -1492,8 +1494,8 @@ msgstr "Натиснути для квітації всіх порушень."
 msgid "&Alarm"
 msgstr "Порушення"
 
-msgid "Alarms (status)"
-msgstr "Порушення (статус)"
+msgid "Generic (status)"
+msgstr "Загальний (статус)"
 
 msgid "This label displays current system's time."
 msgstr "Це маркування показує поточний системний час."
@@ -1695,6 +1697,9 @@ msgstr "<Створити новий сеанс>"
 
 msgid "Running project: %1"
 msgstr "Виконання проекту: %1"
+
+msgid "Status line items"
+msgstr "Елементи рядку статусу"
 
 msgid "Alarm level: %1"
 msgstr "Рівень порушення: %1"

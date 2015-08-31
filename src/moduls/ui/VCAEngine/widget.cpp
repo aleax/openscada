@@ -847,7 +847,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/wdg/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/wdg/w_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str", "dest","sel_ed", "select","/wdg/w_lst");
 		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to parent"),RWRWR_,"root",SUI_ID,1,"tp","lnk");
 	    }
@@ -1478,7 +1478,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
-	    wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
+	    wdg.at().attrAdd(new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser));
 	    //wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
 	    wdg.at().attrAt("newAttr").at().setModif(1);
 	    wdg.at().modif();

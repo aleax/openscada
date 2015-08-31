@@ -1280,7 +1280,7 @@ INSERT INTO "tmplib_S7_io" VALUES('test','in2','Input2',1,160,'DB Test|8',6,'В�
 INSERT INTO "tmplib_S7_io" VALUES('test','in1','Input1',1,160,'DB Test|6',5,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
 INSERT INTO "tmplib_S7_io" VALUES('test','in','Input',1,160,'DB Test|4',4,'Вхід','DB Тест|4','Вход','DB Тест|4');
 CREATE TABLE 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','in','Input',3,144,'Input|in',1,'Вхід',' ','Вход','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід',' ','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','var','Variable',2,32,'0',1,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','ed','Dimension',0,32,' ',2,'Од. виміру',' ','Ед. измерения','');
@@ -1511,13 +1511,16 @@ INSERT INTO "tmplib_base_io" VALUES('SNMP','this','The object',4,0,'',3,'Об''�
 INSERT INTO "tmplib_base_io" VALUES('SNMP','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','DESCR','Description',0,0,'',6,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,' ',0,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','SHIFR','Code',0,0,'',2,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','NAME','Name',0,0,'',3,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',4,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',5,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,' ',0,'Сигнал "{st}:{lev}:{mess}"','','Сигнал "{st}:{lev}:{mess}"','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','SHIFR','Code',0,0,'',5,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','NAME','Name',0,0,'',6,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',7,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',8,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','log','Logarithmic scale',3,32,'0',17,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','stInv','State inverse',3,64,'',1,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'',3,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',4,'','','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '''''''''''''' ,"ID" TEXT DEFAULT '''''''''''''' ,"NAME" TEXT DEFAULT '''''''''''''' ,"TYPE" INTEGER DEFAULT '''''''''''''' ,"MODE" INTEGER DEFAULT '''''''''''''' ,"DEF" TEXT DEFAULT '''''''''''''' ,"HIDE" INTEGER DEFAULT '''''''''''''' ,"POS" INTEGER DEFAULT '''''''''''''' ,"ru#NAME" TEXT DEFAULT '''''' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -2642,7 +2645,7 @@ INSERT INTO "Trs" VALUES('Frequency was bad (previous XtalStat was XPROB_FREQ) a
 INSERT INTO "Trs" VALUES('Stability level XtalStab of xtal >= SlvlTrip.','','');
 INSERT INTO "Trs" VALUES('Unable to determine rate because of a computation error, most likely caused by a parameter (density, z-ratio, etc) having a zero or otherwise invalid (non numeric or infinity) value.','','');
 INSERT INTO "Trs" VALUES('XtalQual of xtal >= QlvlTrip.','','');
-INSERT INTO "Trs" VALUES('Error or no response.','','');
+INSERT INTO "Trs" VALUES('Error or no response.','Помилка або немає відповіді','Ошибка или нет ответа');
 INSERT INTO "Trs" VALUES('CRC error.','','');
 INSERT INTO "Trs" VALUES('DCON error.','','');
 INSERT INTO "Trs" VALUES('Message''s length more 255*255','','');
@@ -3907,7 +3910,7 @@ if(run && !pause) {
 	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
 	else rez = "0:"+tr("Waiting %1s").replace("%1",tmp1.toPrecision(3));
 }','','',1416656093);
-INSERT INTO "tmplib_PrescrTempl" VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлюється паралельно з поточною командою.','Фоновый таймер. Обновляется параллельно с текущей командой.',10,0,'JavaLikeCalc.JavaScript
+INSERT INTO "tmplib_PrescrTempl" VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлення паралельно із поточною командою.','Фоновый таймер. Обновление параллельно с теущей командой.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
 //Run
@@ -3924,15 +3927,23 @@ if(f_start)	f_err = "0", prevVar = EVAL_REAL;
 
 //State set
 tErr = "0", levErr = 0;
-if(in.isEVal())	tErr = "1:"+tr("No data or connection with source"), levErr = -5;
-else if(in == alrm.toInt())	tErr = "3:"+alrm.parse(2,":"), levErr = -alrm.parse(1,":").toInt();
+if(in.isEVal()) {
+	tErr = "1:"+tr("No data or connection with source");
+	levErr = -5;
+	st_open = st_close = in;
+}
+else {
+	if(in == alrm.toInt())	tErr = "3:"+alrm.parse(2,":"), levErr = -alrm.parse(1,":").toInt();
+	st_open = stInv ? !in : in;
+	st_close = !st_open;
+}
 
 //Alarms forming
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1416765738);
+f_err = tErr;','','',1440508854);
 INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders','Сигн. аналог. за границями','Сигн. аналог. по границам','The template of simple parameter included boders and dimension variable.','Шаблон простого параметру з перевіркою границь та одиницею виміру.','Шаблон простого параметра с проверкой границ и единицей измерения.',10,1,'JavaLikeCalc.JavaScript
 var=iMult*(in+iAdd);
 if(var>max)			f_err="1:Upper work border violation";

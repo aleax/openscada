@@ -43,7 +43,6 @@
 //#include <QPolygonF>
 
 #include <tsys.h>
-#include "../VCAEngine/types.h"
 
 #include "tvision.h"
 #include "vis_devel.h"
@@ -54,7 +53,6 @@
 
 
 using namespace VISION;
-using namespace VCA;
 
 ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), dyn_num(0), status_hold(true),

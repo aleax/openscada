@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-28 19:22+0300\n"
+"POT-Creation-Date: 2015-08-31 07:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1421,7 +1421,7 @@ msgstr ""
 msgid "&Alarm"
 msgstr ""
 
-msgid "Alarms (status)"
+msgid "Generic (status)"
 msgstr ""
 
 msgid "This label displays current system's time."
@@ -1613,6 +1613,9 @@ msgid "<Create new session>"
 msgstr ""
 
 msgid "Running project: %1"
+msgstr ""
+
+msgid "Status line items"
 msgstr ""
 
 msgid "Alarm level: %1"

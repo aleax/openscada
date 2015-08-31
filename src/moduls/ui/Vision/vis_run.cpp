@@ -223,8 +223,8 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     menuHelp->addAction(actWhatIs);
 
     //Init tool bars
-    // Alarms tools bar
-    toolBarStatus = new QToolBar(_("Alarms (status)"),this);
+    // Generic tools bar
+    toolBarStatus = new QToolBar(_("Generic (status)"),this);
     connect(toolBarStatus, SIGNAL(actionTriggered(QAction*)), this, SLOT(alarmAct(QAction*)));
     toolBarStatus->setIconSize(QSize(16,16));
     toolBarStatus->addAction(actProjManual);
@@ -239,7 +239,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     mWTime->setVisible(false);
     mWTime->setAlignment(Qt::AlignCenter);
     mWTime->setWhatsThis(_("This label displays current system's time."));
-    statusBar()->insertPermanentWidget(0,mWTime);
+    statusBar()->insertPermanentWidget(0, mWTime);
     mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
     mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display of the current user."));
@@ -256,8 +256,8 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     mStlBar->setToolTip(_("Field for display the used interface style."));
     mStlBar->setStatusTip(_("Double click for style change."));
     connect(mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
-    statusBar()->insertPermanentWidget(0,mStlBar);
-    statusBar()->insertPermanentWidget(0,toolBarStatus);
+    statusBar()->insertPermanentWidget(0, mStlBar);
+    statusBar()->insertPermanentWidget(0, toolBarStatus);
     statusBar()->setVisible(mod->runPrjsSt());
 
     //Init scroller
@@ -268,12 +268,12 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     //Create timers
     // End run timer
-    endRunTimer   = new QTimer( this );
+    endRunTimer   = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
     // Update timer
-    updateTimer = new QTimer( this );
+    updateTimer = new QTimer(this);
     updateTimer->setSingleShot(false);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
 
@@ -1036,6 +1036,65 @@ void VisRun::alarmAct( QAction *alrm )
     if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toStdString());
 }
 
+void VisRun::usrStatus( const string &val, RunPageView *pg )
+{
+    UserItStBar *userSt, *userSt1;
+    if(!pg) pg = masterPg();
+
+    //Presence mark clean
+    for(int iC = 0; iC < statusBar()->children().size(); iC++)
+	if((userSt=qobject_cast<UserItStBar*>(statusBar()->children().at(iC))) && userSt->objectName().indexOf("usr_") == 0)
+	    userSt->setProperty("usrStPresent", false);
+
+    //Items list parse
+    string iLn;
+    for(int off = 0, lCnt = 0; (iLn=TSYS::strLine(val,0,&off)).size(); lCnt++) {
+	// Parse line in the format: "{id}:{label}:{tip}:{color}:{ico}
+	int offIt = 0;
+	string	itId  = TSYS::strParse(iLn, 0, ":", &offIt),
+		itLab = TSYS::strParse(iLn, 0, ":", &offIt),
+		itTip = TSYS::strParse(iLn, 0, ":", &offIt),
+		itColor = TSYS::strParse(iLn, 0, ":", &offIt),
+		itIco = TSYS::strParse(iLn, 0, ":", &offIt);
+	if(itTip.empty()) itTip = itId;
+	if(itColor.empty()) itColor = "black";
+
+	// Try presence yet
+	userSt = statusBar()->findChild<UserItStBar*>(("usr_"+itId).c_str());
+	// Create new one
+	if(!userSt) {
+	    userSt = new UserItStBar(this);
+	    userSt->setObjectName(("usr_"+itId).c_str());
+	    userSt->setAlignment(Qt::AlignCenter);
+	    statusBar()->insertPermanentWidget(0, userSt);
+	}
+	// Set properties
+	userSt->setProperty("usrStPresent", true);
+	userSt->setProperty("usrStPos", lCnt);
+	userSt->setToolTip(itTip.c_str());
+
+	QImage ico_t;
+	if(!itIco.empty()) {
+	    itIco = pg->resGet(itIco);
+	    ico_t.loadFromData((const uchar*)itIco.data(), itIco.size());
+	}
+	userSt->setPixmap(QPixmap::fromImage(ico_t));
+
+	if(itLab.size()) userSt->setText(QString("<font color='%1'>%2</font>").arg(itColor.c_str()).arg(itLab.c_str()));
+    }
+
+    //Check for remove and order
+    for(int iC = 0; iC < statusBar()->children().size(); iC++)
+	if((userSt=qobject_cast<UserItStBar*>(statusBar()->children().at(iC))) && userSt->objectName().indexOf("usr_") == 0) {
+	    if(!userSt->property("usrStPresent").toBool()) userSt->deleteLater();
+	    /*else for(int iC1 = iC; iC1 > 0 ; iC1--) {
+		if(!(userSt1=qobject_cast<UserItStBar*>(statusBar()->children().at(iC1-1))) ||
+		    userSt1->objectName().indexOf("usr_") != 0) continue;
+		if(userSt->property("usrStPos").toInt() < userSt1->property("usrStPos").toInt()) userSt1->stackUnder(userSt);
+	    }*/
+	}
+}
+
 void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 {
     bool isSess = false;
@@ -1197,8 +1256,14 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	    cntrIfCmd(req);
 	}
 
+	// Get and activate for specific attributes to the master-page
+	XMLNode reqSpc("CntrReqs"); reqSpc.setAttr("path", pg_it);
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fattr%2fstatLine")->
+				     setAttr("aNm", _("Status line items"))->setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
+	cntrIfCmd(reqSpc);
+
 	// Create widget view
-	master_pg = new RunPageView(pg_it,this,centralWidget());
+	master_pg = new RunPageView(pg_it, this, centralWidget());
 	//master_pg->load("");
 	master_pg->setFocusPolicy(Qt::StrongFocus);
 	((QScrollArea *)centralWidget())->setWidget(master_pg);
@@ -1209,7 +1274,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	else x_scale = y_scale = 1.0;
     }
     //Put to check for include
-    else master_pg->callPage(pg_it,pgGrp,pgSrc);
+    else master_pg->callPage(pg_it, pgGrp, pgSrc);
 
     //Get the notificators configuration and register thats
     for(unsigned iNtf = 0; iNtf < 7; iNtf++)
@@ -1389,8 +1454,8 @@ void VisRun::updatePage( )
 
     //Pages update
     XMLNode req("openlist");
-    req.setAttr("tm",u2s(reqtm))->
-	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
+    req.setAttr("tm", u2s(reqtm))->
+	setAttr("path", "/ses_"+work_sess+"/%2fserv%2fpg");
 
     if(!(rez=cntrIfCmd(req))) {
 	// Check for delete the pages
@@ -1415,7 +1480,7 @@ void VisRun::updatePage( )
 	pgList.clear();
 	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 	    pgList.push_back(req.childGet(i_ch)->text());
-	    callPage(req.childGet(i_ch)->text(),s2i(req.childGet(i_ch)->attr("updWdg")));
+	    callPage(req.childGet(i_ch)->text(), s2i(req.childGet(i_ch)->attr("updWdg")));
 	}
     }
     // Restore closed session of used project.

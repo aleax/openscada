@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-28 19:22+0300\n"
+"POT-Creation-Date: 2015-08-31 07:52+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -37,6 +37,7 @@ msgstr ""
 msgid "Developers"
 msgstr "Entwickler"
 
+#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
@@ -1104,7 +1105,8 @@ msgid "No one row is selected."
 msgstr "Keine Zeile ist ausgewählt."
 
 msgid "Are you sure of loading a mime to selected item '%1'?"
-msgstr "Sind Sie sicher, der das Laden einer MIME, um ausgewählte Element '%1'?"
+msgstr ""
+"Sind Sie sicher, der das Laden einer MIME, um ausgewählte Element '%1'?"
 
 msgid "All files (*.*)"
 msgstr "Alle Dateien (*.*)"
@@ -1501,8 +1503,8 @@ msgstr "Betätigen für die Quittierung aller Störungen."
 msgid "&Alarm"
 msgstr "Stö&rung"
 
-msgid "Alarms (status)"
-msgstr "Störung (Status)"
+msgid "Generic (status)"
+msgstr "Generisches (Status)"
 
 msgid "This label displays current system's time."
 msgstr "Dieses Zeichen zeigt die aktuelle Systemzeit."
@@ -1705,6 +1707,9 @@ msgstr "<Erstellen Sie eine neue Sitzung>"
 
 msgid "Running project: %1"
 msgstr "Ausführen Projekt: %1"
+
+msgid "Status line items"
+msgstr "Statuszeile Elemente"
 
 msgid "Alarm level: %1"
 msgstr "Stufe der Störung: %1"

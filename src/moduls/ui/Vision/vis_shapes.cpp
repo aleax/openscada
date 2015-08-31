@@ -57,7 +57,6 @@
 #endif
 
 #include <tsys.h>
-#include "../VCAEngine/types.h"
 #include "tvision.h"
 #include "vis_devel.h"
 #include "vis_run.h"
@@ -77,7 +76,6 @@
 
 
 using namespace VISION;
-using namespace VCA;
 
 //*************************************************
 //* Widget shape abstract object                  *

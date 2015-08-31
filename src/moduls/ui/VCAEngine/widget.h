@@ -49,8 +49,8 @@ class Attr
 	enum GlobalAttrFlgs {
 	    Active	= 0x00100,	//Active attribute for primitives process
 
-	    Image	= 0x00200,	//Store image link to DB or to file
-	    DateTime	= 0x00200,	//Store data and time into integer attribute
+	    Image	= 0x00200,	//Store image link to a DB's mime or a file, expand generic type "String"
+	    DateTime	= 0x00200,	//Store data and time, expand generic type "Integer"
 	    Color	= 0x00400,	//Store color
 	    Font	= 0x00800,	//Store font
 	    Address	= 0x01000,	//Store address to a parameter or an attribute
@@ -59,7 +59,7 @@ class Attr
 	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
 	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
 	    OnlyRead	= 0x20000,	//Only read attribute, through widget, no the attribute storing location
-	    PreRead	= 0x40000	//Preprocessed read
+	    PreRead	= 0x40000,	//Preprocessed read
 	};
 
 	// Link types
@@ -69,6 +69,8 @@ class Attr
 	    CfgLnkOut	= 0x04,		//Output link
 	    ProcAttr	= 0x08,		//Process attribute
 	    FromStyle	= 0x40,		//Get value from style
+	    VizerSpec	= 0x80,		//Visualizer specified attribute, for allow it to modification control and transmit to the visualizer.
+					//Sets at and by a session of running project activation.
 
 	    SessAttrInh	= 0x10,		//Inherit attribute into running session
 	    IsInher	= 0x20		//Inherit attribute

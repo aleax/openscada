@@ -1,3 +1,18 @@
+2015-08-31 Roman
+- DB.LibsDB.OscadaLibs.db: tmplib.digAlarm expanded by generic digital state attributes "st_open" and "st_close".
+- DB.LibsDB.vcaBase.db: Main.RootPgSo expanded to 20 signal objects, 10 items per line.
+- FIX:DAQ.MMS: Hook to invokeID specific roll up in ABB processing is added.
+- DAQ.OPC_UA: Library COPYING file replaced to "GNU LESSER GENERAL PUBLIC LICENS" content and the file GPL-3 also added.
+- FIX:UI.{QTCfg,Vision}: Editable ComboBox completer set to Qt::CaseSensitive for allow the symbols register change at it edit.
+- !!!:UI.{VCAEngine,Vision}: Visualizer specific control attributes support is added:
+    Service's "/attr/{aId}" command "activate" is added for the visualizer specific attributes create and activate.
+    UI.Vision::attrSet() unitized for different directions control.
+    "User's status line items" UI.Vision specific attribute implemented:
+	- into the status line display text (variable color), image, (with a tooltip);
+	- trace for its operative changes;
+	- generic mouse events at its generation.
+
+
 2015-08-20 Roman
 - !:DB.LibsDB.OscadaLibs.db: New device IVE_452HS_02 is added to the devices library.
     Sponsored by Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
