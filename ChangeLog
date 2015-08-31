@@ -1,4 +1,5 @@
 2015-08-31 Roman
+- DB.LibsDB.{OscadaLibs,vcaBase}.db, DB.Model.AGLKS.St.db: Some messages translation improved.
 - DB.LibsDB.OscadaLibs.db: tmplib.digAlarm expanded by generic digital state attributes "st_open" and "st_close".
 - DB.LibsDB.vcaBase.db: Main.RootPgSo expanded to 20 signal objects, 10 items per line.
 - FIX:DAQ.MMS: Hook to invokeID specific roll up in ABB processing is added.

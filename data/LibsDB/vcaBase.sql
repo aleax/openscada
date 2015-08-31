@@ -6875,7 +6875,7 @@ INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_3','','','
 INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('calendar','active','1',32,'','','w5_6','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('calendar','name','Calendar',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('calendar','name','Calendar',32,'','','','Календар','','Календарь','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','perm','438',32,'','','so17','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','name','SO17',32,'','','so17','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','en','0',32,'','','so17','','','','','','');
