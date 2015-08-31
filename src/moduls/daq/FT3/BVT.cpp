@@ -170,50 +170,41 @@ void KA_BVT::loadIO(bool force)
 	mPrm.modif(true);
 	return;
     }	//Load/reload IO context only allow for stopped controllers for prevent throws
-
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Period.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Sens.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinS.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxS.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinPV.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxPV.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinW.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxW.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinA.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxA.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Factor.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Adjust.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].State.lnk);
+	loadLnk(data[i].Value.lnk);
+	loadLnk(data[i].Period.lnk);
+	loadLnk(data[i].Sens.lnk);
+	loadLnk(data[i].MinS.lnk);
+	loadLnk(data[i].MaxS.lnk);
+	loadLnk(data[i].MinPV.lnk);
+	loadLnk(data[i].MaxPV.lnk);
+	loadLnk(data[i].MinW.lnk);
+	loadLnk(data[i].MaxW.lnk);
+	loadLnk(data[i].MinA.lnk);
+	loadLnk(data[i].MaxA.lnk);
+	loadLnk(data[i].Factor.lnk);
+	loadLnk(data[i].Adjust.lnk);
     }
 }
 
 void KA_BVT::saveIO()
 {
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Period.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Sens.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinS.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxS.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinPV.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxPV.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinW.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxW.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinA.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxA.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Factor.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Adjust.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].State.lnk);
+	saveLnk(data[i].Value.lnk);
+	saveLnk(data[i].Period.lnk);
+	saveLnk(data[i].Sens.lnk);
+	saveLnk(data[i].MinS.lnk);
+	saveLnk(data[i].MaxS.lnk);
+	saveLnk(data[i].MinPV.lnk);
+	saveLnk(data[i].MaxPV.lnk);
+	saveLnk(data[i].MinW.lnk);
+	saveLnk(data[i].MaxW.lnk);
+	saveLnk(data[i].MinA.lnk);
+	saveLnk(data[i].MaxA.lnk);
+	saveLnk(data[i].Factor.lnk);
+	saveLnk(data[i].Adjust.lnk);
     }
 }
 
@@ -350,6 +341,7 @@ uint16_t KA_BVT::setVal(TVal &val)
 B_BVT::B_BVT(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params, bool has_k, bool has_rate) :
 	DA(prm), ID(id), count_n(n), with_params(has_params), with_k(has_k), with_rate(has_rate)
 {
+    mTypeFT3 = GRS;
     chan_err.clear();
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
@@ -424,59 +416,51 @@ void B_BVT::loadIO(bool force)
 	return;
     }	//Load/reload IO context only allow for stopped controllers for prevent throws
 
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Period.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Sens.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinS.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxS.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinPV.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxPV.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinW.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxW.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MinA.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].MaxA.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Factor.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Dimension.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].CorFactor.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Rate.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Calcs.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].RateSens.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].RateLimit.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].State.lnk);
+	loadLnk(data[i].Value.lnk);
+	loadLnk(data[i].Period.lnk);
+	loadLnk(data[i].Sens.lnk);
+	loadLnk(data[i].MinS.lnk);
+	loadLnk(data[i].MaxS.lnk);
+	loadLnk(data[i].MinPV.lnk);
+	loadLnk(data[i].MaxPV.lnk);
+	loadLnk(data[i].MinW.lnk);
+	loadLnk(data[i].MaxW.lnk);
+	loadLnk(data[i].MinA.lnk);
+	loadLnk(data[i].MaxA.lnk);
+	loadLnk(data[i].Factor.lnk);
+	loadLnk(data[i].Dimension.lnk);
+	loadLnk(data[i].CorFactor.lnk);
+	loadLnk(data[i].Rate.lnk);
+	loadLnk(data[i].Calcs.lnk);
+	loadLnk(data[i].RateSens.lnk);
+	loadLnk(data[i].RateLimit.lnk);
     }
 }
 
 void B_BVT::saveIO()
 {
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Period.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Sens.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinS.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxS.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinPV.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxPV.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinW.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxW.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MinA.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].MaxA.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Factor.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Dimension.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].CorFactor.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Rate.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Calcs.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].RateSens.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].RateLimit.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].State.lnk);
+	saveLnk(data[i].Value.lnk);
+	saveLnk(data[i].Period.lnk);
+	saveLnk(data[i].Sens.lnk);
+	saveLnk(data[i].MinS.lnk);
+	saveLnk(data[i].MaxS.lnk);
+	saveLnk(data[i].MinPV.lnk);
+	saveLnk(data[i].MaxPV.lnk);
+	saveLnk(data[i].MinW.lnk);
+	saveLnk(data[i].MaxW.lnk);
+	saveLnk(data[i].MinA.lnk);
+	saveLnk(data[i].MaxA.lnk);
+	saveLnk(data[i].Factor.lnk);
+	saveLnk(data[i].Dimension.lnk);
+	saveLnk(data[i].CorFactor.lnk);
+	saveLnk(data[i].Rate.lnk);
+	saveLnk(data[i].Calcs.lnk);
+	saveLnk(data[i].RateSens.lnk);
+	saveLnk(data[i].RateLimit.lnk);
     }
 }
 

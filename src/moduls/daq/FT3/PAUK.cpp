@@ -28,8 +28,9 @@
 using namespace FT3;
 
 B_PAUK::B_PAUK(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
-	DA(prm), ID(id << 12), count_n(n), with_params(has_params) //, numReg(0)
+	DA(prm), ID(id << 12), count_n(n), with_params(has_params)
 {
+    mTypeFT3 = GRS;
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("0:0");

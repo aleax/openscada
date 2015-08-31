@@ -312,7 +312,7 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	break;
     case SetData:
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SetData FCB2 %02X newFCB2 %02X"), Channels[msg->B].FCB2, msg->C);
-	if(Channels[msg->B].FCB2 != msg->C) {
+	if(cfg("IGNORE_FCB2").getB() || (Channels[msg->B].FCB2 != msg->C)) {
 	    Channels[msg->B].FCB2 = msg->C;
 	    l = msg->L - 3;
 	    if(l < 3) l = -1;
@@ -449,6 +449,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("NODE", _("Addres"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
     fldAdd(new TFld("ADDR", _("Transport address"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("NCHANNEL", _("Channels count"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
+    fldAdd(new TFld("IGNORE_FCB2", _("Ignore FCB2"), TFld::Boolean, TFld::NoFlag, "1", "0"));
     //> Parameter type bd structure
 
     int t_prm = tpParmAdd("tp_BUC", "PRM_BD_BUC", _("BUC"));

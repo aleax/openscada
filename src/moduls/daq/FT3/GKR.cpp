@@ -31,6 +31,7 @@ B_GKR::B_GKR(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
 	DA(prm), ID(id), count_n(n), with_params(has_params)
 
 {
+    mTypeFT3 = GRS;
     TFld * fld;
     state = 0;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
@@ -84,44 +85,36 @@ void B_GKR::loadIO(bool force)
 	return;
     }	//Load/reload IO context only allow for stopped controllers for prevent throws
 
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].On.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Off.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Run.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Reset.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Lock.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Lubrication.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Time.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].ExTime.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Time_Lub.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Timeout_PO.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].State.lnk);
+	loadLnk(data[i].On.lnk);
+	loadLnk(data[i].Off.lnk);
+	loadLnk(data[i].Run.lnk);
+	loadLnk(data[i].Reset.lnk);
+	loadLnk(data[i].Lock.lnk);
+	loadLnk(data[i].Lubrication.lnk);
+	loadLnk(data[i].Time.lnk);
+	loadLnk(data[i].ExTime.lnk);
+	loadLnk(data[i].Time_Lub.lnk);
+	loadLnk(data[i].Timeout_PO.lnk);
     }
 }
 
 void B_GKR::saveIO()
 {
     //Save links
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].On.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Off.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Run.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Reset.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Lock.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Lubrication.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Time.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].ExTime.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Time_Lub.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Timeout_PO.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].State.lnk);
+	saveLnk(data[i].On.lnk);
+	saveLnk(data[i].Off.lnk);
+	saveLnk(data[i].Run.lnk);
+	saveLnk(data[i].Reset.lnk);
+	saveLnk(data[i].Lock.lnk);
+	saveLnk(data[i].Lubrication.lnk);
+	saveLnk(data[i].Time.lnk);
+	saveLnk(data[i].ExTime.lnk);
+	saveLnk(data[i].Time_Lub.lnk);
+	saveLnk(data[i].Timeout_PO.lnk);
     }
 }
 

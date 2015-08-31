@@ -143,15 +143,19 @@ namespace FT3
 	    AutoHD<TVal> vlattr;
 	    bool Connected()
 	    {
-		if(aprm.freeStat()) {
-		    aprm = SYS->daq().at().attrAt(prmAttr, '.', true);
+		if(prmAttr != "") {
 		    if(aprm.freeStat()) {
-			return false;
+			aprm = SYS->daq().at().attrAt(prmAttr, '.', true);
+			if(aprm.freeStat()) {
+			    return false;
+			} else {
+			    return true;
+			}
 		    } else {
 			return true;
 		    }
 		} else {
-		    return true;
+		    return false;
 		}
 	    }
 
@@ -312,8 +316,8 @@ namespace FT3
 	TMdPrm &mPrm;
 	bool NeedInit;
 	void AddAttr(SLnk& param, TFld::Type type, unsigned flg, const string& ex);
-	void loadLnk(SLnk& lnk, const string& io_bd, const string& io_table, TConfig& cfg);
-	void saveLnk(SLnk& lnk, const string& io_bd, const string& io_table, TConfig& cfg);
+	void loadLnk(SLnk& lnk);
+	void saveLnk(SLnk& lnk);
 	uint8_t SetNew8Val(ui8Data& d, uint8_t addr, uint16_t prmID, uint8_t val);
 	uint8_t SetNew8Val(ui16Data& d, uint8_t addr, uint16_t prmID, uint8_t val);
 	uint8_t SetNew28Val(ui8Data& d1, ui8Data& d2, uint8_t addr, uint16_t prmID, uint8_t val1, uint8_t val2);
@@ -339,6 +343,8 @@ namespace FT3
 
     public:
 	void PushInBE(uint8_t type, uint8_t length, uint16_t id, uint8_t *E);
+	time_t DateTimeToTime_t(uint8_t *d);
+
 	virtual int lnkSize()
 	{
 	}

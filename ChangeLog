@@ -1,3 +1,8 @@
+2015-08-31 fido_max
+- FIX:DAQ.Fastwel: TMdPrm::vlSet and TMdContr::Task syncronized
+- DAQ.FT3: Some refactoring and optimisation made. B_ACCOUNT basic processing added.
+- FIX:DAQ.FT3 KA_BTU runTU fixed
+
 2015-08-31 Roman
 - DB.LibsDB.{OscadaLibs,vcaBase}.db, DB.Model.AGLKS.St.db: Some messages translation improved.
 - DB.LibsDB.OscadaLibs.db: tmplib.digAlarm expanded by generic digital state attributes "st_open" and "st_close".

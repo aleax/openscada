@@ -246,56 +246,47 @@ void KA_GZD::loadIO(bool force)
 	mPrm.modif(true);
 	return;
     }
-
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Function.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUOpen.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUClose.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUStop.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TURemote.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUManual.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeOpen.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeClose.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeStop.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeRemote.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeManual.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCOpen.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCClose.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCMode.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCOpenErr.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCCloseErr.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].State.lnk);
+	loadLnk(data[i].Function.lnk);
+	loadLnk(data[i].TUOpen.lnk);
+	loadLnk(data[i].TUClose.lnk);
+	loadLnk(data[i].TUStop.lnk);
+	loadLnk(data[i].TURemote.lnk);
+	loadLnk(data[i].TUManual.lnk);
+	loadLnk(data[i].TimeOpen.lnk);
+	loadLnk(data[i].TimeClose.lnk);
+	loadLnk(data[i].TimeStop.lnk);
+	loadLnk(data[i].TimeRemote.lnk);
+	loadLnk(data[i].TimeManual.lnk);
+	loadLnk(data[i].TCOpen.lnk);
+	loadLnk(data[i].TCClose.lnk);
+	loadLnk(data[i].TCMode.lnk);
+	loadLnk(data[i].TCOpenErr.lnk);
+	loadLnk(data[i].TCCloseErr.lnk);
     }
 }
 
 void KA_GZD::saveIO(void)
 {
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Function.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUOpen.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUClose.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUStop.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TURemote.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUManual.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeOpen.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeClose.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeStop.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeRemote.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeManual.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCOpen.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCClose.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCMode.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCOpenErr.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCCloseErr.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].State.lnk);
+	saveLnk(data[i].Function.lnk);
+	saveLnk(data[i].TUOpen.lnk);
+	saveLnk(data[i].TUClose.lnk);
+	saveLnk(data[i].TUStop.lnk);
+	saveLnk(data[i].TURemote.lnk);
+	saveLnk(data[i].TUManual.lnk);
+	saveLnk(data[i].TimeOpen.lnk);
+	saveLnk(data[i].TimeClose.lnk);
+	saveLnk(data[i].TimeStop.lnk);
+	saveLnk(data[i].TimeRemote.lnk);
+	saveLnk(data[i].TimeManual.lnk);
+	saveLnk(data[i].TCOpen.lnk);
+	saveLnk(data[i].TCClose.lnk);
+	saveLnk(data[i].TCMode.lnk);
+	saveLnk(data[i].TCOpenErr.lnk);
+	saveLnk(data[i].TCCloseErr.lnk);
     }
 }
 

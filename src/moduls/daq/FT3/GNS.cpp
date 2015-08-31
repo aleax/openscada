@@ -207,55 +207,46 @@ void KA_GNS::loadIO(bool force)
 	mPrm.modif(true);
 	return;
     }
-
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Function.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUOn.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUOff.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUStop.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TURemote.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TUManual.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeOn.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeOff.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeStop.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeRemote.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TimeManual.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCOn.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCOff.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].TCMode.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Time.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].State.lnk);
+	loadLnk(data[i].Function.lnk);
+	loadLnk(data[i].TUOn.lnk);
+	loadLnk(data[i].TUOff.lnk);
+	loadLnk(data[i].TUStop.lnk);
+	loadLnk(data[i].TURemote.lnk);
+	loadLnk(data[i].TUManual.lnk);
+	loadLnk(data[i].TimeOn.lnk);
+	loadLnk(data[i].TimeOff.lnk);
+	loadLnk(data[i].TimeStop.lnk);
+	loadLnk(data[i].TimeRemote.lnk);
+	loadLnk(data[i].TimeManual.lnk);
+	loadLnk(data[i].TCOn.lnk);
+	loadLnk(data[i].TCOff.lnk);
+	loadLnk(data[i].TCMode.lnk);
+	loadLnk(data[i].Time.lnk);
     }
 
 }
 
 void KA_GNS::saveIO(void)
 {
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Function.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUOn.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUOff.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUStop.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TURemote.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TUManual.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeOn.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeOff.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeStop.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeRemote.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TimeManual.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCOn.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCOff.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].TCMode.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Time.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].State.lnk);
+	saveLnk(data[i].Function.lnk);
+	saveLnk(data[i].TUOn.lnk);
+	saveLnk(data[i].TUOff.lnk);
+	saveLnk(data[i].TUStop.lnk);
+	saveLnk(data[i].TURemote.lnk);
+	saveLnk(data[i].TUManual.lnk);
+	saveLnk(data[i].TimeOn.lnk);
+	saveLnk(data[i].TimeOff.lnk);
+	saveLnk(data[i].TimeStop.lnk);
+	saveLnk(data[i].TimeRemote.lnk);
+	saveLnk(data[i].TimeManual.lnk);
+	saveLnk(data[i].TCOn.lnk);
+	saveLnk(data[i].TCOff.lnk);
+	saveLnk(data[i].TCMode.lnk);
+	saveLnk(data[i].Time.lnk);
     }
 
 }

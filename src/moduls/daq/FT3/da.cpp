@@ -35,8 +35,13 @@ void DA::AddAttr(SLnk& param, TFld::Type type, unsigned flg, const string& ex)
     fld->setReserve(ex);
 }
 
-void DA::loadLnk(SLnk& lnk, const string& io_bd, const string& io_table, TConfig& cfg)
+void DA::loadLnk(SLnk& lnk)
 {
+    TConfig cfg(&mPrm.prmIOE());
+    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
+    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
+    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
+
     cfg.cfg("ID").setS(lnk.prmName);
     if(SYS->db().at().dataGet(io_bd, io_table, cfg, false, true)) {
 	lnk.prmAttr = cfg.cfg("VALUE").getS();
@@ -44,8 +49,12 @@ void DA::loadLnk(SLnk& lnk, const string& io_bd, const string& io_table, TConfig
     }
 }
 
-void DA::saveLnk(SLnk& lnk, const string& io_bd, const string& io_table, TConfig& cfg)
+void DA::saveLnk(SLnk& lnk)
 {
+    TConfig cfg(&mPrm.prmIOE());
+    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
+    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
+    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     cfg.cfg("ID").setS(lnk.prmName);
     cfg.cfg("VALUE").setS(lnk.prmAttr);
     SYS->db().at().dataSet(io_bd, io_table, cfg);
@@ -243,6 +252,7 @@ void DA::UpdateParam28(ui8Data& param1, ui8Data& param2, uint16_t ID, uint8_t cl
 
 FT3ID DA::UnpackID(uint16_t ID)
 {
+    if(mess_lev() == TMess::Debug) mess_debug(mPrm.nodePath().c_str(), _("UnpackID %d"), ID);
     FT3ID rc;
     switch(mTypeFT3) {
     case GRS:
@@ -256,6 +266,7 @@ FT3ID DA::UnpackID(uint16_t ID)
 	rc.n = (ID >> 10) & 0x3F;
 	break;
     }
+    if(mess_lev() == TMess::Debug) mess_debug(mPrm.nodePath().c_str(), _("g %d k %d n %d"), rc.g, rc.k, rc.n);
     return rc;
 }
 
@@ -290,4 +301,9 @@ uint16_t DA::PackID(uint8_t g, uint8_t k, uint8_t n)
 void DA::PushInBE(uint8_t type, uint8_t length, uint16_t id, uint8_t *E)
 {
     mPrm.owner().PushInBE(type, length, id, E);
+}
+
+time_t DA::DateTimeToTime_t(uint8_t *d)
+{
+    return mPrm.owner().DateTimeToTime_t(d);
 }

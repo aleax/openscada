@@ -30,6 +30,7 @@ using namespace FT3;
 B_BVI::B_BVI(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params, bool has_ext_period) :
 	DA(prm), ID(id), count_n(n), with_params(has_params), ext_period(has_ext_period)
 {
+    mTypeFT3 = GRS;
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("0:0");
@@ -77,19 +78,14 @@ void B_BVI::loadIO(bool force)
 	mPrm.modif(true);
 	return;
     }	//Load/reload IO context only allow for stopped controllers for prevent throws
-
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Period.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Sens.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Count.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Factor.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Dimension.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].State.lnk);
+	loadLnk(data[i].Value.lnk);
+	loadLnk(data[i].Period.lnk);
+	loadLnk(data[i].Sens.lnk);
+	loadLnk(data[i].Count.lnk);
+	loadLnk(data[i].Factor.lnk);
+	loadLnk(data[i].Dimension.lnk);
     }
 
 }
@@ -97,18 +93,14 @@ void B_BVI::loadIO(bool force)
 void B_BVI::saveIO()
 {
     //Save links
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].State.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Period.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Sens.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Count.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Factor.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Dimension.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].State.lnk);
+	saveLnk(data[i].Value.lnk);
+	saveLnk(data[i].Period.lnk);
+	saveLnk(data[i].Sens.lnk);
+	saveLnk(data[i].Count.lnk);
+	saveLnk(data[i].Factor.lnk);
+	saveLnk(data[i].Dimension.lnk);
     }
 }
 
@@ -347,31 +339,30 @@ uint8_t B_BVI::cmdGet(uint16_t prmID, uint8_t * out)
 uint8_t B_BVI::cmdSet(uint8_t * req, uint8_t addr)
 {
     uint16_t prmID = TSYS::getUnalign16(req);
-    if((prmID & 0xF000) != ID) return 0;
-    uint16_t k = (prmID >> 6) & 0x3F; // object
-    uint16_t n = prmID & 0x3F;  // param
+    FT3ID ft3ID = UnpackID(prmID);
+    if(ft3ID.g != ID) return 0;
     uint l = 0;
 //    mess_info(mPrm.nodePath().c_str(), "cmdSet k %d n %d", k, n);
-    if((k > 0) && (k <= count_n)) {
-	switch(n) {
+    if((ft3ID.k > 0) && (ft3ID.k <= count_n)) {
+	switch(ft3ID.n) {
 	case 2:
 	    if(ext_period) {
-		l = SetNewWVal(data[k - 1].Period, addr, prmID, req[2]);
+		l = SetNewWVal(data[ft3ID.k - 1].Period, addr, prmID, req[2]);
 	    } else {
-		l = SetNew8Val(data[k - 1].Period, addr, prmID, req[2]);
+		l = SetNew8Val(data[ft3ID.k - 1].Period, addr, prmID, req[2]);
 	    }
 	    break;
 	case 3:
-	    l = SetNewflVal(data[k - 1].Sens, addr, prmID, TSYS::getUnalignFloat(req + 2));
+	    l = SetNewflVal(data[ft3ID.k - 1].Sens, addr, prmID, TSYS::getUnalignFloat(req + 2));
 	    break;
 	case 4:
-	    l = SetNew32Val(data[k - 1].Count, addr, prmID, TSYS::getUnalign32(req + 2));
+	    l = SetNew32Val(data[ft3ID.k - 1].Count, addr, prmID, TSYS::getUnalign32(req + 2));
 	    break;
 	case 5:
-	    l = SetNewflVal(data[k - 1].Factor, addr, prmID, TSYS::getUnalignFloat(req + 2));
+	    l = SetNewflVal(data[ft3ID.k - 1].Factor, addr, prmID, TSYS::getUnalignFloat(req + 2));
 	    break;
 	case 6:
-	    l = SetNew8Val(data[k - 1].Dimension, addr, prmID, req[2]);
+	    l = SetNew8Val(data[ft3ID.k - 1].Dimension, addr, prmID, req[2]);
 	    break;
 	}
     }

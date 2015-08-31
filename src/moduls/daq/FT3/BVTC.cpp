@@ -73,28 +73,20 @@ void KA_BVTC::loadIO(bool force)
 	mPrm.modif(true);
 	return;
     }	//Load/reload IO context only allow for stopped controllers for prevent throws
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Count.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Period.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Value.lnk);
+	loadLnk(data[i].Count.lnk);
+	loadLnk(data[i].Period.lnk);
     }
 }
 
 void KA_BVTC::saveIO()
 {
     //Save links
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
-    for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Count.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Period.lnk, io_bd, io_table, cfg);
+     for(int i = 0; i < count_n; i++) {
+	saveLnk(data[i].Value.lnk);
+	saveLnk(data[i].Count.lnk);
+	saveLnk(data[i].Period.lnk);
     }
 }
 
@@ -247,26 +239,18 @@ void B_BVTC::loadIO(bool force)
 	mPrm.modif(true);
 	return;
     }	//Load/reload IO context only allow for stopped controllers for prevent throws
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	loadLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	loadLnk(data[i].Mask.lnk, io_bd, io_table, cfg);
+	loadLnk(data[i].Value.lnk);
+	loadLnk(data[i].Mask.lnk);
     }
 }
 
 void B_BVTC::saveIO()
 {
     //Save links
-    TConfig cfg(&mPrm.prmIOE());
-    cfg.cfg("PRM_ID").setS(mPrm.ownerPath(true));
-    string io_bd = mPrm.owner().DB() + "." + mPrm.typeDBName() + "_io";
-    string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
     for(int i = 0; i < count_n; i++) {
-	saveLnk(data[i].Value.lnk, io_bd, io_table, cfg);
-	saveLnk(data[i].Mask.lnk, io_bd, io_table, cfg);
+	saveLnk(data[i].Value.lnk);
+	saveLnk(data[i].Mask.lnk);
     }
 }
 

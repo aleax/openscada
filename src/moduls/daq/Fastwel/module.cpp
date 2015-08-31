@@ -293,11 +293,20 @@ TMdContr::TMdContr(string name_c, const string & daq_db, ::TElem * cfgelem) :
     cfg("PRM_BD_AIM726").setS("FBUSPrmAIM726_" + name_c);
     cfg("PRM_BD_AIM730").setS("FBUSPrmAIM730_" + name_c);
     cfg("PRM_BD_AIM725").setS("FBUSPrmAIM725_" + name_c);
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&enRes, &attrM);
+    pthread_mutex_init(&dataRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 TMdContr::~TMdContr()
 {
     if(startStat()) stop();
+
+    pthread_mutex_destroy(&enRes);
+    pthread_mutex_destroy(&dataRes);
 }
 
 void TMdContr::GetNodeDescription(int id, PFIO_MODULE_DESC modDesc)
@@ -395,7 +404,7 @@ void TMdContr::prmEn(const string & id, bool val)
 {
     int i_prm;
 
-    ResAlloc res(en_res, true);
+    MtxAlloc res(enRes, true);
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
 	if(p_hd[i_prm].at().id() == id) break;
 
@@ -415,7 +424,7 @@ void *TMdContr::Task(void *icntr)
 
 	//> Update controller's data
 	//!!! Your code for gather data
-	cntr.en_res.resRequestR();
+	MtxAlloc prmRes(cntr.enRes, true);
 	cntr.callSt = true;
 	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
 	    try {
@@ -424,7 +433,7 @@ void *TMdContr::Task(void *icntr)
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    }
 	cntr.callSt = false;
-	cntr.en_res.resRelease();
+	prmRes.unlock();
 	cntr.tmGath = TSYS::curTime() - t_cnt;
 
 	//!!! Wait for next iteration
@@ -777,6 +786,7 @@ void TMdPrm::getVals()
 
 void TMdPrm::vlSet(TVal & vo, const TVariant & vl, const TVariant & pvl)
 {
+    MtxAlloc prmRes(owner().enRes, true);
     uint8_t buf[256];
     uint16_t i;
     if(!enableStat() || !owner().startStat()) {

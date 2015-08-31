@@ -32,7 +32,7 @@ namespace FT3
 	uint16_t ID;
 	uint16_t count_nu;
 	bool with_params;
- 	uint16_t config;
+	uint16_t config;
 	void AddChannel(uint8_t iid);
 	void saveIO(void);
 	void loadIO(bool force = false);
@@ -113,7 +113,7 @@ namespace FT3
 	    case 14:
 	    case 15:
 	    case 16:
-		 return TUdata[num / k].Time[num % k - 1].lnk;
+		return TUdata[num / k].Time[num % k - 1].lnk;
 	    }
 	}
     }
@@ -130,6 +130,8 @@ namespace FT3
 	uint16_t count_nr;
 	uint8_t currTU;
 	bool with_params;
+	void AddTUChannel(uint8_t iid);
+	void AddTRChannel(uint8_t iid);
 	uint16_t Task(uint16_t);
 	uint16_t HandleEvent(uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
@@ -144,10 +146,11 @@ namespace FT3
 	class STRchannel
 	{
 	public:
-	    STRchannel(uint8_t iid) :
-		    id(iid), Value(TSYS::strMess("value_%d", id + 1).c_str(), TSYS::strMess(_("Value %d"), id + 1).c_str())
+	    STRchannel(uint8_t iid, DA* owner) :
+		    da(owner), id(iid), Value(TSYS::strMess("value_%d", id + 1).c_str(), TSYS::strMess(_("Value %d"), id + 1).c_str())
 	    {
 	    }
+	    DA* da;
 	    uint8_t id;
 
 	    flData Value;
@@ -155,8 +158,8 @@ namespace FT3
 	class STUchannel
 	{
 	public:
-	    STUchannel(uint8_t iid) :
-		    id(iid), On(TSYS::strMess("on_%d", id + 1).c_str(), TSYS::strMess(_("On %d"), id + 1).c_str()),
+	    STUchannel(uint8_t iid, DA* owner) :
+		    da(owner), id(iid), On(TSYS::strMess("on_%d", id + 1).c_str(), TSYS::strMess(_("On %d"), id + 1).c_str()),
 		    Off(TSYS::strMess("off_%d", id + 1).c_str(), TSYS::strMess(_("Off %d"), id + 1).c_str()),
 		    Run(TSYS::strMess("run_%d", id + 1).c_str(), TSYS::strMess(_("Run %d"), id + 1).c_str()),
 		    Reset(TSYS::strMess("reset_%d", id + 1).c_str(), TSYS::strMess(_("Reset %d"), id + 1).c_str()),
@@ -166,6 +169,7 @@ namespace FT3
 
 	    {
 	    }
+	    DA* da;
 	    uint8_t id;
 
 	    ui8Data On, Off, Run, Reset;
