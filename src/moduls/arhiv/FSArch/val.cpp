@@ -1098,12 +1098,12 @@ void VFileArch::attach( const string &name )
 	//Load previous val check
 	bool load_prev = false;
 	int64_t cur_tm = TSYS::curTime();
-	if(cur_tm >= begin() && cur_tm <= end() && period() > 10000000) { owner().prev_tm = cur_tm; load_prev = true; }
+	if(cur_tm >= begin() && cur_tm <= end() && period() > 10000000) { owner().prevTm = cur_tm; load_prev = true; }
 
 	//Check and prepare last archive files
 	// Get file size
 	int hd = open(mName.c_str(), O_RDWR);
-	if(hd == -1)	throw TError(owner().archivator().nodePath().c_str(),_("Archive file '%s' no opened!"),name.c_str());
+	if(hd == -1)	throw TError(owner().archivator().nodePath().c_str(), _("Archive file '%s' no opened!"), name.c_str());
 	mSize = lseek(hd, 0, SEEK_END);
 	mpos = (end()-begin())/period();
 	if(!mPack && cur_tm >= begin() && cur_tm <= end()) repairFile(hd);
@@ -1111,33 +1111,11 @@ void VFileArch::attach( const string &name )
 	res.release();
 
 	// Load previous value
-	if(load_prev)
+	if(load_prev && owner().prevVal == EVAL_REAL)
 	    switch(type()) {
-		case TFld::Int16: {
-		    int16_t tval = getVal((cur_tm-begin())/period()).getI();
-		    owner().prev_val.assign((char*)&tval, vSize);
+		case TFld::Int16: case TFld::Int32: case TFld::Int64: case TFld::Float: case TFld::Double:
+		    owner().prevVal = getVal((cur_tm-begin())/period()).getR();
 		    break;
-		}
-		case TFld::Int32: {
-		    int32_t tval = getVal((cur_tm-begin())/period()).getI();
-		    owner().prev_val.assign((char*)&tval, vSize);
-		    break;
-		}
-		case TFld::Int64: {
-		    int64_t tval = getVal((cur_tm-begin())/period()).getI();
-		    owner().prev_val.assign((char*)&tval, vSize);
-		    break;
-		}
-		case TFld::Float: {
-		    float tval = getVal((cur_tm-begin())/period()).getR();
-		    owner().prev_val.assign((char*)&tval, vSize);
-		    break;
-		}
-		case TFld::Double: {
-		    double tval = getVal((cur_tm-begin())/period()).getR();
-		    owner().prev_val.assign((char*)&tval, vSize);
-		    break;
-		}
 		default: break;
 	    }
     }

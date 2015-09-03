@@ -185,20 +185,20 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string	srcData( )	{ return mSource; }
 	CombMode combMode( )	{ return (TVArchive::CombMode)mCombMode.getI(); }
 	AutoHD<TVal> srcPAttr( bool force = false, const string &ipath = "" );
-	bool toStart( )  	{ return mStart; }
-	bool startStat( )	{ return runSt; }
+	bool	toStart( )  	{ return mStart; }
+	bool	startStat( )	{ return runSt; }
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( )		{ return mDB; }
+	string	tbl( );
+	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
-	int64_t end( const string &arch = BUF_ARCH_NM );
-	int64_t begin( const string &arch = BUF_ARCH_NM );
-	int64_t period( const string &arch = BUF_ARCH_NM );
+	int64_t	end( const string &arch = BUF_ARCH_NM );
+	int64_t	begin( const string &arch = BUF_ARCH_NM );
+	int64_t	period( const string &arch = BUF_ARCH_NM );
 	TFld::Type valType( bool full = false )	{ return TValBuf::valType(full); }
-	bool hardGrid( )	{ return TValBuf::hardGrid(); }
-	bool highResTm( )	{ return TValBuf::highResTm(); }
-	int size( )		{ return TValBuf::size(); }
+	bool	hardGrid( )	{ return TValBuf::hardGrid(); }
+	bool	highResTm( )	{ return TValBuf::highResTm(); }
+	int	size( )		{ return TValBuf::size(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
@@ -402,8 +402,8 @@ class TVArchEl
 	virtual bool setValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ return false; }
 
 	// Previous averaging value
-	int64_t	prev_tm;
-	string	prev_val;
+	int64_t	prevTm;
+	double	prevVal;
 
     private:
 	//Private attributes

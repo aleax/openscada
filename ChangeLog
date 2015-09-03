@@ -1,7 +1,20 @@
+2015-09-03 Roman
+- DB.LibsDB.{OscadaLibs,vcaBase}.db: Some translations updated.
+- DB.LibsDB.OscadaLibs.db: base.pidUnif adapted to the dynamic procedure translation.
+- !!!!:FIX:Archive,Archive.FSArch: prev_val unified to double type for all operations like average, thanks to fido_max, which fix:
+    Types INT_16, INT_32 and FLOAT back reading for long periodic archives, like minutes and hours, fix and access to outraged memory prevented.
+    True average for integer types, preventing some parts lost.
+    Generic for integer and real processing set now.
+- !!:Archive.DBArch: Back reading for long periodic archives, like minutes and hours added.
+- FIX:UI.VCAEngine: Permition to tab "Diagnostics" of a project is fixed for "root:UI".
+- FIX:UI.Vision: Events from "User's status line items" fixed by return symbol ":" between same event and the path.
+
+
 2015-08-31 fido_max
 - FIX:DAQ.Fastwel: TMdPrm::vlSet and TMdContr::Task syncronized
 - DAQ.FT3: Some refactoring and optimisation made. B_ACCOUNT basic processing added.
 - FIX:DAQ.FT3 KA_BTU runTU fixed
+
 
 2015-08-31 Roman
 - DB.LibsDB.{OscadaLibs,vcaBase}.db, DB.Model.AGLKS.St.db: Some messages translation improved.

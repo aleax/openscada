@@ -692,10 +692,10 @@ bool UserItStBar::event( QEvent *event )
 		case Qt::MidButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
-	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", mod_ev+"/stIt_"+objId); return true; }
+	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", mod_ev+":/stIt_"+objId); return true; }
 	    break;
 	case QEvent::MouseButtonDblClick:
-	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", "key_mouseDblClick/stIt_"+objId); return true; }
+	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", "key_mouseDblClick:/stIt_"+objId); return true; }
 	    break;
     }
 

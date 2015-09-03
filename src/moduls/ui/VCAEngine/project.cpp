@@ -506,14 +506,14 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/mess",_("Diagnostics"))) {
-	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),RWRW__,"root",SDAQ_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),RWRW__,"root",SDAQ_ID,1,"tp","dec");
-	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SDAQ_ID)) {
-		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SDAQ_ID,1,"tp","time");
-		ctrMkNode("list",opt,-1,"/mess/mess/0a",_("mcsec"),R_R___,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),R_R___,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mess/mess/2",_("Lev."),R_R___,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),R_R___,"root",SDAQ_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),RWRW__,"root",SUI_ID,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),RWRW__,"root",SUI_ID,1,"tp","dec");
+	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SUI_ID)) {
+		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SUI_ID,1,"tp","time");
+		ctrMkNode("list",opt,-1,"/mess/mess/0a",_("mcsec"),R_R___,"root",SUI_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),R_R___,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mess/mess/2",_("Lev."),R_R___,"root",SUI_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),R_R___,"root",SUI_ID,1,"tp","str");
 	    }
 	}
 	return;
@@ -739,31 +739,31 @@ void Project::cntrCmdProc( XMLNode *opt )
 	stlCurentSet(-1);
     }
     else if(a_path == "/mess/tm") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) {
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"messTm","0",opt->attr("user")));
 	    if(!s2i(opt->text())) opt->setText(i2s(time(NULL)));
 	}
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	if(ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
 	    TBDS::genDBSet(mod->nodePath()+"messTm",(s2i(opt->text())>=time(NULL))?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/size") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"messSize","600",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    TBDS::genDBSet(mod->nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID)) {
+    else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)) {
 	vector<TMess::SRec> rec;
 	time_t gtm = s2i(TBDS::genDBGet(mod->nodePath()+"messTm","0",opt->attr("user")));
 	if(!gtm) gtm = time(NULL);
 	int gsz = s2i(TBDS::genDBGet(mod->nodePath()+"messSize","600",opt->attr("user")));
 	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", TMess::Info, "");
 
-	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_tmu  = ctrMkNode("list",opt,-1,"/mess/mess/0a","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/mess/mess/1","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/mess/mess/2","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_mess = ctrMkNode("list",opt,-1,"/mess/mess/3","",R_R___,"root",SDAQ_ID);
+	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SUI_ID);
+	XMLNode *n_tmu  = ctrMkNode("list",opt,-1,"/mess/mess/0a","",R_R___,"root",SUI_ID);
+	XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/mess/mess/1","",R_R___,"root",SUI_ID);
+	XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/mess/mess/2","",R_R___,"root",SUI_ID);
+	XMLNode *n_mess = ctrMkNode("list",opt,-1,"/mess/mess/3","",R_R___,"root",SUI_ID);
 	for(int i_rec = rec.size()-1; i_rec >= 0; i_rec--) {
 	    if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[i_rec].time));
 	    if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[i_rec].utime));

@@ -1222,7 +1222,7 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p2_addr
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p1_name','<EVAL>',34,'Parameter 1|NAME','prm:/LogicLev/experiment/Pi/NAME','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p1_min','<EVAL>',34,'Parameter 1|min','prm:/LogicLev/experiment/Pi/min','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p1_max','<EVAL>',34,'Parameter 1|max','prm:/LogicLev/experiment/Pi/max','e1','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p1_clr','#b000b0',33,'Parameter 1','#b000b0','e1','','Параметр 1','','','Параметр 1','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p1_clr','#b000b0',33,'Parameter 1','#b000b0','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p1_addr','<EVAL>',34,'Parameter 1|var','prm:/LogicLev/experiment/Pi/var','e1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control','name','Control panels',0,'','','','Панелі керування','','','Панели управления','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_ElCadr','pgGrp','cntr',32,'','','','','','','','','');
@@ -2934,7 +2934,7 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomH','142',32,'','','','',''
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','bordColor','black',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','bordStyle','3',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 5',40,'','','p5','Параметр 5','','Параметр 5','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 5',40,'','','p5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomX','61',32,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomH','17',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','223',32,'','','title','','','','','','');
@@ -2944,8 +2944,8 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomY','18',32,'','','trnd',''
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','162',32,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomH','122',32,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomZ','2',32,'','','trnd','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 1',40,'','','p1','Параметр 1','','Параметр 1','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 2',32,'','','p2','Параметр 2','','Параметр 2','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 1',40,'','','p1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 2',32,'','','p2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomX','1',32,'','','p2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomY','42',32,'','','p2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','60',32,'','','p2','','','','','','');
@@ -2955,8 +2955,8 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomMargin','1',32,'','','p2',
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','font','Arial 10',32,'','','p2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','color','#c75300',40,'','','p2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','alignment','8',32,'','','p2','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 2',40,'','','p2','Параметр 2','','Параметр 2','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 3',32,'','','p3','Параметр 3','','Параметр 3','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 2',40,'','','p2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 3',32,'','','p3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomX','1',32,'','','p3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomY','66',32,'','','p3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','60',32,'','','p3','','','','','','');
@@ -2966,8 +2966,8 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomMargin','1',32,'','','p3',
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','font','Arial 10',32,'','','p3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','color','blue',40,'','','p3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','alignment','8',32,'','','p3','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 3',40,'','','p3','Параметр 3','','Параметр 3','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 4',32,'','','p4','Параметр 4','','Параметр 4','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 3',40,'','','p3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 4',32,'','','p4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomX','1',32,'','','p4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomY','90',32,'','','p4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','60',32,'','','p4','','','','','','');
@@ -2977,8 +2977,8 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomMargin','1',32,'','','p4',
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','font','Arial 10',32,'','','p4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','color','#00ff00',40,'','','p4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','alignment','8',32,'','','p4','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 4',40,'','','p4','Параметр 4','','Параметр 4','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 5',32,'','','p5','Параметр 5','','Параметр 5','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Parameter 4',40,'','','p4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 5',32,'','','p5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomX','1',32,'','','p5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomY','114',32,'','','p5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','60',32,'','','p5','','','','','','');
@@ -2998,7 +2998,7 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomH','24',32,'','','p1','','
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomW','60',32,'','','p1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomY','18',32,'','','p1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','geomX','1',32,'','','p1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 1',32,'','','p1','Параметр 1','','Параметр 1','','','');
+INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','name','Parameter 1',32,'','','p1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','text','Tittle',40,'','','title','Заголовок','','Заголовок','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','alignment','8',32,'','','title','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraphEl','font','Arial 15',32,'','','title','','','','','','');
@@ -9289,11 +9289,11 @@ INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_name','Parameter5:name',13
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_max','Parameter5:maximum',131076,'<EVAL>||',10,'Parameter 5|max','','','Параметр5:максимум','','','Параметр5:максимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_min','Parameter5:minimum',131076,'<EVAL>||',10,'Parameter 5|min','','','Параметр5:мінімум','','','Параметр5:минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','title','Tittle',131077,'<EVAL>||',9,'','','','Заголовок','','','Заголовок','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_clr','Parameter1:color',147461,'#b000b0||',9,'Parameter 1','','','Параметр1:колір','','Параметр 1','Параметр1:цвет','','Параметр 1','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p2_clr','Parameter2:color',147461,'#c75300||',9,'Parameter 2','','','Параметр2:колір','','Параметр 2','Параметр2:цвет','','Параметр 2','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p3_clr','Parameter3:color',147461,'blue||',9,'Parameter 3','','','Параметр3:колір','','Параметр 3','Параметр3:цвет','','Параметр 3','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p4_clr','Parameter4:color',147461,'#00ff00||',9,'Parameter 4','','','Параметр4:колір','','Параметр 4','Параметр4:цвет','','Параметр 4','','');
-INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_clr','Parameter5:color',147461,'#06fbff||',9,'Parameter 5','','','Параметр5:колір','','Параметр 5','Параметр5:цвет','','Параметр 5','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_clr','Parameter1:color',147461,'#b000b0||',9,'Parameter 1','','','Параметр1:колір','','','Параметр1:цвет','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p2_clr','Parameter2:color',147461,'#c75300||',9,'Parameter 2','','','Параметр2:колір','','','Параметр2:цвет','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p3_clr','Parameter3:color',147461,'blue||',9,'Parameter 3','','','Параметр3:колір','','','Параметр3:цвет','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p4_clr','Parameter4:color',147461,'#00ff00||',9,'Parameter 4','','','Параметр4:колір','','','Параметр4:цвет','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p5_clr','Parameter5:color',147461,'#06fbff||',9,'Parameter 5','','','Параметр5:колір','','','Параметр5:цвет','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','bTime','Document begin',139265,'0||',14,'<page>|bTime','','','Початок документа','','','Начало документа','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','doc','Document',131077,'<EVAL>||',14,'<page>|doc','','','Документ','','','Документ','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('doc_panel','n','Archive size',131073,'<EVAL>||',10,'<page>|n','','','Розмір архіву','','','Размер архива','','','','');

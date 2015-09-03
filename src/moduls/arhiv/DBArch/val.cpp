@@ -333,5 +333,20 @@ bool ModVArchEl::readMeta( )
 		SYS->db().at().at(TSYS::strParse(wDB,0,".")).at().at(TSYS::strParse(wDB,1,".")).at().enableStat());
     }
 
+    //Read previous
+    if(rez) {
+	// Load previous val check
+	int64_t cur_tm = (TSYS::curTime()/vmax(1,period()))*period();
+	if(cur_tm >= begin() && cur_tm <= end() && period() > 10000000 && prevVal == EVAL_REAL) {
+	    prevTm = cur_tm;
+	    switch(archive().valType()) {
+		case TFld::Int16: case TFld::Int32: case TFld::Int64: case TFld::Float: case TFld::Double:
+		    prevVal = getVal(&cur_tm, false).getR();
+		    break;
+		default: break;
+	    }
+	}
+    }
+
     return rez;
 }
