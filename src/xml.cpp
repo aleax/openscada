@@ -301,8 +301,7 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 {
     const char *replStr = NULL;
     for(unsigned i_sz = 0, f_pos = 0; true; ) {
-	switch(s[i_sz])
-	{
+	switch(s[i_sz]) {
 	    case '>':	replStr = "&gt;";	break;
 	    case '<':	replStr = "&lt;";	break;
 	    case '"':	replStr = "&quot;";	break;

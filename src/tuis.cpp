@@ -192,7 +192,7 @@ void TUI::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/r_st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(run_st?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	atoi(opt->text().c_str())?modStart():modStop();
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	s2i(opt->text()) ? modStart() : modStop();
     }
     else TModule::cntrCmdProc(opt);
 }

@@ -1,3 +1,14 @@
+2015-09-08 Roman
+- DB.LibsDB.vcaBase.db: Main.ElViewGraph: Expanded for periodic enabling check by it's name not EVAL.
+    Main.graphSelPrm: Expanded for full clear by empty item select. In it processing a JavaLike problem detected for the further observing need.
+- FIX:SYS.TRegExp: To replace() added checking to nozero replace range for hangs prevent.
+- FIX:Archive.FSArch: VFileArch::setVals() rewrote for integer and real data types rounding,
+    mostly for prevent wrong access here to not alloced memory.
+- FIX:DAQ.DAQGate: Fixed for prevent SHIFR and other attributes lost at the parameter restore, by lock, after it deletion try.
+- DAQ.DAQGate: Some debug messages added.
+- FIX:UI.{QTCfg,Vision}: Fixed for font get into text edit syntax higligting and more, by Vision::getFont(), from the default font base (system font).
+
+
 2015-09-03 Roman
 - DB.LibsDB.{OscadaLibs,vcaBase}.db: Some translations updated.
 - DB.LibsDB.OscadaLibs.db: base.pidUnif adapted to the dynamic procedure translation.

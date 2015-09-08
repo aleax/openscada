@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.3.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -208,7 +208,7 @@ void TUIMod::unregWin( QMainWindow *win )
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get the page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
@@ -219,7 +219,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to the page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/start_path") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startPath());
@@ -242,7 +242,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 
 void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type, QWidget *parent )
 {
-    //> Put system message.
+    //Put the system message
     message(cat.c_str(),(type==TUIMod::Crit)?TMess::Crit:
 	(type==TUIMod::Error)?TMess::Error:
 	(type==TUIMod::Warning)?TMess::Warning:TMess::Info,"%s",mess.c_str());

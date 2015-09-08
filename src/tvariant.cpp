@@ -800,11 +800,11 @@ string TRegExp::replace( const string &vl, const string &str )
 {
     string rez = vl, repl;
     if(!regex) return rez;
-    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0;
+    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0 && capv[1] > capv[0];
 	curPos = capv[0]+repl.size())
     {
-	repl = substExprRepl(str,rez,capv,n);
-	rez.replace(capv[0],capv[1]-capv[0],repl);
+	repl = substExprRepl(str, rez, capv, n);
+	rez.replace(capv[0], capv[1]-capv[0], repl);
     }
     return rez;
 }

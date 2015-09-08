@@ -1431,6 +1431,7 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //Get values, make value buffer and init the pack index table
     vpos_beg = 0;
     vpos_end = -1;
+    double pRc = ((ModVArch&)owner().archivator()).roundProc();
     while(ibeg <= iend) {
 	// Get value and put it to file
 	switch(type()) {
@@ -1440,33 +1441,56 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 		break;
 	    }
 	    case TFld::Int16: case TFld::Int32: case TFld::Int64: {
-		int64_t tval = buf.getI(&ibeg, true);
-		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0) {
-		    int64_t vprev = *(int64_t*)value_end.c_str();
-		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
-			tval = vprev;
-		}
+		int64_t bval = buf.getI(&ibeg, true);
 		switch(type()) {
-		    case TFld::Int16: { int16_t vl = (tval==EVAL_INT)?EVAL_INT16:tval; value.assign((char*)&vl, vSize); }	break;
-		    case TFld::Int32: { int32_t vl = (tval==EVAL_INT)?EVAL_INT32:tval; value.assign((char*)&vl, vSize); }	break;
-		    case TFld::Int64: { int64_t vl = (tval==EVAL_INT)?EVAL_INT64:tval; value.assign((char*)&vl, vSize); }	break;
-		    default: break;
+		    case TFld::Int16: {
+			int16_t vprev, tval = (bval==EVAL_INT) ? EVAL_INT16 : bval;
+			if(pRc && vpos_end >= 0 && (vprev=*(int16_t*)value_end.c_str()) != EVAL_INT16 && tval != EVAL_INT16 &&
+			    ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= pRc) tval = vprev;
+			value.assign((char*)&tval, vSize);
+			break;
+		    }
+		    case TFld::Int32: {
+			int32_t vprev, tval = (bval==EVAL_INT) ? EVAL_INT32 : bval;
+			if(pRc && vpos_end >= 0 && (vprev=*(int32_t*)value_end.c_str()) != EVAL_INT32 && tval != EVAL_INT32 &&
+			    ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= pRc) tval = vprev;
+			value.assign((char*)&tval, vSize);
+			break;
+		    }
+		    case TFld::Int64: {
+			int64_t vprev, tval = (bval==EVAL_INT) ? EVAL_INT64 : bval;
+			if(pRc && vpos_end >= 0 && (vprev=*(int64_t*)value_end.c_str()) != EVAL_INT64 && tval != EVAL_INT64 &&
+			    ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= pRc) tval = vprev;
+			value.assign((char*)&tval, vSize);
+			break;
+		    }
+		    default:	break;
 		}
 		break;
 	    }
 	    case TFld::Float: case TFld::Double: {
-		double tval = buf.getR(&ibeg, true);
-		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0) {
-		    double vprev = *(double*)value_end.c_str();
-		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
-			tval = vprev;
-		}
+		double bval = buf.getR(&ibeg, true);
 		switch(type()) {
-		    case TFld::Float:	{ float vl = TSYS::floatLE((tval==EVAL_REAL)?EVAL_RFlt:tval); value.assign((char*)&vl, vSize); }	break;
-		    case TFld::Double:	{ double vl = TSYS::doubleLE((tval==EVAL_REAL)?EVAL_RDbl:tval); value.assign((char*)&vl, vSize); }	break;
-		    default: break;
+		    case TFld::Float: {
+			float vprev, tval = (bval==EVAL_REAL) ? EVAL_RFlt : bval;
+			if(pRc && vpos_end >= 0 && (vprev=*(float*)value_end.c_str()) != EVAL_RFlt && tval != EVAL_RFlt &&
+			    ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= pRc) tval = vprev;
+			tval = TSYS::floatLE(tval); value.assign((char*)&tval, vSize);
+			break;
+		    }
+		    case TFld::Double: {
+			double vprev, tval = (bval==EVAL_REAL) ? EVAL_RDbl : bval;
+			if(pRc && vpos_end >= 0 && (vprev=*(double*)value_end.c_str()) != EVAL_RDbl && tval != EVAL_RDbl &&
+			    ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= pRc) tval = vprev;
+			tval = TSYS::doubleLE(tval); value.assign((char*)&tval, vSize);
+			break;
+		    }
+		    default:	break;
 		}
 		break;
 	    }

@@ -54,7 +54,7 @@ TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX),
     prev.grp = -1;
     modif();
 
-    if(SYS && mess_lev() == TMess::Debug && SYS != this) SYS->cntrIter(objName(), 1);
+    if(SYS && this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TCntrNode::~TCntrNode( )
@@ -65,7 +65,7 @@ TCntrNode::~TCntrNode( )
     pthread_mutex_destroy(&mChM);
     pthread_mutex_destroy(&mDataM);
 
-    if(mess_lev() == TMess::Debug && SYS != this) SYS->cntrIter(objName(), -1);
+    if(this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 TCntrNode &TCntrNode::operator=( TCntrNode &node )	{ return *this; }

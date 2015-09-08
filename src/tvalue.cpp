@@ -73,7 +73,7 @@ void TValue::delFld( TElem *el, unsigned id_val )
 void TValue::setVlCfg( TConfig *cfg )
 {
     vector<string> list;
-    // Detach old configurations
+    //Detach old configurations
     if(mCfg) {
 	mCfg->cfgList(list);
 	for(unsigned i_cf = 0; i_cf < list.size(); i_cf++)
@@ -83,9 +83,9 @@ void TValue::setVlCfg( TConfig *cfg )
 	    }
 	mCfg = NULL;
     }
-    // Attach new config
+    //Attach new config
     if(cfg) {
-	cfg->cfgList( list );
+	cfg->cfgList(list);
 	for(unsigned i_cf = 0; i_cf < list.size(); i_cf++)
 	    if(!(cfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && !vlPresent(list[i_cf])) {
 		TVal *vl = vlNew();

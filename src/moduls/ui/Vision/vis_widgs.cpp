@@ -669,7 +669,7 @@ void SyntxHighl::setSnthHgl( XMLNode nd )
     rules = nd;
 
     //Set current font settings
-    document()->setDefaultFont(WdgShape::getFont(rules.attr("font"), 1, false));
+    document()->setDefaultFont(WdgShape::getFont(rules.attr("font"),1,false,document()->defaultFont()));
 
     rehighlight();
 }
@@ -692,8 +692,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	if(curBlk && !i_t) { minRule = curBlk-1; minPos = 0; }
 	else minRule = -1;
 
-	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++)
-	{
+	for(int i_ch = 0; i_t != minPos && i_ch < (int)irl->childSize(); i_ch++) {
 	    if(!(minPos < i_t || rul_pos[i_ch] < i_t || rul_pos[i_ch] < minPos)) continue;
 	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos)	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
 	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos)	{ minRule = i_ch; break; }

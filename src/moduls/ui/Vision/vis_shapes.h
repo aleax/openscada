@@ -95,7 +95,7 @@ class WdgShape : public QObject
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ return false; }
 
 	//Static methods
-	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true );
+	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true, const QFont &defFnt = QFont() );
 	static QColor getColor( const string &vl );
 
     protected:

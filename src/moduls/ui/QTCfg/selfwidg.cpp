@@ -341,17 +341,17 @@ void SyntxHighl::setSnthHgl(XMLNode nd)
     rules = nd;
 
     //Set current font settings
-    QFont rez;
+    QFont rez = document()->defaultFont();
 
-    char family[101]; strcpy(family,"Arial");
-    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
-    sscanf(nd.attr("font").c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-    rez.setFamily(QString(family).replace(QRegExp("_")," "));
-    rez.setPointSize(size);
-    rez.setBold(bold);
-    rez.setItalic(italic);
-    rez.setUnderline(underline);
-    rez.setStrikeOut(strike);
+    char family[101]; family[0] = 0; //strcpy(family, "Arial");
+    int size = -1, bold = -1, italic = -1, underline = -1, strike = -1;
+    sscanf(nd.attr("font").c_str(), "%100s %d %d %d %d %d", family, &size, &bold, &italic, &underline, &strike);
+    if(strlen(family)) rez.setFamily(QString(family).replace(QRegExp("_")," "));
+    if(size >= 0)	rez.setPointSize(size);
+    if(bold >= 0)	rez.setBold(bold);
+    if(italic >= 0)	rez.setItalic(italic);
+    if(underline >= 0)	rez.setUnderline(underline);
+    if(strike >= 0)	rez.setStrikeOut(strike);
     document()->setDefaultFont(rez);
 
     rehighlight();
