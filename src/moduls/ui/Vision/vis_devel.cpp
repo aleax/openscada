@@ -704,7 +704,7 @@ QString VisDevelop::getFileName(const QString &caption, const QString &dir, cons
     fileDlg->setAcceptMode(mode);
     fileDlg->setWindowTitle(caption);
     fileDlg->setNameFilter(filter);
-    if(dir.size()) fileDlg->selectFile(dir);
+    if(dir.size()) { QString dirF = dir; fileDlg->selectFile(dirF.replace("\"","")); }
     if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
 
     return "";

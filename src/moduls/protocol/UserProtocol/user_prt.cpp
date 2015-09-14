@@ -307,7 +307,7 @@ TCntrNode &UserPrt::operator=( TCntrNode &node )
 
 void UserPrt::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
 }
 
 TProt &UserPrt::owner( )	{ return *(TProt*)nodePrev(); }

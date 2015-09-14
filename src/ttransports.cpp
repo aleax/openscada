@@ -181,8 +181,7 @@ void TTransportS::load_( )
     // Load external hosts
     try {
 	TConfig c_el(&el_ext);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); )
-	{
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); ) {
 	    ExtHost host("", "");
 	    host.user_open	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
@@ -411,25 +410,27 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
 {
     int path_off = 0;
     string path = node.attr("path");
-    string station = TSYS::pathLev(path,0,false,&path_off);
+    string station = TSYS::pathLev(path, 0, false, &path_off);
     if(station.empty()) station = SYS->id();
-    else node.setAttr("path",path.substr(path_off));
+    else node.setAttr("path", path.substr(path_off));
 
     if(station == SYS->id()) {
-	node.setAttr("user",(user.empty()?"root":user));
+	node.setAttr("user", user.empty()?"root":user);
 	SYS->cntrCmd(&node);
-	node.setAttr("path",path);
+	node.setAttr("path", path);
 	return s2i(node.attr("rez"));
     }
 
-    //Connect to transport
-    TTransportS::ExtHost host = extHostGet((user.empty()?"*":user),station);
-    AutoHD<TTransportOut> tr = extHost(host,senderPref);
+    //Connect to the transport
+    TTransportS::ExtHost host = extHostGet(user.empty()?"*":user, station);
+    AutoHD<TTransportOut> tr = extHost(host, senderPref);
     if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
 
-    node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
-    tr.at().messProtIO(node,"SelfSystem");
-    node.setAttr("path",path);
+    node.setAttr("rqDir", "0")->setAttr("rqUser", host.user)->setAttr("rqPass", host.pass);
+    if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), _("REQ: %s"), node.save().c_str());
+    tr.at().messProtIO(node, "SelfSystem");
+    if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), _("RESP: %s"), node.save().c_str());
+    node.setAttr("path", path);
 
     return s2i(node.attr("rez"));
 }

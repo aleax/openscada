@@ -731,6 +731,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    string cat     = opt->attr("cat");
 	    int    lev     = s2i(opt->attr("lev"));
 	    vector<TMess::SRec> rez;
+
+	    if(!tm) { tm = time(NULL); opt->setAttr("tm", u2s(tm)); }
 	    messGet(tm_grnd, tm, rez, cat, (TMess::Type)lev, arch);
 	    for(unsigned i_r = 0; i_r < rez.size(); i_r++)
 		opt->childAdd("el")->

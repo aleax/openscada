@@ -1,3 +1,18 @@
+2015-09-14 Roman
+- DB.LibsDB.OscadaLibs.db: Some translation improved next. base.anUnifSt expanded by the attribute "log".
+    base.{digitBlockUnif,pidUnifImp,pidUnif}: adapted to the dynamic procedure translation.
+- DB.LibsDB.vcaBase.db: Some translation improved next.
+    doc.{docUsersSet,docAlarmsRep,docRepSm2}: adapted for fine borders set and the items order reverse by "docRevers".
+    All operator doings log expanded by the parameter name into the category and allow for sort that next.
+- TArchives: Request "get" of the service "/serv/mess" some expanded for zero "tm" processing to the current time.
+- Transport: Debug messages added to the generic OpenSCADA control interface's function cntrIfCmd().
+- !!:DAQ.DAQGate: Messages gate expanded into the redundance mode, from parallel-redundance station.
+- DAQ.JavaLikeCalc: Word "CODE" replaced to the absolute program position, for the debug messages.
+    About "JavaLike problem detected" early: the problem wrong, but reveal some other before.
+- FIX:UI.VCAEngine: A misspell into the code of new notification manager, same into a queue processing, fix.
+- UI.Vision: Some specific symbols from new file names removing is added.
+
+
 2015-09-08 Roman
 - DB.LibsDB.vcaBase.db: Main.ElViewGraph: Expanded for periodic enabling check by it's name not EVAL.
     Main.graphSelPrm: Expanded for full clear by empty item select. In it processing a JavaLike problem detected for the further observing need.

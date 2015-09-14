@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.1"
+#define MOD_VER		"1.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -212,8 +212,8 @@ void TMdContr::enable_( )
 		prmLs.clear();
 		if(!prmId.empty() && prmId != "*") prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+prmId);	//Concrete parameter to root
 		else {	//Parameters group to root
-		    req.clear()->setName("get")->setAttr("path","/"+mStatWork[i_st].first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
-		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
+		    req.clear()->setName("get")->setAttr("path", "/"+mStatWork[i_st].first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
+		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), "%s", req.text().c_str());
 		    else for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 			prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+req.childGet(i_ch)->attr("id"));
 		}
@@ -400,7 +400,38 @@ void *TMdContr::Task( void *icntr )
     bool firstCall = true;
 
     for(unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++) {
-	if(cntr.redntUse()) { TSYS::sysSleep(STD_WAIT_DELAY*1e-3); continue; }
+	if(cntr.redntUse()) {
+	    //Request to the redundant host by messages
+	    if(cntr.mMessLev.getI() >= 0) {
+		XMLNode req("CntrReqs");
+		for(unsigned iSt = 0; iSt < cntr.mStatWork.size(); iSt++) {
+		    int tm_grnd = cntr.mStatWork[iSt].second.lstMess["<<redundant>>"];
+		    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/sub_Archive/%2fserv%2fmess")->
+				setAttr("tm_grnd", i2s(tm_grnd))->
+				setAttr("cat", cntr.mStatWork[iSt].first+":*")->setAttr("lev",cntr.mMessLev);
+		    // Alarms force request
+		    if(!tm_grnd && cntr.mMessLev.getI() >= 0) reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
+		    else reqCh->setAttr("lev", cntr.mMessLev.getS());
+		}
+
+		SYS->daq().at().rdStRequest(cntr.workId(), req);
+
+		// Result messages processing
+		for(unsigned iSt = 0; iSt < cntr.mStatWork.size() && iSt < req.childSize(); iSt++) {
+		    XMLNode *prmNd = req.childGet(iSt);
+		    for(unsigned iM = 0; iM < prmNd->childSize(); iM++) {
+			XMLNode *m = prmNd->childGet(iM);
+			SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")), m->attr("cat"), s2i(m->attr("lev")), m->text());
+		    }
+		    for(map<string, time_t>::iterator iLM = cntr.mStatWork[iSt].second.lstMess.begin();
+								iLM != cntr.mStatWork[iSt].second.lstMess.end(); ++iLM)
+			iLM->second = iLM->second ? s2i(prmNd->attr("tm")) : SYS->sysTm()-3600*cntr.restDtTm();
+		}
+		TSYS::sysSleep(SYS->daq().at().rdTaskPer());
+	    }
+	    else TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	    continue;
+	}
 
 	cntr.call_st = true;
 	t_cnt = TSYS::curTime();
@@ -516,7 +547,10 @@ void *TMdContr::Task( void *icntr )
 			    }
 			    cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] =
 				cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm")) :
-										    SYS->sysTm() - 3600*cntr.restDtTm();
+										    SYS->sysTm()-3600*cntr.restDtTm();
+			    cntr.mStatWork[i_st].second.lstMess["<<redundant>>"] =
+				cntr.mStatWork[i_st].second.lstMess["<<redundant>>"] ? s2i(prmNd->attr("tm")) :
+										    SYS->sysTm()-3600*cntr.restDtTm();
 			}
 			else {
 			    TMdPrm &prm = cntr.pHd[s2i(prmNd->attr("lcPs"))].at();
@@ -601,8 +635,8 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 	if(mStatWork[i_st].first == reqStat) {
 	    if(mStatWork[i_st].second.cntr > 0) break;
 	    try {
-		node.setAttr("conTm",enableStat()?"":"1000");	//Set one second timeout to disabled controller for start procedure speed up.
-		int rez = SYS->transport().at().cntrIfCmd(node,MOD_ID+id());
+		node.setAttr("conTm", enableStat()?"": "1000");	//Set one second timeout to disabled controller for start procedure speed up.
+		int rez = SYS->transport().at().cntrIfCmd(node, MOD_ID+id());
 		if(alSt != 0) {
 		    alSt = 0;
 		    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."), id().c_str(), _("OK")), TMess::Info);
@@ -858,7 +892,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     //Send to active reserve station
     if(owner().redntUse()) {
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
+	SYS->daq().at().rdStRequest(owner().workId(), req);
 	return;
     }
 

@@ -832,7 +832,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
 	}
 	//  Place the entry to the queue
 	unsigned iQ1 = 0;
-	while(iQ1 < mQueue.size() && qIt.lev >= mQueue[iQ].lev) iQ1++;
+	while(iQ1 < mQueue.size() && qIt.lev >= mQueue[iQ1].lev) iQ1++;
 	if(iQ1 < mQueue.size()) {
 	    mQueue.insert(mQueue.begin()+iQ1, qIt);
 	    if((int)iQ <= mQueueCurNtf && mQueueCurNtf >= 0) mQueueCurNtf++;

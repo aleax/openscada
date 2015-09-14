@@ -394,7 +394,7 @@ QString VisRun::getFileName( const QString &caption, const QString &dir, const Q
     fileDlg->setAcceptMode(mode);
     fileDlg->setWindowTitle(caption);
     fileDlg->setNameFilter(filter);
-    if(dir.size()) fileDlg->selectFile(dir);
+    if(dir.size()) { QString dirF = dir; fileDlg->selectFile(dirF.replace("\"","")); }
 #if QT_VERSION >= 0x040500
     fileDlg->setReadOnly(!menuBar()->isVisible());
 #endif

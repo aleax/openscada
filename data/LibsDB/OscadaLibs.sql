@@ -1046,7 +1046,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStab','Stability level (0-9).'
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStabPeak','Highest stability level seen (0-9).',1,16,'',17,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalStat','Channel status.',0,16,'',18,'Статус канала.','','Статус каналу.','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','XtalLife_C','XtalLife (%).',1,16,'',19,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SessId','Session ID',1,32,'',20,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SessId','Session ID',1,32,'',20,'ID сеанса','','ID сеансу','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Fq','Xtal start freq. (Hz)',2,32,'',21,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Fm','Xtal min freq. (Hz)',2,32,'',22,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Density','Material density (gm/cc).',2,32,'',23,'','','','');
@@ -1060,8 +1060,8 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IT3','addr','Device address',1,64,'1',5,'
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',6,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','H','Upper border',3,16,'',7,'Верхняя граница','','Верхня границя','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','L','Lower border',3,16,'',8,'Нижняя граница','','Нижня границя','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'','','Transport','Sockets.out_IVE');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',9,'Состояние реле','','Стан реле','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'','','Transport','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','addr','Device address',1,64,'255',1,'Адрес устройства','','Адреса пристрою','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COIA','Output current level set-point',1,33,'',2,'','','Output current level set-point','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COUA','Output voltage level set-point',1,33,'',3,'','','Output voltage level set-point','');
@@ -1077,9 +1077,9 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEP','Command: Enable 
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_DEL','Command: Blocks #1,2 to line',3,32,'',13,'Команда: Включение блока "по сети" - канал№1,2','','Команда: Включення блоку "по мережі" - канал№1,2','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COM_UF','Command: Display on UI frequency and current',3,32,'',14,'Команда: Отображение на «УИ» напряжения и тока/частоты и мощности блока','','Команда: Відображення на «УІ» напруги та струму/частоти та потужності блоку','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKW','MUBR of the block overheated',3,16,'',15,'','','MUBR of the block overheated','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'','','Short circuits on the block out','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DK','MK of the block overheated',3,16,'',17,'','','MK of the block overheated','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'','','Power and voltage on out present','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -1292,11 +1292,11 @@ INSERT INTO "tmplib_base_io" VALUES('simleBoard','wMin','Lower warning border',2
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','wMax','Upper warning border',2,32,'0',8,'Верхня попереджувальна границя','','Верхн. предупредительная граница','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','iAdd','Addon to input',2,64,'0',9,'Додаток до входу','','Добавка ко входу','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','iMult','Input multiplication',2,64,'1',10,'Множник до входу','','Множитель входа','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdOpen','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','','Команда "Открыть"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdClose','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','','Команда "Закрыть"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdStop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Стоп"','','Команда "Стоп"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','stOpen','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','','Сост. "Открыто"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlock','stClose','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','','Сост. "Закрыто"','');
+INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdOpen','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
+INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdClose','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
+INSERT INTO "tmplib_base_io" VALUES('digitBlock','cmdStop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Стоп"','Кран|stop','Команда "Стоп"','Кран|stop');
+INSERT INTO "tmplib_base_io" VALUES('digitBlock','stOpen','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
+INSERT INTO "tmplib_base_io" VALUES('digitBlock','stClose','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','tCmd','Hold command time (s)',1,32,'5',5,'Час утримання команди (с)','','Время удерж. команды (с)','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник опрацювання команди','','Счётчик отраб. команды','');
@@ -1343,15 +1343,15 @@ INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,6
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',23,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImit','PLC imitation',3,64,'0',24,'Імітація ПЛК','','Имитация ПЛК','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',25,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','','Команда "Открыть"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','close','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','','Команда "Закрыть"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','','Команда "Стоп"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_open','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','','Сост. "Открыто"','');
-INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_close','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','','Сост. "Закрыто"','');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','close','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','Кран|stop','Команда "Стоп"','Кран|stop');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_open','State "Opened"',3,144,'Crane|st_open',3,'Стан "Відкрито"','Кран|st_open','Сост. "Открыто"','Кран|st_open');
+INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','st_close','State "Closed"',3,144,'Crane|st_close',4,'Стан "Закрито"','Кран|st_close','Сост. "Закрыто"','Кран|st_close');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','tCmd','Hold command time (s)',1,64,'5',5,'Час утримання команди (с)','','Время удерж. команды (с)','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','w_tm','Process command counter',2,1,'0',7,'Лічильнк обробки команди','','Счётчик отраб. команды','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
@@ -1419,15 +1419,15 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMax','Border up warning',2,32,'
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',19,'Гистерезис нарушений границ','','Гистерезиз наруш. границ','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','speed','Motion speed',2,32,'0',20,'Швидкість зміни','','Скорость изменения','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',21,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time (s)',2,32,'0',22,'Час фільтру (с)','','Время фильтрации (с)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iAdd','Input addon',2,64,'0',23,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',24,'Множник входу','','Множитель ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',25,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',26,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcExcess','Allowed scale exceeding (%)',2,64,'0',27,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',28,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',29,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time (s)',2,32,'0',23,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iAdd','Input addon',2,64,'0',24,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',25,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',26,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',27,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcExcess','Allowed scale exceeding (%)',2,64,'0',28,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',29,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',30,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO "tmplib_base_io" VALUES('pidUnif','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','manIn','Manual input (%)',2,160,'PID|manIn',3,'Ручний ввід (%)','ПІД|manIn','Ручной ввод (%)','ПИД|manIn');
@@ -1473,10 +1473,10 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcImit','PLC imitation',3,64,'0'
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',43,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','varIn','Variable input',2,32,'0',2,'Введення змінної','','Ввод переменной','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','SHIFR','Code',0,0,'',45,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','this','Object',4,1,'',30,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','SHIFR','Code',0,0,'',31,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','NAME','Name',0,0,'',32,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','DESCR','Description',0,0,'',33,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','this','Object',4,1,'',31,'Об''єкт','','Объект','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','SHIFR','Code',0,0,'',32,'Шифр','','Шифр','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','NAME','Name',0,0,'',33,'Ім''я','','Имя','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','DESCR','Description',0,0,'',34,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','this','Object',4,1,'',26,'Об''єкт','','Объект','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','NAME','Name',0,0,'',46,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','this','Object',4,1,'',44,'Об''єкт','','Объект','');
@@ -1521,6 +1521,7 @@ INSERT INTO "tmplib_base_io" VALUES('manInUnif','log','Logarithmic scale',3,32,'
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','stInv','State inverse',3,64,'',1,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'',3,'','','','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',4,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',22,'','','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '''''''''''''' ,"ID" TEXT DEFAULT '''''''''''''' ,"NAME" TEXT DEFAULT '''''''''''''' ,"TYPE" INTEGER DEFAULT '''''''''''''' ,"MODE" INTEGER DEFAULT '''''''''''''' ,"DEF" TEXT DEFAULT '''''''''''''' ,"HIDE" INTEGER DEFAULT '''''''''''''' ,"POS" INTEGER DEFAULT '''''''''''''' ,"ru#NAME" TEXT DEFAULT '''''' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -2683,7 +2684,7 @@ INSERT INTO "Trs" VALUES('Request: TRANSL_TEMP.','','');
 INSERT INTO "Trs" VALUES('No connection','','');
 INSERT INTO "Trs" VALUES('Output transport ''%1'' error.','','');
 INSERT INTO "Trs" VALUES('Read all data.','','');
-INSERT INTO "Trs" VALUES('Reply is not full','','');
+INSERT INTO "Trs" VALUES('Reply is not full','Відповідь не повна','Ответ не полный');
 INSERT INTO "Trs" VALUES('No Problems. The rest below are prioritized.','','');
 INSERT INTO "Trs" VALUES('Frequency of xtal is > Fq or < Fm. Halts all other calculations.','','');
 INSERT INTO "Trs" VALUES('Frequency was bad (previous XtalStat was XPROB_FREQ) and frequency is now in range, but life is less than 3%.','','');
@@ -4004,8 +4005,7 @@ pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
 if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
 
 //Manual input set process
-if(!varIn.isEVal() && (varIn != var || inout.isEVal()))
-{
+if(!varIn.isEVal() && (varIn != var || inout.isEVal())) {
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
 	vCalibr = (varIn-min)/(max-min);
 	if(scSqr)	vCalibr = pow(vCalibr,2);
@@ -4058,7 +4058,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','','',1418027381);
+}','','',1441880537);
 INSERT INTO "tmplib_base" VALUES('anUnif','Analog sign. (Unif)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -4143,158 +4143,28 @@ else {
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
 }','','',1418027386);
-INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,1,'JavaLikeCalc.JavaScript
-set=false;
-if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
-if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
-if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
-if( set && tCmd > 0 ) w_tm = tCmd;
-if( w_tm > 0 ) w_tm -= 1./f_frq;
-else
-{
-  w_tm=0;
-  if( tCmd > 0 )
-  {
-    if( last_cmd==1 ) com = false;
-    if( last_cmd==2 ) close = false;
-    if( last_cmd==3 ) stop = false;
-    last_cmd = 0;
-  }
-}','JavaLikeCalc.JavaScript
-set=false;
-if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
-if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
-if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
-if( set && tCmd > 0 ) w_tm = tCmd;
-if( w_tm > 0 ) w_tm -= 1./f_frq;
-else
-{
-  w_tm=0;
-  if( tCmd > 0 )
-  {
-    if( last_cmd==1 ) com = false;
-    if( last_cmd==2 ) close = false;
-    if( last_cmd==3 ) stop = false;
-    last_cmd = 0;
-  }
-}','JavaLikeCalc.JavaScript
-set=false;
-if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
-if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
-if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
-if( set && tCmd > 0 ) w_tm = tCmd;
-if( w_tm > 0 ) w_tm -= 1./f_frq;
-else
-{
-  w_tm=0;
-  if( tCmd > 0 )
-  {
-    if( last_cmd==1 ) com = false;
-    if( last_cmd==2 ) close = false;
-    if( last_cmd==3 ) stop = false;
-    last_cmd = 0;
-  }
-}','');
-INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID sign. (Unif, stats)','Імпульсний ПІД сигнал (Уніф, стани)','ПИД импульсный сигн. (Униф, состояния)','The unified template for process analog signals with properties impulse PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами импульсного ПИД.',10,1,'JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
+set = false;
+if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
+if(!close.isEVal() && close && last_cmd != 2)last_cmd = 2, set = true;
+if(!stop.isEVal() && stop && last_cmd != 3)	last_cmd = 3, set = true;
+if(set && tCmd > 0) w_tm = tCmd;
+if(w_tm > 0) w_tm -= 1/f_frq;
+else {
+	w_tm = 0;
+	if(tCmd > 0) {
+		if(last_cmd == 1)	com = false;
+		if(last_cmd == 2)	close = false;
+		if(last_cmd == 3)	stop = false;
+		last_cmd = 0;
 	}
-}
-
-tErr = "0";
-if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "1:The signal exceed to upper hardware border"; var = max+plcExcess*(max-min)/100;}
-else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "2:The signal exceed to bottom hardware border"; var = min-plcExcess*(max-min)/100;}
-if( tErr ) 
-{
-  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-  EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
-	{ tErr="3:Upper alarm border error"; HH=true; EVAL=H=LL=L=false; }
-	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
-	{ tErr="4:Bottom alarm border error"; LL=true; EVAL=HH=H=L=false; }
-	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
-	{ tErr="5:Upper warning border error"; H=true; EVAL=HH=LL=L=false; }
-	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
-	{ tErr="6:Bottom warning border error"; L=true; EVAL=HH=H=LL=false; }
-	else if( speed && varDt > speed ) { tErr="7:Too big parameter''s motion speed";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','JavaLikeCalc.JavaScript
+}','','',1441903511);
+INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID sign. (Unif, stats)','Імпульсний ПІД сигнал (Уніф, стани)','ПИД импульсный сигнал (Униф, состояния)','The unified template for process analog signals with properties impulse PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами импульсного ПИД.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-tErr = "0";
-if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "1:Сигнал перевищив верхню апаратну границю"; var = max+plcExcess*(max-min)/100;}
-else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "2:Сигнал перевищив нижню апаратну границю"; var = min-plcExcess*(max-min)/100;}
-if( tErr ) 
-{
-  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-  EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
-	{ tErr="3:Помилка верхньої границі аварії"; HH=true; EVAL=H=LL=L=false; }
-	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
-	{ tErr="4:Помилка нижньої границі аварії"; LL=true; EVAL=HH=H=L=false; }
-	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
-	{ tErr="5:Помилка верхньої границі попередження"; H=true; EVAL=HH=LL=L=false; }
-	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
-	{ tErr="6:Помилка нижньої границі попередження"; L=true; EVAL=HH=H=LL=false; }
-	else if( speed && varDt > speed ) { tErr="7:Дуже велика швидкість зміни параметру";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
+if(plcImit) {
+	if(!plcImitIn.isEVal()) in = plcImitIn;
+	else {
 		plcDif = plcMax-plcMin;
 		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
 	}
@@ -4302,38 +4172,37 @@ if(plcImit)
 
 tErr = "0";
 if(in > (plcMax+plcExcess*(plcMax-plcMin)/100))
-{ tErr = "1:Выход сигнала за верхнюю аппаратную границу"; var = max+plcExcess*(max-min)/100;}
+{ tErr = "1:"+tr("Signal exceed to upper hardware border"); var = max+plcExcess*(max-min)/100; }
 else if(in < (plcMin-plcExcess*(plcMax-plcMin)/100))
-{ tErr = "2:Выход сигнала за нижнюю аппаратную границу"; var = min-plcExcess*(max-min)/100;}
-if(tErr)
-{
+{ tErr = "2:"+tr("Signal exceed to bottom hardware border"); var = min-plcExcess*(max-min)/100; }
+if(tErr) {
 	//var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
 	EVAL = true;
 }
-else
-{
+else {
 	vCalibr = iMult*(in+iAdd);
 
 	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
+	varDt = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr) - var;
 	var += varDt/max(1,Tf/1000*f_frq);
 
 	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if(aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))))
-	{ tErr="3:Нарушение верхней аварийной границы"; HH=true; EVAL=H=LL=L=false; }
-	else if(aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))))
-	{ tErr="4:Нарушение нижней аварийной границы"; LL=true; EVAL=HH=H=L=false; }
-	else if(wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))))
-	{ tErr="5:Нарушение верхней предупредительной границы"; H=true; EVAL=HH=LL=L=false; }
-	else if(wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))))
-	{ tErr="6:Нарушение нижней предупредительной границы"; L=true; EVAL=HH=H=LL=false; }
-	else if(speed && varDt > speed) { tErr="7:Очень большая скорость изменения параметра";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
+	if(aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
+	{ tErr = "3:"+tr("Upper alarm border error"); HH = true; EVAL = H = LL = L = false; }
+	else if(aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
+	{ tErr="4:"+tr("Nether alarm border error"); LL = true; EVAL = HH = H = L = false; }
+	else if(wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
+	{ tErr="5:"+tr("Upper warning border error"); H = true; EVAL = HH = LL = L = false; }
+	else if(wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
+	{ tErr="6:"+tr("Nether warning border error"); L = true; EVAL = HH = H = LL = false; }
+	else if(speed && varDt > speed)
+	{ tErr = "7:"+tr("Too big parameter''s motion speed"); EVAL = true; HH = H = LL = L = false; }
+	else EVAL = HH = H = LL = L = false;
 }
 
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-f_err = tErr;',1416765846);
+if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
+else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1441907336);
 INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -4420,12 +4289,12 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','','',1416765681);
-INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,0,'JavaLikeCalc.JavaScript
+}','','',1441880480);
+INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигнал (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
 if(plcImit) {
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
+	if(!plcImitIn.isEVal()) in = plcImitIn;
 	else {
 		plcDif = plcMax-plcMin;
 		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
@@ -4464,7 +4333,7 @@ else {
 
 if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
 else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1441170636);
+f_err = tErr;','','',1441906986);
 INSERT INTO "tmplib_base" VALUES('SNMP','','','','','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 
@@ -4860,7 +4729,7 @@ if(curMode == 1 || curMode == 2) {
 	}
 }
 mode = curMode;','','',1417806670);
-INSERT INTO "lib_Controllers" VALUES('test','test','','','','','',10,0,'using Special.FLibSYS;
+INSERT INTO "lib_Controllers" VALUES('test','test','test','','','','',10,0,'using Special.FLibSYS;
 
 out+=10;
 if(out>100) out=0;
@@ -4986,7 +4855,7 @@ for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
   for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
     rec += DBTbl[i_rw][i_fld]+"\t";
   SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
-}*/','','',1416656627);
+}*/','','',1441908975);
 INSERT INTO "lib_Controllers" VALUES('test1','test1','','','','','',10,0,'//clc=0;
 //First getting previous time
 //if(!p_tm){ p_tm = Special.FLibSYS.tmTime(); break; }
@@ -5010,45 +4879,42 @@ INSERT INTO "lib_Controllers" VALUES('test1','test1','','','','','',10,0,'//clc=
 //Special.FLibSYS.avalClose(a_id);
 //p_tm=c_tm;','','',1416656632);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',10,1,'//> Call standard analog PID
-outA=Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
-if( analog ) return outA;
+INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',10,0,'//Call standard analog PID
+outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
+if(analog) return outA;
 
-if( f_start || f_stop ) { impQup = impQdwn = false; return 0; }
+if(f_start || f_stop) { impQup = impQdwn = false; return 0; }
 
-//> Call impuls generator
+//Call impuls generator
 outA = 2*(outA-50);
-if( perLag <= 0 && ((outA*KImpRfact) >= (100*TImpMin/TImpPer) || (-outA/KImpRfact) >= (100*TImpMin/TImpPer) || (!auto && abs(outA) > 0.1)) )
+if(perLag <= 0 && ((outA*KImpRfact) >= (100*TImpMin/TImpPer) || (-outA/KImpRfact) >= (100*TImpMin/TImpPer) || (!auto && abs(outA) > 0.1)))
 {
-  impLag = max(abs(outA)*TImpPer/100,TImpMin);
-  impLag = (outA>0) ? impLag*KImpRfact : impLag/KImpRfact;
-  perLag = TImpPer;
-  if( outA > 0 ) impQup = true; else impQdwn = true;  
+	impLag = max(abs(outA)*TImpPer/100, TImpMin);
+	impLag = (outA>0) ? impLag*KImpRfact : impLag/KImpRfact;
+	perLag = TImpPer;
+	if(outA > 0) impQup = true; else impQdwn = true;  
 }
-else if( perLag > 0 )
-{
-  perLag -= 1e3/f_frq;
-  if( (TImpPer-perLag) >= impLag ) 
-  {
-    impQup = impQdwn = false;
-    if( !auto ) perLag = 0;
-  }
+else if(perLag > 0) {
+	perLag -= 1e3/f_frq;
+	if((TImpPer-perLag) >= impLag) {
+		impQup = impQdwn = false;
+		if(!auto) perLag = 0;
+	}
 }
 
-if( !auto ) manIn = 50;
+if(!auto) manIn = 50;
 
-if( impQupTm > 1 || (impQupTm && !impQup) ) impQupTm--;
-if( impQup && !impQupTm ) impQupTm = 2*f_frq;
-if( impQdwnTm > 1 || (impQdwnTm && !impQdwn) ) impQdwnTm--;
-if( impQdwn && !impQdwnTm ) impQdwnTm = 2*f_frq;
+if(impQupTm > 1 || (impQupTm && !impQup)) impQupTm--;
+if(impQup && !impQupTm) impQupTm = 2*f_frq;
+if(impQdwnTm > 1 || (impQdwnTm && !impQdwn)) impQdwnTm--;
+if(impQdwn && !impQdwnTm) impQdwnTm = 2*f_frq;
 
-if( impAnImit )
-{
-  if( impQup ) out += 100/(impAnOut*f_frq);
-  if( impQdwn ) out -= 100/(impAnOut*f_frq);
-  return max(0,min(100,out));
+if(impAnImit) {
+	if(impQup)	out += 100/(impAnOut*f_frq);
+	if(impQdwn)	out -= 100/(impAnOut*f_frq);
+	return max(0,min(100,out));
 }
-return impAnOut;','','','');
+return impAnOut;','','',1441908785);
 INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply by editing it.','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',10,0,'if(f_start) { outA = out; impQupTm_ = impQdwnTm_ = 0; impQup_ = impQdwn_ = 0; }
 
 //Call standard analog PID
@@ -5669,9 +5535,7 @@ for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
 }','',1427532674);
 INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','ИВЭ-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',1,0,'','','JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="255" err="1:Error">{req}</mess> - message tag
 //  req - request/respond data;

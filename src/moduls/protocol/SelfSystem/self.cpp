@@ -186,7 +186,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
 
-		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,conTm,true);
+		resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf)-1, conTm, true);
 		resp.assign(buf,resp_len);
 
 		// Wait tail
@@ -201,15 +201,15 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ") {
 		    rez = s2i(TSYS::strParse(header,0," ",&off));
 		    if(rez > 0 || off >= (int)header.size())
-			throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),header.substr(off).c_str());
+			throw TError(nodePath().c_str(), _("Station '%s' error: %s!"), tro.id().c_str(), header.substr(off).c_str());
 		    tro.setPrm1(s2i(header.substr(off)));
-		} else throw TError(nodePath().c_str(),_("Station '%s' error: Respond format error!"),tro.id().c_str());
+		} else throw TError(nodePath().c_str(), _("Station '%s' error: Respond format error!"), tro.id().c_str());
 	    }
 
 	    //Request
 	    // Compress data
 	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
-	    if(reqCompr) data = TSYS::strCompr(data,comprLev());
+	    if(reqCompr) data = TSYS::strCompr(data, comprLev());
 
 	    if(isDir)	req = "REQDIR " + user + " " + pass + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
 	    else	req = "REQ " + i2s(tro.prm1()) + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
@@ -243,7 +243,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    while((int)resp.size() < abs(resp_size)+head_end) {
 		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
-		resp.append(buf,resp_len);
+		resp.append(buf, resp_len);
 	    }
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response full %d"), resp.size());
