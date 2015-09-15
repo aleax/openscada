@@ -334,10 +334,8 @@ namespace VISION
 
 	    // Group attributes as <attrs>, into single request, set to the data model
 	    void	attrsSet( AttrValS &attrs );
-	    // Single attribute <attr> set to the data model or process the changes from:
-	    //  <attr> no empty and uiPrmPos != A_NO_ID - write <val> for <attr> to the data model;
-	    //  <uiPrmPos> != A_WR_TO_MODEL - process the changes <val> from the data model.
-	    virtual bool attrSet( const string &attr, const string &val, int uiPrmPos = A_WR_TO_MODEL );
+	    // Single attribute <attr> set to the data model <toModel> or process the changes from
+	    virtual bool attrSet( const string &attr, const string &val, int uiPrmPos = A_NO_ID, bool toModel = false );
 	    virtual string resGet( const string &res );
 
 	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ return 1; };

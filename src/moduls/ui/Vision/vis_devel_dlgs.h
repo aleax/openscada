@@ -190,11 +190,6 @@ class VisItProp : public QDialog
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
 	QComboBox	*obj_parent,	//Parent widget
-	 		*obj_user,	//User
-			*obj_grp,	//Group
-			*obj_accuser,	//User access
-			*obj_accgrp,	//Group access
-			*obj_accother,	//Other access
 			*pg_tp;		//Page: Page type
 
 	LineEdit	*obj_name;	//Name

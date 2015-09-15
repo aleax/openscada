@@ -26,7 +26,6 @@ namespace VCA
     //Attributes preset indexes
     enum AttrID {
 	// Generic
-	A_WR_TO_MODEL	= -5,
 	A_PG_NAME	= -4,
 	A_PERM		= -3,
 	A_COM_FOCUS	= -2,

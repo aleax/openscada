@@ -2556,9 +2556,9 @@ DevelWdgView *DevelWdgView::levelWidget( int lev )
     return this;
 }
 
-bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
+bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool toModel )
 {
-    bool rez = WdgView::attrSet(attr, val, uiPrmPos);
+    bool rez = WdgView::attrSet(attr, val, uiPrmPos, toModel);
 
     bool geomUp = true;
     switch(uiPrmPos) {

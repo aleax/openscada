@@ -23,6 +23,7 @@
 
 #include <telem.h>
 #include <tuis.h>
+#include "types.h"
 #include "libwidg.h"
 #include "project.h"
 #include "session.h"

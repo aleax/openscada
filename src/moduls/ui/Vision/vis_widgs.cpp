@@ -1028,10 +1028,10 @@ void WdgView::resizeF( const QSizeF &isz )
 
 WdgView *WdgView::newWdgItem( const string &iwid )	{ return new WdgView(iwid,wLevel()+1,mainWin(),this); }
 
-bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
+bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool toModel )
 {
     //Send value to model
-    if(!attr.empty() && uiPrmPos != A_NO_ID) {
+    if(!attr.empty() && toModel) {
 	XMLNode req("set");
 	req.setAttr("path",id()+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id",attr)->setText(val);

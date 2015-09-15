@@ -1,3 +1,10 @@
+2015-09-15 Roman
+- DAQ.DAQGate: Removing archives at the parameter removing disabled for possible archives lost prevent, at sync.
+- UI.{VCAEngine,Vision}: Old fassion access to the permissions removed.
+- !!!:FIX:UI.Vision: UI.Vision::attrSet() wrong unitizing for different directions control fixed for strong,
+    by more back writing and "perm" corrupt detected.
+
+
 2015-09-14 Roman
 - DB.LibsDB.OscadaLibs.db: Some translation improved next. base.anUnifSt expanded by the attribute "log".
     base.{digitBlockUnif,pidUnifImp,pidUnif}: adapted to the dynamic procedure translation.

@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -314,7 +314,7 @@ void TMdContr::enable_( )
 		string pId = pHd[i_prm].at().id();
 		try {
 		    TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[i_prm].at().nodePrev());
-		    if(pCntr) pCntr->del(pId, true);
+		    if(pCntr) pCntr->del(pId, TParamContr::RM_NoArch);
 		    else del(pId, true);
 		    continue;
 		}

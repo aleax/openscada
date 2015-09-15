@@ -1470,11 +1470,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }
 	    else {
 		val_w = new QComboBox(widget);
-		val_w->setMinimumSize(100,0);
+		val_w->setMinimumSize(100, 0);
 		val_w->setObjectName(br_path.c_str());
 		val_w->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		val_w->setStatusTip((sel_path+"/"+br_path).c_str());
-		val_w->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed) );
+		val_w->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
 		connect(val_w, SIGNAL(activated(const QString&)), this, SLOT(combBoxActivate(const QString&)));
 	    }
 
@@ -1486,7 +1486,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		(*l_hbox)->insertWidget(l_pos++, lab);
 		if(val_w) (*l_hbox)->insertWidget(l_pos++, val_w);
 		if(val_r) (*l_hbox)->insertWidget(l_pos++, val_r);
-		(*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding, QSizePolicy::Minimum));
+		(*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
 		widget->layout()->addItem(*l_hbox);
 	    }
 	    else {

@@ -1024,33 +1024,6 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_descr, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_descr,5,0,1,4);
 
-    lab = new QLabel(_("Owner, group:"),tab_w);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab,6,0);
-    obj_user = new QComboBox(tab_w);
-    obj_user->setObjectName("/wdg/cfg/owner");
-    connect(obj_user, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_user,6,1);
-    obj_grp = new QComboBox(tab_w);
-    obj_grp->setObjectName("/wdg/cfg/grp");
-    connect(obj_grp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_grp,6,2);
-    lab = new QLabel(_("Access:"),tab_w);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab,7,0);
-    obj_accuser = new QComboBox(tab_w);
-    obj_accuser->setObjectName("/wdg/cfg/u_a");
-    connect(obj_accuser, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accuser,7,1);
-    obj_accgrp  = new QComboBox(tab_w);
-    obj_accgrp->setObjectName("/wdg/cfg/g_a");
-    connect(obj_accgrp, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accgrp,7,2);
-    obj_accother= new QComboBox(tab_w);
-    obj_accother->setObjectName("/wdg/cfg/o_a");
-    connect(obj_accother, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(obj_accother,7,3);
-
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0);
 
@@ -1223,37 +1196,6 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if(!owner()->cntrIfCmd(req)) obj_tmstmp->setText(tm2s(s2i(req.text()),"").c_str());
 	}else obj_tmstmp->setText("");
 
-	// User
-	gnd = TCntrNode::ctrId(root,obj_user->objectName().toStdString(),true);
-	obj_user->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	if(gnd) {
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_user->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) sval = req.text();
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/u_lst",TSYS::PathEl));
-	    obj_user->clear();
-	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
-		{
-		    obj_user->addItem(req.childGet(i_l)->text().c_str());
-		    if(sval == req.childGet(i_l)->text()) obj_user->setCurrentIndex(i_l);
-		}
-	}
-	// Group
-	gnd = TCntrNode::ctrId(root,obj_grp->objectName().toStdString(),true);
-	obj_grp->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	if(gnd) {
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_grp->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) sval = req.text();
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/g_lst",TSYS::PathEl));
-	    obj_grp->clear();
-	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
-		{
-		    obj_grp->addItem(req.childGet(i_l)->text().c_str());
-		    if(sval == req.childGet(i_l)->text()) obj_grp->setCurrentIndex(i_l);
-		}
-	}
-
 	// Icon
 	gnd = TCntrNode::ctrId(root,obj_ico->objectName().toStdString(),true);
 	ico_modif = gnd && s2i(gnd->attr("acs"))&SEC_WR;
@@ -1263,35 +1205,6 @@ void VisItProp::showDlg( const string &iit, bool reload )
 		    ico_t.loadFromData((const uchar*)sval.data(),sval.size()))
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
 	    else obj_ico->setIcon(QIcon());
-	}
-	// Permition
-	string wstr;
-	gnd = TCntrNode::ctrId(root,obj_accuser->objectName().toStdString(),true);
-	obj_accuser->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	if(gnd) {
-	    obj_accuser->clear();
-	    for(int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
-		obj_accuser->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i)));
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accuser->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_accuser->setCurrentIndex(obj_accuser->findData(s2i(req.text())));
-	}
-	gnd = TCntrNode::ctrId(root,obj_accgrp->objectName().toStdString(),true);
-	obj_accgrp->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	if(gnd) {
-	    obj_accgrp->clear();
-	    for(int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
-		obj_accgrp->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i)));
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accgrp->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_accgrp->setCurrentIndex(obj_accgrp->findData(s2i(req.text())));
-	}
-	gnd = TCntrNode::ctrId(root,obj_accother->objectName().toStdString(),true);
-	obj_accother->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	if(gnd) {
-	    obj_accother->clear();
-	    for(int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
-		obj_accother->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i)));
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accother->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_accother->setCurrentIndex(obj_accother->findData(s2i(req.text())));
 	}
 	// Id
 	gnd = TCntrNode::ctrId(root,obj_id->objectName().toStdString(),true);
@@ -1585,16 +1498,6 @@ void VisItProp::isModify( QObject *snd )
     }
     else if(oname == obj_parent->objectName()) {
 	req.setText(((QComboBox*)snd)->currentText().toStdString());
-	update = true;
-    }
-    else if(oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == proc_lang->objectName())
-    {
-	req.setText(((QComboBox*)snd)->currentText().toStdString());
-	update = true;
-    }
-    else if(oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName())
-    {
-	req.setText(((QComboBox*)snd)->itemData(((QComboBox*)snd)->currentIndex()).toString().toStdString());
 	update = true;
     }
     else if(oname == obj_name->objectName() || oname == proc_per->objectName())

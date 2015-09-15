@@ -937,7 +937,7 @@ void ShapeFormEl::buttonPressed( )
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
     switch(((ShpDt*)w->shpData)->mode) {
 	case FBT_STD:
-	case FBT_SAVE: w->attrSet("event","ws_BtPress");	break;
+	case FBT_SAVE: w->attrSet("event", "ws_BtPress", A_NO_ID, true);	break;
     }
 }
 
@@ -947,10 +947,10 @@ void ShapeFormEl::buttonReleased( )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     switch(shD->mode) {
-	case FBT_STD: w->attrSet("event","ws_BtRelease");	break;
+	case FBT_STD: w->attrSet("event", "ws_BtRelease", A_NO_ID, true);	break;
 	case FBT_SAVE: {
 	    if(!shD->wordWrap) {	//The event from timer
-		w->attrSet("event","ws_BtRelease");
+		w->attrSet("event", "ws_BtRelease", A_NO_ID, true);
 		break;
 	    }
 	    shD->wordWrap = false;
@@ -976,7 +976,7 @@ void ShapeFormEl::buttonReleased( )
 		    mod->postMess(mod->nodePath().c_str(),
 			QString(_("Write data to file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
 	    }
-	    w->attrSet("value","");	//Clear previous
+	    w->attrSet("value", "", A_NO_ID, true);	//Clear previous
 	    break;
 	}
 	case FBT_LOAD: {
@@ -1025,7 +1025,7 @@ void ShapeFormEl::buttonMenuTrig( )
 {
     QAction *act = (QAction*)sender();
     WdgView *w = (WdgView *)act->parentWidget()->parentWidget();
-    w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString());
+    w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString(), A_NO_ID, true);
 }
 
 void ShapeFormEl::comboChange( const QString &val )
@@ -1164,7 +1164,7 @@ void ShapeText::init( WdgView *w )	{ w->shpData = new ShpDt(); }
 
 void ShapeText::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
-bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     bool up = true,		//Update view checking
 	 reform = false;	//Text reformation
@@ -1406,7 +1406,7 @@ void ShapeMedia::mediaFinished( )
 #endif
 }
 
-bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     QLabel *lab;
 #ifdef HAVE_PHONON
@@ -1501,7 +1501,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    else if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) {
 		if(shD->videoPlay) {
 		    player->play();
-		    w->attrSet("size",r2s(player->totalTime()));
+		    w->attrSet("size", r2s(player->totalTime()), A_NO_ID, true);
 		}
 		else player->stop();
 	    }
@@ -1641,7 +1641,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    player->load(mSrc);
 		    if(shD->videoPlay) {
 			player->play();
-			w->attrSet("size",r2s(player->totalTime()));
+			w->attrSet("size", r2s(player->totalTime()), A_NO_ID, true);
 		    }
 		    else player->stop();
 		    if(shD->videoPause) player->pause();
@@ -1713,7 +1713,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 		    case Qt::MidButton:		sev += "Midle";	break;
 		    default: return false;
 		}
-		w->attrSet("event", sev);
+		w->attrSet("event", sev, A_NO_ID, true);
 		//return true;	//For common Press event produce
 	    }
 	    break;
@@ -1783,7 +1783,7 @@ void ShapeDiagram::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     bool up = false,		//Repaint diagram picture
 	 make_pct = false;	//Remake diagram picture
@@ -2801,7 +2801,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    curPos = (int)(curFrq/fftDt);
 	    if(curPos >= 1 && curPos < (cP.fftN/2+1)) {
 		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
-		w->attrSet(TSYS::strMess("prm%dval",iT), r2s(val,6), A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iT);
+		w->attrSet(TSYS::strMess("prm%dval",iT), r2s(val,6), A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iT, true);
 	    }
 	}
     }
@@ -3766,7 +3766,7 @@ void ShapeProtocol::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     int	reld_dt = 0;	//Reload data ( 1-reload addons, 2-full reload )
 

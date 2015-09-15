@@ -1008,7 +1008,7 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-        pageAt(ls[i_l]).at().setProcess(val, lastFirstCalc);
+	pageAt(ls[i_l]).at().setProcess(val, lastFirstCalc);
 
     if(!enable()) return;
 
@@ -1408,6 +1408,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	    if((fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus")
 		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output,"",false,("./"+als[i_a]).c_str()));
 	}
+
 	//   Include attributes check
 	wdgList(iwls);
 	for(unsigned i_w = 0; i_w < iwls.size(); i_w++) {
@@ -2046,9 +2047,9 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
 	    unsigned tm = s2ll(opt->attr("tm"));
 	    if(!tm) {
-		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
+		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->
 		    setText(i2s(ownerSess()->sec.at().access(u,SEC_RD|SEC_WR,owner(),grp(),permit())));
-		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id", "name")->setAttr("p", "-4")->setText(name());
+		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
 	    }
 	    if(!tm || modifChk(tm,mMdfClc)) {
 		AutoHD<Attr> attr;
@@ -2082,8 +2083,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	//Self attributes put
 	if(!tm || modifChk(tm,mMdfClc)) {
 	    if(!tm) {
-		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p","-4")->setText(name());
-		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->setText(i2s(perm));
+		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p",i2s(A_PG_NAME))->setText(name());
+		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->setText(i2s(perm));
 	    }
 	    AutoHD<Attr> attr;
 	    vector<string> als;

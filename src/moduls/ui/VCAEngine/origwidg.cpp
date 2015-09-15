@@ -20,7 +20,6 @@
 
 #include <tsys.h>
 
-#include "types.h"
 #include "origwidg.h"
 #include "vcaengine.h"
 

@@ -1033,7 +1033,7 @@ void VisRun::alarmAct( QAction *alrm )
     cntrIfCmd(req);
 
     //Send event to master page
-    if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toStdString());
+    if(master_pg) master_pg->attrSet("event", ("ws_"+alrm->objectName()).toStdString(), A_NO_ID, true);
 }
 
 void VisRun::usrStatus( const string &val, RunPageView *pg )

@@ -24,7 +24,6 @@
 #include <tsys.h>
 
 #include "vcaengine.h"
-#include "types.h"
 #include "widget.h"
 
 using namespace VCA;
@@ -859,14 +858,6 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root",SUI_ID,3,"tp","str","cols","100","rows","4");
 		ctrMkNode("img",opt,-1,"/wdg/cfg/ico",_("Icon"),(isLink()?R_R_R_:RWRWR_),"root",SUI_ID,2,"v_sz","64","h_sz","64");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/owner",_("Owner and group"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/wdg/u_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/grp","",RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/wdg/g_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/u_a",_("Access"),RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
-		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/g_a","",RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
-		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
-		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/clear",_("Clear the widget changes"),RWRWR_,"root",SUI_ID);
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/chDown",_("Put down to the parent for the widget changes"),RWRWR_,"root",SUI_ID);
 	    }
@@ -899,26 +890,6 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if(a_path == "/wdg/st/goparent" && ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && !parent().freeStat())
 	opt->setText(parent().at().nodePath(0,true));
-    else if(a_path == "/wdg/cfg/owner") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(owner());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setOwner(opt->text());
-    }
-    else if(a_path == "/wdg/cfg/grp") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(grp());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setGrp(opt->text());
-    }
-    else if(a_path == "/wdg/cfg/u_a" || a_path == "/wdg/cfg/g_a" || a_path == "/wdg/cfg/o_a") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    if(a_path == "/wdg/cfg/u_a")	opt->setText(i2s((permit()>>6)&0x7));
-	    if(a_path == "/wdg/cfg/g_a")	opt->setText(i2s((permit()>>3)&0x7));
-	    if(a_path == "/wdg/cfg/o_a")	opt->setText(i2s(permit()&0x7));
-	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    if(a_path == "/wdg/cfg/u_a")	setPermit((permit()&(~(0x07<<6)))|(s2i(opt->text())<<6));
-	    if(a_path == "/wdg/cfg/g_a")	setPermit((permit()&(~(0x07<<3)))|(s2i(opt->text())<<3));
-	    if(a_path == "/wdg/cfg/o_a")	setPermit((permit()&(~0x07))|s2i(opt->text()));
-	}
-    }
     else if(a_path == "/wdg/cfg/ico" || a_path == "/ico") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setIco(opt->text());

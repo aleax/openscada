@@ -520,7 +520,7 @@ class DevelWdgView: public WdgView
 
 	DevelWdgView *levelWidget( int lev );
 
-	bool attrSet( const string &attr, const string &val, int uiPrmPos = A_WR_TO_MODEL );
+	bool attrSet( const string &attr, const string &val, int uiPrmPos = A_NO_ID, bool toModel = true );
 
 	// Resource and cache operations
 	string resGet( const string &res );

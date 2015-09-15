@@ -40,6 +40,13 @@ class TTypeParam;
 class TParamContr : public TConfig, public TValue
 {
     public:
+	//Public data
+	enum RemoveMode {
+	    RM_Exit	= 0,
+	    RM_Full	= 1,
+	    RM_NoArch	= 2
+	};
+
 	//Methods
 	TParamContr( const string &name, TTypeParam *tpprm );
 	virtual ~TParamContr( );
@@ -66,7 +73,7 @@ class TParamContr : public TConfig, public TValue
 	void list( vector<string> &list );
 	bool present( const string &name );
 	void add( const string &name, unsigned type = 0 );
-	void del( const string &name, bool full = false );
+	void del( const string &name, int full = RM_Exit );
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" );
 
 	TTypeParam &type( )	{ return *tipparm; }

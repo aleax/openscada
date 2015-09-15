@@ -67,7 +67,7 @@ string RunWdgView::pgOpenSrc( )	{ return property("pgOpenSrc").toString().toStdS
 void RunWdgView::setPgOpenSrc( const string &vl )
 {
     setProperty("pgOpenSrc", vl.c_str());
-    attrSet("pgOpenSrc", vl, A_PG_OPEN_SRC);
+    attrSet("pgOpenSrc", vl, A_PG_OPEN_SRC, true);
 }
 
 int RunWdgView::cntrIfCmd( XMLNode &node, bool glob )	{ return mainWin()->cntrIfCmd(node,glob); }
@@ -169,9 +169,9 @@ void RunWdgView::orderUpdate( )
     }
 }
 
-bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
+bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool toModel )
 {
-    bool rez = WdgView::attrSet(attr, val, uiPrmPos);
+    bool rez = WdgView::attrSet(attr, val, uiPrmPos, toModel);
 
     switch(uiPrmPos) {
 	case A_COM_FOCUS:
@@ -270,7 +270,7 @@ bool RunWdgView::event( QEvent *event )
 		}
 		if(!popup.isEmpty()) {
 		    actTmp = popup.exec(QCursor::pos());
-		    if(actTmp && !actTmp->whatsThis().isEmpty()) attrSet("event","usr_"+actTmp->whatsThis().toStdString());
+		    if(actTmp && !actTmp->whatsThis().isEmpty()) attrSet("event", "usr_"+actTmp->whatsThis().toStdString(), A_NO_ID, true);
 		    popup.clear();
 		    return true;
 		}
@@ -421,13 +421,13 @@ bool RunWdgView::event( QEvent *event )
 	    }
 	    if(isVisible(mapFromGlobal(cursor().pos()))) {
 		if(event->type() == QEvent::MouseButtonPress && !hasFocus()) setFocus(Qt::MouseFocusReason);
-		attrSet("event", mod_ev);
+		attrSet("event", mod_ev, A_NO_ID, true);
 		return true;
 	    }
 	    break;
 	case QEvent::MouseButtonDblClick:
 	    if(!isVisible(mapFromGlobal(cursor().pos()))) break;
-	    attrSet("event", "key_mouseDblClick");
+	    attrSet("event", "key_mouseDblClick", A_NO_ID, true);
 	    return true;
 	case QEvent::FocusIn:
 	    attrs.push_back(std::make_pair("focus","1"));
@@ -692,10 +692,10 @@ bool UserItStBar::event( QEvent *event )
 		case Qt::MidButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
-	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", mod_ev+":/stIt_"+objId); return true; }
+	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", mod_ev+":/stIt_"+objId, A_NO_ID, true); return true; }
 	    break;
 	case QEvent::MouseButtonDblClick:
-	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", "key_mouseDblClick:/stIt_"+objId); return true; }
+	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", "key_mouseDblClick:/stIt_"+objId, A_NO_ID, true); return true; }
 	    break;
     }
 
