@@ -1,3 +1,12 @@
+2015-09-20 Roman
+- ModelsDB.AGLKS.St.db: ModBus string processing test fields are added.
+- FIX:DAQ.JavaLikeCalc: Function {Integer}.toString() fixed for set to signed only the decimal base 10.
+- !!:FIX:Protocol.ModBus: Generic prefix 'i' and string processing fix.
+- !:UI.QTCfg: Integer edition fields expanded for adaptive processing to dec, hex and oct representation, for example,
+    you can set an integer value into need view which will be saved before the page change.
+    Also the integer value allowed range expanded to 64 bits.
+
+
 2015-09-15 Roman
 - DAQ.DAQGate: Removing archives at the parameter removing disabled for possible archives lost prevent, at sync.
 - UI.{VCAEngine,Vision}: Old fassion access to the permissions removed.

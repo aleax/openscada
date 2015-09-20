@@ -706,14 +706,14 @@ void Node::regCR( int id, const SIO &val, const string &tp, bool wr )
 	map<int,SIO> &blk = varSec ? data->coilI : (wr?data->coilW:data->coilR);
 	if((it=blk.find(id)) == blk.end()) blk[id] = val;
 	else mess_warning(nodePath().c_str(),
-	    _("Coil(%s) %d already registered for IO%d. IO%d will be disabled for process coil %d!"),
+	    _("Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for process coil %d!"),
 	    tp.c_str(), id, it->second.id, val.id, id);
     }
     else if(tp == "R" || (varSec=(tp=="RI"))) {
 	map<int,SIO> &blk = varSec ? data->regI : (wr?data->regW:data->regR);
 	if((it=blk.find(id)) == blk.end()) blk[id] = val;
 	else mess_warning(nodePath().c_str(),
-	    _("Register(%s) %d already registered for IO%d. IO%d will be disabled for process register %d!"),
+	    _("Register(%s) %d already registered for IO#%d. IO#%d will be disabled for process register %d!"),
 	    tp.c_str(), id, it->second.id, val.id, id);
     }
     else throw TError(nodePath().c_str(), _("ModBUS data type '%s' error!"), tp.c_str());
@@ -733,8 +733,7 @@ void Node::load_( )
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
     cfg.cfg("VALUE").setExtVal(true);
-    for(int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); )
-    {
+    for(int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); ) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -862,13 +861,12 @@ void Node::setEnable( bool vl )
 	    if(atpM[0] == 'R') {
 		regCR(reg, SIO(i_io,atpSub[0],0), atpM);
 		if(mode == "w") regCR(reg, SIO(i_io,atpSub[0],0), atpM, true);
-		if(atpSub == "i4" || atpSub == "f") {
+		if(atpSub == "i" || atpSub == "i4" || atpSub == "f") {
 		    int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0);
 		    regCR(reg2, SIO(i_io,atpSub[0],1), atpM);
 		    if(mode == "w") regCR(reg2, SIO(i_io,atpSub[0],1), atpM, true);
 		}
-		else if(atpSub == "i8" || atpSub == "d")
-		{
+		else if(atpSub == "i8" || atpSub == "d") {
 		    int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0),
 			reg3 = (sTmp=TSYS::strParse(ai,2,",")).empty() ? (reg2+1) : strtol(sTmp.c_str(),NULL,0),
 			reg4 = (sTmp=TSYS::strParse(ai,3,",")).empty() ? (reg3+1) : strtol(sTmp.c_str(),NULL,0);
@@ -884,7 +882,7 @@ void Node::setEnable( bool vl )
 		else if(atpSub == "s") {
 		    int N = (sTmp=TSYS::strParse(ai,1,",")).empty() ? 0 : vmin(100,strtol(sTmp.c_str(),NULL,0));
 		    if(!N) N = 10;	//Default length 10 registers and maximum 100
-		    for(int i_r = N; i_r < (reg+N); i_r++) {
+		    for(int i_r = reg+1; i_r < (reg+N); i_r++) {
 			regCR(i_r, SIO(i_io,atpSub[0],i_r-reg), atpM);
 			if(mode == "w") regCR(i_r, SIO(i_io,atpSub[0],i_r-reg), atpM, true);
 		    }
@@ -1015,7 +1013,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
 				if(grpValIt != grpVals.end())	valIO = grpValIt->second.getS();
 				else { valIO = data->val.getS(itr->second.id); grpVals[itr->second.id] = valIO; }
-				valIO.resize((itr->second.pos+1)*2, 0);
+				valIO.resize(vmax(0,(itr->second.pos+1)*2), 0);
 				val = TSYS::getUnalign16(valIO.data()+itr->second.pos*2);
 				break;
 			    }
@@ -1056,8 +1054,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		if(ir == data->regW.end()) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
 		else {
 		    unsigned short val = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
-		    switch(ir->second.sTp)
-		    {
+		    switch(ir->second.sTp) {
 			case 'i': {
 			    union { uint16_t r[4]; int64_t i; } wl;
 			    wl.i = data->val.getI(ir->second.id);
@@ -1254,8 +1251,7 @@ void *Node::Task( void *ind )
 			    li->second = SYS->daq().at().attrAt(nd.io(li->first)->rez(), '.', true);
 			if(li->second.freeStat()) continue;
 		    }
-		    switch(nd.data->val.ioType(li->first))
-		    {
+		    switch(nd.data->val.ioType(li->first)) {
 			case IO::String:  nd.data->val.setS(li->first, li->second.at().getS());	break;
 			case IO::Integer: nd.data->val.setI(li->first, li->second.at().getI());	break;
 			case IO::Real:	  nd.data->val.setR(li->first, li->second.at().getR());	break;
@@ -1270,8 +1266,7 @@ void *Node::Task( void *ind )
 		//Put output links
 		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
 		    if(!li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) && nd.data->val.ioMdf(li->first))
-			switch(nd.data->val.ioType(li->first))
-			{
+			switch(nd.data->val.ioType(li->first)) {
 			    case IO::String:	li->second.at().setS(nd.data->val.getS(li->first));	break;
 			    case IO::Integer:	li->second.at().setI(nd.data->val.getI(li->first));	break;
 			    case IO::Real:	li->second.at().setR(nd.data->val.getR(li->first));	break;

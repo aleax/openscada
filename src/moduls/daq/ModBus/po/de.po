@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-22 12:11+0200\n"
+"POT-Creation-Date: 2015-09-20 19:28+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -407,20 +407,18 @@ msgstr "Schalter für das Anhalten der Funktion"
 msgid "Function stop flag"
 msgstr "Schalter für das Starten der Funktion"
 
-#, c-format
 msgid ""
-"Coil(%s) %d already registered for IO%d. IO%d will be disabled for process "
+"Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for process "
 "coil %d!"
 msgstr ""
-"Coil(%s) %d bereits eingetragen für IO%d. IO%d wird für die Prozess-Coil %d "
+"Coil(%s) %d bereits eingetragen für IO#%d. IO#%d wird für die Prozess-Coil %d "
 "deaktiviert zu sein!"
 
-#, c-format
 msgid ""
-"Register(%s) %d already registered for IO%d. IO%d will be disabled for "
+"Register(%s) %d already registered for IO#%d. IO#%d will be disabled for "
 "process register %d!"
 msgstr ""
-"Register(%s) %d bereits eingetragen für IO%d. IO%d wird für die Prozess-"
+"Register(%s) %d bereits eingetragen für IO#%d. IO#%d wird für die Prozess-"
 "Register %d deaktiviert zu sein!"
 
 #, c-format

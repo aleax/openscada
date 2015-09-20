@@ -1784,16 +1784,22 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			val_w->setMinimumSize(100, 0);
 			val_w->setType(LineEdit::Combo);
 		    }
-		    else if(tp == "dec") {
+		    else if(tp == "dec" || tp == "hex" || tp == "oct") {
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"0000000000").width()+30);
+			//val_w->setType(LineEdit::Text);
+			//QIntValidator *iv = new QIntValidator(val_w->workWdg());
+			//((QLineEdit*)val_w->workWdg())->setValidator(iv);
+		    }
+		    /*else if(tp == "dec") {
 			val_w->setFixedWidth(5*15+30);
 			val_w->setType(LineEdit::Integer);
 			QString	max = t_s.attr("max").empty() ? "2147483647" : t_s.attr("max").c_str();
 			QString	min = t_s.attr("min").empty() ? "-2147483647" : t_s.attr("min").c_str();
 			val_w->setCfg(min+":"+max+":1");
 		    }
-		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);
+		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);*/
 		    else if(tp == "real") {
-			val_w->setFixedWidth(5*15+30);
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"3.14159265e123").width()+30);
 			val_w->setType(LineEdit::Text);
 			QDoubleValidator *dv = new QDoubleValidator(val_w->workWdg());
 			dv->setNotation(QDoubleValidator::ScientificNotation);
@@ -1847,8 +1853,10 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    }
 	    // Fill line
 	    string sval = getPrintVal(data_req.text());
-	    if(t_s.attr("tp") == "hex")		sval = "0x" + QString::number(s2i(data_req.text()),16).toStdString();
-	    else if(t_s.attr("tp") == "oct")	sval = "0" + QString::number(s2i(data_req.text()),8).toStdString();
+	    if(t_s.attr("tpCh") == "hex" || (t_s.attr("tpCh").empty() && t_s.attr("tp") == "hex"))
+		sval = "0x" + QString::number(s2ll(data_req.text()),16).toUpper().toStdString();
+	    else if(t_s.attr("tpCh") == "oct" || (t_s.attr("tpCh").empty() && t_s.attr("tp") == "oct"))
+		sval = "0" + QString::number(s2ll(data_req.text()),8).toStdString();
 
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if(val_r) {
@@ -2954,8 +2962,18 @@ void ConfApp::applyButton( QWidget *src )
     try {
 	XMLNode *el = SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl));
 	string sval = el->text();
-	if(el->attr("tp") == "hex")		sval = i2s(QString(sval.c_str()).toUInt(0,16));
-	else if(el->attr("tp") == "oct")	sval = i2s(QString(sval.c_str()).toUInt(0,8));
+	if(el->attr("tp") == "dec" || el->attr("tp") == "hex" || el->attr("tp") == "oct") {
+	    //Check and change decimal format
+	    if(sval.compare(0,2,"0x") == 0 || QString(sval.c_str()).contains(QRegExp("[abcdefABCDEF]"))) {
+		el->setAttr("tpCh", "hex");
+		sval = ll2s(QString(sval.c_str()).toLongLong(0,16));
+	    }
+	    else if(sval[0] == '0') {
+		el->setAttr("tpCh", "oct");
+		sval = ll2s(QString(sval.c_str()).toLongLong(0,8));
+	    }
+	    else el->setAttr("tpCh", "dec");
+	}
 
 	mess_info(mod->nodePath().c_str(),_("%s| Change '%s' to: '%s'!"),
 		w_user->user().toStdString().c_str(), (sel_path+"/"+path).c_str(), sval.c_str());

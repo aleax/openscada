@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:49+0200\n"
+"POT-Creation-Date: 2015-09-20 19:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -343,11 +343,11 @@ msgid "Function stop flag"
 msgstr ""
 
 #, c-format
-msgid "Coil(%s) %d already registered for IO%d. IO%d will be disabled for process coil %d!"
+msgid "Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for process coil %d!"
 msgstr ""
 
 #, c-format
-msgid "Register(%s) %d already registered for IO%d. IO%d will be disabled for process register %d!"
+msgid "Register(%s) %d already registered for IO#%d. IO#%d will be disabled for process register %d!"
 msgstr ""
 
 #, c-format

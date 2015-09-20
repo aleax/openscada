@@ -879,56 +879,34 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','SHIFR','КШ6close','
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','NAME','Close KSH6','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','DESCR','Alarm for closing the valve KSH6','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_КШ6close/"/>','','');
-CREATE TABLE 'ModBus_node' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"ADDR" INTEGER DEFAULT '' ,"InTR" TEXT DEFAULT '' ,"PRT" TEXT DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DT_PER" DOUBLE DEFAULT '' ,"TO_TR" TEXT DEFAULT '' ,"TO_PRT" TEXT DEFAULT '' ,"TO_ADDR" INTEGER DEFAULT '' ,"DT_PROG" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#DT_PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#DT_PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "ModBus_node" VALUES('test','Test',' ',1,1,'*','*',0,1.0,'Serial.exlar','RTU',10,'JavaLikeCalc.JavaScript
-//Test
-R4+=1;
-C4 = !C4;
-
-//AT101_1 processing
-R100 = 65536*(AT101_1_Ti-273)/150;
-R101 = 65536*(AT101_1_To-273)/100;
-//AT101_1 processing
-R103 = 65536*(AT101_2_Ti-273)/150;
-R104 = 65536*(AT101_2_To-273)/100;','Тест',' ','JavaLikeCalc.JavaScript
-//Test
-R4+=1;
-C4 = !C4;
-
-//AT101_1 processing
-R100 = 65536*(AT101_1_Ti-273)/150;
-R101 = 65536*(AT101_1_To-273)/100;
-//AT101_1 processing
-R103 = 65536*(AT101_2_Ti-273)/150;
-R104 = 65536*(AT101_2_To-273)/100;','Тест',' ','');
-INSERT INTO "ModBus_node" VALUES('gate','','',0,2,'Sockets.testModBus','*',1,1.0,'Serial.exlar','RTU',1,'','','','','','','');
 CREATE TABLE 'ModBus_node_io' ("NODE_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("NODE_ID","ID"));
 INSERT INTO "ModBus_node_io" VALUES('test','R0','Register 0',1,0,'1000',0,'Регістр 0','1000','Регистр 0','1000');
 INSERT INTO "ModBus_node_io" VALUES('test','R3w','Register 3 (write)',1,0,'10',2,'Регістр 3 (запис)','10','Регистр 3 (запись)','10');
 INSERT INTO "ModBus_node_io" VALUES('test','R1','Register 1',1,16,'LogicLev.experiment.F3.var',1,'Регістр 1','LogicLev.experiment.F3.var','Регистр 1','LogicLev.experiment.F3.var');
-INSERT INTO "ModBus_node_io" VALUES('test','C3','Bit 3',3,0,'1',9,'Біт 3','1','Бит 3','1');
-INSERT INTO "ModBus_node_io" VALUES('test','C6','Bit 6',3,16,'BlockCalc.Anast1to2node.КШ1.st_open',11,'Біт 6','BlockCalc.Anast1to2node.КШ1.st_open','Бит 6','BlockCalc.Anast1to2node.КШ1.st_open');
-INSERT INTO "ModBus_node_io" VALUES('test','R4','Register 4',1,0,'75369',3,'Регістр 4','30695','Регистр 4','43186');
-INSERT INTO "ModBus_node_io" VALUES('test','C4','Bit 4',3,0,'1',10,'Біт 4','1','Бит 4','1');
-INSERT INTO "ModBus_node_io" VALUES('test','C8w','Bit 8',3,0,'0',12,'Біт 8','0','Бит 8','0');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_Ti','AT101_1.Ti',2,16,'BlockCalc.KM101.AT101_1.Ti',13,'','BlockCalc.KM101.AT101_1.Ti','','BlockCalc.KM101.AT101_1.Ti');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_To','AT101_1.To',2,16,'BlockCalc.KM101.AT101_1.To',14,'','BlockCalc.KM101.AT101_1.To','','BlockCalc.KM101.AT101_1.To');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_Ti','AT101_2.Ti',2,16,'BlockCalc.KM101.AT101_2.Ti',15,'','BlockCalc.KM101.AT101_2.Ti','','BlockCalc.KM101.AT101_2.Ti');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_To','AT101_2.To',2,16,'BlockCalc.KM101.AT101_2.To',16,'','BlockCalc.KM101.AT101_2.To','','BlockCalc.KM101.AT101_2.To');
-INSERT INTO "ModBus_node_io" VALUES('test','R100','AT101_1.Ti code',1,0,'25390',17,'','25392','','25395');
-INSERT INTO "ModBus_node_io" VALUES('test','R101','AT101_1.To code',1,0,'16568',18,'','16566','','16572');
-INSERT INTO "ModBus_node_io" VALUES('test','R102w','AT101_1.Wc',1,16,'BlockCalc.KM101.AT101_1.Wc',19,'','BlockCalc.KM101.AT101_1.Wc','','BlockCalc.KM101.AT101_1.Wc');
-INSERT INTO "ModBus_node_io" VALUES('test','R103','AT101_2.Ti code',1,0,'54876',20,'','54878','','54884');
-INSERT INTO "ModBus_node_io" VALUES('test','R104','AT101_2.To code',1,0,'21687',21,'','21683','','21695');
-INSERT INTO "ModBus_node_io" VALUES('test','R105w','AT101_2.Wc',1,16,'BlockCalc.KM101.AT101_2.Wc',22,'','BlockCalc.KM101.AT101_2.Wc','','BlockCalc.KM101.AT101_2.Wc');
-INSERT INTO "ModBus_node_io" VALUES('test','C100w','КШ2.com',3,16,'BlockCalc.Anast1to2node.КШ2.com',23,'КШ2.com','BlockCalc.Anast1to2node.КШ2.com','','BlockCalc.KM101.КШ102.com');
-INSERT INTO "ModBus_node_io" VALUES('test','C101','КШ2.st_open',3,16,'BlockCalc.Anast1to2node.КШ2.st_open',24,'КШ2.st_open','BlockCalc.Anast1to2node.КШ2.st_open','','BlockCalc.KM101.КШ102.st_open');
-INSERT INTO "ModBus_node_io" VALUES('test','C102','КШ2.st_close',3,16,'BlockCalc.Anast1to2node.КШ2.st_close',25,'КШ2.st_close','BlockCalc.Anast1to2node.КШ2.st_close','','BlockCalc.KM101.КШ102.st_close');
+INSERT INTO "ModBus_node_io" VALUES('test','C3','Bit 3',3,0,'1',10,'Біт 3','1','Бит 3','1');
+INSERT INTO "ModBus_node_io" VALUES('test','C6','Bit 6',3,16,'BlockCalc.Anast1to2node.КШ1.st_open',12,'Біт 6','BlockCalc.Anast1to2node.КШ1.st_open','Бит 6','BlockCalc.Anast1to2node.КШ1.st_open');
+INSERT INTO "ModBus_node_io" VALUES('test','R4','Register 4',1,0,'75464',3,'Регістр 4','30695','Регистр 4','43186');
+INSERT INTO "ModBus_node_io" VALUES('test','C4','Bit 4',3,0,'0',11,'Біт 4','1','Бит 4','1');
+INSERT INTO "ModBus_node_io" VALUES('test','C8w','Bit 8',3,0,'0',13,'Біт 8','0','Бит 8','0');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_Ti','AT101_1.Ti',2,16,'BlockCalc.KM101.AT101_1.Ti',14,'','BlockCalc.KM101.AT101_1.Ti','','BlockCalc.KM101.AT101_1.Ti');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_To','AT101_1.To',2,16,'BlockCalc.KM101.AT101_1.To',15,'','BlockCalc.KM101.AT101_1.To','','BlockCalc.KM101.AT101_1.To');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_Ti','AT101_2.Ti',2,16,'BlockCalc.KM101.AT101_2.Ti',16,'','BlockCalc.KM101.AT101_2.Ti','','BlockCalc.KM101.AT101_2.Ti');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_To','AT101_2.To',2,16,'BlockCalc.KM101.AT101_2.To',17,'','BlockCalc.KM101.AT101_2.To','','BlockCalc.KM101.AT101_2.To');
+INSERT INTO "ModBus_node_io" VALUES('test','R100','AT101_1.Ti code',1,0,'25391',18,'','25392','','25395');
+INSERT INTO "ModBus_node_io" VALUES('test','R101','AT101_1.To code',1,0,'16572',19,'','16566','','16572');
+INSERT INTO "ModBus_node_io" VALUES('test','R102w','AT101_1.Wc',1,16,'BlockCalc.KM101.AT101_1.Wc',20,'','BlockCalc.KM101.AT101_1.Wc','','BlockCalc.KM101.AT101_1.Wc');
+INSERT INTO "ModBus_node_io" VALUES('test','R103','AT101_2.Ti code',1,0,'54881',21,'','54878','','54884');
+INSERT INTO "ModBus_node_io" VALUES('test','R104','AT101_2.To code',1,0,'21700',22,'','21683','','21695');
+INSERT INTO "ModBus_node_io" VALUES('test','R105w','AT101_2.Wc',1,16,'BlockCalc.KM101.AT101_2.Wc',23,'','BlockCalc.KM101.AT101_2.Wc','','BlockCalc.KM101.AT101_2.Wc');
+INSERT INTO "ModBus_node_io" VALUES('test','C100w','КШ2.com',3,16,'BlockCalc.Anast1to2node.КШ2.com',24,'КШ2.com','BlockCalc.Anast1to2node.КШ2.com','','BlockCalc.KM101.КШ102.com');
+INSERT INTO "ModBus_node_io" VALUES('test','C101','КШ2.st_open',3,16,'BlockCalc.Anast1to2node.КШ2.st_open',25,'КШ2.st_open','BlockCalc.Anast1to2node.КШ2.st_open','','BlockCalc.KM101.КШ102.st_open');
+INSERT INTO "ModBus_node_io" VALUES('test','C102','КШ2.st_close',3,16,'BlockCalc.Anast1to2node.КШ2.st_close',26,'КШ2.st_close','BlockCalc.Anast1to2node.КШ2.st_close','','BlockCalc.KM101.КШ102.st_close');
 INSERT INTO "ModBus_node_io" VALUES('test','R_i6w','Register 6,7',1,0,'-5',4,'Регістр 6,7','-4','Регистр 6,7','-5');
 INSERT INTO "ModBus_node_io" VALUES('test','R_f8w','Register 8,9',2,0,'3.14159265',5,'Регістр 8,9','3.14159265','Регистр 8,9','3.14159265');
 INSERT INTO "ModBus_node_io" VALUES('test','R_i8:10:w','Register 10,13',1,0,'123456789',6,'Регістр 10,13','21474836470','Регистр 10,13','123456789');
 INSERT INTO "ModBus_node_io" VALUES('test','R_d:14:w','Register 14-17',2,0,'3.14159265',7,'Регістр 14-17','3.14159265','Регистр 14-17','3.14159265');
 INSERT INTO "ModBus_node_io" VALUES('test','R_d18w','Register 18-21',2,0,'2.7',8,'Регістр 18-21','2.7','Регистр 18-21','2.7');
+INSERT INTO "ModBus_node_io" VALUES('test','R_s110,10w','Register 110-120',0,0,'abcdefghijkl',9,'','','','');
 CREATE TABLE 'ModBus_sdevs' ("ID" TEXT DEFAULT '' ,"SPEED" INTEGER DEFAULT '' ,"LEN" INTEGER DEFAULT '' ,"TWOSTOP" INTEGER DEFAULT '' ,"PARITY" INTEGER DEFAULT '' ,"TM_FRM" INTEGER DEFAULT '' ,"TM_CHAR" DOUBLE DEFAULT '' ,"TM_REQ" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ModBus_sdevs" VALUES('/dev/ttyS0',19200,8,1,0,320,1.88,640);
 CREATE TABLE 'OPC_UA_ep' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"SerialzType" INTEGER DEFAULT '' ,"URL" TEXT DEFAULT '' ,"ServCert" TEXT DEFAULT '' ,"ServPvKey" TEXT DEFAULT '' ,"SecPolicies" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
@@ -1869,7 +1847,8 @@ R_u4:6:r:u6:Integer32 (unsigned) [6,7]
 R_i8:10:r:i10:Integer64 [10-13]
 R_f:8:rw:f8:Float [8,9]
 R_d:14:rw:d14:Double [14-17]
-R_d:18:rw:d18:Double [18-21]','','');
+R_d:18:rw:d18:Double [18-21]
+R_s:110,10:rw:s10:String [110-120]','','');
 CREATE TABLE 'LogLevPrm_experiment' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "LogLevPrm_experiment" VALUES('F3','','F3','','F3','The gas flow through a pipe to Glinsk','Расход газа через трубу на Глинск','Витрати газу через трубу на Глінск',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('F4','','F4','','F4','Gas flow through the diaphragm PP5','Расход через диафрагму PP5','Витрати газу через діафрагму PP5',1,'base.anUnif');
@@ -2656,4 +2635,27 @@ startTm
 curCom
 comLs
 work','Контроль','Контроль');
+CREATE TABLE 'ModBus_node' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ADDR" INTEGER DEFAULT '1' ,"InTR" TEXT DEFAULT '*' ,"PRT" TEXT DEFAULT '*' ,"MODE" INTEGER DEFAULT '0' ,"DT_PER" DOUBLE DEFAULT '1' ,"DT_PR_TR" INTEGER DEFAULT '1' ,"DT_PROG" TEXT DEFAULT '' ,"uk#DT_PROG" TEXT DEFAULT '' ,"ru#DT_PROG" TEXT DEFAULT '' ,"TO_TR" TEXT DEFAULT '' ,"TO_PRT" TEXT DEFAULT 'RTU' ,"TO_ADDR" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
+INSERT INTO "ModBus_node" VALUES('test','Test','Тест','Тест',' ',' ',' ',1,1,'*','*',0,1.0,1,'JavaLikeCalc.JavaScript
+//Test
+R4+=1;
+C4 = !C4;
+
+//AT101_1 processing
+R100 = 65536*(AT101_1_Ti-273)/150;
+R101 = 65536*(AT101_1_To-273)/100;
+//AT101_1 processing
+R103 = 65536*(AT101_2_Ti-273)/150;
+R104 = 65536*(AT101_2_To-273)/100;','JavaLikeCalc.JavaScript
+//Test
+R4+=1;
+C4 = !C4;
+
+//AT101_1 processing
+R100 = 65536*(AT101_1_Ti-273)/150;
+R101 = 65536*(AT101_1_To-273)/100;
+//AT101_1 processing
+R103 = 65536*(AT101_2_Ti-273)/150;
+R104 = 65536*(AT101_2_To-273)/100;','','Serial.exlar','RTU',10);
+INSERT INTO "ModBus_node" VALUES('gate','','','','','','',0,2,'Sockets.testModBus','*',1,1.0,1,'','','','Serial.exlar','RTU',1);
 COMMIT;

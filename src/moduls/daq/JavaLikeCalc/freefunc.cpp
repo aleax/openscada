@@ -1263,14 +1263,18 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    const char *dsymb = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		    int n = 10, w = -1;
 		    int64_t val = vl.getI();
-		    bool sign = (val < 0 || (prms.size() >= 3 && prms[2].getB()));
 		    if(prms.size()) n = vmax(2,vmin(36,prms[0].getI()));
+		    bool sign = (n == 10 && (val < 0 || (prms.size() >= 3 && prms[2].getB())));
 		    if(prms.size() >= 2) w = vmin(100,prms[1].getI()) - (int)sign;
 		    string rez;
-		    for(int64_t c_vl = llabs(val); c_vl || rez.empty() || (w > 0 && (int)rez.size() < w); c_vl = c_vl/n)
+		    if(n == 10) {
+			for(int64_t c_vl = llabs(val); c_vl || rez.empty() || (w > 0 && (int)rez.size() < w); c_vl = c_vl/n)
+			    rez += dsymb[c_vl%n];
+			if(val < 0 || sign) rez += (val >= 0) ? "+" : "-";
+		    }
+		    else for(uint64_t c_vl = val; c_vl || rez.empty() || (w > 0 && (int)rez.size() < w); c_vl = c_vl/n)
 			rez += dsymb[c_vl%n];
-		    if(val < 0 || sign) rez += (val >= 0) ? "+" : "-";
-		    return TSYS::strEncode(rez,TSYS::Reverse);
+		    return TSYS::strEncode(rez, TSYS::Reverse);
 		}
 		return false;
 		//throw TError(nodePath().c_str(),_("Integer or real type have not function '%s' or not enough parameters for it."),prop.c_str());
@@ -2166,7 +2170,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: %d = !%d.", cprg, ptr->rez, ptr->a);
 #endif
-		reg[ptr->rez] = !getValB(val,reg[ptr->a]);
+		reg[ptr->rez] = !getValB(val, reg[ptr->a]);
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitNot: {
@@ -2175,7 +2179,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: %d = ~%d.", cprg, ptr->rez, ptr->a);
 #endif
-		reg[ptr->rez] = ~getValI(val,reg[ptr->a]);
+		reg[ptr->rez] = ~getValI(val, reg[ptr->a]);
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::Neg: {
