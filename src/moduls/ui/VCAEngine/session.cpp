@@ -381,7 +381,10 @@ int Session::alarmStat( )
 
 void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret )
 {
-    if(!wpath.empty()) ((AutoHD<SessWdg>)mod->nodeAt(wpath)).at().alarmQuittance(quit_tmpl, true, ret);
+    string tStr;
+    if(!wpath.empty())
+	for(int off = 0; (tStr=TSYS::strParse(wpath,0,";",&off)).size(); )
+	    ((AutoHD<SessWdg>)mod->nodeAt(tStr)).at().alarmQuittance(quit_tmpl, true, ret);
     else {
 	vector<string> ls;
 	list(ls);
@@ -664,7 +667,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 //* Notify: Generic notifying object.		 *
 //************************************************
 Session::Notify::Notify( uint8_t itp, const string &props, Session *iown ) :
-    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false),
+    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_qMergeMess(false),
     toDo(false), alEn(false), comText(props), mQueueCurNtf(-1), mQueueCurTm(0), mOwner(iown)
 {
     //The resource allocation object init
@@ -687,6 +690,7 @@ Session::Notify::Notify( uint8_t itp, const string &props, Session *iown ) :
 		}
 		else if(iOpt == "resource")	f_resource = true;
 		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
+		else if(iOpt == "qMergeMess")	f_qMergeMess = true;
 
     //The command procedure prepare
     if(comIsExtScript) {
@@ -807,13 +811,14 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
 
     //if(!(aTp&(1<<tp)))	return;
 
-    QueueIt qIt(wpath, aLev, aCat, aMess, aArg, owner()->calcClk());
+    QueueIt qIt(wpath+";", aLev, aCat, aMess, aArg, owner()->calcClk());
 
     MtxAlloc res(dataM, true);
 
     unsigned iQ = 0;
     // Check for the entry to present
-    while(iQ < mQueue.size() && mQueue[iQ].path != qIt.path) iQ++;
+    while(iQ < mQueue.size() && mQueue[iQ].path.find(qIt.path) == string::npos && (!f_qMergeMess || qIt.mess != mQueue[iQ].mess)) iQ++;
+    //while(iQ < mQueue.size() && mQueue[iQ].path != qIt.path) iQ++;
 
     // Clean up the entry from queue
     if(!qIt.lev || !(aTp&(1<<tp))) {
@@ -821,7 +826,12 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
 	return;
     }
     // Update presented and same level entry
-    if(iQ < mQueue.size() && qIt.lev == mQueue[iQ].lev) mQueue[iQ] = qIt;
+    if(iQ < mQueue.size() && f_qMergeMess && qIt.mess == mQueue[iQ].mess) {
+	if(mQueue[iQ].path.find(qIt.path) == string::npos) mQueue[iQ].path += qIt.path;
+	mQueue[iQ].lev = vmax(mQueue[iQ].lev, qIt.lev);
+	mQueue[iQ].quittance = false;
+    }
+    else if(iQ < mQueue.size() && qIt.lev == mQueue[iQ].lev) mQueue[iQ] = qIt;
     else {
 	// Remove presented by different level entry
 	if(iQ < mQueue.size()) {
@@ -847,9 +857,12 @@ void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl, boo
     if(!f_queue) return;
 
     pthread_mutex_lock(&dataM);
+    string tStr, tStr1;
     for(unsigned iQ = 0; iQ < mQueue.size(); iQ++)
-	if(mQueue[iQ].path.substr(0,wpath.size()) == wpath)
-	    mQueue[iQ].quittance = !(quitTmpl&(1<<tp)) && !ret;
+	for(int off = 0; (tStr=TSYS::strParse(wpath,0,";",&off)).size(); )
+	    for(int off1 = 0; (tStr1=TSYS::strParse(mQueue[iQ].path,0,";",&off1)).size(); )
+		if(tStr.compare(0,tStr1.size(),tStr1) == 0)
+		    mQueue[iQ].quittance = !(quitTmpl&(1<<tp)) && !ret;
     pthread_mutex_unlock(&dataM);
 }
 
@@ -1176,7 +1189,7 @@ void SessPage::alarmSet( bool isSet )
     }
 
     //Included widgets process
-    wdgList( lst );
+    wdgList(lst);
     for(unsigned i_w = 0; i_w < lst.size(); i_w++) {
 	int iacur = wdgAt(lst[i_w]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev, iacur&0xFF);

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-20 18:14+0300\n"
+"POT-Creation-Date: 2015-09-24 22:51+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -72,12 +72,17 @@ msgstr "Получено сообщение размером '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Отвечено сообщением размера '%d'."
 
-#, c-format
-msgid "Socket has been disconnected (%d)."
-msgstr "Отключение от сокета (%d)."
+msgid "Socket disconnect (%d)."
+msgstr "Сокет отключен (%d)."
 
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "Active connections"
+msgstr "Активные подключения"
 
 msgid ""
 "SSL input transport has address format:\n"
@@ -105,6 +110,12 @@ msgstr "Пароль приватного ключа"
 msgid "Clients maximum"
 msgstr "Максимум клиентов"
 
+msgid "Clients maximum, per host"
+msgstr "Максимум клиентов, по хостам"
+
+msgid "Set to zero for disable that limit."
+msgstr "Установить в ноль для отключения лимита."
+
 msgid "Input buffer (kbyte)"
 msgstr "Входной буфер (кбайт)"
 
@@ -131,6 +142,9 @@ msgstr ""
 
 msgid "Priority"
 msgstr "Приоритет"
+
+msgid "%s %d(%s): last %s; traffic in %s, out %s."
+msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s."
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -169,6 +183,7 @@ msgstr "Отправлено сообщение размером '%d'."
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
 
+#, c-format
 msgid "Socket error: %s"
 msgstr "Ошибка сокета: %s"
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.1.1"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -90,8 +90,8 @@ TTransSock::TTransSock( string name ) : TTypeTransport(MOD_ID)
     mSource	= name;
 
     //CRYPTO reentrant init
-    mutex_buf = (pthread_mutex_t*)malloc(CRYPTO_num_locks() * sizeof(pthread_mutex_t));
-    for(int i = 0; i < CRYPTO_num_locks( ); i++) pthread_mutex_init(&mutex_buf[i], NULL);
+    bufRes = (pthread_mutex_t*)malloc(CRYPTO_num_locks() * sizeof(pthread_mutex_t));
+    for(int i = 0; i < CRYPTO_num_locks( ); i++) pthread_mutex_init(&bufRes[i], NULL);
     CRYPTO_set_id_callback(id_function);
     CRYPTO_set_locking_callback(locking_function);
     CRYPTO_set_dynlock_create_callback(dyn_create_function);
@@ -111,8 +111,8 @@ TTransSock::~TTransSock( )
     CRYPTO_set_dynlock_create_callback(NULL);
     CRYPTO_set_dynlock_lock_callback(NULL);
     CRYPTO_set_dynlock_destroy_callback(NULL);
-    for(int i = 0; i < CRYPTO_num_locks(); i++) pthread_mutex_destroy(&mutex_buf[i]);
-    free(mutex_buf);
+    for(int i = 0; i < CRYPTO_num_locks(); i++) pthread_mutex_destroy(&bufRes[i]);
+    free(bufRes);
 }
 
 void TTransSock::postEnable( int flag )
@@ -129,8 +129,8 @@ unsigned long TTransSock::id_function( )	{ return (unsigned long)pthread_self();
 
 void TTransSock::locking_function( int mode, int n, const char * file, int line )
 {
-    if(mode&CRYPTO_LOCK) pthread_mutex_lock(&mod->mutex_buf[n]);
-    else		 pthread_mutex_unlock(&mod->mutex_buf[n]);
+    if(mode&CRYPTO_LOCK) pthread_mutex_lock(&mod->bufRes[n]);
+    else		 pthread_mutex_unlock(&mod->bufRes[n]);
 }
 
 struct CRYPTO_dynlock_value *TTransSock::dyn_create_function( const char *file, int line )
@@ -167,13 +167,22 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 //************************************************
 //* TSocketIn                                    *
 //************************************************
-TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), ctx(NULL), mMaxFork(10), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), cl_free(true)
+TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el), ctx(NULL),
+    mMaxFork(20), mMaxForkPerHost(5), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&sockRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     setAddr("localhost:10042");
 }
 
-TSocketIn::~TSocketIn( )	{ }
+TSocketIn::~TSocketIn( )
+{
+    pthread_mutex_destroy(&sockRes);
+}
 
 string TSocketIn::getStatus( )
 {
@@ -182,7 +191,7 @@ string TSocketIn::getStatus( )
     if(!startStat() && !stErr.empty())	rez += _("Start error: ") + stErr;
     else if(startStat())
 	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d."),
-	    connNumb, opConnCnt(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
+	    connNumb, clId.size(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
 
     return rez;
 }
@@ -196,8 +205,9 @@ void TSocketIn::load_( )
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(s2i(vl));
+	vl = prmNd.attr("MaxClientsPerHost");	if(!vl.empty()) setMaxForkPerHost(s2i(vl));
 	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(s2i(vl));
-	vl = prmNd.attr("KeepAliveReqs");if(!vl.empty()) setKeepAliveReqs(s2i(vl));
+	vl = prmNd.attr("KeepAliveReqs");	if(!vl.empty()) setKeepAliveReqs(s2i(vl));
 	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
 	if( prmNd.childGet("CertKey",0,true) ) mCertKey = prmNd.childGet("CertKey")->text();
@@ -209,6 +219,7 @@ void TSocketIn::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("MaxClients", i2s(maxFork()));
+    prmNd.setAttr("MaxClientsPerHost", i2s(maxForkPerHost()));
     prmNd.setAttr("BufLen", i2s(bufLen()));
     prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
     prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
@@ -249,6 +260,15 @@ void TSocketIn::stop( )
     SYS->taskDestroy(nodePath('.',true), &endrun);
 
     TTransportIn::stop();
+}
+
+unsigned TSocketIn::forksPerHost( const string &sender )
+{
+    pthread_mutex_lock(&sockRes);
+    unsigned rez = clS[sender];
+    pthread_mutex_unlock(&sockRes);
+
+    return rez;
 }
 
 void *TSocketIn::Task( void *sock_in )
@@ -338,7 +358,7 @@ void *TSocketIn::Task( void *sock_in )
 
 	s.run_st	= true;
 	s.endrun	= false;
-	s.endrun_cl	= false;
+	s.endrunCl	= false;
 
 	//Select mode
 	struct  timeval tv;
@@ -362,10 +382,20 @@ void *TSocketIn::Task( void *sock_in )
 
 	    BIO *cbio = BIO_pop(abio);
 
-	    if(s.maxFork() <= s.opConnCnt())	{ s.clsConnByLim++; /*BIO_reset(cbio);*/ close(BIO_get_fd(cbio,NULL)); BIO_free(cbio); }
+	    struct sockaddr_in	name_cl;
+	    socklen_t		name_cl_len = sizeof(name_cl);
+	    getpeername(BIO_get_fd(cbio,NULL), (sockaddr*)&name_cl, &name_cl_len);
+	    string sender = inet_ntoa(name_cl.sin_addr);
+
+	    if(s.clId.size() >= s.maxFork() || (s.maxForkPerHost() && s.forksPerHost(sender) >= s.maxForkPerHost())) {
+		s.clsConnByLim++;
+		/*BIO_reset(cbio);*/
+		close(BIO_get_fd(cbio,NULL));
+		BIO_free(cbio);
+	    }
 	    //Make client's socket thread
 	    else {
-		SSockIn *sin = new SSockIn(&s, cbio);
+		SSockIn *sin = new SSockIn(&s, cbio, sender);
 		try {
 		    SYS->taskCreate(s.nodePath('.',true)+"."+i2s(BIO_get_fd(cbio,NULL)), s.taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    s.connNumb++;
@@ -381,8 +411,8 @@ void *TSocketIn::Task( void *sock_in )
     catch(TError err)	{ s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Client tasks stop command
-    s.endrun_cl = true;
-    TSYS::eventWait(s.cl_free, true, string(MOD_ID)+": "+s.id()+_(" client tasks is stopping...."));
+    s.endrunCl = true;
+    TSYS::eventWait(s.clFree, true, string(MOD_ID)+": "+s.id()+_(" client tasks is stopping...."));
 
     //Free context
     if(abio)	BIO_reset(abio);
@@ -400,6 +430,7 @@ void *TSocketIn::Task( void *sock_in )
 void *TSocketIn::ClTask( void *s_inf )
 {
     SSockIn	&s = *(SSockIn *)s_inf;
+    s.pid = pthread_self();
 
     int		rez;
     char	err[255];
@@ -408,14 +439,14 @@ void *TSocketIn::ClTask( void *s_inf )
     AutoHD<TProtocolIn> prot_in;
     SSL		*ssl;
 
-    int cSock = s.s->clientReg(pthread_self());
+    s.s->clientReg(&s);
 
     if(mess_lev() == TMess::Debug)
 	mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"), s.sender.c_str());
 
     if(BIO_do_handshake(s.bio) <= 0) {
 	if(BIO_should_retry(s.bio))
-	    while(BIO_should_retry(s.bio) && !s.s->endrun_cl)
+	    while(BIO_should_retry(s.bio) && !s.s->endrunCl)
 	    { BIO_do_handshake(s.bio); TSYS::sysSleep(STD_WAIT_DELAY*1e-3); }
 	else {
 	    if(ERR_peek_last_error()) {
@@ -428,7 +459,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	}
     }
 
-    int sock_fd = BIO_get_fd(s.bio, NULL);
+    s.sock = BIO_get_fd(s.bio, NULL);
     BIO_get_ssl(s.bio, &ssl);
 
     //Select mode
@@ -440,10 +471,10 @@ void *TSocketIn::ClTask( void *s_inf )
     do {
 	if(!SSL_pending(ssl)) {
 	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	    FD_ZERO(&rd_fd); FD_SET(sock_fd, &rd_fd);
+	    FD_ZERO(&rd_fd); FD_SET(s.sock, &rd_fd);
 
-	    int kz = select(sock_fd+1, &rd_fd, NULL, NULL, &tv);
-	    if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(sock_fd,&rd_fd)) continue;
+	    int kz = select(s.sock+1, &rd_fd, NULL, NULL, &tv);
+	    if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.sock,&rd_fd)) continue;
 	}
 
 	rez = BIO_read(s.bio, buf, sizeof(buf));
@@ -451,30 +482,30 @@ void *TSocketIn::ClTask( void *s_inf )
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
 	req.assign(buf, rez);
-	s.s->sock_res.resRequestW();
-	s.s->trIn += rez;
-	s.s->sock_res.resRelease();
+	pthread_mutex_lock(&s.s->dataRes());
+	s.s->trIn += rez; s.trIn += rez;
+	pthread_mutex_unlock(&s.s->dataRes());
 
-	s.s->messPut(cSock, req, answ, s.sender, prot_in);
+	s.s->messPut(s.sock, req, answ, s.sender, prot_in);
 	if(answ.size()) {
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
 	    do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
 	    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
-	    s.s->sock_res.resRequestW();
-	    s.s->trOut += vmax(0, rez);
-	    s.s->sock_res.resRelease();
+	    pthread_mutex_lock(&s.s->dataRes());
+	    s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
+	    pthread_mutex_unlock(&s.s->dataRes());
 	    answ = "";
 	}
 	cnt++;
-	tm = time(NULL);
+	s.tmReq = tm = time(NULL);
     }
-    while(!s.s->endrun_cl &&
+    while(!s.s->endrunCl &&
 		(!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()) &&
 		(!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()));
 
     BIO_flush(s.bio);
-    close(sock_fd);
+    close(s.sock);
     //BIO_reset(s.bio);
     BIO_free(s.bio);
 
@@ -486,12 +517,9 @@ void *TSocketIn::ClTask( void *s_inf )
 	proto.at().close(n_pr);
     }
 
-    s.s->clientUnreg(pthread_self());
+    if(mess_lev() == TMess::Debug) mess_debug(s.s->nodePath().c_str(), _("Socket disconnect (%d)."), s.s->clId.size());
 
-    if(mess_lev() == TMess::Debug)
-	mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected (%d)."),s.s->cl_id.size());
-
-    delete (SSockIn*)s_inf;
+    s.s->clientUnreg(&s);
 
     return NULL;
 }
@@ -526,44 +554,32 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
     }
 }
 
-int TSocketIn::opConnCnt( )
+void TSocketIn::clientReg( SSockIn *so )
 {
-    ResAlloc res(sock_res,true);
-    int opConn = 0;
-    for(unsigned i_c = 0; i_c < cl_id.size(); i_c++)
-	if(cl_id[i_c]) opConn++;
+    MtxAlloc res(sockRes, true);
 
-    return opConn;
+    for(unsigned iId = 0; iId < clId.size(); iId++)
+	if(clId[iId] == so) return;
+
+    clId.push_back(so);
+    clS[so->sender]++;
+
+    clFree = false;
 }
 
-int TSocketIn::clientReg( pthread_t thrid )
+void TSocketIn::clientUnreg( SSockIn *so )
 {
-    ResAlloc res(sock_res, true);
+    MtxAlloc res(sockRes, true);
 
-    int i_empt = -1;
-    for(int i_id = 0; i_id < (int)cl_id.size(); i_id++)
-	if(!cl_id[i_id] && i_empt < 0) i_empt = i_id;
-	else if(cl_id[i_id] == thrid) return i_id;
+    for(unsigned iId = 0; iId < clId.size(); iId++)
+	if(clId[iId] == so) {
+	    clS[so->sender]--;
+	    clId.erase(clId.begin()+iId);
+	    delete so;
+	    break;
+	}
 
-    if(i_empt >= 0) cl_id[i_empt] = thrid;
-    else { i_empt = cl_id.size(); cl_id.push_back(thrid); }
-
-    cl_free = false;
-
-    return i_empt;
-}
-
-void TSocketIn::clientUnreg( pthread_t thrid )
-{
-    ResAlloc res(sock_res, true);
-
-    bool noFreePres = false;
-    for(unsigned i_id = 0; i_id < cl_id.size(); i_id++) {
-	if(cl_id[i_id] == thrid) cl_id[i_id] = 0;
-	if(cl_id[i_id] && !noFreePres) noFreePres = true;
-    }
-
-    cl_free = !noFreePres;
+    clFree = clId.empty();
 }
 
 void TSocketIn::cntrCmdProc( XMLNode *opt )
@@ -571,6 +587,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TTransportIn::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,1,"/prm/st",_("State")) && clId.size())
+	    ctrMkNode("list", opt, -1, "/prm/st/conns", _("Active connections"), R_R_R_, "root", STR_ID);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
 	    _("SSL input transport has address format:\n"
@@ -583,6 +601,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n_pHost",_("Clients maximum, per host"),RWRWR_,"root",STR_ID,2,"tp","dec",
+	    "help",_("Set to zero for disable that limit."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveReqs",_("Keep alive requests"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Close the connection after specified requests.\nZero value for disable (not close ever)."));
@@ -593,7 +613,15 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/certKey") {
+    if(a_path == "/prm/st/conns" && ctrChkNode(opt)) {
+	MtxAlloc res(sockRes, true);
+	for(vector<SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s."),
+		tm2s((*iId)->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),(*iId)->sock,(*iId)->sender.c_str(),
+		tm2s((*iId)->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
+		TSYS::cpct2str((*iId)->trIn).c_str(),TSYS::cpct2str((*iId)->trOut).c_str()));
+    }
+    else if(a_path == "/prm/cfg/certKey") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(certKey());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
     }
@@ -604,6 +632,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/cl_n") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxFork()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxFork(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/cl_n_pHost") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxForkPerHost()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxForkPerHost(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/bf_ln") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(bufLen()));
@@ -958,15 +990,4 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
     else TTransportOut::cntrCmdProc(opt);
-}
-
-//************************************************
-//* Sockets::SSockIn				 *
-//************************************************
-SSockIn::SSockIn( TSocketIn *is, BIO *ibio ) : s(is), bio(ibio)
-{
-    struct sockaddr_in	name_cl;
-    socklen_t		name_cl_len = sizeof(name_cl);
-    getpeername(BIO_get_fd(bio,NULL), (sockaddr*)&name_cl, &name_cl_len);
-    sender = inet_ntoa(name_cl.sin_addr);
 }

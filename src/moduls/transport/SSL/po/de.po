@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-20 18:14+0300\n"
+"POT-Creation-Date: 2015-09-24 22:51+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -73,12 +73,17 @@ msgstr "Die Nachricht ist bekommen von der Größe '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Es wurde beantwortet mit der Nachricht von der Größe  '%d'."
 
-#, c-format
-msgid "Socket has been disconnected (%d)."
-msgstr "Abfall vom Socket (%d)."
+msgid "Socket disconnect (%d)."
+msgstr "Steckdose ziehen (%d)."
 
 msgid "Error request to protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
+
+msgid "State"
+msgstr "Staats"
+
+msgid "Active connections"
+msgstr "Aktive Verbindungen"
 
 msgid ""
 "SSL input transport has address format:\n"
@@ -107,6 +112,12 @@ msgstr "Das Kennwort des Privatschlüssels"
 msgid "Clients maximum"
 msgstr "Kunden Maximum"
 
+msgid "Clients maximum, per host"
+msgstr "Kunden Maximum, pro Host"
+
+msgid "Set to zero for disable that limit."
+msgstr "Wird auf null gesetzt für Behinderte, die zu begrenzen."
+
 msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
 
@@ -132,6 +143,9 @@ msgstr ""
 
 msgid "Priority"
 msgstr "Priorität"
+
+msgid "%s %d(%s): last %s; traffic in %s, out %s."
+msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s."
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -170,6 +184,7 @@ msgstr "Die Nachricht von der Größe '%d' ist gesendet."
 msgid "Timeouted!"
 msgstr "Die Wartezeit ist aus!"
 
+#, c-format
 msgid "Socket error: %s"
 msgstr "Fehler des Sockets: %s"
 

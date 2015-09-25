@@ -53,21 +53,16 @@ class TSocketIn;
 class SSockIn
 {
     public:
-	SSockIn( TSocketIn *is, int icSock, string isender ) :
-	    s(is), cSock(icSock), sender(isender)	{ }
+	SSockIn( TSocketIn *is, int isock, const string &isender ) :
+	    pid(0), sock(isock), sender(isender), s(is), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0)	{ }
+
+	pthread_t pid;		//Client's thread id
+	int	sock;
+	string	sender;
+	time_t	tmCreate, tmReq;
+	uint64_t trIn, trOut;	//Traffic in and out counters
 
 	TSocketIn	*s;
-	int		cSock;
-	string		sender;
-};
-
-//************************************************
-//* Sockets::SSockCl				 *
-//************************************************
-struct SSockCl
-{
-    pthread_t	cl_id;		//Client's thread id
-    int		cl_sock;
 };
 
 //************************************************
@@ -94,23 +89,26 @@ class TSocketIn: public TTransportIn
 	unsigned MSS( )			{ return mMSS; }
 	unsigned maxQueue( )		{ return mMaxQueue; }
 	unsigned maxFork( )		{ return mMaxFork; }
+	unsigned maxForkPerHost( )	{ return mMaxForkPerHost; }
 	unsigned bufLen( )		{ return mBufLen; }
 	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
 	unsigned keepAliveTm( )		{ return mKeepAliveTm; }
 	int taskPrior( )		{ return mTaskPrior; }
 
 	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
-	void setMaxQueue( int vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
-	void setMaxFork( int vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
-	void setBufLen( int vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
-	void setKeepAliveReqs( int vl )	{ mKeepAliveReqs = vmax(0,vl); modif(); }
-	void setKeepAliveTm( int vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
+	void setMaxQueue( unsigned vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
+	void setMaxFork( unsigned vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
+	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmax(0,vmin(1000,vl)); modif(); }
+	void setBufLen( unsigned vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
+	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vmax(0,vl); modif(); }
+	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
 	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 
 	void start( );
 	void stop( );
 	void check( );			//Some periodic tests and checkings like initiative connection and assigned to that output transports
 	int writeTo( const string &sender, const string &data );
+	unsigned forksPerHost( const string &sender );
 
     protected:
 	//Methods
@@ -126,17 +124,17 @@ class TSocketIn: public TTransportIn
 
 	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
 
-	void clientReg( pthread_t thrid, int i_sock );
-	void clientUnreg( pthread_t thrid );
+	void clientReg( SSockIn *so );
+	void clientUnreg( SSockIn *so );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	int		sock_fd;
-	Res		sock_res;
+	int		sockFd;
+	pthread_mutex_t	sockRes;
 
 	bool		endrun;			//Command for stop task
-	bool		endrun_cl;		//Command for stop client tasks
+	bool		endrunCl;		//Command for stop client tasks
 
 	int		type;			//Socket's types
 	string		path;			//Path to file socket for UNIX socket
@@ -147,13 +145,15 @@ class TSocketIn: public TTransportIn
 			mMSS,			//MSS
 			mMaxQueue,		//Max queue for TCP, UNIX sockets
 			mMaxFork,		//Maximum forking (opened sockets)
+			mMaxForkPerHost,	//Maximum forking (opened sockets), per host
 			mBufLen,		//Input buffer length
 			mKeepAliveReqs,		//KeepAlive requests
 			mKeepAliveTm;		//KeepAlive timeout
 	int		mTaskPrior;		//Requests processing task prioritet
 
-	bool		cl_free;		//Clients stopped
-	vector<SSockCl>	cl_id;			//Client's pids
+	bool		clFree;			//Clients stopped
+	map<int, SSockIn*> clId;		//Client's control object, by sockets FD
+	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
 	uint64_t	trIn, trOut;		// Traffic in and out counter
@@ -204,16 +204,16 @@ class TSocketOut: public TTransportOut
 
 	//Attributes
 	string		mTimings;
-	unsigned short	mMSS,			// MSS
+	unsigned short	mMSS,			//MSS
 			mTmCon,
 			mTmNext,
 			mTmRep;
 
-	int		sock_fd;
+	int		sockFd;
 
 	int		type;			//Socket's types
-	struct sockaddr_in	name_in;
-	struct sockaddr_un	name_un;
+	struct sockaddr_in	nameIn;
+	struct sockaddr_un	nameUn;
 
 	// Status atributes
 	uint64_t	trIn, trOut;		//Traffic in and out counter

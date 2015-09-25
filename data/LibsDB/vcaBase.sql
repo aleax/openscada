@@ -9447,7 +9447,7 @@ INSERT INTO "wlb_Main_uio" VALUES('TextLab','com_text','Command text (from digCo
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmStText','Parameter:status text',131077,'||',10,'Parameter|st_text','','','','','','Parameter:status text','ОТКР;ЗАКР;СТОП','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmComText','Parameter:command text',131077,'||',14,'Parameter|com_text','','','','','','Parameter:command text','ОТКР;ЗАКР;СТОП','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notify2','Notification:type 2 (TextSpeech)',131205,'#!/bin/sh
-#flags=queue
+#flags=queue|qMergeMess
 if test $doRes = 1 -a "x" != "x$mess"; then
  #Specific TTS
  case $lang in
@@ -9496,7 +9496,7 @@ if(en) {
 	if((beep=SYS.system("which beep")).length)
 		SYS.system(beep.parse(0,"\n")+" -f 1000 -l 1000000 &\necho $! > aAlarm.pid", true);
 	else if((play=SYS.system("which play")).length)
-		SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 &\necho $! > aAlarm.pid", true);
+		SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > aAlarm.pid", true);
 }
 else SYS.system("if test -s aAlarm.pid; then kill $(cat aAlarm.pid); rm aAlarm.pid; fi");',0,'','','','','','','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','notifyVisVision2','Notification:Vision type 2 (TextSpeech)',131205,'#!/bin/sh

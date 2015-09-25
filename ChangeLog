@@ -1,3 +1,15 @@
+2015-09-25 Roman
+- DB.LibsDB.vcaBase.db: Main.RootPgSo: New flag "qMergeMess" is appended to notification type 2.
+    Option "gain -20" for the buzzer, notification type 1, to synth by sox is added.
+- !!!!:Transport.{Sockets,SSL}: Set unified to the client's work-control object.
+    Statistic information per active connection is added, include: socket FD, client host address, connection and last request time, IO traffic.
+    Maximum clients per host limit is added.
+- Transport.Sockets: Default port set to 10005, default for the OpenSCADA control interface.
+- UI.QTCfg: List view widget is moved to ListView class, inherited from QListWidget for sizeHint() set to 5 rows for height.
+- UI.VCAEngine: Flag "qMergeMess" is added to queue's notification, for allow merge notifications into the queue by the message.
+    Quittance set allow by list, separated by symbol ';'.
+
+
 2015-09-20 Roman
 - ModelsDB.AGLKS.St.db: ModBus string processing test fields are added.
 - FIX:DAQ.JavaLikeCalc: Function {Integer}.toString() fixed for set to signed only the decimal base 10.

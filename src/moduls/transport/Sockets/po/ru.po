@@ -1,14 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
-# Copyright (C) 2003-2015 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-20 18:12+0300\n"
+"POT-Creation-Date: 2015-09-24 22:37+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -139,14 +138,20 @@ msgstr "От сокета отключился '%s'!"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
-msgstr ""
+msgstr "Создано новый объект входящего протокола '%s'!"
 
 #, c-format
 msgid "Input protocol's object '%s' closed by self!"
-msgstr ""
+msgstr "Объект входящего протокола '%s' закрылся сам!"
 
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "Active connections"
+msgstr "Активные подключения"
 
 msgid ""
 "Socket's input transport has address format:\n"
@@ -215,6 +220,12 @@ msgstr "Длина очереди"
 msgid "Clients maximum"
 msgstr "Максимум клиентов"
 
+msgid "Clients maximum, per host"
+msgstr "Максимум клиентов, по хостам"
+
+msgid "Set to zero for disable that limit."
+msgstr "Установить в ноль для отключения лимита."
+
 msgid "Keep alive requests"
 msgstr "Keep alive запросов"
 
@@ -235,6 +246,9 @@ msgstr ""
 "Закрытие подключения после отсутствия запросов в течении указанного "
 "времени.\n"
 "Нулевое значение для отключения (не закрывается никогда)."
+
+msgid "%s %d(%s): last %s; traffic in %s, out %s."
+msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s."
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -273,6 +287,7 @@ msgstr "Ошибка запроса: %s"
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
 
+#, c-format
 msgid "Socket error: %s"
 msgstr "Ошибка сокета: %s"
 

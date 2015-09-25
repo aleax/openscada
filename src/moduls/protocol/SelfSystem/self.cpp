@@ -359,8 +359,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 	TProt::SAuth auth;
 	if(sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2) auth = mod->sesGet(ses_id);
-	else if(sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3)
-	{
+	else if(sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3) {
 	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass))
 	    { auth.tAuth = 1; auth.name = user; }
 	}

@@ -1,15 +1,14 @@
 # OpenSCADA.Transport.Sockets translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-20 18:12+0300\n"
+"POT-Creation-Date: 2015-09-24 22:37+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -140,14 +139,20 @@ msgstr "Vom Socket abgebunden '%s'!"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
-msgstr ""
+msgstr "Neue Eingangsprotokoll-Objekt '%s' erstellt!"
 
 #, c-format
 msgid "Input protocol's object '%s' closed by self!"
-msgstr ""
+msgstr "Die Eingangsprotokoll-Objekt '%s' durch Selbst geschlossen!"
 
 msgid "Error request to protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
+
+msgid "State"
+msgstr "Staats"
+
+msgid "Active connections"
+msgstr "Aktive Verbindungen"
 
 msgid ""
 "Socket's input transport has address format:\n"
@@ -215,6 +220,12 @@ msgstr "Reihenlänge "
 msgid "Clients maximum"
 msgstr "Kunden Maximum"
 
+msgid "Clients maximum, per host"
+msgstr "Kunden Maximum, pro Host"
+
+msgid "Set to zero for disable that limit."
+msgstr "Wird auf null gesetzt für Behinderte, die zu begrenzen."
+
 msgid "Keep alive requests"
 msgstr "Keep alive Anfragen"
 
@@ -234,6 +245,9 @@ msgid ""
 msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
 "Null-Wert für disable (nicht immer schließen)."
+
+msgid "%s %d(%s): last %s; traffic in %s, out %s."
+msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s."
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -272,6 +286,7 @@ msgstr "Request-Fehler: %s"
 msgid "Timeouted!"
 msgstr "Wartezeit ist aus!"
 
+#, c-format
 msgid "Socket error: %s"
 msgstr "Fehler des Sockets: %s"
 

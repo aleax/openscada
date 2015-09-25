@@ -173,6 +173,7 @@ class Session : public TCntrNode
 		unsigned f_notify	:1;	//Notification enabled
 		unsigned f_resource	:1;	//Form/request the resource for notification: sound file, text or other data
 		unsigned f_queue	:1;	//Form/use queue of notifications by the priority-level
+		unsigned f_qMergeMess	:1;	//Merge queue items by equal messages
 
 		unsigned toDo		:1;	//Need to do some notification doings
 		unsigned alEn		:1;	//Alarm enabled

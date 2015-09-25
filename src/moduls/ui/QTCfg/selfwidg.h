@@ -33,6 +33,7 @@
 #include <QDialogButtonBox>
 #include <QSyntaxHighlighter>
 #include <QTableWidget>
+#include <QListWidget>
 
 #include "tuimod.h"
 
@@ -167,6 +168,19 @@ class TextEdit : public QWidget
 	QDialogButtonBox *but_box;
 	QPoint		holdPnt;
 	QSize		mRowCol;
+};
+
+//************************************************
+//* ListView: List view widget                   *
+//************************************************
+class ListView : public QListWidget
+{
+    Q_OBJECT
+    public:
+	//Methods
+	ListView( QWidget * parent = 0 );
+
+	QSize sizeHint( ) const;
 };
 
 //************************************************

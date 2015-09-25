@@ -124,8 +124,7 @@ void MBD::postDisable( int flag )
 	    string req = "DROP DATABASE \"" + db + "\"";
 	    if((res=PQexec(connection,req.c_str())) == NULL)
 		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
-	    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK)
-	    {
+	    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 		string err, err1;
 		err = PQresStatus(PQresultStatus(res));
 		err1 = PQresultErrorMessage(res);

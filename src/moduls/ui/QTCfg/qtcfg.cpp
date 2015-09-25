@@ -42,7 +42,6 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <QGroupBox>
-#include <QListWidget>
 #include <QTableWidget>
 #include <QComboBox>
 #include <QHBoxLayout>
@@ -672,8 +671,7 @@ void ConfApp::itDel( const string &iit )
 	    XMLNode *branch = req.childGet(0);
 	    for(unsigned i_b = 0; i_b < branch->childSize(); i_b++) {
 		string b_id = branch->childGet(i_b)->attr("id");
-		if(b_id == sel_el.substr(0,b_id.size()) && s2i(branch->childGet(i_b)->attr("acs"))&SEC_WR)
-		{
+		if(b_id == sel_el.substr(0,b_id.size()) && s2i(branch->childGet(i_b)->attr("acs"))&SEC_WR) {
 		    bool idm = s2i(branch->childGet(i_b)->attr("idm"));
 		    req.clear()->setName("del")->setAttr("path",sel_own+"/%2fbr%2f"+b_id);
 		    if(idm) req.setAttr("id",sel_el.substr(b_id.size()));
@@ -1138,13 +1136,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    string br_path = TSYS::strEncode(a_path+t_s.attr("id"), TSYS::PathEl);
 
 	    QLabel *lab;
-	    QListWidget *lstbox;
+	    ListView *lstbox;
 
 	    if(widget) {
-		lstbox = new QListWidget(widget);
+		lstbox = new ListView(widget);
 		lstbox->setStatusTip((sel_path+"/"+br_path).c_str());
 		lstbox->setObjectName(br_path.c_str());
-		lstbox->setMinimumSize(QSize(150,110));
+		//lstbox->setMinimumSize(QSize(150,110));
 		lstbox->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(lstbox, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(listBoxPopup()));
 
@@ -1167,7 +1165,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    }
 	    else {
 		lab	= (QLabel*)TSYS::str2addr(t_s.attr("addr_lab"));
-		lstbox	= (QListWidget*)TSYS::str2addr(t_s.attr("addr_el"));
+		lstbox	= (ListView*)TSYS::str2addr(t_s.attr("addr_el"));
 		lstbox->clear();
 	    }
 	    //  Fill list
@@ -1785,7 +1783,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			val_w->setType(LineEdit::Combo);
 		    }
 		    else if(tp == "dec" || tp == "hex" || tp == "oct") {
-			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"0000000000").width()+30);
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).width("0000000000")+30);
 			//val_w->setType(LineEdit::Text);
 			//QIntValidator *iv = new QIntValidator(val_w->workWdg());
 			//((QLineEdit*)val_w->workWdg())->setValidator(iv);
@@ -1799,7 +1797,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);*/
 		    else if(tp == "real") {
-			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"3.14159265e123").width()+30);
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).width("3.14159265e123")+30);
 			val_w->setType(LineEdit::Text);
 			QDoubleValidator *dv = new QDoubleValidator(val_w->workWdg());
 			dv->setNotation(QDoubleValidator::ScientificNotation);

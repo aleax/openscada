@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-20 18:12+0300\n"
+"POT-Creation-Date: 2015-09-24 22:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,6 +137,12 @@ msgstr ""
 msgid "Error request to protocol."
 msgstr ""
 
+msgid "State"
+msgstr ""
+
+msgid "Active connections"
+msgstr ""
+
 msgid ""
 "Socket's input transport has address format:\n"
 "  TCP:{addr}:{port}:{mode} - TCP socket:\n"
@@ -178,6 +184,12 @@ msgstr ""
 msgid "Clients maximum"
 msgstr ""
 
+msgid "Clients maximum, per host"
+msgstr ""
+
+msgid "Set to zero for disable that limit."
+msgstr ""
+
 msgid "Keep alive requests"
 msgstr ""
 
@@ -192,6 +204,10 @@ msgstr ""
 msgid ""
 "Close the connection after no requests at specified timeout.\n"
 "Zero value for disable (not close ever)."
+msgstr ""
+
+#, c-format
+msgid "%s %d(%s): last %s; traffic in %s, out %s."
 msgstr ""
 
 #, c-format

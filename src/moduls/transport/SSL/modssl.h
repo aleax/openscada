@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,11 +49,17 @@ class TSocketIn;
 class SSockIn
 {
     public:
-	SSockIn( TSocketIn *is, BIO *ibio );
+	SSockIn( TSocketIn *is, BIO *ibio, const string &isender ) :
+	    pid(0), bio(ibio), sock(0), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is) { }
+
+	pthread_t pid;
+	BIO	*bio;
+	int	sock;
+	string	sender;
+	time_t	tmCreate, tmReq;
+	uint64_t trIn, trOut;	//Traffic in and out counters
 
 	TSocketIn	*s;
-	BIO		*bio;
-	string		sender;
 };
 
 //************************************************
@@ -67,25 +73,28 @@ class TSocketIn: public TTransportIn
 
 	string getStatus( );
 
-	int bufLen( )		{ return mBufLen; }
-	int maxFork( )		{ return mMaxFork; }
-	int keepAliveReqs( )	{ return mKeepAliveReqs; }
-	int keepAliveTm( )	{ return mKeepAliveTm; }
+	unsigned bufLen( )		{ return mBufLen; }
+	unsigned maxFork( )		{ return mMaxFork; }
+	unsigned maxForkPerHost( )	{ return mMaxForkPerHost; }
+	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
+	unsigned keepAliveTm( )	{ return mKeepAliveTm; }
 	int taskPrior( )	{ return mTaskPrior; }
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
-	int opConnCnt( );
 
-	void setBufLen( int vl )		{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
-	void setMaxFork( int vl )		{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
-	void setKeepAliveReqs( int vl )		{ mKeepAliveReqs = vmax(0,vl); modif(); }
-	void setKeepAliveTm( int vl )		{ mKeepAliveTm = vmax(0,vl); modif(); }
+	void setBufLen( unsigned vl )		{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
+	void setMaxFork( unsigned vl )		{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
+	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmax(0,vmin(1000,vl)); modif(); }
+	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vmax(0,vl); modif(); }
+	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
 	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
 	void start( );
 	void stop( );
+
+	unsigned forksPerHost( const string &sender );
 
     protected:
 	//Methods
@@ -97,35 +106,38 @@ class TSocketIn: public TTransportIn
 	static void *Task( void * );
 	static void *ClTask( void * );
 
-	int clientReg( pthread_t thrid );
-	void clientUnreg( pthread_t thrid );
+	void clientReg( SSockIn *so );
+	void clientUnreg( SSockIn *so );
 
 	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	Res		sock_res;
+	pthread_mutex_t	sockRes;
 	SSL_CTX		*ctx;
 
-	bool		endrun;			// Command for stop task
-	bool		endrun_cl;		// Command for stop client tasks
+	bool		endrun;			//Command for stop task
+	bool		endrunCl;		//Command for stop client tasks
 
-	int		mMaxFork,		// maximum forking (opened SSL)
-			mBufLen,		// input buffer length
-			mKeepAliveReqs,		// KeepAlive connections
-			mKeepAliveTm,		// KeepAlive timeout
-			mTaskPrior;		// Requests processing task prioritet
-	string		mCertKey,		// SSL certificate
-			mKeyPass;		// SSL private key password
+	unsigned short	mMaxFork,		//Maximum forking (opened SSL)
+			mMaxForkPerHost,	//Maximum forking (opened sockets), per host
+			mBufLen,		//Input buffer length
+			mKeepAliveReqs,		//KeepAlive connections
+			mKeepAliveTm;		//KeepAlive timeout
+	int		mTaskPrior;		//Requests processing task prioritet
+	string		mCertKey,		//SSL certificate
+			mKeyPass;		//SSL private key password
 
-	bool		cl_free;		// Clients stopped
-	vector<pthread_t>	cl_id;		// Client's pids
+	bool		clFree;			//Clients stopped
+	//vector<pthread_t>	clId;		//Client's pids
+	vector<SSockIn*> clId;			//Client's control object, by sockets FD
+	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
-	string		stErr;			// Last error messages
-	uint64_t	trIn, trOut;		// Traffic in and out counter
-	int		connNumb, clsConnByLim;	// Close connections by limit
+	string		stErr;			//Last error messages
+	uint64_t	trIn, trOut;		//Traffic in and out counter
+	int		connNumb, clsConnByLim;	//Close connections by limit
 };
 
 //************************************************
@@ -203,7 +215,7 @@ class TTransSock: public TTypeTransport
 	static void dyn_destroy_function( struct CRYPTO_dynlock_value *l, const char *file, int line );
 
 	//Attributes
-	pthread_mutex_t *mutex_buf;
+	pthread_mutex_t *bufRes;
 };
 
 extern TTransSock *mod;
