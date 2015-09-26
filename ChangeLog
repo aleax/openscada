@@ -1,4 +1,8 @@
 2015-09-25 Roman
+- FIX:Transport.Sockets: Not decremental counter per host connections fixed.
+
+
+2015-09-25 Roman
 - DB.LibsDB.vcaBase.db: Main.RootPgSo: New flag "qMergeMess" is appended to notification type 2.
     Option "gain -20" for the buzzer, notification type 1, to synth by sox is added.
 - !!!!:Transport.{Sockets,SSL}: Set unified to the client's work-control object.

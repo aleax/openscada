@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.9.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -756,7 +756,7 @@ void TSocketIn::clientUnreg( SSockIn *so )
 	if(iId->second == so) {
 	    shutdown(iId->first, SHUT_RDWR);
 	    close(iId->first);
-	    clS[iId->second->sender]++;
+	    clS[iId->second->sender]--;
 	    clId.erase(iId);
 	    delete so;
 	    if(!clId.size()) clFree = true;
