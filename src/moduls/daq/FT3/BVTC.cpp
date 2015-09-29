@@ -92,7 +92,6 @@ void KA_BVTC::saveIO()
 
 void KA_BVTC::tmHandler(void)
 {
-    NeedInit = false;
     for(int i = 0; i < count_n; i++) {
 	UpdateParam8(data[i].Value, PackID(ID, (i + 1), 0), 1);
 	if(with_params) {
@@ -100,6 +99,7 @@ void KA_BVTC::tmHandler(void)
 	}
 
     }
+    NeedInit = false;
 }
 
 uint16_t KA_BVTC::Task(uint16_t uc)
@@ -256,7 +256,6 @@ void B_BVTC::saveIO()
 
 void B_BVTC::tmHandler(void)
 {
-    NeedInit = false;
     for(int i = 0; i < count_n; i++) {
 	uint8_t tmpval;
 	uint8_t g = i / 8;
@@ -268,7 +267,7 @@ void B_BVTC::tmHandler(void)
 		for(int j = 0; j < 8; j++) {
 		    E[0] |= (data[g * 8 + j].Value.vl & 0x01) << j;
 		}
-		mPrm.owner().PushInBE(1, 1, PackID(ID, 1, i / 8), E);
+		PushInBE(1, 1, PackID(ID, 1, i / 8), E);
 	    }
 	}
 	if(with_params) {
@@ -280,10 +279,11 @@ void B_BVTC::tmHandler(void)
 		for(int j = 0; j < 8; j++) {
 		    E[1] |= (data[g * 8 + j].Mask.vl & 0x01) << j;
 		}
-		mPrm.owner().PushInBE(1, 2, PackID(ID, 2, i / 8), E);
+		PushInBE(1, 2, PackID(ID, 2, i / 8), E);
 	    }
 	}
     }
+    NeedInit = false;
 }
 
 uint16_t B_BVTC::Task(uint16_t uc)

@@ -1,3 +1,8 @@
+2015-09-30 fido_max
+- FIX:DAQ.FT3: Minor errors fixed.
+- DAQ.FT3: Event handling optimized. B_ACCOUNT: Period_V, dP, T, P, E implemented. B_BUC: set time, uptime, modification implemented.
+
+
 2015-09-29 Roman
 - FIX:UI.VCAEngine: Attr::VizerSpec processing fix, which caused access at Web and spare attributes transfer.
 

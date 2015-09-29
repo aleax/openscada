@@ -106,7 +106,6 @@ void B_BVI::saveIO()
 
 void B_BVI::tmHandler(void)
 {
-    NeedInit = false;
     for(int i = 0; i < count_n; i++) {
 	uint8_t tmpui8;
 	union
@@ -121,12 +120,13 @@ void B_BVI::tmHandler(void)
 		UpdateParam8(data[i].Period, PackID(ID, (i + 1), 2), 1);
 	    }
 	    UpdateParamFl(data[i].Sens, PackID(ID, (i + 1), 3), 1);
-	    UpdateParam32(data[i].Count, PackID(ID, (i + 1), 4), 1);
+	    UpdateParam32(data[i].Count, PackID(ID, (i + 1), 4), 0);
 	    UpdateParamFl(data[i].Factor, PackID(ID, (i + 1), 5), 1);
 	    UpdateParam8(data[i].Dimension, PackID(ID, (i + 1), 6), 1);
 	}
-	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 1), 1);
+	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 1), 2);
     }
+    NeedInit = false;
 }
 
 uint16_t B_BVI::Task(uint16_t uc)

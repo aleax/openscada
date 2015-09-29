@@ -47,9 +47,9 @@ namespace FT3
 	{
 	public:
 	    SKATCchannel(uint8_t iid, DA* owner) :
-		    da(owner), id(iid), Value(TSYS::strMess("TC_%d", id + 1).c_str(), TSYS::strMess(_("TC %d"), id + 1).c_str()),
-		    Period(TSYS::strMess("Period_%d", id + 1).c_str(), TSYS::strMess(_("Period TC %d"), id + 1).c_str()),
-		    Count(TSYS::strMess("Count_%d", id + 1).c_str(), TSYS::strMess(_("Count TC %d"), id + 1).c_str())
+		    da(owner), id(iid), Value(TSYS::strMess("TC_%d", id + 1), TSYS::strMess(_("TC %d"), id + 1)),
+		    Period(TSYS::strMess("Period_%d", id + 1), TSYS::strMess(_("Period TC %d"), id + 1)),
+		    Count(TSYS::strMess("Count_%d", id + 1), TSYS::strMess(_("Count TC %d"), id + 1))
 	    {
 	    }
 	    DA* da;
@@ -124,8 +124,8 @@ namespace FT3
 	{
 	public:
 	    STCchannel(uint8_t iid, DA* owner) :
-		    da(owner), id(iid), Value(TSYS::strMess("TC_%d", id + 1).c_str(), TSYS::strMess(_("TC %d"), id + 1).c_str()),
-		    Mask(TSYS::strMess("Mask_%d", id + 1).c_str(), TSYS::strMess(_("Mask %d"), id + 1).c_str())
+		    da(owner), id(iid), Value(TSYS::strMess("TC_%d", id + 1), TSYS::strMess(_("TC %d"), id + 1)),
+		    Mask(TSYS::strMess("Mask_%d", id + 1), TSYS::strMess(_("Mask %d"), id + 1))
 	    {
 	    }
 	    DA* da;

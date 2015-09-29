@@ -292,7 +292,6 @@ void KA_GZD::saveIO(void)
 
 void KA_GZD::tmHandler(void)
 {
-    NeedInit = false;
     for(int i = 0; i < count_n; i++) {
 	if(with_params) {
 	    data[i].UpdateTUParam(PackID(ID, (i + 1), 1), 1);
@@ -301,6 +300,7 @@ void KA_GZD::tmHandler(void)
 	UpdateParam8(data[i].State, PackID(ID, (i + 1), 0), 1);
 	UpdateParam8(data[i].Function, PackID(ID, (i + 1), 3), 1);
     }
+    NeedInit = false;
 }
 
 uint16_t KA_GZD::Task(uint16_t uc)

@@ -66,7 +66,7 @@ uint8_t DA::SetNew8Val(ui8Data& d, uint8_t addr, uint16_t prmID, uint8_t val)
 	d.s = addr;
 	d.Set(val);
 	uint8_t E[2] = { addr, d.vl };
-	mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 1;
     } else {
 	return 0;
@@ -79,7 +79,7 @@ uint8_t DA::SetNew8Val(ui16Data& d, uint8_t addr, uint16_t prmID, uint8_t val)
 	d.s = addr;
 	d.Set(val);
 	uint8_t E[2] = { addr, val };
-	mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 1;
     } else {
 	return 0;
@@ -94,7 +94,7 @@ uint8_t DA::SetNew28Val(ui8Data& d1, ui8Data& d2, uint8_t addr, uint16_t prmID, 
 	d2.s = addr;
 	d2.Set(val2);
 	uint8_t E[3] = { addr, d1.vl };
-	mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 2;
     } else {
 	return 0;
@@ -107,7 +107,7 @@ uint8_t DA::SetNewWVal(ui16Data& d, uint8_t addr, uint16_t prmID, uint16_t val)
 	d.s = addr;
 	d.Set(val);
 	uint8_t E[3] = { addr, d.b_vl[0], d.b_vl[1] };
-	mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 2;
     } else {
 	return 0;
@@ -120,7 +120,7 @@ uint8_t DA::SetNewflVal(flData& d, uint8_t addr, uint16_t prmID, float val)
 	d.s = addr;
 	d.Set(val);
 	uint8_t E[5] = { addr, d.b_vl[0], d.b_vl[1], d.b_vl[2], d.b_vl[3] };
-	mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 4;
     } else {
 	return 0;
@@ -133,7 +133,7 @@ uint8_t DA::SetNew32Val(ui32Data& d, uint8_t addr, uint16_t prmID, uint32_t val)
 	d.s = addr;
 	d.Set(val);
 	uint8_t E[5] = { addr, d.b_vl[0], d.b_vl[1], d.b_vl[2], d.b_vl[3] };
-	mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 4;
     } else {
 	return 0;
@@ -148,7 +148,7 @@ uint8_t DA::SetNew2flVal(flData& d1, flData& d2, uint8_t addr, uint16_t prmID, f
 	d2.s = addr;
 	d2.Set(val2);
 	uint8_t E[9] = { addr, d1.b_vl[0], d1.b_vl[1], d1.b_vl[2], d1.b_vl[3], d2.b_vl[0], d2.b_vl[1], d2.b_vl[2], d2.b_vl[3] };
-	mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 4 + 4;
     } else {
 	return 0;
@@ -162,7 +162,7 @@ void DA::UpdateParam8(ui8Data& param, uint16_t ID, uint8_t cl)
     if(tmpui8 != param.vl) {
 	param.Update(tmpui8);
 	uint8_t E[2] = { 0, tmpui8 };
-	mPrm.owner().PushInBE(cl, sizeof(E), ID, E);
+	PushInBE(cl, sizeof(E), ID, E);
     }
 }
 
@@ -173,7 +173,7 @@ void DA::UpdateParam8(ui16Data& param, uint16_t ID, uint8_t cl)
     if(tmpui8 != param.vl) {
 	param.Update(tmpui8);
 	uint8_t E[2] = { 0, tmpui8 };
-	mPrm.owner().PushInBE(cl, sizeof(E), ID, E);
+	PushInBE(cl, sizeof(E), ID, E);
     }
 }
 
@@ -184,7 +184,7 @@ void DA::UpdateParamW(ui16Data& param, uint16_t ID, uint8_t cl)
     if(tmpw.w != param.vl) {
 	param.Update(tmpw.w);
 	uint8_t E[3] = { 0, tmpw.b[0], tmpw.b[1] };
-	mPrm.owner().PushInBE(cl, sizeof(E), ID, E);
+	PushInBE(cl, sizeof(E), ID, E);
     }
 }
 
@@ -195,7 +195,7 @@ void DA::UpdateParamFl(flData& param, uint16_t ID, uint8_t cl)
     if(tmpfl.f != param.vl) {
 	param.Update(tmpfl.f);
 	uint8_t E[5] = { 0, tmpfl.b[0], tmpfl.b[1], tmpfl.b[2], tmpfl.b[3] };
-	mPrm.owner().PushInBE(cl, sizeof(E), ID, E);
+	PushInBE(cl, sizeof(E), ID, E);
     }
 }
 
@@ -206,7 +206,7 @@ void DA::UpdateParam32(ui32Data& param, uint16_t ID, uint8_t cl)
     if(tmp.ui32 != param.vl) {
 	param.Update(tmp.ui32);
 	uint8_t E[5] = { 0, tmp.b[0], tmp.b[1], tmp.b[2], tmp.b[3] };
-	mPrm.owner().PushInBE(cl, sizeof(E), ID, E);
+	PushInBE(cl, sizeof(E), ID, E);
     }
 }
 
@@ -220,7 +220,7 @@ void DA::UpdateParamFlState(flData& param, ui8Data& state, uint16_t ID, uint8_t 
 	state.Update(tmpui8);
 	param.Update(tmpfl.f);
 	uint8_t E[5] = { state.vl, tmpfl.b[0], tmpfl.b[1], tmpfl.b[2], tmpfl.b[3] };
-	mPrm.owner().PushInBE(cl, sizeof(E), ID, E);
+	PushInBE((tmpui8 != state.vl)? 1:cl , sizeof(E), ID, E);
     }
 }
 
@@ -233,7 +233,7 @@ void DA::UpdateParam2Fl(flData& param1, flData& param2, uint16_t ID, uint8_t cl)
 	param1.Update(tmpfl1.f);
 	param2.Update(tmpfl2.f);
 	uint8_t E[9] = { 0, tmpfl1.b[0], tmpfl1.b[1], tmpfl1.b[2], tmpfl1.b[3], tmpfl2.b[0], tmpfl2.b[1], tmpfl2.b[2], tmpfl2.b[3] };
-	mPrm.owner().PushInBE(1, sizeof(E), ID, E);
+	PushInBE(1, sizeof(E), ID, E);
     }
 }
 
@@ -246,7 +246,7 @@ void DA::UpdateParam28(ui8Data& param1, ui8Data& param2, uint16_t ID, uint8_t cl
 	param1.Update(tmp1);
 	param2.Update(tmp2);
 	uint8_t E[3] = { 0, tmp1, tmp2 };
-	mPrm.owner().PushInBE(cl, sizeof(E), ID, E);
+	PushInBE(cl, sizeof(E), ID, E);
     }
 }
 
@@ -300,7 +300,7 @@ uint16_t DA::PackID(uint8_t g, uint8_t k, uint8_t n)
 
 void DA::PushInBE(uint8_t type, uint8_t length, uint16_t id, uint8_t *E)
 {
-    mPrm.owner().PushInBE(type, length, id, E);
+    if (!NeedInit) mPrm.owner().PushInBE(type, length, id, E);
 }
 
 time_t DA::DateTimeToTime_t(uint8_t *d)

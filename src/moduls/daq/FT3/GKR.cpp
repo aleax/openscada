@@ -120,13 +120,13 @@ void B_GKR::saveIO()
 
 void B_GKR::tmHandler(void)
 {
-    NeedInit = false;
     for(int i = 0; i < count_n; i++) {
 	UpdateParamW(data[i].Time, PackID(ID, i + 1, 5), 1);
 	UpdateParam8(data[i].ExTime, PackID(ID, i + 1, 6), 1);
 	UpdateParamW(data[i].Time_Lub, PackID(ID, i + 1, 7), 1);
 	UpdateParam8(data[i].Timeout_PO, PackID(ID, i + 1, 8), 1);
     }
+    NeedInit = false;
 }
 
 uint16_t B_GKR::Task(uint16_t uc)
@@ -270,7 +270,7 @@ void B_GKR::setTU(uint8_t k, uint8_t val, uint8_t addr, uint16_t prmID)
 		TU.On.lnk.aprm.at().setI(1);
 		mPrm.vlAt(TU.On.lnk.prmName.c_str()).at().setI(k, 0, true);
 		uint8_t E[2] = { addr, val };
-		mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+		PushInBE(1, sizeof(E), prmID, E);
 	    }
 	} else {
 	    if(TU.Off.lnk.Connected()) {
@@ -278,7 +278,7 @@ void B_GKR::setTU(uint8_t k, uint8_t val, uint8_t addr, uint16_t prmID)
 		TU.Off.lnk.aprm.at().setI(1);
 		mPrm.vlAt(TU.Off.lnk.prmName.c_str()).at().setI(k, 0, true);
 		uint8_t E[2] = { addr, val };
-		mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+		PushInBE(1, sizeof(E), prmID, E);
 	    }
 	}
 	TU.Off.vl = TU.On.vl = val;
@@ -294,7 +294,7 @@ void B_GKR::runTU(uint8_t k, uint8_t val, uint8_t addr, uint16_t prmID)
 	    TU.Run.lnk.aprm.at().setI(1);
 	    mPrm.vlAt(TU.Run.lnk.prmName.c_str()).at().setI(0, 0, true);
 	    uint8_t E[2] = { addr, 0 };
-	    mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	    PushInBE(1, sizeof(E), prmID, E);
 	    TU.On.vl = TU.Off.vl = 0;
 	}
 	if((!val) && (TU.Reset.lnk.Connected())) {
@@ -302,7 +302,7 @@ void B_GKR::runTU(uint8_t k, uint8_t val, uint8_t addr, uint16_t prmID)
 	    TU.Reset.lnk.aprm.at().setI(1);
 	    mPrm.vlAt(TU.Reset.lnk.prmName.c_str()).at().setI(1, 0, true);
 	    uint8_t E[2] = { addr, 0 };
-	    mPrm.owner().PushInBE(1, sizeof(E), prmID, E);
+	    PushInBE(1, sizeof(E), prmID, E);
 	    TU.On.vl = TU.Off.vl = 0;
 	}
     }

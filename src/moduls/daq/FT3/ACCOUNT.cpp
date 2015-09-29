@@ -31,8 +31,8 @@ uint8_t B_ACCOUNT::SACchannel::SetNewPeriod(uint8_t addr, uint16_t prmID, uint8_
 {
     uint8_t start[5] = { val[0], val[1], val[2], 0, 0 };
     StartDate.Update(da->DateTimeToTime_t(start));
-    EndDate.Update(StartDate.vl + TSYS::getUnalign16(val + 3));
-    uint8_t E[6] = { addr, val[0],val[1], val[2], val[3], val[4] };
+    EndDate.Update(StartDate.vl + TSYS::getUnalign16(val + 3) * 3600);
+    uint8_t E[6] = { addr, val[0], val[1], val[2], val[3], val[4] };
     da->PushInBE(1, sizeof(E), prmID, E);
     return 5 + 2;
 }
@@ -228,7 +228,6 @@ void B_ACCOUNT::saveIO()
 
 void B_ACCOUNT::tmHandler(void)
 {
-    NeedInit = false;
     for(int i = 0; i < count_n; i++) {
 	if(with_params) {
 	    UpdateParam8(data[i].Period, PackID(ID, (i + 1), 2), 1);
@@ -238,8 +237,8 @@ void B_ACCOUNT::tmHandler(void)
 	    UpdateParam32(data[i].Sensors, PackID(ID, (i + 1), 6), 1);
 	    UpdateParamFl(data[i].ServiceQ, PackID(ID, (i + 1), 7), 1);
 	    UpdateParam8(data[i].Hour, PackID(ID, (i + 1), 2), 8);
-	    UpdateParamFl(data[i].HourlyQ, PackID(ID, (i + 1), 9), 1);
-	    UpdateParamFl(data[i].Counter, PackID(ID, (i + 1), 10), 1);
+	    UpdateParamFl(data[i].HourlyQ, PackID(ID, (i + 1), 9), 0);
+	    UpdateParamFl(data[i].Counter, PackID(ID, (i + 1), 10), 0);
 	    /*	    UpdateParamFl(data[i].HourQ, PackID(ID, (i + 1), 11), 1);
 	     UpdateParamFl(data[i].HourdP, PackID(ID, (i + 1), 3), 1);
 	     UpdateParamFl(data[i].HourT, PackID(ID, (i + 1), 3), 1);
@@ -258,8 +257,9 @@ void B_ACCOUNT::tmHandler(void)
 	    UpdateParamFl(data[i].RadiusM, PackID(ID, (i + 1), 26), 1);
 	    UpdateParamFl(data[i].PressureA, PackID(ID, (i + 1), 27), 1);
 	}
-	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 0), 0);
+	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 1), 2);
     }
+    NeedInit = false;
 }
 
 uint16_t B_ACCOUNT::Task(uint16_t uc)
@@ -631,6 +631,8 @@ uint8_t B_ACCOUNT::cmdGet(uint16_t prmID, uint8_t * out)
     FT3ID ft3ID = UnpackID(prmID);
     if(ft3ID.g != ID) return 0;
     uint l = 0;
+    int64_t tm;
+    ui8fl V;
     if(ft3ID.k == 0) {
 	switch(ft3ID.n) {
 	case 0:
@@ -741,7 +743,7 @@ uint8_t B_ACCOUNT::cmdGet(uint16_t prmID, uint8_t * out)
 		out[0] = data[ft3ID.k - 1].StartDate.s;
 		mPrm.owner().Time_tToDateTime(out + 1, data[ft3ID.k - 1].StartDate.vl);
 		ui8w hours;
-		hours.w =data[ft3ID.k - 1].EndDate.vl - data[ft3ID.k - 1].StartDate.vl;
+		hours.w = (data[ft3ID.k - 1].EndDate.vl - data[ft3ID.k - 1].StartDate.vl) / 3600;
 		l = 6;
 		out[4] = hours.b[0];
 		out[5] = hours.b[1];
@@ -760,10 +762,16 @@ uint8_t B_ACCOUNT::cmdGet(uint16_t prmID, uint8_t * out)
 		l = 21;
 		break;
 	    case 14:
-		//TODO get Q period
+		//TODO get V period
 		out[0] = data[ft3ID.k - 1].State.vl;
+		tm = data[ft3ID.k - 1].EndDate.vl;
+		tm *= 1000000;
+		V.f = data[ft3ID.k - 1].Counter.lnk.aprm.at().getR(&tm, true);
+		tm = data[ft3ID.k - 1].StartDate.vl;
+		tm *= 1000000;
+		V.f -= data[ft3ID.k - 1].Counter.lnk.aprm.at().getR(&tm, true);
 		for(uint8_t j = 0; j < 4; j++)
-		    out[1 + j] = data[ft3ID.k - 1].Value.b_vl[j];
+		    out[1 + j] = V.b[j];
 		l = 5;
 		break;
 	    case 15:
@@ -850,10 +858,22 @@ uint8_t B_ACCOUNT::cmdGet(uint16_t prmID, uint8_t * out)
 	    case 28:
 		//TODO get
 		for(uint8_t j = 0; j < 4; j++) {
-		    out[1 + j] = data[ft3ID.k - 1].dP.b_vl[j];
-		    out[5 + j] = data[ft3ID.k - 1].T.b_vl[j];
-		    out[9 + j] = data[ft3ID.k - 1].P.b_vl[j];
-		    out[13 + j] = data[ft3ID.k - 1].E.b_vl[j];
+		    V.f = data[ft3ID.k - 1].dP.Get();
+		    for(uint8_t j = 0; j < 4; j++) {
+			out[0 + j] = V.b[j];
+		    }
+		    V.f = data[ft3ID.k - 1].T.Get();
+		    for(uint8_t j = 0; j < 4; j++) {
+			out[4 + j] = V.b[j];
+		    }
+		    V.f = data[ft3ID.k - 1].P.Get();
+		    for(uint8_t j = 0; j < 4; j++) {
+			out[8 + j] = V.b[j];
+		    }
+		    V.f = data[ft3ID.k - 1].E.Get();
+		    for(uint8_t j = 0; j < 4; j++) {
+			out[12 + j] = V.b[j];
+		    }
 		}
 		l = 16;
 		break;

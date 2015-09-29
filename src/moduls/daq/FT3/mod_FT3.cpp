@@ -147,10 +147,15 @@ void TFT3Channel::PushInBE(uint8_t type, uint8_t length, uint16_t id, uint8_t *E
     uint16_t day = TSYS::getUnalign16(DHM);
     uint16_t hour = DHM[2];
     uint16_t ms100 = TSYS::getUnalign16(DHM + 3);
-    if(type == 1) {
+    switch(type) {
+    case 1:
 	pCi = &C1;
-    } else {
+	break;
+    case 2:
 	pCi = &C2;
+	break;
+    default:
+	return;
     }
     if(!(pCi->tail)) {
 	fNewBE = true;
@@ -259,7 +264,7 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("ResetChan"));
 	Channels[msg->B].FCB2 = Channels[msg->B].FCB3 = 0xFF;
 	resp->L = 3;
-	resp->C = Channels[msg->B].FCB3;
+	resp->C = Channels[msg->B].FCB3 & 0x20;
 	break;
     case ReqData1:
     case ReqData2:
@@ -382,9 +387,9 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	break;
     case ResData2:
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("ResData2"));
-	Channels[msg->B].FCB2 = 0;
+	//Channels[msg->B].FCB2 = 0;
 	resp->L = 3;
-	resp->C = Channels[msg->B].FCB3;
+	resp->C = 0;//Channels[msg->B].FCB3;
 	while(Channels[msg->B].C2.head) {
 	    Channels[msg->B].empt.insert(Channels[msg->B].C2.getdel());
 	}
@@ -454,7 +459,7 @@ void TTpContr::postEnable(int flag)
 
     int t_prm = tpParmAdd("tp_BUC", "PRM_BD_BUC", _("BUC"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;15"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD", _("Modification"), TFld::Integer, TCfg::Hide, "4", "0", "0;15"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD", _("Modification"), TFld::Integer, TFld::HexDec|TCfg::NoVal, "4", "0"));
     // tpPrmAt(t_prm).fldAdd( new TFld("STOP_TIME",_("Last stop time"),TFld::String,TCfg::Hide,"2","0","0;15") );
 
     t_prm = tpParmAdd("tp_BVTS", "PRM_BD_BVTS", _("BVTS"));
@@ -855,6 +860,7 @@ TMdContr::~TMdContr()
 
 //    delete[] BE;
     pthread_mutex_destroy(&enRes);
+    pthread_mutex_destroy(&eventRes);
 }
 
 string TMdContr::getStatus()
@@ -1102,7 +1108,7 @@ void TMdPrm::enable()
 	if(type().name == "tp_GNS") mDA = new KA_GNS(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_BTU") mDA = new KA_BTU(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
     } else {
-	if(type().name == "tp_BUC") mDA = new B_BUC(*this, cfg("DEV_ID").getI());
+	if(type().name == "tp_BUC") mDA = new B_BUC(*this, cfg("DEV_ID").getI(),cfg("MOD").getI());
 	if(type().name == "tp_BVI") mDA = new B_BVI(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB(), cfg("EXT_PERIOD").getB());
 	if(type().name == "tp_BVTS") mDA = new B_BVTC(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_BVT")

@@ -49,10 +49,10 @@ namespace FT3
 	{
 	public:
 	    SKATUchannel(uint8_t iid, DA* owner) :
-		    da(owner), id(iid), iTY(0), Line(TSYS::strMess("Line_%d", id + 1).c_str(), TSYS::strMess(_("Line %d"), id + 1).c_str())
+		    da(owner), id(iid), iTY(0), Line(TSYS::strMess("Line_%d", id + 1), TSYS::strMess(_("Line %d"), id + 1))
 	    {
 		for(int i = 0; i < 16; i++) {
-		    Time.push_back(ui16Data(TSYS::strMess("Time%d_%d", i + 1, id + 1).c_str(), TSYS::strMess(_("Time #%d %d"), i + 1, id + 1).c_str()));
+		    Time.push_back(ui16Data(TSYS::strMess("Time%d_%d", i + 1, id + 1), TSYS::strMess(_("Time #%d %d"), i + 1, id + 1)));
 		}
 	    }
 	    DA* da;
@@ -147,7 +147,7 @@ namespace FT3
 	{
 	public:
 	    STRchannel(uint8_t iid, DA* owner) :
-		    da(owner), id(iid), Value(TSYS::strMess("value_%d", id + 1).c_str(), TSYS::strMess(_("Value %d"), id + 1).c_str())
+		    da(owner), id(iid), Value(TSYS::strMess("value_%d", id + 1), TSYS::strMess(_("Value %d"), id + 1))
 	    {
 	    }
 	    DA* da;
@@ -159,13 +159,13 @@ namespace FT3
 	{
 	public:
 	    STUchannel(uint8_t iid, DA* owner) :
-		    da(owner), id(iid), On(TSYS::strMess("on_%d", id + 1).c_str(), TSYS::strMess(_("On %d"), id + 1).c_str()),
-		    Off(TSYS::strMess("off_%d", id + 1).c_str(), TSYS::strMess(_("Off %d"), id + 1).c_str()),
-		    Run(TSYS::strMess("run_%d", id + 1).c_str(), TSYS::strMess(_("Run %d"), id + 1).c_str()),
-		    Reset(TSYS::strMess("reset_%d", id + 1).c_str(), TSYS::strMess(_("Reset %d"), id + 1).c_str()),
-		    Time(TSYS::strMess("time_%d", id + 1).c_str(), TSYS::strMess(_("Time %d"), id + 1).c_str()),
-		    TC(TSYS::strMess("tc_%d", id + 1).c_str(), TSYS::strMess(_("TC %d"), id + 1).c_str()),
-		    ExTime(TSYS::strMess("extime_%d", id + 1).c_str(), TSYS::strMess(_("ExTime %d"), id + 1).c_str())
+		    da(owner), id(iid), On(TSYS::strMess("on_%d", id + 1), TSYS::strMess(_("On %d"), id + 1)),
+		    Off(TSYS::strMess("off_%d", id + 1), TSYS::strMess(_("Off %d"), id + 1)),
+		    Run(TSYS::strMess("run_%d", id + 1), TSYS::strMess(_("Run %d"), id + 1)),
+		    Reset(TSYS::strMess("reset_%d", id + 1), TSYS::strMess(_("Reset %d"), id + 1)),
+		    Time(TSYS::strMess("time_%d", id + 1), TSYS::strMess(_("Time %d"), id + 1)),
+		    TC(TSYS::strMess("tc_%d", id + 1), TSYS::strMess(_("TC %d"), id + 1)),
+		    ExTime(TSYS::strMess("extime_%d", id + 1), TSYS::strMess(_("ExTime %d"), id + 1))
 
 	    {
 	    }

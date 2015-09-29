@@ -51,18 +51,18 @@ namespace FT3
 	{
 	public:
 	    SKRchannel(uint8_t iid, DA* owner) : da(owner),
-		    id(iid), State(TSYS::strMess("state_%d", id + 1).c_str(), TSYS::strMess(_("State %d"), id + 1).c_str()),
-		    On(TSYS::strMess("on_%d", id + 1).c_str(), TSYS::strMess(_("On %d"), id + 1).c_str()),
-		    Off(TSYS::strMess("off_%d", id + 1).c_str(), TSYS::strMess(_("Off %d"), id + 1).c_str()),
-		    Run(TSYS::strMess("run_%d", id + 1).c_str(), TSYS::strMess(_("Run %d"), id + 1).c_str()),
-		    Reset(TSYS::strMess("reset_%d", id + 1).c_str(), TSYS::strMess(_("Reset %d"), id + 1).c_str()),
-		    Lock(TSYS::strMess("lock_%d", id + 1).c_str(), TSYS::strMess(_("Lock %d"), id + 1).c_str()),
-		    Lubrication(TSYS::strMess("reset_%d", id + 1).c_str(), TSYS::strMess(_("Lubrication %d"), id + 1).c_str()),
+		    id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
+		    On(TSYS::strMess("on_%d", id + 1), TSYS::strMess(_("On %d"), id + 1)),
+		    Off(TSYS::strMess("off_%d", id + 1), TSYS::strMess(_("Off %d"), id + 1)),
+		    Run(TSYS::strMess("run_%d", id + 1), TSYS::strMess(_("Run %d"), id + 1)),
+		    Reset(TSYS::strMess("reset_%d", id + 1), TSYS::strMess(_("Reset %d"), id + 1)),
+		    Lock(TSYS::strMess("lock_%d", id + 1), TSYS::strMess(_("Lock %d"), id + 1)),
+		    Lubrication(TSYS::strMess("reset_%d", id + 1), TSYS::strMess(_("Lubrication %d"), id + 1)),
 
-		    Time(TSYS::strMess("time_%d", id + 1).c_str(), TSYS::strMess(_("Time %d"), id + 1).c_str()),
-		    ExTime(TSYS::strMess("extime_%d", id + 1).c_str(), TSYS::strMess(_("ExTime %d"), id + 1).c_str()),
-		    Time_Lub(TSYS::strMess("time_%d", id + 1).c_str(), TSYS::strMess(_("Time_Lub %d"), id + 1).c_str()),
-		    Timeout_PO(TSYS::strMess("extime_%d", id + 1).c_str(), TSYS::strMess(_("Timeout_PO %d"), id + 1).c_str())
+		    Time(TSYS::strMess("time_%d", id + 1), TSYS::strMess(_("Time %d"), id + 1)),
+		    ExTime(TSYS::strMess("extime_%d", id + 1), TSYS::strMess(_("ExTime %d"), id + 1)),
+		    Time_Lub(TSYS::strMess("time_%d", id + 1), TSYS::strMess(_("Time_Lub %d"), id + 1)),
+		    Timeout_PO(TSYS::strMess("extime_%d", id + 1), TSYS::strMess(_("Timeout_PO %d"), id + 1))
 	    {
 	    }
 	    DA* da;

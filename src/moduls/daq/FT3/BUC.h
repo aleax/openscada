@@ -59,7 +59,7 @@ namespace FT3
     {
     public:
 	//Methods
-	B_BUC(TMdPrm& prm, uint16_t id);
+	B_BUC(TMdPrm& prm, uint16_t id, uint16_t modif);
 	~B_BUC();
 	uint16_t ID;
 	uint16_t Task(uint16_t);

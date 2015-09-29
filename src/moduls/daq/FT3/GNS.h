@@ -45,22 +45,22 @@ namespace FT3
 	{
 	public:
 	    SKANSchannel(uint8_t iid, DA* owner) :
-		    da(owner), id(iid), State(TSYS::strMess("state_%d", id + 1).c_str(), TSYS::strMess(_("State %d"), id + 1).c_str()),
-		    Function(TSYS::strMess("function_%d", id + 1).c_str(), TSYS::strMess(_("Function %d"), id + 1).c_str()),
-		    TUOn(TSYS::strMess("TUOn_%d", id + 1).c_str(), TSYS::strMess(_("TU on %d"), id + 1).c_str()),
-		    TUOff(TSYS::strMess("TUOff_%d", id + 1).c_str(), TSYS::strMess(_("TU off %d"), id + 1).c_str()),
-		    TUStop(TSYS::strMess("TUstop_%d", id + 1).c_str(), TSYS::strMess(_("TU stop %d"), id + 1).c_str()),
-		    TURemote(TSYS::strMess("TUremote_%d", id + 1).c_str(), TSYS::strMess(_("TU remote %d"), id + 1).c_str()),
-		    TUManual(TSYS::strMess("TUmanual_%d", id + 1).c_str(), TSYS::strMess(_("TU manual %d"), id + 1).c_str()),
-		    TimeOn(TSYS::strMess("TimeOn_%d", id + 1).c_str(), TSYS::strMess(_("On time %d"), id + 1).c_str()),
-		    TimeOff(TSYS::strMess("TimeOff_%d", id + 1).c_str(), TSYS::strMess(_("Off time %d"), id + 1).c_str()),
-		    TimeStop(TSYS::strMess("timeStop_%d", id + 1).c_str(), TSYS::strMess(_("Stop time %d"), id + 1).c_str()),
-		    TimeRemote(TSYS::strMess("timeRemote_%d", id + 1).c_str(), TSYS::strMess(_("Remote time %d"), id + 1).c_str()),
-		    TimeManual(TSYS::strMess("timeManual_%d", id + 1).c_str(), TSYS::strMess(_("Manual time %d"), id + 1).c_str()),
-		    TCOn(TSYS::strMess("TCOn_%d", id + 1).c_str(), TSYS::strMess(_("On TC %d"), id + 1).c_str()),
-		    TCOff(TSYS::strMess("TCOff_%d", id + 1).c_str(), TSYS::strMess(_("Off TC %d"), id + 1).c_str()),
-		    TCMode(TSYS::strMess("tcMode_%d", id + 1).c_str(), TSYS::strMess(_("Mode TC %d"), id + 1).c_str()),
-		    Time(TSYS::strMess("time_%d", id + 1).c_str(), TSYS::strMess(_("Work time %d"), id + 1).c_str())
+		    da(owner), id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
+		    Function(TSYS::strMess("function_%d", id + 1), TSYS::strMess(_("Function %d"), id + 1)),
+		    TUOn(TSYS::strMess("TUOn_%d", id + 1), TSYS::strMess(_("TU on %d"), id + 1)),
+		    TUOff(TSYS::strMess("TUOff_%d", id + 1), TSYS::strMess(_("TU off %d"), id + 1)),
+		    TUStop(TSYS::strMess("TUstop_%d", id + 1), TSYS::strMess(_("TU stop %d"), id + 1)),
+		    TURemote(TSYS::strMess("TUremote_%d", id + 1), TSYS::strMess(_("TU remote %d"), id + 1)),
+		    TUManual(TSYS::strMess("TUmanual_%d", id + 1), TSYS::strMess(_("TU manual %d"), id + 1)),
+		    TimeOn(TSYS::strMess("TimeOn_%d", id + 1), TSYS::strMess(_("On time %d"), id + 1)),
+		    TimeOff(TSYS::strMess("TimeOff_%d", id + 1), TSYS::strMess(_("Off time %d"), id + 1)),
+		    TimeStop(TSYS::strMess("timeStop_%d", id + 1), TSYS::strMess(_("Stop time %d"), id + 1)),
+		    TimeRemote(TSYS::strMess("timeRemote_%d", id + 1), TSYS::strMess(_("Remote time %d"), id + 1)),
+		    TimeManual(TSYS::strMess("timeManual_%d", id + 1), TSYS::strMess(_("Manual time %d"), id + 1)),
+		    TCOn(TSYS::strMess("TCOn_%d", id + 1), TSYS::strMess(_("On TC %d"), id + 1)),
+		    TCOff(TSYS::strMess("TCOff_%d", id + 1), TSYS::strMess(_("Off TC %d"), id + 1)),
+		    TCMode(TSYS::strMess("tcMode_%d", id + 1), TSYS::strMess(_("Mode TC %d"), id + 1)),
+		    Time(TSYS::strMess("time_%d", id + 1), TSYS::strMess(_("Work time %d"), id + 1))
 	    {
 	    }
 	    DA* da;

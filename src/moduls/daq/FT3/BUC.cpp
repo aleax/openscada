@@ -59,7 +59,7 @@ string KA_BUC::getStatus(void)
 
 void KA_BUC::tmHandler(void)
 {
-
+    NeedInit = false;
 }
 
 uint16_t KA_BUC::Task(uint16_t uc)
@@ -245,7 +245,7 @@ uint8_t KA_BUC::cmdSet(uint8_t * req, uint8_t addr)
     if(ft3ID.g == ID) {
 	switch(ft3ID.k) {
 	case 0:
-	    switch(ft3ID.k) {
+	    switch(ft3ID.n) {
 	    case 0:
 		if(req[2] & 0x81) {
 		    if(state != req[2]) {
@@ -261,7 +261,7 @@ uint8_t KA_BUC::cmdSet(uint8_t * req, uint8_t addr)
 		    }
 		    s_state = addr;
 		    uint8_t E[2] = { addr, state };
-		    mPrm.owner().PushInBE(1, 2, prmID, E);
+		    PushInBE(1, 2, prmID, E);
 		    l = 3;
 		}
 		break;
@@ -288,8 +288,8 @@ uint8_t KA_BUC::cmdSet(uint8_t * req, uint8_t addr)
     return l;
 }
 
-B_BUC::B_BUC(TMdPrm& prm, uint16_t id) :
-	DA(prm), ID(id), mod_KP(0), state(0), stateWatch(0), s_tm(0), wt1(0), wt2(0), s_wt1(0), s_wt2(0)
+B_BUC::B_BUC(TMdPrm& prm, uint16_t id, uint16_t modif ) :
+	DA(prm), ID(id), mod_KP(modif), state(2), stateWatch(1), s_tm(0), wt1(0), wt2(0), s_wt1(0), s_wt2(0)
 {
     mTypeFT3 = GRS;
     TFld * fld;
@@ -330,7 +330,6 @@ string B_BUC::getStatus(void)
 
 void B_BUC::tmHandler(void)
 {
-
 }
 
 uint16_t B_BUC::Task(uint16_t uc)
@@ -491,6 +490,7 @@ uint8_t B_BUC::cmdGet(uint16_t prmID, uint8_t * out)
     if(ft3ID.g != ID) return 0;
     uint l = 0;
     time_t rawtime;
+    unsigned long val = 0;
     switch(ft3ID.k) {
     case 0:
 	switch(ft3ID.n) {
@@ -520,6 +520,11 @@ uint8_t B_BUC::cmdGet(uint16_t prmID, uint8_t * out)
 	    break;
 	case 2:
 	    time(&rawtime);
+	    FILE *f = fopen("/proc/uptime", "r");
+	    if((f != NULL) && (fscanf(f, "%lu", &val) == 1)) {
+		rawtime -= val;
+	    }
+	    fclose(f);
 	    mPrm.owner().Time_tToDateTime(out, rawtime);
 	    l = 5;
 	    break;
@@ -551,5 +556,24 @@ uint8_t B_BUC::cmdGet(uint16_t prmID, uint8_t * out)
 }
 uint8_t B_BUC::cmdSet(uint8_t * req, uint8_t addr)
 {
-    return 0;
+    uint16_t prmID = TSYS::getUnalign16(req);
+    FT3ID ft3ID = UnpackID(prmID);
+    if(ft3ID.g != ID) return 0;
+    uint8_t l = 0;
+    time_t rawtime;
+    switch(ft3ID.k) {
+    case 1:
+	switch(ft3ID.n) {
+	case 1:
+	    s_tm = addr;
+	    state = stateWatch = 0;
+	    rawtime = mPrm.owner().DateTimeToTime_t(req + 2);
+	    stime(&rawtime);
+	    l = 7;
+	    break;
+	}
+	break;
+    }
+
+    return l;
 }

@@ -45,13 +45,13 @@ namespace FT3
 	{
 	public:
 	    STIchannel(uint8_t iid, DA* owner) : da(owner),
-		    id(iid), State(TSYS::strMess("state_%d", id + 1).c_str(), TSYS::strMess(_("State %d"), id + 1).c_str()),
-		    Value(TSYS::strMess("value_%d", id + 1).c_str(), TSYS::strMess(_("Value %d"), id + 1).c_str()),
-		    Period(TSYS::strMess("period_%d", id + 1).c_str(), TSYS::strMess(_("Measure period %d"), id + 1).c_str()),
-		    Sens(TSYS::strMess("sens_%d", id + 1).c_str(), TSYS::strMess(_("Sensitivity %d"), id + 1).c_str()),
-		    Count(TSYS::strMess("count_%d", id + 1).c_str(), TSYS::strMess(_("Count %d"), id + 1).c_str()),
-		    Factor(TSYS::strMess("factor_%d", id + 1).c_str(), TSYS::strMess(_("Range factor %d"), id + 1).c_str()),
-		    Dimension(TSYS::strMess("dimens_%d", id + 1).c_str(), TSYS::strMess(_("Dimension %d"), id + 1).c_str())
+		    id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
+		    Value(TSYS::strMess("value_%d", id + 1), TSYS::strMess(_("Value %d"), id + 1)),
+		    Period(TSYS::strMess("period_%d", id + 1), TSYS::strMess(_("Measure period %d"), id + 1)),
+		    Sens(TSYS::strMess("sens_%d", id + 1), TSYS::strMess(_("Sensitivity %d"), id + 1)),
+		    Count(TSYS::strMess("count_%d", id + 1), TSYS::strMess(_("Count %d"), id + 1)),
+		    Factor(TSYS::strMess("factor_%d", id + 1), TSYS::strMess(_("Range factor %d"), id + 1)),
+		    Dimension(TSYS::strMess("dimens_%d", id + 1), TSYS::strMess(_("Dimension %d"), id + 1))
 
 	    {
 	    }
