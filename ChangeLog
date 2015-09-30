@@ -1,3 +1,14 @@
+2015-09-30 Roman
+- DB.LibsDB.vcaBase.db: Mostly adapted for real permissions for users into new groups "op", "ITW".
+- DB.Model.{AGLKS,Boiler}.St.db: Some generic properties moved from DB to the configuration file, like:
+	External Hosts, Generic input transports, Security users and groups.
+    Table "SYS" is purged from old configurations, part from them are moved to the configuration file.
+- DB.Model.{AGLKS,Boiler}.vca.db: Main project's permition set to: "root:op" and RWRWR_.
+- Security: standard users "root", "user" and groups "root", "user" creation added only after the subsystem loading and its lack.
+    TSecurity::usrGrpList() set for return all groups for user "root".
+- FIX:Protocol.HTTP: Fix multiplication for autologin user's items at each it loading.
+
+
 2015-09-30 fido_max
 - FIX:DAQ.FT3: Minor errors fixed.
 - DAQ.FT3: Event handling optimized. B_ACCOUNT: Period_V, dP, T, P, E implemented. B_BUC: set time, uptime, modification implemented.

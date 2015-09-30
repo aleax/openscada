@@ -82,7 +82,7 @@ FRqDddfm3Lo4O52BVWKqgeWMShZVbUscxUrstW6GdXM1DssxOuYh2XrMbJu0/98J4F0AE7KtxG8C
 IwDeh904DqtEHINVQpq0leX24DDmprVTQUrBunTsxSVwTHNJubqPJ3N1vQB+CquqG8Fnu+3DZxWf
 udomYZX4PoQFBkgyV6fA+lhgpf2ADmtHJVgILrXfr9qTFZqAak8+CuAwgM5ydZ9T5F80SebqVFib
 47abOM6NaHO1mQAmy9V9WcB2bLYjdBQr3G3F/hV6d+f+rXCcCSC7yBngFbkiiyD/B5CDW0pgBswY
-AAAAAElFTkSuQmCC','roman','users',438,100,4,'','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.','','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.',-1);
+AAAAAElFTkSuQmCC','root','op',436,100,4,'','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.','','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.',-1);
 CREATE TABLE 'prj_AGLKS_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','so1','/wlb_Main/wdg_RootPgSo/wdg_so1','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','so2','/wlb_Main/wdg_RootPgSo/wdg_so2','',2);
@@ -6620,7 +6620,7 @@ else c1 = (pVar<1) ? "red" : "green";','JavaLikeCalc.JavaScript
 if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1;','');
 CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1435132568);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1443604784);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1435132568);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1414589842);

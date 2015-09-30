@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"1.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -116,8 +116,11 @@ void TProt::load_( )
     XMLNode aLogNd("aLog");
     try {
 	aLogNd.load(TBDS::genDBGet(nodePath()+"AutoLogin"));
-	for(unsigned i_n = 0; i_n < aLogNd.childSize(); i_n++)
-	    mALog.push_back(SAutoLogin(aLogNd.childGet(i_n)->attr("addrs"),aLogNd.childGet(i_n)->attr("user")));
+	for(unsigned iN = 0, iAL = 0; iN < aLogNd.childSize(); iN++) {
+	    SAutoLogin al(aLogNd.childGet(iN)->attr("addrs"),aLogNd.childGet(iN)->attr("user"));
+	    for(iAL = 0; iAL < mALog.size() && !(mALog[iAL]==al); ++iAL) ;
+	    if(iAL >= mALog.size()) mALog.push_back(al);
+	}
     }catch(...){ }
 }
 

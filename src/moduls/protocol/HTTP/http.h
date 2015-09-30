@@ -125,6 +125,8 @@ class TProt: public TProtocol
 		SAutoLogin( ) : addrs(""), user("")	{ }
 		SAutoLogin( string iaddrs, string iuser ) : addrs(iaddrs), user(iuser)	{ }
 
+		bool operator==( const SAutoLogin &i ) { return (addrs == i.addrs && user == i.user); }
+
 		//Attributes
 		string addrs, user;
 	};

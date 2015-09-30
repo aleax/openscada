@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,7 +52,7 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"),false)
 
 void TSecurity::postEnable(int flag)
 {
-    if(!(flag&TCntrNode::NodeRestore)) {
+    /*if(!(flag&TCntrNode::NodeRestore)) {
 	//Add surely users, groups and set their parameters
 	// Administrator
 	usrAdd("root");
@@ -75,7 +75,7 @@ void TSecurity::postEnable(int flag)
 	grpAt("users").at().setSysItem(true);
 	grpAt("users").at().userAdd("user");
 	grpAt("users").at().userAdd("root");
-    }
+    }*/
 
     TSubSYS::postEnable(flag);
 }
@@ -91,7 +91,7 @@ void TSecurity::usrGrpList( const string &name, vector<string> &list )
     list.clear();
     grpList(gls);
     for(unsigned i_g = 0; i_g < gls.size(); i_g++)
-	if(grpAt(gls[i_g]).at().user(name))
+	if(name == "root" || grpAt(gls[i_g]).at().user(name))
 	    list.push_back(gls[i_g]);
 }
 
@@ -207,6 +207,36 @@ void TSecurity::load_( )
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new user's groups error."));
     }
+
+    //Add surely users, groups and set their parameters, if its not loaded
+    // Administrator
+    if(!usrPresent("root")) {
+	usrAdd("root");
+	usrAt("root").at().setDescr(_("Administrator (superuser)!!!"));
+	usrAt("root").at().setPass("openscada");
+    }
+    usrAt("root").at().setSysItem(true);
+    // Simple user
+    if(!usrPresent("user")) {
+	usrAdd("user");
+	usrAt("user").at().setDescr(_("Simple user."));
+	usrAt("user").at().setPass("user");
+    }
+    usrAt("user").at().setSysItem(true);
+    // Administrators group
+    if(!grpPresent("root")) {
+	grpAdd("root");
+	grpAt("root").at().setDescr(_("Administrators group."));
+	grpAt("root").at().userAdd("root");
+    }
+    grpAt("root").at().setSysItem(true);
+    // Simple users group
+    if(!grpPresent("users")) {
+	grpAdd("users");
+	grpAt("users").at().setDescr(_("Users group."));
+	grpAt("users").at().userAdd("user");
+    }
+    grpAt("users").at().setSysItem(true);
 }
 
 string TSecurity::optDescr( )
@@ -448,12 +478,12 @@ string TGroup::tbl( )		{ return owner().subId()+"_grp"; }
 void TGroup::load_( )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+    SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
 }
 
 void TGroup::save_( )
 {
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 }
 
 bool TGroup::user( const string &inm )
