@@ -1,3 +1,7 @@
+2015-10-05 Roman
+- UI.QTCfg: Checking for no apply editable widgets rewrote to direct checking.
+
+
 2015-09-30 Roman
 - DB.LibsDB.vcaBase.db: Mostly adapted for real permissions for users into new groups "op", "ITW".
 - DB.Model.{AGLKS,Boiler}.St.db: Some generic properties moved from DB to the configuration file, like:

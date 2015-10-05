@@ -169,15 +169,13 @@ class ConfApp: public QMainWindow
 	XMLNode		pg_info, genReqs;
 	XMLNode 	*root;
 	string		sel_path,
-			copy_buf;       //Copy buffer
+			copy_buf;	//Copy buffer
 
 	int		que_sz;
 	vector<string>	prev;
 	vector<string>	next;
 
 	vector<string>	stMess;
-
-	map<string, QWidget* >	noApplyWdgs;
 
 	bool		tbl_init, mWaitCursorSet;
     };

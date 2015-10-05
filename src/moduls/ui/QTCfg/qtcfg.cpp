@@ -1025,7 +1025,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    if(i_tbs >= tabs->count()) {
 		QScrollArea *scrl = new QScrollArea();
 		tabs->insertTab(i_area, scrl, t_s.attr("dscr").c_str());
-		t_s.setAttr("qview","0");
+		t_s.setAttr("qview", "0");
 	    }
 
 	    //  Find and prepare current tab
@@ -1919,16 +1919,16 @@ void ConfApp::pageDisplay( const string &path )
 	pageCyclRefrStop();
 
 	//Check for no apply editable widgets
-	if(noApplyWdgs.size()) {
-	    if(QMessageBox::information(this,_("Changes apply"),_("Some changes you don't apply!\nApply now or lost the?"),
+	vector<QWidget*> prcW;
+	QList<LineEdit*> lines = tabs->findChildren<LineEdit*>();
+	for(int iIt = 0; iIt < lines.size(); ++iIt)
+	    if(lines[iIt]->isEdited()) prcW.push_back(lines[iIt]);
+	QList<TextEdit*> texts = tabs->findChildren<TextEdit*>();
+	for(int iIt = 0; iIt < texts.size(); ++iIt)
+	    if(texts[iIt]->isChanged()) prcW.push_back(texts[iIt]);
+	if(prcW.size() && QMessageBox::information(this,_("Changes apply"),_("Some changes you don't apply!\nApply now or lost the?"),
 		QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
-	    {
-		map<string, QWidget* > prcW = noApplyWdgs;
-		for(map<string, QWidget* >::iterator iW = prcW.begin(); iW != prcW.end(); ++iW)
-		    applyButton(iW->second);
-	    }
-	    noApplyWdgs.clear();
-	}
+	    for(vector<QWidget*>::iterator iW = prcW.begin(); iW != prcW.end(); ++iW) applyButton(*iW);
 
 	// Request new page tree
 	XMLNode n_node("info");
@@ -2271,8 +2271,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 			    TSYS::strMess(_("Send current command '%s' to other selected nodes \"%s\"?"),node.name().c_str(),selNds.c_str()).c_str(),
 			    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply);
 		    waitCursorSet(1);		//QApplication::setOverrideCursor(Qt::WaitCursor);
-		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); )
-		    {
+		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); ) {
 			node.setAttr("path", reqPath+"/"+reqPathEl);
 			SYS->transport().at().cntrIfCmd(node, "UIQtCfg", w_user->user().toStdString());
 		    }
@@ -2470,8 +2469,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 		if(cntrIfCmd(x_lst)) { mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); return; }
 
 		for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++)
-		    if(x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val)
-		    {
+		    if(x_lst.childGet(i_el)->name() == "el" && x_lst.childGet(i_el)->text() == val) {
 			if(x_lst.childGet(i_el)->attr("id").size()) val = x_lst.childGet(i_el)->attr("id");
 			find_ok = true;
 		    }
@@ -2801,10 +2799,8 @@ void ConfApp::imgPopup( const QPoint &pos )
 		//Load image file
 		int hd = open(fileName.toStdString().c_str(), O_RDONLY);
 		if(hd < 0) throw TError(mod->nodePath().c_str(), _("Open file %s error\n"), fileName.toStdString().c_str());
-		{
-		    while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
-		    ::close(hd);
-		}
+		while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
+		::close(hd);
 
 		//Set image to widget
 		if(!img->setImage(rez))
@@ -2920,8 +2916,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 	//Find selected index
 	bool sel_ok = false;
 	for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
-	    if(req.childGet(i_el)->name() == "el" && req.childGet(i_el)->text() == item->text().toStdString())
-	    {
+	    if(req.childGet(i_el)->name() == "el" && req.childGet(i_el)->text() == item->text().toStdString()) {
 		if(req.childGet(i_el)->attr("id").size())
 		    path = sel_path+"/"+TSYS::strEncode(br_pref+req.childGet(i_el)->attr("id"),TSYS::PathEl);
 		else
@@ -2942,7 +2937,6 @@ void ConfApp::editChange( const QString& txt )
 
     try {
 	string path = wed->objectName().toStdString();
-	noApplyWdgs[path] = wed;
 
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);
@@ -2955,7 +2949,6 @@ void ConfApp::applyButton( QWidget *src )
     QWidget *bwidg = src ? src : (QWidget*)sender();
 
     string path = bwidg->objectName().toStdString();
-    noApplyWdgs.erase(path);
 
     try {
 	XMLNode *el = SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl));
@@ -2977,7 +2970,7 @@ void ConfApp::applyButton( QWidget *src )
 		w_user->user().toStdString().c_str(), (sel_path+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
-	n_el.setAttr("path",sel_path+"/"+path)->setText(sval);
+	n_el.setAttr("path", sel_path+"/"+path)->setText(sval);
 	if(cntrIfCmd(n_el)) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
@@ -2990,7 +2983,6 @@ void ConfApp::cancelButton( )
     QWidget *bwidg = (QWidget *)sender();
 
     string path = bwidg->objectName().toStdString();
-    noApplyWdgs.erase(path);
 
     //Redraw
     pageRefresh(true);
