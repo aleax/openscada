@@ -1,8 +1,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
- 
-
 
 /* ----------------------- Standard C Libs includes --------------------------*/
 #include <stdio.h>
@@ -19,10 +17,13 @@ extern "C" {
 
 
 
-extern char	mbRTU_CRC_Status; 		// = SET_OFF / SET_ON (default)   
+extern char	mbRTU_CRC_Status; 		// = SET_OFF / SET_ON (default)  
+extern int	RECV_TIMEOUT;			//ms,COM port waitint to receive data timout, default 1000 (ms) 
+extern int  RECV_DELAY;				//ms,COM port write data and delay for while to receive data, default 300 (ms) 
 extern int cMBTCPInit(char *server,int tid, int pid, int timeout);
 extern int cMBRTUInit(char *deviceName,unsigned long ulBaudRate,unsigned char parity,
 						unsigned char dataBits, unsigned char stopBit);
+						
 extern void cMBTCPClose(int iSocket);
 extern void cRTUClose(int iSerialFd);
 extern void dumpErrMsg(int errCode);
@@ -234,5 +235,6 @@ extern int mbTCP_W_RangeCode(int s,char sID,int iStartAddr,char rangeCode,
 								
 #ifdef __cplusplus
 }
-#endif				
+#endif
+				
 				

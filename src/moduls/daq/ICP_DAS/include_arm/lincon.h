@@ -11,6 +11,7 @@
 extern "C" {
 #endif
 
+extern long GetTimeTicks();
 extern void SetLED(unsigned int addr,unsigned int value);
 //extern void SetLED(unsigned int bFlag);
 extern int GetBackPlaneID(); //getport 9 0 
@@ -75,10 +76,19 @@ extern int DI_8_BW(int slot, int bit);
 extern int DI_16_BW(int slot, int bit);
 extern int DI_32_BW(int slot, int bit);
 
-extern float HEX_TO_FLOAT_Cal(int HexValue,int slot,int gain);
-extern float CalHex_TO_FLOAT(int HexValue,int gain);
-extern void ARRAY_HEX_TO_FLOAT_cal(int *HexValue,float *FloatValue,int slot,int gain,int len);
-extern void ARRAY_CalHex_TO_FLOAT(int *HexValue,float *FloatValue,int gain,int len);
+// Error Code Definition for i-8017HW
+#define NoError 				   	0
+#define ID_ERROR					  -1
+#define SLOT_ERROR					-2
+#define CHANNEL_ERROR				-3
+#define GAIN_ERROR					-4
+#define INT_MODE_ERROR  		-5
+#define NOT_SUPPORT_ERROR		-6
+
+extern float I8017_HEX_TO_FLOAT_Cal(int HexValue,int slot,int gain);
+extern float I8017_CalHex_TO_FLOAT(int HexValue,int gain);
+extern void I8017_ARRAY_HEX_TO_FLOAT_cal(int *HexValue,float *FloatValue,int slot,int gain,int len);
+extern void I8017_ARRAY_CalHex_TO_FLOAT(int *HexValue,float *FloatValue,int gain,int len);
 extern void I8017_EE_WriteDisable(int slot,int offset);
 extern unsigned I8017_EE_Read(int slot,int Addr);
 extern unsigned I8017_EE_Write(int slot,int Addr,unsigned Data);
@@ -94,6 +104,9 @@ extern int I8017_GetCurAdChannel_Hex_Cal(int slot);
 extern float I8017_GetCurAdChannel_Float_Cal(int slot);
 extern int I8017_AD_POLLING(int slot,int ch,int gain,unsigned int datacount,int *DataPtr);
 extern int I8017_AD_POLLING_Cal(int slot,int ch,int gain,unsigned int datacount,int *DataPtr);
+extern short I8017_GetSingleEndJumper(int slot);
+extern short I8017_GetFirmwareVersion(int slot);
+
 extern void I8024_EE_WriteDisable(int slot,int offset);
 extern unsigned I8024_EE_Read(int slot,int Addr);
 extern unsigned I8024_EE_Write(int slot,int Addr,unsigned Data);

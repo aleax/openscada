@@ -2135,6 +2135,17 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))	opt->setText(sessAttr(TSYS::pathLev(a_path,2)));
 	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	sessAttrSet(TSYS::pathLev(a_path,2), opt->text());
     }
+    else if(a_path.compare(0,11,"/serv/attr/") == 0 && ctrChkNode(opt,"activate")) {
+	string tStr = TSYS::pathLev(a_path, 2);
+	//Visualizer specific attributes creation at the request
+	if(!attrPresent(tStr) && opt->attr("aNm").size()) {
+	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm").c_str(),(TFld::Type)s2i(opt->attr("aTp")),s2i(opt->attr("aFlg"))|Attr::IsUser));
+	    parent().at().attrAt(tStr).at().setModif(1);
+	    parent().at().modif();
+	}
+	parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+    }
     else return Widget::cntrCmdServ(opt);
 
     return true;
@@ -2180,28 +2191,15 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path.compare(0,6,"/attr/") == 0) {
-	string tStr = TSYS::pathLev(a_path, 1);
-	if(ctrChkNode(opt,"activate")) {
-	    //Visualizer specific attributes creation at the request
-	    if(!attrPresent(tStr) && opt->attr("aNm").size()) {
-		parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm").c_str(),(TFld::Type)s2i(opt->attr("aTp")),s2i(opt->attr("aFlg"))|Attr::IsUser));
-		parent().at().attrAt(tStr).at().setModif(1);
-		parent().at().modif();
-	    }
-	    parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
-	    attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
+	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
+	    opt->setText(attr.at().isTransl()?trU(attr.at().getS(),opt->attr("user")):attr.at().getS());
+	else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
+	{
+	    if(attr.at().id() == "event")	eventAdd(opt->text()+"\n");
+	    else				attr.at().setS(opt->text());
 	}
-	else {
-	    AutoHD<Attr> attr = attrAt(tStr);
-	    if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
-		opt->setText(attr.at().isTransl()?trU(attr.at().getS(),opt->attr("user")):attr.at().getS());
-	    else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
-	    {
-		if(attr.at().id() == "event")	eventAdd(opt->text()+"\n");
-		else				attr.at().setS(opt->text());
-	    }
-	    else return Widget::cntrCmdAttributes(opt);
-	}
+	else return Widget::cntrCmdAttributes(opt);
     }
     else return Widget::cntrCmdAttributes(opt);
 

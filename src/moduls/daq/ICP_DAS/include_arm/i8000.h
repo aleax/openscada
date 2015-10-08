@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 #ifdef _WIN32_WCE //Provided for WinCon
 	#define Exp8K I7000CE_API
 //	#define CALLBACK NULL
@@ -617,7 +612,3 @@ Exp8K unsigned CALLBACK  IntToUnsig(int data);
 //#ifdef _WIN32_WCE
 //	#endif  //__I8000_H__
 //#endif
-
-#ifdef __cplusplus
-}
-#endif

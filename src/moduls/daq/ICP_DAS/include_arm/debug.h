@@ -8,11 +8,6 @@
  * History:
  *      0.00    Reed Lai
  */
-#ifdef __cplusplus
-extern "C" {
-#endif
- 
- 
 #undef PDEBUG
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -32,7 +27,3 @@ extern "C" {
 #endif							/* I7K_DEBUG */
 
 #endif							/* _DEBUG_H */
-
-#ifdef __cplusplus
-}
-#endif

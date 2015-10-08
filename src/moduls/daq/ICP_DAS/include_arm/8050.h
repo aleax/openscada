@@ -7,14 +7,10 @@
 
 //#define OFST_DIO_WRITE_BYTE_5   10	//8050 config offset
 //=============2005/08/18 i8050 add by Stanley================
-/*static unsigned uDIOconfig[8]={
+static unsigned uDIOconfig[8]={
 	0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 
 	0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF
-};*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+};
 
 unsigned short UDIO_WriteConfig_16(int slot,unsigned short config); 
 /*
@@ -46,6 +42,3 @@ unsigned short UDIO_DI16(int slot);//1:ON , 0:OFF
   Slot: 0~7, the slot number where the I/O module is plugged into.
 */
 
-#ifdef __cplusplus
-	extern "C" {
-#endif

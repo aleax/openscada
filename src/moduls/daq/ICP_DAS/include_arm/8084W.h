@@ -2,11 +2,8 @@
 /*    i-8084W driver head file                                     */
 /*                                                                 */
 /*    Note: head file version is different to lib file version.    */
-/*    file name: i8084w.h                                           */
+/*    file name: 8084w.h                                           */
 /*******************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 //for LinPAC-270 slot0~slot8
 static int SlotAddr[9] ={0x1,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8};
@@ -376,7 +373,3 @@ int  i8084W_EepReadWord(int Slot, int Addr, int *Value);
     return  0 --> OK
            -1 --> Address error
 	*/
-	
-#ifdef __cplusplus
-}
-#endif

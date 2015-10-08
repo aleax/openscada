@@ -6,13 +6,7 @@
  * static memory bus. 
  * This is included by slot.c.
  */
- 
-#ifdef __cplusplus
-extern "C" {
-#endif
- 
 #include <linux/types.h>
-
 typedef unsigned int slot_flags_t;
 #define slot_lib_version 15
 #define CARD_NAME_LENGTH 32
@@ -133,7 +127,6 @@ enum {
   SLOT_IOCTL_ID_GPIO_WRITE,  // for xboard lib  
   SLOT_IOCTL_ID_GPIO_DIRINPUT,
   SLOT_IOCTL_ID_GPIO_DIROUTPUT,
-  SLOT_IOCTL_ID_GPIO_ALTFUNC, // Cindy 20090408
 	SLOT_IOCTL_ID_LAST
 };
 
@@ -320,8 +313,4 @@ system_type sys;
 #define GPIO_WRITE       _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_WRITE, slot_reg_t *)
 #define GPIO_DIRINPUT    _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIRINPUT, slot_reg_t *)
 #define GPIO_DIROUTPUT   _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_DIROUTPUT ,slot_reg_t *)
-#define GPIO_ALTFUNC     _IOR(SLOT_MAGIC_NUM, SLOT_IOCTL_ID_GPIO_ALTFUNC ,slot_reg_t *)
 
-#ifdef __cplusplus
-}
-#endif

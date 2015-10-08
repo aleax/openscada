@@ -1258,7 +1258,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 
 	// Get and activate for specific attributes to the master-page
 	XMLNode reqSpc("CntrReqs"); reqSpc.setAttr("path", pg_it);
-	reqSpc.childAdd("activate")->setAttr("path", "/%2fattr%2fstatLine")->
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstatLine")->
 				     setAttr("aNm", _("Status line items"))->setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
 	cntrIfCmd(reqSpc);
 

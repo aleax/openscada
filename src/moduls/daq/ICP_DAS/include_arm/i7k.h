@@ -12,10 +12,6 @@
  *      create
  *
  **********************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef _I7K_H
 #define _I7K_H
 
@@ -61,7 +57,3 @@ extern int i7k_send_cs(int fd, const char *cmd);
 extern int i7k_send(int fd, const char *cmd);
 
 #endif							/* _I7K_H */
-
-#ifdef __cplusplus
-}
-#endif

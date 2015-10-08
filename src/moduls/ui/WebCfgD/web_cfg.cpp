@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -199,7 +199,7 @@ string TWEB::pgHead( string head_els )
 
 string TWEB::pgTail( )	{ return "</body>\n</html>"; }
 
-void TWEB::imgConvert(SSess &ses)
+void TWEB::imgConvert( SSess &ses )
 {
     map<string,string>::iterator prmEl;
     gdImagePtr sim = NULL;
@@ -348,8 +348,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 			//  Process groups
 			XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
 			mod->cntrIfCmd(brReq,ses.user);
-			for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++)
-			{
+			for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++) {
 			    XMLNode *chB = chN->childAdd();
 			    *chB = *brReq.childGet(0)->childGet(i_br);
 			    chB->setAttr("chPresent","1");
@@ -365,8 +364,8 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		return;
 	    }
 	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify") {
-		XMLNode req(wp_com); req.setAttr("path",ses.url);
-		mod->cntrIfCmd(req,ses.user);
+		XMLNode req(wp_com); req.setAttr("path", ses.url);
+		mod->cntrIfCmd(req, ses.user);
 		ses.page = req.save();
 		page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
 		return;

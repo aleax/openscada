@@ -5,11 +5,6 @@
  *  Since 1999.10.27 by Reed Lai
  *
  **********************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 /* *INDENT-OFF* */
 #ifndef _CODES_H
 #define _CODES_H
@@ -168,7 +163,3 @@ extern "C" {
 #define XOFF    ASCII_DC3		/* holdoff */
 
 #endif							/* _CODES_H */
-
-#ifdef __cplusplus
-}
-#endif

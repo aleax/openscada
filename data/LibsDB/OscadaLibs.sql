@@ -1080,6 +1080,15 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKW','MUBR of the block ov
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DKZ','Short circuits on the block out',3,16,'',16,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DK','MK of the block overheated',3,16,'',17,'','','MK of the block overheated','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','DE','Power and voltage on out present',3,16,'',18,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','transport','Transport',0,64,'Serial.out_OPTRIS',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','addr','Device address',3,64,'1',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tproc','T process',2,16,'',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Thead','T head',2,16,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tbox','T box',2,16,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tact','T act.',2,16,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','eps','IR epsilon',2,32,'',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','trans','IR transmission',2,32,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','spIll','Spot illumination',3,32,'',8,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2704,6 +2713,7 @@ INSERT INTO "Trs" VALUES('Request for data read.','','');
 INSERT INTO "Trs" VALUES('Set current','','');
 INSERT INTO "Trs" VALUES('Nether alarm border error','','');
 INSERT INTO "Trs" VALUES('Nether warning border error','','');
+INSERT INTO "Trs" VALUES('Device address out of range 0...15','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -3172,7 +3182,7 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1424792709);
-INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','VKT-7','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed. The template implement acquisition for all significant parameters, get history by hours, days and result months. Also you can simple enough append for process other left parameters.
+INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed. The template implement acquisition for all significant parameters, get history by hours, days and result months. Also you can simple enough append for process other left parameters.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vladislav Chubuk','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
@@ -3804,11 +3814,9 @@ else {
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
 else f_err = "0";','','',1427533354);
-INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','IVE-452HS-02','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	addr_ = addr;
@@ -3905,6 +3913,99 @@ if(t_err.length) {
 	f_err = t_err;
 }
 else f_err = "0";','','',1440089815);
+INSERT INTO "tmplib_DevLib" VALUES('OPTRIS','OPTRIS CT/CTL','','','OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	transport_ = transport;
+	Tproc = Thead = Tbox = Tact = eps = eps_ = trans = trans_ = EVAL_REAL;
+	spIll = spIll_ = EVAL_BOOL;
+	tr = SYS.Transport.nodeAt(transport,".");
+}
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.nodeAt(transport, ".");
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	req = SYS.XMLNode("mess").setAttr("ProtIt", "OPTRIS").setAttr("addr", addr).setAttr("cs", "1");
+
+	//Check and write
+	// Epsilon
+	if(eps != eps_ && !(t_err=req.attr("err")).length) {
+		epsH = eps*1000;
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x84,epsH/256,epsH%256));
+		tr.messIO(req, "UserProtocol");
+	}
+	// Transmission
+	if(trans != trans_ && !(t_err=req.attr("err")).length) {
+		transH = trans*1000;
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x85,transH/256,transH%256));
+		tr.messIO(req, "UserProtocol");
+	}
+	// Spot illumination
+	if(spIll != spIll_ && !(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0xA5,spIll));
+		tr.messIO(req, "UserProtocol");
+	}
+
+	//Read data
+	req.setAttr("cs", "0");
+	// Tproc
+	if(!(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x01));
+		tr.messIO(req, "UserProtocol");
+		Tproc = (!(t_err=req.attr("err")).length && req.text().length >= 2) ? (req.text().charCodeAt(0)*256+req.text().charCodeAt(1)-1000)/10 : EVAL_REAL;
+	}
+	// Thead
+	if(!(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x02));
+		tr.messIO(req, "UserProtocol");
+		Thead = (!(t_err=req.attr("err")).length && req.text().length >= 2) ? (req.text().charCodeAt(0)*256+req.text().charCodeAt(1)-1000)/10 : EVAL_REAL;
+	}
+	// Tbox
+	if(!(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x03));
+		tr.messIO(req, "UserProtocol");
+		Tbox = (!(t_err=req.attr("err")).length && req.text().length >= 2) ? (req.text().charCodeAt(0)*256+req.text().charCodeAt(1)-1000)/10 : EVAL_REAL;
+	}
+	// Tact
+	if(!(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x81));
+		tr.messIO(req, "UserProtocol");
+		Tact = (!(t_err=req.attr("err")).length && req.text().length >= 2) ? (req.text().charCodeAt(0)*256+req.text().charCodeAt(1)-1000)/10 : EVAL_REAL;
+	}
+	// IR epsilon
+	if(!(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x04));
+		tr.messIO(req, "UserProtocol");
+		eps = eps_ = (!(t_err=req.attr("err")).length && req.text().length >= 2) ? (req.text().charCodeAt(0)*256+req.text().charCodeAt(1))/1000 : EVAL_REAL;
+	}
+	// IR transmission
+	if(!(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x05));
+		tr.messIO(req, "UserProtocol");
+		trans = trans_ = (!(t_err=req.attr("err")).length && req.text().length >= 2) ? (req.text().charCodeAt(0)*256+req.text().charCodeAt(1))/1000 : EVAL_REAL;
+	}
+	// Spot illumination
+	if(!(t_err=req.attr("err")).length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x25));
+		tr.messIO(req, "UserProtocol");
+		spIll = spIll_ = (!(t_err=req.attr("err")).length && req.text().length >= 1) ? req.text().charCodeAt(0) : EVAL_BOOL;
+	}
+}
+
+//Error set
+if(t_err.length) {
+	Tproc = Thead = Tbox = Tact = eps = eps_ = trans = trans_ = spIll = spIll_ = EVAL_REAL;
+	spIll = spIll_ = EVAL_BOOL;
+	SYS.messDebug("/OPTRIS/TMPL",tr("Error response")+": "+t_err);
+	f_err = t_err;
+}
+else f_err = "0";','','',1444290943);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -5565,6 +5666,31 @@ for(KS = 0, i = 0; i < resp.length-1; i++)	KS += resp.charCodeAt(i);
 KS = 0x100-KS&0xFF;
 if(resp.charCodeAt(resp.length-1) != KS )	{ io.setAttr("err","3:"+tr("CRC error")); return; }
 io.setText(resp.slice(1,resp.length-1));','',1439819778);
+INSERT INTO "UserProtocol_uPrt" VALUES('OPTRIS','OPTRIS CT/CTL','','','Protocol level of OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" cs="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (0...15);
+//  cs - use control sum for SET commands [0,1]
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 0 || addr > 15) { io.setAttr("err", "1:"+tr("Device address out of range 0...15")); return; }
+request = SYS.strFromCharCode(0xB0+addr) + io.text();
+if(io.attr("cs").toInt()) {
+	for(CS = 0, i = 0; i < request.length; i++) CS += request.charCodeAt(i);
+	request += SYS.strFromCharCode(CS);
+}
+SYS.messDebug("/OPTRIS/PRT",tr("Request")+": "+SYS.strDecode(request,"Bin"," "));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length && (tresp=tr.messIO("")).length) resp += tresp;
+SYS.messDebug("/OPTRIS/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+if(resp.length <= 0) { io.setAttr("err","3:"+tr("No a respond")); return; }
+io.setText(resp);','',1444290609);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalc','Перерахунок архівів','Пересчёт архивов','','','',600,1,'using Special.FLibSYS;
 

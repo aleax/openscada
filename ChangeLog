@@ -1,3 +1,11 @@
+2015-10-08 Roman
+- DB.LibsDB.OscadaLibs.db: User protocol implementation "OPTRIS CT/CTL" is added.
+- SYS.XMLNode: To encoding on save function added symbol 0 processing to '\000' before the binary data encoding by system.
+    Mostly for now to resolve problems into UI.WebCfgD.
+- DAQ.ICP_DAS: ARM part updated to current and to build for ISA boards and I-8014.
+- UI.{VCAEngine,Vision}: Service "activate" for visualizer specific attributes moved to "/serv/attr/{AttrId}".
+
+
 2015-10-05 Roman
 - UI.QTCfg: Checking for no apply editable widgets rewrote to direct checking.
 

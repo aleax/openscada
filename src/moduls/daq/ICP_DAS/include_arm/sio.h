@@ -9,10 +9,7 @@
  *
  *              0.00    create
  */
-#ifdef __cplusplus
-extern "C" {
-#endif
- 
+
 #ifndef _SIO_H
 #define _SIO_H
 
@@ -123,7 +120,3 @@ extern int sio_open(const char *port, speed_t baud, tcflag_t data,
 extern int sio_close(int fd);
 
 #endif							/* _SIO_H */
-
-#ifdef __cplusplus
-}
-#endif
