@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2004-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,28 +49,28 @@ class TUIMod: public TUI
 	TUIMod( string name );
 	~TUIMod( );
 
-	bool endRun( )		{ return end_run; }
+	bool endRun( )		{ return mEndRun; }
 
-	string startPath( )	{ return start_path; }
-	string startUser( )	{ return start_user; }
+	string startPath( )	{ return mStartPath; }
+	string startUser( )	{ return mStartUser; }
 
-	void setStartPath( const string &vl )	{ start_path = vl; modif(); }
-	void setStartUser( const string &vl )	{ start_user = vl; modif(); }
+	void setStartPath( const string &vl )	{ mStartPath = vl; modif(); }
+	void setStartUser( const string &vl )	{ mStartUser = vl; modif(); }
 
 	void modStart( );
 	void modStop( );
 
-	//- Module info attributes -
+	// Module info attributes
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
 
-	//- Register window -
+	// Register window
 	void regWin( QMainWindow *win );
 	void unregWin( QMainWindow *win );
 
 	QIcon icon( );
 
-	//- Put message -
+	// Put message
 	void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
 
     protected:
@@ -89,10 +89,10 @@ class TUIMod: public TUI
 	//Attributes
 	vector<QMainWindow*> cfapp;		//Opened configurator opened window
 
-	string	start_user;			//No password requested start user
-	string	start_path;			//Start path
+	string	mStartUser;			//No password requested start user
+	string	mStartPath;			//Start path
 
-	bool	end_run;			//End run command. Close all windows
+	bool	mEndRun;			//End run command. Close all windows
 };
 
 extern TUIMod *mod;

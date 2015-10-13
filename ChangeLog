@@ -1,3 +1,10 @@
+2015-10-13 Roman
+- DATA.ICONS: Appended by icons busy.png, connected.png, connecting.png.
+- SYS: Translation to Russian some fixed.
+- SYS.TUI: Attribute run_st is renamed to runSt.
+- !!!!:UI.QTCfg: Requests to hosts processing moved to different threads and the interface made responsible at whole.
+
+
 2015-10-08 Roman
 - DB.LibsDB.OscadaLibs.db: User protocol implementation "OPTRIS CT/CTL" is added.
 - SYS.XMLNode: To encoding on save function added symbol 0 processing to '\000' before the binary data encoding by system.

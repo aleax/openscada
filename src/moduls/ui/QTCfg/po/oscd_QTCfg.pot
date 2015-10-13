@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:37+0300\n"
+"POT-Creation-Date: 2015-10-13 21:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -419,6 +419,16 @@ msgstr ""
 msgid "Send current command '%s' to other selected nodes \"%s\"?"
 msgstr ""
 
+#, c-format
+msgid "Unknown host '%s'."
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Wait for reply from host '%1'"
+msgstr ""
+
 msgid "Local station"
 msgstr ""
 
@@ -581,6 +591,9 @@ msgstr ""
 msgid "%s| Change '%s' to: '%s'!"
 msgstr ""
 
+msgid "No a link set"
+msgstr ""
+
 msgid "Picture is not set!"
 msgstr ""
 
@@ -591,9 +604,6 @@ msgid "Find next"
 msgstr ""
 
 msgid "Apply"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "Cursor = (%1:%2)"

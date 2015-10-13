@@ -67,7 +67,7 @@ class LineEdit : public QWidget
 	//Methods
 	LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false );
 
-	LType type( )		{ return m_tp; }
+	LType type( )		{ return mTp; }
 	QString value( );
 	bool isEdited( );
 
@@ -75,7 +75,7 @@ class LineEdit : public QWidget
 	void setValue( const QString& );
 	void setCfg( const QString& );
 
-	QWidget *workWdg( )	{ return ed_fld; }
+	QWidget *workWdg( )	{ return edFld; }
 	void viewApplyBt( bool view );
 
     signals:
@@ -91,11 +91,11 @@ class LineEdit : public QWidget
 	void applySlot( );
 
     private:
-	LType		m_tp;
-	QString		m_val;
+	LType		mTp;
+	QString		mVal;
 	bool		mPrev;
-	QWidget		*ed_fld;
-	QPushButton	*bt_fld;
+	QWidget		*edFld;
+	QPushButton	*btFld;
 };
 
 //*************************************************
@@ -138,7 +138,7 @@ class TextEdit : public QWidget
 	void setSnthHgl( XMLNode nd );
 	void setRowsCols( int w, int h );
 
-	QTextEdit *edit( )	{ return ed_fld; }
+	QTextEdit *edit( )	{ return edFld; }
 
     signals:
 	//Signals
@@ -163,9 +163,9 @@ class TextEdit : public QWidget
 	//Private attributes
 	bool		isInit;
 	QAction		*actFind, *actFindNext;
-	QTextEdit	*ed_fld;
-	SyntxHighl	*snt_hgl;
-	QDialogButtonBox *but_box;
+	QTextEdit	*edFld;
+	SyntxHighl	*sntHgl;
+	QDialogButtonBox *butBox;
 	QPoint		holdPnt;
 	QSize		mRowCol;
 };
@@ -191,10 +191,10 @@ class ImgView : public QWidget
     Q_OBJECT
     public:
 	//Methods
-	ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ih_sz = 0, int iv_sz = 0 );
+	ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ihSz = 0, int ivSz = 0 );
 	~ImgView( );
 
-	QImage &image( )	{ return m_img; }
+	QImage &image( )	{ return mImg; }
 
 	bool setImage( const string &imgdata );
 
@@ -204,8 +204,8 @@ class ImgView : public QWidget
 
     private:
 	//Attributes
-	QImage m_img;
-	int   h_sz, v_sz;
+	QImage	mImg;
+	int	hSz, vSz;
 };
 
 //************************************************
@@ -251,10 +251,10 @@ class InputDlg : public QDialog
 	void setMess( const QString &val );
 
 	//Attributes
-	QGridLayout	*ed_lay;
+	QGridLayout	*edLay;
 
     protected:
-	void showEvent( QShowEvent * event );
+	void showEvent( QShowEvent *event );
 
     protected:
 	//Attributes
@@ -343,7 +343,7 @@ class UserStBar : public QLabel
 
     private:
 	//Attributes
-	QString	user_txt;
+	QString	userTxt;
 };
 
 //*************************************************

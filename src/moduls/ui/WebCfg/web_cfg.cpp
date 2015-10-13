@@ -135,12 +135,12 @@ void TWEB::load_( )
 
 void TWEB::modStart()
 {
-    run_st = true;
+    runSt = true;
 }
 
 void TWEB::modStop()
 {
-    run_st = false;
+    runSt = false;
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )

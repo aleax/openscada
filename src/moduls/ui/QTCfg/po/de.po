@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:37+0300\n"
+"POT-Creation-Date: 2015-10-13 21:09+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -447,6 +447,16 @@ msgstr "Senden Sie Änderungen an Selektionen"
 msgid "Send current command '%s' to other selected nodes \"%s\"?"
 msgstr "Senden aktuellen Befehl '%s' zu anderen ausgewählten Knoten \"%s\"?"
 
+#, c-format
+msgid "Unknown host '%s'."
+msgstr "Unknown host '%s'."
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Wait for reply from host '%1'"
+msgstr "Warten Sie auf Antwort vom Host '%1'"
+
 msgid "Local station"
 msgstr "Lokaler Bedienrechner"
 
@@ -609,6 +619,9 @@ msgstr "Ausgewähltes Element '%s' fehlt!"
 msgid "%s| Change '%s' to: '%s'!"
 msgstr "%s| Ändern '%s' in: '%s'!"
 
+msgid "No a link set"
+msgstr "Kein Link-Set"
+
 msgid "Picture is not set!"
 msgstr "Es ist kein Bild hinterlegt!"
 
@@ -620,9 +633,6 @@ msgstr "Weitersuchen"
 
 msgid "Apply"
 msgstr "Übernehmen"
-
-msgid "Cancel"
-msgstr "Abbrechen"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"

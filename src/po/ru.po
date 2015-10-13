@@ -2367,7 +2367,7 @@ msgid "Pre-installed projects"
 msgstr "Предустановленные проекты"
 
 msgid "Select project for start."
-msgstr "Выбирите проект для старта."
+msgstr "Выберите проект для старта."
 
 msgid "OpenSCADA start"
 msgstr "Запуск OpenSCADA!"

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,14 +42,14 @@ class TUI : public TModule
     public:
 	TUI( const string &id );
 
-	bool startStat( )	{ return run_st; }
+	bool startStat( )	{ return runSt; }
 
     protected:
 	//Methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	bool  run_st;
+	bool	runSt;
 };
 
 //*************************************************
@@ -79,7 +79,7 @@ class TUIS : public TSubSYS
 
     private:
 	string optDescr( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };
 
 }

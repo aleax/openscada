@@ -126,7 +126,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID),
 
 TUIMod::~TUIMod( )
 {
-    if(run_st) modStop();
+    if(runSt) modStop();
 }
 
 void TUIMod::postEnable( int flag )
@@ -155,7 +155,7 @@ void TUIMod::postEnable( int flag )
 		toQtArg(argCom.c_str(), argVl.c_str());
 
 	//Start main Qt thread if no help and no daemon
-	if(!(run_st || demon_mode || isHelp)) {
+	if(!(runSt || demon_mode || isHelp)) {
 	    end_run = false;
 	    SYS->taskCreate(nodePath('.',true), 0, Task, this);
 	}
@@ -164,7 +164,7 @@ void TUIMod::postEnable( int flag )
 
 void TUIMod::postDisable( int flag )
 {
-    if(run_st) SYS->taskDestroy(nodePath('.',true), &end_run);
+    if(runSt) SYS->taskDestroy(nodePath('.',true), &end_run);
     /*try { 
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 }
@@ -265,7 +265,7 @@ void *TUIMod::Task( void * )
     QApplication *QtApp = new QApplication(mod->qtArgC, (char**)&mod->qtArgV);
     QtApp->setApplicationName(PACKAGE_STRING);
     QtApp->setQuitOnLastWindowClosed(false);
-    mod->run_st = true;
+    mod->runSt = true;
 
     //Create I18N translator
     I18NTranslator translator;
@@ -340,7 +340,7 @@ void *TUIMod::Task( void * )
     //Qt application object free
     delete QtApp;
 
-    mod->run_st = false;
+    mod->runSt = false;
 
     return NULL;
 }

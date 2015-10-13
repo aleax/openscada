@@ -326,9 +326,9 @@ void TWEB::save_( )
     TBDS::genDBSet(nodePath()+"PNGCompLev",i2s(PNGCompLev()));
 }
 
-void TWEB::modStart( )	{ run_st = true; }
+void TWEB::modStart( )	{ runSt = true; }
 
-void TWEB::modStop( )	{ run_st = false; }
+void TWEB::modStop( )	{ runSt = false; }
 
 void TWEB::perSYSCall( unsigned int cnt )
 {

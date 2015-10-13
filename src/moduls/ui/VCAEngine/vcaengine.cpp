@@ -405,7 +405,7 @@ void Engine::load_( )
 
 void Engine::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save module."));
+    mess_info(nodePath().c_str(), _("Save module."));
 
     //Auto-sessions save
     ResAlloc res(mSesRes, false);
@@ -444,12 +444,12 @@ void Engine::modStart( )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	sesAt(ls[l_id]).at().setStart(true);
 
-    run_st = true;
+    runSt = true;
 }
 
 void Engine::modStop( )
 {
-    mess_info(nodePath().c_str(),_("Stop module."));
+    mess_info(nodePath().c_str(), _("Stop module."));
 
     vector<string> ls;
 
@@ -458,7 +458,7 @@ void Engine::modStop( )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	sesAt(ls[l_id]).at().setStart(false);
 
-    run_st = false;
+    runSt = false;
 }
 
 void Engine::wlbAdd( const string &iid, const string &inm, const string &idb )

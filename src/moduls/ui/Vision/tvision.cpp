@@ -304,7 +304,7 @@ void TVision::modStart( )
     mess_debug(nodePath().c_str(),_("Start module."));
 
     end_run = false;
-    run_st  = true;
+    runSt  = true;
 }
 
 void TVision::modStop( )
@@ -322,7 +322,7 @@ void TVision::modStop( )
 	}
     TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
-    run_st = false;
+    runSt = false;
 }
 
 WdgShape *TVision::getWdgShape( const string &iid )

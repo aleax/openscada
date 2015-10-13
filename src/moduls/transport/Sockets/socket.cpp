@@ -759,7 +759,7 @@ void TSocketIn::clientUnreg( SSockIn *so )
 	    clS[iId->second->sender]--;
 	    clId.erase(iId);
 	    delete so;
-	    if(!clId.size()) clFree = true;
+	    clFree = clId.empty();
 	    break;
 	}
 }

@@ -131,11 +131,11 @@ class Attr
 	//Data
 	// Storing
 	union {
-	    string	*s;		//String
-	    double	r;		//Real
-	    int64_t	i;		//Integer
-	    char	b;		//Boolean
-	    AutoHD<TVarObj>	*o;	//Object
+	    string	*s;	//String
+	    double	r;	//Real
+	    int64_t	i;	//Integer
+	    char	b;	//Boolean
+	    AutoHD<TVarObj> *o;	//Object
 	} mVal;
 	// Attributes
 	TFld		*mFld;		//Base field
