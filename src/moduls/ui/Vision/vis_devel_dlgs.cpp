@@ -1089,7 +1089,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_lang->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
     proc_lang->setObjectName("/proc/calc/progLng");
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(proc_lang,1,1);
+    glay->addWidget(proc_lang, 1, 1);
 
     lab = new QLabel(_("Procedure calculate (ms):"),wdg_proc_fr);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
@@ -1496,7 +1496,7 @@ void VisItProp::isModify( QObject *snd )
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }
-    else if(oname == obj_parent->objectName()) {
+    else if(oname == obj_parent->objectName() || oname == proc_lang->objectName()) {
 	req.setText(((QComboBox*)snd)->currentText().toStdString());
 	update = true;
     }
@@ -1512,13 +1512,13 @@ void VisItProp::isModify( QObject *snd )
 
     //Send command
     if(owner()->cntrIfCmd(req)) {
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
-	showDlg(ed_it,true);
+	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+	showDlg(ed_it, true);
     }
     else {
 	//Post command updating
 	if(oname == obj_parent->objectName())	selectParent();
-	if(update) showDlg(ed_it,true);
+	if(update) showDlg(ed_it, true);
     }
 
     is_modif = true;

@@ -1,3 +1,10 @@
+2015-10-15 Roman
+- debian/control: Some commented dependents are added.
+- SYS: User API object Array expanded by function sum() for the array's pointed items sum allow.
+- FIX:UI.QTCfg: Checking to octal, for single zero, expanded.
+- FIX:UI.Vision: Wrong removed of procedure's language processing fix.
+
+
 2015-10-13 Roman
 - DATA.ICONS: Appended by icons busy.png, connected.png, connecting.png.
 - SYS: Translation to Russian some fixed.

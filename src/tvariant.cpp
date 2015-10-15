@@ -696,6 +696,23 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	pthread_mutex_unlock(&dataM);
 	return rez;
     }
+    // double sum(int beg, int end) - sum of the array part from positon <beg> to <end> (exclude)
+    //  beg - begin position
+    //  end - end position
+    if(id == "sum" && prms.size()) {
+	pthread_mutex_lock(&dataM);
+	int beg = prms[0].getI();
+	if(beg < 0) beg = mEls.size()+beg;
+	beg = vmax(beg, 0);
+	int end = mEls.size();
+	if(prms.size() >= 2) end = prms[1].getI();
+	if(end < 0) end = mEls.size()+end;
+	end = vmin(end, (int)mEls.size());
+	double rez = 0;
+	for(int iP = beg; iP < end; iP++) rez += mEls[iP].getR();
+	pthread_mutex_unlock(&dataM);
+	return rez;
+    }
     // Array sort( ) - lexicographic items sorting
     if(id == "sort") {
 	pthread_mutex_lock(&dataM);

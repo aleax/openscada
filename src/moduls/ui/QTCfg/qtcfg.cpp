@@ -2968,7 +2968,7 @@ void ConfApp::applyButton( QWidget *src )
 		el->setAttr("tpCh", "hex");
 		sval = ll2s(QString(sval.c_str()).toLongLong(0,16));
 	    }
-	    else if(sval[0] == '0') {
+	    else if(sval.size() > 1 && sval[0] == '0') {
 		el->setAttr("tpCh", "oct");
 		sval = ll2s(QString(sval.c_str()).toLongLong(0,8));
 	    }

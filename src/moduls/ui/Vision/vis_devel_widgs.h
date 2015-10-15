@@ -585,7 +585,7 @@ class DevelWdgView: public WdgView
 	XMLNode		*chTree;	//Changes tree
 	XMLNode 	chGeomCtx;	//Change geometry context
 	QPoint		dragStartPos;
-	map<string,string>	mCacheRes; //Resources cache
+	map<string,string> mCacheRes;	//Resources cache
 	QScrollArea	*mMdiWin;
 };
 
