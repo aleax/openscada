@@ -444,8 +444,13 @@ ConfApp::~ConfApp( )
 
     mod->unregWin(this);
 
-    //Wait for a host request finish
+    //Final left hosts' tasks stopping.
+    // Wait for a host request finish
     while(inHostReq) qApp->processEvents();
+
+    // Threads delete
+    for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
+    hosts.clear();
 }
 
 void ConfApp::quitSt( )
@@ -931,6 +936,14 @@ void ConfApp::closeEvent( QCloseEvent* ce )
 	ce->ignore();
 	return;
     }
+
+    //Early hosts' tasks stopping by into the destructor sometime late.
+    // Wait for a host request finish
+    while(inHostReq) qApp->processEvents();
+
+    // Threads delete
+    for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
+    hosts.clear();
 
     ce->accept();
 }

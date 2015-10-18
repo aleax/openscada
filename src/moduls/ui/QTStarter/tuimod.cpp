@@ -1,4 +1,3 @@
-
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
@@ -84,7 +83,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID),
-    demon_mode(false), end_run(false), start_com(false), qtArgC(0), qtArgEnd(0)
+    demonMode(false), mEndRun(false), mStartCom(false), qtArgC(0), qtArgEnd(0)
 {
     mod		= this;
 
@@ -146,7 +145,7 @@ void TUIMod::postEnable( int flag )
 	string argCom, argVl;
 	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
 	    if(argCom == "h" || argCom == "help") isHelp = true;
-	    else if(argCom == "demon") demon_mode = true;
+	    else if(argCom == "demon" || argCom == "daemon") demonMode = true;
 		    // Qt bind options (debug)
 	    else if(argCom == "sync" || argCom == "widgetcount" ||
 		    // Qt bind options
@@ -155,8 +154,8 @@ void TUIMod::postEnable( int flag )
 		toQtArg(argCom.c_str(), argVl.c_str());
 
 	//Start main Qt thread if no help and no daemon
-	if(!(runSt || demon_mode || isHelp)) {
-	    end_run = false;
+	if(!(runSt || demonMode || isHelp)) {
+	    mEndRun = false;
 	    SYS->taskCreate(nodePath('.',true), 0, Task, this);
 	}
     }
@@ -164,7 +163,7 @@ void TUIMod::postEnable( int flag )
 
 void TUIMod::postDisable( int flag )
 {
-    if(runSt) SYS->taskDestroy(nodePath('.',true), &end_run);
+    if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
     /*try { 
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 }
@@ -179,28 +178,28 @@ void TUIMod::load_( )
 	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //Load parameters from config-file
-    start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
+    mStartMod = TBDS::genDBGet(nodePath()+"StartMod",mStartMod);
 }
 
 void TUIMod::save_( )
 {
     mess_debug(nodePath().c_str(),_("Save module."));
 
-    TBDS::genDBSet(nodePath()+"StartMod",start_mod);
+    TBDS::genDBSet(nodePath()+"StartMod", mStartMod);
 }
 
 void TUIMod::modStart()
 {
     mess_debug(nodePath().c_str(),_("Start module."));
 
-    start_com = true;
+    mStartCom = true;
 }
 
 void TUIMod::modStop()
 {
     mess_debug(nodePath().c_str(),_("Stop module."));
 
-    start_com = false;
+    mStartCom = false;
 }
 
 string TUIMod::optDescr( )
@@ -302,7 +301,7 @@ void *TUIMod::Task( void * )
 	    // Search module into start list
 	    int i_off = 0;
 	    string s_el;
-	    while((s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size())
+	    while((s_el=TSYS::strSepParse(mod->mStartMod,0,';',&i_off)).size())
 		if(s_el == list[i_l])	break;
 	    if(!s_el.empty() || !i_off)
 		if(winCntr->callQtModule(list[i_l])) op_wnd++;

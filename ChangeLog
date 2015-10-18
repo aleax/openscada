@@ -1,3 +1,11 @@
+2015-10-18 Roman
+- FIX:SYS: Config-file loading and user API function load() some rewrote for prevent access behind allocated memory.
+- FIX:Special.FLibSYS: Function FFT() some fixed and improved to adaptive substitution <vlOnEVAL> by it same EVAL
+    and insert previous valid values.
+- FIX:UI.QTCfg: Early host's thread closing added at the window close for prevent crashes at OpenSCADA::QTStarter exit.
+- UI.QTStarter: Daemon mode checking to argument "daemon" expanded. Source code some cleaned.
+
+
 2015-10-15 Roman
 - debian/control: Some commented dependents are added.
 - SYS: User API object Array expanded by function sum() for the array's pointed items sum allow.

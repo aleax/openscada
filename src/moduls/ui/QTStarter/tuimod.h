@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,13 +43,13 @@ namespace QTStarter
 //*************************************************
 class I18NTranslator: public QTranslator
 {
-    public:
-	//Methods
-	I18NTranslator( );
+public:
+    //Methods
+    I18NTranslator( );
 
-	bool isEmpty( ) const;
+    bool isEmpty( ) const;
 
-	QString translate( const char *context, const char *sourceText, const char *comment = 0 ) const;
+    QString translate( const char *context, const char *sourceText, const char *comment = 0 ) const;
 };
 
 //*************************************************
@@ -58,22 +58,22 @@ class I18NTranslator: public QTranslator
 class WinControl: public QObject
 {
     Q_OBJECT
-    public:
-	//Methods
-	WinControl( );
+public:
+    //Methods
+    WinControl( );
 
-	bool callQtModule( const string &nm );
-	void startDialog( );
+    bool callQtModule( const string &nm );
+    void startDialog( );
 
-    private slots:
-	//Methods
-	void checkForEnd( );
-	void callQtModule( );
-	void lastWinClose( );
+private slots:
+    //Methods
+    void checkForEnd( );
+    void callQtModule( );
+    void lastWinClose( );
 
-    private:
-	//Attributes
-	QTimer	*tm;
+private:
+    //Attributes
+    QTimer	*tm;
 };
 
 //*************************************************
@@ -82,20 +82,20 @@ class WinControl: public QObject
 class StartDialog: public QMainWindow
 {
     Q_OBJECT
-    public:
-	//Methods
-	StartDialog( WinControl *wcntr );
+public:
+    //Methods
+    StartDialog( WinControl *wcntr );
 
-    protected:
-	//Methods
-	void closeEvent( QCloseEvent* );
+protected:
+    //Methods
+    void closeEvent( QCloseEvent* );
 
-    private slots:
-	//Methods
-	void about( );
-	void aboutQt( );
-	void enterWhatsThis( );
-	void enterManual( );
+private slots:
+    //Methods
+    void about( );
+    void aboutQt( );
+    void enterWhatsThis( );
+    void enterManual( );
 };
 
 //*************************************************
@@ -103,42 +103,42 @@ class StartDialog: public QMainWindow
 //*************************************************
 class TUIMod: public TUI
 {
-    public:
-	//Methods
-	TUIMod( string name );
-	~TUIMod( );
+public:
+    //Methods
+    TUIMod( string name );
+    ~TUIMod( );
 
-	bool endRun( )		{ return end_run; }
-	bool startCom( )	{ return start_com; }
-	string startMod( )	{ return start_mod; }
+    bool endRun( )	{ return mEndRun; }
+    bool startCom( )	{ return mStartCom; }
+    string startMod( )	{ return mStartMod; }
 
-	void setStartMod( const string &vl )	{ start_mod = vl; modif(); }
+    void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
 
-	void modStart( );
-	void modStop( );
+    void modStart( );
+    void modStop( );
 
-    protected:
-	//Methods
-	void load_( );
-	void save_( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void postEnable( int flag );
-	void postDisable( int flag );
+protected:
+    //Methods
+    void load_( );
+    void save_( );
+    void cntrCmdProc( XMLNode *opt );		//Control interface command process
+    void postEnable( int flag );
+    void postDisable( int flag );
 
-    private:
-	//Methods
-	static void *Task( void * );
-	string	optDescr( );
-	void	toQtArg( const char *nm, const char *arg = NULL );
+private:
+    //Methods
+    static void *Task( void * );
+    string	optDescr( );
+    void	toQtArg( const char *nm, const char *arg = NULL );
 
-	//Attributes
-	bool	demon_mode, end_run, start_com;
-	string	start_mod;
+    //Attributes
+    bool	demonMode, mEndRun, mStartCom;
+    string	mStartMod;
 
-	// Command line options binding to Qt
-	int	qtArgC, qtArgEnd;		//Arguments counter and end position
-	char	*qtArgV[10];			//Argument's values
-	char	qtArgBuf[1000];			//Arguments' strings buffer
+    // Command line options binding to Qt
+    int		qtArgC, qtArgEnd;		//Arguments counter and end position
+    char	*qtArgV[10];			//Argument's values
+    char	qtArgBuf[1000];			//Arguments' strings buffer
 };
 
 extern TUIMod *mod;

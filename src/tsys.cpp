@@ -486,12 +486,9 @@ bool TSYS::cfgFileLoad( )
 	int cf_sz = lseek(hd, 0, SEEK_END);
 	if(cf_sz > 0) {
 	    lseek(hd, 0, SEEK_SET);
-	    char *buf = (char*)malloc(cf_sz+1);
-	    if((fOK=(read(hd,buf,cf_sz) == cf_sz))) {
-		buf[cf_sz] = 0;
-		s_buf = buf;
-	    }
-	    free(buf);
+	    char buf[STR_BUF_LEN];
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
+	    fOK = s_buf.size();
 	}
 	close(hd);
 	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());

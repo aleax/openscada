@@ -213,15 +213,22 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	return true;
     }
 #if HAVE_FFTW3_H
-    //ArrayObj FFT( int tm, real size, string archivator = "", int tm_usec = 0 ) - performs the Fast Fourier Transformation using
-    //         the FFT algorithm. Returns an array of amplitudes of the frequencies for archive's values window for begin time
-    //         <tm>:<tm_usec> (seconds:microseconds), depth to history <size> (seconds) and for archivator <archivator>.
+    //ArrayObj FFT( int tm, real size, string archivator = "", int tm_usec = 0, double vlOnEVAL = <EVAL> )
+    //  - performs the Fast Fourier Transformation using the FFT algorithm.
+    //    Returns an array of amplitudes of the frequencies for archive's values window for time <tm>:<tm_usec> (seconds:microseconds),
+    //    depth to history <size> (seconds) and for archivator <archivator> with fill EVALs by <vlOnEVAL>.
+    // tm, tm_usec - FFT window time (end); the curent time uses for zero <tm>;
+    // size        - size in seconds to history (begin);
+    // archivator  - concrete archiver select for FFT processing;
+    // vlOnEVAL    - replacing EVAL value; for same <vlOnEVAL> is EVAL used previous actual value for the EVAL replace.
     if(id == "FFT" && prms.size() >= 2) {
 	int64_t etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
 	int64_t btm = etm - (int64_t)(1e6*prms[1].getR());
 	int fftN = 0, iN = 0;
 	double *fftIn = NULL, tVl,
-	    vlOnEVAL = (prms.size()>=4) ? prms[4].getR() : 0;
+	    vlOnEVAL = (prms.size()>=5) ? prms[4].getR() : EVAL_REAL;
+	bool tracePrevNotEVAL = (vlOnEVAL == EVAL_REAL);
+	if(tracePrevNotEVAL) vlOnEVAL = 0;
 
 	TArrayObj *ao = new TArrayObj();
 	if(isArch()) {
@@ -232,14 +239,22 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    if(fftN > 10) {
 		fftIn = (double*)malloc(sizeof(double)*fftN);
 		for(btm = tb.begin(); btm <= tb.end() && iN < fftN; btm++, iN++)
-		    fftIn[iN] = ((tVl=tb.getR(&btm,true)) == EVAL_REAL) ? vlOnEVAL : tVl;
+		    if((tVl=tb.getR(&btm,true)) == EVAL_REAL) fftIn[iN] = vlOnEVAL;
+		    else {
+			fftIn[iN] = tVl;
+			if(tracePrevNotEVAL) vlOnEVAL = tVl;
+		    }
 	    }
 	}
 	else if(buf() && buf()->realSize() > 10) {
 	    fftN = buf()->realSize();
 	    fftIn = (double*)malloc(sizeof(double)*fftN);
 	    for(btm = buf()->begin(); btm <= buf()->end() && iN < fftN; btm++, iN++)
-		fftIn[iN] = ((tVl=buf()->getR(&btm,true)) == EVAL_REAL) ? vlOnEVAL : tVl;
+		if((tVl=buf()->getR(&btm,true)) == EVAL_REAL) fftIn[iN] = vlOnEVAL;
+		else {
+		    fftIn[iN] = tVl;
+		    if(tracePrevNotEVAL) vlOnEVAL = tVl;
+		}
 	}
 
 	if(fftIn) {
@@ -247,9 +262,9 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    fftw_plan p = fftw_plan_dft_r2c_1d(fftN, fftIn, fftOut, FFTW_ESTIMATE);
 	    fftw_execute(p);
 	    fftw_destroy_plan(p);
-	    for(int i_v = 0; i_v < (fftN/2+1); i_v++)
-		if(!i_v) ao->arSet(i_v, fftOut[i_v][0]/fftN);
-		else ao->arSet(i_v, pow(pow(fftOut[i_v][0],2)+pow(fftOut[i_v][1],2),0.5)/(fftN/2));
+	    for(int iV = 0; iV < (fftN/2+1); iV++)
+		if(!iV) ao->arSet(iV, fftOut[iV][0]/fftN);
+		else ao->arSet(iV, pow(pow(fftOut[iV][0],2)+pow(fftOut[iV][1],2),0.5)/(fftN/2));
 	    delete fftIn;
 	    delete fftOut;
 	}
