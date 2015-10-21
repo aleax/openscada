@@ -482,7 +482,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		    nPrm->vlList(chLs);
 		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
 			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->vlAt(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-			    setAttr("referenceTypeId", NodeId(OpcUa_HasComponent).toAddr())->setAttr("dir", "1")->
+			    setAttr("referenceTypeId", NodeId(OpcUa_Organizes/*OpcUa_HasComponent*/).toAddr())->setAttr("dir", "1")->
 			    setAttr("name", nPrm->vlAt(chLs[i_ch]).at().name())->
 			    setAttr("NodeClass", i2s(NC_Variable))->setAttr("typeDefinition", NodeId(OpcUa_BaseDataVariableType).toAddr());
 		}

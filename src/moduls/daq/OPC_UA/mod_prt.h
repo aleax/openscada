@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("OPC UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.6.1"
+#define PRT_MVER	"1.6.2"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("OPC UA protocol implementation.")
 #define PRT_LICENSE	"GPL2"

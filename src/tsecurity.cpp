@@ -129,7 +129,7 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
     rez |= (access&07)&mode;
     if(rez == mode)	return rez;
     //Check groupe permision
-    if(grpAt(group).at().user(user) || grpAt("root").at().user(user)) rez|=((access&070)>>3)&mode;
+    if(grpAt("root").at().user(user) || (grpPresent(group) && grpAt(group).at().user(user))) rez |= ((access&070)>>3)&mode;
 
     return rez;
 }

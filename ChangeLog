@@ -1,3 +1,13 @@
+2015-10-20 Roman
+- DB.LibsDB.vcaBase.db: Main.prescrEdit translation is updated and the debug messages commented.
+- FIX:SYS.Security: Function access() expanded for requested group presence checking and exception prevent.
+- FIX:Protocol.OPC_UA: referenceTypeId of attributes of parameter is changed from OpcUa_HasComponent to OpcUa_Organizes.
+- Special.FLibSYS: To Array result of the function FFT() added object's attributes "bufSize" and "bufEVAL" for some the data quality control.
+- FIX:UI.QTCfg: Empty warning dialogs prevented and events disabled for the navigation tree on the time of the page updating.
+- FIX:UI.Vision: Some doings are made for prevent possible access to connection error dialog after the master page closing.
+    Some uninitialized variables access prevented, detected by the Valgrind.
+
+
 2015-10-18 Roman
 - FIX:SYS: Config-file loading and user API function load() some rewrote for prevent access behind allocated memory.
 - FIX:Special.FLibSYS: Function FFT() some fixed and improved to adaptive substitution <vlOnEVAL> by it same EVAL

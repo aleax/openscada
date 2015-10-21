@@ -348,7 +348,7 @@ void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 {
-    if(conErr && (time(NULL)-conErr->property("tm").toInt()) < mod->restoreTime()) {
+    if(masterPg() && conErr && (time(NULL)-conErr->property("tm").toInt()) < mod->restoreTime()) {
 	conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()-(time(NULL)-conErr->property("tm").toInt())));
 	return 10;
     }
@@ -371,7 +371,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	    plt.setBrush(QPalette::Background, brsh);
 	    conErr->setPalette(plt);
 	    //Calc size and position
-	    conErr->resize(300,100);
+	    conErr->resize(300, 100);
 	    conErr->move((masterPg()->size().width()-conErr->size().width())/2,(masterPg()->size().height()-conErr->size().height())/2);
 	    conErr->show();
 	}
@@ -382,7 +382,10 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()));
     }
     //Remove error message about connection error
-    else if(rez != 10 && conErr) { conErr->deleteLater(); conErr = NULL; }
+    else if(rez != 10 && conErr) {
+	if(masterPg()) conErr->deleteLater();
+	conErr = NULL;
+    }
 
     return rez;
 }

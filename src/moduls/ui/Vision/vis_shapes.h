@@ -489,7 +489,8 @@ class ShapeProtocol : public WdgShape
 			QFont font;
 		};
 		//Methods
-		ShpDt( ) : active(true), tTimeCurent(false), time(0), tSize(60), tmPrev(0), tmGrndPrev(0), arhBeg(0), arhEnd(0)	{ }
+		ShpDt( ) : active(true), tTimeCurent(false), trcPer(0), lev(0), viewOrd(0),
+		    time(0), tSize(60), tmPrev(0), tmGrndPrev(0), arhBeg(0), arhEnd(0)	{ }
 		//Attributes
 		short active	:1;
 		short tTimeCurent:1;

@@ -6103,7 +6103,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labName',''
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','38',32,'','','labName','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 17',32,'','','labName','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','alignment','8',32,'','','labName','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Name:',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Name:',32,'','','labName','Ім''я:','','Имя:','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','507',32,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','110',32,'','','name','','','','','','');
@@ -9350,7 +9350,7 @@ INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<E
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<EVAL>||',8,'','','info_sp','Лічильник очищень','','','Счётчик очистки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','prExtComLs','Available commands list',131078,'<TVarObj>
 </TVarObj>
-||',10,'Controller|comLs','','','Перелік доступних команд рецепту','','','Список доступных команд рецепта','','','','');
+',10,'Controller|comLs','','','Перелік доступних команд рецепту','','','Список доступных команд рецепта','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prEndRun','Program: running end',131077,'||',8,'','','','Програма: кінець виконання','','','Программа: конец запуска','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prExtCurCom','Controller:current command',131077,'0||',10,'Controller|curCom','','','Контролер:поточна команда','','','Контроллер:текущая команда','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prExtMode','Controller:mode',131073,'0||',14,'Controller|mode','','','Контролер:режим','','','Контроллер:режим','','','','');
@@ -9394,11 +9394,11 @@ INSERT INTO "wlb_Main_uio" VALUES('ElCadr','clearCnt','Clear counter',131073,'<E
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prCnt','Cycles counter',131073,'0||',8,'','','','Лічильник циклів','','','Счётчик циклов','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prEndRun','Program:ending',131072,'0||',8,'','','','Програма:закінчення','','','Программа:завершение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','dbProgs','DB:Programms',131077,'PrescrProgs||',9,'DB','','','БД:Програми','','','БД:Программы','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','dbDB','DB:Data base',131077,'SQLite.vcaBase||',9,'DB','','','БД:База даних','','','БД:База данных','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','dbProgs','DB:Programms',131077,'PrescrProgs||',9,'DB','','','БД:Програми','','','БД:Программы','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','dbDB','DB:Data base',131077,'SQLite.vcaBase',9,'DB','','','БД:База даних','','','БД:База данных','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','dbProgs','DB:Programms',131077,'PrescrProgs',9,'DB','','','БД:Програми','','','БД:Программы','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','dbDB','DB:Data base',131077,'SQLite.vcaBase||',9,'DB','','','БД:База даних','','','БД:База данных','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','dbProgs','DB:Programms',131077,'PrescrProgs||',9,'DB','','','БД:Програми','','','БД:Программы','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','fileExpImp','File export/import',131077,'PrescrExport.xml||',9,'File','','','Файл експорту/імпорту','','Файл','Файл экспорта/импорта','','Файл','','');
+INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','fileExpImp','File export/import',131077,'PrescrExport.xml',9,'File','','','Файл експорту/імпорту','','Файл','Файл экспорта/импорта','','Файл','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','stepCur','Step:current',131073,'0|',8,'','','','Крок:поточний','','','Шаг:текущий','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','stepTm','Step:time',131076,'0|',8,'','','','Крок:час','','','Шаг:час','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('RootPgSo','demoPlayProc','Procedure play demo',131205,'',8,'','','','Проц. програвання демо','','','Проц. проигрывания демо','','','','');
@@ -18736,7 +18736,7 @@ var comOp = "";
 
 //Events for commands process
 for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
+	//SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
 	if(ev_cur == "ws_BtPress:/progAdd") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
@@ -18794,7 +18794,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 				}
 				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
 				prog_value = parentPath+"/"+i_c+":"+(name_value.length?name_value:type_value);
-				SYS.messInfo(this.nodePath(),"prog_value: "+prog_value);
+				//SYS.messInfo(this.nodePath(),"prog_value: "+prog_value);
 				progSelPrg = true;
 			}
 		}
@@ -18983,7 +18983,7 @@ if(f_start || progSelCom || progSelTp) {
 			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
 	}
 }
-type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1413479593);
+type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1445417427);
 INSERT INTO "wlb_Main" VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
 0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW

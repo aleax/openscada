@@ -1033,8 +1033,8 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
     //Send value to model
     if(!attr.empty() && toModel) {
 	XMLNode req("set");
-	req.setAttr("path",id()+"/%2fserv%2fattr");
-	req.childAdd("el")->setAttr("id",attr)->setText(val);
+	req.setAttr("path", id()+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id", attr)->setText(val);
 	cntrIfCmd(req);
     }
     bool up = false, upChlds = false;
@@ -1135,7 +1135,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	bool reqBrCr = false;
 	if(!aBr) {
 	    aBr = new XMLNode("get");
-	    aBr->setAttr("path",id()+"/%2fserv%2fattrBr");
+	    aBr->setAttr("path", id()+"/%2fserv%2fattrBr");
 	    cntrIfCmd(*aBr);
 	    reqBrCr = true;
 	    if(mess_lev() == TMess::Debug)

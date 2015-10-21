@@ -182,11 +182,10 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    setPermCntr(s2i(val)&SEC_WR);
 	    setPermView(s2i(val)&SEC_RD);
 	    return true;
-	case A_NO_ID: {
+	case A_NO_ID:
 	    //User's status line items
 	    if(attr == "statLine") { mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this)); return true; }
 	    break;
-	}
 	case A_PG_NAME:	setWindowTitle(val.c_str());	break;
 	case A_PG_OPEN_SRC: setProperty("pgOpenSrc", val.c_str());	return true;
 	case A_PG_GRP:	setProperty("pgGrp", val.c_str());		return true;

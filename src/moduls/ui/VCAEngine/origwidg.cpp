@@ -1316,7 +1316,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	}
 	sizeUpdate(sw);
     }
-    //Move archive cursor
+    //Move the archive cursor
     else if(cfg.id() == "aCur" && cfg.getI() != prev.getI()) {
 	int n = cfg.owner()->attrAt("n").at().getI();
 	if(cfg.getI() < 0) cfg.setI(((prev.getI()+1) >= n) ? 0 : (prev.getI()+1), false, true);

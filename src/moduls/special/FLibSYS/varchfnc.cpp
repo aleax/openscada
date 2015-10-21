@@ -224,7 +224,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     if(id == "FFT" && prms.size() >= 2) {
 	int64_t etm = 1000000ll * (!prms[0].getI() ? time(NULL) : prms[0].getI()) + ((prms.size()>=4) ? prms[3].getI() : 0);
 	int64_t btm = etm - (int64_t)(1e6*prms[1].getR());
-	int fftN = 0, iN = 0;
+	int fftN = 0, iN = 0, bufEVAL = 0;
 	double *fftIn = NULL, tVl,
 	    vlOnEVAL = (prms.size()>=5) ? prms[4].getR() : EVAL_REAL;
 	bool tracePrevNotEVAL = (vlOnEVAL == EVAL_REAL);
@@ -239,7 +239,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    if(fftN > 10) {
 		fftIn = (double*)malloc(sizeof(double)*fftN);
 		for(btm = tb.begin(); btm <= tb.end() && iN < fftN; btm++, iN++)
-		    if((tVl=tb.getR(&btm,true)) == EVAL_REAL) fftIn[iN] = vlOnEVAL;
+		    if((tVl=tb.getR(&btm,true)) == EVAL_REAL) { fftIn[iN] = vlOnEVAL; bufEVAL++; }
 		    else {
 			fftIn[iN] = tVl;
 			if(tracePrevNotEVAL) vlOnEVAL = tVl;
@@ -250,7 +250,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    fftN = buf()->realSize();
 	    fftIn = (double*)malloc(sizeof(double)*fftN);
 	    for(btm = buf()->begin(); btm <= buf()->end() && iN < fftN; btm++, iN++)
-		if((tVl=buf()->getR(&btm,true)) == EVAL_REAL) fftIn[iN] = vlOnEVAL;
+		if((tVl=buf()->getR(&btm,true)) == EVAL_REAL) { fftIn[iN] = vlOnEVAL; bufEVAL++; }
 		else {
 		    fftIn[iN] = tVl;
 		    if(tracePrevNotEVAL) vlOnEVAL = tVl;
@@ -267,6 +267,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		else ao->arSet(iV, pow(pow(fftOut[iV][0],2)+pow(fftOut[iV][1],2),0.5)/(fftN/2));
 	    delete fftIn;
 	    delete fftOut;
+	    ao->propSet("bufSize", fftN); ao->propSet("bufEVAL", bufEVAL);
 	}
 
 	return ao;
