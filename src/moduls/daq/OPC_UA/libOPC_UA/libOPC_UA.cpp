@@ -1937,7 +1937,7 @@ int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& i
     while(iSC != mSecCnl.end() && !((iseqN-iSC->second.seqN) < 10 && iseqN != iSC->second.startSeqN &&
 				iclAddr == iSC->second.clAddr && iClCert == iSC->second.clCert)) ++iSC;
     if(iSC != mSecCnl.end()) {
-	if(dbg) debugMess(strMess("SecCnl: Re-establish detected for %d(%d): seqN=%d, clAddr='%s'.",
+	if(debug()) debugMess(strMess("SecCnl: Re-establish detected for %d(%d): seqN=%d, clAddr='%s'.",
 				iSC->first,iseqN,iSC->second.seqN,iSC->second.clAddr.c_str()));
 	return iSC->first;
     }
