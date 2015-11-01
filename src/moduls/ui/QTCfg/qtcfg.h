@@ -151,6 +151,10 @@ private slots:
     void editToolUpdate( );			//Edit tools visible update
     void endRunChk( );				//End run flag check
 
+    // [cur >= 0] for create the progress; [cur < 0] for close-disable the progress bar.
+    // [max >= 0] for the progressbar maximum limit set
+    void reqPrgrsSet( int cur = -1, const QString &lab = "", int max = -1 );
+
     // QListView
     void selectItem( );				//Processing of select item signal
     void viewChild( QTreeWidgetItem * i );	//Processing of view item signal
@@ -199,7 +203,7 @@ private:
     string getPrintVal( const string &vl );
 
     //Attributes
-    QTimer	*endRunTimer, *autoUpdTimer;
+    QTimer	*endRunTimer, *autoUpdTimer, *reqPrgrsTimer;
 
     QTreeWidget	*CtrTree;
     QLabel	*titleIco,
@@ -228,9 +232,10 @@ private:
 
     vector<string> stMess;
 
+    int		inHostReq;
     map<string, SCADAHost*> hosts;
 
-    bool	tblInit, inHostReq;
+    bool	tblInit;
 };
 
 }

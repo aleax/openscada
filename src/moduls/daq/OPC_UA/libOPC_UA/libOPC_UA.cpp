@@ -1241,6 +1241,7 @@ void Client::protIO( XML_N &io )
 		    rez.replace(begEncBlck, rez.size()-begEncBlck, asymmetricEncrypt(rez.substr(begEncBlck),io.attr("ServCert"),secPlc));
 		}
 		if(debug) debugMess("OPN Req");
+
 		//Send request and wait respond
 		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
@@ -1917,15 +1918,28 @@ Server::Server( ) : mSecCnlIdLast(1)	{ }
 
 Server::~Server( )			{ }
 
-int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& iClCert, const string &iSecPolicy, char iSecMessMode )
+int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& iClCert, const string &iSecPolicy, char iSecMessMode,
+    const string &iclAddr, uint32_t iseqN )
 {
     //Check for renew
-    if(cid && mSecCnl.find(cid) != mSecCnl.end()) {
-	mSecCnl[cid].tLife = lifeTm;
-	mSecCnl[cid].TokenIdPrev = mSecCnl[cid].TokenId;
-	if((++mSecCnl[cid].TokenId) == 0) mSecCnl[cid].TokenId = 1;
-	mSecCnl[cid].tCreate = curTime();
-	return cid;
+    if(cid) {
+	if(mSecCnl.find(cid) != mSecCnl.end()) {
+	    mSecCnl[cid].tLife = lifeTm;
+	    mSecCnl[cid].TokenIdPrev = mSecCnl[cid].TokenId;
+	    if((++mSecCnl[cid].TokenId) == 0) mSecCnl[cid].TokenId = 1;
+	    mSecCnl[cid].tCreate = curTime();
+	    return cid;
+	} else return -1;
+    }
+
+    //Check for Re-establish
+    map<uint32_t, SecCnl>::iterator iSC = mSecCnl.begin();
+    while(iSC != mSecCnl.end() && !((iseqN-iSC->second.seqN) < 10 && iseqN != iSC->second.startSeqN &&
+				iclAddr == iSC->second.clAddr && iClCert == iSC->second.clCert)) ++iSC;
+    if(iSC != mSecCnl.end()) {
+	if(dbg) debugMess(strMess("SecCnl: Re-establish detected for %d(%d): seqN=%d, clAddr='%s'.",
+				iSC->first,iseqN,iSC->second.seqN,iSC->second.clAddr.c_str()));
+	return iSC->first;
     }
 
     //New channel create
@@ -1933,7 +1947,7 @@ int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& i
 	if(!(++mSecCnlIdLast)) mSecCnlIdLast = 2;
     } while(mSecCnl.find(mSecCnlIdLast) != mSecCnl.end());
 
-    mSecCnl[mSecCnlIdLast] = SecCnl(iEp, 1, lifeTm, iClCert, iSecPolicy, iSecMessMode);
+    mSecCnl[mSecCnlIdLast] = SecCnl(iEp, 1, lifeTm, iClCert, iSecPolicy, iSecMessMode, iclAddr, iseqN);
 
     return mSecCnlIdLast;
 }
@@ -1945,6 +1959,8 @@ Server::SecCnl Server::chnlGet( int cid )
     if(mSecCnl.find(cid) == mSecCnl.end()) return SecCnl();
     return mSecCnl[cid];
 }
+
+Server::SecCnl &Server::chnlGet_( int cid )	{ return mSecCnl[cid]; }
 
 void Server::chnlSecSet( int cid, const string &iServKey, const string &iClKey )
 {
@@ -2019,7 +2035,7 @@ nextReq:
 	    if(dbg) debugMess("OPN Req");
 
 	    off = 8;
-	    uint32_t chnlId = iNu(rb, off, 4);			//>SecureChannelId
+	    int chnlId = iNu(rb, off, 4);			//>SecureChannelId
 	    string secPlcURI = iS(rb, off);			//>SecurityPolicyURI
 	    string secPlc = strParse(secPlcURI, 1, "#");
 	    bool isSecNone = false;
@@ -2085,7 +2101,8 @@ nextReq:
 		    secModOK = true;
 	    if(!secModOK) throw OPCError(OpcUa_BadSecurityModeRejected, "", "");
 
-	    chnlId = chnlSet((reqTp==SC_RENEW?chnlId:0), wep->id(), reqLifeTm, clntCert, secPlc, secMode);
+	    if((chnlId=chnlSet((reqTp==SC_RENEW?chnlId:0),wep->id(),reqLifeTm,clntCert,secPlc,secMode,clientAddr(inPrtId),seqN)) < 0)
+		throw OPCError(OpcUa_BadTcpSecureChannelUnknown, "", "");
 
 	    // Prepare respond message
 	    out.reserve(200);
@@ -2176,8 +2193,7 @@ nextReq:
 								//>>> Extensible parameter
 	    iNodeId(rb, off);					//TypeId (0)
 	    iNu(rb, off, 1);					//Encoding
-	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)
-	    {
+	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt) {
 		if(scHd.secMessMode == MS_SignAndEncrypt) off += iNu(rb, off, 1);	//Pass padding
 		if(rb.substr(off) != symmetricSign(rb.substr(0,off),scHd.servKey,scHd.secPolicy))	//Check Signature
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
@@ -2200,7 +2216,8 @@ nextReq:
 	    if(!scHd.TokenId) throw OPCError(OpcUa_BadSecureChannelClosed, "Secure channel closed");
 	    if(!(tokId == scHd.TokenId || (tokId == scHd.TokenIdPrev && (curTime() < 1000ll*(scHd.tCreate+0.25*scHd.tLife)))))
 		throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
-	    if(curTime() > (scHd.tCreate+(int64_t)scHd.tLife*1000)) throw OPCError(OpcUa_BadSecureChannelIdInvalid, "Secure channel renew expired");
+	    if(curTime() > (scHd.tCreate+(int64_t)scHd.tLife*1000))
+		throw OPCError(OpcUa_BadSecureChannelIdInvalid, "Secure channel renew expired");
 	    EP *wep = epEnAt(scHd.endPoint);
 	    if(!wep) throw OPCError(OpcUa_BadTcpEndpointUrlInvalid, "No propper Endpoint present");
 	    // Decrypt message block and signature check
@@ -2217,6 +2234,7 @@ nextReq:
 	    int reqTp = iNodeId(rb,off).numbVal();		//TypeId request
 								//>> Request Header
 	    uint32_t sesTokId = iNodeId(rb, off).numbVal();	//Session AuthenticationToken
+	    chnlGet_(secId).seqN = seqN;
 	    // Session check
 	    if(!(reqTp == OpcUa_CreateSessionRequest || reqTp == OpcUa_FindServersRequest || reqTp == OpcUa_GetEndpointsRequest ||
 		    reqTp == OpcUa_ActivateSessionRequest) && (stCode=wep->sessActivate(sesTokId,secId,true,inPrtId)))
@@ -2847,7 +2865,7 @@ nextReq:
 			}
 			if(refNumb)	oNu(respEp, refNumb, 4, refNumbOff);
 		    }
-		    oS(respEp, "");			//diagnosticInfos []
+		    oN(respEp, 0, 4);			//diagnosticInfos []
 
 		    reqTp = OpcUa_BrowseResponse;
 
@@ -2900,7 +2918,7 @@ nextReq:
 			}
 			if(refNumb)	oNu(respEp, refNumb, 4, refNumbOff);
 		    }
-		    oS(respEp, "");			//diagnosticInfos []
+		    oN(respEp, 0, 4);			//diagnosticInfos []
 
 		    reqTp = OpcUa_BrowseNextResponse;
 
@@ -2935,7 +2953,7 @@ nextReq:
 			else oDataValue(respEp, 0x02, int2str(rez));
 		    }
 
-		    oS(respEp, "");				//diagnosticInfos []
+		    oN(respEp, 0, 4);				//diagnosticInfos []
 
 		    reqTp = OpcUa_ReadResponse;
 
@@ -2965,7 +2983,7 @@ nextReq:
 			//   Write result status code
 			oNu(respEp, rez, 4);		// StatusCode
 		    }
-		    oS(respEp, "");			//diagnosticInfos []
+		    oN(respEp, 0, 4);			//diagnosticInfos []
 
 		    reqTp = OpcUa_WriteResponse;
 
@@ -3067,7 +3085,7 @@ nextReq:
 					    i_mIt++;
 					}
 				    }
-				    oS(respEp, "");				//<   diagnosticInfos []
+				    oN(respEp, 0, 4);				//<   diagnosticInfos []
 				    oNu(respEp, maxNotPerPublLim, 1, moreNtfOff);//<moreNotifications, real value write
 				    oN(respEp, i_mIt, 4, mItOff);		//<  monitoredItems [], real items number write
 				    oNu(respEp, respEp.size()-extObjOff-4, 4, extObjOff);	//<  extension object real size write
@@ -3088,7 +3106,7 @@ nextReq:
 
 				//oN(respEp, -1, 4);			//<results [], empty
 				respEp += respAck;			//<results []
-				oS(respEp, "");				//<diagnosticInfos []
+				oN(respEp, 0, 4);			//<diagnosticInfos []
 			    }
 			}
 		    }
@@ -3200,14 +3218,14 @@ nextReq:
 //* SecCnl					  *
 //*************************************************
 Server::SecCnl::SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm,
-	const string &iClCert, const string &iSecPolicy, char iSecMessMode ) :
+	const string &iClCert, const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN ) :
     endPoint(iEp), secPolicy(iSecPolicy), secMessMode(iSecMessMode), tCreate(curTime()),
-    tLife(std::max(600000,iLifeTm)), TokenId(iTokenId), TokenIdPrev(0), clCert(iClCert)
+    tLife(std::max(600000,iLifeTm)), TokenId(iTokenId), TokenIdPrev(0), clCert(iClCert), clAddr(iclAddr), seqN(isecN), startSeqN(isecN)
 {
 
 }
 
-Server::SecCnl::SecCnl( ) : secMessMode(MS_None), tCreate(curTime()), tLife(600000), TokenId(0), TokenIdPrev(0)
+Server::SecCnl::SecCnl( ) : secMessMode(MS_None), tCreate(curTime()), tLife(600000), TokenId(0), TokenIdPrev(0), seqN(1)
 {
 
 }

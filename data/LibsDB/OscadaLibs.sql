@@ -1089,6 +1089,9 @@ INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','Tact','T act.',2,16,'',5,'','','
 INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','eps','IR epsilon',2,32,'',6,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','trans','IR transmission',2,32,'',7,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','spIll','Spot illumination',3,32,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('CTR','transport','Transport',0,64,'Serial.out_CTR',0,'','','Transport','Serial.out_CTR');
+INSERT INTO "tmplib_DevLib_io" VALUES('CTR','press','Pressure, Tor',2,17,'',1,'','','Pressure, Tor','');
+INSERT INTO "tmplib_DevLib_io" VALUES('CTR','zeroSet','Zero set',3,32,'',2,'','','Zero set','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -4006,6 +4009,114 @@ if(t_err.length) {
 	f_err = t_err;
 }
 else f_err = "0";','','',1444290943);
+INSERT INTO "tmplib_DevLib" VALUES('CTR','CTR 100, 101','CTR 100, 101','','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','The RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	transport_ = transport;
+	press = FSR_Mantissa = FSR_Exp = EVAL_REAL;
+	tr = SYS.Transport.nodeAt(transport, ".");
+}
+
+u_err = "";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.nodeAt(transport, ".");
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	req = SYS.XMLNode("mess").setAttr("ProtIt","CTR");
+
+	//Read data
+	// F.S.R Mantisa
+	if(!(t_err=req.attr("err")).length && FSR_Mantissa.isEVal()) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x00,0x39,0x00));
+		tr.messIO(req, "UserProtocol");
+		if(!(t_err=req.attr("err")).length) {
+			if((cV=req.text().charCodeAt(5)) == 0) FSR_Mantissa = 1.0;
+			else if(cV == 1) FSR_Mantissa = 1.1;
+			else if(cV == 2) FSR_Mantissa = 2.0;
+			else if(cV == 3) FSR_Mantissa = 2.5;
+			else if(cV == 4) FSR_Mantissa = 5.0;
+		}
+	}
+	// F.S.R Exp
+	if(!(t_err=req.attr("err")).length && FSR_Exp.isEVal()) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x00,0x38,0x00));
+		tr.messIO(req, "UserProtocol");
+		if(!(t_err=req.attr("err")).length) {
+			if((cV=req.text().charCodeAt(5)) == 2) FSR_Exp = -1;
+			else if(cV == 3) FSR_Exp = 0;
+			else if(cV == 4) FSR_Exp = 1;
+			else if(cV == 5) FSR_Exp = 2;
+			else if(cV == 6) FSR_Exp = 3;
+		}
+	}
+	// Main value
+	if(!(t_err=req.attr("err")).length && !FSR_Mantissa.isEVal() && !FSR_Exp.isEVal()) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x00,0x00,0x00));
+		tr.messIO(req, "UserProtocol");
+		if(!(t_err=req.attr("err")).length) {
+			press = ((req.text().charCodeAt(3)*256+req.text().charCodeAt(4))/32000)*FSR_Mantissa*pow(10,FSR_Exp);
+			//  Error process
+			cV = req.text().charCodeAt(2);
+			if(cV&0x7F) {
+				if(cV&0x01)	u_err += tr("RS232 synchronization error. ");
+				if(cV&0x02)	u_err += tr("Incorrect command, e.g. inadmissible address (syntax error). ");
+				if(cV&0x04)	u_err += tr("Inadmissible read command. ");
+				if(cV&0x08)	u_err += tr("SP1 status. ");
+				if(cV&0x10)	u_err += tr("SP2 status. ");
+			}
+			else {
+				//   Extended Error L-Byte
+				req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x00,0x36,0x00));
+				tr.messIO(req, "UserProtocol");
+				if(!(t_err=req.attr("err")).length) {
+					cV = req.text().charCodeAt(5);
+					if(cV&0x01)	u_err += tr("Atm. pressure out of range. ");
+					if(cV&0x02)	u_err += tr("Temperature out of range. ");
+					if(cV&0x10)	u_err += tr("Cal. mode wrong. ");
+					if(cV&0x20)	u_err += tr("Pressure underflow. ");
+					if(cV&0x40)	u_err += tr("Pressure overflow. ");
+					if(cV&0x80)	u_err += tr("Zero adjust warning. ");
+				}
+				//   Extended Error H-Byte
+				req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x00,0x37,0x00));
+				tr.messIO(req, "UserProtocol");
+				cV = req.text().charCodeAt(5);
+				if(cV&0x01)	u_err += tr("PT1000 fault (CTR 101 only). ");
+				if(cV&0x02)	u_err += tr("Heaterblock overtemp. ");
+				if(cV&0x04)	u_err += tr("Electronic overtemp. ");
+				if(cV&0x08)	u_err += tr("Zero adjust error. ");
+			}
+		}
+	}
+
+	//Check and write commands
+	// Zero-adjust
+	if(!(t_err=req.attr("err")).length && zeroSet) {
+		req.setAttr("err", "2:"+tr("No connection")).setText(SYS.strFromCharCode(0x40,0x02,0x00));
+		tr.messIO(req, "UserProtocol");
+		if(!(t_err=req.attr("err")).length) zeroSet = false;
+	}
+
+	//Check and set pool mode
+	if((t_err=req.attr("err")).length && t_err.toInt() == 4) {
+		req.setAttr("err", "2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x00,0x01));
+		tr.messIO(req, "UserProtocol");
+	}
+}
+
+if(t_err.length) {
+	press = EVAL_REAL;
+	f_err = t_err + " " + u_err;
+}
+else f_err = "0: " + u_err;','','',1445606346);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -5691,6 +5802,31 @@ while(resp.length && (tresp=tr.messIO("")).length) resp += tresp;
 SYS.messDebug("/OPTRIS/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
 if(resp.length <= 0) { io.setAttr("err","3:"+tr("No a respond")); return; }
 io.setText(resp);','',1444290609);
+INSERT INTO "UserProtocol_uPrt" VALUES('CTR','CTR 100, 101','CTR 100, 101','','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',1,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  err - sets for the request result.
+io.setAttr("err", "");
+//Request prepare
+req = SYS.strFromCharCode(3) + io.text();
+for(CS = 0, i = 1; i < req.length; i++)	CS += req.charCodeAt(i);
+req += SYS.strFromCharCode(CS&0xFF);
+SYS.messDebug("/CTR/PRT",tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+
+//Send request
+for(resp = tr.messIO(req); resp.length < 9 && (tresp=tr.messIO("")).length; resp += tresp) ;
+if(resp.length == 0){ io.setAttr("err","2:"+tr("No a respond")); return; }
+SYS.messDebug("/CTR/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+if(resp.length < 9)	{ io.setAttr("err","3:"+tr("Respond too short")); return; }
+if(resp.length > 9)	{ io.setAttr("err","4:"+tr("Respond too long, possible continuous mode")); return; }
+for(CS = 0, i = 1; i < resp.length-1; i++)	CS += resp.charCodeAt(i);
+if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC error")); return; }
+io.setText(resp.slice(1,resp.length-1));','',1445606112);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalc','Перерахунок архівів','Пересчёт архивов','','','',600,1,'using Special.FLibSYS;
 

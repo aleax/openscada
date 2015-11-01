@@ -120,6 +120,7 @@ namespace OPC
 #define OpcUa_BadSequenceNumberUnknown	0x807A0000
 #define OpcUa_BadMessageNotAvailable	0x807B0000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
+#define OpcUa_BadTcpSecureChannelUnknown	0x807F0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
 #define OpcUa_BadSecureChannelClosed	0x80860000
@@ -532,7 +533,8 @@ class Server: public UA
 	{
 	    public:
 	    //Methods
-	    SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode );
+	    SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert,
+		const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN );
 	    SecCnl( );
 
 	    //Attributes
@@ -542,8 +544,9 @@ class Server: public UA
 	    int64_t	tCreate;
 	    int32_t	tLife;
 	    uint32_t	TokenId, TokenIdPrev;
-	    string	clCert;
+	    string	clCert, clAddr;
 	    string	servKey, clKey;
+	    uint32_t	seqN, startSeqN;
 	};
 	//* Session
 	class Sess
@@ -739,12 +742,15 @@ class Server: public UA
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
 	virtual bool inReq( string &request, const string &inPrtId, string *answ = NULL );
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
+	virtual string clientAddr( const string &threadId ) = 0;
 
 	// Channel manipulation functions
 	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,
-	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
+	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1,
+	    const string &iclAddr = "", uint32_t iseqN = 1 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
+	SecCnl &chnlGet_( int cid );
 	void chnlSecSet( int cid, const string &servKey, const string &clKey );
 
 	static string mkError( uint32_t errId, const string &err = "" );

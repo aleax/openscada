@@ -74,7 +74,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
-    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), tblInit(false), inHostReq(false)
+    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), tblInit(false), inHostReq(0)
 {
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -428,6 +428,11 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
+    // Create Request progress closing timer
+    reqPrgrsTimer = new QTimer(this);
+    reqPrgrsTimer->setSingleShot(true);
+    reqPrgrsTimer->setInterval(500);
+    connect(reqPrgrsTimer, SIGNAL(timeout()), SLOT(reqPrgrsSet()));
 
     menuBar()->setVisible(true);
 
@@ -441,6 +446,7 @@ ConfApp::~ConfApp( )
 {
     endRunTimer->stop();
     autoUpdTimer->stop();
+    reqPrgrsTimer->stop();
 
     mod->unregWin(this);
 
@@ -771,7 +777,8 @@ void ConfApp::itPaste( )
 		if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
 		   (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
 		{
-		    InputDlg dlg1(this, actItPaste->icon(), QString(_("Node '%1' is already present. Continue?")).arg(dst_nm.c_str()), _("Move or copy node"), 0, 0);
+		    InputDlg dlg1(this, actItPaste->icon(), QString(_("Node '%1' is already present. Continue?")).arg(dst_nm.c_str()),
+					_("Move or copy node"), 0, 0);
 		    if(isMult) {
 			prcAlrPres = new QCheckBox(_("Do not the question anymore."),&dlg1);
 			dlg1.edLay->addWidget(prcAlrPres,5,0,5,1);
@@ -2296,32 +2303,49 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
     }
 
     //Main-first request
-    bool isConcur = inHostReq;
-    inHostReq = true;
-    while(iHost->reqBusy()) qApp->processEvents();
+    inHostReq++;
+    while(iHost->reqBusy()) {
+	reqPrgrsSet(0, QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
+	qApp->processEvents();
+    }
     if(!iHost->reqDo(node)) {
-	if(!reqPrgrs) {
-	    reqPrgrs = new QProgressDialog(this);
-	    reqPrgrs->setWindowModality(Qt::WindowModal);
-	    reqPrgrs->setCancelButtonText(_("Cancel"));
-	    reqPrgrs->show();
-	    qApp->processEvents();
-	}
-	reqPrgrs->setLabelText(QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()));
-	reqPrgrs->setMaximum(iHost->reqTmMax);
+	reqPrgrsSet(0, QString(_("Wait for reply from host '%1'")).arg(hostId.c_str()), iHost->reqTmMax);
 
 	//Wait for the request done
 	time_t stTm = SYS->sysTm();
 	while(iHost->reqBusy()) {
+	    reqPrgrsSet(SYS->sysTm()-stTm);
 	    if(reqPrgrs->wasCanceled()) iHost->sendSIGALRM();
-	    else reqPrgrs->setValue(SYS->sysTm()-stTm);
 	    qApp->processEvents();
 	}
-	if(!isConcur) { delete reqPrgrs; reqPrgrs = NULL; }
     }
-    if(!isConcur) inHostReq = false;
+    inHostReq--;
 
     return s2i(node.attr("rez"));
+}
+
+void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
+{
+    //Create
+    if(!reqPrgrs && cur >= 0) {
+	reqPrgrs = new QProgressDialog(this);
+	reqPrgrs->setWindowModality(Qt::WindowModal);
+	reqPrgrs->setCancelButtonText(_("Cancel"));
+	reqPrgrs->show();
+    }
+    //Close
+    else if(reqPrgrs && cur < 0) {
+	reqPrgrsTimer->stop();
+	delete reqPrgrs;
+	reqPrgrs = NULL;
+    }
+    //Set the progress value
+    if(reqPrgrs) {
+	if(max >= 0)	reqPrgrs->setMaximum(max);
+	if(lab.size())	reqPrgrs->setLabelText(lab);
+	reqPrgrsTimer->start();
+	reqPrgrs->setValue(cur);
+    }
 }
 
 string ConfApp::getPrintVal( const string &vl )
@@ -2458,7 +2482,7 @@ void ConfApp::buttonClicked( )
 		wUser->user().toStdString().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	}
-    }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
     pageRefresh(true);
@@ -2516,7 +2540,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    req.setName("set")->setText(val);
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);// return; }
 	}
-    }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
     pageRefresh(true);

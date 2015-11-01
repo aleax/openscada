@@ -1,3 +1,13 @@
+2015-11-01 Roman
+- DB.LibsDB.OscadaLibs.db: DevLib appended by item pare "CTR" for "CTR 100, 101 Oerlikon Leybold Vacuum CERAVAC".
+- Protocol.OPC_UA: libOPC_UA appended by function Server::clientAddr() for the openned connection re-establish
+    detection by the Secure Channel reusing. For the detection for now used:
+	messages sequence (more for minimum and no more for 10 to previous), the client address and certificate to equal.
+    diagnosticInfos for everywhere fixed to replace empty string lengths (-1) to the empty array number (0).
+- UI.QTCfg: The progress bar dialog, for busy connections, forming improved for it close after 0.5 seconds timeout to the update.
+    Used for more steady and flicking prevent. "inHostReq" variable used as the concurrency connections counter also.
+
+
 2015-10-20 Roman
 - DB.LibsDB.vcaBase.db: Main.prescrEdit translation is updated and the debug messages commented.
 - FIX:SYS.Security: Function access() expanded for requested group presence checking and exception prevent.
