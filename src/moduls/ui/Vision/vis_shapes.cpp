@@ -57,7 +57,6 @@
 #endif
 
 #include <tsys.h>
-#include "../VCAEngine/types.h"
 #include "tvision.h"
 #include "vis_devel.h"
 #include "vis_run.h"
@@ -77,7 +76,6 @@
 
 
 using namespace VISION;
-using namespace VCA;
 
 //*************************************************
 //* Widget shape abstract object                  *
@@ -174,20 +172,22 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 
 bool WdgShape::attrSet( WdgView *view, int uiPrmPos, const string &val )	{ return false; }
 
-QFont WdgShape::getFont( const string &val, float fsc, bool pixSize )
+QFont WdgShape::getFont( const string &val, float fsc, bool pixSize, const QFont &defFnt )
 {
-    QFont rez;
+    QFont rez = defFnt;
 
-    char family[101]; strcpy(family,"Arial");
-    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
-    sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-    rez.setFamily(QString(family).replace(QRegExp("_")," "));
-    if(pixSize) rez.setPixelSize((int)(fsc*(float)size));
-    else rez.setPointSize((int)(fsc*(float)size));
-    rez.setBold(bold);
-    rez.setItalic(italic);
-    rez.setUnderline(underline);
-    rez.setStrikeOut(strike);
+    char family[101]; family[0] = 0; //strcpy(family,"Arial");
+    int size = -1, bold = -1, italic = -1, underline = -1, strike = -1;
+    sscanf(val.c_str(), "%100s %d %d %d %d %d", family, &size, &bold, &italic, &underline, &strike);
+    if(strlen(family)) rez.setFamily(QString(family).replace(QRegExp("_")," "));
+    if(size >= 0) {
+	if(pixSize) rez.setPixelSize((int)(fsc*(float)size));
+	else rez.setPointSize((int)(fsc*(float)size));
+    }
+    if(bold >= 0)	rez.setBold(bold);
+    if(italic >= 0)	rez.setItalic(italic);
+    if(underline >= 0)	rez.setUnderline(underline);
+    if(strike >= 0)	rez.setStrikeOut(strike);
 
     return rez;
 }
@@ -882,13 +882,13 @@ void ShapeFormEl::checkChange(int st)
 void ShapeFormEl::buttonPressed( )
 {
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
-    if(!((ShpDt*)w->shpData)->checkable) w->attrSet("event","ws_BtPress");
+    if(!((ShpDt*)w->shpData)->checkable) w->attrSet("event","ws_BtPress", A_NO_ID, true);
 }
 
 void ShapeFormEl::buttonReleased( )
 {
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
-    if(!((ShpDt*)w->shpData)->checkable) w->attrSet("event","ws_BtRelease");
+    if(!((ShpDt*)w->shpData)->checkable) w->attrSet("event","ws_BtRelease", A_NO_ID, true);
 }
 
 void ShapeFormEl::buttonToggled( bool val )
@@ -1037,7 +1037,7 @@ void ShapeText::init( WdgView *w )	{ w->shpData = new ShpDt(); }
 
 void ShapeText::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
-bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     bool up = true,		//Update view checking
 	 reform = false;	//Text reformation
@@ -1286,7 +1286,7 @@ void ShapeMedia::mediaFinished( )
 #endif
 }
 
-bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     QLabel *lab;
 #ifdef HAVE_PHONON
@@ -1381,7 +1381,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    else if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) {
 		if(shD->videoPlay) {
 		    player->play();
-		    w->attrSet("size",r2s(player->totalTime()));
+		    w->attrSet("size", r2s(player->totalTime()), A_NO_ID, true);
 		}
 		else player->stop();
 	    }
@@ -1521,7 +1521,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    player->load(mSrc);
 		    if(shD->videoPlay) {
 			player->play();
-			w->attrSet("size",r2s(player->totalTime()));
+			w->attrSet("size", r2s(player->totalTime()), A_NO_ID, true);
 		    }
 		    else player->stop();
 		    if(shD->videoPause) player->pause();
@@ -1593,7 +1593,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 		    case Qt::MidButton:		sev += "Midle";	break;
 		    default: return false;
 		}
-		w->attrSet("event", sev);
+		w->attrSet("event", sev, A_NO_ID, true);
 		//return true;	//For common Press event produce
 	    }
 	    break;
@@ -1663,7 +1663,7 @@ void ShapeDiagram::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     bool up = false,		//Repaint diagram picture
 	 make_pct = false;	//Remake diagram picture
@@ -2685,7 +2685,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    curPos = (int)(curFrq/fftDt);
 	    if(curPos >= 1 && curPos < (cP.fftN/2+1)) {
 		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
-		w->attrSet(TSYS::strMess("prm%dval",iT), r2s(val,6), A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iT);
+		w->attrSet(TSYS::strMess("prm%dval",iT), r2s(val,6), A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iT, true);
 	    }
 	}
     }
@@ -3656,7 +3656,7 @@ void ShapeProtocol::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
+bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     int	reld_dt = 0;	//Reload data ( 1-reload addons, 2-full reload )
 

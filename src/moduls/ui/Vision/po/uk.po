@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 20:45+0300\n"
+"POT-Creation-Date: 2015-11-06 12:30+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1068,6 +1068,10 @@ msgstr ""
 msgid "No one row is selected."
 msgstr "Жодної строки не вибрано."
 
+msgid "Are you sure of loading a mime to selected item '%1'?"
+msgstr ""
+"Ви дійсно бажаєте завантажити MIME до обраного візуального елементу '%1'?"
+
 msgid "All files (*.*)"
 msgstr "Всі файли (*.*)"
 
@@ -1484,8 +1488,8 @@ msgstr "Натиснути для квітації всіх порушень з�
 msgid "&Alarm"
 msgstr "Порушення"
 
-msgid "Alarms (status)"
-msgstr "Порушення (статус)"
+msgid "Generic (status)"
+msgstr "Загальний (статус)"
 
 msgid "This label displays current system's time."
 msgstr "Це маркування показує поточний системний час."
@@ -2160,6 +2164,9 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
+
+#~ msgid "Status line items"
+#~ msgstr "Елементи рядку статусу"
 
 #~ msgid "Diagnostics"
 #~ msgstr "Діагностика"

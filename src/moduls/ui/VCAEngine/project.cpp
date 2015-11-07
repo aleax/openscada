@@ -26,7 +26,6 @@
 #include <tsys.h>
 
 #include "vcaengine.h"
-#include "types.h"
 #include "project.h"
 
 using namespace VCA;

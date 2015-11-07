@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.2"
+#define MOD_VER		"0.7.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -118,7 +118,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 					 ((mSmplType==paFloat32)?r2s(EVAL_REAL).c_str():ll2s(EVAL_INT).c_str())));
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
     nodeDelAll();
 }
@@ -130,7 +130,7 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
     if(!startStat()) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
     else if(!redntUse())
-	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost frames %g"),
+	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2g MB. Adjusted samplerate %d. Lost frames %g"),
 	    numChan, acqSize, sRt, lostFrmsCntr);
 
     return val;
@@ -412,6 +412,7 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), mCn
 
 TMdPrm::~TMdPrm( )
 {
+    disable();
     nodeDelAll();
 }
 
@@ -429,24 +430,26 @@ void TMdPrm::load_( )
     TParamContr::load_();
 }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
     TParamContr::enable();
 
     //Set to process
-    if(owner().startStat())	owner().prmEn(id(), true);
+    //if(owner().startStat())
+    owner().prmEn(id(), true);
 }
 
-void TMdPrm::disable()
+void TMdPrm::disable( )
 {
     if(!enableStat())	return;
 
     TParamContr::disable();
 
     //Set to process
-    if(owner().startStat())	owner().prmEn(id(), false);
+    //if(owner().startStat())
+    owner().prmEn(id(), false);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

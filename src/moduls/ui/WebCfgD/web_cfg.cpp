@@ -38,7 +38,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.8.0"
+#define MOD_VER		"0.9.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -151,12 +151,12 @@ void TWEB::load_( )
 
 void TWEB::modStart( )
 {
-    run_st = true;
+    runSt = true;
 }
 
 void TWEB::modStop( )
 {
-    run_st = false;
+    runSt = false;
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )

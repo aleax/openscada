@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"3.3.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
@@ -310,7 +310,7 @@ void TVision::modStart( )
 #endif
 
     end_run = false;
-    run_st  = true;
+    runSt  = true;
 }
 
 void TVision::modStop( )
@@ -329,7 +329,7 @@ void TVision::modStop( )
 	}
     TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
-    run_st = false;
+    runSt = false;
 }
 
 WdgShape *TVision::getWdgShape( const string &iid )

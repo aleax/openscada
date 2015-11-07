@@ -129,9 +129,11 @@ class TSYS : public TCntrNode
 
 	string	workDB( )	{ return mWorkDB; }
 	string	selDB( )	{ return mSelDB; }
+	string	mainCPUs( )	{ return mMainCPUs; }
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
 	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
+	void	setMainCPUs( const string &vl );
 	bool	saveAtExit( )	{ return mSaveAtExit; }
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
 	int	savePeriod( )	{ return mSavePeriod; }
@@ -142,7 +144,7 @@ class TSYS : public TCntrNode
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
 	//> Short time dimensions
-	bool	multCPU( )	{ return mMultCPU; }
+	int	nCPU( )		{ return mN_CPU; }
 	uint64_t sysClk( )	{ return mSysclc; }
 	void	clkCalc( );
 	uint64_t shrtCnt( )
@@ -165,7 +167,7 @@ class TSYS : public TCntrNode
 	static bool taskEndRun( );      // Check for the task endrun by signal SIGUSR1
 
 	//> Sleep task for period grid <per> on ns or to cron time.
-	static int sysSleep( float tm );			//System sleep in seconds up to nanoseconds (1e-9)
+	static int sysSleep( float tm );			//System sleep in seconds down to nanoseconds (1e-9)
 	static void taskSleep( int64_t per, time_t cron = 0 );
 	static time_t cron( const string &vl, time_t base = 0 );
 
@@ -340,7 +342,8 @@ class TSYS : public TCntrNode
 		mIcoDir,	// Icons directory
 		mModDir;	// Modules directory
 
-	string	mWorkDB,mSelDB;	// Work and selected DB
+	string	mWorkDB, mSelDB,// Work and selected DB
+		mMainCPUs;	// Main used processors set
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 
@@ -353,13 +356,14 @@ class TSYS : public TCntrNode
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id
 
-	map<string,STask>	mTasks;
+	map<string, STask>	mTasks;
 	static pthread_key_t	sTaskKey;
 
 	Res	taskRes, mCfgRes;
 
-	bool	mMultCPU;
-	uint64_t mSysclc;
+	int	mN_CPU;
+	pthread_t	mainPthr;
+	uint64_t	mSysclc;
 
 	map<string, double>	mCntrs;
 

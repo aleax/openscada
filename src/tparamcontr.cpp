@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +52,7 @@ TParamContr::~TParamContr( )
 
 }
 
-string TParamContr::objName( )	{ return TValue::objName()+":TParamContr"; }
+string TParamContr::objName( )	{ return TValue::objName() + ":TParamContr"; }
 
 string TParamContr::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
 
@@ -62,31 +61,28 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     TParamContr *src_n = dynamic_cast<TParamContr*>(&node);
     if(!src_n) return *this;
 
-    //> Check for parameter type and change it if different and alow
-    if(type().name != src_n->type().name && owner().owner().tpPrmToId(src_n->type().name) >= 0)
-    {
+    //Check for parameter type and change it if different and alow
+    if(type().name != src_n->type().name && owner().owner().tpPrmToId(src_n->type().name) >= 0) {
 	if(enableStat()) disable();
 	setType(src_n->type().name);
     }
 
-    //> Configuration copy
+    //Configuration copy
     exclCopy(*src_n, "SHIFR;");
 
-    //> Enable new parameter
-    if(src_n->enableStat() && toEnable() && !enableStat())
-    {
+    //Enable new parameter
+    if(src_n->enableStat() && toEnable() && !enableStat()) {
 	enable();
 
-	//> Archives creation and copy
-        vector<string> a_ls;
+	//Archives creation and copy
+	vector<string> a_ls;
 	vlList(a_ls);
-        for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-        {
-            if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
+	for(unsigned i_a = 0; i_a < a_ls.size(); i_a++) {
+	    if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
 
 	    vlAt(a_ls[i_a]).at().setArch();
 	    (TCntrNode&)vlAt(a_ls[i_a]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[i_a]).at().arch().at();
-        }
+	}
     }
 
     return *this;
@@ -104,26 +100,24 @@ bool TParamContr::dataActive( )	{ return owner().startStat(); }
 
 void TParamContr::setDescr( const string &idsc ){ cfg("DESCR").setS(idsc); }
 
-void TParamContr::postEnable(int flag)
+void TParamContr::postEnable( int flag )
 {
     TValue::postEnable(flag);
 
-    if(!vlCfg())  setVlCfg(this);
+    if(!vlCfg()) setVlCfg(this);
     if(!vlElemPresent(&SYS->daq().at().errE()))
 	vlElemAtt(&SYS->daq().at().errE());
 }
 
 void TParamContr::preDisable(int flag)
 {
-    //> Delete or stop archives
+    //Delete or stop the archives
     vector<string> a_ls;
     vlList(a_ls);
-
     for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
-	{
+	if(!vlAt(a_ls[i_a]).at().arch().freeStat()) {
 	    string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
-	    if(flag) SYS->archive().at().valDel(arh_id,true);
+	    if(flag == RM_Full) SYS->archive().at().valDel(arh_id, true);
 	    else SYS->archive().at().valAt(arh_id).at().stop();
 	}
 
@@ -152,7 +146,7 @@ void TParamContr::save_( )
     SYS->db().at().dataSet( owner().DB()+"."+owner().cfg(type().db).getS(),
 			    owner().owner().nodePath()+owner().cfg(type().db).getS(),*this );
 
-    //> Save archives
+    //Save archives
     vector<string> a_ls;
     vlList(a_ls);
     for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
@@ -174,18 +168,17 @@ void TParamContr::enable()
     m_en = true;
 }
 
-void TParamContr::disable()
+void TParamContr::disable( )
 {
     m_en = false;
 }
 
 void TParamContr::vlGet( TVal &val )
 {
-    if( val.name() == "err" )
-    {
-	if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
-	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
-	else val.setS("0",0,true);
+    if(val.name() == "err") {
+	if(!enableStat()) val.setS(_("1:Parameter is disabled."), 0, true);
+	else if(!owner().startStat()) val.setS(_("2:Controller is stopped."), 0, true);
+	else val.setS("0", 0, true);
     }
 }
 
@@ -200,24 +193,23 @@ void TParamContr::setType( const string &tpId )
 
     setNodeMode(TCntrNode::Disabled);
 
-    try
-    {
-	//> Wait for disconnect other
+    try {
+	//Wait for disconnect other
 	while(nodeUse(true) > 1) TSYS::sysSleep(1e-3);
-	//> Remove from DB
+	//Remove from DB
 	postDisable(true);
 
-	//> Create temporary structure
+	//Create temporary structure
 	TConfig tCfg(&type());
 	tCfg = *(TConfig*)this;
 
-	//> Set new config structure
+	//Set new config structure
 	tipparm = &owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId));
 	setElem(tipparm);
 
-	//> Restore configurations
+	//Restore configurations
 	*(TConfig*)this = tCfg;
-    }catch(...) { }
+    } catch(...) { }
 
     setNodeMode(TCntrNode::Enabled);
 
@@ -228,10 +220,10 @@ void TParamContr::setType( const string &tpId )
 
 TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // TCntrNodeObj cntr() - get the controller node
+    //TCntrNodeObj cntr() - get the controller node
     if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
 
-    //> Configuration functions call
+    //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -242,18 +234,15 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
 
-    //> Service commands process
+    //Service commands process
     if(a_path.substr(0,6) == "/serv/")	{ TValue::cntrCmdProc(opt); return; }
 
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TValue::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name(),RWRWR_,"root",SDAQ_ID);
-	if(ctrMkNode("area",opt,0,"/prm",_("Parameter")))
-	{
-	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State")))
-	    {
+	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"))) {
+	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		if(!enableStat() && owner().owner().tpPrmSize() > 1)
 		    ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/prm/tpLst",
 			"help",_("Change type lead to data lost for specific configurations."));
@@ -266,29 +255,24 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	}
         return;
     }
-    //> Process command to page
-    if(a_path == "/prm/st/type")
-    {
+    //Process command to page
+    if(a_path == "/prm/st/type") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(type().name);
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setType(opt->text());
     }
-    else if(a_path == "/prm/st/en")
-    {
+    else if(a_path == "/prm/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    if(!owner().enableStat())	throw TError(nodePath().c_str(),_("Controller is not started!"));
-	    else atoi(opt->text().c_str())?enable():disable();
+	    else s2i(opt->text()) ? enable() : disable();
 	}
     }
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
-    else if(a_path == "/prm/tmplList" && ctrChkNode(opt))
-    {
+    else if(a_path == "/prm/tmplList" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");
         vector<string> lls, ls;
 	SYS->daq().at().tmplLibList(lls);
-	for(unsigned i_l = 0; i_l < lls.size(); i_l++)
-	{
+	for(unsigned i_l = 0; i_l < lls.size(); i_l++) {
 	    SYS->daq().at().tmplLibAt(lls[i_l]).at().list(ls);
 	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
 		opt->childAdd("el")->setText(lls[i_l]+"."+ls[i_t]);

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.9.2"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"2.1.1"
+#define MOD_VER		"3.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -74,7 +73,7 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), /*start_path(string("/")+SYS->id()),*/ end_run(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), /*mStartPath(string("/")+SYS->id()),*/ mEndRun(false)
 {
     mod		= this;
 
@@ -93,7 +92,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), /*start_path(string("/")+SYS->id())
 
 TUIMod::~TUIMod( )
 {
-    if(run_st) modStop();
+    if(runSt) modStop();
 }
 
 string TUIMod::modInfo( const string &name )
@@ -181,8 +180,8 @@ void TUIMod::modStart( )
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    end_run = false;
-    run_st  = true;
+    mEndRun = false;
+    runSt   = true;
 }
 
 void TUIMod::modStop( )
@@ -191,13 +190,13 @@ void TUIMod::modStop( )
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
 
-    end_run = true;
+    mEndRun = true;
 
     for(unsigned i_w = 0; i_w < cfapp.size(); i_w++)
 	while(cfapp[i_w]) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
     TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
-    run_st = false;
+    runSt = false;
 }
 
 void TUIMod::regWin( QMainWindow *win )
@@ -217,25 +216,25 @@ void TUIMod::unregWin( QMainWindow *win )
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get the page info
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",_("Configurator start path"),RWRWR_,"root",SUI_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/startPath",_("Configurator start path"),RWRWR_,"root",SUI_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/startUser",_("Configurator start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
-    //> Process command to page
+    //Process command to the page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/start_path") {
+    if(a_path == "/prm/cfg/startPath") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startPath());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartPath(opt->text());
     }
-    else if(a_path == "/prm/cfg/start_user" ) {
+    else if(a_path == "/prm/cfg/startUser" ) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());
     }
@@ -253,10 +252,10 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 
 void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev type, QWidget *parent )
 {
-    //> Put system message.
+    //Put the system message
     message(cat.c_str(),(type==TUIMod::Crit)?TMess::Crit:
 	(type==TUIMod::Error)?TMess::Error:
-	(type==TUIMod::Warning)?TMess::Warning:TMess::Info,"%s",mess.c_str());
+	(type==TUIMod::Warning)?TMess::Warning:TMess::Info, "%s", mess.c_str());
 
     QMessageBox msgBox(parent);
     msgBox.setWindowTitle(_(MOD_NAME));

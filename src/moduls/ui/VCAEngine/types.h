@@ -30,6 +30,7 @@ namespace VCA
 	A_PERM		= -3,
 	A_COM_FOCUS	= -2,
 	A_COM_LOAD	= -1,
+	A_NO_ID		= 0,
 	A_ROOT		= 1,
 	A_PG_OPEN_SRC	= 3,
 	A_PG_GRP	= 4,

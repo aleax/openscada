@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko                           * 
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"3.0.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -110,19 +109,19 @@ void Engine::postEnable( int flag )
 
     if(!(flag&TCntrNode::NodeConnect)) return;
 
-    //Make lib's DB structure
+    //Make lib's DB structure: Libs(__ID__, NAME, DSCR, DB_TBL, ICO)
     lbwdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
     lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     lbwdg_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
     lbwdg_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
     lbwdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
 
-    //Make library widgets' data container
+    //Make library widgets' data container: {LibWidgetMime,ProjMime}(__ID__, MIME, DATA)
     wdgdata_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     wdgdata_el.fldAdd(new TFld("MIME",_("Mime type"),TFld::String,TFld::NoFlag,"30"));
     wdgdata_el.fldAdd(new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000"));
 
-    //Make widgets' DB structure
+    //Make widgets' DB structure: LibWigets(__ID__, ICO, PARENT, PROC, PROC_PER, ATTRS, TIMESTAMP)
     wdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
@@ -130,13 +129,13 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
     wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
 
-    //Make include widgets' DB structure
+    //Make include widgets' DB structure: {LibWidgetIncl,ProjPageWIncl}(__IDW__, __ID__, PARENT, ATTRS)
     inclwdg_el.fldAdd(new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100"));
     inclwdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     inclwdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     inclwdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
 
-    //Make widget's IO DB structure
+    //Make widget's IO DB structure: {LibWidgetIO,ProjPageIO}(__IDW__, __ID__, __IDC__, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
     wdgio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
     wdgio_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61"));
     wdgio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
@@ -145,7 +144,7 @@ void Engine::postEnable( int flag )
     wdgio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30"));
     wdgio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000"));
 
-    //Make widget's user IO DB structure
+    //Make widget's user IO DB structure: {ProjPageUserIO,LibWidgetUserIO}(__IDW__, __ID__, __IDC__, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
     wdguio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
     wdguio_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61"));
     wdguio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
@@ -156,7 +155,7 @@ void Engine::postEnable( int flag )
     wdguio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30"));
     wdguio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000"));
 
-    //Make project's DB structure
+    //Make project's DB structure: Projs(__ID__, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)
     prj_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
     prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
@@ -169,7 +168,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd(new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
     prj_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
 
-    //Make page's DB structure
+    //Make page's DB structure: ProjPages(__OWNER__, __ID__, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)
     page_el.fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100"));
     page_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
@@ -179,12 +178,12 @@ void Engine::postEnable( int flag )
     page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
 
-    //Make sessions' IO values of projects DB structure
+    //Make sessions' IO values of projects DB structure: ProjSess(__IDW__, __ID__, IO_VAL)
     prj_ses_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200"));
     prj_ses_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     prj_ses_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
 
-    //Make styles' IO DB structure
+    //Make styles' IO DB structure: PrjStl(__ID__, V_0, V_1, V_2, V_3, V_4, V_5, V_6, V_7, V_8, V_9)
     prjStl_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     prjStl_el.fldAdd(new TFld("V_0",_("Value 0"),TFld::String,TFld::NoFlag,"100"));
     prjStl_el.fldAdd(new TFld("V_1",_("Value 1"),TFld::String,TFld::NoFlag,"100"));
@@ -410,7 +409,7 @@ void Engine::load_( )
 
 void Engine::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save module."));
+    mess_info(nodePath().c_str(), _("Save module."));
 
     //Save parameters to DB
     TBDS::genDBSet(nodePath()+"SynthCom", synthCom());
@@ -453,12 +452,12 @@ void Engine::modStart( )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	sesAt(ls[l_id]).at().setStart(true);
 
-    run_st = true;
+    runSt = true;
 }
 
 void Engine::modStop( )
 {
-    mess_info(nodePath().c_str(),_("Stop module."));
+    mess_info(nodePath().c_str(), _("Stop module."));
 
     vector<string> ls;
 
@@ -467,7 +466,7 @@ void Engine::modStop( )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	sesAt(ls[l_id]).at().setStart(false);
 
-    run_st = false;
+    runSt = false;
 }
 
 void Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
@@ -534,15 +533,15 @@ string Engine::callSynth( const string &itxt )
 
     //Read result from result file
     if(!rezFromPipe) {
-	FILE *fp = fopen( synthRez, "r" );
+	FILE *fp = fopen(synthRez, "r");
 	if( !fp ) return "";
 	while((comPos=fread(buf,1,sizeof(buf),fp)))
 	    rez.append(buf,comPos);
 	fclose(fp);
-	remove( synthRez );
+	remove(synthRez);
     }
 
-    return TSYS::strEncode( rez, TSYS::base64 );
+    return TSYS::strEncode(rez, TSYS::base64);
 }
 
 void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen )
@@ -586,19 +585,29 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); ) {
 	string sid = c_el.cfg("ID").getS();
-	unsigned flg = c_el.cfg("IO_TYPE").getI();
-
 	if(!TSYS::pathLev(sid,1).empty()) continue;
+	unsigned type = c_el.cfg("IO_TYPE").getI();
+	unsigned flg = type >> 4;
+	type = type&0x0f;
+	unsigned selfFlg = c_el.cfg("SELF_FLG").getI();
 
 	if(!w.attrPresent(sid))
-	    w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4));
+	    w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)type,flg));
 	AutoHD<Attr> attr = w.attrAt(sid);
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) continue;
-	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
-	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
-	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
+	c_el.cfg("IO_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg));
+	string IO_VAL = c_el.cfg("IO_VAL").getS();
+	attr.at().setS(IO_VAL);
+	if(type == TFld::Integer || type == TFld::Real || (flg&(TFld::Selected|TFld::SelEdit))) {
+	    attr.at().setS(TSYS::strSepParse(IO_VAL,0,'|'));
+	    attr.at().fld().setValues(TSYS::strSepParse(IO_VAL,1,'|'));
+	    if(flg&(TFld::Selected|TFld::SelEdit)) attr.at().fld().setSelNames(TSYS::strSepParse(IO_VAL,2,'|'));
+	}
+	//!!!! Temporary placed for existing DBs clean up to early fix from using Values and Names to unproper types.
+	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
+	c_el.cfg("CFG_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg,selfFlg));
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
 }
@@ -621,8 +630,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	if(ldGen != (bool)(attr.at().flgGlob()&Attr::Generic)) continue;
 
 	//Main attributes store
-	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser))
-	{
+	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser)) {
 	    c_el.cfg("ID").setS( als[i_a] );
 	    c_el.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
@@ -636,7 +644,11 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	else if(!ldGen) {
 	    c_elu.cfg("ID").setS( als[i_a] );
 	    c_elu.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
-	    c_elu.cfg("IO_VAL").setS(attr.at().getS()+"|"+attr.at().fld().values()+"|"+attr.at().fld().selNames());
+	    c_elu.cfg("IO_VAL").setS(attr.at().getS());
+	    if(attr.at().type() == TFld::Integer || attr.at().type() == TFld::Real || (attr.at().flgGlob()&(TFld::Selected|TFld::SelEdit))) {
+		c_elu.cfg("IO_VAL").setS(c_elu.cfg("IO_VAL").getS()+"|"+attr.at().fld().values());
+		if(attr.at().flgGlob()&(TFld::Selected|TFld::SelEdit)) c_elu.cfg("IO_VAL").setS(c_elu.cfg("IO_VAL").getS()+"|"+attr.at().fld().selNames());
+	    }
 	    c_elu.cfg("NAME").setS(attr.at().name());
 	    c_elu.cfg("IO_TYPE").setI(attr.at().fld().type()+(attr.at().fld().flg()<<4));
 	    c_elu.cfg("SELF_FLG").setI(attr.at().flgSelf());

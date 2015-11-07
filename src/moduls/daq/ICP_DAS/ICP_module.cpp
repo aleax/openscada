@@ -36,7 +36,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.0"
+#define MOD_VER		"0.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow realization of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
 #define LICENSE		"GPL2"
@@ -291,7 +291,11 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.mBus == 0 && cntr.period() && wTm > 0) {
 		ResAlloc res(cntr.reqRes, true);
 		int wTmSet = 1e3*vmax(1.5e-9*cntr.period(), wTm);
+#ifdef __i386__
 		EnableSysWDT(wTmSet);
+#else
+		EnableWDT(wTmSet);
+#endif
 		res.release();
 	    }
 
@@ -304,7 +308,15 @@ void *TMdContr::Task( void *icntr )
     catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
 
     //Watchdog timer disable
-    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); DisableSysWDT(); res.release(); }
+    if(cntr.mBus == 0 && wTm > 0) {
+	ResAlloc res(cntr.reqRes, true);
+#ifdef __i386__
+	DisableSysWDT();
+#else
+	DisableWDT();
+#endif
+	res.release();
+    }
 
     cntr.prcSt = false;
 
@@ -873,12 +885,14 @@ void *TMdPrm::fastTask( void *iprm )
 	for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
 	    cnls[i_c].at().setR(vbuf[i_c], wTm, true);
 
-	//> Calc next work time and sleep
-	wTm += (int64_t)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);
-	sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
-	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
+	// Check for more cycles lost
+	if(abs(time(NULL)-wTm/1000000) >= 3) wTm = 1000000ll*time(NULL);
 
-	//TSYS::taskSleep((int64_t)(1e9*100e-6));
+	//> Calc next work time and sleep
+	wTm += 1000000ll*((PrmsI8017*)prm.extPrms)->fastPer;
+	TSYS::taskSleep(int64_t(1e9*((PrmsI8017*)prm.extPrms)->fastPer));	//To prevent hang at wTm more lesser to current
+	//sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
+	//clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &sp_tm, NULL);
     }
 
     prm.prcSt = false;

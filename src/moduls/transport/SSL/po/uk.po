@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:32+0300\n"
+"POT-Creation-Date: 2015-11-06 11:44+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -72,12 +72,17 @@ msgstr "Отримано повідомлення розміром '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Відповідь повідомленням розміром '%d'."
 
-#, c-format
 msgid "Socket has been disconnected (%d)."
-msgstr "Відключення від сокету (%d)."
+msgstr "Сокет відключено (%d)."
 
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
+
+msgid "State"
+msgstr "Стан"
+
+msgid "Active connections"
+msgstr "Активні підключення"
 
 msgid ""
 "SSL input transport has address format:\n"
@@ -106,6 +111,12 @@ msgstr "Пароль приватного ключа"
 msgid "Clients maximum"
 msgstr "Максимум клієнтів"
 
+msgid "Clients maximum, per host"
+msgstr "Максимум клієнтів, за хостами"
+
+msgid "Set to zero for disable that limit."
+msgstr "Встановити у нуль для вимкнення ліміту."
+
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
@@ -131,6 +142,10 @@ msgstr ""
 
 msgid "Priority"
 msgstr "Пріоритет"
+
+#, c-format
+msgid "%s %d(%s): last %s; traffic in %s, out %s."
+msgstr "%s %d(%s): останній %s; трафік вхідний %s, вихідний %s."
 
 #, c-format
 msgid "Traffic in %s, out %s."
@@ -169,8 +184,9 @@ msgstr "Надсилання повідомлення розміром '%d'."
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
-msgid "Socket error!"
-msgstr "Помилка сокету!"
+#, c-format
+msgid "Socket error: %s"
+msgstr "Помилка сокету: %s"
 
 msgid ""
 "SSL output transport has address format:\n"

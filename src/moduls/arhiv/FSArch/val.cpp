@@ -426,13 +426,13 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		  "where they are considered identical and will be archived as a single value\n"
 		  "through sequential packaging. Allows well-packaged slightly changing parameters\n"
 		  "which outside certainty. Disable this property can be set to zero."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Packing files timeout (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the time after which, in the absence of appeals, archive files will be packaged in gzip archiver.\n"
 		 "Set to zero for disable packing by gzip."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Checking archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the frequency of checking the archives for the emergence or delete new files\n"
                   "in a directory of archives, as well as exceeding the limits and removing old archive files."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Using info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
 		_("Specifies whether to create files with information about the packed archive files by gzip-archiver.\n"
                   "When copying files of archive on another station, these info files can speed up the target station\n"
                   "process of first run by eliminating the need to decompress by gzip-archives in order to obtain information."));
@@ -1021,12 +1021,12 @@ void VFileArch::attach( const string &name )
 	//Load previous val check
 	bool load_prev = false;
 	int64_t cur_tm = TSYS::curTime();
-	if(cur_tm >= begin() && cur_tm <= end() && period() > 10000000) { owner().prev_tm = cur_tm; load_prev = true; }
+	if(cur_tm >= begin() && cur_tm <= end() && period() > 10000000) { owner().prevTm = cur_tm; load_prev = true; }
 
 	//Check and prepare last archive files
 	// Get file size
 	int hd = open(mName.c_str(), O_RDWR);
-	if(hd == -1)	throw TError(owner().archivator().nodePath().c_str(),_("Archive file '%s' no opened!"),name.c_str());
+	if(hd == -1)	throw TError(owner().archivator().nodePath().c_str(), _("Archive file '%s' no opened!"), name.c_str());
 	mSize = lseek(hd, 0, SEEK_END);
 	mpos = (end()-begin())/period();
 	if(!mPack && cur_tm >= begin() && cur_tm <= end()) repairFile(hd);
@@ -1034,18 +1034,11 @@ void VFileArch::attach( const string &name )
 	res.release();
 
 	// Load previous value
-	if(load_prev)
+	if(load_prev && owner().prevVal == EVAL_REAL)
 	    switch(type()) {
-		case TFld::Integer: {
-		    int tval = getVal((cur_tm-begin())/period()).getI();
-		    owner().prev_val.assign((char*)&tval,vSize);
+		case TFld::Integer: case TFld::Real:
+		    owner().prevVal = getVal((cur_tm-begin())/period()).getR();
 		    break;
-		}
-		case TFld::Real: {
-		    double tval = getVal((cur_tm-begin())/period()).getR();
-		    owner().prev_val.assign((char*)&tval,vSize);
-		    break;
-		}
 		default: break;
 	    }
     }
@@ -1299,7 +1292,7 @@ TVariant VFileArch::getVal( int vpos )
 bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
     int vpos_beg, vpos_end;
-    string val_b, value, value_first, value_end;	//Set value
+    string val_b, value, value_first, value_end = eVal;	//Set value
 
     ResAlloc res(mRes, false);
     if(mErr) return false;	//throw TError(owner().archivator().nodePath().c_str(), _("Archive file error!"));
@@ -1330,6 +1323,7 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //Get values, make value buffer and init the pack index table
     vpos_beg = 0;
     vpos_end = -1;
+    double pRc = ((ModVArch&)owner().archivator()).roundProc();
     while(ibeg <= iend) {
 	// Get value and put it to file
 	switch(type()) {
@@ -1339,26 +1333,19 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 		break;
 	    }
 	    case TFld::Integer: {
-		int tval = buf.getI(&ibeg, true);
-		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0) {
-		    int vprev = *(int*)value_end.c_str();
-		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
-			tval = vprev;
-		}
+		int vprev, tval = buf.getI(&ibeg, true);
+		if(pRc && vpos_end >= 0 && (vprev=*(int*)value_end.c_str()) != EVAL_INT && tval != EVAL_INT &&
+		    ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+		    100*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= pRc) tval = vprev;
 		value.assign((char*)&tval, vSize);
 		break;
 	    }
 	    case TFld::Real: {
-		double tval = buf.getR(&ibeg, true);
-		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0) {
-		    double vprev = *(double*)value_end.c_str();
-		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
-			tval = vprev;
-		}
-		tval = TSYS::doubleLE(tval);
-		value.assign((char*)&tval, vSize);
+		double vprev, tval = buf.getR(&ibeg, true);
+		if(pRc && vpos_end >= 0 && (vprev=*(double*)value_end.c_str()) != EVAL_REAL && tval != EVAL_REAL &&
+		    ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+		    100*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= pRc) tval = vprev;
+		tval = TSYS::doubleLE(tval); value.assign((char*)&tval, vSize);
 		break;
 	    }
 	    case TFld::String: {

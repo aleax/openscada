@@ -645,6 +645,23 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	pthread_mutex_unlock(&dataM);
 	return rez;
     }
+    // double sum(int beg, int end) - sum of the array part from positon <beg> to <end> (exclude)
+    //  beg - begin position
+    //  end - end position
+    if(id == "sum" && prms.size()) {
+	pthread_mutex_lock(&dataM);
+	int beg = prms[0].getI();
+	if(beg < 0) beg = mEls.size()+beg;
+	beg = vmax(beg, 0);
+	int end = mEls.size();
+	if(prms.size() >= 2) end = prms[1].getI();
+	if(end < 0) end = mEls.size()+end;
+	end = vmin(end, (int)mEls.size());
+	double rez = 0;
+	for(int iP = beg; iP < end; iP++) rez += mEls[iP].getR();
+	pthread_mutex_unlock(&dataM);
+	return rez;
+    }
     // Array sort( ) - lexicographic items sorting
     if(id == "sort") {
 	pthread_mutex_lock(&dataM);
@@ -742,11 +759,11 @@ string TRegExp::replace( const string &vl, const string &str )
 {
     string rez = vl, repl;
     if(!regex) return rez;
-    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0;
+    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0 && capv[1] > capv[0];
 	curPos = capv[0]+repl.size())
     {
-	repl = substExprRepl(str,rez,capv,n);
-	rez.replace(capv[0],capv[1]-capv[0],repl);
+	repl = substExprRepl(str, rez, capv, n);
+	rez.replace(capv[0], capv[1]-capv[0], repl);
     }
     return rez;
 }
@@ -1087,11 +1104,9 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	    int cf_sz = lseek(hd, 0, SEEK_END);
 	    if(cf_sz > 0) {
 		lseek(hd, 0, SEEK_SET);
-		char *buf = (char *)malloc(cf_sz+1);
-		fOK = (read(hd,buf,cf_sz) == cf_sz);
-		buf[cf_sz] = 0;
-		s_buf = buf;
-		free(buf);
+		char buf[STR_BUF_LEN];
+		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
+		fOK = s_buf.size();
 	    }
 	    close(hd);
 	    if(!fOK) return TSYS::strMess(_("3:Load file '%s' error."), prms[0].getS().c_str());

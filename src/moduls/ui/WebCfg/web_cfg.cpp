@@ -36,7 +36,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.6"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -136,12 +136,12 @@ void TWEB::load_( )
 
 void TWEB::modStart()
 {
-    run_st = true;
+    runSt = true;
 }
 
 void TWEB::modStop()
 {
-    run_st = false;
+    runSt = false;
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )

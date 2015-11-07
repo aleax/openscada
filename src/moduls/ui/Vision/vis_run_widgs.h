@@ -60,7 +60,7 @@ namespace VISION
 
 	    WdgView *newWdgItem( const string &iwid );
 	    void update( bool full, XMLNode *aBr = NULL, bool FullTree = false );
-	    bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
+	    bool attrSet( const string &attr, const string &val, int uiPrmPos = A_NO_ID, bool toModel = false );
 
 	    void shapeList( const string &snm, vector<string> &ls );
 	    RunWdgView *findOpenWidget( const string &wdg );
@@ -172,6 +172,20 @@ namespace VISION
 
 	private:
 	    int	mStyle;
+    };
+
+    //*********************************************
+    //* User's status bar item                    *
+    //*********************************************
+    class UserItStBar : public QLabel
+    {
+	Q_OBJECT
+
+	public:
+	    UserItStBar( QWidget *parent = 0 );
+
+	protected:
+	    bool event( QEvent *event );
     };
 }
 

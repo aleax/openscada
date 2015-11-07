@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.9.7"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"

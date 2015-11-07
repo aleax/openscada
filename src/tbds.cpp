@@ -683,7 +683,7 @@ void TBD::preDisable( int flag )	{ disable(); }
 
 void TBD::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+    if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true, true);
 }
 
 TTipBD &TBD::owner( )	{ return *(TTipBD*)nodePrev(); }

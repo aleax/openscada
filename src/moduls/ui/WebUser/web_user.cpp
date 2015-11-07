@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.2"
+#define MOD_VER		"0.6.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -173,7 +173,7 @@ void TWEB::modStart( )
 	if(uPgAt(ls[i_n]).at().toEnable())
 	    uPgAt(ls[i_n]).at().setEnable(true);
 
-    run_st = true;
+    runSt = true;
 }
 
 void TWEB::modStop( )
@@ -183,7 +183,7 @@ void TWEB::modStop( )
     for(unsigned i_n = 0; i_n < ls.size(); i_n++)
 	uPgAt(ls[i_n]).at().setEnable(false);
 
-    run_st = false;
+    runSt = false;
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )

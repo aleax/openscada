@@ -42,6 +42,7 @@
 #include <QTableWidget>
 #include <QScrollArea>
 #include <QTextBrowser>
+#include <QPrinter>
 
 #include <tmess.h>
 #include <xml.h>
@@ -89,7 +90,7 @@ class WdgShape : public QObject
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ return false; }
 
 	//Static methods
-	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true );
+	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true, const QFont &defFnt = QFont() );
 	static QColor getColor( const string &vl );
 
     protected:
@@ -482,7 +483,8 @@ class ShapeProtocol : public WdgShape
 			QFont font;
 		};
 		//Methods
-		ShpDt( ) : active(true), tTimeCurent(false), time(0), tSize(60), tmPrev(0), tmGrndPrev(0), arhBeg(0), arhEnd(0)	{ }
+		ShpDt( ) : active(true), tTimeCurent(false), trcPer(0), lev(0), viewOrd(0),
+		    time(0), tSize(60), tmPrev(0), tmGrndPrev(0), arhBeg(0), arhEnd(0)	{ }
 		//Attributes
 		short active	:1;
 		short tTimeCurent:1;

@@ -35,7 +35,7 @@
 #define MOD_NAME	_("File system archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"1.5.1"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
 #define LICENSE		"GPL2"
@@ -148,7 +148,7 @@ string ModArch::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= The module <%s:%s> options =======================\n"
-	"    --noArchLimit        Disable archives limit to file number. Use for see archives mode, not work.\n"
+	"    --noArchLimit        Disable archives limit to the file number. Use for see archives mode, not work.\n"
 	"\n"),MOD_TYPE,MOD_ID);
 }
 

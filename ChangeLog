@@ -1,3 +1,95 @@
+2015-11-07 Roman 0.8.14
+- API:
+    !!!!:Changes:
+	SYS.TUI: Attribute run_st is renamed to runSt.
+    Appends:
+	SYS: User API object Array expanded by function sum() for the array's pointed items sum allow.
+	    User API function SYS.fileRemove( string file ) is added.
+- SYS:
+    !!!!:FIX: User API function system() fixed for full reading popen's pipe, up to EOF.
+    !!:FIX: Only one processor, number 1, set at the multiprocessing checking fix by the real available processors get.
+    FIX: Config-file loading and user API function load() rewrote for prevent access behind allocated memory.
+    FIX: Translation to Russian some fixed.
+    FIX: Security: standard users "root", "user" and groups "root", "user" creation added only after the subsystem loading and its lack.
+	FIX: Function access() expanded for requested group presence checking and exception prevent.
+	TSecurity::usrGrpList() set for return all groups for user "root".
+    FIX:debian.openscada.init,data.{oscada_ALT.init,oscada_gentoo.init}: "export" keyword miss before LANG=en_US.UTF-8 fixed.
+    TMess: Time mark format of messages for stdout and stderr set to ISO 8601.
+    TRegExp: To replace() added checking to nozero replace range for hangs prevent.
+    DATA.ICONS: Appended by icons busy.png, connected.png, connecting.png.
+    XMLNode: To encoding on save function added symbol 0 processing to '\000'. Mostly for now to resolve problems into UI.WebCfgD.
+    !!!!:Command-line options set to not case sensitive: coreDumpAllow, pidFile, h, help, log, messLev, modPath, config, station, statName.
+	Some command-line options renamed and appended by the synonyms: demon + daemon, CoreDumpAllow to coreDumpAllow, pid-file + pidFile,
+	    MessLev to messLev, ModPath to modPath, Config to config, Station to station, StatName to statName.
+    !!!:All modules version rose to actual changes and will next trace the changes.
+    !!!!:debian: Significant cleaned for most lintian's errors and warnings resolve.
+	openscada.init: Default-Start levels set to 2 3 4 for autostart with GUI prevent, level 5.
+	rules: parallel building by key -j{N_CPU} is added, by Alexey Bondarchuk (aleax).
+    !!:Main CPUs set appended as configuration field for allow generic processors select, include information about current processors set.
+	The information about current processors set to a task's thread is added, into generic tab "Tasks".
+	CPU information's field renamed from "CPU frequency" to "CPU" and is appended by present CPU number.
+    !!:Addressing to the config file properties set to not case sensitive for attribute "id" value, especially for: Workdir to WorkDir.
+- !!!!:FIX:DB: DB removing from config file fixed, by set "ForceCfg".
+- DAQ:
+    FIX:{DCON,ModBus}: Error messages expanding to addition different errors per tries fixed.
+    !!:FIX:ICP_DAS: I-8017 fast acquisition task turn to use TSYS::taskSleep() instead clock_nanosleep() for hangs prevent at wTm overfull.
+	FIX: Build on ARM fixed.
+    FIX:DAQGate: Removing archives at the parameter removing disabled for possible archives lost prevent, at the sync.
+	FIX: Fixed for prevent SHIFR and other attributes lost at the parameter restore, by lock, after it deletion try.
+    FIX:JavaLikeCalc: Function {Integer}.toString() fixed for set to signed only the decimal base 10.
+	Word "CODE" replaced to the absolute program position, for the debug messages.
+	Commenting by symbol '#' allowed to the IO list into parameter object.
+    FIX:SoundCard: Locked resources left prevented for not disabled parameters.
+- Archive:
+    !!!!:FIX: Value's field "Source" set from the control interface (configurators) fixed.
+    !!!!:FIX:{*,FSArch}: prev_val unified to double type for all operations like average.
+    TArchives: Request "get" of the service "/serv/mess" some expanded for zero "tm" processing to the current time.
+    FIX:FSArch: VFileArch::setVals() rewrote for integer and real data types rounding for prevent wrong access here to not allocated memory.
+	Some original messages fixed.
+    !!:Archive.DBArch: Back reading for long periodic archives, like minutes and hours added, at its starting.
+- Transport:
+    !!!!:{Sockets,SSL}: Set unified to the client's work-control object.
+	Statistic information per active connection is added, include: socket FD, client host address, connection and last request time, IO traffic.
+	Maximum clients per host limit is added.
+	Message "Socket error" appended by the system details.
+    Sockets: Default port set to 10005, default for the OpenSCADA control interface.
+- Protocol:
+    OPC_UA:
+	FIX: Possible processing for wrong certificates writing fixed.
+	FIX: referenceTypeId of attributes of parameter is changed from OpcUa_HasComponent to OpcUa_Organizes.
+	Library COPYING file replaced to "GNU LESSER GENERAL PUBLIC LICENS" content and the file GPL-3 also added.
+	libOPC_UA appended by function Server::clientAddr() for the openned connection re-establish detection by the Secure Channel reusing.
+    !!:FIX:ModBus: Generic prefix 'i' and string processing fix.
+    FIX:HTTP: Fix multiplication for autologin user's items at each it loading.
+-UI:
+    FIX:{QTCfg,Vision}: Fixed for font get into the text edit syntax higligting and more, by Vision::getFont(),
+	from the default font base (system font).
+	FIX: Editable ComboBox completer set to Qt::CaseSensitive for allow the symbols register change at it edit.
+    !!!:{VCAEngine,Vision}: Visualizer specific control attributes support is added.
+	"User's status line items" UI.Vision specific attribute implemented.
+	Old fassion access to the permissions removed.
+    QTStarter: Daemon mode checking to argument "daemon" expanded. Source code some cleaned.
+    !!!!:QTCfg:
+	FIX: Checking for no apply editable widgets rewrote to direct checking.
+	FIX: Empty warning dialogs prevented and events disabled for the navigation tree on the time of the page updating.
+	!!!!: Requests to hosts processing moved to different threads and the interface made responsible at whole.
+	!: Integer edition fields expanded for adaptive processing to dec, hex and oct representation.
+	List view widget is moved to ListView class, inherited from QListWidget for sizeHint() set to 5 rows for height.
+    FIX:VCAEngine: Using into user attributes symbol '|' fixed for types no TFld::Integer, TFld::Real and selected.
+	Inline helps for attributes of all primitives mostly updated.
+    Vision:
+	FIX: Some doings are made for prevent possible access to connection error dialog after the master page closing.
+	FIX: Build for Qt 5.4 fix.
+	FIX: The sound alarm empty play command processing fix.
+	Check and notify about mime loading try to a selected item added.
+	QPointF::manhattanLength() replaced by needs Qt version greatter or equal to 4.6.
+	Some specific symbols from new file names, at the export, removing is added.
+	Some uninitialized variables access prevented, detected by the Valgrind.
+- FIX:Special.FLibSYS: VArchObj::FFT(): Potential crash prevented.
+    Expand for check to EVAL and replace that to adaptive <vlOnEVAL>, new last argument.
+    To Array result added object's attributes "bufSize" and "bufEVAL" for some the data quality control.
+
+
 2015-05-10 Roman 0.8.13
 - API:
     !!!!:Changes:

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:37+0300\n"
+"POT-Creation-Date: 2015-11-06 12:06+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -400,6 +400,9 @@ msgstr ""
 "Некоторые изменения не приняты!\n"
 "Принять сейчас или потерять?"
 
+msgid "Broken info respond - no a child."
+msgstr ""
+
 msgid "Refresh items tree"
 msgstr "Обновить элементы дерева"
 
@@ -413,6 +416,16 @@ msgstr "Отправка изменений выбранным"
 #, c-format
 msgid "Send current command '%s' to other selected nodes \"%s\"?"
 msgstr "Отправить текущую команду '%s' другим выбранным узлам \"%s\"?"
+
+#, c-format
+msgid "Unknown host '%s'."
+msgstr "Неизвестный хост '%s'."
+
+msgid "Wait for reply from host '%1'"
+msgstr "Ожидание ответа от хоста '%1'"
+
+msgid "Cancel"
+msgstr "Отмена"
 
 msgid "Local station"
 msgstr "Локальная станция"
@@ -576,6 +589,9 @@ msgstr "Выборочный элемент '%s' отсутствует!"
 msgid "%s| Change '%s' to: '%s'!"
 msgstr "%s| Изменено '%s' в: '%s'!"
 
+msgid "No a link set"
+msgstr "Не установлено подключения"
+
 msgid "Picture is not set!"
 msgstr "Картинка не установлена!"
 
@@ -587,9 +603,6 @@ msgstr "Поиск следующего"
 
 msgid "Apply"
 msgstr "Принять"
-
-msgid "Cancel"
-msgstr "Отмена"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"

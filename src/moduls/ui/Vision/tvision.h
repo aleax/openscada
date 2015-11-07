@@ -28,6 +28,7 @@
 #include <telem.h>
 #include <tuis.h>
 #include "tsys.h"
+#include "../VCAEngine/types.h"
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -37,6 +38,7 @@
 #define POS_PREC_DIG	3
 
 using namespace OSCADA;
+using namespace VCA;
 
 namespace VISION
 {

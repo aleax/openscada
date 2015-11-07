@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 16:38+0300\n"
+"POT-Creation-Date: 2015-11-06 11:28+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -400,18 +400,18 @@ msgstr "Прапорець завершення функції"
 
 #, c-format
 msgid ""
-"Coil(%s) %d already registered for IO%d. IO%d will be disabled for process "
+"Coil(%s) %d already registered for IO#%d. IO#%d will be disabled for process "
 "coil %d!"
 msgstr ""
-"Біт(%s) %d вже зареєстровано для IO%d. IO%d буде виключено із обробки "
+"Біт(%s) %d вже зареєстровано для IO#%d. IO#%d буде виключено із обробки "
 "біта(coil) %d!"
 
 #, c-format
 msgid ""
-"Register(%s) %d already registered for IO%d. IO%d will be disabled for "
+"Register(%s) %d already registered for IO#%d. IO#%d will be disabled for "
 "process register %d!"
 msgstr ""
-"Регістр(%s) %d вже зареєстровано для IO%d. IO%d буде виключено із обробки "
+"Регістр(%s) %d вже зареєстровано для IO#%d. IO#%d буде виключено із обробки "
 "регістра %d!"
 
 #, c-format

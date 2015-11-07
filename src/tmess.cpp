@@ -117,8 +117,8 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 	}
 	syslog(level_sys, "%s", sMess.c_str());
     }
-    if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", tm2s(time(NULL),"").c_str(), sMess.c_str());
-    if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", tm2s(time(NULL),"").c_str(), sMess.c_str());
+    if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", tm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
+    if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", tm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
     if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
 	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
 }
@@ -225,12 +225,12 @@ void TMess::load( )
     //Load params from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	return;
-	else if(argCom == "MessLev") {
+	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) return;
+	else if(strcasecmp(argCom.c_str(),"messlev") == 0) {
 	    int i = atoi(optarg);
 	    if(i >= Debug && i <= Emerg) setMessLevel(i);
 	}
-	else if(argCom == "log") setLogDirect(s2i(argVl));
+	else if(strcasecmp(argCom.c_str(),"log") == 0) setLogDirect(s2i(argVl));
 
     //Load params config-file
     setMessLevel(s2i(TBDS::genDBGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));
