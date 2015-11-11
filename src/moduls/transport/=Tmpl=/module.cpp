@@ -58,7 +58,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 ) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -84,16 +84,10 @@ using namespace ModTmpl;
 TTr::TTr( string name ) : TTypeTransport(MOD_ID)
 {
     //!!! Init shortcut to module's root object. No change it.
-    mod		= this;
+    mod = this;
 
     //!!! Loading module's meta-information into root object. No change it.
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 //!!! Destructor for module's root object. Append into for your need.

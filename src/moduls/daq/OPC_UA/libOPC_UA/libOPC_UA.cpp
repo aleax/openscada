@@ -2123,7 +2123,7 @@ nextReq:
 	    oN(out, rqHndl, 4);				 	//requestHandle
 	    oN(out, 0, 4);					//StatusCode
 	    oN(out, 0, 1);					//serviceDiagnostics
-	    oS(out, "");					//stringTable
+	    oNu(out, 0, 4);					//stringTable
 								//>>> Extensible parameter
 	    oNodeId(out, 0u);					//TypeId (0)
 	    oNu(out, 0, 1);					//Encoding
@@ -2492,8 +2492,8 @@ nextReq:
 		    string servNonce = randBytes(32);
 		    wep->sessServNonceSet(sesTokId, servNonce);
 		    oS(respEp, servNonce);			//serverNonce
-		    oS(respEp, "");				//results []
-		    oS(respEp, "");				//diagnosticInfos []
+		    oNu(respEp, 0, 4);				//results []
+		    oNu(respEp, 0, 4);				//diagnosticInfos []
 		    break;
 		}
 		case OpcUa_CloseSessionRequest: {
@@ -3166,7 +3166,7 @@ nextReq:
 	    oN(out, reqHndl, 4);				//requestHandle
 	    oN(out, stCode, 4);					//StatusCode
 	    oN(out, 0, 1);					//serviceDiagnostics
-	    oS(out, "");					//stringTable
+	    oNu(out, 0, 4);					//stringTable
 								//>>> Extensible parameter
 	    oNodeId(out, 0u);					//TypeId (0)
 	    oNu(out, 0, 1);					//Encoding
@@ -3774,7 +3774,8 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 		    // Values' attributes processing
 		    switch(aid) {
 			case AId_Value:
-			    req.setAttr("type", dtType)->setText(req.attr("Value").empty()?ndX->second->attr("Value"):req.attr("Value"));
+			    req.setAttr("type", dtType)->setText(req.attr("Value").empty()?ndX->second->attr("Value"):req.attr("Value"))->
+				setAttr("Value","");
 			    return 0;
 			case AId_DataType: req.setAttr("type", int2str(OpcUa_NodeId))->setText(int2str(atoi(dtType.c_str())&(~OpcUa_Array)));	return 0;
 			case AId_ValueRank: {

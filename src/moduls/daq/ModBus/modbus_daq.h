@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.0"
+#define DAQ_MVER	"1.8.1"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -75,6 +75,9 @@ class TMdPrm : public TParamContr
 	void upVal( bool first, bool last, double frq );
 
 	TElem &elem( )		{ return p_el; }
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
 	TMdContr &owner( );
 
     protected:
@@ -96,7 +99,7 @@ class TMdPrm : public TParamContr
 	TElem		p_el;		//Work atribute elements
 	ResString	acq_err;
 
-	//> Logical type by template
+	// Logical type by template
 	//Data
 	//***************************************************
 	//* Logical type parameter's context                *
@@ -104,7 +107,7 @@ class TMdPrm : public TParamContr
 	{
 	    public:
 	    //Data
-	    //>> Link structure
+	    // Link structure
 	    class SLnk
 	    {
 		public:
@@ -117,7 +120,7 @@ class TMdPrm : public TParamContr
 	    //Methods
 	    TLogCtx( const string &name );
 
-	    //>> Link operations
+	    // Link operations
 	    int lnkSize( )		{ return plnk.size(); }
 	    int lnkId( int id );
 	    int lnkId( const string &id );

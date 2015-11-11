@@ -1790,7 +1790,7 @@ msgid "Path to parent widget."
 msgstr "Шлях до батьківського віджету."
 
 msgid "The widget owner and group in form \"{owner}:{group}\"."
-msgstr "Володар та група віджету у формі \"{володар}:{група}\"."
+msgstr "Власник та група віджету у формі \"{власник}:{група}\"."
 
 msgid ""
 "Permission to the widget in form \"{user}{group}{other}\".\n"

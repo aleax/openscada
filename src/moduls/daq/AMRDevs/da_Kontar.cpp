@@ -297,13 +297,11 @@ bool Kontar::cfgChange( TParamContr *ip, TCfg &cfg )
     TMdPrm *p = (TMdPrm *)ip;
     tval *ePrm = (tval*)p->extPrms;
 
-    if(cfg.name() == "CNTR_NET_CFG")	//Reload config file
-    {
+    if(cfg.name() == "CNTR_NET_CFG") {	//Reload config file
 	int cf_sz = 0;
 	char *buf = NULL;
 	int hd = open(cfg.getS().c_str(), O_RDONLY);
-	if(hd >= 0 && (cf_sz=lseek(hd,0,SEEK_END)) > 0 && cf_sz < 100000)
-	{
+	if(hd >= 0 && (cf_sz=lseek(hd,0,SEEK_END)) > 0 && cf_sz < 100000) {
 	    lseek(hd, 0, SEEK_SET);
 	    buf = (char*)malloc(cf_sz+1);
 	    if(read(hd,buf,cf_sz) != cf_sz) cf_sz = 0;

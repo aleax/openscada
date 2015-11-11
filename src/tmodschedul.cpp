@@ -229,9 +229,9 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		for(unsigned i_sub = 0; i_sub < list.size(); i_sub++) {
 		    if(owner().at(list[i_sub]).at().subModule() && AtMod.type == owner().at(list[i_sub]).at().subId()) {
 			// Check type module version
-			if(AtMod.t_ver != owner().at(list[i_sub]).at().subVer()) {
+			if(AtMod.tVer != owner().at(list[i_sub]).at().subVer()) {
 			    mess_warning(nodePath().c_str(),_("%s for type '%s' doesn't support module version: %d!"),
-				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
+				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.tVer);
 			    break;
 			}
 			// Check module present

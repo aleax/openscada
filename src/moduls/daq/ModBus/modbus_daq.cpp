@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@
 #include <sys/ioctl.h>
 #include <string.h>
 #include <stdint.h>
+#include <algorithm>
 
 #include <ttypeparam.h>
 
@@ -41,15 +42,9 @@ using namespace ModBus;
 //******************************************************
 TTpContr::TTpContr( string name ) : TTypeDAQ(DAQ_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= DAQ_NAME;
-    mType	= DAQ_TYPE;
-    mVers	= DAQ_MVER;
-    mAuthor	= DAQ_AUTHORS;
-    mDescr	= DAQ_DESCR;
-    mLicense	= DAQ_LICENSE;
-    mSource	= name;
+    modInfoMainSet(DAQ_NAME, DAQ_TYPE, DAQ_MVER, DAQ_AUTHORS, DAQ_DESCR, DAQ_LICENSE, name);
 }
 
 TTpContr::~TTpContr( )
@@ -920,7 +915,7 @@ TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const
 	prms[0].setS(req); prms[0].setModify();
 	return rez;
     }
-    return TController::objFuncCall(iid,prms,user);
+    return TController::objFuncCall(iid, prms, user);
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
@@ -1347,6 +1342,59 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 
     //Alarm set
     acq_err.setVal(w_err.getVal());
+}
+
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
+    //  id, name - new attribute id and name;
+    //  tp - attribute type ["boolean", "integer", "real", "string", "text", "object"] + ["sel|seled"];
+    //  selValsNms - two lines with values in first and it's names in first (separated by ";").
+    if(iid == "attrAdd" && prms.size() >= 1) {
+	if(!enableStat() || !isLogic())	return false;
+	TFld::Type tp;
+	string stp, stp_ = (prms.size() >= 3) ? prms[2].getS() : "real";
+	stp.resize(stp_.length());
+	std::transform(stp_.begin(), stp_.end(), stp.begin(), ::tolower);
+	if(stp.find("boolean") != string::npos)		tp = TFld::Boolean;
+	else if(stp.find("integer") != string::npos)	tp = TFld::Integer;
+	else if(stp.find("real") != string::npos)	tp = TFld::Real;
+	else if(stp.find("string") != string::npos ||
+		stp.find("text") != string::npos)	tp = TFld::String;
+	else if(stp.find("object") != string::npos)	tp = TFld::Object;
+
+	unsigned flg = TFld::NoFlag;
+	if(stp.find("sel") != string::npos)	flg |= TFld::Selected;
+	if(stp.find("seled") != string::npos)	flg |= TFld::SelEdit;
+	if(stp.find("text") != string::npos)	flg |= TFld::FullText;
+
+	string	sVals = (prms.size() >= 4) ? prms[3].getS() : "";
+	string	sNms = TSYS::strLine(sVals, 1);
+	sVals = TSYS::strLine(sVals, 0);
+
+	MtxAlloc res(elem().resEl(), true);
+	unsigned aId = elem().fldId(prms[0].getS(), true);
+	if(aId < elem().fldSize()) {
+	    if(prms.size() >= 2 && prms[1].getS().size()) elem().fldAt(aId).setDescr(prms[1].getS());
+	    elem().fldAt(aId).setFlg(elem().fldAt(aId).flg()^((elem().fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
+	    elem().fldAt(aId).setValues(sVals);
+	    elem().fldAt(aId).setSelNames(sNms);
+	}
+	else if(!vlPresent(prms[0].getS()))
+	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,"","",sVals.c_str(),sNms.c_str()));
+	return true;
+    }
+    //bool attrDel( string id ) - attribute <id> remove.
+    if(iid == "attrDel" && prms.size() >= 1) {
+	if(!enableStat() || !isLogic())	return false;
+	MtxAlloc res(elem().resEl(), true);
+	unsigned aId = elem().fldId(prms[0].getS(), true);
+	if(aId == elem().fldSize())	return false;
+	try { elem().fldDel(aId); } catch(TError){ return false; }
+	return true;
+    }
+
+    return TParamContr::objFuncCall(iid, prms, user);
 }
 
 void TMdPrm::vlGet( TVal &val )

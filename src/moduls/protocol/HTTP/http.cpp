@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.2"
+#define MOD_VER		"1.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -73,15 +73,9 @@ using namespace PrHTTP;
 //*************************************************
 TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), mTmpl(dataRes()), lstSesChk(0)
 {
-    mod		= this;
+    mod = this;
 
-    mType	= MOD_TYPE;
-    mName	= MOD_NAME;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 TProt::~TProt( )

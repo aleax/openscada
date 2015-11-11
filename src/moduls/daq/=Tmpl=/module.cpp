@@ -85,16 +85,10 @@ using namespace ModTmpl;
 TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
     //!!! Init shortcut to module root object. Don't change it!
-    mod		= this;
+    mod = this;
 
     //!!! Load module meta-information to root object. Don't change it!
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 //!!! Destructor for Root module object.

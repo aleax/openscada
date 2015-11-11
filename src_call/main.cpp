@@ -68,7 +68,8 @@ int main( int argc, char *argv[], char *envp[] )
 	    rlim.rlim_max = RLIM_INFINITY;
 	    setrlimit(RLIMIT_CORE, &rlim);
 	}
-	else if(strcasecmp(argCom.c_str(),"pidfile") == 0 && argVl.size() && (pid=open(argVl.c_str(),O_CREAT|O_TRUNC|O_WRONLY,0664)) >= 0)
+	else if((strcasecmp(argCom.c_str(),"pidfile") == 0 || strcasecmp(argCom.c_str(),"pid-file") == 0) &&
+	    argVl.size() && (pid=open(argVl.c_str(),O_CREAT|O_TRUNC|O_WRONLY,0664)) >= 0)
 	{
 	    pidFile = argVl;
 	    argVl = i2s(getpid());

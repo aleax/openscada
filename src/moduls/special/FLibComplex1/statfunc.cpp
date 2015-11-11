@@ -31,7 +31,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.1.0"
+#define MOD_VER		"1.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the library of functions compatible with SCADA Complex1 of the firm SIC \"DIYA\".")
 #define LICENSE		"GPL2"
@@ -70,16 +70,9 @@ using namespace FLibComplex1;
 //*************************************************
 Lib::Lib( string src ) : TSpecial(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    //> Set modul info
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= src;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, src);
 
     m_fnc = grpAdd("fnc_");
 }

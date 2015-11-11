@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.7.1"
+#define MOD_VER		"0.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -71,15 +71,9 @@ using namespace UserProtocol;
 //*************************************************
 TProt::TProt( string name ) : TProtocol(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mType	= MOD_TYPE;
-    mName	= MOD_NAME;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     mPrtU = grpAdd("up_");
 

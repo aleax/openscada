@@ -21,7 +21,6 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <dirent.h>
 
 #include <tsys.h>
 #include "arch.h"

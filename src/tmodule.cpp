@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,14 +40,14 @@ using namespace OSCADA;
 //*************************************************
 //* TModule                                       *
 //*************************************************
-const char *TModule::l_info[] = {"Module", "Name", "Type", "Source", "Version", "Author", "Description", "License"};
+const char *TModule::lInfo[] = {"Module", "Name", "Type", "Source", "Version", "Author", "Description", "License"};
 
-TModule::TModule( const string &id ) : mId(id)
+TModule::TModule( const string &id ) : mModId(id)
 {
-    lc_id = string("oscd_")+mId;
+    lcId = string("oscd_")+mModId;
 
 #ifdef HAVE_LIBINTL_H
-    bindtextdomain(lc_id.c_str(), localedir_full);
+    bindtextdomain(lcId.c_str(), localedir_full);
 #endif
 
     //Dynamic string translation hook
@@ -61,14 +61,26 @@ TModule::TModule( const string &id ) : mId(id)
 TModule::~TModule( )
 {
     //Clean export function list
-    for(unsigned i = 0; i < m_efunc.size(); i++) delete m_efunc[i];
+    for(unsigned i = 0; i < mEfunc.size(); i++) delete mEfunc[i];
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }
 
-string TModule::modName( )	{ return mName; }
+string TModule::modName( )	{ return mModName; }
+
+void TModule::modInfoMainSet( const string &name, const string &type, const string &vers, const string &author,
+			      const string &descr, const string &license, const string &source )
+{
+    mModName	= name;
+    mModType	= type;
+    mModVers	= vers;
+    mModAuthor	= author;
+    mModDescr	= descr;
+    mModLicense	= license;
+    mModSource	= source;
+}
 
 void TModule::postEnable( int flag )
 {
@@ -82,14 +94,14 @@ TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }
 void TModule::modFuncList( vector<string> &list )
 {
     list.clear();
-    for(unsigned i = 0; i < m_efunc.size(); i++)
-	list.push_back(m_efunc[i]->prot);
+    for(unsigned i = 0; i < mEfunc.size(); i++)
+	list.push_back(mEfunc[i]->prot);
 }
 
 bool TModule::modFuncPresent( const string &prot )
 {
-    for(unsigned i = 0; i < m_efunc.size(); i++)
-	if(m_efunc[i]->prot == prot)
+    for(unsigned i = 0; i < mEfunc.size(); i++)
+	if(mEfunc[i]->prot == prot)
 	    return true;
 
     return false;
@@ -97,8 +109,8 @@ bool TModule::modFuncPresent( const string &prot )
 
 TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
-    for(unsigned i = 0; i < m_efunc.size(); i++)
-	if(m_efunc[i]->prot == prot) return *m_efunc[i];
+    for(unsigned i = 0; i < mEfunc.size(); i++)
+	if(mEfunc[i]->prot == prot) return *mEfunc[i];
     throw TError(nodePath().c_str(),_("Function '%s' is not present in the module!"),prot.c_str());
 }
 
@@ -109,22 +121,22 @@ void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
 
 void TModule::modInfo( vector<string> &list )
 {
-    for(unsigned i_opt = 0; i_opt < sizeof(l_info)/sizeof(char *); i_opt++)
-	list.push_back(l_info[i_opt]);
+    for(unsigned i_opt = 0; i_opt < sizeof(lInfo)/sizeof(char *); i_opt++)
+	list.push_back(lInfo[i_opt]);
 }
 
 string TModule::modInfo( const string &name )
 {
     string info;
 
-    if(name == l_info[0])	info = mId;
-    else if(name == l_info[1])	info = mName;
-    else if(name == l_info[2])	info = mType;
-    else if(name == l_info[3])	info = mSource;
-    else if(name == l_info[4])	info = mVers;
-    else if(name == l_info[5])	info = mAuthor;
-    else if(name == l_info[6])	info = mDescr;
-    else if(name == l_info[7])	info = mLicense;
+    if(name == lInfo[0])	info = mModId;
+    else if(name == lInfo[1])	info = mModName;
+    else if(name == lInfo[2])	info = mModType;
+    else if(name == lInfo[3])	info = mModSource;
+    else if(name == lInfo[4])	info = mModVers;
+    else if(name == lInfo[5])	info = mModAuthor;
+    else if(name == lInfo[6])	info = mModDescr;
+    else if(name == lInfo[7])	info = mModLicense;
 
     return info;
 }
@@ -162,7 +174,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 const char *TModule::I18N( const char *mess )
 {
 #ifdef HAVE_LIBINTL_H
-    const char *rez = Mess->I18N(mess,lc_id.c_str());
+    const char *rez = Mess->I18N(mess, lcId.c_str());
     if(!strcmp(mess,rez)) rez = _(mess);
     return rez;
 #else

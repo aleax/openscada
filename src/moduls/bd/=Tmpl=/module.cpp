@@ -75,19 +75,13 @@ using namespace BDTmpl;
 //************************************************
 //* BDTmpl::BDMod				 *
 //************************************************
-BDMod::BDMod(string name) : TTypeBD(MOD_ID)
+BDMod::BDMod( string name ) : TTypeBD(MOD_ID)
 {
     //!!! Init shortcut to the module root object. Don't change it!
-    mod		= this;
+    mod = this;
 
     //!!! Load the module meta-information to the root object. Don't change it!
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= MOD_LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, MOD_LICENSE, name);
 }
 
 //!!! Destructor for the Root module object.

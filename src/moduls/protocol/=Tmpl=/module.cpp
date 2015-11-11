@@ -82,16 +82,10 @@ using namespace ModTmpl;
 TProt::TProt( string name ) : TProtocol(MOD_ID)
 {
     //!!! Init shortcut to module root object. Don't change it!
-    mod		= this;
+    mod = this;
 
     //!!! Load module meta-information to root object. Don't change it!
-    mType	= MOD_TYPE;
-    mName	= MOD_NAME;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 //!!! Destructor for module's root object. Append into for your need.

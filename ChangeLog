@@ -1,3 +1,16 @@
+2015-11-11 Roman
+- SYS: Synonym "pid-file" to "pidfile" command-line argument is added.
+- !!!!:SYS.TElem: Item's resource mResEl moved from Res to pthread_mutex_t. Mostly the source code cleaned.
+- !!!!:SYS.TModule: The info attributes like m{Name} renamed to mMod{Name}. Mostly the source code cleaned.
+    Function modInfoMainSet() added and used into all modules for main info attributes of a module set.
+- !!!:DAQ.{LogicLev,ModBus}: Appended by user API functions to the parameter object attrAdd() and attrDel() for attributes free management.
+- FIX:DAQ.OPC_UA: Product URI changed to "urn:OpenSCADA:DAQ.OPC_UA".
+    Some more empty strings (-1) replaced by empty array (0).
+    System attributes' value reading (AId_Value) fix for substitute first values to next, into single read package.
+    Test client's source code some cleaned and expanded.
+- Transport.Sockets: MaxForkPerHost by default disabled, by set it to 0.
+
+
 2015-11-01 Roman
 - DB.LibsDB.OscadaLibs.db: DevLib appended by item pare "CTR" for "CTR 100, 101 Oerlikon Leybold Vacuum CERAVAC".
 - Protocol.OPC_UA: libOPC_UA appended by function Server::clientAddr() for the openned connection re-establish

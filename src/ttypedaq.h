@@ -52,12 +52,12 @@ class TTypeDAQ : public TModule, public TElem
 	void modStop( );
 
 	// Controllers
-	void list( vector<string> &list )	{ chldList(m_cntr,list); }
-	bool present( const string &name )	{ return chldPresent(m_cntr,name); }
+	void list( vector<string> &list )	{ chldList(mCntr,list); }
+	bool present( const string &name )	{ return chldPresent(mCntr,name); }
 	void add( const string &name, const string &daq_db = "*.*" );
-	void del( const string &name )		{ chldDel(m_cntr,name); }
+	void del( const string &name )		{ chldDel(mCntr,name); }
 	AutoHD<TController> at( const string &name, const string &who = "" )
-	{ return chldAt(m_cntr,name); }
+	{ return chldAt(mCntr,name); }
 
 	// Parameter types (DB structure)
 	bool tpPrmPresent( const string &name_t );
@@ -86,7 +86,7 @@ class TTypeDAQ : public TModule, public TElem
     private:
 	//Private attributes
 	vector<TTypeParam *>	paramt;		// List type parameter and Structure configurations of parameter.
-	int	m_cntr;
+	int	mCntr;
 };
 
 }

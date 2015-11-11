@@ -604,8 +604,7 @@ void LineEdit::setCfg( const QString &cfg )
 
 QString LineEdit::value( )
 {
-    switch(type())
-    {
+    switch(type()) {
 	case Text:	return ((QLineEdit*)ed_fld)->text();
 	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
 	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());

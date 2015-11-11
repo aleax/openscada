@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <algorithm>
 
 #include <terror.h>
 #include <tsys.h>
@@ -38,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -76,15 +77,9 @@ using namespace LogicLev;
 //*************************************************
 TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 TTpContr::~TTpContr( )
@@ -308,7 +303,7 @@ TMdPrm::~TMdPrm( )
 
 TCntrNode &TMdPrm::operator=( TCntrNode &node )
 {
-    TParamContr::operator=( node );
+    TParamContr::operator=(node);
 
     TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
     if(!src_n || !src_n->enableStat() || !enableStat() || !isStd() || !tmpl->val.func()) return *this;
@@ -630,6 +625,59 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
+}
+
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
+    //  id, name - new attribute id and name;
+    //  tp - attribute type ["boolean", "integer", "real", "string", "text", "object"] + ["sel|seled"];
+    //  selValsNms - two lines with values in first and it's names in first (separated by ";").
+    if(iid == "attrAdd" && prms.size() >= 1) {
+	if(!enableStat() || !isStd())	return false;
+	TFld::Type tp;
+	string stp, stp_ = (prms.size() >= 3) ? prms[2].getS() : "real";
+	stp.resize(stp_.length());
+	std::transform(stp_.begin(), stp_.end(), stp.begin(), ::tolower);
+	if(stp.find("boolean") != string::npos)		tp = TFld::Boolean;
+	else if(stp.find("integer") != string::npos)	tp = TFld::Integer;
+	else if(stp.find("real") != string::npos)	tp = TFld::Real;
+	else if(stp.find("string") != string::npos ||
+		stp.find("text") != string::npos)	tp = TFld::String;
+	else if(stp.find("object") != string::npos)	tp = TFld::Object;
+
+	unsigned flg = TFld::NoFlag;
+	if(stp.find("sel") != string::npos)	flg |= TFld::Selected;
+	if(stp.find("seled") != string::npos)	flg |= TFld::SelEdit;
+	if(stp.find("text") != string::npos)	flg |= TFld::FullText;
+
+	string	sVals = (prms.size() >= 4) ? prms[3].getS() : "";
+	string	sNms = TSYS::strLine(sVals, 1);
+	sVals = TSYS::strLine(sVals, 0);
+
+	MtxAlloc res(pEl.resEl(), true);
+	unsigned aId = pEl.fldId(prms[0].getS(), true);
+	if(aId < pEl.fldSize()) {
+	    if(prms.size() >= 2 && prms[1].getS().size()) pEl.fldAt(aId).setDescr(prms[1].getS());
+	    pEl.fldAt(aId).setFlg(pEl.fldAt(aId).flg()^((pEl.fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
+	    pEl.fldAt(aId).setValues(sVals);
+	    pEl.fldAt(aId).setSelNames(sNms);
+	}
+	else if(!vlPresent(prms[0].getS()))
+	    pEl.fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,"","",sVals.c_str(),sNms.c_str()));
+	return true;
+    }
+    //bool attrDel( string id ) - attribute <id> remove.
+    if(iid == "attrDel" && prms.size() >= 1) {
+	if(!enableStat() || !isStd())	return false;
+	MtxAlloc res(pEl.resEl(), true);
+	unsigned aId = pEl.fldId(prms[0].getS(), true);
+	if(aId == pEl.fldSize())	return false;
+	try { pEl.fldDel(aId); } catch(TError){ return false; }
+	return true;
+    }
+
+    return TParamContr::objFuncCall(iid, prms, user);
 }
 
 int TMdPrm::lnkSize( )

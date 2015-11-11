@@ -41,13 +41,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
 {
     modPrt	= this;
 
-    mType	= PRT_TYPE;
-    mName	= PRT_NAME;
-    mVers	= PRT_MVER;
-    mAuthor	= PRT_AUTOR;
-    mDescr	= PRT_DESCR;
-    mLicense	= PRT_LICENSE;
-    mSource	= name;
+    modInfoMainSet(PRT_NAME, PRT_TYPE, PRT_MVER, PRT_AUTOR, PRT_DESCR, PRT_LICENSE, name);
 
     mEndPnt = grpAdd("ep_");
 
@@ -68,7 +62,7 @@ TProt::~TProt( )			{ nodeDelAll(); }
 
 string TProt::applicationUri( )		{ return "urn:"+SYS->host()+":OpenSCADA:DAQ.OPC_UA"; }
 
-string TProt::productUri( )		{ return PACKAGE_SITE; }
+string TProt::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;*/ }
 
 string TProt::applicationName( )	{ return "OpenSCADA.OPC-UA Server"; }
 
@@ -541,7 +535,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		case AId_BrowseName: {
 		    req.setAttr("type", i2s(OpcUa_QualifiedName));
 		    if((nDAQ=dynamic_cast<TDAQS*>(&cNd.at())))			req.setText(nDAQ->subName());
-		    else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modName());
+		    else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at())))	req.setText(nTpDAQ->modName());
 		    else if((nCntr=dynamic_cast<TController*>(&cNd.at())))	req.setText(nCntr->name());
 		    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))	req.setText(nPrm->name());
 		    else if((nVal=dynamic_cast<TVal*>(&cNd.at())))		req.setText(nVal->name());

@@ -74,6 +74,8 @@ class TMdPrm : public TParamContr
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &vo );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
 	TMdContr &owner( );
 
     private:

@@ -36,7 +36,7 @@ using namespace OSCADA;
 //*************************************************
 TTypeDAQ::TTypeDAQ( const string &id ) : TModule(id)
 {
-    m_cntr = grpAdd("cntr_");
+    mCntr = grpAdd("cntr_");
 
     fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
@@ -101,7 +101,7 @@ void TTypeDAQ::modStop( )
 	at(lst[i_l]).at().stop();
 }
 
-void TTypeDAQ::add( const string &name, const string &daq_db )	{ chldAdd(m_cntr, ContrAttach(name,daq_db)); }
+void TTypeDAQ::add( const string &name, const string &daq_db )	{ chldAdd(mCntr, ContrAttach(name,daq_db)); }
 
 TTypeParam &TTypeDAQ::tpPrmAt( unsigned id )
 {
@@ -172,7 +172,7 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 	    add(vid); at(vid).at().setName(opt->text());
 	    opt->setAttr("id", vid);
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(m_cntr,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, 1);
     }
     else TModule::cntrCmdProc(opt);
 }

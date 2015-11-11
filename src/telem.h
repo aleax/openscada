@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,27 +84,27 @@ class TFld
 	TFld &operator=( TFld &fld );
 
 	// Main
-	const string &name( )	{ return m_name; }	//Name
-	const string &descr( )	{ return m_descr; }	//Description
-	int len( )		{ return m_len; }	//Length
-	int dec( )		{ return m_dec; }	//Float dec
-	Type type( )		{ return (Type)m_type; }//Value type
+	const string &name( )	{ return mName; }	//Name
+	const string &descr( )	{ return mDescr; }	//Description
+	int len( )		{ return mLen; }	//Length
+	int dec( )		{ return mDec; }	//Float dec
+	Type type( )		{ return (Type)mType; }//Value type
 	static Type type( IO::Type tp );		//Field type from IO
 	IO::Type typeIO( );				//Type to IO
-	unsigned flg( )		{ return m_flg; }	//Flags
-	const string &def( )	{ return m_def; }	//Default value
+	unsigned flg( )		{ return mFlg; }	//Flags
+	const string &def( )	{ return mDef; }	//Default value
 	string values( );				//Values range or values list
 	string selNames( );				//Select names list
-	const string &reserve( ){ return m_res; }	//Reserve field
+	const string &reserve( ){ return mRes; }	//Reserve field
 
-	void setDescr( const string &idscr )	{ m_descr = idscr; }
-	void setLen( int ivl )			{ m_len = ivl; }
-	void setDec( int ivl )			{ m_dec = ivl; }
-	void setDef( const string &idef )	{ m_def = idef; }
+	void setDescr( const string &idscr )	{ mDescr = idscr; }
+	void setLen( int ivl )			{ mLen = ivl; }
+	void setDec( int ivl )			{ mDec = ivl; }
+	void setDef( const string &idef )	{ mDef = idef; }
 	void setFlg( unsigned iflg );
 	void setValues( const string &vls );
 	void setSelNames( const string &slnms );
-	void setReserve( const string &ires )	{ m_res = ires; }
+	void setReserve( const string &ires )	{ mRes = ires; }
 
 	// Selected
 	const vector<string>	&selValS( );
@@ -131,22 +131,22 @@ class TFld
 
     private:
 	//Attributes
-	string		m_name;		// Name of element (name column into BD);
-	string		m_descr;	// Description of element;
-	int		m_len;		// field len
-	short int	m_dec	:5;	// field dec (for real)
-	short int	m_type	:4;	// Type (Dec, Hex, Oct, ...)
-	unsigned	m_flg;		// element flags (Selected, SelfFld ...);
-	string		m_def;		// default value;
-	string		m_res;		// reserve attribut
+	string		mName;		// Name of element (name column into BD);
+	string		mDescr;		// Description of element;
+	int		mLen;		// field len
+	short int	mDec	:5;	// field dec (for real)
+	short int	mType	:4;	// Type (Dec, Hex, Oct, ...)
+	unsigned	mFlg;		// element flags (Selected, SelfFld ...);
+	string		mDef;		// default value;
+	string		mRes;		// reserve attribut
 
 	union {
 	    vector<string>	*s;
 	    vector<double>	*r;
 	    vector<int>		*i;
 	    vector<bool>	*b;
-	}m_val;
-	vector<string>     *m_sel;
+	}mVal;
+	vector<string>	*mSel;
 };
 //#pragma pack(pop)
 
@@ -162,7 +162,7 @@ class TElem
 	TElem( const string &name = "" );
 	virtual ~TElem( );
 
-	string &elName( )			{ return m_name; }
+	string &elName( )			{ return mName; }
 
 	void fldList( vector<string> &list );
 	unsigned fldSize( )			{ return elem.size(); }
@@ -176,12 +176,14 @@ class TElem
 	void valAtt( TValElem *cnt );
 	void valDet( TValElem *cnt );
 
+	pthread_mutex_t &resEl( )	{ return mResEl; }
+
     private:
 	//Attributes
-	string			m_name;
+	string			mName;
 	vector<TFld*>		elem;
 	vector<TValElem*>	cont;		//Conteiners
-	Res			mResEl;
+	pthread_mutex_t		mResEl;
 };
 
 //*************************************************

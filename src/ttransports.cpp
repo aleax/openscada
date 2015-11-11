@@ -899,7 +899,7 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // string messIO(string mess, real timeOut = 0) - sending the message <mess> through the transport with the waiting timeout <timeOut>
+    // string messIO( string mess, real timeOut = 0 ) - sending the message <mess> through the transport with the waiting timeout <timeOut>
     //  mess - message text for send
     //  timeOut - connection timeout, in seconds
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object) {
@@ -913,7 +913,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 
 	return rez;
     }
-    // int messIO(XMLNodeObj req, string prt) - sending the request <req> to the protocol <prt> for the implementation of a connection
+    // int messIO( XMLNodeObj req, string prt ) - sending the request <req> to the protocol <prt> for the implementation of a connection
     //      session through the transport by means of protocol.
     //  req - request into XML-tree
     //  prt - protocol name

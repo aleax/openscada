@@ -36,7 +36,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.2.2"
+#define MOD_VER		"1.2.3"
 #define MOD_AUTOR	_("Roman Savochenko")
 #define MOD_DESCR	_("Provides the library of system API functions of user programming area.")
 #define MOD_LICENSE	"GPL2"
@@ -74,16 +74,9 @@ using namespace FLibSYS;
 //*************************************************
 Lib::Lib( string src ) : TSpecial(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    //> Set modul info!
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= MOD_AUTOR;
-    mDescr	= MOD_DESCR;
-    mLicense	= MOD_LICENSE;
-    mSource	= src;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, MOD_AUTOR, MOD_DESCR, MOD_LICENSE, src);
 
     mFnc = grpAdd("fnc_", true);
 }

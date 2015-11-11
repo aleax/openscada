@@ -40,13 +40,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
 {
     modPrt	= this;
 
-    mType	= PRT_TYPE;
-    mName	= PRT_NAME;
-    mVers	= PRT_MVER;
-    mAuthor	= PRT_AUTHORS;
-    mDescr	= PRT_DESCR;
-    mLicense	= PRT_LICENSE;
-    mSource	= name;
+    modInfoMainSet(PRT_NAME, PRT_TYPE, PRT_MVER, PRT_AUTHORS, PRT_DESCR, PRT_LICENSE, name);
 
     mNode = grpAdd("n_");
 
@@ -688,7 +682,7 @@ bool Node::cfgChange( TCfg &co, const TVariant &pc )
 
 	//Show selected
 	switch(co.getI()) {
-	    case 0: cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PR_TR").setView(true); cfg("DT_PROG").setView(true);	break;
+	    case 0: cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PR_TR").setView(true); cfg("DT_PROG").setView(true);break;
 	    case 1: cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
 	    case 2: cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true);	break;
 	}

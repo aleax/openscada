@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodule.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,17 +50,17 @@ class TModule : public TCntrNode
 		//Methods
 		SAt( )	{ }
 		SAt( const string &iid, const string &itype = "", int itver = 0 ) :
-		    id(iid), type(itype), t_ver(itver)	{ }
+		    id(iid), type(itype), tVer(itver)	{ }
 
 		bool operator==( const TModule::SAt &amst ) const {
-		    if(amst.id == id && amst.type == type && amst.t_ver == t_ver) return true;
+		    if(amst.id == id && amst.type == type && amst.tVer == tVer) return true;
 		    return false;
 		}
 
 		//Attributes
 		string	id;		//id module
 		string	type;		//Type module
-		int	t_ver;		//Type version module
+		int	tVer;		//Type version module
 	};
 
 	//*****************************************
@@ -76,16 +76,18 @@ class TModule : public TCntrNode
 
 	//Methods
 	TModule( const string &id );
-	virtual ~TModule(  );
+	virtual ~TModule( );
 
 	string	objName( );
 
-	string	modId( )		{ return mId.c_str(); }
+	string	modId( )		{ return mModId.c_str(); }
 	string	modName( );
 
 	virtual void modStart( )	{ }
 	virtual void modStop( )		{ }
 
+	void modInfoMainSet( const string &name, const string &type, const string &vers, const string &author,
+			     const string &descr, const string &license, const string &source );
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
 
@@ -108,27 +110,27 @@ class TModule : public TCntrNode
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	// Reg export function
-	void modFuncReg( ExpFunc *func ){ m_efunc.push_back(func); }
+	void modFuncReg( ExpFunc *func ){ mEfunc.push_back(func); }
 
 	//Attributes
-	string mName;				// Name
-	string mDescr;				// Describe
-	string mType;				// Type
-	string mVers;				// Version
-	string mAuthor;				// Author
-	string mLicense;			// License
-	string mSource;				// Source of module (SO, in build, ....)
+	string	mModName,		// Name
+		mModDescr,		// Describe
+		mModType,		// Type
+		mModVers,		// Version
+		mModAuthor,		// Author
+		mModLicense,		// License
+		mModSource;		// Source of module (SO, in build, ....)
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.c_str(); }
+	const char *nodeName( )	{ return mModId.c_str(); }
 
 	//Attributes
-	const string	mId;		// Identificator
-	string		lc_id;		// Locale id. For gettext.
-	vector<ExpFunc *> m_efunc;	// Export function list
+	const string	mModId;		// Identificator
+	string		lcId;		// Locale id. For gettext.
+	vector<ExpFunc *> mEfunc;	// Export function list
 
-	static const char *l_info[];	// list of the present info options
+	static const char *lInfo[];	// list of the present info options
 };
 
 }

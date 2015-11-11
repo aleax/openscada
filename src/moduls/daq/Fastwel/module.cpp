@@ -73,18 +73,11 @@ using namespace ModFastwel;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr(string name) :
-	TTypeDAQ(MOD_ID)
+TTpContr::TTpContr(string name) : TTypeDAQ(MOD_ID)
 {
     mod = this;
 
-    mName = MOD_NAME;
-    mType = MOD_TYPE;
-    mVers = MOD_VER;
-    mAuthor = AUTHORS;
-    mDescr = DESCRIPTION;
-    mLicense = LICENSE;
-    mSource = name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 TTpContr::~TTpContr()
