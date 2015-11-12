@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.1"
+#define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -123,9 +123,10 @@ void TTpContr::setMRCDirDevs( const string &vl )
     //Scan directory for MR/MC devices *.ini files load
     DevMRCFeature devIni;
     string fn, f_data;
-    dirent scan_dirent, *scan_rez = NULL;
+    dirent  *scan_rez = NULL,
+	    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
     DIR *IdDir = opendir(mod->MRCDirDevs().c_str());
-    while(IdDir && readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+    while(IdDir && readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	fn = mod->MRCDirDevs()+"/"+scan_rez->d_name;
 	if(scan_rez->d_type != DT_REG || fn.compare(fn.size()-4,4,".ini") != 0) continue;
 	if(devIni.load(fn)) {
@@ -134,6 +135,7 @@ void TTpContr::setMRCDirDevs( const string &vl )
 	}
     }
     if(IdDir) closedir(IdDir);
+    free(scan_dirent);
 }
 
 void TTpContr::perSYSCall( unsigned int cnt )

@@ -20,6 +20,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stddef.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <errno.h>
@@ -216,10 +217,6 @@ void ModVArch::checkArchivator( bool now )
 
     bool isTm = time(NULL) > (mLstCheck+checkTm()*60);
     if(now || isTm) {
-	//Find archive files for no present archives and create it.
-	struct stat file_stat;
-	dirent scan_dirent, *scan_rez = NULL;
-
 	// Open/create new directory
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL) {
@@ -227,8 +224,13 @@ void ModVArch::checkArchivator( bool now )
 	    IdDir = opendir(addr().c_str());
 	}
 
+	//Find archive files for no present archives and create it.
+	struct stat file_stat;
+	dirent	*scan_rez = NULL,
+		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+
 	// Scan opened directory
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
 
 	    string	ArhNm;
@@ -261,6 +263,7 @@ void ModVArch::checkArchivator( bool now )
 	    if(iel != archEl.end()) ((ModVArchEl *)iel->second)->fileAdd(NameArhFile);
 	}
 
+	free(scan_dirent);
 	closedir(IdDir);
 	now = true;
     }
@@ -618,16 +621,17 @@ int ModVArchEl::size( )
 void ModVArchEl::checkArchivator( bool now, bool cpctLim )
 {
     if(now && !archivator().chkANow) {
-	//Scan directory for find new files and deleted files
-	struct stat file_stat;
-	dirent scan_dirent, *scan_rez = NULL;
-
 	// Open archive derictory
 	DIR *IdDir = opendir(archivator().addr().c_str());
 	if(IdDir == NULL) return;
 
+	//Scan directory for find new files and deleted files
+	struct stat file_stat;
+	dirent	*scan_rez = NULL,
+		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+
 	// Check to allow files
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0)	continue;
 
 	    string ArhNm;
@@ -639,6 +643,7 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
 	    fileAdd(NameArhFile);
 	}
 
+	free(scan_dirent);
 	closedir(IdDir);
     }
     if(now) mChecked = true;

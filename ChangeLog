@@ -1,4 +1,6 @@
 2015-11-12 Roman
+- SYS,Archive.FSArch,DB.DBF,DAQ.{Comedi,SMH2Gi}:
+    readdir_r() using rewrote to "dirent" structure direct malloc and prevent problems on other OS, like QNX.
 - !!!!:SYS:
     Core library version rose to 3:4:0.
     DB subsystem type modules version rose to 8.

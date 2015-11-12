@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <unistd.h>
+#include <stddef.h>
 #include <dirent.h>
 
 #include <terror.h>
@@ -36,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.1"
+#define MOD_VER		"1.0.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -496,13 +497,15 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/devLst" && ctrChkNode(opt)) {
 	DIR *IdDir = opendir("/dev");
 	if(IdDir) {
-	    dirent scan_dirent, *scan_rez = NULL;
-	    while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+	    dirent  *scan_rez = NULL,
+		    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 		string nFile = string("/dev/")+scan_rez->d_name;
 		if(!strcmp("..",scan_rez->d_name) || !strcmp(".",scan_rez->d_name) ||
 		    strncmp("comedi",scan_rez->d_name,6) || access(nFile.c_str(),F_OK|R_OK) != 0) continue;
 		opt->childAdd("el")->setText(nFile);
 	    }
+	    free(scan_dirent);
 	    closedir(IdDir);
 	}
     }

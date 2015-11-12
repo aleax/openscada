@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
+#include <stddef.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -2219,8 +2220,9 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
     vector<string> its, fits;
     DIR *IdDir = opendir(fsBaseCor.c_str());
     if(IdDir != NULL) {
-	dirent sDir, *sDirRez = NULL;
-	while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez) {
+	dirent	*sDirRez = NULL,
+		*sDir = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+	while(readdir_r(IdDir,sDir,&sDirRez) == 0 && sDirRez) {
 	    if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
 	    if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
 		    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
@@ -2234,6 +2236,7 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 	    }
 	}
 	closedir(IdDir);
+	free(sDir);
     }
     sort(its.begin(),its.end());
     for(unsigned i_it = 0; i_it < its.size(); i_it++)

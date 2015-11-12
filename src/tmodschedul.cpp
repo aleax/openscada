@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <dlfcn.h>
 #include <dirent.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
@@ -116,18 +117,20 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
     files.clear();
 
     //Check and append present files
+    dirent  *scan_rez = NULL,
+	    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
     for(int off = 0; (Path=TSYS::strParse(Paths,0,",",&off)).size(); ) {
-	dirent scan_dirent, *scan_rez = NULL;
 	DIR *IdDir = opendir(Path.c_str());
 	if(IdDir == NULL) continue;
 
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	    if(strcmp("..",scan_rez->d_name) == 0 || strcmp(".",scan_rez->d_name) == 0) continue;
 	    NameMod = Path+"/"+scan_rez->d_name;
 	    if(CheckFile(NameMod)) files.push_back(NameMod);
 	}
 	closedir(IdDir);
     }
+    free(scan_dirent);
 }
 
 bool TModSchedul::CheckFile( const string &iname )
