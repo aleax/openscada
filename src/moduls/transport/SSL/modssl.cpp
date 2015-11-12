@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.2.1"
+#define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -462,41 +462,58 @@ void *TSocketIn::ClTask( void *s_inf )
     int cnt = 0;		//Requests counter
     int tm = time(NULL);	//Last connection time
 
-    do {
-	if(!SSL_pending(ssl)) {
-	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	    FD_ZERO(&rd_fd); FD_SET(s.sock, &rd_fd);
+    try {
+	do {
+	    int kz = 1;
+	    if(!SSL_pending(ssl)) {
+		tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+		bool poolPrt = s.s->prtInit(prot_in, s.sock, s.sender, true) && prot_in.at().waitReqTm();
+		if(poolPrt) { tv.tv_sec = prot_in.at().waitReqTm()/1000; tv.tv_usec = (prot_in.at().waitReqTm()%1000)*1000; }
+		FD_ZERO(&rd_fd); FD_SET(s.sock, &rd_fd);
 
-	    int kz = select(s.sock+1, &rd_fd, NULL, NULL, &tv);
-	    if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.sock,&rd_fd)) continue;
-	}
+		kz = select(s.sock+1, &rd_fd, NULL, NULL, &tv);
+		if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rd_fd))) continue;
+		if(kz < 0) {
+		    if(mess_lev() == TMess::Debug)
+			mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by error: %s"), strerror(errno));
+		    break;
+		}
+	    }
 
-	rez = BIO_read(s.bio, buf, sizeof(buf));
-	if(rez <= 0) break;		//Connection closed by client
-	if(mess_lev() == TMess::Debug)
-	    mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
-	req.assign(buf, rez);
-	pthread_mutex_lock(&s.s->dataRes());
-	s.s->trIn += rez; s.trIn += rez;
-	pthread_mutex_unlock(&s.s->dataRes());
-
-	s.s->messPut(s.sock, req, answ, s.sender, prot_in);
-	if(answ.size()) {
+	    rez = 0;
+	    if(kz && (rez=BIO_read(s.bio,buf,sizeof(buf))) <= 0) break;
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
-	    do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
-	    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
+		mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
+	    req.assign(buf, rez);
 	    pthread_mutex_lock(&s.s->dataRes());
-	    s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
+	    s.s->trIn += rez; s.trIn += rez;
 	    pthread_mutex_unlock(&s.s->dataRes());
-	    answ = "";
+
+	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
+	    if(answ.size()) {
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
+		do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
+		while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
+		pthread_mutex_lock(&s.s->dataRes());
+		s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
+		pthread_mutex_unlock(&s.s->dataRes());
+		answ = "";
+	    }
+	    cnt++;
+	    s.tmReq = tm = time(NULL);
 	}
-	cnt++;
-	s.tmReq = tm = time(NULL);
-    }
-    while(!s.s->endrunCl &&
+	while(!s.s->endrunCl &&
 		(!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()) &&
 		(!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()));
+
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
+    }
+    catch(TError err) {
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
+    }
 
     BIO_flush(s.bio);
     close(s.sock);
@@ -511,11 +528,30 @@ void *TSocketIn::ClTask( void *s_inf )
 	proto.at().close(n_pr);
     }
 
-    if(mess_lev() == TMess::Debug) mess_debug(s.s->nodePath().c_str(), _("Socket disconnect (%d)."), s.s->clId.size());
+
 
     s.s->clientUnreg(&s);
 
     return NULL;
+}
+
+bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex )
+{
+    if(!prot_in.freeStat()) return true;
+
+    try {
+	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
+	string n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
+	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
+	prot_in = proto.at().at(n_pr);
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
+    }
+    catch(TError err) {
+	if(!noex) throw;
+	return false;
+    }
+
+    return !prot_in.freeStat();
 }
 
 void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
@@ -523,12 +559,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
     AutoHD<TProtocol> proto;
     string n_pr;
     try {
-	if(prot_in.freeStat()) {
-	    proto = SYS->protocol().at().modAt(protocol());
-	    n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
-	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
-	    prot_in = proto.at().at(n_pr);
-	}
+	prtInit(prot_in, sock, sender);
 	if(prot_in.at().mess(request,answer)) return;
 	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	n_pr = prot_in.at().name();

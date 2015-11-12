@@ -6,7 +6,7 @@ AC_INIT([OpenSCADA],[0.9],[rom_as@oscada.org])
 # Increase major for next Work version.
 # Increase minor after significant changes into API of the Work version
 # Full freeze for LTS stabilisation levels/updates, after the release
-oscd_LIBREVISION="3:3:0"
+oscd_LIBREVISION="3:4:0"
 
 AC_PREFIX_DEFAULT([/usr])
 oscd_modulpref="oscd_"

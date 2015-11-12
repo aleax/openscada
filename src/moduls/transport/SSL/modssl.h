@@ -109,6 +109,7 @@ class TSocketIn: public TTransportIn
 	void clientReg( SSockIn *so );
 	void clientUnreg( SSockIn *so );
 
+	bool prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex = false );
 	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

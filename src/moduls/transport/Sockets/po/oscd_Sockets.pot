@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 22:37+0300\n"
+"POT-Creation-Date: 2015-11-12 20:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -115,6 +115,10 @@ msgid "Socket has been connected by '%s'!"
 msgstr ""
 
 #, c-format
+msgid "Socket has been terminated by error: %s"
+msgstr ""
+
+#, c-format
 msgid "Socket received message '%d' from '%s'."
 msgstr ""
 
@@ -124,6 +128,10 @@ msgstr ""
 
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
+msgstr ""
+
+#, c-format
+msgid "Socket has been terminated by execution: %s"
 msgstr ""
 
 #, c-format

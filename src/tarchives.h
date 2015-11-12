@@ -21,7 +21,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	7		//ArchiveS type modules version
+#define SARH_VER	8		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <string>

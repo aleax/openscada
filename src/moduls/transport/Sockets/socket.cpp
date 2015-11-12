@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.9.2"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -621,64 +621,81 @@ void *TSocketIn::ClTask( void *s_inf )
     int tm = s.s->connTm = time(NULL);	//Last connection time
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"),s.sender.c_str());
+	mess_debug(s.s->nodePath().c_str(), _("Socket has been connected by '%s'!"), s.sender.c_str());
 
     s.s->clientReg(&s);
 
     //Client socket process
-    struct  timeval tv;
-    fd_set  rw_fd;
-    string  req, answ;
-    char    buf[s.s->bufLen()*1000 + 1];
+    struct timeval tv;
+    fd_set rw_fd;
+    string req, answ;
+    char   buf[s.s->bufLen()*1000 + 1];
     AutoHD<TProtocolIn> prot_in;
-    bool sessOk = false;
+    bool   sessOk = false;
 
-    do {
-	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rw_fd); FD_SET(s.sock,&rw_fd);
-	int kz = select(s.sock+1, &rw_fd, NULL, NULL, &tv);
-	if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.sock, &rw_fd)) continue;
-	ssize_t r_len = read(s.sock, buf, s.s->bufLen()*1000);
-	if(r_len <= 0) break;
-	pthread_mutex_lock(&s.s->dataRes());
-	s.s->trIn += r_len; s.trIn += r_len;
-	pthread_mutex_unlock(&s.s->dataRes());
+    try {
+	do {
+	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+	    bool poolPrt = s.s->prtInit(prot_in, s.sock, s.sender, true) && prot_in.at().waitReqTm();
+	    if(poolPrt) { tv.tv_sec = prot_in.at().waitReqTm()/1000; tv.tv_usec = (prot_in.at().waitReqTm()%1000)*1000; }
+	    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
+	    int kz = select(s.sock+1, &rw_fd, NULL, NULL, &tv);
+	    if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rw_fd))) continue;
+	    if(kz < 0) {
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by error: %s"), strerror(errno));
+		break;
+	    }
+
+	    ssize_t r_len = 0;
+	    if(kz && (r_len=read(s.sock, buf, s.s->bufLen()*1000)) <= 0) break;
+	    pthread_mutex_lock(&s.s->dataRes());
+	    s.s->trIn += r_len; s.trIn += r_len;
+	    pthread_mutex_unlock(&s.s->dataRes());
+
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(s.s->nodePath().c_str(), _("Socket received message '%d' from '%s'."), r_len, s.sender.c_str());
+	    req.assign(buf, r_len);
+
+	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
+
+	    if(answ.size()) {
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(s.s->nodePath().c_str(), _("Socket replied message '%d' to '%s'."), answ.size(), s.sender.c_str());
+		ssize_t wL = 1;
+		for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL) {
+		    wL = write(s.sock, answ.data()+wOff, answ.size()-wOff);
+		    if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
+		    else if(wL < 0) {
+			if(errno == EAGAIN) {
+			    tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
+			    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
+			    kz = select(s.sock+1, NULL, &rw_fd, NULL, &tv);
+			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
+			    //???? May be some flush ????
+			}
+			mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+			break;
+		    }
+		    pthread_mutex_lock(&s.s->dataRes());
+		    s.s->trOut += vmax(0, wL); s.trOut += vmax(0, wL);
+		    pthread_mutex_unlock(&s.s->dataRes());
+		}
+		answ = "";
+	    }
+	    cnt++;
+	    s.tmReq = s.s->connTm = tm = time(NULL);
+	    sessOk = true;
+	} while(!s.s->endrunCl && (s.s->mode() == 2 || ((!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
+		(!sessOk || ((s.s->mode() == 1 || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))))));
 
 	if(mess_lev() == TMess::Debug)
-	    mess_debug(s.s->nodePath().c_str(), _("Socket received message '%d' from '%s'."), r_len, s.sender.c_str());
-	req.assign(buf, r_len);
-
-	s.s->messPut(s.sock, req, answ, s.sender, prot_in);
-
-	if(answ.size()) {
-	    if(mess_lev() == TMess::Debug)
-		mess_debug(s.s->nodePath().c_str(), _("Socket replied message '%d' to '%s'."), answ.size(), s.sender.c_str());
-	    ssize_t wL = 1;
-	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL) {
-		wL = write(s.sock, answ.data()+wOff, answ.size()-wOff);
-		if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
-		else if(wL < 0) {
-		    if(errno == EAGAIN) {
-			tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
-			FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
-			kz = select(s.sock+1, NULL, &rw_fd, NULL, &tv);
-			if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
-			//???? May be some flush ????
-		    }
-		    mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
-		    break;
-		}
-		pthread_mutex_lock(&s.s->dataRes());
-		s.s->trOut += vmax(0, wL); s.trOut += vmax(0, wL);
-		pthread_mutex_unlock(&s.s->dataRes());
-	    }
-	    answ = "";
-	}
-	cnt++;
-	s.tmReq = s.s->connTm = tm = time(NULL);
-	sessOk = true;
-    } while(!s.s->endrunCl && (s.s->mode() == 2 || ((!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
-	    (!sessOk || ((s.s->mode() == 1 || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))))));
+	    mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
+    }
+    catch(TError err) {
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
+    }
 
     //Close protocol on broken connection
     if(!prot_in.freeStat()) {
@@ -688,27 +705,36 @@ void *TSocketIn::ClTask( void *s_inf )
 	proto.at().close(n_pr);
     }
 
-    if(mess_lev() == TMess::Debug)
-	mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
-
     s.s->clientUnreg(&s);
 
     return NULL;
 }
 
-void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
+bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex )
+{
+    if(!prot_in.freeStat()) return true;
+
+    try {
+	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
+	string n_pr = id() + i2s(sock);
+	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
+	prot_in = proto.at().at(n_pr);
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
+    }
+    catch(TError err) {
+	if(!noex) throw;
+	return false;
+    }
+
+    return !prot_in.freeStat();
+}
+
+void TSocketIn::messPut( int sock, string &request, string &answer, const string &sender, AutoHD<TProtocolIn> &prot_in )
 {
     AutoHD<TProtocol> proto;
     string n_pr;
     try {
-	if(prot_in.freeStat()) {
-	    proto = SYS->protocol().at().modAt(protocol());
-	    n_pr = id() + i2s(sock);
-	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
-	    prot_in = proto.at().at(n_pr);
-	    if(mess_lev() == TMess::Debug)
-		mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
-	}
+	prtInit(prot_in, sock, sender);
 	if(prot_in.at().mess(request,answer)) return;
 	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	n_pr = prot_in.at().name();
@@ -1060,7 +1086,7 @@ void TSocketOut::stop( )
 
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
 {
-    string err(_("Unknown error"));
+    string err = _("Unknown error");
     ssize_t kz = 0;
     struct timeval tv;
     fd_set rw_fd;
@@ -1125,7 +1151,7 @@ repeate:
 	    mLstReqTm = TSYS::curTime();
 	    throw TError(nodePath().c_str(),_("Timeouted!"));
 	}
-	else if(kz < 0)	{
+	else if(kz < 0) {
 	    err = strerror(errno);
 	    res.release(); stop();
 	    mLstReqTm = TSYS::curTime();

@@ -30,7 +30,7 @@ using namespace OSCADA;
 //* Function abstract object                      *
 //*************************************************
 TFunction::TFunction( const string &iid, const char *igrp, const string &istor ) :
-    mId(iid), mStor(istor), run_st(false), be_start(false), mTVal(NULL), grp(igrp)
+    mId(iid), mStor(istor), runSt(false), beStart(false), mTVal(NULL), grp(igrp)
 {
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
@@ -152,8 +152,8 @@ void TFunction::ioMove( int pos, int to )
 void TFunction::preIOCfgChange( )
 {
     //Previous stop
-    be_start = startStat();
-    if(be_start) {
+    beStart = startStat();
+    if(beStart) {
 	setStart(false);
 	if(mTVal) { delete mTVal; mTVal = NULL; }
     }
@@ -171,7 +171,7 @@ void TFunction::preIOCfgChange( )
 void TFunction::postIOCfgChange( )
 {
     //Start for restore
-    if(be_start) setStart(true);
+    if(beStart) setStart(true);
 
     for(unsigned i = 0; i < used.size(); i++) used[i]->postIOCfgChange();
 }
@@ -291,7 +291,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/func/st/st") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",grp,SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"get",RWRWR_,"root",grp,SEC_RD))	opt->setText(runSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",grp,SEC_WR))	setStart(s2i(opt->text()));
     }
     else if(a_path == "/func/st/use" && ctrChkNode(opt))	opt->setText(i2s(used.size()));

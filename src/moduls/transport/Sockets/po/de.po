@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 22:37+0300\n"
+"POT-Creation-Date: 2015-11-12 20:43+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -125,6 +125,9 @@ msgstr " Kundenaufgabe wird gestoppt...."
 msgid "Socket has been connected by '%s'!"
 msgstr "Mit dem Socket verbunden '%s'!"
 
+msgid "Socket has been terminated by error: %s"
+msgstr "Socket wurde von Fehler beendet: %s"
+
 #, c-format
 msgid "Socket received message '%d' from '%s'."
 msgstr "Socket hat die Nachricht bekommen '%d' aus '%s'."
@@ -136,6 +139,9 @@ msgstr "Socket hat mit der Nachricht geantwortet '%d' auf '%s'."
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Vom Socket abgebunden '%s'!"
+
+msgid "Socket has been terminated by execution: %s"
+msgstr "Socket wurde durch die Ausführung beendet wurde: %s"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
@@ -246,6 +252,7 @@ msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
 "Null-Wert für disable (nicht immer schließen)."
 
+#, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s."
 msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s."
 

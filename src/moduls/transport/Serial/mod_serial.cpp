@@ -472,7 +472,7 @@ void *TTrIn::Task( void *tr_in )
 	while(true) {
 	    tv.tv_sec = 0; tv.tv_usec = (int)(1.5e3*wCharTm);
 	    FD_ZERO(&rw_fd); FD_SET(tr->fd, &rw_fd);
-	    if(select(tr->fd+1, &rw_fd, NULL, NULL, &tv) <= 0) {
+	    if(select(tr->fd+1,&rw_fd,NULL,NULL,&tv) <= 0) {
 		if(tr->endrun || !req.empty())	break;
 		continue;
 	    }

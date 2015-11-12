@@ -86,8 +86,6 @@ class TModule : public TCntrNode
 	virtual void modStart( )	{ }
 	virtual void modStop( )		{ }
 
-	void modInfoMainSet( const string &name, const string &type, const string &vers, const string &author,
-			     const string &descr, const string &license, const string &source );
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
 
@@ -108,6 +106,9 @@ class TModule : public TCntrNode
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	void modInfoMainSet( const string &name, const string &type, const string &vers, const string &author,
+			     const string &descr, const string &license, const string &source );
 
 	// Reg export function
 	void modFuncReg( ExpFunc *func ){ mEfunc.push_back(func); }

@@ -48,6 +48,10 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name );
 	~TProtIn( );
 
+	unsigned waitReqTm( );
+
+	void setSrcTr( TTransportIn *vl );
+
 	bool mess( const string &request, string &answer );
 
 	TProt &owner( );
@@ -76,6 +80,7 @@ class UserPrt : public TCntrNode, public TConfig
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
 	bool progTr( )		{ return cfg("PR_TR"); }
+	unsigned waitReqTm( )	{ return mWaitReqTm; }
 	string inProgLang( );
 	string inProg( );
 	string outProgLang( );
@@ -95,6 +100,7 @@ class UserPrt : public TCntrNode, public TConfig
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
 	void setProgTr( bool vl )		{ cfg("PR_TR") = vl; }
+	void setWaitReqTm( unsigned vl )	{ mWaitReqTm = vmax(0,vmin(100000,vl)); modif(); }
 	void setInProgLang( const string &ilng );
 	void setInProg( const string &iprg );
 	void setOutProgLang( const string &ilng );
@@ -125,7 +131,7 @@ class UserPrt : public TCntrNode, public TConfig
 	//Attributes
 	TCfg	&mId;
 	char	&mAEn, mEn;
-	int64_t	&mTimeStamp;
+	int64_t	&mWaitReqTm, &mTimeStamp;
 	string	mDB, mWorkInProg, mWorkOutProg;
 };
 

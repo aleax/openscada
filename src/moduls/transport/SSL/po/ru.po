@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 22:51+0300\n"
+"POT-Creation-Date: 2015-11-12 20:52+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -64,6 +64,9 @@ msgstr " клиентская задача остановлена...."
 msgid "Socket has been connected by '%s'!"
 msgstr "Сокет был подключен из '%s'!"
 
+msgid "Socket has been terminated by error: %s"
+msgstr "Сокет был разорван ошибкой: %s"
+
 #, c-format
 msgid "The message is received with the size '%d'."
 msgstr "Получено сообщение размером '%d'."
@@ -72,8 +75,15 @@ msgstr "Получено сообщение размером '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Отвечено сообщением размера '%d'."
 
-msgid "Socket disconnect (%d)."
-msgstr "Сокет отключен (%d)."
+msgid "Socket has been disconnected by '%s'!"
+msgstr "Сокет был отключен от '%s'!"
+
+msgid "Socket has been terminated by execution: %s"
+msgstr "Сокет был разорван исключением: %s"
+
+#, c-format
+msgid "New input protocol's object '%s' created!"
+msgstr "Создано новый объект входящего протокола '%s'!"
 
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
@@ -143,6 +153,7 @@ msgstr ""
 msgid "Priority"
 msgstr "Приоритет"
 
+#, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s."
 msgstr "%s %d(%s): последний %s; трафик входящий %s, исходящий %s."
 

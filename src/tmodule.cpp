@@ -70,18 +70,6 @@ string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }
 
 string TModule::modName( )	{ return mModName; }
 
-void TModule::modInfoMainSet( const string &name, const string &type, const string &vers, const string &author,
-			      const string &descr, const string &license, const string &source )
-{
-    mModName	= name;
-    mModType	= type;
-    mModVers	= vers;
-    mModAuthor	= author;
-    mModDescr	= descr;
-    mModLicense	= license;
-    mModSource	= source;
-}
-
 void TModule::postEnable( int flag )
 {
     if(flag&TCntrNode::NodeRestore)	return;
@@ -169,6 +157,18 @@ void TModule::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path.compare(0,13,"/module/m_inf") == 0 && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
+}
+
+void TModule::modInfoMainSet( const string &name, const string &type, const string &vers, const string &author,
+			      const string &descr, const string &license, const string &source )
+{
+    mModName	= name;
+    mModType	= type;
+    mModVers	= vers;
+    mModAuthor	= author;
+    mModDescr	= descr;
+    mModLicense	= license;
+    mModSource	= source;
 }
 
 const char *TModule::I18N( const char *mess )

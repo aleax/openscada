@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 22:37+0300\n"
+"POT-Creation-Date: 2015-11-12 20:43+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -124,6 +124,9 @@ msgstr " клієнтську задачу зупинено...."
 msgid "Socket has been connected by '%s'!"
 msgstr "До сокета приєднався '%s'!"
 
+msgid "Socket has been terminated by error: %s"
+msgstr "Сокет було перервано помилкою: %s"
+
 #, c-format
 msgid "Socket received message '%d' from '%s'."
 msgstr "Сокет отримав повідомлення '%d' від '%s'."
@@ -135,6 +138,9 @@ msgstr "Сокет відповів повідомленням '%d' до '%s'."
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Від сокету від'єднався '%s'!"
+
+msgid "Socket has been terminated by execution: %s"
+msgstr "Сокет було перервано виключенням: %s"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
@@ -245,6 +251,7 @@ msgstr ""
 "Закриття підключення після відсутності запитів протягом визначеного часу.\n"
 "Нульове значення для відключення (не закривається ніколи)."
 
+#, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s."
 msgstr "%s %d(%s): останній %s; трафік вхідний %s, вихідний %s."
 

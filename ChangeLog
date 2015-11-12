@@ -1,3 +1,18 @@
+2015-11-12 Roman
+- !!!!:SYS:
+    Core library version rose to 3:4:0.
+    DB subsystem type modules version rose to 8.
+    DAQ subsystem type modules version rose to 9.
+    Archive subsystem type modules version rose to 8.
+    Protocol subsystem type modules version rose to 7.
+    Special subsystem type modules version rose to 7.
+    Transports subsystem type modules version rose to 8.
+    UI subsystem type modules version rose to 7.
+    TFunction: Mostly the source code cleaned and run_st renamed ro runSt.
+- !!!:Protocol.{*,UserProtocol},Transport.{Sockets,SSL}: Function Protocol::waitReqTm() added for pool mode control of input protocols.
+    Protocol.UserProtocol and Transport.{Sockets,SSL} adapted to pool mode of input transport-protocol support.
+
+
 2015-11-11 Roman
 - SYS: Synonym "pid-file" to "pidfile" command-line argument is added.
 - !!!!:SYS.TElem: Item's resource mResEl moved from Res to pthread_mutex_t. Mostly the source code cleaned.
@@ -653,11 +668,11 @@
 - !!!!:SYS:
     Classes TTipBD, TTipDAQ, TTipParam, TTipArchivator, TTipTransport  renamed to TTypeBD, TTypeDAQ, TTypeParam, TTypeArchivator, TTypeTransport at last.
     Source tree's files ttipdaq.h, ttipdaq.cpp, ttiparam.h renamed to ttypedaq.h, ttypedaq.cpp, ttypeparam.h.
-    Core library version rised to 3:3:0.
-    DB subsystem type modules version rised to 7.
-    DAQ subsystem type modules version rised to 8.
-    Archive subsystem type modules version rised to 7.
-    Transports subsystem type modules version rised to 7.
+    Core library version rose to 3:3:0.
+    DB subsystem type modules version rose to 7.
+    DAQ subsystem type modules version rose to 8.
+    Archive subsystem type modules version rose to 7.
+    Transports subsystem type modules version rose to 7.
 - !!!!:Transport.Sockets: Initiative connection for input transport types TCP and UNIX support is added
     when the input transport do not wait a connection from remote but self connected and continue waiting request by the established connection.
 
@@ -2719,7 +2734,7 @@
 2012-10-07 Roman
 - TFunction: valAtt() and valDet() is made virtual. Public attribute "exCtx" for execution context store here.
 - !!:DAQ.JavaLikeCalc: Registers RegW execution context moved out each execution turn, and next execution
-    performance rised from 5% to 10%.
+    performance rose from 5% to 10%.
 - Protocol.HTTP: File /robots.txt processing is added for prevent scan by seach engines.
 - FIX:Transport.Serial: New flow control mode "rs485" some fixed for SER_RS485_ENABLED miss processing.
 
@@ -3967,7 +3982,7 @@
 - !:SYS, DAQ.OPC_UA: To and from standard little-endian FloatPoint variant convertion functions is added:
     floatLE(), floatLErev(), doubleLE(), doubleLErev().
 - FIX:DAQ.Siemens: Into Libnodave file nodave.h #pragma pack(1) is replaced to #pragma pack(push,1) ... #pragma pack(pop).
-- SYS: GLibC version for EDEADLK processing hack is rised to 2.4 and features.h include for correct GLibC version check everywhere.
+- SYS: GLibC version for EDEADLK processing hack is rose to 2.4 and features.h include for correct GLibC version check everywhere.
 - SYS, UI.VCAEngine: EDEADLK processing hack is added for pthread_rdlock_wrlock() for fix GLibC 2.3.2 (< 2.5).
 - !:SYS: Set DB to "<cfg>" for load only from config file for all OpenSCADA stored nodes.
 - !!:DAQ.Siemens: Libnodave library is updated to version 0.8.4.6.
@@ -5279,7 +5294,7 @@
 
 2010-09-27 Roman
 - !!:DemoDB: New UI-permitions mechanism is implemented. Real read access for simple users ("user") is granted.
-- !:Archive: Read access speed to values from soft grid buffer is rised.
+- !:Archive: Read access speed to values from soft grid buffer is rose.
 - !:Elem, UI.VCAEngine: The flag TFld::NoStrTransl is added for translation prevent for system's string fields.
 - !!!!:UI.VCAEngine: Rip attribute object "Attr" from object "TCntrNode", memory consumption is decreased to 25%.
     Resource access to widget's attributes is made global by mutex.
@@ -5316,7 +5331,7 @@
 
 
 2010-09-13 Roman
-- !!!!:SYS: OpenSCADA core library version is rised to 1:0:0
+- !!!!:SYS: OpenSCADA core library version is rose to 1:0:0
 - !!!!:SYS: OpenSCADA core librarie's code is moved to namespace OSCADA
 - !:SYS: To node name call function is changed to const string &TCntrNode::nodeName( )
 - !!:Modules: Module check and init code is updated for exclude shared libraries init twice.
@@ -5965,7 +5980,7 @@
 2009-12-01 Roman
 - !!!!:SYS: Global functions is added for central control for OpenSCADA tasks: taskCreate() and taskDestroy(). All OpenSCADA parts is used new tasks API.
 - DAQ.DAQGate: The limit (> 50%) is added for control by separated requested attributes and make full request instead.
-- FIX:Transport.SSL: Restore try time is rised to 0.5 s.
+- FIX:Transport.SSL: Restore try time is rose to 0.5 s.
 
 
 2009-11-28 Roman
@@ -6054,7 +6069,7 @@
 
 2009-11-06 Roman
 - FIX:DAQ.DAQGate: True status show is fixed on time connection try.
-- DAQ.ICP_DAS: Fast task priority is rised to 32.
+- DAQ.ICP_DAS: Fast task priority is rose to 32.
 - Protocol.SelfSystem: Strong timeout set is removed for output transport's request.
 - !!:UI.VCAEngine: Object's functions of user's API is added: user(), alrmSndPlay() and alrmQuittance().
 
@@ -6275,7 +6290,7 @@
 - !!!!:/SYS: The source tree version is changed to 0.6.4. OpenSCADA library version changed to 0:11:0.
     RPM-build speck file is changed for build version 0.6.4 packages.
 - !!!!:/DAQ/ICP_DAS: New module for hardware of the ICP DAS support is added.
-- !!:/DemoDB: Some fixes. Translations updating. SO main page is feature expanded. Contour frame's fonts is rised and buttons for value changing is added.
+- !!:/DemoDB: Some fixes. Translations updating. SO main page is feature expanded. Contour frame's fonts is rose and buttons for value changing is added.
 - /SYS: Encode variant "ID" is renamed to "oscdID".
 - FIX:/DAQ/BlockCalc: A controller configuration field "IO" is expanded to size 1000 from 200.
 - /DAQ/DAQGate: Global checking for write equal values is added.
@@ -7014,7 +7029,7 @@
 - !!!:/UI/VCAEngine,/UI/Vision,/UI/WebVision: The RunTime context menu for active widgets is realised.
 - !!!:/DemoDB: Realised the full feature signal objects. The result graphics template cadr is created. Context and status tips is added.
     The navigation panel is updated and quittance buttons is added. Volumed pipe elements is added to library and used for all mnemos.
-    Context menu is added for digital taps. Value's text font is rised for input's views.
+    Context menu is added for digital taps. Value's text font is rose for input's views.
 
 
 2009-02-27 Roman,Maxim
@@ -7519,10 +7534,10 @@
   to model's data from visualisators.
 - /UI/Vision: Renamed functions from 'm_nm' to 'mNm' view.
 - FIX:/UI/Vision: Select new made widgets mechanism is fixed.
-- !!!!:/UI/Vision: For time optimal requests used new group request '/serv/attrBr'. Performance network and local request significantly rised!
+- !!!!:/UI/Vision: For time optimal requests used new group request '/serv/attrBr'. Performance network and local request significantly rose!
 - /UI/Vision: Debug messages is made through 'OSC_DEBUG >= 3' macro-condition.
 - !!:/UI/Vision: The updating time control mechanism is rewrote.
-- !!!!:/UI/WebVision: For time optimal requests used new group request '/serv/attrBr'. Performance of requests significantly rised!
+- !!!!:/UI/WebVision: For time optimal requests used new group request '/serv/attrBr'. Performance of requests significantly rose!
 - !!:/DemoDB: Is updated.
 
 

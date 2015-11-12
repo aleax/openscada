@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.7.2"
+#define MOD_VER		"0.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -83,6 +83,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
     mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mUPrtEl.fldAdd(new TFld("PR_TR",_("Program translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Wait request timeout"),TFld::Integer,TFld::NoFlag,"6","0"));
     mUPrtEl.fldAdd(new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
@@ -235,18 +236,23 @@ TProtIn::~TProtIn( )
 
 TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
+unsigned TProtIn::waitReqTm( )	{ return !up.freeStat() ? up.at().waitReqTm() : 0; }
+
+void TProtIn::setSrcTr( TTransportIn *vl )
+{
+    TProtocolIn::setSrcTr(vl);
+    string selNode = TSYS::strParse(vl->protocolFull(), 1, ".");
+    if(owner().uPrtPresent(selNode)) up = owner().uPrtAt(selNode);
+}
+
 bool TProtIn::mess( const string &reqst, string &answer )
 {
     try {
 	//Find user protocol for using
 	if(!funcV.func()) {
-	    AutoHD<TTransportIn> tri = srcTr();
-	    string selNode = TSYS::strParse(tri.at().protocolFull(),1,".");
-	    if(!owner().uPrtPresent(selNode)) return false;
-	    up = owner().uPrtAt(selNode);
-	    if(!up.at().enableStat() || up.at().workInProg().empty()) return false;
+	    if(up.freeStat() || !up.at().enableStat() || up.at().workInProg().empty()) return false;
 	    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workInProg())).at());
-	    funcV.setO(4,new TCntrNodeObj(AutoHD<TCntrNode>(&tri.at()),"root"));
+	    funcV.setO(4,new TCntrNodeObj(AutoHD<TCntrNode>(&srcTr().at()),"root"));
 	}
 
 	//Load inputs
@@ -273,7 +279,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 //* UserPrt                                       *
 //*************************************************
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb)
+    TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false),
+    mWaitReqTm(cfg("WaitReqTm").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb)
 {
     mId = iid;
     cfg("InPROG").setExtVal(true);
@@ -456,10 +463,16 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt,"/up/cfg/InPROG");
 		ctrRemoveNode(opt,"/up/cfg/OutPROG");
 		ctrRemoveNode(opt,"/up/cfg/TIMESTAMP");
+		ctrRemoveNode(opt,"/up/cfg/WaitReqTm");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),RWRW__,"root",SPRT_ID)) {
-		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
-		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRW__,"root",SPRT_ID,4,"tp","str","rows","10","SnthHgl","1",
+		ctrMkNode("fld",opt,-1,"/in/WaitReqTm",_("Wait request timeout, ms"),RWRW__,"root",SPRT_ID,2,
+		    "tp","dec", "help",_("Use it for pool mode enable by set the timeout to a nonzero value.\n"
+					"Into the pool mode an input transport will call the protocol by no "
+					"a request with an empty message after that timeout."));
+		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,
+		    "tp","str", "dest","sel_ed", "select","/up/cfg/plangIls");
+		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
 		    "help",_("Next attributes has defined for input requests processing:\n"
 			    "   'rez' - processing result (false-full request;true-not full request);\n"
 			    "   'request' - request message;\n"
@@ -468,8 +481,9 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 			    "   'tr' - sender transport."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID)) {
-		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRW__,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangOls");
-		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRW__,"root",SPRT_ID,4,"tp","str","rows","10","SnthHgl","1",
+		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRW__,"root",SPRT_ID,3,
+		    "tp","str", "dest","sel_ed", "select","/up/cfg/plangOls");
+		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRW__,"root",SPRT_ID,4, "tp","str", "rows","10", "SnthHgl","1",
 		    "help",_("Next attributes has defined for output requests processing:\n"
 			    "   'io' - input/output interface's XMLNode object;\n"
 			    "   'tr' - associated transport."));
@@ -516,6 +530,10 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
+    else if(a_path == "/in/WaitReqTm") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(waitReqTm()));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setWaitReqTm(s2i(opt->text()));
+    }
     else if(a_path == "/in/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProgLang(opt->text());

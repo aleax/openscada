@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tprotocols.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define SPRT_VER	6		//ProtocolS type modules version
+#define SPRT_VER	7		//ProtocolS type modules version
 #define SPRT_ID		"Protocol"
 
 #include <string>
@@ -49,15 +49,19 @@ class TProtocolIn : public TCntrNode
 	string	name( )			{ return mName.c_str(); }
 	AutoHD<TTransportIn> &srcTr( )	{ return mSrcTr; }	//Source or return address
 	const string &srcAddr( )	{ return mSrcAddr; }
+	virtual unsigned waitReqTm( )	{ return 0; }		//Wait for a request timeout, miliseconds, after which call to
+								//the input protocol object with the empty message, for like to initiative pool allow.
+								//Value '0' used for disable the mechanism and waiting to a message
 
-	void setSrcTr( TTransportIn *vl )	{ mSrcTr = vl; }
-	void setSrcAddr( const string &vl )	{ mSrcAddr = vl; }
+	virtual void setSrcTr( TTransportIn *vl )	{ mSrcTr = vl; }
+	virtual void setSrcAddr( const string &vl )	{ mSrcAddr = vl; }
 
 	int writeTo( const string &data );	//Backward request to source, for asynchronous responds to requests mostly
 
 	// Process input messages
-	//  * mess( ) - Send messages point from transports.
-	//              False return for full request came and true for need tail or just wait.
+	//  * mess( ) - Send messages by it's point from the transports.
+	//              False - for full request came.
+	//              True  - for need tail or just wait.
 	virtual bool mess( const string &request, string &answer )	{ answer = ""; return false; }
 
 	TProtocol &owner( );
