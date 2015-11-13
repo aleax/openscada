@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:21+0300\n"
+"POT-Creation-Date: 2015-11-13 11:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,9 @@ msgid "To enable"
 msgstr ""
 
 msgid "Program translation allow"
+msgstr ""
+
+msgid "Wait request timeout, ms"
 msgstr ""
 
 msgid "Input program"
@@ -106,6 +109,11 @@ msgid "Configuration"
 msgstr ""
 
 msgid "Input"
+msgstr ""
+
+msgid ""
+"Use it for pool mode enabling by set the timeout to a nonzero value.\n"
+"Into the pool mode an input transport will call the protocol by no a request with an empty message after that timeout."
 msgstr ""
 
 msgid "Input program language"

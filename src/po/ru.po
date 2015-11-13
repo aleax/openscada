@@ -1228,7 +1228,7 @@ msgstr "SO '%s' ошибка: %s !"
 
 #, c-format
 msgid "%s for type '%s' doesn't support module version: %d!"
-msgstr "%s для типа '%s' не поддерживает версию модуля: %s!"
+msgstr "%s для типа '%s' не поддерживает версию модуля: %d!"
 
 #, c-format
 msgid "Module '%s' is already present!"

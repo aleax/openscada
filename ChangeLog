@@ -1,6 +1,13 @@
+2015-11-13 Roman
+- FIX:SYS: Wrong translation fix to Russian for the message "%s for type '%s' doesn't support module version: %d!"
+- Protocol.UserProtocol: Translation to the new messages appended.
+- FIX:UI.WebVision: Protocol's table fixed for clean before a structure changing.
+
+
 2015-11-13 fido_max
 - DAQ.Fastwel: DIM765/766 added. Init refactored.
 - DAQ.FT3: AddrReq/ReqData processing combined. Using PLC timestamp.   
+
 
 2015-11-12 Roman
 - SYS,Archive.FSArch,DB.DBF,DAQ.{Comedi,SMH2Gi}:

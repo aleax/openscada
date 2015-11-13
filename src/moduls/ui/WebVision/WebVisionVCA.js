@@ -1486,6 +1486,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.curTmpl = this.attrs['tmpl'];
 			this.curLev = this.attrs['lev'];
 			this.headVis = this.attrs['headVis'];
+			while(tblB.childNodes.length) tblB.removeChild(tblB.lastChild);
 			var rowEl = document.createElement('tr');
 			tblB.appendChild(rowEl);
 			var colCfg = '';
@@ -1613,7 +1614,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    sortIts.sort();
 		    if(parseInt(this.attrs['viewOrd'])&0x4) sortIts.reverse();
 
-		    //Write to table
+		    //Write to the table
 		    for(var i_m = 0; i_m < sortIts.length; i_m++) {
 			var rowEl = (i_m>=(tblB.childNodes.length-1)) ? document.createElement('tr') : tblB.childNodes[i_m+1];
 			var elPos = parseInt(sortIts[i_m].slice(sortIts[i_m].lastIndexOf(':')+1));

@@ -83,7 +83,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
     mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mUPrtEl.fldAdd(new TFld("PR_TR",_("Program translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
-    mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Wait request timeout"),TFld::Integer,TFld::NoFlag,"6","0"));
+    mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Wait request timeout, ms"),TFld::Integer,TFld::NoFlag,"6","0"));
     mUPrtEl.fldAdd(new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
@@ -467,7 +467,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),RWRW__,"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/in/WaitReqTm",_("Wait request timeout, ms"),RWRW__,"root",SPRT_ID,2,
-		    "tp","dec", "help",_("Use it for pool mode enable by set the timeout to a nonzero value.\n"
+		    "tp","dec", "help",_("Use it for pool mode enabling by set the timeout to a nonzero value.\n"
 					"Into the pool mode an input transport will call the protocol by no "
 					"a request with an empty message after that timeout."));
 		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,

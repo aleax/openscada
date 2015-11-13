@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.UserProtocol translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.UserProtocol package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:21+0300\n"
+"POT-Creation-Date: 2015-11-13 11:11+0200\n"
 "PO-Revision-Date: 2010-03-04 21:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -40,6 +40,9 @@ msgstr "Вмикати"
 
 msgid "Program translation allow"
 msgstr "Перекладати програму"
+
+msgid "Wait request timeout, ms"
+msgstr "Час очікування запиту, мс"
 
 msgid "Input program"
 msgstr "Вхідна програма"
@@ -107,6 +110,16 @@ msgstr "Конфігурація"
 
 msgid "Input"
 msgstr "Вхід"
+
+msgid ""
+"Use it for pool mode enabling by set the timeout to a nonzero value.\n"
+"Into the pool mode an input transport will call the protocol by no a request "
+"with an empty message after that timeout."
+msgstr ""
+"Використовуйте це поле для включення режиму пулінгу, встановленням у "
+"ненульове значення.\n"
+"У режимі пулінгу вхідний транспорт буде викликати протокол із порожнім "
+"запитом, у випадку відсутності запиту протягом визначеного часу."
 
 msgid "Input program language"
 msgstr "Мова програми входу"

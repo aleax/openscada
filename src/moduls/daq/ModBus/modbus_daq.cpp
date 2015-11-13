@@ -1348,7 +1348,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
-    //  tp - attribute type ["boolean", "integer", "real", "string", "text", "object"] + ["sel|seled"];
+    //  tp - attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled];
     //  selValsNms - two lines with values in first and it's names in first (separated by ";").
     if(iid == "attrAdd" && prms.size() >= 1) {
 	if(!enableStat() || !isLogic())	return false;
