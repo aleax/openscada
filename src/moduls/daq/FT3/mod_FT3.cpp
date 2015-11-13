@@ -389,7 +389,7 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("ResData2"));
 	//Channels[msg->B].FCB2 = 0;
 	resp->L = 3;
-	resp->C = 0;//Channels[msg->B].FCB3;
+	resp->C = 0; //Channels[msg->B].FCB3;
 	while(Channels[msg->B].C2.head) {
 	    Channels[msg->B].empt.insert(Channels[msg->B].C2.getdel());
 	}
@@ -453,7 +453,7 @@ void TTpContr::postEnable(int flag)
 
     int t_prm = tpParmAdd("tp_BUC", "PRM_BD_BUC", _("BUC"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;15"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD", _("Modification"), TFld::Integer, TFld::HexDec|TCfg::NoVal, "4", "0"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD", _("Modification"), TFld::Integer, TFld::HexDec | TCfg::NoVal, "4", "0"));
     // tpPrmAt(t_prm).fldAdd( new TFld("STOP_TIME",_("Last stop time"),TFld::String,TCfg::Hide,"2","0","0;15") );
 
     t_prm = tpParmAdd("tp_BVTS", "PRM_BD_BVTS", _("BVTS"));
@@ -569,6 +569,63 @@ uint16_t TMdContr::CRC(char *data, uint16_t length)
 	}
     }
     return ~CRC;
+}
+
+bool TMdContr::DoCmd(tagMsg * pMsg)
+{
+    uint8_t Cmd = pMsg->C;
+    if(Transact(pMsg)) {
+	switch(Cmd) {
+	case ReqData:
+	case ReqData1:
+	case ReqData2:
+	case AddrReq:
+	    if((pMsg->C & 0x0F) == GOOD3) {
+		if(mess_lev() == TMess::Debug) {
+		    string dump;
+		    for(int i = 0; i < (pMsg->L - 3); i++) {
+			dump += TSYS::strMess("%02X ", pMsg->D[i]);
+		    }
+		    mess_debug(nodePath().c_str(), _("data arrived L:%d %s"), (pMsg->L - 3), dump.c_str());
+		}
+		uint16_t l = pMsg->L - 6, m = 0, n = 3;
+		while(l) {
+		    vector<string> lst;
+		    pMsg->D[3] = pMsg->D[n];
+		    pMsg->D[4] = pMsg->D[n + 1];
+		    l -= 2;
+		    n += 2;
+		    list(lst);
+		    for(int i_l = 0; !m && i_l < lst.size(); i_l++) {
+			AutoHD<TMdPrm> t = at(lst[i_l]);
+			m = t.at().HandleEvent(((int64_t) DateTimeToTime_t(pMsg->D)) * 1000000, pMsg->D + n);
+
+		    }
+		    if(m) {
+			if(!(TSYS::getUnalign16(pMsg->D + n))) pMsg->D[n + 2] = 0;
+			l -= m;
+			n += m;
+			m = 0;
+		    } else {
+			if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Unhandled data  %04X at %d"), TSYS::getUnalign16(pMsg->D + n), n);
+			if(mess_lev() == TMess::Debug) {
+			    string dump;
+			    for(int i = 0; i < (pMsg->L - 3); i++) {
+				dump += TSYS::strMess("%02X ", pMsg->D[i]);
+			    }
+			    mess_debug(nodePath().c_str(), _("%d, %s"), (pMsg->L - 3), dump.c_str());
+			}
+			break;
+		    }
+		}
+	    }
+
+	}
+	return true;
+    } else {
+	return false;
+    }
+
 }
 
 bool TMdContr::Transact(tagMsg * pMsg)
@@ -930,10 +987,10 @@ void *TMdContr::DAQTask(void *icntr)
 	if(cntr.NeedInit) {
 	    Msg.L = 3;
 	    Msg.C = ResetChan;
-	    if(cntr.Transact(&Msg)) {
+	    if(cntr.DoCmd(&Msg)) {
 		Msg.L = 3;
 		Msg.C = ResData2;
-		if(cntr.Transact(&Msg)) {
+		if(cntr.DoCmd(&Msg)) {
 		    cntr.NeedInit = false;
 		}
 	    }
@@ -946,42 +1003,7 @@ void *TMdContr::DAQTask(void *icntr)
 	    }
 	    Msg.L = 3;
 	    Msg.C = ReqData;
-	    cntr.Transact(&Msg);
-	    if((Msg.C & 0x0F) == GOOD3) {
-		if(mess_lev() == TMess::Debug) mess_debug(cntr.nodePath().c_str(), _("new event %d"), Msg.L - 3);
-		string dump;
-		for(int i = 0; i < (Msg.L - 3); i++) {
-		    dump += TSYS::strMess("%02X ", Msg.D[i]);
-		}
-		if(mess_lev() == TMess::Debug) mess_debug(cntr.nodePath().c_str(), _("%d, %s"), (Msg.L - 3), dump.c_str());
-		uint16_t l = Msg.L - 6, m = 0, n = 3;
-		while(l) {
-		    Msg.D[3] = Msg.D[n];
-		    Msg.D[4] = Msg.D[n + 1];
-		    l -= 2;
-		    n += 2;
-		    cntr.list(lst);
-		    for(int i_l = 0; !m && i_l < lst.size(); i_l++) {
-			AutoHD<TMdPrm> t = cntr.at(lst[i_l]);
-			m = t.at().HandleEvent(Msg.D + n);
-
-		    }
-		    if(m) {
-			if(!(TSYS::getUnalign16(Msg.D + n))) Msg.D[n + 2] = 0;
-			l -= m;
-			n += m;
-			m = 0;
-		    } else {
-			if(mess_lev() == TMess::Debug) mess_debug(cntr.nodePath().c_str(), _("Unhandled event  %04X at %d"), TSYS::getUnalign16(Msg.D + n), n);
-			string dump;
-			for(int i = 0; i < (Msg.L - 3); i++) {
-			    dump += TSYS::strMess("%02X ", Msg.D[i]);
-			}
-			if(mess_lev() == TMess::Debug) mess_debug(cntr.nodePath().c_str(), _("%d, %s"), (Msg.L - 3), dump.c_str());
-			break;
-		    }
-		}
-	    }
+	    cntr.DoCmd(&Msg);
 	}
 	prmRes.unlock();
 
@@ -1102,7 +1124,7 @@ void TMdPrm::enable()
 	if(type().name == "tp_GNS") mDA = new KA_GNS(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_BTU") mDA = new KA_BTU(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
     } else {
-	if(type().name == "tp_BUC") mDA = new B_BUC(*this, cfg("DEV_ID").getI(),cfg("MOD").getI());
+	if(type().name == "tp_BUC") mDA = new B_BUC(*this, cfg("DEV_ID").getI(), cfg("MOD").getI());
 	if(type().name == "tp_BVI") mDA = new B_BVI(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB(), cfg("EXT_PERIOD").getB());
 	if(type().name == "tp_BVTS") mDA = new B_BVTC(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_BVT")
@@ -1148,10 +1170,10 @@ uint16_t TMdPrm::Task(uint16_t cod)
 
 }
 
-uint16_t TMdPrm::HandleEvent(uint8_t * D)
+uint16_t TMdPrm::HandleEvent(time_t tm, uint8_t * D)
 {
     if(mDA) {
-	return mDA->HandleEvent(D);
+	return mDA->HandleEvent(tm, D);
     } else {
 	return 0;
     }

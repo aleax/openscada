@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-11 16:49+0300\n"
+"POT-Creation-Date: 2015-11-13 13:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgid "State %d"
 msgstr ""
 
 #, c-format
-msgid "Current flow %d"
+msgid "Value %d"
 msgstr ""
 
 #, c-format
@@ -50,170 +50,6 @@ msgstr ""
 
 #, c-format
 msgid "Alarm maximum %d"
-msgstr ""
-
-#, c-format
-msgid "Sensor 1 %d"
-msgstr ""
-
-#, c-format
-msgid "Sensor 2 %d"
-msgstr ""
-
-#, c-format
-msgid "Sensor T %d"
-msgstr ""
-
-#, c-format
-msgid "Sensor P %d"
-msgstr ""
-
-#, c-format
-msgid "Service flow %d"
-msgstr ""
-
-#, c-format
-msgid "Contract hour %d"
-msgstr ""
-
-#, c-format
-msgid "Hourly flow %d"
-msgstr ""
-
-#, c-format
-msgid "Counter Q %d"
-msgstr ""
-
-#, c-format
-msgid "Hour Q %d"
-msgstr ""
-
-#, c-format
-msgid "Hour dP %d"
-msgstr ""
-
-#, c-format
-msgid "Hour t %d"
-msgstr ""
-
-#, c-format
-msgid "Hour P %d"
-msgstr ""
-
-#, c-format
-msgid "Hour E %d"
-msgstr ""
-
-#, c-format
-msgid "Datetime %d"
-msgstr ""
-
-#, c-format
-msgid "Period %d"
-msgstr ""
-
-#, c-format
-msgid "Avg Q %d"
-msgstr ""
-
-#, c-format
-msgid "Avg dP %d"
-msgstr ""
-
-#, c-format
-msgid "Avg t %d"
-msgstr ""
-
-#, c-format
-msgid "Avg P %d"
-msgstr ""
-
-#, c-format
-msgid "Avg E %d"
-msgstr ""
-
-#, c-format
-msgid "Periodicly Q %d"
-msgstr ""
-
-#, c-format
-msgid "Density %d"
-msgstr ""
-
-#, c-format
-msgid "Equivalence asperity %d"
-msgstr ""
-
-#, c-format
-msgid "N concentration %d"
-msgstr ""
-
-#, c-format
-msgid "CO concentration %d"
-msgstr ""
-
-#, c-format
-msgid "Membrane diameter %d"
-msgstr ""
-
-#, c-format
-msgid "Membrane factor %d"
-msgstr ""
-
-#, c-format
-msgid "Pipe diameter %d"
-msgstr ""
-
-#, c-format
-msgid "Pipe factor %d"
-msgstr ""
-
-#, c-format
-msgid "Measure method %d"
-msgstr ""
-
-#, c-format
-msgid "Test dP/TI %d"
-msgstr ""
-
-#, c-format
-msgid "Test t %d"
-msgstr ""
-
-#, c-format
-msgid "Test P %d"
-msgstr ""
-
-#, c-format
-msgid "Test rate %d"
-msgstr ""
-
-#, c-format
-msgid "Membrane radius %d"
-msgstr ""
-
-#, c-format
-msgid "Atmospheric pressure %d"
-msgstr ""
-
-#, c-format
-msgid "dP %d"
-msgstr ""
-
-#, c-format
-msgid "t %d"
-msgstr ""
-
-#, c-format
-msgid "P %d"
-msgstr ""
-
-#, c-format
-msgid "E %d"
-msgstr ""
-
-#, c-format
-msgid "Value %d"
 msgstr ""
 
 #, c-format
@@ -281,6 +117,14 @@ msgid "Delay 1"
 msgstr ""
 
 msgid "Delay 2"
+msgstr ""
+
+#, c-format
+msgid "UnpackID %d"
+msgstr ""
+
+#, c-format
+msgid "g %d k %d n %d"
 msgstr ""
 
 #, c-format
@@ -418,6 +262,9 @@ msgstr ""
 msgid "Channels count"
 msgstr ""
 
+msgid "Ignore FCB2"
+msgstr ""
+
 msgid "BUC"
 msgstr ""
 
@@ -493,6 +340,18 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
+#, c-format
+msgid "data arrived L:%d %s"
+msgstr ""
+
+#, c-format
+msgid "Unhandled data  %04X at %d"
+msgstr ""
+
+#, c-format
+msgid "%d, %s"
+msgstr ""
+
 msgid "bad header found!"
 msgstr ""
 
@@ -536,18 +395,6 @@ msgstr ""
 msgid "Gather data time %.6g ms. "
 msgstr ""
 
-#, c-format
-msgid "new event %d"
-msgstr ""
-
-#, c-format
-msgid "%d, %s"
-msgstr ""
-
-#, c-format
-msgid "Unhandled event  %04X at %d"
-msgstr ""
-
 msgid "No one device selected."
 msgstr ""
 
@@ -580,6 +427,154 @@ msgstr ""
 
 #, c-format
 msgid "Persistence astime %d"
+msgstr ""
+
+#, c-format
+msgid "Sensors ID %d"
+msgstr ""
+
+#, c-format
+msgid "Service flow %d"
+msgstr ""
+
+#, c-format
+msgid "Contract hour %d"
+msgstr ""
+
+#, c-format
+msgid "Hourly flow %d"
+msgstr ""
+
+#, c-format
+msgid "Counter Q %d"
+msgstr ""
+
+#, c-format
+msgid "Hour Q %d"
+msgstr ""
+
+#, c-format
+msgid "Hour dP %d"
+msgstr ""
+
+#, c-format
+msgid "Hour T %d"
+msgstr ""
+
+#, c-format
+msgid "Hour P %d"
+msgstr ""
+
+#, c-format
+msgid "Hour E %d"
+msgstr ""
+
+#, c-format
+msgid "StartDate %d"
+msgstr ""
+
+#, c-format
+msgid "EndDate %d"
+msgstr ""
+
+#, c-format
+msgid "Avg Q %d"
+msgstr ""
+
+#, c-format
+msgid "Avg dP %d"
+msgstr ""
+
+#, c-format
+msgid "Avg T %d"
+msgstr ""
+
+#, c-format
+msgid "Avg P %d"
+msgstr ""
+
+#, c-format
+msgid "Avg E %d"
+msgstr ""
+
+#, c-format
+msgid "Periodically Q %d"
+msgstr ""
+
+#, c-format
+msgid "Density %d"
+msgstr ""
+
+#, c-format
+msgid "Equivalence asperity %d"
+msgstr ""
+
+#, c-format
+msgid "N concentration %d"
+msgstr ""
+
+#, c-format
+msgid "CO concentration %d"
+msgstr ""
+
+#, c-format
+msgid "Membrane diameter %d"
+msgstr ""
+
+#, c-format
+msgid "Membrane factor %d"
+msgstr ""
+
+#, c-format
+msgid "Pipe diameter %d"
+msgstr ""
+
+#, c-format
+msgid "Pipe factor %d"
+msgstr ""
+
+#, c-format
+msgid "Measure method %d"
+msgstr ""
+
+#, c-format
+msgid "Test dP/TI %d"
+msgstr ""
+
+#, c-format
+msgid "Test T %d"
+msgstr ""
+
+#, c-format
+msgid "Test P %d"
+msgstr ""
+
+#, c-format
+msgid "Test Q %d"
+msgstr ""
+
+#, c-format
+msgid "Membrane radius %d"
+msgstr ""
+
+#, c-format
+msgid "Atmospheric pressure %d"
+msgstr ""
+
+#, c-format
+msgid "dP %d"
+msgstr ""
+
+#, c-format
+msgid "T %d"
+msgstr ""
+
+#, c-format
+msgid "P %d"
+msgstr ""
+
+#, c-format
+msgid "E %d"
 msgstr ""
 
 #, c-format
@@ -680,7 +675,7 @@ msgid "Allow realisation of FT3 protocols."
 msgstr ""
 
 #, c-format
-msgid "Ban_MC %d"
+msgid "Lock %d"
 msgstr ""
 
 #, c-format

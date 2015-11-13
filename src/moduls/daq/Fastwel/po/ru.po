@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fastwel 0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-18 12:26+0300\n"
-"PO-Revision-Date: 2015-04-23 09:36+0300\n"
+"POT-Creation-Date: 2015-11-12 10:28+0300\n"
+"PO-Revision-Date: 2015-11-12 10:28+0300\n"
 "Last-Translator: Maxim Kochetkov <fido_max@inbox.ru>\n"
 "Language-Team: \n"
-"Language: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
@@ -65,6 +65,9 @@ msgstr "Таблица параметров AIM730"
 msgid "AIM725 Parameteres table"
 msgstr "Таблица параметров AIM725"
 
+msgid "DIM765 Parameteres table"
+msgstr "Таблица параметров DIM765"
+
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
 
@@ -113,6 +116,9 @@ msgstr "Глубина фильтра"
 msgid "AIM726"
 msgstr "AIM726"
 
+msgid "50Hz;500Hz;1000Hz"
+msgstr "50Гц;500Гц;1000Гц"
+
 msgid "AIM730"
 msgstr "AIM730"
 
@@ -141,6 +147,33 @@ msgstr "Тип датчика"
 msgid "2-wire;3-wire"
 msgstr "2-х проводный;3-х проводный"
 
+msgid "DIM765/766"
+msgstr "DIM765/766"
+
+#, c-format
+msgid "Type %d"
+msgstr "Тип %d"
+
+msgid ""
+"No break "
+"detection;1K8;2K2;2K7;3K3;3K9;4K7;5K6;6K8;8K2;10K;12K;15K;18K;20K;22K;24K;27K;30K;33K;"
+"Type 2"
+msgstr ""
+"Без "
+"контроля;1К8;2К2;2К7;3К3;3К9;4К7;5К6;6К8;8К2;10К;12К;15К;18К;20К;22К;24К;27К;30К;33К;"
+"Тип 2"
+
+#, c-format
+msgid "Debounce on %d"
+msgstr "Фильтр дребезга вкл %d"
+
+msgid "OFF;1.4ms;2.8ms;4.2ms;9.8ms;20ms;50ms;100ms;200ms;300ms"
+msgstr "НЕТ;1.4мс;2.8мс;4.2мс;9.8мс;20мс;50мс;100мс;200мс;300мс"
+
+#, c-format
+msgid "Debounce off %d"
+msgstr "Фильтр дребезга выкл %d"
+
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
@@ -155,6 +188,10 @@ msgstr "Следующий вызов по cron '%s'. "
 #, c-format
 msgid "Spent time: %s."
 msgstr "Spent time: %s."
+
+#, c-format
+msgid "Break %d"
+msgstr "Обрыв %d"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."

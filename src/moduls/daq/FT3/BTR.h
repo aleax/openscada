@@ -37,7 +37,7 @@ namespace FT3
 	void saveIO(void);
 	void loadIO(bool force = false);
 	uint16_t Task(uint16_t);
-	uint16_t HandleEvent(uint8_t *);
+	uint16_t HandleEvent(int64_t, uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
 	uint8_t cmdSet(uint8_t * req, uint8_t addr);
 	uint16_t setVal(TVal &val);
@@ -133,7 +133,7 @@ namespace FT3
 	void AddTUChannel(uint8_t iid);
 	void AddTRChannel(uint8_t iid);
 	uint16_t Task(uint16_t);
-	uint16_t HandleEvent(uint8_t *);
+	uint16_t HandleEvent(int64_t, uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
 	uint8_t cmdSet(uint8_t * req, uint8_t addr);
 	uint16_t setVal(TVal &val);

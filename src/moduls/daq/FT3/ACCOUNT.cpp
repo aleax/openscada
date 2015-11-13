@@ -270,96 +270,47 @@ uint16_t B_ACCOUNT::Task(uint16_t uc)
     case TaskRefresh:
 	Msg.L = 5;
 	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = ID | (0 << 6) | (0); //состояние
-	if(mPrm.owner().Transact(&Msg)) {
+	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //состояние
+	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(Msg.C == GOOD3) {
-		mPrm.vlAt("state").at().setI(Msg.D[7], 0, true);
 		if(with_params) {
 		    for(int i = 1; i <= count_n; i++) {
 			Msg.L = 49;
 			Msg.C = AddrReq;
-			*((uint16_t *) Msg.D) = ID | (i << 6) | (1); //Расход(Q)
-			*((uint16_t *) (Msg.D + 2)) = ID | (i << 6) | (2); //Период вычисления
-			*((uint16_t *) (Msg.D + 4)) = ID | (i << 6) | (3); //Чувствительность
-			*((uint16_t *) (Msg.D + 6)) = ID | (i << 6) | (4); //min max предупредительный
-			*((uint16_t *) (Msg.D + 8)) = ID | (i << 6) | (5); //min max аварии Q
-			*((uint16_t *) (Msg.D + 10)) = ID | (i << 6) | (6); //Номера датчиков
-			*((uint16_t *) (Msg.D + 12)) = ID | (i << 6) | (7); //Расход при нештатных ситуациях
-			*((uint16_t *) (Msg.D + 14)) = ID | (i << 6) | (8); //Контрактный час
-			*((uint16_t *) (Msg.D + 16)) = ID | (i << 6) | (9); //Объем текущего часа
-			*((uint16_t *) (Msg.D + 18)) = ID | (i << 6) | (10); //Счетчик объема
-			*((uint16_t *) (Msg.D + 20)) = ID | (i << 6) | (11); //Средние Q, dP, t, P, E за предыдущий час
-			*((uint16_t *) (Msg.D + 22)) = ID | (i << 6) | (12); //Период
-			*((uint16_t *) (Msg.D + 24)) = ID | (i << 6) | (13); //Средние Q, dP, t, P, E за период
-			*((uint16_t *) (Msg.D + 26)) = ID | (i << 6) | (14); //Объем за период
-			*((uint16_t *) (Msg.D + 28)) = ID | (i << 6) | (15); //Плотность газа в нормальных условиях
-			*((uint16_t *) (Msg.D + 30)) = ID | (i << 6) | (16); //Эквивалентная шероховатость
-			*((uint16_t *) (Msg.D + 32)) = ID | (i << 6) | (17); //Молярная концентрация азота
-			*((uint16_t *) (Msg.D + 34)) = ID | (i << 6) | (18); //Молярная концентрация углекислого газа
-			*((uint16_t *) (Msg.D + 36)) = ID | (i << 6) | (19); //Диаметр диафрагмы
-			*((uint16_t *) (Msg.D + 38)) = ID | (i << 6) | (20); //Коэффициент теплового расширения диафрагмы
-			*((uint16_t *) (Msg.D + 40)) = ID | (i << 6) | (21); //Диаметр трубопровода
-			*((uint16_t *) (Msg.D + 42)) = ID | (i << 6) | (22); //Коэффициент теплового расширения трубопровода
-			*((uint16_t *) (Msg.D + 44)) = ID | (i << 6) | (23); //Метод измерения
-			if(mPrm.owner().Transact(&Msg)) {
+			*((uint16_t *) Msg.D) = PackID(ID, i, 1); //Расход(Q)
+			*((uint16_t *) (Msg.D + 2)) = PackID(ID, i, 2); //Период вычисления
+			*((uint16_t *) (Msg.D + 4)) = PackID(ID, i, 3); //Чувствительность
+			*((uint16_t *) (Msg.D + 6)) = PackID(ID, i, 4); //min max предупредительный
+			*((uint16_t *) (Msg.D + 8)) = PackID(ID, i, 5); //min max аварии Q
+			*((uint16_t *) (Msg.D + 10)) = PackID(ID, i, 6); //Номера датчиков
+			*((uint16_t *) (Msg.D + 12)) = PackID(ID, i, 7); //Расход при нештатных ситуациях
+			*((uint16_t *) (Msg.D + 14)) = PackID(ID, i, 8); //Контрактный час
+			*((uint16_t *) (Msg.D + 16)) = PackID(ID, i, 9); //Объем текущего часа
+			*((uint16_t *) (Msg.D + 18)) = PackID(ID, i, 10); //Счетчик объема
+			*((uint16_t *) (Msg.D + 20)) = PackID(ID, i, 11); //Средние Q, dP, t, P, E за предыдущий час
+			*((uint16_t *) (Msg.D + 22)) = PackID(ID, i, 12); //Период
+			*((uint16_t *) (Msg.D + 24)) = PackID(ID, i, 13); //Средние Q, dP, t, P, E за период
+			*((uint16_t *) (Msg.D + 26)) = PackID(ID, i, 14); //Объем за период
+			*((uint16_t *) (Msg.D + 28)) = PackID(ID, i, 15); //Плотность газа в нормальных условиях
+			*((uint16_t *) (Msg.D + 30)) = PackID(ID, i, 16); //Эквивалентная шероховатость
+			*((uint16_t *) (Msg.D + 32)) = PackID(ID, i, 17); //Молярная концентрация азота
+			*((uint16_t *) (Msg.D + 34)) = PackID(ID, i, 18); //Молярная концентрация углекислого газа
+			*((uint16_t *) (Msg.D + 36)) = PackID(ID, i, 19); //Диаметр диафрагмы
+			*((uint16_t *) (Msg.D + 38)) = PackID(ID, i, 20); //Коэффициент теплового расширения диафрагмы
+			*((uint16_t *) (Msg.D + 40)) = PackID(ID, i, 21); //Диаметр трубопровода
+			*((uint16_t *) (Msg.D + 42)) = PackID(ID, i, 22); //Коэффициент теплового расширения трубопровода
+			*((uint16_t *) (Msg.D + 44)) = PackID(ID, i, 23); //Метод измерения
+			if(mPrm.owner().DoCmd(&Msg)) {
 			    if(Msg.C == GOOD3) {
-				mPrm.vlAt(TSYS::strMess("state_%d", i).c_str()).at().setI(Msg.D[7], 0, true);
-				mPrm.vlAt(TSYS::strMess("value_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 8), 0, true);
-				mPrm.vlAt(TSYS::strMess("period_%d", i).c_str()).at().setI(Msg.D[17], 0, true);
-				mPrm.vlAt(TSYS::strMess("sens_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 23), 0, true);
-				mPrm.vlAt(TSYS::strMess("minW_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 32), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxW_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 36), 0, true);
-				mPrm.vlAt(TSYS::strMess("minA_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 45), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxA_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 49), 0, true);
-				mPrm.vlAt(TSYS::strMess("sensors_%d", i).c_str()).at().setI(TSYS::getUnalign32(Msg.D + 58), 0, true);
-				mPrm.vlAt(TSYS::strMess("serviceQ_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 67), 0, true);
-				mPrm.vlAt(TSYS::strMess("hour_%d", i).c_str()).at().setI(Msg.D[76], 0, true);
-				mPrm.vlAt(TSYS::strMess("hourlyQ_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 82), 0, true);
-				mPrm.vlAt(TSYS::strMess("counter_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 91), 0, true);
-				mPrm.vlAt(TSYS::strMess("hourQ_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 100), 0, true);
-				mPrm.vlAt(TSYS::strMess("hourdP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 104), 0, true);
-				mPrm.vlAt(TSYS::strMess("hourT_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 108), 0, true);
-				mPrm.vlAt(TSYS::strMess("hourP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 112), 0, true);
-				mPrm.vlAt(TSYS::strMess("hourE_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 116), 0, true);
-//TODO
-//				mPrm.vlAt(TSYS::strMess("period_date_%d", i).c_str()).at().setI(TSYS::getUnalign16(Msg.D + 128), 0, true);
-//				time_t t = mPrm.owner().DateTimeToTime_t(Msg.D + 125);
-//				mPrm.vlAt(TSYS::strMess("dateT_%d", i).c_str()).at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), 0, true);
-//				string data_s;
-				mPrm.vlAt(TSYS::strMess("avgQ_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 135), 0, true);
-				mPrm.vlAt(TSYS::strMess("avgdP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 139), 0, true);
-				mPrm.vlAt(TSYS::strMess("avgT_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 143), 0, true);
-				mPrm.vlAt(TSYS::strMess("avgP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 147), 0, true);
-				mPrm.vlAt(TSYS::strMess("avgE_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 151), 0, true);
-				mPrm.vlAt(TSYS::strMess("periodQ_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 160), 0, true);
-				mPrm.vlAt(TSYS::strMess("density_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 169), 0, true);
-				mPrm.vlAt(TSYS::strMess("asperity_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 178), 0, true);
-				mPrm.vlAt(TSYS::strMess("concentrN_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 187), 0, true);
-				mPrm.vlAt(TSYS::strMess("concentrCO_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 196), 0, true);
-				mPrm.vlAt(TSYS::strMess("diameterM_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 205), 0, true);
-				mPrm.vlAt(TSYS::strMess("factorM_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 214), 0, true);
-				mPrm.vlAt(TSYS::strMess("diameterP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 223), 0, true);
-				mPrm.vlAt(TSYS::strMess("factorP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 232), 0, true);
-				mPrm.vlAt(TSYS::strMess("methodM_%d", i).c_str()).at().setI(Msg.D[241], 0, true);
 				Msg.L = 13;
 				Msg.C = AddrReq;
-				*((uint16_t *) (Msg.D)) = ID | (i << 6) | (24); //Тестовые значения
-				*((uint16_t *) (Msg.D + 2)) = ID | (i << 6) | (25); //Тестовый расход
-				*((uint16_t *) (Msg.D + 4)) = ID | (i << 6) | (26); //Средний радиус закругления кромки диафрагмы
-				*((uint16_t *) (Msg.D + 6)) = ID | (i << 6) | (27); //Атмосферное давление
-				*((uint16_t *) (Msg.D + 8)) = ID | (i << 6) | (28); //dP, t, P, E*/
-				if(mPrm.owner().Transact(&Msg)) {
+				*((uint16_t *) (Msg.D)) = PackID(ID, i, 24); //Тестовые значения
+				*((uint16_t *) (Msg.D + 2)) = PackID(ID, i, 25); //Тестовый расход
+				*((uint16_t *) (Msg.D + 4)) = PackID(ID, i, 26); //Средний радиус закругления кромки диафрагмы
+				*((uint16_t *) (Msg.D + 6)) = PackID(ID, i, 27); //Атмосферное давление
+				*((uint16_t *) (Msg.D + 8)) = PackID(ID, i, 28); //dP, t, P, E*/
+				if(mPrm.owner().DoCmd(&Msg)) {
 				    if(Msg.C == GOOD3) {
-					mPrm.vlAt(TSYS::strMess("testdP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 8), 0, true);
-					mPrm.vlAt(TSYS::strMess("testT_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 12), 0, true);
-					mPrm.vlAt(TSYS::strMess("testP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 16), 0, true);
-					mPrm.vlAt(TSYS::strMess("testQ_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 24), 0, true);
-					mPrm.vlAt(TSYS::strMess("radiusM_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 33), 0, true);
-					mPrm.vlAt(TSYS::strMess("pressureA_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 42), 0, true);
-					mPrm.vlAt(TSYS::strMess("dP_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 50), 0, true);
-					mPrm.vlAt(TSYS::strMess("T_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 54), 0, true);
-					mPrm.vlAt(TSYS::strMess("P_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 58), 0, true);
-					mPrm.vlAt(TSYS::strMess("E_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 62), 0, true);
 					rc = 1;
 				    }
 				}
@@ -384,7 +335,7 @@ uint16_t B_ACCOUNT::Task(uint16_t uc)
     }
     return rc;
 }
-uint16_t B_ACCOUNT::HandleEvent(uint8_t * D)
+uint16_t B_ACCOUNT::HandleEvent(int64_t tm, uint8_t * D)
 {
     if((TSYS::getUnalign16(D) & 0xF000) != ID) return 0;
     uint16_t l = 0;
@@ -395,23 +346,23 @@ uint16_t B_ACCOUNT::HandleEvent(uint8_t * D)
     case 0:
 	switch(n) {
 	case 0:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n * 5;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], 0, true);
-		mPrm.vlAt(TSYS::strMess("expense_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], tm, true);
+		mPrm.vlAt(TSYS::strMess("expense_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), tm, true);
 	    }
 	    break;
 	case 2:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n * 5;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], 0, true);
-		mPrm.vlAt(TSYS::strMess("quantity_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], tm, true);
+		mPrm.vlAt(TSYS::strMess("quantity_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], tm, true);
 	    }
 	    break;
 
@@ -422,78 +373,78 @@ uint16_t B_ACCOUNT::HandleEvent(uint8_t * D)
 	    switch(n) {
 	    time_t t;
 	case 0:
-	    mPrm.vlAt(TSYS::strMess("state_%d", k).c_str()).at().setI(D[2], 0, true);
+	    mPrm.vlAt(TSYS::strMess("state_%d", k).c_str()).at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt(TSYS::strMess("state_%d", k).c_str()).at().setI(D[2], 0, true);
-	    mPrm.vlAt(TSYS::strMess("value_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+	    mPrm.vlAt(TSYS::strMess("state_%d", k).c_str()).at().setI(D[2], tm, true);
+	    mPrm.vlAt(TSYS::strMess("value_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 
 	    l = 7;
 	    break;
 	case 2:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("period_%d", k).c_str()).at().setI(D[3], 0, true);
+		mPrm.vlAt(TSYS::strMess("period_%d", k).c_str()).at().setI(D[3], tm, true);
 	    }
 	    l = 4;
 	    break;
 	case 3:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("sensFV_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("sensFV_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 4:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("minW_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("maxW_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
+		mPrm.vlAt(TSYS::strMess("minW_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxW_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 	    }
 	    l = 11;
 	    break;
 	case 5:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("minA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("maxA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
+		mPrm.vlAt(TSYS::strMess("minA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 	    }
 	    l = 11;
 	    break;
 	case 6:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("sensors_%d", k).c_str()).at().setI(TSYS::getUnalign32(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("sensors_%d", k).c_str()).at().setI(TSYS::getUnalign32(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 7:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("serviceQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("serviceQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 8:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("hour_%d", k).c_str()).at().setI(D[3], 0, true);
+		mPrm.vlAt(TSYS::strMess("hour_%d", k).c_str()).at().setI(D[3], tm, true);
 	    }
 	    l = 4;
 	    break;
 	case 9:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("hourlyQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("hourlyQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 10:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("counter_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("counter_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 11:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("hourQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("hourdP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("hourT_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("hourP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("hourE_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("hourQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("hourdP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("hourT_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("hourP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("hourE_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 23;
 	    break;
@@ -516,106 +467,106 @@ uint16_t B_ACCOUNT::HandleEvent(uint8_t * D)
 	    break;
 	case 13:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("avgQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("avgdP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("avgT_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("avgP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("avgE_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("avgQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("avgdP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("avgT_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("avgP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("avgE_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 23;
 	    break;
 	case 14:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("periodQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("periodQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 15:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("density_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("density_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 16:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("asperity_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("asperity_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 17:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("concentrN_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("concentrN_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 18:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("concentrCO_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("concentrCO_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 19:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("diameterM_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("diameterM_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 20:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("factorM_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("factorM_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 21:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("diameterP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("diameterP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 22:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("factorP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("factorP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 23:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("methodM_%d", k).c_str()).at().setI(D[3], 0, true);
+		mPrm.vlAt(TSYS::strMess("methodM_%d", k).c_str()).at().setI(D[3], tm, true);
 	    }
 	    l = 4;
 	    break;
 	case 24:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("testdP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("testT_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("testP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("testdP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("testT_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("testP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 15;
 	    break;
 	case 25:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("testQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("testQ_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 26:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("radiusM_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("radiusM_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 27:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("pressureA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("pressureA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 7;
 	    break;
 	case 28:
 	    if(with_params) {
-		mPrm.vlAt(TSYS::strMess("dP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("T_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("P_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		mPrm.vlAt(TSYS::strMess("E_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("dP_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("T_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("P_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("E_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 	    }
 	    l = 19;
 	    break;
@@ -966,21 +917,21 @@ uint8_t B_ACCOUNT::cmdSet(uint8_t * req, uint8_t addr)
 uint16_t B_ACCOUNT::setVal(TVal &val)
 {
     int off = 0;
-    uint16_t k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    uint16_t n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
-    uint16_t addr = ID | (k << 6) | n;
+    FT3ID ft3ID;
+    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
+    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
+    ft3ID.g = ID;
 
     tagMsg Msg;
-    switch(n) {
+    Msg.L = 0;
+    Msg.C = SetData;
+    *((uint16_t *) Msg.D) = PackID(ft3ID);
+    switch(ft3ID.n) {
     case 2:
     case 8:
     case 23:
 	Msg.L = 6;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
 	Msg.D[2] = val.get(NULL, true).getI();
-	mPrm.owner().Transact(&Msg);
 	break;
     case 3:
     case 7:
@@ -999,101 +950,64 @@ uint16_t B_ACCOUNT::setVal(TVal &val)
     case 26:
     case 27:
 	Msg.L = 9;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
 	*(float *) (Msg.D + 2) = (float) val.get(NULL, true).getR();
-	mPrm.owner().Transact(&Msg);
 	break;
     case 6:
 	Msg.L = 9;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
 	//TODO
-	Msg.D[2] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensor1_%d", k).c_str()).at().getI(0, true);
-	Msg.D[3] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensor2_%d", k).c_str()).at().getI(0, true);
-	Msg.D[4] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensorT_%d", k).c_str()).at().getI(0, true);
-	Msg.D[5] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensorP_%d", k).c_str()).at().getI(0, true);
-	mPrm.owner().Transact(&Msg);
+	Msg.D[2] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensor1_%d", ft3ID.k).c_str()).at().getI(0, true);
+	Msg.D[3] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensor2_%d", ft3ID.k).c_str()).at().getI(0, true);
+	Msg.D[4] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensorT_%d", ft3ID.k).c_str()).at().getI(0, true);
+	Msg.D[5] = (uint8_t) mPrm.vlAt(TSYS::strMess("sensorP_%d", ft3ID.k).c_str()).at().getI(0, true);
 	break;
     case 4:
 	Msg.L = 13;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minW_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxW_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 5:
 	Msg.L = 13;
-	Msg.C = SetData;
-	*(float *) (Msg.D + 14) = (float) mPrm.vlAt(TSYS::strMess("hourP_%d", k).c_str()).at().getR(0, true);
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minA_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxA_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 24:
 	Msg.L = 17;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("testdP_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("testT_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("testP_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("testdP_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("testT_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("testP_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 28:
 	Msg.L = 21;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("dP_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("T_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("P_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 14) = (float) mPrm.vlAt(TSYS::strMess("E_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("dP_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("T_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("P_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 14) = (float) mPrm.vlAt(TSYS::strMess("E_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 11:
 	Msg.L = 25;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("hourQ_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("hourdP_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("hourT_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 14) = (float) mPrm.vlAt(TSYS::strMess("hourP_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 18) = (float) mPrm.vlAt(TSYS::strMess("hourE_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("hourQ_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("hourdP_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("hourT_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 14) = (float) mPrm.vlAt(TSYS::strMess("hourP_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 18) = (float) mPrm.vlAt(TSYS::strMess("hourE_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 13:
 	Msg.L = 25;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("avgQ_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("avgP_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("avgT_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 14) = (float) mPrm.vlAt(TSYS::strMess("avgP_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 18) = (float) mPrm.vlAt(TSYS::strMess("avgE_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("avgQ_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("avgP_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 10) = (float) mPrm.vlAt(TSYS::strMess("avgT_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 14) = (float) mPrm.vlAt(TSYS::strMess("avgP_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 18) = (float) mPrm.vlAt(TSYS::strMess("avgE_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 12:
 	struct tm tm_tm;
 	//TODO
-	strptime(mPrm.vlAt(TSYS::strMess("dateT_%d", k).c_str()).at().getS().c_str(), "%d.%m.%Y %H:%M:%S", &tm_tm);
+	strptime(mPrm.vlAt(TSYS::strMess("dateT_%d", ft3ID.k).c_str()).at().getS().c_str(), "%d.%m.%Y %H:%M:%S", &tm_tm);
 	Msg.L = 10;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	uint16_t h = (uint16_t) mPrm.vlAt(TSYS::strMess("period_date_%d", k).c_str()).at().getI(0, true);
+	uint16_t h = (uint16_t) mPrm.vlAt(TSYS::strMess("period_date_%d", ft3ID.k).c_str()).at().getI(0, true);
 	mPrm.owner().Time_tToDateTime(Msg.D + 2, mktime(&tm_tm));
 	Msg.D[5] = h & 0xFF;
 	Msg.D[6] = (h >> 8) & 0xFF;
-	mPrm.owner().Transact(&Msg);
 	string data_s;
 	for(int i = 0; i < 7; i++) {
 	    data_s += TSYS::int2str((uint8_t) Msg.D[i], TSYS::Hex) + " ";
@@ -1101,7 +1015,7 @@ uint16_t B_ACCOUNT::setVal(TVal &val)
 	break;
 
     }
-
+    if(Msg.L) mPrm.owner().DoCmd(&Msg);
     return 0;
 }
 

@@ -33,11 +33,17 @@ KA_BUC::KA_BUC(TMdPrm& prm, uint16_t id) :
     mTypeFT3 = KA;
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TVal::DirWrite));
-    fld->setReserve("0:0");
+    fld->setReserve("0:0:0");
     mPrm.p_el.fldAdd(fld = new TFld("config", _("Configuration"), TFld::Integer, TFld::NoWrite));
-    fld->setReserve("0:1");
+    fld->setReserve("0:0:1");
     mPrm.p_el.fldAdd(fld = new TFld("modification", _("Modification"), TFld::Integer, TFld::NoWrite));
-    fld->setReserve("0:2");
+    fld->setReserve("0:0:2");
+    mPrm.p_el.fldAdd(fld = new TFld("sttimer", _("Timer state"), TFld::Integer, TFld::NoWrite));
+    fld->setReserve("1:0:0");
+    mPrm.p_el.fldAdd(fld = new TFld("curdt", _("Current datetime"), TFld::String, TVal::DirWrite));
+    fld->setReserve("1:0:2");
+    mPrm.p_el.fldAdd(fld = new TFld("stopdt", _("Stop datetime"), TFld::String, TFld::NoWrite));
+    fld->setReserve("1:0:3");
 }
 
 KA_BUC::~KA_BUC()
@@ -68,30 +74,39 @@ uint16_t KA_BUC::Task(uint16_t uc)
     uint16_t rc = 0;
     switch(uc) {
     case TaskRefresh:
-	Msg.L = 9;
+	Msg.L = 3 + 2 * 6;
 	Msg.C = AddrReq;
 	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
 	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //configuration
 	*((uint16_t *) (Msg.D + 4)) = PackID(ID, 0, 2); //modification
-	if(mPrm.owner().Transact(&Msg)) {
-	    if(Msg.C == GOOD3) {
-		mPrm.vlAt("state").at().setI(Msg.D[8], 0, true);
-		mPrm.vlAt("config").at().setI(TSYS::getUnalign16(Msg.D + 13), 0, true);
-		mPrm.vlAt("modification").at().setI(TSYS::getUnalign16(Msg.D + 19), 0, true);
-		if(mPrm.vlAt("state").at().getI(0, true) != 1) {
-		    if(Task(TaskSet) == 1) {
-			rc = 1;
-		    }
-		} else {
+	*((uint16_t *) (Msg.D + 8)) = PackID(1, 0, 0); //timer state
+	*((uint16_t *) (Msg.D + 10)) = PackID(1, 0, 2); //current time
+	*((uint16_t *) (Msg.D + 12)) = PackID(1, 0, 3); //uptime
+	if(mPrm.owner().DoCmd(&Msg)) {
+	    if(mPrm.vlAt("state").at().getI(0, true) != 1) {
+		if(Task(TaskSet) == 1) {
 		    rc = 1;
 		}
+	    } else {
+		rc = 1;
 	    }
-
 	}
 	if(rc) NeedInit = false;
 	break;
+    case TaskSet:
+	time_t rawtime;
+	time(&rawtime);
+	Msg.L = 10;
+	Msg.C = SetData;
+	*((uint16_t *) Msg.D) = PackID(1, 0, 2); //current time
+	mPrm.owner().Time_tToDateTime(Msg.D + 2, rawtime);
+	mPrm.owner().DoCmd(&Msg);
+	if(Msg.C == GOOD2) {
+	    rc = 1;
+	}
+	break;
     case TaskIdle:
-	if(mPrm.vlAt("state").at().getI(0, true) != 0) {
+	if(mPrm.vlAt("state").at().getI(0, true) != 1) {
 	    rc = 2;
 	}
 	break;
@@ -99,52 +114,61 @@ uint16_t KA_BUC::Task(uint16_t uc)
     return rc;
 }
 
-uint16_t KA_BUC::HandleEvent(uint8_t * D)
+uint16_t KA_BUC::HandleEvent(int64_t tm, uint8_t *D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
-    //if(ft3ID.g != ID) return 0;
     uint16_t l = 0;
     if(ft3ID.g == ID) {
 	switch(ft3ID.k) {
 	case 0:
 	    switch(ft3ID.n) {
 	    case 0:
-		mPrm.vlAt("state").at().setI(D[3], 0, true);
+		s_state = D[2];
+		state = D[3];
+		mPrm.vlAt("state").at().setI(state, tm, true);
 		l = 4;
 		break;
 	    case 1:
-		mPrm.vlAt("config").at().setI(TSYS::getUnalign16(D + 2), 0, true);
+		config = TSYS::getUnalign16(D + 2);
+		mPrm.vlAt("config").at().setI(config, tm, true);
 		l = 4;
 		break;
 	    case 2:
-		mPrm.vlAt("modification").at().setI(TSYS::getUnalign16(D + 2), 0, true);
+		modification = TSYS::getUnalign16(D + 2);
+		mPrm.vlAt("modification").at().setI(modification, tm, true);
 		l = 4;
 		break;
-
 	    }
 	    break;
 	}
     }
     if(ft3ID.g == clockID) {
-	/*	switch(ft3ID.k) {
-	 case 0:
-	 switch(ft3ID.n) {
-	 case 0:
-	 mPrm.vlAt("state").at().setI(D[3], 0, true);
-	 l = 4;
-	 break;
-	 case 1:
-	 mPrm.vlAt("config").at().setI(TSYS::getUnalign16(D + 2), 0, true);
-	 l = 4;
-	 break;
-	 case 2:
-	 mPrm.vlAt("modification").at().setI(TSYS::getUnalign16(D + 2), 0, true);
-	 l = 4;
-	 break;
-
-	 }
-	 break;
-	 }*/
+	time_t t;
+	switch(ft3ID.k) {
+	case 0:
+	    switch(ft3ID.n) {
+	    case 0:
+		clockstate = D[2];
+		mPrm.vlAt("sttimer").at().setI(clockstate, tm, true);
+		l = 3;
+		break;
+	    case 1:
+		clockconfig = TSYS::getUnalign16(D + 2);
+		l = 4;
+		break;
+	    case 2:
+		t = mPrm.owner().DateTimeToTime_t(D + 3);
+		mPrm.vlAt("curdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+		l = 8;
+		break;
+	    case 3:
+		t = mPrm.owner().DateTimeToTime_t(D + 2);
+		mPrm.vlAt("stopdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+		l = 7;
+		break;
+	    }
+	    break;
+	}
     }
     return l;
 }
@@ -153,34 +177,48 @@ uint16_t KA_BUC::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
-    ft3ID.g = ID;
+    ft3ID.g = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
+    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
+    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
     tagMsg Msg;
     Msg.L = 0;
     Msg.C = SetData;
     *((uint16_t *) Msg.D) = PackID(ft3ID);
-    switch(ft3ID.k) {
-    case 0:
-	switch(ft3ID.n) {
+    if(ft3ID.g == ID) {
+	switch(ft3ID.k) {
 	case 0:
-	    tagMsg Msg;
-	    Msg.L = 6;
-	    Msg.D[2] = val.get(NULL, true).getI();
+	    switch(ft3ID.n) {
+	    case 0:
+		tagMsg Msg;
+		Msg.L = 6;
+		Msg.D[2] = val.get(NULL, true).getI();
+		break;
+	    }
 	    break;
 	}
-	break;
     }
+    if(ft3ID.g == clockID) {
+	switch(ft3ID.k) {
+	case 2:
+	    switch(ft3ID.n) {
+	    case 1:
+		struct tm tm_tm;
+		strptime(val.get(NULL, true).getS().c_str(), "%d.%m.%Y %H:%M:%S", &tm_tm);
+		Msg.L = 10;
+		mPrm.owner().Time_tToDateTime(Msg.D + 2, mktime(&tm_tm));
+		break;
+	    }
+	    break;
+	}
+    }
+    if(Msg.L) mPrm.owner().DoCmd(&Msg);
     return 0;
 }
 
 uint8_t KA_BUC::cmdGet(uint16_t prmID, uint8_t * out)
 {
-//    mess_info("KA_BUC", "cmdGet %04X", prmID);
     FT3ID ft3ID = UnpackID(prmID);
-//    mess_info("KA_BUC", "ID ft3ID g k n ", ID, ft3ID.g, ft3ID.k, ft3ID.n);
     time_t rawtime;
-//    if(ft3ID.g != ID) return 0;
     uint l = 0;
     if(ft3ID.g == ID) {
 	switch(ft3ID.k) {
@@ -239,7 +277,6 @@ uint8_t KA_BUC::cmdSet(uint8_t * req, uint8_t addr)
 {
     uint16_t prmID = TSYS::getUnalign16(req);
     FT3ID ft3ID = UnpackID(prmID);
-    //if(ft3ID.g != ID) return 0;
     uint8_t l = 0;
     time_t rawtime;
     if(ft3ID.g == ID) {
@@ -284,19 +321,17 @@ uint8_t KA_BUC::cmdSet(uint8_t * req, uint8_t addr)
 	    break;
 	}
     }
-
     return l;
 }
 
-B_BUC::B_BUC(TMdPrm& prm, uint16_t id, uint16_t modif ) :
+B_BUC::B_BUC(TMdPrm& prm, uint16_t id, uint16_t modif) :
 	DA(prm), ID(id), mod_KP(modif), state(2), stateWatch(1), s_tm(0), wt1(0), wt2(0), s_wt1(0), s_wt2(0)
 {
     mTypeFT3 = GRS;
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
-
     fld->setReserve("0:0");
-    mPrm.p_el.fldAdd(fld = new TFld("mod", _("Modification"), TFld::Integer, TFld::NoWrite));
+    mPrm.p_el.fldAdd(fld = new TFld("modification", _("Modification"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("0:1");
     mPrm.p_el.fldAdd(fld = new TFld("sttimer", _("Timer state"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("1:0");
@@ -308,7 +343,6 @@ B_BUC::B_BUC(TMdPrm& prm, uint16_t id, uint16_t modif ) :
     fld->setReserve("2:1");
     mPrm.p_el.fldAdd(fld = new TFld("dl2", _("Delay 2"), TFld::Integer, TVal::DirWrite));
     fld->setReserve("2:2");
-
 }
 
 B_BUC::~B_BUC()
@@ -325,11 +359,11 @@ string B_BUC::getStatus(void)
 	rez = "0: Норма";
     }
     return rez;
-
 }
 
 void B_BUC::tmHandler(void)
 {
+    NeedInit = false;
 }
 
 uint16_t B_BUC::Task(uint16_t uc)
@@ -340,24 +374,15 @@ uint16_t B_BUC::Task(uint16_t uc)
     case TaskRefresh:
 	Msg.L = 17;
 	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //состояние
-	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //модификация
-	*((uint16_t *) (Msg.D + 4)) = PackID(ID, 1, 0); //состояние таймера
-	*((uint16_t *) (Msg.D + 6)) = PackID(ID, 1, 1); //текущее время
-	*((uint16_t *) (Msg.D + 8)) = PackID(ID, 1, 2); //время останова
-	*((uint16_t *) (Msg.D + 10)) = PackID(ID, 2, 1); //задержка 1
-	*((uint16_t *) (Msg.D + 12)) = PackID(ID, 2, 2); //задержка 2
-	if(mPrm.owner().Transact(&Msg)) {
+	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //modification
+	*((uint16_t *) (Msg.D + 4)) = PackID(ID, 1, 0); //timer state
+	*((uint16_t *) (Msg.D + 6)) = PackID(ID, 1, 1); //current time
+	*((uint16_t *) (Msg.D + 8)) = PackID(ID, 1, 2); //uptime
+	*((uint16_t *) (Msg.D + 10)) = PackID(ID, 2, 1); //delay 1
+	*((uint16_t *) (Msg.D + 12)) = PackID(ID, 2, 2); //delay 2
+	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(Msg.C == GOOD3) {
-		mPrm.vlAt("state").at().setI(Msg.D[7], 0, true);
-		mPrm.vlAt("mod").at().setI(TSYS::getUnalign16(Msg.D + 12), 0, true);
-		mPrm.vlAt("sttimer").at().setI(Msg.D[18], 0, true);
-		time_t t = mPrm.owner().DateTimeToTime_t(Msg.D + 24);
-		mPrm.vlAt("curdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), 0, true);
-		t = mPrm.owner().DateTimeToTime_t(Msg.D + 33);
-		mPrm.vlAt("stopdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), 0, true);
-		mPrm.vlAt("dl1").at().setI(Msg.D[43], 0, true);
-		mPrm.vlAt("dl2").at().setI(Msg.D[49], 0, true);
 		if(mPrm.vlAt("state").at().getI(0, true) != 0) {
 		    if(Task(TaskSet) == 1) {
 			rc = 1;
@@ -366,7 +391,6 @@ uint16_t B_BUC::Task(uint16_t uc)
 		    rc = 1;
 		}
 	    }
-
 	}
 	if(rc) NeedInit = false;
 	break;
@@ -375,9 +399,9 @@ uint16_t B_BUC::Task(uint16_t uc)
 	time(&rawtime);
 	Msg.L = 10;
 	Msg.C = SetData;
-	*((uint16_t *) Msg.D) = PackID(ID, 1, 1); //текущее время
-	mPrm.owner().Time_tToDateTime(Msg.D + 2, rawtime);
-	mPrm.owner().Transact(&Msg);
+	*((uint16_t *) Msg.D) = PackID(ID, 1, 1);
+	mPrm.owner().Time_tToDateTime(Msg.D + 2, rawtime); //current time
+	mPrm.owner().DoCmd(&Msg);
 	if(Msg.C == GOOD2) {
 	    rc = 1;
 	}
@@ -391,51 +415,58 @@ uint16_t B_BUC::Task(uint16_t uc)
     return rc;
 }
 
-uint16_t B_BUC::HandleEvent(uint8_t * D)
+uint16_t B_BUC::HandleEvent(int64_t tm, uint8_t * D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
     uint16_t l = 0;
+    time_t t;
     switch(ft3ID.k) {
     case 0:
 	switch(ft3ID.n) {
 	case 0:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    state = D[2];
+	    mPrm.vlAt("state").at().setI(state, tm, true);
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt("mod").at().setI(TSYS::getUnalign16(D + 2), 0, true);
+	    mod_KP = TSYS::getUnalign16(D + 2);
+	    mPrm.vlAt("modification").at().setI(mod_KP, tm, true);
 	    l = 4;
 	    break;
 	}
 	break;
     case 1:
 	switch(ft3ID.n) {
-	time_t t;
-    case 0:
-	mPrm.vlAt("sttimer").at().setI(D[2], 0, true);
-	l = 3;
-	break;
-    case 1:
-	t = mPrm.owner().DateTimeToTime_t(D + 3);
-	mPrm.vlAt("curdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), 0, true);
-	l = 8;
-	break;
-    case 2:
-	t = mPrm.owner().DateTimeToTime_t(D + 2);
-	mPrm.vlAt("stopdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), 0, true);
-	l = 7;
-	break;
+	case 0:
+	    stateWatch = D[2];
+	    mPrm.vlAt("sttimer").at().setI(stateWatch, tm, true);
+	    l = 3;
+	    break;
+	case 1:
+	    t = mPrm.owner().DateTimeToTime_t(D + 3);
+	    mPrm.vlAt("curdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+	    l = 8;
+	    break;
+	case 2:
+	    t = mPrm.owner().DateTimeToTime_t(D + 2);
+	    mPrm.vlAt("stopdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+	    l = 7;
+	    break;
 	}
 	break;
     case 2:
 	switch(ft3ID.n) {
 	case 1:
-	    mPrm.vlAt("dl1").at().setI(D[3], 0, true);
+	    s_wt1 = D[2];
+	    wt1 = D[3];
+	    mPrm.vlAt("dl1").at().setI(wt1, tm, true);
 	    l = 4;
 	    break;
 	case 2:
-	    mPrm.vlAt("dl2").at().setI(D[3], 0, true);
+	    s_wt2 = D[2];
+	    wt2 = D[3];
+	    mPrm.vlAt("dl2").at().setI(wt2, tm, true);
 	    l = 4;
 	    break;
 	}
@@ -448,8 +479,8 @@ uint16_t B_BUC::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
+    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
+    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
     ft3ID.g = ID;
     tagMsg Msg;
     Msg.L = 0;
@@ -481,6 +512,7 @@ uint16_t B_BUC::setVal(TVal &val)
 	break;
 
     }
+    if(Msg.L) mPrm.owner().DoCmd(&Msg);
     return 0;
 }
 
@@ -505,7 +537,6 @@ uint8_t B_BUC::cmdGet(uint16_t prmID, uint8_t * out)
 	    break;
 	}
 	break;
-
     case 1:
 	switch(ft3ID.n) {
 	case 0:

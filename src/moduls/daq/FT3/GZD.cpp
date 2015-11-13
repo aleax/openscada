@@ -309,7 +309,7 @@ uint16_t KA_GZD::Task(uint16_t uc)
     return rc;
 }
 
-uint16_t KA_GZD::HandleEvent(uint8_t * D)
+uint16_t KA_GZD::HandleEvent(int64_t tm, uint8_t * D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;

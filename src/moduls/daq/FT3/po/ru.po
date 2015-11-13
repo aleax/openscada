@@ -4,18 +4,19 @@
 #
 # Maxim Kothetkov, 2007-2015.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.FT3 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-11 16:48+0300\n"
-"PO-Revision-Date: 2007-10-29 10:21+0200\n"
-"Last-Translator: Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya\n"
+"POT-Creation-Date: 2015-11-13 13:52+0300\n"
+"PO-Revision-Date: 2015-11-13 15:13+0300\n"
+"Last-Translator: Maxim Kochetkov <fido_max@inbox.ru>\n"
 "Language-Team: \n"
-"Language: RU\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.4\n"
 
 msgid "State"
 msgstr "Состояние"
@@ -25,8 +26,8 @@ msgid "State %d"
 msgstr "Состояние %d"
 
 #, c-format
-msgid "Current flow %d"
-msgstr "Расход (Q) %d"
+msgid "Value %d"
+msgstr "Значение %d"
 
 #, c-format
 msgid "Measure period %d"
@@ -53,170 +54,6 @@ msgid "Alarm maximum %d"
 msgstr "Макс. аварии ФВ %d"
 
 #, c-format
-msgid "Sensor 1 %d"
-msgstr "Номер датчика 1 %d"
-
-#, c-format
-msgid "Sensor 2 %d"
-msgstr "Номер датчика 2 %d"
-
-#, c-format
-msgid "Sensor T %d"
-msgstr "Номер датчика t %d"
-
-#, c-format
-msgid "Sensor P %d"
-msgstr "Номер датчика P %d"
-
-#, c-format
-msgid "Service flow %d"
-msgstr "Расход при нештатных ситуациях %d"
-
-#, c-format
-msgid "Contract hour %d"
-msgstr "Контрактный час %d"
-
-#, c-format
-msgid "Hourly flow %d"
-msgstr "Объем текущего часа %d"
-
-#, c-format
-msgid "Counter Q %d"
-msgstr "Счетчик объема %d"
-
-#, c-format
-msgid "Hour Q %d"
-msgstr "Среднее Q за предыдущий час %d"
-
-#, c-format
-msgid "Hour dP %d"
-msgstr "Среднее dP за предыдущий час %d"
-
-#, c-format
-msgid "Hour t %d"
-msgstr "Среднее t за предыдущий час %d"
-
-#, c-format
-msgid "Hour P %d"
-msgstr "Среднее P за предыдущий час %d"
-
-#, c-format
-msgid "Hour E %d"
-msgstr "Среднее E за предыдущий час %d"
-
-#, c-format
-msgid "Datetime %d"
-msgstr "Период %d"
-
-#, c-format
-msgid "Period %d"
-msgstr "Период %d"
-
-#, c-format
-msgid "Avg Q %d"
-msgstr "Среднее Q за период %d"
-
-#, c-format
-msgid "Avg dP %d"
-msgstr "Среднее dP за период %d"
-
-#, c-format
-msgid "Avg t %d"
-msgstr "Среднее t за период %d"
-
-#, c-format
-msgid "Avg P %d"
-msgstr "Среднее P за период %d"
-
-#, c-format
-msgid "Avg E %d"
-msgstr "Среднее E за период %d"
-
-#, c-format
-msgid "Periodicly Q %d"
-msgstr "Объем за период %d"
-
-#, c-format
-msgid "Density %d"
-msgstr "Плотность газа в НУ %d"
-
-#, c-format
-msgid "Equivalence asperity %d"
-msgstr "Эквивалентная шероховатость %d"
-
-#, c-format
-msgid "N concentration %d"
-msgstr "Молярная концентрация азота %d"
-
-#, c-format
-msgid "CO concentration %d"
-msgstr "Молярная концентрация углекислого газа %d"
-
-#, c-format
-msgid "Membrane diameter %d"
-msgstr "Диаметр диафрагмы %d"
-
-#, c-format
-msgid "Membrane factor %d"
-msgstr "Коэфф. телового расширения диафрагмы %d"
-
-#, c-format
-msgid "Pipe diameter %d"
-msgstr "Диаметр трубопровода %d"
-
-#, c-format
-msgid "Pipe factor %d"
-msgstr "Коэфф. телового расширения трубопровода %d"
-
-#, c-format
-msgid "Measure method %d"
-msgstr "Метод измерения %d"
-
-#, c-format
-msgid "Test dP/TI %d"
-msgstr "Тестовые значения dP/TI %d"
-
-#, c-format
-msgid "Test t %d"
-msgstr "Тестовые значения t %d"
-
-#, c-format
-msgid "Test P %d"
-msgstr "Тестовые значения P %d"
-
-#, c-format
-msgid "Test rate %d"
-msgstr "Тестовый расход %d"
-
-#, c-format
-msgid "Membrane radius %d"
-msgstr "Ср. радиус закругления кромки диаф. %d"
-
-#, c-format
-msgid "Atmospheric pressure %d"
-msgstr "Атмосферное давление %d"
-
-#, fuzzy, c-format
-msgid "dP %d"
-msgstr "Среднее dP за период %d"
-
-#, fuzzy, c-format
-msgid "t %d"
-msgstr "Среднее t за период %d"
-
-#, fuzzy, c-format
-msgid "P %d"
-msgstr "Среднее P за период %d"
-
-#, fuzzy, c-format
-msgid "E %d"
-msgstr "Среднее E за период %d"
-
-#, c-format
-msgid "Value %d"
-msgstr "Значение %d"
-
-#, c-format
 msgid "Dimension %d"
 msgstr "Размерность %d"
 
@@ -240,9 +77,9 @@ msgstr "Максимум частоты %d"
 msgid "Factor %d"
 msgstr "Коэффициент (множитель) %d"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Alarms %d"
-msgstr "Мин. аварии ФВ %d"
+msgstr "Тревоги %d"
 
 #, c-format
 msgid "Ki %d"
@@ -284,6 +121,14 @@ msgid "Delay 2"
 msgstr "Величина задержки 2"
 
 #, c-format
+msgid "UnpackID %d"
+msgstr ""
+
+#, c-format
+msgid "g %d k %d n %d"
+msgstr ""
+
+#, c-format
 msgid "MakePacket one byte req %02X"
 msgstr "Создание пакета байтового опроса %02X"
 
@@ -292,8 +137,8 @@ msgstr "Проверка пакета байтового опроса "
 
 #, c-format
 msgid ""
-"VerifyPacket bad packet pdu.size:%d raslen:%d VerCRC(pdu, pdu.size()):%d "
-"VerCRC(pdu, raslen):%d"
+"VerifyPacket bad packet pdu.size:%d raslen:%d VerCRC(pdu, pdu.size()):%d VerCRC(pdu, "
+"raslen):%d"
 msgstr "Плохой пакет pdu.size:%d raslen:%d VerCRC:%d VerCRC:%d"
 
 msgid "VerifyPacket bad tail"
@@ -420,6 +265,9 @@ msgstr "Адрес транспорта"
 msgid "Channels count"
 msgstr "Число каналов"
 
+msgid "Ignore FCB2"
+msgstr "Игнорировать FCB2"
+
 msgid "BUC"
 msgstr "БУЦ"
 
@@ -445,7 +293,7 @@ msgid "BVI"
 msgstr "БВИ"
 
 msgid "Ext period"
-msgstr ""
+msgstr "Расширенный период"
 
 msgid "BIP"
 msgstr "БИП"
@@ -495,6 +343,18 @@ msgstr "ID"
 msgid "Value"
 msgstr "Значение"
 
+#, c-format
+msgid "data arrived L:%d %s"
+msgstr ""
+
+#, c-format
+msgid "Unhandled data  %04X at %d"
+msgstr "Необработанное событие %04X в %d"
+
+#, c-format
+msgid "%d, %s"
+msgstr "%d, %s"
+
 msgid "bad header found!"
 msgstr "неверный заголовок"
 
@@ -538,18 +398,6 @@ msgstr "Обрезание пакета"
 msgid "Gather data time %.6g ms. "
 msgstr "Время сбора данных %.6g мс. "
 
-#, c-format
-msgid "new event %d"
-msgstr "событие %d"
-
-#, c-format
-msgid "%d, %s"
-msgstr "%d, %s"
-
-#, c-format
-msgid "Unhandled event  %04X at %d"
-msgstr "Необработанное событие %04X в %d"
-
 msgid "No one device selected."
 msgstr "Ничего не выбрано"
 
@@ -583,6 +431,154 @@ msgstr "Время выжержки ТУ %d"
 #, c-format
 msgid "Persistence astime %d"
 msgstr "Доп. время выжержки ТУ %d"
+
+#, c-format
+msgid "Sensors ID %d"
+msgstr "Номера датчиков %d"
+
+#, c-format
+msgid "Service flow %d"
+msgstr "Расход при нештатных ситуациях %d"
+
+#, c-format
+msgid "Contract hour %d"
+msgstr "Контрактный час %d"
+
+#, c-format
+msgid "Hourly flow %d"
+msgstr "Объем текущего часа %d"
+
+#, c-format
+msgid "Counter Q %d"
+msgstr "Счетчик объема %d"
+
+#, c-format
+msgid "Hour Q %d"
+msgstr "Среднее Q за предыдущий час %d"
+
+#, c-format
+msgid "Hour dP %d"
+msgstr "Среднее dP за предыдущий час %d"
+
+#, c-format
+msgid "Hour T %d"
+msgstr "Среднее T за предыдущий час %d"
+
+#, c-format
+msgid "Hour P %d"
+msgstr "Среднее P за предыдущий час %d"
+
+#, c-format
+msgid "Hour E %d"
+msgstr "Среднее E за предыдущий час %d"
+
+#, c-format
+msgid "StartDate %d"
+msgstr "Начало периода %d"
+
+#, c-format
+msgid "EndDate %d"
+msgstr "Конец периода %d"
+
+#, c-format
+msgid "Avg Q %d"
+msgstr "Среднее Q за период %d"
+
+#, c-format
+msgid "Avg dP %d"
+msgstr "Среднее dP за период %d"
+
+#, c-format
+msgid "Avg T %d"
+msgstr "Среднее T за период %d"
+
+#, c-format
+msgid "Avg P %d"
+msgstr "Среднее P за период %d"
+
+#, c-format
+msgid "Avg E %d"
+msgstr "Среднее E за период %d"
+
+#, c-format
+msgid "Periodically Q %d"
+msgstr "Q за период %d"
+
+#, c-format
+msgid "Density %d"
+msgstr "Плотность газа в НУ %d"
+
+#, c-format
+msgid "Equivalence asperity %d"
+msgstr "Эквивалентная шероховатость %d"
+
+#, c-format
+msgid "N concentration %d"
+msgstr "Молярная концентрация азота %d"
+
+#, c-format
+msgid "CO concentration %d"
+msgstr "Молярная концентрация углекислого газа %d"
+
+#, c-format
+msgid "Membrane diameter %d"
+msgstr "Диаметр диафрагмы %d"
+
+#, c-format
+msgid "Membrane factor %d"
+msgstr "Коэфф. телового расширения диафрагмы %d"
+
+#, c-format
+msgid "Pipe diameter %d"
+msgstr "Диаметр трубопровода %d"
+
+#, c-format
+msgid "Pipe factor %d"
+msgstr "Коэфф. телового расширения трубопровода %d"
+
+#, c-format
+msgid "Measure method %d"
+msgstr "Метод измерения %d"
+
+#, c-format
+msgid "Test dP/TI %d"
+msgstr "Тестовые значения dP/TI %d"
+
+#, c-format
+msgid "Test T %d"
+msgstr "Тестовые значения T %d"
+
+#, c-format
+msgid "Test P %d"
+msgstr "Тестовые значения P %d"
+
+#, c-format
+msgid "Test Q %d"
+msgstr "Тестовые значения Q %d"
+
+#, c-format
+msgid "Membrane radius %d"
+msgstr "Ср. радиус закругления кромки диаф. %d"
+
+#, c-format
+msgid "Atmospheric pressure %d"
+msgstr "Атмосферное давление %d"
+
+#, c-format
+msgid "dP %d"
+msgstr "dP %d"
+
+#, c-format
+msgid "T %d"
+msgstr "T %d"
+
+#, c-format
+msgid "P %d"
+msgstr "P %d"
+
+#, c-format
+msgid "E %d"
+msgstr "E %d"
 
 #, c-format
 msgid "Line %d"
@@ -682,8 +678,8 @@ msgid "Allow realisation of FT3 protocols."
 msgstr "Предоставляет реализацию протокола FT3 для контроллеров АПСТМ"
 
 #, c-format
-msgid "Ban_MC %d"
-msgstr ""
+msgid "Lock %d"
+msgstr "Запрет ручного управления %d"
 
 #, c-format
 msgid "Lubrication %d"
@@ -787,7 +783,7 @@ msgstr "ТС ошибка открытия %d"
 
 #, c-format
 msgid "Close error TC %d"
-msgstr "ТС ошибка закрытия"
+msgstr "ТС ошибка закрытия %d"
 
 msgid "DAQ FT3"
 msgstr "АПСТМ (FT3)"
@@ -797,3 +793,37 @@ msgstr "Максим Кочетков, Ольга Авдеева, Ольга К�
 
 msgid "Allow realization of FT3 master/slave service"
 msgstr "Предоставляет реализацию протокола FT3 для контроллеров АПСТМ"
+
+#~ msgid "Current flow %d"
+#~ msgstr "Расход (Q) %d"
+
+#~ msgid "Sensor 2 %d"
+#~ msgstr "Номер датчика 2 %d"
+
+#~ msgid "Sensor T %d"
+#~ msgstr "Номер датчика t %d"
+
+#~ msgid "Sensor P %d"
+#~ msgstr "Номер датчика P %d"
+
+#~ msgid "Hour t %d"
+#~ msgstr "Среднее t за предыдущий час %d"
+
+#~ msgid "Datetime %d"
+#~ msgstr "Период %d"
+
+#~ msgid "Period %d"
+#~ msgstr "Период %d"
+
+#~ msgid "Avg t %d"
+#~ msgstr "Среднее t за период %d"
+
+#~ msgid "Test rate %d"
+#~ msgstr "Тестовый расход %d"
+
+#, fuzzy
+#~ msgid "t %d"
+#~ msgstr "Среднее t за период %d"
+
+#~ msgid "new event %d"
+#~ msgstr "событие %d"

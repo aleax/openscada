@@ -135,7 +135,7 @@ uint16_t B_GKR::Task(uint16_t uc)
     return rc;
 }
 
-uint16_t B_GKR::HandleEvent(uint8_t * D)
+uint16_t B_GKR::HandleEvent(int64_t tm, uint8_t * D)
 {
     uint16_t l = 0;
     return l;

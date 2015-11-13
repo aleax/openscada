@@ -32,7 +32,7 @@ namespace FT3
  	uint16_t ID;
  	uint16_t clockID;
  	uint16_t Task(uint16_t);
- 	uint16_t HandleEvent(uint8_t *);
+ 	uint16_t HandleEvent(int64_t tm, uint8_t *);
  	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
  	uint8_t cmdSet(uint8_t * req, uint8_t addr);
  	uint16_t setVal(TVal &val);
@@ -63,7 +63,7 @@ namespace FT3
 	~B_BUC();
 	uint16_t ID;
 	uint16_t Task(uint16_t);
-	uint16_t HandleEvent(uint8_t *);
+	uint16_t HandleEvent(int64_t tm, uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
 	uint8_t cmdSet(uint8_t * req, uint8_t addr);
 	uint16_t setVal(TVal &val);

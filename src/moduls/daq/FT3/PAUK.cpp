@@ -28,7 +28,7 @@
 using namespace FT3;
 
 B_PAUK::B_PAUK(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
-	DA(prm), ID(id << 12), count_n(n), with_params(has_params)
+	DA(prm), ID(id), count_n(n), with_params(has_params)
 {
     mTypeFT3 = GRS;
     TFld * fld;
@@ -83,33 +83,22 @@ uint16_t B_PAUK::Task(uint16_t uc)
     case TaskRefresh:
 	Msg.L = 13;
 	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = ID | (0 << 6) | (0); //состояние
-	*((uint16_t *) (Msg.D + 2)) = ID | (0 << 6) | (1); //выбор крана
-	*((uint16_t *) (Msg.D + 4)) = ID | (0 << 6) | (2); //исполнение
-	*((uint16_t *) (Msg.D + 6)) = ID | (0 << 6) | (4); //управление
-	*((uint16_t *) (Msg.D + 8)) = ID | (0 << 6) | (5); //ошибки
-	if(mPrm.owner().Transact(&Msg)) {
+	*((uint16_t *) Msg.D) = PackID(ID, 0, 0);
+	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1);
+	*((uint16_t *) (Msg.D + 4)) = PackID(ID, 0, 2);
+	*((uint16_t *) (Msg.D + 6)) = PackID(ID, 0, 4);
+	*((uint16_t *) (Msg.D + 8)) = PackID(ID, 0, 5);
+	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(Msg.C == GOOD3) {
-		//mess_info(mPrm.nodePath().c_str(),_("Data"));
-		mPrm.vlAt("state").at().setI(Msg.D[7], 0, true);
-		mPrm.vlAt("selection").at().setI(Msg.D[12], 0, true);
-		mPrm.vlAt("execution").at().setI(Msg.D[18], 0, true);
-		mPrm.vlAt("control").at().setI(Msg.D[24], 0, true);
-		mPrm.vlAt("errors").at().setI(Msg.D[29], 0, true);
-
 		if(with_params) {
 		    for(int i = 1; i <= count_n; i++) {
 			Msg.L = 9;
 			Msg.C = AddrReq;
-			*((uint16_t *) Msg.D) = ID | (i << 6) | (0); //состояние крана
-			*((uint16_t *) (Msg.D + 2)) = ID | (i << 6) | (1); //время выдержки
-			*((uint16_t *) (Msg.D + 4)) = ID | (i << 6) | (2); //доп время выдержки
-
-			if(mPrm.owner().Transact(&Msg)) {
+			*((uint16_t *) Msg.D) = PackID(ID, i, 0); //состояние крана
+			*((uint16_t *) (Msg.D + 2)) = PackID(ID, i, 1); //время выдержки
+			*((uint16_t *) (Msg.D + 4)) = PackID(ID, i, 2); //доп время выдержки
+			if(mPrm.owner().DoCmd(&Msg)) {
 			    if(Msg.C == GOOD3) {
-				mPrm.vlAt(TSYS::strMess("state_%d", i).c_str()).at().setI(Msg.D[7], 0, true);
-				mPrm.vlAt(TSYS::strMess("time_%d", i).c_str()).at().setI(Msg.D[13], 0, true);
-				mPrm.vlAt(TSYS::strMess("astime_%d", i).c_str()).at().setI(Msg.D[19], 0, true);
 				rc = 1;
 			    } else {
 				rc = 0;
@@ -119,77 +108,73 @@ uint16_t B_PAUK::Task(uint16_t uc)
 			    rc = 0;
 			    break;
 			}
-
 		    }
 		} else {
 		    rc = 1;
 		}
 	    }
-
 	}
 	if(rc) NeedInit = false;
 	break;
     }
     return rc;
 }
-uint16_t B_PAUK::HandleEvent(uint8_t * D)
+uint16_t B_PAUK::HandleEvent(int64_t tm, uint8_t * D)
 {
-    if((TSYS::getUnalign16(D) & 0xF000) != ID) return 0;
+    FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
+    if(ft3ID.g != ID) return 0;
     uint16_t l = 0;
-    uint16_t k = (TSYS::getUnalign16(D) >> 6) & 0x3F; // номер объекта
-    uint16_t n = TSYS::getUnalign16(D) & 0x3F;  // номер параметра
-
-    switch(k) {
+    switch (ft3ID.k) {
     case 0:
-	switch(n) {
+	switch(ft3ID.n) {
 	case 0:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt(TSYS::strMess("selection").c_str()).at().setI(D[3], 0, true);
+	    mPrm.vlAt(TSYS::strMess("selection").c_str()).at().setI(D[3], tm, true);
 	    l = 4;
 	    break;
 	case 2:
-	    mPrm.vlAt(TSYS::strMess("execution").c_str()).at().setI(D[3], 0, true);
+	    mPrm.vlAt(TSYS::strMess("execution").c_str()).at().setI(D[3], tm, true);
 	    l = 4;
 	    break;
 	case 3:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n / 2;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(((D[2 + (j + 1) / 2]) >> ((j % 2) * 4)) & 0x0F, 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(((D[2 + (j + 1) / 2]) >> ((j % 2) * 4)) & 0x0F, tm, true);
 	    }
 	    l = 11;
 	    break;
 	case 4:
-	    mPrm.vlAt(TSYS::strMess("control").c_str()).at().setI(D[2], 0, true);
+	    mPrm.vlAt(TSYS::strMess("control").c_str()).at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 5:
-	    mPrm.vlAt(TSYS::strMess("errors").c_str()).at().setI(D[2], 0, true);
+	    mPrm.vlAt(TSYS::strMess("errors").c_str()).at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 
 	}
 	break;
     default:
-	if(k && (k <= count_n)) {
-	    switch(n) {
+	if(ft3ID.k && (ft3ID.k <= count_n)) {
+	    switch(ft3ID.n) {
 	    case 0:
-		mPrm.vlAt(TSYS::strMess("state_%d", k).c_str()).at().setI(D[2], 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
 		l = 3;
 		break;
 
 	    case 1:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("time_%d", k).c_str()).at().setI(D[3], 0, true);
+		    mPrm.vlAt(TSYS::strMess("time_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
 		}
 		l = 4;
 		break;
 	    case 2:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("astime_%d", k).c_str()).at().setI(D[3], 0, true);
+		    mPrm.vlAt(TSYS::strMess("astime_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
 		    ;
 		}
 		l = 4;
@@ -205,22 +190,23 @@ uint16_t B_PAUK::HandleEvent(uint8_t * D)
 uint16_t B_PAUK::setVal(TVal &val)
 {
     int off = 0;
-    uint16_t k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    uint16_t n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
-    uint16_t addr = ID | (k << 6) | n;
+    FT3ID ft3ID;
+    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
+    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
+    ft3ID.g = ID;
     tagMsg Msg;
-    switch(n) {
+    Msg.L = 0;
+    Msg.C = SetData;
+    *((uint16_t *) Msg.D) = PackID(ft3ID);
+    switch(ft3ID.n) {
     case 1:
     case 2:
 	Msg.L = 6;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
 	Msg.D[2] = val.get(NULL, true).getI();
-	if((n == 2) && (Msg.D[2] != 0x55)) {
+	if((ft3ID.n == 2) && (Msg.D[2] != 0x55)) {
 	    Msg.D[2] = 0;
 	}
-	mPrm.owner().Transact(&Msg);
+	mPrm.owner().DoCmd(&Msg);
 	break;
     }
 

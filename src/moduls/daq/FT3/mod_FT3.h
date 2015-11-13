@@ -200,7 +200,7 @@ namespace FT3
 	uint8_t cmdGet(uint16_t, uint8_t *);
 	uint8_t cmdSet(uint8_t *, uint8_t);
 	uint16_t Task(uint16_t);
-	uint16_t HandleEvent(uint8_t *);
+	uint16_t HandleEvent(time_t, uint8_t *);
 	void tmHandler(void);
 	TElem p_el;			//Work atribute elements
 //	string typeName();
@@ -282,6 +282,7 @@ namespace FT3
 	}
 
 	bool isLogic();
+	bool DoCmd(tagMsg * t);
 	bool Transact(tagMsg * t);
 	bool ProcessMessage(tagMsg *, tagMsg *);
 	void PushInBE(uint8_t type, uint8_t length, uint16_t id, uint8_t *E);

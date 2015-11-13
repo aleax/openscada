@@ -65,12 +65,18 @@ namespace ModFastwel {
 	void getVals();
 
 	TMdContr & owner();
-	bool InitDI(DIM_CONFIGURATION* pConfigDIM);
 
       protected:
 	//Methods
 	void load_();
 	void save_();
+	bool InitDI(DIM_CONFIGURATION* pConfig);
+	bool InitDIM718(DIM718_CONFIGURATION* pConfig);
+	bool InitAIM726(AIM726_CONFIGURATION* pConfig);
+	bool InitAIM730(AIM730_CONFIGURATION* pConfig);
+	bool InitAIM791(AIM791_CONFIGURATION* pConfig);
+	bool InitAIM725(AIM725_CONFIGURATION* pConfig);
+	bool InitDIM7656(DIM7656_CONFIGURATION* pConfig, FIO_MODULE_TYPE type);
 
       private:
 	//Methods
@@ -88,7 +94,7 @@ namespace ModFastwel {
 	string mTypeName;
 
 	uint32_t nDI, nAI, nDO, nAO;
-	double kAI, kAO, dAO;
+	double kAI, kAO, dAO, kAIC;
 	uint8_t mDOState;
 
 	uint8_t mModConfig[64];

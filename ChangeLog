@@ -1,3 +1,7 @@
+2015-11-13 fido_max
+- DAQ.Fastwel: DIM765/766 added. Init refactored.
+- DAQ.FT3: AddrReq/ReqData processing combined. Using PLC timestamp.   
+
 2015-11-12 Roman
 - SYS,Archive.FSArch,DB.DBF,DAQ.{Comedi,SMH2Gi}:
     readdir_r() using rewrote to "dirent" structure direct malloc and prevent problems on other OS, like QNX.

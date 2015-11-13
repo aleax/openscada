@@ -31,10 +31,10 @@ namespace FT3
 	~KA_BVT();
 	uint16_t ID;
 	uint16_t count_n;
- 	uint16_t config;
+	uint16_t config;
 	void AddChannel(uint8_t iid);
 	uint16_t Task(uint16_t);
-	uint16_t HandleEvent(uint8_t *);
+	uint16_t HandleEvent(int64_t, uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
 	uint8_t cmdSet(uint8_t * req, uint8_t addr);
 	uint16_t setVal(TVal &val);
@@ -45,8 +45,8 @@ namespace FT3
 	class SKATTchannel
 	{
 	public:
-	    SKATTchannel(uint8_t iid, DA* owner) : da(owner),
-		    id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
+	    SKATTchannel(uint8_t iid, DA* owner) :
+		    da(owner), id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
 		    Value(TSYS::strMess("value_%d", id + 1), TSYS::strMess(_("Value %d"), id + 1)),
 		    Period(TSYS::strMess("period_%d", id + 1), TSYS::strMess(_("Measure period %d"), id + 1)),
 		    Sens(TSYS::strMess("sens_%d", id + 1), TSYS::strMess(_("Sensitivity %d"), id + 1)),
@@ -168,7 +168,7 @@ namespace FT3
 	uint16_t count_n;
 	void AddChannel(uint8_t iid);
 	uint16_t Task(uint16_t);
-	uint16_t HandleEvent(uint8_t *);
+	uint16_t HandleEvent(int64_t, uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
 	uint8_t cmdSet(uint8_t * req, uint8_t addr);
 	uint16_t setVal(TVal &val);
@@ -179,8 +179,8 @@ namespace FT3
 	class STTchannel
 	{
 	public:
-	    STTchannel(uint8_t iid, DA* owner) : da(owner),
-		    id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
+	    STTchannel(uint8_t iid, DA* owner) :
+		    da(owner), id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
 		    Value(TSYS::strMess("value_%d", id + 1), TSYS::strMess(_("Value %d"), id + 1)),
 		    Period(TSYS::strMess("period_%d", id + 1), TSYS::strMess(_("Measure period %d"), id + 1)),
 		    Sens(TSYS::strMess("sens_%d", id + 1), TSYS::strMess(_("Sensitivity %d"), id + 1)),

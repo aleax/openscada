@@ -41,15 +41,7 @@ TProt::TProt(string name) :
 	TProtocol(PRT_ID)
 {
     modPrt = this;
-
-    mType = PRT_TYPE;
-    mName = PRT_NAME;
-    mVers = PRT_MVER;
-    mAuthor = PRT_AUTORS;
-    mDescr = PRT_DESCR;
-    mLicense = PRT_LICENSE;
-    mSource = name;
-
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 TProt::~TProt()
@@ -155,9 +147,8 @@ uint16_t TProt::VerifyPacket(string &pdu)
 		if(!((raslen = Len(pdu[2])) == pdu.size() && VerCRC(pdu, pdu.size())))
 		    if(!(pdu.size() > raslen && VerCRC(pdu, raslen))) {
 			if(mess_lev() == TMess::Debug)
-			    mess_debug(nodePath().c_str(),
-				    _("VerifyPacket bad packet pdu.size:%d raslen:%d VerCRC(pdu, pdu.size()):%d VerCRC(pdu, raslen):%d"), pdu.size(), raslen,
-				    VerCRC(pdu, pdu.size()), VerCRC(pdu, raslen));
+			    mess_debug(nodePath().c_str(), _("VerifyPacket bad packet pdu.size:%d raslen:%d VerCRC(pdu, pdu.size()):%d VerCRC(pdu, raslen):%d"),
+				    pdu.size(), raslen, VerCRC(pdu, pdu.size()), VerCRC(pdu, raslen));
 			return 2; //wrong packet
 		    } else {
 			if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("VerifyPacket bad tail"));

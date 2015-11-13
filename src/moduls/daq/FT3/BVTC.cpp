@@ -83,7 +83,7 @@ void KA_BVTC::loadIO(bool force)
 void KA_BVTC::saveIO()
 {
     //Save links
-     for(int i = 0; i < count_n; i++) {
+    for(int i = 0; i < count_n; i++) {
 	saveLnk(data[i].Value.lnk);
 	saveLnk(data[i].Count.lnk);
 	saveLnk(data[i].Period.lnk);
@@ -110,7 +110,7 @@ uint16_t KA_BVTC::Task(uint16_t uc)
     return rc;
 }
 
-uint16_t KA_BVTC::HandleEvent(uint8_t * D)
+uint16_t KA_BVTC::HandleEvent(int64_t tm, uint8_t * D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
@@ -295,38 +295,26 @@ uint16_t B_BVTC::Task(uint16_t uc)
 	Msg.L = 5;
 	Msg.C = AddrReq;
 	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
-	if(mPrm.owner().Transact(&Msg)) {
+	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(Msg.C == GOOD3) {
-		mPrm.vlAt("state").at().setI(Msg.D[7], 0, true);
 		uint16_t nTC = (count_n / 8 + (count_n % 8 ? 1 : 0));
 		Msg.L = 3 + nTC * 2;
 		Msg.C = AddrReq;
 		for(int i = 0; i < nTC; i++) {
 		    *((uint16_t *) (Msg.D + i * 2)) = PackID(ID, 1, i); //TC Value
 		}
-		if(mPrm.owner().Transact(&Msg)) {
-		    if(Msg.C == GOOD3) {
-			for(int i = 1; i <= count_n; i++) {
-			    mPrm.vlAt(TSYS::strMess("TC_%d", i).c_str()).at().setB(((Msg.D[7 + ((i - 1) / 8 * 5)]) >> ((i - 1) % 8)) & 0x01, 0, true);
+		if(mPrm.owner().DoCmd(&Msg)) {
+		    if(with_params) {
+			Msg.L = 3 + nTC * 2;
+			Msg.C = AddrReq;
+			for(int i = 0; i < nTC; i++) {
+			    *((uint16_t *) (Msg.D + i * 2)) = PackID(ID, 2, i); //маски ТC
 			}
-			if(with_params) {
-			    Msg.L = 3 + nTC * 2;
-			    Msg.C = AddrReq;
-			    for(int i = 0; i < nTC; i++) {
-				*((uint16_t *) (Msg.D + i * 2)) = PackID(ID, 2, i); //маски ТC
-			    }
-			    if(mPrm.owner().Transact(&Msg)) {
-				if(Msg.C == GOOD3) {
-				    for(int i = 1; i <= count_n; i++) {
-					mPrm.vlAt(TSYS::strMess("Mask_%d", i).c_str()).at().setB(((Msg.D[8 + ((i - 1) / 8 * 6)]) >> ((i - 1) % 8)) & 0x01, 0,
-						true);
-				    }
-				    rc = 1;
-				}
-			    }
-			} else {
+			if(mPrm.owner().DoCmd(&Msg)) {
 			    rc = 1;
 			}
+		    } else {
+			rc = 1;
 		    }
 		}
 	    }
@@ -337,7 +325,7 @@ uint16_t B_BVTC::Task(uint16_t uc)
     return rc;
 }
 
-uint16_t B_BVTC::HandleEvent(uint8_t * D)
+uint16_t B_BVTC::HandleEvent(int64_t tm, uint8_t * D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
@@ -346,29 +334,26 @@ uint16_t B_BVTC::HandleEvent(uint8_t * D)
     case 0:
 	switch(ft3ID.n) {
 	case 0:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n / 4;
 	    for(int j = 1; j <= count_n; j++) {
-
-		mPrm.vlAt(TSYS::strMess("TC_%d", j).c_str()).at().setB((D[((j - 1) >> 3) + 3] >> (j % 8)) & 1, 0, true);
+		mPrm.vlAt(TSYS::strMess("TC_%d", j).c_str()).at().setB((D[((j - 1) >> 3) + 3] >> (j % 8)) & 1, tm, true);
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("Mask_%d", j).c_str()).at().setB((D[((j - 1) >> 3) + 3 + count_n / 8] >> (j % 8)) & 1, 0, true);
+		    mPrm.vlAt(TSYS::strMess("Mask_%d", j).c_str()).at().setB((D[((j - 1) >> 3) + 3 + count_n / 8] >> (j % 8)) & 1, tm, true);
 		}
-
 	    }
 	    break;
-
 	}
 	break;
     case 1:
 	l = 3;
 	for(int i = 0; i < 8; i++) {
 	    if((1 + (ft3ID.n << 3) + i) > count_n) break;
-	    mPrm.vlAt(TSYS::strMess("TC_%d", 1 + (ft3ID.n << 3) + i).c_str()).at().setB((D[2] >> i) & 1, 0, true);
+	    mPrm.vlAt(TSYS::strMess("TC_%d", 1 + (ft3ID.n << 3) + i).c_str()).at().setB((D[2] >> i) & 1, tm, true);
 	}
 	break;
     case 2:
@@ -376,8 +361,7 @@ uint16_t B_BVTC::HandleEvent(uint8_t * D)
 	if(with_params) {
 	    for(int i = 0; i < 8; i++) {
 		if((1 + (ft3ID.n << 3) + i) > count_n) break;
-		mPrm.vlAt(TSYS::strMess("Mask_%d", 1 + (ft3ID.n << 3) + i).c_str()).at().setB((D[3] >> i) & 1, 0, true);
-//		    mess_info("B_BVTC", "new mask event!!!!");
+		mPrm.vlAt(TSYS::strMess("Mask_%d", 1 + (ft3ID.n << 3) + i).c_str()).at().setB((D[3] >> i) & 1, tm, true);
 	    }
 	}
 	break;
@@ -461,7 +445,7 @@ uint8_t B_BVTC::cmdSet(uint8_t * req, uint8_t addr)
 	    for(uint8_t i = ft3ID.n * 8; i < (ft3ID.n + 1) * 8; i++) {
 		data[i].Mask.s = addr;
 		if(data[i].Mask.lnk.Connected()) {
-		    data[i].Mask.Set((uint8_t)(newMask & 0x01));
+		    data[i].Mask.Set((uint8_t) (newMask & 0x01));
 		    newMask = newMask >> 1;
 		    l = 3;
 		} else {
@@ -498,7 +482,7 @@ uint16_t B_BVTC::setVal(TVal &val)
     for(int i = st; i <= en; i++) {
 	Msg.D[2] |= ((mPrm.vlAt(TSYS::strMess("Mask_%d", i).c_str()).at().getB(0, true)) << ((i - 1) % 8));
     }
-    mPrm.owner().Transact(&Msg);
+    mPrm.owner().DoCmd(&Msg);
     return 0;
 }
 

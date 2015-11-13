@@ -28,7 +28,7 @@
 using namespace FT3;
 
 B_BIP::B_BIP(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
-	DA(prm), ID(id << 12), count_n(n), with_params(has_params)
+	DA(prm), ID(id), count_n(n), with_params(has_params)
 {
     mTypeFT3 = GRS;
     TFld * fld;
@@ -56,8 +56,7 @@ B_BIP::B_BIP(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
 	    fld->setReserve(TSYS::strMess("%d:5", i));
 	    mPrm.p_el.fldAdd(fld = new TFld(TSYS::strMess("maxA_%d", i).c_str(), TSYS::strMess(_("Alarm maximum %d"), i).c_str(), TFld::Real, TVal::DirWrite));
 	    fld->setReserve(TSYS::strMess("%d:5", i));
-	    mPrm.p_el.fldAdd(
-		    fld = new TFld(TSYS::strMess("dimens_%d", i).c_str(), TSYS::strMess(_("Dimension %d"), i).c_str(), TFld::Integer, TVal::DirWrite));
+	    mPrm.p_el.fldAdd(fld = new TFld(TSYS::strMess("dimens_%d", i).c_str(), TSYS::strMess(_("Dimension %d"), i).c_str(), TFld::Integer, TVal::DirWrite));
 	    fld->setReserve(TSYS::strMess("%d:6", i));
 	    mPrm.p_el.fldAdd(fld = new TFld(TSYS::strMess("minPV_%d", i).c_str(), TSYS::strMess(_("PV minimum %d"), i).c_str(), TFld::Real, TVal::DirWrite));
 	    fld->setReserve(TSYS::strMess("%d:7", i));
@@ -101,39 +100,24 @@ uint16_t B_BIP::Task(uint16_t uc)
     case TaskRefresh:
 	Msg.L = 5;
 	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = ID | (0 << 6) | (0); //состояние
-	if(mPrm.owner().Transact(&Msg)) {
+	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(Msg.C == GOOD3) {
-		mPrm.vlAt("state").at().setI(Msg.D[7], 0, true);
 		if(with_params) {
 		    for(int i = 1; i <= count_n; i++) {
 			Msg.L = 21;
 			Msg.C = AddrReq;
-			*((uint16_t *) Msg.D) = ID | (i << 6) | (1); //Значение
-			*((uint16_t *) (Msg.D + 2)) = ID | (i << 6) | (2); //Период измерений
-			*((uint16_t *) (Msg.D + 4)) = ID | (i << 6) | (3); //Чувствительность
-			*((uint16_t *) (Msg.D + 6)) = ID | (i << 6) | (4); //min max предупредительный
-			*((uint16_t *) (Msg.D + 8)) = ID | (i << 6) | (5); //min max аварийный
-			*((uint16_t *) (Msg.D + 10)) = ID | (i << 6) | (6); //Размерность
-			*((uint16_t *) (Msg.D + 12)) = ID | (i << 6) | (7); //min max ФВ
-			*((uint16_t *) (Msg.D + 14)) = ID | (i << 6) | (8); //min max частоты
-			*((uint16_t *) (Msg.D + 16)) = ID | (i << 6) | (9); //Коэффициент
-			if(mPrm.owner().Transact(&Msg)) {
+			*((uint16_t *) Msg.D) = PackID(ID, i, 1);
+			*((uint16_t *) (Msg.D + 2)) = PackID(ID, i, 2);
+			*((uint16_t *) (Msg.D + 4)) = PackID(ID, i, 3);
+			*((uint16_t *) (Msg.D + 6)) = PackID(ID, i, 4);
+			*((uint16_t *) (Msg.D + 8)) = PackID(ID, i, 5);
+			*((uint16_t *) (Msg.D + 10)) = PackID(ID, i, 6);
+			*((uint16_t *) (Msg.D + 12)) = PackID(ID, i, 7);
+			*((uint16_t *) (Msg.D + 14)) = PackID(ID, i, 8);
+			*((uint16_t *) (Msg.D + 16)) = PackID(ID, i, 9);
+			if(mPrm.owner().DoCmd(&Msg)) {
 			    if(Msg.C == GOOD3) {
-				mPrm.vlAt(TSYS::strMess("state_%d", i).c_str()).at().setI(Msg.D[7], 0, true);
-				mPrm.vlAt(TSYS::strMess("value_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 8), 0, true);
-				mPrm.vlAt(TSYS::strMess("period_%d", i).c_str()).at().setI(Msg.D[17], 0, true);
-				mPrm.vlAt(TSYS::strMess("sens_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 23), 0, true);
-				mPrm.vlAt(TSYS::strMess("minW_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 32), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxW_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 36), 0, true);
-				mPrm.vlAt(TSYS::strMess("minA_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 45), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxA_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 49), 0, true);
-				mPrm.vlAt(TSYS::strMess("dimens_%d", i).c_str()).at().setI(Msg.D[58], 0, true);
-				mPrm.vlAt(TSYS::strMess("minPV_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 64), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxPV_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 68), 0, true);
-				mPrm.vlAt(TSYS::strMess("minF_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 77), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxF_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 81), 0, true);
-				mPrm.vlAt(TSYS::strMess("factor_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 90), 0, true);
 				rc = 1;
 			    } else {
 				rc = 0;
@@ -156,93 +140,75 @@ uint16_t B_BIP::Task(uint16_t uc)
     return rc;
 }
 
-uint16_t B_BIP::HandleEvent(uint8_t * D)
+uint16_t B_BIP::HandleEvent(int64_t tm, uint8_t * D)
 {
-    if((TSYS::getUnalign16(D) & 0xF000) != ID) return 0;
+    FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
+    if(ft3ID.g != ID) return 0;
     uint16_t l = 0;
-    uint16_t k = (TSYS::getUnalign16(D) >> 6) & 0x3F; // номер объекта
-    uint16_t n = TSYS::getUnalign16(D) & 0x3F;  // номер параметра
-
-    switch(k) {
+    switch(ft3ID.k) {
     case 0:
-	switch(n) {
+	switch(ft3ID.n) {
 	case 0:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n * 5;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], 0, true);
-		mPrm.vlAt(TSYS::strMess("value_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], tm, true);
+		mPrm.vlAt(TSYS::strMess("value_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), tm, true);
 	    }
 	    break;
 
 	}
 	break;
     default:
-	if(k && (k <= count_n)) {
-	    switch(n) {
+	if(ft3ID.k && (ft3ID.k <= count_n)) {
+	    switch(ft3ID.n) {
 	    case 0:
-		mPrm.vlAt(TSYS::strMess("state_%d", k).c_str()).at().setI(D[2], 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
 		l = 3;
 		break;
 	    case 1:
-		mPrm.vlAt(TSYS::strMess("state_%d", k).c_str()).at().setI(D[2], 0, true);
-		mPrm.vlAt(TSYS::strMess("value_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
+		mPrm.vlAt(TSYS::strMess("value_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		l = 7;
 		break;
 	    case 2:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("period_%d", k).c_str()).at().setI(D[3], 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("period_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
 		l = 4;
 		break;
 	    case 3:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("sens_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("sens_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		l = 7;
 		break;
 	    case 4:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minW_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxW_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 5:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxA_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 6:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("dimens_%d", k).c_str()).at().setI(D[3], 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("dimens_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
 		l = 4;
 		break;
 	    case 7:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minPV_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxPV_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 8:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minF_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxF_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("minF_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxF_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 9:
-		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("factor_%d", k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		}
+		mPrm.vlAt(TSYS::strMess("factor_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		l = 7;
 		break;
 	    }
@@ -255,66 +221,47 @@ uint16_t B_BIP::HandleEvent(uint8_t * D)
 uint16_t B_BIP::setVal(TVal &val)
 {
     int off = 0;
-    uint16_t k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    uint16_t n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
-    uint16_t addr = ID | (k << 6) | n;
+    FT3ID ft3ID;
+    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
+    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
+    ft3ID.g = ID;
     tagMsg Msg;
-    switch(n) {
+    Msg.L = 0;
+    Msg.C = SetData;
+    *((uint16_t *) Msg.D) = PackID(ft3ID);
+    switch(ft3ID.n) {
     case 2:
     case 6:
 	Msg.L = 6;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
 	Msg.D[2] = val.get(NULL, true).getI();
-	mPrm.owner().Transact(&Msg);
 	break;
     case 3:
     case 9:
 	Msg.L = 9;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
 	*(float *) (Msg.D + 2) = (float) val.get(NULL, true).getR();
-	mPrm.owner().Transact(&Msg);
 	break;
     case 4:
 	Msg.L = 13;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minW_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxW_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 5:
 	Msg.L = 13;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minA_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxA_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 7:
 	Msg.L = 13;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minPV_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxPV_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     case 8:
 	Msg.L = 13;
-	Msg.C = SetData;
-	Msg.D[0] = addr & 0xFF;
-	Msg.D[1] = (addr >> 8) & 0xFF;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minF_%d", k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxF_%d", k).c_str()).at().getR(0, true);
-	mPrm.owner().Transact(&Msg);
+	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minF_%d", ft3ID.k).c_str()).at().getR(0, true);
+	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxF_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     }
+    if(Msg.L) mPrm.owner().DoCmd(&Msg);
     return 0;
 }
 

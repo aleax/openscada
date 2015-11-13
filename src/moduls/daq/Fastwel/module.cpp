@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.1"
+#define MOD_VER		"0.1.2"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -124,7 +124,7 @@ void TTpContr::FBUS_fbusGetVersion()
 {
     ResAlloc res(FBUSRes, true);
     fbusGetVersion(&verMajor, &verMinor);
-    mVers = TSYS::strMess("%s FBUS: %d.%d", MOD_VER, verMajor, verMinor);
+    mModVers=TSYS::strMess("%s FBUS: %d.%d", MOD_VER, verMajor, verMinor);
 }
 
 void TTpContr::FBUS_fbusOpen(int n)
@@ -219,6 +219,7 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("PRM_BD_AIM726", _("AIM726 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_AIM730", _("AIM730 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_AIM725", _("AIM725 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_DIM765", _("DIM765 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
 
     fldAdd(new TFld("SCHEDULE", _("Acquisition schedule"), TFld::String, TFld::NoFlag, "100", "1"));
     fldAdd(new TFld("PRIOR", _("Gather task priority"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;99"));
@@ -250,7 +251,7 @@ void TTpContr::postEnable(int flag)
     //> Parameter AIM726 bd structure
     t_prm = tpParmAdd("AIM726", "PRM_BD_AIM726", _("AIM726"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
-    tpPrmAt(t_prm).fldAdd(new TFld("AI_FILTER", _("Filter depth"), TFld::Integer, TCfg::NoVal, "3", "0", "0;255"));
+    tpPrmAt(t_prm).fldAdd(new TFld("AI_FILTER", _("Filter depth"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1:2", _("50Hz;500Hz;1000Hz")));
 
     //> Parameter AIM730 bd structure
     t_prm = tpParmAdd("AIM730", "PRM_BD_AIM730", _("AIM730"));
@@ -265,6 +266,22 @@ void TTpContr::postEnable(int flag)
 		    _("PT50;PT100;PT200;PT500;PT1000;NI100;NI120;CU100;CU50;0-150 Ohm;0-300 Ohm;0-600 Ohm;0-1500 Ohm; 0-3000 Ohm")));
     tpPrmAt(t_prm).fldAdd(new TFld("AI_TYPE", _("Sensor type"), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0", "0;1", _("2-wire;3-wire")));
 
+    t_prm = tpParmAdd("DIM765_766", "PRM_BD_DIM765", _("DIM765/766"));
+    tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
+    for(int i = 0; i < 8; i++) {
+	tpPrmAt(t_prm).fldAdd(
+		new TFld(TSYS::strMess("DI_TYPE_%d", i).c_str(), TSYS::strMess(_("Type %d"), i).c_str(), TFld::Integer, TFld::Selected | TCfg::NoVal, "1", "0",
+			"0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;255",
+			_("No break detection;1K8;2K2;2K7;3K3;3K9;4K7;5K6;6K8;8K2;10K;12K;15K;18K;20K;22K;24K;27K;30K;33K;Type 2")));
+	tpPrmAt(t_prm).fldAdd(
+		new TFld(TSYS::strMess("DI_DEBOUNCE_ON_%d", i).c_str(), TSYS::strMess(_("Debounce on %d"), i).c_str(), TFld::Integer,
+			TFld::Selected | TCfg::NoVal, "1", "0", "0;1;2;3;4;5;6;7;8;9", _("OFF;1.4ms;2.8ms;4.2ms;9.8ms;2"
+				"0ms;50ms;100ms;200ms;300ms")));
+	tpPrmAt(t_prm).fldAdd(
+		new TFld(TSYS::strMess("DI_DEBOUNCE_OFF_%d", i).c_str(), TSYS::strMess(_("Debounce off %d"), i).c_str(), TFld::Integer,
+			TFld::Selected | TCfg::NoVal, "1", "0", "0;1;2;3;4;5;6;7;8;9", _("OFF;1.4ms;2.8ms;4.2ms;9.8ms;20ms;50ms;100ms;200ms;300ms")));
+
+    }
 }
 
 TController *TTpContr::ContrAttach(const string & name, const string & daq_db)
@@ -286,6 +303,7 @@ TMdContr::TMdContr(string name_c, const string & daq_db, ::TElem * cfgelem) :
     cfg("PRM_BD_AIM726").setS("FBUSPrmAIM726_" + name_c);
     cfg("PRM_BD_AIM730").setS("FBUSPrmAIM730_" + name_c);
     cfg("PRM_BD_AIM725").setS("FBUSPrmAIM725_" + name_c);
+    cfg("PRM_BD_DIM765").setS("FBUSPrmDIM765_" + name_c);
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
     pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
@@ -379,16 +397,16 @@ void TMdContr::enable_()
 
 void TMdContr::start_()
 {
-    //> Schedule process
+//> Schedule process
     mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0, (int64_t ) (1e9 * atof(cron().c_str()))) : 0;
 
-    //> Start the gathering data task
+//> Start the gathering data task
     SYS->taskCreate(nodePath('.', true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_()
 {
-    //> Stop the request and calc data task
+//> Stop the request and calc data task
     SYS->taskDestroy(nodePath('.', true), &endrunReq);
     mod->FBUS_fbusClose(mNet);
 }
@@ -440,7 +458,7 @@ void *TMdContr::Task(void *icntr)
 
 void TMdContr::cntrCmdProc(XMLNode * opt)
 {
-    //> Get page info
+//> Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld", opt, -1, "/cntr/cfg/SCHEDULE", cfg("SCHEDULE").fld().descr(), startStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 3, "dest", "sel_ed",
@@ -449,7 +467,7 @@ void TMdContr::cntrCmdProc(XMLNode * opt)
 		TMess::labTaskPrior());
 	return;
     }
-    //> Process command to page
+//> Process command to page
     TController::cntrCmdProc(opt);
 }
 
@@ -464,7 +482,7 @@ TMdPrm::TMdPrm(string name, TTypeParam * tp_prm) :
 
 TMdPrm::~TMdPrm()
 {
-    //!!! Call for prevent access to data the object from included nodes on destruction.
+//!!! Call for prevent access to data the object from included nodes on destruction.
     nodeDelAll();
 }
 
@@ -479,7 +497,7 @@ TMdContr & TMdPrm::owner()
     return (TMdContr &) TParamContr::owner();
 }
 
-bool TMdPrm::InitDI(DIM_CONFIGURATION* pConfigDIM)
+bool TMdPrm::InitDI(DIM_CONFIGURATION* pConfig)
 {
     bool fConfig;
     for(unsigned i_p = 0; i_p < nDI; i_p++) {
@@ -489,13 +507,263 @@ bool TMdPrm::InitDI(DIM_CONFIGURATION* pConfigDIM)
     }
     p_el.fldAdd(new TFld("C0", "C0", TFld::Integer, TFld::NoWrite | TVal::DirRead, "", "", "", "", ""));
     p_el.fldAdd(new TFld("C1", "C1", TFld::Integer, TFld::NoWrite | TVal::DirRead, "", "", "", "", ""));
-    if(pConfigDIM->debounce != cfg("DI_DEBOUNCE").getI()) {
+    if(pConfig->debounce != cfg("DI_DEBOUNCE").getI()) {
 	fConfig = true;
-	pConfigDIM->debounce = cfg("DI_DEBOUNCE").getI();
+	pConfig->debounce = cfg("DI_DEBOUNCE").getI();
     }
-    if(pConfigDIM->enableCounting != cfg("DI_COUNT").getI()) {
+    if(pConfig->enableCounting != cfg("DI_COUNT").getI()) {
 	fConfig = true;
-	pConfigDIM->enableCounting = cfg("DI_COUNT").getI();
+	pConfig->enableCounting = cfg("DI_COUNT").getI();
+    }
+    return fConfig;
+}
+bool TMdPrm::InitDIM718(DIM718_CONFIGURATION* pConfig)
+{
+    bool fConfig = false;
+    mDOState = 0;
+    for(unsigned i_p = 0; i_p < nDO; i_p++) {
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("DO%d", i_p).c_str(), TSYS::strMess("DO%d", i_p).c_str(), TFld::Boolean, TVal::DirRead | TVal::DirWrite, "", "", "", "",
+			""));
+    }
+    return fConfig;
+}
+
+bool TMdPrm::InitAIM726(AIM726_CONFIGURATION* pConfig)
+{
+    bool fConfig = false;
+    kAI = 40.0 / 8388607;
+    for(unsigned i_p = 0; i_p < nAI; i_p++) {
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("AI%d", i_p).c_str(), TSYS::strMess("AI%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "", "", "", "",
+			""));
+    }
+    if(pConfig->filterOptions0 != cfg("AI_FILTER").getI()) {
+	fConfig = true;
+	pConfig->filterOptions0 = cfg("AI_FILTER").getI();
+    }
+    if(pConfig->filterOptions1 != cfg("AI_FILTER").getI()) {
+	fConfig = true;
+	pConfig->filterOptions1 = cfg("AI_FILTER").getI();
+    }
+    return fConfig;
+}
+
+bool TMdPrm::InitAIM730(AIM730_CONFIGURATION* pConfig)
+{
+    bool fConfig = false;
+    for(unsigned i_p = 0; i_p < nAO; i_p++) {
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("AO%d", i_p).c_str(), TSYS::strMess("AO%d", i_p).c_str(), TFld::Double, TVal::DirRead | TVal::DirWrite, "", "", "", "",
+			""));
+    }
+    if(pConfig->outputRange0 != cfg("AO_RANGE").getI()) {
+	fConfig = true;
+	pConfig->outputRange0 = cfg("AO_RANGE").getI();
+    }
+    if(pConfig->outputRange1 != cfg("AO_RANGE").getI()) {
+	fConfig = true;
+	pConfig->outputRange1 = cfg("AO_RANGE").getI();
+    }
+    switch(cfg("AO_RANGE").getI()) {
+    case 0:
+	kAO = 20.0 / 65535;
+	dAO = 0;
+	break;
+    case 1:
+	kAO = 16.0 / 65535;
+	dAO = 4;
+	break;
+    }
+    return fConfig;
+}
+
+bool TMdPrm::InitAIM791(AIM791_CONFIGURATION* pConfig)
+{
+    bool fConfig = false;
+    for(unsigned i_p = 0; i_p < nAI; i_p++) {
+	if(pConfig->channelRanges[i_p] != cfg("AI_RANGE").getI()) {
+	    fConfig = true;
+	    pConfig->channelRanges[i_p] = cfg("AI_RANGE").getI();
+	}
+	if(pConfig->lowLimit[i_p] != 0) {
+	    fConfig = true;
+	    pConfig->lowLimit[i_p] = 0;
+	}
+	if(pConfig->highLimit[i_p] != 0xFFFF) {
+	    fConfig = true;
+	    pConfig->highLimit[i_p] = 0xFFFF;
+	}
+    }
+
+    switch(cfg("AI_RANGE").getI()) {
+    case 0:
+	kAI = 5.125 / 65535;
+	break;
+    case 1:
+    case 2:
+	kAI = 20.5 / 65535;
+	break;
+    }
+    for(unsigned i_p = 0; i_p < nAI; i_p++) {
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("AI%d", i_p).c_str(), TSYS::strMess("AI%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "", "", "", "",
+			""));
+    }
+    return fConfig;
+}
+
+bool TMdPrm::InitAIM725(AIM725_CONFIGURATION* pConfig)
+{
+    bool fConfig = false;
+    if(pConfig->scanRate != 0) {
+	fConfig = true;
+	pConfig->scanRate = 0;
+    }
+    if(pConfig->channels_selection != AIM724_5_USE_BOTH_CHANNELS) {
+	fConfig = true;
+	pConfig->channels_selection = AIM724_5_USE_BOTH_CHANNELS;
+    }
+    if(pConfig->inputRange != cfg("AI_RANGE").getI()) {
+	fConfig = true;
+	pConfig->inputRange = cfg("AI_RANGE").getI();
+    }
+    if(pConfig->connectionType != cfg("AI_TYPE").getI()) {
+	fConfig = true;
+	pConfig->connectionType = cfg("AI_TYPE").getI();
+    }
+    kAI = 1;
+    for(unsigned i_p = 0; i_p < nAI; i_p++) {
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("AI%d", i_p).c_str(), TSYS::strMess("AI%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "", "", "", "",
+			""));
+    }
+    return fConfig;
+}
+
+bool TMdPrm::InitDIM7656(DIM7656_CONFIGURATION* pConfig, FIO_MODULE_TYPE type)
+{
+    bool fConfig = false;
+    if(pConfig->shunt0 != cfg("DI_TYPE_0").getI()) {
+	fConfig = true;
+	pConfig->shunt0 = cfg("DI_TYPE_0").getI();
+    }
+    if(pConfig->shunt1 != cfg("DI_TYPE_1").getI()) {
+	fConfig = true;
+	pConfig->shunt1 = cfg("DI_TYPE_1").getI();
+    }
+    if(pConfig->shunt2 != cfg("DI_TYPE_2").getI()) {
+	fConfig = true;
+	pConfig->shunt2 = cfg("DI_TYPE_2").getI();
+    }
+    if(pConfig->shunt3 != cfg("DI_TYPE_3").getI()) {
+	fConfig = true;
+	pConfig->shunt3 = cfg("DI_TYPE_3").getI();
+    }
+    if(pConfig->shunt4 != cfg("DI_TYPE_4").getI()) {
+	fConfig = true;
+	pConfig->shunt4 = cfg("DI_TYPE_4").getI();
+    }
+    if(pConfig->shunt5 != cfg("DI_TYPE_5").getI()) {
+	fConfig = true;
+	pConfig->shunt5 = cfg("DI_TYPE_5").getI();
+    }
+    if(pConfig->shunt6 != cfg("DI_TYPE_6").getI()) {
+	fConfig = true;
+	pConfig->shunt6 = cfg("DI_TYPE_6").getI();
+    }
+    if(pConfig->shunt7 != cfg("DI_TYPE_7").getI()) {
+	fConfig = true;
+	pConfig->shunt7 = cfg("DI_TYPE_7").getI();
+    }
+
+    if(pConfig->switchOnDelay0 != cfg("DI_DEBOUNCE_ON_0").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay0 = cfg("DI_DEBOUNCE_ON_0").getI();
+    }
+    if(pConfig->switchOnDelay1 != cfg("DI_DEBOUNCE_ON_1").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay1 = cfg("DI_DEBOUNCE_ON_1").getI();
+    }
+    if(pConfig->switchOnDelay2 != cfg("DI_DEBOUNCE_ON_2").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay2 = cfg("DI_DEBOUNCE_ON_2").getI();
+    }
+    if(pConfig->switchOnDelay3 != cfg("DI_DEBOUNCE_ON_3").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay3 = cfg("DI_DEBOUNCE_ON_3").getI();
+    }
+    if(pConfig->switchOnDelay4 != cfg("DI_DEBOUNCE_ON_4").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay4 = cfg("DI_DEBOUNCE_ON_4").getI();
+    }
+    if(pConfig->switchOnDelay5 != cfg("DI_DEBOUNCE_ON_5").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay5 = cfg("DI_DEBOUNCE_ON_5").getI();
+    }
+    if(pConfig->switchOnDelay6 != cfg("DI_DEBOUNCE_ON_6").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay6 = cfg("DI_DEBOUNCE_ON_6").getI();
+    }
+    if(pConfig->switchOnDelay7 != cfg("DI_DEBOUNCE_ON_7").getI()) {
+	fConfig = true;
+	pConfig->switchOnDelay7 = cfg("DI_DEBOUNCE_ON_7").getI();
+    }
+
+    if(pConfig->switchOffDelay0 != cfg("DI_DEBOUNCE_OFF_0").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay0 = cfg("DI_DEBOUNCE_OFF_0").getI();
+    }
+    if(pConfig->switchOffDelay1 != cfg("DI_DEBOUNCE_OFF_1").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay1 = cfg("DI_DEBOUNCE_OFF_1").getI();
+    }
+    if(pConfig->switchOffDelay2 != cfg("DI_DEBOUNCE_OFF_2").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay2 = cfg("DI_DEBOUNCE_OFF_2").getI();
+    }
+    if(pConfig->switchOffDelay3 != cfg("DI_DEBOUNCE_OFF_3").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay3 = cfg("DI_DEBOUNCE_OFF_3").getI();
+    }
+    if(pConfig->switchOffDelay4 != cfg("DI_DEBOUNCE_OFF_4").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay4 = cfg("DI_DEBOUNCE_OFF_4").getI();
+    }
+    if(pConfig->switchOffDelay5 != cfg("DI_DEBOUNCE_OFF_5").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay5 = cfg("DI_DEBOUNCE_OFF_5").getI();
+    }
+    if(pConfig->switchOffDelay6 != cfg("DI_DEBOUNCE_OFF_6").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay6 = cfg("DI_DEBOUNCE_OFF_6").getI();
+    }
+    if(pConfig->switchOffDelay7 != cfg("DI_DEBOUNCE_OFF_7").getI()) {
+	fConfig = true;
+	pConfig->switchOffDelay7 = cfg("DI_DEBOUNCE_OFF_7").getI();
+    }
+
+    kAI = 7.4655;
+    if(type == FIO_MODULE_DIM765) {
+	kAIC = 4.0161;
+    } else {
+	kAIC = 3.7422;
+    }
+
+    for(unsigned i_p = 0; i_p < nDI; i_p++) {
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("DI%d", i_p).c_str(), TSYS::strMess("DI%d", i_p).c_str(), TFld::Boolean, TFld::NoWrite | TVal::DirRead, "", "", "", "",
+			""));
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("BREAK%d", i_p).c_str(), TSYS::strMess(_("Break %d"), i_p).c_str(), TFld::Boolean, TFld::NoWrite | TVal::DirRead, "", "",
+			"", "", ""));
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("V%d", i_p).c_str(), TSYS::strMess("V%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "", "", "", "",
+			""));
+	p_el.fldAdd(
+		new TFld(TSYS::strMess("I%d", i_p).c_str(), TSYS::strMess("I%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "", "", "", "",
+			""));
+
     }
     return fConfig;
 }
@@ -505,7 +773,7 @@ void TMdPrm::enable()
     if(enableStat()) return;
 
     TParamContr::enable();
-    //Delete DAQ parameter's attributes
+//Delete DAQ parameter's attributes
     for(unsigned i_f = 0; i_f < p_el.fldSize();) {
 	try {
 	    p_el.fldDel(i_f);
@@ -515,10 +783,6 @@ void TMdPrm::enable()
 	}
 	i_f++;
     }
-    AIM72X_2_CONFIGURATION *pConfig72X_2;
-    AIM7912_CONFIGURATION *pConfig7912;
-    AIM730_CONFIGURATION *pConfig730;
-    AIM725_CONFIGURATION *pConfig725;
     bool fConfig = false;
     owner().prmEn(id(), true);
     try {
@@ -535,140 +799,52 @@ void TMdPrm::enable()
 	    mModComConfig.outputSync = FBUS_UNDEFINED_SYNC_ID;
 	}
 	mTypeName = mModDesc.typeName;
-	if(type().name == mModDesc.typeName) {
-	    mState = StateWork;
-	    switch(mModDesc.type) {
-	    case FIO_MODULE_DIM762:
-		nDI = 8;
-		fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
-		break;
-	    case FIO_MODULE_DIM716:
-		nDI = 2;
-		fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
-		break;
-	    case FIO_MODULE_DIM718:
-		nDO = 8;
-		mDOState = 0;
-		for(unsigned i_p = 0; i_p < nDO; i_p++) {
-		    p_el.fldAdd(
-			    new TFld(TSYS::strMess("DO%d", i_p).c_str(), TSYS::strMess("DO%d", i_p).c_str(), TFld::Boolean, TVal::DirRead | TVal::DirWrite, "",
-				    "", "", "", ""));
-		}
-		break;
-	    case FIO_MODULE_AIM726:
-		nAI = 2;
-		pConfig72X_2 = (AIM72X_2_CONFIGURATION *) mModConfig;
-		kAI = 40.0 / 8388607;
-		for(unsigned i_p = 0; i_p < nAI; i_p++) {
-		    p_el.fldAdd(
-			    new TFld(TSYS::strMess("AI%d", i_p).c_str(), TSYS::strMess("AI%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "",
-				    "", "", "", ""));
-		}
-		break;
-	    case FIO_MODULE_AIM730:
-		nAO = 2;
-		owner().ReadConfig(mID);
-		owner().GetNodeSpecificParameters(mID, mModConfig, 0, mModDesc.specificRwSize);
-		pConfig730 = (AIM730_CONFIGURATION *) mModConfig;
-		for(unsigned i_p = 0; i_p < nAO; i_p++) {
-		    p_el.fldAdd(
-			    new TFld(TSYS::strMess("AO%d", i_p).c_str(), TSYS::strMess("AO%d", i_p).c_str(), TFld::Double, TVal::DirRead | TVal::DirWrite, "",
-				    "", "", "", ""));
-		}
-		if(pConfig730->outputRange0 != cfg("AO_RANGE").getI()) {
-		    fConfig = true;
-		    pConfig730->outputRange0 = cfg("AO_RANGE").getI();
-		}
-		if(pConfig730->outputRange1 != cfg("AO_RANGE").getI()) {
-		    fConfig = true;
-		    pConfig730->outputRange1 = cfg("AO_RANGE").getI();
-		}
-		switch(cfg("AO_RANGE").getI()) {
-		case 0:
-		    kAO = 20.0 / 65535;
-		    dAO = 0;
-		    break;
-		case 1:
-		    kAO = 16.0 / 65535;
-		    dAO = 4;
-		    break;
-		}
-		break;
-	    case FIO_MODULE_AIM791:
-		nAI = 8;
-		owner().ReadConfig(mID);
-		owner().GetNodeSpecificParameters(mID, mModConfig, 0, mModDesc.specificRwSize);
-		pConfig7912 = (AIM7912_CONFIGURATION *) mModConfig;
-		for(unsigned i_p = 0; i_p < nAI; i_p++) {
-		    if(pConfig7912->channelRanges[i_p] != cfg("AI_RANGE").getI()) {
-			fConfig = true;
-			pConfig7912->channelRanges[i_p] = cfg("AI_RANGE").getI();
-		    }
-		    if(pConfig7912->lowLimit[i_p] != 0) {
-			fConfig = true;
-			pConfig7912->lowLimit[i_p] = 0;
-		    }
-		    if(pConfig7912->highLimit[i_p] != 0xFFFF) {
-			fConfig = true;
-			pConfig7912->highLimit[i_p] = 0xFFFF;
-		    }
-		}
+	mState = StateWork;
+	switch(mModDesc.type) {
+	case FIO_MODULE_DIM762:
+	    nDI = 8;
+	    fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
+	    break;
+	case FIO_MODULE_DIM716:
+	    nDI = 2;
+	    fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
+	    break;
+	case FIO_MODULE_DIM718:
+	    nDO = 8;
+	    fConfig = InitDIM718((DIM718_CONFIGURATION *) mModConfig);
+	    break;
+	case FIO_MODULE_AIM726:
+	    nAI = 2;
+	    fConfig = InitAIM726((AIM726_CONFIGURATION *) mModConfig);
+	    break;
+	case FIO_MODULE_AIM730:
+	    nAO = 2;
+	    fConfig = InitAIM730((AIM730_CONFIGURATION *) mModConfig);
+	    break;
+	case FIO_MODULE_AIM791:
+	    nAI = 8;
+	    fConfig = InitAIM791((AIM791_CONFIGURATION *) mModConfig);
+	    break;
+	case FIO_MODULE_AIM725:
+	    nAI = 2;
+	    fConfig = InitAIM725((AIM725_CONFIGURATION *) mModConfig);
+	    break;
+	case FIO_MODULE_DIM765:
+	case FIO_MODULE_DIM766:
+	    nDI = 8;
+	    nAI = 8;
+	    fConfig = InitDIM7656((DIM7656_CONFIGURATION *) mModConfig, mModDesc.type);
+	    break;
 
-		switch(cfg("AI_RANGE").getI()) {
-		case 0:
-		    kAI = 5.125 / 65535;
-		    break;
-		case 1:
-		case 2:
-		    kAI = 20.5 / 65535;
-		    break;
-		}
-		for(unsigned i_p = 0; i_p < nAI; i_p++) {
-		    p_el.fldAdd(
-			    new TFld(TSYS::strMess("AI%d", i_p).c_str(), TSYS::strMess("AI%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "",
-				    "", "", "", ""));
-		}
-		break;
-	    case FIO_MODULE_AIM725:
-		nAI = 2;
-		owner().ReadConfig(mID);
-		owner().GetNodeSpecificParameters(mID, mModConfig, 0, mModDesc.specificRwSize);
-		pConfig725 = (AIM725_CONFIGURATION *) mModConfig;
-		if(pConfig725->scanRate != 0) {
-		    fConfig = true;
-		    pConfig725->scanRate = 0;
-		}
-		if(pConfig725->channels_selection != AIM724_5_USE_BOTH_CHANNELS) {
-		    fConfig = true;
-		    pConfig725->channels_selection = AIM724_5_USE_BOTH_CHANNELS;
-		}
-		if(pConfig725->inputRange != cfg("AI_RANGE").getI()) {
-		    fConfig = true;
-		    pConfig725->inputRange = cfg("AI_RANGE").getI();
-		}
-		if(pConfig725->connectionType != cfg("AI_TYPE").getI()) {
-		    fConfig = true;
-		    pConfig725->connectionType = cfg("AI_TYPE").getI();
-		}
-		kAI = 1;
-		for(unsigned i_p = 0; i_p < nAI; i_p++) {
-		    p_el.fldAdd(
-			    new TFld(TSYS::strMess("AI%d", i_p).c_str(), TSYS::strMess("AI%d", i_p).c_str(), TFld::Double, TFld::NoWrite | TVal::DirRead, "",
-				    "", "", "", ""));
-		}
-		break;
-
-	    default:
-		break;
-	    }
-	    if(fConfig) {
-		owner().SetNodeSpecificParameters(mID, mModConfig, 0, mModDesc.specificRwSize);
-		owner().SetNodeCommonParameters(mID, &mModComConfig, sizeof(mModComConfig));
-		owner().WriteConfig(mID);
-		owner().SaveConfig(mID);
-	    }
-	} else {
+	default:
 	    mState = StateWrongType;
+	    break;
+	}
+	if(fConfig) {
+	    owner().SetNodeSpecificParameters(mID, mModConfig, 0, mModDesc.specificRwSize);
+	    owner().SetNodeCommonParameters(mID, &mModComConfig, sizeof(mModComConfig));
+	    owner().WriteConfig(mID);
+	    owner().SaveConfig(mID);
 	}
     } catch (TError err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -685,7 +861,7 @@ void TMdPrm::disable()
 
     TParamContr::disable();
 
-    //> Set EVAL to parameter attributes
+//> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
@@ -763,11 +939,35 @@ void TMdPrm::getVals()
 		} else {
 		    vlAt(TSYS::strMess("AI0").c_str()).at().setR(EVAL_REAL, 0, true);
 		}
-		if(((((AIM725_INPUTS *) buf)->diagnostics) & 0x0E) == 0){
+		if(((((AIM725_INPUTS *) buf)->diagnostics) & 0x0E) == 0) {
 		    vlAt(TSYS::strMess("AI1").c_str()).at().setR(((AIM725_INPUTS *) buf)->channel1, 0, true);
 		} else {
 		    vlAt(TSYS::strMess("AI1").c_str()).at().setR(EVAL_REAL, 0, true);
 		}
+		break;
+	    case FIO_MODULE_DIM765:
+	    case FIO_MODULE_DIM766:
+		for(unsigned i_p = 0; i_p < nDI; i_p++) {
+		    vlAt(TSYS::strMess("DI%d", i_p).c_str()).at().setB(((((DIM7656_INPUTS *) buf)->channelsState) >> i_p) & 1, 0, true);
+		    vlAt(TSYS::strMess("BREAK%d", i_p).c_str()).at().setB(((((DIM7656_INPUTS *) buf)->wireBreaks) >> i_p) & 1, 0, true);
+		}
+		vlAt(TSYS::strMess("V0").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v0 * kAI, 0, true);
+		vlAt(TSYS::strMess("V1").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v1 * kAI, 0, true);
+		vlAt(TSYS::strMess("V2").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v2 * kAI, 0, true);
+		vlAt(TSYS::strMess("V3").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v3 * kAI, 0, true);
+		vlAt(TSYS::strMess("V4").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v4 * kAI, 0, true);
+		vlAt(TSYS::strMess("V5").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v5 * kAI, 0, true);
+		vlAt(TSYS::strMess("V6").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v6 * kAI, 0, true);
+		vlAt(TSYS::strMess("V7").c_str()).at().setR(((DIM7656_INPUTS *) buf)->v7 * kAI, 0, true);
+
+		vlAt(TSYS::strMess("I0").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i0 * kAIC, 0, true);
+		vlAt(TSYS::strMess("I1").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i1 * kAIC, 0, true);
+		vlAt(TSYS::strMess("I2").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i2 * kAIC, 0, true);
+		vlAt(TSYS::strMess("I3").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i3 * kAIC, 0, true);
+		vlAt(TSYS::strMess("I4").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i4 * kAIC, 0, true);
+		vlAt(TSYS::strMess("I5").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i5 * kAIC, 0, true);
+		vlAt(TSYS::strMess("I6").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i6 * kAIC, 0, true);
+		vlAt(TSYS::strMess("I7").c_str()).at().setR(((DIM7656_INPUTS *) buf)->i7 * kAIC, 0, true);
 		break;
 
 	    default:
@@ -789,7 +989,7 @@ void TMdPrm::vlSet(TVal & vo, const TVariant & vl, const TVariant & pvl)
 
     if(vl.isEVal() || vl == pvl) return;
 
-    //Send to active reserve station
+//Send to active reserve station
     if(owner().redntUse()) {
 	XMLNode req("set");
 	req.setAttr("path", nodePath(0, true) + "/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
@@ -839,21 +1039,21 @@ void TMdPrm::vlSet(TVal & vo, const TVariant & vl, const TVariant & pvl)
 
 void TMdPrm::cntrCmdProc(XMLNode * opt)
 {
-    //> Service commands process
+//> Service commands process
     string a_path = opt->attr("path");
     if(a_path.substr(0, 6) == "/serv/") {
 	TParamContr::cntrCmdProc(opt);
 	return;
     }
 
-    //> Get page info
+//> Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	//ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
 
-    //> Process command to page
+//> Process command to page
     else
 	TParamContr::cntrCmdProc(opt);
 }

@@ -33,7 +33,7 @@ namespace FT3
 	uint16_t count_n;
 	bool with_params;
 	uint16_t Task(uint16_t);
-	uint16_t HandleEvent(uint8_t *);
+	uint16_t HandleEvent(int64_t, uint8_t *);
 	uint16_t setVal(TVal &val);
 	string getStatus(void);
     };

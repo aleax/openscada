@@ -80,7 +80,7 @@ namespace FT3
 	virtual uint16_t Task(uint16_t)
 	{
 	}
-	virtual uint16_t HandleEvent(uint8_t *)
+	virtual uint16_t HandleEvent(int64_t, uint8_t *)
 	{
 	}
 	virtual uint16_t setVal(TVal &)

@@ -225,7 +225,7 @@ uint16_t KA_BVT::Task(uint16_t uc)
     uint16_t rc = 0;
     return rc;
 }
-uint16_t KA_BVT::HandleEvent(uint8_t * D)
+uint16_t KA_BVT::HandleEvent(int64_t tm, uint8_t * D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
@@ -501,13 +501,11 @@ uint16_t B_BVT::Task(uint16_t uc)
 	Msg.L = 5;
 	Msg.C = AddrReq;
 	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //состояние
-	if(mPrm.owner().Transact(&Msg)) {
+	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(Msg.C == GOOD3) {
-		mPrm.vlAt("state").at().setI(Msg.D[7], 0, true);
 		if(with_params) {
 		    for(int i = 1; i <= count_n; i++) {
 			if(chan_err[i].state == 1) continue;
-//			mess_info(mPrm.nodePath().c_str(), "Refreshing channel %d", i);
 			Msg.L = 21;
 			Msg.C = AddrReq;
 			*((uint16_t *) Msg.D) = PackID(ID, i, 1); //Значение ТT
@@ -531,44 +529,19 @@ uint16_t B_BVT::Task(uint16_t uc)
 			    }
 			}
 
-			if(mPrm.owner().Transact(&Msg)) {
+			if(mPrm.owner().DoCmd(&Msg)) {
 			    if(Msg.C == GOOD3) {
-				mPrm.vlAt(TSYS::strMess("state_%d", i).c_str()).at().setI(Msg.D[7], 0, true);
-				mPrm.vlAt(TSYS::strMess("value_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 8), 0, true);
-				mPrm.vlAt(TSYS::strMess("period_%d", i).c_str()).at().setI(Msg.D[17], 0, true);
-				mPrm.vlAt(TSYS::strMess("sens_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 23), 0, true);
-				mPrm.vlAt(TSYS::strMess("minS_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 32), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxS_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 36), 0, true);
-				mPrm.vlAt(TSYS::strMess("minPV_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 45), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxPV_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 49), 0, true);
-				mPrm.vlAt(TSYS::strMess("minW_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 58), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxW_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 62), 0, true);
-				mPrm.vlAt(TSYS::strMess("minA_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 71), 0, true);
-				mPrm.vlAt(TSYS::strMess("maxA_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 75), 0, true);
-				mPrm.vlAt(TSYS::strMess("factor_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 84), 0, true);
-				mPrm.vlAt(TSYS::strMess("dimens_%d", i).c_str()).at().setI(Msg.D[93], 0, true);
-				if(with_k) {
-				    mPrm.vlAt(TSYS::strMess("corfactor_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 99), 0, true);
-				    if(with_rate) {
-					mPrm.vlAt(TSYS::strMess("rate_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 108), 0, true);
-					mPrm.vlAt(TSYS::strMess("calcs_%d", i).c_str()).at().setI(Msg.D[117], 0, true);
-					mPrm.vlAt(TSYS::strMess("ratesens_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 123), 0, true);
-					mPrm.vlAt(TSYS::strMess("ratelimit_%d", i).c_str()).at().setR(TSYS::getUnalignFloat(Msg.D + 132), 0, true);
-				    }
-				}
 				chan_err[i].state = 1;
 				rc = 1;
 			    } else {
 				rc = 0;
 				chan_err[i].state = 2;
 				NeedInit = true;
-				//	break;
 			    }
 			} else {
 			    rc = 0;
 			    chan_err[i].state = 3;
 			    NeedInit = true;
-			    //break;
 			}
 
 		    }
@@ -581,7 +554,7 @@ uint16_t B_BVT::Task(uint16_t uc)
     }
     return rc;
 }
-uint16_t B_BVT::HandleEvent(uint8_t * D)
+uint16_t B_BVT::HandleEvent(int64_t tm, uint8_t * D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
@@ -590,15 +563,15 @@ uint16_t B_BVT::HandleEvent(uint8_t * D)
     case 0:
 	switch(ft3ID.n) {
 	case 0:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt("state").at().setI(D[2], 0, true);
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n * 5;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], 0, true);
-		mPrm.vlAt(TSYS::strMess("value_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], tm, true);
+		mPrm.vlAt(TSYS::strMess("value_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), tm, true);
 	    }
 	    break;
 	case 2:
@@ -606,7 +579,7 @@ uint16_t B_BVT::HandleEvent(uint8_t * D)
 	    l = 3 + count_n * 5;
 	    for(int j = 1; j <= count_n; j++) {
 		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], 0, true);
-		mPrm.vlAt(TSYS::strMess("ratelimit_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), 0, true);
+		mPrm.vlAt(TSYS::strMess("ratelimit_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), tm, true);
 	    }
 	    break;
 
@@ -616,94 +589,94 @@ uint16_t B_BVT::HandleEvent(uint8_t * D)
 	if(ft3ID.k && (ft3ID.k <= count_n)) {
 	    switch(ft3ID.n) {
 	    case 0:
-		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
 		l = 3;
 		break;
 	    case 1:
-		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], 0, true);
-		mPrm.vlAt(TSYS::strMess("value_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
+		mPrm.vlAt(TSYS::strMess("value_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 
 		l = 7;
 		break;
 	    case 2:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("period_%d", ft3ID.k).c_str()).at().setI(D[3], 0, true);
+		    mPrm.vlAt(TSYS::strMess("period_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
 		}
 		l = 4;
 		break;
 	    case 3:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("sens_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		    mPrm.vlAt(TSYS::strMess("sens_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		}
 		l = 7;
 		break;
 	    case 4:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minS_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxS_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
+		    mPrm.vlAt(TSYS::strMess("minS_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		    mPrm.vlAt(TSYS::strMess("maxS_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		}
 		l = 11;
 		break;
 	    case 5:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
+		    mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		    mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		}
 		l = 11;
 		break;
 	    case 6:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
+		    mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		    mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		}
 		l = 11;
 		break;
 	    case 7:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
-		    mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), 0, true);
+		    mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		    mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		}
 		l = 11;
 		break;
 	    case 8:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("factor_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		    mPrm.vlAt(TSYS::strMess("factor_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		}
 		l = 7;
 		break;
 	    case 9:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("dimens_%d", ft3ID.k).c_str()).at().setI(D[3], 0, true);
+		    mPrm.vlAt(TSYS::strMess("dimens_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
 		}
 		l = 4;
 		break;
 	    case 10:
 		if(with_params && with_k) {
-		    mPrm.vlAt(TSYS::strMess("corfactor_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		    mPrm.vlAt(TSYS::strMess("corfactor_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		}
 		l = 7;
 		break;
 	    case 11:
 		if(with_params && with_rate) {
-		    mPrm.vlAt(TSYS::strMess("rate_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		    mPrm.vlAt(TSYS::strMess("rate_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		}
 		l = 7;
 		break;
 	    case 12:
 		if(with_params && with_rate) {
-		    mPrm.vlAt(TSYS::strMess("calcs_%d", ft3ID.k).c_str()).at().setI(D[3], 0, true);
+		    mPrm.vlAt(TSYS::strMess("calcs_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
 		}
 		l = 4;
 		break;
 	    case 13:
 		if(with_params && with_rate) {
-		    mPrm.vlAt(TSYS::strMess("ratesens_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		    mPrm.vlAt(TSYS::strMess("ratesens_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		}
 		l = 7;
 		break;
 	    case 14:
 		if(with_params && with_rate) {
-		    mPrm.vlAt(TSYS::strMess("ratelimit_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), 0, true);
+		    mPrm.vlAt(TSYS::strMess("ratelimit_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		}
 		l = 7;
 		break;
@@ -909,8 +882,8 @@ uint16_t B_BVT::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
+    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
+    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
     ft3ID.g = ID;
     tagMsg Msg;
     Msg.L = 0;
@@ -952,7 +925,7 @@ uint16_t B_BVT::setVal(TVal &val)
 	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().getR(0, true);
 	break;
     }
-    if(Msg.L) mPrm.owner().Transact(&Msg);
+    if(Msg.L) mPrm.owner().DoCmd(&Msg);
     return 0;
 }
 
