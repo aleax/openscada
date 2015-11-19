@@ -3539,7 +3539,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    if(view->cntrIfCmd(req,true))	return;
 
 	    int64_t lst_tm = (s2ll(req.attr("tm"))/wantPer)*wantPer;
-	    if(lst_tm >= valEnd()) {
+	    if(lst_tm && lst_tm >= valEnd()) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;

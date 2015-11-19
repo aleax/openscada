@@ -517,7 +517,11 @@ void VisRun::printPg( const string &ipg )
 	painter.setViewport(prPg->paperRect());
 
 	//Draw image
+#if QT_VERSION >= 0x050000
+	QImage im = rpg->grab().toImage();
+#else
 	QImage im = QPixmap::grabWidget(rpg).toImage();
+#endif
 	im = im.scaled(QSize(vmin(im.width()*4,pagl.width()),vmin(im.height()*4,pagl.height()-2*fntSize)),Qt::KeepAspectRatio/*,Qt::SmoothTransformation*/);
 	painter.drawImage((pagl.width()-im.width())/2,fntSize,im);
 
@@ -588,7 +592,11 @@ void VisRun::printDiag( const string &idg )
 	painter.setViewport(prDiag->paperRect());
 
 	//Draw image
+#if QT_VERSION >= 0x050000
+	QImage im = rwdg->grab().toImage();
+#else
 	QImage im = QPixmap::grabWidget(rwdg).toImage();
+#endif
 	im = im.scaled(QSize(vmin(im.width()*4,pagl.width()),vmin(im.height()*4,pagl.height()-(2+elLine)*fntSize)),Qt::KeepAspectRatio/*,Qt::SmoothTransformation*/);
 	painter.drawImage((pagl.width()-im.width())/2,fntSize*2,im);
 
@@ -712,7 +720,11 @@ void VisRun::exportPg( const string &ipg )
     if(rpg->id() != pg)	rpg = findOpenPage(pg);
     if(!rpg) return;
 
+#if QT_VERSION >= 0x050000
+    QPixmap img = rpg->grab();
+#else
     QPixmap img = QPixmap::grabWidget(rpg);
+#endif
     QString fn = getFileName(_("Save page's image"), (rpg->name()+".png").c_str(), _("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
     if(fn.size() && !img.save(fn)) mod->postMess(mod->nodePath().c_str(), QString(_("Save to file '%1' is error.")).arg(fn), TVision::Error, this);
 }
@@ -750,7 +762,11 @@ void VisRun::exportDiag( const string &idg )
 
     if(!(rwdg=findOpenWidget(dg))) return;
 
+#if QT_VERSION >= 0x050000
+    QPixmap img = rwdg->grab();
+#else
     QPixmap img = QPixmap::grabWidget(rwdg);
+#endif
     QString fileName = getFileName(_("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
 	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty()) {

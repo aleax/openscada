@@ -1800,10 +1800,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);*/
 		    else if(tp == "real") {
 			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).width("3.14159265e123")+30);
-			val_w->setType(LineEdit::Text);
+			//val_w->setType(LineEdit::Text);
+#if QT_VERSION < 0x050000
 			QDoubleValidator *dv = new QDoubleValidator(val_w->workWdg());
 			dv->setNotation(QDoubleValidator::ScientificNotation);
 			((QLineEdit*)val_w->workWdg())->setValidator(dv);
+#endif
 			/*QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
 			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
 			val_w->setCfg(min+":"+max+":1:::4");*/
@@ -2344,6 +2346,7 @@ void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
 	if(max >= 0)	reqPrgrs->setMaximum(max);
 	if(lab.size())	reqPrgrs->setLabelText(lab);
 	reqPrgrsTimer->start();
+	if(cur && cur >= reqPrgrs->maximum())	reqPrgrs->setMaximum(cur+1);
 	reqPrgrs->setValue(cur);
     }
 }

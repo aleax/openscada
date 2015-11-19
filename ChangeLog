@@ -1,3 +1,13 @@
+2015-11-19 Roman
+- DB.LibsDB.OscadaLibs.db: regEl.pidUnifD adapted and tested for pulse with position, mostly for: manual positioner fix, switching to the manual mode.
+- SYS.TVariant: Debug counters conditions disabled for now for some performance rise.
+- FIX:DAQ.JvaLikeCalc: For library "run_st" renamed to "runSt" and init to false.
+- UI.QTCfg: QDoubleValidator for real value's fields disabled for Qt > 5.0.
+    Busy progress bar dialog adapted for first range set and it adapting as maximum to current.
+- UI.Vision: QPixmap::grabWidget() replaced to grab() for Qt > 5.0.
+- FIX:UI.{Vision,WebVision}: Crash into trand's data loading fix for no a value present (time = 0).
+
+
 2015-11-13 Roman
 - FIX:SYS: Wrong translation fix to Russian for the message "%s for type '%s' doesn't support module version: %d!"
 - Protocol.UserProtocol: Translation to the new messages appended.

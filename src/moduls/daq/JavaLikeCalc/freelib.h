@@ -50,9 +50,9 @@ class Lib : public TCntrNode, public TConfig
 	string id( )		{ return mId; }
 	string name( );
 	string descr( )		{ return cfg("DESCR").getS(); }
-	bool startStat( )	{ return run_st; }
+	bool startStat( )	{ return runSt; }
 
-	string DB( )		{ return work_lib_db; }
+	string DB( )		{ return workLibDb; }
 	string tbl( )		{ return cfg("DB").getS(); }
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
@@ -83,9 +83,9 @@ class Lib : public TCntrNode, public TConfig
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
     private:
-	bool	run_st;
+	bool	runSt;
 	int	mFnc;
-	string	work_lib_db;
+	string	workLibDb;
 	TCfg	&mId;
 };
 

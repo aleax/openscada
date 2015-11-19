@@ -2371,7 +2371,12 @@ void DevelWdgView::makeIcon( )
     setPalette(plt);
 
     fMakeIco = true;
+
+#if QT_VERSION >= 0x050000
+    QPixmap ico_new = grab();
+#else
     QPixmap ico_new = QPixmap::grabWidget(this);
+#endif
     fMakeIco = false;
     ico_new = ico_new.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     if(mMdiWin)	mMdiWin->parentWidget()->setWindowIcon(ico_new);	//parentWidget is QMdiSubWindow
@@ -2393,7 +2398,11 @@ void DevelWdgView::makeIcon( )
 
 void DevelWdgView::makeImage( )
 {
+#if QT_VERSION >= 0x050000
+    QPixmap img = grab();
+#else
     QPixmap img = QPixmap::grabWidget(this);
+#endif
 
     //Call save file dialog
     QString fileName = mainWin()->getFileName(_("Save widget's image"), (TSYS::path2sepstr(id())+".png").c_str(),

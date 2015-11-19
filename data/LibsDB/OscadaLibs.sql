@@ -2717,6 +2717,23 @@ INSERT INTO "Trs" VALUES('Set current','','');
 INSERT INTO "Trs" VALUES('Nether alarm border error','','');
 INSERT INTO "Trs" VALUES('Nether warning border error','','');
 INSERT INTO "Trs" VALUES('Device address out of range 0...15','','');
+INSERT INTO "Trs" VALUES('Respond too short','','');
+INSERT INTO "Trs" VALUES('Respond too long, possible continuous mode','','');
+INSERT INTO "Trs" VALUES('RS232 synchronization error. ','','');
+INSERT INTO "Trs" VALUES('Incorrect command, e.g. inadmissible address (syntax error). ','','');
+INSERT INTO "Trs" VALUES('Inadmissible read command. ','','');
+INSERT INTO "Trs" VALUES('SP1 status. ','','');
+INSERT INTO "Trs" VALUES('SP2 status. ','','');
+INSERT INTO "Trs" VALUES('Atm. pressure out of range. ','','');
+INSERT INTO "Trs" VALUES('Temperature out of range. ','','');
+INSERT INTO "Trs" VALUES('Cal. mode wrong. ','','');
+INSERT INTO "Trs" VALUES('Pressure underflow. ','','');
+INSERT INTO "Trs" VALUES('Pressure overflow. ','','');
+INSERT INTO "Trs" VALUES('Zero adjust warning. ','','');
+INSERT INTO "Trs" VALUES('PT1000 fault (CTR 101 only). ','','');
+INSERT INTO "Trs" VALUES('Heaterblock overtemp. ','','');
+INSERT INTO "Trs" VALUES('Electronic overtemp. ','','');
+INSERT INTO "Trs" VALUES('Zero adjust error. ','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -5127,7 +5144,12 @@ if(impAnImit) {
 	return max(0,min(100,out));
 }
 return impAnOut;','','',1441908785);
-INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply by editing it.','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',10,0,'if(f_start) { outA = out; impQupTm_ = impQdwnTm_ = 0; impQup_ = impQdwn_ = 0; }
+INSERT INTO "flb_regEl" VALUES('pidUnifD','PID dynamic','ПІД динамічний','ПИД динамический','Completely identical to unified PID regulator is implemented dynamically on JavaLikeCalc. The dynamic implementation allows you to easily adapt the regulator to the desired requirements, simply by editing it.','Повністю ідентичний уніфікованому ПІД регулятор, реалізований динамічно на JavaLikeCalc. Динамічна реалізація дозволяє легко адаптувати регулятор під потрібні вимоги, просто відредагувати його.','Полностью идентичный унифицированному ПИД регулятор, реализованный динамически на JavaLikeCalc. Динамическая реализация позволяет легко адаптировать регулятор под нужные требования, просто отредактировав его.',10,0,'if(f_start) {
+	auto_ = auto;
+	outA = out;
+	impQupTm_ = impQdwnTm_ = 0;
+	impQup_ = impQdwn_ = 0;
+}
 
 //Call standard analog PID
 Kzd = min(1e3/(f_frq*Tzd),1);
@@ -5179,7 +5201,7 @@ if(f_start || f_stop) { impQup = impQdwn = false; return 0; }
 
 //Call impuls generator
 //SYS.messInfo("PID","outA="+outA);
-outA_ = (impAnOut < 0) ? 2*(outA-50) : (outA-impAnOut);
+outA_ = (impAnOut < 0) ? 2*(outA-50) : 0.1*(outA-impAnOut);
 if(perLag <= 0 && ((outA_*KImpRfact) >= (100*TImpMin/TImpPer) || (-outA_/KImpRfact) >= (100*TImpMin/TImpPer) || (!auto && abs(outA_) > 0.1)))
 {
 	impLag = max(abs(outA_)*TImpPer/100,TImpMin);
@@ -5195,7 +5217,8 @@ else if(perLag > 0) {
 	}
 }
 
-if(!auto && impAnOut < 0) manIn = 50;
+if(!auto && auto != auto_)	manIn = (impAnOut < 0) ? 50 : impAnOut;
+auto_ = auto;
 
 if(impQup && !impQup_) impQupTm_ = 2*f_frq;
 impQupTm_ = max(0,impQupTm_-1);
@@ -5209,9 +5232,9 @@ impQdwn_ = impQdwn;
 if(impAnImit > 0) {
 	if(impQup)	out += 100/(impAnImit*f_frq);
 	if(impQdwn)	out -= 100/(impAnImit*f_frq);
-	return max(0,min(100,out));
+	return max(0, min(100,out));
 }
-return max(0,min(100,impAnOut));','','',1419594416);
+return max(0, min(100,impAnOut));','','',1447837882);
 INSERT INTO "flb_regEl" VALUES('pidImp','PID pulse','ПІД імпульсний','ПИД импульсный','Specialized pulse PID regulator is implemented on a special algorithm with compensation of double integration.','Спеціалізований імпульсний ПІД регулятор реалізований за особливим алгоритмом з компенсацією подвійного інтегрування.','Специализированный импульсный ПИД регулятор реализованный по особому алгоритму с компенсацией двойного интегрирования.',10,1,'//> Call standard analog PID
 Kzd = min(1e3/(f_frq*Tzd),1);
 Kint = min(1e3/(f_frq*Ti),1);

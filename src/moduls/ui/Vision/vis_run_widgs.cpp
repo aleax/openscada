@@ -225,7 +225,11 @@ bool RunWdgView::isVisible( QPoint pos )
     setPalette(plt);
 
     //Grab widget and check it for no zero
+#if QT_VERSION >= 0x050000
+    return grab().toImage().pixel(pos);
+#else
     return QPixmap::grabWidget(this).toImage().pixel(pos);
+#endif
 }
 
 bool RunWdgView::event( QEvent *event )
