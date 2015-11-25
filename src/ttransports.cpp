@@ -335,8 +335,7 @@ void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
     ResAlloc res(extHostRes, true);
     int usrHstId = -1, sysHstId = -1;
     for(int i_h = 0; i_h < (int)extHostLs.size() && (usrHstId < 0 || sysHstId < 0); i_h++)
-	if(extHostLs[i_h].id == host.id)
-	{
+	if(extHostLs[i_h].id == host.id) {
 	    if(host.mode < 0) { if(host.user_open == extHostLs[i_h].user_open) { usrHstId = i_h; break; } }
 	    else if(extHostLs[i_h].user_open == host.user_open)	usrHstId = i_h;
 	    else if(extHostLs[i_h].user_open == "*")		sysHstId = i_h;
@@ -929,7 +928,17 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     }
     // string status( ) - the transport status
     if(iid == "status")	return getStatus();
-    // string addr( string vl = "" ) - the transport address return, set the to no empty <vl>
+    // bool start( bool vl = <EVAL>, int tm = 0 ) - the transport start status return, start/stop it by <vl> is not <EVAL>
+    if(iid == "start") {
+	char com = prms.size() ? prms[0].getB() : EVAL_BOOL;
+	try {
+	    if(com == 0 && startStat())		stop();
+	    else if(com == 1 && !startStat())	start((prms.size()>=2)?prms[1].getI():0);
+	} catch(TError) { }
+
+	return startStat();
+    }
+    // string addr( string vl = "" ) - the transport address return, set it to no empty <vl>
     if(iid == "addr") {
 	if(prms.size() && prms[0].getS().size())
 	    try{ setAddr(prms[0].getS()); } catch(TError) { }

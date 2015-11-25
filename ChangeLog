@@ -1,3 +1,8 @@
+2015-11-25 Roman
+- Transports: User API function {TrOut}.start() added for fast control for the output transport state.
+- FIX:UI.VCAEngine: To function of a widget changes down to the parrent added checking for the recurrence inheritance prevent.
+
+
 2015-11-19 Roman
 - DB.LibsDB.OscadaLibs.db: regEl.pidUnifD adapted and tested for pulse with position, mostly for: manual positioner fix, switching to the manual mode.
 - SYS.TVariant: Debug counters conditions disabled for now for some performance rise.

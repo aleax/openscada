@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 13:39+0300\n"
+"POT-Creation-Date: 2015-11-25 14:40+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1684,6 +1684,13 @@ msgstr "Помилка вимкнення наслідуючого віджет�
 #, c-format
 msgid "Child widget '%s' enable/disable error."
 msgstr "Помилка включення/вимкнення дочірнього віджета '%s'."
+
+#, c-format
+msgid ""
+"Impossible to lower changes of the widget '%s' to '%s' but it has the cyclic "
+"inheritance!"
+msgstr ""
+"Неможливо опустити зміни віджета '%s' до '%s' через циклічну спадковість!"
 
 #, c-format
 msgid "Adding a new attribute '%s' number more to %d!"

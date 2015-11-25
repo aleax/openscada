@@ -237,8 +237,7 @@ void Widget::setEnable( bool val )
 		if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
 
-		if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path())
-		{
+		if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path()) {
 		    mParent.free();
 		    throw TError(nodePath().c_str(),_("Parent identical to owner for link!"));
 		}
@@ -460,9 +459,16 @@ string Widget::wChDown( const string &ia )
     if(isLink()) {
 	Widget *ownW = dynamic_cast<Widget*>(nodePrev(true));
 	parw = ownW->parent();
+
+	// Check for the recurrence inheritance prevent
+	for(AutoHD<Widget> iParw = this; !iParw.freeStat(); iParw = iParw.at().parent())
+	    if(iParw.at().path() == parw.at().path())
+		throw TError(nodePath().c_str(), _("Impossible to lower changes of the widget '%s' to '%s' but it has the cyclic inheritance!"),
+			path().c_str(), parw.at().path().c_str());
+
+	// Add and copy it from the source
 	if(!parw.at().wdgPresent(id()))
 	    try {
-		// Add and copy from source
 		string pName = parentNm();
 		if(pName.find(parw.at().path()+"/") == 0) pName = parent().at().parentNm();
 		parw.at().wdgAdd(id(), "", pName);
