@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 20:43+0200\n"
+"POT-Creation-Date: 2015-11-25 22:31+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -52,8 +52,8 @@ msgid "Socket name '%s' error!"
 msgstr "Помилка у імені '%s' сокету!"
 
 #, c-format
-msgid "Connect to Internet socket error: %s!"
-msgstr "Помилка підключення до Internet сокету: %s!"
+msgid "Connect to Internet socket error: '%s (%d)'!"
+msgstr "Помилка підключення до Internet сокету: '%s (%d)'!"
 
 #, c-format
 msgid "TCP socket doesn't bind to '%s'!"
@@ -64,8 +64,8 @@ msgid "UDP socket doesn't bind to '%s'!"
 msgstr "UDP сокет не під'єднався до '%s'!"
 
 #, c-format
-msgid "Connect to UNIX error: %s!"
-msgstr "Помилка підключення до UNIX сокету: %s!"
+msgid "Connect to UNIX error: '%s (%d)'!"
+msgstr "Помилка підключення до UNIX сокету: '%s (%d)'!"
 
 #, c-format
 msgid "UNIX socket doesn't bind to '%s'!"
@@ -84,8 +84,8 @@ msgid "Restart by no ingoing activity to '%s'."
 msgstr "Перевантаження у зв'язку із відсутністю активності до '%s'."
 
 #, c-format
-msgid "Socket write message '%d'."
-msgstr "Сокет записав повідомлення '%d'."
+msgid "Write: wrote %s."
+msgstr "Запис: записано %s."
 
 msgid "Write: reply for zero bytes."
 msgstr "Запис: відповідь ноль байт."
@@ -95,52 +95,53 @@ msgid "Write: error '%s (%d)'!"
 msgstr "Запис: помилка '%s (%d)'!"
 
 #, c-format
-msgid "Close input transport by error: %s"
-msgstr "Закриття вхідного транспорту за помилкою: %s!"
+msgid "Close input transport by error: '%s (%d)'"
+msgstr "Закриття вхідного транспорту за помилкою: '%s (%d)'"
 
 msgid "Error creation of the thread!"
 msgstr "Помилка створення потоку!"
 
 #, c-format
-msgid "Socket received datagram '%d' from '%s'!"
-msgstr "Сокет отримав датаграму '%d' з '%s'!"
+msgid "Read datagram %s from '%s'!"
+msgstr "Прочитано датаграму %s з '%s'!"
 
 #, c-format
-msgid "Socket replied datagram '%d' to '%s'!"
-msgstr "Сокет відповів датаграмою '%d' до '%s'!"
+msgid "Wrote datagram %s to '%s'!"
+msgstr "Записано датаграму %s до '%s'!"
 
 #, c-format
 msgid ""
-"Socket received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
-"%02X!"
+"Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
-"Сокет отримав CAN повідомлення id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X"
-"%02X%02X!"
+"Отримано CAN повідомлення id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
+"%02X!"
 
 msgid " client task is stopping...."
 msgstr " клієнтську задачу зупинено...."
 
 #, c-format
-msgid "Socket has been connected by '%s'!"
-msgstr "До сокета приєднався '%s'!"
-
-msgid "Socket has been terminated by error: %s"
-msgstr "Сокет було перервано помилкою: %s"
+msgid "Has been connected by '%s'!"
+msgstr "Приєднано '%s'!"
 
 #, c-format
-msgid "Socket received message '%d' from '%s'."
-msgstr "Сокет отримав повідомлення '%d' від '%s'."
+msgid "Has been terminated by error: '%s (%d)'"
+msgstr "Перервано помилкою: '%s (%d)'"
 
 #, c-format
-msgid "Socket replied message '%d' to '%s'."
-msgstr "Сокет відповів повідомленням '%d' до '%s'."
+msgid "Read message %s from '%s'."
+msgstr "Прочитано повідомлення %s від '%s'."
 
 #, c-format
-msgid "Socket has been disconnected by '%s'!"
-msgstr "Від сокету від'єднався '%s'!"
+msgid "Wrote message %s to '%s'."
+msgstr "Записано повідомлення %s до '%s'."
 
-msgid "Socket has been terminated by execution: %s"
-msgstr "Сокет було перервано виключенням: %s"
+#, c-format
+msgid "Has been disconnected by '%s'!"
+msgstr "Відєднано '%s'!"
+
+#, c-format
+msgid "Has been terminated by execution: %s"
+msgstr "Перервано виключенням: %s"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
@@ -264,20 +265,22 @@ msgid "Type socket '%s' error!"
 msgstr "Помилка у типу '%s' сокету!"
 
 #, c-format
-msgid "Error force socket %d using: %s!"
-msgstr "Помилка примусового використання сокету %d: %s!"
+msgid "Error force socket %d using: '%s (%d)'!"
+msgstr "Помилка примусового використання сокету %d: '%s (%d)'!"
 
 #, c-format
-msgid "Error creation TCP socket: %s!"
-msgstr "Помилка створення TCP сокету: %s!"
+msgid "Error creation TCP socket: '%s (%d)'!"
+msgstr "Помилка створення TCP сокету: '%s (%d)'!"
 
 #, c-format
-msgid "Error creation UDP socket: %s!"
-msgstr "Помилка створення UDP сокету: %s!"
+msgid "Error creation UDP socket: '%s (%d)'!"
+msgstr "Помилка створення UDP сокету: '%s (%d)'!"
 
-#, c-format
-msgid "Error creation UNIX socket: %s!"
-msgstr "Помилка створення UNIX сокету: %s!"
+msgid "Connect by timeout %s error: '%s (%d)'"
+msgstr "Помилка підключення за часом %s: '%s (%d)'"
+
+msgid "Error creation UNIX socket: '%s (%d)'!"
+msgstr "Помилка створення UNIX сокету: '%s (%d)'!"
 
 msgid "Unknown error"
 msgstr "Невідома помилка"
@@ -289,12 +292,22 @@ msgstr "Транспорт не запущено!"
 msgid "Request error: %s"
 msgstr "Помилка запиту: %s"
 
+#, c-format
+msgid "Wrote %s."
+msgstr "Записано %s."
+
+msgid "Read timeouted."
+msgstr "Перевищено час очікування читання!"
+
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
+msgid "Read error: %s"
+msgstr "Помилка читання: %s"
+
 #, c-format
-msgid "Socket error: %s"
-msgstr "Помилка сокету: %s"
+msgid "Read %s."
+msgstr "Прочитано %s."
 
 msgid ""
 "Socket's output transport has address format:\n"

@@ -133,7 +133,7 @@ class TMdContr: public TController, public Client
 	// OPC_UA Client methods
 	string sessionName( )	{ return "OpenSCADA station "+SYS->id(); }
 	void protIO( XML_N &io );
-	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
 	void debugMess( const string &mess );
 
     protected:

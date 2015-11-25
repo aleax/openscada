@@ -1,4 +1,12 @@
 2015-11-25 Roman
+- SYS: Transports subsystem type modules version rose to 9.
+- !!:Transports.*: run_st also renamed to runSt. messIO() expanded by change attribute "noRes" to "flags" and the flags appended:
+    IO_NoRes and IO_NoReq.
+    User API function {TrOut}.start() some fixed.
+    User API function {TrOut}.messIO() expanded by the argument "noReq" for no request mode enable.
+    All modules mostly adapted to the no request mode support.
+- !!:FIX:Transports.Sockets: Debug messages some unified and appended.
+    The connection time global sticking to the value from messIO() fixed by executions processing for restore.
 - Transports: User API function {TrOut}.start() added for fast control for the output transport state.
 - FIX:UI.VCAEngine: To function of a widget changes down to the parrent added checking for the recurrence inheritance prevent.
 

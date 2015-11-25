@@ -34,30 +34,30 @@ using namespace OSCADA;
 TTransportS::TTransportS( ) : TSubSYS(STR_ID, "Transports", true)
 {
     //Input transport BD structure
-    el_in.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    el_in.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    el_in.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_in.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
-    el_in.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    el_in.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*3).c_str()));
-    el_in.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
+    elIn.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
+    elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*3).c_str()));
+    elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
-    el_out.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    el_out.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    el_out.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_out.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
-    el_out.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    el_out.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
+    elOut.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
+    elOut.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    elOut.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //External hosts' connection DB struct
-    el_ext.fldAdd(new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_ext.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_ext.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_ext.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,OBJ_ID_SZ));
-    el_ext.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
-    el_ext.fldAdd(new TFld("USER",_("Request user"),TFld::String,0,OBJ_ID_SZ));
-    el_ext.fldAdd(new TFld("PASS",_("Request password"),TFld::String,0,"30"));
+    elExt.fldAdd(new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
+    elExt.fldAdd(new TFld("USER",_("Request user"),TFld::String,0,OBJ_ID_SZ));
+    elExt.fldAdd(new TFld("PASS",_("Request password"),TFld::String,0,"30"));
 }
 
 TTransportS::~TTransportS( )
@@ -107,7 +107,7 @@ void TTransportS::load_( )
     map<string, bool>	itReg;
     // Search and create new input transports
     try {
-	TConfig c_el(&el_in);
+	TConfig c_el(&elIn);
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
@@ -143,7 +143,7 @@ void TTransportS::load_( )
 
     // Search and create new output transports
     try {
-	TConfig c_el(&el_out);
+	TConfig c_el(&elOut);
 	c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	itReg.clear();
@@ -180,7 +180,7 @@ void TTransportS::load_( )
 
     // Load external hosts
     try {
-	TConfig c_el(&el_ext);
+	TConfig c_el(&elExt);
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); ) {
 	    ExtHost host("", "");
 	    host.user_open	= c_el.cfg("OP_USER").getS();
@@ -203,7 +203,7 @@ void TTransportS::save_( )
 {
     //Save external transports
     ResAlloc res(extHostRes, false);
-    TConfig c_el(&el_ext);
+    TConfig c_el(&elExt);
     for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++) {
 	c_el.cfg("OP_USER").setS(extHostLs[i_h].user_open);
 	c_el.cfg("ID").setS(extHostLs[i_h].id);
@@ -577,7 +577,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb)
+    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb)
 {
     mId = iid;
 }
@@ -790,7 +790,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
     else if(a_path == "/prm/st/st") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(runSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	s2i(opt->text())?start():stop();
     }
     else if(a_path == "/prm/st/db") {
@@ -822,7 +822,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), mId(cfg("ID")), mStart(cfg("START").getBd()),
+    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()),
     mDB(idb), mPrm1(0), mPrm2(0)
 {
     mId = iid;
@@ -898,15 +898,17 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // string messIO( string mess, real timeOut = 0 ) - sending the message <mess> through the transport with the waiting timeout <timeOut>
+    // string messIO( string mess, real timeOut = 0, bool noReq = false ) - sending the message <mess> through the transport with the waiting timeout <timeOut>
     //  mess - message text for send
     //  timeOut - connection timeout, in seconds
+    //  noReq - no request, then will not input buffer clean and reconnect for tries
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object) {
 	string rez;
 	char buf[STR_BUF_LEN];
 	try {
 	    if(!startStat()) start();
-	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
+	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf),
+		(prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0, (prms.size() >= 3 && prms[2].getB()) ? IO_NoReq : 0);
 	    rez.assign(buf,resp_len);
 	} catch(TError) { return ""; }
 
@@ -931,9 +933,10 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     // bool start( bool vl = <EVAL>, int tm = 0 ) - the transport start status return, start/stop it by <vl> is not <EVAL>
     if(iid == "start") {
 	char com = prms.size() ? prms[0].getB() : EVAL_BOOL;
+	if(com == EVAL_BOOL) return startStat();
 	try {
-	    if(com == 0 && startStat())		stop();
-	    else if(com == 1 && !startStat())	start((prms.size()>=2)?prms[1].getI():0);
+	    if(!com && startStat())	stop();
+	    else if(com && !startStat())start((prms.size()>=2)?prms[1].getI():0);
 	} catch(TError) { }
 
 	return startStat();
@@ -995,7 +998,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
     else if(a_path == "/prm/st/st") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(run_st?"1":"0");
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(runSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	s2i(opt->text())?start():stop();
     }
     else if(a_path == "/prm/st/db") {

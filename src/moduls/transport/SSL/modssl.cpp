@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"1.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -228,7 +228,7 @@ void TSocketIn::save_( )
 
 void TSocketIn::start( )
 {
-    if(run_st) return;
+    if(runSt) return;
 
     //Status clear
     stErr = "";
@@ -243,7 +243,7 @@ void TSocketIn::start( )
 
 void TSocketIn::stop( )
 {
-    if(!run_st)	return;
+    if(!runSt)	return;
 
     //Status clear
     stErr = "";
@@ -350,7 +350,7 @@ void *TSocketIn::Task( void *sock_in )
 	    throw TError(s.nodePath().c_str(), "BIO_do_accept: %s", err);
 	}
 
-	s.run_st	= true;
+	s.runSt	= true;
 	s.endrun	= false;
 	s.endrunCl	= false;
 
@@ -416,7 +416,7 @@ void *TSocketIn::Task( void *sock_in )
 
     pthread_attr_destroy(&pthr_attr);
 
-    s.run_st = false;
+    s.runSt = false;
 
     return NULL;
 }
@@ -746,7 +746,7 @@ void TSocketOut::start( int tmCon )
     char	err[255];
     ResAlloc res(wres, true);
 
-    if(run_st) return;
+    if(runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -877,7 +877,7 @@ void TSocketOut::start( int tmCon )
 	throw;
     }
 
-    run_st = true;
+    runSt = true;
 
     TTransportOut::start();
 }
@@ -886,7 +886,7 @@ void TSocketOut::stop( )
 {
     ResAlloc res(wres, true);
 
-    if(!run_st) return;
+    if(!runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -898,30 +898,31 @@ void TSocketOut::stop( )
     BIO_free(conn);
     SSL_CTX_free(ctx);
 
-    run_st = false;
+    runSt = false;
 
     TTransportOut::stop();
 }
 
-int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
+int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned time, unsigned flgs )
 {
     int		ret = 0, reqTry = 0;;
     char	err[255];
     bool	writeReq = false;
 
-    if(!noRes) ResAlloc resN(nodeRes(), true);
+    if(!(flgs&TTransportOut::IO_NoRes)) ResAlloc resN(nodeRes(), true);
     ResAlloc res(wres, true);
 
-    if(!run_st) throw TError(nodePath().c_str(), _("Transport is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
 
 repeate:
     if(reqTry++ >= 3)	throw TError(nodePath().c_str(), _("Connection error"));
     //Write request
-    if(obuf != NULL && len_ob > 0) {
+    if(oBuf != NULL && oLen > 0) {
 	// Input buffer clear
-	while(BIO_read(conn,err,sizeof(err)) > 0) ;
+	if(!(flgs&TTransportOut::IO_NoReq))
+	    while(BIO_read(conn,err,sizeof(err)) > 0) ;
 	// Write request
-	do { ret = BIO_write(conn, obuf, len_ob); }
+	do { ret = BIO_write(conn, oBuf, oLen); }
 	while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
 	if(ret <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 
@@ -935,8 +936,8 @@ repeate:
     if(mess_lev() == TMess::Debug && ret > 0) mess_debug(nodePath().c_str(), _("The message is sent with the size '%d'."), ret);
 
     //Read reply
-    if(ibuf != NULL && len_ib > 0) {
-	ret = BIO_read(conn, ibuf, len_ib);
+    if(iBuf != NULL && iLen > 0) {
+	ret = BIO_read(conn, iBuf, iLen);
 	if(ret > 0) trIn += ret;
 	else if(ret == 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 	else if(ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE) {
@@ -965,9 +966,9 @@ repeate:
 		throw TError(nodePath().c_str(), _("Socket error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sock_fd,&rd_fd)) {
-		ret = BIO_read(conn, ibuf, len_ib);
+		ret = BIO_read(conn, iBuf, iLen);
 		if(ret == -1)
-		    while((ret=BIO_read(conn,ibuf,len_ib))==-1) sched_yield();
+		    while((ret=BIO_read(conn,iBuf,iLen))==-1) sched_yield();
 		if(ret < 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
 		trIn += ret;
 	    }

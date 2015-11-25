@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 20:43+0200\n"
+"POT-Creation-Date: 2015-11-25 22:31+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -51,9 +51,8 @@ msgstr "Ошибка типа '%s' сокета!"
 msgid "Socket name '%s' error!"
 msgstr "Ошибка имени '%s' сокета!"
 
-#, c-format
-msgid "Connect to Internet socket error: %s!"
-msgstr "Ошибка подключения к Internet сокету: %s!"
+msgid "Connect to Internet socket error: '%s (%d)'!"
+msgstr "Ошибка подключения к Internet сокету: '%s (%d)'!"
 
 #, c-format
 msgid "TCP socket doesn't bind to '%s'!"
@@ -63,9 +62,8 @@ msgstr "TCP сокет не подключился к '%s'!"
 msgid "UDP socket doesn't bind to '%s'!"
 msgstr "UDP сокет не подключился к '%s'!"
 
-#, c-format
-msgid "Connect to UNIX error: %s!"
-msgstr "Ошибка подключения к UNIX сокету: %s!"
+msgid "Connect to UNIX error: '%s (%d)'!"
+msgstr "Ошибка подключения к UNIX сокету: '%s (%d)'!"
 
 #, c-format
 msgid "UNIX socket doesn't bind to '%s'!"
@@ -83,9 +81,8 @@ msgstr "RAWCAN сокет подключен к '%s'!"
 msgid "Restart by no ingoing activity to '%s'."
 msgstr "Перезапуск по причине отсутствия активности по '%s'."
 
-#, c-format
-msgid "Socket write message '%d'."
-msgstr "Сокет записал сообщение '%d'."
+msgid "Write: wrote %s."
+msgstr "Запись: записано %s."
 
 msgid "Write: reply for zero bytes."
 msgstr "Запись: ответ ноль байт."
@@ -94,53 +91,44 @@ msgstr "Запись: ответ ноль байт."
 msgid "Write: error '%s (%d)'!"
 msgstr "Запись: ошибка '%s (%d)'!"
 
-#, c-format
-msgid "Close input transport by error: %s"
-msgstr "Закрытие входного транспорта по ошибке: %s!"
+msgid "Close input transport by error: '%s (%d)'"
+msgstr "Закрытие входного транспорта по ошибке: '%s (%d)'"
 
 msgid "Error creation of the thread!"
 msgstr "Ошибка создания потока!"
 
-#, c-format
-msgid "Socket received datagram '%d' from '%s'!"
-msgstr "Сокет получил датаграму '%d' из '%s'!"
+msgid "Read datagram %s from '%s'!"
+msgstr "Прочитано датаграму %s из '%s'!"
 
-#, c-format
-msgid "Socket replied datagram '%d' to '%s'!"
-msgstr "Сокет ответил датаграмой '%d' в '%s'!"
+msgid "Wrote datagram %s to '%s'!"
+msgstr "Записано датаграму %s в '%s'!"
 
-#, c-format
 msgid ""
-"Socket received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
-"%02X!"
+"Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
-"Сокет получил CAN сообщение id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X"
+"Получено CAN сообщение id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X"
 "%02X%02X!"
 
 msgid " client task is stopping...."
 msgstr " клиентская задача остановлена...."
 
-#, c-format
-msgid "Socket has been connected by '%s'!"
-msgstr "К сокету подключился '%s'!"
+msgid "Has been connected by '%s'!"
+msgstr "Подключено '%s'!"
 
-msgid "Socket has been terminated by error: %s"
-msgstr "Сокет был разорван ошибкой: %s"
+msgid "Has been terminated by error: '%s (%d)'"
+msgstr "Разорвано ошибкой: '%s (%d)'"
 
-#, c-format
-msgid "Socket received message '%d' from '%s'."
-msgstr "Сокет получил сообщение '%d' из '%s'."
+msgid "Read message %s from '%s'."
+msgstr "Прочитано сообщение %s из '%s'."
 
-#, c-format
-msgid "Socket replied message '%d' to '%s'."
-msgstr "Сокет ответил сообщением '%d' на '%s'."
+msgid "Wrote message %s to '%s'."
+msgstr "Записано сообщение %s на '%s'."
 
-#, c-format
-msgid "Socket has been disconnected by '%s'!"
-msgstr "От сокета отключился '%s'!"
+msgid "Has been disconnected by '%s'!"
+msgstr "Отключено '%s'!"
 
-msgid "Socket has been terminated by execution: %s"
-msgstr "Сокет был разорван исключением: %s"
+msgid "Has been terminated by execution: %s"
+msgstr "Разорвано исключением: %s"
 
 #, c-format
 msgid "New input protocol's object '%s' created!"
@@ -265,21 +253,20 @@ msgstr "Трафик входящий %s, исходящий %s."
 msgid "Type socket '%s' error!"
 msgstr "Ошибка в типе '%s' сокета!"
 
-#, c-format
-msgid "Error force socket %d using: %s!"
-msgstr "Ошибка принудительного использования сокета %d: %s!"
+msgid "Error force socket %d using: '%s (%d)'!"
+msgstr "Ошибка принудительного использования сокета %d: '%s (%d)'!"
 
-#, c-format
-msgid "Error creation TCP socket: %s!"
-msgstr "Ошибка создания TCP сокета: %s!"
+msgid "Error creation TCP socket: '%s (%d)'!"
+msgstr "Ошибка создания TCP сокета: '%s (%d)'!"
 
-#, c-format
-msgid "Error creation UDP socket: %s!"
-msgstr "Ошибка создания UDP сокета: %s!"
+msgid "Error creation UDP socket: '%s (%d)'!"
+msgstr "Ошибка создания UDP сокета: '%s (%d)'!"
 
-#, c-format
-msgid "Error creation UNIX socket: %s!"
-msgstr "Ошибка создания UNIX сокета: %s!"
+msgid "Connect by timeout %s error: '%s (%d)'"
+msgstr "Ошибка подключения по таймауту %s: '%s (%d)'"
+
+msgid "Error creation UNIX socket: '%s (%d)'!"
+msgstr "Ошибка создания UNIX сокета: '%s (%d)'!"
 
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
@@ -291,12 +278,22 @@ msgstr "Транспорт не запущен!"
 msgid "Request error: %s"
 msgstr "Ошибка запроса: %s"
 
+#, c-format
+msgid "Wrote %s."
+msgstr "Записано %s."
+
+msgid "Read timeouted."
+msgstr "Время ожидания чтения истекло!"
+
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
 
+msgid "Read error: %s"
+msgstr "Ошибка чтения: %s"
+
 #, c-format
-msgid "Socket error: %s"
-msgstr "Ошибка сокета: %s"
+msgid "Read %s."
+msgstr "Прочитано %s."
 
 msgid ""
 "Socket's output transport has address format:\n"

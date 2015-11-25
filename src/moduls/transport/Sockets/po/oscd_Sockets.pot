@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 20:43+0200\n"
+"POT-Creation-Date: 2015-11-25 22:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgid "Socket name '%s' error!"
 msgstr ""
 
 #, c-format
-msgid "Connect to Internet socket error: %s!"
+msgid "Connect to Internet socket error: '%s (%d)'!"
 msgstr ""
 
 #, c-format
@@ -58,7 +58,7 @@ msgid "UDP socket doesn't bind to '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Connect to UNIX error: %s!"
+msgid "Connect to UNIX error: '%s (%d)'!"
 msgstr ""
 
 #, c-format
@@ -78,7 +78,7 @@ msgid "Restart by no ingoing activity to '%s'."
 msgstr ""
 
 #, c-format
-msgid "Socket write message '%d'."
+msgid "Write: wrote %s."
 msgstr ""
 
 msgid "Write: reply for zero bytes."
@@ -89,49 +89,49 @@ msgid "Write: error '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "Close input transport by error: %s"
+msgid "Close input transport by error: '%s (%d)'"
 msgstr ""
 
 msgid "Error creation of the thread!"
 msgstr ""
 
 #, c-format
-msgid "Socket received datagram '%d' from '%s'!"
+msgid "Read datagram %s from '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Socket replied datagram '%d' to '%s'!"
+msgid "Wrote datagram %s to '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Socket received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
+msgid "Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
 
 msgid " client task is stopping...."
 msgstr ""
 
 #, c-format
-msgid "Socket has been connected by '%s'!"
+msgid "Has been connected by '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Socket has been terminated by error: %s"
+msgid "Has been terminated by error: '%s (%d)'"
 msgstr ""
 
 #, c-format
-msgid "Socket received message '%d' from '%s'."
+msgid "Read message %s from '%s'."
 msgstr ""
 
 #, c-format
-msgid "Socket replied message '%d' to '%s'."
+msgid "Wrote message %s to '%s'."
 msgstr ""
 
 #, c-format
-msgid "Socket has been disconnected by '%s'!"
+msgid "Has been disconnected by '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Socket has been terminated by execution: %s"
+msgid "Has been terminated by execution: %s"
 msgstr ""
 
 #, c-format
@@ -227,19 +227,23 @@ msgid "Type socket '%s' error!"
 msgstr ""
 
 #, c-format
-msgid "Error force socket %d using: %s!"
+msgid "Error force socket %d using: '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "Error creation TCP socket: %s!"
+msgid "Error creation TCP socket: '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "Error creation UDP socket: %s!"
+msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "Error creation UNIX socket: %s!"
+msgid "Connect by timeout %s error: '%s (%d)'"
+msgstr ""
+
+#, c-format
+msgid "Error creation UNIX socket: '%s (%d)'!"
 msgstr ""
 
 msgid "Unknown error"
@@ -252,11 +256,22 @@ msgstr ""
 msgid "Request error: %s"
 msgstr ""
 
+#, c-format
+msgid "Wrote %s."
+msgstr ""
+
+msgid "Read timeouted."
+msgstr ""
+
 msgid "Timeouted!"
 msgstr ""
 
 #, c-format
-msgid "Socket error: %s"
+msgid "Read error: %s"
+msgstr ""
+
+#, c-format
+msgid "Read %s."
 msgstr ""
 
 msgid ""

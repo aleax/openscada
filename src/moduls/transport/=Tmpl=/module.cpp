@@ -177,7 +177,7 @@ string TTrIn::getStatus( )
 //!!! The inherited (virtual) start and stop interface functions. Append into for your need.
 void TTrIn::start()
 {
-    if( run_st ) return;
+    if( runSt ) return;
 
     //> Status clear
     trIn = trOut = 0;
@@ -190,7 +190,7 @@ void TTrIn::start()
 
 void TTrIn::stop()
 {
-    if( !run_st ) return;
+    if( !runSt ) return;
 
     //> Status clear
     trIn = trOut = 0;
@@ -207,7 +207,7 @@ void *TTrIn::Task( void *tr_in )
     TTrIn *tr = (TTrIn *)tr_in;
     AutoHD<TProtocolIn> prot_in;
 
-    tr->run_st	= true;
+    tr->runSt	= true;
     tr->endrun	= false;
 
     while( !tr->endrun )
@@ -215,7 +215,7 @@ void *TTrIn::Task( void *tr_in )
 	//!!! Your code
     }
 
-    tr->run_st = false;
+    tr->runSt = false;
 
     return NULL;
 }
@@ -294,32 +294,32 @@ string TTrOut::getStatus( )
 //!!! The inherited (virtual) start and stop interface functions. Append into for your need.
 void TTrOut::start()
 {
-    if( run_st ) return;
+    if( runSt ) return;
 
     //> Status clear
     trIn = trOut = 0;
 
     //!!! Your code
 
-    run_st = true;
+    runSt = true;
 }
 
 void TTrOut::stop()
 {
-    if( !run_st ) return;
+    if( !runSt ) return;
 
     //> Status clear
     trIn = trOut = 0;
 
     //!!! Your code
 
-    run_st = false;
+    runSt = false;
 }
 
 //!!! The inherited (virtual) sending data and receiving interface function implementation. Append into for your need.
-int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
+int TTrOut::messIO( const char *oBuf, int iLen, char *iBuf, int iLen, unsigned time, unsigned flgs )
 {
-    if( !run_st ) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     //!!! Your code
 

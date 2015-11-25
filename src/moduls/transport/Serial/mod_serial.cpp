@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.1.4"
+#define MOD_VER		"1.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -405,7 +405,7 @@ void TTrIn::connect( )
 
 void TTrIn::start( )
 {
-    if(run_st) return;
+    if(runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -421,7 +421,7 @@ void TTrIn::start( )
 
 void TTrIn::stop( )
 {
-    if(!run_st) return;
+    if(!runSt) return;
 
     if(mMdmMode && mMdmDataMode) mod->devUnLock(mDevPort);
 
@@ -443,7 +443,7 @@ void *TTrIn::Task( void *tr_in )
 {
     TTrIn *tr = (TTrIn*)tr_in;
 
-    tr->run_st	= true;
+    tr->runSt	= true;
     tr->endrun	= false;
 
     AutoHD<TProtocolIn> prot_in;
@@ -591,7 +591,7 @@ void *TTrIn::Task( void *tr_in )
 	proto.at().close(n_pr);
     }
 
-    tr->run_st = false;
+    tr->runSt = false;
 
     return NULL;
 }
@@ -795,7 +795,7 @@ void TTrOut::setTimings( const string &vl )
 void TTrOut::start( int tmCon )
 {
     ResAlloc res(nodeRes(), true);
-    if(run_st) return;
+    if(runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -909,7 +909,7 @@ void TTrOut::start( int tmCon )
 	string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
 	if(!telNumb.empty()) {
 	    // Resource to transfer function alloc
-	    run_st = true;
+	    runSt = true;
 	    mMdmMode = true;
 
 	    // Send init 1 string
@@ -957,13 +957,13 @@ void TTrOut::start( int tmCon )
 
 	if(fd >= 0) { close(fd); fd = -1; }
 	if(isLock) mod->devUnLock(mDevPort);
-	run_st = false;
+	runSt = false;
 	mMdmMode = false;
 	throw;
     }
 
     mKeepAliveLstTm = TSYS::curTime();
-    run_st = true;
+    runSt = true;
 
     TTransportOut::start();
 }
@@ -971,7 +971,7 @@ void TTrOut::start( int tmCon )
 void TTrOut::stop( )
 {
     ResAlloc res(nodeRes(), true);
-    if(!run_st) return;
+    if(!runSt) return;
 
     mess_debug(nodePath().c_str(), _("Stopping."));
 
@@ -992,7 +992,7 @@ void TTrOut::stop( )
     //Unlock device
     mod->devUnLock(mDevPort);
 
-    run_st = false;
+    runSt = false;
     mMdmMode = false;
 
     TTransportOut::stop();
@@ -1006,16 +1006,16 @@ void TTrOut::check( )
     if(toStop) stop();
 }
 
-int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
+int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned time, unsigned flgs )
 {
     ssize_t blen = 0;
     int off = 0, kz, sec;
     fd_set rw_fd;
     struct timeval tv;
 
-    if(!noRes) ResAlloc res(nodeRes(), true);
+    if(!(flgs&TTransportOut::IO_NoRes)) ResAlloc res(nodeRes(), true);
 
-    if(!run_st) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
     int wReqTm = s2i(TSYS::strSepParse(timings(),0,':',&off));
     wReqTm = time ? time : wReqTm;
@@ -1033,15 +1033,15 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     if(mRTSfc)	ioctl(fd, TIOCMGET, &sec);
 
     //Write request
-    if(obuf && len_ob > 0) {
-	tcflush(fd, TCIOFLUSH);
+    if(oBuf && oLen > 0) {
+	if(!(flgs&TTransportOut::IO_NoReq)) tcflush(fd, TCIOFLUSH);
 	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = TSYS::sysSleep(1e-6*((4e3*wCharTm)-(tmW-mLstReqTm)));
 
 	// Pure RS-485 flow control: Clear RTS for transfer allow
 	if(mRTSfc) { sec &= ~TIOCM_RTS; ioctl(fd, TIOCMSET, &sec); }
 
-	for(int wOff = 0; wOff != len_ob; wOff += kz) {
-	    kz = write(fd, obuf+wOff, len_ob-wOff);
+	for(int wOff = 0; wOff != oLen; wOff += kz) {
+	    kz = write(fd, oBuf+wOff, oLen-wOff);
 	    if(kz <= 0) {
 		if(errno == EAGAIN) {
 		    tv.tv_sec = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000);
@@ -1061,14 +1061,14 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	if(mRTSfc) {
 	    char echoBuf[255];
 	    mLstReqTm = TSYS::curTime();
-	    for(int r_off = 0; r_off < len_ob; ) {
-		kz = read(fd, echoBuf, vmin(len_ob-r_off,(int)sizeof(echoBuf)));
+	    for(int r_off = 0; r_off < oLen; ) {
+		kz = read(fd, echoBuf, vmin(oLen-r_off,(int)sizeof(echoBuf)));
 		if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
-		    if((TSYS::curTime()-mLstReqTm) > wCharTm*len_ob*1e3) throw TError(nodePath().c_str(),_("Timeouted!"));
+		    if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(),_("Timeouted!"));
 		    sched_yield();
 		    continue;
 		}
-		if(kz < 0 || memcmp(echoBuf,obuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Echo request reading error."));
+		if(kz < 0 || memcmp(echoBuf,oBuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Echo request reading error."));
 		r_off += kz;
 	    }
 	    sec |= TIOCM_RTS;
@@ -1077,8 +1077,8 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     }
 
     //Read reply
-    if(ibuf != NULL && len_ib > 0) {
-	if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
+    if(iBuf != NULL && iLen > 0) {
+	if(oBuf && oLen > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
 	else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
 	FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
 	kz = select(fd+1, &rw_fd, NULL, NULL, &tv);
@@ -1090,7 +1090,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    throw TError(nodePath().c_str(), err.c_str());
 	}
 	else if(FD_ISSET(fd,&rw_fd)) {
-	    blen = read(fd, ibuf, len_ib);
+	    blen = read(fd, iBuf, iLen);
 	    trIn += vmax(0, blen);
 	}
     }
@@ -1105,7 +1105,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     //  rts - Request value RTS
     if(iid == "TS") {
 	ResAlloc res(nodeRes(), true);
-	if(!run_st) return EVAL_BOOL;
+	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);
@@ -1124,7 +1124,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     //  dtr - Terminal ready value DTR
     if(iid == "DR") {
 	ResAlloc res(nodeRes(), true);
-	if(!run_st) return EVAL_BOOL;
+	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);
@@ -1142,7 +1142,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     // bool DCD() - Data Carrier Detect control
     if(iid == "DCD") {
 	ResAlloc res(nodeRes(), true);
-	if(!run_st) return EVAL_BOOL;
+	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);
@@ -1151,7 +1151,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     // bool RI() - Ring Indicator control
     if(iid == "RI") {
 	ResAlloc res(nodeRes(), true);
-	if(!run_st) return EVAL_BOOL;
+	if(!runSt) return EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);

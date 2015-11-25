@@ -121,7 +121,7 @@ class TMdContr: public TController, public MMS::Client
 
 	void reqService( MMS::XML_N &io );
 	void protIO( MMS::XML_N &io );
-	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
 	void debugMess( const string &mess );
 
 	string getNameList( const string &domain = "" );

@@ -60,13 +60,12 @@ class TestTrOut : public TFunction
 		int64_t stTm = TSYS::curTime();
 
 		AutoHD<TTypeTransport> tr = SYS->transport().at().modAt(type);
-		if( !tr.at().outPresent(addr) )
-		{
+		if(!tr.at().outPresent(addr)) {
 		    tr.at().outAdd(addr);
 		    tr.at().outAt(addr).at().setAddr(addr);
 		}
-		if( !tr.at().outAt(addr).at().startStat() ) tr.at().outAt(addr).at().start();
-		int len = tr.at().outAt(addr).at().messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,1000);
+		if(!tr.at().outAt(addr).at().startStat()) tr.at().outAt(addr).at().start();
+		int len = tr.at().outAt(addr).at().messIO(req.c_str(), req.size(), buf, sizeof(buf)-1, 1000);
 		tr.at().outAt(addr).at().stop();
 		buf[len] = 0;
 		mod->mess(id(),_("%s: Put '%s'. Get: '%s'. Time = %g ms."),addr.c_str(),req.c_str(),buf,(1e-3*(TSYS::curTime()-stTm)));

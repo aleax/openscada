@@ -56,7 +56,7 @@ class TestClient: public Client
 	bool	connected( )	{ return (sock_fd >= 0); }
 
 	// Write to the transport and read respond
-	int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
+	int	messIO( const char *oBuf, int iLen, char *iBuf = NULL, int iLen = 0 );
 
     private:
 	string	mEp,

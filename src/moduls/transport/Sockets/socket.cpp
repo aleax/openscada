@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -207,7 +207,7 @@ void TSocketIn::save_( )
 
 void TSocketIn::start( )
 {
-    if(run_st) return;
+    if(runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -280,7 +280,7 @@ void TSocketIn::start( )
 		if(res) {
 		    close(sockFd);
 		    sockFd = -1;
-		    throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
+		    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
 		}
 	    }
 	    else if(bind(sockFd,(sockaddr*)&nameIn,sizeof(nameIn)) == -1) {	//Wait connection
@@ -316,7 +316,7 @@ void TSocketIn::start( )
 	    if(connect(sockFd,(sockaddr*)&nameUn,sizeof(nameUn)) == -1) {
 		close(sockFd);
 		sockFd = -1;
-		throw TError(nodePath().c_str(), _("Connect to UNIX error: %s!"), strerror(errno));
+		throw TError(nodePath().c_str(), _("Connect to UNIX error: '%s (%d)'!"), strerror(errno), errno);
 	    }
 	}
 	else if(bind(sockFd,(sockaddr*)&nameUn,sizeof(nameUn)) == -1) {	//Wait connection
@@ -356,14 +356,14 @@ void TSocketIn::start( )
 	} catch(TError err) { close(sockFd); delete sin; throw; }
     }
     else SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);	//main task for processing or client task create
-    run_st = true;
+    runSt = true;
 
     TTransportIn::start();
 }
 
 void TSocketIn::stop( )
 {
-    if(!run_st) return;
+    if(!runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -371,7 +371,7 @@ void TSocketIn::stop( )
 
     if(mode() == 2) SYS->taskDestroy(nodePath('.',true)+"."+i2s(sockFd), &endrunCl);
     else SYS->taskDestroy(nodePath('.',true), &endrun);
-    run_st = false;
+    runSt = false;
 
     shutdown(sockFd, SHUT_RDWR);
     close(sockFd);
@@ -418,7 +418,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 	case SOCK_TCP: case SOCK_UNIX: {
 	    int sId = s2i(TSYS::strLine(sender,1));
 	    if(sId < 0) return -1;
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Socket write message '%d'."), data.size());
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Write: wrote %s."), TSYS::cpct2str(data.size()).c_str());
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;
 	    for( ; wOff != data.size() && wL > 0; wOff += wL) {
@@ -484,7 +484,7 @@ void *TSocketIn::Task( void *sock_in )
     pthread_attr_init(&pthr_attr);
     pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
 
-    sock->run_st	= true;
+    sock->runSt	= true;
     sock->endrunCl	= false;
     sock->endrun	= false;
 
@@ -496,7 +496,7 @@ void *TSocketIn::Task( void *sock_in )
 
 	int kz = select(sock->sockFd+1, &rd_fd, NULL, NULL, &tv);
 	if(kz < 0 && errno != EINTR) {
-	    mess_err(sock->nodePath().c_str(), _("Close input transport by error: %s"), strerror(errno));
+	    mess_err(sock->nodePath().c_str(), _("Close input transport by error: '%s (%d)'"), strerror(errno), errno);
 	    break;
 	}
 	if(kz <= 0 || !FD_ISSET(sock->sockFd, &rd_fd)) continue;
@@ -561,13 +561,13 @@ void *TSocketIn::Task( void *sock_in )
 	    req.assign(buf, r_len);
 
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(sock->nodePath().c_str(), _("Socket received datagram '%d' from '%s'!"), r_len, inet_ntoa(name_cl.sin_addr));
+		mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), inet_ntoa(name_cl.sin_addr));
 
 	    sock->messPut(sock->sockFd, req, answ, inet_ntoa(name_cl.sin_addr), prot_in);
 	    if(!prot_in.freeStat()) continue;
 
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(sock->nodePath().c_str(), _("Socket replied datagram '%d' to '%s'!"), answ.size(), inet_ntoa(name_cl.sin_addr));
+		mess_debug(sock->nodePath().c_str(), _("Wrote datagram %s to '%s'!"), TSYS::cpct2str(answ.size()).c_str(), inet_ntoa(name_cl.sin_addr));
 
 	    r_len = sendto(sock->sockFd, answ.c_str(), answ.size(), 0, (sockaddr *)&name_cl, name_cl_len);
 	    sock->trOut += vmax(0, r_len);
@@ -582,7 +582,7 @@ void *TSocketIn::Task( void *sock_in )
 	    req.assign((char*)frame.data, frame.can_dlc);
 
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(sock->nodePath().c_str(), _("Socket received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"),
+		mess_debug(sock->nodePath().c_str(), _("Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"),
 		    frame.can_id, frame.can_dlc, frame.data[0], frame.data[1], frame.data[2], frame.data[3], frame.data[4],
 		    frame.data[5], frame.data[6], frame.data[7]);
 
@@ -608,7 +608,7 @@ void *TSocketIn::Task( void *sock_in )
     res.unlock();
     TSYS::eventWait(sock->clFree, true, string(MOD_ID)+": "+sock->id()+_(" client task is stopping...."));
 
-    sock->run_st = false;
+    sock->runSt = false;
 
     return NULL;
 }
@@ -621,7 +621,7 @@ void *TSocketIn::ClTask( void *s_inf )
     int tm = s.s->connTm = time(NULL);	//Last connection time
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(s.s->nodePath().c_str(), _("Socket has been connected by '%s'!"), s.sender.c_str());
+	mess_debug(s.s->nodePath().c_str(), _("Has been connected by '%s'!"), s.sender.c_str());
 
     s.s->clientReg(&s);
 
@@ -643,7 +643,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rw_fd))) continue;
 	    if(kz < 0) {
 		if(mess_lev() == TMess::Debug)
-		    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by error: %s"), strerror(errno));
+		    mess_debug(s.s->nodePath().c_str(), _("Has been terminated by error: '%s (%d)'"), strerror(errno), errno);
 		break;
 	    }
 
@@ -654,14 +654,14 @@ void *TSocketIn::ClTask( void *s_inf )
 	    pthread_mutex_unlock(&s.s->dataRes());
 
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(s.s->nodePath().c_str(), _("Socket received message '%d' from '%s'."), r_len, s.sender.c_str());
+		mess_debug(s.s->nodePath().c_str(), _("Read message %s from '%s'."), TSYS::cpct2str(r_len).c_str(), s.sender.c_str());
 	    req.assign(buf, r_len);
 
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
 
 	    if(answ.size()) {
 		if(mess_lev() == TMess::Debug)
-		    mess_debug(s.s->nodePath().c_str(), _("Socket replied message '%d' to '%s'."), answ.size(), s.sender.c_str());
+		    mess_debug(s.s->nodePath().c_str(), _("Wrote message %s to '%s'."), TSYS::cpct2str(answ.size()).c_str(), s.sender.c_str());
 		ssize_t wL = 1;
 		for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL) {
 		    wL = write(s.sock, answ.data()+wOff, answ.size()-wOff);
@@ -690,11 +690,11 @@ void *TSocketIn::ClTask( void *s_inf )
 		(!sessOk || ((s.s->mode() == 1 || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))))));
 
 	if(mess_lev() == TMess::Debug)
-	    mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
+	    mess_debug(s.s->nodePath().c_str(), _("Has been disconnected by '%s'!"), s.sender.c_str());
     }
     catch(TError err) {
 	if(mess_lev() == TMess::Debug)
-	    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
+	    mess_debug(s.s->nodePath().c_str(), _("Has been terminated by execution: %s"), err.mess.c_str());
     }
 
     //Close protocol on broken connection
@@ -936,7 +936,7 @@ void TSocketOut::start( int itmCon )
 {
     ResAlloc res(wres, true);
 
-    if(run_st) return;
+    if(runSt) return;
 
     //Reconnect try after 2*tmCon()
     /*if((TSYS::curTime()-mLstReqTm) < 2000ll*tmCon())
@@ -957,14 +957,14 @@ void TSocketOut::start( int itmCon )
 #ifdef HAVE_LINUX_CAN_H
     else if(s_type == S_NM_RAWCAN)	type = SOCK_RAWCAN;
 #endif
-    else throw TError(nodePath().c_str(),_("Type socket '%s' error!"),s_type.c_str());
+    else throw TError(nodePath().c_str(), _("Type socket '%s' error!"), s_type.c_str());
 
     if(type == SOCK_FORCE) {
 	sockFd = s2i(TSYS::strSepParse(addr(),1,':'));
 	int rez;
 	if((rez=fcntl(sockFd,F_GETFL,0)) < 0 || fcntl(sockFd,F_SETFL,rez|O_NONBLOCK) < 0) {
 	    close(sockFd);
-	    throw TError(nodePath().c_str(), _("Error force socket %d using: %s!"), sockFd, strerror(errno));
+	    throw TError(nodePath().c_str(), _("Error force socket %d using: '%s (%d)'!"), sockFd, strerror(errno), errno);
 	}
     }
     else if(type == SOCK_TCP || type == SOCK_UDP) {
@@ -989,13 +989,13 @@ void TSocketOut::start( int itmCon )
 	//Create socket
 	if(type == SOCK_TCP) {
 	    if((sockFd=socket(PF_INET,SOCK_STREAM,0)) == -1)
-		throw TError(nodePath().c_str(), _("Error creation TCP socket: %s!"), strerror(errno));
+		throw TError(nodePath().c_str(), _("Error creation TCP socket: '%s (%d)'!"), strerror(errno), errno);
 	    int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 	    if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 	}
 	else if(type == SOCK_UDP) {
 	    if((sockFd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
-		throw TError(nodePath().c_str(), _("Error creation UDP socket: %s!"), strerror(errno));
+		throw TError(nodePath().c_str(), _("Error creation UDP socket: '%s (%d)'!"), strerror(errno), errno);
 	}
 	//Connect to socket
 	int flags = fcntl(sockFd, F_GETFL, 0);
@@ -1013,7 +1013,9 @@ void TSocketOut::start( int itmCon )
 	if(res) {
 	    close(sockFd);
 	    sockFd = -1;
-	    throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
+	    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
 	}
     }
     else if(type == SOCK_UNIX) {
@@ -1025,11 +1027,11 @@ void TSocketOut::start( int itmCon )
 
 	//Create socket
 	if((sockFd=socket(PF_UNIX,SOCK_STREAM,0)) == -1)
-	    throw TError(nodePath().c_str(), _("Error creation UNIX socket: %s!"), strerror(errno));
+	    throw TError(nodePath().c_str(), _("Error creation UNIX socket: '%s (%d)'!"), strerror(errno), errno);
 	if(connect(sockFd,(sockaddr*)&nameUn,sizeof(nameUn)) == -1) {
 	    close(sockFd);
 	    sockFd = -1;
-	    throw TError(nodePath().c_str(), _("Connect to UNIX error: %s!"), strerror(errno));
+	    throw TError(nodePath().c_str(), _("Connect to UNIX error: '%s (%d)'!"), strerror(errno), errno);
 	}
 	fcntl(sockFd, F_SETFL, fcntl(sockFd,F_GETFL,0)|O_NONBLOCK);
     }
@@ -1060,7 +1062,7 @@ void TSocketOut::start( int itmCon )
 
     mLstReqTm = TSYS::curTime();
 
-    run_st = true;
+    runSt = true;
 
     TTransportOut::start();
 }
@@ -1069,7 +1071,7 @@ void TSocketOut::stop( )
 {
     ResAlloc res(wres, true);
 
-    if(!run_st) return;
+    if(!runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -1079,95 +1081,109 @@ void TSocketOut::stop( )
 	shutdown(sockFd, SHUT_RDWR);
 	close(sockFd);
     }
-    run_st = false;
+    runSt = false;
 
     TTransportOut::stop();
 }
 
-int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
+int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned time, unsigned flgs )
 {
     string err = _("Unknown error");
     ssize_t kz = 0;
     struct timeval tv;
     fd_set rw_fd;
-    int reqTry = 0;
+    int reqTry = 0,
+	i_b = 0;
     bool writeReq = false;
 
-    if(!noRes) ResAlloc resN(nodeRes(), true);
+    if(!(flgs&TTransportOut::IO_NoRes)) ResAlloc resN(nodeRes(), true);
     ResAlloc res(wres, true);
 
     int prevTmOut = 0;
     if(time) { prevTmOut = tmCon(); setTmCon(time); }
 
-    if(!run_st) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    try {
+	if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
 repeate:
-    if(reqTry++ >= 2) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Request error: %s"),err.c_str()); }
-    //Write request
-    writeReq = false;
-    if(obuf != NULL && len_ob > 0) {
-	if(!time) time = mTmCon;
+	if(reqTry++ >= 2) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Request error: %s"),err.c_str()); }
+	//Write request
+	writeReq = false;
+	if(oBuf != NULL && oLen > 0) {
+	    if(!time) time = mTmCon;
 
-	// Input buffer clear
-	char tbuf[100];
-	while(read(sockFd,tbuf,sizeof(tbuf)) > 0) ;
-	// Write request
-	if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
-	    TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
+	    // Input buffer clear
+	    if(!(flgs&TTransportOut::IO_NoReq)) {
+		char tbuf[100];
+		while(read(sockFd,tbuf,sizeof(tbuf)) > 0) ;
+	    }
+	    // Write request
+	    if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
+		TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 
-	for(int wOff = 0; wOff != len_ob; wOff += kz) {
-	    kz = write(sockFd, obuf+wOff, len_ob-wOff);
-	    if(kz <= 0) {
-		if(errno == EAGAIN) {
-		    tv.tv_sec  = (time/2)/1000; tv.tv_usec = 1000*((time/2)%1000);
-		    FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
-		    kz = select(sockFd+1, NULL, &rw_fd, NULL, &tv);
-		    if(kz > 0 && FD_ISSET(sockFd,&rw_fd)) { kz = 0; continue; }
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
+
+	    for(int wOff = 0; wOff != oLen; wOff += kz) {
+		kz = write(sockFd, oBuf+wOff, oLen-wOff);
+		if(kz <= 0) {
+		    if(errno == EAGAIN) {
+			tv.tv_sec  = (time/2)/1000; tv.tv_usec = 1000*((time/2)%1000);
+			FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
+			kz = select(sockFd+1, NULL, &rw_fd, NULL, &tv);
+			if(kz > 0 && FD_ISSET(sockFd,&rw_fd)) { kz = 0; continue; }
+		    }
+		    err = strerror(errno);
+		    res.release();
+		    stop(); start();
+		    res.request(true);
+		    goto repeate;
+		} else trOut += kz;
+	    }
+
+	    writeReq = true;
+	}
+	else if(!(flgs&TTransportOut::IO_NoReq)) time = mTmNext;
+	if(!time) time = 5000;
+
+	//Read reply
+	if(iBuf != NULL && iLen > 0) {
+	    tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
+	    FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
+	    kz = select(sockFd+1, &rw_fd, NULL, NULL, &tv);
+	    if(kz == 0) {
+		res.release();
+		if(writeReq && !(flgs&TTransportOut::IO_NoReq)) stop();
+		mLstReqTm = TSYS::curTime();
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read timeouted."));
+		throw TError(nodePath().c_str(),_("Timeouted!"));
+	    }
+	    else if(kz < 0) {
+		err = strerror(errno);
+		res.release(); stop();
+		mLstReqTm = TSYS::curTime();
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
+	    }
+	    else if(FD_ISSET(sockFd,&rw_fd)) {
+		i_b = read(sockFd, iBuf, iLen);
+		if(i_b <= 0 && oBuf) {		//Read zero means disconnect by peer
+		    err = strerror(errno);
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		    res.release();
+		    stop();
+		    if(!writeReq || (flgs&TTransportOut::IO_NoReq)) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
+		    start();
+		    res.request(true);
+		    goto repeate;
 		}
-		err = strerror(errno);
-		res.release();
-		stop(); start();
-		res.request(true);
-		goto repeate;
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,i_b)).c_str());
+		trIn += vmax(0, i_b);
 	    }
 	}
-
-	writeReq = true;
     }
-    else time = mTmNext;
-    if(!time) time = 5000;
-
-    trOut += kz;
-
-    //Read reply
-    int i_b = 0;
-    if(ibuf != NULL && len_ib > 0) {
-	tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
-	FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
-	kz = select(sockFd+1, &rw_fd, NULL, NULL, &tv);
-	if(kz == 0) {
-	    res.release();
-	    if(writeReq) stop();
-	    mLstReqTm = TSYS::curTime();
-	    throw TError(nodePath().c_str(),_("Timeouted!"));
-	}
-	else if(kz < 0) {
-	    err = strerror(errno);
-	    res.release(); stop();
-	    mLstReqTm = TSYS::curTime();
-	    throw TError(nodePath().c_str(),_("Socket error: %s"), err.c_str());
-	}
-	else if(FD_ISSET(sockFd, &rw_fd)) {
-	    i_b = read(sockFd, ibuf, len_ib);
-	    if(i_b <= 0 && obuf) {
-		err = strerror(errno);
-		res.release();
-		stop(); start();
-		res.request(true);
-		goto repeate;
-	    }
-	    trIn += vmax(0,i_b);
-	}
+    catch(TError) {
+	if(prevTmOut) setTmCon(prevTmOut);
+	throw;
     }
 
     if(prevTmOut) setTmCon(prevTmOut);

@@ -510,7 +510,7 @@ class Client: public UA
 						//{User}\n{Password}	- by user and password
 
 	// External imlementations
-	virtual int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 ) = 0;
+	virtual int	messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 ) = 0;
 
 	// Main call methods
 	virtual void	protIO( XML_N &io );
