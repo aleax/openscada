@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-07 11:59+0300\n"
+"POT-Creation-Date: 2015-11-26 09:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,6 +183,9 @@ msgstr ""
 msgid "Stopping."
 msgstr ""
 
+msgid "Unknown error"
+msgstr ""
+
 msgid "Transport is not started!"
 msgstr ""
 
@@ -190,7 +193,12 @@ msgstr ""
 msgid "Restart by KeepAliveTm %gs."
 msgstr ""
 
-msgid "Writing request error."
+#, c-format
+msgid "Write error: %s"
+msgstr ""
+
+#, c-format
+msgid "Wrote %s."
 msgstr ""
 
 msgid "Timeouted!"
@@ -199,11 +207,15 @@ msgstr ""
 msgid "Echo request reading error."
 msgstr ""
 
-#, c-format
-msgid "Read: error '%s (%d)'."
+msgid "Read timeouted."
 msgstr ""
 
-msgid "Serial error!"
+#, c-format
+msgid "Read error: %s"
+msgstr ""
+
+#, c-format
+msgid "Read %s."
 msgstr ""
 
 msgid ""

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-07 11:59+0300\n"
+"POT-Creation-Date: 2015-11-26 09:29+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -103,6 +103,7 @@ msgstr "Die Serielle Schnittstelle hat die Nachricht bestätigt '%d'."
 msgid "Write: reply for zero bytes."
 msgstr "Schreiben: Antwort für Null-Bytes."
 
+#, c-format
 msgid "Write: error '%s (%d)'."
 msgstr "Schreiben: Fehler '%s (%d)'."
 
@@ -212,6 +213,9 @@ msgstr "Modem nicht verbunden"
 msgid "Stopping."
 msgstr "Stoppen."
 
+msgid "Unknown error"
+msgstr "Unbekannter Fehler"
+
 msgid "Transport is not started!"
 msgstr "Übertragung ist nicht gestartet!"
 
@@ -219,8 +223,12 @@ msgstr "Übertragung ist nicht gestartet!"
 msgid "Restart by KeepAliveTm %gs."
 msgstr "Neustart durch KeepAliveTm %gs."
 
-msgid "Writing request error."
-msgstr "Fehler beim Senden der Anfrage."
+msgid "Write error: %s"
+msgstr "Fehler beim Schreiben: %s"
+
+#, c-format
+msgid "Wrote %s."
+msgstr "Schrieb %s."
 
 msgid "Timeouted!"
 msgstr "Zeit ist aus!"
@@ -228,11 +236,15 @@ msgstr "Zeit ist aus!"
 msgid "Echo request reading error."
 msgstr "Fehler beim Lesen der Echo-Request."
 
-msgid "Read: error '%s (%d)'."
-msgstr "Lesen: Fehler '%s (%d)'."
+msgid "Read timeouted."
+msgstr "Lesen timeouted."
 
-msgid "Serial error!"
-msgstr "Serielle Fehler"
+msgid "Read error: %s"
+msgstr "Lesefehler: %s"
+
+#, c-format
+msgid "Read %s."
+msgstr "Lesen Sie %s."
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". "

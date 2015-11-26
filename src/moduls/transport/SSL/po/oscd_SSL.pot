@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 20:52+0200\n"
+"POT-Creation-Date: 2015-11-26 09:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,21 +167,36 @@ msgstr ""
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+msgid "Unknown error"
+msgstr ""
+
 msgid "Transport is not started!"
 msgstr ""
 
-msgid "Connection error"
+#, c-format
+msgid "Request error: %s"
 msgstr ""
 
 #, c-format
-msgid "The message is sent with the size '%d'."
+msgid "Write error: %s"
+msgstr ""
+
+#, c-format
+msgid "Wrote %s."
+msgstr ""
+
+#, c-format
+msgid "Read error: %s"
+msgstr ""
+
+msgid "Read timeouted."
 msgstr ""
 
 msgid "Timeouted!"
 msgstr ""
 
 #, c-format
-msgid "Socket error: %s"
+msgid "Read %s."
 msgstr ""
 
 msgid ""

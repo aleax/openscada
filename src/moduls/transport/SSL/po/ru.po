@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 20:52+0200\n"
+"POT-Creation-Date: 2015-11-26 09:33+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -64,6 +64,7 @@ msgstr " клиентская задача остановлена...."
 msgid "Socket has been connected by '%s'!"
 msgstr "Сокет был подключен из '%s'!"
 
+#, c-format
 msgid "Socket has been terminated by error: %s"
 msgstr "Сокет был разорван ошибкой: %s"
 
@@ -75,9 +76,11 @@ msgstr "Получено сообщение размером '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Отвечено сообщением размера '%d'."
 
+#, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Сокет был отключен от '%s'!"
 
+#, c-format
 msgid "Socket has been terminated by execution: %s"
 msgstr "Сокет был разорван исключением: %s"
 
@@ -181,22 +184,34 @@ msgstr ""
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
+
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-msgid "Connection error"
-msgstr "Ошибка подключения"
+msgid "Request error: %s"
+msgstr "Ошибка запроса: %s"
+
+msgid "Write error: %s"
+msgstr "Ошибка записи: %s"
 
 #, c-format
-msgid "The message is sent with the size '%d'."
-msgstr "Отправлено сообщение размером '%d'."
+msgid "Wrote %s."
+msgstr "Записано %s."
+
+msgid "Read error: %s"
+msgstr "Ошибка чтения: %s"
+
+msgid "Read timeouted."
+msgstr "Время ожидания чтения истекло!"
 
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
 
 #, c-format
-msgid "Socket error: %s"
-msgstr "Ошибка сокета: %s"
+msgid "Read %s."
+msgstr "Прочитано %s."
 
 msgid ""
 "SSL output transport has address format:\n"

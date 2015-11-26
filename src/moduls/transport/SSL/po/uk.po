@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 20:52+0200\n"
+"POT-Creation-Date: 2015-11-26 09:33+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -64,6 +64,7 @@ msgstr " зупинка клієнтських задач...."
 msgid "Socket has been connected by '%s'!"
 msgstr "Підключення до сокету з '%s'!"
 
+#, c-format
 msgid "Socket has been terminated by error: %s"
 msgstr "Сокет було перервано помилкою: %s"
 
@@ -75,9 +76,11 @@ msgstr "Отримано повідомлення розміром '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Відповідь повідомленням розміром '%d'."
 
+#, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Сокет було відєднано від '%s'!"
 
+#, c-format
 msgid "Socket has been terminated by execution: %s"
 msgstr "Сокет було перервано виключенням: %s"
 
@@ -181,22 +184,34 @@ msgstr ""
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+msgid "Unknown error"
+msgstr "Невідома помилка"
+
 msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
-msgid "Connection error"
-msgstr "Помилка підключення"
+msgid "Request error: %s"
+msgstr "Помилка запиту: %s"
+
+msgid "Write error: %s"
+msgstr "Помилка запису: %s"
 
 #, c-format
-msgid "The message is sent with the size '%d'."
-msgstr "Надсилання повідомлення розміром '%d'."
+msgid "Wrote %s."
+msgstr "Записано %s."
+
+msgid "Read error: %s"
+msgstr "Помилка читання: %s"
+
+msgid "Read timeouted."
+msgstr "Перевищено час очікування читання!"
 
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
 #, c-format
-msgid "Socket error: %s"
-msgstr "Помилка сокету: %s"
+msgid "Read %s."
+msgstr "Прочитано %s."
 
 msgid ""
 "SSL output transport has address format:\n"
@@ -222,6 +237,3 @@ msgstr ""
 "Часи з'єднання у форматі: \"[conn]:[next]\". Де:\n"
 "    conn - максимальний час очікування відповіді з'єднання, у секундах;\n"
 "    next - максимальний час очікування продовження відповіді, у секундах."
-
-#~ msgid "Socket disconnect (%d)."
-#~ msgstr "Сокет відключено (%d)."

@@ -1,3 +1,14 @@
+2015-11-26 Roman
+- !!!!:SYS: Object ResMtx is added for gather all platform specific mutex implementation.
+    Later it will used instead the direct POSIX API everywhere.
+- !!:Transports.*: messIO() return to the previous prototype and for the no request mode set used <time> argument in negative value (< -1e-3).
+- !!:FIX:Transports.*: Resource of output transport lock into messIO() fixed, by no real a lock hold.
+- Transports.{SSL,Serial}: Appended by diagnostic like to Transports.Sockets.
+- Transports.SSL: Connections processing mostly moved like to Transports.Sockets.
+- Transports.Serial: Disconnect (transport stop) from output port added on read <= 0, which points to the device lost at all.
+- Transports.Sockets: Writing resource allocation, to output transport by messIO(), moved to ResMtx.
+
+
 2015-11-25 Roman
 - SYS: Transports subsystem type modules version rose to 9.
 - !!:Transports.*: run_st also renamed to runSt. messIO() expanded by change attribute "noRes" to "flags" and the flags appended:

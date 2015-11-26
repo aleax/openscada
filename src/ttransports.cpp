@@ -898,18 +898,16 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // string messIO( string mess, real timeOut = 0, bool noReq = false ) - sending the message <mess> through the transport with the waiting timeout <timeOut>
+    // string messIO( string mess, real timeOut = 0 ) - sending the message <mess> through the transport with the waiting timeout <timeOut>
     //  mess - message text for send
-    //  timeOut - connection timeout, in seconds
-    //  noReq - no request, then will not input buffer clean and reconnect for tries
+    //  timeOut - connection timeout, in seconds. Set to "< -1e-3" for the no request mode
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object) {
 	string rez;
 	char buf[STR_BUF_LEN];
 	try {
 	    if(!startStat()) start();
-	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf),
-		(prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0, (prms.size() >= 3 && prms[2].getB()) ? IO_NoReq : 0);
-	    rez.assign(buf,resp_len);
+	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
+	    rez.assign(buf, resp_len);
 	} catch(TError) { return ""; }
 
 	return rez;
@@ -930,7 +928,8 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     }
     // string status( ) - the transport status
     if(iid == "status")	return getStatus();
-    // bool start( bool vl = <EVAL>, int tm = 0 ) - the transport start status return, start/stop it by <vl> is not <EVAL>
+    // bool start( bool vl = <EVAL>, int tm = 0 ) - the transport start status return, start/stop it by <vl> (if it is not <EVAL>).
+    //  For starting you can set the specific timeout //tm//.
     if(iid == "start") {
 	char com = prms.size() ? prms[0].getB() : EVAL_BOOL;
 	if(com == EVAL_BOOL) return startStat();

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 20:52+0200\n"
+"POT-Creation-Date: 2015-11-26 09:33+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -65,6 +65,7 @@ msgstr " Kundenaufgabe ist gestoppt...."
 msgid "Socket has been connected by '%s'!"
 msgstr "Socket ist verbunden von '%s'!"
 
+#, c-format
 msgid "Socket has been terminated by error: %s"
 msgstr "Socket wurde von Fehler beendet: %s"
 
@@ -76,9 +77,11 @@ msgstr "Die Nachricht ist bekommen von der Größe '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Es wurde beantwortet mit der Nachricht von der Größe  '%d'."
 
+#, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Socket wurde von abgeklemmt '%s'!"
 
+#, c-format
 msgid "Socket has been terminated by execution: %s"
 msgstr "Socket wurde durch die Ausführung beendet wurde: %s"
 
@@ -182,22 +185,34 @@ msgstr ""
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+msgid "Unknown error"
+msgstr "Unbekannter Fehler"
+
 msgid "Transport is not started!"
 msgstr "Der Transport  ist nicht gestartet!"
 
-msgid "Connection error"
-msgstr "Fehler der Verbindung"
+msgid "Request error: %s"
+msgstr "Request-Fehler: %s"
+
+msgid "Write error: %s"
+msgstr "Fehler beim Schreiben: %s"
 
 #, c-format
-msgid "The message is sent with the size '%d'."
-msgstr "Die Nachricht von der Größe '%d' ist gesendet."
+msgid "Wrote %s."
+msgstr "Schrieb %s."
+
+msgid "Read error: %s"
+msgstr "Lesefehler: %s"
+
+msgid "Read timeouted."
+msgstr "Lesen timeouted."
 
 msgid "Timeouted!"
 msgstr "Die Wartezeit ist aus!"
 
 #, c-format
-msgid "Socket error: %s"
-msgstr "Fehler des Sockets: %s"
+msgid "Read %s."
+msgstr "Lesen Sie %s."
 
 msgid ""
 "SSL output transport has address format:\n"
@@ -223,6 +238,3 @@ msgstr ""
 "Die Zeitabstände sind Verbindung in das Format: \"[conn]:[next]\". Wo:\n"
 "    conn - maximale Wartezeit Verbindung in Sekunden;\n"
 "    next - maximale Wartezeit auf die Antwort in Sekunden weiter."
-
-#~ msgid "Socket disconnect (%d)."
-#~ msgstr "Steckdose ziehen (%d)."

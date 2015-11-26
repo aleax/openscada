@@ -1006,14 +1006,18 @@ void TTrOut::check( )
     if(toStop) stop();
 }
 
-int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned time, unsigned flgs )
+int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, bool noRes )
 {
+    string err = _("Unknown error");
     ssize_t blen = 0;
     int off = 0, kz, sec;
     fd_set rw_fd;
     struct timeval tv;
+    bool noReq = (time < 0);
+    time = abs(time);
 
-    if(!(flgs&TTransportOut::IO_NoRes)) ResAlloc res(nodeRes(), true);
+    ResAlloc res(nodeRes());
+    if(!noRes) res.lock(true);
 
     if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
@@ -1034,7 +1038,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned t
 
     //Write request
     if(oBuf && oLen > 0) {
-	if(!(flgs&TTransportOut::IO_NoReq)) tcflush(fd, TCIOFLUSH);
+	if(!noReq) tcflush(fd, TCIOFLUSH);
 	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = TSYS::sysSleep(1e-6*((4e3*wCharTm)-(tmW-mLstReqTm)));
 
 	// Pure RS-485 flow control: Clear RTS for transfer allow
@@ -1049,13 +1053,15 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned t
 		    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
 		    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
 		}
+		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 		mLstReqTm = TSYS::curTime();
-		string err = TSYS::strMess(_("Write: error '%s (%d)'."), strerror(errno), errno);
 		stop();
-		throw TError(nodePath().c_str(), err.c_str());
-	    }
-	    else trOut += kz;
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
+		throw TError(nodePath().c_str(), _("Write error: %s"), err.c_str());
+	    } else trOut += kz;
 	}
+
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 
 	// Hard read for wait request echo and transfer disable
 	if(mRTSfc) {
@@ -1064,7 +1070,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned t
 	    for(int r_off = 0; r_off < oLen; ) {
 		kz = read(fd, echoBuf, vmin(oLen-r_off,(int)sizeof(echoBuf)));
 		if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
-		    if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(),_("Timeouted!"));
+		    if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(), _("Timeouted!"));
 		    sched_yield();
 		    continue;
 		}
@@ -1082,21 +1088,34 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, unsigned t
 	else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
 	FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
 	kz = select(fd+1, &rw_fd, NULL, NULL, &tv);
-	if(kz == 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
-	else if(kz < 0)	{
+	if(kz == 0) {
 	    mLstReqTm = TSYS::curTime();
-	    string err = TSYS::strMess(_("Read: error '%s (%d)'."), strerror(errno), errno);
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read timeouted."));
+	    throw TError(nodePath().c_str(), _("Read timeouted."));
+	}
+	else if(kz < 0) {
+	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+	    mLstReqTm = TSYS::curTime();
 	    stop();
-	    throw TError(nodePath().c_str(), err.c_str());
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+	    throw TError(nodePath().c_str(), _("Read error: %s"), err.c_str());
 	}
 	else if(FD_ISSET(fd,&rw_fd)) {
 	    blen = read(fd, iBuf, iLen);
+	    if(blen <= 0) {	//Read zero means disconnect by peer
+		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+		mLstReqTm = TSYS::curTime();
+		stop();
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		throw TError(nodePath().c_str(), _("Read error: %s"), err.c_str());
+	    }
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,blen)).c_str());
 	    trIn += vmax(0, blen);
 	}
     }
     mLstReqTm = TSYS::curTime();
 
-    return vmax(0,blen);
+    return vmax(0, blen);
 }
 
 TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

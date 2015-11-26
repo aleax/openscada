@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 22:31+0200\n"
+"POT-Creation-Date: 2015-11-26 09:24+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -276,9 +276,11 @@ msgstr "Помилка створення TCP сокету: '%s (%d)'!"
 msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr "Помилка створення UDP сокету: '%s (%d)'!"
 
+#, c-format
 msgid "Connect by timeout %s error: '%s (%d)'"
 msgstr "Помилка підключення за часом %s: '%s (%d)'"
 
+#, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"
 msgstr "Помилка створення UNIX сокету: '%s (%d)'!"
 
@@ -292,6 +294,9 @@ msgstr "Транспорт не запущено!"
 msgid "Request error: %s"
 msgstr "Помилка запиту: %s"
 
+msgid "Write error: %s"
+msgstr "Помилка запису: %s"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Записано %s."
@@ -302,6 +307,7 @@ msgstr "Перевищено час очікування читання!"
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
+#, c-format
 msgid "Read error: %s"
 msgstr "Помилка читання: %s"
 

@@ -26,7 +26,7 @@
 using namespace OSCADA;
 
 //********************************************
-//* Resource object                          *
+//* RW Resources allocation object           *
 //********************************************
 Res::Res( )
 {

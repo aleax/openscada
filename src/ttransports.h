@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		9		//TransportS type modules version
+#define STR_VER		8		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -118,9 +118,6 @@ class TTransportIn : public TCntrNode, public TConfig
 class TTransportOut : public TCntrNode, public TConfig
 {
     public:
-	//Data
-	enum FlagsIO { IO_NoRes = 0x01, IO_NoReq = 0x02 };
-
 	//Methods
 	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut( );
@@ -156,7 +153,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual void start( int time = 0 )	{ };
 	virtual void stop( )			{ };
 
-	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, unsigned time = 0, unsigned flgs = 0 )
+	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false )
 	{ return 0; }
 
 	void messProtIO( XMLNode &io, const string &prot );

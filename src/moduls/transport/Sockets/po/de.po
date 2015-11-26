@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 22:31+0200\n"
+"POT-Creation-Date: 2015-11-26 09:24+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -52,6 +52,7 @@ msgstr "Fehler des Typs '%s' des Sockets!"
 msgid "Socket name '%s' error!"
 msgstr "Fehler des Namens '%s' des Sockets!"
 
+#, c-format
 msgid "Connect to Internet socket error: '%s (%d)'!"
 msgstr "Fehler der Internet Verbidung mit dem Socket: '%s (%d)'!"
 
@@ -63,6 +64,7 @@ msgstr "TCP Socket ist nicht verbunden mit '%s'!"
 msgid "UDP socket doesn't bind to '%s'!"
 msgstr "UDP Socket ist nicht verbunden mit '%s'!"
 
+#, c-format
 msgid "Connect to UNIX error: '%s (%d)'!"
 msgstr "Fehler der Verbindung mit dem UNIX Socket: '%s (%d)'!"
 
@@ -82,6 +84,7 @@ msgstr "RAWCAN Socket ist verbunden mit '%s'!"
 msgid "Restart by no ingoing activity to '%s'."
 msgstr "Neu zu starten auf keinen eingehenden Aktivität '%s'."
 
+#, c-format
 msgid "Write: wrote %s."
 msgstr "Schreiben: schrieb %s."
 
@@ -92,42 +95,52 @@ msgstr "Schreiben: Antwort für Null-Bytes."
 msgid "Write: error '%s (%d)'!"
 msgstr "Schreiben: Fehler '%s (%d)'!"
 
+#, c-format
 msgid "Close input transport by error: '%s (%d)'"
 msgstr "Close-Eingang Transport durch Fehler: '%s (%d)'"
 
 msgid "Error creation of the thread!"
 msgstr "Fehler der Schaffung des Stroms!"
 
+#, c-format
 msgid "Read datagram %s from '%s'!"
 msgstr "Lesen Datagramm %s aus '%s'!"
 
+#, c-format
 msgid "Wrote datagram %s to '%s'!"
 msgstr "Schrieb Datagramm %s auf '%s'!"
 
+#, c-format
 msgid ""
 "Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
-"Empfangenen CAN-Rahmen id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X"
-"%02X%02X!"
+"Empfangenen CAN-Rahmen id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
+"%02X!"
 
 msgid " client task is stopping...."
 msgstr " Kundenaufgabe wird gestoppt...."
 
+#, c-format
 msgid "Has been connected by '%s'!"
 msgstr "Verbunden von '%s'!"
 
+#, c-format
 msgid "Has been terminated by error: '%s (%d)'"
 msgstr "Von Fehler beendet: '%s (%d)'"
 
+#, c-format
 msgid "Read message %s from '%s'."
 msgstr "Nachricht lesen %s aus '%s'."
 
+#, c-format
 msgid "Wrote message %s to '%s'."
 msgstr "Schrieb Nachricht %s auf '%s'."
 
+#, c-format
 msgid "Has been disconnected by '%s'!"
 msgstr "Abgebunden vom '%s'!"
 
+#, c-format
 msgid "Has been terminated by execution: %s"
 msgstr "Ausführung beendet wurde: %s"
 
@@ -252,18 +265,23 @@ msgstr "Eingangstraffik %s, Ausgangs- %s."
 msgid "Type socket '%s' error!"
 msgstr "Fehler im Typ '%s' des Sockets!"
 
+#, c-format
 msgid "Error force socket %d using: '%s (%d)'!"
 msgstr "Fehler Kraftsockel %d mit: '%s (%d)'!"
 
+#, c-format
 msgid "Error creation TCP socket: '%s (%d)'!"
 msgstr "Fehler der Schaffung des TCP Sockets: '%s (%d)'!"
 
+#, c-format
 msgid "Error creation UDP socket: '%s (%d)'!"
 msgstr "Fehler der Schaffung des UDP Sockets: '%s (%d)'!"
 
+#, c-format
 msgid "Connect by timeout %s error: '%s (%d)'"
 msgstr "Verbinden von Timeout %s Fehler: '%s (%d)'"
 
+#, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"
 msgstr "Fehler der Schaffung des UNIX Sockets: '%s (%d)'!"
 
@@ -277,6 +295,9 @@ msgstr "Transport ist nicht gestartet!"
 msgid "Request error: %s"
 msgstr "Request-Fehler: %s"
 
+msgid "Write error: %s"
+msgstr "Fehler beim Schreiben: %s"
+
 #, c-format
 msgid "Wrote %s."
 msgstr "Schrieb %s."
@@ -287,6 +308,7 @@ msgstr "Lesen timeouted."
 msgid "Timeouted!"
 msgstr "Timeouted!"
 
+#, c-format
 msgid "Read error: %s"
 msgstr "Lesefehler: %s"
 

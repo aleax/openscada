@@ -32,7 +32,7 @@ namespace OSCADA
 {
 
 //***********************************************************
-//* Resource RW lock object				    *
+//* RW Resources allocation object			    *
 //***********************************************************
 class Res
 {
@@ -52,6 +52,7 @@ class Res
 	pthread_t		wThr;
 #endif
 };
+
 
 //***********************************************************
 //* Automatic resource RW unlock object			    *
@@ -99,6 +100,34 @@ class ResString
 	//Attributes
 	pthread_mutex_t	mRes;
 	string	str;
+};
+
+//***********************************************************
+//* Resources allocation object, by mutex		    *
+//***********************************************************
+class ResMtx
+{
+    public:
+	ResMtx( bool isRecurs = false ) {
+	    pthread_mutexattr_t attrM;
+	    pthread_mutexattr_init(&attrM);
+	    if(isRecurs) pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+	    pthread_mutex_init(&m, &attrM);
+	    pthread_mutexattr_destroy(&attrM);
+	}
+	~ResMtx( ) {
+	    pthread_mutex_destroy(&m);
+	}
+
+	int lock( )	{ return pthread_mutex_lock(&m); }
+	int tryLock( )	{ return pthread_mutex_trylock(&m); }
+	int unlock( )	{ return pthread_mutex_unlock(&m); }
+
+	pthread_mutex_t &mtx( )	{ return m; }
+
+    private:
+	//Attributes
+	pthread_mutex_t	m;
 };
 
 //***********************************************************
