@@ -1702,8 +1702,9 @@ void Client::protIO( XML_N &io )
 				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
 									//> results []
 			    int resN = iNu(rez, off, 4);		//Nodes number
-			    for(int i_r = 0; i_r < resN && stIdx < (int)io.childSize(); i_r++, stIdx++)
-				iDataValue(rez, off, *io.childGet(stIdx));
+			    for(int iR = 0, stIdx_ = stIdx; iR < resN && stIdx_ < (int)io.childSize(); iR++, stIdx_++)
+				iDataValue(rez, off, *io.childGet(stIdx_));
+			    stIdx += std::min(25u, io.childSize()-stIdx);
 									//>> diagnosticInfos []
 			    iNu(rez, off, 4);				//Items number
 			    if(stIdx < (int)io.childSize()) goto nextReq;

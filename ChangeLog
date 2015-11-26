@@ -1,4 +1,5 @@
 2015-11-26 Roman
+- FIX:DAQ.OPC_UA: Empty Read service list cicling fix.
 - !!!!:SYS: Object ResMtx is added for gather all platform specific mutex implementation.
     Later it will used instead the direct POSIX API everywhere.
 - !!:Transports.*: messIO() return to the previous prototype and for the no request mode set used <time> argument in negative value (< -1e-3).

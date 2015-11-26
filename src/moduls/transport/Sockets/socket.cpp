@@ -880,8 +880,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mMSS(0), sockFd(-1), wres(true), mLstReqTm(0)
+TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
+    TTransportOut(name, idb, el), mMSS(0), sockFd(-1), wres(true), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
     setTimings("5:1");
