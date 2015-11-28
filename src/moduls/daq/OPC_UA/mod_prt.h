@@ -50,7 +50,7 @@ using namespace OPC;
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
-#define NS_OpenSCADA_DAQ 2
+#define NS_OpenSCADA_DAQ 4
 
 namespace OPC_UA
 {

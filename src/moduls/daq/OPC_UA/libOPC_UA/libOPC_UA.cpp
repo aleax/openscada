@@ -405,16 +405,16 @@ NodeId NodeId::fromAddr( const string &strAddr )
 	bf[2] = 0;
 	char *endptr = 0;
 	rez = "";
-	for(unsigned i_s = 1; !(vl.size()%2) && (!endptr || *endptr == 0) && i_s < (vl.size()-1); i_s += 2)
-	{ bf[0] = vl[i_s]; bf[1] = vl[i_s+1]; rez += (char)strtol(bf,&endptr,16); }
+	for(unsigned iS = 1; !(vl.size()%2) && (!endptr || *endptr == 0) && iS < (vl.size()-1) && isxdigit(vl[iS]) && isxdigit(vl[iS+1]); iS += 2)
+	{ bf[0] = vl[iS]; bf[1] = vl[iS+1]; rez += (char)strtol(bf,&endptr,16); }
 	if(rez.size() == (vl.size()-2)/2)	return NodeId(rez, ns, NodeId::Opaque);
 	return NodeId(vl.substr(1,vl.size()-2), ns);
     }
 
     //Check for number
     bool isStr = false;
-    for(unsigned i_s = 0; i_s < vl.size() && !isStr; i_s++)
-	if(!isdigit(vl[i_s])) isStr = true;
+    for(unsigned iS = 0; iS < vl.size() && !isStr; iS++)
+	if(!isdigit(vl[iS])) isStr = true;
     if(isStr) return NodeId(vl,ns);
     return NodeId((uint32_t)strtoul(vl.c_str(),NULL,0), ns);
 }
@@ -1364,25 +1364,25 @@ void Client::protIO( XML_N &io )
 		if(io.attr("id") == "FindServers") {
 		    iTpId = OpcUa_FindServersRequest;
 		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
-		    oS(mReq, "");					//localeIds []
-		    oS(mReq, "");					//serverUris []
+		    oN(mReq, 0, 4);					//localeIds []
+		    oN(mReq, 0, 4);					//serverUris []
 		}
 		else if(io.attr("id") == "GetEndpoints") {
 		    iTpId = OpcUa_GetEndpointsRequest;
 		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
-		    oS(mReq, "");					//localeIds []
-		    oS(mReq, "");					//profileUris []
+		    oN(mReq, 0, 4);					//localeIds []
+		    oN(mReq, 0, 4);					//profileUris []
 		}
 		else if(io.attr("id") == "CreateSession") {
 		    iTpId = OpcUa_CreateSessionRequest;
 									//> clientDescription (Application Description)
-		    oS(mReq, "");					//applicationUri
-		    oS(mReq, "");					//productUri
-		    oSl(mReq, "");					//applicationName
+		    oS(mReq, applicationUri());				//applicationUri
+		    oS(mReq, productUri());				//productUri
+		    oSl(mReq, applicationName());			//applicationName
 		    oNu(mReq, 1, 4);					//applicationType (CLIENT_1)
 		    oS(mReq, "");					//gatewayServerUri
 		    oS(mReq, "");					//discoveryProfileUri
-		    oS(mReq, "");					//discoveryUrls
+		    oN(mReq, 0, 4);					//discoveryUrls
 
 		    oS(mReq, "");					//serverUri
 		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
@@ -1410,17 +1410,25 @@ void Client::protIO( XML_N &io )
 		    oNu(mReq, 1, 4);					//List number 1
 		    oS(mReq, "en");					//localeId
 									//> userIdentityToken
+
+		    string userIdTok;
+		    XML_N *userIdToks;
+		    for(int iIT = 0; (userIdToks=sess.endPointDscr.childGet("userIdentityToken",iIT,true)); iIT++)
+			if(atoi(userIdToks->attr("tokenType").c_str()) == (authData().empty()?A_Anon:A_UserNm))
+			    userIdTok = userIdToks->attr("policyId");
+		    if(userIdTok.empty()) throw OPCError(OpcUa_BadIdentityTokenRejected, "");
+
 		    if(authData().empty()) {
 			oNodeId(mReq, OpcUa_AnonymousIdentityToken);	//TypeId
 			oNu(mReq, 1, 1);				//Encode
-			oNu(mReq, 4+10, 4);				//Length
-			oS(mReq, "anonPolicy");				//policyId: force to anonPolicy
+			oNu(mReq, 4+userIdTok.size(), 4);		//Length
+			oS(mReq, userIdTok);				//policyId
 		    }
 		    else {
 			oNodeId(mReq, OpcUa_UserNameIdentityToken);	//TypeId
 			oNu(mReq, 1, 1);				//Encode
 			int tkOff = mReq.size(); oNu(mReq, 0, 4);	//Length
-			oS(mReq, "UserNameIdentityToken");		//policyId: force to UserNameIdentityToken
+			oS(mReq, userIdTok);				//policyId
 			oS(mReq, strLine(authData(),0));		//UserName
 			oS(mReq, strLine(authData(),1));		//Password
 			oS(mReq, "");					//EncryptionAlgorithm
@@ -1808,7 +1816,7 @@ void Client::reqService( XML_N &io )
 	sess.secToken = strtoul(req.attr("SecTokenId").c_str(), NULL, 10);
 	sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
 
-	if(secPolicy() != "None") {
+	if(secPolicy() != "None" || io.attr("id") == "GetEndpoints" || !sess.endPointDscr.childSize()) {
 	    // Send GetEndpoints request for certificate retrieve and for secure policy check
 	    req.setAttr("id", "GetEndpoints")->setAttr("EndPoint", endPoint());
 	    protIO(req);
@@ -1822,8 +1830,13 @@ void Client::reqService( XML_N &io )
 		    break;
 	    if(i_ep >= req.childSize())
 	    { io.setAttr("err",strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,"No secure policy found")); return; }
-	    string servCert = req.childGet(i_ep)->childGet("serverCertificate")->text();
-	    int secMessMode = atoi(req.childGet(i_ep)->attr("securityMode").c_str());
+	    sess.endPointDscr = *req.childGet(i_ep);
+	    if(io.attr("id") == "GetEndpoints") { io = req; return; }
+	}
+
+	if(secPolicy() != "None") {
+	    string servCert = sess.endPointDscr.childGet("serverCertificate")->text();
+	    int secMessMode = atoi(sess.endPointDscr.attr("securityMode").c_str());
 	    req.childClear();
 
 	    // Send Close request for no secure channel
@@ -1903,7 +1916,7 @@ void Client::reqService( XML_N &io )
 	if(!req.attr("err").empty())	{ io.setAttr("err",req.attr("err")); return; }
     }
 
-    io.setAttr("authTokenId", sess.authTkId)->setAttr("ReqHandle", uint2str(sess.reqHndl++))->
+    io.setAttr("EndPoint", endPoint())->setAttr("authTokenId", sess.authTkId)->setAttr("ReqHandle", uint2str(sess.reqHndl++))->
 	setAttr("SeqNumber", uint2str(sess.sqNumb++))->setAttr("SeqReqId", uint2str(sess.sqReqId++))->
 	setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey);
     protIO(io);
@@ -3320,7 +3333,7 @@ void Server::EP::setEnable( bool vl )
 	 nodeReg(OpcUa_Server_ServerStatus,OpcUa_Server_ServerStatus_State,"State",NC_Variable,OpcUa_HasComponent,OpcUa_BaseDataVariableType)->
 	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
 	nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
-	    setAttr("ValueRank","1")->setAttr("Value","http://opcfoundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(OpcUa_Array|OpcUa_String));
+	    setAttr("ValueRank","1")->setAttr("Value","http://opcfoundation.org/UA/\n"+serv->applicationUri()+"\nhttp://opcfoundation.org/UA/DI/\nhttp://PLCopen.org/OpcUa/IEC61131-3/")->setAttr("DataType",int2str(OpcUa_Array|OpcUa_String));
 	nodeReg(OpcUa_Server,OpcUa_Server_ServerArray,"ServerArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
 	    setAttr("ValueRank","1")->setAttr("Value",serv->applicationUri())->setAttr("DataType",int2str(OpcUa_Array|OpcUa_String));
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
@@ -4031,7 +4044,7 @@ XML_N* XML_N::setAttr( const string &name, const string &val )
     return this;
 }
 
-XML_N* XML_N::clear()
+XML_N* XML_N::clear( )
 {
     attrClear();
     mText.clear();

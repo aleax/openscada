@@ -948,6 +948,11 @@ void ConfApp::closeEvent( QCloseEvent* ce )
     // Wait for a host request finish
     while(inHostReq) qApp->processEvents();
 
+    // Timers early stop
+    endRunTimer->stop();
+    autoUpdTimer->stop();
+    reqPrgrsTimer->stop();
+
     // Threads delete
     for(map<string, SCADAHost*>::iterator iH = hosts.begin(); iH != hosts.end(); ++iH) delete iH->second;
     hosts.clear();

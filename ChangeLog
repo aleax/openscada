@@ -1,3 +1,19 @@
+2015-11-28 Roman
+- !!!:FIX:DAQ.OPC_UA:
+    Library: Expanded to new error codes.
+	Auth processing for client fixed to storing current endpoint description for next actual "policyId" obtain and using to the auth service.
+	Wrong NodeId::Opaque type set fix.
+	Next empty arrays number fix for set to 0 instead -1.
+	Fix something "EndPoint" lack.
+	To server part new default name spaces added: 2-"http://opcfoundation.org/UA/DI/, 3-"http://PLCopen.org/OpcUa/IEC61131-3/"
+    Client: Appending information by: applicationUri(), productUri(), applicationName().
+	For empty "browseName" browsed nodes using "displayName" set.
+    Server: OpenSCADA DAQ name space set to index 4.
+- UI.Vision: Adapted for build with libphonon4qt5 and Qt5. Deprecated functions using is resolved for Phonon.
+- UI.{QTCfg,Vision}: Early timers stopping added to the close event processing.
+- UI.VCAEngine: Media files selection appended by URL's extensions: avi, mov, mpg4.
+
+
 2015-11-26 Roman
 - FIX:DAQ.OPC_UA: Empty Read service list cicling fix.
 - !!!!:SYS: Object ResMtx is added for gather all platform specific mutex implementation.

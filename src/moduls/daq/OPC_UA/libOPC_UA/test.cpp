@@ -34,7 +34,7 @@ int main( int argc, char *argv[], char *envp[] )
 	printf("OPC UA client test program need command line arguments:\n"
 	    "  \"testOPC_UA opc.tcp://{Host}:{Port}/{SecurePolicy}/{MessSecMode} {NodeId} [{user}:{pass}]\"\n"
 	    "Examples:\n"
-	    "  \"testOPC_UA opc.tcp://127.0.0.1:4841/None/None 84\""
+	    "  \"testOPC_UA opc.tcp://127.0.0.1:4841/None/None 84\"\n"
 	    "  \"testOPC_UA opc.tcp://127.0.0.1:4841/Basic128Rsa15/SignEnc 84 user:pass\"");
 	return 0;
     }

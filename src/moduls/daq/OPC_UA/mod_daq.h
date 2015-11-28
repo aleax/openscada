@@ -131,6 +131,9 @@ class TMdContr: public TController, public Client
 	Res &nodeRes( )		{ return cntrRes; }
 
 	// OPC_UA Client methods
+	string applicationUri( );
+	string productUri( );
+	string applicationName( );
 	string sessionName( )	{ return "OpenSCADA station "+SYS->id(); }
 	void protIO( XML_N &io );
 	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );

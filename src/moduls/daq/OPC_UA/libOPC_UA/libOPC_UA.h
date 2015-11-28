@@ -99,8 +99,11 @@ namespace OPC
 #define OpcUa_BadNothingToDo		0x800F0000
 #define OpcUa_BadTooManyOperations	0x80100000
 #define OpcUa_BadUserAccessDenied	0x801F0000
+#define OpcUa_BadIdentityTokenInvalid	0x80200000
+#define OpcUa_BadIdentityTokenRejected	0x80210000
 #define OpcUa_BadSecureChannelIdInvalid	0x80220000
 #define OpcUa_BadSessionIdInvalid	0x80250000
+#define OpcUa_BadSessionNotActivated	0x80270000
 #define OpcUa_BadSubscriptionIdInvalid	0x80280000
 #define OpcUa_BadNodeIdInvalid		0x80330000
 #define OpcUa_BadNodeIdUnknown		0x80340000
@@ -126,6 +129,7 @@ namespace OPC
 #define OpcUa_BadSecureChannelClosed	0x80860000
 #define OpcUa_BadSecureChannelTokenUnknown	0x80870000
 #define OpcUa_BadInvalidArgument	0x80AB0000
+#define OpcUa_BadEndOfStream		0x80B00000
 #define OpcUa_BadRequestTooLarge	0x80B80000
 #define OpcUa_BadResponseTooLarge	0x80B90000
 #define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
@@ -249,6 +253,7 @@ namespace OPC
 enum SerializerType	{ ST_Binary };
 enum SC_ReqTP		{ SC_ISSUE = 0, SC_RENEW = 1 };
 enum MessageSecurityMode{ MS_None = 1, MS_Sign, MS_SignAndEncrypt };
+enum AuthTp		{ A_Anon = 0, A_UserNm = 1, A_Cert = 2 };
 enum NodeClasses	{ NC_Object = 1, NC_Variable = 2, NC_Method = 4, NC_ObjectType = 8, NC_VariableType = 16,
 			  NC_ReferenceType = 32, NC_DataType = 64, NC_View = 128 };
 enum BrowseDirection	{ BD_FORWARD = 0, BD_INVERSE, BD_BOTH };
@@ -469,6 +474,7 @@ class Client: public UA
 		void clearFull( )
 		{
 		    endPoint = servCert = clKey = servKey = "";
+		    endPointDscr.clear();
 		    secPolicy = "None"; secMessMode = 1;
 		    secChnl = secToken = reqHndl = 0;
 		    sqNumb = 33;
@@ -479,6 +485,7 @@ class Client: public UA
 		}
 
 		string		endPoint;
+		XML_N		endPointDscr;
 		uint32_t	secChnl;
 		uint32_t	secToken;
 		uint32_t	sqNumb;
@@ -500,6 +507,9 @@ class Client: public UA
 	~Client( );
 
 	// Main variables
+	virtual string	applicationUri( ) = 0;
+	virtual string	productUri( ) = 0;
+	virtual string	applicationName( ) = 0;
 	virtual string	sessionName( ) = 0;
 	virtual string	endPoint( ) = 0;
 	virtual string	secPolicy( ) = 0;

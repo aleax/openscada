@@ -151,6 +151,12 @@ void TMdContr::reqService( XML_N &io )
     if(io.attr("err").empty()) tmDelay--;
 }
 
+string TMdContr::applicationUri( )	{ return "urn:"+SYS->host()+":OpenSCADA:DAQ.OPC_UA"; }
+
+string TMdContr::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;*/ }
+
+string TMdContr::applicationName( )	{ return "OpenSCADA.OPC-UA Client"; }
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )
@@ -450,7 +456,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	// Prepare request for all typical
 	string cNodeId = i2s(OpcUa_RootFolder);
 	size_t stC = mBrwsVar.rfind(")");
-	size_t stP = mBrwsVar.rfind("(",stC);
+	size_t stP = mBrwsVar.rfind("(", stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
 	XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
@@ -539,7 +545,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	// Get current node references by call browse
 	string cNodeId = i2s(OpcUa_RootFolder);
 	size_t stC = mBrwsVar.rfind(")");
-	size_t stP = mBrwsVar.rfind("(",stC);
+	size_t stP = mBrwsVar.rfind("(", stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 	XML_N req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
@@ -556,10 +562,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
 	// Process inverse references
 	bool invRefPr = false;
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	string tStr;
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	    invRefPr = true;
 	}
 	if(!invRefPr && mBrwsVar != TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder))
@@ -568,10 +575,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	// Append self address
 	opt->childAdd("el")->setText(mBrwsVar);
 	// Process forward references
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(!s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(!s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
     }
     else TController::cntrCmdProc(opt);
@@ -809,10 +816,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
 	// Process inverse references
 	bool invRefPr = false;
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	string tStr;
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	    invRefPr = true;
 	}
 	if(!invRefPr && cNodeId != i2s(OpcUa_RootFolder)) opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder));
@@ -820,10 +828,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	// Append self address
 	opt->childAdd("el")->setText(selNd);
 	// Process forward references
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(!s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(!s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
     }
     else TParamContr::cntrCmdProc(opt);

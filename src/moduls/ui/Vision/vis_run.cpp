@@ -424,6 +424,9 @@ void VisRun::closeEvent( QCloseEvent* ce )
 	if(winCnt <= 1) SYS->stop();
     }
 
+    endRunTimer->stop();
+    updateTimer->stop();
+
     winClose = true;
     ce->accept();
 }

@@ -1440,9 +1440,9 @@ INSERT INTO "wlb_originals_io" VALUES('Diagram','parNum','1',0,'','','','','',''
 INSERT INTO "wlb_originals_io" VALUES('Document','time','0',0,'','','','','','','','','');
 INSERT INTO "wlb_originals_io" VALUES('Document','n','0',0,'','','','','','','','','');
 CREATE TABLE 'OPC_UA_Prm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ND_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO "OPC_UA_Prm_test" VALUES('test','','','','','','','',1,'2:"DAQ.System.AutoDA.CPULoad.load"
-2:"DAQ.System.AutoDA.MemInfo.use"
-2:"DAQ.System.AutoDA.MemInfo.free"');
+INSERT INTO "OPC_UA_Prm_test" VALUES('test','','','','','','','',1,'4:"DAQ.System.AutoDA.CPULoad.load"
+4:"DAQ.System.AutoDA.MemInfo.use"
+4:"DAQ.System.AutoDA.MemInfo.free"');
 CREATE TABLE 'ModBusPrm_testTCP' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ATTR_LS" TEXT DEFAULT '' ,"ru#ATTR_LS" TEXT DEFAULT '' ,"uk#ATTR_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "ModBusPrm_testTCP" VALUES('test','','','','','','','',1,'R:0:r:reg0:Register 0
 R:1:r:reg1:Register 1
