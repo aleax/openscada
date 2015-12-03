@@ -46,7 +46,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.8.1"
+#define MOD_VER		"1.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -283,7 +283,7 @@ void *TUIMod::Task( void * )
     }
 
     //Start external modules
-    WinControl *winCntr = new WinControl( );
+    WinControl *winCntr = new WinControl();
 
     int op_wnd = 0;
     mod->owner().modList(list);
@@ -303,7 +303,7 @@ void *TUIMod::Task( void * )
     delete splash;
 
     //Start call dialog
-    if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog( );
+    if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog();
 
     QObject::connect(QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()));
 
@@ -375,12 +375,17 @@ WinControl::WinControl( )
     tm->start(STD_WAIT_DELAY);
 }
 
+WinControl::~WinControl( )
+{
+    tm->stop();
+}
+
 void WinControl::checkForEnd( )
 {
     if(!mod->endRun() && mod->startCom()) return;
-    tm->stop();
+    //tm->stop();
     QWidgetList wl = qApp->topLevelWidgets();
-    for(int i_w = 0; i_w < wl.size(); i_w++) wl[i_w]->setProperty("forceClose",true);
+    for(int iW = 0; iW < wl.size(); iW++) wl[iW]->setProperty("forceClose", true);
     qApp->closeAllWindows();
 }
 
@@ -578,8 +583,8 @@ StartDialog::StartDialog( WinControl *wcntr )
 void StartDialog::closeEvent( QCloseEvent *ce )
 {
     unsigned winCnt = 0;
-    for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
-	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
+    for(int iW = 0; iW < QApplication::topLevelWidgets().size(); iW++)
+	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[iW]) && QApplication::topLevelWidgets()[iW]->isVisible())
 	    winCnt++;
 
     if(winCnt <= 1) SYS->stop();

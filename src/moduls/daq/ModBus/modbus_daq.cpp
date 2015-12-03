@@ -1348,7 +1348,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
-    //  tp - attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled];
+    //  tp - attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read only [ro];
     //  selValsNms - two lines with values in first and it's names in first (separated by ";").
     if(iid == "attrAdd" && prms.size() >= 1) {
 	if(!enableStat() || !isLogic())	return false;
@@ -1367,6 +1367,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	if(stp.find("sel") != string::npos)	flg |= TFld::Selected;
 	if(stp.find("seled") != string::npos)	flg |= TFld::SelEdit;
 	if(stp.find("text") != string::npos)	flg |= TFld::FullText;
+	if(stp.find("ro") != string::npos)	flg |= TFld::NoWrite;
 
 	string	sVals = (prms.size() >= 4) ? prms[3].getS() : "";
 	string	sNms = TSYS::strLine(sVals, 1);

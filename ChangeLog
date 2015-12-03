@@ -1,3 +1,10 @@
+2015-12-03 Roman
+- DB.LibsDB.OscadaLibs.db: UserProtocol.OWEN some tested and fixed.
+- DAQ.{LogicLev,ModBus}: User API function attrAdd() expanded by option "ro", for read-only.
+- Protocol.UserProtocol: For input requests expanded to try enable, mostly for allow to use static functons into the procedures.
+- UI.QTStarter: WinControl's timer stopping moved to it destructor for ensure the timer create/start and stop into one thread.
+
+
 2015-11-28 Roman
 - !!!:FIX:DAQ.OPC_UA:
     Library: Expanded to new error codes.

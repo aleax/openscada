@@ -61,6 +61,7 @@ class WinControl: public QObject
 public:
     //Methods
     WinControl( );
+    ~WinControl( );
 
     bool callQtModule( const string &nm );
     void startDialog( );

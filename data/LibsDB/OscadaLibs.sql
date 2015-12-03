@@ -5688,8 +5688,7 @@ for(reqASCII = "", i = 0; i < request.length; i++)
 request = "#" + reqASCII + "\r";
 
 //Send the request and get respond
-resp = tr.messIO(request);
-while(resp[resp.length-1] != "\r" && (respTail=tr.messIO("")).length) resp += request;
+for(resp = tr.messIO(request); resp[resp.length-1] != "\r" && (respTail=tr.messIO("")).length; ) resp += respTail;
 
 //Respond process
 if(resp.length < 14 || resp[resp.length-1] != "\r" || resp[0] != "#" || (resp.length%2) != 0) {

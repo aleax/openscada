@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.0"
+#define MOD_VER		"0.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -250,9 +250,15 @@ bool TProtIn::mess( const string &reqst, string &answer )
     try {
 	//Find user protocol for using
 	if(!funcV.func()) {
+	    //Try enable, mostly for allow to use static functons into the procedures
+	    if(!up.freeStat() && !up.at().enableStat() && up.at().toEnable() && up.at().workInProg().size()) up.at().setEnable(true);
+
+	    //Malfunction input protocol checking
 	    if(up.freeStat() || !up.at().enableStat() || up.at().workInProg().empty()) return false;
+
+	    //The input function's execution context creation
 	    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workInProg())).at());
-	    funcV.setO(4,new TCntrNodeObj(AutoHD<TCntrNode>(&srcTr().at()),"root"));
+	    funcV.setO(4, new TCntrNodeObj(AutoHD<TCntrNode>(&srcTr().at()),"root"));
 	}
 
 	//Load inputs
