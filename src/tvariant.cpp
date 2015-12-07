@@ -357,9 +357,10 @@ bool TVarObj::AHDDisConnect( )
     pthread_mutex_lock(&dataM);
     if(mUseCnt) mUseCnt--;
     else mess_err("TVarObj",_("Double disconnection try: %d."),mUseCnt);
+    bool toFree = (mUseCnt == 0);
     pthread_mutex_unlock(&dataM);
 
-    return (mUseCnt==0);
+    return toFree;
 }
 
 void TVarObj::propList( vector<string> &ls )
@@ -391,7 +392,7 @@ TVariant TVarObj::propGet( const string &ids, char sep )
     else for(int off = 0; (tid=TSYS::pathLev(ids,0,true,&off)).size() && obj.type() == TVariant::Object; )
 	obj = obj.getO().at().propGet(tid);
 
-    return tid.size() ? TVariant(EVAL_BOOL) : obj;
+    return tid.size() ? TVariant((char)EVAL_BOOL) : obj;
 }
 
 void TVarObj::propSet( const string &id, TVariant val )

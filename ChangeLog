@@ -1,3 +1,7 @@
+2015-12-07 Roman
+- !!!!:SYS.TVarObj: Object's twice free possibility prevented. TVarObj::propGet() EVAL result fix.
+
+
 2015-12-03 Roman
 - DB.LibsDB.OscadaLibs.db: UserProtocol.OWEN some tested and fixed.
 - DAQ.{LogicLev,ModBus}: User API function attrAdd() expanded by option "ro", for read-only.
