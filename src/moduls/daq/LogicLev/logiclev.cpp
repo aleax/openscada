@@ -732,29 +732,29 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idDscr >= 0)	tmpl->val.setS(idDscr, descr());
 
 	//Get input links
-	for(int i_l = 0; i_l < lnkSize(); i_l++)
-	    if(lnk(i_l).aprm.freeStat())tmpl->val.setS(lnk(i_l).ioId, EVAL_STR);
-	    else if(lnk(i_l).aprm.at().fld().type() == TFld::Object && lnk(i_l).detOff < (int)lnk(i_l).prmAttr.size())
-		tmpl->val.set(lnk(i_l).ioId, lnk(i_l).aprm.at().getO().at().propGet(lnk(i_l).prmAttr.substr(lnk(i_l).detOff),'.'));
-	    else tmpl->val.set(lnk(i_l).ioId, lnk(i_l).aprm.at().get());
+	for(int iL = 0; iL < lnkSize(); iL++)
+	    if(lnk(iL).aprm.freeStat()) tmpl->val.setS(lnk(iL).ioId, EVAL_STR);
+	    else if(lnk(iL).aprm.at().fld().type() == TFld::Object && lnk(iL).detOff < (int)lnk(iL).prmAttr.size())
+		tmpl->val.set(lnk(iL).ioId, lnk(iL).aprm.at().getO().at().propGet(lnk(iL).prmAttr.substr(lnk(iL).detOff),'.'));
+	    else tmpl->val.set(lnk(iL).ioId, lnk(iL).aprm.at().get());
 
 	//Calc template
 	tmpl->val.calc();
 	modif();
 
 	//Put output links
-	for(int i_l = 0; i_l < lnkSize(); i_l++)
-	    if(!lnk(i_l).aprm.freeStat() && tmpl->val.ioMdf(lnk(i_l).ioId) &&
-		    tmpl->val.ioFlg(lnk(i_l).ioId)&(IO::Output|IO::Return) &&
-		    !(lnk(i_l).aprm.at().fld().flg()&TFld::NoWrite))
+	for(int iL = 0; iL < lnkSize(); iL++)
+	    if(!lnk(iL).aprm.freeStat() && tmpl->val.ioMdf(lnk(iL).ioId) &&
+		    tmpl->val.ioFlg(lnk(iL).ioId)&(IO::Output|IO::Return) &&
+		    !(lnk(iL).aprm.at().fld().flg()&TFld::NoWrite))
 	    {
-		TVariant vl = tmpl->val.get(lnk(i_l).ioId);
+		TVariant vl = tmpl->val.get(lnk(iL).ioId);
 		if(!vl.isEVal()) {
-		    if(lnk(i_l).aprm.at().fld().type() == TFld::Object && lnk(i_l).detOff < (int)lnk(i_l).prmAttr.size()) {
-			lnk(i_l).aprm.at().getO().at().propSet(lnk(i_l).prmAttr.substr(lnk(i_l).detOff), '.', vl);
-			lnk(i_l).aprm.at().setO(lnk(i_l).aprm.at().getO());	//For modify object sign
+		    if(lnk(iL).aprm.at().fld().type() == TFld::Object && lnk(iL).detOff < (int)lnk(iL).prmAttr.size()) {
+			lnk(iL).aprm.at().getO().at().propSet(lnk(iL).prmAttr.substr(lnk(iL).detOff), '.', vl);
+			lnk(iL).aprm.at().setO(lnk(iL).aprm.at().getO());	//For modify object sign
 		    }
-		    else lnk(i_l).aprm.at().set(vl);
+		    else lnk(iL).aprm.at().set(vl);
 		}
 	    }
 
@@ -811,8 +811,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			string nprm = TSYS::strSepParse(tmpl->val.func()->io(i_io)->def(),0,'|');
 			// Check already to present parameters
 			bool f_ok = false;
-			for(unsigned i_l = 0; i_l < list.size() && !f_ok; i_l++)
-			    if(list[i_l] == nprm) f_ok = true;
+			for(unsigned iL = 0; iL < list.size() && !f_ok; iL++)
+			    if(list[iL] == nprm) f_ok = true;
 			if(!f_ok) {
 			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+i2s(i_io)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,
 				    3,"tp","str","dest","sel_ed","select",(string("/cfg/prm/pl_")+i2s(i_io)).c_str());
@@ -888,13 +888,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if(p_vl == DAQPath()) throw TError(nodePath().c_str(),_("Self to self linking error."));
 	    AutoHD<TValue> prm = SYS->daq().at().prmAt(p_vl, '.', true);
 
-	    for(int i_l = 0; i_l < lnkSize(); i_l++)
-		if(p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).ioId)->def(),0,'|')) {
-		    lnk(i_l).prmAttr = p_vl;
-		    string p_attr = TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).ioId)->def(),1,'|');
+	    for(int iL = 0; iL < lnkSize(); iL++)
+		if(p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(iL).ioId)->def(),0,'|')) {
+		    lnk(iL).prmAttr = p_vl;
+		    string p_attr = TSYS::strSepParse(tmpl->val.func()->io(lnk(iL).ioId)->def(),1,'|');
 		    if(!prm.freeStat()) {
 			if(prm.at().vlPresent(p_attr)) {
-			    lnk(i_l).prmAttr= p_vl+"."+p_attr;
+			    lnk(iL).prmAttr= p_vl+"."+p_attr;
 			    modif();
 			}
 			else no_set += p_attr+",";

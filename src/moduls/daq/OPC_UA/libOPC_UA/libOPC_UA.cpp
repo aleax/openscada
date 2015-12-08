@@ -1875,12 +1875,12 @@ void Client::reqService( XML_N &io )
     //Renew channel request send
     else if(1e-3*(curTime()-sess.sessOpen) >= 0.75*sess.secLifeTime) {
 	req.setAttr("id", "OPN")->setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("ReqType", int2str(SC_RENEW))->
-	    setAttr("ClntCert", cert())->setAttr("ServCert", sess.servCert)->setAttr("PvKey", pvKey())->
+	    setAttr("ClntCert", (secPolicy()=="None")?"":cert())->setAttr("ServCert", sess.servCert)->setAttr("PvKey", pvKey())->
 	    setAttr("SecPolicy", secPolicy())->setAttr("SecurityMode", int2str(sess.secMessMode))->
 	    setAttr("SecLifeTm", "3600000")->setAttr("SeqNumber", uint2str(sess.sqNumb++))->
 	    setAttr("SeqReqId", uint2str(sess.sqReqId++))->setAttr("ReqHandle", uint2str(sess.reqHndl++));
 	protIO(req);
-	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
+	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); sess.clearFull(); return; }
 	sess.sessOpen = curTime();
 	sess.secChnl = strtoul(req.attr("SecChnId").c_str(),NULL,10);
 	sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
@@ -2348,8 +2348,8 @@ nextReq:
 			    oS(respEp, "");			//issuerEndpointUrl
 			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
-			    oS(respEp, "");			//transportProfileUri
-			    oNu(respEp, 0, 1);			//securityLevel
+			    oS(respEp, "http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary");//transportProfileUri
+			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?130:0, 1);	//securityLevel
 			}
 		    }
 		    oNu(respEp, epCnt, 4, 0);			//EndpointDescrNubers list items
@@ -2439,8 +2439,8 @@ nextReq:
 			    oS(respEp, "");			//issuerEndpointUrl
 			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
-			    oS(respEp, "");			//transportProfileUri
-			    oNu(respEp, 0, 1);			//securityLevel
+			    oS(respEp, "http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary");	//transportProfileUri
+			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?130:0, 1);	//securityLevel
 			}
 		    }
 		    oNu(respEp, epCnt, 4, enpNumperPos);	//EndpointDescrNubers real list items

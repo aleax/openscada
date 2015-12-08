@@ -276,7 +276,8 @@ void *TMdContr::Task( void *icntr )
 	    cntr.reqService(req);
 
 	    //Place results
-	    bool isErr = !req.attr("err").empty(), ndSt = 0;
+	    bool isErr = !req.attr("err").empty();
+	    int ndSt = 0;
 	    AutoHD<TVal> vl;
 	    res.lock();
 	    for(unsigned i_c = 0, i_p = 0, varTp = 0; i_c < req.childSize() && i_p < cntr.pHd.size(); i_c++) {
@@ -854,13 +855,13 @@ void TMdPrm::vlGet( TVal &val )
 	uint32_t firstErr = 0;
 	vector<uint32_t> astls;
 	MtxAlloc res(dataRes(), true);
-	for(unsigned i_a = 0; i_a < pEl.fldSize(); i_a++) {
-	    astls.push_back(pEl.fldAt(i_a).len());
-	    if(pEl.fldAt(i_a).len() && !firstErr) firstErr = pEl.fldAt(i_a).len();
+	for(unsigned iA = 0; iA < pEl.fldSize(); iA++) {
+	    astls.push_back(pEl.fldAt(iA).len());
+	    if(pEl.fldAt(iA).len() && !firstErr) firstErr = pEl.fldAt(iA).len();
 	}
 	res.unlock();
 	string aLs;
-	for(unsigned i_a = 0; i_a < astls.size(); i_a++) aLs += TSYS::strMess(":0x%x",astls[i_a]);
+	for(unsigned iA = 0; iA < astls.size(); iA++) aLs += TSYS::strMess(":0x%x",astls[iA]);
 	val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
     }
 }
