@@ -3,7 +3,7 @@
 /******************************************************************************
  *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
- *   Version: 1.0.0							      *
+ *   Version: 1.0.1							      *
  *	* Initial version control.					      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
@@ -86,6 +86,8 @@ namespace OPC
 #define OpcUa_Integer		27
 #define OpcUa_UInteger		28
 #define OpcUa_Enumeration	29
+#define OpcUa_IntAuto		62	//Expanded by OpenSCADA
+#define OpcUa_UIntAuto		63	//Expanded by OpenSCADA
 #define OpcUa_VarMask		0x3F
 #define OpcUa_ArrayDimension	0x40
 #define OpcUa_Array		0x80
@@ -123,6 +125,7 @@ namespace OPC
 #define OpcUa_BadNoMatch		0x806F0000
 #define OpcUa_BadWriteNotSupported	0x80730000
 #define OpcUa_BadTooManySubscriptions	0x80770000
+#define OpcUa_BadNoSubscription		0x80790000
 #define OpcUa_BadSequenceNumberUnknown	0x807A0000
 #define OpcUa_BadMessageNotAvailable	0x807B0000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
@@ -230,7 +233,14 @@ namespace OPC
 #define OpcUa_Server_NamespaceArray	2255
 #define OpcUa_Server_ServerStatus	2256
 #define OpcUa_Server_ServerStatus_State	2259
+#define OpcUa_Server_ServerCapabilities	2268
+#define OpcUa_Server_ServerCapabilities_MinSupportedSampleRate	2272
+#define OpcUa_Server_ServerCapabilities_MaxBrowseContinuationPoints	2735
+#define OpcUa_Server_ServerCapabilities_MaxQueryContinuationPoints	2736
+#define OpcUa_Server_ServerCapabilities_MaxHistoryContinuationPoints	2737
 #define OpcUa_Server_Auditing		2994
+#define OpcUa_Server_ServerCapabilities_MaxArrayLength	11702
+#define OpcUa_Server_ServerCapabilities_MaxStringLength	11703
 
 //ReferenceType Identifiers
 #define OpcUa_References		31
@@ -474,10 +484,10 @@ class Client: public UA
 		//Methods
 		SClntSess( )		{ clearFull( ); }
 		void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
-		void clearFull( )
+		void clearFull( bool inclEPdescr = false )
 		{
 		    endPoint = servCert = clKey = servKey = "";
-		    endPointDscr.clear();
+		    if(inclEPdescr) endPointDscr.clear();
 		    secPolicy = "None"; secMessMode = 1;
 		    secChnl = secToken = reqHndl = 0;
 		    sqNumb = 33;
@@ -526,6 +536,8 @@ class Client: public UA
 	virtual int	messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 ) = 0;
 
 	// Main call methods
+	//  Connection state check and/or establist by <est> > 0 or it close by == 0.
+	virtual bool	connect( int8_t est = -1 )	{ return false; }
 	virtual void	protIO( XML_N &io );
 	virtual void	reqService( XML_N &io );
 

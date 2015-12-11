@@ -56,8 +56,8 @@ class TestClient: public Client
 	string	cert( )		{ return mCert; }
 	string	pvKey( )	{ return mPvKey; }
 
-	// Connection state by TCP connection state
-	bool	connected( )	{ return (sock_fd >= 0); }
+	// Connection state by the TCP connection state
+	bool	connect( int8_t est = -1 );
 
 	// Write to the transport and read respond
 	int	messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );

@@ -753,6 +753,29 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 
     oNu(buf, eMsk, 1);		//Encoding Mask
     if(eMsk&0x01) {		//Variant
+	//Some type correction
+	switch(vEMsk&OpcUa_VarMask) {
+	    case OpcUa_IntAuto: {
+		int64_t tVl = llabs(strtoll(vl.c_str(),NULL,10));
+		uint8_t vTp = OpcUa_SByte;
+		if(tVl >= (1ll<<31))	vTp = OpcUa_Int64;
+		else if(tVl >= (1ll<<15))	vTp = OpcUa_Int32;
+		else if(tVl >= (1ll<<7))	vTp = OpcUa_Int16;
+		vEMsk = vEMsk&(~OpcUa_VarMask) | vTp;
+		break;
+	    }
+	    case OpcUa_UIntAuto: {
+		uint64_t tVl = strtoull(vl.c_str(), NULL, 10);
+		uint8_t vTp = OpcUa_Byte;
+		if(tVl >= (1ll<<32))	vTp = OpcUa_UInt64;
+		else if(tVl >= (1ll<<16))	vTp = OpcUa_UInt32;
+		else if(tVl >= (1ll<<8))	vTp = OpcUa_UInt16;
+		vEMsk = vEMsk&(~OpcUa_VarMask) | vTp;
+		break;
+	    }
+	}
+
+	//Generic processing
 	oNu(buf, vEMsk, 1);	//Encoding Mask
 	int32_t arrL = 1;
 	if(vEMsk&OpcUa_Array) {	//Array process
@@ -760,7 +783,7 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 	    for(int off = 0; strParse(vl,0,"\n",&off).size(); ) arrL++;
 	    oNu(buf, arrL, 4);	//ArrayLength
 	}
-	for(int i_v = 0, off = 0; i_v < arrL; i_v++) {
+	for(int iV = 0, off = 0; iV < arrL; iV++) {
 	    string setVl = (arrL==1) ? vl : strParse(vl,0,"\n",&off);
 	    switch(vEMsk&OpcUa_VarMask) {
 		case OpcUa_Boolean:
@@ -1356,6 +1379,7 @@ void Client::protIO( XML_N &io )
 
 		//Send request and don't wait response
 		messIO(rez.data(), rez.size(), NULL, 0);
+		connect(false);	//Close the connection
 	    }
 	    else {
 		nextReq:
@@ -1695,8 +1719,8 @@ void Client::protIO( XML_N &io )
 			    if(iTpId != OpcUa_ActivateSessionRequest)
 				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
 			    iS(rez, off);				//serverNonce
-			    iS(rez, off);				//results []
-			    iS(rez, off);				//diagnosticInfos []
+			    iN(rez, off, 4);				//results []
+			    iN(rez, off, 4);				//diagnosticInfos []
 			    break;
 			}
 			case OpcUa_CloseSessionResponse:
@@ -1714,7 +1738,7 @@ void Client::protIO( XML_N &io )
 				iDataValue(rez, off, *io.childGet(stIdx_));
 			    stIdx += std::min(25u, io.childSize()-stIdx);
 									//>> diagnosticInfos []
-			    iNu(rez, off, 4);				//Items number
+			    iN(rez, off, 4);				//Items number
 			    if(stIdx < (int)io.childSize()) goto nextReq;
 			    break;
 			}
@@ -1726,7 +1750,7 @@ void Client::protIO( XML_N &io )
 			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
 				io.childGet(i_r)->setAttr("Status", strMess("0x%x",iNu(rez,off,4)));
 									//>> diagnosticInfos []
-			    iNu(rez, off, 4);				//Items number
+			    iN(rez, off, 4);				//Items number
 			    break;
 			}
 			case OpcUa_BrowseResponse: {
@@ -1752,7 +1776,7 @@ void Client::protIO( XML_N &io )
 				    bno->setAttr("typeDefinition", uint2str(iNodeId(rez,off).numbVal()));
 				}
 			    }
-			    iS(rez, off);				//diagnosticInfos []
+			    iN(rez, off, 4);				//diagnosticInfos []
 			    break;
 			}
 			case OpcUa_ServiceFault: err = strMess("0x%x:%s", stCode, "Service fault");	break;
@@ -1794,7 +1818,7 @@ void Client::reqService( XML_N &io )
 		setAttr("SecPolicy", sess.secPolicy)->setAttr("SecurityMode", int2str(sess.secMessMode))->
 		setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey);
 	    protIO(req);
-	    sess.clearFull();
+	    sess.clearFull(true);
 	}
 
 	// Send HELLO message
@@ -2249,6 +2273,9 @@ nextReq:
 								//>> Request Header
 	    uint32_t sesTokId = iNodeId(rb, off).numbVal();	//Session AuthenticationToken
 	    chnlGet_(secId).seqN = seqN;
+
+	    if(dbg) debugMess(strMess("MSG Req: %d; seqN=%d",reqTp,seqN));
+
 	    // Session check
 	    if(!(reqTp == OpcUa_CreateSessionRequest || reqTp == OpcUa_FindServersRequest || reqTp == OpcUa_GetEndpointsRequest ||
 		    reqTp == OpcUa_ActivateSessionRequest) && (stCode=wep->sessActivate(sesTokId,secId,true,inPrtId)))
@@ -2263,8 +2290,6 @@ nextReq:
 								//>>> Extensible parameter
 	    iNodeId(rb, off);					//TypeId (0)
 	    iNu(rb, off, 1);					//Encoding
-
-	    if(dbg) debugMess(strMess("MSG Req: %d; seqN=%d",reqTp,seqN));
 
 	    // Prepare respond message
 	    string respEp;
@@ -2380,7 +2405,7 @@ nextReq:
 		    if(!sesTokId && !wep->sessActivate(sesTokId,secId,true,inPrtId)) sessId = sesTokId;
 		    //  Create new session
 		    if(!sessId) sessId = wep->sessCreate(sessNm, rStm);
-		    string servNonce = randBytes(32);
+		    string servNonce = (scHd.secPolicy != "None") ? randBytes(32) : "";
 		    wep->sessServNonceSet(sessId, servNonce);
 
 		    //  Respond
@@ -2440,7 +2465,7 @@ nextReq:
 			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
 			    oS(respEp, "http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary");	//transportProfileUri
-			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?130:0, 1);	//securityLevel
+			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?10:0, 1);	//securityLevel
 			}
 		    }
 		    oNu(respEp, epCnt, 4, enpNumperPos);	//EndpointDescrNubers real list items
@@ -2503,11 +2528,11 @@ nextReq:
 		    //  Respond
 		    reqTp = OpcUa_ActivateSessionResponse;
 		    respEp.reserve(100);
-		    string servNonce = randBytes(32);
+		    string servNonce = (scHd.secPolicy != "None") ? randBytes(32) : "";
 		    wep->sessServNonceSet(sesTokId, servNonce);
 		    oS(respEp, servNonce);			//serverNonce
-		    oNu(respEp, 0, 4);				//results []
-		    oNu(respEp, 0, 4);				//diagnosticInfos []
+		    oN(respEp, 0, 4);				//results []
+		    oN(respEp, 0, 4);				//diagnosticInfos []
 		    break;
 		}
 		case OpcUa_CloseSessionRequest: {
@@ -2650,7 +2675,7 @@ nextReq:
 			uint32_t st = 0;
 			uint32_t mIt = 0;
 
-			if(fid.numbVal() != 0)	st = OpcUa_BadFilterNotAllowed;
+			if(fid.numbVal() != 0) st = OpcUa_BadFilterNotAllowed;
 			else {
 			    //   Create new monitored item
 			    mIt = wep->mItSet(subScrId, 0, mM, nid, aid, tmStRet, sI, qSz, dO, cH);
@@ -3009,17 +3034,17 @@ nextReq:
 		    //  The publish request queue and/or process
 		    Sess *s = wep->sessGet_(sesTokId);
 		    if(s) {
-			unsigned i_p = 0;
+			unsigned iP = 0;
 			bool findOK = false;
-			for( ; i_p < s->publishReqs.size(); ++i_p)
-			    if((findOK=(rba.compare(0,mSz,s->publishReqs[i_p])==0))) break;
-			if(i_p >= s->publishReqs.size()) s->publishReqs.push_back(rba.substr(0,mSz));
+			for( ; iP < s->publishReqs.size(); ++iP)
+			    if((findOK=(rba.compare(0,mSz,s->publishReqs[iP])==0))) break;
+			if(!findOK) s->publishReqs.push_back(rba.substr(0,mSz));
 			if(findOK || s->publishReqs.size() == 1) {
 			    unsigned prSS = wep->mSubScr.size();
-			    for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
-				if((wep->mSubScr[i_ss].st == SS_LATE || wep->mSubScr[i_ss].st == SS_KEEPALIVE) &&
-					(prSS == wep->mSubScr.size() || wep->mSubScr[i_ss].pr > wep->mSubScr[prSS].pr))
-				    prSS = i_ss;
+			    for(unsigned iSs = 0; iSs < wep->mSubScr.size(); ++iSs)
+				if((wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
+					(prSS == wep->mSubScr.size() || wep->mSubScr[iSs].pr > wep->mSubScr[prSS].pr))
+				    prSS = iSs;
 			    if(prSS < wep->mSubScr.size()) {
 				Subscr &ss = wep->mSubScr[prSS];
 
@@ -3027,17 +3052,20 @@ nextReq:
 				string respAck;
 				int32_t sa = iN(rb, off, 4);			//>subscription Acknowledgements []
 				oN(respAck, sa, 4);				//<results []
-				for(int i_a = 0; i_a < sa; i_a++) {
+				for(int iA = 0; iA < sa; iA++) {
 				    uint32_t prSSAck = iNu(rb, off, 4);		//> subscriptionId
 				    uint32_t seqN = iNu(rb, off, 4);		//> sequenceNumber
-				    uint32_t st = OpcUa_BadSequenceNumberUnknown;
-				    if((--prSSAck) < wep->mSubScr.size())
+				    uint32_t st = OpcUa_BadNoSubscription;
+				    if(prSSAck >= 1 && prSSAck <= wep->mSubScr.size()) {
+					prSSAck--;
+					st = OpcUa_BadSequenceNumberUnknown;
 					for(deque<string>::iterator iRQ = wep->mSubScr[prSSAck].retrQueue.begin();
 						iRQ != wep->mSubScr[prSSAck].retrQueue.end(); ++iRQ)
 					{
 					    int rOff = 0;
 					    if(iNu(*iRQ,rOff,4) == seqN) { wep->mSubScr[prSSAck].retrQueue.erase(iRQ); st = 0; break; }
 					}
+				    }
 				    oNu(respAck, st, 4);			//< results
 				}
 
@@ -3116,7 +3144,7 @@ nextReq:
 				    oTm(respEp, curTime());		// publishTime
 				    oN(respEp, 0, 4);			// notificationData []
 				}
-				s->publishReqs.erase(s->publishReqs.begin()+i_p);	//Remove the publish request from queue
+				s->publishReqs.erase(s->publishReqs.begin()+iP);	//Remove the publish request from the queue
 
 				//oN(respEp, -1, 4);			//<results [], empty
 				respEp += respAck;			//<results []
@@ -3328,6 +3356,8 @@ void Server::EP::setEnable( bool vl )
       nodeReg(OpcUa_RootFolder,OpcUa_ViewsFolder,"Views",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
       nodeReg(OpcUa_RootFolder,OpcUa_ObjectsFolder,"Objects",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_ObjectsFolder,OpcUa_Server,"Server",NC_Object,OpcUa_Organizes,OpcUa_ServerType);
+	nodeReg(OpcUa_Server,OpcUa_Server_Auditing,"Auditing",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Boolean));
 	nodeReg(OpcUa_Server,OpcUa_Server_ServerStatus,"ServerStatus",NC_Variable,OpcUa_HasComponent,OpcUa_ServerStatusType)->
 	    setAttr("Value","Running")->setAttr("DataType",int2str(OpcUa_String/*OpcUa_ServerStatusDataType*/));
 	 nodeReg(OpcUa_Server_ServerStatus,OpcUa_Server_ServerStatus_State,"State",NC_Variable,OpcUa_HasComponent,OpcUa_BaseDataVariableType)->
@@ -3336,6 +3366,19 @@ void Server::EP::setEnable( bool vl )
 	    setAttr("ValueRank","1")->setAttr("Value","http://opcfoundation.org/UA/\n"+serv->applicationUri()+"\nhttp://opcfoundation.org/UA/DI/\nhttp://PLCopen.org/OpcUa/IEC61131-3/")->setAttr("DataType",int2str(OpcUa_Array|OpcUa_String));
 	nodeReg(OpcUa_Server,OpcUa_Server_ServerArray,"ServerArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
 	    setAttr("ValueRank","1")->setAttr("Value",serv->applicationUri())->setAttr("DataType",int2str(OpcUa_Array|OpcUa_String));
+	nodeReg(OpcUa_Server,OpcUa_Server_ServerCapabilities,"ServerCapabilities",NC_Object,OpcUa_HasComponent,OpcUa_ServerCapabilitiesType);
+	 //nodeReg(OpcUa_Server_ServerCapabilities,OpcUa_Server_ServerCapabilities_MinSupportedSampleRate,"MinSupportedSampleRate",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	 //    setAttr("Value","10")->setAttr("DataType",int2str(OpcUa_UInt32));
+	 nodeReg(OpcUa_Server_ServerCapabilities,OpcUa_Server_ServerCapabilities_MaxArrayLength,"MaxArrayLength",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("Value","65536")->setAttr("DataType",int2str(OpcUa_UInt32));
+	 nodeReg(OpcUa_Server_ServerCapabilities,OpcUa_Server_ServerCapabilities_MaxStringLength,"MaxStringLength",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("Value","16777216")->setAttr("DataType",int2str(OpcUa_UInt32));
+	 nodeReg(OpcUa_Server_ServerCapabilities,OpcUa_Server_ServerCapabilities_MaxBrowseContinuationPoints,"MaxBrowseContinuationPoints",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("Value","5")->setAttr("DataType",int2str(OpcUa_UInt16));
+	 nodeReg(OpcUa_Server_ServerCapabilities,OpcUa_Server_ServerCapabilities_MaxQueryContinuationPoints,"MaxQueryContinuationPoints",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("Value","5")->setAttr("DataType",int2str(OpcUa_UInt16));
+	 nodeReg(OpcUa_Server_ServerCapabilities,OpcUa_Server_ServerCapabilities_MaxHistoryContinuationPoints,"MaxHistoryContinuationPoints",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("Value","5")->setAttr("DataType",int2str(OpcUa_UInt16));
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_TypesFolder,OpcUa_ObjectTypesFolder,"ObjectTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
 	nodeReg(OpcUa_ObjectTypesFolder,OpcUa_BaseObjectType,"BaseObjectType",NC_ObjectType,OpcUa_Organizes);
@@ -3504,12 +3547,12 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
     if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) {
 	mSess[sid-1].tAccess = curTime();
 	mSess[sid-1].inPrtId = inPrtId;
-	int i_s;
-	for(i_s = 0; i_s < (int)mSess[sid-1].secCnls.size(); i_s++)
-	    if(mSess[sid-1].secCnls[i_s] == secCnl)
+	int iS;
+	for(iS = 0; iS < (int)mSess[sid-1].secCnls.size(); iS++)
+	    if(mSess[sid-1].secCnls[iS] == secCnl)
 		break;
-	if(!check || i_s < (int)mSess[sid-1].secCnls.size()) {
-	    if(i_s >= (int)mSess[sid-1].secCnls.size()) mSess[sid-1].secCnls.push_back(secCnl);
+	if(!check || iS < (int)mSess[sid-1].secCnls.size()) {
+	    if(iS >= (int)mSess[sid-1].secCnls.size()) mSess[sid-1].secCnls.push_back(secCnl);
 	    rez = 0;
 	}
     }
@@ -3577,9 +3620,9 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 	ssId = mSubScr.size();
 
 	//Find for Subscription on CLOSED state for reusing and subscriptions per session calculation
-	for(uint32_t i_ss = 0; i_ss < mSubScr.size(); i_ss++) {
-	    if(ssId >= mSubScr.size() && mSubScr[i_ss].st == SS_CLOSED) ssId = i_ss;
-	    if(sess >= 0 && mSubScr[i_ss].sess == sess) nSubScrPerSess++;
+	for(uint32_t iSs = 0; iSs < mSubScr.size(); iSs++) {
+	    if(ssId >= mSubScr.size() && mSubScr[iSs].st == SS_CLOSED) ssId = iSs;
+	    if(sess >= 0 && mSubScr[iSs].sess == sess) nSubScrPerSess++;
 	}
 	if(nSubScrPerSess >= limSubScr()) { pthread_mutex_unlock(&mtxData); return 0; }
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
@@ -3861,8 +3904,8 @@ XML_N &XML_N::operator=( const XML_N &prm )
     mText = prm.mText;
     vector<string> ls;
     prm.attrList(ls);
-    for(unsigned i_a = 0; i_a < ls.size(); i_a++)
-	setAttr(ls[i_a],prm.attr(ls[i_a]));
+    for(unsigned iA = 0; iA < ls.size(); iA++)
+	setAttr(ls[iA],prm.attr(ls[iA]));
 
     //Recursive copy children
     for(unsigned i_ch = 0; i_ch < prm.childSize(); i_ch++)
@@ -4004,15 +4047,15 @@ XML_N* XML_N::setText( const string &s, bool childs )
 void XML_N::attrList( vector<string> & list ) const
 {
     list.clear();
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	list.push_back(mAttr[i_a].first);
+    for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	list.push_back(mAttr[iA].first);
 }
 
 XML_N* XML_N::attrDel( const string &name )
 {
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(mAttr[i_a].first == name)
-	{ mAttr.erase(mAttr.begin()+i_a); break; }
+    for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	if(mAttr[iA].first == name)
+	{ mAttr.erase(mAttr.begin()+iA); break; }
 
     return this;
 }
@@ -4022,20 +4065,20 @@ void XML_N::attrClear( )	{ mAttr.clear(); }
 string XML_N::attr( const string &name, bool caseSens ) const
 {
     if(caseSens) {
-	for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	    if(mAttr[i_a].first == name) return mAttr[i_a].second;
+	for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	    if(mAttr[iA].first == name) return mAttr[iA].second;
     }
-    else for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(strcasecmp(mAttr[i_a].first.c_str(),name.c_str()) == 0) return mAttr[i_a].second;
+    else for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	if(strcasecmp(mAttr[iA].first.c_str(),name.c_str()) == 0) return mAttr[iA].second;
 
     return "";
 }
 
 XML_N* XML_N::setAttr( const string &name, const string &val )
 {
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(mAttr[i_a].first == name) {
-	    mAttr[i_a].second = val;
+    for(unsigned iA = 0; iA < mAttr.size(); iA++)
+	if(mAttr[iA].first == name) {
+	    mAttr[iA].second = val;
 	    return this;
 	}
 

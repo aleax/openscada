@@ -558,7 +558,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				bool dtOK = true;
 				switch(nVal->fld().type()) {
 				    case TFld::Boolean:	req.setAttr("type", i2s(OpcUa_Boolean))->setText(nVal->getS(&tm));	break;
-				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int64))->setText(nVal->getS(&tm));	break;
+				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_IntAuto/*OpcUa_Int64*/))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
 				    case TFld::Object: {	//!!!! With structures support append detect ones

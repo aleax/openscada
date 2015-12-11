@@ -157,6 +157,16 @@ string TMdContr::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SI
 
 string TMdContr::applicationName( )	{ return "OpenSCADA.OPC-UA Client"; }
 
+bool TMdContr::connect( int8_t est )
+{
+    if(tr.freeStat()) return false;
+
+    if(est == 0) tr.at().stop();
+    else if(est > 0) tr.at().start();
+
+    return tr.at().startStat();
+}
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )
@@ -212,6 +222,7 @@ void TMdContr::protIO( XML_N &io )
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
+    if(!connect()) connect(true);
     return tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
 }
 

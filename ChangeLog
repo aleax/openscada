@@ -1,3 +1,13 @@
+2015-12-11 Roman
+- !!:FIX:DAQ.OPC_UA.libOPC_UA: Specific value types OpcUa_IntAuto and OpcUa_UIntAuto for adaptive integer type selection,
+	mostly for provide integer into not fixed int64.
+    Error OpcUa_BadNoSubscription added to PublishRequest.
+    Server folder "ServerCapabilities" added and some items here.
+    FIX: Conditional session's clear for selected endpoint is added, mostly for prevent this lost at no "None" policies.
+    Virtual function connect() into client is added for the connection control, used into service "CloseSecureChannel" for close connection.
+    "Nonce" of the Server part disabled into CreateSessionResponse and ActivateSessionRespons for policy "None".
+
+
 2015-12-08 Roman
 - FIX:DAQ.OPC_UA.libOPC_UA: Using the client certificate into a renewal secure channel request set only for no "None" policies.
     Full session clear at errors into a renewal secure channel request is added.
