@@ -1092,6 +1092,17 @@ INSERT INTO "tmplib_DevLib_io" VALUES('OPTRIS','spIll','Spot illumination',3,32,
 INSERT INTO "tmplib_DevLib_io" VALUES('CTR','transport','Transport',0,64,'Serial.out_CTR',0,'','','Transport','Serial.out_CTR');
 INSERT INTO "tmplib_DevLib_io" VALUES('CTR','press','Pressure, Tor',2,17,'',1,'','','Pressure, Tor','');
 INSERT INTO "tmplib_DevLib_io" VALUES('CTR','zeroSet','Zero set',3,32,'',2,'','','Zero set','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','transport','Transport',0,64,'Sockets.out_IEC60870',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','addr','Address, {addr}.{OA}',0,64,'0.5',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','tmRetr','Retry connection time, s',2,64,'10',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t1','Acknowledge lack timeout, s',2,64,'1.5',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t2','Acknowledge timeout, s',2,64,'1',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','t3','Test timeout, s',2,64,'2',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','k','Maximum unconfirmed',1,64,'12',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','w','Maximum no ack',1,64,'8',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"',0,36,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','this','Object',4,0,'',10,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2734,6 +2745,20 @@ INSERT INTO "Trs" VALUES('PT1000 fault (CTR 101 only). ','','');
 INSERT INTO "Trs" VALUES('Heaterblock overtemp. ','','');
 INSERT INTO "Trs" VALUES('Electronic overtemp. ','','');
 INSERT INTO "Trs" VALUES('Zero adjust error. ','','');
+INSERT INTO "Trs" VALUES('Output transport ''%1'' stoped.','','');
+INSERT INTO "Trs" VALUES('Wrong sequence, rejected','','');
+INSERT INTO "Trs" VALUES('Connection terminated by the input sequence broken, lost input packages, S(R)=%1, S(T)=%2','','');
+INSERT INTO "Trs" VALUES('Connection terminated by not acknowledge transmited package ''%1'' by timeout t1 (%2).','','');
+INSERT INTO "Trs" VALUES('Connection terminated by not confirmed TEST package by timeout t1 (%1).','','');
+INSERT INTO "Trs" VALUES('Error','','');
+INSERT INTO "Trs" VALUES('Good output sequence','','');
+INSERT INTO "Trs" VALUES('Good input sequence','','');
+INSERT INTO "Trs" VALUES('M_SP_NA_1: No the SQ mode implemented yet','','');
+INSERT INTO "Trs" VALUES('M_SP_NA_1: Items number discrepancy to the package size','','');
+INSERT INTO "Trs" VALUES('M_ME_NB_1: No the SQ mode implemented yet','','');
+INSERT INTO "Trs" VALUES('M_ME_NB_1: Items number discrepancy to the package size','','');
+INSERT INTO "Trs" VALUES('C_SC_NA_1: No the SQ mode implemented yet','','');
+INSERT INTO "Trs" VALUES('C_SC_NA_1: Items number discrepancy to the package size','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -4134,6 +4159,298 @@ if(t_err.length) {
 	f_err = t_err + " " + u_err;
 }
 else f_err = "0: " + u_err;','','',1445606346);
+INSERT INTO "tmplib_DevLib" VALUES('IEC60870','IEC-60870','','','IEC 60870 part 5 is one of the IEC 60870 set of standards which define systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems. The template implements part 104 (Ethernet transport) for client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1. For acquired and control data primarily used an object into attribute "items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. To the data control by attributes at once you can its describe into "itemsSet". Into the template for the first time used the non request mode of an output transport and free attributes creation wile performing.
+Version: 1.0.0
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Ustijancev Michael.','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	{
+	transport_ = transport;
+	tr = SYS.Transport.nodeAt(transport,".");
+	if(tr) tr.start(false);
+	itemsSet_ = "";
+	tmRetr_ = tmRetr;
+	t1_ = t1__ = t2_ = t3_ = w_ = 0;
+	TESTFR_Act = false;
+	STARTDT_act = STARTDT_con = false;
+	bufIn = bufOut = "";
+	cntTx = cntRx = 0;
+	destAddr = addr.parse(0,".").toInt();
+	destOA = addr.parse(1,".").toInt();
+	//C_IC_NA_1_req = 0;
+	C_IC_NA_1 = C_SC_NA_1 = 0;
+	C_IC_NA_1con = C_CS_NA_1 = C_CS_NA_1con = C_CI_NA_1 = C_CI_NA_1con = false;
+	items = new Object();
+	oAVals = new Object();
+}
+
+//Items set changing process
+if(itemsSet != itemsSet_) {
+	for(off = 0; (iIt=itemsSet.parse(0,"\n",off)).length; ) {
+		iIt_tp = iIt.parse(0,":");
+		iIt_IOA = iIt.parse(1,":");
+		if((iIt_EndIOA=iIt_IOA.indexOf("-")) >= 0) {
+			iIt_EndIOA = iIt_IOA.slice(iIt_EndIOA+1).toInt();
+			iIt_IOA = iIt_IOA.slice(0,iIt_EndIOA).toInt();
+		}
+		else iIt_IOA = iIt_EndIOA = iIt_IOA.toInt();
+		iIt_flgs = iIt.parse(2,":");
+		iIt_nmBase = iIt.parse(3,":");
+		if(iIt_tp == "ai")			{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "AI"; iIt_vtp = "integer,ro"; }
+		else if(iIt_tp == "di")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DI"; iIt_vtp = "boolean,ro"; }
+		else if(iIt_tp == "do")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DO"; iIt_vtp = "boolean"; }
+		else continue;
+		while(iIt_IOA <= iIt_EndIOA) {
+			aId = iIt_tp+iIt_IOA; aDscr = iIt_nmBase+"["+iIt_IOA+"]"; aWr = (iIt_tp == "do");
+			if(items[aId].isEVal()) { items[aId] = itW = new Object(); itW.descr = aDscr; itW.wr = aWr; itW.alarm = 0; }
+			if(iIt_flgs.indexOf("a") >= 0) {
+				this.attrAdd(aId, aDscr, iIt_vtp);
+				if(aWr)	oAVals[aId] = EVAL_INT;
+				this[aId].set(EVAL_INT, 0, 0, true);
+			}
+			iIt_IOA++;
+		}
+	}
+	itemsSet_ = itemsSet;
+}
+
+//Check for the transport change and connect
+t_err = "";
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.nodeAt(transport, ".");
+	transport_ = transport;
+	if(tr) tr.start(false);
+	itemsSet_ = "";
+	tmRetr_ = tmRetr;
+	STARTDT_act = false;
+	items = new Object();
+	oAVals = new Object();
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(!tr.start()) {
+	if(tmRetr_ >= tmRetr) {
+		tr.start(true);
+		bufIn = bufOut = itemsSet_ = "";
+		tmRetr_ = t1_ = t1__ = t2_ = t3_ = w_ = 0;
+	}
+	else tmRetr_ += 1/f_frq;
+	if(tr.start()) STARTDT_act = false;
+	else t_err = "1:"+tr("Output transport ''%1'' stoped.").replace("%1",transport);
+}
+else {
+	//Check and finish, U (STOPDT, Act)
+	if(f_stop && STARTDT_con) bufOut += SYS.strFromCharCode(0x68, 0x04, 0x10|0x03, 0, 0, 0);
+
+	//Send output buffer and read the transport for an input data
+	if(bufOut.length) SYS.messDebug("/IEC60870",tr("Good output sequence")+": "+SYS.strDecode(bufOut,"Bin"," "));
+	bufIn += tr.messIO(bufOut, -0.001);
+	bufOut = "";
+	//Input requests processing
+	while(bufIn.length) {
+		if(bufIn.length >= 2 && (bufIn.charCodeAt(0) != 0x68 || (seqSz=bufIn.charCodeAt(1)) > 253)) {
+			SYS.messDebug("/IEC60870",tr("Wrong sequence, rejected")+": "+SYS.strDecode(bufIn,"Bin"," "));
+			bufIn = "";
+			break;
+		}
+		if(bufIn.length < 6 || (bufIn.length-2) < seqSz)	break;	//Not full, wait
+
+		SYS.messDebug("/IEC60870",tr("Good input sequence")+": "+SYS.strDecode(bufIn.slice(0,seqSz+2),"Bin"," "));
+
+		cntRx_ = -1;
+		sB1 = bufIn.charCodeAt(2);
+		if((sB1&0x3) == 0x3 && (sB1&0x40))			TESTFR_Act = true;	//U (TESTFR, Act)
+		else if((sB1&0x3) == 0x3 && (sB1&0x80))	t1__ = 0;					//U (TESTFR, Con)
+		else if((sB1&0x3) == 0x3 && (sB1&0x08)) {	//U (STARTDT, Con)
+			STARTDT_con = true;
+			t1_ = t1__ = t2_ = t3_ = 0;
+			cntTx = cntRx = 0;
+			destAddr = addr.parse(0,".").toInt();
+			destOA = addr.parse(1,".").toInt();
+			C_IC_NA_1 = C_SC_NA_1 = 0;
+			C_CS_NA_1 = C_CI_NA_1 = false;
+		}
+		else if(STARTDT_con && (sB1&0x3) == 1)	cntRx_ = (bufIn.charCodeAt(5)>>1)*128 + (bufIn.charCodeAt(4)>>1);		//S (Ack)
+		else if(STARTDT_con && (sB1&0x1) == 0) {	//I
+			cntTx_ = bufIn.charCodeAt(3)*128 + (sB1>>1);
+			if(cntTx_ != cntRx)
+				t_err = "2:"+tr("Connection terminated by the input sequence broken, lost input packages, S(R)=%1, S(T)=%2").replace("%1",cntRx.toString()).replace("%2",cntTx_.toString());
+			cntRx_ = bufIn.charCodeAt(5)*128 + (bufIn.charCodeAt(4)>>1);
+			ASDU_id = bufIn.charCodeAt(6);
+			ASDU_els = bufIn.charCodeAt(7);			//7=SQ, 0...6=number
+			ASDU_reas = bufIn.charCodeAt(8);		//7=TEST, 6=P/N, 0...5=number
+			ASDU_addr = bufIn.charCodeAt(9);
+			ASDU_OA = bufIn.charCodeAt(11)*256 + bufIn.charCodeAt(10);
+			//destAddr = ASDU_addr, destOA = ASDU_OA;
+			cntRx = (cntRx+1)&0x7FFF;
+			t2_ = 1/f_frq;	
+			w_++;
+
+			if(ASDU_id == 100) {
+				if(ASDU_reas == 7)			C_IC_NA_1con = true;	//ActCon
+				else if(ASDU_reas == 10)	C_IC_NA_1 = -1;// 1;				//ActTerm, repeate after 1 second
+			}
+			else if(ASDU_id == 101) {
+				if(ASDU_reas == 7)			C_CI_NA_1con = true;	//ActCon
+				//else if(ASDU_reas == 10)	C_CI_NA_1 = false;		//ActTerm, repeate after some timeout
+			}
+			else if(ASDU_id == 103 && ASDU_reas == 7)	C_CS_NA_1con = true;
+			else if(ASDU_id == 1) {	//M_SP_NA_1, Single-point information
+				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_SP_NA_1: No the SQ mode implemented yet"));
+				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870",tr("M_SP_NA_1: Items number discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=4) {
+					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
+					SIQ = bufIn.charCodeAt(iOff+3);
+					aid = "di"+IOA;
+					if(items[aid].isEVal()) {
+						items[aid] = itW = new Object();
+						itW.descr = "DI["+IOA+"]";
+						itW.wr = false; itW.alarm = 0;
+					}
+					items[aid].val = SIQ&0x01;
+					items[aid].SIQ = SIQ;	//For a specific quality processing
+					if((aO=this[aid])) aO.set(items[aid].val, 0, 0, true);
+				}
+			}
+			else if(ASDU_id == 11) {	//M_ME_NB_1, Measured value, scaled value
+				if(ASDU_els&0x80) SYS.messDebug("/IEC60870",tr("M_ME_NB_1: No the SQ mode implemented yet"));
+				else if((10+ASDU_els*6) != seqSz)	SYS.messDebug("/IEC60870",tr("M_ME_NB_1: Items number discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=6) {
+					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
+					val = (bufIn.charCodeAt(iOff+4)<<8) + bufIn.charCodeAt(iOff+3);
+					SIQ = bufIn.charCodeAt(iOff+5);
+					aid = "ai"+IOA;
+
+					if(items[aid].isEVal()) {
+						items[aid] = itW = new Object();
+						itW.descr = "AI["+IOA+"]";
+						itW.wr = false; itW.alarm = 0;
+					}
+					items[aid].val = val;
+					items[aid].SIQ = SIQ;	//For a specific quality processing
+					if((aO=this[aid])) aO.set(items[aid].val, 0, 0, true);
+				}
+			}
+			else if(ASDU_id == 45) {	//C_SC_NA_1, Single-point confirm
+				if(ASDU_els&0x80) SYS.messDebug("/IEC60870", tr("C_SC_NA_1: No the SQ mode implemented yet"));
+				else if((10+ASDU_els*4) != seqSz)	SYS.messDebug("/IEC60870", tr("C_SC_NA_1: Items number discrepancy to the package size"));
+				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=4) {
+					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
+					SIQ = bufIn.charCodeAt(iOff+3);
+					aid = "do" + IOA;
+					items[aid].val = SIQ&0x01;
+					items[aid].SIQ = SIQ;	//For a specific quality processing
+					if((aO=this[aid])) { aO.set(items[aid].val, 0, 0, true); oAVals[aid] = items[aid].val; }
+				}
+				C_SC_NA_1 = 0;
+			}
+			//else ...
+		}
+		if(cntRx_ >= 0 && cntRx_ == cntTx) t1_ = 0;
+
+		t3_ = 0;
+		bufIn = bufIn.slice(seqSz+2);
+	}
+	//Check and the service negotiation perform.
+	while(!t_err.length) {
+		if(TESTFR_Act) {
+			bufOut += SYS.strFromCharCode(0x68, 0x04, 0x80|0x03, 0, 0, 0);
+			TESTFR_Act = false;
+		}
+		else if(!STARTDT_act)	{	//U (STARTDT, Act);
+			bufOut += SYS.strFromCharCode(0x68, 0x04, 0x04|0x03, 0, 0, 0);
+			STARTDT_act = true; STARTDT_con = false;
+		}
+		else if(t1_ > t1)
+			t_err = "3:" + tr("Connection terminated by not acknowledge transmited package ''%1'' by timeout t1 (%2).").replace("%1",cntTx.toString()).replace("%2",t1.toFixed(2));
+		else if(t1__ > t1)
+			t_err = "4:" + tr("Connection terminated by not confirmed TEST package by timeout t1 (%1).").replace("%1",t1.toFixed(2));
+		else if(t3_ > t3) {						//U (TESTFR, Act);
+			bufOut += SYS.strFromCharCode(0x68, 0x04, 0x40|0x03, 0, 0, 0);
+			t3_ = 0; t1__ = 1/f_frq;
+		}
+		else if(t2_ > t2 || w_ >= w) {	//S (Ack)
+			bufOut += SYS.strFromCharCode(0x68, 0x04, 0x01, 0, (cntRx<<1)&0xFF, cntRx>>7);
+			t2_ = w_ = 0;
+		}
+		else if(STARTDT_con /*&& destAddr >= 0*/) {	//I
+			ASDU_ = "";
+			// Services process
+			if(C_IC_NA_1 > 0)	C_IC_NA_1 = max(0, C_IC_NA_1-1/f_frq);
+			else if(C_IC_NA_1 == 0) {
+				//Generic acquisition request (20)
+				ASDU_ = SYS.strFromCharCode(100, 0x01, 0x06, destAddr, destOA&0xFF, destOA>>8, 0x00, 0x00, 0x00, 0x14);
+				C_IC_NA_1 = -1; C_IC_NA_1con = false;
+			}
+			else if(!C_CI_NA_1) {
+				//Generic counters request (5)
+				ASDU_ = SYS.strFromCharCode(101, 0x01, 0x06, destAddr, destOA&0xFF, destOA>>8, 0x00, 0x00, 0x00, 0x05);
+				C_CI_NA_1 = true; C_CI_NA_1con = false;
+			}
+			else if(!C_CS_NA_1) {
+				//Time sync
+				tmMs = 0; tm = SYS.time(tmMs); tmMs = (tm%60)*1000+tmMs/1000;
+				tmMin = tmHour = tmDay = tmMonth = tmYear = tmWDay = tmIsDst = 0;
+				SYS.localtime(tm, 0, tmMin, tmHour, tmDay, tmMonth, tmYear, tmWDay, 0, tmIsDst);
+				ASDU_ = SYS.strFromCharCode(103, 0x01, 0x06, destAddr, destOA&0xFF, destOA>>8, 0, 0, 0, tmMs&0xFF, tmMs>>8, tmMin, tmHour|(tmIsDst?0x80:0), tmDay|((tmWDay?tmWDay:7)<<5), tmMonth+1, tmYear-2000);
+				C_CS_NA_1 = true; C_CS_NA_1con = false;
+			}
+			else if((C_SC_NA_1=max(0,C_SC_NA_1-1/f_frq)) == 0) {
+				//Check for commands set, C_SC_NA_1 (45)
+				cItN = 0; cItSeq = "";
+				// By attributes
+				for(iIt in oAVals)
+					if((aO=this[iIt]) && !(aOval=aO.get()).isEVal() && aOval != oAVals[iIt]) {
+						IOA = iIt.slice(2).toInt();
+						cItSeq += SYS.strFromCharCode(IOA&0xFF, (IOA>>8)&0xFF, IOA>>16, aOval?0x01:0);
+						//oAVals[iIt] = aOval;
+						cItN++;
+					}
+				// By items object
+				for(iIt in items)
+					if((aO=items[iIt]) && !(aOval=aO.set).isEVal()) {
+						IOA = iIt.slice(2).toInt();
+						cItSeq += SYS.strFromCharCode(IOA&0xFF, (IOA>>8)&0xFF, IOA>>16, aOval.toInt()?0x01:0);
+						aO.set = EVAL_BOOL;
+						cItN++;
+					}
+				// Finish the request
+				if(cItN) {
+					ASDU_ = SYS.strFromCharCode(45, cItN, 0x06, destAddr, destOA&0xFF, destOA>>8) + cItSeq;
+					C_SC_NA_1 = 1;	//After one second repeat
+				}
+			}
+
+			// Append header and place to output
+			if(ASDU_.length) {
+				bufOut += SYS.strFromCharCode(0x68, 4+ASDU_.length, (cntTx<<1)&0xFF, cntTx>>7, (cntRx<<1)&0xFF, cntRx>>7) + ASDU_;
+				cntTx = (cntTx+1)&0x7FFF;
+				t1_ = 1/f_frq;
+				//t2_ = w_ = 0;
+			} else break;
+		}
+		else break;
+	}
+
+	if(t1_)		t1_ += 1/f_frq;
+	if(t1__)	t1__ += 1/f_frq;
+	if(t2_)		t2_ += 1/f_frq;
+	t3_ += 1/f_frq;
+}
+
+//Error set
+if(t_err.length) {
+	if(tr && tr.start()) tr.start(false);
+	if(f_err != t_err) {
+		items = new Object();
+		oAVals = new Object();
+		aLs = this.nodeList("a_");
+		for(iA = 0; iA < aLs.length; iA++)
+			if((aPref=aLs[iA].slice(2,4)) == "di" || aPref == "do" || aPref == "ai")
+				this[aLs[iA].slice(2)].set(EVAL_INT, 0, 0, true);
+		SYS.messDebug("/IEC60870", tr("Error")+": "+t_err);
+	}
+	f_err = t_err;
+}
+else f_err = "0";','','',1449949770);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default

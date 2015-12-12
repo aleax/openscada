@@ -1,3 +1,8 @@
+2015-12-12 Roman
+- !!!!:DB.LibsDB.OscadaLibs.db: User protocol for IEC-60870-104 is added, by the template only.
+- !!:DAQ.SMH2Gi: Version 1.0.0 released.
+
+
 2015-12-11 Roman
 - !!:FIX:DAQ.OPC_UA.libOPC_UA: Specific value types OpcUa_IntAuto and OpcUa_UIntAuto for adaptive integer type selection,
 	mostly for provide integer into not fixed int64.
