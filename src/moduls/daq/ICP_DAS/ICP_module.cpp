@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.1"
+#define MOD_VER		"1.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -394,7 +394,7 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 		    else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		    continue;
 		}
-		if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
+		if(rez.size() < (CRC?4:2) || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
 		rez = rez.substr(0,rez.size()-1);
 		if(CRC) {
 		    if(strtol(rez.substr(rez.size()-2).c_str(),NULL,16) != strtol(DCONCRC(rez.substr(0,rez.size()-2)).c_str(),NULL,16))

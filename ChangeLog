@@ -1,3 +1,11 @@
+2015-12-17 Roman
+- DB.LibsDB.OscadaLibs.db: Some descriptions expanded and fixed.
+- DB.LibsDB.vcaBase.db: Main.TextLab: Context command's description into the operator's protocol fix.
+- !:FIX:DAQ.ICP_DAS: Possible crash fix into the OpenSCADA serial transport mode using and CRC enable on short (not full) messages receive and process.
+- Special.FLibComplex1: Some the source code cleaned.
+- !!:FIX:UI.VCAEngine: Queued notification's quittance for all and partial fix.
+
+
 2015-12-12 Roman
 - !!!!:DB.LibsDB.OscadaLibs.db: User protocol for IEC-60870-104 is added, by the template only.
 - !!:DAQ.SMH2Gi: Version 1.0.0 released.

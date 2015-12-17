@@ -1339,7 +1339,7 @@ INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMin','Border down alarm',2,32,
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','aMax','Border up alarm',2,32,'0',9,'Границя верхня аварійна','','Граница верхняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMin','Border down warning',2,32,'0',10,'Границя нижня попереджув.','','Граница нижняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','wMax','Border up warning',2,32,'0',11,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('manInUnif','speed','Motion speed',2,32,'0',13,'Швидкість зміни','','Скорость изменения','');
+INSERT INTO "tmplib_base_io" VALUES('manInUnif','speed','Motion speed (%/cycle)',2,32,'0',13,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','Tf','Filter time (s)',2,32,'0',16,'Час фільтру (с)','','Время фильтрации (с)','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','iAdd','Input addon',2,64,'0',17,'Додаток до входу','','Дополнение ко входу','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','iMult','Input multiplication',2,64,'1',18,'Множник входу','','Множитель ко входу','');
@@ -1356,7 +1356,7 @@ INSERT INTO "tmplib_base_io" VALUES('anUnif','aMin','Border down alarm',2,32,'0'
 INSERT INTO "tmplib_base_io" VALUES('anUnif','aMax','Border up alarm',2,32,'0',11,'Границя верхня аварійна','','Граница верхняя ав.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'0',12,'Границя нижня попереджув.','','Граница нижняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',13,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed',2,32,'0',15,'Швидкість зміни','','Скорость изменения','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',15,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',16,'Точність (знаків)','','Точность (знаков)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time (s)',2,32,'0',18,'Час фільтру (с)','','Время фильтрации (с)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addon',2,64,'0',19,'Додаток до входу','','Дополнение ко входу','');
@@ -1392,14 +1392,14 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','aMax','Border up alarm',2,32,'
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','wMin','Border down warning',2,32,'0',15,'Границя нижня попереджув.','','Граница нижняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','wMax','Border up warning',2,32,'0',16,'Границя верхня попереджув.','','Граница верхняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','HystBnd','Hysteresis of boders violation',2,32,'0',17,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','speed','Motion speed',2,32,'0',18,'Швидкість зміни','','Скорость изменения','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','speed','Motion speed (%/cycle)',2,32,'0',18,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','prec','Precision (signs)',1,32,'2',19,'Точність (знаків)','','Точность (знаков)','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','H','Border up warning violation',3,17,'0',20,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','L','Border down warning violation',3,17,'0',21,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','HH','Border up alarm violation',3,17,'0',22,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','LL','Border down alarm violation',3,17,'0',23,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','EVAL','Value is eval',3,17,'0',24,'Значення невірогідне','','Значение недостоверно','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Tf','Filter time (s)',2,32,'0',25,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Tf','Filter time (ms)',2,32,'0',25,'Час фільтру (мс)','','Время фильтрации (мс)','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Kp','Gain',2,160,'PID|Kp',26,'Kп','ПІД|Kp','Kп','ПИД|Kp');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Ki','Gain integration',2,160,'PID|Ki',27,'Кп інтегралу','ПІД|Ki','Кп интеграла','ПИД|Ki');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','Ti','Ti (ms)',1,160,'PID|Ti',28,'Tі (мс)','ПІД|Ti','Tи (мс)','ПИД|Ti');
@@ -1440,7 +1440,7 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMax','Border up alarm',2,32,'0'
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMin','Border down warning',2,32,'0',17,'Границя нижня попереджув.','','Граница нижняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMax','Border up warning',2,32,'0',18,'Границя верхня попереджув.','','Граница верхняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',19,'Гистерезис нарушений границ','','Гистерезиз наруш. границ','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','speed','Motion speed',2,32,'0',20,'Швидкість зміни','','Скорость изменения','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','speed','Motion speed (%/cycle)',2,32,'0',20,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',21,'Точність (знаків)','','Точность (знаков)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time (s)',2,32,'0',23,'Час фільтру (с)','','Время фильтрации (с)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iAdd','Input addon',2,64,'0',24,'Додаток до входу','','Дополнение ко входу','');
@@ -1466,7 +1466,7 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnif','aMax','Border up alarm',2,32,'0',
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя пред.','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','HystBnd','Hysteresis of boders violation',2,32,'0',15,'Гістерезис порушень границь','','Гистерезиз наруш. границ','');
-INSERT INTO "tmplib_base_io" VALUES('pidUnif','speed','Motion speed',2,32,'0',16,'Швидкість зміни','','Скорость изменения','');
+INSERT INTO "tmplib_base_io" VALUES('pidUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','H','Border up warning violation',3,17,'0',18,'Порушення верхньої попереджув. границі','','Нарушение верхней предупредительной границы','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','L','Border down warning violation',3,17,'0',19,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','');
@@ -2725,8 +2725,6 @@ INSERT INTO "Trs" VALUES('Request for day archive values.','','');
 INSERT INTO "Trs" VALUES('Request for results month archive values.','','');
 INSERT INTO "Trs" VALUES('Request for data read.','','');
 INSERT INTO "Trs" VALUES('Set current','','');
-INSERT INTO "Trs" VALUES('Nether alarm border error','','');
-INSERT INTO "Trs" VALUES('Nether warning border error','','');
 INSERT INTO "Trs" VALUES('Device address out of range 0...15','','');
 INSERT INTO "Trs" VALUES('Respond too short','','');
 INSERT INTO "Trs" VALUES('Respond too long, possible continuous mode','','');
@@ -4736,11 +4734,11 @@ else {
 	if(aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
 	{ tErr = "3:"+tr("Upper alarm border error"); HH = true; EVAL = H = LL = L = false; }
 	else if(aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr="4:"+tr("Nether alarm border error"); LL = true; EVAL = HH = H = L = false; }
+	{ tErr="4:"+tr("Lower alarm border error"); LL = true; EVAL = HH = H = L = false; }
 	else if(wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
 	{ tErr="5:"+tr("Upper warning border error"); H = true; EVAL = HH = LL = L = false; }
 	else if(wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr="6:"+tr("Nether warning border error"); L = true; EVAL = HH = H = LL = false; }
+	{ tErr="6:"+tr("Lower warning border error"); L = true; EVAL = HH = H = LL = false; }
 	else if(speed && varDt > speed)
 	{ tErr = "7:"+tr("Too big parameter''s motion speed"); EVAL = true; HH = H = LL = L = false; }
 	else EVAL = HH = H = LL = L = false;
@@ -4748,7 +4746,7 @@ else {
 
 if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
 else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1441907336);
+f_err = tErr;','','',1450381598);
 INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -4867,11 +4865,11 @@ else {
 	if(aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
 	{ tErr = "3:"+tr("Upper alarm border error"); HH = true; EVAL = H = LL = L = false; }
 	else if(aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr="4:"+tr("Nether alarm border error"); LL = true; EVAL = HH = H = L = false; }
+	{ tErr="4:"+tr("Lower alarm border error"); LL = true; EVAL = HH = H = L = false; }
 	else if(wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
 	{ tErr="5:"+tr("Upper warning border error"); H = true; EVAL = HH = LL = L = false; }
 	else if(wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr="6:"+tr("Nether warning border error"); L = true; EVAL = HH = H = LL = false; }
+	{ tErr="6:"+tr("Lower warning border error"); L = true; EVAL = HH = H = LL = false; }
 	else if(speed && varDt > speed)
 	{ tErr = "7:"+tr("Too big parameter''s motion speed"); EVAL = true; HH = H = LL = L = false; }
 	else EVAL = HH = H = LL = L = false;
@@ -4879,7 +4877,7 @@ else {
 
 if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
 else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1441906986);
+f_err = tErr;','','',1450381549);
 INSERT INTO "tmplib_base" VALUES('SNMP','','','','','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 

@@ -854,15 +854,19 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
 void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl, bool ret )
 {
     //Calls to the queue update from alarmQuittance()
-    if(!f_queue) return;
+    if(!f_queue || (quitTmpl&(1<<tp))) return;
 
     pthread_mutex_lock(&dataM);
     string tStr, tStr1;
-    for(unsigned iQ = 0; iQ < mQueue.size(); iQ++)
-	for(int off = 0; (tStr=TSYS::strParse(wpath,0,";",&off)).size(); )
-	    for(int off1 = 0; (tStr1=TSYS::strParse(mQueue[iQ].path,0,";",&off1)).size(); )
-		if(tStr.compare(0,tStr1.size(),tStr1) == 0)
-		    mQueue[iQ].quittance = !(quitTmpl&(1<<tp)) && !ret;
+    for(unsigned iQ = 0; iQ < mQueue.size(); iQ++) {
+	bool toQuitt = false;
+	if(!wpath.size()) toQuitt = true;
+	else for(int off = 0; !toQuitt && (tStr=TSYS::strParse(wpath,0,";",&off)).size(); )
+	    for(int off1 = 0; !toQuitt && (tStr1=TSYS::strParse(mQueue[iQ].path,0,";",&off1)).size(); )
+		toQuitt = tStr1.compare(0,tStr.size(),tStr) == 0;
+	if(toQuitt) mQueue[iQ].quittance = !ret;
+    }
+
     pthread_mutex_unlock(&dataM);
 }
 
