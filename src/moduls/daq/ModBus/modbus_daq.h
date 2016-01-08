@@ -201,7 +201,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	pthread_mutex_t	enRes, dataRes;
+	ResMtx	enRes, dataRes;
 	Res	reqRes;
 	int64_t	&mPrior,			//Process task priority
 		&mNode,				//Node

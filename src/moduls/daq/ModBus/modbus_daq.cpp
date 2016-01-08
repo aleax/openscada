@@ -110,13 +110,6 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	prcSt(false), callSt(false), endrunReq(false), isReload(false), alSt(-1),
 	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutex_init(&dataRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
     cfg("PRM_BD_L").setS("ModBusPrmL_"+name_c);
     mPrt = "TCP";
@@ -125,9 +118,6 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
-    pthread_mutex_destroy(&dataRes);
 }
 
 void TMdContr::postDisable( int flag )
@@ -234,7 +224,7 @@ void TMdContr::stop_( )
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
 
     //Clear process parameters list
-    MtxAlloc res(enRes, true);
+    MtxAlloc res(enRes.mtx(), true);
     pHd.clear();
 }
 
@@ -257,7 +247,7 @@ void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
     unsigned i_prm;
 
-    MtxAlloc res(enRes, true);
+    MtxAlloc res(enRes.mtx(), true);
     for(i_prm = 0; i_prm < pHd.size(); i_prm++)
 	if(&pHd[i_prm].at() == prm) break;
 
@@ -461,7 +451,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 	return false;
     }
 
-    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes, true); asynchWrs[addr] = val.getS(); return true; }
+    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes.mtx(), true); asynchWrs[addr] = val.getS(); return true; }
 
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
@@ -724,7 +714,7 @@ void *TMdContr::Task( void *icntr )
 	while(true) {
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
-		MtxAlloc prmRes(cntr.enRes, true);
+		MtxAlloc prmRes(cntr.enRes.mtx(), true);
 		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		    cntr.pHd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
 		prmRes.unlock();
@@ -744,7 +734,7 @@ void *TMdContr::Task( void *icntr )
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
-	    MtxAlloc resAsWr(cntr.dataRes,true);
+	    MtxAlloc resAsWr(cntr.dataRes.mtx(), true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
 	    resAsWr.unlock();
@@ -866,7 +856,7 @@ void *TMdContr::Task( void *icntr )
 	    res.release();
 
 	    //Get data from blocks to parameters or calc for logical type parameters
-	    MtxAlloc prmRes(cntr.enRes, true);
+	    MtxAlloc prmRes(cntr.enRes.mtx(), true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		cntr.pHd[i_p].at().upVal(is_start, is_stop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    prmRes.unlock();
