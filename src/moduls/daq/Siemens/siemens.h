@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef SIEMENS_H
 #define SIEMENS_H
 
@@ -34,7 +34,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define MaxLenReq 240
+#define MaxLenReq	240
+#define ConnErrCode	10
 
 using std::string;
 using std::vector;
@@ -42,6 +43,14 @@ using namespace OSCADA;
 
 namespace Siemens
 {
+
+//Constants
+#define ISOTCP_TPKT_Version		3
+
+enum COTP_TPS	{ COTP_CR = 0xE0, COTP_CC = 0xD0, COTP_DT = 0xF0 };
+enum COTP_Class	{ COTP_NoExplFlCntr = 0x01, COTP_ExtForm = 0x02, COTP_LastDtUnit = 0x80 };
+enum COTP_OPTS	{ COTP_O_SzTPDU = 0xC0, COTP_O_SrcTSAP = 0xC1, COTP_O_DstTSAP = 0xC2 };
+enum ISOTCP_PDU_TAG { ISOTCP_OpenS7Connection = 0xF0, ISOTCP_Read = 0x04, ISOTCP_Write = 0x05 };
 
 //************************************************
 //* Value data structure                         *
@@ -146,7 +155,7 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Data
-	enum Type { CIF_PB, ISO_TCP, ADS, ISO_TCP243 };
+	enum Type { CIF_PB, ISO_TCP, ADS, ISO_TCP243, SELF_ISO_TCP };
 
 	//Methods
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
@@ -163,12 +172,18 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void connectRemotePLC( );
+	void connectRemotePLC( bool initOnly = false );
 	void disconnectRemotePLC( );
 	void getDB( unsigned n_db, long offset, string &buffer );
 	void putDB( unsigned n_db, long offset, const string &buffer );
 
 	void redntDataUpdate( );
+
+	// Generic requests API, ISO-TCP only for now
+	void reqService( XMLNode &io );
+	void protIO( XMLNode &io );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
+	void reset( );
 
 	TTpContr &owner( );
 
@@ -184,7 +199,7 @@ class TMdContr: public TController
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( const string &id, bool val );		//Enable parameter to process list
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
-	//> Values process
+	// Values process
 	char getValB( SValData ival, ResString &err );
 	int64_t getValI( SValData ival, ResString &err );
 	double getValR( SValData ival, ResString &err );
@@ -195,15 +210,22 @@ class TMdContr: public TController
 	void setValR( double ivl, SValData ival, ResString &err );
 	void setValS( const string &ivl, SValData ival, ResString &err );
 
-	//> Service
+	// Service
 	void postDisable( int flag );				//Delete all DB if flag 1
 
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
+
+	// Decoding
+	static const char *iVal( const string &buf, int &off, char vSz );
+	static uint32_t iN( const string &rb, int &off, uint8_t vSz );		//Decode number from stream as BE
+	// Encoding
+	static void oN( string &buf, uint32_t val, uint8_t sz, int off = -1 );	//Encode number to stream as BE
 
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
+	void setCntrDelay( const string &err );
 	int valSize( IO::Type itp, int iv_sz );			//Prepare value sizes
 	string revers( const string &ibuf ) {
 	    if(type() == ADS) return ibuf;
@@ -223,29 +245,39 @@ class TMdContr: public TController
 	};
 
 	//Attributes
-	int64_t	&mPerOld,		// ms
-		&mPrior,		// Process task priority
-		&mType,			// Connection type
+	int64_t	&mPerOld,		//ms
+		&mPrior,		//Process task priority
+		&mType,			//Connection type
 		&mSlot,
-		&mDev;			// CIF device number
-	char	&mAssincWR;		// Asynchronous write mode
+		&mDev,			//CIF device number
+		&restTm;		//Restore timeout in s
+	char	&mAssincWR;		//Asynchronous write mode
 
-	bool	prcSt,			// Process task active
-		callSt,			// Calc now stat
-		endrunReq,		// Request to stop of the Process task
-		isReload;
-	ResString errCon;
-	vector< AutoHD<TMdPrm> > pHd;	// Parameter's process list
-	vector< SDataRec > acqBlks;	// Acquisition data blocks
-	vector< SDataRec > writeBlks;	// Data block for write to a data source, for asynchronous write mode
+	bool	prcSt,			//Process task active
+		callSt,			//Calc now stat
+		endrunReq,		//Request to stop of the Process task
+		isReload,
+		isInitiated;		//Only for SELF_ISO_TCP
+	int8_t	alSt;			//Alarm state
+	MtxString conErr;		//Connection error
+	vector< AutoHD<TMdPrm> > pHd;	//Parameter's process list
+	vector< SDataRec > acqBlks;	//Acquisition data blocks
+	vector< SDataRec > writeBlks;	//Data block for write to a data source, for asynchronous write mode
+	AutoHD<TTransportOut>	tr;	//OpenSCADA output transport, for ADS and SELF_ISO_TCP
 
+	uint16_t mInvokeID;
+
+	// LibnoDave specific
 	daveInterface	*di;
 	daveConnection	*dc;
 
-	pthread_mutex_t	enRes, reqAPIRes;
-	Res	reqDataRes;
+	ResMtx	enRes,			//Access to pHd
+		reqAPIRes;		//Access to local connection's API data, like for LibnoDave
+	Res	reqDataRes,		//Access to generic request's data, mostly acqBlks
+		reqDataAsWrRes;		//Access to writeBlks
 
-	double	mPer, tmCalc;		// Template functions calc time
+	double	mPer, numR, numW, numErr;//Counters for read, wrote bytes and connection errors.
+	float	tmDelay;		//Delay time for next try connect
 };
 
 //************************************************

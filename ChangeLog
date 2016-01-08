@@ -1,3 +1,11 @@
+2016-01-08 Roman
+- FIX:DB.LibsDB.OscadaLibs.db: regEl.pidUnifD: Pulse regulation by the back position fixed and tested into real environment.
+- FIX:DAQ.MMS.libMMS: oN() function fix for auto size adjust. Tail wait fix into the messIO() request.
+- FIX:DAQ.ModBus: Some original messages fix. Some resources lock appended.
+- !!!!:DAQ.Siemens: Self implementing for ISO-TCP is added and tested, mostly by Proviron Holding NV request.
+    Restoring timeout is added. Significant refactoring for the resources lock, error messages and other.
+
+
 2015-12-17 Roman
 - DB.LibsDB.OscadaLibs.db: Some descriptions expanded and fixed.
 - DB.LibsDB.vcaBase.db: Main.TextLab: Context command's description into the operator's protocol fix.

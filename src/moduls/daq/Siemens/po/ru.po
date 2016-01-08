@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.Siemens translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.Siemens package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0Report-Msgid-Bugs-To: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:53+0300\n"
+"POT-Creation-Date: 2016-01-08 16:36+0200\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,10 +23,11 @@ msgstr "Роман Савоченко"
 
 msgid ""
 "Provides a data source PLC Siemens by means of Hilscher CIF cards, by using "
-"the MPI protocol, and Libnodave library for the rest."
+"the MPI protocol, and Libnodave library, or self, for the rest."
 msgstr ""
-"Предоставляет источник данных ПЛК Siemens посредством карт Hilscher CIF с "
-"использованием протокола MPI и библиотеки Libnodave для остального."
+"Предоставляет источник данных ПЛК Siemens посредством карт Hilscher CIF, с "
+"использованием протокола MPI, и библиотеки Libnodave, или собственной, для "
+"остального."
 
 msgid "Parameters table"
 msgstr "Таблица параметров"
@@ -39,6 +40,9 @@ msgstr "Планирование опроса"
 
 msgid "Request task priority"
 msgstr "Уровень приоритета задачи получения данных"
+
+msgid "Restore timeout (s)"
+msgstr "Интервал восстановления (с)"
 
 msgid "Asynchronous write mode"
 msgstr "Асинхронный режим записи"
@@ -111,16 +115,16 @@ msgid "Getting request error: %d."
 msgstr "Ошибка получения сообщения: %d."
 
 #, c-format
-msgid "15:Board %d is not present."
-msgstr "15:Плата %d отсутствует."
+msgid "%d:Board %d is not present."
+msgstr "%d:Плата %d отсутствует."
 
 #, c-format
-msgid "12:Sending request error %d."
-msgstr "12:Ошибка отправки сообщения %d."
+msgid "%d:Sending request error %d."
+msgstr "%d:Ошибка отправки сообщения %d."
 
 #, c-format
-msgid "13:Getting request error %d."
-msgstr "13:Ошибка получения сообщения %d."
+msgid "%d:Getting request error %d."
+msgstr "%d:Ошибка получения сообщения %d."
 
 msgid "CIF"
 msgstr ""
@@ -204,6 +208,16 @@ msgstr " : Активная станция"
 msgid " : Passive station"
 msgstr " : Пассивная станция"
 
+msgid "Task terminated! "
+msgstr "Задача прервана! "
+
+msgid "Connect error."
+msgstr "Ошибка подключения."
+
+#, c-format
+msgid "Restoring in %.6g s. "
+msgstr "Восстановления через %.6g с."
+
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
@@ -216,8 +230,16 @@ msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time: %s. Read %s. Wrote %s. Connection errors %g. "
+msgstr ""
+"Затрачено время: %s. Прочитано %s. Записано %s. Ошибок подключения %g. "
+
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: подключение к источнику данных: %s."
+
+msgid "STOP"
+msgstr "ОСТАНОВЛЕН"
 
 msgid "-1:No data"
 msgstr "-1:Нет данных"
@@ -228,9 +250,6 @@ msgstr "Нет ни одного CP или драйвера."
 msgid "Open socket of remote PLC error."
 msgstr "Ошибка открытия сокета удалённого ПЛК."
 
-msgid "10:Connection error."
-msgstr "10:Ошибка подключения."
-
 msgid "Connection to PLC error."
 msgstr "Ошибка подключения к ПЛК."
 
@@ -238,76 +257,145 @@ msgstr "Ошибка подключения к ПЛК."
 msgid "Connection type '%d' is not supported."
 msgstr "Тип соединения '%d' не поддерживается."
 
-msgid "14:Request block is too big."
-msgstr "14:Запрошенный блок очень большой."
+msgid "ReadDB"
+msgstr "ЧтениеБД"
 
-msgid "12:Sending request is timeouted."
-msgstr "12:Истекло время ожидания отправки сообщения."
-
-#, c-format
-msgid "19:Request to DB error %d."
-msgstr "19:Ошибка запроса DB: %d."
-
-msgid "13:Get request is timeouted."
-msgstr "13:Истекло время ожидания получения сообщения."
-
-msgid "17:There is no response from the remote station."
-msgstr "17:Нет ответа от удалённой станции."
-
-msgid "18:Master is out of the logical token ring."
-msgstr "18:Мастер не внутри логического кольца."
-
-msgid "20:Specified offset address or DB error."
-msgstr "20:Ошибка в указанном смещении или БД."
+msgid "Requested block is too big."
+msgstr "Запрошенный блок очень большой."
 
 #, c-format
-msgid "Read block '%d' error: %s"
-msgstr "Ошибка чтения блока '%d': %s"
+msgid "Board %d is not present."
+msgstr "Плата %d отсутствует."
+
+msgid "Sending request is timeouted."
+msgstr "Исчерпано время отправки сообщения."
 
 #, c-format
-msgid "12:Read DB '%d' from controller error: %s"
-msgstr "12:Ошибка чтения БД '%d' из контроллера: %s"
+msgid "Request to DB error, %d."
+msgstr "Ошибка запроса БД, %d."
 
-msgid "13:Error server respond"
-msgstr "13:Ошибка ответа сервера"
+msgid "Get request is timeouted."
+msgstr "Исчерпано время получения сообщения."
 
-msgid "13:Not full respond"
-msgstr "13:Неполный ответ"
+msgid "There is no response from the remote station."
+msgstr "Нет ответа от удалённой станции."
 
-#, c-format
-msgid "13:Error server respond: %d"
-msgstr "13:Ошибка ответа сервера: %d"
+msgid "Master is out of the logical token ring."
+msgstr "Мастер не внутри логического кольца."
 
-#, c-format
-msgid "13:Error server '%s' respond"
-msgstr "13:Ошибка '%s' ответа сервера"
+msgid "Specified offset address or DB error."
+msgstr "Ошибка в указанном адресе смещения или БД."
 
-#, c-format
-msgid "13:Error server '%s' respond: %d"
-msgstr "13:Ошибка '%s' ответа сервера: %d"
-
-msgid "16:Transmitted block is too big."
-msgstr "16:Передаваемый блок очень большой."
-
-msgid "13:Getting request is timeouted."
-msgstr "13:Истекло время ожидания получения сообщения."
+msgid "Connection error."
+msgstr "Ошибка подключения."
 
 #, c-format
-msgid "Write block '%d' error: %s"
-msgstr "Ошибка записи блока '%d': %s"
+msgid "Read block '%d' error, %s."
+msgstr "Ошибка чтения блока '%d', %s."
 
 #, c-format
-msgid "12:Write DB '%d' to controller error: %s"
-msgstr "12:Ошибка записи БД '%d' в контроллер: %s"
+msgid "DB '%d' error, %s."
+msgstr "БД '%d' ошибка, %s."
 
-msgid "11:Value is not gathered."
-msgstr "11:Значения не получены."
+msgid "Error server respond."
+msgstr "Ошибка ответа сервера."
+
+msgid "Not full respond."
+msgstr "Неполный ответ."
+
+#, c-format
+msgid "Error server respond, %d."
+msgstr "Ошибка ответа сервера, %d."
+
+msgid "Reply data block size, %d != %d."
+msgstr "Размер блока данных ответа, %d != %d."
+
+msgid "WriteDB"
+msgstr "ЗаписьБД"
+
+msgid "Transmitted block is too big."
+msgstr "Передаваемый блок очень большой."
+
+msgid "Getting request is timeouted."
+msgstr "Исчерпано время получения сообщения."
+
+#, c-format
+msgid "Write block '%d' error, %s."
+msgstr "Ошибка записи блока '%d', %s."
+
+#, c-format
+msgid "Unknown target protocol '%s'."
+msgstr "Неизвестный целевой протокол '%s'."
+
+#, c-format
+msgid "Unknown service '%s'."
+msgstr "Неизвестный сервис '%s'."
+
+msgid "Respond size is not coincidence."
+msgstr "Несоответствие размера ответа."
+
+msgid "Short."
+msgstr "Короткий."
+
+#, c-format
+msgid "PDU Type error, %d != %d."
+msgstr "Ошибка типа PDU, %d != %d."
+
+msgid "Inconsistent length."
+msgstr "Несоответствие размера."
+
+msgid "PDU header"
+msgstr "Заголовок PDU"
+
+msgid "No start from 0x32."
+msgstr "Не начинается с 0x32."
+
+#, c-format
+msgid "Inconsistent respond's invoke ID to the request, %d != %d."
+msgstr "Несоответствие ID ответа его вызову, %d != %d."
+
+msgid "Parameters + data parts size more to the respond size."
+msgstr "Размер частей параметров + данных более размера ответа."
+
+#, c-format
+msgid "Parameters part size is not equal to expected, %d."
+msgstr "Размер части параметров не соответствует ожидаемому, %d."
+
+msgid "Respond function mismatch."
+msgstr "Неправильная функция ответа."
+
+#, c-format
+msgid "Try access beyond the DB '%s' range %s(%s)."
+msgstr "Попытка доступа за границы БД '%s', %s(%s)."
+
+#, c-format
+msgid "DB '%s' is not exist."
+msgstr "БД '%s' отсутствует."
+
+#, c-format
+msgid "Data access unknown error, %xh."
+msgstr "Неизвестная ошибка доступа к данным, %xh."
+
+#, c-format
+msgid "Unknown data encoding type, %d."
+msgstr "Неизвестный тип данных, %d."
+
+#, c-format
+msgid "Inconsistent data block size to the respond size, %d(%d)."
+msgstr "Несоответствие размера блока данных размеру ответа, %d(%d)."
+
+#, c-format
+msgid "%d:Value is not gathered."
+msgstr "%d:Значение не получено."
 
 msgid "Value type error."
-msgstr "Ошибка в типе значения."
+msgstr "Ошибка типа значения."
 
-msgid "11:Value not gathered."
-msgstr "11:Значения не получены."
+msgid "Connecting..."
+msgstr "Соединение..."
+
+msgid "OK"
+msgstr ""
 
 msgid ""
 "Connection type:\n"

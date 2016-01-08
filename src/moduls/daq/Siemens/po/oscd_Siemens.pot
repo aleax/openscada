@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:55+0300\n"
+"POT-Creation-Date: 2016-01-08 16:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol, and Libnodave library for the rest."
+msgid "Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol, and Libnodave library, or self, for the rest."
 msgstr ""
 
 msgid "Parameters table"
@@ -36,6 +36,9 @@ msgid "Acquisition schedule"
 msgstr ""
 
 msgid "Request task priority"
+msgstr ""
+
+msgid "Restore timeout (s)"
 msgstr ""
 
 msgid "Asynchronous write mode"
@@ -109,15 +112,15 @@ msgid "Getting request error: %d."
 msgstr ""
 
 #, c-format
-msgid "15:Board %d is not present."
+msgid "%d:Board %d is not present."
 msgstr ""
 
 #, c-format
-msgid "12:Sending request error %d."
+msgid "%d:Sending request error %d."
 msgstr ""
 
 #, c-format
-msgid "13:Getting request error %d."
+msgid "%d:Getting request error %d."
 msgstr ""
 
 msgid "CIF"
@@ -202,6 +205,16 @@ msgstr ""
 msgid " : Passive station"
 msgstr ""
 
+msgid "Task terminated! "
+msgstr ""
+
+msgid "Connect error."
+msgstr ""
+
+#, c-format
+msgid "Restoring in %.6g s. "
+msgstr ""
+
 msgid "Call now. "
 msgstr ""
 
@@ -214,7 +227,14 @@ msgid "Call next by cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s. "
+msgid "Spent time: %s. Read %s. Wrote %s. Connection errors %g. "
+msgstr ""
+
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr ""
+
+msgid "STOP"
 msgstr ""
 
 msgid "-1:No data"
@@ -226,9 +246,6 @@ msgstr ""
 msgid "Open socket of remote PLC error."
 msgstr ""
 
-msgid "10:Connection error."
-msgstr ""
-
 msgid "Connection to PLC error."
 msgstr ""
 
@@ -236,75 +253,145 @@ msgstr ""
 msgid "Connection type '%d' is not supported."
 msgstr ""
 
-msgid "14:Request block is too big."
+msgid "ReadDB"
 msgstr ""
 
-msgid "12:Sending request is timeouted."
-msgstr ""
-
-#, c-format
-msgid "19:Request to DB error %d."
-msgstr ""
-
-msgid "13:Get request is timeouted."
-msgstr ""
-
-msgid "17:There is no response from the remote station."
-msgstr ""
-
-msgid "18:Master is out of the logical token ring."
-msgstr ""
-
-msgid "20:Specified offset address or DB error."
+msgid "Requested block is too big."
 msgstr ""
 
 #, c-format
-msgid "Read block '%d' error: %s"
+msgid "Board %d is not present."
+msgstr ""
+
+msgid "Sending request is timeouted."
 msgstr ""
 
 #, c-format
-msgid "12:Read DB '%d' from controller error: %s"
+msgid "Request to DB error, %d."
 msgstr ""
 
-msgid "13:Error server respond"
+msgid "Get request is timeouted."
 msgstr ""
 
-msgid "13:Not full respond"
+msgid "There is no response from the remote station."
 msgstr ""
 
-#, c-format
-msgid "13:Error server respond: %d"
+msgid "Master is out of the logical token ring."
 msgstr ""
 
-#, c-format
-msgid "13:Error server '%s' respond"
+msgid "Specified offset address or DB error."
 msgstr ""
 
-#, c-format
-msgid "13:Error server '%s' respond: %d"
-msgstr ""
-
-msgid "16:Transmitted block is too big."
-msgstr ""
-
-msgid "13:Getting request is timeouted."
+msgid "Connection error."
 msgstr ""
 
 #, c-format
-msgid "Write block '%d' error: %s"
+msgid "Read block '%d' error, %s."
 msgstr ""
 
 #, c-format
-msgid "12:Write DB '%d' to controller error: %s"
+msgid "DB '%d' error, %s."
 msgstr ""
 
-msgid "11:Value is not gathered."
+msgid "Error server respond."
+msgstr ""
+
+msgid "Not full respond."
+msgstr ""
+
+#, c-format
+msgid "Error server respond, %d."
+msgstr ""
+
+#, c-format
+msgid "Reply data block size, %d != %d."
+msgstr ""
+
+msgid "WriteDB"
+msgstr ""
+
+msgid "Transmitted block is too big."
+msgstr ""
+
+msgid "Getting request is timeouted."
+msgstr ""
+
+#, c-format
+msgid "Write block '%d' error, %s."
+msgstr ""
+
+#, c-format
+msgid "Unknown target protocol '%s'."
+msgstr ""
+
+#, c-format
+msgid "Unknown service '%s'."
+msgstr ""
+
+msgid "Respond size is not coincidence."
+msgstr ""
+
+msgid "Short."
+msgstr ""
+
+#, c-format
+msgid "PDU Type error, %d != %d."
+msgstr ""
+
+msgid "Inconsistent length."
+msgstr ""
+
+msgid "PDU header"
+msgstr ""
+
+msgid "No start from 0x32."
+msgstr ""
+
+#, c-format
+msgid "Inconsistent respond's invoke ID to the request, %d != %d."
+msgstr ""
+
+msgid "Parameters + data parts size more to the respond size."
+msgstr ""
+
+#, c-format
+msgid "Parameters part size is not equal to expected, %d."
+msgstr ""
+
+msgid "Respond function mismatch."
+msgstr ""
+
+#, c-format
+msgid "Try access beyond the DB '%s' range %s(%s)."
+msgstr ""
+
+#, c-format
+msgid "DB '%s' is not exist."
+msgstr ""
+
+#, c-format
+msgid "Data access unknown error, %xh."
+msgstr ""
+
+#, c-format
+msgid "Unknown data encoding type, %d."
+msgstr ""
+
+#, c-format
+msgid "Inconsistent data block size to the respond size, %d(%d)."
+msgstr ""
+
+#, c-format
+msgid "%d:Value is not gathered."
 msgstr ""
 
 msgid "Value type error."
 msgstr ""
 
-msgid "11:Value not gathered."
+msgid "Connecting..."
+msgstr ""
+
+msgid "OK"
 msgstr ""
 
 msgid ""

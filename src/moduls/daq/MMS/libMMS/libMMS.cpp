@@ -329,7 +329,7 @@ void Core::oN( string &buf, uint32_t val, uint8_t sz, int off )
 {
     union { uint32_t v; char c[4]; } dt;
     dt.v = i32_LE(val);
-    if(sz < 0 || sz > 4) for(sz = 4; sz > 1 && dt.c[sz-1]; ) sz--;
+    if(sz < 0 || sz > 4) for(sz = 4; sz > 1 && !dt.c[sz-1]; ) sz--;
     off = (off >= 0) ? std::min(off,(int)buf.size()) : buf.size();
     if((off+sz) > (int)buf.size()) buf.append(off+sz-buf.size(), char(0));
     while(sz) buf[off++] = dt.c[--sz];
@@ -791,9 +791,8 @@ void Client::protIO( XML_N &io )
 	tpkt.assign(buf, resp_len);
 	int off = 2;
 	for( ; tpkt.size() < 4 || tpkt.size() < iN(tpkt,off,2); off = 2) {
-	    resp_len = messIO(NULL, 0, buf, sizeof(buf));
-	    if(!resp_len) throw Error("Not full respond.");
-	    rez.append(buf, resp_len);
+	    if(!(resp_len=messIO(NULL,0,buf,sizeof(buf)))) throw Error("Not full respond.");
+	    tpkt.append(buf, resp_len);
 	}
 
 	off = 2;

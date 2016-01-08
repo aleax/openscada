@@ -5515,14 +5515,13 @@ if(analog) return outA;
 if(f_start || f_stop) { impQup = impQdwn = false; return 0; }
 
 //Call impuls generator
-//SYS.messInfo("PID","outA="+outA);
-outA_ = (impAnOut < 0) ? 2*(outA-50) : 0.1*(outA-impAnOut);
-if(perLag <= 0 && ((outA_*KImpRfact) >= (100*TImpMin/TImpPer) || (-outA_/KImpRfact) >= (100*TImpMin/TImpPer) || (!auto && abs(outA_) > 0.1)))
+outA_ = (impAnOut < 0) ? 2*(outA-50) : (outA-impAnOut);
+if(perLag <= 0 && ((outA_*KImpRfact) >= (100*TImpMin/TImpPer) || (-outA_/KImpRfact) >= (100*TImpMin/TImpPer)))
 {
 	impLag = max(abs(outA_)*TImpPer/100,TImpMin);
 	impLag = (outA_>0) ? impLag*KImpRfact : impLag/KImpRfact;
 	perLag = TImpPer;
-	if(outA_ > 0) impQup = !QO; else impQdwn = !QZ;  
+	if(outA_ > 0) impQup = !QO; else impQdwn = !QZ;
 }
 else if(perLag > 0) {
 	perLag -= 1e3/f_frq;

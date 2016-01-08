@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.2"
+#define DAQ_MVER	"1.8.3"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -217,9 +217,9 @@ class TMdContr: public TController
 		&connTry;			//Connections try
 	int64_t	mPer;
 
-	bool	prc_st,				//Process task active
-		call_st,			//Calc now stat
-		endrun_req,			//Request to stop of the Process task
+	bool	prcSt,				//Process task active
+		callSt,				//Calc now stat
+		endrunReq,			//Request to stop of the Process task
 		isReload;
 	int8_t	alSt;				//Alarm state
 	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers

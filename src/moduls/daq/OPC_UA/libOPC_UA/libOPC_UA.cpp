@@ -737,8 +737,8 @@ void UA::oTm( string &buf, int64_t val )
 void UA::oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
     bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef )
 {
-    if(resMask&RdRm_RefType) oNodeId(buf, refTypeId);		else oNodeId(buf,0);
-    if(resMask&RdRm_IsForward) oNu(buf, isForward, 1);		else oNu(buf,0,1);
+    if(resMask&RdRm_RefType) oNodeId(buf, refTypeId);		else oNodeId(buf, 0);
+    if(resMask&RdRm_IsForward) oNu(buf, isForward, 1);		else oNu(buf, 0, 1);
     oNodeId(buf, nodeId);
     if(resMask&RdRm_BrowseName) oSqlf(buf, name, nodeId.ns());	else oSqlf(buf, "");
     if(resMask&RdRm_DisplayName) oSl(buf, name, "en");		else oSl(buf, "");

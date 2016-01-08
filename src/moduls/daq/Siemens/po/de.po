@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:53+0300\n"
+"POT-Creation-Date: 2016-01-08 16:36+0200\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -28,10 +28,10 @@ msgstr "Roman Savotschenko"
 
 msgid ""
 "Provides a data source PLC Siemens by means of Hilscher CIF cards, by using "
-"the MPI protocol, and Libnodave library for the rest."
+"the MPI protocol, and Libnodave library, or self, for the rest."
 msgstr ""
-"Ermöglicht Datenquelle Siemens PLC-Karten mit Hilscher CIF. Für Andere "
-"werden MPI-Protokoll und Bibliothek Libnodave verwendet."
+"Ermöglicht Datenquelle Siemens PLC-Karten mit Hilscher CIF, Für Andere "
+"werden MPI-Protokoll, und Bibliothek Libnodave, oder Selbst, verwendet."
 
 msgid "Parameters table"
 msgstr "Tabelle der Parameter"
@@ -44,6 +44,9 @@ msgstr "Planung der Befragung"
 
 msgid "Request task priority"
 msgstr "Priorität der Datenerfassung"
+
+msgid "Restore timeout (s)"
+msgstr "Zeit der Wiederherstellung (sek)"
 
 msgid "Asynchronous write mode"
 msgstr "Asynchroner Schreibmodus"
@@ -116,16 +119,16 @@ msgid "Getting request error: %d."
 msgstr "Fehler: %d beim Empfang der Anfrage."
 
 #, c-format
-msgid "15:Board %d is not present."
-msgstr "15:Karte %d fehlt."
+msgid "%d:Board %d is not present."
+msgstr "%d:Karte %d fehlt."
 
 #, c-format
-msgid "12:Sending request error %d."
-msgstr "12:Fehler beim Senden der Anfrage %d."
+msgid "%d:Sending request error %d."
+msgstr "%d:Fehler beim Senden der Anfrage %d."
 
 #, c-format
-msgid "13:Getting request error %d."
-msgstr "13:Fehler beim Empfang der Anfrage %d."
+msgid "%d:Getting request error %d."
+msgstr "%d:Fehler beim Empfang der Anfrage %d."
 
 msgid "CIF"
 msgstr ""
@@ -209,8 +212,18 @@ msgstr " : Aktive Station"
 msgid " : Passive station"
 msgstr " : Passive Station"
 
+msgid "Task terminated! "
+msgstr "Task gekündigt! "
+
+msgid "Connect error."
+msgstr "Verbinden Fehler."
+
+#, c-format
+msgid "Restoring in %.6g s. "
+msgstr "Wiederherstellung in %.6g sek. "
+
 msgid "Call now. "
-msgstr "Rufen Sie jetzt an. "
+msgstr "Rufen Sie jetzt. "
 
 #, c-format
 msgid "Call by period: %s. "
@@ -221,8 +234,15 @@ msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Verbrauchte Zeit: %s. "
+msgid "Spent time: %s. Read %s. Wrote %s. Connection errors %g. "
+msgstr "Verbrachte Zeit: %s. Lesen %s. Schrieb %s. Verbindungsfehler %g. "
+
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
+
+msgid "STOP"
+msgstr "STOP"
 
 msgid "-1:No data"
 msgstr "-1:Keine Daten"
@@ -233,9 +253,6 @@ msgstr "Treiber oder CP (Karte) sind nicht vorhanden."
 msgid "Open socket of remote PLC error."
 msgstr "Fehler beim Öffnen des Sockets des entfernten PLC."
 
-msgid "10:Connection error."
-msgstr "10:Fehler beim Anschluss."
-
 msgid "Connection to PLC error."
 msgstr "Fehler beim Anschluss an PLC."
 
@@ -243,76 +260,144 @@ msgstr "Fehler beim Anschluss an PLC."
 msgid "Connection type '%d' is not supported."
 msgstr "Verbindungstyp '%d' wird nicht unterstützt."
 
-msgid "14:Request block is too big."
-msgstr "14:Der angefragte Block ist zu groß."
+msgid "ReadDB"
+msgstr "LesenDB"
 
-msgid "12:Sending request is timeouted."
-msgstr "12:Zeitüberschreitung beim Senden der Anfrage."
-
-#, c-format
-msgid "19:Request to DB error %d."
-msgstr "19:Fehler der Datenbank-Anfrage: %d."
-
-msgid "13:Get request is timeouted."
-msgstr "13:Zeitüberschreitung beim Empfang der Anfrage."
-
-msgid "17:There is no response from the remote station."
-msgstr "17:Keine Antwort von der entfernten Station."
-
-msgid "18:Master is out of the logical token ring."
-msgstr "18:Master ist nicht Teil des logischen Rings."
-
-msgid "20:Specified offset address or DB error."
-msgstr "20:Fehler im vorgegebenen Offset oder in der Datenbank."
+msgid "Requested block is too big."
+msgstr "Der angefragte Block ist zu groß."
 
 #, c-format
-msgid "Read block '%d' error: %s"
-msgstr "Fehler beim Lesen des Blocks '%d': %s"
+msgid "Board %d is not present."
+msgstr "Karte %d fehlt."
+
+msgid "Sending request is timeouted."
+msgstr "Zeitüberschreitung beim Senden der Anfrage."
 
 #, c-format
-msgid "12:Read DB '%d' from controller error: %s"
-msgstr "12:Fehler beim Lesen der Datenbank '%d' aus dem Kontroller: %s"
+msgid "Request to DB error, %d."
+msgstr "Fehler der Datenbank-Anfrage, %d."
 
-msgid "13:Error server respond"
-msgstr "13:Fehler Antwort vom Server"
+msgid "Get request is timeouted."
+msgstr "Zeitüberschreitung beim Empfang der Anfrage."
 
-msgid "13:Not full respond"
-msgstr "13:Ein partielles Ansprechen"
+msgid "There is no response from the remote station."
+msgstr "Keine Antwort von der entfernten Station."
 
-#, c-format
-msgid "13:Error server respond: %d"
-msgstr "13:Fehler Antwort vom Server: %d"
+msgid "Master is out of the logical token ring."
+msgstr "Master ist nicht Teil des logischen Rings."
 
-#, c-format
-msgid "13:Error server '%s' respond"
-msgstr "13:Fehler '%s' Antwort vom Server"
+msgid "Specified offset address or DB error."
+msgstr "Fehler im vorgegebenen Offset oder in der Datenbank."
 
-#, c-format
-msgid "13:Error server '%s' respond: %d"
-msgstr "13:Fehler '%s' Antwort vom Server: %d"
-
-msgid "16:Transmitted block is too big."
-msgstr "16:Übermittelter Block ist zu groß."
-
-msgid "13:Getting request is timeouted."
-msgstr "13:Zeitüberschreitung beim Empfang der Anfrage."
+msgid "Connection error."
+msgstr "Fehler beim Anschluss."
 
 #, c-format
-msgid "Write block '%d' error: %s"
-msgstr "Fehler beim Schreibens des Blocks '%d': %s"
+msgid "Read block '%d' error, %s."
+msgstr "Fehler beim Lesen des Blocks '%d', %s."
 
 #, c-format
-msgid "12:Write DB '%d' to controller error: %s"
-msgstr "12:Fehler beim Schreiben der Datenbank '%d' in den Controller: %s"
+msgid "DB '%d' error, %s."
+msgstr "Datenbank '%d' Fehler, %s."
 
-msgid "11:Value is not gathered."
-msgstr "11:Wert wurde nicht erfasst."
+msgid "Error server respond."
+msgstr "Fehler Antwort vom Server."
+
+msgid "Not full respond."
+msgstr "Ein partielles Ansprechen."
+
+#, c-format
+msgid "Error server respond, %d."
+msgstr "Fehler Antwort vom Server, %d."
+
+#, c-format
+msgid "Reply data block size, %d != %d."
+msgstr "Antworten Datenblockgröße, %d != %d."
+
+msgid "WriteDB"
+msgstr "SchreibeDB"
+
+msgid "Transmitted block is too big."
+msgstr "Übermittelter Block ist zu groß."
+
+msgid "Getting request is timeouted."
+msgstr "Zeitüberschreitung beim Empfang der Anfrage."
+
+#, c-format
+msgid "Write block '%d' error, %s."
+msgstr "Fehler beim Schreibens des Blocks '%d', %s."
+
+#, c-format
+msgid "Unknown target protocol '%s'."
+msgstr "Unknown Ziel-Protokoll '%s'."
+
+#, c-format
+msgid "Unknown service '%s'."
+msgstr "Unknown Service '%s'."
+
+msgid "Respond size is not coincidence."
+msgstr "Respond Größe ist nicht von ungefähr."
+
+msgid "Short."
+msgstr "Kurz."
+
+#, c-format
+msgid "PDU Type error, %d != %d."
+msgstr "PDU Typ Fehler, %d != %d."
+
+msgid "Inconsistent length."
+msgstr "Uneinheitliche Länge."
+
+msgid "PDU header"
+msgstr "PDU-Header"
+
+msgid "No start from 0x32."
+msgstr "Kein Start von 0x32."
+
+#, c-format
+msgid "Inconsistent respond's invoke ID to the request, %d != %d."
+msgstr "Inkonsistent Reaktion Invoke-ID auf die Anforderung, %d != %d."
+
+msgid "Parameters + data parts size more to the respond size."
+msgstr "Parameter + Daten Teile Größe mehr auf den Antwortgröße."
+
+#, c-format
+msgid "Parameters part size is not equal to expected, %d."
+msgstr "Parameter Bauteilgröße nicht gleich zu erwarten, %d."
+
+msgid "Respond function mismatch."
+msgstr "Antwortfunktion Mismatch."
+
+#, c-format
+msgid "Try access beyond the DB '%s' range %s(%s)."
+msgstr "Versuchen Sie, den Zugang über die DB '%s' Bereich %s(%s)."
+
+msgid "DB '%s' is not exist."
+msgstr "DB '%s' ist nicht vorhanden."
+
+#, c-format
+msgid "Data access unknown error, %xh."
+msgstr "Datenzugriff unbekannter Fehler, %xh."
+
+#, c-format
+msgid "Unknown data encoding type, %d."
+msgstr "Unbekannter Datencodierungstyp, %d."
+
+#, c-format
+msgid "Inconsistent data block size to the respond size, %d(%d)."
+msgstr "Inkonsistente Datenblockgröße auf die Antwortgröße, %d(%d)."
+
+msgid "%d:Value is not gathered."
+msgstr "%d:Wert wurde nicht erfasst."
 
 msgid "Value type error."
 msgstr "Fehler im Wertetyp."
 
-msgid "11:Value not gathered."
-msgstr "11:Wert wurde nicht erfasst."
+msgid "Connecting..."
+msgstr "Connecting..."
+
+msgid "OK"
+msgstr "OK"
 
 msgid ""
 "Connection type:\n"
@@ -322,6 +407,10 @@ msgid ""
 "Siemens, by Ethernet network (TCP243 by CP243);\n"
 "  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."
 msgstr ""
+"Verbindungstyp:\n"
+"  CIF_PB - Verbindung zum Controller Serie S7, von der Firma Siemens, die von Kommunikationseinheit CIF-50 PB oder dergleichen;\n"
+"  ISO_TCP, ISO_TCP243 - Verbindung zum Controller Serie S7, von der Firma Siemens, die von Ethernet-Netzwerk (TCP243 von CP243);\n"
+"  ADS - TwinCAT ADS/AMS-Protokoll für den Anschluss an Steuerungen Firma Beckhoff."
 
 msgid ""
 "Remote controller address. For connections:\n"
@@ -335,6 +424,14 @@ msgid ""
 "example: \"192.168.0.1.1.1\";\n"
 "    AMSPort - port, write into view digit 0-65535."
 msgstr ""
+"Fernbedienung-Adresse. Für Verbindungen:\n"
+"  CIF_PB - Controller-Adresse in \"Profibus\" Netzwerk stelligen 0-255;\n"
+"  ISO_TCP, ISO_TCP243 - IP-Adresse in Ethernet-Netzwerk;\n"
+"  ADS - Netzwerkkennung und Port für die Ziel- und Quellstationen angesichts\n"
+"      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
+"      (beispielsweise: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), wo:\n"
+"    AMSNetId - Netzwerkkennung, schreiben Sie in die Ansicht von sechs Ziffern 0-255, zum Beispiel: \"192.168.0.1.1.1\";\n"
+"    AMSPort - Hafen, schreiben Sie in die Ansicht stelligen 0-65535."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."

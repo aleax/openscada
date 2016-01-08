@@ -279,7 +279,7 @@ enum AttrIds		{ Aid_Error = 0, AId_NodeId, AId_NodeClass, AId_BrowseName, AId_Di
 			  AId_Value, AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
 			  AId_MinimumSamplingInterval, AId_Historizing, AId_Executable, AId_UserExecutable };
 enum SubScrSt		{ SS_CUR = 0, SS_CLOSED, SS_CREATING, SS_NORMAL, SS_LATE, SS_KEEPALIVE };
-enum MonitoringMode 	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
+enum MonitoringMode	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
 
 //* External functions                        */
 extern int64_t curTime( );
@@ -416,8 +416,8 @@ class UA
 	class SecuritySetting
 	{
 	    public:
-		SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
-		SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
+	    SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
+	    SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
 
 	    string		policy;
 	    MessageSecurityMode	messageMode;

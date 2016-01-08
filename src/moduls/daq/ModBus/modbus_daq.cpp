@@ -107,7 +107,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
 	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),
 	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
-	prc_st(false), call_st(false), endrun_req(false), isReload(false), alSt(-1),
+	prcSt(false), callSt(false), endrunReq(false), isReload(false), alSt(-1),
 	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     pthread_mutexattr_t attrM;
@@ -149,16 +149,16 @@ string TMdContr::getStatus( )
     string val = TController::getStatus( );
 
     if(startStat() && !redntUse()) {
-	if(!prc_st) val += TSYS::strMess(_("Task terminated! "));
+	if(!prcSt) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
-	    val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
-	    val.replace(0,1,"10");
+	    val += TSYS::strMess(_("Connection error. Restoring in %.6g s."), tmDelay);
+	    val.replace(0, 1, "10");
 	}
 	else {
-	    if(call_st)	val += TSYS::strMess(_("Call now. "));
+	    if(callSt)	val += TSYS::strMess(_("Call now. "));
 	    if(period())val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
 	    else val += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    val += TSYS::strMess(_("Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
+	    val += TSYS::strMess(_("Spent time: %s. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of respond %g."),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 	}
     }
@@ -171,15 +171,17 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new 
 void TMdContr::disable_( )
 {
     //Clear acquisition data block
+    reqRes.resRequestW(true);
     acqBlks.clear();
     acqBlksIn.clear();
     acqBlksCoil.clear();
     acqBlksCoilIn.clear();
+    reqRes.resRelease();
 }
 
 void TMdContr::start_( )
 {
-    if(prc_st) return;
+    if(prcSt) return;
 
     //Establish connection
     /*AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
@@ -195,15 +197,15 @@ void TMdContr::start_( )
 
     //Reenable parameters for data blocks structure update
     // Asynchronous writings queue clear
-    MtxAlloc resAsWr(dataRes, true);
-    asynchWrs.clear();
-    resAsWr.unlock();
+    dataRes.lock(); asynchWrs.clear(); dataRes.unlock();
 
     // Clear data blocks
+    reqRes.resRequestW(true);
     acqBlks.clear();
     acqBlksIn.clear();
     acqBlksCoil.clear();
     acqBlksCoilIn.clear();
+    reqRes.resRelease();
 
     // Reenable parameters
     try {
@@ -223,7 +225,7 @@ void TMdContr::start_( )
 void TMdContr::stop_( )
 {
     //Stop the request and calc data task
-    SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
     alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
     alSt = -1;
@@ -232,6 +234,7 @@ void TMdContr::stop_( )
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
 
     //Clear process parameters list
+    MtxAlloc res(enRes, true);
     pHd.clear();
 }
 
@@ -573,8 +576,7 @@ bool TMdContr::setValR( int val, int addr, ResString &err )
     //Set to acquisition block
     ResAlloc res(reqRes, false);
     for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	if((addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	{
+	if((addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size())) {
 	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off]   = (char)(val>>8);
 	    acqBlks[i_b].val[addr*2-acqBlks[i_b].off+1] = (char)val;
 	    break;
@@ -711,8 +713,8 @@ void *TMdContr::Task( void *icntr )
     string pdu;
     TMdContr &cntr = *(TMdContr *)icntr;
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.endrunReq = false;
+    cntr.prcSt = true;
 
     bool is_start = true;
     bool is_stop  = false;
@@ -727,18 +729,18 @@ void *TMdContr::Task( void *icntr )
 		    cntr.pHd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
 		prmRes.unlock();
 
-		cntr.tmDelay = vmax(0,cntr.tmDelay-1);
+		cntr.tmDelay = vmax(0, cntr.tmDelay-1);
 
 		if(is_stop) break;
 
 		TSYS::sysSleep(1);
 
-		if(cntr.endrun_req) is_stop = true;
+		if(cntr.endrunReq) is_stop = true;
 		is_start = false;
 		continue;
 	    }
 
-	    cntr.call_st = true;
+	    cntr.callSt = true;
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
@@ -757,7 +759,7 @@ void *TMdContr::Task( void *icntr )
 
 	    //Get coils
 	    for(unsigned i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++) {
-		if(cntr.endrun_req) break;
+		if(cntr.endrunReq) break;
 		if(cntr.redntUse()) { cntr.acqBlksCoil[i_b].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x01;					//Function, read multiple coils
@@ -784,7 +786,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0) continue;
 	    //Get input's coils
 	    for(unsigned i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++) {
-		if(cntr.endrun_req) break;
+		if(cntr.endrunReq) break;
 		if(cntr.redntUse()) { cntr.acqBlksCoilIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x02;					//Function, read multiple input's coils
@@ -811,7 +813,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0) continue;
 	    //Get registers
 	    for(unsigned i_b = 0; i_b < cntr.acqBlks.size(); i_b++) {
-		if(cntr.endrun_req) break;
+		if(cntr.endrunReq) break;
 		if(cntr.redntUse()) { cntr.acqBlks[i_b].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x03;				//Function, read multiple registers
@@ -837,7 +839,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0)	continue;
 	    //Get input registers
 	    for(unsigned i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++) {
-		if(cntr.endrun_req) break;
+		if(cntr.endrunReq) break;
 		if(cntr.redntUse()) { cntr.acqBlksIn[i_b].err.setVal(_("4:Server failure.")); continue; }
 		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x04;					//Function, read multiple input registers
@@ -860,6 +862,7 @@ void *TMdContr::Task( void *icntr )
 		    break;
 		}
 	    }
+	    if(cntr.tmDelay > 0)	continue;
 	    res.release();
 
 	    //Get data from blocks to parameters or calc for logical type parameters
@@ -879,19 +882,18 @@ void *TMdContr::Task( void *icntr )
 
 	    //Calc acquisition process time
 	    t_prev = t_cnt;
-	    cntr.call_st = false;
+	    cntr.callSt = false;
 
 	    if(is_stop) break;
 
 	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
-	    if(cntr.endrun_req) is_stop = true;
+	    if(cntr.endrunReq) is_stop = true;
 	    is_start = false;
 	}
-    }
-    catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }
