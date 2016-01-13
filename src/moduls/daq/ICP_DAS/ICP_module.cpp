@@ -36,7 +36,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.1"
+#define MOD_VER		"0.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow realization of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
 #define LICENSE		"GPL2"
@@ -67,15 +67,9 @@ using namespace ICP_DAS_DAQ;
 //******************************************************
 TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 TTpContr::~TTpContr()

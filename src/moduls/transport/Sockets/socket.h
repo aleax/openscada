@@ -114,7 +114,8 @@ class TSocketIn: public TTransportIn
 	static void *Task( void* );
 	static void *ClTask( void* );
 
-	void messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in );
+	bool prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex = false );
+	void messPut( int sock, string &request, string &answer, const string &sender, AutoHD<TProtocolIn> &prot_in );
 
 	void clientReg( SSockIn *so );
 	void clientUnreg( SSockIn *so );
@@ -181,7 +182,7 @@ class TSocketOut: public TTransportOut
 	void start( int time = 0 );
 	void stop( );
 
-	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false );
 
     protected:
 	//Methods
@@ -207,7 +208,7 @@ class TSocketOut: public TTransportOut
 
 	// Status atributes
 	uint64_t	trIn, trOut;			// Traffic in and out counter
-	Res		wres;
+	ResMtx		wres;
 	int64_t		mLstReqTm;
 };
 

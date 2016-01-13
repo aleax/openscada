@@ -44,13 +44,13 @@ using namespace OPC;
 #define PRT_NAME	_("OPC UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.6.3"
+#define PRT_MVER	"1.6.6"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("OPC UA protocol implementation.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
-#define NS_OpenSCADA_DAQ 2
+#define NS_OpenSCADA_DAQ 4
 
 namespace OPC_UA
 {

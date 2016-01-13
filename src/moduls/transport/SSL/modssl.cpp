@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.2.0"
+#define MOD_VER		"1.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -79,19 +79,13 @@ using namespace MSSL;
 //************************************************
 TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //CRYPTO reentrant init
     bufRes = (pthread_mutex_t*)malloc(CRYPTO_num_locks() * sizeof(pthread_mutex_t));
-    for(int i = 0; i < CRYPTO_num_locks( ); i++) pthread_mutex_init(&bufRes[i], NULL);
+    for(int i = 0; i < CRYPTO_num_locks(); i++) pthread_mutex_init(&bufRes[i], NULL);
     CRYPTO_set_id_callback(id_function);
     CRYPTO_set_locking_callback(locking_function);
     CRYPTO_set_dynlock_create_callback(dyn_create_function);
@@ -236,7 +230,7 @@ void TSocketIn::save_( )
 
 void TSocketIn::start( )
 {
-    if(run_st) return;
+    if(runSt) return;
 
     //Status clear
     stErr = "";
@@ -251,7 +245,7 @@ void TSocketIn::start( )
 
 void TSocketIn::stop( )
 {
-    if(!run_st)	return;
+    if(!runSt)	return;
 
     //Status clear
     stErr = "";
@@ -358,7 +352,7 @@ void *TSocketIn::Task( void *sock_in )
 	    throw TError(s.nodePath().c_str(), "BIO_do_accept: %s", err);
 	}
 
-	s.run_st	= true;
+	s.runSt	= true;
 	s.endrun	= false;
 	s.endrunCl	= false;
 
@@ -424,7 +418,7 @@ void *TSocketIn::Task( void *sock_in )
 
     pthread_attr_destroy(&pthr_attr);
 
-    s.run_st = false;
+    s.runSt = false;
 
     return NULL;
 }
@@ -471,43 +465,63 @@ void *TSocketIn::ClTask( void *s_inf )
     int cnt = 0;		//Requests counter
     int tm = time(NULL);	//Last connection time
 
-    do {
-	if(!SSL_pending(ssl)) {
-	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	    FD_ZERO(&rd_fd); FD_SET(s.sock, &rd_fd);
+    try {
+	do {
+	    int kz = 1;
+	    if(!SSL_pending(ssl)) {
+		tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
+		bool poolPrt = s.s->prtInit(prot_in, s.sock, s.sender, true) && prot_in.at().waitReqTm();
+		if(poolPrt) { tv.tv_sec = prot_in.at().waitReqTm()/1000; tv.tv_usec = (prot_in.at().waitReqTm()%1000)*1000; }
+		FD_ZERO(&rd_fd); FD_SET(s.sock, &rd_fd);
 
-	    int kz = select(s.sock+1, &rd_fd, NULL, NULL, &tv);
-	    if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.sock,&rd_fd)) continue;
-	}
-
-	rez = BIO_read(s.bio, buf, sizeof(buf));
-	if(rez <= 0) break;		//Connection closed by client
-#if OSC_DEBUG >= 4
-        mess_debug(s.s->nodePath().c_str(),_("The message is received with the size '%d'."),rez);
+		kz = select(s.sock+1, &rd_fd, NULL, NULL, &tv);
+		if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rd_fd))) continue;
+		if(kz < 0) {
+#if OSC_DEBUG >= 5
+		    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by error: %s"), strerror(errno));
 #endif
-	req.assign(buf,rez);
-	pthread_mutex_lock(&s.s->dataRes());
-	s.s->trIn += rez; s.trIn += rez;
-	pthread_mutex_unlock(&s.s->dataRes());
+		    break;
+		}
+	    }
 
-	s.s->messPut(s.sock, req, answ, s.sender, prot_in);
-	if(answ.size()) {
-#if OSC_DEBUG >= 4
-            mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size '%d'."),answ.size());
+	    rez = 0;
+	    if(kz && (rez=BIO_read(s.bio,buf,sizeof(buf))) <= 0) break;
+#if OSC_DEBUG >= 5
+	    mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
 #endif
-	    do { rez = BIO_write(s.bio,answ.data(),answ.size()); }
-	    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
+	    req.assign(buf, rez);
 	    pthread_mutex_lock(&s.s->dataRes());
-	    s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
+	    s.s->trIn += rez; s.trIn += rez;
 	    pthread_mutex_unlock(&s.s->dataRes());
-	    answ = "";
+
+	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
+	    if(answ.size()) {
+#if OSC_DEBUG >= 5
+		mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
+#endif
+		do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
+		while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
+		pthread_mutex_lock(&s.s->dataRes());
+		s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
+		pthread_mutex_unlock(&s.s->dataRes());
+		answ = "";
+	    }
+	    cnt++;
+	    s.tmReq = tm = time(NULL);
 	}
-	cnt++;
-	s.tmReq = tm = time(NULL);
-    }
-    while(!s.s->endrunCl &&
+	while(!s.s->endrunCl &&
 		(!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()) &&
 		(!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()));
+
+#if OSC_DEBUG >= 5
+	mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
+#endif
+    }
+    catch(TError err) {
+#if OSC_DEBUG >= 5
+	mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
+#endif
+    }
 
     BIO_flush(s.bio);
     close(s.sock);
@@ -522,13 +536,30 @@ void *TSocketIn::ClTask( void *s_inf )
 	proto.at().close(n_pr);
     }
 
-#if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected (%d)."),s.s->cl_id.size() );
-#endif
-
     s.s->clientUnreg(&s);
 
     return NULL;
+}
+
+bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &sender, bool noex )
+{
+    if(!prot_in.freeStat()) return true;
+
+    try {
+	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
+	string n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
+	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this);
+	prot_in = proto.at().at(n_pr);
+#if OSC_DEBUG >= 5
+	mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
+#endif
+    }
+    catch(TError err) {
+	if(!noex) throw;
+	return false;
+    }
+
+    return !prot_in.freeStat();
 }
 
 void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
@@ -536,12 +567,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
     AutoHD<TProtocol> proto;
     string n_pr;
     try {
-	if(prot_in.freeStat()) {
-	    proto = SYS->protocol().at().modAt(protocol());
-	    n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
-	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, workId());
-	    prot_in = proto.at().at(n_pr);
-	}
+	prtInit(prot_in, sock, sender);
 	if(prot_in.at().mess(request,answer,sender)) return;
 	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	n_pr = prot_in.at().name();
@@ -728,7 +754,7 @@ void TSocketOut::start( int tmCon )
     char	err[255];
     ResAlloc res(wres, true);
 
-    if(run_st) return;
+    if(runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -859,7 +885,7 @@ void TSocketOut::start( int tmCon )
 	throw;
     }
 
-    run_st = true;
+    runSt = true;
 
     TTransportOut::start();
 }
@@ -868,7 +894,7 @@ void TSocketOut::stop( )
 {
     ResAlloc res(wres, true);
 
-    if(!run_st) return;
+    if(!runSt) return;
 
     //Status clear
     trIn = trOut = 0;
@@ -880,55 +906,80 @@ void TSocketOut::stop( )
     BIO_free(conn);
     SSL_CTX_free(ctx);
 
-    run_st = false;
+    runSt = false;
 
     TTransportOut::stop();
 }
 
-int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
+int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, bool noRes )
 {
-    int		ret = 0, reqTry = 0;;
-    char	err[255];
-    bool	writeReq = false;
+    string err = _("Unknown error");
+    int	 ret = 0, reqTry = 0;;
+    char err_[255];
+    bool noReq = (time < 0),
+	 writeReq = false;
+    time = abs(time);
 
-    if(!noRes) ResAlloc resN(nodeRes(), true);
+    ResAlloc resN(nodeRes());
+    if(!noRes) resN.lock(true);
     ResAlloc res(wres, true);
 
-    if(!run_st) throw TError(nodePath().c_str(), _("Transport is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(), _("Transport is not started!"));
 
 repeate:
-    if(reqTry++ >= 3)	throw TError(nodePath().c_str(), _("Connection error"));
+    if(reqTry++ >= 2)	throw TError(nodePath().c_str(), _("Request error: %s"), err.c_str());
     //Write request
-    if(obuf != NULL && len_ob > 0) {
-	// Input buffer clear
-	while(BIO_read(conn,err,sizeof(err)) > 0) ;
-	// Write request
-	do { ret = BIO_write(conn, obuf, len_ob); }
-	while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
-	if(ret <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
-
+    if(oBuf != NULL && oLen > 0) {
 	if(!time) time = mTmCon;
-	writeReq = true;
-    }
-    else time = mTmNext;
-    if(!time) time = 5000;
+	// Input buffer clear
+	while(!noReq && BIO_read(conn,err_,sizeof(err_)) > 0) ;
+	// Write request
+	do { ret = BIO_write(conn, oBuf, oLen); } while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
+	if(ret <= 0) {
+	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+	    res.release();
+	    stop();
+#if OSC_DEBUG >= 5
+	    mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
+#endif
+	    if(noReq) throw TError(nodePath().c_str(), _("Write error: %s"), err.c_str());
+	    start();
+	    res.request(true);
+	    goto repeate;
+	}
 
-    trOut += ret;
-#if OSC_DEBUG >= 4
-    if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size '%d'."),ret);
+#if OSC_DEBUG >= 5
+	mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 #endif
 
+	trOut += ret;
+	writeReq = true;
+    }
+    else if(!noReq) time = mTmNext;
+    if(!time) time = 5000;
+
     //Read reply
-    if(ibuf != NULL && len_ib > 0) {
-	ret = BIO_read(conn, ibuf, len_ib);
+    if(iBuf != NULL && iLen > 0) {
+	ret = BIO_read(conn, iBuf, iLen);
 	if(ret > 0) trIn += ret;
-	else if(ret == 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
+	else if(ret == 0) {
+	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+	    res.release();
+	    stop();
+#if OSC_DEBUG >= 5
+	    mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+#endif
+	    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
+	    start();
+	    res.request(true);
+	    goto repeate;
+	}
 	else if(ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE) {
-	    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-	    throw TError(nodePath().c_str(), "BIO_read: %s", err);
+	    ERR_error_string_n(ERR_peek_last_error(), err_, sizeof(err_));
+	    throw TError(nodePath().c_str(), "BIO_read: %s", err_);
 	}
 	else {
-	    //Wait data from socket
+	    //Wait data from the socket
 	    int kz = 0;
 	    fd_set rd_fd;
 	    struct timeval tv;
@@ -939,28 +990,44 @@ repeate:
 	    kz = select(sock_fd+1, &rd_fd, NULL, NULL, &tv);
 	    if(kz == 0) {
 		res.release();
-		if(writeReq) stop();
-		throw TError(nodePath().c_str(), _("Timeouted!"));
+		if(writeReq && !noReq) stop();
+#if OSC_DEBUG >= 5
+		mess_debug(nodePath().c_str(), _("Read timeouted."));
+#endif
+		throw TError(nodePath().c_str(),_("Timeouted!"));
 	    }
 	    else if(kz < 0) {
-		string err = strerror(errno);
+		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 		res.release();
 		stop();
-		throw TError(nodePath().c_str(), _("Socket error: %s"), err.c_str());
+#if OSC_DEBUG >= 5
+		mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+#endif
+		throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sock_fd,&rd_fd)) {
-		ret = BIO_read(conn, ibuf, len_ib);
+		ret = BIO_read(conn, iBuf, iLen);
 		if(ret == -1)
-		    while((ret=BIO_read(conn,ibuf,len_ib))==-1) sched_yield();
-		if(ret < 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
-		trIn += ret;
+		    while((ret=BIO_read(conn,iBuf,iLen)) == -1) sched_yield();
+		if(ret < 0) {
+		    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+		    res.release();
+		    stop();
+#if OSC_DEBUG >= 5
+		    mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+#endif
+		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
+		    start();
+		    res.request(true);
+		    goto repeate;
+		}
+#if OSC_DEBUG >= 5
+		mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,ret)).c_str());
+#endif
+		trIn += vmax(0, ret);
 	    }
 	}
     }
-
-#if OSC_DEBUG >= 4
-    if(ret > 0) mess_debug(nodePath().c_str(),_("The message is received with the size '%d'."),ret);
-#endif
 
     return vmax(0, ret);
 }

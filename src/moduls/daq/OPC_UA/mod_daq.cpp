@@ -40,15 +40,9 @@ using namespace OPC_UA;
 //*************************************************
 TTpContr::TTpContr( string name ) : TTipDAQ(DAQ_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= DAQ_NAME;
-    mType	= DAQ_TYPE;
-    mVers	= DAQ_MVER;
-    mAuthor	= DAQ_AUTOR;
-    mDescr	= DAQ_DESCR;
-    mLicense	= DAQ_LICENSE;
-    mSource	= name;
+    modInfoMainSet(DAQ_NAME, DAQ_TYPE, DAQ_MVER, DAQ_AUTOR, DAQ_DESCR, DAQ_LICENSE, name);
 }
 
 TTpContr::~TTpContr( )	{ }
@@ -157,6 +151,22 @@ void TMdContr::reqService( XML_N &io )
     if(io.attr("err").empty()) tmDelay--;
 }
 
+string TMdContr::applicationUri( )	{ return "urn:"+SYS->host()+":OpenSCADA:DAQ.OPC_UA"; }
+
+string TMdContr::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;*/ }
+
+string TMdContr::applicationName( )	{ return "OpenSCADA.OPC-UA Client"; }
+
+bool TMdContr::connect( int8_t est )
+{
+    if(tr.freeStat()) return false;
+
+    if(est == 0) tr.at().stop();
+    else if(est > 0) tr.at().start();
+
+    return tr.at().startStat();
+}
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )
@@ -210,6 +220,7 @@ void TMdContr::protIO( XML_N &io )
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
+    if(!connect()) connect(true);
     return tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
 }
 
@@ -277,7 +288,8 @@ void *TMdContr::Task( void *icntr )
 	    cntr.reqService(req);
 
 	    //Place results
-	    bool isErr = !req.attr("err").empty(), ndSt = 0;
+	    bool isErr = !req.attr("err").empty();
+	    int ndSt = 0;
 	    AutoHD<TVal> vl;
 	    res.lock();
 	    for(unsigned i_c = 0, i_p = 0, varTp = 0; i_c < req.childSize() && i_p < cntr.pHd.size(); i_c++) {
@@ -462,7 +474,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	// Prepare request for all typical
 	string cNodeId = i2s(OpcUa_RootFolder);
 	size_t stC = mBrwsVar.rfind(")");
-	size_t stP = mBrwsVar.rfind("(",stC);
+	size_t stP = mBrwsVar.rfind("(", stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
 	XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
@@ -550,7 +562,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	// Get current node references by call browse
 	string cNodeId = i2s(OpcUa_RootFolder);
 	size_t stC = mBrwsVar.rfind(")");
-	size_t stP = mBrwsVar.rfind("(",stC);
+	size_t stP = mBrwsVar.rfind("(", stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 	XML_N req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
@@ -567,10 +579,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
 	// Process inverse references
 	bool invRefPr = false;
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	string tStr;
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	    invRefPr = true;
 	}
 	if(!invRefPr && mBrwsVar != TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder))
@@ -579,10 +592,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	// Append self address
 	opt->childAdd("el")->setText(mBrwsVar);
 	// Process forward references
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(!s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(!s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
     }
     else TController::cntrCmdProc(opt);
@@ -820,10 +833,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
 	// Process inverse references
 	bool invRefPr = false;
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	string tStr;
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	    invRefPr = true;
 	}
 	if(!invRefPr && cNodeId != i2s(OpcUa_RootFolder)) opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder));
@@ -831,10 +845,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	// Append self address
 	opt->childAdd("el")->setText(selNd);
 	// Process forward references
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
-	    if(!s2i(rn->childGet(i_n)->attr("isForward"))) continue;
-	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
-		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	for(unsigned iN = 0; iN < rn->childSize(); iN++) {
+	    if(!s2i(rn->childGet(iN)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(((tStr=rn->childGet(iN)->attr("browseName")).size()?tStr:rn->childGet(iN)->attr("displayName"))+
+		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
     }
     else TParamContr::cntrCmdProc(opt);
@@ -857,13 +871,13 @@ void TMdPrm::vlGet( TVal &val )
 	uint32_t firstErr = 0;
 	vector<uint32_t> astls;
 	ResAlloc res(nodeRes(), true);
-	for(unsigned i_a = 0; i_a < pEl.fldSize(); i_a++) {
-	    astls.push_back(pEl.fldAt(i_a).len());
-	    if(pEl.fldAt(i_a).len() && !firstErr) firstErr = pEl.fldAt(i_a).len();
+	for(unsigned iA = 0; iA < pEl.fldSize(); iA++) {
+	    astls.push_back(pEl.fldAt(iA).len());
+	    if(pEl.fldAt(iA).len() && !firstErr) firstErr = pEl.fldAt(iA).len();
 	}
 	res.release();
 	string aLs;
-	for(unsigned i_a = 0; i_a < astls.size(); i_a++) aLs += TSYS::strMess(":0x%x",astls[i_a]);
+	for(unsigned iA = 0; iA < astls.size(); iA++) aLs += TSYS::strMess(":0x%x",astls[iA]);
 	val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
     }
 }

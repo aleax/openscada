@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-06 11:44+0200\n"
+"POT-Creation-Date: 2016-01-12 21:15+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -65,6 +65,10 @@ msgid "Socket has been connected by '%s'!"
 msgstr "Сокет был подключен из '%s'!"
 
 #, c-format
+msgid "Socket has been terminated by error: %s"
+msgstr "Сокет был разорван ошибкой: %s"
+
+#, c-format
 msgid "The message is received with the size '%d'."
 msgstr "Получено сообщение размером '%d'."
 
@@ -72,8 +76,17 @@ msgstr "Получено сообщение размером '%d'."
 msgid "The message is replied with the size '%d'."
 msgstr "Отвечено сообщением размера '%d'."
 
-msgid "Socket has been disconnected (%d)."
-msgstr "Сокет отключен (%d)."
+#, c-format
+msgid "Socket has been disconnected by '%s'!"
+msgstr "Сокет был отключен от '%s'!"
+
+#, c-format
+msgid "Socket has been terminated by execution: %s"
+msgstr "Сокет был разорван исключением: %s"
+
+#, c-format
+msgid "New input protocol's object '%s' created!"
+msgstr "Создано новый объект входящего протокола '%s'!"
 
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
@@ -171,22 +184,37 @@ msgstr ""
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
+
 msgid "Transport is not started!"
 msgstr "Транспорт не запущен!"
 
-msgid "Connection error"
-msgstr "Ошибка подключения"
+#, c-format
+msgid "Request error: %s"
+msgstr "Ошибка запроса: %s"
 
 #, c-format
-msgid "The message is sent with the size '%d'."
-msgstr "Отправлено сообщение размером '%d'."
+msgid "Write error: %s"
+msgstr "Ошибка записи: %s"
+
+#, c-format
+msgid "Wrote %s."
+msgstr "Записано %s."
+
+#, c-format
+msgid "Read error: %s"
+msgstr "Ошибка чтения: %s"
+
+msgid "Read timeouted."
+msgstr "Время ожидания чтения истекло!"
 
 msgid "Timeouted!"
 msgstr "Время ожидания истекло!"
 
 #, c-format
-msgid "Socket error: %s"
-msgstr "Ошибка сокета: %s"
+msgid "Read %s."
+msgstr "Прочитано %s."
 
 msgid ""
 "SSL output transport has address format:\n"

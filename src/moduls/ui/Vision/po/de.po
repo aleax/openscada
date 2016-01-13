@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-06 12:30+0200\n"
+"POT-Creation-Date: 2016-01-12 21:29+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1693,6 +1693,9 @@ msgstr "<Erstellen Sie eine neue Sitzung>"
 msgid "Running project: %1"
 msgstr "Ausführen Projekt: %1"
 
+msgid "Status line items"
+msgstr "Statuszeile Elemente"
+
 #, c-format
 msgid "Error open: %s"
 msgstr "Fehler beim Öffnen: %s"
@@ -2177,30 +2180,3 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
-
-#~ msgid "Status line items"
-#~ msgstr "Statuszeile Elemente"
-
-#~ msgid "Diagnostics"
-#~ msgstr "Diagnostik"
-
-#~ msgid "Time:"
-#~ msgstr "Zeit:"
-
-#~ msgid "Refresh"
-#~ msgstr "Erfrischen"
-
-#~ msgid "Time"
-#~ msgstr "Zeit"
-
-#~ msgid "Lev."
-#~ msgstr "Ebene"
-
-#~ msgid "Project '%1' manual"
-#~ msgstr "Handbuch von Projekt '%1'"
-
-#~ msgid "The button for getting the using project '%1' manual"
-#~ msgstr "Schaltfläche für Projekt '%1' Handbuch"
-
-#~ msgid "Press to get the using project '%1' manual."
-#~ msgstr "Betätigen um Projekt '%1' Handbuch."

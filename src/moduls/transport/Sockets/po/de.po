@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-06 11:55+0200\n"
+"POT-Creation-Date: 2016-01-12 17:56+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -32,6 +32,7 @@ msgstr ""
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
 
+#, c-format
 msgid ""
 "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed "
 "connections by limit %d."
@@ -64,34 +65,38 @@ msgid "UNIX socket doesn't bind to '%s'!"
 msgstr "UNIX ist nicht verbunden mit '%s'!"
 
 #, c-format
-msgid "Close input transport by error: %s"
-msgstr "Close-Eingang Transport durch Fehler: %s!"
+msgid "Close input transport by error: '%s (%d)'"
+msgstr "Close-Eingang Transport durch Fehler: '%s (%d)'"
 
 msgid "Error creation of the thread!"
 msgstr "Fehler der Schaffung des Stroms!"
 
 #, c-format
-msgid "Socket received datagram '%d' from '%s'!"
-msgstr "Socket hat das Datagramm bekommen '%d' aus '%s'!"
+msgid "Read datagram %s from '%s'!"
+msgstr "Lesen Datagramm %s aus '%s'!"
 
 #, c-format
-msgid "Socket replied datagram '%d' to '%s'!"
-msgstr "Socket hat mit dem Datagramm geantwortet '%d' an '%s'!"
+msgid "Wrote datagram %s to '%s'!"
+msgstr "Schrieb Datagramm %s auf '%s'!"
 
 msgid " client task is stopping...."
 msgstr " Kundenaufgabe wird gestoppt...."
 
 #, c-format
-msgid "Socket has been connected by '%s'!"
-msgstr "Mit dem Socket verbunden '%s'!"
+msgid "Has been connected by '%s'!"
+msgstr "Verbunden von '%s'!"
 
 #, c-format
-msgid "Socket received message '%d' from '%s'."
-msgstr "Socket hat die Nachricht bekommen '%d' aus '%s'."
+msgid "Has been terminated by error: '%s (%d)'"
+msgstr "Von Fehler beendet: '%s (%d)'"
 
 #, c-format
-msgid "Socket replied message '%d' to '%s'."
-msgstr "Socket hat mit der Nachricht geantwortet '%d' auf '%s'."
+msgid "Read message %s from '%s'."
+msgstr "Nachricht lesen %s aus '%s'."
+
+#, c-format
+msgid "Wrote message %s to '%s'."
+msgstr "Schrieb Nachricht %s auf '%s'."
 
 msgid "Write: reply for zero bytes."
 msgstr "Schreiben: Antwort für Null-Bytes."
@@ -101,8 +106,16 @@ msgid "Write: error '%s (%d)'!"
 msgstr "Schreiben: Fehler '%s (%d)'!"
 
 #, c-format
-msgid "Socket has been disconnected by '%s'!"
-msgstr "Vom Socket abgebunden '%s'!"
+msgid "Has been disconnected by '%s'!"
+msgstr "Abgebunden vom '%s'!"
+
+#, c-format
+msgid "Has been terminated by execution: %s"
+msgstr "Ausführung beendet wurde: %s"
+
+#, c-format
+msgid "New input protocol's object '%s' created!"
+msgstr "Neue Eingangsprotokoll-Objekt '%s' erstellt!"
 
 msgid "Error request to protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
@@ -201,24 +214,28 @@ msgid "Type socket '%s' error!"
 msgstr "Fehler im Typ '%s' des Sockets!"
 
 #, c-format
-msgid "Error creation TCP socket: %s!"
-msgstr "Fehler der Schaffung des TCP Sockets: %s!"
+msgid "Error creation TCP socket: '%s (%d)'!"
+msgstr "Fehler der Schaffung des TCP Sockets: '%s (%d)'!"
 
 #, c-format
-msgid "Error creation UDP socket: %s!"
-msgstr "Fehler der Schaffung des UDP Sockets: %s!"
+msgid "Error creation UDP socket: '%s (%d)'!"
+msgstr "Fehler der Schaffung des UDP Sockets: '%s (%d)'!"
 
 #, c-format
-msgid "Connect to Internet socket error: %s!"
-msgstr "Fehler der Internet Verbidung mit dem Socket: %s!"
+msgid "Connect by timeout %s error: '%s (%d)'"
+msgstr "Verbinden von Timeout %s Fehler: '%s (%d)'"
 
 #, c-format
-msgid "Error creation UNIX socket: %s!"
-msgstr "Fehler der Schaffung des UNIX Sockets: %s!"
+msgid "Connect to Internet socket error: '%s (%d)'!"
+msgstr "Fehler der Internet Verbidung mit dem Socket: '%s (%d)'!"
 
 #, c-format
-msgid "Connect to UNIX error: %s!"
-msgstr "Fehler der Verbindung mit dem UNIX Socket: %s!"
+msgid "Error creation UNIX socket: '%s (%d)'!"
+msgstr "Fehler der Schaffung des UNIX Sockets: '%s (%d)'!"
+
+#, c-format
+msgid "Connect to UNIX error: '%s (%d)'!"
+msgstr "Fehler der Verbindung mit dem UNIX Socket: '%s (%d)'!"
 
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
@@ -230,12 +247,27 @@ msgstr "Transport ist nicht gestartet!"
 msgid "Request error: %s"
 msgstr "Request-Fehler: %s"
 
-msgid "Timeouted!"
-msgstr "Wartezeit ist aus!"
+#, c-format
+msgid "Write error: %s"
+msgstr "Fehler beim Schreiben: %s"
 
 #, c-format
-msgid "Socket error: %s"
-msgstr "Fehler des Sockets: %s"
+msgid "Wrote %s."
+msgstr "Schrieb %s."
+
+msgid "Read timeouted."
+msgstr "Lesen timeouted."
+
+msgid "Timeouted!"
+msgstr "Timeouted!"
+
+#, c-format
+msgid "Read error: %s"
+msgstr "Lesefehler: %s"
+
+#, c-format
+msgid "Read %s."
+msgstr "Lesen Sie %s."
 
 msgid ""
 "Socket's output transport has address format:\n"
@@ -273,12 +305,3 @@ msgstr ""
 "    next - Maximale Zeit der Erwartung der Fortsetzung der Antwort, in "
 "Sekunden;\n"
 "    rep  - Minimum repeate Timeout, in Sekunden."
-
-#~ msgid "New input protocol's object '%s' created!"
-#~ msgstr "Neue Eingangsprotokoll-Objekt '%s' erstellt!"
-
-#~ msgid "Input protocol's object '%s' closed by self!"
-#~ msgstr "Die Eingangsprotokoll-Objekt '%s' durch Selbst geschlossen!"
-
-#~ msgid "Socket write message '%d'."
-#~ msgstr "Buchse Nachricht schreiben '%d'."

@@ -37,7 +37,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"2.8.2"
+#define MOD_VER		"2.8.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -76,15 +76,9 @@ using namespace JavaLikeCalc;
 //*************************************************
 TpContr::TpContr( string src ) : TTipDAQ(MOD_ID), mSafeTm(10)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= src;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, src);
 
     mLib = grpAdd("lib_");
 }

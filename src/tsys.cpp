@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <features.h>
+#include <byteswap.h>
 #include <ieee754.h>
 #include <syscall.h>
 #include <sys/types.h>
@@ -31,6 +32,7 @@
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
+#include <stddef.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -1242,6 +1244,60 @@ string TSYS::strUncompr( const string &in )
     return rez;
 }
 
+uint16_t TSYS::i16_LE( uint16_t in )
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return bswap_16(in);
+#endif
+
+    return in;
+}
+
+uint32_t TSYS::i32_LE( uint32_t in )
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return bswap_32(in);
+#endif
+
+    return in;
+}
+
+uint64_t TSYS::i64_LE( uint64_t in )
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return bswap_64(in);
+#endif
+
+    return in;
+}
+
+uint16_t TSYS::i16_BE( uint16_t in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return bswap_16(in);
+#endif
+
+    return in;
+}
+
+uint32_t TSYS::i32_BE( uint32_t in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return bswap_32(in);
+#endif
+
+    return in;
+}
+
+uint64_t TSYS::i64_BE( uint64_t in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return bswap_64(in);
+#endif
+
+    return in;
+}
+
 float TSYS::floatLE(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
@@ -1345,6 +1401,106 @@ double TSYS::doubleLErev(double in)
     ieee754_be.ieee.negative	= ieee754_le.ieee.negative;
 
     return ieee754_be.d;
+#endif
+
+    return in;
+}
+
+float TSYS::floatBE( float in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_float ieee754_le;
+    union ieee754_be {
+	float f;
+	struct {
+	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int mantissa:23;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_le.f = in;
+    ieee754_be.ieee.mantissa	= ieee754_le.ieee.mantissa;
+    ieee754_be.ieee.exponent	= ieee754_le.ieee.exponent;
+    ieee754_be.ieee.negative	= ieee754_le.ieee.negative;
+
+    return ieee754_be.f;
+#endif
+
+    return in;
+}
+
+float TSYS::floatBErev( float in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_float ieee754_le;
+    union ieee754_be {
+	float f;
+	struct {
+	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int mantissa:23;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_be.f = in;
+    ieee754_le.ieee.mantissa	= ieee754_be.ieee.mantissa;
+    ieee754_le.ieee.exponent	= ieee754_be.ieee.exponent;
+    ieee754_le.ieee.negative	= ieee754_be.ieee.negative;
+
+    return ieee754_le.f;
+#endif
+
+    return in;
+}
+
+double TSYS::doubleBE( double in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_double ieee754_le;
+    union ieee754_be {
+	double d;
+	struct {
+	    unsigned int negative:1;
+	    unsigned int exponent:11;
+	    unsigned int mantissa0:20;
+	    unsigned int mantissa1:32;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_le.d = in;
+    ieee754_be.ieee.mantissa0	= ieee754_le.ieee.mantissa0;
+    ieee754_be.ieee.mantissa1	= ieee754_le.ieee.mantissa1;
+    ieee754_be.ieee.exponent	= ieee754_le.ieee.exponent;
+    ieee754_be.ieee.negative	= ieee754_le.ieee.negative;
+
+    return ieee754_be.d;
+#endif
+
+    return in;
+}
+
+double TSYS::doubleBErev( double in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_double ieee754_le;
+    union ieee754_be {
+	double d;
+	struct {
+	    unsigned int negative:1;
+	    unsigned int exponent:11;
+	    unsigned int mantissa0:20;
+	    unsigned int mantissa1:32;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_be.d = in;
+    ieee754_le.ieee.mantissa0	= ieee754_be.ieee.mantissa0;
+    ieee754_le.ieee.mantissa1	= ieee754_be.ieee.mantissa1;
+    ieee754_le.ieee.exponent	= ieee754_be.ieee.exponent;
+    ieee754_le.ieee.negative	= ieee754_be.ieee.negative;
+
+    return ieee754_le.d;
 #endif
 
     return in;
@@ -1503,6 +1659,22 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
         if(!(it->second.flgs&STask::Detached)) pthread_join(it->second.thr, NULL);
         mTasks.erase(it);
     }
+}
+
+double TSYS::taskUtilizTm( const string &path )
+{
+    ResAlloc res(taskRes, false);
+    map<string,STask>::iterator it = mTasks.find(path);
+    if(it == mTasks.end()) return 0;
+    int64_t tm_beg = 0, tm_end = 0, tm_per = 0;
+    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
+	tm_beg = it->second.tm_beg;
+	tm_end = it->second.tm_end;
+	tm_per = it->second.tm_per;
+    }
+    if(tm_beg && tm_beg < tm_per) return 1e-3*(tm_end-tm_beg);
+
+    return 0;
 }
 
 bool TSYS::taskEndRun( )
@@ -2048,8 +2220,9 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
     vector<string> its, fits;
     DIR *IdDir = opendir(fsBaseCor.c_str());
     if(IdDir != NULL) {
-	dirent sDir, *sDirRez = NULL;
-	while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez) {
+	dirent	*sDirRez = NULL,
+		*sDir = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+	while(readdir_r(IdDir,sDir,&sDirRez) == 0 && sDirRez) {
 	    if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
 	    if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
 		    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
@@ -2063,6 +2236,7 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 	    }
 	}
 	closedir(IdDir);
+	free(sDir);
     }
     sort(its.begin(),its.end());
     for(unsigned i_it = 0; i_it < its.size(); i_it++)

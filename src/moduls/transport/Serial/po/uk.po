@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:38+0300\n"
+"POT-Creation-Date: 2016-01-12 21:17+0200\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -209,6 +209,9 @@ msgstr "Модем не підключено"
 msgid "Stopping."
 msgstr "Зупинка."
 
+msgid "Unknown error"
+msgstr "Невідома помилка"
+
 msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
@@ -216,15 +219,30 @@ msgstr "Транспорт не запущено!"
 msgid "Restart by KeepAliveTm %gs."
 msgstr "Перевантаження за KeepAliveTm %gс."
 
+#, c-format
+msgid "Write error: %s"
+msgstr "Помилка запису: %s"
+
+#, c-format
+msgid "Wrote %s."
+msgstr "Записано %s."
+
 msgid "Timeouted!"
 msgstr "Час вичерпано!"
 
 msgid "Echo request reading error."
 msgstr "Помилка читання эхо запиту."
 
+msgid "Read timeouted."
+msgstr "Перевищено час очікування читання!"
+
 #, c-format
-msgid "Read: error '%s (%d)'."
-msgstr "Читання: помилка '%s (%d)'."
+msgid "Read error: %s"
+msgstr "Помилка читання: %s"
+
+#, c-format
+msgid "Read %s."
+msgstr "Прочитано %s."
 
 msgid ""
 "Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". "
@@ -300,9 +318,3 @@ msgstr "Повісити слухавку"
 
 msgid "Hangup response"
 msgstr "Повісити слухавку, результат"
-
-#~ msgid "Writing request error."
-#~ msgstr "Помилка надсилання запиту."
-
-#~ msgid "Serial error!"
-#~ msgstr "Помилка послідовного інтерфейсу!"

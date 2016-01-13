@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		6		//TransportS type modules version
+#define STR_VER		7		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -58,7 +57,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual string getStatus( );
 
 	bool toStart( )		{ return mStart; }
-	bool startStat( )	{ return run_st; }
+	bool startStat( )	{ return runSt; }
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -91,7 +90,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	//Attributes
-	bool	run_st;
+	bool	runSt;
 
     private:
 	//Methods
@@ -124,7 +123,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	int	prm1( )		{ return mPrm1; }
 	int	prm2( )		{ return mPrm2; }
 	bool	toStart( )	{ return mStart; }
-	bool	startStat( )	{ return run_st; }
+	bool	startStat( )	{ return runSt; }
 	virtual	string getStatus( );
 
 	string DB( )		{ return mDB; }
@@ -144,7 +143,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual void start( int time = 0 )	{ };
 	virtual void stop( )			{ };
 
-	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false )
+	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false )
 	{ return 0; }
 
 	void messProtIO( XMLNode &io, const string &prot );
@@ -167,7 +166,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void save_( );
 
 	//Attributes
-	bool	run_st;
+	bool	runSt;
 
     private:
 	//Methods
@@ -279,8 +278,8 @@ class TTransportS : public TSubSYS
 	void subStart( );
 	void subStop( );
 
-	TElem &inEl( )			{ return el_in; }
-	TElem &outEl( ) 		{ return el_out; }
+	TElem &inEl( )			{ return elIn; }
+	TElem &outEl( ) 		{ return elOut; }
 
 	AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
 
@@ -294,7 +293,7 @@ class TTransportS : public TSubSYS
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	//Attributes
-	TElem	el_in, el_out, el_ext;
+	TElem	elIn, elOut, elExt;
 
 	Res	extHostRes;             //External hosts resource
 	vector<ExtHost> extHostLs;      //External hosts list

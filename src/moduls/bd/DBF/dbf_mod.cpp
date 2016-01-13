@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <unistd.h>
+#include <stddef.h>
 #include <string>
 #include <errno.h>
 #include <sys/stat.h>
@@ -39,7 +40,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.0"
+#define MOD_VER		"2.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"
@@ -77,15 +78,9 @@ using namespace BDDBF;
 //************************************************
 BDMod::BDMod( string name ) : TTipBD(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 BDMod::~BDMod( )
@@ -130,10 +125,11 @@ void MBD::allowList( vector<string> &list )
     list.clear();
 
     struct stat file_stat;
-    dirent scan_dirent, *scan_rez = NULL;
     DIR *IdDir = opendir(addr().c_str());
     if(IdDir == NULL) return;
-    while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+    dirent  *scan_rez = NULL,
+	    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	nfile = scan_rez->d_name;
 	if(nfile == ".." || nfile == "." ||
 	    nfile.rfind(".") == string::npos || nfile.substr(nfile.rfind(".")) != ".dbf") continue;
@@ -141,6 +137,7 @@ void MBD::allowList( vector<string> &list )
 	if((file_stat.st_mode&S_IFMT) != S_IFREG) continue;
 	list.push_back(nfile.substr(0,nfile.rfind(".")));
     }
+    free(scan_dirent);
     closedir(IdDir);
 }
 

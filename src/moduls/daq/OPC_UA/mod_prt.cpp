@@ -41,13 +41,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
 {
     modPrt	= this;
 
-    mType	= PRT_TYPE;
-    mName	= PRT_NAME;
-    mVers	= PRT_MVER;
-    mAuthor	= PRT_AUTOR;
-    mDescr	= PRT_DESCR;
-    mLicense	= PRT_LICENSE;
-    mSource	= name;
+    modInfoMainSet(PRT_NAME, PRT_TYPE, PRT_MVER, PRT_AUTOR, PRT_DESCR, PRT_LICENSE, name);
 
     mEndPnt = grpAdd("ep_");
 
@@ -68,7 +62,7 @@ TProt::~TProt( )			{ nodeDelAll(); }
 
 string TProt::applicationUri( )		{ return "urn:"+SYS->host()+":OpenSCADA:DAQ.OPC_UA"; }
 
-string TProt::productUri( )		{ return PACKAGE_SITE; }
+string TProt::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;*/ }
 
 string TProt::applicationName( )	{ return "OpenSCADA.OPC-UA Server"; }
 
@@ -540,7 +534,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				bool dtOK = true;
 				switch(nVal->fld().type()) {
 				    case TFld::Boolean:	req.setAttr("type", i2s(OpcUa_Boolean))->setText(nVal->getS(&tm));	break;
-				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int32))->setText(nVal->getS(&tm));	break;
+				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_IntAuto/*OpcUa_Int32*/))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
 				    case TFld::Object: {	//!!!! With structures support append detect ones

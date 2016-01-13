@@ -41,13 +41,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
 {
     modPrt	= this;
 
-    mType	= PRT_TYPE;
-    mName	= PRT_NAME;
-    mVers	= PRT_MVER;
-    mAuthor	= PRT_AUTHORS;
-    mDescr	= PRT_DESCR;
-    mLicense	= PRT_LICENSE;
-    mSource	= name;
+    modInfoMainSet(PRT_NAME, PRT_TYPE, PRT_MVER, PRT_AUTHORS, PRT_DESCR, PRT_LICENSE, name);
 
     mNode = grpAdd("n_");
 
@@ -527,7 +521,7 @@ retry:
     modPrt->nList(nls);
     unsigned i_n;
     for(i_n = 0; i_n < nls.size(); i_n++)
-	if(modPrt->nAt(nls[i_n]).at().req(srcTr(),prt,node,pdu)) break;
+	if(modPrt->nAt(nls[i_n]).at().req(srcTr().at().workId(),prt,node,pdu)) break;
     if(i_n >= nls.size()) return false;
 
     answer = "";
@@ -559,8 +553,8 @@ retry:
 	answer = ":"+modPrt->DataToASCII(answer)+"\x0D\x0A";
     }
 
-    if(owner().prtLen( ) && prt.size() && answer.size()) {
-	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr()+"("+sender+") --> "+i2s(node)+"\n";
+    if(owner().prtLen() && prt.size() && answer.size()) {
+	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+"("+sender+") --> "+i2s(node)+"\n";
 	mess += _("REQ -> ");
 	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin, " ");
 	else if(reqst.size() > 2) mess += reqst.substr(0, reqst.size()-2);
@@ -684,9 +678,9 @@ bool Node::cfgChange( TCfg &co, const TVariant &pc )
 
 	//Show selected
 	switch(co.getI()) {
-	    case 0:	cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
-	    case 1:	cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
-	    case 2:	cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true);	break;
+	    case 0: cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
+	    case 1: cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
+	    case 2: cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true);	break;
 	}
     }
 

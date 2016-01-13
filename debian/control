@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 5), dh-autoreconf, g++, autotools-dev, pkg-config, 
  libmysqlclient-dev, libsqlite3-dev, firebird-dev, libpq-dev,
  libsensors4-dev, portaudio19-dev, bison, libsnmp-dev,
  libssl-dev,
- libfftw3-dev, libqt4-dev | qtbase5-dev, libphonon-dev
+ libfftw3-dev, libqt4-dev | qtbase5-dev, libphonon-dev | libphonon4qt5-dev
 Homepage: http://oscada.org
 
 Package: openscada

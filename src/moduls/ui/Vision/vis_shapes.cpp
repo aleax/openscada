@@ -1252,7 +1252,7 @@ void ShapeMedia::clear( WdgView *w )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    //> Clear label widget's elements
+    //Clear label widget's elements
     QLabel *lab = dynamic_cast<QLabel*>(shD->addrWdg);
     if(lab) {
 	if(lab->movie()) {
@@ -1498,8 +1498,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		MediaSource mSrc;
 		if(player->isPlaying()) { player->stop(); player->seek(0); }
 		//Try play local file
-		if(shD->mediaSrc.compare(0,5,"file:") == 0)
-		    mSrc = MediaSource(QString(shD->mediaSrc.substr(5).c_str()));
+		if(shD->mediaSrc.compare(0,5,"file:") == 0) mSrc = MediaSource(QUrl(shD->mediaSrc.c_str()));
+		    //mSrc = MediaSource(QString(shD->mediaSrc.substr(5).c_str()));
 		//Try play Stream by URL
 		else if(shD->mediaSrc.compare(0,7,"stream:") == 0)
 		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(7).c_str()));
@@ -1513,7 +1513,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			    if(write(tfid, sdata.data(), sdata.size()) != (ssize_t)sdata.size())
 				mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(tfile.c_str()), TVision::Error);
 			    close(tfid);
-			    mSrc = MediaSource(QString(tfile.c_str()));
+			    mSrc = MediaSource(QUrl(("file:"+tfile).c_str()));
+			    //mSrc = MediaSource(QString(tfile.c_str()));
 			}
 		    }
 		}
@@ -1609,8 +1610,7 @@ bool ShapeMedia::eventFilter( WdgView *w, QObject *object, QEvent *event )
 #ifdef HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(((ShpDt*)w->shpData)->addrWdg);
     if(player && player->videoWidget() == object)
-	if(event->type() == QEvent::MouseButtonDblClick && ((QMouseEvent*)event)->button() == Qt::LeftButton)
-	{
+	if(event->type() == QEvent::MouseButtonDblClick && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
 	    player->videoWidget()->setFullScreen(!player->videoWidget()->isFullScreen());
 	    return true;
 	}
@@ -1623,13 +1623,12 @@ bool ShapeMedia::eventFilter( WdgView *w, QObject *object, QEvent *event )
 //*************************************************
 bool ShapeMedia::MapArea::containsPoint( const QPoint & point )
 {
-    switch(shp)
-    {
+    switch(shp) {
 	case FM_RECT:
 	    if(pnts.size() < 2) return false;
 	    return QRect(pnts[0],pnts[1]).contains(point);
 	case FM_POLY:
-	    return QPolygon(pnts).containsPoint(point,Qt::OddEvenFill);
+	    return QPolygon(pnts).containsPoint(point, Qt::OddEvenFill);
 	case FM_CIRCLE: {
 	    if(pnts.size() < 2) return false;
 	    QPoint work = point-pnts[0];
@@ -3431,7 +3430,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    if(view->cntrIfCmd(req,true))	return;
 
 	    int64_t lst_tm = (s2ll(req.attr("tm"))/wantPer)*wantPer;
-	    if(lst_tm >= valEnd()) {
+	    if(lst_tm && lst_tm >= valEnd()) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;

@@ -36,6 +36,10 @@ class TestClient: public Client
 	void start( );
 	void stop( );
 
+	// Application information
+	string	applicationUri( ){ return "urn:HostName:TEST:DAQ.OPC_UA"; }
+	string	productUri( )	{ return "urn:ProgName:DAQ.OPC_UA"; }
+	string	applicationName( ) { return "TestProg.OPC-UA Client"; }
 	// OPC UA client's session name - the client programm name
 	string	sessionName( )	{ return "OpenSCADA OPC_UA library's test station."; }
 	// Used target server's EndPoint
@@ -53,11 +57,11 @@ class TestClient: public Client
 	string	cert( )		{ return mCert; }
 	string	pvKey( )	{ return mPvKey; }
 
-	// Connection state by TCP connection state
-	bool	connected( )	{ return (sock_fd >= 0); }
+	// Connection state by the TCP connection state
+	bool	connect( int8_t est = -1 );
 
 	// Write to the transport and read respond
-	int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
+	int	messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
 
     private:
 	string	mEp,

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2011 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.0"
+#define DAQ_MVER	"1.8.3"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -76,6 +75,9 @@ class TMdPrm : public TParamContr
 	void upVal( bool first, bool last, double frq );
 
 	TElem &elem( )		{ return p_el; }
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
 	TMdContr &owner( );
 
     protected:
@@ -97,19 +99,19 @@ class TMdPrm : public TParamContr
 	TElem		p_el;		//Work atribute elements
 	ResString	acq_err;
 
-	//> Logical type by template
+	// Logical type by template
         //Data
         //***************************************************
         //* Logical type parameter's context                *
 	class TLogCtx : public TValFunc
 	{
 	    public:
-    	    //Data
-    	    //>> Link structure
-    	    class SLnk
-    	    {
-    		public:
-    		SLnk(int iid, const string &iaddr = "") : io_id(iid), addr(iaddr) { }
+	    //Data
+	    // Link structure
+	    class SLnk
+	    {
+		public:
+		SLnk(int iid, const string &iaddr = "") : io_id(iid), addr(iaddr) { }
 
             	int     io_id;		//Template function io index
             	string  addr, real;	//Full item address: R:23
@@ -118,7 +120,7 @@ class TMdPrm : public TParamContr
 	    //Methods
 	    TLogCtx( const string &name );
 
-	    //>> Link operations
+	    // Link operations
     	    int lnkSize( )		{ return plnk.size(); }
     	    int lnkId( int id );
     	    int lnkId( const string &id );
@@ -199,7 +201,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	pthread_mutex_t	enRes, dataRes;
+	ResMtx	enRes, dataRes;
 	Res	reqRes;
 	int	&mPrior,			//Process task priority
 		&mNode,				//Node
@@ -215,9 +217,9 @@ class TMdContr: public TController
 		&connTry;			//Connections try
 	int64_t	mPer;
 
-	bool	prc_st,				//Process task active
-		call_st,			//Calc now stat
-		endrun_req,			//Request to stop of the Process task
+	bool	prcSt,				//Process task active
+		callSt,				//Calc now stat
+		endrunReq,			//Request to stop of the Process task
 		isReload;
 	int8_t	alSt;				//Alarm state
 	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers
@@ -226,7 +228,6 @@ class TMdContr: public TController
 	vector<SDataRec>	acqBlksCoilIn;	//Acquisition data blocks for input coils
 	map<string, string>	asynchWrs;	//Asynchronous writers list
 
-	double	tmGath;				//Gathering time
 	float	tmDelay;			//Delay time for next try connect
 
 	vector< AutoHD<TMdPrm> > pHd;

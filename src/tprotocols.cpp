@@ -83,7 +83,7 @@ TProtocol::~TProtocol( )
 
 }
 
-void TProtocol::open( const string &name, const string &tr )
+void TProtocol::open( const string &name, TTransportIn *tr )
 {
     chldAdd(m_pr,in_open(name));
     at(name).at().setSrcTr(tr);

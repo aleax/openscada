@@ -234,11 +234,11 @@ void Func::delIO( )
 
 void Func::setStart( bool val )
 {
-    if(val == run_st) return;
+    if(val == runSt) return;
     //Start calc
     if(val) {
 	progCompile( );
-	run_st = true;
+	runSt = true;
     }
     //Stop calc
     else {
@@ -247,7 +247,7 @@ void Func::setStart( bool val )
 	regClear();
 	regTmpClean( );
 	funcClear();
-	run_st = false;
+	runSt = false;
     }
 }
 
@@ -298,7 +298,7 @@ void Func::progCompile( )
 	regClear();
 	regTmpClean( );
 	funcClear();
-	run_st = false;
+	runSt = false;
 	throw TError(nodePath().c_str(),"%s",p_err.c_str());
     }
     sprg.clear();
