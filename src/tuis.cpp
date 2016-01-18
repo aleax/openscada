@@ -1,7 +1,6 @@
 //OpenSCADA system file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +52,7 @@ void TUIS::load_( )
     //> Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) fprintf(stdout,"%s",optDescr().c_str());
 
     //> Load parameters from config-file
 }
@@ -134,7 +133,7 @@ void TUIS::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TUI                                           *
 //*************************************************
-TUI::TUI( const string &id ) : TModule(id), run_st(false)
+TUI::TUI( const string &id ) : TModule(id), runSt(false)
 {
 
 }
@@ -155,8 +154,8 @@ void TUI::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/r_st")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(run_st?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	atoi(opt->text().c_str())?modStart():modStop();
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(runSt?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	s2i(opt->text()) ? modStart() : modStop();
     }
     else TModule::cntrCmdProc(opt);
 }

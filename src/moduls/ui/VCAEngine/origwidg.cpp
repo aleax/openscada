@@ -21,7 +21,6 @@
 
 #include <tsys.h>
 
-#include "types.h"
 #include "origwidg.h"
 #include "vcaengine.h"
 
@@ -158,24 +157,28 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_ElFigFillImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_ElFigElLst: el->setAttr("SnthHgl","1")->setAttr("help",
 		    _("The list of elements can contain:\n"
-		      "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-		      "  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-		      "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-		      "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
+		      "  line:({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]\n"
+		      "  line:{p1}:{p2}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]\n"
+		      "  arc:({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]\n"
+		      "  arc:{p1}:{p2}:{p3}:{p4}:{p5}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]\n"
+		      "  bezier:({x}|{y}):({x}|{y}):({x}|{y}):({x}|{y})[:{width}[:{color}[:{bord_w}[:{bord_clr}[:{line_stl}]]]]]\n"
+		      "  bezier:{p1}:{p2}:{p3}:{p4}[:w{n}[:c{n}[:w{n}[:c{n}[:s{n}]]]]]\n"
+		      "  fill:({x}|{y}):({x}|{y}):...:({x}|{y})[:{fill_clr}[:{fill_img}]]\n"
+		      "  fill:{p1}:{p2}:...:{pN}[:c{n}[:i{n}]]\n"
 		      "Where:\n"
-		      "  (x|y)           - direct point (x,y) coordinate in float point pixels;\n"
-		      "  {1}...{n}       - dynamic point 1...n;\n"
+		      "  x, y            - direct point (x,y), coordinate in float point pixels;\n"
+		      "  p1 ... pN       - dynamic point 1...n;\n"
 		      "  width, bord_w   - direct line and border width in float point pixels;\n"
 		      "  w{n}            - dynamic width 'n';\n"
-		      "  color, bord_clr, fill_clr - direct line, border and fill color name or 32bit code whith alpha: {name}-AAA, #RRGGBB-AAA;\n"
+		      "  color, bord_clr, fill_clr - direct line, border and fill color name or 32bit code whith alpha: {name}[-{AAA}], #RRGGBB-AAA;\n"
 		      "  c{n}            - dynamic color 'n';\n"
 		      "  line_stl        - direct line style: 0-Solid, 1-Dashed, 2-Dotted;\n"
 		      "  s{n}            - dynamic style 'n';\n"
-		      "  fill_img        - direct fill image in form \"[src%3Aname]\", where:\n"
-		      "      \"src\" - image source:\n"
-		      "         file - direct from local file by path;\n"
-		      "         res  - from DB mime resources table.\n"
-		      "      \"name\" - file path or resource mime Id.\n"
+		      "  fill_img        - direct fill image in form \"[{src}:]{name}\", where:\n"
+		      "     \"src\"      - image source:\n"
+		      "        file      - direct from local file by path;\n"
+		      "        res       - from DB mime resources table.\n"
+		      "     \"name\"     - file path or resource mime Id.\n"
 		      "  i{n}            - dynamic fill image 'n'.\n"
 		      "For example:\n"
 		      "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
@@ -477,10 +480,10 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    el->setAttr("help",_("List of values the editable combobox by lines."));
 			    break;
 			case FL_INTEGER:
-			    el->setAttr("help",_("Integer value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]\"."));
+			    el->setAttr("help",_("Integer value configuration in form: \"{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}\"."));
 			    break;
 			case FL_REAL:
-			    el->setAttr("help",_("Real value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]:[SignsAfterDot]\"."));
+			    el->setAttr("help",_("Real value configuration in form: \"{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}:{SignsAfterDot}\"."));
 			    break;
 			case FL_TIME: case FL_DATE: case FL_DATE_TM:
 			    el->setAttr("help",_("Enter date and/or time by template with the items:\n"
@@ -520,7 +523,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    break;
 		case F_SLIDER: case F_SCROLL_BAR:
 		    if((el=ctrId(root,"/cfg",true))) el->setAttr("help",
-			_("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep]\".\n"
+			_("Configuration of the slider in the format: \"{VertOrient}:{Min}:{Max}:{SinglStep}:{PageStep}\".\n"
 			  "Where:\n"
 			  "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
 			  "  \"Min\" - minimum value;\n"
@@ -531,7 +534,26 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		case F_TABLE:
 		    if((el=ctrId(root,"/items",true)))  el->setAttr("SnthHgl","1")->setAttr("help",
 			_("XML tag \"tbl\" for the table fill:\n"
-			  "<tbl>\n<h><s>Col1</s><s>Col2</s></h>\n<r><s>Col1ValS</s><i>Col2ValI</i></r>\n</tbl>"));
+			  "  <tbl>\n"
+			  "    <h><s>{Header1}</s><s>{Header2}</s></h>\n"
+			  "    <r><s>{Row1Column1String}</s><i>{Row1Column1Integer}</i></r>\n"
+			  "    <r><b>{Row2Column1Logical}</b><r>{Row2Column2Real}</r></r>\n"
+			  "  </tbl>\n"
+			  "The tags:\n"
+			  "  tbl - Table, the properties at all:\n"
+			  "    sel         - the selection mode of the table items:\n"
+			  "                 \"row\" - by rows, \"col\" - by columns, \"cell\" - by cells (by default);\n"
+			  "    keyID       - the key's row-column number, for the selection value get;\n"
+			  "    colsWdthFit - fit the columns (which size unfixed) size to fill for full the table width.\n"
+			  "  h   - The headers size, allowed attributes about cell-tag of the header, for the column as a whole:\n"
+			  "    width - the column width, in pixels or percents (10%);\n"
+			  "    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0).\n"
+			  "  r   - the row of values, allowed attributes:\n"
+			  "    color - the row color as a whole into the color name or code.\n"
+			  "  s, i, r, b - the data type's cells \"String\", \"Integer\", \"Real\" and \"Logical\". Allowed attributes:\n"
+			  "    color - the cell's background color;\n"
+			  "    img - the cell's image into form \"[{src}:]{name}\", the details above;\n"
+			  "    edit - allowing to the cell of the row edition (0 or 1), by default - no (0)."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 	    }
@@ -684,16 +706,16 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: case A_BordColor: case A_TextColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_TextFont: el->setAttr("help",Widget::helpFont());	break;
 		    case A_BackImg:  el->setAttr("help",Widget::helpImg());	break;
-		    case A_TextText: el->setAttr("help",_("Text value. Use \"%{n}\" for argument {n} (from 1) value insert.")); break;
+		    case A_TextText: el->setAttr("help",_("Text value. Use \"%{x}\" for argument \"x\" (from 1) value insert.")); break;
 		}
 	    }
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++) {
 		if(!(el=ctrId(root,"/arg"+i2s(i_arg)+"cfg",true))) continue;
 		switch(src->attrAt("arg"+i2s(i_arg)+"tp").at().getI()) {
-		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
-		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
-							     "Where \"form\" that 'g', 'e' or 'f'."));			break;
-		    case A_TextArsCfg:	el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
+		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in form \"{len}\"."));break;
+		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in form: \"{width};{form};{prec}\".\n"
+							     "Where \"form\" that 'g', 'e' or 'f'."));		break;
+		    case A_TextArsCfg:	el->setAttr("help",_("String value configuration in form \"{len}\"."));	break;
 		}
 	    }
 	}
@@ -820,16 +842,16 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: case A_BordColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());		break;
 		    case A_MediaSrc: el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+el->attr("id"))->setAttr("help",
-			_("Media source name in form \"[src:]name\", where:\n"
+			_("Media source name in form \"[{src}:]{name}\", where:\n"
 			"  \"src\" - source:\n"
-			"    file - direct from local (visualizator or engine) file by path;\n"
-			"    res - from DB mime resources table;\n"
+			"    file - direct from local (visualizator or engine) file by the path;\n"
+			"    res - from the DB mime resources table;\n"
 			"    stream - Stream URL for video and audio play.\n"
-			"  \"name\" - file path or resource mime Id.\n"
+			"  \"name\" - the file path or the resource mime Id.\n"
 			"Examples:\n"
-			"  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
+			"  \"res:workMedia\" - from the DB mime resources table for Id \"workMedia\";\n"
 			"  \"workMedia\" - like previous;\n"
-			"  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\";\n"
+			"  \"file:/var/tmp/workMedia.mng\" - from local file by the path \"/var/tmp/workMedia.mng\";\n"
 			"  \"stream:http://localhost.localhost:5050\" - video and audio stream play from URL."));
 			break;
 		    case A_MediaType: el->setAttr("help",
@@ -895,8 +917,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrDel("curColor");
 	}
 	else {
-	    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-	    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 	    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 	}
     }
@@ -910,15 +932,15 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	//> Create specific attributes
 	switch(cfg.getI()) {
 	    case FD_TRND:
-		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale:horizontal grid size, sek"),TFld::Real,Attr::Mutable,
+		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale:horizontal grid size, seconds"),TFld::Real,Attr::Mutable,
 		    "","0","0;3e6","",i2s(A_DiagramSclHorPer).c_str()));
 	    case FD_SPECTR: case FD_XY:
-		cfg.owner()->attrAdd(new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
-		cfg.owner()->attrAdd(new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
-		cfg.owner()->attrAdd(new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;3e6","",i2s(A_DiagramTSize).c_str()));
+		cfg.owner()->attrAdd(new TFld("tSek",_("Time:seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
+		cfg.owner()->attrAdd(new TFld("tUSek",_("Time:microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
+		cfg.owner()->attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Real,Attr::Mutable,"","60","0;3e6","",i2s(A_DiagramTSize).c_str()));
 		if(cfg.owner()->attrAt("active").at().getB()) {
-		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:usek"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor:seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor:microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 		}
 		cfg.owner()->attrAdd(new TFld("sclColor",_("Scale:color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","",i2s(A_DiagramSclColor).c_str()));
@@ -1004,7 +1026,7 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_DiagramSclMarkFont: el->setAttr("help",Widget::helpFont());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_DiagramValArch:
-			el->setAttr("help",_("Value archivator in form \"ArchMod.ArchivatorId\"."));	break;
+			el->setAttr("help",_("Value archivator in form \"{ArchMod}.{ArchivatorId}\"."));	break;
 		    case A_DiagramValsForPix:
 			el->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
 			break;
@@ -1014,20 +1036,22 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if((el=ctrId(root,TSYS::strMess("/prm%dcolor",i_p),true))) el->setAttr("help",Widget::helpColor());
 		if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
 		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
-		      "Also support direct data set by prefixes:\n"
-		      "  \"data:{XMLNodeData}\" - draw from direct set data;\n"
-		      "  \"line:{value}\" - draw horizontal line by value.\n"
+		      "Also supported direct data set by the prefixes:\n"
+		      "  \"data:{XMLNodeData}\" - drawing from the direct set data;\n"
+		      "  \"line:{value}\" - drawing the horizontal line by the value, no sense have for type \"XY\".\n"
 		      "Example:\n"
 		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute \"use\" of parameter \"MemInfo\"\n"
-		      "	    of controller \"AutoDA\" of DAQ module \"System\";\n"
+		      "    of controller \"AutoDA\" of DAQ module \"System\";\n"
 		      "  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\";\n"
-		      "  \"data:<d tm=\"1369465209000000\" tm_grnd=\"1369465200000000\" per=\"1000000\">\n"
+		      "  \"data:<d s=\"1\" tm=\"1369465209\" tm_grnd=\"1369465200\" per=\"1\">\n"
 		      "    0 3.14\n"
 		      "    1 3.141\n"
 		      "    5 3.1415</d> - data for 10 seconds and period 1 second from \"25.05.2013 10:00:00\";\n"
+		      "      at pass \"tm\" and \"tm_grnd\" it will sets values from the diagram range,\n"
+		      "      and also by set attribute \"s\" it will allows the time set into seconds;\n"
 		      "  \"line:3.14159265\" - horizontal line into value \"3.14159265\"."));
 		if((el=ctrId(root,TSYS::strMess("/prm%dprop",i_p),true))) el->setAttr("help",
-		    _("Real archive properties in form \"BegArh:EndArh:DataPeriod\", where:\n"
+		    _("Real archive properties in form \"{BegArh}:{EndArh}:{DataPeriod}\", where:\n"
 		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's data in seconds,\n"
 		      "                  real up to microseconds (1e-6)."));
 	    }
@@ -1057,8 +1081,8 @@ void OrigProtocol::postEnable( int flag )
 	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
 	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_ProtFont).c_str()));
 	attrAdd(new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","",i2s(A_ProtHeadVis).c_str()));
-	attrAdd(new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
-	attrAdd(new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
+	attrAdd(new TFld("time",_("Time, seconds"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
+	attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
 	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
 	attrAdd(new TFld("arch",_("Archivator"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_ProtArch).c_str()));
 	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::NoStrTransl,"","","","",i2s(A_ProtTmpl).c_str()));
@@ -1125,9 +1149,9 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case A_BackColor: el->setAttr("help",Widget::helpColor());	break;
 		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
 		    case A_ProtFont: el->setAttr("help",Widget::helpFont());	break;
-		    case A_ProtArch: el->setAttr("help",_("Messages archivator in form \"ArchMod.ArchivatorId\"."));	break;
-		    case A_ProtLev: el->setAttr("help",_("Set value to < 0 for get current alarms."));	break;
-		    case A_ProtTSize: el->setAttr("help",_("Set value to '0' for get all alarms, for \"lev\" < 0."));	break;
+		    case A_ProtArch: el->setAttr("help",_("Messages archivator in form \"{ArchMod}.{ArchivatorId}\"."));	break;
+		    case A_ProtLev: el->setAttr("help",_("Set value to \"< 0\" for get the current alarms."));	break;
+		    case A_ProtTSize: el->setAttr("help",_("Set value to \"0\" for get all alarms, for \"lev\" < 0."));	break;
 		    case A_ProtTmpl: el->setAttr("help",
 			_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
 			"  '*' - any multiply symbols group;\n"
@@ -1279,7 +1303,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	}
 	sizeUpdate(sw);
     }
-    //Move archive cursor
+    //Move the archive cursor
     else if(cfg.id() == "aCur" && cfg.getI() != prev.getI()) {
 	int n = cfg.owner()->attrAt("n").at().getI();
 	if(cfg.getI() < 0) cfg.setI(((prev.getI()+1) >= n) ? 0 : (prev.getI()+1), false, true);

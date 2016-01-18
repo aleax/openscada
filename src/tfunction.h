@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,12 +104,12 @@ class TFunction : public TCntrNode
 	string	id( )			{ return mId.c_str(); };
 	virtual string name( )		{ return ""; }
 	virtual string descr( )		{ return ""; }
-	bool	startStat( )		{ return run_st; }
+	bool	startStat( )		{ return runSt; }
 	int	use( )			{ return used.size(); }
-	Res	&fRes( )		{ return f_res; }
+	Res	&fRes( )		{ return mFRes; }
 
 	void setId( const string &vl );
-	virtual void setStart( bool val ) { run_st = val; }
+	virtual void setStart( bool val )	{ runSt = val; }
 
 	//> IO
 	void ioList( vector<string> &list );
@@ -141,14 +140,14 @@ class TFunction : public TCntrNode
 
 	//Attributes
 	string		mId;
-	bool		run_st, be_start;
+	bool		runSt, beStart;
 	TValFunc	*mTVal;
 	vector<TValFunc*>	used;
 	const char	*grp;
 
     private:
 	//Attributes
-	Res		f_res;
+	Res		mFRes;
 	vector<IO*>	mIO;
 };
 

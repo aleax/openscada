@@ -524,7 +524,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     //Service commands process
     if(a_path == "/serv/pg") {	//Pages operations
 	if(ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEC_RD)) {	//Open pages list
-	    unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
+	    unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
 	    unsigned ntm = calcClk();
 	    vector<string> lst = openList();
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
@@ -802,7 +802,7 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-        pageAt(ls[i_l]).at().setProcess(val, lastFirstCalc);
+	pageAt(ls[i_l]).at().setProcess(val, lastFirstCalc);
 
     if(!enable()) return;
 
@@ -1202,6 +1202,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	    if((fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus")
 		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output,"",false,("./"+als[i_a]).c_str()));
 	}
+
 	//   Include attributes check
 	wdgList(iwls);
 	for(unsigned i_w = 0; i_w < iwls.size(); i_w++) {
@@ -1316,7 +1317,7 @@ void SessWdg::inheritAttr( const string &aid )
 
     if(enable() && !aid.empty() && ownerSess()->start() && attrPresent(aid)) {
 	AutoHD<Attr> attr = attrAt(aid);
-	if(!(attr.at().flgGlob()&Attr::IsUser))
+	if(!(attr.at().flgGlob()&Attr::IsUser) || attr.at().flgSelf()&Attr::VizerSpec)
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()|Attr::SessAttrInh));
     }
 }
@@ -1467,7 +1468,7 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
 
 unsigned int SessWdg::modifVal( Attr &cfg )
 {
-    if(s2i(cfg.fld().reserve())) mMdfClc = mCalcClk;
+    if(s2i(cfg.fld().reserve()) || cfg.flgSelf()&Attr::VizerSpec) mMdfClc = mCalcClk;
 
     return mCalcClk;
 }
@@ -1730,14 +1731,14 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	}
 	catch(TError err){ return false; }
     }
-    // bool wdgDel(string wid) - delete widget, return true for success
+    // bool wdgDel(string wid) - delete the widget, return true for success
     //  wid - widget identifier
     if(iid == "wdgDel" && prms.size()) {
 	try { wdgDel(prms[0].getS()); }
 	catch(TError err){ return false; }
 	return true;
     }
-    // TCntrNodeObj wdgAt(string wid, bool byPath = false) - attach to child widget or global by <path>
+    // TCntrNodeObj wdgAt(string wid, bool byPath = false) - attach to the child widget or global by <path>
     //  wid - widget identifier
     //  byPath - attach by absolute or relative path. First item of absolute path (session or project id) is passed.
     if(iid == "wdgAt" && prms.size()) {
@@ -1836,9 +1837,9 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
 	    unsigned tm = s2ll(opt->attr("tm"));
 	    if(!tm) {
-		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
+		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->
 		    setText(i2s(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())));
-		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id", "name")->setAttr("p", "-4")->setText(name());
+		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
 	    }
 	    if(!tm || modifChk(tm,mMdfClc)) {
 		AutoHD<Attr> attr;
@@ -1846,7 +1847,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		attrList(als);
 		for(unsigned i_l = 0; i_l < als.size(); i_l++) {
 		    attr = attrAt(als[i_l]);
-		    if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && s2i(attr.at().fld().reserve()))
+		    if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
+			    modifChk(tm,attr.at().modif()))
 			opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
 					     setText(attr.at().getS());
@@ -1873,15 +1875,16 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	//Self attributes put
 	if(!tm || modifChk(tm,mMdfClc)) {
 	    if(!tm) {
-		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p","-4")->setText(name());
-		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->setText(i2s(perm));
+		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p",i2s(A_PG_NAME))->setText(name());
+		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->setText(i2s(perm));
 	    }
 	    AutoHD<Attr> attr;
 	    vector<string> als;
 	    attrList(als);
 	    for(unsigned i_l = 0; i_l < als.size(); i_l++) {
 		attr = attrAt(als[i_l]);
-		if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && s2i(attr.at().fld().reserve()))
+		if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
+			modifChk(tm,attr.at().modif()))
 		    opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
 				     setText(attr.at().getS());
@@ -1911,6 +1914,17 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     else if(a_path.compare(0,15,"/serv/attrSess/") == 0) {	//Session attribute's value operations
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))	opt->setText(sessAttr(TSYS::pathLev(a_path,2)));
 	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	sessAttrSet(TSYS::pathLev(a_path,2), opt->text());
+    }
+    else if(a_path.compare(0,11,"/serv/attr/") == 0 && ctrChkNode(opt,"activate")) {
+	string tStr = TSYS::pathLev(a_path, 2);
+	//Visualizer specific attributes creation at the request
+	if(!attrPresent(tStr) && opt->attr("aNm").size()) {
+	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm").c_str(),(TFld::Type)s2i(opt->attr("aTp")),s2i(opt->attr("aFlg"))|Attr::IsUser));
+	    parent().at().attrAt(tStr).at().setModif(1);
+	    parent().at().modif();
+	}
+	parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
     }
     else return Widget::cntrCmdServ(opt);
 

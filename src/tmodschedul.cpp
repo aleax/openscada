@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <dlfcn.h>
 #include <dirent.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
@@ -71,7 +72,7 @@ string TModSchedul::optDescr( )
     char buf[STR_BUF_LEN];
     snprintf(buf,sizeof(buf),_(
 	"=================== Subsystem \"Module scheduler\" options =================\n"
-	"    --ModPath=<path>   Modules <path> (/var/os/modules/).\n"
+	"    --modPath=<path>   Modules <path> (/var/os/modules/).\n"
 	"------------ Parameters of section '%s' in config-file -----------\n"
 	"ModPath  <path>        Path to shared libraries(modules).\n"
 	"ModAllow <list>        List of shared libraries allowed for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
@@ -92,8 +93,8 @@ void TModSchedul::load_( )
     //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
-	else if(argCom == "ModPath")	SYS->setModDir(optarg, true);
+	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) fprintf(stdout,"%s",optDescr().c_str());
+	else if(strcasecmp(argCom.c_str(),"modpath") == 0)	SYS->setModDir(optarg, true);
 
     //Load parameters from command line
     setChkPer(s2i(TBDS::genDBGet(nodePath()+"ChkPer",i2s(chkPer()))));
@@ -116,18 +117,20 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
     files.clear();
 
     //Check and append present files
+    dirent  *scan_rez = NULL,
+	    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
     for(int off = 0; (Path=TSYS::strParse(Paths,0,",",&off)).size(); ) {
-	dirent scan_dirent, *scan_rez = NULL;
 	DIR *IdDir = opendir(Path.c_str());
 	if(IdDir == NULL) continue;
 
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	    if(strcmp("..",scan_rez->d_name) == 0 || strcmp(".",scan_rez->d_name) == 0) continue;
 	    NameMod = Path+"/"+scan_rez->d_name;
 	    if(CheckFile(NameMod)) files.push_back(NameMod);
 	}
 	closedir(IdDir);
     }
+    free(scan_dirent);
 }
 
 bool TModSchedul::CheckFile( const string &iname )
@@ -229,9 +232,9 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		for(unsigned i_sub = 0; i_sub < list.size(); i_sub++) {
 		    if(owner().at(list[i_sub]).at().subModule() && AtMod.type == owner().at(list[i_sub]).at().subId()) {
 			// Check type module version
-			if(AtMod.t_ver != owner().at(list[i_sub]).at().subVer()) {
+			if(AtMod.tVer != owner().at(list[i_sub]).at().subVer()) {
 			    mess_warning(nodePath().c_str(),_("%s for type '%s' doesn't support module version: %d!"),
-				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.t_ver);
+				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.tVer);
 			    break;
 			}
 			// Check module present

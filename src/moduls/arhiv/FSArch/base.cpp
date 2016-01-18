@@ -35,7 +35,7 @@
 #define MOD_NAME	_("File system archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"1.5.1"
+#define MOD_VER		"2.5.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
 #define LICENSE		"GPL2"
@@ -73,15 +73,9 @@ using namespace FSArch;
 //*************************************************
 ModArch::ModArch( const string &name) : TTipArchivator(MOD_ID), noArchLimit(false)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 void ModArch::postEnable( int flag )
@@ -148,7 +142,7 @@ string ModArch::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= The module <%s:%s> options =======================\n"
-	"    --noArchLimit        Disable archives limit to file number. Use for see archives mode, not work.\n"
+	"    --noArchLimit        Disable archives limit to the file number. Use for see archives mode, not work.\n"
 	"\n"),MOD_TYPE,MOD_ID);
 }
 

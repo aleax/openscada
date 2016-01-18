@@ -3,6 +3,9 @@
 /******************************************************************************
  *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
+ *   Version: 1.0.1							      *
+ *	* Initial version control.					      *
+ *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
  *   published by the Free Software Foundation; version 3 of the License.     *
@@ -83,6 +86,8 @@ namespace OPC
 #define OpcUa_Integer		27
 #define OpcUa_UInteger		28
 #define OpcUa_Enumeration	29
+#define OpcUa_IntAuto		62	//Expanded by OpenSCADA
+#define OpcUa_UIntAuto		63	//Expanded by OpenSCADA
 #define OpcUa_VarMask		0x3F
 #define OpcUa_ArrayDimension	0x40
 #define OpcUa_Array		0x80
@@ -99,8 +104,11 @@ namespace OPC
 #define OpcUa_BadNothingToDo		0x800F0000
 #define OpcUa_BadTooManyOperations	0x80100000
 #define OpcUa_BadUserAccessDenied	0x801F0000
+#define OpcUa_BadIdentityTokenInvalid	0x80200000
+#define OpcUa_BadIdentityTokenRejected	0x80210000
 #define OpcUa_BadSecureChannelIdInvalid	0x80220000
 #define OpcUa_BadSessionIdInvalid	0x80250000
+#define OpcUa_BadSessionNotActivated	0x80270000
 #define OpcUa_BadSubscriptionIdInvalid	0x80280000
 #define OpcUa_BadNodeIdInvalid		0x80330000
 #define OpcUa_BadNodeIdUnknown		0x80340000
@@ -117,14 +125,17 @@ namespace OPC
 #define OpcUa_BadNoMatch		0x806F0000
 #define OpcUa_BadWriteNotSupported	0x80730000
 #define OpcUa_BadTooManySubscriptions	0x80770000
+#define OpcUa_BadNoSubscription		0x80790000
 #define OpcUa_BadSequenceNumberUnknown	0x807A0000
 #define OpcUa_BadMessageNotAvailable	0x807B0000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
+#define OpcUa_BadTcpSecureChannelUnknown	0x807F0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
 #define OpcUa_BadSecureChannelClosed	0x80860000
 #define OpcUa_BadSecureChannelTokenUnknown	0x80870000
 #define OpcUa_BadInvalidArgument	0x80AB0000
+#define OpcUa_BadEndOfStream		0x80B00000
 #define OpcUa_BadRequestTooLarge	0x80B80000
 #define OpcUa_BadResponseTooLarge	0x80B90000
 #define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
@@ -222,7 +233,14 @@ namespace OPC
 #define OpcUa_Server_NamespaceArray	2255
 #define OpcUa_Server_ServerStatus	2256
 #define OpcUa_Server_ServerStatus_State	2259
+#define OpcUa_Server_ServerCapabilities	2268
+#define OpcUa_Server_ServerCapabilities_MinSupportedSampleRate	2272
+#define OpcUa_Server_ServerCapabilities_MaxBrowseContinuationPoints	2735
+#define OpcUa_Server_ServerCapabilities_MaxQueryContinuationPoints	2736
+#define OpcUa_Server_ServerCapabilities_MaxHistoryContinuationPoints	2737
 #define OpcUa_Server_Auditing		2994
+#define OpcUa_Server_ServerCapabilities_MaxArrayLength	11702
+#define OpcUa_Server_ServerCapabilities_MaxStringLength	11703
 
 //ReferenceType Identifiers
 #define OpcUa_References		31
@@ -248,6 +266,7 @@ namespace OPC
 enum SerializerType	{ ST_Binary };
 enum SC_ReqTP		{ SC_ISSUE = 0, SC_RENEW = 1 };
 enum MessageSecurityMode{ MS_None = 1, MS_Sign, MS_SignAndEncrypt };
+enum AuthTp		{ A_Anon = 0, A_UserNm = 1, A_Cert = 2 };
 enum NodeClasses	{ NC_Object = 1, NC_Variable = 2, NC_Method = 4, NC_ObjectType = 8, NC_VariableType = 16,
 			  NC_ReferenceType = 32, NC_DataType = 64, NC_View = 128 };
 enum BrowseDirection	{ BD_FORWARD = 0, BD_INVERSE, BD_BOTH };
@@ -260,7 +279,7 @@ enum AttrIds		{ Aid_Error = 0, AId_NodeId, AId_NodeClass, AId_BrowseName, AId_Di
 			  AId_Value, AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
 			  AId_MinimumSamplingInterval, AId_Historizing, AId_Executable, AId_UserExecutable };
 enum SubScrSt		{ SS_CUR = 0, SS_CLOSED, SS_CREATING, SS_NORMAL, SS_LATE, SS_KEEPALIVE };
-enum MonitoringMode 	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
+enum MonitoringMode	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
 
 //* External functions                        */
 extern int64_t curTime( );
@@ -396,8 +415,8 @@ class UA
 	//Data
 	class SecuritySetting {
 	    public:
-		SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
-		SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
+	    SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
+	    SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
 
 	    string		policy;
 	    MessageSecurityMode	messageMode;
@@ -464,9 +483,10 @@ class Client: public UA
 		//Methods
 		SClntSess( )		{ clearFull( ); }
 		void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
-		void clearFull( )
+		void clearFull( bool inclEPdescr = false )
 		{
 		    endPoint = servCert = clKey = servKey = "";
+		    if(inclEPdescr) endPointDscr.clear();
 		    secPolicy = "None"; secMessMode = 1;
 		    secChnl = secToken = reqHndl = 0;
 		    sqNumb = 33;
@@ -477,6 +497,7 @@ class Client: public UA
 		}
 
 		string		endPoint;
+		XML_N		endPointDscr;
 		uint32_t	secChnl;
 		uint32_t	secToken;
 		uint32_t	sqNumb;
@@ -498,6 +519,9 @@ class Client: public UA
 	~Client( );
 
 	// Main variables
+	virtual string	applicationUri( ) = 0;
+	virtual string	productUri( ) = 0;
+	virtual string	applicationName( ) = 0;
 	virtual string	sessionName( ) = 0;
 	virtual string	endPoint( ) = 0;
 	virtual string	secPolicy( ) = 0;
@@ -508,9 +532,11 @@ class Client: public UA
 						//{User}\n{Password}	- by user and password
 
 	// External imlementations
-	virtual int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 ) = 0;
+	virtual int	messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 ) = 0;
 
 	// Main call methods
+	//  Connection state check and/or establist by <est> > 0 or it close by == 0.
+	virtual bool	connect( int8_t est = -1 )	{ return false; }
 	virtual void	protIO( XML_N &io );
 	virtual void	reqService( XML_N &io );
 
@@ -531,7 +557,8 @@ class Server: public UA
 	{
 	    public:
 	    //Methods
-	    SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode );
+	    SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert,
+		const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN );
 	    SecCnl( );
 
 	    //Attributes
@@ -541,8 +568,9 @@ class Server: public UA
 	    int64_t	tCreate;
 	    int32_t	tLife;
 	    uint32_t	TokenId, TokenIdPrev;
-	    string	clCert;
+	    string	clCert, clAddr;
 	    string	servKey, clKey;
+	    uint32_t	seqN, startSeqN;
 	};
 	//* Session
 	class Sess
@@ -738,12 +766,15 @@ class Server: public UA
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
 	virtual bool inReq( string &request, const string &inPrtId, string *answ = NULL );
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
+	virtual string clientAddr( const string &threadId ) = 0;
 
 	// Channel manipulation functions
 	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,
-	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
+	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1,
+	    const string &iclAddr = "", uint32_t iseqN = 1 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
+	SecCnl &chnlGet_( int cid );
 	void chnlSecSet( int cid, const string &servKey, const string &clKey );
 
 	static string mkError( uint32_t errId, const string &err = "" );

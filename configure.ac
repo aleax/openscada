@@ -1,9 +1,9 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.13],[rom_as@oscada.org])
+AC_INIT([OpenSCADA],[0.8.15],[rom_as@oscada.org])
 AC_PREFIX_DEFAULT([/usr])
-oscd_LIBREVISION="2:2:0"
+oscd_LIBREVISION="2:3:0"
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
@@ -484,17 +484,26 @@ AX_MOD_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,
     #>> Modules checkings
     AX_LIB_FFTW3()
     AX_LIB_Qt()
-    AS_IF([test "x${Qt5_use}" = "x"],[
-	AC_ARG_ENABLE(Phonon,AC_HELP_STRING([--disable-Phonon], [disable using Phonon library]),[ ],
-	    [PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
+    AC_ARG_ENABLE(Phonon,AC_HELP_STRING([--disable-Phonon], [disable using Phonon library]),[ ],[
+	AS_IF([test "x${Qt5_use}" = "x"],[
+	    PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
+		[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
+		[AC_MSG_NOTICE(Phonon media player engine is not found. Using disabled!)])
+	],[
+	    PKG_CHECK_MODULES([phonon4qt5],[phonon4qt5 > 4.3.0],
 		[
 		    AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])
-		    SAVE_CXXFLAGS="$CXXFLAGS"
-		    CXXFLAGS="$CXXFLAGS $phonon_CFLAGS"
-		    AC_CHECK_HEADERS([phonon/VideoPlayer],[],[])
-		    CXXFLAGS="$SAVE_CXXFLAGS"
+		    phonon_CFLAGS=$phonon4qt5_CFLAGS
+		    phonon_LIBS=$phonon4qt5_LIBS
 		],
-	    [AC_MSG_NOTICE(Phonon not found. Using is disabled!)])])
+		[AC_MSG_NOTICE(Phonon media player engine is not found. Using disabled!)])
+	])
+	AS_IF([test "x${phonon_CFLAGS}" = "x"],[],[
+	    SAVE_CXXFLAGS="$CXXFLAGS"
+	    CXXFLAGS="$CXXFLAGS -fpic $QtGui_CFLAGS $phonon_CFLAGS"
+	    AC_CHECK_HEADERS([phonon/VideoPlayer],[],[])
+	    CXXFLAGS="$SAVE_CXXFLAGS"
+	])
     ])
     if test $enable_Vision = incl; then
 	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QtGui_LIBS} ${LIB_FFTW3} ${phonon_LIBS} "

@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <algorithm>
 
 #include <terror.h>
 #include <tsys.h>
@@ -39,7 +40,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"1.5.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -77,15 +78,9 @@ using namespace LogicLev;
 //*************************************************
 TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 TTpContr::~TTpContr( )
@@ -312,7 +307,7 @@ TMdPrm::~TMdPrm( )
 
 TCntrNode &TMdPrm::operator=( TCntrNode &node )
 {
-    TParamContr::operator=( node );
+    TParamContr::operator=(node);
 
     TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
     if(!src_n || !src_n->enableStat() || !enableStat() || !isStd() || !tmpl->val.func()) return *this;
@@ -634,7 +629,61 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-int TMdPrm::lnkSize()
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
+    //  id, name - new attribute id and name;
+    //  tp - attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read only [ro];
+    //  selValsNms - two lines with values in first and it's names in first (separated by ";").
+    if(iid == "attrAdd" && prms.size() >= 1) {
+	if(!enableStat() || !isStd())	return false;
+	TFld::Type tp;
+	string stp, stp_ = (prms.size() >= 3) ? prms[2].getS() : "real";
+	stp.resize(stp_.length());
+	std::transform(stp_.begin(), stp_.end(), stp.begin(), ::tolower);
+	if(stp.find("boolean") != string::npos)		tp = TFld::Boolean;
+	else if(stp.find("integer") != string::npos)	tp = TFld::Integer;
+	else if(stp.find("real") != string::npos)	tp = TFld::Real;
+	else if(stp.find("string") != string::npos ||
+		stp.find("text") != string::npos)	tp = TFld::String;
+	else if(stp.find("object") != string::npos)	tp = TFld::Object;
+
+	unsigned flg = TFld::NoFlag;
+	if(stp.find("sel") != string::npos)	flg |= TFld::Selected;
+	if(stp.find("seled") != string::npos)	flg |= TFld::SelEdit;
+	if(stp.find("text") != string::npos)	flg |= TFld::FullText;
+	if(stp.find("ro") != string::npos)	flg |= TFld::NoWrite;
+
+	string	sVals = (prms.size() >= 4) ? prms[3].getS() : "";
+	string	sNms = TSYS::strLine(sVals, 1);
+	sVals = TSYS::strLine(sVals, 0);
+
+	MtxAlloc res(pEl.resEl(), true);
+	unsigned aId = pEl.fldId(prms[0].getS(), true);
+	if(aId < pEl.fldSize()) {
+	    if(prms.size() >= 2 && prms[1].getS().size()) pEl.fldAt(aId).setDescr(prms[1].getS());
+	    pEl.fldAt(aId).setFlg(pEl.fldAt(aId).flg()^((pEl.fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
+	    pEl.fldAt(aId).setValues(sVals);
+	    pEl.fldAt(aId).setSelNames(sNms);
+	}
+	else if(!vlPresent(prms[0].getS()))
+	    pEl.fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,"","",sVals.c_str(),sNms.c_str()));
+	return true;
+    }
+    //bool attrDel( string id ) - attribute <id> remove.
+    if(iid == "attrDel" && prms.size() >= 1) {
+	if(!enableStat() || !isStd())	return false;
+	MtxAlloc res(pEl.resEl(), true);
+	unsigned aId = pEl.fldId(prms[0].getS(), true);
+	if(aId == pEl.fldSize())	return false;
+	try { pEl.fldDel(aId); } catch(TError){ return false; }
+	return true;
+    }
+
+    return TParamContr::objFuncCall(iid, prms, user);
+}
+
+int TMdPrm::lnkSize( )
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     return tmpl->lnk.size();
@@ -685,29 +734,29 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idDscr >= 0)	tmpl->val.setS(idDscr, descr());
 
 	//Get input links
-	for(int i_l = 0; i_l < lnkSize(); i_l++)
-	    if(lnk(i_l).aprm.freeStat())tmpl->val.setS(lnk(i_l).ioId, EVAL_STR);
-	    else if(lnk(i_l).aprm.at().fld().type() == TFld::Object && lnk(i_l).detOff < (int)lnk(i_l).prmAttr.size())
-		tmpl->val.set(lnk(i_l).ioId, lnk(i_l).aprm.at().getO().at().propGet(lnk(i_l).prmAttr.substr(lnk(i_l).detOff),'.'));
-	    else tmpl->val.set(lnk(i_l).ioId, lnk(i_l).aprm.at().get());
+	for(int iL = 0; iL < lnkSize(); iL++)
+	    if(lnk(iL).aprm.freeStat()) tmpl->val.setS(lnk(iL).ioId, EVAL_STR);
+	    else if(lnk(iL).aprm.at().fld().type() == TFld::Object && lnk(iL).detOff < (int)lnk(iL).prmAttr.size())
+		tmpl->val.set(lnk(iL).ioId, lnk(iL).aprm.at().getO().at().propGet(lnk(iL).prmAttr.substr(lnk(iL).detOff),'.'));
+	    else tmpl->val.set(lnk(iL).ioId, lnk(iL).aprm.at().get());
 
 	//Calc template
 	tmpl->val.calc();
 	modif();
 
 	//Put output links
-	for(int i_l = 0; i_l < lnkSize(); i_l++)
-	    if(!lnk(i_l).aprm.freeStat() && tmpl->val.ioMdf(lnk(i_l).ioId) &&
-		    tmpl->val.ioFlg(lnk(i_l).ioId)&(IO::Output|IO::Return) &&
-		    !(lnk(i_l).aprm.at().fld().flg()&TFld::NoWrite))
+	for(int iL = 0; iL < lnkSize(); iL++)
+	    if(!lnk(iL).aprm.freeStat() && tmpl->val.ioMdf(lnk(iL).ioId) &&
+		    tmpl->val.ioFlg(lnk(iL).ioId)&(IO::Output|IO::Return) &&
+		    !(lnk(iL).aprm.at().fld().flg()&TFld::NoWrite))
 	    {
-		TVariant vl = tmpl->val.get(lnk(i_l).ioId);
+		TVariant vl = tmpl->val.get(lnk(iL).ioId);
 		if(!vl.isEVal()) {
-		    if(lnk(i_l).aprm.at().fld().type() == TFld::Object && lnk(i_l).detOff < (int)lnk(i_l).prmAttr.size()) {
-			lnk(i_l).aprm.at().getO().at().propSet(lnk(i_l).prmAttr.substr(lnk(i_l).detOff), '.', vl);
-			lnk(i_l).aprm.at().setO(lnk(i_l).aprm.at().getO());	//For modify object sign
+		    if(lnk(iL).aprm.at().fld().type() == TFld::Object && lnk(iL).detOff < (int)lnk(iL).prmAttr.size()) {
+			lnk(iL).aprm.at().getO().at().propSet(lnk(iL).prmAttr.substr(lnk(iL).detOff), '.', vl);
+			lnk(iL).aprm.at().setO(lnk(iL).aprm.at().getO());	//For modify object sign
 		    }
-		    else lnk(i_l).aprm.at().set(vl);
+		    else lnk(iL).aprm.at().set(vl);
 		}
 	    }
 
@@ -746,10 +795,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-        if(isPRefl()) ctrMkNode("fld",opt,-1,"/prm/cfg/PSRC",cfg("PSRC").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/prmp_lst");
-        else if(isStd()) ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
-	if(isStd() && tmpl->val.func() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration")))
-	{
+	if(isPRefl()) ctrMkNode("fld",opt,-1,"/prm/cfg/PSRC",cfg("PSRC").fld().descr(),RWRW__,"root",SDAQ_ID,3,
+				"tp","str", "dest","sel_ed", "select","/prm/cfg/prmp_lst");
+	else if(isStd()) ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",cfg("PRM").fld().descr(),RWRW__,"root",SDAQ_ID,3,
+				    "tp","str", "dest","select", "select","/prm/tmplList");
+	if(isStd() && tmpl->val.func() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration"))) {
 	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for(int i_io = 0; i_io < tmpl->val.ioSize(); i_io++) {
@@ -763,8 +813,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			string nprm = TSYS::strSepParse(tmpl->val.func()->io(i_io)->def(),0,'|');
 			// Check already to present parameters
 			bool f_ok = false;
-			for(unsigned i_l = 0; i_l < list.size() && !f_ok; i_l++)
-			    if(list[i_l] == nprm) f_ok = true;
+			for(unsigned iL = 0; iL < list.size() && !f_ok; iL++)
+			    if(list[iL] == nprm) f_ok = true;
 			if(!f_ok) {
 			    ctrMkNode("fld",opt,-1,(string("/cfg/prm/pr_")+i2s(i_io)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,
 				    3,"tp","str","dest","sel_ed","select",(string("/cfg/prm/pl_")+i2s(i_io)).c_str());
@@ -840,13 +890,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if(p_vl == DAQPath()) throw TError(nodePath().c_str(),_("Self to self linking error."));
 	    AutoHD<TValue> prm = SYS->daq().at().prmAt(p_vl, '.', true);
 
-	    for(int i_l = 0; i_l < lnkSize(); i_l++)
-		if(p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).ioId)->def(),0,'|')) {
-		    lnk(i_l).prmAttr = p_vl;
-		    string p_attr = TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).ioId)->def(),1,'|');
+	    for(int iL = 0; iL < lnkSize(); iL++)
+		if(p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(iL).ioId)->def(),0,'|')) {
+		    lnk(iL).prmAttr = p_vl;
+		    string p_attr = TSYS::strSepParse(tmpl->val.func()->io(lnk(iL).ioId)->def(),1,'|');
 		    if(!prm.freeStat()) {
 			if(prm.at().vlPresent(p_attr)) {
-			    lnk(i_l).prmAttr= p_vl+"."+p_attr;
+			    lnk(iL).prmAttr= p_vl+"."+p_attr;
 			    modif();
 			}
 			else no_set += p_attr+",";

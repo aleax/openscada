@@ -41,13 +41,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
 {
     modPrt	= this;
 
-    mType	= PRT_TYPE;
-    mName	= PRT_NAME;
-    mVers	= PRT_MVER;
-    mAuthor	= PRT_AUTOR;
-    mDescr	= PRT_DESCR;
-    mLicense	= PRT_LICENSE;
-    mSource	= name;
+    modInfoMainSet(PRT_NAME, PRT_TYPE, PRT_MVER, PRT_AUTOR, PRT_DESCR, PRT_LICENSE, name);
 
     mEndPnt = grpAdd("ep_");
 
@@ -68,7 +62,7 @@ TProt::~TProt( )			{ nodeDelAll(); }
 
 string TProt::applicationUri( )		{ return "urn:"+SYS->host()+":OpenSCADA:DAQ.OPC_UA"; }
 
-string TProt::productUri( )		{ return PACKAGE_SITE; }
+string TProt::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;*/ }
 
 string TProt::applicationName( )	{ return "OpenSCADA.OPC-UA Server"; }
 
@@ -105,6 +99,8 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
     ResAlloc res(enRes, false);
     return Server::inReq(request, inPrtId, answ);
 }
+
+string TProt::clientAddr( const string &inPrtId )	{ return "EVAL";/*TSYS::strLine(at(inPrtId).at().srcAddr(), 0);*/ }
 
 void TProt::discoveryUrls( vector<string> &ls )
 {
@@ -385,7 +381,8 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    if(cNd.freeStat()) return OpcUa_BadBrowseNameInvalid;
 
 	    //typeDefinition reference browse
-	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH) && !dynamic_cast<TDAQS*>(&cNd.at()))
+	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH) &&
+		!dynamic_cast<TDAQS*>(&cNd.at()))
 	    {
 		XML_N *ndTpDef = ndMap[NodeId(OpcUa_BaseDataVariableType).toAddr()];
 		if(dynamic_cast<TTipDAQ*>(&cNd.at()))		ndTpDef = ndMap[NodeId("DAQModuleObjectType",NS_OpenSCADA_DAQ).toAddr()];
@@ -458,7 +455,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		    nPrm->vlList(chLs);
 		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
 			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->vlAt(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-			    setAttr("referenceTypeId", NodeId(OpcUa_HasComponent).toAddr())->setAttr("dir", "1")->
+			    setAttr("referenceTypeId", NodeId(OpcUa_Organizes/*OpcUa_HasComponent*/).toAddr())->setAttr("dir", "1")->
 			    setAttr("name", nPrm->vlAt(chLs[i_ch]).at().name())->
 			    setAttr("NodeClass", i2s(NC_Variable))->setAttr("typeDefinition", NodeId(OpcUa_BaseDataVariableType).toAddr());
 		}
@@ -537,7 +534,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				bool dtOK = true;
 				switch(nVal->fld().type()) {
 				    case TFld::Boolean:	req.setAttr("type", i2s(OpcUa_Boolean))->setText(nVal->getS(&tm));	break;
-				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int32))->setText(nVal->getS(&tm));	break;
+				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_IntAuto/*OpcUa_Int32*/))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
 				    case TFld::Object: {	//!!!! With structures support append detect ones

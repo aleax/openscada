@@ -37,7 +37,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.8.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -76,15 +76,9 @@ using namespace JavaLikeCalc;
 //*************************************************
 TpContr::TpContr( string src ) : TTipDAQ(MOD_ID), mSafeTm(10)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= src;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, src);
 
     mLib = grpAdd("lib_");
 }
@@ -787,10 +781,12 @@ void Prm::enable( )
     //Init elements
     vector<string> pls;
     string mio, ionm, aid, anm;
-    for(int io_off = 0; (mio=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); ) {
-	ionm	= TSYS::strSepParse(mio,0,':');
-	aid	= TSYS::strSepParse(mio,1,':');
-	anm	= TSYS::strSepParse(mio,2,':');
+    for(int ioOff = 0, ioOff1 = 0; (mio=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&ioOff)).size(); ) {
+	if(mio[0] == '#') continue;
+	ioOff1 = 0;
+	ionm	= TSYS::strSepParse(mio, 0, ':', &ioOff1);
+	aid	= TSYS::strSepParse(mio, 0, ':', &ioOff1);
+	anm	= TSYS::strSepParse(mio, 0, ':', &ioOff1);
 	if(aid.empty()) aid = ionm;
 
 	int io_id = ((Contr &)owner()).ioId(ionm);
@@ -902,6 +898,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/FLD" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr","^[^:]*")->setAttr("color","darkblue");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }

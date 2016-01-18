@@ -79,16 +79,10 @@ using namespace ModTmpl;
 Lib::Lib( string src ) : TSpecial(MOD_ID)
 {
     //!!! Init shortcut to module's root object. No change it.
-    mod		= this;
+    mod = this;
 
     //!!! Loading module's meta-information into root object. No change it.
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= src;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, src);
 
     m_fnc = grpAdd("fnc_");
 }

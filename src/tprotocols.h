@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tprotocols.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,12 +21,13 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define SPRT_VER	6		//ProtocolS type modules version
+#define SPRT_VER	7		//ProtocolS type modules version
 #define SPRT_ID		"Protocol"
 
 #include <string>
 
 #include "tsubsys.h"
+#include "ttransports.h"
 
 using std::string;
 
@@ -47,11 +47,17 @@ class TProtocolIn : public TCntrNode
 	virtual ~TProtocolIn( );
 
 	string	name( )		{ return mName.c_str(); }
-	const string &srcTr( )	{ return mSrcTr; }
+	AutoHD<TTransportIn> &srcTr( )	{ return mSrcTr; }	//Source or return address
+	virtual unsigned waitReqTm( )	{ return 0; }		//Wait for a request timeout, miliseconds, after which call to
+								//the input protocol object with the empty message, for like to initiative pool allow.
+								//Value '0' used for disable the mechanism and waiting to a message
 
-	void setSrcTr( const string &vl )	{ mSrcTr = vl; }
+	virtual void setSrcTr( TTransportIn *vl )	{ mSrcTr = vl; }
 
 	// Process input messages
+	//  * mess( ) - Send messages by it's point from the transports.
+	//              False - for full request came.
+	//              True  - for need tail or just wait.
 	virtual bool mess( const string &request, string &answer, const string &sender )
 	{ answer = ""; return false; }
 
@@ -63,7 +69,7 @@ class TProtocolIn : public TCntrNode
 
 	//Attributes
 	string	mName;
-	string	mSrcTr;
+	AutoHD<TTransportIn>	mSrcTr;
 };
 
 //************************************************
@@ -83,7 +89,7 @@ class TProtocol: public TModule
 	// Input protocol
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
 	bool openStat( const string &name )		{ return chldPresent(m_pr,name); }
-	void open( const string &name, const string &tr );
+	void open( const string &name, TTransportIn *tr = NULL );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 

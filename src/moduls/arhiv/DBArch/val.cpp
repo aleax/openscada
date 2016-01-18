@@ -23,7 +23,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <dirent.h>
 #include <math.h>
 
 #include <tsys.h>
@@ -332,6 +331,21 @@ bool ModVArchEl::readMeta( )
 	string wDB = TBDS::realDBName(archivator().addr());
 	rez = (TSYS::strParse(wDB,0,".") == DB_CFG ||
 		SYS->db().at().at(TSYS::strParse(wDB,0,".")).at().at(TSYS::strParse(wDB,1,".")).at().enableStat());
+    }
+
+    //Read previous
+    if(rez) {
+	// Load previous val check
+	int64_t cur_tm = (TSYS::curTime()/vmax(1,period()))*period();
+	if(cur_tm >= begin() && cur_tm <= end() && period() > 10000000 && prevVal == EVAL_REAL) {
+	    prevTm = cur_tm;
+	    switch(archive().valType()) {
+		case TFld::Integer: case TFld::Real:
+		    prevVal = getVal(&cur_tm, false).getR();
+		    break;
+		default: break;
+	    }
+	}
     }
 
     return rez;

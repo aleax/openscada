@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"3.3.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
@@ -86,15 +86,9 @@ using namespace VISION;
 TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), mWinPosCntrSave(true), mExitLstRunPrjCls(true), end_run(false),
     mRestTime(60), mCachePgLife(1), vca_station("."), mPlayCom("play -q %f"), mScrnCnt(0)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //Export functions
     modFuncReg(new ExpFunc("QIcon icon();","Module Qt-icon",(void(TModule::*)( )) &TVision::icon));
@@ -310,7 +304,7 @@ void TVision::modStart( )
 #endif
 
     end_run = false;
-    run_st  = true;
+    runSt  = true;
 }
 
 void TVision::modStop( )
@@ -329,7 +323,7 @@ void TVision::modStop( )
 	}
     TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
-    run_st = false;
+    runSt = false;
 }
 
 WdgShape *TVision::getWdgShape( const string &iid )

@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.0.1"
+#define MOD_VER		"1.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
@@ -73,15 +73,9 @@ using namespace WebVision;
 //************************************************
 TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(1)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     id_vcases	= grpAdd("ses_");
 
@@ -327,9 +321,9 @@ void TWEB::save_( )
     TBDS::genDBSet(nodePath()+"PNGCompLev",i2s(PNGCompLev()));
 }
 
-void TWEB::modStart( )	{ run_st = true; }
+void TWEB::modStart( )	{ runSt = true; }
 
-void TWEB::modStop( )	{ run_st = false; }
+void TWEB::modStop( )	{ runSt = false; }
 
 void TWEB::perSYSCall( unsigned int cnt )
 {

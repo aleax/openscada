@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.5.1"
+#define MOD_VER		"1.1.1"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -79,13 +79,7 @@ TTpContr::TTpContr(string name) : TTipDAQ(MOD_ID)
 {
     mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
 TTpContr::~TTpContr( )
@@ -273,7 +267,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	    }
 	    catch(TError er) {	//By possible the send request breakdown and no response
 		if(err.empty()) err = _("10:Transport error: ") + er.mess;
-		else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
+		else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		continue;
 	    }
 	    if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }

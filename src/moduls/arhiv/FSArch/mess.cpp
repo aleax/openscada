@@ -20,6 +20,7 @@
 
 #include <sys/time.h>
 #include <sys/stat.h>
+#include <stddef.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <errno.h>
@@ -196,9 +197,6 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 void ModMArch::checkArchivator( bool now )
 {
     if(now || time(NULL) > mLstCheck + checkTm()*60) {
-	struct stat file_stat;
-	dirent scan_dirent, *scan_rez = NULL;
-
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL) {
 	    if(mkdir(addr().c_str(),0777))
@@ -210,7 +208,11 @@ void ModMArch::checkArchivator( bool now )
 	for(unsigned iF = 0; iF < files.size(); iF++) files[iF]->scan = false;
 	res.release();
 
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
+	struct stat file_stat;
+	dirent	*scan_rez = NULL,
+		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+
+	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
 	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
 	    string NameArhFile = addr() + "/" + scan_rez->d_name;
 	    stat(NameArhFile.c_str(), &file_stat);
@@ -250,6 +252,7 @@ void ModMArch::checkArchivator( bool now )
 	    }
 	}
 
+	free(scan_dirent);
 	closedir(IdDir);
 
 	//Check deleting Archives
@@ -324,10 +327,10 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the time after which, in the absence of appeals, archive files will be packaged in gzip archiver.\n"
 		 "Set to zero for disable packing by gzip."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Checking the archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
 		_("Sets the frequency of checking the archives for the emergence or delete new files\n"
 		  "in a directory of archives, as well as exceeding the limits and removing old archive files."));
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Using info files for the packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
 		_("Specifies whether to create files with information about the packed archive files by gzip-archiver.\n"
 		  "When copying files of archive on another station, these info files can speed up the target station\n"
 		  "process of first run by eliminating the need to decompress by gzip-archives in order to obtain information."));

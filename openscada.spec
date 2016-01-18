@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.8.13
+Version: 0.8.15
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -336,6 +336,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/Boiler/*.db
 
 %changelog
+* Tue Jan 12 2016 Roman Savochenko <rom_as@oscada.org>
+- The build of 0.8.15 main update to the production release.
+
+* Sat Nov 7 2015 Roman Savochenko <rom_as@oscada.org>
+- The build of 0.8.14 main update to the production release.
+
 * Sun May 10 2015 Roman Savochenko <rom_as@oscada.org>
 - The build of 0.8.13 main update to the production release.
 

@@ -24,7 +24,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <dirent.h>
 #include <math.h>
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.

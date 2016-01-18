@@ -1,4 +1,3 @@
-
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
@@ -44,7 +43,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -81,18 +80,11 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID),
-    demon_mode(false), end_run(false), start_com(false), qtArgC(0), qtArgEnd(0)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), demonMode(false), mEndRun(false), mStartCom(false), qtArgC(0), qtArgEnd(0)
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //> Qt massages not for compile but for indexing by gettext
 #if 0
@@ -124,7 +116,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID),
 
 TUIMod::~TUIMod()
 {
-    if( run_st ) modStop();
+    if(runSt) modStop();
 }
 
 void TUIMod::postEnable( int flag )
@@ -145,7 +137,7 @@ void TUIMod::postEnable( int flag )
 	string argCom, argVl;
 	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
 	    if(argCom == "h" || argCom == "help") isHelp = true;
-	    else if(argCom == "demon") demon_mode = true;
+	    else if(argCom == "demon" || argCom == "daemon") demonMode = true;
 		    //>Qt bind options (debug)
 	    else if(argCom == "sync" || argCom == "widgetcount" ||
 		    //>Qt bind options
@@ -153,10 +145,9 @@ void TUIMod::postEnable( int flag )
 		    argCom == "reverse" || argCom == "graphicssystem" || argCom == "display" || argCom == "geometry")
 		toQtArg(argCom.c_str(), argVl.c_str());
 
-	//> Start main Qt thread if no help and no daemon
-	if(!(run_st || demon_mode || isHelp))
-	{
-	    end_run = false;
+	//Start main Qt thread if no help and no daemon
+	if(!(runSt || demonMode || isHelp)) {
+	    mEndRun = false;
 
 	    SYS->taskCreate(nodePath('.',true), 0, Task, this);
 	}
@@ -165,7 +156,7 @@ void TUIMod::postEnable( int flag )
 
 void TUIMod::postDisable( int flag )
 {
-    if(run_st) SYS->taskDestroy(nodePath('.',true), &end_run, 60);
+    if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
     /*try { 
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 }
@@ -182,7 +173,7 @@ void TUIMod::load_( )
         if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //> Load parameters from config-file
-    start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
+    mStartMod = TBDS::genDBGet(nodePath()+"StartMod",mStartMod);
 }
 
 void TUIMod::save_( )
@@ -191,7 +182,7 @@ void TUIMod::save_( )
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
 
-    TBDS::genDBSet(nodePath()+"StartMod",start_mod);
+    TBDS::genDBSet(nodePath()+"StartMod", mStartMod);
 }
 
 void TUIMod::modStart()
@@ -200,7 +191,7 @@ void TUIMod::modStart()
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    start_com = true;
+    mStartCom = true;
 }
 
 void TUIMod::modStop()
@@ -209,7 +200,7 @@ void TUIMod::modStop()
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
 
-    start_com = false;
+    mStartCom = false;
 }
 
 string TUIMod::optDescr( )
@@ -230,7 +221,7 @@ string TUIMod::optDescr( )
 	"    --session=<nm>         Restores from an earlier session <nm>.\n"
 	"    --reverse              Sets layout direction to Qt::RightToLeft.\n"
 	"    --graphicssystem=<nm>  Sets the backend to be used for on-screen widgets and QPixmaps (raster, opengl).\n"
-	"    --display=<nm>         Sets the X display (default is $DISPLAY).\n"
+	"    --display=<nm>         Sets the X display name (default it is $DISPLAY).\n"
 	"    --geometry=<geom>      Sets the client geometry of the first window that is shown.\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
@@ -274,7 +265,7 @@ void *TUIMod::Task( void * )
     QApplication *QtApp = new QApplication(mod->qtArgC, (char**)&mod->qtArgV);
     QtApp->setApplicationName(PACKAGE_STRING);
     QtApp->setQuitOnLastWindowClosed(false);
-    mod->run_st = true;
+    mod->runSt = true;
 
     //> Create I18N translator
     I18NTranslator translator;
@@ -301,7 +292,7 @@ void *TUIMod::Task( void * )
     }
 
     //> Start external modules
-    WinControl *winCntr = new WinControl( );
+    WinControl *winCntr = new WinControl();
 
     int op_wnd = 0;
     mod->owner().modList(list);
@@ -312,7 +303,7 @@ void *TUIMod::Task( void * )
 	    //>> Search module into start list
 	    int i_off = 0;
 	    string s_el;
-	    while((s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size())
+	    while((s_el=TSYS::strSepParse(mod->mStartMod,0,';',&i_off)).size())
 		if(s_el == list[i_l])	break;
 	    if(!s_el.empty() || !i_off)
 		if(winCntr->callQtModule(list[i_l])) op_wnd++;
@@ -321,7 +312,7 @@ void *TUIMod::Task( void * )
     delete splash;
 
     //> Start call dialog
-    if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog( );
+    if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog();
 
     QObject::connect(QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()));
 
@@ -351,7 +342,7 @@ void *TUIMod::Task( void * )
     //> Qt application object free
     delete QtApp;
 
-    mod->run_st = false;
+    mod->runSt = false;
 
     return NULL;
 }
@@ -399,12 +390,17 @@ WinControl::WinControl( )
     tm->start(STD_WAIT_DELAY);
 }
 
+WinControl::~WinControl( )
+{
+    tm->stop();
+}
+
 void WinControl::checkForEnd( )
 {
     if(!mod->endRun() && mod->startCom()) return;
-    tm->stop();
+    //tm->stop();
     QWidgetList wl = qApp->topLevelWidgets();
-    for(int i_w = 0; i_w < wl.size(); i_w++) wl[i_w]->setProperty("forceClose",true);
+    for(int iW = 0; iW < wl.size(); iW++) wl[iW]->setProperty("forceClose", true);
     qApp->closeAllWindows();
 }
 
@@ -537,8 +533,8 @@ StartDialog::StartDialog( WinControl *wcntr )
 void StartDialog::closeEvent( QCloseEvent *ce )
 {
     unsigned winCnt = 0;
-    for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
-	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
+    for(int iW = 0; iW < QApplication::topLevelWidgets().size(); iW++)
+	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[iW]) && QApplication::topLevelWidgets()[iW]->isVisible())
 	    winCnt++;
 
     if(winCnt <= 1) SYS->stop();

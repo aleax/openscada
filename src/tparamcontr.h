@@ -41,6 +41,13 @@ class TTipParam;
 class TParamContr : public TConfig, public TValue
 {
     public:
+	//Public data
+	enum RemoveMode {
+	    RM_Exit	= 0,
+	    RM_Full	= 1,
+	    RM_NoArch	= 2
+	};
+
 	//Methods
 	TParamContr( const string &name, TTipParam *tpprm );
 	virtual ~TParamContr( );

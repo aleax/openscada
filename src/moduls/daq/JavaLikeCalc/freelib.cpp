@@ -33,7 +33,7 @@ using namespace JavaLikeCalc;
 //* Lib: Functions library                        *
 //*************************************************
 Lib::Lib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elLib()), work_lib_db(lib_db), mId(cfg("ID")), mProgTr(cfg("PROG_TR").getBd())
+    TConfig(&mod->elLib()), runSt(false), workLibDb(lib_db), mId(cfg("ID")), mProgTr(cfg("PROG_TR").getBd())
 {
     mId = id;
     cfg("NAME").setS(name);
@@ -54,7 +54,7 @@ TCntrNode &Lib::operator=( TCntrNode &node )
 
     //Configuration copy
     exclCopy(*src_n, "ID;");
-    work_lib_db = src_n->work_lib_db;
+    workLibDb = src_n->workLibDb;
 
     //Functions copy
     vector<string> ls;
@@ -97,7 +97,7 @@ string Lib::name( )
 void Lib::setFullDB( const string &idb )
 {
     size_t dpos = idb.rfind(".");
-    work_lib_db = (dpos!=string::npos) ? idb.substr(0,dpos) : "";
+    workLibDb = (dpos!=string::npos) ? idb.substr(0,dpos) : "";
     cfg("DB").setS((dpos!=string::npos) ? idb.substr(dpos+1) : "");
     modifG( );
 }
@@ -145,7 +145,7 @@ void Lib::setStart( bool val )
 	try { at(lst[i_f]).at().setStart(val); }
 	catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    run_st = val;
+    runSt = val;
 }
 
 void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc,new Func(id,name)); }

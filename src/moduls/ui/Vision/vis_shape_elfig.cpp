@@ -43,7 +43,6 @@
 //#include <QPolygonF>
 
 #include <tsys.h>
-#include "../VCAEngine/types.h"
 
 #include "tvision.h"
 #include "vis_devel.h"
@@ -54,7 +53,6 @@
 
 
 using namespace VISION;
-using namespace VCA;
 
 ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), dyn_num(0), status_hold(true),
@@ -3017,11 +3015,13 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, WdgView *w )
 	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_1,QSize(6,6)).translated(-3,-3));
 
 	    rectItems.append(RectItem(MotionNum_4,QPainterPath(),QBrush(QColor(127,127,127,128),Qt::SolidPattern)));
-	    int xSh = ((CtrlMotionPos_2-StartMotionPos).manhattanLength() < 5 || (CtrlMotionPos_2-EndMotionPos).manhattanLength() < 5) ? 10*w->xScale(true) : 0;
+	    int xSh = ((sqrt(pow((CtrlMotionPos_2-StartMotionPos).x(),2)-pow((CtrlMotionPos_2-StartMotionPos).y(),2)) < 5) ||
+		(sqrt(pow((CtrlMotionPos_2-EndMotionPos).x(),2)-pow((CtrlMotionPos_2-EndMotionPos).y(),2)) < 5)) ? 10*w->xScale(true) : 0;
 	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_2,QSize(6,6)).translated(-3-xSh,-3));
 
 	    rectItems.append(RectItem(MotionNum_5,QPainterPath(),QBrush(QColor(127,127,127,128),Qt::SolidPattern)));
-	    xSh = ((CtrlMotionPos_3-StartMotionPos).manhattanLength() < 5 || (CtrlMotionPos_3-EndMotionPos).manhattanLength() < 5) ? 10*w->xScale(true) : 0;
+	    xSh = ((sqrt(pow((CtrlMotionPos_3-StartMotionPos).x(),2)-pow((CtrlMotionPos_3-StartMotionPos).y(),2)) < 5) ||
+		    (sqrt(pow((CtrlMotionPos_3-EndMotionPos).x(),2)-pow((CtrlMotionPos_3-EndMotionPos).y(),2)) < 5)) ? 10*w->xScale(true) : 0;
 	    rectItems.last().path.addRect(QRectF(CtrlMotionPos_3,QSize(6,6)).translated(-3-xSh,-3));
 	}
 

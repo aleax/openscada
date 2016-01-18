@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 20:45+0300\n"
+"POT-Creation-Date: 2016-01-12 21:29+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1068,6 +1068,10 @@ msgstr ""
 msgid "No one row is selected."
 msgstr "Жодної строки не вибрано."
 
+msgid "Are you sure of loading a mime to selected item '%1'?"
+msgstr ""
+"Ви дійсно бажаєте завантажити MIME до обраного візуального елементу '%1'?"
+
 msgid "All files (*.*)"
 msgstr "Всі файли (*.*)"
 
@@ -1484,8 +1488,8 @@ msgstr "Натиснути для квітації всіх порушень з�
 msgid "&Alarm"
 msgstr "Порушення"
 
-msgid "Alarms (status)"
-msgstr "Порушення (статус)"
+msgid "Generic (status)"
+msgstr "Загальний (статус)"
 
 msgid "This label displays current system's time."
 msgstr "Це маркування показує поточний системний час."
@@ -1678,6 +1682,9 @@ msgstr "<Створити новий сеанс>"
 
 msgid "Running project: %1"
 msgstr "Виконання проекту: %1"
+
+msgid "Status line items"
+msgstr "Елементи рядку статусу"
 
 #, c-format
 msgid "Error open: %s"
@@ -2160,27 +2167,3 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
-
-#~ msgid "Diagnostics"
-#~ msgstr "Діагностика"
-
-#~ msgid "Time:"
-#~ msgstr "Час:"
-
-#~ msgid "Refresh"
-#~ msgstr "Оновити"
-
-#~ msgid "Time"
-#~ msgstr "Час"
-
-#~ msgid "Lev."
-#~ msgstr "Рів."
-
-#~ msgid "Project '%1' manual"
-#~ msgstr "Підручник проекту '%1'"
-
-#~ msgid "The button for getting the using project '%1' manual"
-#~ msgstr "Кнопка для отримання підручника проекту '%1'"
-
-#~ msgid "Press to get the using project '%1' manual."
-#~ msgstr "Натиснути для отримання підручника проекту '%1'."

@@ -25,7 +25,6 @@
 #include <tsys.h>
 
 #include "vcaengine.h"
-#include "types.h"
 #include "widget.h"
 
 using namespace VCA;
@@ -239,8 +238,7 @@ void Widget::setEnable( bool val )
 		if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
 
-		if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path())
-		{
+		if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path()) {
 		    mParent.free();
 		    throw TError(nodePath().c_str(),_("Parent identical to owner for link!"));
 		}
@@ -460,9 +458,16 @@ string Widget::wChDown( const string &ia )
     if(isLink()) {
 	Widget *ownW = dynamic_cast<Widget*>(nodePrev(true));
 	parw = ownW->parent();
+
+	// Check for the recurrence inheritance prevent
+	for(AutoHD<Widget> iParw = this; !iParw.freeStat(); iParw = iParw.at().parent())
+	    if(iParw.at().path() == parw.at().path())
+		throw TError(nodePath().c_str(), _("Impossible to lower changes of the widget '%s' to '%s' but it has the cyclic inheritance!"),
+			path().c_str(), parw.at().path().c_str());
+
+	// Add and copy it from the source
 	if(!parw.at().wdgPresent(id()))
 	    try {
-		// Add and copy from source
 		string pName = parentNm();
 		if(pName.find(parw.at().path()+"/") == 0) pName = parent().at().parentNm();
 		parw.at().wdgAdd(id(), "", pName);
@@ -693,22 +698,22 @@ AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off )
 
 string Widget::helpImg( )
 {
-    return _("Image name in form \"[src:]name\", where:\n"
-	    "  \"src\" - image source:\n"
-	    "    file - direct from local file by path;\n"
-	    "    res - from DB mime resources table.\n"
-	    "  \"name\" - file path or resource mime Id.\n"
+    return _("Image name in form \"[{src}:]{name}\", where:\n"
+	    "  \"src\" - the image source:\n"
+	    "    file - direct from local file by the path;\n"
+	    "    res - from the DB mime resources table.\n"
+	    "  \"name\" - the file path or the resource mime Id.\n"
 	    "Examples:\n"
-	    "  \"res:backLogo\" - from DB mime resources table for Id \"backLogo\";\n"
+	    "  \"res:backLogo\" - from the DB mime resources table for Id \"backLogo\";\n"
 	    "  \"backLogo\" - like previous;\n"
-	    "  \"file:/var/tmp/backLogo.png\" - from local file by path \"/var/tmp/backLogo.png\".");
+	    "  \"file:/var/tmp/backLogo.png\" - from local file by the path \"/var/tmp/backLogo.png\".");
 }
 
 string Widget::helpColor( )
 {
-    return _("Color name form \"color[-alpha]\", where:\n"
+    return _("Color name form \"{color}[-{alpha}]\", where:\n"
 	    "  \"color\" - standard color name or digital view of three hexadecimal digit's number form \"#RRGGBB\";\n"
-	    "  \"alpha\" - alpha channel level (0-255).\n"
+	    "  \"alpha\" - alpha channel level [0...255], where 0 - full transparent.\n"
 	    "Examples:\n"
 	    "  \"red\" - solid red color;\n"
 	    "  \"#FF0000\" - solid red color by digital code;\n"
@@ -843,7 +848,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/wdg/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/wdg/w_lst");
+		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str", "dest","sel_ed", "select","/wdg/w_lst");
 		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to parent"),RWRWR_,"root",SUI_ID,1,"tp","lnk");
 	    }
@@ -855,14 +860,6 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root",SUI_ID,3,"tp","str","cols","100","rows","4");
 		ctrMkNode("img",opt,-1,"/wdg/cfg/ico",_("Icon"),(isLink()?R_R_R_:RWRWR_),"root",SUI_ID,2,"v_sz","64","h_sz","64");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/owner",_("Owner and group"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/wdg/u_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/grp","",RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/wdg/g_lst");
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/u_a",_("Access"),RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
-		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/g_a","",RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
-		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
-		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/clear",_("Clear the widget changes"),RWRWR_,"root",SUI_ID);
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/chDown",_("Put down to the parent for the widget changes"),RWRWR_,"root",SUI_ID);
 	    }
@@ -895,26 +892,6 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if(a_path == "/wdg/st/goparent" && ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && !parent().freeStat())
 	opt->setText(parent().at().nodePath(0,true));
-    else if(a_path == "/wdg/cfg/owner") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(owner());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setOwner(opt->text());
-    }
-    else if(a_path == "/wdg/cfg/grp") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(grp());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setGrp(opt->text());
-    }
-    else if(a_path == "/wdg/cfg/u_a" || a_path == "/wdg/cfg/g_a" || a_path == "/wdg/cfg/o_a") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    if(a_path == "/wdg/cfg/u_a")	opt->setText(i2s((permit()>>6)&0x7));
-	    if(a_path == "/wdg/cfg/g_a")	opt->setText(i2s((permit()>>3)&0x7));
-	    if(a_path == "/wdg/cfg/o_a")	opt->setText(i2s(permit()&0x7));
-	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    if(a_path == "/wdg/cfg/u_a")	setPermit((permit()&(~(0x07<<6)))|(s2i(opt->text())<<6));
-	    if(a_path == "/wdg/cfg/g_a")	setPermit((permit()&(~(0x07<<3)))|(s2i(opt->text())<<3));
-	    if(a_path == "/wdg/cfg/o_a")	setPermit((permit()&(~0x07))|s2i(opt->text()));
-	}
-    }
     else if(a_path == "/wdg/cfg/ico" || a_path == "/ico") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setIco(opt->text());
@@ -1049,9 +1026,9 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			setAttr("modif",u2s(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
-		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"[owner]:[group]\"."));
+		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"{owner}:{group}\"."));
 		    else if(list_a[i_el] == "perm")
-			el->setAttr("help",_("Permission to the widget in form \"[user][group][other]\".\n"
+			el->setAttr("help",_("Permission to the widget in form \"{user}{group}{other}\".\n"
 					     "Where \"user\", \"group\" and \"other\" is:\n"
 					     "  \"__\" - no any access;\n"
 					     "  \"R_\" - read only;\n"
@@ -1059,7 +1036,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    else if(list_a[i_el] == "evProc")
 			el->setAttr("SnthHgl","1")->
 			    setAttr("help",_("Direct events processing for pages manipulation in form:\n"
-					     "      \"[event]:[evSrc]:[com]:[prm]\". Where:\n"
+					     "      \"{event}:{evSrc}:{com}:{prm}\". Where:\n"
 					     "  \"event\" - waiting event;\n"
 					     "  \"evSrc\" - event source;\n"
 					     "  \"com\" - command of a session (open, next, prev);\n"
@@ -1079,10 +1056,10 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    break;
 			case A_CTX_MENU:
 			    el->setAttr("SnthHgl","1")->
-				setAttr("help",_("Context menu in form strings list: \"[ItName]:[Signal]\".\n"
+				setAttr("help",_("Context menu in form strings list: \"{ItName}:{Signal}\".\n"
 						 "Where:\n"
 						 "  \"ItName\" - item name;\n"
-						 "  \"Signal\" - signal name and result signal name is \"usr_[Signal]\"."));
+						 "  \"Signal\" - signal name and result signal name is \"usr_{Signal}\"."));
 			    break;
 		    }
 		    if(attr.at().type() == TFld::String && attr.at().flgGlob()&Attr::Image)
@@ -1123,7 +1100,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		opt->childAdd("el")->setText("res:"+ls[i_t]);
 	}
 	else if(a_val.compare(0,5,"file:") == 0) {
-	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;");
+	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;avi;mov;mpg4");
 	    for(unsigned i_t = 0; i_t < opt->childSize(); i_t++)
 		opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
 	}
@@ -1476,7 +1453,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
-	    wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
+	    wdg.at().attrAdd(new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser));
 	    //wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
 	    wdg.at().attrAt("newAttr").at().setModif(1);
 	    wdg.at().modif();

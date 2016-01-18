@@ -44,13 +44,13 @@ using namespace OPC;
 #define PRT_NAME	_("OPC UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"0.6.2"
+#define PRT_MVER	"1.6.6"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("OPC UA protocol implementation.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
-#define NS_OpenSCADA_DAQ 2
+#define NS_OpenSCADA_DAQ 4
 
 namespace OPC_UA
 {
@@ -180,6 +180,7 @@ class TProt: public TProtocol, public Server
 	void discoveryUrls( vector<string> &ls );
 	bool inReq( string &request, const string &inPrtId, string *answ = NULL );
 	int writeToClient( const string &inPrtId, const string &data )	{ return 0; }
+	string clientAddr( const string &inPrtId );
 
 	TElem &endPntEl( )			{ return mEndPntEl; }
 

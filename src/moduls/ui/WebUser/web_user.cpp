@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.2"
+#define MOD_VER		"0.6.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -73,17 +73,11 @@ using namespace WebUser;
 //*************************************************
 TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
 {
-    mod		= this;
+    mod = this;
 
-    mName	= MOD_NAME;
-    mType	= MOD_TYPE;
-    mVers	= MOD_VER;
-    mAuthor	= AUTHORS;
-    mDescr	= DESCRIPTION;
-    mLicense	= LICENSE;
-    mSource	= name;
+    modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
-    //> Reg export functions
+    //Reg export functions
     modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
 	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet));
     modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
@@ -91,7 +85,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
 
     mPgU = grpAdd("up_");
 
-    //> User page DB structure
+    //User page DB structure
     mUPgEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
@@ -173,7 +167,7 @@ void TWEB::modStart( )
 	if(uPgAt(ls[i_n]).at().toEnable())
 	    uPgAt(ls[i_n]).at().setEnable(true);
 
-    run_st = true;
+    runSt = true;
 }
 
 void TWEB::modStop( )
@@ -183,7 +177,7 @@ void TWEB::modStop( )
     for(unsigned i_n = 0; i_n < ls.size(); i_n++)
 	uPgAt(ls[i_n]).at().setEnable(false);
 
-    run_st = false;
+    runSt = false;
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )

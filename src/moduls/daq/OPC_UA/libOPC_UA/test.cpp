@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <netdb.h>
 #include <arpa/inet.h>
@@ -30,11 +31,12 @@
 
 int main( int argc, char *argv[], char *envp[] )
 {
-    if(argc < 3)
-    {
+    if(argc < 3) {
 	printf("OPC UA client test program need command line arguments:\n"
-	    "  \"testOPC_UA opc.tcp://{Host}:{Port}/{SecurePolicy}/{MessSecMode} {NodeId} {user:pass}\"\n"
-	    "Example: \"testOPC_UA opc.tcp://127.0.0.1:4841/Basic128Rsa15/SignEnc 84 user:pass");
+	    "  \"testOPC_UA opc.tcp://{Host}:{Port}/{SecurePolicy}/{MessSecMode} {NodeId} [{user}:{pass}]\"\n"
+	    "Examples:\n"
+	    "  \"testOPC_UA opc.tcp://127.0.0.1:4841/None/None 84\"\n"
+	    "  \"testOPC_UA opc.tcp://127.0.0.1:4841/Basic128Rsa15/SignEnc 84 user:pass\"");
 	return 0;
     }
 
@@ -50,12 +52,10 @@ int main( int argc, char *argv[], char *envp[] )
 			  setAttr("resultMask",int2str(RdRm_IsForward|RdRm_BrowseName));
     clnt.reqService(req);
     if(!req.attr("err").empty()) printf("ERROR: Browse: '%s'\n",req.attr("err").c_str());
-    else
-    {
+    else {
 	XML_N *rn = req.childGet(0);
 	printf("Browse node '%s' list from %d items\n", argv[2], rn->childSize());
-	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
-	{
+	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++) {
 	    //if(atoi(rn->childGet(i_n)->attr("isForward").c_str())) continue;
 	    printf("  node%d: \"%s\"\n", i_n, (rn->childGet(i_n)->attr("browseName")+" ("+rn->childGet(i_n)->attr("nodeId")+")").c_str());
 	}
@@ -68,19 +68,16 @@ int main( int argc, char *argv[], char *envp[] )
 	req.childAdd("node")->setAttr("nodeId", argv[2])->setAttr("attributeId", int2str(AId_AccessLevel));
     clnt.reqService(req);
     if(!req.attr("err").empty()) printf("ERROR: Read: '%s'\n", req.attr("err").c_str());
-    else
-    {
+    else {
 	uint32_t state = strtol(req.childGet(0)->attr("Status").c_str(),NULL,0);
 	uint32_t mode = atoi(req.childGet(0)->text().c_str());
-	printf("Read node '%s'=%u\n", argv[2], state);
-	if(!state && mode == NC_Variable)
-	{
+	printf("Read node '%s'=%xh\n", argv[2], state);
+	if(!state && mode == NC_Variable) {
 	    uint32_t accs = atoi(req.childGet(2)->text().c_str());
 	    uint8_t eMask = atoi(req.childGet(1)->attr("VarTp").c_str());
 	    if(accs&ACS_Read) printf(" value='%s', timeStamp=%s\n",
 		req.childGet(1)->text().c_str(), req.childGet(1)->attr("SourceTimestamp").c_str());
-	    if(accs&ACS_Write)
-	    {
+	    if(accs&ACS_Write) {
 		req.clear()->setAttr("id", "Write")->
 		    childAdd("node")->setAttr("nodeId", argv[2])->setAttr("attributeId", int2str(AId_Value))->
 				      setAttr("VarTp", int2str(eMask))->setText("3.14159265");
@@ -98,8 +95,7 @@ int main( int argc, char *argv[], char *envp[] )
 TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), mSecPol("None"), mSecMessMode(MS_None), sock_fd(-1)
 {
     //Parse EndPoint for TCP connection and other properties obtain
-    if(mEp.compare(0,10,"opc.tcp://") == 0)
-    {
+    if(mEp.compare(0,10,"opc.tcp://") == 0) {
 	size_t uriPos = mEp.find("/", 10), uriPos1;
 	mURI = (uriPos != string::npos) ? mEp.substr(uriPos) : "";
 
@@ -108,21 +104,19 @@ TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), mSe
 	if(portPos == string::npos || !atoi(mAddr.substr(portPos+1).c_str())) mAddr = mAddr.substr(0,portPos)+":4840";
 
 	//URI parse
-	if(mURI.size())
-	{
+	if(mURI.size()) {
 	    string secMessMd;
 
 	    uriPos = 1;
 	    if(uriPos >= mURI.size()) mSecPol = "None";
-	    else
-	    {
+	    else {
 		uriPos1 = mURI.find("/", uriPos);
 		mSecPol = (uriPos1 != string::npos) ? mURI.substr(uriPos,uriPos1-uriPos) : mURI.substr(uriPos);
 	    }
 
 	    uriPos = uriPos1+1;
 	    if(uriPos >= mURI.size()) secMessMd = "None";
-	    {
+	    else {
 		uriPos1 = mURI.find("/", uriPos);
 		secMessMd = (uriPos1 != string::npos) ? mURI.substr(uriPos,uriPos1-uriPos) : mURI.substr(uriPos);
 	    }
@@ -140,15 +134,13 @@ TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), mSe
     //Load client certificate and private key from file
     int hd = -1, len;
     char buf[10240];
-    if((hd=open("cert.pem",O_RDONLY)) >= 0)
-    {
+    if((hd=open("cert.pem",O_RDONLY)) >= 0) {
 	len = read(hd,buf,sizeof(buf));
 	mCert.assign(buf,len);
 	close(hd);
     }
 
-    if((hd=open("key.pem",O_RDONLY)) >= 0)
-    {
+    if((hd=open("key.pem",O_RDONLY)) >= 0) {
 	len = read(hd,buf,sizeof(buf));
 	mPvKey.assign(buf,len);
 	close(hd);
@@ -178,20 +170,18 @@ void TestClient::start( )
     name_in.sin_port = htons(atol(mAddr.substr(portPos+1).c_str()));
     sock_fd = socket(PF_INET, SOCK_STREAM, 0);
     int connRes = -1;
-    if(loc_host_nm && loc_host_nm->h_length && name_in.sin_port > 0 && sock_fd >= 0)
-    {
+    if(loc_host_nm && loc_host_nm->h_length && name_in.sin_port > 0 && sock_fd >= 0) {
 	name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
 
 	int vl = 1;
 	setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 
 	// Real connect to socket
-	connRes = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
+	connRes = ::connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
     }
 
     //Error connection
-    if(connRes)
-    {
+    if(connRes) {
 	if(sock_fd >= 0) close(sock_fd);
 	sock_fd = -1;
     }
@@ -203,8 +193,18 @@ void TestClient::stop( )
     sock_fd = -1;
 }
 
+bool TestClient::connect( int8_t est )
+{
+    if(est == 0) stop();
+    else if(est > 0) start();
+
+    return (sock_fd >= 0);
+}
+
 int TestClient::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
+    if(!connect()) connect(true);
+
     int reqTry = 0;
 
     repeate:
@@ -212,11 +212,9 @@ int TestClient::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 
     int kzw = 0, kzr;
     if(obuf != NULL && len_ob > 0) kzw = write(sock_fd, obuf, len_ob);
-    if(ibuf != NULL && len_ib > 0)
-    {
+    if(ibuf != NULL && len_ib > 0) {
 	kzr = read(sock_fd, ibuf, len_ib);
-	if(kzr <= 0)
-	{
+	if(kzr <= 0) {
 	    start();
 	    goto repeate;
 	}

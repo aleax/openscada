@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система
 Summary(uk_UA.UTF8): Відкрита SCADA система
 Summary(de_DE.UTF8): Open SCADA-System
 Name: openscada_LTS
-Version: 0.8.13
+Version: 0.8.15
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -967,7 +967,7 @@ Summary(de_DE.UTF8): System-Konfigurator OpenSCADA (Qt)
 Group: Graphics
 Requires: %name-core = %version-%release %name-UI.QTStarter
 %description UI.QTCfg
-The %{name}-UI.QTCfg package - provides the Qt—based configurator of the OpenSCADA system.
+The %{name}-UI.QTCfg package - provides the Qt-based configurator of the OpenSCADA system.
 %description UI.QTCfg -l ru_RU.UTF8
 Пакет %{name}-UI.QTCfg - предоставляет Qt основанный конфигуратор системы OpenSCADA.
 %description UI.QTCfg -l uk_UA.UTF8
@@ -1517,6 +1517,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Tue Jan 12 2016 Roman Savochenko <rom_as@oscada.org>
+- The build of 0.8.15 main update to the production release.
+
+* Sat Nov 7 2015 Roman Savochenko <rom_as@oscada.org>
+- The build of 0.8.14 main update to the production release.
+
 * Sun May 10 2015 Roman Savochenko <rom_as@oscada.org>
 - The build of 0.8.13 main update to the production release.
 
