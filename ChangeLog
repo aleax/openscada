@@ -1,3 +1,7 @@
+2016-01-19 Roman 0.8.15
+- FIX:Protocol.UserProtocol: The regression fix by functions TProtIn::{waitReqTm,setSrcTr}() miss.
+
+
 2016-01-12 Roman 0.8.15
 - API:
     !!!!:Changes:

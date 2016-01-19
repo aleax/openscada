@@ -235,6 +235,15 @@ TProtIn::~TProtIn( )
 
 TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
+unsigned TProtIn::waitReqTm( )	{ return !up.freeStat() ? up.at().waitReqTm() : 0; }
+
+void TProtIn::setSrcTr( TTransportIn *vl )
+{
+    TProtocolIn::setSrcTr(vl);
+    string selNode = TSYS::strParse(vl->protocolFull(), 1, ".");
+    if(owner().uPrtPresent(selNode)) up = owner().uPrtAt(selNode);
+}
+
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
     try {

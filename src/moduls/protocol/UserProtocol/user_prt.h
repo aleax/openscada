@@ -51,6 +51,8 @@ class TProtIn: public TProtocolIn
 
 	unsigned waitReqTm( );
 
+	void setSrcTr( TTransportIn *vl );
+
 	bool mess( const string &request, string &answer, const string &sender );
 
 	TProt &owner( );
