@@ -1,3 +1,10 @@
+2016-01-25 Roman
+- SYS.{configure.ac,ChangeLog}: Some messages fix.
+- DAQ.JavaLikeCalc: Operation "||" and "&&" formal set to equal priority.
+- DAQ.OPC_UA: Module for client renamed to "Client OPC-UA" and for server to "Server OPC-UA".
+    Protocol: reqData() fixed for "NodeClass" processing of the "Browse" request, motly for forward request to the data model.
+
+
 2016-01-08 Roman
 - FIX:DB.LibsDB.OscadaLibs.db: regEl.pidUnifD: Pulse regulation by the back position fixed and tested into real environment.
 - FIX:DAQ.MMS.libMMS: oN() function fix for auto size adjust. Tail wait fix into the messIO() request.
@@ -20,7 +27,7 @@
 
 
 2015-12-11 Roman
-- !!:FIX:DAQ.OPC_UA.libOPC_UA: Specific value types OpcUa_IntAuto and OpcUa_UIntAuto for adaptive integer type selection,
+- !!:FIX:DAQ.OPC_UA.libOPC_UA: Specific value types OpcUa_IntAuto and OpcUa_UIntAuto added for adaptive integer type selection,
 	mostly for provide integer into not fixed int64.
     Error OpcUa_BadNoSubscription added to PublishRequest.
     Server folder "ServerCapabilities" added and some items here.
@@ -38,7 +45,7 @@
 
 
 2015-12-07 Roman
-- !!!!:SYS.TVarObj: Object's twice free possibility prevented. TVarObj::propGet() EVAL result fix.
+- !!!!:FIX:SYS.TVarObj: Object's twice free possibility prevented. TVarObj::propGet() EVAL result fix.
 
 
 2015-12-03 Roman
@@ -67,7 +74,7 @@
 2015-11-26 Roman
 - FIX:DAQ.OPC_UA: Empty Read service list cicling fix.
 - !!!!:SYS: Object ResMtx is added for gather all platform specific mutex implementation.
-    Later it will used instead the direct POSIX API everywhere.
+    Later it will be used instead the direct POSIX API everywhere.
 - !!:Transports.*: messIO() return to the previous prototype and for the no request mode set used <time> argument in negative value (< -1e-3).
 - !!:FIX:Transports.*: Resource of output transport lock into messIO() fixed, by no real a lock hold.
 - Transports.{SSL,Serial}: Appended by diagnostic like to Transports.Sockets.
@@ -92,7 +99,7 @@
 2015-11-19 Roman
 - DB.LibsDB.OscadaLibs.db: regEl.pidUnifD adapted and tested for pulse with position, mostly for: manual positioner fix, switching to the manual mode.
 - SYS.TVariant: Debug counters conditions disabled for now for some performance rise.
-- FIX:DAQ.JvaLikeCalc: For library "run_st" renamed to "runSt" and init to false.
+- FIX:DAQ.JavaLikeCalc: For library "run_st" renamed to "runSt" and init to false.
 - UI.QTCfg: QDoubleValidator for real value's fields disabled for Qt > 5.0.
     Busy progress bar dialog adapted for first range set and it adapting as maximum to current.
 - UI.Vision: QPixmap::grabWidget() replaced to grab() for Qt > 5.0.
@@ -2624,7 +2631,7 @@
 
 
 2013-02-02 Roman
-- SYS: Function TSYS::taskUtilizTm() added for get utilize time by pointed tasks.
+- SYS: Function TSYS::taskUtilizTm() added for get utilize time by the pointed tasks.
 - DAQ.BlockCalc, DAQ.DiamondBoards, DAQ.LogicLev, DAQ.ModBus:
     The function TSYS::taskUtilizTm() has replace for task execution time measurement.
 - DAQ.SMH2Gi: Digital signals inversion configuration is added for MC and MR modules.

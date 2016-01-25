@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:00+0300\n"
+"POT-Creation-Date: 2016-01-16 15:48+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -67,6 +67,7 @@ msgstr "Standard"
 msgid "Nodes list"
 msgstr "Liste von den Knoten"
 
+#, c-format
 msgid "Root folder (%d)"
 msgstr "Wurzeldirektorie (%d)"
 
@@ -359,17 +360,20 @@ msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 msgid "No present selected row."
 msgstr "Gewählte Zeile fehlt."
 
-msgid "OPC UA"
-msgstr ""
+msgid "Client OPC-UA"
+msgstr "Klient OPC-UA"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "OPC UA client service implementation."
-msgstr "OPC UA Client Service-Implementierung."
+msgid "Provides OPC-UA client service implementation."
+msgstr "Bietet OPC-UA Client-Service-Implementierung."
 
-msgid "OPC UA protocol implementation."
-msgstr "OPC UA-Protokoll-Implementierung."
+msgid "Server OPC-UA"
+msgstr "Server OPC-UA"
+
+msgid "Provides OPC-UA server service implementation."
+msgstr "Bietet OPC-UA Server-Service-Implementierung."
 
 #~ msgid "Transport address"
 #~ msgstr "Adresse des Transports"

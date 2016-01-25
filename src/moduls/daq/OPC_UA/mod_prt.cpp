@@ -443,39 +443,44 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		}
 	    }
 	    // Forward browse
-	    if((!nClass || nClass&NC_Object) && (bd == BD_FORWARD || bd == BD_BOTH)) {
+	    if(bd == BD_FORWARD || bd == BD_BOTH) {
 		NodeId	tDef, refTpId = OpcUa_Organizes;
-		uint32_t nCl = NC_Object;
 		vector<string> chLs;
 		XML_N prevLs("PrevLs");
 
-		if((nDAQ=dynamic_cast<TDAQS*>(&cNd.at()))) {
-		    nDAQ->modList(chLs);
-		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nDAQ->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nDAQ->at(chLs[i_ch]).at().modName())->
-			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId(OpcUa_FolderType).toAddr());
+		//  Objects processing
+		if(!nClass || nClass&NC_Object) {
+		    if((nDAQ=dynamic_cast<TDAQS*>(&cNd.at()))) {
+			nDAQ->modList(chLs);
+			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nDAQ->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nDAQ->at(chLs[i_ch]).at().modName())->
+				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId(OpcUa_FolderType).toAddr());
+		    }
+		    else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at()))) {
+			nTpDAQ->list(chLs);
+			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nTpDAQ->at(chLs[i_ch]).at().name())->
+				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId("DAQControllerObjectType",NS_OpenSCADA_DAQ).toAddr());
+		    }
+		    else if((nCntr=dynamic_cast<TController*>(&cNd.at()))) {
+			nCntr->list(chLs);
+			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nCntr->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nCntr->at(chLs[i_ch]).at().name())->
+				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr());
+		    }
+		    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at()))) {
+			nPrm->list(chLs);
+			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nPrm->at(chLs[i_ch]).at().name())->
+				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr());
+		    }
 		}
-		else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at()))) {
-		    nTpDAQ->list(chLs);
-		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nTpDAQ->at(chLs[i_ch]).at().name())->
-			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId("DAQControllerObjectType",NS_OpenSCADA_DAQ).toAddr());
-		}
-		else if((nCntr=dynamic_cast<TController*>(&cNd.at()))) {
-		    nCntr->list(chLs);
-		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nCntr->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nCntr->at(chLs[i_ch]).at().name())->
-			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr());
-		}
-		else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at()))) {
-		    nPrm->list(chLs);
-		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nPrm->at(chLs[i_ch]).at().name())->
-			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr());
+		//  Variables processing
+		if((!nClass || nClass&NC_Variable) && (nPrm=dynamic_cast<TParamContr*>(&cNd.at()))) {
 		    nPrm->vlList(chLs);
 		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
 			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->vlAt(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->

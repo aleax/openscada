@@ -554,7 +554,7 @@ retry:
 	answer = ":"+modPrt->DataToASCII(answer)+"\x0D\x0A";
     }
 
-    if(owner().prtLen( ) && prt.size() && answer.size()) {
+    if(owner().prtLen() && prt.size() && answer.size()) {
 	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+
 			"("+TSYS::strLine(srcAddr(),0)+") --> "+i2s(node)+"\n";
 	mess += _("REQ -> ");

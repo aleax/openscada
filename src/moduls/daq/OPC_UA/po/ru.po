@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:00+0300\n"
+"POT-Creation-Date: 2016-01-16 15:48+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -66,6 +66,7 @@ msgstr "Стандарт"
 msgid "Nodes list"
 msgstr "Список узлов"
 
+#, c-format
 msgid "Root folder (%d)"
 msgstr "Корневая директория (%d)"
 
@@ -358,17 +359,20 @@ msgstr "Установить в 0 для автоматического по cnt
 msgid "No present selected row."
 msgstr "Выбранная строка отсутствует."
 
-msgid "OPC UA"
-msgstr ""
+msgid "Client OPC-UA"
+msgstr "Клиент OPC-UA"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "OPC UA client service implementation."
-msgstr "Реализация OPC UA клиентского сервиса."
+msgid "Provides OPC-UA client service implementation."
+msgstr "Предоставляет реализацию OPC-UA клиентского сервиса."
 
-msgid "OPC UA protocol implementation."
-msgstr "Реализация OPC UA протокола."
+msgid "Server OPC-UA"
+msgstr "Сервер OPC-UA"
+
+msgid "Provides OPC-UA server service implementation."
+msgstr "Предоставляет реализацию OPC-UA сервиса сервера."
 
 #~ msgid "Transport address"
 #~ msgstr "Адрес транспорта"

@@ -669,8 +669,8 @@ class Server: public UA
 		bool	en;			//Enable state
 		double	publInterv;		//Publish interval (ms)
 		uint32_t seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
-			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object and
-			 cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond
+			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object
+			 cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond and
 						//send StatusChangeNotification with Bad_Timeout
 			 maxNotPerPubl;		//Maximum notifications per single Publish response
 		uint8_t	pr;			//Priority

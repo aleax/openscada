@@ -41,12 +41,12 @@ using namespace OPC;
 //*************************************************
 //* Protocol modul info!                          *
 #define PRT_ID		"OPC_UA"
-#define PRT_NAME	_("OPC UA")
+#define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
 #define PRT_MVER	"1.6.6"
 #define PRT_AUTOR	_("Roman Savochenko")
-#define PRT_DESCR	_("OPC UA protocol implementation.")
+#define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 

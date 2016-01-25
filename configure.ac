@@ -318,7 +318,7 @@ AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,in
 	AS_IF([test "x${Qt5_use}" = "x"],[
 	    PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
 		[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
-		[AC_MSG_NOTICE(WebKit not found. Using is disabled!)])
+		[AC_MSG_NOTICE(Phonon media player engine is not found. Using disabled!)])
 	],[
 	    PKG_CHECK_MODULES([phonon4qt5],[phonon4qt5 > 4.3.0],
 		[
@@ -326,7 +326,7 @@ AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,in
 		    phonon_CFLAGS=$phonon4qt5_CFLAGS
 		    phonon_LIBS=$phonon4qt5_LIBS
 		],
-		[AC_MSG_NOTICE(Phonon not found. Using is disabled!)])
+		[AC_MSG_NOTICE(Phonon media player engine is not found. Using disabled!)])
 	])
 	AS_IF([test "x${phonon_CFLAGS}" = "x"],[],[
 	    SAVE_CXXFLAGS="$CXXFLAGS"

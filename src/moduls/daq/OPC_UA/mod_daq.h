@@ -41,12 +41,12 @@ using namespace OPC;
 //*************************************************
 //* DAQ modul info!                               *
 #define DAQ_ID		"OPC_UA"
-#define DAQ_NAME	_("OPC UA")
+#define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
 #define DAQ_MVER	"1.6.2"
 #define DAQ_AUTOR	_("Roman Savochenko")
-#define DAQ_DESCR	_("OPC UA client service implementation.")
+#define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
 //*************************************************
 

@@ -61,8 +61,7 @@ void sfErr( const string &mess, YYLTYPE *ps );
 
 %right	'=' ADDEQ SUBEQ MULEQ DIVEQ
 %right	'?' ':'
-%left	OR
-%left	AND
+%left	OR AND
 %left	'|' '&' '^'
 %left	'>' '<' GE LE EQ NE
 %left	BITSHLEFT BITSHRIGHT

@@ -48,7 +48,8 @@ int main( int argc, char *argv[], char *envp[] )
     //  Browse request for pointed node
     req.setAttr("id","Browse");
     req.childAdd("node")->setAttr("nodeId",argv[2])->setAttr("browseDirection",int2str(BD_BOTH))->
-			  setAttr("resultMask",int2str(RdRm_IsForward|RdRm_BrowseName));
+			  //setAttr("nodeClassMask",int2str(NC_Object))->
+			  setAttr("resultMask",int2str(RdRm_NodeClass|RdRm_IsForward|RdRm_BrowseName));
     clnt.reqService(req);
     if(!req.attr("err").empty()) printf("ERROR: Browse: '%s'\n",req.attr("err").c_str());
     else {
