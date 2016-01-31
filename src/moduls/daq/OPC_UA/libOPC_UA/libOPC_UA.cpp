@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -2848,6 +2848,44 @@ nextReq:
 			}
 		    }
 		    oN(respEp, 0, 4);			//diagnosticInfos []
+		    break;
+		}
+		case OpcUaId_RegisterNodesRequest: {
+		    //  Request
+							//> nodesToRegister []
+		    uint32_t nN = iNu(rb, off, 4); 	//nodes number
+
+		    if(dbg) debugMess(strMess("RegisterNodesRequest: nodes=%d; off=%d(%d).",nN,off,rb.size()));
+
+		    //  Respond
+		    reqTp = OpcUaId_RegisterNodesResponse;
+		    oNu(respEp, nN, 4);			//< registeredNodeIds []
+
+		    //  Nodes list process
+		    for(unsigned iN = 0; iN < nN; iN++) {
+			if(dbg) debugMess(strMess("RegisterNodesRequest: node=%d; off=%d.",iN,off));
+			NodeId rN = iNodeId(rb, off);	//>> registeredNode
+			//???? Maybe some check for the node <rN> presenting
+			oNodeId(respEp, rN);		//<< registeredNode
+		    }
+		    break;
+		}
+		case OpcUaId_UnregisterNodesRequest: {
+		    //  Request
+							//> nodesToUnregister []
+		    uint32_t nN = iNu(rb, off, 4); 	//nodes number
+
+		    if(dbg) debugMess(strMess("UnregisterNodesRequest: nodes=%d; off=%d(%d).",nN,off,rb.size()));
+
+		    //  Respond
+		    reqTp = OpcUaId_UnregisterNodesResponse;
+
+		    //  Nodes list process
+		    for(unsigned iN = 0; iN < nN; iN++) {
+			if(dbg) debugMess(strMess("UnregisterNodesRequest: node=%d; off=%d.",iN,off));
+			NodeId uN = iNodeId(rb, off);	//>> unregisteredNode
+			//???? Maybe some check for the node <uN> presenting
+		    }
 		    break;
 		}
 		case OpcUa_BrowseRequest: {

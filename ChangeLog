@@ -1,3 +1,14 @@
+2016-01-31 Roman
+- DAQ.OPC_UA.libOPC_UA: New client/server services implemented:
+    RegisterNodesRequest, RegisterNodesResponse, UnregisterNodesRequest, UnregisterNodesResponse. Only formal and no a real doings!
+- FIX:DAQ.Siemens: A crash problem at high and frequent interaction is fixed.
+    The problem into DB block's fragments changing (by assign) at it parallel reading.
+    The DB block's fragments set to replace instead assign everywhere.
+- FIX:UI.VCAEngine: pthread_mutex_t replaced to ResMtx for the function's resources locking.
+    The function's resources locking is added for SesPage::setEnable().
+    Try to enable for disabled pages, at an alarm set action, is prevented by some strange crash here observed, only into LTS.
+
+
 2016-01-25 Roman
 - SYS.{configure.ac,ChangeLog}: Some messages fix.
 - DAQ.JavaLikeCalc: Operation "||" and "&&" formal set to equal priority.

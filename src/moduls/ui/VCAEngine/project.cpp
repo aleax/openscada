@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,12 +37,6 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
     mPer(cfg("PER").getId()), mFlgs(cfg("FLGS").getId()), mStyleIdW(cfg("STYLE").getId()),
     mEnable(false)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mFuncM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     mId = id;
     cfg("NAME").setS(name);
     cfg("DB_TBL").setS(string("prj_")+id);
@@ -51,7 +45,7 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
 
 Project::~Project( )
 {
-    pthread_mutex_destroy(&mFuncM);
+
 }
 
 TCntrNode &Project::operator=( TCntrNode &node )
@@ -160,7 +154,7 @@ void Project::setFullDB( const string &it )
 
 void Project::load_( )
 {
-    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
 
     if(!SYS->chkSelDB(DB())) throw TError();
 
@@ -253,7 +247,7 @@ void Project::setEnable( bool val )
 {
     if(val == enable()) return;
 
-    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
 
     mess_info(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 

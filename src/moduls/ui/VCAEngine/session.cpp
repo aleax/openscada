@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -972,6 +972,8 @@ void SessPage::setEnable( bool val, bool force )
 {
     vector<string> pg_ls;
 
+    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
+
     //Page enable
     if(val) {
 	mToEn = true;
@@ -1186,6 +1188,7 @@ void SessPage::alarmSet( bool isSet )
     //Included pages process
     pageList(lst);
     for(unsigned i_p = 0; i_p < lst.size(); i_p++) {
+	if(!pageAt(lst[i_p]).at().enable()) continue;
 	int iacur = pageAt(lst[i_p]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
@@ -1195,6 +1198,7 @@ void SessPage::alarmSet( bool isSet )
     //Included widgets process
     wdgList(lst);
     for(unsigned i_w = 0; i_w < lst.size(); i_w++) {
+	if(!wdgAt(lst[i_w]).at().enable()) continue;
 	int iacur = wdgAt(lst[i_w]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
@@ -1623,9 +1627,9 @@ void SessWdg::alarmSet( bool isSet )
     vector<string> lst;
 
     //Included widgets process
-    wdgList( lst );
-    for(unsigned i_w = 0; i_w < lst.size(); i_w++) {
-	int iacur = wdgAt(lst[i_w]).at().attrAt("alarmSt").at().getI();
+    wdgList(lst);
+    for(unsigned iW = 0; iW < lst.size(); iW++) {
+	int iacur = wdgAt(lst[iW]).at().attrAt("alarmSt").at().getI();
 	alev = vmax(alev, iacur&0xFF);
 	atp |= (iacur>>8) & 0xFF;
 	aqtp |= (iacur>>16) & 0xFF;
@@ -1649,9 +1653,9 @@ void SessWdg::alarmQuittance( uint8_t quit_tmpl, bool isSet, bool ret )
 
     vector<string> lst;
     //Include widgets quittance
-    wdgList( lst );
-    for(unsigned i_w = 0; i_w < lst.size(); i_w++)
-	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl, false, ret);
+    wdgList(lst);
+    for(unsigned iW = 0; iW < lst.size(); iW++)
+	((AutoHD<SessWdg>)wdgAt(lst[iW])).at().alarmQuittance(quit_tmpl, false, ret);
 
     if(isSet && ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
 }

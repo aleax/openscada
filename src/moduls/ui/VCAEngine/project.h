@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,7 +109,7 @@ class Project : public TCntrNode, public TConfig
 
 	//Attributes
 	bool	enableByNeed;	//Load and enable by need
-	pthread_mutex_t &funcM( )	{ return mFuncM; }
+	ResMtx &funcM( )	{ return mFuncM; }
 
     protected:
 	//Methods
@@ -142,7 +142,7 @@ class Project : public TCntrNode, public TConfig
 	Res	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
 
-	pthread_mutex_t	mFuncM;
+	ResMtx	mFuncM;
 };
 
 //************************************************

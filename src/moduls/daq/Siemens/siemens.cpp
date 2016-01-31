@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -794,7 +794,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		    throw TError(nodePath().c_str(),_("12:Get request is error %d."),res);*/
 
 		//Put result
-		buffer.replace(0,buffer.size(),(char *)tMsg.d+8,buffer.size());
+		buffer.replace(0, buffer.size(), (char *)tMsg.d+8, buffer.size());
 		break;
 	    }
 	    case ISO_TCP:
@@ -809,7 +809,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Read block '%d' error, %s."), n_db, daveStrerror(rez));
 		    throw TError(11, _("ReadDB"), _("DB '%d' error, %s."), n_db, daveStrerror(rez));
 		}
-		buffer.assign((char*)dc->resultPointer, buffer.size());
+		buffer.replace(0, buffer.size(), (char*)dc->resultPointer, buffer.size());	//!!!! But assign() temporary the block size changes
 		break;
 	    }
 	    case ADS: {
@@ -864,7 +864,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		if(ADSreadResp->res) throw TError(13, _("ReadDB"), _("Error server respond, %d."), ADSreadResp->res);
 		if(ADSreadResp->len != buffer.size() || full_len < (int)(resp_len+ADSreadResp->len))
 		    throw TError(14, _("ReadDB"), _("Error server respond."));
-		buffer.assign(res+resp_len, buffer.size());
+		buffer.replace(0, buffer.size(), res+resp_len, buffer.size());	//!!!! But assign() temporary the block size changes
 
 		break;
 	    }
@@ -874,7 +874,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		reqService(req);
 		if(req.attr("err").size()) throw TError(s2i(req.attr("errCod")), "", "%s", req.attr("err").c_str());
 		if(req.text().size() != buffer.size()) throw TError("read", _("Reply data block size, %d != %d."), req.text().size(), buffer.size());
-		buffer = req.text();
+		buffer.replace(0, buffer.size(), req.text());	//!!!! But assign() temporary the block size changes
 		break;
 	    }
 	}
@@ -926,7 +926,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		    tMsg.d[5] = (unsigned char)buffer.size();
 		    tMsg.d[6] = TASK_TDT_UINT8;
 		    tMsg.d[7] = TASK_TFC_WRITE;
-		    memcpy(tMsg.d+8,buffer.c_str(),buffer.size());
+		    memcpy(tMsg.d+8, buffer.c_str(), buffer.size());
 
 		    //Put message to remote host
 		    res = DevPutMessage(mDev, (MSG_STRUC *)&tMsg, 200L);
@@ -1432,7 +1432,7 @@ void TMdContr::setValI( int64_t ivl, SValData ival, ResString &err )
 	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char *)&val,iv_sz))); break; }
+	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char*)&val,iv_sz))); break; }
     } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 

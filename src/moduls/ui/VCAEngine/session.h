@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -347,6 +347,8 @@ class SessPage : public SessWdg
 	bool attrPresent( const string &attr );
 	AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
 
+	ResMtx &funcM( )	{ return mFuncM; }
+
     protected:
 	//Methods
 	bool cntrCmdGeneric( XMLNode *opt );
@@ -359,6 +361,7 @@ class SessPage : public SessWdg
 	//Attributes
 	unsigned mPage		: 4;		//Pages container identifier
 	unsigned mClosePgCom	: 1;
+	ResMtx	mFuncM;
 };
 
 }

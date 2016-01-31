@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -456,13 +456,6 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 	Widget(iid), TConfig(&mod->elWdg()), enableByNeed(false), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mFuncM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
-
     cfg("ID").setS(id());
     cfg("PROC").setExtVal(true);
 
@@ -472,7 +465,7 @@ LWidget::LWidget( const string &iid, const string &isrcwdg ) :
 
 LWidget::~LWidget( )
 {
-    pthread_mutex_destroy(&mFuncM);
+
 }
 
 WidgetLib &LWidget::ownerLib( )	{ return *(WidgetLib*)nodePrev(); }
@@ -577,7 +570,7 @@ void LWidget::setEnable( bool val )
 {
     if(enable() == val) return;
 
-    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
 
     Widget::setEnable(val);
 
@@ -608,7 +601,7 @@ void LWidget::setEnableByNeed( )
 
 void LWidget::load_( )
 {
-    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
 
     if(!SYS->chkSelDB(ownerLib().DB())) throw TError();
 

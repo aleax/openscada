@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_daq.h
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.6.2"
+#define DAQ_MVER	"1.6.3"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
