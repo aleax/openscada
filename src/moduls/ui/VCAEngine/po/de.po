@@ -3,12 +3,12 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 14:40+0200\n"
+"POT-Creation-Date: 2016-02-15 21:34+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1209,15 +1209,6 @@ msgstr "Rechenzeit"
 msgid "Project's session calculate period on milliseconds."
 msgstr "Rechenzeit der Projektsitzung in Millisek."
 
-msgid "Run window"
-msgstr "Fenster des Ausführung"
-
-msgid "Original size;Maximize;Full screen"
-msgstr "Originalgrösse;Maximieren;Vollbild"
-
-msgid "Keep aspect ratio on scale"
-msgstr "Seitenverhältnis beibehalten auf der Skala"
-
 msgid "Pages"
 msgstr "Seiten"
 
@@ -1689,7 +1680,9 @@ msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 msgid ""
 "Impossible to lower changes of the widget '%s' to '%s' but it has the cyclic "
 "inheritance!"
-msgstr "Unmöglich zu geringeren Veränderungen des Widgets '%s' zu '%s', aber es die zyklische Erbe hat!"
+msgstr ""
+"Unmöglich zu geringeren Veränderungen des Widgets '%s' zu '%s', aber es die "
+"zyklische Erbe hat!"
 
 #, c-format
 msgid "Adding a new attribute '%s' number more to %d!"
@@ -2012,6 +2005,15 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "Run window"
+#~ msgstr "Fenster des Ausführung"
+
+#~ msgid "Original size;Maximize;Full screen"
+#~ msgstr "Originalgrösse;Maximieren;Vollbild"
+
+#~ msgid "Keep aspect ratio on scale"
+#~ msgstr "Seitenverhältnis beibehalten auf der Skala"
 
 #~ msgid "Cursor:usek"
 #~ msgstr "Cursor:Mikrosek"

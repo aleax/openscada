@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 07:52+0300\n"
+"POT-Creation-Date: 2016-02-15 21:34+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -34,15 +34,12 @@ msgstr ""
 msgid "Developers"
 msgstr "Розробники"
 
-#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
 "StartUser   <user>    No password requested start user.\n"
 "UserPass    <pass>    User password for no local start.\n"
 "RunPrjs     <list>    Run projects list on the module start.\n"
-"RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
-"WinPosCntrSave {0;1}  Windows position control and save (default = 1).\n"
 "ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
 "CachePgLife <hours>   Cached pages lifetime.\n"
 "VCAstation  <id>      VCA station id ('.' - local).\n"
@@ -55,10 +52,6 @@ msgstr ""
 "UserPass    <пароль>  Пароль користувача для нелокального запуску.\n"
 "RunPrjs    <перелік>  Перелік проектів які мають запускатися при старті "
 "модуля.\n"
-"RunPrjsSt      {0;1}  Відображати статус для проектів що запускаються (по "
-"замовченню = 1).\n"
-"WinPosCntrSave {0;1}  Керування та збереження положень вікон (по замовченню "
-"= 1).\n"
 "ExitLstRunPrjCls {0;1}Вихід при закритті останього проекту що виконується "
 "(по замовченню = 1).\n"
 "CachePgLife <години>  Час життя сторінок у кешу.\n"
@@ -133,12 +126,6 @@ msgstr ""
 "ім'я проекту: 'PrjName-1'.\n"
 "Для підключення до фонового або іншого відкритого сеансу використати "
 "\"ses_{SesID}\"."
-
-msgid "Run projects status display"
-msgstr "Відображення статусу проектів для пуску"
-
-msgid "Windows position control and save"
-msgstr "Керування та збереження положень вікон"
 
 msgid "Exit on last run project close"
 msgstr "Вихід при закритті останього проекту що виконується"
@@ -995,12 +982,6 @@ msgstr "Доступ:"
 msgid "Calculate period (ms):"
 msgstr "Період обчислення (мс):"
 
-msgid "Run window mode:"
-msgstr "Режим вікна виконання:"
-
-msgid "Keep aspect ratio on scale:"
-msgstr "Зберігати пропорцію під час масштабування"
-
 msgid "Mime data"
 msgstr "Mime дані"
 
@@ -1701,6 +1682,21 @@ msgstr "Виконання проекту: %1"
 msgid "Status line items"
 msgstr "Елементи рядку статусу"
 
+msgid "Run window"
+msgstr "Вікно виконання"
+
+msgid "Original size;Maximize;Full screen"
+msgstr "Оригінальний розмір;Максимізувати;На весь екран"
+
+msgid "Keep aspect ratio on scale"
+msgstr "Зберігати пропорцію під час масштабування"
+
+msgid "No show status bar"
+msgstr "Не показувати рядок статусу"
+
+msgid "Windows position control and save"
+msgstr "Керування та збереження положень вікон"
+
 msgid "Alarm level: %1"
 msgstr "Рівень порушення: %1"
 
@@ -2206,6 +2202,9 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
+
+#~ msgid "Run projects status display"
+#~ msgstr "Відображення статусу проектів для пуску"
 
 #~ msgid "Alarms"
 #~ msgstr "Порушення"

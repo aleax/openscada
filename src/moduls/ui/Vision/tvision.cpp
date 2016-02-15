@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: tvision.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2015 by Roman Savochenko (rom_as@oscada.org)
+ *                 2006-2016 by Roman Savochenko (rom_as@oscada.org)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.3.8"
+#define MOD_VER		"3.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
@@ -83,7 +83,7 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), mWinPosCntrSave(true), mExitLstRunPrjCls(true), end_run(false),
+TVision::TVision( string name ) : TUI(MOD_ID)/*, mStatusEn(true), mWinPosCntrSave(true)*/, mExitLstRunPrjCls(true), end_run(false),
     mRestTime(60), mCachePgLife(1), vca_station("."), mScrnCnt(0)
 {
     mod = this;
@@ -126,8 +126,8 @@ string TVision::optDescr( )
 	"StartUser   <user>    No password requested start user.\n"
 	"UserPass    <pass>    User password for no local start.\n"
 	"RunPrjs     <list>    Run projects list on the module start.\n"
-	"RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
-	"WinPosCntrSave {0;1}  Windows position control and save (default = 1).\n"
+	// "RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
+	// "WinPosCntrSave {0;1}  Windows position control and save (default = 1).\n"
 	"ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
 	"CachePgLife <hours>   Cached pages lifetime.\n"
 	"VCAstation  <id>      VCA station id ('.' - local).\n"
@@ -150,13 +150,12 @@ void TVision::load_( )
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",""));
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
-    setRunPrjsSt(s2i(TBDS::genDBGet(nodePath()+"RunPrjsSt","1")));
-    setWinPosCntrSave(s2i(TBDS::genDBGet(nodePath()+"WinPosCntrSave",i2s(winPosCntrSave()))));
+    //setRunPrjsSt(s2i(TBDS::genDBGet(nodePath()+"RunPrjsSt","1")));
+    //setWinPosCntrSave(s2i(TBDS::genDBGet(nodePath()+"WinPosCntrSave",i2s(winPosCntrSave()))));
     setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
     setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setRestoreTime(s2i(TBDS::genDBGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
-    //setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
 }
 
 void TVision::save_( )
@@ -167,13 +166,12 @@ void TVision::save_( )
     TBDS::genDBSet(nodePath()+"StartUser", startUser());
     TBDS::genDBSet(nodePath()+"UserPass", userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
-    TBDS::genDBSet(nodePath()+"RunPrjsSt", i2s(runPrjsSt()));
-    TBDS::genDBSet(nodePath()+"WinPosCntrSave", i2s(winPosCntrSave()));
+    //TBDS::genDBSet(nodePath()+"RunPrjsSt", i2s(runPrjsSt()));
+    //TBDS::genDBSet(nodePath()+"WinPosCntrSave", i2s(winPosCntrSave()));
     TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
     TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
     TBDS::genDBSet(nodePath()+"RestoreTime",i2s(restoreTime()));
-    //TBDS::genDBSet(nodePath()+"PlayCom", playCom());
 }
 
 void TVision::postEnable( int flag )
@@ -368,8 +366,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
 		"help",_("Automatic started projects separated by symbol ';'.\n"
 			 "For opening a project's window to need display (1) use the project name format: 'PrjName-1'.\n"
 			 "For connect to background or other opened session use \"ses_{SesID}\"."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj_st",_("Run projects status display"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/winPos_cntr_save",_("Windows position control and save"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    //ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj_st",_("Run projects status display"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    //ctrMkNode("fld",opt,-1,"/prm/cfg/winPos_cntr_save",_("Windows position control and save"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit on last run project close"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	}
 	return;
@@ -429,18 +427,18 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    /*if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_))
 		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));*/
     }
-    else if(a_path == "/prm/cfg/winPos_cntr_save") {
+    /*else if(a_path == "/prm/cfg/winPos_cntr_save") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(winPosCntrSave()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setWinPosCntrSave(s2i(opt->text()));
-    }
+    }*/
     else if(a_path == "/prm/cfg/exit_on_lst_run_prj_cls") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(exitLstRunPrjCls()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setExitLstRunPrjCls(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/run_prj_st") {
+    /*else if(a_path == "/prm/cfg/run_prj_st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(runPrjsSt()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRunPrjsSt(s2i(opt->text()));
-    }
+    }*/
     else if(a_path == "/prm/cfg/stationVCA") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(VCAStation());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setVCAStation(opt->text());

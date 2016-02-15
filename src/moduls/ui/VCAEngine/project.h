@@ -57,7 +57,7 @@ class Project : public TCntrNode, public TConfig
 	string	grp( );						//Library group
 	short	permit( )	{ return mPermit; }		//Permission for access to library
 	int	period( )	{ return mPer; }		//Project's session calculate period
-	int	prjFlags( )	{ return mFlgs; }		//Project's flags
+	//int	prjFlags( )	{ return mFlgs; }		//Project's flags
 
 	string DB( )		{ return workPrjDB; }		//Current library DB
 	string tbl( )		{ return cfg("DB_TBL").getS(); }//Table of storing library data
@@ -70,7 +70,7 @@ class Project : public TCntrNode, public TConfig
 	void setGrp( const string &it )		{ cfg("GRP").setS(it); }
 	void setPermit( short it )		{ mPermit = it; modif(); }
 	void setPeriod( int it )		{ mPer = it; modif(); }
-	void setPrjFlags( int val )		{ mFlgs = val; modif(); }
+	//void setPrjFlags( int val )		{ mFlgs = val; modif(); }
 
 	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
@@ -134,7 +134,7 @@ class Project : public TCntrNode, public TConfig
 		mOldDB;
 	int64_t	&mPermit,	//Access permission
 		&mPer,		//Calculate period
-		&mFlgs,		//Project's flags
+		//&mFlgs,		//Project's flags
 		&mStyleIdW;	//Work style
 	bool	mEnable;	//Enable state
 

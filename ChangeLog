@@ -1,4 +1,7 @@
 2016-02-15 Roman
+- UI.{VCAEngine,Vision}: Projects flags moved to as the visualizator specific attributes "runWin" and "keepAspectRatio".
+    Vision global properties "stBarNoShow", "winPosCntrSave" moved to the visualizator specific attributes.
+- UI.VCAEngine: Control request "activate" expanded by "aVls" and "aNms" determine.
 - SYS: Function realRound() some simply set.
     System configuration fields "workdir", "moddir", "icodir" and "docdir" set to readonly from the configuration interface,
 	mostly for wrong changes prevent and the changes allow only by the configuration file edit.

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2006-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 14:40+0200\n"
+"POT-Creation-Date: 2016-02-15 21:34+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1211,15 +1211,6 @@ msgstr "Период вычисления"
 msgid "Project's session calculate period on milliseconds."
 msgstr "Период вычисления сессии проекта в миллисекундах."
 
-msgid "Run window"
-msgstr "Окно исполнения"
-
-msgid "Original size;Maximize;Full screen"
-msgstr "Оригинальный размер;Максимизировать;На весь экран"
-
-msgid "Keep aspect ratio on scale"
-msgstr "Сохранять пропорцию при масштабировании"
-
 msgid "Pages"
 msgstr "Страницы"
 
@@ -1691,7 +1682,8 @@ msgid ""
 "Impossible to lower changes of the widget '%s' to '%s' but it has the cyclic "
 "inheritance!"
 msgstr ""
-"Невозможно опустить изменения виджета '%s' в '%s' из-за цикличной наследственности!"
+"Невозможно опустить изменения виджета '%s' в '%s' из-за цикличной "
+"наследственности!"
 
 #, c-format
 msgid "Adding a new attribute '%s' number more to %d!"
@@ -2015,6 +2007,15 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "Run window"
+#~ msgstr "Окно исполнения"
+
+#~ msgid "Original size;Maximize;Full screen"
+#~ msgstr "Оригинальный размер;Максимизировать;На весь экран"
+
+#~ msgid "Keep aspect ratio on scale"
+#~ msgstr "Сохранять пропорцию при масштабировании"
 
 #~ msgid "Cursor:usek"
 #~ msgstr "Курсор:микросек"

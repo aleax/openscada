@@ -181,7 +181,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     prj_ctm->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(prj_ctm, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(prj_ctm,6,1,1,3);
-    lab = new QLabel(_("Run window mode:"),tab_w);
+    /*lab = new QLabel(_("Run window mode:"),tab_w);
     glay->addWidget(lab,7,0);
     prj_runw = new QComboBox( tab_w);
     prj_runw->setObjectName("/obj/cfg/runWin");
@@ -194,7 +194,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     prj_keepAspRt->setObjectName("/obj/cfg/keepAspRatio");
     prj_keepAspRt->setWindowIconText(TSYS::addr2str(lab).c_str());
     connect(prj_keepAspRt, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(prj_keepAspRt,8,1,1,3);
+    glay->addWidget(prj_keepAspRt,8,1,1,3);*/
 
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0);
@@ -483,7 +483,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if(!owner()->cntrIfCmd(req)) prj_ctm->setValue(req.text().c_str());
 	}
 	//  Run window mode
-	gnd = TCntrNode::ctrId(root,prj_runw->objectName().toStdString(),true);
+	/*gnd = TCntrNode::ctrId(root,prj_runw->objectName().toStdString(),true);
 	prj_runw->setVisible(gnd); ((QLabel*)TSYS::str2addr(prj_runw->windowIconText().toStdString()))->setVisible(gnd);
 	if(gnd) {
 	    prj_runw->clear();
@@ -492,13 +492,13 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(prj_runw->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) prj_runw->setCurrentIndex(prj_runw->findData(s2i(req.text())));
 	}
-	//  Run window mode
+	//  Keep aspect rate
 	gnd = TCntrNode::ctrId(root,prj_keepAspRt->objectName().toStdString(),true);
 	prj_keepAspRt->setVisible(gnd); ((QLabel *)TSYS::str2addr(prj_keepAspRt->windowIconText().toStdString()))->setVisible(gnd);
 	if(gnd) {
 	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(prj_keepAspRt->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) prj_keepAspRt->setChecked(s2i(req.text()));
-	}
+	}*/
     }
 
     //Mime data page
@@ -700,7 +700,7 @@ void LibProjProp::isModify( QObject *snd )
 
     XMLNode req("set");
 
-    if(oname == obj_enable->objectName() || oname == prj_keepAspRt->objectName()) {
+    if(oname == obj_enable->objectName() /*|| oname == prj_keepAspRt->objectName()*/) {
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }
@@ -713,8 +713,8 @@ void LibProjProp::isModify( QObject *snd )
 								 ((QComboBox*)snd)->itemData(cPos).toString().toStdString());
 	update = true;
     }
-    else if(oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() ||
-	oname == prj_runw->objectName())
+    else if(oname == obj_accuser->objectName() || oname == obj_accgrp->objectName() || oname == obj_accother->objectName() /*||
+	oname == prj_runw->objectName()*/)
     {
 	req.setText(((QComboBox*)snd)->itemData(((QComboBox*)snd)->currentIndex()).toString().toStdString());
 	update = true;

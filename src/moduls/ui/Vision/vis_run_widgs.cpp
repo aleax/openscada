@@ -184,8 +184,20 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    return true;
 	case A_NO_ID:
 	    //User's status line items
-	    if(attr == "statLine") { mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this)); return true; }
-	    break;
+	    if(attr == "statLine")		mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this));
+	    else if(attr == "runWin") {
+		if(mainWin()->isResizeManual) return true;
+		switch(s2i(val)) {
+		    case 0: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowNoState);	break;
+		    case 1: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowMaximized);	break;
+		    case 2: mainWin()->aFullScr()->setChecked(true);	break;
+		}
+	    }
+	    else if(attr == "keepAspectRatio")	mainWin()->setKeepAspectRatio(s2i(val));
+	    else if(attr == "stBarNoShow")	mainWin()->statusBar()->setVisible(!s2i(val));
+	    else if(attr == "winPosCntrSave")	mainWin()->setWinPosCntrSave(s2i(val));
+	    else break;
+	    return true;
 	case A_PG_NAME:	setWindowTitle(val.c_str());	break;
 	case A_PG_OPEN_SRC: setProperty("pgOpenSrc", val.c_str());	return true;
 	case A_PG_GRP:	setProperty("pgGrp", val.c_str());		return true;
@@ -485,7 +497,7 @@ RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent,
 
     //Restore external window position
     string xPos, yPos;
-    if(mod->winPosCntrSave()) {
+    if(mainWin()->winPosCntrSave()) {
 	if(f == Qt::Tool && (xPos=mainWin()->wAttrGet(id(),i2s(mainWin()->screen())+"geomX",true)).size() &&
 		(yPos=mainWin()->wAttrGet(id(),i2s(mainWin()->screen())+"geomY",true)).size())
 	    move(s2i(xPos), s2i(yPos));
@@ -589,7 +601,7 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 void RunPageView::closeEvent( QCloseEvent *event )
 {
     //Save curent position
-    if(mod->winPosCntrSave()) {
+    if(mainWin()->winPosCntrSave()) {
 	mainWin()->wAttrSet(id(), i2s(mainWin()->screen())+"geomX", i2s(pos().x()), true);
 	mainWin()->wAttrSet(id(), i2s(mainWin()->screen())+"geomY", i2s(pos().y()), true);
     }

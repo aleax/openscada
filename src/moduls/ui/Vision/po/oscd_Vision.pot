@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 07:52+0300\n"
+"POT-Creation-Date: 2016-02-15 21:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,8 +39,6 @@ msgid ""
 "StartUser   <user>    No password requested start user.\n"
 "UserPass    <pass>    User password for no local start.\n"
 "RunPrjs     <list>    Run projects list on the module start.\n"
-"RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
-"WinPosCntrSave {0;1}  Windows position control and save (default = 1).\n"
 "ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
 "CachePgLife <hours>   Cached pages lifetime.\n"
 "VCAstation  <id>      VCA station id ('.' - local).\n"
@@ -105,12 +103,6 @@ msgid ""
 "Automatic started projects separated by symbol ';'.\n"
 "For opening a project's window to need display (1) use the project name format: 'PrjName-1'.\n"
 "For connect to background or other opened session use \"ses_{SesID}\"."
-msgstr ""
-
-msgid "Run projects status display"
-msgstr ""
-
-msgid "Windows position control and save"
 msgstr ""
 
 msgid "Exit on last run project close"
@@ -927,12 +919,6 @@ msgstr ""
 msgid "Calculate period (ms):"
 msgstr ""
 
-msgid "Run window mode:"
-msgstr ""
-
-msgid "Keep aspect ratio on scale:"
-msgstr ""
-
 msgid "Mime data"
 msgstr ""
 
@@ -1616,6 +1602,21 @@ msgid "Running project: %1"
 msgstr ""
 
 msgid "Status line items"
+msgstr ""
+
+msgid "Run window"
+msgstr ""
+
+msgid "Original size;Maximize;Full screen"
+msgstr ""
+
+msgid "Keep aspect ratio on scale"
+msgstr ""
+
+msgid "No show status bar"
+msgstr ""
+
+msgid "Windows position control and save"
 msgstr ""
 
 msgid "Alarm level: %1"

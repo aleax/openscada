@@ -127,12 +127,17 @@ class VisRun : public QMainWindow
 	string	srcProject( )	{ return src_prj; }
 	float	xScale( )	{ return x_scale; }
 	float	yScale( )	{ return y_scale; }
+	bool keepAspectRatio( )	{ return mKeepAspectRatio; }
+	bool winPosCntrSave( )	{ return mWinPosCntrSave; }
 	unsigned reqTm( )	{ return reqtm; }
 	int	style( );
 	bool	connOK( )	{ return !conErr; }
+	QAction *aFullScr( )	{ return actFullScr; }
 
 	void setXScale( float vl )	{ x_scale = vl; }
 	void setYScale( float vl )	{ y_scale = vl; }
+	void setKeepAspectRatio( bool vl )	{ mKeepAspectRatio = vl; }
+	void setWinPosCntrSave( bool vl)	{ mWinPosCntrSave = vl; }
 	void setReqTm( unsigned rt )	{ reqtm = rt; }
 	void setStyle( int istl );
 
@@ -170,6 +175,9 @@ class VisRun : public QMainWindow
 	void alarmSet( unsigned alarm );
 	//  Notification type <tp> register for no empty <props> else unregister, from the page-creator <pgCrtor>
 	void ntfReg( uint8_t tp, const string &props, const string &pgCrtor );
+
+	//Public attributes
+	bool isResizeManual;				//Manual resizing flag
 
     protected:
 	//Protected methods
@@ -241,7 +249,8 @@ class VisRun : public QMainWindow
 	QLabel		*mWTime;		//Run-time time display for fullscreen
 	QLabel		*conErr;		//Connection error label
 	bool		crSessForce;		//Force session creation flag
-	bool		keepAspectRatio;	//Keep aspect ratio on scale
+	bool		mKeepAspectRatio;	//Keep aspect ratio on scale
+	bool		mWinPosCntrSave;	//Windows position control and save
 	string 		prjSes_it, work_sess, src_prj;//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period

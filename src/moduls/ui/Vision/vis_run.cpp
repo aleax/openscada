@@ -59,8 +59,8 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), conErr(NULL),
-    crSessForce(icrSessForce), keepAspectRatio(false), prjSes_it(iprjSes_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1),
+    QMainWindow(QDesktopWidget().screen(iScr)), isResizeManual(false), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), conErr(NULL),
+    crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1),
     expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0)
 {
     QImage ico_t;
@@ -258,7 +258,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     connect(mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
     statusBar()->insertPermanentWidget(0, mStlBar);
     statusBar()->insertPermanentWidget(0, toolBarStatus);
-    statusBar()->setVisible(mod->runPrjsSt());
+    //statusBar()->setVisible(mod->runPrjsSt());
 
     //Init scroller
     QScrollArea *scrl = new QScrollArea;
@@ -295,7 +295,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     statusBar()->showMessage(_("Ready"), 2000);
 
     //Restore main window position
-    if(mod->winPosCntrSave() && masterPg()) {
+    if(winPosCntrSave() && masterPg()) {
 	string xPos, yPos;
 	if((xPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomX",true)).size() &&
 		(yPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomY",true)).size())
@@ -409,7 +409,7 @@ QString VisRun::getFileName( const QString &caption, const QString &dir, const Q
 void VisRun::closeEvent( QCloseEvent* ce )
 {
     //Save main window position
-    if(mod->winPosCntrSave() && masterPg()) {
+    if(winPosCntrSave() && masterPg()) {
 	wAttrSet(masterPg()->id(), i2s(screen())+"geomX", i2s(pos().x()), true);
 	wAttrSet(masterPg()->id(), i2s(screen())+"geomY", i2s(pos().y()), true);
     }
@@ -441,9 +441,13 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)masterPg()->size().height();
 	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
-	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
+	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
 	}else x_scale = y_scale = 1;
-	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
+	if(x_scale_old != x_scale || y_scale_old != y_scale) {
+	    isResizeManual = true;
+	    fullUpdatePgs();
+	    isResizeManual = false;
+	}
 	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
@@ -996,7 +1000,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
 	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
-	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
+	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
 	    mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
 	}
 	fullUpdatePgs();
@@ -1175,7 +1179,7 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
-    req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
+    //req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
     req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
     if(!cntrIfCmd(req)) {
 	// Title
@@ -1196,13 +1200,13 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	pN = req.childGet(4);
 	if(style() < 0 && pN->childSize() <= 1) mStlBar->setVisible(false);
 	// Flags
-	pN = req.childGet(5);
+	/*pN = req.childGet(5);
 	int flgs = s2i(pN->text());
 	if(flgs&0x01)		setWindowState(Qt::WindowMaximized);
 	else if(flgs&0x02)	actFullScr->setChecked(true);
-	keepAspectRatio = flgs&0x04;
+	keepAspectRatio = flgs&0x04;*/
 	// Open pages list
-	pN = req.childGet(6);
+	pN = req.childGet(5);
 	for(unsigned i_ch = 0; i_ch < pN->childSize(); i_ch++) {
 	    pgList.push_back(pN->childGet(i_ch)->text());
 	    callPage(pN->childGet(i_ch)->text());
@@ -1281,7 +1285,21 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	// Get and activate for specific attributes to the master-page
 	XMLNode reqSpc("CntrReqs"); reqSpc.setAttr("path", pg_it);
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstatLine")->
-				     setAttr("aNm", _("Status line items"))->setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
+				     setAttr("aNm", _("Status line items"))->
+				     setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2frunWin")->
+				     setAttr("aNm", _("Run window"))->
+				     setAttr("aTp", i2s(TFld::Integer))->setAttr("aFlg", i2s(TFld::Selected))->
+				     setAttr("aVls", "0;1;2")->setAttr("aNms", _("Original size;Maximize;Full screen"));
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fkeepAspectRatio")->
+				     setAttr("aNm", _("Keep aspect ratio on scale"))->
+				     setAttr("aTp", i2s(TFld::Boolean));
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstBarNoShow")->
+				     setAttr("aNm", _("No show status bar"))->
+				     setAttr("aTp", i2s(TFld::Boolean));
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fwinPosCntrSave")->
+				     setAttr("aNm", _("Windows position control and save"))->
+				     setAttr("aTp", i2s(TFld::Boolean));
 	cntrIfCmd(reqSpc);
 
 	// Create widget view
@@ -1597,7 +1615,7 @@ void VisRun::updatePage( )
 	    x_scale *= xSc;
 	    y_scale *= ySc;
 	    //Proportional scale
-	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
+	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale,y_scale);
 
 	    fullUpdatePgs();
 	}

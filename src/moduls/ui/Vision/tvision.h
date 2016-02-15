@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: tvision.h
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2015 by Roman Savochenko (rom_as@oscada.org)
+ *                 2006-2016 by Roman Savochenko (rom_as@oscada.org)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -63,24 +63,22 @@ class TVision : public TUI
 	string startUser( )			{ return start_user; }
 	string userPass( )			{ return user_pass; }
 	string runPrjs( )			{ return run_prjs; }
-	bool runPrjsSt( )			{ return mStatusEn; }
-	bool winPosCntrSave( )			{ return mWinPosCntrSave; }
+	//bool runPrjsSt( )			{ return mStatusEn; }
+	//bool winPosCntrSave( )			{ return mWinPosCntrSave; }
 	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
 	string VCAStation( )			{ return vca_station; }
 	int restoreTime( )			{ return mRestTime; }
-	//string playCom( )			{ return mPlayCom; }
 	float cachePgLife( )			{ return mCachePgLife; }
 	string uiPropGet( const string &prop, const string &user = "root" );
 
 	void setStartUser( const string &user )	{ start_user = user; modif(); }
 	void setUserPass( const string &pass )	{ user_pass = pass; modif(); }
 	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
-	void setRunPrjsSt( bool en )		{ mStatusEn = en; modif(); }
-	void setWinPosCntrSave( bool en )	{ mWinPosCntrSave = en; modif(); }
+	//void setRunPrjsSt( bool en )		{ mStatusEn = en; modif(); }
+	//void setWinPosCntrSave( bool en )	{ mWinPosCntrSave = en; modif(); }
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }
-	//void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
 	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
 	void uiPropSet( const string &prop, const string &vl, const string &user = "root" );
 
@@ -124,16 +122,14 @@ class TVision : public TUI
 			user_pass,		//No quest user password
 			run_prjs;		//Run projects list on the module start
 	vector<WdgShape*> shapesWdg;
-	bool		mStatusEn,		//Status line display for projects run
-			mWinPosCntrSave,	//Windows position control and save
+	bool		//mStatusEn,		//Status line display for projects run
+			//mWinPosCntrSave,	//Windows position control and save
 			mExitLstRunPrjCls,	//Exit program on last run project close
 			end_run;		//End run command. Close all windows
 	int		mRestTime;		//Restore connection time, seconds
 	float		mCachePgLife;		//Cached pages lifetime
 
 	string		vca_station;		//VCA station id ('.' - for local station)
-
-	//string		mPlayCom;		//Play command
 
 	int		mScrnCnt;
 };
