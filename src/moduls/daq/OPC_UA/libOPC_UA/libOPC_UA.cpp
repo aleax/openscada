@@ -2661,7 +2661,7 @@ nextReq:
 			MonitoringMode mM = (MonitoringMode)iNu(rb, off, 4);	//> monitoringMode
 								//> requestedParameters
 			uint32_t cH = iNu(rb, off, 4);		//>  clientHandle
-			double sI = iR(rb, off, 8);		//>  samplingInterval
+			double sI = iR(rb, off, 8);		//>  samplingInterval, in ms
 			NodeId fid = iNodeId(rb, off);		//>  filter
 			iNu(rb, off, 1);			//>   EncodingMask
 			if(fid.numbVal() != 0) {
@@ -3080,7 +3080,7 @@ nextReq:
 			if(findOK || s->publishReqs.size() == 1) {
 			    unsigned prSS = wep->mSubScr.size();
 			    for(unsigned iSs = 0; iSs < wep->mSubScr.size(); ++iSs)
-				if((wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
+				if((wep->mSubScr[iSs].toInit || wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
 					(prSS == wep->mSubScr.size() || wep->mSubScr[iSs].pr > wep->mSubScr[prSS].pr))
 				    prSS = iSs;
 			    if(prSS < wep->mSubScr.size()) {
@@ -3110,7 +3110,17 @@ nextReq:
 				respEp.reserve(100);
 				oNu(respEp, prSS+1, 4);				//<subscriptionId
 
-				if(ss.st == SS_LATE) {
+				if(ss.toInit || ss.st == SS_KEEPALIVE) {
+				    ss.toInit = false;
+				    if(ss.st == SS_KEEPALIVE) ss.setState(SS_NORMAL);
+				    oN(respEp, 0, 4);			//<availableSequence Numbers []
+				    oNu(respEp, 0, 1);			//moreNotifications, FALSE
+									//notificationMessage
+				    oNu(respEp, ss.seqN, 4);		// sequenceNumber
+				    oTm(respEp, curTime());		// publishTime
+				    oN(respEp, 0, 4);			// notificationData []
+				}
+				else if(ss.st == SS_LATE) {
 				    ss.setState(SS_NORMAL);
 
 				    int aSeqOff = respEp.size(), aSeqN = 1;
@@ -3160,7 +3170,9 @@ nextReq:
 					while(mIt.vQueue.size()) {
 					    if(ss.maxNotPerPubl && i_mIt >= ss.maxNotPerPubl) { maxNotPerPublLim = true; break; }
 					    oNu(respEp, mIt.cH, 4);		//<   clientHandle
-					    oDataValue(respEp, eMsk, mIt.vQueue.front().vl, mIt.vTp, mIt.vQueue.front().tm);	//<   value
+					    if(mIt.vQueue.front().st)
+						oDataValue(respEp, 0x0A, uint2str(mIt.vQueue.front().st), 0, mIt.vQueue.front().tm);	//<   status
+					    else oDataValue(respEp, eMsk, mIt.vQueue.front().vl, mIt.vTp, mIt.vQueue.front().tm);	//<   value
 					    mIt.vQueue.pop_front();
 					    i_mIt++;
 					}
@@ -3172,15 +3184,6 @@ nextReq:
 
 				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
 				    ss.seqN++;
-				}
-				else if(ss.st == SS_KEEPALIVE) {
-				    ss.setState(SS_NORMAL);
-				    oN(respEp, 0, 4);			//<availableSequence Numbers []
-				    oNu(respEp, 0, 1);			//moreNotifications, FALSE
-									//notificationMessage
-				    oNu(respEp, ss.seqN, 4);		// sequenceNumber
-				    oTm(respEp, curTime());		// publishTime
-				    oN(respEp, 0, 4);			// notificationData []
 				}
 				s->publishReqs.erase(s->publishReqs.begin()+iP);	//Remove the publish request from the queue
 
@@ -3664,6 +3667,7 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 	}
 	if(nSubScrPerSess >= limSubScr()) { pthread_mutex_unlock(&mtxData); return 0; }
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
+	mSubScr[ssId].toInit = true;
     }
     else ssId--;
 
@@ -3713,18 +3717,22 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	Subscr::MonitItem &mIt = ss.mItems[mItId];
 	if(md != MM_CUR) {
 	    if(md == MM_DISABLED && md != mIt.md) mIt = Subscr::MonitItem();
+	    if(mIt.md == MM_DISABLED) {	//Initiate the publisher by the InitialValue
+		mIt.vQueue.push_back(Subscr::MonitItem::Val("",(mIt.dtTm=curTime()),OpcUa_UncertainInitialValue));
+		ss.setState(SS_LATE);
+	    }
 	    mIt.md = md;
 	}
 	if(!nd.isNull())	mIt.nd = nd;
 	if(aid != OpcUa_NPosID)	mIt.aid = aid;
 	if(tmToRet != -1)	mIt.tmToRet = tmToRet;
-	if(qSz != OpcUa_NPosID)	mIt.qSz = std::max(uint32_t(1), std::min(uint32_t(1000),qSz));	//!!!! Make upper limit configurable
+	if(qSz != OpcUa_NPosID)	mIt.qSz = std::max(uint32_t(1), std::min(uint32_t(1000),qSz));	//!!!! Make the upper limit configurable
 	if(dO >= 0)		mIt.dO = dO;
 	if(cH != OpcUa_NPosID)	mIt.cH = cH;
 
 	//Checkings for data
 	XML_N req("data");
-	req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtPerGet",(smplItv==0)?"1":"0");
+	req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtPerGet", (smplItv==0)?"1":"0");
 	uint32_t rez = reqData(OpcUa_ReadRequest, req);
 	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
 	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;

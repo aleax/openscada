@@ -23,6 +23,7 @@
 #define VIS_RUN_H
 
 #include <string>
+#include <vector>
 #include <deque>
 #include <map>
 
@@ -34,6 +35,7 @@
 #include "tvision.h"
 
 using std::string;
+using std::vector;
 using std::deque;
 using std::map;
 
@@ -61,9 +63,12 @@ class VisRun : public QMainWindow
 
 		//Methods
 		explicit Notify( ) : tp(-1), comIsExtScript(false),
-		    f_notify(false), f_resource(false), f_queue(false), f_quittanceRet(false), mOwner(NULL)	{ }
-		Notify( uint8_t tp, const string &props, VisRun *own );
+		    f_notify(false), f_resource(false), f_queue(false), f_quittanceRet(false), mOwner(NULL), actAlrm(NULL)	{ }
+		Notify( uint8_t tp, const string &pgProps, VisRun *own );
 		~Notify( );
+
+		string	pgCrtor( );
+		string	props( );
 
 		bool hasQueue( )	{ return f_queue; }
 		bool hasQuittanceRet( )	{ return f_quittanceRet; }
@@ -71,6 +76,10 @@ class VisRun : public QMainWindow
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
 		string ntfRes( string &mess, string &lang );	//The notification resource request
+
+		//Attributes
+		string	pgProps;			//Page-creator and it's properties
+		vector<string> pgPropsQ;		//Page-creators queue
 
 	    private:
 		//Methods
@@ -93,14 +102,15 @@ class VisRun : public QMainWindow
 
 		unsigned toDo		:1;	//Need to do some notification doings
 		unsigned alEn		:1;	//Alarm enabled
-		string	comText, comProc;	//Command text and the procedure name
+		string	comProc;		//Command procedure name
 
 		unsigned mQueueCurTm;
 		string	mQueueCurPath;
 
-		pthread_mutex_t	dataM;
+		ResMtx	dataM;
 		pthread_cond_t	callCV;
 		VisRun	*mOwner;
+		QAction	*actAlrm;
 	};
 
 	//Public methods
@@ -158,7 +168,8 @@ class VisRun : public QMainWindow
 	char alarmTp( char tmpl, bool quittance = false )	{ return (mAlrmSt>>(quittance?16:8)) & tmpl; }
 	int  alarmLev( )					{ return mAlrmSt & 0xFF; }
 	void alarmSet( unsigned alarm );
-	void ntfReg( uint8_t tp, const string &props );
+	//  Notification type <tp> register for no empty <props> else unregister, from the page-creator <pgCrtor>
+	void ntfReg( uint8_t tp, const string &props, const string &pgCrtor );
 
     protected:
 	//Protected methods

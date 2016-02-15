@@ -1,3 +1,14 @@
+2016-02-15 Roman
+- SYS: Function realRound() some simply set.
+    System configuration fields "workdir", "moddir", "icodir" and "docdir" set to readonly from the configuration interface,
+	mostly for wrong changes prevent and the changes allow only by the configuration file edit.
+- *.=Tmpl=.configure.ac: Some spare code parts removed, mostly for old i18n manage.
+- FIX:DAQ.OPC_UA.libOPC_UA: Variable's statuses added, mostly for the "Publish" service.
+    Initial "Publish" responses are added: first after the CreateSubscrition service and second after the CreateMonitoredItems service.
+- UI.{VCAEngine,Vision}: pthread_mutex_t moved to ResMtx. Notifications expanded to unregister and stacked registering ones from other pages.
+- FIX:UI.Vision: conErr pointer lost for not zero set at the master page free/replace is fixed. That sometime causes to crashes!
+
+
 2016-01-31 Roman
 - DAQ.OPC_UA.libOPC_UA: New client/server services implemented:
     RegisterNodesRequest, RegisterNodesResponse, UnregisterNodesRequest, UnregisterNodesResponse. Only formal and no a real doings!

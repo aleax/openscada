@@ -108,7 +108,8 @@ namespace VISION
 
 	protected:
 	    //Protected methods
-	    void closeEvent ( QCloseEvent *event );
+	    void closeEvent( QCloseEvent *event );
+	    void hideEvent( QHideEvent * event );
 
 	private:
 	    //Private attributes

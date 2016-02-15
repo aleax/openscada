@@ -3,7 +3,7 @@
 /******************************************************************************
  *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
- *   Version: 1.0.2							      *
+ *   Version: 1.0.3							      *
  *	* Initial version control.					      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
@@ -139,6 +139,15 @@ namespace OPC
 #define OpcUa_BadRequestTooLarge	0x80B80000
 #define OpcUa_BadResponseTooLarge	0x80B90000
 #define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
+
+//Status codes of values
+#define OpcUa_UncertainNoCommunicationLastUsableValue	0x408F0000
+#define OpcUa_UncertainLastUsableValue	0x40900000
+#define OpcUa_UncertainSubstituteValue	0x40910000
+#define OpcUa_UncertainInitialValue	0x40920000
+#define OpcUa_UncertainSensorNotAccurate	0x40930000
+#define OpcUa_UncertainEngineeringUnitsExceeded	0x40940000
+#define OpcUa_UncertainSubNormal	0x40950000
 
 //Requests types
 #define OpcUa_ServiceFault			397
@@ -634,11 +643,12 @@ class Server: public UA
 			class Val
 			{
 			    public:
-				Val( ) { }
-				Val( const string &ivl, int64_t itm ) : vl(ivl), tm(itm) { }
+				Val( ) : tm(0), st(OpcUa_UncertainNoCommunicationLastUsableValue) { }
+				Val( const string &ivl, int64_t itm, uint32_t ist = 0 ) : vl(ivl), tm(itm), st(ist) { }
 
 				string	vl;
 				int64_t	tm;
+				uint32_t st;
 			};
 
 			//Methods
@@ -661,7 +671,7 @@ class Server: public UA
 		};
 
 		//Methods
-		Subscr( ) : st(SS_CLOSED), sess(-1), en(false), publInterv(100), seqN(1),
+		Subscr( ) : st(SS_CLOSED), sess(-1), en(false), toInit(true), publInterv(100), seqN(1),
 		    cntrLifeTime(12000), wLT(0), cntrKeepAlive(50), wKA(0), maxNotPerPubl(0), pr(0) 	{ }
 
 		Subscr copy( bool noWorkData = true );
@@ -670,7 +680,8 @@ class Server: public UA
 		//Attributes
 		SubScrSt st;			//Subscription status
 		int	sess;			//Session assign
-		bool	en;			//Enable state
+		bool	en,			//Enable state
+			toInit;			//Subsription init publish package send needs
 		double	publInterv;		//Publish interval (ms)
 		uint32_t seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
 			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object

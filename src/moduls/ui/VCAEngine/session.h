@@ -87,7 +87,7 @@ class Session : public TCntrNode
 	void openReg( const string &id );
 	void openUnreg( const string &id );
 
-	pthread_mutex_t	&dataMtx( )		{ return dataM; }
+	ResMtx	&dataMtx( )		{ return dataM; }
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
@@ -98,7 +98,8 @@ class Session : public TCntrNode
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
 	void alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret = false );	//Alarm quittance send
-	void ntfReg( uint8_t tp, const string &props );
+	//  Notification type <tp> register for no empty <props> else unregister, from the page-creator <pgCrtor>
+	void ntfReg( uint8_t tp, const string &props, const string &pgCrtor );
 
 	// Style
 	string stlPropGet( const string &pid, const string &def = "" );
@@ -146,15 +147,22 @@ class Session : public TCntrNode
 
 		//Methods
 		explicit Notify( ) : tp(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false),
-		    mQueueCurNtf(-1), mOwner(NULL) 	{ }
-		Notify( uint8_t tp, const string &props, Session *own );
+		    mQueueCurNtf(-1), dataM(true), mOwner(NULL) 	{ }
+		Notify( uint8_t tp, const string &pgProps, Session *own );
 		~Notify( );
+
+		string	pgCrtor( );
+		string	props( );
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
 		string ntfRes( unsigned &tm, string &wpath, string &mess, string &lang );	//The notification resource request
 
 		void queueSet( const string &wpath, const string &alrm );
 		void queueQuittance( const string &wpath, uint8_t quitTmpl, bool ret = false );	//Notification quittance send
+
+		//Attributes
+		string	pgProps;			//Page-creator and it's properties
+		vector<string> pgPropsQ;		//Page-creators queue
 
 	    private:
 		//Methods
@@ -177,14 +185,14 @@ class Session : public TCntrNode
 
 		unsigned toDo		:1;	//Need to do some notification doings
 		unsigned alEn		:1;	//Alarm enabled
-		string	comText, comProc;	//Command text and the procedure name
+		string	comProc;		//Command procedure name
 
 		vector<QueueIt>	mQueue;
 		int	mQueueCurNtf;
 		unsigned mQueueCurTm;
 		string	mQueueCurPath;
 
-		pthread_mutex_t	dataM;
+		ResMtx	dataM;
 		pthread_cond_t	callCV;
 		Session	*mOwner;
 	};
@@ -193,9 +201,9 @@ class Session : public TCntrNode
 	static void *Task( void *contr );
 
 	//Attributes
-	pthread_mutex_t	dataM,
-			mAlrmRes,		//Alarms resource
-			mCalcRes;		//Calc resource
+	ResMtx	dataM,
+		mAlrmRes,			//Alarms resource
+		mCalcRes;			//Calc resource
 	int	mPage;
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;

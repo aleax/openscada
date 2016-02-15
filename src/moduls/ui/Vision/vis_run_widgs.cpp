@@ -609,6 +609,12 @@ void RunPageView::closeEvent( QCloseEvent *event )
 	}*/
 }
 
+void RunPageView::hideEvent( QHideEvent * event )
+{
+    //Free of the notificators configuration of the page
+    for(unsigned iNtf = 0; iNtf < 7; iNtf++) mainWin()->ntfReg(iNtf, "", id());
+}
+
 //*********************************************
 //* Status bar styles                         *
 //*********************************************

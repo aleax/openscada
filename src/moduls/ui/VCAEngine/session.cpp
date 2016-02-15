@@ -33,18 +33,10 @@ using namespace VCA;
 //************************************************
 //* Session: Project's session			 *
 //************************************************
-Session::Session( const string &iid, const string &iproj ) :
-    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataM), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+Session::Session( const string &iid, const string &iproj ) : dataM(true), mAlrmRes(true), mCalcRes(true),
+    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataM.mtx()), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
     endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mStyleIdW(-1)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&dataM, &attrM);
-    pthread_mutex_init(&mAlrmRes, &attrM);
-    pthread_mutex_init(&mCalcRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     mUser = "root";
     mPage = grpAdd("pg_");
     sec = SYS->security();
@@ -54,10 +46,6 @@ Session::Session( const string &iid, const string &iproj ) :
 Session::~Session( )
 {
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) delete iN->second;
-
-    pthread_mutex_destroy(&dataM);
-    pthread_mutex_destroy(&mAlrmRes);
-    pthread_mutex_destroy(&mCalcRes);
 }
 
 void Session::postEnable( int flag )
@@ -79,7 +67,7 @@ void Session::setUser( const string &it )
 void Session::setEnable( bool val )
 {
     int64_t d_tm = 0;
-    MtxAlloc res(mCalcRes, true);
+    MtxAlloc res(mCalcRes.mtx(), true);
 
     if(val == enable())	return;
 
@@ -157,7 +145,7 @@ void Session::setStart( bool val )
 {
     int64_t d_tm = 0;
 
-    MtxAlloc res(mCalcRes, true);
+    MtxAlloc res(mCalcRes.mtx(), true);
 
     vector<string> pg_ls;
 
@@ -193,7 +181,7 @@ void Session::setStart( bool val )
 	}
 
 	//VCA server's force off
-	MtxAlloc resAl(mAlrmRes, true);
+	MtxAlloc resAl(mAlrmRes.mtx(), true);
 	for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->ntf(0);
 	resAl.unlock();
 
@@ -209,7 +197,7 @@ void Session::setStart( bool val )
 	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
 	//VCA server's force off
-	MtxAlloc resAl(mAlrmRes, true);
+	MtxAlloc resAl(mAlrmRes.mtx(), true);
 	for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->ntf(0);
 	resAl.unlock();
 
@@ -239,28 +227,38 @@ void Session::add( const string &iid, const string &iparent )
 
 vector<string> Session::openList( )
 {
-    pthread_mutex_lock(&dataM);
+    pthread_mutex_lock(&dataM.mtx());
     vector<string> rez = mOpen;
-    pthread_mutex_unlock(&dataM);
+    pthread_mutex_unlock(&dataM.mtx());
     return rez;
 }
 
 void Session::openReg( const string &iid )
 {
     unsigned i_op;
-    pthread_mutex_lock(&dataM);
+    pthread_mutex_lock(&dataM.mtx());
     for(i_op = 0; i_op < mOpen.size(); i_op++)
 	if(iid == mOpen[i_op]) break;
     if(i_op >= mOpen.size())	mOpen.push_back(iid);
-    pthread_mutex_unlock(&dataM);
+    pthread_mutex_unlock(&dataM.mtx());
+
+    //Check for notifiers register
+    for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
+	string aNtf = TSYS::strMess("notify%d", iNtf);
+	AutoHD<SessPage> pgO = nodeAt(iid, 1);
+	if(pgO.at().attrPresent(aNtf)) ntfReg(iNtf, pgO.at().attrAt(aNtf).at().getS(), iid);
+    }
 }
 
 void Session::openUnreg( const string &iid )
 {
-    pthread_mutex_lock(&dataM);
+    pthread_mutex_lock(&dataM.mtx());
     for(unsigned i_op = 0; i_op < mOpen.size(); i_op++)
 	if(iid == mOpen[i_op]) mOpen.erase(mOpen.begin()+i_op);
-    pthread_mutex_unlock(&dataM);
+    pthread_mutex_unlock(&dataM.mtx());
+
+    //Check for notifiers unregister of the page
+    for(unsigned iNtf = 0; iNtf < 7; iNtf++) ntfReg(iNtf, "", iid);
 }
 
 AutoHD<SessPage> Session::at( const string &id )	{ return chldAt(mPage, id); }
@@ -360,7 +358,7 @@ void Session::alarmSet( const string &wpath, const string &alrm )
     if(wpath.empty()) return;
 
     //Notifications queue update
-    MtxAlloc resAl(mAlrmRes, true);
+    MtxAlloc resAl(mAlrmRes.mtx(), true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->queueSet(wpath, alrm);
 }
 
@@ -393,17 +391,47 @@ void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret )
     }
 
     //The notifications queue quittance
-    MtxAlloc resAl(mAlrmRes, true);
+    MtxAlloc resAl(mAlrmRes.mtx(), true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN)
 	iN->second->queueQuittance(wpath, quit_tmpl, ret);
 }
 
-void Session::ntfReg( uint8_t tp, const string &props )
+void Session::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
 {
-    MtxAlloc res(mAlrmRes, true);
+    vector<string> pgPropsQ;
+
+    MtxAlloc res(mAlrmRes.mtx(), true);
+
+    //Find for presented notification type
     map<uint8_t,Notify*>::iterator iN = mNotify.find(tp);
-    if(iN != mNotify.end()) return;
-    mNotify[tp] = new Notify(tp, props, this);
+    if(iN != mNotify.end()) {
+	if(pgCrtor == iN->second->pgCrtor() && props == iN->second->props())	return;
+	pgPropsQ = iN->second->pgPropsQ;
+	if(pgCrtor != iN->second->pgCrtor()) {
+	    // Check the queue for pointed page already here
+	    for(vector<string>::iterator iQ = iN->second->pgPropsQ.begin(); iQ != iN->second->pgPropsQ.end(); ++iQ)
+		if(TSYS::strLine(*iQ,0) == pgCrtor) {
+		    if(props.empty()) iN->second->pgPropsQ.erase(iQ);
+		    else *iQ = pgCrtor+"\n"+props;
+		    return;
+	    }
+	    if(props.empty()) return;
+	    pgPropsQ.push_back(iN->second->pgProps);
+	}
+	delete iN->second;
+	mNotify.erase(iN);
+    }
+
+    //New or replaced creation
+    if(props.size()) {
+	mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this);
+	mNotify[tp]->pgPropsQ = pgPropsQ;
+    }
+    //Take and place a notificator from the queue
+    else if(pgPropsQ.size()) {
+	mNotify[tp] = new Notify(tp, pgPropsQ.back(), this); pgPropsQ.pop_back();
+	mNotify[tp]->pgPropsQ = pgPropsQ;
+    }
 }
 
 void *Session::Task( void *icontr )
@@ -425,7 +453,7 @@ void *Session::Task( void *icontr )
 	    }
 
 	//VCA server's notifications processing
-	MtxAlloc resAl(ses.mAlrmRes, true);
+	MtxAlloc resAl(ses.mAlrmRes.mtx(), true);
 	int aSt = ses.alarmStat();
 	for(map<uint8_t,Notify*>::iterator iN = ses.mNotify.begin(); iN != ses.mNotify.end(); ++iN) iN->second->ntf(aSt);
 	resAl.unlock();
@@ -447,7 +475,7 @@ void Session::stlCurentSet( int sid )
     mStyleIdW = sid;
 
     if(start()) {
-	MtxAlloc res(dataM, true);
+	MtxAlloc res(dataM.mtx(), true);
 
 	//Load Styles from project
 	mStProp.clear();
@@ -467,7 +495,7 @@ void Session::stlCurentSet( int sid )
 
 string Session::stlPropGet( const string &pid, const string &def )
 {
-    MtxAlloc res(dataM, true);
+    MtxAlloc res(dataM.mtx(), true);
 
     if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return def;
 
@@ -479,7 +507,7 @@ string Session::stlPropGet( const string &pid, const string &def )
 
 bool Session::stlPropSet( const string &pid, const string &vl )
 {
-    MtxAlloc res(dataM, true);
+    MtxAlloc res(dataM.mtx(), true);
     if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return false;
     map<string,string>::iterator iStPrp = mStProp.find(pid);
     if(iStPrp == mStProp.end()) return false;
@@ -547,7 +575,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 
 	    // Get visualiser side notification's resource
 	    if(opt->attr("mode") == "resource") {
-		MtxAlloc resAl(mAlrmRes, true);
+		MtxAlloc resAl(mAlrmRes.mtx(), true);
 		map<uint8_t,Notify*>::iterator iN = mNotify.find(s2i(opt->attr("tp")));
 		unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
 		string res, mess, lang, wdg = opt->attr("wdg");
@@ -666,21 +694,14 @@ void Session::cntrCmdProc( XMLNode *opt )
 
 //* Notify: Generic notifying object.		 *
 //************************************************
-Session::Notify::Notify( uint8_t itp, const string &props, Session *iown ) :
+Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : pgProps(ipgProps),
     tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_qMergeMess(false),
-    toDo(false), alEn(false), comText(props), mQueueCurNtf(-1), mQueueCurTm(0), mOwner(iown)
+    toDo(false), alEn(false), mQueueCurNtf(-1), mQueueCurTm(0), dataM(true), mOwner(iown)
 {
-    //The resource allocation object init
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&dataM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     //Parse properties
-    string iLn, iOpt;
+    string iLn, iOpt, iProps = props();
     bool hasLang  = false, hasFlags = false;
-    for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags) && (iLn=TSYS::strLine(props,0,&off)).size(); lCnt++)
+    for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags) && (iLn=TSYS::strLine(iProps,0,&off)).size(); lCnt++)
 	if(!hasLang && !lCnt && iLn.find("#!") == 0) { hasLang = comIsExtScript = true; continue; }
 	else if(!hasFlags && (fPos=iLn.find("flags=")) != string::npos)
 	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); )
@@ -699,7 +720,7 @@ Session::Notify::Notify( uint8_t itp, const string &props, Session *iown ) :
 	bool fOK = false;
 	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0775);
 	if(hd >= 0) {
-	    fOK = write(hd, comText.data(), comText.size()) == comText.size();
+	    fOK = write(hd, props().data(), props().size()) == props().size();
 	    close(hd);
 	}
 	if(!fOK) {
@@ -717,7 +738,7 @@ Session::Notify::Notify( uint8_t itp, const string &props, Session *iown ) :
 	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
 	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
 	funcIO.ioIns(new IO("lang",_("Notification message's language"),IO::String,IO::Default), IFA_lang);
-	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, comText); }
+	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError er) {
 	    mess_err(owner()->nodePath().c_str(), _("Function of the notificator '%s' error: %s"), funcIO.id().c_str(), er.mess.c_str());
 	}
@@ -741,8 +762,15 @@ Session::Notify::~Notify( )
 
     //The command procedure remove
     if(comIsExtScript && comProc.size()) remove(comProc.c_str());
+}
 
-    pthread_mutex_destroy(&dataM);
+string	Session::Notify::pgCrtor( )	{ return TSYS::strLine(pgProps, 0); }
+
+string	Session::Notify::props( )
+{
+    int off = 0;
+    TSYS::strLine(pgProps, 0, &off);
+    return pgProps.substr(off);
 }
 
 void Session::Notify::ntf( int ialSt )
@@ -751,10 +779,10 @@ void Session::Notify::ntf( int ialSt )
     if(!f_notify || !(((ialSt^alSt)>>16)&(1<<tp)))	return;
 
     alEn = (bool)((ialSt>>16)&(1<<tp));
-    pthread_mutex_lock(&dataM);
+    pthread_mutex_lock(&dataM.mtx());
     toDo = true;
     pthread_cond_signal(&callCV);
-    pthread_mutex_unlock(&dataM);
+    pthread_mutex_unlock(&dataM.mtx());
 
     alSt = ialSt;
 }
@@ -773,7 +801,7 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, stri
 	itm = owner()->calcClk();
 
 	// Find entry, return it and the resource
-	MtxAlloc res(dataM, true);
+	MtxAlloc res(dataM.mtx(), true);
 	int iQ, iFirst = -1, iNext = -1;
 	for(iQ = mQueue.size()-1; iQ >= 0; iQ--) {
 	    if(mQueue[iQ].quittance) continue;
@@ -813,7 +841,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
 
     QueueIt qIt(wpath+";", aLev, aCat, aMess, aArg, owner()->calcClk());
 
-    MtxAlloc res(dataM, true);
+    MtxAlloc res(dataM.mtx(), true);
 
     unsigned iQ = 0;
     // Check for the entry to present
@@ -856,7 +884,7 @@ void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl, boo
     //Calls to the queue update from alarmQuittance()
     if(!f_queue || (quitTmpl&(1<<tp))) return;
 
-    pthread_mutex_lock(&dataM);
+    pthread_mutex_lock(&dataM.mtx());
     string tStr, tStr1;
     for(unsigned iQ = 0; iQ < mQueue.size(); iQ++) {
 	bool toQuitt = false;
@@ -867,7 +895,7 @@ void Session::Notify::queueQuittance( const string &wpath, uint8_t quitTmpl, boo
 	if(toQuitt) mQueue[iQ].quittance = !ret;
     }
 
-    pthread_mutex_unlock(&dataM);
+    pthread_mutex_unlock(&dataM.mtx());
 }
 
 void Session::Notify::commCall( bool doNtf, bool doRes, string &res, const string &mess, const string &lang )
@@ -875,9 +903,9 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, const strin
     if(comProc.empty()) return;
 
     //Shared data obtain
-    pthread_mutex_lock(&dataM);
+    pthread_mutex_lock(&dataM.mtx());
     string wcomProc = comProc;
-    pthread_mutex_unlock(&dataM);
+    pthread_mutex_unlock(&dataM.mtx());
 
     if(comIsExtScript) {
 	string resFile = "ses_"+owner()->id()+"_res"+i2s(tp);
@@ -925,12 +953,12 @@ void *Session::Notify::Task( void *intf )
 {
     Session::Notify &ntf = *(Session::Notify*)intf;
 
-    pthread_mutex_lock(&ntf.dataM);
+    pthread_mutex_lock(&ntf.dataM.mtx());
     while(!TSYS::taskEndRun() || ntf.toDo) {
-	if(!ntf.toDo) pthread_cond_wait(&ntf.callCV, &ntf.dataM);
+	if(!ntf.toDo) pthread_cond_wait(&ntf.callCV, &ntf.dataM.mtx());
 	if(!ntf.toDo || ntf.comProc.empty()) { ntf.toDo = false; continue; }
 	ntf.toDo = false;
-	pthread_mutex_unlock(&ntf.dataM);
+	pthread_mutex_unlock(&ntf.dataM.mtx());
 
 	string ntfRes, ntfMess, ntfLang;
 	unsigned delayCnt = 0;
@@ -947,9 +975,9 @@ void *Session::Notify::Task( void *intf )
 	    delayCnt = ntf.repDelay;
 	} while((ntf.repDelay >= 0 || ntf.f_queue) && ntf.alEn && !TSYS::taskEndRun());
 
-	pthread_mutex_lock(&ntf.dataM);
+	pthread_mutex_lock(&ntf.dataM.mtx());
     }
-    pthread_mutex_unlock(&ntf.dataM);
+    pthread_mutex_unlock(&ntf.dataM.mtx());
 }
 
 //************************************************
@@ -982,12 +1010,6 @@ void SessPage::setEnable( bool val, bool force )
 	if((pgOpen || force || parent().at().attrAt("pgNoOpenProc").at().getB()) && !enable()) {
 	    SessWdg::setEnable(true);
 	    if(pgOpen) ownerSess()->openReg(path());
-
-	    //  Check for notifiers register
-	    for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
-		string aNtf = TSYS::strMess("notify%d", iNtf);
-		if(attrPresent(aNtf)) ownerSess()->ntfReg(iNtf, attrAt(aNtf).at().getS());
-	    }
 	}
 	// Child pages process
 	if(!force) {
@@ -996,6 +1018,7 @@ void SessPage::setEnable( bool val, bool force )
 	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
 		if(!pagePresent(pg_ls[i_p]))
 		    pageAdd(pg_ls[i_p],parent().at().pageAt(pg_ls[i_p]).at().path());
+
 	    //Enable included pages
 	    pageList(pg_ls);
 	    for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
@@ -1008,10 +1031,12 @@ void SessPage::setEnable( bool val, bool force )
 	//Unregister opened page
 	if(!(parent().at().prjFlags()&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
 	    ownerSess()->openUnreg(path());
+
 	//Disable include pages
 	pageList(pg_ls);
 	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    pageAt(pg_ls[i_l]).at().setEnable(false);
+
 	//Delete included pages
 	for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 	    pageDel(pg_ls[i_l]);
@@ -1599,19 +1624,19 @@ void SessWdg::sessAttrSet( const string &id, const string &val )
 void SessWdg::eventAdd( const string &ev )
 {
     if(!enable() || !attrPresent("event")) return;
-    pthread_mutex_lock(&ownerSess()->dataMtx());
+    pthread_mutex_lock(&ownerSess()->dataMtx().mtx());
     attrAt("event").at().setS(attrAt("event").at().getS()+ev);
-    pthread_mutex_unlock(&ownerSess()->dataMtx());
+    pthread_mutex_unlock(&ownerSess()->dataMtx().mtx());
 }
 
 string SessWdg::eventGet( bool clear )
 {
     if(!enable() || !attrPresent("event")) return "";
 
-    pthread_mutex_lock(&ownerSess()->dataMtx());
+    pthread_mutex_lock(&ownerSess()->dataMtx().mtx());
     string rez = attrAt("event").at().getS();
     if(clear)	attrAt("event").at().setS("");
-    pthread_mutex_unlock(&ownerSess()->dataMtx());
+    pthread_mutex_unlock(&ownerSess()->dataMtx().mtx());
 
     return rez;
 }
@@ -1665,7 +1690,7 @@ void SessWdg::prcElListUpdate( )
     vector<string> ls;
 
     wdgList(ls);
-    MtxAlloc resDt(ownerSess()->dataMtx(), true);
+    MtxAlloc resDt(ownerSess()->dataMtx().mtx(), true);
     mWdgChldAct.clear();
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	try { if(((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().process()) mWdgChldAct.push_back(ls[i_l]); }
@@ -1686,7 +1711,7 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
     string wpath = ipath + "/" + id();
     if(modifChk(tm,mMdfClc)) els.push_back(wpath);
 
-    MtxAlloc resDt(ownerSess()->dataMtx(), true);
+    MtxAlloc resDt(ownerSess()->dataMtx().mtx(), true);
     for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
 	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_ch]);
@@ -1720,7 +1745,7 @@ void SessWdg::calc( bool first, bool last )
 //    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
     //Calculate include widgets
-    MtxAlloc resDt(ownerSess()->dataMtx(), true);
+    MtxAlloc resDt(ownerSess()->dataMtx().mtx(), true);
     for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
 	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_l]);
