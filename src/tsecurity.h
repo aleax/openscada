@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsecurity.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,22 +51,22 @@ class TUser : public TCntrNode, public TConfig
 	string	longDescr( )	{ return cfg("LONGDESCR").getS(); }
 	string	picture( )	{ return cfg("PICTURE").getS(); }
 	string	lang( )		{ return mLang; }
-	bool sysItem( )		{ return m_sysIt; }
+	bool sysItem( )		{ return mSysIt; }
 
-	bool auth( const string &pass );
+	bool auth( const string &pass, string *hash = NULL );
 
-	string DB( )			{ return m_db; }
+	string DB( )		{ return mDB; }
 	string tbl( );
-	string fullDB( )		{ return DB()+'.'+tbl(); }
+	string fullDB( )	{ return DB()+'.'+tbl(); }
 
 	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
 	void setPicture( const string &pct )	{ cfg("PICTURE").setS(pct); }
 	void setLang( const string &vl )	{ mLang = vl; }
 	void setPass( const string &n_pass );
-	void setSysItem( bool vl )		{ m_sysIt = vl; }
+	void setSysItem( bool vl )		{ mSysIt = vl; }
 
-	void setDB( const string &vl )		{ m_db = vl; modifG(); }
+	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
     protected:
 	//Methods
@@ -87,8 +87,8 @@ class TUser : public TCntrNode, public TConfig
 	//Attributes
 	TCfg	&mName,
 		&mLang;
-	string	m_db;
-	bool	m_sysIt;
+	string	mDB;
+	bool	mSysIt;
 };
 
 //*************************************************
@@ -107,17 +107,17 @@ class TGroup : public TCntrNode, public TConfig
 	string	descr( )	{ return cfg("DESCR").getS(); }
 	string	longDescr( )	{ return cfg("LONGDESCR").getS(); }
 	string	users( )	{ return cfg("USERS").getS(); }
-	bool	sysItem( )	{ return m_sysIt; }
+	bool	sysItem( )	{ return mSysIt; }
 
-	string DB( )		{ return m_db; }
+	string DB( )		{ return mDB; }
 	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string fullDB( )	{ return DB() + '.' + tbl(); }
 
 	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
-	void setSysItem( bool vl )		{ m_sysIt = vl; }
+	void setSysItem( bool vl )		{ mSysIt = vl; }
 
-	void setDB( const string &vl )		{ m_db = vl; modifG(); }
+	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
 	bool user( const string &name );
 	void userAdd( const string &name );
@@ -141,8 +141,8 @@ class TGroup : public TCntrNode, public TConfig
 
 	//Attributes
 	TCfg	&mName;
-	string	m_db;
-	bool	m_sysIt;
+	string	mDB;
+	bool	mSysIt;
 };
 
 //*************************************************
@@ -157,20 +157,23 @@ class TSecurity : public TSubSYS
 
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
 
-	//> Users
-	void usrList( vector<string> &list )		{ chldList(m_usr,list); }
+	// Users
+	void usrList( vector<string> &list )		{ chldList(mUsr,list); }
 	void usrGrpList( const string &name, vector<string> &list );
-	bool usrPresent( const string &name )		{ return chldPresent(m_usr,name); }
+	bool usrPresent( const string &name )		{ return chldPresent(mUsr,name); }
 	void usrAdd( const string &name, const string &db = "*.*" );
 	void usrDel( const string &name, bool complete = false );
-	AutoHD<TUser> usrAt( const string &name )	{ return chldAt(m_usr,name); }
+	AutoHD<TUser> usrAt( const string &name )	{ return chldAt(mUsr,name); }
 
-	//> Groups
-	void grpList( vector<string> &list )		{ chldList(m_grp,list); }
-	bool grpPresent( const string &name )		{ return chldPresent(m_grp,name); }
+	// Groups
+	void grpList( vector<string> &list )		{ chldList(mGrp,list); }
+	bool grpPresent( const string &name )		{ return chldPresent(mGrp,name); }
 	void grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
-	AutoHD<TGroup> grpAt( const string &name )	{ return chldAt(m_grp,name); }
+	AutoHD<TGroup> grpAt( const string &name )	{ return chldAt(mGrp,name); }
+
+	//Public attributes
+	static const string pHashMagic;
 
     protected:
 	//Methods
@@ -186,15 +189,12 @@ class TSecurity : public TSubSYS
 	void postEnable( int flag );
 
 	//Attributes
-	int	m_usr, m_grp;
+	int	mUsr, mGrp;
 
-	TElem	user_el;
-	TElem	grp_el;
-
-	unsigned	hd_res;
+	TElem	userEl;
+	TElem	grpEl;
 };
 
 }
 
 #endif // TSECURITY_H
-

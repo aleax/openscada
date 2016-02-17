@@ -66,7 +66,7 @@ class TProt: public TProtocol
 
 		//Attributes
 		time_t	tAuth;
-		string	name, src;
+		string	name, src, pHash;
 	};
 
 	//Methods
@@ -86,6 +86,7 @@ class TProt: public TProtocol
 	int sesOpen( const string &user, const string &pass, const string &src = "" );
 	void sesClose( int idSes );
 	SAuth sesGet( int idSes );
+	void sesSet( int idSes, const SAuth &auth );
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 

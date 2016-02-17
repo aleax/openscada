@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-15 21:34+0200\n"
+"POT-Creation-Date: 2016-02-17 18:02+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -21,10 +21,7 @@ msgstr ""
 msgid "Operation user interface (Qt)"
 msgstr "Benutzerschnittstelle (Qt)"
 
-msgid "Roman Savochenko"
-msgstr "Roman Savotschenko"
-
-msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
+msgid "Roman Savochenko, Maxim Lysenko, Kseniya Yashina"
 msgstr "Roman Savotschenko, Maxim Lysjenko, Ksenija Jaschina"
 
 msgid ""
@@ -34,9 +31,7 @@ msgstr ""
 "Visuelle Betrieb Benutzeroberfläche basierend auf Qt-Bibliothek - Front-End "
 "für VCA-Motor."
 
-msgid "Developers"
-msgstr "Entwickler"
-
+#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
@@ -833,6 +828,9 @@ msgstr ""
 "Lizenz: %10\n"
 "Autor: %11\n"
 "Web Seite: %12"
+
+msgid "Developers"
+msgstr "Entwickler"
 
 msgid "Manual"
 msgstr "Handbuch"
@@ -2216,60 +2214,3 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
-
-#~ msgid "Run projects status display"
-#~ msgstr "Zeigt den Status von aktivierten Projekten"
-
-#~ msgid "Alarms"
-#~ msgstr "Störungen"
-
-#~ msgid "Play command"
-#~ msgstr "Play Kommando"
-
-#~ msgid ""
-#~ "Command line for call sounds play.\n"
-#~ "Use %f for source file name inserting. If source file is not used play "
-#~ "sample is sent to pipe."
-#~ msgstr ""
-#~ "Kommandozeile für Wiedergabe des Tons.\n"
-#~ "Verwenden Sie %f für Dateinamen. Falls Dateiname nicht verwendet wird, "
-#~ "werden die Dateien in den Kanal gesendet."
-
-#~ msgid "Blink alarm"
-#~ msgstr "Blinzalarme"
-
-#~ msgid "The button for all blink alarms quittance"
-#~ msgstr "Schaltfläche für Quittierung alle Alarme blinken"
-
-#~ msgid "Press for all blink alarms quittance."
-#~ msgstr "Betätigen für die Quittierung alle Alarme blinken."
-
-#~ msgid "Speaker alarm"
-#~ msgstr "Lautsprecheralarm"
-
-#~ msgid "PC speaker alarm"
-#~ msgstr "PC Lautsprecheralarm"
-
-#~ msgid "The button for all PC speaker alarms quittance"
-#~ msgstr "Schaltfläche für die Quittierung aller Lautsprecheralarme"
-
-#~ msgid "Press for all PC speaker alarms quittance."
-#~ msgstr "Betätigen für die Quittierung aller Lautsprecheralarme."
-
-#~ msgid "Sound/speech alarm"
-#~ msgstr "Signal/Redealarm"
-
-#~ msgid "Sound or speech alarm"
-#~ msgstr "Signal- oder Redealarm"
-
-#~ msgid "The button for all sound or speech alarms quittance"
-#~ msgstr "Schaltfläche für die Quittierung aller akustischen Alarme"
-
-#~ msgid "Press for all sound or speech alarms quittance."
-#~ msgstr "Betätigen für Quittierung aller akustischen Alarme."
-
-#~ msgid "Error open: %s"
-#~ msgstr "Fehler beim Öffnen: %s"
-
-#~ msgid "Error write to: %s"
-#~ msgstr "Fehler schreiben Sie an: %s"

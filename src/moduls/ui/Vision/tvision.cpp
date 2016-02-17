@@ -45,9 +45,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.4.0"
-#define AUTHORS		_("Roman Savochenko")
-#define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
+#define MOD_VER		"3.4.1"
+#define AUTHORS		_("Roman Savochenko, Maxim Lysenko, Kseniya Yashina")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -106,13 +105,11 @@ void TVision::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
-    list.push_back(_("Developers"));
 }
 
 string TVision::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
-    if(name == _("Developers"))	return _(DEVELOPERS);
     return TModule::modInfo(name);
 }
 
@@ -231,13 +228,13 @@ QMainWindow *TVision::openWindow( )
 	shapesWdg.push_back(new ShapeFunction);
     }
 
-    string user_open = startUser( );
-    string user_pass = userPass( );
+    string user_open = startUser();
+    string user_pass = userPass();
 
     //Check for start user set OK
     int err = 0;
     XMLNode req("get");
-    req.setAttr("path",string("/Security/")+user_open+"/%2fauth")->setAttr("password",user_pass);
+    req.setAttr("path", string("/Security/") + user_open + "/%2fauth")->setAttr("password", user_pass);
     if(!((VCAStation() == "." && SYS->security().at().usrPresent(startUser())) ||
 	    (!(err=mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true)) && s2i(req.text()))))
 	while(true) {
@@ -253,6 +250,7 @@ QMainWindow *TVision::openWindow( )
 	    user_pass = d_usr.password().toStdString();
 	    break;
 	}
+    if(req.attr("hash").size()) setUserPass(TSecurity::pHashMagic+req.attr("hash"));
 
     //Check for run projects need
     string sprj;
@@ -394,7 +392,11 @@ void TVision::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/u_pass") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText("*******");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setUserPass(opt->text());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    if(opt->text().compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
+		setUserPass(opt->text().substr(TSecurity::pHashMagic.size()));
+	    else setUserPass(opt->text());
+	}
     }
     else if(a_path == "/prm/cfg/restTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(restoreTime()));

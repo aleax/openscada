@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-15 21:34+0200\n"
+"POT-Creation-Date: 2016-02-17 18:02+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -18,11 +18,8 @@ msgstr ""
 msgid "Operation user interface (Qt)"
 msgstr "Робочий інтерфейс користувача (Qt)"
 
-msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
-
-msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
-msgstr "Роман Савоченко, Лисенко Максим, Яшина Ксенія"
+msgid "Roman Savochenko, Maxim Lysenko, Kseniya Yashina"
+msgstr "Роман Савоченко, Максим Лисенко, Ксенія Яшина"
 
 msgid ""
 "Visual operation user interface, based on Qt library - front-end to VCA "
@@ -31,9 +28,7 @@ msgstr ""
 "Робочий інтерфейс користувача, заснований на бібліотеці Qt - зовнішній "
 "інтерфейс до рущія візуалізації."
 
-msgid "Developers"
-msgstr "Розробники"
-
+#, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
@@ -825,6 +820,9 @@ msgstr ""
 "Ліцензія: %10\n"
 "Автор: %11\n"
 "Web сайт: %12"
+
+msgid "Developers"
+msgstr "Розробники"
 
 msgid "Manual"
 msgstr "Підручник"
@@ -2202,60 +2200,3 @@ msgstr "Час ініціалізації '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision діалог"
-
-#~ msgid "Run projects status display"
-#~ msgstr "Відображення статусу проектів для пуску"
-
-#~ msgid "Alarms"
-#~ msgstr "Порушення"
-
-#~ msgid "Play command"
-#~ msgstr "Команда програвання"
-
-#~ msgid ""
-#~ "Command line for call sounds play.\n"
-#~ "Use %f for source file name inserting. If source file is not used play "
-#~ "sample is sent to pipe."
-#~ msgstr ""
-#~ "Командний рядок для виклику програвання звуку.\n"
-#~ "Використовуйте %f для вставлення імені файлу джерела. Якщо файл джерела "
-#~ "не вказано то дані направляються до каналу."
-
-#~ msgid "Blink alarm"
-#~ msgstr "Квітація миготіння"
-
-#~ msgid "The button for all blink alarms quittance"
-#~ msgstr "Кнопка для квітації всіх порушень миготінням"
-
-#~ msgid "Press for all blink alarms quittance."
-#~ msgstr "Натиснути для квітації всіх порушень миготінням."
-
-#~ msgid "Speaker alarm"
-#~ msgstr "Квітація гудком"
-
-#~ msgid "PC speaker alarm"
-#~ msgstr "Квітація гудком"
-
-#~ msgid "The button for all PC speaker alarms quittance"
-#~ msgstr "Кнопка для квітації всіх порушень гудком"
-
-#~ msgid "Press for all PC speaker alarms quittance."
-#~ msgstr "Натиснути для квітації всіх порушень гудком."
-
-#~ msgid "Sound/speech alarm"
-#~ msgstr "Квітація звука/мови"
-
-#~ msgid "Sound or speech alarm"
-#~ msgstr "Квітація звука/мови"
-
-#~ msgid "The button for all sound or speech alarms quittance"
-#~ msgstr "Кнопка для квітації всіх порушень звуком або мовою"
-
-#~ msgid "Press for all sound or speech alarms quittance."
-#~ msgstr "Натиснути для квітації всіх порушень звуком або мовою."
-
-#~ msgid "Error open: %s"
-#~ msgstr "Помилка відкриття: %s"
-
-#~ msgid "Error write to: %s"
-#~ msgstr "Помилка запису до: %s"

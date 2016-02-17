@@ -1307,7 +1307,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
     if(opt->name() == "info") {
 	SessWdg::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session page: ")+ownerFullId()+"/"+id());
-	if(enable() && !(parent().at().prjFlags( )&Page::Empty))
+	if(enable() && !(parent().at().prjFlags()&Page::Empty))
 	    ctrMkNode("fld",opt,1,"/wdg/st/open",_("Open"),RWRWR_,owner().c_str(),grp().c_str(),1,"tp","bool");
 	if(enable() && parent().at().prjFlags()&(Page::Template|Page::Container)) {
 	    if(ctrMkNode("area",opt,1,"/page",_("Pages")))

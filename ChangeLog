@@ -1,3 +1,9 @@
+2016-02-17 Roman
+- SYS: CoreLib version rise to 3.5.
+    Security: Adapted to prevent passwors storing in open view as hash instead, for: OpenSCADA host (Transports), Protocol.SelfSystem, UI.Vision.
+    Security: crypt_r() using enabled only for "__USE_GNU" and the open passwords store instead.
+
+
 2016-02-15 Roman
 - UI.{VCAEngine,Vision}: Projects flags moved to as the visualizator specific attributes "runWin" and "keepAspectRatio".
     Vision global properties "stBarNoShow", "winPosCntrSave" moved to the visualizator specific attributes.

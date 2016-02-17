@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-15 21:34+0200\n"
+"POT-Creation-Date: 2016-02-17 18:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,16 +20,10 @@ msgstr ""
 msgid "Operation user interface (Qt)"
 msgstr ""
 
-msgid "Roman Savochenko"
-msgstr ""
-
-msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
+msgid "Roman Savochenko, Maxim Lysenko, Kseniya Yashina"
 msgstr ""
 
 msgid "Visual operation user interface, based on Qt library - front-end to VCA engine."
-msgstr ""
-
-msgid "Developers"
 msgstr ""
 
 #, c-format
@@ -770,6 +764,9 @@ msgid ""
 "License: %10\n"
 "Author: %11\n"
 "Web site: %12"
+msgstr ""
+
+msgid "Developers"
 msgstr ""
 
 msgid "Manual"

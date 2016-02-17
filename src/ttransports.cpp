@@ -430,6 +430,11 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     tr.at().messProtIO(node, "SelfSystem");
     if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), _("RESP: %s"), node.save().c_str());
     node.setAttr("path", path);
+    //Password's hash processing
+    if(node.attr("pHash").size() && host.pass != (TSecurity::pHashMagic+node.attr("pHash"))) {
+	host.pass = TSecurity::pHashMagic + node.attr("pHash");
+	extHostSet(host);
+    }
 
     return s2i(node.attr("rez"));
 }
@@ -483,7 +488,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if(n_tr)	n_tr->childAdd("el")->setText(host.transp);
 		if(n_addr)	n_addr->childAdd("el")->setText(host.addr);
 		if(n_user)	n_user->childAdd("el")->setText(host.user);
-		if(n_pass)	n_pass->childAdd("el")->setText(host.pass.size()?"*******":"");
+		if(n_pass)	n_pass->childAdd("el")->setText(host.pass.size() ? "*******" : "");
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(host.mode));
 	    }
 	}
@@ -500,7 +505,11 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    else if(col == "transp")host.transp = opt->text();
 	    else if(col == "addr")  host.addr = opt->text();
 	    else if(col == "user")  host.user = opt->text();
-	    else if(col == "pass")  host.pass = opt->text();
+	    else if(col == "pass") {
+		if(opt->text().compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
+		    host.pass = opt->text().substr(TSecurity::pHashMagic.size());
+		else host.pass = opt->text();
+	    }
 	    else if(col == "mode")  host.mode = s2i(opt->text());
 	    extHostSet(host, sysHostAcs);
 	}

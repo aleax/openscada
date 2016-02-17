@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.0.2"
+#define MOD_VER		"1.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
@@ -82,7 +82,8 @@ TProt::~TProt( )
 
 int TProt::sesOpen( const string &user, const string &pass, const string &src )
 {
-    if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass)) return -1;
+    string pHash;
+    if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass,&pHash)) return -1;
 
     MtxAlloc res(dataRes(), true);
 
@@ -110,6 +111,7 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
 
     //Make new sesion
     mAuth[idSes] = TProt::SAuth(time(NULL), user, src);
+    mAuth[idSes].pHash = pHash;
 
     return idSes;
 }
@@ -134,6 +136,12 @@ TProt::SAuth TProt::sesGet( int idSes )
     }
 
     return TProt::SAuth();
+}
+
+void TProt::sesSet( int idSes, const SAuth &auth )
+{
+    MtxAlloc res(dataRes(), true);
+    mAuth[idSes] = auth;
 }
 
 void TProt::load_( )
@@ -235,7 +243,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    // Wait tail
 	    while((int)resp.size() < abs(resp_size)+head_end) {
-		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
+		resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf, resp_len);
 	    }
@@ -354,7 +362,7 @@ bool TProtIn::mess( const string &request, string &answer )
 	TProt::SAuth auth;
 	if(sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2) auth = mod->sesGet(ses_id);
 	else if(sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3) {
-	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass))
+	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass,&auth.pHash))
 	    { auth.tAuth = 1; auth.name = user; }
 	}
 	else { answer = "REZ 3 Command format error.\x0A"; reqBuf.clear(); return false; }
@@ -379,6 +387,10 @@ bool TProtIn::mess( const string &request, string &answer )
 	    }
 
 	    SYS->cntrCmd(&req_node);
+	    if(auth.pHash.size()) {
+		req_node.setAttr("pHash", auth.pHash);
+		if(ses_id >= 0) { auth.pHash = ""; mod->sesSet(ses_id, auth); }
+	    }
 
 	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Process request: '%s', time: %f ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
