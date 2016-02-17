@@ -815,7 +815,8 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, stri
 	    mess = mQueue[iQ].mess;
 	    //  Get the resource direct
 	    if(!mQueue[iQ].tpArg.empty())
-		rez = TSYS::strDecode(((AutoHD<SessWdg>)mod->nodeAt(mQueue[iQ].path)).at().resourceGet(mQueue[iQ].tpArg), TSYS::base64);
+		rez = TSYS::strDecode(((AutoHD<SessWdg>)mod->nodeAt(TSYS::strParse(mQueue[iQ].path,0,";"))).at().
+				resourceGet(mQueue[iQ].tpArg), TSYS::base64);
 	    //  Call the resource producing procedure
 	    else commCall(false, true, rez, mQueue[iQ].mess, lang);
 	    mQueueCurNtf = iQ;
@@ -1017,7 +1018,7 @@ void SessPage::setEnable( bool val, bool force )
 	    parent().at().pageList(pg_ls);
 	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
 		if(!pagePresent(pg_ls[i_p]))
-		    pageAdd(pg_ls[i_p],parent().at().pageAt(pg_ls[i_p]).at().path());
+		    pageAdd(pg_ls[i_p], parent().at().pageAt(pg_ls[i_p]).at().path());
 
 	    //Enable included pages
 	    pageList(pg_ls);

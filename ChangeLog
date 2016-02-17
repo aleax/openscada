@@ -1,4 +1,5 @@
 2016-02-17 Roman
+- FIX:UI.VCAEngine: Notifications by queue and direct pointed resource is fixed.
 - SYS: CoreLib version rise to 3.5.
     Security: Adapted to prevent passwors storing in open view as hash instead, for: OpenSCADA host (Transports), Protocol.SelfSystem, UI.Vision.
     Security: crypt_r() using enabled only for "__USE_GNU" and the open passwords store instead.
