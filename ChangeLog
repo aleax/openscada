@@ -1,3 +1,11 @@
+2016-02-28 Roman
+- DB.Model.{AGLKS.vca.db,Boiler.St.db}: Visualizer's UI.Vision specific attributes moved to the project's root-page.
+- FIX:SYS: User's space flags to generic nodes (TCntrNode) processing fixed, mostly for "RM_Full" flag and DAQ paramter's archives propper removing.
+- UI.Vision: Global modification mark processing moved to different function modifyGlbStUpdate() and some changed.
+- FIX:UI.Vision: Included to container's pages align processing rewrote to trace on the widget's geometry update and
+    to the misaligned scrol-bars appearing sometime prevent.
+
+
 2016-02-17 Roman
 - FIX:UI.VCAEngine: Notifications by queue and direct pointed resource is fixed.
 - SYS: CoreLib version rise to 3.5.

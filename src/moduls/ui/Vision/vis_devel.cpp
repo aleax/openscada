@@ -586,7 +586,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     w_scale->setStatusTip(_("Click to change widgets' scaling mode."));
     statusBar()->insertPermanentWidget(0,w_scale);
     mStModify = new WMdfStBar( this );
-    connect( mStModify, SIGNAL(press()), this, SLOT(itDBSave()) );
+    connect(mStModify, SIGNAL(press()), this, SLOT(itDBSave()));
     mStModify->setWhatsThis(_("This label displays modifying."));
     mStModify->setToolTip(_("Field for display modifying."));
     mStModify->setStatusTip(_("Click to save all modifyings."));
@@ -614,16 +614,17 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     attrInsp = new InspAttrDock(this);
     connect(attrInsp, SIGNAL(modified(const string &)), this, SIGNAL(modifiedItem(const string &)));
-    //connect(attrInsp, SIGNAL(modified(const string &)), this, SLOT(modifyToolUpdate(const string &)));
     attrInsp->setWhatsThis(_("Dock window for widget's attributes inspection."));
     lnkInsp  = new InspLnkDock(this);
     lnkInsp->setWhatsThis(_("Dock window for widget's links inspection."));
-    addDockWidget(Qt::LeftDockWidgetArea,attrInsp);
-    addDockWidget(Qt::LeftDockWidgetArea,lnkInsp);
+    addDockWidget(Qt::LeftDockWidgetArea, attrInsp);
+    addDockWidget(Qt::LeftDockWidgetArea, lnkInsp);
     tabifyDockWidget(attrInsp,lnkInsp);
     mn_view->addAction(attrInsp->toggleViewAction());
     mn_view->addAction(lnkInsp->toggleViewAction());
     mn_view->addSeparator();
+
+    connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(modifyGlbStUpdate()));
 
     //Create timers
     // Main widget's work timer
@@ -877,6 +878,7 @@ void VisDevelop::applyWorkWdg( )
     if(winClose) return;
 
     modifyToolUpdate(work_wdg_new);
+    modifyGlbStUpdate(true);
 
     //Set/update attributes inspector
     attrInsp->setWdg(work_wdg_new);
@@ -935,11 +937,17 @@ void VisDevelop::modifyToolUpdate( const string &wdgs )
 	    actDBSave->setEnabled(true);
 	}
     }
+}
 
-    //Request global VCA modify
-    mStModify->setText(" ");
-    req.setAttr("path","/%2fobj");
-    if(!cntrIfCmd(req) && s2i(req.text())) mStModify->setText("*");
+void VisDevelop::modifyGlbStUpdate( bool check )
+{
+    if(!check) mStModify->setText("*");
+    else {
+        //Request global VCA modify
+	XMLNode req("modify");
+	req.setAttr("path", "/%2fobj");
+	mStModify->setText((!cntrIfCmd(req) && s2i(req.text()))?"*":" ");
+    }
 }
 
 void VisDevelop::updateMenuWindow( )
@@ -1023,6 +1031,7 @@ void VisDevelop::itDBSave( )
 	}
     }
     modifyToolUpdate(own_wdg);
+    modifyGlbStUpdate(true);
 }
 
 void VisDevelop::prjRun( )
@@ -1259,8 +1268,7 @@ void VisDevelop::visualItProp( )
 void VisDevelop::visualItEdit( )
 {
     string ed_wdg;
-    for(int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
-    {
+    for(int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); ) {
 	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
 
 	//Check to already opened widget window

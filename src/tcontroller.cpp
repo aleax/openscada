@@ -530,7 +530,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    at(vid).at().setName(opt->text());
 	    opt->setAttr("id", vid);
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), true);
     }
     else if(a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",R_R_R_)) {
 	for(unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++)

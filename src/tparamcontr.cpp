@@ -230,7 +230,7 @@ void TParamContr::preDisable( int flag )
     for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
 	if(!vlAt(a_ls[i_a]).at().arch().freeStat()) {
 	    string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
-	    if(flag == RM_Full) SYS->archive().at().valDel(arh_id, true);
+	    if((flag>>8) == RM_Full) SYS->archive().at().valDel(arh_id, true);
 	    else SYS->archive().at().valAt(arh_id).at().stop();
 	}
 

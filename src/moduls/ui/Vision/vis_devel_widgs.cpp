@@ -2528,7 +2528,7 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		.arg(srect.width()/xScale(true)).arg(srect.height()/yScale(true)),10000);
     }
     else {
-	//Change widget geometry
+	//Change the widget geometry
 	switch(cursor().shape()) {
 	    case Qt::SizeHorCursor:
 		if(isScale)	x_scale *= 1+dP.x()/sizeF().width();

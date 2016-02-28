@@ -257,7 +257,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_err(nodePath().c_str(), _("Node disable error. Restore node enabling."));
 	setNodeMode(Disabled);
-	nodeEn(NodeRestore|(flag<<8));
+	nodeEn(NodeRestore|flag);
 	throw;
     }
     //try{ postDisable(flag); }

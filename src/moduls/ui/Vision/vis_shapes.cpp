@@ -4464,7 +4464,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
     switch(uiPrmPos) {
 	case A_COM_LOAD:
 	    up = true;
-	    if(runW && shD->inclWidget)	shD->inclWidget->setMinimumSize(w->size());
+	    if(runW && shD->inclPg)	shD->inclPg->setMinimumSize(w->size());
 	    break;
 	case A_COM_FOCUS: break;
 	case A_EN:
@@ -4529,17 +4529,17 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if(!runW || runP)	{ up = false; break; }
 
 	    //Put previous include widget to page cache
-	    if((shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty())) {
-		if(shD->inclWidget) {
-		    shD->inclWidget->setReqTm(shD->inclWidget->mainWin()->reqTm());
-		    runW->mainWin()->pgCacheAdd(shD->inclWidget);
-		    shD->inclWidget->setEnabled(false);
-		    shD->inclWidget->setVisible(false);
+	    if((shD->inclPg && val != shD->inclPg->id()) || (!shD->inclPg && !val.empty())) {
+		if(shD->inclPg) {
+		    shD->inclPg->setReqTm(shD->inclPg->mainWin()->reqTm());
+		    runW->mainWin()->pgCacheAdd(shD->inclPg);
+		    shD->inclPg->setEnabled(false);
+		    shD->inclPg->setVisible(false);
 		    shD->inclScrl->takeWidget();
-		    shD->inclWidget->setParent(NULL);
-		    shD->inclWidget->wx_scale = shD->inclWidget->mainWin()->xScale();
-		    shD->inclWidget->wy_scale = shD->inclWidget->mainWin()->yScale();
-		    shD->inclWidget = NULL;
+		    shD->inclPg->setParent(NULL);
+		    shD->inclPg->wx_scale = shD->inclPg->mainWin()->xScale();
+		    shD->inclPg->wy_scale = shD->inclPg->mainWin()->yScale();
+		    shD->inclPg = NULL;
 		    w->setProperty("inclPg", "");
 		}
 		// Create new include widget
@@ -4554,7 +4554,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			wlay->addWidget(shD->inclScrl);
 		    }
 
-		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()), shD->inclWidget);
+		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()), shD->inclPg);
 		    lab->setAlignment(Qt::AlignCenter);
 		    lab->setWordWrap(true);
 		    lab->resize(w->size());
@@ -4566,36 +4566,33 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shD->inclScrl->setWidget(lab);
 		    qApp->processEvents();
 
-		    shD->inclWidget = runW->mainWin()->pgCacheGet(val);
-		    if(shD->inclWidget) {
-			shD->inclWidget->setProperty("cntPg", TSYS::addr2str(w).c_str());
-			shD->inclScrl->setWidget(shD->inclWidget);
-			shD->inclWidget->setEnabled(true);
-			shD->inclWidget->setVisible(true);
-			shD->inclWidget->setMinimumSize(w->size());
-			if(shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
-				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale())
-			    shD->inclWidget->load("");
+		    shD->inclPg = runW->mainWin()->pgCacheGet(val);
+		    if(shD->inclPg) {
+			shD->inclPg->setProperty("cntPg", TSYS::addr2str(w).c_str());
+			shD->inclScrl->setWidget(shD->inclPg);
+			shD->inclPg->setEnabled(true);
+			shD->inclPg->setVisible(true);
+			shD->inclPg->setMinimumSize(w->size());
+			if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
+				shD->inclPg->wy_scale != shD->inclPg->mainWin()->yScale())
+			    shD->inclPg->load("");
 			else {
-			    unsigned trt = shD->inclWidget->mainWin()->reqTm();
-			    shD->inclWidget->mainWin()->setReqTm(shD->inclWidget->reqTm());
-			    shD->inclWidget->update(false);
-			    shD->inclWidget->mainWin()->setReqTm(trt);
+			    unsigned trt = shD->inclPg->mainWin()->reqTm();
+			    shD->inclPg->mainWin()->setReqTm(shD->inclPg->reqTm());
+			    shD->inclPg->update(false);
+			    shD->inclPg->mainWin()->setReqTm(trt);
 			}
 		    }
 		    else {
-			shD->inclWidget = new RunPageView(val, (VisRun*)w->mainWin(), shD->inclScrl, Qt::SubWindow);
-			shD->inclWidget->setProperty("cntPg", TSYS::addr2str(w).c_str());
-			shD->inclScrl->setWidget(shD->inclWidget);
-			shD->inclWidget->setMinimumSize(w->size());
-			if(shD->inclWidget->sizeOrigF().width() <= w->sizeOrigF().width() &&
-				shD->inclWidget->sizeOrigF().height() <= w->sizeOrigF().height())
-			    shD->inclWidget->setMaximumSize(w->size());
-			//shD->inclWidget->load("");
+			shD->inclPg = new RunPageView(val, (VisRun*)w->mainWin(), shD->inclScrl, Qt::SubWindow);
+			shD->inclPg->setProperty("cntPg", TSYS::addr2str(w).c_str());
+			shD->inclScrl->setWidget(shD->inclPg);
+			shD->inclPg->resizeF(shD->inclPg->sizeF());	//To realign
+			//shD->inclPg->load("");			//That does into the constructor
 
-			shD->inclWidget->setAttribute(Qt::WA_WindowPropagation, true);
+			shD->inclPg->setAttribute(Qt::WA_WindowPropagation, true);
 		    }
-		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
+		    w->setProperty("inclPg", TSYS::addr2str(shD->inclPg).c_str());
 		}
 	    } else up = false;
 	    break;
@@ -4614,7 +4611,7 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 
     switch(event->type()) {
 	case QEvent::Paint: {
-	    if(shD->inclWidget) return false;
+	    if(shD->inclPg) return false;
 	    QPainter pnt(w);
 
 	    //Apply margin
@@ -4635,7 +4632,7 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    return true;
 	}
 	//case QEvent::User:
-	//    if(shD->inclWidget) shD->inclWidget->update();
+	//    if(shD->inclPg) shD->inclPg->update();
 	default: return false;
     }
     return false;

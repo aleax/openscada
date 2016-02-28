@@ -85,6 +85,7 @@ class VisDevelop : public QMainWindow
 	void selectItem( const string &item, bool force = false );	//Update enabled actions state
 	void editToolUpdate( );						//Edit tools visible update
 	void modifyToolUpdate( const string& );
+	void modifyGlbStUpdate( bool check = false );			//<check> in false will set else will check
 	bool exitModifChk( );
 	void waitCursorSet( int val = -1 );	//Set global wait cursor (-1 - real clear from timer, 0 - clear after timer shot, 1 - set)
 

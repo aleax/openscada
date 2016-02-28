@@ -1543,7 +1543,7 @@ void VisRun::updatePage( )
 	    else {
 		if(pg != master_pg)	pg->deleteLater();
 		else {
-		    ((QScrollArea *)centralWidget())->setWidget(new QWidget());
+		    ((QScrollArea*)centralWidget())->setWidget(new QWidget());
 		    master_pg = NULL;
 		    conErr = NULL;		//possible a connection error status clean up
 		}

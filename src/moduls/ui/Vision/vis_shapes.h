@@ -583,14 +583,14 @@ class ShapeBox : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclWidget(NULL), inclScrl(NULL)	{ }
+		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclPg(NULL), inclScrl(NULL)	{ }
 		//Attributes
 		short	en		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		QPen		border;
 		QBrush		backGrnd;
-		RunPageView	*inclWidget;
+		RunPageView	*inclPg;
 		QScrollArea	*inclScrl;
 	};
 
