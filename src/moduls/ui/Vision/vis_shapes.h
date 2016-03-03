@@ -408,7 +408,7 @@ class ShapeDiagram : public WdgShape
 		unsigned geomMargin	:8;
 		unsigned bordStyle	:5;
 		unsigned tTimeCurent	:1;
-		unsigned trcPer		:10;
+
 		unsigned sclHor		:4;
 		unsigned sclVer		:4;
 		unsigned valsForPix	:4;
@@ -421,6 +421,7 @@ class ShapeDiagram : public WdgShape
 		QTimer 	*trcTimer;
 		vector<TrendObj>	prms;
 		int64_t	tTime, tPict, curTime, sclHorPer;
+		float	trcPer;
 		float	tSize;
 		float	fftBeg, fftEnd;
 		float	sclVerScl, sclVerSclOff, sclHorScl, sclHorSclOff;

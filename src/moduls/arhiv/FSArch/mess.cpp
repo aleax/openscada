@@ -37,8 +37,8 @@ using namespace FSArch;
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     TMArchivator(iid,idb,cf_el),
-    mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mPrevDbl(false),
-    tmCalc(0.0), mLstCheck(0)
+    mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10),
+    mPackInfoFiles(false), mPrevDbl(false), mPrevDblTmCatLev(false), tmCalc(0), mLstCheck(0)
 {
 
 }
@@ -64,8 +64,8 @@ void ModMArch::load_( )
 	vl = prmNd.attr("CheckTm");	if(!vl.empty()) setCheckTm(s2i(vl));
 	vl = prmNd.attr("PackInfoFiles"); if(!vl.empty()) setPackInfoFiles(s2i(vl));
 	vl = prmNd.attr("PrevDbl");	if(!vl.empty()) setPrevDbl(s2i(vl));
+	vl = prmNd.attr("PrevDblTmCatLev"); if(!vl.empty()) setPrevDblTmCatLev(s2i(vl));
     } catch(...){ }
-
 }
 
 void ModMArch::save_( )
@@ -79,6 +79,7 @@ void ModMArch::save_( )
     prmNd.setAttr("CheckTm", i2s(checkTm()));
     prmNd.setAttr("PackInfoFiles", i2s(packInfoFiles()));
     prmNd.setAttr("PrevDbl", i2s(prevDbl()));
+    prmNd.setAttr("PrevDblTmCatLev", i2s(prevDblTmCatLev()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TMArchivator::save_();
@@ -339,6 +340,11 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 		  "If there is a duplicate the message does not fit into the archive.\n"
 		  "This feature some increases the recording time to archive, but in cases of\n"
 		  "placing messages in the archive by past time from external sources it allows to eliminate duplication."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/prev_TmCatLev_dbl",_("Mean as duplicates equal time, category, level and prevent its"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		_("Enables checks for duplicate messages at the time put a message in the archive.\n"
+		  "As duplicates mean messages equal to time, category and level.\n"
+		  "If there is a duplicate then the new message will replace the old into the archive.\n"
+		  "This feature mostly usable for messages record's text change in time, for alarm's state to example."));
 	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID,1,"help",
 		_("The command, which allows you to immediately start checking the archives,\n"
 		  "for example, after manual changes to the directory archiver."));
@@ -393,6 +399,10 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/add/prev_dbl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(prevDbl()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPrevDbl(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/add/prev_TmCatLev_dbl") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(prevDblTmCatLev()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPrevDblTmCatLev(s2i(opt->text()));
     }
     else if(a_path == "/prm/add/chk_nw" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	checkArchivator(true);
     else if(a_path == "/files/files" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD)) {
@@ -672,12 +682,17 @@ bool MFileArch::put( TMess::SRec mess )
 	    XMLNode *xIt = mNode->childGet(i_ch);
 	    long xTm = strtol(xIt->attr("tm").c_str(),(char **)NULL,16);
 	    if(xTm > mess.time)	break;
-	    else if(owner().prevDbl() && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime &&
+	    else if((owner().prevDbl() || owner().prevDblTmCatLev()) && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime &&
 		    xIt->attr("cat") == mess.categ && xIt->text() == mess.mess)
 		return true;
+	    else if(owner().prevDblTmCatLev() && xTm == mess.time && s2i(xIt->attr("tmu")) == mess.utime && xIt->attr("cat") == mess.categ) {
+		xIt->setText(mess.mess);
+		mWrite = true;
+		return true;
+	    }
 	}
 
-	XMLNode *cl_node = mNode->childIns(i_ch,"m");
+	XMLNode *cl_node = mNode->childIns(i_ch, "m");
 	cl_node->setAttr("tm", i2s(mess.time,TSYS::Hex))->
 		 setAttr("tmu", i2s(mess.utime))->
 		 setAttr("lv", i2s(mess.level))->
@@ -691,8 +706,8 @@ bool MFileArch::put( TMess::SRec mess )
 	return true;
     }
     else {
-	unsigned int tTm;
-	long mv_beg = 0;
+	unsigned int tTm, tTmU;
+	long mv_beg = 0, mv_off = 0;
 	char buf[STR_BUF_LEN];
 	//Check to empty category and message
 	if(!mess.categ.size())	mess.categ = " ";
@@ -706,17 +721,31 @@ bool MFileArch::put( TMess::SRec mess )
 	string s_buf = TSYS::strMess("%x:%d %d %s %s", (unsigned int)mess.time, mess.utime, mess.level,
 	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
 	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str())+"\n";
+	mv_off = s_buf.size();
 
 	//Check for duples
-	if(mess.time <= mEnd && owner().prevDbl()) {
-	    long c_off = cacheGet(mess.time);
-	    if(c_off) fseek(f,c_off,SEEK_SET);
+	if(mess.time <= mEnd && (owner().prevDbl() || owner().prevDblTmCatLev())) {
+	    long c_off = cacheGet(((int64_t)mess.time*1000000)+mess.utime);
+	    if(c_off) fseek(f, c_off, SEEK_SET);
 	    else fOK = (fgets(buf,sizeof(buf),f) != NULL);
 
-	    while((fOK=fOK&&(fgets(buf,sizeof(buf),f)!=NULL))) {
-		sscanf(buf, "%x %*d", &tTm);
-		if((int)tTm > mess.time) { mv_beg = ftell(f)-strlen(buf); break; }
+	    while(fgets(buf,sizeof(buf),f) != NULL) {
+		int tLev = 0;
+		char tCat[1001];
+		if((sscanf(buf,"%x:%d %d %1000s",&tTm,&tTmU,&tLev,tCat)) < 4) continue;
+
+		if((int)tTm > mess.time || (tTm == mess.time && tTmU > mess.utime)) {
+		    mv_beg = ftell(f) - strlen(buf);
+		    break;
+		}
 		if((int)tTm == mess.time && s_buf == buf) { fclose(f); return true; }
+		if(owner().prevDblTmCatLev() && (int)tTm == mess.time && tTmU == mess.utime && tLev == mess.level &&
+		    TSYS::strDecode(Mess->codeConvIn(mChars,tCat),TSYS::HttpURL) == mess.categ)
+		{
+		    if(s_buf.size() < strlen(buf)) s_buf.resize(strlen(buf), ' ');
+		    mv_beg = ftell(f) - strlen(buf); mv_off = s_buf.size() - strlen(buf);
+		    break;
+		}
 	    }
 	    fseek(f, 0, SEEK_SET);
 	}
@@ -738,43 +767,44 @@ bool MFileArch::put( TMess::SRec mess )
 	else {
 	    if(fOK && !mv_beg) {
 		// Get want position
-		long c_off = cacheGet(mess.time);
+		long c_off = cacheGet(((int64_t)mess.time*1000000)+mess.utime);
 		if(c_off) fseek(f,c_off,SEEK_SET);
 		else fOK = (fgets(buf,sizeof(buf),f) != NULL);
 
 		// Check mess records
 		int pass_cnt = 0;
 		time_t last_tm = 0;
-		while(!mv_beg && (fOK=fOK&&(fgets(buf,sizeof(buf),f)!=NULL))) {
-		    sscanf(buf,"%x %*d",&tTm);
-		    if((int)tTm > mess.time) mv_beg = ftell(f)-strlen(buf);
+		while(!mv_beg && fgets(buf,sizeof(buf),f) != NULL) {
+		    sscanf(buf, "%x:%d %*d", &tTm, &tTmU);
+		    if((int)tTm > mess.time || (tTm == mess.time && tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
 		    //  Add too big position to cache
 		    else if((pass_cnt++) > CACHE_POS && (int)tTm != last_tm) {
-			cacheSet(tTm,ftell(f)-strlen(buf));
+			cacheSet(((int64_t)tTm*1000000)+tTmU, ftell(f)-strlen(buf));
 			pass_cnt = 0;
 		    }
 		    last_tm = tTm;
 		}
 	    }
 	    if(fOK && mv_beg) {
-		fseek(f, 0, SEEK_END);
-		int mv_end = ftell(f);
-		int beg_cur;
-		do {
-		    beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
-		    fseek(f, beg_cur, SEEK_SET);
-		    fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == 1);
-		    fseek(f, beg_cur+s_buf.size(), SEEK_SET);
-		    fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == 1);
-		    mv_end -= sizeof(buf);
+		if(mv_off) {
+		    fseek(f, 0, SEEK_END);
+		    int mv_end = ftell(f);
+		    int beg_cur;
+		    do {
+			beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
+			fseek(f, beg_cur, SEEK_SET);
+			fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == 1);
+			fseek(f, beg_cur+mv_off, SEEK_SET);
+			fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == 1);
+			mv_end -= sizeof(buf);
+		    } while(fOK && beg_cur != mv_beg);
 		}
-		while(fOK && beg_cur != mv_beg);
 		//  Write a new message
 		fseek(f, mv_beg, SEEK_SET);
 		fOK = fOK && (fwrite(s_buf.c_str(),s_buf.size(),1,f) == 1);
-		cacheUpdate(mess.time, s_buf.size());
+		cacheUpdate(((int64_t)mess.time*1000000)+mess.utime, mv_off);
 		//  Put last value to cache
-		cacheSet(mess.time, mv_beg, true);
+		cacheSet(((int64_t)mess.time*1000000)+mess.utime, mv_beg, true);
 	    }
 	}
 	fseek(f, 0, SEEK_END);
@@ -840,7 +870,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 
 	//Get want position
 	bool rdOK = true;
-	long c_off = cacheGet(b_tm);
+	long c_off = cacheGet((int64_t)b_tm*1000000);
 	if(c_off) fseek(f, c_off, SEEK_SET);
 	else rdOK = (fgets(buf,sizeof(buf),f) != NULL);
 	//Check mess records
@@ -871,7 +901,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 		if(!equal) mess.insert(mess.begin()+i_p,b_rec);
 	    }
 	    else if((pass_cnt++) > CACHE_POS && b_rec.time != last_tm) {
-		cacheSet(b_rec.time, ftell(f)-strlen(buf));
+		cacheSet(((int64_t)b_rec.time*1000000)+b_rec.utime, ftell(f)-strlen(buf));
 		pass_cnt = 0;
 	    }
 	    last_tm = b_rec.time;
@@ -929,9 +959,9 @@ void MFileArch::check( bool free )
     }
 }
 
-long MFileArch::cacheGet( time_t tm )
+long MFileArch::cacheGet( int64_t tm )
 {
-    CacheEl rez = {0,0};
+    CacheEl rez = {0, 0};
     for(int i_c = cache.size()-1; i_c >= 0; i_c--)
 	if(tm >= cache[i_c].tm) { rez = cache[i_c]; break; }
     if(tm >= cach_pr.tm && cach_pr.tm >= rez.tm) rez = cach_pr;
@@ -939,20 +969,20 @@ long MFileArch::cacheGet( time_t tm )
     return rez.off;
 }
 
-void MFileArch::cacheSet( time_t tm, long off, bool last )
+void MFileArch::cacheSet( int64_t tm, long off, bool last )
 {
     CacheEl el = { tm, off };
 
     if(!last) {
 	for(unsigned i_c = 0; i_c < cache.size(); i_c++)
 	    if(el.tm == cache[i_c].tm)		{ cache[i_c] = el; return; }
-	    else if(el.tm < cache[i_c].tm)	{ cache.insert(cache.begin()+i_c,el); return; }
+	    else if(el.tm < cache[i_c].tm)	{ cache.insert(cache.begin()+i_c, el); return; }
 	cache.push_back(el);
     }
     else cach_pr = el;
 }
 
-void MFileArch::cacheUpdate( time_t tm, long v_add )
+void MFileArch::cacheUpdate( int64_t tm, long v_add )
 {
     for(unsigned i_c = 0; i_c < cache.size(); i_c++)
 	if(cache[i_c].tm > tm) cache[i_c].off += v_add;

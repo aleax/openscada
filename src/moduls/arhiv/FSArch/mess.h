@@ -69,9 +69,9 @@ class MFileArch
 
     private:
 	// Cache methods
-	long	cacheGet( time_t tm );
-	void	cacheSet( time_t tm, long off, bool last = false );
-	void	cacheUpdate( time_t tm, long v_add );
+	long	cacheGet( int64_t tm );
+	void	cacheSet( int64_t tm, long off, bool last = false );
+	void	cacheUpdate( int64_t tm, long v_add );
 
 	// Base parameters
 	string	mName;		// name Archive file;
@@ -90,8 +90,8 @@ class MFileArch
 	XMLNode	*mNode;		// XML-file tree
 	// Cache parameters
 	struct CacheEl {
-	    time_t tm;
-	    long   off;
+	    int64_t	tm;
+	    long	off;
 	};
 	vector<CacheEl> cache;
 	CacheEl cach_pr;
@@ -127,6 +127,7 @@ class ModMArch: public TMArchivator
 	int  packTm( )		{ return mPackTm; }
 	bool packInfoFiles( )	{ return mPackInfoFiles; }
 	bool prevDbl( )		{ return mPrevDbl; }
+	bool prevDblTmCatLev( )	{ return mPrevDblTmCatLev; }
 
 	void setUseXML( bool vl )	{ mUseXml = vl; modif(); }
 	void setMaxSize( int vl )	{ mMaxSize = vl; modif(); }
@@ -136,6 +137,7 @@ class ModMArch: public TMArchivator
 	void setPackTm( int vl )	{ mPackTm = vl; modif(); }
 	void setPackInfoFiles( bool vl ){ mPackInfoFiles = vl; modif(); }
 	void setPrevDbl( bool vl )	{ mPrevDbl = vl; modif(); }
+	void setPrevDblTmCatLev( bool vl ) { mPrevDblTmCatLev = vl; modif(); }
 
 	void checkArchivator( bool now = false );
 
@@ -150,13 +152,14 @@ class ModMArch: public TMArchivator
 
 	//Attributes
 	bool	mUseXml;	// use XML for archive files
-	int	mMaxSize;	// maximum size kb of Archives file
-	int	mNumbFiles;	// number of Archive files
-	int	mTimeSize;	// number days to one file
-	int	mChkTm;		// period of check archive files directory;
-	int	mPackTm;	// pack the archive files timeout
-	bool	mPackInfoFiles;	// use info files for packed archives
-	bool	mPrevDbl;	// duple messages prevent
+	int	mMaxSize,	// maximum size kb of Archives file
+		mNumbFiles,	// number of Archive files
+		mTimeSize,	// number days to one file
+		mChkTm,		// period of check archive files directory;
+		mPackTm;	// pack the archive files timeout
+	bool	mPackInfoFiles,	// use info files for packed archives
+		mPrevDbl,	// duple messages prevent
+		mPrevDblTmCatLev;// mean and prevent to duples by time, category and level
 
 	Res	mRes;		// resource to access;
 	double	tmCalc;		// Archiving time

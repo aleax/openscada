@@ -1,6 +1,20 @@
+2016-03-03 Roman
+- Archive: TArchives::messPut() expanded by the argument "arch" to allow direct to the archiver writing.
+    Same expanded the user API function messPut().
+- !!!:FIX:Archive.FSArch: Check for duplicate as equal time, category, level and it prevent is added.
+    Check for duplicated at all fixed. Time into cache changed from time_t to int64_t (in microseconds).
+- UI.{VCAEngine,Vision}: Primitive's "Diagram" attribute "trcPer" type changed from "Integer" to "Real".
+    UI.Vision also adapted for update the "Diagram" down to 0.01 ms.
+- !!!!:UI.Vision: View "Table" of the primitive "FormEl" significant expanded by: global table's attributes: "hHdrVis", "vHdrVis";
+	row attributes "colorText", "font"; column attributes "color", "colorText", "font".
+    Context menu support enabled for views: List, Tree and Table.
+- FIX:UI.{Vision,WebVision}: Mode "XY" of the primitive "Diagram" fixed for build by sorting by 'X' disable, only the hierarchical order.
+
+
 2016-02-29 fido_max
 - DAQ.FT3: B_BIP updated, logic side implemented (tmHandler, cmdGet, cmdSet), version rise to 0.2.0.
 - Protocol.FT3: Version rise to 0.2.0.
+
 
 2016-02-28 Roman
 - DB.Model.{AGLKS.vca.db,Boiler.St.db}: Visualizer's UI.Vision specific attributes moved to the project's root-page.

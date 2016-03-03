@@ -419,27 +419,35 @@ void TArchiveS::perSYSCall( unsigned int cnt )
     TSubSYS::perSYSCall(cnt);
 }
 
-void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess )
+void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch )
 {
-    //Put message to buffer
     MtxAlloc res(mRes, true);
-    mBuf[headBuf].time  = tm;
-    mBuf[headBuf].utime = utm;
-    mBuf[headBuf].categ = categ;
-    mBuf[headBuf].level = (TMess::Type)level;
-    mBuf[headBuf].mess  = mess;
-    if((++headBuf) >= mBuf.size()) headBuf = 0;
+    if(arch.empty() || arch == BUF_ARCH_NM) {
+	//Put message to buffer
+	mBuf[headBuf].time  = tm;
+	mBuf[headBuf].utime = utm;
+	mBuf[headBuf].categ = categ;
+	mBuf[headBuf].level = (TMess::Type)level;
+	mBuf[headBuf].mess  = mess;
+	if((++headBuf) >= mBuf.size()) headBuf = 0;
 
-    //Check for the archivator's headers to messages buffer
-    for(unsigned i_m = 0; i_m < actMess.size(); i_m++) {
-	int &messHead = actMess[i_m].at().messHead;
-	if(messHead >= 0 && messHead == (int)headBuf && ++messHead >= (int)mBuf.size()) messHead = 0;
+	//Check for the archivator's headers to messages buffer
+	for(unsigned i_m = 0; i_m < actMess.size(); i_m++) {
+	    int &messHead = actMess[i_m].at().messHead;
+	    if(messHead >= 0 && messHead == (int)headBuf && ++messHead >= (int)mBuf.size()) messHead = 0;
+	}
+
+	//Alarms processing. For level less 0 alarm is set
+	map<string,TMess::SRec>::iterator p;
+	if(level < 0) mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
+	else if((p=mAlarms.find(categ)) != mAlarms.end()) mAlarms.erase(p);
     }
-
-    //Alarms processing. For level less 0 alarm is set
-    map<string,TMess::SRec>::iterator p;
-    if(level < 0) mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
-    else if((p=mAlarms.find(categ)) != mAlarms.end()) mAlarms.erase(p);
+    //Put message to the archive <arch>
+    else try {
+	vector<TMess::SRec> ml;
+	ml.push_back(TMess::SRec(tm,utm,categ,level,mess));
+	at(TSYS::strParse(arch,0,".")).at().messAt(TSYS::strParse(arch,1,".")).at().put(ml);
+    } catch(TError er) { mess_err(nodePath().c_str(), _("Put message to the archiver '%s' error: %s"), arch.c_str(), er.mess.c_str()); }
 }
 
 void TArchiveS::messPut( const vector<TMess::SRec> &recs )
@@ -699,14 +707,15 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	}
 	return rez;
     }
-    // bool messPut(int tm, int utm, string cat, int lev, string mess) - write message <mess> with category <cat>,
-    //       level <lev> and time <tm>.<utm> to archive or/and allarms list.
+    // bool messPut(int tm, int utm, string cat, int lev, string mess, string arch = "") - write message <mess> with category <cat>,
+    //       level <lev> and time <tm>.<utm> to archive <arch> or/and allarms list.
     //  tm.utm - seconds and microseconds message time
     //  cat - message' category
     //  lev - message level
     //  mess - message text
+    //  arch - archive, zero or "<buffer>" cause to generic writing to the buffer and alarms (lev <0) else direct to the archive
     if(iid == "messPut" && prms.size() >= 5) {
-	messPut(prms[0].getI(), prms[1].getI(), prms[2].getS(), prms[3].getI(), prms[4].getS());
+	messPut(prms[0].getI(), prms[1].getI(), prms[2].getS(), prms[3].getI(), prms[4].getS(), (prms.size() >= 6)?prms[5].getS():"");
 	return true;
     }
 

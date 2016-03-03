@@ -577,14 +577,22 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "    sel         - the selection mode of the table items:\n"
 			  "                 \"row\" - by rows, \"col\" - by columns, \"cell\" - by cells (by default);\n"
 			  "    keyID       - the key's row-column number, for the selection value get;\n"
-			  "    colsWdthFit - fit the columns (which size unfixed) size to fill for full the table width.\n"
+			  "    colsWdthFit - fit the columns (which size unfixed) size to fill for full the table width;\n"
+			  "    hHdrVis, vHdrVis - horizontal, vertical header visibility set.\n"
 			  "  h   - The headers size, allowed attributes about cell-tag of the header, for the column as a whole:\n"
 			  "    width - the column width, in pixels or percents (10%);\n"
-			  "    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0).\n"
+			  "    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0);\n"
+			  "    color - the column color as a whole into the color name or code;\n"
+			  "    colorText - the column's text color as a whole into the color name or code;\n"
+			  "    font - the column's text font in typical OpenSCADA's string.\n"
 			  "  r   - the row of values, allowed attributes:\n"
-			  "    color - the row color as a whole into the color name or code.\n"
+			  "    color - the row color as a whole into the color name or code;\n"
+			  "    colorText - the row's text color as a whole into the color name or code;\n"
+			  "    font - the row's text font in typical OpenSCADA's string.\n"
 			  "  s, i, r, b - the data type's cells \"String\", \"Integer\", \"Real\" and \"Logical\". Allowed attributes:\n"
 			  "    color - the cell's background color;\n"
+			  "    colorText - the cell's text color into the color name or code;\n"
+			  "    font - the cell's text font in typical OpenSCADA's string;\n"
 			  "    img - the cell's image into form \"[{src}:]{name}\", the details above;\n"
 			  "    edit - allowing to the cell of the row edition (0 or 1), by default - no (0)."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
@@ -933,7 +941,7 @@ void OrigDiagram::postEnable( int flag )
 	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
-	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_DiagramTrcPer).c_str()));
+	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Real,TFld::NoFlag,"","0","0;360","",i2s(A_DiagramTrcPer).c_str()));
 	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0",
 	    TSYS::strMess("%d;%d;%d",FD_TRND,FD_SPECTR,FD_XY).c_str(),_("Trend;Spectrum;XY"),i2s(A_DiagramType).c_str()));
     }

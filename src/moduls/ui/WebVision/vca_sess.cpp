@@ -6141,10 +6141,10 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	    bordU += vMarg;
 	}
 
-	// X: Prepare XY data buffer sorted by X data and prepare border for percent trend, ONLY!
+	// X: Prepare XY data buffer and prepare border for percent trend, ONLY!
 	float xBordL = cPX.bordL();
 	float xBordU = cPX.bordU();
-	std::multimap<double,double> dBuf;
+	vector< pair<double,double> > dBuf;
 	{
 	    bool xNeedRngChk = (hsPercT && xBordL >= xBordU);
 	    if(xNeedRngChk) xBordU = -3e300, xBordL = 3e300;
@@ -6154,7 +6154,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 		if(cPX.val()[ipos].tm >= aVend) end_vl = true;
 		if(cPX.val()[ipos].val != EVAL_REAL) {
 		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < (int)cP.val().size() && cP.val()[iVpos].val != EVAL_REAL)
-			dBuf.insert(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
+			dBuf.push_back(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
 		    if(xNeedRngChk) {
 			xBordL = vmin(xBordL, cPX.val()[ipos].val);
 			xBordU = vmax(xBordU, cPX.val()[ipos].val);
@@ -6171,7 +6171,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 	// Draw curve
 	int c_vpos, c_hpos, c_vposPrev = -1, c_hposPrev = -1;
 	double curVl, curVlX;
-	for(std::multimap<double,double>::iterator iD = dBuf.begin(); iD != dBuf.end(); ++iD) {
+	for(vector< pair<double,double> >::iterator iD = dBuf.begin(); iD != dBuf.end(); ++iD) {
 	    curVl = vsPercT ? 100*(iD->second-bordL)/(bordU-bordL) : iD->second;
 	    curVlX = hsPercT ? 100*(iD->first-xBordL)/(xBordU-xBordL) : iD->first;
 	    c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,curVl)):curVl)-vsMinT)/(vsMaxT-vsMinT))));
