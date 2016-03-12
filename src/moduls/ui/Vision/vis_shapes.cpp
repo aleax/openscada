@@ -917,7 +917,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		switch(shD->elType) {
 		    case F_LIST: case F_TREE: case F_TABLE:
 			QApplication::sendEvent(w, event);
-			return true;
+			return false;
 		}
 		break;
 	    }

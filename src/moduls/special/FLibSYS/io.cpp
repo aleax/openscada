@@ -63,7 +63,7 @@ TVariant IOObj::propGet( const string &id )
 	fseek(fhd, pos, SEEK_SET);
 	return end;
     }
-    if(id == "pos")		return fhd ? (int64_t)ftell(fhd) : (int64_t)str.size();
+    if(id == "pos")		return fhd ? (int64_t)ftell(fhd) : (int64_t)pos;
     if(id == "string")		return str;
     if(id == "mFormat")		return mFormat;
     if(id == "stringEncode")	return strEnc;
@@ -134,7 +134,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    // From string stream
 	    if(!fhd) {
 		if(cnt != 1) ao = new TArrayObj();
-		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && (pos+tpD.szBt) <= str.size(); pos += tpD.szBt, i_cnt++) {
+		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && (pos+tpD.szBt) <= str.size(); i_cnt++) {
 		    switch(tpD.szBt) {
 			case 2: {
 			    uint16_t v = TSYS::getUnalign16(str.data()+pos);
@@ -164,8 +164,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 		    }
-		    if(cnt == 1) return (int)rez;
-		    ao->arSet(i_cnt, (int)rez);
+		    pos += tpD.szBt;
+		    if(!ao) return rez;
+		    ao->arSet(i_cnt, rez);
 		}
 		if(ao) return ao;
 		return (int64_t)EVAL_INT;
@@ -205,7 +206,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 		    }
-		    if(cnt == 1) return rez;
+		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
 	    if(ao) return ao;
@@ -220,8 +221,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    // From string stream
 	    if(!fhd) {
 		if(cnt != 1) ao = new TArrayObj();
-		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && (pos+tpD.szBt) <= str.size(); pos += tpD.szBt, i_cnt++)
-		{
+		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && (pos+tpD.szBt) <= str.size(); i_cnt++) {
 		    switch(tpD.szBt) {
 			case 4: {
 			    float v = TSYS::getUnalignFloat(str.data()+pos);
@@ -241,6 +241,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 		    }
+		    pos += tpD.szBt;
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
@@ -329,8 +330,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(!tpD.real) {
 	    // To string stream
 	    if(!fhd) {
-		switch(tpD.szBt)
-		{
+		switch(tpD.szBt) {
 		    case 1: {
 			uint8_t v = 0;
 			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {

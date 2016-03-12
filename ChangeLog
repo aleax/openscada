@@ -1,3 +1,8 @@
+2016-03-12 Roman
+- FIX:Special.FLibSYS: IO.pos for string fixed. Single integer and real reading fixed on the position seek.
+- FIX:UI.Vision: Context menu problem for views List, Tree and Table is fixed, for allow the right mouse button's event come to the system functions.
+
+
 2016-03-03 Roman
 - Archive: TArchives::messPut() expanded by the argument "arch" to allow direct to the archiver writing.
     Same expanded the user API function messPut().
