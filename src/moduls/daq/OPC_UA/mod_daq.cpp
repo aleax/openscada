@@ -330,7 +330,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    if(isErr) {
 		cntr.acqErr.setVal(req.attr("err"));
-		mess_err(cntr.nodePath().c_str(), "%s", cntr.acqErr.getVal().c_str());
+		//mess_err(cntr.nodePath().c_str(), "%s", cntr.acqErr.getVal().c_str());
 		if(cntr.alSt <= 0) {
 		    cntr.alSt = 1;
 		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
@@ -476,7 +476,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(i_a));
 	reqService(req);
 	if(!req.attr("err").empty()) {
-	    mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+	    //mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
 	    throw TError(nodePath().c_str(), "%s", req.attr("err").c_str());
 	}
 
@@ -666,7 +666,7 @@ string TMdPrm::attrPrc( )
 	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_AccessLevel));
 	owner().reqService(req);
 	if(!req.attr("err").empty()) {
-	    mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+	    //mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
 	    return req.attr("err");
 	}
 	if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))	continue;

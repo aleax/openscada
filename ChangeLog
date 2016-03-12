@@ -1,4 +1,6 @@
 2016-03-12 Roman
+- DAQ.OPC_UA: Some spare error messages removed.
+- UI.Vision: Primitive "Diagram" updated period limited to one second in the development mode.
 - FIX:Special.FLibSYS: IO.pos for string fixed. Single integer and real reading fixed on the position seek.
 - FIX:UI.Vision: Context menu problem for views List, Tree and Table is fixed, for allow the right mouse button's event come to the system functions.
 

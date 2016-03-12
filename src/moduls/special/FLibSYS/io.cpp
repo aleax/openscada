@@ -164,7 +164,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 		    }
-		    pos += tpD.szBt;
+		    pos += tpD.szBt;	//Before return!
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
@@ -241,7 +241,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 		    }
-		    pos += tpD.szBt;
+		    pos += tpD.szBt;	//Before return!
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
