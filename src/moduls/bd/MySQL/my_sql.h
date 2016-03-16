@@ -111,7 +111,7 @@ class MBD : public TBD
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;
 	MYSQL	connect;
-	pthread_mutex_t	connRes;
+	ResMtx	connRes;
 };
 
 //************************************************

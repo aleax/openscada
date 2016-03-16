@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,18 +109,14 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 //* BDSQLite::MBD				 *
 //************************************************
-MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), trans_reqs(1)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true), trans_reqs(1)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&connRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 MBD::~MBD( )
 {
-    pthread_mutex_destroy(&connRes);
+
 }
 
 void MBD::postDisable( int flag )
@@ -134,7 +130,7 @@ void MBD::postDisable( int flag )
 
 void MBD::enable( )
 {
-    MtxAlloc res(connRes, true);
+    MtxAlloc res(connRes.mtx(), true);
     if(enableStat()) return;
 
     cd_pg = codePage().size()?codePage():Mess->charset();
@@ -151,7 +147,7 @@ void MBD::enable( )
 
 void MBD::disable( )
 {
-    MtxAlloc res(connRes, true);
+    MtxAlloc res(connRes.mtx(), true);
     if(!enableStat()) return;
 
     //Last commit
@@ -189,11 +185,12 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(tbl) tbl->clear();
     if(!enableStat())	return;
 
+    MtxAlloc res(connRes.mtx(), true);	//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
+					//   request's sequence breakage on high concurrency access activity
+
     //Commit set
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
     else if(!intoTrans && reqCnt) transCommit();
-
-    MtxAlloc res(connRes, true);
 
     //Put request
     rc = sqlite3_get_table(m_db, Mess->codeConvOut(cd_pg.c_str(),req).c_str(), &result, &nrow, &ncol, &zErrMsg);
@@ -224,22 +221,22 @@ void MBD::transOpen( )
     //Check for limit into one trinsaction
     if(reqCnt > 1000) transCommit();
 
-    pthread_mutex_lock(&connRes);
+    connRes.lock();
     bool begin = !reqCnt;
     if(begin) trOpenTm = SYS->sysTm();
     reqCnt++;
     reqCntTm = SYS->sysTm();
-    pthread_mutex_unlock(&connRes);
+    connRes.unlock();
 
     if(begin) sqlReq("BEGIN;");
 }
 
 void MBD::transCommit( )
 {
-    pthread_mutex_lock(&connRes);
+    connRes.lock();
     bool commit = reqCnt;
     reqCnt = reqCntTm = 0;
-    pthread_mutex_unlock(&connRes);
+    connRes.unlock();
 
     if(commit) sqlReq("COMMIT;");
 }

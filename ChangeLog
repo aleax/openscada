@@ -1,3 +1,8 @@
+2016-03-16 Roman
+- !!:FIX:DB.{MySQL,}: Prevented the "BEGIN;" and "COMMIT;" request's sequence breakage on high concurrency access activity.
+    "connRes" moved from pthread_mutex direct to ResMtx wrapper.
+
+
 2016-03-12 Roman
 - DAQ.OPC_UA: Some spare error messages removed.
 - UI.Vision: Primitive "Diagram" updated period limited to one second in the development mode.

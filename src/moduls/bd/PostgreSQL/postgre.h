@@ -111,7 +111,7 @@ class MBD : public TBD
 	PGconn	*connection;
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;
-	pthread_mutex_t	connRes;
+	ResMtx	connRes;
 };
 
 //************************************************
