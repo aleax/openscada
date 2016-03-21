@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -462,12 +462,12 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     recs.clear();
 
     MtxAlloc res(mRes, true);
-    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
+    if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
     TRegExp re(category, "p");
 
     //Get records from buffer
     unsigned i_buf = headBuf;
-    while(level >= 0 && (!arch.size() || arch == BUF_ARCH_NM) && time(NULL) < upTo) {
+    while(level >= 0 && (!arch.size() || arch == BUF_ARCH_NM) && SYS->sysTm() < upTo) {
 	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
 		abs(mBuf[i_buf].level) >= level && re.test(mBuf[i_buf].categ))
 	    recs.push_back(mBuf[i_buf]);
@@ -480,17 +480,17 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     modList(t_lst);
     for(unsigned i_t = 0; level >= 0 && i_t < t_lst.size(); i_t++) {
 	at(t_lst[i_t]).at().messList(o_lst);
-	for(unsigned i_o = 0; i_o < o_lst.size() && time(NULL) < upTo; i_o++) {
+	for(unsigned i_o = 0; i_o < o_lst.size() && SYS->sysTm() < upTo; i_o++) {
 	    AutoHD<TMArchivator> archtor = at(t_lst[i_t]).at().messAt(o_lst[i_o]);
 	    if(archtor.at().startStat() && (!arch.size() || arch == archtor.at().workId()))
-		archtor.at().get(b_tm, e_tm, recs, category, level);
+		archtor.at().get(b_tm, e_tm, recs, category, level, upTo);
 	}
     }
 
     //Alarms request processing
     if(level < 0) {
 	vector< pair<int64_t,TMess::SRec* > > mb;
-	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() && time(NULL) < upTo; p++)
+	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() && SYS->sysTm() < upTo; p++)
 	    if((p->second.time >= b_tm || b_tm == e_tm) && p->second.time <= e_tm &&
 		    p->second.level >= abs(level) && re.test(p->second.categ))
 		mb.push_back(pair<int64_t,TMess::SRec* >(FTM(p->second),&p->second));
@@ -971,7 +971,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 //* TMArchivator                                 *
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
-    TConfig(cf_el), run_st(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), m_start(cfg("START").getBd()), m_db(idb)
+    TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()), mDB(idb)
 {
     mId = iid;
 }
@@ -984,7 +984,7 @@ TCntrNode &TMArchivator::operator=( TCntrNode &node )
     //Configuration copy
     exclCopy(*src_n, "ID;");
     cfg("MODUL").setS(owner().modId());
-    m_db = src_n->m_db;
+    mDB = src_n->mDB;
 
     if(src_n->startStat() && toStart() && !startStat()) start();
 
@@ -1026,14 +1026,14 @@ void TMArchivator::save_( )	{ SYS->db().at().dataSet(fullDB(), SYS->archive().at
 void TMArchivator::start( )
 {
     messHead = -1;
-    run_st = true;
+    runSt = true;
     owner().owner().setActMess(this, true);
 }
 
 void TMArchivator::stop( )
 {
     owner().owner().setActMess(this, false);
-    run_st = false;
+    runSt = false;
     messHead = -1;
 }
 
@@ -1099,7 +1099,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt,"/prm/cfg/MODUL");
 	    }
 	}
-	if(run_st && ctrMkNode("area",opt,-1,"/mess",_("Messages"),R_R___,"root",SARH_ID)) {
+	if(runSt && ctrMkNode("area",opt,-1,"/mess",_("Messages"),R_R___,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),RWRW__,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",
@@ -1154,7 +1154,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messLev",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/mess/mess" && run_st && ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
+    else if(a_path == "/mess/mess" && runSt && ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
 	vector<TMess::SRec> rec;
 	time_t end = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
 	if(!end) end = time(NULL);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-03 21:39+0200\n"
+"POT-Creation-Date: 2016-03-17 15:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,28 +122,28 @@ msgstr ""
 msgid "Elementary figures widget of the finite visualization."
 msgstr ""
 
-msgid "Line:width"
+msgid "Line: width"
 msgstr ""
 
-msgid "Line:color"
+msgid "Line: color"
 msgstr ""
 
-msgid "Line:style"
+msgid "Line: style"
 msgstr ""
 
 msgid "Solid;Dashed;Dotted"
 msgstr ""
 
-msgid "Border:width"
+msgid "Border: width"
 msgstr ""
 
-msgid "Border:color"
+msgid "Border: color"
 msgstr ""
 
-msgid "Fill:color"
+msgid "Fill: color"
 msgstr ""
 
-msgid "Fill:image"
+msgid "Fill: image"
 msgstr ""
 
 msgid "Orientation angle"
@@ -241,10 +241,10 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
-msgid "Color:button"
+msgid "Color: button"
 msgstr ""
 
-msgid "Color:text"
+msgid "Color: text"
 msgstr ""
 
 msgid "Mode"
@@ -379,10 +379,10 @@ msgid ""
 "                 \"row\" - by rows, \"col\" - by columns, \"cell\" - by cells (by default);\n"
 "    keyID       - the key's row-column number, for the selection value get;\n"
 "    colsWdthFit - fit the columns (which size unfixed) size to fill for full the table width;\n"
-"    hHdrVis, vHdrVis - horisontal, vertical header visibility set.\n"
+"    hHdrVis, vHdrVis - horizontal, vertical header visibility set.\n"
 "  h   - The headers size, allowed attributes about cell-tag of the header, for the column as a whole:\n"
 "    width - the column width, in pixels or percents (10%);\n"
-"    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0).\n"
+"    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0);\n"
 "    color - the column color as a whole into the color name or code;\n"
 "    colorText - the column's text color as a whole into the color name or code;\n"
 "    font - the column's text font in typical OpenSCADA's string.\n"
@@ -404,13 +404,13 @@ msgstr ""
 msgid "Text fields widget of the finite visualization."
 msgstr ""
 
-msgid "Background:color"
+msgid "Background: color"
 msgstr ""
 
-msgid "Background:image"
+msgid "Background: image"
 msgstr ""
 
-msgid "Border:style"
+msgid "Border: style"
 msgstr ""
 
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
@@ -434,16 +434,16 @@ msgstr ""
 msgid "Argument "
 msgstr ""
 
-msgid ":type"
+msgid ": type"
 msgstr ""
 
 msgid "Integer;Real;String"
 msgstr ""
 
-msgid ":value"
+msgid ": value"
 msgstr ""
 
-msgid ":config"
+msgid ": config"
 msgstr ""
 
 msgid "Text value. Use \"%{x}\" for argument \"x\" (from 1) value insert."
@@ -505,16 +505,16 @@ msgstr ""
 msgid "Area "
 msgstr ""
 
-msgid ":shape"
+msgid ": shape"
 msgstr ""
 
 msgid "Rect;Poly;Circle"
 msgstr ""
 
-msgid ":coordinates"
+msgid ": coordinates"
 msgstr ""
 
-msgid ":title"
+msgid ": title"
 msgstr ""
 
 msgid ""
@@ -559,55 +559,55 @@ msgstr ""
 msgid "Trend;Spectrum;XY"
 msgstr ""
 
-msgid "Cursor:seconds"
+msgid "Cursor: seconds"
 msgstr ""
 
-msgid "Cursor:microseconds"
+msgid "Cursor: microseconds"
 msgstr ""
 
-msgid "Cursor:color"
+msgid "Cursor: color"
 msgstr ""
 
-msgid "Scale:horizontal grid size, seconds"
+msgid "Scale: horizontal grid size, seconds"
 msgstr ""
 
-msgid "Time:seconds"
+msgid "Time: seconds"
 msgstr ""
 
-msgid "Time:microseconds"
+msgid "Time: microseconds"
 msgstr ""
 
 msgid "Size, seconds"
 msgstr ""
 
-msgid "Scale:color"
+msgid "Scale: color"
 msgstr ""
 
-msgid "Scale:horizontal"
+msgid "Scale: horizontal"
 msgstr ""
 
 msgid "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"
 msgstr ""
 
-msgid "Scale:horizontal scale (%)"
+msgid "Scale: horizontal scale (%)"
 msgstr ""
 
-msgid "Scale:horizontal scale offset (%)"
+msgid "Scale: horizontal scale offset (%)"
 msgstr ""
 
-msgid "Scale:vertical"
+msgid "Scale: vertical"
 msgstr ""
 
-msgid "Scale:vertical scale (%)"
+msgid "Scale: vertical scale (%)"
 msgstr ""
 
-msgid "Scale:vertical scale offset (%)"
+msgid "Scale: vertical scale offset (%)"
 msgstr ""
 
-msgid "Scale:Markers:color"
+msgid "Scale: Markers: color"
 msgstr ""
 
-msgid "Scale:Markers:font"
+msgid "Scale: Markers: font"
 msgstr ""
 
 msgid "Value archivator"
@@ -622,28 +622,28 @@ msgstr ""
 msgid "Parameter "
 msgstr ""
 
-msgid ":address"
+msgid ": address"
 msgstr ""
 
-msgid ":view border:lower"
+msgid ": view border: lower"
 msgstr ""
 
-msgid ":view border:upper"
+msgid ": view border: upper"
 msgstr ""
 
-msgid ":color"
+msgid ": color"
 msgstr ""
 
-msgid ":width"
+msgid ": width"
 msgstr ""
 
-msgid ":scale"
+msgid ": scale"
 msgstr ""
 
 msgid "Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"
 msgstr ""
 
-msgid ":properties"
+msgid ": properties"
 msgstr ""
 
 msgid "Value archivator in form \"{ArchMod}.{ArchivatorId}\"."
@@ -712,13 +712,13 @@ msgstr ""
 msgid "Item "
 msgstr ""
 
-msgid ":level"
+msgid ": level"
 msgstr ""
 
-msgid ":template"
+msgid ": template"
 msgstr ""
 
-msgid ":font"
+msgid ": font"
 msgstr ""
 
 msgid "Messages archivator in form \"{ArchMod}.{ArchivatorId}\"."
@@ -756,10 +756,10 @@ msgstr ""
 msgid "CSS"
 msgstr ""
 
-msgid "Time:begin"
+msgid "Time: begin"
 msgstr ""
 
-msgid "Time:current"
+msgid "Time: current"
 msgstr ""
 
 msgid "Process"
@@ -768,16 +768,16 @@ msgstr ""
 msgid "Archive size"
 msgstr ""
 
-msgid "Archive:cursor:view"
+msgid "Archive: cursor: view"
 msgstr ""
 
-msgid "Archive:cursor:current"
+msgid "Archive: cursor: current"
 msgstr ""
 
-msgid "Archive:current document"
+msgid "Archive: current document"
 msgstr ""
 
-msgid "Archive:size"
+msgid "Archive: size"
 msgstr ""
 
 msgid "CSS rules in rows like \"body { background-color:#818181; }\""
@@ -882,10 +882,10 @@ msgstr ""
 msgid "Elements box widget of the finite visualization."
 msgstr ""
 
-msgid "Page:open source"
+msgid "Page: open source"
 msgstr ""
 
-msgid "Page:group"
+msgid "Page: group"
 msgstr ""
 
 msgid "Load project."
@@ -987,6 +987,12 @@ msgid "Page:open state"
 msgstr ""
 
 msgid "Page:process no opened"
+msgstr ""
+
+msgid "Page:group"
+msgstr ""
+
+msgid "Page:open source"
 msgstr ""
 
 msgid "For page can use only Box-based widgets!"
@@ -1328,34 +1334,34 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-msgid "Geometry:x"
+msgid "Geometry: x"
 msgstr ""
 
-msgid "Geometry:y"
+msgid "Geometry: y"
 msgstr ""
 
-msgid "Geometry:width"
+msgid "Geometry: width"
 msgstr ""
 
-msgid "Geometry:height"
+msgid "Geometry: height"
 msgstr ""
 
-msgid "Geometry:x scale"
+msgid "Geometry: x scale"
 msgstr ""
 
-msgid "Geometry:y scale"
+msgid "Geometry: y scale"
 msgstr ""
 
-msgid "Geometry:z"
+msgid "Geometry: z"
 msgstr ""
 
-msgid "Geometry:margin"
+msgid "Geometry: margin"
 msgstr ""
 
-msgid "Tip:tool"
+msgid "Tip: tool"
 msgstr ""
 
-msgid "Tip:status"
+msgid "Tip: status"
 msgstr ""
 
 msgid "Context menu"

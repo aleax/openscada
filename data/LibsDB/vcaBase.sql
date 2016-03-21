@@ -17266,22 +17266,22 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 			prevMode = prmAuto ? ((prmCasc==true)?tr("Cascade"):tr("Automate")) : tr("Manual");      
 			if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) {  
 				prmAuto = false; if(prmCasc==true) prmCasc = false;
-				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Manual"));
+				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prevMode+" : "+tr("Manual"));
 			}
 			else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) {  
 				prmAuto = true; if(prmCasc==true) prmCasc = false;
-				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Automate"));
+				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prevMode+" : "+tr("Automate"));
 			}
 			else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) {  
         	prmAuto = prmCasc = true;
-        	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Cascade"));
+        	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Mode")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prevMode+" : "+tr("Cascade"));
 			}
 			else if(ev_wrk == "key_mousePresLeft:/info_sp") {
-				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Setpoint")+" : "+prmDescr+" : "+prmSp.toFixed(abs(prmPrec))+" : "+info_sp_arg0val.toFixed(abs(prmPrec)));
+				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Setpoint")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prmSp.toFixed(abs(prmPrec))+" : "+info_sp_arg0val.toFixed(abs(prmPrec)));
 				prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
 			}
 			else if(ev_wrk == "key_mousePresLeft:/info_out") {
-				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Output")+" : "+prmDescr+" : "+prmManIn.toFixed(1)+" : "+info_out_arg0val.toFixed(1));
+				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Output")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prmManIn.toFixed(1)+" : "+info_out_arg0val.toFixed(1));
 				prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
 			}
 			else if(ev_wrk == "ws_BtPress:/spToVar") {
@@ -17324,10 +17324,10 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
    	else if(appToVl && !prmAuto) {
 			if(prmAnalog==false) {
 				prmManIn = 50+2.5*appToVl;
-				if(appToVl == -1)			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( < )");
-				else if(appToVl == 1)	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( > )");
-				else if(appToVl == -10)SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( << )");
-				else if(appToVl == 10)	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( >> )");
+				if(appToVl == -1)			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Close")+" ( < )");
+				else if(appToVl == 1)	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Open")+" ( > )");
+				else if(appToVl == -10)SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Close")+" ( << )");
+				else if(appToVl == 10)	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''."+tr("Output")+": "+(prmDescr.isEVal()?"":prmDescr)+" :: "+tr("Open")+" ( >> )");
 			}
 			else {
 				newVl = max(0,min(100,info_out_arg0val+appToVl));
@@ -17354,7 +17354,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 		//Event process
 		for(off = 0; (ev_wrk=event.parse(0,"\n",off)).length; ) {
 			if(ev_wrk == "key_mousePresLeft:/info_var") {
-				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Variable")+" : "+prmDescr+" : "+prmVarIn.toFixed(abs(prmPrec))+" : "+info_var_arg0val.toFixed(abs(prmPrec)));
+				SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Variable")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : "+prmVarIn.toFixed(abs(prmPrec))+" : "+info_var_arg0val.toFixed(abs(prmPrec)));
 				prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
 			}
 			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
@@ -17429,15 +17429,15 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 	for(off = 0; (ev_wrk=event.parse(0,"\n",off)).length; ) {
 		if(ev_wrk == "ws_BtPress:/com_open") {
 			if(!prmCom.isEVal()) prmCom = true; prmClose = false;
-			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_open_name);
+			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : : "+com_open_name);
 		}
 		else if(ev_wrk == "ws_BtPress:/com_close") {
 			if(!prmClose.isEVal()) prmClose = true; prmCom = false;
-			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_close_name);
+			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : : "+com_close_name);
 		}
 		else if(ev_wrk == "ws_BtPress:/com_stop") {
 			prmStop = true;
-			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_stop_name);
+			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : : "+com_stop_name);
 		}
 		else ev_rez+=ev_wrk+"\n";
 	}
@@ -17460,7 +17460,7 @@ else if(!prmComText.isEVal() || !prmStText.isEVal()) {
 	for(off = 0; (ev_wrk=event.parse(0,"\n",off)).length; ) {
 		if(ev_wrk == "ws_CombChange:/com_text") {
 			prmComText = com_text_value;
-			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+prmComText);
+			SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr,"''"+prmShifr+"''. "+tr("Command")+" : "+(prmDescr.isEVal()?"":prmDescr)+" : : "+prmComText);
 			com_text_value = "";
 		}
 		else ev_rez += ev_wrk+"\n";

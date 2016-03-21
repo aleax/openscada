@@ -235,8 +235,8 @@ void TCntrNode::nodeDis( long tm, int flag )
 
 	//Wait of free node
 	time_t t_cur = time(NULL);
-	while(1) {
-	    if(mUse <= 1) break;
+	res.lock();		//!! Added for prevent possible attach and next disable and free the node
+	while(mUse > 1) {
 	    mess_debug(nodePath().c_str(),_("Waiting for freeing by %d users!"),mUse-1);
 	    // Check timeout
 	    if(tm && time(NULL) > t_cur+tm) {
@@ -245,10 +245,13 @@ void TCntrNode::nodeDis( long tm, int flag )
 		mess_err(nodePath().c_str(),_("Blocking node error. Inform developers please!"));
 		break;
 	    }
+	    res.unlock();
 	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	    res.lock();
 	}
 
 	setNodeMode(Disabled);
+	res.unlock();
 	modif();
 
 	postDisable(flag);

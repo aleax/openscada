@@ -88,7 +88,7 @@ class TFld
 	const string &descr( )	{ return mDescr; }	//Description
 	int len( )		{ return mLen; }	//Length
 	int dec( )		{ return mDec; }	//Float dec
-	Type type( )		{ return (Type)mType; }//Value type
+	Type type( )		{ return (Type)mType; }	//Value type
 	static Type type( IO::Type tp );		//Field type from IO
 	IO::Type typeIO( );				//Type to IO
 	unsigned flg( )		{ return mFlg; }	//Flags

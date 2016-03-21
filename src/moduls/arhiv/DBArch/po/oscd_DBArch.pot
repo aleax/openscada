@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 13:41+0300\n"
+"POT-Creation-Date: 2016-03-21 20:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,9 @@ msgstr ""
 msgid "The archiver module. Provides functions for messages and values archiving to DB."
 msgstr ""
 
+msgid "Date (days)"
+msgstr ""
+
 msgid "Time (s)"
 msgstr ""
 
@@ -41,9 +44,6 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-msgid "Value"
-msgstr ""
-
 #, c-format
 msgid "Enable target DB error: %s"
 msgstr ""
@@ -54,5 +54,28 @@ msgstr ""
 msgid "Archiving time (msek)"
 msgstr ""
 
+msgid "Additional options"
+msgstr ""
+
 msgid "Archive size (hours)"
+msgstr ""
+
+msgid "Set to 0 for the limit disable and some performance rise"
+msgstr ""
+
+msgid "Force time as string"
+msgstr ""
+
+msgid "Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."
+msgstr ""
+
+msgid "Scan by days threshold in seconds"
+msgstr ""
+
+msgid ""
+"Nonzero value enables separating datetime to different date and time parts.\n"
+"Usefull for faster access to big parts of the messages on it pick."
+msgstr ""
+
+msgid "Value"
 msgstr ""

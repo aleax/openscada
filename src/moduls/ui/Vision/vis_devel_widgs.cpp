@@ -250,10 +250,10 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    string a_nm = gnd->attr("dscr");
 	    Item *cur_it = it;
 	    // Parse attributes group
-	    if(TSYS::strSepParse(a_nm,1,':').size())
+	    if(TSYS::strParse(a_nm,1,": ").size())
 		for(int i_l = 0; true; i_l++) {
-		    string c_sel = TSYS::strSepParse(a_nm,i_l,':');
-		    if(TSYS::strSepParse(a_nm,i_l+1,':').size()) {
+		    string c_sel = TSYS::strParse(a_nm,i_l,": ");
+		    if(TSYS::strParse(a_nm,i_l+1,": ").size()) {
 			int ga_id = cur_it->childGet(c_sel);
 			if(ga_id < 0) ga_id = cur_it->childInsert(c_sel,-1,Item::AttrGrp);
 			cur_it = cur_it->child(ga_id);

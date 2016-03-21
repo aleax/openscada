@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: arch.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	_("To DB archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"1.1.1"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to DB.")
 #define LICENSE		"GPL2"
@@ -81,41 +81,18 @@ void ModArch::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
-    if(flag&TCntrNode::NodeConnect)
-    {
+    if(flag&TCntrNode::NodeConnect) {
 	//Add self DB-fields for archives
 	owner().messE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
 	owner().valE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
 
 	//Archivators info table DB structure
-	el_arch.fldAdd(new TFld("TBL","Table",TFld::String,TCfg::Key,"50"));
-	el_arch.fldAdd(new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20"));
-	el_arch.fldAdd(new TFld("END","End",TFld::String,TFld::NoFlag,"20"));
-	el_arch.fldAdd(new TFld("PRM1","Parameter 1",TFld::String,TFld::NoFlag,"20"));
-	el_arch.fldAdd(new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20"));
-	el_arch.fldAdd(new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20"));
-
-	//Message DB archive DB structure
-	el_mess.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10"));
-	el_mess.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"6","0"));
-	el_mess.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100"));
-	el_mess.fldAdd(new TFld("MESS",_("Message"),TFld::String,TFld::NoFlag/*TCfg::Key*/,"100000"));
-	el_mess.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
-
-	//Boolean and integer value DB archive DB structure
-	el_vl_int.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10"));
-	el_vl_int.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
-	el_vl_int.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag));
-
-	//Real value DB archive DB structure
-	el_vl_real.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10"));
-	el_vl_real.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
-	el_vl_real.fldAdd(new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag));
-
-	//String value DB archive DB structure
-	el_vl_str.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|TFld::DateTimeDec,"10"));
-	el_vl_str.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
-	el_vl_str.fldAdd(new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000"));
+	elArch.fldAdd(new TFld("TBL","Table",TFld::String,TCfg::Key,"50"));
+	elArch.fldAdd(new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20"));
+	elArch.fldAdd(new TFld("END","End",TFld::String,TFld::NoFlag,"20"));
+	elArch.fldAdd(new TFld("PRM1","Parameter 1",TFld::String,TFld::NoFlag,"20"));
+	elArch.fldAdd(new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20"));
+	elArch.fldAdd(new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20"));
     }
 }
 

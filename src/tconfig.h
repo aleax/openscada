@@ -176,7 +176,7 @@ class TConfig: public TValElem
 	void reqKeysUpdate( );
 
 	//Attributes
-	pthread_mutex_t mRes;
+	ResMtx	mRes;
 
     private:
 	//Attributes

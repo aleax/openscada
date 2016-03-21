@@ -1,14 +1,13 @@
 # OpenSCADA.Archive.DBArch translate to Russian.
-# Copyright (C) 2007-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Archive.DBArch package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2010, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 13:41+0300\n"
+"POT-Creation-Date: 2016-03-21 20:34+0200\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -26,8 +25,11 @@ msgid ""
 "The archiver module. Provides functions for messages and values archiving to "
 "DB."
 msgstr ""
-"Модуль архиватора. Предоставляет функции архивирования сообщений и значений на "
-"БД."
+"Модуль архиватора. Предоставляет функции архивирования сообщений и значений "
+"на БД."
+
+msgid "Date (days)"
+msgstr "Дата (дни)"
 
 msgid "Time (s)"
 msgstr "Время (с)"
@@ -44,9 +46,6 @@ msgstr "Сообщение"
 msgid "Level"
 msgstr "Уровень"
 
-msgid "Value"
-msgstr "Значение"
-
 #, c-format
 msgid "Enable target DB error: %s"
 msgstr "Ошибка включения целевой БД: %s"
@@ -57,5 +56,32 @@ msgstr "Архив не запущен!"
 msgid "Archiving time (msek)"
 msgstr "Время архивирования (мс)"
 
+msgid "Additional options"
+msgstr "Дополнительные опции"
+
 msgid "Archive size (hours)"
 msgstr "Размер архива (часов)"
+
+msgid "Set to 0 for the limit disable and some performance rise"
+msgstr "Установить в 0 для отключения данного лимита и некоторого повышения производительности"
+
+msgid "Force time as string"
+msgstr "Формировать время как строка."
+
+msgid ""
+"Only for DBs it supports by a specific data type like to \"datetime\" into "
+"MySQL."
+msgstr "Только для БД поддерживающих такое посредством специфических типов данных вроде \"datetime\" в MySQL."
+
+msgid "Scan by days threshold in seconds"
+msgstr "Порог, в секундах, для сканирование сутками"
+
+msgid ""
+"Nonzero value enables separating datetime to different date and time parts.\n"
+"Usefull for faster access to big parts of the messages on it pick."
+msgstr ""
+"Ненулевое значение включает разделение датавремени на отдельные части даты и время.\n"
+"Полезно для быстрого доступа к большим частям сообщений при их сканировании."
+
+msgid "Value"
+msgstr "Значение"

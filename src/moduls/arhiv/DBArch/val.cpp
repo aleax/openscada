@@ -35,7 +35,7 @@ using namespace DBArch;
 //* DBArch::ModVArch - Value archivator           *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TVArchivator(iid,idb,cf_el), mMaxSize(24)
+    TVArchivator(iid,idb,cf_el), mMaxSize(0), mTmAsStr(false)
 {
     setSelPrior(1);
     setAddr("*.*");
@@ -56,8 +56,8 @@ void ModVArch::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("Size");
-	if(!vl.empty()) setMaxSize(s2r(vl));
+	if(!(vl=prmNd.attr("Size")).empty()) setMaxSize(s2r(vl));
+	if(!(vl=prmNd.attr("TmAsStr")).empty()) setTmAsStr(s2i(vl));
     } catch(...){ }
 }
 
@@ -65,6 +65,7 @@ void ModVArch::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("Size", r2s(maxSize()));
+    prmNd.setAttr("TmAsStr", i2s(tmAsStr()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TVArchivator::save_();
@@ -95,18 +96,27 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TVArchivator::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
-	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
+	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
+	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,2,
+		"tp","real", "help",_("Set to 0 for the limit disable and some performance rise"));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("Force time as string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
+		"tp","bool", "help",_("Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."));
+	}
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/sz") {
+    if(a_path == "/prm/add/sz") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(maxSize()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(s2r(opt->text()));
+    }
+    else if(a_path == "/prm/add/tmAsStr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(tmAsStr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setTmAsStr(s2i(opt->text()));
     }
     else TVArchivator::cntrCmdProc(opt);
 }
@@ -118,6 +128,20 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive, iarchivator), mBeg(0), mEnd(0), mPer(0), needMeta(false)
 {
     needMeta = !readMeta();
+
+    reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
+    reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
+    switch(archive().valType()) {
+	case TFld::Boolean: case TFld::Integer:
+	    reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag));
+	    break;
+	case TFld::Real:
+	    reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag));
+	    break;
+	case TFld::String:
+	    reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000"));
+	    break;
+    }
 }
 
 ModVArchEl::~ModVArchEl( )	{ }
@@ -163,45 +187,22 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 
     if(iend < ibeg)	return;
 
+    TConfig cfg(&reqEl);
+
     //Get values
     for(int64_t c_tm = ibegIn; c_tm < ibeg; c_tm += period()) buf.setR(EVAL_REAL, c_tm);
-    switch(archive().valType()) {
-	case TFld::Boolean: case TFld::Integer: {
-	    TConfig cfg(&mod->vlIntEl());
-	    for(int64_t c_tm = ibeg; c_tm <= iend; c_tm += period()) {
-		cfg.cfg("TM").setI(c_tm/1000000);
-		cfg.cfg("TMU").setI(c_tm%1000000);
-		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true)) {
-		    if(archive().valType() == TFld::Integer)	buf.setI(cfg.cfg("VAL").getI(), c_tm);
-		    else buf.setB(cfg.cfg("VAL").getI(), c_tm);
-		}
-		else buf.setI(EVAL_INT, c_tm);
+    for(int64_t c_tm = ibeg; c_tm <= iend; c_tm += period()) {
+	cfg.cfg("TM").setI(c_tm/1000000);
+	cfg.cfg("TMU").setI(c_tm%1000000);
+	if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true))
+	    switch(archive().valType()) {
+		case TFld::Boolean:
+		case TFld::Integer:	buf.setI(cfg.cfg("VAL").getI(), c_tm);	break;
+		case TFld::Real:	buf.setR(cfg.cfg("VAL").getR(), c_tm);	break;
+		case TFld::String:	buf.setS(cfg.cfg("VAL").getS(), c_tm);	break;
+		default:		buf.setR(EVAL_REAL, c_tm);		break;
 	    }
-	    break;
-	}
-	case TFld::Real: {
-	    TConfig cfg(&mod->vlRealEl());
-	    for(int64_t c_tm = ibeg; c_tm <= iend; c_tm += period()) {
-		cfg.cfg("TM").setI(c_tm/1000000);
-		cfg.cfg("TMU").setI(c_tm%1000000);
-		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true))
-		    buf.setR(cfg.cfg("VAL").getR(), c_tm);
-		else buf.setR(EVAL_REAL, c_tm);
-	    }
-	    break;
-	}
-	case TFld::String: {
-	    TConfig cfg(&mod->vlStrEl());
-	    for(int64_t c_tm = ibeg; c_tm <= iend; c_tm += period()) {
-		cfg.cfg("TM").setI(c_tm/1000000);
-		cfg.cfg("TMU").setI(c_tm%1000000);
-		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true))
-		    buf.setS(cfg.cfg("VAL").getS(), c_tm);
-		else buf.setS(EVAL_STR, c_tm);
-	    }
-	    break;
-	}
-	default: break;
+	else buf.setR(EVAL_REAL, c_tm);
     }
     for(int64_t c_tm = iend+period(); c_tm <= iendIn; c_tm += period()) buf.setR(EVAL_REAL, c_tm);
 
@@ -219,15 +220,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     int64_t itm = tm ? *tm : SYS->curTime();
     itm = (itm/period())*period()+((up_ord && itm%period())?period():0);
 
-    TConfig cf(NULL);
-
-    switch(archive().valType()) {
-	case TFld::Boolean: case TFld::Integer:
-			    cf.setElem(&mod->vlIntEl());	break;
-	case TFld::Real:    cf.setElem(&mod->vlRealEl());	break;
-	case TFld::String:  cf.setElem(&mod->vlStrEl());	break;
-	default: break;
-    }
+    TConfig cf(&reqEl);
     cf.cfg("TM").setI(itm/1000000);
     cf.cfg("TMU").setI(itm%1000000);
     if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cf,false,true)) {
@@ -256,9 +249,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     end = (end/period())*period();
 
     //Table struct init
-    TConfig cfg((archive().valType()==TFld::Real) ? (&mod->vlRealEl()) :
-		(archive().valType()==TFld::String) ? (&mod->vlStrEl()) : &mod->vlIntEl());
-
+    TConfig cfg(&reqEl);
     AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(), true);
     if(tbl.freeStat()) return false;
 
@@ -281,7 +272,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     }
 
     //Archive size limit process
-    if((mEnd-mBeg) > (int64_t)(archivator().maxSize()*3600e6)) {
+    if(archivator().maxSize() && (mEnd-mBeg) > (int64_t)(archivator().maxSize()*3600e6)) {
 	int64_t n_end = ((mEnd-(int64_t)(archivator().maxSize()*3600e6))/period())*period();
 	for(int64_t t_c = vmax(mBeg,n_end-3600ll*period()); t_c < n_end; t_c += period()) {
 	    cfg.cfg("TM").setI(t_c/1000000, true);
@@ -316,7 +307,7 @@ bool ModVArchEl::readMeta( )
 	mEnd = strtoll(cfg.cfg("END").getS().c_str(), NULL, 10);
 	mPer = strtoll(cfg.cfg("PRM1").getS().c_str(), NULL, 10);
 	// Check for delete archivator table
-	if(mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*3600e6))) {
+	if(archivator().maxSize() && mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*3600e6))) {
 	    SYS->db().at().open(archivator().addr()+"."+archTbl());
 	    SYS->db().at().close(archivator().addr()+"."+archTbl(), true);
 	    mBeg = mEnd = mPer = 0;

@@ -25,14 +25,8 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : mElem(NULL), mIncmplTblStrct(false), mReqKeys(false)
+TConfig::TConfig( TElem *Elements ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     setElem(Elements, true);
 }
 
@@ -47,9 +41,6 @@ TConfig::~TConfig( )
 
     mElem->valDet(this);
     if(single) delete mElem;
-
-    pthread_mutex_lock(&mRes);
-    pthread_mutex_destroy(&mRes);
 }
 
 TConfig &TConfig::operator=(TConfig &config)	{ return exclCopy(config); }
@@ -276,9 +267,9 @@ string TCfg::getSEL( )
 
 string TCfg::getS( )
 {
-    pthread_mutex_lock(&mOwner.mRes);
+    mOwner.mRes.lock();
     string rez = TVariant::getS();
-    pthread_mutex_unlock(&mOwner.mRes);
+    mOwner.mRes.unlock();
     if(!extVal()) return rez;
     else {
 	if(fld().flg()&TransltText && !noTransl()) {
@@ -294,9 +285,9 @@ string TCfg::getS( )
 string TCfg::getS( uint8_t RqFlg )
 {
     if(extVal() && RqFlg&(ExtValOne|ExtValTwo|ExtValThree)) {
-	pthread_mutex_lock(&mOwner.mRes);
+	mOwner.mRes.lock();
 	string rez = TVariant::getS();
-	pthread_mutex_unlock(&mOwner.mRes);
+	mOwner.mRes.unlock();
 
 	return TSYS::strSepParse(rez, ((RqFlg&ExtValTwo)?1:((RqFlg&ExtValThree)?2:0)), 0);
     }
@@ -334,25 +325,25 @@ void TCfg::setS( const string &val )
 	case TVariant::Real:	setR(s2r(val));		break;
 	case TVariant::Boolean:	setB((bool)s2i(val));	break;
 	case TVariant::String: {
-	    pthread_mutex_lock(&mOwner.mRes);
+	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
 	    if(extVal() && (fld().flg()&TransltText) && !noTransl() && val.find(char(0)) == string::npos) {
 		if(Mess->lang2Code()==Mess->lang2CodeBase()) TVariant::setS(val+string(2,0)+getS(ExtValThree));
 		else TVariant::setS(getS(ExtValOne)+string(1,0)+val+string(1,0)+getS(ExtValThree));
 	    }
 	    else TVariant::setS(val);
-	    pthread_mutex_unlock(&mOwner.mRes);
+	    mOwner.mRes.unlock();
 	    try {
 		if(!mOwner.cfgChange(*this,tVal)) {
-		    pthread_mutex_lock(&mOwner.mRes);
+		    mOwner.mRes.lock();
 		    TVariant::setS(tVal);
-		    pthread_mutex_unlock(&mOwner.mRes);
+		    mOwner.mRes.unlock();
 		}
 	    }
 	    catch(TError err) {
-		pthread_mutex_lock(&mOwner.mRes);
+		mOwner.mRes.lock();
 		TVariant::setS(tVal);
-		pthread_mutex_unlock(&mOwner.mRes);
+		mOwner.mRes.unlock();
 		throw;
 	    }
 	    break;

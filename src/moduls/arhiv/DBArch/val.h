@@ -51,7 +51,7 @@ class ModVArchEl: public TVArchEl
 	int64_t end( )		{ return mEnd; }
 	int64_t period( )	{ return mPer; }
 
-	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
+	ModVArch &archivator( )	{ return (ModVArch&)TVArchEl::archivator(); }
 
     protected:
 	//Methods
@@ -65,6 +65,8 @@ class ModVArchEl: public TVArchEl
 	//Attributes
 	int64_t mBeg, mEnd, mPer;
 	bool	needMeta;
+
+	TElem	reqEl;
 };
 
 //************************************************
@@ -78,8 +80,10 @@ class ModVArch: public TVArchivator
 	~ModVArch( );
 
 	double maxSize( )		{ return mMaxSize; }
+	bool tmAsStr( )			{ return mTmAsStr; }
 
-	void setMaxSize( double vl )	{ mMaxSize = vl; modif(); }
+	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
+	bool setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
 
 	void start( );
 	void stop( );
@@ -96,6 +100,7 @@ class ModVArch: public TVArchivator
     private:
 	//Attributes
 	double	mMaxSize;			//Maximum archive size (hours)
+	bool	mTmAsStr;			//Store time as pure integer
 };
 
 }

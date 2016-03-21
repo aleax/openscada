@@ -125,7 +125,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 
     ResAlloc res(mRes, false);
 
-    if(!run_st) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(),_("Archive is not started!"));
 
     bool wrOK = true;
     for(unsigned i_m = 0; i_m < mess.size(); i_m++) {
@@ -183,11 +183,11 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
     if(e_tm <= b_tm) return;
-    if(!run_st) throw TError(nodePath().c_str(), _("Archive is not started!"));
-    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
+    if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
+    if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
 
     ResAlloc res(mRes, false);
-    for(int iF = files.size()-1; iF >= 0 && time(NULL) < upTo; iF--) {
+    for(int iF = files.size()-1; iF >= 0 && SYS->sysTm() < upTo; iF--) {
 	if(!files[iF]->err() &&
 		!((b_tm < files[iF]->begin() && e_tm < files[iF]->begin()) ||
 		   (b_tm > files[iF]->end() && e_tm > files[iF]->end())))

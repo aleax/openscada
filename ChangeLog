@@ -1,3 +1,17 @@
+2016-03-21 Roman
+- DB.LibsDB.vcaBase.db: Main.ElCadr: Field of description checking to EVAL is added for empty value place.
+- !!:FIX:SYS: TCntrNode::nodeDis() fixed to prevent attach to the node at it disabling and result crash.
+- TConfig: Moved to ResMtx from direct pthread_mutex_t.
+- FIX:Archive: m_start, run_st, m_db were renamed to mStart, runSt, mDB. Time limit for get() messages fix.
+- !!!!:FIX:Archive.DBArch: New options of the messages archiver are added: "Store time as pure integer", "Scan by days threshold in seconds".
+    "Archive size (hours)" for both values and messages adapted for set to zero (<0.1) and disable the limit at all.
+    Table structure's for value and messages set adaptive and moved to the objects TMArchivator and ModVArchEl.
+    By the option "Scan by days threshold in seconds" enabled separation the "datatime" row to "date" and "time" with allow significant rise
+	the performance of reading message's big parts by day's blocks scan/seek and decrease the scan/seek by seconds.
+- UI.{VCAEngine,Vision}: Logical groups separator of Widget's attributes is changed from ":" to ": " everywhere, mostly for allow
+    the user attribute value's items separtion and description it with the symbol ":". Some like user attributes will not now grouped before fix!
+
+
 2016-03-16 Roman
 - !!:FIX:DB.{MySQL,}: Prevented the "BEGIN;" and "COMMIT;" request's sequence breakage on high concurrency access activity.
     "connRes" moved from pthread_mutex direct to ResMtx wrapper.
