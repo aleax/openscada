@@ -249,6 +249,8 @@ string RunWdgView::resGet( const string &res )
 
 bool RunWdgView::isVisible( QPoint pos )
 {
+    if(!shape || !shape->needToVisibleCheck())	return true;
+
     //Clear background and draw transparent
     QPalette plt = palette();
     plt.setBrush(QPalette::Window,QColor(0,0,0,0));

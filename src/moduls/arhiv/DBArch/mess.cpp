@@ -104,11 +104,9 @@ void ModMArch::start( )
 {
     if(!runSt) {
 	reqEl.fldClear();
-	if(tmDtSepScDayThr()) {
+	if(tmDtSepScDayThr())
 	    reqEl.fldAdd(new TFld("DT",_("Date (days)"),TFld::Integer,TCfg::Key,"10"));
-	    reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key,"5"));
-	}
-	else reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
+	reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
 	reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"6","0"));
 	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100"));
 	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,TFld::NoFlag/*TCfg::Key*/,"100000"));
@@ -148,11 +146,8 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 
 	//Put record to DB
-	if(tmDtSepScDayThr()) {
-	    cfg.cfg("DT").setI(mess[i_m].time/86400);
-	    cfg.cfg("TM").setI(mess[i_m].time%86400);
-	}
-	else cfg.cfg("TM").setI(mess[i_m].time);
+	if(tmDtSepScDayThr()) cfg.cfg("DT").setI(mess[i_m].time/86400);
+	cfg.cfg("TM").setI(mess[i_m].time);
 	cfg.cfg("TMU").setI(mess[i_m].utime);
 	cfg.cfg("CATEG").setS(mess[i_m].categ);
 	cfg.cfg("MESS").setS(mess[i_m].mess);
@@ -167,11 +162,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
     if(maxSize() && (mEnd-mBeg) > (time_t)(maxSize()*3600)) {
 	time_t n_end = mEnd-(time_t)(maxSize()*3600);
 	for(time_t t_c = vmax(mBeg,n_end-3600); t_c < n_end; t_c++) {
-	    if(tmDtSepScDayThr()) {
-		cfg.cfg("DT").setI(t_c/86400, true);
-		cfg.cfg("TM").setI(t_c%86400, true);
-	    }
-	    else cfg.cfg("TM").setI(t_c, true);
+	    cfg.cfg("TM").setI(t_c, true);
 	    tbl.at().fieldDel(cfg);
 	}
 	mBeg = n_end;
@@ -211,10 +202,11 @@ void ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const str
 	    bool bySec = (eTm-bTm) < tmDtSepScDayThr() || (tC > tTmp && (tTmp+86400) < tmDtSepScDayThr()) || (eTm-tTmp) < tmDtSepScDayThr();
 	    if(!bySec) tC = tTmp;
 	    cfg.cfg("DT").setI(tC/86400, true);
-	    cfg.cfg("TM").setI(tC%86400, true);
+	    cfg.cfg("TM").setI(tC, true);
 	    if(!bySec) cfg.cfg("TM").setKeyUse(false);
 	    for(int e_c = 0; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",e_c++,cfg) && SYS->sysTm() < upTo; ) {
-		TMess::SRec rc(cfg.cfg("DT").getI()*86400+cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(), (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
+		TMess::SRec rc(cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(),
+				(TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
 		if(rc.time >= bTm && rc.time <= eTm && abs(rc.level) >= level && re.test(rc.categ)) {
 		    bool equal = false;
 		    int i_p = mess.size();
@@ -269,12 +261,12 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	    "dest","select","select","/db/list","help",TMess::labDB());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,2,
-		"tp","real", "help",_("Set to 0 for the limit disable and some performance rise"));
+		"tp","real", "help",_("Set to 0 for the limit disable and some performance rise."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("Force time as string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
 		"tp","bool", "help",_("Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/tmDtSepScDayThr",_("Scan by days threshold in seconds"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
 		"tp","dec", "help",_("Nonzero value enables separating datetime to different date and time parts.\n"
-				      "Usefull for faster access to big parts of the messages on it pick."));
+				      "Useful for faster access to big parts of the messages on it pick."));
 	}
 	return;
     }

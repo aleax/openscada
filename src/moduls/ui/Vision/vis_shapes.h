@@ -81,6 +81,7 @@ class WdgShape : public QObject
 	string id( )									{ return m_id; }
 
 	virtual bool isEditable( )							{ return false; }
+	virtual bool needToVisibleCheck( )						{ return true; }
 
 	virtual void init( WdgView *view )						{ }
 	virtual void destroy( WdgView *view )						{ }
@@ -119,6 +120,8 @@ class ShapeFormEl : public WdgShape
     public:
 	//Methods
 	ShapeFormEl( );
+
+	bool needToVisibleCheck( )	{ return false; }
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );

@@ -340,7 +340,7 @@ namespace VISION
 
 	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ return 1; };
 
-            //Attributes
+	    //Attributes
 	    void	*shpData;	//Shape data link
 	    bool	isReload;	//Set if widget updated
 

@@ -859,11 +859,6 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 {
     if(qobject_cast<RunWdgView*>(w))
 	switch(event->type()) {
-	    case QEvent::MouseButtonPress:
-	    case QEvent::MouseButtonRelease:	return true;	//!!!! Pass for standard events processing to the container widget
-								//by some artifications like ticks lost into Slider
-								//Possible for the global events generations will need the processing here
-								//or observe the artification into the global handler.
 	    case QEvent::Hide: {
 		ShpDt *shD = (ShpDt*)w->shpData;
 		switch(shD->elType) {
@@ -912,15 +907,9 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
-	    case QEvent::MouseButtonRelease: {	//For context menu allow to the FormEl
-		ShpDt *shD = (ShpDt*)w->shpData;
-		switch(shD->elType) {
-		    case F_LIST: case F_TREE: case F_TABLE:
-			QApplication::sendEvent(w, event);
-			return false;
-		}
-		break;
-	    }
+	    case QEvent::MouseButtonDblClick:
+	    case QEvent::MouseButtonPress:
+	    case QEvent::MouseButtonRelease: QApplication::sendEvent(w, event);	break;
 	    default:	break;
 	}
     }

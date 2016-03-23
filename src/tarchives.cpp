@@ -483,7 +483,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	for(unsigned i_o = 0; i_o < o_lst.size() && SYS->sysTm() < upTo; i_o++) {
 	    AutoHD<TMArchivator> archtor = at(t_lst[i_t]).at().messAt(o_lst[i_o]);
 	    if(archtor.at().startStat() && (!arch.size() || arch == archtor.at().workId()))
-		archtor.at().get(b_tm, e_tm, recs, category, level, upTo);
+		archtor.at().get(b_tm, e_tm, recs, category, level, arch.size()?upTo:0);	//!! But possible only one archiver, from all,
+												//   processing and next continued by the limit
 	}
     }
 

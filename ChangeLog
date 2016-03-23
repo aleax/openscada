@@ -1,3 +1,10 @@
+2016-03-23 Roman
+- FIX:Archive: Group messages archives request timeout, for common, fix into get().
+- Archive.DBArch: Quick messages obtain by separated field "DT" set compatible but the field "TM" left to store full time.
+- FIX:UI.Vision: Mouse events at all enabled for "FormEl" primitive and some artifications like ticks lost into Slider
+    but mostly into Table detected and fixed.
+
+
 2016-03-21 Roman
 - DB.LibsDB.vcaBase.db: Main.ElCadr: Field of description checking to EVAL is added for empty value place.
 - !!:FIX:SYS: TCntrNode::nodeDis() fixed to prevent attach to the node at it disabling and result crash.
