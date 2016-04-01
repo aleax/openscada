@@ -709,13 +709,14 @@ void TBD::disable( )
     if(!enableStat()) return;
 
     //Close all tables
+    //!!!! Comment the part for omit tables closing temporary before the AutoHD proper locking fix, mostly reproduced on remote MySQL
     try {
 	vector<string> t_list;
 	list(t_list);
 	for(unsigned i_l = 0; i_l < t_list.size(); i_l++)
 	    close(t_list[i_l], false, 1);
     }
-    catch(...) { }	//Pass remove for locked
+    catch(...) { }	//Pass removing for locked
 
     mEn = false;
 }

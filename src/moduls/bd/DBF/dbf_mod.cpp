@@ -483,12 +483,10 @@ void MTable::save( )
 
 string MTable::getVal( TCfg &cfg, db_str_rec *fld_rec )
 {
-    switch(cfg.fld().type())
-    {
+    switch(cfg.fld().type()) {
 	case TFld::String:	return Mess->codeConvOut(codepage, cfg.getS());
 	case TFld::Integer:	return i2s(cfg.getI());
-	case TFld::Real:
-	{
+	case TFld::Real: {
 	    if(!fld_rec)	return r2s(cfg.getR());
 
 	    char str[200];
@@ -503,10 +501,8 @@ string MTable::getVal( TCfg &cfg, db_str_rec *fld_rec )
 
 void MTable::setVal( TCfg &cfg, const string &val )
 {
-    switch(cfg.fld().type())
-    {
-	case TFld::String:
-	{
+    switch(cfg.fld().type()) {
+	case TFld::String: {
 	    //Remove spaces from end
 	    int i;
 	    for(i = val.size(); i > 0 && val[i-1] == ' '; i--) ;

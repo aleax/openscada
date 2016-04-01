@@ -1946,7 +1946,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  level - message level
     //  mess - message text
     if(iid == "message" && prms.size() >= 3)	{ message(prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str()); return 0; }
-    // int messDebug(string cat, string mess) - formation of the system message <mess> with the category <cat> and the appropriate level
+    // int mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}(string cat, string mess) -
+    //		formation of the system message <mess> with the category <cat> and the appropriate level
     //  cat - message category
     //  mess - message text
     if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }

@@ -4,11 +4,12 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
 # Roman Savochenko <rom_as@oscada.org>, 2011-2016.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-17 15:57+0200\n"
+"POT-Creation-Date: 2016-03-31 22:14+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -523,7 +524,8 @@ msgid ""
 "    keyID       - the key's row-column number, for the selection value get;\n"
 "    colsWdthFit - fit the columns (which size unfixed) size to fill for full "
 "the table width;\n"
-"    hHdrVis, vHdrVis - horizontal, vertical header visibility set.\n"
+"    hHdrVis, vHdrVis - horizontal, vertical header visibility set;\n"
+"    sortEn - direct sorting by columns enable.\n"
 "  h   - The headers size, allowed attributes about cell-tag of the header, "
 "for the column as a whole:\n"
 "    width - the column width, in pixels or percents (10%);\n"
@@ -563,6 +565,7 @@ msgstr ""
 "    colsWdthFit - passen Sie die Spalten (welche Größe nicht fixierte) Größe "
 "für volle Breite der Tabelle zu füllen;\n"
 "    hHdrVis, vHdrVis - horizontale, vertikale Kopf Sichtbarkeit Satz.\n"
+"    sortEn - direkte Sortierung von Spalten ermöglichen.\n"
 "  h   - Der Header Größe, erlaubt Attribute zu Zelle-tag des Headers, für "
 "die Spalte als Ganzes:\n"
 "    width - die Spaltenbreite in Pixeln oder Prozent (10%);\n"
@@ -1595,8 +1598,20 @@ msgstr "Modul anhalten."
 msgid "Connection to session is not permitted for '%s'."
 msgstr "Verbindung an die Sitzung ist nicht zulässig für '%s'."
 
+#, c-format
+msgid "User is changed to '%s', from '%s'."
+msgstr "Benutzer ist auf '%s' geändert, von '%s'."
+
+#, c-format
+msgid "User '%s' is connected, from '%s'."
+msgstr "Benutzer '%s' ist verbunden, von '%s'."
+
 msgid "Connect/create session arguments error."
 msgstr "Fehler in den Parametern beim Verbinden/Erstellen der Sitzung."
+
+#, c-format
+msgid "User '%s' is disconnected, from '%s'."
+msgstr "Benutzer '%s' ist abgekoppelt, von '%s'."
 
 msgid "Widgets library"
 msgstr "Widgetsbibliothek"
@@ -2032,3 +2047,6 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "User is '%s' connected, from '%s'."
+#~ msgstr "Der Nutzer ist '%s' verbunden, von '%s'."

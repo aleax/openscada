@@ -976,9 +976,9 @@ void VisRun::about()
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 {
-    //Try second connect to session for permission check
+    //Try second connect to the session for permission check
     XMLNode req("connect");
-    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
+    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("userChange","1");
     if(cntrIfCmd(req)) {
 	mWUser->setUser(oldUser);
 	mWUser->setPass(oldPass);
@@ -988,14 +988,13 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
     cntrIfCmd(req);
 
-    //Update pages after user change
+    //Update pages after an user change
     pgCacheClear();
     bool oldMenuVis = menuBar()->isVisible();
     menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     QApplication::processEvents();
     if(master_pg) {
-	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen))
-	{
+	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)) {
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
 	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;

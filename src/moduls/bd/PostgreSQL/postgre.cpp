@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.4.2"
+#define MOD_VER		"1.4.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -863,8 +863,10 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
 		if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
 	    else {
-		cf.setS(val, (tr?TCfg::ExtValTwo:TCfg::ExtValOne));
-		if(!tr) cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
+		if(!tr) {
+		    cf.setS(val);	//!! Sets no flag instead the TCfg::ExtValOne for clean up from previous the Two, Three
+		    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
+		} else cf.setS(val, TCfg::ExtValTwo);
 	    }
 	    break;
 	default: cf.setS(val); break;

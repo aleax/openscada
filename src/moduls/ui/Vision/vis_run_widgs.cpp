@@ -252,16 +252,21 @@ bool RunWdgView::isVisible( QPoint pos )
     if(!shape || !shape->needToVisibleCheck())	return true;
 
     //Clear background and draw transparent
-    QPalette plt = palette();
+    QPalette pltSave, plt;
+    pltSave = plt = palette();
     plt.setBrush(QPalette::Window,QColor(0,0,0,0));
     setPalette(plt);
 
     //Grab widget and check it for no zero
 #if QT_VERSION >= 0x050000
-    return grab().toImage().pixel(pos);
+    bool rez = grab().toImage().pixel(pos);
 #else
-    return QPixmap::grabWidget(this).toImage().pixel(pos);
+    bool rez = QPixmap::grabWidget(this).toImage().pixel(pos);
 #endif
+
+    setPalette(pltSave);
+
+    return rez;
 }
 
 bool RunWdgView::event( QEvent *event )

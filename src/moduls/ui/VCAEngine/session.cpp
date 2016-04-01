@@ -74,7 +74,7 @@ void Session::setEnable( bool val )
     vector<string> pg_ls;
 
     if(val) {
-	mess_info(nodePath().c_str(),_("Enable session."));
+	mess_debug(nodePath().c_str(),_("Enable session."));
 	try {
 	    if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
@@ -123,7 +123,7 @@ void Session::setEnable( bool val )
     else {
 	if(start()) setStart(false);
 
-	mess_info(nodePath().c_str(),_("Disable session."));
+	mess_debug(nodePath().c_str(),_("Disable session."));
 
 	//Pages disable
 	list(pg_ls);
@@ -155,7 +155,7 @@ void Session::setStart( bool val )
 
 	if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
 
-	mess_info(nodePath().c_str(),_("Start session."));
+	mess_debug(nodePath().c_str(),_("Start session."));
 
 	//Load Styles from project
 	mStProp.clear();
@@ -191,7 +191,7 @@ void Session::setStart( bool val )
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Start process task time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
     }
     else {
-	mess_info(nodePath().c_str(),_("Stop session."));
+	mess_debug(nodePath().c_str(),_("Stop session."));
 
 	//Stop process task
 	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrun_req);
@@ -2079,6 +2079,17 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 
 	return (int)prms[1].getS().size();
     }
+    // int mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg} -
+    //		formation of the system message <mess> with the category by the widget path and the appropriate level
+    //  mess - message text
+    if(iid == "messDebug" && prms.size())	{ mess_debug(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(iid == "messInfo" && prms.size())	{ mess_info(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(iid == "messNote" && prms.size())	{ mess_note(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(iid == "messWarning" && prms.size())	{ mess_warning(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(iid == "messErr" && prms.size())		{ mess_err(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(iid == "messCrit" && prms.size())	{ mess_crit(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(iid == "messAlert" && prms.size())	{ mess_alert(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(iid == "messEmerg" && prms.size())	{ mess_emerg(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
 
     //Request to primitive
     TVariant rez = objFuncCall_w(iid, prms, user, this);

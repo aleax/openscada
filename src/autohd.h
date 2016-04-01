@@ -67,7 +67,9 @@ template <class ORes> class AutoHD
 	bool operator==( const AutoHD &hd )	{ return (m_node == hd.m_node); }
 
 	void free( ) {
-	    if(m_node && m_node->AHDDisConnect()) delete m_node;
+	    if(m_node &&
+		m_node->AHDDisConnect())
+		    delete m_node;
 	    m_node = NULL;
 	}
 

@@ -1,3 +1,17 @@
+2016-04-01 Roman
+- FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Previous scaned value getting prevented on the original value setting to clear all extended structure of translated value.
+    Detected on UI,VCAEngine users attributes seek.
+- Protocol.SelfSystem: Attribute "remoteSrcAddr" of the root node set/reserve to the remoted host's address.
+- FIX:UI.VCAEngine: Mostly information messages from information level moved to debug.
+    User API functions mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}() appended to the run-time widget and included the widget path as category.
+    FIX: setNoTransl() at the attributes loading disabled by some problematic and no a sence.
+    The note messages is added: "User is changed to ...", "User is connected ...", "User is disconnected ...".
+- UI.{VCAEngine,Vision}: To view "Table" of the primitive FormEl into root tag "tbl" added attribute "sortEn" to direct sorting by columns.
+- FIX:UI.Vision: For the attribute inspector labels of the attributes the ToolTip is added to long names (>20).
+    FIX: The palette restoring to visibleCheck function is added for prevent FormEl's artifacts at last.
+    The view "Table" of the primitive FormEl mostly adapted to sorting by the columns.
+
+
 2016-03-23 Roman
 - FIX:Archive: Group messages archives request timeout, for common, fix into get().
 - Archive.DBArch: Quick messages obtain by separated field "DT" set compatible but the field "TM" left to store full time.

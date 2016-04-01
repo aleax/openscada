@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-17 15:57+0200\n"
+"POT-Creation-Date: 2016-03-31 22:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,7 +379,8 @@ msgid ""
 "                 \"row\" - by rows, \"col\" - by columns, \"cell\" - by cells (by default);\n"
 "    keyID       - the key's row-column number, for the selection value get;\n"
 "    colsWdthFit - fit the columns (which size unfixed) size to fill for full the table width;\n"
-"    hHdrVis, vHdrVis - horizontal, vertical header visibility set.\n"
+"    hHdrVis, vHdrVis - horizontal, vertical header visibility set;\n"
+"    sortEn - direct sorting by columns enable.\n"
 "  h   - The headers size, allowed attributes about cell-tag of the header, for the column as a whole:\n"
 "    width - the column width, in pixels or percents (10%);\n"
 "    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0);\n"
@@ -1288,7 +1289,19 @@ msgstr ""
 msgid "Connection to session is not permitted for '%s'."
 msgstr ""
 
+#, c-format
+msgid "User is changed to '%s', from '%s'."
+msgstr ""
+
+#, c-format
+msgid "User '%s' is connected, from '%s'."
+msgstr ""
+
 msgid "Connect/create session arguments error."
+msgstr ""
+
+#, c-format
+msgid "User '%s' is disconnected, from '%s'."
 msgstr ""
 
 msgid "Widgets library"

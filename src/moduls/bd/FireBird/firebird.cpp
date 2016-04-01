@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.2.1"
+#define MOD_VER		"1.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -853,7 +853,9 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
 	if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
     }
     else {
-	cf.setS(val, (tr?TCfg::ExtValTwo:TCfg::ExtValOne));
-	if(!tr) cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
+	if(!tr) {
+	    cf.setS(val);	//!! Sets no flag instead the TCfg::ExtValOne for clean up from previous the Two, Three
+	    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
+	} else cf.setS(val, TCfg::ExtValTwo);
     }
 }

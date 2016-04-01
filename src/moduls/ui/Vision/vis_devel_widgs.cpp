@@ -465,7 +465,10 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			}
 		    }
 		    break;
-		case Qt::ToolTipRole: if(!it->help().empty()) val = it->help().c_str();	break;
+		case Qt::ToolTipRole:
+		    if(it->help().size())		val = it->help().c_str();
+		    else if(it->name().size() > 20)	val = it->name().c_str();
+		    break;
 	    }
     }
 

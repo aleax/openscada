@@ -150,7 +150,7 @@ void WidgetLib::load_( )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    mess_info(nodePath().c_str(),_("Load widget library."));
+    mess_debug(nodePath().c_str(),_("Load widget library."));
 
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
@@ -182,7 +182,7 @@ void WidgetLib::load_( )
 
 void WidgetLib::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save widget library."));
+    mess_debug(nodePath().c_str(),_("Save widget library."));
 
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
@@ -204,7 +204,7 @@ void WidgetLib::setEnable( bool val )
 {
     if(val == enable())	return;
 
-    mess_info(nodePath().c_str(),val ? _("Enable widgets library.") : _("Disable widgets library."));
+    mess_debug(nodePath().c_str(),val ? _("Enable widgets library.") : _("Disable widgets library."));
 
     passAutoEn = true;
 

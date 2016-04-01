@@ -158,7 +158,7 @@ void Project::load_( )
 
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    mess_info(nodePath().c_str(), _("Load project."));
+    mess_debug(nodePath().c_str(), _("Load project."));
 
     SYS->db().at().dataGet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ/", *this);
 
@@ -249,7 +249,7 @@ void Project::setEnable( bool val )
 
     MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
 
-    mess_info(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
+    mess_debug(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 
     vector<string> f_lst;
     list(f_lst);

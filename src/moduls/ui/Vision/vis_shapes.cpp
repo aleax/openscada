@@ -519,6 +519,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    wdg->verticalHeader()->setVisible(false);
 		}
 		else {
+		    if(wdg->isSortingEnabled()) {
+			wdg->setSortingEnabled(false);
+			//wdg->clear();
+			//wdg->setColumnCount(0);
+			wdg->setRowCount(0);
+		    }
 		    // Items
 		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++) {
 			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
@@ -582,6 +588,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				// Modify set
 				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
+				tit->setData(Qt::UserRole+1, i_c);
+				tit->setData(Qt::UserRole+2, i_r);
 			    }
 			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, (int)i_cR); }
 			    i_c++;
@@ -611,8 +619,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 		    wdg->horizontalHeader()->setVisible(tX.attr("hHdrVis").size()?s2i(tX.attr("hHdrVis")):hdrPresent);
 		    wdg->verticalHeader()->setVisible(s2i(tX.attr("vHdrVis")));
+		    wdg->setSortingEnabled(s2i(tX.attr("sortEn")));
 		}
-		wdg->setColumnCount(maxCols); wdg->setRowCount(maxRows);
+		wdg->setColumnCount(maxCols);
+		wdg->setRowCount(maxRows);
 		if(maxCols > 1) wdg->resizeColumnsToContents();
 		if(colsWdthFit && maxRows) {
 		    int averWdth = w->size().width()/maxCols;
@@ -829,11 +839,11 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    switch(wdg->selectionBehavior()) {
 		case QAbstractItemView::SelectRows:
 		    for(QList<QTableWidgetItem*>::iterator iIt = foundIts.begin(); !selIt && iIt != foundIts.end(); ++iIt)
-			if((*iIt)->column() == wdg->property("keyID").toInt()) selIt = *iIt;
+			if((*iIt)->data(Qt::UserRole+1).toInt() == wdg->property("keyID").toInt()) selIt = *iIt;
 		    break;
 		case QAbstractItemView::SelectColumns:
 		    for(QList<QTableWidgetItem*>::iterator iIt = foundIts.begin(); !selIt && iIt != foundIts.end(); ++iIt)
-			if((*iIt)->row() == wdg->property("keyID").toInt()) selIt = *iIt;
+			if((*iIt)->data(Qt::UserRole+2).toInt() == wdg->property("keyID").toInt()) selIt = *iIt;
 		    break;
 		default: {
 		    if(wdg->property("sel").toString() == "cell") selIt = foundIts.length() ? foundIts.front() : NULL;
@@ -842,7 +852,10 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		}
 	    }
 	    shD->addrWdg->blockSignals(true);
-	    if(selIt) { wdg->setCurrentItem(selIt); if(selIt != selItPrev) wdg->scrollToItem(selIt); }
+	    if(selIt) {
+		wdg->setCurrentItem(selIt);
+		if(selIt != selItPrev) wdg->scrollToItem(selIt);
+	    }
 	    else wdg->setCurrentItem(NULL);
 	    shD->addrWdg->blockSignals(false);
 	    break;
@@ -1089,19 +1102,18 @@ void ShapeFormEl::tableSelectChange( )
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
 
     AttrValS attrs;
-    string value = el->selectedItems()[0]->text().toStdString();
+    QTableWidgetItem *wIt = el->selectedItems()[0];
+    string value = wIt->text().toStdString();
     switch(el->selectionBehavior()) {
 	case QAbstractItemView::SelectRows:
-	    value = el->selectedItems()[0]->tableWidget()->item(el->selectedItems()[0]->row(),
-							el->property("keyID").toInt())->text().toStdString();
+	    value = wIt->tableWidget()->item(wIt->row()/*data(Qt::UserRole+2).toInt()*/, el->property("keyID").toInt())->text().toStdString();
 	    break;
 	case QAbstractItemView::SelectColumns:
-	    value = el->selectedItems()[0]->tableWidget()->item(el->property("keyID").toInt(),
-							el->selectedItems()[0]->column())->text().toStdString();
+	    value = wIt->tableWidget()->item(el->property("keyID").toInt(), wIt->column()/*data(Qt::UserRole+1).toInt()*/)->text().toStdString();
 	    break;
 	default:
 	    if(el->property("sel").toString() != "cell")
-		value = i2s(el->selectedItems()[0]->row())+":"+i2s(el->selectedItems()[0]->column());
+		value = i2s(wIt->row()/*data(Qt::UserRole+2).toInt()*/)+":"+i2s(wIt->column()/*data(Qt::UserRole+1).toInt()*/);
 	    break;
     }
 
@@ -1118,13 +1130,14 @@ void ShapeFormEl::tableChange( int row, int col )
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
 
-    QVariant val = el->item(row,col)->data(Qt::DisplayRole);
+    QTableWidgetItem *wIt = el->item(row,col);
+    QVariant val = wIt->data(Qt::DisplayRole);
     if(val.type() == QVariant::Bool) val = val.toInt();
 
     //Events prepare
     AttrValS attrs;
     attrs.push_back(std::make_pair("set",val.toString().toStdString()));
-    attrs.push_back(std::make_pair("event",TSYS::strMess("ws_TableEdit_%d_%d",col,row)));
+    attrs.push_back(std::make_pair("event",TSYS::strMess("ws_TableEdit_%d_%d",wIt->data(Qt::UserRole+1).toInt(),wIt->data(Qt::UserRole+2).toInt())));
     w->attrsSet(attrs);
 }
 
@@ -3902,16 +3915,15 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		isDbl = false;
 
     //Check table structure
-    //Clear collumns
+    //Clear columns
     for(int ncl = 0; ncl < shD->addrWdg->columnCount(); ncl++)
-	if(shD->col.find(shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString().toStdString()) == string::npos)
-	{
+	if(shD->col.find(shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString().toStdString()) == string::npos) {
 	    shD->addrWdg->removeColumn(ncl);
 	    ncl--;
 	    newFill = true;
 	}
 
-    //Get collumns indexes
+    //Get columns indexes
     int c_tm = -1, c_tmu = -1, c_lev = -1, c_cat = -1, c_mess = -1;
     shD->addrWdg->verticalHeader()->setVisible(false);
     string clm;
