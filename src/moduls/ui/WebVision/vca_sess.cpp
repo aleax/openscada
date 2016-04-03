@@ -6590,6 +6590,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     bbeg = s2ll(req.attr("tm_grnd"));
     bend = s2ll(req.attr("tm"));
     bper = s2ll(req.attr("per"));
+    bool toAprox = s2i(req.attr("aprox"));
 
     if(bbeg <= 0 || bend <= 0 || bper <= 0 || bbeg > bend || req.text().empty()) return;
 
@@ -6606,7 +6607,10 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	}
 	else curPos = maxPos+1;
 	if(curPos < 0 || curPos > (maxPos+1)) break;	//Out of range exit
-	for( ; prevPos < curPos; prevPos++) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	for(int stPos = prevPos; prevPos < curPos; prevPos++)
+	    if(toAprox && prevVal != EVAL_REAL && curVal != EVAL_REAL)
+		buf.push_back(SHg(bbeg+prevPos*bper,prevVal+(curVal-prevVal)*(prevPos-stPos)/(curPos-stPos)));
+	    else buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
 	if(prevPos > maxPos) break;	//Normal exit
 	prevVal = curVal;
     }
