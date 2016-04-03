@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.3"
+#define DAQ_MVER	"1.8.4"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -74,7 +74,7 @@ class TMdPrm : public TParamContr
 
 	void upVal( bool first, bool last, double frq );
 
-	TElem &elem( )		{ return p_el; }
+	TElem &elem( )		{ return pEl; }
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -96,8 +96,8 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &vo );
 
 	//Attributes
-	TElem		p_el;		//Work atribute elements
-	ResString	acq_err;
+	TElem		pEl;		//Work atribute elements
+	ResString	acqErr;
 
 	// Logical type by template
 	//Data
@@ -111,9 +111,9 @@ class TMdPrm : public TParamContr
 	    class SLnk
 	    {
 		public:
-		SLnk(int iid, const string &iaddr = "") : io_id(iid), addr(iaddr) { }
+		SLnk( int iid, const string &iaddr = "" ) : ioId(iid), addr(iaddr) { }
 
-		int	io_id;		//Template function io index
+		int	ioId;		//Template function io index
 		string	addr, real;	//Full item address: R:23
 	    };
 
@@ -127,7 +127,7 @@ class TMdPrm : public TParamContr
 	    SLnk &lnk( int num );
 
 	    //Attributes
-	    int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
+	    int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 	    vector<SLnk>	plnk;		//Parameter's links
 	};
 
@@ -148,7 +148,7 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-	TMdContr(string name_c, const string &daq_db, TElem *cfgelem);
+	TMdContr( string name_c, const string &daq_db, TElem *cfgelem );
 	~TMdContr( );
 
 	string	getStatus( );
@@ -245,7 +245,7 @@ class TTpContr: public TTypeDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	TElem	&prmIOE( )	{ return el_prm_io; }
+	TElem	&prmIOE( )	{ return elPrmIO; }
 
     protected:
 	//Methods
@@ -260,7 +260,7 @@ class TTpContr: public TTypeDAQ
 	TController *ContrAttach( const string &name, const string &daq_db );
 
 	//Attributes
-	TElem	el_prm_io;
+	TElem	elPrmIO;
 };
 
 extern TTpContr *mod;

@@ -1,3 +1,9 @@
+2016-04-03 Roman
+- !!:DAQ.DCON: Some cleaned. Adapted and enabled hierarchical parameters. Pass to real requests at the first and last iterations.
+    enRes and reqRes resources lockators moved from Res to ResMtx.
+- !:DAQ.{ModBus,Siemens}: Pass to real requests at the first and last iterations, only the procedures execution.
+
+
 2016-04-01 Roman
 - FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Previous scaned value getting prevented on the original value setting to clear all extended structure of translated value.
     Detected on UI,VCAEngine users attributes seek.

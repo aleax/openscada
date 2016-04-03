@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.1"
+#define MOD_VER		"2.0.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -1529,8 +1529,8 @@ void *TMdContr::Task( void *icntr )
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
-    bool is_start = true;
-    bool is_stop  = false;
+    bool isStart = true;
+    bool isStop  = false;
     int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     try {
@@ -1539,18 +1539,18 @@ void *TMdContr::Task( void *icntr )
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc res1(cntr.enRes.mtx(), true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		    try { cntr.pHd[iP].at().calc(is_start, is_stop, cntr.period()?1:-1); }
+		    try { cntr.pHd[iP].at().calc(isStart, isStop, cntr.period()?1:-1); }
 		    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		res1.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-1);
 
-		if(is_stop) break;
+		if(isStop) break;
 
 		TSYS::taskSleep(1000000000);
 
-		if(cntr.endrunReq) is_stop = true;
-		is_start = false;
+		if(cntr.endrunReq) isStop = true;
+		isStart = false;
 		continue;
 	    }
 	    else if(cntr.tmDelay == 0) cntr.conErr = _("Connecting...");
@@ -1562,7 +1562,7 @@ void *TMdContr::Task( void *icntr )
 	    //Process write data blocks
 	    if(cntr.assincWrite()) {
 		ResAlloc res(cntr.reqDataAsWrRes, false);
-		for(unsigned i_b = 0; !cntr.endrunReq && i_b < cntr.writeBlks.size(); i_b++)
+		for(unsigned i_b = 0; !isStart && !isStop && !cntr.endrunReq && i_b < cntr.writeBlks.size(); i_b++)
 		    try {
 			if(cntr.redntUse()) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
 			if(s2i(cntr.writeBlks[i_b].err.getVal()) == -1) continue;
@@ -1574,7 +1574,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    ResAlloc res(cntr.reqDataRes, false);
 	    //Process acquisition data blocks
-	    for(unsigned i_b = 0; !cntr.endrunReq && i_b < cntr.acqBlks.size(); i_b++)
+	    for(unsigned i_b = 0; !isStart && !isStop && !cntr.endrunReq && i_b < cntr.acqBlks.size(); i_b++)
 		try {
 		    if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
 		    cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
@@ -1587,7 +1587,7 @@ void *TMdContr::Task( void *icntr )
 	    //Calc parameters
 	    MtxAlloc res1(cntr.enRes.mtx(), true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
-		try{ cntr.pHd[i_p].at().calc(is_start,is_stop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+		try{ cntr.pHd[i_p].at().calc(isStart,isStop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    res1.unlock();
 
@@ -1603,12 +1603,12 @@ void *TMdContr::Task( void *icntr )
 	    t_prev = t_cnt;
 	    cntr.callSt = false;
 
-	    if(is_stop) break;
+	    if(isStop) break;
 
 	    TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
-	    if(cntr.endrunReq) is_stop = true;
-	    is_start = false;
+	    if(cntr.endrunReq) isStop = true;
+	    isStart = false;
 	}
     } catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 

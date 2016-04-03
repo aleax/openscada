@@ -2,7 +2,7 @@
 //OpenSCADA system module DAQ.DCON file: DCON_client.h
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2014 by Roman Savochenko, rom_as@oscada.org        *
+ *		   2008-2014,2016 by Roman Savochenko, rom_as@oscada.org   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,25 +58,25 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TElem &elem( )		{ return p_el; }
+	TElem &elem( )		{ return pEl; }
 	TMdContr &owner( );
 
 	//Attributes
-	TElem	p_el;		//Work atribute elements
+	TElem	pEl;		//Work atribute elements
 
-	int64_t	&mod_addr;	//Module address
-	char	&crc_ctrl;	//DCON CRC control mode
-	int64_t	&host_signal;
+	int64_t	&modAddr;	//Module address
+	char	&crcCtrl;	//DCON CRC control mode
+	int64_t	&hostSignal;
 
-	int64_t	&ai_method,
-		&ai_range,
-		&ao_method,
-		&ao_range,
-		&di_method,
-		&do_method,
-		&ci_method;
+	int64_t	&aiMethod,
+		&aiRange,
+		&aoMethod,
+		&aoRange,
+		&diMethod,
+		&doMethod,
+		&ciMethod;
 
-	ResString ai_err, ao_err, di_err, do_err, ci_err;
+	ResString aiErr, aoErr, diErr, doErr, ciErr;
 
 	//Values
 	double	AI[32], AO[32], CI[32];
@@ -114,7 +114,7 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void prmEn( const string &id, bool val );
+	void prmEn( TMdPrm *prm, bool val );
 	string DCONCRC( string str );
 	string DCONReq( string &pdu, bool CRC = false, unsigned acqLen = 0, char resOK = '>' );
 
@@ -133,18 +133,18 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res, req_res;		//Resource for enable params and request values
+	ResMtx	enRes, reqRes;			//Resource for enable params and request values
 	TCfg	&mAddr;				//Transport device address
 	int64_t	&mPerOld,			//Acquisition task (seconds)
 		&mPrior,			//Process task priority
 		&connTry;			//Connections try
 
-	bool	prc_st,				//Process task active
-		call_st,        		//Calc now stat
-		endrun_req;			//Request to stop of the Process task
-	vector< AutoHD<TMdPrm> >  p_hd;
+	bool	prcSt,				//Process task active
+		callSt,				//Calc now stat
+		endrunReq;			//Request to stop of the Process task
+	vector< AutoHD<TMdPrm> >  pHd;
 
-	double	mPer, tm_gath;			//Gathering time
+	double	mPer, tmGath;			//Gathering time
 };
 
 //*************************************************
