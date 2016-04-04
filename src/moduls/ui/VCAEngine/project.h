@@ -216,6 +216,10 @@ class Page : public Widget, public TConfig
 	Page	*ownerPage( );
 	Project	*ownerProj( );
 
+    public:
+	//Attributes
+	bool	manCrt;		//Manual created, mostly for child widget's modification clear after it's inheritance
+
     protected:
 	//Methods
 	void postEnable( int flag );

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -957,31 +957,31 @@ string TSYS::sepstr2path( const string &str, char sep )
 
 string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 {
-    int i_sz;
+    int iSz;
     string sout;
 
     switch(tp) {
 	case TSYS::PathEl:
 	    sout = in;
-	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch(sout[i_sz]) {
-		    case '/': sout.replace(i_sz,1,"%2f"); i_sz += 2; break;
-		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
+	    for(iSz = 0; iSz < (int)sout.size(); iSz++)
+		switch(sout[iSz]) {
+		    case '/': sout.replace(iSz,1,"%2f"); iSz += 2; break;
+		    case '%': sout.replace(iSz,1,"%25"); iSz += 2; break;
 		}
 	    break;
 	case TSYS::HttpURL: {
 	    char buf[4];
 	    sout = in;
-	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch(sout[i_sz]) {
-		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
-		    case ' ': sout.replace(i_sz,1,"%20"); i_sz += 2; break;
-		    case '\t': sout.replace(i_sz,1,"%09"); i_sz += 2; break;
+	    for(iSz = 0; iSz < (int)sout.size(); iSz++)
+		switch(sout[iSz]) {
+		    case '%': sout.replace(iSz,1,"%25"); iSz += 2; break;
+		    case ' ': sout.replace(iSz,1,"%20"); iSz += 2; break;
+		    case '\t': sout.replace(iSz,1,"%09"); iSz += 2; break;
 		    default:
-			if(sout[i_sz]&0x80) {
-			    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[i_sz]);
-			    sout.replace(i_sz,1,buf);
-			    i_sz += 2;
+			if(sout[iSz]&0x80) {
+			    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[iSz]);
+			    sout.replace(iSz,1,buf);
+			    iSz += 2;
 			    break;
 			}
 		}
@@ -989,69 +989,78 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	}
 	case TSYS::Html:
 	    sout.reserve(in.size()+10);
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz]) {
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
 		    case '>':	sout += "&gt;";		break;
 		    case '<':	sout += "&lt;";		break;
 		    case '"':	sout += "&quot;";	break;
 		    case '&':	sout += "&amp;";	break;
 		    case '\'':	sout += "&apos;";	break;
-		    default:	sout += in[i_sz];
+		    default:	sout += in[iSz];
 		}
 	    break;
 	case TSYS::JavaSc:
 	    sout.reserve(in.size()+10);
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz]) {
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
 		    case '\n':	sout += "\\n";	break;
-		    default:	sout += in[i_sz];
+		    default:	sout += in[iSz];
 		}
 	    break;
 	case TSYS::SQL:
-	    sout.reserve(in.size()+10);
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz]) {
-		    case '\'':	sout += "\\'";	break;
-		    case '\"':	sout += "\\\"";	break;
-		    case '`':	sout += "\\`";	break;
-		    case '\\':	sout += "\\\\";	break;
-		    default:	sout += in[i_sz];
-		}
+	    if(!opt1.size()) {
+		sout.reserve(in.size()+10);
+		for(iSz = 0; iSz < (int)in.size(); iSz++)
+		    switch(in[iSz]) {
+			case '\'':	sout += "\\'";	break;
+			case '\"':	sout += "\\\"";	break;
+			case '`':	sout += "\\`";	break;
+			case '\\':	sout += "\\\\";	break;
+			default:	sout += in[iSz];
+		    }
+	    } else {
+		//By doubling method
+		sout = in;
+		for(unsigned iSz = 0; iSz < sout.size(); iSz++)
+		    for(unsigned iSmb = 0; iSmb < opt1.size(); iSmb++)
+			if(sout[iSz] == opt1[iSmb])
+			    sout.replace(iSz++, 1, 2, opt1[iSmb]);
+	    }
 	    break;
 	case TSYS::Custom: {
 	    sout.reserve(in.size()+10);
 	    char buf[4];
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++) {
+	    for(iSz = 0; iSz < (int)in.size(); iSz++) {
 		unsigned i_smb;
 		for(i_smb = 0; i_smb < opt1.size(); i_smb++)
-		    if(in[i_sz] == opt1[i_smb]) {
-			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[i_sz]);
+		    if(in[iSz] == opt1[i_smb]) {
+			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[iSz]);
 			sout += buf;
 			break;
 		    }
-		if(i_smb >= opt1.size()) sout += in[i_sz];
+		if(i_smb >= opt1.size()) sout += in[iSz];
 	    }
 	    break;
 	}
 	case TSYS::base64: {
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz += 3) {
-		if(i_sz && !(i_sz%57))	sout.push_back('\n');
-		sout.push_back(base64alph[(unsigned char)in[i_sz]>>2]);
-		if((i_sz+1) >= (int)in.size()) {
-		    sout.push_back(base64alph[((unsigned char)in[i_sz]&0x03)<<4]);
+	    for(iSz = 0; iSz < (int)in.size(); iSz += 3) {
+		if(iSz && !(iSz%57))	sout.push_back('\n');
+		sout.push_back(base64alph[(unsigned char)in[iSz]>>2]);
+		if((iSz+1) >= (int)in.size()) {
+		    sout.push_back(base64alph[((unsigned char)in[iSz]&0x03)<<4]);
 		    sout += "==";
 		}
 		else {
-		    sout.push_back(base64alph[(((unsigned char)in[i_sz]&0x03)<<4)|((unsigned char)in[i_sz+1]>>4)]);
-		    if((i_sz+2) >= (int)in.size()) {
-			sout.push_back(base64alph[((unsigned char)in[i_sz+1]&0x0F)<<2]);
+		    sout.push_back(base64alph[(((unsigned char)in[iSz]&0x03)<<4)|((unsigned char)in[iSz+1]>>4)]);
+		    if((iSz+2) >= (int)in.size()) {
+			sout.push_back(base64alph[((unsigned char)in[iSz+1]&0x0F)<<2]);
 			sout.push_back('=');
 		    }
 		    else {
-			sout.push_back(base64alph[(((unsigned char)in[i_sz+1]&0x0F)<<2)|((unsigned char)in[i_sz+2]>>6)]);
-			sout.push_back(base64alph[(unsigned char)in[i_sz+2]&0x3F]);
+			sout.push_back(base64alph[(((unsigned char)in[iSz+1]&0x0F)<<2)|((unsigned char)in[iSz+2]>>6)]);
+			sout.push_back(base64alph[(unsigned char)in[iSz+2]&0x3F]);
 		    }
 		}
 	    }
@@ -1059,13 +1068,13 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	}
 	case TSYS::FormatPrint:
 	    sout = in;
-	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		if(sout[i_sz] == '%') { sout.replace(i_sz,1,"%%"); i_sz++; }
+	    for(iSz = 0; iSz < (int)sout.size(); iSz++)
+		if(sout[iSz] == '%') { sout.replace(iSz,1,"%%"); iSz++; }
 	    break;
 	case TSYS::oscdID:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz]) {
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
 		    case ' ': case '/': case '\\': case '&': case '(':
 		    case ')': case '[': case ']': case '!': case '~':
 		    case '`': case '@': case '%': case '^': case '-':
@@ -1073,7 +1082,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		    case ':': case ';': case '"': case '\'': case '<':
 		    case '>': case '?': case '.': case ',':
 			sout+="_";	break;
-		    default:	sout += in[i_sz];
+		    default:	sout += in[iSz];
 		}
 	    break;
 	case TSYS::Bin: {
@@ -1086,13 +1095,13 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    break;
 	}
 	case TSYS::Reverse:
-	    for(i_sz = in.size()-1; i_sz >= 0; i_sz--) sout += in[i_sz];
+	    for(iSz = in.size()-1; iSz >= 0; iSz--) sout += in[iSz];
 	    break;
 	case TSYS::ShieldSimb:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		if(in[i_sz] == '\\' && i_sz < ((int)in.size()-1)) {
-		    switch(in[i_sz+1]) {
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		if(in[iSz] == '\\' && iSz < ((int)in.size()-1)) {
+		    switch(in[iSz+1]) {
 			case 'a':	sout += '\a';	break;
 			case 'b':	sout += '\b';	break;
 			case 'f':	sout += '\f';	break;
@@ -1101,20 +1110,20 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 			case 't':	sout += '\t';	break;
 			case 'v':	sout += '\v';	break;
 			case 'x': case 'X':
-			    if((i_sz+3) < (int)in.size() && isxdigit(in[i_sz+2]) && isxdigit(in[i_sz+3]))
-			    { sout += (char)strtol(in.substr(i_sz+2,2).c_str(),NULL,16); i_sz += 2; }
-			    else sout += in[i_sz+1];
+			    if((iSz+3) < (int)in.size() && isxdigit(in[iSz+2]) && isxdigit(in[iSz+3]))
+			    { sout += (char)strtol(in.substr(iSz+2,2).c_str(),NULL,16); iSz += 2; }
+			    else sout += in[iSz+1];
 			    break;
 			default:
-			    if((i_sz+3) < (int)in.size() && in[i_sz+1] >= '0' && in[i_sz+1] <= '7' &&
-							    in[i_sz+2] >= '0' && in[i_sz+2] <= '7' &&
-							    in[i_sz+3] >= '0' && in[i_sz+3] <= '7')
-			    { sout += (char)strtol(in.substr(i_sz+1,3).c_str(),NULL,8); i_sz += 2; }
-			    else sout += in[i_sz+1];
+			    if((iSz+3) < (int)in.size() && in[iSz+1] >= '0' && in[iSz+1] <= '7' &&
+							    in[iSz+2] >= '0' && in[iSz+2] <= '7' &&
+							    in[iSz+3] >= '0' && in[iSz+3] <= '7')
+			    { sout += (char)strtol(in.substr(iSz+1,3).c_str(),NULL,8); iSz += 2; }
+			    else sout += in[iSz+1];
 		    }
-		    i_sz++;
+		    iSz++;
 		}
-		else sout += in[i_sz];
+		else sout += in[iSz];
 	    break;
     }
     return sout;
@@ -1134,46 +1143,46 @@ unsigned char TSYS::getBase64Code( unsigned char asymb )
 
 string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 {
-    unsigned i_sz;
+    unsigned iSz;
     string sout;
 
     switch(tp) {
 	case TSYS::PathEl: case TSYS::HttpURL: case TSYS::Custom:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < in.size(); i_sz++)
-		switch(in[i_sz]) {
+	    for(iSz = 0; iSz < in.size(); iSz++)
+		switch(in[iSz]) {
 		    case '%':
-			if(i_sz+2 < in.size()) {
-			    sout += (char)strtol(in.substr(i_sz+1,2).c_str(),NULL,16);
-			    i_sz += 2;
-			}else sout += in[i_sz];
+			if(iSz+2 < in.size()) {
+			    sout += (char)strtol(in.substr(iSz+1,2).c_str(),NULL,16);
+			    iSz += 2;
+			}else sout += in[iSz];
 			break;
-		    default: sout += in[i_sz];
+		    default: sout += in[iSz];
 		}
 	    break;
 	case TSYS::base64:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < in.size(); ) {
-		if(in[i_sz] == '\n')	i_sz += sizeof('\n');
-		if((i_sz+3) < in.size())
-		    if(in[i_sz+1] != '=') {
-			char w_code1 = TSYS::getBase64Code(in[i_sz+1]);
-			sout.push_back((TSYS::getBase64Code(in[i_sz])<<2)|(w_code1>>4));
-			if(in[i_sz+2] != '=') {
-			    char w_code2 = TSYS::getBase64Code(in[i_sz+2]);
+	    for(iSz = 0; iSz < in.size(); ) {
+		if(in[iSz] == '\n')	iSz += sizeof('\n');
+		if((iSz+3) < in.size())
+		    if(in[iSz+1] != '=') {
+			char w_code1 = TSYS::getBase64Code(in[iSz+1]);
+			sout.push_back((TSYS::getBase64Code(in[iSz])<<2)|(w_code1>>4));
+			if(in[iSz+2] != '=') {
+			    char w_code2 = TSYS::getBase64Code(in[iSz+2]);
 			    sout.push_back((w_code1<<4)|(w_code2>>2));
-			    if(in[i_sz+3] != '=')
-				sout.push_back((w_code2<<6)|TSYS::getBase64Code(in[i_sz+3]));
+			    if(in[iSz+3] != '=')
+				sout.push_back((w_code2<<6)|TSYS::getBase64Code(in[iSz+3]));
 			}
 		    }
-		i_sz += 4;
+		iSz += 4;
 	    }
 	    break;
 	case TSYS::Bin: {
 	    sout.reserve(in.size()*2);
 	    char buf[3+opt1.size()];
-	    for(i_sz = 0; i_sz < in.size(); i_sz++) {
-		snprintf(buf, sizeof(buf), "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
+	    for(iSz = 0; iSz < in.size(); iSz++) {
+		snprintf(buf, sizeof(buf), "%s%02X", (iSz&&opt1.size())?(((iSz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[iSz]);
 		sout += buf;
 	    }
 	    break;

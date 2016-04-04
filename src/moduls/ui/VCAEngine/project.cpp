@@ -586,7 +586,9 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
-	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
+	    add(vid, opt->text());
+	    at(vid).at().setOwner(opt->attr("user"));
+	    at(vid).at().manCrt = true;
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	del(opt->attr("id"),true);
@@ -772,8 +774,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* Page: Project's page                         *
 //************************************************
-Page::Page( const string &iid, const string &isrcwdg ) :
-    Widget(iid), TConfig(&mod->elPage()), mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
+Page::Page( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elPage()), manCrt(false),
+    mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     cfg("ID").setS(id());
     cfg("PROC").setExtVal(true);
@@ -1137,26 +1139,24 @@ void Page::setEnable( bool val )
     //Enable/disable included pages
     vector<string> ls;
     pageList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-        try{ pageAt(ls[i_l]).at().setEnable(val); }
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+        try { pageAt(ls[iL]).at().setEnable(val); }
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Include widgets link update on the parrent change
     if(val) {
-	if(mParentNmPrev.size() && parentNm() != mParentNmPrev) {
-	    vector<string> lst;
-	    wdgList(lst, true);
-	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-		try {
-		    AutoHD<Widget> iw = wdgAt(lst[i_l]);
-		    if(iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0)
-		    {
-			iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
-			iw.at().setEnable(true);
-		    }
+	bool lnkUpdt = (mParentNmPrev.size() && parentNm() != mParentNmPrev);
+	vector<string> lst;
+	wdgList(lst, true);
+	for(unsigned iL = 0; iL < lst.size(); iL++)
+	    try {
+		AutoHD<Widget> iw = wdgAt(lst[iL]);
+		if(lnkUpdt && iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0) {
+		    iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
+		    iw.at().setEnable(true);
 		}
-		catch(TError err) { }
-	}
+		else if(manCrt) iw.at().modifClr();
+	    } catch(TError err) { }
 	mParentNmPrev = parentNm();
     }
 }
@@ -1169,19 +1169,20 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
     //Check for label <deleted>
     if(!force) {
 	string db = ownerProj()->DB();
-	string tbl = ownerProj()->tbl()+"_incl";
+	string tbl = ownerProj()->tbl() + "_incl";
 	TConfig c_el(&mod->elInclWdg());
 	c_el.cfg("IDW").setS(path());
 	c_el.cfg("ID").setS(wid);
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>")
-	{
-	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true, false, true);
-	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>") {
+	    if(!parent().at().wdgPresent(wid))
+		SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true, false, true);
+	    else throw TError(nodePath().c_str(),
+		_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
     }
 
     //Same widget add
-    chldAdd(inclWdg,new PageWdg(wid,ipath));
+    chldAdd(inclWdg, new PageWdg(wid,ipath));
     wdgAt(wid).at().setName(name);
 
     //Call heritors include widgets update
@@ -1212,7 +1213,7 @@ void Page::pageAdd( const string &id, const string &name, const string &orig )
     if(pagePresent(id)) return;
     if(!(prjFlags()&(Page::Container|Page::Template)))
 	throw TError(nodePath().c_str(),_("Page is not container or template!"));
-    chldAdd(mPage,new Page(id,orig));
+    chldAdd(mPage, new Page(id,orig));
     pageAt(id).at().setName(name);
 }
 
@@ -1232,11 +1233,11 @@ void Page::resourceList( vector<string> &ls )
 {
     //Append to the map for doublets remove
     map<string,bool> sortLs;
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
     ownerProj()->mimeDataList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
     ls.clear();
-    for(map<string,bool>::iterator i_l = sortLs.begin(); i_l != sortLs.end(); ++i_l) ls.push_back(i_l->first);
+    for(map<string,bool>::iterator iL = sortLs.begin(); iL != sortLs.end(); ++iL) ls.push_back(iL->first);
 
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
@@ -1332,13 +1333,15 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;
 	    pageList(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
+	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trU(pageAt(lst[i_f]).at().name(),u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
 	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
-	    pageAdd(vid, opt->text()); pageAt(vid).at().setOwner(opt->attr("user"));
+	    pageAdd(vid, opt->text());
+	    pageAt(vid).at().setOwner(opt->attr("user"));
+	    pageAt(vid).at().manCrt = true;
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
@@ -1383,8 +1386,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt))
-    {
+    if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt)) {
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
@@ -1410,8 +1412,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	// Link interface process
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
-	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:"))
-	{
+	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:")) {
 	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");
 	    opt->childAdd("el")->setText("wdg:");
@@ -1442,8 +1443,8 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    else if(c_lv == 1 && isAbs) {
 			ownerProj()->list(ls);
 			if(ls.size()) opt->childAdd("el")->setText(_("=== Pages ==="));
-			for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			    opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[i_l]);
+			for(unsigned iL = 0; iL < ls.size(); iL++)
+			    opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[iL]);
 			return true;
 		    }
 
@@ -1453,27 +1454,27 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			if(dynamic_cast<Page*>(&wnd.at())) {
 			    ((AutoHD<Page>)wnd).at().pageList(ls);
 			    if(ls.size()) opt->childAdd("el")->setText(_("=== Pages ==="));
-			    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-				opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[i_l]);
+			    for(unsigned iL = 0; iL < ls.size(); iL++)
+				opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[iL]);
 			}
 			wnd.at().wdgList(ls, true);
 			if(ls.size()) opt->childAdd("el")->setText(_("=== Widgets ==="));
-			for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			    opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[i_l]);
+			for(unsigned iL = 0; iL < ls.size(); iL++)
+			    opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[iL]);
 			if(!is_pl) {
 			    wnd.at().attrList(ls);
 			    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
-			    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			    opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
+			    for(unsigned iL = 0; iL < ls.size(); iL++)
+			    opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[iL]);
 			}
 		    }
 		}
 		else if(m_prm == "arh:") {
 		    SYS->archive().at().valList(ls);
-		    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			opt->childAdd("el")->setText(c_path+ls[i_l]);
+		    for(unsigned iL = 0; iL < ls.size(); iL++)
+			opt->childAdd("el")->setText(c_path+ls[iL]);
 		}
-	    }catch(TError err) { }
+	    } catch(TError err) { }
 	}
     }
     else return Widget::cntrCmdLinks(opt, lnk_ro);

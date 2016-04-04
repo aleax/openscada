@@ -1,4 +1,8 @@
 2016-04-04 Roman
+- SYS: TSYS::strEncode() in variant SQL expanded by doubling method of pointed symbols.
+- DB.{PostgreSQL,SQLite}: TSYS::strEncode() in doubling method used.
+- UI.VCAEngine: Manual creation mark for pages is added. Mostly for modification of childs clean up and it's inheritance storing prevent
+    by it is spare and sometime problematic on the parent update, like messages about impossible to enable a widget.
 - FIX:DB.PostgreSQL: Fixed for symbols "'" '"' encoding by it replace to the doubling method.
 
 

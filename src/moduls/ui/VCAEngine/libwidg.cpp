@@ -157,7 +157,7 @@ void WidgetLib::load_( )
     passAutoEn = true;
 
     //Create new widgets
-    map<string, bool>   itReg;
+    map<string, bool>	itReg;
     TConfig c_el(&mod->elWdg());
     c_el.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); ) {

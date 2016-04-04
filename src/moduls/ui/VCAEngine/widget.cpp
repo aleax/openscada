@@ -402,12 +402,12 @@ void Widget::inheritIncl( const string &iwdg )
     if(parw.freeStat()) return;
 
     //Create no present include widgets for no link and container widgets
-    vector<string>  ls;
+    vector<string> ls;
     if(!iwdg.empty() && parw.at().wdgPresent(iwdg)) ls.push_back(iwdg);
     else parw.at().wdgList(ls);
-    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
-	if(!wdgPresent(ls[i_w]))
-	    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path(),true); }
+    for(unsigned iW = 0; iW < ls.size(); iW++)
+	if(!wdgPresent(ls[iW]))
+	    try { wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().path(),true); }
 	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 }
 
@@ -435,17 +435,17 @@ void Widget::wClear( )
 	if(!parw.freeStat()) {
 	    //Check for widget's deletion
 	    wdgList(ls);
-	    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
-		if(!parw.at().wdgPresent(ls[i_w]))
-		    wdgDel(ls[i_w],true);
+	    for(unsigned iW = 0; iW < ls.size(); iW++)
+		if(!parw.at().wdgPresent(ls[iW]))
+		    wdgDel(ls[iW],true);
 
 	    //No present widget's add and clear call
 	    parw.at().wdgList(ls);
-	    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
-		if(!wdgPresent(ls[i_w]))
-		    try{ wdgAdd(ls[i_w],"",parw.at().wdgAt(ls[i_w]).at().path(),true); }
+	    for(unsigned iW = 0; iW < ls.size(); iW++)
+		if(!wdgPresent(ls[iW]))
+		    try{ wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().path(),true); }
 		    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
-		else wdgAt(ls[i_w]).at().wClear();
+		else wdgAt(ls[iW]).at().wClear();
 	}
     }
     modif();
@@ -508,13 +508,13 @@ string Widget::wChDown( const string &ia )
     if(ia.empty() && isContainer() && !isLink()) {
 	//Check for widget's upadte/add
 	wdgList(ls);
-	for(unsigned i_w = 0; i_w < ls.size(); i_w++) wdgAt(ls[i_w]).at().wChDown();
+	for(unsigned iW = 0; iW < ls.size(); iW++) wdgAt(ls[iW]).at().wChDown();
 
 	//No present widget's delete
 	parw.at().wdgList(ls);
-	for(unsigned i_w = 0; i_w < ls.size(); i_w++)
-	    if(!wdgPresent(ls[i_w]))
-		parw.at().wdgDel(ls[i_w],true);
+	for(unsigned iW = 0; iW < ls.size(); iW++)
+	    if(!wdgPresent(ls[iW]))
+		parw.at().wdgDel(ls[iW],true);
     }
 
     modif();
@@ -1001,8 +1001,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	vector<string> c_list;
 	wdgList(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_w = 0; i_w < c_list.size(); i_w++)
-	    if(wdgAt(c_list[i_w]).at().enable()) e_c++;
+	for(unsigned iW = 0; iW < c_list.size(); iW++)
+	    if(wdgAt(c_list[iW]).at().enable()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else return false;
@@ -1128,17 +1128,17 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 				s2i(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
 		vector<string> incllist, alist, list;
 		wdgList(incllist);
-		for(int i_w = -1; i_w < (int)incllist.size(); i_w++) {
+		for(int iW = -1; iW < (int)incllist.size(); iW++) {
 		    AutoHD<Widget> wdg;
-		    if(i_w < 0) wdg = AutoHD<Widget>(this);
-		    else wdg = wdgAt(incllist[i_w]);
+		    if(iW < 0) wdg = AutoHD<Widget>(this);
+		    else wdg = wdgAt(incllist[iW]);
 		    wdg.at().attrList(alist);
 		    for(unsigned i_a = 0; i_a < alist.size(); i_a++) {
 			string grpprm;
 			string idprm = alist[i_a];
 			string nprm  = wdg.at().attrAt(alist[i_a]).at().id();
-			if(i_w >= 0) {
-			    idprm.insert(0,incllist[i_w]+".");
+			if(iW >= 0) {
+			    idprm.insert(0,incllist[iW]+".");
 			    nprm.insert(0,wdg.at().id()+".");
 			}
 
@@ -1151,7 +1151,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			// Check select param
 			if(shwTmpl && !shwAttr) {
 			    nprm = grpprm;
-			    if(i_w >= 0) nprm.insert(0,wdg.at().id()+".");
+			    if(iW >= 0) nprm.insert(0,wdg.at().id()+".");
 
 			    // Check already to present parameters
 			    bool f_ok = false;

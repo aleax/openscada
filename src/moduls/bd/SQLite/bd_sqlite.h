@@ -117,8 +117,6 @@ class BDMod: public TTypeBD
 	BDMod( string name );
 	~BDMod( );
 
-	static string sqlReqCode( const string &req, char symb = '\'' );
-
 	AutoHD<MBD> at( const string &name )	{ return TTypeBD::at(name); }
 
     protected:
