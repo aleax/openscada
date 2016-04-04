@@ -2,7 +2,7 @@
 //OpenSCADA system module BD.PostgreSQL file: postgre.h
 /***************************************************************************
  *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
- *                 2013-2015 by Roman Savochenko, rom_as@oscada.org        *
+ *                 2013-2016 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -123,6 +123,8 @@ class BDMod: public TTypeBD
 	//Public methods
 	BDMod( string name );
 	~BDMod( );
+
+	static string sqlReqCode( const string &req, char symb = '\'' );
 
     private:
 	//Private methods

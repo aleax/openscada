@@ -1,3 +1,7 @@
+2016-04-04 Roman
+- FIX:DB.PostgreSQL: Fixed for symbols "'" '"' encoding by it replace to the doubling method.
+
+
 2016-04-03 Roman
 - UI.{Vision,WebVision}: For primitive "Diagram" to data block "data:<dt/>" option "Aproximation (aprox)" is added.
 - !!:DAQ.DCON: Some cleaned. Adapted and enabled hierarchical parameters. Pass to real requests at the first and last iterations.
