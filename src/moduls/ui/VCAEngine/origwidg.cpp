@@ -1663,13 +1663,15 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    int rCnt = 0;
 	    XMLNode *reptN = xcur->childGet(i_c);
 	    bool docRevers = s2i(xcur->childGet(i_c)->attr("docRevers"));
+	    string docAMessArchs = xcur->childGet(i_c)->attr("docAMessArchs");
 
 	    int off = 0;
 	    int dACat = s2i(TSYS::strSepParse(dAMess,0,':',&off));
 	    string dATmpl = dAMess.substr(off);
 
 	    vector<TMess::SRec> mess;
-	    SYS->archive().at().messGet(funcV.getI(A_DocCalcPrmLTime), funcV.getI(A_DocCalcPrmTime), mess, dATmpl, (TMess::Type)dACat);
+	    SYS->archive().at().messGet(funcV.getI(A_DocCalcPrmLTime), funcV.getI(A_DocCalcPrmTime), mess,
+		dATmpl, (TMess::Type)dACat, docAMessArchs);
 
 	    // Progress bar prepare
 	    if(!progrNode) {

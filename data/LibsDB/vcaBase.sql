@@ -1262,7 +1262,7 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_ggraph/pg_1','max'
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_ggraph/pg_1','min','<EVAL>',42,'Parameter|min','','el8','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_ggraph/pg_1','curSek','1337603688',40,'','','trnd1','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_ggraph/pg_1','max','<EVAL>',42,'Parameter|max','val:400','el6','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics 1',40,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p3_name','<EVAL>',34,'Parameter 3|NAME','prm:/LogicLev/experiment/F_PP1/NAME','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p4_addr','<EVAL>',34,'Parameter 4|var','prm:','e2','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_rg/pg_rg/pg_1','p4_max','<EVAL>',34,'Parameter 4|max','prm:','e2','','','','','','');
@@ -21408,7 +21408,7 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','3','','..',1,''
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','4','','..',1,'','','',-1,0,'name;grpName;',1417969139);
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt',1,'','','',-1,0,'geomZ;pName;',1404219070);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1440410448);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;',1459924728);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
@@ -21431,9 +21431,9 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gview','','/wlb_Main/wdg_ViewCad
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gview','1','','..',1,'','','',-1,0,'name;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','2','','root',1,'
 ','
-','',-1,5,'name;','');
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'pgGrp;','');
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2/ggraph','1','','..',1,'','','',-1,0,'name;grpName;','');
+','',-1,5,'name;',1459924728);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'pgGrp;',1459924728);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2/ggraph','1','','..',1,'','','',-1,0,'name;grpName;',1459924728);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/2','mn','','root',1,'
 ','
 ','',-1,5,'name;dscr;','');

@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Russian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-03 07:40+0300\n"
+"POT-Creation-Date: 2016-04-06 14:52+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -160,6 +160,9 @@ msgstr "Ошибка останова архиватора сообщений '%
 msgid "Value archive '%s' stop error."
 msgstr "Ошибка останова архива значений '%s'."
 
+msgid "Put message to the archiver '%s' error: %s"
+msgstr "Ошибка записи сообщения в архиватор '%s': %s"
+
 msgid "Message buffer process error."
 msgstr "Ошибка обработки буфера сообщений."
 
@@ -218,16 +221,16 @@ msgstr ""
 msgid "Get messages for level more and equal it."
 msgstr "Получать сообщения уровнем больше или равно указанному."
 
-msgid "Archivator"
-msgstr "Архиватор"
+msgid "Archivators"
+msgstr "Архиваторы"
 
 msgid ""
-"Messages archivator.\n"
+"Messages archivators.\n"
 "No set archivator for process by buffer and all archivators.\n"
 "Set '<buffer>' for process by buffer."
 msgstr ""
-"Архиватор сообщений.\n"
-"Не указывайте архиватор для обработки запроса буфером и всеми архиваторами.\n"
+"Архиваторы сообщений.\n"
+"Не указывайте архиваторы для обработки запроса буфером и всеми архиваторами.\n"
 "Установите '<buffer>' для обработки запроса буфером."
 
 msgid "Messages"
@@ -261,9 +264,6 @@ msgstr "Количество"
 msgid "All: %d; Enabled: %d"
 msgstr "Всего: %d; Включено: %d"
 
-msgid "Archivators"
-msgstr "Архиваторы"
-
 msgid "Message archivator"
 msgstr "Архиватор сообщений"
 
@@ -278,6 +278,9 @@ msgstr "Архиваторы значений"
 
 msgid "Message archivator: "
 msgstr "Архиватор сообщений: "
+
+msgid "Archivator"
+msgstr "Архиватор"
 
 msgid "State"
 msgstr "Состояние"
@@ -1438,18 +1441,6 @@ msgstr "Изображение пользователя"
 msgid "Users"
 msgstr "Пользователи"
 
-msgid "Administrator (superuser)!!!"
-msgstr "Администратор (суперпользователь)!!!"
-
-msgid "Simple user."
-msgstr "Простой пользователь."
-
-msgid "Administrators group."
-msgstr "Группа администраторов."
-
-msgid "Users group."
-msgstr "Группа пользователей."
-
 msgid "Removal of system user is inadmissible."
 msgstr "Удаление системного пользователя недопустимо."
 
@@ -1461,6 +1452,18 @@ msgstr "Ошибка поиска и создания новых пользов�
 
 msgid "Search and create new user's groups error."
 msgstr "Ошибка поиска и создания новых групп пользователей."
+
+msgid "Administrator (superuser)!!!"
+msgstr "Администратор (суперпользователь)!!!"
+
+msgid "Simple user."
+msgstr "Простой пользователь."
+
+msgid "Administrators group."
+msgstr "Группа администраторов."
+
+msgid "Users group."
+msgstr "Группа пользователей."
 
 #, c-format
 msgid ""
@@ -2083,6 +2086,14 @@ msgstr ""
 #, c-format
 msgid "Remote host '%s' error!"
 msgstr "Ошибка удалённого хоста '%s'!"
+
+#, c-format
+msgid "REQ: %s"
+msgstr ""
+
+#, c-format
+msgid "RESP: %s"
+msgstr ""
 
 msgid "External hosts poll"
 msgstr "Перечень внешних хостов"

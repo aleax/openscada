@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-03 07:40+0300\n"
+"POT-Creation-Date: 2016-04-06 14:52+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -167,6 +167,9 @@ msgstr "Fehler beim Anhalten des Nachrichtarchivars '%s'."
 msgid "Value archive '%s' stop error."
 msgstr "Fehler beim Anhalten des Wertearchivs '%s'."
 
+msgid "Put message to the archiver '%s' error: %s"
+msgstr "Kleide Mitteilung an den Archivierungs '%s' Fehler: %s"
+
 msgid "Message buffer process error."
 msgstr "Meldepuffer Prozessfehler."
 
@@ -224,11 +227,11 @@ msgstr ""
 msgid "Get messages for level more and equal it."
 msgstr "Empfang von Nachrichten für gleiche und höhere Stufe."
 
-msgid "Archivator"
+msgid "Archivators"
 msgstr "Archivar"
 
 msgid ""
-"Messages archivator.\n"
+"Messages archivators.\n"
 "No set archivator for process by buffer and all archivators.\n"
 "Set '<buffer>' for process by buffer."
 msgstr ""
@@ -268,9 +271,6 @@ msgstr "Anzahl"
 msgid "All: %d; Enabled: %d"
 msgstr "Insgesamt: %d; Eingeschaltet: %d"
 
-msgid "Archivators"
-msgstr "Archivar"
-
 msgid "Message archivator"
 msgstr "Nachrichtarchivar"
 
@@ -285,6 +285,9 @@ msgstr "Wertearchivare"
 
 msgid "Message archivator: "
 msgstr "Nachtrichtarchivar: "
+
+msgid "Archivator"
+msgstr "Archivar"
 
 msgid "State"
 msgstr "Zustand"
@@ -1454,18 +1457,6 @@ msgstr "Bild des Benutzers"
 msgid "Users"
 msgstr "Benutzer"
 
-msgid "Administrator (superuser)!!!"
-msgstr "Administrator (Supernutzer)!!!"
-
-msgid "Simple user."
-msgstr "Normaler Benutzer."
-
-msgid "Administrators group."
-msgstr "Gruppe von Administratoren."
-
-msgid "Users group."
-msgstr "Gruppe von Benutzern."
-
 msgid "Removal of system user is inadmissible."
 msgstr "Löschen des Systembenutzers ist nicht zulässig."
 
@@ -1477,6 +1468,18 @@ msgstr "Fehler beim Suchen und Erstellen neuer Benutzer."
 
 msgid "Search and create new user's groups error."
 msgstr "Fehler beim Suchen und Erstellen neuer Benutzergruppen."
+
+msgid "Administrator (superuser)!!!"
+msgstr "Administrator (Supernutzer)!!!"
+
+msgid "Simple user."
+msgstr "Normaler Benutzer."
+
+msgid "Administrators group."
+msgstr "Gruppe von Administratoren."
+
+msgid "Users group."
+msgstr "Gruppe von Benutzern."
 
 #, c-format
 msgid ""
@@ -2098,6 +2101,14 @@ msgstr ""
 #, c-format
 msgid "Remote host '%s' error!"
 msgstr "Fehler des entfernten Systems '%s'!"
+
+#, c-format
+msgid "REQ: %s"
+msgstr ""
+
+#, c-format
+msgid "RESP: %s"
+msgstr ""
 
 msgid "External hosts poll"
 msgstr "Liste der entfernten Systeme"

@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-03 07:40+0300\n"
+"POT-Creation-Date: 2016-04-06 14:52+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -160,6 +160,9 @@ msgstr "Помилка зупинки архіватору повідомлен�
 msgid "Value archive '%s' stop error."
 msgstr "Помилка зупинки архіву значень '%s'."
 
+msgid "Put message to the archiver '%s' error: %s"
+msgstr "Помилка запису повідомлення до архіватору '%s': %s"
+
 msgid "Message buffer process error."
 msgstr "Помилка опрацювання буферу повідомлень."
 
@@ -217,15 +220,15 @@ msgstr ""
 msgid "Get messages for level more and equal it."
 msgstr "Отримання повідомлень з рівнем більш або дорівнює вказаному."
 
-msgid "Archivator"
-msgstr "Архіватор"
+msgid "Archivators"
+msgstr "Архіватори"
 
 msgid ""
-"Messages archivator.\n"
+"Messages archivators.\n"
 "No set archivator for process by buffer and all archivators.\n"
 "Set '<buffer>' for process by buffer."
 msgstr ""
-"Архіватор повідомлень.\n"
+"Архіватори повідомлень.\n"
 "Не встановлюйте поле для обробки запиту буфером та всіма архіваторами.\n"
 "Встановіть '<buffer>' для обробки запиту буфером."
 
@@ -260,9 +263,6 @@ msgstr "Кількість"
 msgid "All: %d; Enabled: %d"
 msgstr "Всього: %d; Включено: %d"
 
-msgid "Archivators"
-msgstr "Архіватори"
-
 msgid "Message archivator"
 msgstr "Архіватор повідомлень"
 
@@ -277,6 +277,9 @@ msgstr "Архіватори значень"
 
 msgid "Message archivator: "
 msgstr "Архіватор повідомлень: "
+
+msgid "Archivator"
+msgstr "Архіватор"
 
 msgid "State"
 msgstr "Стан"
@@ -1435,18 +1438,6 @@ msgstr "Картинка користувача"
 msgid "Users"
 msgstr "Користувачі"
 
-msgid "Administrator (superuser)!!!"
-msgstr "Адміністратор (суперкористувач)!!!"
-
-msgid "Simple user."
-msgstr "Простий користувач."
-
-msgid "Administrators group."
-msgstr "Група адміністраторів."
-
-msgid "Users group."
-msgstr "Група користувачів"
-
 msgid "Removal of system user is inadmissible."
 msgstr "Видалення системного користувача неможливе."
 
@@ -1458,6 +1449,18 @@ msgstr "Помилка пошуку та створення нових кори�
 
 msgid "Search and create new user's groups error."
 msgstr "Помилка пошуку та створення нових груп користувачів."
+
+msgid "Administrator (superuser)!!!"
+msgstr "Адміністратор (суперкористувач)!!!"
+
+msgid "Simple user."
+msgstr "Простий користувач."
+
+msgid "Administrators group."
+msgstr "Група адміністраторів."
+
+msgid "Users group."
+msgstr "Група користувачів"
 
 #, c-format
 msgid ""
@@ -2079,6 +2082,14 @@ msgstr ""
 #, c-format
 msgid "Remote host '%s' error!"
 msgstr "Помилка віддаленого хосту '%s'!"
+
+#, c-format
+msgid "REQ: %s"
+msgstr ""
+
+#, c-format
+msgid "RESP: %s"
+msgstr ""
 
 msgid "External hosts poll"
 msgstr "Перелік зовнішніх хостів"

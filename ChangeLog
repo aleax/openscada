@@ -1,3 +1,11 @@
+2016-04-06 Roman
+- DB.LibsDB.vcaBase.db: Left graphics group fix to "name" attribute.
+- !!:Archives: messPut() and messGet() expanded to archivators list allow instead single.
+    User API function messGet() expanded by argument "upTo", for the timeout direct control allow.
+- FIX:DB.PostgreSQL: Fix cycling at unsuccessful a table's structure correction.
+- UI.VCAEngine: To messages reading by repeating tags of primitive "Document" added attribute "docAMessArchs" to allow read only archivators.
+
+
 2016-04-04 Roman
 - SYS: TSYS::strEncode() in variant SQL expanded by doubling method of pointed symbols.
 - DB.{PostgreSQL,SQLite}: TSYS::strEncode() in doubling method used.

@@ -312,7 +312,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     else if(!intoTrans && reqCnt)		transCommit();
 
     if((res=PQexec(connection,req.c_str())) == NULL)
-	throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+	throw TError(SQL_CONN, nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
     if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 	string  err = PQresStatus(PQresultStatus(res)),
 		err1 = PQresultErrorMessage(res);
@@ -321,9 +321,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	if(PQstatus(connection) != CONNECTION_OK) {
 	    resource.unlock();
 	    disable();
-	    throw TError(nodePath().c_str(), _("Connect to DB error: %s. %s"),err.c_str(),err1.c_str());
+	    throw TError(SQL_CONN, nodePath().c_str(), _("Connect to DB error: %s. %s"),err.c_str(),err1.c_str());
 	}
-	throw TError(nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
+	throw TError(SQL_QUERY, nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
     }
 
     if(tbl) {
@@ -384,14 +384,20 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* BDPostgreSQL::Table                          *
 //************************************************
-MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
+MTable::MTable( string name, MBD *iown, bool toCreate ) : TTable(name)
 {
-    string req;
-
     setNodePrev(iown);
+
+    create(toCreate);
+}
+
+MTable::~MTable( )	{ }
+
+void MTable::create( bool toCreate )
+{
     vector< vector<string> > tbl;
     string id;
-    req = "SELECT count(*) "
+    string req = "SELECT count(*) "
 	  "FROM pg_catalog.pg_class c "
 	    "JOIN pg_catalog.pg_roles r ON r.oid = c.relowner "
 	    "LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace "
@@ -399,16 +405,14 @@ MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
 	    "AND n.nspname <> 'pg_catalog' "
 	    "AND n.nspname !~ '^pg_toast' "
 	    "AND pg_catalog.pg_table_is_visible(c.oid) "
-	    "AND c.relname = '" + TSYS::strEncode(name,TSYS::SQL,"'") + "'";
+	    "AND c.relname = '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "'";
     owner().sqlReq(req, &tbl);
-    if(create && tbl.size() == 2 && tbl[1][0] == "0") {
-	req = "CREATE TABLE \"" + TSYS::strEncode(name,TSYS::SQL,"\"")+ "\"(\"<<empty>>\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)";
+    if(toCreate && tbl.size() == 2 && tbl[1][0] == "0") {
+	req = "CREATE TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"(\"<<empty>>\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)";
 	owner().sqlReq(req);
     }
-    getStructDB(name, tblStrct);
+    getStructDB(name(), tblStrct);
 }
-
-MTable::~MTable( )	{ }
 
 bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>>"; }
 
@@ -647,7 +651,8 @@ void MTable::fieldSet( TConfig &cfg )
     string req;
     if(!isForceUpdt) {
 	req = "SELECT 1 FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" " + req_where;
-	owner().sqlReq(req, &tbl, true);
+	try { owner().sqlReq(req, &tbl, true); }
+	catch(TError err) { fieldFix(cfg); owner().sqlReq(req, &tbl, true); }
 	if(tbl.size() < 2) {
 	    // Add new record
 	    req = "INSERT INTO \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" ";
@@ -719,7 +724,7 @@ void MTable::fieldDel( TConfig &cfg )
     }
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, bool recurse )
 {
     bool next = false, next_key = false;
     if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
@@ -828,8 +833,17 @@ void MTable::fieldFix( TConfig &cfg )
     if(pr_keys.size()) req += ",ADD PRIMARY KEY (" + pr_keys + ") ";
 
     if(next) {
-	owner().sqlReq(req, NULL, false);
-	getStructDB(name(), tblStrct);	//Update structure information
+	try {
+	    owner().sqlReq(req, NULL, false);
+	    getStructDB(name(), tblStrct);	//Update structure information
+	}
+	//Drop unfixable table
+	catch(TError err) {
+	    if(err.cod == MBD::SQL_CONN || recurse) throw;
+	    owner().sqlReq("DROP TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"");
+	    create(true);
+	    fieldFix(cfg, true);
+	}
     }
 }
 
