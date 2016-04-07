@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1100,7 +1100,8 @@ void TMdPrm::enable( )
 	    }
 	    // Init attrubutes
 	    for(int i_io = 0; i_io < lCtx->func()->ioSize(); i_io++) {
-		if((lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lCtx->lnkId(i_io) < 0) lCtx->plnk.push_back(TLogCtx::SLnk(i_io));
+		if((lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lCtx->lnkId(i_io) < 0)
+		    lCtx->plnk.push_back(TLogCtx::SLnk(i_io,lCtx->func()->io(i_io)->def()));
 		if((lCtx->func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull))) {
 		    unsigned flg = TVal::DirWrite|TVal::DirRead;
 		    if(lCtx->func()->io(i_io)->flg()&IO::FullText)		flg |= TFld::FullText;

@@ -40,16 +40,9 @@ using namespace OSCADA;
 //* TArchiveS                                    *
 //************************************************
 TArchiveS::TArchiveS( ) :
-    TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false),
-    headBuf(0), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false)
+    TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false), mRes(true),
+    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mRes, &attrM);
-    pthread_mutex_init(&vRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     mAval = grpAdd("va_");
 
     //Message archivator DB structure
@@ -105,9 +98,6 @@ TArchiveS::~TArchiveS( )
 
     //Free other resources
     nodeDelAll();
-
-    pthread_mutex_destroy(&mRes);
-    pthread_mutex_destroy(&vRes);
 }
 
 int TArchiveS::valPeriod( )		{ return vmax(1,mValPer); }
@@ -423,8 +413,8 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     string tVl;
     for(int off = 0; (tVl=TSYS::strParse(arch,0,";",&off)).size(); ) archMap[tVl] = true;
 
-    MtxAlloc res(mRes, true);
     if(archMap.empty() || archMap[BUF_ARCH_NM]) {
+	MtxAlloc res(mRes.mtx(), true);
 	//Put message to buffer
 	mBuf[headBuf].time  = tm;
 	mBuf[headBuf].utime = utm;
@@ -481,9 +471,10 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     string tVl;
     for(int off = 0; (tVl=TSYS::strParse(arch,0,";",&off)).size(); ) archMap[tVl] = true;
 
-    MtxAlloc res(mRes, true);
     if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
     TRegExp re(category, "p");
+
+    MtxAlloc res(mRes.mtx(), true);
 
     //Get records from buffer
     unsigned i_buf = headBuf;
@@ -494,6 +485,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	if(++i_buf >= mBuf.size()) i_buf = 0;
 	if(i_buf == headBuf) break;
     }
+
+    res.unlock();
 
     //Get records from archives
     vector<string> tLst, oLst;
@@ -526,7 +519,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 time_t TArchiveS::messBeg( const string &arch )
 {
     time_t rez = 0;
-    MtxAlloc res(mRes, true);
+    MtxAlloc res(mRes.mtx(), true);
     if(arch.empty() || arch == BUF_ARCH_NM) {
 	unsigned i_buf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
@@ -536,6 +529,7 @@ time_t TArchiveS::messBeg( const string &arch )
 	}
 	if(!arch.empty()) return rez;
     }
+    res.unlock();
 
     //Get records from archives
     vector<string> tLst, oLst;
@@ -556,7 +550,7 @@ time_t TArchiveS::messBeg( const string &arch )
 time_t TArchiveS::messEnd( const string &arch )
 {
     time_t rez = 0;
-    MtxAlloc res(mRes, true);
+    MtxAlloc res(mRes.mtx(), true);
     if(arch.empty() || arch == BUF_ARCH_NM) {
 	unsigned i_buf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
@@ -566,6 +560,7 @@ time_t TArchiveS::messEnd( const string &arch )
 	}
 	if(!arch.empty()) return rez;
     }
+    res.unlock();
 
     //Get records from archives
     vector<string> tLst, oLst;
@@ -585,7 +580,7 @@ time_t TArchiveS::messEnd( const string &arch )
 
 void TArchiveS::setMessBufLen( unsigned len )
 {
-    MtxAlloc res(mRes, true);
+    MtxAlloc res(mRes.mtx(), true);
     len = vmin(BUF_SIZE_MAX, vmax(BUF_SIZE_DEF,len));
     while(mBuf.size() > len) {
 	mBuf.erase(mBuf.begin() + headBuf);
@@ -604,7 +599,7 @@ void TArchiveS::setActMess( TMArchivator *a, bool val )
 {
     unsigned iArch;
 
-    MtxAlloc res(mRes, true);
+    MtxAlloc res(mRes.mtx(), true);
     for(iArch = 0; iArch < actMess.size(); iArch++)
 	if(actMess[iArch].at().id() == a->id() && actMess[iArch].at().owner().modId() == a->owner().modId()) break;
 
@@ -616,7 +611,7 @@ void TArchiveS::setActVal( TVArchive *a, bool val )
 {
     unsigned iArch;
 
-    MtxAlloc res(vRes, true);
+    MtxAlloc res(vRes.mtx(), true);
     for(iArch = 0; iArch < actVal.size(); iArch++)
 	if(actVal[iArch].at().id() == a->id()) break;
 
@@ -637,7 +632,7 @@ void *TArchiveS::ArhMessTask( void *param )
     while(true) {
 	if(TSYS::taskEndRun()) isLast = true;
 	//Message buffer read
-	MtxAlloc res(arh.mRes, true);
+	MtxAlloc res(arh.mRes.mtx(), true);
 	for(unsigned i_m = 0; i_m < arh.actMess.size(); i_m++) {
 	    AutoHD<TMArchivator> mArh = arh.actMess[i_m];
 	    int &messHead = mArh.at().messHead;
@@ -686,14 +681,14 @@ void *TArchiveS::ArhValTask( void *param )
     while(!arh.endrunReqVal) {
 	int64_t work_tm = SYS->curTime();
 
-	pthread_mutex_lock(&arh.vRes);
+	arh.vRes.lock();
 	for(unsigned i_arh = 0; i_arh < arh.actVal.size(); i_arh++)
 	    try {
 		if(work_tm/arh.actVal[i_arh].at().period() > arh.actVal[i_arh].at().end()/arh.actVal[i_arh].at().period())
 		    arh.actVal[i_arh].at().getActiveData();
 	    }
 	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-	pthread_mutex_unlock(&arh.vRes);
+	arh.vRes.unlock();
 
 	TSYS::taskSleep((int64_t)arh.valPeriod()*1000000);
     }
@@ -713,12 +708,13 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  cat - messages' category
     //  lev - messages level
     //  arch - messages archivators by list items separated ';'
-    //  upTm - maximum wait up to the time; a negative value used as relative time.
+    //  upTm - sets the operation continuance limit to time; a negative value used as relative time; less to STD_INTERF_TM (5).
     if(iid == "messGet" && prms.size() >= 2) {
 	vector<TMess::SRec> recs;
 	int upTm = (prms.size() >= 6) ? prms[5].getI() : 0;
 	messGet(prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
-	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")), ((upTm<0)?SYS->sysTm()+abs(upTm):upTm));
+	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")),
+	    vmin((upTm<0)?SYS->sysTm()+abs(upTm):upTm,SYS->sysTm()+STD_INTERF_TM));
 	TArrayObj *rez = new TArrayObj();
 	for(unsigned i_m = 0; i_m < recs.size(); i_m++) {
 	    TVarObj *am = new TVarObj();

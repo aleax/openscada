@@ -1,3 +1,11 @@
+2016-04-07 Roman
+- DB.LibsDB.OscadaLibs.db: DAQ template "base.anUnif" expanded by attribute "Connection lost detect delay, s"
+    for prevent blinks into hosts in redundancy or so one.
+- Archives: pthread_mutex_t resources allocation moved to ResMtx and it's space decreased exclusively to local buffers access and
+    prevent some racecondition at the arcivators access.
+- DAQ.ModBus: "Value" field of templates set to use as default link, on first enable.
+
+
 2016-04-06 Roman
 - DB.LibsDB.vcaBase.db: Left graphics group fix to "name" attribute.
 - !!:Archives: messPut() and messGet() expanded to archivators list allow instead single.

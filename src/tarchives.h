@@ -249,13 +249,13 @@ class TArchiveS : public TSubSYS
 	int	mMessPer;		//Message archiving period
 	bool	prcStMess;		//Process messages flag
 	// Messages buffer
-	pthread_mutex_t	mRes;		//Mess access resource
+	ResMtx	mRes;			//Mess access resource
 	unsigned headBuf;		//Head of messages buffer
 	vector<TMess::SRec> mBuf;	//Messages buffer
 	map<string,TMess::SRec> mAlarms;//Alarms buffer
 
 	// Value archiving
-	pthread_mutex_t	vRes;		//Value access resource
+	ResMtx	vRes;			//Value access resource
 	int	mValPer;		//Value archiving period
 	int	mValPrior;		//Value archive task priority
 	bool	prcStVal;		//Process value flag
