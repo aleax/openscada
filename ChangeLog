@@ -1,3 +1,8 @@
+2016-04-08 fido_max
+- !! DAQ.FT3 ui32Data, flData sensivity deadband processing for event forming added. B_ODOR implemented.
+- DAQ.FT3 KA_GNS SetNewState, SetNewFunction implemented, version rise to 0.2.1.
+- Protocol.FT3: Version rise to 0.2.1.
+
 2016-04-07 Roman
 - DB.LibsDB.OscadaLibs.db: DAQ template "base.anUnif" expanded by attribute "Connection lost detect delay, s"
     for prevent blinks into hosts in redundancy or so one.

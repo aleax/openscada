@@ -193,7 +193,7 @@ void DA::UpdateParamFl(flData& param, uint16_t ID, uint8_t cl)
     ui8fl tmpfl;
     tmpfl.f = param.Get();
     if(tmpfl.f != param.vl) {
-	param.Update(tmpfl.f);
+	param.Update(tmpfl.f,0);
 	uint8_t E[5] = { 0, tmpfl.b[0], tmpfl.b[1], tmpfl.b[2], tmpfl.b[3] };
 	PushInBE(cl, sizeof(E), ID, E);
     }
@@ -204,21 +204,22 @@ void DA::UpdateParam32(ui32Data& param, uint16_t ID, uint8_t cl)
     ui832 tmp;
     tmp.ui32 = param.Get();
     if(tmp.ui32 != param.vl) {
-	param.Update(tmp.ui32);
+	param.Update(tmp.ui32,0);
 	uint8_t E[5] = { 0, tmp.b[0], tmp.b[1], tmp.b[2], tmp.b[3] };
 	PushInBE(cl, sizeof(E), ID, E);
     }
 }
 
-void DA::UpdateParamFlState(flData& param, ui8Data& state, uint16_t ID, uint8_t cl)
+void DA::UpdateParamFlState(flData& param, ui8Data& state, flData& sens, uint16_t ID, uint8_t cl)
 {
     uint8_t tmpui8;
     ui8fl tmpfl;
     tmpui8 = state.Get();
     tmpfl.f = param.Get();
-    if((tmpfl.f != param.vl) || (tmpui8 != state.vl)) {
-	state.Update(tmpui8);
-	param.Update(tmpfl.f);
+	param.Update(tmpfl.f,0);
+    if((abs(tmpfl.f - param.vl_sens) > sens.vl)|| (tmpui8 != state.vl)) {
+    state.Update(tmpui8);
+	param.Update(tmpfl.f,1);
 	uint8_t E[5] = { state.vl, tmpfl.b[0], tmpfl.b[1], tmpfl.b[2], tmpfl.b[3] };
 	PushInBE((tmpui8 != state.vl)? 1:cl , sizeof(E), ID, E);
     }
@@ -230,8 +231,8 @@ void DA::UpdateParam2Fl(flData& param1, flData& param2, uint16_t ID, uint8_t cl)
     tmpfl1.f = param1.Get();
     tmpfl2.f = param2.Get();
     if(tmpfl1.f != param1.vl || tmpfl2.f != param2.vl) {
-	param1.Update(tmpfl1.f);
-	param2.Update(tmpfl2.f);
+	param1.Update(tmpfl1.f,0);
+	param2.Update(tmpfl2.f,0);
 	uint8_t E[9] = { 0, tmpfl1.b[0], tmpfl1.b[1], tmpfl1.b[2], tmpfl1.b[3], tmpfl2.b[0], tmpfl2.b[1], tmpfl2.b[2], tmpfl2.b[3] };
 	PushInBE(1, sizeof(E), ID, E);
     }

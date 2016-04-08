@@ -124,7 +124,7 @@ void B_BVI::tmHandler(void)
 	    UpdateParamFl(data[i].Factor, PackID(ID, (i + 1), 5), 1);
 	    UpdateParam8(data[i].Dimension, PackID(ID, (i + 1), 6), 1);
 	}
-	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 1), 2);
+	UpdateParamFlState(data[i].Value, data[i].State, data[i].Sens, PackID(ID, (i + 1), 1), 2);
     }
     NeedInit = false;
 }

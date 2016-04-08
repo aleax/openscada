@@ -48,17 +48,17 @@ void KA_BVT::SKATTchannel::UpdateTTParam(uint16_t ID, uint8_t cl)
 	    || tmpfl[10].f != Adjust.vl) {
 	Period.s = 0;
 	Period.Update(tmp);
-	Sens.Update(tmpfl[0].f);
-	MinS.Update(tmpfl[1].f);
-	MaxS.Update(tmpfl[2].f);
-	MinPV.Update(tmpfl[3].f);
-	MaxPV.Update(tmpfl[4].f);
-	MinA.Update(tmpfl[5].f);
-	MaxA.Update(tmpfl[6].f);
-	MinW.Update(tmpfl[7].f);
-	MaxW.Update(tmpfl[8].f);
-	Factor.Update(tmpfl[9].f);
-	Adjust.Update(tmpfl[10].f);
+	Sens.Update(tmpfl[0].f,0);
+	MinS.Update(tmpfl[1].f,0);
+	MaxS.Update(tmpfl[2].f,0);
+	MinPV.Update(tmpfl[3].f,0);
+	MaxPV.Update(tmpfl[4].f,0);
+	MinA.Update(tmpfl[5].f,0);
+	MaxA.Update(tmpfl[6].f,0);
+	MinW.Update(tmpfl[7].f,0);
+	MaxW.Update(tmpfl[8].f,0);
+	Factor.Update(tmpfl[9].f,0);
+	Adjust.Update(tmpfl[10].f,0);
 	uint8_t E[46] = { 0, tmp, tmpfl[0].b[0], tmpfl[0].b[1], tmpfl[0].b[2], tmpfl[0].b[3], tmpfl[1].b[0], tmpfl[1].b[1], tmpfl[1].b[2], tmpfl[1].b[3],
 		tmpfl[2].b[0], tmpfl[2].b[1], tmpfl[2].b[2], tmpfl[2].b[3], tmpfl[3].b[0], tmpfl[3].b[1], tmpfl[3].b[2], tmpfl[3].b[3], tmpfl[4].b[0],
 		tmpfl[4].b[1], tmpfl[4].b[2], tmpfl[4].b[3], tmpfl[5].b[0], tmpfl[5].b[1], tmpfl[5].b[2], tmpfl[5].b[3], tmpfl[6].b[0], tmpfl[6].b[1],
@@ -214,7 +214,7 @@ void KA_BVT::tmHandler(void)
 	if(with_params) {
 	    data[i].UpdateTTParam(PackID(ID, (i + 1), 2), 1);
 	}
-	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 0), 2);
+	UpdateParamFlState(data[i].Value, data[i].State, data[i].Sens, PackID(ID, (i + 1), 0), 2);
     }
     NeedInit = false;
 }
@@ -479,14 +479,14 @@ void B_BVT::tmHandler(void)
 	    if(with_k) {
 		UpdateParamFl(data[i].CorFactor, PackID(ID, (i + 1), 10), 1);
 		if(with_rate) {
-		    UpdateParamFlState(data[i].Rate, data[i].State, PackID(ID, (i + 1), 11), 2);
+		    UpdateParamFlState(data[i].Rate, data[i].State, data[i].RateSens, PackID(ID, (i + 1), 11), 2);
 		    UpdateParam8(data[i].Calcs, PackID(ID, (i + 1), 12), 1);
 		    UpdateParamFl(data[i].RateSens, PackID(ID, (i + 1), 13), 1);
 		    UpdateParamFl(data[i].RateLimit, PackID(ID, (i + 1), 14), 1);
 		}
 	    }
 	}
-	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 1), 2);
+	UpdateParamFlState(data[i].Value, data[i].State, data[i].Sens, PackID(ID, (i + 1), 1), 2);
     }
     NeedInit = false;
 }

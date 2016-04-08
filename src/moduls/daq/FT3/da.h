@@ -240,7 +240,7 @@ namespace FT3
 	{
 	public:
 	    ui32Data(const string &iprmName, const string &iprmDesc, const string &iprmAttr = "") :
-		    vl(0), s(0), err(0), lnk(iprmName, iprmDesc, iprmAttr)
+		    vl(0), vl_sens(0), s(0), err(0), lnk(iprmName, iprmDesc, iprmAttr)
 	    {
 	    }
 	    union
@@ -249,17 +249,28 @@ namespace FT3
 		uint32_t vl;
 	    };
 	    uint8_t s;
-	    uint32_t err;
+	    uint32_t vl_sens, err;
 	    SLnk lnk;
-	    void Update(uint32_t d)
+	    void Update(uint32_t d,uint8_t cmd)
 	    {
-		vl = d;
-		lnk.vlattr.at().setI(vl, 0, true);
-	    }
-	    ;
+			switch (cmd){
+			case 0:
+				vl = d;
+				lnk.vlattr.at().setI(vl, 0, true);
+				break;
+			case 1:
+				vl_sens = d;
+				lnk.vlattr.at().setI(vl_sens, 0, true);
+				break;
+			default:
+				vl = d;
+				lnk.vlattr.at().setI(vl, 0, true);
+				break;
+			}
+	    };
 	    void Set(uint32_t d)
 	    {
-		Update(d);
+		Update(d,0); Update(d,1);
 		lnk.aprm.at().setI(vl);
 	    }
 	    ;
@@ -277,7 +288,7 @@ namespace FT3
 	{
 	public:
 	    flData(const string &iprmName, const string &iprmDesc, const string &iprmAttr = "") :
-		    vl(0), s(0), err(0), lnk(iprmName, iprmDesc, iprmAttr)
+		    vl(0), vl_sens(0), s(0), err(0), lnk(iprmName, iprmDesc, iprmAttr)
 	    {
 	    }
 	    union
@@ -286,17 +297,28 @@ namespace FT3
 		float vl;
 	    };
 	    uint8_t s;
-	    float err;
+	    float vl_sens, err;
 	    SLnk lnk;
-	    void Update(float d)
+	    void Update(float d,uint8_t cmd)
 	    {
-		vl = d;
-		lnk.vlattr.at().setR(vl, 0, true);
-	    }
-	    ;
+			switch (cmd){
+			case 0:
+				vl = d;
+				lnk.vlattr.at().setR(vl, 0, true);
+				break;
+			case 1:
+				vl_sens = d;
+				lnk.vlattr.at().setR(vl_sens, 0, true);
+				break;
+			default:
+				vl = d;
+				lnk.vlattr.at().setR(vl, 0, true);
+				break;
+			}
+	    };
 	    void Set(float d)
 	    {
-		Update(d);
+	    Update(d,0); Update(d,1);
 		lnk.aprm.at().setR(vl);
 	    }
 	    ;
@@ -334,7 +356,7 @@ namespace FT3
 	void UpdateParamW(ui16Data& param, uint16_t ID, uint8_t cl = 2);
 	void UpdateParamFl(flData& param, uint16_t ID, uint8_t cl = 2);
 	void UpdateParam32(ui32Data& param, uint16_t ID, uint8_t cl = 2);
-	void UpdateParamFlState(flData& param, ui8Data& state, uint16_t ID, uint8_t cl);
+	void UpdateParamFlState(flData& param, ui8Data& state, flData& sens, uint16_t ID, uint8_t cl);
 	void UpdateParam2Fl(flData& param1, flData& param2, uint16_t ID, uint8_t cl);
 	void UpdateParam28(ui8Data& param1, ui8Data& param2, uint16_t ID, uint8_t cl);
 	FT3ID UnpackID(uint16_t ID);

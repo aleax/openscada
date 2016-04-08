@@ -27,6 +27,17 @@
 
 using namespace FT3;
 
+void KA_GNS::SKANSchannel::UpdateState(uint16_t ID, uint8_t cl)
+{
+    uint8_t tmpui8;
+    tmpui8 = State.Get();
+    if(tmpui8 != State.vl) {
+    State.Update(tmpui8);
+    if((tmpui8 & 0x0F) == NAS_ON) Time.Update(Time.vl,1);
+	uint8_t E[2] = { 0, tmpui8 };
+	da->PushInBE(cl, sizeof(E), ID, E);
+    }
+}
 void KA_GNS::SKANSchannel::UpdateTUParam(uint16_t ID, uint8_t cl)
 {
     ui8w tmp[5][2];
@@ -79,6 +90,19 @@ void KA_GNS::SKANSchannel::UpdateTCParam(uint16_t ID, uint8_t cl)
     }
 }
 
+void KA_GNS::SKANSchannel::UpdateTime(uint16_t ID, uint8_t cl)
+{
+	ui832 tmp;
+    tmp.ui32 = Time.Get();
+    Time.Update(tmp.ui32,0);
+    if((tmp.ui32 - Time.vl_sens) > 36000) {
+		Time.s = 0;
+		Time.Update(tmp.ui32,1);
+		uint8_t E[5] = { 0, tmp.b[0], tmp.b[1], tmp.b[2], tmp.b[3] };
+		da->PushInBE(cl, sizeof(E), ID, E);
+    }
+}
+
 uint8_t KA_GNS::SKANSchannel::SetNewTUParam(uint8_t addr, uint16_t prmID, uint8_t *val)
 {
     if(TUOn.lnk.Connected() || TimeOn.lnk.Connected() || TUOff.lnk.Connected() || TimeOff.lnk.Connected() || TUStop.lnk.Connected() || TimeOn.lnk.Connected() || TUManual.lnk.Connected()
@@ -121,6 +145,45 @@ uint8_t KA_GNS::SKANSchannel::SetNewTCParam(uint8_t addr, uint16_t prmID, uint8_
 	da->PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 10;
     }
+}
+
+uint8_t KA_GNS::SKANSchannel::SetNewState(uint8_t addr, uint16_t prmID, uint8_t *val)
+{
+    uint8_t rc = 0, newS = *val;
+    if(State.lnk.Connected()) {
+	if(!Function.vl && ((newS == State.vl) || ((newS & 0x0F) < 4))) {
+	    State.s = addr;
+	    State.Set((uint8_t)((State.vl & 0x80) | newS));
+	    uint8_t E[2] = { addr, State.vl };
+	    da->PushInBE(1, sizeof(E), prmID, E);
+	    rc = 2 + 1;
+	}
+    }
+    return rc;
+}
+
+uint8_t KA_GNS::SKANSchannel::SetNewFunction(uint8_t addr, uint16_t prmID, uint8_t *val)
+{
+	uint8_t rc = 0, t = 0;
+	uint32_t newF = *val;
+    if(Function.lnk.Connected() && State.lnk.Connected() && TURemote.lnk.Connected() && TUOn.lnk.Connected()) {
+		if(newF && (newF < 5))
+			if((Function.vl & 0x0F) == newF) {
+				rc = 3;
+			} else if(!Function.vl && ((State.vl & 0x0F) == NAS_REP) || (((State.vl & 0x0F) == NAS_REP) && (newF > 2))){
+					if ((newF > 2) || TURemote.vl) t = 0xC0;
+					else if (TUOn.vl) t = 0x40;
+					if(t) Function.Set(t);
+					if (Function.vl) {
+						Function.s = addr;
+						Function.Set(Function.vl | newF | (1<<15));
+						uint8_t E[2] = { addr, Function.vl };
+						da->PushInBE(1, sizeof(E), prmID, E);
+						rc = 3;
+					}
+				}
+	}
+    return rc;
 }
 
 KA_GNS::KA_GNS(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
@@ -257,10 +320,11 @@ void KA_GNS::tmHandler(void)
 	if(with_params) {
 	    data[i].UpdateTUParam(PackID(ID, (i + 1), 1), 1);
 	    data[i].UpdateTCParam(PackID(ID, (i + 1), 2), 1);
-	    UpdateParam32(data[i].Time, PackID(ID, (i + 1), 4), 2);
-	    //    data[i].UpdateTTParam(PackID(ID, (i + 1), 2), 1);
+	    data[i].UpdateTime(PackID(ID, (i + 1), 4), 2);
+	    //UpdateParam32(data[i].Time, PackID(ID, (i + 1), 4), 2);
 	}
-	UpdateParam8(data[i].State, PackID(ID, (i + 1), 0), 1);
+	//UpdateParam8(data[i].State, PackID(ID, (i + 1), 0), 1);
+	data[i].UpdateState(PackID(ID, (i + 1), 0), 1);
 	UpdateParam8(data[i].Function, PackID(ID, (i + 1), 3), 1);
     }
     NeedInit = false;
@@ -379,7 +443,7 @@ uint8_t KA_GNS::cmdSet(uint8_t * req, uint8_t addr)
     if(ft3ID.k <= count_n) {
 	switch(ft3ID.n) {
 	case 0:
-	    l = SetNew8Val(data[ft3ID.k - 1].State, addr, prmID, req[2]);
+		l = data[ft3ID.k - 1].SetNewState(addr, prmID, req + 2);
 	    break;
 	case 1:
 	    l = data[ft3ID.k - 1].SetNewTUParam(addr, prmID, req + 2);
@@ -388,7 +452,7 @@ uint8_t KA_GNS::cmdSet(uint8_t * req, uint8_t addr)
 	    l = data[ft3ID.k - 1].SetNewTCParam(addr, prmID, req + 2);
 	    break;
 	case 3:
-	    l = SetNew8Val(data[ft3ID.k - 1].Function, addr, prmID, req[2]);
+		l = data[ft3ID.k - 1].SetNewFunction(addr, prmID, req + 2);
 	    break;
 	case 4:
 	    l = SetNew32Val(data[ft3ID.k - 1].Time, addr, prmID, TSYS::getUnalign16(req + 2));

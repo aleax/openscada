@@ -23,6 +23,13 @@
 
 namespace FT3
 {
+
+#define NAS_VAG       0    // неопределено
+#define NAS_OFF       1    // выкл.
+#define NAS_ON        2    // вкл.
+#define NAS_REP       3    // ремонт
+#define NAS_AWR       4    // авария
+
     class KA_GNS: public DA
     {
     public:
@@ -72,10 +79,14 @@ namespace FT3
 	    ui16Data TCOn, TCOff, TCMode;
 	    ui32Data Time;
 
+	    void UpdateState(uint16_t ID, uint8_t cl);
 	    void UpdateTUParam(uint16_t ID, uint8_t cl);
 	    void UpdateTCParam(uint16_t ID, uint8_t cl);
+	    void UpdateTime(uint16_t ID, uint8_t cl);
 	    uint8_t SetNewTUParam(uint8_t addr, uint16_t prmID, uint8_t *val);
 	    uint8_t SetNewTCParam(uint8_t addr, uint16_t prmID, uint8_t *val);
+	    uint8_t SetNewState(uint8_t addr, uint16_t prmID, uint8_t *val);
+	    uint8_t SetNewFunction(uint8_t addr, uint16_t prmID, uint8_t *val);
 	};
 	vector<SKANSchannel> data;
 	void AddNSChannel(uint8_t iid);

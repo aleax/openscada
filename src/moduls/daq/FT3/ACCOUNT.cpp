@@ -30,8 +30,8 @@ using namespace FT3;
 uint8_t B_ACCOUNT::SACchannel::SetNewPeriod(uint8_t addr, uint16_t prmID, uint8_t *val)
 {
     uint8_t start[5] = { val[0], val[1], val[2], 0, 0 };
-    StartDate.Update(da->DateTimeToTime_t(start));
-    EndDate.Update(StartDate.vl + TSYS::getUnalign16(val + 3) * 3600);
+    StartDate.Update(da->DateTimeToTime_t(start),0);
+    EndDate.Update(StartDate.vl + TSYS::getUnalign16(val + 3) * 3600,0);
     uint8_t E[6] = { addr, val[0], val[1], val[2], val[3], val[4] };
     da->PushInBE(1, sizeof(E), prmID, E);
     return 5 + 2;
@@ -257,7 +257,7 @@ void B_ACCOUNT::tmHandler(void)
 	    UpdateParamFl(data[i].RadiusM, PackID(ID, (i + 1), 26), 1);
 	    UpdateParamFl(data[i].PressureA, PackID(ID, (i + 1), 27), 1);
 	}
-	UpdateParamFlState(data[i].Value, data[i].State, PackID(ID, (i + 1), 1), 2);
+	UpdateParamFlState(data[i].Value, data[i].State, data[i].Sens, PackID(ID, (i + 1), 1), 2);
     }
     NeedInit = false;
 }
