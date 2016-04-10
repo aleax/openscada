@@ -779,7 +779,7 @@ bool MFileArch::put( TMess::SRec mess )
 		    if((int)tTm > mess.time || (tTm == mess.time && tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
 		    //  Add too big position to cache
 		    else if((pass_cnt++) > CACHE_POS && (int)tTm != last_tm) {
-			cacheSet(FTM(tTm), ftell(f)-strlen(buf));
+			cacheSet(((int64_t)tTm*1000000)+tTmU, ftell(f)-strlen(buf));
 			pass_cnt = 0;
 		    }
 		    last_tm = tTm;
