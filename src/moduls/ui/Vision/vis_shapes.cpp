@@ -525,6 +525,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			//wdg->setColumnCount(0);
 			wdg->setRowCount(0);
 		    }
+		    int sortCol = 0;
 		    // Items
 		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++) {
 			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
@@ -551,6 +552,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				    if((wVl=tC->attr("color")).size())	hit->setData(Qt::UserRole+2, QString::fromStdString(wVl));
 				    if((wVl=tC->attr("colorText")).size()) hit->setData(Qt::UserRole+3, QString::fromStdString(wVl));
 				    if((wVl=tC->attr("font")).size())	hit->setData(Qt::UserRole+4, QString::fromStdString(wVl));
+				    if((wVl=tC->attr("sort")).size())	{ sortCol = i_ch+1; if(!s2i(wVl)) sortCol *= -1; }
 				}
 			    }
 			    else {	//Rows content process
@@ -619,7 +621,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 		    wdg->horizontalHeader()->setVisible(tX.attr("hHdrVis").size()?s2i(tX.attr("hHdrVis")):hdrPresent);
 		    wdg->verticalHeader()->setVisible(s2i(tX.attr("vHdrVis")));
-		    wdg->setSortingEnabled(s2i(tX.attr("sortEn")));
+		    if(s2i(tX.attr("sortEn")) || sortCol) {
+			wdg->setSortingEnabled(s2i(tX.attr("sortEn")) || sortCol);
+			wdg->sortItems((sortCol?abs(sortCol)-1:0), ((sortCol>=0)?Qt::AscendingOrder:Qt::DescendingOrder));
+		    }
 		}
 		wdg->setColumnCount(maxCols);
 		wdg->setRowCount(maxRows);

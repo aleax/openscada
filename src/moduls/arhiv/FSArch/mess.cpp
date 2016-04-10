@@ -725,7 +725,7 @@ bool MFileArch::put( TMess::SRec mess )
 
 	//Check for duples
 	if(mess.time <= mEnd && (owner().prevDbl() || owner().prevDblTmCatLev())) {
-	    long c_off = cacheGet(((int64_t)mess.time*1000000)+mess.utime);
+	    long c_off = cacheGet(FTM(mess));
 	    if(c_off) fseek(f, c_off, SEEK_SET);
 	    else fOK = (fgets(buf,sizeof(buf),f) != NULL);
 
@@ -767,7 +767,7 @@ bool MFileArch::put( TMess::SRec mess )
 	else {
 	    if(fOK && !mv_beg) {
 		// Get want position
-		long c_off = cacheGet(((int64_t)mess.time*1000000)+mess.utime);
+		long c_off = cacheGet(FTM(mess));
 		if(c_off) fseek(f,c_off,SEEK_SET);
 		else fOK = (fgets(buf,sizeof(buf),f) != NULL);
 
@@ -779,7 +779,7 @@ bool MFileArch::put( TMess::SRec mess )
 		    if((int)tTm > mess.time || (tTm == mess.time && tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
 		    //  Add too big position to cache
 		    else if((pass_cnt++) > CACHE_POS && (int)tTm != last_tm) {
-			cacheSet(((int64_t)tTm*1000000)+tTmU, ftell(f)-strlen(buf));
+			cacheSet(FTM(tTm), ftell(f)-strlen(buf));
 			pass_cnt = 0;
 		    }
 		    last_tm = tTm;
@@ -802,9 +802,9 @@ bool MFileArch::put( TMess::SRec mess )
 		//  Write a new message
 		fseek(f, mv_beg, SEEK_SET);
 		fOK = fOK && (fwrite(s_buf.c_str(),s_buf.size(),1,f) == 1);
-		cacheUpdate(((int64_t)mess.time*1000000)+mess.utime, mv_off);
+		cacheUpdate(FTM(mess), mv_off);
 		//  Put last value to cache
-		cacheSet(((int64_t)mess.time*1000000)+mess.utime, mv_beg, true);
+		cacheSet(FTM(mess), mv_beg, true);
 	    }
 	}
 	fseek(f, 0, SEEK_END);
@@ -854,8 +854,12 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 		int i_p = mess.size();
 		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {
 		    if(FTM(mess[i_m]) > FTM(b_rec)) i_p = i_m;
-		    else if(FTM(mess[i_m]) == FTM(b_rec) && b_rec.level == mess[i_m].level && b_rec.mess == mess[i_m].mess)
-		    { equal = true; break; }
+		    else if(FTM(mess[i_m]) == FTM(b_rec) && b_rec.level == mess[i_m].level &&
+			    (owner().prevDblTmCatLev() || b_rec.mess == mess[i_m].mess)) {
+			if(owner().prevDblTmCatLev()) mess[i_m] = b_rec;	//Replace previous as the archieved is priority
+			equal = true;
+			break;
+		    }
 		    else if(FTM(mess[i_m]) < FTM(b_rec)) break;
 		}
 		if(!equal) mess.insert(mess.begin()+i_p, b_rec);
@@ -887,21 +891,25 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 		if(abs(b_rec.level) < level) continue;
 		char m_cat[1001], m_mess[100001];
 		sscanf(buf, "%*x:%*d %*d %1000s %100000s", m_cat, m_mess);
-		b_rec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat),TSYS::HttpURL);
-		b_rec.mess  = TSYS::strDecode(Mess->codeConvIn(mChars,m_mess),TSYS::HttpURL);
+		b_rec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat), TSYS::HttpURL);
+		b_rec.mess  = TSYS::strDecode(Mess->codeConvIn(mChars,m_mess), TSYS::HttpURL);
 		if(!re.test(b_rec.categ)) continue;
 		// Check to equal messages and inserting
 		bool equal = false;
 		int i_p = mess.size();
 		for(int i_m = mess.size()-1; i_m >= 0; i_m--)
 		    if(FTM(mess[i_m]) > FTM(b_rec)) i_p = i_m;
-		    else if(FTM(mess[i_m]) == FTM(b_rec) && b_rec.level == mess[i_m].level && b_rec.mess == mess[i_m].mess)
-		    { equal = true; break; }
+		    else if(FTM(mess[i_m]) == FTM(b_rec) && b_rec.level == mess[i_m].level &&
+			    (owner().prevDblTmCatLev() || b_rec.mess == mess[i_m].mess)) {
+			if(owner().prevDblTmCatLev()) mess[i_m] = b_rec;	//Replace previous as the archieved is priority
+			equal = true;
+			break;
+		    }
 		    else if(FTM(mess[i_m]) < FTM(b_rec)) break;
 		if(!equal) mess.insert(mess.begin()+i_p,b_rec);
 	    }
 	    else if((pass_cnt++) > CACHE_POS && b_rec.time != last_tm) {
-		cacheSet(((int64_t)b_rec.time*1000000)+b_rec.utime, ftell(f)-strlen(buf));
+		cacheSet(FTM(b_rec), ftell(f)-strlen(buf));
 		pass_cnt = 0;
 	    }
 	    last_tm = b_rec.time;
