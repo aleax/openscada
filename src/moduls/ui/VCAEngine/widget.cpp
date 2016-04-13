@@ -377,7 +377,7 @@ void Widget::inheritAttr( const string &iattr )
 	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) {
 	    //Force inherited flags processing
 	    int frcInherAtr = Attr::CfgConst | Attr::CfgLnkIn | Attr::CfgLnkOut | Attr::FromStyle;
-	    if((attr.at().flgSelf()&frcInherAtr) != (pattr.at().flgSelf()&frcInherAtr)) {
+	    if((pattr.at().flgSelf()&frcInherAtr) && (attr.at().flgSelf()&frcInherAtr) != (pattr.at().flgSelf()&frcInherAtr)) {
 		attr.at().setFlgSelf((Attr::SelfAttrFlgs)((attr.at().flgSelf() & ~frcInherAtr) | (pattr.at().flgSelf() & frcInherAtr)), true);
 		modif(true);
 	    }
