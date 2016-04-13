@@ -83,8 +83,6 @@ void TTpContr::postEnable( int flag )
 
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
-    //fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    //fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //Parameter types and it's bd structure form
     int tPrm = tpParmAdd("std", "PRM_BD", _("Standard")/*, true*/);
@@ -99,9 +97,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
-    ::TController(name_c,daq_db,cfgelem)/*, prcSt(false), callSt(false), tmGath(0),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR"))*/
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem)
 {
     cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
@@ -110,18 +106,6 @@ TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
 }
-
-/*string TMdContr::getStatus( )
-{
-    string rez = TController::getStatus();
-    if(startStat() && !redntUse()) {
-	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s."), tm2s(tmGath).c_str());
-    }
-    return rez;
-}*/
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
@@ -141,73 +125,13 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    //Schedule process
-    //mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
-    //Start the gathering data task
-    //SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //Stop the request and calc data task
-    //SYS->taskDestroy(nodePath('.',true));
+
 }
-
-/*void TMdContr::prmEn( TMdPrm *prm, bool val )
-{
-    unsigned iPrm;
-
-    MtxAlloc res(enRes.mtx(), true);
-    for(iPrm = 0; iPrm < pHD.size(); iPrm++)
-	if(&pHD[iPrm].at() == prm) break;
-
-    if(val && iPrm >= pHD.size())	pHD.push_back(prm);
-    if(!val && iPrm < pHD.size())	pHD.erase(pHD.begin()+iPrm);
-}*/
-
-/*void *TMdContr::Task( void *icntr )
-{
-    TMdContr &cntr = *(TMdContr *)icntr;
-
-    cntr.prcSt = true;
-
-    while(!TSYS::taskEndRun()) {
-	int64_t t_cnt = TSYS::curTime();
-
-	//Update controller's data
-	cntr.enRes.lock();
-	cntr.callSt = true;
-	for(unsigned i_p = 0; i_p < cntr.pHD.size() && !cntr.redntUse(); i_p++)
-	    try {
-		//!!! Process parameter code
-	    } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-	cntr.callSt = false;
-	cntr.enRes.unlock();
-	cntr.tmGath = TSYS::curTime() - t_cnt;
-
-	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
-    }
-
-    cntr.prcSt = false;
-
-    return NULL;
-}*/
-
-/*void TMdContr::cntrCmdProc( XMLNode *opt )
-{
-    //Get page info
-    if(opt->name() == "info") {
-	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	return;
-    }
-
-    //Process command to page
-    TController::cntrCmdProc(opt);
-}*/
 
 //*************************************************
 //* TMdPrm                                        *
@@ -227,17 +151,10 @@ void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
     if(!vlElemPresent(&elem())) vlElemAtt(&elem());
-}
-
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
-
-void TMdPrm::enable( )
-{
-    if(enableStat())	return;
 
     //Attributes populate
-    //pEl.fldAdd(new TFld("gpio0","GPIO 0: v1P1.3",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
-    //pEl.fldAdd(new TFld("gpio1","GPIO 1: v1P1.5",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+    pEl.fldAdd(new TFld("gpio0","GPIO 0: v1P1.3",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+    pEl.fldAdd(new TFld("gpio1","GPIO 1: v1P1.5",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
     pEl.fldAdd(new TFld("gpio2","GPIO 2: {v2P1,J8}.3",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
     pEl.fldAdd(new TFld("gpio3","GPIO 3: {v2P1,J8}.5",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
     pEl.fldAdd(new TFld("gpio4","GPIO 4: 7",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
@@ -268,6 +185,13 @@ void TMdPrm::enable( )
     pEl.fldAdd(new TFld("gpio29","GPIO 29: P5.4",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
     pEl.fldAdd(new TFld("gpio30","GPIO 30: P5.5",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
     pEl.fldAdd(new TFld("gpio31","GPIO 31: P5.6",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
+}
+
+TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+
+void TMdPrm::enable( )
+{
+    if(enableStat())	return;
 
     //Init to direction and the reverse flag load
     vector<string> ls;
@@ -276,29 +200,39 @@ void TMdPrm::enable( )
 	if(ls[iEl].compare(0,4,"gpio") != 0) continue;
 	int pin = atoi(ls[iEl].c_str()+4);
 	AutoHD<TVal> cVl = vlAt(ls[iEl]);
-	if(s2i(modPrm(TSYS::strMess("GPIOout%d",pin)))) {
-	    cVl.at().fld().setFlg(cVl.at().fld().flg()&(~TFld::NoWrite));
-	    //bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_OUTP);
-	}
-	else {
-	    cVl.at().fld().setFlg(cVl.at().fld().flg()|TFld::NoWrite);
-	    //bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+	switch(s2i(modPrm(TSYS::strMess("GPIOmode%d",pin)))) {
+	    case 0:	//Disabled
+		cVl.at().fld().setFlg(cVl.at().fld().flg()|TFld::NoWrite);
+		break;
+	    case 1:	//Input
+		cVl.at().fld().setFlg(cVl.at().fld().flg()|TFld::NoWrite);
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+		bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_OFF);
+		break;
+	    case 2:	//Input (pull up)
+		cVl.at().fld().setFlg(cVl.at().fld().flg()|TFld::NoWrite);
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+		bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_UP);
+		break;
+	    case 3:	//Input (pull down)
+		cVl.at().fld().setFlg(cVl.at().fld().flg()|TFld::NoWrite);
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+		bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_DOWN);
+		break;
+	    case 4:	//Output
+		cVl.at().fld().setFlg(cVl.at().fld().flg()&(~TFld::NoWrite));
+		bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_OUTP);
+		break;
 	}
 	cVl.at().fld().setReserve(modPrm(TSYS::strMess("GPIOrev%d",pin)));
     }
 
     TParamContr::enable();
-
-
-
-    //owner().prmEn(this, true);
 }
 
 void TMdPrm::disable( )
 {
     if(!enableStat())	return;
-
-    //owner().prmEn(this, false);
 
     TParamContr::disable();
 
@@ -358,8 +292,9 @@ void TMdPrm::vlGet( TVal &vo )
 	return;
     }
 
-    if(vo.name().compare(0,4,"gpio") == 0)
-	vo.setB(bcm2835_gpio_lev(bool(s2i(vo.name().substr(4)))^bool(s2i(vo.fld().reserve()))), 0, true);
+    if(vo.name() == "err") vo.setS("0", 0, true);
+    else if(vo.name().compare(0,4,"gpio") == 0)
+	vo.setB(bool(bcm2835_gpio_lev(s2i(vo.name().substr(4))))^bool(s2i(vo.fld().reserve())), 0, true);
 }
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
@@ -369,7 +304,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(vl.isEVal() || vl == pvl) return;
 
     if(vo.name().compare(0,4,"gpio") == 0)
-	bcm2835_gpio_write(s2i(vo.name().substr(4)), (vl.getB()^bool(s2i(vo.fld().reserve()))));
+	bcm2835_gpio_write(s2i(vo.name().substr(4)), vl.getB()^bool(s2i(vo.fld().reserve())));
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -391,16 +326,17 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt, "/prm/cfg/MOD_PRMS");
-	if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
+	if(ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
 	    vector<string> ls;
 	    elem().fldList(ls);
 	    for(int iL = 0; iL < ls.size(); iL++) {
 		if(ls[iL].compare(0,4,"gpio") != 0) continue;
 		int pin = atoi(ls[iL].c_str()+4);
-		ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/gpioOut%d",pin).c_str(),TSYS::strMess(_("GPIO %d output and reverse"),pin).c_str(),
-		    owner().startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/gpioMode%d",pin).c_str(),TSYS::strMess(_("GPIO %d output and reverse"),pin).c_str(),
+		    enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,"tp","dec", "dest","select",
+		    "sel_id","0;1;2;3;4", "sel_list",_("Disabled;Input;Input (pull up);Input (pull down);Output"));
 		ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/gpioRev%d",pin).c_str(),"",
-		    owner().startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		    enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
 	return;
@@ -408,12 +344,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //Process commands to the page
     string a_path = opt->attr("path");
-    if(enableStat() && a_path.compare(0,12,"/cfg/gpioOut") == 0) {
-	int pin = atoi(a_path.c_str()+12);
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm(TSYS::strMess("GPIOout%d",pin)));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm(TSYS::strMess("GPIOout%d",pin), opt->text());
+    if(a_path.compare(0,13,"/cfg/gpioMode") == 0) {
+	int pin = atoi(a_path.c_str()+13);
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm(TSYS::strMess("GPIOmode%d",pin),"0"));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm(TSYS::strMess("GPIOmode%d",pin), opt->text());
     }
-    else if(enableStat() && a_path.compare(0,12,"/cfg/gpioRev") == 0) {
+    else if(a_path.compare(0,12,"/cfg/gpioRev") == 0) {
 	int pin = atoi(a_path.c_str()+12);
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm(TSYS::strMess("GPIOrev%d",pin)));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm(TSYS::strMess("GPIOrev%d",pin), opt->text());

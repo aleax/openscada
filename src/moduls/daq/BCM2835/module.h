@@ -68,7 +68,6 @@ class TMdPrm : public TParamContr
     private:
 	//Methods
 	void postEnable( int flag );
-	//void cntrCmdProc( XMLNode *opt );
 	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &val );
@@ -88,18 +87,10 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	//string getStatus( );
-
-	//int64_t	period( )	{ return mPer; }
-	//string	cron( )		{ return mSched; }
-	//int	prior( )	{ return mPrior; }
-
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
     protected:
 	//Methods
-	//void prmEn( TMdPrm *prm, bool val );
-
 	void enable_( );
 	void disable_( );
 	void start_( );
@@ -108,21 +99,6 @@ class TMdContr: public TController
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
-	//void cntrCmdProc( XMLNode *opt );
-	//static void *Task( void *icntr );
-
-	//Attributes
-	//ResMtx	enRes;		// Resource allocation for enable parameters
-	//TCfg	&mSched,	// Schedule
-	//	&mPrior;	// Process task priority
-	//int64_t	mPer;
-
-	//bool	prcSt,		// Process task active
-	//	callSt;		// Calc now stat
-
-	//vector< AutoHD<TMdPrm> > pHD;
-
-	//double	tmGath;		// Gathering time
 };
 
 //*************************************************
