@@ -34,7 +34,7 @@
 
 //!!! Module's meta-information. Change for your module.
 //*************************************************
-//* Modul info!                                   *
+//* Module info!                                  *
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	_("Archivator template")
 #define MOD_TYPE	SARH_ID

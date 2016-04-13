@@ -96,7 +96,7 @@ class Attr
 	}
 	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 
-	void setFlgSelf( SelfAttrFlgs flg );
+	void setFlgSelf( SelfAttrFlgs flg, bool sys = false );
 	void setModif( unsigned set )	{ mModif = set; }
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );

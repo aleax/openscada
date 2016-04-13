@@ -31,7 +31,7 @@
 
 //!!! Module's meta-information. Change for your module.
 //************************************************
-//* Modul info!                                  *
+//* Module info!                                 *
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	_("UI template")
 #define MOD_TYPE	SUI_ID

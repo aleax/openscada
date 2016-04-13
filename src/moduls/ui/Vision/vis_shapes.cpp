@@ -622,7 +622,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    wdg->horizontalHeader()->setVisible(tX.attr("hHdrVis").size()?s2i(tX.attr("hHdrVis")):hdrPresent);
 		    wdg->verticalHeader()->setVisible(s2i(tX.attr("vHdrVis")));
 		    if(s2i(tX.attr("sortEn")) || sortCol) {
-			wdg->setSortingEnabled(s2i(tX.attr("sortEn")) || sortCol);
+			wdg->setSortingEnabled(true);
 			wdg->sortItems((sortCol?abs(sortCol)-1:0), ((sortCol>=0)?Qt::AscendingOrder:Qt::DescendingOrder));
 		    }
 		}

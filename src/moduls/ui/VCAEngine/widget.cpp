@@ -373,7 +373,16 @@ void Widget::inheritAttr( const string &iattr )
 	}
 	if(pattr.freeStat()) pattr = parent().at().attrAt(ls[i_l]);
 	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(),true);
-	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) continue;
+
+	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) {
+	    //Force inherited flags processing
+	    int frcInherAtr = Attr::CfgConst | Attr::CfgLnkIn | Attr::CfgLnkOut | Attr::FromStyle;
+	    if((attr.at().flgSelf()&frcInherAtr) != (pattr.at().flgSelf()&frcInherAtr)) {
+		attr.at().setFlgSelf((Attr::SelfAttrFlgs)((attr.at().flgSelf() & ~frcInherAtr) | (pattr.at().flgSelf() & frcInherAtr)), true);
+		modif(true);
+	    }
+	    continue;
+	}
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)pattr.at().flgSelf());
 	if(!(attr.at().flgGlob()&Attr::OnlyRead))
 	    switch(attr.at().type()) {
@@ -1521,13 +1530,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		else if(idcol == "proc") {
 		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();
 		    Attr::SelfAttrFlgs stflg = s2i(opt->text())?Attr::ProcAttr:(Attr::SelfAttrFlgs)0;
-		    wdg.at().attrAt(idattr).at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&Attr::ProcAttr)) );
+		    wdg.at().attrAt(idattr).at().setFlgSelf((Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&Attr::ProcAttr)));
 		}
 		else if(idcol == "cfg") {
 		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();
 		    Attr::SelfAttrFlgs stflg = (Attr::SelfAttrFlgs)s2i(opt->text());
 		    if((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle))
-			wdg.at().attrAt(idattr).at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle))) );
+			wdg.at().attrAt(idattr).at().setFlgSelf((Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle))));
 		}
 		else if(idcol == "cfgtmpl")	wdg.at().attrAt(idattr).at().setCfgTempl(opt->text());
 	    }
@@ -2001,11 +2010,12 @@ void Attr::setCfgVal( const string &vl )
     }
 }
 
-void Attr::setFlgSelf( SelfAttrFlgs flg )
+void Attr::setFlgSelf( SelfAttrFlgs flg, bool sys )
 {
     if(mFlgSelf == flg)	return;
     SelfAttrFlgs t_flg = (SelfAttrFlgs)mFlgSelf;
     mFlgSelf = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
+    if(sys) return;
     if(!owner()->attrChange(*this,TVariant()))	mFlgSelf = t_flg;
     else {
 	unsigned imdf = owner()->modifVal(*this);

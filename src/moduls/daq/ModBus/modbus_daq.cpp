@@ -245,14 +245,14 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
-    unsigned i_prm;
+    unsigned iPrm;
 
     MtxAlloc res(enRes.mtx(), true);
-    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if(&pHd[i_prm].at() == prm) break;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(&pHd[iPrm].at() == prm) break;
 
-    if(val && i_prm >= pHd.size())	pHd.push_back(prm);
-    if(!val && i_prm < pHd.size())	pHd.erase(pHd.begin()+i_prm);
+    if(val && iPrm >= pHd.size())	pHd.push_back(prm);
+    if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
 }
 
 void TMdContr::regVal( int reg, const string &dt )

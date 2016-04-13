@@ -31,7 +31,7 @@
 
 //!!! Module's meta-information. Change for your module.
 //************************************************
-//* Modul info!                                  *
+//* Module info!                                 *
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	_("DB Tmpl")
 #define MOD_TYPE	SDB_ID

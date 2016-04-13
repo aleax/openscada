@@ -184,6 +184,7 @@ AC_SUBST(UISub_mod)
 AC_SUBST(SpecSub_mod)
 
 AC_MSG_RESULT(========== Build modules check =============)
+
 # DB modules
 AX_MOD_DB_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl)
 AX_MOD_DB_EN(MySQL,[disable or enable[=incl] build module DB.MySQL],disable,incl,[
@@ -207,6 +208,7 @@ AX_MOD_DB_EN(ODBC,[disable or enable[=incl] build module DB.ODBC],enable,incl,[
     AX_LIB_IODBC([1])
     if test "$found_iodbc" != "yes"; then AC_MSG_ERROR(DB.ODBC: iODBC development resources not found. Install or check iODBC development package!); fi
 ])
+
 # DAQ modules
 AX_MOD_DAQ_EN(System,[disable or enable[=incl] build module DAQ.System],disable,incl,[
     AX_LIB_SENSORS()
@@ -276,9 +278,12 @@ AX_MOD_DAQ_EN(EPICS,[enable build module DAQ.EPICS],enable,[],[],[])
 AX_MOD_DAQ_EN(FT3,[enable build module DAQ.FT3],enable,[],[],[])
 if test $ix86 != yes -a $target_cpu != "ix86"; then enable_Fastwel=no; fi
 AX_MOD_DAQ_EN(Fastwel,[enable build module DAQ.Fastwel],enable,[],[],[])
+AX_MOD_DAQ_EN(BCM2835,[enable build module DAQ.BCM2835],enable,[],[],[])
+
 # Archive modules
 AX_MOD_Archive_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl)
 AX_MOD_Archive_EN(DBArch,[disable or enable[=incl] build module Archive.DBArch],disable,incl)
+
 # Transport modules
 AX_MOD_Transport_EN(Sockets,[disable or enable[=incl] build module Transport.Sockets],disable,incl,[
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
@@ -288,10 +293,12 @@ AX_MOD_Transport_EN(SSL,[disable or enable[=incl] build module Transport.SSL],di
     AX_LIB_OpenSSL()
 ])
 AX_MOD_Transport_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl)
+
 # Transport protocol modules
 AX_MOD_TrProt_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl)
 AX_MOD_TrProt_EN(SelfSystem,[disable or enable[=incl] build module Protocol.SelfSystem],disable,incl)
 AX_MOD_TrProt_EN(UserProtocol,[disable or enable[=incl] build module Protocol.UserProtocol],disable,incl)
+
 # UI modules
 AX_MOD_UI_EN(VCAEngine,[disable or enable[=incl] build module UI.VCAEngine],disable,incl)
 AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,[
@@ -351,6 +358,7 @@ AX_MOD_UI_EN(WebVision,[disable or enable[=incl] build module UI.WebVision],disa
     AX_LIB_FFTW3()
 ])
 AX_MOD_UI_EN(WebUser,[disable or enable[=incl] build module UI.WebUser],disable,incl)
+
 # Special modules
 AX_MOD_Special_EN(SystemTests,[disable build module Special.SystemTests],disable)
 AX_MOD_Special_EN(FLibComplex1,[disable or enable[=incl] build module Special.FLibComplex1],disable,incl)

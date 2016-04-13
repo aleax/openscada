@@ -60,7 +60,7 @@ class TMdPrm : public TParamContr
 	~TMdPrm( );
 
 	//!!! Parameter's structure element link function
-	TElem &elem( )		{ return p_el; }
+	TElem &elem( )		{ return pEl; }
 
 	//!!! Processing virtual functions for enable and disable parameter
 	void enable( );
@@ -86,7 +86,7 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	//!!! Parameter's structure element
-	TElem	p_el;			//Work atribute elements
+	TElem	pEl;			//Work atribute elements
 };
 
 //!!! DAQ-subsystem controller object realisation define. Add methods and attributes for your need.
@@ -108,7 +108,7 @@ class TMdContr: public TController
 
 	//!!! The controller's background task properties
 	int64_t	period( )	{ return mPer; }
-	string  cron( )         { return mSched; }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 
 	//!!! Request for connection to parameter-object of this controller
@@ -117,7 +117,7 @@ class TMdContr: public TController
     protected:
 	//Methods
 	//!!! Parameters register function, on time it enable, for fast processing into background task.
-	void prmEn( const string &id, bool val );
+	void prmEn( TMdPrm *prm, bool val );
 
 	//!!! Processing virtual functions for start and stop DAQ-controller
 	void start_( );
@@ -134,7 +134,7 @@ class TMdContr: public TController
 
 	//Attributes
 	//!!! The resource for Enable parameters.
-	Res	en_res;		// Resource for enable params
+	Res	enRes;		// Resource allocation for enable parameters
 	//!!! The links to the controller's background task properties into config.
 	TCfg	&mSched,	// Schedule
 		&mPrior;	// Process task priority
@@ -142,11 +142,10 @@ class TMdContr: public TController
 
 	//!!! Background task's sync properties
 	bool	prcSt,		// Process task active
- 		callSt,		// Calc now stat
-		endrunReq;	// Request to stop of the Process task
+		callSt;		// Calc now stat
 
 	//!!! Enabled and processing parameter's links list container.
-	vector< AutoHD<TMdPrm> >  p_hd;
+	vector< AutoHD<TMdPrm> > pHD;
 
 	double	tmGath;		// Gathering time
 };

@@ -33,7 +33,7 @@
 
 //!!! Module's meta-information. Change for your module.
 //*************************************************
-//* Modul info!                                   *
+//* Module info!                                  *
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	_("Protocol template")
 #define MOD_TYPE	SPRT_ID

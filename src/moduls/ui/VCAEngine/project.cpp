@@ -1257,7 +1257,7 @@ void Page::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr(attr);
-    if(!mdf) modifClr( );
+    if(!mdf && !(nodeFlg()&SelfModifyS)) modifClr();
 }
 
 TVariant Page::vlGet( Attr &a )
@@ -1668,8 +1668,8 @@ void PageWdg::wClear( )
 void PageWdg::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
-    Widget::inheritAttr( attr );
-    if(!mdf) modifClr( );
+    Widget::inheritAttr(attr);
+    if(!mdf && !(nodeFlg()&SelfModifyS)) modifClr();
 }
 
 void PageWdg::resourceList( vector<string> &ls )

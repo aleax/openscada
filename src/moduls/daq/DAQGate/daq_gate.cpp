@@ -868,7 +868,7 @@ void TMdPrm::sync( )
 	    }
 	    isSynced = true;
 	    return;
-	}catch(TError err) { continue; }
+	} catch(TError err) { continue; }
 }
 
 void TMdPrm::vlGet( TVal &val )

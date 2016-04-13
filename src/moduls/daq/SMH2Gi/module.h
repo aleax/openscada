@@ -47,7 +47,7 @@ class SHMParam : public TTypeParam
 	SHMParam( );
 
 	void enable( TParamContr *prm );
-        void disable( TParamContr *prm )	{ }
+	void disable( TParamContr *prm )	{ }
 
 	void getVals( TParamContr *prm );
 	void vlSet( TParamContr *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );

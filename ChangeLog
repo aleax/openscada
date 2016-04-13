@@ -1,3 +1,11 @@
+2016-04-13 Roman
+- !!!!:DAQ: Module DAQ.BCM2835 is added, mostly for access to BCM2835 like chip's GPIO and some other.
+    The BCM2835 chips mostly known used into the Raspberry Pi boards. For now the module do not work properly yet and it is under developing!
+- DAQ.=Tmpl=: Some cleaned and expanded.
+- !:UI.VCAEngine: Force inheritance of links types is added, independent from the attribute local modification.
+    Mostly for prevent the link's type changing lost, as significant one, into the modified attributes.
+
+
 2016-04-10 Roman
 - DB.LibsDB.OscadaLibs.db: DAQ template's "base.anUnif" attribute "Connection lost detect delay, s" moved to "Tf, s" in the role.
 - Archive.FSArch: Used FTM() for left the messages time.
