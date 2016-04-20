@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-06 14:52+0300\n"
+"POT-Creation-Date: 2016-04-20 15:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,12 @@ msgid "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);A
 msgstr ""
 
 msgid "Address"
+msgstr ""
+
+msgid "Redundant"
+msgstr ""
+
+msgid "Preferable run"
 msgstr ""
 
 msgid "Value period (sec)"
@@ -157,6 +163,27 @@ msgstr ""
 msgid "Value archive"
 msgstr ""
 
+msgid "Redundancy"
+msgstr ""
+
+msgid "Message archivators"
+msgstr ""
+
+msgid "Archivator"
+msgstr ""
+
+msgid "Run."
+msgstr ""
+
+msgid "Redund."
+msgstr ""
+
+msgid "Pref. run"
+msgstr ""
+
+msgid "Remote"
+msgstr ""
+
 msgid "Messages archive"
 msgstr ""
 
@@ -199,7 +226,7 @@ msgid "Archivators"
 msgstr ""
 
 msgid ""
-"Messages archivators.\n"
+"Message archivators.\n"
 "No set archivator for process by buffer and all archivators.\n"
 "Set '<buffer>' for process by buffer."
 msgstr ""
@@ -235,22 +262,25 @@ msgstr ""
 msgid "All: %d; Enabled: %d"
 msgstr ""
 
+msgid "<High level>"
+msgstr ""
+
+msgid "<Low level>"
+msgstr ""
+
+msgid "<Optimal>"
+msgstr ""
+
 msgid "Message archivator"
 msgstr ""
 
 msgid "Value archivator"
 msgstr ""
 
-msgid "Message archivators"
-msgstr ""
-
 msgid "Value archivators"
 msgstr ""
 
 msgid "Message archivator: "
-msgstr ""
-
-msgid "Archivator"
 msgstr ""
 
 msgid "State"
@@ -817,68 +847,13 @@ msgstr ""
 msgid "Template library"
 msgstr ""
 
-msgid "Redundancy"
-msgstr ""
-
-msgid "Station level"
-msgstr ""
-
-msgid "Redundant task period (s)"
-msgstr ""
-
-msgid "Restore connection timeout (s)"
-msgstr ""
-
 msgid "Restore data depth time (hour)"
-msgstr ""
-
-msgid "Stations"
-msgstr ""
-
-msgid "Live"
-msgstr ""
-
-msgid "Cntr."
-msgstr ""
-
-msgid "Go to remote stations list configuration"
 msgstr ""
 
 msgid "Controllers"
 msgstr ""
 
-msgid "Run."
-msgstr ""
-
-msgid "Redund."
-msgstr ""
-
-msgid "Off;Asymmetric"
-msgstr ""
-
-msgid "Pref. run"
-msgstr ""
-
-msgid "Remote"
-msgstr ""
-
 msgid "Template libraries"
-msgstr ""
-
-#, c-format
-msgid "Spent time: %s."
-msgstr ""
-
-msgid "<newStat>"
-msgstr ""
-
-msgid "<High level>"
-msgstr ""
-
-msgid "<Low level>"
-msgstr ""
-
-msgid "<Optimal>"
 msgstr ""
 
 msgid "Id error!"
@@ -1696,6 +1671,27 @@ msgstr ""
 msgid "Subsystems"
 msgstr ""
 
+msgid "Station level"
+msgstr ""
+
+msgid "Redundant task period (s)"
+msgstr ""
+
+msgid "Restore connection timeout (s)"
+msgstr ""
+
+msgid "Stations"
+msgstr ""
+
+msgid "Live"
+msgstr ""
+
+msgid "Cntr."
+msgstr ""
+
+msgid "Go to remote stations list configuration"
+msgstr ""
+
 msgid "Tasks"
 msgstr ""
 
@@ -1769,6 +1765,13 @@ msgstr ""
 
 #, c-format
 msgid "%dx%0.3gGHz"
+msgstr ""
+
+#, c-format
+msgid "Spent time: %s."
+msgstr ""
+
+msgid "<newStat>"
 msgstr ""
 
 msgid "Finished. "
@@ -1915,10 +1918,7 @@ msgstr ""
 msgid "Answer"
 msgstr ""
 
-msgid "Redundant"
-msgstr ""
-
-msgid "Preferable run"
+msgid "Off;Asymmetric"
 msgstr ""
 
 #, c-format

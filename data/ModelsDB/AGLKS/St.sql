@@ -313,7 +313,7 @@ CREATE TABLE 'DCONPrm_test' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"u
 INSERT INTO "DCONPrm_test" VALUES('test','','','','',1,0,'','',1,0,8,0,0,0,0,0,0);
 CREATE TABLE 'LogLevPrm_experiment_io' ("PRM_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("PRM_ID","ID"));
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','in','BlockCalc.Anast1to2node.F3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','var','45.0907412526859','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','var','45.2974719922495','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','max','100','','');
@@ -328,7 +328,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','in','BlockCalc.Anast1to2node.F4.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','var','52.9858626218298','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','var','52.9958135116769','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','max','100','','');
@@ -343,7 +343,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','in','BlockCalc.Anast1to2node.T_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','var','20.4897261671763','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','var','20.3965286159618','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','max','50','','');
@@ -358,7 +358,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','in','BlockCalc.Anast1to2node.T_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','var','32.1699146501379','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','var','32.1894006028634','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','max','100','','');
@@ -373,7 +373,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','in','BlockCalc.Anast1to2node.T_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','var','32.0323879670771','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','var','32.0498467401737','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','max','100','','');
@@ -388,7 +388,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','in','BlockCalc.Anast1to2node.P_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','var','5.64617018445335','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','var','5.65106374704748','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','ed','at','ата','ата');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','max','10','','');
@@ -403,7 +403,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','in','BlockCalc.Anast1to2node.P_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','var','24.2368067037723','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','var','24.2679614756189','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','max','50','','');
@@ -418,7 +418,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','in','BlockCalc.Anast1to2node.P_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','var','23.7059705555857','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','var','23.7368757490343','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','max','50','','');
@@ -440,7 +440,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','in','BlockCalc.Anast1to2node.P3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','var','22.8982873325313','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','var','22.9189352715096','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','max','100','','');
@@ -455,7 +455,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','in','BlockCalc.Anast1to2node.P4.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','var','23.7059705555857','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','var','23.7368757490343','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','max','50','','');
@@ -470,7 +470,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','in','BlockCalc.Anast1to2node.Pi.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','var','8.85696123081945','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','var','9.02780079530754','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','max','20','','');
@@ -500,7 +500,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','in','BlockCalc.Anast1to2node.PT0503.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','var','5.79958295971756','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','var','5.80423553859919','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','max','10','','');
@@ -515,7 +515,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','in','BlockCalc.Anast1to2node.F_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','var','101.787254485829','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','var','101.755690645348','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','max','150','','');
@@ -530,7 +530,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','in','BlockCalc.Anast1to2node.F_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','var','98.6437300766731','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','var','98.8279165712111','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','max','150','','');
@@ -545,7 +545,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','in','BlockCalc.Anast1to2node.F_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','var','52.9848185331752','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','var','52.9965661190942','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','max','100','','');
@@ -563,17 +563,17 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_err','0','0','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','F','201.677826800932','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','Q','10657.1143176207','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','P','9.82093243292576','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','T','15.5216893747084','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','dP','6.11144929699794','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','DS','0.962761695619096','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','F','199.055510890463','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','Q','10661.6084826645','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','P','9.07064644762811','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','T','14.4770729963095','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','dP','6.03198517849888','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','DS','0.984854088483776','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','plcMax','0','','');
@@ -588,7 +588,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','plcMax','0','','');
@@ -603,7 +603,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','plcMax','150','','');
@@ -618,7 +618,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','plcMax','0','','');
@@ -633,7 +633,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','plcMax','0','','');
@@ -648,7 +648,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','plcMax','0','','');
@@ -663,7 +663,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','plcMax','0','','');
@@ -678,7 +678,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','plcMax','0','','');
@@ -693,7 +693,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','plcMax','0','','');
@@ -708,7 +708,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','plcMax','0','','');
@@ -723,7 +723,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','plcMax','0','','');
@@ -738,7 +738,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','dmsk','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','plcMax','0','','');
@@ -805,7 +805,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','alSup','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','plcMax','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','plcExcess','0','','');
@@ -823,7 +823,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','alSup','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','plcMax','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','plcExcess','0','','');
@@ -841,7 +841,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','alSup','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','plcMax','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','plcExcess','0','','');
@@ -859,7 +859,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','alSup','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','speed','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','prec','2','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','Tf','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','Tf','2','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','plcMin','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','plcMax','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','plcExcess','0','','');
@@ -874,6 +874,25 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','SHIFR','КШ6close','
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','NAME','Close KSH6','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','DESCR','Alarm for closing the valve KSH6','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_КШ6close/"/>','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','log','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','stInv','0','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','st_open','1','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','st_close','0','','');
 CREATE TABLE 'ModBus_node_io' ("NODE_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("NODE_ID","ID"));
 INSERT INTO "ModBus_node_io" VALUES('test','R0','Register 0',1,0,'1000',0,'Регістр 0','1000','Регистр 0','1000');
 INSERT INTO "ModBus_node_io" VALUES('test','R3w','Register 3 (write)',1,0,'10',2,'Регістр 3 (запис)','10','Регистр 3 (запись)','10');
@@ -1697,61 +1716,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HDD statistic: sda1','
 </Attrs>
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HDD statistic: sda2','Статистика НЖМД: sda2','Статистика НЖМД: sda2','','','',1,'System/AutoDA/prm_Statistic_sda2','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda5','','HDD statistic: sda5','Статистика НЖМД: sda5','Статистика НЖМД: sda5','','','',1,'System/AutoDA/prm_Statistic_sda5','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda6','','HDD statistic: sda6','Статистика НЖМД: sda6','Статистика НЖМД: sda6','','','',1,'System/AutoDA/prm_Statistic_sda6','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda7','','HDD statistic: sda7','Статистика НЖМД: sda7','Статистика НЖМД: sda7','','','',1,'System/AutoDA/prm_Statistic_sda7','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda8','','HDD statistic: sda8','Статистика НЖМД: sda8','Статистика НЖМД: sda8','','','',1,'System/AutoDA/prm_Statistic_sda8','<Attrs>
-<a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
-<a id="NAME" nm="Name" tp="5" flg="768" />
-<a id="DESCR" nm="Description" tp="5" flg="776" />
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda9','','HDD statistic: sda9','Статистика НЖМД: sda9','Статистика НЖМД: sda9','','','',1,'System/AutoDA/prm_Statistic_sda9','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />

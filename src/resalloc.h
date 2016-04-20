@@ -40,6 +40,10 @@ class Res
 	Res( );
 	~Res( );
 
+	void lock( bool toWr, unsigned short tm = 0 ) { if(toWr) resRequestW(tm); else resRequestR(tm); }
+	bool tryLock( bool toWr )	{ return toWr ? resTryW() : resTryR(); }
+	void unlock( )			{ resRelease(); }
+
 	void resRequestW( unsigned short tm = 0 );	// Write request, tm in milliseconds
 	bool resTryW( );
 	void resRequestR( unsigned short tm = 0 );	// Read request, tm in milliseconds

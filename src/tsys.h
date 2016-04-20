@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,7 @@
 #define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
 #define STD_INTERF_TM	5	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
+#define ALRM_ARCH_NM	"<alarms>"
 #define DB_CFG		"<cfg>"
 
 #include <signal.h>
@@ -49,6 +50,11 @@
 #include <string>
 #include <vector>
 
+#define __func__ __PRETTY_FUNCTION__
+
+#define vmin(a,b) ((a) < (b) ? (a) : (b))
+#define vmax(a,b) ((a) > (b) ? (a) : (b))
+
 #include "config.h"
 #include "tbds.h"
 #include "tuis.h"
@@ -59,11 +65,6 @@
 #include "tspecials.h"
 #include "tmodschedul.h"
 #include "tsecurity.h"
-
-#define __func__ __PRETTY_FUNCTION__
-
-#define vmin(a,b) ((a) < (b) ? (a) : (b))
-#define vmax(a,b) ((a) > (b) ? (a) : (b))
 
 using std::string;
 using std::vector;
@@ -81,6 +82,20 @@ class TSYS : public TCntrNode
 	//Data
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb };
 	enum IntView	{ Dec, Oct, Hex };
+
+	// Remote station structure
+	class SStat {
+	    public:
+		SStat( int8_t ilev, bool iisLive = false, float icnt = 0 ) :
+		    lev(ilev), isLive(iisLive), cnt(icnt) { }
+		SStat( ) : lev(-1), isLive(false), cnt(0) { }
+
+		bool isActive( )	{ return (lev >= 0 && isLive); }
+
+		int8_t	lev;
+		bool	isLive;
+		float	cnt;
+	};
 
 	//Public methods
 	TSYS( int argi, char **argb, char **env );
@@ -183,6 +198,20 @@ class TSYS : public TCntrNode
 	void	cntrSet( const string &id, double vl );
 	void	cntrIter( const string &id, double vl );
 
+	// Redundancy
+	bool rdEnable( );		//any external host set
+	bool rdActive( );		//any external host active
+	void rdStList( vector<string> &ls );
+	SStat rdSt( const string &id );
+	map<string, SStat> rdSts( );
+	int rdStLevel( )		{ return mRdStLevel; }
+	void setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); modif(); }
+	float rdTaskPer( )		{ return mRdTaskPer; }
+	void setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }
+	int rdRestConnTm( )		{ return mRdRestConnTm; }
+	void setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); modif(); }
+	string rdStRequest( XMLNode &req, const string &st = "" );	//Request to a remote station if <st> is empty or force
+
 	// Convert value to string
 	static string int2str( int val, IntView view = Dec );
 	static string uint2str( unsigned val, IntView view = Dec );
@@ -269,7 +298,7 @@ class TSYS : public TCntrNode
 	string getCmdOpt( int &curPos, string *argVal = NULL );
 	static string getCmdOpt_( int &curPos, string *argVal, int argc, char **argv );
 
-	//  System control interface functions
+	// System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
 	Res &cfgRes( )		{ return mCfgRes; }
@@ -289,6 +318,7 @@ class TSYS : public TCntrNode
 	//Data
 	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10 };
 
+	// Task structure
 	class STask
 	{
 	    public:
@@ -315,6 +345,7 @@ class TSYS : public TCntrNode
 		int		lagMax, consMax;
 	};
 
+
 	//Private methods
 	const char *nodeName( )	{ return mId.c_str(); }
 	bool cfgFileLoad( );
@@ -330,6 +361,7 @@ class TSYS : public TCntrNode
 	static void *taskWrap( void *stas );
 
 	static void *HPrTask( void *isys );
+	static void *RdTask( void *param );
 
 	//Private attributes
 	string	mUser,		// A owner user name!
@@ -357,14 +389,20 @@ class TSYS : public TCntrNode
 	map<string, STask>	mTasks;
 	static pthread_key_t	sTaskKey;
 
-	Res	taskRes, mCfgRes;
+	Res	taskRes, mCfgRes, mRdRes;;
 
 	int	mN_CPU;
 	pthread_t	mainPthr;
 	uint64_t	mSysclc;
 	volatile time_t	mSysTm;
 
-	map<string, double>	mCntrs;
+	map<string, double>	mCntrs;	// Counters
+	map<string, SStat>	mSt;	// Remote stations
+
+	unsigned char	mRdStLevel,	//Current station level
+			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds
+	float		mRdTaskPer,	//Redundant task period in seconds
+			mRdPrcTm;	//Redundant process time
 
 	struct sigaction	sigActOrig;
 };
@@ -373,7 +411,7 @@ class TSYS : public TCntrNode
 //* Global functions for OSCADA namespace         *
 inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2str(val, view); }
 inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
-inline string ll2s( int64_t val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
+inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
 inline double rRnd( double val, int dig = 0, bool toint = false ){ return TSYS::realRound(val, dig, toint); }
 inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }

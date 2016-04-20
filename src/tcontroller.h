@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,12 +92,15 @@ class TController : public TCntrNode, public TConfig
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )	{ return chldAt(mPrm,name); }
 
 	// Redundancy
-	bool redntUse( )			{ return mRedntUse; }
-	void setRedntUse( bool vl );
-	Redundant redntMode( );
-	void setRedntMode( Redundant vl );
-	string redntRun( );
-	void setRedntRun( const string &vl );
+	//  In redundancy now
+	bool redntUse( )	{ return mRedntUse; }
+	void setRedntUse( bool vl )		{ mRedntUse = vl; }
+	//  Mode of the archiver's redundancy, only enabling now
+	Redundant redntMode( )	{ return (TController::Redundant)cfg("REDNT").getI(); }
+	void setRedntMode( Redundant vl )	{ cfg("REDNT").setI(vl); }
+	//  Redundancy condition: <high>, <low>, <optimal>, {ForceStation}
+	string redntRun( )	{ return cfg("REDNT_RUN").getS(); }
+	void setRedntRun( const string &vl )	{ cfg("REDNT_RUN").setS(vl); }
 	virtual void redntDataUpdate( );
 
 	virtual string catsPat( );	//Individual the controller messages' categories pattern

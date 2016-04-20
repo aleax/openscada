@@ -2374,7 +2374,7 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 {
     TVariant vl = getValProc(tm,up_ord);
 
-    if(!onlyLocal && tm && archive().startStat() && vl.isEVal() && SYS->daq().at().rdActive() &&
+    if(!onlyLocal && tm && archive().startStat() && vl.isEVal() && SYS->rdActive() &&
 	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))
     {
 	int64_t remTm = 0;
@@ -2420,7 +2420,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 
     //Check for holes fill
     // Check for redundant allow
-    if(!onlyLocal && archive().startStat() && buf.evalCnt() > ecnt && SYS->daq().at().rdActive() &&
+    if(!onlyLocal && archive().startStat() && buf.evalCnt() > ecnt && SYS->rdActive() &&
 	(archive().srcMode( ) == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))
     {
 	AutoHD<TVal> paVl = archive().srcPAttr();

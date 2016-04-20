@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-06 14:52+0300\n"
+"POT-Creation-Date: 2016-04-20 15:42+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -59,6 +59,12 @@ msgstr ""
 
 msgid "Address"
 msgstr "Adresse"
+
+msgid "Redundant"
+msgstr "Überflüssig"
+
+msgid "Preferable run"
+msgstr "Prioritätsstufe"
 
 msgid "Value period (sec)"
 msgstr "Wiederholung des Werts (sek)"
@@ -167,6 +173,7 @@ msgstr "Fehler beim Anhalten des Nachrichtarchivars '%s'."
 msgid "Value archive '%s' stop error."
 msgstr "Fehler beim Anhalten des Wertearchivs '%s'."
 
+#, c-format
 msgid "Put message to the archiver '%s' error: %s"
 msgstr "Kleide Mitteilung an den Archivierungs '%s' Fehler: %s"
 
@@ -175,6 +182,27 @@ msgstr "Meldepuffer Prozessfehler."
 
 msgid "Value archive"
 msgstr "Wertearchiv"
+
+msgid "Redundancy"
+msgstr "Redundanz"
+
+msgid "Message archivators"
+msgstr "Nachrichtarchivare"
+
+msgid "Archivator"
+msgstr "Archivar"
+
+msgid "Run."
+msgstr "Akt."
+
+msgid "Redund."
+msgstr "Überfl."
+
+msgid "Pref. run"
+msgstr "Prior. Stufe"
+
+msgid "Remote"
+msgstr "Gelöscht"
 
 msgid "Messages archive"
 msgstr "Nachrichtarchiv"
@@ -231,7 +259,7 @@ msgid "Archivators"
 msgstr "Archivar"
 
 msgid ""
-"Messages archivators.\n"
+"Message archivators.\n"
 "No set archivator for process by buffer and all archivators.\n"
 "Set '<buffer>' for process by buffer."
 msgstr ""
@@ -271,23 +299,26 @@ msgstr "Anzahl"
 msgid "All: %d; Enabled: %d"
 msgstr "Insgesamt: %d; Eingeschaltet: %d"
 
+msgid "<High level>"
+msgstr "<Hohes Niveau>"
+
+msgid "<Low level>"
+msgstr "<Niedriges Niveau>"
+
+msgid "<Optimal>"
+msgstr "<Optimal>"
+
 msgid "Message archivator"
 msgstr "Nachrichtarchivar"
 
 msgid "Value archivator"
 msgstr "Wertearchivar"
 
-msgid "Message archivators"
-msgstr "Nachrichtarchivare"
-
 msgid "Value archivators"
 msgstr "Wertearchivare"
 
 msgid "Message archivator: "
 msgstr "Nachtrichtarchivar: "
-
-msgid "Archivator"
-msgstr "Archivar"
 
 msgid "State"
 msgstr "Zustand"
@@ -919,69 +950,14 @@ msgstr ""
 msgid "Template library"
 msgstr "Vorlagenbibliothek"
 
-msgid "Redundancy"
-msgstr "Redundanz"
-
-msgid "Station level"
-msgstr "Stationsstufe"
-
-msgid "Redundant task period (s)"
-msgstr "Zeit der Reservierungsaufgabe"
-
-msgid "Restore connection timeout (s)"
-msgstr "Interval der Wiederherstellungzeit der Verbindung"
-
 msgid "Restore data depth time (hour)"
 msgstr "Tiefe der Wiederherstellungzeit der Daten (Stunden)"
-
-msgid "Stations"
-msgstr "Stationen"
-
-msgid "Live"
-msgstr "Lebendig"
-
-msgid "Cntr."
-msgstr "Zähl."
-
-msgid "Go to remote stations list configuration"
-msgstr "Konfiguration der entfernten Stationen"
 
 msgid "Controllers"
 msgstr "Controller"
 
-msgid "Run."
-msgstr "Akt."
-
-msgid "Redund."
-msgstr "Überfl."
-
-msgid "Off;Asymmetric"
-msgstr "Off;Asymmetrisch"
-
-msgid "Pref. run"
-msgstr "Prior. Stufe"
-
-msgid "Remote"
-msgstr "Gelöscht"
-
 msgid "Template libraries"
 msgstr "Vorlagenbibliotheken"
-
-#, c-format
-msgid "Spent time: %s."
-msgstr "Verbrauchte Zeit: %s."
-
-msgid "<newStat>"
-msgstr "<neueStation>"
-
-msgid "<High level>"
-msgstr "<Hohes Niveau>"
-
-msgid "<Low level>"
-msgstr "<Niedriges Niveau>"
-
-msgid "<Optimal>"
-msgstr "<Optimal>"
 
 msgid "Id error!"
 msgstr "Fehler des Bezeichners!"
@@ -1928,6 +1904,27 @@ msgstr "Zum Archiv"
 msgid "Subsystems"
 msgstr "Subsysteme"
 
+msgid "Station level"
+msgstr "Stationsstufe"
+
+msgid "Redundant task period (s)"
+msgstr "Zeit der Reservierungsaufgabe"
+
+msgid "Restore connection timeout (s)"
+msgstr "Interval der Wiederherstellungzeit der Verbindung"
+
+msgid "Stations"
+msgstr "Stationen"
+
+msgid "Live"
+msgstr "Lebendig"
+
+msgid "Cntr."
+msgstr "Zähl."
+
+msgid "Go to remote stations list configuration"
+msgstr "Konfiguration der entfernten Stationen"
+
 msgid "Tasks"
 msgstr "Aufgaben"
 
@@ -2014,6 +2011,13 @@ msgstr "Ansicht der Nachrichten"
 #, c-format
 msgid "%dx%0.3gGHz"
 msgstr "%dx%0.3gGHz"
+
+#, c-format
+msgid "Spent time: %s."
+msgstr "Verbrauchte Zeit: %s."
+
+msgid "<newStat>"
+msgstr "<neueStation>"
 
 msgid "Finished. "
 msgstr "Finished. "
@@ -2172,11 +2176,8 @@ msgstr ""
 msgid "Answer"
 msgstr "Antwort"
 
-msgid "Redundant"
-msgstr "Überflüssig"
-
-msgid "Preferable run"
-msgstr "Prioritätsstufe"
+msgid "Off;Asymmetric"
+msgstr "Off;Asymmetrisch"
 
 #, c-format
 msgid "Start controller '%s' error."
@@ -2410,11 +2411,3 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
-
-#~ msgid ""
-#~ "For CPU set use processors numbers string separated by symbol ':'.\n"
-#~ "CPU numbers started from 0."
-#~ msgstr ""
-#~ "Für die Bezeichnung der Prozessors benutzen Sie die Nummerzeile, getrennt "
-#~ "mit dem Symbol ':'.\n"
-#~ "Prozessorsnummer beginnen mit 0."

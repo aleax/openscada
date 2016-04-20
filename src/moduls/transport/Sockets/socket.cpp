@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.0.1"
+#define MOD_VER		"2.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -244,40 +244,53 @@ void TSocketIn::start( )
 
     if(type == SOCK_TCP || type == SOCK_UDP) {
 	struct sockaddr_in  nameIn;
-	struct hostent *loc_host_nm;
 	memset(&nameIn, 0, sizeof(nameIn));
 	nameIn.sin_family = AF_INET;
+	char hBuf[STR_BUF_LEN], sBuf[STR_BUF_LEN];
+	struct hostent hostbuf, *hp;
+	struct servent servbuf, *sp;
 
 	host	= TSYS::strSepParse(addr(), 1, ':');
 	port	= TSYS::strSepParse(addr(), 2, ':');
 	if(host.size()) {
-	    loc_host_nm = gethostbyname(host.c_str());
-	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
-		throw TError(nodePath().c_str(), _("Socket name '%s' error!"), host.c_str());
-	    nameIn.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
+	    int herr;
+	    gethostbyname_r(host.c_str(), &hostbuf, hBuf, sizeof(hBuf), &hp, &herr);
+	    if(!hp) switch(herr) {
+		case HOST_NOT_FOUND:
+		    throw TError(nodePath().c_str(), _("Host '%s' not found!"), host.c_str());
+		case NO_ADDRESS:
+		    throw TError(nodePath().c_str(), _("The requested name '%s' does not have an IP address!"), host.c_str());
+		case NO_RECOVERY:
+		    throw TError(nodePath().c_str(), _("A non-recoverable name server error occurred while for '%s'!"), host.c_str());
+		case TRY_AGAIN:
+		    throw TError(nodePath().c_str(), _("A temporary error occurred on an authoritative name server for '%s'!"), host.c_str());
+		default:
+		    throw TError(nodePath().c_str(), _("Unknown error code from gethostbyname_r for '%s'!"), host.c_str());
+	    }
+	    nameIn.sin_addr.s_addr = *((int*)(hp->h_addr_list[0]));	//!!!! Append all IP list processing
 	}
 	else nameIn.sin_addr.s_addr = INADDR_ANY;
 	if(type == SOCK_TCP) {
 	    //Get system port for "oscada" /etc/services
-	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
-	    if(sptr != NULL)			nameIn.sin_port = sptr->s_port;
+	    if(getservbyname_r(port.c_str(),"tcp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
+		nameIn.sin_port = sp->s_port;
 	    else if(htons(s2i(port)) > 0)	nameIn.sin_port = htons(s2i(port));
 	    else nameIn.sin_port = 10005;
 
 	    if(mode() == 2) {							//Initiate connection
 		int flags = fcntl(sockFd, F_GETFL, 0);
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
-		int res = connect(sockFd, (sockaddr*)&nameIn, sizeof(nameIn));
-		if(res == -1 && errno == EINPROGRESS) {
+		int rez = connect(sockFd, (sockaddr*)&nameIn, sizeof(nameIn));
+		if(rez == -1 && errno == EINPROGRESS) {
 		    struct timeval tv;
-		    socklen_t slen = sizeof(res);
+		    socklen_t slen = sizeof(rez);
 		    fd_set fdset;
 		    tv.tv_sec = 5; tv.tv_usec = 0;
 		    FD_ZERO(&fdset); FD_SET(sockFd, &fdset);
-		    if((res=select(sockFd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sockFd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
-		    else res = -1;
+		    if((rez=select(sockFd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sockFd,SOL_SOCKET,SO_ERROR,&rez,&slen) && !rez) rez = 0;
+		    else rez = -1;
 		}
-		if(res) {
+		if(rez) {
 		    close(sockFd);
 		    sockFd = -1;
 		    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
@@ -292,8 +305,8 @@ void TSocketIn::start( )
 	}
 	else if(type == SOCK_UDP) {
 	    //Get system port for "oscada" /etc/services
-	    struct servent *sptr = getservbyname(port.c_str(), "udp");
-	    if(sptr != NULL)			nameIn.sin_port = sptr->s_port;
+	    if(getservbyname_r(port.c_str(),"udp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
+		nameIn.sin_port = sp->s_port;
 	    else if(htons(s2i(port)) > 0)	nameIn.sin_port = htons(s2i(port));
 	    else nameIn.sin_port = 10005;
 
@@ -430,7 +443,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 			FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
 			int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
-			//???? May be some flush ????
+			//???? Maybe some flush ????
 		    }
 		    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
@@ -970,19 +983,34 @@ void TSocketOut::start( int itmCon )
     else if(type == SOCK_TCP || type == SOCK_UDP) {
 	memset(&nameIn, 0, sizeof(nameIn));
 	nameIn.sin_family = AF_INET;
+	char hBuf[STR_BUF_LEN], sBuf[STR_BUF_LEN];
+	struct hostent hostbuf, *hp;
+	struct servent servbuf, *sp;
 
 	string host = TSYS::strSepParse(addr(), 1, ':');
 	string port = TSYS::strSepParse(addr(), 2, ':');
 	if(host.size()) {
-	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
-	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
-		throw TError(nodePath().c_str(),_("Socket name '%s' error!"),host.c_str());
-	    nameIn.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
+	    int herr;
+	    gethostbyname_r(host.c_str(), &hostbuf, hBuf, sizeof(hBuf), &hp, &herr);
+	    if(!hp) switch(herr) {
+		case HOST_NOT_FOUND:
+		    throw TError(nodePath().c_str(), _("Host '%s' not found!"), host.c_str());
+		case NO_ADDRESS:
+		    throw TError(nodePath().c_str(), _("The requested name '%s' does not have an IP address!"), host.c_str());
+		case NO_RECOVERY:
+		    throw TError(nodePath().c_str(), _("A non-recoverable name server error occurred while for '%s'!"), host.c_str());
+		case TRY_AGAIN:
+		    throw TError(nodePath().c_str(), _("A temporary error occurred on an authoritative name server for '%s'!"), host.c_str());
+		default:
+		    throw TError(nodePath().c_str(), _("Unknown error code from gethostbyname_r for '%s'!"), host.c_str());
+	    }
+	    nameIn.sin_addr.s_addr = *((int*)(hp->h_addr_list[0]));	//!!!! Append all IP list processing
 	}
 	else nameIn.sin_addr.s_addr = INADDR_ANY;
+
 	//Get system port for "oscada" /etc/services
-	struct servent *sptr = getservbyname(port.c_str(), (type == SOCK_TCP)?"tcp":"udp");
-	if(sptr != NULL)		nameIn.sin_port = sptr->s_port;
+	if(getservbyname_r(port.c_str(),(type == SOCK_TCP)?"tcp":"udp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
+	    nameIn.sin_port = sp->s_port;
 	else if(htons(s2i(port)) > 0)	nameIn.sin_port = htons(s2i(port));
 	else nameIn.sin_port = 10005;
 
@@ -1000,17 +1028,17 @@ void TSocketOut::start( int itmCon )
 	//Connect to socket
 	int flags = fcntl(sockFd, F_GETFL, 0);
 	fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
-	int res = connect(sockFd, (sockaddr*)&nameIn, sizeof(nameIn));
-	if(res == -1 && errno == EINPROGRESS) {
+	int rez = connect(sockFd, (sockaddr*)&nameIn, sizeof(nameIn));
+	if(rez == -1 && errno == EINPROGRESS) {
 	    struct timeval tv;
-	    socklen_t slen = sizeof(res);
+	    socklen_t slen = sizeof(rez);
 	    fd_set fdset;
 	    tv.tv_sec = itmCon/1000; tv.tv_usec = 1000*(itmCon%1000);
 	    FD_ZERO(&fdset); FD_SET(sockFd, &fdset);
-	    if((res=select(sockFd+1, NULL, &fdset, NULL, &tv)) > 0 && !getsockopt(sockFd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
-	    else res = -1;
+	    if((rez=select(sockFd+1, NULL, &fdset, NULL, &tv)) > 0 && !getsockopt(sockFd,SOL_SOCKET,SO_ERROR,&rez,&slen) && !rez) rez = 0;
+	    else rez = -1;
 	}
-	if(res) {
+	if(rez) {
 	    close(sockFd);
 	    sockFd = -1;
 	    if(mess_lev() == TMess::Debug)
@@ -1170,7 +1198,8 @@ repeate:
 		throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rw_fd)) {
-		i_b = read(sockFd, iBuf, iLen);
+		//!! Reading in that way but some time read() return 0 after select pass.
+		for(int iRtr = 0; (i_b=read(sockFd,iBuf,iLen)) <= 0 && errno == EAGAIN && iRtr < STD_WAIT_DELAY; ++iRtr) TSYS::sysSleep(1e-3);
 		if(i_b <= 0 && (oBuf || noReq)) {	//Read zero means disconnect by peer
 		    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 		    res.unlock();

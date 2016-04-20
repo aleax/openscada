@@ -21,7 +21,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	8		//ArchiveS type modules version
+#define SARH_VER	10		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <string>
@@ -77,12 +77,24 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
+	// Redundancy
+	//  In redundancy now
+	bool redntUse( )	{ return mRedntUse; }
+	void setRedntUse( bool vl )		{ mRedntUse = vl; }
+	//  Enabled the archiver's redundancy
+	bool redntMode( )	{ return cfg("REDNT").getB(); }
+	void setRedntMode( bool vl )		{ cfg("REDNT").setB(vl); }
+	//  Redundancy condition: <high>, <low>, <optimal>, {ForceStation}
+	string redntRun( )	{ return cfg("REDNT_RUN").getS(); }
+	void setRedntRun( const string &vl )	{ cfg("REDNT_RUN").setS(vl); }
+	virtual void redntDataUpdate( );
+
 	virtual void start( );
 	virtual void stop( );
 
-	virtual time_t begin( )	{ return 0; }
-	virtual time_t end( )	{ return 0; }
-	virtual bool put( vector<TMess::SRec> &mess )	{ return false; };
+	virtual time_t begin( )		{ return 0; }
+	virtual time_t end( )		{ return 0; }
+	virtual bool put( vector<TMess::SRec> &mess, bool force = false );	//<force> mostly used by redundancy to prevent cycling
 	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
 
 	TTypeArchivator &owner( );
@@ -100,7 +112,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	//> Check messages criteries
+	// Check messages criteries
 	bool chkMessOK( const string &icateg, int8_t ilvl );
 
 	//Protected atributes
@@ -116,6 +128,8 @@ class TMArchivator : public TCntrNode, public TConfig
 		&mLevel;	//Mess arch level
 	char	&mStart;	//Mess arch starting flag
 	string	mDB;
+
+	unsigned mRedntUse	: 1;
 };
 
 //************************************************
@@ -207,12 +221,17 @@ class TArchiveS : public TSubSYS
 	AutoHD<TTypeArchivator> at( const string &name )		{ return modAt(name); }
 
 	// Message archive function
-	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "" );
-	void messPut( const vector<TMess::SRec> &recs );
+	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "", bool force = false );
+	void messPut( const vector<TMess::SRec> &recs, const string &arch = "", bool force = false );
 	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
 	    int8_t level = TMess::Debug, const string &arch = "", time_t upTo = 0 );
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
+
+	// Redundancy
+	bool rdProcess( XMLNode *reqSt = NULL );
+	void rdActArchMList( vector<string> &ls, bool isRun = false );
+	string rdStRequest( const string &arch, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
 	TElem &messE( )		{ return elMess; }
 	TElem &valE( ) 		{ return elVal; }
@@ -265,6 +284,10 @@ class TArchiveS : public TSubSYS
 
 	vector<AutoHD<TMArchivator> >	actMess;
 	vector<AutoHD<TVArchive> >	actVal;
+
+	// Redundancy
+	Res	mRdRes;
+	map<string, map<string,bool> > mRdArchM;
 };
 
 }

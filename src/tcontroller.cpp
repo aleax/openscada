@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -310,20 +310,6 @@ void TController::add( const string &name, unsigned type )	{ chldAdd(mPrm, Param
 
 TParamContr *TController::ParamAttach( const string &name, int type)	{ return new TParamContr(name, &owner().tpPrmAt(type)); }
 
-TController::Redundant TController::redntMode( )	{ return (TController::Redundant)cfg("REDNT").getI(); }
-
-void TController::setRedntMode( Redundant vl )		{ cfg("REDNT").setI(vl); modif(); }
-
-string TController::redntRun( )				{ return cfg("REDNT_RUN").getS(); }
-
-void TController::setRedntRun( const string &vl )	{ cfg("REDNT_RUN").setS(vl); modif(); }
-
-void TController::setRedntUse( bool vl )
-{
-    if(mRedntUse == vl) return;
-    mRedntUse = vl;
-}
-
 void TController::redntDataUpdate( )
 {
     vector<string> pls;
@@ -331,7 +317,7 @@ void TController::redntDataUpdate( )
 
     //Prepare group request to parameters
     AutoHD<TParamContr> prm;
-    XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
+    XMLNode req("CntrReqs"); req.setAttr("path",nodePath());
     req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");
     for(int i_p = 0; i_p < (int)pls.size(); i_p++) {
 	prm = at(pls[i_p]);
@@ -373,8 +359,7 @@ void TController::redntDataUpdate( )
 
 	    if(aNd->name() == "el")
 	    { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
-	    else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize())
-	    {
+	    else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
 		int64_t btm = atoll(aNd->attr("tm").c_str());
 		int64_t per = atoll(aNd->attr("per").c_str());
 		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);

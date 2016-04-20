@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-26 09:24+0200\n"
+"POT-Creation-Date: 2016-04-20 16:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,23 @@ msgid "Socket type '%s' error!"
 msgstr ""
 
 #, c-format
-msgid "Socket name '%s' error!"
+msgid "Host '%s' not found!"
+msgstr ""
+
+#, c-format
+msgid "The requested name '%s' does not have an IP address!"
+msgstr ""
+
+#, c-format
+msgid "A non-recoverable name server error occurred while for '%s'!"
+msgstr ""
+
+#, c-format
+msgid "A temporary error occurred on an authoritative name server for '%s'!"
+msgstr ""
+
+#, c-format
+msgid "Unknown error code from gethostbyname_r for '%s'!"
 msgstr ""
 
 #, c-format

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.1"
+#define MOD_VER		"1.3.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -528,8 +528,6 @@ void *TSocketIn::ClTask( void *s_inf )
 	proto.at().close(n_pr);
     }
 
-
-
     s.s->clientUnreg(&s);
 
     return NULL;
@@ -773,22 +771,36 @@ void TSocketOut::start( int tmCon )
 
     try {
 	//Connect to remote host try
-	struct sockaddr_in	name_in;
-	memset(&name_in, 0, sizeof(name_in));
-	name_in.sin_family = AF_INET;
+	struct sockaddr_in	nameIn;
+	memset(&nameIn, 0, sizeof(nameIn));
+	nameIn.sin_family = AF_INET;
+	char hBuf[STR_BUF_LEN], sBuf[STR_BUF_LEN];
+	struct hostent hostbuf, *hp;
+	struct servent servbuf, *sp;
 
 	if(ssl_host.size()) {
-	    struct hostent *loc_host_nm = gethostbyname(ssl_host.c_str());
-	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
-	    throw TError(nodePath().c_str(), _("Socket name '%s' error!"), ssl_host.c_str());
-	    name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
+	    int herr;
+	    gethostbyname_r(ssl_host.c_str(), &hostbuf, hBuf, sizeof(hBuf), &hp, &herr);
+	    if(!hp) switch(herr) {
+		case HOST_NOT_FOUND:
+		    throw TError(nodePath().c_str(), _("Host '%s' not found!"), ssl_host.c_str());
+		case NO_ADDRESS:
+		    throw TError(nodePath().c_str(), _("The requested name '%s' does not have an IP address!"), ssl_host.c_str());
+		case NO_RECOVERY:
+		    throw TError(nodePath().c_str(), _("A non-recoverable name server error occurred while for '%s'!"), ssl_host.c_str());
+		case TRY_AGAIN:
+		    throw TError(nodePath().c_str(), _("A temporary error occurred on an authoritative name server for '%s'!"), ssl_host.c_str());
+		default:
+		    throw TError(nodePath().c_str(), _("Unknown error code from gethostbyname_r for '%s'!"), ssl_host.c_str());
+	    }
+	    nameIn.sin_addr.s_addr = *((int*)(hp->h_addr_list[0]));	//!!!! Append all IP list processing
 	}
-	else name_in.sin_addr.s_addr = INADDR_ANY;
+	else nameIn.sin_addr.s_addr = INADDR_ANY;
 	// Get system port for "oscada" /etc/services
-	struct servent *sptr = getservbyname(ssl_port.c_str(), "tcp");
-	if(sptr != NULL)			name_in.sin_port = sptr->s_port;
-	else if(htons(s2i(ssl_port)) > 0)	name_in.sin_port = htons(s2i(ssl_port));
-	else name_in.sin_port = 10041;
+	if(getservbyname_r(ssl_port.c_str(),"tcp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
+	    nameIn.sin_port = sp->s_port;
+	else if(htons(s2i(ssl_port)) > 0)	nameIn.sin_port = htons(s2i(ssl_port));
+	else nameIn.sin_port = 10041;
 
 	if((sock_fd = socket(PF_INET,SOCK_STREAM,0))== -1)
 	    throw TError(nodePath().c_str(), _("Error creation TCP socket: %s!"), strerror(errno));
@@ -798,7 +810,7 @@ void TSocketOut::start( int tmCon )
 	//Connect to socket
 	int flags = fcntl(sock_fd, F_GETFL, 0);
 	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
-	int res = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
+	int res = connect(sock_fd, (sockaddr*)&nameIn, sizeof(nameIn));
 	if(res == -1 && errno == EINPROGRESS) {
 	    struct timeval tv;
 	    socklen_t slen = sizeof(res);

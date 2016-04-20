@@ -350,8 +350,7 @@ nextTag:
     if((pos+2) >= ctx.vl.size()) throw TError("XMLNode",_("Unexpected end. Pos: %d"),pos);
     cpos = pos;
 
-    switch(ctx.vl[pos+1])
-    {
+    switch(ctx.vl[pos+1]) {
 	case '!':	// Comment - special part
 	    //Comment block
 	    if(ctx.vl.compare(pos,4,"<!--") == 0) {

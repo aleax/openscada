@@ -1,3 +1,20 @@
+2016-04-20 Roman
+- DB.LibsDB.OscadaLibs.db: Templates base.{digAlarm,anUnif,anUnifSign} expanded by prevent main execution into cycles
+    of the starting (f_start) and stoping (f_stop). Template base.anUnifSign also expanded for EVAL detection lag into parameter "Tf".
+- DB.Model.AGLKS.St.db: Mostly parameters of LogLevPrm.experiment object of controller set into attribute "Tf" to value 2.
+- !!!!:SYS: Resources locking in RW object "Res" expanded by functions (synonyms) lock(), tryLock() and unlock().
+    All module's subsystems' version set (started) to 10 for the Work version and prevent in casual the modules coonect from LTS and vice versa.
+    !!!!:The redundancy significant expanded to moving redundancy hosts management to the system level, from exclusively DAQ subsystem.
+    Additional managing time macro FTM2 is added.
+    User API function SYS.sleep() expanded to accept first argument of time in seconds as float and allow to set here up to nanoseconds.
+    User API function SYS.sleep() limited to maximum wait time it is standard interface's timeout (5 seconds) and targeted mostly
+	for low level device's short time lags.
+- !!!!:Archives: Redundancy for message archives added.
+    TArchiveS::messPut() expanded to write messages independent to the alarms table.
+- !!:FIX:Transport.{SSL,Sockets}: gethostbyname() and getservbyname() replaced to it's reentrant variants.
+- !:FIX:Transport.{Serial,Sockets}: For result's reading, into output tansport, added wating for data at zero or/and EAGAIN error.
+
+
 2016-04-13 Roman
 - !!!!:DAQ: Module DAQ.BCM2835 is added, mostly for access to BCM2835 like chip's GPIO and some other.
     The BCM2835 chips mostly known used into the Raspberry Pi boards. For now the module do not work properly yet and it is under developing!

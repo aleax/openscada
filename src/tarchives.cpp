@@ -55,6 +55,8 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("LEVEL",_("Messages level"),TFld::Integer,TFld::Selected,"1","0",
 	"0;1;2;3;4;5;6;7",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
     elMess.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
+    elMess.fldAdd(new TFld("REDNT",_("Redundant"),TFld::Boolean,0,"1","0"));
+    elMess.fldAdd(new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>"));
 
     //Value archivator DB structure
     elVal.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
@@ -407,7 +409,7 @@ void TArchiveS::perSYSCall( unsigned int cnt )
     TSubSYS::perSYSCall(cnt);
 }
 
-void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch )
+void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch, bool force )
 {
     map<string, bool> archMap;
     string tVl;
@@ -428,17 +430,20 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	    int &messHead = actMess[i_m].at().messHead;
 	    if(messHead >= 0 && messHead == (int)headBuf && ++messHead >= (int)mBuf.size()) messHead = 0;
 	}
-
-	//Alarms processing. For level less 0 alarm is set
-	map<string,TMess::SRec>::iterator p;
-	if(level < 0) mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
-	else if((p=mAlarms.find(categ)) != mAlarms.end()) mAlarms.erase(p);
     }
+
+    //Alarms processing. For level less 0 alarm is set
+    if(archMap.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM]) {
+	map<string,TMess::SRec>::iterator p = mAlarms.find(categ);
+	if(level < 0 && (p == mAlarms.end() || FTM2(tm,utm) >= FTM(p->second)))
+	    mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
+	if(level >= 0 && p != mAlarms.end() && FTM2(tm,utm) >= FTM(p->second)) mAlarms.erase(p);
+    }
+
     //Put message to the archive <arch>
-    else {
+    if(!archMap[BUF_ARCH_NM]) {
 	vector<TMess::SRec> ml;
 	ml.push_back(TMess::SRec(tm,utm,categ,level,mess));
-	//at(TSYS::strParse(arch,0,".")).at().messAt(TSYS::strParse(arch,1,".")).at().put(ml);
 	vector<string> tLst, oLst;
 	modList(tLst);
 	for(unsigned iT = 0; iT < tLst.size(); iT++) {
@@ -446,7 +451,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	    for(unsigned iO = 0; iO < oLst.size(); iO++) {
 		AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
 		if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
-		    try { archtor.at().put(ml); }
+		    try { archtor.at().put(ml,force); }
 		    catch(TError er) {
 			mess_err(nodePath().c_str(), _("Put message to the archiver '%s' error: %s"),
 							(tLst[iT]+"."+oLst[iO]).c_str(), er.mess.c_str());
@@ -456,10 +461,10 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     }
 }
 
-void TArchiveS::messPut( const vector<TMess::SRec> &recs )
+void TArchiveS::messPut( const vector<TMess::SRec> &recs, const string &arch, bool force )
 {
-    for(unsigned i_r = 0; i_r < recs.size(); i_r++)
-	messPut(recs[i_r].time, recs[i_r].utime, recs[i_r].categ, recs[i_r].level, recs[i_r].mess);
+    for(unsigned iR = 0; iR < recs.size(); iR++)
+	messPut(recs[iR].time, recs[iR].utime, recs[iR].categ, recs[iR].level, recs[iR].mess, arch, force);
 }
 
 void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
@@ -576,6 +581,126 @@ time_t TArchiveS::messEnd( const string &arch )
     }
 
     return rez;
+}
+
+bool TArchiveS::rdProcess( XMLNode *reqSt )
+{
+    if(reqSt) {
+	string StId = reqSt->attr("StId");
+	ResAlloc res(mRdRes, true);
+	mRdArchM[StId].clear();
+	for(unsigned iC = 0; iC < reqSt->childSize(); iC++)
+	    if(reqSt->childGet(iC)->name() == "archM")
+		mRdArchM[StId][reqSt->childGet(iC)->attr("id")] = s2i(reqSt->childGet(iC)->attr("run"));
+	return true;
+    }
+
+    //Planing archivators run and process requests to remote run ones
+    map<string,TSYS::SStat> sts = SYS->rdSts();
+    map<string,TSYS::SStat>::iterator sit;
+    map<string, bool>::iterator cit;
+
+    vector<string> cls;
+    rdActArchMList(cls);
+    for(unsigned iC = 0; iC < cls.size(); iC++) {
+	AutoHD<TMArchivator> arch = at(TSYS::strParse(cls[iC],0,".")).at().messAt(TSYS::strParse(cls[iC],1,"."));
+
+	// Process remote run archivers, before the redundancy status change
+	if(arch.at().startStat() && arch.at().redntUse()) arch.at().redntDataUpdate();
+
+	// Check archivator run plane
+	if(!arch.at().redntMode()) arch.at().setRedntUse(false);
+	else {
+	    ResAlloc res(mRdRes, false);
+	    if(arch.at().redntRun() == "<high>") {
+		int wLev = SYS->rdStLevel();
+		for(sit = sts.begin(); sit != sts.end(); ++sit)
+		    if(sit->second.isLive && (cit=mRdArchM[sit->first].find(arch.at().workId())) != mRdArchM[sit->first].end() && cit->second)
+			wLev = vmax(wLev, sit->second.lev);
+		arch.at().setRedntUse(SYS->rdStLevel() < wLev);
+	    }
+	    else if(arch.at().redntRun() == "<low>") {
+		int wLev = SYS->rdStLevel();
+		for(sit = sts.begin(); sit != sts.end(); sit++)
+		    if(sit->second.isLive && (cit=mRdArchM[sit->first].find(arch.at().workId())) != mRdArchM[sit->first].end() && cit->second)
+		wLev = vmin(wLev, sit->second.lev);
+		arch.at().setRedntUse(SYS->rdStLevel() > wLev);
+	    }
+	    else if(arch.at().redntRun() == "<optimal>") {
+		vector<string> cls_lc;
+		rdActArchMList(cls_lc, true);
+		bool remPresent = false;
+		for(sit = sts.begin(); sit != sts.end(); sit++)
+		    if(sit->second.isLive && (cit=mRdArchM[sit->first].find(arch.at().workId())) != mRdArchM[sit->first].end()) {
+			if(!remPresent) remPresent = cit->second;
+			int aArch = 0;
+			for(map<string,bool>::iterator scit = mRdArchM[sit->first].begin(); scit != mRdArchM[sit->first].end(); scit++)
+			    if(scit->second) aArch++;
+			if(((int)cls_lc.size()-aArch) >= 0 && cit->second) break;
+		    }
+		arch.at().setRedntUse(sit != sts.end());
+	    }
+	    else {
+		for(sit = sts.begin(); sit != sts.end(); sit++)
+		    if(sit->second.isLive && (cit=mRdArchM[sit->first].find(arch.at().workId())) != mRdArchM[sit->first].end() &&
+			cit->second && arch.at().redntRun() == sit->first)
+			    break;
+		arch.at().setRedntUse(sit != sts.end());
+	    }
+	    res.release();
+	}
+	arch.free();
+    }
+
+    return true;
+}
+
+void TArchiveS::rdActArchMList( vector<string> &ls, bool isRun )
+{
+    AutoHD<TMArchivator> archM;
+    ls.clear();
+    vector<string> mls, cls;
+    modList(mls);
+    for(unsigned iM = 0; iM < mls.size(); iM++) {
+	//if(!at(mls[iM]).at().redntAllow()) continue;
+	at(mls[iM]).at().messList(cls);
+	for(unsigned iC = 0; iC < cls.size(); iC++) {
+	    archM = at(mls[iM]).at().messAt(cls[iC]);
+	    if(archM.at().startStat() && (!isRun || (isRun && !archM.at().redntUse())))
+		ls.push_back(archM.at().workId());
+	}
+    }
+}
+
+string TArchiveS::rdStRequest( const string &arch, XMLNode &req, const string &prevSt, bool toRun )
+{
+    string lcPath = req.attr("path");
+    bool prevPresent = false;
+    string rez;
+    map<string, TSYS::SStat>::iterator sit;
+    map<string, bool>::iterator cit;
+
+    ResAlloc res(mRdRes, false);
+    map<string, map<string, bool> > sts = mRdArchM;
+    res.unlock();
+
+    for(map<string, map<string,bool> >::iterator sit = sts.begin(); sit != sts.end(); ++sit) {
+	if((cit=sit->second.find(arch)) != sit->second.end() && (!toRun || cit->second)) {
+	    if(prevSt.size() && !prevPresent) {
+		if(sit->first == prevSt) prevPresent = true;
+		continue;
+	    }
+	    if((rez=SYS->rdStRequest(req,sit->first)).size()) return rez;
+
+	    res.lock(true);
+	    mRdArchM.erase(sit->first);
+	    res.unlock();
+	}
+    }
+
+    at(TSYS::strParse(arch,0,".")).at().messAt(TSYS::strParse(arch,1,".")).at().setRedntUse(false);
+
+    return "";
 }
 
 void TArchiveS::setMessBufLen( unsigned len )
@@ -707,7 +832,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  etm - end time
     //  cat - messages' category
     //  lev - messages level
-    //  arch - messages archivators by list items separated ';'
+    //  arch - message archivators by list items separated ';'
     //  upTm - sets the operation continuance limit to time; a negative value used as relative time; less to STD_INTERF_TM (5).
     if(iid == "messGet" && prms.size() >= 2) {
 	vector<TMess::SRec> recs;
@@ -749,6 +874,21 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
 
     //Service commands process
+    if(a_path == "/serv/redundant") {	//Redundant service requests
+	if(ctrChkNode(opt,"st",RWRWR_,"root",SARH_ID,SEC_RD)) {	//State
+	    opt->setAttr("inProc", "1");
+	    opt->setAttr("StLevel",i2s(SYS->rdStLevel()));
+	    map<string, bool> mArchLs;
+	    vector<string> cls;
+	    rdActArchMList(cls);
+	    for(unsigned iL = 0; iL < cls.size(); iL++) mArchLs[cls[iL]] = false;
+	    rdActArchMList(cls, true);
+	    for(unsigned iL = 0; iL < cls.size(); iL++) mArchLs[cls[iL]] = true;
+	    for(map<string,bool>::iterator cit = mArchLs.begin(); cit != mArchLs.end(); cit++)
+	    opt->childAdd("archM")->setAttr("id",cit->first)->setAttr("run",cit->second?"1":"0");
+	    return;
+	}
+    }
     if(a_path == "/serv/mess") {	//Messages access
 	if(ctrChkNode(opt,"info",RWRWR_,"root",SARH_ID,SEC_RD)) {	//Messages information
 	    string arch = opt->attr("arch");
@@ -787,6 +927,17 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz","20");
+	if(SYS->rdEnable() && ctrMkNode("area",opt,0,"/redund",_("Redundancy"))) {
+	    if(ctrMkNode("table",opt,-1,"/redund/mArch",_("Message archivators"),RWRWR_,"root",SARH_ID,1,"key","id")) {
+		ctrMkNode("list",opt,-1,"/redund/mArch/id",_("Archivator"),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/redund/mArch/nm",_("Name"),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/redund/mArch/start",_("Run."),RWRWR_,"root",SARH_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/redund/mArch/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("list",opt,-1,"/redund/mArch/prefRun",_("Pref. run"),RWRWR_,"root",SDAQ_ID,4,"tp","str",
+		    "idm","1","dest","select","select","/redund/lsMode");
+		ctrMkNode("list",opt,-1,"/redund/mArch/remoted",_("Remote"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
+	    }
+	}
 	if(ctrMkNode("area",opt,1,"/m_arch",_("Messages archive"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/m_arch/size",_("Messages buffer size"),RWRWR_,"root",SARH_ID,2,
 		"tp","dec","min",i2s(BUF_SIZE_DEF).c_str());
@@ -804,7 +955,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 			         "Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"),
 		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivators"),RWRW__,"root",SARH_ID,4,"tp","str","dest","sel_ed","select","/m_arch/lstAMess",
-		    "help",_("Messages archivators.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
+		    "help",_("Message archivators.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
 		if(ctrMkNode("table",opt,-1,"/m_arch/view/mess",_("Messages"),R_R___,"root",SARH_ID)) {
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0a",_("mcsec"),R_R___,"root",SARH_ID,1,"tp","dec");
@@ -926,6 +1077,49 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	chldDel(mAval,opt->attr("id"),-1,1);
     }
+    else if(a_path == "/redund/mArch") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	    XMLNode *nId	= ctrMkNode("list",opt,-1,"/redund/mArch/id","",R_R_R_,"root",SARH_ID);
+	    XMLNode *nNm	= ctrMkNode("list",opt,-1,"/redund/mArch/nm","",R_R_R_,"root",SARH_ID);
+	    XMLNode *nStart	= ctrMkNode("list",opt,-1,"/redund/mArch/start","",RWRWR_,"root",SARH_ID);
+	    XMLNode *nRdndt	= ctrMkNode("list",opt,-1,"/redund/mArch/rdndt","",RWRWR_,"root",SARH_ID);
+	    XMLNode *nPrefRun	= ctrMkNode("list",opt,-1,"/redund/mArch/prefRun","",RWRWR_,"root",SARH_ID);
+	    XMLNode *nRem	= ctrMkNode("list",opt,-1,"/redund/mArch/remoted","",R_R_R_,"root",SARH_ID);
+
+	    vector<string> mls, cls;
+	    modList(mls);
+	    AutoHD<TMArchivator> arh;
+	    for(unsigned iM = 0; iM < mls.size(); iM++) {
+		//if(!at(mls[iM]).at().redntAllow()) continue;
+		at(mls[iM]).at().messList(cls);
+		for(unsigned iC = 0; iC < cls.size(); iC++) {
+		    arh = at(mls[iM]).at().messAt(cls[iC]);
+		    if(nId)		nId->childAdd("el")->setText(mls[iM]+"."+cls[iC]);
+		    if(nNm)		nNm->childAdd("el")->setText(arh.at().name());
+		    if(nStart)		nStart->childAdd("el")->setText(arh.at().startStat()?"1":"0");
+		    if(nRdndt)		nRdndt->childAdd("el")->setText(i2s(arh.at().redntMode()));
+		    if(nPrefRun)	nPrefRun->childAdd("el")->setText(arh.at().redntRun());
+		    if(nRem)		nRem->childAdd("el")->setText(arh.at().redntUse()?"1":"0");
+		}
+	    }
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR)) {
+	    string col = opt->attr("col");
+	    AutoHD<TMArchivator> arh = at(TSYS::strParse(opt->attr("key_id"),0,".")).at().messAt(TSYS::strParse(opt->attr("key_id"),1,"."));
+	    if(col == "start")		s2i(opt->text()) ? arh.at().start() : arh.at().stop();
+	    else if(col == "rdndt")	arh.at().setRedntMode(s2i(opt->text()));
+	    else if(col == "prefRun")	arh.at().setRedntRun(opt->text());
+	}
+    }
+    else if(a_path == "/redund/lsMode" && ctrChkNode(opt)) {
+	opt->childAdd("el")->setAttr("id","<high>")->setText(_("<High level>"));
+	opt->childAdd("el")->setAttr("id","<low>")->setText(_("<Low level>"));
+	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
+	vector<string> sls;
+	SYS->rdStList(sls);
+	for(unsigned iS = 0; iS < sls.size(); iS++)
+	    opt->childAdd("el")->setAttr("id",sls[iS])->setText(SYS->transport().at().extHostGet("*",sls[iS]).name);
+    }
     else TSubSYS::cntrCmdProc(opt);
 }
 
@@ -967,27 +1161,27 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    vector<string> list;
 	    messList(list);
-	    for( unsigned i_a=0; i_a < list.size(); i_a++ )
+	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",list[i_a])->setText(messAt(list[i_a]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR)) {
+	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    messAdd(vid); messAt(vid).at().setName(opt->text());
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	messDel(opt->attr("id"),true);
+	else if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	messDel(opt->attr("id"),true);
     }
     else if(a_path == "/br/val_" || a_path == "/arch/val") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    vector<string> list;
 	    valList(list);
-	    for(unsigned i_a=0; i_a < list.size(); i_a++)
+	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
 		opt->childAdd("el")->setAttr("id",list[i_a])->setText(valAt(list[i_a]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR)) {
+	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    valAdd(vid); valAt(vid).at().setName(opt->text());
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	valDel(opt->attr("id"),true);
+	else if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	valDel(opt->attr("id"),true);
     }
     else TModule::cntrCmdProc(opt);
 }
@@ -1000,7 +1194,8 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 //* TMArchivator                                 *
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
-    TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()), mDB(idb)
+    TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()),
+    mDB(idb), mRedntUse(true)
 {
     mId = iid;
 }
@@ -1048,13 +1243,35 @@ void TMArchivator::load_( )
 {
     if(!SYS->chkSelDB(DB()))	throw TError();
     SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
+
+    mRedntUse = redntMode();
 }
 
 void TMArchivator::save_( )	{ SYS->db().at().dataSet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this); }
 
+void TMArchivator::redntDataUpdate( )
+{
+    //Prepare and call request for messages
+    XMLNode req("get"); req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("bTm",ll2s(end()/*vmax(0,end()-vmax(1,(10*SYS->rdTaskPer()))*/));
+
+    //Send request to first active station for this controller
+    if(owner().owner().rdStRequest(workId(),req).empty()) return;
+
+    //printf("TEST 00: end=%s; '%s': %s\n", tm2s(end(),"").c_str(), id().c_str(), req.save().c_str());
+
+    //Process the result
+    vector<TMess::SRec> mess;
+    XMLNode *mO = NULL;
+    for(int iM = 0; iM < req.childSize(); ++iM)
+	if((mO=req.childGet(iM)) && mO->name() == "it")
+	    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
+    owner().owner().messPut(mess, workId()+";"ALRM_ARCH_NM, true);
+}
+
 void TMArchivator::start( )
 {
     messHead = -1;
+
     runSt = true;
     owner().owner().setActMess(this, true);
 }
@@ -1064,6 +1281,46 @@ void TMArchivator::stop( )
     owner().owner().setActMess(this, false);
     runSt = false;
     messHead = -1;
+}
+
+bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
+{
+    //Redundancy process
+    if(!force && redntMode()) {
+	XMLNode req("put");
+	req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("redundancy", "1");
+	if(redntUse()) {	//for slave
+	    vector<TMess::SRec> messLoc;
+	    for(int iM = 0; iM < mess.size(); ++iM) {
+		if(!chkMessOK(mess[iM].categ,mess[iM].level)) continue;
+		req.childAdd("it")->setAttr("tm", ll2s(mess[iM].time))->setAttr("tmu", i2s(mess[iM].utime))->
+				    setAttr("cat", mess[iM].categ)->setAttr("lev", i2s(mess[iM].level))->setText(mess[iM].mess);
+		if(mess[iM].time <= end()) messLoc.push_back(mess[iM]);
+	    }
+	    mess = messLoc;
+	    if(req.childSize()) {
+		//printf("TEST 01: Slave write: end=%s; '%s': %s\n", tm2s(end(),"").c_str(), id().c_str(), req.save().c_str());
+		return owner().owner().rdStRequest(workId(),req).size();
+	    }
+	    return true;
+	}
+	else {			//for master
+	    for(int iM = 0; iM < mess.size(); ++iM)
+		if(chkMessOK(mess[iM].categ,mess[iM].level) && mess[iM].time <= end())
+		    req.childAdd("it")->setAttr("tm", ll2s(mess[iM].time))->setAttr("tmu", i2s(mess[iM].utime))->
+					setAttr("cat", mess[iM].categ)->setAttr("lev", i2s(mess[iM].level))->setText(mess[iM].mess);
+	    if(req.childSize()) {
+		//printf("TEST 01: Master write: '%s': %s\n", id().c_str(), req.save().c_str());
+		string lstStat;
+		int successWrs = 0;
+		while((lstStat=owner().owner().rdStRequest(workId(),req,lstStat,false)).size()) successWrs++;	//To all hosts
+		return successWrs;
+	    }
+	    return true;
+	}
+    }
+
+    return false;
 }
 
 void TMArchivator::categ( vector<string> &list )
@@ -1106,6 +1363,28 @@ TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
 
 void TMArchivator::cntrCmdProc( XMLNode *opt )
 {
+    string a_path = opt->attr("path");
+    if(a_path == "/serv/mess") {
+	vector<TMess::SRec> mess;
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
+	    time_t eTm = s2ll(opt->attr("eTm"));
+	    get(s2ll(opt->attr("bTm")), (eTm?eTm:SYS->sysTm()), mess, opt->attr("cat"), s2i(opt->attr("lev")));
+	    for(int iM = 0; iM < mess.size(); ++iM)
+		opt->childAdd("it")->setAttr("tm",ll2s(mess[iM].time))->setAttr("tmu",i2s(mess[iM].utime))->
+				     setAttr("cat",mess[iM].categ)->setAttr("lev",i2s(mess[iM].level))->setText(mess[iM].mess);
+	}
+	else if(ctrChkNode(opt,"put",RWRWR_,"root",SARH_ID,SEC_WR)) {
+	    XMLNode *mO = NULL;
+	    for(int iM = 0; iM < opt->childSize(); ++iM)
+		if((mO=opt->childGet(iM)) && mO->name() == "it")
+		    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
+	    if(s2i(opt->attr("redundancy"))) owner().owner().messPut(mess, workId()+";"ALRM_ARCH_NM, true);
+	    else put(mess);
+	    opt->childClear("it");
+	}
+	return;
+    }
+
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
@@ -1120,12 +1399,14 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
+		ctrRemoveNode(opt,"/prm/cfg/MODUL");
+		ctrRemoveNode(opt,"/prm/cfg/REDNT");
+		ctrRemoveNode(opt,"/prm/cfg/REDNT_RUN");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/LEVEL",EVAL_STR,RWRWR_,"root",SARH_ID,1,"help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/CATEG",EVAL_STR,RWRWR_,"root",SARH_ID,1,
 		    "help",_("Messages category template or regular expression to processing by archivator, separated by symbol ';'.\n"
 			   "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
 			   "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
-		ctrRemoveNode(opt,"/prm/cfg/MODUL");
 	    }
 	}
 	if(runSt && ctrMkNode("area",opt,-1,"/mess",_("Messages"),R_R___,"root",SARH_ID)) {
@@ -1151,7 +1432,6 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path");
     if(a_path == "/prm/st/st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(startStat() ? "1" : "0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();

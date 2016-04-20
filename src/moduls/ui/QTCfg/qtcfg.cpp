@@ -1505,9 +1505,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    t_s.setAttr("addr_val_r", TSYS::addr2str(val_r));
 	}
 	else {
-	    lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
-	    val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_val_r"));
-	    val_w = (QComboBox *)TSYS::str2addr(t_s.attr("addr_val_w"));
+	    lab  = (QLabel*)TSYS::str2addr(t_s.attr("addr_lab"));
+	    val_r = (QLabel*)TSYS::str2addr(t_s.attr("addr_val_r"));
+	    val_w = (QComboBox*)TSYS::str2addr(t_s.attr("addr_val_w"));
 	}
 
 	// Fill combo

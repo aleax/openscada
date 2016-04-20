@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,8 +32,7 @@ using namespace OSCADA;
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
-TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
-    mRdStLevel(0), mRdRestConnTm(30), mRdTaskPer(1), mRdRestDtTm(1), mRdPrcTm(0), prcStRd(false), endrunRd(false)
+TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"), mRdRestDtTm(1)
 {
     mTmplib = grpAdd("tmplb_");
 
@@ -69,8 +68,6 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
 
 TDAQS::~TDAQS( )
 {
-    if(prcStRd) subStop();
-
     nodeDelAll();
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
@@ -78,33 +75,17 @@ TDAQS::~TDAQS( )
 
 string TDAQS::objName( )		{ return TSubSYS::objName()+":TDAQS"; }
 
-void TDAQS::setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); modif(); }
-
-void TDAQS::setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }
-
-void TDAQS::setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); modif(); }
-
-void TDAQS::setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(12,vmax(0.01,vl)); modif(); }
-
-void TDAQS::rdStList( vector<string> &ls )
-{
-    ResAlloc res(mRdRes, false);
-    ls.clear();
-    for(map<string,SStat>::iterator sti = mSt.begin(); sti != mSt.end(); sti++)
-	ls.push_back(sti->first);
-}
-
 void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 {
     AutoHD<TController> cntr;
     ls.clear();
     vector<string> mls, cls;
     modList(mls);
-    for(unsigned i_m = 0; i_m < mls.size(); i_m++) {
-	if(!at(mls[i_m]).at().redntAllow()) continue;
-	at(mls[i_m]).at().list(cls);
-	for(unsigned i_c = 0; i_c < cls.size(); i_c++) {
-	    cntr = at(mls[i_m]).at().at(cls[i_c]);
+    for(unsigned iM = 0; iM < mls.size(); iM++) {
+	if(!at(mls[iM]).at().redntAllow()) continue;
+	at(mls[iM]).at().list(cls);
+	for(unsigned iC = 0; iC < cls.size(); iC++) {
+	    cntr = at(mls[iM]).at().at(cls[iC]);
 	    if(cntr.at().startStat() && (!isRun || (isRun && !cntr.at().redntUse())))
 		ls.push_back(cntr.at().workId());
 	}
@@ -224,28 +205,13 @@ void TDAQS::load_( )
     catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Load parameters from config-file and SYS DB
-    setRdStLevel(s2i(TBDS::genDBGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
-    setRdTaskPer(s2r(TBDS::genDBGet(nodePath()+"RdTaskPer",r2s(rdTaskPer()))));
-    setRdRestConnTm(s2i(TBDS::genDBGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
-    string stLs = TBDS::genDBGet(nodePath()+"RdStList"), stId;
-    ResAlloc res(mRdRes, true);
-    for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
-	if(mSt.find(stId) == mSt.end()) mSt[stId] = SStat();
 }
 
 void TDAQS::save_( )
 {
     //Save parameters to SYS DB
-    TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()));
-    TBDS::genDBSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()));
-    TBDS::genDBSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()));
     TBDS::genDBSet(nodePath()+"RdRestDtTm", r2s(rdRestDtTm()));
-    ResAlloc res(mRdRes, false);
-    string stLs;
-    for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
-	stLs += sit->first+";";
-    TBDS::genDBSet(nodePath()+"RdStList", stLs);
 }
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -371,9 +337,6 @@ void TDAQS::subStart( )
     //Archive subsystem start
     if(!SYS->archive().at().subStartStat() || !SYS->stopSignal()) SYS->archive().at().subStart();
 
-    //Redundant task start
-    if(!prcStRd) SYS->taskCreate(nodePath('.',true)+".redundant", 5, TDAQS::RdTask, this, 5, NULL, &prcStRd);
-
     //Controllers start
     TSubSYS::subStart();
 }
@@ -381,8 +344,6 @@ void TDAQS::subStart( )
 void TDAQS::subStop( )
 {
     mess_info(nodePath().c_str(),_("Stop subsystem."));
-
-    if(prcStRd) SYS->taskDestroy(nodePath('.',true)+".redundant", &endrunRd);
 
     vector<string> m_l;
 
@@ -469,160 +430,108 @@ AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
     return DAQnd;
 }
 
-bool TDAQS::rdActive( )
+bool TDAQS::rdProcess( XMLNode *reqSt )
 {
-    ResAlloc res(mRdRes, false);
-    for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
-	if(sit->second.isLive) return true;
-    return false;
+    if(reqSt) {
+	string StId = reqSt->attr("StId");
+	ResAlloc res(mRdRes, true);
+	mRdCntr[StId].clear();
+	for(unsigned iC = 0; iC < reqSt->childSize(); iC++)
+	    if(reqSt->childGet(iC)->name() == "cntr")
+		mRdCntr[StId][reqSt->childGet(iC)->attr("id")] = s2i(reqSt->childGet(iC)->attr("run"));
+	return true;
+    }
+
+    //Planing controllers' run and process requests to remote run controllers
+    map<string,TSYS::SStat> sts = SYS->rdSts();
+    map<string,TSYS::SStat>::iterator sit;
+    map<string,bool>::iterator cit;
+
+    vector<string> cls;
+    rdActCntrList(cls);
+    for(unsigned iC = 0; iC < cls.size(); iC++) {
+	AutoHD<TController> cntr = at(TSYS::strParse(cls[iC],0,".")).at().at(TSYS::strParse(cls[iC],1,"."));
+
+	// Process remote run controllers, before the redundancy status change
+	// !!!!: Moved here from end
+	if(cntr.at().startStat() && cntr.at().redntUse()) cntr.at().redntDataUpdate();
+
+	// Check contoller run plane
+	if(cntr.at().redntMode() == TController::Off) cntr.at().setRedntUse(false);
+	else {
+	    ResAlloc res(mRdRes, false);
+	    if(cntr.at().redntRun() == "<high>") {
+		int wLev = SYS->rdStLevel();
+		for(sit = sts.begin(); sit != sts.end(); ++sit)
+		    if(sit->second.isLive && (cit=mRdCntr[sit->first].find(cntr.at().workId())) != mRdCntr[sit->first].end() && cit->second)
+			wLev = vmax(wLev, sit->second.lev);
+		cntr.at().setRedntUse(SYS->rdStLevel() < wLev);
+	    }
+	    else if(cntr.at().redntRun() == "<low>") {
+		int wLev = SYS->rdStLevel();
+		for(sit = sts.begin(); sit != sts.end(); sit++)
+		    if(sit->second.isLive && (cit=mRdCntr[sit->first].find(cntr.at().workId())) != mRdCntr[sit->first].end() && cit->second)
+			wLev = vmin(wLev, sit->second.lev);
+		cntr.at().setRedntUse(SYS->rdStLevel() > wLev);
+	    }
+	    else if(cntr.at().redntRun() == "<optimal>") {
+		vector<string> cls_lc;
+		rdActCntrList(cls_lc, true);
+		bool remPresent = false;
+		for(sit = sts.begin(); sit != sts.end(); sit++)
+		    if(sit->second.isLive && (cit=mRdCntr[sit->first].find(cntr.at().workId())) != mRdCntr[sit->first].end()) {
+			if(!remPresent) remPresent = cit->second;
+			int aCntr = 0;
+			for(map<string,bool>::iterator scit = mRdCntr[sit->first].begin(); scit != mRdCntr[sit->first].end(); scit++)
+			    if(scit->second) aCntr++;
+			if(((int)cls_lc.size()-aCntr) >= 0 && cit->second) break;
+		    }
+		cntr.at().setRedntUse(sit != sts.end());
+	    }
+	    else {
+		for(sit = sts.begin(); sit != sts.end(); sit++)
+		    if(sit->second.isLive && (cit=mRdCntr[sit->first].find(cntr.at().workId())) != mRdCntr[sit->first].end() &&
+			cit->second && cntr.at().redntRun() == sit->first)
+			    break;
+		cntr.at().setRedntUse(sit != sts.end());
+	    }
+	    res.release();
+	}
+	cntr.free();
+    }
+
+    return true;
 }
 
 string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevSt, bool toRun )
 {
-    bool prevPresent = false;
-    map<string,TDAQS::SStat>::iterator sit;
-    map<string,bool>::iterator cit;
-
     string lcPath = req.attr("path");
+    bool prevPresent = false;
+    string rez;
+    map<string, TSYS::SStat>::iterator sit;
+    map<string, bool>::iterator cit;
+
     ResAlloc res(mRdRes, false);
-    for(sit = mSt.begin(); sit != mSt.end(); sit++) {
-	if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && (!toRun || cit->second))
-	{
+    map<string, map<string,bool> > sts = mRdCntr;
+    res.unlock();
+
+    for(map<string, map<string,bool> >::iterator sit = sts.begin(); sit != sts.end(); ++sit) {
+	if((cit=sit->second.find(cntr)) != sit->second.end() && (!toRun || cit->second)) {
 	    if(prevSt.size() && !prevPresent) {
 		if(sit->first == prevSt) prevPresent = true;
 		continue;
 	    }
-	    //Real request
-	    req.setAttr("path", "/"+sit->first+lcPath);
-	    try {
-		SYS->transport().at().cntrIfCmd(req, "DAQRedundant");
-		sit->second.cnt++;
-		return sit->first;
-	    }
-	    catch(TError err) {
-		sit->second.isLive = false;
-		sit->second.cnt = rdRestConnTm();
-		sit->second.lev = 0;
-		sit->second.actCntr.clear();
-		continue;
-	    }
+	    if((rez=SYS->rdStRequest(req,sit->first)).size()) return rez;
+
+	    res.lock(true);
+	    mRdCntr.erase(sit->first);
+	    res.unlock();
 	}
     }
 
-    at(TSYS::strSepParse(cntr,0,'.')).at().at(TSYS::strSepParse(cntr,1,'.')).at().setRedntUse(false);
+    at(TSYS::strParse(cntr,0,".")).at().at(TSYS::strParse(cntr,1,".")).at().setRedntUse(false);
 
     return "";
-}
-
-void *TDAQS::RdTask( void *param )
-{
-    TDAQS &daq = *(TDAQS *)param;
-    daq.endrunRd = false;
-
-    vector<string> cls;
-    XMLNode req("st");
-    AutoHD<TController> cntr;
-    map<string,TDAQS::SStat>::iterator sit;
-    map<string,bool>::iterator cit;
-
-    while(!daq.endrunRd)
-    try {
-	int64_t work_tm = SYS->curTime();
-
-	daq.prcStRd = true;		//!!!! Moved here for prevent long connection wait and next crash.
-					//Possible the will create problem with first sync
-
-	//Update wait time for dead stations and process connections to stations
-	ResAlloc res(daq.mRdRes, false);
-	for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++) {
-	    // Live stations and connect to new station process
-	    if(sit->second.isLive || (!sit->second.isLive && sit->second.cnt <= 0)) {
-		// Send request for configuration to remote station
-		req.clear()->setAttr("path","/"+sit->first+"/DAQ/%2fserv%2fredundant");
-		try {
-		    if(SYS->transport().at().cntrIfCmd(req,"DAQRedundant")) continue;
-		    sit->second.lev = s2i(req.attr("StLevel"));
-		    sit->second.actCntr.clear();
-		    for(unsigned i_c = 0; i_c < req.childSize(); i_c++)
-			if(req.childGet(i_c)->name() == "cntr")
-			    sit->second.actCntr[req.childGet(i_c)->attr("id")] = s2i(req.childGet(i_c)->attr("run"));
-		    sit->second.isLive = true;
-		}
-		catch(TError err) {
-		    sit->second.isLive = false;
-		    sit->second.lev = 0;
-		    sit->second.actCntr.clear();
-		    sit->second.cnt = daq.rdRestConnTm();
-		    continue;
-		}
-	    }
-	    // Reconnect counter process
-	    if(!sit->second.isLive && sit->second.cnt > 0) sit->second.cnt -= daq.rdTaskPer();
-	}
-	res.release();
-	//daq.prcStRd = true;
-
-	//Planing controllers' run and process requests to remote run controllers
-	daq.rdActCntrList(cls);
-	for(unsigned i_c = 0; i_c < cls.size(); i_c++) {
-	    cntr = daq.at(TSYS::strSepParse(cls[i_c],0,'.')).at().at(TSYS::strSepParse(cls[i_c],1,'.'));
-	    // Check contoller run plane
-	    if(cntr.at().redntMode() == TController::Off) cntr.at().setRedntUse(false);
-	    else {
-		res.request(false);
-		if(cntr.at().redntRun( ) == "<high>") {
-		    int wLev = daq.rdStLevel();
-		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
-			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() && cit->second)
-			    wLev = vmax(wLev,sit->second.lev);
-		    cntr.at().setRedntUse(daq.rdStLevel() < wLev);
-		}
-		else if(cntr.at().redntRun( ) == "<low>") {
-		    int wLev = daq.rdStLevel();
-		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
-			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() && cit->second)
-			    wLev = vmin(wLev,sit->second.lev);
-		    cntr.at().setRedntUse( daq.rdStLevel()>wLev );
-		}
-		else if(cntr.at().redntRun( ) == "<optimal>") {
-		    vector<string> cls_lc;
-		    daq.rdActCntrList(cls_lc,true);
-		    bool remPresent = false;
-		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
-			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end())
-			{
-			    if(!remPresent) remPresent = cit->second;
-			    int aCntr = 0;
-			    for(map<string,bool>::iterator scit = sit->second.actCntr.begin(); scit != sit->second.actCntr.end(); scit++)
-				if(scit->second) aCntr++;
-			    if(((int)cls_lc.size()-aCntr) >= 0 && cit->second) break;
-			}
-		    cntr.at().setRedntUse(sit != daq.mSt.end());
-		}
-		else {
-		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
-			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() &&
-				cit->second && cntr.at().redntRun( ) == sit->first)
-			    break;
-		    cntr.at().setRedntUse(sit != daq.mSt.end());
-		}
-		res.release();
-	    }
-
-	    // Process remote run controllers
-	    if(cntr.at().startStat() && cntr.at().redntUse()) cntr.at().redntDataUpdate();
-
-	    cntr.free();
-	}
-
-	daq.mRdPrcTm = SYS->curTime()-work_tm;
-
-	TSYS::taskSleep((int64_t)(daq.rdTaskPer()*1e9));
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-
-    daq.prcStRd = false;
-
-    return NULL;
 }
 
 string TDAQS::optDescr( )
@@ -643,14 +552,15 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     //Service commands process
     if(a_path == "/serv/redundant") {	//Redundant service requests
-	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
-	    opt->setAttr("StLevel",i2s(rdStLevel()));
-	    map<string,bool> cntrLs;
+	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD)) {	//State
+	    opt->setAttr("inProc", "1");
+	    opt->setAttr("StLevel",i2s(SYS->rdStLevel()));
+	    map<string, bool> cntrLs;
 	    vector<string> cls;
 	    rdActCntrList(cls);
-	    for(unsigned i_l = 0; i_l < cls.size(); i_l++) cntrLs[cls[i_l]] = false;
+	    for(unsigned iL = 0; iL < cls.size(); iL++) cntrLs[cls[iL]] = false;
 	    rdActCntrList(cls,true);
-	    for(unsigned i_l = 0; i_l < cls.size(); i_l++) cntrLs[cls[i_l]] = true;
+	    for(unsigned iL = 0; iL < cls.size(); iL++) cntrLs[cls[iL]] = true;
 	    for(map<string,bool>::iterator cit = cntrLs.begin(); cit != cntrLs.end(); cit++)
 		opt->childAdd("cntr")->setAttr("id",cit->first)->setAttr("run",cit->second?"1":"0");
 	    return;
@@ -664,31 +574,17 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	TSubSYS::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",EVAL_STR,R_R_R_,"root","root",1,"doc",(subId()+"|"+subId()).c_str());
 	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
-	if(ctrMkNode("area",opt,0,"/redund",_("Redundancy"))) {
-	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+	if(SYS->rdEnable() && ctrMkNode("area",opt,0,"/redund",_("Redundancy"))) {
 	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Restore data depth time (hour)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
-	    if(ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root",SDAQ_ID,2,"key","st","s_com","add,del"))
-	    {
-		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/redund/lsSt");
-		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/redund/sts/live",_("Live"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Lev."),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Cntr."),R_R_R_,"root",SDAQ_ID,1,"tp","real");
-		ctrMkNode("list",opt,-1,"/redund/sts/run",_("Run"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-	    }
-	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
-	    if(ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root",SDAQ_ID,1,"key","id"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root",SDAQ_ID,1,"key","id")) {
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Run."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
-		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
-		    "sel_list",_("Off;Asymmetric"/*;Symmetric"*/));
-		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. run"),RWRWR_,"root",SDAQ_ID,4,"tp","str","idm","1","dest","select","select","/redund/lsMode");
+		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");/*,"dest","select",
+		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)+";"+i2s(TController::Symmetric)).c_str(),
+		    "sel_list",_("Off;Asymmetric;Symmetric"));*/
+		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. run"),RWRWR_,"root",SDAQ_ID,4,"tp","str",
+		    "idm","1","dest","select","select","/redund/lsMode");
 		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remote"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
@@ -711,86 +607,33 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibUnreg(opt->attr("id"),1);
     }
-    else if(a_path == "/redund/status" && ctrChkNode(opt,"get",R_R_R_,"root",SDAQ_ID))
-	opt->setText(TSYS::strMess(_("Spent time: %s."),TSYS::time2str(mRdPrcTm).c_str()));
-    else if(a_path == "/redund/statLev") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(rdStLevel()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdStLevel(s2i(opt->text()));
-    }
-    else if(a_path == "/redund/tskPer") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(r2s(rdTaskPer()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdTaskPer(s2r(opt->text()));
-    }
-    else if(a_path == "/redund/restConn") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(rdRestConnTm()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdRestConnTm(s2i(opt->text()));
-    }
     else if(a_path == "/redund/restDtTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(r2s(rdRestDtTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setRdRestDtTm(s2r(opt->text()));
     }
-    else if(a_path == "/redund/sts") {
-	ResAlloc res(mRdRes, true);
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
-	    XMLNode *n_st	= ctrMkNode("list",opt,-1,"/redund/sts/st","",RWRWR_,"root",SDAQ_ID);
-	    XMLNode *n_name	= ctrMkNode("list",opt,-1,"/redund/sts/name","",R_R_R_,"root",SDAQ_ID);
-	    XMLNode *n_live	= ctrMkNode("list",opt,-1,"/redund/sts/live","",R_R_R_,"root",SDAQ_ID);
-	    XMLNode *n_lev	= ctrMkNode("list",opt,-1,"/redund/sts/lev","",R_R_R_,"root",SDAQ_ID);
-	    XMLNode *n_cnt	= ctrMkNode("list",opt,-1,"/redund/sts/cnt","",R_R_R_,"root",SDAQ_ID);
-	    XMLNode *n_run	= ctrMkNode("list",opt,-1,"/redund/sts/run","",R_R_R_,"root",SDAQ_ID);
-
-	    for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++) {
-		if(n_st)	n_st->childAdd("el")->setText(sit->first);
-		if(n_name)	n_name->childAdd("el")->setText(SYS->transport().at().extHostGet("*",sit->first).name);
-		if(n_live)	n_live->childAdd("el")->setText(sit->second.isLive?"1":"0");
-		if(n_lev)	n_lev->childAdd("el")->setText(i2s(sit->second.lev));
-		if(n_cnt)	n_cnt->childAdd("el")->setText(r2s(sit->second.cnt));
-		if(n_run) {
-		    string cls;
-		    for( map<string,bool>::iterator cit = sit->second.actCntr.begin(); cit != sit->second.actCntr.end(); cit++ )
-			cls += cit->first+(cit->second?" (+); ":"; ");
-		    n_run->childAdd("el")->setText(cls);
-		}
-	    }
-	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ mSt[_("<newStat>")] = SStat(); modif(); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ mSt.erase(opt->attr("key_st")); modif(); }
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && opt->attr("col") == "st") {
-	    mSt.erase(opt->attr("key_st"));
-	    mSt[opt->text()] = SStat();
-	    modif();
-	}
-    }
-    else if(a_path == "/redund/lsSt" && ctrChkNode(opt)) {
-	vector<string> hls;
-	SYS->transport().at().extHostList("*",hls);
-	for(unsigned i_h = 0; i_h < hls.size(); i_h++)
-	    opt->childAdd("el")->setText(hls[i_h]);
-    }
-    else if(a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/redund/cntr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
-	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/redund/cntr/id","",R_R_R_,"root",SDAQ_ID);
-	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/redund/cntr/nm","",R_R_R_,"root",SDAQ_ID);
-	    XMLNode *n_start	= ctrMkNode("list",opt,-1,"/redund/cntr/start","",RWRWR_,"root",SDAQ_ID);
-	    XMLNode *n_rdndt	= ctrMkNode("list",opt,-1,"/redund/cntr/rdndt","",RWRWR_,"root",SDAQ_ID);
-	    XMLNode *n_prefRun	= ctrMkNode("list",opt,-1,"/redund/cntr/prefRun","",RWRWR_,"root",SDAQ_ID);
-	    XMLNode *n_rem	= ctrMkNode("list",opt,-1,"/redund/cntr/remoted","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *nId	= ctrMkNode("list",opt,-1,"/redund/cntr/id","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *nNm	= ctrMkNode("list",opt,-1,"/redund/cntr/nm","",R_R_R_,"root",SDAQ_ID);
+	    XMLNode *nStart	= ctrMkNode("list",opt,-1,"/redund/cntr/start","",RWRWR_,"root",SDAQ_ID);
+	    XMLNode *nRdndt	= ctrMkNode("list",opt,-1,"/redund/cntr/rdndt","",RWRWR_,"root",SDAQ_ID);
+	    XMLNode *nPrefRun	= ctrMkNode("list",opt,-1,"/redund/cntr/prefRun","",RWRWR_,"root",SDAQ_ID);
+	    XMLNode *nRem	= ctrMkNode("list",opt,-1,"/redund/cntr/remoted","",R_R_R_,"root",SDAQ_ID);
 
 	    vector<string> mls, cls;
 	    modList(mls);
 	    AutoHD<TController> cntr;
-	    for(unsigned i_m = 0; i_m < mls.size(); i_m++) {
-		if(!at(mls[i_m]).at().redntAllow()) continue;
-		at(mls[i_m]).at().list(cls);
-		for(unsigned i_c = 0; i_c < cls.size(); i_c++) {
-		    cntr = at(mls[i_m]).at().at(cls[i_c]);
-		    if(n_id)		n_id->childAdd("el")->setText(mls[i_m]+"."+cls[i_c]);
-		    if(n_nm)		n_nm->childAdd("el")->setText(cntr.at().name());
-		    if(n_start)		n_start->childAdd("el")->setText(cntr.at().startStat()?"1":"0");
-		    if(n_rdndt)		n_rdndt->childAdd("el")->setText(i2s(cntr.at().redntMode()));
-		    if(n_prefRun)	n_prefRun->childAdd("el")->setText(cntr.at().redntRun());
-		    if(n_rem)		n_rem->childAdd("el")->setText(cntr.at().redntUse( )?"1":"0");
+	    for(unsigned iM = 0; iM < mls.size(); iM++) {
+		if(!at(mls[iM]).at().redntAllow()) continue;
+		at(mls[iM]).at().list(cls);
+		for(unsigned iC = 0; iC < cls.size(); iC++) {
+		    cntr = at(mls[iM]).at().at(cls[iC]);
+		    if(nId)		nId->childAdd("el")->setText(mls[iM]+"."+cls[iC]);
+		    if(nNm)		nNm->childAdd("el")->setText(cntr.at().name());
+		    if(nStart)		nStart->childAdd("el")->setText(cntr.at().startStat()?"1":"0");
+		    if(nRdndt)		nRdndt->childAdd("el")->setText(i2s(cntr.at().redntMode()));
+		    if(nPrefRun)	nPrefRun->childAdd("el")->setText(cntr.at().redntRun());
+		    if(nRem)		nRem->childAdd("el")->setText(cntr.at().redntUse()?"1":"0");
 		}
 	    }
 	}
@@ -798,9 +641,9 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    string col = opt->attr("col");
 	    AutoHD<TController> cntr  = at(TSYS::strSepParse(opt->attr("key_id"),0,'.')).at().
 					at(TSYS::strSepParse(opt->attr("key_id"),1,'.'));
-	    if(col == "start") s2i(opt->text()) ? cntr.at().start() : cntr.at().stop();
-	    else if(col == "rdndt") cntr.at().setRedntMode((TController::Redundant)s2i(opt->text()));
-	    else if(col == "prefRun") cntr.at().setRedntRun(opt->text());
+	    if(col == "start")		s2i(opt->text()) ? cntr.at().start() : cntr.at().stop();
+	    else if(col == "rdndt")	cntr.at().setRedntMode((TController::Redundant)(s2i(opt->text())?TController::Asymmetric:0));
+	    else if(col == "prefRun")	cntr.at().setRedntRun(opt->text());
 	}
     }
     else if(a_path == "/redund/lsMode" && ctrChkNode(opt)) {
@@ -808,9 +651,9 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id","<low>")->setText(_("<Low level>"));
 	opt->childAdd("el")->setAttr("id","<optimal>")->setText(_("<Optimal>"));
 	vector<string> sls;
-	rdStList(sls);
-	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
-	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
+	SYS->rdStList(sls);
+	for(unsigned iS = 0; iS < sls.size(); iS++)
+	    opt->childAdd("el")->setAttr("id",sls[iS])->setText(SYS->transport().at().extHostGet("*",sls[iS]).name);
     }
     else TSubSYS::cntrCmdProc(opt);
 }

@@ -67,12 +67,13 @@ class TSubSYS : public TCntrNode
 	AutoHD<TModule> modAt( const string &name );
 
 	virtual void perSYSCall( unsigned int cnt );
+	virtual bool rdProcess( XMLNode *reqSt = NULL )	{ return false; }	//Main redundancy processing function in the subsystem specific
 
 	TSYS &owner( );
 
     protected:
 	//Protected methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Private attributes
 	bool	mStart;

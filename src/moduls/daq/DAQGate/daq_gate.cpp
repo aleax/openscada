@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.2"
+#define MOD_VER		"1.5.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -421,7 +421,7 @@ void *TMdContr::Task( void *icntr )
 								iLM != cntr.mStatWork[iSt].second.lstMess.end(); ++iLM)
 			iLM->second = iLM->second ? s2i(prmNd->attr("tm")) : SYS->sysTm()-3600*cntr.restDtTm();
 		}
-		TSYS::sysSleep(SYS->daq().at().rdTaskPer());
+		TSYS::sysSleep(SYS->rdTaskPer());
 	    }
 	    else TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 	    continue;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	9	//ControllerS type modules version
+#define SDAQ_VER	10	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>
@@ -51,7 +51,7 @@ class TDAQS : public TSubSYS
 	string objName( );
 
 	int subVer( )	{ return SDAQ_VER; }
-	void subStart(  );
+	void subStart( );
 	void subStop( );
 
 	AutoHD<TTypeDAQ> at( const string &name )		{ return modAt(name); }
@@ -69,16 +69,9 @@ class TDAQS : public TSubSYS
 	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmplib,id); }
 
 	// Redundancy
-	bool rdActive( );
-	int rdStLevel( )		{ return mRdStLevel; }
-	void setRdStLevel( int vl );
-	float rdTaskPer( )		{ return mRdTaskPer; }
-	void setRdTaskPer( float vl );
-	int rdRestConnTm( )		{ return mRdRestConnTm; }
-	void setRdRestConnTm( int vl );
+	bool rdProcess( XMLNode *reqSt = NULL );
 	float rdRestDtTm( )		{ return mRdRestDtTm; }
-	void setRdRestDtTm( float vl );
-	void rdStList( vector<string> &ls );
+	void setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(12,vmax(0.01,vl)); modif(); }
 	void rdActCntrList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &cntr, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
@@ -95,36 +88,18 @@ class TDAQS : public TSubSYS
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
-	//Private data
-	class SStat {
-	    public:
-		SStat( ) : isLive(false), cnt(0), lev(0) { }
-
-		bool	isLive;
-		float	cnt;
-		char	lev;
-		map<string,bool> actCntr;
-	};
-
 	//Private methods
 	string optDescr( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	static void *RdTask( void *param );
 
 	//Private attributes
 	TElem	el_err, lb_el, el_tmpl, el_tmpl_io;
 	int	mTmplib;
 
 	Res		mRdRes;
-	unsigned char	mRdStLevel,		//Current station level
-			mRdRestConnTm;		//Redundant restore connection to reserve stations timeout in seconds
-	float		mRdTaskPer,		//Redundant task period in seconds
-			mRdRestDtTm,		//Redundant history restore length time in hour
-			mRdPrcTm;		//Redundant process time
-	bool		prcStRd, endrunRd;
-	map<string,SStat> mSt;
+	float		mRdRestDtTm;		//Redundant history restore length time in hour
+	map<string, map<string,bool> > mRdCntr;
 };
 
 }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-06 14:52+0300\n"
+"POT-Creation-Date: 2016-04-20 15:42+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -54,6 +54,12 @@ msgstr ""
 
 msgid "Address"
 msgstr "Адреса"
+
+msgid "Redundant"
+msgstr "Резервування"
+
+msgid "Preferable run"
+msgstr "Уподобання виконання"
 
 msgid "Value period (sec)"
 msgstr "Період значень (сек)"
@@ -160,6 +166,7 @@ msgstr "Помилка зупинки архіватору повідомлен�
 msgid "Value archive '%s' stop error."
 msgstr "Помилка зупинки архіву значень '%s'."
 
+#, c-format
 msgid "Put message to the archiver '%s' error: %s"
 msgstr "Помилка запису повідомлення до архіватору '%s': %s"
 
@@ -168,6 +175,27 @@ msgstr "Помилка опрацювання буферу повідомлен�
 
 msgid "Value archive"
 msgstr "Архів значень"
+
+msgid "Redundancy"
+msgstr "Резервування"
+
+msgid "Message archivators"
+msgstr "Архіватори повідомлень"
+
+msgid "Archivator"
+msgstr "Архіватор"
+
+msgid "Run."
+msgstr "Вик."
+
+msgid "Redund."
+msgstr "Резерв."
+
+msgid "Pref. run"
+msgstr "Уподоб. вик."
+
+msgid "Remote"
+msgstr "Віддалений"
 
 msgid "Messages archive"
 msgstr "Архів повідомлень"
@@ -224,7 +252,7 @@ msgid "Archivators"
 msgstr "Архіватори"
 
 msgid ""
-"Messages archivators.\n"
+"Message archivators.\n"
 "No set archivator for process by buffer and all archivators.\n"
 "Set '<buffer>' for process by buffer."
 msgstr ""
@@ -263,23 +291,26 @@ msgstr "Кількість"
 msgid "All: %d; Enabled: %d"
 msgstr "Всього: %d; Включено: %d"
 
+msgid "<High level>"
+msgstr "<Високий рівень>"
+
+msgid "<Low level>"
+msgstr "<Низький рівень>"
+
+msgid "<Optimal>"
+msgstr "<Оптимально>"
+
 msgid "Message archivator"
 msgstr "Архіватор повідомлень"
 
 msgid "Value archivator"
 msgstr "Архіватор значень"
 
-msgid "Message archivators"
-msgstr "Архіватори повідомлень"
-
 msgid "Value archivators"
 msgstr "Архіватори значень"
 
 msgid "Message archivator: "
 msgstr "Архіватор повідомлень: "
-
-msgid "Archivator"
-msgstr "Архіватор"
 
 msgid "State"
 msgstr "Стан"
@@ -903,69 +934,14 @@ msgstr ""
 msgid "Template library"
 msgstr "Бібліотеки шаблонів"
 
-msgid "Redundancy"
-msgstr "Резервування"
-
-msgid "Station level"
-msgstr "Рівень станції"
-
-msgid "Redundant task period (s)"
-msgstr "Період задачі резервування (с)"
-
-msgid "Restore connection timeout (s)"
-msgstr "Час відновлення підключення (с)"
-
 msgid "Restore data depth time (hour)"
 msgstr "Глибина часу відновлення даних (годин)"
-
-msgid "Stations"
-msgstr "Станції"
-
-msgid "Live"
-msgstr "Жива"
-
-msgid "Cntr."
-msgstr "Ліч."
-
-msgid "Go to remote stations list configuration"
-msgstr "Перехід до конфігурації переліку віддалених станцій"
 
 msgid "Controllers"
 msgstr "Контролери"
 
-msgid "Run."
-msgstr "Вик."
-
-msgid "Redund."
-msgstr "Резерв."
-
-msgid "Off;Asymmetric"
-msgstr "Виключено;Асиметрично"
-
-msgid "Pref. run"
-msgstr "Уподоб. вик."
-
-msgid "Remote"
-msgstr "Віддалений"
-
 msgid "Template libraries"
 msgstr "Бібліотеки шаблонів"
-
-#, c-format
-msgid "Spent time: %s."
-msgstr "Витрачено часу: %s."
-
-msgid "<newStat>"
-msgstr "<новСтанц>"
-
-msgid "<High level>"
-msgstr "<Високий рівень>"
-
-msgid "<Low level>"
-msgstr "<Низький рівень>"
-
-msgid "<Optimal>"
-msgstr "<Оптимально>"
 
 msgid "Id error!"
 msgstr "Помилка ідентифікатору!"
@@ -1910,6 +1886,27 @@ msgstr "До архіву"
 msgid "Subsystems"
 msgstr "Підсистеми"
 
+msgid "Station level"
+msgstr "Рівень станції"
+
+msgid "Redundant task period (s)"
+msgstr "Період задачі резервування (с)"
+
+msgid "Restore connection timeout (s)"
+msgstr "Час відновлення підключення (с)"
+
+msgid "Stations"
+msgstr "Станції"
+
+msgid "Live"
+msgstr "Жива"
+
+msgid "Cntr."
+msgstr "Ліч."
+
+msgid "Go to remote stations list configuration"
+msgstr "Перехід до конфігурації переліку віддалених станцій"
+
 msgid "Tasks"
 msgstr "Задачі"
 
@@ -1995,6 +1992,13 @@ msgstr "Перегляд повідомлень"
 #, c-format
 msgid "%dx%0.3gGHz"
 msgstr "%dx%0.3gГГц"
+
+#, c-format
+msgid "Spent time: %s."
+msgstr "Витрачено часу: %s."
+
+msgid "<newStat>"
+msgstr "<новСтанц>"
 
 msgid "Finished. "
 msgstr "Закінчено. "
@@ -2153,11 +2157,8 @@ msgstr ""
 msgid "Answer"
 msgstr "Відповідь"
 
-msgid "Redundant"
-msgstr "Резервування"
-
-msgid "Preferable run"
-msgstr "Уподобання виконання"
+msgid "Off;Asymmetric"
+msgstr "Виключено;Асиметрично"
 
 #, c-format
 msgid "Start controller '%s' error."

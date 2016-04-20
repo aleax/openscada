@@ -112,7 +112,7 @@ void TSubSYS::subStart( )
 
 void TSubSYS::subStop( )
 {
-    if( !subModule() )	return;
+    if(!subModule())	return;
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
@@ -137,6 +137,15 @@ void TSubSYS::perSYSCall( unsigned int cnt )
 
 void TSubSYS::cntrCmdProc( XMLNode *opt )
 {
+    //Service commands process
+    string a_path = opt->attr("path");
+    if(a_path == "/serv/redundant") {	//Redundant service requests
+	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD)) {	//State
+	    opt->setAttr("inProc", "0");
+	    return;
+	}
+    }
+
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
@@ -152,7 +161,6 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path");
     if(a_path == "/ico" && ctrChkNode(opt)) {
 	string itp;
 	opt->setText(TSYS::strEncode(TUIS::icoGet(subId(),&itp),TSYS::base64));

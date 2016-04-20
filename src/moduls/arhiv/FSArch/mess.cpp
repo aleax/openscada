@@ -119,8 +119,10 @@ time_t ModMArch::end( )
     return 0;
 }
 
-bool ModMArch::put( vector<TMess::SRec> &mess )
+bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 {
+    TMArchivator::put(mess, force);	//Allow redundancy
+
     int64_t t_cnt = TSYS::curTime();
 
     ResAlloc res(mRes, false);

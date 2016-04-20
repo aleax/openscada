@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		8		//BDS type modules version
+#define SDB_VER		10		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>

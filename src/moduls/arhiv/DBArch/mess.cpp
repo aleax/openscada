@@ -129,12 +129,10 @@ void ModMArch::stop( )
     reqEl.fldClear();
 }
 
-time_t ModMArch::begin( )	{ return mBeg; }
-
-time_t ModMArch::end( )		{ return mEnd; }
-
-bool ModMArch::put( vector<TMess::SRec> &mess )
+bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 {
+    TMArchivator::put(mess, force);    //Allow redundancy
+
     if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
 
     AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(), true);

@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-26 09:24+0200\n"
+"POT-Creation-Date: 2016-04-20 16:42+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -48,8 +48,24 @@ msgid "Socket type '%s' error!"
 msgstr "Ошибка типа '%s' сокета!"
 
 #, c-format
-msgid "Socket name '%s' error!"
-msgstr "Ошибка имени '%s' сокета!"
+msgid "Host '%s' not found!"
+msgstr "Хост '%s' не найден!"
+
+#, c-format
+msgid "The requested name '%s' does not have an IP address!"
+msgstr "Запрошенное имя '%s' не имеет IP адресов!"
+
+#, c-format
+msgid "A non-recoverable name server error occurred while for '%s'!"
+msgstr "Возникла неисправимая ошибка сервера имён для '%s'!"
+
+#, c-format
+msgid "A temporary error occurred on an authoritative name server for '%s'!"
+msgstr "Возникла временная ошибка авторитетного сервера имён для '%s'!"
+
+#, c-format
+msgid "Unknown error code from gethostbyname_r for '%s'!"
+msgstr "Неизвестная ошибка gethostbyname_r для '%s'!"
 
 #, c-format
 msgid "Connect to Internet socket error: '%s (%d)'!"
@@ -296,6 +312,7 @@ msgstr "Транспорт не запущен!"
 msgid "Request error: %s"
 msgstr "Ошибка запроса: %s"
 
+#, c-format
 msgid "Write error: %s"
 msgstr "Ошибка записи: %s"
 

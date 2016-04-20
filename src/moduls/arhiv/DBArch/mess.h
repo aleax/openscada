@@ -48,10 +48,10 @@ class ModMArch: public TMArchivator
 	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
 	void setTmDtSepScDayThr( int vl ) { mTmDtSepScDayThr = vmax(0,vmin(10000,vl)); modif(); }
 
-	time_t begin( );
-	time_t end( );
+	time_t begin( )		{ return mBeg; }
+	time_t end( )		{ return mEnd; }
 
-	bool put( vector<TMess::SRec> &mess );
+	bool put( vector<TMess::SRec> &mess, bool force = false );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
 
 	void start( );

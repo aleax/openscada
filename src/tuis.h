@@ -22,7 +22,7 @@
 #ifndef TUIS_H
 #define TUIS_H
 
-#define SUI_VER		7	//UIS type modules version
+#define SUI_VER		10	//UIS type modules version
 #define SUI_ID		"UI"
 
 #include <string>

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.1.5"
+#define MOD_VER		"1.1.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -1101,7 +1101,8 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	    throw TError(nodePath().c_str(), _("Read error: %s"), err.c_str());
 	}
 	else if(FD_ISSET(fd,&rw_fd)) {
-	    blen = read(fd, iBuf, iLen);
+	    //!! Reading in that way but some time read() return 0 after select pass.
+	    for(int iRtr = 0; (blen=read(fd,iBuf,iLen)) <= 0 && errno == EAGAIN && iRtr < STD_WAIT_DELAY; ++iRtr) TSYS::sysSleep(1e-3);
 	    if(blen <= 0) {	//Read zero means disconnect by peer
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 		mLstReqTm = TSYS::curTime();
