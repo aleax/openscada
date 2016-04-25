@@ -147,6 +147,7 @@ class TController : public TCntrNode, public TConfig
 
 	unsigned mPrm		: 2;
 	unsigned mRedntUse	: 1;
+	unsigned mRedntFirst	: 1;
 };
 
 }

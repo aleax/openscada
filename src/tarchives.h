@@ -130,6 +130,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	string	mDB;
 
 	unsigned mRedntUse	: 1;
+	unsigned mRedntFirst	: 1;
 };
 
 //************************************************
@@ -288,6 +289,7 @@ class TArchiveS : public TSubSYS
 	// Redundancy
 	Res	mRdRes;
 	map<string, map<string,bool> > mRdArchM;
+	unsigned mRedntFirst	: 1;
 };
 
 }

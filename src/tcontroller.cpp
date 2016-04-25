@@ -31,7 +31,7 @@ using namespace OSCADA;
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
     TConfig(cfgelem), enSt(false), runSt(false),
     mId(cfg("ID")), mMessLev(cfg("MESS_LEV")), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
-    mDB(daq_db), mRedntSt(dataRes()), mRedntUse(true)
+    mDB(daq_db), mRedntSt(dataRes()), mRedntUse(true), mRedntFirst(true)
 {
     mId = id_c;
     mPrm = grpAdd("prm_");
@@ -319,11 +319,11 @@ void TController::redntDataUpdate( )
     AutoHD<TParamContr> prm;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath());
     req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");
-    for(int i_p = 0; i_p < (int)pls.size(); i_p++) {
-	prm = at(pls[i_p]);
-	if(!prm.at().enableStat()) { pls.erase(pls.begin()+i_p); i_p--; continue; }
+    for(int iP = 0; iP < (int)pls.size(); iP++) {
+	prm = at(pls[iP]);
+	if(!prm.at().enableStat()) { pls.erase(pls.begin()+iP); iP--; continue; }
 
-	XMLNode *prmNd = req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr");
+	XMLNode *prmNd = req.childAdd("get")->setAttr("path","/prm_"+pls[iP]+"/%2fserv%2fattr");
 
 	// Prepare individual attributes list
 	prmNd->setAttr("sepReq", "1");
@@ -346,14 +346,15 @@ void TController::redntDataUpdate( )
     }
 
     //Send request to first active station for this controller
-    if(owner().owner().rdStRequest(workId(),req).empty()) return;
+    if(owner().owner().rdStRequest(workId(),req,"",!mRedntFirst).empty()) return;
+    mRedntFirst = false;
 
     //Write data to parameters
     if(req.childSize()) mRedntSt.setVal(req.childGet(0)->text());
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	prm = at(pls[i_p]);
-	for(unsigned i_a = 0; i_a < req.childGet(i_p+1)->childSize(); i_a++) {
-	    XMLNode *aNd = req.childGet(i_p+1)->childGet(i_a);
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	prm = at(pls[iP]);
+	for(unsigned i_a = 0; i_a < req.childGet(iP+1)->childSize(); i_a++) {
+	    XMLNode *aNd = req.childGet(iP+1)->childGet(i_a);
 	    if(!prm.at().vlPresent(aNd->attr("id"))) continue;
 	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
 

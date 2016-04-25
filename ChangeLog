@@ -1,4 +1,7 @@
 2016-04-25 Roman
+- SYS: Early redundancy task starting set.
+- DAQ,Archive: In redundancy, guaranty first initial sync request support is added, mostly for master.
+- Archive: In redundancy, alarms initial obtain is added.
 - DAQ: Initialization of redundancy of TController object some changed to enabled by default. That will next checked into a complex environment.
 - DAQ.BCM2835: Expanded for access to GPIO by static functions which significant faster ones.
 - FIX:DAQ.JavaLikeCalc: setNoTransl() at the attributes value (DB field "DEF") loading disabled by some problematic and no a sence.

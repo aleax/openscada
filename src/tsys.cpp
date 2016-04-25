@@ -644,8 +644,9 @@ void TSYS::save_( )
 
 int TSYS::start( )
 {
-    //High priority service task creation
+    //High priority service task and redundancy start
     taskCreate("SYS_HighPriority", 20, TSYS::HPrTask, this);
+    taskCreate("SYS_Redundancy", 5, TSYS::RdTask, this);
 
     //Subsystems starting
     vector<string> lst;
@@ -658,9 +659,6 @@ int TSYS::start( )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error start subsystem '%s'."),lst[i_a].c_str());
 	}
-
-    //Redundant task start
-    taskCreate("SYS_Redundancy", 5, TSYS::RdTask, this);
 
     cfgFileScan(true);
 
@@ -708,7 +706,7 @@ int TSYS::start( )
 	    mess_err(nodePath().c_str(),_("Error stop subsystem '%s'."),lst[i_a].c_str());
 	}
 
-    //High priority service task stop
+    //High priority service task and redundancy stop
     taskDestroy("SYS_Redundancy");
     taskDestroy("SYS_HighPriority");
 

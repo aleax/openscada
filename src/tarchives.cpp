@@ -41,7 +41,7 @@ using namespace OSCADA;
 //************************************************
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false), mRes(true),
-    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false)
+    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false), mRedntFirst(true)
 {
     mAval = grpAdd("va_");
 
@@ -593,6 +593,19 @@ bool TArchiveS::rdProcess( XMLNode *reqSt )
 	    if(reqSt->childGet(iC)->name() == "archM")
 		mRdArchM[StId][reqSt->childGet(iC)->attr("id")] = s2i(reqSt->childGet(iC)->attr("run"));
 	return true;
+    }
+
+    //Alarms initial obtain
+    if(mRedntFirst) {
+	XMLNode req("get"); req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("lev","-1");
+	if(SYS->rdStRequest(req).size()) {
+	    mRedntFirst = false;
+	    // Process the result
+	    for(int iEl = 0; iEl < req.childSize(); ++iEl) {
+		XMLNode *el = req.childGet(iEl);
+		messPut(s2ll(el->attr("time")), s2i(el->attr("utime")), el->attr("cat"), s2i(el->attr("lev")), el->text(), ALRM_ARCH_NM);
+	    }
+	}
     }
 
     //Planing archivators run and process requests to remote run ones
@@ -1195,7 +1208,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
     TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()),
-    mDB(idb), mRedntUse(true)
+    mDB(idb), mRedntUse(true), mRedntFirst(true)
 {
     mId = iid;
 }
@@ -1255,7 +1268,7 @@ void TMArchivator::redntDataUpdate( )
     XMLNode req("get"); req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("bTm",ll2s(end()/*vmax(0,end()-vmax(1,(10*SYS->rdTaskPer()))*/));
 
     //Send request to first active station for this controller
-    if(owner().owner().rdStRequest(workId(),req).empty()) return;
+    if(owner().owner().rdStRequest(workId(),req,"",!mRedntFirst).empty()) return;
 
     //printf("TEST 00: end=%s; '%s': %s\n", tm2s(end(),"").c_str(), id().c_str(), req.save().c_str());
 
