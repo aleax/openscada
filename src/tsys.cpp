@@ -249,7 +249,7 @@ string TSYS::uint2str( unsigned val, IntView view )
     return buf;
 }
 
-string TSYS::ll2str( int64_t val, IntView view )
+string TSYS::ll2str( long long val, IntView view )
 {
     char buf[NSTR_BUF_LEN];
     switch(view) {
@@ -2176,7 +2176,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return string("0");
     }
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
-    //  tm - wait time in seconds, no more to 100 seconds
+    //  tm - wait time in seconds (precised up to nanoseconds), up to STD_INTERF_TM(5 seconds)
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1) {
 	struct timespec sp_tm;

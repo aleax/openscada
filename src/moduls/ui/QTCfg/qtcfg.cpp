@@ -400,7 +400,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     wUser->setWhatsThis(_("This label displays current user."));
     wUser->setToolTip(_("Field for display of the current user."));
     wUser->setStatusTip(_("Double click to change user."));
-    statusBar()->insertPermanentWidget(0,wUser);
+    statusBar()->insertPermanentWidget(0, wUser);
     connect(wUser, SIGNAL(userChanged()), this, SLOT(userSel()));
 
     mStModify = new QLabel(" ",this);
@@ -845,7 +845,7 @@ void ConfApp::userSel( )
 
     pgInfo.setAttr("path", "");
 
-    try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
+    try { pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError err) { pageDisplay("/"+SYS->id()); }
 }
 
@@ -863,7 +863,7 @@ void ConfApp::pageRefresh( bool tm )
     try {
 	//Tree part update
 	if(CtrTree->currentItem())
-	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent(): CtrTree->currentItem(), true);
+	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent() : CtrTree->currentItem(), true);
 
 	//Same page update
 	pageDisplay(selPath);
@@ -1470,9 +1470,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_r = new QLabel(widget);
 		val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		val_r->setStatusTip((selPath+"/"+br_path).c_str());
-		QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
-		sp.setHorizontalStretch(1);
-		val_r->setSizePolicy(sp);
+		//QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
+		//sp.setHorizontalStretch(1);
+		//val_r->setSizePolicy(sp);
 	    }
 	    else {
 		val_w = new QComboBox(widget);
@@ -3162,6 +3162,7 @@ void SCADAHost::run( )
 	mtx.lock();
 	if(!req || (req && reqDone)) cond.wait(&mtx, 1000);
 	if(req && !reqDone) {
+	    wuser = user;
 	    mtx.unlock();
 	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != 10;
 	    else {

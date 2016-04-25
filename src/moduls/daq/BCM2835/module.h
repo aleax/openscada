@@ -57,6 +57,13 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
+	//Functions
+	void fList( vector<string> &ls )	{ chldList(mFnc, ls); }
+	bool fPresent( const string &id )	{ return chldPresent(mFnc, id); }
+	AutoHD<TFunction> fAt( const string &id ){ return chldAt(mFnc, id); }
+	void fReg( TFunction *fnc )		{ chldAdd(mFnc, fnc); }
+	void fUnreg( const char *id )		{ chldDel(mFnc, id); }
+
 	TElem &elem( )		{ return pEl; }
 
 	TMdContr &owner( );
@@ -74,6 +81,7 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	pEl;		//Work atribute elements
+	int	mFnc;
 };
 
 //*************************************************
@@ -121,6 +129,45 @@ class TTpContr: public TTypeDAQ
 };
 
 extern TTpContr *mod;
+
+
+//*************************************************
+//* Access by functions                           *
+
+//*************************************************
+//* Get GPIO value                                *
+//*************************************************
+class GPIO_get : public TFunction
+{
+    public:
+	GPIO_get( ) : TFunction("get",SDAQ_ID) {
+	    ioAdd(new IO("rez",_("Result"),IO::Boolean,IO::Return));
+	    ioAdd(new IO("pin",_("Pin"),IO::Integer,IO::Default));
+	}
+
+	string name( )	{ return _("GPIO: Get"); }
+	string descr( )	{ return _("GPIO get pin level."); }
+
+	void calc( TValFunc *val );
+};
+
+//*************************************************
+//* Put value to GPIO                             *
+//*************************************************
+class GPIO_put : public TFunction
+{
+    public:
+	GPIO_put( ) : TFunction("put",SDAQ_ID) {
+	    ioAdd(new IO("pin",_("Pin"),IO::Integer,IO::Default));
+	    ioAdd(new IO("val",_("Value"),IO::Boolean,IO::Default));
+	}
+
+	string name( )	{ return _("GPIO: Put"); }
+	string descr( )	{ return _("GPIO put pin level."); }
+
+	void calc( TValFunc *val );
+};
+
 
 } //End namespace ModBCM
 

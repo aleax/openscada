@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009 - 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2015.
+# Roman Savochenko <rom_as@oscada.org>, 2015-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:13+0300\n"
+"POT-Creation-Date: 2016-04-25 11:44+0300\n"
 "PO-Revision-Date: 2011-07-19 20:52+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -53,34 +53,33 @@ msgid "Name"
 msgstr "Name"
 
 msgid "From file"
-msgstr ""
+msgstr "Aus Datei"
 
 msgid "LibGD2"
 msgstr ""
 
 msgid "Graphical library GD2 images processing."
-msgstr ""
+msgstr "Grafikbibliothek GD2 Bilder Verarbeitung."
 
 msgid "File name or data (for string stream)"
-msgstr ""
+msgstr "Dateiname oder Daten (für String-Stream)"
 
 msgid ""
 "File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-"
 "append;...)"
-msgstr ""
+msgstr "Dateizugriff (''-stringstream; 'r[+]'-lesen;'w[+]'-Schreiben von Null;'a[+]'-Anhängen;...)"
 
 msgid "Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"
-msgstr ""
+msgstr "Maschinendaten Format ('n'-sys Ordnung;'b'-BigEndian;'l'-littleEndian)"
 
-#, fuzzy
 msgid "String encoding in file"
-msgstr "Zeile: Kodierung der Zeile in HTML"
+msgstr "String-Codierung in der Datei"
 
 msgid "IO"
 msgstr ""
 
 msgid "Input/Output to: file, string stream."
-msgstr ""
+msgstr "Input/Output an: Datei, string."
 
 msgid "Command"
 msgstr "Kommando"
@@ -286,22 +285,22 @@ msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Zusammenfügen Fliesskomma (4 Bytes)  aus Wörtern (2 Bytes)."
 
 msgid "Data"
-msgstr ""
+msgstr "Daten"
 
 msgid "Polynomial (reversion)"
-msgstr ""
+msgstr "Polynomial (Reversion)"
 
 msgid "Width"
-msgstr ""
+msgstr "Breite"
 
 msgid "Initial"
-msgstr ""
+msgstr "Initia"
 
 msgid "Cyclic Redundancy Code (CRC)"
-msgstr ""
+msgstr "Cyclic Redundancy-Code (CRC)"
 
 msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
-msgstr ""
+msgstr "Einheitliche Cyclic Redundancy-Code für 8-64 Bit Breite umzusetzen."
 
 msgid "Date and time string"
 msgstr "Zeile für Datum und Zeit"
@@ -310,7 +309,7 @@ msgid "Seconds"
 msgstr "Sekunden"
 
 msgid "Date and time format"
-msgstr "Datum- und Zeitenformat"
+msgstr "Datum und Zeitenformat"
 
 msgid "Time: String time"
 msgstr "Zeit: Zeit in die Zeile"
@@ -381,6 +380,15 @@ msgstr "Zeit: Cron Format"
 msgid "Plane time by cron standard."
 msgstr "Berechnet die nächste absolute Zeit nach Cron Format"
 
+msgid "Time"
+msgstr "Zeit"
+
+msgid "Time: sleep"
+msgstr "Zeit: Schlaf"
+
+msgid "Short sleep from nanoseconds and up to STD_INTERF_TM (5 seconds)."
+msgstr "Kurzer Schlaf von Nanosekunden und bis zu STD_INTERF_TM (5 Sekunden)."
+
 msgid "Val: Archive"
 msgstr "Wert: Archiv speichern."
 
@@ -422,7 +430,3 @@ msgstr "XML: Kontrollanfrage"
 
 msgid "Control request to system by XML."
 msgstr "XML Kontrollanfrage an das System"
-
-#, fuzzy
-#~ msgid "Properties no supported by th object."
-#~ msgstr "Eigenschaften werden vom Objekt nicht unterstützt."

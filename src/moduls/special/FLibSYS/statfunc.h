@@ -50,7 +50,7 @@ class Lib : public TSpecial
 	void modStart( );
 	void modStop( );
 
-	void list( vector<string> &ls ) 	{ chldList(mFnc,ls); }
+	void list( vector<string> &ls )		{ chldList(mFnc,ls); }
 	bool present( const string &id )	{ return chldPresent(mFnc,id); }
 	AutoHD<TFunction> at( const string &id ){ return chldAt(mFnc,id); }
 	void reg( TFunction *fnc )		{ chldAdd(mFnc,fnc); }

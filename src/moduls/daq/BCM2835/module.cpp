@@ -38,7 +38,7 @@
 #define MOD_NAME	_("BCM 2835")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.0"
+#define MOD_VER		"1.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO and other. Mostly for and used in Raspberry Pi.")
 #define LICENSE		"GPL2"
@@ -138,7 +138,7 @@ void TMdContr::stop_( )
 //*************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm)
 {
-
+    mFnc = grpAdd("fnc_", true);
 }
 
 TMdPrm::~TMdPrm( )
@@ -150,9 +150,15 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(!vlElemPresent(&elem())) vlElemAtt(&elem());
+
+    if(flag&TCntrNode::NodeRestore) return;
+
+    //Reg functions
+    fReg(new GPIO_get());
+    fReg(new GPIO_put());
 
     //Attributes populate
+    if(!vlElemPresent(&elem())) vlElemAtt(&elem());
     pEl.fldAdd(new TFld("gpio0","GPIO 0: v1P1.3",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
     pEl.fldAdd(new TFld("gpio1","GPIO 1: v1P1.5",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
     pEl.fldAdd(new TFld("gpio2","GPIO 2: {v2P1,J8}.3",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
@@ -227,6 +233,11 @@ void TMdPrm::enable( )
 	cVl.at().fld().setReserve(modPrm(TSYS::strMess("GPIOrev%d",pin)));
     }
 
+    //Functions start
+    fList(ls);
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+	fAt(ls[iL]).at().setStart(true);
+
     TParamContr::enable();
 }
 
@@ -241,6 +252,11 @@ void TMdPrm::disable( )
     elem().fldList(ls);
     for(int iEl = 0; iEl < ls.size(); iEl++)
 	vlAt(ls[iEl]).at().setS(EVAL_STR, 0, true);
+
+    //Functions stop
+    fList(ls);
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+	fAt(ls[iL]).at().setStart(false);
 }
 
 string TMdPrm::modPrm( const string &prm, const string &def )
@@ -325,6 +341,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Get the page information
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
+	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),R_R_R_,"root",SDAQ_ID,1,"idm","1");
+	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),R_R_R_,"root",SDAQ_ID,3,"tp","br","idm","1","br_pref","fnc_");
 	ctrRemoveNode(opt, "/prm/cfg/MOD_PRMS");
 	if(ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
 	    vector<string> ls;
@@ -339,12 +357,19 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
+	
 	return;
     }
 
     //Process commands to the page
     string a_path = opt->attr("path");
-    if(a_path.compare(0,13,"/cfg/gpioMode") == 0) {
+    if((a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt)) {
+	vector<string> ls;
+	fList(ls);
+	for(unsigned iF = 0; iF < ls.size(); iF++)
+	    opt->childAdd("el")->setAttr("id",ls[iF])->setText(fAt(ls[iF]).at().name());
+    }
+    else if(a_path.compare(0,13,"/cfg/gpioMode") == 0) {
 	int pin = atoi(a_path.c_str()+13);
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm(TSYS::strMess("GPIOmode%d",pin),"0"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm(TSYS::strMess("GPIOmode%d",pin), opt->text());
@@ -356,3 +381,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else TParamContr::cntrCmdProc(opt);
 }
+
+//*************************************************
+//* Get GPIO value                                *
+//*************************************************
+void GPIO_get::calc( TValFunc *v )	{ v->setB(0, (bool)bcm2835_gpio_lev(v->getI(1))); }
+
+//*************************************************
+//* Put value to GPIO                             *
+//*************************************************
+void GPIO_put::calc( TValFunc *v )	{ bcm2835_gpio_write(v->getI(0), v->getB(1)); }

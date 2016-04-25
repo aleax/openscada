@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.2"
+#define MOD_VER		"1.3.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -774,7 +774,7 @@ void TSocketOut::start( int tmCon )
 	struct sockaddr_in	nameIn;
 	memset(&nameIn, 0, sizeof(nameIn));
 	nameIn.sin_family = AF_INET;
-	char hBuf[STR_BUF_LEN], sBuf[STR_BUF_LEN];
+	char hBuf[STR_BUF_LEN], sBuf[256];
 	struct hostent hostbuf, *hp;
 	struct servent servbuf, *sp;
 

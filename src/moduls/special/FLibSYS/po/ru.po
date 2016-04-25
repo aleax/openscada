@@ -1,13 +1,13 @@
 # OpenSCADA.Special.FLibSYS translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:13+0300\n"
+"POT-Creation-Date: 2016-04-25 11:44+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -379,6 +379,15 @@ msgstr "Time: Время планирования Cron"
 msgid "Plane time by cron standard."
 msgstr "Планирование времени по стандарту cron."
 
+msgid "Time"
+msgstr "Время"
+
+msgid "Time: sleep"
+msgstr "Время: сон"
+
+msgid "Short sleep from nanoseconds and up to STD_INTERF_TM (5 seconds)."
+msgstr "Короткий сон от наносекунд и до STD_INTERF_TM (5 секунд)."
+
 msgid "Val: Archive"
 msgstr "Val: Архив"
 
@@ -420,6 +429,3 @@ msgstr "XML: Запрос интерфейса управления"
 
 msgid "Control request to system by XML."
 msgstr "Запрос интерфейса управления к системе посредством XML."
-
-#~ msgid "Input/Output access."
-#~ msgstr "Доступ Ввода/Вывода."

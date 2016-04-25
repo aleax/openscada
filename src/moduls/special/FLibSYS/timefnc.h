@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: timefnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -157,6 +157,24 @@ class tmCron : public TFunction
 
 	void calc( TValFunc *val )	{ val->setI(0, SYS->cron(val->getS(1),val->getI(2))); }
 };
+
+//*************************************************
+//* tmSleep                                       *
+//*************************************************
+class tmSleep : public TFunction
+{
+    public:
+	tmSleep( ) : TFunction("tmSleep",SSPC_ID) {
+	    ioAdd(new IO("res",_("Result"),IO::Integer,IO::Return,"0"));
+	    ioAdd(new IO("tm",_("Time"),IO::Real,IO::Default,"0"));
+	}
+
+	string name( )	{ return _("Time: sleep"); }
+	string descr( )	{ return _("Short sleep from nanoseconds and up to STD_INTERF_TM (5 seconds)."); }
+
+	void calc( TValFunc *v )	{ v->setI(0, TSYS::sysSleep(vmin(STD_INTERF_TM,v->getR(1)))); }
+};
+
 
 }
 

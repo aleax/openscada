@@ -166,7 +166,7 @@ void Func::loadIO( )
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	io(id)->setFlg(cfg.cfg("MODE").getI());
-	cfg.cfg("DEF").setNoTransl(io(id)->type()!=IO::String);
+	//cfg.cfg("DEF").setNoTransl(io(id)->type()!=IO::String);
 	io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }

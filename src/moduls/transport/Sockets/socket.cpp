@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.1.0"
+#define MOD_VER		"2.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -246,7 +246,7 @@ void TSocketIn::start( )
 	struct sockaddr_in  nameIn;
 	memset(&nameIn, 0, sizeof(nameIn));
 	nameIn.sin_family = AF_INET;
-	char hBuf[STR_BUF_LEN], sBuf[STR_BUF_LEN];
+	char hBuf[STR_BUF_LEN], sBuf[256];
 	struct hostent hostbuf, *hp;
 	struct servent servbuf, *sp;
 
@@ -983,7 +983,7 @@ void TSocketOut::start( int itmCon )
     else if(type == SOCK_TCP || type == SOCK_UDP) {
 	memset(&nameIn, 0, sizeof(nameIn));
 	nameIn.sin_family = AF_INET;
-	char hBuf[STR_BUF_LEN], sBuf[STR_BUF_LEN];
+	char hBuf[STR_BUF_LEN], sBuf[256];
 	struct hostent hostbuf, *hp;
 	struct servent servbuf, *sp;
 
