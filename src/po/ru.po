@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-20 15:42+0300\n"
+"POT-Creation-Date: 2016-04-26 20:55+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1775,6 +1775,14 @@ msgstr "Задача '%s' не остановлена!"
 #, c-format
 msgid "Task %u unexpected terminated by exception."
 msgstr "Задача %u неожиданно прервана исключением."
+
+#, c-format
+msgid "Redundancy '%s': station '%s' up."
+msgstr "Резервирование '%s': станция '%s' запущена."
+
+#, c-format
+msgid "Redundancy '%s': station '%s' down."
+msgstr "Резервирование '%s': станция '%s' остановлена."
 
 msgid "1:Request is not object!"
 msgstr "1:Запрос не объект!"

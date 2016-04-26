@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-20 15:42+0300\n"
+"POT-Creation-Date: 2016-04-26 20:55+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1789,6 +1789,14 @@ msgstr "Aufgabe '%s' ist nicht gestoppt!"
 #, c-format
 msgid "Task %u unexpected terminated by exception."
 msgstr "Task %u unerwartet beendet durch Ausnahme."
+
+#, c-format
+msgid "Redundancy '%s': station '%s' up."
+msgstr "Redundancy '%s': station '%s' auf."
+
+#, c-format
+msgid "Redundancy '%s': station '%s' down."
+msgstr "Redundancy '%s': station '%s' abwärts."
 
 msgid "1:Request is not object!"
 msgstr "1:Die Anfrage ist kein Objekt!"

@@ -415,8 +415,9 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     string tVl;
     for(int off = 0; (tVl=TSYS::strParse(arch,0,";",&off)).size(); ) archMap[tVl] = true;
 
+    MtxAlloc res(mRes.mtx());
     if(archMap.empty() || archMap[BUF_ARCH_NM]) {
-	MtxAlloc res(mRes.mtx(), true);
+	res.lock();
 	//Put message to buffer
 	mBuf[headBuf].time  = tm;
 	mBuf[headBuf].utime = utm;
@@ -426,18 +427,21 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	if((++headBuf) >= mBuf.size()) headBuf = 0;
 
 	//Check for the archivator's headers to messages buffer
-	for(unsigned i_m = 0; i_m < actMess.size(); i_m++) {
-	    int &messHead = actMess[i_m].at().messHead;
+	for(unsigned iM = 0; iM < actMess.size(); iM++) {
+	    int &messHead = actMess[iM].at().messHead;
 	    if(messHead >= 0 && messHead == (int)headBuf && ++messHead >= (int)mBuf.size()) messHead = 0;
 	}
+	res.unlock();
     }
 
     //Alarms processing. For level less 0 alarm is set
     if(archMap.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM]) {
+	res.lock();
 	map<string,TMess::SRec>::iterator p = mAlarms.find(categ);
 	if(level < 0 && (p == mAlarms.end() || FTM2(tm,utm) >= FTM(p->second)))
 	    mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
 	if(level >= 0 && p != mAlarms.end() && FTM2(tm,utm) >= FTM(p->second)) mAlarms.erase(p);
+	res.unlock();
     }
 
     //Put message to the archive <arch>
@@ -479,9 +483,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
     TRegExp re(category, "p");
 
-    MtxAlloc res(mRes.mtx(), true);
-
     //Get records from buffer
+    MtxAlloc res(mRes.mtx(), true);
     unsigned i_buf = headBuf;
     while(level >= 0 && (archMap.empty() || archMap[BUF_ARCH_NM]) && SYS->sysTm() < upTo) {
 	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
@@ -490,7 +493,6 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	if(++i_buf >= mBuf.size()) i_buf = 0;
 	if(i_buf == headBuf) break;
     }
-
     res.unlock();
 
     //Get records from archives
@@ -508,14 +510,16 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 
     //Alarms request processing
     if(level < 0) {
+	res.lock();
 	vector< pair<int64_t,TMess::SRec* > > mb;
 	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() && SYS->sysTm() < upTo; p++)
 	    if((p->second.time >= b_tm || b_tm == e_tm) && p->second.time <= e_tm &&
 		    p->second.level >= abs(level) && re.test(p->second.categ))
 		mb.push_back(pair<int64_t,TMess::SRec* >(FTM(p->second),&p->second));
-	sort(mb.begin(),mb.end());
-	for(unsigned i_b = 0; i_b < mb.size(); i_b++) {
-	    recs.push_back(*mb[i_b].second);
+	res.unlock();
+	sort(mb.begin(), mb.end());
+	for(unsigned iB = 0; iB < mb.size(); iB++) {
+	    recs.push_back(*mb[iB].second);
 	    if(recs.back().level > 0) recs.back().level *= -1;
 	}
     }
@@ -723,8 +727,8 @@ void TArchiveS::setMessBufLen( unsigned len )
     while(mBuf.size() > len) {
 	mBuf.erase(mBuf.begin() + headBuf);
 	if(headBuf >= mBuf.size())	headBuf = 0;
-	for(unsigned i_m = 0; i_m < actMess.size(); i_m++) {
-	    int &messHead = actMess[i_m].at().messHead;
+	for(unsigned iM = 0; iM < actMess.size(); iM++) {
+	    int &messHead = actMess[iM].at().messHead;
 	    if(messHead >= 0 && messHead >= (int)mBuf.size()) messHead = mBuf.size()-1;
 	}
 	//if(headLstread >= mBuf.size())	headLstread = mBuf.size()-1;
@@ -771,8 +775,8 @@ void *TArchiveS::ArhMessTask( void *param )
 	if(TSYS::taskEndRun()) isLast = true;
 	//Message buffer read
 	MtxAlloc res(arh.mRes.mtx(), true);
-	for(unsigned i_m = 0; i_m < arh.actMess.size(); i_m++) {
-	    AutoHD<TMArchivator> mArh = arh.actMess[i_m];
+	for(unsigned iM = 0; iM < arh.actMess.size(); iM++) {
+	    AutoHD<TMArchivator> mArh = arh.actMess[iM];
 	    int &messHead = mArh.at().messHead;
 	    if(messHead < 0 && ((messHead=arh.headBuf+1) >= (int)arh.mBuf.size() || !arh.mBuf[messHead].time)) messHead = 0;
 	    if(messHead == (int)arh.headBuf)	continue;
@@ -854,14 +858,14 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")),
 	    vmin((upTm<0)?SYS->sysTm()+abs(upTm):upTm,SYS->sysTm()+STD_INTERF_TM));
 	TArrayObj *rez = new TArrayObj();
-	for(unsigned i_m = 0; i_m < recs.size(); i_m++) {
+	for(unsigned iM = 0; iM < recs.size(); iM++) {
 	    TVarObj *am = new TVarObj();
-	    am->propSet("tm", (int)recs[i_m].time);
-	    am->propSet("utm", recs[i_m].utime);
-	    am->propSet("categ", recs[i_m].categ);
-	    am->propSet("level", recs[i_m].level);
-	    am->propSet("mess", recs[i_m].mess);
-	    rez->arSet(i_m, am);
+	    am->propSet("tm", (int)recs[iM].time);
+	    am->propSet("utm", recs[iM].utime);
+	    am->propSet("categ", recs[iM].categ);
+	    am->propSet("level", recs[iM].level);
+	    am->propSet("mess", recs[iM].mess);
+	    rez->arSet(iM, am);
 	}
 	return rez;
     }
@@ -1265,7 +1269,8 @@ void TMArchivator::save_( )	{ SYS->db().at().dataSet(fullDB(), SYS->archive().at
 void TMArchivator::redntDataUpdate( )
 {
     //Prepare and call request for messages
-    XMLNode req("get"); req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("bTm",ll2s(end()/*vmax(0,end()-vmax(1,(10*SYS->rdTaskPer()))*/));
+    // end()+1 used for decrease traffic by request end() messages in each cycle. The messages in <= end() will transfer direct.
+    XMLNode req("get"); req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("bTm",ll2s(end()+1));
 
     //Send request to first active station for this controller
     if(owner().owner().rdStRequest(workId(),req,"",!mRedntFirst).empty()) return;
@@ -1308,7 +1313,7 @@ bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
 		if(!chkMessOK(mess[iM].categ,mess[iM].level)) continue;
 		req.childAdd("it")->setAttr("tm", ll2s(mess[iM].time))->setAttr("tmu", i2s(mess[iM].utime))->
 				    setAttr("cat", mess[iM].categ)->setAttr("lev", i2s(mess[iM].level))->setText(mess[iM].mess);
-		if(mess[iM].time <= end()) messLoc.push_back(mess[iM]);
+		if(mess[iM].time < end()) messLoc.push_back(mess[iM]);
 	    }
 	    mess = messLoc;
 	    if(req.childSize()) {

@@ -552,7 +552,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				    if((wVl=tC->attr("color")).size())	hit->setData(Qt::UserRole+2, QString::fromStdString(wVl));
 				    if((wVl=tC->attr("colorText")).size()) hit->setData(Qt::UserRole+3, QString::fromStdString(wVl));
 				    if((wVl=tC->attr("font")).size())	hit->setData(Qt::UserRole+4, QString::fromStdString(wVl));
-				    if((wVl=tC->attr("sort")).size())	{ sortCol = i_ch+1; if(!s2i(wVl)) sortCol *= -1; }
+				    if((wVl=tC->attr("sort")).size())	{ sortCol = i_c+1; if(!s2i(wVl)) sortCol *= -1; }
 				}
 			    }
 			    else {	//Rows content process

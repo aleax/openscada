@@ -1,3 +1,12 @@
+2016-04-26 Roman
+- !!:SYS: Messages about redundant stations up and down are added.
+    TSYS::rdStRequest() expanded by scan mode for stations.
+    Main redundancy properties of the system level forced for store to the configuration file.
+- !!:FIX:Archives: Locking for access to the alarms table is restored.
+    Access to messages in redundancy unified.
+- FIX:UI.Vision: For view "Table" of primitive "FormEl" header's item option "sort" fixed.
+
+
 2016-04-25 Roman
 - SYS: Early redundancy task starting set.
 - DAQ,Archive: In redundancy, guaranty first initial sync request support is added, mostly for master.

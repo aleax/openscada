@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-20 15:42+0300\n"
+"POT-Creation-Date: 2016-04-26 20:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1565,6 +1565,14 @@ msgstr ""
 
 #, c-format
 msgid "Task %u unexpected terminated by exception."
+msgstr ""
+
+#, c-format
+msgid "Redundancy '%s': station '%s' up."
+msgstr ""
+
+#, c-format
+msgid "Redundancy '%s': station '%s' down."
 msgstr ""
 
 msgid "1:Request is not object!"

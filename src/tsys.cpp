@@ -58,7 +58,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
     mModDir(oscd_moddir_full), mIcoDir("icons;"oscd_datadir_full"/icons"), mDocDir("docs;"oscd_datadir_full"/docs"),
     mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1),
-    mainPthr(0), mSysTm(time(NULL)), mRdStLevel(0), mRdRestConnTm(30), mRdTaskPer(1), mRdPrcTm(0)
+    mainPthr(0), mSysTm(time(NULL)), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -629,15 +629,15 @@ void TSYS::save_( )
     TBDS::genDBSet(nodePath()+"MainCPUs", mainCPUs());
 
     //Redundancy parameters
-    TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()));
-    TBDS::genDBSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()));
-    TBDS::genDBSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()));
+    TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
     mRdRes.lock(false);
     string stLs;
     for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
 	stLs += sit->first+";";
     mRdRes.unlock();
-    TBDS::genDBSet(nodePath()+"RdStList", stLs);
+    TBDS::genDBSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
 
     Mess->save();	//Messages load
 }
@@ -1596,25 +1596,33 @@ map<string, TSYS::SStat> TSYS::rdSts( )
     return rez;
 }
 
-string TSYS::rdStRequest( XMLNode &req, const string &st )
+string TSYS::rdStRequest( XMLNode &req, const string &st, bool toScan )
 {
+    bool prevPresent = false;
     string lcPath = req.attr("path");
 
     ResAlloc res(mRdRes, false);
-    map<string, TSYS::SStat>::iterator sit = st.size() ? mSt.find(st) : mSt.begin();
-    if(sit == mSt.end()) return "";
+    //map<string, TSYS::SStat>::iterator sit = st.size() ? mSt.find(st) : mSt.begin();
+    //if(sit == mSt.end()) return "";
 
     //Same request
-    req.setAttr("path", "/"+sit->first+lcPath);
-    try {
-	SYS->transport().at().cntrIfCmd(req, "redundant");
-	sit->second.cnt++;
-	return sit->first;
-    }
-    catch(TError err) {
-	sit->second.isLive = false;
-	sit->second.cnt = rdRestConnTm();
-	sit->second.lev = 0;
+    for(map<string, TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); ++sit) {
+	if(!sit->second.isLive) continue;
+	if(toScan && st.size() && !prevPresent) {
+	    if(sit->first == st) prevPresent = true;
+	    continue;
+	}
+	try {
+	    req.setAttr("path", "/"+sit->first+lcPath);
+	    SYS->transport().at().cntrIfCmd(req, "redundant");
+	    sit->second.cnt++;
+	    return sit->first;
+	}
+	catch(TError err) {
+	    sit->second.isLive = false;
+	    sit->second.cnt = rdRestConnTm();
+	    sit->second.lev = 0;
+	}
     }
 
     return "";
@@ -1880,6 +1888,13 @@ void *TSYS::RdTask( void *param )
 	    }
 	    // Reconnect counter process
 	    if(!sit->second.isLive && sit->second.cnt > 0) sit->second.cnt -= SYS->rdTaskPer();
+	    if(sit->second.isLive != sit->second.isLivePrev) {
+		if(sit->second.isLive) mess_note(SYS->nodePath().c_str(), _("Redundancy '%s': station '%s' up."),
+					    SYS->name().c_str(), SYS->transport().at().extHostGet("*",sit->first).name.c_str());
+		else mess_warning(SYS->nodePath().c_str(), _("Redundancy '%s': station '%s' down."),
+					    SYS->name().c_str(), SYS->transport().at().extHostGet("*",sit->first).name.c_str());
+		sit->second.isLivePrev = sit->second.isLive;
+	    }
 	}
 	res.release();
 
