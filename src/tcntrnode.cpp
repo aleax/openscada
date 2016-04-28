@@ -148,12 +148,11 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),(nodePath()+path).c_str(),s_br.c_str());
 
 	    // Check and put the command to the redundant stations
-	    // !!!!: For further. For all transfers comands needs set attribute like "directDoing" from configurators.
-	    //                    Before transfer the attribute need to clean.
-	    /*if(SYS->rdEnable() && SYS->rdActive()) {
-		string aNm = opt->name();
-		printf("TEST 00: '%s': '%s'\n", aNm.c_str(), s_br.c_str());
-	    }*/
+	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && s2i(opt->attr("primaryCmd"))) {
+		string aNm = opt->name(), lstStat;
+		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "");
+		while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ;
+	    }
 	}
     }
     catch(TError err) {

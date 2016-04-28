@@ -96,6 +96,21 @@ Server::EP *TProt::epEnAt( const string &ep )
 
 bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 {
+#ifdef POOL_OF_TR
+    //Pool for subscriptions process
+    AutoHD<TProtIn> ip = at(inPrtId);
+    if(ip.at().waitReqTm() && !ip.at().mSubscrIn && epPresent(ip.at().mEp)) {
+	int64_t wTm = SYS->curTime();
+	if((wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm()) {
+	    ip.at().mSubscrCntr++;
+	    ip.at().mPrevTm = wTm;
+	    ip.at().mSubscrIn = true;
+	    epAt(ip.at().mEp).at().subScrCycle(ip.at().mSubscrCntr, answ, inPrtId);
+	    ip.at().mSubscrIn = false;
+	}
+    }
+#endif
+
     ResAlloc res(enRes, false);
     return Server::inReq(request, inPrtId, answ);
 }
@@ -143,8 +158,7 @@ void TProt::load_( )
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); )
-	    {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); ) {
 		string id = g_cfg.cfg("ID").getS();
 		if(!epPresent(id)) epAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 		itReg[id] = true;
@@ -218,7 +232,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn(name)	{ }
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPoolTm(0), mSubscrCntr(0), mPrevTm(0)	{ }
 
 TProtIn::~TProtIn( )		{ }
 
@@ -227,7 +241,11 @@ TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
+#ifdef POOL_OF_TR
+    return owner().inReq(mBuf, name(), &answ);
+#else
     return owner().inReq(mBuf, name());
+#endif
 }
 
 //*************************************************
@@ -282,6 +300,7 @@ string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
 bool OPCEndPoint::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
+#ifndef POOL_OF_TR
 void *OPCEndPoint::Task( void *iep )
 {
     OPCEndPoint &ep = *(OPCEndPoint *)iep;
@@ -296,6 +315,7 @@ void *OPCEndPoint::Task( void *iep )
 
     return NULL;
 }
+#endif
 
 void OPCEndPoint::load_( )
 {
@@ -352,9 +372,23 @@ void OPCEndPoint::setEnable( bool vl )
 	nodeReg(OpcUa_BaseObjectType,NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ),"DAQParameterObjectType",NC_ObjectType,OpcUa_HasSubtype);
 	nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),NS_OpenSCADA_DAQ),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->
 	    setAttr("DisplayName",SYS->daq().at().subName());
+#ifndef POOL_OF_TR
 	SYS->taskCreate(nodePath('.',true), 0/*mPrior*/, OPCEndPoint::Task, this);
     }
     else SYS->taskDestroy(nodePath('.',true));
+#else
+    }
+#endif
+}
+
+void OPCEndPoint::setPublish( const string &inPrtId )
+{
+#ifdef POOL_OF_TR
+    AutoHD<TProtIn> ip = owner().at(inPrtId);
+    ip.at().mPoolTm = subscrProcPer();
+    ip.at().mEp = id();
+#endif
+    //Otherwise the task started/stoped into setEnable()
 }
 
 string OPCEndPoint::getStatus( )

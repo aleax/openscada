@@ -691,6 +691,12 @@ VisDevelop::~VisDevelop( )
 
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
+    //Mark commands in "primaryCmd", for redundant hosts mostly transfer
+    // !!! Move further to the command's source
+    if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
+	    node.name() == "load" || node.name() == "save")
+	node.setAttr("primaryCmd", "1");
+
     waitCursorSet(1);	//QApplication::setOverrideCursor(Qt::WaitCursor);
     int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
     waitCursorSet(0);	//QApplication::restoreOverrideCursor();

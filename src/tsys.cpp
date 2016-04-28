@@ -58,7 +58,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
     mModDir(oscd_moddir_full), mIcoDir("icons;"oscd_datadir_full"/icons"), mDocDir("docs;"oscd_datadir_full"/docs"),
     mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1),
-    mainPthr(0), mSysTm(time(NULL)), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0)
+    mainPthr(0), mSysTm(time(NULL)), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -555,6 +555,7 @@ void TSYS::cfgPrmLoad( )
     setRdStLevel(s2i(TBDS::genDBGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
     setRdTaskPer(s2r(TBDS::genDBGet(nodePath()+"RdTaskPer",r2s(rdTaskPer()))));
     setRdRestConnTm(s2i(TBDS::genDBGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
+    setRdPrimCmdTr(s2i(TBDS::genDBGet(nodePath()+"RdPrimCmdTr",i2s(rdPrimCmdTr()))));
     string stLs = TBDS::genDBGet(nodePath()+"RdStList"), stId;
     mRdRes.lock(true);
     for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
@@ -632,6 +633,7 @@ void TSYS::save_( )
     TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
     TBDS::genDBSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
     TBDS::genDBSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
     mRdRes.lock(false);
     string stLs;
     for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
@@ -2479,6 +2481,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root","root",1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root","root",1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root","root",1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/redund/primCmdTr",_("Local primary commands transfer"),RWRWR_,"root","root",1,"tp","bool");
 	    if(ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root","root",2,"key","st","s_com","add,del")) {
 		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root","root",3,"tp","str","dest","select","select","/redund/lsSt");
 		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root","root",1,"tp","str");
@@ -2664,6 +2667,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/redund/restConn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(rdRestConnTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setRdRestConnTm(s2i(opt->text()));
+    }
+    else if(a_path == "/redund/primCmdTr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(rdPrimCmdTr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setRdPrimCmdTr(s2i(opt->text()));
     }
     else if(a_path == "/redund/sts") {
 	ResAlloc res(mRdRes, true);

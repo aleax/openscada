@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.5"
+#define MOD_VER		"0.9.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -477,6 +477,11 @@ string TWEB::trMessReplace( const string &tsrc )
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 {
+    //Mark commands in "primaryCmd", for redundant hosts mostly transfer
+    // !!! Move further to the command's source
+    if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
+	    node.name() == "load" || node.name() == "save")
+	node.setAttr("primaryCmd", "1");
     try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
     catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 

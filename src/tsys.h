@@ -210,6 +210,8 @@ class TSYS : public TCntrNode
 	void setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }
 	int rdRestConnTm( )		{ return mRdRestConnTm; }
 	void setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); modif(); }
+	bool rdPrimCmdTr( )		{ return mRdPrimCmdTr; }
+	void setRdPrimCmdTr( bool vl )	{ mRdPrimCmdTr = vl; modif(); }
 	string rdStRequest( XMLNode &req, const string &st = "", bool toScan = false );	//Request to a remote station if <st> is empty or force
 
 	// Convert value to string
@@ -403,6 +405,7 @@ class TSYS : public TCntrNode
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds
 	float		mRdTaskPer,	//Redundant task period in seconds
 			mRdPrcTm;	//Redundant process time
+	bool		mRdPrimCmdTr;	//Allow transfer local primary commands to redundant ones
 
 	struct sigaction	sigActOrig;
 };

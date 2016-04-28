@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfg file: web_cfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -100,13 +100,13 @@ class TWEB: public TUI
 	int  postCmd( SSess &ses, XMLNode &node, string prs_path );
 	int  postList( SSess &ses, XMLNode &node, string prs_path );
 	int  postTable( SSess &ses, XMLNode &node, string prs_path );
-	//> Post message dialog
+	// Post message dialog
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 
-	//> Get form content for name
+	// Get form content for name
 	string cntGet( SSess &ses, const string &nm );
 
-	//> Controll system requests
+	// Controll system requests
 	int cntrIfCmd( XMLNode &node );
 
 	string modInfo( const string &name );

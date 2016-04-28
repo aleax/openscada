@@ -1,3 +1,10 @@
+2016-04-28 Roman
+- !!!:SYS,UI.{QTCfg,Vision,WebCfg,WebCfgD}: Transfer local primary commands to redundant host is added, by an option of redundancy.
+    As primary commands, which transfered, mean: "set", "add", "ins", "del", "move", "load", "save".
+- !:Protocol.OPC_UA: Works into pool mode of input transport are allowed and enabled by default.
+- UI.WebCfg: Source code significant cleaned.
+
+
 2016-04-26 Roman
 - !!:SYS: Messages about redundant stations up and down are added.
     TSYS::rdStRequest() expanded by scan mode for stations.

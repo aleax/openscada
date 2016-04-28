@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-26 20:55+0300\n"
+"POT-Creation-Date: 2016-04-28 17:02+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1920,6 +1920,9 @@ msgstr "Zeit der Reservierungsaufgabe"
 
 msgid "Restore connection timeout (s)"
 msgstr "Interval der Wiederherstellungzeit der Verbindung"
+
+msgid "Local primary commands transfer"
+msgstr "Lokale primäre Befehle Übertragung"
 
 msgid "Stations"
 msgstr "Stationen"

@@ -2025,6 +2025,7 @@ bool Server::inReq( string &rba, const string &inPrtId, string *answ )
     int off = 0;
     bool dbg = debug(), holdConn = true;
 
+    //The same input request processing
 nextReq:
     if(rba.size() <= 0) return holdConn;
     string rb, out;
@@ -2565,6 +2566,7 @@ nextReq:
 		    uint32_t subScrId = wep->subscrSet(0, SS_CREATING, en, sesTokId, pi, lt, ka, npp, pr);
 		    if(!subScrId) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadTooManySubscriptions; break; }
 		    if(dbg) debugMess(strMess("EP: SubScription %d created.",subScrId));
+		    wep->setPublish(inPrtId);
 		    Subscr ss = wep->subscrGet(subScrId);
 
 		    //  Respond
@@ -3479,7 +3481,7 @@ void Server::EP::setEnable( bool vl )
     mEn = vl;
 }
 
-void Server::EP::subScrCycle( unsigned cntr )
+void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId )
 {
     pthread_mutex_lock(&mtxData);
 
@@ -3491,6 +3493,7 @@ void Server::EP::subScrCycle( unsigned cntr )
 	Subscr &scr = mSubScr[i_sc];
 	if(scr.st == SS_CLOSED) continue;
 	if(!(s=sessGet_(scr.sess)) || !s->tAccess) { scr.setState(SS_CLOSED); continue; }
+	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
 	// Monitored items processing
 	bool hasData = false;
 	XML_N req("data");
@@ -3530,8 +3533,9 @@ void Server::EP::subScrCycle( unsigned cntr )
     for(size_t i_s = 0; i_s < sls.size(); i_s++) {
 	if(!(s=sessGet_(sls[i_s])) || s->publishReqs.empty()) continue;
 	string req = s->publishReqs.front(), inPrt = s->inPrtId;
+	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
 	pthread_mutex_unlock(&mtxData);
-	serv->inReq(req, inPrt);
+	serv->inReq(req, inPrt, answ);
 	pthread_mutex_lock(&mtxData);
     }
 

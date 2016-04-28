@@ -3,7 +3,7 @@
 /******************************************************************************
  *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
- *   Version: 1.0.3							      *
+ *   Version: 1.0.4							      *
  *	* Initial version control.					      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
@@ -715,9 +715,11 @@ class Server: public UA
 		virtual uint32_t limRetrQueueTm( )	{ return 0; }	//Time limit (seconds) for retransmission queue
 
 		bool enableStat( )	{ return mEn; }
+		virtual bool publishInPool( ) = 0;	//Publish in the pool mode of transport, otherwise that is an external task
 
 		virtual void setEnable( bool vl );
-		void subScrCycle( unsigned cntr );	//Subscriptions processing cycle
+		virtual void setPublish( const string &inPrtId )	{ }	//Start a publish task or input request's pool of subScrCycle()
+		void subScrCycle( unsigned cntr, string *answ = NULL, const string &inPrtId = "" );	//Subscriptions processing cycle
 
 		// Security policies
 		int secSize( )		{ return mSec.size(); }
@@ -777,6 +779,7 @@ class Server: public UA
 	virtual string applicationUri( ) = 0;
 	virtual string productUri( ) = 0;
 	virtual string applicationName( ) = 0;
+
 	virtual bool debug( )	{ return false; }
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
