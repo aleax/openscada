@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.JavaLikeCalc translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:36+0300\n"
+"POT-Creation-Date: 2016-05-04 21:12+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -53,6 +53,7 @@ msgstr "Выполнение функции прервано ошибкой"
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr "Исчерпано время вычисления функции %d > %d+%d"
 
+#, c-format
 msgid "Not supported type %d for operation 'Add'."
 msgstr "Не поддерживаемый тип %d для операции 'Add'."
 
@@ -314,6 +315,10 @@ msgstr ""
 "Если 'aid' или 'anm' не установлены то они будут генерироваться из "
 "выбранного IO функции."
 
+#, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Внутрення функция недоступна ввиду смещения %d > %d"
+
 msgid "Error constant after constant"
 msgstr "Ошибка постоянной после постоянной"
 
@@ -330,6 +335,16 @@ msgstr "Символ перевода линии недопустим в стр�
 
 msgid "Using namespace is error or empty, "
 msgstr "Ошибка использования области имён или она пуста, "
+
+msgid "Internal function declaration error, "
+msgstr "Ошибка определения внутренней функции, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Внутренняя функция '%s' ранее определена, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Не включать определение одной внутренней функции в другую, "
 
 msgid "Build in function has too much parameters, "
 msgstr "Встроенная функция имеет слишком много параметров, "

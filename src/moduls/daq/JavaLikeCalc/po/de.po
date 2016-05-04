@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:36+0300\n"
+"POT-Creation-Date: 2016-05-04 21:12+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -58,6 +58,7 @@ msgstr "Funktion Ausführung abgebrochen durch Fehler"
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr "Zeitüberschreitung Berechnung der Funktion %d > %d+%d"
 
+#, c-format
 msgid "Not supported type %d for operation 'Add'."
 msgstr "Nicht unterstützt Typ %d für den Betrieb auf 'Hinzufügen'."
 
@@ -155,8 +156,9 @@ msgid ""
 "Provides based on java like language calculator and engine of libraries.  "
 "The user can create and modify functions and libraries."
 msgstr ""
-"Bietet auf Basis von Java ähnlichen Sprache Rechner und Motor der Bibliotheken. "
-"Der Anwender kann erstellen und Funktionen und Bibliotheken zu modifizieren."
+"Bietet auf Basis von Java ähnlichen Sprache Rechner und Motor der "
+"Bibliotheken. Der Anwender kann erstellen und Funktionen und Bibliotheken zu "
+"modifizieren."
 
 msgid "Parameters table"
 msgstr "Tabelle der Parameter"
@@ -319,6 +321,10 @@ msgstr ""
 "  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewählten IO "
 "der Funktion generiert."
 
+#, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Interne Funktion unzugänglich durch Offset %d > %d"
+
 msgid "Error constant after constant"
 msgstr "Fehler konstant nach konstanter"
 
@@ -334,6 +340,16 @@ msgstr "Das Zeichen für das Zeilenende ist in der Zeichenkette, "
 
 msgid "Using namespace is error or empty, "
 msgstr "Namensbereich ist fehlerhaft oder leer, "
+
+msgid "Internal function declaration error, "
+msgstr "Interne Funktionsdeklaration Fehler, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Interne Funktionen '%s' früh definiert, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Nicht Deklaration einer internen Funktion auf andere schließen, "
 
 msgid "Build in function has too much parameters, "
 msgstr "Installierte Funktion hat zu viel Parameter, "

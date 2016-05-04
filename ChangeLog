@@ -1,3 +1,9 @@
+2016-05-04 Roman
+- DB.LibsDB.OscadaLibs.db: "Low level devices" library of DAQ.JavaLikeCalc functions and function "Display 1602A" (for Raspberry Pi) into is added.
+    base.digAlarm DAQ template expanded by an input processing procedure like into base.anIn.
+- !!!!:DAQ.JavaLikeCalc: Support of included functions definition and it's call is added.
+
+
 2016-04-29 Roman
 - !!:FIX:Archives: Locking for access to the alarms table is expanded to sort into the messages get request.
 
@@ -5,7 +11,7 @@
 2016-04-28 Roman
 - !!!:SYS,UI.{QTCfg,Vision,WebCfg,WebCfgD}: Transfer local primary commands to redundant host is added, by an option of redundancy.
     As primary commands, which transfered, mean: "set", "add", "ins", "del", "move", "load", "save".
-- !:Protocol.OPC_UA: Works into pool mode of input transport are allowed and enabled by default.
+- !:Protocol.OPC_UA: Works into poll mode of input transport are allowed and enabled by default.
 - UI.WebCfg: Source code significant cleaned.
 
 
@@ -337,8 +343,8 @@
     Transports subsystem type modules version rose to 8.
     UI subsystem type modules version rose to 7.
     TFunction: Mostly the source code cleaned and run_st renamed ro runSt.
-- !!!:Protocol.{*,UserProtocol},Transport.{Sockets,SSL}: Function Protocol::waitReqTm() added for pool mode control of input protocols.
-    Protocol.UserProtocol and Transport.{Sockets,SSL} adapted to pool mode of input transport-protocol support.
+- !!!:Protocol.{*,UserProtocol},Transport.{Sockets,SSL}: Function Protocol::waitReqTm() added for poll mode control of input protocols.
+    Protocol.UserProtocol and Transport.{Sockets,SSL} adapted to poll mode of input transport-protocol support.
 
 
 2015-11-11 Roman

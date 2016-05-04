@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -122,7 +122,7 @@ class Reg
 	    Neg,	//[CRRrr]: Negate real.
 	    If,		//[CRR00nn]: Construction [if(R) else <00>; <nn>]
 	    Cycle,	//[CRRbbaann]: Cycles construction [for(<first_init>;R=<cond>;aa)<bb>;<nn>] [while(R=<cond>)<bb>;<nn>]
-	    CycleObj,	//[COObbRRnn]: Object cycles construction [for( RR in OO )<bb>;<nn>]
+	    CycleObj,	//[COObbRRnn]: Object cycles construction [for(RR in OO)<bb>;<nn>]
 	    Break,	//[C]: Break for cycles
 	    Continue,	//[C]: Continue for cycles
 	    FSin,	//[CRRrr]: Function sine.
@@ -150,7 +150,10 @@ class Reg
 	    FTr,	//[CRRrr]: Function for get translation of base message.
 	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
 	    CFunc,	//[CFnRR____]: Function.
-	    CFuncObj	//[CRRnRR____]: Object's function
+	    CFuncObj,	//[CRRnRR____]: Object's function
+	    IFuncDef,	//[CNNnRR____]: Internal function's header definition where:
+			//		{NN} - code size, {n} - arguments number, {__} - argument's variables, {RR} - return
+	    IFunc	//[CNNnRR____]: Internal function call into the absolute position {NN} and for {n} arguments {__} and return into {RR}.
 	};
 
 	union El {
@@ -270,7 +273,7 @@ class Func : public TConfig, public TFunction
 	bool progTr( )			{ return cfg("PR_TR"); }
 	string prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }
-	int64_t	timeStamp( )		{ return mTimeStamp; }
+	int64_t timeStamp( )		{ return mTimeStamp; }
 	unsigned cnstStatLim( )		{ return 32767; }
 
 	void setName( const string &nm );
@@ -288,19 +291,23 @@ class Func : public TConfig, public TFunction
 	void valAtt( TValFunc *vfnc );
         void valDet( TValFunc *vfnc );
 
-	// Functins`list functions
+	// External functions
 	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return mFncs.at(id); }
 	void funcClear( );
 
-	// Registers`list functions
+	// Internal functions
+	int inFuncGet( const string &nm );
+	void inFuncDef( const string &nm, int pos );
+
+	// Registers' list functions
 	int regNew( bool sep = false, int recom = -1 );
-	int regGet( const string &nm );
+	int regGet( const string &nm, bool inFncNS = false );
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
 	void regClear( );
 
-	// Temporary registers`list functions
+	// Temporary registers' list functions
 	Reg *regTmpNew( );
 	void regTmpClean( );
 
@@ -323,6 +330,7 @@ class Func : public TConfig, public TFunction
 	void cdCycleObj(int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var );
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL );
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
+	Reg *cdIntFnc( int fOff, int pCnt, bool proc = false );
 	Reg *cdObjFnc( Reg *obj, int p_cnt );
 	Reg *cdProp( Reg *obj, const string &sprp, Reg *dprp = NULL );
 
@@ -356,7 +364,7 @@ class Func : public TConfig, public TFunction
     protected:
 	//Data
 	struct ExecData {
-	    time_t	start_tm;	//Start time
+	    time_t	startTm;	//Start time
 	    unsigned char flg;		//0x01 - recursive exit stat;
 					//0x02 - break operator flag;
 					//0x04 - continue operator flag;
@@ -387,17 +395,19 @@ class Func : public TConfig, public TFunction
 
 	// Parser's data
 	string		sprg, prg;	//Build prog
-	unsigned	la_pos;		//LA position
-	string		p_err;		//Parse error
-	string		mUsings;	//Functions usings namespaces
-	vector<UFunc*>	mFncs;		//Work functions list
-	vector<Reg*>	mRegs;		//Work registers list
+	unsigned	laPos;		//LA position
+	string		pErr;		//Parse error
+	string		mUsings,	//External functions usings namespaces
+			mInFnc;		//Current internal function namespace
+	vector<UFunc*>	mFncs;		//External functions list in action
+	map<string, int> mInFncs;	//Internal functions list in compile
+	vector<Reg*>	mRegs;		//Registers list in action
 	vector<Reg*>	mTmpRegs;	//Constant temporary list
-	deque<Reg*>	f_prmst;	//Function's parameters stack
-	Res		&parse_res;
+	deque<Reg*>	fPrmst;		//Function's parameters stack
+	Res		&parseRes;
 };
 
-extern Func *p_fnc;
+extern Func *pF;
 
 } //End namespace StatFunc
 

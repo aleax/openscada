@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,14 +31,14 @@
 
 using namespace JavaLikeCalc;
 
-Func *JavaLikeCalc::p_fnc;
+Func *JavaLikeCalc::pF;
 
 //*************************************************
 //* Func: Function                                *
 //*************************************************
 Func::Func( const string &iid, const string &name ) :
     TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
-    mMaxCalcTm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parse_res(mod->parseRes())
+    mMaxCalcTm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parseRes(mod->parseRes())
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
@@ -285,7 +285,7 @@ void Func::setStart( bool val )
     if(val == runSt) return;
     //Start calc
     if(val) {
-	progCompile( );
+	progCompile();
 	runSt = true;
     }
     //Stop calc
@@ -325,20 +325,22 @@ void Func::ioMove( int pos, int to )
 
 void Func::progCompile( )
 {
-    ResAlloc res(parse_res, true);
+    ResAlloc res(parseRes, true);
     ResAlloc res1(fRes(), true);
 
     //Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
 
-    p_fnc  = this;	//Parse func
-    p_err  = "";	//Clear error messages
-    la_pos = 0;		//LA position
+    pF  = this;	//Parse func
+    pErr  = "";	//Clear error messages
+    laPos  = 0;		//LA position
     sprg   = cfg("FORMULA").getS();
     prg.clear();	//Clear program
     regClear();		//Clear registers list
     regTmpClean( );	//Clear temporary registers list
     funcClear();	//Clear functions list
+    mInFnc = "";
+    mInFncs.clear();
 
     if(yyparse()) {
 	prg.clear();
@@ -346,10 +348,12 @@ void Func::progCompile( )
 	regClear();
 	regTmpClean();
 	funcClear();
+	mInFncs.clear();
 	runSt = false;
-	throw TError(nodePath().c_str(), "%s", p_err.c_str());
+	throw TError(nodePath().c_str(), "%s", pErr.c_str());
     }
     sprg.clear();
+    mInFncs.clear();
     regTmpClean();
 
     //Work registers update for calc contexts
@@ -390,6 +394,18 @@ void Func::funcClear( )
     mFncs.clear();
 }
 
+int Func::inFuncGet( const string &nm )
+{
+    map<string, int>::iterator iF = mInFncs.find(nm);
+    return (iF == mInFncs.end()) ? -1 : iF->second;
+}
+
+void Func::inFuncDef( const string &nm, int pos )
+{
+    if(pos >= 0) { mInFncs[nm] = pos; mInFnc = nm; }
+    else mInFnc = "";
+}
+
 int Func::regNew( bool sep, int recom )
 {
     //Get new register
@@ -405,8 +421,10 @@ int Func::regNew( bool sep, int recom )
     return i_rg;
 }
 
-int Func::regGet( const string &nm )
+int Func::regGet( const string &inm, bool inFncNS )
 {
+    string nm = inm;
+    if(inFncNS && mInFnc.size()) nm = mInFnc+":"+nm;
     //Check allow registers
     for(int i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
 	if(mRegs[i_rg]->name() == nm)
@@ -492,7 +510,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 #endif
 	}
 	else if(mRegs.size() < cnstStatLim()) {
-	    *(rez=regAt(p_fnc->regNew(true))) = *op;
+	    *(rez=regAt(pF->regNew(true))) = *op;
 	    rez->setLock(true);
 	    op->free();
 #ifdef OSC_DEBUG
@@ -503,7 +521,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
     }
 
     //Same mvi
-    int r_id = p_fnc->regNew();
+    int r_id = pF->regNew();
     *(rez=regAt(r_id)) = *op;
     op->free();
     if(no_code) return rez;
@@ -534,7 +552,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    prg.append((char*)&addr, sizeof(uint16_t));
 	    prg += (uint8_t)vmin(255, sval.size());
 	    prg += sval.substr(0, vmin(255,sval.size()));
-	    //> Load and append next parts for big string (>255)
+	    //Load and append next parts for big string (>255)
 	    for(unsigned i_chunk = 1; i_chunk < (sval.size()/255+((sval.size()%255)?1:0)); i_chunk++) {
 		Reg *treg = regTmpNew();
 		*treg = sval.substr(i_chunk*255, vmin(255,(sval.size()-i_chunk*255)));
@@ -580,12 +598,12 @@ Reg *Func::cdMviArray( int p_cnt )
 
     //Mvi all parameters
     for(int i_prm = 0; i_prm < p_cnt; i_prm++)
-	f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
+	fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
     //Get parameters.
     for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
-	p_pos.push_front(f_prmst.front()->pos());
-	f_prmst.front()->free();
-	f_prmst.pop_front();
+	p_pos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
     }
     //Make result
     Reg *rez = regAt(regNew());
@@ -610,11 +628,11 @@ Reg *Func::cdMviRegExp( int p_cnt )
     Reg *rg_arg  = NULL;
 
     if(p_cnt == 2) {
-	rg_arg = cdMvi(f_prmst.front());	f_prmst.pop_front();
-	rg_expr = cdMvi(f_prmst.front());	f_prmst.pop_front();
+	rg_arg = cdMvi(fPrmst.front());	fPrmst.pop_front();
+	rg_expr = cdMvi(fPrmst.front());fPrmst.pop_front();
     }
     else {
-	rg_expr = cdMvi(f_prmst.front());	f_prmst.pop_front();
+	rg_expr = cdMvi(fPrmst.front());	fPrmst.pop_front();
 	rg_arg = regTmpNew();
 	rg_arg->setType(Reg::String);
         rg_arg = cdMvi(rg_arg);
@@ -1089,13 +1107,13 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	throw TError(nodePath().c_str(), _("Function is requested '%s', but it doesn't have return of IO"), funcAt(f_id)->func().at().id().c_str());
 
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
 
     //Get parameters. Add check parameters type !!!!
     for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
-	p_pos.push_front(f_prmst.front()->pos());
-	f_prmst.front()->free();
-	f_prmst.pop_front();
+	p_pos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
     }
 
     //Make result
@@ -1122,6 +1140,36 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     return rez;
 }
 
+Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
+{
+    Reg *rez = NULL;
+    deque<int> pPos;
+
+    //Mvi all parameters
+    for(int iPrm = 0; iPrm < pCnt; iPrm++) fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
+
+    //Get parameters
+    for(int iPrm = 0; iPrm < pCnt; iPrm++) {
+	pPos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
+    }
+
+    //Make result
+    if(!proc) (rez=regAt(regNew()))->setType(Reg::Real);
+
+    //Make code
+    uint16_t addr;
+    prg += (uint8_t)Reg::IFunc;
+    addr = fOff; prg.append((char*)&addr, sizeof(uint16_t));
+    prg += (uint8_t)pCnt;
+    addr = proc ? 0 : rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    for(unsigned iPrm = 0; iPrm < pPos.size(); iPrm++)
+    { addr = pPos[iPrm]; prg.append((char*)&addr, sizeof(uint16_t)); }
+
+    return rez;
+}
+
 Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
 {
     if(!obj->objEl())	throw TError(nodePath().c_str(), _("No object variable for function"));
@@ -1131,12 +1179,12 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     deque<int> p_pos;
 
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
     //Get parameters
     for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
-	p_pos.push_front(f_prmst.front()->pos());
-	f_prmst.front()->free();
-	f_prmst.pop_front();
+	p_pos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
     }
     obj->free();
     rez = regAt(regNew());
@@ -1469,12 +1517,12 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 {
     TVariant vl(EVAL_REAL);
 
-    //> Get base value
+    //Get base value
     switch(rg.type()) {
-	case Reg::Bool:	  vl = rg.val().b;	break;
-	case Reg::Int:	  vl = rg.val().i;	break;
-	case Reg::Real:	  vl = rg.val().r;	break;
-	case Reg::String: vl = *rg.val().s;	break;
+	case Reg::Bool:		vl = rg.val().b;	break;
+	case Reg::Int:		vl = rg.val().i;	break;
+	case Reg::Real:		vl = rg.val().r;	break;
+	case Reg::String:	vl = *rg.val().s;	break;
 	case Reg::Var:
 	    switch(io->ioType(rg.val().io)) {
 		case IO::Boolean:	vl = io->getB(rg.val().io);	break;
@@ -1710,8 +1758,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 
     while(!(dt.flg&0x01)) {
 	//Calc time control mechanism
-	if(SYS->sysTm() > (dt.start_tm+mMaxCalcTm)) {
-	    mess_err(nodePath().c_str(), _("Timeouted function calculation %d > %d+%d"), SYS->sysTm(), dt.start_tm, mMaxCalcTm);
+	if(SYS->sysTm() > (dt.startTm+mMaxCalcTm)) {
+	    mess_err(nodePath().c_str(), _("Timeouted function calculation %d > %d+%d"), SYS->sysTm(), dt.startTm, mMaxCalcTm);
 	    dt.flg |= 0x09;
 	    return;
 	}
@@ -2558,7 +2606,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getO());	break;
 			    default:	break;
 			}
-		//> Process return
+		//Process return
 		switch(rez.type()) {
 		    case TVariant::Boolean:	reg[ptr->rez] = rez.getB();	break;
 		    case TVariant::Integer:	reg[ptr->rez] = rez.getI();	break;
@@ -2568,6 +2616,40 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		    default:	break;
 		}
 
+		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
+	    }
+	    case Reg::IFuncDef: {
+		struct SCode { uint8_t cod; uint16_t sz; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#ifdef OSC_DEBUG
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "%ph: Internal function definition pass in long %d.", cprg, ptr->sz);
+#endif
+		cprg += ptr->sz; continue;
+	    }
+	    case Reg::IFunc: {
+		struct SCode { uint8_t cod; uint16_t off; uint8_t n; uint16_t rez; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+		struct SFCode { uint8_t cod; uint16_t sz; uint8_t n; uint16_t rez; } __attribute__((packed));
+		const struct SFCode *ptrF = (const struct SFCode *)(prg.data()+ptr->off);
+
+#ifdef OSC_DEBUG
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "%ph: Call internal function/procedure %d = %d(%d).", cprg, ptr->rez, ptr->off, ptr->n);
+#endif
+
+		// Process parameters
+		for(int iF = 0; iF < ptrF->n; iF++)
+		    reg[TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t))] =
+			(iF >= ptr->n) ? TVariant() : getVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))]);
+		// Make calc
+		exec(val, (const uint8_t*)ptrF+sizeof(SFCode)+ptrF->n*sizeof(uint16_t), dt);
+		// Process outputs
+		for(int iF = 0; iF < vmin(ptrF->n,ptr->n); iF++)
+		    setVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))],
+				getVal(val, reg[TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t))]));
+		// Return rezult
+		if(ptr->rez) reg[ptr->rez] = getVal(val, reg[ptrF->rez]);
 		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
 	    }
 	    default:
