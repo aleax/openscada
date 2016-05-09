@@ -530,6 +530,10 @@ retry:
 	    *yylval.reg = (smb_nm == "true") ? true : false;
 	    return CONST;
 	}
+
+	//Check IO
+	if(c != '(' && (yylval.reg=pF->regAt(pF->ioGet(smb_nm)))) return VAR;
+
 	//Constants
 	NConst *cnst_v;
 	if((cnst_v = mod->constGet(smb_nm.c_str())) != NULL) {
@@ -618,7 +622,7 @@ retry:
 	    return ERR;
 	}
 	//Check IO
-	if((yylval.reg=pF->regAt(pF->ioGet(smb_nm)))) return VAR;
+	//if((yylval.reg=pF->regAt(pF->ioGet(smb_nm)))) return VAR;
 
 	//Keywords
 	if(smb_nm == "in")	return IN;

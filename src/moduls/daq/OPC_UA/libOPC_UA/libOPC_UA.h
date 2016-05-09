@@ -1,25 +1,34 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
-/******************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>	      *
- *									      *
- *   Version: 1.0.4							      *
- *	* Initial version control.					      *
- *									      *
- *   This library is free software; you can redistribute it and/or modify     *
- *   it under the terms of the GNU Lesser General Public License as	      *
- *   published by the Free Software Foundation; version 3 of the License.     *
- *									      *
- *   This library is distributed in the hope that it will be useful,	      *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of	      *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	      *
- *   GNU Lesser General Public License for more details.		      *
- *									      *
- *   You should have received a copy of the GNU Lesser General Public License *
- *   along with this library; if not, write to the			      *
- *   Free Software Foundation, Inc.,					      *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.		      *
- ******************************************************************************/
+/********************************************************************************
+ *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>		*
+ *										*
+ *   Version: 1.1.0								*
+ *	* Packages sequence number managing for server part is fixed by		*
+ *	  separating from the value of input packages.				*
+ *	* Initial filters support is added into requests			*
+ *	  CreateMonitoredItemsRequest and ModifyMonitoredItemsRequest.		*
+ *	* Packages sequence number managing for input part also unified		*
+ *	  and fixed to prevent the value repeats.				*
+ *	* Early Acknowledgements processing in request "Publish" is added.	*
+ *	* Adapting to work with UAExpert 1.4.					*
+ *   Version: 1.0.4								*
+ *	* Initial version control.						*
+ *										*
+ *   This library is free software; you can redistribute it and/or modify	*
+ *   it under the terms of the GNU Lesser General Public License as		*
+ *   published by the Free Software Foundation; version 3 of the License.	*
+ *										*
+ *   This library is distributed in the hope that it will be useful,		*
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of		*
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the		*
+ *   GNU Lesser General Public License for more details.			*
+ *										*
+ *   You should have received a copy of the GNU Lesser General Public License	*
+ *   along with this library; if not, write to the				*
+ *   Free Software Foundation, Inc.,						*
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.			*
+ ********************************************************************************/
 
 #ifndef LIBOPC_UA_H
 #define LIBOPC_UA_H
@@ -178,6 +187,7 @@ namespace OPC
 #define OpcUa_ReadResponse			634
 #define OpcUa_WriteRequest			673
 #define OpcUa_WriteResponse			676
+#define OpcUa_EventFilterResult			736
 #define OpcUa_CreateMonitoredItemsRequest	751
 #define OpcUa_CreateMonitoredItemsResponse	754
 #define OpcUa_ModifyMonitoredItemsRequest	763
@@ -400,7 +410,6 @@ class NodeId
 	void setNumbVal( uint32_t in );
 	void setStrVal( const string &istr, Type tp = String );
 
-	// Static
 	static NodeId fromAddr( const string &strAddr );
 	string toAddr( ) const;
 
@@ -455,6 +464,7 @@ class UA
 	static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
 	static int64_t iTm( const string &buf, int &off );
 	static NodeId iNodeId( const string &buf, int &off );
+	static string iVariant( const string &buf, int &off, uint8_t *tp = NULL );
 	static void iDataValue( const string &buf, int &off, XML_N &nVal );
 
 	static void oN( string &buf, int64_t val, char sz, int off = -1 );
@@ -497,8 +507,7 @@ class Client: public UA
 		//Methods
 		SClntSess( )		{ clearFull( ); }
 		void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
-		void clearFull( bool inclEPdescr = false )
-		{
+		void clearFull( bool inclEPdescr = false ) {
 		    endPoint = servCert = clKey = servKey = "";
 		    if(inclEPdescr) endPointDscr.clear();
 		    secPolicy = "None"; secMessMode = 1;
@@ -584,7 +593,7 @@ class Server: public UA
 	    uint32_t	TokenId, TokenIdPrev;
 	    string	clCert, clAddr;
 	    string	servKey, clKey;
-	    uint32_t	seqN, startSeqN;
+	    uint32_t	servSeqN, clSeqN, startClSeqN;
 	};
 	//* Session
 	class Sess
@@ -664,6 +673,7 @@ class Server: public UA
 			uint32_t	qSz;		//Queue size
 			bool		dO;		//Discard oldest
 			uint32_t	cH;		//Client handle
+			XML_N		fltr;		//Filters
 
 			int		vTp;		//Values type
 			int64_t		dtTm;		//Last value time
@@ -744,7 +754,7 @@ class Server: public UA
 		//  Monitored items
 		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = 0 for new create
 		    const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
-		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID );
+		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID, XML_N *fltr = NULL );
 		Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );
 
 		virtual uint32_t reqData( int reqTp, XML_N &req );

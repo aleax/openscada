@@ -4147,7 +4147,7 @@ else {
 		if(!(t_err=req.attr("err")).length) zeroSet = false;
 	}
 
-	//Check and set pool mode
+	//Check and set poll mode
 	if((t_err=req.attr("err")).length && t_err.toInt() == 4) {
 		req.setAttr("err", "2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x00,0x01));
 		tr.messIO(req, "UserProtocol");
@@ -6964,9 +6964,12 @@ if(step < 0 || step == 8) {
 	buf = vArhBuf(1, 10, per*1000000, true, true);
 	buf.set(10000, tm+9*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
 }','','',1426404595);
-CREATE TABLE 'flb_lowLevDevs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+CREATE TABLE 'flb_lowLevDevs_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln1','Line 1',0,0,'',0,0);
+INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln2','Line 2',0,0,'',0,1);
+CREATE TABLE 'flb_lowLevDevs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_lowLevDevs" VALUES('1602A','Display 1602A','Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
-Connection: GPIO7(RS), GPIO8(E), GPIO25(D4), GPIO24(D5), GPIO23(D6), GPIO18(D7)',10,0,'using DAQ.BCM2835.pi2.pi2;
+Connection: GPIO7(RS), GPIO8(E), GPIO25(D4), GPIO24(D5), GPIO23(D6), GPIO18(D7)',0,10,0,'using DAQ.BCM2835.pi2.pi2;
 using Special.FLibSYS;
 
 function byte(vl, md, dl) {
@@ -6996,8 +6999,5 @@ if(ln2.length) {
 	byte(0xC0);
 	for(iC = 0; iC < min(16,ln2.length); iC++)
 		byte(ln2.charCodeAt(iC), true);
-}',1462365836);
-CREATE TABLE 'flb_lowLevDevs_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln1','Line 1',0,0,'',0,0);
-INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln2','Line 2',0,0,'',0,1);
+}',1462734956);
 COMMIT;

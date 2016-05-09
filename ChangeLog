@@ -1,7 +1,22 @@
+2016-05-09 Roman
+- DB.LibsDB.OscadaLibs.db: Function "Low level devices"."Display 1602A" set to stopped by default, with the new option.
+- !!:DAQ.JavaLikeCalc: To function object is added "To start" parameter for allow disabled by default ones.
+    Checking for IO moved before constants for it's override.
+    Constant "EVAL" as a synonym to EVAL_REAL is added.
+- !!!!:FIX:DAQ.OPC_UA.libOPC_UA: Initial filters support is added into requests CreateMonitoredItemsRequest and ModifyMonitoredItemsRequest
+	only for OpcUa_EventFilter at AId_EventNotifier parse.
+    Input Variants function iVariant() is added as a separated part of function iDataValue().
+    !!!!:FIX: Packages sequence number managing for server part is fixed by separating from the value of input packages.
+    FIX: Packages sequence number managing for input part also unified and fixed to prevent the value repeats.
+    Services CreateMonitoredItems and ModifyMonitoredItems processing merged to singe one.
+    !!: Early Acknowledgements processing in request "Publish" is added.
+    Successful adapting to work with UAExpert 1.4.
+
+
 2016-05-04 Roman
 - DB.LibsDB.OscadaLibs.db: "Low level devices" library of DAQ.JavaLikeCalc functions and function "Display 1602A" (for Raspberry Pi) into is added.
     base.digAlarm DAQ template expanded by an input processing procedure like into base.anIn.
-- !!!!:DAQ.JavaLikeCalc: Support of included functions definition and it's call is added.
+- !!!!:DAQ.JavaLikeCalc: Support of internal functions definition and it's call is added.
 
 
 2016-04-29 Roman
@@ -3234,7 +3249,7 @@
 - DAQ.ModBus: Asynchronous write mode is realized.
 - FIX:XMLNode: Digits using for attributes name set.
 - DAQ: Type parameters using as specific container is added at first, by inherit allow by new function TTipDAQ::tpParmAdd().
-- !:DAQ.Comedi: First realization for simple pool AI, AO, DI, DO and DIO, without configuring yet is added.
+- !:DAQ.Comedi: First realization for simple poll AI, AO, DI, DO and DIO, without configuring yet is added.
 - !!:DAQ.ICP_DAS: The module is separated to three parts "LP_8x" (LP-8000, I-8000 parallel bus), "87x" (I-8700, I-7000 serial bus) and
     "ISA" (ISA DAQ boards) for further unification and expanding different parts.
     Simple ISA DIO is expanded for support boards: "DIO-48", "DIO-96" and "DIO-144" (tested).

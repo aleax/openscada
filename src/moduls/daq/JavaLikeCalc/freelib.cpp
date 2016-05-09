@@ -111,8 +111,7 @@ void Lib::load_( )
     map<string, bool>   itReg;
     TConfig c_el(&mod->elFnc());
     c_el.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); ) {
 	string f_id = c_el.cfg("ID").getS();
 	if(!present(f_id)) add(f_id.c_str());
 	at(f_id).at().load();
@@ -141,7 +140,7 @@ void Lib::setStart( bool val )
     vector<string> lst;
     list(lst);
     for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-	try { at(lst[i_f]).at().setStart(val); }
+	try { if(at(lst[i_f]).at().toStart()) at(lst[i_f]).at().setStart(val); }
 	catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     runSt = val;

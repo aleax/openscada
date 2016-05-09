@@ -266,18 +266,20 @@ class Func : public TConfig, public TFunction
 
 	Func &operator=( Func &func );
 
-	string name( );
-	string descr( )			{ return cfg("DESCR").getS(); }
-	string stor( );
+	string	name( );
+	string	descr( )		{ return cfg("DESCR").getS(); }
+	string	stor( );
+	bool	toStart( )		{ return cfg("START"); }
 	int maxCalcTm( )		{ return mMaxCalcTm; }
-	bool progTr( )			{ return cfg("PR_TR"); }
-	string prog( )			{ return cfg("FORMULA").getS(); }
+	bool	progTr( )		{ return cfg("PR_TR"); }
+	string	prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }
-	int64_t timeStamp( )		{ return mTimeStamp; }
+	int64_t	timeStamp( )		{ return mTimeStamp; }
 	unsigned cnstStatLim( )		{ return 32767; }
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
+	bool setToStart( bool vl )	{ cfg("START") = vl; }
 	void setMaxCalcTm( int vl );
 	void setProgTr( bool vl )	{ cfg("PR_TR") = vl; }
 	void setProg( const string &prg );

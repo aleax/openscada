@@ -49,9 +49,9 @@ class TProtocolIn : public TCntrNode
 	string	name( )			{ return mName.c_str(); }
 	AutoHD<TTransportIn> &srcTr( )	{ return mSrcTr; }	//Source or return address
 	const string &srcAddr( )	{ return mSrcAddr; }
-	virtual unsigned waitReqTm( )	{ return 0; }		//Wait for a request timeout, miliseconds, after which call to
-								//the input protocol object with the empty message, for like to initiative pool allow.
-								//Value '0' used for disable the mechanism and waiting to a message
+	virtual unsigned waitReqTm( )	{ return 0; }		//Wait for the request timeout, miliseconds, after which call to
+								//the input protocol object with the empty message, for like to initiative poll allow.
+								//Value '0' used for disable the mechanism and waiting to any data
 
 	virtual void setSrcTr( TTransportIn *vl )	{ mSrcTr = vl; }
 	virtual void setSrcAddr( const string &vl )	{ mSrcAddr = vl; }
