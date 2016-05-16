@@ -1492,7 +1492,9 @@ void Client::protIO( XML_N &io )
 			oNodeId(mReq, NodeId::fromAddr(nd->attr("nodeId")));			//nodeId
 			oNu(mReq, strtoul(nd->attr("attributeId").c_str(),NULL,0), 4);		//attributeId (Value)
 			oS(mReq, "");								//indexRange
-			oDataValue(mReq, 0x0D, nd->text(), atoi(nd->attr("VarTp").c_str()));	//value
+			oDataValue(mReq, 0x01 /*0x0D*/, nd->text(), atoi(nd->attr("VarTp").c_str()));	//value,
+												//!!: TimeStamps disabled but some servers tell
+												//    0x80730000 (OpcUa_BadWriteNotSupported)
 		    }
 		}
 		else if(io.attr("id") == "Browse") {

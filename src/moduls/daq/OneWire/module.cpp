@@ -39,7 +39,7 @@
 #define MOD_NAME	_("1Wire devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.2"
+#define MOD_VER		"0.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("1Wire devices support by OWFS (http://owfs.org).")
 #define LICENSE		"GPL2"
@@ -94,7 +94,7 @@ void TTpContr::postEnable( int flag )
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("BUS",_("1Wire bus"),TFld::Integer,TFld::NoFlag,"2","-1","-1;99"));
     fldAdd(new TFld("Simult",_("Simultaneous temperature request"),TFld::Real,TCfg::NoVal,"3.2","0"));
 

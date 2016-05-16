@@ -337,7 +337,7 @@ class TSYS : public TCntrNode
 		//Attributes
 		string		path;
 		pthread_t	thr;
-		char		policy, prior;
+		uint8_t		policy, prior;
 		pid_t		tid;
 		ResString	cpuSet;
 		void *(*task) (void *);

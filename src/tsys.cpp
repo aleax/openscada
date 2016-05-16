@@ -647,7 +647,7 @@ void TSYS::save_( )
 int TSYS::start( )
 {
     //High priority service task and redundancy start
-    taskCreate("SYS_HighPriority", 20, TSYS::HPrTask, this);
+    taskCreate("SYS_HighPriority", 120, TSYS::HPrTask, this);
     taskCreate("SYS_Redundancy", 5, TSYS::RdTask, this);
 
     //Subsystems starting
@@ -1657,7 +1657,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.taskArg = arg;
     htsk.flgs = 0;
     htsk.thr = 0;
-    htsk.prior = priority;
+    htsk.prior = priority%100;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1674,8 +1674,9 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     if(priority < 0)	policy = SCHED_BATCH;
 #endif
     if(priority > 0)	policy = SCHED_RR;
+    if(priority >= 100)	policy = SCHED_FIFO;
     pthread_attr_setschedpolicy(pthr_attr, policy);
-    prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
+    prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority%100));
     pthread_attr_setschedparam(pthr_attr, &prior);
 
     try {
@@ -2736,9 +2737,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		}
 		if(n_plc) {
 		    string plcVl = _("Standard");
-		    if(it->second.policy == SCHED_RR) plcVl = _("RT Round-robin");
+		    if(it->second.policy == SCHED_FIFO)		plcVl = _("RT FIFO");
+		    else if(it->second.policy == SCHED_RR)	plcVl = _("RT Round-robin");
 #if __GLIBC_PREREQ(2,4)
-		    if(it->second.policy == SCHED_BATCH) plcVl = _("Style \"batch\"");
+		    else if(it->second.policy == SCHED_BATCH)	plcVl = _("Style \"batch\"");
 #endif
 		    n_plc->childAdd("el")->setText(plcVl);
 		}

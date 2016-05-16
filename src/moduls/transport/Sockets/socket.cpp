@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.1.1"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -218,25 +218,25 @@ void TSocketIn::start( )
 
     if(s_type == S_NM_TCP) {
 	if((sockFd=socket(PF_INET,SOCK_STREAM,0)) == -1)
-	    throw TError(nodePath().c_str(),_("Error create '%s' socket!"),s_type.c_str());
+	    throw TError(nodePath().c_str(), _("Create %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 	int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 	if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 	type = SOCK_TCP;
     }
     else if(s_type == S_NM_UDP) {
 	if((sockFd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
-	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
+	    throw TError(nodePath().c_str(), _("Create %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 	type = SOCK_UDP;
     }
     else if(s_type == S_NM_UNIX) {
 	if((sockFd=socket(PF_UNIX,SOCK_STREAM,0)) == -1)
-	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
+	    throw TError(nodePath().c_str(), _("Create %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 	type = SOCK_UNIX;
     }
 #ifdef HAVE_LINUX_CAN_H
     else if(s_type == S_NM_RAWCAN) {
 	if((sockFd=socket(PF_CAN,SOCK_RAW,CAN_RAW)) == -1)
-	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
+	    throw TError(nodePath().c_str(), _("Create %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 	type = SOCK_RAWCAN;
     }
 #endif
@@ -293,13 +293,14 @@ void TSocketIn::start( )
 		if(rez) {
 		    close(sockFd);
 		    sockFd = -1;
-		    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
+		    throw TError(nodePath().c_str(), _("Connect to %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 		}
 	    }
 	    else if(bind(sockFd,(sockaddr*)&nameIn,sizeof(nameIn)) == -1) {	//Wait connection
+		int rez = errno;
 		shutdown(sockFd, SHUT_RDWR);
 		close(sockFd);
-		throw TError(nodePath().c_str(), _("TCP socket doesn't bind to '%s'!"), addr().c_str());
+		throw TError(nodePath().c_str(), _("Bind to %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(rez), rez);
 	    }
 	    listen(sockFd, maxQueue());
 	}
@@ -311,9 +312,10 @@ void TSocketIn::start( )
 	    else nameIn.sin_port = 10005;
 
 	    if(bind(sockFd,(sockaddr*)&nameIn,sizeof(nameIn)) == -1) {
+		int rez = errno;
 		shutdown(sockFd, SHUT_RDWR);
 		close(sockFd);
-		throw TError(nodePath().c_str(), _("UDP socket doesn't bind to '%s'!"), addr().c_str());
+		throw TError(nodePath().c_str(), _("Bind to %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(rez), rez);
 	    }
 	}
     }
@@ -325,16 +327,17 @@ void TSocketIn::start( )
 	memset(&nameUn, 0, sizeof(nameUn));
 	nameUn.sun_family = AF_UNIX;
 	strncpy(nameUn.sun_path, path.c_str(), sizeof(nameUn.sun_path));
-	if(mode() == 2) {							//Initiate connection
+	if(mode() == 2) {
 	    if(connect(sockFd,(sockaddr*)&nameUn,sizeof(nameUn)) == -1) {
 		close(sockFd);
 		sockFd = -1;
-		throw TError(nodePath().c_str(), _("Connect to UNIX error: '%s (%d)'!"), strerror(errno), errno);
+		throw TError(nodePath().c_str(), _("Connect to %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 	    }
 	}
-	else if(bind(sockFd,(sockaddr*)&nameUn,sizeof(nameUn)) == -1) {	//Wait connection
+	else if(bind(sockFd,(sockaddr*)&nameUn,sizeof(nameUn)) == -1) {
+	    int rez = errno;
 	    close(sockFd);
-	    throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to '%s'!"),addr().c_str());
+	    throw TError(nodePath().c_str(),_("Bind to %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(rez), rez);
 	}
 	listen(sockFd, maxQueue());
     }
@@ -354,7 +357,7 @@ void TSocketIn::start( )
 	name_can.can_ifindex = ifr.ifr_ifindex;
 	if(bind(sockFd,(struct sockaddr*)&name_can,sizeof(name_can)) == -1) {
 	    close(sockFd);
-	    throw TError(nodePath().c_str(), _("RAWCAN socket doesn't bind to '%s'!"), addr().c_str());
+	    throw TError(nodePath().c_str(), _("Bind to %s socket error: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 	}
 	else if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("RAWCAN socket binded '%s'!"), addr().c_str());
     }
@@ -825,8 +828,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "help",_("Empty value for the protocol selection switchs the transport to mode\n"
 		     "of creation associated output transports for each connection to one."));
 	ctrMkNode("fld", opt, -1, "/prm/cfg/bfLn", _("Input buffer (kbyte)"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "tp","dec");
-	ctrMkNode("fld", opt, -1, "/prm/cfg/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 4,
-	    "tp","dec", "min","-1", "max","99", "help",TMess::labTaskPrior());
+	ctrMkNode("fld", opt, -1, "/prm/cfg/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+	    "tp","dec", "help",TMess::labTaskPrior());
 	if(addr().compare(0,4,"TCP:") == 0)
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/MSS", _("Maximum segment size (MSS)"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
 		"tp","str", "help",_("Set 0 for system MSS."));
@@ -1035,7 +1038,7 @@ void TSocketOut::start( int itmCon )
 	    fd_set fdset;
 	    tv.tv_sec = itmCon/1000; tv.tv_usec = 1000*(itmCon%1000);
 	    FD_ZERO(&fdset); FD_SET(sockFd, &fdset);
-	    if((rez=select(sockFd+1, NULL, &fdset, NULL, &tv)) > 0 && !getsockopt(sockFd,SOL_SOCKET,SO_ERROR,&rez,&slen) && !rez) rez = 0;
+	    if((rez=select(sockFd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sockFd,SOL_SOCKET,SO_ERROR,&rez,&slen) && !rez) rez = 0;
 	    else rez = -1;
 	}
 	if(rez) {
@@ -1121,7 +1124,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     struct timeval tv;
     fd_set rw_fd;
     int reqTry = 0,
-	i_b = 0;
+	iB = 0;
     bool noReq = (time < 0),
 	 writeReq = false;
     time = abs(time);
@@ -1194,24 +1197,30 @@ repeate:
 		res.unlock();
 		stop();
 		mLstReqTm = TSYS::curTime();
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
-		throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
+		throw TError(nodePath().c_str(),_("Read (select) error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rw_fd)) {
-		//!! Reading in that way but some time read() return 0 after select pass.
-		for(int iRtr = 0; (i_b=read(sockFd,iBuf,iLen)) <= 0 && errno == EAGAIN && iRtr < STD_WAIT_DELAY; ++iRtr) TSYS::sysSleep(1e-3);
-		if(i_b <= 0 && (oBuf || noReq)) {	//Read zero means disconnect by peer
-		    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+		//!! Reading in that way but some time read() return 0 after the select() pass.
+		// * Force wait any data in the request mode or EAGAIN
+		// * No wait any data in the not request mode but it can get the data later
+		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < time; ++iRtr)
+		    TSYS::sysSleep(1e-3);
+		// * Force errors
+		// * Retry if any data was wrote but no a reply there into the request mode
+		if(iB < 0 || (iB == 0 && writeReq && !noReq)) {
+		    err = (iB < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno): _("No data");
 		    res.unlock();
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
 		    res.lock();
 		    goto repeate;
 		}
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,i_b)).c_str());
-		trIn += vmax(0, i_b);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());
+		trIn += vmax(0, iB);
 	    }
 	}
     }
@@ -1224,7 +1233,7 @@ repeate:
 
     if(mTmRep)	mLstReqTm = TSYS::curTime();
 
-    return vmax(0, i_b);
+    return vmax(0, iB);
 }
 
 void TSocketOut::cntrCmdProc( XMLNode *opt )

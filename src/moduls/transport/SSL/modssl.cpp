@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.3"
+#define MOD_VER		"1.3.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -631,7 +631,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "help",_("Close the connection after specified requests.\nZero value for disable (not close ever)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Close the connection after no requests at specified timeout.\nZero value for disable (not close ever)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",TMess::labTaskPrior());
 	return;
     }
     //Process command to page
@@ -996,8 +996,8 @@ repeate:
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 		res.release();
 		stop();
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
-		throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
+		throw TError(nodePath().c_str(),_("Read (select) error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sock_fd,&rd_fd)) {
 		ret = BIO_read(conn, iBuf, iLen);
@@ -1008,6 +1008,7 @@ repeate:
 		    res.release();
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
 		    res.request(true);

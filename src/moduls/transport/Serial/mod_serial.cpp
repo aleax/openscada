@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.1.6"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -620,10 +620,9 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    _("Connection timings in format: \"symbol:frm\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    frm - maximum frame length, in ms."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
-	    "tp","dec","min","-1","max","99","help",TMess::labTaskPrior());
-	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
-	{
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
+	    "tp","dec", "help",TMess::labTaskPrior());
+	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay (sec)"),RWRWR_,"root",STR_ID,1,"tp","real");
@@ -1097,14 +1096,19 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 	    mLstReqTm = TSYS::curTime();
 	    stop();
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
-	    throw TError(nodePath().c_str(), _("Read error: %s"), err.c_str());
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
+	    throw TError(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
 	}
 	else if(FD_ISSET(fd,&rw_fd)) {
-	    //!! Reading in that way but some time read() return 0 after select pass.
-	    for(int iRtr = 0; (blen=read(fd,iBuf,iLen)) <= 0 && errno == EAGAIN && iRtr < STD_WAIT_DELAY; ++iRtr) TSYS::sysSleep(1e-3);
-	    if(blen <= 0) {	//Read zero means disconnect by peer
-		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+	    //!! Reading in that way but some time read() return 0 after the select() pass.
+	    // * Force wait any data in the request mode or EAGAIN
+	    // * No wait any data in the not request mode but it can get the data later
+	    for(int iRtr = 0; (((blen=read(fd,iBuf,iLen)) == 0 && !noReq) || (blen < 0 && errno == EAGAIN)) && iRtr < time; ++iRtr)
+		TSYS::sysSleep(1e-3);
+	    // * Force errors
+	    // * Retry if any data was wrote but no a reply there into the request mode
+	    if(blen < 0 || (blen == 0 && oBuf && oLen > 0 && !noReq)) {
+		err = (blen < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno): _("No data");
 		mLstReqTm = TSYS::curTime();
 		stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());

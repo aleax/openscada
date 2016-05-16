@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-04 21:12+0300\n"
+"POT-Creation-Date: 2016-05-09 17:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr ""
+
+#, c-format
 msgid "Variable '%s' is used but undefined"
+msgstr ""
+
+msgid "Error constant after constant"
+msgstr ""
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr ""
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr ""
+
+msgid "The next line symbol failed into string, "
+msgstr ""
+
+msgid "Using namespace is error or empty, "
+msgstr ""
+
+msgid "Internal function declaration error, "
+msgstr ""
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr ""
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr ""
+
+msgid "Build in function has too much parameters, "
+msgstr ""
+
+msgid "Function error, "
+msgstr ""
+
+msgid "Symbol error, "
+msgstr ""
+
+msgid "Object's properties too long, "
 msgstr ""
 
 msgid "Array have more 255 items."
@@ -76,6 +118,9 @@ msgid "Name"
 msgstr ""
 
 msgid "Description"
+msgstr ""
+
+msgid "To start"
 msgstr ""
 
 msgid "Maximum calculate time (sec)"
@@ -298,46 +343,4 @@ msgid ""
 "  aid - created attribute identifier;\n"
 "  anm - created attribute name.\n"
 "If 'aid' or 'anm' are not set they will be generated from selected function's IO."
-msgstr ""
-
-#, c-format
-msgid "Internal function inaccessible by offset %d > %d"
-msgstr ""
-
-msgid "Error constant after constant"
-msgstr ""
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr ""
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr ""
-
-msgid "The next line symbol failed into string, "
-msgstr ""
-
-msgid "Using namespace is error or empty, "
-msgstr ""
-
-msgid "Internal function declaration error, "
-msgstr ""
-
-#, c-format
-msgid "Internal function '%s' defined early, "
-msgstr ""
-
-msgid "Do not include declaration of one internal function to other, "
-msgstr ""
-
-msgid "Build in function has too much parameters, "
-msgstr ""
-
-msgid "Function error, "
-msgstr ""
-
-msgid "Symbol error, "
-msgstr ""
-
-msgid "Object's properties too long, "
 msgstr ""

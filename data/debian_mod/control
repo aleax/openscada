@@ -264,12 +264,12 @@ Description: Siemens DAQ
  by means of Hilscher CIF cards, by using the MPI protocol, and Libnodave
  library for the rest.
 
-Package: openscada-daq-icpdas
-Architecture: i386 arm
-Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: ICP DAS hardware
- The openscada-daq-icpdas - provides implementation for "ICP DAS" hardware support.
- Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.
+#Package: openscada-daq-icpdas
+#Architecture: i386 arm
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: ICP DAS hardware
+# The openscada-daq-icpdas - provides implementation for "ICP DAS" hardware support.
+# Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.
 
 Package: openscada-daq-amrdevs
 Architecture: any
@@ -284,6 +284,13 @@ Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends
 Description: Big Farm Net
  The openscada-daq-bfn package - provides Big Farm Net (BFN) modules support for
  Viper CT/BAS and other from "Big Dutchman" (http://www.bigdutchman.com).
+
+#Package: openscada-daq-bcm2835
+#Architecture: any
+#Depends: openscada-core (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+#Description: BCM 2835
+# The openscada-daq-bcm2835 package - Broadcom BCM 2835 GPIO and other.
+# Mostly for and used in Raspberry Pi.
 
 #===== Archiver subsystem modules =====
 Package: openscada-arh-fsarch

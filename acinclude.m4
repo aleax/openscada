@@ -1061,15 +1061,17 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
         [want_postgresql="yes"]
     )
 
-    POSTGRESQL_CFLAGS=""
-    POSTGRESQL_LDFLAGS=""
-    POSTGRESQL_VERSION=""
+    POSTGRESQL_CFLAGS="$($PKG_CONFIG --cflags libpq)"
+    POSTGRESQL_LDFLAGS="$($PKG_CONFIG --libs libpq)"
+    POSTGRESQL_VERSION="$($PKG_CONFIG --modversion libpq)"
 
     dnl
     dnl Check PostgreSQL libraries (libpq)
     dnl
-
-    if test "$want_postgresql" = "yes"; then
+    if test "x$POSTGRESQL_CFLAGS" != "x"; then
+        found_postgresql="yes"
+        AC_MSG_RESULT([yes])
+    elif test "$want_postgresql" = "yes"; then
 
         if test -z "$PG_CONFIG" -o test; then
             AC_PATH_PROG([PG_CONFIG], [pg_config], [])
@@ -1473,10 +1475,10 @@ AC_DEFUN([AX_LIB_Qt],
 	])
 	AC_SUBST(Qt_MOC)
 	AC_SUBST(Qt_RCC)
-	Qt_MOC="$(pkg-config --variable=moc_location ${QtGui})"
-	Qt_RCC="$(pkg-config --variable=rcc_location ${QtGui})";
-	if test "x${Qt_MOC}" = "x"; then Qt_MOC="$(pkg-config --variable=prefix ${QtGui})/bin/moc"; fi
-	if test "x${Qt_RCC}" = "x"; then Qt_RCC="$(pkg-config --variable=prefix ${QtGui})/bin/rcc"; fi
+	Qt_MOC="$($PKG_CONFIG --variable=moc_location ${QtGui})"
+	Qt_RCC="$($PKG_CONFIG --variable=rcc_location ${QtGui})";
+	if test "x${Qt_MOC}" = "x" -o ! -x "${Qt_MOC}"; then Qt_MOC="$($PKG_CONFIG --variable=prefix ${QtGui})/bin/moc"; fi
+	if test "x${Qt_RCC}" = "x" -o ! -x "${Qt_RCC}"; then Qt_RCC="$($PKG_CONFIG --variable=prefix ${QtGui})/bin/rcc"; fi
 	Qt_use=true
     fi
 ])

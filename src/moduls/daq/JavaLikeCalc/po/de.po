@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-04 21:12+0300\n"
+"POT-Creation-Date: 2016-05-09 17:29+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -21,8 +21,50 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Interne Funktion unzugänglich durch Offset %d > %d"
+
+#, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Die Variable '%s' wird verwendet, ist aber nicht definiert"
+
+msgid "Error constant after constant"
+msgstr "Fehler konstant nach konstanter"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, Position: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr "Unerwartetes Programmende, erwarte Endezeichen '\"',"
+
+msgid "The next line symbol failed into string, "
+msgstr "Das Zeichen für das Zeilenende ist in der Zeichenkette, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Namensbereich ist fehlerhaft oder leer, "
+
+msgid "Internal function declaration error, "
+msgstr "Interne Funktionsdeklaration Fehler, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Interne Funktionen '%s' früh definiert, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Nicht Deklaration einer internen Funktion auf andere schließen, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Installierte Funktion hat zu viel Parameter, "
+
+msgid "Function error, "
+msgstr "Funktionsfehler, "
+
+msgid "Symbol error, "
+msgstr "Symbolfehler, "
+
+msgid "Object's properties too long, "
+msgstr "Eigenschaften des Objekts zu lang,"
 
 msgid "Array have more 255 items."
 msgstr "Array haben mehr 255 Artikel."
@@ -80,6 +122,9 @@ msgstr "Name"
 
 msgid "Description"
 msgstr "Beschreibung"
+
+msgid "To start"
+msgstr "Starten"
 
 msgid "Maximum calculate time (sec)"
 msgstr "Maximale Zeit der Berechnung (sek)"
@@ -194,7 +239,7 @@ msgid "Data base"
 msgstr "Datenbank"
 
 msgid "Program translation allow"
-msgstr ""
+msgstr "Programm Übersetzung ermöglichen"
 
 msgid "Formula"
 msgstr "Formel"
@@ -320,45 +365,3 @@ msgstr ""
 "  anm - Name des gebildeten Attributs.\n"
 "  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewählten IO "
 "der Funktion generiert."
-
-#, c-format
-msgid "Internal function inaccessible by offset %d > %d"
-msgstr "Interne Funktion unzugänglich durch Offset %d > %d"
-
-msgid "Error constant after constant"
-msgstr "Fehler konstant nach konstanter"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, Position: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr "Unerwartetes Programmende, erwarte Endezeichen '\"',"
-
-msgid "The next line symbol failed into string, "
-msgstr "Das Zeichen für das Zeilenende ist in der Zeichenkette, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Namensbereich ist fehlerhaft oder leer, "
-
-msgid "Internal function declaration error, "
-msgstr "Interne Funktionsdeklaration Fehler, "
-
-#, c-format
-msgid "Internal function '%s' defined early, "
-msgstr "Interne Funktionen '%s' früh definiert, "
-
-msgid "Do not include declaration of one internal function to other, "
-msgstr "Nicht Deklaration einer internen Funktion auf andere schließen, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Installierte Funktion hat zu viel Parameter, "
-
-msgid "Function error, "
-msgstr "Funktionsfehler, "
-
-msgid "Symbol error, "
-msgstr "Symbolfehler, "
-
-msgid "Object's properties too long, "
-msgstr "Eigenschaften des Objekts zu lang,"

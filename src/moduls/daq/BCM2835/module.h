@@ -135,6 +135,24 @@ extern TTpContr *mod;
 //* Access by functions                           *
 
 //*************************************************
+//* GPIO mode                                     *
+//*************************************************
+class GPIO_mode : public TFunction
+{
+    public:
+	GPIO_mode( ) : TFunction("mode",SDAQ_ID) {
+	    ioAdd(new IO("rez",_("Result"),IO::Integer,IO::Return));
+	    ioAdd(new IO("pin",_("Pin"),IO::Integer,IO::Default));
+	    ioAdd(new IO("set",_("Force the input mode: 1-Input,2-Input (pull up),3-Input (pull down),4-Output"),IO::Integer,IO::Default,"0"));
+	}
+
+	string name( )	{ return _("GPIO: Mode"); }
+	string descr( )	{ return _("GPIO mode, input or output."); }
+
+	void calc( TValFunc *val );
+};
+
+//*************************************************
 //* Get GPIO value                                *
 //*************************************************
 class GPIO_get : public TFunction

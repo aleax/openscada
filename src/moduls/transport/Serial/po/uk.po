@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-26 09:29+0200\n"
+"POT-Creation-Date: 2016-05-16 09:36+0300\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -235,6 +235,12 @@ msgstr "Помилка читання эхо запиту."
 
 msgid "Read timeouted."
 msgstr "Перевищено час очікування читання!"
+
+msgid "Read (select) error: %s"
+msgstr "Помилка читання (select): %s"
+
+msgid "No data"
+msgstr "Немає даних"
 
 #, c-format
 msgid "Read error: %s"

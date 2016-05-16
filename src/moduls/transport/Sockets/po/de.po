@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-20 16:42+0300\n"
+"POT-Creation-Date: 2016-05-16 09:41+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -40,9 +40,8 @@ msgstr ""
 "Verbindungen %d, eröffnet %d, letzte %s. Eingangstraffik %s, Ausgangs %s. "
 "Verbindungen geschlossen nach dem Limit %d."
 
-#, c-format
-msgid "Error create '%s' socket!"
-msgstr "Fehler der Schaffung des Sockets '%s'!"
+msgid "Create %s socket error: '%s (%d)'!"
+msgstr "Erstellen %s socket Fehler: '%s (%d)'!"
 
 #, c-format
 msgid "Socket type '%s' error!"
@@ -58,39 +57,24 @@ msgstr "Der angeforderte Name '%s' hat keine IP-Adresse!"
 
 #, c-format
 msgid "A non-recoverable name server error occurred while for '%s'!"
-msgstr "Ein nicht behebbarer Name-Server-Fehler ist aufgetreten, während für '%s'!"
+msgstr ""
+"Ein nicht behebbarer Name-Server-Fehler ist aufgetreten, während für '%s'!"
 
 #, c-format
 msgid "A temporary error occurred on an authoritative name server for '%s'!"
-msgstr "Ein temporärer Fehler aufgetreten auf einem autoritativen Nameserver für '%s'!"
+msgstr ""
+"Ein temporärer Fehler aufgetreten auf einem autoritativen Nameserver für "
+"'%s'!"
 
 #, c-format
 msgid "Unknown error code from gethostbyname_r for '%s'!"
 msgstr "Unbekannter Fehlercode aus gethostbyname_r für '%s'!"
 
-#, c-format
-msgid "Connect to Internet socket error: '%s (%d)'!"
-msgstr "Fehler der Internet Verbidung mit dem Socket: '%s (%d)'!"
+msgid "Connect to %s socket error: '%s (%d)'!"
+msgstr "Eine Verbindung mit %s Socket Fehler: '%s (%d)'!"
 
-#, c-format
-msgid "TCP socket doesn't bind to '%s'!"
-msgstr "TCP Socket ist nicht verbunden mit '%s'!"
-
-#, c-format
-msgid "UDP socket doesn't bind to '%s'!"
-msgstr "UDP Socket ist nicht verbunden mit '%s'!"
-
-#, c-format
-msgid "Connect to UNIX error: '%s (%d)'!"
-msgstr "Fehler der Verbindung mit dem UNIX Socket: '%s (%d)'!"
-
-#, c-format
-msgid "UNIX socket doesn't bind to '%s'!"
-msgstr "UNIX ist nicht verbunden mit '%s'!"
-
-#, c-format
-msgid "RAWCAN socket doesn't bind to '%s'!"
-msgstr "RAWCAN Socket ist nicht verbunden mit '%s'!"
+msgid "Bind to %s socket error: '%s (%d)'!"
+msgstr "Binden %s Socket Fehler: '%s (%d)'!"
 
 #, c-format
 msgid "RAWCAN socket binded '%s'!"
@@ -298,8 +282,24 @@ msgid "Connect by timeout %s error: '%s (%d)'"
 msgstr "Verbinden von Timeout %s Fehler: '%s (%d)'"
 
 #, c-format
+msgid "Connect to Internet socket error: '%s (%d)'!"
+msgstr "Fehler der Internet Verbidung mit dem Socket: '%s (%d)'!"
+
+#, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"
 msgstr "Fehler der Schaffung des UNIX Sockets: '%s (%d)'!"
+
+#, c-format
+msgid "Connect to UNIX error: '%s (%d)'!"
+msgstr "Fehler der Verbindung mit dem UNIX Socket: '%s (%d)'!"
+
+#, c-format
+msgid "Error create '%s' socket!"
+msgstr "Fehler der Schaffung des Sockets '%s'!"
+
+#, c-format
+msgid "RAWCAN socket doesn't bind to '%s'!"
+msgstr "RAWCAN Socket ist nicht verbunden mit '%s'!"
 
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
@@ -324,6 +324,12 @@ msgstr "Lesen timeouted."
 
 msgid "Timeouted!"
 msgstr "Timeouted!"
+
+msgid "Read (select) error: %s"
+msgstr "Lesefehler (select): %s"
+
+msgid "No data"
+msgstr "Keine Daten"
 
 #, c-format
 msgid "Read error: %s"

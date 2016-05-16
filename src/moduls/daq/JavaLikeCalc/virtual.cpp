@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.1.0"
+#define MOD_VER		"3.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -107,7 +107,7 @@ void TpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
     fldAdd(new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Calculation task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Calculation task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ITER",_("Iteration number in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
 
     //Controller value db structure

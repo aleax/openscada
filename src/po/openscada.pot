@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-28 17:02+0300\n"
+"POT-Creation-Date: 2016-05-16 08:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1036,9 +1036,10 @@ msgstr ""
 
 msgid ""
 "Task priority level (-1...99), where:\n"
-"  -1     - lowest priority batch policy;\n"
-"  0      - standard userspace priority;\n"
-"  1...99 - realtime priority level (round-robin), often allowed only for \"root\"."
+"  -1        - lowest priority batch policy;\n"
+"  0         - standard userspace priority;\n"
+"  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"
+"  100...199 - realtime priority level (FIFO), often allowed only for \"root\"."
 msgstr ""
 
 msgid "Modules scheduler"
@@ -1793,6 +1794,9 @@ msgid "Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost:
 msgstr ""
 
 msgid "Standard"
+msgstr ""
+
+msgid "RT FIFO"
 msgstr ""
 
 msgid "RT Round-robin"

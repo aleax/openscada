@@ -38,7 +38,7 @@
 #define MOD_NAME	_("BCM 2835")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.0"
+#define MOD_VER		"1.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO and other. Mostly for and used in Raspberry Pi.")
 #define LICENSE		"GPL2"
@@ -154,6 +154,7 @@ void TMdPrm::postEnable( int flag )
     if(flag&TCntrNode::NodeRestore) return;
 
     //Reg functions
+    fReg(new GPIO_mode());
     fReg(new GPIO_get());
     fReg(new GPIO_put());
 
@@ -380,6 +381,31 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm(TSYS::strMess("GPIOrev%d",pin), opt->text());
     }
     else TParamContr::cntrCmdProc(opt);
+}
+
+//*************************************************
+//* GPIO mode                                     *
+//*************************************************
+void GPIO_mode::calc( TValFunc *v ) {
+    int pin = v->getI(1);
+    switch(v->getI(2)) {
+	case 1:
+	    bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+	    bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_OFF);
+	    break;
+	case 2:
+	    bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+	    bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_UP);
+	    break;
+	case 3:
+	    bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+	    bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_DOWN);
+	    break;
+	case 4:
+	    bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_OUTP);
+	    break;
+    }
+    v->setI(0, 0);
 }
 
 //*************************************************

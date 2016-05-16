@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-20 16:42+0300\n"
+"POT-Creation-Date: 2016-05-16 09:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgid "Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed connect
 msgstr ""
 
 #, c-format
-msgid "Error create '%s' socket!"
+msgid "Create %s socket error: '%s (%d)'!"
 msgstr ""
 
 #, c-format
@@ -62,27 +62,11 @@ msgid "Unknown error code from gethostbyname_r for '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Connect to Internet socket error: '%s (%d)'!"
+msgid "Connect to %s socket error: '%s (%d)'!"
 msgstr ""
 
 #, c-format
-msgid "TCP socket doesn't bind to '%s'!"
-msgstr ""
-
-#, c-format
-msgid "UDP socket doesn't bind to '%s'!"
-msgstr ""
-
-#, c-format
-msgid "Connect to UNIX error: '%s (%d)'!"
-msgstr ""
-
-#, c-format
-msgid "UNIX socket doesn't bind to '%s'!"
-msgstr ""
-
-#, c-format
-msgid "RAWCAN socket doesn't bind to '%s'!"
+msgid "Bind to %s socket error: '%s (%d)'!"
 msgstr ""
 
 #, c-format
@@ -259,7 +243,23 @@ msgid "Connect by timeout %s error: '%s (%d)'"
 msgstr ""
 
 #, c-format
+msgid "Connect to Internet socket error: '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "Error creation UNIX socket: '%s (%d)'!"
+msgstr ""
+
+#, c-format
+msgid "Connect to UNIX error: '%s (%d)'!"
+msgstr ""
+
+#, c-format
+msgid "Error create '%s' socket!"
+msgstr ""
+
+#, c-format
+msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr ""
 
 msgid "Unknown error"
@@ -284,6 +284,13 @@ msgid "Read timeouted."
 msgstr ""
 
 msgid "Timeouted!"
+msgstr ""
+
+#, c-format
+msgid "Read (select) error: %s"
+msgstr ""
+
+msgid "No data"
 msgstr ""
 
 #, c-format

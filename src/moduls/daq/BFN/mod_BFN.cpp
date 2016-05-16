@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.1"
+#define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -83,7 +83,7 @@ void TTpContr::postEnable( int flag )
     //Controler's bd structure
     //fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));

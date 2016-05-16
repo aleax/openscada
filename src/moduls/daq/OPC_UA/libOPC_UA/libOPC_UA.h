@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>		*
  *										*
- *   Version: 1.1.0								*
+ *   Version: 1.1.1								*
  *	* Packages sequence number managing for server part is fixed by		*
  *	  separating from the value of input packages.				*
  *	* Initial filters support is added into requests			*

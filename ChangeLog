@@ -1,3 +1,15 @@
+2016-05-16 Roman
+- DB.Model.AGLKS.St.db: All stored attributes of the VCA originals are cleaned.
+- !!:SYS: To data/debian_mod the package openscada-daq-bcm2835 building (commented-disabled by default) is added.
+    Building of openscada-daq-ICP_DAS into data/debian_mod by default also set to disabled.
+    {DAQ,Transport}.*: Tasks priorities range expanded up to 199 where 100-199 used for SCHED_FIFO tasks planing policy.
+- DAQ.BCM2835: Static function mode() is added for GPIO pins Input/Output modes free control, from needs to DHT11.
+- FIX:DAQ.OPC_UA.libOPC_UA: TimeStamps into "Write" client request's are disabled but some servers tell 0x80730000 (OpcUa_BadWriteNotSupported).
+- !!:Transport.{Sockets,Serial}: Possible wrong readings after the select() wrong termination, with marking as a data present (some caused),
+    is unified and better adjusted for different modes of the requesting and the not requesting mode of output transport.
+- Transport.Sockets: Input transport's error messages some improved and set more informative.
+
+
 2016-05-09 Roman
 - DB.LibsDB.OscadaLibs.db: Function "Low level devices"."Display 1602A" set to stopped by default, with the new option.
 - !!:DAQ.JavaLikeCalc: To function object is added "To start" parameter for allow disabled by default ones.

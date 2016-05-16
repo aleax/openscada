@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.0"
+#define MOD_VER		"1.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -97,7 +97,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD_SHM",_("Shared memory parameters"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PRM_BD_MRC",_("MR and MC bus parameters"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("SHM_VARS",_("Shared memory variables file"),TFld::String,TFld::NoFlag,"255","/projects/load_files.srv"));
     fldAdd(new TFld("MR_DEV",_("MR bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrext"));
     fldAdd(new TFld("MC_DEV",_("MC bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrint"));

@@ -87,7 +87,7 @@ class TSocketIn: public TTransportIn
 	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmax(0,vmin(1000,vl)); modif(); }
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vmax(0,vl); modif(); }
 	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
-	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
+	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 

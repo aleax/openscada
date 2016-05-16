@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.2"
+#define MOD_VER		"1.5.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -102,7 +102,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"50",""));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100", "1"));
-    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     // Standard parameter type by template
