@@ -83,7 +83,7 @@ class ModVArch: public TVArchivator
 	bool tmAsStr( )			{ return mTmAsStr; }
 
 	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
-	bool setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
+	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
 
 	void start( );
 	void stop( );

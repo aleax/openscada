@@ -74,7 +74,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
-    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), tblInit(false), inHostReq(0)
+    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false)
 {
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -2400,8 +2400,6 @@ void ConfApp::initHosts( )
     //Add/update hosts
     bool emptyTree = !CtrTree->topLevelItemCount();
     for(unsigned i_st = 0; i_st < stls.size(); i_st++) {
-	int errCon = 0;
-
 	QTreeWidgetItem *nit = NULL;
 	if(!emptyTree)
 	    for(int iTop = 0; iTop < CtrTree->topLevelItemCount(); iTop++)

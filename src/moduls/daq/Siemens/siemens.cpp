@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.3"
+#define MOD_VER		"2.0.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -446,7 +446,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
 	::TController(name_c, daq_db, cfgelem),
 	mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
 	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), restTm(cfg("TM_REST").getId()), mAssincWR(cfg("ASINC_WR").getBd()),
-	prcSt(false), callSt(false), endrunReq(false), isReload(false), isInitiated(false), conErr(dataRes()), alSt(-1), mInvokeID(-1),
+	prcSt(false), callSt(false), endrunReq(false), isReload(false), isInitiated(false), alSt(-1), conErr(dataRes()), mInvokeID(-1),
 	di(NULL), dc(NULL), mPer(1e9), numR(0), numW(0), numErr(0), tmDelay(0)
 {
     cfg("PRM_BD").setS("SiemensPrm_"+name_c);
@@ -1205,13 +1205,13 @@ void TMdContr::protIO( XMLNode &io )
 	    uint16_t szPrm  = iN(tpkt, off, 2);			//plen: length of parameters which follow this header
 	    uint16_t szData = iN(tpkt, off, 2);			//dlen: length of data which follow the parameters
 	    uint16_t iErr = 0;
-	    if(iHTp == 2 || iHTp == 3) iErr = iN(tpkt, off, 2);	//result[2]: only present in type 2 and 3 headers. This contains error information.
-	    if((off+szPrm+szData) > tpkt.size()) throw TError(_("PDU header"), _("Parameters + data parts size more to the respond size."));
+	    if(iHTp == 2 || iHTp == 3) iErr = iN(tpkt, off, 2);	//result[2]: only present in type 2 and 3 headers. This contains an error information.
+	    if((off+szPrm+szData) > (int)tpkt.size()) throw TError(_("PDU header"), _("Parameters + data parts size more to the respond size."));
 
 	    switch(sCd) {
 		case ISOTCP_OpenS7Connection: {
 		    if(szPrm != 8) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 8);
-		    if(iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
 		    iN(tpkt, off, 1);
 		    iN(tpkt, off, 2);
 		    iN(tpkt, off, 2);
@@ -1220,7 +1220,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 		case ISOTCP_Read: {
 		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 2);
-		    if(iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
@@ -1236,7 +1236,7 @@ void TMdContr::protIO( XMLNode &io )
 		    else if(iDLenTp == 9) ;		//len is already in bytes, ok
 		    else if(iDLenTp == 3) ;		//len is in bits, but there is a byte per result bit, ok
 		    else throw TError(14, io.attr("id").c_str(), _("Unknown data encoding type, %d."), iDLenTp);
-		    if((off+iDLen) != tpkt.size())
+		    if((off+iDLen) != (int)tpkt.size())
 			throw TError(15, io.attr("id").c_str(), _("Inconsistent data block size to the respond size, %d(%d)."),
 								    (off+iDLen), tpkt.size());
 		    io.setText(tpkt.substr(off));
@@ -1244,7 +1244,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 		case ISOTCP_Write: {
 		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 2);
-		    if(iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);

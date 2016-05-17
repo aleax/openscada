@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.4"
+#define MOD_VER		"1.3.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -224,7 +224,7 @@ string TMdContr::getNameList( const string &domain )
     //Check cache
     MtxAlloc res(dataRes(), true);
     map<string, NamesCacheEl>::iterator cEl = namesCache.find(domain);
-    if(cEl != namesCache.end() && (!syncPer() || SYS->sysTm() < (cEl->second.tm+syncPer()) && (cEl->second.nms.size() || (startStat() && !connOK()))))
+    if(cEl != namesCache.end() && (!syncPer() || SYS->sysTm() < (cEl->second.tm+syncPer())) && (cEl->second.nms.size() || (startStat() && !connOK())))
 	return cEl->second.nms;
     res.unlock();
 

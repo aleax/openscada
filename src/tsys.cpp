@@ -1867,7 +1867,7 @@ void *TSYS::RdTask( void *param )
 		// Prepare request to a remote station
 		req.clear()->setAttr("path", "/"+sit->first);
 		req.childAdd("st")->setAttr("path","/%2fserv%2fredundant");
-		for(int iSub = 0; iSub < subLs.size(); iSub++)
+		for(unsigned iSub = 0; iSub < subLs.size(); iSub++)
 		    req.childAdd("st")->setAttr("path","/"+subLs[iSub]+"/%2fserv%2fredundant");
 		try {
 		    if(SYS->transport().at().cntrIfCmd(req,"redundant")) continue;
@@ -1875,7 +1875,7 @@ void *TSYS::RdTask( void *param )
 		    sit->second.isLive = true;
 
 		    // State request
-		    for(int iL = 0, iReq = 1; iL < subLs.size() && iReq < req.childSize(); iL++, iReq++) {
+		    for(int iL = 0, iReq = 1; iL < (int)subLs.size() && iReq < (int)req.childSize(); iL++, iReq++) {
 			XMLNode *subPrt = req.childGet(iReq);
 			subPrt->setAttr("StId", sit->first);
 			if(!s2i(subPrt->attr("inProc")) || !SYS->at(subLs[iL]).at().rdProcess(subPrt))
@@ -1902,7 +1902,7 @@ void *TSYS::RdTask( void *param )
 	res.release();
 
 	//Call to main service request
-	for(int iL = 0; iL < subLs.size(); iL++)
+	for(int iL = 0; iL < (int)subLs.size(); iL++)
 	    if(!SYS->at(subLs[iL]).at().rdProcess())
 		subLs.erase(subLs.begin()+(iL--));
 

@@ -279,7 +279,7 @@ class Func : public TConfig, public TFunction
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
-	bool setToStart( bool vl )	{ cfg("START") = vl; }
+	void setToStart( bool vl )	{ cfg("START") = vl; }
 	void setMaxCalcTm( int vl );
 	void setProgTr( bool vl )	{ cfg("PR_TR") = vl; }
 	void setProg( const string &prg );

@@ -703,7 +703,7 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
     bool hasLang  = false, hasFlags = false;
     for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags) && (iLn=TSYS::strLine(iProps,0,&off)).size(); lCnt++)
 	if(!hasLang && !lCnt && iLn.find("#!") == 0) { hasLang = comIsExtScript = true; continue; }
-	else if(!hasFlags && (fPos=iLn.find("flags=")) != string::npos)
+	else if(!hasFlags && (size_t)(fPos=iLn.find("flags=")) != string::npos)
 	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); )
 		if(iOpt.compare(0,6,"notify") == 0) {
 		    f_notify = true;
@@ -720,7 +720,7 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	bool fOK = false;
 	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0775);
 	if(hd >= 0) {
-	    fOK = write(hd, props().data(), props().size()) == props().size();
+	    fOK = write(hd, props().data(), props().size()) == (ssize_t)props().size();
 	    close(hd);
 	}
 	if(!fOK) {
@@ -979,6 +979,8 @@ void *Session::Notify::Task( void *intf )
 	pthread_mutex_lock(&ntf.dataM.mtx());
     }
     pthread_mutex_unlock(&ntf.dataM.mtx());
+
+    return NULL;
 }
 
 //************************************************

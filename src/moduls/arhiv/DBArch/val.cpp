@@ -141,6 +141,7 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 	case TFld::String:
 	    reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000"));
 	    break;
+	default: break;
     }
 }
 

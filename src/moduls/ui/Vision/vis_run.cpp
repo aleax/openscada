@@ -1063,7 +1063,7 @@ void VisRun::alarmAct( QAction *alrm )
 
 void VisRun::usrStatus( const string &val, RunPageView *pg )
 {
-    UserItStBar *userSt, *userSt1;
+    UserItStBar *userSt;
     if(!pg) pg = masterPg();
 
     //Presence mark clean
@@ -1634,7 +1634,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
     bool hasLang  = false, hasFlags = false;
     for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags || ico.empty() || name.empty()) && (iLn=TSYS::strLine(iProps,0,&off)).size(); lCnt++)
 	if(!hasLang && !lCnt && iLn.find("#!") == 0) { hasLang = comIsExtScript = true; continue; }
-	else if(!hasFlags && (fPos=iLn.find("flags=")) != string::npos)
+	else if(!hasFlags && (size_t)(fPos=iLn.find("flags=")) != string::npos)
 	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); ) {
 		if(iOpt.compare(0,6,"notify") == 0) {
 		    f_notify = true;
@@ -1644,8 +1644,8 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
 		else if(iOpt == "quittanceRet")	f_quittanceRet = true;
 	    }
-	else if(ico.empty() && (fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
-	else if(name.empty() && (fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
+	else if(ico.empty() && (size_t)(fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
+	else if(name.empty() && (size_t)(fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
 
     //The command procedure prepare
     if(comIsExtScript) {
@@ -1654,7 +1654,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	bool fOK = false;
 	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0775);
 	if(hd >= 0) {
-	    fOK = write(hd, props().data(), props().size()) == props().size();
+	    fOK = write(hd, props().data(), props().size()) == (ssize_t)props().size();
 	    ::close(hd);
 	}
 	if(!fOK) {
@@ -1852,4 +1852,6 @@ void *VisRun::Notify::Task( void *intf )
 	pthread_mutex_lock(&ntf.dataM.mtx());
     }
     pthread_mutex_unlock(&ntf.dataM.mtx());
+
+    return NULL;
 }

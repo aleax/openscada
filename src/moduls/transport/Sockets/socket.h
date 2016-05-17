@@ -54,7 +54,7 @@ class SSockIn
 {
     public:
 	SSockIn( TSocketIn *is, int isock, const string &isender ) :
-	    pid(0), sock(isock), sender(isender), s(is), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0)	{ }
+	    pid(0), sock(isock), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is)	{ }
 
 	pthread_t pid;		//Client's thread id
 	int	sock;

@@ -1,8 +1,18 @@
+2016-05-17 Roman
+- !!:SYS: All key warnings next resolved. Include some controversial ones:
+    DAQ.MMS: Mixed "||" and "&&" logic into the items cash access.
+    DAQ.OPC_UA.libOPC_UA: Encoding mask processing in mix of operations '&' and '|'.
+
+
 2016-05-16 Roman
 - DB.Model.AGLKS.St.db: All stored attributes of the VCA originals are cleaned.
 - !!:SYS: To data/debian_mod the package openscada-daq-bcm2835 building (commented-disabled by default) is added.
     Building of openscada-daq-ICP_DAS into data/debian_mod by default also set to disabled.
     {DAQ,Transport}.*: Tasks priorities range expanded up to 199 where 100-199 used for SCHED_FIFO tasks planing policy.
+    Build and check the build environment scripts some improved for the crossbuild, by
+	- appending pkg-config using for DB.PostgreSQL check before;
+	- same pkg-config used from PKG_CONFIG enviroment which points to the cross variant;
+	- check to Qt expanded by test taken from Qt_MOC and Qt_RCC ones.
 - DAQ.BCM2835: Static function mode() is added for GPIO pins Input/Output modes free control, from needs to DHT11.
 - FIX:DAQ.OPC_UA.libOPC_UA: TimeStamps into "Write" client request's are disabled but some servers tell 0x80730000 (OpcUa_BadWriteNotSupported).
 - !!:Transport.{Sockets,Serial}: Possible wrong readings after the select() wrong termination, with marking as a data present (some caused),

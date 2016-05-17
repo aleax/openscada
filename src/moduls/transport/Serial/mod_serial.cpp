@@ -1108,7 +1108,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	    // * Force errors
 	    // * Retry if any data was wrote but no a reply there into the request mode
 	    if(blen < 0 || (blen == 0 && oBuf && oLen > 0 && !noReq)) {
-		err = (blen < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno): _("No data");
+		err = (blen < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno) : _("No data");
 		mLstReqTm = TSYS::curTime();
 		stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());

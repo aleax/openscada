@@ -605,7 +605,7 @@ bool TArchiveS::rdProcess( XMLNode *reqSt )
 	if(SYS->rdStRequest(req).size()) {
 	    mRedntFirst = false;
 	    // Process the result
-	    for(int iEl = 0; iEl < req.childSize(); ++iEl) {
+	    for(unsigned iEl = 0; iEl < req.childSize(); ++iEl) {
 		XMLNode *el = req.childGet(iEl);
 		messPut(s2ll(el->attr("time")), s2i(el->attr("utime")), el->attr("cat"), s2i(el->attr("lev")), el->text(), ALRM_ARCH_NM);
 	    }
@@ -1280,7 +1280,7 @@ void TMArchivator::redntDataUpdate( )
     //Process the result
     vector<TMess::SRec> mess;
     XMLNode *mO = NULL;
-    for(int iM = 0; iM < req.childSize(); ++iM)
+    for(unsigned iM = 0; iM < req.childSize(); ++iM)
 	if((mO=req.childGet(iM)) && mO->name() == "it")
 	    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
     owner().owner().messPut(mess, workId()+";"ALRM_ARCH_NM, true);
@@ -1309,7 +1309,7 @@ bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
 	req.setAttr("path", nodePath()+"/%2fserv%2fmess")->setAttr("redundancy", "1");
 	if(redntUse()) {	//for slave
 	    vector<TMess::SRec> messLoc;
-	    for(int iM = 0; iM < mess.size(); ++iM) {
+	    for(unsigned iM = 0; iM < mess.size(); ++iM) {
 		if(!chkMessOK(mess[iM].categ,mess[iM].level)) continue;
 		req.childAdd("it")->setAttr("tm", ll2s(mess[iM].time))->setAttr("tmu", i2s(mess[iM].utime))->
 				    setAttr("cat", mess[iM].categ)->setAttr("lev", i2s(mess[iM].level))->setText(mess[iM].mess);
@@ -1323,7 +1323,7 @@ bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
 	    return true;
 	}
 	else {			//for master
-	    for(int iM = 0; iM < mess.size(); ++iM)
+	    for(unsigned iM = 0; iM < mess.size(); ++iM)
 		if(chkMessOK(mess[iM].categ,mess[iM].level) && mess[iM].time <= end())
 		    req.childAdd("it")->setAttr("tm", ll2s(mess[iM].time))->setAttr("tmu", i2s(mess[iM].utime))->
 					setAttr("cat", mess[iM].categ)->setAttr("lev", i2s(mess[iM].level))->setText(mess[iM].mess);
@@ -1387,13 +1387,13 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    time_t eTm = s2ll(opt->attr("eTm"));
 	    get(s2ll(opt->attr("bTm")), (eTm?eTm:SYS->sysTm()), mess, opt->attr("cat"), s2i(opt->attr("lev")));
-	    for(int iM = 0; iM < mess.size(); ++iM)
+	    for(unsigned iM = 0; iM < mess.size(); ++iM)
 		opt->childAdd("it")->setAttr("tm",ll2s(mess[iM].time))->setAttr("tmu",i2s(mess[iM].utime))->
 				     setAttr("cat",mess[iM].categ)->setAttr("lev",i2s(mess[iM].level))->setText(mess[iM].mess);
 	}
 	else if(ctrChkNode(opt,"put",RWRWR_,"root",SARH_ID,SEC_WR)) {
 	    XMLNode *mO = NULL;
-	    for(int iM = 0; iM < opt->childSize(); ++iM)
+	    for(unsigned iM = 0; iM < opt->childSize(); ++iM)
 		if((mO=opt->childGet(iM)) && mO->name() == "it")
 		    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
 	    if(s2i(opt->attr("redundancy"))) owner().owner().messPut(mess, workId()+";"ALRM_ARCH_NM, true);

@@ -742,6 +742,7 @@ bool UserItStBar::event( QEvent *event )
 	case QEvent::MouseButtonDblClick:
 	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", "key_mouseDblClick:/stIt_"+objId, A_NO_ID, true); return true; }
 	    break;
+	default: break;
     }
 
     return QLabel::event(event);

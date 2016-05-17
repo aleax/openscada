@@ -1345,7 +1345,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     //  selValsNms - two lines with values in first and it's names in first (separated by ";").
     if(iid == "attrAdd" && prms.size() >= 1) {
 	if(!enableStat() || !isLogic())	return false;
-	TFld::Type tp;
+	TFld::Type tp = TFld::Real;
 	string stp, stp_ = (prms.size() >= 3) ? prms[2].getS() : "real";
 	stp.resize(stp_.length());
 	std::transform(stp_.begin(), stp_.end(), stp.begin(), ::tolower);

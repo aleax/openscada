@@ -736,12 +736,12 @@ bool MFileArch::put( TMess::SRec mess )
 		char tCat[1001];
 		if((sscanf(buf,"%x:%d %d %1000s",&tTm,&tTmU,&tLev,tCat)) < 4) continue;
 
-		if((int)tTm > mess.time || (tTm == mess.time && tTmU > mess.utime)) {
+		if(tTm > mess.time || (tTm == mess.time && (int)tTmU > mess.utime)) {
 		    mv_beg = ftell(f) - strlen(buf);
 		    break;
 		}
-		if((int)tTm == mess.time && s_buf == buf) { fclose(f); return true; }
-		if(owner().prevDblTmCatLev() && (int)tTm == mess.time && tTmU == mess.utime && tLev == mess.level &&
+		if(tTm == mess.time && s_buf == buf) { fclose(f); return true; }
+		if(owner().prevDblTmCatLev() && tTm == mess.time && (int)tTmU == mess.utime && tLev == mess.level &&
 		    TSYS::strDecode(Mess->codeConvIn(mChars,tCat),TSYS::HttpURL) == mess.categ)
 		{
 		    if(s_buf.size() < strlen(buf)) s_buf.resize(strlen(buf), ' ');
@@ -778,9 +778,9 @@ bool MFileArch::put( TMess::SRec mess )
 		time_t last_tm = 0;
 		while(!mv_beg && fgets(buf,sizeof(buf),f) != NULL) {
 		    sscanf(buf, "%x:%d %*d", &tTm, &tTmU);
-		    if((int)tTm > mess.time || (tTm == mess.time && tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
+		    if(tTm > mess.time || (tTm == mess.time && (int)tTmU > mess.utime)) mv_beg = ftell(f) - strlen(buf);
 		    //  Add too big position to cache
-		    else if((pass_cnt++) > CACHE_POS && (int)tTm != last_tm) {
+		    else if((pass_cnt++) > CACHE_POS && tTm != last_tm) {
 			cacheSet(((int64_t)tTm*1000000)+tTmU, ftell(f)-strlen(buf));
 			pass_cnt = 0;
 		    }

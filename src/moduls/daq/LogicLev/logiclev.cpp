@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.3"
+#define MOD_VER		"1.5.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -635,7 +635,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     //  selValsNms - two lines with values in first and it's names in first (separated by ";").
     if(iid == "attrAdd" && prms.size() >= 1) {
 	if(!enableStat() || !isStd())	return false;
-	TFld::Type tp;
+	TFld::Type tp = TFld::Real;
 	string stp, stp_ = (prms.size() >= 3) ? prms[2].getS() : "real";
 	stp.resize(stp_.length());
 	std::transform(stp_.begin(), stp_.end(), stp.begin(), ::tolower);

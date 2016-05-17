@@ -398,8 +398,8 @@ class ShapeDiagram : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1), tTime(0),
-		    tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
+		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), valsForPix(1), tTime(0),
+		    tPict(0), curTime(0), sclHorPer(0), trcPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
 
 		int64_t	arhEnd( int64_t def = 0 );
 

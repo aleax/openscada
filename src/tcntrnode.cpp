@@ -449,7 +449,7 @@ void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex, bool only
 	    list[p->second->mOi] = p->first;
 	}
 	if(onlyEn)	//Remove empty
-	    for(int iL = 0; iL < list.size(); iL++)
+	    for(int iL = 0; iL < (int)list.size(); iL++)
 		if(!list[iL].size()) list.erase(list.begin()+(iL--));
     }
 }
