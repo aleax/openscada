@@ -6967,9 +6967,14 @@ if(step < 0 || step == 8) {
 CREATE TABLE 'flb_lowLevDevs_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln1','Line 1',0,0,'',0,0);
 INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln2','Line 2',0,0,'',0,1);
+INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','res','Result',0,2,'',0,0);
+INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','pin','GPIO Pin',1,0,'17',0,1);
+INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','tries','Tries',1,0,'3',0,2);
 CREATE TABLE 'flb_lowLevDevs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_lowLevDevs" VALUES('1602A','Display 1602A','Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
-Connection: GPIO7(RS), GPIO8(E), GPIO25(D4), GPIO24(D5), GPIO23(D6), GPIO18(D7)',0,10,0,'using DAQ.BCM2835.pi2.pi2;
+INSERT INTO "flb_lowLevDevs" VALUES('1602A','Display 1602A','Description: LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots
+Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
+Connection: GPIO7(RS), GPIO8(E), GPIO25(D4), GPIO24(D5), GPIO23(D6), GPIO18(D7)
+Conditions: Default planing policy but realtime better.',0,10,0,'using DAQ.BCM2835.pi2.pi2;
 using Special.FLibSYS;
 
 function byte(vl, md, dl) {
@@ -6987,7 +6992,7 @@ function byte(vl, md, dl) {
 byte(0x33); byte(0x32); byte(0x28); byte(0x0C); byte(0x06); byte(0x01);
 //Line 1
 if(ln1.length) {
-	tmSleep(1e-3);
+	tmSleep(2e-3);
 	byte(0x80);
 	for(iC = 0; iC < min(16,ln1.length); iC++)
 		byte(ln1.charCodeAt(iC), true);
@@ -6995,9 +7000,58 @@ if(ln1.length) {
 
 //Line 2
 if(ln2.length) {
-	tmSleep(1e-3);
+	tmSleep(2e-3);
 	byte(0xC0);
 	for(iC = 0; iC < min(16,ln2.length); iC++)
 		byte(ln2.charCodeAt(iC), true);
-}',1462734956);
+}',1463511761);
+INSERT INTO "flb_lowLevDevs" VALUES('DHT','DHT (AOSONG)','Description: Reading temperature and humidity module DHT11 
+Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
+Connection: GPIO (17 by default)
+Conditions: Exclusively realtime planing in the prioroty 199 (FIFO-99).',0,10,0,'using DAQ.BCM2835.pi2.pi2;
+using Special.FLibSYS;
+
+function read() {
+	vl = 0;						//Meassured value
+	cntHoldMax = 100;	//Maximum wait counter
+
+	//Call the device to a respond
+	fnc_mode(pin, 4); fnc_put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
+	fnc_put(pin, false); tmSleep(20e-3);								//Set output to false for 20ms
+	fnc_mode(pin, 2);																//Set pin to input mode
+
+	//Read
+	// Wait for to pull pin low.
+	for(cntHold = 0; fnc_get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+
+	//Meassure the typical pulse length
+	for(cntHold = 0; !fnc_get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	for(cntHold = 0; fnc_get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	cntPulse = cntHold;
+
+	//Read meassured value
+	for(iB = 0; iB < 40; iB++) {
+		stg = iB;
+		for(cntHold = 0; !fnc_get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		for(cntHold = 0; fnc_get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		vl = vl << 1;
+		if(cntHold > cntPulse/2)	vl = vl | 1;
+	}
+
+	return vl;
+}
+
+for(i = 0; i < tries; i++) {
+	if(i) tmSleep(2);	//Retry after two seconds
+	if((vl=read())) {
+		hum = (vl>>32)&0xFF; tmp = (vl>>16)&0xFF;
+		if(((hum+tmp)&0xFF) == (vl&0xFF))
+			return hum.toString() + ":" + tmp.toString();
+	}
+}',1463511759);
 COMMIT;

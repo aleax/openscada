@@ -96,17 +96,15 @@ solve:  assign ';'
 	    }
 	| BREAK ';'	{ pF->prg = pF->prg+(char)Reg::Break; }
 	| CONTINUE ';'	{ pF->prg = pF->prg+(char)Reg::Continue; }
-	| RETURN ';'	{ pF->prg += pF->mInFnc.size() ? (char)Reg::End : (char)Reg::EndFull; }
+	| RETURN ';'	{ pF->prg += (char)Reg::EndFull; }
 	| RETURN expr ';'
 	    {
 		if(pF->mInFnc.size()) {
 		    struct SCode { uint8_t cod; uint16_t sz; uint8_t n; uint16_t rez; } __attribute__((packed));
 		    const struct SCode *ptr = (const struct SCode *)(pF->prg.data()+pF->inFuncGet(pF->mInFnc));
 		    pF->cdMove(pF->regAt(ptr->rez), $2);
-		    pF->prg += (char)Reg::End;
 		}
-		else {
-		    for(int i_io = 0; i_io < pF->ioSize(); i_io++)
+		else for(int i_io = 0; i_io < pF->ioSize(); i_io++)
 			if(pF->io(i_io)->flg()&IO::Return) {
 			    Reg *rez = pF->regAt(pF->regGet(pF->io(i_io)->id()));
 			    if(!rez) {
@@ -117,8 +115,7 @@ solve:  assign ';'
 			    pF->cdAssign(rez, $2);
 			    break;
 			}
-		    pF->prg += (char)Reg::EndFull;
-		}
+		pF->prg += (char)Reg::EndFull;
 	    }
 	| FUNC '(' prmlst ')' ';'
 	    { try{ pF->cdExtFnc($1,$3,true); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }

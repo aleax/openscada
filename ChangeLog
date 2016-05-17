@@ -1,4 +1,6 @@
 2016-05-17 Roman
+- FIX:DAQ.JavaLikeCalc: Return from included function fixed.
+- DB.LibsDB.OscadaLibs.db: Low level device's function "DHT (AOSONG)" (for Raspberry Pi) is added, for reading temperature and humidity module DHT11.
 - !!:SYS: All key warnings next resolved. Include some controversial ones:
     DAQ.MMS: Mixed "||" and "&&" logic into the items cash access.
     DAQ.OPC_UA.libOPC_UA: Encoding mask processing in mix of operations '&' and '|'.

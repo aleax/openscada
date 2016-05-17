@@ -2289,8 +2289,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			dt.flg &= ~0x06;
 			exec(val, cprg + ptr->body, dt);
 			//Check break and continue operators
-			if(dt.flg&0x02)		{ dt.flg=0; break; }
-			else if(dt.flg&0x04)	dt.flg=0;
+			if(dt.flg&0x02)		{ dt.flg = 0; break; }
+			else if(dt.flg&0x04)	dt.flg = 0;
 		    }
 		}
 		cprg += ptr->end;
@@ -2644,6 +2644,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			(iF >= ptr->n) ? TVariant() : getVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))]);
 		// Make calc
 		exec(val, (const uint8_t*)ptrF+sizeof(SFCode)+ptrF->n*sizeof(uint16_t), dt);
+		dt.flg = 0;	//Clean all flags
 		// Process outputs
 		for(int iF = 0; iF < vmin(ptrF->n,ptr->n); iF++)
 		    setVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))],
