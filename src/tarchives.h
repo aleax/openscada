@@ -195,12 +195,14 @@ class TArchiveS : public TSubSYS
 	int subVer( )		{ return SARH_VER; }
 
 	int messPeriod( )	{ return mMessPer; }
-	int valPeriod( );
+	int valPeriod( )	{ return vmax(1, mValPer); }
 	int valPrior( )		{ return mValPrior; }
+	bool valForceCurTm( )	{ return mValForceCurTm; }
 
 	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
-	void setValPrior( int ivl );
+	void setValPrior( int ivl )	{ mValPrior = vmax(-1, vmin(199,ivl)); modif(); }
+	void setValForceCurTm( bool vl ){ mValForceCurTm = vl; modif(); }
 	void setToUpdate( )		{ toUpdate = true; }
 
 	void subStart( );
@@ -268,7 +270,7 @@ class TArchiveS : public TSubSYS
 	char	bufErr;			//Buffer error
 	int	mMessPer;		//Message archiving period
 	bool	prcStMess;		//Process messages flag
-	// Messages buffer
+	//  Messages buffer
 	ResMtx	mRes;			//Mess access resource
 	unsigned headBuf;		//Head of messages buffer
 	vector<TMess::SRec> mBuf;	//Messages buffer
@@ -276,12 +278,14 @@ class TArchiveS : public TSubSYS
 
 	// Value archiving
 	ResMtx	vRes;			//Value access resource
-	int	mValPer;		//Value archiving period
-	int	mValPrior;		//Value archive task priority
-	bool	prcStVal;		//Process value flag
-	bool	endrunReqVal;		//Endrun value request
-	bool	toUpdate;
-	int	mAval;
+	int	mValPer,		//Value archiving period
+		mValPrior,		//Value archive task priority
+		mAval;
+
+	bool	mValForceCurTm,		//Time of taken values force to current and overide it's source from
+		prcStVal,		//Process value flag
+		endrunReqVal,		//Endrun value request
+		toUpdate;
 
 	vector<AutoHD<TMArchivator> >	actMess;
 	vector<AutoHD<TVArchive> >	actVal;

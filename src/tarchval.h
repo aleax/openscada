@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,6 +61,7 @@ class TValBuf
 	TFld::Type valType( bool full = false )	{ return full ? mValTp : (TFld::Type)(mValTp&TFld::GenMask); }
 	bool hardGrid( )	{ return mHrdGrd; }
 	bool highResTm( )	{ return mHgResTm; }
+	bool fillLast( )	{ return mFillLast; }
 	int size( )		{ return mSize; }
 	int realSize( );
 	unsigned int evalCnt( )	{ return mEvalCnt; }
@@ -74,6 +75,7 @@ class TValBuf
 	void setValType( TFld::Type vl );
 	void setHardGrid( bool vl );
 	void setHighResTm( bool vl );
+	void setFillLast( bool vl )	{ mFillLast = vl; }
 	void setSize( int vl );
 	void setPeriod( int64_t vl );
 
@@ -102,7 +104,7 @@ class TValBuf
 	    friend class TValBuf;
 	    public:
 		//Public methods
-		TBuf( TpVal eval, int &isz, int64_t &ipr, bool &ihgrd, bool &ihres,
+		TBuf( TpVal eval, int &isz, int64_t &ipr, bool &ihgrd, bool &ihres, bool &iFillLast,
 		    int64_t &iend, int64_t &ibeg, unsigned int &iEvalCnt );
 		~TBuf( );
 
@@ -118,8 +120,9 @@ class TValBuf
 
 	    private:
 		//Private attributes
-		bool	&hg_res_tm,
-			&hrd_grd;
+		bool	&hgResTm,
+			&hrdGrd,
+			&fillLast;
 		int64_t	&end, &beg,
 			&per;
 		int	&size,
@@ -131,9 +134,9 @@ class TValBuf
 		struct SHg  { int64_t tm; TpVal val; };
 		union {
 		    vector<TpVal>	*grid;
-		    vector<SLw>		*tm_low;
-		    vector<SHg>		*tm_high;
-		}buf;
+		    vector<SLw>		*tmLow;
+		    vector<SHg>		*tmHigh;
+		} buf;
 	};
 
 	Res		bRes;		//Access resource
@@ -149,7 +152,8 @@ class TValBuf
 	} buf;
 
 	bool	mHgResTm,		//High resolution time use (microseconds)
-		mHrdGrd;		//Set hard griding. It mode no support the zero periodic.
+		mHrdGrd,		//Set hard griding. It mode no support the zero periodic
+		mFillLast;		//Fill pass points by previous value at insert value more to one
 	int64_t	mEnd, mBeg,		//Time of buffer begin and end (64 bit usec)
 		mPer;			//Periodic grid value (usec). If value = 0 then it no periodic buffer, error for time griding mode!
 	int	mSize;			//Buffer size limit.
@@ -198,6 +202,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TFld::Type valType( bool full = false )	{ return TValBuf::valType(full); }
 	bool	hardGrid( )	{ return TValBuf::hardGrid(); }
 	bool	highResTm( )	{ return TValBuf::highResTm(); }
+	bool	fillLast( )	{ return TValBuf::fillLast(); }
 	int	size( )		{ return TValBuf::size(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
@@ -208,10 +213,11 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
-	void setValType( TFld::Type vl );
-	void setHardGrid( bool vl );
-	void setHighResTm( bool vl );
-	void setSize( int vl );
+	void setValType( TFld::Type vl )	{ mVType = vl; }
+	void setHardGrid( bool vl )		{ mBHGrd = vl; setUpBuf(); modif(); }
+	void setHighResTm( bool vl )		{ mBHRes = vl; setUpBuf(); modif(); }
+	void setFillLast( bool vl )		{ mFillLast = vl; TValBuf::setFillLast(vl); modif(); }
+	void setSize( int vl )			{ mBSize = vl; }
 	void setPeriod( int64_t vl );
 
 	// Service
@@ -225,7 +231,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void setVals( TValBuf &buf, int64_t beg, int64_t end, const string &arch );
 
 	// Active get data from atribute
-	void getActiveData( );
+	void getActiveData( const int64_t &tm = 0 );
 
 	// Phisical archivator's functions
 	void archivatorList( vector<string> &ls );
@@ -271,11 +277,12 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 		&mBSize;	//Buffer size
 	char	&mStart,	//Starting flag
 		&mBHGrd,	//Buffer use hard time griding
-		&mBHRes;	//Buffer use high time resolution
+		&mBHRes,	//Buffer use high time resolution
+		&mFillLast;	//Fill pass points by previous value at insert value more to one
 	// Mode params
-	AutoHD<TVal>	pattr_src;
+	AutoHD<TVal>	pattrSrc;
 	// Phisical archive's elements
-	vector<TVArchEl*> arch_el;	//Links
+	vector<TVArchEl*> archEl;	//Links
 };
 
 //*************************************************

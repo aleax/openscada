@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@ using namespace OSCADA;
 //*************************************************
 //* TValBuf                                       *
 //*************************************************
-TValBuf::TValBuf( ) : mValTp(TFld::Integer), mHgResTm(false), mHrdGrd(false), mEnd(0), mBeg(0), mPer(0), mSize(100)
+TValBuf::TValBuf( ) : mValTp(TFld::Integer), mHgResTm(false), mHrdGrd(false), mFillLast(false), mEnd(0), mBeg(0), mPer(0), mSize(100)
 {
     buf.bl = NULL;
 
@@ -55,7 +55,7 @@ TValBuf::TValBuf( ) : mValTp(TFld::Integer), mHgResTm(false), mHrdGrd(false), mE
 }
 
 TValBuf::TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres ) :
-    mValTp(vtp), mHgResTm(ihres), mHrdGrd(ihgrd), mEnd(0), mBeg(0), mPer(vmax(0,ipr)), mSize(isz)
+    mValTp(vtp), mHgResTm(ihres), mHrdGrd(ihgrd), mFillLast(false), mEnd(0), mBeg(0), mPer(vmax(0,ipr)), mSize(isz)
 {
     buf.bl = NULL;
 
@@ -84,44 +84,44 @@ TValBuf &TValBuf::operator=( TValBuf &src )
 	case TFld::Boolean:
 	    buf.bl->cur = src.buf.bl->cur;
 	    if(mHrdGrd)		*(buf.bl->buf.grid) = *(src.buf.bl->buf.grid);
-	    else if(mHgResTm)	*(buf.bl->buf.tm_high) = *(src.buf.bl->buf.tm_high);
-	    else		*(buf.bl->buf.tm_low) = *(src.buf.bl->buf.tm_low);
+	    else if(mHgResTm)	*(buf.bl->buf.tmHigh) = *(src.buf.bl->buf.tmHigh);
+	    else		*(buf.bl->buf.tmLow) = *(src.buf.bl->buf.tmLow);
 	    break;
 	case TFld::Int16:
 	    buf.i16->cur = src.buf.i16->cur;
 	    if(mHrdGrd)		*(buf.i16->buf.grid) = *(src.buf.i16->buf.grid);
-	    else if(mHgResTm)	*(buf.i16->buf.tm_high) = *(src.buf.i16->buf.tm_high);
-	    else		*(buf.i16->buf.tm_low) = *(src.buf.i16->buf.tm_low);
+	    else if(mHgResTm)	*(buf.i16->buf.tmHigh) = *(src.buf.i16->buf.tmHigh);
+	    else		*(buf.i16->buf.tmLow) = *(src.buf.i16->buf.tmLow);
 	    break;
 	case TFld::Int32:
 	    buf.i32->cur = src.buf.i32->cur;
 	    if(mHrdGrd)		*(buf.i32->buf.grid) = *(src.buf.i32->buf.grid);
-	    else if(mHgResTm)	*(buf.i32->buf.tm_high) = *(src.buf.i32->buf.tm_high);
-	    else		*(buf.i32->buf.tm_low) = *(src.buf.i32->buf.tm_low);
+	    else if(mHgResTm)	*(buf.i32->buf.tmHigh) = *(src.buf.i32->buf.tmHigh);
+	    else		*(buf.i32->buf.tmLow) = *(src.buf.i32->buf.tmLow);
 	    break;
 	case TFld::Int64:
 	    buf.i64->cur = src.buf.i64->cur;
 	    if(mHrdGrd)		*(buf.i64->buf.grid) = *(src.buf.i64->buf.grid);
-	    else if(mHgResTm)	*(buf.i64->buf.tm_high) = *(src.buf.i64->buf.tm_high);
-	    else		*(buf.i64->buf.tm_low) = *(src.buf.i64->buf.tm_low);
+	    else if(mHgResTm)	*(buf.i64->buf.tmHigh) = *(src.buf.i64->buf.tmHigh);
+	    else		*(buf.i64->buf.tmLow) = *(src.buf.i64->buf.tmLow);
 	    break;
 	case TFld::Float:
 	    buf.rFlt->cur = src.buf.rFlt->cur;
 	    if(mHrdGrd)		*(buf.rFlt->buf.grid) = *(src.buf.rFlt->buf.grid);
-	    else if(mHgResTm)	*(buf.rFlt->buf.tm_high) = *(src.buf.rFlt->buf.tm_high);
-	    else		*(buf.rFlt->buf.tm_low) = *(src.buf.rFlt->buf.tm_low);
+	    else if(mHgResTm)	*(buf.rFlt->buf.tmHigh) = *(src.buf.rFlt->buf.tmHigh);
+	    else		*(buf.rFlt->buf.tmLow) = *(src.buf.rFlt->buf.tmLow);
 	    break;
 	case TFld::Double:
 	    buf.rDbl->cur = src.buf.rDbl->cur;
 	    if(mHrdGrd)		*(buf.rDbl->buf.grid) = *(src.buf.rDbl->buf.grid);
-	    else if(mHgResTm)	*(buf.rDbl->buf.tm_high) = *(src.buf.rDbl->buf.tm_high);
-	    else		*(buf.rDbl->buf.tm_low) = *(src.buf.rDbl->buf.tm_low);
+	    else if(mHgResTm)	*(buf.rDbl->buf.tmHigh) = *(src.buf.rDbl->buf.tmHigh);
+	    else		*(buf.rDbl->buf.tmLow) = *(src.buf.rDbl->buf.tmLow);
 	    break;
 	case TFld::String:
 	    buf.str->cur = src.buf.str->cur;
 	    if(mHrdGrd)		*(buf.str->buf.grid) = *(src.buf.str->buf.grid);
-	    else if(mHgResTm)	*(buf.str->buf.tm_high) = *(src.buf.str->buf.tm_high);
-	    else		*(buf.str->buf.tm_low) = *(src.buf.str->buf.tm_low);
+	    else if(mHgResTm)	*(buf.str->buf.tmHigh) = *(src.buf.str->buf.tmHigh);
+	    else		*(buf.str->buf.tmLow) = *(src.buf.str->buf.tmLow);
 	    break;
 	default: break;
     }
@@ -199,13 +199,13 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
     if(!buf.bl) {
 	//Make new buffer
 	switch(v_tp) {
-	    case TFld::Boolean:	buf.bl = new TBuf<char>(EVAL_BOOL, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
-	    case TFld::Int16:	buf.i16 = new TBuf<int16_t>(EVAL_INT16, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
-	    case TFld::Int32:	buf.i32 = new TBuf<int32_t>(EVAL_INT32, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
-	    case TFld::Int64:	buf.i64 = new TBuf<int64_t>(EVAL_INT64, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
-	    case TFld::Float:	buf.rFlt = new TBuf<float>(EVAL_RFlt, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
-	    case TFld::Double:	buf.rDbl = new TBuf<double>(EVAL_RDbl, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
-	    case TFld::String:	buf.str = new TBuf<string>(EVAL_STR, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
+	    case TFld::Boolean:	buf.bl = new TBuf<char>(EVAL_BOOL, mSize, mPer, mHrdGrd, mHgResTm, mFillLast, mEnd, mBeg, mEvalCnt);	break;
+	    case TFld::Int16:	buf.i16 = new TBuf<int16_t>(EVAL_INT16, mSize, mPer, mHrdGrd, mHgResTm, mFillLast, mEnd, mBeg, mEvalCnt);break;
+	    case TFld::Int32:	buf.i32 = new TBuf<int32_t>(EVAL_INT32, mSize, mPer, mHrdGrd, mHgResTm, mFillLast, mEnd, mBeg, mEvalCnt);break;
+	    case TFld::Int64:	buf.i64 = new TBuf<int64_t>(EVAL_INT64, mSize, mPer, mHrdGrd, mHgResTm, mFillLast, mEnd, mBeg, mEvalCnt);break;
+	    case TFld::Float:	buf.rFlt = new TBuf<float>(EVAL_RFlt, mSize, mPer, mHrdGrd, mHgResTm, mFillLast, mEnd, mBeg, mEvalCnt);	break;
+	    case TFld::Double:	buf.rDbl = new TBuf<double>(EVAL_RDbl, mSize, mPer, mHrdGrd, mHgResTm, mFillLast, mEnd, mBeg, mEvalCnt);break;
+	    case TFld::String:	buf.str = new TBuf<string>(EVAL_STR, mSize, mPer, mHrdGrd, mHgResTm, mFillLast, mEnd, mBeg, mEvalCnt);	break;
 	    default: break;
 	}
 	mValTp = v_tp;
@@ -391,27 +391,27 @@ void TValBuf::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )	{ buf.getVals(
 //* TValBuf::TBuf                                 *
 //*************************************************
 template <class TpVal> TValBuf::TBuf<TpVal>::TBuf( TpVal ieval, int &isz, int64_t &ipr,
-	bool &ihgrd, bool &ihres, int64_t &iend, int64_t &ibeg, unsigned int &iEvalCnt ) :
-    hg_res_tm(ihres), hrd_grd(ihgrd), end(iend), beg(ibeg), per(ipr), size(isz), cur(0), eval(ieval), mEvalCnt(iEvalCnt)
+	bool &ihgrd, bool &ihres, bool &iFillLast, int64_t &iend, int64_t &ibeg, unsigned int &iEvalCnt ) :
+    hgResTm(ihres), hrdGrd(ihgrd), fillLast(iFillLast), end(iend), beg(ibeg), per(ipr), size(isz), cur(0), eval(ieval), mEvalCnt(iEvalCnt)
 {
     buf.grid = NULL;
 
-    makeBuf(size, per, hrd_grd, hg_res_tm);
+    makeBuf(size, per, hrdGrd, hgResTm);
 }
 
 template <class TpVal> TValBuf::TBuf<TpVal>::~TBuf( )
 {
-    if(hrd_grd)		delete buf.grid;
-    else if(hg_res_tm)	delete buf.tm_high;
-    else		delete buf.tm_low;
+    if(hrdGrd)		delete buf.grid;
+    else if(hgResTm)	delete buf.tmHigh;
+    else		delete buf.tmLow;
 }
 
 template <class TpVal> void TValBuf::TBuf<TpVal>::clear( )
 {
     if(!buf.grid)	return;
-    if(hrd_grd)		buf.grid->clear();
-    else if(hg_res_tm)	buf.tm_high->clear();
-    else		buf.tm_low->clear();
+    if(hrdGrd)		buf.grid->clear();
+    else if(hgResTm)	buf.tmHigh->clear();
+    else		buf.tmLow->clear();
     cur = end = beg = 0;
     mEvalCnt = 0;
 }
@@ -419,9 +419,9 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::clear( )
 template <class TpVal> int TValBuf::TBuf<TpVal>::realSize( )
 {
     if(!buf.grid)	return 0;
-    if(hrd_grd)		return buf.grid->size();
-    else if(hg_res_tm)	return buf.tm_high->size();
-    else		return buf.tm_low->size();
+    if(hrdGrd)		return buf.grid->size();
+    else if(hgResTm)	return buf.tmHigh->size();
+    else		return buf.tmLow->size();
 }
 
 template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, int64_t ipr, bool ihd_grd, bool ihg_res )
@@ -429,35 +429,35 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::makeBuf( int isz, int64_t ipr,
     bool recr_buf = false;
     if(!buf.grid)			recr_buf = true;
     if(isz < size || (!size && isz))	recr_buf = true;
-    if(hrd_grd != ihd_grd) {
+    if(hrdGrd != ihd_grd) {
 	if(ihd_grd && !ipr)	ipr = 1000000;
 	recr_buf = true;
     }
-    if(hg_res_tm != ihg_res)	recr_buf = true;
+    if(hgResTm != ihg_res)	recr_buf = true;
     if(per != ipr) {
-	if(hrd_grd && !ipr)	ipr = 1000000;
+	if(hrdGrd && !ipr)	ipr = 1000000;
 	recr_buf = true;
     }
 
     size = isz;
-    hrd_grd = ihd_grd;
-    hg_res_tm = ihg_res;
+    hrdGrd = ihd_grd;
+    hgResTm = ihg_res;
     per = ipr;
 
     if(recr_buf) {
 	//Destroy buffer
 	cur = end = beg = 0;
 	if(buf.grid) {
-	    if(hrd_grd)		delete buf.grid;
-	    else if(hg_res_tm)	delete buf.tm_high;
-	    else		delete buf.tm_low;
+	    if(hrdGrd)		delete buf.grid;
+	    else if(hgResTm)	delete buf.tmHigh;
+	    else		delete buf.tmLow;
 	}
 	buf.grid = NULL;
 
 	//Make new buffer
 	if(ihd_grd)	buf.grid = new vector<TpVal>;
-	else if(ihg_res)buf.tm_high = new vector<SHg>;
-	else		buf.tm_low = new vector<SLw>;
+	else if(ihg_res)buf.tmHigh = new vector<SHg>;
+	else		buf.tmLow = new vector<SLw>;
 	mEvalCnt = 0;
     }
 }
@@ -470,7 +470,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 
     tm = up_ord ? vmax(tm, beg) : vmin(tm, end);
     //Process hard grid buffer
-    if(hrd_grd) {
+    if(hrdGrd) {
 	int npos = up_ord ? (end-tm)/per : (int64_t)buf.grid->size()-1-(tm-beg)/per;
 	if(npos < 0 || npos >= (int)buf.grid->size()) { if(itm) *itm = 0; return eval; }
 	if(itm)	*itm = end-npos*per;
@@ -479,57 +479,57 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
     //Process soft grid buffer
     else if(per) {
 	int npos = (up_ord?(end-tm):(tm-beg))/per;
-	if(hg_res_tm) {
-	    int c_cur = cur ? cur-1 : buf.tm_high->size()-1;
+	if(hgResTm) {
+	    int c_cur = cur ? cur-1 : buf.tmHigh->size()-1;
 	    int c_end = c_cur;
 
 	    // Half divider
-	    for(int d_win = buf.tm_high->size()/2; d_win > HalfDivMinWin; d_win /= 2) {
+	    for(int d_win = buf.tmHigh->size()/2; d_win > HalfDivMinWin; d_win /= 2) {
 		int c_cnext = c_end-d_win;
-		if(c_cnext < 0) c_cnext += buf.tm_high->size();
-		if(tm/per < (*buf.tm_high)[c_cnext].tm/per) c_end = c_cnext;
+		if(c_cnext < 0) c_cnext += buf.tmHigh->size();
+		if(tm/per < (*buf.tmHigh)[c_cnext].tm/per) c_end = c_cnext;
 	    }
 	    // Proving
 	    do {
-		int w_pos = up_ord ? (end/per-(*buf.tm_high)[c_end].tm/per) :
-				     ((*buf.tm_high)[c_end].tm/per-beg/per);
+		int w_pos = up_ord ? (end/per-(*buf.tmHigh)[c_end].tm/per) :
+				     ((*buf.tmHigh)[c_end].tm/per-beg/per);
 		if(up_ord && w_pos >= npos) {
-		    if(itm) *itm = (w_pos==npos) ? (*buf.tm_high)[c_end].tm : end-npos*per;
-		    return (*buf.tm_high)[c_end].val;
+		    if(itm) *itm = (w_pos==npos) ? (*buf.tmHigh)[c_end].tm : end-npos*per;
+		    return (*buf.tmHigh)[c_end].val;
 		}
 		else if(!up_ord && w_pos <= npos) {
-		    if(itm) *itm = (w_pos==npos) ? (*buf.tm_high)[c_end].tm : beg+npos*per;
-		    return (*buf.tm_high)[c_end].val;
+		    if(itm) *itm = (w_pos==npos) ? (*buf.tmHigh)[c_end].tm : beg+npos*per;
+		    return (*buf.tmHigh)[c_end].val;
 		}
-		if(--c_end < 0) c_end = buf.tm_high->size()-1;
+		if(--c_end < 0) c_end = buf.tmHigh->size()-1;
 	    } while(c_end != c_cur);
 
 	    if(itm) *itm = 0;
 	    return eval;
 	}
 	else {
-	    int c_cur = cur ? cur-1 : buf.tm_low->size()-1;
+	    int c_cur = cur ? cur-1 : buf.tmLow->size()-1;
 	    int c_end = c_cur;
 
 	    // Half divider
-	    for(int d_win = buf.tm_low->size()/2; d_win > HalfDivMinWin; d_win /= 2) {
+	    for(int d_win = buf.tmLow->size()/2; d_win > HalfDivMinWin; d_win /= 2) {
 		int c_cnext = c_end-d_win;
-		if(c_cnext < 0) c_cnext += buf.tm_low->size();
-		if(tm/per < (int64_t)(*buf.tm_low)[c_cnext].tm*1000000/per) c_end=c_cnext;
+		if(c_cnext < 0) c_cnext += buf.tmLow->size();
+		if(tm/per < (int64_t)(*buf.tmLow)[c_cnext].tm*1000000/per) c_end=c_cnext;
 	    }
 	    // Proving
 	    do {
-		int w_pos = up_ord ? (end/per-(int64_t)(*buf.tm_low)[c_end].tm*1000000/per) :
-				     ((int64_t)(*buf.tm_low)[c_end].tm*1000000/per-beg/per);
+		int w_pos = up_ord ? (end/per-(int64_t)(*buf.tmLow)[c_end].tm*1000000/per) :
+				     ((int64_t)(*buf.tmLow)[c_end].tm*1000000/per-beg/per);
 		if(up_ord && w_pos >= npos) {
-		    if(itm) *itm = (w_pos==npos) ? (int64_t)(*buf.tm_low)[c_end].tm*1000000 : end-npos*per;
-		    return (*buf.tm_low)[c_end].val;
+		    if(itm) *itm = (w_pos==npos) ? (int64_t)(*buf.tmLow)[c_end].tm*1000000 : end-npos*per;
+		    return (*buf.tmLow)[c_end].val;
 		}
 		if(!up_ord && w_pos <= npos) {
-		    if(itm) *itm = (w_pos==npos) ? (int64_t)(*buf.tm_low)[c_end].tm*1000000 : beg+npos*per;
-		    return (*buf.tm_low)[c_end].val;
+		    if(itm) *itm = (w_pos==npos) ? (int64_t)(*buf.tmLow)[c_end].tm*1000000 : beg+npos*per;
+		    return (*buf.tmLow)[c_end].val;
 		}
-		if(--c_end < 0) c_end = buf.tm_low->size()-1;
+		if(--c_end < 0) c_end = buf.tmLow->size()-1;
 	    }while(c_end != c_cur);
 
 	    if(itm) *itm = 0;
@@ -538,22 +538,22 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
     }
     //Proccess flow buffer
     else {
-	if(hg_res_tm) {
-	    int c_end = buf.tm_high->size()-1;
+	if(hgResTm) {
+	    int c_end = buf.tmHigh->size()-1;
 	    // Half divider
 	    for(int d_win = c_end/2; d_win > HalfDivMinWin; d_win /= 2)
-		if(!((!up_ord && tm >= (*buf.tm_high)[c_end-d_win].tm) ||
-			(up_ord && tm <= (*buf.tm_high)[buf.tm_high->size()-(c_end-d_win)-1].tm)))
+		if(!((!up_ord && tm >= (*buf.tmHigh)[c_end-d_win].tm) ||
+			(up_ord && tm <= (*buf.tmHigh)[buf.tmHigh->size()-(c_end-d_win)-1].tm)))
 		    c_end -= d_win;
 	    // Scan last window
 	    while(c_end >= 0) {
-		if(!up_ord && tm >= (*buf.tm_high)[c_end].tm) {
-		    if(itm) *itm = (*buf.tm_high)[c_end].tm;
-		    return (*buf.tm_high)[c_end].val;
+		if(!up_ord && tm >= (*buf.tmHigh)[c_end].tm) {
+		    if(itm) *itm = (*buf.tmHigh)[c_end].tm;
+		    return (*buf.tmHigh)[c_end].val;
 		}
-		else if(up_ord && tm <= (*buf.tm_high)[buf.tm_high->size()-c_end-1].tm) {
-		    if(itm) *itm = (*buf.tm_high)[buf.tm_high->size()-c_end-1].tm;
-		    return (*buf.tm_high)[buf.tm_high->size()-c_end-1].val;
+		else if(up_ord && tm <= (*buf.tmHigh)[buf.tmHigh->size()-c_end-1].tm) {
+		    if(itm) *itm = (*buf.tmHigh)[buf.tmHigh->size()-c_end-1].tm;
+		    return (*buf.tmHigh)[buf.tmHigh->size()-c_end-1].val;
 		}
 		c_end--;
 	    }
@@ -561,21 +561,21 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 	    return eval;
 	}
 	else {
-	    int c_end = buf.tm_low->size()-1;
+	    int c_end = buf.tmLow->size()-1;
 	    // Half divider
 	    for(int d_win = c_end/2; d_win > HalfDivMinWin; d_win /= 2)
-		if(!((!up_ord && tm/1000000 >= (*buf.tm_low)[c_end-d_win].tm) ||
-			(up_ord && tm <= (int64_t)(*buf.tm_low)[buf.tm_low->size()-(c_end-d_win)-1].tm*1000000)))
+		if(!((!up_ord && tm/1000000 >= (*buf.tmLow)[c_end-d_win].tm) ||
+			(up_ord && tm <= (int64_t)(*buf.tmLow)[buf.tmLow->size()-(c_end-d_win)-1].tm*1000000)))
 		    c_end -= d_win;
 	    // Scan last window
 	    while(c_end >= 0) {
-		if(!up_ord && tm/1000000 >= (*buf.tm_low)[c_end].tm) {
-		    if(itm) *itm = (int64_t)(*buf.tm_low)[c_end].tm*1000000;
-		    return (*buf.tm_low)[c_end].val;
+		if(!up_ord && tm/1000000 >= (*buf.tmLow)[c_end].tm) {
+		    if(itm) *itm = (int64_t)(*buf.tmLow)[c_end].tm*1000000;
+		    return (*buf.tmLow)[c_end].val;
 		}
-		else if(up_ord && tm <= (int64_t)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000) {
-		    if(itm) *itm = (int64_t)(*buf.tm_low)[buf.tm_low->size()-c_end-1].tm*1000000;
-		    return (*buf.tm_low)[buf.tm_low->size()-c_end-1].val;
+		else if(up_ord && tm <= (int64_t)(*buf.tmLow)[buf.tmLow->size()-c_end-1].tm*1000000) {
+		    if(itm) *itm = (int64_t)(*buf.tmLow)[buf.tmLow->size()-c_end-1].tm*1000000;
+		    return (*buf.tmLow)[buf.tmLow->size()-c_end-1].val;
 		}
 		c_end--;
 	    }
@@ -592,7 +592,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     if(!beg) beg = per ? per*(tm/per) : tm;
 
     //Process hard grid buffer
-    if(hrd_grd) {
+    if(hrdGrd) {
 	int npos = (tm-end)/per;
 	// Set value
 	if(npos <= 0 && (-npos) < (int)buf.grid->size()) {
@@ -604,9 +604,11 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    return;
 	}
 	else if(npos < 0) throw TError("ValBuf",_("Grid mode doesn't support inserting too old values %lld (%lld-%lld)."),tm,beg,end);
-	else
+	else {
+	    TpVal fillVl = eval;
+	    if(fillLast && buf.grid->size()) fillVl = cur ? (*buf.grid)[cur-1] : (*buf.grid)[buf.grid->size()-1];
 	    while(npos--) {
-		TpVal w_val = npos ? eval : value;
+		TpVal w_val = npos ? fillVl : value;
 		// Set new value
 		if(w_val == eval) mEvalCnt++;
 		if(cur >= (int)buf.grid->size()) buf.grid->push_back(w_val);
@@ -629,6 +631,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 		// Update end time
 		end += per;
 	    }
+	}
     }
     //Process soft grid buffer
     else if(per) {
@@ -636,70 +639,72 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	// Set value
 	if(npos < 0) throw TError("ValBuf",_("Grid mode doesn't support inserting old values."));
 	else {
-	    if(hg_res_tm) {
+	    if(hgResTm) {
 		SHg b_el;
 
 		// Update current end value
 		if(npos == 0) {
 		    b_el.tm = end; b_el.val = value;
-		    int h_el = cur ? cur-1 : buf.tm_high->size()-1;
-		    if(((*buf.tm_high)[h_el].tm-end)/per) {
+		    int h_el = cur ? cur-1 : buf.tmHigh->size()-1;
+		    if(((*buf.tmHigh)[h_el].tm-end)/per) {
 			//  Write new value
 			if(b_el.val == eval) mEvalCnt++;
-			if(cur >= (int)buf.tm_high->size()) buf.tm_high->push_back(b_el);
+			if(cur >= (int)buf.tmHigh->size()) buf.tmHigh->push_back(b_el);
 			else {
-			    if(cur+1 >= (int)buf.tm_high->size()) beg = (*buf.tm_high)[0].tm;
-			    else beg = (*buf.tm_high)[cur+1].tm;
+			    if(cur+1 >= (int)buf.tmHigh->size()) beg = (*buf.tmHigh)[0].tm;
+			    else beg = (*buf.tmHigh)[cur+1].tm;
 			    beg = per*(beg/per);
-			    if((*buf.tm_high)[cur].val == eval) mEvalCnt--;
-			    (*buf.tm_high)[cur] = b_el;
+			    if((*buf.tmHigh)[cur].val == eval) mEvalCnt--;
+			    (*buf.tmHigh)[cur] = b_el;
 			}
 			//  Update cursor
 			if((++cur >= size) && size) {
 			    cur = 0;
 			    //   Memory consumption is made optimal for limited size
-			    if((int)buf.tm_high->capacity() > size) {
+			    if((int)buf.tmHigh->capacity() > size) {
 				vector<SHg> *ns = new vector<SHg>;
-				*ns = *buf.tm_high;
-				delete buf.tm_high;
-				buf.tm_high = ns;
+				*ns = *buf.tmHigh;
+				delete buf.tmHigh;
+				buf.tmHigh = ns;
 			    }
 			}
 		    }
-		    else (*buf.tm_high)[h_el] = b_el;
+		    else (*buf.tmHigh)[h_el] = b_el;
 		    return;
 		}
 
 		// Insert new value
 		int c_npos = npos;
+		TpVal fillVl = eval;
+		if(fillLast && buf.tmHigh->size()) fillVl = cur ? (*buf.tmHigh)[cur-1].val : (*buf.tmHigh)[buf.tmHigh->size()-1].val;
 		while(c_npos--) {
 		    //  Prepare data
-		    if(c_npos) 	{ b_el.tm = end+(npos-c_npos)*per; b_el.val = eval; }
+		    if(c_npos) 	{ b_el.tm = end+(npos-c_npos)*per; b_el.val = fillVl; }
 		    else	{ b_el.tm = tm; b_el.val = value; }
 		    //  Check previous value
-		    if(!buf.tm_high->size() ||
-			    (cur && (*buf.tm_high)[cur-1].val != b_el.val ) ||
-			    (!cur && (*buf.tm_high)[buf.tm_high->size()-1].val != b_el.val))
+		    if(!buf.tmHigh->size() ||
+			    (cur && (*buf.tmHigh)[cur-1].val != b_el.val ) ||
+			    (!cur && (*buf.tmHigh)[buf.tmHigh->size()-1].val != b_el.val))
 		    {
 			//   Write new value
 			if(b_el.val == eval) mEvalCnt++;
-			if(cur >= (int)buf.tm_high->size()) buf.tm_high->push_back(b_el);
+			if(cur >= (int)buf.tmHigh->size()) buf.tmHigh->push_back(b_el);
 			else {
-			    if(cur+1 >= (int)buf.tm_high->size()) beg = (*buf.tm_high)[0].tm;
-			    else beg = (*buf.tm_high)[cur+1].tm;
+			    if(cur+1 >= (int)buf.tmHigh->size()) beg = (*buf.tmHigh)[0].tm;
+			    else beg = (*buf.tmHigh)[cur+1].tm;
 			    beg = per*(beg/per);
-			    if((*buf.tm_high)[cur].val == eval) mEvalCnt--;
-			    (*buf.tm_high)[cur] = b_el;
+			    if((*buf.tmHigh)[cur].val == eval) mEvalCnt--;
+			    (*buf.tmHigh)[cur] = b_el;
 			}
 			//   Update cursor
 			if((++cur >= size) && size) {
 			    cur = 0;
 			    //   Memory consumption is made optimal for limited size
-			    if((int)buf.tm_high->capacity() > size) {
+			    if((int)buf.tmHigh->capacity() > size) {
 				vector<SHg> *ns = new vector<SHg>;
-				*ns = *buf.tm_high;
-				delete buf.tm_high;
-				buf.tm_high = ns;
+				*ns = *buf.tmHigh;
+				delete buf.tmHigh;
+				buf.tmHigh = ns;
 			    }
 			}
 		    }
@@ -713,65 +718,67 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 		// Update current end value
 		if(npos == 0) {
 		    b_el.tm = end/1000000; b_el.val = value;
-		    int h_el = cur ? cur-1 : buf.tm_low->size()-1;
-		    if(((int64_t)(*buf.tm_low)[h_el].tm*1000000-end)/per) {
+		    int h_el = cur ? cur-1 : buf.tmLow->size()-1;
+		    if(((int64_t)(*buf.tmLow)[h_el].tm*1000000-end)/per) {
 			//  Write new value
 			if(b_el.val == eval) mEvalCnt++;
-			if(cur >= (int)buf.tm_low->size()) buf.tm_low->push_back(b_el);
+			if(cur >= (int)buf.tmLow->size()) buf.tmLow->push_back(b_el);
 			else {
-			    if(cur+1 >= (int)buf.tm_low->size()) beg = (int64_t)(*buf.tm_low)[0].tm * 1000000;
-			    else beg = (int64_t)(*buf.tm_low)[cur+1].tm * 1000000;
+			    if(cur+1 >= (int)buf.tmLow->size()) beg = (int64_t)(*buf.tmLow)[0].tm * 1000000;
+			    else beg = (int64_t)(*buf.tmLow)[cur+1].tm * 1000000;
 			    beg = per*(beg/per);
-			    if((*buf.tm_low)[cur].val == eval) mEvalCnt--;
-			    (*buf.tm_low)[cur] = b_el;
+			    if((*buf.tmLow)[cur].val == eval) mEvalCnt--;
+			    (*buf.tmLow)[cur] = b_el;
 			}
 			//  Update cursor
 			if((++cur >= size) && size) {
 			    cur = 0;
 			    //   Memory consumption is made optimal for limited size
-			    if((int)buf.tm_low->capacity() > size) {
+			    if((int)buf.tmLow->capacity() > size) {
 				vector<SLw> *ns = new vector<SLw>;
-				*ns = *buf.tm_low;
-				delete buf.tm_low;
-				buf.tm_low = ns;
+				*ns = *buf.tmLow;
+				delete buf.tmLow;
+				buf.tmLow = ns;
 			    }
 			}
 		    }
-		    else (*buf.tm_low)[h_el] = b_el;
+		    else (*buf.tmLow)[h_el] = b_el;
 		    return;
 		}
 
 		// Insert new value
 		int c_npos = npos;
+		TpVal fillVl = eval;
+		if(fillLast && buf.tmLow->size()) fillVl = cur ? (*buf.tmLow)[cur-1].val : (*buf.tmLow)[buf.tmLow->size()-1].val;
 		while(c_npos--) {
 		    //  Prepare data
-		    if(c_npos)	{ b_el.tm = (end+(npos-c_npos)*per)/1000000; b_el.val = eval; }
+		    if(c_npos)	{ b_el.tm = (end+(npos-c_npos)*per)/1000000; b_el.val = fillVl; }
 		    else	{ b_el.tm = tm/1000000; b_el.val = value; }
 		    //  Check previous value
-		    if(!buf.tm_low->size() ||
-			    (cur && (*buf.tm_low)[cur-1].val != b_el.val) ||
-			    (!cur && (*buf.tm_low)[buf.tm_low->size()-1].val != b_el.val))
+		    if(!buf.tmLow->size() ||
+			    (cur && (*buf.tmLow)[cur-1].val != b_el.val) ||
+			    (!cur && (*buf.tmLow)[buf.tmLow->size()-1].val != b_el.val))
 		    {
 			//   Write new value
 			if(b_el.val == eval) mEvalCnt++;
-			if(cur >= (int)buf.tm_low->size()) buf.tm_low->push_back(b_el);
+			if(cur >= (int)buf.tmLow->size()) buf.tmLow->push_back(b_el);
 			else {
-			    if(cur+1 >= (int)buf.tm_low->size())
-				beg = (int64_t)(*buf.tm_low)[0].tm * 1000000;
-			    else beg = (int64_t)(*buf.tm_low)[cur+1].tm * 1000000;
+			    if(cur+1 >= (int)buf.tmLow->size())
+				beg = (int64_t)(*buf.tmLow)[0].tm * 1000000;
+			    else beg = (int64_t)(*buf.tmLow)[cur+1].tm * 1000000;
 			    beg = per*(beg/per);
-			    if((*buf.tm_low)[cur].val == eval) mEvalCnt--;
-			    (*buf.tm_low)[cur] = b_el;
+			    if((*buf.tmLow)[cur].val == eval) mEvalCnt--;
+			    (*buf.tmLow)[cur] = b_el;
 			}
 			//   Update cursor
 			if((++cur >= size) && size) {
 			    cur = 0;
 			    //   Memory consumption is made optimal for limited size
-			    if((int)buf.tm_low->capacity() > size) {
+			    if((int)buf.tmLow->capacity() > size) {
 				vector<SLw> *ns = new vector<SLw>;
-				*ns = *buf.tm_low;
-				delete buf.tm_low;
-				buf.tm_low = ns;
+				*ns = *buf.tmLow;
+				delete buf.tmLow;
+				buf.tmLow = ns;
 			    }
 			}
 		    }
@@ -783,34 +790,34 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
     }
     //Proccess flow buffer
     else {
-	if(hg_res_tm) {
+	if(hgResTm) {
 	    SHg b_el = { tm, value };
-	    if(tm < beg && size && (int)buf.tm_high->size() >= size) throw TError("ValBuf",_("Set too old value to buffer."));
+	    if(tm < beg && size && (int)buf.tmHigh->size() >= size) throw TError("ValBuf",_("Set too old value to buffer."));
 	    int c_pos = 0;
 
 	    // Half divider
-	    int d_win = buf.tm_high->size()/2;
+	    int d_win = buf.tmHigh->size()/2;
 	    while(d_win > HalfDivMinWin) {
-		if(tm > (*buf.tm_high)[c_pos+d_win].tm) c_pos += d_win;
+		if(tm > (*buf.tmHigh)[c_pos+d_win].tm) c_pos += d_win;
 		d_win /= 2;
 	    }
 	    // Scan last window
 	    while(true) {
-		if(c_pos >= (int)buf.tm_high->size() || tm < (*buf.tm_high)[c_pos].tm) {
+		if(c_pos >= (int)buf.tmHigh->size() || tm < (*buf.tmHigh)[c_pos].tm) {
 		    if(b_el.val == eval) mEvalCnt++;
-		    if(c_pos == (int)buf.tm_high->size()) buf.tm_high->push_back(b_el);
-		    else buf.tm_high->insert(buf.tm_high->begin()+c_pos,b_el);
-		    if(size && (int)buf.tm_high->size() > size) {
-			if(buf.tm_high->begin()->val == eval) mEvalCnt--;
-			buf.tm_high->erase(buf.tm_high->begin());
+		    if(c_pos == (int)buf.tmHigh->size()) buf.tmHigh->push_back(b_el);
+		    else buf.tmHigh->insert(buf.tmHigh->begin()+c_pos,b_el);
+		    if(size && (int)buf.tmHigh->size() > size) {
+			if(buf.tmHigh->begin()->val == eval) mEvalCnt--;
+			buf.tmHigh->erase(buf.tmHigh->begin());
 		    }
-		    beg = (*buf.tm_high)[0].tm;
-		    end = (*buf.tm_high)[buf.tm_high->size()-1].tm;
+		    beg = (*buf.tmHigh)[0].tm;
+		    end = (*buf.tmHigh)[buf.tmHigh->size()-1].tm;
 		    return;
 		}
-		else if(tm == (*buf.tm_high)[c_pos].tm) {
-		    if((*buf.tm_high)[c_pos].val == eval) mEvalCnt--;
-		    (*buf.tm_high)[c_pos] = b_el;
+		else if(tm == (*buf.tmHigh)[c_pos].tm) {
+		    if((*buf.tmHigh)[c_pos].val == eval) mEvalCnt--;
+		    (*buf.tmHigh)[c_pos] = b_el;
 		    return;
 		}
 		c_pos++;
@@ -818,31 +825,31 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	}
 	else {
 	    SLw b_el = { tm/1000000, value };
-	    if(tm < beg && size && (int)buf.tm_low->size() >= size) throw TError("ValBuf",_("Set too old value to buffer."));
+	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf",_("Set too old value to buffer."));
 	    int c_pos = 0;
 	    // Half divider
-	    int d_win = buf.tm_low->size()/2;
+	    int d_win = buf.tmLow->size()/2;
 	    while(d_win > HalfDivMinWin) {
-		if(tm/1000000 > (*buf.tm_low)[c_pos+d_win].tm) c_pos += d_win;
+		if(tm/1000000 > (*buf.tmLow)[c_pos+d_win].tm) c_pos += d_win;
 		d_win /= 2;
 	    }
 	    // Scan last window
 	    while(true) {
-		if(c_pos >= (int)buf.tm_low->size() || tm/1000000 < (*buf.tm_low)[c_pos].tm) {
+		if(c_pos >= (int)buf.tmLow->size() || tm/1000000 < (*buf.tmLow)[c_pos].tm) {
 		    if(b_el.val == eval) mEvalCnt++;
-		    if(c_pos == (int)buf.tm_low->size()) buf.tm_low->push_back(b_el);
-		    else buf.tm_low->insert(buf.tm_low->begin()+c_pos,b_el);
-		    if(size && (int)buf.tm_low->size() > size) {
-			if( buf.tm_low->begin()->val == eval ) mEvalCnt--;
-			buf.tm_low->erase(buf.tm_low->begin());
+		    if(c_pos == (int)buf.tmLow->size()) buf.tmLow->push_back(b_el);
+		    else buf.tmLow->insert(buf.tmLow->begin()+c_pos,b_el);
+		    if(size && (int)buf.tmLow->size() > size) {
+			if( buf.tmLow->begin()->val == eval ) mEvalCnt--;
+			buf.tmLow->erase(buf.tmLow->begin());
 		    }
-		    beg = (int64_t)(*buf.tm_low)[0].tm*1000000;
-		    end = (int64_t)(*buf.tm_low)[buf.tm_low->size()-1].tm*1000000;
+		    beg = (int64_t)(*buf.tmLow)[0].tm*1000000;
+		    end = (int64_t)(*buf.tmLow)[buf.tmLow->size()-1].tm*1000000;
 		    return;
 		}
-		else if(tm/1000000 == (*buf.tm_low)[c_pos].tm) {
-		    if((*buf.tm_low)[c_pos].val == eval) mEvalCnt--;
-		    (*buf.tm_low)[c_pos] = b_el;
+		else if(tm/1000000 == (*buf.tmLow)[c_pos].tm) {
+		    if((*buf.tmLow)[c_pos].val == eval) mEvalCnt--;
+		    (*buf.tmLow)[c_pos] = b_el;
 		    return;
 		}
 		c_pos++;
@@ -858,7 +865,7 @@ TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     TConfig(cf_el), runSt(false), mDB(idb),
     mId(cfg("ID")), mVType(cfg("VTYPE")), mSrcMode(cfg("SrcMode")), mSource(cfg("Source")),
     mCombMode(cfg("CombMode")), mBPer(cfg("BPER")), mBSize(cfg("BSIZE")), mStart(cfg("START").getBd()),
-    mBHGrd(cfg("BHGRD").getBd()), mBHRes(cfg("BHRES").getBd())
+    mBHGrd(cfg("BHGRD").getBd()), mBHRes(cfg("BHRES").getBd()), mFillLast(cfg("FillLast").getBd())
 {
     mId = iid;
     mVType = TFld::Real;
@@ -899,6 +906,7 @@ bool TVArchive::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.getS() == pc.getS()) return true;
     if(co.name() == "VTYPE" || co.name() == "BSIZE" || co.name() == "BHGRD" || co.name() == "BHRES") setUpBuf();
+    else if(co.name() == "FillLast")	TValBuf::setFillLast(mFillLast);
     else if(co.name() == "SrcMode") {
 	if(startStat()) stop();
 	setSrcMode((TVArchive::SrcMode)co.getI());
@@ -925,7 +933,7 @@ string TVArchive::name( )
 
 AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
 {
-    if(!force && ipath.empty() && !pattr_src.freeStat()) return pattr_src;
+    if(!force && ipath.empty() && !pattrSrc.freeStat()) return pattrSrc;
     string srcPath = ipath.empty() ? srcData() : ipath;
     AutoHD<TVal> attr;
     if(srcMode() == TVArchive::Passive)	return attr;
@@ -952,9 +960,9 @@ int64_t TVArchive::end( const string &arch )
     }
 
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->end() > rez) {
-	    rez = arch_el[i_a]->end();
+    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
+	if((arch.empty() || arch == archEl[i_a]->archivator().workId()) && archEl[i_a]->end() > rez) {
+	    rez = archEl[i_a]->end();
 	    if(!arch.empty())	break;
 	}
 
@@ -972,9 +980,9 @@ int64_t TVArchive::begin( const string &arch )
     if(!rez) rez = cTm;	//Empty buffer
 
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->begin() < rez) {
-	    rez = arch_el[i_a]->begin();
+    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
+	if((arch.empty() || arch == archEl[i_a]->archivator().workId()) && archEl[i_a]->begin() < rez) {
+	    rez = archEl[i_a]->begin();
 	    if(!arch.empty())	break;
 	}
 
@@ -985,19 +993,11 @@ int64_t TVArchive::period( const string &arch )
 {
     if(arch.empty() || arch == BUF_ARCH_NM) return TValBuf::period();
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if(arch == arch_el[i_a]->archivator().workId())
-	    return (int64_t)(1e6*arch_el[i_a]->archivator().valPeriod());
+    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
+	if(arch == archEl[i_a]->archivator().workId())
+	    return (int64_t)(1e6*archEl[i_a]->archivator().valPeriod());
     return 0;
 }
-
-void TVArchive::setValType( TFld::Type vl )	{ mVType = vl; }
-
-void TVArchive::setHardGrid( bool vl )		{ mBHGrd = vl; setUpBuf(); modif(); }
-
-void TVArchive::setHighResTm( bool vl )		{ mBHRes = vl; setUpBuf(); modif(); }
-
-void TVArchive::setSize( int vl )		{ mBSize = vl; }
 
 void TVArchive::setPeriod( int64_t vl )
 {
@@ -1057,45 +1057,45 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     bool stOnCh = runSt;
 
     //Disable all links
-    if(!pattr_src.freeStat() && (!runSt || vl == Passive || vl != srcMode() || src != srcData())) {
+    if(!pattrSrc.freeStat() && (!runSt || vl == Passive || vl != srcMode() || src != srcData())) {
 	owner().setActVal(this, false);
 	srcPAttr().at().setArch(AutoHD<TVArchive>());
-	pattr_src.free();
+	pattrSrc.free();
     }
 
     //Set all links
     if(runSt && vl == ActiveAttr) {
-	pattr_src = srcPAttr(true,src);
-	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
+	pattrSrc = srcPAttr(true,src);
+	if(pattrSrc.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
 	else {
 	    //Double link prevent
-	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this) {
+	    if(!pattrSrc.at().arch().freeStat() && &pattrSrc.at().arch().at() != this) {
 		if(!noex) {
-		    pattr_src.free();
+		    pattrSrc.free();
 		    throw TError(nodePath().c_str(), _("The archive '%s' was already connected to target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }
 	    else {
-		pattr_src.at().setArch(AutoHD<TVArchive>(this));
+		pattrSrc.at().setArch(AutoHD<TVArchive>(this));
 		owner().setActVal(this, true);
 	    }
 	}
     }
 
     if(runSt && vl == PassiveAttr) {
-	pattr_src = srcPAttr(true, src);
-	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
+	pattrSrc = srcPAttr(true, src);
+	if(pattrSrc.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
 	else {
 	    //Double link prevent
-	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this) {
+	    if(!pattrSrc.at().arch().freeStat() && &pattrSrc.at().arch().at() != this) {
 		if(!noex) {
-		    pattr_src.free();
+		    pattrSrc.free();
 		    throw TError(nodePath().c_str(), _("The archive '%s' was already connected to target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }
-	    else pattr_src.at().setArch(AutoHD<TVArchive>(this));
+	    else pattrSrc.at().setArch(AutoHD<TVArchive>(this));
 	}
     }
 
@@ -1120,13 +1120,13 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
     else {
 	ResAlloc res(aRes, false);
 	vector<pair<float,TVArchEl*> >	propArchs;
-	for(unsigned i_a = 0; i_a < arch_el.size(); i_a++) {
-	    TVArchivator &archPr = arch_el[i_a]->archivator();
+	for(unsigned i_a = 0; i_a < archEl.size(); i_a++) {
+	    TVArchivator &archPr = archEl[i_a]->archivator();
 	    if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&
 		    (!tm ||
-			(up_ord && *tm <= arch_el[i_a]->end() && *tm > arch_el[i_a]->begin()-(int64_t)(1e6*archPr.valPeriod())) ||
-			(!up_ord && *tm < arch_el[i_a]->end()+(int64_t)(1e6*archPr.valPeriod()) && *tm >= arch_el[i_a]->begin())))
-		propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), arch_el[i_a]));
+			(up_ord && *tm <= archEl[i_a]->end() && *tm > archEl[i_a]->begin()-(int64_t)(1e6*archPr.valPeriod())) ||
+			(!up_ord && *tm < archEl[i_a]->end()+(int64_t)(1e6*archPr.valPeriod()) && *tm >= archEl[i_a]->begin())))
+		propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), archEl[i_a]));
 	}
 	std::sort(propArchs.begin(), propArchs.end());
 	TVariant rez;
@@ -1150,11 +1150,11 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     //Get priority archivators list for requested range
     ResAlloc res(aRes, false);
     vector<pair<float,TVArchEl*> >	propArchs;
-    for(unsigned i_a = 0; i_a < arch_el.size(); i_a++) {
-	TVArchivator &archPr = arch_el[i_a]->archivator();
-	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&		//!!!! iend >= arch_el[i_a]->begin() need for request beside to the border
-		((!ibeg || ibeg <= arch_el[i_a]->end()) && (!iend || iend >= arch_el[i_a]->begin())) && ibeg <= iend)
-	    propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), arch_el[i_a]));
+    for(unsigned i_a = 0; i_a < archEl.size(); i_a++) {
+	TVArchivator &archPr = archEl[i_a]->archivator();
+	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&		//!!!! iend >= archEl[i_a]->begin() need for request beside to the border
+		((!ibeg || ibeg <= archEl[i_a]->end()) && (!iend || iend >= archEl[i_a]->begin())) && ibeg <= iend)
+	    propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), archEl[i_a]));
     }
     std::sort(propArchs.begin(), propArchs.end());
 
@@ -1183,23 +1183,22 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 
     //Put to archivators
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()))
-		//&& (!arch_el[i_a]->lastGet() || ibeg < arch_el[i_a]->lastGet()))	//!!!! Impossible write direct else
-	    arch_el[i_a]->setVals(buf, ibeg, iend/*vmin(iend,arch_el[i_a]->lastGet())*/);
+    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
+	if((arch.empty() || arch == archEl[i_a]->archivator().workId()))
+		//&& (!archEl[i_a]->lastGet() || ibeg < archEl[i_a]->lastGet()))	//!!!! Impossible write direct else
+	    archEl[i_a]->setVals(buf, ibeg, iend/*vmin(iend,archEl[i_a]->lastGet())*/);
 }
 
-void TVArchive::getActiveData( )
+void TVArchive::getActiveData( const int64_t &tm )
 {
-    if(pattr_src.freeStat() || !pattr_src.at().dataActive()) return;
+    if(pattrSrc.freeStat() || !pattrSrc.at().dataActive()) return;
 
-    int64_t tm = TSYS::curTime();
-    TVariant vl = pattr_src.at().get(&tm);
+    int64_t stm = 0;
     switch(valType()) {
-	case TFld::Boolean: setB(vl, tm);	break;
-	case TFld::Integer: setI(vl, tm);	break;
-	case TFld::Real:    setR(vl, tm);	break;
-	case TFld::String:  setS(vl, tm);	break;
+	case TFld::Boolean: { char vl = pattrSrc.at().getB(&stm); setB(vl, (tm?tm:stm)); break; }
+	case TFld::Integer: { int64_t vl = pattrSrc.at().getI(&stm); setI(vl, (tm?tm:stm)); break; }
+	case TFld::Real:    { double vl = pattrSrc.at().getR(&stm); setR(vl, (tm?tm:stm)); break; }
+	case TFld::String:  { string vl = pattrSrc.at().getS(&stm); setS(vl, (tm?tm:stm)); break; }
 	default: break;
     }
 }
@@ -1208,8 +1207,8 @@ void TVArchive::archivatorList( vector<string> &ls )
 {
     ResAlloc res(aRes, false);
     ls.clear();
-    for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-	ls.push_back(arch_el[i_l]->archivator().workId());
+    for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
+	ls.push_back(archEl[i_l]->archivator().workId());
 }
 
 bool TVArchive::archivatorPresent( const string &arch )
@@ -1218,8 +1217,8 @@ bool TVArchive::archivatorPresent( const string &arch )
     try {
 	AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
 						valAt(TSYS::strSepParse(arch,1,'.'));
-	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-	    if(&arch_el[i_l]->archivator() == &archivat.at())
+	for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
+	    if(&archEl[i_l]->archivator() == &archivat.at())
 		return true;
     } catch(TError err){ }
 
@@ -1237,20 +1236,20 @@ void TVArchive::archivatorAttach( const string &arch )
 
     if(startStat()) {	//Attach allow only to started archive
 	int i_l, i_ins = -1;
-	for(i_l = 0; i_l < (int)arch_el.size(); i_l++) {
-	    if(&arch_el[i_l]->archivator() == &archivat.at()) break;
-	    if(i_ins < 0 && archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod()) i_ins = i_l;
+	for(i_l = 0; i_l < (int)archEl.size(); i_l++) {
+	    if(&archEl[i_l]->archivator() == &archivat.at()) break;
+	    if(i_ins < 0 && archivat.at().valPeriod() <= archEl[i_l]->archivator().valPeriod()) i_ins = i_l;
 	}
-	if(i_l >= (int)arch_el.size()) {
-	    if(i_ins < 0) arch_el.push_back(archivat.at().archivePlace(*this));
-	    else arch_el.insert(arch_el.begin()+i_ins,archivat.at().archivePlace(*this));
+	if(i_l >= (int)archEl.size()) {
+	    if(i_ins < 0) archEl.push_back(archivat.at().archivePlace(*this));
+	    else archEl.insert(archEl.begin()+i_ins,archivat.at().archivePlace(*this));
 	}
     }
 
     if(!TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS())) {
 	string als;
-	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-	    als += arch_el[i_l]->archivator().workId()+";";
+	for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
+	    als += archEl[i_l]->archivator().workId()+";";
 	cfg("ArchS").setS(als);
     }
 }
@@ -1262,16 +1261,16 @@ void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
 					    valAt(TSYS::strSepParse(arch,1,'.'));
     //Find archivator
-    for(unsigned i_l = 0; i_l < arch_el.size(); )
-	if(&arch_el[i_l]->archivator() == &archivat.at()) {
+    for(unsigned i_l = 0; i_l < archEl.size(); )
+	if(&archEl[i_l]->archivator() == &archivat.at()) {
 	    archivat.at().archiveRemove(id(),full);
-	    arch_el.erase(arch_el.begin()+i_l);
+	    archEl.erase(archEl.begin()+i_l);
 	} else i_l++;
 
     if(toModify && TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS())) {
 	string als;
-	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-	    als += arch_el[i_l]->archivator().workId()+";";
+	for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
+	    als += archEl[i_l]->archivator().workId()+";";
 	cfg("ArchS").setS(als);
     }
 }
@@ -1284,11 +1283,11 @@ void TVArchive::archivatorSort( )
 
     do {
 	rep_try = false;
-	for(unsigned i_l = 1; i_l < arch_el.size(); i_l++)
-	    if(arch_el[i_l-1]->archivator().valPeriod() > arch_el[i_l]->archivator().valPeriod()) {
-		TVArchEl *t_el = arch_el[i_l-1];
-		arch_el[i_l-1] = arch_el[i_l];
-		arch_el[i_l] = t_el;
+	for(unsigned i_l = 1; i_l < archEl.size(); i_l++)
+	    if(archEl[i_l-1]->archivator().valPeriod() > archEl[i_l]->archivator().valPeriod()) {
+		TVArchEl *t_el = archEl[i_l-1];
+		archEl[i_l-1] = archEl[i_l];
+		archEl[i_l] = t_el;
 		rep_try = true;
 	    }
     } while(rep_try);
@@ -1381,12 +1380,12 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	if(rarch.empty() && !vOK(ibeg,iend)) {
 	    double best_a_per = 0;
 	    ResAlloc res(aRes, false);
-	    for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-		if(arch_el[i_a]->archivator().valPeriod() > best_a_per &&
-		    arch_el[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz))
+	    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
+		if(archEl[i_a]->archivator().valPeriod() > best_a_per &&
+		    archEl[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz))
 		{
-		    best_a_per = arch_el[i_a]->archivator().valPeriod();
-		    rarch = arch_el[i_a]->archivator().workId();
+		    best_a_per = archEl[i_a]->archivator().valPeriod();
+		    rarch = archEl[i_a]->archivator().workId();
 		}
 	}
 
@@ -1690,9 +1689,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    if(arch.empty() || arch == BUF_ARCH_NM) opt->setAttr("per",ll2s(TValBuf::period()));
 	    else {
 		ResAlloc res(aRes, false);
-		for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-		    if(arch == arch_el[i_a]->archivator().workId())
-		    { opt->setAttr("per",ll2s((int64_t)(1e6*arch_el[i_a]->archivator().valPeriod()))); break; }
+		for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
+		    if(arch == archEl[i_a]->archivator().workId())
+		    { opt->setAttr("per",ll2s((int64_t)(1e6*archEl[i_a]->archivator().valPeriod()))); break; }
 	    }
 	}
 	else if(ctrChkNode(opt,"get",RWRWRW,"root","root",SEC_RD)) {	//Value's data request
@@ -1724,11 +1723,11 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ResAlloc res(aRes, false);
 		//Get priority archivators list for requested range
 		vector<pair<float,TVArchEl*> >	propArchs;
-		for(unsigned i_a = 0; i_a < arch_el.size(); i_a++) {
-		    TVArchivator &archPr = arch_el[i_a]->archivator();
+		for(unsigned i_a = 0; i_a < archEl.size(); i_a++) {
+		    TVArchivator &archPr = archEl[i_a]->archivator();
 		    if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&
-			    tm_grnd <= arch_el[i_a]->end() && tm >= arch_el[i_a]->begin())
-			propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/vmax(1,abs(archPr.valPeriod()-period/1e6)), arch_el[i_a]));
+			    tm_grnd <= archEl[i_a]->end() && tm >= archEl[i_a]->begin())
+			propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/vmax(1,abs(archPr.valPeriod()-period/1e6)), archEl[i_a]));
 		}
 		std::sort(propArchs.begin(), propArchs.end());
 
@@ -1906,6 +1905,16 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		if(srcMode() == PassiveAttr || srcMode() == ActiveAttr)
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/Source","",RWRWR_,"root",SARH_ID,2,"dest","sel_ed","select","/cfg/prm_atr_ls");
 		else ctrRemoveNode(opt,"/prm/cfg/Source");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/BSIZE",EVAL_STR,RWRWR_,"root",SARH_ID,1,
+		    "help",_("The values buffer size have to much enough for archivators periodicity.\n"
+			     "Typical the value automatic adjusts to the archive period and archivators periodicity in 60 seconds."));
+		ctrMkNode("fld",opt,-1,"/prm/cfg/BHGRD",EVAL_STR,RWRWR_,"root",SARH_ID,1,
+		    "help",_("Typical for fastest processing of values archivation."));
+		ctrMkNode("fld",opt,-1,"/prm/cfg/BHRES",EVAL_STR,RWRWR_,"root",SARH_ID,1,
+		    "help",_("Set for the values periodicity lesser to seconds."));
+		ctrMkNode("fld",opt,-1,"/prm/cfg/FillLast",EVAL_STR,RWRWR_,"root",SARH_ID,1,
+		    "help",_("Mostly the pass values fill by EVAL but sometime\n"
+			     "the source's data periodicity greater to the archive's one and it is normal."));
 		ctrRemoveNode(opt,"/prm/cfg/ArchS");
 	    }
 	}
@@ -1980,9 +1989,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    TVArchEl *a_el = NULL;
 		    //Find attached
 		    ResAlloc res(aRes, false);
-		    for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-			if(arch_el[i_l]->archivator().owner().modId() == t_arch_ls[i_ta] && arch_el[i_l]->archivator().id() == arch_ls[i_a])
-			    a_el = arch_el[i_l];
+		    for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
+			if(archEl[i_l]->archivator().owner().modId() == t_arch_ls[i_ta] && archEl[i_l]->archivator().id() == arch_ls[i_a])
+			    a_el = archEl[i_l];
 		    //Fill table element
 		    if(n_arch)	n_arch->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().workId());
 		    if(n_start)	n_start->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().startStat()?"1":"0");
@@ -2265,11 +2274,11 @@ void *TVArchivator::Task( void *param )
 	    int64_t beg, end;
 	    for(map<string,TVArchEl*>::iterator iel = arch.archEl.begin(); iel != arch.archEl.end(); ++iel)
 		if(iel->second->archive().startStat()) {
-		    TVArchEl *arch_el = iel->second;
-		    beg = vmax(arch_el->mLastGet, arch_el->archive().begin());
-		    end = arch_el->archive().end();
+		    TVArchEl *archEl = iel->second;
+		    beg = vmax(archEl->mLastGet, archEl->archive().begin());
+		    end = archEl->archive().end();
 		    if(!beg || !end || beg > end) continue;
-		    arch_el->setVals(arch_el->archive(), beg, end);
+		    archEl->setVals(archEl->archive(), beg, end);
 		}
 	    res.release();
 

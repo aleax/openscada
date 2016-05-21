@@ -1634,8 +1634,8 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
     bool hasLang  = false, hasFlags = false;
     for(int off = 0, lCnt = 0, fPos; (!hasLang || !hasFlags || ico.empty() || name.empty()) && (iLn=TSYS::strLine(iProps,0,&off)).size(); lCnt++)
 	if(!hasLang && !lCnt && iLn.find("#!") == 0) { hasLang = comIsExtScript = true; continue; }
-	else if(!hasFlags && (size_t)(fPos=iLn.find("flags=")) != string::npos)
-	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); ) {
+	else if(!hasFlags && (size_t)(fPos=iLn.find("flags=")) != string::npos) {
+	    for(fPos += 6; (iOpt=TSYS::strParse(iLn,0,"|",&fPos)).size(); )
 		if(iOpt.compare(0,6,"notify") == 0) {
 		    f_notify = true;
 		    repDelay = (iOpt.size() > 6) ? vmax(0,vmin(100,atoi(iOpt.c_str()+6))) : -1;
@@ -1643,7 +1643,8 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 		else if(iOpt == "resource")	f_resource = true;
 		else if(iOpt == "queue")	{ f_queue = true; if(repDelay < 0) repDelay = 0; }
 		else if(iOpt == "quittanceRet")	f_quittanceRet = true;
-	    }
+	    hasFlags = true;
+	}
 	else if(ico.empty() && (size_t)(fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
 	else if(name.empty() && (size_t)(fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
 

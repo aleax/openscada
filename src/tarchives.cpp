@@ -41,7 +41,8 @@ using namespace OSCADA;
 //************************************************
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false), mRes(true),
-    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false), mRedntFirst(true)
+    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mValForceCurTm(false),
+    prcStVal(false), endrunReqVal(false), toUpdate(false), mRedntFirst(true)
 {
     mAval = grpAdd("va_");
 
@@ -88,6 +89,7 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd(new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"8","100","10;10000000"));
     elAval.fldAdd(new TFld("BHGRD",_("Buffer in hard time grid"),TFld::Boolean,0,"1","1"));
     elAval.fldAdd(new TFld("BHRES",_("Buffer in high time resolution"),TFld::Boolean,0,"1","0"));
+    elAval.fldAdd(new TFld("FillLast",_("Fill pass points to a last value"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500"));
 
     setMessBufLen(BUF_SIZE_DEF);
@@ -102,10 +104,6 @@ TArchiveS::~TArchiveS( )
     nodeDelAll();
 }
 
-int TArchiveS::valPeriod( )		{ return vmax(1,mValPer); }
-
-void TArchiveS::setValPrior( int ivl )	{ mValPrior = vmax(-1,vmin(99,ivl)); modif(); }
-
 void TArchiveS::load_( )
 {
     //Load parameters from command line
@@ -115,9 +113,10 @@ void TArchiveS::load_( )
 
     //Load parameters
     setMessBufLen(s2i(TBDS::genDBGet(nodePath()+"MessBufSize",i2s(messBufLen()))));
-    setMessPeriod(s2i(TBDS::genDBGet(nodePath()+"MessPeriod",i2s(mMessPer))));
-    setValPeriod(s2i(TBDS::genDBGet(nodePath()+"ValPeriod",i2s(mValPer))));
-    setValPrior(s2i(TBDS::genDBGet(nodePath()+"ValPriority",i2s(mValPrior))));
+    setMessPeriod(s2i(TBDS::genDBGet(nodePath()+"MessPeriod",i2s(messPeriod()))));
+    setValPeriod(s2i(TBDS::genDBGet(nodePath()+"ValPeriod",i2s(valPeriod()))));
+    setValPrior(s2i(TBDS::genDBGet(nodePath()+"ValPriority",i2s(valPrior()))));
+    setValForceCurTm(s2i(TBDS::genDBGet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()))));
 
     //LidDB
     // Message archivators load
@@ -236,6 +235,7 @@ void TArchiveS::save_( )
     TBDS::genDBSet(nodePath()+"MessPeriod", i2s(messPeriod()));
     TBDS::genDBSet(nodePath()+"ValPeriod", i2s(valPeriod()));
     TBDS::genDBSet(nodePath()+"ValPriority", i2s(valPrior()));
+    TBDS::genDBSet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()));
 }
 
 void TArchiveS::valAdd( const string &iid, const string &idb )
@@ -824,12 +824,12 @@ void *TArchiveS::ArhValTask( void *param )
 	int64_t work_tm = SYS->curTime();
 
 	arh.vRes.lock();
-	for(unsigned i_arh = 0; i_arh < arh.actVal.size(); i_arh++)
+	int64_t stm = arh.valForceCurTm() ? TSYS::curTime() : 0;
+	for(unsigned iArh = 0; iArh < arh.actVal.size(); iArh++)
 	    try {
-		if(work_tm/arh.actVal[i_arh].at().period() > arh.actVal[i_arh].at().end()/arh.actVal[i_arh].at().period())
-		    arh.actVal[i_arh].at().getActiveData();
-	    }
-	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+		if(work_tm/arh.actVal[iArh].at().period() > arh.actVal[iArh].at().end()/arh.actVal[iArh].at().period())
+		    arh.actVal[iArh].at().getActiveData(stm);
+	    } catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	arh.vRes.unlock();
 
 	TSYS::taskSleep((int64_t)arh.valPeriod()*1000000);
@@ -985,6 +985,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,2,"/v_arch",_("Value archives"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/v_arch/per",_("Get data period (ms)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Get data task priority level"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/v_arch/fCurTm",_("Variable timestamp force to current time"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/v_arch/nmb",_("Number"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","va_","idSz","20");
 	}
@@ -1072,6 +1073,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/v_arch/prior") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(valPrior()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setValPrior(s2i(opt->text()));
+    }
+    else if(a_path == "/v_arch/fCurTm") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(valForceCurTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setValForceCurTm(s2i(opt->text()));
     }
     else if(a_path == "/v_arch/nmb" && ctrChkNode(opt)) {
 	vector<string> list;

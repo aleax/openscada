@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.1"
+#define MOD_VER		"2.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1204,10 +1204,11 @@ repeate:
 		//!! Reading in that way but some time read() return 0 after the select() pass.
 		// * Force wait any data in the request mode or EAGAIN
 		// * No wait any data in the not request mode but it can get the data later
-		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < time; ++iRtr)
+		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr)
 		    TSYS::sysSleep(1e-3);
 		// * Force errors
 		// * Retry if any data was wrote but no a reply there into the request mode
+		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode
 		if(iB < 0 || (iB == 0 && writeReq && !noReq)) {
 		    err = (iB < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno): _("No data");
 		    res.unlock();

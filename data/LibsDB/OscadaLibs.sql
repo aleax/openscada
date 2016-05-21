@@ -4316,6 +4316,7 @@ else {
 				else for(iEl = 0, iOff = 12; iEl < ASDU_els; iEl++, iOff+=6) {
 					IOA = (bufIn.charCodeAt(iOff+2)<<16) + (bufIn.charCodeAt(iOff+1)<<8) + bufIn.charCodeAt(iOff);
 					val = (bufIn.charCodeAt(iOff+4)<<8) + bufIn.charCodeAt(iOff+3);
+					if(val > 32767) val -= 65536;
 					SIQ = bufIn.charCodeAt(iOff+5);
 					aid = "ai"+IOA;
 
@@ -4450,7 +4451,7 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1449949770);
+else f_err = "0";','','',1463575281);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -7051,7 +7052,7 @@ for(i = 0; i < tries; i++) {
 	if((vl=read())) {
 		hum = (vl>>32)&0xFF; tmp = (vl>>16)&0xFF;
 		if(((hum+tmp)&0xFF) == (vl&0xFF))
-			return hum.toString() + ":" + tmp.toString();
+			return (hum+20).toString() + ":" + tmp.toString();
 	}
-}',1463511759);
+}',1463575062);
 COMMIT;

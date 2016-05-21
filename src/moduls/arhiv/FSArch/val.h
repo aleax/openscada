@@ -207,7 +207,7 @@ class ModVArch: public TVArchivator
 	void start( );
 	void stop( );
 
-	void checkArchivator( bool now = false );
+	void checkArchivator( bool now = false, bool toLimits = false );
 
 	// Packing archives
 	bool filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper );

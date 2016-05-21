@@ -1,3 +1,14 @@
+2016-05-21 Roman
+- DB.LibsDB.OscadaLibs.db: IEC-60870-104: M_ME_NB_1 processing fix for signed value.
+    "DHT (AOSONG)": Offset to 20 set for humidity of DHT11.
+- !!!:Archive: Values archivation a global option is added for time of taken values force to current and overide it's source from.
+    To archive object an option is added for pass values fill to last value.
+- !:Archive:FSArch: Expanded for early limits check and it's check at unpack errors and then prevent
+    storages overfull at close limits and small storages. the feature is not tested yet!
+- Transport.Sockets: Wait timeout at read() function's zero set to the next time but that case possible after disconection by peer also.
+- UI.{VCAEngine,Vision}: Deep header's processing of the notification's rules fix by hasFlags set.
+
+
 2016-05-17 Roman
 - FIX:DAQ.JavaLikeCalc: Return from included function fixed.
 - DB.LibsDB.OscadaLibs.db: Low level device's function "DHT (AOSONG)" (for Raspberry Pi) is added, for reading temperature and humidity module DHT11.
