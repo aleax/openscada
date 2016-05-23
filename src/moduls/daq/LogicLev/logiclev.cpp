@@ -433,7 +433,7 @@ void TMdPrm::enable( )
 		idNm	= tmpl->val.ioId("NAME");
 		idDscr	= tmpl->val.ioId("DESCR");
 		int id_this = tmpl->val.ioId("this");
-		if(id_this >= 0) tmpl->val.setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+		if(id_this >= 0) tmpl->val.setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 	    }
 	    isProc = true;
 	}

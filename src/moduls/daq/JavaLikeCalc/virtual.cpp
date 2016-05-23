@@ -224,10 +224,10 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	funcId = "Auto";
 	for(int iP = 1; lbAt("sys_compile").at().present(funcId); ++iP) funcId = TSYS::strMess("Auto%d",iP);
     }
-    else funcId = fnc_cfg.nodePath('_',true);
+    else funcId = fnc_cfg.nodePath('_', true);
 
     // Connect or use allowed compiled function object
-    if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId,"");
+    if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId, "");
     res.release();
 
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);

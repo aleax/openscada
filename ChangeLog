@@ -1,3 +1,11 @@
+2016-05-23 Roman
+- DB.LibsDB.OscadaLibs.db: Templates base.{digAlarm,}: expanded into the input data preprocessing procedure for
+    fix the procedure to reusing (more faster), stored context object into "ctx", "f_frq" actual value pass.
+- !!:DAQ: User API function funcCall() significant expanded to fix the result function for reusing and then significant performance rise.
+- TFunction: Virtual function prog() and setProg() is added for alow it's control through an abstract object.
+- DAQ.BlockCalc: Special attribute "this" of the object access set to processing into blocks. Some the source code cleaned.
+
+
 2016-05-21 Roman
 - DB.LibsDB.OscadaLibs.db: IEC-60870-104: M_ME_NB_1 processing fix for signed value.
     "DHT (AOSONG)": Offset to 20 set for humidity of DHT11.

@@ -216,79 +216,97 @@ void TDAQS::save_( )
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool funcCall(string progLang, TVarObj args, string prog) - call function text <prog> whith arguments <args> for program language <progLang>.
-    //		Return "true" on well call.
-    //  progLang - program procedure language;
+    // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "") -
+    //    Call function text <prog> whith arguments <args> for program language <progLang>
+    //    and with the fixed identifier <fixId> (automatic for this empty). Return "true" on a well call.
+    //    For the fixed function recreate you need change the program or clean up <fixId> by the function original id.
+    //  progLang - program procedure language or the stored function's address, after call with <store>;
     //  args - function arguments;
-    //  prog - function text.
+    //  prog - function text;
+    //  fixId - two direction field of fixed identifier of the function;
+    //          for the field empty the function id will be automatic and destroy at end,
+    //          else the id will used on the function creation and replaced by an address to it.
     if(iid == "funcCall" && prms.size() >= 3 && prms[1].type() == TVariant::Object) {
-	string langMod = TSYS::strParse(prms[0].getS(),0,".");
-	if(!modPresent(langMod)) return false;
-	TVariant aVal;
+	string fixId = (prms.size() >= 4) ? prms[3].getS() : "";
+	string faddr;
+	AutoHD<TFunction> wFnc; if(fixId.size()) wFnc = SYS->nodeAt(fixId, 0, 0, 0, true);
 	AutoHD<TVarObj> args = prms[1].getO();
+	vector<string> als; args.at().propList(als);
+	TVariant aVal;
 
 	try {
-	    //Prepare arguments structure
-	    TFunction argStr("<auto>");
-	    vector<string> als;
-	    args.at().propList(als);
-	    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-		aVal = args.at().propGet(als[i_a]);
-		IO::Type tp = IO::String;
-		switch(aVal.type()) {
-		    case TVariant::Boolean:	tp = IO::Boolean;	break;
-		    case TVariant::Integer:	tp = IO::Integer;	break;
-		    case TVariant::Real:	tp = IO::Real;		break;
-		    case TVariant::String:	tp = IO::String;	break;
-		    case TVariant::Object:	tp = IO::Object;	break;
-		    default:	break;
-		}
-		argStr.ioAdd(new IO(als[i_a].c_str(),als[i_a].c_str(),tp,IO::Default));
-	    }
+	    //New call environment preparing or modifying presented
+	    if(wFnc.freeStat() || prms[2].getS() != wFnc.at().prog()) {
+		// Update present function
+		if(!wFnc.freeStat()) { wFnc.at().setStart(false); wFnc.at().setProg(prms[2].getS()); wFnc.at().setStart(true); }
+		else {
+		    string langMod = TSYS::strParse(prms[0].getS(), 0, ".");
+		    if(!modPresent(langMod)) return false;
 
-	    //Get function id and compile.
-	    string faddr = at(langMod).at().compileFunc(TSYS::strParse(prms[0].getS(),1,"."), argStr, prms[2].getS());
-	    AutoHD<TFunction> wFnc = SYS->nodeAt(faddr);
+		    //Prepare arguments structure
+		    TFunction argStr(fixId.size()?"uf_"+TSYS::strEncode(fixId,TSYS::oscdID):"<auto>");
+		    for(unsigned iA = 0; iA < als.size(); iA++) {
+			aVal = args.at().propGet(als[iA]);
+			IO::Type tp = IO::String;
+			switch(aVal.type()) {
+			    case TVariant::Boolean:	tp = IO::Boolean;	break;
+			    case TVariant::Integer:	tp = IO::Integer;	break;
+			    case TVariant::Real:	tp = IO::Real;		break;
+			    case TVariant::String:	tp = IO::String;	break;
+			    case TVariant::Object:	tp = IO::Object;	break;
+			    default:	break;
+			}
+			argStr.ioAdd(new IO(als[iA].c_str(),als[iA].c_str(),tp,IO::Default));
+		    }
+
+		    //Get function id and compile.
+		    faddr = at(langMod).at().compileFunc(TSYS::strParse(prms[0].getS(),1,"."), argStr, prms[2].getS());
+		    wFnc = SYS->nodeAt(faddr);
+		}
+	    }
+	    //Prepare and execute
 	    TValFunc wCtx("UserFunc", &wFnc.at(), true, user);
 
-	    //Load values
-	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
-		switch((aVal=args.at().propGet(als[i_a])).type()) {
-		    case TVariant::Boolean:	wCtx.setB(i_a, aVal.getB());	break;
-		    case TVariant::Integer:	wCtx.setI(i_a, aVal.getI());	break;
-		    case TVariant::Real:	wCtx.setR(i_a, aVal.getR());	break;
-		    case TVariant::String:	wCtx.setS(i_a, aVal.getS());	break;
-		    case TVariant::Object:	wCtx.setO(i_a, aVal.getO());	break;
+	    // Load values
+	    for(unsigned iA = 0; iA < als.size(); iA++)
+		switch((aVal=args.at().propGet(als[iA])).type()) {
+		    case TVariant::Boolean:	wCtx.setB(iA, aVal.getB());	break;
+		    case TVariant::Integer:	wCtx.setI(iA, aVal.getI());	break;
+		    case TVariant::Real:	wCtx.setR(iA, aVal.getR());	break;
+		    case TVariant::String:	wCtx.setS(iA, aVal.getS());	break;
+		    case TVariant::Object:	wCtx.setO(iA, aVal.getO());	break;
 		    default:	break;
 		}
 
-	    //Call function
+	    // Call function
 	    wCtx.calc();
 
-	    //Place call result and remove function object.
-	    for(int i_a = 0; i_a < wCtx.ioSize(); i_a++)
-		switch(wCtx.ioType(i_a)) {
-		    case IO::Boolean:	args.at().propSet(als[i_a], wCtx.getB(i_a));	break;
-		    case IO::Integer:	args.at().propSet(als[i_a], wCtx.getI(i_a));	break;
-		    case IO::Real:	args.at().propSet(als[i_a], wCtx.getR(i_a));	break;
-		    case IO::String:	args.at().propSet(als[i_a], wCtx.getS(i_a));	break;
-		    case IO::Object:	args.at().propSet(als[i_a], wCtx.getO(i_a));	break;
+	    // Place the call results and remove function object.
+	    for(int iA = 0; iA < wCtx.ioSize(); iA++)
+		switch(wCtx.ioType(iA)) {
+		    case IO::Boolean:	args.at().propSet(als[iA], wCtx.getB(iA));	break;
+		    case IO::Integer:	args.at().propSet(als[iA], wCtx.getI(iA));	break;
+		    case IO::Real:	args.at().propSet(als[iA], wCtx.getR(iA));	break;
+		    case IO::String:	args.at().propSet(als[iA], wCtx.getS(iA));	break;
+		    case IO::Object:	args.at().propSet(als[iA], wCtx.getO(iA));	break;
 		    default:	break;
 		}
 
-	    //Remove compiled function object
+	    // Remove compiled function object
 	    wCtx.setFunc(NULL);
-	    wFnc.free();
-	    try{ SYS->nodeDel(faddr); } catch (TError) { }
+		wFnc.free();
+		if(faddr.size()) {
+		    if(fixId.size()) { prms[3].setS(faddr); prms[3].setModify(); }
+		    else SYS->nodeDel(faddr);
+		}
 
 	    return true;
-	}
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	return false;
     }
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TDAQS::subStart( )
@@ -599,8 +617,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    tmplLibList(lst);
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(tmplLibAt(lst[i_a]).at().name());
+	    for(unsigned iA = 0; iA < lst.size(); iA++)
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(tmplLibAt(lst[iA]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibReg(new TPrmTmplLib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
