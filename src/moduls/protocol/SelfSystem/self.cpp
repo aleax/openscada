@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.0.4"
+#define MOD_VER		"1.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
@@ -174,6 +174,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     ResAlloc res(tro.nodeRes(), true);
 
     bool isDir = s2i(io.attr("rqDir"));	io.attrDel("rqDir");
+    bool authForce = s2i(io.attr("rqAuthForce")); io.attrDel("rqAuthForce");
     int conTm = s2i(io.attr("conTm"));	io.attrDel("conTm");
     string user = io.attr("rqUser");	io.attrDel("rqUser");
     string pass = io.attr("rqPass");	io.attrDel("rqPass");
@@ -183,13 +184,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     try {
 	while(true) {
 	    //Session open
-	    if(!isDir && tro.prm1() < 0) {
+	    if(!isDir && (tro.prm1() < 0 || authForce)) {
 		req = "SES_OPEN " + user + " " + pass + "\x0A";
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
 
 		resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf)-1, conTm, true);
-		resp.assign(buf,resp_len);
+		resp.assign(buf, resp_len);
 
 		// Wait tail
 		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
@@ -202,8 +203,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		off = 0;
 		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ") {
 		    rez = s2i(TSYS::strParse(header,0," ",&off));
-		    if(rez > 0 || off >= (int)header.size())
+		    if(rez > 0 || off >= (int)header.size()) {
+			if(rez == ERR_AUTH) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
 			throw TError(nodePath().c_str(), _("Station '%s' error: %s!"), tro.id().c_str(), header.substr(off).c_str());
+		    }
 		    tro.setPrm1(s2i(header.substr(off)));
 		} else throw TError(nodePath().c_str(), _("Station '%s' error: Respond format error!"), tro.id().c_str());
 	    }
@@ -230,13 +233,17 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response first %d"), resp.size());
 
 	    // Get head
-	    head_end = header.size()+1;
+	    head_end = header.size() + 1;
 	    off = 0;
 	    //header = TSYS::strLine(resp,0,&head_end);
 	    if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
 		throw TError(nodePath().c_str(),_("Station respond '%s' error!"),tro.id().c_str());
 	    rez = s2i(TSYS::strParse(header,0," ",&off));
-	    if(rez == 1) { tro.setPrm1(-1); if(isDir) break; else continue; }
+	    if(rez == ERR_AUTH) {
+		tro.setPrm1(-1);
+		if(isDir) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
+		else continue;
+	    }
 	    if(rez > 0 || off >= (int)header.size())
 		throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),buf+off);
 	    int resp_size = s2i(header.substr(off));
@@ -344,8 +351,8 @@ bool TProtIn::mess( const string &request, string &answer )
     if(req.compare(0,8,"SES_OPEN") == 0) {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
 	if((ses_id=mod->sesOpen(user,pass,TSYS::strLine(srcAddr(),0))) < 0)
-	    answer = "REZ 1 Auth error. User or password error.\x0A";
-	else answer = "REZ 0 " + i2s(ses_id) + "\x0A";
+	    answer = "REZ "+i2s(ERR_AUTH)+" Auth error. User or password error.\x0A";
+	else answer = "REZ "+i2s(ERR_NO)+" " + i2s(ses_id) + "\x0A";
     }
     else if(req.compare(0,9,"SES_CLOSE") == 0) {
 	sscanf(req.c_str(), "SES_CLOSE %d", &ses_id);
@@ -365,9 +372,9 @@ bool TProtIn::mess( const string &request, string &answer )
 	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass,&auth.pHash))
 	    { auth.tAuth = 1; auth.name = user; }
 	}
-	else { answer = "REZ 3 Command format error.\x0A"; reqBuf.clear(); return false; }
+	else { answer = "REZ "+i2s(ERR_CMD)+" Command format error.\x0A"; reqBuf.clear(); return false; }
 
-	if(!auth.tAuth) { answer = "REZ 1 Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
+	if(!auth.tAuth) { answer = "REZ "+i2s(ERR_AUTH)+" Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
 
 	try {
 	    if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
@@ -378,24 +385,44 @@ bool TProtIn::mess( const string &request, string &answer )
 	    //Process request
 	    XMLNode req_node;
 	    req_node.load(reqBuf.substr(req.size()+1));
-	    req_node.setAttr("user", auth.name);
 
-	    if(mess_lev() == TMess::Debug) {
-		mess_debug(nodePath().c_str(), _("Unpack and load request: '%s': %d, time: %f ms."),
-		    req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
-		d_tm = TSYS::curTime();
+	    // Check for reforward requests
+	    string host = req_node.attr("reforwardHost");
+	    if(host.size()) {
+		if(mess_lev() == TMess::Debug) {
+		    mess_debug(nodePath().c_str(), _("Check and reforward request: '%s': %d, time: %f ms."),
+			req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
+		    d_tm = TSYS::curTime();
+		}
+		int off = 0;
+		req_node.setAttr("path", "/"+TSYS::strParse(host,0,".",&off)+req_node.attr("path"));
+		req_node.setAttr("reforwardHost", host.substr(off));
+		try { SYS->transport().at().cntrIfCmd(req_node, "Reforward", auth.name); }
+		catch(TError err) {
+		    req_node.childClear();
+		    req_node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
+		}
 	    }
+	    else {
+		req_node.setAttr("user", auth.name);
 
-	    req_node.setAttr("remoteSrcAddr", TSYS::strLine(srcAddr(),0));
-	    SYS->cntrCmd(&req_node);
-	    if(auth.pHash.size()) {
-		req_node.setAttr("pHash", auth.pHash);
-		if(ses_id >= 0) { auth.pHash = ""; mod->sesSet(ses_id, auth); }
-	    }
+		if(mess_lev() == TMess::Debug) {
+		    mess_debug(nodePath().c_str(), _("Unpack and load request: '%s': %d, time: %f ms."),
+			req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
+		    d_tm = TSYS::curTime();
+		}
 
-	    if(mess_lev() == TMess::Debug) {
-		mess_debug(nodePath().c_str(), _("Process request: '%s', time: %f ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
-		d_tm = TSYS::curTime();
+		req_node.setAttr("remoteSrcAddr", TSYS::strLine(srcAddr(),0));
+		SYS->cntrCmd(&req_node);
+		if(auth.pHash.size()) {
+		    req_node.setAttr("pHash", auth.pHash);
+		    if(ses_id >= 0) { auth.pHash = ""; mod->sesSet(ses_id, auth); }
+		}
+
+		if(mess_lev() == TMess::Debug) {
+		    mess_debug(nodePath().c_str(), _("Process request: '%s', time: %f ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		    d_tm = TSYS::curTime();
+		}
 	    }
 
 	    string resp = req_node.save(XMLNode::MissTagEnc|XMLNode::MissAttrEnc)+"\n";
@@ -408,11 +435,10 @@ bool TProtIn::mess( const string &request, string &answer )
 		mess_debug(nodePath().c_str(), _("Save respond to stream and pack: '%s': %d, time: %f ms."),
 		    req.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
 
-	    answer = "REZ 0 " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
-	}
-	catch(TError err) { answer = "REZ 2 " + err.cat + ":" + err.mess + "\x0A"; }
+	    answer = "REZ "+i2s(ERR_NO)+" " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
+	} catch(TError err) { answer = "REZ "+i2s(ERR_PRC)+" " + err.cat + ":" + err.mess + "\x0A"; }
     }
-    else answer = "REZ 3 Command format error.\x0A";
+    else answer = "REZ "+i2s(ERR_CMD)+" Command format error.\x0A";
 
     reqBuf.clear();
 

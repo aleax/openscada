@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-21 19:57+0300\n"
+"POT-Creation-Date: 2016-05-29 19:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1861,6 +1861,9 @@ msgstr ""
 msgid "Request password"
 msgstr ""
 
+msgid "Uprising level"
+msgstr ""
+
 msgid "Search and create new input transports error."
 msgstr ""
 
@@ -1910,6 +1913,9 @@ msgstr ""
 msgid "New external host"
 msgstr ""
 
+msgid "Uprising hosts not allowed here for its management!"
+msgstr ""
+
 msgid "Input transport"
 msgstr ""
 
@@ -1930,6 +1936,10 @@ msgid "Input transport: "
 msgstr ""
 
 msgid "Transport DB"
+msgstr ""
+
+#, c-format
+msgid "Established: %s. "
 msgstr ""
 
 #, c-format

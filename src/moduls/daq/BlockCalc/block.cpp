@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -231,7 +231,7 @@ bool Block::linkActive( unsigned iid )
     if(iid >= mLnk.size()) throw TError(nodePath().c_str(),_("Link %d error!"),iid);
 
     switch(mLnk[iid].tp) {
-	case I_LOC: case I_GLB:	return !mLnk[iid].iblk->w_bl.freeStat();
+	case I_LOC: case I_GLB:	return !mLnk[iid].iblk->wBl.freeStat();
 	case I_PRM:		return !mLnk[iid].aprm->freeStat();
 	default: return false;
     }
@@ -272,20 +272,20 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 
 	switch(mLnk[iid].tp) {
 	    case I_LOC: case O_LOC:
-		mLnk[iid].iblk->w_bl.free();
+		mLnk[iid].iblk->wBl.free();
 		if(owner().blkPresent(lo1) && owner().blkAt(lo1).at().ioId(lo2) >= 0) {
-		    mLnk[iid].iblk->w_bl = owner().blkAt(lo1);
-		    mLnk[iid].iblk->w_id = mLnk[iid].iblk->w_bl.at().ioId(lo2);
+		    mLnk[iid].iblk->wBl = owner().blkAt(lo1);
+		    mLnk[iid].iblk->wId = mLnk[iid].iblk->wBl.at().ioId(lo2);
 		}
 		break;
 	    case I_GLB: case O_GLB:
-		mLnk[iid].iblk->w_bl.free();
+		mLnk[iid].iblk->wBl.free();
 		if(owner().owner().present(lo1) &&
 		    ((Contr &)owner().owner().at(lo1).at()).blkPresent(lo2) &&
 		    ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2).at().ioId(lo3) >= 0)
 		{
-		    mLnk[iid].iblk->w_bl = ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2);
-		    mLnk[iid].iblk->w_id = mLnk[iid].iblk->w_bl.at().ioId(lo3);
+		    mLnk[iid].iblk->wBl = ((Contr &)owner().owner().at(lo1).at()).blkAt(lo2);
+		    mLnk[iid].iblk->wId = mLnk[iid].iblk->wBl.at().ioId(lo3);
 		}
 		break;
 	    case I_PRM: case O_PRM:
@@ -298,7 +298,7 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
     //Disconnect
     if(cmd == DEINIT)
 	switch(mLnk[iid].tp) {
-	    case I_LOC: case I_GLB: case O_LOC: case O_GLB: mLnk[iid].iblk->w_bl.free();	break;
+	    case I_LOC: case I_GLB: case O_LOC: case O_GLB: mLnk[iid].iblk->wBl.free();	break;
 	    case I_PRM: case O_PRM: mLnk[iid].aprm->free();					break;
 	    default: break;
 	}
@@ -320,20 +320,20 @@ void Block::calc( bool first, bool last, double frq )
 	for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++)
 	    switch(mLnk[i_ln].tp) {
 		case I_LOC: case I_GLB:
-		    if(mLnk[i_ln].iblk->w_bl.freeStat()) break;
-		    if(mLnk[i_ln].iblk->w_bl.at().enable()) {
+		    if(mLnk[i_ln].iblk->wBl.freeStat()) break;
+		    if(mLnk[i_ln].iblk->wBl.at().enable()) {
 			//  Early disconnected link init try
-			if(mLnk[i_ln].iblk->w_id == -100) {
+			if(mLnk[i_ln].iblk->wId == -100) {
 			    lnkRes.resRelease();
 			    try{ setLink(i_ln, INIT); } catch(...) { setLink(i_ln, DEINIT); }
 			    lnkRes.resRequestR();
-			    if(mLnk[i_ln].iblk->w_bl.freeStat()) break;
+			    if(mLnk[i_ln].iblk->wBl.freeStat()) break;
 			}
 			//  Use link
-			set(i_ln,mLnk[i_ln].iblk->w_bl.at().get(mLnk[i_ln].iblk->w_id));
+			set(i_ln,mLnk[i_ln].iblk->wBl.at().get(mLnk[i_ln].iblk->wId));
 		    }
 		    //  Check for link disable need
-		    else mLnk[i_ln].iblk->w_id = -100;
+		    else mLnk[i_ln].iblk->wId = -100;
 		    break;
 		case I_PRM:
 		    if(mLnk[i_ln].aprm->freeStat()) break;
@@ -363,20 +363,20 @@ void Block::calc( bool first, bool last, double frq )
 	for(unsigned i_ln = 0; i_ln < mLnk.size(); i_ln++)
 	    switch(mLnk[i_ln].tp) {
 		case O_LOC: case O_GLB:
-		    if(mLnk[i_ln].iblk->w_bl.freeStat() || (outLnkWrChs() && !ioMdf(i_ln))) break;
-		    if(mLnk[i_ln].iblk->w_bl.at().enable()) {
+		    if(mLnk[i_ln].iblk->wBl.freeStat() || (outLnkWrChs() && !ioMdf(i_ln))) break;
+		    if(mLnk[i_ln].iblk->wBl.at().enable()) {
 			//Early disconnected link init try
-			if(mLnk[i_ln].iblk->w_id == -100) {
+			if(mLnk[i_ln].iblk->wId == -100) {
 			    lnkRes.resRelease();
 			    try{ setLink(i_ln, INIT); } catch(...) { setLink(i_ln, DEINIT); }
 			    lnkRes.resRequestR();
-			    if(mLnk[i_ln].iblk->w_bl.freeStat()) break;
+			    if(mLnk[i_ln].iblk->wBl.freeStat()) break;
 			}
 			//Use link
-			mLnk[i_ln].iblk->w_bl.at().set(mLnk[i_ln].iblk->w_id,get(i_ln));
+			mLnk[i_ln].iblk->wBl.at().set(mLnk[i_ln].iblk->wId,get(i_ln));
 		    }
 		    //Check for link disable need
-		    else mLnk[i_ln].iblk->w_id = -100;
+		    else mLnk[i_ln].iblk->wId = -100;
 		    break;
 		case O_PRM:
 		    if(mLnk[i_ln].aprm->freeStat() || (outLnkWrChs() && !ioMdf(i_ln))) break;
@@ -426,15 +426,10 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/blck/st/prc",_("Process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/blck/cfg",_("Configuration"))) {
-		ctrMkNode("fld",opt,-1,"/blck/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
-		ctrMkNode("fld",opt,-1,"/blck/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","90","rows","4");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",_("To enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",_("To process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/prior",_("Prior block"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed","select","/blck/cfg/blks",
+		TConfig::cntrCmdMake(opt,"/blck/cfg",0,"root",SDAQ_ID,RWRWR_);
+		ctrMkNode("fld",opt,-1,"/blck/cfg/PRIOR",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,"dest","sel_ed","select","/blck/cfg/blks",
 		    "help",_("Priority block(s) calculate before this block. Blocks list is separated by symbol ';'."));
-		ctrMkNode("fld",opt,-1,"/blck/cfg/outLnkWrChs",cfg("LNK_OUT_WR_CH").fld().descr().c_str(),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/func",_("Function"),(!func())?RWRWR_:R_R_R_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/blck/cfg/fncs");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/FUNC",EVAL_STR,func()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/blck/cfg/fncs");
 		ctrMkNode("comm",opt,-1,"/blck/cfg/func_lnk",_("Go to function"),wFunc().empty()?0:RWRW__,"root",SDAQ_ID,1,"tp","lnk");
 	    }
 	}
@@ -493,39 +488,15 @@ void Block::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(process()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setProcess(s2i(opt->text()));
     }
-    else if(a_path == "/blck/cfg/id" && ctrChkNode(opt))	opt->setText(id());
-    else if(a_path == "/blck/cfg/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
-    }
-    else if(a_path == "/blck/cfg/descr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
-    }
-    else if(a_path == "/blck/cfg/toen") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(toEnable() ? "1" : "0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setToEnable(s2i(opt->text()));
-    }
-    else if(a_path == "/blck/cfg/toprc") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(toProcess() ? "1" : "0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setToProcess(s2i(opt->text()));
-    }
-    else if(a_path == "/blck/cfg/prior") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prior());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setPrior(opt->text());
-    }
-    else if(a_path == "/blck/cfg/outLnkWrChs") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(outLnkWrChs()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOutLnkWrChs(s2i(opt->text()));
-    }
     else if(a_path == "/blck/cfg/blks" && ctrChkNode(opt)) {
 	vector<string> list;
 	owner().blkList(list);
 	opt->childAdd("el")->setText("");
-	for(unsigned i_b = 0; i_b < list.size(); i_b++)
-	    if(list[i_b] != id()) opt->childAdd("el")->setText((prior().size()?prior()+";":"")+list[i_b]);
+	for(unsigned iB = 0; iB < list.size(); iB++)
+	    if(list[iB] != id() && prior() != list[iB] && prior().find(";"+list[iB]) == string::npos && prior().find(list[iB]+";") == string::npos)
+		opt->childAdd("el")->setText((prior().size()?prior()+";":"")+list[iB]);
     }
-    else if(a_path == "/blck/cfg/func") {
+    else if(a_path == "/blck/cfg/FUNC") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    opt->setText(wFunc());
 	    try{ if(dynamic_cast<TFunction*>(&SYS->nodeAt(wFunc(),0,'.').at())) opt->setText(opt->text()+" (+)"); }
@@ -549,6 +520,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_a=0; i_a < list.size(); i_a++)
 	    opt->childAdd("el")->setText(c_path+list[i_a]);
     }
+    else if(a_path.compare(0,9,"/blck/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
     else if((a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
@@ -659,4 +631,16 @@ void Block::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",i2s(Block::I_PRM))->setText(_("Parameter in"));
     }
     else TCntrNode::cntrCmdProc(opt);
+}
+
+TVariant Block::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //TCntrNodeObj cntr() - get the controller node
+    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
+
+    //Configuration functions call
+    TVariant cfRez = objFunc(iid, prms, user);
+    if(!cfRez.isNull()) return cfRez;
+
+    return TCntrNode::objFuncCall(iid, prms, user);
 }

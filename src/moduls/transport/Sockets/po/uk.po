@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-16 09:41+0300\n"
+"POT-Creation-Date: 2016-05-29 20:49+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -39,6 +39,7 @@ msgstr ""
 "Підключень %d, відкрито %d, останне %s. Трафік вхідний %s, вихідний %s. "
 "Закрито підключень за лімітом %d."
 
+#, c-format
 msgid "Create %s socket error: '%s (%d)'!"
 msgstr "Помилка створення %s сокету: '%s (%d)'!"
 
@@ -66,9 +67,11 @@ msgstr "Виникла тимчасова помилка на авторитет
 msgid "Unknown error code from gethostbyname_r for '%s'!"
 msgstr "Невідомий код помилки gethostbyname_r для '%s'!"
 
+#, c-format
 msgid "Connect to %s socket error: '%s (%d)'!"
 msgstr "Помилка підключення до %s сокету: '%s (%d)'!"
 
+#, c-format
 msgid "Bind to %s socket error: '%s (%d)'!"
 msgstr "Помилка зв'язування із %s сокетом: '%s (%d)'!"
 
@@ -307,6 +310,9 @@ msgstr "Транспорт не запущено!"
 msgid "Request error: %s"
 msgstr "Помилка запиту: %s"
 
+msgid "No data wrote"
+msgstr "Не записано даних"
+
 #, c-format
 msgid "Write error: %s"
 msgstr "Помилка запису: %s"
@@ -321,6 +327,7 @@ msgstr "Перевищено час очікування читання!"
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
+#, c-format
 msgid "Read (select) error: %s"
 msgstr "Помилка читання (select): %s"
 

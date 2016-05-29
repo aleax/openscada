@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Serial translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2009-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2009-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-16 09:36+0300\n"
+"POT-Creation-Date: 2016-05-29 20:51+0300\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -219,6 +219,9 @@ msgstr "Транспорт не запущено!"
 msgid "Restart by KeepAliveTm %gs."
 msgstr "Перевантаження за KeepAliveTm %gс."
 
+msgid "No data wrote"
+msgstr "Не записано даних"
+
 #, c-format
 msgid "Write error: %s"
 msgstr "Помилка запису: %s"
@@ -236,6 +239,7 @@ msgstr "Помилка читання эхо запиту."
 msgid "Read timeouted."
 msgstr "Перевищено час очікування читання!"
 
+#, c-format
 msgid "Read (select) error: %s"
 msgstr "Помилка читання (select): %s"
 

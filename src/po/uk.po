@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-21 19:57+0300\n"
+"POT-Creation-Date: 2016-05-29 19:30+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -425,8 +425,10 @@ msgid ""
 "Typical the value automatic adjusts to the archive period and archivators "
 "periodicity in 60 seconds."
 msgstr ""
-"Розмір буферу значень має бути достатньо великим для періодичності архіваторів.\n"
-"Типово це значення автоматично налаштовується на періодичність цього архіву та періодичність архіваторів у 60 секунд."
+"Розмір буферу значень має бути достатньо великим для періодичності "
+"архіваторів.\n"
+"Типово це значення автоматично налаштовується на періодичність цього архіву "
+"та періодичність архіваторів у 60 секунд."
 
 msgid "Typical for fastest processing of values archivation."
 msgstr "Типово для швидкої обробки архівації значень."
@@ -439,7 +441,8 @@ msgid ""
 "the source's data periodicity greater to the archive's one and it is normal."
 msgstr ""
 "Переважно прохідні значення заповнюються EVAL однак інколи\n"
-"періодичність значень джерела більша за періодичність цього архіву та це нормально."
+"періодичність значень джерела більша за періодичність цього архіву та це "
+"нормально."
 
 msgid "Start"
 msgstr "Запущено"
@@ -2098,6 +2101,9 @@ msgstr "Користувач запиту"
 msgid "Request password"
 msgstr "Пароль запиту"
 
+msgid "Uprising level"
+msgstr "Рівень підняття"
+
 msgid "Search and create new input transports error."
 msgstr "Помилка пошуку та створення нових вхідних транспортів."
 
@@ -2149,6 +2155,9 @@ msgstr "Корист.;Системн.;Корист. та Системн."
 msgid "New external host"
 msgstr "Новий зовнішній хост"
 
+msgid "Uprising hosts not allowed here for its management!"
+msgstr "Підняті хости недоступні для контролю тут!"
+
 msgid "Input transport"
 msgstr "Вхідний транспорт"
 
@@ -2170,6 +2179,10 @@ msgstr "Вхідний транспорт: "
 
 msgid "Transport DB"
 msgstr "БД транспорту"
+
+#, c-format
+msgid "Established: %s. "
+msgstr "Встановлено: %s. "
 
 #, c-format
 msgid "Transport protocol '%s' no present"

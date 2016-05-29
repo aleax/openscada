@@ -571,16 +571,16 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_view->addAction(elFigTool->toggleViewAction());
     mn_view->addSeparator();
     //Init status bar
-    mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
+    mWUser = new UserStBar(open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
     mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display the current user."));
     mWUser->setStatusTip(_("Double click to change user."));
     statusBar()->insertPermanentWidget(0,mWUser);
-    mWStat = new QLabel( VCAStation().c_str(), this );
+    mWStat = new QLabel(VCAStation().c_str(), this);
     mWStat->setWhatsThis(_("This label displays the using VCA engine station."));
     mWStat->setToolTip(_("Field for display of the using VCA engine station."));
-    statusBar()->insertPermanentWidget(0,mWStat);
-    w_scale = new WScaleStBar( this );
+    statusBar()->insertPermanentWidget(0, mWStat);
+    w_scale = new WScaleStBar(this);
     w_scale->setWhatsThis(_("This label displays widgets' scaling mode."));
     w_scale->setToolTip(_("Field for display widgets' scaling mode."));
     w_scale->setStatusTip(_("Click to change widgets' scaling mode."));

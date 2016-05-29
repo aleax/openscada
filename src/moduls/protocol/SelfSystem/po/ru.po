@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.SelfSystem translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-05 17:08+0300\n"
+"POT-Creation-Date: 2016-05-29 20:34+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -119,6 +119,9 @@ msgstr ""
 #, c-format
 msgid "Get request: '%s': %d, time: %f ms."
 msgstr "Получение запроса: '%s': %d, время: %f мс."
+
+msgid "Check and reforward request: '%s': %d, time: %f ms."
+msgstr "Проверка и перенаправление запроса: '%s': %d, время: %f мс."
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."

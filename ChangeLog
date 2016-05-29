@@ -1,3 +1,23 @@
+2016-05-29 Roman
+- SYS:data/debian: the service's script openscada.init moved to separated package openscada-server.
+- !!!!:SYS,Transport,DAQ.DAQGate,UI.{QTCfg,Vision,WebCfgD}: External host uprise is implemented by the function extHostList() extention;
+    the requests reforwarding by function cntrIfCmd() and the input part of the self-system protocol.
+- Transport: Module's subsystems' version set to 11.
+    Starting-connection time is added to the output transports.
+    Modify property is added to the external host's object for reconnect on it modification.
+- !!:DAQ.BlockCalc: Configuration fields of block unified and moved to TConfig::cntrCmdMake().
+    User API functions cntr(), cfg(), cfgSet() are added.
+- FIX:DAQ.Siemens.LibnoDave: gethostbyname() replaced to it's reentrant variants.
+- !!!!:Protocol.SelfSystem: Force authentication update by attribute "rqAuthForce" is added.
+    Authentication error processing for direct requests is added.
+    Authentication errors moved from the connection kind to the request, into the tag attribute "rez" and text.
+    Reforwarding of host's requests attribute "reforwardHost" into input part is added.
+- FIX:Transport.{Serial,Sockets}: Errors on writing in the output part is fixed.
+- FIX:Transport.Sockets: Debug message about connect by timeout in the time is fixed.
+- !!!!:UI.Vision: Requests to an external host moved to using cntrIfCmd().
+    Remote authentication moved to allow use the host autentication by default and the same connection for check it.
+
+
 2016-05-23 Roman
 - DB.LibsDB.OscadaLibs.db: Templates base.{digAlarm,}: expanded into the input data preprocessing procedure for
     fix the procedure to reusing (more faster), stored context object into "ctx", "f_frq" actual value pass.

@@ -32,6 +32,12 @@ Description: Open SCADA system project
  UI.WebUser, UI.WebVision,
  Special.FLibMath, Special.SystemTests
 
+Package: openscada-server
+Architecture: all
+Depends: openscada
+Description: OpenSCADA - server virtual package
+ The openscada-server is virtual package for SCADA-server.
+
 Package: openscada-dbg
 Section: debug
 Priority: extra

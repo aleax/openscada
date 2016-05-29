@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-05 17:08+0300\n"
+"POT-Creation-Date: 2016-05-29 20:34+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -124,6 +124,9 @@ msgstr ""
 #, c-format
 msgid "Get request: '%s': %d, time: %f ms."
 msgstr "Holen Antrag: '%s': %d, Zeit: %f ms."
+
+msgid "Check and reforward request: '%s': %d, time: %f ms."
+msgstr "Überprüfen und wieder nach vorn Anfrage: '%s': %d, Zeit: %f ms."
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."

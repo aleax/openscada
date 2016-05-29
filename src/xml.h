@@ -95,7 +95,7 @@ class XMLNode
 	void	childClear( const string &name = "" );
 	XMLNode* childGet( const int, bool noex = false ) const;
 	XMLNode* childGet( const string &name, const int numb = 0, bool noex = false ) const;
-	XMLNode* childGet( const string &attr, const string &name, bool noex = false ) const;
+	XMLNode* childGet( const string &attr, const string &vl, bool noex = false ) const;
 	XMLNode* getElementBy( const string &attr, const string &val );
 
 	XMLNode* parent( )			{ return mParent; }

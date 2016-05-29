@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		10		//TransportS type modules version
+#define STR_VER		11		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -134,6 +134,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	int64_t	prm2( )		{ return mPrm2; }
 	bool	toStart( )	{ return mStart; }
 	bool	startStat( )	{ return runSt; }
+	time_t	startTm( )	{ return mStartTm; }
 	virtual	string getStatus( );
 
 	string DB( )		{ return mDB; }
@@ -150,7 +151,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
-	virtual void start( int time = 0 )	{ };
+	virtual void start( int time = 0 );
 	virtual void stop( )			{ };
 
 	virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0, bool noRes = false )
@@ -187,7 +188,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	char	&mStart;
 	string	mDB;
 
-	//> Reserve parameters
+	// Reserve parameters
+	time_t	mStartTm;
 	int64_t	mPrm1, mPrm2;
 	Res	nRes;
 };
@@ -247,22 +249,23 @@ class TTransportS : public TSubSYS
 		//Data
 		enum Mode { User = 0, System, UserSystem };
 		//Methods
-		ExtHost( const string &iuser_open, const string &iid, const string &iname = "",
-			const string &itransp = "", const string &iaddr = "", const string &iuser = "", const string &ipass = "" ) :
-		    user_open(iuser_open), id(iid), name(iname), transp(itransp), addr(iaddr),
-		    user(iuser), pass(ipass), link_ok(false), mode(-1) { }
+		ExtHost( const string &iUserOpen, const string &iid, const string &iname = "", const string &itransp = "",
+			 const string &iaddr = "", const string &iuser = "", const string &ipass = "", uint8_t iUpRiseLev = 0 ) :
+		    userOpen(iUserOpen), id(iid), name(iname), transp(itransp), addr(iaddr),
+		    user(iuser), pass(ipass), upRiseLev(iUpRiseLev), mode(-1), mdf(time(NULL)) { }
 
 		//Attributes
-		string	user_open;	//User which open remote host
-		string	id;		//External host id
-		string	name;		//Name
-		string	transp;		//Connect transport
-		string	addr;		//External host address
-		string	user;		//External host user
-		string	pass;		//External host password
-		bool	link_ok;	//Link OK
+		string	userOpen,	//User which open remote host
+			id,		//External host id
+			name,		//Name
+			transp,		//Connect transport
+			addr,		//External host address
+			user,		//External host user
+			pass;		//External host password
+		uint8_t	upRiseLev;	//Underneath hosts uprising level in the cascading access, zero for disable
 
 		int8_t	mode;		//Mode; Only dynamic set
+		time_t	mdf;		//Modify time, for detect the reconnection need
 	};
 
 	//Methods
@@ -275,10 +278,9 @@ class TTransportS : public TSubSYS
 
 	// External hosts
 	string extHostsDB( );
-	void extHostList( const string &user, vector<string> &list, bool andSYS = false );
-	bool extHostPresent( const string &user, const string &id );
-	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
+	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1 );
 	ExtHost extHostGet( const string &user, const string &id, bool andSYS = false );
+	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
 	void extHostSet( const ExtHost &host, bool andSYS = false );
 	void extHostDel( const string &user, const string &id, bool andSYS = false );
 

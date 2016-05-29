@@ -2699,10 +2699,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/redund/lsSt" && ctrChkNode(opt)) {
-	vector<string> hls;
-	SYS->transport().at().extHostList("*",hls);
-	for(unsigned i_h = 0; i_h < hls.size(); i_h++)
-	    opt->childAdd("el")->setText(hls[i_h]);
+	vector<TTransportS::ExtHost> hls;
+	SYS->transport().at().extHostList("*", hls);
+	for(unsigned iH = 0; iH < hls.size(); iH++)
+	    opt->childAdd("el")->setText(hls[iH].id);
     }
     else if(a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/tasks/tasks") {

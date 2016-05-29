@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:03+0300\n"
+"POT-Creation-Date: 2016-05-29 20:06+0300\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -62,33 +62,12 @@ msgstr "Bearbeitung"
 msgid "Configuration"
 msgstr "Konfiguration"
 
-msgid "Id"
-msgstr ""
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "To enable"
-msgstr "Einschalten"
-
-msgid "To process"
-msgstr "Bearbeiten"
-
-msgid "Prior block"
-msgstr "Priorität Block"
-
 msgid ""
 "Priority block(s) calculate before this block. Blocks list is separated by "
 "symbol ';'."
 msgstr ""
 "Priorität Block(e) vor diesem Block berechnet. Blockiert Liste wird von "
 "Symbol getrennt ';'."
-
-msgid "Function"
-msgstr "Funktion"
 
 msgid "Go to function"
 msgstr "Zur Funktion"
@@ -171,8 +150,26 @@ msgstr "IO-Parameter des Blocks"
 msgid "ID"
 msgstr ""
 
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "To enable"
+msgstr "Einschalten"
+
+msgid "To process"
+msgstr "Bearbeiten"
+
+msgid "Prior block"
+msgstr "Priorität Block"
+
 msgid "Write to output links only at changes"
 msgstr "Schreiben Ausgangsverbindungen nur bei Änderungen"
+
+msgid "Function"
+msgstr "Funktion"
 
 msgid "Block's ID"
 msgstr "Id des Blocks"
@@ -209,22 +206,22 @@ msgid "Enable block '%s' error."
 msgstr "Fehler beim Einschalten des Blocks '%s'."
 
 msgid "Start stage 1: set all blocks to process."
-msgstr ""
+msgstr "Startstufe 1: setzen Sie alle Blöcke zu verarbeiten."
 
 #, c-format
 msgid "Process block '%s' error."
 msgstr "Fehler bei der Bearbeitung des Blocks '%s'."
 
 msgid "Start stage 2: sort blocks for need sequence."
-msgstr ""
+msgstr "Startstufe 2: kurze Blöcke für Not-Sequenz."
 
 #, c-format
 msgid "Reshuffle blocks '%s'(%d) <-> '%s'(%d)."
-msgstr ""
+msgstr "Umprogrammieren Blöcke '%s'(%d) <-> '%s'(%d)."
 
 #, c-format
 msgid "Start stage 3: task create: prcSt=%d."
-msgstr ""
+msgstr "Startstufe 3: Aufgabe erstellen: prcSt=%d."
 
 #, c-format
 msgid "Block '%s' calc error."

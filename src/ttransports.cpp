@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,6 +58,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, "Transports", true)
     elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
     elExt.fldAdd(new TFld("USER",_("Request user"),TFld::String,0,OBJ_ID_SZ));
     elExt.fldAdd(new TFld("PASS",_("Request password"),TFld::String,0,"30"));
+    elExt.fldAdd(new TFld("UpRiseLev",_("Uprising level"),TFld::Integer,0,"1"));
 }
 
 TTransportS::~TTransportS( )
@@ -183,13 +184,14 @@ void TTransportS::load_( )
 	TConfig c_el(&elExt);
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); ) {
 	    ExtHost host("", "");
-	    host.user_open	= c_el.cfg("OP_USER").getS();
+	    host.userOpen	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
 	    host.name		= c_el.cfg("NAME").getS();
 	    host.transp		= c_el.cfg("TRANSP").getS();
 	    host.addr		= c_el.cfg("ADDR").getS();
 	    host.user		= c_el.cfg("USER").getS();
 	    host.pass		= c_el.cfg("PASS").getS();
+	    host.upRiseLev	= c_el.cfg("UpRiseLev").getI();
 	    extHostSet(host);
 	}
     }
@@ -204,21 +206,21 @@ void TTransportS::save_( )
     //Save external transports
     ResAlloc res(extHostRes, false);
     TConfig c_el(&elExt);
-    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++) {
-	c_el.cfg("OP_USER").setS(extHostLs[i_h].user_open);
-	c_el.cfg("ID").setS(extHostLs[i_h].id);
-	c_el.cfg("NAME").setS(extHostLs[i_h].name);
-	c_el.cfg("TRANSP").setS(extHostLs[i_h].transp);
-	c_el.cfg("ADDR").setS(extHostLs[i_h].addr);
-	c_el.cfg("USER").setS(extHostLs[i_h].user);
-	c_el.cfg("PASS").setS(extHostLs[i_h].pass);
+    for(unsigned iH = 0; iH < extHostLs.size(); iH++) {
+	c_el.cfg("OP_USER").setS(extHostLs[iH].userOpen);
+	c_el.cfg("ID").setS(extHostLs[iH].id);
+	c_el.cfg("NAME").setS(extHostLs[iH].name);
+	c_el.cfg("TRANSP").setS(extHostLs[iH].transp);
+	c_el.cfg("ADDR").setS(extHostLs[iH].addr);
+	c_el.cfg("USER").setS(extHostLs[iH].user);
+	c_el.cfg("PASS").setS(extHostLs[iH].pass);
+	c_el.cfg("UpRiseLev").setI(extHostLs[iH].upRiseLev);
 	SYS->db().at().dataSet(extHostsDB(),nodePath()+"ExtTansp",c_el);
     }
     //Clear external transports
     c_el.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); )
-	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size())
-	{
+	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size()) {
 	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp",c_el,true,true,true);
 	    fld_cnt--;
 	}
@@ -306,39 +308,71 @@ string TTransportS::optDescr( )
     return buf;
 }
 
-void TTransportS::extHostList( const string &user, vector<string> &list, bool andSYS )
+void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool andSYS, int upRiseLev )
 {
     list.clear();
     ResAlloc res(extHostRes, false);
-    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
-	if(!user.size() || user == extHostLs[i_h].user_open || (andSYS && extHostLs[i_h].user_open == "*"))
-	{
+    for(unsigned iH = 0; iH < extHostLs.size(); iH++)
+	if(!user.size() || user == extHostLs[iH].userOpen || (andSYS && extHostLs[iH].userOpen == "*")) {
 	    bool itSet = false;
-	    for(vector<string>::iterator iL = list.begin(); (!user.size() || andSYS) && !itSet && iL != list.end(); ++iL)
-		itSet = (*iL == extHostLs[i_h].id);
-	    if(!itSet) list.push_back(extHostLs[i_h].id);
+	    for(vector<ExtHost>::iterator iL = list.begin(); (!user.size() || andSYS) && !itSet && iL != list.end(); ++iL)
+		itSet = (iL->id == extHostLs[iH].id);
+	    if(itSet) continue;
+	    list.push_back(extHostLs[iH]);
+	    if(list.back().mode < 0) list.back().mode = (list.back().userOpen == "*") ? ExtHost::System : ExtHost::User;
 	}
+    res.unlock();
+
+    //Prepare and request to the station for it's external hosts list
+    XMLNode req("get"), *nId, *nT;
+    for(unsigned iH = 0, nH = list.size(), wUpRiseLev; iH < nH; iH++) {
+	if(!(wUpRiseLev=(upRiseLev<0)?list[iH].upRiseLev:upRiseLev)) continue;
+	req.clear()->setAttr("path", "/"+list[iH].id+"/Transport/%2fsub%2fehost")->
+		     setAttr("upRiseLev", i2s(wUpRiseLev-1))->setAttr("upRiseSYS", i2s(andSYS));
+	try {
+	    if(cntrIfCmd(req,"UpRiseLev",user)) continue;
+	    nId = req.childGet("id", "id", true);
+	    for(unsigned iH1 = 0; nId && iH1 < nId->childSize(); ++iH1) {
+		ExtHost eh(user, list[iH].id+"."+nId->childGet(iH1)->text());
+		if((nT=req.childGet("id","name",true)) && iH1 < nT->childSize()) eh.name = list[iH].name + " > "+nT->childGet(iH1)->text();
+		if((nT=req.childGet("id","transp",true)) && iH1 < nT->childSize()) eh.transp = nT->childGet(iH1)->text();
+		if((nT=req.childGet("id","addr",true)) && iH1 < nT->childSize()) eh.addr = nT->childGet(iH1)->text();
+		if((nT=req.childGet("id","user",true)) && iH1 < nT->childSize()) eh.user = nT->childGet(iH1)->text();
+		if((nT=req.childGet("id","pass",true)) && iH1 < nT->childSize()) eh.pass = nT->childGet(iH1)->text();
+		if((nT=req.childGet("id","mode",true)) && iH1 < nT->childSize()) eh.mode = s2i(nT->childGet(iH1)->text());
+		if((nT=req.childGet("id","upRiseLev",true)) && iH1 < nT->childSize()) eh.upRiseLev = s2i(nT->childGet(iH1)->text());
+		list.push_back(eh);
+	    }
+	} catch(TError err) { }
+    }
 }
 
-bool TTransportS::extHostPresent( const string &user, const string &iid )
+TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &id, bool andSYS )
 {
-    ResAlloc res(extHostRes,false);
-    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
-	if((!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == iid)
-	    return true;
+    ResAlloc res(extHostRes, false);
+    ExtHost eh(user, "");
+    for(unsigned iH = 0; iH < extHostLs.size(); ++iH)
+	if(extHostLs[iH].id == id && (user.empty() || user == extHostLs[iH].userOpen || (andSYS && extHostLs[iH].userOpen == "*"))) {
+	    if(eh.mode < 0) {
+		eh = extHostLs[iH];
+		eh.mode = (eh.userOpen == "*") ? ExtHost::System : ExtHost::User;
+	    }
+	    else if(eh.userOpen != extHostLs[iH].userOpen) { eh.mode = ExtHost::UserSystem; break; }
+	}
+    if(eh.userOpen == "*" && user.size() && user != eh.userOpen) eh.userOpen = user;
 
-    return false;
+    return eh;
 }
 
 void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 {
     ResAlloc res(extHostRes, true);
     int usrHstId = -1, sysHstId = -1;
-    for(int i_h = 0; i_h < (int)extHostLs.size() && (usrHstId < 0 || sysHstId < 0); i_h++)
-	if(extHostLs[i_h].id == host.id) {
-	    if(host.mode < 0) { if(host.user_open == extHostLs[i_h].user_open) { usrHstId = i_h; break; } }
-	    else if(extHostLs[i_h].user_open == host.user_open)	usrHstId = i_h;
-	    else if(extHostLs[i_h].user_open == "*")		sysHstId = i_h;
+    for(int iH = 0; iH < (int)extHostLs.size() && (usrHstId < 0 || sysHstId < 0); iH++)
+	if(extHostLs[iH].id == host.id) {
+	    if(host.mode < 0) { if(host.userOpen == extHostLs[iH].userOpen) { usrHstId = iH; break; } }
+	    else if(extHostLs[iH].userOpen == host.userOpen)	usrHstId = iH;
+	    else if(extHostLs[iH].userOpen == "*")		sysHstId = iH;
 	}
     if(host.mode < 0 || !andSYS) {
 	if(usrHstId < 0) extHostLs.push_back(host);
@@ -351,8 +385,8 @@ void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 	    else extHostLs[usrHstId] = host;
 	}
 	if(host.mode == ExtHost::System || host.mode == ExtHost::UserSystem) {
-	    if(sysHstId < 0) { extHostLs.push_back(host); extHostLs.back().user_open = "*"; }
-	    else { extHostLs[sysHstId] = host; extHostLs[sysHstId].user_open = "*"; }
+	    if(sysHstId < 0) { extHostLs.push_back(host); extHostLs.back().userOpen = "*"; }
+	    else { extHostLs[sysHstId] = host; extHostLs[sysHstId].userOpen = "*"; }
 	}
 	//Remove
 	if(host.mode == ExtHost::User && sysHstId >= 0) extHostLs.erase(extHostLs.begin() + sysHstId);
@@ -365,30 +399,12 @@ void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 void TTransportS::extHostDel( const string &user, const string &id, bool andSYS )
 {
     ResAlloc res(extHostRes, true);
-    for(unsigned i_h = 0; i_h < extHostLs.size(); )
-	if(extHostLs[i_h].id == id &&
-		(!user.size() || user == extHostLs[i_h].user_open || (andSYS && extHostLs[i_h].user_open == "*")))
-	    extHostLs.erase(extHostLs.begin()+i_h);
-	else i_h++;
+    for(unsigned iH = 0; iH < extHostLs.size(); )
+	if(extHostLs[iH].id == id &&
+		(!user.size() || user == extHostLs[iH].userOpen || (andSYS && extHostLs[iH].userOpen == "*")))
+	    extHostLs.erase(extHostLs.begin()+iH);
+	else iH++;
     modif();
-}
-
-TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &id, bool andSYS )
-{
-    ResAlloc res(extHostRes, false);
-    ExtHost eh(user, "");
-    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
-	if(extHostLs[i_h].id == id &&
-		(user.empty() || user == extHostLs[i_h].user_open || (andSYS && extHostLs[i_h].user_open == "*")))
-	{
-	    if(eh.mode < 0) {
-		eh = extHostLs[i_h];
-		eh.mode = (eh.user_open == "*") ? ExtHost::System : ExtHost::User;
-	    }
-	    else if(eh.user_open != extHostLs[i_h].user_open) { eh.mode = ExtHost::UserSystem; break; }
-	}
-    if(eh.user_open == "*" && user.size() && user != eh.user_open) eh.user_open = user;
-    return eh;
 }
 
 AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const string &pref )
@@ -405,35 +421,45 @@ AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const str
     return at(host.transp).at().outAt(pref+host.id);
 }
 
-int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const string &user )
+int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const string &iuser )
 {
-    int path_off = 0;
+    int off = 0;
     string path = node.attr("path");
-    string station = TSYS::pathLev(path, 0, false, &path_off);
+    string station = TSYS::pathLev(path, 0, false, &off);
     if(station.empty()) station = SYS->id();
-    else node.setAttr("path", path.substr(path_off));
+    else node.setAttr("path", path.substr(off));
 
     if(station == SYS->id()) {
-	node.setAttr("user", user.empty()?"root":user);
+	node.setAttr("user", iuser.empty()?"root":iuser);
 	SYS->cntrCmd(&node);
 	node.setAttr("path", path);
 	return s2i(node.attr("rez"));
     }
 
-    //Connect to the transport
-    TTransportS::ExtHost host = extHostGet(user.empty()?"*":user, station);
-    AutoHD<TTransportOut> tr = extHost(host, senderPref);
-    if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
+    //Check for reforward
+    off = 0; TSYS::strParse(station, 0, ".", &off);
+    if(off && off < station.size()) { node.setAttr("reforwardHost", station.substr(off)); station.erase(off-1); }
 
-    node.setAttr("rqDir", "0")->setAttr("rqUser", host.user)->setAttr("rqPass", host.pass);
+    //Connect to the transport
+    off = 0;
+    string user = TSYS::strLine(iuser, 0, &off), rqUser = TSYS::strLine(iuser, 0, &off), rqPass = TSYS::strLine(iuser, 0, &off);
+    TTransportS::ExtHost host = extHostGet(user.empty()?"*":user, station);
+    bool rqDir = (rqUser.size() && rqUser != host.user) || (rqUser == host.user && rqPass.size());
+    node.setAttr("rqDir", i2s(rqDir))->setAttr("rqUser", rqDir?rqUser:host.user)->setAttr("rqPass", rqDir?rqPass:host.pass);
+    AutoHD<TTransportOut> tr = extHost(host, senderPref);
+    if(tr.at().startStat() && host.mdf > tr.at().startTm()) { tr.at().stop(); node.setAttr("rqAuthForce","1"); }
+    if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
     if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), _("REQ: %s"), node.save().c_str());
     tr.at().messProtIO(node, "SelfSystem");
     if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), _("RESP: %s"), node.save().c_str());
     node.setAttr("path", path);
     //Password's hash processing
-    if(node.attr("pHash").size() && host.pass != (TSecurity::pHashMagic+node.attr("pHash"))) {
-	host.pass = TSecurity::pHashMagic + node.attr("pHash");
-	extHostSet(host);
+    if(!rqDir && node.attr("pHash").size()) {
+	if(host.pass != (TSecurity::pHashMagic+node.attr("pHash"))) {
+	    host.pass = TSecurity::pHashMagic + node.attr("pHash");
+	    extHostSet(host);
+	}
+	node.setAttr("pHash", "");
     }
 
     return s2i(node.attr("rez"));
@@ -457,6 +483,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/sub/ehost/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","int","dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d",ExtHost::User,ExtHost::System,ExtHost::UserSystem).c_str(),
 		"sel_list",_("User;System;User and System"));
+	    ctrMkNode("list",opt,-1,"/sub/ehost/upRiseLev",_("Uprising level"),RWRWRW,"root",STR_ID,1,"tp","dec");
 	}
 	return;
     }
@@ -465,52 +492,64 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     if(a_path == "/sub/transps" && ctrChkNode(opt)) {
 	vector<string>  list;
 	modList(list);
-	for(unsigned i_a = 0; i_a < list.size(); i_a++)
-	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
+	for(unsigned iA = 0; iA < list.size(); iA++)
+	    opt->childAdd("el")->setAttr("id",list[iA])->setText(modAt(list[iA]).at().modName());
     }
     else if(a_path == "/sub/ehost") {
-	bool sysHostAcs = SYS->security().at().access(u,SEC_WR,"root",STR_ID,RWRWR_);
+	bool sysHostAcs = SYS->security().at().access(u, SEC_WR, "root", STR_ID, RWRWR_);
 	if(ctrChkNode(opt,"get",RWRWRW,"root",STR_ID,SEC_RD)) {
-	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/sub/ehost/id","",RWRWRW,"root",STR_ID);
-	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/sub/ehost/name","",RWRWRW,"root",STR_ID);
-	    XMLNode *n_tr	= ctrMkNode("list",opt,-1,"/sub/ehost/transp","",RWRWRW,"root",STR_ID);
-	    XMLNode *n_addr	= ctrMkNode("list",opt,-1,"/sub/ehost/addr","",RWRWRW,"root",STR_ID);
-	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/sub/ehost/user","",RWRWRW,"root",STR_ID);
-	    XMLNode *n_pass	= ctrMkNode("list",opt,-1,"/sub/ehost/pass","",RWRWRW,"root",STR_ID);
-	    XMLNode *n_mode	= sysHostAcs ? ctrMkNode("list",opt,-1,"/sub/ehost/mode","",RWRW__,"root",STR_ID) : NULL;
+	    XMLNode *nId	= ctrMkNode("list",opt,-1,"/sub/ehost/id","",RWRWRW,"root",STR_ID);
+	    XMLNode *nNm	= ctrMkNode("list",opt,-1,"/sub/ehost/name","",RWRWRW,"root",STR_ID);
+	    XMLNode *nTr	= ctrMkNode("list",opt,-1,"/sub/ehost/transp","",RWRWRW,"root",STR_ID);
+	    XMLNode *nAddr	= ctrMkNode("list",opt,-1,"/sub/ehost/addr","",RWRWRW,"root",STR_ID);
+	    XMLNode *nUser	= ctrMkNode("list",opt,-1,"/sub/ehost/user","",RWRWRW,"root",STR_ID);
+	    XMLNode *nPass	= ctrMkNode("list",opt,-1,"/sub/ehost/pass","",RWRWRW,"root",STR_ID);
+	    XMLNode *nMode	= sysHostAcs ? ctrMkNode("list",opt,-1,"/sub/ehost/mode","",RWRW__,"root",STR_ID) : NULL;
+	    XMLNode *nUpRiseLev	= ctrMkNode("list",opt,-1,"/sub/ehost/upRiseLev","",RWRWRW,"root",STR_ID);
 
-	    vector<string> list;
-	    extHostList(u, list, n_mode);
-	    for(unsigned i_h = 0; i_h < list.size(); i_h++) {
-		ExtHost host = extHostGet(u, list[i_h], n_mode);
-		if(n_id)	n_id->childAdd("el")->setText(host.id);
-		if(n_nm)	n_nm->childAdd("el")->setText(trU(host.name,u));
-		if(n_tr)	n_tr->childAdd("el")->setText(host.transp);
-		if(n_addr)	n_addr->childAdd("el")->setText(host.addr);
-		if(n_user)	n_user->childAdd("el")->setText(host.user);
-		if(n_pass)	n_pass->childAdd("el")->setText(host.pass.size() ? "*******" : "");
-		if(n_mode)	n_mode->childAdd("el")->setText(i2s(host.mode));
+	    vector<ExtHost> list;
+	    string tVl;
+	    extHostList(u, list, ((tVl=opt->attr("upRiseSYS")).size()?(bool)s2i(tVl):(bool)nMode),
+				 ((tVl=opt->attr("upRiseLev")).size()?s2i(tVl):-1));
+	    for(unsigned iH = 0; iH < list.size(); iH++) {
+		ExtHost &host = list[iH];
+		if(nId)		nId->childAdd("el")->setText(host.id);
+		if(nNm)		nNm->childAdd("el")->setText(trU(host.name,u));
+		if(nTr)		nTr->childAdd("el")->setText(host.transp);
+		if(nAddr)	nAddr->childAdd("el")->setText(host.addr);
+		if(nUser)	nUser->childAdd("el")->setText(host.user);
+		if(nPass)	nPass->childAdd("el")->setText(host.pass.size() ? "*******" : "");
+		if(nMode)	nMode->childAdd("el")->setText(i2s(host.mode));
+		if(nUpRiseLev)	nUpRiseLev->childAdd("el")->setText(i2s(host.upRiseLev));
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))	extHostSet(ExtHost(u,"newHost",_("New external host"),"","",u));
-	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR))	extHostDel(u, opt->attr("key_id"), sysHostAcs);
+	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR)) {
+	    if(TSYS::strParse(opt->attr("key_id"), 1, ".").size())
+		throw TError(nodePath().c_str(), _("Uprising hosts not allowed here for its management!"));
+	    extHostDel(u, opt->attr("key_id"), sysHostAcs);
+	}
 	if(ctrChkNode(opt,"set",RWRWRW,"root",STR_ID,SEC_WR)) {
+	    if(TSYS::strParse(opt->attr("key_id"), 1, ".").size())
+		throw TError(nodePath().c_str(), _("Uprising hosts not allowed here for its management!"));
 	    string col   = opt->attr("col");
 	    ExtHost host = extHostGet(u, opt->attr("key_id"), sysHostAcs);
 	    if(col == "id") {
 		host.id = opt->text();
 		extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	    }
-	    else if(col == "name")  host.name = trSetU(host.name,u,opt->text());
-	    else if(col == "transp")host.transp = opt->text();
-	    else if(col == "addr")  host.addr = opt->text();
-	    else if(col == "user")  host.user = opt->text();
+	    else if(col == "name")	host.name = trSetU(host.name,u,opt->text());
+	    else if(col == "transp")	host.transp = opt->text();
+	    else if(col == "addr")	host.addr = opt->text();
+	    else if(col == "user")	host.user = opt->text();
 	    else if(col == "pass") {
 		if(opt->text().compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
 		    host.pass = opt->text().substr(TSecurity::pHashMagic.size());
 		else host.pass = opt->text();
 	    }
-	    else if(col == "mode")  host.mode = s2i(opt->text());
+	    else if(col == "mode")	host.mode = s2i(opt->text());
+	    else if(col == "upRiseLev")	host.upRiseLev = vmax(0,vmin(9,s2i(opt->text())));
+	    host.mdf = SYS->sysTm();
 	    extHostSet(host, sysHostAcs);
 	}
     }
@@ -558,8 +597,8 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
     if(a_path == "/br/in_" || a_path == "/tr/in") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD)) {
 	    inList(list);
-	    for(unsigned i_a=0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",list[i_a])->setText(inAt(list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(inAt(list[iA]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
@@ -570,8 +609,8 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/br/out_" || a_path == "/tr/out") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD)) {
 	    outList(list);
-	    for(unsigned i_a=0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",list[i_a])->setText(outAt(list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < list.size(); iA++)
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(outAt(list[iA]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
@@ -832,7 +871,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()),
-    mDB(idb), mPrm1(0), mPrm2(0)
+    mDB(idb), mStartTm(0), mPrm1(0), mPrm2(0)
 {
     mId = iid;
 }
@@ -866,6 +905,8 @@ string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportOut::tbl( )		{ return owner().owner().subId()+"_out"; }
 
+void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); }
+
 void TTransportOut::postDisable( int flag )
 {
     if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
@@ -879,7 +920,10 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
     return true;
 }
 
-string TTransportOut::getStatus( )	{ return startStat() ? _("Started. ") : _("Stoped. "); }
+string TTransportOut::getStatus( )
+{
+    return (startStat()?_("Started. "):_("Stoped. ")) + TSYS::strMess(_("Established: %s. "), tm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str());
+}
 
 void TTransportOut::load_( )
 {
@@ -966,7 +1010,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TTransportOut::cntrCmdProc( XMLNode *opt )

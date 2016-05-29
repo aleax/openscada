@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.2.0"
+#define MOD_VER		"1.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -1043,22 +1043,20 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	// Pure RS-485 flow control: Clear RTS for transfer allow
 	if(mRTSfc) { sec &= ~TIOCM_RTS; ioctl(fd, TIOCMSET, &sec); }
 
-	for(int wOff = 0; wOff != oLen; wOff += kz) {
-	    kz = write(fd, oBuf+wOff, oLen-wOff);
-	    if(kz <= 0) {
-		if(errno == EAGAIN) {
+	for(int wOff = 0; wOff != oLen; wOff += kz)
+	    if((kz=write(fd,oBuf+wOff,oLen-wOff)) <= 0) {
+		if(kz == 0 || (kz < 0 && errno == EAGAIN)) {
 		    tv.tv_sec = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000);
 		    FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
 		    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
 		    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
 		}
-		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+		err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
 		mLstReqTm = TSYS::curTime();
 		stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
 		throw TError(nodePath().c_str(), _("Write error: %s"), err.c_str());
 	    } else trOut += kz;
-	}
 
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.4"
+#define MOD_VER		"1.5.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -691,9 +691,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/cntr/cfg/SEL_STAT_lst" && ctrChkNode(opt)) {
-	vector<string> list;
+	vector<TTransportS::ExtHost> list;
 	SYS->transport().at().extHostList("*", list);
-	for(unsigned i_l = 0; i_l < list.size(); i_l++) opt->childAdd("el")->setText(list[i_l]);
+	for(unsigned iL = 0; iL < list.size(); iL++) opt->childAdd("el")->setText(list[iL].id);
     }
     else if(a_path == "/cntr/cfg/CPRM_TREE") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(owner().nodePath()+"selCPRM","",opt->attr("user")));

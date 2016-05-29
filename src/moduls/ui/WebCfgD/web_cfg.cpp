@@ -324,19 +324,14 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		string gbr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 		// Get information about allow stations
 		if(zero_lev.empty()) {
-		    vector<string> stls;
-		    SYS->transport().at().extHostList(ses.user,stls);
-		    stls.insert(stls.begin(),SYS->id());
-		    for(unsigned i_st = 0; i_st < stls.size(); i_st++) {
-			XMLNode *chN;
-			if(stls[i_st] == SYS->id())
-			    chN = req.childAdd("el")->setAttr("id",SYS->id())->setText(SYS->name());
-			else {
-			    TTransportS::ExtHost host = SYS->transport().at().extHostGet(ses.user,stls[i_st]);
-			    chN = req.childAdd("el")->setAttr("id",host.id)->setText(host.name);
-			}
+		    vector<TTransportS::ExtHost> stls;
+		    SYS->transport().at().extHostList(ses.user, stls);
+		    stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
+		    for(unsigned iSt = 0; iSt < stls.size(); iSt++) {
+			XMLNode *chN = req.childAdd("el")->setAttr("id",stls[iSt].id)->
+							   setText((stls[iSt].id==SYS->id())?SYS->name():stls[iSt].name);
 			//  Check icon
-			XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");
+			XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[iSt].id+"/%2fico");
 			if(mod->cntrIfCmd(reqIco,ses.user)) chN->setAttr("icoSize","1000");
 			else chN->setAttr("icoSize",i2s(reqIco.text().size()));
 			//  Process groups

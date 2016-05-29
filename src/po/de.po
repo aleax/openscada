@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-21 19:57+0300\n"
+"POT-Creation-Date: 2016-05-29 19:30+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -432,7 +432,8 @@ msgid ""
 "periodicity in 60 seconds."
 msgstr ""
 "Die Werte Puffergröße haben zu viel genug für archivators Periodizität.\n"
-"Typische der Wert automatisch passt sich der Archivierungsperiode und archivators Periodizität in 60 Sekunden."
+"Typische der Wert automatisch passt sich der Archivierungsperiode und "
+"archivators Periodizität in 60 Sekunden."
 
 msgid "Typical for fastest processing of values archivation."
 msgstr "Typisch für schnellste Bearbeitung von Werten Archivierung."
@@ -443,8 +444,10 @@ msgstr "Set für die Periodizität Werte weniger auf Sekunden."
 msgid ""
 "Mostly the pass values fill by EVAL but sometime\n"
 "the source's data periodicity greater to the archive's one and it is normal."
-msgstr "Meistens füllen sich die Pass-Werte von EVAL aber irgendwann\n"
-"die eine Daten Periodizität größer in das Archiv der die Quelle und es ist normal."
+msgstr ""
+"Meistens füllen sich die Pass-Werte von EVAL aber irgendwann\n"
+"die eine Daten Periodizität größer in das Archiv der die Quelle und es ist "
+"normal."
 
 msgid "Start"
 msgstr "Starten"
@@ -2115,6 +2118,9 @@ msgstr "Benutzer der Anfrage"
 msgid "Request password"
 msgstr "Kennwort der Anfrage"
 
+msgid "Uprising level"
+msgstr "Uprising Ebene"
+
 msgid "Search and create new input transports error."
 msgstr "Fehler bei der Suche und Erstellung neuer Eingangsübertragungen."
 
@@ -2166,6 +2172,9 @@ msgstr "Benutzer;System;Benutzer und System"
 msgid "New external host"
 msgstr "Neuer externe Host"
 
+msgid "Uprising hosts not allowed here for its management!"
+msgstr "Uprising Hosts hier nicht für die Verwaltung erlaubt!"
+
 msgid "Input transport"
 msgstr "Eingangsübertragung"
 
@@ -2187,6 +2196,10 @@ msgstr "Eingangsübertragung: "
 
 msgid "Transport DB"
 msgstr "Datenbank der Übertragung"
+
+#, c-format
+msgid "Established: %s. "
+msgstr "Etabliert: %s. "
 
 #, c-format
 msgid "Transport protocol '%s' no present"

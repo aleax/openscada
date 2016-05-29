@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,15 +109,17 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Data
 	// Define input interblock link structure
 	class SLIBlk {
 	    public:
-		SLIBlk( ) : w_id(-1) { }
+		SLIBlk( ) : wId(-1) { }
 
-		AutoHD<Block>	w_bl;	//Block AutoHD
-		int		w_id;	//IO index
+		AutoHD<Block>	wBl;	//Block AutoHD
+		int		wId;	//IO index
 	};
 
 	//> Define link structures

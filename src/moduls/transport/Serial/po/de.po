@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-16 09:36+0300\n"
+"POT-Creation-Date: 2016-05-29 20:51+0300\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -223,6 +223,9 @@ msgstr "Übertragung ist nicht gestartet!"
 msgid "Restart by KeepAliveTm %gs."
 msgstr "Neustart durch KeepAliveTm %gs."
 
+msgid "No data wrote"
+msgstr "Keine Daten geschrieben"
+
 #, c-format
 msgid "Write error: %s"
 msgstr "Fehler beim Schreiben: %s"
@@ -240,6 +243,7 @@ msgstr "Fehler beim Lesen der Echo-Request."
 msgid "Read timeouted."
 msgstr "Lesen timeouted."
 
+#, c-format
 msgid "Read (select) error: %s"
 msgstr "Lesefehler (select): %s"
 

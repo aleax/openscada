@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.BlockCalc translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.BlockCalc package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:03+0300\n"
+"POT-Creation-Date: 2016-05-29 20:06+0300\n"
 "PO-Revision-Date: 2007-10-28 08:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -56,33 +56,12 @@ msgstr "Обрабатывается"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-msgid "Id"
-msgstr ""
-
-msgid "Name"
-msgstr "Имя"
-
-msgid "Description"
-msgstr "Описание"
-
-msgid "To enable"
-msgstr "Включать"
-
-msgid "To process"
-msgstr "Обрабатывать"
-
-msgid "Prior block"
-msgstr "Предшествующий блок"
-
 msgid ""
 "Priority block(s) calculate before this block. Blocks list is separated by "
 "symbol ';'."
 msgstr ""
 "Приоритетный блок(и) вычисляемый перед данным. Список блоков разделяется "
 "символом ';'."
-
-msgid "Function"
-msgstr "Функция"
 
 msgid "Go to function"
 msgstr "Перейти к функции"
@@ -165,8 +144,26 @@ msgstr "Параметры блока"
 msgid "ID"
 msgstr ""
 
+msgid "Name"
+msgstr "Имя"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "To enable"
+msgstr "Включать"
+
+msgid "To process"
+msgstr "Обрабатывать"
+
+msgid "Prior block"
+msgstr "Предшествующий блок"
+
 msgid "Write to output links only at changes"
 msgstr "Записывать по выходным связям только при изменениях"
+
+msgid "Function"
+msgstr "Функция"
 
 msgid "Block's ID"
 msgstr "Id блока"
@@ -203,22 +200,22 @@ msgid "Enable block '%s' error."
 msgstr "Ошибка включения блока '%s'."
 
 msgid "Start stage 1: set all blocks to process."
-msgstr ""
+msgstr "Этап запуска 1: установка всех блоков в обработку."
 
 #, c-format
 msgid "Process block '%s' error."
 msgstr "Ошибка обработки блока '%s'."
 
 msgid "Start stage 2: sort blocks for need sequence."
-msgstr ""
+msgstr "Этап запуска 2: сортировка блоков в нужной последовательности."
 
 #, c-format
 msgid "Reshuffle blocks '%s'(%d) <-> '%s'(%d)."
-msgstr ""
+msgstr "Перестановка блоков '%s'(%d) <-> '%s'(%d)."
 
 #, c-format
 msgid "Start stage 3: task create: prcSt=%d."
-msgstr ""
+msgstr "Этап запуска 3: создание задачи: prcSt=%d."
 
 #, c-format
 msgid "Block '%s' calc error."

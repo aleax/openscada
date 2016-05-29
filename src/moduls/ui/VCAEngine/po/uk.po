@@ -1289,7 +1289,7 @@ msgid "New style"
 msgstr "Новий стиль"
 
 msgid "No style"
-msgstr "Не має стилю"
+msgstr "Немає стилю"
 
 msgid "Create new style"
 msgstr "Створити новий стиль"

@@ -1155,9 +1155,9 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	else { close(); return; }
     }
 
-    req.clear()->setName("connect")->setAttr("path","/%2fserv%2fsess");
-    if(work_sess.empty()) req.setAttr("prj",src_prj);
-    else req.setAttr("sess",work_sess);
+    req.clear()->setName("connect")->setAttr("path", "/%2fserv%2fsess");
+    if(work_sess.empty()) req.setAttr("prj", src_prj);
+    else req.setAttr("sess", work_sess);
     if(cntrIfCmd(req)) {
 	if(!(conErr && s2i(req.attr("rez")) == 10)) {	//Need check for prevent the warning dialog and the run closing by the session creation wait
 	    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);

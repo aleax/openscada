@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -154,8 +154,8 @@ class TpContr: public TTypeDAQ
 
 	TController *ContrAttach( const string &name, const string &daq_db );
 
-	TElem &blockE( )	{ return blk_el; }
-	TElem &blockIOE( )	{ return blkio_el; }
+	TElem &blockE( )	{ return blkEl; }
+	TElem &blockIOE( )	{ return blkioEl; }
 
 	AutoHD<Contr> at( const string &name, const string &who = "" )	{ return TTypeDAQ::at(name,who); }
 	void copy( const string &src, const string &dst );
@@ -172,8 +172,8 @@ class TpContr: public TTypeDAQ
 	void preDisable( int flag );
 
 	//Private attributes
-	TElem	blk_el;
-	TElem	blkio_el;
+	TElem	blkEl;
+	TElem	blkioEl;
 };
 
 extern TpContr *mod;

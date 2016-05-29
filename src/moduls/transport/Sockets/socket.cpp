@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.2"
+#define MOD_VER		"2.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1045,7 +1045,7 @@ void TSocketOut::start( int itmCon )
 	    close(sockFd);
 	    sockFd = -1;
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
+		mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e3*itmCon).c_str(), strerror(errno), errno);
 	    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
 	}
     }
@@ -1153,16 +1153,15 @@ repeate:
 	    if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
 		TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 
-	    for(int wOff = 0; wOff != oLen; wOff += kz) {
-		kz = write(sockFd, oBuf+wOff, oLen-wOff);
-		if(kz <= 0) {
-		    if(errno == EAGAIN) {
+	    for(int wOff = 0; wOff != oLen; wOff += kz)
+		if((kz=write(sockFd,oBuf+wOff,oLen-wOff)) <= 0) {
+		    if(kz == 0 || (kz < 0 && errno == EAGAIN)) {
 			tv.tv_sec  = (time/2)/1000; tv.tv_usec = 1000*((time/2)%1000);
 			FD_ZERO(&rw_fd); FD_SET(sockFd, &rw_fd);
 			kz = select(sockFd+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sockFd,&rw_fd)) { kz = 0; continue; }
 		    }
-		    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
+		    err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
 		    res.unlock();
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
@@ -1171,7 +1170,6 @@ repeate:
 		    res.lock();
 		    goto repeate;
 		} else trOut += kz;
-	    }
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
 

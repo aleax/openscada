@@ -203,7 +203,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 	for(unsigned i_u = 0; i_u < req.childSize(); i_u++)
 	    users->addItem(req.childGet(i_u)->text().c_str());
 
-    users->setEditText(iuser);
+    users->setEditText(mod->userStart().c_str());
 }
 
 QString DlgUser::user( )	{ return users->currentText(); }
@@ -214,9 +214,10 @@ void DlgUser::finish( int result )
 {
     if(result) {
 	//Check user auth
-	XMLNode req("get");
-	req.setAttr("path",string("/Security/")+user().toStdString()+"/%2fauth")->setAttr("password",password().toStdString());
-	if(!mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true) && s2i(req.text()))
+	XMLNode req("get"); req.setAttr("path", "/%2fgen%2fid");
+	if((VCAstat == "." && (user().toStdString() == mod->userStart() || (SYS->security().at().usrPresent(user().toStdString()) &&
+		    SYS->security().at().usrAt(user().toStdString()).at().auth(password().toStdString())))) ||
+		(VCAstat != "." && !mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true)))
 	    setResult(SelOK);
 	else setResult(SelErr);
     }
@@ -359,7 +360,7 @@ UserStBar::UserStBar( const QString &iuser, const QString &ipass, const QString 
 
 void UserStBar::setUser( const QString &val )
 {
-    setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val));
+    setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val.size()?val:"*"));
     user_txt = val;
 }
 
