@@ -216,9 +216,9 @@ void DA::UpdateParamFlState(flData& param, ui8Data& state, flData& sens, uint16_
     ui8fl tmpfl;
     tmpui8 = state.Get();
     tmpfl.f = param.Get();
-	param.Update(tmpfl.f,0);
-    if((abs(tmpfl.f - param.vl_sens) > sens.vl)|| (tmpui8 != state.vl)) {
-    state.Update(tmpui8);
+    param.Update(tmpfl.f,0);
+    if((fabs(tmpfl.f - param.vl_sens) > sens.vl) || (tmpui8 != state.vl)) {
+    	state.Update(tmpui8);
 	param.Update(tmpfl.f,1);
 	uint8_t E[5] = { state.vl, tmpfl.b[0], tmpfl.b[1], tmpfl.b[2], tmpfl.b[3] };
 	PushInBE((tmpui8 != state.vl)? 1:cl , sizeof(E), ID, E);

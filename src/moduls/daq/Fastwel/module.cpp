@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.Fastwel file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2014 by Maxim Kochetkov                                 *
+ *   Copyright (C) 2014-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.3"
+#define MOD_VER		"0.1.4"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -803,37 +803,37 @@ void TMdPrm::enable()
 	switch(mModDesc.type) {
 	case FIO_MODULE_DIM762:
 	    nDI = 8;
-	    fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
+	    fConfig |= InitDI((DIM_CONFIGURATION *) mModConfig);
 	    break;
 	case FIO_MODULE_DIM716:
 	    nDI = 2;
-	    fConfig = InitDI((DIM_CONFIGURATION *) mModConfig);
+	    fConfig |= InitDI((DIM_CONFIGURATION *) mModConfig);
 	    break;
 	case FIO_MODULE_DIM718:
 	    nDO = 8;
-	    fConfig = InitDIM718((DIM718_CONFIGURATION *) mModConfig);
+	    fConfig |= InitDIM718((DIM718_CONFIGURATION *) mModConfig);
 	    break;
 	case FIO_MODULE_AIM726:
 	    nAI = 2;
-	    fConfig = InitAIM726((AIM726_CONFIGURATION *) mModConfig);
+	    fConfig |= InitAIM726((AIM726_CONFIGURATION *) mModConfig);
 	    break;
 	case FIO_MODULE_AIM730:
 	    nAO = 2;
-	    fConfig = InitAIM730((AIM730_CONFIGURATION *) mModConfig);
+	    fConfig |= InitAIM730((AIM730_CONFIGURATION *) mModConfig);
 	    break;
 	case FIO_MODULE_AIM791:
 	    nAI = 8;
-	    fConfig = InitAIM791((AIM791_CONFIGURATION *) mModConfig);
+	    fConfig |= InitAIM791((AIM791_CONFIGURATION *) mModConfig);
 	    break;
 	case FIO_MODULE_AIM725:
 	    nAI = 2;
-	    fConfig = InitAIM725((AIM725_CONFIGURATION *) mModConfig);
+	    fConfig |= InitAIM725((AIM725_CONFIGURATION *) mModConfig);
 	    break;
 	case FIO_MODULE_DIM765:
 	case FIO_MODULE_DIM766:
 	    nDI = 8;
 	    nAI = 8;
-	    fConfig = InitDIM7656((DIM7656_CONFIGURATION *) mModConfig, mModDesc.type);
+	    fConfig |= InitDIM7656((DIM7656_CONFIGURATION *) mModConfig, mModDesc.type);
 	    break;
 
 	default:

@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: mod_ft3.h
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define MOD_NAME	_("DAQ FT3")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.2.2"
+#define MOD_VER		"0.2.3"
 #define AUTHORS		_("Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya")
 #define DESCRIPTION	_("Allow realization of FT3 master/slave service")
 #define LICENSE		"GPL2"
@@ -64,9 +64,13 @@ namespace FT3
      uint8_t h;
      uint16_t ms100;
      };*/
+
+#define mlD 252
+#define nBE 400
+
     typedef struct sMsg  // FT3 message
     {
-	uint8_t D[252]; // data
+	uint8_t D[mlD]; // data
 	uint8_t L; // length
 	uint8_t C; // command
 	uint8_t A; // destination address
@@ -96,9 +100,6 @@ namespace FT3
     {
 	TaskNone = 0, TaskIdle = 1, TaskRefresh = 2, TaskSet = 3
     } ModeTask;
-
-#define mlD 252
-#define nBE 400
 
     struct blockEvents
     {

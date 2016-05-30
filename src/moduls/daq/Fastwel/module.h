@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.Fastwel file: module.h
 /***************************************************************************
- *   Copyright (C) 2014 by Maxim Kochetkov                                 *
+ *   Copyright (C) 2014-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

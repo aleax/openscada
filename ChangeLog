@@ -1,3 +1,8 @@
+2016-05-30 fido_max
+- FIX:DAQ.FT3 flData sensivity deadband processing for event forming fixed. B_BTR:setTU count_nu fixed. TMdContr::ProcessMessage data length for cmdGet answer fixed.
+- FIX:DAQ.Fastwel: TMdPrm::enable module config init fixed.
+
+
 2016-05-29 Roman
 - SYS:data/debian: the service's script openscada.init moved to separated package openscada-server.
 - !!!!:SYS,Transport,DAQ.DAQGate,UI.{QTCfg,Vision,WebCfgD}: External host uprise is implemented by the function extHostList() extention;

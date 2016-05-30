@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: BTR.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -610,7 +610,7 @@ void B_BTR::setTU(uint8_t tu)
 {
     uint8_t vl = tu >> 7;
     uint8_t n = tu & 0x7F;
-    if((n > 0) && (n < count_nu)) {
+    if((n > 0) && (n <= count_nu)) {
 	STUchannel &TU = TUdata[n - 1];
 	currTU = n;
 	if(vl) {

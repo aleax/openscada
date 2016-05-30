@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: mod_FT3.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -369,15 +369,19 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	    list(lst);
 	    rc = 0;
 	    rc = cmdGet(id, Channels[msg->B].resp3.D + n);
-	    if(rc != 0) {
-		n += rc;
-	    }
 	    if(rc == 0) {
 		l = msg->L - 3;
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("AddrReq ID not found! %04X"), id);
 		Channels[msg->B].resp3.C = 9;
 		break;
 	    }
+	    if(rc > (mlD - n)) {
+		l = msg->L - 3;
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Too much data to answer %04X"), id);
+		Channels[msg->B].resp3.C = 9;
+		break;
+	    }
+	    n += rc;
 	}
 	if(Channels[msg->B].resp3.C == 9) {
 	    Channels[msg->B].resp3.L = 3;
@@ -465,7 +469,7 @@ void TTpContr::postEnable(int flag)
 
     t_prm = tpParmAdd("tp_BVT", "PRM_BD_BVT", _("BVT"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "3", "0;15"));
-    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "16;64"));
+    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;48"));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_KPARAMS", _("With correcting factor"), TFld::Boolean, TCfg::NoVal, "1", "1"));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_RATEPARAMS", _("With rate calculations"), TFld::Boolean, TCfg::NoVal, "1", "1"));

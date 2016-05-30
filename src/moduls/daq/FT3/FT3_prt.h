@@ -1,6 +1,6 @@
 //OpenSCADA system module Protocol.FT3 file: FT3_prt.h
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -42,7 +42,7 @@ using namespace OSCADA;
 #define PRT_NAME	_("FT3")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"0.2.1"
+#define PRT_MVER	"0.2.3"
 #define PRT_AUTORS	_("Maxim Kochetkov")
 #define PRT_DESCR	_("Allow realisation of FT3 protocols.")
 #define PRT_LICENSE	"GPL2"
