@@ -316,7 +316,7 @@ void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool a
 	if(!user.size() || user == extHostLs[iH].userOpen || (andSYS && extHostLs[iH].userOpen == "*")) {
 	    bool itSet = false;
 	    for(vector<ExtHost>::iterator iL = list.begin(); (!user.size() || andSYS) && !itSet && iL != list.end(); ++iL)
-		itSet = (iL->id == extHostLs[iH].id);
+		if((itSet=(iL->id == extHostLs[iH].id)) && iL->userOpen != extHostLs[iH].userOpen) iL->mode = ExtHost::UserSystem;
 	    if(itSet) continue;
 	    list.push_back(extHostLs[iH]);
 	    if(list.back().mode < 0) list.back().mode = (list.back().userOpen == "*") ? ExtHost::System : ExtHost::User;

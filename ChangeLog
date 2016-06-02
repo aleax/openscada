@@ -1,4 +1,5 @@
 2016-06-02 Roman
+- Transport: Listed external host's mode merging from two entries is fixed.
 - FIX:DAQ.Value: Write access to DAQ attributes closed for all into the service request "set".
 - !:Protocol.SelfSystem: Moved to some faster errors placing method. The reforwarding requests' processing set optimal.
 - FIX:UI.QTCfg: Into TextEdit widget added a signals blocking at setPlainText() for prevent the cursor events,
