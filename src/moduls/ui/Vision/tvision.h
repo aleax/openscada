@@ -113,16 +113,15 @@ class TVision : public TUI
 	QMainWindow *openWindow( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	string		mUserStart,		//No question start user
-			mUserPass,		//No quest user password
-			mRunPrjs;		//Run projects list on the module start
+	MtxString	mVCAStation,		//VCA station id ('.' - for local station)
+			mUserStart,		//No question start user
+			mUserPass;		//No quest user password
+	string		mRunPrjs;		//Run projects list on the module start
 	vector<WdgShape*> shapesWdg;
 	bool		mExitLstRunPrjCls,	//Exit program on last run project close
 			mEndRun;		//End run command. Close all windows
 	int		mRestTime;		//Restore connection time, seconds
 	float		mCachePgLife;		//Cached pages lifetime
-
-	string		mVCAStation;		//VCA station id ('.' - for local station)
 
 	int		mScrnCnt;
 };

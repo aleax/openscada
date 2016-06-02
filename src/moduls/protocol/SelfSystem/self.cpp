@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.0"
+#define MOD_VER		"1.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
@@ -204,7 +204,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ") {
 		    rez = s2i(TSYS::strParse(header,0," ",&off));
 		    if(rez > 0 || off >= (int)header.size()) {
-			if(rez == ERR_AUTH) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
+			if(rez == atoi(ERR_AUTH)) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
 			throw TError(nodePath().c_str(), _("Station '%s' error: %s!"), tro.id().c_str(), header.substr(off).c_str());
 		    }
 		    tro.setPrm1(s2i(header.substr(off)));
@@ -239,7 +239,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
 		throw TError(nodePath().c_str(),_("Station respond '%s' error!"),tro.id().c_str());
 	    rez = s2i(TSYS::strParse(header,0," ",&off));
-	    if(rez == ERR_AUTH) {
+	    if(rez == atoi(ERR_AUTH)) {
 		tro.setPrm1(-1);
 		if(isDir) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
 		else continue;
@@ -351,8 +351,8 @@ bool TProtIn::mess( const string &request, string &answer )
     if(req.compare(0,8,"SES_OPEN") == 0) {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
 	if((ses_id=mod->sesOpen(user,pass,TSYS::strLine(srcAddr(),0))) < 0)
-	    answer = "REZ "+i2s(ERR_AUTH)+" Auth error. User or password error.\x0A";
-	else answer = "REZ "+i2s(ERR_NO)+" " + i2s(ses_id) + "\x0A";
+	    answer = "REZ "ERR_AUTH" Auth error. User or password error.\x0A";
+	else answer = "REZ "ERR_NO" " + i2s(ses_id) + "\x0A";
     }
     else if(req.compare(0,9,"SES_CLOSE") == 0) {
 	sscanf(req.c_str(), "SES_CLOSE %d", &ses_id);
@@ -372,9 +372,9 @@ bool TProtIn::mess( const string &request, string &answer )
 	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass,&auth.pHash))
 	    { auth.tAuth = 1; auth.name = user; }
 	}
-	else { answer = "REZ "+i2s(ERR_CMD)+" Command format error.\x0A"; reqBuf.clear(); return false; }
+	else { answer = "REZ "ERR_CMD" Command format error.\x0A"; reqBuf.clear(); return false; }
 
-	if(!auth.tAuth) { answer = "REZ "+i2s(ERR_AUTH)+" Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
+	if(!auth.tAuth) { answer = "REZ "ERR_AUTH" Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
 
 	try {
 	    if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
@@ -394,9 +394,7 @@ bool TProtIn::mess( const string &request, string &answer )
 			req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
-		int off = 0;
-		req_node.setAttr("path", "/"+TSYS::strParse(host,0,".",&off)+req_node.attr("path"));
-		req_node.setAttr("reforwardHost", host.substr(off));
+		req_node.setAttr("path", "/"+host+req_node.attr("path"))->setAttr("reforwardHost", "");
 		try { SYS->transport().at().cntrIfCmd(req_node, "Reforward", auth.name); }
 		catch(TError err) {
 		    req_node.childClear();
@@ -435,10 +433,10 @@ bool TProtIn::mess( const string &request, string &answer )
 		mess_debug(nodePath().c_str(), _("Save respond to stream and pack: '%s': %d, time: %f ms."),
 		    req.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
 
-	    answer = "REZ "+i2s(ERR_NO)+" " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
-	} catch(TError err) { answer = "REZ "+i2s(ERR_PRC)+" " + err.cat + ":" + err.mess + "\x0A"; }
+	    answer = "REZ "ERR_NO" " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
+	} catch(TError err) { answer = "REZ "ERR_PRC" " + err.cat + ":" + err.mess + "\x0A"; }
     }
-    else answer = "REZ "+i2s(ERR_CMD)+" Command format error.\x0A";
+    else answer = "REZ "ERR_CMD" Command format error.\x0A";
 
     reqBuf.clear();
 

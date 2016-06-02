@@ -1313,7 +1313,7 @@ void WdgTree::selectItem( bool force )
     emit selectItem(work_wdg,force);
 }
 
-void WdgTree::updateTree( const string &vca_it )
+void WdgTree::updateTree( const string &vca_it, bool initial )
 {
     int64_t d_cnt = 0;
     if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
@@ -1336,7 +1336,7 @@ void WdgTree::updateTree( const string &vca_it )
     string upd_wdgi = (vca_lev>=3) ? TSYS::pathLev(vca_it,2).substr(4) : "";
 
     XMLNode req("get");
-    req.setAttr("path","/%2fserv%2fwlbBr")->setAttr("item",vca_it);
+    req.setAttr("path", "/%2fserv%2fwlbBr")->setAttr("item", vca_it)->setAttr("conTm", i2s(initial?mod->restoreTime()*1000:0));
     owner()->cntrIfCmd(req);
 
     if(mess_lev() == TMess::Debug)
@@ -1665,7 +1665,7 @@ void ProjTree::selectItem( bool force )
     emit selectItem(work_wdg,force);
 }
 
-void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
+void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initial )
 {
     int64_t d_cnt = 0;
     vector<string> list_pr, list_pg;
@@ -1689,7 +1689,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	//Process top level items and project's list
 	// Get widget's libraries list
 	XMLNode prj_req("get");
-	prj_req.setAttr("path","/%2fprm%2fcfg%2fprj");
+	prj_req.setAttr("path", "/%2fprm%2fcfg%2fprj")->setAttr("conTm", i2s(initial?mod->restoreTime()*1000:0));
 	if(owner()->cntrIfCmd(prj_req)) {
 	    mod->postMess(prj_req.attr("mcat").c_str(), prj_req.text().c_str(), TVision::Error, this);
 	    return;

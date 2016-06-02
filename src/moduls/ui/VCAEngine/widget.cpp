@@ -815,8 +815,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
 		catch(TError) { }
     }
-    else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD))	//Get attributes all updated elements' of the branch
-    {
+    else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD)) {	//Get attributes all updated elements' of the branch
 	// Self attributes put
 	vector<string> ls;
 	attrList(ls);

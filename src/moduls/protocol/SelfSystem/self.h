@@ -26,12 +26,15 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+#define ERR_NO		"0"
+#define ERR_AUTH	"1"
+#define ERR_PRC		"2"
+#define ERR_CMD		"3"
+
 using namespace OSCADA;
 
 namespace SelfPr
 {
-
-enum Errors { ERR_NO = 0, ERR_AUTH = 1, ERR_PRC = 2, ERR_CMD = 3 };
 
 //*************************************************
 //* TProtIn                                       *

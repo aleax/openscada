@@ -240,7 +240,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     mWTime->setAlignment(Qt::AlignCenter);
     mWTime->setWhatsThis(_("This label displays current system's time."));
     statusBar()->insertPermanentWidget(0, mWTime);
-    mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this );
+    mWUser = new UserStBar(open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
     mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display of the current user."));
     mWUser->setStatusTip(_("Double click to change user."));
@@ -336,26 +336,26 @@ VisRun::~VisRun( )
     if(fileDlg)	delete fileDlg;
 }
 
-string VisRun::user( )		{ return mWUser->user().toStdString(); }
+string VisRun::user( )		{ return mWUser->user(); }
 
-string VisRun::password( )	{ return mWUser->pass().toStdString(); }
+string VisRun::password( )	{ return mWUser->pass(); }
 
-string VisRun::VCAStation( )	{ return mWUser->VCAStation().toStdString(); }
+string VisRun::VCAStation( )	{ return mWUser->VCAStation(); }
 
 int VisRun::style( )		{ return mStlBar->style(); }
 
 void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
 
-int VisRun::cntrIfCmd( XMLNode &node, bool glob )
+int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 {
-    if(masterPg() && conErr && (time(NULL)-conErr->property("tm").toLongLong()) < mod->restoreTime()) {
-	conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()-(time(NULL)-conErr->property("tm").toLongLong())));
+    if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < mod->restoreTime())) {
+	if(main) conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()-(time(NULL)-conErr->property("tm").toLongLong())));
 	return 10;
     }
 
     int rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
     //Display error message about connection error
-    if(rez == 10 && masterPg()) {
+    if(rez == 10 && main && masterPg()) {
 	if(!conErr) {
 	    //Create error message
 	    conErr = new QLabel(masterPg());
@@ -372,7 +372,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	    conErr->setPalette(plt);
 	    //Calc size and position
 	    conErr->resize(300, 100);
-	    conErr->move((masterPg()->size().width()-conErr->size().width())/2,(masterPg()->size().height()-conErr->size().height())/2);
+	    conErr->move((masterPg()->size().width()-conErr->size().width())/2, (masterPg()->size().height()-conErr->size().height())/2);
 	    conErr->show();
 	}
 	conErr->setProperty("tm", (long long)time(NULL));
@@ -382,7 +382,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()));
     }
     //Remove error message about connection error
-    else if(rez != 10 && conErr) {
+    else if(rez != 10 && main && conErr) {
 	if(masterPg()) conErr->deleteLater();
 	conErr = NULL;
     }
@@ -965,7 +965,7 @@ void VisRun::exportDoc( const string &idoc )
     }
 }
 
-void VisRun::about()
+void VisRun::about( )
 {
     QMessageBox::about(this,windowTitle(),
 	QString(_("%1 v%2.\n%3\nAuthor: %4\nDevelopers: %5\nLicense: %6\n\n%7 v%8.\n%9\nLicense: %10\nAuthor: %11\nWeb site: %12")).
@@ -980,8 +980,8 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     XMLNode req("connect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("userChange","1");
     if(cntrIfCmd(req)) {
-	mWUser->setUser(oldUser);
-	mWUser->setPass(oldPass);
+	mWUser->setUser(oldUser.toStdString());
+	mWUser->setPass(oldPass.toStdString());
 	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	return;
     }
@@ -1155,7 +1155,10 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	else { close(); return; }
     }
 
-    req.clear()->setName("connect")->setAttr("path", "/%2fserv%2fsess");
+    req.clear()->setName("connect")->
+		 setAttr("path", "/%2fserv%2fsess")->
+		 setAttr("conTm", i2s(mod->restoreTime()*1000));	//Initial for allow the project loading and
+									//the session creation on the server side mostly/.
     if(work_sess.empty()) req.setAttr("prj", src_prj);
     else req.setAttr("sess", work_sess);
     if(cntrIfCmd(req)) {
@@ -1529,7 +1532,7 @@ void VisRun::updatePage( )
     req.setAttr("tm", u2s(reqtm))->
 	setAttr("path", "/ses_"+work_sess+"/%2fserv%2fpg");
 
-    if(!(rez=cntrIfCmd(req))) {
+    if(!(rez=cntrIfCmd(req,false,true))) {
 	// Check for delete the pages
 	RunPageView *pg;
 	for(unsigned i_p = 0, i_ch; i_p < pgList.size(); i_p++) {
@@ -1574,7 +1577,7 @@ void VisRun::updatePage( )
 	    setName("get")->
 	    setAttr("mode", "stat")->
 	    setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm");
-	if(!cntrIfCmd(req)) wAlrmSt = s2i(req.attr("alarmSt"));
+	if(!cntrIfCmd(req,false,true)) wAlrmSt = s2i(req.attr("alarmSt"));
 
 	// Set alarm
 	alarmSet(wAlrmSt);

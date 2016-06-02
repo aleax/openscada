@@ -158,7 +158,7 @@ class VisRun : public QMainWindow
 	RunPageView *findOpenPage( const string &pg );
 	RunWdgView *findOpenWidget( const string &wdg );
 
-	int cntrIfCmd( XMLNode &node, bool glob = false );
+	int cntrIfCmd( XMLNode &node, bool glob = false, bool main = false );
 
 	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
 

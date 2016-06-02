@@ -1,3 +1,18 @@
+2016-06-02 Roman
+- FIX:DAQ.Value: Write access to DAQ attributes closed for all into the service request "set".
+- !:Protocol.SelfSystem: Moved to some faster errors placing method. The reforwarding requests' processing set optimal.
+- FIX:UI.QTCfg: Into TextEdit widget added a signals blocking at setPlainText() for prevent the cursor events,
+    status bar update and crash in some cases here.
+- !!!!:FIX:UI.Vision: Too important fixes made in way of adapting to stable work with remote VCA servers:
+    The module's attributes VCAStation, UserStart, UserPass and UserStBar::{user,pass,VCAStation} were moved
+	under resources locking by the MtxString value type using.
+    To both runtime and development parts were added an initial connection with the restore connection timeout,
+	for allow to load the VCA-server resources.
+    In way of authentication as a default user the name takes from the attribute "user" of the session.
+    Processing of the information dialog about a connection lost was moved to a single request (and thread) from updatePage(),
+	for multithread access prevent and crashes (mostly from the notification tasks).
+
+
 2016-05-30 fido_max
 - FIX:DAQ.FT3 flData sensivity deadband processing for event forming fixed. B_BTR:setTU count_nu fixed. TMdContr::ProcessMessage data length for cmdGet answer fixed.
 - FIX:DAQ.Fastwel: TMdPrm::enable module config init fixed.

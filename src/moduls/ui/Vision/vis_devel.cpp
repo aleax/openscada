@@ -647,8 +647,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     setWindowState(Qt::WindowMaximized);
     menuBar()->setVisible(true);
 
-    wdgTree->updateTree();
-    prjTree->updateTree();
+    wdgTree->updateTree("", true);	//Initial for allow the widgets loading on the server side mostly
+    prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly
 
     //Restore main window state
     string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()),TSYS::base64);
@@ -717,11 +717,11 @@ QString VisDevelop::getFileName(const QString &caption, const QString &dir, cons
     return "";
 }
 
-string VisDevelop::user( )	{ return mWUser->user().toStdString(); }
+string VisDevelop::user( )	{ return mWUser->user(); }
 
-string VisDevelop::password( )	{ return mWUser->pass().toStdString(); }
+string VisDevelop::password( )	{ return mWUser->pass(); }
 
-string VisDevelop::VCAStation( )	{ return mWUser->VCAStation().toStdString(); }
+string VisDevelop::VCAStation( )	{ return mWUser->VCAStation(); }
 
 bool VisDevelop::wdgScale( )		{ return w_scale->scale(); }
 

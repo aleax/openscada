@@ -226,7 +226,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(!aNd->childSize()) { opt->childDel(aNd); i_a--; }
 	    }
 	}
-	if(ctrChkNode(opt,"set",RWRWRW,"root",SDAQ_ID,SEC_WR))		//Multi attributes set
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))		//Multi attributes set
 	    for(unsigned i_el = 0; i_el < opt->childSize(); i_el++)
 		vlAt(opt->childGet(i_el)->attr("id")).at().setS(opt->childGet(i_el)->text());
 	return;

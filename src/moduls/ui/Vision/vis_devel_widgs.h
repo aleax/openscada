@@ -331,7 +331,7 @@ class WdgTree: public QDockWidget
 	void selectItem( const string &vca_it, bool force = false );
 
     public slots:
-	void updateTree( const string &vca_it = "" );
+	void updateTree( const string &vca_it = "", bool initial = false );
 
     protected:
 	//Protecten methods
@@ -369,7 +369,7 @@ class ProjTree: public QDockWidget
 	void selectItem( const string &idwdg, bool force = false );
 
     public slots:
-	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL );
+	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL, bool initial = false );
 
     protected:
 	//Protecten methods

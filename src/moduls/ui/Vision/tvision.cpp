@@ -45,8 +45,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.7.0"
-#define AUTHORS		_("Roman Savochenko, Maxim Lysenko, Kseniya Yashina")
+#define MOD_VER		"3.8.0"
+#define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -82,9 +82,10 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : TUI(MOD_ID), mExitLstRunPrjCls(true), mEndRun(false),
-    mRestTime(60), mCachePgLife(1), mVCAStation("."), mScrnCnt(0)
+TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStart(dataRes()), mUserPass(dataRes()),
+    mExitLstRunPrjCls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mScrnCnt(0)
 {
+    mVCAStation = ".";
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
@@ -244,6 +245,7 @@ QMainWindow *TVision::openWindow( )
 	    user_pass = d_usr.password().toStdString();
 	    break;
 	}
+    if(!user_open.size()) user_open = req.attr("user");
 
     //Check for run projects need
     string sprj;
@@ -469,7 +471,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     node.setAttr("path", "/"+(isLoc?SYS->id():VCAStat)+node.attr("path"));
 
     try {
-	int rez = SYS->transport().at().cntrIfCmd(node, "UIVision", isLoc?user:("\n"+user+"\n"+password));
+	int rez = SYS->transport().at().cntrIfCmd(node, "UIVision", (isLoc?user:("\n"+user+"\n"+password)));
 	//Password's hash processing
 	if(node.attr("pHash").size() && userStart() == user && userPass() != (TSecurity::pHashMagic+node.attr("pHash"))) {
 	    setUserPass(TSecurity::pHashMagic + node.attr("pHash"));
