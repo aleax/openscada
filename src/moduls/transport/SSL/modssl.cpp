@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.4"
+#define MOD_VER		"1.3.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -161,21 +161,15 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 //************************************************
 //* TSocketIn                                    *
 //************************************************
-TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el), ctx(NULL),
+TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el), sockRes(true), ctx(NULL),
     mMaxFork(20), mMaxForkPerHost(0), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&sockRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     setAddr("localhost:10042");
 }
 
 TSocketIn::~TSocketIn( )
 {
-    pthread_mutex_destroy(&sockRes);
+
 }
 
 string TSocketIn::getStatus( )
@@ -258,9 +252,9 @@ void TSocketIn::stop( )
 
 unsigned TSocketIn::forksPerHost( const string &sender )
 {
-    pthread_mutex_lock(&sockRes);
+    sockRes.lock();
     unsigned rez = clS[sender];
-    pthread_mutex_unlock(&sockRes);
+    sockRes.unlock();
 
     return rez;
 }
@@ -485,9 +479,9 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
 	    req.assign(buf, rez);
-	    pthread_mutex_lock(&s.s->dataRes());
+	    s.s->dataRes().lock();
 	    s.s->trIn += rez; s.trIn += rez;
-	    pthread_mutex_unlock(&s.s->dataRes());
+	    s.s->dataRes().unlock();
 
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
 	    if(answ.size()) {
@@ -495,9 +489,9 @@ void *TSocketIn::ClTask( void *s_inf )
 		    mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
 		do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
 		while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
-		pthread_mutex_lock(&s.s->dataRes());
+		s.s->dataRes().lock();
 		s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
-		pthread_mutex_unlock(&s.s->dataRes());
+		s.s->dataRes().unlock();
 		answ = "";
 	    }
 	    cnt++;

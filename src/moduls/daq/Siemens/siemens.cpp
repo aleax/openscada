@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.5"
+#define MOD_VER		"2.0.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -580,7 +580,7 @@ void TMdContr::prmEn( const string &id, bool val )
 {
     unsigned i_prm;
 
-    MtxAlloc res(enRes.mtx(), true);
+    MtxAlloc res(enRes, true);
     for(i_prm = 0; i_prm < pHd.size(); i_prm++)
 	if(pHd[i_prm].at().id() == id) break;
 
@@ -672,7 +672,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	    if(dc && di) disconnectRemotePLC();
 
 	    //Full Libnodave API
-	    MtxAlloc res1(reqAPIRes.mtx(), true);
+	    MtxAlloc res1(reqAPIRes, true);
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102, addr().c_str());
 	    if(fds.rfd <= 0) throw TError(nodePath().c_str(), _("Open socket of remote PLC error."));
@@ -706,7 +706,7 @@ void TMdContr::disconnectRemotePLC( )
     switch(mType) {
 	case ISO_TCP:
 	case ISO_TCP243: {
-	    MtxAlloc res(reqAPIRes.mtx(), true);
+	    MtxAlloc res(reqAPIRes, true);
 	    ResAlloc res2(mod->resAPI, true);
 	    if(!dc || !di) break;
 	    daveDisconnectPLC(dc);
@@ -802,7 +802,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		//Reconnect for lost connection
 		if(!dc || tmDelay >= 0) connectRemotePLC();
 		int rez;
-		MtxAlloc res1(reqAPIRes.mtx(), true);
+		MtxAlloc res1(reqAPIRes, true);
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL))) {
 		    if(rez == daveResTimeout) throw TError(_("ReadDB"), _("Connection error."));
@@ -813,7 +813,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		break;
 	    }
 	    case ADS: {
-		MtxAlloc rRes(reqAPIRes.mtx(), true);
+		MtxAlloc rRes(reqAPIRes, true);
 		tr.at().start();
 
 		char buf[1000], res[1000];
@@ -951,7 +951,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		//Reconnect for lost connection
 		if(!dc || tmDelay >= 0) connectRemotePLC();
 		int rez;
-		MtxAlloc res1(reqAPIRes.mtx(), true);
+		MtxAlloc res1(reqAPIRes, true);
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str()))) {
 		    if(rez == daveResTimeout) throw TError(_("WriteDB"), _("Connection error."));
@@ -961,7 +961,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		break;
 	    }
 	    case ADS: {
-		MtxAlloc res1(reqAPIRes.mtx(), true);
+		MtxAlloc res1(reqAPIRes, true);
 		tr.at().start();
 
 		char buf[1000], res[1000];
@@ -1035,7 +1035,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 
 void TMdContr::reqService( XMLNode &io )
 {
-    MtxAlloc res(reqAPIRes.mtx(), true);
+    MtxAlloc res(reqAPIRes, true);
     try {
 	tr.at().start((enableStat() && !isReload) ? 0 : 1000);
 
@@ -1537,7 +1537,7 @@ void *TMdContr::Task( void *icntr )
 	while(true) {
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
-		MtxAlloc res1(cntr.enRes.mtx(), true);
+		MtxAlloc res1(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		    try { cntr.pHd[iP].at().calc(isStart, isStop, cntr.period()?1:-1); }
 		    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -1585,7 +1585,7 @@ void *TMdContr::Task( void *icntr )
 	    res.unlock();
 
 	    //Calc parameters
-	    MtxAlloc res1(cntr.enRes.mtx(), true);
+	    MtxAlloc res1(cntr.enRes, true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
 		try{ cntr.pHd[i_p].at().calc(isStart,isStop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }

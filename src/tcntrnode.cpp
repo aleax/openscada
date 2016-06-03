@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,15 +40,8 @@ using namespace OSCADA;
 
 //*************************************************
 //* Controll scenaries language section           *
-TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
+TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mChM, &attrM);
-    pthread_mutex_init(&mDataM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     setNodeMode(Disabled);
     prev.node = iprev;
     prev.grp = -1;
@@ -61,9 +54,6 @@ TCntrNode::~TCntrNode( )
 {
     nodeDelAll();
     if(chGrp) delete chGrp;
-
-    pthread_mutex_destroy(&mChM);
-    pthread_mutex_destroy(&mDataM);
 
     if(this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
@@ -85,9 +75,9 @@ void TCntrNode::nodeDelAll( )
 
 void TCntrNode::setNodeMode( char mode )
 {
-    pthread_mutex_lock(&mDataM);
+    dataRes().lock();
     mFlg = (mFlg&(~0x03))|(mode&0x03);
-    pthread_mutex_unlock(&mDataM);
+    dataRes().unlock();
 }
 
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
@@ -527,14 +517,14 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
 
 void TCntrNode::setNodeFlg( char flg )
 {
-    pthread_mutex_lock(&mDataM);
+    dataRes().lock();
     mFlg |= flg&(SelfModify|SelfModifyS|SelfSaveForceOnChild);
-    pthread_mutex_unlock(&mDataM);
+    dataRes().unlock();
 }
 
 unsigned TCntrNode::nodeUse( bool selfOnly )
 {
-    MtxAlloc res1(mDataM, true);
+    MtxAlloc res1(dataRes(), true);
 
     unsigned i_use = mUse;
     res1.unlock();
@@ -589,7 +579,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
 int TCntrNode::isModify( int f )
 {
     int rflg = 0;
-    MtxAlloc res1(mDataM, true);
+    MtxAlloc res1(dataRes(), true);
     if(f&Self && mFlg&SelfModify) rflg |= Self;
     if(f&Child) {
 	res1.unlock();
@@ -621,16 +611,16 @@ int TCntrNode::isModify( int f )
 
 void TCntrNode::modif( bool save )
 {
-    pthread_mutex_lock(&mDataM);
+    dataRes().lock();
     mFlg |= (save?(SelfModifyS|SelfModify):SelfModify);
-    pthread_mutex_unlock(&mDataM);
+    dataRes().unlock();
 }
 
 void TCntrNode::modifClr( bool save )
 {
-    pthread_mutex_lock(&mDataM);
+    dataRes().lock();
     mFlg &= ~(save?SelfModifyS:SelfModify);
-    pthread_mutex_unlock(&mDataM);
+    dataRes().unlock();
 }
 
 void TCntrNode::modifG( )
@@ -744,17 +734,17 @@ void TCntrNode::save( unsigned lev, string *errs )
 
 void TCntrNode::AHDConnect( )
 {
-    pthread_mutex_lock(&mDataM);
+    dataRes().lock();
     mUse++;
-    pthread_mutex_unlock(&mDataM);
+    dataRes().unlock();
     if(mUse > 65000) mess_err(nodePath().c_str(),_("Too more users for node!!!"));
 }
 
 bool TCntrNode::AHDDisConnect( )
 {
-    pthread_mutex_lock(&mDataM);
+    dataRes().lock();
     mUse--;
-    pthread_mutex_unlock(&mDataM);
+    dataRes().unlock();
 
     return false;
 }

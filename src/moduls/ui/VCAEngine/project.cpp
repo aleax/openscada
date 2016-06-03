@@ -154,7 +154,7 @@ void Project::setFullDB( const string &it )
 
 void Project::load_( )
 {
-    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     if(!SYS->chkSelDB(DB())) throw TError();
 
@@ -247,7 +247,7 @@ void Project::setEnable( bool val )
 {
     if(val == enable()) return;
 
-    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     mess_debug(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 
@@ -258,12 +258,6 @@ void Project::setEnable( bool val )
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     mEnable = val;
-}
-
-void Project::setEnableByNeed( )
-{
-    enableByNeed = true;
-    modifClr();
 }
 
 void Project::add( const string &id, const string &name, const string &orig )
@@ -472,9 +466,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Calculate period"),RWRWR_,"root",SUI_ID,2,"tp","dec",
 		    "help",_("Project's session calculate period on milliseconds."));
-		/*ctrMkNode("fld",opt,-1,"/obj/cfg/runWin",_("Run window"),RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
-		    "sel_id","0;1;2","sel_list",_("Original size;Maximize;Full screen"));
-		ctrMkNode("fld",opt,-1,"/obj/cfg/keepAspRatio",_("Keep aspect ratio on scale"),RWRWR_,"root",SUI_ID,1,"tp","bool");*/
+		ctrMkNode("fld",opt,-1,"/obj/cfg/toEnByNeed",_("Enable by need"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages"))) {
@@ -566,16 +558,10 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(period()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPeriod(s2i(opt->text()));
     }
-    /*else if(a_path == "/obj/cfg/flgs" && ctrChkNode(opt))	opt->setText(i2s(prjFlags()));
-    else if(a_path == "/obj/cfg/runWin") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(prjFlags()&(Maximize|FullScreen)));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	    setPrjFlags((prjFlags()&(~(Maximize|FullScreen)))|s2i(opt->text()));
+    else if(a_path == "/obj/cfg/toEnByNeed") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(toEnByNeed()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setToEnByNeed(s2i(opt->text()));
     }
-    else if(a_path == "/obj/cfg/keepAspRatio") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText((prjFlags()&KeepAspectRatio)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPrjFlags(s2i(opt->text()) ? prjFlags()|KeepAspectRatio : prjFlags()&(~KeepAspectRatio));
-    }*/
     else if(a_path == "/br/pg_" || a_path == "/page/page") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;

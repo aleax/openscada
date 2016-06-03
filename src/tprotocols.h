@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tprotocols.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define SPRT_VER	10		//ProtocolS type modules version
+#define SPRT_VER	11		//ProtocolS type modules version
 #define SPRT_ID		"Protocol"
 
 #include <string>

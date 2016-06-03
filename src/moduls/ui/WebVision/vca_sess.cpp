@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2015 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2016 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -287,20 +287,14 @@ VCASess &VCAObj::owner( ) { return *(VCASess*)nodePrev(); }
 //*************************************************
 //* ElFigure					  *
 //*************************************************
-VCAElFigure::VCAElFigure( const string &iid ) : VCAObj(iid), im(NULL)
+VCAElFigure::VCAElFigure( const string &iid ) : VCAObj(iid), im(NULL), mRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 VCAElFigure::~VCAElFigure( )
 {
     if(im) { gdImageDestroy(im); im = NULL; }
-
-    pthread_mutex_destroy(&mRes);
 }
 
 #define SAME_SIGNS(a, b) ((a) * (b) >= 0)
@@ -4324,20 +4318,14 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 //*************************************************
 //* Text				      *
 //*************************************************
-VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL)
+VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL), mRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 VCAText::~VCAText( )
 {
     if(im) { gdImageDestroy(im); im = NULL; }
-
-    pthread_mutex_destroy(&mRes);
 }
 
 Point VCAText::rot( const Point pnt, double alpha, const Point center )
@@ -4809,18 +4797,14 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 //* VCADiagram					  *
 //*************************************************
 VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0),
-    sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0), lstTrc(false)
+    sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0), lstTrc(false), mRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 VCADiagram::~VCADiagram( )
 {
-    pthread_mutex_destroy(&mRes);
+
 }
 
 void VCADiagram::getReq( SSess &ses )

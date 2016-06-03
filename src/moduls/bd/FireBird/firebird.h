@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.h
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,7 +109,7 @@ class MBD : public TBD
 	isc_tr_handle	htrans;
 	int		reqCnt;
 	time_t		reqCntTm, trOpenTm;
-	pthread_mutex_t	connRes;
+	ResMtx		connRes;
 };
 
 //*************************************************

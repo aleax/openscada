@@ -170,7 +170,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	pthread_mutex_t	enRes;			//Resource for enable params and request to remote OpenSCADA station
+	ResMtx	enRes;				//Resource for enable params and request to remote OpenSCADA station
 	TCfg	&mSched,			//Calc schedule
 		&mMessLev;			//Messages level for gather
 	double	&mRestDtTm;			//Restore data maximum length time (hour)

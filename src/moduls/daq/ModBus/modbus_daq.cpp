@@ -224,7 +224,7 @@ void TMdContr::stop_( )
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
 
     //Clear process parameters list
-    MtxAlloc res(enRes.mtx(), true);
+    MtxAlloc res(enRes, true);
     pHd.clear();
 }
 
@@ -247,7 +247,7 @@ void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
     unsigned iPrm;
 
-    MtxAlloc res(enRes.mtx(), true);
+    MtxAlloc res(enRes, true);
     for(iPrm = 0; iPrm < pHd.size(); iPrm++)
 	if(&pHd[iPrm].at() == prm) break;
 
@@ -451,7 +451,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 	return false;
     }
 
-    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes.mtx(), true); asynchWrs[addr] = val.getS(); return true; }
+    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes, true); asynchWrs[addr] = val.getS(); return true; }
 
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
@@ -714,7 +714,7 @@ void *TMdContr::Task( void *icntr )
 	while(true) {
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
-		MtxAlloc prmRes(cntr.enRes.mtx(), true);
+		MtxAlloc prmRes(cntr.enRes, true);
 		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		    cntr.pHd[i_p].at().upVal(isStart, isStop, cntr.period()?1:-1);
 		prmRes.unlock();
@@ -734,7 +734,7 @@ void *TMdContr::Task( void *icntr )
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
-	    MtxAlloc resAsWr(cntr.dataRes.mtx(), true);
+	    MtxAlloc resAsWr(cntr.dataRes, true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
 	    resAsWr.unlock();
@@ -856,7 +856,7 @@ void *TMdContr::Task( void *icntr )
 	    res.release();
 
 	    //Get data from blocks to parameters or calc for logical type parameters
-	    MtxAlloc prmRes(cntr.enRes.mtx(), true);
+	    MtxAlloc prmRes(cntr.enRes, true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		cntr.pHd[i_p].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    prmRes.unlock();

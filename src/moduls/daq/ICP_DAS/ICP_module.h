@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: ICP_module.h
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -122,7 +122,7 @@ class TMdContr: public TController
 
 	string serReq( string req, char mSlot = 0, bool CRC = false );
 
-	pthread_mutex_t	reqRes, pBusRes;	//Resource allocators for lock values and parallel bus devices
+	ResMtx	reqRes, pBusRes;	//Resource allocators for lock values and parallel bus devices
 
     protected:
 	//Methods

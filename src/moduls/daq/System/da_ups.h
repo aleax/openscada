@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: da_ups.h
 /***************************************************************************
- *   Copyright (C) 2014 by Roman Savochenko, <rom_as@oscada.org>           *
+ *   Copyright (C) 2014-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -68,7 +68,7 @@ class UPS: public DA
 
 	//Attributes
 	string	tTr, nTr;
-	pthread_mutex_t	reqRes;
+	ResMtx	reqRes;
 };
 
 } //End namespace

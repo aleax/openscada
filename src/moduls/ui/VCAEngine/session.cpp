@@ -34,7 +34,7 @@ using namespace VCA;
 //* Session: Project's session			 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) : dataM(true), mAlrmRes(true), mCalcRes(true),
-    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataM.mtx()), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataM), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
     endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mStyleIdW(-1)
 {
     mUser = "root";
@@ -67,7 +67,7 @@ void Session::setUser( const string &it )
 void Session::setEnable( bool val )
 {
     int64_t d_tm = 0;
-    MtxAlloc res(mCalcRes.mtx(), true);
+    MtxAlloc res(mCalcRes, true);
 
     if(val == enable())	return;
 
@@ -145,7 +145,7 @@ void Session::setStart( bool val )
 {
     int64_t d_tm = 0;
 
-    MtxAlloc res(mCalcRes.mtx(), true);
+    MtxAlloc res(mCalcRes, true);
 
     vector<string> pg_ls;
 
@@ -181,7 +181,7 @@ void Session::setStart( bool val )
 	}
 
 	//VCA server's force off
-	MtxAlloc resAl(mAlrmRes.mtx(), true);
+	MtxAlloc resAl(mAlrmRes, true);
 	for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->ntf(0);
 	resAl.unlock();
 
@@ -197,7 +197,7 @@ void Session::setStart( bool val )
 	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
 	//VCA server's force off
-	MtxAlloc resAl(mAlrmRes.mtx(), true);
+	MtxAlloc resAl(mAlrmRes, true);
 	for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->ntf(0);
 	resAl.unlock();
 
@@ -358,7 +358,7 @@ void Session::alarmSet( const string &wpath, const string &alrm )
     if(wpath.empty()) return;
 
     //Notifications queue update
-    MtxAlloc resAl(mAlrmRes.mtx(), true);
+    MtxAlloc resAl(mAlrmRes, true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN) iN->second->queueSet(wpath, alrm);
 }
 
@@ -391,7 +391,7 @@ void Session::alarmQuittance( const string &wpath, uint8_t quit_tmpl, bool ret )
     }
 
     //The notifications queue quittance
-    MtxAlloc resAl(mAlrmRes.mtx(), true);
+    MtxAlloc resAl(mAlrmRes, true);
     for(map<uint8_t,Notify*>::iterator iN = mNotify.begin(); iN != mNotify.end(); ++iN)
 	iN->second->queueQuittance(wpath, quit_tmpl, ret);
 }
@@ -400,7 +400,7 @@ void Session::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
 {
     vector<string> pgPropsQ;
 
-    MtxAlloc res(mAlrmRes.mtx(), true);
+    MtxAlloc res(mAlrmRes, true);
 
     //Find for presented notification type
     map<uint8_t,Notify*>::iterator iN = mNotify.find(tp);
@@ -453,7 +453,7 @@ void *Session::Task( void *icontr )
 	    }
 
 	//VCA server's notifications processing
-	MtxAlloc resAl(ses.mAlrmRes.mtx(), true);
+	MtxAlloc resAl(ses.mAlrmRes, true);
 	int aSt = ses.alarmStat();
 	for(map<uint8_t,Notify*>::iterator iN = ses.mNotify.begin(); iN != ses.mNotify.end(); ++iN) iN->second->ntf(aSt);
 	resAl.unlock();
@@ -475,7 +475,7 @@ void Session::stlCurentSet( int sid )
     mStyleIdW = sid;
 
     if(start()) {
-	MtxAlloc res(dataM.mtx(), true);
+	MtxAlloc res(dataM, true);
 
 	//Load Styles from project
 	mStProp.clear();
@@ -495,7 +495,7 @@ void Session::stlCurentSet( int sid )
 
 string Session::stlPropGet( const string &pid, const string &def )
 {
-    MtxAlloc res(dataM.mtx(), true);
+    MtxAlloc res(dataM, true);
 
     if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return def;
 
@@ -507,7 +507,7 @@ string Session::stlPropGet( const string &pid, const string &def )
 
 bool Session::stlPropSet( const string &pid, const string &vl )
 {
-    MtxAlloc res(dataM.mtx(), true);
+    MtxAlloc res(dataM, true);
     if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return false;
     map<string,string>::iterator iStPrp = mStProp.find(pid);
     if(iStPrp == mStProp.end()) return false;
@@ -575,7 +575,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 
 	    // Get visualiser side notification's resource
 	    if(opt->attr("mode") == "resource") {
-		MtxAlloc resAl(mAlrmRes.mtx(), true);
+		MtxAlloc resAl(mAlrmRes, true);
 		map<uint8_t,Notify*>::iterator iN = mNotify.find(s2i(opt->attr("tp")));
 		unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
 		string res, mess, lang, wdg = opt->attr("wdg");
@@ -803,7 +803,7 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &mess, stri
 	itm = owner()->calcClk();
 
 	// Find entry, return it and the resource
-	MtxAlloc res(dataM.mtx(), true);
+	MtxAlloc res(dataM, true);
 	int iQ, iFirst = -1, iNext = -1;
 	for(iQ = mQueue.size()-1; iQ >= 0; iQ--) {
 	    if(mQueue[iQ].quittance) continue;
@@ -844,7 +844,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
 
     QueueIt qIt(wpath+";", aLev, aCat, aMess, aArg, owner()->calcClk());
 
-    MtxAlloc res(dataM.mtx(), true);
+    MtxAlloc res(dataM, true);
 
     unsigned iQ = 0;
     // Check for the entry to present
@@ -1005,7 +1005,7 @@ void SessPage::setEnable( bool val, bool force )
 {
     vector<string> pg_ls;
 
-    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     //Page enable
     if(val) {
@@ -1347,20 +1347,14 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
     Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), mProc(false), inLnkGet(true), mToEn(false), mMdfClc(0),
-    mCalcClk(isess->calcClk()), mSess(isess)
+    mCalcClk(isess->calcClk()), mCalcRes(true), mSess(isess)
 {
     BACrtHoldOvr = true;
-
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mCalcRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
 }
 
 SessWdg::~SessWdg( )
 {
-    pthread_mutex_destroy(&mCalcRes);
+
 }
 
 void SessWdg::preDisable( int flag )
@@ -1695,7 +1689,7 @@ void SessWdg::prcElListUpdate( )
     vector<string> ls;
 
     wdgList(ls);
-    MtxAlloc resDt(ownerSess()->dataMtx().mtx(), true);
+    MtxAlloc resDt(ownerSess()->dataMtx(), true);
     mWdgChldAct.clear();
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	try { if(((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().process()) mWdgChldAct.push_back(ls[i_l]); }
@@ -1716,7 +1710,7 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
     string wpath = ipath + "/" + id();
     if(modifChk(tm,mMdfClc)) els.push_back(wpath);
 
-    MtxAlloc resDt(ownerSess()->dataMtx().mtx(), true);
+    MtxAlloc resDt(ownerSess()->dataMtx(), true);
     for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
 	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_ch]);
@@ -1750,7 +1744,7 @@ void SessWdg::calc( bool first, bool last )
 //    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
     //Calculate include widgets
-    MtxAlloc resDt(ownerSess()->dataMtx().mtx(), true);
+    MtxAlloc resDt(ownerSess()->dataMtx(), true);
     for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
 	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_l]);

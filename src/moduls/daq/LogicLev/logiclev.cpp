@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.4"
+#define MOD_VER		"1.5.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -123,16 +123,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem), enRes(true),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
     prcSt(false), callSt(false), endrunReq(false), mPer(1e9)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
     cfg("PRM_BD_REFL").setS("LogLevPrmRefl_"+name_c);
 }
@@ -140,8 +134,6 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::T
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
 }
 
 void TMdContr::postDisable(int flag)
@@ -224,11 +216,11 @@ void *TMdContr::Task( void *icntr )
 	//Update controller's data
 	if(!cntr.redntUse()) {
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
-	    pthread_mutex_lock(&cntr.enRes);
+	    cntr.enRes.lock();
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		try { cntr.pHd[i_p].at().calc(is_start, is_stop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	    pthread_mutex_unlock(&cntr.enRes);
+	    cntr.enRes.unlock();
 	    t_prev = t_cnt;
 	}
 

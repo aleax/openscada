@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-10 22:28+0300\n"
+"POT-Creation-Date: 2016-06-03 16:52+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1234,6 +1234,9 @@ msgstr "Rechenzeit"
 
 msgid "Project's session calculate period on milliseconds."
 msgstr "Rechenzeit der Projektsitzung in Millisek."
+
+msgid "Enable by need"
+msgstr "Befähigen von Notwendigkeit"
 
 msgid "Pages"
 msgstr "Seiten"

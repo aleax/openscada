@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da_LP_8x.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2012-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -183,9 +183,9 @@ void da_LP_8x::getVal( TMdPrm *p )
 	if(vl.at().getR() == EVAL_REAL) vl.at().setR(GetSDKversion(), 0, true);
 
 	//Read DIP switch status
-	pthread_mutex_lock(&p->owner().pBusRes);
+	p->owner().pBusRes.lock();
 	int dpSw = (~GetDIPswitch())&0xFF;
-	pthread_mutex_unlock(&p->owner().pBusRes);
+	p->owner().pBusRes.unlock();
 	p->vlAt("DIP").at().setI(dpSw, 0, true);
 
 	//Read Rotary switch status
@@ -205,7 +205,7 @@ void da_LP_8x::getVal( TMdPrm *p )
     else if(p->modTp.getS() == "I-8014") {	//Individual I-8014 processing ????
 	//Check and first init for I-8014
 	if(!ePrm->init)	{
-	    pthread_mutex_lock(&p->owner().pBusRes);
+	    p->owner().pBusRes.lock();
 	    ePrm->init = i8014W_Init(p->modSlot) != -1;
 	    // Specific parameters reading
 	    if(ePrm->init) {
@@ -220,7 +220,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 		    TSYS::strMess(_("Version FPGA=%04X, Library=%04X, ISO=%04X; Build=%s; Jumper SE=%d"),vFPGA,vLib,vISO,libDate,jSE),
 		    0, true);
 	    }
-	    pthread_mutex_unlock(&p->owner().pBusRes);
+	    p->owner().pBusRes.unlock();
 	}
 	if(ePrm->init) {
 	    //Check for I-8014 fast task (Magic, FIFO) start
@@ -240,10 +240,10 @@ void da_LP_8x::getVal( TMdPrm *p )
     else if(p->modTp.getS() == "I-8017") {	//Individual I-8017 processing
 	//Check for I-8017 init
 	if(!ePrm->init)	{
-	    pthread_mutex_lock(&p->owner().pBusRes);
+	    p->owner().pBusRes.lock();
 	    I8017_Init(p->modSlot);
 	    ePrm->init = true;
-	    pthread_mutex_unlock(&p->owner().pBusRes);
+	    p->owner().pBusRes.unlock();
 	}
 	//Check for I-8017 fast task start
 	if(ePrm->fastPer && ePrm->prmNum && !p->prcSt) SYS->taskCreate(p->nodePath('.',true), 32, fastTask, p);
@@ -262,7 +262,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 	bool isErr = false;
 	uint32_t val = 0;
 
-	pthread_mutex_lock(&p->owner().pBusRes);
+	p->owner().pBusRes.lock();
 	switch(ePrm->dev.DI>>8) {
 	    case 0:     //DI_8(32)
 		switch(ePrm->dev.DI&0xFF) {
@@ -281,7 +281,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 		break;
 	    default:	isErr = true;
 	}
-	pthread_mutex_unlock(&p->owner().pBusRes);
+	p->owner().pBusRes.unlock();
 
 	for(unsigned i_ch = 0; i_ch < (ePrm->dev.DI&0xFF); i_ch++)
 	    for(int i_i = 0; i_i < 8; i_i++)
@@ -292,7 +292,7 @@ void da_LP_8x::getVal( TMdPrm *p )
     else if(ePrm->dev.DO) {
 	bool isErr = false;
 
-	pthread_mutex_lock(&p->owner().pBusRes);
+	p->owner().pBusRes.lock();
 	switch(ePrm->dev.DO>>8) {
 	    case 0:	//DO_8_RB(32)
 		switch(ePrm->dev.DO&0xFF) {
@@ -311,7 +311,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 		break;
 	    default:    isErr = true;
 	}
-	pthread_mutex_unlock(&p->owner().pBusRes);
+	p->owner().pBusRes.unlock();
 
 	for(unsigned i_ch = 0; i_ch < (ePrm->dev.DO&0xFF); i_ch++)
 	    for(int i_o = 0; i_o < 8; i_o++)
@@ -337,14 +337,14 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &p
 	    if(p->vlAt(TSYS::strMess("ha%d",i_v)).at().getB(0, true) == true) hvl |= 1;
 	    if(p->vlAt(TSYS::strMess("la%d",i_v)).at().getB(0, true) == true) lvl |= 1;
 	}
-	pthread_mutex_lock(&p->owner().pBusRes);
+	p->owner().pBusRes.lock();
 	I8017_SetLed(p->modSlot,(lvl<<8)|hvl);
-	pthread_mutex_unlock(&p->owner().pBusRes);
+	p->owner().pBusRes.unlock();
     }
     else if(p->modTp.getS() == "I-8024") {	//Individual I-8024 processing
-	pthread_mutex_lock(&p->owner().pBusRes);
+	p->owner().pBusRes.lock();
 	I8024_VoltageOut(p->modSlot, atoi(vo.name().c_str()+2), vl.getR());
-	pthread_mutex_unlock(&p->owner().pBusRes);
+	p->owner().pBusRes.unlock();
     }
     //Other typical modules processing
     // DO
@@ -365,7 +365,7 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &p
 	    val ^= p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch];
 	}*/
 
-	pthread_mutex_lock(&p->owner().pBusRes);
+	p->owner().pBusRes.lock();
 	switch(ePrm->dev.DO>>8) {
 	    case 0:	//DO_8(32)
 		switch(ePrm->dev.DO&0xFF) {
@@ -381,7 +381,7 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &p
 		}
 		break;
 	}
-	pthread_mutex_unlock(&p->owner().pBusRes);
+	p->owner().pBusRes.unlock();
     }
 
     /*else if(p->modTp.getS() == "I-8042")
@@ -390,9 +390,9 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &p
 	if(vl == EVAL_BOOL || vl == pvl.getB()) return;
 	int chnl = atoi(vo.name().c_str()+1);
 
-	pthread_mutex_lock(&p->owner().pBusRes);
+	p->owner().pBusRes.lock();
 	DO_16(p->modSlot, ((vl^(p->dInOutRev[1]>>chnl))&1) ? (DO_16_RB(p->modSlot) | 0x01<<chnl) : (DO_16_RB(p->modSlot) & ~(0x01<<chnl)));
-	pthread_mutex_unlock(&p->owner().pBusRes);
+	p->owner().pBusRes.unlock();
     }*/
 }
 
@@ -482,7 +482,7 @@ void *da_LP_8x::fastTask( void *ip )
 
 	float cntOverFull = 0, cntCor = 0, acqSize = 0, curSRate = 0, retrTm;
 
-	pthread_mutex_lock(&p.owner().pBusRes);
+	p.owner().pBusRes.lock();
 
 	//Magic scan configure
 	i8014W_ConfigMagicScan(p.modSlot, chArr, gainArr, cnls.size(), vmax(1,vmin(250000,1/ePrm->fastPer)), 2, 0, 0, &curSRate);
@@ -492,7 +492,7 @@ void *da_LP_8x::fastTask( void *ip )
 	//Start for magic scan
 	i8014W_StartMagicScan(p.modSlot);
 
-	pthread_mutex_unlock(&p.owner().pBusRes);
+	p.owner().pBusRes.unlock();
 
 	//Read and place result of scanning data
 	time_t	corTm = SYS->sysTm(), corDt, upStatTm = corTm, cVlTm = corTm;
@@ -505,14 +505,14 @@ void *da_LP_8x::fastTask( void *ip )
 
 	while(!p.endRunReq) {
 	    // Read available FIFO data
-	    pthread_mutex_lock(&p.owner().pBusRes);
+	    p.owner().pBusRes.lock();
 	    if((rdRez=i8014W_ReadFIFO(p.modSlot,rdData,szFIFO,&rdCnt)) == FIFO_LATCHED) {
 		cntOverFull++;
 		i8014W_StopMagicScan(p.modSlot);
 		i8014W_ReadFIFO(p.modSlot, rdData, szFIFO, &rdCnt);
 		i8014W_UnLockFIFO(p.modSlot);
 		i8014W_StartMagicScan(p.modSlot);
-		pthread_mutex_unlock(&p.owner().pBusRes);
+		p.owner().pBusRes.unlock();
 		corTm = SYS->sysTm();
 		wTm = 1000000ll*corTm;
 		continue;
@@ -525,7 +525,7 @@ void *da_LP_8x::fastTask( void *ip )
 			rdCnt%cnls.size(), cnls.size()-(rdCnt%cnls.size()), rdCnt1);
 		rdCnt += rdCnt1;
 	    }
-	    pthread_mutex_unlock(&p.owner().pBusRes);
+	    p.owner().pBusRes.unlock();
 
 	    acqSize += (float)(rdCnt*2)/1048576;
 	    tSz = 1000000ll*(rdCnt/cnls.size())/(int64_t)curSRate;
@@ -595,13 +595,13 @@ void *da_LP_8x::fastTask( void *ip )
 	float vbuf[cnls.size()];
 
 	while(!p.endRunReq) {
-	    pthread_mutex_lock(&p.owner().pBusRes);
+	    p.owner().pBusRes.lock();
 	    for(unsigned i_c = 0; p.owner().startStat() && i_c < cnls.size(); i_c++) {
 		c_mode = ePrm->cnlMode[i_c];
 		I8017_SetChannelGainMode(p.modSlot, i_c, c_mode, 0);
 		vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017_GetCurAdChannel_Hex(p.modSlot)/8000;
 	    }
-	    pthread_mutex_unlock(&p.owner().pBusRes);
+	    p.owner().pBusRes.unlock();
 
 	    for(unsigned i_c = 0; p.owner().startStat() && i_c < cnls.size(); i_c++)
 		cnls[i_c].at().setR(vbuf[i_c], wTm, true);

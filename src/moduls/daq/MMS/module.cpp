@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2013-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.5"
+#define MOD_VER		"1.3.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -115,17 +115,10 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true), cntrRes(true),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
     prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes()), tmGath(0), tmDelay(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutex_init(&cntrRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("MMSPrm_"+name_c);
 
     //ParameterCBB
@@ -154,9 +147,6 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TC
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
-    pthread_mutex_destroy(&cntrRes);
 }
 
 string TMdContr::getStatus( )

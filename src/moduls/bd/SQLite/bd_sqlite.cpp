@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.1.4"
+#define MOD_VER		"2.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -121,7 +121,7 @@ void MBD::postDisable( int flag )
 
 void MBD::enable( )
 {
-    MtxAlloc res(connRes.mtx(), true);
+    MtxAlloc res(connRes, true);
     if(enableStat()) return;
 
     cd_pg = codePage().size()?codePage():Mess->charset();
@@ -138,7 +138,7 @@ void MBD::enable( )
 
 void MBD::disable( )
 {
-    MtxAlloc res(connRes.mtx(), true);
+    MtxAlloc res(connRes, true);
     if(!enableStat()) return;
 
     //Last commit
@@ -176,8 +176,8 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(tbl) tbl->clear();
     if(!enableStat())	return;
 
-    MtxAlloc res(connRes.mtx(), true);	//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
-					//   request's sequence breakage on high concurrency access activity
+    MtxAlloc res(connRes, true);//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
+				//   request's sequence breakage on high concurrency access activity
 
     //Commit set
     if(intoTrans && intoTrans != EVAL_BOOL) transOpen();

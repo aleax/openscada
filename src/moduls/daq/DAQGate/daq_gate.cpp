@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.5"
+#define MOD_VER		"1.5.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -114,25 +114,17 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    TController(name_c,daq_db,cfgelem),
+    TController(name_c,daq_db,cfgelem), enRes(true),
     mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mSync(cfg("SYNCPER").getId()), mPerOld(cfg("PERIOD").getId()), mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     prcSt(false), call_st(false), endrunReq(false), alSt(-1), mPer(1e9), tmGath(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
 }
 
 string TMdContr::getStatus( )

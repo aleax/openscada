@@ -138,7 +138,7 @@ class Contr: public TController
 	vector< AutoHD<Block> > calcBlks;	// Calc blocks HD
 	double	mPer;
 
-	pthread_mutex_t calcRes;	// Resource for process block
+	ResMtx	calcRes;	// Resource for process block
 	Res	hdRes;
 };
 

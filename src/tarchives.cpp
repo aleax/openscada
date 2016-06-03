@@ -415,7 +415,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     string tVl;
     for(int off = 0; (tVl=TSYS::strParse(arch,0,";",&off)).size(); ) archMap[tVl] = true;
 
-    MtxAlloc res(mRes.mtx());
+    MtxAlloc res(mRes);
     if(archMap.empty() || archMap[BUF_ARCH_NM]) {
 	res.lock();
 	//Put message to buffer
@@ -484,7 +484,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     TRegExp re(category, "p");
 
     //Get records from buffer
-    MtxAlloc res(mRes.mtx(), true);
+    MtxAlloc res(mRes, true);
     unsigned i_buf = headBuf;
     while(level >= 0 && (archMap.empty() || archMap[BUF_ARCH_NM]) && SYS->sysTm() < upTo) {
 	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
@@ -528,7 +528,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 time_t TArchiveS::messBeg( const string &arch )
 {
     time_t rez = 0;
-    MtxAlloc res(mRes.mtx(), true);
+    MtxAlloc res(mRes, true);
     if(arch.empty() || arch == BUF_ARCH_NM) {
 	unsigned i_buf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
@@ -559,7 +559,7 @@ time_t TArchiveS::messBeg( const string &arch )
 time_t TArchiveS::messEnd( const string &arch )
 {
     time_t rez = 0;
-    MtxAlloc res(mRes.mtx(), true);
+    MtxAlloc res(mRes, true);
     if(arch.empty() || arch == BUF_ARCH_NM) {
 	unsigned i_buf = headBuf;
 	while(!arch.size() || arch == BUF_ARCH_NM) {
@@ -722,7 +722,7 @@ string TArchiveS::rdStRequest( const string &arch, XMLNode &req, const string &p
 
 void TArchiveS::setMessBufLen( unsigned len )
 {
-    MtxAlloc res(mRes.mtx(), true);
+    MtxAlloc res(mRes, true);
     len = vmin(BUF_SIZE_MAX, vmax(BUF_SIZE_DEF,len));
     while(mBuf.size() > len) {
 	mBuf.erase(mBuf.begin() + headBuf);
@@ -741,7 +741,7 @@ void TArchiveS::setActMess( TMArchivator *a, bool val )
 {
     unsigned iArch;
 
-    MtxAlloc res(mRes.mtx(), true);
+    MtxAlloc res(mRes, true);
     for(iArch = 0; iArch < actMess.size(); iArch++)
 	if(actMess[iArch].at().id() == a->id() && actMess[iArch].at().owner().modId() == a->owner().modId()) break;
 
@@ -753,7 +753,7 @@ void TArchiveS::setActVal( TVArchive *a, bool val )
 {
     unsigned iArch;
 
-    MtxAlloc res(vRes.mtx(), true);
+    MtxAlloc res(vRes, true);
     for(iArch = 0; iArch < actVal.size(); iArch++)
 	if(actVal[iArch].at().id() == a->id()) break;
 
@@ -774,7 +774,7 @@ void *TArchiveS::ArhMessTask( void *param )
     while(true) {
 	if(TSYS::taskEndRun()) isLast = true;
 	//Message buffer read
-	MtxAlloc res(arh.mRes.mtx(), true);
+	MtxAlloc res(arh.mRes, true);
 	for(unsigned iM = 0; iM < arh.actMess.size(); iM++) {
 	    AutoHD<TMArchivator> mArh = arh.actMess[iM];
 	    int &messHead = mArh.at().messHead;

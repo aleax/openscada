@@ -348,8 +348,8 @@ void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 {
-    if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < mod->restoreTime())) {
-	if(main) conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()-(time(NULL)-conErr->property("tm").toLongLong())));
+    if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < conErr->property("tmRest").toInt())) {
+	if(main) conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()-(time(NULL)-conErr->property("tm").toLongLong())));
 	return 10;
     }
 
@@ -373,13 +373,17 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 	    //Calc size and position
 	    conErr->resize(300, 100);
 	    conErr->move((masterPg()->size().width()-conErr->size().width())/2, (masterPg()->size().height()-conErr->size().height())/2);
-	    conErr->show();
-	}
+	    //conErr->show();
+	    conErr->setProperty("tmRest", 0);
+	} else conErr->setProperty("tmRest", vmin(mod->restoreTime(),conErr->property("tmRest").toInt()+1));
 	conErr->setProperty("tm", (long long)time(NULL));
-	conErr->setProperty("labTmpl",
-	    QString(_("Connection to visualization server '%1' error: %2.\nWill restore try after %3s!"))
-		.arg(VCAStation().c_str()).arg(node.text().c_str()).arg("%1"));
-	conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()));
+	if(conErr->property("tmRest").toInt() > 3) {
+	    if(!conErr->isVisible()) conErr->show();
+	    conErr->setProperty("labTmpl",
+		QString(_("Connection to visualization server '%1' error: %2.\nWill restore try after %3s!"))
+		    .arg(VCAStation().c_str()).arg(node.text().c_str()).arg("%1"));
+	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()));
+	}
     }
     //Remove error message about connection error
     else if(rez != 10 && main && conErr) {

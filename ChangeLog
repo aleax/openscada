@@ -1,3 +1,12 @@
+2016-06-03 Roman
+- !!!!:SYS,*: MtxAlloc and MtxString moved to the mutex wrapper object ResMtx.
+    All module's subsystems' version rose to one point. CoreLib version rise to 3.5.
+- !:UI.Vision: Timeout of tries of restoring connection to a remote station set to progressive up to the pointed one
+	and the error message display after the timeout value in 3 seconds.
+- !:UI.VCAEngine: To project objects were added a property "EnableByNeed" to control the projects ready after start and prevent long connection
+    by the deferred enabling.
+
+
 2016-06-02 Roman
 - Transport: Listed external host's mode merging from two entries is fixed.
 - FIX:DAQ.Value: Write access to DAQ attributes closed for all into the service request "set".

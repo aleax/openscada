@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.h
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -152,7 +152,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	pthread_mutex_t	enRes;			//Resource for enable params
+	ResMtx	enRes;				//Resource for enable params
 	int64_t	&mPerOld,			// ms
 		&mPrior;			// Process task priority
 

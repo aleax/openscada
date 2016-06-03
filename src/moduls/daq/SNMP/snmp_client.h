@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp_client.h
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -133,7 +133,7 @@ class TMdContr: public TController
 	void str2oid( const string &str, oid *ioid, size_t &isz, const string &sep = "_" );
 
 	//Attributes
-	pthread_mutex_t	enRes, dataRes;	//Resource for enable params and controller DAQ API
+	ResMtx	enRes, dataRes;	//Resource for enable params and controller DAQ API
 	int64_t	&mPrior,	// Process task priority
 		&mPattrLim,	// Parameter's attributes limit
 		&mRetr,		// Request retries

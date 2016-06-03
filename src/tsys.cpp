@@ -121,10 +121,10 @@ TSYS::~TSYS( )
 
     if(mLev == TMess::Debug) {
 	string cntrsStr;
-	pthread_mutex_lock(&dataRes());
+	dataRes().lock();
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	    cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
-	pthread_mutex_unlock(&dataRes());
+	dataRes().unlock();
 	printf(_("System counters on exit: %s"), cntrsStr.c_str());
     }
 

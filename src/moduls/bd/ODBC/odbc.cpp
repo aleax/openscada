@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.ODBC file: odbc.cpp
 /***************************************************************************
- *   Copyright (C) 2015 by Roman Savochenko, <rom_as@oscada.org>           *
+ *   Copyright (C) 2015-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.1.1"
+#define MOD_VER		"0.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -88,18 +88,14 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //* BD_ODBC::MBD				 *
 //************************************************
 MBD::MBD( string iid, TElem *cf_el ) :
-    TBD(iid, cf_el), henv(SQL_NULL_HANDLE), hdbc(SQL_NULL_HANDLE), hstmt(SQL_NULL_HANDLE), reqCnt(0), reqCntTm(0), trOpenTm(0)
+    TBD(iid, cf_el), henv(SQL_NULL_HANDLE), hdbc(SQL_NULL_HANDLE), hstmt(SQL_NULL_HANDLE), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&connRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 MBD::~MBD( )
 {
-    pthread_mutex_destroy(&connRes);
+
 }
 
 void MBD::postDisable( int flag )
@@ -270,22 +266,22 @@ void MBD::transOpen( )
     //Check for limit into one trinsaction
     if(reqCnt > 1000) transCommit();
 
-    pthread_mutex_lock(&connRes);
+    connRes.lock();
     bool begin = !reqCnt;
     if(begin) trOpenTm = SYS->sysTm();
     reqCnt++;
     reqCntTm = SYS->sysTm();
-    pthread_mutex_unlock(&connRes);
+    connRes.unlock();
 
     if(begin) sqlReq("BEGIN;");
 }
 
 void MBD::transCommit( )
 {
-    pthread_mutex_lock(&connRes);
+    connRes.lock();
     bool commit = reqCnt;
     reqCnt = reqCntTm = 0;
-    pthread_mutex_unlock(&connRes);
+    connRes.unlock();
 
     if(commit) sqlReq("COMMIT;");
 }

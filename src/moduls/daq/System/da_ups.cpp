@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: da_ups.cpp
 /***************************************************************************
- *   Copyright (C) 2014 by Roman Savochenko, <rom_as@oscada.org>           *
+ *   Copyright (C) 2014-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,18 +28,14 @@ using namespace SystemCntr;
 //*************************************************
 //* UPS                                           *
 //*************************************************
-UPS::UPS( ) : tTr("Sockets"), nTr("sys_UPS")
+UPS::UPS( ) : tTr("Sockets"), nTr("sys_UPS"), reqRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&reqRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 UPS::~UPS( )
 {
-    pthread_mutex_destroy(&reqRes);
+
 }
 
 void UPS::init( TMdPrm *prm )

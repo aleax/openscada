@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,7 @@
 #ifndef TUIS_H
 #define TUIS_H
 
-#define SUI_VER		10	//UIS type modules version
+#define SUI_VER		11	//UIS type modules version
 #define SUI_ID		"UI"
 
 #include <string>

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.3"
+#define MOD_VER		"1.7.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -155,18 +155,11 @@ DA *TTpContr::daGet( TMdPrm *prm )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
-	TController(name_c, daq_db, cfgelem),
+	TController(name_c, daq_db, cfgelem), reqRes(true), pBusRes(true),
 	mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()),
 	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE")), mTrOscd(cfg("TR_OSCD")),
 	mPer(100000000), prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&reqRes, &attrM);
-    pthread_mutex_init(&pBusRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
 }
@@ -174,9 +167,6 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 TMdContr::~TMdContr()
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&reqRes);
-    pthread_mutex_destroy(&pBusRes);
 }
 
 string TMdContr::getStatus( )
@@ -240,7 +230,7 @@ void TMdContr::stop_( )
 	if(trOscd() == TrIcpDasNm) Close_Com(mBus?mBus:1);
 	else tr.free();
     }
-    if(mBus == 0) { pthread_mutex_lock(&pBusRes); Close_Slot(9); Close_SlotAll(); pthread_mutex_unlock(&pBusRes); }
+    if(mBus == 0) { pBusRes.lock(); Close_Slot(9); Close_SlotAll(); pBusRes.unlock(); }
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -363,10 +353,10 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 
     //Request by ICP DAS serial API
     if(mBus == 0 && mSlot != mCurSlot) {
-	pthread_mutex_lock(&pBusRes);
+	pBusRes.lock();
 	ChangeToSlot(mSlot);
 	mCurSlot = mSlot;
-	pthread_mutex_unlock(&pBusRes);
+	pBusRes.unlock();
     }
 
     //Request by OpenSCADA output transport

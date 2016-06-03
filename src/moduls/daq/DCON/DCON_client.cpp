@@ -2,7 +2,7 @@
 //OpenSCADA system module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2014,2016 by Roman Savochenko, rom_as@oscada.org   *
+ *		   2008-2016 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.1"
+#define MOD_VER		"1.2.2"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -215,7 +215,7 @@ void TMdContr::stop_( )
     if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
     //Clear process parameters list
-    MtxAlloc res(enRes.mtx(), true);
+    MtxAlloc res(enRes, true);
     pHd.clear();
 }
 
@@ -225,7 +225,7 @@ void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
     unsigned i_prm;
 
-    MtxAlloc res(enRes.mtx(), true);
+    MtxAlloc res(enRes, true);
     for(i_prm = 0; i_prm < pHd.size(); i_prm++)
 	if(&pHd[i_prm].at() == prm) break;
 
@@ -242,7 +242,7 @@ string TMdContr::DCONCRC( string str )
 
 string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 {
-    MtxAlloc res(reqRes.mtx(), true);
+    MtxAlloc res(reqRes, true);
     char buf[1000];
     string rez, err;
 
@@ -315,7 +315,7 @@ void *TMdContr::Task( void *icntr )
 		int64_t t_cnt = TSYS::curTime();
 
 		//Update controller's data
-		MtxAlloc res(cntr.enRes.mtx(), true);
+		MtxAlloc res(cntr.enRes, true);
 		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++) {
 		    if(cntr.endrunReq) break;
 		    //Reset errors

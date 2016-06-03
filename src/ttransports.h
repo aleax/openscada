@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		11		//TransportS type modules version
+#define STR_VER		12		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>

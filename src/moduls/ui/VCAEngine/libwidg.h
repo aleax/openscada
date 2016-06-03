@@ -135,7 +135,7 @@ class LWidget : public Widget, public TConfig
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
 	void setParentNm( const string &isw );
-	void setEnableByNeed( );
+	void setEnableByNeed( )			{ enableByNeed = true; modifClr(); }
 
 	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );

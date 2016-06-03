@@ -132,7 +132,7 @@ class TSocketIn: public TTransportIn
 
 	//Attributes
 	int		sockFd;
-	pthread_mutex_t	sockRes;
+	ResMtx		sockRes;
 
 	bool		endrun;			//Command for stop task
 	bool		endrunCl;		//Command for stop client tasks

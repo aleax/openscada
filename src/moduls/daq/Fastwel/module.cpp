@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.4"
+#define MOD_VER		"0.1.5"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -293,8 +293,8 @@ TController *TTpContr::ContrAttach(const string & name, const string & daq_db)
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr(string name_c, const string & daq_db, ::TElem * cfgelem) :
-	::TController(name_c, daq_db, cfgelem), prcSt(false), callSt(false), endrunReq(false), tmGath(0), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")),
-	mNet(cfg("NET_ID"))
+	::TController(name_c, daq_db, cfgelem), prcSt(false), callSt(false), endrunReq(false), tmGath(0), enRes(true), dataRes(true),
+	mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mNet(cfg("NET_ID"))
 {
     cfg("PRM_BD_DIM762").setS("FBUSPrmDIM762_" + name_c);
     cfg("PRM_BD_DIM716").setS("FBUSPrmDIM716_" + name_c);
@@ -304,20 +304,11 @@ TMdContr::TMdContr(string name_c, const string & daq_db, ::TElem * cfgelem) :
     cfg("PRM_BD_AIM730").setS("FBUSPrmAIM730_" + name_c);
     cfg("PRM_BD_AIM725").setS("FBUSPrmAIM725_" + name_c);
     cfg("PRM_BD_DIM765").setS("FBUSPrmDIM765_" + name_c);
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutex_init(&dataRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
 }
 
 TMdContr::~TMdContr()
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
-    pthread_mutex_destroy(&dataRes);
 }
 
 void TMdContr::GetNodeDescription(int id, PFIO_MODULE_DESC modDesc)

@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -151,14 +151,8 @@ TController *TpContr::ContrAttach( const string &name, const string &daq_db )	{ 
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c, daq_db, cfgelem), prcSt(false), callSt(false), endrunReq(false),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()),
-    mPer(1e9)
+    mPer(1e9), calcRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&calcRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
     cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
     mBl = grpAdd("blk_");
@@ -166,7 +160,7 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 
 Contr::~Contr( )
 {
-    pthread_mutex_destroy(&calcRes);
+
 }
 
 TCntrNode &Contr::operator=( TCntrNode &node )

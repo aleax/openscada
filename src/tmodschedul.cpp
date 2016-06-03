@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,18 +38,14 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules scheduler"),false), mAllow("*"), mPer(10)
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules scheduler"),false), mAllow("*"), mPer(10), schM(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&schM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 TModSchedul::~TModSchedul( )
 {
-    pthread_mutex_destroy(&schM);
+
 }
 
 void TModSchedul::preDisable(int flag)

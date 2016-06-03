@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.4.6"
+#define MOD_VER		"1.4.7"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -101,7 +101,7 @@ void MBD::postDisable( int flag )
     TBD::postDisable(flag);
 
     if(flag && owner().fullDeleteDB()) {
-	MtxAlloc resource(connRes.mtx(), true);
+	MtxAlloc resource(connRes, true);
 	PGconn * connection = NULL;
 	PGresult *res;
 	try {
@@ -131,7 +131,7 @@ void MBD::postDisable( int flag )
 
 void MBD::enable( )
 {
-    MtxAlloc resource(connRes.mtx(), true);
+    MtxAlloc resource(connRes, true);
     if(enableStat())	return;
 
     int off = 0;
@@ -188,7 +188,7 @@ nextTry:
 
 void MBD::disable( )
 {
-    MtxAlloc resource(connRes.mtx(), true);
+    MtxAlloc resource(connRes, true);
 
     if(!enableStat())  return;
 
@@ -239,7 +239,7 @@ void MBD::transOpen( )
     if(begin) sqlReq("BEGIN;");
 
 #else
-    MtxAlloc resource(connRes.mtx(), true);
+    MtxAlloc resource(connRes, true);
     PGTransactionStatusType tp;
     tp = PQtransactionStatus(connection);
 
@@ -270,7 +270,7 @@ void MBD::transCommit( )
 
     if(commit) sqlReq("COMMIT;");
 #else
-    MtxAlloc resource(connRes.mtx(), true);
+    MtxAlloc resource(connRes, true);
     PGTransactionStatusType tp;
     tp = PQtransactionStatus(connection);
 
@@ -305,8 +305,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     string req = Mess->codeConvOut(cd_pg.c_str(), ireq);
 
-    MtxAlloc resource(connRes.mtx(), true);	//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
-						//   request's sequence breakage on high concurrency access activity
+    MtxAlloc resource(connRes, true);	//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
+					//   request's sequence breakage on high concurrency access activity
 
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && reqCnt)		transCommit();

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.2.2"
+#define MOD_VER		"1.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -92,20 +92,14 @@ string BDMod::sqlReqCode( const string &req, char symb )
 //************************************************
 //* FireBird::MBD				 *
 //************************************************
-MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), conTm("1"), hdb(0), htrans(0), reqCnt(0), reqCntTm(0), trOpenTm(0)
+MBD::MBD( const string &iid, TElem *cf_el ) : TBD(iid,cf_el), conTm("1"), hdb(0), htrans(0), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&connRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     setAddr("localhost:/var/tmp/test.fbd");
 }
 
 MBD::~MBD( )
 {
-    pthread_mutex_destroy(&connRes);
+
 }
 
 void MBD::postDisable( int flag )

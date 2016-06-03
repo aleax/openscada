@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -187,11 +187,11 @@ void TFunction::valAtt( TValFunc *vfnc )
 
 void TFunction::valDet( TValFunc *vfnc )
 {
-    pthread_mutex_lock(&dataRes());
+    dataRes().lock();
     for(unsigned i = 0; i < used.size() ;i++)
 	if(used[i] == vfnc)
 	{ used.erase(used.begin()+i); break; }
-    pthread_mutex_unlock(&dataRes());
+    dataRes().unlock();
 }
 
 TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

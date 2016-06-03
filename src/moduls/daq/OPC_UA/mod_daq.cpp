@@ -81,27 +81,19 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
+TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
     mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), mPAttrLim(cfg("AttrsLimit").getId()),
     prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmGath(0), tmDelay(0), servSt(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
 }
 
 string TMdContr::epParse( string *uri )

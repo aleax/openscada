@@ -162,7 +162,7 @@ void WidgetLib::load_( )
     c_el.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); ) {
 	string f_id = c_el.cfg("ID").getS();
-	if(!present(f_id)) { add(f_id,"",""); at(f_id).at().setEnableByNeed(); }
+	if(!present(f_id)) { add(f_id, "", ""); at(f_id).at().setEnableByNeed(); }
 	itReg[f_id] = true;
     }
 
@@ -570,7 +570,7 @@ void LWidget::setEnable( bool val )
 {
     if(enable() == val) return;
 
-    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     Widget::setEnable(val);
 
@@ -593,15 +593,9 @@ void LWidget::setEnable( bool val )
     }
 }
 
-void LWidget::setEnableByNeed( )
-{
-    enableByNeed = true;
-    modifClr();
-}
-
 void LWidget::load_( )
 {
-    MtxAlloc fRes(funcM().mtx(), true);	//Prevent multiple entry
+    MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     if(!SYS->chkSelDB(ownerLib().DB())) throw TError();
 

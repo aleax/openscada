@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.3"
+#define MOD_VER		"2.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -141,21 +141,15 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), mMode(0), mMSS(0), mMaxQueue(10), mMaxFork(20), mMaxForkPerHost(0), mBufLen(5),
+    TTransportIn(name,idb,el), sockRes(true), mMode(0), mMSS(0), mMaxQueue(10), mMaxFork(20), mMaxForkPerHost(0), mBufLen(5),
     mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&sockRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     setAddr("TCP:localhost:10002:0");
 }
 
 TSocketIn::~TSocketIn( )
 {
-    pthread_mutex_destroy(&sockRes);
+
 }
 
 string TSocketIn::getStatus( )
@@ -453,13 +447,13 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 		}
 
 		//Counters
-		pthread_mutex_lock(&dataRes());
+		dataRes().lock();
 		trOut += vmax(0, wL);
-		pthread_mutex_unlock(&dataRes());
-		pthread_mutex_lock(&sockRes);
+		dataRes().unlock();
+		sockRes.lock();
 		map<int, SSockIn*>::iterator cI = clId.find(sId);
 		if(cI != clId.end()) cI->second->trOut += vmax(0, wL);
-		pthread_mutex_unlock(&sockRes);
+		sockRes.unlock();
 	    }
 	    return wOff;
 	}
@@ -470,9 +464,9 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 
 unsigned TSocketIn::forksPerHost( const string &sender )
 {
-    pthread_mutex_lock(&sockRes);
+    sockRes.lock();
     unsigned rez = clS[sender];
-    pthread_mutex_unlock(&sockRes);
+    sockRes.unlock();
 
     return rez;
 }
@@ -665,9 +659,9 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	    ssize_t r_len = 0;
 	    if(kz && (r_len=read(s.sock, buf, s.s->bufLen()*1000)) <= 0) break;
-	    pthread_mutex_lock(&s.s->dataRes());
+	    s.s->dataRes().lock();
 	    s.s->trIn += r_len; s.trIn += r_len;
-	    pthread_mutex_unlock(&s.s->dataRes());
+	    s.s->dataRes().unlock();
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("Read message %s from '%s'."), TSYS::cpct2str(r_len).c_str(), s.sender.c_str());
@@ -693,9 +687,9 @@ void *TSocketIn::ClTask( void *s_inf )
 			mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 			break;
 		    }
-		    pthread_mutex_lock(&s.s->dataRes());
+		    s.s->dataRes().lock();
 		    s.s->trOut += vmax(0, wL); s.trOut += vmax(0, wL);
-		    pthread_mutex_unlock(&s.s->dataRes());
+		    s.s->dataRes().unlock();
 		}
 		answ = "";
 	    }
@@ -950,7 +944,7 @@ void TSocketOut::save_( )
 
 void TSocketOut::start( int itmCon )
 {
-    MtxAlloc res(wres.mtx(), true);
+    MtxAlloc res(wres, true);
 
     if(runSt) return;
 
@@ -1100,7 +1094,7 @@ void TSocketOut::start( int itmCon )
 
 void TSocketOut::stop( )
 {
-    MtxAlloc res(wres.mtx(), true);
+    MtxAlloc res(wres, true);
 
     if(!runSt) return;
 
@@ -1131,7 +1125,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 
     ResAlloc resN(nodeRes());
     if(!noRes) resN.lock(true);
-    MtxAlloc res(wres.mtx(), true);
+    MtxAlloc res(wres, true);
 
     int prevTmOut = 0;
     if(time) { prevTmOut = tmCon(); setTmCon(time); }

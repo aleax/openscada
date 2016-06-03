@@ -4399,7 +4399,7 @@ else {
 				cItN = 0; cItSeq = "";
 				// By attributes
 				for(iIt in oAVals)
-					if((aO=this[iIt]) && !(aOval=aO.get()).isEVal() && aOval != oAVals[iIt]) {
+					if((aO=this[iIt]) && !(aOval=aO.get()).isEVal() && aOval != oAVals[iIt] && !cItN) {
 						IOA = iIt.slice(2).toInt();
 						cItSeq += SYS.strFromCharCode(IOA&0xFF, (IOA>>8)&0xFF, IOA>>16, aOval?0x01:0);
 						//oAVals[iIt] = aOval;
@@ -4407,7 +4407,7 @@ else {
 					}
 				// By items object
 				for(iIt in items)
-					if((aO=items[iIt]) && !(aOval=aO.set).isEVal()) {
+					if((aO=items[iIt]) && !(aOval=aO.set).isEVal() && !cItN) {
 						IOA = iIt.slice(2).toInt();
 						cItSeq += SYS.strFromCharCode(IOA&0xFF, (IOA>>8)&0xFF, IOA>>16, aOval.toInt()?0x01:0);
 						aO.set = EVAL_BOOL;
@@ -4451,7 +4451,7 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1463575281);
+else f_err = "0";','','',1464936781);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default

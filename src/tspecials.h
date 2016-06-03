@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tspecials.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TSPECIALS_H
 #define TSPECIALS_H
 
-#define SSPC_VER	10		//SpecialS type modules version
+#define SSPC_VER	11		//SpecialS type modules version
 #define SSPC_ID		"Special"
 
 #include <string>

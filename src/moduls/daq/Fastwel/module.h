@@ -151,7 +151,7 @@ namespace ModFastwel {
 	static void *Task(void *icntr);
 
 	//Attributes
-	pthread_mutex_t	enRes, dataRes;
+	ResMtx	enRes, dataRes;
 	TCfg & mSched,		// Schedule
 	    &mPrior,		// Process task priority
 	    &mNet;		// Network number

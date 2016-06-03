@@ -115,7 +115,7 @@ class TSocketIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	pthread_mutex_t	sockRes;
+	ResMtx		sockRes;
 	SSL_CTX		*ctx;
 
 	bool		endrun;			//Command for stop task

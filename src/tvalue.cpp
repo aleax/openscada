@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -518,9 +518,9 @@ string TVal::getS( int64_t *tm, bool sys )
 	    //Get current value
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
-	    pthread_mutex_lock(&dataRes());
+	    dataRes().lock();
 	    string rez(val.s->data(), val.s->size());
-	    pthread_mutex_unlock(&dataRes());
+	    dataRes().unlock();
 	    return rez;
 	}
 	default: break;
@@ -621,9 +621,9 @@ AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
     //Get current value
     if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
     if(tm) *tm = time();
-    pthread_mutex_lock(&dataRes());
+    dataRes().lock();
     AutoHD<TVarObj> rez = *val.o;
-    pthread_mutex_unlock(&dataRes());
+    dataRes().unlock();
 
     return rez;
 }
@@ -667,10 +667,10 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
 	    //Set current value and time
-	    pthread_mutex_lock(&dataRes());
+	    dataRes().lock();
 	    string pvl = *val.s;
 	    val.s->assign(value.data(), value.size());
-	    pthread_mutex_unlock(&dataRes());
+	    dataRes().unlock();
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, value, pvl);
@@ -776,10 +776,10 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     //Check to write
     if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
     //Set current value and time
-    pthread_mutex_lock(&dataRes());
+    dataRes().lock();
     AutoHD<TVarObj> pvl = *val.o;
     *val.o = value;
-    pthread_mutex_unlock(&dataRes());
+    dataRes().unlock();
     mTime = tm;
     if(!mTime) mTime = TSYS::curTime();
     if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);

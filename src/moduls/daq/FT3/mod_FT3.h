@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define MOD_NAME	_("DAQ FT3")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.2.3"
+#define MOD_VER		"0.2.4"
 #define AUTHORS		_("Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya")
 #define DESCRIPTION	_("Allow realization of FT3 master/slave service")
 #define LICENSE		"GPL2"
@@ -340,7 +340,7 @@ namespace FT3
 
 	//Attributes
 	//!!! The resource for Enable parameters.
-	pthread_mutex_t enRes, eventRes;
+	ResMtx enRes, eventRes;
 	//!!! The links to the controller's background task properties into config.
 	int64_t mPer;
 	int64_t &mPrior;			//Process task priority

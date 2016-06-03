@@ -311,7 +311,7 @@ class SessWdg : public Widget, public TValFunc
 	string		mWorkProg;
 	unsigned int	mMdfClc;
 	unsigned int	&mCalcClk;
-	pthread_mutex_t	mCalcRes;
+	ResMtx		mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list
 			mAttrLnkLs;	//Linked attributes list

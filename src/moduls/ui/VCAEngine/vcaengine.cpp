@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.2.6"
+#define MOD_VER		"3.2.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -161,7 +161,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd(new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
     prj_el.fldAdd(new TFld("PER",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"4","100"));
     prj_el.fldAdd(new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
-    //prj_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    prj_el.fldAdd(new TFld("EN_BY_NEED",_("Enable by need"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Make page's DB structure: ProjPages(__OWNER__, __ID__, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)
     page_el.fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100"));
@@ -304,19 +304,19 @@ void Engine::load_( )
 	// Search and create new projects
 	TConfig c_el(&elProject());
 	c_el.cfgViewAll(false);
+	c_el.cfg("EN_BY_NEED").setView(true);
 	vector<string> db_ls;
 	itReg.clear();
 
 	// Search into DB
-	SYS->db().at().dbList(db_ls,true);
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,c_el); )
-	    {
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,c_el); ) {
 		string prj_id = c_el.cfg("ID").getS();
 		if(!prjPresent(prj_id)) {
 		    prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		    prjAt(prj_id).at().setEnableByNeed();
+		    if(c_el.cfg("EN_BY_NEED").getB()) prjAt(prj_id).at().setEnableByNeed();
 		}
 		itReg[prj_id] = true;
 	    }

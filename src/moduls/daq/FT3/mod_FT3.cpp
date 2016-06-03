@@ -540,8 +540,8 @@ TController *TTpContr::ContrAttach(const string &name, const string &daq_db)
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
-	TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), tm_gath(0), NeedInit(true), mPer(cfg("PERIOD").getI()),
-	mPrior(cfg("PRIOR").getId())
+	TController(name_c, daq_db, cfgelem), prc_st(false), endrun_req(false), tm_gath(0), NeedInit(true), enRes(true), eventRes(true),
+	mPer(cfg("PERIOD").getI()), mPrior(cfg("PRIOR").getId())
 {
     cfg("PRM_BD_BUC").setS("FT3Prm_BUC_" + name_c);
     cfg("PRM_BD_BVTS").setS("FT3Prm_BVTS_" + name_c);
@@ -556,12 +556,6 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
     cfg("PRM_BD_ODOR").setS("FT3Prm_ODOR_" + name_c);
     cfg("PRM_BD_GZD").setS("FT3Prm_GZD_" + name_c);
     cfg("PRM_BD_GNS").setS("FT3Prm_GNS_" + name_c);
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutex_init(&eventRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
 
     MtxAlloc res(eventRes, true);
 
@@ -922,8 +916,6 @@ TMdContr::~TMdContr()
     if(startStat()) stop();
 
 //    delete[] BE;
-    pthread_mutex_destroy(&enRes);
-    pthread_mutex_destroy(&eventRes);
 }
 
 string TMdContr::getStatus()

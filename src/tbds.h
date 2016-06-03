@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		10		//BDS type modules version
+#define SDB_VER		11		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>

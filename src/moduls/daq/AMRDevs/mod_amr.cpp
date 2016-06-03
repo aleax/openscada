@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.AMRDevs file: mod_amr.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.5"
+#define MOD_VER		"0.6.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
 #define LICENSE		"GPL2"
@@ -258,20 +258,14 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), mErr(dataM), numBytes(0)
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), dataM(true), mErr(dataM), numBytes(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&dataM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 TMdPrm::~TMdPrm( )
 {
     nodeDelAll();
-
-    pthread_mutex_destroy(&dataM);
 }
 
 void TMdPrm::postEnable( int flag )

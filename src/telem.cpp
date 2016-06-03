@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: telem.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,21 +28,15 @@ using namespace OSCADA;
 //*************************************************
 //* TElem                                         *
 //*************************************************
-TElem::TElem( const string &name ) : mName(name)
+TElem::TElem( const string &name ) : mName(name), mResEl(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mResEl, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 TElem::~TElem( )
 {
     while(cont.size())	cont[0]->detElem(this);
     fldClear();
-
-    pthread_mutex_destroy(&mResEl);
 }
 
 int TElem::fldAdd( TFld *fld, int id )
