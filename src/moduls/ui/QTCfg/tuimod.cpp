@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.0.10"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -73,11 +73,13 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), /*mStartPath(string("/")+SYS->id()),*/ mEndRun(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartPath(dataRes()), mStartUser(dataRes()), mEndRun(false)
 {
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
+
+    setTmConChk("10:600");
 
     //Public export functions
     modFuncReg(new ExpFunc("QIcon icon();","Module Qt-icon",(void(TModule::*)( )) &TUIMod::icon));
@@ -121,6 +123,7 @@ void TUIMod::load_( )
 	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //Load parameters from config-file and DB
+    setTmConChk(TBDS::genDBGet(nodePath()+"TmConChk",tmConChk()));
     setStartPath(TBDS::genDBGet(nodePath()+"StartPath",startPath()));
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
 }
@@ -130,6 +133,7 @@ void TUIMod::save_( )
     mess_debug(nodePath().c_str(),_("Save module."));
 
     //Save parameters to DB
+    TBDS::genDBSet(nodePath()+"TmConChk", tmConChk());
     TBDS::genDBSet(nodePath()+"StartPath", startPath());
     TBDS::genDBSet(nodePath()+"StartUser", startUser());
 }
@@ -162,6 +166,13 @@ QMainWindow *TUIMod::openWindow( )
 	    break;
 	}
     return new ConfApp(user_open);
+}
+
+void TUIMod::setTmConChk( const string &vl )
+{
+    mTmConChk = i2s(vmax(1,vmin(100,s2i(TSYS::strParse(vl,0,":"))))) + ":" +
+		i2s(vmax(1,vmin(1000,s2i(TSYS::strParse(vl,1,":")))));
+    modif();
 }
 
 void TUIMod::modStart( )
@@ -206,16 +217,22 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/startPath",_("Configurator start path"),RWRWR_,"root",SUI_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/startUser",_("Configurator start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/tmConChk",_("Connection check timeouts in seconds '{fail}:{good}'"),RWRWR_,"root",SUI_ID,1, "tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/startPath",_("Configurator start path"),RWRWR_,"root",SUI_ID,1, "tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/startUser",_("Configurator start user"),RWRWR_,"root",SUI_ID,3,
+		"tp","str", "dest","select", "select","/prm/cfg/u_lst");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1, "tp","lnk");
 	}
 	return;
     }
 
     //Process command to the page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/startPath") {
+    if(a_path == "/prm/cfg/tmConChk") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(tmConChk());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setTmConChk(opt->text());
+    }
+    else if(a_path == "/prm/cfg/startPath") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startPath());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartPath(opt->text());
     }

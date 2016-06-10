@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,7 @@ using namespace OSCADA;
 //* TPrmTempl                                     *
 //*************************************************
 TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
-    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()),
+    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().elTmpl()),
     mId(cfg("ID")), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     mId = iid;
@@ -70,7 +70,7 @@ void TPrmTempl::postDisable(int flag)
 	SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(), *this, true);
 
 	//Delete template's IO
-	TConfig cfg(&owner().owner().tplIOE());
+	TConfig cfg(&owner().owner().elTmplIO());
 	cfg.cfg("TMPL_ID").setS(id(),true);
 	SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
     }
@@ -160,7 +160,7 @@ void TPrmTempl::load_( )
 
     //Load IO
     vector<string> u_pos;
-    TConfig cfg(&owner().owner().tplIOE());
+    TConfig cfg(&owner().owner().elTmplIO());
     cfg.cfg("TMPL_ID").setS(id(),true);
     for(int io_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",io_cnt++,cfg); )
     {
@@ -205,7 +205,7 @@ void TPrmTempl::save_( )
     SYS->db().at().dataSet(w_db, w_cfgpath, *this);
 
     //Save IO
-    TConfig cfg(&owner().owner().tplIOE());
+    TConfig cfg(&owner().owner().elTmplIO());
     cfg.cfg("TMPL_ID").setS(id(),true);
     for(int i_io = 0; i_io < ioSize(); i_io++) {
 	if(io(i_io)->flg()&TPrmTempl::LockAttr) continue;
@@ -494,7 +494,7 @@ void TPrmTmplLib::load_( )
 
     //Load templates
     map<string, bool>	itReg;
-    TConfig c_el(&owner().tplE());
+    TConfig c_el(&owner().elTmpl());
     c_el.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el); ) {
 	string f_id = c_el.cfg("ID").getS();

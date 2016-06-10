@@ -315,7 +315,7 @@ void TController::redntDataUpdate( )
     vector<string> pls;
     list(pls);
 
-    //Prepare group request to parameters
+    //Prepare a group request to the parameters
     AutoHD<TParamContr> prm;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath());
     req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");

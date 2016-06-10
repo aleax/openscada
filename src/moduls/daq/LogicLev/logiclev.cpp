@@ -243,9 +243,9 @@ void TMdContr::redntDataUpdate( )
 
     //Request for template's attributes values
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	if(!at(pls[i_p]).at().enableStat()) continue;
-	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2ftmplAttr");
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	if(!at(pls[iP]).at().enableStat()) continue;
+	req.childAdd("get")->setAttr("path","/prm_"+pls[iP]+"/%2fserv%2ftmplAttr");
     }
 
     //Send request to first active station for this controller
@@ -253,13 +253,13 @@ void TMdContr::redntDataUpdate( )
 
     //Redirect respond to local parameters
     req.setAttr("path","/");
-    for(unsigned i_prm = 0; i_prm < req.childSize(); ) {
-	if(s2i(req.childGet(i_prm)->attr("err"))) {
-	    req.childDel(i_prm);
+    for(unsigned iPrm = 0; iPrm < req.childSize(); ) {
+	if(s2i(req.childGet(iPrm)->attr("err"))) {
+	    req.childDel(iPrm);
 	    continue;
 	}
-	req.childGet(i_prm)->setName("set");
-	i_prm++;
+	req.childGet(iPrm)->setName("set");
+	iPrm++;
     }
     cntrCmd(&req);
 }
@@ -433,13 +433,13 @@ void TMdPrm::enable( )
     catch(...){ disable(); throw; }
 
     //Check for delete DAQ parameter's attributes
-    for(int i_p = 0; isProc && i_p < (int)pEl.fldSize(); i_p++) {
+    for(int iP = 0; isProc && iP < (int)pEl.fldSize(); iP++) {
 	unsigned i_l;
 	for(i_l = 0; i_l < als.size(); i_l++)
-	    if(pEl.fldAt(i_p).name() == als[i_l])
+	    if(pEl.fldAt(iP).name() == als[i_l])
 		break;
 	if(i_l >= als.size())
-	    try{ pEl.fldDel(i_p); i_p--; }
+	    try{ pEl.fldDel(iP); iP--; }
 	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 

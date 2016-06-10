@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-13 21:09+0300\n"
+"POT-Creation-Date: 2016-06-10 13:32+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -433,6 +433,9 @@ msgstr ""
 "Einige Änderungen nicht gelten!\n"
 "Bewerben Sie sich jetzt oder verloren das?"
 
+msgid "Broken info respond - no a child."
+msgstr ""
+
 msgid "Refresh items tree"
 msgstr "Elementenbaum aktualisieren"
 
@@ -451,11 +454,11 @@ msgstr "Senden aktuellen Befehl '%s' zu anderen ausgewählten Knoten \"%s\"?"
 msgid "Unknown host '%s'."
 msgstr "Unknown host '%s'."
 
-msgid "Cancel"
-msgstr "Abbrechen"
-
 msgid "Wait for reply from host '%1'"
 msgstr "Warten Sie auf Antwort vom Host '%1'"
+
+msgid "Cancel"
+msgstr "Abbrechen"
 
 msgid "Local station"
 msgstr "Lokaler Bedienrechner"
@@ -714,6 +717,9 @@ msgstr "Anhalten des Moduls."
 
 msgid "Module options"
 msgstr "Optionen des Moduls"
+
+msgid "Connection check timeouts in seconds '{fail}:{good}'"
+msgstr "Verbindungsprüfung Timeouts in Sekunden '{nicht}:{gut}'"
 
 msgid "Configurator start path"
 msgstr "Verzeichnispfad der Systemeinstellungen"

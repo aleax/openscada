@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@ using namespace OSCADA;
 //*************************************************
 //* TParamContr                                   *
 //*************************************************
-TParamContr::TParamContr( const string &name, TTypeParam *tpprm ) : TConfig(tpprm), mPrm(-1), mEn(false), tipparm(tpprm)
+TParamContr::TParamContr( const string &name, TTypeParam *tpprm ) : TConfig(tpprm), mPrm(-1), mEn(false), tpParm(tpprm)
 {
     cfg("SHIFR") = mId = name;	//!! For prevent ID location change on the parameter type change
 
@@ -218,8 +218,8 @@ void TParamContr::postEnable( int flag )
     TValue::postEnable(flag);
 
     if(!vlCfg()) setVlCfg(this);
-    if(!vlElemPresent(&SYS->daq().at().errE()))
-	vlElemAtt(&SYS->daq().at().errE());
+    if(!vlElemPresent(&SYS->daq().at().elErr()))
+	vlElemAtt(&SYS->daq().at().elErr());
 }
 
 void TParamContr::preDisable( int flag )
@@ -370,14 +370,14 @@ void TParamContr::setType( const string &tpId )
 	tCfg = *(TConfig*)this;
 
 	//Set new config structure
-	tipparm = &owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId));
-	setElem(tipparm);
+	tpParm = &owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId));
+	setElem(tpParm);
 
 	//Restore configurations
 	*(TConfig*)this = tCfg;
     } catch(...) { }
 
-    if(mPrm < 0 && tipparm->isPrmCntr) mPrm = grpAdd("prm_");
+    if(mPrm < 0 && tpParm->isPrmCntr) mPrm = grpAdd("prm_");
 
     setNodeMode(TCntrNode::Enabled);
 

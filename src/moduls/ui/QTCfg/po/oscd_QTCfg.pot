@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-13 21:09+0300\n"
+"POT-Creation-Date: 2016-06-10 13:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -405,6 +405,9 @@ msgid ""
 "Apply now or lost the?"
 msgstr ""
 
+msgid "Broken info respond - no a child."
+msgstr ""
+
 msgid "Refresh items tree"
 msgstr ""
 
@@ -423,10 +426,10 @@ msgstr ""
 msgid "Unknown host '%s'."
 msgstr ""
 
-msgid "Cancel"
+msgid "Wait for reply from host '%1'"
 msgstr ""
 
-msgid "Wait for reply from host '%1'"
+msgid "Cancel"
 msgstr ""
 
 msgid "Local station"
@@ -679,6 +682,9 @@ msgid "Stop module."
 msgstr ""
 
 msgid "Module options"
+msgstr ""
+
+msgid "Connection check timeouts in seconds '{fail}:{good}'"
 msgstr ""
 
 msgid "Configurator start path"

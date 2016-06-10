@@ -1975,11 +1975,11 @@ void ConfApp::pageDisplay( const string &path )
 
 loadGenReqDate:
     //Page content forming
-    CtrTree->blockSignals(true);
+    //CtrTree->blockSignals(true);
     tabs->blockSignals(true);
     selectChildRecArea(*root, "/");
     tabs->blockSignals(false);
-    CtrTree->blockSignals(false);
+    //CtrTree->blockSignals(false);
 
     //Load and Save allow check
     actDBLoad->setEnabled(false); actDBSave->setEnabled(false);
@@ -2214,7 +2214,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	}
 	//Delete no present
 	if(upTree) {
-	    CtrTree->blockSignals(true);
+	    //CtrTree->blockSignals(true);
 	    for(unsigned i_it = 0, i_e; i_it < (unsigned)i->childCount(); ) {
 		for(i_e = 0; i_e < req.childSize(); i_e++) {
 		    // Prepare branch patch
@@ -2227,7 +2227,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		if(i_e >= req.childSize()) { delete i->takeChild(i_it); continue; }
 		i_it++;
 	    }
-	    CtrTree->blockSignals(false);
+	    //CtrTree->blockSignals(false);
 	}
     }
 
@@ -2412,7 +2412,7 @@ void ConfApp::initHosts( )
 	    if(hosts.find(stls[iSt].id) == hosts.end()) {
 		hosts[stls[iSt].id] = new SCADAHost(stls[iSt].id.c_str(), wUser->user(), (stls[iSt].id!=SYS->id()), this);
 		connect(hosts[stls[iSt].id], SIGNAL(setSt(const QString&,int,const QImage&,const QStringList&,const QString&)),
-			this, SLOT(hostStSet(const QString&,int,const QImage&,const QStringList&,const QString&)));
+			this, SLOT(hostStSet(const QString&,int,const QImage&,const QStringList&,const QString&)), Qt::QueuedConnection);
 		hosts[stls[iSt].id]->start();
 	    }
 	}
@@ -3126,7 +3126,8 @@ void SCADAHost::run( )
     while(!endRun) {
 	mtx.lock(); wuser = user; mtx.unlock();
 	//Link status processing
-	if(isFirst || (!lnkOK && (SYS->sysTm()-tm) > 10) || (lnkOK && (SYS->sysTm()-tm) > 600)) {
+	if(isFirst || (!lnkOK && (SYS->sysTm()-tm) > s2i(TSYS::strParse(mod->tmConChk(),0,":"))) ||
+		      (lnkOK && (SYS->sysTm()-tm) > s2i(TSYS::strParse(mod->tmConChk(),1,":")))) {
 	    emit setSt(id, -1, imgConnEst);
 
 	    // Check connection by the station name, icon and branches request
@@ -3155,6 +3156,8 @@ void SCADAHost::run( )
 	    else if(rez/* == 10*/) {
 		img = imgDisConnect;
 		toolTip = req.text().c_str();
+
+		lnkOK = false;
 	    }
 
 	    emit setSt(id, lnkOK, img, brs, toolTip);

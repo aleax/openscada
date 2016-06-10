@@ -62,11 +62,11 @@ class TDAQS : public TSubSYS
 
 	// Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }
-	void tmplLibList( vector<string> &list )		{ chldList(mTmplib,list); }
-	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmplib,id); }
-	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmplib,lib); }
-	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmplib,id,-1,flg); }
-	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmplib,id); }
+	void tmplLibList( vector<string> &list )		{ chldList(mTmpLib,list); }
+	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmpLib,id); }
+	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmpLib,lib); }
+	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmpLib,id,-1,flg); }
+	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmpLib,id); }
 
 	// Redundancy
 	bool rdProcess( XMLNode *reqSt = NULL );
@@ -75,11 +75,11 @@ class TDAQS : public TSubSYS
 	void rdActCntrList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &cntr, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
-	TElem &elLib( )	{ return lb_el; }
-	TElem &tplE( )	{ return el_tmpl; }
-	TElem &tplIOE( ){ return el_tmpl_io; }
+	TElem &elLib( )		{ return mElLib; }
+	TElem &elTmpl( )	{ return mElTmpl; }
+	TElem &elTmplIO( )	{ return mElTmplIO; }
 
-	TElem &errE( )	{ return el_err; }	//Error atributes structure
+	TElem &elErr( )		{ return mElErr; }	//Error atributes structure
 
     protected:
 	void load_( );
@@ -94,11 +94,11 @@ class TDAQS : public TSubSYS
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Private attributes
-	TElem	el_err, lb_el, el_tmpl, el_tmpl_io;
-	int	mTmplib;
+	TElem	mElErr, mElLib, mElTmpl, mElTmplIO;
+	int	mTmpLib;
 
-	Res		mRdRes;
-	float		mRdRestDtTm;		//Redundant history restore length time in hour
+	Res	mRdRes;
+	float	mRdRestDtTm;			//Redundant history restore length time in hour
 	map<string, map<string,bool> > mRdCntr;
 };
 
