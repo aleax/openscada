@@ -922,8 +922,7 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	    for(unsigned i_el = 0; i_el < elst.size(); i_el++) {
 		TCfg &icfg = cfg.cfg(elst[i_el]);
 		string stp = "str";
-		switch(icfg.fld().type())
-		{
+		switch(icfg.fld().type()) {
 		    case TFld::Boolean:	stp = "bool";	break;
 		    case TFld::Integer:	stp = "int";	break;
 		    case TFld::Real:	stp = "real";	break;

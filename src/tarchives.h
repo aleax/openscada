@@ -79,8 +79,8 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	// Redundancy
 	//  In redundancy now
-	bool redntUse( )	{ return mRedntUse; }
-	void setRedntUse( bool vl )		{ mRedntUse = vl; }
+	bool redntUse( )	{ return mRdUse; }
+	void setRedntUse( bool vl )		{ mRdUse = vl; }
 	//  Enabled the archiver's redundancy
 	bool redntMode( )	{ return cfg("REDNT").getB(); }
 	void setRedntMode( bool vl )		{ cfg("REDNT").setB(vl); }
@@ -129,8 +129,8 @@ class TMArchivator : public TCntrNode, public TConfig
 	char	&mStart;	//Mess arch starting flag
 	string	mDB;
 
-	unsigned mRedntUse	: 1;
-	unsigned mRedntFirst	: 1;
+	unsigned mRdUse  : 1;
+	unsigned mRdFirst: 1;
 };
 
 //************************************************
@@ -233,6 +233,8 @@ class TArchiveS : public TSubSYS
 
 	// Redundancy
 	bool rdProcess( XMLNode *reqSt = NULL );
+	float rdRestDtOverTm( )			{ return mRdRestDtOverTm; }
+	void setRdRestDtOverTm( float vl )	{ mRdRestDtOverTm = vmin(24,vmax(0,vl)); modif(); }
 	void rdActArchMList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &arch, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
@@ -292,8 +294,9 @@ class TArchiveS : public TSubSYS
 
 	// Redundancy
 	Res	mRdRes;
+	float	mRdRestDtOverTm;	//Overtime of the redundant history reload at start in hours
 	map<string, map<string,bool> > mRdArchM;
-	unsigned mRedntFirst	: 1;
+	unsigned mRdFirst	: 1;
 };
 
 }

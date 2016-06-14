@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.4"
+#define MOD_VER		"2.4.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -100,19 +100,21 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
-	MYSQL connect;
+    if(flag && owner().fullDeleteDB())
+	try {
+	    MYSQL connect;
 
-	if(!mysql_init(&connect)) throw TError(nodePath().c_str(), _("Error initializing client."));
-	connect.reconnect = 1;
-	if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-	    throw TError(nodePath().c_str(), _("Connect to DB error: %s"), mysql_error(&connect));
+	    MtxAlloc resource(connRes, true);
+	    if(!mysql_init(&connect)) throw TError(nodePath().c_str(), _("Error initializing client."));
+	    connect.reconnect = 1;
+	    if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
+		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), mysql_error(&connect));
 
-	string req = "DROP DATABASE `" + bd + "`";
-	if(mysql_real_query(&connect,req.c_str(),req.size())) throw TError(nodePath().c_str(), _("Query to DB error: %s"), mysql_error(&connect));
+	    string req = "DROP DATABASE `" + bd + "`";
+	    if(mysql_real_query(&connect,req.c_str(),req.size())) throw TError(nodePath().c_str(), _("Query to DB error: %s"), mysql_error(&connect));
 
-	mysql_close(&connect);
-    }
+	    mysql_close(&connect);
+	} catch(TError) { }
 }
 
 void MBD::enable( )

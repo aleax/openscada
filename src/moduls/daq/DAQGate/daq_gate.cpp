@@ -170,7 +170,7 @@ void TMdContr::enable_( )
     list(prmLs);
     for(unsigned i_p = 0; i_p < prmLs.size(); i_p++) at(prmLs[i_p]).at().setStats("");
 
-    //Station list update
+    //Stations list update
     if(!mStatWork.size())
 	for(int stOff = 0; (statV=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&stOff)).size(); )
 	    mStatWork.push_back(pair<string,StHd>(statV,StHd()));
@@ -194,7 +194,7 @@ void TMdContr::enable_( )
 		    prmId = pIt;
 		}
 
-		// Get top parameters list
+		// Get the top parameters list
 		prmLs.clear();
 		if(!prmId.empty() && prmId != "*") prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+prmId);	//Concrete parameter to root
 		else {	//Parameters group to root
@@ -285,8 +285,7 @@ void TMdContr::enable_( )
 			}else i_ip++;
 		    }
 		}
-	    }
-	    catch(TError err) { if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str()); }
+	    } catch(TError err) { if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str()); }
 
     //Removing remotely missed parameters in case all remote stations active status by the actual list
     bool prmChkToDel = true;

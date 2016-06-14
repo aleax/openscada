@@ -424,7 +424,12 @@ string TSYS::optDescr( )
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
 	"SaveAtExit <true>	Save the system at exit.\n"
-	"SavePeriod <sec>	Save the system period.\n\n"),
+	"SavePeriod <sec>	Save the system period.\n"
+	"RdStLevel  <lev>	Level of redundancy current station.\n"
+	"RdTaskPer  <s>		Call period of the redundant task.\n"
+	"RdRestConnTm <s>	Restore connection timeout of try to the \"dead\" reserve stations.\n"
+	"RdStList   <list>	Redundant stations list, separated symbol ';' (st1;st2).\n"
+	"RdPrimCmdTr <0|1>	Enable the primary commands transfering to the redundant stations.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 

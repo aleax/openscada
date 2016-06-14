@@ -71,7 +71,7 @@ class TDAQS : public TSubSYS
 	// Redundancy
 	bool rdProcess( XMLNode *reqSt = NULL );
 	float rdRestDtTm( )		{ return mRdRestDtTm; }
-	void setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(12,vmax(0.01,vl)); modif(); }
+	void setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(24,vmax(0.01,vl)); modif(); }
 	void rdActCntrList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &cntr, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
@@ -98,7 +98,7 @@ class TDAQS : public TSubSYS
 	int	mTmpLib;
 
 	Res	mRdRes;
-	float	mRdRestDtTm;			//Redundant history restore length time in hour
+	float	mRdRestDtTm;			//Depth time of the redundant history restore in hours
 	map<string, map<string,bool> > mRdCntr;
 };
 

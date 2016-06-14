@@ -133,7 +133,7 @@ void TDAQS::load_( )
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
 	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    map<string, bool>   itReg;
+    map<string, bool>	itReg;
 
     //Load templates libraries of parameter
     try {
@@ -143,11 +143,10 @@ void TDAQS::load_( )
 	vector<string> db_ls;
 
 	// Search into DB
-	SYS->db().at().dbList(db_ls,true);
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),nodePath()+"tmplib",lib_cnt++,c_el); )
-	    {
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),nodePath()+"tmplib",lib_cnt++,c_el); ) {
 		string l_id = c_el.cfg("ID").getS();
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
 		itReg[l_id] = true;
@@ -179,7 +178,7 @@ void TDAQS::load_( )
 	    itReg.clear();
 
 	    // Search into DB and create new controllers
-	    SYS->db().at().dbList(db_ls,true);
+	    SYS->db().at().dbList(db_ls, true);
 	    db_ls.push_back(DB_CFG);
 	    for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 		for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
@@ -201,8 +200,7 @@ void TDAQS::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(db_ls[i_it]).at().DB()))
 		    wmod.at().del(db_ls[i_it]);
 	}
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Load parameters from config-file and SYS DB
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
@@ -414,8 +412,7 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
 	bool lastEl = (c_lv > 2 && c_off >= (int)path.size());
 	if(waitForAttr && lastEl) c_grp = "a_";
 	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
-	if(tNd.freeStat() && !(strcmp(c_grp,"a_") && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+c_el,0,sep,0,true)).freeStat()))
-	{
+	if(tNd.freeStat() && !(strcmp(c_grp,"a_") && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+c_el,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
 	    else throw TError(nodePath().c_str(),_("No DAQ node present '%s'."),path.c_str());
 	}
@@ -557,11 +554,7 @@ string TDAQS::optDescr( )
     return TSYS::strMess(_(
 	"=================== Subsystem \"Data acquisition\" options ================\n"
 	"------------ Parameters of section '%s' in config-file -----------\n"
-	"RdStLevel    <lev>  The current station redundant level.\n"
-	"RdTaskPer    <s>    The redundant task call period.\n"
-	"RdRestConnTm <s>    Restore connection timeout to dead reserve stations.\n"
-	"RdRestDtTm   <hour> Restore data archive depth from a reserve station after deadline.\n"
-	"RdStList     <list> Redundant stations list, separated symbol ';' (st1;st2).\n\n"
+	"RdRestDtTm   <hour> Restore data archive depth from a reserve station after deadline.\n\n"
 	),nodePath().c_str());
 }
 
@@ -593,7 +586,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",EVAL_STR,R_R_R_,"root","root",1,"doc",(subId()+"|"+subId()).c_str());
 	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(SYS->rdEnable() && ctrMkNode("area",opt,0,"/redund",_("Redundancy"))) {
-	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Restore data depth time (hour)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Depth time of restoring data at start, hours"),RWRWR_,"root",SDAQ_ID,1, "tp","real");
 	    if(ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root",SDAQ_ID,1,"key","id")) {
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");

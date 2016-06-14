@@ -48,6 +48,14 @@ class TController : public TCntrNode, public TConfig
 	    Asymmetric	= 1,
 	    Symmetric	= 2
 	};
+	class RedntStkEl {
+	    public:
+	    RedntStkEl( const string &iaddr = "" ) : pos(0), addr(iaddr)	{ }
+
+	    unsigned pos;
+	    vector<string> ls;
+	    string addr;
+	};
 
 	//Public methods
 	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
@@ -93,8 +101,8 @@ class TController : public TCntrNode, public TConfig
 
 	// Redundancy
 	//  In redundancy now
-	bool redntUse( )	{ return mRedntUse; }
-	void setRedntUse( bool vl )		{ mRedntUse = vl; }
+	bool redntUse( )	{ return mRdUse; }
+	void setRedntUse( bool vl )		{ mRdUse = vl; }
 	//  Mode of the archiver's redundancy, only enabling now
 	Redundant redntMode( )	{ return (TController::Redundant)cfg("REDNT").getI(); }
 	void setRedntMode( Redundant vl )	{ cfg("REDNT").setI(vl); }
@@ -143,11 +151,11 @@ class TController : public TCntrNode, public TConfig
 	char	&mAEn, &mAStart;
 
 	string	mDB;
-	MtxString mRedntSt;
+	MtxString mRdSt;
 
-	unsigned mPrm		: 2;
-	unsigned mRedntUse	: 1;
-	unsigned mRedntFirst	: 1;
+	unsigned mPrm	 : 2;
+	unsigned mRdUse	 : 1;
+	unsigned mRdFirst: 1;
 };
 
 }

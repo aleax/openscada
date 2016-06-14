@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.5"
+#define MOD_VER		"1.5.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -239,25 +239,39 @@ void TMdContr::redntDataUpdate( )
 {
     TController::redntDataUpdate();
 
-    vector<string> pls; list(pls);
-
-    //Request for template's attributes values
+    vector<RedntStkEl> hst;
+    //Prepare a group of a hierarchy request to the parameters
+    AutoHD<TParamContr> prm, prmC;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
-    for(unsigned iP = 0; iP < pls.size(); iP++) {
-	if(!at(pls[iP]).at().enableStat()) continue;
-	req.childAdd("get")->setAttr("path","/prm_"+pls[iP]+"/%2fserv%2ftmplAttr");
+    //XMLNode reqUsrAttrs("CntrReqs"); req.setAttr("path",nodePath(0,true));
+
+    hst.push_back(RedntStkEl());
+    list(hst.back().ls);
+    string addr;
+    while(true) {
+	if(hst.back().pos >= hst.back().ls.size()) {
+	    if(!hst.back().addr.size()) break;
+	    hst.pop_back(); hst.back().pos++;
+	    prm = AutoHD<TParamContr>((TParamContr*)prm.at().nodePrev(true));
+	    continue;
+	}
+	prmC = prm.freeStat() ? TController::at(hst.back().ls[hst.back().pos]) : prm.at().at(hst.back().ls[hst.back().pos]);
+	addr = hst.back().addr + "/prm_"+hst.back().ls[hst.back().pos];
+	if(prmC.at().enableStat()) {
+	    req.childAdd("get")->setAttr("path", addr + "/%2fserv%2ftmplAttr");
+	}
+	hst.push_back(RedntStkEl(addr));
+	prmC.at().list(hst.back().ls);
+	prm = prmC;
     }
 
     //Send request to first active station for this controller
     if(owner().owner().rdStRequest(workId(),req).empty()) return;
 
     //Redirect respond to local parameters
-    req.setAttr("path","/");
+    req.setAttr("path", "/");
     for(unsigned iPrm = 0; iPrm < req.childSize(); ) {
-	if(s2i(req.childGet(iPrm)->attr("err"))) {
-	    req.childDel(iPrm);
-	    continue;
-	}
+	if(s2i(req.childGet(iPrm)->attr("err"))) { req.childDel(iPrm); continue; }
 	req.childGet(iPrm)->setName("set");
 	iPrm++;
     }
