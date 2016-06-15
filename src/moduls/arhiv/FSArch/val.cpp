@@ -221,6 +221,7 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
     ResAlloc res(archRes, false);
     for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
 	((ModVArchEl*)iel->second)->checkArchivator(now || isTm || toLimits, (maxCapacity() > 1) && (curCapacity()/1048576) > maxCapacity());
+    res.unlock();
 
     //Archivator's folder check for new files attach and present files pack needs
     if(now || isTm) {
@@ -265,7 +266,7 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 	    //  Check for attached
 	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
 	    //  Try connect new file
-	    ResAlloc res(archRes, false);
+	    ResAlloc res1(archRes, false);
 	    map<string,TVArchEl*>::iterator iel = archEl.find(ArhNm);
 	    if(iel != archEl.end()) ((ModVArchEl *)iel->second)->fileAdd(NameArhFile);
 	}

@@ -1,3 +1,7 @@
+2016-06-15 Roman
+- Archive.FSArch: The resources allocation including one to one are prevented. It was caused sometime to hungs before.
+
+
 2016-06-14 Roman
 - TSYS,TArchiveS,TDAQS: Description of arguments of the configuration file is fixed.
 - TArchiveS: New redundancy option "Overtime of the redundant history reload at start in hours" is added.
