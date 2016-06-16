@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.8"
+#define DAQ_MVER	"1.8.9"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -74,6 +74,7 @@ class TMdPrm : public TParamContr
 
 	void upVal( bool first, bool last, double frq );
 
+	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

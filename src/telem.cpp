@@ -162,7 +162,7 @@ TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg
     mRes   = ires;
 
     int ilen = 0, idec = 0;
-    sscanf(valLen,"%d.%d",&ilen,&idec);
+    sscanf(valLen, "%d.%d", &ilen, &idec);
     mLen = ilen;
     mDec = idec;
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvalue.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,9 @@ class TVal: public TCntrNode
 	//Data
 	enum AttrFlg {
 	    DirRead  = 0x100,
-	    DirWrite = 0x200
+	    DirWrite = 0x200,
+	    Dynamic  = 0x400	//Created and can be changed in dynamic way by a procedure,
+				//mostly that is provided by the logical sources like DAQ.{LogicLev,ModBus}
 	};
 
 	//Methods
@@ -63,7 +65,8 @@ class TVal: public TCntrNode
 	void setCfg( TCfg &cfg );
 
 	string	name( );
-	int64_t time( )	{ return mTime; }
+	int64_t time( )		{ return mTime; }
+	bool	isCfg( )	{ return mCfg; }
 	bool	dataActive( );
 
 	// Read current value (direct)
@@ -119,15 +122,15 @@ class TVal: public TCntrNode
 	    AutoHD<TVarObj> *o;		//Object value
 	} val;
 
-	unsigned char	mCfg	: 1;		//Configuration id
-	unsigned char	mReqFlg	: 1;		//Request to attribute flag
-	unsigned char	mResB1	: 1;		//Reserve Boolean
-	unsigned char	mResB2	: 1;		//Reserve Boolean
+	unsigned char	mCfg	: 1;	//Configuration id
+	unsigned char	mReqFlg	: 1;	//Request to attribute flag
+	unsigned char	mResB1	: 1;	//Reserve Boolean
+	unsigned char	mResB2	: 1;	//Reserve Boolean
 	union {
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;
-	int64_t mTime;		//Last value's time (usec)
+	int64_t mTime;			//Last value's time (usec)
 	AutoHD<TVArchive>	mArch;
 };
 
@@ -140,7 +143,7 @@ class TValue: public TCntrNode, public TValElem
 
     public:
 	TValue( );
-	virtual ~TValue();
+	virtual ~TValue( );
 
 	virtual bool dataActive( )	{ return false; }
 
@@ -149,9 +152,9 @@ class TValue: public TCntrNode, public TValElem
 	virtual string DAQPath( );
 
 	// Atributes
-	void vlList( vector<string> &list )	{ chldList(m_vl, list); }
-	bool vlPresent( const string &name )	{ return chldPresent(m_vl, name); }
-	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl, name); }
+	void vlList( vector<string> &list )	{ chldList(mVl, list); }
+	bool vlPresent( const string &name )	{ return chldPresent(mVl, name); }
+	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(mVl, name); }
 
     protected:
 	//Methods
@@ -181,10 +184,10 @@ class TValue: public TCntrNode, public TValElem
 	void delFld( TElem *el, unsigned id_val );
 
 	//Attributes
-	char		m_vl;
+	char		mVl;
 	vector<TElem*>	elem;		// Elements (dinamic parts)
 
-	short int	l_cfg;		// Configuration len
+	short int	lCfg;		// Configuration len
 	TConfig*	mCfg;		// Configurations (static parts)
 };
 

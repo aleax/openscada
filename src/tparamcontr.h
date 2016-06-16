@@ -76,7 +76,9 @@ class TParamContr : public TConfig, public TValue
 	void del( const string &name, int full = RM_Exit );
 	AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" );
 
-	TTypeParam &type( )	{ return *tpParm; }
+	TTypeParam &type( )		{ return *tpParm; }
+
+	virtual TElem *dynElCntr( )	{ return NULL; }
 
 	virtual void enable( );			// Enable parameter and open access to value
 	virtual void disable( );		// Disable parameter and close access to value
@@ -86,6 +88,9 @@ class TParamContr : public TConfig, public TValue
 	TParamContr &operator=( TParamContr &PrmCntr );
 
 	TController &owner( );
+
+	//Attributes
+	time_t	mRdPrcTm;	//Redundancy processing time, mostly for the dynamic DAQ attributes
 
     protected:
 	//Methods

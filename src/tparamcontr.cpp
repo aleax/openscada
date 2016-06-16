@@ -32,7 +32,7 @@ using namespace OSCADA;
 //*************************************************
 //* TParamContr                                   *
 //*************************************************
-TParamContr::TParamContr( const string &name, TTypeParam *tpprm ) : TConfig(tpprm), mPrm(-1), mEn(false), tpParm(tpprm)
+TParamContr::TParamContr( const string &name, TTypeParam *tpprm ) : TConfig(tpprm), mRdPrcTm(0), mPrm(-1), mEn(false), tpParm(tpprm)
 {
     cfg("SHIFR") = mId = name;	//!! For prevent ID location change on the parameter type change
 

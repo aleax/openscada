@@ -316,8 +316,8 @@ void TController::redntDataUpdate( )
 
     //Prepare a group of a hierarchy request to the parameters
     AutoHD<TParamContr> prm, prmC;
-    XMLNode req("CntrReqs"); req.setAttr("path",nodePath());
-    req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");
+    XMLNode req("CntrReqs"); req.setAttr("path", nodePath());
+    req.childAdd("get")->setAttr("path", "/%2fcntr%2fst%2fstatus");
 
     hst.push_back(RedntStkEl());
     list(hst.back().ls);
@@ -326,7 +326,7 @@ void TController::redntDataUpdate( )
 	if(hst.back().pos >= hst.back().ls.size()) {
 	    if(!hst.back().addr.size()) break;
 	    hst.pop_back(); hst.back().pos++;
-	    prm = AutoHD<TParamContr>((TParamContr*)prm.at().nodePrev(true));
+	    prm = AutoHD<TParamContr>(hst.back().addr.size()?dynamic_cast<TParamContr*>(prm.at().nodePrev(true)):NULL);
 	    continue;
 	}
 	prmC = prm.freeStat() ? at(hst.back().ls[hst.back().pos]) : prm.at().at(hst.back().ls[hst.back().pos]);
@@ -335,7 +335,7 @@ void TController::redntDataUpdate( )
 	    XMLNode *prmNd = req.childAdd("get")->setAttr("path", addr + "/%2fserv%2fattr");
 
 	    // Prepare individual attributes list
-	    prmNd->setAttr("sepReq", "1");
+	    prmNd->setAttr("sepReq", "1")->setAttr("prcTm", i2s(prmC.at().mRdPrcTm));
 
 	    // Check attributes last present data time into archives
 	    vector<string> listV;
@@ -350,7 +350,7 @@ void TController::redntDataUpdate( )
 								   TSYS::curTime()-(int64_t)(3.6e9*owner().owner().rdRestDtTm()))));
 	    }
 	    if(rC > listV.size()/2) { prmNd->childClear("el"); prmNd->setAttr("sepReq", "0"); }
-	    if(s2i(prmNd->attr("sepReq")) && !prmNd->childSize()) req.childDel(prmNd);
+	    //if(s2i(prmNd->attr("sepReq")) && !prmNd->childSize()) req.childDel(prmNd);
 	}
 	hst.push_back(RedntStkEl(addr));
 	prmC.at().list(hst.back().ls);
@@ -368,19 +368,34 @@ void TController::redntDataUpdate( )
 	if(addr == "/%2fcntr%2fst%2fstatus") { mRdSt.setVal(p->text()); continue; }
 	size_t aPos = addr.rfind("/"); addr = (aPos == string::npos) ? "" : addr.substr(0, aPos);
 	if((prm=nodeAt(addr,0,0,0,true)).freeStat()) continue;
+	prm.at().mRdPrcTm = s2i(p->attr("prcTm"));
 	for(unsigned iA = 0; iA < p->childSize(); iA++) {
 	    XMLNode *aNd = p->childGet(iA);
-	    if(!prm.at().vlPresent(aNd->attr("id"))) continue;
-	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
+	    AutoHD<TVal> vl;
+	    if(prm.at().vlPresent(aNd->attr("id"))) vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if(aNd->name() == "el") { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
-	    else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
+	    if(aNd->name() == "el" && !vl.freeStat()) { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
+	    else if(aNd->name() == "ael" && !vl.freeStat() && !vl.at().arch().freeStat() && aNd->childSize()) {
 		int64_t btm = atoll(aNd->attr("tm").c_str());
 		int64_t per = atoll(aNd->attr("per").c_str());
 		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
 		for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
 		    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
 		vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
+	    }
+	    else if(aNd->name() == "del" && prm.at().dynElCntr()) {
+		MtxAlloc res(prm.at().dynElCntr()->resEl(), true);
+		TFld::Type tp = (TFld::Type)s2i(aNd->attr("type"));
+		unsigned flg = s2i(aNd->attr("flg"));
+		if(vl.freeStat()) prm.at().dynElCntr()->fldAdd(new TFld(aNd->attr("id").c_str(),aNd->attr("name").c_str(),tp,flg,"","",
+									aNd->attr("values").c_str(),aNd->attr("selNames").c_str()));
+		else {
+		    unsigned aId = prm.at().dynElCntr()->fldId(aNd->attr("id"), true);
+		    prm.at().dynElCntr()->fldAt(aId).setDescr(aNd->attr("name"));
+		    prm.at().dynElCntr()->fldAt(aId).setFlg(prm.at().dynElCntr()->fldAt(aId).flg()^((prm.at().dynElCntr()->fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
+		    prm.at().dynElCntr()->fldAt(aId).setValues(aNd->attr("values"));
+		    prm.at().dynElCntr()->fldAt(aId).setSelNames(aNd->attr("selNames"));
+		}
 	    }
 	}
     }

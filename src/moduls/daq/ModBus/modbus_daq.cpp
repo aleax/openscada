@@ -859,6 +859,7 @@ void *TMdContr::Task( void *icntr )
 	    MtxAlloc prmRes(cntr.enRes, true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		cntr.pHd[i_p].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
+	    isStart = false;
 	    prmRes.unlock();
 
 	    //Generic acquisition alarm generate
@@ -879,7 +880,6 @@ void *TMdContr::Task( void *icntr )
 	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
 	    if(cntr.endrunReq) isStop = true;
-	    isStart = false;
 	}
     } catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
@@ -1356,7 +1356,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		stp.find("text") != string::npos)	tp = TFld::String;
 	else if(stp.find("object") != string::npos)	tp = TFld::Object;
 
-	unsigned flg = TFld::NoFlag;
+	unsigned flg = TVal::Dynamic;
 	if(stp.find("sel") != string::npos)	flg |= TFld::Selected;
 	if(stp.find("seled") != string::npos)	flg |= TFld::SelEdit;
 	if(stp.find("text") != string::npos)	flg |= TFld::FullText;
@@ -1373,9 +1373,11 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	    elem().fldAt(aId).setFlg(elem().fldAt(aId).flg()^((elem().fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
 	    elem().fldAt(aId).setValues(sVals);
 	    elem().fldAt(aId).setSelNames(sNms);
+	    elem().fldAt(aId).setLen(SYS->sysTm());
 	}
 	else if(!vlPresent(prms[0].getS()))
-	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,"","",sVals.c_str(),sNms.c_str()));
+	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,
+				    i2s(SYS->sysTm()).c_str(),"",sVals.c_str(),sNms.c_str()));
 	return true;
     }
     //bool attrDel( string id ) - attribute <id> remove.

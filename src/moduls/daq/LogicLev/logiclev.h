@@ -51,6 +51,8 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
+	TElem *dynElCntr( )	{ return &pEl; }
+
 	TCntrNode &operator=( TCntrNode &node );
 
 	bool isStd( );
@@ -114,7 +116,8 @@ class TMdPrm : public TParamContr
 
 	bool	chkLnkNeed;			//Check lnk need flag
 	Res	calcRes;			//Resource
-	int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
+	int	idFreq, idStart, idStop,
+		idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 };
 
 //*************************************************

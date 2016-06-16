@@ -1,3 +1,9 @@
+2016-06-16 Roman
+- !!!!:TDAQS,DAQ.{LogicLev,ModBus}: Redundancy of the dynamic attributes is added.
+- FIX:TDAQS,DAQ.LogicLev: Hierarchical DAQ parameters processing procedure is fixed.
+    Special and translated IO from config are prevented from the redundancy.
+
+
 2016-06-15 Roman
 - Archive.FSArch: The resources allocation including one to one are prevented. It was caused sometime to hungs before.
 
