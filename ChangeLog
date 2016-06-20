@@ -1,4 +1,5 @@
 2016-06-20 Roman
+- !!!!:SYS.TCntrNode: Free locked nodes and attach to disabled ones are prevented by propper resource locking to mUse.
 - SYS:data/openscada_start.in is adapted to working without "gettext", mostly for N800.
     data/{debian,debian_mod}/changelog: Author set to OpenSCADA <oscada@oscada.org>, mostly for allow the sign after build by that key.
 - DB: Resource's of the DB allocation TBD::resTbls is added. For now that is experimental and used in generic functions of the tables open(), close().

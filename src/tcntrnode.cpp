@@ -232,23 +232,23 @@ void TCntrNode::nodeDis( long tm, int flag )
 
 	//Wait of free node
 	time_t t_cur = time(NULL);
-	res.lock();		//!! Added for prevent possible attach and next disable and free the node
+	MtxAlloc res1(dataRes(), true);		//!! Added for prevent possible attach and next disable and free the node, by mUse control
 	while(mUse > 1) {
 	    mess_debug(nodePath().c_str(),_("Waiting for freeing by %d users!"),mUse-1);
 	    // Check timeout
-	    if(tm && time(NULL) > t_cur+tm) {
+	    if(tm && time(NULL) > (t_cur+tm)) {
 		if(!TSYS::finalKill)
 		    throw TError(nodePath().c_str(),_("Timeouted of wait. Object is used by %d users. Free object first!"),mUse-1);
 		mess_err(nodePath().c_str(),_("Blocking node error. Inform developers please!"));
 		break;
 	    }
-	    res.unlock();
+	    res1.unlock();
 	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
-	    res.lock();
+	    res1.lock();
 	}
 
 	setNodeMode(Disabled);
-	res.unlock();
+	res1.unlock();
 	modif();
 
 	postDisable(flag);
@@ -524,10 +524,10 @@ void TCntrNode::setNodeFlg( char flg )
 
 unsigned TCntrNode::nodeUse( bool selfOnly )
 {
-    MtxAlloc res1(dataRes(), true);
+    //MtxAlloc res1(dataRes(), true);
 
     unsigned i_use = mUse;
-    res1.unlock();
+    //res1.unlock();
 
     TMap::iterator p;
     MtxAlloc res2(mChM, true);
@@ -570,10 +570,16 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
-    if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disabled)
+    if(p == (*chGrp)[igr].elem.end()) throw TError(nodePath().c_str(),_("Element '%s' is not present!"), name.c_str());
+    AutoHD<TCntrNode> chN(p->second, user);
+    if(chN.at().nodeMode() == Disabled) throw TError(nodePath().c_str(),_("Element '%s' is disabled!"), name.c_str());
+
+    return chN;
+
+    /*if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disabled)
 	throw TError(nodePath().c_str(),_("Element '%s' is not present or disabled!"), name.c_str());
 
-    return AutoHD<TCntrNode>(p->second, user);
+    return AutoHD<TCntrNode>(p->second, user);*/
 }
 
 int TCntrNode::isModify( int f )
