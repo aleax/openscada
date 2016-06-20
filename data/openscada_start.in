@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -n "$(which gettext 2> /dev/null)" ]; then
+    export GETTEXT=gettext
+else
+    export GETTEXT=echo
+fi
 export TEXTDOMAIN=openscada
 export TEXTDOMAINDIR=@datadir_full@/locale
 if [ -n "$(which tput)" ]; then tput init; TERM_REZ=$?;
@@ -21,13 +26,13 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then ProjName=$OSCADA_ProjN
 # Set the project name to default "start"
 if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
     if test $TERM_REZ = 0 -a -n "$(which dialog)" || test -n "$DISPLAY" -a -n "$(which kdialog || which zenity || which Xdialog)"; then
-	prjList=("start" "<$(gettext "Default")>" "<new>" "<$(gettext "New project")>")
+	prjList=("start" "<$($GETTEXT "Default")>" "<new>" "<$($GETTEXT "New project")>")
 	if test ! -w $WorkDir/$ProjName; then
-	    prjList=("${prjList[@]}" "<*>" "==== $(gettext "User directory copy projects") ===")
+	    prjList=("${prjList[@]}" "<*>" "==== $($GETTEXT "User directory copy projects") ===")
 	    for fit in `ls ~/.openscada`; do
 		if test -d ~/.openscada/$fit && test -f ~/.openscada/$fit/oscada.xml; then prjList=("${prjList[@]}" "$fit" "$fit"); fi
 	    done
-	    prjList=("${prjList[@]}" "<*>" "==== $(gettext "Pre-installed projects") ===")
+	    prjList=("${prjList[@]}" "<*>" "==== $($GETTEXT "Pre-installed projects") ===")
 	fi
 	# Projects list obtaine from preinstalled projects
 	for fit in `ls $StartWorkDir`; do
@@ -35,19 +40,19 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
 	done
 
 	rez=
-	if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --menu "$(gettext "Select project for start.")" 20 60 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`;
-	elif test -n "$(which kdialog)"; then rez=`kdialog --title "$(gettext "OpenSCADA start")" --menu "$(gettext "Select project for start.")" "${prjList[@]}"`;
-	elif test -n "$(which zenity)"; then rez=`zenity --height=400 --width=300 --title "$(gettext "OpenSCADA start")" --list --text="$(gettext "Select project for start.")" --column="Tag" --column="Project" --hide-column=1 "${prjList[@]}"`;
-	elif test -n "$(which Xdialog)"; then Xdialog --title "$(gettext "OpenSCADA start")" --no-tags --menubox "$(gettext "Select project for start.")" 20 50 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`; fi
+	if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --menu "$($GETTEXT "Select project for start.")" 20 60 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`;
+	elif test -n "$(which kdialog)"; then rez=`kdialog --title "$($GETTEXT "OpenSCADA start")" --menu "$($GETTEXT "Select project for start.")" "${prjList[@]}"`;
+	elif test -n "$(which zenity)"; then rez=`zenity --height=400 --width=300 --title "$($GETTEXT "OpenSCADA start")" --list --text="$($GETTEXT "Select project for start.")" --column="Tag" --column="Project" --hide-column=1 "${prjList[@]}"`;
+	elif test -n "$(which Xdialog)"; then Xdialog --title "$($GETTEXT "OpenSCADA start")" --no-tags --menubox "$($GETTEXT "Select project for start.")" 20 50 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`; fi
 	ProjName=$rez
 	if test "x$ProjName" = "x" -o "x$ProjName" = "x<*>"; then ProjName=;
 	# New project create
 	elif test "x$ProjName" = "x<new>"; then
 	    rez=
-	    if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --inputbox "$(gettext "Enter new project ID. Do not use spaces!")" 10 50 2> $tmpfile; rez=`cat $tmpfile`;
-	    elif test -n "$(which kdialog)"; then rez=`kdialog --title "$(gettext "OpenSCADA start")" --inputbox "$(gettext "Enter new project ID. Do not use spaces!")" 'NewProject'`;
-	    elif test -n "$(which zenity)"; then rez=`zenity --title "$(gettext "OpenSCADA start")" --entry --text "$(gettext "Enter new project ID. Do not use spaces!")" --entry-text="NewProject"`;
-	    elif test -n "$(which Xdialog)"; then Xdialog --title "$(gettext "OpenSCADA start")" --inputbox "$(gettext "Enter new project ID. Do not use spaces!")" 10 50 2> $tmpfile; rez=`cat $tmpfile`; fi
+	    if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --inputbox "$($GETTEXT "Enter new project ID. Do not use spaces!")" 10 50 2> $tmpfile; rez=`cat $tmpfile`;
+	    elif test -n "$(which kdialog)"; then rez=`kdialog --title "$($GETTEXT "OpenSCADA start")" --inputbox "$($GETTEXT "Enter new project ID. Do not use spaces!")" 'NewProject'`;
+	    elif test -n "$(which zenity)"; then rez=`zenity --title "$($GETTEXT "OpenSCADA start")" --entry --text "$($GETTEXT "Enter new project ID. Do not use spaces!")" --entry-text="NewProject"`;
+	    elif test -n "$(which Xdialog)"; then Xdialog --title "$($GETTEXT "OpenSCADA start")" --inputbox "$($GETTEXT "Enter new project ID. Do not use spaces!")" 10 50 2> $tmpfile; rez=`cat $tmpfile`; fi
 	    ProjName=$rez
 	    if test "x$ProjName" = "x"; then ProjName=;
 	    # Move and prepare start ico to desktop
@@ -62,9 +67,9 @@ fi
 
 rm -f $tmpfile
 
-if [ -z "$ProjName" ]; then echo "$(gettext "No a project set!")"; exit 1; fi
+if [ -z "$ProjName" ]; then echo "$($GETTEXT "No a project set!")"; exit 1; fi
 
-echo "$(gettext "Set the project name to:") \"$ProjName\""
+echo "$($GETTEXT "Set the project name to:") \"$ProjName\""
 
 # Work directory check and prepare
 StartCfgFile=$StartOrigCfgPref/oscada_$ProjName.xml
@@ -101,10 +106,10 @@ pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=$CfgFile --StatName=$Proj
 if ps -C $TEXTDOMAIN -o command | grep "^${pCmd}" > /dev/null; then
 #if [ -f $pLock ] && ps -Ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
     echo "OpenSCADA station \"$ProjName\" already started!";
-    if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --msgbox "\"$ProjName\" $(gettext "already started.")" 10 30;
-    elif test -n "$(which kdialog)"; then kdialog --title "$(gettext "OpenSCADA start")" --msgbox "\"$ProjName\" $(gettext "already started.")";
-    elif test -n "$(which zenity)"; then zenity --title "$(gettext "OpenSCADA start")" --info --text="\"$ProjName\" $(gettext "already started.")";
-    elif test -n "$(which Xdialog)"; then Xdialog --title "$(gettext "OpenSCADA start")" --msgbox "\"$ProjName\" $(gettext "already started.")" 10 30; fi
+    if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --msgbox "\"$ProjName\" $($GETTEXT "already started.")" 10 30;
+    elif test -n "$(which kdialog)"; then kdialog --title "$($GETTEXT "OpenSCADA start")" --msgbox "\"$ProjName\" $($GETTEXT "already started.")";
+    elif test -n "$(which zenity)"; then zenity --title "$($GETTEXT "OpenSCADA start")" --info --text="\"$ProjName\" $($GETTEXT "already started.")";
+    elif test -n "$(which Xdialog)"; then Xdialog --title "$($GETTEXT "OpenSCADA start")" --msgbox "\"$ProjName\" $($GETTEXT "already started.")" 10 30; fi
     exit 1;
 fi
 

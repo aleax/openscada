@@ -182,7 +182,7 @@ msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, hours"
 msgstr ""
-"Глубины принудительной перезагрузки истории резерва при запуске, в часах."
+"Глубина принудительной перезагрузки истории резерва при запуске, в часах."
 
 msgid "Message archivators"
 msgstr "Архиваторы сообщений"

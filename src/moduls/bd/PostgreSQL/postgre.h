@@ -44,7 +44,7 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *iown, bool create );
+	MTable( string name, MBD *iown );
 	~MTable( );
 
 	// Field's functions
@@ -54,11 +54,12 @@ class MTable : public TTable
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
+	static void create( MBD &odb, const string &nm, bool toCreate = false );
+
 	MBD &owner( );
 
     private:
 	//Private methods
-	void create( bool toCreate = false );
 	bool isEmpty( );
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg, bool recurse = false );

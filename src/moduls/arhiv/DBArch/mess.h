@@ -42,11 +42,11 @@ class ModMArch: public TMArchivator
 	string archTbl( )		{ return "DBAMsg_"+id(); }
 	double maxSize( )		{ return mMaxSize; }
 	bool tmAsStr( )			{ return mTmAsStr; }
-	int tmDtSepScDayThr( )		{ return mTmDtSepScDayThr; }
+	//int tmDtSepScDayThr( )		{ return mTmDtSepScDayThr; }
 
 	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
 	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
-	void setTmDtSepScDayThr( int vl ) { mTmDtSepScDayThr = vmax(0,vmin(10000,vl)); modif(); }
+	//void setTmDtSepScDayThr( int vl ) { mTmDtSepScDayThr = vmax(0,vmin(10000,vl)); modif(); }
 
 	time_t begin( )		{ return mBeg; }
 	time_t end( )		{ return mEnd; }
@@ -71,7 +71,7 @@ class ModMArch: public TMArchivator
 	time_t	mBeg, mEnd;
 	double	mMaxSize;			//Maximum archive size (hours)
 	bool	mTmAsStr;			//Store time as pure integer
-	int	mTmDtSepScDayThr;		//Store datetime as separated date and time and threshold value for scan by days
+	//int	mTmDtSepScDayThr;		//Store datetime as separated date and time and threshold value for scan by days
 
 	TElem	reqEl;				//Requests structure
 };

@@ -155,7 +155,19 @@ void MBD::transCloseCheck( )
 TTable *MBD::openTable( const string &nm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), nm.c_str());
-    return new MTable(nm,this,create);
+
+    //Set file extend
+    string tblNm = nm;
+    if(!(tblNm.size() > 4 && tblNm.substr(tblNm.size()-4,4) == ".dbf")) tblNm += ".dbf";
+    string nTable = addr() + '/' + tblNm;
+
+    TBasaDBF *basa = new TBasaDBF();
+    if(basa->LoadFile((char*)nTable.c_str()) == -1 && !create) {
+	delete basa;
+	throw TError(nodePath().c_str(), _("Open table error!"));
+    }
+
+    return new MTable(nm, this, nTable, basa);
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -179,22 +191,11 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* BDDBF::MTable                                *
 //************************************************
-MTable::MTable( const string &inm, MBD *iown, bool create ) : TTable(inm), mModify(0)
+MTable::MTable( const string &inm, MBD *iown, const string &inTable, TBasaDBF *ibasa ) :
+    TTable(inm), mModify(0), nTable(inTable), basa(ibasa)
 {
-    string tbl_nm = name();
     setNodePrev(iown);
-
-    //Set file extend
-    if(!(tbl_nm.size() > 4 && tbl_nm.substr(tbl_nm.size()-4,4) == ".dbf")) tbl_nm += ".dbf";
-
     codepage = owner().codePage().size() ? owner().codePage() : Mess->charset();
-    n_table = owner().addr()+'/'+tbl_nm;
-
-    basa = new TBasaDBF();
-    if(basa->LoadFile((char *)n_table.c_str()) == -1 && !create) {
-	delete basa;
-	throw TError(nodePath().c_str(), _("Open table error!"));
-    }
 }
 
 MTable::~MTable( )	{ delete basa; }
@@ -293,8 +294,8 @@ void MTable::fieldSet( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //Check for write access
-    if(!(access(n_table.c_str(),F_OK|W_OK) == 0 || (access(n_table.c_str(),F_OK) != 0 && access(owner().addr().c_str(),W_OK) == 0)))
-	throw TError(nodePath().c_str(), _("Read only access to file '%s'."), n_table.c_str());
+    if(!(access(nTable.c_str(),F_OK|W_OK) == 0 || (access(nTable.c_str(),F_OK) != 0 && access(owner().addr().c_str(),W_OK) == 0)))
+	throw TError(nodePath().c_str(), _("Read only access to file '%s'."), nTable.c_str());
 
     bool forceUpdt = cfg.reqKeys(),
 	appMode = forceUpdt || (cfg.incomplTblStruct() && !basa->isEmpty());	//Only for append no present fields
@@ -386,8 +387,8 @@ void MTable::fieldDel( TConfig &cfg )
     bool i_ok = false;
     int i_ln;
     while((i_ln = findKeyLine(cfg,0,true)) >= 0) {
-	if(!i_ok && !(access(n_table.c_str(),F_OK|W_OK) == 0 || (access(n_table.c_str(),F_OK) != 0 && mModify && access(owner().addr().c_str(),W_OK) == 0)))
-	    throw TError(nodePath().c_str(), _("Read only access to file '%s'."), n_table.c_str());
+	if(!i_ok && !(access(nTable.c_str(),F_OK|W_OK) == 0 || (access(nTable.c_str(),F_OK) != 0 && mModify && access(owner().addr().c_str(),W_OK) == 0)))
+	    throw TError(nodePath().c_str(), _("Read only access to file '%s'."), nTable.c_str());
 	if(basa->DeleteItems(i_ln,1) < 0) throw TError(nodePath().c_str(), _("Line error!"));
 
 	i_ok = true;
@@ -477,7 +478,7 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 void MTable::save( )
 {
     ResAlloc res(mRes, true);
-    basa->SaveFile((char *)n_table.c_str());
+    basa->SaveFile((char *)nTable.c_str());
     mModify = 0;
 }
 

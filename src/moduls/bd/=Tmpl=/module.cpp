@@ -162,7 +162,9 @@ TTable *MBD::openTable( const string &inm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
 
-    return new MTable(inm, this, create);
+    //!!! The code of the table creation in the database if it is not exist there and any exceptions place
+
+    return new MTable(inm, this);
 }
 
 //!!! BEGIN a transaction processing functions
@@ -211,13 +213,11 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* BDTmpl::Table                                *
 //************************************************
-MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
+MTable::MTable( string name, MBD *iown ) : TTable(name)
 {
-    string req;
-
     setNodePrev(iown);
 
-    //!!! The code of the table creation in the database if it is not exist there
+
 
     //!!! Get the table structure
     getStructDB(name, tblStrct);

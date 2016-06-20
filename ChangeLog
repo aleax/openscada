@@ -1,3 +1,12 @@
+2016-06-20 Roman
+- SYS:data/openscada_start.in is adapted to working without "gettext", mostly for N800.
+    data/{debian,debian_mod}/changelog: Author set to OpenSCADA <oscada@oscada.org>, mostly for allow the sign after build by that key.
+- DB: Resource's of the DB allocation TBD::resTbls is added. For now that is experimental and used in generic functions of the tables open(), close().
+- !!:Archive.DBArch: Get messages algorithm is rewrote to request by minutes in reason of requesting by hours is some too long for PostgreSQL,
+    with the limit about 1500 records.
+- !!!!:DB.*: All DB modules rewrote to open table without exceptions into the table object constructor.
+
+
 2016-06-16 Roman
 - !!!!:TDAQS,DAQ.{LogicLev,ModBus}: Redundancy of the dynamic attributes is added.
 - FIX:TDAQS,DAQ.LogicLev: Hierarchical DAQ parameters processing procedure is fixed.

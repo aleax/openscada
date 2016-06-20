@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.4.7"
+#define MOD_VER		"1.5.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -220,7 +220,10 @@ void MBD::allowList( vector<string> &list )
 TTable *MBD::openTable( const string &inm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
-    return new MTable(inm, this, create);
+
+    MTable::create(*this, inm, create);
+
+    return new MTable(inm, this);
 }
 
 void MBD::transOpen( )
@@ -384,16 +387,19 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* BDPostgreSQL::Table                          *
 //************************************************
-MTable::MTable( string name, MBD *iown, bool toCreate ) : TTable(name)
+MTable::MTable( string iname, MBD *iown ) : TTable(iname)
 {
     setNodePrev(iown);
 
-    create(toCreate);
+    try {
+	create(owner(), name(), false);
+	getStructDB(name(), tblStrct);
+    } catch(...) { }
 }
 
 MTable::~MTable( )	{ }
 
-void MTable::create( bool toCreate )
+void MTable::create( MBD &odb, const string &nm, bool toCreate )
 {
     vector< vector<string> > tbl;
     string id;
@@ -405,13 +411,12 @@ void MTable::create( bool toCreate )
 	    "AND n.nspname <> 'pg_catalog' "
 	    "AND n.nspname !~ '^pg_toast' "
 	    "AND pg_catalog.pg_table_is_visible(c.oid) "
-	    "AND c.relname = '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "'";
-    owner().sqlReq(req, &tbl);
+	    "AND c.relname = '" + TSYS::strEncode(nm,TSYS::SQL,"'") + "'";
+    odb.sqlReq(req, &tbl);
     if(toCreate && tbl.size() == 2 && tbl[1][0] == "0") {
-	req = "CREATE TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"(\"<<empty>>\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)";
-	owner().sqlReq(req);
+	req = "CREATE TABLE \"" + TSYS::strEncode(nm,TSYS::SQL,"\"")+ "\"(\"<<empty>>\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)";
+	odb.sqlReq(req);
     }
-    getStructDB(name(), tblStrct);
 }
 
 bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>>"; }
@@ -841,7 +846,8 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
 	catch(TError err) {
 	    if(err.cod == MBD::SQL_CONN || recurse) throw;
 	    owner().sqlReq("DROP TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"");
-	    create(true);
+	    create(owner(), name(), true);
+	    getStructDB(name(), tblStrct);
 	    fieldFix(cfg, true);
 	}
     }

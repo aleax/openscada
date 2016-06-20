@@ -44,7 +44,7 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *bd, bool create );
+	MTable( string name, MBD *bd );
 	~MTable( );
 
 	// Field's operations

@@ -141,6 +141,9 @@ class TBD : public TCntrNode, public TConfig
 
 	TTypeBD &owner( );
 
+	//Public attributes
+	ResMtx	resTbls;
+
     protected:
 	//Protected methods
 	virtual TTable *openTable( const string &table, bool create )
@@ -174,7 +177,7 @@ class TBD : public TCntrNode, public TConfig
 	int	mTbl;
 
 	string	userSQLReq;
-	vector< vector<string> >	userSQLResTbl;
+	vector< vector<string> > userSQLResTbl;
 	char	userSQLTrans;
 };
 
@@ -190,14 +193,14 @@ class TTypeBD : public TModule
 	TTypeBD( const string &id );
 	virtual ~TTypeBD( );
 
-	bool fullDeleteDB( )	{ return full_db_del; }
+	bool fullDeleteDB( )	{ return fullDBDel; }
 
 	// Opened DB
-	void list( vector<string> &list )	{ chldList(m_db,list); }
-	bool openStat( const string &idb )	{ return chldPresent(m_db,idb); }
+	void list( vector<string> &list )	{ chldList(mDB,list); }
+	bool openStat( const string &idb )	{ return chldPresent(mDB,idb); }
 	void open( const string &iid );
-	void close( const string &iid, bool erase = false )	{ chldDel(m_db,iid,-1,erase); }
-	AutoHD<TBD> at( const string &name )	{ return chldAt(m_db,name); }
+	void close( const string &iid, bool erase = false )	{ chldDel(mDB,iid,-1,erase); }
+	AutoHD<TBD> at( const string &name )	{ return chldAt(mDB,name); }
 
 	TBDS &owner( );
 
@@ -208,8 +211,8 @@ class TTypeBD : public TModule
 	virtual TBD *openBD( const string &id )	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"openBD"); }
 
 	//Private attributes
-	bool	full_db_del;
-	int	m_db;
+	bool	fullDBDel;
+	int	mDB;
 };
 
 //************************************************
@@ -254,13 +257,11 @@ class TBDS : public TSubSYS, public TElem
 	string fullDBSYS( );
 	string fullDB( );
 
-	TElem &openDB_E( )	{ return el_db; }
+	TElem &openDB_E( )	{ return elDB; }
 
 	AutoHD<TTypeBD> at( const string &iid )	{ return modAt(iid); }
 
 	string optDescr( );
-
-	Res &nodeRes( )		{ return nRes; }
 
     protected:
 	void load_( );
@@ -270,10 +271,8 @@ class TBDS : public TSubSYS, public TElem
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	//Private attributes
-	TElem	el_db;
+	TElem	elDB;
 	bool	mSYSStPref;
-
-	Res	nRes;
 };
 
 }

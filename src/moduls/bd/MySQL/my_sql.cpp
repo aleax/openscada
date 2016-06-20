@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.5"
+#define MOD_VER		"2.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -202,7 +202,13 @@ TTable *MBD::openTable( const string &inm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
 
-    return new MTable(inm, this, create);
+    if(create) {
+	string req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`.`"+
+	    TSYS::strEncode(inm, TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
+	sqlReq(req);
+    }
+
+    return new MTable(inm, this);
 }
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
@@ -334,23 +340,18 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* MBDMySQL::Table                              *
 //************************************************
-MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
+MTable::MTable( string name, MBD *iown ) : TTable(name)
 {
-    string req;
-
     setNodePrev(iown);
 
-    if(create) {
-	req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
-	    TSYS::strEncode(name,TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
-	owner().sqlReq(req);
-    }
-    //Get table structure description
-    req = "DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name,TSYS::SQL) + "`";
-    owner().sqlReq(req, &tblStrct);
+    try {
+	//Get table structure description
+	string req = "DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name,TSYS::SQL) + "`";
+	owner().sqlReq(req, &tblStrct);
 
-    //req = "SELECT * FROM `"+TSYS::strEncode(name,TSYS::SQL)+"` LIMIT 0,1";
-    //owner().sqlReq( req );
+	//req = "SELECT * FROM `"+TSYS::strEncode(name,TSYS::SQL)+"` LIMIT 0,1";
+	//owner().sqlReq(req);
+    } catch(...) { }
 }
 
 MTable::~MTable( )	{ }

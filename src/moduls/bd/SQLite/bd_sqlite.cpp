@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.1.5"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -164,7 +164,10 @@ TTable *MBD::openTable( const string &inm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
 
-    return new MTable(inm, this, create);
+    try { sqlReq("SELECT * FROM '" + TSYS::strEncode(inm,TSYS::SQL,"'") + "' LIMIT 0;"); }
+    catch(...) { if(!create) throw; }
+
+    return new MTable(inm, this);
 }
 
 void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTrans )
@@ -266,17 +269,12 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* MBDMySQL::Table                              *
 //************************************************
-MTable::MTable( string inm, MBD *iown, bool create ) : TTable(inm)
+MTable::MTable( string inm, MBD *iown ) : TTable(inm)
 {
     setNodePrev(iown);
 
-    try {
-	string req = "SELECT * FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' LIMIT 0;";	//!! Need for table present checking
-	owner().sqlReq(req);
-	req ="PRAGMA table_info('"+TSYS::strEncode(name(),TSYS::SQL,"'")+"');";
-	owner().sqlReq(req, &tblStrct);
-    }
-    catch(...) { if(!create) throw; }
+    try { owner().sqlReq("PRAGMA table_info('"+TSYS::strEncode(name(),TSYS::SQL,"'")+"');", &tblStrct); }
+    catch(...) { }
 }
 
 MTable::~MTable( )

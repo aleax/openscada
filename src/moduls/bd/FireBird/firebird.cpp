@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.2.3"
+#define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -190,7 +190,15 @@ TTable *MBD::openTable( const string &inm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
 
-    return new MTable(inm, this, create);
+    if(create) {
+	string req = "EXECUTE BLOCK AS BEGIN "
+	    "if (not exists(select 1 from rdb$relations where rdb$relation_name = '" + mod->sqlReqCode(inm) + "')) then "
+	    "execute statement 'create table \"" + mod->sqlReqCode(inm,'"') + "\" (\"<<empty>>\" VARCHAR(20) NOT NULL, "
+	    "CONSTRAINT \"pk_" + mod->sqlReqCode(inm,'"') + "\" PRIMARY KEY(\"<<empty>>\") )'; END";
+	sqlReq(req);
+    }
+
+    return new MTable(inm, this);
 }
 
 string MBD::getErr( ISC_STATUS_ARRAY status )
@@ -418,21 +426,13 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* FireBird::Table				 *
 //************************************************
-MTable::MTable( string inm, MBD *iown, bool create ) : TTable(inm)
+MTable::MTable( string inm, MBD *iown ) : TTable(inm)
 {
     setNodePrev(iown);
 
-    if(create) {
-	string req = "EXECUTE BLOCK AS BEGIN "
-	    "if (not exists(select 1 from rdb$relations where rdb$relation_name = '" + mod->sqlReqCode(name()) + "')) then "
-	    "execute statement 'create table \"" + mod->sqlReqCode(name(),'"') + "\" (\"<<empty>>\" VARCHAR(20) NOT NULL, "
-	    "CONSTRAINT \"pk_" + mod->sqlReqCode(name(),'"') + "\" PRIMARY KEY(\"<<empty>>\") )'; END";
-	owner().sqlReq(req);
-    }
-
     //Get table structure description
-    getStructDB(tblStrct);
-    if(tblStrct.size() <= 1) throw TError(nodePath().c_str(), _("Table '%s' is not present."), name().c_str());
+    try { getStructDB(tblStrct); } catch(...) { }
+    //if(tblStrct.size() <= 1) throw TError(nodePath().c_str(), _("Table '%s' is not present."), name().c_str());
 }
 
 MTable::~MTable( )	{ }

@@ -3,7 +3,7 @@ openscada (0.9-1) experimental; urgency=low
   * Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
   * LTS version naming 0.8.N.
 
- -- Roman Savochenko <rom_as@oscada.org>  Fri, 22 May 2015 22:00:00 +0200
+ -- OpenSCADA <oscada@oscada.org>  Fri, 22 May 2015 22:00:00 +0200
 
 openscada (0.8.1-0.1) experimental; urgency=low
 

@@ -487,8 +487,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	    int status = snmp_sess_synch_response(ss, pdu, &response);
 	    if(status == STAT_SUCCESS && response && response->errstat == SNMP_ERR_NOERROR)
 		for(var = response->variables; var; var = var->next_variable) {
-		    if((var->name_length < oid_root_len) || (memcmp(oid_root,var->name,oid_root_len*sizeof(oid)) != 0))
-		    {
+		    if((var->name_length < oid_root_len) || (memcmp(oid_root,var->name,oid_root_len*sizeof(oid)) != 0)) {
 			running = false;
 			continue;
 		    }
@@ -509,16 +508,14 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 				flg |= TFld::NoWrite;
 			    if(subtree->enums) {
 				flg |= TFld::Selected;
-				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next)
-				{
+				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next) {
 				    selIds += i2s(enums->value)+";";
 				    selLabs += string(enums->label)+";";
 				}
 			    }
 			}
 
-			switch(var->type)
-			{
+			switch(var->type) {
 			    case ASN_BOOLEAN:		tp = TFld::Boolean;	break;
 			    case ASN_INTEGER:		tp = TFld::Integer;	break;
 			    case ASN_OPAQUE_FLOAT:
