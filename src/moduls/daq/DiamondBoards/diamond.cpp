@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.2"
+#define MOD_VER		"2.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -267,8 +267,7 @@ void *TMdContr::Task( void *icntr )
 	    if(TSYS::taskEndRun()) isStop = true;
 	    if(!cntr.redntUse()) isStart = false;
 	}
-    }
-    catch(TError err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prcSt = false;
 
@@ -423,7 +422,7 @@ void TMdPrm::enable( )
 	unsigned cFldId = pEl.fldId(chnId, true);
 	if(cFldId < pEl.fldSize() && pEl.fldAt(cFldId).type() != chnTp)
 	    try{ pEl.fldDel(cFldId); }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
 	pEl.fldAt(pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),chnTp,TFld::NoWrite|TVal::DirRead))).
 	    setReserve(modPrm(TSYS::strMess("AI_TP%d",i_a),"0x00"));
@@ -542,7 +541,7 @@ void TMdPrm::enable( )
 		break;
 	if(i_l >= als.size())
 	    try{ pEl.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     if(owner().startStat()) getVals("", true);
@@ -837,7 +836,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
 		return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
-    } catch(...){ }
+    } catch(...) { }
 
     return def;
 }
@@ -845,7 +844,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 void TMdPrm::setModPrm( const string &prm, const string &val )
 {
     XMLNode prmNd("ModCfg");
-    try { prmNd.load(cfg("PRMS").getS()); } catch(...){ }
+    try { prmNd.load(cfg("PRMS").getS()); } catch(...) { }
 
     if(modPrm(prm) != val) modif();
     string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");

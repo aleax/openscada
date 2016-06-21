@@ -97,14 +97,13 @@ void FlowTEC::getVals( )
 	    //> Wait tail
 	    while(resp_len && (rez.size() < 4 || rez.size() < (uint8_t)rez[2]))
 	    {
-		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError er){ break; }
+		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError &er) { break; }
 		rez.append(szReceive, resp_len);
 	    }
 	    if( rez.size() < 4 || rez.size() < (uint8_t)rez[2] ) continue;
 	    errPresent = false;
 	    break;
-	}
-	catch(...) { continue; }
+	} catch(...) { continue; }
     }
 
     //> Respond process

@@ -126,9 +126,8 @@ AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 	    if(!obd.at().openStat(bdTbl)) obd.at().open(bdTbl,create);
 	    tbl = obd.at().at(bdTbl);
 	}
-    }
-    catch(TError err) {
-	/*mess_warning(err.cat.c_str(),"%s",err.mess.c_str());*/
+    } catch(TError &err) {
+	//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
     }
 
     return tbl;
@@ -147,8 +146,7 @@ void TBDS::close( const string &bdn, bool del )
 	MtxAlloc res(obd.at().resTbls);	//!!!! For prevent multiple entry and closing try
 	if(obd.at().enableStat() && obd.at().openStat(bdTbl) && obd.at().at(bdTbl).at().nodeUse() == 1)
 	    obd.at().close(bdTbl, del);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Close DB '%s' error!"),bdn.c_str());
     }
@@ -231,7 +229,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	if(!tbl.freeStat()) {
 	    db_true = true;
 	    try { tbl.at().fieldGet(cfg); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		db_true = false;
 		dbErr = err;
 	    }
@@ -300,7 +298,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	if(!tbl.freeStat()) {
 	    bool db_true = true;
 	    try { tbl.at().fieldSet(cfg); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		db_true = false;
 		if(!noEx) throw;
@@ -402,8 +400,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 		if(useKeyAll)
 		    for(unsigned i_el = 0; i_el < cels.size(); i_el++)
 			cfg.cfg(cels[i_el]).setKeyUse(false);
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		dbErr = err;
 		//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    }
@@ -457,8 +454,7 @@ void TBDS::genDBSet( const string &path, const string &val, const string &user, 
 	    try {
 		tbl.at().fieldSet(db_el);
 		bd_ok = true;
-	    }
-	    catch(TError err){ }
+	    } catch(TError &err){ }
 	}
     }
 
@@ -492,8 +488,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
 		tbl.at().fieldGet(db_el);
 		rez = db_el.cfg("val").getS();
 		bd_ok = true;
-	    }
-	    catch(TError err){  }
+	    } catch(TError &err) {  }
 	}
     }
 
@@ -557,8 +552,7 @@ void TBDS::load_( )
 		    at(type).at().open(id);
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and open new DB error."));
     }
@@ -717,8 +711,7 @@ void TBD::disable( )
 	list(t_list);
 	for(unsigned i_l = 0; i_l < t_list.size(); i_l++)
 	    close(t_list[i_l], false, 1);
-    }
-    catch(...) { }	//Pass removing for locked
+    } catch(...) { }	//Pass removing for locked
 
     mEn = false;
 }
@@ -757,8 +750,7 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 		}
 		rez->arSet(iR, row);
 	    }
-	}
-	catch(...){ }
+	} catch(...){ }
 
 	return rez;
     }
@@ -938,8 +930,7 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		el->propSet("key", (icfg.fld().flg()&TCfg::Key)?"1":"0");
 		rez->childAdd(el);
 	    }
-	}
-	catch(TError err) { }
+	} catch(TError &err) { }
 
 	return rez;
     }
@@ -981,8 +972,7 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		for(unsigned i_el = 0; i_el < el.size(); i_el++)
 		    fld.at().childGet(i_el).at().setText(cfg.cfg(el[i_el]).getS());
 	    }
-	}
-	catch(TError err) { rez = "0:"+err.mess; }
+	} catch(TError &err) { rez = "0:"+err.mess; }
 
 	return rez;
     }

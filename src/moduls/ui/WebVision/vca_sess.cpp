@@ -6526,7 +6526,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    arh_beg = s2ll(req.attr("tm_grnd"));
 	    arh_end = s2ll(req.attr("tm"));
 	    arh_per = s2ll(req.attr("per"));
-	} catch(TError) { arh_per = arh_beg = arh_end = 0; return; }
+	} catch(TError&) { arh_per = arh_beg = arh_end = 0; return; }
 
     if(!arh_per) return;
 
@@ -6690,7 +6690,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 		    xproc.load(string(XHTML_entity)+req_el->text(), true, Mess->charset());
 		    req_el->setText(xproc.save(XMLNode::Clean, Mess->charset()));
 		}
-		catch(TError err)
+		catch(TError &err)
 		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),path().c_str(),err.mess.c_str()); }
 		break;
 	    }

@@ -124,8 +124,7 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
 		lwdg.at().load(true);
 		lwdg.at().setEnable(true);
 		lwdg.at().modifGClr();
-	    }
-	    catch(TError err) { }
+	    } catch(TError &err) { }
 	}
     }
 
@@ -213,8 +212,7 @@ void WidgetLib::setEnable( bool val )
     for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++) {
 	if(at(f_lst[i_ls]).at().enableByNeed)	continue;
 	try { at(f_lst[i_ls]).at().setEnable(val); }
-	catch(TError err)
-	{ mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
+	catch(TError &err) { mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
     }
 
     passAutoEn = false;
@@ -586,8 +584,7 @@ void LWidget::setEnable( bool val )
 			iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
 			iw.at().setEnable(true);
 		    }
-		}
-		catch(TError err) { }
+		} catch(TError &err) { }
 	}
 	mParentNmPrev = parentNm();
     }
@@ -646,7 +643,7 @@ void LWidget::loadIO( )
 	}
 	if(!wdgPresent(sid))
 	    try{ wdgAdd(sid,"",""); }
-	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load();
 	itReg[sid] = true;

@@ -41,7 +41,7 @@ Hddtemp::~Hddtemp( )
     try {
 	if(((TTypeTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr))
 	    ((TTypeTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
-    }catch(TError err) { }
+    } catch(TError &err) { }
 }
 
 void Hddtemp::init( TMdPrm *prm )
@@ -69,7 +69,7 @@ void Hddtemp::dList( vector<string> &list )
 	list.clear();
 	for(int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt += 5)
 	    list.push_back(c_el);
-    } catch(TError err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
+    } catch(TError &err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 }
 
 void Hddtemp::getVal( TMdPrm *prm )
@@ -88,7 +88,7 @@ void Hddtemp::getVal( TMdPrm *prm )
 		devOK = true;
 		break;
 	    }
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     if(devOK) prm->daErr = "";
     else if(!prm->daErr.getVal().size()) {
@@ -158,8 +158,7 @@ void Hddtemp::makeActiveDA( TMdContr *aCntr )
 	    dprm.at().cfg("EN").setB(true);
 	    if(aCntr->enableStat()) dprm.at().enable();
 	}
-    }
-    catch(TError err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
+    } catch(TError &err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 }
 
 string Hddtemp::parseName( const string &val )

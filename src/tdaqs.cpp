@@ -159,8 +159,7 @@ void TDAQS::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(tmplLibAt(db_ls[i_it]).at().DB()))
 		    tmplLibUnreg(db_ls[i_it]);
         }
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load template's libraries error."));
     }
@@ -187,8 +186,7 @@ void TDAQS::load_( )
 		    try {
 			if(!wmod.at().present(m_id)) wmod.at().add(m_id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 			itReg[m_id] = true;
-		    }
-		    catch(TError err) {
+		    } catch(TError &err) {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 			mess_err(wmod.at().nodePath().c_str(),_("Add controller '%s' error."),m_id.c_str());
 		    }
@@ -200,7 +198,7 @@ void TDAQS::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(db_ls[i_it]).at().DB()))
 		    wmod.at().del(db_ls[i_it]);
 	}
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Load parameters from config-file and SYS DB
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
@@ -299,7 +297,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		}
 
 	    return true;
-	} catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	return false;
     }
@@ -321,7 +319,7 @@ void TDAQS::subStart( )
 	tmplLibList(tmpl_lst);
 	for(unsigned i_lb = 0; i_lb < tmpl_lst.size(); i_lb++)
 	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		if(try_cnt) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Start template library '%s' error."),tmpl_lst[i_lb].c_str());
@@ -338,7 +336,7 @@ void TDAQS::subStart( )
 		AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 		if(/*!cntr.at().enableStat() &&*/ cntr.at().toEnable())
 		    try{ cntr.at().enable(); }
-		    catch(TError err) {
+		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 			    mess_err(nodePath().c_str(),_("Enable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
@@ -372,7 +370,7 @@ void TDAQS::subStop( )
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 	    if(cntr.at().startStat())
 		try{ cntr.at().stop(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Stop controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
@@ -386,7 +384,7 @@ void TDAQS::subStop( )
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 	    if(cntr.at().enableStat())
 		try{ cntr.at().disable(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Disable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
 		}

@@ -484,7 +484,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try { owner().sqlReq(req, NULL, true); }
-    catch(TError err) {
+    catch(TError &err) {
 	fieldFix(cfg);
 	owner().sqlReq(req, NULL, true);
     }
@@ -512,8 +512,7 @@ void MTable::fieldDel( TConfig &cfg )
     //Main request
     try { owner().sqlReq("DELETE FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
 					 TSYS::strEncode(name(),TSYS::SQL)+"` "+req_where, NULL, true);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	//Check for present
 	vector< vector<string> > tbl;
 	owner().sqlReq("SELECT 1 FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+

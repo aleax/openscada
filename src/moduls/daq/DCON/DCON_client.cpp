@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.2"
+#define MOD_VER		"1.2.3"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -203,7 +203,7 @@ void TMdContr::start_( )
     //Establish connection
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
     try { tr.at().start(); }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -262,11 +262,10 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 
 		//Wait tail
 		while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
-		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
+		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &er) { break; }
 		    rez.append(buf, resp_len);
 		}
-	    }
-	    catch(TError er) {	//By possible the send request breakdown and no response
+	    } catch(TError &er) {	//By possible the send request breakdown and no response
 		if(err.empty()) err = _("10:Transport error: ") + er.mess;
 		else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		continue;
@@ -285,8 +284,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	    err = "0";
 	    break;
 	}
-    }
-    catch(TError er) { err = _("10:Transport error: ")+er.mess; }
+    } catch(TError &er) { err = _("10:Transport error: ")+er.mess; }
 
     if(err != "0") {
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("ERR -> '%s': %s"), pdu.c_str(), err.c_str());
@@ -662,8 +660,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.endrunReq) isStop = true;
 	    isStart = false;
 	}
-    }
-    catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prcSt = false;
 
@@ -736,7 +733,7 @@ void TMdPrm::enable()
     //Delete DAQ parameter's attributes
     for(unsigned i_f = 0; i_f < pEl.fldSize(); ) {
 	try { pEl.fldDel(i_f); continue; }
-	catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	i_f++;
     }
 

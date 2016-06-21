@@ -975,8 +975,7 @@ void Client::protIO( XML_N &io )
 		}
 	    }
 	}
-    }
-    catch(Error er) { err = strMess("100:%s", er.mess.c_str()); }
+    } catch(Error &er) { err = strMess("100:%s", er.mess.c_str()); }
 
     io.setAttr("err", err);
 }

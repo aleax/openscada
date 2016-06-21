@@ -171,8 +171,7 @@ void TProt::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(epAt(db_ls[i_it]).at().DB()))
 		    epDel(db_ls[i_it]);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new server error."));
     }
@@ -307,8 +306,8 @@ void *OPCEndPoint::Task( void *iep )
 
     for(unsigned cntr = 0; !TSYS::taskEndRun(); cntr++) {
 	try { ep.subScrCycle(cntr); }
-	catch(OPCError err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
-	catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+	catch(OPCError &err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
+	catch(TError &err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
 	TSYS::taskSleep((int64_t)(ep.subscrProcPer()*1000000));
     }
@@ -339,7 +338,7 @@ void OPCEndPoint::load_( )
 	vl = prmNd.attr("LimSubScr");		if(!vl.empty()) setLimSubScr(s2i(vl));
 	vl = prmNd.attr("LimMonitItms");	if(!vl.empty()) setLimMonitItms(s2i(vl));
 	vl = prmNd.attr("LimRetrQueueTm");	if(!vl.empty()) setLimRetrQueueTm(s2i(vl));
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void OPCEndPoint::save_( )

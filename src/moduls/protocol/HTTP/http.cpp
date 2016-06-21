@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.3"
+#define MOD_VER		"1.6.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -115,7 +115,7 @@ void TProt::load_( )
 	    for(iAL = 0; iAL < mALog.size() && !(mALog[iAL]==al); ++iAL) ;
 	    if(iAL >= mALog.size()) mALog.push_back(al);
 	}
-    }catch(...){ }
+    } catch(...) { }
 }
 
 void TProt::save_( )
@@ -313,8 +313,7 @@ next_ch:
 
 	// Next chunk process
 	if(c_lng == -2 && ch_ln != 0) goto next_ch;
-    }
-    catch(TError err)	{ io.setAttr("err",err.mess); return; }
+    } catch(TError &err) { io.setAttr("err",err.mess); return; }
 
     io.setAttr("err","");
 }
@@ -586,8 +585,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			 "</html>\n";
 		answer = httpHead("501 Method Not Implemented",answer.size())+answer;
 	    }
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    //Check to direct file request for template
 	    if(method == "GET" && mod->tmpl().size() && urls != "/") {
 		int hd = -1;
@@ -673,8 +671,7 @@ string TProtIn::pgTmpl( const string &cnt, const string &head_els )
 		    }
 		    else answer.clear();
 		}
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(nodePath().c_str(),_("HTML-template '%s' load error: %s"),mod->tmpl().c_str(),err.mess.c_str());
 		answer.clear();
 	    }

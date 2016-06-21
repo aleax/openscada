@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -212,8 +212,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		getArea(ses, *ses.root, "/");
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	ses.page = "Page '"+ses.url+"' error: "+TSYS::strEncode(err.mess,TSYS::Html);
 	//postMess(ses.page,err.cat,err.mess,TWEB::Error);
 	page = httpHead("404 Not Found",ses.page.size())+ses.page;
@@ -692,7 +691,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 		getArea(ses, *ses.root, "/");
 	    }
 	}
-    } catch(TError err)	{ messPost(ses.page,err.cat,err.mess,TWEB::Error); }
+    } catch(TError &err) { messPost(ses.page,err.cat,err.mess,TWEB::Error); }
 
     colontDown(ses);
     ses.page += pgTail();
@@ -713,8 +712,7 @@ int TWEB::postArea( SSess &ses, XMLNode &node, const string &prs_comm, int level
 	else if(prs_cat == "list" && t_nd->name() == "list")			return postList(ses,*t_nd,prs_path);
 	else if(prs_cat == "tbl" && t_nd->name() == "table")			return postTable(ses,*t_nd,prs_path);
 	return postArea(ses, *t_nd, prs_comm, ++level);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	messPost(ses.page,err.cat,err.mess,TWEB::Error);
 	return 0x01|0x02;
     }
@@ -781,7 +779,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 	    *req.childAdd() = *node.childGet(i_ch);
 	if(cntrIfCmd(req)) ses.mess.push_back(req.text().c_str());
 	//return 0x01;
-    } catch(TError err) { ses.mess.push_back( err.mess ); }
+    } catch(TError &err) { ses.mess.push_back( err.mess ); }
     //{
 	//postMess(ses.page,err.mess,TWEB::Error);
 	//return 0x01|0x02;

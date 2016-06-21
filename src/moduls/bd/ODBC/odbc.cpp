@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.1"
+#define MOD_VER		"0.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -210,7 +210,7 @@ void MBD::enable( )
 	if(SQLAllocHandle(SQL_HANDLE_STMT,hdbc,&hstmt) != SQL_SUCCESS)	throw TError(nodePath().c_str(), "SQLAllocHandle: %s", errors().c_str());
 #endif
 	TBD::enable();
-    } catch(TError) { disable(); throw; }
+    } catch(TError&) { disable(); throw; }
 }
 
 void MBD::disable( )
@@ -377,8 +377,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 	    }
 	}
 	//if(sts == SQL_ERROR) throw TError(nodePath().c_str(), "SQLMoreResults: %s", errors().c_str());	//!!!! Only single result support !!!!
-    }
-    catch(TError ier) { err = ier.mess; }
+    } catch(TError &ier) { err = ier.mess; }
 
 #if (ODBCVER < 0x0300)
     SQLFreeStmt(hstmt, SQL_CLOSE);

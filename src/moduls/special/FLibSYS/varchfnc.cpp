@@ -52,7 +52,7 @@ bool VArchObj::open( const string &inm )
 	if(ta.freeStat()) return false;
 	mArch = new AutoHD<TVArchive>(ta);
 	mIsArch = true;
-    }catch(TError err)	{ return false; }
+    } catch(TError &err) { return false; }
 
     return true;
 }

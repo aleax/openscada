@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.6"
+#define MOD_VER		"0.9.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -376,8 +376,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		ses.page = ses.page+"<center>Call page/widget '"+ses.url+"' command: '"+wp_com+"'</center>\n<br/>";
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	ses.page = "Page <"+ses.url+"> error: "+err.mess;
 	page = httpHead("404 Not Found",ses.page.size())+ses.page;
 	return;
@@ -478,7 +477,7 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 	    node.name() == "load" || node.name() == "save")
 	node.setAttr("primaryCmd", "1");
     try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
-    catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
+    catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 
     return s2i(node.attr("rez"));
 }

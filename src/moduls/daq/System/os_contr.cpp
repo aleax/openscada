@@ -48,7 +48,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.3"
+#define MOD_VER		"2.0.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -276,7 +276,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.en_res.resRelease();
 
 		cntr.tm_calc = TSYS::curTime()-t_cnt;
-	    } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    cntr.call_st = false;
 	}
 
@@ -386,7 +386,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 
     //Direct write
     try { if(mDA) mDA->vlSet(this, vo, vl, pvl); }
-    catch(TError err) {
+    catch(TError &err) {
 	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),vo.name().c_str(),err.mess.c_str());
 	vo.setS(pvl.getS(), 0, true);
     }
@@ -449,8 +449,7 @@ void TMdPrm::setType( const string &da_id )
 	    vlElemAtt(mDA);
 	    mDA->init(this);
 	}
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 }
 
 string TMdPrm::addPrm( const string &prm, const string &def )
@@ -465,7 +464,7 @@ string TMdPrm::addPrm( const string &prm, const string &def )
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
 		return (rez=prmNd.childGet(i_n)->attr(sa)).empty() ? def : rez;
-    } catch(...){ }
+    } catch(...) { }
 
     return def;
 }
@@ -473,7 +472,7 @@ string TMdPrm::addPrm( const string &prm, const string &def )
 void TMdPrm::setAddPrm( const string &prm, const string &val )
 {
     XMLNode prmNd("cfg");
-    try { prmNd.load(cfg("ADD_PRMS").getS()); } catch(...){ }
+    try { prmNd.load(cfg("ADD_PRMS").getS()); } catch(...) { }
 
     if(addPrm(prm) != val) modif();
     string sobj = TSYS::strParse(prm, 0, ":"), sa = TSYS::strParse(prm, 1, ":");

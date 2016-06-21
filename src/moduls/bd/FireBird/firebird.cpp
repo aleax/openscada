@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.3.1"
+#define MOD_VER		"1.3.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -389,8 +389,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	    stmt = trans = 0;
 	    throw TError(nodePath().c_str(), _("DSQL close transaction error: %s"), getErr(status).c_str());
 	}
-    }
-    catch(...) {
+    } catch(...) {
 	if(stmt) isc_dsql_free_statement(status, &stmt, DSQL_drop);
 	if(trans && !htrans) isc_commit_transaction(status, &trans);
 	free(out_sqlda);
@@ -472,7 +471,7 @@ void MTable::postDisable( int flag )
     owner().transCommit();
     if(flag) {
 	try { owner().sqlReq("DROP TABLE \"" + mod->sqlReqCode(name(),'"') + "\""); }
-	catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
     }
 }
 
@@ -721,7 +720,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try{ owner().sqlReq(req, NULL, true); }
-    catch(TError err) { fieldFix(cfg); owner().sqlReq(req, NULL, true); }
+    catch(TError &err) { fieldFix(cfg); owner().sqlReq(req, NULL, true); }
 }
 
 void MTable::fieldDel( TConfig &cfg )

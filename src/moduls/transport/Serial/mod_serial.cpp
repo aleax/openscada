@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.2.1"
+#define MOD_VER		"1.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -88,7 +88,7 @@ TTr::TTr( string name ) : TTypeTransport(MOD_ID)
 
 TTr::~TTr( )
 {
-    try{ modStop(); }catch(...){}
+    try { modStop(); } catch(...) { }
 }
 
 void TTr::postEnable( int flag )
@@ -138,7 +138,7 @@ void TTr::perSYSCall( unsigned int cnt )
     mod->outList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	try{ mod->outAt(ls[i_l]).at().check(); }
-	catch(TError err){ }
+	catch(TError &err) { }
 }
 
 void TTr::writeLine( int fd, const string &ln, bool noNewLn )
@@ -219,7 +219,7 @@ void TTrIn::load_( )
 	vl = prmNd.attr("MdmRingReq");	if(!vl.empty()) setMdmRingReq(vl);
 	vl = prmNd.attr("MdmRingAnswer");if(!vl.empty()) setMdmRingAnswer(vl);
 	vl = prmNd.attr("MdmRingAnswerResp");	if(!vl.empty()) setMdmRingAnswerResp(vl);
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TTrIn::save_( )
@@ -396,8 +396,7 @@ void TTrIn::connect( )
 		TSYS::sysSleep(mdmPostInit());
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(fd >= 0) { close(fd); fd = -1; }
 	throw;
     }
@@ -495,7 +494,7 @@ void *TTrIn::Task( void *tr_in )
 		    // Reconnect try after hung up by remote agent
 		    mod->devUnLock(tr->mDevPort);
 		    TSYS::sysSleep(10);
-		    try{ tr->connect(); } catch(TError err) { break; }
+		    try{ tr->connect(); } catch(TError &err) { break; }
 		    continue;
 		}
 	    }
@@ -530,8 +529,7 @@ void *TTrIn::Task( void *tr_in )
 		prot_in = proto.at().at(n_pr);
 	    }
 	    prot_in.at().mess(req, answ);
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    mess_err(tr->nodePath().c_str(),"%s",err.mess.c_str() );
 	    mess_err(tr->nodePath().c_str(),_("Error request to protocol."));
 	}
@@ -732,7 +730,7 @@ void TTrOut::load_( )
 	vl = prmNd.attr("MdmExit");	if(!vl.empty()) setMdmExit(vl);
 	vl = prmNd.attr("MdmHangUp");	if(!vl.empty()) setMdmHangUp(vl);
 	vl = prmNd.attr("MdmHangUpResp");if(!vl.empty()) setMdmHangUpResp(vl);
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TTrOut::save_( )
@@ -949,8 +947,7 @@ void TTrOut::start( int tmCon )
 	    mLstReqTm = TSYS::curTime();
 	    mMdmDataMode = true;
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	//HangUp
 	if(mMdmMode) TTr::writeLine(fd,mdmHangUp());
 

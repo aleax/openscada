@@ -46,7 +46,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
 
 ModVArch::~ModVArch( )
 {
-    try { stop(); }catch(...){}
+    try { stop(); } catch(...) { }
 }
 
 double ModVArch::curCapacity( )
@@ -73,8 +73,7 @@ void ModVArch::load_( )
 	vl = prmNd.attr("PackTm");	if(!vl.empty()) setPackTm(s2i(vl));
 	vl = prmNd.attr("CheckTm");	if(!vl.empty()) setCheckTm(s2i(vl));
 	vl = prmNd.attr("PackInfoFiles"); if(!vl.empty()) setPackInfoFiles(s2i(vl));
-    } catch(...){ }
-
+    } catch(...) { }
 }
 
 void ModVArch::save_( )
@@ -105,7 +104,7 @@ void ModVArch::start( )
     TVArchivator::start();
 
     //First scan dir. Load and connect archive files
-    try { checkArchivator(true); } catch(TError err) { stop(); throw; }
+    try { checkArchivator(true); } catch(TError &err) { stop(); throw; }
 }
 
 void ModVArch::stop( )
@@ -162,7 +161,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	try {
 	    mess_info(nodePath().c_str(), _("Unpack '%s' for information get."),anm.c_str());
 	    a_fnm = mod->unPackArch(anm, false);
-	} catch(TError){ return false; }
+	} catch(TError&) { return false; }
 	unpck = true;
     }
     //Get params from file
@@ -1126,8 +1125,7 @@ void VFileArch::attach( const string &name )
 		    break;
 		default: break;
 	    }
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_err(mod->nodePath().c_str(), _("Attach file '%s' error."), name.c_str());
 	mErr = true;
@@ -1176,7 +1174,7 @@ int64_t VFileArch::endData( )
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
     if(mPack) {
 	res.request(true);
-	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
+	try{ mName = mod->unPackArch(mName); } catch(TError&) { mErr = true; throw; }
 	mPack = false;
 	res.request(false);
     }
@@ -1223,11 +1221,11 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     if(mPack) {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); }
-	catch(TError){
+	catch(TError&) {
 	    try {
 		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
 		mName = mod->unPackArch(mName);
-	    } catch(TError) { mErr = true; throw; }
+	    } catch(TError&) { mErr = true; throw; }
 	}
 	mPack = false;
 	res.request(false);
@@ -1358,11 +1356,11 @@ TVariant VFileArch::getVal( int vpos )
     if(mPack) {
 	res.request(true);
 	try { mName = mod->unPackArch(mName); }
-	catch(TError) {
+	catch(TError&) {
 	    try {
 		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
 		mName = mod->unPackArch(mName);
-	    } catch(TError) { mErr = true; throw; }
+	    } catch(TError&) { mErr = true; throw; }
 	}
 	mPack = false;
 	res.request(false);
@@ -1434,11 +1432,11 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     if(mPack) {
 	res.request(true);
 	try { mName = mod->unPackArch(mName); }
-	catch(TError) {
+	catch(TError&) {
 	    try {
 		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
 		mName = mod->unPackArch(mName);
-	    } catch(TError) { mErr = true; return false; /*throw;*/ }
+	    } catch(TError&) { mErr = true; return false; /*throw;*/ }
 	}
 	mPack = false;
 	res.request(false);

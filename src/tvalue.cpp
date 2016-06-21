@@ -685,7 +685,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setS(value,time()); }
-		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -714,7 +714,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setI(value,time()); }
-		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -743,7 +743,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setR(value, time()); }
-		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -770,7 +770,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setB(value,time()); }
-		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -812,7 +812,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    if(prms.size() >= 2) { prms[1].setI(tm%1000000); prms[1].setModify(); }
 
 	    return rez;
-	}catch(...){ }
+	} catch(...){ }
 	return EVAL_REAL;
     }
     // bool set(ElTp val, int tm = 0, int utm = 0, bool sys = false) - write value <val> to attribute with time label <tm:utm> and system
@@ -828,7 +828,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    if(prms.size() >= 4) isSys = prms[3].getB();
 	    set(prms[0],tm,isSys);
 	    return false;
-	}catch(...){ }
+	} catch(...){ }
 	return true;
     }
     // TCntrNodeObj arch() - get current archive object for value

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.1"
+#define MOD_VER		"0.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -133,8 +133,7 @@ void TProt::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(uPrtAt(db_ls[i_it]).at().DB()))
 		    uPrtDel(db_ls[i_it]);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new user protocol error."));
     }
@@ -276,7 +275,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	up.at().cntInReq++;
 
 	return rez;
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     return false;
 }
@@ -551,7 +550,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    try {
 		SYS->daq().at().at(TSYS::strParse(inProgLang(),0,".")).at().
 				    compileFuncSynthHighl(TSYS::strParse(inProgLang(),1,"."),*opt);
-	    } catch(...){ }
+	    } catch(...) { }
     }
     else if(a_path == "/out/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProgLang());
@@ -564,7 +563,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    try {
 		SYS->daq().at().at(TSYS::strParse(outProgLang(),0,".")).at().
 				    compileFuncSynthHighl(TSYS::strParse(outProgLang(),1,"."),*opt);
-	    } catch(...){ }
+	    } catch(...) { }
     }
     else TCntrNode::cntrCmdProc(opt);
 }

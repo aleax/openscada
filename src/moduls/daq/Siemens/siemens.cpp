@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.6"
+#define MOD_VER		"2.0.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -434,7 +434,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		    case 0x30:	opt->childAdd("el")->setText(i2s(i_st)+_(" : Active station"));	break;
 		    case 0x00:	opt->childAdd("el")->setText(i2s(i_st)+_(" : Passive station"));break;
 		}
-	} catch(TError err) { opt->childAdd("el")->setText(err.mess); }
+	} catch(TError &err) { opt->childAdd("el")->setText(err.mess); }
     }
     else TTypeDAQ::cntrCmdProc(opt);
 }
@@ -467,7 +467,7 @@ void TMdContr::postDisable( int flag )
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
@@ -543,7 +543,7 @@ void TMdContr::start_( )
 	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
 	    if(at(pls[i_p]).at().enableStat()) at(pls[i_p]).at().enable();
 	isReload = false;
-    } catch(TError) { isReload = false; throw; }
+    } catch(TError&) { isReload = false; throw; }
 
     //Counters reset
     numR = numW = numErr = 0;
@@ -694,7 +694,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	case SELF_ISO_TCP:
 	    tr = SYS->transport().at().at(TSYS::strParse(addrTr(),0,".")).at().outAt(TSYS::strParse(addrTr(),1,"."));
 	    //try { tr.at().start(); }
-	    //catch(TError err) { throw TError(nodePath().c_str(), _("Connection error.")); }
+	    //catch(TError &err) { throw TError(nodePath().c_str(), _("Connection error.")); }
 	    reset();
 	    break;
 	default: throw TError(nodePath().c_str(), _("Connection type '%d' is not supported."), mType);
@@ -879,8 +879,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    }
 	}
 	numR += buffer.size();
-    }
-    catch(TError er) {
+    } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
 	if(!er.cod) er.cod = ConnErrCode;
 	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
@@ -1022,8 +1021,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    }
 	}
 	numW += buffer.size();
-    }
-    catch(TError er) {
+    } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
 	if(!er.cod) er.cod = ConnErrCode;
 	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
@@ -1052,7 +1050,7 @@ void TMdContr::reqService( XMLNode &io )
 	    isInitiated = true;
 	}
 	protIO(io);
-    } catch(TError er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
+    } catch(TError &er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
 }
 
 void TMdContr::protIO( XMLNode &io )
@@ -1258,7 +1256,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 	    }
 	}
-    } catch(TError er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
+    } catch(TError &er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
 }
 
 int TMdContr::messIO( const char *oBuf, int oLen, char *iBuf, int iLen )
@@ -1399,7 +1397,7 @@ void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+1) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val[ival.off-acqBlks[i_b].off] = val; break; }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValI( int64_t ivl, SValData ival, ResString &err )
@@ -1433,7 +1431,7 @@ void TMdContr::setValI( int64_t ivl, SValData ival, ResString &err )
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char*)&val,iv_sz))); break; }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValR( double ivl, SValData ival, ResString &err )
@@ -1471,7 +1469,7 @@ void TMdContr::setValR( double ivl, SValData ival, ResString &err )
 		acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
 		break;
 	    }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
@@ -1506,7 +1504,7 @@ void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali); break; }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 int TMdContr::valSize( IO::Type itp, int iv_sz )
@@ -1540,7 +1538,7 @@ void *TMdContr::Task( void *icntr )
 		MtxAlloc res1(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		    try { cntr.pHd[iP].at().calc(isStart, isStop, cntr.period()?1:-1); }
-		    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		res1.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-1);
@@ -1568,8 +1566,7 @@ void *TMdContr::Task( void *icntr )
 			if(s2i(cntr.writeBlks[i_b].err.getVal()) == -1) continue;
 			cntr.putDB(cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val);
 			cntr.writeBlks[i_b].err = _("-1:No data");
-		    }
-		    catch(TError err) { cntr.writeBlks[i_b].err = err.mess; }
+		    } catch(TError &err) { cntr.writeBlks[i_b].err = err.mess; }
 		if(cntr.tmDelay > 0) continue;
 	    }
 	    ResAlloc res(cntr.reqDataRes, false);
@@ -1579,8 +1576,7 @@ void *TMdContr::Task( void *icntr )
 		    if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
 		    cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
 		    cntr.acqBlks[i_b].err = "";
-		}
-		catch(TError err) { cntr.acqBlks[i_b].err = err.mess; }
+		} catch(TError &err) { cntr.acqBlks[i_b].err = err.mess; }
 	    if(cntr.tmDelay > 0) continue;
 	    res.unlock();
 
@@ -1588,7 +1584,7 @@ void *TMdContr::Task( void *icntr )
 	    MtxAlloc res1(cntr.enRes, true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
 		try{ cntr.pHd[i_p].at().calc(isStart,isStop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
-		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    res1.unlock();
 
 	    //Generic acquisition alarm generate
@@ -1610,7 +1606,7 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.endrunReq) isStop = true;
 	    isStart = false;
 	}
-    } catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prcSt = false;
 
@@ -1791,7 +1787,7 @@ void TMdPrm::enable( )
 		TFld::Type tp = TFld::type(ioType(i_io));
 		if((fId=pEl.fldId(func()->io(i_io)->id(),true)) < pEl.fldSize()) {
 		    if(pEl.fldAt(fId).type() != tp)
-			try{ pEl.fldDel(fId); } catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+			try{ pEl.fldDel(fId); } catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 		    else {
 			pEl.fldAt(fId).setFlg(flg);
 			pEl.fldAt(fId).setDescr(func()->io(i_io)->name().c_str());
@@ -1831,13 +1827,13 @@ void TMdPrm::enable( )
 		    break;
 	    if(i_l >= als.size())
 		try{ pEl.fldDel(i_p); i_p--; }
-		catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	}
 
 	// Set to process
 	if(owner().startStat())	calc(true, false, 0);
 
-    } catch(TError err) { disable(); throw; }
+    } catch(TError &err) { disable(); throw; }
 
     owner().prmEn(id(), true);
 }
@@ -1930,7 +1926,7 @@ void TMdPrm::vlGet( TVal &val )
 		case TFld::Boolean:	val.setB(owner().getValB(lnk(id_lnk).val,acqErr),0,true);	break;
 		default: break;
 	    }
-	} catch(TError err) { }
+	} catch(TError &err) { }
     else {
 	if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(idErr >= 0) val.setS(getS(idErr), 0, true);
@@ -1965,7 +1961,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 		default: break;
 	    }
 	}
-    }catch(TError err) {  }
+    } catch(TError &err) {  }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -2079,8 +2075,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idNm >= 0)	setName(getS(idNm));
 	if(idDscr >= 0)setDescr(getS(idDscr));
 
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error calculate template."));
     }

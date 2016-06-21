@@ -46,7 +46,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.8.2"
+#define MOD_VER		"1.8.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -157,8 +157,6 @@ void TUIMod::postEnable( int flag )
 void TUIMod::postDisable( int flag )
 {
     if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
-    /*try { 
-    catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 }
 
 void TUIMod::load_( )
@@ -395,7 +393,7 @@ void WinControl::callQtModule( )
     if(obj->objectName() == "*exit*")	SYS->stop();
     else {
 	try{ callQtModule(obj->objectName().toStdString()); }
-	catch(TError err) {  }
+	catch(TError &err) {  }
     }
 }
 

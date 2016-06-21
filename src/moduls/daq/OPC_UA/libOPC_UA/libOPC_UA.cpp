@@ -1787,8 +1787,7 @@ void Client::protIO( XML_N &io )
 	    }
 	}
 	else err = strMess("0x%x:%s", OpcUa_BadServiceUnsupported, strMess("OPC_UA protocol '%s' isn't supported.", io.name().c_str()).c_str());
-    }
-    catch(OPCError er) { err = strMess("0x%x:%s", er.cod, er.mess.c_str()); }
+    } catch(OPCError &er) { err = strMess("0x%x:%s", er.cod, er.mess.c_str()); }
 
     io.setAttr("err", err);
 }
@@ -3326,8 +3325,7 @@ nextReq:
 	    if(dbg) debugMess(strMess("MSG Resp: %d",reqTp));
 	}
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
-    }
-    catch(OPCError er) {
+    } catch(OPCError &er) {
 	if(er.cod) {
 	    if(dbg) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
 	    out = mkError(er.cod, er.mess);

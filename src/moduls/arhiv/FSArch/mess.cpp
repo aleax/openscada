@@ -45,7 +45,7 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
 
 ModMArch::~ModMArch( )
 {
-    try{ stop(); }catch(...){ }
+    try { stop(); } catch(...) { }
 }
 
 void ModMArch::load_( )
@@ -65,7 +65,7 @@ void ModMArch::load_( )
 	vl = prmNd.attr("PackInfoFiles"); if(!vl.empty()) setPackInfoFiles(s2i(vl));
 	vl = prmNd.attr("PrevDbl");	if(!vl.empty()) setPrevDbl(s2i(vl));
 	vl = prmNd.attr("PrevDblTmCatLev"); if(!vl.empty()) setPrevDblTmCatLev(s2i(vl));
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void ModMArch::save_( )
@@ -140,8 +140,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 		    (mess[i_m].time >= files[iF]->begin()+mTimeSize*24*60*60))) break;
 		try {
 		    wrOK = files[iF]->put(mess[i_m]) && wrOK;
-		}
-		catch(TError err) { mess_err(err.cat.c_str(),err.mess.c_str()); continue; }
+		} catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); continue; }
 		iF = -1;
 		break;
 	    }
@@ -167,8 +166,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 		if(iF == (int)files.size()) files.push_back(f_obj);
 		else if(iF < (int)files.size()) files.insert(files.begin()+iF, f_obj);
 		else { delete f_obj; return true; }
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_crit(nodePath().c_str(),_("Error create new archive file '%s'!"),(addr()+f_name).c_str() );
 		return false;
 	    }
@@ -548,7 +546,7 @@ void MFileArch::attach( const string &iname, bool full )
 		return;
 	    }
 
-	    try { mName = mod->unPackArch(name()); } catch(TError){ mErr = true; return; }
+	    try { mName = mod->unPackArch(name()); } catch(TError&) { mErr = true; return; }
 	    mPack = false;
 	}
 
@@ -647,8 +645,7 @@ void MFileArch::attach( const string &iname, bool full )
 		return;
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	if(mNode) delete mNode;
 	mNode = NULL;
@@ -664,7 +661,7 @@ bool MFileArch::put( TMess::SRec mess )
     ResAlloc res(mRes, true);
 
     if(mPack) {
-	try { mName = mod->unPackArch(name()); } catch(TError err) { mErr = true; throw; }
+	try { mName = mod->unPackArch(name()); } catch(TError &err) { mErr = true; throw; }
 	mPack = false;
     }
 
@@ -830,7 +827,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
     if(!upTo) upTo = time(NULL) + STD_INTERF_TM;
 
     if(mPack) {
-	try { mName = mod->unPackArch(name()); } catch(TError err) { mErr = true; throw; }
+	try { mName = mod->unPackArch(name()); } catch(TError &err) { mErr = true; throw; }
 	mPack = false;
     }
 

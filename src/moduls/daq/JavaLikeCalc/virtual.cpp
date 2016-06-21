@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.1.2"
+#define MOD_VER		"3.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -238,8 +238,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	try {
 	    ((TFunction&)func.at()).operator=(fnc_cfg);
 	    if(prog_text == func.at().prog()) return func.at().nodePath(0,true);
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    func.at().setStart(true);
 	    throw;
 	}
@@ -251,8 +250,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	((TFunction&)func.at()).operator=(fnc_cfg);
 	func.at().setStart(true);
 	func.at().modifClr();
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!func.at().use()) {
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
@@ -289,8 +287,7 @@ void TpContr::load_( )
 		    try {
 			lbAt(l_id).at().load();
 			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
-		    }
-		    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		}
 		itReg[l_id] = true;
 	    }
@@ -302,8 +299,7 @@ void TpContr::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
 		    lbUnreg(db_ls[i_it]);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
     }
@@ -412,8 +408,7 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().open(db);
 	    SYS->db().at().close(db,true);
 	}
-    }
-    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
 }
@@ -443,7 +438,7 @@ void Contr::enable_( )
     }
     setFunc(&mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().at(TSYS::strSepParse(wfnc,1,'.')).at());
     try{ loadFunc(); }
-    catch(TError err) {
+    catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Load function and its IO error."));
     }
@@ -567,7 +562,7 @@ void *Contr::Task( void *icntr )
 
 	    for(int i_it = 0; i_it < cntr.mIter; i_it++)
 		try { cntr.calc(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
 		    mess_err(cntr.nodePath().c_str(),_("Calculation controller's function error."));
 		}
@@ -776,8 +771,7 @@ void Prm::enable( )
 	    try {
 		v_el.fldDel(i_fld);
 		continue;
-	    }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	i_fld++;
     }
 
@@ -819,8 +813,7 @@ void Prm::enable( )
 	    try {
 		v_el.fldDel(i_fld);
 		continue;
-	    }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	i_fld++;
     }
 
@@ -854,7 +847,7 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	int io_id = ((Contr &)owner()).ioId(vo.fld().reserve());
 	if(io_id < 0) disable();
 	else ((Contr&)owner()).set(io_id, vl);
-    }catch(TError err) { disable(); }
+    } catch(TError &err) { disable(); }
 }
 
 void Prm::vlGet( TVal &val )
@@ -870,7 +863,7 @@ void Prm::vlGet( TVal &val )
 	int io_id = ((Contr &)owner()).ioId(val.fld().reserve());
 	if(io_id < 0) disable();
 	else val.set(enableStat()?owner().get(io_id):EVAL_STR,0,true);
-    }catch(TError err) { disable(); }
+    } catch(TError &err) { disable(); }
 }
 
 void Prm::vlArchMake( TVal &val )

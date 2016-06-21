@@ -33,7 +33,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.4"
+#define MOD_VER		"1.6.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
@@ -335,8 +335,7 @@ void TWEB::perSYSCall( unsigned int cnt )
 	for(unsigned i_s = 0; i_s < list.size(); i_s++)
 	    if(cur_tm > vcaSesAt(list[i_s]).at().lstReq()+sessTime()*60)
 		vcaSesDel(list[i_s]);
-    }
-    catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
@@ -507,8 +506,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    }
 	    else mess_err(nodePath().c_str(),_("An inaccessible request is received: '%s'"),zero_lev.c_str());
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	ses.page = "Page <" + ses.url + "> error: " + err.mess;
 	page = httpHead("404 Not Found",ses.page.size()) + ses.page;
 	return;
@@ -565,8 +563,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);
 	    page = ses.page;
 	}
-    }
-    catch(...) { page = httpHead("404 Not Found"); }
+    } catch(...) { page = httpHead("404 Not Found"); }
 }
 
 void TWEB::messPost( string &page, const string &cat, const string &mess, MessLev type )

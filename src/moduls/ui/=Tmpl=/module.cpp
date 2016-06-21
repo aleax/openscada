@@ -255,7 +255,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    if(i_col==(n_col-1)) page = page+"</tr>";
 		    if(++i_col == n_col) i_col=0;
 		}
-	    }catch(...)	{ }
+	    } catch(...) { }
 	}
 	page = page+"</table>\n"+w_tail();
 	page = http_head("200 OK",page.size())+page;

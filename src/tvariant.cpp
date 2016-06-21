@@ -448,7 +448,7 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
     XMLNode oTree;
     if(!nd) {
 	try { oTree.load(str, 0, Mess->charset()); }
-	catch(TError err) { return prev; }
+	catch(TError &err) { return prev; }
 	nd = &oTree;
     }
 
@@ -1174,12 +1174,12 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	    if(!fOK) return TSYS::strMess(_("3:Load file '%s' error."), prms[0].getS().c_str());
 
 	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getI():0), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
-	    catch(TError err) { return "1:"+err.mess; }
+	    catch(TError &err) { return "1:"+err.mess; }
 	}
 	//  Load from string
 	else
 	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getI():0), Mess->charset()); }
-	    catch(TError err) { return "1:"+err.mess; }
+	    catch(TError &err) { return "1:"+err.mess; }
 	fromXMLNode(nd);
 	return string("0");
     }
@@ -1289,8 +1289,7 @@ TVariant TCntrNodeObj::propGet( const string &id )
     try {
 	AutoHD<TCntrNode> nnd = cnd.at().nodeAt(id);
 	return new TCntrNodeObj(nnd,user());
-    }
-    catch(...) { }
+    } catch(...) { }
 
     TVariant rez = cnd.at().objPropGet(id);
     if(rez.isNull()) return TVariant();
@@ -1308,6 +1307,6 @@ string TCntrNodeObj::getStrXML( const string &oid )	{ return "<TCntrNodeObj path
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if(cnd.freeStat()) throw TError("TCntrNodeObj",_("The object don't attached to node of OpenSCADA tree."));
-    try{ return cnd.at().objFuncCall(id, prms, user()); } catch(TError){ }
+    try{ return cnd.at().objFuncCall(id, prms, user()); } catch(TError&){ }
     return TVarObj::funcCall(id, prms);
 }

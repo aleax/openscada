@@ -37,7 +37,7 @@
 #define MOD_NAME	_("EPICS CA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.2"
+#define MOD_VER		"0.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Channel Access, by EPICS.")
 #define LICENSE		"GPL2"
@@ -166,7 +166,7 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 void TMdContr::enable_( )
 {
     try{ connectServer(); }
-    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 }
 
 void TMdContr::disable_( )
@@ -247,7 +247,7 @@ void *TMdContr::Task( void *icntr )
 	if(cntr.redntUse()) { TSYS::sysSleep(1); continue; }
 	if(cntr.tmDelay > 0){ TSYS::sysSleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 	//try{ if(!cntr.con) cntr.connectServer(); }
-	//catch(TError err) { cntr.tmDelay = cntr.syncPer(); continue; }
+	//catch(TError &err) { cntr.tmDelay = cntr.syncPer(); continue; }
 	firstCall = (cntr.tmDelay == 0);
 
 	int64_t t_cnt = TSYS::curTime();
@@ -309,8 +309,7 @@ void *TMdContr::Task( void *icntr )
 		    MmsValue_delete(value);
 		    cntr.tmDelay--;
 		}
-	    }
-	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }*/
+	    } catch(TError &err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }*/
 	cntr.callSt = false;
 	cntr.enRes.resRelease();
 	cntr.tmGath = TSYS::curTime()-t_cnt;
@@ -454,7 +453,7 @@ void TMdPrm::save_( )
 	for(i_p = 0; i_p < als->size(); i_p++)
 	    if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == (*als)[i_p]) break;
 	if(i_p >= als->size())
-	    try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
+	    try{ p_el.fldDel(i_a); continue; } catch(TError &err) { }
 	i_a++;
     }
 

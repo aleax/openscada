@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.5.3"
+#define MOD_VER		"1.5.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -225,7 +225,7 @@ void *TTest::Task( void *CfgM )
 			fc.setS(i_prm, t_n->attr(fc.func()->io(i_prm)->id()));
 		    }
 		    try{ fc.calc("root"); }
-		    catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+		    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 		}
 	}
 	TSYS::sysSleep(STD_WAIT_DELAY*1e-3);

@@ -272,7 +272,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
 	return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
-    } catch(...){ }
+    } catch(...) { }
 
     return def;
 }
@@ -280,7 +280,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 void TMdPrm::setModPrm( const string &prm, const string &val )
 {
     XMLNode prmNd("ModCfg");
-    try { prmNd.load(cfg("MOD_PRMS").getS()); } catch(...){ }
+    try { prmNd.load(cfg("MOD_PRMS").getS()); } catch(...) { }
 
     if(modPrm(prm) != val) modif();
     string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");

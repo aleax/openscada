@@ -547,7 +547,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 	    }
 	}
 	if(toSetWdg || (TSYS::strSepParse(cur_wdg,1,';').size() && (isGrp || nwdg == TSYS::strSepParse(cur_wdg,0,';')))) setWdg(cur_wdg);
-    }catch(...){ return false; }
+    } catch(...) { return false; }
 
     return true;
 }

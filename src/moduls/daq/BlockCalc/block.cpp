@@ -158,8 +158,7 @@ void Block::saveIO( )
 	    cfg.cfg("VAL").setS(getS(i_ln));					//Value
 
 	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Block link '%s' save error."),func()->io(i_ln)->id().c_str());
 	}
@@ -341,8 +340,7 @@ void Block::calc( bool first, bool last, double frq )
 		    break;
 		default: break;
 	    }
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mErrCnt++;
 	lnkRes.resRelease();
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -354,8 +352,7 @@ void Block::calc( bool first, bool last, double frq )
     try {
 	TValFunc::calc();
 	modif();
-    }
-    catch(TError err) { mErrCnt++; throw; }
+    } catch(TError &err) { mErrCnt++; throw; }
 
     //Put values to output links
     lnkRes.resRequestR();
@@ -384,8 +381,7 @@ void Block::calc( bool first, bool last, double frq )
 		    break;
 		default: break;
 	    }
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mErrCnt++;
 	lnkRes.resRelease();
 	throw TError(nodePath().c_str(),_("Error writing block's '%s' links."),id().c_str());
@@ -500,7 +496,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    opt->setText(wFunc());
 	    try{ if(dynamic_cast<TFunction*>(&SYS->nodeAt(wFunc(),0,'.').at())) opt->setText(opt->text()+" (+)"); }
-	    catch(TError) { }
+	    catch(TError&) { }
 	}
 	if(!func() && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) setWFunc(TSYS::strParse(opt->text(),0," "));
     }
@@ -557,8 +553,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 				break;
 			    default: break;
 			}
-		    }
-		    catch(TError) { }
+		    } catch(TError&) { }
 		    break;
 		case '3':
 		    if(mLnk[id].tp == I_PRM || mLnk[id].tp == O_PRM) SYS->daq().at().ctrListPrmAttr(opt, lnk, false, '.');

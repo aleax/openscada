@@ -39,7 +39,7 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
 
 ModMArch::~ModMArch( )
 {
-    try{ stop(); }catch(...){}
+    try { stop(); } catch(...) { }
 }
 
 void ModMArch::postDisable( int flag )
@@ -72,7 +72,7 @@ void ModMArch::load_( )
 	if(!(vl=prmNd.attr("Size")).empty())	setMaxSize(s2r(vl));
 	if(!(vl=prmNd.attr("TmAsStr")).empty())	setTmAsStr(s2i(vl));
 	//if(!(vl=prmNd.attr("TmDtSepScDayThr")).empty())	setTmDtSepScDayThr(s2i(vl));
-    } catch(...){ }
+    } catch(...) { }
 
     //Load message archive parameters
     TConfig wcfg(&mod->archEl());
@@ -118,7 +118,7 @@ void ModMArch::start( )
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb, 0, '.');
     try { if(!db.at().enableStat()) db.at().enable(); }
-    catch(TError err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
 
     TMArchivator::start();
 }

@@ -137,7 +137,7 @@ void TMdContr::reqService( XML_N &io )
     io.setAttr("err", "");
 
     try { tr.at().start(); }
-    catch(TError err) { io.setAttr("err", TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
+    catch(TError &err) { io.setAttr("err", TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
 
     Client::reqService(io);
     if(io.attr("err").empty()) tmDelay--;
@@ -182,7 +182,7 @@ void TMdContr::disable_( )
 void TMdContr::start_( )
 {
     //Establish connection
-    //try { tr.at().start(); } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+    //try { tr.at().start(); } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
@@ -208,7 +208,7 @@ void TMdContr::protIO( XML_N &io )
     ResAlloc resN(tr.at().nodeRes(), true);
     if(messLev() == TMess::Debug) io.setAttr("debug", "1");
     try { Client::protIO(io); }
-    catch(TError er)
+    catch(TError &er)
     { io.setAttr("err", TSYS::strMess("0x%x:%s:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
 }
 
@@ -346,8 +346,7 @@ void *TMdContr::Task( void *icntr )
 
 	    TSYS::taskSleep(cntr.period(), cntr.period() ? 0 : TSYS::cron(cntr.cron()));
 	}
-    }
-    catch(TError err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prcSt = false;
 
@@ -556,7 +555,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 			      setAttr("referenceTypeId",i2s(OpcUa_HierarchicalReferences))->
 			      setAttr("browseDirection",i2s(BD_BOTH))->
 			      setAttr("resultMask",i2s(/*0x3f*/RdRm_IsForward|RdRm_BrowseName));
-	try{ reqService(req); } catch(TError) { opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)); return; }
+	try{ reqService(req); } catch(TError&) { opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)); return; }
 	if(!req.attr("err").empty() || !req.childSize() || !req.childGet(0)->childSize()) {
 	    if(!req.attr("err").empty()) mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
 	    opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder));
@@ -684,7 +683,7 @@ string TMdPrm::attrPrc( )
 		if(TSYS::strLine(pEl.fldAt(i_a).reserve(),0) == snd) {
 		    if(pEl.fldAt(i_a).type() != vtp)
 			try { pEl.fldDel(i_a); break; }
-			catch(TError err) { }
+			catch(TError &err) { }
 		    srchOK = true;
 		}
 
@@ -734,7 +733,7 @@ string TMdPrm::attrPrc( )
 	for(i_p = 0; i_p < als.size(); i_p++)
 	    if(TSYS::strLine(pEl.fldAt(i_a).reserve(),0) == als[i_p])	break;
 	if(i_p >= als.size())
-	    try{ pEl.fldDel(i_a); continue; } catch(TError err) { }
+	    try{ pEl.fldDel(i_a); continue; } catch(TError &err) { }
 	i_a++;
     }
 
@@ -789,7 +788,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		cNodeId = TSYS::strDecode(opt->text().substr(stP+1,stC-stP-1));
 		XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 		req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(AId_NodeClass));
-		try { owner().reqService(req); } catch(TError) { }
+		try { owner().reqService(req); } catch(TError&) { }
 		if(req.attr("err").empty() && req.childSize() && s2i(req.childGet(0)->text()) == NC_Variable) {
 		    string nLs = ndList(), nS;
 		    for(int off = 0; (nS=TSYS::strLine(nLs,0,&off)).size(); )
@@ -811,7 +810,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			      setAttr("browseDirection", i2s(BD_BOTH))->
 			      setAttr("resultMask", i2s(RdRm_IsForward|RdRm_BrowseName));
 	try{ owner().reqService(req); }
-	catch(TError) { opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)); return; }
+	catch(TError&) { opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)); return; }
 	if(!req.attr("err").empty() || !req.childSize() || !req.childGet(0)->childSize()) {
 	    opt->childAdd("el")->setText(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder));
 	    return;

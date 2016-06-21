@@ -151,7 +151,7 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 		    break;
 		}
 	    }
-	} catch(TError) { }
+	} catch(TError&) { }
     }
 
     return rez;

@@ -100,26 +100,26 @@ void ModArch::postEnable( int flag )
 }
 
 //!!! Destructor for root module's object.
-ModArch::~ModArch()
+ModArch::~ModArch( )
 {
-    try{ modStop(); }catch(...){}
+    try{ modStop(); } catch(...) { }
 }
 
 //!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
-void ModArch::load_()
+void ModArch::load_( )
 {
     //> Load parameters from command line
 
 }
 
 //!!! Main subsystem API function for self modules message objects creation.
-TMArchivator *ModArch::AMess(const string &iid, const string &idb)
+TMArchivator *ModArch::AMess( const string &iid, const string &idb )
 {
     return new ModMArch(iid,idb,&owner().messE());
 }
 
 //!!! Main subsystem API functions for self modules value archive objects creation.
-TVArchivator *ModArch::AVal(const string &iid, const string &idb)
+TVArchivator *ModArch::AVal( const string &iid, const string &idb )
 {
     return new ModVArch(iid,idb,&owner().valE());
 }

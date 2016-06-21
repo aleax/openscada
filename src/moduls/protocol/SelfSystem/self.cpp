@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.1"
+#define MOD_VER		"1.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
@@ -262,8 +262,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    return;
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Request error: %s"), err.mess.c_str());
 	tro.stop();
 	throw;
@@ -396,7 +395,7 @@ bool TProtIn::mess( const string &request, string &answer )
 		}
 		req_node.setAttr("path", "/"+host+req_node.attr("path"))->setAttr("reforwardHost", "");
 		try { SYS->transport().at().cntrIfCmd(req_node, "Reforward", auth.name); }
-		catch(TError err) {
+		catch(TError &err) {
 		    req_node.childClear();
 		    req_node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
 		}
@@ -434,7 +433,7 @@ bool TProtIn::mess( const string &request, string &answer )
 		    req.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
 
 	    answer = "REZ "ERR_NO" " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
-	} catch(TError err) { answer = "REZ "ERR_PRC" " + err.cat + ":" + err.mess + "\x0A"; }
+	} catch(TError &err) { answer = "REZ "ERR_PRC" " + err.cat + ":" + err.mess + "\x0A"; }
     }
     else answer = "REZ "ERR_CMD" Command format error.\x0A";
 

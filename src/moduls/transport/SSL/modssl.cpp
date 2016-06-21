@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.5"
+#define MOD_VER		"1.3.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -200,7 +200,7 @@ void TSocketIn::load_( )
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
 	if( prmNd.childGet("CertKey",0,true) ) mCertKey = prmNd.childGet("CertKey")->text();
 	mKeyPass = prmNd.attr("PKeyPass");
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TSocketIn::save_( )
@@ -387,16 +387,14 @@ void *TSocketIn::Task( void *sock_in )
 		try {
 		    SYS->taskCreate(s.nodePath('.',true)+"."+i2s(BIO_get_fd(cbio,NULL)), s.taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    s.connNumb++;
-		}
-		catch(TError err) {
+		} catch(TError &err) {
 		    delete sin;
 		    mess_err(err.cat.c_str(), err.mess.c_str());
 		    mess_err(s.nodePath().c_str(), _("Error creation of the thread!"));
 		}
 	    }
 	}
-    }
-    catch(TError err)	{ s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Client tasks stop command
     s.endrunCl = true;
@@ -503,8 +501,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
     }
@@ -537,8 +534,7 @@ bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &s
 	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	prot_in = proto.at().at(n_pr);
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!noex) throw;
 	return false;
     }
@@ -557,8 +553,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 	n_pr = prot_in.at().name();
 	prot_in.free();
 	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!prot_in.freeStat()) {
 	    if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	    n_pr = prot_in.at().name();
@@ -713,7 +708,7 @@ void TSocketOut::load_( )
 	if(prmNd.childGet("CertKey",0,true)) setCertKey(prmNd.childGet("CertKey")->text());
 	vl = prmNd.attr("PKeyPass");	if(!vl.empty()) setPKeyPass(vl);
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TSocketOut::save_( )
@@ -874,8 +869,7 @@ void TSocketOut::start( int tmCon )
 	BIO_set_nbio(conn, 1);
 
 	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(sock_fd >= 0) close(sock_fd);
 	if(conn) { BIO_reset(conn); BIO_free(conn); }
 	if(ctx)	SSL_CTX_free(ctx);

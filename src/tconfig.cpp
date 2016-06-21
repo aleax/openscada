@@ -339,8 +339,7 @@ void TCfg::setS( const string &val )
 		    TVariant::setS(tVal);
 		    mOwner.mRes.unlock();
 		}
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mOwner.mRes.lock();
 		TVariant::setS(tVal);
 		mOwner.mRes.unlock();
@@ -364,7 +363,7 @@ void TCfg::setR( double val )
 	    double tVal = TVariant::getR();
 	    TVariant::setR(val);
 	    try{ if(!mOwner.cfgChange(*this,tVal)) TVariant::setR(tVal); }
-	    catch(TError err) { TVariant::setR(tVal); throw; }
+	    catch(TError &err) { TVariant::setR(tVal); throw; }
 	    break;
 	}
 	default: break;
@@ -383,7 +382,7 @@ void TCfg::setI( int64_t val )
 	    int tVal = TVariant::getI();
 	    TVariant::setI(val);
 	    try{ if(!mOwner.cfgChange(*this,tVal)) TVariant::setI(tVal); }
-	    catch(TError err) { TVariant::setI(tVal); throw; }
+	    catch(TError &err) { TVariant::setI(tVal); throw; }
 	    break;
 	}
 	default: break;
@@ -400,7 +399,7 @@ void TCfg::setB( char val )
 	    bool tVal = TVariant::getB();
 	    TVariant::setB(val);
 	    try { if(!mOwner.cfgChange(*this,tVal)) TVariant::setB(tVal); }
-	    catch(TError err) { TVariant::setB(tVal); throw; }
+	    catch(TError &err) { TVariant::setB(tVal); throw; }
 	    break;
 	}
 	default: break;

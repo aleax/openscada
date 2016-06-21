@@ -1304,7 +1304,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    SYS->taskDestroy(taskNm);
 	    SYS->taskCreate(taskNm, -1, OrigDocument::DocTask, sw, 2);
 	    sw->attrAt("process").at().setB(true);
-	}catch(TError err) { }
+	} catch(TError &err) { }
     }
     //Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI()) {
@@ -1321,7 +1321,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	string cdoc = cfg.owner()->attrAt("doc").at().getS();
 	if(!cdoc.empty()) {
 	    XMLNode xdoc;
-	    try { xdoc.load(XHTML_entity+cdoc, false, Mess->charset()); } catch(TError err) { }
+	    try { xdoc.load(XHTML_entity+cdoc, false, Mess->charset()); } catch(TError &err) { }
 	    cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
 	}
 	sizeUpdate(sw);
@@ -1421,7 +1421,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    delete reRez;
 	    if(dcLng.size())
 		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);
-	} catch(...){ }
+	} catch(...) { }
 	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
 	    tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
 	    tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");
@@ -1483,8 +1483,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     try {
 	if(!tmpl.empty()) xdoc.load(XHTML_entity+tmpl, true, Mess->charset());
 	else return "";
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(wdg->nodePath().c_str(),_("Document parsing error: %s."),err.mess.c_str());
 	return "";
     }
@@ -1530,8 +1529,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	// Load values of user IO
 	for(int i_a = 12; i_a < funcV.ioSize( ); i_a++)
 	    funcV.set(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().get());
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(wdg->nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
 	return "";
     }
@@ -1590,8 +1588,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		for(unsigned i_tr = 0; i_tr < xproc.childSize(); i_tr++)
 		    *(xcur->childAdd()) = *xproc.childGet(i_tr);
 		if(instrDel)	xcur->childDel(i_t--);
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(wdg->nodePath().c_str(),_("Instruction procedure '%s' error: %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
 		mess_err(wdg->nodePath().c_str(),_("Error code: %s"), curPrc->text().c_str());
 	    }

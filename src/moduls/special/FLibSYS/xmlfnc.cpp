@@ -44,5 +44,5 @@ void xmlCntrReq::calc( TValFunc *val )
 	}
 	xnd.at().fromXMLNode(req);
 	val->setS(0, "0");
-    }catch(TError err){ val->setS(0, TSYS::strMess(_("1:Request error: %s"),err.mess.c_str())); }
+    } catch(TError &err) { val->setS(0, TSYS::strMess(_("1:Request error: %s"),err.mess.c_str())); }
 }

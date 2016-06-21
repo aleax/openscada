@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.8.1"
+#define MOD_VER		"3.8.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -179,8 +179,7 @@ string TVision::uiPropGet( const string &prop, const string &user )
     try {
 	prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user));
 	return prmNd.attr(prop);
-    }
-    catch(TError err)	{ }
+    } catch(TError &err) { }
 
     return "";
 }
@@ -191,7 +190,7 @@ void TVision::uiPropSet( const string &prop, const string &vl, const string &use
 
     XMLNode prmNd("UI");
     try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }
-    catch(TError err)	{ }
+    catch(TError &err)	{ }
     prmNd.setAttr(prop,vl);
     TBDS::genDBSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
 }
@@ -478,8 +477,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 	    node.setAttr("pHash", "");
 	}
 	return rez;
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	node.childClear();
 	node.setAttr("mcat", err.cat)->setAttr("rez", "10")->setText(err.mess);
     }

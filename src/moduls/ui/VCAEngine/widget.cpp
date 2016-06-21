@@ -251,8 +251,7 @@ void Widget::setEnable( bool val )
 
 		//Register of heritater
 		parent().at().heritReg(this);
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(nodePath().c_str(),_("Widget enable error: %s"),err.mess.c_str());
 		mParent.free();
 		if(BACrtHoldOvr) { BACrtHoldOvr = false; postEnable(TCntrNode::NodeConnect); }
@@ -279,7 +278,7 @@ void Widget::setEnable( bool val )
 	for(unsigned i_h = 0; i_h < herit().size(); )
 	    if(herit()[i_h].at().enable())
 		try { herit()[i_h].at().setEnable(false); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Inheriting widget '%s' disable error."),herit()[i_h].at().id().c_str());
 		    i_h++;
@@ -300,7 +299,7 @@ void Widget::setEnable( bool val )
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	if(val != wdgAt(ls[i_l]).at().enable())
 	    try { wdgAt(ls[i_l]).at().setEnable(val); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Child widget '%s' enable/disable error."),ls[i_l].c_str());
 	    }
@@ -417,7 +416,7 @@ void Widget::inheritIncl( const string &iwdg )
     for(unsigned iW = 0; iW < ls.size(); iW++)
 	if(!wdgPresent(ls[iW]))
 	    try { wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().path(),true); }
-	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 }
 
 void Widget::wClear( )
@@ -453,7 +452,7 @@ void Widget::wClear( )
 	    for(unsigned iW = 0; iW < ls.size(); iW++)
 		if(!wdgPresent(ls[iW]))
 		    try{ wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().path(),true); }
-		    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+		    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 		else wdgAt(ls[iW]).at().wClear();
 	}
     }
@@ -482,8 +481,7 @@ string Widget::wChDown( const string &ia )
 		if(pName.find(parw.at().path()+"/") == 0) pName = parent().at().parentNm();
 		parw.at().wdgAdd(id(), "", pName);
 		(TCntrNode&)parw.at().wdgAt(id()).at() = (TCntrNode&)*this;
-	    }
-	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 	parw = parw.at().wdgAt(id());
 	// Relink original to source
 	if(parentNm() != parw.at().path()) { setParentNm(parw.at().path()); setEnable(true); }
@@ -569,8 +567,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf )
 	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
 	//Set modif for new attribute reload allow
 	if(forceMdf) a->setModif(modifVal(*a));
-    }
-    catch(...){ }
+    } catch(...) { }
     pthread_mutex_unlock(&mtxAttr());
 }
 
@@ -597,8 +594,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	    if(p1->second->mOi > pos) p1->second->mOi--;
 	delete p->second;
 	mAttrs.erase(p);
-    }
-    catch(...){ }
+    } catch(...) { }
     pthread_mutex_unlock(&mtxAttr());
 }
 
@@ -813,7 +809,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
 		try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
-		catch(TError) { }
+		catch(TError&) { }
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD)) {	//Get attributes all updated elements' of the branch
 	// Self attributes put
@@ -975,7 +971,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    }
 	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 		opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
-	}catch(TError err) { }
+	} catch(TError &err) { }
     }
     else if(a_path == "/br/wdg_" || a_path == "/inclwdg/wdg") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
@@ -1352,7 +1348,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 			opt->childAdd("el")->setText(c_path+ls[i_l]);
 		}
-	    }catch(TError err) { }
+	    } catch(TError &err) { }
 	}
     }
     else if(a_path.compare(0,14,"/links/lnk/el_") == 0) {
@@ -1561,7 +1557,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    try {
 		SYS->daq().at().at(TSYS::strParse(calcLang(),0,".")).at().
 				compileFuncSynthHighl(TSYS::strParse(calcLang(),1,"."),*opt);
-	    } catch(...){ }
+	    } catch(...) { }
     }
     else if(a_path == "/proc/calc/plangLs" && ctrChkNode(opt)) {
 	string tplng = calcLang();

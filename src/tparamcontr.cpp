@@ -184,12 +184,12 @@ void TParamContr::LoadParmCfg( )
 		    string shfr = c_el.cfg("SHIFR").getS();
 		    if(!present(shfr))	add(shfr, i_tp);
 		    itReg[shfr] = true;
-		} catch(TError err) {
+		} catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		    mess_err(nodePath().c_str(), _("Add parameter '%s' error."), c_el.cfg("SHIFR").getS().c_str());
 		}
 	    }
-	} catch(TError err) {
+	} catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_err(nodePath().c_str(), _("Search and create new parameters error."));
 	}
@@ -294,7 +294,7 @@ void TParamContr::enable( )
     for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
 	if(at(prm_list[i_prm]).at().toEnable())
 	    try{ at(prm_list[i_prm]).at().enable(); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
 		mess_warning(nodePath().c_str(), _("Enable parameter '%s' error."), prm_list[i_prm].c_str());
 		enErr = true;
@@ -313,7 +313,7 @@ void TParamContr::disable( )
     for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
 	if(at(prm_list[i_prm]).at().enableStat())
 	    try{ at(prm_list[i_prm]).at().disable(); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
 		mess_warning(nodePath().c_str(), _("Disable parameter '%s' error."), prm_list[i_prm].c_str());
 	    }

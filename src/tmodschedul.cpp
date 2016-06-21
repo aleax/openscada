@@ -280,8 +280,7 @@ void TModSchedul::libDet( const string &iname )
 			modDel(TSYS::strSepParse(schHD[i_sh].use[0],1,'.'));
 		    schHD[i_sh].use.erase(schHD[i_sh].use.begin());
 		}
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		//owner().at(schHD[i_sh]->use[0].mod_sub).at().modAt(schHD[i_sh]->use[0].n_mod).at().load();
 		//Start all modules
 		for(unsigned i_m = 0; i_m < schHD[i_sh].use.size(); i_m++)
@@ -349,7 +348,7 @@ int TModSchedul::libLoad( const string &iname, bool full )
 	    res.unlock();
 	    libReg("*"+smod);
 	    try{ libAtt("*"+smod,full); ldCnt++; }
-	    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
     }
 
@@ -367,8 +366,7 @@ int TModSchedul::libLoad( const string &iname, bool full )
 	    try {
 		res.unlock();
 		if(st_auto) libDet(files[i_f]);
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_warning(nodePath().c_str(),_("Can't detach library '%s'."),files[i_f].c_str());
 		continue;
@@ -380,7 +378,7 @@ int TModSchedul::libLoad( const string &iname, bool full )
 
 	if(st_auto) {
 	    try{ libAtt(files[i_f],full); ldCnt++; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
     }
 

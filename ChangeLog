@@ -1,4 +1,6 @@
 2016-06-21 Roman
+- !!!!:SYS: For some productivity rise the exceptions catch moved from the object copy to it's reference,
+    thanks Max Kochetkov (fido_max) for the hint.
 - SYS:data/openscada_start.in adapted to gettext by use the aliase "GETTEXT".
 - !!!!:FIX:DB.FireBird,MySQL,ODBC,: Fix and checked the moving to open table without exceptions into the table object constructor.
 - FIX:TUIS::docGet(): Force documents to background is added.

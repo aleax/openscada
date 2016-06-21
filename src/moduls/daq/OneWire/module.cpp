@@ -39,7 +39,7 @@
 #define MOD_NAME	_("1Wire devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.3"
+#define MOD_VER		"0.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("1Wire devices support by OWFS (http://owfs.org).")
 #define LICENSE		"GPL2"
@@ -274,7 +274,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.callSt = true;
 	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse() && !TSYS::taskEndRun(); i_p++)
 	    try { cntr.p_hd[i_p].at().getVals(); }
-	    catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	cntr.callSt = false;
 	cntr.en_res.resRelease();
 	cntr.tmGath = TSYS::curTime()-t_cnt;
@@ -355,7 +355,7 @@ void TMdPrm::enable( )
 		break;
 	if(i_l >= als.size())
 	    try{ p_el.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     owner().prmEn(id(), true);

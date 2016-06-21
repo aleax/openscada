@@ -39,7 +39,7 @@
 #define MOD_NAME	_("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.6"
+#define MOD_VER		"0.6.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
 #define LICENSE		"GPL2"
@@ -226,7 +226,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.en_res.resRequestR( );
 	for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++)
 	    try { cntr.p_hd[i_p].at().type().getVals(&cntr.p_hd[i_p].at()); }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease( );
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;
@@ -293,7 +293,7 @@ void TMdPrm::enable( )
 		break;
 	if(i_l >= als.size())
 	    try { els.fldDel(i_p); i_p--; }
-	    catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
     als.clear();
 

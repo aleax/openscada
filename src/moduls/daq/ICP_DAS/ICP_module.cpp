@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.4"
+#define MOD_VER		"1.7.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -213,8 +213,7 @@ void TMdContr::start_( )
 
 	//Start the gathering data task
 	SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(mBus == 0)	{ Close_Slot(9); Close_SlotAll(); }
 	throw;
     }
@@ -252,7 +251,7 @@ string TMdContr::DCONCRC( string str )
 string TMdContr::prmLP( const string &prm )
 {
     XMLNode prmNd;
-    try { prmNd.load(cfg("LP_PRMS").getS()); return prmNd.attr(prm); } catch(...){ }
+    try { prmNd.load(cfg("LP_PRMS").getS()); return prmNd.attr(prm); } catch(...) { }
 
     return "";
 }
@@ -260,7 +259,7 @@ string TMdContr::prmLP( const string &prm )
 void TMdContr::setPrmLP( const string &prm, const string &vl )
 {
     XMLNode prmNd("prms");
-    try { prmNd.load(cfg("LP_PRMS").getS()); } catch(...){ }
+    try { prmNd.load(cfg("LP_PRMS").getS()); } catch(...) { }
     prmNd.setAttr(prm,vl);
     cfg("LP_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
     modif();
@@ -323,8 +322,7 @@ void *TMdContr::Task( void *icntr )
 	    //Calc next work time and sleep
 	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 	}
-    }
-    catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     //Watchdog timer disable
     if(cntr.mBus == 0 && wTm > 0) {
@@ -375,11 +373,10 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 		    rez.assign(buf, resp_len);
 		    // Wait tail
 		    while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
-			try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
+			try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &er) { break; }
 			rez.append(buf, resp_len);
 		    }
-		}
-		catch(TError er) {	//By possible the send request breakdown and no response
+		} catch(TError &er) {	//By possible the send request breakdown and no response
 		    if(err.empty()) err = "10:" + er.mess;
 		    else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		    continue;
@@ -396,7 +393,7 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 
 		return rez;
 	    }
-	} catch(TError er) { err = "10:" + er.mess; }
+	} catch(TError &er) { err = "10:" + er.mess; }
 
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("ERR -> '%s': %s"), rez.c_str(), err.c_str());
 
@@ -503,7 +500,7 @@ void TMdPrm::enable( )
 		break;
 	if(i_l >= als.size())
 	    try{ pEl.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     owner().prmEn(id(), true);
@@ -546,7 +543,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
 		return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
-    } catch(...){ }
+    } catch(...) { }
 
     return def;
 }
@@ -554,7 +551,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 void TMdPrm::setModPrm( const string &prm, const string &val )
 {
     XMLNode prmNd("ModCfg");
-    try { prmNd.load(cfg("MOD_PRMS").getS()); } catch(...){ }
+    try { prmNd.load(cfg("MOD_PRMS").getS()); } catch(...) { }
 
     if(modPrm(prm) != val) modif();
     string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
@@ -616,7 +613,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     }
     //Direct write
     try { if(da) da->vlSet(this, vo, vl, pvl); }
-    catch(TError err) {
+    catch(TError &err) {
 	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),vo.name().c_str(),err.mess.c_str());
 	vo.setS(pvl.getS(), 0, true);
     }

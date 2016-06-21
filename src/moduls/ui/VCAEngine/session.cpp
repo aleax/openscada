@@ -112,13 +112,12 @@ void Session::setEnable( bool val )
 	    list(pg_ls);
 	    for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
-		catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+		catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Enable root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 
 	    modifGClr();
-	}
-	catch(...){ mParent.free(); }
+	} catch(...) { mParent.free(); }
     }
     else {
 	if(start()) setStart(false);
@@ -328,7 +327,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
 	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path());
 	}
-    }catch(...){ }
+    } catch(...) { }
 }
 
 string Session::sessAttr( const string &idw, const string &id, bool onlyAllow )
@@ -447,7 +446,7 @@ void *Session::Task( void *icontr )
 	//Calc session pages and all other items at recursion
 	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
 	    try { ses.at(pls[i_l]).at().calc(false, false); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
 	    }
@@ -741,7 +740,7 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
 	funcIO.ioIns(new IO("lang",_("Notification message's language"),IO::String,IO::Default), IFA_lang);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
-	catch(TError er) {
+	catch(TError &er) {
 	    mess_err(owner()->nodePath().c_str(), _("Function of the notificator '%s' error: %s"), funcIO.id().c_str(), er.mess.c_str());
 	}
     }
@@ -1028,7 +1027,7 @@ void SessPage::setEnable( bool val, bool force )
 	    pageList(pg_ls);
 	    for(unsigned i_l = 0; i_l < pg_ls.size(); i_l++)
 		try{ pageAt(pg_ls[i_l]).at().setEnable(true); }
-		catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+		catch(TError &err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	}
 	mToEn = false;
     }
@@ -1089,7 +1088,7 @@ AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off )
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
 	try { return (AutoHD<Widget>)ownerSess()->nodeAt(wdg,1); }
-	catch(TError err) { return AutoHD<Widget>(); }
+	catch(TError &err) { return AutoHD<Widget>(); }
 
     int offt = off;
     string iw = TSYS::pathLev(wdg,lev,true,&offt);
@@ -1194,8 +1193,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			    if(prml.at().vlPresent(atr_id))	attr.at().setCfgVal("prm:"+prm_lnk+"/"+atr_id);
 			}
 		    }
-		}
-		catch(TError err) { }
+		} catch(TError &err) { }
 	    }
 	    if(cfg.owner()->attrAt("pgOpen").at().getB() != !cfg.getS().empty())
 		cfg.owner()->attrAt("pgOpen").at().setB(!cfg.getS().empty());
@@ -1475,15 +1473,13 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	try {
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    // Second compile try
 	    try {
 		fio.setId(TSYS::path2sepstr(path(),'_'));
 		mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(nodePath().c_str(),_("Compile function '%s' by language '%s' for widget error: %s"),
 					    fio.id().c_str(),calcLang().c_str(),err.mess.c_str());
 	    }
@@ -1585,7 +1581,7 @@ AutoHD<Widget> SessWdg::wdgAt( const string &wdg, int lev, int off )
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
 	try { return (AutoHD<Widget>)ownerSess()->nodeAt(wdg,1); }
-	catch(TError err) { return AutoHD<Widget>(); }
+	catch(TError &err) { return AutoHD<Widget>(); }
 
     return Widget::wdgAt(wdg, lev, off);
 }
@@ -1598,7 +1594,7 @@ void SessWdg::pgClose( )
 	    ((AutoHD<SessWdg>)mod->nodeAt(attrAt("pgOpenSrc").at().getS())).at().attrAt("pgOpen").at().setB(false);
 	    attrAt("pgOpenSrc").at().setS("");
 	}
-    }catch(TError) { }
+    } catch(TError&) { }
 
     vector<string> list;
     wdgList(list);
@@ -1693,7 +1689,7 @@ void SessWdg::prcElListUpdate( )
     mWdgChldAct.clear();
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	try { if(((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().process()) mWdgChldAct.push_back(ls[i_l]); }
-	catch(TError err) { }
+	catch(TError &err) { }
     resDt.unlock();
 
     attrList(ls);
@@ -1717,8 +1713,7 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
 	    resDt.unlock();
 	    wdg.at().getUpdtWdg(wpath, tm, els);
 	    resDt.lock();
-	}
-	catch(TError err) { }
+	} catch(TError &err) { }
 }
 
 unsigned int SessWdg::modifVal( Attr &cfg )
@@ -1751,8 +1746,7 @@ void SessWdg::calc( bool first, bool last )
 	    resDt.unlock();
 	    wdg.at().calc(first, last);
 	    resDt.lock();
-	}
-	catch(TError err) { }
+	} catch(TError &err) { }
     resDt.unlock();
 
     try {
@@ -1794,7 +1788,7 @@ void SessWdg::calc( bool first, bool last )
 		    }
 		    else if(obj_tp == "wdg:")
 			try { attr.at().set(attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).at().get()); }
-			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
+			catch(TError &err) { attr.at().setS(EVAL_STR); continue; }
 		    else if(obj_tp == "arh:" && attr.at().flgGlob()&Attr::Address)
 			attr.at().setS("/Archive/va_"+attr.at().cfgVal().substr(obj_tp.size()));
 		}
@@ -1904,8 +1898,7 @@ void SessWdg::calc( bool first, bool last )
 	    //Generic calc
 	    Widget::calc(this);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	res.unlock();
 	mess_err(err.cat.c_str(), err.mess.c_str());
 	mess_err(nodePath().c_str(), _("Widget calculation error. Process is disabled."));
@@ -1947,7 +1940,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		//SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().set(cfg.get());
 	    }
 	    else if(obj_tp == "wdg:")	attrAt(cfg.cfgVal().substr(obj_tp.size()),0).at().set(cfg.get());
-	}catch(...)	{ }
+	} catch(...)	{ }
     }
 
     return true;
@@ -1983,14 +1976,13 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    nw.at().setEnable(true);
 
 	    return new TCntrNodeObj(&nw.at(), user);
-	}
-	catch(TError err){ return false; }
+	} catch(TError &err) { return false; }
     }
     // bool wdgDel(string wid) - delete the widget, return true for success
     //  wid - widget identifier
     if(iid == "wdgDel" && prms.size()) {
 	try { wdgDel(prms[0].getS()); }
-	catch(TError err){ return false; }
+	catch(TError &err){ return false; }
 	return true;
     }
     // TCntrNodeObj wdgAt(string wid, bool byPath = false) - attach to the child widget or global by <path>
@@ -1998,7 +1990,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  byPath - attach by absolute or relative path. First item of absolute path (session or project id) is passed.
     if(iid == "wdgAt" && prms.size()) {
 	try { return new TCntrNodeObj(wdgAt(prms[0].getS(),(prms.size()>1&&prms[1].getB())?0:-1),user); }
-	catch(TError err){ }
+	catch(TError &err) { }
 	return false;
     }
     // bool attrPresent(string attr) - check for attribute <attr> present.

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.2.7"
+#define MOD_VER		"3.2.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -293,8 +293,7 @@ void Engine::load_( )
 		d_tm = TSYS::curTime();
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load widgets libraries error."));
     }
@@ -340,8 +339,7 @@ void Engine::load_( )
 		d_tm = TSYS::curTime();
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load projects error."));
     }
@@ -388,7 +386,7 @@ void Engine::load_( )
 		    sesAt(sId).at().setBackgrnd(true);
 		    sesAt(sId).at().setEnable(true);
 		}
-	    } catch(...){ }
+	    } catch(...) { }
 	}
     } catch(...){ }
     res.release();
@@ -429,7 +427,7 @@ void Engine::modStart( )
 		    sesAt(sId).at().setBackgrnd(true);
 		    sesAt(sId).at().setEnable(true);
 		}
-	    }catch(...){ }
+	    } catch(...) { }
     res.release();
 
     //Start sessions
@@ -889,7 +887,7 @@ AutoHD<TCntrNode> Engine::chldAt( int8_t igr, const string &name, const string &
 		prj.at().load(true);
 		prj.at().setEnable(true);
 		prj.at().modifGClr();
-	    } catch(TError err) { }
+	    } catch(TError &err) { }
 	}
     }
 

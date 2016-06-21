@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.5.1"
+#define MOD_VER		"1.5.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -121,8 +121,7 @@ void MBD::postDisable( int flag )
 	    }
 	    else PQclear(res);
 	    PQfinish(connection);
-	}
-	catch(...) {
+	} catch(...) {
 	    if(connection) PQfinish(connection);
 	    throw;
 	}
@@ -178,8 +177,7 @@ nextTry:
 	}
 	PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
 	if(!dbCreateTry) TBD::enable();
-    }
-    catch(...) {
+    } catch(...) {
 	if(connection) PQfinish(connection);
 	TBD::disable();
 	throw;
@@ -460,7 +458,7 @@ void MTable::postDisable( int flag )
     owner().transCommit();
     if(flag) {
 	try { owner().sqlReq("DROP TABLE \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\""); }
-	catch(TError err){ mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
+	catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
     }
 }
 
@@ -657,7 +655,7 @@ void MTable::fieldSet( TConfig &cfg )
     if(!isForceUpdt) {
 	req = "SELECT 1 FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" " + req_where;
 	try { owner().sqlReq(req, &tbl, true); }
-	catch(TError err) { fieldFix(cfg); owner().sqlReq(req, &tbl, true); }
+	catch(TError &err) { fieldFix(cfg); owner().sqlReq(req, &tbl, true); }
 	if(tbl.size() < 2) {
 	    // Add new record
 	    req = "INSERT INTO \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" ";
@@ -697,7 +695,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try{ owner().sqlReq(req, NULL, true); }
-    catch(TError err) { fieldFix(cfg); owner().sqlReq(req, NULL, true); }
+    catch(TError &err) { fieldFix(cfg); owner().sqlReq(req, NULL, true); }
 }
 
 void MTable::fieldDel( TConfig &cfg )
@@ -720,7 +718,7 @@ void MTable::fieldDel( TConfig &cfg )
 
     //Main request
     try { owner().sqlReq("DELETE FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" "+req_where, NULL, true); }
-    catch(TError err) {
+    catch(TError &err) {
 	//Check for present
 	vector< vector<string> > tbl;
 	owner().sqlReq("SELECT 1 FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" "+req_where, &tbl, false);
@@ -843,7 +841,7 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
 	    owner().getStructDB(name(), tblStrct);	//Update the table structure information
 	}
 	//Drop unfixable table
-	catch(TError err) {
+	catch(TError &err) {
 	    if(err.cod == MBD::SQL_CONN || recurse) throw;
 	    owner().sqlReq("DROP TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"");
 	    owner().create(name(), true);

@@ -130,8 +130,7 @@ void TMdContr::postDisable( int flag )
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl,true);
 	}
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
@@ -176,7 +175,7 @@ void TMdContr::start_( )
     //Establish connection
     /*AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
     try { tr.at().start(); }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
+    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 
     //Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
@@ -206,7 +205,7 @@ void TMdContr::start_( )
 	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
 	    if(at(pls[i_p]).at().enableStat()) at(pls[i_p]).at().enable();
 	isReload = false;
-    } catch(TError) { isReload = false; throw; }
+    } catch(TError&) { isReload = false; throw; }
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -881,7 +880,7 @@ void *TMdContr::Task( void *icntr )
 
 	    if(cntr.endrunReq) isStop = true;
 	}
-    } catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prcSt = false;
 
@@ -1110,7 +1109,7 @@ void TMdPrm::enable( )
 		    if((fId=pEl.fldId(lCtx->func()->io(i_io)->id(),true)) < pEl.fldSize()) {
 			if(pEl.fldAt(fId).type() != tp)
 			    try{ pEl.fldDel(fId); }
-			    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+			    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 			else {
 			    pEl.fldAt(fId).setFlg(flg);
 			    pEl.fldAt(fId).setDescr(lCtx->func()->io(i_io)->name().c_str());
@@ -1145,7 +1144,7 @@ void TMdPrm::enable( )
 	    // First call
 	    if(owner().startStat()) upVal(true, false, 0);
 
-	}catch(TError err) { disable(); throw; }
+	} catch(TError &err) { disable(); throw; }
 
     //Check for delete DAQ parameter's attributes
     for(int i_p = 0; i_p < (int)pEl.fldSize(); i_p++) {
@@ -1155,7 +1154,7 @@ void TMdPrm::enable( )
 		break;
 	if(i_l >= als.size())
 	    try{ pEl.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     owner().prmEn(this, true);	//Put to process
@@ -1327,8 +1326,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[i_el])), 0, true);
 		else pVal.at().set(owner().getVal(lCtx->lnk(id_lnk).real,acqErr), 0, true);
 	    }
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_warning(nodePath().c_str(),_("Error calculate template."));
 	}
@@ -1386,7 +1384,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	MtxAlloc res(elem().resEl(), true);
 	unsigned aId = elem().fldId(prms[0].getS(), true);
 	if(aId == elem().fldSize())	return false;
-	try { elem().fldDel(aId); } catch(TError){ return false; }
+	try { elem().fldDel(aId); } catch(TError&) { return false; }
 	return true;
     }
 

@@ -78,15 +78,15 @@ solver:	/*empty*/
 solve:  assign ';'
 	| var ';'	{ $1->free(); }
 	| IF '(' expr ')' if solve end
-	    { try{ pF->cdCond($3,$5,$7,$7); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ pF->cdCond($3,$5,$7,$7); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| IF '(' expr ')' if solve end ELSE solve end
-	    { try{ pF->cdCond($3,$5,$7,$10); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ pF->cdCond($3,$5,$7,$10); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| WHILE cycl '(' expr end ')' solve end
-	    { try{ pF->cdCycle($2,$4,$5,$8,0); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ pF->cdCycle($2,$4,$5,$8,0); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| FOR '(' assign ';' cycl expr end ';' assign end ')' solve end
-	    { try{ pF->cdCycle($5,$6,$10,$13,$7); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ pF->cdCycle($5,$6,$10,$13,$7); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| FOR '(' var IN cycl expr end ')' solve end
-	    { try{ pF->cdCycleObj($5,$6,$7,$10,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ pF->cdCycleObj($5,$6,$7,$10,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| FUNCTON '(' varlst ')' fnc_in solve end
 	    {
 		if($5 > 65535) { sfErr(TSYS::strMess(_("Internal function inaccessible by offset %d > %d"),$5,65535), &@1); YYABORT; }
@@ -118,23 +118,23 @@ solve:  assign ';'
 		pF->prg += (char)Reg::EndFull;
 	    }
 	| FUNC '(' prmlst ')' ';'
-	    { try{ pF->cdExtFnc($1,$3,true); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ pF->cdExtFnc($1,$3,true); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| INT_FUNC '(' prmlst ')' ';'
-	    { try{ pF->cdIntFnc($1,$3,true); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ pF->cdIntFnc($1,$3,true); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '{' solver '}'
 var:	VAR			{ $$ = $1; }
 	| VAR_DIR VAR		{ $2->setType(Reg::Real/*String*/); $$ = $2; }
 	| var O_PRP_F		{ $$ = pF->cdProp($1,$2); }
 	| var '[' expr ']'	{ $$ = pF->cdProp($1,"",$3); }
 	| var O_PRP_F '(' prmlst ')'
-	    { try{ $$ = pF->cdObjFnc(pF->cdProp($1,$2),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ $$ = pF->cdObjFnc(pF->cdProp($1,$2),$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 assign: assign ',' assign
 	| var '=' expr
 	    {
 		try {
 		    if($1->type() == Reg::Free) $1->setType($3->vType(pF));
 		    pF->cdAssign($1, $3);
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var ADDEQ expr
 	    {
@@ -142,7 +142,7 @@ assign: assign ',' assign
 		    if($1->type() == Reg::Free) throw TError(pF->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    pF->cdBinaryOp(Reg::AddAss, $1, $3, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Add,$1,$3));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var SUBEQ expr
 	    {
@@ -150,7 +150,7 @@ assign: assign ',' assign
 		    if($1->type() == Reg::Free) throw TError(pF->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    pF->cdBinaryOp(Reg::SubAss, $1, $3, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Sub,$1,$3));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var MULEQ expr
 	    {
@@ -158,7 +158,7 @@ assign: assign ',' assign
 		    if($1->type() == Reg::Free) throw TError(pF->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    pF->cdBinaryOp(Reg::MulAss, $1, $3, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Mul,$1,$3));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var DIVEQ expr
 	    {
@@ -166,7 +166,7 @@ assign: assign ',' assign
 		    if($1->type() == Reg::Free) throw TError(pF->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    pF->cdBinaryOp(Reg::DivAss, $1, $3, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Div,$1,$3));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var INCREM
 	    {
@@ -175,7 +175,7 @@ assign: assign ',' assign
 		    Reg *reg = pF->regTmpNew(); *reg = 1;
 		    pF->cdBinaryOp(Reg::AddAss, $1, reg, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Add,$1,reg));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var DECREM
 	    {
@@ -184,7 +184,7 @@ assign: assign ',' assign
 		    Reg *reg = pF->regTmpNew(); *reg = 1;
 		    pF->cdBinaryOp(Reg::SubAss, $1, reg, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Sub,$1,reg));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| /*empty*/
 expr:	CONST	{ $$ = $1; }
@@ -196,7 +196,7 @@ expr:	CONST	{ $$ = $1; }
 		    $1->val().s->append(*($2->val().s));
 		    $2->free();
 		    $$ = $1;
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var
 	    {
@@ -204,7 +204,7 @@ expr:	CONST	{ $$ = $1; }
 		    if($1->type() == Reg::Free)
 			throw TError(pF->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    $$ = $1;
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var '=' expr
 	    {
@@ -212,7 +212,7 @@ expr:	CONST	{ $$ = $1; }
 		    if($1->type() == Reg::Free) $1->setType($3->vType(pF));
 		    pF->cdAssign($1, $3);
 		    $$ = $1;
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var INCREM
 	    {
@@ -222,7 +222,7 @@ expr:	CONST	{ $$ = $1; }
 		    Reg *reg = pF->regTmpNew(); *reg = 1;
 		    pF->cdBinaryOp(Reg::AddAss, $1, reg, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Add,$1,reg));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| var DECREM
 	    {
@@ -232,7 +232,7 @@ expr:	CONST	{ $$ = $1; }
 		    Reg *reg = pF->regTmpNew(); *reg = 1;
 		    pF->cdBinaryOp(Reg::SubAss, $1, reg, $1);
 		    //pF->cdAssign($1, pF->cdBinaryOp(Reg::Sub,$1,reg));
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| INCREM var
 	    {
@@ -242,7 +242,7 @@ expr:	CONST	{ $$ = $1; }
 		    pF->cdBinaryOp(Reg::AddAss, $2, reg, $2);
 		    //pF->cdAssign($2, pF->cdBinaryOp(Reg::Add,$2,reg));
 		    $$ = $2;
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
 	| DECREM var
 	    {
@@ -252,46 +252,46 @@ expr:	CONST	{ $$ = $1; }
 		    pF->cdBinaryOp(Reg::SubAss, $2, reg, $2);
 		    //pF->cdAssign($2, pF->cdBinaryOp(Reg::Sub,$2,reg));
 		    $$ = $2;
-		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
+		} catch(TError &err){ sfErr(err.mess,&@1); YYABORT; }
 	    }
-	| B_FUNC '(' ')'		{ try{ $$ = pF->cdBldFnc($1); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| B_FUNC1 '(' expr ')'		{ try{ $$ = pF->cdBldFnc($1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| B_FUNC2 '(' expr ',' expr ')'	{ try{ $$ = pF->cdBldFnc($1,$3,$5); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| FUNC '(' prmlst ')'		{ try{ $$ = pF->cdExtFnc($1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| INT_FUNC '(' prmlst ')'	{ try{ $$ = pF->cdIntFnc($1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| NEW OBJECT '(' ')'		{ try{ $$ = pF->cdMviObject(); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| NEW ARRAY '(' prmlst ')'	{ try{ $$ = pF->cdMviArray($4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| NEW REGEXP '(' prmlst ')'	{ try{ $$ = pF->cdMviRegExp($4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '+' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Add,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '-' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Sub,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '*' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Mul,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '/' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Div,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '%' expr	{ try{ $$ = pF->cdBinaryOp(Reg::RstI,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '|' expr	{ try{ $$ = pF->cdBinaryOp(Reg::BitOr,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '&' expr	{ try{ $$ = pF->cdBinaryOp(Reg::BitAnd,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '^' expr	{ try{ $$ = pF->cdBinaryOp(Reg::BitXor,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	| B_FUNC '(' ')'		{ try{ $$ = pF->cdBldFnc($1); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| B_FUNC1 '(' expr ')'		{ try{ $$ = pF->cdBldFnc($1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| B_FUNC2 '(' expr ',' expr ')'	{ try{ $$ = pF->cdBldFnc($1,$3,$5); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| FUNC '(' prmlst ')'		{ try{ $$ = pF->cdExtFnc($1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| INT_FUNC '(' prmlst ')'	{ try{ $$ = pF->cdIntFnc($1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| NEW OBJECT '(' ')'		{ try{ $$ = pF->cdMviObject(); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| NEW ARRAY '(' prmlst ')'	{ try{ $$ = pF->cdMviArray($4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| NEW REGEXP '(' prmlst ')'	{ try{ $$ = pF->cdMviRegExp($4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '+' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Add,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '-' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Sub,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '*' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Mul,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '/' expr	{ try{ $$ = pF->cdBinaryOp(Reg::Div,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '%' expr	{ try{ $$ = pF->cdBinaryOp(Reg::RstI,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '|' expr	{ try{ $$ = pF->cdBinaryOp(Reg::BitOr,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '&' expr	{ try{ $$ = pF->cdBinaryOp(Reg::BitAnd,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '^' expr	{ try{ $$ = pF->cdBinaryOp(Reg::BitXor,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '(' expr ')'	{ $$ = $2; }
-//	| expr OR expr	{ try{ $$ = pF->cdBinaryOp(Reg::LOr,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr OR_expr expr end		{ try{ $$ = pF->cdCondBinaryOp($2,$1,$3,$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-//	| expr AND expr	{ try{ $$ = pF->cdBinaryOp(Reg::LAnd,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr AND_expr expr end	{ try{ $$ = pF->cdCondBinaryOp($2,$1,$3,$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr BITSHLEFT expr		{ try{ $$ = pF->cdBinaryOp(Reg::BitShLeft,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr BITSHRIGHT expr		{ try{ $$ = pF->cdBinaryOp(Reg::BitShRight,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '<' expr	{ try{ $$ = pF->cdBinaryOp(Reg::LT,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr '>' expr	{ try{ $$ = pF->cdBinaryOp(Reg::GT,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr GE expr 	{ try{ $$ = pF->cdBinaryOp(Reg::GEQ,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr LE expr 	{ try{ $$ = pF->cdBinaryOp(Reg::LEQ,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr EQ expr 	{ try{ $$ = pF->cdBinaryOp(Reg::EQU,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| expr NE expr 	{ try{ $$ = pF->cdBinaryOp(Reg::NEQ,$1,$3); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| '!' expr	{ try{ $$ = pF->cdUnaryOp(Reg::Not,$2); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| '~' expr	{ try{ $$ = pF->cdUnaryOp(Reg::BitNot,$2); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
-	| '-' expr %prec UN_MINUS { try{ $$ = pF->cdUnaryOp(Reg::Neg,$2); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+//	| expr OR expr	{ try{ $$ = pF->cdBinaryOp(Reg::LOr,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr OR_expr expr end		{ try{ $$ = pF->cdCondBinaryOp($2,$1,$3,$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+//	| expr AND expr	{ try{ $$ = pF->cdBinaryOp(Reg::LAnd,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr AND_expr expr end	{ try{ $$ = pF->cdCondBinaryOp($2,$1,$3,$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr BITSHLEFT expr		{ try{ $$ = pF->cdBinaryOp(Reg::BitShLeft,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr BITSHRIGHT expr		{ try{ $$ = pF->cdBinaryOp(Reg::BitShRight,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '<' expr	{ try{ $$ = pF->cdBinaryOp(Reg::LT,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr '>' expr	{ try{ $$ = pF->cdBinaryOp(Reg::GT,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr GE expr 	{ try{ $$ = pF->cdBinaryOp(Reg::GEQ,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr LE expr 	{ try{ $$ = pF->cdBinaryOp(Reg::LEQ,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr EQ expr 	{ try{ $$ = pF->cdBinaryOp(Reg::EQU,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| expr NE expr 	{ try{ $$ = pF->cdBinaryOp(Reg::NEQ,$1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| '!' expr	{ try{ $$ = pF->cdUnaryOp(Reg::Not,$2); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| '~' expr	{ try{ $$ = pF->cdUnaryOp(Reg::BitNot,$2); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| '-' expr %prec UN_MINUS { try{ $$ = pF->cdUnaryOp(Reg::Neg,$2); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr if_expr expr end ':' expr end
-	    { try{ $$ = pF->cdCond($1,$2,$4,$7,$3,$6); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ $$ = pF->cdCond($1,$2,$4,$7,$3,$6); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| expr O_PRP_F		{ $$ = pF->cdProp($1,$2); }
 	| expr '[' expr ']'	{ $$ = pF->cdProp($1,"",$3); }
 	| expr O_PRP_F '(' prmlst ')'
-	    { try{ $$ = pF->cdObjFnc(pF->cdProp($1,$2),$4); } catch(TError err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ $$ = pF->cdObjFnc(pF->cdProp($1,$2),$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 prmlst: /*empty*/		{ $$ = 0; }
 	| expr			{ $$ = 1; pF->fPrmst.push_front($1); }
 	| prmlst ',' prmlst	{ $$ = $1 + $3; }
@@ -605,7 +605,7 @@ retry:
 		yylval.reg->setPAttr(vl);
 		yylval.reg->setLock(true);
 		return VAR;
-	    } catch(...){ }
+	    } catch(...) { }
 
 	    // Check for object's parameters
 	    //string sel = TSYS::strSepParse(smb_nm,0,'.');

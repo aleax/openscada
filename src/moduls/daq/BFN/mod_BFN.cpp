@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.2"
+#define MOD_VER		"0.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -372,7 +372,7 @@ void TMdContr::enable_( )
 		}
 	    }
 	}
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TMdContr::start_( )
@@ -420,7 +420,7 @@ void TMdContr::reqBFN(XMLNode &io)
 
     AutoHD<TTransportOut> tr;
     try{ tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.')); }
-    catch(TError err){ throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),addr().c_str()); }
+    catch(TError &err) { throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),addr().c_str()); }
 
     XMLNode req("POST");
     req.setAttr("URI","/cgi-bin/imwl_ws.cgi");
@@ -452,7 +452,7 @@ void TMdContr::reqBFN(XMLNode &io)
     if(req.attr("err").empty()) {
 	XMLNode rez;
 	try { rez.load(req.text()); }
-	catch(TError err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplete.")); }
+	catch(TError &err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplete.")); }
 	string rCod = rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response")->childGet("res")->text();
 	if(s2i(rCod)) io.setAttr("err",rCod);
 	else {
@@ -580,8 +580,7 @@ void *TMdContr::Task( void *icntr )
 		else if(tErr.empty()) tErr = reqAlrms.attr("err");
 		cntr.p_hd[i_p].at().acq_err.setVal(tErr);
 	    }
-	}
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; }
+	} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; }
 
 	//Generic alarm generate
 	if(tErr.size() && cntr.alSt <= 0) {

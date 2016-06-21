@@ -209,8 +209,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 
 			if(p->owner().messLev() == TMess::Debug)
 			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Response: '%s'"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin," ").c_str());
-		    }
-		    catch(...) { }
+		    } catch(...) { }
 		if(trsO[i_t].at().prm1() == cntrMN) { trO = trsO[i_t]; ePrm->prevTr = trO.at().id(); }
 	    }
 	}
@@ -240,12 +239,10 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 	//Wait tail
 	mbap.assign(buf, resp_len);
 	while(resp_len)
-	    try
-	    {
+	    try {
 		resp_len = trO.at().messIO(NULL, 0, buf, sizeof(buf), 0, true);
 		mbap.append(buf, resp_len);
-	    }
-	    catch(TError err){ break; }
+	    } catch(TError &err) { break; }
 
 	if(mbap.size() < 5)	err = _("13:Error respond: Too short.");
 	else
@@ -284,7 +281,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 		pdu = mbap.substr(5);
 	    }
 	}
-    }catch(TError er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
+    } catch(TError &er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
 
     if(!err.empty() && p->owner().messLev() == TMess::Debug)
 	mess_debug_(p->nodePath().c_str(), _("Error: '%s': '%s'"),err.c_str(), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
@@ -506,28 +503,24 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
     // Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/trLst" && ip->ctrChkNode(opt,"get"))
-	try
-	{
+	try {
 	    vector<string> sls;
 	    SYS->transport().at().at("Sockets").at().inList(sls);
 	    for(unsigned i_s = 0; i_s < sls.size(); i_s++) opt->childAdd("el")->setText(sls[i_s]);
-	} catch(TError err) { }
+	} catch(TError &err) { }
     else if(a_path == "/prm/cfg/mPLCLst" && ip->ctrChkNode(opt,"get"))
-	try
-	{
+	try {
 	    vector<AutoHD<TTransportOut> > trsO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().assTrs();
 	    for(unsigned i_t = 0; i_t < trsO.size(); i_t++)
 		if(trsO[i_t].at().startStat())
 		    opt->childAdd("el")->setText(u2s(trsO[i_t].at().prm1()));
-	} catch(TError err) { }
+	} catch(TError &err) { }
     else if(a_path == "/prm/cfg/fileList" && ip->ctrChkNode(opt,"get")) TSYS::ctrListFS(opt, ip->cfg("CNTR_NET_CFG"), "xml;");
-    else if(a_path == "/prm/cfg/PLCList" && ip->ctrChkNode(opt,"get"))
-    {
+    else if(a_path == "/prm/cfg/PLCList" && ip->ctrChkNode(opt,"get")) {
 	opt->childAdd("el")->setAttr("id","0")->setText(_("<No select>"));
 	XMLNode *nDev = NULL, *nId = NULL, *nNm = NULL;
 	MtxAlloc res(p->dataM, true);
-	for(int i_dev = 0; (nDev=ePrm->cfg.childGet("Device",i_dev,true)); i_dev++)
-	{
+	for(int i_dev = 0; (nDev=ePrm->cfg.childGet("Device",i_dev,true)); i_dev++) {
 	    if(!(nId=nDev->childGet("Number",0,true))) continue;
 	    nNm = nDev->childGet("Name",0,true);
 	    opt->childAdd("el")->setAttr("id",nId->text())->setText(nNm?(nNm->text()+"("+nId->text()+")"):nId->text());

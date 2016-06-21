@@ -152,8 +152,7 @@ void TArchiveS::load_( )
 			at(m_ls[i_m]).at().messDel(db_ls[i_it]);
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Message archivators load error."));
     }
@@ -189,8 +188,7 @@ void TArchiveS::load_( )
 			at(m_ls[i_m]).at().valDel(db_ls[i_it]);
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Value archivators load error."));
     }
@@ -222,8 +220,7 @@ void TArchiveS::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(valAt(db_ls[i_it]).at().DB()))
 		    valDel(db_ls[i_it]);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Value archives load error."));
     }
@@ -283,7 +280,7 @@ void TArchiveS::subStart( )
 	    if(mess.at().startStat()) stArchM = true;
 	    else if(mess.at().toStart())
 		try { mess.at().start(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),oLst[iO].c_str());
 		}
@@ -295,7 +292,7 @@ void TArchiveS::subStart( )
 	    if(val.at().startStat()) stArchV = true;
 	    else if(val.at().toStart())
 		try { val.at().start(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		    mess_err(nodePath().c_str(), _("Value archivator '%s' start error."), val.at().workId().c_str());
 		}
@@ -308,7 +305,7 @@ void TArchiveS::subStart( )
 	AutoHD<TVArchive> aval = valAt(oLst[iO]);
 	if(aval.at().toStart())
 	    try { aval.at().start(); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Value archive '%s' start error."),oLst[iO].c_str());
 	    }
@@ -323,7 +320,7 @@ void TArchiveS::subStart( )
 	    AutoHD<TMArchivator> mess = mod.at().messAt(oLst[iO]);
 	    if(mess.at().startStat())
 		try { mess.at().start(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),oLst[iO].c_str());
 		}
@@ -334,7 +331,7 @@ void TArchiveS::subStart( )
 	    AutoHD<TVArchivator> val = mod.at().valAt(oLst[iO]);
 	    if(val.at().startStat())
 		try { val.at().start(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		    mess_err(nodePath().c_str(), _("Value archivator '%s' start error."), val.at().workId().c_str());
 		}
@@ -372,7 +369,7 @@ void TArchiveS::subStop( )
 	    AutoHD<TVArchivator> val = mod.at().valAt(oLst[iO]);
 	    if(val.at().startStat())
 		try { val.at().stop(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Value archivator '%s' stop error."),oLst[iO].c_str());
 		}
@@ -383,7 +380,7 @@ void TArchiveS::subStop( )
 	    AutoHD<TMArchivator> mess = mod.at().messAt(oLst[iO]);
 	    if(mess.at().startStat())
 		try { mess.at().stop(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Message archivator '%s' stop error."),oLst[iO].c_str());
 		}
@@ -396,7 +393,7 @@ void TArchiveS::subStop( )
 	AutoHD<TVArchive> aval = valAt(oLst[iO]);
 	if(aval.at().startStat())
 	    try { aval.at().stop(); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Value archive '%s' stop error."),oLst[iO].c_str());
 	    }
@@ -457,7 +454,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 		AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
 		if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
 		    try { archtor.at().put(ml,force); }
-		    catch(TError er) {
+		    catch(TError &er) {
 			mess_err(nodePath().c_str(), _("Put message to the archiver '%s' error: %s"),
 							(tLst[iT]+"."+oLst[iO]).c_str(), er.mess.c_str());
 		    }
@@ -796,8 +793,7 @@ void *TArchiveS::ArhMessTask( void *param )
 
 		res.lock();
 		if(rez) messHead = newHeadLstread;
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(arh.nodePath().c_str(),_("Message buffer process error."));
 	    }
@@ -830,7 +826,7 @@ void *TArchiveS::ArhValTask( void *param )
 	    try {
 		if(work_tm/arh.actVal[iArh].at().period() > arh.actVal[iArh].at().end()/arh.actVal[iArh].at().period())
 		    arh.actVal[iArh].at().getActiveData(stm);
-	    } catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	arh.vRes.unlock();
 
 	TSYS::taskSleep((int64_t)arh.valPeriod()*1000000);

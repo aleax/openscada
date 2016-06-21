@@ -255,7 +255,7 @@ void Project::setEnable( bool val )
     list(f_lst);
     for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++)
 	try{ at(f_lst[i_ls]).at().setEnable(val); }
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     mEnable = val;
 }
@@ -1011,7 +1011,7 @@ void Page::load_( )
 	string f_id = c_el.cfg("ID").getS();
 	if(!pagePresent(f_id))
 	    try { pageAdd(f_id,"",""); }
-	    catch(TError err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 	itReg[f_id] = true;
     }
 
@@ -1058,7 +1058,7 @@ void Page::loadIO( )
 	}
 	if(!wdgPresent(sid))
 	    try{ wdgAdd(sid,"",""); }
-	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load();
 	itReg[sid] = true;
@@ -1127,7 +1127,7 @@ void Page::setEnable( bool val )
     pageList(ls);
     for(unsigned iL = 0; iL < ls.size(); iL++)
         try { pageAt(ls[iL]).at().setEnable(val); }
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Include widgets link update on the parrent change
     if(val) {
@@ -1142,7 +1142,7 @@ void Page::setEnable( bool val )
 		    iw.at().setEnable(true);
 		}
 		else if(manCrt) iw.at().modifClr();
-	    } catch(TError err) { }
+	    } catch(TError &err) { }
 	mParentNmPrev = parentNm();
     }
 }
@@ -1182,7 +1182,7 @@ AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off )
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
 	try { return (AutoHD<Widget>)ownerProj()->nodeAt(wdg,1); }
-	catch(TError err) { return AutoHD<Widget>(); }
+	catch(TError &err) { return AutoHD<Widget>(); }
 
     int offt = off;
     string iw = TSYS::pathLev(wdg,lev,true,&offt);
@@ -1460,7 +1460,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    for(unsigned iL = 0; iL < ls.size(); iL++)
 			opt->childAdd("el")->setText(c_path+ls[iL]);
 		}
-	    } catch(TError err) { }
+	    } catch(TError &err) { }
 	}
     }
     else return Widget::cntrCmdLinks(opt, lnk_ro);
@@ -1542,7 +1542,7 @@ AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off )
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
 	try { return (AutoHD<Widget>)ownerPage().ownerProj()->nodeAt(wdg,1); }
-	catch(TError err) { return AutoHD<Widget>(); }
+	catch(TError &err) { return AutoHD<Widget>(); }
 
     return Widget::wdgAt(wdg, lev, off);
 }

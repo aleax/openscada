@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.6.0"
+#define MOD_VER		"1.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -146,8 +146,7 @@ void TMdContr::postDisable(int flag)
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
-    }
-    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
@@ -219,7 +218,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.enRes.lock();
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
 		try { cntr.pHd[i_p].at().calc(isStart, isStop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
-		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    isStart = false;
 	    cntr.enRes.unlock();
 	    t_prev = t_cnt;
@@ -408,7 +407,7 @@ void TMdPrm::enable( )
 			if((fId=pEl.fldId(tmpl->val.func()->io(i_io)->id(),true)) < pEl.fldSize()) {
 			    if(pEl.fldAt(fId).type() != tp)
 				try{ pEl.fldDel(fId); }
-				catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+				catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 			    else {
 				pEl.fldAt(fId).setFlg(flg);
 				pEl.fldAt(fId).setDescr(tmpl->val.func()->io(i_io)->name().c_str());
@@ -441,8 +440,7 @@ void TMdPrm::enable( )
 	    }
 	    isProc = true;
 	}
-    }
-    catch(...){ disable(); throw; }
+    } catch(...) { disable(); throw; }
 
     //Check for delete DAQ parameter's attributes
     for(int iP = 0; isProc && iP < (int)pEl.fldSize(); iP++) {
@@ -452,7 +450,7 @@ void TMdPrm::enable( )
 		break;
 	if(i_l >= als.size())
 	    try{ pEl.fldDel(iP); iP--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     if(isFullEn && owner().startStat()) calc(true, false, 0);
@@ -553,7 +551,7 @@ void TMdPrm::initTmplLnks( bool checkNoLink )
 		else tmpl->val.setS(lnk(i_l).ioId, lnk(i_l).aprm.at().getS());
 	    }
 	    else chkLnkNeed = true;
-	} catch(TError err){ chkLnkNeed = true; }
+	} catch(TError &err) { chkLnkNeed = true; }
     }
 }
 
@@ -581,8 +579,7 @@ void TMdPrm::vlGet( TVal &val )
 		    val.set(lnk(id_lnk).aprm.at().getO().at().propGet(lnk(id_lnk).prmAttr.substr(lnk(id_lnk).detOff),'.'));
 		else val.set(lnk(id_lnk).aprm.at().get(), 0, true);
 	    }
-	}
-	catch(TError err) { }
+	} catch(TError &err) { }
     }
     else {
 	if(isStd() && tmpl->val.func() && idErr >= 0) val.setS(tmpl->val.getS(idErr), 0, true);
@@ -617,7 +614,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	    }
 	    else lnk(id_lnk).aprm.at().set(vl);
 	}
-    }catch(TError err) { }
+    } catch(TError &err) { }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -680,7 +677,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	MtxAlloc res(pEl.resEl(), true);
 	unsigned aId = pEl.fldId(prms[0].getS(), true);
 	if(aId == pEl.fldSize())	return false;
-	try { pEl.fldDel(aId); } catch(TError){ return false; }
+	try { pEl.fldDel(aId); } catch(TError&) { return false; }
 	return true;
     }
 
@@ -767,8 +764,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	//Put fixed system attributes
 	if(idNm >= 0)	setName(tmpl->val.getS(idNm));
 	if(idDscr >= 0)	setDescr(tmpl->val.getS(idDscr));
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error calculate template."));
     }
@@ -865,7 +861,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(prmValm == owner().owner().modId()+"."+owner().id()+"."+id())
 		    prmValm = owner().owner().modId()+"."+owner().id();
 		cfg("PSRC").setS(prmValm);
-	    } catch(...){ disable(); throw; }
+	    } catch(...) { disable(); throw; }
     }
     else if(isStd() && a_path == "/prm/cfg/PRM") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(cfg("PRM").getS());
@@ -873,7 +869,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    try {
 		if(enableStat()) disable();
 		cfg("PRM").setS(opt->text());
-	    } catch(...){ disable(); throw; }
+	    } catch(...) { disable(); throw; }
     }
     else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
     else if(isStd() && a_path == "/cfg/attr_only") {

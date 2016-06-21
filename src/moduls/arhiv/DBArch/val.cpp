@@ -43,7 +43,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
 
 ModVArch::~ModVArch( )
 {
-    try{ stop(); }catch(...){ }
+    try { stop(); } catch(...) { }
 }
 
 void ModVArch::load_( )
@@ -58,7 +58,7 @@ void ModVArch::load_( )
 	prmNd.load(cfg("A_PRMS").getS());
 	if(!(vl=prmNd.attr("Size")).empty()) setMaxSize(s2r(vl));
 	if(!(vl=prmNd.attr("TmAsStr")).empty()) setTmAsStr(s2i(vl));
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void ModVArch::save_( )
@@ -77,7 +77,7 @@ void ModVArch::start( )
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
     try { if(!db.at().enableStat()) db.at().enable(); }
-    catch(TError err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
 
     //Start getting data cycle
     TVArchivator::start();

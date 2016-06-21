@@ -61,7 +61,7 @@ void Func::postDisable( int flag )
     setStart(false);
     if(flag && !owner().DB().empty())
 	try{ del(); }
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 bool Func::cfgChange( TCfg &co, const TVariant &pc )
@@ -178,7 +178,7 @@ void Func::loadIO( )
     //Position fixing
     for(int i_p = 0; i_p < (int)u_pos.size(); i_p++) {
 	int iid = ioId(u_pos[i_p]);
-	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...){ }
+	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...) { }
     }
 }
 
@@ -368,12 +368,12 @@ int Func::funcGet( const string &path )
     try {
 	if(dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()))
 	    f_path = SYS->nodeAt(path,0,'.').at().nodePath();
-    }catch(...){ }
+    } catch(...) { }
 
     if(f_path.empty()) {
 	for(int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
 	    try{ if(dynamic_cast<TFunction*>(&SYS->nodeAt(ns+"."+path,0,'.').at())) break; }
-	    catch(...){ continue; }
+	    catch(...) { continue; }
 	if(ns.empty()) return -1;
 	f_path = SYS->nodeAt(ns+"."+path,0,'.').at().nodePath();
     }
@@ -1505,8 +1505,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	}
 	return false;
 	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%s", err.mess.c_str());
     }
 

@@ -110,8 +110,7 @@ void TProt::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(nAt(db_ls[i_it]).at().DB()))
 		    nDel(db_ls[i_it]);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new node error."));
     }
@@ -299,11 +298,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.assign(buf, resp_len);
 		    //Wait tail
 		    while(resp_len) {
-			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);
 		    }
-		}
-		catch(TError er) {	//By possible the send request breakdown and no response
+		} catch(TError &er) {	//By possible the send request breakdown and no response
 		    if(err.empty()) err = _("14:Device error: ") + er.mess;
 		    else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		    continue;
@@ -331,11 +329,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.assign(buf, resp_len);
 		    //Wait tail
 		    while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A")) {
-			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);
 		    }
-		}
-		catch(TError er) {	//By possible the send request breakdown and no response
+		} catch(TError &er) {	//By possible the send request breakdown and no response
 		    if(err.empty()) err = _("14:Device error: ") + er.mess;
 		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
 		    continue;
@@ -369,7 +366,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
 	}
-    } catch(TError er) { err = _("14:Device error: ") + er.mess; }
+    } catch(TError &er) { err = _("14:Device error: ") + er.mess; }
 
     io.setText(err.empty()?pdu:"");
     if(!err.empty()) io.setAttr("err",err);
@@ -817,8 +814,7 @@ void Node::setEnable( bool vl )
 		string mWorkProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
 		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    }
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str());
 	    throw;
 	}
@@ -1204,7 +1200,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 
 	    if(!req.attr("err").empty()) { pdu.assign(1, pdu[0]|0x80); pdu += 0xA; }
 	    pdu = req.text();
-	}catch(TError err) { pdu.assign(1, pdu[0]|0x80); pdu += 0xA; }
+	} catch(TError &err) { pdu.assign(1, pdu[0]|0x80); pdu += 0xA; }
 
 	return true;
     }
@@ -1267,8 +1263,7 @@ void *Node::Task( void *ind )
 			    case IO::Boolean:	li->second.at().setB(nd.data->val.getB(li->first));	break;
 			    default: break;
 			}
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(err.cat.c_str(), "%s", err.mess.c_str() );
 		mess_err(nd.nodePath().c_str(), _("Calculate node's function error."));
 	    }
@@ -1452,7 +1447,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    try {
 		SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
 				compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
-	    } catch(...){ }
+	    } catch(...) { }
     }
     else if(a_path == "/dt/plang_ls" && ctrChkNode(opt)) {
 	string tplng = progLang();

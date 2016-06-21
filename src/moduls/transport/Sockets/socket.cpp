@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.4"
+#define MOD_VER		"2.2.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -180,7 +180,7 @@ void TSocketIn::load_( )
 	vl = prmNd.attr("KeepAliveReqs");	if(!vl.empty()) setKeepAliveReqs(s2i(vl));
 	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TSocketIn::save_( )
@@ -363,7 +363,7 @@ void TSocketIn::start( )
 	    endrunCl = false;
 	    SYS->taskCreate(nodePath('.',true)+"."+i2s(sockFd), taskPrior(), ClTask, sin);
 	    connNumb++;
-	} catch(TError err) { close(sockFd); delete sin; throw; }
+	} catch(TError &err) { close(sockFd); delete sin; throw; }
     }
     else SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);	//main task for processing or client task create
     runSt = true;
@@ -414,7 +414,7 @@ void TSocketIn::check( )
 	    int fRes = getsockopt(oSockFd, SOL_SOCKET, SO_ERROR, &error, &slen);
 	    printf("TEST 01: fRes=%d; error=%d\n", fRes, error);
 	}*/
-    } catch(...){ }
+    } catch(...) { }
 }
 
 int TSocketIn::writeTo( const string &sender, const string &data )
@@ -534,8 +534,7 @@ void *TSocketIn::Task( void *sock_in )
 		try {
 		    SYS->taskCreate(sock->nodePath('.',true)+"."+i2s(sockFdCL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
-		}
-		catch(TError err) {
+		} catch(TError &err) {
 		    delete sin;
 		    mess_err(err.cat.c_str(), err.mess.c_str());
 		    mess_err(sock->nodePath().c_str(), _("Error creation of the thread!"));
@@ -554,8 +553,7 @@ void *TSocketIn::Task( void *sock_in )
 		try {
 		    SYS->taskCreate(sock->nodePath('.',true)+"."+i2s(sockFdCL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
-		}
-		catch(TError err) {
+		} catch(TError &err) {
 		    delete sin;
 		    mess_err(err.cat.c_str(), err.mess.c_str());
 		    mess_err(sock->nodePath().c_str(), _("Error creation of the thread!"));
@@ -701,8 +699,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("Has been disconnected by '%s'!"), s.sender.c_str());
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(s.s->nodePath().c_str(), _("Has been terminated by execution: %s"), err.mess.c_str());
     }
@@ -730,8 +727,7 @@ bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &s
 	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	prot_in = proto.at().at(n_pr);
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!noex) throw;
 	return false;
     }
@@ -752,8 +748,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, const string
 	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(nodePath().c_str(), _("Input protocol's object '%s' closed by self!"), n_pr.c_str());
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!prot_in.freeStat()) {
 	    if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	    n_pr = prot_in.at().name();
@@ -929,7 +924,7 @@ void TSocketOut::load_( )
 	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("tms"); if(!vl.empty()) setTimings(vl);
 	vl = prmNd.attr("MSS"); if(!vl.empty()) setMSS(s2i(vl));
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TSocketOut::save_( )
@@ -1216,8 +1211,7 @@ repeate:
 		trIn += vmax(0, iB);
 	    }
 	}
-    }
-    catch(TError) {
+    } catch(TError&) {
 	if(prevTmOut) setTmCon(prevTmOut);
 	throw;
     }

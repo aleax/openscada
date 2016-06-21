@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.9"
+#define MOD_VER		"0.7.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -306,7 +306,7 @@ void *TMdContr::Task( void *icntr )
 	MtxAlloc res(cntr.enRes, true);
 	for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
 	    try { cntr.pHd[i_p].at().upVal(ss); }
-	    catch(TError err) { daqerr = err.mess; }
+	    catch(TError &err) { daqerr = err.mess; }
 	res.unlock();
 	cntr.tmGath = TSYS::curTime()-t_cnt;
 	cntr.callSt = false;
@@ -438,7 +438,7 @@ void TMdPrm::enable( )
 	void *ss =  snmp_sess_open(owner().getSess());
 	if(ss) {
 	    try { upVal(ss,true); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		owner().prmEnErr = true;
 		mess_err(nodePath().c_str(),"%s",err.mess.c_str());
 	    }
@@ -622,7 +622,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 		break;
 	if(i_l >= als.size())
 	    try{ elem().fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 }
 

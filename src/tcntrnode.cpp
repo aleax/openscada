@@ -144,8 +144,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ;
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(err.cat == "warning") opt->setAttr("rez","1");
 	else opt->setAttr("rez","2");
 	opt->childClear();
@@ -182,18 +181,10 @@ void TCntrNode::nodeEn( int flag )
     }
     res.unlock();
 
-    /*MtxAlloc res(mChM, true);
-    TMap::iterator p;
-    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-	    if(p->second->nodeMode() == Disabled)
-		p->second->nodeEn(flag);
-    res.unlock();*/
-
     setNodeMode(Enabled);
 
     try { postEnable(flag); }
-    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    catch(TError &err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TCntrNode::nodeDis( long tm, int flag )
@@ -222,14 +213,6 @@ void TCntrNode::nodeDis( long tm, int flag )
 	}
 	res.unlock();
 
-	/*MtxAlloc res(mChM, true);
-	TMap::iterator p;
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-		if(p->second->nodeMode() == Enabled)
-		    p->second->nodeDis(tm, flag);
-	res.unlock();*/
-
 	//Wait of free node
 	time_t t_cur = time(NULL);
 	MtxAlloc res1(dataRes(), true);		//!! Added for prevent possible attach and next disable and free the node, by mUse control
@@ -252,16 +235,13 @@ void TCntrNode::nodeDis( long tm, int flag )
 	modif();
 
 	postDisable(flag);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_err(nodePath().c_str(), _("Node disable error. Restore node enabling."));
 	setNodeMode(Disabled);
 	nodeEn(NodeRestore|flag);
 	throw;
     }
-    //try{ postDisable(flag); }
-    //catch(TError err)	{ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 }
 
 void TCntrNode::nodeList( vector<string> &list, const string &gid )
@@ -299,8 +279,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 	res.unlock();
 	if(!chN.freeStat()) return chN.at().nodeAt(path, 0, sep, off, noex);
 	throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
-    }
-    catch(TError err) { if(!noex) throw; }
+    } catch(TError &err) { if(!noex) throw; }
 
     return NULL;
 }
@@ -575,11 +554,6 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(chN.at().nodeMode() == Disabled) throw TError(nodePath().c_str(),_("Element '%s' is disabled!"), name.c_str());
 
     return chN;
-
-    /*if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disabled)
-	throw TError(nodePath().c_str(),_("Element '%s' is not present or disabled!"), name.c_str());
-
-    return AutoHD<TCntrNode>(p->second, user);*/
 }
 
 int TCntrNode::isModify( int f )
@@ -604,10 +578,6 @@ int TCntrNode::isModify( int f )
 		if(chRflg) { rflg |= Child; break; }
 	    }
 	    if(iN < chLs.size()) break;
-
-	    /*for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-		if(p->second->isModify(Self|Child))	{ rflg |= Child; break; }
-	    if(p != (*chGrp)[i_g].elem.end())	break;*/
 	}
 	res2.unlock();
     }
@@ -658,8 +628,7 @@ void TCntrNode::load( bool force, string *errs )
 	    modifClr(true);			//Save flag clear
 	    load_();
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	    /*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_err(nodePath().c_str(), _("Load node error: %s"), err.mess.c_str());*/
@@ -681,11 +650,6 @@ void TCntrNode::load( bool force, string *errs )
 		res.lock();
 	    }
 	}
-
-	/*MtxAlloc res(mChM, true);
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-		if(p->second->isModify(Self|Child) || force) p->second->load(force, errs);*/
     }
 }
 
@@ -705,8 +669,7 @@ void TCntrNode::save( unsigned lev, string *errs )
 		if(nd->nodeFlg()&SelfSaveForceOnChild)	nd->save_();
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	/*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_err(nodePath().c_str(), _("Save node error: %s"), err.mess.c_str());*/
@@ -729,11 +692,6 @@ void TCntrNode::save( unsigned lev, string *errs )
 		res.lock();
 	    }
 	}
-
-	/*MtxAlloc res(mChM, true);
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-		if(p->second->isModify(Self|Child)) p->second->save(lev+1, errs);*/
     }
     if(!isError) modifClr();
 }
@@ -772,8 +730,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    nd.at().nodeList(nls, (prms.size() >= 1) ? prms[0].getS() : string(""));
 	    for(unsigned iN = 0; iN < nls.size(); iN++) rez->arSet(iN, nls[iN]);
 	    return rez;
-	}
-	catch(TError)	{ }
+	} catch(TError&)	{ }
 	return false;
     }
     // TCntrNodeObj nodeAt(string path, string sep = "") - attach to node

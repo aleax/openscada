@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.1"
+#define MOD_VER		"1.0.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -321,7 +321,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	    rez.assign(buf, resp_len);
 	    //Wait tail
 	    while(resp_len) {
-		try{ resp_len = tro.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+		try{ resp_len = tro.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
 		rez.append(buf, resp_len);
 	    }
 
@@ -334,8 +334,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	    err = "";
 	    break;
 	}
-    }
-    catch(TError ierr) { err = "10:"+ierr.mess; }
+    } catch(TError &ierr) { err = "10:"+ierr.mess; }
 
     if(messLev() >= TMess::Error && err.size()) mess_err(nodePath().c_str(), "%s", err.c_str());
     if(messLev() == TMess::Debug && err.size())
@@ -368,7 +367,7 @@ void *TMdContr::Task( void *icntr )
 	// Call for get vals
 	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
 	    try { cntr.p_hd[i_p].at().getVals(); }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	// Send generic MR write frame
 	if(cntr.MRWrFrm.size() != 8) {
@@ -510,7 +509,7 @@ void TMdPrm::enable( )
 		break;
 	if(i_l >= als.size())
 	    try{ p_el.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
     als.clear();
 
@@ -573,7 +572,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
 		return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
-    } catch(...){ }
+    } catch(...) { }
 
     return def;
 }
@@ -581,7 +580,7 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 void TMdPrm::setModPrm( const string &prm, const string &val )
 {
     XMLNode prmNd("ModCfg");
-    try { prmNd.load(cfg("MOD_PRMS").getS()); } catch(...){ }
+    try { prmNd.load(cfg("MOD_PRMS").getS()); } catch(...) { }
 
     if(modPrm(prm) != val) modif();
     string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
@@ -821,8 +820,7 @@ void MRCParam::enable( TParamContr *ip )
 	ePrm->SoftID = resp->proc.ID.soft;
 	ePrm->SN = resp->SerialNum;
 
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(p->extPrms)	{ delete (tval*)p->extPrms; p->extPrms = NULL; }
 	throw;
     }

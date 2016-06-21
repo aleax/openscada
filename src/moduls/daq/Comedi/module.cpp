@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.3"
+#define MOD_VER		"1.0.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -183,8 +183,7 @@ void *TMdContr::Task( void *icntr )
 	    //Calc next work time and sleep
 	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 	}
-    }
-    catch(TError err) { mess_err( err.cat.c_str(), err.mess.c_str() ); }
+    } catch(TError &err) { mess_err( err.cat.c_str(), err.mess.c_str() ); }
 
     cntr.prcSt = false;
 
@@ -343,7 +342,7 @@ void TMdPrm::enable()
 		break;
 	if(i_l >= als.size())
 	    try{ p_el.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     owner().prmEn(id(), true);
@@ -418,7 +417,7 @@ string TMdPrm::modPrm( const string &prm )
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
 		return prmNd.childGet(i_n)->attr(sa);
-    } catch(...){ }
+    } catch(...) { }
 
     return "";
 }
@@ -426,7 +425,7 @@ string TMdPrm::modPrm( const string &prm )
 void TMdPrm::setModPrm( const string &prm, const string &val )
 {
     XMLNode prmNd("ModCfg");
-    try { prmNd.load(cfg("PRMS").getS()); } catch(...){ }
+    try { prmNd.load(cfg("PRMS").getS()); } catch(...) { }
 
     if(modPrm(prm) != val) modif();
     string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");

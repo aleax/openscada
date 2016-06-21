@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.6"
+#define MOD_VER		"1.3.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -185,7 +185,7 @@ void TMdContr::reqService( MMS::XML_N &io )
     io.setAttr("err", "");
 
     try { tr.at().start((enableStat() && !isReload)?0:1000); }
-    catch(TError err) { io.setAttr("err", TSYS::strMess("10:%s",err.mess.c_str())); reset(); return; }
+    catch(TError &err) { io.setAttr("err", TSYS::strMess("10:%s",err.mess.c_str())); reset(); return; }
 
     Client::reqService(io);
     if(io.attr("err").empty()) tmDelay--;
@@ -197,7 +197,7 @@ void TMdContr::protIO( MMS::XML_N &io )
     ResAlloc resN(tr.at().nodeRes(), true);
     if(messLev() == TMess::Debug) io.setAttr("debug", "1");
     try { Client::protIO(io); }
-    catch(TError er) { io.setAttr("err", TSYS::strMess("%s:%s", _("Remote host error"), er.mess.c_str())); }
+    catch(TError &er) { io.setAttr("err", TSYS::strMess("%s:%s", _("Remote host error"), er.mess.c_str())); }
 }
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
@@ -289,7 +289,7 @@ void TMdContr::start_( )
 	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
 	    if(at(pls[i_p]).at().enableStat()) at(pls[i_p]).at().enable();
 	isReload = false;
-    } catch(TError) { isReload = false; throw; }
+    } catch(TError&) { isReload = false; throw; }
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -467,8 +467,7 @@ void *TMdContr::Task( void *icntr )
 		    if(!(nId=TSYS::strLine(pVal.at().fld().reserve(),0)).empty()) pVal.at().set(cntr.mVars[nId].val, 0, true);
 		}
 		res.unlock();
-	    }
-	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	cntr.callSt = firstCall = false;
 	res.unlock();
@@ -636,7 +635,7 @@ string TMdPrm::attrPrc( )
 	for(i_p = 0; i_p < als.size(); i_p++)
 	    if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == als[i_p]) break;
 	if(i_p >= als.size())
-	    try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
+	    try{ p_el.fldDel(i_a); continue; } catch(TError &err) { }
 	i_a++;
     }
 

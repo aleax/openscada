@@ -231,7 +231,7 @@ void *TMdContr::Task( void *icntr )
 	for(unsigned i_p = 0; i_p < cntr.pHD.size() && !cntr.redntUse(); i_p++)
 	    try {
 		//!!! Process parameter code
-	    } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	cntr.callSt = false;
 	cntr.enRes.unlock();
 	cntr.tmGath = TSYS::curTime() - t_cnt;

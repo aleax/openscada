@@ -941,8 +941,7 @@ AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
 	if(TSYS::strParse(srcPath,0,".") == "sub_DAQ" || TSYS::strParse(srcPath,0,".") == "DAQ")
 	    attr = SYS->nodeAt(srcPath,0,'.');
 	else attr = SYS->daq().at().attrAt(srcPath,'.');
-    }
-    catch(TError err) { }
+    } catch(TError &err) { }
 
     return attr;
 }
@@ -1026,14 +1025,14 @@ void TVArchive::start( )
 	try {
 	    runSt = true;
 	    setSrcMode();
-	} catch(...){ runSt = false; throw; }
+	} catch(...) { runSt = false; throw; }
 
     //Attach to archivators
     string arch, archs = cfg("ArchS").getS();
     for(int i_off = 0; (arch = TSYS::strSepParse(archs,0,';',&i_off)).size(); )
 	if(!archivatorPresent(arch))
 	    try { archivatorAttach(arch); }
-	    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TVArchive::stop( bool full_del )
@@ -1220,7 +1219,7 @@ bool TVArchive::archivatorPresent( const string &arch )
 	for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
 	    if(&archEl[i_l]->archivator() == &archivat.at())
 		return true;
-    } catch(TError err){ }
+    } catch(TError &err) { }
 
     return false;
 }
@@ -2288,8 +2287,7 @@ void *TVArchivator::Task( void *param )
 
 	    //while(!arch.endrunReq && (time(NULL)-stTm) < arch.archPeriod()) TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 	    TSYS::taskSleep((int64_t)(1e9*arch.archPeriod()));
-	}
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+	} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
 
     arch.runSt = false;
 

@@ -136,8 +136,7 @@ void TTransportS::load_( )
 			at(m_ls[i_m]).at().inDel(db_ls[i_it]);
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new input transports error.")); 
     }
@@ -173,8 +172,7 @@ void TTransportS::load_( )
 			at(m_ls[i_m]).at().outDel(db_ls[i_it]);
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new input transports error."));
     }
@@ -194,8 +192,7 @@ void TTransportS::load_( )
 	    host.upRiseLev	= c_el.cfg("UpRiseLev").getI();
 	    extHostSet(host);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and load external hosts DB error."));
     }
@@ -240,8 +237,7 @@ void TTransportS::subStart( )
 	    try {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if(!in.at().startStat() && in.at().toStart()) in.at().start();
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Start input transport '%s' error."),o_lst[i_o].c_str());
 	    }
@@ -252,8 +248,7 @@ void TTransportS::subStart( )
 	    try {
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if(!out.at().startStat() && out.at().toStart()) out.at().start();
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 	        mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Start output transport '%s' error."),o_lst[i_o].c_str());
 	    }
@@ -277,8 +272,7 @@ void TTransportS::subStop( )
 	    try {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if(in.at().startStat()) in.at().stop();
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Stop input transport '%s' error."),o_lst[i_o].c_str());
 	    }
@@ -288,8 +282,7 @@ void TTransportS::subStop( )
 	    try {
 		AutoHD<TTransportOut> out = mod.at().outAt(o_lst[i_o]);
 		if(out.at().startStat()) out.at().stop();
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Stop output transport '%s' error."),o_lst[i_o].c_str());
 	    }
@@ -343,7 +336,7 @@ void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool a
 		if((nT=req.childGet("id","upRiseLev",true)) && iH1 < nT->childSize()) eh.upRiseLev = s2i(nT->childGet(iH1)->text());
 		list.push_back(eh);
 	    }
-	} catch(TError err) { }
+	} catch(TError &err) { }
     }
 }
 
@@ -632,18 +625,18 @@ TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
 
 TTransportIn::~TTransportIn( )
 {
-    try{ stop(); }catch(...){ }
+    try{ stop(); } catch(...){ }
 }
 
 void TTransportIn::preEnable( int flag )
 {
     cfg("MODULE").setS(owner().modId());
-    try{ load(); }catch(...){ }
+    try{ load(); } catch(...){ }
 }
 
 void TTransportIn::postDisable( int flag )
 {
-    try { stop(); }catch(...){ }		//Stop at any disabling
+    try { stop(); } catch(...){ }		//Stop at any disabling
     if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
 }
 
@@ -703,7 +696,7 @@ void TTransportIn::stop( )
 	oTrId = mAssTrO.back().at().id();
 	mAssTrO.pop_back();
 	try { owner().outDel(oTrId); }
-	catch(TError er) { mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str()); }
+	catch(TError &er) { mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str()); }
     }
 }
 
@@ -722,7 +715,7 @@ vector<AutoHD<TTransportOut> > TTransportIn::assTrs( bool checkForCleanDisabled 
 		string oTrId = mAssTrO[i_ass].at().id();
 		mAssTrO[i_ass].free();
 		try { owner().outDel(oTrId); }
-		catch(TError er) {
+		catch(TError &er) {
 		    mAssTrO[i_ass] = owner().outAt(oTrId);
 		    mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str());
 		    continue;
@@ -751,7 +744,7 @@ string TTransportIn::assTrO( const string &addr )
 	    string oTrId = mAssTrO[i_ass].at().id();
 	    mAssTrO[i_ass].free();
 	    try { owner().outDel(oTrId); }
-	    catch(TError er) {
+	    catch(TError &er) {
 		mAssTrO[i_ass] = owner().outAt(oTrId);
 		mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str());
 		continue;
@@ -776,7 +769,7 @@ string TTransportIn::assTrO( const string &addr )
     mAssTrO[trFor].at().setPrm2(0);
     mAssTrO[trFor].at().modifGClr();
     try{ mAssTrO[trFor].at().start(); }
-    catch(TError er) { mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str()); }
+    catch(TError &er) { mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str()); }
 
     return mAssTrO[trFor].at().id();
 }
@@ -787,7 +780,7 @@ TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, c
     //  sender - sender address
     //  mess - message for send
     if(iid == "writeTo" && prms.size() >= 2) {
-	try { return writeTo(prms[0].getS(), prms[1].getS()); }	catch(TError) { }
+	try { return writeTo(prms[0].getS(), prms[1].getS()); }	catch(TError&) { }
 	return 0;
     }
     // string status() - the transport status
@@ -795,7 +788,7 @@ TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, c
     // string addr( string vl = "" ) - the transport address return, set the to no empty <vl>
     if(iid == "addr") {
 	if(prms.size() && prms[0].getS().size())
-	    try{ setAddr(prms[0].getS()); } catch(TError) { }
+	    try{ setAddr(prms[0].getS()); } catch(TError&) { }
 	return addr();
     }
     // TArrayObj assTrsList() - assigned output transports list to the input
@@ -878,7 +871,7 @@ TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) 
 
 TTransportOut::~TTransportOut( )
 {
-    try{ stop(); }catch(...){ }
+    try{ stop(); } catch(...){ }
 }
 
 TCntrNode &TTransportOut::operator=( TCntrNode &node )
@@ -939,7 +932,7 @@ void TTransportOut::save_( )
 void TTransportOut::preEnable( int flag )
 {
     cfg("MODULE").setS(owner().modId());
-    try{ load(); }catch(...){ }
+    try{ load(); } catch(...){ }
 }
 
 void TTransportOut::messProtIO( XMLNode &io, const string &prot )
@@ -961,7 +954,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	    if(!startStat()) start();
 	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
 	    rez.assign(buf, resp_len);
-	} catch(TError) { return ""; }
+	} catch(TError&) { return ""; }
 
 	return rez;
     }
@@ -976,7 +969,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().toXMLNode(req);
 	    messProtIO(req, prms[1].getS());
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().fromXMLNode(req);
-	} catch(TError err) { return err.mess; }
+	} catch(TError &err) { return err.mess; }
 	return 0;
     }
     // string status( ) - the transport status
@@ -989,20 +982,20 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	try {
 	    if(!com && startStat())	stop();
 	    else if(com && !startStat())start((prms.size()>=2)?prms[1].getI():0);
-	} catch(TError) { }
+	} catch(TError&) { }
 
 	return startStat();
     }
     // string addr( string vl = "" ) - the transport address return, set it to no empty <vl>
     if(iid == "addr") {
 	if(prms.size() && prms[0].getS().size())
-	    try{ setAddr(prms[0].getS()); } catch(TError) { }
+	    try{ setAddr(prms[0].getS()); } catch(TError&) { }
 	return addr();
     }
     // string timings( string vl = "" ) - the transport timings return, set the to no empty <vl>
     if(iid == "timings") {
 	if(prms.size() && prms[0].getS().size())
-	    try{ setTimings(prms[0].getS()); } catch(TError) { }
+	    try{ setTimings(prms[0].getS()); } catch(TError&) { }
 	return timings();
     }
 
@@ -1121,14 +1114,13 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	    bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
 	    while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
-		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError err) { break; }
+		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError &err) { break; }
 		answ.append(buf,resp_len);
 	    }
 
 	    TBDS::genDBSet(owner().nodePath()+"ReqTm",tm2s(TSYS::curTime()-stm),opt->attr("user"));
 	    TBDS::genDBSet(owner().nodePath()+"ReqAnsw",(mode==0)?TSYS::strDecode(answ,TSYS::Bin," "):answ,opt->attr("user"));
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    TBDS::genDBSet(owner().nodePath()+"ReqTm",tm2s(TSYS::curTime()-stm),opt->attr("user"));
 	    throw;
 	}

@@ -3616,8 +3616,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    arh_beg = s2ll(req.attr("tm_grnd"));
 	    arh_end = s2ll(req.attr("tm"));
 	    arh_per = s2ll(req.attr("per"));
-	}
-	catch(TError) { arh_per = arh_beg = arh_end = 0; return; }
+	} catch(TError&) { arh_per = arh_beg = arh_end = 0; return; }
 
     if(!arh_per) return;
 
@@ -4414,8 +4413,7 @@ string ShapeDocument::ShpDt::toHtml( )
     // Parse document
     XMLNode xproc("body");
     try{ if(!doc.empty()) xproc.load(string(XHTML_entity)+doc, true, Mess->charset()); }
-    catch(TError err)
-    { mess_err(mod->nodePath().c_str(), _("Document parsing error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_err(mod->nodePath().c_str(), _("Document parsing error: %s"), err.mess.c_str()); }
 
     nodeProcess(&xproc);
 

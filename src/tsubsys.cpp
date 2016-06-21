@@ -102,7 +102,7 @@ void TSubSYS::subStart( )
     modList(list);
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	try { modAt(list[i_m]).at().modStart(); }
-	catch(TError err) {
+	catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Start module '%s' error."),list[i_m].c_str());
 	}
@@ -117,7 +117,7 @@ void TSubSYS::subStop( )
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().modStop( ); }
-	catch(TError err) {
+	catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Stop module '%s' error."),list[i_m].c_str());
 	}
@@ -132,7 +132,7 @@ void TSubSYS::perSYSCall( unsigned int cnt )
     modList(list);
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().perSYSCall(cnt); }
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TSubSYS::cntrCmdProc( XMLNode *opt )

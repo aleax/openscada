@@ -126,7 +126,7 @@ void ResAlloc::request( bool write, unsigned short tm )
 	if(write) mId.resRequestW(tm);
 	else mId.resRequestR(tm);
 	mAlloc = true;
-    } catch(TError err) { if(err.cod!=10) throw; }
+    } catch(TError &err) { if(err.cod!=10) throw; }
 }
 
 void ResAlloc::release( )
