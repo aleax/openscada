@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:45+0200\n"
+"POT-Creation-Date: 2016-06-21 08:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "DB PostgreSQL"
 msgstr ""
 
-msgid "Maxim Lysenko"
+msgid "Roman Savochenko, Maxim Lysenko"
 msgstr ""
 
 msgid "BD module. Provides support of the BD PostgreSQL."
@@ -39,6 +39,10 @@ msgstr ""
 
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
+msgstr ""
+
+#, c-format
+msgid "Table '%s' is not present!"
 msgstr ""
 
 msgid "Start transaction error!"
@@ -65,9 +69,6 @@ msgid ""
 "  connect_timeout - connection timeout\n"
 "For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
 "For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
-msgstr ""
-
-msgid "Table is not present!"
 msgstr ""
 
 msgid "Table is empty!"

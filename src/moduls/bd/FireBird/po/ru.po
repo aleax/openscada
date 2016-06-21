@@ -1,13 +1,13 @@
 # OpenSCADA.DB.FireBird translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DB.FireBird package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:44+0200\n"
+"POT-Creation-Date: 2016-06-21 08:30+0300\n"
 "PO-Revision-Date: 2007-10-23 12:52+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -35,6 +35,10 @@ msgstr "Ошибка создания БД '%s': %s"
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Ошибка открытия таблицы '%s'. БД отключена."
+
+#, c-format
+msgid "Table '%s' is not present."
+msgstr "Таблица '%s' отсутствует."
 
 #, c-format
 msgid "Start transaction error: %s"
@@ -91,10 +95,6 @@ msgstr ""
 "  пользователь - пользователь БД;\n"
 "  пароль - пароль пользователя БД;\n"
 "  conTm  - таймаут подключения (с)."
-
-#, c-format
-msgid "Table '%s' is not present."
-msgstr "Таблица '%s' отсутствует."
 
 msgid "Table is empty."
 msgstr "Таблица пуста."

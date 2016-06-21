@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:44+0200\n"
+"POT-Creation-Date: 2016-06-21 08:30+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -40,6 +40,10 @@ msgstr "Datenbank '%s', Fehler %s bei der Erstellung"
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
+
+#, c-format
+msgid "Table '%s' is not present."
+msgstr "Tabelle '%s' ist nicht vorhanden."
 
 #, c-format
 msgid "Start transaction error: %s"
@@ -97,10 +101,6 @@ msgstr ""
 "  user - Benutzer der Datenbank;\n"
 "  pass - Kennwort des Datenbankbenutzers;\n"
 "  conTm- Verbindungs-Timeout (s)."
-
-#, c-format
-msgid "Table '%s' is not present."
-msgstr "Tabelle '%s' ist nicht vorhanden."
 
 msgid "Table is empty."
 msgstr "Tabelle ist leer."

@@ -114,7 +114,7 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
     if(hd != -1) {
 	if(tp) *tp = types[i_t];
 	if(opt == GetFilePath) rez = pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t];
-	else if(opt == GetExecCommand) rez = "xdg-open "+pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t];
+	else if(opt == GetExecCommand) rez = "xdg-open "+pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t]+" &";
 	else {
 	    char buf[STR_BUF_LEN];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);

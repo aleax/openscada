@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.0"
+#define MOD_VER		"2.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -202,13 +202,13 @@ TTable *MBD::openTable( const string &inm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
 
-    if(create) {
-	string req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`.`"+
-	    TSYS::strEncode(inm, TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
-	sqlReq(req);
-    }
+    if(create) sqlReq("CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`.`"+
+			TSYS::strEncode(inm, TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)");
+    //Get the table structure description and check it to presence
+    vector< vector<string> > tblStrct;
+    sqlReq("DESCRIBE `" + TSYS::strEncode(bd,TSYS::SQL) + "`.`" + TSYS::strEncode(inm,TSYS::SQL) + "`", &tblStrct);
 
-    return new MTable(inm, this);
+    return new MTable(inm, this, &tblStrct);
 }
 
 void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTrans )
@@ -340,14 +340,14 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* MBDMySQL::Table                              *
 //************************************************
-MTable::MTable( string name, MBD *iown ) : TTable(name)
+MTable::MTable( string name, MBD *iown, vector< vector<string> > *itblStrct ) : TTable(name)
 {
     setNodePrev(iown);
 
     try {
-	//Get table structure description
-	string req = "DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name,TSYS::SQL) + "`";
-	owner().sqlReq(req, &tblStrct);
+	//Get the table structure description
+	if(itblStrct) tblStrct = *itblStrct;
+	else owner().sqlReq("DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name,TSYS::SQL) + "`", &tblStrct);
 
 	//req = "SELECT * FROM `"+TSYS::strEncode(name,TSYS::SQL)+"` LIMIT 0,1";
 	//owner().sqlReq(req);

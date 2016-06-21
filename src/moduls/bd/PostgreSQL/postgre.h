@@ -44,7 +44,7 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *iown );
+	MTable( string name, MBD *iown, vector< vector<string> > *tblStrct = NULL );
 	~MTable( );
 
 	// Field's functions
@@ -54,8 +54,6 @@ class MTable : public TTable
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	static void create( MBD &odb, const string &nm, bool toCreate = false );
-
 	MBD &owner( );
 
     private:
@@ -64,7 +62,7 @@ class MTable : public TTable
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg, bool recurse = false );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
-	void getStructDB( string name, vector< vector<string> > &tblStrct );
+
 
 	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
@@ -97,6 +95,9 @@ class MBD : public TBD
 
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
+
+	void create( const string &nm, bool toCreate = false );
+	void getStructDB( const string &nm, vector< vector<string> > &tblStrct );
 
 	void transOpen( );
 	void transCommit( );

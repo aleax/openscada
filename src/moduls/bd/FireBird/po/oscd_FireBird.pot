@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 10:44+0200\n"
+"POT-Creation-Date: 2016-06-21 08:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,10 @@ msgstr ""
 
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
+msgstr ""
+
+#, c-format
+msgid "Table '%s' is not present."
 msgstr ""
 
 #, c-format
@@ -85,10 +89,6 @@ msgid ""
 "  user - DB user;\n"
 "  pass - password of DB user;\n"
 "  conTm- connection timeout (s)."
-msgstr ""
-
-#, c-format
-msgid "Table '%s' is not present."
 msgstr ""
 
 msgid "Table is empty."

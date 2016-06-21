@@ -40,7 +40,7 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *iown );
+	MTable( string name, MBD *iown, vector< vector<string> > *tblStrct = NULL );
 	~MTable( );
 
 	// Field's functions

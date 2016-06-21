@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-14 20:53+0300\n"
+"POT-Creation-Date: 2016-06-21 08:23+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -122,6 +122,7 @@ msgstr "Fehler beim Laden des Wertearchivars."
 msgid "Value archives load error."
 msgstr "Fehler beim Laden des Wertearchivs."
 
+#, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
 "------------ Parameters of section '%s' in config-file -----------\n"
@@ -141,7 +142,8 @@ msgstr ""
 "MessPeriod    <sec>         Zeitperiode für Archivierung der Nachrichten.\n"
 "ValPeriod     <msec>        Zeitperiode für Archivierung der Werte.\n"
 "ValPriority   <level>       Prioritätsstufe der Werte.\n"
-"RdRestDtOverTm <Std.>       Überstunden der Reserve Geschichte neu zu laden beim Start in Stunden.\n"
+"RdRestDtOverTm <Std.>       Überstunden der Reserve Geschichte neu zu laden "
+"beim Start in Stunden.\n"
 "\n"
 
 msgid "Start/update subsystem."
@@ -727,8 +729,12 @@ msgid "Node is the root or is not connected!"
 msgstr "Knoten ist 'root' oder nicht verbunden!"
 
 #, c-format
-msgid "Element '%s' is not present or disabled!"
-msgstr "Element '%s' ist nicht vorhanden oder abgeschaltet!"
+msgid "Element '%s' is not present!"
+msgstr "Element '%s' ist nicht vorhanden!"
+
+#, c-format
+msgid "Element '%s' is disabled!"
+msgstr "Element '%s' ist abgeschaltet!"
 
 msgid "Too more users for node!!!"
 msgstr "Zu viele Benutzer für Knoten!!!"
@@ -981,10 +987,6 @@ msgstr "Fehler des Bezeichners!"
 
 msgid "The element container is already attached!"
 msgstr "Elementencontainer ist schon eingeschaltet!"
-
-#, c-format
-msgid "Element '%s' is not present!"
-msgstr "Element '%s' ist nicht vorhanden!"
 
 msgid "Field is not String."
 msgstr "Feld ist kein Text."

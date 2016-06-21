@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-14 20:53+0300\n"
+"POT-Creation-Date: 2016-06-21 08:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -645,7 +645,11 @@ msgid "Node is the root or is not connected!"
 msgstr ""
 
 #, c-format
-msgid "Element '%s' is not present or disabled!"
+msgid "Element '%s' is not present!"
+msgstr ""
+
+#, c-format
+msgid "Element '%s' is disabled!"
 msgstr ""
 
 msgid "Too more users for node!!!"
@@ -880,10 +884,6 @@ msgid "Id error!"
 msgstr ""
 
 msgid "The element container is already attached!"
-msgstr ""
-
-#, c-format
-msgid "Element '%s' is not present!"
 msgstr ""
 
 msgid "Field is not String."

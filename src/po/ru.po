@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-14 20:53+0300\n"
+"POT-Creation-Date: 2016-06-21 08:23+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -117,6 +117,7 @@ msgstr "Ошибка загрузки архиваторов значений."
 msgid "Value archives load error."
 msgstr "Ошибка загрузки архивов значений."
 
+#, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
 "------------ Parameters of section '%s' in config-file -----------\n"
@@ -134,7 +135,8 @@ msgstr ""
 "MessPeriod    <сек>     Период архивирования сообщений.\n"
 "ValPeriod     <мсек>    Период архивирования значений.\n"
 "ValPriority   <уровень> Уровень приоритета задачи значений.\n"
-"RdRestDtOverTm <часы>   Глубина принудительной перезагрузки истории резерва при запуске, в часах.\n"
+"RdRestDtOverTm <часы>   Глубина принудительной перезагрузки истории резерва "
+"при запуске, в часах.\n"
 "\n"
 
 msgid "Start/update subsystem."
@@ -718,8 +720,11 @@ msgid "Node is the root or is not connected!"
 msgstr "Узел корневой или не подключен!"
 
 #, c-format
-msgid "Element '%s' is not present or disabled!"
-msgstr "Элемент '%s' отсутствует или отключен!"
+msgid "Element '%s' is not present!"
+msgstr "Элемент '%s' отсутствует!"
+
+msgid "Element '%s' is disabled!"
+msgstr "Элемент '%s' отключен!"
 
 msgid "Too more users for node!!!"
 msgstr "Очень много пользователей у узла!!!"
@@ -972,10 +977,6 @@ msgstr "Ошибка идентификатора!"
 
 msgid "The element container is already attached!"
 msgstr "Элемент контейнера уже подключен!"
-
-#, c-format
-msgid "Element '%s' is not present!"
-msgstr "Элемент '%s' отсутствует!"
 
 msgid "Field is not String."
 msgstr "Поле не строка."
