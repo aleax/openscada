@@ -1,3 +1,14 @@
+2016-06-23 Roman
+- !!!:Archive,*: To messages get functions added a time result of the finished processing.
+    Mostly for allow fast continue from the point after long terminated by the timeout requests.
+    The limit rdRestDtOverTm rise to days and up to 356.
+- Archive.DBArch: The property "maxSize" is expanded from hours to days.
+    The used table closing after any put request is disabled.
+- Archive.{DBArch,FSArch}: Get messages request for equal begin and end time is allowed.
+- Archive.FSArch: Get from XML set some optimal. Get from pline allowed for the messages time equal to end.
+- Special.SystemTests: The DB tests are expanded by a seek test.
+
+
 2016-06-21 Roman
 - !!!!:SYS: For some productivity rise the exceptions catch moved from the object copy to it's reference,
     thanks Max Kochetkov (fido_max) for the hint.

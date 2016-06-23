@@ -283,7 +283,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	mBeg = n_end;
     }
     tbl.free();
-    SYS->db().at().close(archivator().addr()+"."+archTbl());
+    //SYS->db().at().close(archivator().addr()+"."+archTbl());		//!!! No close the table manually
 
     //Update archive info
     cfg.setElem(&mod->archEl());

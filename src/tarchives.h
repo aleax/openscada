@@ -95,7 +95,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	virtual time_t begin( )		{ return 0; }
 	virtual time_t end( )		{ return 0; }
 	virtual bool put( vector<TMess::SRec> &mess, bool force = false );	//<force> mostly used by redundancy to prevent cycling
-	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
+	virtual time_t get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
 
 	TTypeArchivator &owner( );
 
@@ -131,6 +131,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	unsigned mRdUse  : 1;
 	unsigned mRdFirst: 1;
+	time_t	mRdTm;
 };
 
 //************************************************
@@ -226,15 +227,15 @@ class TArchiveS : public TSubSYS
 	// Message archive function
 	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "", bool force = false );
 	void messPut( const vector<TMess::SRec> &recs, const string &arch = "", bool force = false );
-	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
+	time_t messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs, const string &category = "",
 	    int8_t level = TMess::Debug, const string &arch = "", time_t upTo = 0 );
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
 
 	// Redundancy
 	bool rdProcess( XMLNode *reqSt = NULL );
-	float rdRestDtOverTm( )			{ return mRdRestDtOverTm; }
-	void setRdRestDtOverTm( float vl )	{ mRdRestDtOverTm = vmin(24,vmax(0,vl)); modif(); }
+	float rdRestDtOverTm( )			{ return mRdRestDtOverTm; }	//In days
+	void setRdRestDtOverTm( float vl )	{ mRdRestDtOverTm = vmin(356,vmax(0,vl)); modif(); }
 	void rdActArchMList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &arch, XMLNode &req, const string &prevSt = "", bool toRun = true );
 

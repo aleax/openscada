@@ -469,9 +469,10 @@ void TArchiveS::messPut( const vector<TMess::SRec> &recs, const string &arch, bo
 	messPut(recs[iR].time, recs[iR].utime, recs[iR].categ, recs[iR].level, recs[iR].mess, arch, force);
 }
 
-void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
+time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     const string &category, int8_t level, const string &arch, time_t upTo )
 {
+    time_t result = eTm;	//Means successful buffers processing
     recs.clear();
 
     map<string, bool> archMap;
@@ -484,8 +485,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     //Get records from buffer
     MtxAlloc res(mRes, true);
     unsigned i_buf = headBuf;
-    while(level >= 0 && (archMap.empty() || archMap[BUF_ARCH_NM]) && SYS->sysTm() < upTo) {
-	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
+    while(level >= 0 && (archMap.empty() || archMap[BUF_ARCH_NM]) /*&& SYS->sysTm() < upTo*/) {
+	if(mBuf[i_buf].time >= bTm && mBuf[i_buf].time && mBuf[i_buf].time <= eTm &&
 		abs(mBuf[i_buf].level) >= level && re.test(mBuf[i_buf].categ))
 	    recs.push_back(mBuf[i_buf]);
 	if(++i_buf >= mBuf.size()) i_buf = 0;
@@ -501,8 +502,9 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	for(unsigned iO = 0; iO < oLst.size() && SYS->sysTm() < upTo; iO++) {
 	    AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
 	    if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
-		archtor.at().get(b_tm, e_tm, recs, category, level, arch.size()?upTo:0);	//!! But possible only one archiver, from all,
-												//   processing and next continued by the limit
+		//!! But possible only one archiver, from all, processing and next continued by the limit
+		result = vmin(result, archtor.at().get(bTm,eTm,recs,category,level,arch.size()?upTo:0));
+
 	}
     }
 
@@ -510,8 +512,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     if(level < 0) {
 	res.lock();
 	vector< pair<int64_t,TMess::SRec* > > mb;
-	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() && SYS->sysTm() < upTo; p++)
-	    if((p->second.time >= b_tm || b_tm == e_tm) && p->second.time <= e_tm &&
+	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() /*&& SYS->sysTm() < upTo*/; p++)
+	    if((p->second.time >= bTm || bTm == eTm) && p->second.time <= eTm &&
 		    p->second.level >= abs(level) && re.test(p->second.categ))
 		mb.push_back(pair<int64_t,TMess::SRec* >(FTM(p->second),&p->second));
 	sort(mb.begin(), mb.end());
@@ -521,6 +523,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	}
 	res.unlock();
     }
+
+    return result;
 }
 
 time_t TArchiveS::messBeg( const string &arch )
@@ -851,10 +855,11 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     if(iid == "messGet" && prms.size() >= 2) {
 	vector<TMess::SRec> recs;
 	int upTm = (prms.size() >= 6) ? prms[5].getI() : 0;
-	messGet(prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
-	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")),
-	    vmin((upTm<0)?SYS->sysTm()+abs(upTm):upTm,SYS->sysTm()+STD_INTERF_TM));
+	time_t result = messGet(prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
+				((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")),
+				vmin((upTm<0)?SYS->sysTm()+abs(upTm):upTm,SYS->sysTm()+STD_INTERF_TM));
 	TArrayObj *rez = new TArrayObj();
+	rez->propSet("tm", ll2s(result));
 	for(unsigned iM = 0; iM < recs.size(); iM++) {
 	    TVarObj *am = new TVarObj();
 	    am->propSet("tm", (int)recs[iM].time);
@@ -918,7 +923,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    vector<TMess::SRec> rez;
 
 	    if(!tm) { tm = time(NULL); opt->setAttr("tm", u2s(tm)); }
-	    messGet(tm_grnd, tm, rez, cat, (TMess::Type)lev, arch);
+	    opt->setAttr("tm", ll2s(messGet(tm_grnd,tm,rez,cat,(TMess::Type)lev,arch)));
 	    for(unsigned i_r = 0; i_r < rez.size(); i_r++)
 		opt->childAdd("el")->
 		    setAttr("time", u2s(rez[i_r].time))->
@@ -1219,7 +1224,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
     TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()),
-    mDB(idb), mRdUse(true), mRdFirst(true)
+    mDB(idb), mRdUse(true), mRdFirst(true), mRdTm(0)
 {
     mId = iid;
 }
@@ -1275,17 +1280,21 @@ void TMArchivator::save_( )	{ SYS->db().at().dataSet(fullDB(), SYS->archive().at
 
 void TMArchivator::redntDataUpdate( )
 {
+    //Init the point from which the archives sync
+    if(!mRdTm) mRdTm = vmax(0, (end()?end():SYS->sysTm())-owner().owner().rdRestDtOverTm()*86400);
+
     //Prepare and call request for messages
     // end()+1 used for decrease traffic by request end() messages in each cycle. The messages in <= end() will transfer direct.
     XMLNode req("get");
     req.setAttr("path", nodePath()+"/%2fserv%2fmess")->
-	setAttr("bTm", ll2s(end()+1-(mRdFirst?owner().owner().rdRestDtOverTm()*3600:0)));
+	setAttr("bTm", ll2s(mRdTm/* vmax(0,end()+1-(mRdFirst?owner().owner().rdRestDtOverTm()*86400:0))*/));
 
     //Send request to first active station for this controller
     if(owner().owner().rdStRequest(workId(),req,"",!mRdFirst).empty()) return;
     mRdFirst = false;
+    mRdTm = s2ll(req.attr("tm"))+1;
 
-    //printf("TEST 00: end=%s; '%s': %s\n", tm2s(end(),"").c_str(), id().c_str(), req.save().c_str());
+    //printf("TEST 01: end=%s; '%s': %s\n", tm2s(mRdTm,"").c_str(), id().c_str(), req.save().c_str());
 
     //Process the result
     vector<TMess::SRec> mess;
@@ -1396,7 +1405,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	vector<TMess::SRec> mess;
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    time_t eTm = s2ll(opt->attr("eTm"));
-	    get(s2ll(opt->attr("bTm")), (eTm?eTm:SYS->sysTm()), mess, opt->attr("cat"), s2i(opt->attr("lev")));
+	    opt->setAttr("tm", ll2s(get(s2ll(opt->attr("bTm")),(eTm?eTm:SYS->sysTm()),mess,opt->attr("cat"),s2i(opt->attr("lev")))));
 	    for(unsigned iM = 0; iM < mess.size(); ++iM)
 		opt->childAdd("it")->setAttr("tm",ll2s(mess[iM].time))->setAttr("tmu",i2s(mess[iM].utime))->
 				     setAttr("cat",mess[iM].categ)->setAttr("lev",i2s(mess[iM].level))->setText(mess[iM].mess);

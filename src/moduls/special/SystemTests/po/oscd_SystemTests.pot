@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 20:20+0300\n"
+"POT-Creation-Date: 2016-06-23 09:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -301,6 +301,13 @@ msgstr ""
 
 #, c-format
 msgid "Got %d records for time %f sec."
+msgstr ""
+
+msgid "Seek records."
+msgstr ""
+
+#, c-format
+msgid "Sought %d records for time %f sec."
 msgstr ""
 
 msgid "Change DB structure."
