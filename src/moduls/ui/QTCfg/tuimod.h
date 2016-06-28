@@ -51,9 +51,11 @@ class TUIMod: public TUI
 
 	bool endRun( )		{ return mEndRun; }
 
+	string tmConChk( )	{ return mTmConChk; }
 	string startPath( )	{ return mStartPath; }
 	string startUser( )	{ return mStartUser; }
 
+	void setTmConChk( const string &vl );
 	void setStartPath( const string &vl )	{ mStartPath = vl; modif(); }
 	void setStartUser( const string &vl )	{ mStartUser = vl; modif(); }
 
@@ -89,8 +91,9 @@ class TUIMod: public TUI
 	//Attributes
 	vector<QMainWindow*> cfapp;		//Opened configurator opened window
 
-	string	mStartUser;			//No password requested start user
-	string	mStartPath;			//Start path
+	MtxString mTmConChk,			//Connection check timeout in seconds "{fail}:{good}"
+		mStartUser,			//No password requested start user
+		mStartPath;			//Start path
 
 	bool	mEndRun;			//End run command. Close all windows
 };

@@ -76,6 +76,7 @@ class WdgShape : public QObject
 	string id( )									{ return m_id; }
 
 	virtual bool isEditable( )							{ return false; }
+	virtual bool needToVisibleCheck( )						{ return true; }
 
 	virtual void init( WdgView *view )						{ }
 	virtual void destroy( WdgView *view )						{ }
@@ -114,6 +115,8 @@ class ShapeFormEl : public WdgShape
     public:
 	//Methods
 	ShapeFormEl( );
+
+	bool needToVisibleCheck( )	{ return false; }
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );
@@ -389,8 +392,8 @@ class ShapeDiagram : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1), tTime(0),
-		    tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
+		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), valsForPix(1), tTime(0),
+		    tPict(0), curTime(0), sclHorPer(0), trcPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
 
 		int64_t	arhEnd( int64_t def = 0 );
 
@@ -402,7 +405,7 @@ class ShapeDiagram : public WdgShape
 		unsigned geomMargin	:8;
 		unsigned bordStyle	:5;
 		unsigned tTimeCurent	:1;
-		unsigned trcPer		:10;
+
 		unsigned sclHor		:4;
 		unsigned sclVer		:4;
 		unsigned valsForPix	:4;
@@ -415,6 +418,7 @@ class ShapeDiagram : public WdgShape
 		QTimer 	*trcTimer;
 		vector<TrendObj>	prms;
 		int64_t	tTime, tPict, curTime, sclHorPer;
+		float	trcPer;
 		float	tSize;
 		float	fftBeg, fftEnd;
 		float	sclVerScl, sclVerSclOff, sclHorScl, sclHorSclOff;
@@ -573,14 +577,14 @@ class ShapeBox : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclWidget(NULL), inclScrl(NULL)	{ }
+		ShpDt( ) : en(true), geomMargin(0), bordStyle(0), inclPg(NULL), inclScrl(NULL)	{ }
 		//Attributes
 		short	en		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		QPen		border;
 		QBrush		backGrnd;
-		RunPageView	*inclWidget;
+		RunPageView	*inclPg;
 		QScrollArea	*inclScrl;
 	};
 

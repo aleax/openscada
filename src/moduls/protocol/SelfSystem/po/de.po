@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:23+0300\n"
+"POT-Creation-Date: 2016-06-25 07:28+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -97,8 +97,13 @@ msgstr "Wert in Bytes."
 msgid "%s %s(%s)"
 msgstr ""
 
+#, c-format
 msgid "Get request: '%s': %d"
 msgstr "Holen Antrag: '%s': %d"
+
+#, c-format
+msgid "Check and reforward request: '%s': %d, time: %f ms."
+msgstr "Überprüfen und wieder nach vorn Anfrage: '%s': %d, Zeit: %f ms."
 
 #, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
@@ -111,21 +116,3 @@ msgstr "Prozess Anfrage: '%s', Zeit: %f ms."
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
 msgstr "Sparen reagieren zu Strom und zu verpacken: '%s': %d, Zeit: %f ms."
-
-#~ msgid "SES_OPEN request: %d"
-#~ msgstr "SES_OPEN Antrag: %d"
-
-#~ msgid "SES_OPEN response: %d"
-#~ msgstr "SES_OPEN Antwort: %d"
-
-#~ msgid "REQ send: %d"
-#~ msgstr "REQ senden: %d"
-
-#~ msgid "REQ response first %d"
-#~ msgstr "REQ Antwort zuerst %d"
-
-#~ msgid "REQ response full %d"
-#~ msgstr "REQ Antwort voll %d"
-
-#~ msgid "Request error: %s"
-#~ msgstr "Anforderungsfehler: %s"

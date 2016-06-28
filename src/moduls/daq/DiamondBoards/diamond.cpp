@@ -414,8 +414,7 @@ void *TMdContr::AD_DSCTask( void *param )
 		get_tm.tv_sec = vtm/1000000; get_tm.tv_nsec = 1000*(vtm%1000000);
 		clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&get_tm,NULL);
 	    }
-    }catch( TError err )
-    {
+    } catch( TError &err ) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(cntr.nodePath().c_str(),_("AD DSC task error."));
     }

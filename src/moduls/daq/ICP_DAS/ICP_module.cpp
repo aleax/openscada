@@ -188,9 +188,7 @@ void TMdContr::start_( )
 
 	    //> Start the gathering data task
 	    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
-	}
-	catch(TError err)
-	{
+	} catch(TError &err) {
 	    if( mBus == 0 )	{ Close_Slot(9); Close_SlotAll(); }
 	    throw;
 	}
@@ -298,8 +296,7 @@ void *TMdContr::Task( void *icntr )
 	    //> Calc next work time and sleep
 	    TSYS::taskSleep((int64_t)(1e9*cntr.period()));
 	}
-    }
-    catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
+    } catch( TError &err ) { mess_err( err.cat.c_str(), err.mess.c_str() ); }
 
     //Watchdog timer disable
     if(cntr.mBus == 0 && wTm > 0) {
@@ -332,8 +329,7 @@ string TMdContr::serReq( string req, char mSlot )
     {
 	if( !tr.at().startStat() ) tr.at().start();
 	req += "\r";
-    }
-    catch(...)	{ return ""; }*/
+    } catch(...)	{ return ""; }*/
 
     //ResAlloc resN( tr.nodeRes(), true );
     for( int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++ )
@@ -346,13 +342,12 @@ string TMdContr::serReq( string req, char mSlot )
 	    //> Wait tail
 	    while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r'))
 	    {
-		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError er){ break; }
+		try{ resp_len = tr.at().messIO( NULL, 0, szReceive, sizeof(szReceive), 0, true ); } catch(TError &er){ break; }
 		rez.append( szReceive, resp_len );
 	    }
 	    if( rez.size() < 2 || rez[rez.size()-1] != '\r' )	{ errResp = true; continue; }
 	    return rez.substr(0,rez.size()-1);
-	}
-	catch(...) { errTm = true; continue; }*/
+	} catch(...) { errTm = true; continue; }*/
 
 	if( !Send_Receive_Cmd(mBus?mBus:1,(char*)req.c_str(),szReceive,1,0,&wT) ) return szReceive;
     }
@@ -449,8 +444,7 @@ void TMdPrm::enable()
 	{
 	    p_el.fldDel(i_f);
 	    i_f--;
-	}
-	catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	} catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     //> Make DAQ parameter's attributes
@@ -831,8 +825,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	    break;
 	}
     }
-    }catch( TError err )
-    {
+    } catch( TError &err ) {
 	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),valo.name().c_str(),err.mess.c_str());
 	valo.setS( pvl.getS(), 0, true );
     }

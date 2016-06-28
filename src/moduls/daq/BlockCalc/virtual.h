@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -139,7 +138,7 @@ class Contr: public TController
 	vector< AutoHD<Block> > calcBlks;	// Calc blocks HD
 	double	mPer, tm_calc;			// Scheme's calc time
 
-	pthread_mutex_t calcRes;	// Resource for process block
+	ResMtx	calcRes;	// Resource for process block
 	Res	hdRes;
 };
 
@@ -155,8 +154,8 @@ class TpContr: public TTipDAQ
 
 	TController *ContrAttach( const string &name, const string &daq_db );
 
-	TElem &blockE( )	{ return blk_el; }
-	TElem &blockIOE( )	{ return blkio_el; }
+	TElem &blockE( )	{ return blkEl; }
+	TElem &blockIOE( )	{ return blkioEl; }
 
 	AutoHD<Contr> at( const string &name, const string &who = "" )	{ return TTipDAQ::at(name,who); }
 	void copy( const string &src, const string &dst );
@@ -173,8 +172,8 @@ class TpContr: public TTipDAQ
 	void preDisable( int flag );
 
 	//Private attributes
-	TElem	blk_el;
-	TElem	blkio_el;
+	TElem	blkEl;
+	TElem	blkioEl;
 };
 
 extern TpContr *mod;

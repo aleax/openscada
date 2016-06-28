@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,7 @@ class SSockIn
 {
     public:
 	SSockIn( TSocketIn *is, int isock, const string &isender ) :
-	    pid(0), sock(isock), sender(isender), s(is), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0)	{ }
+	    pid(0), sock(isock), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is)	{ }
 
 	pthread_t pid;		//Client's thread id
 	int	sock;
@@ -96,13 +96,11 @@ class TSocketIn: public TTransportIn
 	void setBufLen( unsigned vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vmax(0,vl); modif(); }
 	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
-	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
+	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
 
 	void start( );
 	void stop( );
 	unsigned forksPerHost( const string &sender );
-
-	pthread_mutex_t &dataRes( )	{ return mDataRes; }
 
     protected:
 	//Methods
@@ -124,7 +122,7 @@ class TSocketIn: public TTransportIn
 
 	//Attributes
 	int		sockFd;
-	pthread_mutex_t	sockRes, mDataRes;
+	ResMtx		sockRes;
 
 	bool		endrun;			//Command for stop task
 	bool		endrunCl;		//Command for stop client tasks

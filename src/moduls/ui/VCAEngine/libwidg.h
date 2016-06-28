@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -131,7 +131,7 @@ class LWidget : public Widget, public TConfig
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
 	void setParentNm( const string &isw );
-	void setEnableByNeed( );
+	void setEnableByNeed( )			{ enableByNeed = true; modifClr(); }
 
 	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
@@ -150,7 +150,7 @@ class LWidget : public Widget, public TConfig
 	WidgetLib &ownerLib( );
 
 	bool	enableByNeed;	//Load and enable by need
-	pthread_mutex_t &funcM( )	{ return mFuncM; }
+	ResMtx &funcM( )	{ return mFuncM; }
 
     protected:
 	//Methods
@@ -169,7 +169,7 @@ class LWidget : public Widget, public TConfig
 	//Attributes
 	int	&m_proc_per;	//Widget period
 	string	mParentNmPrev;	//Previous parent name after successful enable
-	pthread_mutex_t	mFuncM;
+	ResMtx	mFuncM;
 };
 
 //************************************************

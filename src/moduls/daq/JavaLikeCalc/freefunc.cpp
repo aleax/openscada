@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,14 +30,14 @@
 
 using namespace JavaLikeCalc;
 
-Func *JavaLikeCalc::p_fnc;
+Func *JavaLikeCalc::pF;
 
 //*************************************************
 //* Func: Function                                *
 //*************************************************
 Func::Func( const string &iid, const string &name ) :
     TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
-    mMaxCalcTm(cfg("MAXCALCTM").getId()), parse_res(mod->parseRes())
+    mMaxCalcTm(cfg("MAXCALCTM").getId()), parseRes(mod->parseRes())
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
@@ -58,10 +57,9 @@ void Func::postEnable( int flag )
 void Func::postDisable( int flag )
 {
     setStart(false);
-    if( flag && !owner().DB().empty() )
-	try{ del( ); }
-	catch(TError err)
-	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag && !owner().DB().empty())
+	try{ del(); }
+	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 Lib &Func::owner( )	{ return *((Lib*)nodePrev()); }
@@ -169,7 +167,7 @@ void Func::loadIO( )
     //Position fixing
     for(int i_p = 0; i_p < (int)u_pos.size(); i_p++) {
 	int iid = ioId(u_pos[i_p]);
-	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...){ }
+	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...) { }
     }
 }
 
@@ -237,7 +235,7 @@ void Func::setStart( bool val )
     if(val == runSt) return;
     //Start calc
     if(val) {
-	progCompile( );
+	progCompile();
 	runSt = true;
     }
     //Stop calc
@@ -277,20 +275,22 @@ void Func::ioMove( int pos, int to )
 
 void Func::progCompile( )
 {
-    ResAlloc res(parse_res, true);
+    ResAlloc res(parseRes, true);
     ResAlloc res1(fRes(), true);
 
     //Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
 
-    p_fnc  = this;	//Parse func
-    p_err  = "";	//Clear error messages
-    la_pos = 0;		//LA position
+    pF  = this;	//Parse func
+    pErr  = "";	//Clear error messages
+    laPos  = 0;		//LA position
     sprg = cfg("FORMULA").getS();
     prg.clear();	//Clear program
     regClear();		//Clear registers list
     regTmpClean( );	//Clear temporary registers list
     funcClear();	//Clear functions list
+    mInFnc = "";
+    mInFncs.clear();
 
     if(yyparse()) {
 	prg.clear();
@@ -298,11 +298,13 @@ void Func::progCompile( )
 	regClear();
 	regTmpClean( );
 	funcClear();
+	mInFncs.clear();
 	runSt = false;
-	throw TError(nodePath().c_str(),"%s",p_err.c_str());
+	throw TError(nodePath().c_str(), "%s", pErr.c_str());
     }
     sprg.clear();
-    regTmpClean( );
+    mInFncs.clear();
+    regTmpClean();
 }
 
 int Func::funcGet( const string &path )
@@ -313,12 +315,12 @@ int Func::funcGet( const string &path )
     try {
 	if( dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()) )
 	    f_path = SYS->nodeAt(path,0,'.').at().nodePath();
-    }catch(...){ }
+    } catch(...) { }
 
     if(f_path.empty()) {
 	for( int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
 	    try{ if( dynamic_cast<TFunction*>(&SYS->nodeAt(ns+"."+path,0,'.').at()) ) break; }
-	    catch(...){ continue; }
+	    catch(...) { continue; }
 	if( ns.empty() ) return -1;
 	f_path = SYS->nodeAt(ns+"."+path,0,'.').at().nodePath();
     }
@@ -339,6 +341,18 @@ void Func::funcClear( )
     mFncs.clear();
 }
 
+int Func::inFuncGet( const string &nm )
+{
+    map<string, int>::iterator iF = mInFncs.find(nm);
+    return (iF == mInFncs.end()) ? -1 : iF->second;
+}
+
+void Func::inFuncDef( const string &nm, int pos )
+{
+    if(pos >= 0) { mInFncs[nm] = pos; mInFnc = nm; }
+    else mInFnc = "";
+}
+
 int Func::regNew( bool sep, int recom )
 {
     //Get new register
@@ -354,8 +368,10 @@ int Func::regNew( bool sep, int recom )
     return i_rg;
 }
 
-int Func::regGet( const string &nm )
+int Func::regGet( const string &inm, bool inFncNS )
 {
+    string nm = inm;
+    if(inFncNS && mInFnc.size()) nm = mInFnc+":"+nm;
     //Check allow registers
     for(int i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
 	if(mRegs[i_rg]->name() == nm)
@@ -406,7 +422,7 @@ void Func::regTmpClean( )
 Reg *Func::cdMvi( Reg *op, bool no_code )
 {
     if(op->pos() >= 0) return op;	//Already load
-    int r_id = p_fnc->regNew();
+    int r_id = pF->regNew();
     Reg *rez = regAt(r_id);
     *rez = *op;
     op->free();
@@ -438,7 +454,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    prg.append((char *)&addr,sizeof(uint16_t));
 	    prg += (uint8_t)vmin(255,sval.size());
 	    prg += sval.substr(0,vmin(255,sval.size()));
-	    //> Load and append next parts for big string (>255)
+	    //Load and append next parts for big string (>255)
 	    for(unsigned i_chunk = 1; i_chunk < (sval.size()/255+((sval.size()%255)?1:0)); i_chunk++) {
 		Reg *treg = regTmpNew();
 		*treg = sval.substr(i_chunk*255,vmin(255,(sval.size()-i_chunk*255)));
@@ -484,12 +500,12 @@ Reg *Func::cdMviArray( int p_cnt )
 
     //Mvi all parameters
     for(int i_prm = 0; i_prm < p_cnt; i_prm++)
-	f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
+	fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
     //Get parameters.
     for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
-	p_pos.push_front(f_prmst.front()->pos());
-	f_prmst.front()->free();
-	f_prmst.pop_front();
+	p_pos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
     }
     //Make result
     Reg *rez = regAt(regNew());
@@ -514,11 +530,11 @@ Reg *Func::cdMviRegExp( int p_cnt )
     Reg *rg_arg  = NULL;
 
     if(p_cnt == 2) {
-	rg_arg = cdMvi(f_prmst.front());	f_prmst.pop_front();
-	rg_expr = cdMvi(f_prmst.front());	f_prmst.pop_front();
+	rg_arg = cdMvi(fPrmst.front());	fPrmst.pop_front();
+	rg_expr = cdMvi(fPrmst.front());fPrmst.pop_front();
     }
     else {
-	rg_expr = cdMvi(f_prmst.front());	f_prmst.pop_front();
+	rg_expr = cdMvi(fPrmst.front());	fPrmst.pop_front();
 	rg_arg = regTmpNew();
 	rg_arg->setType(Reg::String);
         rg_arg = cdMvi(rg_arg);
@@ -992,14 +1008,13 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	throw TError(nodePath().c_str(),_("Function is requested '%s', but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
 
     //Mvi all parameters
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
-	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
 
     //Get parameters. Add check parameters type !!!!
     for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
-	p_pos.push_front( f_prmst.front()->pos() );
-	f_prmst.front()->free();
-	f_prmst.pop_front();
+	p_pos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
     }
 
     //Make result
@@ -1026,6 +1041,36 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     return rez;
 }
 
+Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
+{
+    Reg *rez = NULL;
+    deque<int> pPos;
+
+    //Mvi all parameters
+    for(int iPrm = 0; iPrm < pCnt; iPrm++) fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
+
+    //Get parameters
+    for(int iPrm = 0; iPrm < pCnt; iPrm++) {
+	pPos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
+    }
+
+    //Make result
+    if(!proc) (rez=regAt(regNew()))->setType(Reg::Real);
+
+    //Make code
+    uint16_t addr;
+    prg += (uint8_t)Reg::IFunc;
+    addr = fOff; prg.append((char*)&addr, sizeof(uint16_t));
+    prg += (uint8_t)pCnt;
+    addr = proc ? 0 : rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    for(unsigned iPrm = 0; iPrm < pPos.size(); iPrm++)
+    { addr = pPos[iPrm]; prg.append((char*)&addr, sizeof(uint16_t)); }
+
+    return rez;
+}
+
 Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
 {
     if( !obj->objEl( ) )
@@ -1036,13 +1081,12 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     deque<int> p_pos;
 
     //Mvi all parameters
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
-	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
     //Get parameters
     for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
-	p_pos.push_front( f_prmst.front()->pos() );
-	f_prmst.front()->free();
-	f_prmst.pop_front();
+	p_pos.push_front(fPrmst.front()->pos());
+	fPrmst.front()->free();
+	fPrmst.pop_front();
     }
     obj->free();
     rez = regAt(regNew());
@@ -1363,8 +1407,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	}
 	return false;
 	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());
-    }
-    catch(TError err){ mess_debug(nodePath().c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_debug(nodePath().c_str(), "%s", err.mess.c_str()); }
 
     return false;
 }
@@ -1373,7 +1416,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 {
     TVariant vl(EVAL_REAL);
 
-    //> Get base value
+    //Get base value
     switch(rg.type()) {
 	case Reg::Bool:		vl = rg.val().b;	break;
 	case Reg::Int:		vl = rg.val().i;	break;
@@ -1628,10 +1671,10 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 {
     while(!(dt.flg&0x01)) {
 	//Calc time control mechanism
-	if(!((dt.com_cnt++)%10)) {
-	    if(time(NULL) > (dt.start_tm+mMaxCalcTm)) {
+	if(!((dt.comCnt++)%10)) {
+	    if(time(NULL) > (dt.startTm+mMaxCalcTm)) {
 		mess_err(nodePath().c_str(),_("Timeouted function calculation"));
-		dt.flg |= 0x01;
+		dt.flg |= 0x09;
 		return;
 	    }
 	}
@@ -2158,8 +2201,8 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			dt.flg &= ~0x06;
 			exec(val, reg, cprg + ptr->body, dt);
 			//Check break and continue operators
-			if(dt.flg&0x02)		{ dt.flg=0; break; }
-			else if(dt.flg&0x04)	dt.flg=0;
+			if(dt.flg&0x02)		{ dt.flg = 0; break; }
+			else if(dt.flg&0x04)	dt.flg = 0;
 		    }
 		}
 		cprg += ptr->end;
@@ -2473,7 +2516,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getO());	break;
 			    default:	break;
 			}
-		//> Process return
+		//Process return
 		switch(rez.type()) {
 		    case TVariant::Boolean:	reg[ptr->rez] = rez.getB();	break;
 		    case TVariant::Integer:	reg[ptr->rez] = rez.getI();	break;
@@ -2483,6 +2526,41 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    default:	break;
 		}
 
+		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
+	    }
+	    case Reg::IFuncDef: {
+		struct SCode { uint8_t cod; uint16_t sz; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#ifdef OSC_DEBUG
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "%ph: Internal function definition pass in long %d.", cprg, ptr->sz);
+#endif
+		cprg += ptr->sz; continue;
+	    }
+	    case Reg::IFunc: {
+		struct SCode { uint8_t cod; uint16_t off; uint8_t n; uint16_t rez; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+		struct SFCode { uint8_t cod; uint16_t sz; uint8_t n; uint16_t rez; } __attribute__((packed));
+		const struct SFCode *ptrF = (const struct SFCode *)(prg.data()+ptr->off);
+
+#ifdef OSC_DEBUG
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "%ph: Call internal function/procedure %d = %d(%d).", cprg, ptr->rez, ptr->off, ptr->n);
+#endif
+
+		// Process parameters
+		for(int iF = 0; iF < ptrF->n; iF++)
+		    reg[TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t))] =
+			(iF >= ptr->n) ? TVariant() : getVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))]);
+		// Make calc
+		exec(val, reg, (const uint8_t*)ptrF+sizeof(SFCode)+ptrF->n*sizeof(uint16_t), dt);
+		dt.flg = 0;	//Clean all flags
+		// Process outputs
+		for(int iF = 0; iF < vmin(ptrF->n,ptr->n); iF++)
+		    setVal(val, reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iF*sizeof(uint16_t))],
+				getVal(val, reg[TSYS::getUnalign16((const uint8_t*)ptrF+sizeof(SFCode)+iF*sizeof(uint16_t))]));
+		// Return rezult
+		if(ptr->rez) reg[ptr->rez] = getVal(val, reg[ptrF->rez]);
 		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
 	    }
 	    default:
@@ -2500,6 +2578,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),/*owner().DB().empty()?R_R_R_:*/RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
+	ctrMkNode("fld",opt,-1,"/func/cfg/toStart",_("To start"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,
 	    "tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program"))) {
@@ -2524,6 +2603,10 @@ void Func::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/func/cfg/name" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     else if(a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+    else if(a_path == "/func/cfg/toStart") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(toStart()?"1":"0");
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setToStart(s2i(opt->text()));
+    }
     else if(a_path == "/func/cfg/m_calc_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(maxCalcTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMaxCalcTm(s2i(opt->text()));

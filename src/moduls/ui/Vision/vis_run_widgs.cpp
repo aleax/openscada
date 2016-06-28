@@ -61,6 +61,24 @@ string RunWdgView::user( )	{ return mainWin()->user(); }
 
 VisRun *RunWdgView::mainWin( )	{ return (VisRun *)WdgView::mainWin(); }
 
+void RunWdgView::resizeF( const QSizeF &size )
+{
+    WdgView::resizeF(size);
+
+    RunPageView *holdPg = dynamic_cast<RunPageView*>(this);
+    RunWdgView *cntW = NULL;
+    if(holdPg && !holdPg->property("cntPg").toString().isEmpty())
+	cntW = (RunWdgView*)TSYS::str2addr(holdPg->property("cntPg").toString().toStdString());
+    else if(!holdPg && root() == "Box" && (holdPg=((ShapeBox::ShpDt*)shpData)->inclPg)) cntW = this;
+    if(holdPg && cntW) {
+	bool wHold = (holdPg->sizeOrigF().width() <= cntW->sizeOrigF().width());
+	bool hHold = (holdPg->sizeOrigF().height() <= cntW->sizeOrigF().height());
+	holdPg->setMinimumSize(wHold ? cntW->size().width() : holdPg->size().width(), hHold ? cntW->size().height() : holdPg->size().height());
+	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);
+    }
+}
+
+
 string RunWdgView::pgGrp( )	{ return property("pgGrp").toString().toStdString(); }
 
 string RunWdgView::pgOpenSrc( )	{ return property("pgOpenSrc").toString().toStdString(); }
@@ -220,17 +238,24 @@ string RunWdgView::resGet( const string &res )
 
 bool RunWdgView::isVisible( QPoint pos )
 {
+    if(!shape || !shape->needToVisibleCheck())	return true;
+
     //Clear background and draw transparent
-    QPalette plt = palette();
+    QPalette pltSave, plt;
+    pltSave = plt = palette();
     plt.setBrush(QPalette::Window,QColor(0,0,0,0));
     setPalette(plt);
 
     //Grab widget and check it for no zero
 #if QT_VERSION >= 0x050000
-    return grab().toImage().pixel(pos);
+    bool rez = grab().toImage().pixel(pos);
 #else
-    return QPixmap::grabWidget(this).toImage().pixel(pos);
+    bool rez = QPixmap::grabWidget(this).toImage().pixel(pos);
 #endif
+
+    setPalette(pltSave);
+
+    return rez;
 }
 
 bool RunWdgView::event( QEvent *event )
@@ -266,8 +291,7 @@ bool RunWdgView::event( QEvent *event )
 		QAction *actTmp;
 		QMenu popup;
 		string sln;
-		for(int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toStdString(),0,'\n',&off)).size(); )
-		{
+		for(int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toStdString(),0,'\n',&off)).size(); ) {
 		    actTmp = new QAction(TSYS::strSepParse(sln,0,':').c_str(),this);
 		    actTmp->setWhatsThis(TSYS::strSepParse(sln,1,':').c_str());
 		    popup.addAction(actTmp);
@@ -525,8 +549,8 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
 	if(rwdg->property("isVisible").toBool() && rwdg->root() == "Box") {
 	    if(rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty())
 		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toStdString());
-	    if(((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget) {
-		pg = ((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget->findOpenPage(ipg);
+	    if(((ShapeBox::ShpDt*)rwdg->shpData)->inclPg) {
+		pg = ((ShapeBox::ShpDt*)rwdg->shpData)->inclPg->findOpenPage(ipg);
 		if(pg) return pg;
 	    }
 	}
@@ -554,8 +578,8 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 		}
 		return true;
 	    }
-	    if(((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget &&
-		    ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclWidget->callPage(pg_it,pgGrp,pgSrc))
+	    if(((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclPg &&
+		    ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclPg->callPage(pg_it,pgGrp,pgSrc))
 		return true;
         }
     //Put checking to self include pages
@@ -699,7 +723,7 @@ bool StylesStBar::styleSel( )
 	if(s2i(req.childGet(i_s)->attr("id")) == style())
 	    stls->setCurrentIndex(i_s);
     }
-    dlg.resize(300,120);
+    dlg.resize(300, 120);
     if(dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0) {
 	setStyle(stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toStdString());
 	emit styleChanged();
@@ -745,6 +769,7 @@ bool UserItStBar::event( QEvent *event )
 	case QEvent::MouseButtonDblClick:
 	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", "key_mouseDblClick:/stIt_"+objId, A_NO_ID, true); return true; }
 	    break;
+	default: break;
     }
 
     return QLabel::event(event);

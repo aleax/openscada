@@ -46,7 +46,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
 
 ModVArch::~ModVArch( )
 {
-    try { stop(); }catch(...){}
+    try { stop(); } catch(...) { }
 }
 
 double ModVArch::curCapacity( )
@@ -73,8 +73,7 @@ void ModVArch::load_( )
 	vl = prmNd.attr("PackTm");	if(!vl.empty()) setPackTm(s2i(vl));
 	vl = prmNd.attr("CheckTm");	if(!vl.empty()) setCheckTm(s2i(vl));
 	vl = prmNd.attr("PackInfoFiles"); if(!vl.empty()) setPackInfoFiles(s2i(vl));
-    } catch(...){ }
-
+    } catch(...) { }
 }
 
 void ModVArch::save_( )
@@ -105,7 +104,7 @@ void ModVArch::start( )
     TVArchivator::start();
 
     //First scan dir. Load and connect archive files
-    try { checkArchivator(true); } catch(TError err) { stop(); throw; }
+    try { checkArchivator(true); } catch(TError &err) { stop(); throw; }
 }
 
 void ModVArch::stop( )
@@ -161,8 +160,8 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 
 	try {
 	    mess_info(nodePath().c_str(), _("Unpack '%s' for information get."),anm.c_str());
-	    a_fnm = mod->unPackArch(anm,false);
-	} catch(TError){ return false; }
+	    a_fnm = mod->unPackArch(anm, false);
+	} catch(TError&) { return false; }
 	unpck = true;
     }
     //Get params from file
@@ -207,13 +206,22 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     return true;
 }
 
-void ModVArch::checkArchivator( bool now )
+void ModVArch::checkArchivator( bool now, bool toLimits )
 {
     if(!startStat())	return;
 
     chkANow = true;
 
     bool isTm = time(NULL) > (mLstCheck+checkTm()*60);
+
+    //Present files of attached archives check.
+    //!!!! Moved to the top for early capacity limits check
+    ResAlloc res(archRes, false);
+    for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
+	((ModVArchEl*)iel->second)->checkArchivator(now || isTm || toLimits, (maxCapacity() > 1) && (curCapacity()/1048576) > maxCapacity());
+    res.unlock();
+
+    //Archivator's folder check for new files attach and present files pack needs
     if(now || isTm) {
 	// Open/create new directory
 	DIR *IdDir = opendir(addr().c_str());
@@ -222,7 +230,7 @@ void ModVArch::checkArchivator( bool now )
 	    IdDir = opendir(addr().c_str());
 	}
 
-	//Find archive files for no present archives and create it.
+	// Find archive files for no present archives and create it.
 	struct stat file_stat;
 	dirent	*scan_rez = NULL,
 		*scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
@@ -256,7 +264,7 @@ void ModVArch::checkArchivator( bool now )
 	    //  Check for attached
 	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
 	    //  Try connect new file
-	    ResAlloc res(archRes, false);
+	    ResAlloc res1(archRes, false);
 	    map<string,TVArchEl*>::iterator iel = archEl.find(ArhNm);
 	    if(iel != archEl.end()) ((ModVArchEl *)iel->second)->fileAdd(NameArhFile);
 	}
@@ -265,11 +273,6 @@ void ModVArch::checkArchivator( bool now )
 	closedir(IdDir);
 	now = true;
     }
-
-    // Scan files of attached archives
-    ResAlloc res(archRes, false);
-    for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
-	((ModVArchEl*)iel->second)->checkArchivator(now, (maxCapacity() > 1) && (curCapacity()/1048576) > maxCapacity());
 
     chkANow = false;
     if(isTm)	mLstCheck = time(NULL);
@@ -1046,8 +1049,7 @@ void VFileArch::attach( const string &name )
 		    break;
 		default: break;
 	    }
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(mod->nodePath().c_str(),_("Attach file '%s' error."),name.c_str());
 	mErr = true;
@@ -1096,7 +1098,7 @@ int64_t VFileArch::endData( )
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
     if(mPack) {
 	res.request(true);
-	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
+	try{ mName = mod->unPackArch(mName); } catch(TError&) { mErr = true; throw; }
 	mPack = false;
 	res.request(false);
     }
@@ -1142,7 +1144,13 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 
     if(mPack) {
 	res.request(true);
-	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
+	try{ mName = mod->unPackArch(mName); }
+	catch(TError&) {
+	    try {
+		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
+		mName = mod->unPackArch(mName);
+	    } catch(TError&) { mErr = true; throw; }
+	}
 	mPack = false;
 	res.request(false);
     }
@@ -1256,7 +1264,13 @@ TVariant VFileArch::getVal( int vpos )
 
     if(mPack) {
 	res.request(true);
-	try { mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
+	try { mName = mod->unPackArch(mName); }
+	catch(TError&) {
+	    try {
+		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
+		mName = mod->unPackArch(mName);
+	    } catch(TError&) { mErr = true; throw; }
+	}
 	mPack = false;
 	res.request(false);
     }
@@ -1310,8 +1324,13 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     if(mPack) {
 	res.request(true);
-	try { mName = mod->unPackArch(mName); } catch(TError)
-	{ mErr = true; return false; /*throw;*/ }
+	try { mName = mod->unPackArch(mName); }
+	catch(TError&) {
+	    try {
+		owner().archivator().checkArchivator(false, true);	// Try to remove some files by limits
+		mName = mod->unPackArch(mName);
+	    } catch(TError&) { mErr = true; return false; /*throw;*/ }
+	}
 	mPack = false;
 	res.request(false);
     }

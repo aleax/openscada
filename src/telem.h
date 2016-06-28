@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -102,7 +102,7 @@ class TFld
 	const vector<double>	&selValR( );
 	const vector<bool>	&selValB( );
 	// selectable element's name
-	const vector<string> &selNm( );
+	const vector<string>	&selNm( );
 
 	string selVl2Nm( const string &val );
 	string selVl2Nm( int val );
@@ -165,14 +165,14 @@ class TElem
 	void valAtt( TValElem *cnt );
 	void valDet( TValElem *cnt );
 
-	pthread_mutex_t &resEl( )	{ return mResEl; }
+	ResMtx &resEl( )	{ return mResEl; }
 
     private:
 	//Attributes
 	string			mName;
 	vector<TFld*>		elem;
 	vector<TValElem*>	cont;		//Conteiners
-	pthread_mutex_t		mResEl;
+	ResMtx			mResEl;
 };
 
 //*************************************************

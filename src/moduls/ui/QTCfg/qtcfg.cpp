@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,7 +73,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
-    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), tblInit(false), inHostReq(0)
+    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false)
 {
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -374,7 +374,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     wUser->setWhatsThis(_("This label displays current user."));
     wUser->setToolTip(_("Field for display of the current user."));
     wUser->setStatusTip(_("Double click to change user."));
-    statusBar()->insertPermanentWidget(0,wUser);
+    statusBar()->insertPermanentWidget(0, wUser);
     connect(wUser, SIGNAL(userChanged()), this, SLOT(userSel()));
 
     mStModify = new QLabel(" ",this);
@@ -413,7 +413,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     // Display root page and init external pages
     initHosts();
     try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
-    catch(TError err) { pageDisplay("/"+SYS->id()); }
+    catch(TError &err) { pageDisplay("/"+SYS->id()); }
 }
 
 ConfApp::~ConfApp( )
@@ -551,7 +551,7 @@ void ConfApp::pagePrev( )
     string path = prev[0];
     prev.erase(prev.begin());
 
-    try{ pageDisplay(path); } catch(TError err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+    try{ pageDisplay(path); } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
 void ConfApp::pageNext()
@@ -561,7 +561,7 @@ void ConfApp::pageNext()
     string path = next[0];
     next.erase(next.begin());
 
-    try{ pageDisplay(path); } catch(TError err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+    try{ pageDisplay(path); } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
 void ConfApp::itDBLoad( )
@@ -819,8 +819,8 @@ void ConfApp::userSel( )
 
     pgInfo.setAttr("path", "");
 
-    try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
-    catch(TError err) { pageDisplay("/"+SYS->id()); }
+    try { pageDisplay("/"+SYS->id()+mod->startPath()); }
+    catch(TError &err) { pageDisplay("/"+SYS->id()); }
 }
 
 void ConfApp::pageRefresh( bool tm )
@@ -839,12 +839,11 @@ void ConfApp::pageRefresh( bool tm )
     {
 	//Tree part update
 	if(CtrTree->currentItem())
-	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent(): CtrTree->currentItem(), true);
+	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent() : CtrTree->currentItem(), true);
 
 	//Same page update
 	pageDisplay(selPath);
-    }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::pageCyclRefrStart( )
@@ -950,8 +949,7 @@ void ConfApp::selectPage( const string &path )
 
 	//Display page
 	pageDisplay(path);
-    }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget )
@@ -1440,9 +1438,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_r = new QLabel(widget);
 		val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		val_r->setStatusTip((selPath+"/"+br_path).c_str());
-		QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
-		sp.setHorizontalStretch(1);
-		val_r->setSizePolicy(sp);
+		//QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
+		//sp.setHorizontalStretch(1);
+		//val_r->setSizePolicy(sp);
 	    }
 	    else {
 		val_w = new QComboBox(widget);
@@ -1475,9 +1473,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    t_s.setAttr("addr_val_r", TSYS::addr2str(val_r));
 	}
 	else {
-	    lab  = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
-	    val_r = (QLabel *)TSYS::str2addr(t_s.attr("addr_val_r"));
-	    val_w = (QComboBox *)TSYS::str2addr(t_s.attr("addr_val_w"));
+	    lab  = (QLabel*)TSYS::str2addr(t_s.attr("addr_lab"));
+	    val_r = (QLabel*)TSYS::str2addr(t_s.attr("addr_val_r"));
+	    val_w = (QComboBox*)TSYS::str2addr(t_s.attr("addr_val_w"));
 	}
 
 	// Fill combo
@@ -1897,8 +1895,7 @@ void ConfApp::viewChild( QTreeWidgetItem * i )
 	while(i->childCount()) delete i->takeChild(0);
 	viewChildRecArea(i);
 	CtrTree->resizeColumnToContents(0);
-    }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::pageDisplay( const string &path )
@@ -1960,11 +1957,11 @@ void ConfApp::pageDisplay( const string &path )
 
 loadGenReqDate:
     //Page content forming
-    CtrTree->blockSignals(true);
+    //CtrTree->blockSignals(true);
     tabs->blockSignals(true);
     selectChildRecArea(*root, "/");
     tabs->blockSignals(false);
-    CtrTree->blockSignals(false);
+    //CtrTree->blockSignals(false);
 
     //Load and Save allow check
     actDBLoad->setEnabled(false); actDBSave->setEnabled(false);
@@ -2095,7 +2092,7 @@ void ConfApp::ctrTreePopup( )
 	    treeUpdate();
 	}
 	popup.clear();
-    }catch(TError err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
 void ConfApp::tabSelect( int idx )
@@ -2103,8 +2100,7 @@ void ConfApp::tabSelect( int idx )
     try {
 	pageCyclRefrStop();
 	pageDisplay(selPath);
-    }
-    catch(TError err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
 void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
@@ -2200,7 +2196,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	}
 	//Delete no present
 	if(upTree) {
-	    CtrTree->blockSignals(true);
+	    //CtrTree->blockSignals(true);
 	    for(unsigned i_it = 0, i_e; i_it < (unsigned)i->childCount(); ) {
 		for(i_e = 0; i_e < req.childSize(); i_e++) {
 		    // Prepare branch patch
@@ -2213,7 +2209,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		if(i_e >= req.childSize()) { delete i->takeChild(i_it); continue; }
 		i_it++;
 	    }
-	    CtrTree->blockSignals(false);
+	    //CtrTree->blockSignals(false);
 	}
     }
 
@@ -2281,8 +2277,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	    }
 	}
 	return rez;
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	node.childClear();
 	node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
     }
@@ -2362,14 +2357,14 @@ string ConfApp::getPrintVal( const string &vl )
 
 void ConfApp::initHosts( )
 {
-    vector<string> stls;
+    vector<TTransportS::ExtHost> stls;
     SYS->transport().at().extHostList(wUser->user().toStdString(), stls);
-    stls.insert(stls.begin(), SYS->id());
+    stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 
     //Remove no present hosts
     for(unsigned iTop = 0, iH; iTop < (unsigned)CtrTree->topLevelItemCount(); ) {
 	for(iH = 0; iH < stls.size(); iH++)
-	    if(stls[iH] == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
+	    if(stls[iH].id == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
 		break;
 	if(iH >= stls.size()) {
 	    // Remove the host thread
@@ -2386,37 +2381,34 @@ void ConfApp::initHosts( )
 
     //Add/update hosts
     bool emptyTree = !CtrTree->topLevelItemCount();
-    for(unsigned i_st = 0; i_st < stls.size(); i_st++) {
-	int errCon = 0;
-
+    for(unsigned iSt = 0; iSt < stls.size(); iSt++) {
 	QTreeWidgetItem *nit = NULL;
 	if(!emptyTree)
 	    for(int iTop = 0; iTop < CtrTree->topLevelItemCount(); iTop++)
-		if(stls[i_st] == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
+		if(stls[iSt].id == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
 		{ nit = CtrTree->topLevelItem(iTop); break; }
 	if(!nit) {
 	    nit = new QTreeWidgetItem(CtrTree);
 
 	    // Append the host thread
-	    if(hosts.find(stls[i_st]) == hosts.end()) {
-		hosts[stls[i_st]] = new SCADAHost(stls[i_st].c_str(), wUser->user(), (stls[i_st]!=SYS->id()), this);
-		connect(hosts[stls[i_st]], SIGNAL(setSt(const QString&,int,const QImage&,const QStringList&,const QString&)),
-			this, SLOT(hostStSet(const QString&,int,const QImage&,const QStringList&,const QString&)));
-		hosts[stls[i_st]]->start();
+	    if(hosts.find(stls[iSt].id) == hosts.end()) {
+		hosts[stls[iSt].id] = new SCADAHost(stls[iSt].id.c_str(), wUser->user(), (stls[iSt].id!=SYS->id()), this);
+		connect(hosts[stls[iSt].id], SIGNAL(setSt(const QString&,int,const QImage&,const QStringList&,const QString&)),
+			this, SLOT(hostStSet(const QString&,int,const QImage&,const QStringList&,const QString&)), Qt::QueuedConnection);
+		hosts[stls[iSt].id]->start();
 	    }
 	}
-	if(stls[i_st] == SYS->id()) {
+	if(stls[iSt].id == SYS->id()) {
 	    nit->setText(0, SYS->name().c_str());
 	    nit->setText(1, _("Local station"));
 	    nit->setText(2, ("/"+SYS->id()).c_str());
 	}
 	else {
-	    TTransportS::ExtHost host = SYS->transport().at().extHostGet(wUser->user().toStdString(),stls[i_st]);
-	    nit->setText(0, host.name.c_str());
+	    nit->setText(0, stls[iSt].name.c_str());
 	    nit->setText(1, _("Remote station"));
-	    nit->setText(2, ("/"+host.id).c_str());
+	    nit->setText(2, ("/"+stls[iSt].id).c_str());
 	}
-	if(hosts[stls[i_st]]) hosts[stls[i_st]]->userSet(wUser->user());
+	if(hosts[stls[iSt].id]) hosts[stls[iSt].id]->userSet(wUser->user());
     }
 }
 
@@ -2449,7 +2441,7 @@ void ConfApp::checkBoxStChange( int stat )
 	    req.setName("set")->setText(val);
 	    if(cntrIfCmd(req))	mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	}
-    }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
     pageRefresh(true);
@@ -2483,7 +2475,7 @@ void ConfApp::buttonClicked( )
 		wUser->user().toStdString().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	}
-    } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
     pageRefresh(true);
@@ -2541,7 +2533,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    req.setName("set")->setText(val);
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this);// return; }
 	}
-    } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
     pageRefresh(true);
@@ -2686,8 +2678,7 @@ void ConfApp::listBoxPopup( )
 
 	    popup.clear();
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
 	pageRefresh(true);	//Redraw
     }
@@ -2805,7 +2796,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 
 	    popup.clear();
 	}
-    }catch(TError err)	{ mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     pageRefresh(true);	//Redraw
 }
@@ -2864,8 +2855,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 		if(cntrIfCmd(n_el1)) { mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this); return; }
 	    }
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
 	pageRefresh(true);	//Redraw
     }
@@ -2944,8 +2934,7 @@ void ConfApp::tableSet( int row, int col )
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());
 	noReload = s2i(n_el1.attr("noReload"));
 	if(noReload) n_el->childGet(col)->childGet(row)->setText(value);
-    }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     if(!noReload) pageRefresh(true);
 }
@@ -2977,8 +2966,7 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 
 	selPath = path;
 	pageRefresh(true);
-    }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::editChange( const QString& txt )
@@ -2991,7 +2979,7 @@ void ConfApp::editChange( const QString& txt )
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);
 	SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl))->setText(txt.toStdString());
-    }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::applyButton( QWidget *src )
@@ -3022,7 +3010,7 @@ void ConfApp::applyButton( QWidget *src )
 	XMLNode n_el("set");
 	n_el.setAttr("path", selPath+"/"+path)->setText(sval);
 	if(cntrIfCmd(n_el)) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
-    }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
     pageRefresh(true);
@@ -3116,7 +3104,8 @@ void SCADAHost::run( )
     while(!endRun) {
 	mtx.lock(); wuser = user; mtx.unlock();
 	//Link status processing
-	if(isFirst || (!lnkOK && (time(NULL)-tm) > 10) || (lnkOK && (time(NULL)-tm) > 600)) {
+	if(isFirst || (!lnkOK && (time(NULL)-tm) > s2i(TSYS::strParse(mod->tmConChk(),0,":"))) ||
+		      (lnkOK && (time(NULL)-tm) > s2i(TSYS::strParse(mod->tmConChk(),1,":")))) {
 	    emit setSt(id, -1, imgConnEst);
 
 	    // Check connection by the station name, icon and branches request
@@ -3142,9 +3131,11 @@ void SCADAHost::run( )
 
 		lnkOK = true;
 	    }
-	    else if(rez == 10) {
+	    else if(rez/* == 10*/) {
 		img = imgDisConnect;
 		toolTip = req.text().c_str();
+
+		lnkOK = false;
 	    }
 
 	    emit setSt(id, lnkOK, img, brs, toolTip);
@@ -3155,6 +3146,7 @@ void SCADAHost::run( )
 	mtx.lock();
 	if(!req || (req && reqDone)) cond.wait(&mtx, 1000);
 	if(req && !reqDone) {
+	    wuser = user;
 	    mtx.unlock();
 	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != 10;
 	    else {
@@ -3178,11 +3170,11 @@ int SCADAHost::cntrIfCmd( XMLNode &node, const QString &iuser )
 	int rez = SYS->transport().at().cntrIfCmd(node, "UIQtCfg", iuser.toStdString());
 	reqTmMax = vmax(reqTmMax, (tm=time(NULL))-stTm);
 	return rez;
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	node.childClear();
 	node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
 	tm = 0;		//Check the link immediately
     }
+
     return s2i(node.attr("rez"));
 }

@@ -59,26 +59,26 @@ class TVision : public TUI
 	TVision( string name );
 	~TVision( );
 
-	bool endRun( )				{ return end_run; }
-	string startUser( )			{ return start_user; }
-	string userPass( )			{ return user_pass; }
-	string runPrjs( )			{ return run_prjs; }
+	bool endRun( )				{ return mEndRun; }
+	string userStart( )			{ return mUserStart; }
+	string userPass( )			{ return mUserPass; }
+	string runPrjs( )			{ return mRunPrjs; }
 	bool runPrjsSt( )			{ return mStatusEn; }
 	bool winPosCntrSave( )			{ return mWinPosCntrSave; }
 	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
-	string VCAStation( )			{ return vca_station; }
+	string VCAStation( )			{ return mVCAStation; }
 	int restoreTime( )			{ return mRestTime; }
 	string playCom( )			{ return mPlayCom; }
 	float cachePgLife( )			{ return mCachePgLife; }
 	string uiPropGet( const string &prop, const string &user = "root" );
 
-	void setStartUser( const string &user )	{ start_user = user; modif(); }
-	void setUserPass( const string &pass )	{ user_pass = pass; modif(); }
-	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
+	void setUserStart( const string &user )	{ mUserStart = user; modif(); }
+	void setUserPass( const string &pass )	{ mUserPass = pass; modif(); }
+	void setRunPrjs( const string &prj )	{ mRunPrjs = prj; modif(); }
 	void setRunPrjsSt( bool en )		{ mStatusEn = en; modif(); }
 	void setWinPosCntrSave( bool en )	{ mWinPosCntrSave = en; modif(); }
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
-	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
+	void setVCAStation( const string &stat ){ mVCAStation = stat; modif(); }
 	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }
 	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
 	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
@@ -117,21 +117,20 @@ class TVision : public TUI
     private:
 	//Methods
 	string optDescr( );
-	QMainWindow *openWindow();
+	QMainWindow *openWindow( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	string		start_user,		//No question start user
-			user_pass,		//No quest user password
-			run_prjs;		//Run projects list on the module start
+	MtxString	mVCAStation,		//VCA station id ('.' - for local station)
+			mUserStart,		//No question start user
+			mUserPass;		//No quest user password
+	string		mRunPrjs;		//Run projects list on the module start
 	vector<WdgShape*> shapesWdg;
 	bool		mStatusEn,		//Status line display for projects run
 			mWinPosCntrSave,	//Windows position control and save
 			mExitLstRunPrjCls,	//Exit program on last run project close
-			end_run;		//End run command. Close all windows
+			mEndRun;		//End run command. Close all windows
 	int		mRestTime;		//Restore connection time, seconds
 	float		mCachePgLife;		//Cached pages lifetime
-
-	string		vca_station;		//VCA station id ('.' - for local station)
 
 	string		mPlayCom;		//Play command
 

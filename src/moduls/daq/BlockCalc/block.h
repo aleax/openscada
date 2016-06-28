@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,14 +62,14 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	// Block's parameters
-	string id( )		{ return m_id; }
+	string id( )		{ return mId; }
 	string name( );
 	string descr( ) 	{ return cfg("DESCR").getS(); }
-	int    errCnt( )	{ return err_cnt; }
-	bool   enable( )	{ return m_enable; }
-	bool   process( )	{ return m_process; }
-	bool   toEnable( )	{ return m_to_en; }
-	bool   toProcess( )	{ return m_to_prc; }
+	int    errCnt( )	{ return mErrCnt; }
+	bool   enable( )	{ return mEnable; }
+	bool   process( )	{ return mProcess; }
+	bool   toEnable( )	{ return mToEn; }
+	bool   toProcess( )	{ return mToPrc; }
 	string prior( )		{ return cfg("PRIOR").getS(); }
 	string wFunc( )		{ return cfg("FUNC").getS(); }
 	bool outLnkWrChs( )	{ return mOutLnkWrChs; }
@@ -79,8 +78,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void setDescr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
 	void setEnable( bool val );
 	void setProcess( bool val );
-	void setToEnable( bool val )		{ m_to_en = val; modif(); }
-	void setToProcess( bool val )		{ m_to_prc = val; modif(); }
+	void setToEnable( bool val )		{ mToEn = val; modif(); }
+	void setToProcess( bool val )		{ mToPrc = val; modif(); }
 	void setPrior( const string &vl )	{ cfg("PRIOR").setS(vl); }
 	void setWFunc( const string &vl )	{ cfg("FUNC").setS(vl); }
 	void setOutLnkWrChs( bool val )		{ mOutLnkWrChs = val; modif(); }
@@ -103,22 +102,24 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void loadIO( const string &blk_db = "", const string &blk_id = "", bool force = false );
 	void saveIO( );
 
-	const char *nodeName( )	{ return m_id.getSd(); }
+	const char *nodeName( )	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preDisable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Data
 	// Define input interblock link structure
 	class SLIBlk {
 	    public:
-		SLIBlk( ) : w_id(-1) { }
+		SLIBlk( ) : wId(-1) { }
 
-		AutoHD<Block>	w_bl;	//Block AutoHD
-		int		w_id;	//IO index
+		AutoHD<Block>	wBl;	//Block AutoHD
+		int		wId;	//IO index
 	};
 
 	//> Define link structures
@@ -132,17 +133,17 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	};
 
 	//Attributes
-	vector<SLnk>	m_lnk;
-	bool		m_enable,
-			m_process;	//Processing block
+	vector<SLnk>	mLnk;
+	bool		mEnable,
+			mProcess;	//Processing block
 
-	TCfg		&m_id;		//Block id
-	char		&m_to_en, &m_to_prc,
+	TCfg		&mId;		//Block id
+	char		&mToEn, &mToPrc,
 			&mOutLnkWrChs;	//Write to output links only at changes
 
-	Res		lnk_res;	//Link resource
-	int		err_cnt;
-	int		id_freq, id_start, id_stop;	//Fixed system attributes identifiers
+	Res		lnkRes;		//Link resource
+	int		mErrCnt;
+	int		idFreq, idStart, idStop;	//Fixed system attributes identifiers
 };
 
 } //End namespace virtual

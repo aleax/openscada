@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,7 +91,7 @@ class VisRun : public QMainWindow
 	RunPageView *findOpenPage( const string &pg );
 	RunWdgView *findOpenWidget( const string &wdg );
 
-	int cntrIfCmd( XMLNode &node, bool glob = false );
+	int cntrIfCmd( XMLNode &node, bool glob = false, bool main = false );
 
 	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
 

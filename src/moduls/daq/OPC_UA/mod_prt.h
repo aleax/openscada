@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,15 +41,16 @@ using namespace OPC;
 //*************************************************
 //* Protocol modul info!                          *
 #define PRT_ID		"OPC_UA"
-#define PRT_NAME	_("OPC UA")
+#define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.6.6"
+#define PRT_MVER	"1.7.2"
 #define PRT_AUTOR	_("Roman Savochenko")
-#define PRT_DESCR	_("OPC UA protocol implementation.")
+#define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
+#define POOL_OF_TR
 #define NS_OpenSCADA_DAQ 4
 
 namespace OPC_UA
@@ -67,13 +68,17 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name );
 	~TProtIn( );
 
+	unsigned waitReqTm( )	{ return mPoolTm; }
+
 	bool mess( const string &request, string &answer, const string &sender );
 
 	TProt &owner( );
 
-    public:
 	//Attributes
-	string mBuf;
+	bool	mSubscrIn;
+	unsigned mPoolTm, mSubscrCntr;
+	int64_t	mPrevTm;
+	string	mBuf, mEp;
 };
 
 //*************************************************
@@ -96,7 +101,14 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string url( )		{ return mURL; }
 	string cert( );
 	string pvKey( );
-	double subscrProcPer( )	{ return 0; }	//Disabled
+	double subscrProcPer( )	{ return 100; }
+	bool publishInPool( ) {
+#ifdef POOL_OF_TR
+	    return true;
+#else
+	    return false;
+#endif
+	}
 
 	string getStatus( );
 
@@ -108,6 +120,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	void setDescr( const string &idsc )	{ mDescr = idsc; }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
+	void setPublish( const string &inPrtId );
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 

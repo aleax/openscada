@@ -38,6 +38,7 @@
 #define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
 #define STD_INTERF_TM	5	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
+#define ALRM_ARCH_NM	"<alarms>"
 #define DB_CFG		"<cfg>"
 
 #include <signal.h>
@@ -49,6 +50,11 @@
 #include <string>
 #include <vector>
 
+#define __func__ __PRETTY_FUNCTION__
+
+#define vmin(a,b) ((a) < (b) ? (a) : (b))
+#define vmax(a,b) ((a) > (b) ? (a) : (b))
+
 #include "config.h"
 #include "tbds.h"
 #include "tuis.h"
@@ -59,11 +65,6 @@
 #include "tspecials.h"
 #include "tmodschedul.h"
 #include "tsecurity.h"
-
-#define __func__ __PRETTY_FUNCTION__
-
-#define vmin(a,b) ((a) < (b) ? (a) : (b))
-#define vmax(a,b) ((a) > (b) ? (a) : (b))
 
 using std::string;
 using std::vector;
@@ -184,13 +185,12 @@ class TSYS : public TCntrNode
 	//> Convert value to string
 	static string int2str( int val, IntView view = Dec );
 	static string uint2str( unsigned val, IntView view = Dec );
-	static string ll2str( int64_t val, IntView view = Dec );
+	static string ll2str( long long val, IntView view = Dec );
 	static string real2str( double val, int prec = 15, char tp = 'g' );
 	static double realRound( double val, int dig = 0, bool toint = false )
 	{
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
-	    if(toint) return floor(rez+0.5);
-	    return rez;
+	    return toint ? floor(rez+0.5) : rez;
 	}
 	static string time2str( time_t tm, const string &format );
 	static string time2str( double utm );
@@ -311,7 +311,7 @@ class TSYS : public TCntrNode
 		//Attributes
 		string		path;
 		pthread_t	thr;
-		char		policy, prior;
+		uint8_t		policy, prior;
 		pid_t		tid;
 		ResString	cpuSet;
 		void *(*task) (void *);
@@ -375,7 +375,7 @@ class TSYS : public TCntrNode
 //* Global functions for OSCADA namespace         *
 inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2str(val, view); }
 inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
-inline string ll2s( int64_t val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
+inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
 inline double rRnd( double val, int dig = 0, bool toint = false ){ return TSYS::realRound(val, dig, toint); }
 inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }

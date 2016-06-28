@@ -35,7 +35,7 @@
 
 //!!! Module's meta-information. Change for your module.
 //************************************************
-//* Modul info!                                  *
+//* Module info!                                 *
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	_("Transport template")
 #define MOD_TYPE	STR_ID

@@ -36,7 +36,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.3"
+#define MOD_VER		"1.6.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ using namespace PrHTTP;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), lstSesChk(0)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), mTmpl(dataRes()), lstSesChk(0)
 {
     mod = this;
 
@@ -107,7 +107,7 @@ void TProt::load_( )
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
     // Load auto-login config
-    ResAlloc res(nodeRes(),true);
+    MtxAlloc res(dataRes(), true);
     XMLNode aLogNd("aLog");
     try {
 	aLogNd.load(TBDS::genDBGet(nodePath()+"AutoLogin"));
@@ -116,7 +116,7 @@ void TProt::load_( )
 	    for(iAL = 0; iAL < mALog.size() && !(mALog[iAL]==al); ++iAL) ;
 	    if(iAL >= mALog.size()) mALog.push_back(al);
 	}
-    }catch(...){ }
+    } catch(...) { }
 }
 
 void TProt::save_( )
@@ -125,7 +125,7 @@ void TProt::save_( )
     TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
 
     //Save auto-login config
-    ResAlloc res(nodeRes(),false);
+    MtxAlloc res(dataRes(), true);
     XMLNode aLogNd("aLog");
     for(unsigned i_n = 0; i_n < mALog.size(); i_n++)
 	aLogNd.childAdd("it")->setAttr("addrs", mALog[i_n].addrs)->setAttr("user", mALog[i_n].user);
@@ -137,7 +137,7 @@ TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
 int TProt::sesOpen( const string &name, const string &srcAddr, const string &userAgent )
 {
     int sess_id;
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
 
     //Get free identifier
     do{ sess_id = rand(); }
@@ -151,7 +151,7 @@ int TProt::sesOpen( const string &name, const string &srcAddr, const string &use
 
 void TProt::sesClose( int sid )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     map<int,SAuth>::iterator authEl = mAuth.find(sid);
     if(authEl != mAuth.end()) {
 	mess_info(nodePath().c_str(),_("Auth exit from user '%s'."),authEl->second.name.c_str());
@@ -165,7 +165,7 @@ string TProt::sesCheck( int sid )
     map<int,SAuth>::iterator authEl;
 
     //Check for close old sessions
-    ResAlloc res(nodeRes(),true);
+    MtxAlloc res(dataRes(), true);
     if(cur_tm > lstSesChk+10) {
 	for(authEl = mAuth.begin(); authEl != mAuth.end(); )
 	    if(cur_tm > authEl->second.tAuth+authTime()*60) {
@@ -188,7 +188,7 @@ string TProt::sesCheck( int sid )
 string TProt::autoLogGet( const string &sender )
 {
     string addr;
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     for(unsigned i_a = 0; sender.size() && i_a < mALog.size(); i_a++)
 	for(int aoff = 0; (addr=TSYS::strParse(mALog[i_a].addrs,0,";",&aoff)).size(); )
 	    if(TRegExp(addr, "p").test(sender)) return mALog[i_a].user;
@@ -314,8 +314,7 @@ next_ch:
 
 	// Next chunk process
 	if(c_lng == -2 && ch_ln != 0) goto next_ch;
-    }
-    catch(TError err)	{ io.setAttr("err",err.mess); return; }
+    } catch(TError &err) { io.setAttr("err",err.mess); return; }
 
     io.setAttr("err","");
 }
@@ -346,7 +345,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/auths" && ctrChkNode(opt)) {
-	ResAlloc res(nodeRes(), false);
+	MtxAlloc res(dataRes(), true);
 	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s), by \"%s\""),
 		tm2s(authEl->second.tAuth,"").c_str(),authEl->second.name.c_str(),authEl->second.addr.c_str(),authEl->second.agent.c_str()));
@@ -362,14 +361,14 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_addrs	= ctrMkNode("list",opt,-1,"/prm/cfg/alog/addrs","");
 	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/prm/cfg/alog/user","");
 
-	    ResAlloc res(nodeRes(),false);
+	    MtxAlloc res(dataRes(), true);
 	    for(unsigned i_a = 0; i_a < mALog.size(); i_a++) {
 		if(n_addrs)	n_addrs->childAdd("el")->setText(mALog[i_a].addrs);
 		if(n_user)	n_user->childAdd("el")->setText(mALog[i_a].user);
 	    }
 	    return;
 	}
-	ResAlloc res(nodeRes(),true);
+	MtxAlloc res(dataRes(), true);
 	modif();
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	mALog.push_back(SAutoLogin());
 	else if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR) && (idrow >= 0 || idrow < (int)mALog.size()))
@@ -594,8 +593,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 			 "</html>\n";
 		answer = httpHead("501 Method Not Implemented",answer.size())+answer;
 	    }
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    //Check to direct file request for template
 	    if(method == "GET" && mod->tmpl().size() && urls != "/") {
 		int hd = -1;
@@ -681,8 +679,7 @@ string TProtIn::pgTmpl( const string &cnt, const string &head_els )
 		    }
 		    else answer.clear();
 		}
-	    }
-	    catch(TError err) {
+	    } catch(TError &err) {
 		mess_err(nodePath().c_str(),_("HTML-template '%s' load error: %s"),mod->tmpl().c_str(),err.mess.c_str());
 		answer.clear();
 	    }

@@ -22,7 +22,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	7	//ControllerS type modules version
+#define SDAQ_VER	8	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>
@@ -63,31 +63,31 @@ class TDAQS : public TSubSYS
 
 	//> Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }
-	void tmplLibList( vector<string> &list )		{ chldList(mTmplib,list); }
-	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmplib,id); }
-	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmplib,lib); }
-	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmplib,id,-1,flg); }
-	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmplib,id); }
+	void tmplLibList( vector<string> &list )		{ chldList(mTmpLib,list); }
+	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmpLib,id); }
+	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmpLib,lib); }
+	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmpLib,id,-1,flg); }
+	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmpLib,id); }
 
 	//> Redundancy
 	bool rdActive( );
 	int rdStLevel( )		{ return mRdStLevel; }
-	void setRdStLevel( int vl );
+	void setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); modif(); }
 	float rdTaskPer( )		{ return mRdTaskPer; }
-	void setRdTaskPer( float vl );
+	void setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }
 	int rdRestConnTm( )		{ return mRdRestConnTm; }
-	void setRdRestConnTm( int vl );
+	void setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); modif(); }
 	float rdRestDtTm( )		{ return mRdRestDtTm; }
-	void setRdRestDtTm( float vl );
+	void setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(24,vmax(0.01,vl)); modif(); }
 	void rdStList( vector<string> &ls );
 	void rdActCntrList( vector<string> &ls, bool isRun = false );
 	string rdStRequest( const string &cntr, XMLNode &req, const string &prevSt = "", bool toRun = true );
 
-	TElem &elLib( )	{ return lb_el; }
-	TElem &tplE( )	{ return el_tmpl; }
-	TElem &tplIOE( ){ return el_tmpl_io; }
+	TElem &elLib( )		{ return mElLib; }
+	TElem &elTmpl( )	{ return mElTmpl; }
+	TElem &elTmplIO( )	{ return mElTmplIO; }
 
-	TElem &errE( )	{ return el_err; }	//Error atributes structure
+	TElem &elErr( )		{ return mElErr; }	//Error atributes structure
 
     protected:
 	void load_( );
@@ -115,8 +115,8 @@ class TDAQS : public TSubSYS
 	static void *RdTask( void *param );
 
 	//Private attributes
-	TElem	el_err, lb_el, el_tmpl, el_tmpl_io;
-	int	mTmplib;
+	TElem	mElErr, mElLib, mElTmpl, mElTmplIO;
+	int	mTmpLib;
 
 	Res		mRdRes;
 	unsigned char	mRdStLevel,		//Current station level

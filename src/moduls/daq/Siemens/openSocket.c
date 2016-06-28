@@ -51,7 +51,9 @@ int openSocket(const int port, const char * peer) {
     struct sockaddr_in addr;
     socklen_t addrlen;
 #ifndef DONT_USE_GETHOSTBYNAME    
-    struct hostent *he;
+    char hBuf[10000];
+    struct hostent hostbuf, *he;
+    //struct hostent *he;
 #endif    
     if (daveDebug & daveDebugOpen) {
 	LOG1(ThisModule "enter OpenSocket");
@@ -61,7 +63,9 @@ int openSocket(const int port, const char * peer) {
     addr.sin_port =htons(port);
 //	(((port) & 0xff) << 8) | (((port) & 0xff00) >> 8);
 #ifndef DONT_USE_GETHOSTBYNAME
-    he = gethostbyname(peer);
+    int herr;
+    gethostbyname_r(peer, &hostbuf, hBuf, sizeof(hBuf), &he, &herr);
+    //he = gethostbyname(peer);
     if (!he) return 0;  // bug reported by Nick Hibma
     memcpy(&addr.sin_addr, he->h_addr_list[0], sizeof(addr.sin_addr));
 #else

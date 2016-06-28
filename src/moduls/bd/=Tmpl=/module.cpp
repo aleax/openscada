@@ -31,7 +31,7 @@
 
 //!!! Module's meta-information. Change for your module.
 //************************************************
-//* Modul info!                                  *
+//* Module info!                                 *
 #define MOD_ID		"Tmpl"
 #define MOD_NAME	_("DB Tmpl")
 #define MOD_TYPE	SDB_ID
@@ -162,7 +162,9 @@ TTable *MBD::openTable( const string &inm, bool create )
 {
     if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
 
-    return new MTable(inm, this, create);
+    //!!! The code of the table creation in the database if it is not exist there and any exceptions place
+
+    return new MTable(inm, this);
 }
 
 //!!! BEGIN a transaction processing functions
@@ -211,13 +213,11 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* BDTmpl::Table                                *
 //************************************************
-MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
+MTable::MTable( string name, MBD *iown ) : TTable(name)
 {
-    string req;
-
     setNodePrev(iown);
 
-    //!!! The code of the table creation in the database if it is not exist there
+
 
     //!!! Get the table structure
     getStructDB(name, tblStrct);
@@ -270,7 +270,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     vector< vector<string> > tbl;
 
     if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
-    mLstUse = SYS->sysTm();
+    mLstUse = time(NULL);
 
     //Check for no present and no empty keys allow
     if(row == 0) {
@@ -337,7 +337,7 @@ void MTable::fieldGet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
-    mLstUse = SYS->sysTm();
+    mLstUse = time(NULL);
 
     string sid;
     //Prepare request
@@ -389,7 +389,7 @@ void MTable::fieldSet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
-    mLstUse = SYS->sysTm();
+    mLstUse = time(NULL);
 
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -484,7 +484,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try { owner().sqlReq(req, NULL, true); }
-    catch(TError err) {
+    catch(TError &err) {
 	fieldFix(cfg);
 	owner().sqlReq(req, NULL, true);
     }
@@ -495,7 +495,7 @@ void MTable::fieldDel( TConfig &cfg )
 {
     //!!! Check the syntax of the request's, it may differ in your database
     if(tblStrct.empty()) return;
-    mLstUse = SYS->sysTm();
+    mLstUse = time(NULL);
 
     //Where prepare
     string req_where = "WHERE ";
@@ -512,8 +512,7 @@ void MTable::fieldDel( TConfig &cfg )
     //Main request
     try { owner().sqlReq("DELETE FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
 					 TSYS::strEncode(name(),TSYS::SQL)+"` "+req_where, NULL, true);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	//Check for present
 	vector< vector<string> > tbl;
 	owner().sqlReq("SELECT 1 FROM `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+

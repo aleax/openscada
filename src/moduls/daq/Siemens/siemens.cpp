@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.0.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -90,7 +90,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
     fldAdd(new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected,"1","0",
@@ -434,7 +434,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 		    case 0x30:	opt->childAdd("el")->setText(i2s(i_st)+_(" : Active station"));	break;
 		    case 0x00:	opt->childAdd("el")->setText(i2s(i_st)+_(" : Passive station"));break;
 		}
-	} catch(TError err) { opt->childAdd("el")->setText(err.mess); }
+	} catch(TError &err) { opt->childAdd("el")->setText(err.mess); }
     }
     else TTipDAQ::cntrCmdProc(opt);
 }
@@ -446,7 +446,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
 	::TController(name_c, daq_db, cfgelem),
 	mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
 	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), restTm(cfg("TM_REST").getId()), mAssincWR(cfg("ASINC_WR").getBd()),
-	prcSt(false), callSt(false), endrunReq(false), isReload(false), isInitiated(false), alSt(-1), mInvokeID(-1),
+	prcSt(false), callSt(false), endrunReq(false), isReload(false), isInitiated(false), alSt(-1), conErr(dataRes()), mInvokeID(-1),
 	di(NULL), dc(NULL), mPer(1e9), numR(0), numW(0), numErr(0), tmDelay(0)
 {
     cfg("PRM_BD").setS("SiemensPrm_"+name_c);
@@ -467,7 +467,7 @@ void TMdContr::postDisable( int flag )
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
@@ -543,7 +543,7 @@ void TMdContr::start_( )
 	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
 	    if(at(pls[i_p]).at().enableStat()) at(pls[i_p]).at().enable();
 	isReload = false;
-    } catch(TError) { isReload = false; throw; }
+    } catch(TError&) { isReload = false; throw; }
 
     //Counters reset
     numR = numW = numErr = 0;
@@ -580,7 +580,7 @@ void TMdContr::prmEn( const string &id, bool val )
 {
     unsigned i_prm;
 
-    MtxAlloc res(enRes.mtx(), true);
+    MtxAlloc res(enRes, true);
     for(i_prm = 0; i_prm < pHd.size(); i_prm++)
 	if(pHd[i_prm].at().id() == id) break;
 
@@ -672,7 +672,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	    if(dc && di) disconnectRemotePLC();
 
 	    //Full Libnodave API
-	    MtxAlloc res1(reqAPIRes.mtx(), true);
+	    MtxAlloc res1(reqAPIRes, true);
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102, addr().c_str());
 	    if(fds.rfd <= 0) throw TError(nodePath().c_str(), _("Open socket of remote PLC error."));
@@ -694,7 +694,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	case SELF_ISO_TCP:
 	    tr = SYS->transport().at().at(TSYS::strParse(addrTr(),0,".")).at().outAt(TSYS::strParse(addrTr(),1,"."));
 	    //try { tr.at().start(); }
-	    //catch(TError err) { throw TError(nodePath().c_str(), _("Connection error.")); }
+	    //catch(TError &err) { throw TError(nodePath().c_str(), _("Connection error.")); }
 	    reset();
 	    break;
 	default: throw TError(nodePath().c_str(), _("Connection type '%d' is not supported."), mType);
@@ -706,7 +706,7 @@ void TMdContr::disconnectRemotePLC( )
     switch(mType) {
 	case ISO_TCP:
 	case ISO_TCP243: {
-	    MtxAlloc res(reqAPIRes.mtx(), true);
+	    MtxAlloc res(reqAPIRes, true);
 	    ResAlloc res2(mod->resAPI, true);
 	    if(!dc || !di) break;
 	    daveDisconnectPLC(dc);
@@ -794,7 +794,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		    throw TError(nodePath().c_str(),_("12:Get request is error %d."),res);*/
 
 		//Put result
-		buffer.replace(0,buffer.size(),(char *)tMsg.d+8,buffer.size());
+		buffer.replace(0, buffer.size(), (char *)tMsg.d+8, buffer.size());
 		break;
 	    }
 	    case ISO_TCP:
@@ -802,7 +802,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		//Reconnect for lost connection
 		if(!dc || tmDelay >= 0) connectRemotePLC();
 		int rez;
-		MtxAlloc res1(reqAPIRes.mtx(), true);
+		MtxAlloc res1(reqAPIRes, true);
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveReadBytes(dc,daveDB,n_db,offset,buffer.size(),NULL))) {
 		    if(rez == daveResTimeout) throw TError(_("ReadDB"), _("Connection error."));
@@ -811,11 +811,11 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 #endif
 		    throw TError(11, _("ReadDB"), _("DB '%d' error, %s."), n_db, daveStrerror(rez));
 		}
-		buffer.assign((char*)dc->resultPointer, buffer.size());
+		buffer.replace(0, buffer.size(), (char*)dc->resultPointer, buffer.size());	//!!!! But assign() temporary the block size changes
 		break;
 	    }
 	    case ADS: {
-		MtxAlloc rRes(reqAPIRes.mtx(), true);
+		MtxAlloc rRes(reqAPIRes, true);
 		tr.at().start();
 
 		char buf[1000], res[1000];
@@ -866,7 +866,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		if(ADSreadResp->res) throw TError(13, _("ReadDB"), _("Error server respond, %d."), ADSreadResp->res);
 		if(ADSreadResp->len != buffer.size() || full_len < (int)(resp_len+ADSreadResp->len))
 		    throw TError(14, _("ReadDB"), _("Error server respond."));
-		buffer.assign(res+resp_len, buffer.size());
+		buffer.replace(0, buffer.size(), res+resp_len, buffer.size());	//!!!! But assign() temporary the block size changes
 
 		break;
 	    }
@@ -876,13 +876,12 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 		reqService(req);
 		if(req.attr("err").size()) throw TError(s2i(req.attr("errCod")), "", "%s", req.attr("err").c_str());
 		if(req.text().size() != buffer.size()) throw TError("read", _("Reply data block size, %d != %d."), req.text().size(), buffer.size());
-		buffer = req.text();
+		buffer.replace(0, buffer.size(), req.text());	//!!!! But assign() temporary the block size changes
 		break;
 	    }
 	}
 	numR += buffer.size();
-    }
-    catch(TError er) {
+    } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
 	if(!er.cod) er.cod = ConnErrCode;
 	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
@@ -930,7 +929,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		    tMsg.d[5] = (unsigned char)buffer.size();
 		    tMsg.d[6] = TASK_TDT_UINT8;
 		    tMsg.d[7] = TASK_TFC_WRITE;
-		    memcpy(tMsg.d+8,buffer.c_str(),buffer.size());
+		    memcpy(tMsg.d+8, buffer.c_str(), buffer.size());
 
 		    //Put message to remote host
 		    res = DevPutMessage(mDev, (MSG_STRUC *)&tMsg, 200L);
@@ -955,7 +954,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		//Reconnect for lost connection
 		if(!dc || tmDelay >= 0) connectRemotePLC();
 		int rez;
-		MtxAlloc res1(reqAPIRes.mtx(), true);
+		MtxAlloc res1(reqAPIRes, true);
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveWriteBytes(dc,daveDB,n_db,offset,buffer.size(),(char*)buffer.c_str()))) {
 		    if(rez == daveResTimeout) throw TError(_("WriteDB"), _("Connection error."));
@@ -967,7 +966,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 		break;
 	    }
 	    case ADS: {
-		MtxAlloc res1(reqAPIRes.mtx(), true);
+		MtxAlloc res1(reqAPIRes, true);
 		tr.at().start();
 
 		char buf[1000], res[1000];
@@ -1028,8 +1027,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    }
 	}
 	numW += buffer.size();
-    }
-    catch(TError er) {
+    } catch(TError &er) {
 	if(er.cat.size()) er.mess = er.cat + ":" + er.mess;
 	if(!er.cod) er.cod = ConnErrCode;
 	if(er.cod == ConnErrCode) setCntrDelay(er.mess);
@@ -1043,7 +1041,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 
 void TMdContr::reqService( XMLNode &io )
 {
-    MtxAlloc res(reqAPIRes.mtx(), true);
+    MtxAlloc res(reqAPIRes, true);
     try {
 	tr.at().start((enableStat() && !isReload) ? 0 : 1000);
 
@@ -1060,7 +1058,7 @@ void TMdContr::reqService( XMLNode &io )
 	    isInitiated = true;
 	}
 	protIO(io);
-    } catch(TError er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
+    } catch(TError &er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
 }
 
 void TMdContr::protIO( XMLNode &io )
@@ -1213,13 +1211,13 @@ void TMdContr::protIO( XMLNode &io )
 	    uint16_t szPrm  = iN(tpkt, off, 2);			//plen: length of parameters which follow this header
 	    uint16_t szData = iN(tpkt, off, 2);			//dlen: length of data which follow the parameters
 	    uint16_t iErr = 0;
-	    if(iHTp == 2 || iHTp == 3) iErr = iN(tpkt, off, 2);	//result[2]: only present in type 2 and 3 headers. This contains error information.
-	    if((off+szPrm+szData) > tpkt.size()) throw TError(_("PDU header"), _("Parameters + data parts size more to the respond size."));
+	    if(iHTp == 2 || iHTp == 3) iErr = iN(tpkt, off, 2);	//result[2]: only present in type 2 and 3 headers. This contains an error information.
+	    if((off+szPrm+szData) > (int)tpkt.size()) throw TError(_("PDU header"), _("Parameters + data parts size more to the respond size."));
 
 	    switch(sCd) {
 		case ISOTCP_OpenS7Connection: {
 		    if(szPrm != 8) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 8);
-		    if(iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
 		    iN(tpkt, off, 1);
 		    iN(tpkt, off, 2);
 		    iN(tpkt, off, 2);
@@ -1228,7 +1226,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 		case ISOTCP_Read: {
 		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 2);
-		    if(iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
@@ -1244,7 +1242,7 @@ void TMdContr::protIO( XMLNode &io )
 		    else if(iDLenTp == 9) ;		//len is already in bytes, ok
 		    else if(iDLenTp == 3) ;		//len is in bits, but there is a byte per result bit, ok
 		    else throw TError(14, io.attr("id").c_str(), _("Unknown data encoding type, %d."), iDLenTp);
-		    if((off+iDLen) != tpkt.size())
+		    if((off+iDLen) != (int)tpkt.size())
 			throw TError(15, io.attr("id").c_str(), _("Inconsistent data block size to the respond size, %d(%d)."),
 								    (off+iDLen), tpkt.size());
 		    io.setText(tpkt.substr(off));
@@ -1252,7 +1250,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 		case ISOTCP_Write: {
 		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size is not equal to expected, %d."), 2);
-		    if(iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Respond function mismatch."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
@@ -1266,7 +1264,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 	    }
 	}
-    } catch(TError er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
+    } catch(TError &er) { io.setAttr("err", (er.cat.empty()?"":er.cat+":")+er.mess)->setAttr("errCod", i2s(er.cod)); }
 }
 
 int TMdContr::messIO( const char *oBuf, int oLen, char *iBuf, int iLen )
@@ -1407,7 +1405,7 @@ void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+1) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val[ival.off-acqBlks[i_b].off] = val; break; }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValI( int ivl, SValData ival, ResString &err )
@@ -1440,8 +1438,8 @@ void TMdContr::setValI( int ivl, SValData ival, ResString &err )
 	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
-	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char *)&val,iv_sz))); break; }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string((char*)&val,iv_sz))); break; }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValR( double ivl, SValData ival, ResString &err )
@@ -1479,7 +1477,7 @@ void TMdContr::setValR( double ivl, SValData ival, ResString &err )
 		acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,revers(string(((iv_sz==4)?(char *)&val_4:(char *)&val),iv_sz)));
 		break;
 	    }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
@@ -1514,7 +1512,7 @@ void TMdContr::setValS( const string &ivl, SValData ival, ResString &err )
 	    if(acqBlks[i_b].db == ival.db && ival.off >= acqBlks[i_b].off &&
 		    (ival.off+iv_sz) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    { acqBlks[i_b].val.replace(ival.off-acqBlks[i_b].off,iv_sz,vali); break; }
-    } catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
+    } catch(TError &cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
 int TMdContr::valSize( IO::Type itp, int iv_sz )
@@ -1537,28 +1535,28 @@ void *TMdContr::Task( void *icntr )
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
-    bool is_start = true;
-    bool is_stop  = false;
+    bool isStart = true;
+    bool isStop  = false;
     int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     try {
 	while(true) {
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
-		MtxAlloc res1(cntr.enRes.mtx(), true);
+		MtxAlloc res1(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		    try { cntr.pHd[iP].at().calc(is_start, is_stop, cntr.period()?1:-1); }
-		    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		    try { cntr.pHd[iP].at().calc(isStart, isStop, cntr.period()?1:-1); }
+		    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		res1.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-1);
 
-		if(is_stop) break;
+		if(isStop) break;
 
 		TSYS::taskSleep(1000000000);
 
-		if(cntr.endrunReq) is_stop = true;
-		is_start = false;
+		if(cntr.endrunReq) isStop = true;
+		isStart = false;
 		continue;
 	    }
 	    else if(cntr.tmDelay == 0) cntr.conErr = _("Connecting...");
@@ -1570,33 +1568,31 @@ void *TMdContr::Task( void *icntr )
 	    //Process write data blocks
 	    if(cntr.assincWrite()) {
 		ResAlloc res(cntr.reqDataAsWrRes, false);
-		for(unsigned i_b = 0; !cntr.endrunReq && i_b < cntr.writeBlks.size(); i_b++)
+		for(unsigned i_b = 0; !isStart && !isStop && !cntr.endrunReq && i_b < cntr.writeBlks.size(); i_b++)
 		    try {
 			if(cntr.redntUse()) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
 			if(s2i(cntr.writeBlks[i_b].err.getVal()) == -1) continue;
 			cntr.putDB(cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val);
 			cntr.writeBlks[i_b].err = _("-1:No data");
-		    }
-		    catch(TError err) { cntr.writeBlks[i_b].err = err.mess; }
+		    } catch(TError &err) { cntr.writeBlks[i_b].err = err.mess; }
 		if(cntr.tmDelay > 0) continue;
 	    }
 	    ResAlloc res(cntr.reqDataRes, false);
 	    //Process acquisition data blocks
-	    for(unsigned i_b = 0; !cntr.endrunReq && i_b < cntr.acqBlks.size(); i_b++)
+	    for(unsigned i_b = 0; !isStart && !isStop && !cntr.endrunReq && i_b < cntr.acqBlks.size(); i_b++)
 		try {
 		    if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
 		    cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
 		    cntr.acqBlks[i_b].err = "";
-		}
-		catch(TError err) { cntr.acqBlks[i_b].err = err.mess; }
+		} catch(TError &err) { cntr.acqBlks[i_b].err = err.mess; }
 	    if(cntr.tmDelay > 0) continue;
 	    res.unlock();
 
 	    //Calc parameters
-	    MtxAlloc res1(cntr.enRes.mtx(), true);
+	    MtxAlloc res1(cntr.enRes, true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
-		try{ cntr.pHd[i_p].at().calc(is_start,is_stop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
-		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		try{ cntr.pHd[i_p].at().calc(isStart,isStop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    res1.unlock();
 
 	    //Generic acquisition alarm generate
@@ -1611,14 +1607,14 @@ void *TMdContr::Task( void *icntr )
 	    t_prev = t_cnt;
 	    cntr.callSt = false;
 
-	    if(is_stop) break;
+	    if(isStop) break;
 
 	    TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 
-	    if(cntr.endrunReq) is_stop = true;
-	    is_start = false;
+	    if(cntr.endrunReq) isStop = true;
+	    isStart = false;
 	}
-    } catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     cntr.prcSt = false;
 
@@ -1799,7 +1795,7 @@ void TMdPrm::enable( )
 		TFld::Type tp = TFld::type(ioType(i_io));
 		if((fId=pEl.fldId(func()->io(i_io)->id(),true)) < pEl.fldSize()) {
 		    if(pEl.fldAt(fId).type() != tp)
-			try{ pEl.fldDel(fId); } catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+			try{ pEl.fldDel(fId); } catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 		    else {
 			pEl.fldAt(fId).setFlg(flg);
 			pEl.fldAt(fId).setDescr(func()->io(i_io)->name().c_str());
@@ -1839,13 +1835,13 @@ void TMdPrm::enable( )
 		    break;
 	    if(i_l >= als.size())
 		try{ pEl.fldDel(i_p); i_p--; }
-		catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	}
 
 	// Set to process
 	if(owner().startStat())	calc(true, false, 0);
 
-    } catch(TError err) { disable(); throw; }
+    } catch(TError &err) { disable(); throw; }
 
     owner().prmEn(id(), true);
 }
@@ -1938,7 +1934,7 @@ void TMdPrm::vlGet( TVal &val )
 		case TFld::Boolean:	val.setB(owner().getValB(lnk(id_lnk).val,acqErr),0,true);	break;
 		default: break;
 	    }
-	} catch(TError err) { }
+	} catch(TError &err) { }
     else {
 	if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(idErr >= 0) val.setS(getS(idErr), 0, true);
@@ -1973,7 +1969,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 		default: break;
 	    }
 	}
-    }catch(TError err) {  }
+    } catch(TError &err) {  }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -2087,8 +2083,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idNm >= 0)	setName(getS(idNm));
 	if(idDscr >= 0)setDescr(getS(idDscr));
 
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error calculate template."));
     }

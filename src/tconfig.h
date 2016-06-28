@@ -158,7 +158,7 @@ class TConfig: public TValElem
 	void delFld( TElem *el, unsigned id );
 
 	//Attributes
-	pthread_mutex_t mRes;
+	ResMtx	mRes;
 
     private:
 	//Attributes

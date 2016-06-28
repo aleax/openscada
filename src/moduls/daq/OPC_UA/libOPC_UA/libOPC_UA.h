@@ -1,25 +1,34 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
-/******************************************************************************
- *   Copyright (C) 2009-2015 by Roman Savochenko, <rom_as@oscada.org>	      *
- *									      *
- *   Version: 1.0.1							      *
- *	* Initial version control.					      *
- *									      *
- *   This library is free software; you can redistribute it and/or modify     *
- *   it under the terms of the GNU Lesser General Public License as	      *
- *   published by the Free Software Foundation; version 3 of the License.     *
- *									      *
- *   This library is distributed in the hope that it will be useful,	      *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of	      *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the	      *
- *   GNU Lesser General Public License for more details.		      *
- *									      *
- *   You should have received a copy of the GNU Lesser General Public License *
- *   along with this library; if not, write to the			      *
- *   Free Software Foundation, Inc.,					      *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.		      *
- ******************************************************************************/
+/********************************************************************************
+ *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>		*
+ *										*
+ *   Version: 1.1.3								*
+ *	* Packages sequence number managing for server part is fixed by		*
+ *	  separating from the value of input packages.				*
+ *	* Initial filters support is added into requests			*
+ *	  CreateMonitoredItemsRequest and ModifyMonitoredItemsRequest.		*
+ *	* Packages sequence number managing for input part also unified		*
+ *	  and fixed to prevent the value repeats.				*
+ *	* Early Acknowledgements processing in request "Publish" is added.	*
+ *	* Adapting to work with UAExpert 1.4.					*
+ *   Version: 1.0.4								*
+ *	* Initial version control.						*
+ *										*
+ *   This library is free software; you can redistribute it and/or modify	*
+ *   it under the terms of the GNU Lesser General Public License as		*
+ *   published by the Free Software Foundation; version 3 of the License.	*
+ *										*
+ *   This library is distributed in the hope that it will be useful,		*
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of		*
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the		*
+ *   GNU Lesser General Public License for more details.			*
+ *										*
+ *   You should have received a copy of the GNU Lesser General Public License	*
+ *   along with this library; if not, write to the				*
+ *   Free Software Foundation, Inc.,						*
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.			*
+ ********************************************************************************/
 
 #ifndef LIBOPC_UA_H
 #define LIBOPC_UA_H
@@ -140,6 +149,15 @@ namespace OPC
 #define OpcUa_BadResponseTooLarge	0x80B90000
 #define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
 
+//Status codes of values
+#define OpcUa_UncertainNoCommunicationLastUsableValue	0x408F0000
+#define OpcUa_UncertainLastUsableValue	0x40900000
+#define OpcUa_UncertainSubstituteValue	0x40910000
+#define OpcUa_UncertainInitialValue	0x40920000
+#define OpcUa_UncertainSensorNotAccurate	0x40930000
+#define OpcUa_UncertainEngineeringUnitsExceeded	0x40940000
+#define OpcUa_UncertainSubNormal	0x40950000
+
 //Requests types
 #define OpcUa_ServiceFault			397
 #define OpcUa_FindServersRequest		422
@@ -161,10 +179,15 @@ namespace OPC
 #define OpcUa_BrowseNextResponse		536
 #define OpcUa_TranslateBrowsePathsToNodeIdsRequest	554
 #define OpcUa_TranslateBrowsePathsToNodeIdsResponse	557
+#define OpcUaId_RegisterNodesRequest		560
+#define OpcUaId_RegisterNodesResponse		563
+#define OpcUaId_UnregisterNodesRequest		566
+#define OpcUaId_UnregisterNodesResponse		569
 #define OpcUa_ReadRequest			631
 #define OpcUa_ReadResponse			634
 #define OpcUa_WriteRequest			673
 #define OpcUa_WriteResponse			676
+#define OpcUa_EventFilterResult			736
 #define OpcUa_CreateMonitoredItemsRequest	751
 #define OpcUa_CreateMonitoredItemsResponse	754
 #define OpcUa_ModifyMonitoredItemsRequest	763
@@ -387,7 +410,6 @@ class NodeId
 	void setNumbVal( uint32_t in );
 	void setStrVal( const string &istr, Type tp = String );
 
-	// Static
 	static NodeId fromAddr( const string &strAddr );
 	string toAddr( ) const;
 
@@ -441,6 +463,7 @@ class UA
 	static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
 	static int64_t iTm( const string &buf, int &off );
 	static NodeId iNodeId( const string &buf, int &off );
+	static string iVariant( const string &buf, int &off, uint8_t *tp = NULL );
 	static void iDataValue( const string &buf, int &off, XML_N &nVal );
 
 	static void oN( string &buf, int64_t val, char sz, int off = -1 );
@@ -483,8 +506,7 @@ class Client: public UA
 		//Methods
 		SClntSess( )		{ clearFull( ); }
 		void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
-		void clearFull( bool inclEPdescr = false )
-		{
+		void clearFull( bool inclEPdescr = false ) {
 		    endPoint = servCert = clKey = servKey = "";
 		    if(inclEPdescr) endPointDscr.clear();
 		    secPolicy = "None"; secMessMode = 1;
@@ -570,7 +592,7 @@ class Server: public UA
 	    uint32_t	TokenId, TokenIdPrev;
 	    string	clCert, clAddr;
 	    string	servKey, clKey;
-	    uint32_t	seqN, startSeqN;
+	    uint32_t	servSeqN, clSeqN, startClSeqN;
 	};
 	//* Session
 	class Sess
@@ -629,11 +651,12 @@ class Server: public UA
 			class Val
 			{
 			    public:
-				Val( ) { }
-				Val( const string &ivl, int64_t itm ) : vl(ivl), tm(itm) { }
+				Val( ) : tm(0), st(OpcUa_UncertainNoCommunicationLastUsableValue) { }
+				Val( const string &ivl, int64_t itm, uint32_t ist = 0 ) : vl(ivl), tm(itm), st(ist) { }
 
 				string	vl;
 				int64_t	tm;
+				uint32_t st;
 			};
 
 			//Methods
@@ -649,6 +672,7 @@ class Server: public UA
 			uint32_t	qSz;		//Queue size
 			bool		dO;		//Discard oldest
 			uint32_t	cH;		//Client handle
+			XML_N		fltr;		//Filters
 
 			int		vTp;		//Values type
 			int64_t		dtTm;		//Last value time
@@ -656,7 +680,7 @@ class Server: public UA
 		};
 
 		//Methods
-		Subscr( ) : st(SS_CLOSED), sess(-1), en(false), publInterv(100), seqN(1),
+		Subscr( ) : st(SS_CLOSED), sess(-1), en(false), toInit(true), publInterv(100), seqN(1),
 		    cntrLifeTime(12000), wLT(0), cntrKeepAlive(50), wKA(0), maxNotPerPubl(0), pr(0) 	{ }
 
 		Subscr copy( bool noWorkData = true );
@@ -665,11 +689,12 @@ class Server: public UA
 		//Attributes
 		SubScrSt st;			//Subscription status
 		int	sess;			//Session assign
-		bool	en;			//Enable state
+		bool	en,			//Enable state
+			toInit;			//Subsription init publish package send needs
 		double	publInterv;		//Publish interval (ms)
 		uint32_t seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
-			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object and
-			 cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond
+			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object
+			 cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond and
 						//send StatusChangeNotification with Bad_Timeout
 			 maxNotPerPubl;		//Maximum notifications per single Publish response
 		uint8_t	pr;			//Priority
@@ -699,9 +724,11 @@ class Server: public UA
 		virtual uint32_t limRetrQueueTm( )	{ return 0; }	//Time limit (seconds) for retransmission queue
 
 		bool enableStat( )	{ return mEn; }
+		virtual bool publishInPool( ) = 0;	//Publish in the pool mode of transport, otherwise that is an external task
 
 		virtual void setEnable( bool vl );
-		void subScrCycle( unsigned cntr );	//Subscriptions processing cycle
+		virtual void setPublish( const string &inPrtId )	{ }	//Start a publish task or input request's pool of subScrCycle()
+		void subScrCycle( unsigned cntr, string *answ = NULL, const string &inPrtId = "" );	//Subscriptions processing cycle
 
 		// Security policies
 		int secSize( )		{ return mSec.size(); }
@@ -726,7 +753,7 @@ class Server: public UA
 		//  Monitored items
 		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = 0 for new create
 		    const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
-		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID );
+		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID, XML_N *fltr = NULL );
 		Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );
 
 		virtual uint32_t reqData( int reqTp, XML_N &req );
@@ -761,6 +788,7 @@ class Server: public UA
 	virtual string applicationUri( ) = 0;
 	virtual string productUri( ) = 0;
 	virtual string applicationName( ) = 0;
+
 	virtual bool debug( )	{ return false; }
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;

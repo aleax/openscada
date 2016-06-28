@@ -104,12 +104,14 @@ class TFunction : public TCntrNode
 	string	id( )			{ return mId.c_str(); };
 	virtual string name( )		{ return ""; }
 	virtual string descr( )		{ return ""; }
+	virtual string prog( )		{ return ""; }
 	bool	startStat( )		{ return runSt; }
 	int	use( )			{ return used.size(); }
 	Res	&fRes( )		{ return mFRes; }
 
 	void setId( const string &vl );
-	virtual void setStart( bool val )	{ runSt = val; }
+	virtual void setProg( const string &prg )	{ }
+	virtual void setStart( bool val )		{ runSt = val; }
 
 	//> IO
 	void ioList( vector<string> &list );

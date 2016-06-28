@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: arch.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,11 +51,7 @@ class ModArch: public TTipArchivator
 
 	string mainTbl( )	{ return modId(); }
 
-	TElem &archEl( )	{ return el_arch; }
-	TElem &messEl( )	{ return el_mess; }
-	TElem &vlIntEl( )	{ return el_vl_int; }
-	TElem &vlRealEl( )	{ return el_vl_real; }
-	TElem &vlStrEl( )	{ return el_vl_str; }
+	TElem &archEl( )	{ return elArch; }
 
     protected:
 	//Methods
@@ -69,7 +64,7 @@ class ModArch: public TTipArchivator
 
     private:
 	//Attributes
-	TElem el_arch, el_mess, el_vl_int, el_vl_real, el_vl_str;
+	TElem elArch;
 };
 
 extern ModArch *mod;

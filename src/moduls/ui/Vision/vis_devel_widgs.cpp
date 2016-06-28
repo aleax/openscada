@@ -251,10 +251,10 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    string a_nm = gnd->attr("dscr");
 	    Item *cur_it = it;
 	    // Parse attributes group
-	    if(TSYS::strSepParse(a_nm,1,':').size())
+	    if(TSYS::strParse(a_nm,1,": ").size())
 		for(int i_l = 0; true; i_l++) {
-		    string c_sel = TSYS::strSepParse(a_nm,i_l,':');
-		    if(TSYS::strSepParse(a_nm,i_l+1,':').size()) {
+		    string c_sel = TSYS::strParse(a_nm,i_l,": ");
+		    if(TSYS::strParse(a_nm,i_l+1,": ").size()) {
 			int ga_id = cur_it->childGet(c_sel);
 			if(ga_id < 0) ga_id = cur_it->childInsert(c_sel,-1,Item::AttrGrp);
 			cur_it = cur_it->child(ga_id);
@@ -466,7 +466,10 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			}
 		    }
 		    break;
-		case Qt::ToolTipRole: if(!it->help().empty()) val = it->help().c_str();	break;
+		case Qt::ToolTipRole:
+		    if(it->help().size())		val = it->help().c_str();
+		    else if(it->name().size() > 20)	val = it->name().c_str();
+		    break;
 	    }
     }
 
@@ -545,7 +548,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 	    }
 	}
 	if(toSetWdg || (TSYS::strSepParse(cur_wdg,1,';').size() && (isGrp || nwdg == TSYS::strSepParse(cur_wdg,0,';')))) setWdg(cur_wdg);
-    }catch(...){ return false; }
+    } catch(...) { return false; }
 
     return true;
 }
@@ -1311,7 +1314,7 @@ void WdgTree::selectItem( bool force )
     emit selectItem(work_wdg,force);
 }
 
-void WdgTree::updateTree( const string &vca_it )
+void WdgTree::updateTree( const string &vca_it, bool initial )
 {
 #if OSC_DEBUG >= 3
     int64_t t_cnt = TSYS::curTime();
@@ -1335,7 +1338,7 @@ void WdgTree::updateTree( const string &vca_it )
     string upd_wdgi = (vca_lev>=3) ? TSYS::pathLev(vca_it,2).substr(4) : "";
 
     XMLNode req("get");
-    req.setAttr("path","/%2fserv%2fwlbBr")->setAttr("item",vca_it);
+    req.setAttr("path", "/%2fserv%2fwlbBr")->setAttr("item", vca_it)->setAttr("conTm", i2s(initial?mod->restoreTime()*1000:0));
     owner()->cntrIfCmd(req);
 
 #if OSC_DEBUG >= 3
@@ -1666,7 +1669,7 @@ void ProjTree::selectItem( bool force )
     emit selectItem(work_wdg,force);
 }
 
-void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
+void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initial )
 {
     vector<string> list_pr, list_pg;
     QTreeWidgetItem *nit, *nit_pg;
@@ -1691,7 +1694,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	//Process top level items and project's list
 	// Get widget's libraries list
 	XMLNode prj_req("get");
-	prj_req.setAttr("path","/%2fprm%2fcfg%2fprj");
+	prj_req.setAttr("path", "/%2fprm%2fcfg%2fprj")->setAttr("conTm", i2s(initial?mod->restoreTime()*1000:0));
 	if(owner()->cntrIfCmd(prj_req)) {
 	    mod->postMess(prj_req.attr("mcat").c_str(),prj_req.text().c_str(),TVision::Error,this);
 	    return;
@@ -2538,7 +2541,7 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		.arg(srect.width()/xScale(true)).arg(srect.height()/yScale(true)),10000);
     }
     else {
-	//Change widget geometry
+	//Change the widget geometry
 	switch(cursor().shape()) {
 	    case Qt::SizeHorCursor:
 		if(isScale)	x_scale *= 1+dP.x()/sizeF().width();

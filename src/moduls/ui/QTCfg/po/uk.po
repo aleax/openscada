@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-06 12:06+0200\n"
+"POT-Creation-Date: 2016-06-10 13:32+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -397,7 +397,7 @@ msgstr ""
 "Прийняти зараз або втратити?"
 
 msgid "Broken info respond - no a child."
-msgstr ""
+msgstr "Зламаний запит інформації - немає нащадків."
 
 msgid "Refresh items tree"
 msgstr "Оновити елементи дерева"
@@ -679,6 +679,9 @@ msgstr "Зупинка модуля."
 
 msgid "Module options"
 msgstr "Параметри модуля"
+
+msgid "Connection check timeouts in seconds '{fail}:{good}'"
+msgstr "Таймаути перевірки підключення, у секундах, '{немає}:{є}'"
 
 msgid "Configurator start path"
 msgstr "Початковий шлях конфігуратору"

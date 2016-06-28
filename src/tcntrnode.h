@@ -145,6 +145,9 @@ class TCntrNode
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
 	//Methods
+	ResMtx &dataRes( ) { return mDataM; }	//Generic node's data mutex
+						//Allowed for using by heirs into data resources allocation
+						//  not for long-term functions-tasks resources allocation!
 	virtual Res &nodeRes( )		{ return hd_res; }
 	virtual const char *nodeName( ) = 0;
 	string nodePath( char sep = 0, bool from_root = false );
@@ -229,8 +232,8 @@ class TCntrNode
 
 	//Attributes
 	// Childs
-	Res			hd_res;	//Resource HD
-	static pthread_mutex_t	connM;	//Connection mutex
+	ResMtx	mDataM;			//Generic data mutexes
+	Res	hd_res;			//Resource HD
 
 	vector<GrpEl>		*chGrp;	//Child groups
 

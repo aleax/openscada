@@ -259,7 +259,7 @@ class TMdContr: public TController
 		isReload,
 		isInitiated;		//Only for SELF_ISO_TCP
 	int8_t	alSt;			//Alarm state
-	ResString conErr;		//Connection error
+	MtxString conErr;		//Connection error
 	vector< AutoHD<TMdPrm> > pHd;	//Parameter's process list
 	vector< SDataRec > acqBlks;	//Acquisition data blocks
 	vector< SDataRec > writeBlks;	//Data block for write to a data source, for asynchronous write mode

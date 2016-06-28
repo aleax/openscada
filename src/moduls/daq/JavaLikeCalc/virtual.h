@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -192,10 +191,10 @@ class TpContr : public TTipDAQ
 
 	Res &parseRes( )			{ return parse_res; }
 
-	//> Named constant
+	// Named constant
 	NConst *constGet( const char *nm );
 
-	//> BuildIn functions
+	// BuildIn functions
 	BFunc *bFuncGet( const char *nm );
 
 	bool compileFuncLangs( vector<string> *ls = NULL );
@@ -219,7 +218,7 @@ class TpContr : public TTipDAQ
 			mSafeTm;	//Safe timeout
 	TElem		val_el, lb_el, fnc_el, fncio_el;
 
-	//> General parse data
+	// General parse data
 	Res		parse_res;	//Syntax analisator
 	vector<NConst>	mConst;		//Name constant table
 	vector<BFunc>	mBFunc;		//Buildin functions

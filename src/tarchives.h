@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +21,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	7		//ArchiveS type modules version
+#define SARH_VER	8		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <string>
@@ -60,23 +59,23 @@ class TMArchivator : public TCntrNode, public TConfig
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
-	bool	toStart( )	{ return m_start; }
-	bool	startStat( )	{ return run_st; }
+	bool	toStart( )	{ return mStart; }
+	bool	startStat( )	{ return runSt; }
 	string	addr( )		{ return cfg("ADDR").getS(); }
 	int	level( )	{ return mLevel; }
 	void	categ( vector<string> &list );
 
-	string	DB( )		{ return m_db; }
+	string	DB( )		{ return mDB; }
 	string	tbl( );
 	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &vl )	{ cfg("NAME").setS(vl); }
 	void setDscr( const string &vl )	{ cfg("DESCR").setS(vl); }
-	void setToStart( bool vl )		{ m_start = vl; modif(); }
+	void setToStart( bool vl )		{ mStart = vl; modif(); }
 	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
 	void setLevel( int lev )		{ mLevel = lev; }
 
-	void setDB( const string &idb )		{ m_db = idb; modifG(); }
+	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
 	virtual void start( );
 	virtual void stop( );
@@ -84,7 +83,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	virtual time_t begin( )	{ return 0; }
 	virtual time_t end( )	{ return 0; }
 	virtual bool put( vector<TMess::SRec> &mess )	{ return false; };
-	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
+	virtual time_t get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
 
 	TTipArchivator &owner( );
 
@@ -105,7 +104,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	bool chkMessOK( const string &icateg, int8_t ilvl );
 
 	//Protected atributes
-	bool	run_st;
+	bool	runSt;
 	int	messHead;			//Last read and archived head of messages buffer
 
     private:
@@ -115,8 +114,8 @@ class TMArchivator : public TCntrNode, public TConfig
 	//Private attributes
 	TCfg	&mId,		//Mess arch id
 		&mLevel;	//Mess arch level
-	char	&m_start;	//Mess arch starting flag
-	string	m_db;
+	char	&mStart;	//Mess arch starting flag
+	string	mDB;
 };
 
 //************************************************
@@ -181,12 +180,14 @@ class TArchiveS : public TSubSYS
 	int subVer( )		{ return SARH_VER; }
 
 	int messPeriod( )	{ return mMessPer; }
-	int valPeriod( );
+	int valPeriod( )	{ return vmax(1, mValPer); }
 	int valPrior( )		{ return mValPrior; }
+	bool valForceCurTm( )	{ return mValForceCurTm; }
 
 	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
-	void setValPrior( int ivl );
+	void setValPrior( int ivl )	{ mValPrior = vmax(-1, vmin(199,ivl)); modif(); }
+	void setValForceCurTm( bool vl ){ mValForceCurTm = vl; modif(); }
 	void setToUpdate( )		{ toUpdate = true; }
 
 	void subStart( );
@@ -208,9 +209,9 @@ class TArchiveS : public TSubSYS
 	AutoHD<TTipArchivator> at( const string &name )		{ return modAt(name); }
 
 	//> Message archive function
-	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess );
-	void messPut( const vector<TMess::SRec> &recs );
-	void messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category = "",
+	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "" );
+	void messPut( const vector<TMess::SRec> &recs, const string &arch = "" );
+	time_t messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs, const string &category = "",
 	    int8_t level = TMess::Debug, const string &arch = "", time_t upTo = 0 );
 	time_t messBeg( const string &arch = "" );
 	time_t messEnd( const string &arch = "" );
@@ -249,20 +250,22 @@ class TArchiveS : public TSubSYS
 	char	bufErr;			//Buffer error
 	int	mMessPer;		//Message archiving period
 	bool	prcStMess;		//Process messages flag
-	//> Messages buffer
-	pthread_mutex_t	mRes;		//Mess access resource
+	//  Messages buffer
+	ResMtx	mRes;			//Mess access resource
 	unsigned headBuf;		//Head of messages buffer
 	vector<TMess::SRec> mBuf;	//Messages buffer
 	map<string,TMess::SRec> mAlarms;//Alarms buffer
 
 	//> Value archiving
-	pthread_mutex_t	vRes;		//Value access resource
-	int	mValPer;		//Value archiving period
-	int	mValPrior;		//Value archive task priority
-	bool	prcStVal;		//Process value flag
-	bool	endrunReqVal;		//Endrun value request
-	bool	toUpdate;
-	int	mAval;
+	ResMtx	vRes;			//Value access resource
+	int	mValPer,		//Value archiving period
+		mValPrior,		//Value archive task priority
+		mAval;
+
+	bool	mValForceCurTm,		//Time of taken values force to current and overide it's source from
+		prcStVal,		//Process value flag
+		endrunReqVal,		//Endrun value request
+		toUpdate;
 
 	vector<AutoHD<TMArchivator> >	actMess;
 	vector<AutoHD<TVArchive> >	actVal;

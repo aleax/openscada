@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@ using namespace OSCADA;
 //*************************************************
 //* TParamContr                                   *
 //*************************************************
-TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm), m_en(false), tipparm(tpprm)
+TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm), mRdPrcTm(0), mEn(false), tpParm(tpprm)
 {
     cfg("SHIFR") = mId = name;	//!! For prevent ID location change on the parameter type change
     setName(name);
@@ -105,8 +105,8 @@ void TParamContr::postEnable( int flag )
     TValue::postEnable(flag);
 
     if(!vlCfg()) setVlCfg(this);
-    if(!vlElemPresent(&SYS->daq().at().errE()))
-	vlElemAtt(&SYS->daq().at().errE());
+    if(!vlElemPresent(&SYS->daq().at().elErr()))
+	vlElemAtt(&SYS->daq().at().elErr());
 }
 
 void TParamContr::preDisable(int flag)
@@ -117,7 +117,7 @@ void TParamContr::preDisable(int flag)
     for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
 	if(!vlAt(a_ls[i_a]).at().arch().freeStat()) {
 	    string arh_id = vlAt(a_ls[i_a]).at().arch().at().id();
-	    if(flag == RM_Full) SYS->archive().at().valDel(arh_id, true);
+	    if((flag>>8) == RM_Full) SYS->archive().at().valDel(arh_id, true);
 	    else SYS->archive().at().valAt(arh_id).at().stop();
 	}
 
@@ -165,12 +165,12 @@ TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 
 void TParamContr::enable()
 {
-    m_en = true;
+    mEn = true;
 }
 
 void TParamContr::disable( )
 {
-    m_en = false;
+    mEn = false;
 }
 
 void TParamContr::vlGet( TVal &val )
@@ -204,8 +204,8 @@ void TParamContr::setType( const string &tpId )
 	tCfg = *(TConfig*)this;
 
 	//Set new config structure
-	tipparm = &owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId));
-	setElem(tipparm);
+	tpParm = &owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId));
+	setElem(tpParm);
 
 	//Restore configurations
 	*(TConfig*)this = tCfg;

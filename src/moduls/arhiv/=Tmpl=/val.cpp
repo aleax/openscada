@@ -49,7 +49,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) : TVArc
 //!!! Destructor for the object.
 ModVArch::~ModVArch( )
 {
-    try{ stop(); }catch(...){}
+    try{ stop(); } catch(...) { }
 }
 
 //!!! Inherited (virtual) load object's node methods. Place here for object's data loading
@@ -60,13 +60,12 @@ void ModVArch::load_( )
     if( addr().empty() ) setAddr("*.*");
 
     //!!! Addon parameters of the object loading.
-    try
-    {
+    try {
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
 	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(atof(vl.c_str()));
-    } catch(...){ }
+    } catch(...) { }
 }
 
 //!!! Inherited (virtual) save object's node methods. Place here for object's data saving

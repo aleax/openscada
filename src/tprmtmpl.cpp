@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +27,7 @@ using namespace OSCADA;
 //* TPrmTempl                                     *
 //*************************************************
 TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
-    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), mId(cfg("ID"))
+    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().elTmpl()), mId(cfg("ID"))
 {
     mId = iid;
     setName(iname);
@@ -70,7 +69,7 @@ void TPrmTempl::postDisable(int flag)
 	SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this,true);
 
 	//Delete template's IO
-	TConfig cfg(&owner().owner().tplIOE());
+	TConfig cfg(&owner().owner().elTmplIO());
 	cfg.cfg("TMPL_ID").setS(id(),true);
 	SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
     }
@@ -139,8 +138,7 @@ AutoHD<TFunction> TPrmTempl::func()
     if(!startStat())	throw TError(nodePath().c_str(),_("Template is disabled."));
     if(!prog().size())	return AutoHD<TFunction>(this);
     try { return SYS->nodeAt(work_prog); }
-    catch(TError err)
-    {
+    catch(TError &err) {
 	//Template restart try
 	setStart(false);
 	setStart(true);
@@ -157,7 +155,7 @@ void TPrmTempl::load_( )
 
     //Load IO
     vector<string> u_pos;
-    TConfig cfg(&owner().owner().tplIOE());
+    TConfig cfg(&owner().owner().elTmplIO());
     cfg.cfg("TMPL_ID").setS(id(),true);
     for(int io_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",io_cnt++,cfg); )
     {
@@ -203,7 +201,7 @@ void TPrmTempl::save_( )
     SYS->db().at().dataSet(w_db,w_cfgpath,*this);
 
     //Save IO
-    TConfig cfg(&owner().owner().tplIOE());
+    TConfig cfg(&owner().owner().elTmplIO());
     cfg.cfg("TMPL_ID").setS(id(),true);
     for(int i_io = 0; i_io < ioSize(); i_io++) {
 	if(io(i_io)->flg()&TPrmTempl::LockAttr) continue;
@@ -512,7 +510,7 @@ void TPrmTmplLib::load_( )
 
     //Load templates
     map<string, bool>	itReg;
-    TConfig c_el(&owner().tplE());
+    TConfig c_el(&owner().elTmpl());
     c_el.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(), fld_cnt++,c_el); )
     {
@@ -543,8 +541,7 @@ void TPrmTmplLib::start( bool val )
     list(lst);
     for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	try{ at(lst[i_f]).at().setStart(val); }
-	catch(TError err)
-	{
+	catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Template '%s' start is error."),lst[i_f].c_str());
 	    isErr = true;

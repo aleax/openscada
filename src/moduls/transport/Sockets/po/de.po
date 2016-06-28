@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-12 17:56+0200\n"
+"POT-Creation-Date: 2016-06-25 07:46+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -41,28 +41,39 @@ msgstr ""
 "Verbindungen geschlossen nach dem Limit %d."
 
 #, c-format
-msgid "Error create '%s' socket!"
-msgstr "Fehler der Schaffung des Sockets '%s'!"
+msgid "Create %s socket error: '%s (%d)'!"
+msgstr "Erstellen %s socket Fehler: '%s (%d)'!"
 
 #, c-format
 msgid "Socket type '%s' error!"
 msgstr "Fehler des Typs '%s' des Sockets!"
 
 #, c-format
-msgid "Socket name '%s' error!"
-msgstr "Fehler des Namens '%s' des Sockets!"
+msgid "Host '%s' not found!"
+msgstr "Host '%s' wurde nicht gefunden!"
 
 #, c-format
-msgid "TCP socket doesn't bind to '%s'!"
-msgstr "TCP Socket ist nicht verbunden mit '%s'!"
+msgid "The requested name '%s' does not have an IP address!"
+msgstr "Der angeforderte Name '%s' hat keine IP-Adresse!"
 
 #, c-format
-msgid "UDP socket doesn't bind to '%s'!"
-msgstr "UDP Socket ist nicht verbunden mit '%s'!"
+msgid "A non-recoverable name server error occurred while for '%s'!"
+msgstr ""
+"Ein nicht behebbarer Name-Server-Fehler ist aufgetreten, während für '%s'!"
 
 #, c-format
-msgid "UNIX socket doesn't bind to '%s'!"
-msgstr "UNIX ist nicht verbunden mit '%s'!"
+msgid "A temporary error occurred on an authoritative name server for '%s'!"
+msgstr ""
+"Ein temporärer Fehler aufgetreten auf einem autoritativen Nameserver für "
+"'%s'!"
+
+#, c-format
+msgid "Unknown error code from gethostbyname_r for '%s'!"
+msgstr "Unbekannter Fehlercode aus gethostbyname_r für '%s'!"
+
+#, c-format
+msgid "Bind to %s socket error: '%s (%d)'!"
+msgstr "Binden %s Socket Fehler: '%s (%d)'!"
 
 #, c-format
 msgid "Close input transport by error: '%s (%d)'"
@@ -157,6 +168,13 @@ msgstr ""
 "    mode - Arbeitsregime (0 - die Verbindung brechen; 1 - die Verbindung "
 "speichern)."
 
+msgid ""
+"Empty value for the protocol selection switchs the transport to mode\n"
+"of creation associated output transports for each connection to one."
+msgstr ""
+"Leer Wert für die Protokollauswahl switchs den Transport nach Art der\n"
+"Schaffung zugehörige Ausgangstransporte für jede Verbindung zu einem."
+
 msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
 
@@ -247,6 +265,9 @@ msgstr "Transport ist nicht gestartet!"
 msgid "Request error: %s"
 msgstr "Request-Fehler: %s"
 
+msgid "No data wrote"
+msgstr "Keine Daten geschrieben"
+
 #, c-format
 msgid "Write error: %s"
 msgstr "Fehler beim Schreiben: %s"
@@ -260,6 +281,13 @@ msgstr "Lesen timeouted."
 
 msgid "Timeouted!"
 msgstr "Timeouted!"
+
+#, c-format
+msgid "Read (select) error: %s"
+msgstr "Lesefehler (select): %s"
+
+msgid "No data"
+msgstr "Keine Daten"
 
 #, c-format
 msgid "Read error: %s"

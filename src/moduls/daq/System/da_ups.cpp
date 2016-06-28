@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: da_ups.cpp
 /***************************************************************************
- *   Copyright (C) 2014 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2014-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,18 +28,14 @@ using namespace SystemCntr;
 //*************************************************
 //* UPS                                           *
 //*************************************************
-UPS::UPS( ) : tTr("Sockets"), nTr("sys_UPS")
+UPS::UPS( ) : tTr("Sockets"), nTr("sys_UPS"), reqRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&reqRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 UPS::~UPS( )
 {
-    pthread_mutex_destroy(&reqRes);
+
 }
 
 void UPS::init( TMdPrm *prm )
@@ -93,8 +88,7 @@ string UPS::upsList( const string &addr )
 	    else if(lstSec)
 		if(sscanf(c_el.c_str(),"UPS %50s \"%255[^\"]s\"",name,dscr) == 2)
 		    rez = rez + name+"@"+host+" ("+dscr+");";
-    }
-    catch(TError err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
+    } catch(TError &err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 
     return rez;
 }
@@ -169,8 +163,7 @@ void UPS::getVal( TMdPrm *prm )
 		    als.push_back(aid);
 		}
 	}
-    }
-    catch(TError err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
+    } catch(TError &err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 
     if(als.size()) {
 	prm->daErr = "";
@@ -182,7 +175,7 @@ void UPS::getVal( TMdPrm *prm )
 		    break;
 	    if(i_l >= als.size())
 		try { fldDel(i_p); i_p--; }
-		catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	}
     }
     else if(!prm->daErr.getVal().size()) {
@@ -247,7 +240,7 @@ string UPS::reqUPS( const string &addr, const string &req, const string &debCat 
 
     //Wait tail
     while(resp_len) {
-	try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+	try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err) { break; }
 	val.append(buf, resp_len);
     }
 
@@ -308,6 +301,5 @@ void UPS::makeActiveDA( TMdContr *aCntr )
 	    dprm.at().cfg("EN").setB(true);
 	    if(aCntr->enableStat()) dprm.at().enable();
 	}
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

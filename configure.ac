@@ -1,9 +1,9 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.15],[rom_as@oscada.org])
+AC_INIT([OpenSCADA],[0.8.16],[rom_as@oscada.org])
 AC_PREFIX_DEFAULT([/usr])
-oscd_LIBREVISION="2:3:0"
+oscd_LIBREVISION="2:4:0"
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
@@ -34,11 +34,10 @@ if test "$ac_cv_prog_cc_g" = "no" -o "$ac_cv_prog_cxx_g" = "no"; then
     AC_MSG_ERROR([No C or C++ compiler present. Install GCC and G++.]);
 fi
 
-AC_CHECK_PROG(have_pkg_config, pkg-config, yes, no)
-if test x"$have_pkg_config" = "xno"; then
+PKG_PROG_PKG_CONFIG
+if test "x$PKG_CONFIG" = "x"; then
     AC_MSG_ERROR(pkg-config is required to configure this program)
 fi
-PKG_PROG_PKG_CONFIG
 
 AM_SANITY_CHECK
 
@@ -143,7 +142,7 @@ if test $enable_LibGD = yes; then
 fi
 
 #> Check for PCRE library use in OpenSCADA core
-CXXFLAGS="$CXXFLAGS $(pkg-config --cflags libpcre)"
+CXXFLAGS="$CXXFLAGS $($PKG_CONFIG --cflags libpcre)"
 AC_CHECK_HEADERS([pcre.h],[],
     [AC_MSG_ERROR(PCRE header not found. Install or check PCRE developing package!)])
 AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library using])],
