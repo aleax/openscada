@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-12 22:18+0200\n"
+"POT-Creation-Date: 2016-06-28 11:50+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,7 +106,7 @@ msgid "Spent time: %s. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, 
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr ""
 
 msgid "STOP"

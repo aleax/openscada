@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-04 17:57+0200\n"
+"POT-Creation-Date: 2016-06-28 11:22+0300\n"
 "PO-Revision-Date: 2013-10-20 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -84,9 +84,8 @@ msgstr "Remote-Host-Fehler"
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "MMS erstellt automatische Transport für '%s' Controller."
 
-#, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
+msgid "DAQ.%s.%s: connect to data source: %s."
+msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
 
 msgid "STOP"
 msgstr "STOP"
@@ -104,6 +103,7 @@ msgstr "Keine Daten"
 msgid "Zero for disable periodic sync."
 msgstr "Zero deaktivieren periodische Synchronisation."
 
+#, c-format
 msgid "Value type '%s' is not implemented for '%s'."
 msgstr "Werttyp '%s' ist nicht für '%s' implementiert."
 

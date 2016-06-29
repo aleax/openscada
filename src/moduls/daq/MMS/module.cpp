@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.7"
+#define MOD_VER		"1.3.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -300,7 +300,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
 
-    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")),TMess::Info);
     alSt = -1;
 
     //Set EVal
@@ -355,8 +355,8 @@ void *TMdContr::Task( void *icntr )
 			mess_err(cntr.nodePath().c_str(), "%s", cntr.acq_err.getVal().c_str());
 			if(cntr.alSt <= 0) {
 			    cntr.alSt = 1;
-			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
-						cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
+			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
+								TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
 			}
 			cntr.tmDelay = cntr.restTm();
 		    }
@@ -364,7 +364,8 @@ void *TMdContr::Task( void *icntr )
 			cntr.acq_err.setVal("");
 			if(cntr.alSt != 0) {
 			    cntr.alSt = 0;
-			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),
+							    cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),TMess::Info);
 			}
 		    }
 		}
@@ -453,8 +454,8 @@ void *TMdContr::Task( void *icntr )
 			cntr.acq_err.setVal(aPrcErr);
 			if(cntr.alSt <= 0) {
 			    cntr.alSt = 1;
-			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
-				cntr.id().c_str(), (aPrcErr.size()?TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str():_("No data"))));
+			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
+						(aPrcErr.size()?TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str():_("No data"))));
 			}
 			cntr.tmDelay = cntr.restTm();
 		    }

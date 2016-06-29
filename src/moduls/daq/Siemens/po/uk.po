@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-08 16:36+0200\n"
+"POT-Creation-Date: 2016-06-28 11:31+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -234,9 +234,8 @@ msgid "Spent time: %s. Read %s. Wrote %s. Connection errors %g. "
 msgstr ""
 "Витрачено часу: %s. Прочитано %s. Записано %s. Помилок підключення %g. "
 
-#, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: підключення до джерела даних: %s."
+msgid "DAQ.%s.%s: connect to data source: %s."
+msgstr "DAQ.%s.%s: підключення до джерела даних: %s."
 
 msgid "STOP"
 msgstr "ЗУПИНЕНО"
@@ -307,6 +306,7 @@ msgstr "Неповна відповідь"
 msgid "Error server respond, %d."
 msgstr "Помилка відповіді серверу, %d."
 
+#, c-format
 msgid "Reply data block size, %d != %d."
 msgstr "Розмір блока даних відповіді, %d != %d."
 

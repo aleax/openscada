@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-04 17:57+0200\n"
+"POT-Creation-Date: 2016-06-28 11:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgid "MMS automatic created transport for '%s' controller."
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
+msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr ""
 
 msgid "STOP"

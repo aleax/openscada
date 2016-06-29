@@ -105,7 +105,6 @@ class TProt: public TProtocol
 	TProtocolIn *in_open( const string &name );
 
 	//Attributes
-	pthread_mutex_t	sesRes;
 	map<int, SAuth>	mAuth;
 	int		mTAuth, mComprLev, mComprBrd, mSingleUserHostLimit;
 };

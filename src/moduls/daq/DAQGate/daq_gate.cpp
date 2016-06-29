@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.7"
+#define MOD_VER		"1.5.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -300,7 +300,7 @@ void TMdContr::enable_( )
 		try {
 		    TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[i_prm].at().nodePrev());
 		    if(pCntr) pCntr->del(pId, TParamContr::RM_NoArch);
-		    else del(pId, true);
+		    else del(pId, TParamContr::RM_NoArch);
 		    continue;
 		} catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -345,7 +345,7 @@ void TMdContr::stop_( )
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
     //Connection alarm clear
-    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
     alSt = -1;
 }
 
@@ -622,15 +622,15 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		int rez = SYS->transport().at().cntrIfCmd(node, MOD_ID+id());
 		if(alSt != 0) {
 		    alSt = 0;
-		    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."), id().c_str(), _("OK")), TMess::Info);
+		    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("OK")), TMess::Info);
 		}
 		mStatWork[i_st].second.cntr -= 1;
 		return rez;
 	    } catch(TError &err) {
 		if(alSt <= 0) {
 		    alSt = 1;
-		    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source '%s': %s."),
-			    id().c_str(), mStatWork[i_st].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
+		    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source '%s': %s."),owner().modId().c_str(),id().c_str(),
+						mStatWork[i_st].first.c_str(),TRegExp(":","g").replace(err.mess,"=").c_str()));
 		}
 		if(call_st) mStatWork[i_st].second.cntr = mRestTm;
 		throw;

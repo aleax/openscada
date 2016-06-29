@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:07+0300\n"
+"POT-Creation-Date: 2016-06-28 11:25+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -29,7 +29,9 @@ msgstr "Roman Savotscheko"
 msgid ""
 "Allows you to perform the locking of the data sources of the remote "
 "OpenSCADA stations in the local ones."
-msgstr "Hier können Sie die Verriegelung der Datenquellen der Fern OpenSCADA Stationen in der lokalen diejenigen durchzuführen."
+msgstr ""
+"Hier können Sie die Verriegelung der Datenquellen der Fern OpenSCADA "
+"Stationen in der lokalen diejenigen durchzuführen."
 
 msgid "Parameters cache table"
 msgstr "Einflussgrößen Cache-Tabelle"
@@ -101,16 +103,21 @@ msgid "Requests to station '%s': %.6g."
 msgstr "Anfragen an die Station '%s': %.6g."
 
 #, c-format
-msgid ""
-"Deletion parameter '%s' is error but it no present on configuration or "
-"remote station."
-msgstr ""
-"Löschen des Parameters '%s' ist falsch, er fehlt in der Konfiguration oder "
-"in der entfernten Station."
+msgid "Enable: current stations: %d; parameters: %d."
+msgstr "Enable: Strom-Stationen: %d; Parameter: %d."
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
+msgid "Enable: station '%s' processing item '%s' for parameters %d."
+msgstr "Enable: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
+
+msgid ""
+"Deletion parameter '%s' is error but it no present on the configuration or "
+"remote station."
+msgstr ""
+"Löschen Parameter '%s' ist Fehler, aber es nicht, die auf der Konfiguration oder Remote-Station."
+
+msgid "DAQ.%s.%s: connect to data source: %s."
+msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
 
 msgid "STOP"
 msgstr "STOP"
@@ -121,9 +128,8 @@ msgstr "10:Daten nicht zulassen."
 msgid "OK"
 msgstr "OK"
 
-#, c-format
-msgid "DAQ.%s: connect to data source '%s': %s."
-msgstr "DAQ.%s: Verbindung zu Datenquelle '%s': %s."
+msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgstr "DAQ.%s.%s: Verbindung zu Datenquelle '%s': %s."
 
 msgid "Zero for disable archive access."
 msgstr "Null für Behinderte Archiv zugreifen."

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:07+0300\n"
+"POT-Creation-Date: 2016-06-28 11:25+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -25,7 +25,8 @@ msgid ""
 "Allows you to perform the locking of the data sources of the remote "
 "OpenSCADA stations in the local ones."
 msgstr ""
-"Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій до локальних."
+"Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій до "
+"локальних."
 
 msgid "Parameters cache table"
 msgstr "Таблиця кеша параметрів"
@@ -97,16 +98,22 @@ msgid "Requests to station '%s': %.6g."
 msgstr "Запитів до станції '%s': %.6g."
 
 #, c-format
-msgid ""
-"Deletion parameter '%s' is error but it no present on configuration or "
-"remote station."
-msgstr ""
-"Помилка видалення параметру '%s', однак він відсутній у конфігурації або на "
-"віддаленій станції."
+msgid "Enable: current stations: %d; parameters: %d."
+msgstr "Включення: поточних станцій: %d; параметрів: %d."
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: підключення до джерела даних: %s."
+msgid "Enable: station '%s' processing item '%s' for parameters %d."
+msgstr "Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
+
+msgid ""
+"Deletion parameter '%s' is error but it no present on the configuration or "
+"remote station."
+msgstr ""
+"Помилка видалення параметру '%s' оскільки він відсутній у конфігурації або на "
+"віддаленій станції."
+
+msgid "DAQ.%s.%s: connect to data source: %s."
+msgstr "DAQ.%s.%s: підключення до джерела даних: %s."
 
 msgid "STOP"
 msgstr "ЗУПИНЕНО"
@@ -117,9 +124,8 @@ msgstr "10:Дані не доступні."
 msgid "OK"
 msgstr "НОРМА"
 
-#, c-format
-msgid "DAQ.%s: connect to data source '%s': %s."
-msgstr "DAQ.%s: підключення до джерела даних '%s': %s."
+msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgstr "DAQ.%s.%s: підключення до джерела даних '%s': %s."
 
 msgid "Zero for disable archive access."
 msgstr "Нуль для виключення доступу до архіву."

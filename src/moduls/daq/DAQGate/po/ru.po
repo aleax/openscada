@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:07+0300\n"
+"POT-Creation-Date: 2016-06-28 11:25+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -98,16 +98,22 @@ msgid "Requests to station '%s': %.6g."
 msgstr "Запросов к станции '%s': %.6g."
 
 #, c-format
-msgid ""
-"Deletion parameter '%s' is error but it no present on configuration or "
-"remote station."
-msgstr ""
-"Ошибка удаления параметра '%s', однако он отсутствует в конфигурации или на "
-"удалённой станции."
+msgid "Enable: current stations: %d; parameters: %d."
+msgstr "Включение: текущих станций: %d; параметров: %d."
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: подключение к источнику данных: %s."
+msgid "Enable: station '%s' processing item '%s' for parameters %d."
+msgstr "Включение: станция '%s' обрабатывает элемент '%s' для параметров %d."
+
+msgid ""
+"Deletion parameter '%s' is error but it no present on the configuration or "
+"remote station."
+msgstr ""
+"Ошибка удаления параметра '%s' поскольку он отсутствует в конфигурации или на "
+"удалённой станции."
+
+msgid "DAQ.%s.%s: connect to data source: %s."
+msgstr "DAQ.%s.%s: подключение к источнику данных: %s."
 
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
@@ -118,9 +124,8 @@ msgstr "10:Данные не доступны."
 msgid "OK"
 msgstr "НОРМА"
 
-#, c-format
-msgid "DAQ.%s: connect to data source '%s': %s."
-msgstr "DAQ.%s: подключение к источнику данных '%s': %s."
+msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgstr "DAQ.%s.%s: подключение к источнику данных '%s': %s."
 
 msgid "Zero for disable archive access."
 msgstr "Ноль для отключения доступа к архивам."

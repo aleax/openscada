@@ -424,7 +424,7 @@ msgstr ""
 "Прийняти зараз або втратити?"
 
 msgid "Broken info respond - no a child."
-msgstr ""
+msgstr "Зламаний запит інформації - немає нащадків."
 
 msgid "Refresh items tree"
 msgstr "Оновити елементи дерева"

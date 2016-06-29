@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.2.8"
+#define MOD_VER		"3.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -669,7 +669,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		throw TError(nodePath().c_str(),_("Connection to session is not permitted for '%s'."),opt->attr("user").c_str());
 	    // Connect to present session
 	    if(!sess.empty()) {
-		sesAt(sess).at().connect();
+		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("prj", sesAt(sess).at().projNm());
 		if(s2i(opt->attr("userChange")))
 		    mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User is changed to '%s', from '%s'."),
@@ -683,7 +683,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		sesAdd(sess, prj);
 		sesAt(sess).at().setUser(opt->attr("user"));
 		sesAt(sess).at().setStart(true);
-		sesAt(sess).at().connect();
+		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("sess", sess);
 		mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User '%s' is connected, from '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
@@ -691,7 +691,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	}
 	else if(ctrChkNode(opt,"disconnect",RWRWRW,"root",SUI_ID,SEC_WR)) {
 	    string sess = opt->attr("sess");
-	    sesAt(sess).at().disconnect();
+	    sesAt(sess).at().disconnect(s2i(opt->attr("conId")));
 	    if(sesAt(sess).at().connects() == 0 && !sesAt(sess).at().backgrnd()) {
 		mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User '%s' is disconnected, from '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");

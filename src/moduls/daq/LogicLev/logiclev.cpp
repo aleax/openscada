@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"1.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -779,7 +779,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("No template parameter or error."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		for(int iA = 0; iA < tmpl->val.ioSize(); iA++)
-		    if(iA != idFreq && iA != idStart && iA != idStop && iA != idErr && iA != idSh && iA != idNm && iA != idDscr &&
+		    if(iA != idFreq && iA != idStart && iA != idStop /*&& iA != idErr*/ && iA != idSh && iA != idNm && iA != idDscr &&
 			    tmpl->val.func()->io(iA)->id() != "this")
 			opt->childAdd("ta")->setAttr("id",tmpl->val.func()->io(iA)->id())->setText(tmpl->val.getS(iA));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:07+0300\n"
+"POT-Creation-Date: 2016-06-28 11:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,11 +92,19 @@ msgid "Requests to station '%s': %.6g."
 msgstr ""
 
 #, c-format
-msgid "Deletion parameter '%s' is error but it no present on configuration or remote station."
+msgid "Enable: current stations: %d; parameters: %d."
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
+msgid "Enable: station '%s' processing item '%s' for parameters %d."
+msgstr ""
+
+#, c-format
+msgid "Deletion parameter '%s' is error but it no present on the configuration or remote station."
+msgstr ""
+
+#, c-format
+msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr ""
 
 msgid "STOP"
@@ -109,7 +117,7 @@ msgid "OK"
 msgstr ""
 
 #, c-format
-msgid "DAQ.%s: connect to data source '%s': %s."
+msgid "DAQ.%s.%s: connect to data source '%s': %s."
 msgstr ""
 
 msgid "Zero for disable archive access."

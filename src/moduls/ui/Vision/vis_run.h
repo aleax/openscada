@@ -254,6 +254,7 @@ class VisRun : public QMainWindow
 	string 		prjSes_it, work_sess, src_prj;//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period
+	int		mConId;			//The connection to VCA ID
 	unsigned	mScreen,		//Work screen, possible virtual
 			wPrcCnt;		//Process counter
 	float		upd_tm;

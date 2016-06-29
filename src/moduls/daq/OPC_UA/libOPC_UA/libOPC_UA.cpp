@@ -3545,7 +3545,7 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
 	XML_N req("data");
 	for(unsigned iM = 0; iM < scr.mItems.size(); ++iM) {
 	    Subscr::MonitItem &mIt = scr.mItems[iM];
-	    if(mIt.md == MM_DISABLED || (cntr%(unsigned)(mIt.smplItv/subscrProcPer())))	continue;
+	    if(mIt.md == MM_DISABLED || (cntr%std::max(1u,(unsigned)(mIt.smplItv/subscrProcPer()))))	continue;
 	    //  Read data
 	    req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtTmGet","1");
 		//setAttr("dtTmGet",(mIt.tmToRet==TS_SOURCE||mIt.tmToRet==TS_BOTH)?"1":"0");
@@ -3562,7 +3562,7 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
 	}
 	if(hasData) scr.setState(SS_LATE);
 	// Publish processing
-	if((cntr%(unsigned)(scr.publInterv/subscrProcPer())))	continue;
+	if((cntr%std::max(1u,(unsigned)(scr.publInterv/subscrProcPer()))))	continue;
 	if(s->publishReqs.size()) {
 	    scr.wLT = 0;
 	    if(scr.st == SS_LATE)			{ scr.wKA = 0; sls.push_back(scr.sess); }
@@ -3787,7 +3787,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	uint32_t rez = reqData(OpcUa_ReadRequest, req);
 	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
 	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;
-	if(smplItv == 0)  smplItv = atof(req.attr("dtPer").c_str())*1000;
+	if(smplItv == 0 || isnan(smplItv)) smplItv = atof(req.attr("dtPer").c_str())*1000;
 	if(smplItv == -1) smplItv = ss.publInterv;
 	if(smplItv != -2) mIt.smplItv = ceil(std::max(smplItv,subscrProcPer())/subscrProcPer())*subscrProcPer();
     }

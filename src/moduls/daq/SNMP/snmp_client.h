@@ -133,7 +133,7 @@ class TMdContr: public TController
 	void str2oid( const string &str, oid *ioid, size_t &isz, const string &sep = "_" );
 
 	//Attributes
-	ResMtx	enRes, dataRes;	//Resource for enable params and controller DAQ API
+	ResMtx	enRes;		// Resource for enable params and controller DAQ API
 	int64_t	&mPrior,	// Process task priority
 		&mPattrLim,	// Parameter's attributes limit
 		&mRetr,		// Request retries

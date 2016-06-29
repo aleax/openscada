@@ -428,7 +428,7 @@ msgstr ""
 "Принять сейчас или потерять?"
 
 msgid "Broken info respond - no a child."
-msgstr ""
+msgstr "Сломанный запрос информации - нет вложений."
 
 msgid "Refresh items tree"
 msgstr "Обновить элементы дерева"

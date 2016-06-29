@@ -414,9 +414,22 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     for(int off = 0; (tVl=TSYS::strParse(arch,0,";",&off)).size(); ) archMap[tVl] = true;
 
     MtxAlloc res(mRes);
+    //Alarms processing. For level less 0 alarm is set
+    if(archMap.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM]) {
+	res.lock();
+	map<string,TMess::SRec>::iterator p = mAlarms.find(categ);
+	if(p != mAlarms.end() && level < 0 && abs(level) == p->second.level && SYS->rdEnable() &&
+		mess == p->second.mess && FTM2(tm,utm) >= FTM(p->second))
+	    return;		//Prevent for update equal alarm in redundancy
+	if(level < 0 && (p == mAlarms.end() || FTM2(tm,utm) >= FTM(p->second) || SYS->rdEnable()))
+	    mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
+	if(level >= 0 && p != mAlarms.end() && FTM2(tm,utm) >= FTM(p->second)) mAlarms.erase(p);
+	res.unlock();
+    }
+
+    //Put the message to the buffer
     if(archMap.empty() || archMap[BUF_ARCH_NM]) {
 	res.lock();
-	//Put message to buffer
 	mBuf[headBuf].time  = tm;
 	mBuf[headBuf].utime = utm;
 	mBuf[headBuf].categ = categ;
@@ -429,16 +442,6 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	    int &messHead = actMess[iM].at().messHead;
 	    if(messHead >= 0 && messHead == (int)headBuf && ++messHead >= (int)mBuf.size()) messHead = 0;
 	}
-	res.unlock();
-    }
-
-    //Alarms processing. For level less 0 alarm is set
-    if(archMap.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM]) {
-	res.lock();
-	map<string,TMess::SRec>::iterator p = mAlarms.find(categ);
-	if(level < 0 && (p == mAlarms.end() || FTM2(tm,utm) >= FTM(p->second)))
-	    mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
-	if(level >= 0 && p != mAlarms.end() && FTM2(tm,utm) >= FTM(p->second)) mAlarms.erase(p);
 	res.unlock();
     }
 

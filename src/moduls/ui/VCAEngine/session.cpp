@@ -33,9 +33,9 @@ using namespace VCA;
 //************************************************
 //* Session: Project's session			 *
 //************************************************
-Session::Session( const string &iid, const string &iproj ) : dataM(true), mAlrmRes(true), mCalcRes(true),
-    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataM), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
-    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mStyleIdW(-1)
+Session::Session( const string &iid, const string &iproj ) : mAlrmRes(true), mCalcRes(true),
+    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataRes()), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+    endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mStyleIdW(-1)
 {
     mUser = "root";
     mPage = grpAdd("pg_");
@@ -193,7 +193,7 @@ void Session::setStart( bool val )
 	mess_debug(nodePath().c_str(),_("Stop session."));
 
 	//Stop process task
-	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrun_req);
+	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
 	//VCA server's force off
 	MtxAlloc resAl(mAlrmRes, true);
@@ -205,6 +205,31 @@ void Session::setStart( bool val )
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(false);
     }
+}
+
+int Session::connect( )
+{
+    dataRes().lock();
+    mConnects++;
+
+    int rez;
+    do { rez = (SYS->sysTm()%10000000)*10 + (int)(10*(float)rand()/(float)RAND_MAX); }
+    while(mCons.find(rez) != mCons.end());
+    mCons[rez] = true;
+    dataRes().unlock();
+
+    return rez;
+}
+
+void Session::disconnect( int conId )
+{
+    dataRes().lock();
+    if(mConnects>0) mConnects--;
+
+    map<int, bool>::iterator mC = mCons.find(conId);
+    if(mC != mCons.end()) mCons.erase(mC);
+
+    dataRes().unlock();
 }
 
 bool Session::modifChk( unsigned int tm, unsigned int iMdfClc )
@@ -226,20 +251,20 @@ void Session::add( const string &iid, const string &iparent )
 
 vector<string> Session::openList( )
 {
-    pthread_mutex_lock(&dataM.mtx());
+    dataRes().lock();
     vector<string> rez = mOpen;
-    pthread_mutex_unlock(&dataM.mtx());
+    dataRes().unlock();
     return rez;
 }
 
 void Session::openReg( const string &iid )
 {
     unsigned i_op;
-    pthread_mutex_lock(&dataM.mtx());
+    dataRes().lock();
     for(i_op = 0; i_op < mOpen.size(); i_op++)
 	if(iid == mOpen[i_op]) break;
     if(i_op >= mOpen.size())	mOpen.push_back(iid);
-    pthread_mutex_unlock(&dataM.mtx());
+    dataRes().unlock();
 
     //Check for notifiers register
     for(unsigned iNtf = 0; iNtf < 7; iNtf++) {
@@ -251,10 +276,10 @@ void Session::openReg( const string &iid )
 
 void Session::openUnreg( const string &iid )
 {
-    pthread_mutex_lock(&dataM.mtx());
+    dataRes().lock();
     for(unsigned i_op = 0; i_op < mOpen.size(); i_op++)
 	if(iid == mOpen[i_op]) mOpen.erase(mOpen.begin()+i_op);
-    pthread_mutex_unlock(&dataM.mtx());
+    dataRes().unlock();
 
     //Check for notifiers unregister of the page
     for(unsigned iNtf = 0; iNtf < 7; iNtf++) ntfReg(iNtf, "", iid);
@@ -438,11 +463,11 @@ void *Session::Task( void *icontr )
     vector<string> pls;
     Session &ses = *(Session *)icontr;
 
-    ses.endrun_req = false;
+    ses.endrunReq = false;
     ses.mStart	   = true;
 
     ses.list(pls);
-    while(!ses.endrun_req) {
+    while(!ses.endrunReq) {
 	//Calc session pages and all other items at recursion
 	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
 	    try { ses.at(pls[i_l]).at().calc(false, false); }
@@ -474,7 +499,7 @@ void Session::stlCurentSet( int sid )
     mStyleIdW = sid;
 
     if(start()) {
-	MtxAlloc res(dataM, true);
+	MtxAlloc res(dataRes(), true);
 
 	//Load Styles from project
 	mStProp.clear();
@@ -494,7 +519,7 @@ void Session::stlCurentSet( int sid )
 
 string Session::stlPropGet( const string &pid, const string &def )
 {
-    MtxAlloc res(dataM, true);
+    MtxAlloc res(dataRes(), true);
 
     if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return def;
 
@@ -506,7 +531,7 @@ string Session::stlPropGet( const string &pid, const string &def )
 
 bool Session::stlPropSet( const string &pid, const string &vl )
 {
-    MtxAlloc res(dataM, true);
+    MtxAlloc res(dataRes(), true);
     if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return false;
     map<string,string>::iterator iStPrp = mStProp.find(pid);
     if(iStPrp == mStProp.end()) return false;
@@ -538,6 +563,14 @@ void Session::cntrCmdProc( XMLNode *opt )
     //Service commands process
     if(a_path == "/serv/pg") {	//Pages operations
 	if(ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEC_RD)) {	//Open pages list
+	    // Check for propper connection ID
+	    int conId = s2i(opt->attr("conId"));
+	    dataRes().lock();
+	    bool conIdOK = (conId == 0 || mCons.find(conId) != mCons.end());
+	    dataRes().unlock();
+	    if(!conIdOK) throw TError(nodePath().c_str(), _("Unregistered connection %d on the session."), conId);
+
+	    // Main process
 	    unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
 	    unsigned ntm = calcClk();
 	    vector<string> lst = openList();
@@ -1619,19 +1652,19 @@ void SessWdg::sessAttrSet( const string &id, const string &val )
 void SessWdg::eventAdd( const string &ev )
 {
     if(!enable() || !attrPresent("event")) return;
-    pthread_mutex_lock(&ownerSess()->dataMtx().mtx());
+    ownerSess()->dataRes().lock();
     attrAt("event").at().setS(attrAt("event").at().getS()+ev);
-    pthread_mutex_unlock(&ownerSess()->dataMtx().mtx());
+    ownerSess()->dataRes().unlock();
 }
 
 string SessWdg::eventGet( bool clear )
 {
     if(!enable() || !attrPresent("event")) return "";
 
-    pthread_mutex_lock(&ownerSess()->dataMtx().mtx());
+    ownerSess()->dataRes().lock();
     string rez = attrAt("event").at().getS();
     if(clear)	attrAt("event").at().setS("");
-    pthread_mutex_unlock(&ownerSess()->dataMtx().mtx());
+    ownerSess()->dataRes().unlock();
 
     return rez;
 }
@@ -1685,7 +1718,7 @@ void SessWdg::prcElListUpdate( )
     vector<string> ls;
 
     wdgList(ls);
-    MtxAlloc resDt(ownerSess()->dataMtx(), true);
+    MtxAlloc resDt(ownerSess()->dataRes(), true);
     mWdgChldAct.clear();
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	try { if(((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().process()) mWdgChldAct.push_back(ls[i_l]); }
@@ -1706,7 +1739,7 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
     string wpath = ipath + "/" + id();
     if(modifChk(tm,mMdfClc)) els.push_back(wpath);
 
-    MtxAlloc resDt(ownerSess()->dataMtx(), true);
+    MtxAlloc resDt(ownerSess()->dataRes(), true);
     for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
 	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_ch]);
@@ -1739,7 +1772,7 @@ void SessWdg::calc( bool first, bool last )
 //    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
     //Calculate include widgets
-    MtxAlloc resDt(ownerSess()->dataMtx(), true);
+    MtxAlloc resDt(ownerSess()->dataRes(), true);
     for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
 	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_l]);

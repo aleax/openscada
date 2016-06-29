@@ -216,7 +216,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear statistic
@@ -865,7 +865,8 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay <= 0) {
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
+			TMess::Info);
 		}
 		cntr.tmDelay--;
 	    }
@@ -891,7 +892,8 @@ void TMdContr::setCntrDelay( const string &err )
 {
     if(alSt <= 0) {
 	alSt = 1;
-	alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),TRegExp(":","g").replace(err,"=").c_str()));
+	alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),
+								TRegExp(":","g").replace(err,"=").c_str()));
     }
     tmDelay = restTm;
 }

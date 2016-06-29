@@ -2053,6 +2053,3 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
-
-#~ msgid "User is '%s' connected, from '%s'."
-#~ msgstr "Подключился пользователь '%s', из '%s'."

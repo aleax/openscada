@@ -434,7 +434,7 @@ msgstr ""
 "Bewerben Sie sich jetzt oder verloren das?"
 
 msgid "Broken info respond - no a child."
-msgstr ""
+msgstr "Gebrochen Info reagieren - zu einem Kind."
 
 msgid "Refresh items tree"
 msgstr "Elementenbaum aktualisieren"

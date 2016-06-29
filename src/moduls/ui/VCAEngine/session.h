@@ -70,8 +70,8 @@ class Session : public TCntrNode
 	void setEnable( bool val );
 	void setStart( bool val );
 	void setBackgrnd( bool val )		{ mBackgrnd = val; }
-	void connect( )				{ mConnects++; }
-	void disconnect( )			{ if(mConnects>0) mConnects--; }
+	int connect( );
+	void disconnect( int conId = 0 );
 	void stlCurentSet( int sid );
 
 	bool modifChk( unsigned int tm, unsigned int iMdfClc );
@@ -86,8 +86,6 @@ class Session : public TCntrNode
 	vector<string> openList( );
 	void openReg( const string &id );
 	void openUnreg( const string &id );
-
-	ResMtx	&dataMtx( )		{ return dataM; }
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
@@ -201,17 +199,17 @@ class Session : public TCntrNode
 	static void *Task( void *contr );
 
 	//Attributes
-	ResMtx	dataM,
-		mAlrmRes,			//Alarms resource
+	ResMtx	mAlrmRes,			//Alarms resource
 		mCalcRes;			//Calc resource
 	int	mPage;
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;
 	MtxString mUser;
 	int	mPer, mPermit;
-	bool	mEnable, mStart, endrun_req;	//Enabled, Started and endrun stats
+	bool	mEnable, mStart, endrunReq;	//Enabled, Started and endrun stats
 	bool	mBackgrnd;			//Backgrounded execution of a session
 	int	mConnects;			//Connections counter
+	map<int, bool> mCons;			//Identifiers of the connections
 
 	unsigned	mCalcClk;		//Calc clock
 	time_t		mReqTm;

@@ -2052,6 +2052,3 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
-
-#~ msgid "User is '%s' connected, from '%s'."
-#~ msgstr "Der Nutzer ist '%s' verbunden, von '%s'."
