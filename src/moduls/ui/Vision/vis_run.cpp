@@ -1186,6 +1186,7 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     mConId = s2i(req.attr("conId"));
     bool toRestore = master_pg;
     if(openPgs.size()) openPgs = "/ses_"+work_sess+openPgs;
+    if(toRestore) isResizeManual = true;
 
     //Prepare group for parameters request and apply
     setWindowTitle(QString(_("Running project: %1")).arg(src_prj.c_str()));	//Default title
@@ -1248,6 +1249,8 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
 	    callPage(pIt);
     }
+
+    if(toRestore) isResizeManual = false;
 
     QCoreApplication::processEvents();
 

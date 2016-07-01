@@ -156,8 +156,8 @@ void TSYS::setWorkDir( const string &wdir, bool init )
 {
     if(wdir.empty() || workDir() == wdir) return;
     if(chdir(wdir.c_str()) != 0)
-	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
-	    wdir.c_str(),strerror(errno),workDir().c_str());
+	mess_warning(nodePath().c_str(),_("%s: Changing work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
+	    name().c_str(),wdir.c_str(),strerror(errno),workDir().c_str());
     else if(init) sysModifFlgs &= ~MDF_WorkDir;
     else { sysModifFlgs |= MDF_WorkDir; modif(); }
 }
@@ -485,7 +485,7 @@ bool TSYS::cfgFileLoad( )
 
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_err(nodePath().c_str(),_("%s: Config-file '%s' error: %s"),name().c_str(),mConfFile.c_str(),strerror(errno));
     else {
 	bool fOK = true;
 	string s_buf;
@@ -497,7 +497,7 @@ bool TSYS::cfgFileLoad( )
 	    fOK = s_buf.size();
 	}
 	close(hd);
-	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());
+	if(!fOK) mess_err(nodePath().c_str(), _("%s: Config-file '%s' load error."),name().c_str(),mConfFile.c_str());
 
 	try {
 	    ResAlloc res(cfgRes(), true);
@@ -511,16 +511,16 @@ bool TSYS::cfgFileLoad( )
 		    }
 		if(stat_n && stat_n->attr("id") != mId) {
 		    if(mId != "EmptySt")
-			mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
-			    mId.c_str(), stat_n->attr("id").c_str());
+			mess_warning(nodePath().c_str(),_("%s: Station '%s' is not present in the config-file. Using configuration for station '%s'!"),
+			    name().c_str(), mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
 	    }
 	    else rootN.clear();
-	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Configuration '%s' error!"),mConfFile.c_str());
+	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("%s: Configuration '%s' error!"),name().c_str(),mConfFile.c_str());
 	    rootModifCnt = 0;
-	} catch(TError &err) { mess_err(nodePath().c_str(),_("Load config-file error: %s"),err.mess.c_str() ); }
+	} catch(TError &err) { mess_err(nodePath().c_str(),_("%s: Load config-file error: %s"),name().c_str(),err.mess.c_str() ); }
     }
 
     return cmd_help;
@@ -531,11 +531,11 @@ void TSYS::cfgFileSave( )
     ResAlloc res(cfgRes(), true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_err(nodePath().c_str(),_("%s: Config-file '%s' error: %s"),name().c_str(),mConfFile.c_str(),strerror(errno));
     else {
 	string rezFile = rootN.save(XMLNode::XMLHeader);
 	int rez = write(hd, rezFile.data(), rezFile.size());
-	if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
+	if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("%s: Configuration '%s' write error. %s"),name().c_str(),mConfFile.c_str(),((rez<0)?strerror(errno):""));
 	rootModifCnt = 0;
 	rootFlTm = time(NULL);
 	close(hd);
@@ -572,7 +572,7 @@ void TSYS::load_( )
     static bool first_load = true;
 
     bool cmd_help = cfgFileLoad();
-    mess_info(nodePath().c_str(),_("Load!"));
+    mess_info(nodePath().c_str(),_("%s: Load!"),name().c_str());
     cfgPrmLoad();
     Mess->load();	//Messages load
 
@@ -591,7 +591,7 @@ void TSYS::load_( )
 	//Load modules
 	modSchedul().at().load();
 	if(!modSchedul().at().loadLibS()) {
-	    mess_err(nodePath().c_str(),_("No one module is loaded. Your configuration broken!"));
+	    mess_err(nodePath().c_str(),_("%s: No one module is loaded. Your configuration is broken!"),name().c_str());
 	    stop();
 	}
 
@@ -610,8 +610,8 @@ void TSYS::load_( )
     for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().load(); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error load subsystem '%s'."),lst[i_a].c_str());
+	    mess_err(err.cat.c_str(),"%s: %s",name().c_str(),err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("%s: Error load subsystem '%s'."),name().c_str(),lst[i_a].c_str());
 	}
 
     if(cmd_help) stop();
@@ -620,7 +620,7 @@ void TSYS::load_( )
 
 void TSYS::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save!"));
+    mess_info(nodePath().c_str(),_("%s: Save!"),name().c_str());
 
     //System parameters
     TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
@@ -658,12 +658,12 @@ int TSYS::start( )
     vector<string> lst;
     list(lst);
 
-    mess_info(nodePath().c_str(),_("Start!"));
+    mess_info(nodePath().c_str(),_("%s: Start!"),name().c_str());
     for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().subStart(); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error start subsystem '%s'."),lst[i_a].c_str());
+	    mess_err(err.cat.c_str(),"%s: %s",name().c_str(),err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("%s: Error start subsystem '%s'."),name().c_str(),lst[i_a].c_str());
 	}
 
     cfgFileScan(true);
@@ -671,7 +671,7 @@ int TSYS::start( )
     //Register user API translations into config
     Mess->translReg("", "uapi:"DB_CFG);
 
-    mess_info(nodePath().c_str(),_("Final starting!"));
+    mess_info(nodePath().c_str(),_("%s: Final starting!"),name().c_str());
 
     unsigned int i_cnt = 1;
     mStopSignal = 0;
@@ -696,20 +696,20 @@ int TSYS::start( )
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
 	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
-		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		catch(TError &err) { mess_err(err.cat.c_str(),"%s: %s",name().c_str(),err.mess.c_str()); }
 
 	sysSleep(STD_WAIT_DELAY*1e-3);
 	i_cnt++;
     }
 
-    mess_info(nodePath().c_str(),_("Stop!"));
+    mess_info(nodePath().c_str(),_("%s: Stop!"),name().c_str());
     if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
     for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error stop subsystem '%s'."),lst[i_a].c_str());
+	    mess_err(err.cat.c_str(),"%s: %s",name().c_str(),err.mess.c_str());
+	    mess_err(nodePath().c_str(),_("%s: Error stop subsystem '%s'."),name().c_str(),lst[i_a].c_str());
 	}
 
     //High priority service task and redundancy stop
@@ -760,31 +760,31 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGTERM:
-	    mess_warning(SYS->nodePath().c_str(), _("The Terminate signal is received. Server is being stopped!"));
+	    mess_warning(SYS->nodePath().c_str(), _("%s: Termination signal is received. Stop the station!"), SYS->name().c_str());
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGFPE:
-	    mess_warning(SYS->nodePath().c_str(), _("Floating point exception is caught!"));
+	    mess_warning(SYS->nodePath().c_str(), _("%s: Floating point exception is caught!"), SYS->name().c_str());
 	    exit(1);
 	    break;
 	case SIGCHLD: {
 	    int status;
 	    pid_t pid = wait(&status);
-	    if(!WIFEXITED(status) && pid > 0) mess_info(SYS->nodePath().c_str(), _("Free child process %d!"), pid);
+	    if(!WIFEXITED(status) && pid > 0) mess_info(SYS->nodePath().c_str(), _("%s: Free child process %d!"), SYS->name().c_str(), pid);
 	    break;
 	}
 	case SIGPIPE:
 	    //mess_warning(SYS->nodePath().c_str(),_("Broken PIPE signal!"));
 	    break;
 	case SIGSEGV:
-	    mess_emerg(SYS->nodePath().c_str(), _("Segmentation fault signal!"));
+	    mess_emerg(SYS->nodePath().c_str(), _("%s: Segmentation fault signal!"), SYS->name().c_str());
 	    break;
 	case SIGABRT:
-	    mess_emerg(SYS->nodePath().c_str(), _("OpenSCADA is aborted!"));
+	    mess_emerg(SYS->nodePath().c_str(), _("%s: OpenSCADA is aborted!"), SYS->name().c_str());
 	    break;
 	case SIGALRM: case SIGUSR1: break;
 	default:
-	    mess_warning(SYS->nodePath().c_str(), _("Unknown signal %d!"), signal);
+	    mess_warning(SYS->nodePath().c_str(), _("%s: Unknown signal %d!"), SYS->name().c_str(), signal);
     }
 }
 
@@ -851,13 +851,13 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	time_t c_tm = time(NULL);
 	//Check timeout
 	if(tm && (c_tm > s_tm+tm)) {
-	    mess_crit(loc.c_str(),_("Timeouted !!!"));
+	    mess_crit(loc.c_str(),_("%s: Timeouted !!!"), SYS->name().c_str());
 	    return true;
 	}
 	//Make messages
 	if(c_tm > t_tm+1) {	//1sec
 	    t_tm = c_tm;
-	    mess_info(loc.c_str(),_("Wait event..."));
+	    mess_info(loc.c_str(),_("%s: Wait event..."), SYS->name().c_str());
 	}
 	sysSleep(STD_WAIT_DELAY*1e-3);
     }
@@ -1687,7 +1687,8 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM) {
-	    mess_warning(nodePath().c_str(), _("No permission for create real-time policy for '%s'. Default thread is created!"), path.c_str());
+	    mess_warning(nodePath().c_str(), _("%s: No permission for create a real-time policy for '%s'. Default thread is created!"),
+					    name().c_str(), path.c_str());
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;
@@ -1738,13 +1739,13 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 	time_t c_tm = time(NULL);
 	//Check timeout
 	if(wtm && (c_tm > (s_tm+wtm))) {
-	    mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
+	    mess_crit((nodePath()+path+": stop").c_str(),_("%s: Timeouted !!!"),name().c_str());
 	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
 	}
 	//Make messages
 	if(c_tm > t_tm+1) {  //1sec
 	    t_tm = c_tm;
-	    mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
+	    mess_info((nodePath()+path+": stop").c_str(),_("%s: Wait event..."),name().c_str());
 	}
 	sysSleep(STD_WAIT_DELAY*1e-3);
 	first = false;
@@ -1826,8 +1827,8 @@ void *TSYS::taskWrap( void *stas )
     void *rez = NULL;
     try { rez = wTask(wTaskArg); }
     catch(TError &err) {
-	mess_err(err.cat.c_str(),err.mess.c_str());
-	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exception."),tsk->thr);
+	mess_err(err.cat.c_str(),"%s: %s",SYS->name().c_str(),err.mess.c_str());
+	mess_err(SYS->nodePath().c_str(),_("%s: Task %u unexpected terminated by exception."),SYS->name().c_str(),tsk->thr);
     }
     //???? The code cause: FATAL: exception not rethrown
     //catch(...)	{ mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by unknown exception."),tsk->thr); }
@@ -1893,9 +1894,9 @@ void *TSYS::RdTask( void *param )
 	    // Reconnect counter process
 	    if(!sit->second.isLive && sit->second.cnt > 0) sit->second.cnt -= SYS->rdTaskPer();
 	    if(sit->second.isLive != sit->second.isLivePrev) {
-		if(sit->second.isLive) mess_note(SYS->nodePath().c_str(), _("Redundancy '%s': station '%s' up."),
+		if(sit->second.isLive) mess_note(SYS->nodePath().c_str(), _("%s: redundant station '%s' up."),
 					    SYS->name().c_str(), SYS->transport().at().extHostGet("*",sit->first).name.c_str());
-		else mess_warning(SYS->nodePath().c_str(), _("Redundancy '%s': station '%s' down."),
+		else mess_warning(SYS->nodePath().c_str(), _("%s: redundant station '%s' down."),
 					    SYS->name().c_str(), SYS->transport().at().extHostGet("*",sit->first).name.c_str());
 		sit->second.isLivePrev = sit->second.isLive;
 	    }
@@ -1911,7 +1912,7 @@ void *TSYS::RdTask( void *param )
 
 	//Wait to next iteration
 	TSYS::taskSleep((int64_t)(SYS->rdTaskPer()*1e9));
-    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s: %s",SYS->name().c_str(),err.mess.c_str()); }
 
     return NULL;
 }

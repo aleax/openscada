@@ -2214,6 +2214,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	}
 	parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
 	attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	attrAt(tStr).at().setModif(modifVal(attrAt(tStr).at()));	//Force set modify for allow load next
     }
     else return Widget::cntrCmdServ(opt);
 

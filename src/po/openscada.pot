@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 11:51+0300\n"
+"POT-Creation-Date: 2016-07-01 11:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1385,7 +1385,7 @@ msgid "System counters on exit: %s"
 msgstr ""
 
 #, c-format
-msgid "Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."
+msgid "%s: Changing work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."
 msgstr ""
 
 #, c-format
@@ -1490,83 +1490,95 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "Config-file '%s' error: %s"
+msgid "%s: Config-file '%s' error: %s"
 msgstr ""
 
 #, c-format
-msgid "Config-file '%s' load error."
+msgid "%s: Config-file '%s' load error."
 msgstr ""
 
 #, c-format
-msgid "Station '%s' is not present in the config-file. Use '%s' station configuration!"
+msgid "%s: Station '%s' is not present in the config-file. Using configuration for station '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Configuration '%s' error!"
+msgid "%s: Configuration '%s' error!"
 msgstr ""
 
 #, c-format
-msgid "Load config-file error: %s"
+msgid "%s: Load config-file error: %s"
 msgstr ""
 
 #, c-format
-msgid "Configuration '%s' write error. %s"
-msgstr ""
-
-msgid "Load!"
-msgstr ""
-
-msgid "No one module is loaded. Your configuration broken!"
+msgid "%s: Configuration '%s' write error. %s"
 msgstr ""
 
 #, c-format
-msgid "Error load subsystem '%s'."
-msgstr ""
-
-msgid "Save!"
-msgstr ""
-
-msgid "Start!"
+msgid "%s: Load!"
 msgstr ""
 
 #, c-format
-msgid "Error start subsystem '%s'."
-msgstr ""
-
-msgid "Final starting!"
-msgstr ""
-
-msgid "Stop!"
+msgid "%s: No one module is loaded. Your configuration is broken!"
 msgstr ""
 
 #, c-format
-msgid "Error stop subsystem '%s'."
-msgstr ""
-
-msgid "The Terminate signal is received. Server is being stopped!"
-msgstr ""
-
-msgid "Floating point exception is caught!"
+msgid "%s: Error load subsystem '%s'."
 msgstr ""
 
 #, c-format
-msgid "Free child process %d!"
-msgstr ""
-
-msgid "Segmentation fault signal!"
-msgstr ""
-
-msgid "OpenSCADA is aborted!"
+msgid "%s: Save!"
 msgstr ""
 
 #, c-format
-msgid "Unknown signal %d!"
+msgid "%s: Start!"
 msgstr ""
 
-msgid "Timeouted !!!"
+#, c-format
+msgid "%s: Error start subsystem '%s'."
 msgstr ""
 
-msgid "Wait event..."
+#, c-format
+msgid "%s: Final starting!"
+msgstr ""
+
+#, c-format
+msgid "%s: Stop!"
+msgstr ""
+
+#, c-format
+msgid "%s: Error stop subsystem '%s'."
+msgstr ""
+
+#, c-format
+msgid "%s: Termination signal is received. Stop the station!"
+msgstr ""
+
+#, c-format
+msgid "%s: Floating point exception is caught!"
+msgstr ""
+
+#, c-format
+msgid "%s: Free child process %d!"
+msgstr ""
+
+#, c-format
+msgid "%s: Segmentation fault signal!"
+msgstr ""
+
+#, c-format
+msgid "%s: OpenSCADA is aborted!"
+msgstr ""
+
+#, c-format
+msgid "%s: Unknown signal %d!"
+msgstr ""
+
+#, c-format
+msgid "%s: Timeouted !!!"
+msgstr ""
+
+#, c-format
+msgid "%s: Wait event..."
 msgstr ""
 
 #, c-format
@@ -1574,7 +1586,7 @@ msgid "Task '%s' already present!"
 msgstr ""
 
 #, c-format
-msgid "No permission for create real-time policy for '%s'. Default thread is created!"
+msgid "%s: No permission for create a real-time policy for '%s'. Default thread is created!"
 msgstr ""
 
 #, c-format
@@ -1590,15 +1602,15 @@ msgid "Task '%s' is not stopped!"
 msgstr ""
 
 #, c-format
-msgid "Task %u unexpected terminated by exception."
+msgid "%s: Task %u unexpected terminated by exception."
 msgstr ""
 
 #, c-format
-msgid "Redundancy '%s': station '%s' up."
+msgid "%s: redundant station '%s' up."
 msgstr ""
 
 #, c-format
-msgid "Redundancy '%s': station '%s' down."
+msgid "%s: redundant station '%s' down."
 msgstr ""
 
 msgid "1:Request is not object!"

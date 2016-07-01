@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 11:51+0300\n"
+"POT-Creation-Date: 2016-07-01 11:04+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1540,11 +1540,11 @@ msgstr "Системні лічильники при виході: %s"
 
 #, c-format
 msgid ""
-"Change work directory to '%s' error: %s. Perhaps current directory already "
-"set correct to '%s'."
+"%s: Changing work directory to '%s' error: %s. Perhaps current directory "
+"already set correct to '%s'."
 msgstr ""
-"Помилка зміни робочої директорії у '%s': %s. Можливо поточну директорію вже "
-"коректно встановлено у %s'."
+"%s: Помилка зміни робочої директорії у '%s': %s. Можливо поточну директорію "
+"вже коректно встановлено у %s'."
 
 #, c-format
 msgid "Read only access to file '%s'."
@@ -1703,88 +1703,99 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Config-file '%s' error: %s"
-msgstr "Помилка конфігураційного файлу '%s': %s"
+msgid "%s: Config-file '%s' error: %s"
+msgstr "%s: Помилка конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid "Config-file '%s' load error."
-msgstr "Помилка завантаження конфігураційного файлу '%s'."
+msgid "%s: Config-file '%s' load error."
+msgstr "%s: Помилка завантаження конфігураційного файлу '%s'."
 
 #, c-format
 msgid ""
-"Station '%s' is not present in the config-file. Use '%s' station "
-"configuration!"
+"%s: Station '%s' is not present in the config-file. Using configuration for "
+"station '%s'!"
 msgstr ""
-"Станція '%s' відсутня у конфігураційному файлі. Використано конфігурацію "
+"%s: Станція '%s' відсутня у конфігураційному файлі. Використано конфігурацію "
 "станції '%s'!"
 
 #, c-format
-msgid "Configuration '%s' error!"
-msgstr "Помилка конфігурації '%s'!"
+msgid "%s: Configuration '%s' error!"
+msgstr "%s: Помилка конфігурації '%s'!"
 
 #, c-format
-msgid "Load config-file error: %s"
-msgstr "Помилка завантаження конфігураційного файлу: %s"
+msgid "%s: Load config-file error: %s"
+msgstr "%s: Помилка завантаження конфігураційного файлу: %s"
 
 #, c-format
-msgid "Configuration '%s' write error. %s"
-msgstr "Помилка конфігураційного файлу '%s': %s"
-
-msgid "Load!"
-msgstr "Завантаження"
-
-msgid "No one module is loaded. Your configuration broken!"
-msgstr "Жодного модуля не завантажено. Вашу конфігурацію зламано!"
+msgid "%s: Configuration '%s' write error. %s"
+msgstr "%s: Помилка конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid "Error load subsystem '%s'."
-msgstr "Помилка завантаження підсистеми '%s'."
-
-msgid "Save!"
-msgstr "Збереження"
-
-msgid "Start!"
-msgstr "Запуск!"
+msgid "%s: Load!"
+msgstr "%s: Завантаження"
 
 #, c-format
-msgid "Error start subsystem '%s'."
-msgstr "Помилка старту підсистеми '%s'."
-
-msgid "Final starting!"
-msgstr "Запуск завершено!"
-
-msgid "Stop!"
-msgstr "Зупинка!"
+msgid "%s: No one module is loaded. Your configuration is broken!"
+msgstr "%s: Жодного модуля не завантажено. Вашу конфігурацію зламано!"
 
 #, c-format
-msgid "Error stop subsystem '%s'."
-msgstr "Помилка зупинки підсистеми '%s'."
-
-msgid "The Terminate signal is received. Server is being stopped!"
-msgstr "Отримано сигнал припинення. Сервер буде зупинено!"
-
-msgid "Floating point exception is caught!"
-msgstr "Виключення операції з плаваючою крапкою!"
+msgid "%s: Error load subsystem '%s'."
+msgstr "%s: Помилка завантаження підсистеми '%s'."
 
 #, c-format
-msgid "Free child process %d!"
-msgstr "Закриття процесу нащадка %d!"
-
-msgid "Segmentation fault signal!"
-msgstr "Сигнал помилки сегментації пам'яті!"
-
-msgid "OpenSCADA is aborted!"
-msgstr "OpenSCADA перервано!"
+msgid "%s: Save!"
+msgstr "%s: Збереження!"
 
 #, c-format
-msgid "Unknown signal %d!"
-msgstr "Невідомий сигнал %d!"
+msgid "%s: Start!"
+msgstr "%s: Запуск!"
 
-msgid "Timeouted !!!"
-msgstr "Час очікування вичерпано!!!"
+#, c-format
+msgid "%s: Error start subsystem '%s'."
+msgstr "%s: Помилка старту підсистеми '%s'."
 
-msgid "Wait event..."
-msgstr "Очікування повідомлення..."
+#, c-format
+msgid "%s: Final starting!"
+msgstr "%s: Запуск завершено!"
+
+#, c-format
+msgid "%s: Stop!"
+msgstr "%s: Зупинка!"
+
+#, c-format
+msgid "%s: Error stop subsystem '%s'."
+msgstr "%s: Помилка зупинки підсистеми '%s'."
+
+msgid "%s: Termination signal is received. Stop the station!"
+msgstr "%s: Отримано сигнал припинення. Зупинка станції!"
+
+#, c-format
+msgid "%s: Floating point exception is caught!"
+msgstr "%s: Виключення операції з плаваючою крапкою!"
+
+#, c-format
+msgid "%s: Free child process %d!"
+msgstr "%s: Закриття процесу нащадка %d!"
+
+#, c-format
+msgid "%s: Segmentation fault signal!"
+msgstr "%s: Сигнал помилки сегментації пам'яті!"
+
+#, c-format
+msgid "%s: OpenSCADA is aborted!"
+msgstr "%s: OpenSCADA перервано!"
+
+#, c-format
+msgid "%s: Unknown signal %d!"
+msgstr "%s: Невідомий сигнал %d!"
+
+#, c-format
+msgid "%s: Timeouted !!!"
+msgstr "%s: Час очікування вичерпано!!!"
+
+#, c-format
+msgid "%s: Wait event..."
+msgstr "%s: Очікування повідомлення..."
 
 #, c-format
 msgid "Task '%s' already present!"
@@ -1792,10 +1803,10 @@ msgstr "Завдання '%s' вже присутнє!"
 
 #, c-format
 msgid ""
-"No permission for create real-time policy for '%s'. Default thread is "
+"%s: No permission for create a real-time policy for '%s'. Default thread is "
 "created!"
 msgstr ""
-"Немає доступу для створення політики реального часу для '%s'. Створено "
+"%s: Немає доступу для створення політики реального часу для '%s'. Створено "
 "звичайну нитку!"
 
 #, c-format
@@ -1811,16 +1822,16 @@ msgid "Task '%s' is not stopped!"
 msgstr "Завдання '%s' не зупинено!"
 
 #, c-format
-msgid "Task %u unexpected terminated by exception."
-msgstr "Завдання %u несподівано перервано виключенням."
+msgid "%s: Task %u unexpected terminated by exception."
+msgstr "%s: Завдання %u несподівано перервано виключенням."
 
 #, c-format
-msgid "Redundancy '%s': station '%s' up."
-msgstr "Резервування '%s': станція '%s' запущена."
+msgid "%s: redundant station '%s' up."
+msgstr "%s: резервна станція '%s' доступна."
 
 #, c-format
-msgid "Redundancy '%s': station '%s' down."
-msgstr "Резервування '%s': станція '%s' зупинена."
+msgid "%s: redundant station '%s' down."
+msgstr "%s: резервна станція '%s' недоступна."
 
 msgid "1:Request is not object!"
 msgstr "1:Запит не є об'єкт!"

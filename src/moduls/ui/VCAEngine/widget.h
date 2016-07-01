@@ -101,7 +101,7 @@ class Attr
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
 
-	//> Get value
+	// Get value
 	string getSEL( bool sys = false );
 	TVariant get( bool sys = false );
 	string getS( bool sys = false );

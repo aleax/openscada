@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-21 08:23+0300\n"
+"POT-Creation-Date: 2016-07-01 11:04+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1555,11 +1555,11 @@ msgstr "System Zählern an der Ausfahrt: %s"
 
 #, c-format
 msgid ""
-"Change work directory to '%s' error: %s. Perhaps current directory already "
-"set correct to '%s'."
+"%s: Changing work directory to '%s' error: %s. Perhaps current directory "
+"already set correct to '%s'."
 msgstr ""
-"Fehler der Veränderung der Arbeitsdirectory in '%s': %s. Wahrscheinlich ist "
-"die laufende Directory schon korrekt installiert in '%s'."
+"%s: Fehler der Veränderung der Arbeitsdirectory in '%s': %s. Wahrscheinlich "
+"ist die laufende Directory schon korrekt installiert in '%s'."
 
 #, c-format
 msgid "Read only access to file '%s'."
@@ -1717,88 +1717,99 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Config-file '%s' error: %s"
-msgstr "Konfigurationsdatei '%s' Fehler: %s"
+msgid "%s: Config-file '%s' error: %s"
+msgstr "%s: Konfigurationsdatei '%s' Fehler: %s"
 
 #, c-format
-msgid "Config-file '%s' load error."
-msgstr "Config-Datei '%s' Ladefehler."
+msgid "%s: Config-file '%s' load error."
+msgstr "%s: Config-Datei '%s' Ladefehler."
 
 #, c-format
 msgid ""
-"Station '%s' is not present in the config-file. Use '%s' station "
-"configuration!"
+"%s: Station '%s' is not present in the config-file. Using configuration for "
+"station '%s'!"
 msgstr ""
-"Station '%s' fehlt in der Konfigurationsdatei. Konfiguration der Station "
+"%s: Station '%s' fehlt in der Konfigurationsdatei. Konfiguration der Station "
 "'%s' wird verwendet!"
 
 #, c-format
-msgid "Configuration '%s' error!"
-msgstr "Konfigurationsfehler '%s'!"
+msgid "%s: Configuration '%s' error!"
+msgstr "%s: Konfigurationsfehler '%s'!"
 
 #, c-format
-msgid "Load config-file error: %s"
-msgstr "Fehler beim Laden der Konfigurationsdatei: %s"
+msgid "%s: Load config-file error: %s"
+msgstr "%s: Fehler beim Laden der Konfigurationsdatei: %s"
 
 #, c-format
-msgid "Configuration '%s' write error. %s"
-msgstr "Konfigurationsdatei '%s' Fehler: %s"
-
-msgid "Load!"
-msgstr "Laden!"
-
-msgid "No one module is loaded. Your configuration broken!"
-msgstr "Kein Modul ist geladen. Ihre Konfiguration ist kaput"
+msgid "%s: Configuration '%s' write error. %s"
+msgstr "%s: Konfigurationsdatei '%s' Fehler: %s"
 
 #, c-format
-msgid "Error load subsystem '%s'."
-msgstr "Fehler beim Laden des Subsysems '%s'."
-
-msgid "Save!"
-msgstr "Speicherung!"
-
-msgid "Start!"
-msgstr "Starten!"
+msgid "%s: Load!"
+msgstr "%s: Laden!"
 
 #, c-format
-msgid "Error start subsystem '%s'."
-msgstr "Fehler beim Starten des Subsystems '%s'."
-
-msgid "Final starting!"
-msgstr "Starten ist beendet"
-
-msgid "Stop!"
-msgstr "Anhalten!"
+msgid "%s: No one module is loaded. Your configuration is broken!"
+msgstr "%s: Kein Modul ist geladen. Ihre Konfiguration ist kaput"
 
 #, c-format
-msgid "Error stop subsystem '%s'."
-msgstr "Fehler beim Anhalten des Subsystems '%s'."
-
-msgid "The Terminate signal is received. Server is being stopped!"
-msgstr "Signal zum Beenden wird empfangen. Server wird angehalten!"
-
-msgid "Floating point exception is caught!"
-msgstr "Fehler bei Fliesskommaoperation abgefangen!"
+msgid "%s: Error load subsystem '%s'."
+msgstr "%s: Fehler beim Laden des Subsysems '%s'."
 
 #, c-format
-msgid "Free child process %d!"
-msgstr "Beenden des Kindprozesses %d!"
-
-msgid "Segmentation fault signal!"
-msgstr "Fehler Speichersegmentierung!"
-
-msgid "OpenSCADA is aborted!"
-msgstr "OpenSCADA ist abgebrochen!"
+msgid "%s: Save!"
+msgstr "%s: Speicherung!"
 
 #, c-format
-msgid "Unknown signal %d!"
-msgstr "Unbekanntes Signal %d!"
+msgid "%s: Start!"
+msgstr "%s: Starten!"
 
-msgid "Timeouted !!!"
-msgstr "Zeitüberschreitung !!!"
+#, c-format
+msgid "%s: Error start subsystem '%s'."
+msgstr "%s: Fehler beim Starten des Subsystems '%s'."
 
-msgid "Wait event..."
-msgstr "Warte auf Ereignis..."
+#, c-format
+msgid "%s: Final starting!"
+msgstr "%s: Starten ist beendet"
+
+#, c-format
+msgid "%s: Stop!"
+msgstr "%s: Anhalten!"
+
+#, c-format
+msgid "%s: Error stop subsystem '%s'."
+msgstr "%s: Fehler beim Anhalten des Subsystems '%s'."
+
+msgid "%s: Termination signal is received. Stop the station!"
+msgstr "%s: Signal zum Beenden wird empfangen. Stoppen Sie die Station!"
+
+#, c-format
+msgid "%s: Floating point exception is caught!"
+msgstr "%s: Fehler bei Fliesskommaoperation abgefangen!"
+
+#, c-format
+msgid "%s: Free child process %d!"
+msgstr "%s: Beenden des Kindprozesses %d!"
+
+#, c-format
+msgid "%s: Segmentation fault signal!"
+msgstr "%s: Fehler Speichersegmentierung!"
+
+#, c-format
+msgid "%s: OpenSCADA is aborted!"
+msgstr "%s: OpenSCADA ist abgebrochen!"
+
+#, c-format
+msgid "%s: Unknown signal %d!"
+msgstr "%s: Unbekanntes Signal %d!"
+
+#, c-format
+msgid "%s: Timeouted !!!"
+msgstr "%s: Zeitüberschreitung !!!"
+
+#, c-format
+msgid "%s: Wait event..."
+msgstr "%s: Warte auf Ereignis..."
 
 #, c-format
 msgid "Task '%s' already present!"
@@ -1806,10 +1817,10 @@ msgstr "Aufgabe '%s' ist schon geschafft!"
 
 #, c-format
 msgid ""
-"No permission for create real-time policy for '%s'. Default thread is "
+"%s: No permission for create a real-time policy for '%s'. Default thread is "
 "created!"
 msgstr ""
-"Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist "
+"%s: Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist "
 "geschaffen default!"
 
 #, c-format
@@ -1825,16 +1836,16 @@ msgid "Task '%s' is not stopped!"
 msgstr "Aufgabe '%s' ist nicht gestoppt!"
 
 #, c-format
-msgid "Task %u unexpected terminated by exception."
-msgstr "Task %u unerwartet beendet durch Ausnahme."
+msgid "%s: Task %u unexpected terminated by exception."
+msgstr "%s: Task %u unerwartet beendet durch Ausnahme."
 
 #, c-format
-msgid "Redundancy '%s': station '%s' up."
-msgstr "Redundancy '%s': station '%s' auf."
+msgid "%s: redundant station '%s' up."
+msgstr "%s: Redundancy station '%s' auf."
 
 #, c-format
-msgid "Redundancy '%s': station '%s' down."
-msgstr "Redundancy '%s': station '%s' abwärts."
+msgid "%s: redundant station '%s' down."
+msgstr "%s: Redundancy station '%s' abwärts."
 
 msgid "1:Request is not object!"
 msgstr "1:Die Anfrage ist kein Objekt!"
