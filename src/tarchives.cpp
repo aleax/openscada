@@ -1283,8 +1283,16 @@ void TMArchivator::save_( )	{ SYS->db().at().dataSet(fullDB(), SYS->archive().at
 
 void TMArchivator::redntDataUpdate( )
 {
+    vector<TMess::SRec> mess;
+
     //Init the point from which the archives sync
     if(!mRdTm) mRdTm = vmax(0, (end()?end():SYS->sysTm())-owner().owner().rdRestDtOverTm()*86400);
+
+    //First start replay of the local archive for active messages
+    if(mRdFirst) {
+	get(mRdTm, end(), mess);
+	owner().owner().messPut(mess, ALRM_ARCH_NM);
+    }
 
     //Prepare and call request for messages
     // end()+1 used for decrease traffic by request end() messages in each cycle. The messages in <= end() will transfer direct.
@@ -1300,7 +1308,7 @@ void TMArchivator::redntDataUpdate( )
     //printf("TEST 01: end=%s; '%s': %s\n", tm2s(mRdTm,"").c_str(), id().c_str(), req.save().c_str());
 
     //Process the result
-    vector<TMess::SRec> mess;
+    mess.clear();
     XMLNode *mO = NULL;
     for(unsigned iM = 0; iM < req.childSize(); ++iM)
 	if((mO=req.childGet(iM)) && mO->name() == "it")

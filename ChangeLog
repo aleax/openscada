@@ -1,4 +1,5 @@
 2016-07-01 Roman
+- Archive: First start replay of the local archive for redundancy active messages is added, into depth "rdRestDtOverTm".
 - SYS: A prefix with the station name is added to most significant system's messages.
 - FIX:UI.VCAEngine: Visualiser specific attributes force to modify at it's activation.
 - UI.Vision: Lock for main window run mode change at the session update-reconnect.
