@@ -198,7 +198,8 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 	tC = (tC/60)*60;
 	cfg.cfg("MIN").setI(tC/60, true);
 	int eC = 0;
-	for( ; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",eC++,cfg) && SYS->sysTm() < upTo; ) {
+	vector< vector<string> > full;
+	for( ; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",eC++,cfg,false,&full) && SYS->sysTm() < upTo; ) {
 	    TMess::SRec rc(cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(),
 			    (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
 	    if(rc.time >= bTm && rc.time <= eTm && abs(rc.level) >= level && re.test(rc.categ)) {

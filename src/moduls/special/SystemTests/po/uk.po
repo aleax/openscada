@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 09:33+0300\n"
+"POT-Creation-Date: 2016-07-04 20:16+0300\n"
 "PO-Revision-Date: 2007-10-24 19:01+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -324,8 +324,12 @@ msgstr "Отримано %d записів за час %f сек."
 msgid "Seek records."
 msgstr "Сканування записів."
 
+#, c-format
 msgid "Sought %d records for time %f sec."
 msgstr "Проскановано %d записів за час %f сек."
+
+msgid "Sought %d records in preload for time %f sec."
+msgstr "Проскановано %d передзавантажених записів за час %f сек."
 
 msgid "Change DB structure."
 msgstr "Зміна структури БД."

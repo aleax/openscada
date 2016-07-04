@@ -49,7 +49,7 @@ class MTable : public TTable
 
 	// Field's functions
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );

@@ -70,8 +70,8 @@ void RunWdgView::resizeF( const QSizeF &size )
 	cntW = (RunWdgView*)TSYS::str2addr(holdPg->property("cntPg").toString().toStdString());
     else if(!holdPg && root() == "Box" && (holdPg=((ShapeBox::ShpDt*)shpData)->inclPg)) cntW = this;
     if(holdPg && cntW) {
-	bool wHold = (holdPg->sizeOrigF().width() <= cntW->sizeOrigF().width());
-	bool hHold = (holdPg->sizeOrigF().height() <= cntW->sizeOrigF().height());
+	bool wHold = (holdPg->sizeOrigF().width()*holdPg->xScale() <= cntW->sizeOrigF().width()*cntW->xScale());
+	bool hHold = (holdPg->sizeOrigF().height()*holdPg->yScale() <= cntW->sizeOrigF().height()*cntW->yScale());
 	holdPg->setMinimumSize(wHold ? cntW->size().width() : holdPg->size().width(), hHold ? cntW->size().height() : holdPg->size().height());
 	holdPg->setMaximumSize(wHold ? cntW->size().width() : 1000000, hHold ? cntW->size().height() : 1000000);
     }

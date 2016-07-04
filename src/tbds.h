@@ -62,7 +62,7 @@ class TTable : public TCntrNode
 
 	virtual void fieldStruct( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldStruct"); }
-	virtual bool fieldSeek( int row, TConfig &cfg )
+	virtual bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL )
 	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldSeek"); }
 	virtual void fieldGet( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldGet"); }
@@ -245,7 +245,7 @@ class TBDS : public TSubSYS, public TElem
 	void close( const string &bdn, bool del = false );
 
 	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
-	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false );
+	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false, vector< vector<string> > *full = NULL );
 	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
 	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );	//Next test for noEx=false

@@ -168,8 +168,16 @@ class TestDB : public TFunction
 		bd_cfg.cfg("name").setKeyUse(false);
 		int pos = 0;
 		while(tbl.at().fieldSeek(pos,bd_cfg)) pos++;
-		bd_cfg.cfg("name").setKeyUse(true);
 		mod->mess(id(), _("Sought %d records for time %f sec."), pos, 1e-6*(TSYS::curTime()-ctime));
+
+		//Seek in preload all records
+		mod->mess(id(), _("Seek records."));
+		ctime = TSYS::curTime();
+		vector< vector<string> > full;
+		pos = 0;
+		while(tbl.at().fieldSeek(pos,bd_cfg,&full)) pos++;
+		bd_cfg.cfg("name").setKeyUse(true);
+		mod->mess(id(), _("Sought %d records in preload for time %f sec."), pos, 1e-6*(TSYS::curTime()-ctime));
 
 		//Check for fix structure
 		mod->mess(id(),_("Change DB structure."));

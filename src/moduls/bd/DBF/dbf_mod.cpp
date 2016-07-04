@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.2"
+#define MOD_VER		"2.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"
@@ -217,7 +217,7 @@ void MTable::postDisable( int flag )
 
 MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
 
-bool MTable::fieldSeek( int i_ln, TConfig &cfg )
+bool MTable::fieldSeek( int i_ln, TConfig &cfg, vector< vector<string> > *full )
 {
     int i_clm;
 

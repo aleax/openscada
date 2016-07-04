@@ -1,3 +1,11 @@
+2016-07-04 Roman
+- !!!:DB.{*,FireBird,MySQL,PostgreSQL,SQLite}:
+    Preloading scanning mode is added to functions fieldSeek() and dataSeek() for significant performance rise here.
+- Archive.DBArch: Messages get switched to use the preloading scanning mode.
+- Special.SystemTests: To the DB tests pool added a test of the preloading scanning mode.
+- FIX:UI.Vision: Pages including into the pages container is fixed for adjust at it's scale change.
+
+
 2016-07-01 Roman
 - Archive: First start replay of the local archive for redundancy active messages is added, into depth "rdRestDtOverTm".
 - SYS: A prefix with the station name is added to most significant system's messages.

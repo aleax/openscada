@@ -156,7 +156,7 @@ string TBDS::fullDBSYS( )	{ return SYS->workDB()+".SYS"; }
 
 string TBDS::fullDB( )		{ return SYS->workDB()+".DB"; }
 
-bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg, bool forceCfg )
+bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg, bool forceCfg, vector< vector<string> > *full )
 {
     int c_lev = 0;
     string bdn = realDBName(ibdn);
@@ -208,7 +208,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat()) {
-	    bool rez = tbl.at().fieldSeek(lev-c_lev,cfg);
+	    bool rez = tbl.at().fieldSeek(lev-c_lev,cfg,full);
 	    //tbl.free(); close(bdn);
 	    return rez;
 	}
@@ -1019,27 +1019,28 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD)) {
 	    time_t upTo = time(NULL)+STD_INTERF_TM;
 	    bool firstRow = true;
-	    for(unsigned i_r = vmax(0,tblOff); time(NULL) < upTo && fieldSeek(i_r,req); i_r++, firstRow = false)
-		for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++) {
-		    eid = req.elem().fldAt(i_f).name();
+	    vector< vector<string> > full;
+	    for(unsigned iR = vmax(0,tblOff); time(NULL) < upTo && fieldSeek(iR,req,&full); iR++, firstRow = false)
+		for(unsigned iF = 0; iF < req.elem().fldSize(); iF++) {
+		    eid = req.elem().fldAt(iF).name();
 		    if(firstRow) ctrMkNode("list",opt,-1,("/prm/tbl/"+eid).c_str(),"",RWRWR_);
-		    opt->childGet(i_f)->childAdd("el")->setText(req.cfg(eid).getS());
+		    opt->childGet(iF)->childAdd("el")->setText(req.cfg(eid).getS());
 		}
 	    notFullShow = (time(NULL) >= upTo);
 	}
 	if(ctrChkNode(opt,"add",RWRW__,"root",SDB_ID,SEC_WR)) {
-	    for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++) {
-		eid = req.elem().fldAt(i_f).name();
-		if(!(req.elem().fldAt(i_f).flg()&TCfg::Key)) continue;
+	    for(unsigned iF = 0; iF < req.elem().fldSize(); iF++) {
+		eid = req.elem().fldAt(iF).name();
+		if(!(req.elem().fldAt(iF).flg()&TCfg::Key)) continue;
 		req.cfg(eid).setS("newReqKey");
 	    }
 	    req.cfgViewAll(false);
 	    fieldSet(req);
 	}
 	if(ctrChkNode(opt,"del",RWRW__,"root",SDB_ID,SEC_WR)) {
-	    for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++)
-		if(req.elem().fldAt(i_f).flg()&TCfg::Key) {
-		    eid = req.elem().fldAt(i_f).name();
+	    for(unsigned iF = 0; iF < req.elem().fldSize(); iF++)
+		if(req.elem().fldAt(iF).flg()&TCfg::Key) {
+		    eid = req.elem().fldAt(iF).name();
 		    req.cfg(eid).setS(opt->attr("key_"+eid),true);
 		}
 	    fieldDel(req);
@@ -1047,9 +1048,9 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR)) {
 	    string col = opt->attr("col");
 	    // Keys obtain
-	    for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++)
-		if(req.elem().fldAt(i_f).flg()&TCfg::Key) {
-		    eid = req.elem().fldAt(i_f).name();
+	    for(unsigned iF = 0; iF < req.elem().fldSize(); iF++)
+		if(req.elem().fldAt(iF).flg()&TCfg::Key) {
+		    eid = req.elem().fldAt(iF).name();
 		    req.cfg(eid).setS(opt->attr("key_"+eid), TCfg::ForceUse|TCfg::ExtValTwo);
 		}
 	    // Same set
