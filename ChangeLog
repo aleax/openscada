@@ -1,3 +1,9 @@
+2016-07-05 Roman
+- DB.LibsDB.OscadaLibs.db: ParamTemplLibs.{anUnif,anUnifSt}: Expand to alarms modes: 0-force NORMA, 1-suppress, 2-save on change.
+- SYS: To prepare the translations table used the preloaded seek.
+- UI.VCAEngine: To user's attributes loading used the preloaded seek.
+
+
 2016-07-04 Roman
 - !!!:DB.{*,FireBird,MySQL,PostgreSQL,SQLite}:
     Preloading scanning mode is added to functions fieldSeek() and dataSeek() for significant performance rise here.
@@ -132,7 +138,7 @@
 
 
 2016-05-23 Roman
-- DB.LibsDB.OscadaLibs.db: Templates base.{digAlarm,}: expanded into the input data preprocessing procedure for
+- DB.LibsDB.OscadaLibs.db: Templates base.{digAlarm}: expanded into the input data preprocessing procedure for
     fix the procedure to reusing (more faster), stored context object into "ctx", "f_frq" actual value pass.
 - !!:DAQ: User API function funcCall() significant expanded to fix the result function for reusing and then significant performance rise.
 - TFunction: Virtual function prog() and setProg() is added for allow it's control through an abstract object.

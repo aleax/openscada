@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.3.1"
+#define MOD_VER		"3.3.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -523,7 +523,8 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     c_el.cfg("IDC").setS(idc,true);
     c_el.cfg("IO_VAL").setExtVal(true);
     c_el.cfg("CFG_VAL").setExtVal(true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); ) {
+    vector<vector<string> > full;
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el,false,&full); ) {
 	string sid = c_el.cfg("ID").getS();
 	if(!TSYS::pathLev(sid,1).empty()) continue;
 	unsigned type = c_el.cfg("IO_TYPE").getI();

@@ -2839,8 +2839,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 
 	    // Values request from first source
 	    MtxAlloc res(Mess->mRes, true);
-	    for(map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin(); im != Mess->trMessIdx.end(); ++im)
-	    {
+	    for(map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin(); im != Mess->trMessIdx.end(); ++im) {
 		//  Check for filter
 		if(trFltr.size()) {
 		    map<string,string>::iterator is;
@@ -2879,8 +2878,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			//  Get from config file or DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req);
+			    vector< vector<string> > full;
+			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, &full)
+					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, &full);
 			    if(!seekRez) break;
 			    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
 				if(!(i_n && i_n < (ns.size()-1))) continue;

@@ -2,7 +2,13 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'ParamTemplLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ParamTemplLibs" VALUES('S7','S7','','Templates library of parameters for PLC series S7 of firm Siemens.','Бібліотека шаблонів параметрів для контролерів фірми Siemens серії S7.','tmplib_S7','','Библиотека шаблонов параметров для контроллеров фирмы Siemens серии S7.');
-INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Allow realisation of the main templates.','Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Предоставляет реализацию базовых шаблонов.');
+INSERT INTO "ParamTemplLibs" VALUES('base','Main templates','Базові шаблони','Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.1
+Allow realisation of the main templates.','Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.0.1
+Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.1
+Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -1516,11 +1522,11 @@ INSERT INTO "tmplib_base_io" VALUES('anUnif','HystBnd','Hysteresis of boders vio
 INSERT INTO "tmplib_base_io" VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Процедура обробки входу','','Процедура обработки входа','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','subMode','Substitute:mode (0-no; 1-last; 2-substitute)',1,32,'0',7,'Заміна:режим (0-немає; 1-останне; 2-заміна)','','Замена:режим (0-нет; 1-последний; 2-замена)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute:variable',2,32,'0',8,'Заміна:змінна','','Замена:переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Alarms suppress',3,32,'0',9,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','alSup','Alarms (0-init NORMA, 1-suppress, 2-save on change)',1,32,'0',9,'Порушення (0-ініціаліз. НОРМА, 1-придушення, 2-збереж. при зміні)','','Нарушения (0-принужд. НОРМА, 1-подавление, 2-сохр. при смене)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','inProc','Input processing procedure',0,68,'',1,'Процедура обробки входу','','Процедура обработки входа','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subMode','Substitute:mode (0-no; 1-last; 2-substitute)',1,32,'0',12,'Заміна:режим (0-немає; 1-останне; 2-заміна)','','Замена:режим (0-нет; 1-последний; 2-замена)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','subVar','Substitute:variable',2,32,'0',13,'Заміна:змінна','','Замена:переменная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alSup','Alarms suppress',3,32,'0',14,'Придушення порушень','','Подавление нарушений','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alSup','Alarms (0-init NORMA, 1-suppress, 2-save on change)',1,32,'0',14,'Порушення (0-инициализ. НОРМА, 1-придушення, 2-збереж. при зміні)','','Нарушения (0-принужд. НОРМА, 1-подавление, 2-сохр. при смене)','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','alSup','Alarms suppress',3,32,'0',7,'Придушення порушень','','Подавление нарушений','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','HystBnd','Hysteresis of boders violation',2,32,'1',12,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','prec','Precision (signs)',1,32,'2',14,'Точність (знаків)','','Точность (знаков)','');
@@ -4625,7 +4631,7 @@ else {
 }','','',1441880537);
 INSERT INTO "tmplib_base" VALUES('anUnif','Analog sign. (Unif)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
-	f_err = "0";
+	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
 	conDelay_ = 0;
 	//Prepare data for preprocessing
@@ -4707,15 +4713,17 @@ if(!tErr) {
 }
 
 //Alarms forming
-if(alSup)	f_err = "0";
+if(alSup == 1)	f_err = "0";
 else {
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	toSave = (alSup == 2 && f_err != tErr);
 	f_err = tErr;
+	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 }
-conDelay_ = 0;','','',1463998305);
+conDelay_ = 0;','','',1467708902);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
@@ -4778,7 +4786,7 @@ else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:S
 f_err = tErr;','','',1450381598);
 INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
-	f_err = "0";
+	if(alSup == 0) f_err = "0";
 	prevVar = EVAL_REAL;
 	conDelay_ = 0;
 	//Prepare data for preprocessing
@@ -4863,15 +4871,17 @@ else {
 }
 
 //Alarms forming
-if(alSup)	f_err = "0";
+if(alSup == 1)	f_err = "0";
 else {
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	toSave = (alSup == 2 && f_err != tErr);
 	f_err = tErr;
+	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 }
-conDelay_ = 0;','','',1463998358);
+conDelay_ = 0;','','',1467708877);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигнал (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
