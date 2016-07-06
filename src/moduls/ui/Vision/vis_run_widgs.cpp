@@ -46,12 +46,16 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     string lstEl = iwid.substr(endElSt+1);
     if(lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_") setObjectName(lstEl.substr(4).c_str());
     if(lstEl.size() > 3 && lstEl.substr(0,3) == "pg_")  setObjectName(lstEl.substr(3).c_str());
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:RunWdgView", 1);
 }
 
 RunWdgView::~RunWdgView( )
 {
     //Child widgets remove before
     childsClear();
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:RunWdgView", -1);
 }
 
 string RunWdgView::name( )	{ return windowTitle().isEmpty() ? mainWin()->wAttrGet(id(),"name") : windowTitle().toStdString(); }
@@ -527,12 +531,16 @@ RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent,
 	    move(s2i(xPos), s2i(yPos));
 	else if(abs(posF().x()) || abs(posF().y())) move(posF().x(), posF().y());
     }
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:RunPageView", 1);
 }
 
 RunPageView::~RunPageView( )
 {
     //Child widgets remove before
     childsClear();
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:RunPageView", -1);
 }
 
 float RunPageView::xScale( bool full )	{ return full ? mainWin()->xScale()*WdgView::xScale() : WdgView::xScale(); }

@@ -448,7 +448,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio()) x_scale = y_scale = vmin(x_scale, y_scale);
-	}else x_scale = y_scale = 1;
+	} else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale) {
 	    isResizeManual = true;
 	    fullUpdatePgs();
@@ -1073,6 +1073,7 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 {
     UserItStBar *userSt;
     if(!pg) pg = masterPg();
+    if(!pg || pg != masterPg()) return;
 
     //Presence mark clean
     for(int iC = 0; iC < statusBar()->children().size(); iC++)
@@ -1119,7 +1120,9 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
     //Check for remove and order
     for(int iC = 0; iC < statusBar()->children().size(); iC++)
 	if((userSt=qobject_cast<UserItStBar*>(statusBar()->children().at(iC))) && userSt->objectName().indexOf("usr_") == 0) {
-	    if(!userSt->property("usrStPresent").toBool()) userSt->deleteLater();
+	    if(!userSt->property("usrStPresent").toBool())
+		delete userSt;
+		//userSt->deleteLater();
 	    /*else for(int iC1 = iC; iC1 > 0 ; iC1--) {
 		if(!(userSt1=qobject_cast<UserItStBar*>(statusBar()->children().at(iC1-1))) ||
 		    userSt1->objectName().indexOf("usr_") != 0) continue;
@@ -1198,44 +1201,50 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
     //req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
-    req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("conId", i2s(mConId));
+    req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("tm","0")->setAttr("conId", i2s(mConId));
     if(!cntrIfCmd(req)) {
-	// Get openned pages list
-	if(toRestore) {
-	    QList<RunPageView*> lnEdWs = findChildren<RunPageView*>();
-	    openPgs = "";
-	    for(int iP = 0; iP < lnEdWs.size(); iP++) openPgs += lnEdWs[iP]->id() + ";";
-	}
 	// Title
 	XMLNode *pN = req.childGet(0);
 	setWindowTitle(pN->text().c_str());
+
 	// Icon
 	pN = req.childGet(1);
 	QImage img;
 	string simg = TSYS::strDecode(pN->text(),TSYS::base64);
 	if(img.loadFromData((const uchar*)simg.data(),simg.size()))
 	    setWindowIcon(QPixmap::fromImage(img));
+
 	// Period
 	pN = req.childGet(2);
 	mPeriod = s2i(pN->text());
+
 	// Style
 	pN = req.childGet(3);
 	setStyle(s2i(pN->text()));
 	pN = req.childGet(4);
 	if(style() < 0 && pN->childSize() <= 1) mStlBar->setVisible(false);
-	// Flags
-	/*pN = req.childGet(5);
-	int flgs = s2i(pN->text());
-	if(flgs&0x01)		setWindowState(Qt::WindowMaximized);
-	else if(flgs&0x02)	actFullScr->setChecked(true);
-	keepAspectRatio = flgs&0x04;*/
+
+	// Clean up the previous pages for clean reconnection
+	if(toRestore) {
+	    pgCacheClear();
+	    openPgs = "";
+	    for(unsigned iP = 0; iP < pgList.size(); iP++) {
+		RunPageView *pg = master_pg->findOpenPage(pgList[iP]);
+		if(pg) { pg->deleteLater(); openPgs += pgList[iP] + ";"; }
+	    }
+	    master_pg->deleteLater();
+	    master_pg = NULL;
+	    setXScale(1); setYScale(1);
+	}
+
 	// Open pages list
 	pN = req.childGet(5);
+	pgList.clear();
 	for(unsigned i_ch = 0; i_ch < pN->childSize(); i_ch++) {
 	    pgList.push_back(pN->childGet(i_ch)->text());
-	    callPage(pN->childGet(i_ch)->text(), toRestore);
+	    callPage(pN->childGet(i_ch)->text()/*, toRestore*/);
 	}
-	reqtm = strtoul(pN->attr("tm").c_str(),NULL,10);
+	reqtm = strtoul(pN->attr("tm").c_str(), NULL, 10);
     }
 
     //Open direct-selected page or openned before ones
@@ -1737,6 +1746,8 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
     actAlrm->setVisible((owner()->alarmSt()>>8)&(1<<tp));
     if(f_quittanceRet) actAlrm->setChecked(!(owner()->alarmSt()>>16)&(1<<tp));
     else actAlrm->setEnabled((owner()->alarmSt()>>16)&(1<<tp));
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:Notify", 1);
 }
 
 VisRun::Notify::~Notify( )
@@ -1752,6 +1763,8 @@ VisRun::Notify::~Notify( )
     //The quittance action remove
     if(actAlrm) actAlrm->deleteLater();
     actAlrm = NULL;
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:Notify", -1);
 }
 
 string	VisRun::Notify::pgCrtor( )	{ return TSYS::strLine(pgProps, 0); }

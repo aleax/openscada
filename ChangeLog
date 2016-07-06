@@ -1,3 +1,10 @@
+2016-07-06 Roman
+- Archive: The option's "Overtime of the reserve history reload" description is fixed.
+- !!:FIX:UI.Vision: Status line configuration set and update is fixed only for the master-page and it's items immediately removing.
+    Session restoring moved to prior pages removing but that is some faster, safer and cleaner then updating.
+    Some debug counters are added.
+
+
 2016-07-05 Roman
 - DB.LibsDB.OscadaLibs.db: ParamTemplLibs.{anUnif,anUnifSt}: Expand to alarms modes: 0-force NORMA, 1-suppress, 2-save on change.
 - SYS: To prepare the translations table used the preloaded seek.

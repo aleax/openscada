@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-01 11:04+0300\n"
+"POT-Creation-Date: 2016-07-05 16:35+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -182,9 +182,9 @@ msgstr "Архів значень"
 msgid "Redundancy"
 msgstr "Резервування"
 
-msgid "Overtime of the reserve history reload at start, hours"
+msgid "Overtime of the reserve history reload at start, days"
 msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, у годинах."
+"Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivators"
 msgstr "Архіватори повідомлень"
@@ -1766,6 +1766,7 @@ msgstr "%s: Зупинка!"
 msgid "%s: Error stop subsystem '%s'."
 msgstr "%s: Помилка зупинки підсистеми '%s'."
 
+#, c-format
 msgid "%s: Termination signal is received. Stop the station!"
 msgstr "%s: Отримано сигнал припинення. Зупинка станції!"
 
