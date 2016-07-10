@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 16:35+0300\n"
+"POT-Creation-Date: 2016-07-08 12:52+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -966,6 +966,9 @@ msgstr "Глибина відновлення даних при запуску, 
 
 msgid "Controllers"
 msgstr "Контролери"
+
+msgid "Off;Asymmetric;Only alarms"
+msgstr "Виключено;Асиметрично;Тільки порушення"
 
 msgid "Template libraries"
 msgstr "Бібліотеки шаблонів"

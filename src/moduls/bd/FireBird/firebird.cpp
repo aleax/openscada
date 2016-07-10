@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.3.5"
+#define MOD_VER		"1.3.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -561,7 +561,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     }
 
     //Request
-    if(!full || !full->size()) {
+    if(!full || !full->size() || row == 0) {
 	if(first_sel) return false;
 	req += " FROM \"" + mod->sqlReqCode(name(),'"') + "\" " + (next?req_where:"");
 

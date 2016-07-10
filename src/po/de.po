@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 16:35+0300\n"
+"POT-Creation-Date: 2016-07-08 12:52+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -978,6 +978,9 @@ msgstr "Tiefe Zeit von Daten beim Start wiederherstellen, Stunden"
 
 msgid "Controllers"
 msgstr "Controller"
+
+msgid "Off;Asymmetric;Only alarms"
+msgstr "Off;Asymmetrisch;Nur Alarme"
 
 msgid "Template libraries"
 msgstr "Vorlagenbibliotheken"

@@ -46,7 +46,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.8.3"
+#define MOD_VER		"1.8.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -138,7 +138,7 @@ void TUIMod::postEnable( int flag )
 	string argCom, argVl;
 	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
 	    if(argCom == "h" || argCom == "help") isHelp = true;
-	    else if(argCom == "demon" || argCom == "daemon") demonMode = true;
+	    else if(argCom == "demon" || argCom == "daemon" || strcasecmp(argCom.c_str(),"nox11") == 0) demonMode = true;
 		    // Qt bind options (debug)
 	    else if(argCom == "sync" || argCom == "widgetcount" ||
 		    // Qt bind options
@@ -200,6 +200,7 @@ string TUIMod::optDescr( )
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
 	"----------- Qt debug commandline options ----------\n"
+	"    --noX11                Prevent Qt start, mostly for pure console.\n"
 	"    --sync                 Switches to synchronous mode X11 for debugging.\n"
 	"    --widgetcount          Prints debug message at the end about number of widgets\n"
 	"                           left undestroyed and maximum number of widgets existed at\n"

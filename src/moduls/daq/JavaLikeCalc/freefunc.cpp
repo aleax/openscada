@@ -477,34 +477,34 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
     Reg *rez = NULL, *tR = NULL;
     if(op->pos() >= 0) return op;	//Already load
 
-    //Check for place use and set standalone
-    int i_rg = -1;
+    //Check for place used and set standalone
+    int iRg = -1;
     switch(op->type()) {
 	case Reg::Bool:
-	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
-		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().b == op->val().b)
+	    for(iRg = 0; iRg < (int)mRegs.size(); iRg++)
+		if((tR=mRegs[iRg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().b == op->val().b)
 		    break;
 	    break;
 	case Reg::Int:
-	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
-		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().i == op->val().i)
+	    for(iRg = 0; iRg < (int)mRegs.size(); iRg++)
+		if((tR=mRegs[iRg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().i == op->val().i)
 		    break;
 	    break;
 	case Reg::Real:
-	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
-		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().r == op->val().r)
+	    for(iRg = 0; iRg < (int)mRegs.size(); iRg++)
+		if((tR=mRegs[iRg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().r == op->val().r)
 		    break;
 	    break;
 	case Reg::String:
-	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
-		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().s == op->val().s)
+	    for(iRg = 0; iRg < (int)mRegs.size(); iRg++)
+		if((tR=mRegs[iRg])->name().empty() && tR->type() == op->type() && tR->lock() && *tR->val().s == *op->val().s)
 		    break;
 	    break;
 	default: break;
     }
-    if(i_rg >= 0) {
-	if(i_rg < (int)mRegs.size()) {
-	    rez = mRegs[i_rg];
+    if(iRg >= 0) {
+	if(iRg < (int)mRegs.size()) {
+	    rez = mRegs[iRg];
 #ifdef OSC_DEBUG
 	    SYS->cntrIter("ReusedConstants",1);
 #endif
@@ -734,7 +734,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
 {
-    //Check allow the buildin calc and calc
+    //Check to allow the buildin calc and calc
     if(op1->pos() < 0 && op2->pos() < 0) {
 	switch(cod) {
 	    case Reg::Add: case Reg::AddAss: case Reg::Sub: case Reg::SubAss:
@@ -813,8 +813,9 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
     Reg::Type op1_tp = op1->vType(this);
     Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
     int op1_pos = op1->pos();
-    if(op1_tp != Reg::Dynamic) op2 = cdTypeConv(op2, op1_tp);
-    else if(op2->pos() < 0) op2 = cdMvi(op2);
+    //if(op1_tp != Reg::Dynamic) op2 = cdTypeConv(op2, op1_tp);
+    //else 
+    if(op2->pos() < 0) op2 = cdMvi(op2);
     int op2_pos = op2->pos();
 
     if(rez != op1) op1->free();
@@ -1877,7 +1878,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			case Reg::Int:	  setValI(val, reg[ptr->toR], getValI(val,reg[ptr->fromR]));	break;
 			case Reg::Real:	  setValR(val, reg[ptr->toR], getValR(val,reg[ptr->fromR]));	break;
 			case Reg::String: setValS(val, reg[ptr->toR], getValS(val,reg[ptr->fromR]));	break;
-			default:	  setVal(val, reg[ptr->toR], getVal(val,reg[ptr->fromR]));		break;
+			default:	  setVal(val, reg[ptr->toR], getVal(val,reg[ptr->fromR]));	break;
 		    }
 		else setVal(val, reg[ptr->toR], getVal(val,reg[ptr->fromR]));
 		cprg += sizeof(SCode); continue;

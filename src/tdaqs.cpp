@@ -86,7 +86,7 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 	at(mls[iM]).at().list(cls);
 	for(unsigned iC = 0; iC < cls.size(); iC++) {
 	    cntr = at(mls[iM]).at().at(cls[iC]);
-	    if(cntr.at().startStat() && (!isRun || (isRun && !cntr.at().redntUse())))
+	    if(cntr.at().startStat() && (!isRun || (isRun && !cntr.at().redntUse(TController::Any))))
 		ls.push_back(cntr.at().workId());
 	}
     }
@@ -589,9 +589,9 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Run."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");/*,"dest","select",
-		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)+";"+i2s(TController::Symmetric)).c_str(),
-		    "sel_list",_("Off;Asymmetric;Symmetric"));*/
+		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4, "tp","int", "dest","select",
+		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)+";"+i2s(TController::OnlyAlarms)).c_str(),
+		    "sel_list",_("Off;Asymmetric;Only alarms"));
 		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. run"),RWRWR_,"root",SDAQ_ID,4,"tp","str",
 		    "idm","1","dest","select","select","/redund/lsMode");
 		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remote"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
@@ -642,7 +642,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		    if(nStart)		nStart->childAdd("el")->setText(cntr.at().startStat()?"1":"0");
 		    if(nRdndt)		nRdndt->childAdd("el")->setText(i2s(cntr.at().redntMode()));
 		    if(nPrefRun)	nPrefRun->childAdd("el")->setText(cntr.at().redntRun());
-		    if(nRem)		nRem->childAdd("el")->setText(cntr.at().redntUse()?"1":"0");
+		    if(nRem)		nRem->childAdd("el")->setText(cntr.at().redntUse(TController::Any)?"1":"0");
 		}
 	    }
 	}
@@ -651,7 +651,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    AutoHD<TController> cntr  = at(TSYS::strSepParse(opt->attr("key_id"),0,'.')).at().
 					at(TSYS::strSepParse(opt->attr("key_id"),1,'.'));
 	    if(col == "start")		s2i(opt->text()) ? cntr.at().start() : cntr.at().stop();
-	    else if(col == "rdndt")	cntr.at().setRedntMode((TController::Redundant)(s2i(opt->text())?TController::Asymmetric:0));
+	    else if(col == "rdndt")	cntr.at().setRedntMode((TController::Redundant)(s2i(opt->text())));
 	    else if(col == "prefRun")	cntr.at().setRedntRun(opt->text());
 	}
     }

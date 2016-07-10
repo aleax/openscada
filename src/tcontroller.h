@@ -46,7 +46,9 @@ class TController : public TCntrNode, public TConfig
 	enum Redundant {
 	    Off		= 0,
 	    Asymmetric	= 1,
-	    Symmetric	= 2
+	    OnlyAlarms	= 2,
+	    // Command specific
+	    Any		= 0
 	};
 	class RedntStkEl {
 	    public:
@@ -101,7 +103,7 @@ class TController : public TCntrNode, public TConfig
 
 	// Redundancy
 	//  In redundancy now
-	bool redntUse( )	{ return mRdUse; }
+	bool redntUse( Redundant md = Asymmetric )	{ return mRdUse && (md == Any || redntMode() == md); }
 	void setRedntUse( bool vl )		{ mRdUse = vl; }
 	//  Mode of the archiver's redundancy, only enabling now
 	Redundant redntMode( )	{ return (TController::Redundant)cfg("REDNT").getI(); }
