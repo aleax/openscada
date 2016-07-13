@@ -141,7 +141,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && s2i(opt->attr("primaryCmd"))) {
 		string aNm = opt->name(), lstStat;
 		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "");
-		while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ;
+		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
+		catch(TError &) { }
 	    }
 	}
     } catch(TError &err) {
@@ -619,13 +620,14 @@ void TCntrNode::modifGClr( )
 	    p->second->modifGClr();
 }
 
-void TCntrNode::load( bool force, string *errs )
+void TCntrNode::load( TConfig *cfg, string *errs )
 {
     //Self load
-    if((isModify(Self)&Self) || force)
+    if((isModify(Self)&Self))
 	try {
 	    if(nodeMode() == TCntrNode::Disabled) nodeEn(NodeRestore);
 	    modifClr(true);			//Save flag clear
+	    load_(cfg);
 	    load_();
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
 	} catch(TError &err) {
@@ -635,7 +637,7 @@ void TCntrNode::load( bool force, string *errs )
 	}
 
     //Childs load process
-    if((isModify(Child)&Child) || force) {
+    if((isModify(Child)&Child)) {
 	MtxAlloc res(mChM, true);
 	for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++) {
 	    vector<string> chLs;
@@ -644,9 +646,9 @@ void TCntrNode::load( bool force, string *errs )
 	    for(unsigned iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
 		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
 		AutoHD<TCntrNode> ndO(p->second);
-		if(!(ndO.at().isModify(Self|Child) || force))	continue;
+		if(!ndO.at().isModify(Self|Child))	continue;
 		res.unlock();
-		ndO.at().load(force, errs);
+		ndO.at().load(NULL, errs);
 		res.lock();
 	    }
 	}
@@ -888,8 +890,10 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"modify",R_R_R_))	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	// Do load node
 	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR)) {
+	    if(s2i(opt->attr("force"))) modifG();
+
 	    string errs;
-	    load(s2i(opt->attr("force")), &errs);
+	    load(NULL, &errs);
 	    if(errs.size()) throw TError(nodePath().c_str(), _("Load error:\n%s"), errs.c_str());
 	}
 	// Do save node

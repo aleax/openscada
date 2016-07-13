@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.1.5"
+#define MOD_VER		"3.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -271,21 +271,22 @@ void TpContr::load_( )
     //Load function's libraries
     try {
 	// Search and create new libraries
-	TConfig c_el(&elLib());
-	c_el.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig cEl(&elLib());
+	//cEl.cfgViewAll(false);
+	vector<string> dbLs;
 	map<string, bool> itReg;
+	vector<vector<string> > full;
 
 	// Search into DB
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),nodePath()+"lib",lib_cnt++,c_el); ) {
-		string l_id = c_el.cfg("ID").getS();
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,&full); ) {
+		string l_id = cEl.cfg("ID").getS();
 		if(!lbPresent(l_id)) {
-		    lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
+		    lbReg(new Lib(l_id.c_str(),"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]));
 		    try {
-			lbAt(l_id).at().load();
+			lbAt(l_id).at().load(&cEl);
 			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
 		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		}
@@ -294,10 +295,10 @@ void TpContr::load_( )
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    lbList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
-		    lbUnreg(db_ls[i_it]);
+	    lbList(dbLs);
+	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(dbLs[i_it]).at().DB()))
+		    lbUnreg(dbLs[i_it]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -451,7 +452,7 @@ void Contr::disable_( )
 
 void Contr::load_( )
 {
-    TController::load_();
+    //TController::load_();
 
     loadFunc();
 }
@@ -471,11 +472,12 @@ void Contr::loadFunc( bool onlyVl )
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
+	vector<vector<string> > full;
 
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
 	    if(ioId < 0 || func()->io(ioId)->flg()&Func::SysAttr) continue;
-	    setS(ioId,cfg.cfg("VAL").getS());
+	    setS(ioId, cfg.cfg("VAL").getS());
 	}
     }
 }
@@ -506,11 +508,12 @@ void Contr::save_( )
 	}
 
 	//Clear VAL
+	vector<vector<string> > full;
 	cfg.cfgViewAll(false);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
+	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
 		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true, false, true);
-		fld_cnt--;
+		fldCnt--;
 	    }
     }
 }
@@ -650,10 +653,10 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if(a_path == "/cntr/flst" && ctrChkNode(opt)) {
 	vector<string> lst;
 	int c_lv = 0;
-	string c_path = "", c_el;
+	string c_path = "", cEl;
 	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(fnc(),0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+c_el : c_el;
+	for(int c_off = 0; (cEl=TSYS::strSepParse(fnc(),0,'.',&c_off)).size(); c_lv++) {
+	    c_path += c_lv ? "."+cEl : cEl;
 	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";

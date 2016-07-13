@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		11		//BDS type modules version
+#define SDB_VER		12		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -153,7 +153,7 @@ class TBD : public TCntrNode, public TConfig
 	void postDisable( int flag );
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

@@ -60,7 +60,7 @@ double ModVArch::curCapacity( )
 
 void ModVArch::load_( )
 {
-    TVArchivator::load_();
+    //TVArchivator::load_();
 
     try {
 	XMLNode prmNd;

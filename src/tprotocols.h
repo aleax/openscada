@@ -21,7 +21,7 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define SPRT_VER	11		//ProtocolS type modules version
+#define SPRT_VER	12		//ProtocolS type modules version
 #define SPRT_ID		"Protocol"
 
 #include <string>

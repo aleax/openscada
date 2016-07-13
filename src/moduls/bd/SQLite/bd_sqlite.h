@@ -122,7 +122,6 @@ class BDMod: public TTypeBD
     protected:
 	//Methods
 	void modStop( );
-	void load_( );
 
     private:
 	//Private methods

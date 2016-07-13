@@ -48,7 +48,7 @@ ModVArch::~ModVArch( )
 
 void ModVArch::load_( )
 {
-    TVArchivator::load_();
+    //TVArchivator::load_();
 
     if(addr().empty()) setAddr("*.*");
 

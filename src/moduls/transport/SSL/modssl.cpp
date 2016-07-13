@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.6"
+#define MOD_VER		"1.3.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -186,7 +186,7 @@ string TSocketIn::getStatus( )
 
 void TSocketIn::load_( )
 {
-    TTransportIn::load_();
+    //TTransportIn::load_();
 
     try {
 	XMLNode prmNd;
@@ -699,7 +699,7 @@ string TSocketOut::getStatus( )
 
 void TSocketOut::load_( )
 {
-    TTransportOut::load_();
+    //TTransportOut::load_();
 
     try {
 	XMLNode prmNd;

@@ -98,7 +98,7 @@ class UserPg : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	bool cfgChange( TCfg &co, const TVariant &pc );

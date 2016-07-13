@@ -21,7 +21,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	11	//ControllerS type modules version
+#define SDAQ_VER	12	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>

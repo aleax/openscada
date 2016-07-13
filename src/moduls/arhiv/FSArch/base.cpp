@@ -35,7 +35,7 @@
 #define MOD_NAME	_("File system archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"2.8.0"
+#define MOD_VER		"2.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
 #define LICENSE		"GPL2"
@@ -185,13 +185,13 @@ void ModArch::perSYSCall( unsigned int cnt )
 
 	//Check to nopresent archive files
 	struct stat file_stat;
-	TConfig c_el(&mod->packFE());
-	c_el.cfgViewAll(false);
-	for(int fld_cnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fld_cnt++,c_el); )
-	    if(stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG)
-	    {
-		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",c_el,true,false,true))	break;
-		fld_cnt--;
+	vector<vector<string> > full;
+	TConfig cEl(&mod->packFE());
+	cEl.cfgViewAll(false);
+	for(int fldCnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fldCnt++,cEl,false,&full); )
+	    if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
+		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",cEl,true,false,true))	break;
+		fldCnt--;
 	    }
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 }

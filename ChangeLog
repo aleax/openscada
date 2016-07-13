@@ -1,3 +1,18 @@
+2016-07-13 Roman
+- DB.LibsDB.{OscadaLibs,vcaTest}.db: CREATE TABLE cleaned from default values like '''''''''.
+- !!!!:SYS: Node's function load() and load_() expanded by argument TConfig *cfg for allow direct loading after the seeking request.
+    All parts adapted to the new argument "cfg" of loading functions, preloaded dataSeek() and the direct loading after the seeking request.
+    Overall loading time decresed from 36% (Core) to 15% (VCAEngine) and some parts down to 80%.
+    Argument "force" of the node function load() was removed and relaced by modifG() pre-call.
+    Modules version of the subsystem "DB", "DAQ", "Archive", "Protocol", "UI" rose to 12.
+    Modules version of the subsystem "Transport" rose to 13.
+    Primary commands transmission by "rdStRequest()" prevented from exceptions.
+- FIX:DB.{FireBird,MySQL,PostgreSQL,SQLite}: Fix to original translated message set into value "One" of the extended value and value "Two" clean up.
+- DAQ.BlockCalc: IO of blocks loading was moved to using the seek request.
+- DAQ.LogicLev: IO of parameters loading was moved to using the seek request.
+- UI.VCAEngine: User attribute's value translation into the user attributes loading is fixed.
+
+
 2016-07-10 Roman
 - !:DAQ: DAQ redundancy mode OnlyAlarms is added.
 - FIX:DB.{FireBird,MySQL,PostgreSQL,SQLite}: Field seek is fixed for full request force on "row" = 0.

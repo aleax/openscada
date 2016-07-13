@@ -81,7 +81,7 @@ class TPrmTempl: public TFunction, public TConfig
 
     protected:
 	//Methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void postEnable( int flag );
@@ -145,7 +145,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	void postDisable( int flag );
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

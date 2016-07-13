@@ -126,10 +126,6 @@ class BDMod: public TTypeBD
 
 	static string sqlReqCode( const string &req, char symb = '\'' );
 
-    protected:
-	//Protected methods
-	void load_( );
-
     private:
 	//Private methods
 	TBD *openBD( const string &iid );

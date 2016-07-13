@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.2.2"
+#define MOD_VER		"1.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -202,7 +202,7 @@ TTrIn::~TTrIn( )	{ }
 
 void TTrIn::load_( )
 {
-    TTransportIn::load_();
+    //TTransportIn::load_();
 
     try {
 	XMLNode prmNd;
@@ -708,7 +708,7 @@ TTrOut::~TTrOut( )	{ }
 
 void TTrOut::load_( )
 {
-    TTransportOut::load_();
+    //TTransportOut::load_();
 
     try {
 	XMLNode prmNd;

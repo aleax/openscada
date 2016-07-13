@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.8"
+#define MOD_VER		"1.5.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -154,7 +154,7 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new 
 
 void TMdContr::load_( )
 {
-    TController::load_();
+    //TController::load_();
 
     //Check for get old period method value
     if(mPerOld) { cfg("SCHEDULE").setS(i2s(mPerOld)); mPerOld = 0; }
@@ -773,7 +773,7 @@ void TMdPrm::setStats( const string &vl )
 void TMdPrm::load_( )
 {
     //Load from cache
-    TParamContr::load_();
+    //TParamContr::load_();
 
     //Restore attributes from cache
     try {

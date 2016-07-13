@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.5.6"
+#define MOD_VER		"1.5.7"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -893,7 +893,8 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
 	    }
 	    else {
 		if(!tr) {
-		    cf.setS(val);	//!! Sets no flag instead the TCfg::ExtValOne for clean up from previous the Two, Three
+		    cf.setS(val, TCfg::ExtValOne);
+		    cf.setS("", TCfg::ExtValTwo);	//!! Sets for clean up from previous Two value
 		    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
 		} else cf.setS(val, TCfg::ExtValTwo);
 	    }

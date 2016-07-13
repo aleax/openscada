@@ -124,10 +124,6 @@ class BDMod: public TTypeBD
 	BDMod( string name );
 	~BDMod( );
 
-    protected:
-	//Protected methods
-	void load_( );
-
     private:
 	//Private methods
 	TBD *openBD( const string &iid );

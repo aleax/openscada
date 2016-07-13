@@ -21,7 +21,7 @@
 #ifndef TARCHIVES_H
 #define TARCHIVES_H
 
-#define SARH_VER	11		//ArchiveS type modules version
+#define SARH_VER	12		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
 #include <string>
@@ -107,7 +107,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

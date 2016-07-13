@@ -106,22 +106,23 @@ void TTransportS::load_( )
     //Load DB
     string id, type;
     map<string, bool>	itReg;
+    vector<vector<string> > full;
     // Search and create new input transports
     try {
 	TConfig c_el(&elIn);
-	c_el.cfgViewAll(false);
+	//c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(db_ls,true);
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el); )
-	    {
+	for(unsigned iDB = 0; iDB < db_ls.size(); iDB++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[iDB]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,&full); ) {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(modPresent(type) && !at(type).at().inPresent(id))
-		    at(type).at().inAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		    at(type).at().inAdd(id,(db_ls[iDB]==SYS->workDB())?"*.*":db_ls[iDB]);
+		at(type).at().inAt(id).at().load(&c_el);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -144,20 +145,20 @@ void TTransportS::load_( )
     // Search and create new output transports
     try {
 	TConfig c_el(&elOut);
-	c_el.cfgViewAll(false);
+	//c_el.cfgViewAll(false);
 	vector<string> tdb_ls, db_ls;
 	itReg.clear();
 
 	//  Search new into DB and Config-file
 	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el); )
-	    {
+	for(unsigned iDB = 0; iDB < db_ls.size(); iDB++)
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[iDB]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,&full); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(modPresent(type) && !at(type).at().outPresent(id))
-		    at(type).at().outAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		    at(type).at().outAdd(id,(db_ls[iDB]==SYS->workDB())?"*.*":db_ls[iDB]);
+		at(type).at().outAt(id).at().load(&c_el);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -180,7 +181,7 @@ void TTransportS::load_( )
     // Load external hosts
     try {
 	TConfig c_el(&elExt);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); ) {
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true,&full); ) {
 	    ExtHost host("", "");
 	    host.userOpen	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
@@ -676,10 +677,12 @@ string TTransportIn::protocol( )	{ return TSYS::strParse(protocolFull(),0,"."); 
 
 string TTransportIn::getStatus( )	{ return startStat() ? _("Started. ") : _("Stoped. "); }
 
-void TTransportIn::load_( )
+void TTransportIn::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
 void TTransportIn::save_( )
@@ -918,10 +921,12 @@ string TTransportOut::getStatus( )
     return (startStat()?_("Started. "):_("Stoped. ")) + TSYS::strMess(_("Established: %s. "), tm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
-void TTransportOut::load_( )
+void TTransportOut::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
 void TTransportOut::save_( )

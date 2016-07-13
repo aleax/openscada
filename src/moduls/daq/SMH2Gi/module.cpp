@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.2"
+#define MOD_VER		"1.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -596,16 +596,6 @@ void TMdPrm::setModPrm( const string &prm, const string &val )
     }
 
     cfg("MOD_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
-}
-
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
-
-void TMdPrm::save_( )
-{
-    TParamContr::save_();
 }
 
 void TMdPrm::vlArchMake( TVal &val )

@@ -1007,10 +1007,13 @@ void TVArchive::setPeriod( int64_t vl )
 
 void TVArchive::setUpBuf( )	{ makeBuf((TFld::Type)mVType.getI(), mBSize, (int64_t)(1e6*mBPer.getR()), mBHGrd, mBHRes); }
 
-void TVArchive::load_( )
+void TVArchive::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+
     setUpBuf();
 }
 
@@ -2239,10 +2242,12 @@ TVArchEl *TVArchivator::getArchEl( TVArchive &arch )	{ return new TVArchEl(arch,
 
 TTypeArchivator &TVArchivator::owner( )			{ return *(TTypeArchivator *)nodePrev(); }
 
-void TVArchivator::load_( )
+void TVArchivator::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
 }
 
 void TVArchivator::save_( )

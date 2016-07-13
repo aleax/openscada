@@ -66,11 +66,6 @@ class TMdPrm : public TParamContr
 
 	TMdContr &owner( );
 
-    protected:
-	//Methods
-	void load_( );
-	void save_( );
-
     private:
 	//Methods
 	void postEnable( int flag );

@@ -123,21 +123,22 @@ void TArchiveS::load_( )
     // Message archivators load
     string id,type;
     map<string, bool>	itReg;
+    vector<vector<string> > full;
     try {
-	TConfig c_el(&elMess);
-	c_el.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig cEl(&elMess);
+	//cEl.cfgViewAll(false);
+	vector<string> dbLs;
 
 	// Search int DB and create new archivators
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
-	    {
-		id = c_el.cfg("ID").getS();
-		type = c_el.cfg("MODUL").getS();
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,false,&full); ) {
+		id = cEl.cfg("ID").getS();
+		type = cEl.cfg("MODUL").getS();
 		if(modPresent(type) && !at(type).at().messPresent(id))
-		    at(type).at().messAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		    at(type).at().messAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		at(type).at().messAt(id).at().load(&cEl);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -146,10 +147,10 @@ void TArchiveS::load_( )
 	    vector<string> m_ls;
 	    modList(m_ls);
 	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++) {
-		at(m_ls[i_m]).at().messList(db_ls);
-		for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().messAt(db_ls[i_it]).at().DB()))
-			at(m_ls[i_m]).at().messDel(db_ls[i_it]);
+		at(m_ls[i_m]).at().messList(dbLs);
+		for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		    if(itReg.find(m_ls[i_m]+"."+dbLs[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().messAt(dbLs[i_it]).at().DB()))
+			at(m_ls[i_m]).at().messDel(dbLs[i_it]);
 	    }
 	}
     } catch(TError &err) {
@@ -159,21 +160,21 @@ void TArchiveS::load_( )
 
     // Value archivators load
     try {
-	TConfig c_el(&elVal);
-	c_el.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig cEl(&elVal);
+	//cEl.cfgViewAll(false);
+	vector<string> dbLs;
 	itReg.clear();
 
 	//  Search into DB and create new archivators
-	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fld_cnt++,c_el); )
-	    {
-		id = c_el.cfg("ID").getS();
-		type = c_el.cfg("MODUL").getS();
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,false,&full); ) {
+		id = cEl.cfg("ID").getS();
+		type = cEl.cfg("MODUL").getS();
 		if(modPresent(type) && !at(type).at().valPresent(id))
-		    at(type).at().valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		    at(type).at().valAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		at(type).at().valAt(id).at().load(&cEl);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -182,10 +183,10 @@ void TArchiveS::load_( )
 	    vector<string> m_ls;
 	    modList(m_ls);
 	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++) {
-		at(m_ls[i_m]).at().valList(db_ls);
-		for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().valAt(db_ls[i_it]).at().DB()))
-			at(m_ls[i_m]).at().valDel(db_ls[i_it]);
+		at(m_ls[i_m]).at().valList(dbLs);
+		for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		    if(itReg.find(m_ls[i_m]+"."+dbLs[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().valAt(dbLs[i_it]).at().DB()))
+			at(m_ls[i_m]).at().valDel(dbLs[i_it]);
 	    }
 	}
     } catch(TError &err) {
@@ -195,30 +196,30 @@ void TArchiveS::load_( )
 
     // Value archives load
     try {
-	TConfig c_el(&elAval);
-	c_el.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig cEl(&elAval);
+	//cEl.cfgViewAll(false);
+	vector<string> dbLs;
 	itReg.clear();
 
 	//  Search into DB and create new archives
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val",nodePath()+subId()+"_val",fld_cnt++,c_el); )
-	    {
-		id = c_el.cfg("ID").getS();
-		if(!valPresent(id)) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,false,&full); ) {
+		id = cEl.cfg("ID").getS();
+		if(!valPresent(id)) valAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
 		//   For force loading after creation from archivator storage
-		else if(valAt(id).at().DB() == "*.*" && db_ls[i_db] != SYS->workDB()) valAt(id).at().setDB(db_ls[i_db]);
+		else if(valAt(id).at().DB() == "*.*" && dbLs[iDB] != SYS->workDB()) valAt(id).at().setDB(dbLs[iDB]);
+		valAt(id).at().load(&cEl);
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    valList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(valAt(db_ls[i_it]).at().DB()))
-		    valDel(db_ls[i_it]);
+	    valList(dbLs);
+	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(valAt(dbLs[i_it]).at().DB()))
+		    valDel(dbLs[i_it]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -1271,10 +1272,12 @@ string TMArchivator::name( )
 
 string TMArchivator::tbl( )	{ return string(owner().owner().subId())+"_mess_proc"; }
 
-void TMArchivator::load_( )
+void TMArchivator::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB()))	throw TError();
-    SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
 
     mRdUse = redntMode();
 }

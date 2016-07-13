@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		12		//TransportS type modules version
+#define STR_VER		13		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -92,7 +92,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -173,7 +173,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	//Attributes

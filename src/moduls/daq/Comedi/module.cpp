@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.4"
+#define MOD_VER		"1.0.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -443,10 +443,6 @@ void TMdPrm::setModPrm( const string &prm, const string &val )
 
     cfg("PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 }
-
-void TMdPrm::load_( )	{ TParamContr::load_(); }
-
-void TMdPrm::save_( )	{ TParamContr::save_(); }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {

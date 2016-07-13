@@ -80,7 +80,7 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

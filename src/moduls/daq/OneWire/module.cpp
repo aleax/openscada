@@ -39,7 +39,7 @@
 #define MOD_NAME	_("1Wire devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.4"
+#define MOD_VER		"0.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("1Wire devices support by OWFS (http://owfs.org).")
 #define LICENSE		"GPL2"
@@ -370,16 +370,6 @@ void TMdPrm::disable( )
     TParamContr::disable();
 
     setEval();
-}
-
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
-
-void TMdPrm::save_( )
-{
-    TParamContr::save_();
 }
 
 string TMdPrm::OWFSDevLs( )

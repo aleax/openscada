@@ -1187,7 +1187,7 @@ void TMdPrm::disable( )
 
 void TMdPrm::load_( )
 {
-    TParamContr::load_();
+    //TParamContr::load_();
     loadIO();
 }
 

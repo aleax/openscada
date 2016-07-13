@@ -60,7 +60,7 @@ void ModMArch::postDisable( int flag )
 
 void ModMArch::load_( )
 {
-    TMArchivator::load_();
+    //TMArchivator::load_();
 
     //Init address to DB
     if(addr().empty()) setAddr("*.*");

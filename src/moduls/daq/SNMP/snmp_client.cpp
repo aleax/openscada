@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.11"
+#define MOD_VER		"0.7.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -625,8 +625,6 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 }
-
-void TMdPrm::load_( )	{ TParamContr::load_(); }
 
 void TMdPrm::parseOIDList(const string &ioid)
 {

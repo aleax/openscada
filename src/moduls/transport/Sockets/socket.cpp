@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.5"
+#define MOD_VER		"2.2.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -166,7 +166,7 @@ string TSocketIn::getStatus( )
 
 void TSocketIn::load_( )
 {
-    TTransportIn::load_();
+    //TTransportIn::load_();
 
     try {
 	XMLNode prmNd;
@@ -916,7 +916,7 @@ string TSocketOut::getStatus( )
 
 void TSocketOut::load_( )
 {
-    TTransportOut::load_();
+    //TTransportOut::load_();
 
     try {
 	XMLNode prmNd;

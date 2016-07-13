@@ -89,6 +89,7 @@ typedef hash_map<const char*, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 //* TCntrNode - Controll node					*
 //***************************************************************
 class TVariant;
+class TConfig;
 
 //#pragma pack(push,1)
 class TCntrNode
@@ -167,7 +168,7 @@ class TCntrNode
 	void modifG( );					//Set group modify
 	void modifClr( bool save = false );		//Clear modify
 	void modifGClr( );				//Modify group clear
-	void load( bool force = false, string *errs = NULL );	//Load node, if modified
+	void load( TConfig *cfg = NULL, string *errs = NULL );	//Load node, if modified
 	void save( unsigned lev = 0, string *errs = NULL );	//Save node, if modified
 
 	// Connections counter
@@ -217,6 +218,7 @@ class TCntrNode
 	virtual void preDisable( int flag )	{ }
 	virtual void postDisable( int flag )	{ }
 
+	virtual void load_( TConfig *cfg )	{ }
 	virtual void load_( )			{ }
 	virtual void save_( )			{ }
 

@@ -539,17 +539,19 @@ void TBDS::load_( )
 	at(db_tp).at().at(db_nm).at().enable();
     }
 
-    // Open other DB stored into table 'DB' and config-file
+    // Open other DB stored into the table 'DB' and the config-file
     try {
 	string id,type;
 	if(SYS->chkSelDB(fullDB())) {
 	    TConfig c_el(&elDB);
-	    c_el.cfgViewAll(false);
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el,true); ) {
+	    //c_el.cfgViewAll(false);
+	    vector<vector<string> > full;
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,true,&full); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
 		if((type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id))
 		    at(type).at().open(id);
+		at(type).at().at(id).at().load(&c_el);
 	    }
 	}
     } catch(TError &err) {
@@ -721,10 +723,13 @@ void TBD::open( const string &table, bool create )
     if(!chldPresent(mTbl,table)) chldAdd(mTbl,openTable(table,create));
 }
 
-void TBD::load_( )
+void TBD::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB_CFG))	throw TError();
-    SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+
     if(!enableStat() && toEnable()) enable();
 }
 
@@ -834,7 +839,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/st/load" && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
 	SYS->setSelDB(owner().modId()+"."+id());
-	SYS->load(true);
+	SYS->modifG();
+	SYS->load();
 	SYS->setSelDB("");
     }
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDB_ID,RWRWR_);

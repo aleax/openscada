@@ -102,10 +102,10 @@ class TFunction : public TCntrNode
 	TFunction &operator=( TFunction &func );
 
 	string	id( )			{ return mId.c_str(); };
-	virtual string name( )		{ return ""; }
-	virtual string descr( )		{ return ""; }
-	virtual string prog( )		{ return ""; }
-	virtual string stor( )		{ return mStor; }
+	virtual	string name( )		{ return ""; }
+	virtual	string descr( )		{ return ""; }
+	virtual	string prog( )		{ return ""; }
+	virtual	string stor( )		{ return mStor; }
 	bool	startStat( )		{ return runSt; }
 	int	use( )			{ return used.size(); }
 	Res	&fRes( )		{ return mFRes; }

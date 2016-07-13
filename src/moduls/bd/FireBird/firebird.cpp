@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.3.6"
+#define MOD_VER		"1.3.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -77,8 +77,6 @@ BDMod::BDMod( string name ) : TTypeBD(MOD_ID)
 BDMod::~BDMod( )	{ }
 
 TBD *BDMod::openBD( const string &iid )	{ return new MBD(iid,&owner().openDB_E()); }
-
-void BDMod::load_( )	{ }
 
 string BDMod::sqlReqCode( const string &req, char symb )
 {
@@ -863,7 +861,8 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
     }
     else {
 	if(!tr) {
-	    cf.setS(val);	//!! Sets no flag instead the TCfg::ExtValOne for clean up from previous the Two, Three
+	    cf.setS(val, TCfg::ExtValOne);
+	    cf.setS("", TCfg::ExtValTwo);	//!! Sets for clean up from previous Two value
 	    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
 	} else cf.setS(val, TCfg::ExtValTwo);
     }

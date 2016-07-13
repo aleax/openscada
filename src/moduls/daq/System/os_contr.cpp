@@ -48,7 +48,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.4"
+#define MOD_VER		"2.0.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -213,7 +213,7 @@ void TMdContr::load_( )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    TController::load_();
+    //TController::load_();
 
     //Check for get old period method value
     if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; }
@@ -344,9 +344,9 @@ void TMdPrm::disable( )
     TParamContr::disable();
 }
 
-void TMdPrm::load_( )
+void TMdPrm::load_( TConfig *cfg )
 {
-    if(!mAuto)	TParamContr::load_();
+    if(!mAuto)	TParamContr::load_(cfg);
 }
 
 void TMdPrm::save_( )

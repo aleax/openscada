@@ -96,7 +96,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 
     protected:
 	//Attributes
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void loadIO( const string &blk_db = "", const string &blk_id = "", bool force = false );

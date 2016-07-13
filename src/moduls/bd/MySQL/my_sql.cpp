@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.6"
+#define MOD_VER		"2.5.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -80,8 +80,6 @@ BDMod::BDMod( string name ) : TTypeBD(MOD_ID)
 BDMod::~BDMod( )	{ }
 
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name,&owner().openDB_E()); }
-
-void BDMod::load_( )	{ }
 
 //************************************************
 //* BDMySQL::MBD				 *
@@ -827,7 +825,8 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
 	    }
 	    else {
 		if(!tr) {
-		    cf.setS(val);	//!! Sets no flag instead the TCfg::ExtValOne for clean up from previous the Two, Three
+		    cf.setS(val, TCfg::ExtValOne);
+		    cf.setS("", TCfg::ExtValTwo);	//!! Sets for clean up from previous Two value
 		    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
 		} else cf.setS(val, TCfg::ExtValTwo);
 	    }

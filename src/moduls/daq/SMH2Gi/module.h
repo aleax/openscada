@@ -158,9 +158,6 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	void load_( );
-	void save_( );
-
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:

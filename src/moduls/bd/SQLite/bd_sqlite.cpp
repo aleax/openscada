@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.6"
+#define MOD_VER		"2.2.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -88,13 +88,6 @@ void BDMod::modStop( )
     list(dbs);
     for(unsigned i_db = 0; i_db < dbs.size(); i_db++)
 	at(dbs[i_db]).at().transCommit();
-}
-
-void BDMod::load_( )
-{
-    //Load parameters from command line
-
-    //Load parameters from config-file
 }
 
 //************************************************
@@ -730,7 +723,8 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
     }
     else {
 	if(!tr) {
-	    cf.setS(val);	//!! Sets no flag instead the TCfg::ExtValOne for clean up from previous the Two, Three
+	    cf.setS(val, TCfg::ExtValOne);
+	    cf.setS("", TCfg::ExtValTwo);	//!! Sets for clean up from previous Two value
 	    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
 	} else cf.setS(val, TCfg::ExtValTwo);
     }

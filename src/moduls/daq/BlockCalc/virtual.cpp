@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.2"
+#define MOD_VER		"1.7.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -227,24 +227,25 @@ void Contr::load_( )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    TController::load_( );
+    //TController::load_( );
 
     //Check for get old period method value
     if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
 
     //Load block's configuration
-    TConfig c_el(&mod->blockE());
-    c_el.cfgViewAll(false);
+    TConfig cEl(&mod->blockE());
+    //cEl.cfgViewAll(false);
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     map<string, bool>	itReg;
+    vector<vector<string> > full;
 
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); ) {
-	string id = c_el.cfg("ID").getS();
+    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,false,&full); ) {
+	string id = cEl.cfg("ID").getS();
 	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);
-	    ((TConfig &)blkAt(id).at()) = c_el;
+	    //((TConfig &)blkAt(id).at()) = cEl;
 	}
-	blkAt(id).at().load();
+	blkAt(id).at().load(&cEl);
 	itReg[id] = true;
     }
 

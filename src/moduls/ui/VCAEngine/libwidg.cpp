@@ -121,7 +121,8 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
 	if(!lwdg.freeStat() && !lwdg.at().enable() && !passAutoEn && lwdg.at().enableByNeed) {
 	    lwdg.at().enableByNeed = false;
 	    try {
-		lwdg.at().load(true);
+		lwdg.at().modifG();
+		lwdg.at().load();
 		lwdg.at().setEnable(true);
 		lwdg.at().modifGClr();
 	    } catch(TError &err) { }
@@ -145,24 +146,27 @@ void WidgetLib::setFullDB( const string &it )
     modifG();
 }
 
-void WidgetLib::load_( )
+void WidgetLib::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
     mess_debug(nodePath().c_str(),_("Load widget library."));
 
-    SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
     passAutoEn = true;
 
     //Create new widgets
     map<string, bool>	itReg;
-    TConfig c_el(&mod->elWdg());
-    c_el.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); ) {
-	string f_id = c_el.cfg("ID").getS();
-	if(!present(f_id)) { add(f_id, "", ""); at(f_id).at().setEnableByNeed(); }
-	itReg[f_id] = true;
+    vector<vector<string> > full;
+    TConfig cEl(&mod->elWdg());
+    //cEl.cfgViewAll(false);
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,&full); ) {
+	string fId = cEl.cfg("ID").getS();
+	if(!present(fId)) { add(fId, "", ""); at(fId).at().setEnableByNeed(); }
+	at(fId).at().load(&cEl);
+	itReg[fId] = true;
     }
 
     // Check for remove items removed from DB
@@ -224,12 +228,13 @@ void WidgetLib::mimeDataList( vector<string> &list, const string &idb )
 {
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
-    TConfig c_el(&mod->elWdgData());
-    c_el.cfgViewAll(false);
+    TConfig cEl(&mod->elWdgData());
+    cEl.cfgViewAll(false);
 
     list.clear();
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
-	list.push_back(c_el.cfg("ID").getS());
+    vector<vector<string> > full;
+    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,&full); fldCnt++)
+	list.push_back(cEl.cfg("ID").getS());
 }
 
 bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb )
@@ -242,12 +247,12 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	string dbid = is_res ? iid.substr(4) : iid;
 	string wtbl = tbl()+"_mime";
 	string wdb  = idb.empty() ? DB() : idb;
-	TConfig c_el(&mod->elWdgData());
-	if(!mimeData) c_el.cfg("DATA").setView(false);
-	c_el.cfg("ID").setS( dbid );
-	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el,false,true)) {
-	    mimeType = c_el.cfg("MIME").getS();
-	    if(mimeData) *mimeData = c_el.cfg("DATA").getS();
+	TConfig cEl(&mod->elWdgData());
+	if(!mimeData) cEl.cfg("DATA").setView(false);
+	cEl.cfg("ID").setS( dbid );
+	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,cEl,false,true)) {
+	    mimeType = cEl.cfg("MIME").getS();
+	    if(mimeData) *mimeData = cEl.cfg("DATA").getS();
 	    return true;
 	}
     }
@@ -278,21 +283,21 @@ void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const st
 {
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
-    TConfig c_el(&mod->elWdgData());
-    c_el.cfg("ID").setS(iid);
-    c_el.cfg("MIME").setS(mimeType);
-    if(!mimeData.size()) c_el.cfg("DATA").setView(false);
-    else c_el.cfg("DATA").setS(mimeData);
-    SYS->db().at().dataSet(wdb+"."+wtbl, mod->nodePath()+wtbl, c_el, false, true);
+    TConfig cEl(&mod->elWdgData());
+    cEl.cfg("ID").setS(iid);
+    cEl.cfg("MIME").setS(mimeType);
+    if(!mimeData.size()) cEl.cfg("DATA").setView(false);
+    else cEl.cfg("DATA").setS(mimeData);
+    SYS->db().at().dataSet(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, false, true);
 }
 
 void WidgetLib::mimeDataDel( const string &iid, const string &idb )
 {
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
-    TConfig c_el(&mod->elWdgData());
-    c_el.cfg("ID").setS(iid,true);
-    SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, c_el, false, false, true);
+    TConfig cEl(&mod->elWdgData());
+    cEl.cfg("ID").setS(iid,true);
+    SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, false, false, true);
 }
 
 void WidgetLib::add( const string &id, const string &name, const string &orig )
@@ -478,19 +483,19 @@ void LWidget::postDisable( int flag )
 	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, *this, true);
 
 	//Remove widget's IO from library IO table
-	TConfig c_el(&mod->elWdgIO());
-	c_el.cfg("IDW").setS(id(), true);
-	SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
+	TConfig cEl(&mod->elWdgIO());
+	cEl.cfg("IDW").setS(id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", cEl);
 
 	//Remove widget's user IO from library IO table
-	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS(id(), true);
-	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el);
+	cEl.setElem(&mod->elWdgUIO());
+	cEl.cfg("IDW").setS(id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", cEl);
 
 	//Remove widget's included widgets from library include table
-	c_el.setElem(&mod->elInclWdg());
-	c_el.cfg("IDW").setS(id(), true);
-	SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", c_el);
+	cEl.setElem(&mod->elInclWdg());
+	cEl.cfg("IDW").setS(id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", cEl);
     }
 }
 
@@ -590,7 +595,7 @@ void LWidget::setEnable( bool val )
     }
 }
 
-void LWidget::load_( )
+void LWidget::load_( TConfig *icfg )
 {
     MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
@@ -599,7 +604,9 @@ void LWidget::load_( )
     //Load generic widget's data
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
-    SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Inherit modify attributes
     vector<string> als;
@@ -631,13 +638,14 @@ void LWidget::loadIO( )
     //Load cotainer widgets
     if(!isContainer()) return;
     map<string, bool>   itReg;
-    TConfig c_el(&mod->elInclWdg());
+    vector<vector<string> > full;
+    TConfig cEl(&mod->elInclWdg());
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_incl";
-    c_el.cfg("IDW").setS(id(),true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); ) {
-	string sid  = c_el.cfg("ID").getS();
-	if(c_el.cfg("PARENT").getS() == "<deleted>") {
+    cEl.cfg("IDW").setS(id(),true);
+    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,&full); ) {
+	string sid  = cEl.cfg("ID").getS();
+	if(cEl.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
 	    continue;
 	}
@@ -645,7 +653,7 @@ void LWidget::loadIO( )
 	    try{ wdgAdd(sid,"",""); }
 	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 
-	wdgAt(sid).at().load();
+	wdgAt(sid).at().load(&cEl);
 	itReg[sid] = true;
     }
 
@@ -700,11 +708,11 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
     if(!force) {
 	string db  = ownerLib().DB();
 	string tbl = ownerLib().tbl()+"_incl";
-	TConfig c_el( &mod->elInclWdg() );
-	c_el.cfg("IDW").setS(id());
-	c_el.cfg("ID").setS(wid);
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>") {
-	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true, false, true);
+	TConfig cEl( &mod->elInclWdg() );
+	cEl.cfg("IDW").setS(id());
+	cEl.cfg("ID").setS(wid);
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true) && cEl.cfg("PARENT").getS() == "<deleted>") {
+	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
 	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
     }
@@ -828,12 +836,12 @@ void CWidget::postDisable( int flag )
 	//Remove widget's work and users IO from library IO table
 	string tAttrs = cfg("ATTRS").getS();
 
-	TConfig c_el(&mod->elWdgIO());
-	c_el.cfg("IDW").setS(ownerLWdg().id(), true); c_el.cfg("IDC").setS(id(), true);
-	SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", c_el);
-	c_el.setElem(&mod->elWdgUIO());
-	c_el.cfg("IDW").setS(ownerLWdg().id(), true); c_el.cfg("IDC").setS(id(), true);
-	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el);
+	TConfig cEl(&mod->elWdgIO());
+	cEl.cfg("IDW").setS(ownerLWdg().id(), true); cEl.cfg("IDC").setS(id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", cEl);
+	cEl.setElem(&mod->elWdgUIO());
+	cEl.cfg("IDW").setS(ownerLWdg().id(), true); cEl.cfg("IDC").setS(id(), true);
+	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", cEl);
     }
 }
 
@@ -870,14 +878,16 @@ string CWidget::calcProgStors( const string &attr ){ return parent().freeStat() 
 
 int CWidget::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
-void CWidget::load_( )
+void CWidget::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(ownerLWdg().ownerLib().DB())) throw TError();
 
     //Load generic widget's data
     string db  = ownerLWdg().ownerLib().DB();
     string tbl = ownerLWdg().ownerLib().tbl()+"_incl";
-    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
     //Inherit modify attributes
     vector<string> als;

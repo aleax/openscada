@@ -124,7 +124,7 @@ class TController : public TCntrNode, public TConfig
 
 	//Methods
 	// User methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 	virtual void enable_( )		{ }
 	virtual void disable_( )	{ }

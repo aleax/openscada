@@ -144,16 +144,18 @@ string TController::getStatus( )
     return rez;
 }
 
-void TController::load_( )
+void TController::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-
     mess_info(nodePath().c_str(),_("Load controller's configurations!"));
 
     bool enSt_prev = enSt, runSt_prev = runSt;
 
-    cfgViewAll(true);
-    SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
+    if(icfg) *(TConfig*)this = *icfg;
+    else {
+	//cfgViewAll(true);
+	SYS->db().at().dataGet(fullDB(), owner().nodePath()+"DAQ", *this);
+    }
 
     mRdUse = owner().redntAllow() && (bool)redntMode();
 
@@ -258,26 +260,28 @@ void TController::disable( )
 void TController::LoadParmCfg( )
 {
     map<string, bool>	itReg;
+    vector<vector<string> > full;
 
     //Search and create new parameters
-    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++) {
-	if(owner().tpPrmAt(i_tp).DB(this).empty()) continue;
+    for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
+	if(owner().tpPrmAt(iTp).DB(this).empty()) continue;
 	try {
-	    TConfig c_el(&owner().tpPrmAt(i_tp));
-	    c_el.cfgViewAll(false);
-	    c_el.cfg("OWNER").setS("", TCfg::ForceUse);
+	    TConfig cEl(&owner().tpPrmAt(iTp));
+	    //cEl.cfgViewAll(false);
+	    cEl.cfg("OWNER").setS("", TCfg::ForceUse);
 
 	    // Search new into DB and Config-file
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+owner().tpPrmAt(i_tp).DB(this),
-					   owner().nodePath()+owner().tpPrmAt(i_tp).DB(this),fld_cnt++,c_el); )
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
+					   owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,false,&full); )
 	    {
 		try {
-		    string shfr = c_el.cfg("SHIFR").getS();
-		    if(!present(shfr))	add(shfr, i_tp);
+		    string shfr = cEl.cfg("SHIFR").getS();
+		    if(!present(shfr))	add(shfr, iTp);
+		    at(shfr).at().load(&cEl);
 		    itReg[shfr] = true;
 		} catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Add parameter '%s' error."),c_el.cfg("SHIFR").getS().c_str());
+		    mess_err(nodePath().c_str(),_("Add parameter '%s' error."),cEl.cfg("SHIFR").getS().c_str());
 		}
 	    }
 	} catch(TError &err) {

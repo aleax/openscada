@@ -50,7 +50,7 @@ ModMArch::~ModMArch( )
 
 void ModMArch::load_( )
 {
-    TMArchivator::load_();
+    //TMArchivator::load_();
 
     try {
 	XMLNode prmNd;

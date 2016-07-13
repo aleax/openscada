@@ -82,7 +82,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	const char *nodeName( )		{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void postEnable( int flag );
@@ -163,7 +163,7 @@ class LWidget : public Widget, public TConfig
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	// Storing
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 	void wClear( );
 
@@ -221,7 +221,7 @@ class CWidget : public Widget, public TConfig
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 	// Storing
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 	void wClear( );
 

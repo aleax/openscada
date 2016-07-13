@@ -379,7 +379,7 @@ class Func : public TConfig, public TFunction
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void loadIO( );

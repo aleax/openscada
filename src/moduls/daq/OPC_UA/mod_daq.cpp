@@ -632,11 +632,6 @@ void TMdPrm::disable( )
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 }
 
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
-
 string TMdPrm::attrPrc( )
 {
     MtxAlloc res(dataRes());
@@ -739,11 +734,6 @@ string TMdPrm::attrPrc( )
     }
 
     return "";
-}
-
-void TMdPrm::save_( )
-{
-    TParamContr::save_();
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )

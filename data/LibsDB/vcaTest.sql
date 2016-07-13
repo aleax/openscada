@@ -1940,6 +1940,6 @@ slKtVsfHxwcUOnLkCBaLffDgQUtLy9jY2MaNG6lUanFxsVKplEgkq+VCU1tbe/To0d7e3qi86mN3
 lHC73RQKRSgUTk9Pl5SU+OOX5SsUOwdWSKHYORDAH3744dKlS48fP05OTvYjBEFUKtXj8bjdbhAE
 n/wqgAUFBWQy+S8HouFAdBX6y4G/HFjlDgTPB6Ke3/8J84Ho5vd/znwgivn9Ss8H/gvqvl5+zIak
 ZQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','','','',-1,'name;geomW;geomH;backImg;',1374518075);
-CREATE TABLE 'wlb_test_uio' ("IDW" TEXT DEFAULT '''''' ,"ID" TEXT DEFAULT '''''' ,"IDC" TEXT DEFAULT '''''' ,"NAME" TEXT DEFAULT '''''' ,"uk#NAME" TEXT DEFAULT '''''' ,"IO_TYPE" INTEGER DEFAULT '''''' ,"IO_VAL" TEXT DEFAULT '''''' ,"uk#IO_VAL" TEXT DEFAULT '''''' ,"SELF_FLG" INTEGER DEFAULT '''''' ,"CFG_TMPL" TEXT DEFAULT '''''' ,"uk#CFG_TMPL" TEXT DEFAULT '''''' ,"CFG_VAL" TEXT DEFAULT '''''' ,"uk#CFG_VAL" TEXT DEFAULT '''''' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
+CREATE TABLE 'wlb_test_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_test_uio" VALUES('FormElTests','extValue','','Ext. value','Зовнішне значення',131076,'0||','',6,'','','','','Внешнее значение');
 COMMIT;

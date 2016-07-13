@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define PRT_NAME	_("ModBUS")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.0.3"
+#define PRT_MVER	"1.0.5"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define PRT_LICENSE	"GPL2"
@@ -133,7 +133,7 @@ class Node : public TFunction, public TConfig
 
     protected:
 	//Methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
     private:

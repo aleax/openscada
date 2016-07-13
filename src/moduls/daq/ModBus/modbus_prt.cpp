@@ -87,28 +87,29 @@ void TProt::load_( )
     //Load DB
     // Search and create new nodes
     try {
-	TConfig g_cfg(&nodeEl());
-	g_cfg.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig gCfg(&nodeEl());
+	//gCfg.cfgViewAll(false);
+	vector<string> dbLs;
 	map<string, bool> itReg;
+	vector<vector<string> > full;
 
 	//  Search into DB
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_node",nodePath()+modId()+"_node",fld_cnt++,g_cfg); )
-	    {
-		string id = g_cfg.cfg("ID").getS();
-		if(!nPresent(id)) nAdd(id, (db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,false,&full); ) {
+		string id = gCfg.cfg("ID").getS();
+		if(!nPresent(id)) nAdd(id, (dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		nAt(id).at().load(&gCfg);
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    nList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(nAt(db_ls[i_it]).at().DB()))
-		    nDel(db_ls[i_it]);
+	    nList(dbLs);
+	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(nAt(dbLs[i_it]).at().DB()))
+		    nDel(dbLs[i_it]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -710,21 +711,26 @@ void Node::regCR( int id, const SIO &val, const string &tp, bool wr )
     else throw TError(nodePath().c_str(), _("ModBUS data type '%s' error!"), tp.c_str());
 }
 
-void Node::load_( )
+void Node::load_( TConfig *icfg )
 {
     bool en_prev = enableStat();
 
     if(!SYS->chkSelDB(DB())) throw TError();
-    cfgViewAll(true);
-    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(), *this);
-    cfg("MODE").setI(cfg("MODE").getI());
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else {
+	//cfgViewAll(true);
+	SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(), *this);
+	//cfg("MODE").setI(cfg("MODE").getI());
+    }
 
     //Load IO
+    vector<vector<string> > full;
     vector<string> u_pos;
     TConfig cfg(&owner().nodeIOEl());
-    cfg.cfg("NODE_ID").setS(id(),true);
+    cfg.cfg("NODE_ID").setS(id(), TCfg::ForceUse);
     cfg.cfg("VALUE").setExtVal(true);
-    for(int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); ) {
+    for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,false,&full); ) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -782,13 +788,13 @@ void Node::save_( )
     }
 
     //Clear IO
+    vector<vector<string> > full;
     cfg.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fld_cnt++,cfg); )
-    {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg,false,&full); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&Node::LockAttr) {
 	    SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg, true, false, true);
-	    fld_cnt--;
+	    fldCnt--;
 	}
     }
 }
