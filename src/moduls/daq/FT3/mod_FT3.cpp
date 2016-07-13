@@ -1250,7 +1250,7 @@ void TMdPrm::vlGet(TVal &val)
 
 void TMdPrm::load_()
 {
-    TParamContr::load_();
+    //TParamContr::load_();
     if(enableStat() && mDA) mDA->loadIO();
 }
 

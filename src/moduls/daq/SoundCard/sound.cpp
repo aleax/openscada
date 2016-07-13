@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.9"
+#define MOD_VER		"0.7.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -171,16 +171,6 @@ string TMdContr::sampleRates( )
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new TMdPrm(name,&owner().tpPrmAt(type)); }
-
-void TMdContr::load_( )
-{
-    TController::load_( );
-}
-
-void TMdContr::save_( )
-{
-    TController::save_();
-}
 
 void TMdContr::start_( )
 {
@@ -420,11 +410,6 @@ void TMdPrm::postEnable( int flag )
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
-
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
 
 void TMdPrm::enable( )
 {

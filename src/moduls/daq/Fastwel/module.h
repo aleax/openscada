@@ -68,8 +68,6 @@ namespace ModFastwel {
 
       protected:
 	//Methods
-	void load_();
-	void save_();
 	bool InitDI(DIM_CONFIGURATION* pConfig);
 	bool InitDIM718(DIM718_CONFIGURATION* pConfig);
 	bool InitAIM726(AIM726_CONFIGURATION* pConfig);

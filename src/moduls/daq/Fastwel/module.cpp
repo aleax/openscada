@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.5"
+#define MOD_VER		"0.1.6"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -857,16 +857,6 @@ void TMdPrm::disable()
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
-}
-
-void TMdPrm::load_()
-{
-    TParamContr::load_();
-}
-
-void TMdPrm::save_()
-{
-    TParamContr::save_();
 }
 
 void TMdPrm::vlGet(TVal & val)
