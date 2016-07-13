@@ -711,7 +711,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("sess", sess);
 		mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User '%s' is connected, from '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
-	    }else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
+	    } else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
+	    opt->setAttr("userIsRoot", SYS->security().at().access(opt->attr("user"),SEC_WR,"root","root",RWRWR_)?"1":"0");
 	}
 	else if(ctrChkNode(opt,"disconnect",RWRWRW,"root",SUI_ID,SEC_WR)) {
 	    string sess = opt->attr("sess");
