@@ -1,3 +1,10 @@
+2016-07-14 Roman 0.8.16
+- FIX:!!:Archive: Old LTS problem with alarms is fixed, for the negative level read from the messages buffer and allow write to archives.
+- !!!!:FIX:DAQ.JavaLikeCalc: Second argument's type changing at compile is fixed but it is dynamic now mostly,
+    detected on problems with some string operations.
+- FIX:UI.Vision: Pages including into the pages container is fixed for adjust at it's scale change.
+
+
 2016-06-28 Roman 0.8.16
 - API:
     !!!!:Changes:

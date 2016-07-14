@@ -636,7 +636,7 @@ Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
 {
-    //Check allow the buildin calc and calc
+    //Check to allow the buildin calc and calc
     if(op1->pos() < 0 && op2->pos() < 0) {
 	switch(cod) {
 	    case Reg::Add: case Reg::AddAss: case Reg::Sub: case Reg::SubAss:
@@ -715,8 +715,9 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
     Reg::Type op1_tp = op1->vType(this);
     Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
     int op1_pos = op1->pos();
-    if( op1_tp != Reg::Dynamic ) op2 = cdTypeConv(op2,op1_tp);
-    else if( op2->pos() < 0 ) op2 = cdMvi( op2 );
+    //if(op1_tp != Reg::Dynamic) op2 = cdTypeConv(op2, op1_tp);
+    //else 
+    if(op2->pos() < 0) op2 = cdMvi(op2);
     int op2_pos = op2->pos();
 
     if(rez != op1) op1->free();
@@ -1789,11 +1790,11 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		if(!reg[ptr->toR].props().size())
 		    switch(reg[ptr->fromR].vType(this)) {
-			case Reg::Bool:		setValB(val,reg[ptr->toR], getValB(val,reg[ptr->fromR]));	break;
-			case Reg::Int:		setValI(val,reg[ptr->toR], getValI(val,reg[ptr->fromR]));	break;
-			case Reg::Real:		setValR(val,reg[ptr->toR], getValR(val,reg[ptr->fromR]));	break;
-			case Reg::String:	setValS(val,reg[ptr->toR], getValS(val,reg[ptr->fromR]));	break;
-			default:		setVal(val,reg[ptr->toR], getVal(val,reg[ptr->fromR]));		break;
+			case Reg::Bool:	  setValB(val, reg[ptr->toR], getValB(val,reg[ptr->fromR]));	break;
+			case Reg::Int:	  setValI(val, reg[ptr->toR], getValI(val,reg[ptr->fromR]));	break;
+			case Reg::Real:	  setValR(val, reg[ptr->toR], getValR(val,reg[ptr->fromR]));	break;
+			case Reg::String: setValS(val, reg[ptr->toR], getValS(val,reg[ptr->fromR]));	break;
+			default:	  setVal(val, reg[ptr->toR], getVal(val,reg[ptr->fromR]));	break;
 		    }
 		else setVal(val, reg[ptr->toR], getVal(val,reg[ptr->fromR]));
 		cprg += sizeof(SCode); continue;

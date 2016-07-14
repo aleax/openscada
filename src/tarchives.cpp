@@ -483,7 +483,7 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     unsigned i_buf = headBuf;
     while(level >= 0 && (archMap.empty() || archMap[BUF_ARCH_NM]) /*&& time(NULL) < upTo*/) {
 	if(mBuf[i_buf].time >= bTm && mBuf[i_buf].time && mBuf[i_buf].time <= eTm &&
-		mBuf[i_buf].level >= level && re.test(mBuf[i_buf].categ))
+		abs(mBuf[i_buf].level) >= level && re.test(mBuf[i_buf].categ))
 	    recs.push_back(mBuf[i_buf]);
 	if(++i_buf >= mBuf.size()) i_buf = 0;
 	if(i_buf == headBuf) break;
@@ -1138,7 +1138,7 @@ bool TMArchivator::chkMessOK( const string &icateg, int8_t ilvl )
 
     categ(cat_ls);
 
-    if(ilvl >= level())
+    if(abs(ilvl) >= level())
 	for(unsigned i_cat = 0; i_cat < cat_ls.size(); i_cat++)
 	    if(TRegExp(cat_ls[i_cat], "p").test(icateg))
 		return true;
