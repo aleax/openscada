@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.2.3"
+#define MOD_VER		"1.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -192,7 +192,7 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), mTaskPrior(0),
     mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
-    mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
+    mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mEchofl(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("6:320");
@@ -246,7 +246,13 @@ bool TTrIn::cfgChange( TCfg &co, const TVariant &pc )
     if(co.name() == "ADDR") {
 	//Times adjust
 	int speed = s2i(TSYS::strSepParse(co.getS(),1,':'));
-	if(speed)	setTimings(r2s(11e4/(float)speed,2,'f')+":"+i2s((512*11*1000)/speed));
+	if(speed){
+	    string tMS = r2s(11e4/(float)speed,2,'f')+":"+i2s((512*11*1000)/speed);
+	    string preMS = TSYS::strSepParse(timings(),3,':');
+	    string postMS = TSYS::strSepParse(timings(),4,':');
+	    if(!preMS.empty() && !postMS.empty()) tMS += "::"+preMS+":"+postMS;
+	    setTimings(tMS);
+	}
     }
 
     return TTransportIn::cfgChange(co, pc);
@@ -267,7 +273,9 @@ void TTrIn::setTimings( const string &vl )
 {
     double wCharTm = vmax(0.01,vmin(1e3,s2r(TSYS::strSepParse(vl,0,':'))));
     int wFrTm = vmax(1,vmin(10000,s2i(TSYS::strSepParse(vl,1,':'))));
-    mTimings = TSYS::strMess("%g:%d",wCharTm,wFrTm);
+    double wPreMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,3,':'))));
+    double wPostMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,4,':'))));
+    mTimings = TSYS::strMess(wPreMS?"%g:%d::%g:%g":"%g:%d",wCharTm,wFrTm,wPreMS,wPostMS);
 
     modif();
 }
@@ -346,11 +354,14 @@ void TTrIn::connect( )
 
 	// Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
-	mRTSfc = false;
+	mRTSfc = mRTSlvl = mEchofl = false;
 	tio.c_cflag &= ~CRTSCTS;
 	if(strcasecmp(fc.c_str(),"h") == 0)         tio.c_cflag |= CRTSCTS;
 	else if(strcasecmp(fc.c_str(),"s") == 0)    tio.c_iflag |= (IXON|IXOFF|IXANY);
-	else if(strcasecmp(fc.c_str(),"rts") == 0)  mRTSfc = true;
+	else if(strcasecmp(fc.c_str(),"rts") == 0)  { mRTSfc = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1") == 0)  { mRTSfc = mRTSlvl = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)  { mRTSfc = mRTSlvl = true; }
+	else if(strcasecmp(fc.c_str(),"rtsne") == 0)  { mRTSfc = true; }
 
 	// Set port's data
 	tcflush(fd, TCIOFLUSH);
@@ -455,6 +466,8 @@ void *TTrIn::Task( void *tr_in )
 
     double wCharTm = s2r(TSYS::strSepParse(tr->timings(),0,':'));
     int wFrTm = 1000*s2i(TSYS::strSepParse(tr->timings(),1,':'));
+    double wPreMS = 1e-3*s2r(TSYS::strSepParse(tr->timings(),3,':'));
+    double wPostMS = 1e-3*s2r(TSYS::strSepParse(tr->timings(),4,':'));
     int64_t stFrTm = 0, tmW = 0, tmTmp1;
 
     fcntl(tr->fd, F_SETFL, 0);
@@ -462,7 +475,8 @@ void *TTrIn::Task( void *tr_in )
     if(tr->mRTSfc) {
 	ioctl(tr->fd, TIOCMGET, &sec);
 	//Disable transfer for read allow
-	sec |= TIOCM_RTS;
+	if(!tr->mRTSlvl) sec |= TIOCM_RTS;
+	else sec &= ~TIOCM_RTS;
 	ioctl(tr->fd, TIOCMSET, &sec);
     }
 
@@ -539,8 +553,12 @@ void *TTrIn::Task( void *tr_in )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(tr->nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
 	    // Pure RS-485 flow control: Clear RTS for transfer allow
-	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
-
+	    if(tr->mRTSfc) {
+		if(!tr->mRTSlvl) sec &= ~TIOCM_RTS;
+		else sec |= TIOCM_RTS;
+		ioctl(tr->fd, TIOCMSET, &sec);
+		if(wPreMS) TSYS::sysSleep(wPreMS);
+	    }
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;
 	    for( ; wOff != answ.size() && wL > 0; wOff += wL) {
@@ -560,20 +578,24 @@ void *TTrIn::Task( void *tr_in )
 	    }
 
 	    // Hard read for wait request echo and transfer disable
-	    if(tr->mRTSfc && wOff == answ.size()) {
-		char echoBuf[255];
-		int64_t mLstReqTm = TSYS::curTime();
-		for(unsigned r_off = 0; r_off < answ.size(); ) {
-		    int kz = read(tr->fd,echoBuf,vmin(answ.size()-r_off,sizeof(echoBuf)));
-		    if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
-			if((TSYS::curTime()-mLstReqTm) > wCharTm*answ.size()*1e3) break;
-			sched_yield();
-			continue;
+	    if(tr->mRTSfc) {
+		if(tr->mEchofl && wOff == answ.size()) {
+		    char echoBuf[255];
+		    int64_t mLstReqTm = TSYS::curTime();
+		    for(unsigned r_off = 0; r_off < answ.size(); ) {
+			int kz = read(tr->fd,echoBuf,vmin(answ.size()-r_off,sizeof(echoBuf)));
+			if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
+			    if((TSYS::curTime()-mLstReqTm) > wCharTm*answ.size()*1e3) break;
+			    sched_yield();
+			    continue;
+			}
+			if(kz < 0 || memcmp(echoBuf,answ.data()+r_off,kz) != 0) break;
+			r_off += kz;
 		    }
-		    if(kz < 0 || memcmp(echoBuf,answ.data()+r_off,kz) != 0) break;
-		    r_off += kz;
-		}
-		sec |= TIOCM_RTS;
+		} else tcdrain(tr->fd);
+		if(wPostMS) TSYS::sysSleep(wPostMS);
+		if(!tr->mRTSlvl) sec |= TIOCM_RTS;
+		else sec &= ~TIOCM_RTS;
 		ioctl(tr->fd, TIOCMSET, &sec);
 	    }
 	    answ = "";
@@ -611,13 +633,18 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
+	    "      'rts1' - use RTS signal for transfer(true) and check for echo, for pure RS-485;\n"
+	    "      'rtsne' - use RTS signal for transfer(false) without check for echo, for pure RS-485;\n"
+	    "      'rts1ne' - use RTS signal for transfer(true) without check for echo, for pure RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"symbol:frm\". Where:\n"
+	    _("Connection timings in format: \"symbol:frm[::delay1:delay2]\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-	    "    frm - maximum frame length, in ms."));
+	    "    frm - maximum frame length, in ms;\n"
+	    "    delay1 - delay between RTS and start transfer, in ms;\n"
+	    "    delay2 - delay between stop transfer and RTS, in ms."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
 	    "tp","dec", "help",TMess::labTaskPrior());
 	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
@@ -698,7 +725,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), mKeepAliveLstTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
-    mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
+    mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mEchofl(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("640:6");
@@ -773,7 +800,13 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
 	//Times adjust
 	int speed = s2i(TSYS::strSepParse(co.getS(),1,':'));
 	if(TSYS::strSepParse(addr(),4,':').size()) setTimings("5000:1000");
-	else if(speed) setTimings(i2s((1024*11*1000)/speed)+":"+r2s(11e4/(float)speed,2,'f'));
+	else if(speed){
+	    string tMS = i2s((1024*11*1000)/speed)+":"+r2s(11e4/(float)speed,2,'f');
+	    string preMS = TSYS::strSepParse(timings(),3,':');
+	    string postMS = TSYS::strSepParse(timings(),4,':');
+	    if(!preMS.empty() && !postMS.empty()) tMS += "::"+preMS+":"+postMS;
+	    setTimings(tMS);
+	}
     }
 
     return TTransportOut::cfgChange(co, pc);
@@ -784,7 +817,9 @@ void TTrOut::setTimings( const string &vl )
     int wReqTm = vmax(1,vmin(10000,s2i(TSYS::strSepParse(vl,0,':'))));
     double wCharTm = vmax(0.01,vmin(1e3,s2r(TSYS::strSepParse(vl,1,':'))));
     double wKeepAliveTm = vmax(0,vmin(1e3,s2r(TSYS::strSepParse(vl,2,':'))));
-    mTimings = TSYS::strMess(wKeepAliveTm?"%d:%g:%g":"%d:%g",wReqTm,wCharTm,wKeepAliveTm);
+    double wPreMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,3,':'))));
+    double wPostMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,4,':'))));
+    mTimings = TSYS::strMess((wKeepAliveTm || wPreMS)?"%d:%g:%g:%g:%g":"%d:%g",wReqTm,wCharTm,wKeepAliveTm,wPreMS,wPostMS);
 
     modif();
 }
@@ -881,11 +916,14 @@ void TTrOut::start( int tmCon )
 
 	// Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
-	mRTSfc = false;
+	mRTSfc = mRTSlvl = mEchofl = false;
 	tio.c_cflag &= ~CRTSCTS;
 	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
-	else if(strcasecmp(fc.c_str(),"rts") == 0)	mRTSfc = true;
+	else if(strcasecmp(fc.c_str(),"rts") == 0)  { mRTSfc = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1") == 0)  { mRTSfc = mRTSlvl = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)  { mRTSfc = mRTSlvl = true; }
+	else if(strcasecmp(fc.c_str(),"rtsne") == 0)  { mRTSfc = true; }
 
 	// Set port's data
 	tcflush(fd, TCIOFLUSH);
@@ -1021,6 +1059,8 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
     wReqTm = time ? time : wReqTm;
     double wCharTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
     double wKeepAliveTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
+    double wPreMS = 1e-3*s2r(TSYS::strSepParse(timings(),3,':'));
+    double wPostMS = 1e-3*s2r(TSYS::strSepParse(timings(),4,':'));
     if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
 	mess_debug(nodePath().c_str(), _("Restart by KeepAliveTm %gs."), wKeepAliveTm);
 	stop();
@@ -1038,7 +1078,12 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = TSYS::sysSleep(1e-6*((4e3*wCharTm)-(tmW-mLstReqTm)));
 
 	// Pure RS-485 flow control: Clear RTS for transfer allow
-	if(mRTSfc) { sec &= ~TIOCM_RTS; ioctl(fd, TIOCMSET, &sec); }
+	if(mRTSfc) {
+	    if(!mRTSlvl) sec &= ~TIOCM_RTS;
+	    else sec |= TIOCM_RTS;
+	    ioctl(fd, TIOCMSET, &sec);
+	    if(wPreMS) TSYS::sysSleep(wPreMS);
+	}
 
 	for(int wOff = 0; wOff != oLen; wOff += kz)
 	    if((kz=write(fd,oBuf+wOff,oLen-wOff)) <= 0) {
@@ -1059,19 +1104,23 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
 	// Hard read for wait request echo and transfer disable
 	if(mRTSfc) {
+	    if(mEchofl) {
 	    char echoBuf[255];
-	    mLstReqTm = TSYS::curTime();
-	    for(int r_off = 0; r_off < oLen; ) {
-		kz = read(fd, echoBuf, vmin(oLen-r_off,(int)sizeof(echoBuf)));
-		if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
-		    if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(), _("Timeouted!"));
-		    sched_yield();
-		    continue;
-		}
-		if(kz < 0 || memcmp(echoBuf,oBuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Echo request reading error."));
-		r_off += kz;
-	    }
-	    sec |= TIOCM_RTS;
+		    mLstReqTm = TSYS::curTime();
+		    for(int r_off = 0; r_off < oLen; ) {
+			kz = read(fd, echoBuf, vmin(oLen-r_off,(int)sizeof(echoBuf)));
+			if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
+			    if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(), _("Timeouted!"));
+			    sched_yield();
+			    continue;
+			}
+			if(kz < 0 || memcmp(echoBuf,oBuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Echo request reading error."));
+			r_off += kz;
+		    }
+	    } else tcdrain(fd);
+	    if(wPostMS) TSYS::sysSleep(wPostMS);
+	    if(!mRTSlvl) sec |= TIOCM_RTS;
+	    else sec &= ~TIOCM_RTS;
 	    ioctl(fd, TIOCMSET, &sec);
 	}
     }
@@ -1197,13 +1246,18 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
+	    "      'rts1' - use RTS signal for transfer(true) and check for echo, for pure RS-485;\n"
+	    "      'rtsne' - use RTS signal for transfer(false) without check for echo, for pure RS-485;\n"
+	    "      'rts1ne' - use RTS signal for transfer(true) without check for echo, for pure RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"conn:symbol[:KeepAliveTm]\". Where:\n"
+	    _("Connection timings in format: \"conn:symbol[:KeepAliveTm:delay1:delay2]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
-	    "    KeepAliveTm - keep alive timeout in seconds for restart transport."));
+	    "    KeepAliveTm - keep alive timeout in seconds for restart transport;\n"
+	    "    delay1 - delay between RTS and start transfer, in ms;\n"
+	    "    delay2 - delay between stop transfer and RTS, in ms."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");

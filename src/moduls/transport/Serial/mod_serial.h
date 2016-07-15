@@ -105,6 +105,8 @@ class TTrIn: public TTransportIn
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
 	unsigned mRTSfc		:1;
+	unsigned mRTSlvl	:1;
+	unsigned mEchofl	:1;
 };
 
 //************************************************
@@ -190,6 +192,8 @@ class TTrOut: public TTransportOut
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
 	unsigned mRTSfc		:1;		//Flow control by RTS signal for pure RS-485
+	unsigned mRTSlvl	:1;
+	unsigned mEchofl	:1;
 };
 
 //************************************************

@@ -1,3 +1,6 @@
+2016-07-15 fido_max
+- Transports.Serial: Appended by RTS toggle (true/false) flow control and echo filtering.
+
 2016-07-13 Roman
 - UI.{VCAEngine,Vision}: To the "connect" service added checking the user for root by attribute "userIsRoot" and use for menu visible.
 - DB.LibsDB.{OscadaLibs,vcaTest}.db: CREATE TABLE cleaned from default values like '''''''''.
