@@ -280,7 +280,6 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
 
     //actProjManual->setEnabled(TUIS::docGet(actProjManual->property("doc").toString().toStdString(),NULL,TUIS::GetFilePath).size());
-    //menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
     resize(600, 400);
 
@@ -991,7 +990,8 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	return;
     }
-    menuBar()->setVisible(s2i(req.attr("userIsRoot")));
+    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
+    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     int oldConId = mConId;
     mConId = s2i(req.attr("conId"));
     req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
@@ -1000,7 +1000,6 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     //Update pages after an user change
     pgCacheClear();
     bool oldMenuVis = menuBar()->isVisible();
-    //menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     QApplication::processEvents();
     if(master_pg) {
 	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)) {
@@ -1183,7 +1182,8 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	}
 	return;
     }
-    menuBar()->setVisible(s2i(req.attr("userIsRoot")));
+    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
+    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
     if(work_sess.empty()) work_sess = req.attr("sess");
     if(src_prj.empty()) src_prj = req.attr("prj");

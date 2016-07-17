@@ -43,8 +43,8 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.2.4"
-#define AUTHORS		_("Roman Savochenko")
+#define MOD_VER		"1.3.0"
+#define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -245,14 +245,9 @@ bool TTrIn::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "ADDR") {
 	//Times adjust
-	int speed = s2i(TSYS::strSepParse(co.getS(),1,':'));
-	if(speed){
-	    string tMS = r2s(11e4/(float)speed,2,'f')+":"+i2s((512*11*1000)/speed);
-	    string preMS = TSYS::strSepParse(timings(),3,':');
-	    string postMS = TSYS::strSepParse(timings(),4,':');
-	    if(!preMS.empty() && !postMS.empty()) tMS += "::"+preMS+":"+postMS;
-	    setTimings(tMS);
-	}
+	int speed = s2i(TSYS::strParse(co.getS(),1,":"));
+	if(speed) setTimings(r2s(11e4/(float)speed,2,'f')+":"+i2s((512*11*1000)/speed)+
+				"::"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"));
     }
 
     return TTransportIn::cfgChange(co, pc);
@@ -271,11 +266,13 @@ string TTrIn::getStatus( )
 
 void TTrIn::setTimings( const string &vl )
 {
-    double wCharTm = vmax(0.01,vmin(1e3,s2r(TSYS::strSepParse(vl,0,':'))));
-    int wFrTm = vmax(1,vmin(10000,s2i(TSYS::strSepParse(vl,1,':'))));
-    double wPreMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,3,':'))));
-    double wPostMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,4,':'))));
-    mTimings = TSYS::strMess(wPreMS?"%g:%d::%g:%g":"%g:%d",wCharTm,wFrTm,wPreMS,wPostMS);
+    float wCharTm = vmax(0.01, vmin(1e3,s2r(TSYS::strParse(vl,0,":"))));
+    int wFrTm = vmax(1, vmin(10000,s2i(TSYS::strParse(vl,1,":"))));
+    mTimings = TSYS::strMess("%g:%d", wCharTm, wFrTm);
+
+    float wRtsDel1 = vmax(0, vmin(10000,s2r(TSYS::strParse(vl,3,":"))));
+    float wRtsDel2 = vmax(0, vmin(10000,s2r(TSYS::strParse(vl,4,":"))));
+    if(wRtsDel1 || wRtsDel2) mTimings += TSYS::strMess("::%g:%g", wRtsDel1, wRtsDel2);
 
     modif();
 }
@@ -356,12 +353,12 @@ void TTrIn::connect( )
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
 	mRTSfc = mRTSlvl = mEchofl = false;
 	tio.c_cflag &= ~CRTSCTS;
-	if(strcasecmp(fc.c_str(),"h") == 0)         tio.c_cflag |= CRTSCTS;
-	else if(strcasecmp(fc.c_str(),"s") == 0)    tio.c_iflag |= (IXON|IXOFF|IXANY);
-	else if(strcasecmp(fc.c_str(),"rts") == 0)  { mRTSfc = mEchofl = true; }
-	else if(strcasecmp(fc.c_str(),"rts1") == 0)  { mRTSfc = mRTSlvl = mEchofl = true; }
-	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)  { mRTSfc = mRTSlvl = true; }
-	else if(strcasecmp(fc.c_str(),"rtsne") == 0)  { mRTSfc = true; }
+	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
+	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
+	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)	{ mRTSfc = mRTSlvl = true; }
+	else if(strcasecmp(fc.c_str(),"rtsne") == 0)	{ mRTSfc = true; }
 
 	// Set port's data
 	tcflush(fd, TCIOFLUSH);
@@ -464,10 +461,10 @@ void *TTrIn::Task( void *tr_in )
     fd_set rw_fd;
     int kz, sec;
 
-    double wCharTm = s2r(TSYS::strSepParse(tr->timings(),0,':'));
-    int wFrTm = 1000*s2i(TSYS::strSepParse(tr->timings(),1,':'));
-    double wPreMS = 1e-3*s2r(TSYS::strSepParse(tr->timings(),3,':'));
-    double wPostMS = 1e-3*s2r(TSYS::strSepParse(tr->timings(),4,':'));
+    float wCharTm = s2r(TSYS::strParse(tr->timings(),0,":"));
+    int wFrTm = 1000*s2i(TSYS::strParse(tr->timings(),1,":"));
+    float wRtsDelay1 = 1e-3*s2r(TSYS::strParse(tr->timings(),3,":"));
+    float wRtsDelay2 = 1e-3*s2r(TSYS::strParse(tr->timings(),4,":"));
     int64_t stFrTm = 0, tmW = 0, tmTmp1;
 
     fcntl(tr->fd, F_SETFL, 0);
@@ -557,7 +554,7 @@ void *TTrIn::Task( void *tr_in )
 		if(!tr->mRTSlvl) sec &= ~TIOCM_RTS;
 		else sec |= TIOCM_RTS;
 		ioctl(tr->fd, TIOCMSET, &sec);
-		if(wPreMS) TSYS::sysSleep(wPreMS);
+		if(wRtsDelay1) TSYS::sysSleep(wRtsDelay1);
 	    }
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;
@@ -593,7 +590,7 @@ void *TTrIn::Task( void *tr_in )
 			r_off += kz;
 		    }
 		} else tcdrain(tr->fd);
-		if(wPostMS) TSYS::sysSleep(wPostMS);
+		if(wRtsDelay2) TSYS::sysSleep(wRtsDelay2);
 		if(!tr->mRTSlvl) sec |= TIOCM_RTS;
 		else sec &= ~TIOCM_RTS;
 		ioctl(tr->fd, TIOCMSET, &sec);
@@ -632,19 +629,19 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    fc - flow control:\n"
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"
-	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
-	    "      'rts1' - use RTS signal for transfer(true) and check for echo, for pure RS-485;\n"
-	    "      'rtsne' - use RTS signal for transfer(false) without check for echo, for pure RS-485;\n"
-	    "      'rts1ne' - use RTS signal for transfer(true) without check for echo, for pure RS-485;\n"
+	    "      'rts' - using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;\n"
+	    "      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
+	    "      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
+	    "      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"symbol:frm[::delay1:delay2]\". Where:\n"
+	    _("Connection timings in format: \"symbol:frm[::rtsDelay1:rtsDelay2]\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    frm - maximum frame length, in ms;\n"
-	    "    delay1 - delay between RTS and start transfer, in ms;\n"
-	    "    delay2 - delay between stop transfer and RTS, in ms."));
+	    "    rtsDelay1 - the delay from the transmitter enabling by the RTS signal and to same the transferring, in ms;\n"
+	    "    rtsDelay2 - the delay from the transferring finish and the transmitter disabling by the RTS signal, in ms."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
 	    "tp","dec", "help",TMess::labTaskPrior());
 	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
@@ -800,13 +797,9 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
 	//Times adjust
 	int speed = s2i(TSYS::strSepParse(co.getS(),1,':'));
 	if(TSYS::strSepParse(addr(),4,':').size()) setTimings("5000:1000");
-	else if(speed){
-	    string tMS = i2s((1024*11*1000)/speed)+":"+r2s(11e4/(float)speed,2,'f');
-	    string preMS = TSYS::strSepParse(timings(),3,':');
-	    string postMS = TSYS::strSepParse(timings(),4,':');
-	    if(!preMS.empty() && !postMS.empty()) tMS += "::"+preMS+":"+postMS;
-	    setTimings(tMS);
-	}
+	else if(speed)
+	    setTimings(i2s((1024*11*1000)/speed)+":"+r2s(11e4/(float)speed,2,'f')+
+			":"+TSYS::strSepParse(timings(),2,':')+":"+TSYS::strSepParse(timings(),3,':')+":"+TSYS::strSepParse(timings(),4,':'));
     }
 
     return TTransportOut::cfgChange(co, pc);
@@ -814,12 +807,15 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
 
 void TTrOut::setTimings( const string &vl )
 {
-    int wReqTm = vmax(1,vmin(10000,s2i(TSYS::strSepParse(vl,0,':'))));
-    double wCharTm = vmax(0.01,vmin(1e3,s2r(TSYS::strSepParse(vl,1,':'))));
-    double wKeepAliveTm = vmax(0,vmin(1e3,s2r(TSYS::strSepParse(vl,2,':'))));
-    double wPreMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,3,':'))));
-    double wPostMS = vmax(0,vmin(10000,s2r(TSYS::strSepParse(vl,4,':'))));
-    mTimings = TSYS::strMess((wKeepAliveTm || wPreMS)?"%d:%g:%g:%g:%g":"%d:%g",wReqTm,wCharTm,wKeepAliveTm,wPreMS,wPostMS);
+    int wReqTm = vmax(1, vmin(10000,s2i(TSYS::strParse(vl,0,":"))));
+    float wCharTm = vmax(0.01, vmin(1e3,s2r(TSYS::strParse(vl,1,":"))));
+    mTimings = TSYS::strMess("%d:%g", wReqTm, wCharTm);
+
+    float wKeepAliveTm = vmax(0, vmin(1e3,s2r(TSYS::strParse(vl,2,":"))));
+    float wRtsDelay1 = vmax(0, vmin(10000,s2r(TSYS::strParse(vl,3,":"))));
+    float wRtsDelay2 = vmax(0, vmin(10000,s2r(TSYS::strParse(vl,4,":"))));
+    if(wKeepAliveTm || wRtsDelay1 || wRtsDelay2) mTimings += TSYS::strMess(":%g", wKeepAliveTm);
+    if(wRtsDelay1 || wRtsDelay2) mTimings += TSYS::strMess(":%g:%g", wRtsDelay1, wRtsDelay2);
 
     modif();
 }
@@ -920,10 +916,10 @@ void TTrOut::start( int tmCon )
 	tio.c_cflag &= ~CRTSCTS;
 	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
-	else if(strcasecmp(fc.c_str(),"rts") == 0)  { mRTSfc = mEchofl = true; }
-	else if(strcasecmp(fc.c_str(),"rts1") == 0)  { mRTSfc = mRTSlvl = mEchofl = true; }
-	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)  { mRTSfc = mRTSlvl = true; }
-	else if(strcasecmp(fc.c_str(),"rtsne") == 0)  { mRTSfc = true; }
+	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)	{ mRTSfc = mRTSlvl = true; }
+	else if(strcasecmp(fc.c_str(),"rtsne") == 0)	{ mRTSfc = true; }
 
 	// Set port's data
 	tcflush(fd, TCIOFLUSH);
@@ -1057,10 +1053,10 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
     int wReqTm = s2i(TSYS::strSepParse(timings(),0,':',&off));
     wReqTm = time ? time : wReqTm;
-    double wCharTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
-    double wKeepAliveTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
-    double wPreMS = 1e-3*s2r(TSYS::strSepParse(timings(),3,':'));
-    double wPostMS = 1e-3*s2r(TSYS::strSepParse(timings(),4,':'));
+    float wCharTm = s2r(TSYS::strParse(timings(),0,":",&off));
+    float wKeepAliveTm = s2r(TSYS::strParse(timings(),0,":",&off));
+    float wRtsDelay1 = 1e-3*s2r(TSYS::strParse(timings(),0,":",&off));
+    float wRtsDelay2 = 1e-3*s2r(TSYS::strParse(timings(),0,":",&off));
     if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
 	mess_debug(nodePath().c_str(), _("Restart by KeepAliveTm %gs."), wKeepAliveTm);
 	stop();
@@ -1082,7 +1078,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	    if(!mRTSlvl) sec &= ~TIOCM_RTS;
 	    else sec |= TIOCM_RTS;
 	    ioctl(fd, TIOCMSET, &sec);
-	    if(wPreMS) TSYS::sysSleep(wPreMS);
+	    if(wRtsDelay1) TSYS::sysSleep(wRtsDelay1);
 	}
 
 	for(int wOff = 0; wOff != oLen; wOff += kz)
@@ -1118,7 +1114,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 			r_off += kz;
 		    }
 	    } else tcdrain(fd);
-	    if(wPostMS) TSYS::sysSleep(wPostMS);
+	    if(wRtsDelay2) TSYS::sysSleep(wRtsDelay2);
 	    if(!mRTSlvl) sec |= TIOCM_RTS;
 	    else sec &= ~TIOCM_RTS;
 	    ioctl(fd, TIOCMSET, &sec);
@@ -1245,19 +1241,19 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    fc - flow control:\n"
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"
-	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
-	    "      'rts1' - use RTS signal for transfer(true) and check for echo, for pure RS-485;\n"
-	    "      'rtsne' - use RTS signal for transfer(false) without check for echo, for pure RS-485;\n"
-	    "      'rts1ne' - use RTS signal for transfer(true) without check for echo, for pure RS-485;\n"
+	    "      'rts' - using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;\n"
+	    "      'rts1' - using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;\n"
+	    "      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
+	    "      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"conn:symbol[:KeepAliveTm:delay1:delay2]\". Where:\n"
+	    _("Connection timings in format: \"conn:symbol[:KeepAliveTm[:rtsDelay1:rtsDelay2]]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    KeepAliveTm - keep alive timeout in seconds for restart transport;\n"
-	    "    delay1 - delay between RTS and start transfer, in ms;\n"
-	    "    delay2 - delay between stop transfer and RTS, in ms."));
+	    "    rtsDelay1 - the delay from the transmitter enabling by the RTS signal and to same the transferring, in ms;\n"
+	    "    rtsDelay2 - the delay from the transferring finish and the transmitter disabling by the RTS signal, in ms."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");

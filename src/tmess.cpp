@@ -549,7 +549,7 @@ const char *TMess::labSecCRONsel( )	{ return "1;1e-3;* * * * *;10 * * * *;10-20 
 
 const char *TMess::labTaskPrior( )
 {
-    return _("Task priority level (-1...99), where:\n"
+    return _("Task priority level (-1...199), where:\n"
 	     "  -1        - lowest priority batch policy;\n"
 	     "  0         - standard userspace priority;\n"
 	     "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"

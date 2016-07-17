@@ -1,5 +1,11 @@
+2016-07-17 Roman
+- Transport.Serial: Some cleaned about the RTS toggle (true/false) flow control and echo filtering and the translations update.
+- UI.Vision: Direct access check for root is restored at "userIsRoot" miss.
+
+
 2016-07-15 fido_max
-- Transports.Serial: Appended by RTS toggle (true/false) flow control and echo filtering.
+- Transport.Serial: Appended by RTS toggle (true/false) flow control and echo filtering.
+
 
 2016-07-13 Roman
 - UI.{VCAEngine,Vision}: To the "connect" service added checking the user for root by attribute "userIsRoot" and use for menu visible.
