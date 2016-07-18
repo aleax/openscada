@@ -1,3 +1,11 @@
+2016-07-18 Roman
+- !!!:FIX:DB: DBs loading interruption is prevented after loading with the ready configuration and an error here.
+- !!:FIX:DAQ.BlockCalc: For IO presenting check was used uninterrupted ioId() of the function object.
+- !!:Transport.Serial: Output transport expanded for I2C check and use.
+- !!:Transport.Sockets: Output transport's reading reply after false FD_ISSET is expanded by socket's SO_ERROR reading and
+    the wait interruption on any socket error. Allow early broken pipe detection and like ones for sockets.
+
+
 2016-07-17 Roman
 - Transport.Serial: Some cleaned about the RTS toggle (true/false) flow control and echo filtering and the translations update.
 - UI.Vision: Direct access check for root is restored at "userIsRoot" miss.

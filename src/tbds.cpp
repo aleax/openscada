@@ -208,7 +208,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat()) {
-	    bool rez = tbl.at().fieldSeek(lev-c_lev,cfg,full);
+	    bool rez = tbl.at().fieldSeek(lev-c_lev, cfg, full);
 	    //tbl.free(); close(bdn);
 	    return rez;
 	}
@@ -551,7 +551,7 @@ void TBDS::load_( )
 		type = c_el.cfg("TYPE").getS();
 		if((type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id))
 		    at(type).at().open(id);
-		at(type).at().at(id).at().load(&c_el);
+		try{ at(type).at().at(id).at().load(&c_el); } catch(TError&) { }
 	    }
 	}
     } catch(TError &err) {

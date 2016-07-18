@@ -132,7 +132,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
     //IO values loading and links set, by seek
     vector<vector<string> > full;
     for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); ) {
-	int io = ioId(cfg.cfg("ID").getS());
+	int io = func()->ioId(cfg.cfg("ID").getS());
 	if(io < 0) continue;
 	setS(io, cfg.cfg("VAL").getS());
 	setLink(io, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS());

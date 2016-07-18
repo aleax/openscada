@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <linux/serial.h>
+#include <linux/i2c-dev.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
@@ -43,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.0"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -192,7 +193,7 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), mTaskPrior(0),
     mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
-    mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mEchofl(false)
+    mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("6:320");
@@ -285,10 +286,11 @@ void TTrIn::connect( )
 	mDevPort = TSYS::strSepParse(addr(),0,':');
 	//  O_NONBLOCK is used for prevent function open() hang on several USB->RS485 converters
 	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
-	if(fd < 0) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
+	if(fd < 0) throw TError(nodePath().c_str(), _("Serial port '%s' %s error: %s."), mDevPort.c_str(), "open", strerror(errno));
 	// Set serial port parameters
 	struct termios tio;
-	tcgetattr(fd, &tio);
+	if(tcgetattr(fd,&tio) < 0)
+	    throw TError(nodePath().c_str(), _("Serial port '%s' %s error: %s."), mDevPort.c_str(), "tcgetattr", strerror(errno));
 	tio.c_iflag = 0;
 	tio.c_oflag = 0;
 	tio.c_cflag |= (CREAD|CLOCAL);
@@ -351,18 +353,19 @@ void TTrIn::connect( )
 
 	// Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
-	mRTSfc = mRTSlvl = mEchofl = false;
+	mRTSfc = mRTSlvl = mRTSEcho = false;
 	tio.c_cflag &= ~CRTSCTS;
 	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
-	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mEchofl = true; }
-	else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mEchofl = true; }
+	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
+	else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mRTSEcho = true; }
 	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)	{ mRTSfc = mRTSlvl = true; }
 	else if(strcasecmp(fc.c_str(),"rtsne") == 0)	{ mRTSfc = true; }
 
 	// Set port's data
 	tcflush(fd, TCIOFLUSH);
-	tcsetattr(fd, TCSANOW, &tio);
+	if(tcsetattr(fd,TCSANOW,&tio) < 0)
+	    throw TError(nodePath().c_str(), _("Serial port '%s' %s error: %s."), mDevPort.c_str(), "tcsetattr", strerror(errno));
 
 #ifdef SER_RS485_ENABLED
 #ifndef TIOCSRS485
@@ -576,7 +579,7 @@ void *TTrIn::Task( void *tr_in )
 
 	    // Hard read for wait request echo and transfer disable
 	    if(tr->mRTSfc) {
-		if(tr->mEchofl && wOff == answ.size()) {
+		if(tr->mRTSEcho && wOff == answ.size()) {
 		    char echoBuf[255];
 		    int64_t mLstReqTm = TSYS::curTime();
 		    for(unsigned r_off = 0; r_off < answ.size(); ) {
@@ -722,7 +725,8 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), mKeepAliveLstTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
-    mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mEchofl(false)
+    mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"),
+    mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false), mI2C(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("640:6");
@@ -825,13 +829,14 @@ void TTrOut::start( int tmCon )
     ResAlloc res(nodeRes(), true);
     if(runSt) return;
 
-    //Status clear
+    //Statuses clear
+    mMdmMode = mRTSfc = mRTSlvl = mRTSEcho = mI2C = false;
     trIn = trOut = 0;
     bool isLock = false;
 
     try {
 	//Open and setup device
-	mDevPort = TSYS::strSepParse(addr(),0,':');
+	mDevPort = TSYS::strSepParse(addr(), 0, ':');
 	// Lock device for all serial transports
 	if(!(isLock=mod->devLock(mDevPort))) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
 
@@ -840,146 +845,153 @@ void TTrOut::start( int tmCon )
 	// Serial port open
 	//  O_NONBLOCK is used for prevent function open() hang on several USB->RS485 converters
 	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
-	if(fd < 0) throw TError(nodePath().c_str(),_("Serial port '%s' open error: %s."),mDevPort.c_str(),strerror(errno));
+	if(fd < 0) throw TError(nodePath().c_str(), _("Serial port '%s' %s error: %s."), mDevPort.c_str(), "open", strerror(errno));
 
 	// Set serial port parameters
 	struct termios tio;
-	tcgetattr(fd, &tio);
-	tio.c_iflag = 0;
-	tio.c_oflag = 0;
-	tio.c_cflag |= (CREAD|CLOCAL);
-	tio.c_lflag = 0;
-	tio.c_cc[VTIME] = 0;		///< inter-character timer unused
-	tio.c_cc[VMIN] = 0;		///< blocking read until 0 character arrives
-
-	// Set speed
-	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
-	if(!speed.empty()) {
-	    speed_t tspd = B9600;
-	    switch(s2i(speed)) {
-		case 300:	tspd = B300;	break;
-		case 600:	tspd = B600;	break;
-		case 1200:	tspd = B1200;	break;
-		case 2400:	tspd = B2400;	break;
-		case 4800:	tspd = B4800;	break;
-		case 9600:	tspd = B9600;	break;
-		case 19200:	tspd = B19200;	break;
-		case 38400:	tspd = B38400;	break;
-		case 57600:	tspd = B57600;	break;
-		case 115200:	tspd = B115200;	break;
-		case 230400:	tspd = B230400;	break;
-		case 460800:	tspd = B460800;	break;
-		case 500000:	tspd = B500000;	break;
-		case 576000:	tspd = B576000;	break;
-		case 921600:	tspd = B921600;	break;
-		default: throw TError(nodePath().c_str(),_("Speed '%s' error."),speed.c_str());
-	    }
-	    cfsetispeed(&tio, tspd);
-	    cfsetospeed(&tio, tspd);
+	if(tcgetattr(fd,&tio) < 0) {
+	    string tErr = TSYS::strMess(_("Serial port '%s' %s error: %s."), mDevPort.c_str(), "tcgetattr", strerror(errno));
+	    //  Try to I2C by set some slave device address
+	    if(ioctl(fd,I2C_SLAVE,0) >= 0) mI2C = true;
+	    else throw TError(nodePath().c_str(), "%s", tErr.c_str());
 	}
+	if(!mI2C) {
+	    tio.c_iflag = 0;
+	    tio.c_oflag = 0;
+	    tio.c_cflag |= (CREAD|CLOCAL);
+	    tio.c_lflag = 0;
+	    tio.c_cc[VTIME] = 0;	//< inter-character timer unused
+	    tio.c_cc[VMIN] = 0;		//< blocking read until 0 character arrives
 
-	// Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
-	if(!format.empty()) {
-	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
-
-	    //  Set byte length
-	    int len =  format[0]-'0';
-	    if(len < 5 || len > 8) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
-	    tio.c_cflag &= ~CSIZE;
-	    switch(len) {
-		case 5:	tio.c_cflag |= CS5;	break;
-		case 6:	tio.c_cflag |= CS6;	break;
-		case 7:	tio.c_cflag |= CS7;	break;
-		case 8:	tio.c_cflag |= CS8;	break;
+	    // Set speed
+	    string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
+	    if(!speed.empty()) {
+		speed_t tspd = B9600;
+		switch(s2i(speed)) {
+		    case 300:	tspd = B300;	break;
+		    case 600:	tspd = B600;	break;
+		    case 1200:	tspd = B1200;	break;
+		    case 2400:	tspd = B2400;	break;
+		    case 4800:	tspd = B4800;	break;
+		    case 9600:	tspd = B9600;	break;
+		    case 19200:	tspd = B19200;	break;
+		    case 38400:	tspd = B38400;	break;
+		    case 57600:	tspd = B57600;	break;
+		    case 115200:tspd = B115200;	break;
+		    case 230400:tspd = B230400;	break;
+		    case 460800:tspd = B460800;	break;
+		    case 500000:tspd = B500000;	break;
+		    case 576000:tspd = B576000;	break;
+		    case 921600:tspd = B921600;	break;
+		    default: throw TError(nodePath().c_str(),_("Speed '%s' error."),speed.c_str());
+		}
+		cfsetispeed(&tio, tspd);
+		cfsetospeed(&tio, tspd);
 	    }
 
-	    //  Set parity
-	    char parity = tolower(format[1]);
-	    switch(parity) {
-		case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;break;
-		case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
-		case 'n': tio.c_cflag &= ~PARENB;			break;
-		default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
+	    // Set asynchronous data format
+	    string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
+	    if(!format.empty()) {
+		if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
+
+		//  Set byte length
+		int len =  format[0]-'0';
+		if(len < 5 || len > 8) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
+		tio.c_cflag &= ~CSIZE;
+		switch(len) {
+		    case 5:	tio.c_cflag |= CS5;	break;
+		    case 6:	tio.c_cflag |= CS6;	break;
+		    case 7:	tio.c_cflag |= CS7;	break;
+		    case 8:	tio.c_cflag |= CS8;	break;
+		}
+
+		//  Set parity
+		char parity = tolower(format[1]);
+		switch(parity) {
+		    case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;break;
+		    case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
+		    case 'n': tio.c_cflag &= ~PARENB;			break;
+		    default: throw TError(nodePath().c_str(),_("Parity checking mode '%c' error."),parity);
+		}
+
+		//  Set stop bits number
+		int stopbt = format[2]-'0';
+		if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
+		else if(stopbt == 2) tio.c_cflag |= CSTOPB;
+		else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
 	    }
 
-	    //  Set stop bits number
-	    int stopbt = format[2]-'0';
-	    if(stopbt == 1) tio.c_cflag &= ~CSTOPB;
-	    else if(stopbt == 2) tio.c_cflag |= CSTOPB;
-	    else throw TError(nodePath().c_str(),_("Stop bits '%d' error."),stopbt);
-	}
+	    // Set flow control
+	    string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	    tio.c_cflag &= ~CRTSCTS;
+	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
+	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
+	    else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
+	    else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mRTSEcho = true; }
+	    else if(strcasecmp(fc.c_str(),"rts1ne") == 0) { mRTSfc = mRTSlvl = true; }
+	    else if(strcasecmp(fc.c_str(),"rtsne") == 0){ mRTSfc = true; }
 
-	// Set flow control
-	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
-	mRTSfc = mRTSlvl = mEchofl = false;
-	tio.c_cflag &= ~CRTSCTS;
-	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
-	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
-	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mEchofl = true; }
-	else if(strcasecmp(fc.c_str(),"rts1") == 0)	{ mRTSfc = mRTSlvl = mEchofl = true; }
-	else if(strcasecmp(fc.c_str(),"rts1ne") == 0)	{ mRTSfc = mRTSlvl = true; }
-	else if(strcasecmp(fc.c_str(),"rtsne") == 0)	{ mRTSfc = true; }
-
-	// Set port's data
-	tcflush(fd, TCIOFLUSH);
-	tcsetattr(fd, TCSANOW, &tio);
+	    // Set port's data
+	    tcflush(fd, TCIOFLUSH);
+	    if(tcsetattr(fd,TCSANOW,&tio) < 0)
+		throw TError(nodePath().c_str(), _("Serial port '%s' %s error: %s."), mDevPort.c_str(), "tcsetattr", strerror(errno));
 
 #ifdef SER_RS485_ENABLED
 #ifndef TIOCSRS485
 #define TIOCSRS485      0x542f
 #endif
-	// Standard RS-485 mode
-	serial_rs485 rs485conf;
-	memset(&rs485conf, 0, sizeof(serial_rs485));
-	if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
-	ioctl(fd, TIOCSRS485, &rs485conf);
+	    // Standard RS-485 mode
+	    serial_rs485 rs485conf;
+	    memset(&rs485conf, 0, sizeof(serial_rs485));
+	    if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
+	    ioctl(fd, TIOCSRS485, &rs485conf);
 #endif
 
-	//Modem connection establish
-	string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
-	if(!telNumb.empty()) {
-	    // Resource to transfer function alloc
-	    runSt = true;
-	    mMdmMode = true;
+	    //Modem connection establish
+	    string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
+	    if(!telNumb.empty()) {
+		// Resource to transfer function alloc
+		runSt = true;
+		mMdmMode = true;
 
-	    // Send init 1 string
-	    if(!mdmInitStr1().empty()) {
-		if(mdmPreInit() > 0) {
-		    TSYS::sysSleep(mdmPreInit()*0.5);
-		    TTr::writeLine(fd,"");
-		    TSYS::sysSleep(mdmPreInit()*0.5);
+		// Send init 1 string
+		if(!mdmInitStr1().empty()) {
+		    if(mdmPreInit() > 0) {
+			TSYS::sysSleep(mdmPreInit()*0.5);
+			TTr::writeLine(fd,"");
+			TSYS::sysSleep(mdmPreInit()*0.5);
+		    }
+		    TTr::writeLine(fd,mdmInitStr1());
+		    if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
+			throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr1().c_str());
+		    TSYS::sysSleep(mdmPostInit());
 		}
-		TTr::writeLine(fd,mdmInitStr1());
-		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
-		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr1().c_str());
-		TSYS::sysSleep(mdmPostInit());
-	    }
-	    // Send init 2 string
-	    if(!mdmInitStr2().empty()) {
-		if(mdmPreInit() > 0) {
-		    TSYS::sysSleep(mdmPreInit()*0.5);
-		    TTr::writeLine(fd,"");
-		    TSYS::sysSleep(mdmPreInit()*0.5);
+		// Send init 2 string
+		if(!mdmInitStr2().empty()) {
+		    if(mdmPreInit() > 0) {
+			TSYS::sysSleep(mdmPreInit()*0.5);
+			TTr::writeLine(fd,"");
+			TSYS::sysSleep(mdmPreInit()*0.5);
+		    }
+		    TTr::writeLine(fd,mdmInitStr2());
+		    if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
+			throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr2().c_str());
+		    TSYS::sysSleep(mdmPostInit());
 		}
-		TTr::writeLine(fd,mdmInitStr2());
-		if(TTr::expect(fd,mdmInitResp(),mdmTm()).empty())
-		    throw TError(nodePath().c_str(),_("No response to initial request '%s'."),mdmInitStr2().c_str());
-		TSYS::sysSleep(mdmPostInit());
+		// Dial number and connection wait
+		string rez;
+		telNumb = mdmDialStr()+telNumb;
+		TTr::writeLine(fd,telNumb);
+		if((rez=TTr::expect(fd,mdmCnctResp()+"\n"+mdmBusyResp()+"\n"+mdmNoCarResp()+"\n"+mdmNoDialToneResp(),mdmTm())) != mdmCnctResp())
+		{
+		    if(rez == mdmBusyResp())		throw TError(nodePath().c_str(),_("Modem busy"));
+		    else if(rez == mdmNoCarResp())	throw TError(nodePath().c_str(),_("Modem no carrier"));
+		    else if(rez == mdmNoDialToneResp())	throw TError(nodePath().c_str(),_("Modem no dial tone"));
+		    else				throw TError(nodePath().c_str(),_("Modem no connected"));
+		}
+		mLstReqTm = TSYS::curTime();
+		mMdmDataMode = true;
 	    }
-	    // Dial number and connection wait
-	    string rez;
-	    telNumb = mdmDialStr()+telNumb;
-	    TTr::writeLine(fd,telNumb);
-	    if((rez=TTr::expect(fd,mdmCnctResp()+"\n"+mdmBusyResp()+"\n"+mdmNoCarResp()+"\n"+mdmNoDialToneResp(),mdmTm())) != mdmCnctResp())
-	    {
-		if(rez == mdmBusyResp())		throw TError(nodePath().c_str(),_("Modem busy"));
-		else if(rez == mdmNoCarResp())		throw TError(nodePath().c_str(),_("Modem no carrier"));
-		else if(rez == mdmNoDialToneResp())	throw TError(nodePath().c_str(),_("Modem no dial tone"));
-		else 					throw TError(nodePath().c_str(),_("Modem no connected"));
-	    }
-	    mLstReqTm = TSYS::curTime();
-	    mMdmDataMode = true;
 	}
     } catch(TError &err) {
 	//HangUp
@@ -1081,7 +1093,10 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	    if(wRtsDelay1) TSYS::sysSleep(wRtsDelay1);
 	}
 
-	for(int wOff = 0; wOff != oLen; wOff += kz)
+	// Same writing
+	int wOff = 0;
+	if(mI2C && oLen) { ioctl(fd, I2C_SLAVE, oBuf[wOff]); wOff++; }
+	for( ; wOff != oLen; wOff += kz)
 	    if((kz=write(fd,oBuf+wOff,oLen-wOff)) <= 0) {
 		if(kz == 0 || (kz < 0 && errno == EAGAIN)) {
 		    tv.tv_sec = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000);
@@ -1100,19 +1115,19 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
 	// Hard read for wait request echo and transfer disable
 	if(mRTSfc) {
-	    if(mEchofl) {
-	    char echoBuf[255];
-		    mLstReqTm = TSYS::curTime();
-		    for(int r_off = 0; r_off < oLen; ) {
-			kz = read(fd, echoBuf, vmin(oLen-r_off,(int)sizeof(echoBuf)));
-			if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
-			    if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(), _("Timeouted!"));
-			    sched_yield();
-			    continue;
-			}
-			if(kz < 0 || memcmp(echoBuf,oBuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Echo request reading error."));
-			r_off += kz;
+	    if(mRTSEcho) {
+		char echoBuf[255];
+		mLstReqTm = TSYS::curTime();
+		for(int r_off = 0; r_off < oLen; ) {
+		    kz = read(fd, echoBuf, vmin(oLen-r_off,(int)sizeof(echoBuf)));
+		    if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
+			if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(), _("Timeouted!"));
+			sched_yield();
+			continue;
 		    }
+		    if(kz < 0 || memcmp(echoBuf,oBuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Echo request reading error."));
+		    r_off += kz;
+		}
 	    } else tcdrain(fd);
 	    if(wRtsDelay2) TSYS::sysSleep(wRtsDelay2);
 	    if(!mRTSlvl) sec |= TIOCM_RTS;
