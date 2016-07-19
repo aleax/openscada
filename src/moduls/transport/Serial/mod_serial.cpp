@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.4.0"
+#define MOD_VER		"1.4.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -851,9 +851,12 @@ void TTrOut::start( int tmCon )
 	struct termios tio;
 	if(tcgetattr(fd,&tio) < 0) {
 	    string tErr = TSYS::strMess(_("Serial port '%s' %s error: %s."), mDevPort.c_str(), "tcgetattr", strerror(errno));
+#ifdef I2C_SLAVE
 	    //  Try to I2C by set some slave device address
 	    if(ioctl(fd,I2C_SLAVE,0) >= 0) mI2C = true;
-	    else throw TError(nodePath().c_str(), "%s", tErr.c_str());
+	    else
+#endif
+		throw TError(nodePath().c_str(), "%s", tErr.c_str());
 	}
 	if(!mI2C) {
 	    tio.c_iflag = 0;
@@ -1082,7 +1085,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
     //Write request
     if(oBuf && oLen > 0) {
-	if(!noReq) tcflush(fd, TCIOFLUSH);
+	if(!noReq && !mI2C) tcflush(fd, TCIOFLUSH);
 	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = TSYS::sysSleep(1e-6*((4e3*wCharTm)-(tmW-mLstReqTm)));
 
 	// Pure RS-485 flow control: Clear RTS for transfer allow
@@ -1095,7 +1098,9 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
 	// Same writing
 	int wOff = 0;
+#ifdef I2C_SLAVE
 	if(mI2C && oLen) { ioctl(fd, I2C_SLAVE, oBuf[wOff]); wOff++; }
+#endif
 	for( ; wOff != oLen; wOff += kz)
 	    if((kz=write(fd,oBuf+wOff,oLen-wOff)) <= 0) {
 		if(kz == 0 || (kz < 0 && errno == EAGAIN)) {

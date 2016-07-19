@@ -3005,16 +3005,17 @@ void ConfApp::applyButton( QWidget *src )
 	XMLNode *el = SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl));
 	string sval = el->text();
 	if(el->attr("tp") == "dec" || el->attr("tp") == "hex" || el->attr("tp") == "oct") {
-	    //Check and change decimal format
-	    if(sval.compare(0,2,"0x") == 0 || QString(sval.c_str()).contains(QRegExp("[abcdefABCDEF]"))) {
+	    //Check and change decimal format and the limits control
+	    if(sval.compare(0,2,"0x") == 0 || QString(sval.c_str()).contains(QRegExp("[abcdefABCDEF]")))
 		el->setAttr("tpCh", "hex");
-		sval = ll2s(QString(sval.c_str()).toLongLong(0,16));
-	    }
-	    else if(sval.size() > 1 && sval[0] == '0') {
+	    else if(sval.size() > 1 && sval[0] == '0')
 		el->setAttr("tpCh", "oct");
-		sval = ll2s(QString(sval.c_str()).toLongLong(0,8));
-	    }
 	    else el->setAttr("tpCh", "dec");
+
+	    long long vl = strtoll(sval.c_str(), NULL, 0), vlBrd;
+	    if(el->attr("min").size()) vl = vmax(s2ll(el->attr("min")), vl);
+	    if(el->attr("max").size()) vl = vmin(s2ll(el->attr("max")), vl);
+	    sval = ll2s(vl);
 	}
 
 	mess_info(mod->nodePath().c_str(),_("%s| Change '%s' to: '%s'!"),

@@ -949,16 +949,19 @@ void TTransportOut::messProtIO( XMLNode &io, const string &prot )
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // string messIO( string mess, real timeOut = 0 ) - sending the message <mess> through the transport with the waiting timeout <timeOut>
+    // string messIO( string mess, real timeOut = 0, int inBufLen = -1 ) -
+    //    sending the message <mess> through the transport with the waiting timeout <timeOut> and reading for <inBufLen> bytes.
     //  mess - message text for send
     //  timeOut - connection timeout, in seconds. Set to "< -1e-3" for the no request mode
+    //  inBufLen - input buffer length, < 0 - STR_BUF_LEN(10000), 0 - no read but only write, > 0 - read pointed bytes
     if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object) {
 	string rez;
-	char buf[STR_BUF_LEN];
+	int inBufLen = (prms.size() < 3 || prms[2].getI() < 0) ? STR_BUF_LEN : vmin(STR_BUF_LEN,prms[2].getI());
+	char buf[inBufLen];
 	try {
 	    if(!startStat()) start();
-	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
-	    rez.assign(buf, resp_len);
+	    int respLen = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, inBufLen, (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
+	    if(inBufLen && respLen) rez.assign(buf, respLen);
 	} catch(TError&) { return ""; }
 
 	return rez;
@@ -1038,6 +1041,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		  "Many systems in response to various protocols (HTTP) are send the response data in several pieces.\n"
 		  "Without this flag will be received and displayed only the first piece.\n"
 		  "When this flag will be set all the pieces awaiting an answer, until the lack of data during the timeout the transport elapsed ."));
+	    ctrMkNode("fld",opt,-1,"/req/inBufSz",_("Input buffer size, bytes"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max",i2s(STR_BUF_LEN).c_str(),
+		"help",_("Direct set the input buffer size. Use 0 to disable waiting and reading to a data, only to write."));
 	    ctrMkNode("comm",opt,-1,"/req/send",_("Send"),RWRW__,"root",STR_ID);
 	    ctrMkNode("fld",opt,-1,"/req/req",_("Request"),RWRW__,"root",STR_ID,3,"tp","str","cols","90","rows","5");
 	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),RWRW__,"root",STR_ID,3,"tp","str","cols","90","rows","5");
@@ -1065,6 +1070,12 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/req/toTmOut") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
+    }
+    else if(a_path == "/req/inBufSz") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))
+	    opt->setText(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
+	    TBDS::genDBSet(owner().nodePath()+"InBufSz",i2s(vmax(0,vmin(STR_BUF_LEN,s2i(opt->text())))), opt->attr("user"));
     }
     else if(a_path == "/req/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
@@ -1111,16 +1122,19 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	int64_t stm = TSYS::curTime();
 	try {
-	    char buf[STR_BUF_LEN];
+	    int inBufSz = s2i(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
+	    char buf[inBufSz];
 	    if(!startStat()) start();
 	    ResAlloc resN(nodeRes(), true);
-	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
-	    answ.assign(buf,resp_len);
+	    int resp_len = messIO(req.data(), req.size(), buf, inBufSz, 0, true);
+	    if(inBufSz) {
+		answ.assign(buf, resp_len);
 
-	    bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
-	    while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
-		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError &err) { break; }
-		answ.append(buf,resp_len);
+		bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
+		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
+		    try { resp_len = messIO(NULL, 0, buf, inBufSz, 0, true); } catch(TError &err) { break; }
+		    answ.append(buf, resp_len);
+		}
 	    }
 
 	    TBDS::genDBSet(owner().nodePath()+"ReqTm",tm2s(TSYS::curTime()-stm),opt->attr("user"));
