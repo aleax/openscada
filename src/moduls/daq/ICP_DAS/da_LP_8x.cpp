@@ -503,6 +503,7 @@ void *da_LP_8x::fastTask( void *ip )
 
 	retrTm = vmin(1, szFIFO/(curSRate*2*cnls.size()));
 
+	//Same scan loop
 	while(!p.endRunReq) {
 	    // Read available FIFO data
 	    p.owner().pBusRes.lock();
@@ -538,10 +539,10 @@ void *da_LP_8x::fastTask( void *ip )
 		    if(!cnls[iC].at().arch().freeStat() && (arch=cnls[iC].at().arch()).at().srcMode() == TVArchive::PassiveAttr)
 			for(int64_t iT = 0; iT < tSz; iT += arch.at().period()) {
 			    //i8014W_CalibrateData(p.modSlot, gainArr[iC], rdData[((rdCnt/cnls.size())*iT/tSz)*cnls.size()+iC], &vAI);
-			    vAI = (10.0/(gainArr[iC]?2*gainArr[iC]:1))*(float)rdData[((rdCnt/cnls.size())*iT/tSz)*cnls.size()+iC]/32670;	//Beter up to 1.5%
+			    vAI = (10.0/(gainArr[iC]?2*gainArr[iC]:1))*(float)rdData[((rdCnt/cnls.size())*iT/tSz)*cnls.size()+iC]/32670; //Better up to 1.5%
 			    arch.at().setR(vAI, wTm+iT);
 			}
-		    // Place the readed data last value to current, may be check for period acquisition task and blocks repeate
+		    // Place the read data last value to current, may be check for period acquisition task and blocks repeat
 		    if(cVlSet) {
 			//i8014W_CalibrateData(p.modSlot, gainArr[iC], rdData[(rdCnt/cnls.size()-1)*cnls.size()+iC], &vAI);
 			vAI = (10.0/(gainArr[iC]?2*gainArr[iC]:1))*(float)rdData[(rdCnt/cnls.size()-1)*cnls.size()+iC]/32670;

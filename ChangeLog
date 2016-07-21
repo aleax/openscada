@@ -1,3 +1,8 @@
+2016-07-21 Roman
+- !!:Transport.Sockets: Output transport's reading reply in check to SO_ERROR moved to step 2 for take some time for delayed read
+    but same SO_ERROR reading somtime long.
+
+
 2016-07-19 Roman
 - DB.LibsDB.OscadaLibs: Template PCF8591 is added to the library DevLib. PCF8591 is I2C 8-bit A/D and D/A converter.
 - Transport: User API function messIO() is expanded by the input buffer size.

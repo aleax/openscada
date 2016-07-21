@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -1192,7 +1192,7 @@ repeate:
 		// * Force wait any data in the request mode or EAGAIN
 		// * No wait any data in the not request mode but it can get the data later
 		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr) {
-		    if(iRtr == 0 && iB == 0) {	//Check for same socket's errors
+		    if(iRtr == 1 && iB == 0) {	//Check for same socket's errors
 			int sockError = 0, sockLen = sizeof(sockError);
 			getsockopt(sockFd, SOL_SOCKET, SO_ERROR, (char*)&sockError, (socklen_t*)&sockLen);
 			if(sockError) { errno = sockError; break; }
