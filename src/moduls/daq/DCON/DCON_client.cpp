@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.4"
+#define MOD_VER		"1.2.5"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -164,9 +164,9 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(tmGath).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(1e-6*tmGath).c_str());
     }
 
     return rez;
@@ -182,7 +182,7 @@ void TMdContr::load_( )
     //TController::load_( );
 
     //Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(i2s(mPerOld)); mPerOld = 0; }
+    if(mPerOld) { cfg("SCHEDULE").setS(i2s(mPerOld)); mPerOld = 0; modif(true); }
 }
 
 void TMdContr::disable_( )
@@ -655,7 +655,7 @@ void *TMdContr::Task( void *icntr )
 
 	    if(isStop) break;
 
-	    TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	    TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
 
 	    if(cntr.endrunReq) isStop = true;
 	    isStart = false;

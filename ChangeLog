@@ -1,3 +1,15 @@
+2016-07-23 Roman
+- !!!!:SYS: The system option clockRT is added for select the tasks planning clock as CLOCK_REALTIME but else it is CLOCK_MONOTONIC (default now).
+    time2str() and tm2s() of the astronomic time were renamed to atime2str() and atm2s().
+    time2str() and tm2s() of the relative time were moved from microseconds to seconds origin.
+    taskSleep() in the cron argument is moved to it's pure (string) representing for the origin point hold for
+	the astronomic clock changing detect and cron's target correction then and also for the consumption meassuring by the taskUtilizTm().
+- DAQ.{BlockCalc,DCON,LogicLev,Siemens}: The deprecated property "PERIOD" processing fix for allow it's replace next by
+    the propery "SCHEDULE" forcing to rewrite and "PERIOD" to clean.
+- DAQ: The unfinished module "EPICS" was removed but the project "YAPU" forbidden.
+- FIX:UI.QTCfg: Crash prevented for system's time change.
+
+
 2016-07-21 Roman
 - !!:Transport.Sockets: Output transport's reading reply in check to SO_ERROR moved to step 2 for take some time for delayed read
     but same SO_ERROR reading somtime long.

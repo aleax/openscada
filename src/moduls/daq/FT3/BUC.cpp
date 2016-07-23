@@ -158,12 +158,12 @@ uint16_t KA_BUC::HandleEvent(int64_t tm, uint8_t *D)
 		break;
 	    case 2:
 		t = mPrm.owner().DateTimeToTime_t(D + 3);
-		mPrm.vlAt("curdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+		mPrm.vlAt("curdt").at().setS(atm2s(t, "%d.%m.%Y %H:%M:%S"), tm, true);
 		l = 8;
 		break;
 	    case 3:
 		t = mPrm.owner().DateTimeToTime_t(D + 2);
-		mPrm.vlAt("stopdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+		mPrm.vlAt("stopdt").at().setS(atm2s(t, "%d.%m.%Y %H:%M:%S"), tm, true);
 		l = 7;
 		break;
 	    }
@@ -445,12 +445,12 @@ uint16_t B_BUC::HandleEvent(int64_t tm, uint8_t * D)
 	    break;
 	case 1:
 	    t = mPrm.owner().DateTimeToTime_t(D + 3);
-	    mPrm.vlAt("curdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+	    mPrm.vlAt("curdt").at().setS(atm2s(t, "%d.%m.%Y %H:%M:%S"), tm, true);
 	    l = 8;
 	    break;
 	case 2:
 	    t = mPrm.owner().DateTimeToTime_t(D + 2);
-	    mPrm.vlAt("stopdt").at().setS(TSYS::time2str(t, "%d.%m.%Y %H:%M:%S"), tm, true);
+	    mPrm.vlAt("stopdt").at().setS(atm2s(t, "%d.%m.%Y %H:%M:%S"), tm, true);
 	    l = 7;
 	    break;
 	}

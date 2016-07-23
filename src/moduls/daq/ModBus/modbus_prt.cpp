@@ -385,7 +385,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	else if(rez.size() > 2) mess += rez.substr(0,rez.size()-2);
 
 	if(prtLen())
-	    pushPrtMess(tm2s(time(NULL),"")+" "+prt+": '"+sid+"' --> "+i2s(node)+"("+tro.workId()+")\n"+mess+"\n");
+	    pushPrtMess(atm2s(time(NULL))+" "+prt+": '"+sid+"' --> "+i2s(node)+"("+tro.workId()+")\n"+mess+"\n");
 	if(debugCat.size()) mess_debug_(debugCat.c_str(), mess.c_str());
     }
 }
@@ -553,7 +553,7 @@ retry:
     }
 
     if(owner().prtLen() && prt.size() && answer.size()) {
-	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+
+	string mess = atm2s(time(NULL))+" "+prt+": "+srcTr().at().workId()+
 			"("+TSYS::strLine(srcAddr(),0)+") --> "+i2s(node)+"\n";
 	mess += _("REQ -> ");
 	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin, " ");
@@ -914,7 +914,7 @@ string Node::getStatus( )
 	    case MD_DATA:
 		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
 					"Writed registers %.4g, coils %.4g."),
-		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rRegI, data->rCoilI, data->wReg, data->wCoil);
+		    tm2s(1e-6*tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rRegI, data->rCoilI, data->wReg, data->wCoil);
 		break;
 	    case MD_GT_ND: case MD_GT_NET:
 		rez += TSYS::strMess(_("Requests %.4g."), cntReq);

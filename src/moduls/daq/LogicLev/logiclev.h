@@ -147,7 +147,7 @@ class TMdContr: public TController
 	void load_( );
 	void start_( );
 	void stop_( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
@@ -156,12 +156,12 @@ class TMdContr: public TController
 
 	//Attributes
 	ResMtx	enRes;				//Resource for enable params
-	int64_t	&mPerOld,			// ms
-		&mPrior;			// Process task priority
+	int64_t	&mPerOld,			//ms
+		&mPrior;			//Process task priority
 
-	bool	prcSt,				// Process task active
-		callSt,				// Calc now stat
-		endrunReq;			// Request to stop of the Process task
+	bool	prcSt,				//Process task active
+		callSt,				//Calc now stat
+		endrunReq;			//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> > pHd;
 
 	double	mPer;

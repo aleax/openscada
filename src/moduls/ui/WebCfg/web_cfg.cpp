@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.1"
+#define MOD_VER		"1.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -454,7 +454,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		    struct tm tm_tm;
 		    time_t tm_t = dt_req.text().size() ? s2i(dt_req.text()) : time(NULL);
 		    localtime_r(&tm_t, &tm_tm);
-		    if(!wr) ses.page += "<b>"+tm2s(tm_t,"%d-%m-%Y %H:%M:%S")+"</b>";
+		    if(!wr) ses.page += "<b>"+atm2s(tm_t,"%d-%m-%Y %H:%M:%S")+"</b>";
 		    else {
 			string s_id = node.attr("id");
 			ses.page += "<input type='text' name='"+s_id+"_d' value='"+i2s(tm_tm.tm_mday)+"' maxlength='2' size='2'/>\n";
@@ -575,7 +575,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 
 		XMLNode *x_el = t_lsel->childGet(i_rw);
 		if(t_linf->attr("tp") == "time")
-		    ses.page += "<td nowrap='nowrap'>"+tm2s(s2i(x_el->text()),"%d-%m-%Y %H:%M:%S")+"</td>";
+		    ses.page += "<td nowrap='nowrap'>"+atm2s(s2i(x_el->text()),"%d-%m-%Y %H:%M:%S")+"</td>";
 		else if((t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed") && c_wr) {
 		    ses.page += "<td><select name='"+i2s(i_rw)+":"+t_linf->attr("id")+"'>";
 

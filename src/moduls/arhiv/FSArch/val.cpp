@@ -553,8 +553,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iF = 0; iF < el->files.size(); iF++) {
 		if(rwArch)	rwArch->childAdd("el")->setText(el->archive().id());
 		if(rwNm)	rwNm->childAdd("el")->setText(el->files[iF]->name());
-		if(rwBeg)	rwBeg->childAdd("el")->setText(tm2s(el->files[iF]->begin()/1000000,"")+"."+i2s(el->files[iF]->begin()%1000000));
-		if(rwEnd)	rwEnd->childAdd("el")->setText(tm2s(el->files[iF]->end()/1000000,"")+"."+i2s(el->files[iF]->end()%1000000));
+		if(rwBeg)	rwBeg->childAdd("el")->setText(atm2s(el->files[iF]->begin()/1000000)+"."+i2s(el->files[iF]->begin()%1000000));
+		if(rwEnd)	rwEnd->childAdd("el")->setText(atm2s(el->files[iF]->end()/1000000)+"."+i2s(el->files[iF]->end()%1000000));
 		if(rwPer)	rwPer->childAdd("el")->setText(ll2s(el->files[iF]->period()));
 		if(rwTp) {
 		    string stp = _("Unknown");

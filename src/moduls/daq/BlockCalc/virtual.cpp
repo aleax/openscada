@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.4"
+#define MOD_VER		"1.7.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -195,9 +195,9 @@ string Contr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "), tm2s(1e-6*SYS->taskUtilizTm(nodePath('.',true))).c_str());
     }
     return rez;
 }
@@ -230,7 +230,7 @@ void Contr::load_( )
     //TController::load_( );
 
     //Check for get old period method value
-    if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
+    if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0;  modif(true); }
 
     //Load block's configuration
     TConfig cEl(&mod->blockE());
@@ -388,7 +388,7 @@ void *Contr::Task( void *icontr )
 
 	if(is_stop) break;
 
-	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
 
 	if(cntr.endrunReq)	is_stop = true;
 	if(!cntr.redntUse())	is_start = false;

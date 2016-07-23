@@ -1308,7 +1308,7 @@ void TMArchivator::redntDataUpdate( )
     mRdFirst = false;
     mRdTm = s2ll(req.attr("tm"))+1;
 
-    //printf("TEST 01: end=%s; '%s': %s\n", tm2s(mRdTm,"").c_str(), id().c_str(), req.save().c_str());
+    //printf("TEST 01: end=%s; '%s': %s\n", atm2s(mRdTm).c_str(), id().c_str(), req.save().c_str());
 
     //Process the result
     mess.clear();
@@ -1350,7 +1350,7 @@ bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
 	    }
 	    mess = messLoc;
 	    if(req.childSize()) {
-		//printf("TEST 01: Slave write: end=%s; '%s': %s\n", tm2s(end(),"").c_str(), id().c_str(), req.save().c_str());
+		//printf("TEST 01: Slave write: end=%s; '%s': %s\n", atm2s(end()).c_str(), id().c_str(), req.save().c_str());
 		return owner().owner().rdStRequest(workId(),req).size();
 	    }
 	    return true;

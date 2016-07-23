@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-19 11:37+0300\n"
+"POT-Creation-Date: 2016-07-23 16:30+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1657,6 +1657,8 @@ msgid ""
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two "
 "symbols code.\n"
 "MainCPUs   <list>\tMain used CPUs list (separated by ':').\n"
+"ClockRT    <false>\tSet for use REALTIME (else MONOTONIC) clock, some "
+"problematic with the system clock modification.\n"
 "SaveAtExit <true>\tSave the system at exit.\n"
 "SavePeriod <sec>\tSave the system period.\n"
 "RdStLevel  <lev>\tLevel of redundancy current station.\n"
@@ -1707,6 +1709,8 @@ msgstr ""
 "Lang2CodeBase <Sprache> Grundsprache für die Übersetzung von Textvariablen, "
 "zwei Symbole.\n"
 "MainCPUs   <Liste>\tWichtigsten gebrauchte CPUs Liste (geteilt ':').\n"
+"ClockRT    <falsch>\tStellen Sie für die Verwendung REALTIME (elsa "
+"MONOTONIC) Uhr, einige problematische mit dem Systemtakt Modifikation.\n"
 "SaveAtExit <true>\tSystem beim Beenden Speichern.\n"
 "SavePeriod <sec>\tZeitintervall für Systemspeicherung.\n"
 "RdStLevel  <lev>\tDas Niveau der laufenden Station im Bereitstellungschema.\n"
@@ -1851,6 +1855,10 @@ msgstr "%s: Redundancy station '%s' auf."
 msgid "%s: redundant station '%s' down."
 msgstr "%s: Redundancy station '%s' abwärts."
 
+#, c-format
+msgid "%s: System clock changed to '%s'. Correction the cron '%s' target!"
+msgstr "%s: Der Systemtakt geändert '%s'. Korrektur der cron '%s' Ziel!"
+
 msgid "1:Request is not object!"
 msgstr "1:Die Anfrage ist kein Objekt!"
 
@@ -1890,8 +1898,8 @@ msgstr ""
 "dem Symbol ':' getrennt.\n"
 "Prozessorsnummer beginnen mit 0."
 
-msgid "Real-time clock resolution"
-msgstr "Auflösung Echtzeituhr"
+msgid "Tasks planning clock"
+msgstr "Aufgaben Uhr Planung"
 
 msgid "Internal charset"
 msgstr "Interne Kodierung"
@@ -2077,6 +2085,14 @@ msgid "%dx%0.3gGHz"
 msgstr "%dx%0.3gGHz"
 
 #, c-format
+msgid "Real-time %s"
+msgstr "Echtzeit %s"
+
+#, c-format
+msgid "Monotonic %s"
+msgstr "Monotone %s"
+
+#, c-format
 msgid "Spent time: %s."
 msgstr "Verbrauchte Zeit: %s."
 
@@ -2256,7 +2272,8 @@ msgstr "Eingangspuffergröße, Bytes"
 msgid ""
 "Direct set the input buffer size. Use 0 to disable waiting and reading to a "
 "data, only to write."
-msgstr "Direktes Setzen der Eingangspuffergröße. Verwenden Sie 0 zu deaktivieren "
+msgstr ""
+"Direktes Setzen der Eingangspuffergröße. Verwenden Sie 0 zu deaktivieren "
 "warten und das Lesen zu einem Daten, nur zu schreiben."
 
 msgid "Answer"

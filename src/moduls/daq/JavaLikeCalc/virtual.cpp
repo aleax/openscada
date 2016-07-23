@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.2.0"
+#define MOD_VER		"3.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -420,9 +420,9 @@ string Contr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s."),tm2s(tm_calc).c_str());
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	val += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tm_calc).c_str());
     }
 
     return val;
@@ -575,7 +575,7 @@ void *Contr::Task( void *icntr )
 	}
 
 	if(is_stop) break;
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	if(cntr.endrun_req) is_stop = true;
 	is_start = false;
 	cntr.modif();

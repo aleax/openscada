@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.4"
+#define MOD_VER		"0.6.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -302,10 +302,10 @@ string TMdContr::getStatus( )
 	//Display processing
 	if(acq_st) rez += TSYS::strMess(_("Call now. "));
 	//Display schedule
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	//Display spent time
-	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),tm2s(tm_gath).c_str());
+	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tm_gath).c_str());
     }
 
     return rez;
@@ -597,7 +597,7 @@ void *TMdContr::Task( void *icntr )
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;
 	cntr.acq_st = false;
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     cntr.prc_st = false;

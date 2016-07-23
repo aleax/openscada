@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.9"
+#define MOD_VER		"1.3.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -159,9 +159,9 @@ string TMdContr::getStatus( )
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(tmGath).c_str(),-tmDelay);
+	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(1e-6*tmGath).c_str(),-tmDelay);
 	}
     }
 
@@ -475,7 +475,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.tmGath = TSYS::curTime()-t_cnt;
 
 	if(TSYS::taskEndRun()) break;
-	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     cntr.prcSt = false;

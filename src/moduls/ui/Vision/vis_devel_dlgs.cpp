@@ -380,7 +380,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root, obj_tmstmp->objectName().toStdString(), true);
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_tmstmp->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_tmstmp->setText(tm2s(s2i(req.text()),"").c_str());
+	    if(!owner()->cntrIfCmd(req)) obj_tmstmp->setText(atm2s(s2i(req.text())).c_str());
 	    else obj_tmstmp->setText(_("No set"));
 	}else obj_tmstmp->setText("");
 	// User
@@ -582,7 +582,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		messTable->setRowCount(req.childGet(i_c)->childSize());
 		for(unsigned i_r = 0; i_r < req.childGet(i_c)->childSize(); i_r++) {
 		    string val = req.childGet(i_c)->childGet(i_r)->text();
-		    if(i_c == 0) val = tm2s(s2i(val),"");
+		    if(i_c == 0) val = atm2s(s2i(val));
 		    messTable->setItem(i_r, i_c, new QTableWidgetItem(val.c_str()));
 		    messTable->item(i_r, i_c)->setFlags(Qt::ItemIsEnabled);
 		}
@@ -1193,7 +1193,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root, obj_tmstmp->objectName().toStdString(), true);
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_tmstmp->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_tmstmp->setText(tm2s(s2i(req.text()),"").c_str());
+	    if(!owner()->cntrIfCmd(req)) obj_tmstmp->setText(atm2s(s2i(req.text())).c_str());
 	}else obj_tmstmp->setText("");
 
 	// Icon

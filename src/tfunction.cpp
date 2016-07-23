@@ -343,13 +343,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))
-	opt->setText(TSYS::time2str(SYS->cntrGet(nodePath('.'))));
+	opt->setText(tm2s(1e-6*SYS->cntrGet(nodePath('.'))));
     else if(a_path.substr(0,8) == "/exec/io" && mTVal) {
 	string io_id = TSYS::pathLev(a_path,2);
 	for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
 	    if(io_id == io(i_io)->id()) {
 		if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))
-		    opt->setText( (mTVal->ioType(i_io)==IO::Real) ? r2s(mTVal->getR(i_io),6) : mTVal->getS(i_io) );
+		    opt->setText((mTVal->ioType(i_io)==IO::Real) ? r2s(mTVal->getR(i_io),6) : mTVal->getS(i_io));
 		if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
 		    mTVal->setS(i_io,opt->text());
 		break;

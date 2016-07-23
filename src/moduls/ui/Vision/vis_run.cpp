@@ -811,7 +811,7 @@ void VisRun::exportDiag( const string &idg )
 		int64_t bTmVl = eTmVl - 1e6*dgDt->tSize;
 		for(unsigned i_v = 0; i_v < baseVls.size() && baseVls[i_v].tm <= eTmVl; i_v++) {
 		    if(baseVls[i_v].tm < bTmVl) continue;
-		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+i2s(baseVls[i_v].tm%1000000);
+		    CSVr += atm2s(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+i2s(baseVls[i_v].tm%1000000);
 		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++) {
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
 			if(cPrm.val().size() && cPrm.color().isValid()) {

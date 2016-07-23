@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.7"
+#define MOD_VER		"1.3.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -629,8 +629,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	MtxAlloc res(sockRes, true);
 	for(vector<SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s."),
-		tm2s((*iId)->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),(*iId)->sock,(*iId)->sender.c_str(),
-		tm2s((*iId)->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
+		atm2s((*iId)->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),(*iId)->sock,(*iId)->sender.c_str(),
+		atm2s((*iId)->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
 		TSYS::cpct2str((*iId)->trIn).c_str(),TSYS::cpct2str((*iId)->trOut).c_str()));
     }
     else if(a_path == "/prm/cfg/certKey") {

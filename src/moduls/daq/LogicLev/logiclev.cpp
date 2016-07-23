@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.6.5"
+#define MOD_VER		"1.6.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -154,9 +154,9 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(1e-6*SYS->taskUtilizTm(nodePath('.',true))).c_str());
     }
     return rez;
 }
@@ -170,7 +170,7 @@ void TMdContr::load_( )
     //TController::load_();
 
     //Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; }
+    if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; modif(true); }
 }
 
 void TMdContr::start_( )
@@ -225,7 +225,7 @@ void *TMdContr::Task( void *icntr )
 	}
 
 	if(isStop) break;
-	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
 	if(cntr.endrunReq)	isStop = true;
     }
 

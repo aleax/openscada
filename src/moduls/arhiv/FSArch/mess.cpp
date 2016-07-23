@@ -153,7 +153,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 	    if(iF && files[iF-1]->begin() > f_beg && (files[iF-1]->begin()-f_beg) < (mTimeSize*24*60*60*2/3))
 		f_beg = files[iF-1]->begin()-mTimeSize*24*60*60;
 	    // Create new Archive
-	    string f_name = TSYS::time2str(f_beg,"/%F %T.msg");
+	    string f_name = atm2s(f_beg, "/%F %T.msg");
 	    try {
 		MFileArch *f_obj = new MFileArch(addr()+f_name, f_beg, this, Mess->charset(), useXML());
 		//Remove new error created file mostly by store space lack
@@ -371,7 +371,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/dirList" && ctrChkNode(opt))		TSYS::ctrListFS(opt, addr());
     else if(a_path == "/prm/st/fsz" && ctrChkNode(opt))		opt->setText(TSYS::cpct2str(size()));
-    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::time2str(tmCalc));
+    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(tm2s(1e-6*tmCalc));
     else if(a_path == "/prm/add/xml") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(useXML() ? "1" : "0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setUseXML(s2i(opt->text()));

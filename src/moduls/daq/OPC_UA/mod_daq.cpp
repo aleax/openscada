@@ -117,9 +117,9 @@ string TMdContr::getStatus( )
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(tmGath).c_str(),-tmDelay);
+	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(1e-6*tmGath).c_str(),-tmDelay);
 	    if(servSt) rez.replace(0, 1, TSYS::strMess("0x%x",servSt));
 	}
     }
@@ -345,7 +345,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.tmGath = TSYS::curTime()-t_cnt;
 	    cntr.callSt = false;
 
-	    TSYS::taskSleep(cntr.period(), cntr.period() ? 0 : TSYS::cron(cntr.cron()));
+	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	}
     } catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 

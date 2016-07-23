@@ -53,7 +53,7 @@ void Res::resRequestW( unsigned short tm )
     if(!tm) rez = pthread_rwlock_wrlock(&rwc);
     else {
 	timespec wtm;
-	clock_gettime(CLOCK_REALTIME,&wtm);
+	clock_gettime(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &wtm);
 	wtm.tv_nsec += 1000000*(tm%1000);
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedwrlock(&rwc,&wtm);
@@ -84,7 +84,7 @@ void Res::resRequestR( unsigned short tm )
     if(!tm) rez = pthread_rwlock_rdlock(&rwc);
     else {
 	timespec wtm;
-	clock_gettime(CLOCK_REALTIME,&wtm);
+	clock_gettime(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &wtm);
 	wtm.tv_nsec += 1000000*(tm%1000);
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);

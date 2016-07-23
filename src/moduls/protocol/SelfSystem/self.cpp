@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.3"
+#define MOD_VER		"1.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
@@ -298,7 +298,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	MtxAlloc res(dataRes(), true);
 	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s)"),
-		tm2s(authEl->second.tAuth,"").c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));
+		atm2s(authEl->second.tAuth).c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));
     }
     else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));

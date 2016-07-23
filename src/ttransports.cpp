@@ -918,7 +918,7 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 
 string TTransportOut::getStatus( )
 {
-    return (startStat()?_("Started. "):_("Stoped. ")) + TSYS::strMess(_("Established: %s. "), tm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str());
+    return (startStat()?_("Started. "):_("Stoped. ")) + TSYS::strMess(_("Established: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
 void TTransportOut::load_( TConfig *icfg )
@@ -1137,10 +1137,10 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 
-	    TBDS::genDBSet(owner().nodePath()+"ReqTm",tm2s(TSYS::curTime()-stm),opt->attr("user"));
-	    TBDS::genDBSet(owner().nodePath()+"ReqAnsw",(mode==0)?TSYS::strDecode(answ,TSYS::Bin," "):answ,opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"ReqAnsw", (mode==0)?TSYS::strDecode(answ,TSYS::Bin," "):answ, opt->attr("user"));
 	} catch(TError &err) {
-	    TBDS::genDBSet(owner().nodePath()+"ReqTm",tm2s(TSYS::curTime()-stm),opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
 	    throw;
 	}
     }

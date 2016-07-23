@@ -460,7 +460,7 @@ uint16_t B_ACCOUNT::HandleEvent(int64_t tm, uint8_t * D)
 		D[6] = 0;
 		D[7] = 0;
 		t = mPrm.owner().DateTimeToTime_t(D + 3);
-		//mPrm.vlAt(TSYS::strMess("dateT_%d", k).c_str()).at().setS(TSYS::time2str(t, "%d.%m.%Y %H:00:00"), 0, true);
+		//mPrm.vlAt(TSYS::strMess("dateT_%d", k).c_str()).at().setS(atm2s(t, "%d.%m.%Y %H:00:00"), 0, true);
 
 	    }
 	    l = 8;

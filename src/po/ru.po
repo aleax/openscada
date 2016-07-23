@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-19 11:37+0300\n"
+"POT-Creation-Date: 2016-07-23 16:30+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1604,7 +1604,6 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
-#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1645,6 +1644,8 @@ msgid ""
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two "
 "symbols code.\n"
 "MainCPUs   <list>\tMain used CPUs list (separated by ':').\n"
+"ClockRT    <false>\tSet for use REALTIME (else MONOTONIC) clock, some "
+"problematic with the system clock modification.\n"
 "SaveAtExit <true>\tSave the system at exit.\n"
 "SavePeriod <sec>\tSave the system period.\n"
 "RdStLevel  <lev>\tLevel of redundancy current station.\n"
@@ -1696,6 +1697,8 @@ msgstr ""
 "символа.\n"
 "MainCPUs   <список>\tОсновной перечень используемых процессоров (разделены "
 "':').\n"
+"ClockRT    <false>\tУстановить для использования REALTIME (иначе MONOTONIC) часов, "
+"несколько проблематичное при модификации системных часов.\n"
 "SaveAtExit <true>\tСохранять систему при выходе.\n"
 "SavePeriod <сек>\tПериод сохранения системы.\n"
 "RdStLevel  <уров>\tУровень текущей станции в схеме резервирования.\n"
@@ -1840,6 +1843,10 @@ msgstr "%s: резервная станция '%s' доступна."
 msgid "%s: redundant station '%s' down."
 msgstr "%s: резервная станция '%s' недоступна."
 
+#, c-format
+msgid "%s: System clock changed to '%s'. Correction the cron '%s' target!"
+msgstr "%s: Системные часы изменены в '%s'. Коррекция цели крона '%s'!"
+
 msgid "1:Request is not object!"
 msgstr "1:Запрос не объект!"
 
@@ -1879,8 +1886,8 @@ msgstr ""
 "разделённых символом ':'.\n"
 "Номера процессоров начинаются с 0."
 
-msgid "Real-time clock resolution"
-msgstr "Разрешение часов реального времени"
+msgid "Tasks planning clock"
+msgstr "Часы планирования задач"
 
 msgid "Internal charset"
 msgstr "Внутренняя кодировка"
@@ -2064,6 +2071,14 @@ msgstr "Просмотр сообщений"
 #, c-format
 msgid "%dx%0.3gGHz"
 msgstr "%dx%0.3gГГц"
+
+#, c-format
+msgid "Real-time %s"
+msgstr "Реального времени %s"
+
+#, c-format
+msgid "Monotonic %s"
+msgstr "Монотонные %s"
 
 #, c-format
 msgid "Spent time: %s."

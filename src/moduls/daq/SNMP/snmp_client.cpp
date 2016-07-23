@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.12"
+#define MOD_VER		"0.7.13"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -139,9 +139,9 @@ string TMdContr::getStatus( )
 	if(!acqErr.getVal().empty())	rez = acqErr.getVal();
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s."),tm2s(tmGath).c_str());
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tmGath).c_str());
 	}
     }
 
@@ -313,7 +313,7 @@ void *TMdContr::Task( void *icntr )
 
 	cntr.acqErr.setVal(daqerr);
 
-	TSYS::taskSleep(cntr.period(), cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     snmp_sess_close(ss);

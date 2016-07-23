@@ -21,13 +21,13 @@
 #ifndef TSYS_H
 #define TSYS_H
 
-//> Program constants
+//Program constants
 #define PACKAGE_LICENSE	"GPL v2"
 #define PACKAGE_DESCR	_("Open Supervisory Control And Data Acquisition")
 #define PACKAGE_AUTHOR	_("Roman Savochenko")
 #define PACKAGE_SITE	"http://oscada.org"
 
-//> Other system's constants
+//Other system's constants
 #define OBJ_ID_SZ	"20"	// Typical object's ID size. Warning the size can cause key limit on MySQL like DB.
 #define OBJ_NM_SZ	"100"	// Typical object's NAME size.
 #define USER_FILE_LIMIT	1048576	// Loading and processing files limit into userspace
@@ -147,14 +147,18 @@ class TSYS : public TCntrNode
 	string	workDB( )	{ return mWorkDB; }
 	string	selDB( )	{ return mSelDB; }
 	string	mainCPUs( )	{ return mMainCPUs; }
-	bool	chkSelDB( const string& wDB, bool isStrong = false );
+	bool	clockRT( )	{ return mClockRT; }
+	bool	saveAtExit( )	{ return mSaveAtExit; }
+	int	savePeriod( )	{ return mSavePeriod; }
+
 	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	void	setMainCPUs( const string &vl );
-	bool	saveAtExit( )	{ return mSaveAtExit; }
+	void	setClockRT( bool vl )		{ mClockRT = vl; modif(); }
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
-	int	savePeriod( )	{ return mSavePeriod; }
 	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
+
+	bool	chkSelDB( const string& wDB, bool isStrong = false );
 
 	string	optDescr( );	//print comand line options
 
@@ -186,7 +190,7 @@ class TSYS : public TCntrNode
 
 	// Sleep task for period grid <per> on ns or to cron time.
 	static int sysSleep( float tm );			//System sleep in seconds down to nanoseconds (1e-9)
-	static void taskSleep( int64_t per, time_t cron = 0, int64_t *lag = NULL );	//<per> in nanoseconds
+	static void taskSleep( int64_t per, const string &cron = "", int64_t *lag = NULL );	//<per> in nanoseconds
 	static time_t cron( const string &vl, time_t base = 0 );
 
 	// Wait event with timeout support
@@ -223,8 +227,8 @@ class TSYS : public TCntrNode
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
 	    return toint ? floor(rez+0.5) : rez;
 	}
-	static string time2str( time_t tm, const string &format );
-	static string time2str( double utm );
+	static string atime2str( time_t tm, const string &format = "" );
+	static string time2str( double tm );
 	static string cpct2str( double cnt );
 
 	// Adress convertors
@@ -347,7 +351,6 @@ class TSYS : public TCntrNode
 		int		lagMax, consMax;
 	};
 
-
 	//Private methods
 	const char *nodeName( )	{ return mId.c_str(); }
 	bool cfgFileLoad( );
@@ -393,13 +396,14 @@ class TSYS : public TCntrNode
 
 	Res	taskRes, mCfgRes, mRdRes;;
 
-	int	mN_CPU;
+	int		mN_CPU;
 	pthread_t	mainPthr;
 	uint64_t	mSysclc;
 	volatile time_t	mSysTm;
+	bool		mClockRT;	//Used clock REALTIME, else it is MONOTONIC
 
-	map<string, double>	mCntrs;	// Counters
-	map<string, SStat>	mSt;	// Remote stations
+	map<string, double>	mCntrs;	//Counters
+	map<string, SStat>	mSt;	//Remote stations
 
 	unsigned char	mRdStLevel,	//Current station level
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds
@@ -417,8 +421,8 @@ inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::
 inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
 inline double rRnd( double val, int dig = 0, bool toint = false ){ return TSYS::realRound(val, dig, toint); }
-inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }
-inline string tm2s( double utm )				{ return TSYS::time2str(utm); }
+inline string atm2s( time_t tm, const string &format = "" )	{ return TSYS::atime2str(tm, format); }
+inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }
 inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-19 11:37+0300\n"
+"POT-Creation-Date: 2016-07-23 16:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1482,6 +1482,7 @@ msgid ""
 "Lang       <lang>\tWork-internal language, like \"en_US.UTF-8\".\n"
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two symbols code.\n"
 "MainCPUs   <list>\tMain used CPUs list (separated by ':').\n"
+"ClockRT    <false>\tSet for use REALTIME (else MONOTONIC) clock, some problematic with the system clock modification.\n"
 "SaveAtExit <true>\tSave the system at exit.\n"
 "SavePeriod <sec>\tSave the system period.\n"
 "RdStLevel  <lev>\tLevel of redundancy current station.\n"
@@ -1616,6 +1617,10 @@ msgstr ""
 msgid "%s: redundant station '%s' down."
 msgstr ""
 
+#, c-format
+msgid "%s: System clock changed to '%s'. Correction the cron '%s' target!"
+msgstr ""
+
 msgid "1:Request is not object!"
 msgstr ""
 
@@ -1652,7 +1657,7 @@ msgid ""
 "CPU numbers started from 0."
 msgstr ""
 
-msgid "Real-time clock resolution"
+msgid "Tasks planning clock"
 msgstr ""
 
 msgid "Internal charset"
@@ -1817,6 +1822,14 @@ msgstr ""
 
 #, c-format
 msgid "%dx%0.3gGHz"
+msgstr ""
+
+#, c-format
+msgid "Real-time %s"
+msgstr ""
+
+#, c-format
+msgid "Monotonic %s"
 msgstr ""
 
 #, c-format

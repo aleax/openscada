@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.3.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -158,7 +158,7 @@ string TSocketIn::getStatus( )
 
     if(startStat())
 	rez += TSYS::strMess(_("Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed connections by limit %d."),
-				connNumb, (protocol().empty()?assTrs().size():clId.size()), tm2s(lastConn(),"").c_str(),
+				connNumb, (protocol().empty()?assTrs().size():clId.size()), atm2s(lastConn()).c_str(),
 				TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
 
     return rez;
@@ -843,8 +843,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	MtxAlloc res(sockRes, true);
 	for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s."),
-		tm2s(iId->second->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),iId->first,iId->second->sender.c_str(),
-		tm2s(iId->second->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
+		atm2s(iId->second->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),iId->first,iId->second->sender.c_str(),
+		atm2s(iId->second->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
 		TSYS::cpct2str(iId->second->trIn).c_str(),TSYS::cpct2str(iId->second->trOut).c_str()));
     }
     else if(a_path == "/prm/cfg/MSS") {
@@ -1034,7 +1034,7 @@ void TSocketOut::start( int itmCon )
 	    close(sockFd);
 	    sockFd = -1;
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e3*itmCon).c_str(), strerror(errno), errno);
+		mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
 	    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
 	}
     }
@@ -1191,7 +1191,7 @@ repeate:
 		//!! Reading in that way but some time read() return 0 after the select() pass.
 		// * Force wait any data in the request mode or EAGAIN
 		// * No wait any data in the not request mode but it can get the data later
-		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr) {
+		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < /*time*/mTmNext; ++iRtr) {
 		    if(iRtr == 1 && iB == 0) {	//Check for same socket's errors
 			int sockError = 0, sockLen = sizeof(sockError);
 			getsockopt(sockFd, SOL_SOCKET, SO_ERROR, (char*)&sockError, (socklen_t*)&sockLen);

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.9"
+#define MOD_VER		"0.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -184,7 +184,7 @@ void TWEB::modStop( )
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
     return  "HTTP/1.0 "+rcode+"\x0D\x0A"
-	    "Date: "+tm2s(time(NULL),"%a, %d %b %Y %T %Z")+"\x0D\x0A"
+	    "Date: "+atm2s(time(NULL),"%a, %d %b %Y %T %Z")+"\x0D\x0A"
 	    "Server: "+PACKAGE_STRING+"\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
 	    "Content-Length: "+i2s(cln)+"\x0D\x0A"+

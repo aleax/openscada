@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.Comedi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2015 by Roman Savochenko                           *
+ *   Copyright (C) 2012-2016 by Roman Savochenko                           *
  *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.5"
+#define MOD_VER		"1.0.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -117,9 +117,9 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s. "), tm2s(tm_gath).c_str());
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	val += TSYS::strMess(_("Spent time: %s. "), tm2s(1e-6*tm_gath).c_str());
     }
 
     return val;
@@ -181,7 +181,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.prcSt = true;
 
 	    //Calc next work time and sleep
-	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	}
     } catch(TError &err) { mess_err( err.cat.c_str(), err.mess.c_str() ); }
 

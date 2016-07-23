@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.3"
+#define MOD_VER		"1.0.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -212,9 +212,9 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s."), tm2s(tmGath).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s."), tm2s(1e-6*tmGath).c_str());
     }
     return rez;
 }
@@ -392,7 +392,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.en_res.resRelease( );
 	cntr.tmGath = TSYS::curTime()-t_cnt;
 
-	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     cntr.prcSt = false;

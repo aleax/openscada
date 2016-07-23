@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.9"
+#define MOD_VER		"2.0.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -482,10 +482,10 @@ string TMdContr::getStatus( )
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. Read %s. Wrote %s. Connection errors %g. "),
-			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), TSYS::cpct2str(numR).c_str(), TSYS::cpct2str(numW).c_str(), numErr);
+			tm2s(1e-6*SYS->taskUtilizTm(nodePath('.',true))).c_str(), TSYS::cpct2str(numR).c_str(), TSYS::cpct2str(numW).c_str(), numErr);
 	}
     }
 
@@ -501,7 +501,7 @@ void TMdContr::load_( )
     //TController::load_();
 
     //Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; }
+    if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; modif(true); }
 }
 
 void TMdContr::save_( )
@@ -1602,7 +1602,7 @@ void *TMdContr::Task( void *icntr )
 
 	    if(isStop) break;
 
-	    TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	    TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
 
 	    if(cntr.endrunReq) isStop = true;
 	    isStart = false;

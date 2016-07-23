@@ -1960,9 +1960,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
     }
     if(a_path == "/prm/st/bEnd" && ctrChkNode(opt))
-	opt->setText(TSYS::time2str(end(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(end(BUF_ARCH_NM)%1000000));
+	opt->setText(atm2s(end(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(end(BUF_ARCH_NM)%1000000));
     if(a_path == "/prm/st/bBeg" && ctrChkNode(opt))
-	opt->setText(TSYS::time2str(begin(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(begin(BUF_ARCH_NM)%1000000));
+	opt->setText(atm2s(begin(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(begin(BUF_ARCH_NM)%1000000));
     else if(a_path == "/prm/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDB(opt->text());
@@ -2001,9 +2001,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    if(a_el) {
 			if(n_prc) n_prc->childAdd("el")->setText("1");
 			if(n_end)
-			    n_end->childAdd("el")->setText(TSYS::time2str(a_el->end()/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(a_el->end()%1000000));
+			    n_end->childAdd("el")->setText(atm2s(a_el->end()/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(a_el->end()%1000000));
 			if(n_beg)
-			    n_beg->childAdd("el")->setText(TSYS::time2str(a_el->begin()/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(a_el->begin()%1000000));
+			    n_beg->childAdd("el")->setText(atm2s(a_el->begin()/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(a_el->begin()%1000000));
 		    }
 		    else {
 			if(n_prc) n_prc->childAdd("el")->setText("0");
@@ -2348,7 +2348,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(startStat() ? "1" : "0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
     }
-    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::time2str(tm_calc));
+    else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(tm2s(1e-6*tm_calc));
     else if(a_path == "/prm/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDB(opt->text());

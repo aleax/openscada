@@ -205,9 +205,9 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(callSt)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s. "), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str());
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	val += TSYS::strMess(_("Spent time: %s. "), tm2s(1e-6*SYS->taskUtilizTm(nodePath('.',true))).c_str());
     }
 
     return val;
@@ -263,7 +263,7 @@ void *TMdContr::Task( void *icntr )
 
 	    //Calc next work time and sleep
 	    if(isStop)	break;
-	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())), &cntr.mLag);
+	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron(), &cntr.mLag);
 	    if(TSYS::taskEndRun()) isStop = true;
 	    if(!cntr.redntUse()) isStart = false;
 	}

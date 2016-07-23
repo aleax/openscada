@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.6"
+#define MOD_VER		"0.1.7"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -367,10 +367,10 @@ string TMdContr::getStatus()
     if(startStat() && !redntUse()) {
 	if(callSt) rez += TSYS::strMess(_("Call now. "));
 	if(period())
-	    rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3 * period()).c_str());
+	    rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
 	else
-	    rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s."), tm2s(tmGath).c_str());
+	    rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s."), tm2s(1e-6*tmGath).c_str());
     }
     return rez;
 }
@@ -439,7 +439,7 @@ void *TMdContr::Task(void *icntr)
 	cntr.tmGath = TSYS::curTime() - t_cnt;
 
 	//!!! Wait for next iteration
-	TSYS::taskSleep(cntr.period(), (cntr.period() ? 0 : TSYS::cron(cntr.cron())));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     cntr.prcSt = false;
@@ -449,7 +449,7 @@ void *TMdContr::Task(void *icntr)
 
 void TMdContr::cntrCmdProc(XMLNode * opt)
 {
-//> Get page info
+    //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld", opt, -1, "/cntr/cfg/SCHEDULE", cfg("SCHEDULE").fld().descr(), startStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 3, "dest", "sel_ed",
@@ -458,7 +458,7 @@ void TMdContr::cntrCmdProc(XMLNode * opt)
 		TMess::labTaskPrior());
 	return;
     }
-//> Process command to page
+    //Process command to page
     TController::cntrCmdProc(opt);
 }
 
