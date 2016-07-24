@@ -208,7 +208,7 @@ namespace ModFastwel {
 
 	//Attributes
 	bool FBUS_initOK;
-	Res FBUSRes;
+	ResRW FBUSRes;
 	FBUS_HANDLE hNet[FBUS_MAX_NET];
 	size_t modCount[FBUS_MAX_NET];
 

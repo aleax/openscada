@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define PRT_NAME	_("ModBUS")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.0.6"
+#define PRT_MVER	"1.0.7"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define PRT_LICENSE	"GPL2"
@@ -169,7 +169,7 @@ class Node : public TFunction, public TConfig
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	nRes;
+	ResRW	nRes;
 	SData	*data;
 	TCfg	&mId, &mName, &mDscr;
 	double	&mPer;
@@ -229,7 +229,7 @@ class TProt: public TProtocol
 	TElem &nodeEl( )	{ return mNodeEl; }
 	TElem &nodeIOEl( )	{ return mNodeIOEl; }
 
-	Res &nodeRes( )		{ return nRes; }
+	ResRW &nodeRes( )	{ return nRes; }
 
     protected:
 	//Methods
@@ -256,7 +256,7 @@ class TProt: public TProtocol
 
 	TElem	mNodeEl, mNodeIOEl;
 
-	Res	nRes;
+	ResRW	nRes;
 };
 
 extern TProt *modPrt;

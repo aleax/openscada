@@ -294,7 +294,7 @@ class TArchiveS : public TSubSYS
 	vector<AutoHD<TVArchive> >	actVal;
 
 	// Redundancy
-	Res	mRdRes;
+	ResRW	mRdRes;
 	float	mRdRestDtOverTm;	//Overtime of the redundant history reload at start in hours
 	map<string, map<string,bool> > mRdArchM;
 	unsigned mRdFirst	: 1;

@@ -134,14 +134,14 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
-	int64_t	&mPerOld,	// ms
-		&mPrior;	// Process task priority
+	ResRW	enRes;		//Resource for enable params
+	int64_t	&mPerOld,	//ms
+		&mPrior;	//Process task priority
 
-	bool	prc_st,		// Process task active
-		call_st,        // Calc now stat
-		endrun_req;	// Request to stop of the Process task
-	vector< AutoHD<TMdPrm> >  p_hd;
+	bool	prcSt,		//Process task active
+		callSt,		//Calc now stat
+		endrunReq;	//Request to stop of the Process task
+	vector< AutoHD<TMdPrm> > pHd;
 
 	double	mPer, tm_calc;	// Scheme's calc time
 };

@@ -113,7 +113,7 @@ class VFileArch
 	// State parameters
 	bool	mErr;		//Archive err
 	bool	mPack;		//Archive packed
-	Res	mRes;		//Resource to access
+	ResRW	mRes;		//Resource to access
 	time_t	mAcces;		//Last access time
 
 	// File access atributes
@@ -171,7 +171,7 @@ class ModVArchEl: public TVArchEl
     private:
 	//Attributes
 	bool	mChecked;	//The present archive files checked, for prevent doubles create at the new data place
-	Res	mRes;		//Resource to access;
+	ResRW	mRes;		//Resource to access;
 	deque<VFileArch*>	files;
 	int64_t	realEnd;
 };

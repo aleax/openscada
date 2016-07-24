@@ -1,3 +1,11 @@
+2016-07-24 Roman
+- !!!!:SYS: The RW resources allocation object "Res" renamed to "ResRW".
+    Conditional variable management object "CondVar" is added.
+    FIX: ResRW::{resRequestW,resRequestR}() in wait timeout are forced to CLOCK_REALTIME but the pthread_rwlock unallowed to use any other.
+    The object ResString moved from the direct mutex managing to the ResMtx.
+- !!:UI.QTCfg: Moved from QMutex and QWaitCondition to ResMtx and CondVar, mostly for prevent here hangs on the system time changing.
+
+
 2016-07-23 Roman
 - !!!!:SYS: The system option clockRT is added for select the tasks planning clock as CLOCK_REALTIME but else it is CLOCK_MONOTONIC (default now).
     time2str() and tm2s() of the astronomic time were renamed to atime2str() and atm2s().

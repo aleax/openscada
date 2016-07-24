@@ -80,7 +80,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TTypeTransport &owner( );
 
-	Res &nodeRes( )			{ return nRes; }
+	ResRW &nodeRes( )	{ return nRes; }
 
     protected:
 	//Methods
@@ -108,7 +108,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	TCfg	&mId;
 	char	&mStart;
 	string	mDB;
-	Res	nRes;
+	ResRW	nRes;
 	vector<AutoHD<TTransportOut> >	mAssTrO;
 };
 
@@ -161,7 +161,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TTypeTransport &owner( );
 
-	Res &nodeRes( )			{ return nRes; }
+	ResRW &nodeRes( )			{ return nRes; }
 
     protected:
 	//Methods
@@ -191,7 +191,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	// Reserve parameters
 	time_t	mStartTm;
 	int64_t	mPrm1, mPrm2;
-	Res	nRes;
+	ResRW	nRes;
 };
 
 //************************************************
@@ -307,7 +307,7 @@ class TTransportS : public TSubSYS
 	//Attributes
 	TElem	elIn, elOut, elExt;
 
-	Res	extHostRes;             //External hosts resource
+	ResRW	extHostRes;             //External hosts resource
 	vector<ExtHost> extHostLs;      //External hosts list
 };
 

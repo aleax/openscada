@@ -52,7 +52,7 @@ class Hddtemp: public DA
 	string parseName( const string &vl );
 
 	//Attributes
-	Res	m_res;		//Resource for access to HDDTemp transport
+	ResRW	m_res;		//Resource for access to HDDTemp transport
 	string	t_tr, n_tr;
 };
 

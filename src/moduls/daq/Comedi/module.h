@@ -77,7 +77,7 @@ class TMdPrm : public TParamContr
 	TElem	p_el;		//Work atribute elements
 	char	&asynchRd;	//Asynchronous reading
 
-	Res	dev_res;	//Resource for access to device
+	ResRW	dev_res;	//Resource for access to device
 	comedi_t *devH;
 	int	aiTm;
 };
@@ -115,7 +115,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;				//Resource for enable params
+	ResRW	en_res;				//Resource for enable params
 	int64_t	&mPrior;			//Process task priority
 	TCfg	&mSched;			//Calc schedule
 	int64_t	mPer;

@@ -112,7 +112,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
+	ResRW	enRes;		//Resource for enable params
 	int64_t	&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s
 		&mConnTry;	//Connections try

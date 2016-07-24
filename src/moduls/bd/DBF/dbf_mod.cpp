@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.3"
+#define MOD_VER		"2.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"

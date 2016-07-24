@@ -96,7 +96,7 @@ class MFileArch
 	vector<CacheEl> cache;
 	CacheEl cach_pr;
 	// Specific parameters
-	Res	mRes;		// resource to access;
+	ResRW	mRes;		// resource to access;
 	ModMArch *mOwner;
     };
 
@@ -161,7 +161,7 @@ class ModMArch: public TMArchivator
 		mPrevDbl,	// duple messages prevent
 		mPrevDblTmCatLev;// mean and prevent to duples by time, category and level
 
-	Res	mRes;		// resource to access;
+	ResRW	mRes;		// resource to access;
 	double	tmCalc;		// Archiving time
 	time_t	mLstCheck;	// Last check directory time
 

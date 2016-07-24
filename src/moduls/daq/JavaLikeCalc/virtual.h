@@ -189,7 +189,7 @@ class TpContr : public TTypeDAQ
 	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(mLib,id,-1,flg); }
 	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(mLib,id); }
 
-	Res &parseRes( )			{ return parse_res; }
+	ResRW &parseRes( )			{ return mParseRes; }
 
 	// Named constant
 	NConst *constGet( const char *nm );
@@ -219,7 +219,7 @@ class TpContr : public TTypeDAQ
 	TElem		val_el, lb_el, fnc_el, fncio_el;
 
 	// General parse data
-	Res		parse_res;	//Syntax analisator
+	ResRW		mParseRes;	//Syntax analisator
 	vector<NConst>	mConst;		//Name constant table
 	vector<BFunc>	mBFunc;		//Buildin functions
 };

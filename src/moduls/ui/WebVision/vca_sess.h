@@ -436,7 +436,7 @@ class VCASess : public TCntrNode
 	string cacheResGet( const string &res, string *mime = NULL );
 	void cacheResSet( const string &res, const string &val, const string &mime );
 
-	Res &nodeRes( )			{ return nRes; }
+	ResRW &nodeRes( )		{ return nRes; }
 
     private:
 	//Data
@@ -463,7 +463,7 @@ class VCASess : public TCntrNode
 	bool			mIsCreate;
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 
-	Res	nRes;
+	ResRW	nRes;
 };
 
 }

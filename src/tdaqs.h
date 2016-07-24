@@ -97,7 +97,7 @@ class TDAQS : public TSubSYS
 	TElem	mElErr, mElLib, mElTmpl, mElTmplIO;
 	int	mTmpLib;
 
-	Res	mRdRes;
+	ResRW	mRdRes;
 	float	mRdRestDtTm;			//Depth time of the redundant history restore in hours
 	map<string, map<string,bool> > mRdCntr;
 };

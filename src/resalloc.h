@@ -34,11 +34,11 @@ namespace OSCADA
 //***********************************************************
 //* RW Resources allocation object			    *
 //***********************************************************
-class Res
+class ResRW
 {
     public:
-	Res( );
-	~Res( );
+	ResRW( );
+	~ResRW( );
 
 	void lock( bool toWr, unsigned short tm = 0 ) { if(toWr) resRequestW(tm); else resRequestR(tm); }
 	bool tryLock( bool toWr )	{ return toWr ? resTryW() : resTryR(); }
@@ -65,8 +65,8 @@ class ResAlloc
 {
     public:
 	//Methods
-	ResAlloc( Res &rid );
-	ResAlloc( Res &rid, bool write, unsigned short tm = 0 );
+	ResAlloc( ResRW &rid );
+	ResAlloc( ResRW &rid, bool write, unsigned short tm = 0 );
 	~ResAlloc( );
 
 	void request( bool write = false, unsigned short tm = 0 );
@@ -76,34 +76,8 @@ class ResAlloc
 
     private:
 	//Attributes
-	Res	&mId;
+	ResRW	&mId;
 	bool	mAlloc;
-};
-
-//********************************************
-//* String+resource RW lock for		     *
-//********************************************
-class ResString
-{
-    public:
-	//Methods
-	explicit ResString( const string &vl = "" );
-	~ResString( );
-
-	ResString &operator=( const string &val );
-	operator string( )		{ return getVal(); }
-
-	size_t size( );
-	bool   empty( );
-
-	void setVal( const string &vl );
-	string getVal( );
-	const string &getValRef( )	{ return str; }
-
-    private:
-	//Attributes
-	pthread_mutex_t	mRes;
-	string	str;
 };
 
 //***********************************************************
@@ -132,6 +106,49 @@ class ResMtx
     private:
 	//Attributes
 	pthread_mutex_t	m;
+};
+
+//********************************************
+//* String+resource RW lock for		     *
+//********************************************
+class ResString
+{
+    public:
+	//Methods
+	explicit ResString( const string &vl = "" );
+	~ResString( );
+
+	ResString &operator=( const string &val );
+	operator string( )		{ return getVal(); }
+
+	size_t size( );
+	bool   empty( );
+
+	void setVal( const string &vl );
+	string getVal( );
+	const string &getValRef( )	{ return str; }
+
+    private:
+	//Attributes
+	ResMtx	mRes;
+	string	str;
+};
+
+//***********************************************************
+//* Conditional variable object, by mutex		    *
+//***********************************************************
+class CondVar
+{
+    public:
+	CondVar( );
+	~CondVar( );
+
+	int wait( ResMtx &mtx, unsigned short tm = 0 );
+	int wakeOne( );
+	int wakeAll( );
+
+    private:
+	pthread_cond_t	cnd;
 };
 
 //***********************************************************

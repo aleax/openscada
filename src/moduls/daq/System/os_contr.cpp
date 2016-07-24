@@ -48,7 +48,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.6"
+#define MOD_VER		"2.0.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -175,7 +175,7 @@ void TTpContr::perSYSCall( unsigned int cnt )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem) : TController(name_c,daq_db,cfgelem),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
-    prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_calc(0)
+    prcSt(false), callSt(false), endrunReq(false), mPer(1e9), tm_calc(0)
 {
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
@@ -189,7 +189,7 @@ string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
     if(startStat() && !redntUse()) {
-	if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
 	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "), tm2s(1e-6*tm_calc).c_str());
@@ -231,59 +231,59 @@ void TMdContr::start_( )
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
 
     //Start the request data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
+    if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
     //Set Eval for parameters
-    ResAlloc res(en_res, true);
-    for(unsigned i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	p_hd[i_prm].at().setEval();
+    ResAlloc res(enRes, true);
+    for(unsigned i_prm = 0; i_prm < pHd.size(); i_prm++)
+	pHd[i_prm].at().setEval();
 }
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(en_res, true);
+    ResAlloc res(enRes, true);
     unsigned i_prm;
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(p_hd[i_prm].at().id() == id) break;
+    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
+	if(pHd[i_prm].at().id() == id) break;
 
-    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
-    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
+    if(val && i_prm >= pHd.size())	pHd.push_back(at(id));
+    if(!val && i_prm < pHd.size())	pHd.erase(pHd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
 {
     TMdContr &cntr = *(TMdContr *)icntr;
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.endrunReq = false;
+    cntr.prcSt = true;
 
-    while(!cntr.endrun_req) {
+    while(!cntr.endrunReq) {
 	if(!cntr.redntUse()) {
-	    cntr.call_st = true;
+	    cntr.callSt = true;
 	    //Update controller's data
 	    try {
 		int64_t t_cnt = TSYS::curTime();
 
-		cntr.en_res.resRequestR();
-		for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
-		    cntr.p_hd[i_p].at().getVal();
-		cntr.en_res.resRelease();
+		cntr.enRes.resRequestR();
+		for(unsigned i_p=0; i_p < cntr.pHd.size(); i_p++)
+		    cntr.pHd[i_p].at().getVal();
+		cntr.enRes.resRelease();
 
 		cntr.tm_calc = TSYS::curTime()-t_cnt;
 	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-	    cntr.call_st = false;
+	    cntr.callSt = false;
 	}
 
 	TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }

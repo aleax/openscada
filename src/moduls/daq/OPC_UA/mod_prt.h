@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.7.5"
+#define PRT_MVER	"1.7.6"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -203,7 +203,7 @@ class TProt: public TProtocol, public Server
 
 	//void outMess( XMLNode &io, TTransportOut &tro );	//!!!! Need for translate from XMLNode to XML_N
 
-	Res &nodeRes( )		{ return nRes; }
+	ResRW &nodeRes( )	{ return nRes; }
 
     protected:
 	//Methods
@@ -228,8 +228,8 @@ class TProt: public TProtocol, public Server
 	TElem	mEndPntEl;
 	vector< AutoHD<OPCEndPoint> > ep_hd;
 
-	Res	nRes;
-	Res	enRes;				//Resource for enable endpoints
+	ResRW	nRes,
+		enRes;				//Resource for enable endpoints
 };
 
 extern TProt *modPrt;

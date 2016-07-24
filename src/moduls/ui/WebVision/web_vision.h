@@ -143,7 +143,7 @@ class TWEB: public TUI
 	string		mCSStables;			//CSS tables
 	map<string,int> colors;				//Named colors
 
-	Res		mSesRes;			//Sessions resource
+	ResRW		mSesRes;			//Sessions resource
 };
 
 extern TWEB *mod;

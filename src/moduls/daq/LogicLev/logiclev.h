@@ -115,7 +115,7 @@ class TMdPrm : public TParamContr
 	TElem	pEl;				//Work atribute elements
 
 	bool	chkLnkNeed;			//Check lnk need flag
-	Res	calcRes;			//Resource
+	ResRW	calcRes;			//Resource
 	int	idFreq, idStart, idStop,
 		idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 };

@@ -307,7 +307,7 @@ class TSYS : public TCntrNode
 	// System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
-	Res &cfgRes( )		{ return mCfgRes; }
+	ResRW &cfgRes( )	{ return mCfgRes; }
 
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources
@@ -394,7 +394,7 @@ class TSYS : public TCntrNode
 	map<string, STask>	mTasks;
 	static pthread_key_t	sTaskKey;
 
-	Res	taskRes, mCfgRes, mRdRes;;
+	ResRW	taskRes, mCfgRes, mRdRes;;
 
 	int		mN_CPU;
 	pthread_t	mainPthr;

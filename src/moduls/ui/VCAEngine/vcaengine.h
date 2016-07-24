@@ -124,7 +124,7 @@ class Engine : public TUI
 		prj_ses_el,	//The table structure of session's IO of project
 		prjStl_el;	//The table structure of styles of project
 
-	Res	mSesRes;	//Sessions resource
+	ResRW	mSesRes;	//Sessions resource
 
 	map<string,string>	mSessAuto;
 };

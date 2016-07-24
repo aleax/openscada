@@ -139,7 +139,7 @@ class TValBuf
 		} buf;
 	};
 
-	Res		bRes;		//Access resource
+	ResRW		bRes;		//Access resource
 	TFld::Type	mValTp;		//Store values type
 	union {
 	    TBuf<char>		*bl;
@@ -264,7 +264,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Private attributes
-	Res	aRes;
+	ResRW	aRes;
 	bool	runSt;
 	string	mDB;
 
@@ -357,7 +357,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void save_( );
 
 	//Protected attributes
-	Res	archRes;
+	ResRW	archRes;
 	bool	runSt, endrunReq;
 	// Phisical elements storing
 	map<string,TVArchEl*> archEl;

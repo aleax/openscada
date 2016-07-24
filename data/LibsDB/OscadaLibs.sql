@@ -1112,7 +1112,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','itemsSet','Items set by: "ai|d
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','this','Object',4,0,'',10,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','transport','Transport I2C',0,64,'i2c',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','addr','Device address (0, 119)',1,64,'72',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','addr','Device address [0...119]',1,64,'72',1,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','vRef','Reference voltage, V',2,64,'3.2',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai0','AI0',2,16,'',3,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai1','AI1',2,16,'',4,'','','','');
@@ -4469,7 +4469,7 @@ if(t_err.length) {
 	f_err = t_err;
 }
 else f_err = "0";','','',1464936781);
-INSERT INTO "tmplib_DevLib" VALUES('PCF8591','','','','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport in I2C mode.
+INSERT INTO "tmplib_DevLib" VALUES('PCF8591','','','','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
@@ -4496,7 +4496,7 @@ else {
 		else t_err = "3:"+tr("No read result.");
 	}
 }
-f_err = t_err;','','',1468953808);
+f_err = t_err;','','',1469377416);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default

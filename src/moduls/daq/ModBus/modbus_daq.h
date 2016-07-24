@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.13"
+#define DAQ_MVER	"1.8.14"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -203,7 +203,7 @@ class TMdContr: public TController
 
 	//Attributes
 	ResMtx	enRes, dataRes;
-	Res	reqRes;
+	ResRW	reqRes;
 	int64_t	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size

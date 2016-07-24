@@ -86,7 +86,7 @@ class MTable : public TTable
 	string codepage;
 	TBasaDBF *basa;
 
-	Res	mRes;
+	ResRW	mRes;
 	time_t	mModify;
 };
  

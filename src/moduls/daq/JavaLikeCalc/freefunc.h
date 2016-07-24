@@ -406,7 +406,7 @@ class Func : public TConfig, public TFunction
 	vector<Reg*>	mRegs;		//Registers list in action
 	vector<Reg*>	mTmpRegs;	//Constant temporary list
 	deque<Reg*>	fPrmst;		//Function's parameters stack
-	Res		&parseRes;
+	ResRW		&parseRes;
 };
 
 extern Func *pF;

@@ -141,7 +141,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	char		&mToEn, &mToPrc,
 			&mOutLnkWrChs;	//Write to output links only at changes
 
-	Res		lnkRes;		//Link resource
+	ResRW		lnkRes;		//Link resource
 	int		mErrCnt;
 	int		idFreq, idStart, idStop;	//Fixed system attributes identifiers
 };

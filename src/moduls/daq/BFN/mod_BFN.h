@@ -119,7 +119,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res, req_res;// Resource for enable params
+	ResRW	en_res, req_res;// Resource for enable params
 	int64_t	&mPrior;	// Process task priority
 	double	&mSync;		// Synchronization inter remote station: attributes list update.
 	int64_t	mPer;

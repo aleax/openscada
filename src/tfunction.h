@@ -108,7 +108,7 @@ class TFunction : public TCntrNode
 	virtual	string stor( )		{ return mStor; }
 	bool	startStat( )		{ return runSt; }
 	int	use( )			{ return used.size(); }
-	Res	&fRes( )		{ return mFRes; }
+	ResRW	&fRes( )		{ return mFRes; }
 
 	void setId( const string &vl );
 	virtual void setProg( const string &prg )	{ }
@@ -152,7 +152,7 @@ class TFunction : public TCntrNode
 
     private:
 	//Attributes
-	Res		mFRes;
+	ResRW		mFRes;
 	vector<IO*>	mIO;
 };
 

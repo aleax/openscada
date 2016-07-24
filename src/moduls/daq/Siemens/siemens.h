@@ -273,7 +273,7 @@ class TMdContr: public TController
 
 	ResMtx	enRes,			//Access to pHd
 		reqAPIRes;		//Access to local connection's API data, like for LibnoDave
-	Res	reqDataRes,		//Access to generic request's data, mostly acqBlks
+	ResRW	reqDataRes,		//Access to generic request's data, mostly acqBlks
 		reqDataAsWrRes;		//Access to writeBlks
 
 	double	mPer, numR, numW, numErr;//Counters for read, wrote bytes and connection errors.
@@ -302,7 +302,7 @@ class TTpContr: public TTypeDAQ
 	void getLifeListPB( unsigned board, string &buffer );
 
 	//Attributes
-	Res	resAPI;
+	ResRW	resAPI;
 
     protected:
 	//Methods
@@ -322,7 +322,7 @@ class TTpContr: public TTypeDAQ
 	TElem	elCifDev, elPrmIO;
 
 	struct SCifDev {
-	    Res		res;		//Device resource
+	    ResRW	res;		//Device resource
 	    bool	present;	//Present flag
 	    int		board;		//Board number
 	    unsigned long phAddr;	//Physical address

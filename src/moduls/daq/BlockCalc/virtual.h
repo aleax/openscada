@@ -139,7 +139,7 @@ class Contr: public TController
 	double	mPer;
 
 	ResMtx	calcRes;	// Resource for process block
-	Res	hdRes;
+	ResRW	hdRes;
 };
 
 //************************************************

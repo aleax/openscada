@@ -140,7 +140,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	enRes;				//Resource for enable params
+	ResRW	enRes;				//Resource for enable params
 	int64_t	&mPrior,			//Process task priority
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
 		&mBaud,				//Baudrate

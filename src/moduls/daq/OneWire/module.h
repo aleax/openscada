@@ -111,7 +111,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;		// Resource for enable params
+	ResRW	en_res;		// Resource for enable params
 	TCfg	&mSched,	// Schedule
 		&mPrior,	// Process task priority
 		&mBus,		// 1Wire BUS
@@ -160,7 +160,7 @@ class TTpContr: public TTypeDAQ
 	bool	OW_initOK;
 	string	mOWFSPrms;
 
-	Res	OWFSRes;
+	ResRW	OWFSRes;
 };
 
 extern TTpContr *mod;

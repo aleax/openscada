@@ -3076,7 +3076,7 @@ bool SCADAHost::reqDo( XMLNode &node )
     reqDone = false;
     req = &node;
     cond.wakeOne();
-    cond.wait(&mtx, 100);
+    cond.wait(mtx, 100);
     if(!reqDone) { mtx.unlock(); return false; }
     req = NULL;
     reqDone = false;
@@ -3158,7 +3158,7 @@ void SCADAHost::run( )
 
 	//Interface's requests processing
 	mtx.lock();
-	if(!req || (req && reqDone)) cond.wait(&mtx, 1000);
+	if(!req || (req && reqDone)) cond.wait(mtx, 1000);
 	if(req && !reqDone) {
 	    wuser = user;
 	    mtx.unlock();

@@ -102,7 +102,7 @@ class TMdContr: public TController
 
 	TTpContr &owner( );
 
-	Res &nodeRes( )		{ return nRes; }
+	ResRW &nodeRes( )	{ return nRes; }
 
     protected:
 	//Methods
@@ -129,7 +129,7 @@ class TMdContr: public TController
 	double	inAdcTimePrev, inAdcTimeAdj, lostFrmsCntr;
 	unsigned long framesPerBufferMax;
 
-	Res	nRes;
+	ResRW	nRes;
 };
 
 //*************************************************

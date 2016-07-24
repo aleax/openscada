@@ -138,7 +138,7 @@ class Project : public TCntrNode, public TConfig
 	bool	mEnable;	//Enable state
 
 	// Styles
-	Res	mStRes;
+	ResRW	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
 
 	ResMtx	mFuncM;

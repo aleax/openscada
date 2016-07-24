@@ -116,7 +116,7 @@ class TMdPrm : public TParamContr
 		&mAImode;	//AI values mode
 	char	&asynchRd;	//Asynchronous reading
 
-	Res	devRes;		//Resource for access to device
+	ResRW	devRes;		//Resource for access to device
 	DevFeature dev;		//Device info
 	DSCB	dscb;		//Board descriptor
 	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
@@ -168,7 +168,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	enRes;			//Resource for enable params
+	ResRW	enRes;			//Resource for enable params
 	int64_t	&mPrior;		//Process task priority
 	TCfg	&mSched;		//Calc schedule
 	int64_t	mPer, mLag;
