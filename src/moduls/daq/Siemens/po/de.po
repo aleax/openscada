@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 11:31+0300\n"
+"POT-Creation-Date: 2016-07-27 19:54+0300\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -233,10 +233,10 @@ msgstr "Aufruf mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s. Read %s. Wrote %s. Connection errors %g. "
-msgstr "Verbrachte Zeit: %s. Lesen %s. Schrieb %s. Verbindungsfehler %g. "
+msgid "Spent time: %s[%s]. Read %s. Wrote %s. Connection errors %g. "
+msgstr "Verbrachte Zeit: %s[%s]. Lesen %s. Schrieb %s. Verbindungsfehler %g. "
 
+#, c-format
 msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
 

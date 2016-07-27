@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 17:39+0300\n"
+"POT-Creation-Date: 2016-07-27 19:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,13 +74,17 @@ msgid "Call next by cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s. "
+msgid "Spent time: %s[%s]. "
 msgstr ""
 
 msgid "1:Parameter is disabled."
 msgstr ""
 
 msgid "2:Controller is stopped."
+msgstr ""
+
+#, c-format
+msgid "Spent time %s[%s]"
 msgstr ""
 
 msgid "Parameter is disabled or is not based on the template."

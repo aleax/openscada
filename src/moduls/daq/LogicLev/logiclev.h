@@ -63,6 +63,9 @@ class TMdPrm : public TParamContr
 
 	void calc( bool first, bool last, double frq );	//Calc template's algoritmes
 
+	//Attributes
+	float tmCalc, tmCalcMax;
+
     protected:
 	//Methods
 	void postEnable( int flag );

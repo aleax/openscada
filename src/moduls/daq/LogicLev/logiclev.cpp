@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.6.7"
+#define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -154,9 +154,10 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(1e-6*SYS->taskUtilizTm(nodePath('.',true))).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s[%s]. "),
+	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
     return rez;
 }
@@ -202,6 +203,7 @@ void TMdContr::prmEn( TMdPrm *p, bool val )
 
 void *TMdContr::Task( void *icntr )
 {
+    const TSYS::STask &tsk = TSYS::taskDescr();
     TMdContr &cntr = *(TMdContr*)icntr;
 
     cntr.endrunReq = false;
@@ -209,19 +211,25 @@ void *TMdContr::Task( void *icntr )
 
     bool isStart = true;
     bool isStop  = false;
-    int64_t t_cnt = 0, t_prev = TSYS::curTime();
+    int64_t tCnt1, tCnt2;
 
     while(true) {
 	//Update controller's data
 	if(!cntr.redntUse()) {
-	    if(!cntr.period())	t_cnt = TSYS::curTime();
+	    if(cntr.messLev() == TMess::Debug) tCnt1 = TSYS::curTime();
 	    cntr.enRes.lock();
-	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
-		try { cntr.pHd[i_p].at().calc(isStart, isStop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
-		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		try {
+		    cntr.pHd[iP].at().calc(isStart, isStop, tsk.period()?(1/tsk.period()):(cntr.period()?1e9/cntr.period():1));
+		    if(cntr.messLev() == TMess::Debug) {
+			tCnt2 = TSYS::curTime();
+			cntr.pHd[iP].at().tmCalc = 1e-6*(tCnt2-tCnt1);
+			cntr.pHd[iP].at().tmCalcMax = vmax(cntr.pHd[iP].at().tmCalcMax, cntr.pHd[iP].at().tmCalc);
+			tCnt1 = tCnt2;
+		    }
+		} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    isStart = false;
 	    cntr.enRes.unlock();
-	    t_prev = t_cnt;
 	}
 
 	if(isStop) break;
@@ -293,7 +301,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
-    TParamContr(name,tp_prm), prmRefl(NULL), pEl("w_attr"), chkLnkNeed(false),
+    TParamContr(name,tp_prm), tmCalc(0), tmCalcMax(0), prmRefl(NULL), pEl("w_attr"), chkLnkNeed(false),
     idFreq(-1), idStart(-1), idStop(-1), idSh(-1), idNm(-1), idDscr(-1)
 {
     setType(type().name);
@@ -362,6 +370,7 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
+    tmCalc = tmCalcMax = 0;
     bool isProc = false, isFullEn = !enableStat();
     if(isFullEn) TParamContr::enable();
 
@@ -597,6 +606,8 @@ void TMdPrm::vlGet( TVal &val )
     else {
 	if(isStd() && tmpl->val.func() && idErr >= 0) val.setS(tmpl->val.getS(idErr), 0, true);
 	else val.setS("0", 0, true);
+	if(owner().messLev() == TMess::Debug)
+	    val.setS(val.getS(NULL,true)+": "+TSYS::strMess(_("Spent time %s[%s]"),tm2s(tmCalc).c_str(),tm2s(tmCalcMax).c_str()), 0, true);
     }
 }
 

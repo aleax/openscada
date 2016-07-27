@@ -1,3 +1,11 @@
+2016-07-27 Roman
+- SYS: taskUtilizTm() is expanded by the argument "max" for the maximum value obtain and the value changed to seconds.
+    The function taskDescr() is added for link get to the current task description structure.
+- DAQ.{BlockCalc,LogicLev,ModBus,Siemens}: The task's execution status was expanded by the maximum consumption value.
+- !!!:DAQ.LogicLev: Moved for set the attribute "f_frq" to the real frequency, taken from the task description structure.
+    The parameters task's consumption measurement is added, into attribute "err", into the Debug mode of the controller object.
+
+
 2016-07-24 Roman
 - !!!!:SYS: The RW resources allocation object "Res" renamed to "ResRW".
     Conditional variable management object "CondVar" is added.

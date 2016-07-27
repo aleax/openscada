@@ -123,8 +123,8 @@ msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Витрачено часу: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Витрачено часу: %s[%s]. "
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."

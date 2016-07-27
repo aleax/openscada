@@ -686,7 +686,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setProjNm(opt->text());
     }
     else if(a_path == "/obj/st/backgrnd" && ctrChkNode(opt))	opt->setText(i2s(backgrnd()));
-    else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))	opt->setText(tm2s(1e-6*calcTm()));
+    else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))	opt->setText(tm2s(calcTm()));
     else if(a_path == "/obj/st/connect" && ctrChkNode(opt))	opt->setText(i2s(connects()));
     else if(a_path == "/obj/st/reqTime" && ctrChkNode(opt))	opt->setText(i2s(reqTm()));
     else if(a_path == "/obj/st/leftToClose" && ctrChkNode(opt))	opt->setText(i2s(vmax(0,DIS_SES_TM-(time(NULL)-reqTm()))));

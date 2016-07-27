@@ -125,8 +125,8 @@ msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Verbrauchte Zeit: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Verbrauchte Zeit: %s[%s]. "
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."

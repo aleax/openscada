@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-29 20:06+0300\n"
+"POT-Creation-Date: 2016-07-27 19:39+0300\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -197,9 +197,8 @@ msgstr "Call mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s. "
-msgstr "Verbrauchte Zeit: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Verbrauchte Zeit: %s[%s]. "
 
 #, c-format
 msgid "Enable block '%s' error."

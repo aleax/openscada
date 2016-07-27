@@ -147,8 +147,9 @@ string TMdContr::getStatus( )
 	    if(callSt)	val += TSYS::strMess(_("Call now. "));
 	    if(period())val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    val += TSYS::strMess(_("Spent time: %s. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of respond %g."),
-			tm2s(1e-6*SYS->taskUtilizTm(nodePath('.',true))).c_str(),numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+	    val += TSYS::strMess(_("Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of respond %g."),
+			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
+			numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 	}
     }
 
@@ -663,8 +664,7 @@ bool TMdContr::setValC( char val, int addr, ResString &err )
     //Set to acquisition block
     ResAlloc res(reqRes, false);
     for(unsigned i_b = 0; i_b < acqBlksCoil.size(); i_b++)
-	if(addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+(int)acqBlksCoil[i_b].val.size()))
-	{
+	if(addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+(int)acqBlksCoil[i_b].val.size())) {
 	    acqBlksCoil[i_b].val[addr-acqBlksCoil[i_b].off] = val;
 	    break;
 	}

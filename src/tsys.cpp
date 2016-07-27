@@ -1761,18 +1761,19 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     }
 }
 
-double TSYS::taskUtilizTm( const string &path )
+double TSYS::taskUtilizTm( const string &path, bool max )
 {
     ResAlloc res(taskRes, false);
     map<string,STask>::iterator it = mTasks.find(path);
     if(it == mTasks.end()) return 0;
+    if(max) return 1e-9*it->second.consMax;
     int64_t tm_beg = 0, tm_end = 0, tm_per = 0;
     for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
 	tm_beg = it->second.tm_beg;
 	tm_end = it->second.tm_end;
 	tm_per = it->second.tm_per;
     }
-    if(tm_beg && tm_beg < tm_per) return 1e-3*(tm_end-tm_beg);
+    if(tm_beg && tm_beg < tm_per) return 1e-9*(tm_end-tm_beg);
 
     return 0;
 }
@@ -1781,6 +1782,13 @@ bool TSYS::taskEndRun( )
 {
     sigset_t sigset;
     return sigpending(&sigset) == 0 && sigismember(&sigset,SIGUSR1);
+}
+
+const TSYS::STask& TSYS::taskDescr( )
+{
+    STask *stsk = (STask*)pthread_getspecific(sTaskKey);
+    if(stsk) return *stsk;
+    throw TError(SYS->nodePath().c_str(), _("It isn't OpenSCADA task!"));
 }
 
 void *TSYS::taskWrap( void *stas )
