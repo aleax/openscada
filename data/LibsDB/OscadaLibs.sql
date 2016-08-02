@@ -9,7 +9,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Автор: Роман Савоченко <rom_as@oscada.org>
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
-INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','Version: 1.1
+INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','Version: 1.2.0
 The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -1111,7 +1111,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','w','Maximum no ack',1,64,'8',7
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','itemsSet','Items set by: "ai|di|do:{IOA}[-{EndIOA}]:a[:{NameBase}]"',0,36,'',8,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','items','All items',4,33,'',9,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IEC60870','this','Object',4,0,'',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','transport','Transport I2C',0,64,'i2c',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','addr','Device address [0...119]',1,64,'72',1,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','vRef','Reference voltage, V',2,64,'3.2',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai0','AI0',2,16,'',3,'','','','');
@@ -1119,6 +1119,10 @@ INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai1','AI1',2,16,'',4,'','','','
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai2','AI2',2,16,'',5,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai3','AI3',2,16,'',6,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ao','AO',2,32,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','this','Object',4,0,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','power','Power',3,16,'',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','tmResc','Rescan period, s',2,64,'60',2,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2776,6 +2780,12 @@ INSERT INTO "Trs" VALUES('C_SC_NA_1: No the SQ mode implemented yet','','');
 INSERT INTO "Trs" VALUES('C_SC_NA_1: Items number discrepancy to the package size','','');
 INSERT INTO "Trs" VALUES('Device address ''%1'' out of range [0...119].','','');
 INSERT INTO "Trs" VALUES('No read result.','','');
+INSERT INTO "Trs" VALUES('No a device present on the bus ''%1''.','','');
+INSERT INTO "Trs" VALUES('1W device','','');
+INSERT INTO "Trs" VALUES('Temperature','','');
+INSERT INTO "Trs" VALUES('User cell [0...65535]','','');
+INSERT INTO "Trs" VALUES('Resolution [9...12]','','');
+INSERT INTO "Trs" VALUES('1:Device missed','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -4470,7 +4480,8 @@ if(t_err.length) {
 }
 else f_err = "0";','','',1464936781);
 INSERT INTO "tmplib_DevLib" VALUES('PCF8591','','','','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <rom_as@oscada.org>','','',10,0,'JavaLikeCalc.JavaScript
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
 	transport_ = transport;
@@ -4496,7 +4507,214 @@ else {
 		else t_err = "3:"+tr("No read result.");
 	}
 }
-f_err = t_err;','','',1469377416);
+
+if(t_err.toInt() && !f_err.toInt())
+	for(i = 0; i < 4 && !t_err.toInt(); i++)
+		arguments["ai"+i] = EVAL;
+
+f_err = t_err;','','',1470158835);
+INSERT INTO "tmplib_DevLib" VALUES('oneWire','One Wire','','','One Wire sensors bus implementing by DS9097 and for: DS1820.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 0.1.0','','',30,0,'JavaLikeCalc.JavaScript
+//Functions
+function reset(tr) {
+	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
+	rez = tr.messIO(SYS.strFromCharCode(0xF0));
+	tr.addr(tr.addr().parse(0,":")+":115200:8N1"); tr.timings("100:2-0"); tr.start(true);
+	tr.messIO("");
+	return rez.length && rez.charCodeAt(0) != 0xF0;
+}
+
+function out(tr, mess, bits) {
+	if(bits == EVAL) bits = mess.length * 8;
+	req = "";
+	for(iB = 0; iB < ceil(bits/8); iB++) {
+		vB = mess.charCodeAt(iB);
+		bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+		for(iBi = 0; iBi < bB; iBi++) req += SYS.strFromCharCode((vB&(1<<iBi)) ? 0xFF : 0x00);
+	}
+	for(resp = tr.messIO(req); resp.length < req.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+}
+
+function io(tr, mess, bits) {
+	if(bits == EVAL) bits = mess.length * 8;
+	req = "";
+	for(iB = 0; iB < ceil(bits/8); iB++) {
+		vB = mess.charCodeAt(iB);
+		bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+		for(iBi = 0; iBi < bB; iBi++) req += SYS.strFromCharCode((vB&(1<<iBi)) ? 0xFF : 0x00);
+	}
+	//SYS.messInfo("OneWire","bits="+bits+"; req="+SYS.strDecode(req,"Bin"," "));
+	for(resp = tr.messIO(req); resp.length < req.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+	//SYS.messInfo("OneWire","bits="+bits+"; resp="+SYS.strDecode(resp,"Bin"," "));
+	rez = "";
+	for(iR = 0; iR < resp.length; ) {
+		vB = 0;
+		for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
+			if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
+		rez += SYS.strFromCharCode(vB);
+	}		
+	return rez;
+}
+
+function scan(tr, lstDiscr) {
+	if(!reset(tr)) return "";
+	crc8 = 0;
+	sn = new Array(0,0,0,0,0,0,0,0);
+	out(tr, SYS.strFromCharCode(0xF0));
+	//tr.messIO(SYS.strFromCharCode(0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF));	//Scan command, 0xF0
+	for(nByte = 0, nBit = 1, tBit = 0, sDir = false, mskByte = 1, lstZero = 0; nByte < 8; ) {
+		tBit = io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0) << 1;
+		tBit = tBit | io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0);
+		//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; tBit="+tBit);
+		if(tBit == 3) break;
+		if(tBit > 0) sDir = !(tBit&0x01);
+		else {
+			if(nBit < lstDiscr) sDir = ((sn[nByte]&mskByte) > 0);
+			else sDir = (nBit == lstDiscr);
+			if(sDir == 0) lstZero = nBit;
+			if(lstZero < 9) lstDiscr = lstZero;
+		}
+		if(sDir) sn[nByte] = sn[nByte] | mskByte;
+		tr.messIO(SYS.strFromCharCode(sDir?0xFF:0x00));
+		nBit++;
+     mskByte = (mskByte<<1)&0xFF;
+		if(!mskByte) { nByte++; mskByte = 1; }
+	}
+
+	rez = "";
+	if(nByte == 8) {
+		for(iB = 0; iB < nByte; iB++) rez += SYS.strFromCharCode(sn[iB]);
+		if(!Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = lstZero;
+		else { rez = ""; lstDiscr = 0; }
+	}
+
+	return rez;
+}
+
+//Set transport and init
+if(f_start) {
+	tmResc_ = tmResc;
+	devLs = new Object();
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+}
+if(f_stop) {
+	for(var devID in devLs) {
+		if((dO=devLs[devID]).isEVal()) continue;
+		aLs = dO.dP.nodeList("a_");
+		for(iA = 0; iA < aLs.length; iA++)
+			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+	}
+	devLs = tr = false;
+	return;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	//Generic information update. !!!! The periodicy call append
+	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
+		tmResc_ = tmResc;
+		tmSc = SYS.time();
+		// Check for power
+		if(!reset(tr) ||
+		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
+			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
+			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
+		else power = resp.charCodeAt(0);
+		// Scan for allowed devices on the bus.
+		for(devID = "start", lstDiscr = -1; devID.length && lstDiscr; ) {
+			if(lstDiscr < 0) lstDiscr = 0;
+			if((devID=scan(tr,lstDiscr)).length)	{
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				if((dO=devLs[devID]).isEVal()) {
+					devLs[devID] = dO = new Object();
+					// Create the device''s parameter object
+					decId = SYS.strDecode(devID,"Bin","");
+					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(tr("1W device")+" "+decId));
+					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
+					// Create the device''s proper attributes
+					dO.dP = dP = this["prm_"+decId];
+					if(devID.charCodeAt(0) == 0x28) {	//DS18B20
+						dP.attrAdd("val", tr("Temperature"), "real|ro");
+						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
+						dP.attrAdd("res", tr("Resolution [9...12]"), "integer");
+					}
+				}
+				dO.tmSc = tmSc;
+			}
+		}
+		//Check for removed devices
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			if(dO.tmSc != tmSc)	{
+				devLs[devID] = EVAL;
+				aLs = dO.dP.nodeList("a_");
+				for(iA = 0; iA < aLs.length; iA++)
+					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+			}
+		}
+	}
+	else {
+		//Process devices for reading current value and set modifable
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			if(devID.charCodeAt(0) == 0x28) {	//DS18B20
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
+				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
+					//Set scratchpad
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
+					//Copy scratchpad part to the EEPROM
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current
+				// Call the transmission
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
+				// Get scratchpad
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				out(tr, SYS.strFromCharCode(0xBE));
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
+					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
+					if(val > 32767) val -= 65536;
+					dP.val.set(val/16, 0, 0, true);
+					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
+						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
+						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
+					}
+				}
+				else {
+					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
+					dO.m = dO.res = EVAL;
+				}
+			}
+		}
+	}
+}
+
+f_err = t_err;','','',1470158835);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default

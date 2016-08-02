@@ -12,4 +12,5 @@
 #endif
 */
 
+#define _LINPAC_
 #define x86

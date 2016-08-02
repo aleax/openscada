@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.4.1"
+#define MOD_VER		"1.4.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -283,7 +283,7 @@ void TTrIn::connect( )
     try {
 	//Open and setup device
 	// Serial port open
-	mDevPort = TSYS::strSepParse(addr(),0,':');
+	mDevPort = TSYS::strParse(addr(), 0, ":");
 	//  O_NONBLOCK is used for prevent function open() hang on several USB->RS485 converters
 	fd = open(mDevPort.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
 	if(fd < 0) throw TError(nodePath().c_str(), _("Serial port '%s' %s error: %s."), mDevPort.c_str(), "open", strerror(errno));
@@ -298,7 +298,7 @@ void TTrIn::connect( )
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
 	tio.c_cc[VMIN] = 0;            ///< blocking read until 0 character arrives*/
 	// Set speed
-	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
+	string speed = TSYS::strNoSpace(TSYS::strParse(addr(),1,":"));
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
 	    switch(s2i(speed)) {
@@ -323,7 +323,7 @@ void TTrIn::connect( )
 	    cfsetospeed(&tio, tspd);
 	}
 	// Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
+	string format = TSYS::strNoSpace(TSYS::strParse(addr(),2,":"));
 	if(!format.empty()) {
 	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 	    //  Set byte length
@@ -352,7 +352,7 @@ void TTrIn::connect( )
 	}
 
 	// Set flow control
-	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
 	mRTSfc = mRTSlvl = mRTSEcho = false;
 	tio.c_cflag &= ~CRTSCTS;
 	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
@@ -379,7 +379,7 @@ void TTrIn::connect( )
 #endif
 
 	//Modem init
-	mMdmMode = s2i(TSYS::strSepParse(addr(),4,':'));
+	mMdmMode = s2i(TSYS::strParse(addr(),4,":"));
 	if(mMdmMode) {
 	    mMdmDataMode = false;
 	    // Send init 1 string
@@ -799,11 +799,11 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "ADDR") {
 	//Times adjust
-	int speed = s2i(TSYS::strSepParse(co.getS(),1,':'));
-	if(TSYS::strSepParse(addr(),4,':').size()) setTimings("5000:1000");
+	int speed = s2i(TSYS::strParse(co.getS(),1,":"));
+	if(TSYS::strParse(addr(),4,":").size()) setTimings("5000:1000");
 	else if(speed)
 	    setTimings(i2s((1024*11*1000)/speed)+":"+r2s(11e4/(float)speed,2,'f')+
-			":"+TSYS::strSepParse(timings(),2,':')+":"+TSYS::strSepParse(timings(),3,':')+":"+TSYS::strSepParse(timings(),4,':'));
+			":"+TSYS::strParse(timings(),2,":")+":"+TSYS::strParse(timings(),3,":")+":"+TSYS::strParse(timings(),4,":"));
     }
 
     return TTransportOut::cfgChange(co, pc);
@@ -836,7 +836,7 @@ void TTrOut::start( int tmCon )
 
     try {
 	//Open and setup device
-	mDevPort = TSYS::strSepParse(addr(), 0, ':');
+	mDevPort = TSYS::strParse(addr(), 0, ":");
 	// Lock device for all serial transports
 	if(!(isLock=mod->devLock(mDevPort))) throw TError(nodePath().c_str(),_("Device '%s' is used now."),mDevPort.c_str());
 
@@ -867,7 +867,7 @@ void TTrOut::start( int tmCon )
 	    tio.c_cc[VMIN] = 0;		//< blocking read until 0 character arrives
 
 	    // Set speed
-	    string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':'));
+	    string speed = TSYS::strNoSpace(TSYS::strParse(addr(),1,":"));
 	    if(!speed.empty()) {
 		speed_t tspd = B9600;
 		switch(s2i(speed)) {
@@ -893,7 +893,7 @@ void TTrOut::start( int tmCon )
 	    }
 
 	    // Set asynchronous data format
-	    string format = TSYS::strNoSpace(TSYS::strSepParse(addr(),2,':'));
+	    string format = TSYS::strNoSpace(TSYS::strParse(addr(),2,":"));
 	    if(!format.empty()) {
 		if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 
@@ -925,7 +925,7 @@ void TTrOut::start( int tmCon )
 	    }
 
 	    // Set flow control
-	    string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	    string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
 	    tio.c_cflag &= ~CRTSCTS;
 	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
@@ -951,7 +951,7 @@ void TTrOut::start( int tmCon )
 #endif
 
 	    //Modem connection establish
-	    string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
+	    string telNumb = TSYS::strNoSpace(TSYS::strParse(addr(),4,":"));
 	    if(!telNumb.empty()) {
 		// Resource to transfer function alloc
 		runSt = true;
@@ -1066,12 +1066,20 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
     if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
 
-    int wReqTm = s2i(TSYS::strSepParse(timings(),0,':',&off));
+    int wReqTm = s2i(TSYS::strParse(timings(),0,":",&off));
     wReqTm = time ? time : wReqTm;
-    float wCharTm = s2r(TSYS::strParse(timings(),0,":",&off));
+
+    string tVl = TSYS::strParse(timings(), 0, ":", &off);
+    float wCharTm = s2r(TSYS::strParse(tVl,0,"-"));
+    tVl = TSYS::strParse(tVl, 1, "-");
+    float reqRetrMult = tVl.size() ? vmax(0,vmin(10,s2r(tVl))) : 4;
+
     float wKeepAliveTm = s2r(TSYS::strParse(timings(),0,":",&off));
+
     float wRtsDelay1 = 1e-3*s2r(TSYS::strParse(timings(),0,":",&off));
+
     float wRtsDelay2 = 1e-3*s2r(TSYS::strParse(timings(),0,":",&off));
+
     if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
 	mess_debug(nodePath().c_str(), _("Restart by KeepAliveTm %gs."), wKeepAliveTm);
 	stop();
@@ -1086,7 +1094,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
     //Write request
     if(oBuf && oLen > 0) {
 	if(!noReq && !mI2C) tcflush(fd, TCIOFLUSH);
-	if((tmW-mLstReqTm) < (4000*wCharTm)) kz = TSYS::sysSleep(1e-6*((4e3*wCharTm)-(tmW-mLstReqTm)));
+	if((tmW-mLstReqTm) < (reqRetrMult*wCharTm)) kz = TSYS::sysSleep(1e-6*((reqRetrMult*wCharTm)-(tmW-mLstReqTm)));
 
 	// Pure RS-485 flow control: Clear RTS for transfer allow
 	if(mRTSfc) {
@@ -1268,9 +1276,10 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"conn:symbol[:KeepAliveTm[:rtsDelay1:rtsDelay2]]\". Where:\n"
+	    _("Connection timings in format: \"conn:symbol[-NextReqMult][:KeepAliveTm[:rtsDelay1:rtsDelay2]]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
+	    "    NextReqMult - next request's multiplicator to the {symbol} time, 4 by default;\n"
 	    "    KeepAliveTm - keep alive timeout in seconds for restart transport;\n"
 	    "    rtsDelay1 - the delay from the transmitter enabling by the RTS signal and to same the transferring, in ms;\n"
 	    "    rtsDelay2 - the delay from the transferring finish and the transmitter disabling by the RTS signal, in ms."));

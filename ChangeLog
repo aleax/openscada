@@ -1,8 +1,18 @@
+2016-08-02 Roman
+- !!!!:DB.LibsDB.OscadaLibs: To the templates library "DevLib" new template "oneWire" is added for implement OneWire bus by DS9097 and for DS1820.
+    Template DevLib.PCF8591 expanded by the AI set to EVAL on errors.
+- SYS: For user API TVal::set() prevented writing to no writable values of configurations.
+    New user API function TVal::isCfg() added.
+- DAQ.ICP_DAS: SDK was updated to last version of "ICP DAS".
+- DAQ.JavaLikeCalc: Syntax highlight expanded to the command "~".
+- Transport.Serial: The timeout "symbol" was expanded by "the next request's multiplicator to the {symbol} time, 4 by default".
+
+
 2016-07-27 Roman
 - SYS: taskUtilizTm() is expanded by the argument "max" for the maximum value obtain and the value changed to seconds.
     The function taskDescr() is added for link get to the current task description structure.
 - DAQ.{BlockCalc,LogicLev,ModBus,Siemens}: The task's execution status was expanded by the maximum consumption value.
-- !!!:DAQ.LogicLev: Moved for set the attribute "f_frq" to the real frequency, taken from the task description structure.
+- !!!:DAQ.LogicLev: Moved for set the attribute "f_frq" to the real (instantaneous) frequency, taken from the task description structure.
     The parameters task's consumption measurement is added, into attribute "err", into the Debug mode of the controller object.
 
 

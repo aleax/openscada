@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.2.2"
+#define MOD_VER		"3.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -207,7 +207,7 @@ void TpContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 	shgl.childAdd("rule")->setAttr("expr","\\b(var|in)(?=\\s+\\w)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","(\\?|\\:)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*\\.?[0-9]+|[0-9]*\\.?[0-9]+[eE][-+]?[0-9]*|true|false)\\b")->setAttr("color","darkorange");
-	shgl.childAdd("rule")->setAttr("expr","(\\=|\\!|\\+|\\-|\\>|\\<|\\*|\\/|\\%|\\||\\&|\\^)")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","(\\=|\\!|\\+|\\-|\\>|\\<|\\*|\\/|\\%|\\||\\&|\\^|\\~)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","(\\;|\\,|\\{|\\}|\\[|\\]|\\(|\\))")->setAttr("color","blue");
     }
 }

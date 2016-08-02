@@ -818,7 +818,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // bool set(ElTp val, int tm = 0, int utm = 0, bool sys = false) - write value <val> to attribute with time label <tm:utm> and system
     //       access flag <sys>
     //  tm, utm - time for set value
-    //  sys - system request, direct to object
+    //  sys - system request, direct to the object
     if(iid == "set" && prms.size() >= 1) {
 	try {
 	    int64_t tm = 0;
@@ -826,7 +826,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    if(prms.size() >= 3) tm += prms[2].getI();
 	    bool isSys = false;
 	    if(prms.size() >= 4) isSys = prms[3].getB();
-	    set(prms[0],tm,isSys);
+	    if(isSys && isCfg() && fld().flg()&TFld::NoWrite) return false;
+	    set(prms[0], tm, isSys);
 	    return false;
 	} catch(...){ }
 	return true;
@@ -858,6 +859,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "selNames")	return fld().selNames();
     // string reserve() - reserve string property value
     if(iid == "reserve")return fld().reserve();
+    // bool isCfg() - check to a configuration field
+    if(iid == "isCfg")	return isCfg();
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }
