@@ -1,3 +1,15 @@
+2016-08-07 Roman
+- !!!!:DB.LibsDB.OscadaLibs: To the templates library "DevLib" new template "SSCP" is added for implement Shark Slave Communication Protocol.
+    !!!:DAQ template DevLib.oneWire: fix to the search algorithm and it's tested for 13 sensors on the bus;
+	appended by the devices support: DS2413 (tested), DS1822, DS1820/DS18S20/DS1920.
+    DAQ template DevLib.PCF8591 some fixed for set values to EVAL on errors and stability.
+- FIX:SYS.XML: Crashes on empty string encoding try fixed.
+- !!:FIX:DAQ.JavaLikeCalc: Free of a function test execution is added on the function stop, for some crashes on exit prevent.
+    !:FIX:Return of included functions fix for the string constant "" override.
+- !!:FIX:Special.FLibSYS: The system functions were appended by the Message Digest 5 (MD5) calculation function by OpenSSL.
+    FIX: IO object was fixed for type "char" (1 byte) counted reading.
+
+
 2016-08-02 Roman
 - !!!!:DB.LibsDB.OscadaLibs: To the templates library "DevLib" new template "oneWire" is added for implement OneWire bus by DS9097 and for DS1820.
     Template DevLib.PCF8591 expanded by the AI set to EVAL on errors.

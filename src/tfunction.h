@@ -113,7 +113,7 @@ class TFunction : public TCntrNode
 	void setId( const string &vl );
 	virtual void setProg( const string &prg )	{ }
 	void setStor( const string &istor )		{ mStor = istor; }
-	virtual void setStart( bool val )		{ runSt = val; }
+	virtual void setStart( bool val );
 
 	// IO
 	void ioList( vector<string> &list );

@@ -9,8 +9,8 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Надає реалізацію базових шаблонів.','tmplib_base','Базовые шаблоны','Автор: Роман Савоченко <rom_as@oscada.org>
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
-INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','Version: 1.2.0
-The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.','','tmplib_DevLib','Библиотека устройств','');
+INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
+Version: 1.3.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -1121,8 +1121,18 @@ INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ai3','AI3',2,16,'',6,'','','','
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8591','ao','AO',2,32,'',7,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','this','Object',4,0,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','power','Power',3,16,'',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','tmResc','Rescan period, s',2,64,'60',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','power','Power, for temperature',3,16,'',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','tmResc','Rescan period, s',2,64,'60',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','transport','Transport of the One Wire bus, Sockets',0,64,'SSCP',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','user','User',0,64,'admin',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','pass','Password',0,64,'rw',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','list','Selected to process variables',0,36,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','listsDir','List files'' folder',0,64,'SSCP',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','this','Object',4,0,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrm','Maximum data frame size',1,64,'2048',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','verPrt','Protocol version',1,16,'',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2786,6 +2796,26 @@ INSERT INTO "Trs" VALUES('Temperature','','');
 INSERT INTO "Trs" VALUES('User cell [0...65535]','','');
 INSERT INTO "Trs" VALUES('Resolution [9...12]','','');
 INSERT INTO "Trs" VALUES('1:Device missed','','');
+INSERT INTO "Trs" VALUES('3:No a response or the response short.','','');
+INSERT INTO "Trs" VALUES('3:Incomplete response.','','');
+INSERT INTO "Trs" VALUES('4:Request error.','','');
+INSERT INTO "Trs" VALUES('Address ''%1'' out of range [0...255].','','');
+INSERT INTO "Trs" VALUES('Response','','');
+INSERT INTO "Trs" VALUES('Appending variable','','');
+INSERT INTO "Trs" VALUES('4:Unknown function.','','');
+INSERT INTO "Trs" VALUES('4:Insufficient rights.','','');
+INSERT INTO "Trs" VALUES('4:Invalid function received.','','');
+INSERT INTO "Trs" VALUES('5:Data error...','','');
+INSERT INTO "Trs" VALUES('4:Invalid host''s address received.','','');
+INSERT INTO "Trs" VALUES('5:Operation error.','','');
+INSERT INTO "Trs" VALUES('Wrong login.','','');
+INSERT INTO "Trs" VALUES('No such variable.','','');
+INSERT INTO "Trs" VALUES('Unknown error %1.','','');
+INSERT INTO "Trs" VALUES('Destination:','','');
+INSERT INTO "Trs" VALUES('DI0','','');
+INSERT INTO "Trs" VALUES('DI1','','');
+INSERT INTO "Trs" VALUES('DO0','','');
+INSERT INTO "Trs" VALUES('DO1','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -4481,9 +4511,10 @@ if(t_err.length) {
 else f_err = "0";','','',1464936781);
 INSERT INTO "tmplib_DevLib" VALUES('PCF8591','','','','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript
 //Set transport
 if(f_start) {
+	f_err = "0";
 	transport_ = transport;
 	tr = SYS.Transport.Serial["out_"+transport];
 }
@@ -4501,7 +4532,7 @@ else {
 	for(i = 0; i < 4 && !t_err.toInt(); i++) {
 		//Select next channel and the output
 		tr.messIO(SYS.strFromCharCode(addr,0x40|((i+1)&0x3),255*max(0,min(1,ao/vRef))), 0, 0);
-		//SYS.sleep(5e-3);
+		SYS.sleep(1e-3);
 		rez = tr.messIO("", 0, 1);
 		if(rez.length)	arguments["ai"+i] = vRef*(rez.charCodeAt(0)/255);
 		else t_err = "3:"+tr("No read result.");
@@ -4509,13 +4540,14 @@ else {
 }
 
 if(t_err.toInt() && !f_err.toInt())
-	for(i = 0; i < 4 && !t_err.toInt(); i++)
+	for(i = 0; i < 4; i++)
 		arguments["ai"+i] = EVAL;
 
-f_err = t_err;','','',1470158835);
-INSERT INTO "tmplib_DevLib" VALUES('oneWire','One Wire','','','One Wire sensors bus implementing by DS9097 and for: DS1820.
+f_err = t_err;','','',1470548661);
+INSERT INTO "tmplib_DevLib" VALUES('oneWire','One Wire','','','One Wire sensors bus implementing by 1Wire-adapter: DS9097, DS9097U(scheduled). Supported direct and parasite powering for the temperature sensors.
+Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408 (scheduled), DS2450 (scheduled), DS2438 (scheduled).
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 0.1.0','','',30,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0','','',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
 	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
@@ -4557,12 +4589,9 @@ function io(tr, mess, bits) {
 	return rez;
 }
 
-function scan(tr, lstDiscr) {
+function scan(tr, sn, lstDiscr) {
 	if(!reset(tr)) return "";
-	crc8 = 0;
-	sn = new Array(0,0,0,0,0,0,0,0);
 	out(tr, SYS.strFromCharCode(0xF0));
-	//tr.messIO(SYS.strFromCharCode(0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF));	//Scan command, 0xF0
 	for(nByte = 0, nBit = 1, tBit = 0, sDir = false, mskByte = 1, lstZero = 0; nByte < 8; ) {
 		tBit = io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0) << 1;
 		tBit = tBit | io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0);
@@ -4570,12 +4599,15 @@ function scan(tr, lstDiscr) {
 		if(tBit == 3) break;
 		if(tBit > 0) sDir = !(tBit&0x01);
 		else {
-			if(nBit < lstDiscr) sDir = ((sn[nByte]&mskByte) > 0);
+			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; lstDiscr="+lstDiscr);
+			if(nBit < lstDiscr) sDir = sn[nByte]&mskByte;
 			else sDir = (nBit == lstDiscr);
-			if(sDir == 0) lstZero = nBit;
-			if(lstZero < 9) lstDiscr = lstZero;
+			if(!sDir) lstZero = nBit;
+			//if(lstZero < 9) lstDiscr = lstZero;
+			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; sDir="+sDir+"; mskByte="+mskByte);
 		}
 		if(sDir) sn[nByte] = sn[nByte] | mskByte;
+		else sn[nByte] = sn[nByte] & (~mskByte);
 		tr.messIO(SYS.strFromCharCode(sDir?0xFF:0x00));
 		nBit++;
      mskByte = (mskByte<<1)&0xFF;
@@ -4630,24 +4662,38 @@ else {
 			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
 		else power = resp.charCodeAt(0);
 		// Scan for allowed devices on the bus.
+		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
 		for(devID = "start", lstDiscr = -1; devID.length && lstDiscr; ) {
 			if(lstDiscr < 0) lstDiscr = 0;
-			if((devID=scan(tr,lstDiscr)).length)	{
+			if((devID=scan(tr,sn,lstDiscr)).length)	{
 				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
 				if((dO=devLs[devID]).isEVal()) {
 					devLs[devID] = dO = new Object();
+					devFamily = devID.charCodeAt(0); devNm = tr("1W device"); dO.isT = false;
+					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
+					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
+					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
+					else if(devFamily == 0x3A)	devNm = "DS2413";
+
 					// Create the device''s parameter object
 					decId = SYS.strDecode(devID,"Bin","");
-					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(tr("1W device")+" "+decId));
+					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
 					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
 					// Create the device''s proper attributes
 					dO.dP = dP = this["prm_"+decId];
-					if(devID.charCodeAt(0) == 0x28) {	//DS18B20
+					if(dO.isT) {	//Temperature
 						dP.attrAdd("val", tr("Temperature"), "real|ro");
 						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
 						dP.attrAdd("res", tr("Resolution [9...12]"), "integer");
 					}
+					else if(devFamily == 0x3A) {	//DS2413
+						dP.attrAdd("di0", tr("DI0"), "boolean|ro");
+						dP.attrAdd("di1", tr("DI1"), "boolean|ro");
+						dP.attrAdd("do0", tr("DO0"), "boolean");
+						dP.attrAdd("do1", tr("DO1"), "boolean");
+					}
 				}
+				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
 				dO.tmSc = tmSc;
 			}
 		}
@@ -4666,7 +4712,8 @@ else {
 		//Process devices for reading current value and set modifable
 		for(devID in devLs) {
 			if((dO=devLs[devID]).isEVal()) continue;
-			if(devID.charCodeAt(0) == 0x28) {	//DS18B20
+			devFamily = devID.charCodeAt(0);
+			if(dO.isT) {	//Temperature
 				dP = dO.dP;
 				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
 				//Check for a modifications
@@ -4710,11 +4757,205 @@ else {
 					dO.m = dO.res = EVAL;
 				}
 			}
+			else if(devFamily == 0x3A) {	//DS2413
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				do0_ = dP.do0.get(), do1_ = dP.do1.get();
+				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
+					tVl = (do1_<<1) | do0_;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
+					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
+					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
+						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
+						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
+					}
+				}
+				else {
+					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
+					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
+					dO.do0 = dO.do1 = EVAL;
+				}
+			}
 		}
 	}
 }
 
-f_err = t_err;','','',1470158835);
+f_err = t_err;','','',1470549909);
+INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Costumer Faster CZ (http://faster.cz)','','',10,0,'JavaLikeCalc.JavaScript
+//Same request to the device
+function req(tr, addr, func, data) {
+	req = SYS.strFromCharCode(addr, (func>>8)&0xFF, func&0xFF, (data.length>>8)&0xFF, data.length&0xFF) + data;
+	//SYS.messInfo("/SSCP",tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+	resp = tr.messIO(req);
+	while(resp.length && (resp.length < 5 || (resp.length-5) < ((resp.charCodeAt(3)<<8)|resp.charCodeAt(4))) &&
+		(tresp=tr.messIO("")).length) resp += tresp;
+	//SYS.messInfo("/SSCP",tr("Response")+": "+SYS.strDecode(resp,"Bin"," "));
+	data = resp;
+	if(resp.length < 5)
+		return tr("3:No a response or the response short.");
+	if((resp.length-5) < ((resp.charCodeAt(3)<<8)|resp.charCodeAt(4)))
+		return tr("3:Incomplete response.");
+	if(resp.charCodeAt(0) != addr)	return tr("4:Invalid host''s address received.");
+	func_ = ((resp.charCodeAt(1)&0xFF)<<8) | resp.charCodeAt(2);
+	if(func_ == 0xfffe)						return tr("4:Unknown function.");
+	if(func_ == 0xffff)						return tr("4:Insufficient rights.");
+	if((func_&0x3FFF) != func)			return tr("4:Invalid function received.");
+	if((func_&0xC000) != 0x8000) {
+		opErr = tr("5:Operation error.");
+		if(resp.length >= 9) {
+			errCod = (resp.charCodeAt(5)<<24) | (resp.charCodeAt(6)<<16) | (resp.charCodeAt(7)<<8) | resp.charCodeAt(8);
+			if(errCod == 0x0101)		opErr += " "+tr("Wrong login.");
+			else if(errCod == 0x103)	opErr += " "+tr("No such variable.");
+			//... Append here for needs
+			else opErr += " "+tr("Unknown error %1.").replace("%1",errCod);
+		}
+		if(resp.length >= 17)	opErr += " "+tr("Destination:")+" "+SYS.strDecode(resp.slice(9),"Bin","")+"h";
+		return opErr;
+	}
+	data = resp.slice(5);
+	return "0";
+}
+
+//Set transport and init
+if(f_start) {
+	transport_ = transport;
+	tr = SYS.Transport.Sockets["out_"+transport];
+	vlist = new Object();
+	prcVList = new Array();
+	isLogin = false;
+	toLoadVarLsts = true;
+	aSelList = false;
+	list_ = "";
+}
+if(f_stop) return;
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Sockets["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 255)
+	t_err = "2:"+tr("Address ''%1'' out of range [0...255].").replace("%1",addr);
+else {
+	//Generic information update.
+	if(toLoadVarLsts) {
+		toLoadVarLsts = false;
+		fLs = SYS.system("ls -1 "+listsDir+"/*.vlist");
+		for(off = 0; (fln=fLs.parse(0,"\n",off)).length; ) {
+			fl = SYS.fileRead(fln);
+			for(off1 = 0; (ln=fl.parse(0,"\x0D\x0A",off1)).length; ) {
+				off2 = 0;
+				vid = ln.parse(0, ";", off2);
+				if(vid == "Project" || !(tVl=ln.parse(0,";",off2)).length) continue;
+				vid += ":"+tVl;
+				vlist[vid] = vO = new Object();
+				vO.Type = ln.parse(0, ";", off2);
+				vO.CommUid = ln.parse(0, ";", off2).toInt();
+				vO.Offset = ln.parse(0, ";", off2).toInt();
+				vO.Length = ln.parse(0, ";", off2).toInt();
+				vO.ParentTypeFamily = ln.parse(0, ";", off2);
+				vO.HistoryId = ln.parse(0, ";", off2);
+			}
+		}
+		selLst = "";
+		for(tVl in vlist) selLst += tVl+";";
+		this.attrAdd("selList", tr("Appending variable"), "string|sel", selLst+"\n"+selLst);
+		aSelList = this.selList;
+		aSelList.set("");
+	}
+	//Check for select a varable and append it to the processing list
+	if(aSelList && (tVl=aSelList.get()).length) {
+		if(list.indexOf(tVl) == -1)
+			list += ((list.length && list[list.length-1] != "\n")?"\n":"")+ tVl+"\n";
+		aSelList.set("");
+	}
+	//The processing variables list update/form
+	if(list != list_) {
+		list_ = list;
+		prcVList = new Array();
+		for(off = 0; (vid=list.parse(0,"\n",off)).length; ) {
+			if((vO=vlist[vid]).isEVal()) continue;
+			prcVList.push(vO);
+			vO.aId = vid.replace(new RegExp("[\\.\\:]+","g"),"_").replace(new RegExp("[\\$\\-]+","g"),"");
+			vTp = "string";
+			if(vO.Type.indexOf("bool") != -1)			vTp = "boolean";
+			else if(vO.Type.indexOf("real") != -1)	vTp = "real";
+			else if(vO.Type.indexOf("int") != -1)		vTp = "integer";
+			this.attrAdd(vO.aId, vid, vTp+"|ro");
+			vO.aO = this[vO.aId];
+			//SYS.messInfo("/SSCP","aId="+vO.aId);
+		}
+	}
+
+	//Same requests
+	if(!isLogin) {
+		io = SYS.strFromCharCode(0x01, (maxDtFrm>>8)&0xFF, maxDtFrm&0xFF, user.length) +
+				user + SYS.strFromCharCode(0x10) + Special.FLibSYS.MD5(pass);
+		if(!(t_err=req(tr,addr,0x0100,io)).toInt()) {
+			verPrt = io.charCodeAt(0);
+			maxDtFrmServ = (io.charCodeAt(1)<<8) | io.charCodeAt(2);
+			isLogin = true;
+		}
+	}
+	if(isLogin && !t_err.toInt()) {
+		for(iV0 = iV1 = 0; iV0 < prcVList.length; iV0 = iV1) {
+			frmSz = frmSzServ = 0;
+			io = Special.FLibSYS.IO("", "", "b");
+			io.wr(0x80);
+			for(iV1 = iV0; iV1 < prcVList.length; iV1++) {
+				vO = prcVList[iV1];
+				frmSz += vO.Length; frmSzServ += 12;
+				if(frmSz >= maxDtFrm || frmSzServ >= maxDtFrmServ) break;
+				io.wr(vO.CommUid, "uint32").wr(vO.Offset, "uint32").wr(vO.Length, "uint32");
+			}
+			//SYS.messInfo("/SSCP","req="+SYS.strDecode(io.string,"Bin"," "));
+			rqDt = io.string;
+			t_err = req(tr, addr, 0x0500, rqDt);
+			io.string = rqDt; io.pos = 0;
+			//SYS.messInfo("/SSCP","resp="+SYS.strDecode(io.string,"Bin"," "));
+			for(iV2 = iV0; iV2 < iV1; iV2++) {
+				vO = prcVList[iV2];
+				//SYS.messInfo("/SSCP","aId="+vO.aId+"; pos="+io.pos);
+				if(t_err.toInt()) tVl = EVAL;
+				else {
+					if(vO.Type.indexOf("bool") != -1 && vO.Length == 1)
+						tVl = io.read("char", 1);
+					else if(vO.Type.indexOf("real") != -1 && (vO.Length == 4 || vO.Length == 8))
+						tVl = io.read((vO.Length==8)?"double":"float", 1, "l");
+					else if(vO.Type.indexOf("int") != -1 && (vO.Length == 2 || vO.Length == 4))
+						tVl = io.read((vO.Length==4)?"int32":"int16", 1);
+					else if(vO.Type.indexOf("dt") != -1 && vO.Length == 8) {
+						tVl = io.read("char", vO.Length);
+						//????
+					}
+					else tVl = io.read("char", vO.Length);
+				}
+				vO.aO.set(tVl, 0, 0, true);
+			}
+		}
+	}
+}
+
+f_err = t_err;','','',1470491722);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -5268,465 +5509,6 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1416765601);
-CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','','','','',10,0,'clcCnt++;
-
-if(f_start)	work = SYS.XMLNode("prg");
-
-//Check to commands controller present
-comCntrO = false;
-if(comsCntr.length)	comCntrO = SYS.DAQ.nodeAt(comsCntr,".");
-
-//Commands list update
-if(f_start || !(clcCnt%(60*f_frq))) {
-	if(!comCntrO) {
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
-		comLs = new Object();
-		for(i_t = 1; i_t < rez.length; i_t++) {
-			comNm = rez[i_t]["name"];
-			comLs[comNm] = new Object();
-			comLs[comNm]["descr"] = rez[i_t]["descr"];
-			comLs[comNm]["proc"] = rez[i_t]["proc"];
-			for(i_a = 1; i_a <= 5; i_a++)
-				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
-		}
-	}
-	else {
-		var nL = comCntrO.nodeList("prm_");
-		comLs = new Object();
-		for(i_n = 0; i_n < nL.length; i_n++) {
-			comO = comCntrO[nL[i_n]];
-			comNm = comO.cfg("NAME");
-			comLs[comNm] = new Object();
-			comLs[comNm]["prmID"] = nL[i_n].slice(4);
-			comLs[comNm]["descr"] = comO.cfg("DESCR");
-			for(i_a = 1; i_a <= 5; i_a++)
-				if(!(comA=comO["arg"+i_a]).isEVal())
-					comLs[comNm]["arg"+i_a] = comA.descr();
-		}
-	}
-}
-
-//Programm selection change
-if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
-	work = SYS.XMLNode("prg");
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-	if(rez.length > 1) {
-		//Parse program and insert procedure text and argument''s labels
-		work.load(rez[1][0]);
-		work.setAttr("name",prog);
-		for(comElN = work, comPos = 0; true; comPos++) {
-			if(comPos >= comElN.childSize()) {
-				if((comElN=comElN.parent())) { comPos = comElN.attr("seekPos").toInt(); continue; }
-				break;
-			}
-			comElI = comElN.childGet(comPos);
-			comId = comElI.attr("id");
-			if(comLs[comId].isEVal())	continue;
-			comElI.setAttr("proc",comLs[comId].proc);
-			for(i_a = 1; i_a <= 5; i_a++) comElI.setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
-			if(comElI.childSize()) { comElN.setAttr("seekPos",comPos); comElN = comElI; comPos = -1; }
-		}
-	}
-	else prog = "";
-}
-
-//Start process
-if(curMode <= 0 && mode == 1 && prog.length) {
-	startTm = SYS.time();
-	curCom = 0;
-	curMode = mode;	
-
-	if(comCntrO) {
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++) {
-			var cLi = comCntrO[cL[i_c]];
-			cLi.run.set(false);
-			cLi.stop.set(false);
-			cLi.error.set(false);
-			cLi.abort.set(false);
-			cLi.start.set(true);
-		}
-	}
-}
-//Pause and other process
-else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1)) {
-	curMode = mode;
-	if((curMode == 1 || curMode == 2) && comCntrO) {
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-			comCntrO[cL[i_c]].pause.set(curMode==2);
-	}
-}
-
-//Call program
-if(curMode == 1 || curMode == 2) {
-	prog = work.attr("name");
-
-	//Curent node at levels obtain
-	curComNd = work;
-	for(curComLev = 0, curComPos = 0, off = 0; curComNd && (tVl=curCom.parse(0,":",off)).length; curComLev++, curComPos = tVl.toInt())
-		curComNd = curComNd.childGet(tVl.toInt());
-	if(!curComNd) {
-		SYS.messInfo("uprg"+prog,tr("No current node present")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-		curMode = mode = -3;
-	}
-	curComNd = curComNd.parent();
-
-	//Internal commands call
-	if(!comCntrO) {
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
-			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
-			curCom++;
-		}
-		if(curCom >= 0 && curCom < work.childSize()) {
-			comEl = work.childGet(curCom);
-			//Stop process
-			if(mode == 0) {
-				comEl.setAttr("rez","-10:"+tr("Program terminated"));
-				// Call stop command
-				if(!comLs["Stop"].isEVal()) {
-					off = 0;
-					prLang = comLs["Stop"].proc.parse(0,"\n",off);
-					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-				}
-				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//Pass empty command		
-			else if(!comEl.attr("proc").length) curCom++;
-			//Execute command
-			else if(curMode == 1) {
-				args = new Object();
-				args.rez = "";
-				args.f_start = !comEl.attr("tm").length;
-				if(args.f_start) comEl.setAttr("tm",SYS.time());
-				args.f_frq = f_frq;
-				for(i_a = 1; i_a <= 5; i_a++) args["arg"+i_a] = comEl.attr("arg"+i_a);
-				for(i_a = 1; i_a <= 10; i_a++) args["tmp"+i_a] = comEl.attr("tmp"+i_a);
-				off = 0;
-				prLang = comEl.attr("proc").parse(0,"\n",off);
-				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
-				if(rez && args.rez.toInt() > 0) curCom++;
-				else if(!rez || args.rez.toInt() < 0) {
-					// Call error command
-					if(!comLs["Error"].isEVal()) {
-						off = 0;
-						prLang = comLs["Error"].proc.parse(0,"\n",off);
-						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
-					}
-					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-					curMode = mode = -1;
-				}
-				comEl.setAttr("rez",args.rez);
-				for(i_a = 1; i_a <= 5; i_a++) comEl.setAttr("arg"+i_a, args["arg"+i_a]);
-				for(i_a = 1; i_a <= 10; i_a++) comEl.setAttr("tmp"+i_a, args["tmp"+i_a]);
-				//SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y);
-			}
-		}
-
-		//End call
-		if(curCom < 0 || curCom >= work.childSize()) {
-			// Call stop command
-			if(!comLs["Stop"].isEVal()) {
-				off = 0;
-				prLang = comLs["Stop"].proc.parse(0,"\n",off);
-				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-			}
-
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1) {
-				//Parse programm and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-	//External commands call
-	else {
-		// Get current command parameter-object		
-		toNext = false;
-		curComPrm = EVAL_BOOL;
-		if(curComPos >= 0 && curComPos < curComNd.childSize()) {
-			if(!(comId=comLs[curComNd.childGet(curComPos).attr("id")]).isEVal()) curComPrm = comCntrO["prm_"+comId.prmID];
-			if(curComPrm.isEVal()) {
-				curMode = mode = -1;
-				curComNd.childGet(curComPos).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
-				return;
-			}
-		}
-		if(mode == 3 && curComPos >= 0 && curComPos < curComNd.childSize()) {
-			curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
-			curComPrm.run.set(false);
-			mode = curMode;
-			toNext = true;
-		}
-		else if(curComPos >= 0 && curComPos < curComNd.childSize()) {
-			comEl = curComNd.childGet(curComPos);
-			//Stop process
-			if(mode == 0) {
-				comEl.setAttr("rez","-12:"+tr("Program terminated"));
-				// Stop all typical and set "abort" flag
-				var cL = comCntrO.nodeList("prm_");
-				for(i_c = 0; i_c < cL.length; i_c++) {
-					var cLi = comCntrO[cL[i_c]];
-					cLi.run.set(false);
-					cLi.start.set(false);
-					cLi.abort.set(true);
-				}
-				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//Commands process
-			else {
-				// Start command
-				if(!comEl.attr("tm").length) {
-					curComPrm.run.set(false);	//Stop for possible background call
-					comEl.setAttr("tm",SYS.time());
-					for(i_a = 1; i_a <= 5; i_a++)
-						if(!(comA=curComPrm["arg"+i_a]).isEVal())
-							comA.set(comEl.attr("arg"+i_a));
-					curComPrm.rez.set(0);
-					curComPrm.run.set(true);
-				}
-				//Update steps status, up to current comand
-				for(comElN = work, comPos = 0, comLev = 0, comCur = true; true; comPos++) {
-					if(comPos >= comElN.childSize()) {
-						if((comElN=comElN.parent())) {
-							comLev--;
-							comPos = comElN.attr("seekPos").toInt();
-							comCur = comElN.attr("comCur").toInt();
-							continue;
-						}
-						break;
-					}
-					comElI = comElN.childGet(comPos);
-					isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
-					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
-					if(isCurCmd || (curComPI.run.get() && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))
-					{
-						rez = curComPI.rez.get();
-						if(isCurCmd && rez.toInt() > 0) toNext = true;
-						if(rez.toInt() < 0) {
-							// Stop all typical and call "error" command
-							var cL = comCntrO.nodeList("prm_");
-							for(i_c = 0; i_c < cL.length; i_c++) {
-								var cLi = comCntrO[cL[i_c]];
-								cLi.run.set(false);
-								cLi.start.set(false);
-								cLi.error.set(true);
-							}
-							SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-							curMode = mode = -1;
-						}
-						comElI.setAttr("rez",rez);
-						for(i_a = 1; i_a <= 5; i_a++)
-							if(!(comA=curComPI["arg"+i_a]).isEVal())
-								comElI.setAttr("arg"+i_a, comA.get());
-					}
-					if(isCurCmd) break;
-					if(comElI.childSize()) {
-						comElN.setAttr("seekPos",comPos);
-						comElN.setAttr("comCur",comCur);
-						comElN = comElI;
-						comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
-						comPos = -1; comLev++;
-					}
-				}
-			}
-		}
-
-		// Go to next step
-		if(toNext) {
-			if(curComNd.childGet(curComPos).childSize())	{ curComLev++; curComPos = 0; }
-			else if((++curComPos) >= curComNd.childSize())
-			{ curComLev--; curComPos = curComLev ? curCom.parse(curComLev-1,":").toInt()+1 : curComNd.childSize(); }
-			for(i_c = 0, curComN = ""; i_c < (curComLev-1); i_c++) curComN += curCom.parse(i_c,":");
-			curCom = curComN.length ? curComN+":"+curComPos : curComPos;
-		}
-		
-		//End call
-		if(curComLev <= 0) {
-			// Stop all typical and call "stop" command
-			var cL = comCntrO.nodeList("prm_");
-			for(i_c = 0; i_c < cL.length; i_c++) {
-				var cLi = comCntrO[cL[i_c]];
-				cLi.run.set(false);
-				cLi.start.set(false);
-				cLi.stop.set(true);
-			}
-
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1) {
-				//Parse program and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-}
-mode = curMode;','','',1417806670);
-INSERT INTO "lib_Controllers" VALUES('test','test','test','','','','',10,0,'using Special.FLibSYS;
-
-out+=10;
-if(out>100) out=0;
-
-test = (10).toString(16,2,true);
-test = (-10.34).toFixed(4,8);
-
-//Request prepare
-//req = SYS.XMLNode("#").setAttr("ProtIt","DCON").setAttr("addr",10);
-//Send request
-//SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
-//if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
-
-//test = "Text \n value[\041abc\x21].";
-
-//test = arguments[4];
-//arguments[4] = 10;
-
-//test="Java123Script".search(new RegExp("script","i"));
-//text = "Javascript3\"sdf\"3javaScript __ javascript";
-//test = text.replace(4,3,"67");
-//test = text.replace("3","55");
-//test = text.replace(new RegExp("javascript","ig"),"JavaScript");//
-//test = text.replace(new RegExp("\"([^\"]*)\"","g"),"``$1''''");
-//text = "1 плюс 2 плюс 3";
-//test = text.match("\\d+","g");
-//text = "Посетите мою домашнюю страницу http://www.isp.com/~david";
-//test = text.match("(\\w+):\\/\\/([\\w.]+)\\/(\\S*)");
-//test = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));
-//test = "hello <b>world</b>".split(new RegExp("(<[^>]*>)"));
-//var p = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
-//test = p.test("abc12/30/1969def");
-
-/*CRC = new Array(0,1,2,3,4,5);vSz = 3
-hi=CRC[out%6];
-test = hi;*/
-
-//test = SYS.Transport.Sockets.out_testModBus.messIO("123456");
-
-/*obj = new Object();
-obj["test1"]=1;l
-obj["test2"]=1;
-for( var i in obj ) SYS.messDebug("test","Prop: "+i);
-SYS.messDebug("test","Props test");*/
-
-//vl = SYS.strFromCharCode(100,200,50,60);
-//test = vl.charCodeAt(1);
-
-//test = SYS.system("ps -Ao pid,comm");
-
-//ModBus.Unidrive.pos.pos=out;
-//ModBus.testRTU.test.pos=out;
-//test = rand(offset*0.4);
-//val="Test";
-//if( val=="Test1" || val=="Test2" ) test="TestN"; else test="Test";
-
-//test1=new Array(1,"a",2,"b",3,"c",4);
-//test1[7]=new Array(5,6,7);
-//test=test1[7][1];
-
-//test1="ab;cde;fgh;jk;lm";
-//test = test1.split(";").join();
-
-//req = xmlNode("get").setAttr("path","/%2fgen%2fid");
-//test = xmlCntrReq(req);
-//test = req.text();
-
-/*test1 = vArh("DAQ.System.AutoDA.CPULoad.load");
-test2 = test1.FFT(0,60);
-test = "";
-for( i = 0; i < test2.length; i++ ) test += ""+test2[i]+";";*/
-
-//messPut("cron",0,"Time: "+tmFStr(tmTime()));
-
-/*req = SYS.XMLNode();
-test = req.load("test1.xml",true);*/
-//for( i = 0; i < req.childSize(); i++ )
-//  test += req.childGet(i).attr("id")+"; ";
-/*sutm = 0; stm = SYS.time(sutm);
-req.save(0,"test2.xml");
-eutm = 0; etm = SYS.time(eutm);
-test = 1e6*(etm-stm)+(eutm-sutm);*/
-
-//test = strDec4Bin(Transport.Sockets.out_testModBus.messIO(strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05")));
-
-/*req = SYS.XMLNode("GET");
-req.setAttr("URI","/");
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
-test = req.text();*/
-
-/*req = SYS.XMLNode("POST");
-req.setAttr("URI","/WebUser/FlowTec.txt");
-cntNode = req.childAdd("cnt").setAttr("name","pole0").setAttr("filename","Object2-k001-100309-17.txt");
-cntNode.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
-cntText = "Object2-k001\r\n";
-cntText += "\r\n";
-cntText += "v002\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
-cntText += "v005\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
-cntText += "\r\n";
-cntNode.setText(cntText);
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");*/
-
-//test = SYS.UI.VCAEngine["ses_AGLKS"].alrmSndPlay();
-//test = "1;2;5;7;9";
-//test = "1;2;5;7;9".type();
-
-//SYS.messDebug("test",strEnc2Bin("68 74 74 70 3a 2f 2f 77 77 77 2e 77 33 2e 6f 72 67 2f 32 30 30 30 2f 30 39 2f 78 6d 6c 64 73 69 67 23 72 73 61 2d 73 68 61 31"));
-
-//test = SYS.DAQ.ModBus.testTCP.test.a_8_1_1_ПС_ОПД_стенд_температура__ОПД_.get();
-
-/*req = SYS.XMLNode("get").setAttr("path","/%2fgen%2fid");
-rez = SYS.cntrReq(req,"loop");
-test = req.text();*/
-
-/*DBTbl=SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
-for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
-{
-  var rec = "";
-  for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
-    rec += DBTbl[i_rw][i_fld]+"\t";
-  SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
-}*/','','',1441908975);
-INSERT INTO "lib_Controllers" VALUES('test1','test1','','','','','',10,0,'//clc=0;
-//First getting previous time
-//if(!p_tm){ p_tm = Special.FLibSYS.tmTime(); break; }
-
-//Get curent time
-//c_tm = Special.FLibSYS.tmTime()-2;
-
-//Open value archive
-//a_id = Special.FLibSYS.avalOpen("Archive.va_test");
-//if(a_id==-1) break;
-
-//Calc average archive
-//for(i_tm=p_tm;i_tm<c_tm;i_tm++)
-//{ 
-//  val = Special.FLibSYS.avalGetR(a_id,i_tm,0,"");
-//  rez = (rez*(i_tm-p_tm)+val)/(i_tm-p_tm+1);
-//  clc++;
-//}
-
-//Close value archive
-//Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','',1416656632);
 CREATE TABLE 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_regEl" VALUES('pidUnif','PID (unified)','ПІД (уніфікований)','ПИД (унифицированный)','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library "FLibComplex1" (http://wiki.oscada.org/HomePageEn/Doc/FLibComplex1#h902-15) and the implementation of the PWM for the pulse part.','Суміщений-уніфікований аналоговий та імпульсний ПІД-регулятор. У основі регулятора лежить мова стандартного аналогового ПІД-регулятора з бібліотеки "FLibComplex1" та реалізація ШІМ для імпульсної частини.','Совмещённый-унифицированный аналоговый и импульсный ПИД-регулятор. В основе регулятора лежит ядро стандартного аналогового ПИД-регулятора из библиотеки "FLibComplex1" (http://wiki.oscada.org/Doc/FLibComplex1#h91-15) и реализация ШИМ для импульсной части.',10,0,'//Call standard analog PID
 outA = Special.FLibComplex1.pid(var,sp,max,min,manIn,auto,casc,Kp,Ti,Kd,Td,Tzd,Hup,Hdwn,Zi,followSp,K1,in1,K2,in2,K3,in3,K4,in4,f_frq,int,dif,lag);
@@ -7328,4 +7110,463 @@ for(i = 0; i < tries; i++) {
 			return (hum+20).toString() + ":" + tmp.toString();
 	}
 }',1463575062);
+CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','','','','',1,10,0,'clcCnt++;
+
+if(f_start)	work = SYS.XMLNode("prg");
+
+//Check to commands controller present
+comCntrO = false;
+if(comsCntr.length)	comCntrO = SYS.DAQ.nodeAt(comsCntr,".");
+
+//Commands list update
+if(f_start || !(clcCnt%(60*f_frq))) {
+	if(!comCntrO) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
+		comLs = new Object();
+		for(i_t = 1; i_t < rez.length; i_t++) {
+			comNm = rez[i_t]["name"];
+			comLs[comNm] = new Object();
+			comLs[comNm]["descr"] = rez[i_t]["descr"];
+			comLs[comNm]["proc"] = rez[i_t]["proc"];
+			for(i_a = 1; i_a <= 5; i_a++)
+				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
+		}
+	}
+	else {
+		var nL = comCntrO.nodeList("prm_");
+		comLs = new Object();
+		for(i_n = 0; i_n < nL.length; i_n++) {
+			comO = comCntrO[nL[i_n]];
+			comNm = comO.cfg("NAME");
+			comLs[comNm] = new Object();
+			comLs[comNm]["prmID"] = nL[i_n].slice(4);
+			comLs[comNm]["descr"] = comO.cfg("DESCR");
+			for(i_a = 1; i_a <= 5; i_a++)
+				if(!(comA=comO["arg"+i_a]).isEVal())
+					comLs[comNm]["arg"+i_a] = comA.descr();
+		}
+	}
+}
+
+//Programm selection change
+if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
+	work = SYS.XMLNode("prg");
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+	if(rez.length > 1) {
+		//Parse program and insert procedure text and argument''s labels
+		work.load(rez[1][0]);
+		work.setAttr("name",prog);
+		for(comElN = work, comPos = 0; true; comPos++) {
+			if(comPos >= comElN.childSize()) {
+				if((comElN=comElN.parent())) { comPos = comElN.attr("seekPos").toInt(); continue; }
+				break;
+			}
+			comElI = comElN.childGet(comPos);
+			comId = comElI.attr("id");
+			if(comLs[comId].isEVal())	continue;
+			comElI.setAttr("proc",comLs[comId].proc);
+			for(i_a = 1; i_a <= 5; i_a++) comElI.setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
+			if(comElI.childSize()) { comElN.setAttr("seekPos",comPos); comElN = comElI; comPos = -1; }
+		}
+	}
+	else prog = "";
+}
+
+//Start process
+if(curMode <= 0 && mode == 1 && prog.length) {
+	startTm = SYS.time();
+	curCom = 0;
+	curMode = mode;	
+
+	if(comCntrO) {
+		var cL = comCntrO.nodeList("prm_");
+		for(i_c = 0; i_c < cL.length; i_c++) {
+			var cLi = comCntrO[cL[i_c]];
+			cLi.run.set(false);
+			cLi.stop.set(false);
+			cLi.error.set(false);
+			cLi.abort.set(false);
+			cLi.start.set(true);
+		}
+	}
+}
+//Pause and other process
+else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1)) {
+	curMode = mode;
+	if((curMode == 1 || curMode == 2) && comCntrO) {
+		var cL = comCntrO.nodeList("prm_");
+		for(i_c = 0; i_c < cL.length; i_c++)
+			comCntrO[cL[i_c]].pause.set(curMode==2);
+	}
+}
+
+//Call program
+if(curMode == 1 || curMode == 2) {
+	prog = work.attr("name");
+
+	//Curent node at levels obtain
+	curComNd = work;
+	for(curComLev = 0, curComPos = 0, off = 0; curComNd && (tVl=curCom.parse(0,":",off)).length; curComLev++, curComPos = tVl.toInt())
+		curComNd = curComNd.childGet(tVl.toInt());
+	if(!curComNd) {
+		SYS.messInfo("uprg"+prog,tr("No current node present")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+		curMode = mode = -3;
+	}
+	curComNd = curComNd.parent();
+
+	//Internal commands call
+	if(!comCntrO) {
+		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
+			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
+			curCom++;
+		}
+		if(curCom >= 0 && curCom < work.childSize()) {
+			comEl = work.childGet(curCom);
+			//Stop process
+			if(mode == 0) {
+				comEl.setAttr("rez","-10:"+tr("Program terminated"));
+				// Call stop command
+				if(!comLs["Stop"].isEVal()) {
+					off = 0;
+					prLang = comLs["Stop"].proc.parse(0,"\n",off);
+					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
+				}
+				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				curMode = mode = -3;
+			}
+			//Pass empty command		
+			else if(!comEl.attr("proc").length) curCom++;
+			//Execute command
+			else if(curMode == 1) {
+				args = new Object();
+				args.rez = "";
+				args.f_start = !comEl.attr("tm").length;
+				if(args.f_start) comEl.setAttr("tm",SYS.time());
+				args.f_frq = f_frq;
+				for(i_a = 1; i_a <= 5; i_a++) args["arg"+i_a] = comEl.attr("arg"+i_a);
+				for(i_a = 1; i_a <= 10; i_a++) args["tmp"+i_a] = comEl.attr("tmp"+i_a);
+				off = 0;
+				prLang = comEl.attr("proc").parse(0,"\n",off);
+				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
+				if(rez && args.rez.toInt() > 0) curCom++;
+				else if(!rez || args.rez.toInt() < 0) {
+					// Call error command
+					if(!comLs["Error"].isEVal()) {
+						off = 0;
+						prLang = comLs["Error"].proc.parse(0,"\n",off);
+						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
+					}
+					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					curMode = mode = -1;
+				}
+				comEl.setAttr("rez",args.rez);
+				for(i_a = 1; i_a <= 5; i_a++) comEl.setAttr("arg"+i_a, args["arg"+i_a]);
+				for(i_a = 1; i_a <= 10; i_a++) comEl.setAttr("tmp"+i_a, args["tmp"+i_a]);
+				//SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y);
+			}
+		}
+
+		//End call
+		if(curCom < 0 || curCom >= work.childSize()) {
+			// Call stop command
+			if(!comLs["Stop"].isEVal()) {
+				off = 0;
+				prLang = comLs["Stop"].proc.parse(0,"\n",off);
+				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
+			}
+
+			curMode = mode = -2;
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+
+			//Place to program last execution time
+			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			if(rez.length > 1) {
+				//Parse programm and insert procedure text and argument''s labels to here
+				comTree = SYS.XMLNode("prg");
+				comTree.load(rez[1][0]);
+				comTree.setAttr("wtm",SYS.time()-startTm);
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+			}
+		}
+	}
+	//External commands call
+	else {
+		// Get current command parameter-object		
+		toNext = false;
+		curComPrm = EVAL_BOOL;
+		if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			if(!(comId=comLs[curComNd.childGet(curComPos).attr("id")]).isEVal()) curComPrm = comCntrO["prm_"+comId.prmID];
+			if(curComPrm.isEVal()) {
+				curMode = mode = -1;
+				curComNd.childGet(curComPos).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
+				return;
+			}
+		}
+		if(mode == 3 && curComPos >= 0 && curComPos < curComNd.childSize()) {
+			curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
+			curComPrm.run.set(false);
+			mode = curMode;
+			toNext = true;
+		}
+		else if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			comEl = curComNd.childGet(curComPos);
+			//Stop process
+			if(mode == 0) {
+				comEl.setAttr("rez","-12:"+tr("Program terminated"));
+				// Stop all typical and set "abort" flag
+				var cL = comCntrO.nodeList("prm_");
+				for(i_c = 0; i_c < cL.length; i_c++) {
+					var cLi = comCntrO[cL[i_c]];
+					cLi.run.set(false);
+					cLi.start.set(false);
+					cLi.abort.set(true);
+				}
+				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				curMode = mode = -3;
+			}
+			//Commands process
+			else {
+				// Start command
+				if(!comEl.attr("tm").length) {
+					curComPrm.run.set(false);	//Stop for possible background call
+					comEl.setAttr("tm",SYS.time());
+					for(i_a = 1; i_a <= 5; i_a++)
+						if(!(comA=curComPrm["arg"+i_a]).isEVal())
+							comA.set(comEl.attr("arg"+i_a));
+					curComPrm.rez.set(0);
+					curComPrm.run.set(true);
+				}
+				//Update steps status, up to current comand
+				for(comElN = work, comPos = 0, comLev = 0, comCur = true; true; comPos++) {
+					if(comPos >= comElN.childSize()) {
+						if((comElN=comElN.parent())) {
+							comLev--;
+							comPos = comElN.attr("seekPos").toInt();
+							comCur = comElN.attr("comCur").toInt();
+							continue;
+						}
+						break;
+					}
+					comElI = comElN.childGet(comPos);
+					isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
+					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
+					if(isCurCmd || (curComPI.run.get() && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))
+					{
+						rez = curComPI.rez.get();
+						if(isCurCmd && rez.toInt() > 0) toNext = true;
+						if(rez.toInt() < 0) {
+							// Stop all typical and call "error" command
+							var cL = comCntrO.nodeList("prm_");
+							for(i_c = 0; i_c < cL.length; i_c++) {
+								var cLi = comCntrO[cL[i_c]];
+								cLi.run.set(false);
+								cLi.start.set(false);
+								cLi.error.set(true);
+							}
+							SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+							curMode = mode = -1;
+						}
+						comElI.setAttr("rez",rez);
+						for(i_a = 1; i_a <= 5; i_a++)
+							if(!(comA=curComPI["arg"+i_a]).isEVal())
+								comElI.setAttr("arg"+i_a, comA.get());
+					}
+					if(isCurCmd) break;
+					if(comElI.childSize()) {
+						comElN.setAttr("seekPos",comPos);
+						comElN.setAttr("comCur",comCur);
+						comElN = comElI;
+						comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
+						comPos = -1; comLev++;
+					}
+				}
+			}
+		}
+
+		// Go to next step
+		if(toNext) {
+			if(curComNd.childGet(curComPos).childSize())	{ curComLev++; curComPos = 0; }
+			else if((++curComPos) >= curComNd.childSize())
+			{ curComLev--; curComPos = curComLev ? curCom.parse(curComLev-1,":").toInt()+1 : curComNd.childSize(); }
+			for(i_c = 0, curComN = ""; i_c < (curComLev-1); i_c++) curComN += curCom.parse(i_c,":");
+			curCom = curComN.length ? curComN+":"+curComPos : curComPos;
+		}
+		
+		//End call
+		if(curComLev <= 0) {
+			// Stop all typical and call "stop" command
+			var cL = comCntrO.nodeList("prm_");
+			for(i_c = 0; i_c < cL.length; i_c++) {
+				var cLi = comCntrO[cL[i_c]];
+				cLi.run.set(false);
+				cLi.start.set(false);
+				cLi.stop.set(true);
+			}
+
+			curMode = mode = -2;
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+
+			//Place to program last execution time
+			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			if(rez.length > 1) {
+				//Parse program and insert procedure text and argument''s labels to here
+				comTree = SYS.XMLNode("prg");
+				comTree.load(rez[1][0]);
+				comTree.setAttr("wtm",SYS.time()-startTm);
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+			}
+		}
+	}
+}
+mode = curMode;','','',1417806670);
+INSERT INTO "lib_Controllers" VALUES('test','test','test','','','','',1,10,0,'using Special.FLibSYS;
+
+out+=10;
+if(out>100) out=0;
+
+test = (10).toString(16,2,true);
+test = (-10.34).toFixed(4,8);
+
+//Request prepare
+//req = SYS.XMLNode("#").setAttr("ProtIt","DCON").setAttr("addr",10);
+//Send request
+//SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
+//if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
+
+//test = "Text \n value[\041abc\x21].";
+
+//test = arguments[4];
+//arguments[4] = 10;
+
+//test="Java123Script".search(new RegExp("script","i"));
+//text = "Javascript3\"sdf\"3javaScript __ javascript";
+//test = text.replace(4,3,"67");
+//test = text.replace("3","55");
+//test = text.replace(new RegExp("javascript","ig"),"JavaScript");//
+//test = text.replace(new RegExp("\"([^\"]*)\"","g"),"``$1''''");
+//text = "1 плюс 2 плюс 3";
+//test = text.match("\\d+","g");
+//text = "Посетите мою домашнюю страницу http://www.isp.com/~david";
+//test = text.match("(\\w+):\\/\\/([\\w.]+)\\/(\\S*)");
+//test = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));
+//test = "hello <b>world</b>".split(new RegExp("(<[^>]*>)"));
+//var p = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
+//test = p.test("abc12/30/1969def");
+
+/*CRC = new Array(0,1,2,3,4,5);vSz = 3
+hi=CRC[out%6];
+test = hi;*/
+
+//test = SYS.Transport.Sockets.out_testModBus.messIO("123456");
+
+/*obj = new Object();
+obj["test1"]=1;l
+obj["test2"]=1;
+for( var i in obj ) SYS.messDebug("test","Prop: "+i);
+SYS.messDebug("test","Props test");*/
+
+//vl = SYS.strFromCharCode(100,200,50,60);
+//test = vl.charCodeAt(1);
+
+//test = SYS.system("ps -Ao pid,comm");
+
+//ModBus.Unidrive.pos.pos=out;
+//ModBus.testRTU.test.pos=out;
+//test = rand(offset*0.4);
+//val="Test";
+//if( val=="Test1" || val=="Test2" ) test="TestN"; else test="Test";
+
+//test1=new Array(1,"a",2,"b",3,"c",4);
+//test1[7]=new Array(5,6,7);
+//test=test1[7][1];
+
+//test1="ab;cde;fgh;jk;lm";
+//test = test1.split(";").join();
+
+//req = xmlNode("get").setAttr("path","/%2fgen%2fid");
+//test = xmlCntrReq(req);
+//test = req.text();
+
+/*test1 = vArh("DAQ.System.AutoDA.CPULoad.load");
+test2 = test1.FFT(0,60);
+test = "";
+for( i = 0; i < test2.length; i++ ) test += ""+test2[i]+";";*/
+
+//messPut("cron",0,"Time: "+tmFStr(tmTime()));
+
+/*req = SYS.XMLNode();
+test = req.load("test1.xml",true);*/
+//for( i = 0; i < req.childSize(); i++ )
+//  test += req.childGet(i).attr("id")+"; ";
+/*sutm = 0; stm = SYS.time(sutm);
+req.save(0,"test2.xml");
+eutm = 0; etm = SYS.time(eutm);
+test = 1e6*(etm-stm)+(eutm-sutm);*/
+
+//test = strDec4Bin(Transport.Sockets.out_testModBus.messIO(strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05")));
+
+/*req = SYS.XMLNode("GET");
+req.setAttr("URI","/");
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
+test = req.text();*/
+
+/*req = SYS.XMLNode("POST");
+req.setAttr("URI","/WebUser/FlowTec.txt");
+cntNode = req.childAdd("cnt").setAttr("name","pole0").setAttr("filename","Object2-k001-100309-17.txt");
+cntNode.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
+cntText = "Object2-k001\r\n";
+cntText += "\r\n";
+cntText += "v002\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
+cntText += "v005\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
+cntText += "\r\n";
+cntNode.setText(cntText);
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");*/
+
+//test = SYS.UI.VCAEngine["ses_AGLKS"].alrmSndPlay();
+//test = "1;2;5;7;9";
+//test = "1;2;5;7;9".type();
+
+//SYS.messDebug("test",strEnc2Bin("68 74 74 70 3a 2f 2f 77 77 77 2e 77 33 2e 6f 72 67 2f 32 30 30 30 2f 30 39 2f 78 6d 6c 64 73 69 67 23 72 73 61 2d 73 68 61 31"));
+
+//test = SYS.DAQ.ModBus.testTCP.test.a_8_1_1_ПС_ОПД_стенд_температура__ОПД_.get();
+
+/*req = SYS.XMLNode("get").setAttr("path","/%2fgen%2fid");
+rez = SYS.cntrReq(req,"loop");
+test = req.text();*/
+
+/*DBTbl=SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
+for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
+{
+  var rec = "";
+  for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
+    rec += DBTbl[i_rw][i_fld]+"\t";
+  SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
+}*/','','',1441908975);
+INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',1,10,0,'//clc=0;
+//First getting previous time
+//if(!p_tm){ p_tm = Special.FLibSYS.tmTime(); break; }
+
+//Get curent time
+//c_tm = Special.FLibSYS.tmTime()-2;
+
+//Open value archive
+//a_id = Special.FLibSYS.avalOpen("Archive.va_test");
+//if(a_id==-1) break;
+
+//Calc average archive
+//for(i_tm=p_tm;i_tm<c_tm;i_tm++)
+//{ 
+//  val = Special.FLibSYS.avalGetR(a_id,i_tm,0,"");
+//  rez = (rez*(i_tm-p_tm)+val)/(i_tm-p_tm+1);
+//  clc++;
+//}
+
+//Close value archive
+//Special.FLibSYS.avalClose(a_id);
+//p_tm=c_tm;','','',1470304380);
 COMMIT;

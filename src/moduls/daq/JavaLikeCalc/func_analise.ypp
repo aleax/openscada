@@ -304,12 +304,13 @@ varlst: /*empty*/		{ $$ = 0; }
 	| VAR			{ $$ = 1; pF->fPrmst.push_front($1); }
 	| varlst ',' varlst	{ $$ = $1 + $3; }
 fnc_in:	/*empty*/	{ $$ = pF->prg.size();
-
 			    pF->prg = pF->prg + (char)Reg::IFuncDef + "NN";
 			    pF->prg += (uint8_t)pF->fPrmst.size();
 			    uint16_t addr;
 			    //Place the return
-			    addr = pF->regNew(true); pF->regAt(addr)->setLock(true); pF->prg.append((char*)&addr,sizeof(addr));
+			    addr = pF->regNew(true);
+			    pF->regAt(addr)->setName("<<IN-RET>>"); pF->regAt(addr)->setLock(true);
+			    pF->prg.append((char*)&addr,sizeof(addr));
 			    //Place the arguments
 			    while(pF->fPrmst.size()) {
 				pF->fPrmst.back()->setType(Reg::Real);

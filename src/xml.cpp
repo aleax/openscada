@@ -300,8 +300,8 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
 void XMLNode::encode( const string &s, string &rez, bool text ) const
 {
     const char *replStr = NULL;
-    for(unsigned i_sz = 0, f_pos = 0; true; ) {
-	switch(s[i_sz]) {
+    for(unsigned iSz = 0, fPos = 0; iSz < s.size(); ) {
+	switch(s[iSz]) {
 	    case 0:	replStr = "\\000";	break;	//Bynary symbol but for next also problems possible and here needs check to Unicode
 	    case '>':	replStr = "&gt;";	break;
 	    case '<':	replStr = "&lt;";	break;
@@ -310,15 +310,15 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    case '\'':	replStr = "&#039;";	break;
 	    case '\n':	if(!text) replStr = "&#010;"; break;
 	}
-	i_sz++;
+	iSz++;
 	if(replStr) {
-	    if((i_sz-1) > f_pos) rez.append(s,f_pos,i_sz-f_pos-1);
+	    if((iSz-1) > fPos) rez.append(s, fPos, iSz-fPos-1);
 	    rez.append(replStr);
 	    replStr = NULL;
-	    f_pos = i_sz;
+	    fPos = iSz;
 	}
-	if(i_sz >= s.size()) {
-	    if(i_sz > f_pos) rez.append(s,f_pos,i_sz-f_pos);
+	if(iSz >= s.size()) {
+	    if(iSz > fPos) rez.append(s, fPos, iSz-fPos);
 	    break;
 	}
     }

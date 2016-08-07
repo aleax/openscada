@@ -286,10 +286,7 @@ void Func::setStart( bool val )
 {
     if(val == runSt) return;
     //Start calc
-    if(val) {
-	progCompile();
-	runSt = true;
-    }
+    if(val) progCompile();
     //Stop calc
     else {
 	ResAlloc res(fRes(), true);
@@ -297,8 +294,8 @@ void Func::setStart( bool val )
 	regClear();
 	regTmpClean( );
 	funcClear();
-	runSt = false;
     }
+    TFunction::setStart(val);
 }
 
 void Func::ioAdd( IO *io )

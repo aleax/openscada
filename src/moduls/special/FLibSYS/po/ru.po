@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-25 11:44+0300\n"
+"POT-Creation-Date: 2016-08-07 10:31+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -300,6 +300,12 @@ msgstr "Циклический Избыточный Код (CRC)"
 
 msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
 msgstr "Реализация Циклического Избыточного Кода для длин 8-64 бит."
+
+msgid "Message Digest 5 (MD5)"
+msgstr "Слепок сообщения 5 (MD5)"
+
+msgid "Message Digest 5 calculation."
+msgstr "Расчёт слепка сообщения 5."
 
 msgid "Date and time string"
 msgstr "Строка даты и времени"

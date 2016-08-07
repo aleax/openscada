@@ -25,6 +25,7 @@
 #include <stdint.h>
 
 #include <tfunction.h>
+#include <openssl/md5.h>
 
 #include "statfunc.h"
 
@@ -500,7 +501,7 @@ class floatMergeWord : public TFunction
 };
 
 //*************************************************
-//* Merge float from words                        *
+//* Cyclic redundancy check                       *
 //*************************************************
 class CRC : public TFunction
 {
@@ -529,6 +530,29 @@ class CRC : public TFunction
 	    val->setI(0, (int64_t)CRC);
 	}
 };
+
+//*************************************************
+//* Message Digest 5                              *
+//*************************************************
+class MD5 : public TFunction
+{
+    public:
+	MD5( ) : TFunction("MD5", SSPC_ID) {
+	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
+	    ioAdd(new IO("data",_("Data"),IO::String,IO::Default));
+	}
+
+	string name( )	{ return _("Message Digest 5 (MD5)"); }
+	string descr( )	{ return _("Message Digest 5 calculation."); }
+
+	void calc( TValFunc *val ) {
+	    string data = val->getS(1);
+	    unsigned char result[MD5_DIGEST_LENGTH];
+	    ::MD5((unsigned char*)data.data(), data.size(), result);
+	    val->setS(0, string((char*)result, MD5_DIGEST_LENGTH));
+	}
+};
+
 
 }
 

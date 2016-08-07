@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.2.3"
+#define MOD_VER		"3.2.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -329,13 +329,13 @@ void TpContr::modStop( )
     //Stop and disable all JavaLike-controllers
     vector<string> lst;
     list(lst);
-    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-	at(lst[i_l]).at().disable();
+    for(unsigned iL = 0; iL < lst.size(); iL++)
+	at(lst[iL]).at().disable();
 
     //Stop functions
     lbList(lst);
-    for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
-	lbAt(lst[i_lb]).at().setStart(false);
+    for(unsigned iLb = 0; iLb < lst.size(); iLb++)
+	lbAt(lst[iLb]).at().setStart(false);
 }
 
 void TpContr::cntrCmdProc( XMLNode *opt )

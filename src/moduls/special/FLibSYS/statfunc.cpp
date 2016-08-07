@@ -119,6 +119,7 @@ void Lib::postEnable( int flag )
     reg(new floatMergeWord());
 
     reg(new CRC());
+    reg(new MD5());
 
     // Time functions
     reg(new tmFStr());

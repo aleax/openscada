@@ -363,6 +363,7 @@ AX_MOD_Special_EN(FLibComplex1,[disable or enable[=incl] build module Special.FL
 AX_MOD_Special_EN(FLibMath,[disable or enable[=incl] build module Special.FLibMath],disable,incl)
 AX_MOD_Special_EN(FLibSYS,[disable or enable[=incl] build module Special.FLibSYS],disable,incl,[
     AX_LIB_FFTW3()
+    AX_LIB_OpenSSL()
 ])
 AC_MSG_RESULT(===========================================)
 

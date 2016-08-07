@@ -37,7 +37,7 @@ TFunction::TFunction( const string &iid, const char *igrp, const string &istor )
 
 TFunction::~TFunction( )
 {
-    for(unsigned i_io = 0; i_io < mIO.size(); i_io++) delete mIO[i_io];
+    for(unsigned iIO = 0; iIO < mIO.size(); iIO++) delete mIO[iIO];
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
@@ -46,17 +46,17 @@ TFunction &TFunction::operator=( TFunction &func )
 {
     //Copy IO
     // Clear no present IO
-    for(int i_io = 0; i_io < ioSize(); )
-	if(func.ioId(io(i_io)->id()) < 0) ioDel(i_io);
-	else i_io++;
+    for(int iIO = 0; iIO < ioSize(); )
+	if(func.ioId(io(iIO)->id()) < 0) ioDel(iIO);
+	else iIO++;
     // Update present and create new IO
-    for(int i_io = 0; i_io < func.ioSize(); i_io++) {
-	int dst_io = ioId(func.io(i_io)->id());
+    for(int iIO = 0; iIO < func.ioSize(); iIO++) {
+	int dst_io = ioId(func.io(iIO)->id());
 	if(dst_io < 0)
-	    dst_io = ioIns( new IO( func.io(i_io)->id().c_str(), func.io(i_io)->name().c_str(), func.io(i_io)->type(), func.io(i_io)->flg(),
-		func.io(i_io)->def().c_str(), func.io(i_io)->hide(), func.io(i_io)->rez().c_str() ), i_io );
-	else *io(dst_io) = *func.io(i_io);
-	if(dst_io != i_io && !use()) ioMove(dst_io,i_io);
+	    dst_io = ioIns( new IO( func.io(iIO)->id().c_str(), func.io(iIO)->name().c_str(), func.io(iIO)->type(), func.io(iIO)->flg(),
+		func.io(iIO)->def().c_str(), func.io(iIO)->hide(), func.io(iIO)->rez().c_str() ), iIO );
+	else *io(dst_io) = *func.io(iIO);
+	if(dst_io != iIO && !use()) ioMove(dst_io,iIO);
     }
 
     if(mId.empty()) mId = func.id();
@@ -91,16 +91,23 @@ IO *TFunction::io( int iid )
 
 int TFunction::ioId( const string &id )
 {
-    for(int i_io = 0; i_io < (int)mIO.size(); i_io++)
-	if(mIO[i_io]->id() == id) return i_io;
+    for(int iIO = 0; iIO < (int)mIO.size(); iIO++)
+	if(mIO[iIO]->id() == id) return iIO;
 
     return -1;
 }
 
+void TFunction::setStart( bool val )
+{
+    if(!val && mTVal) { delete mTVal; mTVal = NULL; }
+
+    runSt = val;
+}
+
 void TFunction::ioList( vector<string> &list )
 {
-    for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
-	list.push_back(mIO[i_io]->id());
+    for(unsigned iIO = 0; iIO < mIO.size(); iIO++)
+	list.push_back(mIO[iIO]->id());
 }
 
 void TFunction::ioAdd( IO *io )
@@ -263,14 +270,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    // Add test form
 	    if(mTVal) {
 		if(ctrMkNode("area",opt,-1,"/exec/io",_("IO")))
-		    for(int i_io = 0; i_io < ioSize(); i_io++) {
-			if(mIO[i_io]->hide()) continue;
-			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),RWRW__,"root",grp);
+		    for(int iIO = 0; iIO < ioSize(); iIO++) {
+			if(mIO[iIO]->hide()) continue;
+			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),io(iIO)->name(),RWRW__,"root",grp);
 			if(nd) {
-			    switch(io(i_io)->type()) {
+			    switch(io(iIO)->type()) {
 				case IO::String:
 				    nd->setAttr("tp","str");
-				    if(io(i_io)->flg()&IO::FullText) nd->setAttr("cols","100")->setAttr("rows","4");
+				    if(io(iIO)->flg()&IO::FullText) nd->setAttr("cols","100")->setAttr("rows","4");
 				    break;
 				case IO::Integer:	nd->setAttr("tp","dec");	break;
 				case IO::Real:		nd->setAttr("tp","real");	break;
@@ -306,12 +313,12 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_hide	= ctrMkNode("list",opt,-1,"/io/io/4","");
 	XMLNode *n_def	= ctrMkNode("list",opt,-1,"/io/io/5","");
 	//XMLNode *n_vect	= ctrId(opt,"6");
-	for(int i_io = 0; i_io < ioSize(); i_io++) {
+	for(int iIO = 0; iIO < ioSize(); iIO++) {
 	    string tmp_str;
-	    if(n_id)	n_id->childAdd("el")->setText(io(i_io)->id());
-	    if(n_nm)	n_nm->childAdd("el")->setText(io(i_io)->name());
+	    if(n_id)	n_id->childAdd("el")->setText(io(iIO)->id());
+	    if(n_nm)	n_nm->childAdd("el")->setText(io(iIO)->name());
 	    if(n_type) {
-		switch(io(i_io)->type()) {
+		switch(io(iIO)->type()) {
 		    case IO::String:	tmp_str = _("String");	break;
 		    case IO::Integer:	tmp_str = _("Integer");	break;
 		    case IO::Real:	tmp_str = _("Real");	break;
@@ -321,13 +328,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		n_type->childAdd("el")->setText(tmp_str);
 	    }
 	    if(n_mode) {
-		if(io(i_io)->flg()&IO::Return)		tmp_str = _("Return");
-		else if(io(i_io)->flg()&IO::Output)	tmp_str = _("Output");
+		if(io(iIO)->flg()&IO::Return)		tmp_str = _("Return");
+		else if(io(iIO)->flg()&IO::Output)	tmp_str = _("Output");
 		else					tmp_str = _("Input");
 		n_mode->childAdd("el")->setText(tmp_str);
 	    }
-	    if(n_hide)	n_hide->childAdd("el")->setText(io(i_io)->hide()?"1":"0");
-	    if(n_def)	n_def->childAdd("el")->setText(io(i_io)->def());
+	    if(n_hide)	n_hide->childAdd("el")->setText(io(iIO)->hide()?"1":"0");
+	    if(n_def)	n_def->childAdd("el")->setText(io(iIO)->def());
 	}
     }
     else if(a_path == "/exec/en") {
@@ -346,12 +353,12 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	opt->setText(tm2s(1e-6*SYS->cntrGet(nodePath('.'))));
     else if(a_path.substr(0,8) == "/exec/io" && mTVal) {
 	string io_id = TSYS::pathLev(a_path,2);
-	for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
-	    if(io_id == io(i_io)->id()) {
+	for(unsigned iIO = 0; iIO < mIO.size(); iIO++)
+	    if(io_id == io(iIO)->id()) {
 		if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))
-		    opt->setText((mTVal->ioType(i_io)==IO::Real) ? r2s(mTVal->getR(i_io),6) : mTVal->getS(i_io));
+		    opt->setText((mTVal->ioType(iIO)==IO::Real) ? r2s(mTVal->getR(iIO),6) : mTVal->getS(iIO));
 		if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
-		    mTVal->setS(i_io,opt->text());
+		    mTVal->setS(iIO,opt->text());
 		break;
 	    }
     }
@@ -776,13 +783,13 @@ string TFuncArgsObj::getStrXML( const string &oid )
     string nd("<TFuncArgsObj");
     if(!oid.empty()) nd = nd + " p='" + oid + "'";
     nd = nd + ">\n";
-    for(int i_io = 0; vf.func() && i_io < vf.ioSize(); i_io++)
-	switch(vf.ioType(i_io)) {
-	    case IO::String:	nd += "<str id='"+vf.func()->io(i_io)->id()+"'>"+TSYS::strEncode(vf.getS(i_io),TSYS::Html)+"</str>\n"; break;
-	    case IO::Integer:	nd += "<int id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</int>\n"; break;
-	    case IO::Real:	nd += "<real id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</real>\n"; break;
-	    case IO::Boolean:	nd += "<bool id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</bool>\n"; break;
-	    case IO::Object:	nd += vf.getO(i_io).at().getStrXML(vf.func()->io(i_io)->id()); break;
+    for(int iIO = 0; vf.func() && iIO < vf.ioSize(); iIO++)
+	switch(vf.ioType(iIO)) {
+	    case IO::String:	nd += "<str id='"+vf.func()->io(iIO)->id()+"'>"+TSYS::strEncode(vf.getS(iIO),TSYS::Html)+"</str>\n"; break;
+	    case IO::Integer:	nd += "<int id='"+vf.func()->io(iIO)->id()+"'>"+vf.getS(iIO)+"</int>\n"; break;
+	    case IO::Real:	nd += "<real id='"+vf.func()->io(iIO)->id()+"'>"+vf.getS(iIO)+"</real>\n"; break;
+	    case IO::Boolean:	nd += "<bool id='"+vf.func()->io(iIO)->id()+"'>"+vf.getS(iIO)+"</bool>\n"; break;
+	    case IO::Object:	nd += vf.getO(iIO).at().getStrXML(vf.func()->io(iIO)->id()); break;
 	}
     nd += "</TFuncArgsObj>\n";
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-25 11:44+0300\n"
+"POT-Creation-Date: 2016-08-07 10:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -290,6 +290,12 @@ msgid "Cyclic Redundancy Code (CRC)"
 msgstr ""
 
 msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
+msgstr ""
+
+msgid "Message Digest 5 (MD5)"
+msgstr ""
+
+msgid "Message Digest 5 calculation."
 msgstr ""
 
 msgid "Date and time string"

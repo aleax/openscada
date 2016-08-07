@@ -113,8 +113,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(tpD.szBt == 1) {
 	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    if(!fhd) {
-		rez = str.substr(pos,vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
-		pos = vmax(str.size(), pos+cnt);
+		rez = str.substr(pos, vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
+		pos = vmin(str.size(), pos+cnt);
 	    }
 	    else {
 		char buf[STR_BUF_LEN];
