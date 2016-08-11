@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.3.0','','tmplib_DevLib','Библиотека устройств','');
+Version: 1.3.1','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -1123,16 +1123,16 @@ INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','transport','Transport of the On
 INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','this','Object',4,0,'',3,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','power','Power, for temperature',3,16,'',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('oneWire','tmResc','Rescan period, s',2,64,'60',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','transport','Transport of the One Wire bus, Sockets',0,64,'SSCP',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','user','User',0,64,'admin',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','pass','Password',0,64,'rw',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','list','Selected to process variables',0,36,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','listsDir','List files'' folder',0,64,'SSCP',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','this','Object',4,0,'',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrm','Maximum data frame size',1,64,'2048',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','verPrt','Protocol version',1,16,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','transport','Transport of the One Wire bus, Sockets',0,64,'SSCP',0,'','','Transport of the One Wire bus, Sockets','SSCP');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','addr','Address [0...255]',1,64,'1',1,'','','Address [0...255]','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','user','User',0,64,'admin',2,'','','User','admin');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','pass','Password',0,64,'rw',3,'','','Password','rw');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','list','Selected to process variables',0,36,'',8,'','','Selected to process variables','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','listsDir','List files'' folder',0,64,'SSCP',5,'','','List files'' folder','SSCP');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','this','Object',4,0,'',9,'','','Object','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrm','Maximum data frame size',1,64,'2048',4,'','','Maximum data frame size','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','verPrt','Protocol version',1,16,'',6,'','','Protocol version','');
+INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'','','Server''s maximum data frame size','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -4795,9 +4795,12 @@ else {
 }
 
 f_err = t_err;','','',1470549909);
-INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','Shark Slave Communication Protocol','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Costumer Faster CZ (http://faster.cz)','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Costumer Faster CZ (http://faster.cz)
+Version: 0.5.0','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Costumer Faster CZ (http://faster.cz)','',10,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(tr, addr, func, data) {
 	req = SYS.strFromCharCode(addr, (func>>8)&0xFF, func&0xFF, (data.length>>8)&0xFF, data.length&0xFF) + data;
@@ -4823,7 +4826,7 @@ function req(tr, addr, func, data) {
 			if(errCod == 0x0101)		opErr += " "+tr("Wrong login.");
 			else if(errCod == 0x103)	opErr += " "+tr("No such variable.");
 			//... Append here for needs
-			else opErr += " "+tr("Unknown error %1.").replace("%1",errCod);
+			else opErr += " "+tr("Unknown error %1.").replace("%1",errCod.toString());
 		}
 		if(resp.length >= 17)	opErr += " "+tr("Destination:")+" "+SYS.strDecode(resp.slice(9),"Bin","")+"h";
 		return opErr;
@@ -4854,7 +4857,7 @@ if(!tr || transport != transport_)	{
 }
 if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 else if(addr < 0 || addr > 255)
-	t_err = "2:"+tr("Address ''%1'' out of range [0...255].").replace("%1",addr);
+	t_err = "2:"+tr("Address ''%1'' out of range [0...255].").replace("%1",addr.toString());
 else {
 	//Generic information update.
 	if(toLoadVarLsts) {
@@ -4928,9 +4931,7 @@ else {
 				io.wr(vO.CommUid, "uint32").wr(vO.Offset, "uint32").wr(vO.Length, "uint32");
 			}
 			//SYS.messInfo("/SSCP","req="+SYS.strDecode(io.string,"Bin"," "));
-			rqDt = io.string;
-			t_err = req(tr, addr, 0x0500, rqDt);
-			io.string = rqDt; io.pos = 0;
+			t_err = req(tr, addr, 0x0500, io.string); io.pos = 0;
 			//SYS.messInfo("/SSCP","resp="+SYS.strDecode(io.string,"Bin"," "));
 			for(iV2 = iV0; iV2 < iV1; iV2++) {
 				vO = prcVList[iV2];
@@ -4940,14 +4941,14 @@ else {
 					if(vO.Type.indexOf("bool") != -1 && vO.Length == 1)
 						tVl = io.read("char", 1);
 					else if(vO.Type.indexOf("real") != -1 && (vO.Length == 4 || vO.Length == 8))
-						tVl = io.read((vO.Length==8)?"double":"float", 1, "l");
+						tVl = io.read((vO.Length==8)?"double":"float", 1);
 					else if(vO.Type.indexOf("int") != -1 && (vO.Length == 2 || vO.Length == 4))
 						tVl = io.read((vO.Length==4)?"int32":"int16", 1);
 					else if(vO.Type.indexOf("dt") != -1 && vO.Length == 8) {
-						tVl = io.read("char", vO.Length);
+						tVl = SYS.strDecode(io.read("char", vO.Length), "Bin", " ");
 						//????
 					}
-					else tVl = io.read("char", vO.Length);
+					else tVl = SYS.strDecode(io.read("char", vO.Length), "Bin", " ");;
 				}
 				vO.aO.set(tVl, 0, 0, true);
 			}
@@ -4955,7 +4956,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1470491722);
+f_err = t_err;','','',1470917339);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default

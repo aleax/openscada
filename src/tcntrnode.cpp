@@ -60,6 +60,19 @@ TCntrNode::~TCntrNode( )
 
 TCntrNode &TCntrNode::operator=( TCntrNode &node )	{ return *this; }
 
+/*void TCntrNode::mess_sys( int8_t level, const char *fmt,  ... )
+{
+    char str[STR_BUF_LEN];
+    va_list argptr;
+
+    va_start(argptr, fmt);
+    vsnprintf(str, sizeof(str), fmt, argptr);
+    va_end(argptr);
+
+    string cat, mess = string(str, sizeof(str));
+    
+}*/
+
 void TCntrNode::nodeDelAll( )
 {
     if(nodeMode() != Disabled)	nodeDis();

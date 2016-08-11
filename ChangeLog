@@ -1,3 +1,8 @@
+2016-08-11 Roman
+- FIX:DB.LibsDB.OscadaLibs: DevLib.SSCP some fixed for type "real" process and messages.
+- !!:FIX:Special.FLibSYS: IO object was fixed for byte orders of type "real" using as the integer bytes, but not native.
+
+
 2016-08-07 Roman
 - !!!!:DB.LibsDB.OscadaLibs: To the templates library "DevLib" new template "SSCP" is added for implement Shark Slave Communication Protocol.
     !!!:DAQ template DevLib.oneWire: fix to the search algorithm and it's tested for 13 sensors on the bus;

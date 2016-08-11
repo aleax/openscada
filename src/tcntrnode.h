@@ -104,6 +104,8 @@ class TCntrNode
 
 	virtual TCntrNode &operator=( TCntrNode &node );
 
+	//void mess_sys( int8_t level, const char *fmt,  ... );
+
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );
 
 	// Static functions
@@ -150,7 +152,7 @@ class TCntrNode
 	virtual const char *nodeName( ) = 0;
 	string nodePath( char sep = 0, bool from_root = true );
 
-	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
+	void nodeList( vector<string> &list, const string& gid = "" );	//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0, bool noex = false );	//Get node for full path
 	void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
