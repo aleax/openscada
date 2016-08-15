@@ -27,7 +27,7 @@ using namespace OSCADA;
 //************************************************
 //* TProtocolS                                   *
 //************************************************
-TProtocolS::TProtocolS( ) : TSubSYS("Protocol", _("Transport protocols"), true)
+TProtocolS::TProtocolS( ) : TSubSYS("Protocol", _("Transport Protocols"), true)
 {
 
 }

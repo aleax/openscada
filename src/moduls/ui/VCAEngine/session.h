@@ -109,6 +109,7 @@ class Session : public TCntrNode
     protected:
 	//Methods
 	const char *nodeName( )		{ return mId.c_str(); }
+	const char *nodeNameSYSM( )	{ return mId.c_str(); }
 	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

@@ -442,7 +442,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if(hd == (iconv_t)(-1)) {
-	mess_crit("IConv",_("Error 'iconv' open: %s"),strerror(errno));
+	mess_crit("IConv", _("Error 'iconv' open: %s"), strerror(errno));
 	return mess;
     }
 

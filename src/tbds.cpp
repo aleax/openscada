@@ -127,7 +127,7 @@ AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 	    tbl = obd.at().at(bdTbl);
 	}
     } catch(TError &err) {
-	//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+	//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
     }
 
     return tbl;
@@ -147,8 +147,8 @@ void TBDS::close( const string &bdn, bool del )
 	if(obd.at().enableStat() && obd.at().openStat(bdTbl) && obd.at().at(bdTbl).at().nodeUse() == 1)
 	    obd.at().close(bdTbl, del);
     } catch(TError &err) {
-	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Close DB '%s' error!"),bdn.c_str());
+	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_sys(TMess::Warning, _("Close DB '%s' error!"), bdn.c_str());
     }
 }
 
@@ -281,9 +281,10 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	}
     }
 
-    if(!db_true && !noEx)
-	throw TError(dbErr.cat.empty() ? nodePath().c_str() : dbErr.cat.c_str(), "%s",
-	    dbErr.mess.empty() ? _("Requested row no present.") : dbErr.mess.c_str());
+    if(!db_true && !noEx) {
+	if(dbErr.cat.empty()) throw err_sys("%s", dbErr.mess.empty() ? _("Requested row no present.") : dbErr.mess.c_str());
+	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("Requested row no present.") : dbErr.mess.c_str());
+    }
 
     return db_true;
 }
@@ -299,7 +300,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	    bool db_true = true;
 	    try { tbl.at().fieldSet(cfg); }
 	    catch(TError &err) {
-		//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+		//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
 		db_true = false;
 		if(!noEx) throw;
 	    }
@@ -366,7 +367,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	}
     }
 
-    if(!noEx) throw TError(nodePath().c_str(), _("Write row to DB or config file error."));
+    if(!noEx) throw err_sys(_("Write row to DB or config file error."));
 
     return false;
 }
@@ -402,7 +403,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 			cfg.cfg(cels[i_el]).setKeyUse(false);
 	    } catch(TError &err) {
 		dbErr = err;
-		//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+		//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
 	    }
 	    //tbl.free(); close(bdn);
 	}
@@ -555,8 +556,8 @@ void TBDS::load_( )
 	    }
 	}
     } catch(TError &err) {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and open new DB error."));
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_sys(TMess::Error, _("Search and open new DB error."));
     }
 }
 

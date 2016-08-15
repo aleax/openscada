@@ -34,7 +34,7 @@ using namespace OSCADA;
 //*************************************************
 //* TUIS                                          *
 //*************************************************
-TUIS::TUIS( ) : TSubSYS(SUI_ID,_("User interfaces"), true)
+TUIS::TUIS( ) : TSubSYS(SUI_ID,_("User Interfaces"), true)
 {
 #if HAVE_GD_CORE
     gdFTUseFontConfig(1);
@@ -55,20 +55,6 @@ void TUIS::load_( )
 	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //Load parameters from config-file
-}
-
-void TUIS::subStart( )
-{
-    mess_info(nodePath().c_str(), _("Start subsystem."));
-
-    TSubSYS::subStart( );
-}
-
-void TUIS::subStop( )
-{
-    mess_info(nodePath().c_str(), _("Stop subsystem."));
-
-    TSubSYS::subStop( );
 }
 
 string TUIS::icoGet( const string &inm, string *tp, bool retPath )

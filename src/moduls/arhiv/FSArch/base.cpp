@@ -35,7 +35,7 @@
 #define MOD_NAME	_("File system archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"2.8.3"
+#define MOD_VER		"2.8.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
 #define LICENSE		"GPL2"
@@ -115,7 +115,7 @@ string ModArch::packArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw TError(nodePath().c_str(),_("Compress error!"));
+	throw err_sys(_("Compress error!"));
     }
     if(replace) remove(anm.c_str());
 
@@ -131,7 +131,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw TError(nodePath().c_str(),_("Decompress error: '%s'!"),anm.c_str());
+	throw err_sys(_("Decompress error: '%s'!"), anm.c_str());
     }
     if(replace) remove(anm.c_str());
 
@@ -169,8 +169,8 @@ void ModArch::perSYSCall( unsigned int cnt )
 	    if(messAt(a_list[i_a]).at().startStat())
 		try{ messAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Check message archivator '%s' error."),a_list[i_a].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Check message archivator '%s' error."), a_list[i_a].c_str());
 		}
 
 	//Check value archivators
@@ -179,8 +179,8 @@ void ModArch::perSYSCall( unsigned int cnt )
 	    if(valAt(a_list[i_a]).at().startStat())
 		try{ valAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Check value archivator '%s' error."),a_list[i_a].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Check value archivator '%s' error."), a_list[i_a].c_str());
 		}
 
 	//Check to nopresent archive files
@@ -193,7 +193,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",cEl,true,false,true))	break;
 		fldCnt--;
 	    }
-    } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_sys(TMess::Error, "%s", err.mess.c_str()); }
 }
 
 TMArchivator *ModArch::AMess( const string &iid, const string &idb )	{ return new ModMArch(iid,idb,&owner().messE()); }

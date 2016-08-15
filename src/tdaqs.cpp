@@ -32,7 +32,7 @@ using namespace OSCADA;
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
-TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), mElErr("Error"), mRdRestDtTm(1)
+TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data Acquisition"),true), mElErr("Error"), mRdRestDtTm(1)
 {
     mTmpLib = grpAdd("tmplb_");
 
@@ -162,8 +162,8 @@ void TDAQS::load_( )
 		    tmplLibUnreg(dbLs[i_it]);
         }
     } catch(TError &err) {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Load template's libraries error."));
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_sys(TMess::Error, _("Load template's libraries error."));
     }
 
     //Load parameters
@@ -189,8 +189,8 @@ void TDAQS::load_( )
 			wmod.at().at(mId).at().load(&gCfg);
 			itReg[mId] = true;
 		    } catch(TError &err) {
-			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			mess_err(wmod.at().nodePath().c_str(),_("Add controller '%s' error."),mId.c_str());
+			mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+			mess_sys(TMess::Error, _("Add controller '%s' error."), mId.c_str());
 		    }
 		}
 
@@ -200,7 +200,7 @@ void TDAQS::load_( )
 		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(dbLs[i_it]).at().DB()))
 		    wmod.at().del(dbLs[i_it]);
 	}
-    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Load parameters from config-file and SYS DB
     setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
@@ -299,7 +299,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		}
 
 	    return true;
-	} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	return false;
     }
@@ -309,8 +309,6 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 
 void TDAQS::subStart( )
 {
-    mess_info(nodePath().c_str(), _("Start subsystem."));
-
     vector<string> m_l, tmpl_lst;
 
     bool reply   = false;
@@ -323,8 +321,8 @@ void TDAQS::subStart( )
 	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
 	    catch(TError &err) {
 		if(try_cnt) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Start template library '%s' error."),tmpl_lst[i_lb].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Start template library '%s' error."), tmpl_lst[i_lb].c_str());
 		}
 		reply = true;
 	    }
@@ -340,8 +338,8 @@ void TDAQS::subStart( )
 		    try{ cntr.at().enable(); }
 		    catch(TError &err) {
 			if(try_cnt) {
-			    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			    mess_err(nodePath().c_str(),_("Enable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+			    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+			    mess_sys(TMess::Error, _("Enable controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 			}
 			reply = true;
 		    }
@@ -359,8 +357,6 @@ void TDAQS::subStart( )
 
 void TDAQS::subStop( )
 {
-    mess_info(nodePath().c_str(),_("Stop subsystem."));
-
     vector<string> m_l;
 
     //Stop
@@ -373,8 +369,8 @@ void TDAQS::subStop( )
 	    if(cntr.at().startStat())
 		try{ cntr.at().stop(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Stop controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Stop controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -387,8 +383,8 @@ void TDAQS::subStop( )
 	    if(cntr.at().enableStat())
 		try{ cntr.at().disable(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Disable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Disable controller '%s' error."), (m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
 	}
     }
@@ -414,7 +410,7 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
 	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+cEl, 0, sep, 0, true);
 	if(tNd.freeStat() && !(strcmp(c_grp,"a_") && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
-	    else throw TError(nodePath().c_str(),_("No DAQ node present '%s'."),path.c_str());
+	    else throw err_sys(_("No DAQ node present '%s'."), path.c_str());
 	}
 	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
 	DAQnd = tNd;
@@ -428,7 +424,7 @@ AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex);
     if(DAQnd.freeStat() || !dynamic_cast<TValue*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TValue>();
-	else throw TError(nodePath().c_str(),_("Pointed node is not parameter '%s'."),path.c_str());
+	else throw err_sys(_("Pointed node is not parameter '%s'."), path.c_str());
     }
 
     return DAQnd;
@@ -439,7 +435,7 @@ AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true);
     if(DAQnd.freeStat() || !dynamic_cast<TVal*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TVal>();
-	else throw TError(nodePath().c_str(),_("Pointed node is not attribute '%s'."),path.c_str());
+	else throw err_sys(_("Pointed node is not attribute '%s'."), path.c_str());
     }
 
     return DAQnd;

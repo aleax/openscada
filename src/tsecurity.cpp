@@ -107,7 +107,7 @@ void TSecurity::usrAdd( const string &name, const string &idb )
 
 void TSecurity::usrDel( const string &name, bool complete )
 {
-    if(usrAt(name).at().sysItem())	throw TError(nodePath().c_str(), _("Removal of system user is inadmissible."));
+    if(usrAt(name).at().sysItem())	throw err_sys(_("Removal of system user is inadmissible."));
     chldDel(mUsr, name, -1, complete);
 }
 
@@ -118,7 +118,7 @@ void TSecurity::grpAdd( const string &name, const string &idb )
 
 void TSecurity::grpDel( const string &name, bool complete )
 {
-    if(grpAt(name).at().sysItem())	throw TError(nodePath().c_str(), _("Removal of system group is inadmissible.")); 
+    if(grpAt(name).at().sysItem())	throw err_sys(_("Removal of system group is inadmissible."));
     chldDel(mGrp, name, -1, complete);
 }
 
@@ -178,7 +178,7 @@ void TSecurity::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_err(nodePath().c_str(), _("Search and create new users error."));
+	mess_sys(TMess::Error, _("Search and create new users error."));
     }
 
     // Search and create new user groups
@@ -207,8 +207,8 @@ void TSecurity::load_( )
 		    grpDel(db_ls[i_it]);
 	}
     } catch(TError &err) {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Search and create new user's groups error."));
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_sys(TMess::Error, _("Search and create new user's groups error."));
     }
 
     //Add surely users, groups and set their parameters, if its not loaded

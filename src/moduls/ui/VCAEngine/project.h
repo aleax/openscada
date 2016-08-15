@@ -109,11 +109,12 @@ class Project : public TCntrNode, public TConfig
 
 	//Attributes
 	bool	enableByNeed;	//Load and enable by need
-	ResMtx &funcM( )	{ return mFuncM; }
+	ResMtx &funcM( )		{ return mFuncM; }
 
     protected:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( )		{ return mId.getSd(); }
+	const char *nodeNameSYSM( )	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( TConfig *cfg );

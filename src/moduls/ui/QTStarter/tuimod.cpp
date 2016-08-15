@@ -274,7 +274,8 @@ void *TUIMod::Task( void * )
 	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
 	QString mess;
 	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
+	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
+	    //mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	recs.clear();
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
@@ -320,7 +321,8 @@ void *TUIMod::Task( void * )
 	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
 	QString mess;
 	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
+	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
+	    //mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
 	recs.clear();
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();

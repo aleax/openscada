@@ -140,7 +140,7 @@ void TPrmTempl::setStart( bool vl )
 
 AutoHD<TFunction> TPrmTempl::func( )
 {
-    if(!startStat())	throw TError(nodePath().c_str(),_("Template is disabled."));
+    if(!startStat())	throw err_sys(_("Template is disabled."));
     if(!prog().size())	return AutoHD<TFunction>(this);
     try { return SYS->nodeAt(work_prog); }
     catch(TError &err) {
@@ -340,7 +340,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    if(io(row)->flg()&TPrmTempl::LockAttr)
-		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
+		throw err_sys(_("Deleting lock attribute in not allow."));
 	    ioDel(row);
 	    modif();
 	}
@@ -348,8 +348,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));
-	    if(io(row)->flg()&TPrmTempl::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
-	    if((col == 0 || col == 1) && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
+	    if(io(row)->flg()&TPrmTempl::LockAttr)	throw err_sys(_("Changing locked attribute is not allowed."));
+	    if((col == 0 || col == 1) && !opt->text().size())	throw err_sys(_("Empty value is not valid."));
 	    modif();
 	    switch(col) {
 		case 0:	io(row)->setId(opt->text());	break;
@@ -528,14 +528,14 @@ void TPrmTmplLib::start( bool val )
     for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 	try{ at(lst[i_f]).at().setStart(val); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Template '%s' start is error."),lst[i_f].c_str());
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	    mess_sys(TMess::Error, _("Template '%s' start is error."), lst[i_f].c_str());
 	    isErr = true;
 	}
 
     run_st = val;
 
-    if(isErr)	throw TError(nodePath().c_str(),_("Some templates start error."));
+    if(isErr)	throw err_sys(_("Some templates start error."));
 }
 
 void TPrmTmplLib::add( const string &id, const string &name )

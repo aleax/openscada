@@ -65,8 +65,6 @@ class TUIS : public TSubSYS
 	TUIS( );
 
 	int subVer( )		{ return SUI_VER; }
-	void subStart( );
-	void subStop( );
 
 	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
 

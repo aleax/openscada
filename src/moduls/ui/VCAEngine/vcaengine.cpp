@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.4.3"
+#define MOD_VER		"3.4.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -248,8 +248,6 @@ void Engine::load_( )
 {
     int64_t d_tm = 0;
 
-    mess_info(nodePath().c_str(),_("Load module."));
-
     if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
     map<string, bool>	itReg;
@@ -276,7 +274,7 @@ void Engine::load_( )
 		wlbAt(lId).at().load(&cEl);
 		itReg[lId] = true;
 		if(mess_lev() == TMess::Debug) {
-		    mess_debug(nodePath().c_str(), _("Load library '%s' time: %f ms."), lId.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		    mess_sys(TMess::Debug, _("Load library '%s' time: %f ms."), lId.c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 	    }
@@ -296,13 +294,13 @@ void Engine::load_( )
 	for(unsigned lId = 0; lId < dbLs.size(); lId++) {
 	    wlbAt(dbLs[lId]).at().load();
 	    if(mess_lev() == TMess::Debug) {
-		mess_debug(nodePath().c_str(), _("Load library '%s' time: %f ms."), dbLs[lId].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		mess_sys(TMess::Debug, _("Load library '%s' time: %f ms."), dbLs[lId].c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }
 	}*/
     } catch(TError &err) {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Load widgets libraries error."));
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_sys(TMess::Error, _("Load widgets libraries error."));
     }
 
     //Load projects
@@ -327,7 +325,7 @@ void Engine::load_( )
 		prjAt(prj_id).at().load(&cEl);
 		itReg[prj_id] = true;
 		if(mess_lev() == TMess::Debug) {
-		    mess_debug(nodePath().c_str(), _("Load project '%s' time: %f ms."), prj_id.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		    mess_sys(TMess::Debug, _("Load project '%s' time: %f ms."), prj_id.c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 	    }
@@ -347,13 +345,13 @@ void Engine::load_( )
 	for(unsigned el_id = 0; el_id < dbLs.size(); el_id++) {
 	    prjAt(dbLs[el_id]).at().load();
 	    if(mess_lev() == TMess::Debug) {
-		mess_debug(nodePath().c_str(), _("Load project '%s' time: %f ms."), dbLs[el_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		mess_sys(TMess::Debug, _("Load project '%s' time: %f ms."), dbLs[el_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }
 	}*/
     } catch(TError &err) {
-	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Load projects error."));
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_sys(TMess::Error, _("Load projects error."));
     }
 
     //Libraries enable
@@ -362,7 +360,7 @@ void Engine::load_( )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++) {
 	wlbAt(ls[l_id]).at().setEnable(true);
 	if(mess_lev() == TMess::Debug) {
-	    mess_debug(nodePath().c_str(),_("Enable library '%s' time: %f ms."),ls[l_id].c_str(),1e-3*(TSYS::curTime()-d_tm));
+	    mess_sys(TMess::Debug, _("Enable library '%s' time: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
     }
@@ -373,7 +371,7 @@ void Engine::load_( )
 	if(prjAt(ls[l_id]).at().enableByNeed)	continue;
 	prjAt(ls[l_id]).at().setEnable(true);
 	if(mess_lev() == TMess::Debug) {
-	    mess_debug(nodePath().c_str(), _("Enable project '%s' time: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+	    mess_sys(TMess::Debug, _("Enable project '%s' time: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
     }
@@ -408,8 +406,6 @@ void Engine::load_( )
 
 void Engine::save_( )
 {
-    mess_info(nodePath().c_str(), _("Save module."));
-
     //Auto-sessions save
     ResAlloc res(mSesRes, false);
     XMLNode aSess("Sess");
@@ -422,9 +418,9 @@ void Engine::save_( )
 
 void Engine::modStart( )
 {
-    mess_info(nodePath().c_str(),_("Start module."));
-
     vector<string> ls;
+
+    TModule::modStart();
 
     //Auto-sessions enable
     ResAlloc res(mSesRes, true);
@@ -452,7 +448,7 @@ void Engine::modStart( )
 
 void Engine::modStop( )
 {
-    mess_info(nodePath().c_str(), _("Stop module."));
+    TModule::modStop();
 
     vector<string> ls;
 
@@ -696,7 +692,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("prj", sesAt(sess).at().projNm());
 		if(s2i(opt->attr("userChange")))
-		    mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User is changed to '%s', from '%s'."),
+		    sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User is changed to '%s', from '%s'."),
 			opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 	    }
 	    // Create session
@@ -709,7 +705,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		sesAt(sess).at().setStart(true);
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("sess", sess);
-		mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User '%s' is connected, from '%s'."),
+		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' is connected, from '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 	    } else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
 	    opt->setAttr("userIsRoot", SYS->security().at().access(opt->attr("user"),SEC_WR,"root","root",RWRWR_)?"1":"0");
@@ -718,7 +714,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    string sess = opt->attr("sess");
 	    sesAt(sess).at().disconnect(s2i(opt->attr("conId")));
 	    if(sesAt(sess).at().connects() == 0 && !sesAt(sess).at().backgrnd()) {
-		mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User '%s' is disconnected, from '%s'."),
+		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' is disconnected, from '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 		sesDel(sess);
 	    }

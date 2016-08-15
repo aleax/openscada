@@ -40,7 +40,7 @@ using namespace OSCADA;
 //* TArchiveS                                    *
 //************************************************
 TArchiveS::TArchiveS( ) :
-    TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false), mRes(true),
+    TSubSYS(SARH_ID,_("Archives"),true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false), mRes(true),
     headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mValForceCurTm(false),
     prcStVal(false), endrunReqVal(false), toUpdate(false), mRdRestDtOverTm(0), mRdFirst(true)
 {
@@ -155,7 +155,7 @@ void TArchiveS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Message archivators load error."));
+	mess_sys(TMess::Error, _("Message archivators load error."));
     }
 
     // Value archivators load
@@ -191,7 +191,7 @@ void TArchiveS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Value archivators load error."));
+	mess_sys(TMess::Error, _("Value archivators load error."));
     }
 
     // Value archives load
@@ -223,7 +223,7 @@ void TArchiveS::load_( )
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_err(nodePath().c_str(),_("Value archives load error."));
+	mess_sys(TMess::Error, _("Value archives load error."));
     }
 }
 
@@ -262,7 +262,7 @@ string TArchiveS::optDescr(  )
 
 void TArchiveS::subStart( )
 {
-    mess_info(nodePath().c_str(),_("Start/update subsystem."));
+    mess_sys(TMess::Error, _("Start/update subsystem."));
 
     subStarting = true;
     toUpdate = false;	//Moved to start for prevent possible changes the toUpdate at processing
@@ -282,8 +282,8 @@ void TArchiveS::subStart( )
 	    else if(mess.at().toStart())
 		try { mess.at().start(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),oLst[iO].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Message archivator '%s' start error."), oLst[iO].c_str());
 		}
 	}
 	//Values
@@ -295,7 +295,7 @@ void TArchiveS::subStart( )
 		try { val.at().start(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_err(nodePath().c_str(), _("Value archivator '%s' start error."), val.at().workId().c_str());
+		    mess_sys(TMess::Error, _("Value archivator '%s' start error."), val.at().workId().c_str());
 		}
 	}
     }
@@ -307,8 +307,8 @@ void TArchiveS::subStart( )
 	if(aval.at().toStart())
 	    try { aval.at().start(); }
 	    catch(TError &err) {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Value archive '%s' start error."),oLst[iO].c_str());
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Error, _("Value archive '%s' start error."), oLst[iO].c_str());
 	    }
     }
 
@@ -322,8 +322,8 @@ void TArchiveS::subStart( )
 	    if(mess.at().startStat())
 		try { mess.at().start(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),oLst[iO].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Message archivator '%s' start error."), oLst[iO].c_str());
 		}
 	}
 	//Values
@@ -334,7 +334,7 @@ void TArchiveS::subStart( )
 		try { val.at().start(); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_err(nodePath().c_str(), _("Value archivator '%s' start error."), val.at().workId().c_str());
+		    mess_sys(TMess::Error, _("Value archivator '%s' start error."), val.at().workId().c_str());
 		}
 	}
     }
@@ -350,8 +350,6 @@ void TArchiveS::subStart( )
 
 void TArchiveS::subStop( )
 {
-    mess_info(nodePath().c_str(),_("Stop subsystem."));
-
     TSubSYS::subStop( );
 
     vector<string> tLst, oLst;
@@ -371,8 +369,8 @@ void TArchiveS::subStop( )
 	    if(val.at().startStat())
 		try { val.at().stop(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Value archivator '%s' stop error."),oLst[iO].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Value archivator '%s' stop error."), oLst[iO].c_str());
 		}
 	}
 	// Message archivators stop
@@ -382,8 +380,8 @@ void TArchiveS::subStop( )
 	    if(mess.at().startStat())
 		try { mess.at().stop(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Message archivator '%s' stop error."),oLst[iO].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Message archivator '%s' stop error."), oLst[iO].c_str());
 		}
 	}
     }
@@ -395,8 +393,8 @@ void TArchiveS::subStop( )
 	if(aval.at().startStat())
 	    try { aval.at().stop(); }
 	    catch(TError &err) {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Value archive '%s' stop error."),oLst[iO].c_str());
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Error, _("Value archive '%s' stop error."), oLst[iO].c_str());
 	    }
     }
 }
@@ -459,8 +457,8 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 		if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
 		    try { archtor.at().put(ml,force); }
 		    catch(TError &er) {
-			mess_err(nodePath().c_str(), _("Put message to the archiver '%s' error: %s"),
-							(tLst[iT]+"."+oLst[iO]).c_str(), er.mess.c_str());
+			mess_sys(TMess::Error, _("Put message to the archiver '%s' error: %s"),
+					(tLst[iT]+"."+oLst[iO]).c_str(), er.mess.c_str());
 		    }
 	    }
 	}
@@ -802,8 +800,8 @@ void *TArchiveS::ArhMessTask( void *param )
 		res.lock();
 		if(rez) messHead = newHeadLstread;
 	    } catch(TError &err) {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(arh.nodePath().c_str(),_("Message buffer process error."));
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		arh.mess_sys(TMess::Error, _("Message buffer process error."));
 	    }
 	    res.lock();
 	}

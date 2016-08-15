@@ -124,6 +124,7 @@ class TMess
 
 	void put( const char *categ, int8_t level, const char *fmt,  ... );
 	void put_( const char *categ, int8_t level, const char *fmt,  ... );
+	void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
 	// Internal messages translations
@@ -164,9 +165,6 @@ class TMess
 		time_t	tm;
 		string	val;
 	};
-
-	//Methods
-	void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );
 
 	//Attributes
 	string	IOCharSet;		//Internal charset

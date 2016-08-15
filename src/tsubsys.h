@@ -80,7 +80,8 @@ class TSubSYS : public TCntrNode
 
     private:
 	//Private methods
-	const char *nodeName( )	{ return mId.c_str(); }
+	const char *nodeName( )		{ return mId.c_str(); }
+	const char *nodeNameSYSM( )	{ return mName.c_str(); }
 
 	//Private attributes
 	bool	mModSys;

@@ -188,12 +188,12 @@ void TParamContr::LoadParmCfg( )
 		    itReg[shfr] = true;
 		} catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		    mess_err(nodePath().c_str(), _("Add parameter '%s' error."), cEl.cfg("SHIFR").getS().c_str());
+		    mess_sys(TMess::Error, _("Add parameter '%s' error."), cEl.cfg("SHIFR").getS().c_str());
 		}
 	    }
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_err(nodePath().c_str(), _("Search and create new parameters error."));
+	    mess_sys(TMess::Error, _("Search and create new parameters error."));
 	}
     }
 
@@ -301,13 +301,13 @@ void TParamContr::enable( )
 	    try{ at(prm_list[i_prm]).at().enable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_warning(nodePath().c_str(), _("Enable parameter '%s' error."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Enable parameter '%s' error."), prm_list[i_prm].c_str());
 		enErr = true;
 	    }
 
     mEn = true;
 
-    if(enErr) throw TError(nodePath().c_str(), _("Some parameters enable error."));
+    if(enErr) throw err_sys(_("Some parameters enable error."));
 }
 
 void TParamContr::disable( )
@@ -320,7 +320,7 @@ void TParamContr::disable( )
 	    try{ at(prm_list[i_prm]).at().disable(); }
 	    catch(TError &err) {
 		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_warning(nodePath().c_str(), _("Disable parameter '%s' error."), prm_list[i_prm].c_str());
+		mess_sys(TMess::Warning, _("Disable parameter '%s' error."), prm_list[i_prm].c_str());
 	    }
 
     type().disable(this);
@@ -452,7 +452,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    if(!owner().enableStat())	throw TError(nodePath().c_str(),_("Controller is not started!"));
+	    if(!owner().enableStat())	throw err_sys(_("Controller is not started!"));
 	    else s2i(opt->text()) ? enable() : disable();
 	}
     }

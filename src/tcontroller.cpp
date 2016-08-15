@@ -147,7 +147,7 @@ string TController::getStatus( )
 void TController::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    mess_info(nodePath().c_str(),_("Load controller's configurations!"));
+    mess_sys(TMess::Info, _("Load controller's configurations!"));
 
     bool enSt_prev = enSt, runSt_prev = runSt;
 
@@ -167,7 +167,7 @@ void TController::load_( TConfig *icfg )
 
 void TController::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save controller's configurations!"));
+    mess_sys(TMess::Info, _("Save controller's configurations!"));
 
     //Update type controller bd record
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
@@ -179,7 +179,7 @@ void TController::start( )
     if(runSt)	return;
     if(!enSt)	enable();
 
-    mess_info(nodePath().c_str(),_("Start controller!"));
+    mess_sys(TMess::Info, _("Start controller!"));
 
     //First archives synchronization
     if(owner().redntAllow() && redntMode()) redntDataUpdate();
@@ -194,7 +194,7 @@ void TController::stop( )
 {
     if(!runSt)	return;
 
-    mess_info(nodePath().c_str(),_("Stop controller!"));
+    mess_sys(TMess::Info, _("Stop controller!"));
 
     //Stop for children
     stop_();
@@ -205,7 +205,7 @@ void TController::stop( )
 void TController::enable( )
 {
     if(!enSt) {
-	mess_info(nodePath().c_str(),_("Enable controller!"));
+	mess_sys(TMess::Info, _("Enable controller!"));
 
 	//Enable for children
 	enable_();
@@ -219,15 +219,15 @@ void TController::enable( )
 	if(at(prm_list[i_prm]).at().toEnable())
 	    try{ at(prm_list[i_prm]).at().enable(); }
 	    catch(TError &err) {
-		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Enable parameter '%s' error."),prm_list[i_prm].c_str());
+		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Warning, _("Enable parameter '%s' error."), prm_list[i_prm].c_str());
 		enErr = true;
 	    }
 
     //Set enable stat flag
     enSt = true;
 
-    if(enErr) throw TError(nodePath().c_str(),_("Some parameters enable error."));
+    if(enErr) throw err_sys(_("Some parameters enable error."));
 }
 
 void TController::disable( )
@@ -237,7 +237,7 @@ void TController::disable( )
     //Stop if runed
     if(runSt) stop();
 
-    mess_info(nodePath().c_str(),_("Disable controller!"));
+    mess_sys(TMess::Info, _("Disable controller!"));
 
     //Disable parameters
     vector<string> prm_list;
@@ -246,8 +246,8 @@ void TController::disable( )
 	if(at(prm_list[i_prm]).at().enableStat())
 	    try{ at(prm_list[i_prm]).at().disable(); }
 	    catch(TError &err) {
-		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Disable parameter '%s' error."),prm_list[i_prm].c_str());
+		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Warning, _("Disable parameter '%s' error."), prm_list[i_prm].c_str());
 	    }
 
     //Disable for children
@@ -280,13 +280,13 @@ void TController::LoadParmCfg( )
 		    at(shfr).at().load(&cEl);
 		    itReg[shfr] = true;
 		} catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Add parameter '%s' error."),cEl.cfg("SHIFR").getS().c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Warning, _("Add parameter '%s' error."), cEl.cfg("SHIFR").getS().c_str());
 		}
 	    }
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Search and create new parameters error."));
+	    mess_sys(TMess::Error, _("Search and create new parameters error."));
 	}
     }
 

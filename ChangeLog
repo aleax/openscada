@@ -1,3 +1,12 @@
+2016-08-15 Roman
+- !!!!:SYS: To object TCntrNode added function mess_sys() for create system messages with the node path into the category
+	and the node's location into the message begin, by the function nodeNameSYSM().
+    To object TCntrNode added function err_sys() for create error objects with the node path and the node's location.
+    The new TCntrNode object's functions were used everywhere into the OpenSCADA core.
+    Some of system messages moved to the debug category.
+- Archive.FSArch, UI.VCAEngine: The module moved to use the functions TCntrNode::{mess_sys,err_sys}().
+
+
 2016-08-11 Roman
 - FIX:DB.LibsDB.OscadaLibs: DevLib.SSCP some fixed for type "real" process and messages.
 - !!:FIX:Special.FLibSYS: IO object was fixed for byte orders of type "real" using as the integer bytes, but not native.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-23 16:30+0300\n"
+"POT-Creation-Date: 2016-08-14 09:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,9 @@ msgid "Resource is try deadlock a thread!"
 msgstr ""
 
 msgid "Resource is timeouted!"
+msgstr ""
+
+msgid "Archives"
 msgstr ""
 
 msgid "ID"
@@ -138,9 +141,6 @@ msgstr ""
 
 #, c-format
 msgid "Value archive '%s' start error."
-msgstr ""
-
-msgid "Stop subsystem."
 msgstr ""
 
 #, c-format
@@ -462,9 +462,6 @@ msgstr ""
 msgid "Selection the archiver priority for \"All\" sources using mode. Set to zero for full the selection disable."
 msgstr ""
 
-msgid "Archives"
-msgstr ""
-
 msgid "Buffer size"
 msgstr ""
 
@@ -611,7 +608,7 @@ msgid "Node '%s' no present!"
 msgstr ""
 
 #, c-format
-msgid "Copy from '%s' to '%s' is impossible"
+msgid "Copy from '%s' to '%s' impossible."
 msgstr ""
 
 msgid "Destination node doesn't have branches."
@@ -792,7 +789,7 @@ msgid ""
 "Also affect to specific-diagnostic messages generation by data source."
 msgstr ""
 
-msgid "Data acquisition"
+msgid "Data Acquisition"
 msgstr ""
 
 msgid "Maximum calculate time (sec)"
@@ -827,9 +824,6 @@ msgstr ""
 
 #, c-format
 msgid "Add controller '%s' error."
-msgstr ""
-
-msgid "Start subsystem."
 msgstr ""
 
 #, c-format
@@ -1065,7 +1059,7 @@ msgid ""
 "  100...199 - realtime priority level (FIFO), often allowed only for \"root\"."
 msgstr ""
 
-msgid "Modules scheduler"
+msgid "Modules Scheduler"
 msgstr ""
 
 #, c-format
@@ -1153,7 +1147,16 @@ msgstr ""
 msgid "License"
 msgstr ""
 
-msgid "Connect module."
+msgid "Enable module."
+msgstr ""
+
+msgid "Disable module."
+msgstr ""
+
+msgid "Start module."
+msgstr ""
+
+msgid "Stop module."
 msgstr ""
 
 #, c-format
@@ -1268,7 +1271,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-msgid "Transport protocols"
+msgid "Transport Protocols"
 msgstr ""
 
 msgid ""
@@ -1366,11 +1369,21 @@ msgid "The subsystem is not modular!"
 msgstr ""
 
 #, c-format
+msgid "Connect module '%s'!"
+msgstr ""
+
+#, c-format
 msgid "Disconnect module '%s'!"
+msgstr ""
+
+msgid "Start subsystem."
 msgstr ""
 
 #, c-format
 msgid "Start module '%s' error."
+msgstr ""
+
+msgid "Stop subsystem."
 msgstr ""
 
 #, c-format
@@ -1388,7 +1401,7 @@ msgid "System counters on exit: %s"
 msgstr ""
 
 #, c-format
-msgid "%s: Changing work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."
+msgid "Changing work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."
 msgstr ""
 
 #, c-format
@@ -1494,95 +1507,83 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "%s: Config-file '%s' error: %s"
+msgid "Config-file '%s' error: %s"
 msgstr ""
 
 #, c-format
-msgid "%s: Config-file '%s' load error."
+msgid "Config-file '%s' load error."
 msgstr ""
 
 #, c-format
-msgid "%s: Station '%s' is not present in the config-file. Using configuration for station '%s'!"
+msgid "Station '%s' is not present in the config-file. Using configuration for station '%s'!"
 msgstr ""
 
 #, c-format
-msgid "%s: Configuration '%s' error!"
+msgid "Configuration '%s' error!"
 msgstr ""
 
 #, c-format
-msgid "%s: Load config-file error: %s"
+msgid "Load config-file error: %s"
 msgstr ""
 
 #, c-format
-msgid "%s: Configuration '%s' write error. %s"
+msgid "Configuration '%s' write error. %s"
+msgstr ""
+
+msgid "Load!"
+msgstr ""
+
+msgid "No one module is loaded. Your configuration is broken!"
 msgstr ""
 
 #, c-format
-msgid "%s: Load!"
+msgid "Error load subsystem '%s'."
+msgstr ""
+
+msgid "Save!"
+msgstr ""
+
+msgid "Start!"
 msgstr ""
 
 #, c-format
-msgid "%s: No one module is loaded. Your configuration is broken!"
+msgid "Error start subsystem '%s'."
+msgstr ""
+
+msgid "Final starting!"
+msgstr ""
+
+msgid "Stop!"
 msgstr ""
 
 #, c-format
-msgid "%s: Error load subsystem '%s'."
+msgid "Error stop subsystem '%s'."
+msgstr ""
+
+msgid "Termination signal is received. Stop the station!"
+msgstr ""
+
+msgid "Floating point exception is caught!"
 msgstr ""
 
 #, c-format
-msgid "%s: Save!"
+msgid "Free child process %d!"
+msgstr ""
+
+msgid "Segmentation fault signal!"
+msgstr ""
+
+msgid "Program aborted!"
 msgstr ""
 
 #, c-format
-msgid "%s: Start!"
+msgid "Unknown signal %d!"
 msgstr ""
 
-#, c-format
-msgid "%s: Error start subsystem '%s'."
+msgid "Timeouted !!!"
 msgstr ""
 
-#, c-format
-msgid "%s: Final starting!"
-msgstr ""
-
-#, c-format
-msgid "%s: Stop!"
-msgstr ""
-
-#, c-format
-msgid "%s: Error stop subsystem '%s'."
-msgstr ""
-
-#, c-format
-msgid "%s: Termination signal is received. Stop the station!"
-msgstr ""
-
-#, c-format
-msgid "%s: Floating point exception is caught!"
-msgstr ""
-
-#, c-format
-msgid "%s: Free child process %d!"
-msgstr ""
-
-#, c-format
-msgid "%s: Segmentation fault signal!"
-msgstr ""
-
-#, c-format
-msgid "%s: OpenSCADA is aborted!"
-msgstr ""
-
-#, c-format
-msgid "%s: Unknown signal %d!"
-msgstr ""
-
-#, c-format
-msgid "%s: Timeouted !!!"
-msgstr ""
-
-#, c-format
-msgid "%s: Wait event..."
+msgid "Wait event..."
 msgstr ""
 
 #, c-format
@@ -1590,7 +1591,7 @@ msgid "Task '%s' already present!"
 msgstr ""
 
 #, c-format
-msgid "%s: No permission for create a real-time policy for '%s'. Default thread is created!"
+msgid "No permission for create a real-time policy for '%s'. Default thread is created!"
 msgstr ""
 
 #, c-format
@@ -1602,23 +1603,34 @@ msgid "Task '%s' start timeouted!"
 msgstr ""
 
 #, c-format
+msgid "Task '%s' timeouted !!!"
+msgstr ""
+
+#, c-format
 msgid "Task '%s' is not stopped!"
 msgstr ""
 
 #, c-format
-msgid "%s: Task %u unexpected terminated by exception."
+msgid "Wait event of task '%s' ..."
+msgstr ""
+
+msgid "It isn't OpenSCADA task!"
 msgstr ""
 
 #, c-format
-msgid "%s: redundant station '%s' up."
+msgid "Task %u unexpected terminated by exception."
 msgstr ""
 
 #, c-format
-msgid "%s: redundant station '%s' down."
+msgid "Redundant station '%s' up."
 msgstr ""
 
 #, c-format
-msgid "%s: System clock changed to '%s'. Correction the cron '%s' target!"
+msgid "Redundant station '%s' down."
+msgstr ""
+
+#, c-format
+msgid "System clock changed to '%s'. Correction the cron '%s' target!"
 msgstr ""
 
 msgid "1:Request is not object!"
@@ -1871,6 +1883,9 @@ msgstr ""
 msgid "<<<Unmatched sources!!!>>>\n"
 msgstr ""
 
+msgid "Transports"
+msgstr ""
+
 msgid "Transport type"
 msgstr ""
 
@@ -1953,9 +1968,6 @@ msgstr ""
 msgid "Output transport"
 msgstr ""
 
-msgid "Transports"
-msgstr ""
-
 msgid "Stoped. "
 msgstr ""
 
@@ -2026,7 +2038,7 @@ msgstr ""
 msgid "Owner"
 msgstr ""
 
-msgid "User interfaces"
+msgid "User Interfaces"
 msgstr ""
 
 msgid ""

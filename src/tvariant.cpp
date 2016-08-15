@@ -285,7 +285,7 @@ void TVariant::setS( const string &ivl )
     if(type() != String && !mFixedTp) setType(String);
     switch(type()) {
 	case String:
-	    if(ivl.size() > 130000000)	throw TError("TVariant",_("Too big string length (> 130 MB)!"));
+	    if(ivl.size() > 130000000)	throw TError("TVariant", _("Too big string length (> 130 MB)!"));
 	    if(ivl.size() < sizeof(val.sMini)) {
 		if(mSize >= sizeof(val.sMini)) free(val.sPtr);
 		memcpy(val.sMini, ivl.data(), ivl.size());
@@ -297,7 +297,7 @@ void TVariant::setS( const string &ivl )
 		if(!val.sPtr) {
 		    mSize = 0;
 		    val.sMini[mSize] = 0;
-		    throw TError("TVariant",_("Memory alloc for big string length (%d) error!"),ivl.size());
+		    throw TError("TVariant", _("Memory alloc for big string length (%d) error!"), ivl.size());
 		}
 		memcpy(val.sPtr, ivl.data(), ivl.size());
 		val.sPtr[ivl.size()] = 0;
@@ -356,7 +356,7 @@ bool TVarObj::AHDDisConnect( )
 {
     pthread_mutex_lock(&dataM);
     if(mUseCnt) mUseCnt--;
-    else mess_err("TVarObj",_("Double disconnection try: %d."),mUseCnt);
+    else mess_err("TVarObj", _("Double disconnection try: %d."), mUseCnt);
     bool toFree = (mUseCnt == 0);
     pthread_mutex_unlock(&dataM);
 
@@ -481,7 +481,7 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
     // bool isEVal() - return "false" for EVAL detect
     if(id == "isEVal")	return false;
 
-    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(),_("Function '%s' error or not enough parameters."),id.c_str());
+    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(), _("Function '%s' error or not enough parameters."), id.c_str());
 }
 
 //*****************************************************************
@@ -628,7 +628,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // ElTp pop( ) - pop variable from array
     if(id == "pop") {
-	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
+	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj", _("Array is empty."));
 	pthread_mutex_lock(&dataM);
 	TVariant val = mEls.back();
 	mEls.pop_back();
@@ -644,7 +644,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // ElTp shift( ) - shift array's items upward
     if(id == "shift") {
-	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
+	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj", _("Array is empty."));
 	pthread_mutex_lock(&dataM);
 	TVariant val = mEls.front();
 	mEls.erase(mEls.begin());
@@ -736,7 +736,7 @@ TVariant TArrayObj::arGet( int vid )
 
 void TArrayObj::arSet( int vid, TVariant val )
 {
-    if(vid < 0) return;//throw TError("ArrayObj",_("Negative id is not allow for array."));
+    if(vid < 0) return;//throw TError("ArrayObj", _("Negative id is not allow for array."));
     pthread_mutex_lock(&dataM);
     while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
     mEls[vid] = val;
@@ -1015,7 +1015,7 @@ void XMLNodeObj::childIns( unsigned id, AutoHD<XMLNodeObj> nd )
 
 void XMLNodeObj::childDel( unsigned id )
 {
-    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj",_("Deletion child '%d' error."),id);
+    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj", _("Deletion child '%d' error."), id);
     pthread_mutex_lock(&dataM);
     if(mChilds[id].at().parent == this) mChilds[id].at().parent = NULL;
     mChilds.erase(mChilds.begin()+id);
@@ -1024,7 +1024,7 @@ void XMLNodeObj::childDel( unsigned id )
 
 AutoHD<XMLNodeObj> XMLNodeObj::childGet( unsigned id )
 {
-    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj",_("Child '%d' is not allow."),id);
+    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj", _("Child '%d' is not allow."), id);
     pthread_mutex_lock(&dataM);
     AutoHD<XMLNodeObj> rez = mChilds[id];
     pthread_mutex_unlock(&dataM);
@@ -1039,7 +1039,7 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet( const string &name, unsigned num )
 	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && (i_n++) == (int)num)
 	    rez = mChilds[i_ch];
     pthread_mutex_unlock(&dataM);
-    if(rez.freeStat()) throw TError("XMLNodeObj",_("Child %s:%d is not found!"),name.c_str(),num);
+    if(rez.freeStat()) throw TError("XMLNodeObj", _("Child %s:%d is not found!"), name.c_str(), num);
     return rez;
 }
 
@@ -1306,7 +1306,7 @@ string TCntrNodeObj::getStrXML( const string &oid )	{ return "<TCntrNodeObj path
 
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    if(cnd.freeStat()) throw TError("TCntrNodeObj",_("The object don't attached to node of OpenSCADA tree."));
+    if(cnd.freeStat()) throw TError("TCntrNodeObj", _("The object don't attached to node of OpenSCADA tree."));
     try{ return cnd.at().objFuncCall(id, prms, user()); } catch(TError&){ }
     return TVarObj::funcCall(id, prms);
 }

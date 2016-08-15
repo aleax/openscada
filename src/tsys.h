@@ -354,10 +354,9 @@ class TSYS : public TCntrNode
 	//Data
 	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10 };
 
-
-
 	//Private methods
-	const char *nodeName( )	{ return mId.c_str(); }
+	const char *nodeName( )		{ return mId.c_str(); }
+	const char *nodeNameSYSM( )	{ return mName.c_str(); }
 	bool cfgFileLoad( );
 	void cfgFileSave( );
 	void cfgPrmLoad( );

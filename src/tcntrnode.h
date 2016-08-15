@@ -104,8 +104,6 @@ class TCntrNode
 
 	virtual TCntrNode &operator=( TCntrNode &node );
 
-	//void mess_sys( int8_t level, const char *fmt,  ... );
-
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );
 
 	// Static functions
@@ -150,6 +148,7 @@ class TCntrNode
 						//Allowed for using by heirs into data resources allocation
 						//  not for long-term functions-tasks resources allocation!
 	virtual const char *nodeName( ) = 0;
+	virtual const char *nodeNameSYSM( )	{ return ""; }
 	string nodePath( char sep = 0, bool from_root = true );
 
 	void nodeList( vector<string> &list, const string& gid = "" );	//Full node list
@@ -176,6 +175,10 @@ class TCntrNode
 	// Connections counter
 	virtual void AHDConnect( );
 	virtual bool AHDDisConnect( );
+
+	void mess_sys( int8_t level, const char *fmt,  ... );
+	TError err_sys( const char *fmt,  ... );
+	TError err_sys( int cod, const char *fmt,  ... );
 
 	// User object access
 	virtual TVariant objPropGet( const string &id );

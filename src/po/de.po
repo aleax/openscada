@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-23 16:30+0300\n"
+"POT-Creation-Date: 2016-08-14 09:09+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -28,6 +28,9 @@ msgstr "Die Ressource versucht den toten Block in den Strom einzusetzen"
 
 msgid "Resource is timeouted!"
 msgstr "Wartezeit der Ressource ist aus"
+
+msgid "Archives"
+msgstr "Aufzeichnungen"
 
 msgid "ID"
 msgstr ""
@@ -160,9 +163,6 @@ msgstr "Fehler beim Starten des Wertearchivars '%s'."
 #, c-format
 msgid "Value archive '%s' start error."
 msgstr "Fehler beim Starten des Wertearchivs '%s'."
-
-msgid "Stop subsystem."
-msgstr "Subsystem anhalten."
 
 #, c-format
 msgid "Value archivator '%s' stop error."
@@ -527,9 +527,6 @@ msgstr ""
 "Auswahl der Archivierungs Priorität für \"Alle\" mit Quellen-Modus. Auf Null "
 "einstellen für Voll der Auswahl deaktivieren."
 
-msgid "Archives"
-msgstr "Aufzeichnungen"
-
 msgid "Buffer size"
 msgstr "Speichergrösse"
 
@@ -694,8 +691,7 @@ msgstr "Der Knoten ist abgeschaltet!"
 msgid "Node '%s' no present!"
 msgstr "Der Knoten '%s' ist nicht vorhanden!"
 
-#, c-format
-msgid "Copy from '%s' to '%s' is impossible"
+msgid "Copy from '%s' to '%s' impossible."
 msgstr "Kopieren von '%s' nach '%s' ist nicht zulässig."
 
 msgid "Destination node doesn't have branches."
@@ -886,7 +882,7 @@ msgstr ""
 "Empfang von Nachrichten für gleiche und höhere Stufe.\n"
 "Wirkt sich auch auf das Erzeugen der Datenquelle Diagnosemeldungen."
 
-msgid "Data acquisition"
+msgid "Data Acquisition"
 msgstr "Datenerfassung"
 
 msgid "Maximum calculate time (sec)"
@@ -922,9 +918,6 @@ msgstr "Fehler beim Laden der Vorlagenbibliotheken."
 #, c-format
 msgid "Add controller '%s' error."
 msgstr "Fehler beim Hinzufügen eines Controllers '%s'."
-
-msgid "Start subsystem."
-msgstr "Subsystems starten."
 
 #, c-format
 msgid "Start template library '%s' error."
@@ -1198,7 +1191,7 @@ msgstr ""
 "\"root\";\n"
 "  100...199 - Die Prioritätsstufe der Echtzeit-(FIFO), oft nur für \"root\"."
 
-msgid "Modules scheduler"
+msgid "Modules Scheduler"
 msgstr "Modulsteuerung"
 
 #, c-format
@@ -1312,8 +1305,17 @@ msgstr "Autor"
 msgid "License"
 msgstr "Lizenz"
 
-msgid "Connect module."
-msgstr "Modul verbinden."
+msgid "Enable module."
+msgstr "Aktivieren Modul."
+
+msgid "Disable module."
+msgstr "Disable-Modul."
+
+msgid "Start module."
+msgstr "Startmodul."
+
+msgid "Stop module."
+msgstr "Stopp-Modul."
 
 #, c-format
 msgid "Function '%s' is not present in the module!"
@@ -1429,7 +1431,7 @@ msgstr "Parametervorlagen"
 msgid "Templates"
 msgstr "Vorlagen"
 
-msgid "Transport protocols"
+msgid "Transport Protocols"
 msgstr "Übertragungsprotokolle"
 
 msgid ""
@@ -1535,12 +1537,22 @@ msgid "The subsystem is not modular!"
 msgstr "Das Subsystem ist nicht modular!"
 
 #, c-format
+msgid "Connect module '%s'!"
+msgstr "Verbinden Modul '%s'!"
+
+#, c-format
 msgid "Disconnect module '%s'!"
-msgstr "Verbindung trennen für das Modul '%s'!"
+msgstr "Abklemmen Modul '%s'!"
+
+msgid "Start subsystem."
+msgstr "Subsystems starten."
 
 #, c-format
 msgid "Start module '%s' error."
 msgstr "Fehler beim Starten des Moduls '%s'."
+
+msgid "Stop subsystem."
+msgstr "Subsystem anhalten."
 
 #, c-format
 msgid "Stop module '%s' error."
@@ -1558,11 +1570,11 @@ msgstr "System Zählern an der Ausfahrt: %s"
 
 #, c-format
 msgid ""
-"%s: Changing work directory to '%s' error: %s. Perhaps current directory "
-"already set correct to '%s'."
+"Changing work directory to '%s' error: %s. Perhaps current directory already "
+"set correct to '%s'."
 msgstr ""
-"%s: Fehler der Veränderung der Arbeitsdirectory in '%s': %s. Wahrscheinlich "
-"ist die laufende Directory schon korrekt installiert in '%s'."
+"Fehler der Veränderung der Arbeitsdirectory in '%s': %s. Wahrscheinlich ist "
+"die laufende Directory schon korrekt installiert in '%s'."
 
 #, c-format
 msgid "Read only access to file '%s'."
@@ -1724,100 +1736,88 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "%s: Config-file '%s' error: %s"
-msgstr "%s: Konfigurationsdatei '%s' Fehler: %s"
+msgid "Config-file '%s' error: %s"
+msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
 #, c-format
-msgid "%s: Config-file '%s' load error."
-msgstr "%s: Config-Datei '%s' Ladefehler."
+msgid "Config-file '%s' load error."
+msgstr "Config-Datei '%s' Ladefehler."
 
 #, c-format
 msgid ""
-"%s: Station '%s' is not present in the config-file. Using configuration for "
+"Station '%s' is not present in the config-file. Using configuration for "
 "station '%s'!"
 msgstr ""
-"%s: Station '%s' fehlt in der Konfigurationsdatei. Konfiguration der Station "
+"Station '%s' fehlt in der Konfigurationsdatei. Konfiguration der Station "
 "'%s' wird verwendet!"
 
 #, c-format
-msgid "%s: Configuration '%s' error!"
-msgstr "%s: Konfigurationsfehler '%s'!"
+msgid "Configuration '%s' error!"
+msgstr "Konfigurationsfehler '%s'!"
 
 #, c-format
-msgid "%s: Load config-file error: %s"
-msgstr "%s: Fehler beim Laden der Konfigurationsdatei: %s"
+msgid "Load config-file error: %s"
+msgstr "Fehler beim Laden der Konfigurationsdatei: %s"
 
 #, c-format
-msgid "%s: Configuration '%s' write error. %s"
-msgstr "%s: Konfigurationsdatei '%s' Fehler: %s"
+msgid "Configuration '%s' write error. %s"
+msgstr "Konfigurationsdatei '%s' Fehler: %s"
+
+msgid "Load!"
+msgstr "Laden!"
+
+msgid "No one module is loaded. Your configuration is broken!"
+msgstr "Kein Modul ist geladen. Ihre Konfiguration ist kaput"
 
 #, c-format
-msgid "%s: Load!"
-msgstr "%s: Laden!"
+msgid "Error load subsystem '%s'."
+msgstr "Fehler beim Laden des Subsysems '%s'."
+
+msgid "Save!"
+msgstr "Speicherung!"
+
+msgid "Start!"
+msgstr "Starten!"
 
 #, c-format
-msgid "%s: No one module is loaded. Your configuration is broken!"
-msgstr "%s: Kein Modul ist geladen. Ihre Konfiguration ist kaput"
+msgid "Error start subsystem '%s'."
+msgstr "Fehler beim Starten des Subsystems '%s'."
+
+msgid "Final starting!"
+msgstr "Starten ist beendet"
+
+msgid "Stop!"
+msgstr "Anhalten!"
 
 #, c-format
-msgid "%s: Error load subsystem '%s'."
-msgstr "%s: Fehler beim Laden des Subsysems '%s'."
+msgid "Error stop subsystem '%s'."
+msgstr "Fehler beim Anhalten des Subsystems '%s'."
+
+msgid "Termination signal is received. Stop the station!"
+msgstr "Signal zum Beenden wird empfangen. Stoppen Sie die Station!"
+
+msgid "Floating point exception is caught!"
+msgstr "Fehler bei Fliesskommaoperation abgefangen!"
 
 #, c-format
-msgid "%s: Save!"
-msgstr "%s: Speicherung!"
+msgid "Free child process %d!"
+msgstr "Beenden des Kindprozesses %d!"
+
+msgid "Segmentation fault signal!"
+msgstr "Fehler Speichersegmentierung!"
+
+msgid "Program aborted!"
+msgstr "Programmabbruch!"
 
 #, c-format
-msgid "%s: Start!"
-msgstr "%s: Starten!"
+msgid "Unknown signal %d!"
+msgstr "Unbekanntes Signal %d!"
 
-#, c-format
-msgid "%s: Error start subsystem '%s'."
-msgstr "%s: Fehler beim Starten des Subsystems '%s'."
+msgid "Timeouted !!!"
+msgstr "Zeitüberschreitung !!!"
 
-#, c-format
-msgid "%s: Final starting!"
-msgstr "%s: Starten ist beendet"
-
-#, c-format
-msgid "%s: Stop!"
-msgstr "%s: Anhalten!"
-
-#, c-format
-msgid "%s: Error stop subsystem '%s'."
-msgstr "%s: Fehler beim Anhalten des Subsystems '%s'."
-
-#, c-format
-msgid "%s: Termination signal is received. Stop the station!"
-msgstr "%s: Signal zum Beenden wird empfangen. Stoppen Sie die Station!"
-
-#, c-format
-msgid "%s: Floating point exception is caught!"
-msgstr "%s: Fehler bei Fliesskommaoperation abgefangen!"
-
-#, c-format
-msgid "%s: Free child process %d!"
-msgstr "%s: Beenden des Kindprozesses %d!"
-
-#, c-format
-msgid "%s: Segmentation fault signal!"
-msgstr "%s: Fehler Speichersegmentierung!"
-
-#, c-format
-msgid "%s: OpenSCADA is aborted!"
-msgstr "%s: OpenSCADA ist abgebrochen!"
-
-#, c-format
-msgid "%s: Unknown signal %d!"
-msgstr "%s: Unbekanntes Signal %d!"
-
-#, c-format
-msgid "%s: Timeouted !!!"
-msgstr "%s: Zeitüberschreitung !!!"
-
-#, c-format
-msgid "%s: Wait event..."
-msgstr "%s: Warte auf Ereignis..."
+msgid "Wait event..."
+msgstr "Warte auf Ereignis..."
 
 #, c-format
 msgid "Task '%s' already present!"
@@ -1825,10 +1825,10 @@ msgstr "Aufgabe '%s' ist schon geschafft!"
 
 #, c-format
 msgid ""
-"%s: No permission for create a real-time policy for '%s'. Default thread is "
+"No permission for create a real-time policy for '%s'. Default thread is "
 "created!"
 msgstr ""
-"%s: Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist "
+"Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist "
 "geschaffen default!"
 
 #, c-format
@@ -1840,24 +1840,35 @@ msgid "Task '%s' start timeouted!"
 msgstr "Task-Start '%s' timeouted!"
 
 #, c-format
+msgid "Task '%s' timeouted !!!"
+msgstr "Tasks '%s' Timeout !!!"
+
+#, c-format
 msgid "Task '%s' is not stopped!"
 msgstr "Aufgabe '%s' ist nicht gestoppt!"
 
 #, c-format
-msgid "%s: Task %u unexpected terminated by exception."
-msgstr "%s: Task %u unerwartet beendet durch Ausnahme."
+msgid "Wait event of task '%s' ..."
+msgstr "Warten Sie Ereignis von Aufgaben '%s' ..."
+
+msgid "It isn't OpenSCADA task!"
+msgstr "Es ist nicht OpenSCADA Aufgabe!"
 
 #, c-format
-msgid "%s: redundant station '%s' up."
-msgstr "%s: Redundancy station '%s' auf."
+msgid "Task %u unexpected terminated by exception."
+msgstr "Task %u unerwartet beendet durch Ausnahme."
 
 #, c-format
-msgid "%s: redundant station '%s' down."
-msgstr "%s: Redundancy station '%s' abwärts."
+msgid "Redundant station '%s' up."
+msgstr "Redundancy station '%s' auf."
 
 #, c-format
-msgid "%s: System clock changed to '%s'. Correction the cron '%s' target!"
-msgstr "%s: Der Systemtakt geändert '%s'. Korrektur der cron '%s' Ziel!"
+msgid "Redundant station '%s' down."
+msgstr "Redundancy station '%s' abwärts."
+
+#, c-format
+msgid "System clock changed to '%s'. Correction the cron '%s' target!"
+msgstr "Der Systemtakt geändert '%s'. Korrektur der cron '%s' Ziel!"
 
 msgid "1:Request is not object!"
 msgstr "1:Die Anfrage ist kein Objekt!"
@@ -2134,6 +2145,9 @@ msgstr "Fehler bei der Installation von Prozessoren für den Strom."
 msgid "<<<Unmatched sources!!!>>>\n"
 msgstr "<<<Unerreichte Quelle!!!>>>\n"
 
+msgid "Transports"
+msgstr "Übertragungen"
+
 msgid "Transport type"
 msgstr "Übertragungstypen"
 
@@ -2218,9 +2232,6 @@ msgstr "Eingangsübertragung"
 msgid "Output transport"
 msgstr "Ausgangsübertragung"
 
-msgid "Transports"
-msgstr "Übertragungen"
-
 msgid "Stoped. "
 msgstr "Angehalten. "
 
@@ -2304,7 +2315,7 @@ msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
 msgid "Owner"
 msgstr "Eigentümer"
 
-msgid "User interfaces"
+msgid "User Interfaces"
 msgstr "Benutzerschnittstellen"
 
 msgid ""
@@ -2514,3 +2525,12 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#~ msgid "%s: Timeouted !!!"
+#~ msgstr "%s: Zeitüberschreitung !!!"
+
+#~ msgid "%s: Wait event..."
+#~ msgstr "%s: Warte auf Ereignis..."
+
+#~ msgid "Add module '%s'!"
+#~ msgstr "In Modul '%s'!"

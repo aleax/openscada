@@ -87,8 +87,8 @@ void TTypeDAQ::modStart( )
 	if(at(lst[i_l]).at().toStart())
 	    try{ at(lst[i_l]).at().start(); }
 	    catch(TError &err) {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(nodePath().c_str(),_("Start controller '%s' error."),(modId()+"."+lst[i_l]).c_str());
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Error, _("Start controller '%s' error."), (modId()+"."+lst[i_l]).c_str());
 	    }
 }
 
@@ -105,8 +105,7 @@ void TTypeDAQ::add( const string &name, const string &daq_db )	{ chldAdd(mCntr, 
 
 TTypeParam &TTypeDAQ::tpPrmAt( unsigned id )
 {
-    if(id >= paramt.size() || id < 0)
-	throw TError(nodePath().c_str(),_("Id of parameter type error!"));
+    if(id >= paramt.size() || id < 0) throw err_sys(_("Id of parameter type error!"));
     return *paramt[id];
 }
 
@@ -134,17 +133,17 @@ int TTypeDAQ::tpPrmToId( const string &name_t )
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name == name_t) return i_t;
-    throw TError(nodePath().c_str(),_("Parameter type '%s' is not present."),name_t.c_str());
+    throw err_sys(_("Parameter type '%s' is not present."), name_t.c_str());
 }
 
 TController *TTypeDAQ::ContrAttach( const string &name, const string &daq_db )
 {
-    throw TError(nodePath().c_str(),_("Error attach new controller %s."),name.c_str());
+    throw err_sys(_("Error attach new controller %s."), name.c_str());
 }
 
 string TTypeDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
-    throw TError(nodePath().c_str(),_("Module doesn't support the function for compilation programming languages."));
+    throw err_sys(_("Module doesn't support the function for compilation programming languages."));
 }
 
 void TTypeDAQ::cntrCmdProc( XMLNode *opt )
