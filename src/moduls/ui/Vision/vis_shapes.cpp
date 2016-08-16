@@ -1865,7 +1865,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
@@ -1956,6 +1956,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
 
     if(!w->allAttrLoad()) {
+	//w->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr() && shD->type == FD_TRND);
 	if(reld_tr_dt)	{ loadData(w,reld_tr_dt==2); make_pct = true; }
 	if(make_pct)	{ makePicture(w); up = true; }
 	if(up && uiPrmPos != -1) {
@@ -2204,8 +2205,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    string labVal;
 	    pnt.setPen(grdPenT);
 	    pnt.drawLine(tAr.x()-1, tAr.y(), tAr.x()-1, tAr.height());
-	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv)
-	    {
+	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		int v_pos = tAr.y() + tAr.height() - (int)((double)tAr.height()*(iV-vsMinT)/(vsMaxT-vsMinT));
 		if(sclVerT&FD_GRD) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
 		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
@@ -3334,7 +3334,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    QPainter pnt(w);
 
 	    // Decoration draw
-	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
+	    QRect dA = w->rect().adjusted(0, 0, -2*shD->geomMargin, -2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
@@ -3398,14 +3398,62 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if(!shD->active || !w->hasFocus()) break;
 	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
 	    if(curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width())) break;
-	    if(shD->type == 0) {
-		int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
-		setCursor(w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width());
-	    }
-	    else if(shD->type == 1)
-		setCursor(w, (int64_t)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())));
-	    w->update();
+
+	    //Hold processing
+	    if((static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton && shD->type == FD_TRND)
+		shD->holdPnt = curp;
+
 	    break;
+	}
+	case QEvent::MouseButtonRelease:
+	    if(shD->fMoveHold) {
+		shD->fMoveHold = false;
+		w->setCursor(Qt::ArrowCursor);
+		if(shD->fMoveTmCh) {
+		    w->attrSet("tSek", i2s(shD->tTime/1000000), A_NO_ID, true);
+		    w->attrSet("tUSek", i2s(shD->tTime%1000000), A_NO_ID, true);
+		    w->attrSet("trcPer", "0", A_NO_ID, true);
+		}
+	    }
+	    else {
+		//Cursor set
+		QPoint curp = w->mapFromGlobal(w->cursor().pos());
+		if(curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width())) break;
+		switch(shD->type) {
+		    case FD_TRND: {
+			int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
+			setCursor(w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width());
+			break;
+		    }
+		    case FD_SPECTR:
+			setCursor(w, (int64_t)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())));
+			break;
+		    default: break;
+		}
+		w->update();
+	    }
+	    break;
+	case QEvent::MouseMove: {
+	    QMouseEvent *mev = (QMouseEvent*)event;
+	    QPoint dP = mev->pos() - shD->holdPnt;
+	    if(shD->fMoveHold || ((mev->buttons()&Qt::LeftButton) && dP.manhattanLength() >= QApplication::startDragDistance())) {
+		if(!shD->fMoveHold) { w->setCursor(Qt::ClosedHandCursor /*Qt::PointingHandCursor*/); shD->fMoveTmCh = false; }
+		shD->fMoveHold = true;
+		shD->holdPnt = mev->pos();
+		if(dP.x() > 0 || (dP.x() < 0 && !shD->tTimeCurent)) {
+		    if(shD->trcPer) w->attrSet("trcPer", "0", A_DiagramTrcPer);
+		    shD->tTimeCurent = false;
+
+		    int64_t toTm = vmax(0, vmin((int64_t)time(NULL)*1000000,shD->tTime-((int64_t)(1e6*shD->tSize)/shD->pictRect.width())*dP.x()));
+		    if(toTm != shD->tTime) {
+			shD->tTime = toTm; shD->fMoveTmCh = true;
+			//Load by parameters after moving drop.
+			makePicture(w);
+			w->update();
+		    }
+		}
+	    }
+	    if(shD->fMoveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton)) { shD->fMoveHold = false; w->setCursor(Qt::ArrowCursor); }
 	}
 	default: break;
     }

@@ -1,3 +1,7 @@
+2016-08-16 Roman
+- UI.Vision: To primitive "Diagram" of mode "Trend" added sliding by mouse in the time axis.
+
+
 2016-08-15 Roman
 - !!!!:SYS: To object TCntrNode added function mess_sys() for create system messages with the node path into the category
 	and the node's location into the message begin, by the function nodeNameSYSM().

@@ -3076,7 +3076,7 @@ bool DevelWdgView::event( QEvent *event )
 		if(fMoveHold || cursor().shape() != Qt::ArrowCursor) {
 		    if(cursor().shape() != Qt::ArrowCursor) {
 			vector<DevelWdgView*> lswdgs;
-			selectChilds(NULL,&lswdgs);
+			selectChilds(NULL, &lswdgs);
 			if(fMoveHoldMove) {
 			    if(!lswdgs.size()) {
 				saveGeom(id().c_str());
@@ -3156,7 +3156,7 @@ bool DevelWdgView::event( QEvent *event )
 		upMouseCursors(curp);
 
 		// Move widgets control
-		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
+		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && (((QMouseEvent*)event)->buttons()&Qt::LeftButton) &&
 		    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance())
 		{
 		    dragStartPos = QPoint(-100,-100);
@@ -3292,8 +3292,7 @@ void SizePntWdg::apply( )
     if(mWSize.width() > 2 && mWSize.height() > 2) {
 	QRegion reg;
 	QRect   wrect, irect;
-	switch(view)
-	{
+	switch(view) {
 	    case SizeDots:
 		wrect = QRectF(mWPos,mWSize).adjusted(-3,-3,3,3).toRect();
 		irect = QRect(0,0,wrect.width(),wrect.height());
@@ -3324,16 +3323,14 @@ void SizePntWdg::apply( )
 
 bool SizePntWdg::event( QEvent *ev )
 {
-    switch(ev->type())
-    {
+    switch(ev->type()) {
 	case QEvent::Paint: {
 	    if(!rect().isValid()) break;
 
 	    QPainter pnt(this);
 	    pnt.setWindow(rect());
 
-	    switch(view)
-	    {
+	    switch(view) {
 		case SizeDots:
 		    pnt.setPen(QColor("black"));
 		    pnt.setBrush(QBrush(QColor("lightgreen")));
