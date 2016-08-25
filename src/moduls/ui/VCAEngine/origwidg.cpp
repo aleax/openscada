@@ -972,7 +972,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		if(!(cfg.getI() == FD_TRND))	cfg.owner()->attrDel("sclHorPer");
 	}
 
-	//> Create specific attributes
+	// Create specific attributes
 	switch(cfg.getI()) {
 	    case FD_TRND:
 		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale: horizontal grid size, seconds"),TFld::Real,Attr::Mutable,

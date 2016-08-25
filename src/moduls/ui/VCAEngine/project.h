@@ -193,7 +193,7 @@ class Page : public Widget, public TConfig
 	void loadIO( );
 	void saveIO( );
 
-	void setEnable( bool val );
+	void setEnable( bool val, bool force = false );
 
 	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
@@ -271,7 +271,7 @@ class PageWdg : public Widget, public TConfig
 	int	calcPer( );
 	string	parentNm( )	{ return cfg("PARENT").getS(); }
 
-	void setEnable( bool val );
+	void setEnable( bool val, bool force = false );
 	void setParentNm( const string &isw );
 
 	// Storing

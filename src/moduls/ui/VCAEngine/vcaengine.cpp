@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.4.4"
+#define MOD_VER		"3.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -635,7 +635,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
 	    SYS->db().at().dataDel(fullDB+"_io", nodePath()+tbl+"_io", cEl, true, false, true);
-	    fldCnt--;
+	    if(full.empty()) fldCnt--;
 	}
 
 	//Clear no present IO for user io table
@@ -645,7 +645,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
 	    SYS->db().at().dataDel(fullDB+"_uio", nodePath()+tbl+"_uio", cElu, true, false, true);
-	    fldCnt--;
+	    if(full.empty()) fldCnt--;
 	}
     }
 

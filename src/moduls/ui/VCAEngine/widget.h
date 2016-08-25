@@ -203,7 +203,7 @@ class Widget : public TCntrNode
 
 	// Enable stat
 	bool enable( );
-	virtual void setEnable( bool val );
+	virtual void setEnable( bool val, bool force = false );
 
 	// Inheritance methods
 	virtual string parentNm( )	{ return mParentNm; }	//Parent widget name

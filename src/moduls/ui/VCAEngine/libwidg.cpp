@@ -203,7 +203,7 @@ void WidgetLib::save_( )
     mOldDB = TBDS::realDBName(DB());
 }
 
-void WidgetLib::setEnable( bool val )
+void WidgetLib::setEnable( bool val, bool force )
 {
     if(val == enable())	return;
 
@@ -569,7 +569,7 @@ void LWidget::setParentNm( const string &isw )
     cfg("PARENT").setS(isw);
 }
 
-void LWidget::setEnable( bool val )
+void LWidget::setEnable( bool val, bool force )
 {
     if(enable() == val) return;
 
@@ -634,6 +634,21 @@ void LWidget::loadIO( )
 
     //Load widget's work attributes
     mod->attrsLoad(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", cfg("ATTRS").getS());
+
+    //Force Active, not inherited and not modified attributes, mostly for init the primitives ones.
+    vector<string> aLs;
+    map<string, bool> aPrc;
+    for(bool act = true; parent().freeStat() && act; ) {
+	act = false;
+	attrList(aLs);
+	for(unsigned iA = 0; iA < aLs.size(); ++iA) {
+	    AutoHD<Attr> aO = attrAt(aLs[iA]);
+	    if((aO.at().flgGlob()&Attr::Active) && !aO.at().modif() && !aPrc[aLs[iA]]) {
+		aO.at().set(aO.at().get(true), true); aO.at().setModif(0);
+		aPrc[aLs[iA]] = act = true;
+	    }
+	}
+    }
 
     //Load cotainer widgets
     if(!isContainer()) return;
@@ -854,7 +869,7 @@ void CWidget::setParentNm( const string &isw )
     modif();
 }
 
-void CWidget::setEnable( bool val )
+void CWidget::setEnable( bool val, bool force )
 {
     if(enable() == val) return;
 

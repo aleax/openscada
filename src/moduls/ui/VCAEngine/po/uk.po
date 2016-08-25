@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-03 16:52+0300\n"
+"POT-Creation-Date: 2016-08-25 15:26+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1392,6 +1392,10 @@ msgstr "Зупинка сеансу."
 msgid "Session '%s' calculate error."
 msgstr "Помилка обчислення сесії '%s'."
 
+#, c-format
+msgid "Unregistered connection %d on the session."
+msgstr ""
+
 msgid "Session: "
 msgstr "Сеанс: "
 
@@ -1452,6 +1456,12 @@ msgstr "Повідомлення сповіщення"
 
 msgid "Notification message's language"
 msgstr "Мова повідомлення сповіщення"
+
+msgid "Enable page."
+msgstr "Включення сторінки."
+
+msgid "Disable page."
+msgstr "Вимкнення сторінки."
 
 msgid "Session page: "
 msgstr "Сторінки сеансу: "
@@ -1565,9 +1575,6 @@ msgstr "Значення 9"
 msgid "Original widgets"
 msgstr "Базові віджети"
 
-msgid "Load module."
-msgstr "Завантаження модуля."
-
 #, c-format
 msgid "Load library '%s' time: %f ms."
 msgstr "Час завантаження бібліотеки '%s': %f мс."
@@ -1589,15 +1596,6 @@ msgstr "Час включення бібліотеки '%s': %f мс."
 #, c-format
 msgid "Enable project '%s' time: %f ms."
 msgstr "Час включення проекту '%s': %f мс."
-
-msgid "Save module."
-msgstr "Збереження модуля."
-
-msgid "Start module."
-msgstr "Старт модуля."
-
-msgid "Stop module."
-msgstr "Зупинка модуля."
 
 #, c-format
 msgid "Connection to session is not permitted for '%s'."
@@ -1714,6 +1712,9 @@ msgstr "Батько ідентичний до власника для поси�
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Помилка включення віджета: %s"
+
+msgid "Disable widget."
+msgstr "Вимкнення віджету."
 
 #, c-format
 msgid "Inheriting widget '%s' disable error."
@@ -1930,6 +1931,9 @@ msgstr "Помилка. Видалення елементу не користу�
 msgid "Changing of not user attribute is no permitted"
 msgstr "Модифікація атрибутів не користувача не дозволена"
 
+msgid "New attribute's ID is empty!"
+msgstr "Новий ID атрибуту порожній!"
+
 #, c-format
 msgid "New attribute's ID '%s' already present!"
 msgstr "Новий ідентифікатор атрибуту '%s' вже присутній!"
@@ -2051,3 +2055,15 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
+
+#~ msgid "Load module."
+#~ msgstr "Завантаження модуля."
+
+#~ msgid "Save module."
+#~ msgstr "Збереження модуля."
+
+#~ msgid "Start module."
+#~ msgstr "Старт модуля."
+
+#~ msgid "Stop module."
+#~ msgstr "Зупинка модуля."

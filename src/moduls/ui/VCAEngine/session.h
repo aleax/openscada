@@ -249,7 +249,7 @@ class SessWdg : public Widget, public TValFunc
 	int	calcPer( );
 	bool	process( )	{ return mProc; }		//Process stat
 
-	void setEnable( bool val );
+	void setEnable( bool val, bool force = false );
 	virtual void setProcess( bool val, bool lastFirstCalc = true );
 
 	virtual void prcElListUpdate( );
@@ -368,6 +368,7 @@ class SessPage : public SessWdg
 	//Attributes
 	unsigned mPage		: 4;		//Pages container identifier
 	unsigned mClosePgCom	: 1;
+	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
 	ResMtx	mFuncM;
 };
 

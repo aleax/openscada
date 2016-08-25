@@ -2186,8 +2186,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	QRectF selRect;
 	int sel_cnt = 0;
 	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
-	    {
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select()) {
 		selRect = selRect.united(cwdg->geometryF());
 		sel_cnt++;
 	    }

@@ -245,7 +245,7 @@ void Project::save_( )
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); )
 	if(mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
 	    SYS->db().at().dataDel(fullDB()+"_stl", nodePath()+tbl()+"_stl", cStl, false, false, true);
-	    fldCnt--;
+	    if(full.empty()) fldCnt--;
 	}
 }
 
@@ -1115,7 +1115,7 @@ void Page::wClear( )
     cfg("ATTRS").setS("");
 }
 
-void Page::setEnable( bool val )
+void Page::setEnable( bool val, bool force )
 {
     if(enable() == val) return;
 
@@ -1567,7 +1567,7 @@ void PageWdg::setParentNm( const string &isw )
     cfg("PARENT").setS(isw);
 }
 
-void PageWdg::setEnable( bool val )
+void PageWdg::setEnable( bool val, bool force )
 {
     if(enable() == val) return;
 

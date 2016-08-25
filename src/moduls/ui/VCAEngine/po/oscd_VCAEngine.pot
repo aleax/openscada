@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-03 16:52+0300\n"
+"POT-Creation-Date: 2016-08-25 15:26+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1082,6 +1082,10 @@ msgstr ""
 msgid "Session '%s' calculate error."
 msgstr ""
 
+#, c-format
+msgid "Unregistered connection %d on the session."
+msgstr ""
+
 msgid "Session: "
 msgstr ""
 
@@ -1141,6 +1145,12 @@ msgid "Notification message"
 msgstr ""
 
 msgid "Notification message's language"
+msgstr ""
+
+msgid "Enable page."
+msgstr ""
+
+msgid "Disable page."
 msgstr ""
 
 msgid "Session page: "
@@ -1255,9 +1265,6 @@ msgstr ""
 msgid "Original widgets"
 msgstr ""
 
-msgid "Load module."
-msgstr ""
-
 #, c-format
 msgid "Load library '%s' time: %f ms."
 msgstr ""
@@ -1278,15 +1285,6 @@ msgstr ""
 
 #, c-format
 msgid "Enable project '%s' time: %f ms."
-msgstr ""
-
-msgid "Save module."
-msgstr ""
-
-msgid "Start module."
-msgstr ""
-
-msgid "Stop module."
 msgstr ""
 
 #, c-format
@@ -1395,6 +1393,9 @@ msgstr ""
 
 #, c-format
 msgid "Widget enable error: %s"
+msgstr ""
+
+msgid "Disable widget."
 msgstr ""
 
 #, c-format
@@ -1549,6 +1550,9 @@ msgid "Deleting the not user element error."
 msgstr ""
 
 msgid "Changing of not user attribute is no permitted"
+msgstr ""
+
+msgid "New attribute's ID is empty!"
 msgstr ""
 
 #, c-format

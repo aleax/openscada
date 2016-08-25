@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-03 16:52+0300\n"
+"POT-Creation-Date: 2016-08-25 15:26+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1391,6 +1391,10 @@ msgstr "Session stoppen."
 msgid "Session '%s' calculate error."
 msgstr "Fehler der Berechnung der Sitzung '%s'."
 
+#, c-format
+msgid "Unregistered connection %d on the session."
+msgstr ""
+
 msgid "Session: "
 msgstr "Sitzung: "
 
@@ -1451,6 +1455,12 @@ msgstr "Benachrichtigung"
 
 msgid "Notification message's language"
 msgstr "Sprache Benachrichtigung"
+
+msgid "Enable page."
+msgstr "Aktivieren Seite."
+
+msgid "Disable page."
+msgstr "Deaktivieren Seite."
 
 msgid "Session page: "
 msgstr "Sitzungsseite: "
@@ -1565,9 +1575,6 @@ msgstr "Wert 9"
 msgid "Original widgets"
 msgstr "Original Widgets"
 
-msgid "Load module."
-msgstr "Modul laden"
-
 #, c-format
 msgid "Load library '%s' time: %f ms."
 msgstr "Zeit Laden der Bibliothek '%s': %f msek."
@@ -1589,15 +1596,6 @@ msgstr "Zeit des Einschaltens der Bibliothek '%s': %f msek."
 #, c-format
 msgid "Enable project '%s' time: %f ms."
 msgstr "Zeit des Einschaltens des Projekts '%s': %f msek."
-
-msgid "Save module."
-msgstr "Modul speichern."
-
-msgid "Start module."
-msgstr "Modul starten."
-
-msgid "Stop module."
-msgstr "Modul anhalten."
 
 #, c-format
 msgid "Connection to session is not permitted for '%s'."
@@ -1714,6 +1712,9 @@ msgstr "Der Elternteil ist identisch mit dem Besitzer für den Anschluss!"
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Fehler der Einschaltung des Widgets: %s"
+
+msgid "Disable widget."
+msgstr "Disable-Widget."
 
 #, c-format
 msgid "Inheriting widget '%s' disable error."
@@ -1930,6 +1931,9 @@ msgstr "Fehler beim Löschen des nicht benutzerdefinierten Elements."
 msgid "Changing of not user attribute is no permitted"
 msgstr "Ändern der nicht benutzerdefinierten Attribute ist nicht zulässig "
 
+msgid "New attribute's ID is empty!"
+msgstr "Neues Attribut ID ist leer!"
+
 #, c-format
 msgid "New attribute's ID '%s' already present!"
 msgstr "Neuer Bezeichner des Attributs '%s' ist vorhanden!"
@@ -2052,3 +2056,15 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "Load module."
+#~ msgstr "Modul laden"
+
+#~ msgid "Save module."
+#~ msgstr "Modul speichern."
+
+#~ msgid "Start module."
+#~ msgstr "Modul starten."
+
+#~ msgid "Stop module."
+#~ msgstr "Modul anhalten."

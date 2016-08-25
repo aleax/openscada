@@ -77,7 +77,7 @@ void ShapeElFigure::destroy( WdgView *w )
     delete (ElFigDt*)w->shpData;
 }
 
-bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     ElFigDt	*elFD = (ElFigDt*)w->shpData;
     RunWdgView	*runW = qobject_cast<RunWdgView*>(w);

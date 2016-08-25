@@ -1021,7 +1021,7 @@ void *Session::Notify::Task( void *intf )
 //* SessPage: Page of Project's session          *
 //************************************************
 SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) :
-    SessWdg(iid,ipage,sess), mClosePgCom(false)
+    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false)
 {
     mPage = grpAdd("pg_");
 }
@@ -1041,6 +1041,7 @@ void SessPage::setEnable( bool val, bool force )
 
     //Page enable
     if(val) {
+	mess_sys(TMess::Debug, _("Enable page."));
 	mToEn = true;
 	// Check for full enable need
 	bool pgOpen = (!(parent().at().prjFlags()&Page::Empty) && parent().at().attrAt("pgOpen").at().getB());
@@ -1065,6 +1066,8 @@ void SessPage::setEnable( bool val, bool force )
 	mToEn = false;
     }
     else if(enable()) {
+	mess_sys(TMess::Debug, _("Disable page."));
+
 	//Unregister opened page
 	if(!(parent().at().prjFlags()&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
 	    ownerSess()->openUnreg(path());
@@ -1079,6 +1082,7 @@ void SessPage::setEnable( bool val, bool force )
 	    pageDel(pg_ls[i_l]);
 
 	SessWdg::setEnable(false);
+	mDisMan = true;
     }
 }
 
@@ -1298,14 +1302,14 @@ void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet, bool ret )
 
 bool SessPage::attrPresent(const string &attr)
 {
-    if(!enable() && !mToEn) setEnable(true, true);
+    if(!enable() && !mToEn && !mDisMan) setEnable(true, true);
     return Widget::attrPresent(attr);
 }
 
 AutoHD<Attr> SessPage::attrAt(const string &attr, int lev)
 {
-    if(lev < 0 && !enable() && !mToEn) setEnable(true, true);
-    return Widget::attrAt(attr,lev);
+    if(lev < 0 && !enable() && !mToEn && !mDisMan) setEnable(true, true);
+    return Widget::attrAt(attr, lev);
 }
 
 TVariant SessPage::vlGet( Attr &a )
@@ -1439,7 +1443,7 @@ string SessWdg::ownerFullId( bool contr )
     return string(contr?"/ses_":"/")+ownerSess()->id();
 }
 
-void SessWdg::setEnable( bool val )
+void SessWdg::setEnable( bool val, bool force )
 {
     try { Widget::setEnable(val); } catch(...) { return; }
 
@@ -2212,9 +2216,12 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    parent().at().attrAt(tStr).at().setModif(1);
 	    parent().at().modif();
 	}
-	parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
-	attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
-	attrAt(tStr).at().setModif(modifVal(attrAt(tStr).at()));	//Force set modify for allow load next
+	if(parent().at().attrPresent(tStr))
+	    parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	if(attrPresent(tStr)) {
+	    attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec));
+	    attrAt(tStr).at().setModif(modifVal(attrAt(tStr).at()));	//Force set modify for allow load next
+	}
     }
     else return Widget::cntrCmdServ(opt);
 

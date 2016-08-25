@@ -1045,7 +1045,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
 
     switch(uiPrmPos) {
 	case A_COM_LOAD: up = true;	break;
-	case A_NO_ID:	return false;
+	//case A_NO_ID:	return false;
 	case A_ROOT:
 	    if(shape && shape->id() == val)	break;
 	    if(shape) shape->destroy(this);
@@ -1096,7 +1096,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
 		((WdgView*)children().at(i_c))->load("");
     }
 
-    if(shape)	return shape->attrSet(this, uiPrmPos, val);
+    if(shape)	return shape->attrSet(this, uiPrmPos, val, attr);
 
     return true;
 }

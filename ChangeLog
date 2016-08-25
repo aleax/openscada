@@ -1,3 +1,19 @@
+2016-08-25 Roman
+- !!!!:FIX:DB.LibsDB.OscadaLibs: DAQ template DevLib.oneWire renamed to DevLib.1W_DS9097 and some simplified.
+    New DAQ template DevLib.1W_DS9097U is added for allow OneWire support by an adapter DS9097U, based on the chip DS2480.
+    DAQ template DevLib.SSCP expanded for types "dt" and "time" support and the allowed to selection variables list moving to RO text attribute.
+- !!:DB.LibsDB.vcaBase: Groups of graphics and the control panel expanded to visualizer UI.Vision specific feature of selection/scalling
+    by window drawn by mouse. The attribute "enForce" naming of ElViewGraph fix.
+- FIX:UI.VCAEngine: setEnable() of widget and it's succession was expanded by the argument "force" like to pages.
+    FIX:Primitives force activation for not loaded active attributes is added after the widgets loading try, into the widgets libraries.
+    FIX:Units removing after the preloaded seek is fixed.
+    FIX:Session's pages force enabling, at a request, is prevented after it's manual disable.
+    FIX:User attribute ID set to empty prevented.
+    Visualizer specific atributes activation expanded for only present atributes activation, no a creation.
+- !!:UI.Vision: Allowed visualizer specific attributes by the primitives.
+    To primitive diagram the user-specific attribute "sclWin" added and used for trends view scale by window drawn by mouse.
+
+
 2016-08-25 fido_max
 - DAQ.FT3: General cleanup and refactoring of source code. KA DAQ implemented (BTU, BVT, BVTC, GZD, GNS). KA TANK object added.
            Translation fixed. Major erros fixed.

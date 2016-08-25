@@ -155,7 +155,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
     //Archive size limit process
     if(maxSize() && (mEnd-mBeg) > (time_t)(maxSize()*86400)) {
-	time_t nEnd = (mEnd - (time_t)(maxSize()*86400));
+	time_t nEnd = mEnd - (time_t)(maxSize()*86400);
 	cfg.cfg("TM").setKeyUse(false);
 	for(int tC = mBeg/60; tC < nEnd/60; tC++) {
 	    cfg.cfg("MIN").setI(tC, true);
