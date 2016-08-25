@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.BUC file: BUC.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -79,9 +79,9 @@ uint16_t KA_BUC::Task(uint16_t uc)
 	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
 	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //configuration
 	*((uint16_t *) (Msg.D + 4)) = PackID(ID, 0, 2); //modification
-	*((uint16_t *) (Msg.D + 8)) = PackID(1, 0, 0); //timer state
-	*((uint16_t *) (Msg.D + 10)) = PackID(1, 0, 2); //current time
-	*((uint16_t *) (Msg.D + 12)) = PackID(1, 0, 3); //uptime
+	*((uint16_t *) (Msg.D + 6)) = PackID(1, 0, 0); //timer state
+	*((uint16_t *) (Msg.D + 8)) = PackID(1, 0, 2); //current time
+	*((uint16_t *) (Msg.D + 10)) = PackID(1, 0, 3); //uptime
 	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(mPrm.vlAt("state").at().getI(0, true) != 1) {
 		if(Task(TaskSet) == 1) {
@@ -177,9 +177,10 @@ uint16_t KA_BUC::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.g = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
+    ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.n = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.g = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+
     tagMsg Msg;
     Msg.L = 0;
     Msg.C = SetData;
@@ -189,9 +190,8 @@ uint16_t KA_BUC::setVal(TVal &val)
 	case 0:
 	    switch(ft3ID.n) {
 	    case 0:
-		tagMsg Msg;
 		Msg.L = 6;
-		Msg.D[2] = val.get(NULL, true).getI();
+		Msg.D[2] = val.getI(0, true);
 		break;
 	    }
 	    break;
@@ -199,11 +199,11 @@ uint16_t KA_BUC::setVal(TVal &val)
     }
     if(ft3ID.g == clockID) {
 	switch(ft3ID.k) {
-	case 2:
+	case 0:
 	    switch(ft3ID.n) {
-	    case 1:
+	    case 2:
 		struct tm tm_tm;
-		strptime(val.get(NULL, true).getS().c_str(), "%d.%m.%Y %H:%M:%S", &tm_tm);
+		strptime(val.getS(0, true).c_str(), "%d.%m.%Y %H:%M:%S", &tm_tm);
 		Msg.L = 10;
 		mPrm.owner().Time_tToDateTime(Msg.D + 2, mktime(&tm_tm));
 		break;
@@ -220,6 +220,7 @@ uint8_t KA_BUC::cmdGet(uint16_t prmID, uint8_t * out)
     FT3ID ft3ID = UnpackID(prmID);
     time_t rawtime;
     uint l = 0;
+    unsigned long val = 0;
     if(ft3ID.g == ID) {
 	switch(ft3ID.k) {
 	case 0:
@@ -264,6 +265,11 @@ uint8_t KA_BUC::cmdGet(uint16_t prmID, uint8_t * out)
 		break;
 	    case 3:
 		time(&rawtime);
+		FILE *f = fopen("/proc/uptime", "r");
+		if((f != NULL) && (fscanf(f, "%lu", &val) == 1)) {
+		    rawtime -= val;
+		}
+		fclose(f);
 		mPrm.owner().Time_tToDateTime(out, rawtime);
 		l = 5;
 		break;
@@ -479,9 +485,9 @@ uint16_t B_BUC::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0);
-    ft3ID.g = ID;
+    ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.n = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.g = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
     tagMsg Msg;
     Msg.L = 0;
     Msg.C = SetData;
@@ -492,7 +498,7 @@ uint16_t B_BUC::setVal(TVal &val)
 	case 1:
 	    struct tm tm_tm;
 
-	    strptime(val.get(NULL, true).getS().c_str(), "%d.%m.%Y %H:%M:%S", &tm_tm);
+	    strptime(val.getS(0, true).c_str(), "%d.%m.%Y %H:%M:%S", &tm_tm);
 
 	    Msg.L = 10;
 	    mPrm.owner().Time_tToDateTime(Msg.D + 2, mktime(&tm_tm));
@@ -505,7 +511,7 @@ uint16_t B_BUC::setVal(TVal &val)
 	case 2:
 	    tagMsg Msg;
 	    Msg.L = 6;
-	    Msg.D[2] = val.get(NULL, true).getI();
+	    Msg.D[2] = val.getI(0, true);
 	    break;
 
 	}

@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: GZD.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -85,8 +85,8 @@ void KA_GZD::SKAZDchannel::UpdateTCParam(uint16_t ID, uint8_t cl)
 
 uint8_t KA_GZD::SKAZDchannel::SetNewTUParam(uint8_t addr, uint16_t prmID, uint8_t *val)
 {
-    if(TUOpen.lnk.Connected() || TimeOpen.lnk.Connected() || TUClose.lnk.Connected() || TimeClose.lnk.Connected() || TUStop.lnk.Connected() || TimeOpen.lnk.Connected()
-	    || TURemote.lnk.Connected() || TimeRemote.lnk.Connected() || TUManual.lnk.Connected() || TimeManual.lnk.Connected()) {
+    if(TUOpen.lnk.Connected() || TimeOpen.lnk.Connected() || TUClose.lnk.Connected() || TimeClose.lnk.Connected() || TUStop.lnk.Connected()
+	    || TimeOpen.lnk.Connected() || TURemote.lnk.Connected() || TimeRemote.lnk.Connected() || TUManual.lnk.Connected() || TimeManual.lnk.Connected()) {
 	TUOpen.s = addr;
 	TUOpen.Set(TSYS::getUnalign16(val));
 	TimeOpen.Set(TSYS::getUnalign16(val + 2));
@@ -135,7 +135,7 @@ uint8_t KA_GZD::SKAZDchannel::SetNewState(uint8_t addr, uint16_t prmID, uint8_t 
     if(State.lnk.Connected()) {
 	if(Function.vl == 0) {
 	    State.s = addr;
-	    State.Set((uint8_t)((State.vl & 0x80) | *val));
+	    State.Set((uint8_t) ((State.vl & 0x80) | *val));
 	    uint8_t E[2] = { addr, State.vl };
 	    da->PushInBE(1, sizeof(E), prmID, E);
 	    rc = 2 + 1;
@@ -155,8 +155,8 @@ uint8_t KA_GZD::SKAZDchannel::SetNewFunction(uint8_t addr, uint16_t prmID, uint8
 	    } else {
 		if(newF > 2) {
 		    Function.s = addr;
-		    Function.Set(newF<<16|newF);
-		    State.Set((uint8_t)(State.vl & 0x8F));
+		    Function.Set(newF << 16 | newF);
+		    State.Set((uint8_t) (State.vl & 0x8F));
 		    uint8_t E[2] = { addr, Function.vl };
 		    da->PushInBE(1, sizeof(E), prmID, E);
 		    rc = 3;
@@ -164,8 +164,8 @@ uint8_t KA_GZD::SKAZDchannel::SetNewFunction(uint8_t addr, uint16_t prmID, uint8
 	    }
 	} else {
 	    Function.s = addr;
-	    Function.Set(newF<<16|newF);
-	    State.Set((uint8_t)(State.vl & 0x8F));
+	    Function.Set(newF << 16 | newF);
+	    State.Set((uint8_t) (State.vl & 0x8F));
 	    uint8_t E[2] = { addr, Function.vl };
 	    da->PushInBE(1, sizeof(E), prmID, E);
 	    rc = 3;
@@ -211,11 +211,11 @@ void KA_GZD::AddZDChannel(uint8_t iid)
 	AddAttr(data.back().TimeStop.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 1));
 	AddAttr(data.back().TimeRemote.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 1));
 	AddAttr(data.back().TimeManual.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 1));
-	AddAttr(data.back().TCOpen.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 2));
-	AddAttr(data.back().TCClose.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 2));
-	AddAttr(data.back().TCMode.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 2));
-	AddAttr(data.back().TCOpenErr.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 2));
-	AddAttr(data.back().TCCloseErr.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 2));
+	AddAttr(data.back().TCOpen.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
+	AddAttr(data.back().TCClose.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
+	AddAttr(data.back().TCMode.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
+	AddAttr(data.back().TCOpenErr.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
+	AddAttr(data.back().TCCloseErr.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
     }
 }
 
@@ -305,8 +305,54 @@ void KA_GZD::tmHandler(void)
 
 uint16_t KA_GZD::Task(uint16_t uc)
 {
+    tagMsg Msg;
     uint16_t rc = 0;
+    switch(uc) {
+    case TaskRefresh:
+	Msg.L = 5;
+	Msg.C = AddrReq;
+	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //состояние
+	if(mPrm.owner().DoCmd(&Msg)) {
+	    if(Msg.C == GOOD3) {
+		NeedInit = false;
+		if(with_params) {
+		    for(int i = 1; i <= count_n; i++) {
+			if(chan_err[i].state == 1) continue;
+			Msg.L = 11;
+			Msg.C = AddrReq;
+			*((uint16_t *) Msg.D) = PackID(ID, i, 0); //Состояние задвижки
+			*((uint16_t *) (Msg.D + 2)) = PackID(ID, i, 1); //Адреса ТУ
+			*((uint16_t *) (Msg.D + 4)) = PackID(ID, i, 2); //Адреса ТС
+			*((uint16_t *) (Msg.D + 6)) = PackID(ID, i, 3); //Функция
+
+			if(mPrm.owner().DoCmd(&Msg)) {
+			    if(Msg.C == GOOD3) {
+				chan_err[i].state = 1;
+				rc = 1;
+			    } else {
+				rc = 0;
+				chan_err[i].state = 2;
+				NeedInit = true;
+			    }
+			} else {
+			    rc = 0;
+			    chan_err[i].state = 3;
+			    NeedInit = true;
+			}
+
+		    }
+		} else {
+		    rc = 1;
+		}
+	    } else {
+		rc = 0;
+		NeedInit = true;
+	    }
+	}
+	break;
+    }
     return rc;
+
 }
 
 uint16_t KA_GZD::HandleEvent(int64_t tm, uint8_t * D)
@@ -314,14 +360,72 @@ uint16_t KA_GZD::HandleEvent(int64_t tm, uint8_t * D)
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
     uint16_t l = 0;
+    switch(ft3ID.k) {
+    case 0:
+	switch(ft3ID.n) {
+	case 0:
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
+	    l = 3;
+	    break;
+	case 1:
+	    l = 4;
+	    break;
+	case 2:
+	    l = 2 + count_n * 2;
+	    for(int j = 0; j < count_n; j++) {
+		mPrm.vlAt(TSYS::strMess("state_%d", j)).at().setI(D[j * 2 + 3], tm, true);
+	    }
+	    break;
+	}
+	break;
+    default:
+	if(ft3ID.k && (ft3ID.k <= count_n)) {
+	    switch(ft3ID.n) {
+	    case 0:
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k)).at().setI(D[3], tm, true);
+		l = 4;
+		break;
+	    case 1:
+		if(with_params) {
+		    mPrm.vlAt(TSYS::strMess("TUopen_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 3), tm, true);
+		    mPrm.vlAt(TSYS::strMess("timeOpen_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 5), tm, true);
+		    mPrm.vlAt(TSYS::strMess("TUclose_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 7), tm, true);
+		    mPrm.vlAt(TSYS::strMess("timeClose_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 9), tm, true);
+		    mPrm.vlAt(TSYS::strMess("TUstop_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 11), tm, true);
+		    mPrm.vlAt(TSYS::strMess("timeStop_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 13), tm, true);
+		    mPrm.vlAt(TSYS::strMess("TUremote_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 15), tm, true);
+		    mPrm.vlAt(TSYS::strMess("timeRemote_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 17), tm, true);
+		    mPrm.vlAt(TSYS::strMess("TUmanual_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 19), tm, true);
+		    mPrm.vlAt(TSYS::strMess("timeManual_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 21), tm, true);
+		}
+		l = 3 + 20;
+		break;
+	    case 2:
+		if(with_params) {
+		    mPrm.vlAt(TSYS::strMess("tcOpen_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 3), tm, true);
+		    mPrm.vlAt(TSYS::strMess("tcClose_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 5), tm, true);
+		    mPrm.vlAt(TSYS::strMess("tcMode_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 7), tm, true);
+		    mPrm.vlAt(TSYS::strMess("tcOpenErr_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 9), tm, true);
+		    mPrm.vlAt(TSYS::strMess("tcCloseErr_%d", ft3ID.k)).at().setI(TSYS::getUnalign16(D + 11), tm, true);
+		}
+		l = 3 + 10;
+		break;
+	    case 3:
+		mPrm.vlAt(TSYS::strMess("function_%d", ft3ID.k)).at().setI(D[3], tm, true);
+		l = 4;
+		break;
+
+	    }
+	}
+    }
+
     return l;
 }
 
 uint8_t KA_GZD::cmdGet(uint16_t prmID, uint8_t * out)
 {
-//    mess_info("KA_GZD", "cmdGet %04X", prmID);
     FT3ID ft3ID = UnpackID(prmID);
-//    mess_info("KA_GZD", "ID %d ft3ID g%d k%d n%d ", ID, ft3ID.g, ft3ID.k, ft3ID.n);
+//    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "ID %d ft3ID g%d k%d n%d ", ID, ft3ID.g, ft3ID.k, ft3ID.n);
     if(ft3ID.g != ID) return 0;
     uint l = 0;
     if(ft3ID.k == 0) {
@@ -405,7 +509,7 @@ uint8_t KA_GZD::cmdSet(uint8_t * req, uint8_t addr)
     FT3ID ft3ID = UnpackID(prmID);
     if(ft3ID.g != ID) return 0;
     uint l = 0;
-//    mess_info(mPrm.nodePath().c_str(), "cmdSet k %d n %d", ft3ID.k, ft3ID.n);
+//    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "cmdSet k %d n %d", ft3ID.k, ft3ID.n);
     if(ft3ID.k <= count_n) {
 	switch(ft3ID.n) {
 	case 0:
@@ -427,5 +531,49 @@ uint8_t KA_GZD::cmdSet(uint8_t * req, uint8_t addr)
 
 uint16_t KA_GZD::setVal(TVal &val)
 {
+    int off = 0;
+    FT3ID ft3ID;
+    ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.n = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.g = ID;
+
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = SetData;
+    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ft3ID));
+    if(count_n && (ft3ID.k <= count_n)) {
+	switch(ft3ID.n) {
+	case 0:
+	    Msg.L += SerializeB(Msg.D + Msg.L, val.getI(0, true));
+	    break;
+	case 1:
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("TUopen_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("timeOpen_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("TUclose_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("timeClose_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("TUstop_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("timeStop_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("TUremote_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("timeRemote_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("TUmanual_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("timeManual_%d", ft3ID.k)).at().getI(0, true));
+	    break;
+	case 2:
+
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("tcOpen_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("tcClose_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("tcMode_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("tcOpenErr_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("tcCloseErr_%d", ft3ID.k)).at().getI(0, true));
+	    break;
+	case 3:
+	    Msg.L += SerializeB(Msg.D + Msg.L, val.getI(0, true));
+	    break;
+	}
+    }
+    if(Msg.L > 2) {
+	Msg.L += 3;
+	mPrm.owner().DoCmd(&Msg);
+    }
     return 0;
 }

@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: da.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,7 +31,7 @@ void DA::AddAttr(SLnk& param, TFld::Type type, unsigned flg, const string& ex)
 {
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld(param.prmName.c_str(), param.prmDesc.c_str(), type, flg));
-    param.vlattr = mPrm.vlAt(param.prmName.c_str());
+    param.vlattr = mPrm.vlAt(param.prmName);
     fld->setReserve(ex);
 }
 
@@ -93,7 +93,7 @@ uint8_t DA::SetNew28Val(ui8Data& d1, ui8Data& d2, uint8_t addr, uint16_t prmID, 
 	d1.Set(val1);
 	d2.s = addr;
 	d2.Set(val2);
-	uint8_t E[3] = { addr, d1.vl };
+	uint8_t E[3] = { addr, d1.vl, d2.vl };
 	PushInBE(1, sizeof(E), prmID, E);
 	return 2 + 2;
     } else {
@@ -193,7 +193,7 @@ void DA::UpdateParamFl(flData& param, uint16_t ID, uint8_t cl)
     ui8fl tmpfl;
     tmpfl.f = param.Get();
     if(tmpfl.f != param.vl) {
-	param.Update(tmpfl.f,0);
+	param.Update(tmpfl.f, 0);
 	uint8_t E[5] = { 0, tmpfl.b[0], tmpfl.b[1], tmpfl.b[2], tmpfl.b[3] };
 	PushInBE(cl, sizeof(E), ID, E);
     }
@@ -204,7 +204,7 @@ void DA::UpdateParam32(ui32Data& param, uint16_t ID, uint8_t cl)
     ui832 tmp;
     tmp.ui32 = param.Get();
     if(tmp.ui32 != param.vl) {
-	param.Update(tmp.ui32,0);
+	param.Update(tmp.ui32, 0);
 	uint8_t E[5] = { 0, tmp.b[0], tmp.b[1], tmp.b[2], tmp.b[3] };
 	PushInBE(cl, sizeof(E), ID, E);
     }
@@ -216,12 +216,12 @@ void DA::UpdateParamFlState(flData& param, ui8Data& state, flData& sens, uint16_
     ui8fl tmpfl;
     tmpui8 = state.Get();
     tmpfl.f = param.Get();
-    param.Update(tmpfl.f,0);
+    param.Update(tmpfl.f, 0);
     if((fabs(tmpfl.f - param.vl_sens) > sens.vl) || (tmpui8 != state.vl)) {
-    	state.Update(tmpui8);
-	param.Update(tmpfl.f,1);
+	state.Update(tmpui8);
+	param.Update(tmpfl.f, 1);
 	uint8_t E[5] = { state.vl, tmpfl.b[0], tmpfl.b[1], tmpfl.b[2], tmpfl.b[3] };
-	PushInBE((tmpui8 != state.vl)? 1:cl , sizeof(E), ID, E);
+	PushInBE((tmpui8 != state.vl) ? 1 : cl, sizeof(E), ID, E);
     }
 }
 
@@ -231,8 +231,8 @@ void DA::UpdateParam2Fl(flData& param1, flData& param2, uint16_t ID, uint8_t cl)
     tmpfl1.f = param1.Get();
     tmpfl2.f = param2.Get();
     if(tmpfl1.f != param1.vl || tmpfl2.f != param2.vl) {
-	param1.Update(tmpfl1.f,0);
-	param2.Update(tmpfl2.f,0);
+	param1.Update(tmpfl1.f, 0);
+	param2.Update(tmpfl2.f, 0);
 	uint8_t E[9] = { 0, tmpfl1.b[0], tmpfl1.b[1], tmpfl1.b[2], tmpfl1.b[3], tmpfl2.b[0], tmpfl2.b[1], tmpfl2.b[2], tmpfl2.b[3] };
 	PushInBE(1, sizeof(E), ID, E);
     }
@@ -253,7 +253,7 @@ void DA::UpdateParam28(ui8Data& param1, ui8Data& param2, uint16_t ID, uint8_t cl
 
 FT3ID DA::UnpackID(uint16_t ID)
 {
-    if(mess_lev() == TMess::Debug) mess_debug(mPrm.nodePath().c_str(), _("UnpackID %d"), ID);
+    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, _("UnpackID %d"), ID);
     FT3ID rc;
     switch(mTypeFT3) {
     case GRS:
@@ -267,7 +267,7 @@ FT3ID DA::UnpackID(uint16_t ID)
 	rc.n = (ID >> 10) & 0x3F;
 	break;
     }
-    if(mess_lev() == TMess::Debug) mess_debug(mPrm.nodePath().c_str(), _("g %d k %d n %d"), rc.g, rc.k, rc.n);
+    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, _("g %d k %d n %d"), rc.g, rc.k, rc.n);
     return rc;
 }
 
@@ -299,9 +299,55 @@ uint16_t DA::PackID(uint8_t g, uint8_t k, uint8_t n)
     return rc;
 }
 
+uint8_t DA::SerializeF(uint8_t * out, float vl)
+{
+    union
+    {
+	float v;
+	uint8_t c[4];
+    } dt;
+    dt.v = vl;
+    for(uint8_t j = 0; j < 4; j++)
+	out[j] = dt.c[j];
+    return 4;
+}
+
+uint8_t DA::SerializeUi16(uint8_t * out, uint16_t vl)
+{
+    union
+    {
+	uint16_t v;
+	uint8_t c[2];
+    } dt;
+    dt.v = vl;
+    for(uint8_t j = 0; j < 2; j++)
+	out[j] = dt.c[j];
+    return 2;
+}
+
+uint8_t DA::SerializeUi32(uint8_t * out, uint32_t vl)
+{
+    union
+    {
+	uint32_t v;
+	uint8_t c[4];
+    } dt;
+    dt.v = vl;
+    for(uint8_t j = 0; j < 4; j++)
+	out[j] = dt.c[j];
+    return 4;
+}
+
+
+uint8_t DA::SerializeB(uint8_t * out, uint8_t vl)
+{
+    out[0] = vl;
+    return 1;
+}
+
 void DA::PushInBE(uint8_t type, uint8_t length, uint16_t id, uint8_t *E)
 {
-    if (!NeedInit) mPrm.owner().PushInBE(type, length, id, E);
+    if(!NeedInit) mPrm.owner().PushInBE(type, length, id, E);
 }
 
 time_t DA::DateTimeToTime_t(uint8_t *d)

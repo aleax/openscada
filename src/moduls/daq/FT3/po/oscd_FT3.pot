@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-13 13:52+0300\n"
+"POT-Creation-Date: 2016-08-23 09:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,6 +37,10 @@ msgid "Sensitivity %d"
 msgstr ""
 
 #, c-format
+msgid "Alarms %d"
+msgstr ""
+
+#, c-format
 msgid "Warning minimum %d"
 msgstr ""
 
@@ -53,34 +57,6 @@ msgid "Alarm maximum %d"
 msgstr ""
 
 #, c-format
-msgid "Dimension %d"
-msgstr ""
-
-#, c-format
-msgid "PV minimum %d"
-msgstr ""
-
-#, c-format
-msgid "PV maximum %d"
-msgstr ""
-
-#, c-format
-msgid "Minimum frequency %d"
-msgstr ""
-
-#, c-format
-msgid "Maximum frequency %d"
-msgstr ""
-
-#, c-format
-msgid "Factor %d"
-msgstr ""
-
-#, c-format
-msgid "Alarms %d"
-msgstr ""
-
-#, c-format
 msgid "Ki %d"
 msgstr ""
 
@@ -92,10 +68,10 @@ msgstr ""
 msgid "A %d"
 msgstr ""
 
-msgid "Select TU"
+msgid "Execution"
 msgstr ""
 
-msgid "Execution"
+msgid "Select TU"
 msgstr ""
 
 msgid "Configuration"
@@ -196,6 +172,10 @@ msgstr ""
 msgid "AddrReq ID not found! %04X"
 msgstr ""
 
+#, c-format
+msgid "Too much data to answer %04X"
+msgstr ""
+
 msgid "ResData2"
 msgstr ""
 
@@ -241,10 +221,19 @@ msgstr ""
 msgid "BTE Parameteres table"
 msgstr ""
 
+msgid "ODOR Parameteres table"
+msgstr ""
+
 msgid "GZD Parameteres table"
 msgstr ""
 
 msgid "GNS Parameteres table"
+msgstr ""
+
+msgid "GKR Parameteres table"
+msgstr ""
+
+msgid "TANK Parameteres table"
 msgstr ""
 
 msgid "Gather data period (s)"
@@ -259,7 +248,7 @@ msgstr ""
 msgid "Transport address"
 msgstr ""
 
-msgid "Channels count"
+msgid "Channels count/Stantion address"
 msgstr ""
 
 msgid "Ignore FCB2"
@@ -272,6 +261,9 @@ msgid "Device address"
 msgstr ""
 
 msgid "BVTS"
+msgstr ""
+
+msgid "Channels count"
 msgstr ""
 
 msgid "With parameters"
@@ -316,19 +308,19 @@ msgstr ""
 msgid "BTE"
 msgstr ""
 
-msgid "Channels count TE"
+msgid "ODOR"
 msgstr ""
 
 msgid "GZD"
 msgstr ""
 
-msgid "Channels count ZD"
-msgstr ""
-
 msgid "GNS"
 msgstr ""
 
-msgid "Channels count NS"
+msgid "GKR"
+msgstr ""
+
+msgid "TANK"
 msgstr ""
 
 msgid "Parameter ID"
@@ -342,6 +334,18 @@ msgstr ""
 
 #, c-format
 msgid "data arrived L:%d %s"
+msgstr ""
+
+#, c-format
+msgid "---l:%d n:%d"
+msgstr ""
+
+#, c-format
+msgid "%d bytes handled"
+msgstr ""
+
+#, c-format
+msgid "l:%d n:%d"
 msgstr ""
 
 #, c-format
@@ -365,6 +369,10 @@ msgstr ""
 
 #, c-format
 msgid "CRC %04X"
+msgstr ""
+
+#, c-format
+msgid "response: %s"
 msgstr ""
 
 #, c-format
@@ -578,6 +586,30 @@ msgid "E %d"
 msgstr ""
 
 #, c-format
+msgid "Dimension %d"
+msgstr ""
+
+#, c-format
+msgid "Sensor minimum %d"
+msgstr ""
+
+#, c-format
+msgid "Sensor maximum %d"
+msgstr ""
+
+#, c-format
+msgid "Frequency minimum %d"
+msgstr ""
+
+#, c-format
+msgid "Frequency maximum %d"
+msgstr ""
+
+#, c-format
+msgid "Range factor %d"
+msgstr ""
+
+#, c-format
 msgid "Line %d"
 msgstr ""
 
@@ -618,10 +650,6 @@ msgid "Count %d"
 msgstr ""
 
 #, c-format
-msgid "Range factor %d"
-msgstr ""
-
-#, c-format
 msgid "Period TC %d"
 msgstr ""
 
@@ -634,11 +662,11 @@ msgid "Mask %d"
 msgstr ""
 
 #, c-format
-msgid "Sensor minimum %d"
+msgid "PV minimum %d"
 msgstr ""
 
 #, c-format
-msgid "Sensor maximum %d"
+msgid "PV maximum %d"
 msgstr ""
 
 #, c-format
@@ -789,4 +817,60 @@ msgid "Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya"
 msgstr ""
 
 msgid "Allow realization of FT3 master/slave service"
+msgstr ""
+
+#, c-format
+msgid "Drop volume %d"
+msgstr ""
+
+#, c-format
+msgid "Sens1 TC %d"
+msgstr ""
+
+#, c-format
+msgid "Sens1 TC Not %d"
+msgstr ""
+
+#, c-format
+msgid "Sens2 TC %d"
+msgstr ""
+
+#, c-format
+msgid "Sens2 TC Not %d"
+msgstr ""
+
+#, c-format
+msgid "TU Light Alarm %d"
+msgstr ""
+
+#, c-format
+msgid "TU Sound Alarm %d"
+msgstr ""
+
+#, c-format
+msgid "TU Relay Off %d"
+msgstr ""
+
+#, c-format
+msgid "Delay time %d"
+msgstr ""
+
+#, c-format
+msgid "False alarm time %d"
+msgstr ""
+
+#, c-format
+msgid "State Sens1 TC %d"
+msgstr ""
+
+#, c-format
+msgid "State Sens1 TC Not %d"
+msgstr ""
+
+#, c-format
+msgid "State Sens2 TC %d"
+msgstr ""
+
+#, c-format
+msgid "State Sens2 TC Not %d"
 msgstr ""

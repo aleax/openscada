@@ -36,6 +36,7 @@
 #include "GZD.h"
 #include "GNS.h"
 #include "GKR.h"
+#include "TANK.h"
 
 #include "mod_FT3.h"
 #include "FT3_prt.h"
@@ -238,7 +239,7 @@ uint8_t TMdContr::cmdSet(uint8_t * req, uint8_t addr)
 
 bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 {
-//    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Process message___"));
+//    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Process message___"));
     uint8_t l;
     uint8_t n;
     uint16_t tm;
@@ -248,7 +249,7 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
     MtxAlloc res(eventRes, true);
     resp->L = 0;
     if(msg->L == 1) {
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("ProcessMessage one byte req A %02X"), msg->A);
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ProcessMessage one byte req A %02X"), msg->A);
 	// One byte req from first block event
 	resp->L = 1;
 	resp->C = msg->A & 0x3F;
@@ -262,7 +263,7 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
     }
     switch(msg->C & 0x0F) {
     case ResetChan:
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("ResetChan"));
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ResetChan"));
 	Channels[msg->B].FCB2 = Channels[msg->B].FCB3 = 0xFF;
 	resp->L = 3;
 	resp->C = Channels[msg->B].FCB3 & 0x20;
@@ -276,23 +277,23 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	    case ReqData1:
 		pC = &(Channels[msg->B].C1);
 
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("%d ReqData1 C1 %08X %08X"), msg->B, pC, pC->head);
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("%d ReqData1 C1 %08X %08X"), msg->B, pC, pC->head);
 		break;
 	    case ReqData2:
 		pC = &(Channels[msg->B].C2);
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("%d ReqData1 C2 %08X %08X"), msg->B, pC, pC->head);
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("%d ReqData1 C2 %08X %08X"), msg->B, pC, pC->head);
 		break;
 	    default:
 		if(Channels[msg->B].C1.head) {
 		    pC = &(Channels[msg->B].C1);
-//		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("default ReqData C1 %08X %08X"), pC, pC->head);
+//		    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("default ReqData C1 %08X %08X"), pC, pC->head);
 		} else {
 		    pC = &(Channels[msg->B].C2);
-//		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("default ReqData C2 %08X %08X"), pC, pC->head);
+//		    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("default ReqData C2 %08X %08X"), pC, pC->head);
 		}
 	    }
 	    if((pC == NULL) || (pC->head == NULL)) {
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("%d empty %08X %08X"), msg->B, pC, pC->head);
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("%d empty %08X %08X"), msg->B, pC, pC->head);
 		Channels[msg->B].resp3.L = 3;
 		Channels[msg->B].resp3.C = 9;
 	    } else {
@@ -312,21 +313,21 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 		Channels[msg->B].resp3.C |= 0x20;
 	    }
 	} else {
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("ReqData BAD FCB!!!"));
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ReqData BAD FCB!!!"));
 	}
 	memcpy(resp, &Channels[msg->B].resp3, sizeof(tagMsg));
 	break;
     case SetData:
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SetData FCB2 %02X newFCB2 %02X"), Channels[msg->B].FCB2, msg->C);
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("SetData FCB2 %02X newFCB2 %02X"), Channels[msg->B].FCB2, msg->C);
 	if(cfg("IGNORE_FCB2").getB() || (Channels[msg->B].FCB2 != msg->C)) {
 	    Channels[msg->B].FCB2 = msg->C;
 	    l = msg->L - 3;
 	    if(l < 3) l = -1;
 	    n = 0;
 	    while(l > 1) {
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("l before %d"), l);
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("l before %d"), l);
 		rc = cmdSet(msg->D + n, msg->B);
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("rc after %d"), rc);
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("rc after %d"), rc);
 		if(rc) {
 		    l -= rc;
 		    n += rc;
@@ -334,23 +335,23 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 		    l = 1;
 		}
 	    }
-//	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("l after %d"), l);
+//	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("l after %d"), l);
 	    if(l) {
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("XXXXXXXX"));
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("XXXXXXXX"));
 		Channels[msg->B].resp2.L = 3;
 		Channels[msg->B].resp2.C = 1;
 	    } else {
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("OOOOOOOO"));
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("OOOOOOOO"));
 		Channels[msg->B].resp2.L = 3;
 		Channels[msg->B].resp2.C = 0;
 	    }
 	} else {
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SetData BAD FCB!!!"));
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("SetData BAD FCB!!!"));
 	}
 	memcpy(resp, &Channels[msg->B].resp2, sizeof(tagMsg));
 	break;
     case AddrReq:
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("AddrReq"));
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("AddrReq"));
 	Channels[msg->B].resp3.C = 8;
 	time_t rawtime;
 	time(&rawtime);
@@ -371,13 +372,13 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	    rc = cmdGet(id, Channels[msg->B].resp3.D + n);
 	    if(rc == 0) {
 		l = msg->L - 3;
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("AddrReq ID not found! %04X"), id);
+		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("AddrReq ID not found! %04X"), id);
 		Channels[msg->B].resp3.C = 9;
 		break;
 	    }
 	    if(rc > (mlD - n)) {
 		l = msg->L - 3;
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Too much data to answer %04X"), id);
+		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Too much data to answer %04X"), id);
 		Channels[msg->B].resp3.C = 9;
 		break;
 	    }
@@ -391,7 +392,7 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 	memcpy(resp, &Channels[msg->B].resp3, sizeof(tagMsg));
 	break;
     case ResData2:
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("ResData2"));
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ResData2"));
 	//Channels[msg->B].FCB2 = 0;
 	resp->L = 3;
 	resp->C = 0; //Channels[msg->B].FCB3;
@@ -409,7 +410,8 @@ bool TMdContr::ProcessMessage(tagMsg *msg, tagMsg *resp)
 //* TTpContr                                      *
 //*************************************************
 
-TTpContr::TTpContr(string name) : TTypeDAQ(MOD_ID)
+TTpContr::TTpContr(string name) :
+	TTypeDAQ(MOD_ID)
 {
     mod = this;
 
@@ -448,12 +450,14 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("PRM_BD_ODOR", _("ODOR Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_GZD", _("GZD Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PRM_BD_GNS", _("GNS Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_GKR", _("GKR Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_TANK", _("TANK Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
     fldAdd(new TFld("PERIOD", _("Gather data period (s)"), TFld::Integer, TFld::NoFlag, "3", "1", "0;100"));
     fldAdd(new TFld("PRIOR", _("Gather task priority"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;199"));
     //fldAdd(new TFld("TO_PRTR",_("Blocs"),TFld::String,TFld::Selected,"5","BUC","BUC;BTR;BVT;BVTS;BPI",_("BUC;BTR;BVT;BVTS;BPI")));
     fldAdd(new TFld("NODE", _("Addres"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
     fldAdd(new TFld("ADDR", _("Transport address"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("NCHANNEL", _("Channels count"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
+    fldAdd(new TFld("NCHANNEL", _("Channels count/Stantion address"), TFld::Integer, TFld::NoFlag, "2", "1", "1;63"));
     fldAdd(new TFld("IGNORE_FCB2", _("Ignore FCB2"), TFld::Boolean, TFld::NoFlag, "1", "0"));
     //> Parameter type bd structure
 
@@ -508,7 +512,7 @@ void TTpContr::postEnable(int flag)
 
     t_prm = tpParmAdd("tp_BTE", "PRM_BD_BTE", _("BTE"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "11", "0;15"));
-    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count TE"), TFld::Integer, TCfg::NoVal, "3", "1", "0;63"));
+    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;63"));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     t_prm = tpParmAdd("tp_ODOR", "PRM_BD_ODOR", _("ODOR"));
@@ -518,12 +522,22 @@ void TTpContr::postEnable(int flag)
 
     t_prm = tpParmAdd("tp_GZD", "PRM_BD_GZD", _("GZD"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "6", "0;15"));
-    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count ZD"), TFld::Integer, TCfg::NoVal, "3", "1", "0;16"));
+    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;48"));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     t_prm = tpParmAdd("tp_GNS", "PRM_BD_GNS", _("GNS"));
-    tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "6", "0;15"));
-    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count NS"), TFld::Integer, TCfg::NoVal, "3", "1", "0;16"));
+    tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "7", "0;15"));
+    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;16"));
+    tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
+
+    t_prm = tpParmAdd("tp_GKR", "PRM_BD_GKR", _("GKR"));
+    tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "15", "0;15"));
+    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;32"));
+    tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
+
+    t_prm = tpParmAdd("tp_TANK", "PRM_BD_TANK", _("TANK"));
+    tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "7", "0;15"));
+    tpPrmAt(t_prm).fldAdd(new TFld("CHAN_COUNT", _("Channels count"), TFld::Integer, TCfg::NoVal, "3", "1", "0;32"));
     tpPrmAt(t_prm).fldAdd(new TFld("WITH_PARAMS", _("With parameters"), TFld::Boolean, TCfg::NoVal, "1", "0"));
 
     elPrmIO.fldAdd(new TFld("PRM_ID", _("Parameter ID"), TFld::String, TCfg::Key, i2s(atoi(OBJ_ID_SZ) * 6).c_str()));
@@ -556,6 +570,8 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
     cfg("PRM_BD_ODOR").setS("FT3Prm_ODOR_" + name_c);
     cfg("PRM_BD_GZD").setS("FT3Prm_GZD_" + name_c);
     cfg("PRM_BD_GNS").setS("FT3Prm_GNS_" + name_c);
+    cfg("PRM_BD_GKR").setS("FT3Prm_GKR_" + name_c);
+    cfg("PRM_BD_TANK").setS("FT3Prm_TANK_" + name_c);
 
     MtxAlloc res(eventRes, true);
 
@@ -592,7 +608,7 @@ bool TMdContr::DoCmd(tagMsg * pMsg)
 		    for(int i = 0; i < (pMsg->L - 3); i++) {
 			dump += TSYS::strMess("%02X ", pMsg->D[i]);
 		    }
-		    mess_debug(nodePath().c_str(), _("data arrived L:%d %s"), (pMsg->L - 3), dump.c_str());
+		    mess_sys(TMess::Debug, _("data arrived L:%d %s"), (pMsg->L - 3), dump.c_str());
 		}
 		uint16_t l = pMsg->L - 6, m = 0, n = 3;
 		while(l) {
@@ -603,23 +619,25 @@ bool TMdContr::DoCmd(tagMsg * pMsg)
 		    n += 2;
 		    list(lst);
 		    for(int i_l = 0; !m && i_l < lst.size(); i_l++) {
+			if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("---l:%d n:%d"), l, n);
 			AutoHD<TMdPrm> t = at(lst[i_l]);
 			m = t.at().HandleEvent(((int64_t) DateTimeToTime_t(pMsg->D)) * 1000000, pMsg->D + n);
-
+			if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("%d bytes handled"), m);
 		    }
 		    if(m) {
-			if(!(TSYS::getUnalign16(pMsg->D + n))) pMsg->D[n + 2] = 0;
+			//if(!(TSYS::getUnalign16(pMsg->D + n))) pMsg->D[n + 2] = 0;
 			l -= m;
 			n += m;
 			m = 0;
+			if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("l:%d n:%d"), l, n);
 		    } else {
-			if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Unhandled data  %04X at %d"), TSYS::getUnalign16(pMsg->D + n), n);
+			if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Unhandled data  %04X at %d"), TSYS::getUnalign16(pMsg->D + n), n);
 			if(mess_lev() == TMess::Debug) {
 			    string dump;
 			    for(int i = 0; i < (pMsg->L - 3); i++) {
 				dump += TSYS::strMess("%02X ", pMsg->D[i]);
 			    }
-			    mess_debug(nodePath().c_str(), _("%d, %s"), (pMsg->L - 3), dump.c_str());
+			    mess_sys(TMess::Debug, _("%d, %s"), (pMsg->L - 3), dump.c_str());
 			}
 			break;
 		    }
@@ -639,22 +657,22 @@ bool TMdContr::Transact(tagMsg * pMsg)
 
     uint16_t l = 0;
     uint8_t Cmd = pMsg->C;
+    pMsg->A = devAddr;
+    pMsg->B = nChannel;
     string data_s = "";
     char io_buf[4096];
     switch(Cmd) {
     case SetData:
-	pMsg->C |= (Channels[pMsg->B].FCB2 | 0x10);
+	pMsg->C |= Channels[0].FCB2;
 	break;
     case ReqData1:
     case ReqData2:
-	pMsg->C |= (Channels[pMsg->B].FCB2 | 0x10);
+	pMsg->C |= Channels[0].FCB3;
 	break;
     case ReqData:
-	if(pMsg->L != 1) pMsg->C |= (Channels[pMsg->B].FCB2 | 0x10);
+	if(pMsg->L != 1) pMsg->C |= Channels[0].FCB3;
 	break;
     }
-    pMsg->A = devAddr;
-    pMsg->B = 2;
     uint16_t rc;
     MakePacket(pMsg, io_buf, &l);
     try {
@@ -665,6 +683,12 @@ bool TMdContr::Transact(tagMsg * pMsg)
 	bool errPresent = true;
 	ResAlloc resN(tr.at().nodeRes(), true);
 	pMsg->L = 0;
+
+	data_s = "";
+	for(int i = 0; i < l; i++) {
+	    data_s += TSYS::int2str((uint8_t) io_buf[i], TSYS::Hex) + " ";
+	}
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("request: %s"), data_s.c_str());
 
 	int resp_len = tr.at().messIO(io_buf, l, io_buf, 8, 0, true);
 	l = resp_len;
@@ -696,62 +720,69 @@ bool TMdContr::Transact(tagMsg * pMsg)
 		} while(resp_len);
 	    }
 	} else {
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("bad header found!"));
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("l %d"), l);
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("bad header found!"));
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("l %d"), l);
+	    data_s = "";
 	    for(int i = 0; i < l; i++) {
 		data_s += TSYS::int2str((uint8_t) io_buf[i], TSYS::Hex) + " ";
 	    }
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("io_buf: %s"), data_s.c_str());
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("CRC %04X"), CRC(io_buf + 2, 4));
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("io_buf: %s"), data_s.c_str());
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("CRC %04X"), CRC(io_buf + 2, 4));
 
 	}
 	errPresent = false;
+	data_s = "";
+	for(int i = 0; i < l; i++) {
+	    data_s += TSYS::int2str((uint8_t) io_buf[i], TSYS::Hex) + " ";
+	}
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("response: %s"), data_s.c_str());
+
 	if(l) {
 	    rc = VerifyPacket(io_buf, &l);
 	    if(!rc) {
 		rc = ParsePacket(io_buf, l, pMsg);
 
 		if(rc == 1) {
-		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Parse error %d"), rc);
+		    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Parse error %d"), rc);
 		    pMsg->L = 0;
 		} else {
 
 		}
 
 	    } else {
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Verify error %d"), rc);
+		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Verify error %d"), rc);
 		data_s = "";
 		for(int i = 0; i < l; i++) {
 		    data_s += TSYS::int2str((uint8_t) io_buf[i], TSYS::Hex) + " ";
 		}
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("io_buf: %s"), data_s.c_str());
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("l %d"), l);
+		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("io_buf: %s"), data_s.c_str());
+		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("l %d"), l);
 		pMsg->L = 0;
 	    }
 
 	} else {
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Receive error %d"), l);
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Receive error %d"), l);
 	    pMsg->L = 0;
 	}
 
 	if(pMsg->L) switch(Cmd) {
 	case Reset:
 	case ResetChan:
-	    Channels[pMsg->B].FCB2 = 0x20;
+	    Channels[0].FCB2 = 0x20;
 	    break;
 	case SetData:
-	    Channels[pMsg->B].FCB2 ^= 0x20;
+	    Channels[0].FCB2 ^= 0x20;
 	    break;
 	case ReqData1:
 	case ReqData2:
 	case ReqData:
 
-	    Channels[pMsg->B].FCB3 ^= 0x20;
+	    Channels[0].FCB3 ^= 0x20;
 	    break;
 
 	}
     } catch (...) {
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("messIO error"));
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("messIO error"));
     }
     return pMsg->L;
 }
@@ -768,7 +799,18 @@ void TMdContr::MakePacket(tagMsg *msg, char *io_buf, uint16_t *len)
 	//full packet
 	*(uint16_t *) io_buf = 0x6405;
 	io_buf[2] = msg->L;
-	io_buf[3] = msg->C | 0x40;
+	if((cfg("PRTTYPE").getS() == "KA") ) {
+	    switch((msg->C & 0x0F)){
+	    case ResetChan: case ResData2: case AddrReq:
+		io_buf[3] = msg->C | 0x40;
+		break;
+	    default:
+		io_buf[3] = msg->C | 0x50;
+		break;
+	    }
+	} else {
+	    io_buf[3] = msg->C | 0x50;
+	}
 	io_buf[4] = msg->A;
 	io_buf[5] = msg->B;
 	*(uint16_t *) (io_buf + 6) = CRC(io_buf + 2, 4);
@@ -780,7 +822,7 @@ void TMdContr::MakePacket(tagMsg *msg, char *io_buf, uint16_t *len)
 	    z = l - x;
 	    if(z > 16) z = 16;
 	    w = CRC((char *) (msg->D + x), z);
-	    for(z; z > 0; z--)
+	    for(; z > 0; z--)
 		io_buf[y++] = msg->D[x++];
 	    io_buf[y] = (w) & 0xFF;
 	    io_buf[y + 1] = (w >> 8) & 0xFF;
@@ -810,13 +852,13 @@ bool TMdContr::VerCRC(char *p, uint16_t l)
 uint16_t TMdContr::VerifyPacket(char *t, uint16_t *l)
 {
     uint16_t raslen;
-//    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("in VerifyPacket l %d"), *l);
+//    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("in VerifyPacket l %d"), *l);
     string data_s = "";
     for(int i = 0; i < *l; i++) {
 	data_s += TSYS::int2str((uint8_t) t[i], TSYS::Hex) + " ";
     }
-    //   if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("in VerifyPacket io_buf: %s"), data_s.c_str());
-    //   if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("l %d"), *l);
+    //   if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("in VerifyPacket io_buf: %s"), data_s.c_str());
+    //   if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("l %d"), *l);
     if((*l == 1)) {
 	//one byte req
 	return 0;
@@ -825,15 +867,15 @@ uint16_t TMdContr::VerifyPacket(char *t, uint16_t *l)
 	if(*l > 7) {
 
 	    if((t[0] == 0x05) && (t[0] != 0x64)) {
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Len -%d"), Len((uint8_t )t[2]));
-//		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("VerCRC -%d"), VerCRC(t, *l));
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Len -%d"), Len((uint8_t )t[2]));
+//		if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("VerCRC -%d"), VerCRC(t, *l));
 		if(!((raslen = Len((uint8_t) t[2])) == *l && VerCRC(t, *l))) {
-		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("good header"));
+		    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("good header"));
 		    if(!(*l > raslen && VerCRC(t, raslen))) {
-			if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("bad packet"));
+			if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("bad packet"));
 			return 2;    //wrong packet
 		    } else {
-			if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("cutting packet"));
+			if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("cutting packet"));
 			*l = raslen; //corrupted end of packet
 		    }
 		}
@@ -882,7 +924,7 @@ uint16_t TMdContr::ParsePacket(char *t, uint16_t l, tagMsg * msg)
 		    z -= 2;
 		else
 		    z = 16;
-		for(z; z > 0; z--)
+		for(; z > 0; z--)
 		    msg->D[y++] = t[x++];
 		x += 2;
 	    }
@@ -943,18 +985,21 @@ void TMdContr::start_()
 {
     nChannel = cfg("NCHANNEL").getI();
     Channels.clear();
-    for(int i = 0; i <= nChannel; i++) {
-
-	Channels.push_back(TFT3Channel());
-
-    }
     devAddr = vmin(63, vmax(1,cfg("NODE").getI()));
     //> Start the gathering data task
     if(!prc_st) {
 	if(cfg("CTRTYPE").getS() == "DAQ") {
+	    //for(int i = 0; i <= nChannel; i++) {
+	    Channels.push_back(TFT3Channel());
+	    Channels[0].FCB2 = 0x20;
+	    Channels[0].FCB3 = 0x20;
+	    //}
 	    SYS->taskCreate(nodePath('.', true), mPrior, TMdContr::DAQTask, this);
 	} else {
 	    if(cfg("CTRTYPE").getS() == "Logic") {
+		for(int i = 0; i <= nChannel; i++) {
+		    Channels.push_back(TFT3Channel());
+		}
 		SYS->taskCreate(nodePath('.', true), mPrior, TMdContr::LogicTask, this);
 	    }
 	}
@@ -1126,6 +1171,7 @@ void TMdPrm::enable()
 	if(type().name == "tp_BVT") mDA = new KA_BVT(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_GZD") mDA = new KA_GZD(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_GNS") mDA = new KA_GNS(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
+	if(type().name == "tp_TANK") mDA = new KA_TANK(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_BTU") mDA = new KA_BTU(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
     } else {
 	if(type().name == "tp_BUC") mDA = new B_BUC(*this, cfg("DEV_ID").getI(), cfg("MOD").getI());
@@ -1142,6 +1188,7 @@ void TMdPrm::enable()
 	    mDA = new B_BTR(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNTU").getI(), cfg("CHAN_COUNTR").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_BTE") mDA = new B_BTE(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_ODOR") mDA = new B_ODOR(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
+	if(type().name == "tp_GKR") mDA = new B_GKR(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
     }
     if(mDA == NULL) throw TError(nodePath().c_str(), _("No one device selected."));
 
@@ -1215,7 +1262,7 @@ uint8_t TMdPrm::cmdSet(uint8_t * req, uint8_t addr)
 
 void TMdPrm::vlSet(TVal &vo, const TVariant &vl, const TVariant &pvl)
 {
-    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("TMdPrm::vlSet name %s "), vo.name().c_str());
+    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("TMdPrm::vlSet name %s "), vo.name().c_str());
     if(!enableStat() || !owner().startStat()) vo.setS(EVAL_STR, 0, true);
 
     if(vl.isEVal() || vl == pvl) return;

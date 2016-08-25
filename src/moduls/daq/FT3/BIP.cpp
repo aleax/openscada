@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: BIP.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,6 +31,7 @@ B_BIP::B_BIP(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
 	DA(prm), ID(id), count_n(n), with_params(has_params)
 {
     mTypeFT3 = GRS;
+    blkID = 0x30;
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("0:0");
@@ -205,8 +206,8 @@ uint16_t B_BIP::HandleEvent(int64_t tm, uint8_t * D)
 	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n * 5;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(D[(j - 1) * 5 + 3], tm, true);
-		mPrm.vlAt(TSYS::strMess("value_%d", j).c_str()).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), tm, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", j)).at().setI(D[(j - 1) * 5 + 3], tm, true);
+		mPrm.vlAt(TSYS::strMess("value_%d", j)).at().setR(TSYS::getUnalignFloat(D + (j - 1) * 5 + 4), tm, true);
 	    }
 	    break;
 
@@ -216,48 +217,48 @@ uint16_t B_BIP::HandleEvent(int64_t tm, uint8_t * D)
 	if(ft3ID.k && (ft3ID.k <= count_n)) {
 	    switch(ft3ID.n) {
 	    case 0:
-		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k)).at().setI(D[2], tm, true);
 		l = 3;
 		break;
 	    case 1:
-		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
-		mPrm.vlAt(TSYS::strMess("value_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k)).at().setI(D[2], tm, true);
+		mPrm.vlAt(TSYS::strMess("value_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		l = 7;
 		break;
 	    case 2:
-		mPrm.vlAt(TSYS::strMess("period_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
+		mPrm.vlAt(TSYS::strMess("period_%d", ft3ID.k)).at().setI(D[3], tm, true);
 		l = 4;
 		break;
 	    case 3:
-		mPrm.vlAt(TSYS::strMess("sens_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("sens_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		l = 7;
 		break;
 	    case 4:
-		mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
-		mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
+		mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 5:
-		mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
-		mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
+		mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 6:
-		mPrm.vlAt(TSYS::strMess("dimens_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
+		mPrm.vlAt(TSYS::strMess("dimens_%d", ft3ID.k)).at().setI(D[3], tm, true);
 		l = 4;
 		break;
 	    case 7:
-		mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
-		mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
+		mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 8:
-		mPrm.vlAt(TSYS::strMess("minFreq_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
-		mPrm.vlAt(TSYS::strMess("maxFreq_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
+		mPrm.vlAt(TSYS::strMess("minFreq_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("maxFreq_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 7), tm, true);
 		l = 11;
 		break;
 	    case 9:
-		mPrm.vlAt(TSYS::strMess("factor_%d", ft3ID.k).c_str()).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
+		mPrm.vlAt(TSYS::strMess("factor_%d", ft3ID.k)).at().setR(TSYS::getUnalignFloat(D + 3), tm, true);
 		l = 7;
 		break;
 	    }
@@ -276,12 +277,12 @@ uint8_t B_BIP::cmdGet(uint16_t prmID, uint8_t * out)
 	switch(ft3ID.n) {
 	case 0:
 	    //state
-	    out[0] = 0;
+	    out[0] = 0 | blkID;
 	    l = 1;
 	    break;
 	case 1:
 
-	    out[0] = 0;
+	    out[0] = 0 | blkID;
 	    l = 1;
 	    //value
 	    for(uint8_t i = 0; i < count_n; i++) {
@@ -374,7 +375,6 @@ uint8_t B_BIP::cmdSet(uint8_t * req, uint8_t addr)
     FT3ID ft3ID = UnpackID(prmID);
     if(ft3ID.g != ID) return 0;
     uint l = 0;
-//    mess_info(mPrm.nodePath().c_str(), "cmdSet k %d n %d", ft3ID.k, ft3ID.n);
     if((ft3ID.k > 0) && (ft3ID.k <= count_n)) {
 	switch(ft3ID.n) {
 	case 2:
@@ -406,51 +406,47 @@ uint8_t B_BIP::cmdSet(uint8_t * req, uint8_t addr)
     return l;
 }
 
-
 uint16_t B_BIP::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
+    ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.n = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
     ft3ID.g = ID;
+
     tagMsg Msg;
     Msg.L = 0;
     Msg.C = SetData;
-    *((uint16_t *) Msg.D) = PackID(ft3ID);
+    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ft3ID));
     switch(ft3ID.n) {
     case 2:
-    case 6:
-	Msg.L = 6;
-	Msg.D[2] = val.get(NULL, true).getI();
+	Msg.L += SerializeB(Msg.D + Msg.L, val.getI(0, true));
 	break;
     case 3:
     case 9:
-	Msg.L = 9;
-	*(float *) (Msg.D + 2) = (float) val.get(NULL, true).getR();
+	Msg.L += SerializeF(Msg.D + Msg.L, val.getR(0, true));
 	break;
     case 4:
-	Msg.L = 13;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k).c_str()).at().getR(0, true);
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("minW_%d", ft3ID.k)).at().getR(0, true));
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k)).at().getR(0, true));
 	break;
     case 5:
-	Msg.L = 13;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k).c_str()).at().getR(0, true);
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("minA_%d", ft3ID.k)).at().getR(0, true));
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("maxA_%d", ft3ID.k)).at().getR(0, true));
 	break;
     case 7:
-	Msg.L = 13;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k).c_str()).at().getR(0, true);
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("minPV_%d", ft3ID.k)).at().getR(0, true));
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("maxPV_%d", ft3ID.k)).at().getR(0, true));
 	break;
     case 8:
-	Msg.L = 13;
-	*(float *) (Msg.D + 2) = (float) mPrm.vlAt(TSYS::strMess("minFreq_%d", ft3ID.k).c_str()).at().getR(0, true);
-	*(float *) (Msg.D + 6) = (float) mPrm.vlAt(TSYS::strMess("maxFreq_%d", ft3ID.k).c_str()).at().getR(0, true);
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("minFreq_%d", ft3ID.k)).at().getR(0, true));
+	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("maxFreq_%d", ft3ID.k)).at().getR(0, true));
 	break;
     }
-    if(Msg.L) mPrm.owner().DoCmd(&Msg);
+    if(Msg.L > 2) {
+	Msg.L += 3;
+	mPrm.owner().DoCmd(&Msg);
+    }
     return 0;
 }
 

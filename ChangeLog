@@ -1,3 +1,7 @@
+2016-08-25 fido_max
+- DAQ.FT3: General cleanup and refactoring of source code. KA DAQ implemented (BTU, BVT, BVTC, GZD, GNS). KA TANK object added.
+           Translation fixed. Major erros fixed.
+
 2016-08-16 Roman
 - UI.Vision: To primitive "Diagram" of mode "Trend" added sliding by mouse in the time axis.
 

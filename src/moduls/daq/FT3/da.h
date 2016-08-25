@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: da.h
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -67,7 +67,7 @@ namespace FT3
     public:
 	//Methods
 	DA(TMdPrm& prm) :
-		mPrm(prm), NeedInit(true)
+		mPrm(prm), NeedInit(true), blkID(0)
 	{
 	}
 	virtual ~DA()
@@ -336,6 +336,7 @@ namespace FT3
 	//Attributes
 	TypeFT3 mTypeFT3;
 	TMdPrm &mPrm;
+	uint8_t blkID;
 	bool NeedInit;
 	void AddAttr(SLnk& param, TFld::Type type, unsigned flg, const string& ex);
 	void loadLnk(SLnk& lnk);
@@ -362,7 +363,10 @@ namespace FT3
 	FT3ID UnpackID(uint16_t ID);
 	uint16_t PackID(FT3ID ID);
 	uint16_t PackID(uint8_t g, uint8_t k, uint8_t n);
-
+	uint8_t SerializeF(uint8_t * out, float vl);
+	uint8_t SerializeUi16(uint8_t * out, uint16_t vl);
+	uint8_t SerializeUi32(uint8_t * out, uint32_t vl);
+	uint8_t SerializeB(uint8_t * out, uint8_t vl);
     public:
 	void PushInBE(uint8_t type, uint8_t length, uint16_t id, uint8_t *E);
 	time_t DateTimeToTime_t(uint8_t *d);

@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: BVTC.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -106,7 +106,36 @@ uint16_t KA_BVTC::Task(uint16_t uc)
 {
     tagMsg Msg;
     uint16_t rc = 0;
-    //TODO
+    switch(uc) {
+    case TaskRefresh:
+	Msg.L = 7;
+	Msg.C = AddrReq;
+	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //config
+	if(mPrm.owner().DoCmd(&Msg)) {
+	    if(Msg.C == GOOD3) {
+		Msg.L = 5;
+		Msg.C = AddrReq;
+		*((uint16_t *) Msg.D) = PackID(ID, 0, 2); //TC Value
+		if(mPrm.owner().DoCmd(&Msg)) {
+		    if(with_params) {
+			Msg.L = 3 + count_n * 2;
+			Msg.C = AddrReq;
+			for(int i = 1; i <= count_n; i++) {
+			    *((uint16_t *) (Msg.D + (i - 1) * 2)) = PackID(ID, i, 1); //маски ТC
+			}
+			if(mPrm.owner().DoCmd(&Msg)) {
+			    rc = 1;
+			}
+		    } else {
+			rc = 1;
+		    }
+		}
+	    }
+	}
+	if(rc) NeedInit = false;
+	break;
+    }
     return rc;
 }
 
@@ -115,21 +144,55 @@ uint16_t KA_BVTC::HandleEvent(int64_t tm, uint8_t * D)
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
     uint16_t l = 0;
-    //TODO
+    switch(ft3ID.k) {
+    case 0:
+	switch(ft3ID.n) {
+	case 0:
+	    mPrm.vlAt("state").at().setI(D[2], tm, true);
+	    l = 3;
+	    break;
+	case 1:
+	    l = 4;
+	    break;
+	case 2:
+	    l = 2 + count_n * 2;
+	    for(int j = 1; j <= count_n; j++) {
+		mPrm.vlAt(TSYS::strMess("TC_%d", j)).at().setI(D[j * 2 + 1], tm, true);
+	    }
+	    break;
+	}
+	break;
+    default:
+	switch(ft3ID.n) {
+	case 0:
+	    l = 4;
+	    if(ft3ID.k > count_n) break;
+	    mPrm.vlAt(TSYS::strMess("TC_%d", ft3ID.k)).at().setI(D[3], tm, true);
+	    break;
+	case 1:
+	    l = 5;
+	    if(with_params) {
+		if(ft3ID.k > count_n) break;
+		mPrm.vlAt(TSYS::strMess("Period_%d", ft3ID.k)).at().setI(D[3], tm, true);
+		mPrm.vlAt(TSYS::strMess("Count_%d", ft3ID.k)).at().setI(D[4], tm, true);
+	    }
+	    break;
+	}
+	break;
+    }
     return l;
 }
 
 uint8_t KA_BVTC::cmdGet(uint16_t prmID, uint8_t * out)
 {
-//    mess_info("KA_BVTC", "cmdGet %04X", prmID);
     FT3ID ft3ID = UnpackID(prmID);
-//    mess_info("KA_BVTC", "ID %d ft3ID g%d k%d n%d ", ID, ft3ID.g, ft3ID.k, ft3ID.n);
+//    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "ID %d ft3ID g%d k%d n%d ", ID, ft3ID.g, ft3ID.k, ft3ID.n);
     if(ft3ID.g != ID) return 0;
     uint l = 0;
     if(ft3ID.k == 0) {
 	switch(ft3ID.n) {
 	case 0:
-	    out[0] = 0;
+	    out[0] = 1;
 	    l = 1;
 	    break;
 	case 1:
@@ -170,7 +233,7 @@ uint8_t KA_BVTC::cmdSet(uint8_t * req, uint8_t addr)
     uint16_t prmID = TSYS::getUnalign16(req);
     FT3ID ft3ID = UnpackID(prmID);
     if(ft3ID.g != ID) return 0;
-//    mess_info(mPrm.nodePath().c_str(), "cmdSet k %d n %d", ft3ID.k, ft3ID.n);
+//    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "cmdSet k %d n %d", ft3ID.k, ft3ID.n);
     uint l = 0;
     if((ft3ID.k > 0) && (ft3ID.k <= count_n)) {
 	switch(ft3ID.n) {
@@ -187,7 +250,32 @@ uint8_t KA_BVTC::cmdSet(uint8_t * req, uint8_t addr)
 
 uint16_t KA_BVTC::setVal(TVal &val)
 {
-    //TODO
+    int off = 0;
+    FT3ID ft3ID;
+    ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.n = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.g = ID;
+
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = SetData;
+    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ft3ID));
+    if((ft3ID.k >= 1) && (ft3ID.k <= count_n)) {
+	switch(ft3ID.n) {
+	case 0:
+	    Msg.L += SerializeB(Msg.D + Msg.L, val.getI(0, true));
+	    break;
+	case 1:
+	    Msg.L += SerializeB(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("Period_%d", ft3ID.k)).at().getI(0, true));
+	    Msg.L += SerializeB(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("Count_%d", ft3ID.k)).at().getI(0, true));
+	    break;
+	}
+    }
+    if(Msg.L > 2) {
+	Msg.L += 3;
+	mPrm.owner().DoCmd(&Msg);
+    }
+
     return 0;
 }
 
@@ -197,6 +285,7 @@ B_BVTC::B_BVTC(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
 	DA(prm), count_n(n), ID(id), with_params(has_params)
 {
     mTypeFT3 = GRS;
+    blkID = 0x00;
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("0:0");
@@ -341,9 +430,9 @@ uint16_t B_BVTC::HandleEvent(int64_t tm, uint8_t * D)
 	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n / 4;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("TC_%d", j).c_str()).at().setB((D[((j - 1) >> 3) + 3] >> (j % 8)) & 1, tm, true);
+		mPrm.vlAt(TSYS::strMess("TC_%d", j)).at().setB((D[((j - 1) >> 3) + 3] >> (j % 8)) & 1, tm, true);
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("Mask_%d", j).c_str()).at().setB((D[((j - 1) >> 3) + 3 + count_n / 8] >> (j % 8)) & 1, tm, true);
+		    mPrm.vlAt(TSYS::strMess("Mask_%d", j)).at().setB((D[((j - 1) >> 3) + 3 + count_n / 8] >> (j % 8)) & 1, tm, true);
 		}
 	    }
 	    break;
@@ -353,7 +442,7 @@ uint16_t B_BVTC::HandleEvent(int64_t tm, uint8_t * D)
 	l = 3;
 	for(int i = 0; i < 8; i++) {
 	    if((1 + (ft3ID.n << 3) + i) > count_n) break;
-	    mPrm.vlAt(TSYS::strMess("TC_%d", 1 + (ft3ID.n << 3) + i).c_str()).at().setB((D[2] >> i) & 1, tm, true);
+	    mPrm.vlAt(TSYS::strMess("TC_%d", 1 + (ft3ID.n << 3) + i)).at().setB((D[2] >> i) & 1, tm, true);
 	}
 	break;
     case 2:
@@ -361,7 +450,7 @@ uint16_t B_BVTC::HandleEvent(int64_t tm, uint8_t * D)
 	if(with_params) {
 	    for(int i = 0; i < 8; i++) {
 		if((1 + (ft3ID.n << 3) + i) > count_n) break;
-		mPrm.vlAt(TSYS::strMess("Mask_%d", 1 + (ft3ID.n << 3) + i).c_str()).at().setB((D[3] >> i) & 1, tm, true);
+		mPrm.vlAt(TSYS::strMess("Mask_%d", 1 + (ft3ID.n << 3) + i)).at().setB((D[3] >> i) & 1, tm, true);
 	    }
 	}
 	break;
@@ -380,11 +469,11 @@ uint8_t B_BVTC::cmdGet(uint16_t prmID, uint8_t * out)
 	switch(ft3ID.n) {
 	case 0:
 	    //state
-	    out[0] = 0;
+	    out[0] = 0 | blkID;
 	    l = 1;
 	    break;
 	case 1:
-	    out[0] = 0;
+	    out[0] = 0 | blkID;
 	    l = 1;
 	    //value
 	    for(uint8_t i = 0; i < nTC; i++) {
@@ -466,23 +555,27 @@ uint16_t B_BVTC::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
+    ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.n = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
     ft3ID.g = ID;
-    tagMsg Msg;
-    Msg.L = 0;
-    Msg.C = SetData;
-    *((uint16_t *) Msg.D) = PackID(ft3ID);
 
-    Msg.D[2] = 0;
     uint16_t st = ft3ID.n * 8 + 1;
     uint16_t en = (ft3ID.n + 1) * 8;
     if(en > count_n) en = count_n;
-    Msg.L = 6;
+
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = SetData;
+    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ft3ID));
+    uint8_t mask = 0;
     for(int i = st; i <= en; i++) {
-	Msg.D[2] |= ((mPrm.vlAt(TSYS::strMess("Mask_%d", i).c_str()).at().getB(0, true)) << ((i - 1) % 8));
+	mask |= ((mPrm.vlAt(TSYS::strMess("Mask_%d", i)).at().getB(0, true)) << ((i - 1) % 8));
     }
-    mPrm.owner().DoCmd(&Msg);
+    Msg.L += SerializeB(Msg.D + Msg.L, val.getI(0, true));
+    if(Msg.L > 2) {
+	Msg.L += 3;
+	mPrm.owner().DoCmd(&Msg);
+    }
     return 0;
 }
 

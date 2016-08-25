@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.FT3 0.0.1\n"
+"Project-Id-Version: OpenSCADA.FT3 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-13 13:52+0300\n"
+"POT-Creation-Date: 2016-08-23 09:36+0300\n"
 "PO-Revision-Date: 2015-11-13 15:13+0300\n"
 "Last-Translator: Maxim Kochetkov <fido_max@inbox.ru>\n"
 "Language-Team: \n"
@@ -38,6 +38,10 @@ msgid "Sensitivity %d"
 msgstr "Чувствительность %d"
 
 #, c-format
+msgid "Alarms %d"
+msgstr "Тревоги %d"
+
+#, c-format
 msgid "Warning minimum %d"
 msgstr "Мин. предупред. %d"
 
@@ -54,34 +58,6 @@ msgid "Alarm maximum %d"
 msgstr "Макс. аварии ФВ %d"
 
 #, c-format
-msgid "Dimension %d"
-msgstr "Размерность %d"
-
-#, c-format
-msgid "PV minimum %d"
-msgstr "Мин. ФВ %d"
-
-#, c-format
-msgid "PV maximum %d"
-msgstr "Макс. ФВ %d"
-
-#, c-format
-msgid "Minimum frequency %d"
-msgstr "Минимум частоты %d"
-
-#, c-format
-msgid "Maximum frequency %d"
-msgstr "Максимум частоты %d"
-
-#, c-format
-msgid "Factor %d"
-msgstr "Коэффициент (множитель) %d"
-
-#, c-format
-msgid "Alarms %d"
-msgstr "Тревоги %d"
-
-#, c-format
 msgid "Ki %d"
 msgstr ""
 
@@ -93,11 +69,11 @@ msgstr ""
 msgid "A %d"
 msgstr ""
 
-msgid "Select TU"
-msgstr "Выбор ТУ"
-
 msgid "Execution"
 msgstr "Исполнение"
+
+msgid "Select TU"
+msgstr "Выбор ТУ"
 
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -137,8 +113,8 @@ msgstr "Проверка пакета байтового опроса "
 
 #, c-format
 msgid ""
-"VerifyPacket bad packet pdu.size:%d raslen:%d VerCRC(pdu, pdu.size()):%d VerCRC(pdu, "
-"raslen):%d"
+"VerifyPacket bad packet pdu.size:%d raslen:%d VerCRC(pdu, pdu.size()):%d "
+"VerCRC(pdu, raslen):%d"
 msgstr "Плохой пакет pdu.size:%d raslen:%d VerCRC:%d VerCRC:%d"
 
 msgid "VerifyPacket bad tail"
@@ -199,6 +175,10 @@ msgstr "Адресный запрос"
 msgid "AddrReq ID not found! %04X"
 msgstr "Адресный опрос ID не обнаружено %04X"
 
+#, c-format
+msgid "Too much data to answer %04X"
+msgstr "Слишком длинный ответ %04X"
+
 msgid "ResData2"
 msgstr "Сброс данных класса 2"
 
@@ -244,11 +224,20 @@ msgstr "Таблица параметров БТР"
 msgid "BTE Parameteres table"
 msgstr "Таблица параметров БТЭ"
 
+msgid "ODOR Parameteres table"
+msgstr "Таблица параметров ОДОРИЗАТОР"
+
 msgid "GZD Parameteres table"
 msgstr "Таблица параметров ГЗД"
 
 msgid "GNS Parameteres table"
 msgstr "Таблица параметров ГНС"
+
+msgid "GKR Parameteres table"
+msgstr "Таблица параметров ГКР"
+
+msgid "TANK Parameteres table"
+msgstr "Таблица параметров РЕЗЕРВУАР"
 
 msgid "Gather data period (s)"
 msgstr "Период сбора данных"
@@ -262,8 +251,8 @@ msgstr "Адрес контроллера"
 msgid "Transport address"
 msgstr "Адрес транспорта"
 
-msgid "Channels count"
-msgstr "Число каналов"
+msgid "Channels count/Stantion address"
+msgstr "Число каналов/Адрес станции"
 
 msgid "Ignore FCB2"
 msgstr "Игнорировать FCB2"
@@ -276,6 +265,9 @@ msgstr "Адрес блока"
 
 msgid "BVTS"
 msgstr "БВТС"
+
+msgid "Channels count"
+msgstr "Число каналов"
 
 msgid "With parameters"
 msgstr "С параметрами"
@@ -319,20 +311,20 @@ msgstr "Число каналов ТР"
 msgid "BTE"
 msgstr "БТЭ"
 
-msgid "Channels count TE"
-msgstr "Число каналов ТЭ"
+msgid "ODOR"
+msgstr "ОДОРИЗАТОР"
 
 msgid "GZD"
 msgstr "ГЗД"
 
-msgid "Channels count ZD"
-msgstr "Число задвижек"
-
 msgid "GNS"
 msgstr "ГНС"
 
-msgid "Channels count NS"
-msgstr "Число насосов"
+msgid "GKR"
+msgstr "ГКР"
+
+msgid "TANK"
+msgstr "РЕЗЕРВУАР"
 
 msgid "Parameter ID"
 msgstr "ID параметра"
@@ -345,6 +337,18 @@ msgstr "Значение"
 
 #, c-format
 msgid "data arrived L:%d %s"
+msgstr "получены данные L:%d %s"
+
+#, c-format
+msgid "---l:%d n:%d"
+msgstr ""
+
+#, c-format
+msgid "%d bytes handled"
+msgstr "%d байт обработано"
+
+#, c-format
+msgid "l:%d n:%d"
 msgstr ""
 
 #, c-format
@@ -369,6 +373,10 @@ msgstr "io_buf: %s"
 #, c-format
 msgid "CRC %04X"
 msgstr "CRC %04X"
+
+#, c-format
+msgid "response: %s"
+msgstr "ответ: %s"
 
 #, c-format
 msgid "Parse error %d"
@@ -581,6 +589,30 @@ msgid "E %d"
 msgstr "E %d"
 
 #, c-format
+msgid "Dimension %d"
+msgstr "Размерность %d"
+
+#, c-format
+msgid "Sensor minimum %d"
+msgstr "Мин. датчика %d"
+
+#, c-format
+msgid "Sensor maximum %d"
+msgstr "Макс. датчика %d"
+
+#, c-format
+msgid "Frequency minimum %d"
+msgstr "Мин. частоты %d"
+
+#, c-format
+msgid "Frequency maximum %d"
+msgstr "Макс. частоты %d"
+
+#, c-format
+msgid "Range factor %d"
+msgstr "Коэффициент расширения диапазона %d"
+
+#, c-format
 msgid "Line %d"
 msgstr "Линия %d"
 
@@ -621,10 +653,6 @@ msgid "Count %d"
 msgstr "Счетчик %d"
 
 #, c-format
-msgid "Range factor %d"
-msgstr "Коэффициент расширения диапазона %d"
-
-#, c-format
 msgid "Period TC %d"
 msgstr "Период TC %d"
 
@@ -637,12 +665,12 @@ msgid "Mask %d"
 msgstr "Маска %d"
 
 #, c-format
-msgid "Sensor minimum %d"
-msgstr "Мин. датчика %d"
+msgid "PV minimum %d"
+msgstr "Мин. ФВ %d"
 
 #, c-format
-msgid "Sensor maximum %d"
-msgstr "Макс. датчика %d"
+msgid "PV maximum %d"
+msgstr "Макс. ФВ %d"
 
 #, c-format
 msgid "Adjustment %d"
@@ -794,36 +822,58 @@ msgstr "Максим Кочетков, Ольга Авдеева, Ольга К�
 msgid "Allow realization of FT3 master/slave service"
 msgstr "Предоставляет реализацию протокола FT3 для контроллеров АПСТМ"
 
-#~ msgid "Current flow %d"
-#~ msgstr "Расход (Q) %d"
+msgid "Drop volume %d"
+msgstr "Объем капли %d"
 
-#~ msgid "Sensor 2 %d"
-#~ msgstr "Номер датчика 2 %d"
+#, c-format
+msgid "Sens1 TC %d"
+msgstr "Номер датчика TC1 %d"
 
-#~ msgid "Sensor T %d"
-#~ msgstr "Номер датчика t %d"
+#, c-format
+msgid "Sens1 TC Not %d"
+msgstr "Номер датчика TC1 инв. %d"
 
-#~ msgid "Sensor P %d"
-#~ msgstr "Номер датчика P %d"
+#, c-format
+msgid "Sens2 TC %d"
+msgstr "Номер датчика ТС2 %d"
 
-#~ msgid "Hour t %d"
-#~ msgstr "Среднее t за предыдущий час %d"
+#, c-format
+msgid "Sens2 TC Not %d"
+msgstr "Номер датчика ТС2 инв %d"
 
-#~ msgid "Datetime %d"
-#~ msgstr "Период %d"
+#, c-format
+msgid "TU Light Alarm %d"
+msgstr "ТУ световая сигнализация %d"
 
-#~ msgid "Period %d"
-#~ msgstr "Период %d"
+#, c-format
+msgid "TU Sound Alarm %d"
+msgstr "ТУ звуковая сигнализация %d"
 
-#~ msgid "Avg t %d"
-#~ msgstr "Среднее t за период %d"
+#, c-format
+msgid "TU Relay Off %d"
+msgstr "ТУ реле откл %d"
 
-#~ msgid "Test rate %d"
-#~ msgstr "Тестовый расход %d"
+#, c-format
+msgid "Delay time %d"
+msgstr "Задержка %d"
 
-#, fuzzy
-#~ msgid "t %d"
-#~ msgstr "Среднее t за период %d"
+#, c-format
+msgid "False alarm time %d"
+msgstr "Время ложной аварии %d"
 
-#~ msgid "new event %d"
-#~ msgstr "событие %d"
+#, c-format
+msgid "State Sens1 TC %d"
+msgstr "Состояние датчика ТС1 %d"
+
+#, c-format
+msgid "State Sens1 TC Not %d"
+msgstr "Состояние датчика ТС1 инв %d"
+
+#, c-format
+msgid "State Sens2 TC %d"
+msgstr "Состояние датчика ТС2 %d"
+
+#, c-format
+msgid "State Sens2 TC Not %d"
+msgstr "Состояние датчика ТС2 инв %d"
+

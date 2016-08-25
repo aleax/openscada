@@ -50,7 +50,7 @@ namespace FT3
 		    Period(TSYS::strMess("period_%d", id + 1), TSYS::strMess(_("Measure period %d"), id + 1)),
 		    Sens(TSYS::strMess("sens_%d", id + 1), TSYS::strMess(_("Sensitivity %d"), id + 1)),
 		    Count(TSYS::strMess("count_%d", id + 1), TSYS::strMess(_("Count %d"), id + 1)),
-		    Vdrop(TSYS::strMess("vdrop_%d", id + 1), TSYS::strMess(_("Volume a drop %d"), id + 1))
+		    Vdrop(TSYS::strMess("vdrop_%d", id + 1), TSYS::strMess(_("Drop volume %d"), id + 1))
 	    {
 	    }
 	    DA* da;

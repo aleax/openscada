@@ -1,5 +1,5 @@
 ﻿/***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -57,20 +57,21 @@ namespace FT3
 		    Run(TSYS::strMess("run_%d", id + 1), TSYS::strMess(_("Run %d"), id + 1)),
 		    Reset(TSYS::strMess("reset_%d", id + 1), TSYS::strMess(_("Reset %d"), id + 1)),
 		    Lock(TSYS::strMess("lock_%d", id + 1), TSYS::strMess(_("Lock %d"), id + 1)),
-		    Lubrication(TSYS::strMess("reset_%d", id + 1), TSYS::strMess(_("Lubrication %d"), id + 1)),
+		    Lubrication(TSYS::strMess("lub_%d", id + 1), TSYS::strMess(_("Lubrication %d"), id + 1)),
 
 		    Time(TSYS::strMess("time_%d", id + 1), TSYS::strMess(_("Time %d"), id + 1)),
 		    ExTime(TSYS::strMess("extime_%d", id + 1), TSYS::strMess(_("ExTime %d"), id + 1)),
-		    Time_Lub(TSYS::strMess("time_%d", id + 1), TSYS::strMess(_("Time_Lub %d"), id + 1)),
-		    Timeout_PO(TSYS::strMess("extime_%d", id + 1), TSYS::strMess(_("Timeout_PO %d"), id + 1))
+		    Time_Lub(TSYS::strMess("timelub_%d", id + 1), TSYS::strMess(_("Time_Lub %d"), id + 1)),
+		    Timeout_PO(TSYS::strMess("timeout_po_%d", id + 1), TSYS::strMess(_("Timeout_PO %d"), id + 1))
 	    {
 	    }
 	    DA* da;
 	    uint8_t id;
 
 	    ui8Data State, On, Off, Run, Reset, Lock, Lubrication;
-	    ui16Data Time, Time_Lub;
-	    ui8Data ExTime,  Timeout_PO;
+	    ui16Data Time, Time_Lub, ExTime,  Timeout_PO;
+
+	    void UpdateState(uint16_t ID, uint8_t cl);
 	};
 	vector<SKRchannel> data;
 

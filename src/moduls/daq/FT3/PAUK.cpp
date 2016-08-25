@@ -1,6 +1,6 @@
 //OpenSCADA system module DAQ.FT3 file: PAUK.cpp
 /***************************************************************************
- *   Copyright (C) 2011-2015 by Maxim Kochetkov                            *
+ *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
  *   fido_max@inbox.ru                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,6 +31,7 @@ B_PAUK::B_PAUK(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params) :
 	DA(prm), ID(id), count_n(n), with_params(has_params)
 {
     mTypeFT3 = GRS;
+    blkID = 0;
     TFld * fld;
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TFld::NoWrite));
     fld->setReserve("0:0");
@@ -124,7 +125,7 @@ uint16_t B_PAUK::HandleEvent(int64_t tm, uint8_t * D)
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
     if(ft3ID.g != ID) return 0;
     uint16_t l = 0;
-    switch (ft3ID.k) {
+    switch(ft3ID.k) {
     case 0:
 	switch(ft3ID.n) {
 	case 0:
@@ -132,27 +133,27 @@ uint16_t B_PAUK::HandleEvent(int64_t tm, uint8_t * D)
 	    l = 3;
 	    break;
 	case 1:
-	    mPrm.vlAt(TSYS::strMess("selection").c_str()).at().setI(D[3], tm, true);
+	    mPrm.vlAt(TSYS::strMess("selection")).at().setI(D[3], tm, true);
 	    l = 4;
 	    break;
 	case 2:
-	    mPrm.vlAt(TSYS::strMess("execution").c_str()).at().setI(D[3], tm, true);
+	    mPrm.vlAt(TSYS::strMess("execution")).at().setI(D[3], tm, true);
 	    l = 4;
 	    break;
 	case 3:
 	    mPrm.vlAt("state").at().setI(D[2], tm, true);
 	    l = 3 + count_n / 2;
 	    for(int j = 1; j <= count_n; j++) {
-		mPrm.vlAt(TSYS::strMess("state_%d", j).c_str()).at().setI(((D[2 + (j + 1) / 2]) >> ((j % 2) * 4)) & 0x0F, tm, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", j)).at().setI(((D[2 + (j + 1) / 2]) >> ((j % 2) * 4)) & 0x0F, tm, true);
 	    }
 	    l = 11;
 	    break;
 	case 4:
-	    mPrm.vlAt(TSYS::strMess("control").c_str()).at().setI(D[2], tm, true);
+	    mPrm.vlAt(TSYS::strMess("control")).at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 	case 5:
-	    mPrm.vlAt(TSYS::strMess("errors").c_str()).at().setI(D[2], tm, true);
+	    mPrm.vlAt(TSYS::strMess("errors")).at().setI(D[2], tm, true);
 	    l = 3;
 	    break;
 
@@ -162,19 +163,19 @@ uint16_t B_PAUK::HandleEvent(int64_t tm, uint8_t * D)
 	if(ft3ID.k && (ft3ID.k <= count_n)) {
 	    switch(ft3ID.n) {
 	    case 0:
-		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k).c_str()).at().setI(D[2], tm, true);
+		mPrm.vlAt(TSYS::strMess("state_%d", ft3ID.k)).at().setI(D[2], tm, true);
 		l = 3;
 		break;
 
 	    case 1:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("time_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
+		    mPrm.vlAt(TSYS::strMess("time_%d", ft3ID.k)).at().setI(D[3], tm, true);
 		}
 		l = 4;
 		break;
 	    case 2:
 		if(with_params) {
-		    mPrm.vlAt(TSYS::strMess("astime_%d", ft3ID.k).c_str()).at().setI(D[3], tm, true);
+		    mPrm.vlAt(TSYS::strMess("astime_%d", ft3ID.k)).at().setI(D[3], tm, true);
 		    ;
 		}
 		l = 4;
@@ -191,25 +192,38 @@ uint16_t B_PAUK::setVal(TVal &val)
 {
     int off = 0;
     FT3ID ft3ID;
-    ft3ID.k = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер объекта
-    ft3ID.n = strtol((TSYS::strParse(val.fld().reserve(), 0, ":", &off)).c_str(), NULL, 0); // номер параметра
+    ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
+    ft3ID.n = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
     ft3ID.g = ID;
+
     tagMsg Msg;
     Msg.L = 0;
     Msg.C = SetData;
-    *((uint16_t *) Msg.D) = PackID(ft3ID);
+    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ft3ID));
+    uint8_t run;
     switch(ft3ID.n) {
-    case 1:
-    case 2:
-	Msg.L = 6;
-	Msg.D[2] = val.get(NULL, true).getI();
-	if((ft3ID.n == 2) && (Msg.D[2] != 0x55)) {
-	    Msg.D[2] = 0;
+	switch(ft3ID.n) {
+	case 1:
+	    Msg.L += SerializeB(Msg.D + Msg.L, val.getI(0, true));
+	    break;
+	case 2:
+	    run = val.getI(0, true);
+	    if(run == 170) {
+		Msg.L += SerializeB(Msg.D + Msg.L, 0);
+	    } else {
+		if(run == 85) {
+		    Msg.L += SerializeB(Msg.D + Msg.L, run);
+		} else {
+		    Msg.L = 0;
+		}
+	    }
+	    break;
 	}
-	mPrm.owner().DoCmd(&Msg);
-	break;
     }
-
+    if(Msg.L > 2) {
+	Msg.L += 3;
+	mPrm.owner().DoCmd(&Msg);
+    }
     return 0;
 }
 
