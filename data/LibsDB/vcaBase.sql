@@ -3571,7 +3571,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1471972084',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1472202837',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','curUSek','0',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','');
@@ -17431,7 +17431,7 @@ for(i_el = 0; i_el < 8; i_el++) {
 			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
 		}
 		if(!typeXY || !(i_el%2)) {
-			if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+			if((cEl.attr("log")==true) == (cntrLog > cntrAct/2) && cEl.attr("bordWidth") == 1) cTr.attrSet(cTrPrm+"scl",0);
 			else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
 		}
 		else {
@@ -17448,7 +17448,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1471972334);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1472203011);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAaCAYAAAAHfFpPAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABJJJREFUWIXlmU1vG0UYx38znp19qeOXxE2cNJQmqdQGekPAl4Ar6g31
 I/ReiQtSv0K/AeoNcaWoElSIcuGARICivqRuyTp27NjOxt7ZneWQNjQ0idzYSVvxkyyvVuv//veZ
@@ -18365,6 +18365,7 @@ tSek = tSek ? tSek : curTm;
 
 //Archivators real list forming
 if(f_start) {
+	tSek_ = -1;
 	arch_items = tr("All");
 	mods = SYS.Archive.nodeList("mod_");
 	for(i_m = 0; i_m < mods.length; i_m++) {
@@ -18409,7 +18410,7 @@ for(/*ev_rez = "", */off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/xZoomDef")	sclHor = 100, sclHorOff = 0;
 	else if(ev_cur == "ws_BtToggleChange:/selWin") {
 		if(selWin_value) { tSek_ = tSek; tSize_ = tSize; sclVer_ = sclVer; sclVerOff_ = sclVerOff; }
-		else { tSek = tSek_; tSize = tSize_; sclVer = sclVer_; sclVerOff = sclVerOff_; }
+		else if(tSek_ >= 0) { tSek = tSek_; tSize = tSize_; sclVer = sclVer_; sclVerOff = sclVerOff_; }
 		sclWin = selWin_value;
 	}
 	//else ev_rez += (ev_cur+"\n");
@@ -18435,7 +18436,7 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1472130108);
+if(selWin_en)	selWin_value = sclWin;','','',200,'name;geomW;geomH;pgGrp;backColor;bordWidth;',1472203264);
 INSERT INTO "wlb_Main" VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -18517,7 +18518,8 @@ else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || var
 lb_ed_text = ed.isEVal() ? "" : ed;
 
 //Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == name)
+if(this.attr("focus") ||
+		(!name.isEVal() && name.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == name))
 {
   bordColor = (bordColor == "white") ? "black" : "white";
   bordWidth =  2;
@@ -18556,7 +18558,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1471511194);
+}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1472200489);
 INSERT INTO "wlb_Main" VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -19638,7 +19640,7 @@ for(i_el = 0; i_el < 10; i_el++) {
 			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
 		}
 		if(!typeXY || !(i_el%2)) {
-			if((cEl.attr("log")==true) == (cntrLog > cntrAct/2)) cTr.attrSet(cTrPrm+"scl",0);
+			if((cEl.attr("log")==true) == (cntrLog > cntrAct/2) && cEl.attr("bordWidth") == 1) cTr.attrSet(cTrPrm+"scl",0);
 			else cTr.attrSet(cTrPrm+"scl",(cEl.attr("log")==true)?6:2);
 		}
 		else {
@@ -19655,7 +19657,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1443604784);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1472203011);
 INSERT INTO "wlb_Main" VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ

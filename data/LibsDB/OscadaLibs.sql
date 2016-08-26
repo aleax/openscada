@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.3.1','','tmplib_DevLib','Библиотека устройств','');
+Version: 1.4.1','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -1132,11 +1132,12 @@ INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum d
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','this','Object',4,0,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','this','Object',4,0,'',4,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','power','Power, for temperature',3,16,'',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',3,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -4745,42 +4746,38 @@ f_err = t_err;','','',1472125162);
 INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097U','One Wire by DS9097U','','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408 (scheduled), DS2450 (scheduled), DS2438 (scheduled).
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 0.1.0','','',30,0,'JavaLikeCalc.JavaScript
+Version: 1.0.0','','',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
-	//resp = tr.messIO(SYS.strFromCharCode(0xF1));	//MODE_STOP_PULSE
-	//if((resp.charCodeAt(0)&0xE0) != 0xE0)	return false;
-	resp = tr.messIO(SYS.strFromCharCode(0xE3,0xC5));	//MODE_COMMAND, CMD_COMM(0x81) | FUNCTSEL_RESET(0x40) | SPEEDSEL_FLEX(0x04)
+	req = (isData?SYS.strFromCharCode(0xE3):"") +
+				SYS.strFromCharCode(0xC5);	//CMD_COMM(0x81) | FUNCTSEL_RESET(0x40) | SPEEDSEL_FLEX(0x04)
+	isData = false;
+	resp = tr.messIO(req);
 	return (resp.charCodeAt(0)&0x03) == 0x01;	//RB_PRESENCE
 }
 
 function io(tr, mess, bits) {
 	if(bits == EVAL) {
-		req = SYS.strFromCharCode(0xE1);				//MODE_DATA
+		req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+		isData = true;
 		for(iB = 0; iB < mess.length; iB++) {
 			req += SYS.strFromCharCode(tVl=mess.charCodeAt(iB));
 			if(tVl == 0xE3) req += SYS.strFromCharCode(0xE3);	//duplication to the COMMAND mode
 		}
-		req += SYS.strFromCharCode(0xE3,0xA5);	//MODE_COMMAND, CMD_COMM(0x81)|???FUNCTSEL_SEARCHOFF(0x20)|SPEEDSEL_FLEX(0x04)
-		//SYS.messInfo("OneWire","req="+SYS.strDecode(req,"Bin"," "));
 		for(resp = tr.messIO(req); resp.length && resp.length < mess.length && (tresp=tr.messIO("")).length; resp += tresp) ;
-		//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-		//tr.messIO(SYS.strFromCharCode(0xE3,0xC5));
 		return resp;
 	}
 	else {
-		req = SYS.strFromCharCode(0xE3,0x3F);	//MODE_COMMAND, CMD_CONFIG(0x01) | PARMSEL_5VPULSE(0x30) | PARMSET_infinite(0x0E)
+		req = (isData?SYS.strFromCharCode(0xE3):"") + SYS.strFromCharCode(0x3F);	//MODE_COMMAND, CMD_CONFIG(0x01) | PARMSEL_5VPULSE(0x30) | PARMSET_infinite(0x0E)
+		isData = false;
 		for(iB = 0; iB < ceil(bits/8); iB++) {
 			vB = mess.charCodeAt(iB);
 			bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
 			for(iBi = 0; iBi < bB; iBi++)
 				//{BITPOL_ONE(0x10)|BITPOL_ZERO(0x00)}|CMD_COMM(0x81)|FUNCTSEL_BIT(0x00)|SPEEDSEL_FLEX(0x04)|{PRIME5V_TRUE(0x02)|PRIME5V_FALSE(0x00)}
-				req += SYS.strFromCharCode(((vB&(1<<iBi))?0x10:0x00)|0x85|((iB==(ceil(bits/8)-1)&&iBi==(bB-1))?0x02:0x00));
+				req += SYS.strFromCharCode(((vB&(1<<iBi))?0x10:0x00)|0x85/*|((iB==(ceil(bits/8)-1)&&iBi==(bB-1))?0x02:0x00)*/);
 		}
-		//req += SYS.strFromCharCode(0xE3,0xA5);
-		//SYS.messInfo("OneWire","bits="+bits+"; req="+SYS.strDecode(req,"Bin"," "));
 		for(resp = tr.messIO(req); resp.length && resp.length < (bits+1) && (tresp=tr.messIO("")).length; resp += tresp) ;
-		//SYS.messInfo("OneWire","bits="+bits+"; resp="+SYS.strDecode(resp,"Bin"," "));
 		rez = "";
 		if(resp.length && !(resp.charCodeAt(0)&0x81))
 			for(iR = 1;  iR < resp.length; ) {
@@ -4789,7 +4786,6 @@ function io(tr, mess, bits) {
 					if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
 				rez += SYS.strFromCharCode(vB);
 			}
-		//SYS.messInfo("OneWire","mess="+SYS.strDecode(mess,"Bin"," ")+"; rez="+SYS.strDecode(rez,"Bin"," "));
 	}
 	return rez;
 }
@@ -4803,10 +4799,13 @@ function scan(tr, sn, lstDiscr) {
 		if((i < (lstDiscr-1) && sn[floor(i/8)]&(1<<(i%8))) || i == (lstDiscr-1))
 			asn[(i*2+1)/8] = asn[(i*2+1)/8] | (1<<((i*2+1)%8));
 
-	resp = tr.messIO(SYS.strFromCharCode(0xE1,0xF0,0xE3,0xB5,0xE1,
-				asn[0],asn[1],asn[2],asn[3],asn[4],asn[5],asn[6],asn[7],asn[8],asn[9],asn[10],asn[11],asn[12],asn[13],asn[14],asn[15],
-				0xE3,0xA5));
-	for( ; resp.length && resp.length < 17 && (tresp=tr.messIO("")).length; resp += tresp) ;
+	req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+	req += SYS.strFromCharCode(0xF0, 0xE3, 0xB5, 0xE1,
+				asn[0], asn[1], asn[2], asn[3], asn[4], asn[5], asn[6], asn[7],
+				asn[8], asn[9], asn[10], asn[11], asn[12], asn[13], asn[14], asn[15],
+				0xE3, 0xA5);
+	isData = false;
+	for(resp = tr.messIO(req); resp.length && resp.length < 17 && (tresp=tr.messIO("")).length; resp += tresp) ;
 
 	tmpLastDesc = -1;
 	for(i = 0; i < 64; i++) {
@@ -4827,11 +4826,11 @@ function scan(tr, sn, lstDiscr) {
 
 //Set transport and init
 if(f_start) {
-	tmResc_ = tmResc;
+	tmResc_ = 0;
 	devLs = new Object();
 	transport_ = transport;
 	tr = SYS.Transport.Serial["out_"+transport];
-	DS2480 = false;
+	DS2480 = isData = false;
 }
 if(f_stop) {
 	for(var devID in devLs) {
@@ -4856,14 +4855,17 @@ if(!tr || transport != transport_)	{
 if(tr && !DS2480)	{
 	tr.addr(tr.addr().parse(0,":")+":9600:8N1");	tr.timings("500:20");
 	if(tr.start(true)) {
-		tr.messIO(SYS.strFromCharCode(0xC1));	//Send timing byte
+		tr.sendbreak(); SYS.sleep(2e-3);
+		tr.messIO(SYS.strFromCharCode(0xC1));	SYS.sleep(4e-3);	//Send timing byte
 		//PDSRC=1.37Vus; W1LT=10us; DSO/WORT=8us;
 		//read the baud rate (to test command block); do 1 bit operation (to test 1-Wire block)
-		resp = tr.messIO(SYS.strFromCharCode(0x17,0x45,0x5B,0x0F,0x91));
+		req = SYS.strFromCharCode(0x17, 0x45, 0x5B, 0x0F, 0x91);
+		for(resp = tr.messIO(req); resp.length && resp.length < 5 && (tresp=tr.messIO("")).length; resp += tresp) ;
 		if(resp.length == 5 && (resp.charCodeAt(3)&0xF1) == 0x00 && (resp.charCodeAt(3)&0x0E) == 0x00/*9600*/ &&
 				(resp.charCodeAt(4)&0xF0) == 0x90 && (resp.charCodeAt(4)&0x0C) == 0x00/*9600*/)
 			DS2480 = true;
 	}
+	isData = false;
 }
 if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 else if(!DS2480)	t_err = "2:"+tr("DS2480 is not detected.");
@@ -4873,12 +4875,11 @@ else {
 		tmResc_ = tmResc;
 		tmSc = SYS.time();
 		// Check for power
-		/*if(!reset(tr) ||
+		if(!reset(tr) ||
 		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
 			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
 			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
-		else power = resp.charCodeAt(0);*/
-		power = false;
+		else power = resp.charCodeAt(0);
 		// Scan for allowed devices on the bus.
 		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
 		for(devID = "start", lstDiscr = 0; devID.length && lstDiscr >= 0; ) {
@@ -5011,7 +5012,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1472118199);
+f_err = t_err;','','',1472207994);
 INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097','One Wire by DS9097','','','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408 (scheduled), DS2450 (scheduled), DS2438 (scheduled).
 Author: Roman Savochenko <rom_as@oscada.org>

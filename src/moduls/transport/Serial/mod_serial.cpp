@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.4.2"
+#define MOD_VER		"1.5.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -1248,6 +1248,12 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);
 	return (bool)(tiocm&TIOCM_RI);
+    }
+    // int sendbreak(int duration = 0)
+    if(iid == "sendbreak") {
+	ResAlloc res(nodeRes(), true);
+	if(!runSt) return (int64_t)EVAL_INT;
+	return tcsendbreak(fd, prms.size() ? prms[0].getI() : 0);
     }
 
     return TTransportOut::objFuncCall(iid, prms, user);

@@ -1,8 +1,16 @@
+2016-08-26 Roman
+- !!:DB.LibsDB.OscadaLibs: DAQ template DevLib.1W_DS9097U finished and final working.
+- !!:DB.LibsDB.vcaBase: Main.grpGraph adapted for show self scale of a selected parameter.
+    Main.grph_panel fixed for restore after scale by window only for allowed data.
+    Main.ElViewGraph expanded for select by focus in also.
+- Transport.Serial: User API function sendbreak() is added to output transport.
+
+
 2016-08-25 Roman
 - !!!!:FIX:DB.LibsDB.OscadaLibs: DAQ template DevLib.oneWire renamed to DevLib.1W_DS9097 and some simplified.
     New DAQ template DevLib.1W_DS9097U is added for allow OneWire support by an adapter DS9097U, based on the chip DS2480.
     DAQ template DevLib.SSCP expanded for types "dt" and "time" support and the allowed to selection variables list moving to RO text attribute.
-- !!:DB.LibsDB.vcaBase: Groups of graphics and the control panel expanded to visualizer UI.Vision specific feature of selection/scalling
+ Groups of graphics and the control panel expanded to visualizer UI.Vision specific feature of selection/scalling
     by window drawn by mouse. The attribute "enForce" naming of ElViewGraph fix.
 - FIX:UI.VCAEngine: setEnable() of widget and it's succession was expanded by the argument "force" like to pages.
     FIX:Primitives force activation for not loaded active attributes is added after the widgets loading try, into the widgets libraries.
