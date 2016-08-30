@@ -270,7 +270,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	funcV.calc();
 	//Get outputs
 	bool rez = funcV.getB(0);
-	if(!rez) funcV.setS(1,"");
+	if(!rez) funcV.setS(1, "");
 	answer = funcV.getS(2);
 
 	up.at().cntInReq++;

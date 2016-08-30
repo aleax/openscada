@@ -803,6 +803,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	case F_LIST: {
 	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
 	    QList<QListWidgetItem *> its = wdg->findItems(val.c_str(), Qt::MatchExactly);
+	    if(!its.size() && val.size()) { wdg->addItem(val.c_str()); its = wdg->findItems(val.c_str(), Qt::MatchExactly); }
 	    if(its.size()) {
 		wdg->setCurrentItem(its[0]);
 		wdg->scrollToItem(its[0]);
@@ -1966,7 +1967,6 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
     }
 
     if(!w->allAttrLoad()) {
-	//w->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr() && shD->type == FD_TRND);
 	if(reld_tr_dt)	{ loadData(w,reld_tr_dt==2); make_pct = true; }
 	if(make_pct)	{ makePicture(w); up = true; }
 	if(up && uiPrmPos != -1) {
@@ -2629,8 +2629,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	cP.isIndiv = false;
 	if(!cP.fftN || !cP.color().isValid() || !(cP.wScale&FD_GRD_MARKS)) continue;
 	// Check for include to present or create new group and exclude from individual
-	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
-	{
+	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))) {
 	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
 	    prmInGrp++; prmGrpLast = iP;
 	    continue;
@@ -3506,7 +3505,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 
     if(shD->type == FD_TRND) {
 	int64_t tTimeGrnd = shD->tTime - (int64_t)(1e6*shD->tSize);
-	int64_t curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
+	int64_t curTime   = vmax(vmin(itm,shD->tTime), tTimeGrnd);
 
 	shD->curTime = curTime;
 	shD->holdCur = (curTime==shD->tTime);
@@ -3661,16 +3660,17 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		setAttr("tm_grnd", "0");
 	    if(view->cntrIfCmd(req,true))	return;
 
-	    int64_t lst_tm = (s2ll(req.attr("tm"))/wantPer)*wantPer;
-	    if(lst_tm && lst_tm >= valEnd()) {
+	    int64_t lstTm = (s2ll(req.attr("tm"))/wantPer)*wantPer,
+		    valEnd_ = (valEnd()/wantPer)*wantPer;
+	    if(lstTm && lstTm >= valEnd_) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
-		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
-		else if((lst_tm == valEnd() && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));
+		else if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
+		else if((lstTm == valEnd_ && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL) {
-		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		    int s_k = lstTm-wantPer*(lstTm/wantPer), n_k = trcPer;
 		    vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
 		}
 		while(vals.size() > bufLim)	vals.pop_front();
@@ -3846,11 +3846,13 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
 
 int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
 {
-    int64_t rez = 0;
-    for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP)
+    int64_t rez = 0, rez1 = 0;
+    for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP) {
 	rez = vmax(rez, iP->arhEnd());
+	rez1 = vmax(rez1, iP->arhEnd()+iP->arhPer());	//!!!! For allow curent values update on periodicity by minutes and hours.
+    }
 
-    return rez ? rez : def;
+    return (rez && rez1 < def) ? rez : def;
 }
 
 //************************************************

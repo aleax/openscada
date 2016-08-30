@@ -239,8 +239,6 @@ bool Session::modifChk( unsigned int tm, unsigned int iMdfClc )
 
 string Session::ico( )			{ return (!parent().freeStat()) ? parent().at().ico() : ""; }
 
-double Session::calcTm( )		{ return SYS->taskUtilizTm(nodePath('.',true)); }
-
 AutoHD<Project> Session::parent( )	{ return mParent; }
 
 void Session::add( const string &iid, const string &iparent )
@@ -686,7 +684,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setProjNm(opt->text());
     }
     else if(a_path == "/obj/st/backgrnd" && ctrChkNode(opt))	opt->setText(i2s(backgrnd()));
-    else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))	opt->setText(tm2s(calcTm()));
+    else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))
+	opt->setText(tm2s(SYS->taskUtilizTm(nodePath('.',true)))+"["+tm2s(SYS->taskUtilizTm(nodePath('.',true),true))+"]");
     else if(a_path == "/obj/st/connect" && ctrChkNode(opt))	opt->setText(i2s(connects()));
     else if(a_path == "/obj/st/reqTime" && ctrChkNode(opt))	opt->setText(i2s(reqTm()));
     else if(a_path == "/obj/st/leftToClose" && ctrChkNode(opt))	opt->setText(i2s(vmax(0,DIS_SES_TM-(time(NULL)-reqTm()))));
@@ -1608,9 +1607,9 @@ void SessWdg::inheritAttr( const string &aid )
     }
 }
 
-void SessWdg::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf )
+void SessWdg::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allInher )
 {
-    Widget::attrAdd(attr, pos, inher, forceMdf || enable());
+    Widget::attrAdd(attr, pos, inher, forceMdf || enable(), allInher);
 }
 
 AutoHD<Widget> SessWdg::wdgAt( const string &wdg, int lev, int off )

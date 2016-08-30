@@ -6479,21 +6479,22 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
 	{
 	    XMLNode req("get");
-	    req.setAttr("path",addr()+"/%2fserv%2fval")->
-		setAttr("tm",ll2s(tTime))->
-		setAttr("tm_grnd","0");
+	    req.setAttr("path", addr()+"/%2fserv%2fval")->
+		setAttr("tm", ll2s(tTime))->
+		setAttr("tm_grnd", "0");
 	    if(mod->cntrIfCmd(req,user,false)) return;
 
-	    int64_t lst_tm = (s2ll(req.attr("tm"))/wantPer)*wantPer;
-	    if(lst_tm && lst_tm >= valEnd()) {
+	    int64_t lstTm = (s2ll(req.attr("tm"))/wantPer)*wantPer,
+		    valEnd_ = (valEnd()/wantPer)*wantPer;
+	    if(lstTm && lstTm >= valEnd_) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
-		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
-		else if((lst_tm == valEnd() && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));
+		else if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
+		else if((lstTm == valEnd_ && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL) {
-		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		    int s_k = lstTm-wantPer*(lstTm/wantPer), n_k = trcPer;
 		    vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
 		}
 		while(vals.size() > bufLim) vals.pop_front();

@@ -54,7 +54,6 @@ class Session : public TCntrNode
 	string	grp( )		{ return mGrp; }		//Source project group
 	short	permit( )	{ return mPermit; }		//Permission for access to source project
 	int	period( )	{ return vmax(1,mPer); }	//Process period (ms)
-	double	calcTm( );					//Calculate session time
 	bool	enable( )	{ return mEnable; }		//Enable stat
 	bool	start( )	{ return mStart; }		//Start stat
 	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
@@ -282,7 +281,7 @@ class SessWdg : public Widget, public TValFunc
 
 	void inheritAttr( const string &attr = "" );
 
-	void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false );
+	void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false, bool allInher = false );
 
     protected:
 	//Methods

@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -593,7 +593,7 @@ void TMdPrm::vlGet( TVal &val )
     if(val.name() != "err") {
 	try {
 	    if(isPRefl() && !prmRefl->freeStat()) val.set(prmRefl->at().vlAt(val.name()).at().get(), 0, true);
-	    else if(isStd() && tmpl->val.func()) {
+	    else if(isStd() && tmpl->val.func() && (idErr < 0 || tmpl->val.getS(idErr) != EVAL_STR)) {
 		int id_lnk = lnkId(val.name());
 		if(id_lnk >= 0 && lnk(id_lnk).aprm.freeStat()) id_lnk = -1;
 		if(id_lnk < 0) val.set(tmpl->val.get(tmpl->val.ioId(val.name())), 0, true);
@@ -604,8 +604,9 @@ void TMdPrm::vlGet( TVal &val )
 	} catch(TError &err) { }
     }
     else {
-	if(isStd() && tmpl->val.func() && idErr >= 0) val.setS(tmpl->val.getS(idErr), 0, true);
-	else val.setS("0", 0, true);
+	if(isStd() && tmpl->val.func() && idErr >= 0) {
+	    if(tmpl->val.getS(idErr) != EVAL_STR) val.setS(tmpl->val.getS(idErr), 0, true);
+	} else val.setS("0", 0, true);
 	if(owner().messLev() == TMess::Debug)
 	    val.setS(val.getS(NULL,true)+": "+TSYS::strMess(_("Spent time %s[%s]"),tm2s(tmCalc).c_str(),tm2s(tmCalcMax).c_str()), 0, true);
     }

@@ -1,3 +1,16 @@
+2016-08-30 Roman
+- !!:DB.LibsDB.OscadaLibs: DAQ template DevLib.IT3 and the user protocol part expanded by a passive mode, by list a different session.
+    JavaLikeCalc function lowLevDevs.DHT expanded for AM2320, DHT22 (AM2302) support.
+- !!:DB.LibsDB.vcaBase: tmplSO.graphSelPrm significant expanded for selection from list and fast search.
+    Main.{grph_panel,grpGraph,grpGraph10} adapted to store scaling context by mouse's window.
+- DAQ.LogicLev: Expanded to allow writing from external to the RO attributes "err" and all other for the "f_err" EVAL.
+- !!:FIX:UI.VCAEngine: Session calculation time expanded by it's maximum value.
+    Attribute addition expanded and used at manual creation by the attribute "allInher" for it's creation inheritance.
+    New attribute's ID and NAME set to indexed.
+- !:UI.Vision: The view "List" of primitive "FormEl" expanded by appending the pointed but missed values to the list.
+- FIX:UI.{Vision,WebVision}: Current values tracing of primitive "Diagram" for big periodics, in days, is fixed.
+
+
 2016-08-26 Roman
 - !!:DB.LibsDB.OscadaLibs: DAQ template DevLib.1W_DS9097U finished and final working.
 - !!:DB.LibsDB.vcaBase: Main.grpGraph adapted for show self scale of a selected parameter.

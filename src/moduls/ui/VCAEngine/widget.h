@@ -219,7 +219,7 @@ class Widget : public TCntrNode
 
 	// Widget's attributes
 	void attrList( vector<string> &list );
-	virtual void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false );
+	virtual void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false, bool allInher = false );
 	void attrDel( const string &attr, bool allInher = false );
 	virtual bool attrPresent( const string &attr );
 	int  attrPos( const string &iattr );

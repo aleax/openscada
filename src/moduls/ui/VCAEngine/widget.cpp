@@ -543,7 +543,7 @@ void Widget::attrList( vector<string> &list )
     pthread_mutex_unlock(&mtxAttr());
 }
 
-void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf )
+void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allInher )
 {
     string anm = attr->name();
 
@@ -571,6 +571,11 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf )
 	if(forceMdf) a->setModif(modifVal(*a));
     } catch(...) { }
     pthread_mutex_unlock(&mtxAttr());
+
+    //Update heritors' attributes
+    for(unsigned iH = 0; allInher && iH < mHerit.size(); iH++)
+	if(mHerit[iH].at().enable())
+	    mHerit[iH].at().inheritAttr(anm);
 }
 
 void Widget::attrDel( const string &attr, bool allInher  )
@@ -1461,9 +1466,14 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
-	    wdg.at().attrAdd(new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser));
-	    //wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
-	    wdg.at().attrAt("newAttr").at().setModif(1);
+	    string newAId = "newAttr", newANm = _("New attribute");
+	    while(wdg.at().attrPresent(newAId)) {
+		newAId = TSYS::strLabEnum(newAId);
+		newANm = TSYS::strLabEnum(newANm);
+	    }
+	    wdg.at().attrAdd(new TFld(newAId.c_str(),newANm.c_str(),TFld::String,Attr::IsUser), -1, false, false, true);
+	    //wdg.at().attrAt(newAId).at().setS(EVAL_STR);
+	    wdg.at().attrAt(newAId).at().setModif(1);
 	    wdg.at().modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) {
@@ -1508,7 +1518,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
 		wdg.at().attrDel(idattr);
-		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()));
+		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()), -1, false, false, true);
 		wdg.at().attrAt(tid).at().setS(tvl);
 		wdg.at().attrAt(tid).at().setFlgSelf(sflgs);
 		wdg.at().attrAt(tid).at().setCfgVal(cfgval);
@@ -1825,7 +1835,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	case TFld::Real:	setR((val!=EVAL_STR) ? s2r(val) : EVAL_REAL, strongPrev, sys);	break;
 	case TFld::Boolean:	setB((val!=EVAL_STR) ? (bool)s2i(val) : EVAL_BOOL, strongPrev, sys);	break;
 	case TFld::Object:
-	    setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val, NULL, getO()) : AutoHD<TVarObj>(new TEValObj), strongPrev, sys);
+	    setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val,NULL,getO()) : AutoHD<TVarObj>(new TEValObj), strongPrev, sys);
 	    break;
 	case TFld::String: {
 	    if((!strongPrev && *mVal.s == val) ||

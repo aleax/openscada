@@ -1063,12 +1063,12 @@ INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','Tooling','1.000 is 100 % tooling (
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','RateReq','Requested rate (A/S).',2,32,'',26,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','QlvlTrip','Quality threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',27,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('SMDP','SlvlTrip','Stability threshold, if non 0 and exceeded, xtal fail occurs.',1,32,'',28,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','transport','Transport',0,64,'IT3',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','addr','Device address',1,64,'1',5,'Адрес устройства','','Адреса пристрою','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','H','Upper border',3,16,'',7,'Верхняя граница','','Верхня границя','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','L','Lower border',3,16,'',8,'Нижняя граница','','Нижня границя','');
-INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',9,'Состояние реле','','Стан реле','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','transport','Transport',0,64,'IT3',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','addr','Device address',1,64,'1',1,'Адрес устройства','','Адреса пристрою','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','T','Temperature',2,16,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','H','Upper border',3,16,'',4,'Верхняя граница','','Верхня границя','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','L','Lower border',3,16,'',5,'Нижняя граница','','Нижня границя','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','relSt','Relay state',3,16,'',6,'Состояние реле','','Стан реле','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','transport','Transport',0,64,'Sockets.out_IVE',0,'','','Transport','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','addr','Device address',1,64,'255',1,'Адрес устройства','','Адреса пристрою','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IVE_452HS_02','COIA','Output current level set-point',1,33,'',2,'','','Output current level set-point','');
@@ -1138,6 +1138,7 @@ INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','tmResc','Rescan period, s',2,
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','power','Power, for temperature',3,16,'',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',3,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','mdPass','Passive mode, writing by an input protocol''s part',3,64,'0',2,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -3902,7 +3903,9 @@ else {
 f_err = t_err.length ? t_err : "0";','','',1425737232);
 INSERT INTO "tmplib_DevLib" VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.1.0','','',10,0,'JavaLikeCalc.JavaScript
+if(mdPass)	{ f_err = EVAL; return; }
 //Set transport
 if(f_start)	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 if(!tr)	t_err = "1:"+tr("Serial output transport ''%1'' error.").replace("%1",transport);
@@ -3930,7 +3933,7 @@ else {
 }
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
-else f_err = "0";','','',1427533354);
+else f_err = "0";','','',1472580719);
 INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
@@ -6013,540 +6016,6 @@ if( impAnImit )
   return max(0,min(100,out));
 }
 return impAnOut;','','','');
-CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
-Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<cmd pin="1111" tel="+380XXXXXXXXX" addr="1" err="1:Error">{text}</cmd>**
-//  cmd - command, for now only "send" allowed;
-//  pin - PIN code to the SIM card access;
-//  tel - telephone number for receiver (remote cell phone or GSM modem);
-//  text - the message text;
-//  err - sets for the request result.
-if(io.name() == "send") {
-	//Prepare PDU
-	var pdu = "001100";	//SMS center number (default) + SMS-Submit
-	//Telephone number encode
-	var tel = io.attr("tel");
-	if(!tel.length || tel[0] != "+") { io.setAttr("err","100:"+tr("Telephone number error.")); return; }
-	tel = tel.slice(1);
-	pdu += tel.length.toString(16,2) + "91";	//Telephone length and type
-	while(tel.length < 12) tel += "F";
-	for(i = 0; i < 6; i++) pdu += tel[i*2+1]+tel[i*2];
-	//Message encode
-	var text = SYS.strCodeConv(io.text(),"","UCS2");
-	if((text.length/2) > 70) { io.setAttr("err","101:"+tr("Long length (%1) of the message.").replace("%1",(text.length/2))); return; }
-	pdu += "0018C1"+(text.length).toString(16,2);
-	for(i = 0; i < text.length/2; i++) pdu += text.charCodeAt(i*2+1).toString(16,2)+text.charCodeAt(i*2).toString(16,2);
-	//SYS.messDebug("TEST SMS","PDU :"+pdu);
-	//Send request
-	if(!io.attr("pin").isEVal()) {
-		var rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
-		if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error set PIN-code.")); return; }
-	}
-	// Switch to PDU SMS mode
-	var rez = tr.messIO("AT+CMGF=0\r");
-	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error set PDU mode.")); return; }
-	// Send PDU message
-	var rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
-	if(rez.search(">") < 0)	{ io.setAttr("err","10:"+tr("Error sent SMS.")); return; }
-	var rez = tr.messIO(pdu+"\x1A");
-	for(var i_tr = 0; i_tr < 5 && rez.search("OK\r") < 0; i_tr++) rez += tr.messIO("");
-	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error sent SMS PDU")); return; }
-	io.setAttr("err", "0");
-	//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
-}','',1424879673);
-INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (<0 - single; >=0 - multi port);
-//  err - sets for the request result.
-if(io.text().length > 255*255) { io.setAttr("err","1:"+tr("Message''s length more 255*255")); return; }
-addr = io.attr("addr").toInt();
-k = ceil(io.text().length/255);	//transmission blocks
-for(i_k = 1; i_k <= k; i_k++) {
-	request = "\x02"+k.toString(16,3) + io.text().slice((i_k-1)*255,(i_k-1)*255+min(255,io.text().length-(i_k-1)*255)) + ((k>1&&i_k<k)?"\x17":"\x03");
-	// Calc LRC
-	LRC = 0xFF;
-	for(i = 0; i < request.length; i++) LRC = LRC^request.charCodeAt(i);
-	request += SYS.strFromCharCode(LRC);
-
-	// Multy port
-	if(addr>=0) request = "@"+addr.toString(16,2)+request;
-	//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
-
-	//Send the request
-	resp = tr.messIO(request);
-	while(resp.length) {
-		tresp = tr.messIO("");
-		if(!tresp.length) break;
-  		resp += tresp;
-	}
-	if(!resp.length) { io.setAttr("err","2:"+tr("No respond")); return; }
-	//SYS.messDebug("PRT","Ack: "+Special.FLibSYS.strDec4Bin(resp));
-	if(resp.charCodeAt(0) != 6) { io.setAttr("err","3:"+tr("No acknowledgment")); return; }
-	// Pass included acknowledgement
-	resp = resp.slice((addr>=0)?3:1);
-
-	// Read data blocks
-	io.setText("");
-	for(i_k = 1; true; i_k++) {
-		//Send application acknowledgement and wait data
-		if(!resp.length) {
-			request = "\x06";
-			if(addr >= 0) request += addr.toString(16,2);
-			resp = tr.messIO(request);
-			while(resp.length) {
-				tresp = tr.messIO("");
-				if(!tresp.length) break;
-  				resp += tresp;
-			}
-			if(!resp.length) { io.setAttr("err","4:"+tr("No data block get")); return; }
-		}
-		if(resp.length < ((addr>=0)?10:7) || resp.charCodeAt(0) != 0x40) { io.setAttr("err","5:"+tr("Data block short or error")); return; }
-
-		//SYS.messDebug("PRT","BLK "+i_k+": "+Special.FLibSYS.strDec4Bin(resp));
-
-		if(addr >= 0) resp = resp.slice(3);
-		LRC = 0xFF;
-		for(i = 0; i < (resp.length-1); i++) LRC = LRC^resp.charCodeAt(i);
-		if(LRC != resp.charCodeAt(resp.length-1)) { io.setAttr("err","6:"+tr("LRC error.")); return; }
-		if(i_k != resp.slice(1,4).toInt(16)) { io.setAttr("err","7:"+tr("Block sequence.")); return; }
-		io.setText(io.text()+resp.slice(4,resp.length-2));
-		if(resp.charCodeAt(resp.length-2) == 0x03) break;
-		if(resp.charCodeAt(resp.length-2) == 0x17) { resp = ""; continue; }
-		io.setAttr("err","8:"+tr("Unknown block end."));
-		return;
-	}
-}','',1425737159);
-INSERT INTO "UserProtocol_uPrt" VALUES('TMH','Power supply for turbomolecular pumps','','','Protocol level of power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (1...32);
-//  err - sets for the request result.
-
-io.setAttr("err","");
-addr = io.attr("addr").toInt();
-if(addr < 1 || addr > 32) { io.setAttr("err","1:"+tr("Device address out of range 1...32")); return; }
-request = "MJ"+addr.toString(10,2)+io.text();
-//Calc CRC
-CRC = 0;
-for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
-request += (CRC&0xFF).toString(16,2)+"\r";
-//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
-
-//Send request
-resp = tr.messIO(request);
-while(resp.length && resp[resp.length-1] != "\r") {
-	tresp = tr.messIO("");
-	if(!tresp.length) break;
-  	resp += tresp;
-}
-if(resp.length < 6 || resp[resp.length-1] != "\r" || resp.slice(0,2) != "MJ" || resp.slice(2,4).toInt() != addr)
-{ io.setAttr("err","2:"+tr("No or error respond")); return; }
-//SYS.messDebug("PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
-CRC = 0;
-for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
-if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:"+tr("CRC error.")); return; }
-io.setText(resp.slice(4,resp.length-3));','',1425737190);
-INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vladislav Chubuk','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (0...254);
-//  err - sets for the request result.
-io.setAttr("err", "");
-addr = io.attr("addr").toInt();
-if(addr < 0 || addr > 254) { io.setAttr("err", "1:"+tr("Device address out of range 0...254")); return; }
-request = SYS.strFromCharCode(addr) + io.text();
-//Calc KS
-KS = 0xFFFF;
-for(i = 0; i < request.length; i++) {
-	KS = KS ^ request.charCodeAt(i);
-	for(j = 0; j < 8; j++)
-		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
-}
-request = SYS.strFromCharCode(0xFF,0xFF) + request + SYS.strFromCharCode(KS,KS>>8);
-SYS.messDebug("/VKT7/PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
-
-//Send request
-resp = tr.messIO(request);
-while(resp.length) {
-	tresp = tr.messIO("");
-	if(!tresp.length) break;
-  	resp += tresp;
-}
-if(resp.length < 4 || resp.charCodeAt(0) != addr)	{ io.setAttr("err", "2:"+tr("No or error respond")); return; }
-SYS.messDebug("/VKT7/PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
-
-//Calc KS
-KS = 0xFFFF;
-for(i = 0; i < (resp.length-2); i++) {
-	KS = KS ^ resp.charCodeAt(i);
-	for(j = 0; j < 8; j++)
-		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
-}
-if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
-{ io.setAttr("err","6:"+tr("KS error")+" "+KS.toString(16,4)+"=="+((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)).toString(16,4)); return; }
-if(resp.charCodeAt(1)&0x80)
-{ io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
-io.setText(resp.slice(1,-2));','',1424879706);
-INSERT INTO "UserProtocol_uPrt" VALUES('DCON','DCON','','','Mostly aimed for example implement user protocols into OpenSCADA and contains only main functions into the protocol part.
-Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,'JavaLikeCalc.JavaScript
-//Processing: test implements only processing for requests ''#'' and ''@'' with fixed reply data.
-
-var enCRC = true;
-//SYS.messDebug("TEST REQ: ",request);
-//Test request for full
-if(request.length < 4 || request[request.length-1] != "\r") {
-  if(request.length > 10) request = "";
-  return true;
-}
-//Check for integrity of the request (CRC) and address
-if(enCRC) {
-	CRC = 0;
-	for(i = 0; i < (request.length-3); i++) CRC += request.charCodeAt(i);
-	if(CRC != request.slice(request.length-3,request.length-1).toInt(16) || request.slice(1,3).toInt(16) != 10) return false;
-}
-//Analysis of the request and response prepare
-if(request.charCodeAt(0) == "#") answer = ">+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234";
-else if(request.charCodeAt(0) == "@") answer = ">AB3C";
-else answer = "?";
-//Finish response
-if(enCRC) {
-	CRC = 0;
-	for(i=0; i < answer.length; i++) CRC += answer.charCodeAt(i);
-	answer += (CRC&0xFF).toString(16)+"\r";
-}
-//SYS.messDebug("TEST ANSV: "+answer.charCodeAt(0),answer);
-return 0;','','JavaLikeCalc.JavaScript
-//Request form:
-//<ReqSymb addr="1" err="1:Error">{req}</ReqSymb> - message tag
-//  ReqSymb - request type symbol into the tag name, like: ''#'', ''@'', etc
-//  req - request/respond data;
-//  addr - remote host address [1...240];
-//  err - sets for the request result.
-
-//Result request prepare
-request = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
-if(io.attr("CRC").toInt()) {
-	CRC = 0;
-	for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
-	request += (CRC&0xFF).toString(16) + "\r";
-}
-else request += "\r";
-//Send request
-resp = tr.messIO(request);
-while(resp[resp.length-1] != "\r") {
-  tresp = tr.messIO("");
-  if(!tresp.length) break;
-  resp += tresp;
-}
-if(io.attr("CRC").toInt()) {
-	//Analysis response
-	if(resp.length < 4 || resp[resp.length-1] != "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
-	//Check response to the integrity (CRC)
-	CRC = 0;
-	for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
-	if(CRC != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","11:"+tr("CRC error.")); return; }
-}
-//Analysis response
-else if(resp.length < 2 || resp[resp.length-1] != "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
-if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
-//The result return
-io.setAttr("err","");
-io.setText(resp.slice(1,resp.length-3));','',1424879498);
-INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
-Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (1...254);
-//  err - sets for the request result.
-io.setAttr("err", "");
-addr = io.attr("addr").toInt();
-if(addr < 1 || addr > 254) { io.setAttr("err","1:"+tr("Device address out of range 1...254")); return; }
-request = ":"+addr.toString(10)+";"+io.text()+";";
-//Calc KS
-KS = 0xFFFF;
-for(i = 1; i < request.length; i++) {
-	KS = KS ^ request.charCodeAt(i);
-	for(j = 0; j < 8; j++)
-		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
-}
-request += KS.toString(10)+"\r";
-//SYS.messDebug("PRT","Request: "+request);
-
-//Send request
-resp = tr.messIO(request);
-while(resp.length && resp[resp.length-1] != "\r") {
-	tresp = tr.messIO("");
-	if(!tresp.length) break;
-  	resp += tresp;
-}
-if(resp.length && resp.charCodeAt(0) == 0xFF) resp = resp.slice(1);
-if(resp.length < 7 || resp[resp.length-1] != "\r" ||
-	resp[0] != "!" || resp.slice(1).toInt() != addr || (KSpos=resp.lastIndexOf(";")) < 0)
-{ io.setAttr("err","2:"+tr("No or error respond")); return; }
-//SYS.messDebug("PRT","Respond: "+resp);
-
-//Calc KS
-KS = 0xFFFF;
-for(i = 1; i < min(KSpos+1,resp.length); i++) {
-	KS = KS ^ resp.charCodeAt(i);
-	for(j = 0; j < 8; j++)
-		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
-}
-if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:"+tr("KS error.")); return; }
-io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','',1424879686);
-INSERT INTO "UserProtocol_uPrt" VALUES('SMDP','Sycon Multi Drop Protocol','','','Protocol level of STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com)
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="16" try="1" err="1:Error">{req}</mess> - message tag
-//req - request/respond data;
-//addr - remote device address [16...254];
-//try - tries for the request;
-//err - sets for the request result.
-
-if(!io.text().length) { io.setAttr("err","1:"+tr("Message empty")); return; }
-addr = io.attr("addr").toInt();
-try = min(5,max(1,io.attr("try").toInt()));
-request = "\x02"+SYS.strFromCharCode(addr) + io.text();
-//Calc CHKSUM
-CRC = 0;
-for(i = 1; i < request.length; i++) CRC += request.charCodeAt(i);
-request += SYS.strFromCharCode((CRC>>4&0xF)+0x30,(CRC&0xF)+0x30,0x0D);
-
-SYS.messDebug("/UserProt/SMDP",tr("Request:")+" "+Special.FLibSYS.strDec4Bin(request));
-
-for( ; try > 0; try--) {
-	//Send the request
-	resp = tr.messIO(request);
-	while(resp.length && resp.charCodeAt(resp.length-1) != 0x0D)
-		if((tresp=tr.messIO("")).length) resp += tresp;
-		else break;
-
-	if(!resp.length)	{ io.setAttr("err","2:"+tr("No respond")); continue; }
-	if(resp.length < 6 || resp.charCodeAt(resp.length-1) != 0x0D)	{ io.setAttr("err","3:"+tr("Not full respond")); continue; }
-	if(resp.charCodeAt(0) != 0x02 || resp.charCodeAt(1) != addr)	{ io.setAttr("err","4:"+tr("Wrong respond")); continue; }
-
-	SYS.messDebug("/UserProt/SMDP",tr("Respond:")+" "+Special.FLibSYS.strDec4Bin(resp));
-
-	CRC = 0;
-	for(i = 1; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
-	if((CRC&0xFF) != (((resp.charCodeAt(resp.length-3)-0x30)<<4)|(resp.charCodeAt(resp.length-2)-0x30)))
-	{ io.setAttr("err","6:"+tr("CRC error.")); continue; }
-	break;
-}
-if(try <= 0)	return;
-
-errCd = resp.charCodeAt(2)&0x7;
-if(errCd == 1) io.setAttr("err","").setText(resp.slice(2,-2));
-else if(errCd == 2) io.setAttr("err",""+(10+errCd)+":Err_inv_cmd: "+tr("Illegal command (CMD code not valid)."));
-else if(errCd == 3) io.setAttr("err",""+(10+errCd)+":Err_syntax: "+tr("Syntax error. (Too many bytes in data field, not enough bytes, etc)."));
-else if(errCd == 4) io.setAttr("err",""+(10+errCd)+":Err_range: "+tr("Data range error."));
-else if(errCd == 5) io.setAttr("err",""+(10+errCd)+":Err_inhibited: "+tr("Inhibited."));
-else if(errCd == 6) io.setAttr("err",""+(10+errCd)+":Err_obso: "+tr("Obsolete command. No action taken, but not really an error."));
-else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));','',1425737182);
-INSERT INTO "UserProtocol_uPrt" VALUES('OWEN','OWEN','','','Protocol level of mostly models of OWEN devices by specific protocol.
-Author: Constantine (IrmIngeneer)
-Refactoring: Roman Savochenko <rom_as@oscada.org>','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (0...2047);
-//  err - sets for the request result.
-io.setAttr("err", "");
-addr = io.attr("addr").toInt();
-if(addr < 0 || addr > 2047) { io.setAttr("err", "1:"+tr("Device address out of range 0...2047")); return; }
-request = SYS.strFromCharCode((addr<256)?addr:addr>>3, ((addr<256)?0:addr<<5)|0x10) + io.text();
-
-// CRC append
-for(CRC = 0, i = 0; i < request.length; i++) {
-	b = request.charCodeAt(i);
-	for(j = 0; j < 8; j++, b = b << 1)
-		CRC = ((b^(CRC>>8)&0x80)?(CRC<<1)^0x8F57:CRC<<1) & 0xFFFF;
-}
-request += SYS.strFromCharCode(CRC>>8, CRC&255);
-
-// Convert to ASCII
-for(reqASCII = "", i = 0; i < request.length; i++)
-	reqASCII += SYS.strFromCharCode((request.charCodeAt(i)>>4)+71, (request.charCodeAt(i)&0x0F)+71);
-
-// Result request
-request = "#" + reqASCII + "\r";
-
-//Send the request and get respond
-for(resp = tr.messIO(request); resp[resp.length-1] != "\r" && (respTail=tr.messIO("")).length; ) resp += respTail;
-
-//Respond process
-if(resp.length < 14 || resp[resp.length-1] != "\r" || resp[0] != "#" || (resp.length%2) != 0) {
-	io.setAttr("err", "10:"+tr("Wrong or no a respond."));
-	return; 
-}
-
-// Remove markers
-resp = resp.slice(1, resp.length-1);
-
-// Convert to binary
-for(respBin = "", b = 0, i = 0, fullB = false; i < resp.length; i++, fullB = !fullB) {
-	b += resp.charCodeAt(i) - 71;
-	if(fullB) { respBin += SYS.strFromCharCode(b); b = 0; } else b *= 16;
-}
-resp = respBin;
-
-// Check for CRC
-for(CRC = 0, i = 0; i < resp.length-2; i++) {
-	b = resp.charCodeAt(i);
-	for(j = 0; j < 8; j++, b = b << 1)
-		CRC = ((b^(CRC>>8)&0x80)?(CRC<<1)^0x8F57:CRC<<1) & 0xFFFF;
-}
-if(CRC != ((resp.charCodeAt(resp.length-2)<<8)+resp.charCodeAt(resp.length-1))) {
-	io.setAttr("err", "11:"+tr("CRC error."));
-	return;
-}
-
-//Return result
-io.setText(resp.slice(0,resp.length-2));','',1425737955);
-INSERT INTO "UserProtocol_uPrt" VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (1...32);
-//  err - sets for the request result.
-io.setAttr("err", "");
-addr = io.attr("addr").toInt();
-if(addr < 1 || addr > 32) { io.setAttr("err","1:"+tr("Device address out of range 1...32")); return; }
-//Header
-reqHdr = SYS.strFromCharCode(0x16,0x03,addr,0x00);
-for(KS = 0, i = 1; i < reqHdr.length; i++)	KS += reqHdr.charCodeAt(i);
-KS = ~(KS+1);
-reqHdr += SYS.strFromCharCode(KS, KS>>8);
-//Body
-reqBody = io.text();
-for(KS = 0, i = 0; i < reqBody.length; i++)	KS += reqBody.charCodeAt(i);
-KS = ~(KS+1);
-reqBody += SYS.strFromCharCode(KS, KS>>8);
-request = reqHdr+reqBody;
-SYS.messDebug("/IT3/PRT",tr("Request")+": "+SYS.strDecode(request,"Bin"," "));
-
-//Send request
-resp = tr.messIO(request);
-while(resp.length) {
-	if(!(tresp=tr.messIO("")).length) break;
-  	resp += tresp;
-}
-if(resp.length == 0) { io.setAttr("err","2:"+tr("No or short respond")); return; }
-SYS.messDebug("/IT3/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
-for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
-	if(resp.charCodeAt(blkOff) != 0x16){ io.setAttr("err","3:"+tr("Header error")); return; }
-	for(KS = 0, i = (blkOff+1); i < (blkOff+4); i++) KS += resp.charCodeAt(i);
-	KS = (~(KS+1))&0xFFFF;
-	if(((resp.charCodeAt(blkOff+5)<<8)+resp.charCodeAt(blkOff+4)) != KS)
-	{ io.setAttr("err","3:"+tr("Header CRC error")); return; }
-	blkLen = resp.charCodeAt(blkOff+1);
-	if(blkOff+6+blkLen > resp.length) { io.setAttr("err","4:"+tr("Info block size error")); return; }
-	for(KS = 0, i = (blkOff+6); i < (blkOff+6+blkLen-2); i++) KS += resp.charCodeAt(i);
-	KS = (~(KS+1))&0xFFFF;
-	if(((resp.charCodeAt(blkOff+6+blkLen-1)<<8)+resp.charCodeAt(blkOff+6+blkLen-2)) != KS)
-	{ io.setAttr("err","4:"+tr("Info block CRC error.")); return; }
-	if(resp.charCodeAt(blkOff+6) == 0x80 && resp.charCodeAt(blkOff+7))
-	{ io.setAttr("err","5:"+resp.charCodeAt(blkOff+7)+":"+tr("Request error")); return; }
-	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
-}','',1427532674);
-INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','ИВЭ-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="255" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (0...255);
-//  err - sets for the request result.
-io.setAttr("err", "");
-addr = io.attr("addr").toInt();
-if(addr < 0 || addr > 255) { io.setAttr("err","1:"+tr("Device address out of range 0...255")); return; }
-//Request prepare
-req = SYS.strFromCharCode(addr)+io.text();
-for(KS = 0, i = 0; i < req.length; i++)	KS += req.charCodeAt(i);
-KS = 0x100-KS&0xFF;
-req += SYS.strFromCharCode(KS);
-SYS.messDebug("/IVE452HS02/PRT",tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
-
-//Send request
-resp = tr.messIO(req);
-while(resp.length) {
-	if(!(tresp=tr.messIO("")).length) break;
-  	resp += tresp;
-}
-if(resp.length == 0) { io.setAttr("err","2:"+tr("No a respond")); return; }
-SYS.messDebug("/IVE452HS02/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
-if(resp.length <= 3 || resp.charCodeAt(0) != addr || resp.charCodeAt(1) != req.charCodeAt(1))
-{ io.setAttr("err","3:"+tr("Respond too short or wrong")); return; }
-for(KS = 0, i = 0; i < resp.length-1; i++)	KS += resp.charCodeAt(i);
-KS = 0x100-KS&0xFF;
-if(resp.charCodeAt(resp.length-1) != KS )	{ io.setAttr("err","3:"+tr("CRC error")); return; }
-io.setText(resp.slice(1,resp.length-1));','',1439819778);
-INSERT INTO "UserProtocol_uPrt" VALUES('OPTRIS','OPTRIS CT/CTL','','','Protocol level of OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1" cs="1" err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  addr - remote station address (0...15);
-//  cs - use control sum for SET commands [0,1]
-//  err - sets for the request result.
-io.setAttr("err", "");
-addr = io.attr("addr").toInt();
-if(addr < 0 || addr > 15) { io.setAttr("err", "1:"+tr("Device address out of range 0...15")); return; }
-request = SYS.strFromCharCode(0xB0+addr) + io.text();
-if(io.attr("cs").toInt()) {
-	for(CS = 0, i = 0; i < request.length; i++) CS += request.charCodeAt(i);
-	request += SYS.strFromCharCode(CS);
-}
-SYS.messDebug("/OPTRIS/PRT",tr("Request")+": "+SYS.strDecode(request,"Bin"," "));
-
-//Send request
-resp = tr.messIO(request);
-while(resp.length && (tresp=tr.messIO("")).length) resp += tresp;
-SYS.messDebug("/OPTRIS/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
-if(resp.length <= 0) { io.setAttr("err","3:"+tr("No a respond")); return; }
-io.setText(resp);','',1444290609);
-INSERT INTO "UserProtocol_uPrt" VALUES('CTR','CTR 100, 101','CTR 100, 101','','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
-Author: Roman Savochenko <rom_as@oscada.org>
-Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',1,0,'','','JavaLikeCalc.JavaScript
-//Request form:
-//<mess err="1:Error">{req}</mess> - message tag
-//  req - request/respond data;
-//  err - sets for the request result.
-io.setAttr("err", "");
-//Request prepare
-req = SYS.strFromCharCode(3) + io.text();
-for(CS = 0, i = 1; i < req.length; i++)	CS += req.charCodeAt(i);
-req += SYS.strFromCharCode(CS&0xFF);
-SYS.messDebug("/CTR/PRT",tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
-
-//Send request
-for(resp = tr.messIO(req); resp.length < 9 && (tresp=tr.messIO("")).length; resp += tresp) ;
-if(resp.length == 0){ io.setAttr("err","2:"+tr("No a respond")); return; }
-SYS.messDebug("/CTR/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
-if(resp.length < 9)	{ io.setAttr("err","3:"+tr("Respond too short")); return; }
-if(resp.length > 9)	{ io.setAttr("err","4:"+tr("Respond too long, possible continuous mode")); return; }
-for(CS = 0, i = 1; i < resp.length-1; i++)	CS += resp.charCodeAt(i);
-if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC error")); return; }
-io.setText(resp.slice(1,resp.length-1));','',1445606112);
 CREATE TABLE 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_servProc" VALUES('procArh','Archives recalc','Перерахунок архівів','Пересчёт архивов','','','',600,1,'using Special.FLibSYS;
 
@@ -7323,6 +6792,7 @@ INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln2','Line 2',0,0,'',0,1);
 INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','res','Result',0,2,'',0,0);
 INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','pin','GPIO Pin',1,0,'17',0,1);
 INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','tries','Tries',1,0,'3',0,2);
+INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,0,'0',0,3);
 CREATE TABLE 'flb_lowLevDevs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_lowLevDevs" VALUES('1602A','Display 1602A','Description: LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots
 Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
@@ -7358,15 +6828,16 @@ if(ln2.length) {
 	for(iC = 0; iC < min(16,ln2.length); iC++)
 		byte(ln2.charCodeAt(iC), true);
 }',1463511761);
-INSERT INTO "flb_lowLevDevs" VALUES('DHT','DHT (AOSONG)','Description: Reading temperature and humidity module DHT11 
+INSERT INTO "flb_lowLevDevs" VALUES('DHT','DHT (AOSONG)','Description: Reading temperature and humidity module DHT11, AM2320, DHT22 (AM2302)
 Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
 Connection: GPIO (17 by default)
-Conditions: Exclusively realtime planing in the prioroty 199 (FIFO-99).',0,10,0,'using DAQ.BCM2835.pi2.pi2;
+Conditions: Exclusively realtime planing in the prioroty 199 (FIFO-99).
+Version: 1.1.0',0,10,0,'using DAQ.BCM2835.pi2.pi2;
 using Special.FLibSYS;
 
 function read() {
 	vl = 0;						//Meassured value
-	cntHoldMax = 100;	//Maximum wait counter
+	cntHoldMax = 100;		//Maximum wait counter
 
 	//Call the device to a respond
 	fnc_mode(pin, 4); fnc_put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
@@ -7387,7 +6858,6 @@ function read() {
 
 	//Read meassured value
 	for(iB = 0; iB < 40; iB++) {
-		stg = iB;
 		for(cntHold = 0; !fnc_get(pin); cntHold++)
 			if(cntHold > cntHoldMax) return 0;
 		for(cntHold = 0; fnc_get(pin); cntHold++)
@@ -7401,12 +6871,16 @@ function read() {
 
 for(i = 0; i < tries; i++) {
 	if(i) tmSleep(2);	//Retry after two seconds
-	if((vl=read())) {
+	if((vl=read()) && (vl&0xFF) == ((((vl>>8)&0xFF)+((vl>>16)&0xFF)+((vl>>24)&0xFF)+((vl>>32)&0xFF))&0xFF)) {
+		if(dev == 1) {
+			hum = 0.1*(((vl>>32)&0xFF)*256+((vl>>24)&0xFF));
+			tmp = 0.1*(((vl>>16)&0xFF)*256+((vl>>8)&0xFF));
+			return hum.toFixed(1) + ":" + tmp.toFixed(1);
+		}
 		hum = (vl>>32)&0xFF; tmp = (vl>>16)&0xFF;
-		if(((hum+tmp)&0xFF) == (vl&0xFF))
-			return (hum+20).toString() + ":" + tmp.toString();
+		return (hum+20).toString() + ":" + tmp.toString();
 	}
-}',1463575062);
+}',1472580871);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','','','','',1,10,0,'clcCnt++;
 
@@ -7865,5 +7339,584 @@ INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',1,10,0,
 
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','',1470304380);
+//p_tm=c_tm;','','',1472483539);
+CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
+Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<cmd pin="1111" tel="+380XXXXXXXXX" addr="1" err="1:Error">{text}</cmd>**
+//  cmd - command, for now only "send" allowed;
+//  pin - PIN code to the SIM card access;
+//  tel - telephone number for receiver (remote cell phone or GSM modem);
+//  text - the message text;
+//  err - sets for the request result.
+if(io.name() == "send") {
+	//Prepare PDU
+	var pdu = "001100";	//SMS center number (default) + SMS-Submit
+	//Telephone number encode
+	var tel = io.attr("tel");
+	if(!tel.length || tel[0] != "+") { io.setAttr("err","100:"+tr("Telephone number error.")); return; }
+	tel = tel.slice(1);
+	pdu += tel.length.toString(16,2) + "91";	//Telephone length and type
+	while(tel.length < 12) tel += "F";
+	for(i = 0; i < 6; i++) pdu += tel[i*2+1]+tel[i*2];
+	//Message encode
+	var text = SYS.strCodeConv(io.text(),"","UCS2");
+	if((text.length/2) > 70) { io.setAttr("err","101:"+tr("Long length (%1) of the message.").replace("%1",(text.length/2))); return; }
+	pdu += "0018C1"+(text.length).toString(16,2);
+	for(i = 0; i < text.length/2; i++) pdu += text.charCodeAt(i*2+1).toString(16,2)+text.charCodeAt(i*2).toString(16,2);
+	//SYS.messDebug("TEST SMS","PDU :"+pdu);
+	//Send request
+	if(!io.attr("pin").isEVal()) {
+		var rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
+		if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error set PIN-code.")); return; }
+	}
+	// Switch to PDU SMS mode
+	var rez = tr.messIO("AT+CMGF=0\r");
+	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error set PDU mode.")); return; }
+	// Send PDU message
+	var rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
+	if(rez.search(">") < 0)	{ io.setAttr("err","10:"+tr("Error sent SMS.")); return; }
+	var rez = tr.messIO(pdu+"\x1A");
+	for(var i_tr = 0; i_tr < 5 && rez.search("OK\r") < 0; i_tr++) rez += tr.messIO("");
+	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error sent SMS PDU")); return; }
+	io.setAttr("err", "0");
+	//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
+}','',1424879673);
+INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (<0 - single; >=0 - multi port);
+//  err - sets for the request result.
+if(io.text().length > 255*255) { io.setAttr("err","1:"+tr("Message''s length more 255*255")); return; }
+addr = io.attr("addr").toInt();
+k = ceil(io.text().length/255);	//transmission blocks
+for(i_k = 1; i_k <= k; i_k++) {
+	request = "\x02"+k.toString(16,3) + io.text().slice((i_k-1)*255,(i_k-1)*255+min(255,io.text().length-(i_k-1)*255)) + ((k>1&&i_k<k)?"\x17":"\x03");
+	// Calc LRC
+	LRC = 0xFF;
+	for(i = 0; i < request.length; i++) LRC = LRC^request.charCodeAt(i);
+	request += SYS.strFromCharCode(LRC);
+
+	// Multy port
+	if(addr>=0) request = "@"+addr.toString(16,2)+request;
+	//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
+
+	//Send the request
+	resp = tr.messIO(request);
+	while(resp.length) {
+		tresp = tr.messIO("");
+		if(!tresp.length) break;
+  		resp += tresp;
+	}
+	if(!resp.length) { io.setAttr("err","2:"+tr("No respond")); return; }
+	//SYS.messDebug("PRT","Ack: "+Special.FLibSYS.strDec4Bin(resp));
+	if(resp.charCodeAt(0) != 6) { io.setAttr("err","3:"+tr("No acknowledgment")); return; }
+	// Pass included acknowledgement
+	resp = resp.slice((addr>=0)?3:1);
+
+	// Read data blocks
+	io.setText("");
+	for(i_k = 1; true; i_k++) {
+		//Send application acknowledgement and wait data
+		if(!resp.length) {
+			request = "\x06";
+			if(addr >= 0) request += addr.toString(16,2);
+			resp = tr.messIO(request);
+			while(resp.length) {
+				tresp = tr.messIO("");
+				if(!tresp.length) break;
+  				resp += tresp;
+			}
+			if(!resp.length) { io.setAttr("err","4:"+tr("No data block get")); return; }
+		}
+		if(resp.length < ((addr>=0)?10:7) || resp.charCodeAt(0) != 0x40) { io.setAttr("err","5:"+tr("Data block short or error")); return; }
+
+		//SYS.messDebug("PRT","BLK "+i_k+": "+Special.FLibSYS.strDec4Bin(resp));
+
+		if(addr >= 0) resp = resp.slice(3);
+		LRC = 0xFF;
+		for(i = 0; i < (resp.length-1); i++) LRC = LRC^resp.charCodeAt(i);
+		if(LRC != resp.charCodeAt(resp.length-1)) { io.setAttr("err","6:"+tr("LRC error.")); return; }
+		if(i_k != resp.slice(1,4).toInt(16)) { io.setAttr("err","7:"+tr("Block sequence.")); return; }
+		io.setText(io.text()+resp.slice(4,resp.length-2));
+		if(resp.charCodeAt(resp.length-2) == 0x03) break;
+		if(resp.charCodeAt(resp.length-2) == 0x17) { resp = ""; continue; }
+		io.setAttr("err","8:"+tr("Unknown block end."));
+		return;
+	}
+}','',1425737159);
+INSERT INTO "UserProtocol_uPrt" VALUES('TMH','Power supply for turbomolecular pumps','','','Protocol level of power supply for turbomolecular pumps of firm SHIMADZU (http://www.shimadzu.com), model EI-R04M.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (1...32);
+//  err - sets for the request result.
+
+io.setAttr("err","");
+addr = io.attr("addr").toInt();
+if(addr < 1 || addr > 32) { io.setAttr("err","1:"+tr("Device address out of range 1...32")); return; }
+request = "MJ"+addr.toString(10,2)+io.text();
+//Calc CRC
+CRC = 0;
+for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
+request += (CRC&0xFF).toString(16,2)+"\r";
+//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length && resp[resp.length-1] != "\r") {
+	tresp = tr.messIO("");
+	if(!tresp.length) break;
+  	resp += tresp;
+}
+if(resp.length < 6 || resp[resp.length-1] != "\r" || resp.slice(0,2) != "MJ" || resp.slice(2,4).toInt() != addr)
+{ io.setAttr("err","2:"+tr("No or error respond")); return; }
+//SYS.messDebug("PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
+CRC = 0;
+for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
+if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:"+tr("CRC error.")); return; }
+io.setText(resp.slice(4,resp.length-3));','',1425737190);
+INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','','Protocol level of firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vladislav Chubuk','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (0...254);
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 0 || addr > 254) { io.setAttr("err", "1:"+tr("Device address out of range 0...254")); return; }
+request = SYS.strFromCharCode(addr) + io.text();
+//Calc KS
+KS = 0xFFFF;
+for(i = 0; i < request.length; i++) {
+	KS = KS ^ request.charCodeAt(i);
+	for(j = 0; j < 8; j++)
+		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
+}
+request = SYS.strFromCharCode(0xFF,0xFF) + request + SYS.strFromCharCode(KS,KS>>8);
+SYS.messDebug("/VKT7/PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length) {
+	tresp = tr.messIO("");
+	if(!tresp.length) break;
+  	resp += tresp;
+}
+if(resp.length < 4 || resp.charCodeAt(0) != addr)	{ io.setAttr("err", "2:"+tr("No or error respond")); return; }
+SYS.messDebug("/VKT7/PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
+
+//Calc KS
+KS = 0xFFFF;
+for(i = 0; i < (resp.length-2); i++) {
+	KS = KS ^ resp.charCodeAt(i);
+	for(j = 0; j < 8; j++)
+		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
+}
+if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
+{ io.setAttr("err","6:"+tr("KS error")+" "+KS.toString(16,4)+"=="+((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)).toString(16,4)); return; }
+if(resp.charCodeAt(1)&0x80)
+{ io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
+io.setText(resp.slice(1,-2));','',1424879706);
+INSERT INTO "UserProtocol_uPrt" VALUES('DCON','DCON','','','Mostly aimed for example implement user protocols into OpenSCADA and contains only main functions into the protocol part.
+Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'JavaLikeCalc.JavaScript
+//Processing: test implements only processing for requests ''#'' and ''@'' with fixed reply data.
+
+var enCRC = true;
+//SYS.messDebug("TEST REQ: ",request);
+//Test request for full
+if(request.length < 4 || request[request.length-1] != "\r") {
+  if(request.length > 10) request = "";
+  return true;
+}
+//Check for integrity of the request (CRC) and address
+if(enCRC) {
+	CRC = 0;
+	for(i = 0; i < (request.length-3); i++) CRC += request.charCodeAt(i);
+	if(CRC != request.slice(request.length-3,request.length-1).toInt(16) || request.slice(1,3).toInt(16) != 10) return false;
+}
+//Analysis of the request and response prepare
+if(request.charCodeAt(0) == "#") answer = ">+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234";
+else if(request.charCodeAt(0) == "@") answer = ">AB3C";
+else answer = "?";
+//Finish response
+if(enCRC) {
+	CRC = 0;
+	for(i=0; i < answer.length; i++) CRC += answer.charCodeAt(i);
+	answer += (CRC&0xFF).toString(16)+"\r";
+}
+//SYS.messDebug("TEST ANSV: "+answer.charCodeAt(0),answer);
+return 0;','','JavaLikeCalc.JavaScript
+//Request form:
+//<ReqSymb addr="1" err="1:Error">{req}</ReqSymb> - message tag
+//  ReqSymb - request type symbol into the tag name, like: ''#'', ''@'', etc
+//  req - request/respond data;
+//  addr - remote host address [1...240];
+//  err - sets for the request result.
+
+//Result request prepare
+request = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
+if(io.attr("CRC").toInt()) {
+	CRC = 0;
+	for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
+	request += (CRC&0xFF).toString(16) + "\r";
+}
+else request += "\r";
+//Send request
+resp = tr.messIO(request);
+while(resp[resp.length-1] != "\r") {
+  tresp = tr.messIO("");
+  if(!tresp.length) break;
+  resp += tresp;
+}
+if(io.attr("CRC").toInt()) {
+	//Analysis response
+	if(resp.length < 4 || resp[resp.length-1] != "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
+	//Check response to the integrity (CRC)
+	CRC = 0;
+	for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
+	if(CRC != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","11:"+tr("CRC error.")); return; }
+}
+//Analysis response
+else if(resp.length < 2 || resp[resp.length-1] != "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
+if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
+//The result return
+io.setAttr("err","");
+io.setText(resp.slice(1,resp.length-3));','',1424879498);
+INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','','Protocol level of multichannels thermometer Elemer TM5102 and TM5103 of firm Elemer (http://www.elemer.ru).
+Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (1...254);
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 1 || addr > 254) { io.setAttr("err","1:"+tr("Device address out of range 1...254")); return; }
+request = ":"+addr.toString(10)+";"+io.text()+";";
+//Calc KS
+KS = 0xFFFF;
+for(i = 1; i < request.length; i++) {
+	KS = KS ^ request.charCodeAt(i);
+	for(j = 0; j < 8; j++)
+		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
+}
+request += KS.toString(10)+"\r";
+//SYS.messDebug("PRT","Request: "+request);
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length && resp[resp.length-1] != "\r") {
+	tresp = tr.messIO("");
+	if(!tresp.length) break;
+  	resp += tresp;
+}
+if(resp.length && resp.charCodeAt(0) == 0xFF) resp = resp.slice(1);
+if(resp.length < 7 || resp[resp.length-1] != "\r" ||
+	resp[0] != "!" || resp.slice(1).toInt() != addr || (KSpos=resp.lastIndexOf(";")) < 0)
+{ io.setAttr("err","2:"+tr("No or error respond")); return; }
+//SYS.messDebug("PRT","Respond: "+resp);
+
+//Calc KS
+KS = 0xFFFF;
+for(i = 1; i < min(KSpos+1,resp.length); i++) {
+	KS = KS ^ resp.charCodeAt(i);
+	for(j = 0; j < 8; j++)
+		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
+}
+if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:"+tr("KS error.")); return; }
+io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','',1424879686);
+INSERT INTO "UserProtocol_uPrt" VALUES('SMDP','Sycon Multi Drop Protocol','','','Protocol level of STM devices for resonant frequency measurement for mass of deposited films attached to its surface by Sycon Instruments, Inc. (http://www.sycon.com)
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="16" try="1" err="1:Error">{req}</mess> - message tag
+//req - request/respond data;
+//addr - remote device address [16...254];
+//try - tries for the request;
+//err - sets for the request result.
+
+if(!io.text().length) { io.setAttr("err","1:"+tr("Message empty")); return; }
+addr = io.attr("addr").toInt();
+try = min(5,max(1,io.attr("try").toInt()));
+request = "\x02"+SYS.strFromCharCode(addr) + io.text();
+//Calc CHKSUM
+CRC = 0;
+for(i = 1; i < request.length; i++) CRC += request.charCodeAt(i);
+request += SYS.strFromCharCode((CRC>>4&0xF)+0x30,(CRC&0xF)+0x30,0x0D);
+
+SYS.messDebug("/UserProt/SMDP",tr("Request:")+" "+Special.FLibSYS.strDec4Bin(request));
+
+for( ; try > 0; try--) {
+	//Send the request
+	resp = tr.messIO(request);
+	while(resp.length && resp.charCodeAt(resp.length-1) != 0x0D)
+		if((tresp=tr.messIO("")).length) resp += tresp;
+		else break;
+
+	if(!resp.length)	{ io.setAttr("err","2:"+tr("No respond")); continue; }
+	if(resp.length < 6 || resp.charCodeAt(resp.length-1) != 0x0D)	{ io.setAttr("err","3:"+tr("Not full respond")); continue; }
+	if(resp.charCodeAt(0) != 0x02 || resp.charCodeAt(1) != addr)	{ io.setAttr("err","4:"+tr("Wrong respond")); continue; }
+
+	SYS.messDebug("/UserProt/SMDP",tr("Respond:")+" "+Special.FLibSYS.strDec4Bin(resp));
+
+	CRC = 0;
+	for(i = 1; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
+	if((CRC&0xFF) != (((resp.charCodeAt(resp.length-3)-0x30)<<4)|(resp.charCodeAt(resp.length-2)-0x30)))
+	{ io.setAttr("err","6:"+tr("CRC error.")); continue; }
+	break;
+}
+if(try <= 0)	return;
+
+errCd = resp.charCodeAt(2)&0x7;
+if(errCd == 1) io.setAttr("err","").setText(resp.slice(2,-2));
+else if(errCd == 2) io.setAttr("err",""+(10+errCd)+":Err_inv_cmd: "+tr("Illegal command (CMD code not valid)."));
+else if(errCd == 3) io.setAttr("err",""+(10+errCd)+":Err_syntax: "+tr("Syntax error. (Too many bytes in data field, not enough bytes, etc)."));
+else if(errCd == 4) io.setAttr("err",""+(10+errCd)+":Err_range: "+tr("Data range error."));
+else if(errCd == 5) io.setAttr("err",""+(10+errCd)+":Err_inhibited: "+tr("Inhibited."));
+else if(errCd == 6) io.setAttr("err",""+(10+errCd)+":Err_obso: "+tr("Obsolete command. No action taken, but not really an error."));
+else io.setAttr("err",""+(10+errCd)+":"+tr("Unknown error."));','',1425737182);
+INSERT INTO "UserProtocol_uPrt" VALUES('OWEN','OWEN','','','Protocol level of mostly models of OWEN devices by specific protocol.
+Author: Constantine (IrmIngeneer)
+Refactoring: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (0...2047);
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 0 || addr > 2047) { io.setAttr("err", "1:"+tr("Device address out of range 0...2047")); return; }
+request = SYS.strFromCharCode((addr<256)?addr:addr>>3, ((addr<256)?0:addr<<5)|0x10) + io.text();
+
+// CRC append
+for(CRC = 0, i = 0; i < request.length; i++) {
+	b = request.charCodeAt(i);
+	for(j = 0; j < 8; j++, b = b << 1)
+		CRC = ((b^(CRC>>8)&0x80)?(CRC<<1)^0x8F57:CRC<<1) & 0xFFFF;
+}
+request += SYS.strFromCharCode(CRC>>8, CRC&255);
+
+// Convert to ASCII
+for(reqASCII = "", i = 0; i < request.length; i++)
+	reqASCII += SYS.strFromCharCode((request.charCodeAt(i)>>4)+71, (request.charCodeAt(i)&0x0F)+71);
+
+// Result request
+request = "#" + reqASCII + "\r";
+
+//Send the request and get respond
+for(resp = tr.messIO(request); resp[resp.length-1] != "\r" && (respTail=tr.messIO("")).length; ) resp += respTail;
+
+//Respond process
+if(resp.length < 14 || resp[resp.length-1] != "\r" || resp[0] != "#" || (resp.length%2) != 0) {
+	io.setAttr("err", "10:"+tr("Wrong or no a respond."));
+	return; 
+}
+
+// Remove markers
+resp = resp.slice(1, resp.length-1);
+
+// Convert to binary
+for(respBin = "", b = 0, i = 0, fullB = false; i < resp.length; i++, fullB = !fullB) {
+	b += resp.charCodeAt(i) - 71;
+	if(fullB) { respBin += SYS.strFromCharCode(b); b = 0; } else b *= 16;
+}
+resp = respBin;
+
+// Check for CRC
+for(CRC = 0, i = 0; i < resp.length-2; i++) {
+	b = resp.charCodeAt(i);
+	for(j = 0; j < 8; j++, b = b << 1)
+		CRC = ((b^(CRC>>8)&0x80)?(CRC<<1)^0x8F57:CRC<<1) & 0xFFFF;
+}
+if(CRC != ((resp.charCodeAt(resp.length-2)<<8)+resp.charCodeAt(resp.length-1))) {
+	io.setAttr("err", "11:"+tr("CRC error."));
+	return;
+}
+
+//Return result
+io.setText(resp.slice(0,resp.length-2));','',1425737955);
+INSERT INTO "UserProtocol_uPrt" VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.1.0','','',1,0,0,'JavaLikeCalc.JavaScript
+// Input part of the protocol IT-3
+// for work into the background/listen mode to an other interaction session.
+var prm;
+if(prm.isEVal())	prm = SYS.nodeAt("/DAQ/LogicLev/cryo/prm_IT3");
+if(prm.isEVal())	return false;	//Drop all request but the target parameter''s object wrong
+
+//SYS.messDebug("/IT3/IN","TEST 00: req="+SYS.strDecode(request,"Bin"," "));
+
+while(request.length >= 6) {	//the full header
+	if(request.charCodeAt(0) != 0x16)	{ request = ""; break; }		//The package is broken, drop full
+
+	if((6+(blkLen=request.charCodeAt(1))) > request.length)	break;	//The package is not full, wait
+
+	//The package''s header control sum check and pass broken packages
+	for(KS = 0, i = 1; i < 4; i++) KS += request.charCodeAt(i);
+	KS = (~(KS+1))&0xFFFF;
+	if(((request.charCodeAt(5)<<8)+request.charCodeAt(4)) != KS) { request = request.slice(6+blkLen); continue; }
+
+	//The package''s body control sum check and pass broken packages
+	for(KS = 0, i = 6; i < (6+blkLen-2); i++) KS += request.charCodeAt(i);
+	KS = (~(KS+1))&0xFFFF;
+	if(((request.charCodeAt(6+blkLen-1)<<8)+request.charCodeAt(6+blkLen-2)) != KS)	{ request = request.slice(6+blkLen); continue; }
+
+	if(request.charCodeAt(2))	{ request = request.slice(6+blkLen); continue; }	//The package is a request, pass
+
+	//Info respond package
+	if(request.charCodeAt(6) == 0x80)
+		prm.err.set((errCode=request.charCodeAt(6+1))?("5:"+errCode+":"+tr("Request error")):"0", 0, 0, true);
+	//Data respond package
+	if(request.charCodeAt(6) == 0x85) {
+		errCode = prm.err.get().toInt();
+		cntrB = request.charCodeAt(6+3);
+		T = errCode ? EVAL : ((request.charCodeAt(6+2)<<8)+request.charCodeAt(6+1));
+		if(!T.isEVal())	T = T/((cntrB&0x8)?100:10);
+		prm.T.set(T, 0, 0, true);
+		prm.relSt.set(errCode?EVAL:(cntrB&0x1), 0, 0, true);
+		prm.L.set(errCode?EVAL:(cntrB&0x2), 0, 0, true);
+		prm.H.set(errCode?EVAL:(cntrB&0x4), 0, 0, true);
+	}
+
+	request = request.slice(6+blkLen);
+}
+
+return true;','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (1...32);
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 1 || addr > 32) { io.setAttr("err","1:"+tr("Device address out of range 1...32")); return; }
+//Header
+reqHdr = SYS.strFromCharCode(0x16,0x03,addr,0x00);
+for(KS = 0, i = 1; i < reqHdr.length; i++)	KS += reqHdr.charCodeAt(i);
+KS = ~(KS+1);
+reqHdr += SYS.strFromCharCode(KS, KS>>8);
+//Body
+reqBody = io.text();
+for(KS = 0, i = 0; i < reqBody.length; i++)	KS += reqBody.charCodeAt(i);
+KS = ~(KS+1);
+reqBody += SYS.strFromCharCode(KS, KS>>8);
+request = reqHdr+reqBody;
+SYS.messDebug("/IT3/PRT",tr("Request")+": "+SYS.strDecode(request,"Bin"," "));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length) {
+	if(!(tresp=tr.messIO("")).length) break;
+  	resp += tresp;
+}
+if(resp.length == 0) { io.setAttr("err","2:"+tr("No or short respond")); return; }
+SYS.messDebug("/IT3/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
+	if(resp.charCodeAt(blkOff) != 0x16){ io.setAttr("err","3:"+tr("Header error")); return; }
+	for(KS = 0, i = (blkOff+1); i < (blkOff+4); i++) KS += resp.charCodeAt(i);
+	KS = (~(KS+1))&0xFFFF;
+	if(((resp.charCodeAt(blkOff+5)<<8)+resp.charCodeAt(blkOff+4)) != KS)
+	{ io.setAttr("err","3:"+tr("Header CRC error")); return; }
+	blkLen = resp.charCodeAt(blkOff+1);
+	if(blkOff+6+blkLen > resp.length) { io.setAttr("err","4:"+tr("Info block size error")); return; }
+	for(KS = 0, i = (blkOff+6); i < (blkOff+6+blkLen-2); i++) KS += resp.charCodeAt(i);
+	KS = (~(KS+1))&0xFFFF;
+	if(((resp.charCodeAt(blkOff+6+blkLen-1)<<8)+resp.charCodeAt(blkOff+6+blkLen-2)) != KS)
+	{ io.setAttr("err","4:"+tr("Info block CRC error.")); return; }
+	if(resp.charCodeAt(blkOff+6) == 0x80 && resp.charCodeAt(blkOff+7))
+	{ io.setAttr("err","5:"+resp.charCodeAt(blkOff+7)+":"+tr("Request error")); return; }
+	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
+}','',1472580779);
+INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','ИВЭ-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="255" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (0...255);
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 0 || addr > 255) { io.setAttr("err","1:"+tr("Device address out of range 0...255")); return; }
+//Request prepare
+req = SYS.strFromCharCode(addr)+io.text();
+for(KS = 0, i = 0; i < req.length; i++)	KS += req.charCodeAt(i);
+KS = 0x100-KS&0xFF;
+req += SYS.strFromCharCode(KS);
+SYS.messDebug("/IVE452HS02/PRT",tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+
+//Send request
+resp = tr.messIO(req);
+while(resp.length) {
+	if(!(tresp=tr.messIO("")).length) break;
+  	resp += tresp;
+}
+if(resp.length == 0) { io.setAttr("err","2:"+tr("No a respond")); return; }
+SYS.messDebug("/IVE452HS02/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+if(resp.length <= 3 || resp.charCodeAt(0) != addr || resp.charCodeAt(1) != req.charCodeAt(1))
+{ io.setAttr("err","3:"+tr("Respond too short or wrong")); return; }
+for(KS = 0, i = 0; i < resp.length-1; i++)	KS += resp.charCodeAt(i);
+KS = 0x100-KS&0xFF;
+if(resp.charCodeAt(resp.length-1) != KS )	{ io.setAttr("err","3:"+tr("CRC error")); return; }
+io.setText(resp.slice(1,resp.length-1));','',1439819778);
+INSERT INTO "UserProtocol_uPrt" VALUES('OPTRIS','OPTRIS CT/CTL','','','Protocol level of OPTRIS CT/CTL communication interface of "Optris" GmbH, from Berlin.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1" cs="1" err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  addr - remote station address (0...15);
+//  cs - use control sum for SET commands [0,1]
+//  err - sets for the request result.
+io.setAttr("err", "");
+addr = io.attr("addr").toInt();
+if(addr < 0 || addr > 15) { io.setAttr("err", "1:"+tr("Device address out of range 0...15")); return; }
+request = SYS.strFromCharCode(0xB0+addr) + io.text();
+if(io.attr("cs").toInt()) {
+	for(CS = 0, i = 0; i < request.length; i++) CS += request.charCodeAt(i);
+	request += SYS.strFromCharCode(CS);
+}
+SYS.messDebug("/OPTRIS/PRT",tr("Request")+": "+SYS.strDecode(request,"Bin"," "));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length && (tresp=tr.messIO("")).length) resp += tresp;
+SYS.messDebug("/OPTRIS/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+if(resp.length <= 0) { io.setAttr("err","3:"+tr("No a respond")); return; }
+io.setText(resp);','',1444290609);
+INSERT INTO "UserProtocol_uPrt" VALUES('CTR','CTR 100, 101','CTR 100, 101','','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','Protocol part of the RS232C Serial Interface permits the communication between the digital Oerlikon Leybold Vacuum CERAVAC, from Köln.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','',1,0,0,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess err="1:Error">{req}</mess> - message tag
+//  req - request/respond data;
+//  err - sets for the request result.
+io.setAttr("err", "");
+//Request prepare
+req = SYS.strFromCharCode(3) + io.text();
+for(CS = 0, i = 1; i < req.length; i++)	CS += req.charCodeAt(i);
+req += SYS.strFromCharCode(CS&0xFF);
+SYS.messDebug("/CTR/PRT",tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+
+//Send request
+for(resp = tr.messIO(req); resp.length < 9 && (tresp=tr.messIO("")).length; resp += tresp) ;
+if(resp.length == 0){ io.setAttr("err","2:"+tr("No a respond")); return; }
+SYS.messDebug("/CTR/PRT","Respond: "+SYS.strDecode(resp,"Bin"," "));
+if(resp.length < 9)	{ io.setAttr("err","3:"+tr("Respond too short")); return; }
+if(resp.length > 9)	{ io.setAttr("err","4:"+tr("Respond too long, possible continuous mode")); return; }
+for(CS = 0, i = 1; i < resp.length-1; i++)	CS += resp.charCodeAt(i);
+if(resp.charCodeAt(resp.length-1) != (CS&0xFF))	{ io.setAttr("err","5:"+tr("CRC error")); return; }
+io.setText(resp.slice(1,resp.length-1));','',1445606112);
 COMMIT;
