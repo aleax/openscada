@@ -283,6 +283,12 @@ class SessWdg : public Widget, public TValFunc
 
 	void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false, bool allInher = false );
 
+	virtual float tmCalcAll( );
+	virtual float tmCalcMaxAll( );
+
+	//Attributes
+	float tmCalc, tmCalcMax;
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -345,6 +351,9 @@ class SessPage : public SessWdg
 	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
+
+	float tmCalcAll( );
+	float tmCalcMaxAll( );
 
 	// Alarms process
 	void alarmSet( bool isSet = false );

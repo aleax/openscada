@@ -191,7 +191,7 @@ class Reg
 	void setType( Type tp );
 	void setLock( bool vl )			{ mLock = vl; }
 	void setObjEl( )			{ mObjEl = true; }
-	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
+	void setVar( int ivar )			{ setType(Var); el.io = ivar; }
 	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.pA = ivattr; }
 
 	void free( );

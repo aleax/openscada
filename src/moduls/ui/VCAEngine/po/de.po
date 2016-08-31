@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-25 15:26+0300\n"
+"POT-Creation-Date: 2016-08-31 21:03+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1475,6 +1475,15 @@ msgstr ""
 
 msgid "Widget calculation error. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
+
+msgid "Spent time"
+msgstr "Verbrachte Zeit"
+
+msgid "Subtree="
+msgstr "Subtree="
+
+msgid "Item="
+msgstr "Punkt="
 
 msgid "Visual control area engine"
 msgstr "Visualisierungssteuerung"

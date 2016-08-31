@@ -1,3 +1,9 @@
+2016-08-31 Roman
+- DB.LibsDB.vcaBase: tmplSO.graphSelPrm some improved.
+- FIX:SYS: Long locking at the redundancy state request is prevented by the resources reorder.
+- UI.VCAEngine: Sessions were expanded for diagnostic and profiling per pages/widgets and subtrees.
+
+
 2016-08-30 Roman
 - !!:DB.LibsDB.OscadaLibs: DAQ template DevLib.IT3 and the user protocol part expanded by a passive mode, by list a different session.
     JavaLikeCalc function lowLevDevs.DHT expanded for AM2320, DHT22 (AM2302) support.

@@ -2682,7 +2682,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setRdPrimCmdTr(s2i(opt->text()));
     }
     else if(a_path == "/redund/sts") {
-	ResAlloc res(mRdRes, true);
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
 	    XMLNode *nSt	= ctrMkNode("list",opt,-1,"/redund/sts/st","",RWRWR_,"root","root");
 	    XMLNode *nName	= ctrMkNode("list",opt,-1,"/redund/sts/name","",R_R_R_,"root","root");
@@ -2690,6 +2689,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *nLev	= ctrMkNode("list",opt,-1,"/redund/sts/lev","",R_R_R_,"root","root");
 	    XMLNode *nCnt	= ctrMkNode("list",opt,-1,"/redund/sts/cnt","",R_R_R_,"root","root");
 
+	    ResAlloc res(mRdRes, false);
 	    for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++) {
 		if(nSt)		nSt->childAdd("el")->setText(sit->first);
 		if(nName)	nName->childAdd("el")->setText(SYS->transport().at().extHostGet("*",sit->first).name);
@@ -2698,12 +2698,15 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(nCnt)	nCnt->childAdd("el")->setText(r2s(sit->second.cnt));
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root","root",SEC_WR))	{ mSt[_("<newStat>")] = SStat(0); modif(); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root","root",SEC_WR))	{ mSt.erase(opt->attr("key_st")); modif(); }
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) && opt->attr("col") == "st") {
-	    mSt.erase(opt->attr("key_st"));
-	    mSt[opt->text()] = SStat();
-	    modif();
+	else {
+	    ResAlloc res(mRdRes, true);
+	    if(ctrChkNode(opt,"add",RWRWR_,"root","root",SEC_WR))	{ mSt[_("<newStat>")] = SStat(0); modif(); }
+	    else if(ctrChkNode(opt,"del",RWRWR_,"root","root",SEC_WR))	{ mSt.erase(opt->attr("key_st")); modif(); }
+	    else if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR) && opt->attr("col") == "st") {
+		mSt.erase(opt->attr("key_st"));
+		mSt[opt->text()] = SStat();
+		modif();
+	    }
 	}
     }
     else if(a_path == "/redund/lsSt" && ctrChkNode(opt)) {
