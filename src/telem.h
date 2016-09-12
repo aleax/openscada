@@ -160,7 +160,10 @@ class TElem
     public:
 	//Methods
 	TElem( const string &name = "" );
+	TElem( const TElem &src );
 	virtual ~TElem( );
+
+	TElem &operator=( const TElem &src );
 
 	string &elName( )			{ return mName; }
 

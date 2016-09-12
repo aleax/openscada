@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -429,7 +429,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible) {
 	    if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc']) {
 		this.wdgs[i].attrs['pgOpenSrc'] = pgId;
-		this.wdgs[i].makeEl(null,true);
+		this.wdgs[i].makeEl(null, true);
 		setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
 		return true;
 	    }
@@ -525,7 +525,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	}
 
 	this.pages[iPg.addr] = iPg;
-	iPg.makeEl(attrBrVal,false,true);
+	iPg.makeEl(attrBrVal, false, true);
 
 	return true;
     }
@@ -791,7 +791,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
+	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.childNodes.length <= 1) ||
 					  (!parseInt(this.attrs['areas']) && this.place.childNodes.length > 1))
@@ -799,20 +799,25 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	    var toInit = !this.place.childNodes.length;
 	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
-	    if(toInit || this.attrsMdf["src"]) {
+	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || !pgBr) {
 		medObj.src = this.attrs['src'].length ? '/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src'] : '';
 		medObj.hidden = !this.attrs['src'].length;
 	    }
-	    if(toInit || this.attrsMdf["fit"]) {
+	    if(toInit || this.attrsMdf["fit"] || !pgBr) {
 		if(this.attrs['fit'] == 1) {
 		    medObj.width = geomW; medObj.height = geomH;
 		    if(this.attrs['src'].length) medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}
-		else medObj.onload = function() {
-		    var cWdth = this.width; var cHeight = this.height;
-		    this.width = cWdth * this.wdgLnk.xScale(true);
-		    this.height = cHeight * this.wdgLnk.yScale(true);
+		else {
+		    src_ = medObj.src; medObj.src = '';	//For the image reload cause
+		    medObj.setAttribute('width',''); medObj.setAttribute('height','');
+		    medObj.onload = function() {
+			var cWdth = this.width; var cHeight = this.height;
+			this.width = cWdth * this.wdgLnk.xScale(true);
+			this.height = cHeight * this.wdgLnk.yScale(true);
+		    }
+		    medObj.src = src_;
 		}
 	    }
 	    if(elWr && (toInit || this.attrsMdf["areas"])) {
@@ -1953,7 +1958,7 @@ function makeUI( callBackRez )
 		if(opPg.parent)	delete opPg.parent.pages[pgList[i_p]];
 	    }
 	    else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p])
-	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null,true); }
+	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null, true); }
 	}
 	// Process opened pages
 	pgList = new Array();

@@ -52,9 +52,10 @@ class TValBuf
 	//Public methods
 	TValBuf( );
 	TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd = false, bool ihres = false );
+	TValBuf( const TValBuf &src );
 	virtual ~TValBuf( );
 
-	TValBuf &operator=( TValBuf &src );
+	TValBuf &operator=( const TValBuf &src );
 
 	void clear( );
 
@@ -347,6 +348,8 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	virtual TVArchEl *getArchEl( TVArchive &arch );
 
+	virtual void pushAccumVals( )	{ };
+
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postEnable( int flag );
 	void preDisable( int flag );
@@ -397,7 +400,7 @@ class TVArchEl
 
 	TVariant getVal( int64_t *tm, bool up_ord, bool onlyLocal = false );
 	void getVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0, bool onlyLocal = false );
-	void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
+	void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0, bool toAccum = false );
 
 	TVArchive &archive( );
 	TVArchivator &archivator( );
@@ -406,7 +409,7 @@ class TVArchEl
 	//Protected methods
 	virtual TVariant getValProc( int64_t *tm, bool up_ord );
 	virtual void getValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ }
-	virtual bool setValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ return false; }
+	virtual int64_t setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool toAccum )	{ return 0; }
 
 	// Previous averaging value
 	int64_t	prevTm;

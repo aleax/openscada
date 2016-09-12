@@ -62,6 +62,13 @@ TValBuf::TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres )
     makeBuf(mValTp, mSize, mPer, mHrdGrd, mHgResTm);
 }
 
+TValBuf::TValBuf( const TValBuf &src )
+{
+    buf.bl = NULL;
+
+    operator=(src);
+}
+
 TValBuf::~TValBuf( )
 {
     switch(mValTp) {
@@ -76,7 +83,7 @@ TValBuf::~TValBuf( )
     }
 }
 
-TValBuf &TValBuf::operator=( TValBuf &src )
+TValBuf &TValBuf::operator=( const TValBuf &src )
 {
     makeBuf(src.mValTp, src.mSize, src.mPer, src.mHrdGrd, src.mHgResTm);
 
@@ -125,6 +132,8 @@ TValBuf &TValBuf::operator=( TValBuf &src )
 	    break;
 	default: break;
     }
+    mFillLast = src.mFillLast;
+    mEnd = src.mEnd, mBeg = src.mBeg;
     mEvalCnt = src.mEvalCnt;
 
     return *this;
@@ -2281,9 +2290,12 @@ void *TVArchivator::Task( void *param )
 		    beg = vmax(archEl->mLastGet, archEl->archive().begin());
 		    end = archEl->archive().end();
 		    if(!beg || !end || beg > end) continue;
-		    archEl->setVals(archEl->archive(), beg, end);
+		    archEl->setVals(archEl->archive(), beg, end, true);
 		}
 	    res.release();
+
+	    //Call for accumulated values archiving
+	    arch.pushAccumVals();
 
 	    arch.tm_calc = TSYS::curTime()-t_cnt;
 
@@ -2405,7 +2417,7 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 		vl.setS(req.text());
 		if(vl.getS() == EVAL_STR) goto reqCall;
 		*tm = remTm;
-		//Put to local archive
+		//Put to the local archive
 		TValBuf buf(archive().valType(), 0, 0, false, true);
 		buf.setS(vl.getS(), remTm);
 		setVals(buf);
@@ -2520,7 +2532,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
     }
 }
 
-void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
+void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
 {
     int64_t a_per = (int64_t)(1e6*archivator().valPeriod());
 
@@ -2541,9 +2553,9 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 
     //Combining
     TVArchive::CombMode combM = archive().combMode();
-    bool setOK = false;
+    int64_t setOK = 0;
     if(a_per > ibuf.period()) {
-	TValBuf obuf(ibuf.valType(), 0, a_per, true, true);
+	TValBuf obuf(ibuf.valType(true), 0, a_per, true, true);
 	for(int64_t c_tm = beg; c_tm <= end; ) {
 	    switch(ibuf.valType()) {
 		case TFld::Boolean: {
@@ -2607,12 +2619,12 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		default: break;
 	    }
 	}
-	setOK = setValsProc(obuf, obuf.begin(), obuf.end()/*end*/);	//Or possible vmax(obuf.end(),end)
+	setOK = setValsProc(obuf, obuf.begin(), obuf.end()/*end*/, toAccum);	//Or possible vmax(obuf.end(),end)
     }
-    else setOK = setValsProc(ibuf, beg, end);
+    else setOK = setValsProc(ibuf, beg, end, toAccum);
 
     if(setOK) {
-	if(mLastGet && end > mLastGet) mLastGet = end+1;
-	if(&archive() == &ibuf || end > archive().end()) { prevTm = wPrevTm; prevVal = wPrevVal; }
+	if(mLastGet && setOK > mLastGet) mLastGet = setOK+1;
+	if(&archive() == &ibuf || setOK > archive().end()) { prevTm = wPrevTm; prevVal = wPrevVal; }
     }
 }

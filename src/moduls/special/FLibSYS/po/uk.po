@@ -329,7 +329,7 @@ msgid "Minutes"
 msgstr "Хвилини"
 
 msgid "Hours"
-msgstr "Часи"
+msgstr "Години"
 
 msgid "Day of the month"
 msgstr "День місяця"

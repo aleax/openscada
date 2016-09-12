@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 15:52+0300\n"
+"POT-Creation-Date: 2016-09-12 20:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,10 @@ msgid "Roman Savochenko"
 msgstr ""
 
 msgid "The archiver module. Provides functions for messages and values archiving to DB."
+msgstr ""
+
+#, c-format
+msgid "Check value archivator '%s' error."
 msgstr ""
 
 msgid "In minutes"
@@ -69,10 +73,13 @@ msgstr ""
 msgid "Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."
 msgstr ""
 
-msgid "Archive size (hours)"
+msgid "Set to 0 for the limit disable and some performance rise"
 msgstr ""
 
-msgid "Set to 0 for the limit disable and some performance rise"
+msgid "Grouping parameters limit"
+msgstr ""
+
+msgid "Enable grouping arhivator's parameters into a single table. Set to '0' for one table per parameter."
 msgstr ""
 
 msgid "Value"

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,9 +33,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.7"
-#define AUTHORS		_("Roman Savochenko")
-#define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
+#define MOD_VER		"1.6.8"
+#define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -269,7 +268,6 @@ string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-    if(name == _("Developers"))	return DEVELOPERS;
     return TModule::modInfo(name);
 }
 
@@ -278,7 +276,6 @@ void TWEB::modInfo( vector<string> &list )
     TModule::modInfo(list);
     list.push_back("SubType");
     list.push_back("Auth");
-    list.push_back(_("Developers"));
 }
 
 void TWEB::vcaSesAdd( const string &name, bool isCreate )

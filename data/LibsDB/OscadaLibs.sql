@@ -1139,6 +1139,25 @@ INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','power','Power, for temperatur
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',3,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',3,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','mdPass','Passive mode, writing by an input protocol''s part',3,64,'0',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('IT3','this','Object',4,0,'',7,'','','Object','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','addr','Device address [0...119]',1,64,'39',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di0','DI0',3,16,'',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di1','DI1',3,16,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di2','DI2',3,16,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di3','DI3',3,16,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di4','DI4',3,16,'',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di5','DI5',3,16,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di6','DI6',3,16,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','di7','DI7',3,16,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do0','DO0',3,33,'',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do1','DO1',3,33,'',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do2','DO2',3,33,'',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do3','DO3',3,33,'',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do4','DO4',3,33,'',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do5','DO5',3,33,'',15,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do6','DO6',3,33,'',16,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','do7','DO7',3,33,'',17,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2832,6 +2851,8 @@ INSERT INTO "Trs" VALUES('ms','','');
 INSERT INTO "Trs" VALUES('us','','');
 INSERT INTO "Trs" VALUES('ns','','');
 INSERT INTO "Trs" VALUES('Allowed variables','','');
+INSERT INTO "Trs" VALUES('No data','','');
+INSERT INTO "Trs" VALUES('No a data','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -3904,8 +3925,20 @@ f_err = t_err.length ? t_err : "0";','','',1425737232);
 INSERT INTO "tmplib_DevLib" VALUES('IT3','Temperature measurement IT-3','','','Temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.1.0','','',10,0,'JavaLikeCalc.JavaScript
-if(mdPass)	{ f_err = EVAL; return; }
+Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
+if(mdPass)	{
+	if(f_start) { f_err = EVAL; this.cnt.set(0, 0, 0, true); cnt_ = 0; tDl = 5; }
+	if((cnt=this.cnt.get()) != cnt_)	{ tDl = 5; cnt_ = cnt; }
+	else if(tDl > 0 && (tDl=tDl-1/f_frq) <= 0) {
+		this.err.set("1:"+tr("No a data"), 0, 0, true);
+		this.T.set(EVAL, 0, 0, true);
+		this.H.set(EVAL, 0, 0, true);
+		this.L.set(EVAL, 0, 0, true);
+		this.relSt.set(EVAL, 0, 0, true);
+	}
+	return;
+}
+
 //Set transport
 if(f_start)	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
 if(!tr)	t_err = "1:"+tr("Serial output transport ''%1'' error.").replace("%1",transport);
@@ -3933,7 +3966,7 @@ else {
 }
 
 if(t_err.length) { SYS.messDebug("/IT3/TMPL",tr("Error response")+": "+t_err); f_err = t_err; }
-else f_err = "0";','','',1472580719);
+else f_err = "0";','','',1472721622);
 INSERT INTO "tmplib_DevLib" VALUES('IVE_452HS_02','IVE-452HS-02','','','Power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',10,0,'JavaLikeCalc.JavaScript
@@ -5256,6 +5289,47 @@ else {
 }
 
 f_err = t_err;','','',1472124700);
+INSERT INTO "tmplib_DevLib" VALUES('PCF8574','','','','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial["out_"+transport];
+	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
+	do0 = do1 = do2 = do3 = do4 = do5 = do6 = do7 = true;
+	do0_ = do1_ = do2_ = do3_ = do4_ = do5_ = do6_ = do7_ = true;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial["out_"+transport];
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	if(do0 != do0_ || do1 != do1_ || do2 != do2_ || do3 != do3_ || do4 != do4_ || do5 != do5_ || do6 != do6_ || do7 != do7_) {
+		tr.messIO(SYS.strFromCharCode(addr,(do0?0x01:0)|(do1?0x02:0)|(do2?0x04:0)|(do3?0x08:0)|
+																(do4?0x10:0)|(do5?0x20:0)|(do6?0x40:0)|(do7?0x80:0)), 0, 0);
+		do0_ = do0; do1_ = do1; do2_ = do2; do3_ = do3; do4_ = do4; do5_ = do5; do6_ = do6; do7_ = do7;
+	}
+	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 1);
+	if(rez.length) {
+		vl = rez.charCodeAt(0);
+		di0 = (vl&0x01); di1 = (vl&0x02); di2 = (vl&0x04); di3 = (vl&0x08);
+		di4 = (vl&0x10); di5 = (vl&0x20); di6 = (vl&0x40); di7 = (vl&0x80);
+	}
+	else t_err = "3:"+tr("No read result.");
+}
+
+if(t_err.toInt() && !f_err.toInt())
+	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
+
+f_err = t_err;','','',1472747808);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -7747,13 +7821,20 @@ io.setText(resp.slice(0,resp.length-2));','',1425737955);
 INSERT INTO "UserProtocol_uPrt" VALUES('IT3','Temperature measurement IT-3','','','Protocol level of temperature measurement IT-3 from OmskEtalon (http://www.omsketalon.ru).
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
-Version: 1.1.0','','',1,0,0,'JavaLikeCalc.JavaScript
+Version: 1.2.0','','',1,0,0,'JavaLikeCalc.JavaScript
 // Input part of the protocol IT-3
 // for work into the background/listen mode to an other interaction session.
 var prm;
 if(prm.isEVal())	prm = SYS.nodeAt("/DAQ/LogicLev/cryo/prm_IT3");
 if(prm.isEVal())	return false;	//Drop all request but the target parameter''s object wrong
-
+if(!request.length) {					//Empty request means it is not a data for the pointed time, 1 second
+	prm.err.set("1:"+tr("No data"), 0, 0, true);
+	prm.T.set(EVAL, 0, 0, true);
+	prm.relSt.set(EVAL, 0, 0, true);
+	prm.L.set(EVAL, 0, 0, true);
+	prm.H.set(EVAL, 0, 0, true);
+	return true;
+}
 //SYS.messDebug("/IT3/IN","TEST 00: req="+SYS.strDecode(request,"Bin"," "));
 
 while(request.length >= 6) {	//the full header
@@ -7778,7 +7859,7 @@ while(request.length >= 6) {	//the full header
 		prm.err.set((errCode=request.charCodeAt(6+1))?("5:"+errCode+":"+tr("Request error")):"0", 0, 0, true);
 	//Data respond package
 	if(request.charCodeAt(6) == 0x85) {
-		errCode = prm.err.get().toInt();
+		errCode = 0;//prm.err.get().toInt();
 		cntrB = request.charCodeAt(6+3);
 		T = errCode ? EVAL : ((request.charCodeAt(6+2)<<8)+request.charCodeAt(6+1));
 		if(!T.isEVal())	T = T/((cntrB&0x8)?100:10);
@@ -7786,6 +7867,7 @@ while(request.length >= 6) {	//the full header
 		prm.relSt.set(errCode?EVAL:(cntrB&0x1), 0, 0, true);
 		prm.L.set(errCode?EVAL:(cntrB&0x2), 0, 0, true);
 		prm.H.set(errCode?EVAL:(cntrB&0x4), 0, 0, true);
+		prm.cnt.set(prm.cnt.get()+1, 0, 0, true);
 	}
 
 	request = request.slice(6+blkLen);
@@ -7836,7 +7918,7 @@ for(blkOff = 0, blkLen = 0; blkOff < resp.length; blkOff += 6+blkLen) {
 	if(resp.charCodeAt(blkOff+6) == 0x80 && resp.charCodeAt(blkOff+7))
 	{ io.setAttr("err","5:"+resp.charCodeAt(blkOff+7)+":"+tr("Request error")); return; }
 	io.setText(resp.slice(blkOff+6,blkOff+6+blkLen));
-}','',1472580779);
+}','',1472721683);
 INSERT INTO "UserProtocol_uPrt" VALUES('IVE_452HS_02','ИВЭ-452HS-02','IVE-452HS-02','','Protocol level of power supply of beam-electrons evaporator of "Plasma Tech" Ltd, from Moskov.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript

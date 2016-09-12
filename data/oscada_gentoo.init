@@ -1,4 +1,4 @@
-#!/sbin/runscript
+#!/sbin/openrc-run
 #
 # Init file for OpenSCADA system demon.
 #

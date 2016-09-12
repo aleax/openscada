@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -166,7 +166,7 @@ class ModVArchEl: public TVArchEl
 	//Methods
 	TVariant getValProc( int64_t *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
-	bool setValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	int64_t setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool toAccum );
 
     private:
 	//Attributes
@@ -205,7 +205,7 @@ class ModVArch: public TVArchivator
 	void setPackInfoFiles( bool vl )	{ mPackInfoFiles = vl; modif(); }
 
 	void start( );
-	void stop( );
+	void stop( bool full_del = false );
 
 	void checkArchivator( bool now = false, bool toLimits = false );
 

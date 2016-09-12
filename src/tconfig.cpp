@@ -30,6 +30,12 @@ TConfig::TConfig( TElem *Elements ) : mRes(true), mElem(NULL), mIncmplTblStrct(f
     setElem(Elements, true);
 }
 
+TConfig::TConfig( const TConfig &src ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false)
+{
+    setElem(NULL, true);
+    operator=(src);
+}
+
 TConfig::~TConfig( )
 {
     //Deinit value
@@ -43,17 +49,22 @@ TConfig::~TConfig( )
     if(single) delete mElem;
 }
 
-TConfig &TConfig::operator=(TConfig &config)	{ return exclCopy(config); }
+TConfig &TConfig::operator=( const TConfig &config )	{ return exclCopy(config, "", true); }
 
-TConfig &TConfig::exclCopy( TConfig &config, const string &passCpLs )
+TConfig &TConfig::exclCopy( const TConfig &config, const string &passCpLs, bool cpElsToSingle )
 {
-    vector<string> list_el;
+    vector<string> listEl;
 
-    cfgList(list_el);
-    for(unsigned i_el = 0; i_el < list_el.size(); i_el++) {
-	if(!config.cfgPresent(list_el[i_el]) || passCpLs.find(list_el[i_el]+";") != string::npos) continue;
-	TCfg &s_cfg = config.cfg(list_el[i_el]);
-	TCfg &d_cfg = cfg(list_el[i_el]);
+    //Copy elements for single/builtin elements structure
+    if(cpElsToSingle && single && mElem) {
+	//????
+    }
+
+    cfgList(listEl);
+    for(unsigned iEl = 0; iEl < listEl.size(); iEl++) {
+	if(!config.cfgPresent(listEl[iEl]) || passCpLs.find(listEl[iEl]+";") != string::npos) continue;
+	TCfg &s_cfg = const_cast<TConfig*>(&config)->cfg(listEl[iEl]);
+	TCfg &d_cfg = cfg(listEl[iEl]);
 	switch(d_cfg.fld().type()) {
 	    case TFld::String:
 		d_cfg.setExtVal(s_cfg.extVal());
@@ -118,7 +129,7 @@ void TConfig::cfgList( vector<string> &list )
     if(mElem)	mElem->fldList(list);
 }
 
-bool TConfig::cfgPresent( const string &n_val )	{ return (value.find(n_val) != value.end()); }
+bool TConfig::cfgPresent( const string &n_val ) const	{ return (value.find(n_val) != value.end()); }
 
 void TConfig::cfgViewAll( bool val )
 {
@@ -167,9 +178,9 @@ void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const stri
 {
     vector<string> list_c;
     cfgList(list_c);
-    for(unsigned i_el = 0; i_el < list_c.size(); i_el++)
-	if(cfg(list_c[i_el]).view())
-	    cfg(list_c[i_el]).fld().cntrCmdMake(opt, path, (pos<0)?pos:pos++, user, grp, perm);
+    for(unsigned iEl = 0; iEl < list_c.size(); iEl++)
+	if(cfg(list_c[iEl]).view())
+	    cfg(list_c[iEl]).fld().cntrCmdMake(opt, path, (pos<0)?pos:pos++, user, grp, perm);
 }
 
 void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )

@@ -139,13 +139,14 @@ class TConfig: public TValElem
     public:
 	//Methods
 	TConfig( TElem *Elements = NULL );
+	TConfig( const TConfig &src );
 	virtual ~TConfig( );
 
-	TConfig &operator=( TConfig &cfg );
-	TConfig &exclCopy( TConfig &cfg, const string &passCpLs = "" );
+	TConfig &operator=( const TConfig &cfg );
+	TConfig &exclCopy( const TConfig &cfg, const string &passCpLs = "", bool cpElsToSingle = false );
 
 	void cfgList( vector<string> &list );
-	bool cfgPresent( const string &n_val );
+	bool cfgPresent( const string &n_val ) const;
 	TCfg &cfg( const string &n_val );
 	TCfg *at( const string &n_val, bool noExpt = false );
 	void cfgViewAll( bool val = true );	// Show/Hide all no key elements

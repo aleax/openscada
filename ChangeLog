@@ -1,3 +1,19 @@
+2016-09-12 Roman
+- DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were expanded for detect the external connection lost.
+    Template PCF8574 is added to the library DevLib. PCF8574 is I2C 8DIO.
+- FIX:SYS: data/oscada_gentoo.init is some fixed by IrmIngeneer.
+- !!:FIX:Archive: Value archivator is expanded for the accumulation mode support, mostly for Archive.DBArch.
+    FIX:TValBuf: Fix for the object copy by the copy constructor appending and some fields lack.
+- FIX:TConfig: Fix for the object copy by the copy constructor appending and it's reserved for implementing of copying the items to single ones.
+- FIX:TElem: Fix for the object copy by the copy constructor appending and it's reserved for full implementing further.
+- FIX:Archive.FSArch: It's adapted to values accumulation API. Values archivator fix for the function stop() prototype.
+- !!!!:Archive.DBArch: The value archivation part expanded by the archives grouping into one group table, mostly for the archivation performance rise.
+    Checking of the module meta table is added for creation lack value archives, like into Archive.FSArch.
+    Value archives limit is rose to days.
+    Extended types int16_t, int32_t, int64_t, float and double archivation support is added.
+- FIX:UI.WebVision: The prototype "Media" processing some fix for "fit" toggle and container's scale change.
+
+
 2016-08-31 Roman
 - DB.LibsDB.vcaBase: tmplSO.graphSelPrm some improved.
 - FIX:SYS: Long locking at the redundancy state request is prevented by the resources reorder.
@@ -29,8 +45,8 @@
 - !!!!:FIX:DB.LibsDB.OscadaLibs: DAQ template DevLib.oneWire renamed to DevLib.1W_DS9097 and some simplified.
     New DAQ template DevLib.1W_DS9097U is added for allow OneWire support by an adapter DS9097U, based on the chip DS2480.
     DAQ template DevLib.SSCP expanded for types "dt" and "time" support and the allowed to selection variables list moving to RO text attribute.
- Groups of graphics and the control panel expanded to visualizer UI.Vision specific feature of selection/scalling
-    by window drawn by mouse. The attribute "enForce" naming of ElViewGraph fix.
+    Groups of graphics and the control panel expanded to visualizer UI.Vision specific feature of selection/scalling
+	by window drawn by mouse. The attribute "enForce" naming of ElViewGraph fix.
 - FIX:UI.VCAEngine: setEnable() of widget and it's succession was expanded by the argument "force" like to pages.
     FIX:Primitives force activation for not loaded active attributes is added after the widgets loading try, into the widgets libraries.
     FIX:Units removing after the preloaded seek is fixed.
@@ -43,7 +59,8 @@
 
 2016-08-25 fido_max
 - DAQ.FT3: General cleanup and refactoring of source code. KA DAQ implemented (BTU, BVT, BVTC, GZD, GNS). KA TANK object added.
-           Translation fixed. Major erros fixed.
+    Translation fixed. Major erros fixed.
+
 
 2016-08-16 Roman
 - UI.Vision: To primitive "Diagram" of mode "Trend" added sliding by mouse in the time axis.
@@ -444,8 +461,8 @@
 
 
 2016-04-08 fido_max
-- !! DAQ.FT3 ui32Data, flData sensivity deadband processing for event forming added. B_ODOR implemented.
-- DAQ.FT3 KA_GNS SetNewState, SetNewFunction implemented, version rise to 0.2.1.
+- !!:DAQ.FT3: ui32Data, flData sensivity deadband processing for event forming added. B_ODOR implemented.
+- DAQ.FT3: KA_GNS SetNewState, SetNewFunction implemented, version rise to 0.2.1.
 - Protocol.FT3: Version rise to 0.2.1.
 
 
@@ -912,6 +929,7 @@
 
 2015-08-13 fido_max
 - FIX:DAQ:FT3: B_BVI, B_GKR constructor fixed
+
 
 2015-08-11 fido_max
 - !!!!:DAQ: New module "FT3" for support FT3 devices protocol is added. It is initial implementation of GRS and SUAP implementation.
@@ -1585,7 +1603,7 @@
 
 2014-11-13 Roman
 - LibsDB.vcaBase.db: Main.ElCadr mostly fixed for tooltips to the commands.
-- !!:FIX:Archive,Archive.FSArch: Final fixed for prevent doubles and wrong archives connection for later appended data sources.
+- !!:FIX:Archive,Archive.FSArch: Final fixed for prevent the doubles and wrong archives connection for later appended data sources.
 
 
 2014-11-09 Roman
@@ -1867,7 +1885,7 @@
 
 2014-07-20 Roman
 - FIX:Archive: Place to archive fix next for int64_t.
-- !!:FIX:UI.VCAEngine: Change parent trace for project and widget's library fix.
+- !!:FIX:UI.VCAEngine: Tracing of a parent change for project and widget's library fix.
 
 
 2014-07-18 Roman
@@ -1919,7 +1937,7 @@
 
 
 2014-07-05 Roman
-- Protocol.ModBus: Functions 0x2 (CI) and 0x4 (RI) implement is rewrote and clean up.
+- Protocol.ModBus: Functions 0x2 (CI) and 0x4 (RI) implement is rewrote and cleaned.
 
 
 2014-07-05 fido_max

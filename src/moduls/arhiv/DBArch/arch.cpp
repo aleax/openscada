@@ -34,7 +34,7 @@
 #define MOD_NAME	_("To DB archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"1.4.3"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to DB.")
 #define LICENSE		"GPL2"
@@ -91,7 +91,7 @@ void ModArch::postEnable( int flag )
 	elArch.fldAdd(new TFld("BEGIN","Begin",TFld::String,TFld::NoFlag,"20"));
 	elArch.fldAdd(new TFld("END","End",TFld::String,TFld::NoFlag,"20"));
 	elArch.fldAdd(new TFld("PRM1","Parameter 1",TFld::String,TFld::NoFlag,"20"));
-	elArch.fldAdd(new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20"));
+	elArch.fldAdd(new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"1000000"));
 	elArch.fldAdd(new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20"));
     }
 }
@@ -99,6 +99,25 @@ void ModArch::postEnable( int flag )
 ModArch::~ModArch( )
 {
     try{ modStop(); } catch(...) { }
+}
+
+void ModArch::perSYSCall( unsigned int cnt )
+{
+    try {
+	if(cnt%60) return;
+
+	vector<string> aLs;
+
+	//Check value archivators
+	valList(aLs);
+	for(unsigned iA = 0; iA < aLs.size(); iA++)
+	    if(valAt(aLs[iA]).at().startStat())
+		try{ valAt(aLs[iA]).at().checkArchivator(); }
+		catch(TError &err) {
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Check value archivator '%s' error."), aLs[iA].c_str());
+	    }
+    } catch(TError &err) { mess_sys(TMess::Error, "%s", err.mess.c_str()); }
 }
 
 void ModArch::load_( )		{ }

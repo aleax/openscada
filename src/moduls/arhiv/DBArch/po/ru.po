@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 15:52+0300\n"
+"POT-Creation-Date: 2016-09-12 20:24+0300\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -28,8 +28,12 @@ msgstr ""
 "Модуль архиватора. Предоставляет функции архивирования сообщений и значений "
 "на БД."
 
+#, c-format
+msgid "Check value archivator '%s' error."
+msgstr "Ошибка проверки архиватора значений '%s'."
+
 msgid "In minutes"
-msgstr ""
+msgstr "В минутах"
 
 msgid "Time (s)"
 msgstr "Время (с)"
@@ -77,29 +81,20 @@ msgstr ""
 "Только для БД поддерживающих такое посредством специфических типов данных "
 "вроде \"datetime\" в MySQL."
 
-msgid "Archive size (hours)"
-msgstr "Размер архива (часов)"
-
 msgid "Set to 0 for the limit disable and some performance rise"
 msgstr ""
 "Установить в 0 для отключения данного лимита и некоторого повышения "
 "производительности"
 
+msgid "Grouping parameters limit"
+msgstr "Ограничение группировки параметров"
+
+msgid ""
+"Enable grouping arhivator's parameters into a single table. Set to '0' for "
+"one table per parameter."
+msgstr ""
+"Включение группировки параметров архиватора в одной таблице. Установить в "
+"'0' для одной таблицы на параметр."
+
 msgid "Value"
 msgstr "Значение"
-
-#~ msgid "Date (days)"
-#~ msgstr "Дата (дни)"
-
-#~ msgid "Scan by days threshold in seconds"
-#~ msgstr "Порог, в секундах, для сканирование сутками"
-
-#~ msgid ""
-#~ "Nonzero value enables separating datetime to different date and time "
-#~ "parts.\n"
-#~ "Useful for faster access to big parts of the messages on it pick."
-#~ msgstr ""
-#~ "Ненулевое значение включает разделение датавремени на отдельные части "
-#~ "даты и время.\n"
-#~ "Полезно для быстрого доступа к большим частям сообщений при их "
-#~ "сканировании."

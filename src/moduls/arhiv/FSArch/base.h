@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: base.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,7 @@ class ModArch: public TTypeArchivator
 	AutoHD<ModMArch> messAt( const string &iid )	{ return TTypeArchivator::messAt(iid); }
 	AutoHD<ModVArch> valAt( const string &iid )	{ return TTypeArchivator::valAt(iid); }
 
-	//> Packing archives
+	// Packing archives
 	bool filePack( const string &anm );
 	string packArch( const string &anm, bool replace = true );
 	string unPackArch( const string &anm, bool replace = true );
@@ -60,7 +60,7 @@ class ModArch: public TTypeArchivator
 
 	void perSYSCall( unsigned int cnt );
 
-	//> Attributes
+	// Attributes
 	bool	noArchLimit;
 
     protected:

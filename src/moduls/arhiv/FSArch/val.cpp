@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -107,10 +107,10 @@ void ModVArch::start( )
     try { checkArchivator(true); } catch(TError &err) { stop(); throw; }
 }
 
-void ModVArch::stop( )
+void ModVArch::stop( bool full_del )
 {
     //Stop getting data cicle an detach archives
-    TVArchivator::stop();
+    TVArchivator::stop(full_del);
 }
 
 bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, int64_t *abeg, int64_t *aend, int64_t *aper )
@@ -771,7 +771,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     return EVAL_REAL;
 }
 
-bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
+int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool toAccum )
 {
     //Check border
     if(!buf.vOK(beg,end)) return false;
@@ -790,7 +790,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	if(!files[i_a]->err() && beg <= end) {
 	    // Create new file for old data
 	    if(beg < files[i_a]->begin()) {
-		if(!mChecked)	return false;	//Wait for checking
+		if(!mChecked)	return 0;	//Wait for checking
 
 		//  Calc file limits
 		int64_t n_end, n_beg;	//New file end position
@@ -812,7 +812,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 		    files[i_a]->delFile();
 		    delete files[i_a];
 		    files.erase(files.begin()+i_a);
-		    return false;
+		    return 0;
 		}
 	    }
 
@@ -829,7 +829,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	}
     //Create new file for new data
     while(end >= beg) {
-	if(!mChecked)	return false;	//Wait for checking
+	if(!mChecked)	return 0;	//Wait for checking
 	char c_buf[30];
 	time_t tm = beg/1000000;
 	struct tm tm_tm;
@@ -844,7 +844,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	    files.back()->delFile();
 	    delete files.back();
 	    files.pop_back();
-	    return false;
+	    return 0;
 	}
 	n_end = (end > n_end) ? n_end : end;
 
@@ -854,7 +854,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	beg = n_end + v_per;
     }
 
-    return wrOK;
+    return wrOK ? end : 0;
 }
 
 //*************************************************

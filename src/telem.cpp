@@ -33,6 +33,16 @@ TElem::TElem( const string &name ) : mName(name), mResEl(true)
 
 }
 
+TElem::TElem( const TElem &src ) : mName(src.mName), mResEl(true)
+{
+    operator=(src);
+}
+
+TElem &TElem::operator=( const TElem &src )
+{
+    //???? Implement on needs, for now pass it
+}
+
 TElem::~TElem( )
 {
     while(cont.size())	cont[0]->detElem(this);

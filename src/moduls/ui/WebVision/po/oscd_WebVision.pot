@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:46+0300\n"
+"POT-Creation-Date: 2016-09-12 21:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,10 +68,7 @@ msgstr ""
 msgid "Operation user interface (WEB)"
 msgstr ""
 
-msgid "Roman Savochenko"
-msgstr ""
-
-msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
+msgid "Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)"
 msgstr ""
 
 msgid "Visual operation user interface, based on WEB - front-end to VCA engine."
@@ -93,9 +90,6 @@ msgid "mcsec"
 msgstr ""
 
 msgid "Ready"
-msgstr ""
-
-msgid "Developers"
 msgstr ""
 
 #, c-format

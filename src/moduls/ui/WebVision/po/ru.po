@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:46+0300\n"
+"POT-Creation-Date: 2016-09-12 21:24+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -70,15 +70,14 @@ msgstr "Ошибка парсинга документа '%s': %s"
 msgid "Operation user interface (WEB)"
 msgstr "Рабочий пользовательский интерфейс (WEB)"
 
-msgid "Roman Savochenko"
-msgstr "Роман Савоченко"
-
-msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
-msgstr "Роман Савоченко, Лысенко Максим, Яшина Ксения"
+msgid "Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)"
+msgstr "Роман Савоченко, Лысенко Максим (2008-2012), Яшина Ксения (2007)"
 
 msgid ""
 "Visual operation user interface, based on WEB - front-end to VCA engine."
-msgstr "Рабочий пользовательский интерфейс, основанный на WEB - внешний интерфейс к движку визуализации."
+msgstr ""
+"Рабочий пользовательский интерфейс, основанный на WEB - внешний интерфейс к "
+"движку визуализации."
 
 msgid "Date and time"
 msgstr "Дата и время"
@@ -97,9 +96,6 @@ msgstr "мкс"
 
 msgid "Ready"
 msgstr "Готов"
-
-msgid "Developers"
-msgstr "Разработчики"
 
 #, c-format
 msgid ""
@@ -163,3 +159,9 @@ msgstr ""
 "  -1  - оптимальный, скорость-размер;\n"
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
+
+#~ msgid "Roman Savochenko"
+#~ msgstr "Роман Савоченко"
+
+#~ msgid "Developers"
+#~ msgstr "Разработчики"

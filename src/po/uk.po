@@ -1896,7 +1896,7 @@ msgstr ""
 "Номера процесорів починаються з 0."
 
 msgid "Tasks planning clock"
-msgstr "Часи планування задач"
+msgstr "Годинник планування задач"
 
 msgid "Internal charset"
 msgstr "Внутрішнє кодування"
