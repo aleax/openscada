@@ -1,3 +1,10 @@
+2016-09-16 Roman
+- !!:FIX:Archive.{*,FSArch}: Spare writings direct to the archivators prevent for TVArchive::setVals().
+    !!:FIX:Last read buffer information is added and the property using fix.
+- DAQ: For redundancy processing firstly readed the value archive's part.
+- FIX:Archive.DBArch: Set values processing mostly fix for return correct last time.
+
+
 2016-09-12 Roman
 - DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were expanded for detect the external connection lost.
     Template PCF8574 is added to the library DevLib. PCF8574 is I2C 8DIO.

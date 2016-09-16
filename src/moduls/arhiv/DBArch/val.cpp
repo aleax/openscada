@@ -690,57 +690,60 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 
 	return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true) ? iend : 0;
     }
+
     //The group table processing
-    else {
-	MtxAlloc res(archivator().reqRes, true);
-	ModVArch::SGrp *gO = NULL;
-	TValBuf &pDt = archivator().accmGetReg(archive().id(), &gO, archive().valType(true));
-	if(toAccum) {
-	    if(!gO->dbOK && pDt.realSize()) return 0;
-	    pDt = buf;
-	    if(!gO->accmBeg || !gO->accmEnd) { gO->accmBeg = ibeg; gO->accmEnd = iend; }
-	    return vmin(gO->accmEnd, iend);
-	}
-
-	//Direct writing to the group table
-	// Limiting to only already present data range
-	ibeg = vmax(ibeg, begin());
-	iend = vmin(iend, end());
-
-	// Table struct init
-	AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archivator().archTbl(gO->pos), true);
-	if(tbl.freeStat()) return 0;
-
-	//Write data to the table
-	for(int64_t ctm; ibeg <= iend; ibeg++) {
-	    switch(archive().valType(true)) {
-		case TFld::Boolean:	cfg.cfg(archive().id()).setI(buf.getB(&ibeg,true));	break;
-		case TFld::Int16: case TFld::Int32: case TFld::Int64: {
-		    int64_t bval = buf.getI(&ibeg, true);
-		    switch(archive().valType(true)) {
-			case TFld::Int16: cfg.cfg(archive().id()).setI((bval==EVAL_INT) ? EVAL_INT16 : (int16_t)bval);	break;
-			case TFld::Int32: cfg.cfg(archive().id()).setI((bval==EVAL_INT) ? EVAL_INT32 : (int32_t)bval);	break;
-			case TFld::Int64: cfg.cfg(archive().id()).setI((bval==EVAL_INT) ? EVAL_INT64 : bval);	break;
-		    }
-		    break;
-		}
-		case TFld::Float: case TFld::Double: {
-		    double bval = buf.getR(&ibeg, true);
-		    switch(archive().valType(true)) {
-			case TFld::Float:  cfg.cfg(archive().id()).setR((bval==EVAL_REAL) ? EVAL_RFlt : (float)bval);	break;
-			case TFld::Double: cfg.cfg(archive().id()).setR((bval==EVAL_REAL) ? EVAL_RDbl : bval);	break;
-		    }
-		    break;
-		}
-		case TFld::String:	cfg.cfg(archive().id()).setS(buf.getS(&ibeg,true));	break;
-		default: break;
-	    }
-	    ctm = (ibeg/period())*period();
-	    cfg.cfg("TM").setI(ctm/1000000);
-	    cfg.cfg("TMU").setI(ctm%1000000);
-	    tbl.at().fieldSet(cfg);
-	}
+    MtxAlloc res(archivator().reqRes, true);
+    ModVArch::SGrp *gO = NULL;
+    TValBuf &pDt = archivator().accmGetReg(archive().id(), &gO, archive().valType(true));
+    if(toAccum) {
+	if(!gO->dbOK && pDt.realSize()) return 0;
+	pDt = buf;
+	if(!gO->accmBeg || !gO->accmEnd) { gO->accmBeg = ibeg; gO->accmEnd = iend; }
+	return vmin(gO->accmEnd, iend);
     }
+
+    //Direct writing to the group table
+    // Limiting to only already present data range
+    ibeg = vmax(ibeg, begin());
+    iend = vmin(iend, end());
+
+    // Table struct init
+    AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archivator().archTbl(gO->pos), true);
+    if(tbl.freeStat()) return 0;
+
+    //Write data to the table
+    int64_t lstWrTm = 0;
+    for(int64_t ctm; ibeg <= iend; ibeg++) {
+	switch(archive().valType(true)) {
+	    case TFld::Boolean:	cfg.cfg(archive().id()).setI(buf.getB(&ibeg,true));	break;
+	    case TFld::Int16: case TFld::Int32: case TFld::Int64: {
+		int64_t bval = buf.getI(&ibeg, true);
+		switch(archive().valType(true)) {
+		    case TFld::Int16: cfg.cfg(archive().id()).setI((bval==EVAL_INT) ? EVAL_INT16 : (int16_t)bval);	break;
+		    case TFld::Int32: cfg.cfg(archive().id()).setI((bval==EVAL_INT) ? EVAL_INT32 : (int32_t)bval);	break;
+		    case TFld::Int64: cfg.cfg(archive().id()).setI((bval==EVAL_INT) ? EVAL_INT64 : bval);	break;
+		}
+		break;
+	    }
+	    case TFld::Float: case TFld::Double: {
+		double bval = buf.getR(&ibeg, true);
+		switch(archive().valType(true)) {
+		    case TFld::Float:  cfg.cfg(archive().id()).setR((bval==EVAL_REAL) ? EVAL_RFlt : (float)bval);	break;
+		    case TFld::Double: cfg.cfg(archive().id()).setR((bval==EVAL_REAL) ? EVAL_RDbl : bval);	break;
+		}
+		break;
+	    }
+	    case TFld::String:	cfg.cfg(archive().id()).setS(buf.getS(&ibeg,true));	break;
+	    default: break;
+	}
+	ctm = (ibeg/period())*period();
+	cfg.cfg("TM").setI(ctm/1000000);
+	cfg.cfg("TMU").setI(ctm%1000000);
+	tbl.at().fieldSet(cfg);
+	lstWrTm = ctm;
+    }
+
+    return lstWrTm;
 }
 
 bool ModVArchEl::readMeta( )

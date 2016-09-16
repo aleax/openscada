@@ -405,6 +405,9 @@ class TVArchEl
 	TVArchive &archive( );
 	TVArchivator &archivator( );
 
+	//Public attributes
+	int64_t	mLastGet;
+
     protected:
 	//Protected methods
 	virtual TVariant getValProc( int64_t *tm, bool up_ord );
@@ -419,8 +422,6 @@ class TVArchEl
 	//Private attributes
 	TVArchive	&mArchive;
 	TVArchivator	&mArchivator;
-
-	int64_t	mLastGet;
 };
 
 }

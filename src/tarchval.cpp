@@ -1189,15 +1189,18 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch )
 {
     //Check for put to buffer
-    if((arch.empty() || arch == BUF_ARCH_NM) && iend > TValBuf::begin())
+    if(((arch.empty() && TValBuf::end()) || arch == BUF_ARCH_NM) && iend > TValBuf::begin()) {
+	bool onlyBuf = (ibeg >= TValBuf::end());
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
+	if(arch == BUF_ARCH_NM || onlyBuf) return;	//To prevent spare writings direct to the archivators
+    }
 
-    //Put to archivators
+    //Put to the archivators
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
-	if((arch.empty() || arch == archEl[i_a]->archivator().workId()))
+    for(unsigned iA = 0; iA < archEl.size(); iA++)
+	if((arch.empty() || arch == archEl[iA]->archivator().workId()))
 		//&& (!archEl[i_a]->lastGet() || ibeg < archEl[i_a]->lastGet()))	//!!!! Impossible write direct else
-	    archEl[i_a]->setVals(buf, ibeg, iend/*vmin(iend,archEl[i_a]->lastGet())*/);
+	    archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[i_a]->lastGet())*/);
 }
 
 void TVArchive::getActiveData( const int64_t &tm )
@@ -2349,6 +2352,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/arch/arch/0",_("Archive"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/1",_("Period (s)"),R_R_R_,"root",SARH_ID,1,"tp","real");
 		ctrMkNode("list",opt,-1,"/arch/arch/2",_("Buffer size"),R_R_R_,"root",SARH_ID,1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/arch/arch/3",_("Last read buffer"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	    }
 	return;
     }
@@ -2370,12 +2374,14 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/0","");
 	XMLNode *n_per  = ctrMkNode("list",opt,-1,"/arch/arch/1","");
 	XMLNode *n_size = ctrMkNode("list",opt,-1,"/arch/arch/2","");
+	XMLNode *n_lstRd = ctrMkNode("list",opt,-1,"/arch/arch/3","");
 
 	ResAlloc res(archRes,false);
 	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel) {
 	    if(n_arch)	n_arch->childAdd("el")->setText(iel->second->archive().id());
 	    if(n_per)	n_per->childAdd("el")->setText(r2s((double)iel->second->archive().period()/1000000.,6));
 	    if(n_size)	n_size->childAdd("el")->setText(i2s(iel->second->archive().size()));
+	    if(n_lstRd)	n_lstRd->childAdd("el")->setText(atm2s(iel->second->mLastGet*1e-6)+"."+i2s(iel->second->mLastGet%1000000));
 	}
     }
     else TCntrNode::cntrCmdProc(opt);
@@ -2385,7 +2391,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 //* TVArchEl                                      *
 //*************************************************
 TVArchEl::TVArchEl( TVArchive &iarchive, TVArchivator &iarchivator ) :
-    prevTm(0), prevVal(EVAL_REAL), mArchive(iarchive), mArchivator(iarchivator), mLastGet(0)	{ }
+    mLastGet(0), prevTm(0), prevVal(EVAL_REAL), mArchive(iarchive), mArchivator(iarchivator)	{ }
 
 TVArchEl::~TVArchEl( )	{ }
 
@@ -2624,7 +2630,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
     else setOK = setValsProc(ibuf, beg, end, toAccum);
 
     if(setOK) {
-	if(mLastGet && setOK > mLastGet) mLastGet = setOK+1;
+	if(&archive() == &ibuf && (!mLastGet || (mLastGet && setOK > mLastGet))) mLastGet = setOK+1;
 	if(&archive() == &ibuf || setOK > archive().end()) { prevTm = wPrevTm; prevVal = wPrevVal; }
     }
 }
