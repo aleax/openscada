@@ -3585,7 +3585,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1472562892',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1474391075',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','curUSek','0',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','');
@@ -4204,7 +4204,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrRegul','sclMarkFont','Arial 14',32,'','','
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm0val','<EVAL>',40,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm1val','<EVAL>',8,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm2val','<EVAL>',8,'','','trnd','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrRegul','curSek','1441805957',0,'','','trnd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrRegul','curSek','1474390947',0,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm3addr','',8,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm3bordU','16',0,'','','trnd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrRegul','prm3color','magenta-127',0,'','','trnd','','','','','','');
@@ -9144,9 +9144,9 @@ INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmOpenSt','Parameter:state - "Opene
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmClose','Parameter:command - "Close"',131072,'<EVAL>',14,'Parameter|close','','','Параметр:команда - "Закрити"','','Parameter|close','Параметр:команда - "Закрыть"','','Parameter|close','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmStop','Parameter:command - "Stop"',131072,'<EVAL>',14,'Parameter|stop','','','Параметр:команда - "Стоп"','','Parameter|stop','Параметр:команда - "Стоп"','','Parameter|stop','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElCadr','prmCom','Parameter:command - "Open"',131072,'<EVAL>',14,'Parameter|com','','','Параметр:команда - "Відкрити"','','Parameter|com','Параметр:команда - "Открыть"','','Parameter|com','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','SHIFR','Parameter:code',131077,'<EVAL>||',10,'Parameter|SHIFR','','','Параметр:шифр','<EVAL>||','Parameter|SHIFR','Параметр:шифр','<EVAL>','Parameter|SHIFR','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','DESCR','Parameter:Description',131077,'<EVAL>||',10,'Parameter|DESCR','','','Параметр:опис','<EVAL>||','Parameter|DESCR','Параметр:описание','<EVAL>','Parameter|DESCR','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','ed','Parameter:Dimension variable',131077,'<EVAL>||',10,'Parameter|ed','','','Параметр:одиниця виміру','<EVAL>||','Parameter|ed','Параметр:единица измерения','<EVAL>','Parameter|ed','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','SHIFR','Parameter:code',131077,'<EVAL>',10,'Parameter|SHIFR','','','Параметр:шифр','<EVAL>||','','Параметр:шифр','<EVAL>','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','DESCR','Parameter:Description',131077,'<EVAL>',10,'Parameter|DESCR','','','Параметр:опис','<EVAL>||','','Параметр:описание','<EVAL>','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','ed','Parameter:Dimension variable',131077,'<EVAL>',10,'Parameter|ed','','','Параметр:одиниця виміру','<EVAL>||','','Параметр:единица измерения','<EVAL>','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','Hdwn','Parameter:bottom output border',131076,'<EVAL>|',14,'Parameter|Hdwn','','','Параметр:нижня границя виходу','','','Параметр:нижняя граница выхода','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','Hup','Parameter:atop output border',131076,'<EVAL>|',14,'Parameter|Hup','','','Параметр:верхня границя виходу','','','Параметр:верхняя граница выхода','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','K1','Parameter:Input 1 coefficient',131076,'<EVAL>|',14,'Parameter|K1','','','Параметр:коеф. входу 1','','','Параметр:коэф. входа 1','','','','');
@@ -9158,7 +9158,7 @@ INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','max','Parameter:Scale maximum',13
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','min','Parameter:Scale minimum',131076,'<EVAL>|',10,'Parameter|min','','','Параметр:мінімум шкали','','Parameter|min','Параметр:минимум шкалы','','Parameter|min','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','out','Parameter:Output',131076,'<EVAL>|',10,'Parameter|out','','','Параметр:вихід','','Parameter|out','Параметр:выход','','Parameter|out','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','out_addr','Parameter:Output address',196613,'<EVAL>',10,'Parameter|out','','','Параметр:адреса виходу','','Parameter|out','Параметр:адрес выхода','','Parameter|out','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','NAME','Parameter:code',131077,'<EVAL>||',10,'Parameter|NAME','','','Параметр:шифр','<EVAL>||','Parameter|NAME','Параметр:шифр','<EVAL>','Parameter|NAME','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','NAME','Parameter:code',131077,'<EVAL>',10,'Parameter|NAME','','','Параметр:шифр','<EVAL>||','','Параметр:шифр','<EVAL>','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','sp','Parameter:Set point',131076,'<EVAL>|',10,'Parameter|sp','','','Параметр:завдання','','Parameter|sp','Параметр:задание','','Parameter|sp','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrRegul','sp_addr','Parameter:Set point address',196613,'<EVAL>',10,'Parameter|sp','','','Параметр:адреса завдання','','Parameter|sp','Параметр:адрес задания','','Parameter|sp','','');
 INSERT INTO "wlb_Main_uio" VALUES('ResultGraphEl','p1_min','Parameter1:minimum',131076,'<EVAL>||',10,'Parameter 1|min','','','Параметр1:мінімум','','','Параметр1:минимум','','','','');
@@ -17399,6 +17399,8 @@ if(f_start) {
 			if(cEl.attr("contextMenu").search(":select$") < 0)
 				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
 		}
+	this.trnd1.attrSet("focus", true);
+	//event = "ws_FocusIn:/trnd1";
 }
 
 curTm = SYS.time();
@@ -17485,7 +17487,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1472581150);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1474391480);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAD/klEQVRYhe2Z224bRRiA57gHr8/H2MEpLSCRovYGiXsE4qJ9gEq8RR+A
 23LDg0TiFSJ6Ty8hvSEJJSRqnMb2endnZ2dPPxdxTZq6jllMlkr+rmakmX//z/96ZjSLv/v+Bx9p
@@ -18184,7 +18186,7 @@ trnd_prm2bordL = min;
 trnd_prm2bordU = max;
 trnd_prm3addr = auto_addr;
 trnd_prm4addr = impQup_addr;
-trnd_prm5addr = impQdwn_addr;','','',1000,'id;path;name;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;',1441805959);
+trnd_prm5addr = impQdwn_addr;','','',1000,'id;path;name;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;',1474391480);
 INSERT INTO "wlb_Main" VALUES('ResultGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 OElEQVRYhc2YTW8TRxiA33fmnZnd9VcSO4EgQW+tVPVSCUGLAAHiQ6I3JISEOHLtpRfE36A/CSEq
 hdKEQogqVNoCdkJI7NiO7f2YeXtwQD2UHXMYtXsb6ZlnPZJ3n53BH+/dc84NBgPHnOd5nueRMXlR
@@ -19615,6 +19617,8 @@ if(f_start) {
 			if(cEl.attr("contextMenu").search(":select$") < 0)
 				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
 		}
+	this.trnd1.attrSet("focus", true);
+	//event = "ws_FocusIn:/trnd1";
 }
 
 curTm = SYS.time();
@@ -19702,7 +19706,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1472581150);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1474391480);
 INSERT INTO "wlb_Main" VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ

@@ -109,6 +109,8 @@ class ModVArch: public TVArchivator
 
 	TValBuf &accmGetReg( const string &aNm, SGrp **grp = NULL, TFld::Type tp = TFld::Real, int prefGrpPos = -1 );
 	void accmUnreg( const string &aNm );
+	bool grpLimits( SGrp &oG, int64_t *beg = NULL, int64_t *end = NULL );
+	void grpMetaUpd( SGrp &oG, const string *aLs = NULL );
 
 	//Attributes
 	bool	needMeta;			//Need meta mark
@@ -120,6 +122,7 @@ class ModVArch: public TVArchivator
 	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	TVArchEl *getArchEl( TVArchive &arch );
 

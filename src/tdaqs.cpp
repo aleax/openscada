@@ -526,7 +526,7 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
     map<string, map<string,bool> > sts = mRdCntr;
     res.unlock();
 
-    for(map<string, map<string,bool> >::iterator sit = sts.begin(); sit != sts.end(); ++sit) {
+    for(map<string, map<string,bool> >::iterator sit = sts.begin(); sit != sts.end(); ++sit)
 	if((cit=sit->second.find(cntr)) != sit->second.end() && (!toRun || cit->second)) {
 	    if(prevSt.size() && !prevPresent) {
 		if(sit->first == prevSt) prevPresent = true;
@@ -538,9 +538,8 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
 	    mRdCntr.erase(sit->first);
 	    res.unlock();
 	}
-    }
 
-    at(TSYS::strParse(cntr,0,".")).at().at(TSYS::strParse(cntr,1,".")).at().setRedntUse(false);
+    if(prevSt.empty()) at(TSYS::strParse(cntr,0,".")).at().at(TSYS::strParse(cntr,1,".")).at().setRedntUse(false);
 
     return "";
 }

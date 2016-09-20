@@ -66,7 +66,7 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
     elVal.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
     elVal.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
-    elVal.fldAdd(new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;1000000"));
+    elVal.fldAdd(new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;100000"));
     elVal.fldAdd(new TFld("A_PER",_("Period archiving (sec)"),TFld::Integer,0,"4","60","0;1000"));
     elVal.fldAdd(new TFld("SEL_PR",_("Selection priority"),TFld::Integer,0,"4","10","0;1000"));
 
@@ -343,7 +343,7 @@ void TArchiveS::subStart( )
     if(!prcStMess) SYS->taskCreate(nodePath('.',true)+".mess", 0, TArchiveS::ArhMessTask, this);
     if(!prcStVal)  SYS->taskCreate(nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this);
 
-    TSubSYS::subStart( );
+    TSubSYS::subStart();
 
     subStarting = false;
 }
@@ -719,7 +719,7 @@ string TArchiveS::rdStRequest( const string &arch, XMLNode &req, const string &p
 	}
     }
 
-    at(TSYS::strParse(arch,0,".")).at().messAt(TSYS::strParse(arch,1,".")).at().setRedntUse(false);
+    if(prevSt.empty()) at(TSYS::strParse(arch,0,".")).at().messAt(TSYS::strParse(arch,1,".")).at().setRedntUse(false);
 
     return "";
 }
@@ -1306,8 +1306,6 @@ void TMArchivator::redntDataUpdate( )
     mRdFirst = false;
     mRdTm = s2ll(req.attr("tm"))+1;
 
-    //printf("TEST 01: end=%s; '%s': %s\n", atm2s(mRdTm).c_str(), id().c_str(), req.save().c_str());
-
     //Process the result
     mess.clear();
     XMLNode *mO = NULL;
@@ -1347,10 +1345,7 @@ bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
 		if(mess[iM].time < end()) messLoc.push_back(mess[iM]);
 	    }
 	    mess = messLoc;
-	    if(req.childSize()) {
-		//printf("TEST 01: Slave write: end=%s; '%s': %s\n", atm2s(end()).c_str(), id().c_str(), req.save().c_str());
-		return owner().owner().rdStRequest(workId(),req).size();
-	    }
+	    if(req.childSize()) return owner().owner().rdStRequest(workId(),req).size();
 	    return true;
 	}
 	else {			//for master
@@ -1359,7 +1354,6 @@ bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )
 		    req.childAdd("it")->setAttr("tm", ll2s(mess[iM].time))->setAttr("tmu", i2s(mess[iM].utime))->
 					setAttr("cat", mess[iM].categ)->setAttr("lev", i2s(mess[iM].level))->setText(mess[iM].mess);
 	    if(req.childSize()) {
-		//printf("TEST 01: Master write: '%s': %s\n", id().c_str(), req.save().c_str());
 		string lstStat;
 		int successWrs = 0;
 		while((lstStat=owner().owner().rdStRequest(workId(),req,lstStat,false)).size()) successWrs++;	//To all hosts

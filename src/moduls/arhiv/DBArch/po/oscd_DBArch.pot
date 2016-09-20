@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-12 20:24+0300\n"
+"POT-Creation-Date: 2016-09-20 21:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,9 @@ msgid "Force time as string"
 msgstr ""
 
 msgid "Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."
+msgstr ""
+
+msgid "Mark, time/(10*per)"
 msgstr ""
 
 msgid "Set to 0 for the limit disable and some performance rise"

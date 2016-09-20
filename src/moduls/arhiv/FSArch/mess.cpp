@@ -246,8 +246,7 @@ void ModMArch::checkArchivator( bool now )
 		if(f_arh->err()) files.push_back(f_arh);
 		else {
 		    for(iF = 0; iF < files.size(); iF++)
-			if(files[iF]->err() || f_arh->begin() >= files[iF]->begin())
-			{
+			if(files[iF]->err() || f_arh->begin() >= files[iF]->begin()) {
 			    files.insert(files.begin()+iF, f_arh);
 			    break;
 			}

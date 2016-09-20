@@ -1,3 +1,16 @@
+2016-09-20 Roman
+- DB.LibsDB.vcaBase: Main.{grpGraph,grpGraph10}: Set to the trend's control panel open on it start.
+- FIX:DAQ,Archive: The redundant request procedure fix for prevent the object stop at scaning requests, by previous host.
+- FIX:Archive: getVal() fix for request to current value but the buffer end() some lesser to it.
+- FIX:Archive.{*,FSArch,DBArch}: Exceptions into archivatorAttach() at the archivator's object stopped is prevented for allow the archive early start.
+    Archive.{FSArch,DBArch}: The modules adapted for early archivators init and archive's meta set from the physical archives.
+- !!!!:FIX:Archive.FSArch: Reading of value archives set optimal to the request time, up to ten times, through using "MARK" key and the seek request.
+    FIX: End of pushing accumulated values set to minimum from the data block's end and the group end.
+    Adapting to direct writing beyond the main accumulation process with limits and meta update.
+    Adapting to redundancy.
+    Values archivation period limited to the resolution in seconds.
+
+
 2016-09-16 Roman
 - !!:FIX:Archive.{*,FSArch}: Spare writings direct to the archivators prevent for TVArchive::setVals().
     !!:FIX:Last read buffer information is added and the property using fix.

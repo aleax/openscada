@@ -260,8 +260,10 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 		varch = owner().owner().valAt(ArhNm);
 		varch.at().setToStart(true);
 		varch.at().setValType(ArhTp);
-		varch.at().start();
+		//varch.at().start();
 	    }
+	    //  Check for archive's start state and it starts early for propper redundancy sync
+	    if(!varch.at().startStat() && varch.at().toStart()) varch.at().start();
 	    //  Check for attached
 	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
 	    //  Try connect new file

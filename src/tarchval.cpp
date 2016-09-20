@@ -1119,7 +1119,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )
 {
     //Get from buffer
-    if((arch.empty() || arch == BUF_ARCH_NM) && (!tm || (*tm >= begin() && *tm <= end())))
+    if((arch.empty() || arch == BUF_ARCH_NM) && (!tm || (begin() && *tm >= begin() && end() /*&& *tm <= end()*/)))
 	switch(TValBuf::valType()) {
 	    case TFld::Integer:	return TValBuf::getI(tm, up_ord);
 	    case TFld::String:	return TValBuf::getS(tm, up_ord);
@@ -1245,7 +1245,7 @@ void TVArchive::archivatorAttach( const string &arch )
 
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().valAt(TSYS::strSepParse(arch,1,'.'));
 
-    if(!archivat.at().startStat()) throw err_sys(_("Archivator '%s' error or it is not started."), arch.c_str());
+    if(!archivat.at().startStat()) return;	//throw err_sys(_("Archivator '%s' error or it is not started."), arch.c_str());
 
     if(startStat()) {	//Attach allow only to started archive
 	int i_l, i_ins = -1;
@@ -2407,10 +2407,10 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))
     {
 	int64_t remTm = 0;
-	string lstStat;
 	AutoHD<TVal> paVl = archive().srcPAttr();
 	AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&paVl.at().owner()));
 	if(sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode() != TController::Off) {
+	    string lstStat;
 	    XMLNode req("get");
 	    req.clear()->setAttr("local","1")->
 		setAttr("path", paVl.at().nodePath(0,true)+"/%2fserv%2fval")->
@@ -2459,9 +2459,9 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 	    int64_t firstEval = 0, curEval = 0;
 	    int64_t cbeg = buf.begin();
 	    iend = buf.end();
-	    string lstStat;
 	    XMLNode req("get");
 	    do {
+		string lstStat;
 		string curVal = buf.getS(&cbeg, true);
 		if(curVal == EVAL_STR) {
 		    curEval = cbeg;
