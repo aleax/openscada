@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.5.7"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -106,18 +106,18 @@ void MBD::postDisable( int flag )
 	PGresult *res;
 	try {
 	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
-		throw TError(nodePath().c_str(), _("Fatal error - unable to allocate connection."));
+		throw err_sys(_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(connection) != CONNECTION_OK)
-		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
 	    string req = "DROP DATABASE \"" + db + "\"";
 	    if((res=PQexec(connection,req.c_str())) == NULL)
-		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
 	    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 		string err, err1;
 		err = PQresStatus(PQresultStatus(res));
 		err1 = PQresultErrorMessage(res);
 		PQclear(res);
-		throw TError(nodePath().c_str(), _("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
+		throw err_sys(_("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
 	    }
 	    else PQclear(res);
 	    PQfinish(connection);
@@ -155,15 +155,15 @@ void MBD::enable( )
 	bool dbCreateTry = false;
 nextTry:
 	if((connection=PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
-	    throw TError(nodePath().c_str(), _("Fatal error - unable to allocate connection."));
+	    throw err_sys(_("Fatal error - unable to allocate connection."));
 	if(PQstatus(connection) != CONNECTION_OK) {
-	    if(dbCreateTry) throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+	    if(dbCreateTry) throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
 	    //Try for connect to system DB, check for need DB present and create otherwise
 	    PQfinish(connection);
 	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
-		throw TError(nodePath().c_str(), _("Fatal error - unable to allocate connection."));
+		throw err_sys(_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(connection) != CONNECTION_OK)
-		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
 	    TBD::enable();
 
 	    vector< vector<string> > tbl;
@@ -217,7 +217,7 @@ void MBD::allowList( vector<string> &list )
 
 TTable *MBD::openTable( const string &inm, bool icreate )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
 
     create(inm, icreate);
     vector< vector<string> > tblStrct;
@@ -273,7 +273,7 @@ void MBD::getStructDB( const string &nm, vector< vector<string> > &tblStrct )
 	    tblStrct[i_f].push_back((i_k<keyLst.size())?"PRI":"");
 	}
     }
-    else throw TError(nodePath().c_str(), _("Table '%s' is not present!"), nm.c_str());
+    else throw err_sys(_("Table '%s' is not present!"), nm.c_str());
 }
 
 void MBD::transOpen( )
@@ -301,9 +301,9 @@ void MBD::transOpen( )
 	res = PQexec(connection, "BEGIN");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
 	    PQclear(res);
-	    mess_warning(nodePath().c_str(), _("Start transaction error!"));
+	    mess_sys(TMess::Warning, _("Start transaction error!"));
 	    return;
-	    //throw TError(nodePath().c_str(),_("Start transaction error!"));
+	    //throw err_sys(_("Start transaction error!"));
 	}
 	PQclear(res);
 	trOpenTm = SYS->sysTm();
@@ -332,9 +332,9 @@ void MBD::transCommit( )
 	res = PQexec(connection, "COMMIT");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
 	    PQclear(res);
-	    mess_warning(nodePath().c_str(), _("Stop transaction error!"));
+	    mess_sys(TMess::Warning, _("Stop transaction error!"));
 	    return;
-	    //throw TError(nodePath().c_str(),_("Stop transaction error!"));
+	    //throw err_sys(_("Stop transaction error!"));
 	}
 	PQclear(res);
     }
@@ -361,11 +361,14 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     MtxAlloc resource(connRes, true);	//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
 					//   request's sequence breakage on high concurrency access activity
 
+    if(reqCnt && PQtransactionStatus(connection) == PQTRANS_INERROR) transCommit();	//Close error transaction
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && reqCnt)		transCommit();
 
-    if((res=PQexec(connection,req.c_str())) == NULL)
-	throw TError(SQL_CONN, nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+    if((res=PQexec(connection,req.c_str())) == NULL) {
+	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON for: %s"), ireq.c_str());
+	throw err_sys(SQL_CONN, _("Connect to DB error: %s"), PQerrorMessage(connection));
+    }
     if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 	string  err = PQresStatus(PQresultStatus(res)),
 		err1 = PQresultErrorMessage(res);
@@ -374,10 +377,15 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	if(PQstatus(connection) != CONNECTION_OK) {
 	    resource.unlock();
 	    disable();
-	    throw TError(SQL_CONN, nodePath().c_str(), _("Connect to DB error: %s. %s"),err.c_str(),err1.c_str());
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON_st for: %s"), ireq.c_str());
+	    throw err_sys(SQL_CONN, _("Connect to DB error: %s. %s"), err.c_str(), err1.c_str());
 	}
-	throw TError(SQL_QUERY, nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
+	if(mess_lev() == TMess::Debug)
+	    mess_sys(TMess::Debug, _("ERR QUERY (con=%d;res=%d;tr=%d) for: %s"),
+		PQstatus(connection), PQresultStatus(res), PQtransactionStatus(connection), ireq.c_str());
+	throw err_sys(SQL_QUERY, _("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
     }
+    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("OK (tr=%d) for: %s"), PQtransactionStatus(connection), ireq.c_str());
 
     if(tbl) {
 	int num_fields = PQnfields(res);
@@ -468,7 +476,7 @@ MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
 	int pr1;
@@ -493,7 +501,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     vector< vector<string> >	inTbl,
 				&tbl = full ? *full : inTbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
     //Check for no present and no empty keys allow
@@ -564,7 +572,7 @@ void MTable::fieldGet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
     string sid;
     //Prepare request
@@ -597,7 +605,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw TError(nodePath().c_str(), _("Row \"%s\" is not present."), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present."), req_where.c_str());
 
     //Processing of query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
@@ -613,7 +621,7 @@ void MTable::fieldSet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -741,7 +749,7 @@ void MTable::fieldDel( TConfig &cfg )
 void MTable::fieldFix( TConfig &cfg, bool recurse )
 {
     bool next = false, next_key = false;
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
 
     bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
 	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -864,10 +872,19 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
 
 string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    string rez = cfg.getS(RqFlg);
+    string rez;
+    switch(cfg.fld().type()) {	//!! Different types for correct EVAL represent
+	case TFld::Boolean:	rez = i2s(cfg.getB());	break;
+	case TFld::Integer:	rez = (cfg.fld().flg()&TFld::DateTimeDec) ? UTCtoSQL(cfg.getI()) : i2s(cfg.getI());	break;
+	case TFld::Real:	rez = r2s(cfg.getR());	break;
+	default: rez = (cfg.fld().len() > 0) ? cfg.getS(RqFlg).substr(0,cfg.fld().len()) : cfg.getS(RqFlg);
+    }
+    return rez;
+
+    /*string rez = cfg.getS(RqFlg);
     if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
     if(cfg.fld().type() == TFld::String && cfg.fld().len() > 0) return rez.substr(0,cfg.fld().len());
-    return rez;
+    return rez;*/
 
     /*switch(cfg.fld().type()) {
 	case TFld::String:	return (cfg.fld().len() > 0) ? cfg.getS().substr(0,cfg.fld().len()) : cfg.getS();

@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.3"
+#define MOD_VER		"0.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -175,12 +175,12 @@ void MBD::enable( )
 
     try {
 #if (ODBCVER < 0x0300)
-	if(SQLAllocEnv(&henv) != SQL_SUCCESS)		throw TError(nodePath().c_str(), "SQLAllocEnv: %s", errors().c_str());
-	if(SQLAllocConnect(henv,&hdbc) != SQL_SUCCESS)	throw TError(nodePath().c_str(), "SQLAllocConnect: %s", errors().c_str());
+	if(SQLAllocEnv(&henv) != SQL_SUCCESS)		throw err_sys("SQLAllocEnv: %s", errors().c_str());
+	if(SQLAllocConnect(henv,&hdbc) != SQL_SUCCESS)	throw err_sys("SQLAllocConnect: %s", errors().c_str());
 #else
-	if(SQLAllocHandle(SQL_HANDLE_ENV,NULL,&henv) != SQL_SUCCESS)	throw TError(nodePath().c_str(), "SQLAllocHandle: %s", errors().c_str());
+	if(SQLAllocHandle(SQL_HANDLE_ENV,NULL,&henv) != SQL_SUCCESS)	throw err_sys("SQLAllocHandle: %s", errors().c_str());
 	SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, SQL_IS_UINTEGER);
-	if(SQLAllocHandle(SQL_HANDLE_DBC,henv,&hdbc) != SQL_SUCCESS)	throw TError(nodePath().c_str(), "SQLAllocHandle: %s", errors().c_str());
+	if(SQLAllocHandle(SQL_HANDLE_DBC,henv,&hdbc) != SQL_SUCCESS)	throw err_sys("SQLAllocHandle: %s", errors().c_str());
 #endif
 
 	//Set the application name
@@ -193,7 +193,7 @@ void MBD::enable( )
 
 	//Real connect
 	if(SQLDriverConnect(hdbc,0,(SQLCHAR*)addr().c_str(),SQL_NTS,(SQLCHAR*)outdsn,sizeof(outdsn)/sizeof(SQLTCHAR),&buflen,SQL_DRIVER_COMPLETE) != SQL_SUCCESS)
-	    throw TError(nodePath().c_str(), "SQLDriverConnect: %s", errors().c_str());
+	    throw err_sys("SQLDriverConnect: %s", errors().c_str());
 
 	//The version number and name of the driver
 	if(SQLGetInfo(hdbc,SQL_DRIVER_VER,driverInfo,sizeof(driverInfo),NULL) == SQL_SUCCESS) {
@@ -205,9 +205,9 @@ void MBD::enable( )
 
 	//Allocate statement handle
 #if (ODBCVER < 0x0300)
-	if(SQLAllocStmt(hdbc,&hstmt) != SQL_SUCCESS)	throw TError(nodePath().c_str(), "SQLAllocStmt: %s", errors().c_str());
+	if(SQLAllocStmt(hdbc,&hstmt) != SQL_SUCCESS)	throw err_sys("SQLAllocStmt: %s", errors().c_str());
 #else
-	if(SQLAllocHandle(SQL_HANDLE_STMT,hdbc,&hstmt) != SQL_SUCCESS)	throw TError(nodePath().c_str(), "SQLAllocHandle: %s", errors().c_str());
+	if(SQLAllocHandle(SQL_HANDLE_STMT,hdbc,&hstmt) != SQL_SUCCESS)	throw err_sys("SQLAllocHandle: %s", errors().c_str());
 #endif
 	TBD::enable();
     } catch(TError&) { disable(); throw; }
@@ -256,7 +256,7 @@ void MBD::allowList( vector<string> &list )
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
 
     //if(create) owner().sqlReq("CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
     //				TSYS::strEncode(inm,TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)");
@@ -376,7 +376,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 		tbl->push_back(row);
 	    }
 	}
-	//if(sts == SQL_ERROR) throw TError(nodePath().c_str(), "SQLMoreResults: %s", errors().c_str());	//!!!! Only single result support !!!!
+	//if(sts == SQL_ERROR) throw err_sys("SQLMoreResults: %s", errors().c_str());	//!!!! Only single result support !!!!
     } catch(TError &ier) { err = ier.mess; }
 
 #if (ODBCVER < 0x0300)
@@ -385,7 +385,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     SQLCloseCursor(hstmt);
 #endif
 
-    if(err.size()) throw TError(nodePath().c_str(), "%s", err.c_str());
+    if(err.size()) throw err_sys("%s", err.c_str());
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -477,7 +477,7 @@ MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {
-    if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty, nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(TSYS::DBTableEmpty, _("Table is empty!"));
     mLstUse = time(NULL);
     for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 
@@ -513,9 +513,18 @@ void MTable::fieldFix( TConfig &cfg )
 
 string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    string rez = cfg.getS(RqFlg);
-    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
+    string rez;
+    switch(cfg.fld().type()) {	//!! Different types for correct EVAL represent
+	case TFld::Boolean:	rez = i2s(cfg.getB());	break;
+	case TFld::Integer:	rez = i2s(cfg.getI());	break;
+	case TFld::Real:	rez = r2s(cfg.getR());	break;
+	default: rez = (cfg.fld().len() > 0) ? cfg.getS(RqFlg).substr(0,cfg.fld().len()) : cfg.getS(RqFlg);
+    }
     return rez;
+
+    //string rez = cfg.getS(RqFlg);
+    //if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
+    //return rez;
 }
 
 void MTable::setVal( TCfg &cf, const string &val, bool tr )

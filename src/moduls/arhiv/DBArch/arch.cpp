@@ -34,7 +34,7 @@
 #define MOD_NAME	_("To DB archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"2.1.0"
+#define MOD_VER		"2.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to DB.")
 #define LICENSE		"GPL2"
@@ -104,7 +104,7 @@ ModArch::~ModArch( )
 void ModArch::perSYSCall( unsigned int cnt )
 {
     try {
-	if(cnt%60) return;
+	//if(cnt%60) return;
 
 	vector<string> aLs;
 
@@ -112,7 +112,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 	valList(aLs);
 	for(unsigned iA = 0; iA < aLs.size(); iA++)
 	    if(valAt(aLs[iA]).at().startStat())
-		try{ valAt(aLs[iA]).at().checkArchivator(); }
+		try{ valAt(aLs[iA]).at().checkArchivator(cnt); }
 		catch(TError &err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		    mess_sys(TMess::Error, _("Check value archivator '%s' error."), aLs[iA].c_str());

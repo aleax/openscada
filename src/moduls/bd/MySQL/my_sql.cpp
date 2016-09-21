@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.7"
+#define MOD_VER		"2.5.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -103,13 +103,13 @@ void MBD::postDisable( int flag )
 	    MYSQL connect;
 
 	    MtxAlloc resource(connRes, true);
-	    if(!mysql_init(&connect)) throw TError(nodePath().c_str(), _("Error initializing client."));
+	    if(!mysql_init(&connect)) throw err_sys(_("Error initializing client."));
 	    connect.reconnect = 1;
 	    if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), mysql_error(&connect));
+		throw err_sys(_("Connect to DB error: %s"), mysql_error(&connect));
 
 	    string req = "DROP DATABASE `" + bd + "`";
-	    if(mysql_real_query(&connect,req.c_str(),req.size())) throw TError(nodePath().c_str(), _("Query to DB error: %s"), mysql_error(&connect));
+	    if(mysql_real_query(&connect,req.c_str(),req.size())) throw err_sys(_("Query to DB error: %s"), mysql_error(&connect));
 
 	    mysql_close(&connect);
 	} catch(TError&) { }
@@ -136,7 +136,7 @@ void MBD::enable( )
     cd_pg  = codePage().size() ? codePage() : Mess->charset();
 
     //API init
-    if(!mysql_init(&connect)) throw TError(nodePath().c_str(), _("Error initializing client."));
+    if(!mysql_init(&connect)) throw err_sys(_("Error initializing client."));
 
     //Timeouts parse
     off = 0;
@@ -150,7 +150,7 @@ void MBD::enable( )
 
     connect.reconnect = 1;
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-	throw TError(nodePath().c_str(), _("Connect to DB error: %s"), mysql_error(&connect));
+	throw err_sys(_("Connect to DB error: %s"), mysql_error(&connect));
 
     TBD::enable();
 
@@ -197,7 +197,7 @@ void MBD::allowList( vector<string> &list )
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
 
     if(create) sqlReq("CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`.`"+
 			TSYS::strEncode(inm, TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)");
@@ -232,7 +232,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	{
 	    resource.unlock();
 	    disable();
-	    throw TError(nodePath().c_str(), _("Connect to DB error %d: %s"), irez, mysql_error(&connect));
+	    throw err_sys(_("Connect to DB error %d: %s"), irez, mysql_error(&connect));
 	}
 	if(irez) {
 	    if(mysql_errno(&connect) == ER_NO_DB_ERROR) {
@@ -241,14 +241,14 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		resource.lock();
 		goto rep;
 	    }
-	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Query '%s' is error."),ireq.c_str());
-	    throw TError(nodePath().c_str(), _("Query to DB error %d: %s"), irez, mysql_error(&connect));
+	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("Query '%s' is error."), ireq.c_str());
+	    throw err_sys(_("Query to DB error %d: %s"), irez, mysql_error(&connect));
 	}
     }
 
     do {
 	if(!(res=mysql_store_result(&connect)) && mysql_field_count(&connect))
-	    throw TError(nodePath().c_str(), _("Store result error: %s"), mysql_error(&connect));
+	    throw err_sys(_("Store result error: %s"), mysql_error(&connect));
 
 	if(res && tbl && tbl->empty()) {	//Process only first statement's result
 	    int num_fields = mysql_num_fields(res);
@@ -270,7 +270,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
 	if(res) mysql_free_result(res);
 
-	if((irez=mysql_next_result(&connect)) > 0) throw TError(nodePath().c_str(), _("Could not execute statement: %s"), mysql_error(&connect));
+	if((irez=mysql_next_result(&connect)) > 0) throw err_sys(_("Could not execute statement: %s"), mysql_error(&connect));
     }while(irez == 0);
 }
 
@@ -367,7 +367,7 @@ MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
     for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
@@ -404,7 +404,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     vector< vector<string> >	inTbl,
 				&tbl = full ? *full : inTbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
     //Check for no present and no empty keys allow
@@ -477,7 +477,7 @@ void MTable::fieldGet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
     string sid;
@@ -511,7 +511,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw TError(nodePath().c_str(), _("Row \"%s\" is not present."), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present."), req_where.c_str());
 
     //Processing of query
     for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
@@ -527,7 +527,7 @@ void MTable::fieldSet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
     string sid, sval;
@@ -662,7 +662,7 @@ void MTable::fieldFix( TConfig &cfg )
 {
     bool next = false, next_key = false;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
 
     bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
 	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -798,9 +798,18 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 
 string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    string rez = cfg.getS(RqFlg);
-    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
+    string rez;
+    switch(cfg.fld().type()) {	//!! Different types for correct EVAL represent
+	case TFld::Boolean:	rez = i2s(cfg.getB());	break;
+	case TFld::Integer:	rez = (cfg.fld().flg()&TFld::DateTimeDec) ? UTCtoSQL(cfg.getI()) : i2s(cfg.getI());	break;
+	case TFld::Real:	rez = r2s(cfg.getR());	break;
+	default: rez = (cfg.fld().len() > 0) ? cfg.getS(RqFlg).substr(0,cfg.fld().len()) : cfg.getS(RqFlg);
+    }
     return rez;
+
+    /*string rez = cfg.getS(RqFlg);
+    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
+    return rez;*/
 
     /*switch(cfg.fld().type()) {
 	case TFld::Integer:

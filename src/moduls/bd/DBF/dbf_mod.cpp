@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.4"
+#define MOD_VER		"2.2.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the *.dbf files, version 3.0.")
 #define LICENSE		"GPL2"
@@ -101,7 +101,7 @@ void MBD::postDisable( int flag )
     TBD::postDisable(flag);
 
     if(flag && owner().fullDeleteDB())
-	if(rmdir(addr().c_str()) != 0) mess_warning(nodePath().c_str(), _("Delete DB error!"));
+	if(rmdir(addr().c_str()) != 0) mess_sys(TMess::Warning, _("Delete DB error!"));
 }
 
 void MBD::enable( )
@@ -110,8 +110,8 @@ void MBD::enable( )
 
     char *rez = getcwd(buf, sizeof(buf));
     if(chdir(addr().c_str()) != 0 && mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0)
-	throw TError(nodePath().c_str(), _("Error create DB directory '%s'!"),addr().c_str());
-    if(rez && chdir(buf)) throw TError(nodePath().c_str(), _("Restore previous directory as current error."));
+	throw err_sys(_("Error create DB directory '%s'!"), addr().c_str());
+    if(rez && chdir(buf)) throw err_sys(_("Restore previous directory as current error."));
 
     TBD::enable();
 }
@@ -154,7 +154,7 @@ void MBD::transCloseCheck( )
 
 TTable *MBD::openTable( const string &nm, bool create )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), nm.c_str());
+    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), nm.c_str());
 
     //Set file extend
     string tblNm = nm;
@@ -164,7 +164,7 @@ TTable *MBD::openTable( const string &nm, bool create )
     TBasaDBF *basa = new TBasaDBF();
     if(basa->LoadFile((char*)nTable.c_str()) == -1 && !create) {
 	delete basa;
-	throw TError(nodePath().c_str(), _("Open table error!"));
+	throw err_sys(_("Open table error!"));
     }
 
     return new MTable(nm, this, nTable, basa);
@@ -211,7 +211,7 @@ void MTable::postDisable( int flag )
 	if(!(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf")) n_tbl += ".dbf";
 
 	if(remove((owner().addr()+"/"+n_tbl).c_str()) < 0)
-	    mess_err(nodePath().c_str(), "%s", strerror(errno));
+	    mess_sys(TMess::Error, "%s", strerror(errno));
     }
 }
 
@@ -241,7 +241,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg, vector< vector<string> > *full )
 
 	// Get table volume
 	string val;
-	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Cell error!"));
 
 	// Write value
 	setVal(e_cfg, val);
@@ -258,7 +258,7 @@ void MTable::fieldGet( TConfig &cfg )
     ResAlloc res(mRes, false);
 
     //Get key line
-    if((i_ln=findKeyLine(cfg)) < 0) throw TError(nodePath().c_str(), _("Field is not present!"));
+    if((i_ln=findKeyLine(cfg)) < 0) throw err_sys(_("Field is not present!"));
 
     //Get config fields list
     vector<string> cf_el;
@@ -276,7 +276,7 @@ void MTable::fieldGet( TConfig &cfg )
 
 	// Get table volume
 	string val;
-	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Cell error!"));
 	// Write value
 	setVal(e_cfg, val);
     }
@@ -295,7 +295,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Check for write access
     if(!(access(nTable.c_str(),F_OK|W_OK) == 0 || (access(nTable.c_str(),F_OK) != 0 && access(owner().addr().c_str(),W_OK) == 0)))
-	throw TError(nodePath().c_str(), _("Read only access to file '%s'."), nTable.c_str());
+	throw err_sys(_("Read only access to file '%s'."), nTable.c_str());
 
     bool forceUpdt = cfg.reqKeys(),
 	appMode = forceUpdt || (cfg.incomplTblStruct() && !basa->isEmpty());	//Only for append no present fields
@@ -313,7 +313,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    db_str_rec n_rec;
 
 	    fieldPrmSet(e_cfg, n_rec);
-	    if(basa->addField(i_cf,&n_rec) < 0) throw TError(nodePath().c_str(), _("Column error!"));
+	    if(basa->addField(i_cf,&n_rec) < 0) throw err_sys(_("Column error!"));
 	}
 	else if(!appMode) {
 	    // Check collumn parameters
@@ -337,7 +337,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    db_str_rec n_rec;
 
 	    fieldPrmSet(e_cfg, n_rec);
-	    if(basa->setField(i_clm,&n_rec) < 0) throw TError(nodePath().c_str(), _("Column error!"));
+	    if(basa->setField(i_clm,&n_rec) < 0) throw err_sys(_("Column error!"));
 	}
     }
     //Del no used collumn
@@ -346,7 +346,7 @@ void MTable::fieldSet( TConfig &cfg )
 	unsigned i_cf;
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
-	if(i_cf >= cf_el.size() && basa->DelField(i_clm) < 0) throw TError(nodePath().c_str(), _("Delete field error!"));
+	if(i_cf >= cf_el.size() && basa->DelField(i_clm) < 0) throw err_sys(_("Delete field error!"));
     }
 
     //Write to all records
@@ -370,7 +370,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(fld_rec == NULL) continue;
 
 	    // Set table volume
-	    if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	    if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw err_sys(_("Cell error!"));
 	}
 	if(!forceUpdt) isEnd = true;
     }
@@ -388,8 +388,8 @@ void MTable::fieldDel( TConfig &cfg )
     int i_ln;
     while((i_ln = findKeyLine(cfg,0,true)) >= 0) {
 	if(!i_ok && !(access(nTable.c_str(),F_OK|W_OK) == 0 || (access(nTable.c_str(),F_OK) != 0 && mModify && access(owner().addr().c_str(),W_OK) == 0)))
-	    throw TError(nodePath().c_str(), _("Read only access to file '%s'."), nTable.c_str());
-	if(basa->DeleteItems(i_ln,1) < 0) throw TError(nodePath().c_str(), _("Line error!"));
+	    throw err_sys(_("Read only access to file '%s'."), nTable.c_str());
+	if(basa->DeleteItems(i_ln,1) < 0) throw err_sys(_("Line error!"));
 
 	i_ok = true;
 	mModify = SYS->sysTm();
@@ -422,10 +422,10 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey, int off )
 	    db_str_rec *fld_rec;
 	    for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
 		if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
-	    if(fld_rec == NULL) throw TError(nodePath().c_str(), _("Key column '%s' is not present!"), cf_el[i_cf].c_str());
+	    if(fld_rec == NULL) throw err_sys(_("Key column '%s' is not present!"), cf_el[i_cf].c_str());
 	    // Get table volume
 	    string val;
-	    if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	    if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw err_sys(_("Cell error!"));
 	    // Remove spaces from end
 	    int i;
 	    for(i = val.size(); i > 0 && val[i-1] == ' '; i--) ;
@@ -484,20 +484,22 @@ void MTable::save( )
 
 string MTable::getVal( TCfg &cfg, db_str_rec *fld_rec )
 {
+    string rez;
     switch(cfg.fld().type()) {
-	case TFld::String:	return Mess->codeConvOut(codepage, cfg.getS());
-	case TFld::Integer:	return i2s(cfg.getI());
+	case TFld::Boolean:	rez = cfg.getB() ? "T" : "F";	break;
+	case TFld::Integer:	rez = i2s(cfg.getI());		break;
 	case TFld::Real: {
-	    if(!fld_rec)	return r2s(cfg.getR());
+	    if(!fld_rec)	{ rez = r2s(cfg.getR()); break; }
 
 	    char str[200];
 	    snprintf(str, sizeof(str), "%*.*f", fld_rec->len_fild, fld_rec->dec_field, cfg.getR());
-	    return str;
+	    rez = str;
+	    break;
 	}
-	case TFld::Boolean:	return cfg.getB() ? "T" : "F";
-	default: break;
+	default: rez = Mess->codeConvOut(codepage, cfg.getS());	break;
     }
-    return "";
+
+    return rez;
 }
 
 void MTable::setVal( TCfg &cfg, const string &val )

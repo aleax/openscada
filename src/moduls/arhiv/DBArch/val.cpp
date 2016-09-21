@@ -35,7 +35,7 @@ using namespace DBArch;
 //* DBArch::ModVArch - Value archivator           *
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TVArchivator(iid,idb,cf_el), needMeta(true), reqRes(true), mMaxSize(0), mTmAsStr(false), mGroupPrms(0)
+    TVArchivator(iid,idb,cf_el), needMeta(true), needRePushGrps(false), reqRes(true), mMaxSize(0), mTmAsStr(false), mGroupPrms(0)
 {
     setSelPrior(1);
     setAddr("*.*");
@@ -79,7 +79,7 @@ void ModVArch::start( )
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
     try { if(!db.at().enableStat()) db.at().enable(); }
-    catch(TError &err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_sys(TMess::Warning, _("Enable target DB error: %s"), err.mess.c_str()); }
 
     //Start getting data cycle
     TVArchivator::start();
@@ -101,9 +101,11 @@ TVArchEl *ModVArch::getArchEl( TVArchive &arch )	{ return new ModVArchEl(arch, *
 
 string ModVArch::archTbl( int iG )	{ return "DBAVl_"+id()+((iG<0)?"":("_<GRP>"+(iG?i2s(iG):""))); }
 
-void ModVArch::checkArchivator( )
+void ModVArch::checkArchivator( unsigned int cnt )
 {
-    if(!needMeta) return;
+    if(needRePushGrps) pushAccumVals();
+
+    if(!needMeta || (cnt%60)) return;
 
     //Clear the accummulator's groups
     if(groupPrms()) accm.clear();
@@ -302,7 +304,7 @@ void ModVArch::accmUnreg( const string &aNm )
 	    pLs += i2s(iP->second.valType()) + ":" + iP->first + "\n";
 
 	//Update the group meta info
-	grpMetaUpd(oG, &pLs);
+	try{ grpMetaUpd(oG, &pLs); } catch(TError&) { }
 	break;
     }
 }
@@ -314,27 +316,25 @@ bool ModVArch::grpLimits( SGrp &oG, int64_t *ibeg, int64_t *iend )
 
     if(ibeg && iend && wEnd <= oG.end && wBeg >= oG.beg) return false;
 
-    AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(oG.pos), true);
+    try {
+	AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(oG.pos), true);
 
-    //Remove limited records
-    TConfig	cfg(&oG.tblEl);
-    if(maxSize() && (wEnd-wBeg) > (int64_t)(maxSize()*86400e6)) {
-	cfg.cfg("TM").setKeyUse(false); //cfg.cfg("TMU").setKeyUse(false);
-	int64_t nEnd = ((wEnd-(int64_t)(maxSize()*86400e6))/oG.per)*oG.per;
-	for(int tC = vmax(wBeg,nEnd-3600ll*oG.per)/(10*oG.per); tC < nEnd/(10*oG.per); ++tC) {
-	    cfg.cfg("MARK").setI(tC, true);
-	    tbl.at().fieldDel(cfg);
+	//Remove limited records
+	TConfig	cfg(&oG.tblEl);
+	if(maxSize() && (wEnd-wBeg) > (int64_t)(maxSize()*86400e6)) {
+	    cfg.cfg("TM").setKeyUse(false); //cfg.cfg("TMU").setKeyUse(false);
+	    int64_t nEnd = ((wEnd-(int64_t)(maxSize()*86400e6))/oG.per)*oG.per;
+	    for(int tC = vmax(wBeg,nEnd-3600ll*oG.per)/(10*oG.per); tC < nEnd/(10*oG.per); ++tC) {
+		cfg.cfg("MARK").setI(tC, true);
+		tbl.at().fieldDel(cfg);
+	    }
+	    wBeg = nEnd;
 	}
+	oG.beg = wBeg;
+	if(ibeg) *ibeg = wBeg;
 
-	/*for(int64_t tC = vmax(wBeg,nEnd-3600ll*oG.per); tC < nEnd; tC += oG.per) {
-	    cfg.cfg("TM").setI(tC/1000000, true);
-	    cfg.cfg("TMU").setI(tC%1000000, true);
-	    tbl.at().fieldDel(cfg);
-	}*/
-	wBeg = nEnd;
-    }
-    oG.beg = wBeg;
-    if(ibeg) *ibeg = wBeg;
+	oG.dbOK = true;
+    } catch(TError&) { oG.dbOK = false; throw; }
 
     return true;
 }
@@ -349,89 +349,102 @@ void ModVArch::grpMetaUpd( SGrp &oG, const string *aLs )
     cfg.cfg("END").setS(ll2s(oG.end), true);
     cfg.cfg("PRM1").setS(ll2s(oG.per), true);
     if(aLs) cfg.cfg("PRM2").setS(*aLs, true);
-    oG.dbOK = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg,false,true);
+    try {
+	SYS->db().at().dataSet(addr()+"."+mod->mainTbl(), "", cfg);
+	oG.dbOK = true;
+    } catch(TError&) { oG.dbOK = false; throw; }
 }
 
 void ModVArch::pushAccumVals( )
 {
     MtxAlloc res(reqRes, true);
 
+    needRePushGrps = false;
     for(unsigned iG = 0; iG < accm.size(); iG++) {
 	SGrp &oG = accm[iG];
 	if(!oG.accmBeg || !oG.accmEnd) continue;
 
-	AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(iG), true);
-	if(tbl.freeStat()) continue;
+	try {
+	    AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(iG), true);
+	    if(tbl.freeStat()) continue;
 
-	TConfig	cfg(&oG.tblEl);
+	    TConfig	cfg(&oG.tblEl);
 
-	//Write data to the table
-	for(int64_t beg = oG.accmBeg, ctm, per = (oG.per?oG.per:(valPeriod()*1e6)); beg <= oG.accmEnd; beg += per) {
-	    for(map<string,TValBuf>::iterator iP = oG.els.begin(); iP != oG.els.end(); ++iP) {
-		TValBuf &oP = iP->second;
-		ctm = beg;
-		bool noData = (ctm < oP.begin() || ctm > oP.end());
-		switch(oP.valType(true)) {
-		    case TFld::Boolean:	cfg.cfg(iP->first).setI(noData?EVAL_BOOL:oP.getB(&ctm,true));	break;
-		    case TFld::Int16: case TFld::Int32: case TFld::Int64: {
-			int64_t bval = noData ? EVAL_INT : oP.getI(&ctm,true);
-			switch(oP.valType(true)) {
-			    case TFld::Int16: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT16 : (int16_t)bval);	break;
-			    case TFld::Int32: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT32 : (int32_t)bval);	break;
-			    case TFld::Int64: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT64 : bval);	break;
+	    //Write data to the table
+	    for(int64_t beg = oG.accmBeg, ctm, per = (oG.per?oG.per:(valPeriod()*1e6)); beg <= oG.accmEnd; beg += per) {
+		for(map<string,TValBuf>::iterator iP = oG.els.begin(); iP != oG.els.end(); ++iP) {
+		    TValBuf &oP = iP->second;
+		    ctm = beg;
+		    bool noData = (ctm < oP.begin() || ctm > oP.end());
+		    switch(oP.valType(true)) {
+			case TFld::Boolean:	cfg.cfg(iP->first).setI(noData?EVAL_BOOL:oP.getB(&ctm,true));	break;
+			case TFld::Int16: case TFld::Int32: case TFld::Int64: {
+			    int64_t bval = noData ? EVAL_INT : oP.getI(&ctm,true);
+			    switch(oP.valType(true)) {
+				case TFld::Int16: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT16 : (int16_t)bval);	break;
+				case TFld::Int32: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT32 : (int32_t)bval);	break;
+				case TFld::Int64: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT64 : bval);	break;
+			    }
+			    break;
 			}
-			break;
-		    }
-		    case TFld::Float: case TFld::Double: {
-			double bval = noData ? EVAL_REAL : oP.getR(&ctm, true);
-			switch(oP.valType(true)) {
-			    case TFld::Float:  cfg.cfg(iP->first).setR((bval==EVAL_REAL) ? EVAL_RFlt : (float)bval);	break;
-			    case TFld::Double: cfg.cfg(iP->first).setR((bval==EVAL_REAL) ? EVAL_RDbl : bval);	break;
+			case TFld::Float: case TFld::Double: {
+			    double bval = noData ? EVAL_REAL : oP.getR(&ctm, true);
+			    switch(oP.valType(true)) {
+				case TFld::Float:  cfg.cfg(iP->first).setR((bval==EVAL_REAL) ? EVAL_RFlt : (float)bval);	break;
+				case TFld::Double: cfg.cfg(iP->first).setR((bval==EVAL_REAL) ? EVAL_RDbl : bval);	break;
+			    }
+			    break;
 			}
-			break;
+			case TFld::String:	cfg.cfg(iP->first).setS(noData?EVAL_STR:oP.getS(&ctm,true));	break;
+			default: break;
 		    }
-		    case TFld::String:	cfg.cfg(iP->first).setS(noData?EVAL_STR:oP.getS(&ctm,true));	break;
-		    default: break;
 		}
+
+		cfg.cfg("MARK").setI(beg/(10*per));
+		cfg.cfg("TM").setI(beg/1000000);
+		//cfg.cfg("TMU").setI(beg%1000000);
+		tbl.at().fieldSet(cfg);
 	    }
 
-	    cfg.cfg("MARK").setI(beg/(10*per));
-	    cfg.cfg("TM").setI(beg/1000000);
-	    //cfg.cfg("TMU").setI(beg%1000000);
-	    try { tbl.at().fieldSet(cfg); } catch(TError &err) { oG.dbOK = false; break; }
-	}
+	    if(!oG.per) oG.per = (valPeriod()*1e6);
+	    if(!oG.beg) oG.beg = oG.accmBeg;
+	    oG.end = oG.accmEnd;
 
-	if(!oG.dbOK) continue;
+	    //Archive size limit process
+	    grpLimits(oG);
 
-	if(!oG.per) oG.per = (valPeriod()*1e6);
-	if(!oG.beg) oG.beg = oG.accmBeg;
-	oG.end = oG.accmEnd;
+	    //Actual parameters list prepare
+	    string	pLs;
+	    for(map<string,TValBuf>::iterator iP = oG.els.begin(); iP != oG.els.end(); ++iP)
+		pLs += i2s(iP->second.valType(true)) + ":" + iP->first + "\n";
 
-	//Archive size limit process
-	grpLimits(oG);
+	    //Update the group meta info
+	    grpMetaUpd(oG, &pLs);
 
-	//Clear the accumulators and some parameters update
-	string	pLs;
-	for(map<string,TValBuf>::iterator iP = oG.els.begin(); iP != oG.els.end(); ++iP) {
-	    pLs += i2s(iP->second.valType(true)) + ":" + iP->first + "\n";
+	    //Clear the accumulators and some parameters update
+	    for(map<string,TValBuf>::iterator iP = oG.els.begin(); iP != oG.els.end(); ++iP) {
+		// Update the main archive parameters
+		ResAlloc res1(archRes, false);
+		map<string,TVArchEl*>::iterator iel = archEl.find(iP->first);
+		if(iel != archEl.end()) {
+		    ModVArchEl *ael = (ModVArchEl*)iel->second;
+		    ael->mBeg = oG.beg;
+		    ael->mEnd = /*oG.end;*/ vmin(oG.end, iP->second.end());
+		    ael->mPer = oG.per;
+		}
 
-	    // Update the main archive parameters
-	    ResAlloc res1(archRes, false);
-	    map<string,TVArchEl*>::iterator iel = archEl.find(iP->first);
-	    if(iel != archEl.end()) {
-		ModVArchEl *ael = (ModVArchEl*)iel->second;
-		ael->mBeg = oG.beg;
-		ael->mEnd = /*oG.end;*/ vmin(oG.end, iP->second.end());
-		ael->mPer = oG.per;
+		iP->second.clear();
 	    }
 
-	    iP->second.clear();
+	    oG.accmBeg = oG.accmEnd = 0;
+
+	    oG.dbOK = true;
 	}
-
-	//Update the group meta info
-	grpMetaUpd(oG, &pLs);
-
-	oG.accmBeg = oG.accmEnd = 0;
+	catch(TError &err) {
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	    oG.dbOK = false; needRePushGrps = true;
+	    continue;
+	}
     }
 }
 
@@ -740,12 +753,6 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 		cfg.cfg("MARK").setI(tC, true);
 		tbl.at().fieldDel(cfg);
 	    }
-
-	    /*for(int64_t tC = vmax(mBeg,n_end-3600ll*period()); tC < n_end; tC += period()) {
-		cfg.cfg("TM").setI(tC/1000000, true);
-		cfg.cfg("TMU").setI(tC%1000000, true);
-		tbl.at().fieldDel(cfg);
-	    }*/
 	    mBeg = nEnd;
 	}
 	tbl.free();
@@ -769,7 +776,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     ModVArch::SGrp *gO = NULL;
     TValBuf &pDt = archivator().accmGetReg(vlFld, &gO, archive().valType(true));
     if(toAccum) {
-	if(!gO->dbOK && pDt.realSize()) return 0;
+	if(!gO->dbOK && pDt.realSize()) return 0;	//Prevent the accumulated data lost at DB errors
 	pDt = buf;
 	if(!gO->accmBeg || !gO->accmEnd) { gO->accmBeg = ibeg; gO->accmEnd = iend; }
 	return vmin(gO->accmEnd, iend);

@@ -103,7 +103,7 @@ class ModVArch: public TVArchivator
 	void start( );
 	void stop( bool full_del = false );
 
-	void checkArchivator( );
+	void checkArchivator( unsigned int cnt = 0 );
 
 	string archTbl( int iG = -1 );	// -1 - for preffix to the archivator tables
 
@@ -113,7 +113,8 @@ class ModVArch: public TVArchivator
 	void grpMetaUpd( SGrp &oG, const string *aLs = NULL );
 
 	//Attributes
-	bool	needMeta;			//Need meta mark
+	bool	needMeta,			//Need meta mark
+		needRePushGrps;			//Need to repush the groups, mostly at DB access errors
 	ResMtx	reqRes;				//Request functional resource allocator, mostly for the grouping mode
 
     protected:

@@ -1,3 +1,9 @@
+2016-09-21 Roman
+- !!:Archive.DBArch: Lost DB managing and early connection restoring is added and some tested.
+- !!:FIX:DB.*: EVAL writing fix. Detected and tested on PostgreSQL. Messages and errors forming moved to new API.
+- DB.PostgreSQL: Some tracing debug information is added.
+
+
 2016-09-20 Roman
 - DB.LibsDB.vcaBase: Main.{grpGraph,grpGraph10}: Set to the trend's control panel open on it start.
 - FIX:DAQ,Archive: The redundant request procedure fix for prevent the object stop at scaning requests, by previous host.
