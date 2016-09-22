@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-16 21:28+0300\n"
+"POT-Creation-Date: 2016-09-22 20:03+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -222,11 +222,22 @@ msgstr "Archivierungsperiode (Sek.)"
 msgid "View messages"
 msgstr "Ansicht der Nachrichten"
 
-msgid "Time"
-msgstr "Zeit"
+msgid "Time, size (s) and level"
+msgstr "Zeit, Größe (sek.) und Niveau"
 
-msgid "Size (s)"
-msgstr "Größe (s)"
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
+"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
+"Emergency (7), ALARMS"
+msgstr ""
+"Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
+"(5);Wach (6);Notfall (7);Information (1), ALARM;Bemerkung (2), ALARM;Warnung "
+"(3), ALARM;Fehler (4), ALARM;Kritisch (5), ALARM;Wach (6), ALARM;Notfall "
+"(7), ALARM"
+
+msgid "Get messages for level more and equal it."
+msgstr "Empfang von Nachrichten für gleiche und höhere Stufe."
 
 msgid "Category pattern"
 msgstr "Kategoriemuster"
@@ -244,23 +255,6 @@ msgstr ""
 "  '?' - ein beliebiges Symbol.\n"
 "Regulärer Ausdruck in Symbolen umschlossen '/' (/mod_(System|LogicLev)/)."
 
-msgid "Level"
-msgstr "Stufe"
-
-msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
-"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
-"Emergency (7), ALARMS"
-msgstr ""
-"Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
-"(5);Wach (6);Notfall (7);Information (1), ALARM;Bemerkung (2), ALARM;Warnung "
-"(3), ALARM;Fehler (4), ALARM;Kritisch (5), ALARM;Wach (6), ALARM;Notfall "
-"(7), ALARM"
-
-msgid "Get messages for level more and equal it."
-msgstr "Empfang von Nachrichten für gleiche und höhere Stufe."
-
 msgid "Archivators"
 msgstr "Archivar"
 
@@ -276,6 +270,9 @@ msgstr ""
 
 msgid "Messages"
 msgstr "Nachrichten"
+
+msgid "Time"
+msgstr "Zeit"
 
 msgid "mcsec"
 msgstr "mks"
@@ -362,6 +359,12 @@ msgstr ""
 "  '?' - jeweiliges Symbol.\n"
 "Regulärer Ausdruck in Symbolen umschlossen '/' (/mod_(System|LogicLev)/)."
 
+msgid "Level"
+msgstr "Stufe"
+
+msgid "Requested %d records for time %s."
+msgstr "Fordert %d Datensätze für Zeit %s."
+
 msgid "Value is not present."
 msgstr "Der Wert ist nicht vorhanden."
 
@@ -383,10 +386,6 @@ msgstr "Fehler beim Verbinden mit der Quelle '%s'."
 #, c-format
 msgid "The archive '%s' was already connected to target parameter '%s'."
 msgstr "Archiv '%s' ist bereits auf die Zielparameter '%s' verbunden."
-
-#, c-format
-msgid "Archivator '%s' error or it is not started."
-msgstr "Archivar '%s' Fehler oder Archivar ist nicht gestartet."
 
 #, c-format
 msgid "gdImageStringFT for font '%s' error: %s."
@@ -466,6 +465,9 @@ msgstr "Werte"
 
 msgid "Microseconds"
 msgstr "Mikrosekunden"
+
+msgid "Size (s)"
+msgstr "Größe (s)"
 
 msgid ""
 "Values archivator.\n"
@@ -2529,12 +2531,3 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
-
-#~ msgid "%s: Timeouted !!!"
-#~ msgstr "%s: Zeitüberschreitung !!!"
-
-#~ msgid "%s: Wait event..."
-#~ msgstr "%s: Warte auf Ereignis..."
-
-#~ msgid "Add module '%s'!"
-#~ msgstr "In Modul '%s'!"

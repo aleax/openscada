@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-16 21:28+0300\n"
+"POT-Creation-Date: 2016-09-22 20:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -201,10 +201,13 @@ msgstr ""
 msgid "View messages"
 msgstr ""
 
-msgid "Time"
+msgid "Time, size (s) and level"
 msgstr ""
 
-msgid "Size (s)"
+msgid "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"
+msgstr ""
+
+msgid "Get messages for level more and equal it."
 msgstr ""
 
 msgid "Category pattern"
@@ -218,15 +221,6 @@ msgid ""
 "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
 msgstr ""
 
-msgid "Level"
-msgstr ""
-
-msgid "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"
-msgstr ""
-
-msgid "Get messages for level more and equal it."
-msgstr ""
-
 msgid "Archivators"
 msgstr ""
 
@@ -237,6 +231,9 @@ msgid ""
 msgstr ""
 
 msgid "Messages"
+msgstr ""
+
+msgid "Time"
 msgstr ""
 
 msgid "mcsec"
@@ -317,6 +314,13 @@ msgid ""
 "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."
 msgstr ""
 
+msgid "Level"
+msgstr ""
+
+#, c-format
+msgid "Requested %d records for time %s."
+msgstr ""
+
 msgid "Value is not present."
 msgstr ""
 
@@ -336,10 +340,6 @@ msgstr ""
 
 #, c-format
 msgid "The archive '%s' was already connected to target parameter '%s'."
-msgstr ""
-
-#, c-format
-msgid "Archivator '%s' error or it is not started."
 msgstr ""
 
 #, c-format
@@ -412,6 +412,9 @@ msgid "Values"
 msgstr ""
 
 msgid "Microseconds"
+msgstr ""
+
+msgid "Size (s)"
 msgstr ""
 
 msgid ""

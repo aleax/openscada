@@ -213,7 +213,7 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 		}
 		if(!equal) {
 		    mess.insert(mess.begin()+i_p, rc);
-		    if(time(NULL) >= upTo) return result;
+		    if(SYS->sysTm() >= upTo) return result;
 		}
 	    }
 	}

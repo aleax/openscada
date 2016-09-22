@@ -1227,17 +1227,16 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 
 string TSYS::strCompr( const string &in, int lev )
 {
-    z_stream strm;
-
     if(in.empty())	return "";
 
+    z_stream strm;
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
 
     if(deflateInit(&strm,lev) != Z_OK) return "";
 
-    uLongf comprLen = deflateBound(&strm,in.size());
+    uLongf comprLen = deflateBound(&strm, in.size());
     char out[comprLen];
 
     strm.next_in = (Bytef*)in.data();
@@ -1254,7 +1253,7 @@ string TSYS::strCompr( const string &in, int lev )
 
     deflateEnd(&strm);
 
-    return string(out,comprLen);
+    return string(out, comprLen);
 }
 
 string TSYS::strUncompr( const string &in )

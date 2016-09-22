@@ -1,7 +1,14 @@
+2016-09-22 Roman
+- FIX:Arhives: getMess() fix for double call modules' function get().
+    Some fields of the messages request dialogs are merged to single line.
+    Some debug messages are added to getMess().
+- UI.Vision: Source code of primitive ElFigure some addition cleaned.
+
+
 2016-09-21 Roman
 - !!:Archive.DBArch: Lost DB managing and early connection restoring is added and some tested.
 - !!:FIX:DB.*: EVAL writing fix. Detected and tested on PostgreSQL. Messages and errors forming moved to new API.
-- DB.PostgreSQL: Some tracing debug information is added.
+- DB.PostgreSQL: Some tracing debug information is added. Error transactions commit is added.
 
 
 2016-09-20 Roman

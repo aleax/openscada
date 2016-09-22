@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-16 21:28+0300\n"
+"POT-Creation-Date: 2016-09-22 20:03+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -216,11 +216,22 @@ msgstr "Период архивирования (с)"
 msgid "View messages"
 msgstr "Просмотр сообщений"
 
-msgid "Time"
-msgstr "Время"
+msgid "Time, size (s) and level"
+msgstr "Время, размер (сек.) и уровень"
 
-msgid "Size (s)"
-msgstr "Размер (сек)"
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
+"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
+"Emergency (7), ALARMS"
+msgstr ""
+"Отладка (0);Информация (1);Замечание (2);Предупреждение (3);Ошибка (4);"
+"Критически (5);Тревога (6);Авария (7);Информация (1), НАРУШЕНИЯ;Замечание "
+"(2), НАРУШЕНИЯ;Предупреждение (3), НАРУШЕНИЯ;Ошибка (4), НАРУШЕНИЯ;"
+"Критически (5), НАРУШЕНИЯ;Тревога (6), НАРУШЕНИЯ;Авария (7), НАРУШЕНИЯ"
+
+msgid "Get messages for level more and equal it."
+msgstr "Получать сообщения уровнем больше или равно указанному."
 
 msgid "Category pattern"
 msgstr "Шаблон категории"
@@ -239,23 +250,6 @@ msgstr ""
 "Регулярное выражение заключается между символами '/' (/mod_(System|"
 "LogicLev)/)."
 
-msgid "Level"
-msgstr "Уровень"
-
-msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
-"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
-"Emergency (7), ALARMS"
-msgstr ""
-"Отладка (0);Информация (1);Замечание (2);Предупреждение (3);Ошибка (4);"
-"Критически (5);Тревога (6);Авария (7);Информация (1), НАРУШЕНИЯ;Замечание "
-"(2), НАРУШЕНИЯ;Предупреждение (3), НАРУШЕНИЯ;Ошибка (4), НАРУШЕНИЯ;"
-"Критически (5), НАРУШЕНИЯ;Тревога (6), НАРУШЕНИЯ;Авария (7), НАРУШЕНИЯ"
-
-msgid "Get messages for level more and equal it."
-msgstr "Получать сообщения уровнем больше или равно указанному."
-
 msgid "Archivators"
 msgstr "Архиваторы"
 
@@ -271,6 +265,9 @@ msgstr ""
 
 msgid "Messages"
 msgstr "Сообщения"
+
+msgid "Time"
+msgstr "Время"
 
 msgid "mcsec"
 msgstr "мкс"
@@ -358,6 +355,12 @@ msgstr ""
 "Регулярные выражения заключаются между символами '/' (/mod_(System|"
 "LogicLev)/)."
 
+msgid "Level"
+msgstr "Уровень"
+
+msgid "Requested %d records for time %s."
+msgstr "Запрошено %d записей в течении %s."
+
 msgid "Value is not present."
 msgstr "Значение отсутствует."
 
@@ -380,10 +383,6 @@ msgstr "Ошибка подключения к источнику '%s'."
 #, c-format
 msgid "The archive '%s' was already connected to target parameter '%s'."
 msgstr "Архив '%s' уже подключен к целевому параметру '%s'."
-
-#, c-format
-msgid "Archivator '%s' error or it is not started."
-msgstr "Ошибка архиватора '%s' или он не запущен."
 
 #, c-format
 msgid "gdImageStringFT for font '%s' error: %s."
@@ -464,6 +463,9 @@ msgstr "Значения"
 
 msgid "Microseconds"
 msgstr "Микросекунды"
+
+msgid "Size (s)"
+msgstr "Размер (сек)"
 
 msgid ""
 "Values archivator.\n"
@@ -2517,18 +2519,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-
-#~ msgid "%s: Timeouted !!!"
-#~ msgstr "%s: Превышение времени ожидания !!!"
-
-#~ msgid "%s: Wait event..."
-#~ msgstr "%s: Ожидание события..."
-
-#~ msgid "Add module '%s'!"
-#~ msgstr "Добавление модуля '%s'!"
-
-#~ msgid "%s: Start!"
-#~ msgstr "%s: Запуск!"
-
-#~ msgid "%s: OpenSCADA is aborted!"
-#~ msgstr "%s: OpenSCADA прервана!"
