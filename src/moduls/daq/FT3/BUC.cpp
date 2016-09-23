@@ -35,15 +35,23 @@ KA_BUC::KA_BUC(TMdPrm& prm, uint16_t id) :
     mPrm.p_el.fldAdd(fld = new TFld("state", _("State"), TFld::Integer, TVal::DirWrite));
     fld->setReserve("0:0:0");
     mPrm.p_el.fldAdd(fld = new TFld("config", _("Configuration"), TFld::Integer, TFld::NoWrite));
-    fld->setReserve("0:0:1");
+    fld->setReserve("0:1:0");
     mPrm.p_el.fldAdd(fld = new TFld("modification", _("Modification"), TFld::Integer, TFld::NoWrite));
-    fld->setReserve("0:0:2");
+    fld->setReserve("0:2:0");
     mPrm.p_el.fldAdd(fld = new TFld("sttimer", _("Timer state"), TFld::Integer, TFld::NoWrite));
-    fld->setReserve("1:0:0");
-    mPrm.p_el.fldAdd(fld = new TFld("curdt", _("Current datetime"), TFld::String, TVal::DirWrite));
-    fld->setReserve("1:0:2");
+    fld->setReserve("0:0:1");
+    mPrm.p_el.fldAdd(fld = new TFld("curdt", _("Current datetime"), TFld::String, TVal::DirWrite | TVal::DirRead));
+    fld->setReserve("0:2:1");
     mPrm.p_el.fldAdd(fld = new TFld("stopdt", _("Stop datetime"), TFld::String, TFld::NoWrite));
-    fld->setReserve("1:0:3");
+    fld->setReserve("0:3:1");
+    mPrm.p_el.fldAdd(fld = new TFld("reset", _("Hard Reset"), TFld::Boolean, TVal::DirWrite));
+    fld->setReserve("1:0:0");
+    mPrm.p_el.fldAdd(fld = new TFld("resetchn", _("Channel reset"), TFld::Boolean, TVal::DirWrite));
+    fld->setReserve("1:1:0");
+    mPrm.p_el.fldAdd(fld = new TFld("resetdata", _("Data reset"), TFld::Boolean, TVal::DirWrite));
+    fld->setReserve("1:2:0");
+    //fld->setReserve("1:0:3");
+
 }
 
 KA_BUC::~KA_BUC()
@@ -54,10 +62,21 @@ KA_BUC::~KA_BUC()
 string KA_BUC::getStatus(void)
 {
     string rez;
-    if(NeedInit) {
-	rez = "20: Опрос";
-    } else {
-	rez = "0: Норма";
+    switch(mPrm.vlAt("state").at().getI(0, true)) {
+    case KA_BUC_HardReset:
+	rez = _("10: Hard reset");
+	break;
+    case KA_BUC_Normal:
+	rez = _("0: Normal");
+	break;
+    case KA_BUC_SoftReset:
+	rez = _("11: Soft reset");
+	break;
+    case KA_BUC_Setup:
+	rez = _("12: Setup");
+    case KA_BUC_Start:
+	rez = _("13: Startup");
+	break;
     }
     return rez;
 
@@ -68,50 +87,96 @@ void KA_BUC::tmHandler(void)
     NeedInit = false;
 }
 
-uint16_t KA_BUC::Task(uint16_t uc)
+uint16_t KA_BUC::GetState()
 {
     tagMsg Msg;
-    uint16_t rc = 0;
-    switch(uc) {
-    case TaskRefresh:
-	Msg.L = 3 + 2 * 6;
-	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
-	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //configuration
-	*((uint16_t *) (Msg.D + 4)) = PackID(ID, 0, 2); //modification
-	*((uint16_t *) (Msg.D + 6)) = PackID(1, 0, 0); //timer state
-	*((uint16_t *) (Msg.D + 8)) = PackID(1, 0, 2); //current time
-	*((uint16_t *) (Msg.D + 10)) = PackID(1, 0, 3); //uptime
-	if(mPrm.owner().DoCmd(&Msg)) {
-	    if(mPrm.vlAt("state").at().getI(0, true) != 1) {
-		if(Task(TaskSet) == 1) {
-		    rc = 1;
-		}
-	    } else {
-		rc = 1;
-	    }
+    uint16_t rc = BlckStateUnknown;
+    Msg.L = 5;
+    Msg.C = AddrReq;
+    *((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+    if(mPrm.owner().DoCmd(&Msg) == GOOD3) {
+	switch(mPrm.vlAt("state").at().getI(0, true)) {
+	case KA_BUC_HardReset:
+	    rc = BlckStateHardReset;
+	    break;
+	case KA_BUC_Normal:
+	    rc = BlckStateNormal;
+	    break;
+	case KA_BUC_SoftReset:
+	    rc = BlckStateSoftReset;
+	    break;
+	case KA_BUC_Setup:
+	case KA_BUC_Start:
+	    rc = BlckStateSetup;
+	    break;
 	}
-	if(rc) NeedInit = false;
-	break;
-    case TaskSet:
+    }
+    return rc;
+}
+
+uint16_t KA_BUC::SetupClock(void)
+{
+    uint16_t rc;
+    tagMsg Msg;
+    Msg.L = 6;
+    Msg.C = SetData;
+    *((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+    Msg.D[2] = 0x80;
+    rc = mPrm.owner().DoCmd(&Msg);
+    if(rc == GOOD2 || rc == GOOD3) {
 	time_t rawtime;
 	time(&rawtime);
 	Msg.L = 10;
 	Msg.C = SetData;
 	*((uint16_t *) Msg.D) = PackID(1, 0, 2); //current time
 	mPrm.owner().Time_tToDateTime(Msg.D + 2, rawtime);
-	mPrm.owner().DoCmd(&Msg);
-	if(Msg.C == GOOD2) {
-	    rc = 1;
-	}
-	break;
-    case TaskIdle:
-	if(mPrm.vlAt("state").at().getI(0, true) != 1) {
-	    rc = 2;
-	}
-	break;
+	rc = mPrm.owner().DoCmd(&Msg);
     }
     return rc;
+}
+
+uint16_t KA_BUC::Start(void)
+{
+    tagMsg Msg;
+    uint16_t rc = GOOD2;
+    Msg.L = 6;
+    Msg.C = SetData;
+    *((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+    Msg.D[2] = 0x01;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
+uint16_t KA_BUC::RefreshData(void)
+{
+    tagMsg Msg;
+    Msg.L = 3 + 2 * 6;
+    Msg.C = AddrReq;
+    *((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+    *((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //configuration
+    *((uint16_t *) (Msg.D + 4)) = PackID(ID, 0, 2); //modification
+    *((uint16_t *) (Msg.D + 6)) = PackID(1, 0, 0); //timer state
+    *((uint16_t *) (Msg.D + 8)) = PackID(1, 0, 2); //current time
+    *((uint16_t *) (Msg.D + 10)) = PackID(1, 0, 3); //uptime
+    return mPrm.owner().DoCmd(&Msg);
+}
+
+uint16_t KA_BUC::Task(uint16_t uc)
+{
+    switch(mPrm.vlAt("state").at().getI(0, true)) {
+    case KA_BUC_HardReset:
+	mPrm.owner().SetCntrState(StateHardReset);
+	break;
+    case KA_BUC_Normal:
+	break;
+    case KA_BUC_SoftReset:
+	mPrm.owner().SetCntrState(StateSoftReset);
+	break;
+    case KA_BUC_Setup:
+    case KA_BUC_Start:
+	mPrm.owner().SetCntrState(StateUnknown);
+	break;
+    }
+    return 0;
 }
 
 uint16_t KA_BUC::HandleEvent(int64_t tm, uint8_t *D)
@@ -195,6 +260,24 @@ uint16_t KA_BUC::setVal(TVal &val)
 		break;
 	    }
 	    break;
+	case 1:
+	    switch(ft3ID.n) {
+	    case 0:
+		Msg.L = 3;
+		Msg.C = Reset;
+		break;
+	    case 1:
+		Msg.L = 3;
+		Msg.C = ResetChan;
+		break;
+	    case 2:
+		Msg.L = 3;
+		Msg.C = ResData2;
+		break;
+	    }
+	    val.setB(0, 0, true);
+	    break;
+
 	}
     }
     if(ft3ID.g == clockID) {
@@ -213,6 +296,19 @@ uint16_t KA_BUC::setVal(TVal &val)
     }
     if(Msg.L) mPrm.owner().DoCmd(&Msg);
     return 0;
+}
+
+void KA_BUC::vlGet(TVal &val)
+{
+    if(val.name() == "curdt") {
+	tagMsg Msg;
+	Msg.L = 0;
+	Msg.C = AddrReq;
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(1, 0, 2)); //current time
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(1, 0, 3)); //uptime
+	Msg.L += 3;
+	mPrm.owner().DoCmd(&Msg);
+    }
 }
 
 uint8_t KA_BUC::cmdGet(uint16_t prmID, uint8_t * out)
@@ -390,7 +486,7 @@ uint16_t B_BUC::Task(uint16_t uc)
 	if(mPrm.owner().DoCmd(&Msg)) {
 	    if(Msg.C == GOOD3) {
 		if(mPrm.vlAt("state").at().getI(0, true) != 0) {
-		    if(Task(TaskSet) == 1) {
+		    if(Task(TaskSetParams) == 1) {
 			rc = 1;
 		    }
 		} else {
@@ -400,7 +496,7 @@ uint16_t B_BUC::Task(uint16_t uc)
 	}
 	if(rc) NeedInit = false;
 	break;
-    case TaskSet:
+    case TaskSetParams:
 	time_t rawtime;
 	time(&rawtime);
 	Msg.L = 10;

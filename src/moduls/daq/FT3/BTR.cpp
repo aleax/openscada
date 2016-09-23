@@ -73,6 +73,89 @@ string KA_BTU::getStatus(void)
 
 }
 
+uint16_t KA_BTU::GetState()
+{
+    tagMsg Msg;
+    uint16_t rc = BlckStateUnknown;
+    Msg.L = 5;
+    Msg.C = AddrReq;
+    *((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+    if(mPrm.owner().DoCmd(&Msg) == GOOD3) {
+	switch(mPrm.vlAt("state").at().getI(0, true)) {
+	case KA_BTU_Error:
+	    rc = BlckStateError;
+	    break;
+	case KA_BTU_Normal:
+	    rc = BlckStateNormal;
+	    break;
+	}
+    }
+    return rc;
+}
+
+uint16_t KA_BTU::SetParams(void)
+{
+    uint16_t rc;
+    tagMsg Msg;
+    loadParam();
+    for(int i = 0; i < count_nu; i++) {
+	Msg.L = 0;
+	Msg.C = SetData;
+	for(int j = 0; j < 16; j++) {
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i + 1, j + 1));
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, TUdata[i].Time[j].lnk.vlattr.at().getI(0, true));
+	}
+	Msg.L += 3;
+	rc = mPrm.owner().DoCmd(&Msg);
+	if((rc == BAD2) || (rc == BAD3)) {
+	    mPrm.mess_sys(TMess::Error, "Can't set channel %d", i + 1);
+	} else {
+	    if(rc == ERROR) {
+		mPrm.mess_sys(TMess::Error, "No answer to set channel %d", i + 1);
+		break;
+	    }
+	}
+    }
+    return rc;
+}
+
+uint16_t KA_BTU::RefreshData(void)
+{
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = AddrReq;
+    for(int i = 1; i <= count_nu; i++) {
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i, 0));
+    }
+    Msg.L += 3;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
+uint16_t KA_BTU::RefreshParams(void)
+{
+    uint16_t rc;
+    tagMsg Msg;
+    for(int i = 1; i <= count_nu; i++) {
+	Msg.L = 0;
+	Msg.C = AddrReq;
+	for(int j = 1; j <= 16; j++) {
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i, j));
+	}
+	Msg.L += 3;
+	rc = mPrm.owner().DoCmd(&Msg);
+	if((rc == BAD2) || (rc == BAD3)) {
+	    mPrm.mess_sys(TMess::Error, "Can't refresh channel %d params", i);
+	} else {
+	    if(rc == ERROR) {
+		mPrm.mess_sys(TMess::Error, "No answer to refresh channel %d params", i);
+		break;
+	    }
+	}
+
+    }
+    return rc;
+}
+
 void KA_BTU::loadIO(bool force)
 {
     if(mPrm.owner().startStat() && !force) {
@@ -99,6 +182,27 @@ void KA_BTU::saveIO()
     }
 }
 
+void KA_BTU::saveParam(void)
+{
+    for(int i = 0; i < count_nu; i++) {
+	saveVal(TUdata[i].Line.lnk);
+	for(int j = 0; j < 16; j++) {
+	    saveVal(TUdata[i].Time[j].lnk);
+	}
+    }
+}
+
+void KA_BTU::loadParam(void)
+{
+    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "load param");
+    for(int i = 0; i < count_nu; i++) {
+	loadVal(TUdata[i].Line.lnk);
+	for(int j = 0; j < 16; j++) {
+	    loadVal(TUdata[i].Time[j].lnk);
+	}
+    }
+}
+
 void KA_BTU::tmHandler(void)
 {
     for(int i = 0; i < count_nu; i++) {
@@ -109,53 +213,6 @@ void KA_BTU::tmHandler(void)
     NeedInit = false;
 }
 
-uint16_t KA_BTU::Task(uint16_t uc)
-{
-    tagMsg Msg;
-    uint16_t rc = 0;
-    switch(uc) {
-    case TaskRefresh:
-	Msg.L = 5;
-	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //состояние
-	if(mPrm.owner().DoCmd(&Msg)) {
-	    if(Msg.C == GOOD3) {
-		rc = 1;
-		Msg.L = 5;
-		Msg.C = AddrReq;
-		*((uint16_t *) (Msg.D)) = PackID(ID, 0, 2); //исполнение
-		mPrm.owner().DoCmd(&Msg);
-		if(with_params) {
-		    for(int i = 1; i <= count_nu; i++) {
-			Msg.L = 5;
-			Msg.C = AddrReq;
-			*((uint16_t *) Msg.D) = PackID(ID, i, 0); //линия ТУ
-			for(int j = 1; j <= 16; j++) {
-			    Msg.L += 2;
-			    *((uint16_t *) (Msg.D + Msg.L - 5)) = PackID(ID, i, j); //Параметры реле
-			}
-			if(mPrm.owner().DoCmd(&Msg)) {
-			    if(Msg.C == GOOD3) {
-				rc = 1;
-			    } else {
-				rc = 0;
-				break;
-			    }
-			} else {
-			    rc = 0;
-			    break;
-			}
-
-		    }
-		}
-
-	    }
-	}
-	if(rc) NeedInit = false;
-	break;
-    }
-    return rc;
-}
 uint16_t KA_BTU::HandleEvent(int64_t tm, uint8_t * D)
 {
     FT3ID ft3ID = UnpackID(TSYS::getUnalign16(D));
@@ -371,6 +428,7 @@ uint8_t KA_BTU::cmdSet(uint8_t * req, uint8_t addr)
 
 uint16_t KA_BTU::setVal(TVal &val)
 {
+    uint16_t rc = 0;
     int off = 0;
     FT3ID ft3ID;
     ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
@@ -399,6 +457,7 @@ uint16_t KA_BTU::setVal(TVal &val)
 	}
     } else {
 	if(count_nu && (ft3ID.k <= count_nu)) {
+	    rc = 1;
 	    if(ft3ID.n == 0) {
 		Msg.L += SerializeB(Msg.D + Msg.L, val.getI(0, true));
 	    } else {
@@ -406,6 +465,7 @@ uint16_t KA_BTU::setVal(TVal &val)
 		    Msg.L += SerializeUi16(Msg.D + Msg.L, val.getI(0, true));
 		} else {
 		    Msg.L = 0;
+		    rc = 0;
 		}
 	    }
 	}
@@ -414,7 +474,7 @@ uint16_t KA_BTU::setVal(TVal &val)
 	Msg.L += 3;
 	mPrm.owner().DoCmd(&Msg);
     }
-    return 0;
+    return rc;
 }
 
 B_BTR::B_BTR(TMdPrm& prm, uint16_t id, uint16_t nu, uint16_t nr, bool has_params) :

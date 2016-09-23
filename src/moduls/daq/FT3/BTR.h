@@ -23,6 +23,11 @@
 
 namespace FT3
 {
+    enum eKA_BTU_State
+    {
+	KA_BTU_Error = 0x0,
+	KA_BTU_Normal = 0x1
+    };
     class KA_BTU: public DA
     {
     public:
@@ -34,9 +39,10 @@ namespace FT3
 	bool with_params;
 	uint16_t config;
 	void AddChannel(uint8_t iid);
-	void saveIO(void);
-	void loadIO(bool force = false);
-	uint16_t Task(uint16_t);
+	uint16_t GetState(void);
+	uint16_t SetParams(void);
+	uint16_t RefreshData(void);
+	uint16_t RefreshParams(void);
 	uint16_t HandleEvent(int64_t, uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
 	uint8_t cmdSet(uint8_t * req, uint8_t addr);
@@ -44,6 +50,10 @@ namespace FT3
 	void setTU(uint8_t);
 	uint8_t runTU(uint8_t);
 	string getStatus(void);
+	void saveIO(void);
+	void loadIO(bool force = false);
+	void saveParam(void);
+	void loadParam(void);
 	void tmHandler(void);
 	class SKATUchannel
 	{

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 09:36+0300\n"
+"POT-Creation-Date: 2016-09-23 13:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,18 +89,34 @@ msgstr ""
 msgid "Stop datetime"
 msgstr ""
 
+msgid "Hard Reset"
+msgstr ""
+
+msgid "Channel reset"
+msgstr ""
+
+msgid "Data reset"
+msgstr ""
+
+msgid "10: Hard reset"
+msgstr ""
+
+msgid "0: Normal"
+msgstr ""
+
+msgid "11: Soft reset"
+msgstr ""
+
+msgid "12: Setup"
+msgstr ""
+
+msgid "13: Startup"
+msgstr ""
+
 msgid "Delay 1"
 msgstr ""
 
 msgid "Delay 2"
-msgstr ""
-
-#, c-format
-msgid "UnpackID %d"
-msgstr ""
-
-#, c-format
-msgid "g %d k %d n %d"
 msgstr ""
 
 #, c-format
@@ -236,7 +252,7 @@ msgstr ""
 msgid "TANK Parameteres table"
 msgstr ""
 
-msgid "Gather data period (s)"
+msgid "Acquisition schedule"
 msgstr ""
 
 msgid "Gather task priority"
@@ -314,6 +330,12 @@ msgstr ""
 msgid "GZD"
 msgstr ""
 
+msgid "Valve type"
+msgstr ""
+
+msgid "5 TU;6 TU"
+msgstr ""
+
 msgid "GNS"
 msgstr ""
 
@@ -332,20 +354,11 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
+msgid "Attribute value"
+msgstr ""
+
 #, c-format
 msgid "data arrived L:%d %s"
-msgstr ""
-
-#, c-format
-msgid "---l:%d n:%d"
-msgstr ""
-
-#, c-format
-msgid "%d bytes handled"
-msgstr ""
-
-#, c-format
-msgid "l:%d n:%d"
 msgstr ""
 
 #, c-format
@@ -396,14 +409,56 @@ msgstr ""
 msgid "bad packet"
 msgstr ""
 
-msgid "cutting packet"
+msgid "cutted packet"
+msgstr ""
+
+msgid "No connection"
+msgstr ""
+
+msgid "Unknown state"
+msgstr ""
+
+msgid "Hard reset"
+msgstr ""
+
+msgid "PreInit"
+msgstr ""
+
+msgid "Set Params"
+msgstr ""
+
+msgid "PostInit"
+msgstr ""
+
+msgid "Starting"
+msgstr ""
+
+msgid "Refresh data"
+msgstr ""
+
+msgid "Refresh params"
+msgstr ""
+
+msgid "Idle"
 msgstr ""
 
 #, c-format
-msgid "Gather data time %.6g ms. "
+msgid ". Gather data time %.6g ms. "
+msgstr ""
+
+msgid "Soft reset"
+msgstr ""
+
+msgid "Setup Clock"
 msgstr ""
 
 msgid "No one device selected."
+msgstr ""
+
+msgid "Receiving block state error"
+msgstr ""
+
+msgid "Block SetParams error"
 msgstr ""
 
 #, c-format
@@ -787,11 +842,19 @@ msgid "TU close %d"
 msgstr ""
 
 #, c-format
+msgid "TU stop Ex %d"
+msgstr ""
+
+#, c-format
 msgid "Open time %d"
 msgstr ""
 
 #, c-format
 msgid "Close time %d"
+msgstr ""
+
+#, c-format
+msgid "Stop time Ex %d"
 msgstr ""
 
 #, c-format

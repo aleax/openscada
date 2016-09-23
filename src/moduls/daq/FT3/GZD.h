@@ -23,23 +23,37 @@
 
 namespace FT3
 {
-#define vs_AWR       0       // авария
-#define vs_OFF       1       // закрыто(выкл.)
-#define vs_ON        2       // открыто(вкл.)
-#define vs_03        3
-#define vs_04        4
-#define vs_05        5
-#define vs_06        6
+#define vt_5TU       0
+#define vt_6TU       1
 
+    enum eKA_GZD_VS
+    {
+	vs_AWR = 0,       // авария
+	vs_OFF = 1,       // закрыто(выкл.)
+	vs_ON = 2,       // открыто(вкл.)
+	vs_03 = 3,
+	vs_04 = 4,
+	vs_05 = 5,
+	vs_06 = 6
+
+    };
+    enum eKA_GZD_State
+    {
+	KA_GZD_Error = 0x0, KA_GZD_Normal = 0x1
+    };
     class KA_GZD: public DA
     {
     public:
 	//Methods
-	KA_GZD(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params);
+	KA_GZD(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params, uint32_t v_type);
 	~KA_GZD();
 	uint16_t ID;
 	uint16_t count_n;
-	uint16_t Task(uint16_t);
+	uint32_t valve_type;
+	uint16_t GetState(void);
+	uint16_t SetParams(void);
+	uint16_t RefreshData(void);
+	uint16_t RefreshParams(void);
 	uint16_t HandleEvent(int64_t, uint8_t *);
 	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
 	uint8_t cmdSet(uint8_t * req, uint8_t addr);
@@ -47,23 +61,26 @@ namespace FT3
 	string getStatus(void);
 	void saveIO(void);
 	void loadIO(bool force = false);
+	void saveParam(void);
+	void loadParam(void);
 	void tmHandler(void);
- 	uint16_t config;
+	uint16_t config;
 	class SKAZDchannel
 	{
 	public:
-	    SKAZDchannel(uint8_t iid, DA* owner) : da(owner),
-		    id(iid),
-		    State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
+	    SKAZDchannel(uint8_t iid, bool w_params, uint32_t v_type, DA* owner) :
+		    valve_type(v_type), da(owner), id(iid), State(TSYS::strMess("state_%d", id + 1), TSYS::strMess(_("State %d"), id + 1)),
 		    Function(TSYS::strMess("function_%d", id + 1), TSYS::strMess(_("Function %d"), id + 1)),
 		    TUOpen(TSYS::strMess("TUopen_%d", id + 1), TSYS::strMess(_("TU open %d"), id + 1)),
 		    TUClose(TSYS::strMess("TUclose_%d", id + 1), TSYS::strMess(_("TU close %d"), id + 1)),
 		    TUStop(TSYS::strMess("TUstop_%d", id + 1), TSYS::strMess(_("TU stop %d"), id + 1)),
 		    TURemote(TSYS::strMess("TUremote_%d", id + 1), TSYS::strMess(_("TU remote %d"), id + 1)),
 		    TUManual(TSYS::strMess("TUmanual_%d", id + 1), TSYS::strMess(_("TU manual %d"), id + 1)),
+		    TUStopEx(TSYS::strMess("TUstopEx_%d", id + 1), TSYS::strMess(_("TU stop Ex %d"), id + 1)),
 		    TimeOpen(TSYS::strMess("timeOpen_%d", id + 1), TSYS::strMess(_("Open time %d"), id + 1)),
 		    TimeClose(TSYS::strMess("timeClose_%d", id + 1), TSYS::strMess(_("Close time %d"), id + 1)),
 		    TimeStop(TSYS::strMess("timeStop_%d", id + 1), TSYS::strMess(_("Stop time %d"), id + 1)),
+		    TimeStopEx(TSYS::strMess("timeStopEx_%d", id + 1), TSYS::strMess(_("Stop time Ex %d"), id + 1)),
 		    TimeRemote(TSYS::strMess("timeRemote_%d", id + 1), TSYS::strMess(_("Remote time %d"), id + 1)),
 		    TimeManual(TSYS::strMess("timeManual_%d", id + 1), TSYS::strMess(_("Manual time %d"), id + 1)),
 		    TCOpen(TSYS::strMess("tcOpen_%d", id + 1), TSYS::strMess(_("Open TC %d"), id + 1)),
@@ -72,13 +89,30 @@ namespace FT3
 		    TCOpenErr(TSYS::strMess("tcOpenErr_%d", id + 1), TSYS::strMess(_("Open error TC %d"), id + 1)),
 		    TCCloseErr(TSYS::strMess("tcCloseErr_%d", id + 1), TSYS::strMess(_("Close error TC %d"), id + 1))
 	    {
+		if(w_params) {
+		    switch(v_type) {
+		    case vt_5TU:
+			n_link = 17;
+			break;
+		    case vt_6TU:
+			n_link = 19;
+			break;
+		    default:
+			n_link = 2;
+			break;
+		    }
+		} else {
+		    n_link = 2;
+		}
 	    }
 	    DA* da;
 	    uint8_t id;
+	    uint32_t n_link;
+	    uint32_t valve_type;
 
 	    ui8Data State, Function;
-	    ui16Data TUOpen, TUClose, TUStop, TURemote, TUManual;
-	    ui16Data TimeOpen, TimeClose, TimeStop, TimeRemote, TimeManual;
+	    ui16Data TUOpen, TUClose, TUStop, TUStopEx, TURemote, TUManual;
+	    ui16Data TimeOpen, TimeClose, TimeStop, TimeStopEx, TimeRemote, TimeManual;
 	    ui16Data TCOpen, TCClose, TCMode, TCOpenErr, TCCloseErr;
 
 	    void UpdateTUParam(uint16_t ID, uint8_t cl);
@@ -92,57 +126,42 @@ namespace FT3
 	void AddZDChannel(uint8_t iid);
 	int lnkSize()
 	{
-	    if(with_params) {
-		return data.size() * 17;
-	    } else {
-		return data.size() * 2;
-	    }
+	    return data.size() * data[0].n_link;
 	}
 	int lnkId(const string &id)
 	{
-
-	    if(with_params) {
-		for(int i_l = 0; i_l < data.size(); i_l++) {
-		    if(data[i_l].State.lnk.prmName == id) return i_l * 17;
-		    if(data[i_l].Function.lnk.prmName == id) return i_l * 17 + 1;
-		    if(data[i_l].TUOpen.lnk.prmName == id) return i_l * 17 + 2;
-		    if(data[i_l].TUClose.lnk.prmName == id) return i_l * 17 + 3;
-		    if(data[i_l].TUStop.lnk.prmName == id) return i_l * 17 + 4;
-		    if(data[i_l].TURemote.lnk.prmName == id) return i_l * 17 + 5;
-		    if(data[i_l].TUManual.lnk.prmName == id) return i_l * 17 + 6;
-		    if(data[i_l].TimeOpen.lnk.prmName == id) return i_l * 17 + 7;
-		    if(data[i_l].TimeClose.lnk.prmName == id) return i_l * 17 + 8;
-		    if(data[i_l].TimeStop.lnk.prmName == id) return i_l * 17 + 9;
-		    if(data[i_l].TimeRemote.lnk.prmName == id) return i_l * 17 + 10;
-		    if(data[i_l].TimeManual.lnk.prmName == id) return i_l * 17 + 11;
-		    if(data[i_l].TCOpen.lnk.prmName == id) return i_l * 17 + 12;
-		    if(data[i_l].TCClose.lnk.prmName == id) return i_l * 17 + 13;
-		    if(data[i_l].TCMode.lnk.prmName == id) return i_l * 17 + 14;
-		    if(data[i_l].TCOpenErr.lnk.prmName == id) return i_l * 17 + 15;
-		    if(data[i_l].TCCloseErr.lnk.prmName == id) return i_l * 17 + 16;
-
-
-		}
-	    } else {
-		for(int i_l = 0; i_l < data.size(); i_l++) {
-		    if(data[i_l].State.lnk.prmName == id) {
-			return i_l * 2;
+	    for(int i_l = 0; i_l < data.size(); i_l++) {
+		uint32_t k = data[i_l].n_link;
+		if(data[i_l].State.lnk.prmName == id) return i_l * k;
+		if(data[i_l].Function.lnk.prmName == id) return i_l * k + 1;
+		if(with_params) {
+		    if(data[i_l].TUOpen.lnk.prmName == id) return i_l * k + 2;
+		    if(data[i_l].TUClose.lnk.prmName == id) return i_l * k + 3;
+		    if(data[i_l].TUStop.lnk.prmName == id) return i_l * k + 4;
+		    if(data[i_l].TURemote.lnk.prmName == id) return i_l * k + 5;
+		    if(data[i_l].TUManual.lnk.prmName == id) return i_l * k + 6;
+		    if(data[i_l].TimeOpen.lnk.prmName == id) return i_l * k + 7;
+		    if(data[i_l].TimeClose.lnk.prmName == id) return i_l * k + 8;
+		    if(data[i_l].TimeStop.lnk.prmName == id) return i_l * k + 9;
+		    if(data[i_l].TimeRemote.lnk.prmName == id) return i_l * k + 10;
+		    if(data[i_l].TimeManual.lnk.prmName == id) return i_l * k + 11;
+		    if(data[i_l].TCOpen.lnk.prmName == id) return i_l * k + 12;
+		    if(data[i_l].TCClose.lnk.prmName == id) return i_l * k + 13;
+		    if(data[i_l].TCMode.lnk.prmName == id) return i_l * k + 14;
+		    if(data[i_l].TCOpenErr.lnk.prmName == id) return i_l * k + 15;
+		    if(data[i_l].TCCloseErr.lnk.prmName == id) return i_l * k + 16;
+		    if(valve_type == vt_6TU) {
+			if(data[i_l].TUStopEx.lnk.prmName == id) return i_l * k + 17;
+			if(data[i_l].TimeStopEx.lnk.prmName == id) return i_l * k + 18;
 		    }
-		    if(data[i_l].Function.lnk.prmName == id) {
-			return i_l * 2 + 1;
-		    }
+
 		}
 	    }
 	    return -1;
 	}
 	SLnk &lnk(int num)
 	{
-	    int k;
-	    if(with_params) {
-		k = 17;
-	    } else {
-		k = 2;
-	    }
+	    uint32_t k = data[0].n_link;
 	    switch(num % k) {
 	    case 0:
 		return data[num / k].State.lnk;
@@ -178,6 +197,10 @@ namespace FT3
 		return data[num / k].TCOpenErr.lnk;
 	    case 16:
 		return data[num / k].TCCloseErr.lnk;
+	    case 17:
+		return data[num / k].TUStopEx.lnk;
+	    case 18:
+		return data[num / k].TimeStopEx.lnk;
 	    }
 	}
 

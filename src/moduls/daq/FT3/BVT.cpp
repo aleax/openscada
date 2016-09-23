@@ -127,7 +127,7 @@ void KA_BVT::AddChannel(uint8_t iid)
     chan_err.insert(chan_err.end(), SDataRec());
     data.push_back(SKATTchannel(iid, this));
     AddAttr(data.back().State.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:1", iid + 1));
-    AddAttr(data.back().Value.lnk, TFld::Real,  TVal::DirWrite, TSYS::strMess("%d:0", iid + 1));
+    AddAttr(data.back().Value.lnk, TFld::Real, TVal::DirWrite, TSYS::strMess("%d:0", iid + 1));
     if(with_params) {
 	AddAttr(data.back().Period.lnk, TFld::Integer, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
 	AddAttr(data.back().Sens.lnk, TFld::Real, TVal::DirWrite, TSYS::strMess("%d:2", iid + 1));
@@ -165,6 +165,126 @@ string KA_BVT::getStatus(void)
     return rez;
 }
 
+uint16_t KA_BVT::GetState()
+{
+    tagMsg Msg;
+    uint16_t rc = BlckStateUnknown;
+    Msg.L = 5;
+    Msg.C = AddrReq;
+    *((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+    if(mPrm.owner().DoCmd(&Msg) == GOOD3) {
+	switch(mPrm.vlAt("state").at().getI(0, true)) {
+	case KA_BVT_Error:
+	    rc = BlckStateError;
+	    break;
+	case KA_BVT_Normal:
+	    rc = BlckStateNormal;
+	    break;
+	}
+    }
+    return rc;
+}
+
+uint16_t KA_BVT::PreInit(void)
+{
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = SetData;
+    for(int i = 0; i < count_n; i++) {
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i + 1, 1));
+	Msg.L += SerializeB(Msg.D + Msg.L, TT_OFF);
+    }
+    Msg.L += 3;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
+uint16_t KA_BVT::SetParams(void)
+{
+    uint16_t rc;
+    tagMsg Msg;
+    loadParam();
+    for(int i = 0; i < count_n; i++) {
+	if(data[i].State.lnk.vlattr.at().getI(0, true) != TT_OFF) {
+	    Msg.L = 0;
+	    Msg.C = SetData;
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i + 1, 2));
+	    Msg.L += SerializeB(Msg.D + Msg.L, data[i].Period.lnk.vlattr.at().getI(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].Sens.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MinS.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MaxS.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MinPV.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MaxPV.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MinW.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MaxW.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MinA.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].MaxA.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].Factor.lnk.vlattr.at().getR(0, true));
+	    Msg.L += SerializeF(Msg.D + Msg.L, data[i].Adjust.lnk.vlattr.at().getR(0, true));
+	    Msg.L += 3;
+	    rc = mPrm.owner().DoCmd(&Msg);
+	    if((rc == BAD2) || (rc == BAD3)) {
+		mPrm.mess_sys(TMess::Error, "Can't set channel %d", i + 1);
+	    } else {
+		if(rc == ERROR) {
+		    mPrm.mess_sys(TMess::Error, "No answer to set channel %d", i + 1);
+		    break;
+		}
+	    }
+
+	}
+    }
+    return rc;
+
+}
+
+uint16_t KA_BVT::RefreshParams(void)
+{
+    uint16_t rc;
+    tagMsg Msg;
+    for(int i = 1; i <= count_n; i++) {
+	Msg.L = 0;
+	Msg.C = AddrReq;
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i, 2));
+	Msg.L += 3;
+	rc = mPrm.owner().DoCmd(&Msg);
+	if((rc == BAD2) || (rc == BAD3)) {
+	    mPrm.mess_sys(TMess::Error, "Can't refresh channel %d params", i);
+	} else {
+	    if(rc == ERROR) {
+		mPrm.mess_sys(TMess::Error, "No answer to refresh channel %d params", i);
+		break;
+	    }
+	}
+
+    }
+    return rc;
+}
+
+uint16_t KA_BVT::PostInit(void)
+{
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = SetData;
+    for(int i = 0; i < count_n; i++) {
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i + 1, 1));
+	Msg.L += SerializeB(Msg.D + Msg.L, data[i].State.lnk.vlattr.at().getI(0, true));
+    }
+    Msg.L += 3;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
+uint16_t KA_BVT::RefreshData(void)
+{
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = AddrReq;
+    for(int i = 1; i <= count_n; i++) {
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i, 0));
+    }
+    Msg.L += 3;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
 void KA_BVT::loadIO(bool force)
 {
     if(mPrm.owner().startStat() && !force) {
@@ -189,8 +309,9 @@ void KA_BVT::loadIO(bool force)
     }
 }
 
-void KA_BVT::saveIO()
+void KA_BVT::saveIO(void)
 {
+    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "save io");
     for(int i = 0; i < count_n; i++) {
 	saveLnk(data[i].State.lnk);
 	saveLnk(data[i].Value.lnk);
@@ -209,6 +330,46 @@ void KA_BVT::saveIO()
     }
 }
 
+void KA_BVT::saveParam(void)
+{
+    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "save param");
+    for(int i = 0; i < count_n; i++) {
+	saveVal(data[i].State.lnk);
+	saveVal(data[i].Period.lnk);
+	saveVal(data[i].Sens.lnk);
+	saveVal(data[i].MinS.lnk);
+	saveVal(data[i].MaxS.lnk);
+	saveVal(data[i].MinPV.lnk);
+	saveVal(data[i].MaxPV.lnk);
+	saveVal(data[i].MinW.lnk);
+	saveVal(data[i].MaxW.lnk);
+	saveVal(data[i].MinA.lnk);
+	saveVal(data[i].MaxA.lnk);
+	saveVal(data[i].Factor.lnk);
+	saveVal(data[i].Adjust.lnk);
+    }
+}
+
+void KA_BVT::loadParam(void)
+{
+    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "load param");
+    for(int i = 0; i < count_n; i++) {
+	loadVal(data[i].State.lnk);
+	loadVal(data[i].Period.lnk);
+	loadVal(data[i].Sens.lnk);
+	loadVal(data[i].MinS.lnk);
+	loadVal(data[i].MaxS.lnk);
+	loadVal(data[i].MinPV.lnk);
+	loadVal(data[i].MaxPV.lnk);
+	loadVal(data[i].MinW.lnk);
+	loadVal(data[i].MaxW.lnk);
+	loadVal(data[i].MinA.lnk);
+	loadVal(data[i].MaxA.lnk);
+	loadVal(data[i].Factor.lnk);
+	loadVal(data[i].Adjust.lnk);
+    }
+}
+
 void KA_BVT::tmHandler(void)
 {
     for(int i = 0; i < count_n; i++) {
@@ -218,53 +379,6 @@ void KA_BVT::tmHandler(void)
 	UpdateParamFlState(data[i].Value, data[i].State, data[i].Sens, PackID(ID, (i + 1), 0), 2);
     }
     NeedInit = false;
-}
-
-uint16_t KA_BVT::Task(uint16_t uc)
-{
-    tagMsg Msg;
-    uint16_t rc = 0;
-    switch(uc) {
-    case TaskRefresh:
-	Msg.L = 5;
-	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
-	if(mPrm.owner().DoCmd(&Msg)) {
-	    if(Msg.C == GOOD3) {
-		NeedInit = false;
-		rc = 1;
-		for(int i = 1; i <= count_n; i++) {
-		    if(chan_err[i].state == 1) continue;
-		    Msg.L = 5;
-		    Msg.C = AddrReq;
-		    *((uint16_t *) Msg.D) = PackID(ID, i, 0); //value
-		    if(with_params) {
-			Msg.L += 2;
-			*((uint16_t *) (Msg.D + 2)) = PackID(ID, i, 2); //params
-		    }
-		    if(mPrm.owner().DoCmd(&Msg)) {
-			if(Msg.C == GOOD3) {
-			    chan_err[i].state = 1;
-			    rc = 1;
-			} else {
-			    rc = 0;
-			    chan_err[i].state = 2;
-			    NeedInit = true;
-			}
-		    } else {
-			rc = 0;
-			chan_err[i].state = 3;
-			NeedInit = true;
-		    }
-		}
-	    } else {
-		rc = 0;
-		NeedInit = true;
-	    }
-	}
-	break;
-    }
-    return rc;
 }
 
 uint16_t KA_BVT::HandleEvent(int64_t tm, uint8_t * D)
@@ -429,6 +543,7 @@ uint8_t KA_BVT::cmdSet(uint8_t * req, uint8_t addr)
 
 uint16_t KA_BVT::setVal(TVal &val)
 {
+    uint16_t rc = 0;
     int off = 0;
     FT3ID ft3ID;
     ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
@@ -471,13 +586,14 @@ uint16_t KA_BVT::setVal(TVal &val)
 	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("maxW_%d", ft3ID.k)).at().getR(0, true));
 	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("factor_%d", ft3ID.k)).at().getR(0, true));
 	Msg.L += SerializeF(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("adjust_%d", ft3ID.k)).at().getR(0, true));
+	rc = 1;
 	break;
     }
     if(Msg.L > 2) {
 	Msg.L += 3;
 	mPrm.owner().DoCmd(&Msg);
     }
-    return 0;
+    return rc;
 }
 
 B_BVT::B_BVT(TMdPrm& prm, uint16_t id, uint16_t n, bool has_params, bool has_k, bool has_rate) :

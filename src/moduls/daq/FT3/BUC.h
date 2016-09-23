@@ -23,6 +23,15 @@
 
 namespace FT3
 {
+    enum eKA_BUC_State
+    {
+	KA_BUC_HardReset = 0x0,
+	KA_BUC_Normal = 0x1,
+	KA_BUC_SoftReset = 0x2,
+	KA_BUC_Setup = 0x80,
+	KA_BUC_Start = 0x81,
+    };
+
     class KA_BUC: public DA
     {
     public:
@@ -32,10 +41,15 @@ namespace FT3
  	uint16_t ID;
  	uint16_t clockID;
  	uint16_t Task(uint16_t);
+	uint16_t GetState(void);
+	uint16_t SetupClock(void);
+	uint16_t Start(void);
+	uint16_t RefreshData(void);
  	uint16_t HandleEvent(int64_t tm, uint8_t *);
  	uint8_t cmdGet(uint16_t prmID, uint8_t * out);
  	uint8_t cmdSet(uint8_t * req, uint8_t addr);
  	uint16_t setVal(TVal &val);
+ 	void vlGet(TVal &val);
  	string getStatus(void);
  	void tmHandler(void);
 

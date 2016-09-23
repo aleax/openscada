@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.FT3 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 09:36+0300\n"
+"POT-Creation-Date: 2016-09-23 13:30+0300\n"
 "PO-Revision-Date: 2015-11-13 15:13+0300\n"
 "Last-Translator: Maxim Kochetkov <fido_max@inbox.ru>\n"
 "Language-Team: \n"
@@ -90,19 +90,35 @@ msgstr "Текущие дата-время"
 msgid "Stop datetime"
 msgstr "Дата-время последнего останова"
 
+msgid "Hard Reset"
+msgstr "Общий сброс"
+
+msgid "Channel reset"
+msgstr "Сброс канала"
+
+msgid "Data reset"
+msgstr "Сброс данных"
+
+msgid "10: Hard reset"
+msgstr "10: Общий сброс"
+
+msgid "0: Normal"
+msgstr "0: Норма"
+
+msgid "11: Soft reset"
+msgstr "11: Сброс с сохранением"
+
+msgid "12: Setup"
+msgstr "12: Установка"
+
+msgid "13: Startup"
+msgstr "13: Запуск"
+
 msgid "Delay 1"
 msgstr "Величина задержки 1"
 
 msgid "Delay 2"
 msgstr "Величина задержки 2"
-
-#, c-format
-msgid "UnpackID %d"
-msgstr ""
-
-#, c-format
-msgid "g %d k %d n %d"
-msgstr ""
 
 #, c-format
 msgid "MakePacket one byte req %02X"
@@ -239,8 +255,8 @@ msgstr "Таблица параметров ГКР"
 msgid "TANK Parameteres table"
 msgstr "Таблица параметров РЕЗЕРВУАР"
 
-msgid "Gather data period (s)"
-msgstr "Период сбора данных"
+msgid "Acquisition schedule"
+msgstr "Планирование опроса"
 
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи"
@@ -317,6 +333,12 @@ msgstr "ОДОРИЗАТОР"
 msgid "GZD"
 msgstr "ГЗД"
 
+msgid "Valve type"
+msgstr "Тип задвижки"
+
+msgid "5 TU;6 TU"
+msgstr "5 ТУ;6 ТУ"
+
 msgid "GNS"
 msgstr "ГНС"
 
@@ -335,21 +357,12 @@ msgstr "ID"
 msgid "Value"
 msgstr "Значение"
 
+msgid "Attribute value"
+msgstr "Значение атрибута"
+
 #, c-format
 msgid "data arrived L:%d %s"
 msgstr "получены данные L:%d %s"
-
-#, c-format
-msgid "---l:%d n:%d"
-msgstr ""
-
-#, c-format
-msgid "%d bytes handled"
-msgstr "%d байт обработано"
-
-#, c-format
-msgid "l:%d n:%d"
-msgstr ""
 
 #, c-format
 msgid "Unhandled data  %04X at %d"
@@ -399,15 +412,57 @@ msgstr "Правильный заголовок"
 msgid "bad packet"
 msgstr "Плохой пакет"
 
-msgid "cutting packet"
-msgstr "Обрезание пакета"
+msgid "cutted packet"
+msgstr "обрезанный пакет"
+
+msgid "No connection"
+msgstr "Нет связи"
+
+msgid "Unknown state"
+msgstr "Неизвестное состояние"
+
+msgid "Hard reset"
+msgstr "Общий сброс"
+
+msgid "PreInit"
+msgstr "Предварительная инициализация"
+
+msgid "Set Params"
+msgstr "Установка параметров"
+
+msgid "PostInit"
+msgstr "Пост-инициализация"
+
+msgid "Starting"
+msgstr "Запуск"
+
+msgid "Refresh data"
+msgstr "Опрос значений"
+
+msgid "Refresh params"
+msgstr "Опрос параметров"
+
+msgid "Idle"
+msgstr "Ожидание событий"
 
 #, c-format
-msgid "Gather data time %.6g ms. "
-msgstr "Время сбора данных %.6g мс. "
+msgid ". Gather data time %.6g ms. "
+msgstr ". Время сбора данных %.6g мс. "
+
+msgid "Soft reset"
+msgstr "Сброс с сохранением"
+
+msgid "Setup Clock"
+msgstr "Установка часов"
 
 msgid "No one device selected."
 msgstr "Ничего не выбрано"
+
+msgid "Receiving block state error"
+msgstr "Ошибка опроса состояния блока"
+
+msgid "Block SetParams error"
+msgstr "Ошибка установки параметров блока"
 
 #, c-format
 msgid "TMdPrm::vlSet name %s "
@@ -790,12 +845,20 @@ msgid "TU close %d"
 msgstr "ТУ закрыть %d"
 
 #, c-format
+msgid "TU stop Ex %d"
+msgstr "ТУ стоп доп. %d"
+
+#, c-format
 msgid "Open time %d"
 msgstr "Время открыть %d"
 
 #, c-format
 msgid "Close time %d"
 msgstr "Время закрыть %d"
+
+#, c-format
+msgid "Stop time Ex %d"
+msgstr "Время стоп доп. %d"
 
 #, c-format
 msgid "Open TC %d"
@@ -822,6 +885,7 @@ msgstr "Максим Кочетков, Ольга Авдеева, Ольга К�
 msgid "Allow realization of FT3 master/slave service"
 msgstr "Предоставляет реализацию протокола FT3 для контроллеров АПСТМ"
 
+#, c-format
 msgid "Drop volume %d"
 msgstr "Объем капли %d"
 

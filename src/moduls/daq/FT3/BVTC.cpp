@@ -66,6 +66,116 @@ string KA_BVTC::getStatus(void)
     return rez;
 }
 
+uint16_t KA_BVTC::GetState()
+{
+    tagMsg Msg;
+    uint16_t rc = BlckStateUnknown;
+    Msg.L = 5;
+    Msg.C = AddrReq;
+    *((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
+    if(mPrm.owner().DoCmd(&Msg) == GOOD3) {
+	switch(mPrm.vlAt("state").at().getI(0, true)) {
+	case KA_BVTC_Error:
+	    rc = BlckStateError;
+	    break;
+	case KA_BVTC_Normal:
+	    rc = BlckStateNormal;
+	    break;
+	}
+    }
+    return rc;
+}
+
+uint16_t KA_BVTC::PreInit(void)
+{
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = SetData;
+    for(int i = 0; i < count_n; i++) {
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i + 1, 0));
+	Msg.L += SerializeB(Msg.D + Msg.L, TC_DISABLED);
+    }
+    Msg.L += 3;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
+uint16_t KA_BVTC::SetParams(void)
+{
+    uint16_t rc;
+    tagMsg Msg;
+    loadParam();
+    for(int i = 0; i < count_n; i++) {
+	if(data[i].Value.lnk.vlattr.at().getI(0, true) != TC_DISABLED) {
+	    Msg.L = 0;
+	    Msg.C = SetData;
+	    Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i + 1, 1));
+	    Msg.L += SerializeB(Msg.D + Msg.L, data[i].Period.lnk.vlattr.at().getI(0, true));
+	    Msg.L += SerializeB(Msg.D + Msg.L, data[i].Count.lnk.vlattr.at().getI(0, true));
+	    Msg.L += 3;
+	    rc = mPrm.owner().DoCmd(&Msg);
+	    if((rc == BAD2) || (rc == BAD3)) {
+		mPrm.mess_sys(TMess::Error, "Can't set channel %d", i + 1);
+	    } else {
+		if(rc == ERROR) {
+		    mPrm.mess_sys(TMess::Error, "No answer to set channel %d", i + 1);
+		    break;
+		}
+	    }
+	}
+    }
+    return rc;
+
+}
+
+uint16_t KA_BVTC::RefreshParams(void)
+{
+    uint16_t rc;
+    tagMsg Msg;
+    for(int i = 1; i <= count_n; i++) {
+	Msg.L = 0;
+	Msg.C = AddrReq;
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i, 1));
+	Msg.L += 3;
+	rc = mPrm.owner().DoCmd(&Msg);
+	if((rc == BAD2) || (rc == BAD3)) {
+	    mPrm.mess_sys(TMess::Error, "Can't refresh channel %d params", i);
+	} else {
+	    if(rc == ERROR) {
+		mPrm.mess_sys(TMess::Error, "No answer to refresh channel %d params", i);
+		break;
+	    }
+	}
+
+    }
+    return rc;
+
+}
+
+uint16_t KA_BVTC::PostInit(void)
+{
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = SetData;
+    for(int i = 0; i < count_n; i++) {
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i + 1, 0));
+	Msg.L += SerializeB(Msg.D + Msg.L, data[i].Value.lnk.vlattr.at().getI(0, true));
+    }
+    Msg.L += 3;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
+uint16_t KA_BVTC::RefreshData(void)
+{
+    tagMsg Msg;
+    Msg.L = 0;
+    Msg.C = AddrReq;
+    for(int i = 1; i <= count_n; i++) {
+	Msg.L += SerializeUi16(Msg.D + Msg.L, PackID(ID, i, 0));
+    }
+    Msg.L += 3;
+    return mPrm.owner().DoCmd(&Msg);
+}
+
 void KA_BVTC::loadIO(bool force)
 {
     //Load links
@@ -80,13 +190,32 @@ void KA_BVTC::loadIO(bool force)
     }
 }
 
-void KA_BVTC::saveIO()
+void KA_BVTC::saveIO(void)
 {
     //Save links
     for(int i = 0; i < count_n; i++) {
 	saveLnk(data[i].Value.lnk);
 	saveLnk(data[i].Count.lnk);
 	saveLnk(data[i].Period.lnk);
+    }
+}
+
+void KA_BVTC::saveParam(void)
+{
+    for(int i = 0; i < count_n; i++) {
+	saveVal(data[i].Value.lnk);
+	saveVal(data[i].Count.lnk);
+	saveVal(data[i].Period.lnk);
+    }
+}
+
+void KA_BVTC::loadParam(void)
+{
+    if(mess_lev() == TMess::Debug) mPrm.mess_sys(TMess::Debug, "load param");
+    for(int i = 0; i < count_n; i++) {
+	loadVal(data[i].Value.lnk);
+	loadVal(data[i].Period.lnk);
+	loadVal(data[i].Count.lnk);
     }
 }
 
@@ -100,43 +229,6 @@ void KA_BVTC::tmHandler(void)
 
     }
     NeedInit = false;
-}
-
-uint16_t KA_BVTC::Task(uint16_t uc)
-{
-    tagMsg Msg;
-    uint16_t rc = 0;
-    switch(uc) {
-    case TaskRefresh:
-	Msg.L = 7;
-	Msg.C = AddrReq;
-	*((uint16_t *) Msg.D) = PackID(ID, 0, 0); //state
-	*((uint16_t *) (Msg.D + 2)) = PackID(ID, 0, 1); //config
-	if(mPrm.owner().DoCmd(&Msg)) {
-	    if(Msg.C == GOOD3) {
-		Msg.L = 5;
-		Msg.C = AddrReq;
-		*((uint16_t *) Msg.D) = PackID(ID, 0, 2); //TC Value
-		if(mPrm.owner().DoCmd(&Msg)) {
-		    if(with_params) {
-			Msg.L = 3 + count_n * 2;
-			Msg.C = AddrReq;
-			for(int i = 1; i <= count_n; i++) {
-			    *((uint16_t *) (Msg.D + (i - 1) * 2)) = PackID(ID, i, 1); //маски ТC
-			}
-			if(mPrm.owner().DoCmd(&Msg)) {
-			    rc = 1;
-			}
-		    } else {
-			rc = 1;
-		    }
-		}
-	    }
-	}
-	if(rc) NeedInit = false;
-	break;
-    }
-    return rc;
 }
 
 uint16_t KA_BVTC::HandleEvent(int64_t tm, uint8_t * D)
@@ -250,6 +342,7 @@ uint8_t KA_BVTC::cmdSet(uint8_t * req, uint8_t addr)
 
 uint16_t KA_BVTC::setVal(TVal &val)
 {
+    uint16_t rc = 0;
     int off = 0;
     FT3ID ft3ID;
     ft3ID.k = s2i(TSYS::strParse(val.fld().reserve(), 0, ":", &off));
@@ -268,6 +361,7 @@ uint16_t KA_BVTC::setVal(TVal &val)
 	case 1:
 	    Msg.L += SerializeB(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("Period_%d", ft3ID.k)).at().getI(0, true));
 	    Msg.L += SerializeB(Msg.D + Msg.L, mPrm.vlAt(TSYS::strMess("Count_%d", ft3ID.k)).at().getI(0, true));
+	    rc = 1;
 	    break;
 	}
     }
@@ -276,7 +370,7 @@ uint16_t KA_BVTC::setVal(TVal &val)
 	mPrm.owner().DoCmd(&Msg);
     }
 
-    return 0;
+    return rc;
 }
 
 //---------------------------------------------------------------------------

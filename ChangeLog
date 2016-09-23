@@ -1,3 +1,6 @@
+2016-09-23 fido_max
+- DAQ.FT3: KA DAQ refactored and fully implemented (BTU, BVT, BVTC, GZD, GNS). Params save/load, set/refresh implemented.
+
 2016-09-22 Roman
 - FIX:Arhives: getMess() fix for double call modules' function get().
     Some fields of the messages request dialogs are merged to single line.
