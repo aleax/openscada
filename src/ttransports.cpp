@@ -538,7 +538,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		else host.pass = opt->text();
 	    }
 	    else if(col == "mode")	host.mode = s2i(opt->text());
-	    else if(col == "upRiseLev")	host.upRiseLev = vmax(0,vmin(9,s2i(opt->text())));
+	    else if(col == "upRiseLev")	host.upRiseLev = vmax(0, vmin(9,s2i(opt->text())));
 	    host.mdf = SYS->sysTm();
 	    extHostSet(host, sysHostAcs);
 	}
@@ -1070,7 +1070,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))
 	    opt->setText(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(STR_BUF_LEN),opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
-	    TBDS::genDBSet(owner().nodePath()+"InBufSz",i2s(vmax(0,vmin(STR_BUF_LEN,s2i(opt->text())))), opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(STR_BUF_LEN,s2i(opt->text())))), opt->attr("user"));
     }
     else if(a_path == "/req/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));

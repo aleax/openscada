@@ -1682,7 +1682,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     if(priority > 0)	policy = SCHED_RR;
     if(priority >= 100)	policy = SCHED_FIFO;
     pthread_attr_setschedpolicy(pthr_attr, policy);
-    prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority%100));
+    prior.sched_priority = vmax(sched_get_priority_min(policy), vmin(sched_get_priority_max(policy),priority%100));
     pthread_attr_setschedparam(pthr_attr, &prior);
 
     try {
@@ -2011,11 +2011,11 @@ reload:
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=59; }
-	if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_min>=vbeg)?60:0));
+	if(vend < 0) vm = vmin(vm, vbeg+((ttm.tm_min>=vbeg)?60:0));
 	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(59,vend))) {
-	    if(ttm.tm_min < vbeg) vm = vmin(vm,vbeg);
+	    if(ttm.tm_min < vbeg) vm = vmin(vm, vbeg);
 	    else if((vstep>1 && ttm.tm_min >= (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_min >= vend))
-		vm = vmin(vm,vbeg+60);
+		vm = vmin(vm, vbeg+60);
 	    else if(vstep>1 ) vm = vmin(vm, vbeg + vstep*(((ttm.tm_min+1)-vbeg)/vstep + ((((ttm.tm_min+1)-vbeg)%vstep)?1:0)));
 	    else vm = vmin(vm, ttm.tm_min+1);
 	}
@@ -2031,12 +2031,12 @@ reload:
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=23; }
-	if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_hour>vbeg)?24:0));
+	if(vend < 0) vm = vmin(vm, vbeg+((ttm.tm_hour>vbeg)?24:0));
 	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(23,vend))) {
-	    if(ttm.tm_hour < vbeg) vm = vmin(vm,vbeg);
+	    if(ttm.tm_hour < vbeg) vm = vmin(vm, vbeg);
 	    else if((vstep>1 && ttm.tm_hour > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_hour > vend))
-		vm = vmin(vm,vbeg+24);
-	    else if(vstep>1 ) vm = vmin(vm, vbeg + vstep*((ttm.tm_hour-vbeg)/vstep + (((ttm.tm_hour-vbeg)%vstep)?1:0)));
+		vm = vmin(vm, vbeg+24);
+	    else if(vstep > 1) vm = vmin(vm, vbeg + vstep*((ttm.tm_hour-vbeg)/vstep + (((ttm.tm_hour-vbeg)%vstep)?1:0)));
 	    else vm = vmin(vm, ttm.tm_hour);
 	}
 	if(vm == ttm.tm_hour) break;
@@ -2055,12 +2055,12 @@ reload:
 	    vbeg = vend = -1; vstep = 0;
 	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	    if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=31; }
-	    if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_mday>vbeg)?31:0));
+	    if(vend < 0) vm = vmin(vm, vbeg+((ttm.tm_mday>vbeg)?31:0));
 	    else if((vbeg=vmax(1,vbeg)) < (vend=vmin(31,vend))) {
-		if(ttm.tm_mday < vbeg) vm = vmin(vm,vbeg);
+		if(ttm.tm_mday < vbeg) vm = vmin(vm, vbeg);
 		else if((vstep>1 && ttm.tm_mday > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_mday > vend))
-		    vm = vmin(vm,vbeg+31);
-		else if(vstep>1 ) vm = vmin(vm, vbeg + vstep*((ttm.tm_mday-vbeg)/vstep + (((ttm.tm_mday-vbeg)%vstep)?1:0)));
+		    vm = vmin(vm, vbeg+31);
+		else if(vstep > 1) vm = vmin(vm, vbeg + vstep*((ttm.tm_mday-vbeg)/vstep + (((ttm.tm_mday-vbeg)%vstep)?1:0)));
 		else vm = vmin(vm, ttm.tm_mday);
 	    }
 	    if(vm == ttm.tm_mday) break;
@@ -2093,12 +2093,12 @@ reload:
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=12; }
-	if(vend < 0) vm = vmin(vm,vbeg+(((ttm.tm_mon+1)>vbeg)?12:0));
+	if(vend < 0) vm = vmin(vm, vbeg+(((ttm.tm_mon+1)>vbeg)?12:0));
 	else if((vbeg=vmax(1,vbeg)) < (vend=vmin(12,vend))) {
-	    if((ttm.tm_mon+1) < vbeg) vm = vmin(vm,vbeg);
+	    if((ttm.tm_mon+1) < vbeg) vm = vmin(vm, vbeg);
 	    else if((vstep>1 && (ttm.tm_mon+1) > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && (ttm.tm_mon+1) > vend))
-		vm = vmin(vm,vbeg+12);
-	    else if(vstep>1) vm = vmin( vm, vbeg + vstep*(((ttm.tm_mon+1)-vbeg)/vstep + ((((ttm.tm_mon+1)-vbeg)%vstep)?1:0)));
+		vm = vmin(vm, vbeg+12);
+	    else if(vstep > 1) vm = vmin(vm, vbeg + vstep*(((ttm.tm_mon+1)-vbeg)/vstep + ((((ttm.tm_mon+1)-vbeg)%vstep)?1:0)));
 	    else vm = vmin(vm, ttm.tm_mon+1);
 	}
 	if(vm == (ttm.tm_mon+1)) break;
@@ -2151,9 +2151,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "fileRead" && prms.size() >= 1) {
 	char buf[STR_BUF_LEN];
 	string rez;
-	int hd = open(prms[0].getS().c_str(),O_RDONLY);
+	int hd = open(prms[0].getS().c_str(), O_RDONLY);
 	if(hd >= 0) {
-	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf, len);
 	    close(hd);
 	}
 	return rez;

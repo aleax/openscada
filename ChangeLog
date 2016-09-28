@@ -1,5 +1,17 @@
+2016-09-28 Roman
+- FIX:DB.LibsDB.OscadaLibs: DAQ template DevLib.SSCP: Fix for bool type represent. Load big LIST files performance some rised.
+- FIX:SYS: The functional templates fmin() and fmax() were added.
+    FIX:TRegExp fix in function split(), for hang and crash prevent.
+- Archive: Into getMess() used fmin() for previous problem.
+    Attribute "tm" of the Array result of user API function "getMess" changed to type "int".
+- Archive.DBArch: Messages archivation part fixed for "needMeta" and deny an access to the archivator before the successful meta get.
+- FIX:DAQ.JavaLikeCalc: The syntax highlight some fixed for strings and backslash '\' in variant "\\".
+- Special.FLibSYS: Function strParse() expanded for multisymbols separation.
+
+
 2016-09-23 fido_max
 - DAQ.FT3: KA DAQ refactored and fully implemented (BTU, BVT, BVTC, GZD, GNS). Params save/load, set/refresh implemented.
+
 
 2016-09-22 Roman
 - FIX:Arhives: getMess() fix for double call modules' function get().

@@ -172,14 +172,14 @@ void Func::loadIO( )
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }
     //Remove holes
-    for(unsigned i_p = 0; i_p < u_pos.size(); ) {
-	if(u_pos[i_p].empty()) { u_pos.erase(u_pos.begin()+i_p); continue; }
-	i_p++;
+    for(unsigned iP = 0; iP < u_pos.size(); ) {
+	if(u_pos[iP].empty()) { u_pos.erase(u_pos.begin()+iP); continue; }
+	iP++;
     }
     //Position fixing
-    for(int i_p = 0; i_p < (int)u_pos.size(); i_p++) {
-	int iid = ioId(u_pos[i_p]);
-	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...) { }
+    for(int iP = 0; iP < (int)u_pos.size(); iP++) {
+	int iid = ioId(u_pos[iP]);
+	if(iid != iP) try{ ioMove(iid,iP); } catch(...) { }
     }
 }
 
@@ -596,10 +596,10 @@ Reg *Func::cdMviArray( int p_cnt )
     deque<int> p_pos;
 
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++)
-	fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++)
+	fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
     //Get parameters.
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) {
 	p_pos.push_front(fPrmst.front()->pos());
 	fPrmst.front()->free();
 	fPrmst.pop_front();
@@ -613,8 +613,8 @@ Reg *Func::cdMviArray( int p_cnt )
     prg += (uint8_t)Reg::MviArray;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     prg += (uint8_t)p_cnt;
-    for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+    for(unsigned iPrm = 0; iPrm < p_pos.size(); iPrm++)
+    { addr = p_pos[iPrm]; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
@@ -1107,10 +1107,10 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	throw TError(nodePath().c_str(), _("Function is requested '%s', but it doesn't have return of IO"), funcAt(f_id)->func().at().id().c_str());
 
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
 
     //Get parameters. Add check parameters type !!!!
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) {
 	p_pos.push_front(fPrmst.front()->pos());
 	fPrmst.front()->free();
 	fPrmst.pop_front();
@@ -1134,8 +1134,8 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     prg += (uint8_t)f_id;
     prg += (uint8_t)p_cnt;
     addr = proc ? 0 : rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+    for(unsigned iPrm = 0; iPrm < p_pos.size(); iPrm++)
+    { addr = p_pos[iPrm]; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
@@ -1179,9 +1179,9 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     deque<int> p_pos;
 
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
     //Get parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) {
 	p_pos.push_front(fPrmst.front()->pos());
 	fPrmst.front()->free();
 	fPrmst.pop_front();
@@ -1197,8 +1197,8 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     prg += (uint8_t)p_cnt;
     addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
 
-    for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
-    { addr = p_pos[i_prm]; prg.append((char*)&addr, sizeof(uint16_t)); }
+    for(unsigned iPrm = 0; iPrm < p_pos.size(); iPrm++)
+    { addr = p_pos[iPrm]; prg.append((char*)&addr, sizeof(uint16_t)); }
 
     return rez;
 }
@@ -1347,8 +1347,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  val1, val2 - appended values
 		if(prop == "concat" && prms.size()) {
 		    string rez = vl.getS();
-		    for(unsigned i_p = 0; i_p < prms.size(); i_p++)
-			rez += prms[i_p].getS();
+		    for(unsigned iP = 0; iP < prms.size(); iP++)
+			rez += prms[iP].getS();
 		    return rez;
 		}
 		// int indexOf(string substr, int start) - returns the position of the required string <substr> in the original
@@ -1424,10 +1424,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 
 		    //  Use simple string separator
 		    TArrayObj *rez = new TArrayObj();
-		    for(size_t posB = 0, posC, i_p = 0; true; i_p++) {
+		    for(size_t posB = 0, posC, iP = 0; true; iP++) {
 			if(prms.size() > 1 && rez->size() >= prms[1].getI()) break;
 			posC = vl.getS().find(prms[0].getS(),posB);
-			if(posC != posB) rez->arSet(i_p, vl.getS().substr(posB,posC-posB));
+			if(posC != posB) rez->arSet(iP, vl.getS().substr(posB,posC-posB));
 			if(posC == string::npos) break;
 			posB = posC + prms[0].getS().size();
 		    }
@@ -1546,10 +1546,10 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 	default: break;
     }
 
-    for(unsigned i_p = 0; i_p < rg.props().size(); i_p++) {
-	if(fObj && i_p == (rg.props().size()-1)) break;
+    for(unsigned iP = 0; iP < rg.props().size(); iP++) {
+	if(fObj && iP == (rg.props().size()-1)) break;
 	if(vl.isNull())	return TVariant();	//Null //return false;
-	vl = oPropGet(vl, rg.props()[i_p]);
+	vl = oPropGet(vl, rg.props()[iP]);
     }
 
     return vl;
@@ -1679,9 +1679,9 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 	}
     else if(rg.type() == Reg::Obj) {
 	TVariant vl(*rg.val().o);
-	for(unsigned i_p = 0; i_p < rg.props().size(); i_p++)
-	    if(i_p < (rg.props().size()-1)) vl = vl.getO().at().propGet(rg.props()[i_p]);
-	    else vl.getO().at().propSet(rg.props()[i_p], val);
+	for(unsigned iP = 0; iP < rg.props().size(); iP++)
+	    if(iP < (rg.props().size()-1)) vl = vl.getO().at().propGet(rg.props()[iP]);
+	    else vl.getO().at().propSet(rg.props()[iP], val);
     }
 }
 
@@ -1821,17 +1821,17 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		TArrayObj *ar = new TArrayObj();
 		//  Fill array by empty elements number
 		if(ptr->numb == 1)
-		    for(int i_p = 0; i_p < getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]); i_p++)
-			ar->arSet(i_p, EVAL_REAL);
+		    for(int iP = 0; iP < getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]); iP++)
+			ar->arSet(iP, EVAL_REAL);
 		//  Fill array by parameters
 		else
-		    for(int i_p = 0; i_p < ptr->numb; i_p++)
-			switch(reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].vType(this)) {
-			    case Reg::Bool:	ar->arSet(i_p, getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Int:	ar->arSet(i_p, getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Real:	ar->arSet(i_p, getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::String:	ar->arSet(i_p, getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Obj:	ar->arSet(i_p, getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
+		    for(int iP = 0; iP < ptr->numb; iP++)
+			switch(reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))].vType(this)) {
+			    case Reg::Bool:	ar->arSet(iP, getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::Int:	ar->arSet(iP, getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::Real:	ar->arSet(iP, getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::String:	ar->arSet(iP, getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::Obj:	ar->arSet(iP, getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
 			    default:	break;
 			}
 		reg[ptr->reg] = AutoHD<TVarObj>(ar);
@@ -2530,36 +2530,36 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		    mess_debug(nodePath().c_str(), "%ph: Call function/procedure %d = %s(%d).", cprg, ptr->rez, vfnc->func()->id().c_str(), ptr->n);
 #endif
 		//  Get return position
-		int r_pos, i_p, p_p;
+		int r_pos, iP, p_p;
 		for(r_pos = 0; r_pos < vfnc->func()->ioSize(); r_pos++)
 		    if(vfnc->ioFlg(r_pos)&IO::Return) break;
 		//  Process parameters
-		for(i_p = p_p = 0; true; i_p++) {
-		    p_p = (i_p>=r_pos)?i_p+1:i_p;
+		for(iP = p_p = 0; true; iP++) {
+		    p_p = (iP>=r_pos)?iP+1:iP;
 		    if(p_p >= vfnc->func()->ioSize()) break;
 		    //   Set default value
-		    if(i_p >= ptr->n)	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
+		    if(iP >= ptr->n)	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
 		    switch(vfnc->ioType(p_p)) {
-			case IO::String: vfnc->setS(p_p,getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Integer:vfnc->setI(p_p,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Real:	 vfnc->setR(p_p,getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Boolean:vfnc->setB(p_p,getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Object: vfnc->setO(p_p,getValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
+			case IO::String: vfnc->setS(p_p,getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			case IO::Integer:vfnc->setI(p_p,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			case IO::Real:	 vfnc->setR(p_p,getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			case IO::Boolean:vfnc->setB(p_p,getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			case IO::Object: vfnc->setO(p_p,getValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
 		    }
 		}
 		//  Make calc
 		vfnc->calc(val->user());
 		//  Process outputs
-		for(i_p = 0; i_p < ptr->n; i_p++) {
-		    p_p = (i_p>=r_pos)?i_p+1:i_p;
+		for(iP = 0; iP < ptr->n; iP++) {
+		    p_p = (iP>=r_pos)?iP+1:iP;
 		    if(p_p >= vfnc->func()->ioSize()) break;
 		    if(vfnc->ioFlg(p_p)&IO::Output)
 			switch(vfnc->ioType(p_p)) {
-			    case IO::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getS(p_p)); break;
-			    case IO::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getI(p_p)); break;
-			    case IO::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getR(p_p)); break;
-			    case IO::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getB(p_p)); break;
-			    case IO::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getO(p_p)); break;
+			    case IO::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getS(p_p)); break;
+			    case IO::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getI(p_p)); break;
+			    case IO::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getR(p_p)); break;
+			    case IO::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getB(p_p)); break;
+			    case IO::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getO(p_p)); break;
 			}
 		}
 		//  Set return
@@ -2588,21 +2588,21 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 
 		//Prepare inputs
 		vector<TVariant> prms;
-		for(int i_p = 0; i_p < ptr->n; i_p++)
-		    prms.push_back(getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));
+		for(int iP = 0; iP < ptr->n; iP++)
+		    prms.push_back(getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));
 
 		//Call
 		TVariant rez = oFuncCall(obj, reg[ptr->obj].props().back(), prms);
 		//if(obj.isModify()) setVal(val,reg[ptr->obj],obj,true);
 		//Process outputs
-		for(unsigned i_p = 0; i_p < prms.size(); i_p++)
-		    if(prms[i_p].isModify())
-			switch(prms[i_p].type()) {
-			    case TVariant::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getB());	break;
-			    case TVariant::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getI());	break;
-			    case TVariant::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getR());	break;
-			    case TVariant::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getS());	break;
-			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getO());	break;
+		for(unsigned iP = 0; iP < prms.size(); iP++)
+		    if(prms[iP].isModify())
+			switch(prms[iP].type()) {
+			    case TVariant::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],prms[iP].getB());	break;
+			    case TVariant::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],prms[iP].getI());	break;
+			    case TVariant::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],prms[iP].getR());	break;
+			    case TVariant::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],prms[iP].getS());	break;
+			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],prms[iP].getO());	break;
 			    default:	break;
 			}
 		//Process return

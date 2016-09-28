@@ -420,6 +420,9 @@ class TSYS : public TCntrNode
 
 //*************************************************
 //* Global functions for OSCADA namespace         *
+template <class fVal> fVal fmin( fVal a, fVal b ) { return (a < b) ? a : b; }
+template <class fVal> fVal fmax( fVal a, fVal b ) { return (a > b) ? a : b; }
+
 inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2str(val, view); }
 inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
 inline string ll2s( long long val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }

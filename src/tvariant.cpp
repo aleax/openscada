@@ -670,7 +670,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	int end = mEls.size();
 	if(prms.size() >= 2) end = prms[1].getI();
 	if(end < 0) end = mEls.size()+end;
-	end = vmin(end,(int)mEls.size());
+	end = vmin(end, (int)mEls.size());
 	TArrayObj *rez = new TArrayObj();
 	for(int i_p = beg; i_p < end; i_p++)
 	    rez->arSet(i_p-beg, mEls[i_p]);
@@ -801,12 +801,12 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
     if(!regex) return rez;
 
     if(all && global)
-	for(int curPos = 0, i_n = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], i_n++)
-	    rez->arSet(i_n, string(vl.data()+capv[0],capv[1]-capv[0]));
+	for(int curPos = 0, iN = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], iN++)
+	    rez->arSet(iN, string(vl.data()+capv[0],capv[1]-capv[0]));
     else {
 	int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
-	for(int i_n = 0; i_n < n; i_n++)
-	    rez->arSet(i_n, string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
+	for(int iN = 0; iN < n; iN++)
+	    rez->arSet(iN, string(vl.data()+capv[iN*2],capv[iN*2+1]-capv[iN*2]));
 	if(global) lastIndex = (n>0) ? capv[1] : 0;
 	if(n > 0) { rez->propSet("index", capv[0]); rez->propSet("input", vl); }
     }
@@ -831,14 +831,15 @@ TArrayObj *TRegExp::split( const string &vl, int limit )
 {
     TArrayObj *rez = new TArrayObj();
     if(!regex) return rez;
-    int curPos = 0, i_n = 0;
-    for(int se = 0; (se=pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && (!limit || i_n < limit); curPos = capv[1])
+    int curPos = 0, iN = 0;
+    for(int se = 0; (se=pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && capv[1] > capv[0] && (!limit || iN < limit);
+		curPos = capv[1])
     {
-	rez->arSet(i_n++, string(vl.data()+curPos,capv[0]-curPos));
-	for(int i_se = 1; i_se < se && (!limit || i_n < limit); i_se++)
-	    rez->arSet(i_n++, string(vl.data()+capv[i_se*2],capv[i_se*2+1]-capv[i_se*2]));
+	rez->arSet(iN++, string(vl.data()+curPos,capv[0]-curPos));
+	for(int iSe = 1; iSe < se && (!limit || iN < limit); iSe++)
+	    rez->arSet(iN++, string(vl.data()+capv[iSe*2],capv[iSe*2+1]-capv[iSe*2]));
     }
-    if(curPos <= (int)vl.size() && (!limit || i_n < limit)) rez->arSet(i_n++, string(vl.data()+curPos,vl.size()-curPos));
+    if(curPos <= (int)vl.size() && (!limit || iN < limit)) rez->arSet(iN++, string(vl.data()+curPos,vl.size()-curPos));
     return rez;
 }
 
@@ -1007,7 +1008,7 @@ void XMLNodeObj::childIns( unsigned id, AutoHD<XMLNodeObj> nd )
     if(&nd.at() == this) return;
     pthread_mutex_lock(&dataM);
     if(id < 0) id = mChilds.size();
-    id = vmin(id,mChilds.size());
+    id = vmin(id, mChilds.size());
     mChilds.insert(mChilds.begin()+id,nd);
     nd.at().parent = this;
     pthread_mutex_unlock(&dataM);
@@ -1035,8 +1036,8 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet( const string &name, unsigned num )
 {
     pthread_mutex_lock(&dataM);
     AutoHD<XMLNodeObj> rez;
-    for(int i_ch = 0, i_n = 0; i_ch < (int)mChilds.size(); i_ch++)
-	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && (i_n++) == (int)num)
+    for(int i_ch = 0, iN = 0; i_ch < (int)mChilds.size(); i_ch++)
+	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && (iN++) == (int)num)
 	    rez = mChilds[i_ch];
     pthread_mutex_unlock(&dataM);
     if(rez.freeStat()) throw TError("XMLNodeObj", _("Child %s:%d is not found!"), name.c_str(), num);

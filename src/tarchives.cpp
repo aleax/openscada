@@ -503,11 +503,9 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
 	at(tLst[iT]).at().messList(oLst);
 	for(unsigned iO = 0; iO < oLst.size() && SYS->sysTm() < upTo; iO++) {
 	    AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
-	    if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()])) {
+	    if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
 		//!! But possible only one archiver, from all, processing and next continued by the limit
-		time_t tres = archtor.at().get(bTm, eTm, recs, category, level, arch.size()?upTo:0);
-		result = vmin(result, tres);	//!! Do not merge into vmin
-	    }
+		result = fmin(result, archtor.at().get(bTm,eTm,recs,category,level,arch.size()?upTo:0));
 	}
     }
 
@@ -862,7 +860,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 				((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")),
 				vmin((upTm<0)?SYS->sysTm()+abs(upTm):upTm,SYS->sysTm()+STD_INTERF_TM));
 	TArrayObj *rez = new TArrayObj();
-	rez->propSet("tm", ll2s(result));
+	rez->propSet("tm", (int64_t)result);
 	for(unsigned iM = 0; iM < recs.size(); iM++) {
 	    TVarObj *am = new TVarObj();
 	    am->propSet("tm", (int)recs[iM].time);

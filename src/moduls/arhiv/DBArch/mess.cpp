@@ -32,7 +32,7 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid, idb, cf_el), tmProc(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false)
+    TMArchivator(iid, idb, cf_el), tmProc(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false), needMeta(true)
 {
     setAddr("*.*");
 }
@@ -73,19 +73,7 @@ void ModMArch::load_( )
 	if(!(vl=prmNd.attr("TmAsStr")).empty())	setTmAsStr(s2i(vl));
     } catch(...) { }
 
-    //Load message archive parameters
-    TConfig wcfg(&mod->archEl());
-    wcfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,false,true)) {
-	mBeg = s2i(wcfg.cfg("BEGIN").getS());
-	mEnd = s2i(wcfg.cfg("END").getS());
-	// Check for delete archivator table
-	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
-	    SYS->db().at().open(addr()+"."+archTbl());
-	    SYS->db().at().close(addr()+"."+archTbl(), true);
-	    mBeg = mEnd = 0;
-	}
-    }
+    needMeta = !readMeta();
 }
 
 void ModMArch::save_( )
@@ -128,7 +116,9 @@ void ModMArch::stop( )
 
 bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 {
-    TMArchivator::put(mess, force);    //Allow redundancy
+    if(needMeta && (needMeta=!readMeta()))	return false;
+
+    TMArchivator::put(mess, force);	//Allow redundancy
 
     if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
 
@@ -182,6 +172,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
     if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
+    if(needMeta && (needMeta=!readMeta())) return eTm;
     if(!upTo) upTo = SYS->sysTm() + STD_INTERF_TM;
 
     bTm = vmax(bTm, begin());
@@ -222,6 +213,34 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
     }
 
     return result;
+}
+
+bool ModMArch::readMeta( )
+{
+    bool rez = true;
+
+    //Load message archive parameters
+    TConfig wcfg(&mod->archEl());
+    wcfg.cfg("TBL").setS(archTbl());
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,false,true)) {
+	mBeg = s2i(wcfg.cfg("BEGIN").getS());
+	mEnd = s2i(wcfg.cfg("END").getS());
+	// Check for delete archivator table
+	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
+	    SYS->db().at().open(addr()+"."+archTbl());
+	    SYS->db().at().close(addr()+"."+archTbl(), true);
+	    mBeg = mEnd = 0;
+	}
+    } else rez = false;
+
+    //Check for target DB enabled (disabled by the connection lost)
+    if(!rez) {
+	string wDB = TBDS::realDBName(addr());
+	rez = (TSYS::strParse(wDB,0,".") == DB_CFG ||
+	    SYS->db().at().at(TSYS::strParse(wDB,0,".")).at().at(TSYS::strParse(wDB,1,".")).at().enableStat());
+    }
+
+    return rez;
 }
 
 void ModMArch::cntrCmdProc( XMLNode *opt )

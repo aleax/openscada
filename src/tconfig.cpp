@@ -370,7 +370,7 @@ void TCfg::setR( double val )
 	case TVariant::Boolean:	setB((bool)val);break;
 	case TVariant::Real: {
 	    if(!(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1])
-		val = vmin(mFld->selValR()[1],vmax(mFld->selValR()[0],val));
+		val = vmin(mFld->selValR()[1], vmax(mFld->selValR()[0],val));
 	    double tVal = TVariant::getR();
 	    TVariant::setR(val);
 	    try{ if(!mOwner.cfgChange(*this,tVal)) TVariant::setR(tVal); }
@@ -389,7 +389,7 @@ void TCfg::setI( int64_t val )
 	case TVariant::Boolean:	setB((bool)val);break;
 	case TVariant::Integer: {
 	    if(!(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1])
-		val = vmin(mFld->selValI()[1],vmax(mFld->selValI()[0],val));
+		val = vmin(mFld->selValI()[1], vmax(mFld->selValI()[0],val));
 	    int tVal = TVariant::getI();
 	    TVariant::setI(val);
 	    try{ if(!mOwner.cfgChange(*this,tVal)) TVariant::setI(tVal); }

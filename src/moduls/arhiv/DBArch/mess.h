@@ -63,12 +63,15 @@ class ModMArch: public TMArchivator
 	void postDisable( int flag );		//Delete all DB if flag 1
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
+	bool readMeta( );
+
     private:
 	//Attributes
 	double	tmProc;				//Archiving/processing time
 	time_t	mBeg, mEnd;
 	double	mMaxSize;			//Maximum archive size (hours)
-	bool	mTmAsStr;			//Store time as pure integer
+	bool	mTmAsStr,			//Store time as pure integer
+		needMeta;
 
 	TElem	reqEl;				//Requests structure
 };

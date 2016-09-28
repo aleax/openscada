@@ -4665,8 +4665,13 @@ else {
 		toLoadVarLsts = false;
 		fLs = SYS.system("ls -1 "+listsDir+"/*.vlist");
 		for(off = 0; (fln=fLs.parse(0,"\n",off)).length; ) {
+			//stTm = SYS.time();
 			fl = SYS.fileRead(fln);
-			for(off1 = 0; (ln=fl.parse(0,"\x0D\x0A",off1)).length; ) {
+			fl = fl.split("\x0D\x0A");
+			for(iL = 0; iL < fl.length; iL++) {
+				ln = fl[iL];
+			//for(off1 = 0; (ln=fl.parse(0,"\x0D\x0A",off1)).length; ) {
+			//for(off1 = 0; (ln=Special.FLibSYS.strParse(fl,0,"\x0D\x0A",off1)).length; ) {
 				off2 = 0;
 				vid = ln.parse(0, ";", off2);
 				if(vid == "Project" || !(tVl=ln.parse(0,";",off2)).length) continue;
@@ -4680,8 +4685,9 @@ else {
 				vO.ParentTypeFamily = ln.parse(0, ";", off2);
 				vO.HistoryId = ln.parse(0, ";", off2);
 			}
+			//SYS.messInfo("SSCP", "Time="+(SYS.time()-stTm)+"s; length="+fl.length);
 		}
-		selLst = "";
+		fl = selLst = "";
 		//for(tVl in vlist) selLst += tVl+";";
 		//this.attrAdd("selList", tr("Appending variable"), "string|sel", selLst+"\n"+selLst);
 		//aSelList = this.selList;
@@ -4745,7 +4751,7 @@ else {
 				if(t_err.toInt()) tVl = EVAL;
 				else {
 					if(vO.Type.indexOf("bool") != -1 && vO.Length == 1)
-						tVl = io.read("char", 1);
+						tVl = io.read("char", 1).charCodeAt(0);
 					else if(vO.Type.indexOf("real") != -1 && (vO.Length == 4 || vO.Length == 8))
 						tVl = io.read((vO.Length==8)?"double":"float", 1);
 					else if(vO.Type.indexOf("int") != -1 && (vO.Length == 2 || vO.Length == 4))
@@ -4778,7 +4784,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1472125162);
+f_err = t_err;','','',1474988841);
 INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097U','One Wire by DS9097U','','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408 (scheduled), DS2450 (scheduled), DS2438 (scheduled).
 Author: Roman Savochenko <rom_as@oscada.org>

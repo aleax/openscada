@@ -706,7 +706,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
-		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
+		value = vmin(fld().selValI()[1], vmax(fld().selValI()[0],value));
 	    int pvl = val.i; val.i = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
@@ -735,7 +735,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
-		value = vmin(fld().selValR()[1],vmax(fld().selValR()[0],value));
+		value = vmin(fld().selValR()[1], vmax(fld().selValR()[0],value));
 	    double pvl = val.r; val.r = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
