@@ -358,17 +358,20 @@ msgstr "Встановити у 0 для автоматичного за cntrKee
 msgid "No present selected row."
 msgstr "Обраний рядок відсутній."
 
-msgid "OPC UA"
-msgstr ""
+msgid "Client OPC-UA"
+msgstr "Клієнт OPC-UA"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "OPC UA client service implementation."
-msgstr "Реалізація OPC UA клієнтського сервісу."
+msgid "Provides OPC-UA client service implementation."
+msgstr "Надає реалізацію OPC-UA клієнтського сервісу."
 
-msgid "OPC UA protocol implementation."
-msgstr "Реалізація OPC UA протоколу."
+msgid "Server OPC-UA"
+msgstr "Сервер OPC-UA"
+
+msgid "Provides OPC-UA server service implementation."
+msgstr "Надає реалізацію OPC-UA сервісу серверу."
 
 #~ msgid "Transport address"
 #~ msgstr "Адреса транспорту"

@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.1"
+#define MOD_VER		"0.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -83,7 +83,7 @@ void TTpContr::postEnable( int flag )
     //Controler's bd structure
     //fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));
@@ -117,7 +117,7 @@ void TTpContr::setSymbDB( const string &idb )
 
 string TTpContr::getSymbolCode(const string &id)
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     map<unsigned,string>::iterator is = mSymbCode.find(s2i(id));
     if(is == mSymbCode.end()) return TSYS::strMess(_("Code %s"),id.c_str());
     return is->second;
@@ -125,7 +125,7 @@ string TTpContr::getSymbolCode(const string &id)
 
 TTpContr::AlrmSymb TTpContr::getSymbolAlarm(const string &id)
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     map<unsigned,AlrmSymb>::iterator is = mSymbAlrm.find(s2i(id));
     if(is == mSymbAlrm.end()) return AlrmSymb();
     return is->second;
@@ -137,7 +137,7 @@ void TTpContr::load_( )
     string wtbl = MOD_ID"_SymbCode";
     string wdb  = symbDB();
     TConfig c_el(&symbCode_el);
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     mSymbCode.clear();
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
 	mSymbCode[c_el.cfg("ID").getI()] = c_el.cfg("TEXT").getS();
@@ -156,7 +156,7 @@ void TTpContr::save_( )
     string wtbl = MOD_ID"_SymbCode";
     string wdb  = symbDB();
     TConfig c_el(&symbCode_el);
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++) {
 	c_el.cfg("ID").setI(is->first);
 	c_el.cfg("TEXT").setS(is->second);
@@ -220,7 +220,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/symbs/codes/id","");
 	    XMLNode *n_text	= ctrMkNode("list",opt,-1,"/symbs/codes/text","");
 
-	    ResAlloc res(nodeRes(), false);
+	    MtxAlloc res(dataRes(), true);
 	    for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++) {
 		if(n_id)	n_id->childAdd("el")->setText(u2s(is->first));
 		if(n_text)	n_text->childAdd("el")->setText(is->second);
@@ -249,7 +249,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_code	= ctrMkNode("list",opt,-1,"/symbs/alrms/code","");
 	    XMLNode *n_text	= ctrMkNode("list",opt,-1,"/symbs/alrms/text","");
 
-	    ResAlloc res(nodeRes(), false);
+	    MtxAlloc res(dataRes(), true);
 	    for(map<unsigned,AlrmSymb>::iterator is = mSymbAlrm.begin(); is != mSymbAlrm.end(); is++) {
 		if(n_id)	n_id->childAdd("el")->setText(u2s(is->first));
 		if(n_code)	n_code->childAdd("el")->setText(u2s(is->second.code));
@@ -374,7 +374,7 @@ void TMdContr::enable_( )
 		}
 	    }
 	}
-    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TMdContr::start_( )
@@ -422,7 +422,7 @@ void TMdContr::reqBFN(XMLNode &io)
 
     AutoHD<TTransportOut> tr;
     try{ tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.')); }
-    catch(TError err){ throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),addr().c_str()); }
+    catch(TError &err) { throw TError(nodePath().c_str(),_("Connect to transport '%s' error."),addr().c_str()); }
 
     XMLNode req("POST");
     req.setAttr("URI","/cgi-bin/imwl_ws.cgi");
@@ -454,7 +454,7 @@ void TMdContr::reqBFN(XMLNode &io)
     if(req.attr("err").empty()) {
 	XMLNode rez;
 	try { rez.load(req.text()); }
-	catch(TError err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplete.")); }
+	catch(TError &err) { throw TError(nodePath().c_str(),_("Respond parsing error. Possible respond incomplete.")); }
 	string rCod = rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response")->childGet("res")->text();
 	if(s2i(rCod)) io.setAttr("err",rCod);
 	else {
@@ -582,8 +582,7 @@ void *TMdContr::Task( void *icntr )
 		else if(tErr.empty()) tErr = reqAlrms.attr("err");
 		cntr.p_hd[i_p].at().acq_err.setVal(tErr);
 	    }
-	}
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; }
+	} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; }
 
 	//Generic alarm generate
 	if(tErr.size() && cntr.alSt <= 0) {

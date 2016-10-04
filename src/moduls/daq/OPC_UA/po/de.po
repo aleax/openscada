@@ -360,17 +360,20 @@ msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 msgid "No present selected row."
 msgstr "Gewählte Zeile fehlt."
 
-msgid "OPC UA"
-msgstr ""
+msgid "Client OPC-UA"
+msgstr "Klient OPC-UA"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "OPC UA client service implementation."
-msgstr "OPC UA Client Service-Implementierung."
+msgid "Provides OPC-UA client service implementation."
+msgstr "Bietet OPC-UA Client-Service-Implementierung."
 
-msgid "OPC UA protocol implementation."
-msgstr "OPC UA-Protokoll-Implementierung."
+msgid "Server OPC-UA"
+msgstr "Server OPC-UA"
+
+msgid "Provides OPC-UA server service implementation."
+msgstr "Bietet OPC-UA Server-Service-Implementierung."
 
 #~ msgid "Transport address"
 #~ msgstr "Adresse des Transports"

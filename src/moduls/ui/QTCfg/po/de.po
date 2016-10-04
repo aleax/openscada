@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-06 12:06+0200\n"
+"POT-Creation-Date: 2016-06-10 13:32+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -406,7 +406,7 @@ msgstr ""
 "Bewerben Sie sich jetzt oder verloren das?"
 
 msgid "Broken info respond - no a child."
-msgstr ""
+msgstr "Gebrochen Info reagieren - zu einem Kind."
 
 msgid "Refresh items tree"
 msgstr "Elementenbaum aktualisieren"
@@ -610,7 +610,7 @@ msgid "Apply"
 msgstr "Übernehmen"
 
 msgid "Cursor = (%1:%2)"
-msgstr ""
+msgstr "Cursor = (%1:%2)"
 
 msgid "Enter text string for search:"
 msgstr "Geben Sie den Text-String für Suche:"
@@ -689,6 +689,9 @@ msgstr "Anhalten des Moduls."
 
 msgid "Module options"
 msgstr "Optionen des Moduls"
+
+msgid "Connection check timeouts in seconds '{fail}:{good}'"
+msgstr "Verbindungsprüfung Timeouts in Sekunden '{nicht}:{gut}'"
 
 msgid "Configurator start path"
 msgstr "Verzeichnispfad der Systemeinstellungen"

@@ -359,17 +359,20 @@ msgstr "Установить в 0 для автоматического по cnt
 msgid "No present selected row."
 msgstr "Выбранная строка отсутствует."
 
-msgid "OPC UA"
-msgstr ""
+msgid "Client OPC-UA"
+msgstr "Клиент OPC-UA"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "OPC UA client service implementation."
-msgstr "Реализация OPC UA клиентского сервиса."
+msgid "Provides OPC-UA client service implementation."
+msgstr "Предоставляет реализацию OPC-UA клиентского сервиса."
 
-msgid "OPC UA protocol implementation."
-msgstr "Реализация OPC UA протокола."
+msgid "Server OPC-UA"
+msgstr "Сервер OPC-UA"
+
+msgid "Provides OPC-UA server service implementation."
+msgstr "Предоставляет реализацию OPC-UA сервиса сервера."
 
 #~ msgid "Transport address"
 #~ msgstr "Адрес транспорта"

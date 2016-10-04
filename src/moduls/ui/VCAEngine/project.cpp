@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,12 +37,6 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
     mPer(cfg("PER").getId()), mFlgs(cfg("FLGS").getId()), mStyleIdW(cfg("STYLE").getId()),
     mEnable(false)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mFuncM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     mId = id;
     cfg("NAME").setS(name);
     cfg("DB_TBL").setS(string("prj_")+id);
@@ -52,7 +45,7 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
 
 Project::~Project( )
 {
-    pthread_mutex_destroy(&mFuncM);
+
 }
 
 TCntrNode &Project::operator=( TCntrNode &node )
@@ -165,7 +158,7 @@ void Project::load_( )
 
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    mess_info(nodePath().c_str(), _("Load project."));
+    mess_debug(nodePath().c_str(), _("Load project."));
 
     SYS->db().at().dataGet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ/", *this);
 
@@ -256,21 +249,15 @@ void Project::setEnable( bool val )
 
     MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
-    mess_info(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
+    mess_debug(nodePath().c_str(),val ? _("Enable project.") : _("Disable project."));
 
     vector<string> f_lst;
     list(f_lst);
     for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++)
 	try{ at(f_lst[i_ls]).at().setEnable(val); }
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     mEnable = val;
-}
-
-void Project::setEnableByNeed( )
-{
-    enableByNeed = true;
-    modifClr();
 }
 
 void Project::add( const string &id, const string &name, const string &orig )
@@ -479,6 +466,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/cfg/runWin",_("Run window"),RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;1;2","sel_list",_("Original size;Maximize;Full screen"));
 		ctrMkNode("fld",opt,-1,"/obj/cfg/keepAspRatio",_("Keep aspect ratio on scale"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/toEnByNeed",_("Enable by need"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/page",_("Pages"))) {
@@ -558,6 +546,10 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    setPrjFlags((prjFlags()&(~(Maximize|FullScreen)))|s2i(opt->text()));
     }
+    else if(a_path == "/obj/cfg/toEnByNeed") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(toEnByNeed()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setToEnByNeed(s2i(opt->text()));
+    }
     else if(a_path == "/obj/cfg/keepAspRatio") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText((prjFlags()&KeepAspectRatio)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPrjFlags(s2i(opt->text()) ? prjFlags()|KeepAspectRatio : prjFlags()&(~KeepAspectRatio));
@@ -572,7 +564,9 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    if(present(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
-	    add(vid, opt->text()); at(vid).at().setOwner(opt->attr("user"));
+	    add(vid, opt->text());
+	    at(vid).at().setOwner(opt->attr("user"));
+	    at(vid).at().manCrt = true;
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	del(opt->attr("id"),true);
@@ -723,8 +717,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* Page: Project's page                         *
 //************************************************
-Page::Page( const string &iid, const string &isrcwdg ) :
-	Widget(iid), TConfig(&mod->elPage()), mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId())
+Page::Page( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elPage()), manCrt(false),
+    mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId())
 {
     cfg("ID").setS(id());
 
@@ -952,7 +946,7 @@ void Page::load_( )
 	string f_id = c_el.cfg("ID").getS();
 	if(!pagePresent(f_id))
 	    try { pageAdd(f_id,"",""); }
-	    catch(TError err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 	itReg[f_id] = true;
     }
 
@@ -999,7 +993,7 @@ void Page::loadIO( )
 	}
 	if(!wdgPresent(sid))
 	    try{ wdgAdd(sid,"",""); }
-	    catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load();
 	itReg[sid] = true;
@@ -1065,26 +1059,24 @@ void Page::setEnable( bool val )
     //Enable/disable included pages
     vector<string> ls;
     pageList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-        try{ pageAt(ls[i_l]).at().setEnable(val); }
-	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+        try { pageAt(ls[iL]).at().setEnable(val); }
+	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Include widgets link update on the parrent change
     if(val) {
-	if(mParentNmPrev.size() && parentNm() != mParentNmPrev) {
-	    vector<string> lst;
-	    wdgList(lst, true);
-	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-		try {
-		    AutoHD<Widget> iw = wdgAt(lst[i_l]);
-		    if(iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0)
-		    {
-			iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
-			iw.at().setEnable(true);
-		    }
+	bool lnkUpdt = (mParentNmPrev.size() && parentNm() != mParentNmPrev);
+	vector<string> lst;
+	wdgList(lst, true);
+	for(unsigned iL = 0; iL < lst.size(); iL++)
+	    try {
+		AutoHD<Widget> iw = wdgAt(lst[iL]);
+		if(lnkUpdt && iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0) {
+		    iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
+		    iw.at().setEnable(true);
 		}
-		catch(TError err) { }
-	}
+		else if(manCrt) iw.at().modifClr();
+	    } catch(TError &err) { }
 	mParentNmPrev = parentNm();
     }
 }
@@ -1097,19 +1089,20 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
     //Check for label <deleted>
     if(!force) {
 	string db = ownerProj()->DB();
-	string tbl = ownerProj()->tbl()+"_incl";
+	string tbl = ownerProj()->tbl() + "_incl";
 	TConfig c_el(&mod->elInclWdg());
 	c_el.cfg("IDW").setS(path());
 	c_el.cfg("ID").setS(wid);
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>")
-	{
-	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true, false, true);
-	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>") {
+	    if(!parent().at().wdgPresent(wid))
+		SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true, false, true);
+	    else throw TError(nodePath().c_str(),
+		_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
     }
 
     //Same widget add
-    chldAdd(inclWdg,new PageWdg(wid,ipath));
+    chldAdd(inclWdg, new PageWdg(wid,ipath));
     wdgAt(wid).at().setName(name);
 
     //Call heritors include widgets update
@@ -1123,7 +1116,7 @@ AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off )
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
 	try { return (AutoHD<Widget>)ownerProj()->nodeAt(wdg,1); }
-	catch(TError err) { return AutoHD<Widget>(); }
+	catch(TError &err) { return AutoHD<Widget>(); }
 
     int offt = off;
     string iw = TSYS::pathLev(wdg,lev,true,&offt);
@@ -1140,7 +1133,7 @@ void Page::pageAdd( const string &id, const string &name, const string &orig )
     if(pagePresent(id)) return;
     if(!(prjFlags()&(Page::Container|Page::Template)))
 	throw TError(nodePath().c_str(),_("Page is not container or template!"));
-    chldAdd(mPage,new Page(id,orig));
+    chldAdd(mPage, new Page(id,orig));
     pageAt(id).at().setName(name);
 }
 
@@ -1160,11 +1153,11 @@ void Page::resourceList( vector<string> &ls )
 {
     //Append to the map for doublets remove
     map<string,bool> sortLs;
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
     ownerProj()->mimeDataList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
     ls.clear();
-    for(map<string,bool>::iterator i_l = sortLs.begin(); i_l != sortLs.end(); ++i_l) ls.push_back(i_l->first);
+    for(map<string,bool>::iterator iL = sortLs.begin(); iL != sortLs.end(); ++iL) ls.push_back(iL->first);
 
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
@@ -1184,7 +1177,7 @@ void Page::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr(attr);
-    if(!mdf) modifClr( );
+    if(!mdf && !(nodeFlg()&SelfModifyS)) modifClr();
 }
 
 TVariant Page::vlGet( Attr &a )
@@ -1258,13 +1251,15 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;
 	    pageList(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
+	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);
 	    if(pagePresent(vid)) throw TError(nodePath().c_str(), _("Page '%s' already present!"), vid.c_str());
-	    pageAdd(vid, opt->text()); pageAt(vid).at().setOwner(opt->attr("user"));
+	    pageAdd(vid, opt->text());
+	    pageAt(vid).at().setOwner(opt->attr("user"));
+	    pageAt(vid).at().manCrt = true;
 	    opt->setAttr("id", vid);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	pageDel(opt->attr("id"),true);
@@ -1309,8 +1304,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt))
-    {
+    if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt)) {
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
@@ -1336,8 +1330,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	// Link interface process
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
-	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:"))
-	{
+	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:")) {
 	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");
 	    opt->childAdd("el")->setText("wdg:");
@@ -1368,8 +1361,8 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    else if(c_lv == 1 && isAbs) {
 			ownerProj()->list(ls);
 			if(ls.size()) opt->childAdd("el")->setText(_("=== Pages ==="));
-			for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			    opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[i_l]);
+			for(unsigned iL = 0; iL < ls.size(); iL++)
+			    opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[iL]);
 			return true;
 		    }
 
@@ -1379,27 +1372,27 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			if(dynamic_cast<Page*>(&wnd.at())) {
 			    ((AutoHD<Page>)wnd).at().pageList(ls);
 			    if(ls.size()) opt->childAdd("el")->setText(_("=== Pages ==="));
-			    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-				opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[i_l]);
+			    for(unsigned iL = 0; iL < ls.size(); iL++)
+				opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[iL]);
 			}
 			wnd.at().wdgList(ls, true);
 			if(ls.size()) opt->childAdd("el")->setText(_("=== Widgets ==="));
-			for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			    opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[i_l]);
+			for(unsigned iL = 0; iL < ls.size(); iL++)
+			    opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[iL]);
 			if(!is_pl) {
 			    wnd.at().attrList(ls);
 			    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
-			    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			    opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
+			    for(unsigned iL = 0; iL < ls.size(); iL++)
+			    opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[iL]);
 			}
 		    }
 		}
 		else if(m_prm == "arh:") {
 		    SYS->archive().at().valList(ls);
-		    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-			opt->childAdd("el")->setText(c_path+ls[i_l]);
+		    for(unsigned iL = 0; iL < ls.size(); iL++)
+			opt->childAdd("el")->setText(c_path+ls[iL]);
 		}
-	    }catch(TError err) { }
+	    } catch(TError &err) { }
 	}
     }
     else return Widget::cntrCmdLinks(opt, lnk_ro);
@@ -1482,7 +1475,7 @@ AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off )
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
 	try { return (AutoHD<Widget>)ownerPage().ownerProj()->nodeAt(wdg,1); }
-	catch(TError err) { return AutoHD<Widget>(); }
+	catch(TError &err) { return AutoHD<Widget>(); }
 
     return Widget::wdgAt(wdg, lev, off);
 }
@@ -1592,8 +1585,8 @@ void PageWdg::wClear( )
 void PageWdg::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
-    Widget::inheritAttr( attr );
-    if( !mdf )  modifClr( );
+    Widget::inheritAttr(attr);
+    if(!mdf && !(nodeFlg()&SelfModifyS)) modifClr();
 }
 
 void PageWdg::resourceList( vector<string> &ls )

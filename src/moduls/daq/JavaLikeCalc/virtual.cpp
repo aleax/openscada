@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"2.8.5"
+#define MOD_VER		"3.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -108,7 +107,7 @@ void TpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
     fldAdd(new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Calculation task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Calculation task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ITER",_("Iteration number in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
 
     //Controller value db structure
@@ -130,6 +129,7 @@ void TpContr::postEnable( int flag )
     fnc_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     fnc_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     fnc_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300"));
+    fnc_el.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
     fnc_el.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
     fnc_el.fldAdd(new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"1000000"));
 
@@ -147,7 +147,9 @@ void TpContr::postEnable( int flag )
     double rvl;
     rvl = 3.14159265358l; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
     rvl = 2.71828182845l; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
-    rvl = EVAL_REAL; mConst.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
+    rvl = EVAL_REAL;
+    mConst.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
+    mConst.push_back(NConst(TFld::Real,"EVAL",string((char*)&rvl,sizeof(rvl))));
     int ivl;
     ivl = EVAL_INT; mConst.push_back(NConst(TFld::Integer,"EVAL_INT",string((char*)&ivl,sizeof(ivl))));
     ivl = EVAL_BOOL; mConst.push_back(NConst(TFld::Boolean,"EVAL_BOOL",string((char*)&ivl,1)));
@@ -200,7 +202,7 @@ void TpContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 	     childAdd("rule")->setAttr("expr","\\\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})")->setAttr("color","green")->setAttr("font_weight","1");
 	shgl.childAdd("blk")->setAttr("beg","/\\*")->setAttr("end","\\*/")->setAttr("color","gray")->setAttr("font_italic","1");
 	shgl.childAdd("rule")->setAttr("expr","//.*$")->setAttr("color","gray")->setAttr("font_italic","1");
-	shgl.childAdd("rule")->setAttr("expr","\\b(if|else|for|while|using|new|break|continue|return|Array|Object|RegExp)\\b")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","\\b(if|else|for|while|using|new|break|continue|return|function|Array|Object|RegExp)\\b")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","\\b(var|in)(?=\\s+\\w)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","(\\?|\\:)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*\\.?[0-9]+|[0-9]*\\.?[0-9]+[eE][-+]?[0-9]*|true|false)\\b")->setAttr("color","darkorange");
@@ -221,10 +223,10 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	funcId = "Auto";
 	for(int iP = 1; lbAt("sys_compile").at().present(funcId); ++iP) funcId = TSYS::strMess("Auto%d",iP);
     }
-    else funcId = fnc_cfg.nodePath('_',true);
+    else funcId = fnc_cfg.nodePath('_', true);
 
     // Connect or use allowed compiled function object
-    if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId.c_str(),"");
+    if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId, "");
     res.release();
 
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
@@ -235,8 +237,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	try {
 	    ((TFunction&)func.at()).operator=(fnc_cfg);
 	    if(prog_text == func.at().prog()) return func.at().nodePath(0,true);
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    func.at().setStart(true);
 	    throw;
 	}
@@ -248,8 +249,7 @@ string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 	((TFunction&)func.at()).operator=(fnc_cfg);
 	func.at().setStart(true);
 	func.at().modifClr();
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!func.at().use()) {
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
@@ -286,8 +286,7 @@ void TpContr::load_( )
 		    try {
 			lbAt(l_id).at().load();
 			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
-		    }
-		    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		}
 		itReg[l_id] = true;
 	    }
@@ -299,8 +298,7 @@ void TpContr::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
 		    lbUnreg(db_ls[i_it]);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
     }
@@ -409,8 +407,7 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().open(db);
 	    SYS->db().at().close(db,true);
 	}
-    }
-    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
 }
@@ -440,7 +437,7 @@ void Contr::enable_( )
     }
     setFunc(&mod->lbAt(TSYS::strSepParse(wfnc,0,'.')).at().at(TSYS::strSepParse(wfnc,1,'.')).at());
     try{ loadFunc(); }
-    catch(TError err) {
+    catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Load function and its IO error."));
     }
@@ -564,7 +561,7 @@ void *Contr::Task( void *icntr )
 
 	    for(int i_it = 0; i_it < cntr.mIter; i_it++)
 		try { cntr.calc(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
 		    mess_err(cntr.nodePath().c_str(),_("Calculation controller's function error."));
 		}
@@ -605,7 +602,7 @@ TParamContr *Contr::ParamAttach( const string &name, int type )	{ return new Prm
 
 void Contr::cntrCmdProc( XMLNode *opt )
 {
-    //> Service commands process
+    //Service commands process
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/serv/") {
 	if(a_path == "/serv/fncAttr") {
@@ -773,8 +770,7 @@ void Prm::enable( )
 	    try {
 		v_el.fldDel(i_fld);
 		continue;
-	    }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	i_fld++;
     }
 
@@ -816,8 +812,7 @@ void Prm::enable( )
 	    try {
 		v_el.fldDel(i_fld);
 		continue;
-	    }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	i_fld++;
     }
 
@@ -851,7 +846,7 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	int io_id = ((Contr &)owner()).ioId(vo.fld().reserve());
 	if(io_id < 0) disable();
 	else ((Contr&)owner()).set(io_id, vl);
-    }catch(TError err) { disable(); }
+    } catch(TError &err) { disable(); }
 }
 
 void Prm::vlGet( TVal &val )
@@ -867,7 +862,7 @@ void Prm::vlGet( TVal &val )
 	int io_id = ((Contr &)owner()).ioId(val.fld().reserve());
 	if(io_id < 0) disable();
 	else val.set(enableStat()?owner().get(io_id):EVAL_STR,0,true);
-    }catch(TError err) { disable(); }
+    } catch(TError &err) { disable(); }
 }
 
 void Prm::vlArchMake( TVal &val )

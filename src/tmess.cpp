@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -282,7 +281,8 @@ const char *TMess::labSecCRONsel( )	{ return "1;1e-3;* * * * *;10 * * * *;10-20 
 const char *TMess::labTaskPrior( )
 {
     return _("Task priority level (-1...99), where:\n"
-	     "  -1     - lowest priority batch policy;\n"
-	     "  0      - standard userspace priority;\n"
-	     "  1...99 - realtime priority level (round-robin), often allowed only for \"root\".");
+	     "  -1        - lowest priority batch policy;\n"
+	     "  0         - standard userspace priority;\n"
+	     "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"
+	     "  100...199 - realtime priority level (FIFO), often allowed only for \"root\".");
 }

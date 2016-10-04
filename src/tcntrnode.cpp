@@ -38,11 +38,10 @@ using namespace OSCADA;
 //*************************************************
 //* TCntrNode                                     *
 //*************************************************
-pthread_mutex_t TCntrNode::connM = PTHREAD_MUTEX_INITIALIZER;
 
 //*************************************************
 //* Controll scenaries language section           *
-TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
+TCntrNode::TCntrNode( TCntrNode *iprev ) : mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
 {
     setNodeMode(Disabled);
     prev.node = iprev;
@@ -72,9 +71,9 @@ void TCntrNode::nodeDelAll( )
 
 void TCntrNode::setNodeMode( char mode )
 {
-    pthread_mutex_lock(&connM);
+    dataRes().lock();
     mFlg = (mFlg&(~0x03))|(mode&0x03);
-    pthread_mutex_unlock(&connM);
+    dataRes().unlock();
 }
 
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
@@ -130,8 +129,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    if( opt->attr("rez") != "0" )
 		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),(nodePath()+path).c_str(),s_br.c_str());
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if( err.cat == "warning" )	opt->setAttr("rez","1");
 	else opt->setAttr("rez","2");
 	opt->childClear();
@@ -161,7 +159,7 @@ void TCntrNode::nodeEn( int flag )
     setNodeMode(Enabled);
 
     try { postEnable(flag); }
-    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    catch(TError &err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 };
 
 void TCntrNode::nodeDis( long tm, int flag )
@@ -182,8 +180,8 @@ void TCntrNode::nodeDis( long tm, int flag )
 
 	//Wait of free node
 	time_t t_cur = time(NULL);
-	while(1) {
-	    if(!mUse)	break;
+	MtxAlloc res1(dataRes(), true);		//!! Added for prevent possible attach and next disable and free the node, by mUse control
+	while(mUse) {
 #if OSC_DEBUG >= 1
             mess_debug(nodePath().c_str(),_("Waiting for freeing by %d users!"),mUse);
 #endif
@@ -194,23 +192,25 @@ void TCntrNode::nodeDis( long tm, int flag )
 		mess_err(nodePath().c_str(),_("Blocking node error. Inform developers please!"));
 		break;
 	    }
+	    res1.unlock();
 	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
+	    res1.lock();
 	}
 
 	setNodeMode(Disabled);
+	res1.unlock();
 	modif();
 
 	postDisable(flag);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_err(nodePath().c_str(), _("Node disable error. Restore node enabling."));
 	setNodeMode(Disabled);
-	nodeEn(NodeRestore|(flag<<8));
+	nodeEn(NodeRestore|flag);
 	throw;
     }
     //try{ postDisable(flag); }
-    //catch(TError err)	{ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+    //catch(TError &err)	{ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 };
 
 void TCntrNode::nodeList( vector<string> &list, const string &gid )
@@ -235,15 +235,19 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 	    if(nodeMode() == Disabled) throw TError(nodePath().c_str(),_("Node is disabled!"));
 	    return this;
 	}
-	ResAlloc res(hd_res,false);
+	AutoHD<TCntrNode> chN;
+	ResAlloc res(hd_res, false);
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0)
-		return chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().nodeAt(path,0,sep,off,noex);
+	    if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0) {
+		chN = chldAt(i_g, s_br.substr((*chGrp)[i_g].id.size()));
+		break;
+	    }
 	//Go to default group
-	if(chGrp) return chldAt(0,s_br).at().nodeAt(path,0,sep,off,noex);
+	if(chN.freeStat() && chGrp) chN = chldAt(0, s_br);
+	res.unlock();
+	if(!chN.freeStat()) return chN.at().nodeAt(path, 0, sep, off, noex);
 	throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
-    }
-    catch(TError err) { if(!noex) throw; }
+    } catch(TError &err) { if(!noex) throw; }
 
     return NULL;
 }
@@ -475,10 +479,11 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(nodeMode() == Disabled)	throw TError(nodePath().c_str(),"Node is disabled!");
 
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
-    if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disabled)
-	throw TError(nodePath().c_str(),_("Element '%s' is not present or disabled!"), name.c_str());
+    if(p == (*chGrp)[igr].elem.end()) throw TError(nodePath().c_str(),_("Element '%s' is not present!"), name.c_str());
+    AutoHD<TCntrNode> chN(p->second, user);
+    if(chN.at().nodeMode() == Disabled) throw TError(nodePath().c_str(),_("Element '%s' is disabled!"), name.c_str());
 
-    return AutoHD<TCntrNode>(p->second, user);
+    return chN;
 }
 
 int TCntrNode::isModify( int f )
@@ -500,16 +505,16 @@ int TCntrNode::isModify( int f )
 
 void TCntrNode::modif( bool save )
 {
-    pthread_mutex_lock(&connM);
+    dataRes().lock();
     mFlg |= (save?(SelfModifyS|SelfModify):SelfModify);
-    pthread_mutex_unlock(&connM);
+    dataRes().unlock();
 }
 
 void TCntrNode::modifClr( bool save )
 {
-    pthread_mutex_lock(&connM);
+    dataRes().lock();
     mFlg &= ~(save?SelfModifyS:SelfModify);
-    pthread_mutex_unlock(&connM);
+    dataRes().unlock();
 }
 
 void TCntrNode::modifG( )
@@ -539,8 +544,7 @@ void TCntrNode::load( bool force, string *errs )
 	    modifClr(true);			//Save flag clear
 	    load_();
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	    /*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_err(nodePath().c_str(), _("Load node error: %s"), err.mess.c_str());*/
@@ -562,8 +566,7 @@ void TCntrNode::save( string *errs )
     //Self save
     try {
 	if(isModify(Self)&Self)	save_();
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	/*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_err(nodePath().c_str(), _("Save node error: %s"), err.mess.c_str());*/
@@ -580,19 +583,19 @@ void TCntrNode::save( string *errs )
     if(!isError) modifClr();
 }
 
-void TCntrNode::AHDConnect()
+void TCntrNode::AHDConnect( )
 {
-    pthread_mutex_lock(&connM);
+    dataRes().lock();
     mUse++;
+    dataRes().unlock();
     if(mUse > 65000) mess_err(nodePath().c_str(),_("Too more users for node!!!"));
-    pthread_mutex_unlock(&connM);
 }
 
-bool TCntrNode::AHDDisConnect()
+bool TCntrNode::AHDDisConnect( )
 {
-    pthread_mutex_lock(&connM);
+    dataRes().lock();
     mUse--;
-    pthread_mutex_unlock(&connM);
+    dataRes().unlock();
     return false;
 }
 
@@ -613,8 +616,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    nd.at().nodeList(nls, (prms.size() >= 1) ? prms[0].getS() : string(""));
 	    for(unsigned iN = 0; iN < nls.size(); iN++) rez->arSet(iN, nls[iN]);
 	    return rez;
-	}
-	catch(TError)	{ }
+	} catch(TError&) { }
 	return false;
     }
     // TCntrNodeObj nodeAt(string path, string sep = "") - attach to node

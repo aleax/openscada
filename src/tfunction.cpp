@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -175,7 +174,7 @@ void TFunction::postIOCfgChange()
 
 void TFunction::valAtt( TValFunc *vfnc )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     for(unsigned i = 0; i < used.size(); i++)
 	if(used[i] == vfnc)
 	    throw TError(nodePath().c_str(), _("Value '%s' is already attached!"), vfnc->vfName().c_str());
@@ -184,10 +183,11 @@ void TFunction::valAtt( TValFunc *vfnc )
 
 void TFunction::valDet( TValFunc *vfnc )
 {
-    ResAlloc res(nodeRes(), true);
+    dataRes().lock();
     for(unsigned i = 0; i < used.size() ;i++)
 	if(used[i] == vfnc)
 	{ used.erase(used.begin()+i); break; }
+    dataRes().unlock();
 }
 
 TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

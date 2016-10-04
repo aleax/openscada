@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -88,7 +87,7 @@ class Session : public TCntrNode
 	void openReg( const string &id );
 	void openUnreg( const string &id );
 
-	pthread_mutex_t	&dataMtx( )		{ return dataM; }
+	ResMtx	&dataMtx( )		{ return dataM; }
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
@@ -143,8 +142,8 @@ class Session : public TCntrNode
 	static void *Task( void *contr );
 
 	//Attributes
-	pthread_mutex_t	dataM,
-			mCalcRes;		//Calc resource
+	ResMtx	dataM,
+		mCalcRes;		//Calc resource
 	int	mPage;
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;
@@ -255,7 +254,7 @@ class SessWdg : public Widget, public TValFunc
 	string		mWorkProg;
 	unsigned int	mMdfClc;
 	unsigned int	&mCalcClk;
-	pthread_mutex_t	mCalcRes;
+	ResMtx		mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list
 			mAttrLnkLs;	//Linked attributes list
@@ -299,6 +298,8 @@ class SessPage : public SessWdg
 	bool attrPresent(const string &attr);
 	AutoHD<Attr> attrAt(const string &attr, int lev = -1);
 
+	ResMtx &funcM( )	{ return mFuncM; }
+
     protected:
 	//Methods
 	bool cntrCmdGeneric( XMLNode *opt );
@@ -311,6 +312,7 @@ class SessPage : public SessWdg
 	//Attributes
 	unsigned mPage		: 4;		//Pages container identifier
 	unsigned mClosePgCom	: 1;
+	ResMtx	mFuncM;
 };
 
 }

@@ -47,7 +47,7 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
 //!!! Destructor for the object.
 ModMArch::~ModMArch( )
 {
-    try{ stop(); }catch(...){}
+    try{ stop(); } catch(...) { }
 }
 
 //!!! Module's post disable call. Place here for your data remove at the object remove
@@ -74,20 +74,18 @@ void ModMArch::load_( )
     //> Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg,false,true))
-    {
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg,false,true)) {
 	mBeg = atoi(cfg.cfg("BEGIN").getS().c_str());
 	mEnd = atoi(cfg.cfg("END").getS().c_str());
     }
 
     //!!! Addon parameters of the object loading.
-    try
-    {
+    try {
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(mAPrms);
 	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(atof(vl.c_str()));
-    } catch(...){ }
+    } catch(...) { }
 }
 
 //!!! Inherited (virtual) save object's node methods. Place here for object's data saving

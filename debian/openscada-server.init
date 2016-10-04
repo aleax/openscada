@@ -1,20 +1,20 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides: OpenSCADA
-# Required-Start: $remote_fs $syslog
+# Provides: OpenSCADA_server
+# Required-Start:    $remote_fs $syslog
 # Should-Start:
-# Required-Stop: $remote_fs $syslog
-# Default-Start: 2 3 4
-# Default-Stop: 0 1 5 6
-# Short-Description: OpenSCADA
-# Description: Start OpenSCADA
+# Required-Stop:     $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: OpenSCADA Server
+# Description: Start OpenSCADA server
 ### END INIT INFO
 
-DESC="OpenSCADA"
+DESC="OpenSCADA server"
 NAME=openscada
-PIDFILE=/var/run/$NAME.pid
+PIDFILE=/var/run/${NAME}_server.pid
 DAEMON=/usr/bin/$NAME
-DAEMON_ARGS="--demon --pid-file=$PIDFILE"
+DAEMON_ARGS="--demon --pidFile=$PIDFILE"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0

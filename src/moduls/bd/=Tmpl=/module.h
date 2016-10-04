@@ -51,7 +51,7 @@ class MTable : public TTable
     public:
 	//Public methods
 	//!!! Constructor for a DB-subsystem table object
-	MTable( string name, MBD *iown, bool create );
+	MTable( string name, MBD *iown );
 	//!!! Destructor for a DB-subsystem table object
 	~MTable( );
 

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.2"
+#define MOD_VER		"1.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -103,7 +102,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"50",""));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100", "1"));
-    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     // Standard parameter type by template
@@ -124,16 +123,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem), enRes(true),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
     prcSt(false), callSt(false), endrunReq(false), mPer(1e9), tm_calc(0)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
     cfg("PRM_BD_REFL").setS("LogLevPrmRefl_"+name_c);
 }
@@ -141,8 +134,6 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::T
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
 }
 
 void TMdContr::postDisable(int flag)
@@ -155,8 +146,7 @@ void TMdContr::postDisable(int flag)
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
-    }
-    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
@@ -217,8 +207,8 @@ void *TMdContr::Task( void *icntr )
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
-    bool is_start = true;
-    bool is_stop  = false;
+    bool isStart = true;
+    bool isStop  = false;
     int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     while(true) {
@@ -226,20 +216,20 @@ void *TMdContr::Task( void *icntr )
 	if(!cntr.redntUse()) {
 	    cntr.callSt = true;
 	    t_cnt = TSYS::curTime();
-	    pthread_mutex_lock(&cntr.enRes);
+	    cntr.enRes.lock();
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
-		try { cntr.pHd[i_p].at().calc(is_start, is_stop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
-		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	    pthread_mutex_unlock(&cntr.enRes);
+		try { cntr.pHd[i_p].at().calc(isStart, isStop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    isStart = false;
+	    cntr.enRes.unlock();
 	    t_prev = t_cnt;
 	    cntr.tm_calc = TSYS::curTime()-t_cnt;
 	    cntr.callSt = false;
 	}
 
-	if(is_stop) break;
+	if(isStop) break;
 	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
-	if(cntr.endrunReq)	is_stop = true;
-	if(!cntr.redntUse())	is_start = false;
+	if(cntr.endrunReq)	isStop = true;
     }
 
     cntr.prcSt = false;
@@ -255,9 +245,9 @@ void TMdContr::redntDataUpdate( )
 
     //Request for template's attributes values
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	if(!at(pls[i_p]).at().enableStat()) continue;
-	req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2ftmplAttr");
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	if(!at(pls[iP]).at().enableStat()) continue;
+	req.childAdd("get")->setAttr("path","/prm_"+pls[iP]+"/%2fserv%2ftmplAttr");
     }
 
     //Send request to first active station for this controller
@@ -265,13 +255,13 @@ void TMdContr::redntDataUpdate( )
 
     //Redirect respond to local parameters
     req.setAttr("path","/");
-    for(unsigned i_prm = 0; i_prm < req.childSize(); ) {
-	if(s2i(req.childGet(i_prm)->attr("err"))) {
-	    req.childDel(i_prm);
+    for(unsigned iPrm = 0; iPrm < req.childSize(); ) {
+	if(s2i(req.childGet(iPrm)->attr("err"))) {
+	    req.childDel(iPrm);
 	    continue;
 	}
-	req.childGet(i_prm)->setName("set");
-	i_prm++;
+	req.childGet(iPrm)->setName("set");
+	iPrm++;
     }
     cntrCmd(&req);
 }
@@ -408,7 +398,7 @@ void TMdPrm::enable( )
 			if((fId=pEl.fldId(tmpl->val.func()->io(i_io)->id(),true)) < pEl.fldSize()) {
 			    if(pEl.fldAt(fId).type() != tp)
 				try{ pEl.fldDel(fId); }
-				catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+				catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 			    else {
 				pEl.fldAt(fId).setFlg(flg);
 				pEl.fldAt(fId).setDescr(tmpl->val.func()->io(i_io)->name().c_str());
@@ -436,23 +426,22 @@ void TMdPrm::enable( )
 		idSh	= tmpl->val.ioId("SHIFR");
 		idNm	= tmpl->val.ioId("NAME");
 		idDscr	= tmpl->val.ioId("DESCR");
-		int id_this = tmpl->val.ioId("this");
-		if(id_this >= 0) tmpl->val.setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+		int idThis = tmpl->val.ioId("this");
+		if(idThis >= 0) tmpl->val.setO(idThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 	    }
 	    isProc = true;
 	}
-    }
-    catch(...){ disable(); throw; }
+    } catch(...) { disable(); throw; }
 
     //Check for delete DAQ parameter's attributes
-    for(int i_p = 0; isProc && i_p < (int)pEl.fldSize(); i_p++) {
+    for(int iP = 0; isProc && iP < (int)pEl.fldSize(); iP++) {
 	unsigned i_l;
 	for(i_l = 0; i_l < als.size(); i_l++)
-	    if(pEl.fldAt(i_p).name() == als[i_l])
+	    if(pEl.fldAt(iP).name() == als[i_l])
 		break;
 	if(i_l >= als.size())
-	    try{ pEl.fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    try{ pEl.fldDel(iP); iP--; }
+	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     if(isFullEn && owner().startStat()) calc(true, false, 0);
@@ -551,7 +540,7 @@ void TMdPrm::initTmplLnks( bool checkNoLink )
 		else tmpl->val.setS(lnk(i_l).ioId, lnk(i_l).aprm.at().getS());
 	    }
 	    else chkLnkNeed = true;
-	} catch(TError err){ chkLnkNeed = true; }
+	} catch(TError &err) { chkLnkNeed = true; }
     }
 }
 
@@ -579,8 +568,7 @@ void TMdPrm::vlGet( TVal &val )
 		    val.set(lnk(id_lnk).aprm.at().getO().at().propGet(lnk(id_lnk).prmAttr.substr(lnk(id_lnk).detOff),'.'));
 		else val.set(lnk(id_lnk).aprm.at().get(), 0, true);
 	    }
-	}
-	catch(TError err) { }
+	} catch(TError &err) { }
     }
     else {
 	if(isStd() && tmpl->val.func() && idErr >= 0) val.setS(tmpl->val.getS(idErr), 0, true);
@@ -615,7 +603,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	    }
 	    else lnk(id_lnk).aprm.at().set(vl);
 	}
-    }catch(TError err) { }
+    } catch(TError &err) { }
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -637,7 +625,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     //  selValsNms - two lines with values in first and it's names in first (separated by ";").
     if(iid == "attrAdd" && prms.size() >= 1) {
 	if(!enableStat() || !isStd())	return false;
-	TFld::Type tp;
+	TFld::Type tp = TFld::Real;
 	string stp, stp_ = (prms.size() >= 3) ? prms[2].getS() : "real";
 	stp.resize(stp_.length());
 	std::transform(stp_.begin(), stp_.end(), stp.begin(), ::tolower);
@@ -648,7 +636,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		stp.find("text") != string::npos)	tp = TFld::String;
 	else if(stp.find("object") != string::npos)	tp = TFld::Object;
 
-	unsigned flg = TFld::NoFlag;
+	unsigned flg = TVal::Dynamic;
 	if(stp.find("sel") != string::npos)	flg |= TFld::Selected;
 	if(stp.find("seled") != string::npos)	flg |= TFld::SelEdit;
 	if(stp.find("text") != string::npos)	flg |= TFld::FullText;
@@ -665,9 +653,11 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	    pEl.fldAt(aId).setFlg(pEl.fldAt(aId).flg()^((pEl.fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
 	    pEl.fldAt(aId).setValues(sVals);
 	    pEl.fldAt(aId).setSelNames(sNms);
+	    pEl.fldAt(aId).setLen(time(NULL));
 	}
 	else if(!vlPresent(prms[0].getS()))
-	    pEl.fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,"","",sVals.c_str(),sNms.c_str()));
+	    pEl.fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,
+				i2s(time(NULL)).c_str(),"",sVals.c_str(),sNms.c_str()));
 	return true;
     }
     //bool attrDel( string id ) - attribute <id> remove.
@@ -676,7 +666,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	MtxAlloc res(pEl.resEl(), true);
 	unsigned aId = pEl.fldId(prms[0].getS(), true);
 	if(aId == pEl.fldSize())	return false;
-	try { pEl.fldDel(aId); } catch(TError){ return false; }
+	try { pEl.fldDel(aId); } catch(TError&) { return false; }
 	return true;
     }
 
@@ -763,8 +753,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	//> Put fixed system attributes
 	if(idNm >= 0)	setName(tmpl->val.getS(idNm));
 	if(idDscr >= 0)	setDescr(tmpl->val.getS(idDscr));
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error calculate template."));
     }
@@ -778,13 +767,15 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(a_path == "/serv/tmplAttr") {
 	    if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("No template parameter or error."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-		for(int i_a = 0; i_a < tmpl->val.ioSize(); i_a++)
-		    opt->childAdd("ta")->setAttr("id",tmpl->val.func()->io(i_a)->id())->setText(tmpl->val.getS(i_a));
+		for(int iA = 0; iA < tmpl->val.ioSize(); iA++)
+		    if(iA != idFreq && iA != idStart && iA != idStop && iA != idErr && iA != idSh && iA != idNm && iA != idDscr &&
+			    tmpl->val.func()->io(iA)->id() != "this")
+			opt->childAdd("ta")->setAttr("id",tmpl->val.func()->io(iA)->id())->setText(tmpl->val.getS(iA));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++) {
+		for(unsigned iA = 0; iA < opt->childSize(); iA++) {
 		    int ioId = -1;
-		    if(opt->childGet(i_a)->name() != "ta" || (ioId=tmpl->val.ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
-		    tmpl->val.setS(ioId,opt->childGet(i_a)->text());
+		    if(opt->childGet(iA)->name() != "ta" || (ioId=tmpl->val.ioId(opt->childGet(iA)->attr("id"))) < 0) continue;
+		    tmpl->val.setS(ioId,opt->childGet(iA)->text());
 		}
 	}
 	else TParamContr::cntrCmdProc(opt);
@@ -859,7 +850,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		if(prmValm == owner().owner().modId()+"."+owner().id()+"."+id())
 		    prmValm = owner().owner().modId()+"."+owner().id();
 		cfg("PSRC").setS(prmValm);
-	    } catch(...){ disable(); throw; }
+	    } catch(...) { disable(); throw; }
     }
     else if(isStd() && a_path == "/prm/cfg/PRM") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(cfg("PRM").getS());
@@ -867,7 +858,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    try {
 		if(enableStat()) disable();
 		cfg("PRM").setS(opt->text());
-	    } catch(...){ disable(); throw; }
+	    } catch(...) { disable(); throw; }
     }
     else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
     else if(isStd() && a_path == "/cfg/attr_only") {

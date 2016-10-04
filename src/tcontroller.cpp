@@ -212,7 +212,7 @@ void TController::enable( )
     for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
 	if(at(prm_list[i_prm]).at().toEnable())
 	    try{ at(prm_list[i_prm]).at().enable(); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_warning(nodePath().c_str(),_("Enable parameter '%s' error."),prm_list[i_prm].c_str());
 		enErr = true;
@@ -239,7 +239,7 @@ void TController::disable( )
     for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
 	if(at(prm_list[i_prm]).at().enableStat())
 	    try{ at(prm_list[i_prm]).at().disable(); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_warning(nodePath().c_str(),_("Disable parameter '%s' error."),prm_list[i_prm].c_str());
 	    }
@@ -270,14 +270,12 @@ void TController::LoadParmCfg( )
 		    string shfr = c_el.cfg("SHIFR").getS();
 		    if(!present(shfr))	add(shfr, i_tp);
 		    itReg[shfr] = true;
-		}
-		catch(TError err) {
+		} catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Add parameter '%s' error."),c_el.cfg("SHIFR").getS().c_str());
 		}
 	    }
-	}
-	catch(TError err) {
+	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Search and create new parameters error."));
 	}
@@ -324,7 +322,7 @@ void TController::redntDataUpdate( )
     vector<string> pls;
     list(pls);
 
-    //Prepare group request to parameters
+    //Prepare a group request to the parameters
     AutoHD<TParamContr> prm;
     XMLNode req("CntrReqs"); req.setAttr("path",nodePath(0,true));
     req.childAdd("get")->setAttr("path","/%2fcntr%2fst%2fstatus");
@@ -335,7 +333,7 @@ void TController::redntDataUpdate( )
 	XMLNode *prmNd = req.childAdd("get")->setAttr("path","/prm_"+pls[i_p]+"/%2fserv%2fattr");
 
 	// Prepare individual attributes list
-	prmNd->setAttr("sepReq", "1");
+	prmNd->setAttr("sepReq", "1")->setAttr("prcTm", i2s(prm.at().mRdPrcTm));
 
 	// Check attributes last present data time into archives
 	vector<string> listV;
@@ -359,23 +357,37 @@ void TController::redntDataUpdate( )
 
     //Write data to parameters
     if(req.childSize()) mRedntSt.setVal(req.childGet(0)->text());
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	prm = at(pls[i_p]);
-	for(unsigned i_a = 0; i_a < req.childGet(i_p+1)->childSize(); i_a++) {
-	    XMLNode *aNd = req.childGet(i_p+1)->childGet(i_a);
-	    if(!prm.at().vlPresent(aNd->attr("id"))) continue;
-	    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	XMLNode *p = req.childGet(iP+1);
+	prm = at(pls[iP]);
+	prm.at().mRdPrcTm = s2i(p->attr("prcTm"));
+	for(unsigned iA = 0; iA < req.childGet(iP+1)->childSize(); iA++) {
+	    XMLNode *aNd = p->childGet(iA);
+	    AutoHD<TVal> vl;
+	    if(prm.at().vlPresent(aNd->attr("id"))) vl = prm.at().vlAt(aNd->attr("id"));
 
-	    if(aNd->name() == "el")
-	    { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
-	    else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize())
-	    {
+	    if(aNd->name() == "el" && !vl.freeStat()) { vl.at().setS(aNd->text(),atoll(aNd->attr("tm").c_str()),true); vl.at().setReqFlg(false); }
+	    else if(aNd->name() == "ael" && !vl.freeStat() && !vl.at().arch().freeStat() && aNd->childSize()) {
 		int64_t btm = atoll(aNd->attr("tm").c_str());
 		int64_t per = atoll(aNd->attr("per").c_str());
 		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
 		for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
 		    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
 		vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
+	    }
+	    else if(aNd->name() == "del" && prm.at().dynElCntr()) {
+		MtxAlloc res(prm.at().dynElCntr()->resEl(), true);
+		TFld::Type tp = (TFld::Type)s2i(aNd->attr("type"));
+		unsigned flg = s2i(aNd->attr("flg"));
+		if(vl.freeStat()) prm.at().dynElCntr()->fldAdd(new TFld(aNd->attr("id").c_str(),aNd->attr("name").c_str(),tp,flg,"","",
+									aNd->attr("values").c_str(),aNd->attr("selNames").c_str()));
+		else {
+		    unsigned aId = prm.at().dynElCntr()->fldId(aNd->attr("id"), true);
+		    prm.at().dynElCntr()->fldAt(aId).setDescr(aNd->attr("name"));
+		    prm.at().dynElCntr()->fldAt(aId).setFlg(prm.at().dynElCntr()->fldAt(aId).flg()^((prm.at().dynElCntr()->fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
+		    prm.at().dynElCntr()->fldAt(aId).setValues(aNd->attr("values"));
+		    prm.at().dynElCntr()->fldAt(aId).setSelNames(aNd->attr("selNames"));
+		}
 	    }
 	}
     }
@@ -457,8 +469,8 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/nmb" && ctrChkNode(opt)) {
 	list(c_list);
 	unsigned e_c = 0;
-	for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
-	    if(at(c_list[i_a]).at().enableStat()) e_c++;
+	for(unsigned iA = 0; iA < c_list.size(); iA++)
+	    if(at(c_list[iA]).at().enableStat()) e_c++;
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize()) {
@@ -470,11 +482,11 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if((a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    list(c_list);
-	    for(unsigned i_a = 0; i_a < c_list.size(); i_a++) {
-		XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
+		XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(at(c_list[iA]).at().name());
 		if(!s2i(opt->attr("recurs"))) continue;
 		cN->setName(opt->name())->setAttr("path",TSYS::strEncode(opt->attr("path"),TSYS::PathEl))->setAttr("recurs","1");
-		at(c_list[i_a]).at().cntrCmd(cN);
+		at(c_list[iA]).at().cntrCmd(cN);
 		cN->setName("el")->setAttr("path","")->setAttr("rez","")->setAttr("recurs","")->setText("");
 	    }
 	}
@@ -487,8 +499,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
     }
     else if(a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",R_R_R_)) {
-	for(unsigned i_a=0; i_a < owner().tpPrmSize(); i_a++)
-	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(i_a).name)->setText(owner().tpPrmAt(i_a).descr);
+	for(unsigned iA = 0; iA < owner().tpPrmSize(); iA++)
+	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(iA).name)->setText(owner().tpPrmAt(iA).descr);
     }
     else if(a_path == "/cntr/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(DB());

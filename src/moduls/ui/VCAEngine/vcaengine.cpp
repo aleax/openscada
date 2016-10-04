@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.0.8"
+#define MOD_VER		"3.2.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -161,6 +161,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd(new TFld("PER",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"4","100"));
     prj_el.fldAdd(new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
     prj_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    prj_el.fldAdd(new TFld("EN_BY_NEED",_("Enable by need"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Make page's DB structure: ProjPages(__OWNER__, __ID__, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)
     page_el.fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100"));
@@ -296,8 +297,7 @@ void Engine::load_( )
 	    w_tm = TSYS::curTime();
 #endif
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load widgets libraries error."));
     }
@@ -307,19 +307,19 @@ void Engine::load_( )
 	// Search and create new projects
 	TConfig c_el(&elProject());
 	c_el.cfgViewAll(false);
+	c_el.cfg("EN_BY_NEED").setView(true);
 	vector<string> db_ls;
 	itReg.clear();
 
 	// Search into DB
-	SYS->db().at().dbList(db_ls,true);
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,c_el); )
-	    {
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,c_el); ) {
 		string prj_id = c_el.cfg("ID").getS();
 		if(!prjPresent(prj_id)) {
 		    prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		    prjAt(prj_id).at().setEnableByNeed();
+		    if(c_el.cfg("EN_BY_NEED").getB()) prjAt(prj_id).at().setEnableByNeed();
 		}
 		itReg[prj_id] = true;
 	    }
@@ -345,8 +345,7 @@ void Engine::load_( )
 	    w_tm = TSYS::curTime();
 #endif
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load projects error."));
     }
@@ -393,7 +392,7 @@ void Engine::load_( )
 		    sesAt(sId).at().setBackgrnd(true);
 		    sesAt(sId).at().setEnable(true);
 		}
-	    } catch(...){ }
+	    } catch(...) { }
 	}
     } catch(...){ }
     res.release();
@@ -438,7 +437,7 @@ void Engine::modStart( )
 		    sesAt(sId).at().setBackgrnd(true);
 		    sesAt(sId).at().setEnable(true);
 		}
-	    }catch(...){ }
+	    } catch(...) { }
     res.release();
 
     //Start sessions
@@ -584,12 +583,11 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	unsigned flg = type >> 4;
 	type = type&0x0f;
 	unsigned selfFlg = c_el.cfg("SELF_FLG").getI();
-
 	if(!w.attrPresent(sid))
 	    w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)type,flg));
 	AutoHD<Attr> attr = w.attrAt(sid);
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) continue;
-	c_el.cfg("IO_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg));
+	//c_el.cfg("IO_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg));	//!! But it is not a sense and mostly broke for next
 	string IO_VAL = c_el.cfg("IO_VAL").getS();
 	attr.at().setS(IO_VAL);
 	if(type == TFld::Integer || type == TFld::Real || (flg&(TFld::Selected|TFld::SelEdit))) {
@@ -601,7 +599,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
-	c_el.cfg("CFG_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg,selfFlg));
+	//c_el.cfg("CFG_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg,selfFlg));	//!! But it is not a sense and mostly broke for next
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
 }
@@ -716,7 +714,10 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    // Connect to present session
 	    if(!sess.empty()) {
 		sesAt(sess).at().connect();
-		opt->setAttr("prj",sesAt(sess).at().projNm());
+		opt->setAttr("prj", sesAt(sess).at().projNm());
+		if(s2i(opt->attr("userChange")))
+		    mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User is changed to '%s', from '%s'."),
+			opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 	    }
 	    // Create session
 	    else if(!prj.empty()) {
@@ -727,14 +728,19 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		sesAt(sess).at().setUser(opt->attr("user"));
 		sesAt(sess).at().setStart(true);
 		sesAt(sess).at().connect();
-		opt->setAttr("sess",sess);
+		opt->setAttr("sess", sess);
+		mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User '%s' is connected, from '%s'."),
+		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 	    }else throw TError(nodePath().c_str(),_("Connect/create session arguments error."));
 	}
 	else if(ctrChkNode(opt,"disconnect",RWRWRW,"root",SUI_ID,SEC_WR)) {
 	    string sess = opt->attr("sess");
 	    sesAt(sess).at().disconnect();
-	    if(sesAt(sess).at().connects() == 0 && !sesAt(sess).at().backgrnd())
+	    if(sesAt(sess).at().connects() == 0 && !sesAt(sess).at().backgrnd()) {
+		mess_note(sesAt(sess).at().parent().at().nodePath().c_str(), _("User '%s' is disconnected, from '%s'."),
+		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 		sesDel(sess);
+	    }
 	}
 	return;
     }
@@ -946,7 +952,7 @@ AutoHD<TCntrNode> Engine::chldAt( int8_t igr, const string &name, const string &
 		prj.at().load(true);
 		prj.at().setEnable(true);
 		prj.at().modifGClr();
-	    } catch(TError err) { }
+	    } catch(TError &err) { }
 	}
     }
 

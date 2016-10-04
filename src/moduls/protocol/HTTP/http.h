@@ -142,7 +142,7 @@ class TProt: public TProtocol
 	//Attributes
 	map<int, SAuth>	mAuth;
 	int		mTAuth;
-	ResString	mTmpl;
+	MtxString	mTmpl;
 	time_t		lstSesChk;
 
 	vector<SAutoLogin>	mALog;

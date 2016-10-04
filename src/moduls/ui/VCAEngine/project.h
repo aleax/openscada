@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,6 +58,7 @@ class Project : public TCntrNode, public TConfig
 	short	permit( )	{ return mPermit; }		//Permission for access to library
 	int	period( )	{ return mPer; }		//Project's session calculate period
 	int	prjFlags( )	{ return mFlgs; }		//Project's flags
+	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
 
 	string DB( )		{ return workPrjDB; }		//Current library DB
 	string tbl( )		{ return cfg("DB_TBL").getS(); }//Table of storing library data
@@ -72,14 +72,15 @@ class Project : public TCntrNode, public TConfig
 	void setPermit( short it )		{ mPermit = it; modif(); }
 	void setPeriod( int it )		{ mPer = it; modif(); }
 	void setPrjFlags( int val )		{ mFlgs = val; modif(); }
+	void setToEnByNeed( bool vl )		{ cfg("EN_BY_NEED").setB(vl); }
 
 	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
 
 	// Enable stat
-	bool enable( )		{ return mEnable; }
+	bool enable( )				{ return mEnable; }
 	void setEnable( bool val );
-	void setEnableByNeed( );
+	void setEnableByNeed( )			{ enableByNeed = true; modifClr(); }
 
 	// Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
@@ -108,7 +109,7 @@ class Project : public TCntrNode, public TConfig
 
 	//Attributes
 	bool	enableByNeed;	//Load and enable by need
-	pthread_mutex_t &funcM( )	{ return mFuncM; }
+	ResMtx &funcM( )	{ return mFuncM; }
 
     protected:
 	//Methods
@@ -141,7 +142,7 @@ class Project : public TCntrNode, public TConfig
 	Res	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
 
-	pthread_mutex_t	mFuncM;
+	ResMtx	mFuncM;
 };
 
 //************************************************
@@ -210,6 +211,10 @@ class Page : public Widget, public TConfig
 
 	Page	*ownerPage( );
 	Project	*ownerProj( );
+
+    public:
+	//Attributes
+	bool	manCrt;		//Manual created, mostly for child widget's modification clear after it's inheritance
 
     protected:
 	//Methods

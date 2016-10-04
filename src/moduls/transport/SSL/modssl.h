@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -87,7 +87,7 @@ class TSocketIn: public TTransportIn
 	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmax(0,vmin(1000,vl)); modif(); }
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vmax(0,vl); modif(); }
 	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
-	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
+	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
@@ -95,8 +95,6 @@ class TSocketIn: public TTransportIn
 	void stop( );
 
 	unsigned forksPerHost( const string &sender );
-
-	pthread_mutex_t &dataRes( )	{ return mDataRes; }
 
     protected:
 	//Methods
@@ -117,7 +115,7 @@ class TSocketIn: public TTransportIn
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	pthread_mutex_t	sockRes, mDataRes;
+	ResMtx		sockRes;
 	SSL_CTX		*ctx;
 
 	bool		endrun;			//Command for stop task

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,7 +57,7 @@ using namespace VISION;
 InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm ) :
 	QDialog(parent), mId(NULL), mName(NULL)
 {
-    setMaximumSize(800, 600);
+    //setMaximumSize(800, 600);
     setWindowTitle(ndlg);
     setWindowIcon(icon);
     //setSizeGripEnabled(true);
@@ -204,7 +203,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 	for(unsigned i_u = 0; i_u < req.childSize(); i_u++)
 	    users->addItem(req.childGet(i_u)->text().c_str());
 
-    users->setEditText(iuser);
+    users->setEditText(mod->userStart().c_str());
 }
 
 QString DlgUser::user( )	{ return users->currentText(); }
@@ -215,10 +214,14 @@ void DlgUser::finish( int result )
 {
     if(result) {
 	//Check user auth
-	XMLNode req("get");
-	req.setAttr("path",string("/Security/")+user().toStdString()+"/%2fauth")->setAttr("password",password().toStdString());
-	if(!mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true) && s2i(req.text()))
+	XMLNode req("get"); req.setAttr("path", "/%2fgen%2fid");
+	if((VCAstat == "." && (user().toStdString() == mod->userStart() || (SYS->security().at().usrPresent(user().toStdString()) &&
+		    SYS->security().at().usrAt(user().toStdString()).at().auth(password().toStdString())))) ||
+		(VCAstat != "." && !mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true)))
+	{
+	    if(user().isEmpty()) users->setEditText(req.attr("user").c_str());
 	    setResult(SelOK);
+	}
 	else setResult(SelErr);
     }
     else setResult(SelCancel);
@@ -351,17 +354,18 @@ void FontDlg::showEvent( QShowEvent * event )
 //*********************************************
 //* Status bar user widget                    *
 //*********************************************
-UserStBar::UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent ) : QLabel(parent)
+UserStBar::UserStBar( const string &iuser, const string &ipass, const string &iVCAstat, QWidget *parent ) :
+    QLabel(parent), userTxt(resData), userPass(resData), VCAStat(resData)
 {
     setUser(iuser);
     setPass(ipass);
     setVCAStation(iVCAstat);
 }
 
-void UserStBar::setUser( const QString &val )
+void UserStBar::setUser( const string &val )
 {
-    setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val));
-    user_txt = val;
+    setText(QString("<font color='%1'>%2</font>").arg((val=="root")?"red":"green").arg(val.size()?val.c_str():"*"));
+    userTxt = val;
 }
 
 bool UserStBar::event( QEvent *event )
@@ -372,12 +376,12 @@ bool UserStBar::event( QEvent *event )
 
 bool UserStBar::userSel( )
 {
-    DlgUser d_usr(user(), pass(), VCAStation(), parentWidget());
+    DlgUser d_usr(user().c_str(), pass().c_str(), VCAStation().c_str(), parentWidget());
     int rez = d_usr.exec();
-    if(rez == DlgUser::SelOK && d_usr.user() != user()) {
-	QString old_user = user(), old_pass = pass();
-	setUser(d_usr.user());
-	setPass(d_usr.password());
+    if(rez == DlgUser::SelOK && d_usr.user().toStdString() != user()) {
+	QString old_user = user().c_str(), old_pass = pass().c_str();
+	setUser(d_usr.user().toStdString());
+	setPass(d_usr.password().toStdString());
 	emit userChanged(old_user, old_pass);
 	return true;
     }

@@ -61,7 +61,7 @@ class MTable : public TTable
 
     public:
 	//Public methods
-	MTable( const string &name, MBD *iown, bool create );
+	MTable( const string &name, MBD *iown, const string &inTable, TBasaDBF *ibasa );
 	~MTable( );
 
 	// Field's operations
@@ -83,7 +83,7 @@ class MTable : public TTable
 	void   setVal( TCfg &cfg, const string &vl );
 
 	//Private atributes
-	string n_table;
+	string nTable;
 	string codepage;
 	TBasaDBF *basa;
 

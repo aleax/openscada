@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,6 +46,8 @@ namespace VISION
 	    string name( );
 	    string user( );
 	    VisRun *mainWin( );
+
+	    void resizeF( const QSizeF &size );
 
 	    string pgGrp( );
 	    string pgOpenSrc( );

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -117,11 +117,11 @@ TSYS::~TSYS( )
     pthread_key_delete(sTaskKey);
 
 #if OSC_DEBUG >= 1
-    ResAlloc res(nodeRes(), false);
     string cntrsStr;
+    dataRes().lock();
     for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
-    res.release();
+    dataRes().unlock();
     printf(_("System counters on exit: %s"),cntrsStr.c_str());
 #endif
 
@@ -242,7 +242,7 @@ string TSYS::uint2str( unsigned val, IntView view )
     return buf;
 }
 
-string TSYS::ll2str( int64_t val, IntView view )
+string TSYS::ll2str( long long val, IntView view )
 {
     char buf[NSTR_BUF_LEN];
     switch(view)
@@ -508,8 +508,7 @@ bool TSYS::cfgFileLoad( )
 	    else rootN.clear();
 	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Configuration '%s' error!"),mConfFile.c_str());
 	    rootModifCnt = 0;
-	}
-	catch(TError err) { mess_err(nodePath().c_str(),_("Load config-file error: %s"),err.mess.c_str() ); }
+	} catch(TError &err) { mess_err(nodePath().c_str(),_("Load config-file error: %s"),err.mess.c_str() ); }
     }
 
     return cmd_help;
@@ -587,7 +586,7 @@ void TSYS::load_( )
     list(lst);
     for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().load(); }
-	catch(TError err) {
+	catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error load subsystem '%s'."),lst[i_a].c_str());
 	}
@@ -621,7 +620,7 @@ int TSYS::start( )
     mess_info(nodePath().c_str(),_("Start!"));
     for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().subStart(); }
-	catch(TError err) {
+	catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error start subsystem '%s'."),lst[i_a].c_str());
 	}
@@ -653,7 +652,7 @@ int TSYS::start( )
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
 	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
-		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	sysSleep(STD_WAIT_DELAY*1e-3);
 	i_cnt++;
@@ -664,7 +663,7 @@ int TSYS::start( )
     cfgFileSave();
     for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
-	catch(TError err) {
+	catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error stop subsystem '%s'."),lst[i_a].c_str());
 	}
@@ -941,34 +940,32 @@ string TSYS::sepstr2path( const string &str, char sep )
 
 string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 {
-    int i_sz;
+    int iSz;
     string sout;
 
     switch(tp)
     {
 	case TSYS::PathEl:
 	    sout = in;
-	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch(sout[i_sz])
-		{
-		    case '/': sout.replace(i_sz,1,"%2f"); i_sz += 2; break;
-		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
+	    for(iSz = 0; iSz < (int)sout.size(); iSz++)
+		switch(sout[iSz]) {
+		    case '/': sout.replace(iSz,1,"%2f"); iSz += 2; break;
+		    case '%': sout.replace(iSz,1,"%25"); iSz += 2; break;
 		}
 	    break;
 	case TSYS::HttpURL: {
 	    char buf[4];
 	    sout = in;
-	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch(sout[i_sz])
-		{
-		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
-		    case ' ': sout.replace(i_sz,1,"%20"); i_sz += 2; break;
-		    case '\t': sout.replace(i_sz,1,"%09"); i_sz += 2; break;
+	    for(iSz = 0; iSz < (int)sout.size(); iSz++)
+		switch(sout[iSz]) {
+		    case '%': sout.replace(iSz,1,"%25"); iSz += 2; break;
+		    case ' ': sout.replace(iSz,1,"%20"); iSz += 2; break;
+		    case '\t': sout.replace(iSz,1,"%09"); iSz += 2; break;
 		    default:
-			if(sout[i_sz]&0x80) {
-			    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[i_sz]);
-			    sout.replace(i_sz,1,buf);
-			    i_sz += 2;
+			if(sout[iSz]&0x80) {
+			    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[iSz]);
+			    sout.replace(iSz,1,buf);
+			    iSz += 2;
 			    break;
 			}
 		}
@@ -976,72 +973,78 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	}
 	case TSYS::Html:
 	    sout.reserve(in.size()+10);
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
 		    case '>':	sout += "&gt;";		break;
 		    case '<':	sout += "&lt;";		break;
 		    case '"':	sout += "&quot;";	break;
 		    case '&':	sout += "&amp;";	break;
 		    case '\'':	sout += "&apos;";	break;
-		    default:	sout += in[i_sz];
+		    default:	sout += in[iSz];
 		}
 	    break;
 	case TSYS::JavaSc:
 	    sout.reserve(in.size()+10);
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
 		    case '\n':	sout += "\\n";	break;
-		    default:	sout += in[i_sz];
+		    default:	sout += in[iSz];
 		}
 	    break;
 	case TSYS::SQL:
-	    sout.reserve(in.size()+10);
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
-		    case '\'':	sout += "\\'";	break;
-		    case '\"':	sout += "\\\"";	break;
-		    case '`':	sout += "\\`";	break;
-		    case '\\':	sout += "\\\\";	break;
-		    default:	sout += in[i_sz];
-		}
+	    if(!opt1.size()) {
+		sout.reserve(in.size()+10);
+		for(iSz = 0; iSz < (int)in.size(); iSz++)
+		    switch(in[iSz]) {
+			case '\'':	sout += "\\'";	break;
+			case '\"':	sout += "\\\"";	break;
+			case '`':	sout += "\\`";	break;
+			case '\\':	sout += "\\\\";	break;
+			default:	sout += in[iSz];
+		    }
+	    } else {
+		//By doubling method
+		sout = in;
+		for(unsigned iSz = 0; iSz < sout.size(); iSz++)
+		    for(unsigned iSmb = 0; iSmb < opt1.size(); iSmb++)
+			if(sout[iSz] == opt1[iSmb])
+			    sout.replace(iSz++, 1, 2, opt1[iSmb]);
+	    }
 	    break;
 	case TSYS::Custom: {
 	    sout.reserve(in.size()+10);
 	    char buf[4];
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++) {
+	    for(iSz = 0; iSz < (int)in.size(); iSz++) {
 		unsigned i_smb;
 		for(i_smb = 0; i_smb < opt1.size(); i_smb++)
-		    if(in[i_sz] == opt1[i_smb]) {
-			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[i_sz]);
+		    if(in[iSz] == opt1[i_smb]) {
+			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[iSz]);
 			sout += buf;
 			break;
 		    }
-		if(i_smb >= opt1.size()) sout += in[i_sz];
+		if(i_smb >= opt1.size()) sout += in[iSz];
 	    }
 	    break;
 	}
 	case TSYS::base64: {
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz += 3) {
-		if(i_sz && !(i_sz%57))	sout.push_back('\n');
-		sout.push_back(base64alph[(unsigned char)in[i_sz]>>2]);
-		if((i_sz+1) >= (int)in.size()) {
-		    sout.push_back(base64alph[((unsigned char)in[i_sz]&0x03)<<4]);
+	    for(iSz = 0; iSz < (int)in.size(); iSz += 3) {
+		if(iSz && !(iSz%57))	sout.push_back('\n');
+		sout.push_back(base64alph[(unsigned char)in[iSz]>>2]);
+		if((iSz+1) >= (int)in.size()) {
+		    sout.push_back(base64alph[((unsigned char)in[iSz]&0x03)<<4]);
 		    sout += "==";
 		}
 		else {
-		    sout.push_back(base64alph[(((unsigned char)in[i_sz]&0x03)<<4)|((unsigned char)in[i_sz+1]>>4)]);
-		    if((i_sz+2) >= (int)in.size()) {
-			sout.push_back(base64alph[((unsigned char)in[i_sz+1]&0x0F)<<2]);
+		    sout.push_back(base64alph[(((unsigned char)in[iSz]&0x03)<<4)|((unsigned char)in[iSz+1]>>4)]);
+		    if((iSz+2) >= (int)in.size()) {
+			sout.push_back(base64alph[((unsigned char)in[iSz+1]&0x0F)<<2]);
 			sout.push_back('=');
 		    }
 		    else {
-			sout.push_back(base64alph[(((unsigned char)in[i_sz+1]&0x0F)<<2)|((unsigned char)in[i_sz+2]>>6)]);
-			sout.push_back(base64alph[(unsigned char)in[i_sz+2]&0x3F]);
+			sout.push_back(base64alph[(((unsigned char)in[iSz+1]&0x0F)<<2)|((unsigned char)in[iSz+2]>>6)]);
+			sout.push_back(base64alph[(unsigned char)in[iSz+2]&0x3F]);
 		    }
 		}
 	    }
@@ -1049,14 +1052,13 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	}
 	case TSYS::FormatPrint:
 	    sout = in;
-	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		if(sout[i_sz] == '%') { sout.replace(i_sz,1,"%%"); i_sz++; }
+	    for(iSz = 0; iSz < (int)sout.size(); iSz++)
+		if(sout[iSz] == '%') { sout.replace(iSz,1,"%%"); iSz++; }
 	    break;
 	case TSYS::oscdID:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
 		    case ' ': case '/': case '\\': case '&': case '(':
 		    case ')': case '[': case ']': case '!': case '~':
 		    case '`': case '@': case '%': case '^': case '-':
@@ -1064,7 +1066,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		    case ':': case ';': case '"': case '\'': case '<':
 		    case '>': case '?': case '.': case ',':
 			sout+="_";	break;
-		    default:	sout += in[i_sz];
+		    default:	sout += in[iSz];
 		}
 	    break;
 	case TSYS::Bin: {
@@ -1077,14 +1079,13 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    break;
 	}
 	case TSYS::Reverse:
-	    for(i_sz = in.size()-1; i_sz >= 0; i_sz--) sout += in[i_sz];
+	    for(iSz = in.size()-1; iSz >= 0; iSz--) sout += in[iSz];
 	    break;
 	case TSYS::ShieldSimb:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		if(in[i_sz] == '\\' && i_sz < ((int)in.size()-1)) {
-		    switch(in[i_sz+1])
-		    {
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		if(in[iSz] == '\\' && iSz < ((int)in.size()-1)) {
+		    switch(in[iSz+1]) {
 			case 'a':	sout += '\a';	break;
 			case 'b':	sout += '\b';	break;
 			case 'f':	sout += '\f';	break;
@@ -1093,20 +1094,20 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 			case 't':	sout += '\t';	break;
 			case 'v':	sout += '\v';	break;
 			case 'x': case 'X':
-			    if((i_sz+3) < (int)in.size() && isxdigit(in[i_sz+2]) && isxdigit(in[i_sz+3]))
-			    { sout += (char)strtol(in.substr(i_sz+2,2).c_str(),NULL,16); i_sz += 2; }
-			    else sout += in[i_sz+1];
+			    if((iSz+3) < (int)in.size() && isxdigit(in[iSz+2]) && isxdigit(in[iSz+3]))
+			    { sout += (char)strtol(in.substr(iSz+2,2).c_str(),NULL,16); iSz += 2; }
+			    else sout += in[iSz+1];
 			    break;
 			default:
-			    if((i_sz+3) < (int)in.size() && in[i_sz+1] >= '0' && in[i_sz+1] <= '7' &&
-							    in[i_sz+2] >= '0' && in[i_sz+2] <= '7' &&
-							    in[i_sz+3] >= '0' && in[i_sz+3] <= '7')
-			    { sout += (char)strtol(in.substr(i_sz+1,3).c_str(),NULL,8); i_sz += 2; }
-			    else sout += in[i_sz+1];
+			    if((iSz+3) < (int)in.size() && in[iSz+1] >= '0' && in[iSz+1] <= '7' &&
+							    in[iSz+2] >= '0' && in[iSz+2] <= '7' &&
+							    in[iSz+3] >= '0' && in[iSz+3] <= '7')
+			    { sout += (char)strtol(in.substr(iSz+1,3).c_str(),NULL,8); iSz += 2; }
+			    else sout += in[iSz+1];
 		    }
-		    i_sz++;
+		    iSz++;
 		}
-		else sout += in[i_sz];
+		else sout += in[iSz];
 	    break;
     }
     return sout;
@@ -1127,48 +1128,47 @@ unsigned char TSYS::getBase64Code( unsigned char asymb )
 
 string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 {
-    unsigned i_sz;
+    unsigned iSz;
     string sout;
 
     switch(tp)
     {
 	case TSYS::PathEl: case TSYS::HttpURL: case TSYS::Custom:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+	    for(iSz = 0; iSz < in.size(); iSz++)
+		switch(in[iSz]) {
 		    case '%':
-			if(i_sz+2 < in.size()) {
-			    sout += (char)strtol(in.substr(i_sz+1,2).c_str(),NULL,16);
-			    i_sz += 2;
-			}else sout += in[i_sz];
+			if(iSz+2 < in.size()) {
+			    sout += (char)strtol(in.substr(iSz+1,2).c_str(),NULL,16);
+			    iSz += 2;
+			}else sout += in[iSz];
 			break;
-		    default: sout += in[i_sz];
+		    default: sout += in[iSz];
 		}
 	    break;
 	case TSYS::base64:
 	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < in.size(); ) {
-		if(in[i_sz] == '\n')	i_sz += sizeof('\n');
-		if((i_sz+3) < in.size())
-		    if(in[i_sz+1] != '=') {
-			char w_code1 = TSYS::getBase64Code(in[i_sz+1]);
-			sout.push_back((TSYS::getBase64Code(in[i_sz])<<2)|(w_code1>>4));
-			if(in[i_sz+2] != '=') {
-			    char w_code2 = TSYS::getBase64Code(in[i_sz+2]);
+	    for(iSz = 0; iSz < in.size(); ) {
+		if(in[iSz] == '\n')	iSz += sizeof('\n');
+		if((iSz+3) < in.size())
+		    if(in[iSz+1] != '=') {
+			char w_code1 = TSYS::getBase64Code(in[iSz+1]);
+			sout.push_back((TSYS::getBase64Code(in[iSz])<<2)|(w_code1>>4));
+			if(in[iSz+2] != '=') {
+			    char w_code2 = TSYS::getBase64Code(in[iSz+2]);
 			    sout.push_back((w_code1<<4)|(w_code2>>2));
-			    if(in[i_sz+3] != '=')
-				sout.push_back((w_code2<<6)|TSYS::getBase64Code(in[i_sz+3]));
+			    if(in[iSz+3] != '=')
+				sout.push_back((w_code2<<6)|TSYS::getBase64Code(in[iSz+3]));
 			}
 		    }
-		i_sz += 4;
+		iSz += 4;
 	    }
 	    break;
 	case TSYS::Bin: {
 	    sout.reserve(in.size()*2);
 	    char buf[3+opt1.size()];
-	    for(i_sz = 0; i_sz < in.size(); i_sz++) {
-		snprintf(buf, sizeof(buf), "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
+	    for(iSz = 0; iSz < in.size(); iSz++) {
+		snprintf(buf, sizeof(buf), "%s%02X", (iSz&&opt1.size())?(((iSz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[iSz]);
 		sout += buf;
 	    }
 	    break;
@@ -1513,13 +1513,13 @@ long TSYS::HZ()
 
 bool TSYS::cntrEmpty( )
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     return mCntrs.empty();
 }
 
 double TSYS::cntrGet( const string &id )
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     map<string,double>::iterator icnt = mCntrs.find(id);
     if(icnt == mCntrs.end())	return 0;
     return icnt->second;
@@ -1527,13 +1527,13 @@ double TSYS::cntrGet( const string &id )
 
 void TSYS::cntrSet( const string &id, double vl )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     mCntrs[id] = vl;
 }
 
 void TSYS::cntrIter( const string &id, double vl )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     mCntrs[id] += vl;
 }
 
@@ -1566,7 +1566,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.taskArg = arg;
     htsk.flgs = 0;
     htsk.thr = 0;
-    htsk.prior = priority;
+    htsk.prior = priority%100;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1583,8 +1583,9 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     if(priority < 0)	policy = SCHED_BATCH;
 #endif
     if(priority > 0)	policy = SCHED_RR;
+    if(priority >= 100)	policy = SCHED_FIFO;
     pthread_attr_setschedpolicy(pthr_attr, policy);
-    prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
+    prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority%100));
     pthread_attr_setschedparam(pthr_attr, &prior);
 
     try {
@@ -1610,8 +1611,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	    if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' start timeouted!"),path.c_str());
 	    sysSleep(STD_WAIT_DELAY*1e-3);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(err.cod) {		//Remove info for pthread_create() but left for other by possible start later
 	    res.request(true);
 	    mTasks.erase(path);
@@ -1730,7 +1730,7 @@ void *TSYS::taskWrap( void *stas )
     //Call work task
     void *rez = NULL;
     try { rez = wTask(wTaskArg); }
-    catch(TError err) {
+    catch(TError &err) {
 	mess_err(err.cat.c_str(),err.mess.c_str());
 	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exception."),tsk->thr);
     }
@@ -1945,7 +1945,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  level - message level
     //  mess - message text
     if(iid == "message" && prms.size() >= 3)	{ message(prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str()); return 0; }
-    // int messDebug(string cat, string mess) - formation of the system message <mess> with the category <cat> and the appropriate level
+    // int mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}(string cat, string mess) -
+    //		formation of the system message <mess> with the category <cat> and the appropriate level
     //  cat - message category
     //  mess - message text
     if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
@@ -2023,14 +2024,15 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	xnd.at().fromXMLNode(req);
 	return string("0");
     }
-    // int sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
-    //  tm - wait time in seconds
+    // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
+    //  tm - wait time in seconds (precised up to nanoseconds), up to STD_INTERF_TM(5 seconds)
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1) {
 	struct timespec sp_tm;
 	sp_tm.tv_sec = prms[0].getI();
-	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
-	return nanosleep(&sp_tm,NULL);
+	sp_tm.tv_nsec = 1000000000l*(prms[0].getR()-sp_tm.tv_sec) + ((prms.size()>=2)?prms[1].getI():0);
+	sp_tm.tv_sec = vmin(STD_INTERF_TM, sp_tm.tv_sec);
+	return nanosleep(&sp_tm, NULL);
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
@@ -2273,9 +2275,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
-	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/icoDirList");
-	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/icoDirList");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the system at exit"),RWRWR_,"root","root",2,"tp","bool",
@@ -2474,9 +2476,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		}
 		if(n_plc) {
 		    string plcVl = _("Standard");
-		    if(it->second.policy == SCHED_RR) plcVl = _("RT Round-robin");
+		    if(it->second.policy == SCHED_FIFO)		plcVl = _("RT FIFO");
+		    else if(it->second.policy == SCHED_RR)	plcVl = _("RT Round-robin");
 #if __GLIBC_PREREQ(2,4)
-		    if(it->second.policy == SCHED_BATCH) plcVl = _("Style \"batch\"");
+		    else if(it->second.policy == SCHED_BATCH)	plcVl = _("Style \"batch\"");
 #endif
 		    n_plc->childAdd("el")->setText(plcVl);
 		}
@@ -2530,7 +2533,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/cntr/cntr/id","",R_R___,"root","root");
 	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/cntr/cntr/vl","",R_R___,"root","root");
 
-	ResAlloc res(nodeRes(), false);
+	MtxAlloc res(dataRes(), true);
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++) {
 	    if(n_id)	n_id->childAdd("el")->setText(icnt->first);
 	    if(n_vl)	n_vl->childAdd("el")->setText(r2s(icnt->second));

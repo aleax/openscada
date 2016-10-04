@@ -2,13 +2,13 @@
 # Copyright (C) 2005-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 16:31+0300\n"
+"POT-Creation-Date: 2016-06-24 20:25+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -69,6 +69,9 @@ msgstr "Ім'я"
 
 msgid "Description"
 msgstr "Опис"
+
+msgid "To start"
+msgstr "Запускати"
 
 msgid "Maximum calculate time (sec)"
 msgstr "Максимальний час обрахунку (сек)"
@@ -302,6 +305,10 @@ msgstr ""
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "IO функції."
 
+#, c-format
+msgid "Internal function inaccessible by offset %d > %d"
+msgstr "Внутрішня функція недосяжна через зміщення %d > %d"
+
 msgid "Error constant after constant"
 msgstr "Помилка константи після константи"
 
@@ -317,6 +324,16 @@ msgstr "Символ переведення лінії не дозволено �
 
 msgid "Using namespace is error or empty, "
 msgstr "Помилка площини найменувань або вона порожня, "
+
+msgid "Internal function declaration error, "
+msgstr "Помилка декларації внутрішньої функцій, "
+
+#, c-format
+msgid "Internal function '%s' defined early, "
+msgstr "Внутрішню функцію '%s' визначено раніш, "
+
+msgid "Do not include declaration of one internal function to other, "
+msgstr "Не включайте визначення однієї внутрішньої функції до іншої, "
 
 msgid "Build in function has too much parameters, "
 msgstr "Вбудована функція має дуже багато параметрів, "

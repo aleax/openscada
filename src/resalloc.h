@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: resalloc.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +39,10 @@ class Res
     public:
 	Res( );
 	~Res( );
+
+	void lock( bool toWr, unsigned short tm = 0 ) { if(toWr) resRequestW(tm); else resRequestR(tm); }
+	bool tryLock( bool toWr )	{ return toWr ? resTryW() : resTryR(); }
+	void unlock( )			{ resRelease(); }
 
 	void resRequestW( unsigned short tm = 0 );	// Write request, tm in milliseconds
 	bool resTryW( );
@@ -138,7 +141,7 @@ class MtxAlloc
 {
     public:
 	//Methods
-	MtxAlloc( pthread_mutex_t &iM, bool lock = false );
+	MtxAlloc( ResMtx &iM, bool lock = false );
 	~MtxAlloc( );
 
 	int lock( );
@@ -147,7 +150,7 @@ class MtxAlloc
 
     private:
 	//Attributes
-	pthread_mutex_t	&m;
+	ResMtx	&m;
 	bool	mLock;
 };
 
@@ -158,7 +161,7 @@ class MtxString
 {
     public:
 	//Methods
-	MtxString( pthread_mutex_t &iM );
+	MtxString( ResMtx &iM );
 	~MtxString( );
 
 	MtxString &operator=( const string &val );
@@ -173,7 +176,7 @@ class MtxString
 
     private:
 	//Attributes
-	pthread_mutex_t	&m;
+	ResMtx	&m;
 	string	str;
 };
 

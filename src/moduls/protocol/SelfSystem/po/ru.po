@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.SelfSystem translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:24+0300\n"
+"POT-Creation-Date: 2016-06-25 07:28+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -97,6 +97,10 @@ msgid "Get request: '%s': %d"
 msgstr "Запрос Get: '%s': %d"
 
 #, c-format
+msgid "Check and reforward request: '%s': %d, time: %f ms."
+msgstr "Проверка и перенаправление запроса: '%s': %d, время: %f мс."
+
+#, c-format
 msgid "Unpack and load request: '%s': %d, time: %f ms."
 msgstr "Распаковка и загрузка запроса: '%s': %d, время: %f мс."
 
@@ -107,24 +111,3 @@ msgstr "Обработка запроса: '%s', время: %f мс."
 #, c-format
 msgid "Save respond to stream and pack: '%s': %d, time: %f ms."
 msgstr "Сохранение ответа в поток и упаковка: '%s': %d, время: %f мс."
-
-#~ msgid "SES_OPEN request: %d"
-#~ msgstr "SES_OPEN запрос: %d"
-
-#~ msgid "SES_OPEN response: %d"
-#~ msgstr "SES_OPEN ответ: %d"
-
-#~ msgid "REQ send: %d"
-#~ msgstr "REQ отправка: %d"
-
-#~ msgid "REQ response first %d"
-#~ msgstr "REQ первый ответ %d"
-
-#~ msgid "REQ response full %d"
-#~ msgstr "REQ весь ответ %d"
-
-#~ msgid "Request error: %s"
-#~ msgstr "Ошибка запроса: %s"
-
-#~ msgid "Get request: '%s': %d, time: %f ms."
-#~ msgstr "Получение запроса: '%s': %d, время: %f мс."

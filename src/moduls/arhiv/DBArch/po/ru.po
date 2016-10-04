@@ -1,14 +1,13 @@
 # OpenSCADA.Archive.DBArch translate to Russian.
-# Copyright (C) 2007-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Archive.DBArch package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2007-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2010, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 11:16+0300\n"
+"POT-Creation-Date: 2016-06-23 15:52+0300\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -29,6 +28,9 @@ msgstr ""
 "Модуль архиватора. Предоставляет функции архивирования сообщений и значений "
 "на БД."
 
+msgid "In minutes"
+msgstr "В минутах"
+
 msgid "Time (s)"
 msgstr "Время (с)"
 
@@ -44,9 +46,6 @@ msgstr "Сообщение"
 msgid "Level"
 msgstr "Уровень"
 
-msgid "Value"
-msgstr "Значение"
-
 #, c-format
 msgid "Enable target DB error: %s"
 msgstr "Ошибка включения целевой БД: %s"
@@ -57,5 +56,34 @@ msgstr "Архив не запущен!"
 msgid "Archiving time (msek)"
 msgstr "Время архивирования (мс)"
 
+msgid "Additional options"
+msgstr "Дополнительные опции"
+
+msgid "Archive size (days)"
+msgstr "Размер архива (дней)"
+
+msgid "Set to 0 for the limit disable and some performance rise."
+msgstr ""
+"Установить в 0 для отключения данного лимита и некоторого повышения "
+"производительности."
+
+msgid "Force time as string"
+msgstr "Формировать время как строка"
+
+msgid ""
+"Only for DBs it supports by a specific data type like to \"datetime\" into "
+"MySQL."
+msgstr ""
+"Только для БД поддерживающих такое посредством специфических типов данных "
+"вроде \"datetime\" в MySQL."
+
 msgid "Archive size (hours)"
 msgstr "Размер архива (часов)"
+
+msgid "Set to 0 for the limit disable and some performance rise"
+msgstr ""
+"Установить в 0 для отключения данного лимита и некоторого повышения "
+"производительности"
+
+msgid "Value"
+msgstr "Значение"

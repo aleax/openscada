@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-06 10:05+0200\n"
+"POT-Creation-Date: 2016-06-24 13:15+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -93,6 +93,9 @@ msgstr "Raster der Pufferzeit"
 msgid "Buffer in high time resolution"
 msgstr "Auflösung Pufferzeit"
 
+msgid "Fill pass points to a last value"
+msgstr "Füllen Sie Passpunkte zu einem letzten Wert"
+
 msgid "Process into archivators"
 msgstr "Bearbeitung mit Archivaren"
 
@@ -159,6 +162,10 @@ msgstr "Fehler beim Anhalten des Nachrichtarchivars '%s'."
 msgid "Value archive '%s' stop error."
 msgstr "Fehler beim Anhalten des Wertearchivs '%s'."
 
+#, c-format
+msgid "Put message to the archiver '%s' error: %s"
+msgstr "Kleide Mitteilung an den Archivierungs '%s' Fehler: %s"
+
 msgid "Message buffer process error."
 msgstr "Meldepuffer Prozessfehler."
 
@@ -216,11 +223,11 @@ msgstr ""
 msgid "Get messages for level more and equal it."
 msgstr "Empfang von Nachrichten für gleiche und höhere Stufe."
 
-msgid "Archivator"
+msgid "Archivators"
 msgstr "Archivar"
 
 msgid ""
-"Messages archivator.\n"
+"Message archivators.\n"
 "No set archivator for process by buffer and all archivators.\n"
 "Set '<buffer>' for process by buffer."
 msgstr ""
@@ -253,6 +260,9 @@ msgstr "Zeitintervall für Datenempfang (ms)"
 msgid "Get data task priority level"
 msgstr "Prioritätsstufe Datenempfanges"
 
+msgid "Variable timestamp force to current time"
+msgstr "Variable Zeitstempel Kraft zu aktuellen Zeit"
+
 msgid "Number"
 msgstr "Anzahl"
 
@@ -262,9 +272,6 @@ msgstr "Optionen Hilfe"
 #, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Insgesamt: %d; Eingeschaltet: %d"
-
-msgid "Archivators"
-msgstr "Archivar"
 
 msgid "Message archivator"
 msgstr "Nachrichtarchivar"
@@ -280,6 +287,9 @@ msgstr "Wertearchivare"
 
 msgid "Message archivator: "
 msgstr "Nachtrichtarchivar: "
+
+msgid "Archivator"
+msgstr "Archivar"
 
 msgid "State"
 msgstr "Zustand"
@@ -380,6 +390,29 @@ msgstr "Buffersbeginn"
 
 msgid "Archive DB"
 msgstr "Archiv Datenbank"
+
+msgid ""
+"The values buffer size have to much enough for archivators periodicity.\n"
+"Typical the value automatic adjusts to the archive period and archivators "
+"periodicity in 60 seconds."
+msgstr ""
+"Die Werte Puffergröße haben zu viel genug für archivators Periodizität.\n"
+"Typische der Wert automatisch passt sich der Archivierungsperiode und "
+"archivators Periodizität in 60 Sekunden."
+
+msgid "Typical for fastest processing of values archivation."
+msgstr "Typisch für schnellste Bearbeitung von Werten Archivierung."
+
+msgid "Set for the values periodicity lesser to seconds."
+msgstr "Set für die Periodizität Werte weniger auf Sekunden."
+
+msgid ""
+"Mostly the pass values fill by EVAL but sometime\n"
+"the source's data periodicity greater to the archive's one and it is normal."
+msgstr ""
+"Meistens füllen sich die Pass-Werte von EVAL aber irgendwann\n"
+"die eine Daten Periodizität größer in das Archiv der die Quelle und es ist "
+"normal."
 
 msgid "Start"
 msgstr "Starten"
@@ -832,8 +865,8 @@ msgstr "Datenerfassung"
 msgid "Maximum calculate time (sec)"
 msgstr "Maximale Zeit der Berechnung (sek)"
 
-msgid "Template program"
-msgstr "Vorlagenprogramm"
+msgid "Program"
+msgstr "Programm"
 
 msgid "Template ID"
 msgstr "ID der Vorlage"
@@ -932,8 +965,8 @@ msgstr "Zeit der Reservierungsaufgabe"
 msgid "Restore connection timeout (s)"
 msgstr "Interval der Wiederherstellungzeit der Verbindung"
 
-msgid "Restore data depth time (hour)"
-msgstr "Tiefe der Wiederherstellungzeit der Daten (Stunden)"
+msgid "Depth time of restoring data at start, hours"
+msgstr "Tiefe Zeit von Daten beim Start wiederherstellen, Stunden"
 
 msgid "Stations"
 msgstr "Stationen"
@@ -1178,16 +1211,19 @@ msgstr ""
 
 msgid ""
 "Task priority level (-1...99), where:\n"
-"  -1     - lowest priority batch policy;\n"
-"  0      - standard userspace priority;\n"
-"  1...99 - realtime priority level (round-robin), often allowed only for "
-"\"root\"."
-msgstr ""
-"Task-Priorität (-1 ... 99), wobei:\n"
-"  -1     - Niedrigste Priorität, Hintergrund Politik;\n"
-"  0      - Standard-Benutzer Priorität;\n"
-"  1...99 - Die Prioritätsstufe der Echtzeit-(Round-Robin), oft nur für \"root"
+"  -1        - lowest priority batch policy;\n"
+"  0         - standard userspace priority;\n"
+"  1...99    - realtime priority level (round-robin), often allowed only for "
+"\"root\";\n"
+"  100...199 - realtime priority level (FIFO), often allowed only for \"root"
 "\"."
+msgstr ""
+"Task-Priorität (-1...99), wobei:\n"
+"  -1        - Niedrigste Priorität, Hintergrund Politik;\n"
+"  0         - Standard-Benutzer Priorität;\n"
+"  1...99    - Die Prioritätsstufe der Echtzeit-(Round-Robin), oft nur für "
+"\"root\";\n"
+"  100...199 - Die Prioritätsstufe der Echtzeit-(FIFO), oft nur für \"root\"."
 
 msgid "Modules scheduler"
 msgstr "Modulsteuerung"
@@ -1375,9 +1411,6 @@ msgstr "Konstante;Konstante frei verfügbar;Verbindung"
 
 msgid "Program language"
 msgstr "Programmsprache"
-
-msgid "Program"
-msgstr "Programm"
 
 msgid "New IO"
 msgstr "Neu IO"
@@ -1853,11 +1886,11 @@ msgstr "Konfigurationsdatei"
 msgid "Work directory"
 msgstr "Arbeitsverzeichnis"
 
-msgid "Icons directory"
-msgstr "Symbolverzeichnis"
-
 msgid "Modules directory"
 msgstr "Modulverzeichnis"
+
+msgid "Icons directory"
+msgstr "Symbolverzeichnis"
 
 msgid "Work DB"
 msgstr "Arbeitsdatenbank"
@@ -1966,6 +1999,9 @@ msgstr ""
 msgid "Standard"
 msgstr "Standard"
 
+msgid "RT FIFO"
+msgstr "RT FIFO"
+
 msgid "RT Round-robin"
 msgstr "RT Round-robin"
 
@@ -2028,6 +2064,9 @@ msgstr "Benutzer der Anfrage"
 msgid "Request password"
 msgstr "Kennwort der Anfrage"
 
+msgid "Uprising level"
+msgstr "Uprising Ebene"
+
 msgid "Search and create new input transports error."
 msgstr "Fehler bei der Suche und Erstellung neuer Eingangsübertragungen."
 
@@ -2071,6 +2110,9 @@ msgstr "Benutzer;System;Benutzer und System"
 msgid "New external host"
 msgstr "Neuer externe Host"
 
+msgid "Uprising hosts not allowed here for its management!"
+msgstr "Uprising Hosts hier nicht für die Verwaltung erlaubt!"
+
 msgid "Input transport"
 msgstr "Eingangsübertragung"
 
@@ -2088,6 +2130,10 @@ msgstr "Eingangsübertragung: "
 
 msgid "Transport DB"
 msgstr "Datenbank der Übertragung"
+
+#, c-format
+msgid "Established: %s. "
+msgstr "Etabliert: %s. "
 
 #, c-format
 msgid "Transport protocol '%s' no present"

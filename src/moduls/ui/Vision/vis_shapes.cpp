@@ -511,10 +511,21 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		XMLNode tX("tbl");
 		bool hdrPresent = false, colsWdthFit = false;
 		int maxCols = 0, maxRows = 0;
-		string wVl, rClr;
+		string wVl, rClr, rClrTxt, rFnt;
 		try { tX.load(shD->items); } catch(...) { }
-		if(tX.name() != "tbl") wdg->clear();
+		if(tX.name() != "tbl") {
+		    wdg->clear();
+		    wdg->horizontalHeader()->setVisible(false);
+		    wdg->verticalHeader()->setVisible(false);
+		}
 		else {
+		    if(wdg->isSortingEnabled()) {
+			wdg->setSortingEnabled(false);
+			//wdg->clear();
+			//wdg->setColumnCount(0);
+			wdg->setRowCount(0);
+		    }
+		    int sortCol = 0;
 		    // Items
 		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++) {
 			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
@@ -522,7 +533,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
 			if(!isH && (int)i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
-			if(!isH && tR) rClr = tR->attr("color");
+			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); }
 			for(unsigned i_c = 0, i_cR = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) ||
 								    (int)i_c < wdg->columnCount(); i_ch1++)
 			{
@@ -537,7 +548,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 					if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
 					hit->setData(Qt::UserRole, wdthCel);
 				    }
-				    if(s2i(tC->attr("edit"))) hit->setData(Qt::UserRole+1, true);
+				    if(s2i(tC->attr("edit")))		hit->setData(Qt::UserRole+1, true);
+				    if((wVl=tC->attr("color")).size())	hit->setData(Qt::UserRole+2, QString::fromStdString(wVl));
+				    if((wVl=tC->attr("colorText")).size()) hit->setData(Qt::UserRole+3, QString::fromStdString(wVl));
+				    if((wVl=tC->attr("font")).size())	hit->setData(Qt::UserRole+4, QString::fromStdString(wVl));
+				    if((wVl=tC->attr("sort")).size())	{ sortCol = i_c+1; if(!s2i(wVl)) sortCol *= -1; }
 				}
 			    }
 			    else {	//Rows content process
@@ -549,14 +564,24 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 					case 'b': v = (bool)s2i(tC->text());	break;
 					case 'i': v = s2ll(tC->text());		break;
 					case 'r': v = s2r(tC->text());		break;
-					default: v = tC->text().c_str();	break;
+					default: v = QString::fromStdString(tC->text()); break;
 				    }
 				tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-				tit->setData(Qt::DisplayRole, v);
+				tit->setData(Qt::DisplayRole, QVariant()); tit->setData(Qt::DisplayRole, v);
 				// Back color
-				if((tC && (wVl=tC->attr("color")).size()) || rClr.size())
-				    tit->setData(Qt::BackgroundRole, QColor((wVl.size()?wVl:rClr).c_str()));
+				if((tC && (wVl=tC->attr("color")).size()) || (wVl=hit->data(Qt::UserRole+2).toString().toStdString()).size() ||
+					(wVl=rClr).size())
+				    tit->setData(Qt::BackgroundRole, QColor(wVl.c_str()));
 				else tit->setData(Qt::BackgroundRole, QVariant());
+				// Text font and color
+				if((tC && (wVl=tC->attr("colorText")).size()) || (wVl=hit->data(Qt::UserRole+3).toString().toStdString()).size() ||
+					(wVl=rClrTxt).size())
+				    tit->setData(Qt::ForegroundRole, QColor(wVl.c_str()));
+				else tit->setData(Qt::ForegroundRole, QVariant());
+				if((tC && (wVl=tC->attr("font")).size()) || (wVl=hit->data(Qt::UserRole+4).toString().toStdString()).size() ||
+					(wVl=rFnt).size())
+				    tit->setData(Qt::FontRole, getFont(wVl.c_str(),vmin(w->xScale(true),w->yScale(true)),true,elFnt));
+				else tit->setData(Qt::FontRole, QVariant());
 				// Cell image
 				QImage img;
 				if(tC && (wVl=w->resGet(tC->attr("img"))).size() && img.loadFromData((const uchar*)wVl.data(),wVl.size()))
@@ -565,6 +590,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				// Modify set
 				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
+				tit->setData(Qt::UserRole+1, i_c);
+				tit->setData(Qt::UserRole+2, i_r);
 			    }
 			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, (int)i_cR); }
 			    i_c++;
@@ -591,9 +618,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    wdg->setProperty("keyID", keyID);
 
 		    colsWdthFit = s2i(tX.attr("colsWdthFit"));
+
+		    wdg->horizontalHeader()->setVisible(tX.attr("hHdrVis").size()?s2i(tX.attr("hHdrVis")):hdrPresent);
+		    wdg->verticalHeader()->setVisible(s2i(tX.attr("vHdrVis")));
+		    if(s2i(tX.attr("sortEn")) || sortCol) {
+			wdg->setSortingEnabled(true);
+			wdg->sortItems((sortCol?abs(sortCol)-1:0), ((sortCol>=0)?Qt::AscendingOrder:Qt::DescendingOrder));
+		    }
 		}
-		wdg->horizontalHeader()->setVisible(hdrPresent);
-		wdg->setColumnCount(maxCols); wdg->setRowCount(maxRows);
+		wdg->setColumnCount(maxCols);
+		wdg->setRowCount(maxRows);
 		if(maxCols > 1) wdg->resizeColumnsToContents();
 		if(colsWdthFit && maxRows) {
 		    int averWdth = w->size().width()/maxCols;
@@ -757,11 +791,11 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    switch(wdg->selectionBehavior()) {
 		case QAbstractItemView::SelectRows:
 		    for(QList<QTableWidgetItem*>::iterator iIt = foundIts.begin(); !selIt && iIt != foundIts.end(); ++iIt)
-			if((*iIt)->column() == wdg->property("keyID").toInt()) selIt = *iIt;
+			if((*iIt)->data(Qt::UserRole+1).toInt() == wdg->property("keyID").toInt()) selIt = *iIt;
 		    break;
 		case QAbstractItemView::SelectColumns:
 		    for(QList<QTableWidgetItem*>::iterator iIt = foundIts.begin(); !selIt && iIt != foundIts.end(); ++iIt)
-			if((*iIt)->row() == wdg->property("keyID").toInt()) selIt = *iIt;
+			if((*iIt)->data(Qt::UserRole+2).toInt() == wdg->property("keyID").toInt()) selIt = *iIt;
 		    break;
 		default: {
 		    if(wdg->property("sel").toString() == "cell") selIt = foundIts.length() ? foundIts.front() : NULL;
@@ -770,7 +804,10 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		}
 	    }
 	    shD->addrWdg->blockSignals(true);
-	    if(selIt) { wdg->setCurrentItem(selIt); if(selIt != selItPrev) wdg->scrollToItem(selIt); }
+	    if(selIt) {
+		wdg->setCurrentItem(selIt);
+		if(selIt != selItPrev) wdg->scrollToItem(selIt);
+	    }
 	    else wdg->setCurrentItem(NULL);
 	    shD->addrWdg->blockSignals(false);
 	    break;
@@ -787,11 +824,6 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 {
     if(qobject_cast<RunWdgView*>(w))
 	switch(event->type()) {
-	    case QEvent::MouseButtonPress:
-	    case QEvent::MouseButtonRelease:	return true;	//!!!! Pass for standard events processing to the container widget
-								//by some artifications like ticks lost into Slider
-								//Possible for the global events generations will need the processing here
-								//or observe the artification into the global handler.
 	    case QEvent::Hide: {
 		ShpDt *shD = (ShpDt*)w->shpData;
 		switch(shD->elType) {
@@ -840,6 +872,9 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
+	    case QEvent::MouseButtonDblClick:
+	    case QEvent::MouseButtonPress:
+	    case QEvent::MouseButtonRelease: QApplication::sendEvent(w, event);	break;
 	    default:	break;
 	}
     }
@@ -945,19 +980,18 @@ void ShapeFormEl::tableSelectChange( )
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
 
     AttrValS attrs;
-    string value = el->selectedItems()[0]->text().toStdString();
+    QTableWidgetItem *wIt = el->selectedItems()[0];
+    string value = wIt->text().toStdString();
     switch(el->selectionBehavior()) {
 	case QAbstractItemView::SelectRows:
-	    value = el->selectedItems()[0]->tableWidget()->item(el->selectedItems()[0]->row(),
-							el->property("keyID").toInt())->text().toStdString();
+	    value = wIt->tableWidget()->item(wIt->row()/*data(Qt::UserRole+2).toInt()*/, el->property("keyID").toInt())->text().toStdString();
 	    break;
 	case QAbstractItemView::SelectColumns:
-	    value = el->selectedItems()[0]->tableWidget()->item(el->property("keyID").toInt(),
-							el->selectedItems()[0]->column())->text().toStdString();
+	    value = wIt->tableWidget()->item(el->property("keyID").toInt(), wIt->column()/*data(Qt::UserRole+1).toInt()*/)->text().toStdString();
 	    break;
 	default:
 	    if(el->property("sel").toString() != "cell")
-		value = i2s(el->selectedItems()[0]->row())+":"+i2s(el->selectedItems()[0]->column());
+		value = i2s(wIt->row()/*data(Qt::UserRole+2).toInt()*/)+":"+i2s(wIt->column()/*data(Qt::UserRole+1).toInt()*/);
 	    break;
     }
 
@@ -974,13 +1008,14 @@ void ShapeFormEl::tableChange( int row, int col )
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
 
-    QVariant val = el->item(row,col)->data(Qt::DisplayRole);
+    QTableWidgetItem *wIt = el->item(row,col);
+    QVariant val = wIt->data(Qt::DisplayRole);
     if(val.type() == QVariant::Bool) val = val.toInt();
 
     //Events prepare
     AttrValS attrs;
     attrs.push_back(std::make_pair("set",val.toString().toStdString()));
-    attrs.push_back(std::make_pair("event",TSYS::strMess("ws_TableEdit_%d_%d",col,row)));
+    attrs.push_back(std::make_pair("event",TSYS::strMess("ws_TableEdit_%d_%d",wIt->data(Qt::UserRole+1).toInt(),wIt->data(Qt::UserRole+2).toInt())));
     w->attrsSet(attrs);
 }
 
@@ -1719,9 +1754,9 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_BordColor: shD->border.setColor(getColor(val)); up = true;	break;
 	case A_BordStyle: shD->bordStyle = s2i(val); up = true;			break;
 	case A_DiagramTrcPer:
-	    shD->trcPer = s2i(val);
-	    if(shD->trcPer) shD->trcTimer->start(shD->trcPer*1000);
-	    else shD->trcTimer->stop();
+	    shD->trcPer = s2r(val);
+	    if(shD->trcPer < 0.01) { shD->trcPer = 0; shD->trcTimer->stop(); }
+	    else shD->trcTimer->start(vmax(qobject_cast<RunWdgView*>(w)?0.01:1,shD->trcPer)*1000);
 	    break;
 	case A_DiagramType: shD->type = s2i(val); reld_tr_dt = 2;		break;
 	case A_DiagramTSek:
@@ -2306,10 +2341,10 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    bordU += vMarg;
 	}
 
-	// X: Prepare XY data buffer sorted by X data and prepare border for percent trend, ONLY!
+	// X: Prepare XY data buffer and prepare border for percent trend, ONLY!
 	float xBordL = cPX.bordL();
 	float xBordU = cPX.bordU();
-	std::multimap<double,double> dBuf;
+	vector< pair<double,double> > dBuf;
 	{
 	    bool xNeedRngChk = (hsPercT && xBordL >= xBordU);
 	    if(xNeedRngChk) xBordU = -3e300, xBordL = 3e300;
@@ -2319,7 +2354,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		if(cPX.val()[ipos].tm >= aVend) end_vl = true;
 		if(cPX.val()[ipos].val != EVAL_REAL) {
 		    if((iVpos=cP.val(cPX.val()[ipos].tm)) < (int)cP.val().size() && cP.val()[iVpos].val != EVAL_REAL)
-			dBuf.insert(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
+			dBuf.push_back(pair<double,double>(cPX.val()[ipos].val,cP.val()[iVpos].val));
 		    if(xNeedRngChk) {
 			xBordL = vmin(xBordL, cPX.val()[ipos].val);
 			xBordU = vmax(xBordU, cPX.val()[ipos].val);
@@ -2336,7 +2371,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	// Draw curve
 	int c_vpos, c_hpos, c_vposPrev = -1, c_hposPrev = -1;
 	double curVl, curVlX;
-	for(std::multimap<double,double>::iterator iD = dBuf.begin(); iD != dBuf.end(); ++iD) {
+	for(vector< pair<double,double> >::iterator iD = dBuf.begin(); iD != dBuf.end(); ++iD) {
 	    curVl = vsPercT ? 100*(iD->second-bordL)/(bordU-bordL) : iD->second;
 	    curVlX = hsPercT ? 100*(iD->first-xBordL)/(xBordU-xBordL) : iD->first;
 	    c_vpos = tAr.y() + tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,curVl)):curVl)-vsMinT)/(vsMaxT-vsMinT))));
@@ -3159,7 +3194,7 @@ void ShapeDiagram::tracing( )
 
     if(!w->isEnabled()) return;
 
-    int64_t trcPer = (int64_t)shD->trcPer*1000000;
+    int64_t trcPer = shD->trcPer*1e6;
     if(shD->tTimeCurent)shD->tTime = (int64_t)time(NULL)*1000000;
     else if(shD->tTime)	shD->tTime += trcPer;
     loadData(w);
@@ -3419,7 +3454,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	}
 
 	// One request check and prepare
-	int trcPer = shD->trcPer*1000000;
+	int trcPer = shD->trcPer*1e6;
 	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
 	{
@@ -3471,8 +3506,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    arh_beg = s2ll(req.attr("tm_grnd"));
 	    arh_end = s2ll(req.attr("tm"));
 	    arh_per = s2ll(req.attr("per"));
-	}
-	catch(TError) { arh_per = arh_beg = arh_end = 0; return; }
+	} catch(TError&) { arh_per = arh_beg = arh_end = 0; return; }
 
     if(!arh_per) return;
 
@@ -3520,6 +3554,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     bbeg = s2ll(req.attr("tm_grnd"));
     bend = s2ll(req.attr("tm"));
     bper = s2ll(req.attr("per"));
+    bool toAprox = s2i(req.attr("aprox"));
 
     if(bbeg <= 0 || bend <= 0 || bper <= 0 || bbeg > bend || req.text().empty()) return;
 
@@ -3536,7 +3571,10 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	}
 	else curPos = maxPos+1;
 	if(curPos < 0 || curPos > (maxPos+1)) break;	//Out of range exit
-	for( ; prevPos < curPos; prevPos++) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	for(int stPos = prevPos; prevPos < curPos; prevPos++)
+	    if(toAprox && prevVal != EVAL_REAL && curVal != EVAL_REAL)
+		buf.push_back(SHg(bbeg+prevPos*bper,prevVal+(curVal-prevVal)*(prevPos-stPos)/(curPos-stPos)));
+	    else buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
 	if(prevPos > maxPos) break;	//Normal exit
 	prevVal = curVal;
     }
@@ -3775,16 +3813,15 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		isDbl = false;
 
     //Check table structure
-    //Clear collumns
+    //Clear columns
     for(int ncl = 0; ncl < shD->addrWdg->columnCount(); ncl++)
-	if(shD->col.find(shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString().toStdString()) == string::npos)
-	{
+	if(shD->col.find(shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString().toStdString()) == string::npos) {
 	    shD->addrWdg->removeColumn(ncl);
 	    ncl--;
 	    newFill = true;
 	}
 
-    //Get collumns indexes
+    //Get columns indexes
     int c_tm = -1, c_tmu = -1, c_lev = -1, c_cat = -1, c_mess = -1;
     shD->addrWdg->verticalHeader()->setVisible(false);
     string clm;
@@ -4245,8 +4282,7 @@ string ShapeDocument::ShpDt::toHtml( )
     // Parse document
     XMLNode xproc("body");
     try{ if(!doc.empty()) xproc.load(string(XHTML_entity)+doc, true, Mess->charset()); }
-    catch(TError err)
-    { mess_err(mod->nodePath().c_str(), _("Document parsing error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_err(mod->nodePath().c_str(), _("Document parsing error: %s"), err.mess.c_str()); }
 
     nodeProcess(&xproc);
 
@@ -4329,7 +4365,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
     switch(uiPrmPos) {
 	case A_COM_LOAD:
 	    up = true;
-	    if(runW && shD->inclWidget)	shD->inclWidget->setMinimumSize(w->size());
+	    if(runW && shD->inclPg)	shD->inclPg->setMinimumSize(w->size());
 	    break;
 	case A_COM_FOCUS: break;
 	case A_EN:
@@ -4394,17 +4430,17 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    if(!runW || runP)	{ up = false; break; }
 
 	    //Put previous include widget to page cache
-	    if((shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty())) {
-		if(shD->inclWidget) {
-		    shD->inclWidget->setReqTm(shD->inclWidget->mainWin()->reqTm());
-		    runW->mainWin()->pgCacheAdd(shD->inclWidget);
-		    shD->inclWidget->setEnabled(false);
-		    shD->inclWidget->setVisible(false);
+	    if((shD->inclPg && val != shD->inclPg->id()) || (!shD->inclPg && !val.empty())) {
+		if(shD->inclPg) {
+		    shD->inclPg->setReqTm(shD->inclPg->mainWin()->reqTm());
+		    runW->mainWin()->pgCacheAdd(shD->inclPg);
+		    shD->inclPg->setEnabled(false);
+		    shD->inclPg->setVisible(false);
 		    shD->inclScrl->takeWidget();
-		    shD->inclWidget->setParent(NULL);
-		    shD->inclWidget->wx_scale = shD->inclWidget->mainWin()->xScale();
-		    shD->inclWidget->wy_scale = shD->inclWidget->mainWin()->yScale();
-		    shD->inclWidget = NULL;
+		    shD->inclPg->setParent(NULL);
+		    shD->inclPg->wx_scale = shD->inclPg->mainWin()->xScale();
+		    shD->inclPg->wy_scale = shD->inclPg->mainWin()->yScale();
+		    shD->inclPg = NULL;
 		    w->setProperty("inclPg", "");
 		}
 		// Create new include widget
@@ -4419,7 +4455,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			wlay->addWidget(shD->inclScrl);
 		    }
 
-		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()), shD->inclWidget);
+		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()), shD->inclPg);
 		    lab->setAlignment(Qt::AlignCenter);
 		    lab->setWordWrap(true);
 		    lab->resize(w->size());
@@ -4431,36 +4467,33 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shD->inclScrl->setWidget(lab);
 		    qApp->processEvents();
 
-		    shD->inclWidget = runW->mainWin()->pgCacheGet(val);
-		    if(shD->inclWidget) {
-			shD->inclWidget->setProperty("cntPg", TSYS::addr2str(w).c_str());
-			shD->inclScrl->setWidget(shD->inclWidget);
-			shD->inclWidget->setEnabled(true);
-			shD->inclWidget->setVisible(true);
-			shD->inclWidget->setMinimumSize(w->size());
-			if(shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
-				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale())
-			    shD->inclWidget->load("");
+		    shD->inclPg = runW->mainWin()->pgCacheGet(val);
+		    if(shD->inclPg) {
+			shD->inclPg->setProperty("cntPg", TSYS::addr2str(w).c_str());
+			shD->inclScrl->setWidget(shD->inclPg);
+			shD->inclPg->setEnabled(true);
+			shD->inclPg->setVisible(true);
+			shD->inclPg->setMinimumSize(w->size());
+			if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
+				shD->inclPg->wy_scale != shD->inclPg->mainWin()->yScale())
+			    shD->inclPg->load("");
 			else {
-			    unsigned trt = shD->inclWidget->mainWin()->reqTm();
-			    shD->inclWidget->mainWin()->setReqTm(shD->inclWidget->reqTm());
-			    shD->inclWidget->update(false);
-			    shD->inclWidget->mainWin()->setReqTm(trt);
+			    unsigned trt = shD->inclPg->mainWin()->reqTm();
+			    shD->inclPg->mainWin()->setReqTm(shD->inclPg->reqTm());
+			    shD->inclPg->update(false);
+			    shD->inclPg->mainWin()->setReqTm(trt);
 			}
 		    }
 		    else {
-			shD->inclWidget = new RunPageView(val, (VisRun*)w->mainWin(), shD->inclScrl, Qt::SubWindow);
-			shD->inclWidget->setProperty("cntPg", TSYS::addr2str(w).c_str());
-			shD->inclScrl->setWidget(shD->inclWidget);
-			shD->inclWidget->setMinimumSize(w->size());
-			if(shD->inclWidget->sizeOrigF().width() <= w->sizeOrigF().width() &&
-				shD->inclWidget->sizeOrigF().height() <= w->sizeOrigF().height())
-			    shD->inclWidget->setMaximumSize(w->size());
-			//shD->inclWidget->load("");
+			shD->inclPg = new RunPageView(val, (VisRun*)w->mainWin(), shD->inclScrl, Qt::SubWindow);
+			shD->inclPg->setProperty("cntPg", TSYS::addr2str(w).c_str());
+			shD->inclScrl->setWidget(shD->inclPg);
+			shD->inclPg->resizeF(shD->inclPg->sizeF());	//To realign
+			//shD->inclPg->load("");			//That does into the constructor
 
-			shD->inclWidget->setAttribute(Qt::WA_WindowPropagation, true);
+			shD->inclPg->setAttribute(Qt::WA_WindowPropagation, true);
 		    }
-		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
+		    w->setProperty("inclPg", TSYS::addr2str(shD->inclPg).c_str());
 		}
 	    } else up = false;
 	    break;
@@ -4479,7 +4512,7 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 
     switch(event->type()) {
 	case QEvent::Paint: {
-	    if(shD->inclWidget) return false;
+	    if(shD->inclPg) return false;
 	    QPainter pnt(w);
 
 	    //Apply margin
@@ -4500,7 +4533,7 @@ bool ShapeBox::event( WdgView *w, QEvent *event )
 	    return true;
 	}
 	//case QEvent::User:
-	//    if(shD->inclWidget) shD->inclWidget->update();
+	//    if(shD->inclPg) shD->inclPg->update();
 	default: return false;
     }
     return false;

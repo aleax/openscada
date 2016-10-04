@@ -26,10 +26,8 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : mElem(NULL)
+TConfig::TConfig( TElem *Elements ) : mRes(true), mElem(NULL)
 {
-    pthread_mutex_init(&mRes, NULL);
-
     setElem(Elements, true);
 }
 
@@ -44,9 +42,6 @@ TConfig::~TConfig( )
 
     mElem->valDet(this);
     if(single) delete mElem;
-
-    pthread_mutex_lock(&mRes);
-    pthread_mutex_destroy(&mRes);
 }
 
 TConfig &TConfig::operator=(TConfig &config)	{ return exclCopy(config); }
@@ -274,9 +269,9 @@ string TCfg::getSEL( )
 
 string TCfg::getS( )
 {
-    pthread_mutex_lock(&mOwner.mRes);
+    mOwner.mRes.lock();
     string rez = TVariant::getS();
-    pthread_mutex_unlock(&mOwner.mRes);
+    mOwner.mRes.unlock();
     return rez;
 }
 
@@ -287,21 +282,20 @@ void TCfg::setS( const string &val )
 	case TVariant::Real:	setR(atof(val.c_str()));	break;
 	case TVariant::Boolean:	setB((bool)atoi(val.c_str()));	break;
 	case TVariant::String: {
-	    pthread_mutex_lock(&mOwner.mRes);
+	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
 	    TVariant::setS(val);
-	    pthread_mutex_unlock(&mOwner.mRes);
+	    mOwner.mRes.unlock();
 	    try {
 		if(!mOwner.cfgChange(*this)) {
-		    pthread_mutex_lock(&mOwner.mRes);
+		    mOwner.mRes.lock();
 		    TVariant::setS(tVal);
-		    pthread_mutex_unlock(&mOwner.mRes);
+		    mOwner.mRes.unlock();
 		}
-	    }
-	    catch(TError err) {
-		pthread_mutex_lock(&mOwner.mRes);
+	    } catch(TError &err) {
+		mOwner.mRes.lock();
 		TVariant::setS(tVal);
-		pthread_mutex_unlock(&mOwner.mRes);
+		mOwner.mRes.unlock();
 		throw;
 	    }
 	    break;
@@ -322,7 +316,7 @@ void TCfg::setR( double val )
 	    double tVal = TVariant::getR();
 	    TVariant::setR(val);
 	    try{ if(!mOwner.cfgChange(*this)) TVariant::setR(tVal); }
-	    catch(TError err) { TVariant::setR(tVal); throw; }
+	    catch(TError &err) { TVariant::setR(tVal); throw; }
 	    break;
 	}
 	default: break;
@@ -341,7 +335,7 @@ void TCfg::setI( int val )
 	    int tVal = TVariant::getI();
 	    TVariant::setI(val);
 	    try{ if(!mOwner.cfgChange(*this)) TVariant::setI(tVal); }
-	    catch(TError err) { TVariant::setI(tVal); throw; }
+	    catch(TError &err) { TVariant::setI(tVal); throw; }
 	    break;
 	}
 	default: break;
@@ -358,7 +352,7 @@ void TCfg::setB( char val )
 	    bool tVal = TVariant::getB();
 	    TVariant::setB(val);
 	    try { if(!mOwner.cfgChange(*this)) TVariant::setB(tVal); }
-	    catch(TError err) { TVariant::setB(tVal); throw; }
+	    catch(TError &err) { TVariant::setB(tVal); throw; }
 	    break;
 	}
 	default: break;

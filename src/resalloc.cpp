@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: resalloc.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -127,7 +126,7 @@ void ResAlloc::request( bool write, unsigned short tm )
 	if(write) mId.resRequestW(tm);
 	else mId.resRequestR(tm);
 	mAlloc = true;
-    } catch(TError err) { if(err.cod!=10) throw; }
+    } catch(TError &err) { if(err.cod!=10) throw; }
 }
 
 void ResAlloc::release( )
@@ -176,14 +175,14 @@ ResString &ResString::operator=( const string &val )	{ setVal(val); return *this
 //***********************************************************
 //* Automatic POSIX mutex allocator/deallocator		    *
 //***********************************************************
-MtxAlloc::MtxAlloc( pthread_mutex_t &iM, bool iLock ) : m(iM),  mLock(false){ if(iLock) lock(); }
+MtxAlloc::MtxAlloc( ResMtx &iM, bool iLock ) : m(iM),  mLock(false){ if(iLock) lock(); }
 
 MtxAlloc::~MtxAlloc( )	{ unlock(); }
 
 int MtxAlloc::lock( )
 {
     if(mLock) return 0;
-    int rez = pthread_mutex_lock(&m);
+    int rez = m.lock();
     if(!rez) mLock = true;
 
     return rez;
@@ -192,7 +191,7 @@ int MtxAlloc::lock( )
 int MtxAlloc::tryLock( )
 {
     if(mLock) return 0;
-    int rez = pthread_mutex_trylock(&m);
+    int rez = m.tryLock();
     if(!rez) mLock = true;
 
     return rez;
@@ -201,7 +200,7 @@ int MtxAlloc::tryLock( )
 int MtxAlloc::unlock( )
 {
     if(!mLock) return 0;
-    int rez = pthread_mutex_unlock(&m);
+    int rez = m.unlock();
     if(!rez) mLock = false;
 
     return rez;
@@ -210,7 +209,7 @@ int MtxAlloc::unlock( )
 //********************************************
 //* String + reference mutex lock for        *
 //********************************************
-MtxString::MtxString( pthread_mutex_t &iM ) : m(iM)	{ }
+MtxString::MtxString( ResMtx &iM ) : m(iM)	{ }
 
 MtxString::~MtxString( )	{ }
 
@@ -220,16 +219,16 @@ bool   MtxString::empty( )	{ return getVal().empty(); }
 
 void MtxString::setVal( const string &vl )
 {
-    pthread_mutex_lock(&m);
+    m.lock();
     str.assign(vl.data(), vl.size());	//Bypass for COW algorithm prevent
-    pthread_mutex_unlock(&m);
+    m.unlock();
 }
 
 string MtxString::getVal( )
 {
-    pthread_mutex_lock(&m);
+    m.lock();
     string rez(str.data(), str.size());	//Bypass for COW algorithm prevent
-    pthread_mutex_unlock(&m);
+    m.unlock();
     return rez;
 }
 

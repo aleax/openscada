@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.7"
+#define MOD_VER		"0.6.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -145,8 +145,7 @@ void TWEB::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(uPgAt(db_ls[i_it]).at().DB()))
 		    uPgDel(db_ls[i_it]);
 	}
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new user page error."));
     }
@@ -293,8 +292,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 
 	up.at().cntReq++;
 	return;
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	page = TSYS::strMess(_("Page '%s' error: %s"),urli.c_str(),err.mess.c_str());
 	page = httpHead("404 Not Found",page.size())+page;
 	return;
@@ -370,8 +368,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	up.at().cntReq++;
 	return;
 
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	page = "Page '"+url+"' error: "+err.mess;
 	page = httpHead("404 Not Found",page.size())+page;
 	return;

@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2015 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2016 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -196,7 +196,7 @@ class VCAElFigure : public VCAObj
 	vector<ShapeItem> shapeItems;
 	vector<InundationItem> inundationItems;
 
-	pthread_mutex_t	mRes;
+	ResMtx	mRes;
 };
 
 //*************************************************
@@ -260,7 +260,7 @@ class VCAText : public VCAObj
 		textFont;	//The text's font
 	vector<ArgObj>	args;	//The argument's vector
 
-	pthread_mutex_t	mRes;
+	ResMtx	mRes;
 };
 
 //*************************************************
@@ -387,7 +387,7 @@ class VCADiagram : public VCAObj
 	//Attributes
 	vector<TrendObj> trnds;			//Trends container
 
-	pthread_mutex_t	mRes;
+	ResMtx	mRes;
 };
 
 //*************************************************

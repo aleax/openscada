@@ -551,22 +551,22 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_view->addAction(elFigTool->toggleViewAction());
     mn_view->addSeparator();
     //> Init status bar
-    mWUser = new UserStBar( open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
+    mWUser = new UserStBar(open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
     mWUser->setWhatsThis(_("This label displays current user."));
     mWUser->setToolTip(_("Field for display the current user."));
     mWUser->setStatusTip(_("Double click to change user."));
     statusBar()->insertPermanentWidget(0,mWUser);
-    mWStat = new QLabel( VCAStation().c_str(), this );
+    mWStat = new QLabel(VCAStation().c_str(), this);
     mWStat->setWhatsThis(_("This label displays the using VCA engine station."));
     mWStat->setToolTip(_("Field for display of the using VCA engine station."));
-    statusBar()->insertPermanentWidget(0,mWStat);
-    w_scale = new WScaleStBar( this );
+    statusBar()->insertPermanentWidget(0, mWStat);
+    w_scale = new WScaleStBar(this);
     w_scale->setWhatsThis(_("This label displays widgets' scaling mode."));
     w_scale->setToolTip(_("Field for display widgets' scaling mode."));
     w_scale->setStatusTip(_("Click to change widgets' scaling mode."));
     statusBar()->insertPermanentWidget(0,w_scale);
     mStModify = new WMdfStBar( this );
-    connect( mStModify, SIGNAL(press()), this, SLOT(itDBSave()) );
+    connect(mStModify, SIGNAL(press()), this, SLOT(itDBSave()));
     mStModify->setWhatsThis(_("This label displays modifying."));
     mStModify->setToolTip(_("Field for display modifying."));
     mStModify->setStatusTip(_("Click to save all modifyings."));
@@ -594,24 +594,25 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     attrInsp = new InspAttrDock(this);
     connect(attrInsp, SIGNAL(modified(const string &)), this, SIGNAL(modifiedItem(const string &)));
-    //connect(attrInsp, SIGNAL(modified(const string &)), this, SLOT(modifyToolUpdate(const string &)));
     attrInsp->setWhatsThis(_("Dock window for widget's attributes inspection."));
     lnkInsp  = new InspLnkDock(this);
     lnkInsp->setWhatsThis(_("Dock window for widget's links inspection."));
-    addDockWidget(Qt::LeftDockWidgetArea,attrInsp);
-    addDockWidget(Qt::LeftDockWidgetArea,lnkInsp);
+    addDockWidget(Qt::LeftDockWidgetArea, attrInsp);
+    addDockWidget(Qt::LeftDockWidgetArea, lnkInsp);
     tabifyDockWidget(attrInsp,lnkInsp);
     mn_view->addAction(attrInsp->toggleViewAction());
     mn_view->addAction(lnkInsp->toggleViewAction());
     mn_view->addSeparator();
 
-    //> Create timers
-    //>> Main widget's work timer
+    connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(modifyGlbStUpdate()));
+
+    //Create timers
+    // Main widget's work timer
     work_wdgTimer = new QTimer(this);
     work_wdgTimer->setSingleShot(true);
     work_wdgTimer->setInterval(200);
     connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));
-    //>> End run timer
+    // End run timer
     endRunTimer   = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
@@ -626,8 +627,8 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     setWindowState(Qt::WindowMaximized);
     menuBar()->setVisible(true);
 
-    wdgTree->updateTree();
-    prjTree->updateTree();
+    wdgTree->updateTree("", true);	//Initial for allow the widgets loading on the server side mostly
+    prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly
 
     //Restore main window state
     string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()),TSYS::base64);
@@ -690,11 +691,11 @@ QString VisDevelop::getFileName(const QString &caption, const QString &dir, cons
     return "";
 }
 
-string VisDevelop::user( )	{ return mWUser->user().toStdString(); }
+string VisDevelop::user( )	{ return mWUser->user(); }
 
-string VisDevelop::password( )	{ return mWUser->pass().toStdString(); }
+string VisDevelop::password( )	{ return mWUser->pass(); }
 
-string VisDevelop::VCAStation( )	{ return mWUser->VCAStation().toStdString(); }
+string VisDevelop::VCAStation( )	{ return mWUser->VCAStation(); }
 
 bool VisDevelop::wdgScale( )		{ return w_scale->scale(); }
 
@@ -833,9 +834,9 @@ void VisDevelop::quitSt( )
 void VisDevelop::about( )
 {
     QMessageBox::about(this,windowTitle(),
-	QString(_("%1 v%2.\n%3\nAuthor: %4\nDevelopers: %5\nLicense: %6\n\n%7 v%8.\n%9\nLicense: %10\nAuthor: %11\nWeb site: %12")).
+	QString(_("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11")).
 	    arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description").c_str()).
-	    arg(mod->modInfo("Author").c_str()).arg(mod->modInfo(_("Developers")).c_str()).arg(mod->modInfo("License").c_str()).
+	    arg(mod->modInfo("Author").c_str()).arg(mod->modInfo("License").c_str()).
 	    arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
 }
 
@@ -857,6 +858,7 @@ void VisDevelop::applyWorkWdg( )
     if(winClose) return;
 
     modifyToolUpdate(work_wdg_new);
+    modifyGlbStUpdate(true);
 
     //Set/update attributes inspector
     attrInsp->setWdg(work_wdg_new);
@@ -907,11 +909,17 @@ void VisDevelop::modifyToolUpdate( const string &wdgs )
 	    actDBSave->setEnabled(true);
 	}
     }
+}
 
-    //Request global VCA modify
-    mStModify->setText(" ");
-    req.setAttr("path","/%2fobj");
-    if(!cntrIfCmd(req) && s2i(req.text())) mStModify->setText("*");
+void VisDevelop::modifyGlbStUpdate( bool check )
+{
+    if(!check) mStModify->setText("*");
+    else {
+        //Request global VCA modify
+	XMLNode req("modify");
+	req.setAttr("path", "/%2fobj");
+	mStModify->setText((!cntrIfCmd(req) && s2i(req.text()))?"*":" ");
+    }
 }
 
 void VisDevelop::updateMenuWindow( )
@@ -996,6 +1004,7 @@ void VisDevelop::itDBSave( )
 	}
     }
     modifyToolUpdate(own_wdg);
+    modifyGlbStUpdate(true);
 }
 
 void VisDevelop::prjRun( )
@@ -1232,8 +1241,7 @@ void VisDevelop::visualItProp( )
 void VisDevelop::visualItEdit( )
 {
     string ed_wdg;
-    for(int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
-    {
+    for(int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); ) {
 	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
 
 	//Check to already opened widget window

@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tparamcontr.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,14 +61,16 @@ class TParamContr : public TConfig, public TValue
 	string	name( );
 	string	descr( );
 	bool toEnable( )	{ return cfg("EN").getB(); }
-	bool enableStat( )	{ return m_en; }
+	bool enableStat( )	{ return mEn; }
 	bool dataActive( );
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
 	void setToEnable( bool vl )		{ cfg("EN").setB(vl); modif(); }
 
-	TTipParam &type( )	{ return *tipparm; }
+	TTipParam &type( )	{ return *tpParm; }
+
+	virtual TElem *dynElCntr( )	{ return NULL; }
 
 	virtual void enable( );			// Enable parameter and open access to value
 	virtual void disable( );		// Disable parameter and close access to value
@@ -80,6 +81,9 @@ class TParamContr : public TConfig, public TValue
 	TParamContr &operator=( TParamContr & PrmCntr );
 
 	TController &owner( );
+
+	//Attributes
+	time_t	mRdPrcTm;	//Redundancy processing time, mostly for the dynamic DAQ attributes
 
     protected:
 	//Methods
@@ -105,11 +109,10 @@ class TParamContr : public TConfig, public TValue
 	const char *nodeName( )	{ return mId.c_str(); }
 
 	//Attributes
-	bool	m_en;
+	bool	mEn;
 	string	mId;
-	TElem	el_err;		//Error atributes
 
-	TTipParam	*tipparm;
+	TTipParam *tpParm;
 };
 
 }

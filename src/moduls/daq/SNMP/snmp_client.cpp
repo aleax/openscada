@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.7"
+#define MOD_VER		"0.7.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -101,7 +100,7 @@ void TTpContr::postEnable( int flag )
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
     fldAdd(new TFld("RETR",_("Retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
     fldAdd(new TFld("TM",_("Timeout (sec)"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
@@ -121,26 +120,16 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
-    TController(name_c,daq_db,cfgelem),
+    TController(name_c,daq_db,cfgelem), enRes(true),
     mPrior(cfg("PRIOR").getId()), mPattrLim(cfg("PATTR_LIM").getId()), mRetr(cfg("RETR").getId()), mTm(cfg("TM").getId()),
-    prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes)
+    prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes())
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&enRes, &attrM);
-    pthread_mutex_init(&dataRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
-
-    pthread_mutex_destroy(&enRes);
-    pthread_mutex_destroy(&dataRes);
 }
 
 string TMdContr::getStatus( )
@@ -317,7 +306,7 @@ void *TMdContr::Task( void *icntr )
 	MtxAlloc res(cntr.enRes, true);
 	for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
 	    try { cntr.pHd[i_p].at().upVal(ss); }
-	    catch(TError err) { daqerr = err.mess; }
+	    catch(TError &err) { daqerr = err.mess; }
 	res.unlock();
 	cntr.tmGath = TSYS::curTime()-t_cnt;
 	cntr.callSt = false;
@@ -449,7 +438,7 @@ void TMdPrm::enable( )
 	void *ss =  snmp_sess_open(owner().getSess());
 	if(ss) {
 	    try { upVal(ss,true); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		owner().prmEnErr = true;
 		mess_err(nodePath().c_str(),"%s",err.mess.c_str());
 	    }
@@ -498,8 +487,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	    int status = snmp_sess_synch_response(ss, pdu, &response);
 	    if(status == STAT_SUCCESS && response && response->errstat == SNMP_ERR_NOERROR)
 		for(var = response->variables; var; var = var->next_variable) {
-		    if((var->name_length < oid_root_len) || (memcmp(oid_root,var->name,oid_root_len*sizeof(oid)) != 0))
-		    {
+		    if((var->name_length < oid_root_len) || (memcmp(oid_root,var->name,oid_root_len*sizeof(oid)) != 0)) {
 			running = false;
 			continue;
 		    }
@@ -520,16 +508,14 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 				flg |= TFld::NoWrite;
 			    if(subtree->enums) {
 				flg |= TFld::Selected;
-				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next)
-				{
+				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next) {
 				    selIds += i2s(enums->value)+";";
 				    selLabs += string(enums->label)+";";
 				}
 			    }
 			}
 
-			switch(var->type)
-			{
+			switch(var->type) {
 			    case ASN_BOOLEAN:		tp = TFld::Boolean;	break;
 			    case ASN_INTEGER:		tp = TFld::Integer;	break;
 			    case ASN_OPAQUE_FLOAT:
@@ -636,7 +622,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 		break;
 	if(i_l >= als.size())
 	    try{ elem().fldDel(i_p); i_p--; }
-	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 }
 

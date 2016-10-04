@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.h
 /***************************************************************************
- *   Copyright (C) 2006-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2006-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,6 +50,8 @@ class TMdPrm : public TParamContr
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
+
+	TElem *dynElCntr( )	{ return &pEl; }
 
 	TCntrNode &operator=( TCntrNode &node );
 
@@ -115,7 +116,8 @@ class TMdPrm : public TParamContr
 
 	bool	chkLnkNeed;			//Check lnk need flag
 	Res	calcRes;			//Resource
-	int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
+	int	idFreq, idStart, idStop,
+		idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 };
 
 //*************************************************
@@ -153,7 +155,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	pthread_mutex_t	enRes;			//Resource for enable params
+	ResMtx	enRes;				//Resource for enable params
 	int	&mPerOld,			// ms
 		&mPrior;			// Process task priority
 

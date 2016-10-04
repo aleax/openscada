@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,15 +40,17 @@ class ModMArch: public TMArchivator
 	~ModMArch( );
 
 	string archTbl( )		{ return "DBAMsg_"+id(); }
-	double maxSize( )		{ return mMaxSize; }
+	double maxSize( )		{ return mMaxSize; }	//In days
+	bool tmAsStr( )			{ return mTmAsStr; }
 
-	void setMaxSize( double vl )	{ mMaxSize = vl; modif(); }
+	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
+	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
 
 	time_t begin( );
 	time_t end( );
 
 	bool put( vector<TMess::SRec> &mess );
-	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
+	time_t get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
 
 	void start( );
 	void stop( );
@@ -64,9 +65,12 @@ class ModMArch: public TMArchivator
 
     private:
 	//Attributes
-	double	tm_calc;			//Archiving time
+	double	tmProc;				//Archiving/processing time
 	time_t	mBeg, mEnd;
 	double	mMaxSize;			//Maximum archive size (hours)
+	bool	mTmAsStr;			//Store time as pure integer
+
+	TElem	reqEl;				//Requests structure
 };
 
 }

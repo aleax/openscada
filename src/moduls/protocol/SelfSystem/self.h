@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +25,11 @@
 
 #undef _
 #define _(mess) mod->I18N(mess)
+
+#define ERR_NO		"0"
+#define ERR_AUTH	"1"
+#define ERR_PRC		"2"
+#define ERR_CMD		"3"
 
 using namespace OSCADA;
 
@@ -67,7 +71,7 @@ class TProt: public TProtocol
 
 		//Attributes
 		time_t	tAuth;
-		string	name, src;
+		string	name, src, pHash;
 	};
 
 	//Methods
@@ -87,6 +91,7 @@ class TProt: public TProtocol
 	int sesOpen( const string &user, const string &pass, const string &src = "" );
 	void sesClose( int idSes );
 	SAuth sesGet( int idSes );
+	void sesSet( int idSes, const SAuth &auth );
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -100,9 +105,8 @@ class TProt: public TProtocol
 	TProtocolIn *in_open( const string &name );
 
 	//Attributes
-	pthread_mutex_t	sesRes;
 	map<int, SAuth>	mAuth;
-	int		mTAuth, mComprLev, mComprBrd, mSingleUserHostLimit;
+	int	mTAuth, mComprLev, mComprBrd, mSingleUserHostLimit;
 };
 
 extern TProt *mod;

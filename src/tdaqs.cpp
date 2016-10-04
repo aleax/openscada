@@ -33,35 +33,35 @@ using namespace OSCADA;
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
-TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
+TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), mElErr("Error"),
     mRdStLevel(0), mRdRestConnTm(30), mRdTaskPer(1), mRdRestDtTm(1), mRdPrcTm(0), prcStRd(false), endrunRd(false)
 {
-    mTmplib = grpAdd("tmplb_");
+    mTmpLib = grpAdd("tmplb_");
 
     //> Templates lib db structure
-    lb_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
-    lb_el.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
+    mElLib.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElLib.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    mElLib.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
+    mElLib.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
 
     //> Template DB structure
-    el_tmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_tmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_tmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
-    el_tmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    el_tmpl.fldAdd(new TFld("PROGRAM",_("Template program"),TFld::String,TCfg::TransltText,"1000000"));
+    mElTmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElTmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    mElTmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
+    mElTmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
+    mElTmpl.fldAdd(new TFld("PROGRAM",_("Program"),TFld::String,TCfg::TransltText,"1000000"));
 
     //> Parameter template IO DB structure
-    el_tmpl_io.fldAdd(new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_tmpl_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_tmpl_io.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_tmpl_io.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
-    el_tmpl_io.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
-    el_tmpl_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50"));
-    el_tmpl_io.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
+    mElTmplIO.fldAdd(new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElTmplIO.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    mElTmplIO.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    mElTmplIO.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    mElTmplIO.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    mElTmplIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50"));
+    mElTmplIO.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 
-    //> Error attributes
-    el_err.fldAdd( new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead) );
+    //Error attributes
+    mElErr.fldAdd(new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
 }
 
 TDAQS::~TDAQS( )
@@ -72,14 +72,6 @@ TDAQS::~TDAQS( )
 }
 
 string TDAQS::objName( )		{ return TSubSYS::objName()+":TDAQS"; }
-
-void TDAQS::setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); modif(); }
-
-void TDAQS::setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }
-
-void TDAQS::setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); modif(); }
-
-void TDAQS::setRdRestDtTm( float vl )	{ mRdRestDtTm = vmin(12,vmax(0.01,vl)); modif(); }
 
 void TDAQS::rdStList( vector<string> &ls )
 {
@@ -147,7 +139,7 @@ void TDAQS::load_( )
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
         if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    map<string, bool>   itReg;
+    map<string, bool>	itReg;
 
     //Load templates libraries of parameter
     try {
@@ -157,11 +149,10 @@ void TDAQS::load_( )
 	vector<string> db_ls;
 
 	//>> Search into DB
-	SYS->db().at().dbList(db_ls,true);
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),nodePath()+"tmplib",lib_cnt++,c_el); )
-	    {
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),nodePath()+"tmplib",lib_cnt++,c_el); ) {
 		string l_id = c_el.cfg("ID").getS();
 		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
 		itReg[l_id] = true;
@@ -174,8 +165,7 @@ void TDAQS::load_( )
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(tmplLibAt(db_ls[i_it]).at().DB()))
 		    tmplLibUnreg(db_ls[i_it]);
         }
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load template's libraries error."));
     }
@@ -193,7 +183,7 @@ void TDAQS::load_( )
 	    itReg.clear();
 
 	    //>> Search into DB and create new controllers
-	    SYS->db().at().dbList(db_ls,true);
+	    SYS->db().at().dbList(db_ls, true);
 	    db_ls.push_back(DB_CFG);
 	    for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 		for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
@@ -202,8 +192,7 @@ void TDAQS::load_( )
 		    try {
 			if(!wmod.at().present(m_id)) wmod.at().add(m_id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 			itReg[m_id] = true;
-		    }
-		    catch(TError err) {
+		    } catch(TError &err) {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 			mess_err(wmod.at().nodePath().c_str(),_("Add controller '%s' error."),m_id.c_str());
 		    }
@@ -215,7 +204,7 @@ void TDAQS::load_( )
                 if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(db_ls[i_it]).at().DB()))
                     wmod.at().del(db_ls[i_it]);
 	}
-    }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //> Load parameters from config-file and SYS DB
     setRdStLevel(s2i(TBDS::genDBGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
@@ -244,78 +233,97 @@ void TDAQS::save_( )
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // bool funcCall(string progLang, TVarObj args, string prog) - call function text <prog> whith arguments <args> for program language <progLang>.
-    //		Return "true" on well call.
-    //  progLang - program procedure language;
+    // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "") -
+    //    Call function text <prog> whith arguments <args> for program language <progLang>
+    //    and with the fixed identifier <fixId> (automatic for this empty). Return "true" on a well call.
+    //    For the fixed function recreate you need change the program or clean up <fixId> by the function original id.
+    //  progLang - program procedure language or the stored function's address, after call with <store>;
     //  args - function arguments;
-    //  prog - function text.
+    //  prog - function text;
+    //  fixId - two direction field of fixed identifier of the function;
+    //          for the field empty the function id will be automatic and destroy at end,
+    //          else the id will used on the function creation and replaced by an address to it.
     if(iid == "funcCall" && prms.size() >= 3 && prms[1].type() == TVariant::Object) {
-	string langMod = TSYS::strParse(prms[0].getS(),0,".");
-	if(!modPresent(langMod)) return false;
-	TVariant aVal;
+	string fixId = (prms.size() >= 4) ? prms[3].getS() : "";
+	string faddr;
+	AutoHD<TFunction> wFnc; if(fixId.size()) wFnc = SYS->nodeAt(fixId, 0, 0, 0, true);
 	AutoHD<TVarObj> args = prms[1].getO();
+	vector<string> als; args.at().propList(als);
+	TVariant aVal;
 
 	try {
-	    //> Prepare arguments structure
-	    TFunction argStr("<auto>");
-	    vector<string> als;
-	    args.at().propList(als);
-	    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-		aVal = args.at().propGet(als[i_a]);
-		IO::Type tp = IO::String;
-		switch(aVal.type()) {
-        	    case TVariant::Boolean:	tp = IO::Boolean;	break;
-        	    case TVariant::Integer:	tp = IO::Integer;	break;
-		    case TVariant::Real:	tp = IO::Real;		break;
-        	    case TVariant::String:	tp = IO::String;	break;
-        	    case TVariant::Object:	tp = IO::Object;	break;
-		    default:	break;
-		}
-		argStr.ioAdd(new IO(als[i_a].c_str(),als[i_a].c_str(),tp,IO::Default));
-	    }
+	    //New call environment preparing or modifying presented
+	    if(wFnc.freeStat() || prms[2].getS() != wFnc.at().prog()) {
+		// Update present function
+		if(!wFnc.freeStat()) { wFnc.at().setStart(false); wFnc.at().setProg(prms[2].getS()); wFnc.at().setStart(true); }
+		else {
+		    string langMod = TSYS::strParse(prms[0].getS(), 0, ".");
+		    if(!modPresent(langMod)) return false;
 
-	    //> Get function id and compile.
-	    string faddr = at(langMod).at().compileFunc(TSYS::strParse(prms[0].getS(),1,"."), argStr, prms[2].getS());
-	    AutoHD<TFunction> wFnc = SYS->nodeAt(faddr);
+		    //Prepare arguments structure
+		    TFunction argStr(fixId.size()?"uf_"+TSYS::strEncode(fixId,TSYS::oscdID):"<auto>");
+		    for(unsigned iA = 0; iA < als.size(); iA++) {
+			aVal = args.at().propGet(als[iA]);
+			IO::Type tp = IO::String;
+			switch(aVal.type()) {
+			    case TVariant::Boolean:	tp = IO::Boolean;	break;
+			    case TVariant::Integer:	tp = IO::Integer;	break;
+			    case TVariant::Real:	tp = IO::Real;		break;
+			    case TVariant::String:	tp = IO::String;	break;
+			    case TVariant::Object:	tp = IO::Object;	break;
+			    default:	break;
+			}
+			argStr.ioAdd(new IO(als[iA].c_str(),als[iA].c_str(),tp,IO::Default));
+		    }
+
+		    //Get function id and compile.
+		    faddr = at(langMod).at().compileFunc(TSYS::strParse(prms[0].getS(),1,"."), argStr, prms[2].getS());
+		    wFnc = SYS->nodeAt(faddr);
+		}
+	    }
+	    //Prepare and execute
 	    TValFunc wCtx("UserFunc", &wFnc.at(), true, user);
 
-	    //> Load values
-	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
-		switch((aVal=args.at().propGet(als[i_a])).type()) {
-        	    case TVariant::Boolean:	wCtx.setB(i_a, aVal.getB());	break;
-        	    case TVariant::Integer:	wCtx.setI(i_a, aVal.getI());	break;
-		    case TVariant::Real:	wCtx.setR(i_a, aVal.getR());	break;
-        	    case TVariant::String:	wCtx.setS(i_a, aVal.getS());	break;
-        	    case TVariant::Object:	wCtx.setO(i_a, aVal.getO());	break;
+	    // Load values
+	    for(unsigned iA = 0; iA < als.size(); iA++)
+		switch((aVal=args.at().propGet(als[iA])).type()) {
+		    case TVariant::Boolean:	wCtx.setB(iA, aVal.getB());	break;
+		    case TVariant::Integer:	wCtx.setI(iA, aVal.getI());	break;
+		    case TVariant::Real:	wCtx.setR(iA, aVal.getR());	break;
+		    case TVariant::String:	wCtx.setS(iA, aVal.getS());	break;
+		    case TVariant::Object:	wCtx.setO(iA, aVal.getO());	break;
 		    default:	break;
 		}
 
-	    //> Call function
+	    // Call function
 	    wCtx.calc();
 
-	    //> Place call result and remove function object.
-	    for(int i_a = 0; i_a < wCtx.ioSize(); i_a++)
-		switch(wCtx.ioType(i_a)) {
-        	    case IO::Boolean:	args.at().propSet(als[i_a], wCtx.getB(i_a));	break;
-        	    case IO::Integer:	args.at().propSet(als[i_a], wCtx.getI(i_a));	break;
-		    case IO::Real:	args.at().propSet(als[i_a], wCtx.getR(i_a));	break;
-        	    case IO::String:	args.at().propSet(als[i_a], wCtx.getS(i_a));	break;
-        	    case IO::Object:	args.at().propSet(als[i_a], wCtx.getO(i_a));	break;
+	    // Place the call results and remove function object.
+	    for(int iA = 0; iA < wCtx.ioSize(); iA++)
+		switch(wCtx.ioType(iA)) {
+		    case IO::Boolean:	args.at().propSet(als[iA], wCtx.getB(iA));	break;
+		    case IO::Integer:	args.at().propSet(als[iA], wCtx.getI(iA));	break;
+		    case IO::Real:	args.at().propSet(als[iA], wCtx.getR(iA));	break;
+		    case IO::String:	args.at().propSet(als[iA], wCtx.getS(iA));	break;
+		    case IO::Object:	args.at().propSet(als[iA], wCtx.getO(iA));	break;
 		    default:	break;
 		}
 
-	    //> Remove compiled function object
+	    // Remove compiled function object
 	    wCtx.setFunc(NULL);
-	    wFnc.free();
-	    try{ SYS->nodeDel(faddr); } catch (TError) { }
+		wFnc.free();
+		if(faddr.size()) {
+		    if(fixId.size()) { prms[3].setS(faddr); prms[3].setModify(); }
+		    else SYS->nodeDel(faddr);
+		}
 
 	    return true;
-	}catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	return false;
     }
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TDAQS::subStart( )
@@ -334,7 +342,7 @@ void TDAQS::subStart( )
 	tmplLibList(tmpl_lst);
 	for(unsigned i_lb = 0; i_lb < tmpl_lst.size(); i_lb++)
 	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
-	    catch(TError err) {
+	    catch(TError &err) {
 		if(try_cnt) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Start template library '%s' error."),tmpl_lst[i_lb].c_str());
@@ -351,7 +359,7 @@ void TDAQS::subStart( )
 		AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 		if(/*!cntr.at().enableStat() &&*/ cntr.at().toEnable())
 		    try{ cntr.at().enable(); }
-		    catch(TError err) {
+		    catch(TError &err) {
 			if(try_cnt) {
 			    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 			    mess_err(nodePath().c_str(),_("Enable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
@@ -392,7 +400,7 @@ void TDAQS::subStop( )
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 	    if(cntr.at().startStat())
 		try{ cntr.at().stop(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Stop controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
@@ -406,7 +414,7 @@ void TDAQS::subStop( )
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
 	    if(cntr.at().enableStat())
 		try{ cntr.at().disable(); }
-		catch(TError err) {
+		catch(TError &err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Disable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
 		}
@@ -432,8 +440,7 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
 	bool lastEl = (c_lv > 2 && c_off >= (int)path.size());
 	if(waitForAttr && lastEl) c_grp = "a_";
 	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
-	if(tNd.freeStat() && !(strcmp(c_grp,"a_") && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+c_el,0,sep,0,true)).freeStat()))
-	{
+	if(tNd.freeStat() && !(strcmp(c_grp,"a_") && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+c_el,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
 	    else throw TError(nodePath().c_str(),_("No DAQ node present '%s'."),path.c_str());
 	}
@@ -665,7 +672,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Restore data depth time (hour)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Depth time of restoring data at start, hours"),RWRWR_,"root",SDAQ_ID,1, "tp","real");
 	    if(ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root",SDAQ_ID,2,"key","st","s_com","add,del"))
 	    {
 		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/redund/lsSt");
@@ -700,8 +707,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    tmplLibList(lst);
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(tmplLibAt(lst[i_a]).at().name());
+	    for(unsigned iA = 0; iA < lst.size(); iA++)
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(tmplLibAt(lst[iA]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibReg(new TPrmTmplLib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
@@ -759,10 +766,10 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/redund/lsSt" && ctrChkNode(opt)) {
-	vector<string> hls;
-	SYS->transport().at().extHostList("*",hls);
-	for(unsigned i_h = 0; i_h < hls.size(); i_h++)
-	    opt->childAdd("el")->setText(hls[i_h]);
+	vector<TTransportS::ExtHost> hls;
+	SYS->transport().at().extHostList("*", hls);
+	for(unsigned iH = 0; iH < hls.size(); iH++)
+	    opt->childAdd("el")->setText(hls[iH].id);
     }
     else if(a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/redund/cntr") {

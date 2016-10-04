@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,7 +95,7 @@ class TModSchedul : public TSubSYS
 
 	int		mPer;				//Check to new modules period
 
-	pthread_mutex_t	schM;
+	ResMtx		schM;
 	vector<SHD>	schHD;
 };
 

@@ -153,15 +153,15 @@ namespace VISION
 	Q_OBJECT
 
 	public:
-	    UserStBar( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0 );
+	    UserStBar( const string &iuser, const string &ipass, const string &iVCAstat, QWidget *parent = 0 );
 
-	    QString user( )		{ return user_txt; }
-	    QString pass( )		{ return user_pass; }
-	    QString VCAStation( )	{ return VCA_stat; }
+	    string user( )		{ return userTxt; }
+	    string pass( )		{ return userPass; }
+	    string VCAStation( )	{ return VCAStat; }
 
-	    void setUser( const QString &val );
-	    void setPass( const QString &val )		{ user_pass = val; }
-	    void setVCAStation( const QString &val )	{ VCA_stat = val.isEmpty() ? "." : val; }
+	    void setUser( const string &val );
+	    void setPass( const string &val )		{ userPass = val; }
+	    void setVCAStation( const string &val )	{ VCAStat = val.empty() ? "." : val; }
 
 	    bool userSel( );
 
@@ -172,7 +172,8 @@ namespace VISION
 	    bool event( QEvent *event );
 
 	private:
-	    QString	user_txt, user_pass, VCA_stat;
+	    ResMtx	resData;
+	    MtxString	userTxt, userPass, VCAStat;
     };
 
     //*********************************************************************************************
@@ -341,7 +342,7 @@ namespace VISION
 
 	    virtual int cntrIfCmd( XMLNode &node, bool glob = false )	{ return 1; };
 
-            //Attributes
+	    //Attributes
 	    void	*shpData;	//Shape data link
 	    bool	isReload;	//Set if widget updated
 

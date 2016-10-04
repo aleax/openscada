@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.1"
+#define MOD_VER		"1.3.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
 #define LICENSE		"GPL2"
@@ -161,23 +161,15 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 //************************************************
 //* TSocketIn                                    *
 //************************************************
-TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el), ctx(NULL),
+TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el), sockRes(true), ctx(NULL),
     mMaxFork(20), mMaxForkPerHost(0), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&sockRes, &attrM);
-    pthread_mutex_init(&mDataRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     setAddr("localhost:10042");
 }
 
 TSocketIn::~TSocketIn( )
 {
-    pthread_mutex_destroy(&sockRes);
-    pthread_mutex_destroy(&mDataRes);
+
 }
 
 string TSocketIn::getStatus( )
@@ -208,7 +200,7 @@ void TSocketIn::load_( )
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
 	if( prmNd.childGet("CertKey",0,true) ) mCertKey = prmNd.childGet("CertKey")->text();
 	mKeyPass = prmNd.attr("PKeyPass");
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TSocketIn::save_( )
@@ -260,9 +252,9 @@ void TSocketIn::stop( )
 
 unsigned TSocketIn::forksPerHost( const string &sender )
 {
-    pthread_mutex_lock(&sockRes);
+    sockRes.lock();
     unsigned rez = clS[sender];
-    pthread_mutex_unlock(&sockRes);
+    sockRes.unlock();
 
     return rez;
 }
@@ -395,16 +387,14 @@ void *TSocketIn::Task( void *sock_in )
 		try {
 		    SYS->taskCreate(s.nodePath('.',true)+"."+i2s(BIO_get_fd(cbio,NULL)), s.taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    s.connNumb++;
-		}
-		catch(TError err) {
+		} catch(TError &err) {
 		    delete sin;
 		    mess_err(err.cat.c_str(), err.mess.c_str());
 		    mess_err(s.nodePath().c_str(), _("Error creation of the thread!"));
 		}
 	    }
 	}
-    }
-    catch(TError err)	{ s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Client tasks stop command
     s.endrunCl = true;
@@ -490,9 +480,9 @@ void *TSocketIn::ClTask( void *s_inf )
 	    mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
 #endif
 	    req.assign(buf, rez);
-	    pthread_mutex_lock(&s.s->dataRes());
+	    s.s->dataRes().lock();
 	    s.s->trIn += rez; s.trIn += rez;
-	    pthread_mutex_unlock(&s.s->dataRes());
+	    s.s->dataRes().unlock();
 
 	    s.s->messPut(s.sock, req, answ, s.sender, prot_in);
 	    if(answ.size()) {
@@ -501,9 +491,9 @@ void *TSocketIn::ClTask( void *s_inf )
 #endif
 		do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
 		while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
-		pthread_mutex_lock(&s.s->dataRes());
+		s.s->dataRes().lock();
 		s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
-		pthread_mutex_unlock(&s.s->dataRes());
+		s.s->dataRes().unlock();
 		answ = "";
 	    }
 	    cnt++;
@@ -516,8 +506,7 @@ void *TSocketIn::ClTask( void *s_inf )
 #if OSC_DEBUG >= 5
 	mess_debug(s.s->nodePath().c_str(), _("Socket has been disconnected by '%s'!"), s.sender.c_str());
 #endif
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 #if OSC_DEBUG >= 5
 	mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by execution: %s"), err.mess.c_str());
 #endif
@@ -553,8 +542,7 @@ bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &s
 #if OSC_DEBUG >= 5
 	mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
 #endif
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!noex) throw;
 	return false;
     }
@@ -573,8 +561,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 	n_pr = prot_in.at().name();
 	prot_in.free();
 	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(!prot_in.freeStat()) {
 	    if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	    n_pr = prot_in.at().name();
@@ -641,7 +628,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "help",_("Close the connection after specified requests.\nZero value for disable (not close ever)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Close the connection after no requests at specified timeout.\nZero value for disable (not close ever)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",TMess::labTaskPrior());
 	return;
     }
     //Process command to page
@@ -692,7 +679,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOut(name, idb, el)
+TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el)
 {
     setAddr("localhost:10042");
     setTimings("5:1");
@@ -729,7 +716,7 @@ void TSocketOut::load_( )
 	if(prmNd.childGet("CertKey",0,true)) setCertKey(prmNd.childGet("CertKey")->text());
 	vl = prmNd.attr("PKeyPass");	if(!vl.empty()) setPKeyPass(vl);
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
-    } catch(...){ }
+    } catch(...) { }
 }
 
 void TSocketOut::save_( )
@@ -781,22 +768,36 @@ void TSocketOut::start( int tmCon )
 
     try {
 	//Connect to remote host try
-	struct sockaddr_in	name_in;
-	memset(&name_in, 0, sizeof(name_in));
-	name_in.sin_family = AF_INET;
+	struct sockaddr_in	nameIn;
+	memset(&nameIn, 0, sizeof(nameIn));
+	nameIn.sin_family = AF_INET;
+	char hBuf[STR_BUF_LEN], sBuf[256];
+	struct hostent hostbuf, *hp;
+	struct servent servbuf, *sp;
 
 	if(ssl_host.size()) {
-	    struct hostent *loc_host_nm = gethostbyname(ssl_host.c_str());
-	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
-	    throw TError(nodePath().c_str(), _("Socket name '%s' error!"), ssl_host.c_str());
-	    name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
+	    int herr;
+	    gethostbyname_r(ssl_host.c_str(), &hostbuf, hBuf, sizeof(hBuf), &hp, &herr);
+	    if(!hp) switch(herr) {
+		case HOST_NOT_FOUND:
+		    throw TError(nodePath().c_str(), _("Host '%s' not found!"), ssl_host.c_str());
+		case NO_ADDRESS:
+		    throw TError(nodePath().c_str(), _("The requested name '%s' does not have an IP address!"), ssl_host.c_str());
+		case NO_RECOVERY:
+		    throw TError(nodePath().c_str(), _("A non-recoverable name server error occurred while for '%s'!"), ssl_host.c_str());
+		case TRY_AGAIN:
+		    throw TError(nodePath().c_str(), _("A temporary error occurred on an authoritative name server for '%s'!"), ssl_host.c_str());
+		default:
+		    throw TError(nodePath().c_str(), _("Unknown error code from gethostbyname_r for '%s'!"), ssl_host.c_str());
+	    }
+	    nameIn.sin_addr.s_addr = *((int*)(hp->h_addr_list[0]));	//!!!! Append all IP list processing
 	}
-	else name_in.sin_addr.s_addr = INADDR_ANY;
+	else nameIn.sin_addr.s_addr = INADDR_ANY;
 	// Get system port for "oscada" /etc/services
-	struct servent *sptr = getservbyname(ssl_port.c_str(), "tcp");
-	if(sptr != NULL)			name_in.sin_port = sptr->s_port;
-	else if(htons(s2i(ssl_port)) > 0)	name_in.sin_port = htons(s2i(ssl_port));
-	else name_in.sin_port = 10041;
+	if(getservbyname_r(ssl_port.c_str(),"tcp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
+	    nameIn.sin_port = sp->s_port;
+	else if(htons(s2i(ssl_port)) > 0)	nameIn.sin_port = htons(s2i(ssl_port));
+	else nameIn.sin_port = 10041;
 
 	if((sock_fd = socket(PF_INET,SOCK_STREAM,0))== -1)
 	    throw TError(nodePath().c_str(), _("Error creation TCP socket: %s!"), strerror(errno));
@@ -806,7 +807,7 @@ void TSocketOut::start( int tmCon )
 	//Connect to socket
 	int flags = fcntl(sock_fd, F_GETFL, 0);
 	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
-	int res = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
+	int res = connect(sock_fd, (sockaddr*)&nameIn, sizeof(nameIn));
 	if(res == -1 && errno == EINPROGRESS) {
 	    struct timeval tv;
 	    socklen_t slen = sizeof(res);
@@ -876,8 +877,7 @@ void TSocketOut::start( int tmCon )
 	BIO_set_nbio(conn, 1);
 
 	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
-    }
-    catch(TError err) {
+    } catch(TError &err) {
 	if(sock_fd >= 0) close(sock_fd);
 	if(conn) { BIO_reset(conn); BIO_free(conn); }
 	if(ctx)	SSL_CTX_free(ctx);
@@ -1001,9 +1001,9 @@ repeate:
 		res.release();
 		stop();
 #if OSC_DEBUG >= 5
-		mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
+		mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
 #endif
-		throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
+		throw TError(nodePath().c_str(),_("Read (select) error: %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sock_fd,&rd_fd)) {
 		ret = BIO_read(conn, iBuf, iLen);
@@ -1016,6 +1016,7 @@ repeate:
 #if OSC_DEBUG >= 5
 		    mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
 #endif
+		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || noReq) throw TError(nodePath().c_str(),_("Read error: %s"), err.c_str());
 		    start();
 		    res.request(true);

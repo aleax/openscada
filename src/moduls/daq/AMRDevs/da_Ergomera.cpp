@@ -159,7 +159,7 @@ string Ergomera::modBusReq( string &pdu )
 	    //> Wait tail
 	    while(resp_len)
 	    {
-		try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+		try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &err){ break; }
 		rez.append(buf, resp_len);
 	    }
 
@@ -170,7 +170,7 @@ string Ergomera::modBusReq( string &pdu )
 	    err = "";
 	    break;
 	}
-    }catch(TError er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
+    } catch(TError &er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
 
     return err;
 }

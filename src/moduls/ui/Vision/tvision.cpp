@@ -45,9 +45,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.3.8"
-#define AUTHORS		_("Roman Savochenko")
-#define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
+#define MOD_VER		"3.9.1"
+#define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -83,9 +82,11 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), mWinPosCntrSave(true), mExitLstRunPrjCls(true), end_run(false),
-    mRestTime(60), mCachePgLife(1), vca_station("."), mPlayCom("play -q %f"), mScrnCnt(0)
+TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStart(dataRes()), mUserPass(dataRes()),
+    mStatusEn(true), mWinPosCntrSave(true), mExitLstRunPrjCls(true), mEndRun(false),
+    mRestTime(60), mCachePgLife(1), mPlayCom("play -q %f"), mScrnCnt(0)
 {
+    mVCAStation = ".";
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
@@ -106,13 +107,11 @@ void TVision::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
-    list.push_back(_("Developers"));
 }
 
 string TVision::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
-    if(name == _("Developers"))	return _(DEVELOPERS);
     return TModule::modInfo(name);
 }
 
@@ -150,7 +149,7 @@ void TVision::load_( )
 	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //Load parameters from config-file and DB
-    setStartUser(TBDS::genDBGet(nodePath()+"StartUser",""));
+    setUserStart(TBDS::genDBGet(nodePath()+"StartUser",""));
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setRunPrjsSt(s2i(TBDS::genDBGet(nodePath()+"RunPrjsSt","1")));
@@ -168,7 +167,7 @@ void TVision::save_( )
     mess_debug(nodePath().c_str(),_("Save module."));
 #endif
     //Save parameters to DB
-    TBDS::genDBSet(nodePath()+"StartUser", startUser());
+    TBDS::genDBSet(nodePath()+"StartUser", userStart());
     TBDS::genDBSet(nodePath()+"UserPass", userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
     TBDS::genDBSet(nodePath()+"RunPrjsSt", i2s(runPrjsSt()));
@@ -187,25 +186,24 @@ void TVision::postEnable( int flag )
 
 string TVision::uiPropGet( const string &prop, const string &user )
 {
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
 
     XMLNode prmNd;
     try {
 	prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user));
 	return prmNd.attr(prop);
-    }
-    catch(TError err)	{ }
+    } catch(TError &err) { }
 
     return "";
 }
 
 void TVision::uiPropSet( const string &prop, const string &vl, const string &user )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
 
     XMLNode prmNd("UI");
     try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }
-    catch(TError err)	{ }
+    catch(TError &err)	{ }
     prmNd.setAttr(prop,vl);
     TBDS::genDBSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
 }
@@ -237,18 +235,18 @@ QMainWindow *TVision::openWindow( )
 	shapesWdg.push_back(new ShapeFunction);
     }
 
-    string user_open = startUser( );
-    string user_pass = userPass( );
+    string user_open = userStart();
+    string user_pass = userPass();
 
     //Check for start user set OK
     int err = 0;
-    XMLNode req("get");
-    req.setAttr("path",string("/Security/")+user_open+"/%2fauth")->setAttr("password",user_pass);
-    if(!((VCAStation() == "." && SYS->security().at().usrPresent(startUser())) ||
-	    (!(err=mod->cntrIfCmd(req,startUser(),userPass(),VCAStation(),true)) && s2i(req.text()))))
+    XMLNode req("get"); req.setAttr("path", "/%2fgen%2fid");
+    if(!((VCAStation() == "." && SYS->security().at().usrPresent(userStart())) ||
+	    (VCAStation() != "." && !(err=mod->cntrIfCmd(req,userStart(),userPass(),VCAStation(),true)))))
+										//!!! But for remote same the request has the athentification
 	while(true) {
 	    if(err == 10)	{ postMess(nodePath().c_str(),_("Error connection to remote station!")); return NULL; }
-	    DlgUser d_usr(startUser().c_str(),userPass().c_str(),VCAStation().c_str());
+	    DlgUser d_usr(userStart().c_str(), userPass().c_str(), VCAStation().c_str());
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
 	    if(rez == DlgUser::SelErr) {
@@ -259,6 +257,7 @@ QMainWindow *TVision::openWindow( )
 	    user_pass = d_usr.password().toStdString();
 	    break;
 	}
+    if(!user_open.size()) user_open = req.attr("user");
 
     //Check for run projects need
     string sprj;
@@ -278,13 +277,13 @@ QMainWindow *TVision::openWindow( )
 
 	//QDesktopWidget().screen(1)
 	// Find for already opened run window
-	ResAlloc res(nodeRes(), false);
+	MtxAlloc res(dataRes(), true);
 	bool openRunOK = false;
 	for(unsigned iW = 0; !openRunOK && iW < mnWinds.size(); iW++)
 	    openRunOK = (qobject_cast<VisRun*>(mnWinds[iW]) &&
 		    ((isSess && ((VisRun*)mnWinds[iW])->workSess() == sprj) || (!isSess && ((VisRun*)mnWinds[iW])->srcProject() == sprj)) &&
 		    ((VisRun*)mnWinds[iW])->screen() == screen);
-	res.release();
+	res.unlock();
 	if(openRunOK) continue;
 
 	VisRun *sess = new VisRun((isSess?"/ses_":"/prj_")+sprj, user_open, user_pass, VCAStation(), true, screen);
@@ -303,7 +302,7 @@ void TVision::modStart( )
     mess_debug(nodePath().c_str(),_("Start module."));
 #endif
 
-    end_run = false;
+    mEndRun = false;
     runSt  = true;
 }
 
@@ -312,14 +311,14 @@ void TVision::modStop( )
 #if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Stop module."));
 #endif
-    end_run = true;
+    mEndRun = true;
 
-    ResAlloc res(nodeRes(), false);
+    MtxAlloc res(dataRes(), true);
     for(unsigned i_w = 0; i_w < mnWinds.size(); i_w++)
 	while(mnWinds[i_w]) {
-	    res.release();
+	    res.unlock();
 	    TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
-	    res.request(false);
+	    res.lock();
 	}
     TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
 
@@ -337,7 +336,7 @@ WdgShape *TVision::getWdgShape( const string &iid )
 
 void TVision::regWin( QMainWindow *mwd )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     unsigned i_w;
     for(i_w = 0; i_w < mnWinds.size(); i_w++)
 	if(mnWinds[i_w] == NULL) break;
@@ -347,7 +346,7 @@ void TVision::regWin( QMainWindow *mwd )
 
 void TVision::unregWin( QMainWindow *mwd )
 {
-    ResAlloc res(nodeRes(), true);
+    MtxAlloc res(dataRes(), true);
     for(unsigned i_w = 0; i_w < mnWinds.size(); i_w++)
 	if(mnWinds[i_w] == mwd) mnWinds[i_w] = NULL;
 }
@@ -362,10 +361,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
-	    if(VCAStation() == ".")
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
-	    else {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
+	    if(VCAStation() != ".") {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Restore connection timeout, s"),RWRWR_,"root",SUI_ID,3,"tp","dec","min","1","max","1000");
 	    }
@@ -392,7 +389,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/disp_n" && ctrChkNode(opt))		opt->setText(i2s(mScrnCnt));
     else if(a_path == "/prm/st/mnWinds" && ctrChkNode(opt)) {
 	string rez;
-	ResAlloc res(nodeRes(), false);
+	MtxAlloc res(dataRes(), true);
 	for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	    if(dynamic_cast<VisDevelop*>(mnWinds[iW]))	opt->childAdd("el")->setText(TSYS::strMess(_("%d: Development"),iW));
 	    else if(dynamic_cast<VisRun*>(mnWinds[iW]))	{
@@ -403,12 +400,16 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    }
     }
     else if(a_path == "/prm/cfg/start_user") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(userStart());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setUserStart(opt->text());
     }
     else if(a_path == "/prm/cfg/u_pass") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText("*******");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setUserPass(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(string(userPass().size(),'*')/* "*******" */);
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    if(opt->text().compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
+		setUserPass(opt->text().substr(TSecurity::pHashMagic.size()));
+	    else setUserPass(opt->text());
+	}
     }
     else if(a_path == "/prm/cfg/restTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(restoreTime()));
@@ -428,17 +429,17 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	XMLNode req("CntrReqs");
 	req.childAdd("get")->setAttr("path", "%2fses%2fses")->setAttr("chkUserPerm", "1");
 	req.childAdd("get")->setAttr("path", "%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm", "1");
-	cntrIfCmd(req, startUser(), userPass(), VCAStation());
+	cntrIfCmd(req, userStart(), userPass(), VCAStation());
 	XMLNode *reqN = req.childGet(0);
 	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
 	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());
-	    /*if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_) ||
-		    reqN->childGet(i_ch)->attr("user") == startUser())
+	    /*if(SYS->security().at().access(userStart(),SEC_WR,"root","root",RWRWR_) ||
+		    reqN->childGet(i_ch)->attr("user") == userStart())
 		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());*/
 	reqN = req.childGet(1);
 	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
 	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));
-	    /*if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_))
+	    /*if(SYS->security().at().access(userStart(),SEC_WR,"root","root",RWRWR_))
 		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));*/
     }
     else if(a_path == "/prm/cfg/winPos_cntr_save") {
@@ -455,24 +456,24 @@ void TVision::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/stationVCA") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(VCAStation());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setVCAStation(opt->text());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	{ setVCAStation(opt->text()); setUserStart(""); setUserPass(""); }
     }
     else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
     else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt)) {
-	vector<string> ls;
-	SYS->security().at().usrList(ls);
+	XMLNode req("get");
+	req.setAttr("path","/Security/%2fusgr%2fusers");
 	opt->childAdd("el")->setText("");
-	for(unsigned i_u = 0; i_u < ls.size(); i_u++)
-	    opt->childAdd("el")->setText(ls[i_u]);
+	if(!mod->cntrIfCmd(req,"","",VCAStation(),true))
+	    for(unsigned iU = 0; iU < req.childSize(); iU++)
+		opt->childAdd("el")->setText(req.childGet(iU)->text());
     }
     else if(a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id",".")->setText("Local");
-	vector<string> lst;
-	SYS->transport().at().extHostList("*",lst);
-	for(unsigned i_ls = 0; i_ls < lst.size(); i_ls++)
-	    opt->childAdd("el")->setAttr("id",lst[i_ls])->
-		setText(SYS->transport().at().extHostGet("*",lst[i_ls]).name);
+	vector<TTransportS::ExtHost> lst;
+	SYS->transport().at().extHostList("*", lst);
+	for(unsigned iLs = 0; iLs < lst.size(); iLs++)
+	    opt->childAdd("el")->setAttr("id",lst[iLs].id)->setText(lst[iLs].name);
     }
     else if(a_path == "/alarm/plComm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(playCom());
@@ -502,35 +503,23 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 {
     //Check for local VCAEngine path
     if(!glob) node.setAttr("path", "/UI/VCAEngine"+node.attr("path"));
+    bool isLoc = (VCAStat.empty() || VCAStat == ".");
+    node.setAttr("path", "/"+(isLoc?SYS->id():VCAStat)+node.attr("path"));
 
-    //Local station request
-    if(VCAStat.empty() || VCAStat == ".") {
-	node.setAttr("user", user);
-	SYS->cntrCmd(&node);
-	return s2i(node.attr("rez"));
-    }
-
-    //Request remote host
     try {
-	TTransportS::ExtHost host = SYS->transport().at().extHostGet("*", VCAStat);
-	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host, "UIVision");
-	if(!tr.at().startStat()) tr.at().start();
-
-	bool trUser = (user.empty() || user == host.user);
-	node.setAttr("rqDir", trUser?"0":"1")->
-	    setAttr("rqUser", trUser?host.user:user)->
-	    setAttr("rqPass", trUser?host.pass:password);
-	tr.at().messProtIO(node, "SelfSystem");
-
-	return s2i(node.attr("rez"));
-    }
-    catch(TError err) {
+	int rez = SYS->transport().at().cntrIfCmd(node, "UIVision", (isLoc?user:("\n"+user+"\n"+password)));
+	//Password's hash processing
+	if(node.attr("pHash").size() && userStart() == user && userPass() != (TSecurity::pHashMagic+node.attr("pHash"))) {
+	    setUserPass(TSecurity::pHashMagic + node.attr("pHash"));
+	    node.setAttr("pHash", "");
+	}
+	return rez;
+    } catch(TError &err) {
 	node.childClear();
-	node.setAttr("rez", "10");
-	node.setAttr("mcat", err.cat);
-	node.setText(err.mess);
-	return 10;
+	node.setAttr("mcat", err.cat)->setAttr("rez", "10")->setText(err.mess);
     }
+
+    return s2i(node.attr("rez"));
 }
 
 QWidget *TVision::getFocusedWdg( QWidget *wcntr )

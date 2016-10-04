@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,14 +32,14 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid, idb, cf_el), tm_calc(0), mBeg(0), mEnd(0), mMaxSize(24)
+    TMArchivator(iid, idb, cf_el), tmProc(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false)
 {
     setAddr("*.*");
 }
 
 ModMArch::~ModMArch( )
 {
-    try{ stop(); }catch(...){}
+    try { stop(); } catch(...) { }
 }
 
 void ModMArch::postDisable( int flag )
@@ -70,9 +69,9 @@ void ModMArch::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("Size");
-	if(!vl.empty()) setMaxSize(s2r(vl));
-    } catch(...){ }
+	if(!(vl=prmNd.attr("Size")).empty())	setMaxSize(s2r(vl));
+	if(!(vl=prmNd.attr("TmAsStr")).empty())	setTmAsStr(s2i(vl));
+    } catch(...) { }
 
     //Load message archive parameters
     TConfig wcfg(&mod->archEl());
@@ -81,7 +80,7 @@ void ModMArch::load_( )
 	mBeg = s2i(wcfg.cfg("BEGIN").getS());
 	mEnd = s2i(wcfg.cfg("END").getS());
 	// Check for delete archivator table
-	if(mEnd <= (time(NULL)-(time_t)(maxSize()*3600))) {
+	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
 	    SYS->db().at().open(addr()+"."+archTbl());
 	    SYS->db().at().close(addr()+"."+archTbl(), true);
 	    mBeg = mEnd = 0;
@@ -92,7 +91,8 @@ void ModMArch::load_( )
 void ModMArch::save_( )
 {
     XMLNode prmNd("prms");
-    prmNd.setAttr("Size",r2s(maxSize()));
+    prmNd.setAttr("Size", r2s(maxSize()));
+    prmNd.setAttr("TmAsStr", i2s(tmAsStr()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TMArchivator::save_();
@@ -100,16 +100,31 @@ void ModMArch::save_( )
 
 void ModMArch::start( )
 {
+    if(!runSt) {
+	reqEl.fldClear();
+	reqEl.fldAdd(new TFld("MIN",_("In minutes"),TFld::Integer,TCfg::Key,"15"));	//Mostly for fast reading next, by minutes
+	reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
+	reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"6","0"));
+	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"100"));
+	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,TFld::NoFlag/*TCfg::Key*/,"100000"));
+	reqEl.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
+    }
+
     //Connection to DB and enable status check
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb, 0, '.');
     try { if(!db.at().enableStat()) db.at().enable(); }
-    catch(TError err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
+    catch(TError &err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
 
     TMArchivator::start();
 }
 
-void ModMArch::stop( )	{ TMArchivator::stop(); }
+void ModMArch::stop( )
+{
+    TMArchivator::stop();
+
+    reqEl.fldClear();
+}
 
 time_t ModMArch::begin( )	{ return mBeg; }
 
@@ -117,17 +132,18 @@ time_t ModMArch::end( )		{ return mEnd; }
 
 bool ModMArch::put( vector<TMess::SRec> &mess )
 {
-    if(!run_st) throw TError(nodePath().c_str(), _("Archive is not started!"));
+    if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
 
     AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(), true);
     if(tbl.freeStat()) return false;
 
-    TConfig cfg(&mod->messEl());
+    TConfig cfg(&reqEl);
     int64_t t_cnt = TSYS::curTime();
     for(unsigned i_m = 0; i_m < mess.size(); i_m++) {
 	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 
 	//Put record to DB
+	cfg.cfg("MIN").setI(mess[i_m].time/60);
 	cfg.cfg("TM").setI(mess[i_m].time);
 	cfg.cfg("TMU").setI(mess[i_m].utime);
 	cfg.cfg("CATEG").setS(mess[i_m].categ);
@@ -140,16 +156,17 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
     }
 
     //Archive size limit process
-    if((mEnd-mBeg) > (time_t)(maxSize()*3600)) {
-	time_t n_end = mEnd-(time_t)(maxSize()*3600);
-	for(time_t t_c = vmax(mBeg,n_end-3600); t_c < n_end; t_c++) {
-	    cfg.cfg("TM").setI(t_c,true);
+    if(maxSize() && (mEnd-mBeg) > (time_t)(maxSize()*86400)) {
+	time_t nEnd = (mEnd - (time_t)(maxSize()*86400));
+	cfg.cfg("TM").setKeyUse(false);
+	for(int tC = mBeg/60; tC < nEnd/60; tC++) {
+	    cfg.cfg("MIN").setI(tC, true);
 	    tbl.at().fieldDel(cfg);
 	}
-	mBeg = n_end;
+	mBeg = nEnd;
     }
     tbl.free();
-    SYS->db().at().close(addr()+"."+archTbl());
+    //SYS->db().at().close(addr()+"."+archTbl());	//!!! No close the table manually
 
     //Update archive info
     cfg.setElem(&mod->archEl());
@@ -159,29 +176,34 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
     cfg.cfg("END").setS(i2s(mEnd),true);
     bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg,false,true);
 
-    tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+    tmProc = 1e-3*(TSYS::curTime()-t_cnt);
 
     return rez;
 }
 
-void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
+time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
-    if(!run_st) throw TError(nodePath().c_str(), _("Archive is not started!"));
-    if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
+    if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
+    if(!upTo) upTo = time(NULL) + STD_INTERF_TM;
 
-    b_tm = vmax(b_tm, begin());
-    e_tm = vmin(e_tm, end());
-    if(e_tm <= b_tm) return;
+    bTm = vmax(bTm, begin());
+    eTm = vmin(eTm, end());
+    if(eTm < bTm) return eTm;
 
-    TConfig cfg(&mod->messEl());
+    TConfig cfg(&reqEl);
     TRegExp re(category, "p");
 
     //Get values from DB
-    for(time_t t_c = b_tm; t_c <= e_tm; t_c++) {
-	cfg.cfg("TM").setI(t_c,true);
-	for(int e_c = 0; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",e_c++,cfg); ) {
-	    TMess::SRec rc(t_c, cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(), (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
-	    if(abs(rc.level) >= level && re.test(rc.categ)) {
+    cfg.cfg("TM").setKeyUse(false);
+    time_t result = bTm;
+    for(time_t tC = bTm; tC/60 <= eTm/60 && time(NULL) < upTo; ) {
+	tC = (tC/60)*60;
+	cfg.cfg("MIN").setI(tC/60, true);
+	int eC = 0;
+	for( ; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",eC++,cfg) && time(NULL) < upTo; ) {
+	    TMess::SRec rc(cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(),
+			    (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
+	    if(rc.time >= bTm && rc.time <= eTm && abs(rc.level) >= level && re.test(rc.categ)) {
 		bool equal = false;
 		int i_p = mess.size();
 		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {
@@ -192,11 +214,15 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 		}
 		if(!equal) {
 		    mess.insert(mess.begin()+i_p, rc);
-		    if(time(NULL) >= upTo) return;
+		    if(time(NULL) >= upTo) return result;
 		}
 	    }
 	}
+	tC += 60;
+	if(time(NULL) < upTo) result = vmax(bTm, vmin(eTm,tC-1));
     }
+
+    return result;
 }
 
 void ModMArch::cntrCmdProc( XMLNode *opt )
@@ -204,20 +230,29 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TMArchivator::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
-	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
+	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
+	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size (days)"),RWRWR_,"root",SARH_ID,2,
+		"tp","real", "help",_("Set to 0 for the limit disable and some performance rise."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmAsStr",_("Force time as string"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
+		"tp","bool", "help",_("Only for DBs it supports by a specific data type like to \"datetime\" into MySQL."));
+	}
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(r2s(tm_calc,6));
-    else if(a_path == "/prm/cfg/sz") {
+    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(r2s(tmProc,6));
+    else if(a_path == "/prm/add/sz") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(maxSize()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(s2r(opt->text()));
+    }
+    else if(a_path == "/prm/add/tmAsStr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(tmAsStr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setTmAsStr(s2i(opt->text()));
     }
     else TMArchivator::cntrCmdProc(opt);
 }

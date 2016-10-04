@@ -245,7 +245,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.en_res.resRequestR( );
 	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
 	    try { cntr.p_hd[i_p].at().getVals( ); }
-	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease( );
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;
@@ -305,7 +305,7 @@ void TMdPrm::enable()
     for(unsigned i_f = 0; i_f < p_el.fldSize(); )
     {
 	try { p_el.fldDel(i_f); }
-	catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); i_f++; }
+	catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); i_f++; }
     }
 
     //> Connect device's code

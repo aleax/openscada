@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Sockets translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-12 17:56+0200\n"
+"POT-Creation-Date: 2016-06-25 07:46+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -40,28 +40,36 @@ msgstr ""
 "Закрито підключень за лімітом %d."
 
 #, c-format
-msgid "Error create '%s' socket!"
-msgstr "Помилка створення %s сокету!"
+msgid "Create %s socket error: '%s (%d)'!"
+msgstr "Помилка створення %s сокету: '%s (%d)'!"
 
 #, c-format
 msgid "Socket type '%s' error!"
 msgstr "Помилка у типу '%s' сокету!"
 
 #, c-format
-msgid "Socket name '%s' error!"
-msgstr "Помилка у імені '%s' сокету!"
+msgid "Host '%s' not found!"
+msgstr "Не знайдено хоста '%s'!"
 
 #, c-format
-msgid "TCP socket doesn't bind to '%s'!"
-msgstr "TCP сокет не під'єднався до '%s'!"
+msgid "The requested name '%s' does not have an IP address!"
+msgstr "Запитане ім'я '%s' не має IP адрес!"
 
 #, c-format
-msgid "UDP socket doesn't bind to '%s'!"
-msgstr "UDP сокет не під'єднався до '%s'!"
+msgid "A non-recoverable name server error occurred while for '%s'!"
+msgstr "Виникла невиправна помилка серверу імен для '%s'!"
 
 #, c-format
-msgid "UNIX socket doesn't bind to '%s'!"
-msgstr "UNIX сокет не під'єднався до '%s'!"
+msgid "A temporary error occurred on an authoritative name server for '%s'!"
+msgstr "Виникла тимчасова помилка на авторитетному сервері імен для '%s'!"
+
+#, c-format
+msgid "Unknown error code from gethostbyname_r for '%s'!"
+msgstr "Невідомий код помилки gethostbyname_r для '%s'!"
+
+#, c-format
+msgid "Bind to %s socket error: '%s (%d)'!"
+msgstr "Помилка зв'язування із %s сокетом: '%s (%d)'!"
 
 #, c-format
 msgid "Close input transport by error: '%s (%d)'"
@@ -154,6 +162,13 @@ msgstr ""
 "    name - Ім'я файлу UNIX-сокета;\n"
 "    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання)."
 
+msgid ""
+"Empty value for the protocol selection switchs the transport to mode\n"
+"of creation associated output transports for each connection to one."
+msgstr ""
+"Порожне значення вибору протоколу перемикає транспорт у режим створення\n"
+"асоційованого вихідного транспорту для кожного підключення на цей вхідний."
+
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
@@ -244,6 +259,9 @@ msgstr "Транспорт не запущено!"
 msgid "Request error: %s"
 msgstr "Помилка запиту: %s"
 
+msgid "No data wrote"
+msgstr "Не записано даних"
+
 #, c-format
 msgid "Write error: %s"
 msgstr "Помилка запису: %s"
@@ -257,6 +275,13 @@ msgstr "Перевищено час очікування читання!"
 
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
+
+#, c-format
+msgid "Read (select) error: %s"
+msgstr "Помилка читання (select): %s"
+
+msgid "No data"
+msgstr "Немає даних"
 
 #, c-format
 msgid "Read error: %s"
