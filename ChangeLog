@@ -1,3 +1,9 @@
+2016-10-11 Roman
+- DB.LibsDB.OscadaLibs: DevLib.IEC60870: Expanded for single items description.
+- FIX:SYS: LibZ functions were rewrote for some unification and the used memory optimization.
+- FIX:DAQ.{BlockCalc,LogicLev}: Input links processing moved out of the attributes modifications detection into calc().
+
+
 2016-09-28 Roman
 - FIX:DB.LibsDB.OscadaLibs: DAQ template DevLib.SSCP: Fix for bool type represent. Load big LIST files performance some rised.
 - FIX:SYS: The functional templates fmin() and fmax() were added.
@@ -32,7 +38,7 @@
 - FIX:Archive: getVal() fix for request to current value but the buffer end() some lesser to it.
 - FIX:Archive.{*,FSArch,DBArch}: Exceptions into archivatorAttach() at the archivator's object stopped is prevented for allow the archive early start.
     Archive.{FSArch,DBArch}: The modules adapted for early archivators init and archive's meta set from the physical archives.
-- !!!!:FIX:Archive.FSArch: Reading of value archives set optimal to the request time, up to ten times, through using "MARK" key and the seek request.
+- !!!!:FIX:Archive.DBArch: Reading of value archives set optimal to the request time, up to ten times, through using "MARK" key and the seek request.
     FIX: End of pushing accumulated values set to minimum from the data block's end and the group end.
     Adapting to direct writing beyond the main accumulation process with limits and meta update.
     Adapting to redundancy.

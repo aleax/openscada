@@ -311,8 +311,6 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 
 void Block::calc( bool first, bool last, double frq )
 {
-    setMdfChk(outLnkWrChs());
-
     //Set fixed system attributes
     if(idFreq >= 0)	setR(idFreq, frq);
     if(idStart >= 0)	setB(idStart, first);
@@ -356,6 +354,7 @@ void Block::calc( bool first, bool last, double frq )
 
     //Calc function
     try {
+	setMdfChk(outLnkWrChs());
 	TValFunc::calc();
 	modif();
     } catch(TError &err) { mErrCnt++; throw; }

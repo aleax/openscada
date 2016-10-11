@@ -1229,6 +1229,7 @@ string TSYS::strCompr( const string &in, int lev )
 {
     if(in.empty())	return "";
 
+    string rez;
     z_stream strm;
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
@@ -1236,7 +1237,24 @@ string TSYS::strCompr( const string &in, int lev )
 
     if(deflateInit(&strm,lev) != Z_OK) return "";
 
-    uLongf comprLen = deflateBound(&strm, in.size());
+    strm.next_in = (Bytef*)in.data();
+    strm.avail_in = (uInt)in.size();
+
+    unsigned char out[vmax(100,vmin((in.size()/10)*10,STR_BUF_LEN))];
+
+    do {
+	strm.next_out = (Bytef*)out;
+	strm.avail_out = sizeof(out);
+	int ret = deflate(&strm, Z_FINISH);
+	if(ret == Z_STREAM_ERROR) { rez = ""; break; }
+	rez.append((char*)out, sizeof(out)-strm.avail_out);
+    } while(strm.avail_out == 0);
+
+    deflateEnd(&strm);
+
+    return rez;
+
+    /*uLongf comprLen = deflateBound(&strm, in.size());
     char out[comprLen];
 
     strm.next_in = (Bytef*)in.data();
@@ -1253,40 +1271,37 @@ string TSYS::strCompr( const string &in, int lev )
 
     deflateEnd(&strm);
 
-    return string(out, comprLen);
+    return string(out, comprLen);*/
 }
 
 string TSYS::strUncompr( const string &in )
 {
     int ret;
     z_stream strm;
-    unsigned char out[STR_BUF_LEN];
     string rez;
-
-    if(in.empty())	return "";
 
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
 
-    if(inflateInit(&strm) != Z_OK)	return "";
+    if(in.empty() || inflateInit(&strm) != Z_OK) return "";
+
+    unsigned char out[vmax(100,vmin(((in.size()*2)/10)*10,STR_BUF_LEN))];
 
     strm.avail_in = in.size();
     strm.next_in = (Bytef*)in.data();
     do {
 	strm.avail_out = sizeof(out);
 	strm.next_out = out;
-	ret = inflate(&strm,Z_NO_FLUSH);
-	if(ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR)
+	ret = inflate(&strm, Z_NO_FLUSH);
+	if(ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR || ret == Z_VERSION_ERROR)
 	    break;
-	rez.append((char*)out,sizeof(out)-strm.avail_out);
-    } while(strm.avail_out == 0);
+	rez.append((char*)out, sizeof(out)-strm.avail_out);
+    } while(strm.avail_out == 0 && ret != Z_STREAM_END);
 
     inflateEnd(&strm);
 
-    if(ret != Z_STREAM_END)	return "";
-
-    return rez;
+    return (ret == Z_STREAM_END) ? rez : "";
 }
 
 uint16_t TSYS::i16_LE( uint16_t in )

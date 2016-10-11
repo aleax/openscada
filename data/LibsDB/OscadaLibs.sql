@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.4.1','','tmplib_DevLib','Библиотека устройств','');
+Version: 1.4.2','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -4268,7 +4268,7 @@ if(t_err.length) {
 }
 else f_err = "0: " + u_err;','','',1445606346);
 INSERT INTO "tmplib_DevLib" VALUES('IEC60870','IEC-60870','','','IEC 60870 part 5 is one of the IEC 60870 set of standards which define systems used for telecontrol (supervisory control and data acquisition) in electrical engineering and power system automation applications. Part 5 provides a communication profile for sending basic telecontrol messages between two systems, which uses permanent directly connected data circuits between the systems. The template implements part 104 (Ethernet transport) for client and followed services: STARTDT, STOPDT, TESTFR, Ack, C_IC_NA_1, C_CI_NA_1, C_SC_NA_1, M_SP_NA_1, M_ME_NB_1, C_CS_NA_1. For acquired and control data primarily used an object into attribute "items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. To the data control by attributes at once you can its describe into "itemsSet". Into the template for the first time used the non request mode of an output transport and free attributes creation wile performing.
-Version: 1.0.0
+Version: 1.0.1
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Ustijancev Michael.','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{
@@ -4294,21 +4294,22 @@ if(f_start)	{
 //Items set changing process
 if(itemsSet != itemsSet_) {
 	for(off = 0; (iIt=itemsSet.parse(0,"\n",off)).length; ) {
-		iIt_tp = iIt.parse(0,":");
-		iIt_IOA = iIt.parse(1,":");
+		iIt_tp = iIt.parse(0, ":");
+		iIt_IOA = iIt.parse(1, ":");
+		iIt_flgs = iIt.parse(2, ":");
+		iIt_nmBase = iIt.parse(3, ":");
+		iIt_sDscr = false;
 		if((iIt_EndIOA=iIt_IOA.indexOf("-")) >= 0) {
 			iIt_EndIOA = iIt_IOA.slice(iIt_EndIOA+1).toInt();
 			iIt_IOA = iIt_IOA.slice(0,iIt_EndIOA).toInt();
 		}
-		else iIt_IOA = iIt_EndIOA = iIt_IOA.toInt();
-		iIt_flgs = iIt.parse(2,":");
-		iIt_nmBase = iIt.parse(3,":");
+		else { iIt_IOA = iIt_EndIOA = iIt_IOA.toInt(); iIt_sDscr = iIt_nmBase.length; }
 		if(iIt_tp == "ai")			{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "AI"; iIt_vtp = "integer,ro"; }
 		else if(iIt_tp == "di")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DI"; iIt_vtp = "boolean,ro"; }
 		else if(iIt_tp == "do")	{ iIt_nmBase = iIt_nmBase.length ? iIt_nmBase : "DO"; iIt_vtp = "boolean"; }
 		else continue;
 		while(iIt_IOA <= iIt_EndIOA) {
-			aId = iIt_tp+iIt_IOA; aDscr = iIt_nmBase+"["+iIt_IOA+"]"; aWr = (iIt_tp == "do");
+			aId = iIt_tp+iIt_IOA; aDscr = iIt_nmBase+(iIt_sDscr?"":"["+iIt_IOA+"]"); aWr = (iIt_tp == "do");
 			if(items[aId].isEVal()) { items[aId] = itW = new Object(); itW.descr = aDscr; itW.wr = aWr; itW.alarm = 0; }
 			if(iIt_flgs.indexOf("a") >= 0) {
 				this.attrAdd(aId, aDscr, iIt_vtp);
@@ -4559,7 +4560,7 @@ if(t_err.length) {
 	}
 	f_err = t_err;
 }
-else f_err = "0";','','',1464936781);
+else f_err = "0";','','',1476207406);
 INSERT INTO "tmplib_DevLib" VALUES('PCF8591','','','','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.1','','',10,0,'JavaLikeCalc.JavaScript

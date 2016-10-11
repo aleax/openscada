@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.1"
+#define MOD_VER		"1.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -749,8 +749,6 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	ResAlloc cres(calcRes, true);
 	if(chkLnkNeed) initTmplLnks(true);
 
-	tmpl->val.setMdfChk(true);
-
 	//Set fixed system attributes
 	if(idFreq >= 0)	tmpl->val.setR(idFreq, frq);
 	if(idStart >= 0)tmpl->val.setB(idStart, first);
@@ -767,6 +765,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	    else tmpl->val.set(lnk(iL).ioId, lnk(iL).aprm.at().get());
 
 	//Calc template
+	tmpl->val.setMdfChk(true);
 	tmpl->val.calc();
 	modif();
 
