@@ -271,8 +271,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,TPrmTempl::AttrRead,TPrmTempl::AttrFull).c_str(),
 		    "sel_list",_("No attribute;Read only;Full access"));
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Configure"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,TPrmTempl::CfgPublConst,TPrmTempl::CfgLink).c_str(),
-		    "sel_list",_("Constant;Public constant;Link"));
+		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,TPrmTempl::CfgConst,TPrmTempl::CfgLink).c_str(),
+		    "sel_list",_("Variable;Constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Program language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/io/plang_ls");
@@ -320,7 +320,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_attr)	n_attr->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
-		if(n_accs)	n_accs->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));
+		if(n_accs)	n_accs->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::CfgConst|TPrmTempl::CfgLink)));
 		if(n_val)	n_val->childAdd("el")->setText(io(id)->def());
 	    }
 	}
@@ -360,7 +360,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		    break;
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(IO::Output|IO::Return)));		break;
 		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
-		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
+		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::CfgConst|TPrmTempl::CfgLink)));	break;
 		case 6:	io(row)->setDef(opt->text()); setStart(false); break;
 	    }
 	}

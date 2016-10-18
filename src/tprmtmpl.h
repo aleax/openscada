@@ -46,8 +46,8 @@ class TPrmTempl: public TFunction, public TConfig
 	enum IOTmplFlgs {
 	    AttrRead	= 0x010,	//Attribute only for read
 	    AttrFull	= 0x020,	//Attribute for full access
-	    CfgPublConst= 0x040,	//Configure as public constant
-	    CfgLink	= 0x080,	//Configure as link
+	    CfgConst	= 0x040,	//Configure as a constant
+	    CfgLink	= 0x080,	//Configure as a link
 	    LockAttr	= 0x100		//Lock attribute
 	};
 

@@ -254,6 +254,7 @@ string RunWdgView::resGet( const string &res )
 bool RunWdgView::isVisible( QPoint pos )
 {
     if(!shape || !shape->needToVisibleCheck())	return true;
+    if(!QRect(QPoint(),size()).contains(pos))	return false;
 
     //Clear background and draw transparent
     QPalette pltSave, plt;
@@ -482,6 +483,16 @@ bool RunWdgView::event( QEvent *event )
 	    attrs.push_back(std::make_pair("event","ws_FocusOut"));
 	    attrsSet(attrs);
 	    return true;
+	case QEvent::ToolTip:
+	    if(property("active").toBool() && permCntr() && toolTip().size() && isVisible(mapFromGlobal(cursor().pos())))	break;
+	    return false;
+	case QEvent::StatusTip:
+	    if(property("active").toBool() && permCntr() && statusTip().size() && isVisible(mapFromGlobal(cursor().pos()))) {
+		mainWin()->statusBar()->showMessage(statusTip(), 10000);
+		return true;
+	    }
+	    return false;
+	    break;
 	default: break;
     }
 

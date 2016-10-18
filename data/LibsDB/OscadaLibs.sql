@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.4.2','','tmplib_DevLib','Библиотека устройств','');
+Version: 1.4.3','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -4599,7 +4599,7 @@ f_err = t_err;','','',1470548661);
 INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','Shark Slave Communication Protocol','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
-Version: 0.6.0','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+Version: 0.6.1','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
@@ -4668,10 +4668,10 @@ else {
 		for(off = 0; (fln=fLs.parse(0,"\n",off)).length; ) {
 			//stTm = SYS.time();
 			fl = SYS.fileRead(fln);
-			fl = fl.split("\x0D\x0A");
-			for(iL = 0; iL < fl.length; iL++) {
-				ln = fl[iL];
-			//for(off1 = 0; (ln=fl.parse(0,"\x0D\x0A",off1)).length; ) {
+			//fl = fl.split("\x0D\x0A");
+			//for(iL = 0; iL < fl.length; iL++) {
+				//ln = fl[iL];
+			for(off1 = 0; (ln=fl.parse(0,"\x0D\x0A",off1)).length; ) {
 			//for(off1 = 0; (ln=Special.FLibSYS.strParse(fl,0,"\x0D\x0A",off1)).length; ) {
 				off2 = 0;
 				vid = ln.parse(0, ";", off2);
@@ -4785,7 +4785,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1474988841);
+f_err = t_err;','','',1476811531);
 INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097U','One Wire by DS9097U','','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408 (scheduled), DS2450 (scheduled), DS2438 (scheduled).
 Author: Roman Savochenko <rom_as@oscada.org>

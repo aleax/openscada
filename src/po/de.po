@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-22 20:03+0300\n"
+"POT-Creation-Date: 2016-10-15 16:01+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -362,6 +362,7 @@ msgstr ""
 msgid "Level"
 msgstr "Stufe"
 
+#, c-format
 msgid "Requested %d records for time %s."
 msgstr "Fordert %d Datensätze für Zeit %s."
 
@@ -1390,8 +1391,8 @@ msgstr "Nicht Attribut;Nur Lesen;Voller Zugang"
 msgid "Configure"
 msgstr "Konfiguration"
 
-msgid "Constant;Public constant;Link"
-msgstr "Konstante;Konstante frei verfügbar;Verbindung"
+msgid "Variable;Constant;Link"
+msgstr "Variable;Konstante;Verbindung"
 
 msgid "Program language"
 msgstr "Programmsprache"

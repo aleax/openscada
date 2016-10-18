@@ -829,7 +829,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/cfg/attr_only",_("Only attributes are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for(int iIO = 0; iIO < tmpl->val.ioSize(); iIO++) {
-		    if(!(tmpl->val.func()->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)))
+		    if(!(tmpl->val.func()->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))
 			continue;
 		    // Check select param
 		    bool is_lnk = tmpl->val.func()->io(iIO)->flg()&TPrmTempl::CfgLink;
@@ -945,7 +945,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		opt->setText(lnk(lnkId(iIO)).prmAttr);
 		if(!SYS->daq().at().attrAt(TSYS::strParse(opt->text(),0,"#"),'.',true).freeStat()) opt->setText(opt->text()+" (+)");
 	    }
-	    else if(tmpl->val.func()->io(iIO)->flg()&TPrmTempl::CfgPublConst)
+	    else if(tmpl->val.func()->io(iIO)->flg()&TPrmTempl::CfgConst)
 		opt->setText(tmpl->val.getS(iIO));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
@@ -959,7 +959,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		lnk(lnkId(iIO)).prmAttr = a_vl;
 		initTmplLnks();
 	    }
-	    else if(tmpl->val.func()->io(iIO)->flg()&TPrmTempl::CfgPublConst) tmpl->val.setS(iIO,opt->text());
+	    else if(tmpl->val.func()->io(iIO)->flg()&TPrmTempl::CfgConst) tmpl->val.setS(iIO,opt->text());
 	    modif();
 	}
     }

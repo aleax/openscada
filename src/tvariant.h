@@ -121,13 +121,16 @@ class TVariant
 	    char	b;
 	    int64_t	i;
 	    double	r;
-	    char	*sPtr;
-	    char	sMini[8];
+	    // String variants
+	    string	*s;		//Standard string for too big
+	    char	*sPtr;		//Middle blocks up to STR_BUF_LEN
+	    char	sMini[8];	//Minimum fixed area
 	    AutoHD<TVarObj>	*o;
 	} val;
 
 	//Attributes
-	unsigned mSize		: 27;
+	unsigned mSize		: 26;
+	unsigned mStdString	: 1;
 	unsigned mType		: 3;
 	unsigned mModify	: 1;
 	unsigned mFixedTp	: 1;

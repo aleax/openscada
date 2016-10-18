@@ -114,7 +114,8 @@ void TVariant::setType( Type tp, bool fix )
     //Free
     switch(mType) {
 	case String:
-	    if(mSize >= sizeof(val.sMini))	free(val.sPtr);
+	    if(mStdString) delete val.s;
+	    else if(mSize >= sizeof(val.sMini))	free(val.sPtr);
 	    mSize = 0;
 	    break;
 	case Object:
@@ -130,7 +131,7 @@ void TVariant::setType( Type tp, bool fix )
 	/*case Boolean:	setB(EVAL_BOOL);	break;
 	case Integer:	setI(EVAL_INT);		break;
 	case Real:	setR(EVAL_REAL);	break;*/
-	case String:	mSize = 0; val.sMini[mSize] = 0; /*setS(EVAL_STR);*/	break;
+	case String:	mSize = 0; val.sMini[mSize] = 0; mStdString = false; /*setS(EVAL_STR);*/	break;
 	case Object:	val.o = new AutoHD<TVarObj>();	break;
 	default: break;
     }
@@ -230,8 +231,9 @@ string TVariant::getS( ) const
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_STR : i2s(tvl); }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_STR : tvl.at().getStrXML(); }
 	case String:
-	    if(mSize < sizeof(val.sMini)) return string(val.sMini,mSize);
-	    return string(val.sPtr,mSize);
+	    if(mStdString)	return *val.s;
+	    if(mSize < sizeof(val.sMini)) return string(val.sMini, mSize);
+	    return string(val.sPtr, mSize);
 	default: break;
     }
     return EVAL_STR;
@@ -285,15 +287,18 @@ void TVariant::setS( const string &ivl )
     if(type() != String && !mFixedTp) setType(String);
     switch(type()) {
 	case String:
-	    if(ivl.size() > 130000000)	throw TError("TVariant", _("Too big string length (> 130 MB)!"));
-	    if(ivl.size() < sizeof(val.sMini)) {
-		if(mSize >= sizeof(val.sMini)) free(val.sPtr);
+	    //if(ivl.size() > 130000000)	throw TError("TVariant", _("Too big string length (> 130 MB)!"));
+	    if(ivl.size() < sizeof(val.sMini)) {	//Minimum fixed area
+		if(mStdString) { delete val.s; mStdString = false; }
+		else if(mSize >= sizeof(val.sMini)) free(val.sPtr);
 		memcpy(val.sMini, ivl.data(), ivl.size());
 		val.sMini[ivl.size()] = 0;
+		mSize = ivl.size();
 	    }
-	    else {
-		if(mSize < sizeof(val.sMini)) val.sPtr = (char*)malloc(ivl.size()+1);
-		else if(ivl.size() != mSize) val.sPtr = (char*)realloc(val.sPtr,ivl.size()+1);
+	    else if(ivl.size() < STR_BUF_LEN) {		//For middle blocks up to STR_BUF_LEN
+		if(mStdString) { delete val.s; mStdString = false; }
+		if(mSize < sizeof(val.sMini))	val.sPtr = (char*)malloc(ivl.size()+1);
+		else if(ivl.size() != mSize)	val.sPtr = (char*)realloc(val.sPtr, ivl.size()+1);
 		if(!val.sPtr) {
 		    mSize = 0;
 		    val.sMini[mSize] = 0;
@@ -301,8 +306,16 @@ void TVariant::setS( const string &ivl )
 		}
 		memcpy(val.sPtr, ivl.data(), ivl.size());
 		val.sPtr[ivl.size()] = 0;
+		mSize = ivl.size();
 	    }
-	    mSize = ivl.size();
+	    else {					//Standard string for too big strings
+		if(!mStdString) {
+		    if(mSize >= sizeof(val.sMini)) free(val.sPtr);
+		    val.s = new string;
+		    mSize = 0; mStdString = true;
+		}
+		*val.s = ivl;
+	    }
 	    break;
 	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : s2ll(ivl));	break;
 	case Real:	setR((ivl==EVAL_STR) ? EVAL_REAL : s2r(ivl));	break;

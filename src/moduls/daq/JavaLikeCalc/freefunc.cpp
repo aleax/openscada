@@ -1480,9 +1480,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  off - start position
 		if(prop == "parse" && prms.size()) {
 		    int off = (prms.size() >= 3) ? prms[2].getI() : 0;
-		    string rez = TSYS::strParse( vl.getS(), prms[0].getI(),
-			(prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4) ? prms[3].getB() : false );
-		    if( prms.size() >= 3 ) { prms[2].setI(off); prms[2].setModify(); }
+		    string rez = TSYS::strParse(vl.getS(), prms[0].getI(),
+						(prms.size()>=2) ? prms[1].getS() : ".", &off,
+						(prms.size()>=4) ? prms[3].getB() : false);
+		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
 		    return rez;
 		}
 		// string parsePath(int pos, int off = 0) - get path token with numbet <pos> from the string and from offset <off>
@@ -2584,7 +2585,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		if(reg[ptr->obj].props().empty())
 		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
 
-		TVariant obj = getVal(val,reg[ptr->obj],true);
+		TVariant obj = getVal(val, reg[ptr->obj], true);
 
 		//Prepare inputs
 		vector<TVariant> prms;

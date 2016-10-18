@@ -1,3 +1,11 @@
+2016-10-18 Roman
+- FIX:DB.LibsDB.OscadaLibs: DAQ template DevLib.SSCP: Loading of big LIST files performance some rised, by OpenSCADA core fix also.
+- !!!:SYS: TVariant for string type expanded to store too big data, more for STR_BUF_LEN(10000), as the standard string,
+    and then significant increase the performance.
+- !!!!:DAQ: Template's configure's field variant "Constant" renamed to "Variable" and "Public constant" to "Constant" respectively.
+- UI.Vision: Widget's tooltip and statustip set to show at not full transparent widget's parts.
+
+
 2016-10-11 Roman
 - DB.LibsDB.OscadaLibs: DevLib.IEC60870: Expanded for single items description.
 - FIX:SYS: LibZ functions were rewrote for some unification and the used memory optimization.

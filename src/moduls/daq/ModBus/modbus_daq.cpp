@@ -1482,7 +1482,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration"))) {
 		if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for(int i_io = 0; i_io < lCtx->ioSize(); i_io++) {
-		    if(!(lCtx->func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst))) continue;
+		    if(!(lCtx->func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst))) continue;
 		    // Check select param
 		    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
@@ -1539,7 +1539,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    int i_io = s2i(a_path.substr(12));
 	    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) opt->setText(lCtx->lnk(lCtx->lnkId(i_io)).addr);
-	    else if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) opt->setText(lCtx->getS(i_io));
+	    else if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgConst) opt->setText(lCtx->getS(i_io));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int i_io = s2i(a_path.substr(12));
@@ -1547,7 +1547,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		lCtx->lnk(lCtx->lnkId(i_io)).addr = opt->text();
 		initLnks();
 	    }
-	    else if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) lCtx->setS(i_io,opt->text());
+	    else if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgConst) lCtx->setS(i_io,opt->text());
 	    modif();
 	}
     }

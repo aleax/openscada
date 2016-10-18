@@ -2113,7 +2113,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for(int i_io = 0; i_io < ioSize(); i_io++) {
-		    if(!(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)))
+		    if(!(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))
 			continue;
 		    // Check select param
 		    bool is_lnk = func()->io(i_io)->flg()&TPrmTempl::CfgLink;
@@ -2193,7 +2193,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    int i_io = s2i(a_path.substr(12));
 	    if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)		opt->setText(lnk(lnkId(i_io)).dbAddr);
-	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)	opt->setText(getS(i_io));
+	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgConst)	opt->setText(getS(i_io));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int i_io = s2i(a_path.substr(12));
@@ -2201,7 +2201,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		lnk(lnkId(i_io)).dbAddr = opt->text();
 		initLnks();
 	    }
-	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) setS(i_io, opt->text());
+	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgConst) setS(i_io, opt->text());
 	    modif();
 	}
     }
