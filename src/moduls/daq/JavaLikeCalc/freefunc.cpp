@@ -265,17 +265,17 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 	vfnc->exCtx = new RegW[mRegs.size()];
 	RegW *reg = (RegW*)vfnc->exCtx;
 	//Init list of registers
-	for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++) {
-	    Reg *tR = mRegs[i_rg];
+	for(unsigned iRg = 0; iRg < mRegs.size(); iRg++) {
+	    Reg *tR = mRegs[iRg];
 	    switch(tR->type()) {
 		// Saved constants check
-		case Reg::Bool:	if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().b; reg[i_rg].setVConst(); }	break;
-		case Reg::Int:	if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().i; reg[i_rg].setVConst(); }	break;
-		case Reg::Real:	if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().r; reg[i_rg].setVConst(); }	break;
-		case Reg::String: if(tR->lock() && tR->name().empty()) { reg[i_rg] = *tR->val().s;reg[i_rg].setVConst(); }	break;
+		case Reg::Bool:	if(tR->lock() && tR->name().empty()) { reg[iRg] = tR->val().b; reg[iRg].setVConst(); }	break;
+		case Reg::Int:	if(tR->lock() && tR->name().empty()) { reg[iRg] = tR->val().i; reg[iRg].setVConst(); }	break;
+		case Reg::Real:	if(tR->lock() && tR->name().empty()) { reg[iRg] = tR->val().r; reg[iRg].setVConst(); }	break;
+		case Reg::String: if(tR->lock() && tR->name().empty()) { reg[iRg] = *tR->val().s;reg[iRg].setVConst(); }	break;
 
-		case Reg::Var:	reg[i_rg].setType(Reg::Var); reg[i_rg].val().io = tR->val().io;			break;
-		case Reg::PrmAttr: reg[i_rg].setType(Reg::PrmAttr); *reg[i_rg].val().pA = *tR->val().pA;	break;
+		case Reg::Var:	reg[iRg].setType(Reg::Var); reg[iRg].val().io = tR->val().io;			break;
+		case Reg::PrmAttr: reg[iRg].setType(Reg::PrmAttr); *reg[iRg].val().pA = *tR->val().pA;	break;
 		default: break;
 	    }
 	}
@@ -408,16 +408,19 @@ void Func::inFuncDef( const string &nm, int pos )
 int Func::regNew( bool sep, int recom )
 {
     //Get new register
-    unsigned i_rg = mRegs.size();
+    unsigned iRg = mRegs.size();
     if(!sep) {
-	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() && mRegs[recom]->type() == Reg::Free) i_rg = recom;
-	else for(i_rg = 0; i_rg < mRegs.size(); i_rg++)
-	    if(!mRegs[i_rg]->lock() && mRegs[i_rg]->type() == Reg::Free)
+	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() &&
+		mRegs[recom]->type() == Reg::Free && mRegs[recom]->inFnc() == mInFnc)
+	    iRg = recom;
+	else for(iRg = 0; iRg < mRegs.size(); iRg++)
+	    if(!mRegs[iRg]->lock() && mRegs[iRg]->type() == Reg::Free && mRegs[iRg]->inFnc() == mInFnc)
 		break;
     }
-    if(i_rg >= mRegs.size()) mRegs.push_back(new Reg(i_rg));
+    if(iRg >= mRegs.size()) mRegs.push_back(new Reg(iRg));
+    mRegs[iRg]->setInFnc(mInFnc);
 
-    return i_rg;
+    return iRg;
 }
 
 int Func::regGet( const string &inm, bool inFncNS )
@@ -425,9 +428,9 @@ int Func::regGet( const string &inm, bool inFncNS )
     string nm = inm;
     if(inFncNS && mInFnc.size()) nm = mInFnc+":"+nm;
     //Check allow registers
-    for(int i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
-	if(mRegs[i_rg]->name() == nm)
-	    return i_rg;
+    for(int iRg = 0; iRg < (int)mRegs.size(); iRg++)
+	if(mRegs[iRg]->name() == nm)
+	    return iRg;
     return -1;
 }
 
@@ -449,25 +452,25 @@ int Func::ioGet( const string &nm )
 
 void Func::regClear( )
 {
-    for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
-	delete mRegs[i_rg];
+    for(unsigned iRg = 0; iRg < mRegs.size(); iRg++)
+	delete mRegs[iRg];
     mRegs.clear();
 }
 
 Reg *Func::regTmpNew( )
 {
-    unsigned i_rg;
-    for(i_rg = 0; i_rg < mTmpRegs.size(); i_rg++)
-	if(mTmpRegs[i_rg]->type() == Reg::Free)
+    unsigned iRg;
+    for(iRg = 0; iRg < mTmpRegs.size(); iRg++)
+	if(mTmpRegs[iRg]->type() == Reg::Free)
 	    break;
-    if(i_rg >= mTmpRegs.size()) mTmpRegs.push_back(new Reg());
-    return mTmpRegs[i_rg];
+    if(iRg >= mTmpRegs.size()) mTmpRegs.push_back(new Reg());
+    return mTmpRegs[iRg];
 }
 
 void Func::regTmpClean( )
 {
-    for(unsigned i_rg = 0; i_rg < mTmpRegs.size(); i_rg++)
-	delete mTmpRegs[i_rg];
+    for(unsigned iRg = 0; iRg < mTmpRegs.size(); iRg++)
+	delete mTmpRegs[iRg];
     mTmpRegs.clear();
 }
 
@@ -2280,12 +2283,12 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		if(mess_lev() == TMess::Debug)
 		    mess_debug(nodePath().c_str(), "%ph: CycleObj %d: %d|%d|%d.", cprg, ptr->obj, ptr->body, ptr->val, ptr->end);
 #endif
-		TVariant obj = getVal(val,reg[ptr->obj]);
+		TVariant obj = getVal(val, reg[ptr->obj]);
 		if(obj.type() == TVariant::Object) {
 		    vector<string> pLs;
 		    obj.getO().at().propList(pLs);
-		    for(unsigned i_l = 0; i_l < pLs.size() && !(dt.flg&0x01); i_l++) {
-			setValS(val,reg[ptr->val],pLs[i_l]);
+		    for(unsigned iL = 0; iL < pLs.size() && !(dt.flg&0x01); iL++) {
+			setValS(val, reg[ptr->val], pLs[iL]);
 			dt.flg &= ~0x06;
 			exec(val, cprg + ptr->body, dt);
 			//Check break and continue operators
@@ -2836,7 +2839,7 @@ Reg::Type Reg::vType( Func *fnc )
     return type();
 }
 
-void Reg::free()
+void Reg::free( )
 {
     if(lock()) return;
 

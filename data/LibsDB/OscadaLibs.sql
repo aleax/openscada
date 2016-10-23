@@ -334,6 +334,20 @@ INSERT INTO "lib_Controllers_io" VALUES('prescr','f_frq','Function calculate fre
 INSERT INTO "lib_Controllers_io" VALUES('prescr','f_start','Function start flag',3,0,'0',0,1,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','this','This controller object link',4,0,'0',0,3,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_start','Function start flag',3,0,'',0,10,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','server','Server, empty for disable',0,0,'localhost:25',0,0,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','auth','Auth, empty for disable',0,0,'user:pass',0,1,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','sender','Sender',0,0,'noreply@oscada.org',0,2,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','defReceiver','Default receiver',0,0,'test@oscada.org',0,3,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailTopic','EMail topic',0,0,'Notification',0,4,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailMess','EMail message',0,0,'',0,5,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,12,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_stop','Function stop flag',3,0,'0',0,11,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','this','This controller object link',4,0,'0',0,13,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','tmOut','Timeout, seconds',1,0,'5',0,9,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTrId','SMS serial transport, empty for disable',0,0,'SMS',0,6,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSPin','SMS pin, empty for disable',0,0,'1111',0,7,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSDefTel','SMS default receiver, tel. number',0,0,'+380XXXXXXXXX',0,8,'','','','');
 CREATE TABLE 'lib_servProc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "lib_servProc_io" VALUES('procArh','fromarch','From archive',0,0,'Archive.va_ai3_code',0,0,'З архіву','','Из архива','');
 INSERT INTO "lib_servProc_io" VALUES('procArh','toarch','To archive',0,0,'Archive.va_ai3_dP',0,1,'У архів','','В архив','');
@@ -6963,7 +6977,10 @@ for(i = 0; i < tries; i++) {
 	}
 }',1472580871);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','','','','',1,10,0,'clcCnt++;
+INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager','','','Prescriptions manager and controller.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsor: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".
+Version: 1.0.0','','',1,10,0,'clcCnt++;
 
 if(f_start)	work = SYS.XMLNode("prg");
 
@@ -7271,7 +7288,7 @@ if(curMode == 1 || curMode == 2) {
 		}
 	}
 }
-mode = curMode;','','',1417806670);
+mode = curMode;','','',1476953055);
 INSERT INTO "lib_Controllers" VALUES('test','test','test','','','','',1,10,0,'using Special.FLibSYS;
 
 out+=10;
@@ -7398,7 +7415,7 @@ for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
   for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
     rec += DBTbl[i_rw][i_fld]+"\t";
   SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
-}*/','','',1441908975);
+}*/','','',1476985516);
 INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',1,10,0,'//clc=0;
 //First getting previous time
 //if(!p_tm){ p_tm = Special.FLibSYS.tmTime(); break; }
@@ -7421,9 +7438,73 @@ INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',1,10,0,
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
 //p_tm=c_tm;','','',1472483539);
+INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher','','','Notifications dispatcher by EMail and SMS for alarms.
+Author: Roman Savochenko <rom_as@oscada.org>
+Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
+Version: 1.0.0','','',1,10,0,'//Initial
+if(f_start) {
+	queue = new Object();
+	queueSMS = new Object();
+	prTm = SYS.time();
+	prTmU = 0;
+	SMSTrId_ = SMSTrId;
+	SMSTr = SMSTrId.length ? SYS.Transport.Serial["out_"+SMSTrId] : false;
+}
+if(SMSTrId_ != SMSTrId)	{
+	SMSTr = SMSTrId.length ? SYS.Transport.Serial["out_"+SMSTrId] : false;
+	SMSTrId_ = SMSTrId;
+}
+
+//Current alarms reading, and the queue of dispatching update
+mess = SYS.Archive.messGet(prTm, SYS.time(), "al*:*", 1, "<buffer>");
+for(iM = 0; iM < mess.length; iM++) {
+	oM = mess[iM];
+	if(oM.tm == prTm && oM.utm <= prTmU)	continue;
+
+	if(server.length)	queue[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
+	if(SMSTr)	queueSMS[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
+
+	prTm = oM.tm; prTmU = oM.utm;
+	//SYS.messInfo("NTF","Queue mess: "+oM.mess);
+}
+
+//The notifications mail queue process in a cycle limited by overall time
+stTm = SYS.time();
+for(var nM in queue) {
+	oM = queue[nM];
+	//SYS.messInfo("NTF","Send mess \""+nM+"\": "+oM.mess);
+
+	topic = emailTopic + " (" + ((oM.level < 0)?tr("Alarm"):tr("Norm")) + ")";
+	mess = emailMess + SYS.strftime(oM.tm) + ": " + oM.mess;
+	req = "sendemail -q -f " + sender + " -t " + defReceiver +
+		" -u \"=?utf8?B?" + SYS.strEncode(topic,"Base64") + "?=\" -m \"" + mess + "\" -s " + server;
+	if(auth.length)	req += " -xu " + auth.parse(0,":") + " -xp " + auth.parse(1,":");
+	req += " -o tls=no -o message-charset=utf8";
+	//SYS.messInfo("NTF","Send mess: "+req);
+	rez = SYS.system(req, true);
+	if(!rez)	queue[nM] = EVAL;
+
+	if((SYS.time()-stTm) > tmOut)	break;
+}
+
+//The notifications SMS queue process in a cycle limited by overall time
+stTm = SYS.time();
+for(var nM in queueSMS) {
+	if(!SMSTr)	break;
+	oM = queueSMS[nM];
+	//SYS.messInfo("NTF","Send SMS \""+nM+"\": "+oM.mess);
+
+	mess = oM.mess;
+	req = SYS.XMLNode("send"); req.setAttr("ProtIt", "SMS").setAttr("pin", SMSPin).setAttr("tel", SMSDefTel).setText(mess);
+	SMSTr.messIO(req, "UserProtocol");
+	if(!req.attr("err").toInt())	queueSMS[nM] = EVAL;
+
+	if((SYS.time()-stTm) > tmOut)	break;
+}','','',1477239109);
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('SMS','SMS','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
-Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'','','JavaLikeCalc.JavaScript
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 2.0.0','','',1,0,0,'','','JavaLikeCalc.JavaScript
 //Request form:
 //<cmd pin="1111" tel="+380XXXXXXXXX" addr="1" err="1:Error">{text}</cmd>**
 //  cmd - command, for now only "send" allowed;
@@ -7431,39 +7512,46 @@ Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'','','JavaLikeCalc.Ja
 //  tel - telephone number for receiver (remote cell phone or GSM modem);
 //  text - the message text;
 //  err - sets for the request result.
+
+//Transport''s timings check
+if(tr.timings() != "1000:100")	tr.timings("1000:100");
+
 if(io.name() == "send") {
 	//Prepare PDU
-	var pdu = "001100";	//SMS center number (default) + SMS-Submit
+	pdu = "001100";	//SMS center number (default) + SMS-Submit
 	//Telephone number encode
-	var tel = io.attr("tel");
-	if(!tel.length || tel[0] != "+") { io.setAttr("err","100:"+tr("Telephone number error.")); return; }
+	tel = io.attr("tel");
+	if(!tel.length || tel[0] != "+") { io.setAttr("err", "100:"+tr("Telephone number error.")); return; }
 	tel = tel.slice(1);
 	pdu += tel.length.toString(16,2) + "91";	//Telephone length and type
 	while(tel.length < 12) tel += "F";
 	for(i = 0; i < 6; i++) pdu += tel[i*2+1]+tel[i*2];
 	//Message encode
-	var text = SYS.strCodeConv(io.text(),"","UCS2");
-	if((text.length/2) > 70) { io.setAttr("err","101:"+tr("Long length (%1) of the message.").replace("%1",(text.length/2))); return; }
+	text = SYS.strCodeConv(io.text(),"","UCS2");
+	if((text.length/2) > 70) { io.setAttr("err", "101:"+tr("Long length (%1) of the message.").replace("%1",(text.length/2))); return; }
 	pdu += "0018C1"+(text.length).toString(16,2);
 	for(i = 0; i < text.length/2; i++) pdu += text.charCodeAt(i*2+1).toString(16,2)+text.charCodeAt(i*2).toString(16,2);
 	//SYS.messDebug("TEST SMS","PDU :"+pdu);
 	//Send request
-	if(!io.attr("pin").isEVal()) {
-		var rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
-		if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error set PIN-code.")); return; }
+	if(io.attr("pin").length) {
+		rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
+		while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+		if(rez.search("OK\r") < 0)	{ io.setAttr("err", "10:"+tr("Error set PIN-code.")); return; }
 	}
 	// Switch to PDU SMS mode
-	var rez = tr.messIO("AT+CMGF=0\r");
-	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error set PDU mode.")); return; }
-	// Send PDU message
-	var rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
-	if(rez.search(">") < 0)	{ io.setAttr("err","10:"+tr("Error sent SMS.")); return; }
-	var rez = tr.messIO(pdu+"\x1A");
-	for(var i_tr = 0; i_tr < 5 && rez.search("OK\r") < 0; i_tr++) rez += tr.messIO("");
-	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:"+tr("Error sent SMS PDU")); return; }
+	rez = tr.messIO("AT+CMGF=0\r");
+	while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+	if(rez.search("OK\r") < 0)	{ io.setAttr("err", "10:"+tr("Error set PDU mode.")); return; }
+	// Send the PDU message
+	rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
+	while(rez.length && (trez=tr.messIO("")).length) rez += trez;
+	if(rez.search(">") < 0)	{ io.setAttr("err", "10:"+tr("Error sent SMS.")); return; }
+	rez = tr.messIO(pdu+"\x1A");
+	for(var iTr = 0; iTr < 100 && rez.search("OK\r") < 0; iTr++) rez += tr.messIO("");	//Up to 10 seconds wait for reply
+	if(rez.search("OK\r") < 0)	{ io.setAttr("err", "10:"+tr("Error sent SMS PDU.")); return; }
 	io.setAttr("err", "0");
-	//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
-}','',1424879673);
+	//SYS.messDebug("TEST SMS","PDU REZ :"+rez);*/
+}','',1477239339);
 INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript

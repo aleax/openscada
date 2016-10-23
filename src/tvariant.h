@@ -168,7 +168,7 @@ class TVarObj
 	//Attributes
 	map<string, TVariant> mProps;
 	unsigned int mUseCnt;
-	pthread_mutex_t	dataM;
+	ResMtx	dataM;
 };
 
 //*****************************************************************

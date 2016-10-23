@@ -2297,7 +2297,7 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
     //Mark commands in "primaryCmd", for redundant hosts mostly transfer
     // !!! Move further to the command's source
     if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
-	    node.name() == "load" || node.name() == "save")
+	    node.name() == "load" || node.name() == "save" || node.name() == "copy")
 	node.setAttr("primaryCmd", "1");
 
     string hostId = TSYS::pathLev(node.attr("path"), 0);

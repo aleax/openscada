@@ -340,38 +340,30 @@ void TVariant::setO( TVarObj *val )
 //* TVarObj                                                 *
 //*   Variable object, by default included properties only  *
 //***********************************************************
-TVarObj::TVarObj( ) : mUseCnt(0)
+TVarObj::TVarObj( ) : mUseCnt(0), dataM(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&dataM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
-
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
 TVarObj::~TVarObj( )
 {
-    pthread_mutex_destroy(&dataM);
-
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
 void TVarObj::AHDConnect( )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     ++mUseCnt;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 bool TVarObj::AHDDisConnect( )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     if(mUseCnt) mUseCnt--;
     else mess_err("TVarObj", _("Double disconnection try: %d."), mUseCnt);
     bool toFree = (mUseCnt == 0);
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 
     return toFree;
 }
@@ -379,19 +371,19 @@ bool TVarObj::AHDDisConnect( )
 void TVarObj::propList( vector<string> &ls )
 {
     ls.clear();
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	ls.push_back(ip->first);
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 TVariant TVarObj::propGet( const string &id )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     TVariant rez;
     map<string,TVariant>::iterator vit = mProps.find(id);
     if(vit != mProps.end()) rez = vit->second;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 
     return rez;
 }
@@ -410,9 +402,10 @@ TVariant TVarObj::propGet( const string &ids, char sep )
 
 void TVarObj::propSet( const string &id, TVariant val )
 {
-    pthread_mutex_lock(&dataM);
-    mProps[id] = val;
-    pthread_mutex_unlock(&dataM);
+    dataM.lock();
+    if(val.isEVal()) mProps.erase(id);
+    else mProps[id] = val;
+    dataM.unlock();
 }
 
 void TVarObj::propSet( const string &ids, char sep, TVariant val )
@@ -429,9 +422,9 @@ void TVarObj::propSet( const string &ids, char sep, TVariant val )
 
 void TVarObj::propClear( )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     mProps.clear();
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 string TVarObj::getStrXML( const string &oid )
@@ -440,7 +433,7 @@ string TVarObj::getStrXML( const string &oid )
     if(!oid.empty()) nd += " p='" + oid + "'";
     nd += ">\n";
 
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	switch(ip->second.type()) {
 	    case TVariant::String: nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n";	break;
@@ -450,7 +443,7 @@ string TVarObj::getStrXML( const string &oid )
 	    case TVariant::Object: nd += ip->second.getO().at().getStrXML(ip->first); break;
 	    default: break;
 	}
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
     nd += "</TVarObj>\n";
 
     return nd;
@@ -562,7 +555,7 @@ string TArrayObj::getStrXML( const string &oid )
     if(!oid.empty()) nd = nd + " p='" + oid + "'";
     nd = nd + ">\n";
 
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     //Array items process
     for(unsigned ip = 0; ip < mEls.size(); ip++)
 	switch(mEls[ip].type()) {
@@ -583,7 +576,7 @@ string TArrayObj::getStrXML( const string &oid )
 	    case TVariant::Object: nd += ip->second.getO().at().getStrXML(ip->first);			break;
 	    default: break;
 	}
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 
     nd += "</TArrayObj>\n";
 
@@ -616,67 +609,67 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     //  sep - items separator
     if(id == "join" || id == "toString" || id == "valueOf") {
 	string rez, sep = prms.size() ? prms[0].getS() : ",";
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	for(unsigned i_e = 0; i_e < mEls.size(); i_e++)
 	    rez += (i_e?sep:"")+mEls[i_e].getS();
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return rez;
     }
     // TArrayObj concat(TArrayObj arr) - concatenate array
     //  arr - source array
     if(id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat()) {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
 	for(unsigned iP = 0; iP < sArr->mEls.size(); iP++) mEls.push_back(sArr->mEls[iP]);
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return this;
     }
     // int push(ElTp var, ...) - push variables to array
     //  var - variable
     if(id == "push" && prms.size()) {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.push_back(prms[i_p]);
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return (int)mEls.size();
     }
     // ElTp pop( ) - pop variable from array
     if(id == "pop") {
 	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj", _("Array is empty."));
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	TVariant val = mEls.back();
 	mEls.pop_back();
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return val;
     }
     // Array reverse( ) - reverse array's items order
     if(id == "reverse") {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	reverse(mEls.begin(),mEls.end());
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return this;
     }
     // ElTp shift( ) - shift array's items upward
     if(id == "shift") {
 	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj", _("Array is empty."));
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	TVariant val = mEls.front();
 	mEls.erase(mEls.begin());
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return val;
     }
     // int unshift(ElTp var, ...) - shift items to array upward
     //  var - variable
     if(id == "unshift" && prms.size()) {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.insert(mEls.begin()+i_p, prms[i_p]);
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return (int)mEls.size();
     }
     // Array slice(int beg, int end) - get array part from positon <beg> to <end> (exclude)
     //  beg - begin position
     //  end - end position
     if(id == "slice" && prms.size()) {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	int beg = prms[0].getI();
 	if(beg < 0) beg = mEls.size()+beg;
 	beg = vmax(beg,0);
@@ -687,7 +680,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	TArrayObj *rez = new TArrayObj();
 	for(int i_p = beg; i_p < end; i_p++)
 	    rez->arSet(i_p-beg, mEls[i_p]);
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return rez;
     }
     // Array splice(int beg, int remN, ElTp val1, ElTp val2, ...) - insert, remove or replace array's items
@@ -695,7 +688,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     //  remN - removed items number
     //  val1, val2, ... - values for insert
     if(id == "splice" && prms.size() >= 1) {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	int beg = vmax(0, prms[0].getI());
 	int cnt = (prms.size()>1) ? prms[1].getI() : mEls.size();
 	//  Delete elements
@@ -707,14 +700,14 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	//  Insert elements
 	for(unsigned i_c = 2; i_c < prms.size() && beg <= (int)mEls.size(); i_c++)
 	    mEls.insert(mEls.begin()+beg+i_c-2,prms[i_c]);
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return rez;
     }
     // double sum(int beg, int end) - sum of the array part from positon <beg> to <end> (exclude)
     //  beg - begin position
     //  end - end position
     if(id == "sum" && prms.size()) {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	int beg = prms[0].getI();
 	if(beg < 0) beg = mEls.size()+beg;
 	beg = vmax(beg, 0);
@@ -724,14 +717,14 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	end = vmin(end, (int)mEls.size());
 	double rez = 0;
 	for(int iP = beg; iP < end; iP++) rez += mEls[iP].getR();
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return rez;
     }
     // Array sort( ) - lexicographic items sorting
     if(id == "sort") {
-	pthread_mutex_lock(&dataM);
+	dataM.lock();
 	sort(mEls.begin(),mEls.end(),compareLess);
-	pthread_mutex_unlock(&dataM);
+	dataM.unlock();
 	return this;
     }
 
@@ -741,19 +734,19 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 TVariant TArrayObj::arGet( int vid )
 {
     TVariant rez;
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     if(vid >= 0 && vid < (int)mEls.size()) rez = mEls[vid];
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
     return rez;
 }
 
 void TArrayObj::arSet( int vid, TVariant val )
 {
     if(vid < 0) return;//throw TError("ArrayObj", _("Negative id is not allow for array."));
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
     mEls[vid] = val;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )	{ return v1.getS() < v2.getS(); }
@@ -979,80 +972,80 @@ XMLNodeObj::~XMLNodeObj( )
 
 string XMLNodeObj::name( )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     string rez = mName;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
     return rez;
 }
 
 string XMLNodeObj::text( )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     string rez = mText;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
     return rez;
 }
 
 void XMLNodeObj::setName( const string &vl )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     mName = vl;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 void XMLNodeObj::setText( const string &vl )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     mText = vl;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 void XMLNodeObj::childAdd( AutoHD<XMLNodeObj> nd )
 {
     if(&nd.at() == this) return;
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     mChilds.push_back(nd);
     nd.at().parent = this;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 void XMLNodeObj::childIns( unsigned id, AutoHD<XMLNodeObj> nd )
 {
     if(&nd.at() == this) return;
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     if(id < 0) id = mChilds.size();
     id = vmin(id, mChilds.size());
     mChilds.insert(mChilds.begin()+id,nd);
     nd.at().parent = this;
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 void XMLNodeObj::childDel( unsigned id )
 {
     if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj", _("Deletion child '%d' error."), id);
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     if(mChilds[id].at().parent == this) mChilds[id].at().parent = NULL;
     mChilds.erase(mChilds.begin()+id);
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 AutoHD<XMLNodeObj> XMLNodeObj::childGet( unsigned id )
 {
     if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj", _("Child '%d' is not allow."), id);
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     AutoHD<XMLNodeObj> rez = mChilds[id];
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
     return rez;
 }
 
 AutoHD<XMLNodeObj> XMLNodeObj::childGet( const string &name, unsigned num )
 {
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     AutoHD<XMLNodeObj> rez;
     for(int i_ch = 0, iN = 0; i_ch < (int)mChilds.size(); i_ch++)
 	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && (iN++) == (int)num)
 	    rez = mChilds[i_ch];
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
     if(rez.freeStat()) throw TError("XMLNodeObj", _("Child %s:%d is not found!"), name.c_str(), num);
     return rez;
 }
@@ -1061,13 +1054,13 @@ string XMLNodeObj::getStrXML( const string &oid )
 {
     string nd("<XMLNodeObj:"+name());
     if(!oid.empty()) nd += " p='"+oid+"'";
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	nd += " "+ip->first+"=\""+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"\"";
     nd += ">"+TSYS::strEncode(text(),TSYS::Html)+"\n";
     for(unsigned i_ch = 0; i_ch < mChilds.size(); i_ch++)
 	nd += mChilds[i_ch].at().getStrXML();
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
     nd += "</XMLNodeObj:"+name()+">\n";
 
     return nd;
@@ -1237,12 +1230,12 @@ void XMLNodeObj::toXMLNode( XMLNode &nd )
 {
     nd.clear();
     nd.setName(name())->setText(text());
-    pthread_mutex_lock(&dataM);
+    dataM.lock();
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	nd.setAttr(ip->first,ip->second.getS());
     for(unsigned i_ch = 0; i_ch < mChilds.size(); i_ch++)
 	mChilds[i_ch].at().toXMLNode(*nd.childAdd());
-    pthread_mutex_unlock(&dataM);
+    dataM.unlock();
 }
 
 void XMLNodeObj::fromXMLNode( XMLNode &nd )

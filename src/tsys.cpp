@@ -1078,7 +1078,8 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	    for(iSz = 0; iSz < (int)in.size(); iSz += 3) {
-		if(iSz && !(iSz%57))	sout.push_back('\n');
+		//if(iSz && !(iSz%57))	sout.push_back('\n');
+		if(iSz && !(iSz%57) && opt1.size())	sout += opt1;
 		sout.push_back(base64alph[(unsigned char)in[iSz]>>2]);
 		if((iSz+1) >= (int)in.size()) {
 		    sout.push_back(base64alph[((unsigned char)in[iSz]&0x03)<<4]);
@@ -1195,7 +1196,8 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::base64:
 	    sout.reserve(in.size());
 	    for(iSz = 0; iSz < in.size(); ) {
-		if(in[iSz] == '\n')	iSz += sizeof('\n');
+		//if(in[iSz] == '\n') iSz += sizeof('\n');
+		if(isspace(in[iSz])) { iSz++; continue; }
 		if((iSz+3) < in.size())
 		    if(in[iSz+1] != '=') {
 			char w_code1 = TSYS::getBase64Code(in[iSz+1]);
@@ -2146,7 +2148,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
-    // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
+    // {string|int} system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
     if(iid == "system" && prms.size() >= 1) {

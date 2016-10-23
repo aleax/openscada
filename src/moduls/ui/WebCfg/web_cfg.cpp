@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.2"
+#define MOD_VER		"1.7.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -1085,7 +1085,7 @@ int TWEB::cntrIfCmd( XMLNode &node )
     //Mark commands in "primaryCmd", for redundant hosts mostly transfer
     // !!! Move further to the command's source
     if(node.name() == "set" || node.name() == "add" || node.name() == "ins" || node.name() == "del" || node.name() == "move" ||
-	    node.name() == "load" || node.name() == "save")
+	    node.name() == "load" || node.name() == "save" || node.name() == "copy")
 	node.setAttr("primaryCmd", "1");
 
     SYS->cntrCmd(&node);

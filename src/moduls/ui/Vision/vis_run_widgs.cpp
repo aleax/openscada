@@ -119,27 +119,27 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
 
     //Delete child widgets check
     if(full || FullTree)
-	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++) {
-	    if(!qobject_cast<RunWdgView*>(children().at(i_c)) || qobject_cast<RunPageView*>(children().at(i_c))) continue;
+	for(int iC = 0, i_l = 0; iC < children().size(); iC++) {
+	    if(!qobject_cast<RunWdgView*>(children().at(iC)) || qobject_cast<RunPageView*>(children().at(iC))) continue;
 	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
 		if(aBr->childGet(i_l)->name() == "w" &&
-			((WdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+			((WdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		    break;
-	    if(i_l >= (int)aBr->childSize()) children().at(i_c)->deleteLater();
+	    if(i_l >= (int)aBr->childSize()) children().at(iC)->deleteLater();
 	}
 
     //Create new child widget
-    for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++) {
+    for(int i_l = 0, iC = 0; i_l < (int)aBr->childSize(); i_l++) {
 	if(aBr->childGet(i_l)->name() != "w") continue;
 
-	for(i_c = 0; i_c < children().size(); i_c++)
-	    if(qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
-		    ((RunWdgView*)children().at(i_c))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
+	for(iC = 0; iC < children().size(); iC++)
+	    if(qobject_cast<RunWdgView*>(children().at(iC)) && !qobject_cast<RunPageView*>(children().at(iC)) &&
+		    ((RunWdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 	    {
-		((RunWdgView*)children().at(i_c))->update(full,aBr->childGet(i_l),FullTree);
+		((RunWdgView*)children().at(iC))->update(full,aBr->childGet(i_l),FullTree);
 		break;
 	    }
-	if(i_c < children().size()) continue;
+	if(iC < children().size()) continue;
 	WdgView *nwdg = newWdgItem(id()+"/wdg_"+aBr->childGet(i_l)->attr("id"));
 	nwdg->show();
 	nwdg->load("");
@@ -157,10 +157,10 @@ void RunWdgView::shapeList( const string &snm, vector<string> &ls )
 {
     if(shape && snm == shape->id())	ls.push_back(id());
 
-    for(int i_c = 0; i_c < children().size(); i_c++)
-	if(qobject_cast<RunWdgView*>(children().at(i_c)) && !qobject_cast<RunPageView*>(children().at(i_c)) &&
-		((RunWdgView*)children().at(i_c))->isEnabled())
-	    ((RunWdgView*)children().at(i_c))->shapeList(snm,ls);
+    for(int iC = 0; iC < children().size(); iC++)
+	if(qobject_cast<RunWdgView*>(children().at(iC)) && !qobject_cast<RunPageView*>(children().at(iC)) &&
+		((RunWdgView*)children().at(iC))->isEnabled())
+	    ((RunWdgView*)children().at(iC))->shapeList(snm,ls);
 }
 
 RunWdgView *RunWdgView::findOpenWidget( const string &iwdg )
@@ -169,9 +169,9 @@ RunWdgView *RunWdgView::findOpenWidget( const string &iwdg )
     if(id() == iwdg) return this;
     //Check to included widgets
     RunWdgView *wdg;
-    for(int i_ch = 0; i_ch < children().size(); i_ch++)
-	if(qobject_cast<RunWdgView*>(children().at(i_ch)) && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
-		((RunWdgView*)children().at(i_ch))->isEnabled() && (wdg=((RunWdgView*)children().at(i_ch))->findOpenWidget(iwdg)))
+    for(int iCh = 0; iCh < children().size(); iCh++)
+	if(qobject_cast<RunWdgView*>(children().at(iCh)) && !qobject_cast<RunPageView*>(children().at(iCh)) &&
+		((RunWdgView*)children().at(iCh))->isEnabled() && (wdg=((RunWdgView*)children().at(iCh))->findOpenWidget(iwdg)))
 	    return wdg;
 
     return NULL;
@@ -183,8 +183,8 @@ void RunWdgView::orderUpdate( )
 
     //Update tab order
     RunWdgView *prev_aw = NULL;
-    for(int i_c = 0; i_c < children().size(); i_c++) {
-	RunWdgView *cw = qobject_cast<RunWdgView*>(children().at(i_c));
+    for(int iC = 0; iC < children().size(); iC++) {
+	RunWdgView *cw = qobject_cast<RunWdgView*>(children().at(iC));
 	if(!cw || !(mod->getFocusedWdg(cw)->focusPolicy()&Qt::TabFocus)) continue;
 	if(prev_aw) QWidget::setTabOrder(mod->getFocusedWdg(prev_aw), mod->getFocusedWdg(cw));
 	prev_aw = cw;
@@ -276,6 +276,8 @@ bool RunWdgView::isVisible( QPoint pos )
 
 bool RunWdgView::event( QEvent *event )
 {
+    bool trToUnderlay = false;
+
     //Force event's process
     switch(event->type()) {
 	case QEvent::Paint:
@@ -319,6 +321,18 @@ bool RunWdgView::event( QEvent *event )
 		    return true;
 		}
 	    }
+	    trToUnderlay = true;
+	    break;
+	case QEvent::ToolTip:
+	    if(isVisible(mapFromGlobal(cursor().pos()))) break;
+	    trToUnderlay = true;
+	    break;
+	case QEvent::StatusTip:
+	    if(isVisible(mapFromGlobal(cursor().pos()))) {
+		mainWin()->statusBar()->showMessage(statusTip(), 10000);
+		return true;
+	    }
+	    trToUnderlay = true;
 	    break;
 	default: break;
     }
@@ -446,7 +460,7 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::Key_BracketRight: mod_ev += "BracketRight"; break;
 		case Qt::Key_QuoteLeft:	mod_ev += "QuoteLeft";	break;
 		default:
-		    mod_ev += "#"+i2s(((QKeyEvent*)event)->key(),TSYS::Hex);
+		    mod_ev += "#"+i2s(((QKeyEvent*)event)->key(), TSYS::Hex);
 		    break;
 	    }
 	    evs += (evs.size()?"\n":"")+mod_ev;
@@ -468,11 +482,15 @@ bool RunWdgView::event( QEvent *event )
 		attrSet("event", mod_ev, A_NO_ID, true);
 		return true;
 	    }
+	    trToUnderlay = true;
 	    break;
 	case QEvent::MouseButtonDblClick:
-	    if(!isVisible(mapFromGlobal(cursor().pos()))) break;
-	    attrSet("event", "key_mouseDblClick", A_NO_ID, true);
-	    return true;
+	    if(isVisible(mapFromGlobal(cursor().pos()))) {
+		attrSet("event", "key_mouseDblClick", A_NO_ID, true);
+		return true;
+	    }
+	    trToUnderlay = true;
+	    break;
 	case QEvent::FocusIn:
 	    attrs.push_back(std::make_pair("focus","1"));
 	    attrs.push_back(std::make_pair("event","ws_FocusIn"));
@@ -483,43 +501,33 @@ bool RunWdgView::event( QEvent *event )
 	    attrs.push_back(std::make_pair("event","ws_FocusOut"));
 	    attrsSet(attrs);
 	    return true;
-	case QEvent::ToolTip:
-	    if(property("active").toBool() && permCntr() && toolTip().size() && isVisible(mapFromGlobal(cursor().pos())))	break;
-	    return false;
-	case QEvent::StatusTip:
-	    if(property("active").toBool() && permCntr() && statusTip().size() && isVisible(mapFromGlobal(cursor().pos()))) {
-		mainWin()->statusBar()->showMessage(statusTip(), 10000);
-		return true;
-	    }
-	    return false;
-	    break;
 	default: break;
     }
 
-    //Try put mouse event to next level widget into same container
-    if(!qobject_cast<RunPageView*>(this) &&
-	(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick))
-    {
+    //Try put mouse event to next level widget into this container
+    if(!qobject_cast<RunPageView*>(this) && trToUnderlay) {
+	//(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick))
 	bool isOk = false;
 	QPoint curp = parentWidget()->mapFromGlobal(cursor().pos());
-	for(int i_c = parentWidget()->children().size()-1; i_c >= 0; i_c--) {
-	    RunWdgView *curwdg = qobject_cast<RunWdgView*>(parentWidget()->children().at(i_c));
+	for(int iC = parentWidget()->children().size()-1; iC >= 0; iC--) {
+	    RunWdgView *curwdg = qobject_cast<RunWdgView*>(parentWidget()->children().at(iC));
 	    if(!curwdg) continue;
 	    if(curwdg == this) isOk = true;
 	    else if(isOk && curwdg->geometry().contains(curp)) {
 		RunWdgView *wdg = curwdg;
 		curp = wdg->mapFromGlobal(cursor().pos());
-		for(int i_cr = wdg->children().size()-1; i_cr >= 0; i_cr--) {
-		    curwdg = qobject_cast<RunWdgView*>(wdg->children().at(i_cr));
+		for(int iCr = wdg->children().size()-1; iCr >= 0; iCr--) {
+		    curwdg = qobject_cast<RunWdgView*>(wdg->children().at(iCr));
 		    if(curwdg && curwdg->geometry().contains(curp)) {
 			wdg = curwdg;
-			i_cr = wdg->children().size();
+			iCr = wdg->children().size();
 			curp = wdg->mapFromGlobal(cursor().pos());
 		    }
 		}
 		return QApplication::sendEvent(wdg, event);
 	    }
 	}
+	return QApplication::sendEvent(parentWidget(), event);
     }
 
     return QWidget::event(event);
@@ -568,14 +576,14 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
     if(id() == ipg) return this;
 
     //Check to included widgets
-    for(int i_ch = 0; i_ch < children().size(); i_ch++) {
-	if(qobject_cast<RunPageView*>(children().at(i_ch))) {
-	    pg = ((RunPageView*)children().at(i_ch))->findOpenPage(ipg);
+    for(int iCh = 0; iCh < children().size(); iCh++) {
+	if(qobject_cast<RunPageView*>(children().at(iCh))) {
+	    pg = ((RunPageView*)children().at(iCh))->findOpenPage(ipg);
 	    if(pg) return pg;
 	    continue;
 	}
-	if(!qobject_cast<RunWdgView*>(children().at(i_ch)))	continue;
-	RunWdgView *rwdg = (RunWdgView*)children().at(i_ch);
+	if(!qobject_cast<RunWdgView*>(children().at(iCh)))	continue;
+	RunWdgView *rwdg = (RunWdgView*)children().at(iCh);
 	if(rwdg->property("isVisible").toBool() && rwdg->root() == "Box") {
 	    if(rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty())
 		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toStdString());
@@ -592,29 +600,29 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
 bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const string &pgSrc )
 {
     //Check for set include page
-    for(int i_ch = 0; i_ch < children().size(); i_ch++)
-	if(!pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(i_ch)) &&
-		((RunWdgView*)children().at(i_ch))->property("isVisible").toBool() && ((RunWdgView*)children().at(i_ch))->root() == "Box")
+    for(int iCh = 0; iCh < children().size(); iCh++)
+	if(!pgGrp.empty() && !qobject_cast<RunPageView*>(children().at(iCh)) &&
+		((RunWdgView*)children().at(iCh))->property("isVisible").toBool() && ((RunWdgView*)children().at(iCh))->root() == "Box")
 	{
-	    if(((RunWdgView*)children().at(i_ch))->pgGrp() == pgGrp) {
-		string pg_it_prev = ((RunWdgView*)children().at(i_ch))->pgOpenSrc();
+	    if(((RunWdgView*)children().at(iCh))->pgGrp() == pgGrp) {
+		string pg_it_prev = ((RunWdgView*)children().at(iCh))->pgOpenSrc();
 		if(pg_it != pg_it_prev) {
 		    if(!pg_it_prev.empty()) {
 			XMLNode req("close");
 			req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
 			mainWin()->cntrIfCmd(req);
 		    }
-		    ((RunWdgView*)children().at(i_ch))->setPgOpenSrc(pg_it);
+		    ((RunWdgView*)children().at(iCh))->setPgOpenSrc(pg_it);
 		}
 		return true;
 	    }
-	    if(((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclPg &&
-		    ((ShapeBox::ShpDt*)((RunWdgView*)children().at(i_ch))->shpData)->inclPg->callPage(pg_it,pgGrp,pgSrc))
+	    if(((ShapeBox::ShpDt*)((RunWdgView*)children().at(iCh))->shpData)->inclPg &&
+		    ((ShapeBox::ShpDt*)((RunWdgView*)children().at(iCh))->shpData)->inclPg->callPage(pg_it,pgGrp,pgSrc))
 		return true;
         }
     //Put checking to self include pages
-    for(int i_ch = 0; i_ch < children().size(); i_ch++)
-	if(qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunPageView *)children().at(i_ch))->callPage(pg_it,pgGrp,pgSrc))
+    for(int iCh = 0; iCh < children().size(); iCh++)
+	if(qobject_cast<RunPageView*>(children().at(iCh)) && ((RunPageView *)children().at(iCh))->callPage(pg_it,pgGrp,pgSrc))
 	    return true;
     //Check for open child page or for unknown and empty source pages open as master page child windows
     if((pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg) {
@@ -655,11 +663,11 @@ void RunPageView::closeEvent( QCloseEvent *event )
     mainWin()->cntrIfCmd(req);
 
     //Close included pages
-    /*for(int i_ch = 0; i_ch < children().size(); i_ch++)
-	if(!qobject_cast<RunPageView*>(children().at(i_ch)) && ((RunWdgView *)children().at(i_ch))->root() == "Box" &&
-		!((RunWdgView*)children().at(i_ch))->pgOpenSrc().empty())
+    /*for(int iCh = 0; iCh < children().size(); iCh++)
+	if(!qobject_cast<RunPageView*>(children().at(iCh)) && ((RunWdgView *)children().at(iCh))->root() == "Box" &&
+		!((RunWdgView*)children().at(iCh))->pgOpenSrc().empty())
 	{
-	    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",((RunWdgView*)children().at(i_ch))->pgOpenSrc());
+	    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",((RunWdgView*)children().at(iCh))->pgOpenSrc());
 	    mainWin()->cntrIfCmd(req);
 	}*/
 }

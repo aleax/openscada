@@ -1,3 +1,14 @@
+2016-10-23 Roman
+- FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher Controllers.ntfDispatch as a JavaLikeCalc function is added for send EMail (by sendemail) and SMS.
+    UserProtocol.SMS: fixed, expanded and adapted for stated work.
+- SYS: TSecurity::access() function expanded for allow groups list as a separated by ',' one.
+    Base64 encoding/decoding method some expanded for line separator point as an argument.
+    TVarObj: pthread_mutexattr_t next replaced to ResMtx. Properties clear at EVAL set is added.
+- FIX:DAQ.JavaLikeCalc: Internal function's space split for temporary registers.
+- UI.{QTCfg,Vision,WebCfg,WebCfgD}: Primary commands expanded by "copy".
+- !:UI.Vision: Widget's tooltip and statustip show some fixed and included to put the events to next level widget into this container.
+
+
 2016-10-18 Roman
 - FIX:DB.LibsDB.OscadaLibs: DAQ template DevLib.SSCP: Loading of big LIST files performance some rised, by OpenSCADA core fix also.
 - !!!:SYS: TVariant for string type expanded to store too big data, more for STR_BUF_LEN(10000), as the standard string,

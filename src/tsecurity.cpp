@@ -122,7 +122,7 @@ void TSecurity::grpDel( const string &name, bool complete )
     chldDel(mGrp, name, -1, complete);
 }
 
-char TSecurity::access( const string &user, char mode, const string &owner, const string &group, int access )
+char TSecurity::access( const string &user, char mode, const string &owner, const string &groups, int access )
 {
     char rez = 0;
 
@@ -132,8 +132,15 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
     if(rez == mode)	return rez;
     rez |= (access&07)&mode;
     if(rez == mode)	return rez;
-    //Check groupe permision
-    if(grpAt("root").at().user(user) || (grpPresent(group) && grpAt(group).at().user(user))) rez |= ((access&070)>>3)&mode;
+    //Check groups permision
+    bool grpAccs = false;
+    grpAccs = grpAt("root").at().user(user);
+    string grp;
+    for(int off = 0; !grpAccs && (grp=TSYS::strParse(groups,0,",",&off)).size(); )
+	grpAccs = (grpPresent(grp) && grpAt(grp).at().user(user));
+    if(grpAccs) rez |= ((access&070)>>3)&mode;
+
+    //if(grpAt("root").at().user(user) || (grpPresent(group) && grpAt(group).at().user(user))) rez |= ((access&070)>>3)&mode;
 
     return rez;
 }

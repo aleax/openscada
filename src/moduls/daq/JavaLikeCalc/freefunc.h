@@ -181,6 +181,7 @@ class Reg
 	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);	   *el.o = ivar; }
 
 	string name( ) const			{ return mNm; }
+	string inFnc( ) const			{ return mInFnc; }
 	Type type( ) const			{ return mTp; }
 	Type vType( Func *fnc );
 	int pos( )				{ return mPos; }
@@ -188,6 +189,7 @@ class Reg
 	bool objEl( )				{ return mObjEl; }
 
 	void setName( const string &nm )	{ mNm = nm; }
+	void setInFnc( const string &vl )	{ mInFnc = vl; }
 	void setType( Type tp );
 	void setLock( bool vl )			{ mLock = vl; }
 	void setObjEl( )			{ mObjEl = true; }
@@ -201,7 +203,8 @@ class Reg
     private:
 	//Attributes
 	int	mPos;
-	string	mNm;
+	string	mNm,
+		mInFnc;		//In internal function context
 	bool	mObjEl;		//Object's element
 	bool	mLock;		//Locked register
 	Type	mTp;
