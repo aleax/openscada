@@ -302,6 +302,7 @@ bool RunWdgView::event( QEvent *event )
 		pnt.drawText(rect(),QString(_("Page: '%1'.\nView access is not permitted.")).arg(id().c_str()),to);
 	    }
 	    return true;
+	case QEvent::MouseButtonPress:	trToUnderlay = true;	break;
 	case QEvent::MouseButtonRelease:
 	    if(((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() &&
 		property("active").toBool() && permCntr() && isVisible(mapFromGlobal(cursor().pos())))
@@ -323,6 +324,7 @@ bool RunWdgView::event( QEvent *event )
 	    }
 	    trToUnderlay = true;
 	    break;
+	case QEvent::MouseButtonDblClick: trToUnderlay = true;	break;
 	case QEvent::ToolTip:
 	    if(isVisible(mapFromGlobal(cursor().pos()))) break;
 	    trToUnderlay = true;
@@ -482,14 +484,12 @@ bool RunWdgView::event( QEvent *event )
 		attrSet("event", mod_ev, A_NO_ID, true);
 		return true;
 	    }
-	    trToUnderlay = true;
 	    break;
 	case QEvent::MouseButtonDblClick:
 	    if(isVisible(mapFromGlobal(cursor().pos()))) {
 		attrSet("event", "key_mouseDblClick", A_NO_ID, true);
 		return true;
 	    }
-	    trToUnderlay = true;
 	    break;
 	case QEvent::FocusIn:
 	    attrs.push_back(std::make_pair("focus","1"));

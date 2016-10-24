@@ -1,3 +1,10 @@
+2016-10-24 Roman
+- DB.LibsDB.vcaBase: Attributes Main.{grpGraph,grpGraph10}.grpName were removed at last.
+    Main.{grpGraph,grpGraph10,ElViewGraph} adapted to per-user saving selected graphics.
+- UI.VCAEngine: Programs translation by default set to false.
+- FIX:UI.Vision: Events MouseButtonPress, MouseButtonDblClick for put to next level widget into this container fixed.
+
+
 2016-10-23 Roman
 - FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher Controllers.ntfDispatch as a JavaLikeCalc function is added for send EMail (by sendemail) and SMS.
     UserProtocol.SMS: fixed, expanded and adapted for stated work.
