@@ -94,7 +94,7 @@ void TController::postDisable( int flag )
 {
     if(flag) {
 	//Delete DB record
-	SYS->db().at().dataDel(fullDB(),owner().nodePath()+"DAQ",*this,true);
+	SYS->db().at().dataDel(fullDB(), owner().nodePath()+"DAQ", *this, true);
 
 	//Delete parameter's tables
 	for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++) {

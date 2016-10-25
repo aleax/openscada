@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.2.7"
+#define MOD_VER		"3.2.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -514,7 +514,7 @@ void Contr::save_( )
 	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
 		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true, false, true);
-		fldCnt--;
+		if(full.empty()) fldCnt--;
 	    }
     }
 }

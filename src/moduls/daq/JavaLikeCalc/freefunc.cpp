@@ -222,7 +222,7 @@ void Func::saveIO( )
     for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg,false,&full); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
 	    SYS->db().at().dataDel(io_bd, io_cfgpath, cfg, true, false, true);
-	    fldCnt--;
+	    if(full.empty()) fldCnt--;
 	}
 }
 

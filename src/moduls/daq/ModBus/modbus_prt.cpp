@@ -794,7 +794,7 @@ void Node::save_( )
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&Node::LockAttr) {
 	    SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg, true, false, true);
-	    fldCnt--;
+	    if(full.empty()) fldCnt--;
 	}
     }
 }

@@ -54,7 +54,7 @@ INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><co
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','User interface''s main elements library.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.1','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
+Version: 1.2.2','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версія: 1.1.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
 Автор: Роман Савоченко <rom_as@oscada.org>
@@ -1791,7 +1791,7 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','98',32,'','','st_open','','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','name','Graphics group',41,'','','','Група графіків','','Группа графиков','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','dscr','Pages template: "Graphics group"
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','Шаблон сторінок: "Група графіків"
+Version: 1.2.0',32,'','','','Шаблон сторінок: "Група графіків"
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версія: 1.1.0','','Шаблон страниц: "Группа графиков"
 Автор: Роман Савоченко <rom_as@oscada.org>
@@ -3586,7 +3586,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1474391075',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1477413736',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','curUSek','0',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','');
@@ -4390,7 +4390,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordColor','gray',32,'','','
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordStyle','6',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','name','',32,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','dscr','Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.1',42,'Parameter|DESCR','','','','','','','','');
+Version: 1.1.1',42,'Parameter|DESCR','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomY','13.376',32,'','','btPass','','','','','','');
@@ -5757,7 +5757,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','trendsList','
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Graphics group 10',41,'','','','Група графіків 10','','Группа графиков 10','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','dscr','Pages template: "Graphics group 10"
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0',32,'','','','Шаблон сторінок: "Група графіків 10"
+Version: 1.2.0',32,'','','','Шаблон сторінок: "Група графіків 10"
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версія: 1.1.0','','Шаблон страниц: "Группа графиков 10"
 Автор: Роман Савоченко <rom_as@oscada.org>
@@ -17488,7 +17488,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1477315568);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1477414088);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAD/klEQVRYhe2Z224bRRiA57gHr8/H2MEpLSCRovYGiXsE4qJ9gEq8RR+A
 23LDg0TiFSJ6Ty8hvSEJJSRqnMb2endnZ2dPPxdxTZq6jllMlkr+rmakmX//z/96ZjSLv/v+Bx9p
@@ -18543,11 +18543,14 @@ bufzSvjw9LrpylLUFUAwk93d63MApFMH2zUoILArM9Nbc3IAIZ1MXj+fCD9VbCrJpsqWreYvsSQg
 NpKA2EgCYiMJiI0kIDaXeyECoEeUQv6PTwCXGsDLAq0A76pWztXxAqxfnJFRFBUIBM7HBoC3VS7q
 KnQCmP4YUhT1GyVO83OL1qsxAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 var user_;
-if(f_start)	perUserSel = this.ownerWdg(true).attr("perUserSel");
+if(f_start)	{
+	allowSel = this.ownerWdg(true).attr("allowSelLst").length;
+	perUserSel = this.ownerWdg(true).attr("perUserSel");
+}
 user = (perUserSel == true) ? this.ownerSess().user() : "";
 if(f_start || user != user_) { loadFromSess = false; user_ = user; }
 en = enForce || !name.isEVal();
-if((en && name.isEVal()) || !loadFromSess) {
+if(allowSel && ((en && name.isEVal()) || !loadFromSess)) {
 	name = tr("<No selected>");
 	//Load stored session''s assignments
 	if(!loadFromSess) {
@@ -18611,7 +18614,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1477315895);
+}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1477414088);
 INSERT INTO "wlb_Main" VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -19712,7 +19715,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1477315572);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1477414088);
 INSERT INTO "wlb_Main" VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ

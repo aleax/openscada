@@ -225,7 +225,7 @@ void TPrmTempl::save_( )
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr) {
 	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true);
-	    fld_cnt--;
+	    if(full.empty()) fld_cnt--;
 	}
     }
 }
