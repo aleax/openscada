@@ -56,7 +56,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods
@@ -100,7 +100,7 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	TTpContr &owner( );
+	TTpContr &owner( ) const;
 
 	ResRW &nodeRes( )	{ return nRes; }
 

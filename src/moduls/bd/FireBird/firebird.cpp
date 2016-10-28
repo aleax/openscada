@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.3.8"
+#define MOD_VER		"1.3.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -172,12 +172,12 @@ void MBD::disable( )
     hdb = 0;
 }
 
-void MBD::allowList( vector<string> &list )
+void MBD::allowList( vector<string> &list ) const
 {
     if(!enableStat()) return;
     list.clear();
     vector< vector<string> > tbl;
-    sqlReq("SELECT rdb$relation_name FROM rdb$relations WHERE "
+    const_cast<MBD*>(this)->sqlReq("SELECT rdb$relation_name FROM rdb$relations WHERE "
 	"((rdb$system_flag = 0) OR (rdb$system_flag IS NULL)) AND "
 	"(rdb$view_source IS NULL) ORDER BY rdb$relation_name", &tbl);
     for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
@@ -473,9 +473,7 @@ void MTable::postDisable( int flag )
     }
 }
 
-MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
-
-
+MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {

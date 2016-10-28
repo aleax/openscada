@@ -1975,7 +1975,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	}
     }
 
-    return (reld_tr_dt|make_pct|up);
+    return (reld_tr_dt || make_pct || up);
 }
 
 void ShapeDiagram::loadData( WdgView *w, bool full )

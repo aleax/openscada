@@ -55,16 +55,17 @@ class IO
 	//Methods
 	IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "",
 		bool hide = false, const char *rez = "" );
+	IO( const IO &src );
 
-	IO &operator=( IO &iio );
+	IO &operator=( const IO &iio );
 
-	const string &id( )	{ return mId; }
-	const string &name( )	{ return mName; }
-	const Type &type( )	{ return mType; }
-	unsigned flg( )		{ return mFlg; }
-	const string &def( )	{ return mDef; }
-	bool  hide( )		{ return mHide; }
-	const string &rez( )	{ return mRez; }
+	const string &id( ) const	{ return mId; }
+	const string &name( ) const	{ return mName; }
+	const Type &type( ) const	{ return mType; }
+	unsigned flg( ) const		{ return mFlg; }
+	const string &def( ) const	{ return mDef; }
+	bool  hide( ) const		{ return mHide; }
+	const string &rez( ) const	{ return mRez; }
 
 	void setId( const string &val );
 	void setName( const string &val );
@@ -97,16 +98,17 @@ class TFunction : public TCntrNode
     public:
 	//Methods
 	TFunction( const string &id, const char *grp = "root", const string &stor = "" );
+	TFunction( const TFunction &src );
 	virtual ~TFunction( );
 
-	TFunction &operator=( TFunction &func );
+	TFunction &operator=( const TFunction &func );
 
-	string	id( )			{ return mId.c_str(); };
+	string	id( ) const		{ return mId.c_str(); };
 	virtual	string name( )		{ return ""; }
 	virtual	string descr( )		{ return ""; }
 	virtual	string prog( )		{ return ""; }
-	virtual	string stor( )		{ return mStor; }
-	bool	startStat( )		{ return runSt; }
+	virtual	string stor( ) const	{ return mStor; }
+	bool	startStat( ) const	{ return runSt; }
 	int	use( )			{ return used.size(); }
 	ResRW	&fRes( )		{ return mFRes; }
 
@@ -117,9 +119,9 @@ class TFunction : public TCntrNode
 
 	// IO
 	void ioList( vector<string> &list );
-	int ioId( const string &id );
-	int ioSize( );
-	IO *io( int id );
+	int ioId( const string &id ) const;
+	int ioSize( ) const;
+	IO *io( int id ) const;
 	void ioAdd( IO *io );
 	int ioIns( IO *io, int pos );
 	void ioDel( int pos );
@@ -137,8 +139,8 @@ class TFunction : public TCntrNode
 
     protected:
 	//Methods
-	const char *nodeName( )	{ return mId.c_str(); }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	const char *nodeName( ) const	{ return mId.c_str(); }
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preDisable( int flag );
 

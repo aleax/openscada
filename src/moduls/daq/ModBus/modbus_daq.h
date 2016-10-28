@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.15"
+#define DAQ_MVER	"1.8.16"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -64,10 +64,10 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	bool isStd( );
-	bool isLogic( );
+	bool isStd( ) const;
+	bool isLogic( ) const;
 
 	void enable( );
 	void disable( );
@@ -79,7 +79,7 @@ class TMdPrm : public TParamContr
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods
@@ -156,7 +156,7 @@ class TMdContr: public TController
 
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
-	string	addr( )		{ return mAddr; }
+	string	addr( ) const	{ return mAddr; }
 	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }

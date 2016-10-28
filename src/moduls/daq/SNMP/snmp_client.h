@@ -60,7 +60,7 @@ class TMdPrm : public TParamContr
 
 	void upVal( void *ss, bool onlyInit = false );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     private:
 	//Methods

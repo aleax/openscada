@@ -54,19 +54,19 @@ class TDAQS : public TSubSYS
 	void subStart( );
 	void subStop( );
 
-	AutoHD<TTypeDAQ> at( const string &name )		{ return modAt(name); }
-	AutoHD<TCntrNode> daqAt( const string &path, char sep = 0, bool noex = false, bool waitForAttr = false );
-	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false );
-	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false );
+	AutoHD<TTypeDAQ> at( const string &name ) const		{ return modAt(name); }
+	AutoHD<TCntrNode> daqAt( const string &path, char sep = 0, bool noex = false, bool waitForAttr = false ) const;
+	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false ) const;
+	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false ) const;
 	void ctrListPrmAttr( XMLNode *nd, const string &addrBase, bool toPrm = false, char sep = 0, const string &pref = "" );
 
 	// Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }
-	void tmplLibList( vector<string> &list )		{ chldList(mTmpLib,list); }
-	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmpLib,id); }
+	void tmplLibList( vector<string> &list ) const		{ chldList(mTmpLib,list); }
+	bool tmplLibPresent( const string &id ) const		{ return chldPresent(mTmpLib,id); }
 	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmpLib,lib); }
 	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmpLib,id,-1,flg); }
-	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmpLib,id); }
+	AutoHD<TPrmTmplLib> tmplLibAt( const string &id ) const	{ return chldAt(mTmpLib,id); }
 
 	// Redundancy
 	bool rdProcess( XMLNode *reqSt = NULL );

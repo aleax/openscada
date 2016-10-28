@@ -39,7 +39,7 @@
 #define MOD_NAME	_("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.9"
+#define MOD_VER		"0.6.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
 #define LICENSE		"GPL2"
@@ -159,7 +159,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem),
     mPrior(cfg("PRIOR").getId()), mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
-    prc_st(false), endrun_req(false), tm_gath(0)
+    mPer(0), prc_st(false), endrun_req(false), tm_gath(0)
 {
 
 }
@@ -274,7 +274,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&els))	vlElemAtt(&els);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

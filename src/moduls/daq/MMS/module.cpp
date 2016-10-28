@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.10"
+#define MOD_VER		"1.3.11"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -528,7 +528,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

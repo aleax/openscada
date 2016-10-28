@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.7.1"
+#define MOD_VER		"3.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -466,7 +466,7 @@ void Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
     chldAdd(idWlb, new WidgetLib(iid,inm,idb));
 }
 
-AutoHD<WidgetLib> Engine::wlbAt( const string &id )	{ return chldAt(idWlb,id); }
+AutoHD<WidgetLib> Engine::wlbAt( const string &id ) const	{ return chldAt(idWlb,id); }
 
 void Engine::prjAdd( const string &iid, const string &inm, const string &idb )
 {
@@ -474,7 +474,7 @@ void Engine::prjAdd( const string &iid, const string &inm, const string &idb )
     chldAdd(idPrj, new Project(iid,inm,idb));
 }
 
-AutoHD<Project> Engine::prjAt( const string &id )	{ return chldAt(idPrj,id); }
+AutoHD<Project> Engine::prjAt( const string &id ) const	{ return chldAt(idPrj,id); }
 
 void Engine::sesAdd( const string &iid, const string &iproj )
 {
@@ -482,9 +482,9 @@ void Engine::sesAdd( const string &iid, const string &iproj )
     chldAdd(idSes, new Session(iid,iproj));
 }
 
-AutoHD<Session> Engine::sesAt( const string &id )	{ return chldAt(idSes,id); }
+AutoHD<Session> Engine::sesAt( const string &id ) const	{ return chldAt(idSes,id); }
 
-AutoHD<TFunction> Engine::fAt( const string &id )	{ return chldAt(idFnc,id); }
+AutoHD<TFunction> Engine::fAt( const string &id ) const	{ return chldAt(idFnc,id); }
 
 void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen )
 {
@@ -634,7 +634,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    string sid = cEl.cfg("ID").getS();
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
-	    SYS->db().at().dataDel(fullDB+"_io", nodePath()+tbl+"_io", cEl, true, false, true);
+	    if(!SYS->db().at().dataDel(fullDB+"_io",nodePath()+tbl+"_io",cEl,true,false,true))	break;
 	    if(full.empty()) fldCnt--;
 	}
 
@@ -644,7 +644,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    string sid = cElu.cfg("ID").getS();
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
-	    SYS->db().at().dataDel(fullDB+"_uio", nodePath()+tbl+"_uio", cElu, true, false, true);
+	    if(!SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",cElu,true,false,true)) break;
 	    if(full.empty()) fldCnt--;
 	}
     }
@@ -897,7 +897,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-AutoHD<TCntrNode> Engine::chldAt( int8_t igr, const string &name, const string &user )
+AutoHD<TCntrNode> Engine::chldAt( int8_t igr, const string &name, const string &user ) const
 {
     AutoHD<TCntrNode> nd = TCntrNode::chldAt(igr, name, user);
     if(igr == idPrj && !nd.freeStat()) {

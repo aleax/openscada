@@ -72,7 +72,7 @@ class TMdPrm : public TParamContr
 	string addPrm( const string &prm, const string &def = "" );
 	void setAddPrm( const string &prm, const string &val );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	//Attributes
 	ResString daErr;		//DA error

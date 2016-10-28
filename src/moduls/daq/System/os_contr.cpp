@@ -48,7 +48,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.7"
+#define MOD_VER		"2.0.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -326,7 +326,7 @@ TMdPrm::~TMdPrm( )
     setType("");
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

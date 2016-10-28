@@ -38,7 +38,7 @@
 #define MOD_NAME	_("BCM 2835")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.1"
+#define MOD_VER		"1.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO and other. Mostly for and used in Raspberry Pi.")
 #define LICENSE		"GPL2"
@@ -194,7 +194,7 @@ void TMdPrm::postEnable( int flag )
     pEl.fldAdd(new TFld("gpio31","GPIO 31: P5.6",TFld::Boolean,TVal::DirRead|TVal::DirWrite));
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

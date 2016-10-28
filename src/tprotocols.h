@@ -64,11 +64,11 @@ class TProtocolIn : public TCntrNode
 	//              True  - for need tail or just wait.
 	virtual bool mess( const string &request, string &answer )	{ answer = ""; return false; }
 
-	TProtocol &owner( );
+	TProtocol &owner( ) const;
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mName.c_str(); }
+	const char *nodeName( ) const	{ return mName.c_str(); }
 
 	//Attributes
 	string	mName,
@@ -93,11 +93,11 @@ class TProtocol: public TModule
 	virtual void itemListIn( vector<string> &ls, const string &curIt = "" );
 
 	// Input protocol
-	void list( vector<string> &list )		{ chldList(m_pr,list); }
-	bool openStat( const string &name )		{ return chldPresent(m_pr,name); }
+	void list( vector<string> &list ) const		{ chldList(m_pr,list); }
+	bool openStat( const string &name ) const	{ return chldPresent(m_pr,name); }
 	void open( const string &name, TTransportIn *tr = NULL, const string &sender = "" );
 	void close( const string &name );
-	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
+	AutoHD<TProtocolIn> at( const string &name ) const	{ return chldAt(m_pr,name); }
 
 	// Output protocol
 	virtual void outMess( XMLNode &io, TTransportOut &tro )
@@ -123,7 +123,7 @@ class TProtocolS : public TSubSYS
 
 	int subVer( )		{ return SPRT_VER; }
 
-	AutoHD<TProtocol> at( const string &iid )	{ return modAt(iid); }
+	AutoHD<TProtocol> at( const string &iid ) const	{ return modAt(iid); }
 
 	string optDescr( );
 

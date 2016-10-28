@@ -51,7 +51,7 @@ class TSubSYS : public TCntrNode
 	string	subName( );
 	bool subStartStat( )	{ return mStart; }
 
-	bool subModule( )	{ return mModSys; }	//Module subsystem
+	bool subModule( ) const	{ return mModSys; }	//Module subsystem
 
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
 
@@ -64,12 +64,12 @@ class TSubSYS : public TCntrNode
 	bool modPresent( const string &name );
 	void modAdd( TModule *modul );
 	void modDel( const string &name );
-	AutoHD<TModule> modAt( const string &name );
+	AutoHD<TModule> modAt( const string &name ) const;
 
 	virtual void perSYSCall( unsigned int cnt );
 	virtual bool rdProcess( XMLNode *reqSt = NULL )	{ return false; }	//Main redundancy processing function in the subsystem specific
 
-	TSYS &owner( );
+	TSYS &owner( ) const;
 
     protected:
 	//Protected methods
@@ -80,8 +80,8 @@ class TSubSYS : public TCntrNode
 
     private:
 	//Private methods
-	const char *nodeName( )		{ return mId.c_str(); }
-	const char *nodeNameSYSM( )	{ return mName.c_str(); }
+	const char *nodeName( ) const		{ return mId.c_str(); }
+	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
 
 	//Private attributes
 	bool	mModSys;

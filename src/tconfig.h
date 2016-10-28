@@ -60,30 +60,31 @@ class TCfg : public TVariant
 
 	//Methods
 	TCfg( TFld &fld, TConfig &owner );
+	TCfg( const TCfg &cfg );
 	~TCfg( );
 
 	const string &name( );
 
 	bool	operator==( TCfg &cfg );
-	TCfg	&operator=( TCfg &cfg );
+	TCfg	&operator=( const TCfg &cfg );
 
-	bool	view( )			{ return mView; }
-	bool	keyUse( )		{ return mKeyUse; }
-	bool	noTransl( )		{ return mNoTransl; }
-	bool	reqKey( )		{ return mReqKey; }
-	bool	isKey( );						//Whether real or request key test
-	bool	extVal( )		{ return mExtVal; }
+	bool	view( ) const		{ return mView; }
+	bool	keyUse( ) const		{ return mKeyUse; }
+	bool	noTransl( ) const	{ return mNoTransl; }
+	bool	reqKey( ) const		{ return mReqKey; }
+	bool	isKey( ) const;						//Whether real or request key test
+	bool	extVal( ) const		{ return mExtVal; }
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if(fld().flg()&Key) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 	void	setReqKey( bool vl );
 	void	setExtVal( bool vw )	{ mExtVal = vw; }
 
-	TFld	&fld( )			{ return *mFld; }
+	TFld	&fld( ) const		{ return *mFld; }
 
 	// Universal access
 	string	getSEL( );
-	string	getS( );
+	string	getS( ) const;
 	string	getS( uint8_t RqFlg );
 	operator bool( )		{ return getB(); }
 
@@ -110,7 +111,7 @@ class TCfg : public TVariant
 	TCfg	&operator=( int64_t vl )	{ setI(vl); return *this; }
 	TCfg	&operator=( bool vl )		{ setB(vl); return *this; }
 
-	TConfig	&owner( )	{ return mOwner; }
+	TConfig	&owner( ) const		{ return mOwner; }
 
     private:
 	//Attributes
@@ -145,10 +146,10 @@ class TConfig: public TValElem
 	TConfig &operator=( const TConfig &cfg );
 	TConfig &exclCopy( const TConfig &cfg, const string &passCpLs = "", bool cpElsToSingle = false );
 
-	void cfgList( vector<string> &list );
+	void cfgList( vector<string> &list ) const;
 	bool cfgPresent( const string &n_val ) const;
-	TCfg &cfg( const string &n_val );
-	TCfg *at( const string &n_val, bool noExpt = false );
+	TCfg &cfg( const string &n_val ) const;
+	TCfg *at( const string &n_val, bool noExpt = false ) const;
 	void cfgViewAll( bool val = true );	// Show/Hide all no key elements
 	void cfgKeyUseAll( bool val );
 

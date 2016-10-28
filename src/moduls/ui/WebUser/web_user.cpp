@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.7.0"
+#define MOD_VER		"0.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -218,8 +218,8 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 			"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 			"'DTD/xhtml1-transitional.dtd'>\n"
 			"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
-			"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-			"<title>"PACKAGE_NAME"!</title>\n"
+			"<meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n"
+			"<title>" PACKAGE_NAME "!</title>\n"
 			"<style type='text/css'>\n"
 			"  hr { width: 95%; }\n"
 			"  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
@@ -233,7 +233,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 			"</style>\n"
 			"</head>\n"
 			"<body>\n"
-			"<h1 class='head'>"PACKAGE_NAME"</h1>\n"
+			"<h1 class='head'>" PACKAGE_NAME "</h1>\n"
 			"<hr/><br/>\n"
 			"<center><table class='work' width='50%'>\n"
 			"<tr><td class='content'>"
@@ -431,9 +431,9 @@ UserPg::~UserPg( )
     try{ setEnable(false); } catch(...) { }
 }
 
-TCntrNode &UserPg::operator=( TCntrNode &node )
+TCntrNode &UserPg::operator=( const TCntrNode &node )
 {
-    UserPg *src_n = dynamic_cast<UserPg*>(&node);
+    const UserPg *src_n = dynamic_cast<const UserPg*>(&node);
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -450,7 +450,7 @@ void UserPg::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
 }
 
-TWEB &UserPg::owner( )		{ return *(TWEB*)nodePrev(); }
+TWEB &UserPg::owner( ) const	{ return *(TWEB*)nodePrev(); }
 
 string UserPg::name( )
 {
@@ -458,7 +458,7 @@ string UserPg::name( )
     return rez.size() ? rez : id();
 }
 
-string UserPg::tbl( )		{ return owner().modId()+"_uPg"; }
+string UserPg::tbl( ) const	{ return owner().modId()+"_uPg"; }
 
 string UserPg::progLang( )
 {

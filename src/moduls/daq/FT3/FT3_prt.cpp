@@ -237,7 +237,7 @@ TProtIn::~TProtIn()
     if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("delete TProtIn"));
 }
 
-TProt &TProtIn::owner()
+TProt &TProtIn::owner( ) const
 {
     return *(TProt*) nodePrev();
 }

@@ -37,16 +37,16 @@ class PrWidget : public LWidget
 	//Methods
 	PrWidget( const string &iid );
 
-	string rootId( )	{ return id(); }
-	string ico( );
-	string type( )		{ return "Terminator"; }
-	string parentNm( )	{ return "root"; }
-	string name( )		{ return _("Root primitive"); }
-	string descr( )		{ return _("Abstract root primitive"); }
+	string rootId( ) const		{ return id(); }
+	string ico( ) const;
+	string type( )			{ return "Terminator"; }
+	string parentNm( ) const	{ return "root"; }
+	string name( ) const		{ return _("Root primitive"); }
+	string descr( ) const		{ return _("Abstract root primitive"); }
 
 	void setName( const string &inm )	{ }
 	void setDescr( const string &idscr )	{ }
-	void setEnable( bool val );
+	void setEnable( bool val, bool force = false );
 
     protected:
 	//Methods
@@ -69,8 +69,8 @@ class OrigElFigure : public PrWidget
 	//Methods
 	OrigElFigure( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
     protected:
 	//Methods
@@ -88,8 +88,8 @@ class OrigFormEl : public PrWidget
 	//Methods
 	OrigFormEl( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
     protected:
 	//Methods
@@ -108,8 +108,8 @@ class OrigText : public PrWidget
 	//Methods
 	OrigText( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
      protected:
 	//Methods
@@ -127,8 +127,8 @@ class OrigMedia : public PrWidget
 	//Methods
 	OrigMedia( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
     protected:
 	//Methods
@@ -146,8 +146,8 @@ class OrigDiagram : public PrWidget
 	//Methods
 	OrigDiagram( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
     protected:
 	//Methods
@@ -165,8 +165,8 @@ class OrigProtocol : public PrWidget
 	//Methods
 	OrigProtocol( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
     protected:
 	//Methods
@@ -188,8 +188,8 @@ class OrigDocument : public PrWidget
 	//Methods
 	OrigDocument( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
     protected:
 	//Methods
@@ -218,8 +218,8 @@ class OrigFunction : public PrWidget
 	//Methods
 	OrigFunction( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 };
 
 //************************************************
@@ -231,10 +231,10 @@ class OrigBox : public PrWidget
 	//Methods
 	OrigBox( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
-	bool isContainer( )	{ return true; }
+	bool isContainer( ) const	{ return true; }
 
     protected:
 	//Methods
@@ -251,8 +251,8 @@ class OrigLink : public PrWidget
 	//Methods
 	OrigLink( );
 
-	string name( );
-	string descr( );
+	string name( ) const;
+	string descr( ) const;
 
     protected:
 	//Methods

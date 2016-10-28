@@ -36,14 +36,19 @@ Func *JavaLikeCalc::pF;
 //*************************************************
 //* Func: Function                                *
 //*************************************************
-Func::Func( const string &iid, const string &name ) :
-    TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
+Func::Func( const string &iid, const string &name ) : TConfig(&mod->elFnc()), TFunction(iid, SDAQ_ID),
     mMaxCalcTm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parseRes(mod->parseRes())
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
     cfg("FORMULA").setExtVal(true);
     mMaxCalcTm = mod->safeTm();
+}
+
+Func::Func( const Func &ifunc ) : TConfig(&mod->elFnc()), TFunction(ifunc.id(), SDAQ_ID),
+    mMaxCalcTm(ifunc.mMaxCalcTm), mTimeStamp(ifunc.mTimeStamp), parseRes(mod->parseRes())
+{
+    operator=(ifunc);
 }
 
 Func::~Func( )
@@ -71,7 +76,7 @@ bool Func::cfgChange( TCfg &co, const TVariant &pc )
     return true;
 }
 
-Lib &Func::owner( )	{ return *((Lib*)nodePrev()); }
+Lib &Func::owner( ) const	{ return *((Lib*)nodePrev()); }
 
 string Func::name( )
 {
@@ -79,11 +84,11 @@ string Func::name( )
     return tNm.size() ? tNm : id();
 }
 
-string Func::stor( )	{ return TFunction::stor().size() ? TFunction::stor() : owner().DB(); }
+string Func::stor( ) const	{ return TFunction::stor().size() ? TFunction::stor() : owner().DB(); }
 
-TCntrNode &Func::operator=( TCntrNode &node )
+TCntrNode &Func::operator=( const TCntrNode &node )
 {
-    Func *src_n = dynamic_cast<Func*>(&node);
+    const Func *src_n = dynamic_cast<const Func*>(&node);
     if(!src_n) return *this;
 
     *(TConfig *)this = *(TConfig*)src_n;
@@ -97,7 +102,7 @@ TCntrNode &Func::operator=( TCntrNode &node )
     return *this;
 }
 
-Func &Func::operator=( Func &func )
+Func &Func::operator=( const Func &func )
 {
     *(TConfig*)this = (TConfig&)func;
     *(TFunction*)this = (TFunction&)func;
@@ -126,9 +131,9 @@ void Func::setMaxCalcTm( int vl )
     if(!owner().DB().empty()) modif();
 }
 
-void Func::setProg( const string &prg )
+void Func::setProg( const string &iprg )
 {
-    cfg("FORMULA").setS(prg);
+    cfg("FORMULA").setS(iprg);
     if(owner().DB().empty()) modifClr();
 }
 
@@ -221,7 +226,7 @@ void Func::saveIO( )
     cfg.cfgViewAll(false);
     for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg,false,&full); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
-	    SYS->db().at().dataDel(io_bd, io_cfgpath, cfg, true, false, true);
+	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true,false,true))	break;
 	    if(full.empty()) fldCnt--;
 	}
 }
@@ -2776,7 +2781,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 //*************************************************
 Reg::~Reg( )	{ setType(Free); }
 
-Reg &Reg::operator=( Reg &irg )
+Reg &Reg::operator=( const Reg &irg )
 {
     setType(irg.type());
     switch(type()) {

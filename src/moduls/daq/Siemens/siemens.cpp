@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.12"
+#define MOD_VER		"2.0.13"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -493,7 +493,7 @@ string TMdContr::getStatus( )
     return rez;
 }
 
-TTpContr &TMdContr::owner( )	{ return *(TTpContr*)nodePrev(); }
+TTpContr &TMdContr::owner( ) const	{ return *(TTpContr*)nodePrev(); }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new TMdPrm(name,&owner().tpPrmAt(type)); }
 
@@ -1724,7 +1724,7 @@ void TMdContr::oN( string &buf, uint32_t val, uint8_t sz, int off )
 {
     union { uint32_t v; char c[4]; } dt;
     dt.v = TSYS::i32_LE(val);
-    if(sz < 0 || sz > 4) for(sz = 4; sz > 1 && !dt.c[sz-1]; ) sz--;
+    if(/*sz < 0 || */sz > 4) for(sz = 4; sz > 1 && !dt.c[sz-1]; ) sz--;
     off = (off >= 0) ? std::min(off,(int)buf.size()) : buf.size();
     if((off+sz) > (int)buf.size()) buf.append(off+sz-buf.size(), char(0));
     while(sz) buf[off++] = dt.c[--sz];
@@ -1763,7 +1763,7 @@ void TMdPrm::postDisable( int flag )
     }
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

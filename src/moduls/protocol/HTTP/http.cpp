@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.5"
+#define MOD_VER		"1.6.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -226,7 +226,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    bool isCnt = false;
 	    for(unsigned cnt_c = 0; cnt_c < io.childSize(); cnt_c++) {
 		if(io.childGet(cnt_c)->name() != "cnt") continue;
-		cnt += "--"cntBnd"\x0D\x0A";
+		cnt += "--" cntBnd "\x0D\x0A";
 		cnt += "Content-Disposition: form-data; \""+io.childGet(cnt_c)->attr("name")+
 		       "\"; filename=\""+io.childGet(cnt_c)->attr("filename")+"\"\x0D\x0A";
 		// Place appended content properties
@@ -238,8 +238,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		isCnt = true;
 	    }
 	    if(isCnt) {
-		cnt += "--"cntBnd"--\x0D\x0A";
-		io.childAdd("prm")->setAttr("id","Content-Type")->setText("multipart/form-data; boundary="cntBnd);
+		cnt += "--" cntBnd "--\x0D\x0A";
+		io.childAdd("prm")->setAttr("id","Content-Type")->setText("multipart/form-data; boundary=" cntBnd);
 	    } else cnt = io.text();
 	    io.childAdd("prm")->setAttr("id","Content-Length")->setText(i2s(cnt.size()));
 	}
@@ -249,7 +249,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	req = TSYS::strMess("%s %s HTTP/1.1\x0D\x0A",io.name().c_str(),uri.c_str());
 	// Place main HTTP properties
 	req += TSYS::strMess("Host: %s\x0D\x0A",host.c_str());
-	req += "User-Agent: "PACKAGE_NAME" v"VERSION"\x0D\x0A";
+	req += "User-Agent: " PACKAGE_NAME " v" VERSION "\x0D\x0A";
 	// Place appended HTTP-properties
 	for(unsigned ch_c = 0; ch_c < io.childSize(); ch_c++)
 	    if(io.childGet(ch_c)->name() == "prm")

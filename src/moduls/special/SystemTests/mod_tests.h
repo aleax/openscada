@@ -49,10 +49,10 @@ class TTest: public TSpecial
 	void prXMLNode( const string &cat, XMLNode *node, int level = 0 );
 
 	//> Test's functions
-	void testList( vector<string> &ls )		{ chldList(mTest,ls); }
-	bool testPresent( const string &id )		{ return chldPresent(mTest,id); }
+	void testList( vector<string> &ls ) const	{ chldList(mTest, ls); }
+	bool testPresent( const string &id ) const		{ return chldPresent(mTest, id); }
 	void testReg( TFunction *test )			{ chldAdd(mTest, test); }
-	AutoHD<TFunction> testAt( const string &id )	{ return chldAt(mTest,id); }
+	AutoHD<TFunction> testAt( const string &id ) const	{ return chldAt(mTest, id); }
 
     protected:
 	//Methods

@@ -42,7 +42,7 @@ class TUI : public TModule
     public:
 	TUI( const string &id );
 
-	bool startStat( )	{ return runSt; }
+	bool startStat( ) const	{ return runSt; }
 
     protected:
 	//Methods
@@ -66,7 +66,7 @@ class TUIS : public TSubSYS
 
 	int subVer( )		{ return SUI_VER; }
 
-	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
+	AutoHD<TUI> at( const string &name ) const	{ return modAt(name); }
 
 	// All system UI functions
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );

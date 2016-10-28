@@ -55,7 +55,7 @@ class Prm : public TParamContr
 	void enable( );
 	void disable( );
 
-	Contr &owner( );
+	Contr &owner( ) const;
 
     protected:
 	//Protected methods
@@ -88,7 +88,7 @@ class Contr: public TController
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string getStatus( );
 
@@ -98,13 +98,13 @@ class Contr: public TController
 	int iterate( )				{ return mIter; }
 
 	// Scheme's functions
-	void blkList( vector<string> &ls )	{ chldList(mBl,ls); }
-	bool blkPresent( const string &id )	{ return chldPresent(mBl,id); }
+	void blkList( vector<string> &ls ) const	{ chldList(mBl, ls); }
+	bool blkPresent( const string &id ) const	{ return chldPresent(mBl, id); }
 	void blkAdd( const string &id );
-	void blkDel( const string &id )		{ chldDel(mBl,id); }
-	AutoHD<Block> blkAt( const string &id )	{ return chldAt(mBl,id); }
+	void blkDel( const string &id )			{ chldDel(mBl, id); }
+	AutoHD<Block> blkAt( const string &id ) const	{ return chldAt(mBl, id); }
 
-	TpContr &owner( );
+	TpContr &owner( ) const;
 
 	void redntDataUpdate( );
 

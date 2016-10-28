@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define PRT_NAME	_("ModBUS")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.0.8"
+#define PRT_MVER	"1.0.9"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define PRT_LICENSE	"GPL2"
@@ -64,7 +64,7 @@ class TProtIn: public TProtocolIn
 
 	bool mess( const string &request, string &answer );
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
     public:
 	//Attributes
@@ -93,15 +93,15 @@ class Node : public TFunction, public TConfig
 	Node( const string &iid, const string &db, TElem *el );
 	~Node( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )		{ return mId; }
+	string id( )			{ return mId; }
 	string name( );
-	string descr( )		{ return mDscr; }
-	string stor( )		{ return DB(); }
-	bool toEnable( )	{ return mAEn; }
-	bool enableStat( )	{ return mEn; }
-	int addr( );
+	string descr( )			{ return mDscr; }
+	string stor( ) const		{ return DB(); }
+	bool toEnable( )		{ return mAEn; }
+	bool enableStat( ) const	{ return mEn; }
+	int addr( ) const;
 	string inTransport( );
 	string prt( );
 	NodeModes mode( );
@@ -113,7 +113,7 @@ class Node : public TFunction, public TConfig
 
 	string getStatus( );
 
-	string DB( )		{ return mDB; }
+	string DB( ) const	{ return mDB; }
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
@@ -129,7 +129,7 @@ class Node : public TFunction, public TConfig
 
 	bool req( const string &tr, const string &prt, unsigned char node, string &pdu );
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
     protected:
 	//Methods
@@ -157,7 +157,7 @@ class Node : public TFunction, public TConfig
 	};
 
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -207,11 +207,11 @@ class TProt: public TProtocol
 	void modStop( );
 
 	// Node's functions
-	void nList( vector<string> &ls )	{ chldList(mNode,ls); }
-	bool nPresent( const string &id )	{ return chldPresent(mNode,id); }
+	void nList( vector<string> &ls ) const		{ chldList(mNode, ls); }
+	bool nPresent( const string &id ) const		{ return chldPresent(mNode, id); }
 	void nAdd( const string &id, const string &db = "*.*" );
-	void nDel( const string &id )		{ chldDel(mNode,id); }
-	AutoHD<Node> nAt( const string &id )	{ return chldAt(mNode,id); }
+	void nDel( const string &id )			{ chldDel(mNode, id); }
+	AutoHD<Node> nAt( const string &id ) const	{ return chldAt(mNode, id); }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 

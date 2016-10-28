@@ -49,7 +49,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.5.6"
+#define MOD_VER		"1.5.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the group of tests to the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -117,7 +117,7 @@ void TTest::postEnable( int flag )
 	testAt(lst[i_l]).at().setStart(true);
 }
 
-string TTest::cat( )	{ return "TEST:"MOD_ID":"; }
+string TTest::cat( )	{ return "TEST:" MOD_ID ":"; }
 
 void TTest::mess( const string &testNm, const char *fmt,  ... )
 {

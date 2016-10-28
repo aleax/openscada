@@ -139,7 +139,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 
     if(mLogDir & DIR_SYSLOG) {
 	int level_sys;
-	switch(abs(level)) {
+	switch((int8_t)abs(level)) {
 	    case Debug:		level_sys = LOG_DEBUG;	break;
 	    case Info:		level_sys = LOG_INFO;	break;
 	    case Notice:	level_sys = LOG_NOTICE;	break;
@@ -235,14 +235,14 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
 		    req.cfg("base").setS(base);
 		}
-		if(SYS->db().at().dataGet(*iA+"."mess_TrUApiTbl,"/"mess_TrUApiTbl,req,false,true)) {
+		if(SYS->db().at().dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,false,true)) {
 		    rez = req.cfg(tStrVl).getS();
 		    break;
 		}
 		// Create new record into the translation table of the data source
 		else if((iA+1) == addrs.rend() && lang2CodeBase().size()) {
 		    if(lang2CodeBase() == trLang) req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
-		    SYS->db().at().dataSet(*iA+"."mess_TrUApiTbl, "/"mess_TrUApiTbl, req, false, true);
+		    SYS->db().at().dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, false, true);
 		}
 	    }
 	    trMessCache[cKey] = CacheEl(rez, SYS->sysTm());
@@ -363,11 +363,11 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 	MtxAlloc res(mRes, true);
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    if(ls[i_l] == DB_CFG)
-		for(int io_cnt = 0; SYS->db().at().dataSeek("","/"mess_TrUApiTbl,io_cnt++,req,false,&full); )
-		    trMessIdx[req.cfg("base").getS()]["cfg:/"mess_TrUApiTbl] = prms;
+		for(int io_cnt = 0; SYS->db().at().dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,false,&full); )
+		    trMessIdx[req.cfg("base").getS()]["cfg:/" mess_TrUApiTbl] = prms;
 	    else
-		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[i_l]+"."mess_TrUApiTbl,"",io_cnt++,req,false,&full); )
-		    trMessIdx[req.cfg("base").getS()]["db:"+ls[i_l]+"."mess_TrUApiTbl"#base"] = prms;
+		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[i_l]+"." mess_TrUApiTbl,"",io_cnt++,req,false,&full); )
+		    trMessIdx[req.cfg("base").getS()]["db:"+ls[i_l]+"." mess_TrUApiTbl "#base"] = prms;
     }
     else {
 	if(TSYS::strNoSpace(mess).empty()) return;

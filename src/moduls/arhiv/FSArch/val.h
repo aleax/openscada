@@ -64,11 +64,11 @@ class VFileArch
 	void	getVals( TValBuf &buf, int64_t beg, int64_t end );
 	TVariant getVal( int pos );
 
-	ModVArchEl &owner()	{ return *mOwner; }
+	ModVArchEl &owner( ) const	{ return *mOwner; }
 
 	void check( );
 
-	int maxPos( )		{ return mpos; }
+	int maxPos( )			{ return mpos; }
 
 	//Attributes
 	static string afl_id;
@@ -197,7 +197,7 @@ class ModVArch: public TVArchivator
 	bool	packInfoFiles( ){ return mPackInfoFiles; }
 
 	void setFileTimeSize( double vl )	{ time_size = vmax(100*valPeriod()/3600,vl); modif(); }
-	void setNumbFiles( unsigned vl )	{ mNumbFiles = vmax(0,vl); modif(); }
+	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
 	void setMaxCapacity( double vl )	{ mMaxCapacity = vmax(0,vl); modif(); }
 	void setRoundProc( double vl )		{ round_proc = vmax(0,vmin(50,vl)); modif(); }
 	void setCheckTm( int vl )		{ mChkTm = vmax(0,vl); modif(); }

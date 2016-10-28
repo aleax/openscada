@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.8"
+#define MOD_VER		"2.2.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -143,12 +143,12 @@ void MBD::disable( )
     sqlite3_close(m_db);
 }
 
-void MBD::allowList( vector<string> &list )
+void MBD::allowList( vector<string> &list ) const
 {
     if(!enableStat()) return;
     list.clear();
     vector< vector<string> > tbl;
-    sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';", &tbl, false);
+    const_cast<MBD*>(this)->sqlReq("SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%';", &tbl, false);
     for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
 	list.push_back(tbl[i_t][0]);
 }
@@ -283,7 +283,7 @@ void MTable::postDisable( int flag )
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
-MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
+MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {
@@ -651,8 +651,8 @@ void MTable::fieldFix( TConfig &cfg )
 		    (cfg.cfg(cf_el[iCf]).fld().flg()&TCfg::TransltText && tblStrct[iFld][1].size() > 3 &&
 		    tblStrct[iFld][1].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][1].compare(0,2,Mess->lang2Code()) != 0))
 		break;
-	    if(iCf >= cf_el.size()) toUpdate = true;
-	}
+	if(iCf >= cf_el.size()) toUpdate = true;
+    }
 
     if(!toUpdate) return;
 

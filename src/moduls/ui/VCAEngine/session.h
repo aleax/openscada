@@ -46,21 +46,21 @@ class Session : public TCntrNode
 	Session( const string &id, const string &proj = "" );
 	~Session( );
 
-	string	ico( );
-	string	id( )		{ return mId.c_str(); }		//Identifier
+	string	ico( ) const;
+	string	id( ) const	{ return mId.c_str(); }		//Identifier
 	string	projNm( )	{ return mPrjnm; }		//Project's name
 	string	user( )		{ return mUser; }		//Open session user
-	string	owner( )	{ return mOwner; }		//Source project owner
-	string	grp( )		{ return mGrp; }		//Source project group
-	short	permit( )	{ return mPermit; }		//Permission for access to source project
+	string	owner( ) const	{ return mOwner; }		//Source project owner
+	string	grp( ) const	{ return mGrp; }		//Source project group
+	short	permit( ) const	{ return mPermit; }		//Permission for access to source project
 	int	period( )	{ return vmax(1,mPer); }	//Process period (ms)
-	bool	enable( )	{ return mEnable; }		//Enable stat
+	bool	enable( ) const	{ return mEnable; }		//Enable stat
 	bool	start( )	{ return mStart; }		//Start stat
 	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
 	int	connects( )	{ return mConnects; }		//Connections counter
 	time_t	reqTm( )	{ return mReqTm; }		//Last request time from client
 	unsigned &calcClk( )	{ return mCalcClk; }		//Calc clock
-	AutoHD<Project> parent( );
+	AutoHD<Project> parent( ) const;
 	int stlCurent( )	{ return mStyleIdW; }
 
 	void setProjNm( const string &it )	{ mPrjnm = it; }
@@ -76,9 +76,9 @@ class Session : public TCntrNode
 	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 
 	// Pages
-	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
-	bool present( const string &id )	{ return chldPresent(mPage,id); }
-	AutoHD<SessPage> at( const string &id );
+	void list( vector<string> &ls ) const		{ chldList(mPage,ls); }
+	bool present( const string &id ) const		{ return chldPresent(mPage,id); }
+	AutoHD<SessPage> at( const string &id ) const;
 	void add( const string &id, const string &parent = "" );
 	void del( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
@@ -107,8 +107,8 @@ class Session : public TCntrNode
 
     protected:
 	//Methods
-	const char *nodeName( )		{ return mId.c_str(); }
-	const char *nodeNameSYSM( )	{ return mId.c_str(); }
+	const char *nodeName( ) const		{ return mId.c_str(); }
+	const char *nodeNameSYSM( ) const	{ return mId.c_str(); }
 	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -166,7 +166,7 @@ class Session : public TCntrNode
 		//Methods
 		void commCall( bool doNtf, bool doRes, string &res, const string &mess = "", const string &lang = "" );
 
-		Session *owner( )	{ return mOwner; }
+		Session *owner( ) const	{ return mOwner; }
 
 		static void *Task( void *ntf );
 
@@ -238,14 +238,14 @@ class SessWdg : public Widget, public TValFunc
 	~SessWdg( );
 
 	// Main parameters
-	string	path( );
-	string	ownerFullId( bool contr = false );
+	string	path( ) const;
+	string	ownerFullId( bool contr = false ) const;
 	string	type( )		{ return "SessWidget"; }
-	string	ico( );
-	string	calcLang( );
-	string	calcProg( );
+	string	ico( ) const;
+	string	calcLang( ) const;
+	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
-	int	calcPer( );
+	int	calcPer( ) const;
 	bool	process( )	{ return mProc; }		//Process stat
 
 	void setEnable( bool val, bool force = false );
@@ -257,7 +257,7 @@ class SessWdg : public Widget, public TValFunc
 
 	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on the inherit
-	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 	void pgClose( );
 
 	string sessAttr( const string &id, bool onlyAllow = false );
@@ -275,9 +275,9 @@ class SessWdg : public Widget, public TValFunc
 	string resourceGet( const string &id, string *mime = NULL );
 	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
-	SessWdg  *ownerSessWdg( bool base = false );
-	SessPage *ownerPage( );
-	Session  *ownerSess( )	{ return mSess; }
+	SessWdg  *ownerSessWdg( bool base = false ) const;
+	SessPage *ownerPage( ) const;
+	Session  *ownerSess( ) const	{ return mSess; }
 
 	void inheritAttr( const string &attr = "" );
 
@@ -333,7 +333,7 @@ class SessPage : public SessWdg
 	SessPage( const string &id, const string &page, Session *sess );
 	~SessPage( );
 
-	string	path( );
+	string	path( ) const;
 	string	type( )		{ return "SessPage"; }
 
 	void setEnable( bool val, bool force = false );
@@ -341,16 +341,16 @@ class SessPage : public SessWdg
 
 	void calc( bool first, bool last );
 
-	AutoHD<Page> parent( );
+	AutoHD<Page> parent( ) const;
 
 	// Pages
-	void pageList( vector<string> &ls )			{ chldList(mPage,ls); }
-	bool pagePresent( const string &id )			{ return chldPresent(mPage,id); }
-	AutoHD<SessPage> pageAt( const string &id );
+	void pageList( vector<string> &ls ) const		{ chldList(mPage,ls); }
+	bool pagePresent( const string &id ) const		{ return chldPresent(mPage,id); }
+	AutoHD<SessPage> pageAt( const string &id ) const;
 	void pageAdd( const string &id, const string &parent = "" );
 	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
-	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	float tmCalcAll( );
 	float tmCalcMaxAll( );
@@ -359,8 +359,8 @@ class SessPage : public SessWdg
 	void alarmSet( bool isSet = false );
 	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
 
-	bool attrPresent( const string &attr );
-	AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
+	bool attrPresent( const string &attr ) const;
+	AutoHD<Attr> attrAt( const string &attr, int lev = -1 ) const;
 
 	ResMtx &funcM( )	{ return mFuncM; }
 

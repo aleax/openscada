@@ -24,8 +24,8 @@ int Shm::parseItem(const char * name, map_t * list)
     int ret = sscanf(name, "%i,%i,%i,%i,%s", &tmp, &size, &type, &off, s);
     if(ret == 5) {
 	ShmValue * val = new ShmValue(type, off);
-	string * st = new string(s);
-	list->insert(pair<string*, ShmValue*>(st, val));
+	::string * st = new ::string(s);
+	list->insert(pair< ::string*, ShmValue*>(st, val));
 //	list->insert(pair<const char *, ShmValue*>(s, val));
     }
     return 0;
@@ -77,7 +77,7 @@ Shm::Shm(const char * name)
 
 int Shm::isFound(const char *name, map_t::iterator & it, map_t * m)
 {
-    string s;
+    ::string s;
     s = name;
     it = m->find(&s);
     if(it != m->end())

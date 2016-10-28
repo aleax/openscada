@@ -62,7 +62,7 @@ class TMdPrm : public TParamContr
 	void setModPrm( const string &prm, const string &val );
 
 	TElem &elem( )		{ return pEl; }
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	//Attributes
 	TElem	pEl;		//Work atribute elements

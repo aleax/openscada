@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.13"
+#define MOD_VER		"0.7.14"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -420,7 +420,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&p_el)) vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

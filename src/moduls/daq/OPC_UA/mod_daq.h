@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.6.12"
+#define DAQ_MVER	"1.6.13"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -72,7 +72,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	string attrPrc( );
 

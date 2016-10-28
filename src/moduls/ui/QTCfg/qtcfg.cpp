@@ -2464,8 +2464,6 @@ void ConfApp::buttonClicked( )
 {
     QPushButton *button = (QPushButton *)sender();
 
-    XMLNode req();
-
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(button->objectName().toStdString(),TSYS::PathEl));
 
@@ -3158,7 +3156,7 @@ void SCADAHost::run( )
 
 	//Interface's requests processing
 	mtx.lock();
-	if(!req || (req && reqDone)) cond.wait(mtx, 1000);
+	if(!req || reqDone) cond.wait(mtx, 1000);
 	if(req && !reqDone) {
 	    wuser = user;
 	    mtx.unlock();

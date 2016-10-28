@@ -62,7 +62,7 @@ class MFileArch
 	bool	err( )		{ return mErr; }
 	bool	isPack( )	{ return mPack; }
 
-	ModMArch &owner( )	{ return *mOwner; }
+	ModMArch &owner( ) const{ return *mOwner; }
 
 	//Attributes
 	bool	scan;		// Archive scaned (for check deleted files). Use from ModMArch

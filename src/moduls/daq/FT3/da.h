@@ -1,3 +1,4 @@
+
 //OpenSCADA system module DAQ.FT3 file: da.h
 /***************************************************************************
  *   Copyright (C) 2011-2016 by Maxim Kochetkov                            *
@@ -66,21 +67,12 @@ namespace FT3
 	friend class TMdPrm;
     public:
 	//Methods
-	DA(TMdPrm& prm) :
-		mPrm(prm), NeedInit(true), blkID(0)
-	{
-	}
-	virtual ~DA()
-	{
-	}
+	DA(TMdPrm& prm) : mPrm(prm), NeedInit(true), blkID(0)	{ }
+	virtual ~DA( )	{ }
 
-	virtual void getVals()
-	{
-	}
+	virtual void getVals( )	{ }
 	virtual uint16_t Task(uint16_t);
-	virtual uint16_t GetState()
-	{
-	}
+	virtual uint16_t GetState( )			{ return 0; }
 	virtual uint16_t SetupClock(void);
 	virtual uint16_t PreInit(void);
 	virtual uint16_t SetParams(void);
@@ -88,61 +80,26 @@ namespace FT3
 	virtual uint16_t Start(void);
 	virtual uint16_t RefreshData(void);
 	virtual uint16_t RefreshParams(void);
-	virtual uint16_t HandleEvent(int64_t, uint8_t *)
-	{
-	}
-	virtual uint16_t setVal(TVal &)
-	{
-	}
-	virtual uint8_t cmdGet(uint16_t, uint8_t *)
-	{
-	}
-	virtual uint8_t cmdSet(uint8_t *, uint8_t)
-	{
-	}
-	virtual bool cntrCmdProc(XMLNode *opt)
-	{
-	    return false;
-	}
-	virtual string getStatus()
-	{
-	}
-	virtual void saveIO(void)
-	{
-	}
-	virtual void saveParam(void)
-	{
-	}
-	virtual void loadIO(bool force = false)
-	{
-	}
-	virtual void loadParam(void)
-	{
-	}
-	virtual void tmHandler(void)
-	{
-	}
-	virtual void vlGet(TVal &val)
-	{
-	}
-	void setInit(bool bInit)
-	{
-	    NeedInit = bInit;
-	}
-	bool IsNeedUpdate()
-	{
-	    return NeedInit;
-	}
+	virtual uint16_t HandleEvent(int64_t, uint8_t *){ return 0; }
+	virtual uint16_t setVal(TVal &)			{ return 0; }
+	virtual uint8_t cmdGet(uint16_t, uint8_t *)	{ return 0; }
+	virtual uint8_t cmdSet(uint8_t *, uint8_t)	{ return 0; }
+	virtual bool cntrCmdProc(XMLNode *opt)		{ return false; }
+	virtual string getStatus( )			{ return ""; }
+	virtual void saveIO(void)			{ }
+	virtual void saveParam(void)			{ }
+	virtual void loadIO(bool force = false)		{ }
+	virtual void loadParam(void)			{ }
+	virtual void tmHandler(void)			{ }
+	virtual void vlGet(TVal &val)			{ }
+	void setInit(bool bInit)			{ NeedInit = bInit; }
+	bool IsNeedUpdate()				{ return NeedInit; }
 
     protected:
 	class SDataRec
 	{
 	public:
-	    SDataRec(void) :
-		    state(0)
-	    {
-	    }
-	    ;
+	    SDataRec(void) : state(0)	{ }
 	    int state;		//Channel state
 	};
 	//Data

@@ -1499,7 +1499,7 @@ void TMdPrm::postEnable(int flag)
     if(!vlElemPresent(&p_el)) vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner()
+TMdContr &TMdPrm::owner( ) const
 {
     return (TMdContr&) TParamContr::owner();
 }

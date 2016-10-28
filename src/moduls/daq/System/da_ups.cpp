@@ -117,7 +117,8 @@ void UPS::getVal( TMdPrm *prm )
 		    if(!prm->vlPresent(aid)) {
 			// Description request
 			string descr = reqUPS(addr, "GET DESC "+UPS+" "+var+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
-			if(sscanf(descr.c_str(),"DESC %*s %*s \"%255[^\"]s\"",vVal) == 1 && strcmp(vVal,"Description unavailable")) descr = vVal;
+			if(sscanf(descr.c_str(),"DESC %*s %*s \"%255[^\"]s\"",vVal) == 1 && strcmp(vVal,"Description unavailable") != 0)
+			    descr = vVal;
 			else descr = var;
 			// Type request
 			string stp = reqUPS(addr, "GET TYPE "+UPS+" "+var+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
@@ -154,7 +155,8 @@ void UPS::getVal( TMdPrm *prm )
 		    if(!prm->vlPresent(aid)) {
 			// Description request
 			string descr = reqUPS(addr, "GET CMDDESC "+UPS+" "+vid+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
-			if(sscanf(descr.c_str(),"CMDDESC %*s %*s \"%255[^\"]s\"",vVal) == 1 && strcmp(vVal,"Description unavailable")) descr = vVal;
+			if(sscanf(descr.c_str(),"CMDDESC %*s %*s \"%255[^\"]s\"",vVal) == 1 && strcmp(vVal,"Description unavailable") != 0)
+			    descr = vVal;
 			else descr = var;
 			// Create
 			((tval*)prm->daData)->els.fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::Boolean,TVal::DirWrite,"","","","",vid.c_str()));

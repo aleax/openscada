@@ -147,7 +147,7 @@ class TMdPrm : public TParamContr
 	string modPrm( const string &prm, const string &def = "" );
         void setModPrm( const string &prm, const string &val );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	//Attributes
 	ResString acq_err;

@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.7"
+#define MOD_VER		"1.0.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -269,7 +269,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     }
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {

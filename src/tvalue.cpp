@@ -394,7 +394,7 @@ string TVal::objName( )	{ return TCntrNode::objName()+":TVal"; }
 
 string TVal::DAQPath( )	{ return owner().DAQPath()+"."+name(); }
 
-TValue &TVal::owner( )	{ return *(TValue*)nodePrev(); }
+TValue &TVal::owner( ) const	{ return *(TValue*)nodePrev(); }
 
 void TVal::setFld( TFld &fld )
 {
@@ -437,15 +437,15 @@ void TVal::setCfg( TCfg &cfg )
     mCfg = true;
 }
 
-string TVal::name( )		{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
+string TVal::name( )			{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
-bool TVal::dataActive( )	{ return owner().dataActive(); }
+bool TVal::dataActive( )		{ return owner().dataActive(); }
 
-const char *TVal::nodeName( )	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
+const char *TVal::nodeName( ) const	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
-TFld &TVal::fld( )		{ return mCfg ? src.cfg->fld() : *src.fld; }
+TFld &TVal::fld( )			{ return mCfg ? src.cfg->fld() : *src.fld; }
 
-AutoHD<TVArchive> TVal::arch( )	{ return mArch; }
+AutoHD<TVArchive> TVal::arch( )		{ return mArch; }
 
 void TVal::setArch( const AutoHD<TVArchive> &vl )	{ mArch = vl; }
 

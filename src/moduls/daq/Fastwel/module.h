@@ -64,7 +64,7 @@ namespace ModFastwel {
 
 	void getVals();
 
-	TMdContr & owner();
+	TMdContr & owner( ) const;
 
       protected:
 	//Methods

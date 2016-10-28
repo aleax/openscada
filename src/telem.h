@@ -75,27 +75,27 @@ class TFld
 
 	//Methods
 	TFld( );
-	TFld( TFld &ifld, const char *name = NULL );
+	TFld( const TFld &ifld, const char *name = NULL );
 	TFld( const char *name, const char *descr, Type type, unsigned flg,
 	    const char *valLen = "", const char *valDef = "",
 	    const char *vals = "", const char *nSel = "", const char *res = "" );
 	~TFld( );
 
-	TFld &operator=( TFld &fld );
+	TFld &operator=( const TFld &fld );
 
 	// Main
-	const string &name( )	{ return mName; }	//Name
-	const string &descr( )	{ return mDescr; }	//Description
-	int len( )		{ return mLen; }	//Length
-	int dec( )		{ return mDec; }	//Float dec
-	Type type( )		{ return (Type)mType; }	//Value type
-	static Type type( IO::Type tp );		//Field type from IO
-	IO::Type typeIO( );				//Type to IO
-	unsigned flg( )		{ return mFlg; }	//Flags
-	const string &def( )	{ return mDef; }	//Default value
-	string values( );				//Values range or values list
-	string selNames( );				//Select names list
-	const string &reserve( ){ return mRes; }	//Reserve field
+	const string &name( ) const	{ return mName; }	//Name
+	const string &descr( ) const	{ return mDescr; }	//Description
+	int len( ) const		{ return mLen; }	//Length
+	int dec( ) const		{ return mDec; }	//Float dec
+	Type type( ) const		{ return (Type)mType; }	//Value type
+	static Type type( IO::Type tp );			//Field type from IO
+	IO::Type typeIO( ) const;				//Type to IO
+	unsigned flg( ) const		{ return mFlg; }	//Flags
+	const string &def( ) const	{ return mDef; }	//Default value
+	string values( ) const;					//Values range or values list
+	string selNames( ) const;				//Select names list
+	const string &reserve( ) const	{ return mRes; }	//Reserve field
 
 	void setDescr( const string &idscr )	{ mDescr = idscr; }
 	void setLen( int ivl )			{ mLen = ivl; }
@@ -107,12 +107,12 @@ class TFld
 	void setReserve( const string &ires )	{ mRes = ires; }
 
 	// Selected
-	const vector<string>	&selValS( );
-	const vector<int>	&selValI( );
-	const vector<double>	&selValR( );
-	const vector<bool>	&selValB( );
+	const vector<string>	&selValS( ) const;
+	const vector<int>	&selValI( ) const;
+	const vector<double>	&selValR( ) const;
+	const vector<bool>	&selValB( ) const;
 	// selectable element's name
-	const vector<string>	&selNm( );
+	const vector<string>	&selNm( ) const;
 
 	string selVl2Nm( const string &val );
 	string selVl2Nm( int64_t val );

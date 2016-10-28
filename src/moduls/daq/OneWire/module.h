@@ -61,7 +61,7 @@ class TMdPrm : public TParamContr
 	void getVals( );
 	void setEval( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     private:
 	//Methods

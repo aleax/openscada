@@ -46,9 +46,9 @@ Lib::~Lib( )
 
 }
 
-TCntrNode &Lib::operator=( TCntrNode &node )
+TCntrNode &Lib::operator=( const TCntrNode &node )
 {
-    Lib *src_n = dynamic_cast<Lib*>(&node);
+    const Lib *src_n = dynamic_cast<const Lib*>(&node);
     if(!src_n) return *this;
 
     //Configuration copy

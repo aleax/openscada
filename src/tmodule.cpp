@@ -82,7 +82,7 @@ void TModule::postDisable( int flag )
     mess_sys(TMess::Debug, _("Disable module."));
 }
 
-TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }
+TSubSYS &TModule::owner( ) const	{ return *(TSubSYS*)nodePrev(); }
 
 void TModule::modStart( )
 {

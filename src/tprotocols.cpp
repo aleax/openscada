@@ -108,4 +108,4 @@ TProtocolIn::~TProtocolIn( )
 
 int TProtocolIn::writeTo( const string &data )	{ return srcTr().at().writeTo(srcAddr(), data); }
 
-TProtocol &TProtocolIn::owner( )	{ return *(TProtocol*)nodePrev(); }
+TProtocol &TProtocolIn::owner( ) const	{ return *(TProtocol*)nodePrev(); }

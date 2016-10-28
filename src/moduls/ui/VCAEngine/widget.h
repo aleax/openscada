@@ -81,8 +81,8 @@ class Attr
 	Attr( TFld *fld, bool inher );
 	~Attr( );
 
-	const string &id( );
-	string name( );
+	const string &id( ) const;
+	string name( ) const;
 	TFld::Type type( );
 	int flgGlob( );		//Global attribite's flags
 	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)mFlgSelf; }
@@ -119,13 +119,13 @@ class Attr
 	void setB( char val, bool strongPrev = false, bool sys = false );
 	void setO( AutoHD<TVarObj> val, bool strongPrev = false, bool sys = false );
 
-	TFld &fld( )			{ return *mFld; }
+	TFld &fld( ) const			{ return *mFld; }
 	void setFld( TFld *fld, bool inher );
 
 	void AHDConnect( );
 	bool AHDDisConnect( );
 
-	Widget *owner( )		{ return mOwner; }
+	Widget *owner( ) const		{ return mOwner; }
 
     private:
 	//Data
@@ -162,25 +162,25 @@ class Widget : public TCntrNode
 	Widget( const string &id, const string &isrcwdg = "" );
 	~Widget( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )			{ return mId.c_str(); }	//Identifier
-	virtual string path( );					//Curent widget path
-	virtual string name( );					//Name
-	virtual string descr( );				//Description
-	virtual string ico( )		{ return ""; }		//Icon
+	string id( ) const		{ return mId.c_str(); }	//Identifier
+	virtual string path( ) const;				//Curent widget path
+	virtual string name( ) const;				//Name
+	virtual string descr( ) const;				//Description
+	virtual string ico( ) const	{ return ""; }		//Icon
 	virtual string type( )		{ return "Generic"; }	//Widget hierarchy type
-	string owner( );					//Widget owner
-	string grp( );						//Widget group
-	short  permit( );					//Permission for access to widget
+	string owner( ) const;					//Widget owner
+	string grp( ) const;					//Widget group
+	short  permit( ) const;					//Permission for access to widget
 	virtual string calcId( );				//Compile function identifier
-	virtual string calcLang( )	{ return ""; }		//Calc procedure language
+	virtual string calcLang( ) const { return ""; }		//Calc procedure language
 	virtual bool   calcProgTr( )	{ return true; }	//Calc procedure translation
-	virtual string calcProg( )	{ return ""; }		//Calc procedure
+	virtual string calcProg( ) const { return ""; }		//Calc procedure
 	virtual string calcProgStors( const string &attr = "" )	{ return ""; }	//Storages get
-	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
-	virtual bool   isContainer( );				//Is container (Is define of the terminator)
-	virtual bool   isLink( )	{ return mLnk; }	//Widget as link
+	virtual int    calcPer( ) const	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
+	virtual bool   isContainer( ) const;			//Is container (Is define of the terminator)
+	virtual bool   isLink( ) const	{ return mLnk; }	//Widget as link
 	bool stlLock( )			{ return mStlLock; }	//Style lock
 
 	virtual void setName( const string &inm );
@@ -202,13 +202,13 @@ class Widget : public TCntrNode
 	virtual string wChDown( const string &ia = "" );	//Widget's changes put down
 
 	// Enable stat
-	bool enable( );
+	bool enable( ) const;
 	virtual void setEnable( bool val, bool force = false );
 
 	// Inheritance methods
-	virtual string parentNm( )	{ return mParentNm; }	//Parent widget name
-	virtual string rootId( );				//Root widget id
-	AutoHD<Widget> parent( );				//Parent widget
+	virtual string parentNm( ) const { return mParentNm; }	//Parent widget name
+	virtual string rootId( ) const;				//Root widget id
+	AutoHD<Widget> parent( ) const;				//Parent widget
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
@@ -218,19 +218,19 @@ class Widget : public TCntrNode
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
 	// Widget's attributes
-	void attrList( vector<string> &list );
+	void attrList( vector<string> &list ) const;
 	virtual void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false, bool allInher = false );
 	void attrDel( const string &attr, bool allInher = false );
-	virtual bool attrPresent( const string &attr );
+	virtual bool attrPresent( const string &attr ) const;
 	int  attrPos( const string &iattr );
-	virtual AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
+	virtual AutoHD<Attr> attrAt( const string &attr, int lev = -1 ) const;
 
 	// Include widgets
-	void wdgList( vector<string> &list, bool fromLnk = false );
-	bool wdgPresent( const string &wdg );
+	void wdgList( vector<string> &list, bool fromLnk = false ) const;
+	bool wdgPresent( const string &wdg ) const;
 	virtual void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full); }
-	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
+	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	// Data access
 	virtual void resourceList( vector<string> &ls )	{ }
@@ -243,7 +243,7 @@ class Widget : public TCntrNode
 
     protected:
 	//Methods
-	const char *nodeName()	{ return mId.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
 
 	void postEnable( int flag );
 	void preDisable( int flag );

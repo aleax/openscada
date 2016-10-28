@@ -98,11 +98,12 @@ class TCntrNode
     public:
 	//Methods
 	TCntrNode( TCntrNode *prev = NULL );
+	TCntrNode( const TCntrNode &src );
 	virtual ~TCntrNode( );
 
 	virtual string objName( )	{ return "TCntrNode"; }
 
-	virtual TCntrNode &operator=( TCntrNode &node );
+	virtual TCntrNode &operator=( const TCntrNode &node );
 
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );
 
@@ -147,19 +148,19 @@ class TCntrNode
 	ResMtx &dataRes( ) { return mDataM; }	//Generic node's data mutex
 						//Allowed for using by heirs into data resources allocation
 						//  not for long-term functions-tasks resources allocation!
-	virtual const char *nodeName( ) = 0;
-	virtual const char *nodeNameSYSM( )	{ return ""; }
-	string nodePath( char sep = 0, bool from_root = true );
+	virtual const char *nodeName( ) const = 0;
+	virtual const char *nodeNameSYSM( ) const	{ return ""; }
+	string nodePath( char sep = 0, bool from_root = true ) const;
 
 	void nodeList( vector<string> &list, const string& gid = "" );	//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0, bool noex = false );	//Get node for full path
 	void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 
-	TCntrNode *nodePrev( bool noex = false );
+	TCntrNode *nodePrev( bool noex = false ) const;
 	char	 nodeFlg( )		{ return mFlg; }
 	void	 setNodeFlg( char flg );
-	char	 nodeMode( )		{ return mFlg&0x3; }
+	char	 nodeMode( ) const	{ return mFlg&0x3; }
 	unsigned nodeUse( bool selfOnly = false );
 	unsigned nodePos( )		{ return mOi; }
 
@@ -177,8 +178,8 @@ class TCntrNode
 	virtual bool AHDDisConnect( );
 
 	void mess_sys( int8_t level, const char *fmt,  ... );
-	TError err_sys( const char *fmt,  ... );
-	TError err_sys( int cod, const char *fmt,  ... );
+	TError err_sys( const char *fmt,  ... ) const;
+	TError err_sys( int cod, const char *fmt,  ... ) const;
 
 	// User object access
 	virtual TVariant objPropGet( const string &id );
@@ -188,9 +189,9 @@ class TCntrNode
 	// Childs
 	int8_t	grpSize( );
 	int8_t	grpId( const string &sid );
-	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true );
-	bool chldPresent( int8_t igr, const string &name );
+	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
+	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
+	bool chldPresent( int8_t igr, const string &name ) const;
 
     protected:
 	//Data

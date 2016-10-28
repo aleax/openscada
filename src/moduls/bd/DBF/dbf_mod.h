@@ -69,7 +69,7 @@ class MTable : public TTable
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	MBD &owner( );
+	MBD &owner( ) const;
 
     private:
 	//Private methods
@@ -102,7 +102,7 @@ class MBD : public TBD
 	~MBD( );
 
 	void enable( );
-	void allowList( vector<string> &list );
+	void allowList( vector<string> &list ) const;
 	void transCloseCheck( );
 
     protected:

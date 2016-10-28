@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.5"
+#define MOD_VER		"1.2.6"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -722,7 +722,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {

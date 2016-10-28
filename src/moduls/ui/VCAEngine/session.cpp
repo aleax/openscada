@@ -237,9 +237,9 @@ bool Session::modifChk( unsigned int tm, unsigned int iMdfClc )
     return (mCalcClk>=tm) ? (iMdfClc >= tm && iMdfClc <= mCalcClk) : (iMdfClc >= tm || iMdfClc <= mCalcClk);
 }
 
-string Session::ico( )			{ return (!parent().freeStat()) ? parent().at().ico() : ""; }
+string Session::ico( ) const		{ return (!parent().freeStat()) ? parent().at().ico() : ""; }
 
-AutoHD<Project> Session::parent( )	{ return mParent; }
+AutoHD<Project> Session::parent( ) const{ return mParent; }
 
 void Session::add( const string &iid, const string &iparent )
 {
@@ -283,7 +283,7 @@ void Session::openUnreg( const string &iid )
     for(unsigned iNtf = 0; iNtf < 7; iNtf++) ntfReg(iNtf, "", iid);
 }
 
-AutoHD<SessPage> Session::at( const string &id )	{ return chldAt(mPage, id); }
+AutoHD<SessPage> Session::at( const string &id ) const	{ return chldAt(mPage, id); }
 
 void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 {
@@ -1030,7 +1030,7 @@ SessPage::~SessPage( )
 
 }
 
-string SessPage::path( )	{ return ownerFullId(true)+"/pg_"+id(); }
+string SessPage::path( ) const	{ return ownerFullId(true)+"/pg_"+id(); }
 
 void SessPage::setEnable( bool val, bool force )
 {
@@ -1102,7 +1102,7 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
     else if(!val) SessWdg::setProcess(false, lastFirstCalc);
 }
 
-AutoHD<Page> SessPage::parent( )
+AutoHD<Page> SessPage::parent( ) const
 {
     if(!enable()) {
 	if(parentNm() == "..") return AutoHD<TCntrNode>(nodePrev());
@@ -1117,9 +1117,9 @@ void SessPage::pageAdd( const string &iid, const string &iparent )
     chldAdd(mPage,new SessPage(iid,iparent,ownerSess()));
 }
 
-AutoHD<SessPage> SessPage::pageAt( const string &iid )	{ return chldAt(mPage,iid); }
+AutoHD<SessPage> SessPage::pageAt( const string &iid ) const	{ return chldAt(mPage,iid); }
 
-AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off )
+AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off ) const
 {
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
@@ -1322,15 +1322,15 @@ void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet, bool ret )
     if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
 }
 
-bool SessPage::attrPresent(const string &attr)
+bool SessPage::attrPresent( const string &attr ) const
 {
-    if(!enable() && !mToEn && !mDisMan) setEnable(true, true);
+    if(!enable() && !mToEn && !mDisMan) const_cast<SessPage*>(this)->setEnable(true, true);
     return Widget::attrPresent(attr);
 }
 
-AutoHD<Attr> SessPage::attrAt(const string &attr, int lev)
+AutoHD<Attr> SessPage::attrAt( const string &attr, int lev ) const
 {
-    if(lev < 0 && !enable() && !mToEn && !mDisMan) setEnable(true, true);
+    if(lev < 0 && !enable() && !mToEn && !mDisMan) const_cast<SessPage*>(this)->setEnable(true, true);
     return Widget::attrAt(attr, lev);
 }
 
@@ -1434,7 +1434,7 @@ void SessWdg::postEnable( int flag )
     }
 }
 
-SessWdg *SessWdg::ownerSessWdg( bool base )
+SessWdg *SessWdg::ownerSessWdg( bool base ) const
 {
     if(nodePrev(true)) {
 	if(!base && dynamic_cast<SessPage*>(nodePrev())) return NULL;
@@ -1444,7 +1444,7 @@ SessWdg *SessWdg::ownerSessWdg( bool base )
     return NULL;
 }
 
-SessPage *SessWdg::ownerPage()
+SessPage *SessWdg::ownerPage( ) const
 {
     if(nodePrev(true) && dynamic_cast<SessPage*>(nodePrev()))	return (SessPage*)nodePrev();
     SessWdg *own = ownerSessWdg();
@@ -1453,9 +1453,9 @@ SessPage *SessWdg::ownerPage()
     return NULL;
 }
 
-string SessWdg::path( )	{ return ownerFullId(true)+"/wdg_"+id(); }
+string SessWdg::path( ) const	{ return ownerFullId(true)+"/wdg_"+id(); }
 
-string SessWdg::ownerFullId( bool contr )
+string SessWdg::ownerFullId( bool contr ) const
 {
     SessWdg *ownW = ownerSessWdg();
     if(ownW) return ownW->ownerFullId(contr)+(contr?"/wdg_":"/")+ownW->id();
@@ -1580,15 +1580,15 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     if(val && diff && lastFirstCalc) calc(true, false);
 }
 
-string SessWdg::ico( )		{ return parent().freeStat() ? "" : parent().at().ico(); }
+string SessWdg::ico( ) const		{ return parent().freeStat() ? "" : parent().at().ico(); }
 
-string SessWdg::calcLang( )	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
+string SessWdg::calcLang( ) const	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
 
-string SessWdg::calcProg( )	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
+string SessWdg::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
 string SessWdg::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
 
-int SessWdg::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
+int SessWdg::calcPer( ) const		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
 string SessWdg::resourceGet( const string &iid, string *mime )
 {
@@ -1639,7 +1639,7 @@ void SessWdg::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allI
     Widget::attrAdd(attr, pos, inher, forceMdf || enable(), allInher);
 }
 
-AutoHD<Widget> SessWdg::wdgAt( const string &wdg, int lev, int off )
+AutoHD<Widget> SessWdg::wdgAt( const string &wdg, int lev, int off ) const
 {
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)

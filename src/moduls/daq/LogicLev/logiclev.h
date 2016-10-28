@@ -53,10 +53,10 @@ class TMdPrm : public TParamContr
 
 	TElem *dynElCntr( )	{ return &pEl; }
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	bool isStd( );
-        bool isPRefl( );
+	bool isStd( ) const;
+        bool isPRefl( ) const;
 
 	void enable( );
 	void disable( );
@@ -81,7 +81,7 @@ class TMdPrm : public TParamContr
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     private:
 	//Data
@@ -105,10 +105,10 @@ class TMdPrm : public TParamContr
 
 	//Methods
 	// Template link operations
-	int lnkSize( );
-	int lnkId( int id );
-	int lnkId( const string &id );
-	SLnk &lnk( int num );
+	int lnkSize( ) const;
+	int lnkId( int id ) const;
+	int lnkId( const string &id ) const;
+	SLnk &lnk( int num ) const;
 
 	void loadIO( bool force = false );
 	void saveIO( );

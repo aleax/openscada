@@ -40,9 +40,9 @@ TPrmTempl::~TPrmTempl( )
 
 }
 
-TCntrNode &TPrmTempl::operator=( TCntrNode &node )
+TCntrNode &TPrmTempl::operator=( const TCntrNode &node )
 {
-    TPrmTempl *src_n = dynamic_cast<TPrmTempl*>(&node);
+    const TPrmTempl *src_n = dynamic_cast<const TPrmTempl*>(&node);
     if(!src_n) return *this;
 
     exclCopy(*src_n, "ID;");
@@ -83,7 +83,7 @@ bool TPrmTempl::cfgChange( TCfg &co, const TVariant &pc )
     return true;
 }
 
-TPrmTmplLib &TPrmTempl::owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
+TPrmTmplLib &TPrmTempl::owner( ) const	{ return *(TPrmTmplLib*)nodePrev(); }
 
 string TPrmTempl::name( )		{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
 
@@ -93,7 +93,7 @@ string TPrmTempl::descr( )		{ return cfg("DESCR").getS(); }
 
 void TPrmTempl::setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
 
-string TPrmTempl::stor( )		{ return owner().DB(); }
+string TPrmTempl::stor( ) const		{ return owner().DB(); }
 
 int TPrmTempl::maxCalcTm( )		{ return cfg("MAXCALCTM").getI(); }
 
@@ -224,7 +224,7 @@ void TPrmTempl::save_( )
     for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg,false,&full); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr) {
-	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true);
+	    if(!SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true))	break;
 	    if(full.empty()) fld_cnt--;
 	}
     }
@@ -428,9 +428,9 @@ TPrmTmplLib::~TPrmTmplLib()
 
 }
 
-TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
+TCntrNode &TPrmTmplLib::operator=( const TCntrNode &node )
 {
-    TPrmTmplLib *src_n = dynamic_cast<TPrmTmplLib*>(&node);
+    const TPrmTmplLib *src_n = dynamic_cast<const TPrmTmplLib*>(&node);
     if(!src_n) return *this;
 
     //Configuration copy
@@ -469,7 +469,7 @@ void TPrmTmplLib::postDisable(int flag)
     }
 }
 
-TDAQS &TPrmTmplLib::owner( )	{ return *(TDAQS*)nodePrev(); }
+TDAQS &TPrmTmplLib::owner( ) const	{ return *(TDAQS*)nodePrev(); }
 
 string TPrmTmplLib::name( )	{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
 

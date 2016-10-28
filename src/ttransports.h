@@ -46,19 +46,19 @@ class TTransportIn : public TCntrNode, public TConfig
 	TTransportIn( const string &id, const string &db, TElem *el );
 	virtual ~TTransportIn( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	id( )		{ return mId; }
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
-	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	addr( ) const	{ return cfg("ADDR").getS(); }
 	string	protocolFull( )	{ return cfg("PROT").getS(); }
 	string	protocol( );
 	virtual	string getStatus( );
 
 	bool toStart( )		{ return mStart; }
-	bool startStat( )	{ return runSt; }
+	bool startStat( ) const	{ return runSt; }
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -78,7 +78,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanDisabled = false );	//Assigned transports
 
-	TTypeTransport &owner( );
+	TTypeTransport &owner( ) const;
 
 	ResRW &nodeRes( )	{ return nRes; }
 
@@ -102,7 +102,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
 	TCfg	&mId;
@@ -122,19 +122,19 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	workId( );
 	string	name( );
-	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
-	string	addr( )		{ return cfg("ADDR").getS(); }
-	virtual	string timings( ) { return ""; }
-	int64_t	prm1( )		{ return mPrm1; }
-	int64_t	prm2( )		{ return mPrm2; }
-	bool	toStart( )	{ return mStart; }
-	bool	startStat( )	{ return runSt; }
-	time_t	startTm( )	{ return mStartTm; }
+	string	dscr( )			{ return cfg("DESCRIPT").getS(); }
+	string	addr( ) const		{ return cfg("ADDR").getS(); }
+	virtual	string timings( )	{ return ""; }
+	int64_t	prm1( )			{ return mPrm1; }
+	int64_t	prm2( )			{ return mPrm2; }
+	bool	toStart( )		{ return mStart; }
+	bool	startStat( ) const	{ return runSt; }
+	time_t	startTm( )		{ return mStartTm; }
 	virtual	string getStatus( );
 
 	string DB( )		{ return mDB; }
@@ -159,7 +159,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void messProtIO( XMLNode &io, const string &prot );
 
-	TTypeTransport &owner( );
+	TTypeTransport &owner( ) const;
 
 	ResRW &nodeRes( )			{ return nRes; }
 
@@ -181,7 +181,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
 	TCfg	&mId;
@@ -207,20 +207,20 @@ class TTypeTransport: public TModule
 	virtual ~TTypeTransport( );
 
 	// Input transports
-	void inList( vector<string> &list )			{ chldList(mIn,list); }
-	bool inPresent( const string &name )			{ return chldPresent(mIn,name); }
+	void inList( vector<string> &list ) const		{ chldList(mIn,list); }
+	bool inPresent( const string &name ) const		{ return chldPresent(mIn,name); }
 	void inAdd( const string &name, const string &db = "*.*" );
 	void inDel( const string &name, bool complete = false )	{ chldDel(mIn,name,-1,complete); }
-	AutoHD<TTransportIn> inAt( const string &name )		{ return chldAt(mIn,name); }
+	AutoHD<TTransportIn> inAt( const string &name ) const	{ return chldAt(mIn,name); }
 
 	// Output transports
-	void outList( vector<string> &list )			{ chldList(mOut,list); }
-	bool outPresent( const string &name )			{ return chldPresent(mOut,name); }
+	void outList( vector<string> &list ) const		{ chldList(mOut,list); }
+	bool outPresent( const string &name ) const		{ return chldPresent(mOut,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
 	void outDel( const string &name, bool complete = false ){ chldDel(mOut,name,-1,complete); }
-	AutoHD<TTransportOut> outAt( const string &name )	{ return chldAt(mOut,name); }
+	AutoHD<TTransportOut> outAt( const string &name ) const	{ return chldAt(mOut,name); }
 
-	TTransportS &owner( );
+	TTransportS &owner( ) const;
 
     protected:
 	//Methods
@@ -293,7 +293,7 @@ class TTransportS : public TSubSYS
 	TElem &inEl( )			{ return elIn; }
 	TElem &outEl( ) 		{ return elOut; }
 
-	AutoHD<TTypeTransport> at( const string &iid )	{ return modAt(iid); }
+	AutoHD<TTypeTransport> at( const string &iid ) const	{ return modAt(iid); }
 
     protected:
 	void load_( );

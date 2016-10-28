@@ -35,6 +35,13 @@ TFunction::TFunction( const string &iid, const char *igrp, const string &istor )
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
+TFunction::TFunction( const TFunction &src ) : runSt(false), beStart(false), mTVal(NULL), grp(NULL)
+{
+    operator=(src);
+
+    if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
+}
+
 TFunction::~TFunction( )
 {
     for(unsigned iIO = 0; iIO < mIO.size(); iIO++) delete mIO[iIO];
@@ -42,7 +49,7 @@ TFunction::~TFunction( )
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
-TFunction &TFunction::operator=( TFunction &func )
+TFunction &TFunction::operator=( const TFunction &func )
 {
     //Copy IO
     // Clear no present IO
@@ -81,15 +88,15 @@ void TFunction::setId( const string &vl )
     if(!nodePrev(true)) mId = vl;
 }
 
-int TFunction::ioSize( )	{ return mIO.size(); }
+int TFunction::ioSize( ) const	{ return mIO.size(); }
 
-IO *TFunction::io( int iid )
+IO *TFunction::io( int iid ) const
 {
     if(iid >= (int)mIO.size()) throw err_sys(_("Index %d is broken!"), iid);
     return mIO[iid];
 }
 
-int TFunction::ioId( const string &id )
+int TFunction::ioId( const string &id ) const
 {
     for(int iIO = 0; iIO < (int)mIO.size(); iIO++)
 	if(mIO[iIO]->id() == id) return iIO;
@@ -377,18 +384,18 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* IO                                            *
 //*************************************************
-IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez )
+IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez ) :
+    mId(iid), mName(iname), mType(itype), mFlg(iflgs), mHide(ihide), mDef(idef), mRez(irez), owner(NULL)
 {
-    mId		= iid;
-    mName	= iname;
-    mType	= itype;
-    mFlg	= iflgs;
-    mHide	= ihide;
-    mDef	= idef;
-    mRez	= irez;
+
 }
 
-IO &IO::operator=( IO &iio )
+IO::IO( const IO &src ) : mType(Real), mFlg(0), mHide(false), owner(NULL)
+{
+    operator=(src);
+}
+
+IO &IO::operator=( const IO &iio )
 {
     setId(iio.id());
     setName(iio.name());

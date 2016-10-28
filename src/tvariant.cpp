@@ -298,7 +298,11 @@ void TVariant::setS( const string &ivl )
 	    else if(ivl.size() < STR_BUF_LEN) {		//For middle blocks up to STR_BUF_LEN
 		if(mStdString) { delete val.s; mStdString = false; }
 		if(mSize < sizeof(val.sMini))	val.sPtr = (char*)malloc(ivl.size()+1);
-		else if(ivl.size() != mSize)	val.sPtr = (char*)realloc(val.sPtr, ivl.size()+1);
+		else if(ivl.size() != mSize)	{
+		    char *sPtrTmp = val.sPtr;
+		    val.sPtr = (char*)realloc(val.sPtr, ivl.size()+1);
+		    if(sPtrTmp && !val.sPtr) free(sPtrTmp);
+		}
 		if(!val.sPtr) {
 		    mSize = 0;
 		    val.sMini[mSize] = 0;
@@ -331,9 +335,9 @@ void TVariant::setO( AutoHD<TVarObj> ivl )
     *val.o = ivl;
 }
 
-void TVariant::setO( TVarObj *val )
+void TVariant::setO( TVarObj *ival )
 {
-    setO(AutoHD<TVarObj>(val));
+    setO(AutoHD<TVarObj>(ival));
 }
 
 //***********************************************************
@@ -891,21 +895,21 @@ int TRegExp::search( const string &vl, int off )
     return (n>0) ? capv[0] : -1;
 }
 
-string TRegExp::substExprRepl( const string &str, const string &val, int *capv, int n )
+string TRegExp::substExprRepl( const string &str, const string &val, int *icapv, int n )
 {
     string rez = str;
     for(size_t cpos = 0; n > 0 && (cpos=rez.find("$",cpos)) != string::npos && cpos < (rez.size()-1); )
 	switch(rez[cpos+1]) {
 	    case '$':	rez.replace(cpos,2,"$"); cpos++; break;
-	    case '`':	rez.replace(cpos,2,val,0,capv[0]); cpos += capv[0]; break;
-	    case '\'':	rez.replace(cpos,2,val,capv[1],val.size()-capv[1]);cpos += (val.size()-capv[1]); break;
-	    case '&':	rez.replace(cpos,2,val,capv[0],(capv[1]-capv[0])); cpos += capv[1]; break;
+	    case '`':	rez.replace(cpos,2,val,0,icapv[0]); cpos += icapv[0]; break;
+	    case '\'':	rez.replace(cpos,2,val,icapv[1],val.size()-icapv[1]);cpos += (val.size()-icapv[1]); break;
+	    case '&':	rez.replace(cpos,2,val,icapv[0],(icapv[1]-icapv[0])); cpos += icapv[1]; break;
 	    default: {
 		int nd = isdigit(rez[cpos+1]) ? 1 : 0;
 		if(nd && cpos < (rez.size()-2) && isdigit(rez[cpos+2])) nd++;
 		int subexp = s2i(string(rez.data()+cpos+1,nd));
 		string replVl;
-		if(subexp > 0 && subexp < n) replVl.assign(val,capv[subexp*2],capv[subexp*2+1]-capv[subexp*2]);
+		if(subexp > 0 && subexp < n) replVl.assign(val,icapv[subexp*2],icapv[subexp*2+1]-icapv[subexp*2]);
 		rez.replace(cpos,nd+1,replVl);
 		cpos += replVl.size();
 	    }
@@ -1013,7 +1017,7 @@ void XMLNodeObj::childIns( unsigned id, AutoHD<XMLNodeObj> nd )
 {
     if(&nd.at() == this) return;
     dataM.lock();
-    if(id < 0) id = mChilds.size();
+    //if(id < 0) id = mChilds.size();
     id = vmin(id, mChilds.size());
     mChilds.insert(mChilds.begin()+id,nd);
     nd.at().parent = this;
@@ -1022,7 +1026,7 @@ void XMLNodeObj::childIns( unsigned id, AutoHD<XMLNodeObj> nd )
 
 void XMLNodeObj::childDel( unsigned id )
 {
-    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj", _("Deletion child '%d' error."), id);
+    if(/*id < 0 || */id >= mChilds.size()) throw TError("XMLNodeObj", _("Deletion child '%d' error."), id);
     dataM.lock();
     if(mChilds[id].at().parent == this) mChilds[id].at().parent = NULL;
     mChilds.erase(mChilds.begin()+id);
@@ -1031,7 +1035,7 @@ void XMLNodeObj::childDel( unsigned id )
 
 AutoHD<XMLNodeObj> XMLNodeObj::childGet( unsigned id )
 {
-    if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj", _("Child '%d' is not allow."), id);
+    if(/*id < 0 || */id >= mChilds.size()) throw TError("XMLNodeObj", _("Child '%d' is not allow."), id);
     dataM.lock();
     AutoHD<XMLNodeObj> rez = mChilds[id];
     dataM.unlock();

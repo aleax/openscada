@@ -327,9 +327,9 @@ TUser::~TUser( )
 
 }
 
-TCntrNode &TUser::operator=( TCntrNode &node )
+TCntrNode &TUser::operator=( const TCntrNode &node )
 {
-    TUser *src_n = dynamic_cast<TUser*>(&node);
+    const TUser *src_n = dynamic_cast<const TUser*>(&node);
     if(!src_n) return *this;
 
     exclCopy(*src_n, "NAME;");
@@ -377,9 +377,9 @@ void TUser::postDisable( int flag )
 	owner().grpAt(gls[i_g]).at().userDel(name());
 }
 
-TSecurity &TUser::owner( )	{ return *(TSecurity*)nodePrev(); }
+TSecurity &TUser::owner( ) const	{ return *(TSecurity*)nodePrev(); }
 
-string TUser::tbl( )		{ return string(owner().subId())+"_user"; }
+string TUser::tbl( )			{ return string(owner().subId())+"_user"; }
 
 void TUser::load_( TConfig *icfg )
 {
@@ -482,9 +482,9 @@ TGroup::~TGroup( )
 
 }
 
-TCntrNode &TGroup::operator=( TCntrNode &node )
+TCntrNode &TGroup::operator=( const TCntrNode &node )
 {
-    TGroup *src_n = dynamic_cast<TGroup*>(&node);
+    const TGroup *src_n = dynamic_cast<const TGroup*>(&node);
     if(!src_n) return *this;
 
     exclCopy(*src_n, "NAME;");
@@ -498,9 +498,9 @@ void TGroup::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
 }
 
-TSecurity &TGroup::owner( )	{ return *(TSecurity*)nodePrev(); }
+TSecurity &TGroup::owner( ) const	{ return *(TSecurity*)nodePrev(); }
 
-string TGroup::tbl( )		{ return owner().subId()+"_grp"; }
+string TGroup::tbl( )			{ return owner().subId()+"_grp"; }
 
 void TGroup::load_( TConfig *icfg )
 {

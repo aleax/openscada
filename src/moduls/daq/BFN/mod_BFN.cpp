@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.6"
+#define MOD_VER		"0.6.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -673,7 +673,7 @@ void TMdPrm::postEnable(int flag)
     if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::setEval( )
 {

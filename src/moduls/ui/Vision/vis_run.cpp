@@ -1131,7 +1131,7 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 	}
 }
 
-void VisRun::initSess( const string &prjSes_it, bool crSessForce )
+void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 {
     bool isSess = false;
     src_prj = work_sess = "";
@@ -1139,8 +1139,8 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 
     //Connect/create session
     int off = 0;
-    if((src_prj=TSYS::pathLev(prjSes_it,0,true,&off)).empty()) return;
-    if(off > 0 && off < prjSes_it.size()) openPgs = prjSes_it.substr(off);
+    if((src_prj=TSYS::pathLev(iprjSes_it,0,true,&off)).empty()) return;
+    if(off > 0 && off < iprjSes_it.size()) openPgs = iprjSes_it.substr(off);
     // Check for ready session connection or project
     if(src_prj.compare(0,4,"ses_") == 0) { work_sess = src_prj.substr(4); src_prj = ""; isSess = true; }
     else if(src_prj.compare(0,4,"prj_") == 0) src_prj.erase(0,4);
@@ -1149,7 +1149,7 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     //Get opened sessions list for our page and put dialog for connection
     XMLNode req("list");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
-    if(!isSess && !crSessForce && !cntrIfCmd(req) && req.childSize()) {
+    if(!isSess && !icrSessForce && !cntrIfCmd(req) && req.childSize()) {
 	// Prepare and execute a session selection dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("vision_prj_run",NULL,true).c_str())) ico_t.load(":/images/prj_run.png");
@@ -1746,7 +1746,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 
     //Apply to the current alarm status
     actAlrm->setVisible((owner()->alarmSt()>>8)&(1<<tp));
-    if(f_quittanceRet) actAlrm->setChecked(!(owner()->alarmSt()>>16)&(1<<tp));
+    if(f_quittanceRet) actAlrm->setChecked(!((owner()->alarmSt()>>16)&(1<<tp)));
     else actAlrm->setEnabled((owner()->alarmSt()>>16)&(1<<tp));
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:Notify", 1);

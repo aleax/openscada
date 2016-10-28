@@ -49,7 +49,11 @@ public:
 
     bool isEmpty( ) const;
 
+#if QT_VERSION < 0x050000
     QString translate( const char *context, const char *sourceText, const char *comment = 0 ) const;
+#else
+    QString translate( const char *context, const char *sourceText, const char *disambiguation = Q_NULLPTR, int n = -1 ) const;
+#endif
 };
 
 //*************************************************

@@ -44,9 +44,9 @@ Block::~Block( )
     if(enable()) setEnable(false);
 }
 
-TCntrNode &Block::operator=( TCntrNode &node )
+TCntrNode &Block::operator=( const TCntrNode &node )
 {
-    Block *src_n = dynamic_cast<Block*>(&node);
+    const Block *src_n = dynamic_cast<const Block*>(&node);
     if(!src_n) return *this;
 
     //Copy parameters
@@ -81,7 +81,7 @@ void Block::postDisable( int flag )
     }
 }
 
-Contr &Block::owner( )	{ return *(Contr*)nodePrev(); }
+Contr &Block::owner( ) const	{ return *(Contr*)nodePrev(); }
 
 string Block::name( )
 {

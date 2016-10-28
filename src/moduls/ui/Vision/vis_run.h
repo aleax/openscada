@@ -85,7 +85,7 @@ class VisRun : public QMainWindow
 		//Methods
 		void commCall( string &res, const string &mess = "", const string &lang = "" );
 
-		VisRun *owner( )	{ return mOwner; }
+		VisRun *owner( ) const	{ return mOwner; }
 
 		static void *Task( void *ntf );
 

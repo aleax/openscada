@@ -49,11 +49,11 @@ class Lib : public TSpecial
 	void modStart( );
 	void modStop( );
 
-	void list( vector<string> &ls )		{ chldList(m_fnc,ls); }
-	bool present( const string &id )	{ return chldPresent(m_fnc,id); }
-	AutoHD<TFunction> at( const string &id ){ return chldAt(m_fnc,id); }
-	void reg( TFunction *fnc )		{ chldAdd(m_fnc,fnc); }
-	void unreg( const char *id )		{ chldDel(m_fnc,id); }
+	void list( vector<string> &ls ) const		{ chldList(m_fnc, ls); }
+	bool present( const string &id ) const		{ return chldPresent(m_fnc, id); }
+	AutoHD<TFunction> at( const string &id ) const	{ return chldAt(m_fnc, id); }
+	void reg( TFunction *fnc )			{ chldAdd(m_fnc, fnc); }
+	void unreg( const char *id )			{ chldDel(m_fnc, id); }
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 

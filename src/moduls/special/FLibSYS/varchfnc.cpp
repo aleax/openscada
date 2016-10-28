@@ -265,8 +265,8 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    for(int iV = 0; iV < (fftN/2+1); iV++)
 		if(!iV) ao->arSet(iV, fftOut[iV][0]/fftN);
 		else ao->arSet(iV, pow(pow(fftOut[iV][0],2)+pow(fftOut[iV][1],2),0.5)/(fftN/2));
-	    delete fftIn;
-	    delete fftOut;
+	    free(fftIn);
+	    free(fftOut);
 	    ao->propSet("bufSize", fftN); ao->propSet("bufEVAL", bufEVAL);
 	}
 

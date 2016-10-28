@@ -983,11 +983,11 @@ void TMdPrm::postDisable( int flag )
     }
 }
 
-TCntrNode &TMdPrm::operator=( TCntrNode &node )
+TCntrNode &TMdPrm::operator=( const TCntrNode &node )
 {
     TParamContr::operator=(node);
 
-    TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
+    const TMdPrm *src_n = dynamic_cast<const TMdPrm*>(&node);
     if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx) return *this;
 
     //IO values copy
@@ -1008,11 +1008,11 @@ void TMdPrm::setType( const string &tpId )
     if(isLogic()) lCtx = new TLogCtx(name()+"_ModBusPrm");
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
-bool TMdPrm::isStd( )		{ return type().name == "std"; }
+bool TMdPrm::isStd( ) const		{ return type().name == "std"; }
 
-bool TMdPrm::isLogic( )		{ return type().name == "logic"; }
+bool TMdPrm::isLogic( ) const		{ return type().name == "logic"; }
 
 void TMdPrm::enable( )
 {

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.3"
+#define MOD_VER		"1.7.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -151,12 +151,12 @@ string TWEB::pgHead( string head_els )
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	"  <meta http-equiv='Cache-Control' content='no-cache'/>\n"+
 	head_els+
-	"  <link rel='shortcut icon' href='/"MOD_ID"/ico' type='image' />\n"
-	"  <title>"PACKAGE_NAME". "+_(MOD_NAME)+"</title>\n"
-	"  <style type='text/css'>\n"+mCSStables+"</style>\n"
+	"  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
+	"  <title>" PACKAGE_NAME ". " + _(MOD_NAME) + "</title>\n"
+	"  <style type='text/css'>\n" + mCSStables + "</style>\n"
 	"</head>\n"
 	"<body>\n"
-	"<h1 class='head'>"PACKAGE_NAME". "+_(MOD_NAME)+"</h1>\n"
+	"<h1 class='head'>" PACKAGE_NAME ". " + _(MOD_NAME) + "</h1>\n"
 	"<hr size='3'/><br/>\n";
 }
 
@@ -178,7 +178,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	//Get module icon and global image
 	else if(zero_lev == "ico" || zero_lev.substr(0,4) == "img_") {
 	    string itp;
-	    ses.page = TUIS::icoGet((zero_lev=="ico")?"UI."MOD_ID:zero_lev.substr(4), &itp);
+	    ses.page = TUIS::icoGet((zero_lev=="ico")?"UI." MOD_ID:zero_lev.substr(4), &itp);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;
 	}
@@ -257,14 +257,14 @@ void TWEB::getHead( SSess &ses )
 
     ses.page += "<table class='page_head'><tr>\n"
 	"<td class='tool'>\n"
-	"<a href='"+path+"?com=load' title='"+_("Load")+"'><img src='/"MOD_ID"/img_load' alt='"+_("Load")+"'/></a>\n"
-	"<a href='"+path+"?com=save' title='"+_("Save")+"'><img src='/"MOD_ID"/img_save' alt='"+_("Save")+"'/></a>\n"
-	"<img src='/"MOD_ID"/img_line'/>\n"
-	"<a href='/"MOD_ID"' title='"+_("Root page")+"'><img src='/"MOD_ID"/img_gohome' alt='"+_("Root page")+"'/></a>\n"
-	"<a href='"+path+"' title='"+_("Current page")+"'><img src='/"MOD_ID"/img_reload' alt='" +_("Curent page")+"'/></a>\n"
-	"<a href='"+path.substr(0,path.rfind("/"))+"' title='"+_("Previous page")+"'><img src='/"MOD_ID"/img_up' alt='"+_("Previous page")+"'/></a>\n"
-	"<img src='/"MOD_ID"/img_line'/>\n"
-	"<a href='/"MOD_ID"/about' title='"+_("About")+"'><img src='/"MOD_ID"/img_help' alt='"+_("About")+"'/></a>\n"
+	"<a href='" + path + "?com=load' title='" + _("Load") + "'><img src='/" MOD_ID "/img_load' alt='" + _("Load") + "'/></a>\n"
+	"<a href='" + path + "?com=save' title='" + _("Save")+"'><img src='/" MOD_ID "/img_save' alt='" + _("Save") + "'/></a>\n"
+	"<img src='/" MOD_ID "/img_line'/>\n"
+	"<a href='/" MOD_ID "' title='" + _("Root page") + "'><img src='/" MOD_ID "/img_gohome' alt='" + _("Root page") + "'/></a>\n"
+	"<a href='" + path + "' title='" + _("Current page") + "'><img src='/" MOD_ID "/img_reload' alt='" +_("Curent page") + "'/></a>\n"
+	"<a href='" + path.substr(0,path.rfind("/")) + "' title='" + _("Previous page") + "'><img src='/" MOD_ID "/img_up' alt='" + _("Previous page") + "'/></a>\n"
+	"<img src='/" MOD_ID "/img_line'/>\n"
+	"<a href='/" MOD_ID "/about' title='" + _("About") + "'><img src='/" MOD_ID "/img_help' alt='" + _("About") + "'/></a>\n"
 	"</td>\n"
 	"<td>";
     if(ses.root->childGet("id","ico",true))

@@ -176,10 +176,10 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    if(cnt != 1) ao = new TArrayObj();
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
 	    for(long r_cnt = 0, r_full = 0, i_cnt = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
-		for(unsigned pos = 0; (pos+tpD.szBt) <= r_cnt; pos += tpD.szBt, i_cnt++) {
+		for(unsigned iPos = 0; (iPos+tpD.szBt) <= r_cnt; iPos += tpD.szBt, i_cnt++) {
 		    switch(tpD.szBt) {
 			case 2: {
-			    uint16_t v = *(uint16_t*)(buf+pos);
+			    uint16_t v = *(uint16_t*)(buf+iPos);
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i16_LE(v);	break;
 				case 'b': v = TSYS::i16_BE(v);	break;
@@ -188,7 +188,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 			case 4: {
-			    uint32_t v = *(uint32_t*)(buf+pos);
+			    uint32_t v = *(uint32_t*)(buf+iPos);
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i32_LE(v);	break;
 				case 'b': v = TSYS::i32_BE(v);	break;
@@ -197,7 +197,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 			case 8: {
-			    uint64_t v = *(uint64_t*)(buf+pos);
+			    uint64_t v = *(uint64_t*)(buf+iPos);
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i64_LE(v);	break;
 				case 'b': v = TSYS::i64_BE(v);	break;
@@ -258,10 +258,10 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
 	    for(int r_cnt = 0, r_full = 0, i_cnt = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
 	    {
-		for(unsigned pos = 0; (int)pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++) {
+		for(unsigned iPos = 0; (int)iPos <= (r_cnt-tpD.szBt); iPos += tpD.szBt, i_cnt++) {
 		    switch(tpD.szBt) {
 			case 4: {
-			    float v = *(float*)(buf+pos);
+			    float v = *(float*)(buf+iPos);
 			    switch(mach[0]) {
 				case 'l': *((int32_t*)&v) = TSYS::i32_LE(*((int32_t*)&v));	break;
 					//v = TSYS::floatLErev(v);	break;
@@ -272,7 +272,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    break;
 			}
 			case 8: {
-			    rez = *(double*)(buf+pos);
+			    rez = *(double*)(buf+iPos);
 			    switch(mach[0]) {
 				case 'l': *((int64_t*)&rez) = TSYS::i64_LE(*((int64_t*)&rez));	break;
 					//rez = TSYS::doubleLErev(rez);	break;

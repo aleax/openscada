@@ -518,7 +518,7 @@ class CRC : public TFunction
 
 	void calc( TValFunc *val ) {
 	    int wdth = vmin(64, vmax(1,val->getI(3)));
-	    uint64_t mask = 0xFFFFFFFFFFFFFFFFll >> (64-wdth);
+	    uint64_t mask = 0xFFFFFFFFFFFFFFFFull >> (64-wdth);
 	    uint64_t CRC = val->getI(4) & mask;
 	    uint64_t pat = val->getI(2) & mask;
 	    string data = val->getS(1);

@@ -800,20 +800,20 @@ QPointF ShapeElFigure::getArcStartEnd( QPointF pBeg, QPointF pEnd, QPointF pCntr
     pBeg = unRotate(pBeg, ang, pCntr1);
     if(pBeg.x() >= a)	pBeg = QPointF(a, (pBeg.y()/pBeg.x())*a);
     if(pBeg.x() < -a)	pBeg = QPointF(-a, (pBeg.y()/pBeg.x())*(-a));
-    double t_start = acos(pBeg.x()/a)/(2*M_PI);
-    if(pBeg.y() > 0)	t_start = 1 - t_start;
+    double tt_start = acos(pBeg.x()/a)/(2*M_PI);
+    if(pBeg.y() > 0)	tt_start = 1 - tt_start;
 
     pEnd = unRotate(pEnd, ang, pCntr1);
     if(pEnd.x() < -a)	pEnd = QPointF(-a, (pEnd.y()/pEnd.x())*(-a));
     if(pEnd.x() >= a)	pEnd = QPointF(a, (pEnd.y()/pEnd.x())*(a));
-    double t_end = acos(pEnd.x()/a)/(2*M_PI);
-    if(pEnd.y() > 0)	t_end = 1 - t_end;
-    if(t_start > t_end)	t_end += 1;
-    if((t_end-1) > t_start)	t_end -= 1;
-    if(fabs(t_start-t_end) < ARC_STEP) t_end += 1;
-    if(t_end > t_start && t_start >= 1 && t_end > 1) { t_start -= 1; t_end -= 1; }
+    double tt_end = acos(pEnd.x()/a)/(2*M_PI);
+    if(pEnd.y() > 0)	tt_end = 1 - tt_end;
+    if(tt_start > tt_end)	tt_end += 1;
+    if((tt_end-1) > tt_start)	tt_end -= 1;
+    if(fabs(tt_start-tt_end) < ARC_STEP) tt_end += 1;
+    if(tt_end > tt_start && tt_start >= 1 && tt_end > 1) { tt_start -= 1; tt_end -= 1; }
 
-    return QPointF(t_start, t_end);
+    return QPointF(tt_start, tt_end);
 }
 
 void ShapeElFigure::editEnter( DevelWdgView *w )
@@ -3611,22 +3611,22 @@ QPainterPath ShapeElFigure::painterPath( float width, float bWidth, int type, do
 		   arc_b = length(pCntr1, pCntr2) + width/2 + bWidth/2,
 		   arc_a_small = arc_a - width - bWidth,
 		   arc_b_small = arc_b - width - bWidth,
-		   t_start = aT.x(), t_end = aT.y();
-	    QPointF rotArc = rotate(arc(t_start,arc_a_small,arc_b_small), ang);
+		   tt_start = aT.x(), tt_end = aT.y();
+	    QPointF rotArc = rotate(arc(tt_start,arc_a_small,arc_b_small), ang);
 	    circlePath.moveTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
-	    rotArc = rotate(arc(t_start,arc_a,arc_b), ang);
+	    rotArc = rotate(arc(tt_start,arc_a,arc_b), ang);
 	    circlePath.lineTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
-	    for(double t = t_start; true; t += ARC_STEP) {
-		rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+	    for(double t = tt_start; true; t += ARC_STEP) {
+		rotArc = rotate(arc(vmin(t,tt_end),arc_a,arc_b), ang);
 		circlePath.lineTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
-		if(t >= t_end) break;
+		if(t >= tt_end) break;
 	    }
-	    rotArc = rotate(arc(t_end,arc_a_small,arc_b_small), ang);
+	    rotArc = rotate(arc(tt_end,arc_a_small,arc_b_small), ang);
 	    circlePath.lineTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
-	    for(double t = t_end; true; t -= ARC_STEP) {
-		rotArc = rotate(arc(vmax(t,t_start),arc_a_small,arc_b_small), ang);
+	    for(double t = tt_end; true; t -= ARC_STEP) {
+		rotArc = rotate(arc(vmax(t,tt_start),arc_a_small,arc_b_small), ang);
 		circlePath.lineTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
-		if(t <= t_start) break;
+		if(t <= tt_start) break;
 	    }
 	    circlePath.closeSubpath();
 	    circlePath.setFillRule(Qt::WindingFill);
@@ -3679,14 +3679,14 @@ QPainterPath ShapeElFigure::painterPathSimple( int type, double ang, QPointF pBe
 	case ShT_Line: circlePath.lineTo(pEnd); break;
 	case ShT_Arc: {
 	    double arc_a = length(pCntr3, pCntr1), arc_b = length(pCntr1, pCntr2),
-		   t_start = aT.x(), t_end = aT.y();
-	    QPointF rotArc;// = rotate(arc(t_start,arc_a,arc_b), ang);
-	    //printf("TEST 00 Arc: ang=%g; t_start=%g; t_end=%g; pCntr1=[%g:%g]; pCntr2=[%g:%g]; pCntr3=[%g:%g]; arc_a=%g; arc_b=%g\n",
-	    //	ang, t_start, t_end, pCntr1.x(), pCntr1.y(), pCntr2.x(), pCntr2.y(), pCntr3.x(), pCntr3.y(), arc_a, arc_b);
-	    for(double t = t_start; true; t += ARC_STEP) {
-		rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+		   tt_start = aT.x(), tt_end = aT.y();
+	    QPointF rotArc;// = rotate(arc(tt_start,arc_a,arc_b), ang);
+	    //printf("TEST 00 Arc: ang=%g; tt_start=%g; tt_end=%g; pCntr1=[%g:%g]; pCntr2=[%g:%g]; pCntr3=[%g:%g]; arc_a=%g; arc_b=%g\n",
+	    //	ang, tt_start, tt_end, pCntr1.x(), pCntr1.y(), pCntr2.x(), pCntr2.y(), pCntr3.x(), pCntr3.y(), arc_a, arc_b);
+	    for(double t = tt_start; true; t += ARC_STEP) {
+		rotArc = rotate(arc(vmin(t,tt_end),arc_a,arc_b), ang);
 		circlePath.lineTo(pCntr1.x()+rotArc.x(), pCntr1.y()-rotArc.y());
-		if(t >= t_end) break;
+		if(t >= tt_end) break;
 	    }
 	    circlePath.lineTo(pEnd);
 	    break;
@@ -3768,7 +3768,7 @@ int ShapeElFigure::buildMatrix( WdgView *w )
     return N;
 }
 
-void ShapeElFigure::step( int s, int f, int p, const QVector<int> &vect, int N )
+void ShapeElFigure::step( int s, int f, int p, const QVector<int> &ivect, int N )
 {
     int c;
     if( s == f && p > 4 )
@@ -3787,7 +3787,7 @@ void ShapeElFigure::step( int s, int f, int p, const QVector<int> &vect, int N )
 	    if( map_matrix[s][c] && !incl[c]&& ( len == 0 || clen+map_matrix[s][c] <= len ) )
 	    {
 		road[p] = c; incl[c] = 1; clen = clen + map_matrix[s][c];
-		step ( c, f, p+1, vect, N );
+		step ( c, f, p+1, ivect, N );
 		incl[c] = 0; road[p] = 0; clen = clen - map_matrix[s][c];
 	    }
     }
@@ -3885,7 +3885,7 @@ bool ShapeElFigure::inundation( const QPointF &point, int N, WdgView *w )
     return true;
 }
 
-QVector<int> ShapeElFigure::inundationSort( const QPainterPath &inundationPath, QVector<int> &inundation_fig_num, WdgView *w )
+QVector<int> ShapeElFigure::inundationSort( const QPainterPath &iinundationPath, QVector<int> &inundation_fig_num, WdgView *w )
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
@@ -3897,11 +3897,11 @@ QVector<int> ShapeElFigure::inundationSort( const QPainterPath &inundationPath, 
 	       (shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n1))
 	    {
 		if(shapeItems[j].type == 2  && p != j)
-		    if(inundationPath.contains(scaleRotate(pnts[shapeItems[j].n4],w)))
+		    if(iinundationPath.contains(scaleRotate(pnts[shapeItems[j].n4],w)))
 			inundation_fig_num[p] = j;
 		if(shapeItems[j].type == 3 && p != j && shapeItems[inundation_fig_num[p]].type != 2)
-		    if(inundationPath.contains(scaleRotate(pnts[shapeItems[j].n4],w)) &&
-			inundationPath.contains(scaleRotate(pnts[shapeItems[j].n3],w)))
+		    if(iinundationPath.contains(scaleRotate(pnts[shapeItems[j].n4],w)) &&
+			iinundationPath.contains(scaleRotate(pnts[shapeItems[j].n3],w)))
 			inundation_fig_num[p] = j;
 	    }
     return inundation_fig_num;
@@ -4380,7 +4380,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
     QPointF rotArc, scRtTmp, scRtEnd;
     int flag = -1, in_index = -1;
     bool flag_n1, flag_n2, flag_break;
-    double arc_a, arc_b, t_start, t_end, t, ang;
+    double arc_a, arc_b, tt_start, tt_end, t, ang;
     QLineF line1, line2;
 
     const ShapeItem &curShIt = shapeItems[in_fig_num[0]];
@@ -4409,13 +4409,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 		// Possible need RealRound apply only to all source points or only to begin and end points.
 		arc_a = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n5],w));
 		arc_b = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n4],w));
-		t_start = curShIt.ctrlPos4.x();
-		t_end = curShIt.ctrlPos4.y();
-		for(t = t_start; true; t += ARC_STEP) {
+		tt_start = curShIt.ctrlPos4.x();
+		tt_end = curShIt.ctrlPos4.y();
+		for(t = tt_start; true; t += ARC_STEP) {
 		    scRtTmp = scaleRotate(pnts[curShIt.n3], w);
-		    rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+		    rotArc = rotate(arc(vmin(t,tt_end),arc_a,arc_b), ang);
 		    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-		    if(t >= t_end) break;
+		    if(t >= tt_end) break;
 		}
 		path.lineTo(scRtEnd);
 		break;
@@ -4457,13 +4457,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 		// Possible need RealRound apply only to all source points or only to begin and end points.
 		arc_a = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n5],w));
 		arc_b = length(scaleRotate(pnts[curShIt.n3],w), scaleRotate(pnts[curShIt.n4],w));
-		t_start = curShIt.ctrlPos4.x();
-		t_end = curShIt.ctrlPos4.y();
-		for(t = t_end; true; t -= ARC_STEP) {
+		tt_start = curShIt.ctrlPos4.x();
+		tt_end = curShIt.ctrlPos4.y();
+		for(t = tt_end; true; t -= ARC_STEP) {
 		    scRtTmp = scaleRotate(pnts[curShIt.n3], w);
-		    rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
+		    rotArc = rotate(arc(vmax(t,tt_start),arc_a,arc_b), ang);
 		    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-		    if(t <= t_start) break;
+		    if(t <= tt_start) break;
 		}
 		path.lineTo(scRtEnd);
 		break;
@@ -4542,13 +4542,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 			// Possible need RealRound apply only to all source points or only to begin and end points.
 			arc_a = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n5],w));
 			arc_b = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n4],w));
-			t_start = inShIt.ctrlPos4.x();
-			t_end = inShIt.ctrlPos4.y();
-			for(t = t_start; true; t += ARC_STEP) {
+			tt_start = inShIt.ctrlPos4.x();
+			tt_end = inShIt.ctrlPos4.y();
+			for(t = tt_start; true; t += ARC_STEP) {
 			    scRtTmp = scaleRotate(pnts[inShIt.n3], w);
-			    rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+			    rotArc = rotate(arc(vmin(t,tt_end),arc_a,arc_b), ang);
 			    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-			    if(t >= t_end) break;
+			    if(t >= tt_end) break;
 			}
 			path.lineTo(scRtEnd);
 			break;
@@ -4586,13 +4586,13 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 			arc_a = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n5],w));
 			arc_b = length(scaleRotate(pnts[inShIt.n3],w), scaleRotate(pnts[inShIt.n4],w));
 
-			t_start = inShIt.ctrlPos4.x();
-			t_end = inShIt.ctrlPos4.y();
-			for(t = t_end; true; t -= ARC_STEP) {
+			tt_start = inShIt.ctrlPos4.x();
+			tt_end = inShIt.ctrlPos4.y();
+			for(t = tt_end; true; t -= ARC_STEP) {
 			    scRtTmp = scaleRotate(pnts[inShIt.n3], w);
-			    rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
+			    rotArc = rotate(arc(vmax(t,tt_start),arc_a,arc_b), ang);
 			    path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
-			    if(t <= t_start) break;
+			    if(t <= tt_start) break;
 			}
 			path.lineTo(scRtEnd);
 			break;

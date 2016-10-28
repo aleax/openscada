@@ -542,7 +542,7 @@ void MFileArch::attach( const string &iname, bool full )
 		}
 	    }
 
-	    if(infoOK && (!mXML || (mXML && !full))) {
+	    if(infoOK && (!mXML || !full)) {
 		//  Get the file size
 		int hd = open(name().c_str(), O_RDONLY);
 		if(hd > 0) { mSize = lseek(hd,0,SEEK_END); close(hd); }

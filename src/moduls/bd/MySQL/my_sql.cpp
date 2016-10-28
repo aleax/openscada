@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.8"
+#define MOD_VER		"2.5.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -100,18 +100,18 @@ void MBD::postDisable( int flag )
 
     if(flag && owner().fullDeleteDB())
 	try {
-	    MYSQL connect;
+	    MYSQL tcon;
 
 	    MtxAlloc resource(connRes, true);
-	    if(!mysql_init(&connect)) throw err_sys(_("Error initializing client."));
-	    connect.reconnect = 1;
-	    if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
-		throw err_sys(_("Connect to DB error: %s"), mysql_error(&connect));
+	    if(!mysql_init(&tcon)) throw err_sys(_("Error initializing client."));
+	    tcon.reconnect = 1;
+	    if(!mysql_real_connect(&tcon,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
+		throw err_sys(_("Connect to DB error: %s"), mysql_error(&tcon));
 
 	    string req = "DROP DATABASE `" + bd + "`";
-	    if(mysql_real_query(&connect,req.c_str(),req.size())) throw err_sys(_("Query to DB error: %s"), mysql_error(&connect));
+	    if(mysql_real_query(&tcon,req.c_str(),req.size())) throw err_sys(_("Query to DB error: %s"), mysql_error(&tcon));
 
-	    mysql_close(&connect);
+	    mysql_close(&tcon);
 	} catch(TError&) { }
 }
 
@@ -185,12 +185,12 @@ void MBD::disable( )
     mysql_close(&connect);
 }
 
-void MBD::allowList( vector<string> &list )
+void MBD::allowList( vector<string> &list ) const
 {
     if(!enableStat())	return;
     list.clear();
     vector< vector<string> > tbl;
-    sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`", &tbl, false);
+    const_cast<MBD*>(this)->sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`", &tbl, false);
     for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
 	list.push_back(tbl[i_t][0]);
 }
@@ -363,7 +363,7 @@ void MTable::postDisable( int flag )
 	catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
-MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
+MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {

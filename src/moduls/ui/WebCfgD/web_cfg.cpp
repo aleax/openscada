@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.8"
+#define MOD_VER		"0.9.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -154,12 +154,12 @@ void TWEB::modStop( )
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
 {
-    return  "HTTP/1.0 "+rcode+"\x0D\x0A"
-	    "Server: "PACKAGE_STRING"\x0D\x0A"
+    return  "HTTP/1.0 " + rcode + "\x0D\x0A"
+	    "Server: " PACKAGE_STRING "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
-	    "Content-Length: "+i2s(cln)+"\x0D\x0A"
-	    "Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"
-	    "Cache-Control: no-cache\x0D\x0A"+addattr+"\x0D\x0A";
+	    "Content-Length: " + i2s(cln) + "\x0D\x0A"
+	    "Content-Type: " + cnt_tp + "; charset=" + charset + "\x0D\x0A"
+	    "Cache-Control: no-cache\x0D\x0A" + addattr + "\x0D\x0A";
 }
 
 string TWEB::pgHead( string head_els )
@@ -175,8 +175,8 @@ string TWEB::pgHead( string head_els )
 	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
 	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"+
 	head_els+
-	"  <link rel='shortcut icon' href='/"MOD_ID"/ico' type='image' />\n"
-	"  <title>"PACKAGE_NAME". "+_(MOD_NAME)+"</title>\n"
+	"  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
+	"  <title>" PACKAGE_NAME ". " + _(MOD_NAME) + "</title>\n"
 	"  <style type='text/css'>\n"
 	"    hr { width: 95%; }\n"
 	"    body { background-color: #818181; }\n"
@@ -265,7 +265,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	//Get module icon and global image
 	else if(zero_lev == "ico" || zero_lev.substr(0,4) == "img_") {
 	    string itp;
-	    ses.page = TUIS::icoGet(((zero_lev == "ico")?"UI."MOD_ID:zero_lev.substr(4)), &itp);
+	    ses.page = TUIS::icoGet(((zero_lev == "ico")?"UI." MOD_ID:zero_lev.substr(4)), &itp);
 	    imgConvert(ses);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;

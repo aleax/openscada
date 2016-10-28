@@ -45,12 +45,12 @@ class Lib : public TCntrNode, public TConfig
 	Lib( const string &id, const string &name, const string &lib_db );
 	~Lib( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string id( )		{ return mId; }
 	string name( );
 	string descr( )		{ return cfg("DESCR").getS(); }
-	bool startStat( )	{ return runSt; }
+	bool startStat( ) const	{ return runSt; }
 
 	string DB( )		{ return workLibDb; }
 	string tbl( )		{ return cfg("DB").getS(); }
@@ -61,9 +61,9 @@ class Lib : public TCntrNode, public TConfig
 	void setStart( bool val );
 	void setFullDB( const string &idb );
 
-	void list( vector<string> &ls )		{ chldList(mFnc,ls); }
-	bool present( const string &id )	{ return chldPresent(mFnc,id); }
-	AutoHD<Func> at( const string &id )	{ return chldAt(mFnc,id); }
+	void list( vector<string> &ls ) const		{ chldList(mFnc, ls); }
+	bool present( const string &id ) const		{ return chldPresent(mFnc, id); }
+	AutoHD<Func> at( const string &id ) const	{ return chldAt(mFnc, id); }
 	void add( const string &id, const string &name = "" );
 	void del( const string &id );
 
@@ -72,7 +72,7 @@ class Lib : public TCntrNode, public TConfig
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     protected:
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( TConfig *cfg );

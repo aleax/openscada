@@ -560,7 +560,7 @@ TTypeTransport::~TTypeTransport()
     nodeDelAll();
 }
 
-TTransportS &TTypeTransport::owner( )	{ return (TTransportS&)TModule::owner(); }
+TTransportS &TTypeTransport::owner( ) const	{ return (TTransportS&)TModule::owner(); }
 
 void TTypeTransport::inAdd( const string &name, const string &idb )	{ chldAdd(mIn, In(name,idb)); }
 
@@ -645,9 +645,9 @@ bool TTransportIn::cfgChange( TCfg &co, const TVariant &pc )
     return true;
 }
 
-TCntrNode &TTransportIn::operator=( TCntrNode &node )
+TCntrNode &TTransportIn::operator=( const TCntrNode &node )
 {
-    TTransportIn *src_n = dynamic_cast<TTransportIn*>(&node);
+    const TTransportIn *src_n = dynamic_cast<const TTransportIn*>(&node);
     if(!src_n) return *this;
 
     exclCopy(*src_n, "ID;");
@@ -657,7 +657,7 @@ TCntrNode &TTransportIn::operator=( TCntrNode &node )
     return *this;
 }
 
-TTypeTransport &TTransportIn::owner( )	{ return *(TTypeTransport*)nodePrev(); }
+TTypeTransport &TTransportIn::owner( ) const	{ return *(TTypeTransport*)nodePrev(); }
 
 string TTransportIn::name( )
 {
@@ -873,9 +873,9 @@ TTransportOut::~TTransportOut( )
     try{ stop(); } catch(...){ }
 }
 
-TCntrNode &TTransportOut::operator=( TCntrNode &node )
+TCntrNode &TTransportOut::operator=( const TCntrNode &node )
 {
-    TTransportOut *src_n = dynamic_cast<TTransportOut*>(&node);
+    const TTransportOut *src_n = dynamic_cast<const TTransportOut*>(&node);
     if(!src_n) return *this;
 
     exclCopy(*src_n, "ID;");
@@ -885,7 +885,7 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
     return *this;
 }
 
-TTypeTransport &TTransportOut::owner( )	{ return *(TTypeTransport*)nodePrev(); }
+TTypeTransport &TTransportOut::owner( ) const	{ return *(TTypeTransport*)nodePrev(); }
 
 string TTransportOut::name( )
 {

@@ -53,7 +53,7 @@ class MTable : public TTable
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	MBD &owner( );
+	MBD &owner( ) const;
 
     private:
 	//Private methods
@@ -88,7 +88,7 @@ class MBD : public TBD
 	void enable( );
 	void disable( );
 
-	void allowList( vector<string> &list );
+	void allowList( vector<string> &list ) const;
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
 	void transOpen( );

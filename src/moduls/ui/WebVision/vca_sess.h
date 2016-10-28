@@ -73,14 +73,14 @@ class VCAObj : public TCntrNode
 	//Methods
 	VCAObj( const string &iid );
 
-	const char *nodeName( )	{ return mId.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
 	string path( )	{ return TSYS::sepstr2path(mId); }
 
 	virtual void getReq( SSess &ses ) = 0;
 	virtual void postReq( SSess &ses ) = 0;
 	virtual void setAttrs( XMLNode &node, const string &user ) = 0;
 
-	VCASess &owner( );
+	VCASess &owner( ) const;
 
     protected:
 	string imgDef;
@@ -215,7 +215,7 @@ class VCAText : public VCAObj
 
 		string &cfg( )				{ return m_cfg; }
 		string &val( )				{ return m_val; }
-		int type( )				{ return m_type; }
+		int type( ) const			{ return m_type; }
 
 		void setCfg( const string &vl )		{ m_cfg = vl; }
 		void setVal( const string &vl )		{ m_val = vl; }
@@ -326,7 +326,7 @@ class VCADiagram : public VCAObj
 		TrendObj( VCADiagram *owner );
 		~TrendObj( );
 
-		string	addr( )		{ return mAddr; }
+		string	addr( ) const	{ return mAddr; }
 		double	bordL( )	{ return mBordLow; }
 		double	bordU( )	{ return mBordUp; }
 		int	color( )	{ return mColor; }
@@ -351,7 +351,7 @@ class VCADiagram : public VCAObj
 		void loadTrendsData( const string &user, bool full );
 		void loadSpectrumData( const string &user, bool full );
 
-		VCADiagram &owner( );
+		VCADiagram &owner( ) const;
 
 		//Attributes
 		double	adjL, adjU;		//Adjusted lower and upper borders
@@ -425,11 +425,11 @@ class VCASess : public TCntrNode
 
 	// Objects
 	void objCheck( const string &rootId, const string &wPath );
-	void objList( vector<string> &list )		{ chldList(id_objs,list); }
-	bool objPresent( const string &name )		{ return chldPresent(id_objs,name); }
+	void objList( vector<string> &list ) const		{ chldList(id_objs,list); }
+	bool objPresent( const string &name ) const		{ return chldPresent(id_objs,name); }
 	void objAdd( VCAObj *obj );
-	void objDel( const string &name )		{ chldDel(id_objs, name); }
-	AutoHD<VCAObj> objAt( const string &name )	{ return chldAt(id_objs,name); }
+	void objDel( const string &name )			{ chldDel(id_objs, name); }
+	AutoHD<VCAObj> objAt( const string &name ) const	{ return chldAt(id_objs,name); }
 
 	string resGet( const string &res, const string &path, const string &user, string *mime = NULL );
 
@@ -452,7 +452,7 @@ class VCASess : public TCntrNode
 	};
 
 	//Methods
-	const char *nodeName( )	{ return mId.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
 	void postDisable( int flag );
 
 	//Attributes

@@ -67,7 +67,7 @@ class TMdPrm : public TParamContr
 	void disable( );
 
 	//!!! Direct link to parameter's owner controller
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods

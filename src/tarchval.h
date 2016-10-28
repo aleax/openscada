@@ -180,18 +180,18 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TVArchive( const string &id, const string &db, TElem *cf_el );
 	~TVArchive( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	// Base functions
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	name( );
-	string	dscr( )		{ return cfg("DESCR").getS(); }
-	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode.getI(); }
-	string	srcData( )	{ return mSource; }
-	CombMode combMode( )	{ return (TVArchive::CombMode)mCombMode.getI(); }
+	string	dscr( )			{ return cfg("DESCR").getS(); }
+	SrcMode	srcMode( )		{ return (TVArchive::SrcMode)mSrcMode.getI(); }
+	string	srcData( )		{ return mSource; }
+	CombMode combMode( )		{ return (TVArchive::CombMode)mCombMode.getI(); }
 	AutoHD<TVal> srcPAttr( bool force = false, const string &ipath = "" );
-	bool	toStart( )  	{ return mStart; }
-	bool	startStat( )	{ return runSt; }
+	bool	toStart( )  		{ return mStart; }
+	bool	startStat( ) const	{ return runSt; }
 
 	string	DB( )		{ return mDB; }
 	string	tbl( );
@@ -244,7 +244,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string makeTrendImg( int64_t beg, int64_t end, const string &arch,
 	    int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0, string *tp = NULL );
 
-	TArchiveS &owner( );
+	TArchiveS &owner( ) const;
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
@@ -262,7 +262,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     private:
 	//Private methods
 	void setUpBuf( );
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Private attributes
 	ResRW	aRes;
@@ -301,19 +301,19 @@ class TVArchivator : public TCntrNode, public TConfig
 	TVArchivator( const string &id, const string &db, TElem *cf_el );
 	~TVArchivator( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	id( )		{ return mId; }
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
-	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	addr( ) const	{ return cfg("ADDR").getS(); }
 	double	valPeriod( )	{ return mVPer; }
 	int	archPeriod( )	{ return mAPer; }
 	int	selPrior( )	{ return mSelPrior; }
 
 	bool toStart( )		{ return mStart; }
-	bool startStat( )	{ return runSt; }
+	bool startStat( ) const	{ return runSt; }
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -338,7 +338,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void archiveList( vector<string> &ls );
 	bool archivePresent( const string &iid );
 
-	TTypeArchivator &owner( );
+	TTypeArchivator &owner( ) const;
 
     protected:
 	//Protected methods
@@ -367,7 +367,7 @@ class TVArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const char *nodeName( )		{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 	static void *Task( void *param );	//Process task
 
 	//Private attributes

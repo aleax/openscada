@@ -46,7 +46,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.8.4"
+#define MOD_VER		"1.8.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -628,7 +628,11 @@ I18NTranslator::I18NTranslator( ) : QTranslator(0)
 
 bool I18NTranslator::isEmpty( ) const	{ return false; }
 
+#if QT_VERSION < 0x050000
 QString I18NTranslator::translate( const char *context, const char *sourceText, const char *comment ) const
+#else
+QString I18NTranslator::translate( const char *context, const char *sourceText, const char *comment, int n ) const;
+#endif
 {
     if(!sourceText) return "";
     QString trRes = _(sourceText);

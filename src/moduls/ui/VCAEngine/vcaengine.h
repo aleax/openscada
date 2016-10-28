@@ -56,30 +56,30 @@ class Engine : public TUI
 	string prjTable( )	{ return "VCAPrjs"; }
 
 	// Widgets libraries
-	void wlbList( vector<string> &ls )			{ chldList( idWlb, ls ); }
-	bool wlbPresent( const string &id )			{ return chldPresent( idWlb, id ); }
+	void wlbList( vector<string> &ls ) const		{ chldList( idWlb, ls ); }
+	bool wlbPresent( const string &id ) const		{ return chldPresent( idWlb, id ); }
 	void wlbAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
 	void wlbDel( const string &iid, bool full = false )	{ chldDel( idWlb, iid, -1, full ); }
-	AutoHD<WidgetLib> wlbAt( const string &id );
+	AutoHD<WidgetLib> wlbAt( const string &id ) const;
 
 	// Projects
-	void prjList( vector<string> &ls )			{ chldList( idPrj, ls ); }
-	bool prjPresent( const string &id )			{ return chldPresent( idPrj, id ); }
+	void prjList( vector<string> &ls ) const		{ chldList( idPrj, ls ); }
+	bool prjPresent( const string &id ) const		{ return chldPresent( idPrj, id ); }
 	void prjAdd( const string &iid, const string &inm = "", const string &idb = "*.*" );
 	void prjDel( const string &iid, bool full = false )	{ chldDel( idPrj, iid, -1, full ); }
-	AutoHD<Project> prjAt( const string &id );
+	AutoHD<Project> prjAt( const string &id ) const;
 
 	// Sessions
-	void sesList( vector<string> &ls )			{ chldList( idSes, ls ); }
-	bool sesPresent( const string &id )			{ return chldPresent( idSes, id ); }
+	void sesList( vector<string> &ls ) const		{ chldList( idSes, ls ); }
+	bool sesPresent( const string &id ) const		{ return chldPresent( idSes, id ); }
 	void sesAdd( const string &id, const string &proj = "" );
 	void sesDel( const string &iid, bool full = false )	{ chldDel( idSes, iid, -1, full ); }
-	AutoHD<Session> sesAt( const string &id );
+	AutoHD<Session> sesAt( const string &id ) const;
 
 	// User functions
-	void fList( vector<string> &ls )			{ chldList( idFnc, ls ); }
-	bool fPresent( const string &id )			{ return chldPresent( idFnc, id ); }
-	AutoHD<TFunction> fAt( const string &id );
+	void fList( vector<string> &ls ) const			{ chldList(idFnc, ls); }
+	bool fPresent( const string &id ) const			{ return chldPresent(idFnc, id); }
+	AutoHD<TFunction> fAt( const string &id ) const;
 
 	// Attributes process functions
 	void attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen = false );
@@ -107,7 +107,7 @@ class Engine : public TUI
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
+	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 
     private:
 	//Attributes

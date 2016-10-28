@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define MOD_NAME	_("DAQ FT3")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.4.0"
+#define MOD_VER		"0.4.1"
 #define AUTHORS		_("Maxim Kothetkov, Olga Avdeyeva, Olga Kuzmickaya")
 #define DESCRIPTION	_("Allow realization of FT3 master/slave service")
 #define LICENSE		"GPL2"
@@ -201,7 +201,7 @@ namespace FT3
 	TMdPrm(string name, TTypeParam *tp_prm);
 	~TMdPrm();
 
-//	TCntrNode &operator=( TCntrNode &node );
+//	TCntrNode &operator=( const TCntrNode &node );
 
 	void enable();
 	void disable();
@@ -211,7 +211,7 @@ namespace FT3
 	    return p_el;
 	}
 	TElem &prmIOE();
-	TMdContr &owner();
+	TMdContr &owner( ) const;
 
 	//!!! Get data from Logic FT3 parameter
 	uint8_t cmdGet(uint16_t, uint8_t *);

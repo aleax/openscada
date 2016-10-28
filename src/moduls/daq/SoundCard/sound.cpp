@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.11"
+#define MOD_VER		"0.7.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -117,7 +117,7 @@ TMdContr::~TMdContr( )
     nodeDelAll();
 }
 
-TTpContr &TMdContr::owner( )	{ return (TTpContr&)TController::owner(); }
+TTpContr &TMdContr::owner( ) const	{ return (TTpContr&)TController::owner(); }
 
 string TMdContr::getStatus( )
 {
@@ -409,7 +409,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&owner().prmEL())) vlElemAtt(&owner().prmEL());
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

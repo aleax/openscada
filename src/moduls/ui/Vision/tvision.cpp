@@ -23,13 +23,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <tsys.h>
-#include <tmess.h>
-
 #include <QDesktopWidget>
 #include <QIcon>
 #include <QMessageBox>
 #include <QErrorMessage>
+
+#include <tsys.h>
+#include <tmess.h>
 
 #include "vis_devel.h"
 #include "vis_run.h"
@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.1.1"
+#define MOD_VER		"4.1.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"

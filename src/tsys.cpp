@@ -56,7 +56,7 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
-    mModDir(oscd_moddir_full), mIcoDir("icons;"oscd_datadir_full"/icons"), mDocDir("docs;"oscd_datadir_full"/docs"),
+    mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1),
     mainPthr(0), mSysTm(time(NULL)), mClockRT(false), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
 {
@@ -503,7 +503,7 @@ bool TSYS::cfgFileLoad( )
 
 	try {
 	    ResAlloc res(cfgRes(), true);
-	    rootN.load(s_buf, true);
+	    rootN.load(s_buf, XMLNode::LD_Full);
 	    if(rootN.name() == "OpenSCADA") {
 		XMLNode *stat_n = NULL;
 		for(int i_st = rootN.childSize()-1; i_st >= 0; i_st--)
@@ -673,7 +673,7 @@ int TSYS::start( )
     cfgFileScan(true);
 
     //Register user API translations into config
-    Mess->translReg("", "uapi:"DB_CFG);
+    Mess->translReg("", "uapi:" DB_CFG);
 
     mess_sys(TMess::Info, _("Final starting!"));
 

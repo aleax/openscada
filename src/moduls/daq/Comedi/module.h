@@ -63,7 +63,7 @@ class TMdPrm : public TParamContr
 
 	void setModPrm( const string &prm, const string &val );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     private:
 	//Methods

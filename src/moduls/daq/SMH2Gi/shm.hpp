@@ -32,7 +32,7 @@ class string {
 	string & operator=(const char * a) { s = (char*)a; return *this; };
 };
 
-typedef map<string*, ShmValue* , string> map_t;
+typedef map< ::string*, ShmValue*, ::string> map_t;
 
 
 class Shm {

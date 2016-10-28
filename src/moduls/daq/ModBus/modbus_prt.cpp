@@ -224,7 +224,6 @@ string TProt::ASCIIToData( const string &in )
     string rez;
 
     for(unsigned i = 0; i < (in.size()&(~0x01)); i += 2) {
-	ch2 = 0;
 	ch1 = in[i];
 	if(ch1 >= '0' && ch1 <= '9')		ch1 -= '0';
 	else if(ch1 >= 'A' && ch1 <= 'F')	ch1 -= ('A'-10);
@@ -469,7 +468,7 @@ TProtIn::~TProtIn( )
 
 }
 
-TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 bool TProtIn::mess( const string &ireqst, string &answer )
 {
@@ -590,9 +589,9 @@ Node::~Node( )
     if(data) { delete data; data = NULL; }
 }
 
-TCntrNode &Node::operator=( TCntrNode &node )
+TCntrNode &Node::operator=( const TCntrNode &node )
 {
-    Node *src_n = dynamic_cast<Node*>(&node);
+    const Node *src_n = dynamic_cast<const Node*>(&node);
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -626,7 +625,7 @@ void Node::postDisable( int flag )
     }
 }
 
-TProt &Node::owner( )		{ return *(TProt*)nodePrev(); }
+TProt &Node::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 string Node::name( )
 {
@@ -636,7 +635,7 @@ string Node::name( )
 
 string Node::tbl( )		{ return owner().modId()+"_node"; }
 
-int Node::addr( )		{ return cfg("ADDR").getI(); }
+int Node::addr( ) const		{ return cfg("ADDR").getI(); }
 
 string Node::inTransport( )	{ return cfg("InTR").getS(); }
 
@@ -793,7 +792,7 @@ void Node::save_( )
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg,false,&full); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&Node::LockAttr) {
-	    SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg, true, false, true);
+	    if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,true,false,true)) break;
 	    if(full.empty()) fldCnt--;
 	}
     }

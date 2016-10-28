@@ -90,11 +90,11 @@ class TWEB: public TUI
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
 	// VCA sessions
-	void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
-	bool vcaSesPresent( const string &name )	{ return chldPresent(id_vcases,name); }
+	void vcaSesList( vector<string> &list ) const	{ chldList(id_vcases,list); }
+	bool vcaSesPresent( const string &name ) const	{ return chldPresent(id_vcases,name); }
 	void vcaSesAdd( const string &name, bool isCreate );
-	void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
-	AutoHD<VCASess> vcaSesAt( const string &name )	{ return chldAt(id_vcases,name); }
+	void vcaSesDel( const string &name )		{ chldDel(id_vcases, name); }
+	AutoHD<VCASess> vcaSesAt( const string &name ) const	{ return chldAt(id_vcases, name); }
 
 	// Web process methods
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );

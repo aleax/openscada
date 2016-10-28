@@ -64,13 +64,13 @@ class UserPg : public TCntrNode, public TConfig
 	UserPg( const string &iid, const string &db, TElem *el );
 	~UserPg( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	name( );
-	string	descr( )	{ return cfg("DESCR").getS(); }
-	bool	toEnable( )	{ return mAEn; }
-	bool	enableStat( )	{ return mEn; }
+	string	descr( )		{ return cfg("DESCR").getS(); }
+	bool	toEnable( )		{ return mAEn; }
+	bool	enableStat( ) const	{ return mEn; }
 	string	progLang( );
 	string	prog( );
 	string	workProg( )	{ return mWorkProg; }
@@ -78,9 +78,9 @@ class UserPg : public TCntrNode, public TConfig
 
 	string	getStatus( );
 
-	string	DB( )		{ return mDB; }
-	string	tbl( );
-	string	fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( ) const		{ return mDB; }
+	string	tbl( ) const;
+	string	fullDB( ) const	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
@@ -91,7 +91,7 @@ class UserPg : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	TWEB &owner( );
+	TWEB &owner( ) const;
 
 	//Attributes
 	float	cntReq;
@@ -105,7 +105,7 @@ class UserPg : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -135,11 +135,11 @@ class TWEB: public TUI
 	void modStop( );
 
 	//> User page's functions
-	void uPgList( vector<string> &ls )	{ chldList(mPgU,ls); }
-	bool uPgPresent( const string &id )	{ return chldPresent(mPgU,id); }
+	void uPgList( vector<string> &ls ) const	{ chldList(mPgU,ls); }
+	bool uPgPresent( const string &id ) const	{ return chldPresent(mPgU,id); }
 	void uPgAdd( const string &id, const string &db = "*.*" );
-	void uPgDel( const string &id )		{ chldDel(mPgU,id); }
-	AutoHD<UserPg> uPgAt( const string &id ){ return chldAt(mPgU,id); }
+	void uPgDel( const string &id )			{ chldDel(mPgU,id); }
+	AutoHD<UserPg> uPgAt( const string &id ) const	{ return chldAt(mPgU, id); }
 
 	TElem &uPgEl( )		{ return mUPgEl; }
 

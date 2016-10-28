@@ -686,7 +686,7 @@ void TArchiveS::rdActArchMList( vector<string> &ls, bool isRun )
 	at(mls[iM]).at().messList(cls);
 	for(unsigned iC = 0; iC < cls.size(); iC++) {
 	    archM = at(mls[iM]).at().messAt(cls[iC]);
-	    if(archM.at().startStat() && (!isRun || (isRun && !archM.at().redntUse())))
+	    if(archM.at().startStat() && (!isRun || !archM.at().redntUse()))
 		ls.push_back(archM.at().workId());
 	}
     }
@@ -1164,7 +1164,7 @@ TTypeArchivator::TTypeArchivator( const string &id ) : TModule(id)
 
 TTypeArchivator::~TTypeArchivator( )	{ nodeDelAll(); }
 
-TArchiveS &TTypeArchivator::owner( )	{ return (TArchiveS &)TModule::owner(); }
+TArchiveS &TTypeArchivator::owner( ) const	{ return (TArchiveS &)TModule::owner(); }
 
 void TTypeArchivator::messAdd(const string &name, const string &idb )	{ chldAdd(mMess, AMess(name,idb)); }
 
@@ -1230,9 +1230,9 @@ TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
     mId = iid;
 }
 
-TCntrNode &TMArchivator::operator=( TCntrNode &node )
+TCntrNode &TMArchivator::operator=( const TCntrNode &node )
 {
-    TMArchivator *src_n = dynamic_cast<TMArchivator*>(&node);
+    const TMArchivator *src_n = dynamic_cast<const TMArchivator*>(&node);
     if(!src_n) return *this;
 
     //Configuration copy
@@ -1257,7 +1257,7 @@ void TMArchivator::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
 }
 
-TTypeArchivator &TMArchivator::owner( )	{ return *(TTypeArchivator*)nodePrev(); }
+TTypeArchivator &TMArchivator::owner( ) const	{ return *(TTypeArchivator*)nodePrev(); }
 
 string TMArchivator::workId( )		{ return string(owner().modId())+"."+id(); }
 
@@ -1311,7 +1311,7 @@ void TMArchivator::redntDataUpdate( )
     for(unsigned iM = 0; iM < req.childSize(); ++iM)
 	if((mO=req.childGet(iM)) && mO->name() == "it")
 	    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
-    owner().owner().messPut(mess, workId()+";"ALRM_ARCH_NM, true);
+    owner().owner().messPut(mess, workId() + ";" ALRM_ARCH_NM, true);
 }
 
 void TMArchivator::start( )
@@ -1420,7 +1420,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iM = 0; iM < opt->childSize(); ++iM)
 		if((mO=opt->childGet(iM)) && mO->name() == "it")
 		    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
-	    if(s2i(opt->attr("redundancy"))) owner().owner().messPut(mess, workId()+";"ALRM_ARCH_NM, true);
+	    if(s2i(opt->attr("redundancy"))) owner().owner().messPut(mess, workId() + ";" ALRM_ARCH_NM, true);
 	    else put(mess);
 	    opt->childClear("it");
 	}

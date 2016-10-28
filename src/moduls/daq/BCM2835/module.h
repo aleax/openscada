@@ -58,15 +58,15 @@ class TMdPrm : public TParamContr
 	void disable( );
 
 	//Functions
-	void fList( vector<string> &ls )	{ chldList(mFnc, ls); }
-	bool fPresent( const string &id )	{ return chldPresent(mFnc, id); }
-	AutoHD<TFunction> fAt( const string &id ){ return chldAt(mFnc, id); }
-	void fReg( TFunction *fnc )		{ chldAdd(mFnc, fnc); }
-	void fUnreg( const char *id )		{ chldDel(mFnc, id); }
+	void fList( vector<string> &ls ) const		{ chldList(mFnc, ls); }
+	bool fPresent( const string &id ) const		{ return chldPresent(mFnc, id); }
+	AutoHD<TFunction> fAt( const string &id ) const	{ return chldAt(mFnc, id); }
+	void fReg( TFunction *fnc )			{ chldAdd(mFnc, fnc); }
+	void fUnreg( const char *id )			{ chldDel(mFnc, id); }
 
 	TElem &elem( )		{ return pEl; }
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods

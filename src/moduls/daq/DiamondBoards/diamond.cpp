@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.5"
+#define MOD_VER		"2.1.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -381,7 +381,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(errRez.size())	{ acqErr.setVal(errRez); mess_err(nodePath().c_str(), "%s", errRez.c_str()); }
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

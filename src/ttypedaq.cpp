@@ -64,7 +64,7 @@ string TTypeDAQ::objName( )	{ return TModule::objName()+":TTypeDAQ"; }
 
 string TTypeDAQ::DAQPath( )	{ return modId(); }
 
-TDAQS &TTypeDAQ::owner( )	{ return *(TDAQS*)nodePrev(); }
+TDAQS &TTypeDAQ::owner( ) const	{ return *(TDAQS*)nodePrev(); }
 
 void TTypeDAQ::postEnable( int flag )
 {
@@ -105,7 +105,7 @@ void TTypeDAQ::add( const string &name, const string &daq_db )	{ chldAdd(mCntr, 
 
 TTypeParam &TTypeDAQ::tpPrmAt( unsigned id )
 {
-    if(id >= paramt.size() || id < 0) throw err_sys(_("Id of parameter type error!"));
+    if(id >= paramt.size()/* || id < 0*/) throw err_sys(_("Id of parameter type error!"));
     return *paramt[id];
 }
 

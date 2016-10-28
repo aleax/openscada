@@ -593,7 +593,7 @@ void TTypeBD::open( const string &iid )
     chldAdd(mDB, openBD(iid));
 }
 
-TBDS &TTypeBD::owner( )	{ return (TBDS&)TModule::owner(); }
+TBDS &TTypeBD::owner( ) const	{ return (TBDS&)TModule::owner(); }
 
 void TTypeBD::cntrCmdProc( XMLNode *opt )
 {
@@ -642,9 +642,9 @@ TBD::TBD( const string &iid, TElem *cf_el ) : TConfig( cf_el ),
     mTbl = grpAdd("tbl_");
 }
 
-TCntrNode &TBD::operator=( TCntrNode &node )
+TCntrNode &TBD::operator=( const TCntrNode &node )
 {
-    TBD *src_n = dynamic_cast<TBD*>(&node);
+    const TBD *src_n = dynamic_cast<const TBD*>(&node);
     if(!src_n) return *this;
 
     if(!enableStat()) {
@@ -658,14 +658,14 @@ TCntrNode &TBD::operator=( TCntrNode &node )
 	src_n->allowList(tbl_ls);
 	for(unsigned i_l = 0; i_l < tbl_ls.size(); i_l++) {
 	    //Open source and destination tables
-	    src_n->open(tbl_ls[i_l], false);
+	    const_cast<TBD*>(src_n)->open(tbl_ls[i_l], false);
 	    open(tbl_ls[i_l], true);
 
 	    //Copy table
 	    (TCntrNode&)at(tbl_ls[i_l]).at() = (TCntrNode&)src_n->at(tbl_ls[i_l]).at();
 
 	    //Close source and destination tables
-	    src_n->close(tbl_ls[i_l]);
+	    const_cast<TBD*>(src_n)->close(tbl_ls[i_l]);
 	    close(tbl_ls[i_l]);
 	}
     }
@@ -684,7 +684,7 @@ void TBD::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true, true);
 }
 
-TTypeBD &TBD::owner( )	{ return *(TTypeBD*)nodePrev(); }
+TTypeBD &TBD::owner( ) const	{ return *(TTypeBD*)nodePrev(); }
 
 string TBD::fullDBName( )	{ return owner().modId()+"."+id(); }
 
@@ -768,12 +768,12 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 
-AutoHD<TCntrNode> TBD::chldAt( int8_t igr, const string &name, const string &user )
+AutoHD<TCntrNode> TBD::chldAt( int8_t igr, const string &name, const string &user ) const
 {
     try { return TCntrNode::chldAt(igr, name, user); }
     catch(...) {
 	if(igr == mTbl && !openStat(name)) {
-	    open(name,false);
+	    const_cast<TBD*>(this)->open(name, false);
 	    return TCntrNode::chldAt(igr, name, user);
 	}
 	else throw;
@@ -889,24 +889,24 @@ TTable::~TTable( )
 
 }
 
-TCntrNode &TTable::operator=( TCntrNode &node )
+TCntrNode &TTable::operator=( const TCntrNode &node )
 {
-    TTable *src_n = dynamic_cast<TTable*>(&node);
+    const TTable *src_n = dynamic_cast<const TTable*>(&node);
     if(!src_n || !src_n->owner().enableStat() || !owner().enableStat()) return *this;
 
     //Table content copy
     TConfig req;
-    src_n->fieldStruct(req);
+    const_cast<TTable*>(src_n)->fieldStruct(req);
 
     // Scan source table and write to destination table
-    for(int row = 0; src_n->fieldSeek(row,req); row++) fieldSet(req);
+    for(int row = 0; const_cast<TTable*>(src_n)->fieldSeek(row,req); row++) fieldSet(req);
 
     return *this;
 }
 
 string TTable::fullDBName( )	{ return owner().fullDBName()+"."+name(); }
 
-TBD &TTable::owner( )	{ return *(TBD*)nodePrev(); }
+TBD &TTable::owner( ) const	{ return *(TBD*)nodePrev(); }
 
 TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
@@ -1048,7 +1048,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iF = 0; iF < req.elem().fldSize(); iF++)
 		if(req.elem().fldAt(iF).flg()&TCfg::Key) {
 		    eid = req.elem().fldAt(iF).name();
-		    req.cfg(eid).setS(opt->attr("key_"+eid),true);
+		    req.cfg(eid).setS(opt->attr("key_"+eid), TCfg::ForceUse);
 		}
 	    fieldDel(req);
 	}

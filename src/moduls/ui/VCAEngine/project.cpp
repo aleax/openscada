@@ -48,9 +48,9 @@ Project::~Project( )
 
 }
 
-TCntrNode &Project::operator=( TCntrNode &node )
+TCntrNode &Project::operator=( const TCntrNode &node )
 {
-    Project *src_n = dynamic_cast<Project*>(&node);
+    const Project *src_n = dynamic_cast<const Project*>(&node);
     if(!src_n) return *this;
 
     //Copy generic configuration
@@ -121,15 +121,15 @@ void Project::postDisable( int flag )
     }
 }
 
-string Project::name( )
+string Project::name( ) const
 {
     string rezs = cfg("NAME").getS();
     return rezs.size() ? rezs : mId;
 }
 
-string Project::owner( )	{ return SYS->security().at().usrPresent(cfg("USER").getS()) ? cfg("USER").getS() : string("root"); }
+string Project::owner( ) const	{ return SYS->security().at().usrPresent(cfg("USER").getS()) ? cfg("USER").getS() : string("root"); }
 
-string Project::grp( )		{ return SYS->security().at().grpPresent(cfg("GRP").getS()) ? cfg("GRP").getS() : string("UI"); }
+string Project::grp( ) const	{ return SYS->security().at().grpPresent(cfg("GRP").getS()) ? cfg("GRP").getS() : string("UI"); }
 
 void Project::setOwner( const string &it )
 {
@@ -244,7 +244,7 @@ void Project::save_( )
     cStl.cfgViewAll(false);
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,&full); )
 	if(mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
-	    SYS->db().at().dataDel(fullDB()+"_stl", nodePath()+tbl()+"_stl", cStl, false, false, true);
+	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,false,false,true))	break;
 	    if(full.empty()) fldCnt--;
 	}
 }
@@ -279,9 +279,9 @@ void Project::add( Page *iwdg )
     else chldAdd(mPage, iwdg);
 }
 
-AutoHD<Page> Project::at( const string &id )	{ return chldAt(mPage,id); }
+AutoHD<Page> Project::at( const string &id ) const	{ return chldAt(mPage,id); }
 
-void Project::mimeDataList( vector<string> &list, const string &idb )
+void Project::mimeDataList( vector<string> &list, const string &idb ) const
 {
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
@@ -294,7 +294,7 @@ void Project::mimeDataList( vector<string> &list, const string &idb )
 	list.push_back(cEl.cfg("ID").getS());
 }
 
-bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb )
+bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb ) const
 {
     bool is_file = (iid.compare(0,5,"file:")==0);
     bool is_res  = (iid.compare(0,4,"res:")==0);
@@ -784,9 +784,9 @@ Page::~Page( )
 
 }
 
-TCntrNode &Page::operator=( TCntrNode &node )
+TCntrNode &Page::operator=( const TCntrNode &node )
 {
-    Page *src_n = dynamic_cast<Page*>(&node);
+    const Page *src_n = dynamic_cast<const Page*>(&node);
     if(!src_n) return Widget::operator=(node);
 
     if(!src_n->enable()) return *this;
@@ -810,9 +810,9 @@ TCntrNode &Page::operator=( TCntrNode &node )
     return *this;
 }
 
-Page *Page::ownerPage( )	{ return nodePrev(true) ? dynamic_cast<Page*>(nodePrev()) : NULL; }
+Page *Page::ownerPage( ) const	{ return nodePrev(true) ? dynamic_cast<Page*>(nodePrev()) : NULL; }
 
-Project *Page::ownerProj( )
+Project *Page::ownerProj( ) const
 {
     Page *own = ownerPage();
     if(own) return own->ownerProj();
@@ -820,9 +820,9 @@ Project *Page::ownerProj( )
     return NULL;
 }
 
-string Page::path( )		{ return ownerFullId(true)+"/pg_"+id(); }
+string Page::path( ) const	{ return ownerFullId(true)+"/pg_"+id(); }
 
-string Page::ownerFullId( bool contr )
+string Page::ownerFullId( bool contr ) const
 {
     Page *own = ownerPage( );
     if(own) return own->ownerFullId(contr)+(contr?"/pg_":"/")+own->id();
@@ -857,7 +857,7 @@ void Page::postEnable( int flag )
     cfg("OWNER").setS(ownerFullId());
 
     //Set default parent for parent template page
-    if(ownerPage() && ownerPage()->prjFlags()&Page::Template) setParentNm("..");
+    if(ownerPage() && (ownerPage()->prjFlags()&Page::Template)) setParentNm("..");
 }
 
 void Page::postDisable( int flag )
@@ -893,7 +893,7 @@ bool Page::cfgChange( TCfg &co, const TVariant &pc )
     return true;
 }
 
-string Page::ico( )
+string Page::ico( ) const
 {
     if(cfg("ICO").getS().size())return cfg("ICO").getS();
     if(!parent().freeStat())	return parent().at().ico();
@@ -904,7 +904,7 @@ void Page::setParentNm( const string &isw )
 {
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
-    if(ownerPage() && ownerPage()->prjFlags()&Page::Template && !(ownerPage()->prjFlags()&Page::Container))
+    if(ownerPage() && (ownerPage()->prjFlags()&Page::Template) && !(ownerPage()->prjFlags()&Page::Container))
 	cfg("PARENT").setS("..");
     modif();
 }
@@ -919,7 +919,7 @@ string Page::calcId( )
     return "P_"+ownerProj()->id()+"_"+id();
 }
 
-string Page::calcLang( )
+string Page::calcLang( ) const
 {
     if(proc().empty() && !parent().freeStat()) return parent().at().calcLang();
 
@@ -933,7 +933,7 @@ string Page::calcLang( )
 
 bool Page::calcProgTr( )	{ return (!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() : cfg("PR_TR"); }
 
-string Page::calcProg( )
+string Page::calcProg( ) const
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcProg();
 
@@ -952,7 +952,7 @@ string Page::calcProgStors( const string &attr )
     return rez;
 }
 
-int Page::calcPer( )	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
+int Page::calcPer( ) const	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void Page::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
 
@@ -1187,7 +1187,7 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	    mHerit[i_h].at().inheritIncl(wid);
 }
 
-AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off )
+AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const
 {
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
@@ -1223,7 +1223,7 @@ void Page::pageAdd( Page *iwdg )
     else chldAdd(mPage,iwdg);
 }
 
-AutoHD<Page> Page::pageAt( const string &id )	{ return chldAt(mPage,id); }
+AutoHD<Page> Page::pageAt( const string &id ) const	{ return chldAt(mPage,id); }
 
 void Page::resourceList( vector<string> &ls )
 {
@@ -1292,7 +1292,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
-	    if(prjFlags()&Page::Empty || (ownerPage() && ownerPage()->prjFlags()&(Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
+	    if((prjFlags()&Page::Empty) || (ownerPage() && (ownerPage()->prjFlags()&Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,10,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
 	    ctrMkNode("fld",opt,-1,"/wdg/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
@@ -1310,7 +1310,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path"), u = opt->attr("user");
-    if(a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlags()&Page::Template)
+    if(a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && (ownerPage()->prjFlags()&Page::Template))
 	opt->childIns(0,"el")->setText("..");
     else if(a_path == "/wdg/st/pgTp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(prjFlags()&(Page::Container|Page::Template|Page::Empty)));
@@ -1493,7 +1493,7 @@ PageWdg::~PageWdg( )
 
 }
 
-TCntrNode &PageWdg::operator=( TCntrNode &node )
+TCntrNode &PageWdg::operator=( const TCntrNode &node )
 {
     if(ownerPage().parentNm() == ".." && ownerPage().parent().at().wdgPresent(id())) {
 	setParentNm(ownerPage().parent().at().path()+"/wdg_"+id());
@@ -1505,7 +1505,7 @@ TCntrNode &PageWdg::operator=( TCntrNode &node )
     return *this;
 }
 
-Page &PageWdg::ownerPage( )	{ return *(Page*)nodePrev(); }
+Page &PageWdg::ownerPage( ) const	{ return *(Page*)nodePrev(); }
 
 void PageWdg::postEnable( int flag )
 {
@@ -1547,7 +1547,7 @@ void PageWdg::postDisable( int flag )
     }
 }
 
-AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off )
+AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off ) const
 {
     //Check for global
     if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
@@ -1557,9 +1557,9 @@ AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off )
     return Widget::wdgAt(wdg, lev, off);
 }
 
-string PageWdg::path( )	{ return ownerPage().path()+"/wdg_"+id(); }
+string PageWdg::path( ) const	{ return ownerPage().path()+"/wdg_"+id(); }
 
-string PageWdg::ico( )	{ return parent().freeStat() ? "" : parent().at().ico(); }
+string PageWdg::ico( ) const	{ return parent().freeStat() ? "" : parent().at().ico(); }
 
 void PageWdg::setParentNm( const string &isw )
 {
@@ -1583,13 +1583,13 @@ void PageWdg::setEnable( bool val, bool force )
 
 string PageWdg::calcId( )	{ return parent().freeStat() ? "" : parent().at().calcId(); }
 
-string PageWdg::calcLang( )	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
+string PageWdg::calcLang( ) const	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
 
-string PageWdg::calcProg( )	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
+string PageWdg::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
-string PageWdg::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+string PageWdg::calcProgStors( const string &attr ) { return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
 
-int PageWdg::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
+int PageWdg::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
 void PageWdg::load_( TConfig *icfg )
 {

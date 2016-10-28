@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.4"
+#define MOD_VER		"0.2.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -184,7 +184,7 @@ void MBD::enable( )
 #endif
 
 	//Set the application name
-	SQLSetConnectOption(hdbc, SQL_APPLICATION_NAME, (SQLULEN)PACKAGE_NAME".BD."MOD_ID);
+	SQLSetConnectOption(hdbc, SQL_APPLICATION_NAME, (SQLULEN)PACKAGE_NAME ".BD." MOD_ID);
 
 	//The version number of the driver manager
 	SQLTCHAR driverInfo[255];
@@ -243,12 +243,12 @@ void MBD::disable( )
     hstmt = hdbc = henv = SQL_NULL_HANDLE;
 }
 
-void MBD::allowList( vector<string> &list )
+void MBD::allowList( vector<string> &list ) const
 {
     if(!enableStat())	return;
     list.clear();
     vector< vector<string> > tbl;
-    sqlReq("tables", &tbl, false);
+    const_cast<MBD*>(this)->sqlReq("tables", &tbl, false);
     for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
 	if(tbl[i_t].size() >= 4 && tbl[i_t][3] == "TABLE")
 	    list.push_back(tbl[i_t][2]);
@@ -430,7 +430,7 @@ void MTable::postDisable( int flag )
 	catch(TError err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }*/
 }
 
-MBD &MTable::owner( )	{ return (MBD&)TTable::owner(); }
+MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 
 /*void MTable::getStructDB( string name, vector< vector<string> > &tblStrct )
 {

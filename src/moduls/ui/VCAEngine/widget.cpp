@@ -63,9 +63,9 @@ Widget::~Widget( )
     pthread_mutex_destroy(&mtxAttrM);
 }
 
-TCntrNode &Widget::operator=( TCntrNode &node )
+TCntrNode &Widget::operator=( const TCntrNode &node )
 {
-    Widget *src_n = dynamic_cast<Widget*>(&node);
+    const Widget *src_n = dynamic_cast<const Widget*>(&node);
     if(!src_n) return *this;
 
     if(!src_n->enable()) return *this;
@@ -169,9 +169,9 @@ void Widget::preDisable( int flag )
     if(enable()) setEnable(false);
 }
 
-string Widget::rootId( )	{ return parent().freeStat() ? "" : parent().at().rootId(); }
+string Widget::rootId( ) const	{ return parent().freeStat() ? "" : parent().at().rootId(); }
 
-string Widget::name( )
+string Widget::name( ) const
 {
     string wnm = attrAt("name").at().getS();
     return wnm.size() ? wnm : mId;
@@ -179,11 +179,11 @@ string Widget::name( )
 
 void Widget::setName( const string &inm )	{ attrAt("name").at().setS(inm); }
 
-string Widget::descr( )		{ return attrAt("dscr").at().getS(); }
+string Widget::descr( ) const	{ return attrAt("dscr").at().getS(); }
 
 void Widget::setDescr( const string &idscr )	{ attrAt("dscr").at().setS(idscr); }
 
-string Widget::owner( )		{ return TSYS::strParse(attrAt("owner").at().getS(),0,":"); }
+string Widget::owner( ) const	{ return TSYS::strParse(attrAt("owner").at().getS(),0,":"); }
 
 void Widget::setOwner( const string &iown )
 {
@@ -197,17 +197,17 @@ void Widget::setOwner( const string &iown )
     }
 }
 
-string Widget::grp( )		{ return TSYS::strParse(attrAt("owner").at().getS(),1,":"); }
+string Widget::grp( ) const	{ return TSYS::strParse(attrAt("owner").at().getS(),1,":"); }
 
 void Widget::setGrp( const string &igrp )	{ attrAt("owner").at().setS(owner()+":"+igrp); }
 
-short Widget::permit( )		{ return attrAt("perm").at().getI(); }
+short Widget::permit( ) const	{ return attrAt("perm").at().getI(); }
 
 void Widget::setPermit( short iperm )		{ attrAt("perm").at().setI(iperm); }
 
-bool Widget::isContainer( )	{ return parent().freeStat() ? false : parent().at().isContainer(); }
+bool Widget::isContainer( ) const	{ return parent().freeStat() ? false : parent().at().isContainer(); }
 
-string Widget::path( )
+string Widget::path( ) const
 {
     Widget *ownW = dynamic_cast<Widget*>(nodePrev());
     if(ownW) return ownW->path()+"/wdg_"+mId;
@@ -223,7 +223,7 @@ string Widget::calcId( )
     return mId;
 }
 
-bool Widget::enable( )		{ return mEnable; }
+bool Widget::enable( ) const	{ return mEnable; }
 
 void Widget::setEnable( bool val, bool force )
 {
@@ -315,7 +315,7 @@ void Widget::setParentNm( const string &isw )
     mParentNm = isw;
 }
 
-AutoHD<Widget> Widget::parent( )	{ return mParent; }
+AutoHD<Widget> Widget::parent( ) const	{ return mParent; }
 
 AutoHD<Widget> Widget::parentNoLink( )	{ return parent().at().isLink() ? parent().at().parentNoLink() : parent(); }
 
@@ -531,16 +531,16 @@ string Widget::wChDown( const string &ia )
     return parw.at().path();
 }
 
-void Widget::attrList( vector<string> &list )
+void Widget::attrList( vector<string> &list ) const
 {
-    pthread_mutex_lock(&mtxAttr());
+    pthread_mutex_lock(&const_cast<Widget*>(this)->mtxAttr());
     list.clear();
     list.reserve(mAttrs.size());
-    for(map<string, Attr* >::iterator p = mAttrs.begin(); p != mAttrs.end(); ++p) {
+    for(map<string, Attr* >::const_iterator p = mAttrs.begin(); p != mAttrs.end(); ++p) {
 	while(p->second->mOi >= list.size())	list.push_back("");
 	list[p->second->mOi] = p->first;
     }
-    pthread_mutex_unlock(&mtxAttr());
+    pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
 }
 
 void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allInher )
@@ -605,26 +605,26 @@ void Widget::attrDel( const string &attr, bool allInher  )
     pthread_mutex_unlock(&mtxAttr());
 }
 
-bool Widget::attrPresent( const string &attr )
+bool Widget::attrPresent( const string &attr ) const
 {
-    pthread_mutex_lock(&mtxAttr());
+    pthread_mutex_lock(&const_cast<Widget*>(this)->mtxAttr());
     bool rez = (mAttrs.find(attr) != mAttrs.end());
-    pthread_mutex_unlock(&mtxAttr());
+    pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
     return rez;
 }
 
-AutoHD<Attr> Widget::attrAt( const string &attr, int lev )
+AutoHD<Attr> Widget::attrAt( const string &attr, int lev ) const
 {
     //Local atribute request
     if(lev < 0) {
-	pthread_mutex_lock(&mtxAttr());
-	map<string, Attr* >::iterator p = mAttrs.find(attr);
+	pthread_mutex_lock(&const_cast<Widget*>(this)->mtxAttr());
+	map<string, Attr* >::const_iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end()) {
-	    pthread_mutex_unlock(&mtxAttr());
+	    pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
 	    throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
 	}
 	AutoHD<Attr> rez(p->second);
-	pthread_mutex_unlock(&mtxAttr());
+	pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
 	return rez;
     }
     //Process by full path
@@ -671,13 +671,13 @@ bool Widget::attrChange( Attr &cfg, TVariant prev )
     return true;
 }
 
-void Widget::wdgList( vector<string> &list, bool fromLnk )
+void Widget::wdgList( vector<string> &list, bool fromLnk ) const
 {
     if(fromLnk && isLink()) parent().at().wdgList(list);
     else chldList(inclWdg, list);
 }
 
-bool Widget::wdgPresent( const string &wdg )	{ return chldPresent(inclWdg, wdg); }
+bool Widget::wdgPresent( const string &wdg ) const	{ return chldPresent(inclWdg, wdg); }
 
 void Widget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
@@ -693,14 +693,14 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path, 
 	    mHerit[i_h].at().inheritIncl(wid);
 }
 
-AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off )
+AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off ) const
 {
     if(lev < 0) return chldAt(inclWdg, wdg);
 
     AutoHD<Widget> rez;
     string iw = TSYS::pathLev(wdg,lev,true,&off);
     if(iw.compare(0,4,"wdg_") == 0) iw = iw.substr(4);
-    if(iw.empty())	rez = AutoHD<Widget>(this);
+    if(iw.empty())	rez = AutoHD<Widget>(const_cast<Widget*>(this));
     else if(iw == "..") {
 	if(dynamic_cast<Widget*>(nodePrev())) rez = ((Widget*)nodePrev())->wdgAt(wdg, 0, off);
     }
@@ -1689,9 +1689,9 @@ void Attr::setFld( TFld *fld, bool inher )
     if(owner()) pthread_mutex_unlock(&owner()->mtxAttr());
 }
 
-const string &Attr::id( )	{ return fld().name(); }
+const string &Attr::id( ) const	{ return fld().name(); }
 
-string Attr::name( )		{ return fld().descr(); }
+string Attr::name( ) const	{ return fld().descr(); }
 
 TFld::Type Attr::type( )	{ return fld().type(); }
 

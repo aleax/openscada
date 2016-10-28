@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.7.6"
+#define PRT_MVER	"1.7.7"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -72,7 +72,7 @@ class TProtIn: public TProtocolIn
 
 	bool mess( const string &request, string &answer );
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
 	//Attributes
 	bool	mSubscrIn;
@@ -91,7 +91,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	OPCEndPoint( const string &iid, const string &db, TElem *el );
 	~OPCEndPoint( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string id( )		{ return mId; }
 	string name( );
@@ -112,9 +112,9 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	string getStatus( );
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string DB( ) const	{ return mDB; }
+	string tbl( ) const;
+	string fullDB( ) const	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &name )	{ mName = name; }
 	void setDescr( const string &idsc )	{ mDescr = idsc; }
@@ -133,9 +133,9 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void setLimSubScr( uint32_t vl )	{ mLimSubScr = vmax(1,vmin(vl,1000)); modif(); }
 	void setLimMonitItms( uint32_t vl )	{ mLimMonitItms = vmax(10,vmin(1000000,vl)); modif(); }
-	void setLimRetrQueueTm( uint32_t vl )	{ mLimRetrQueueTm = vmax(0,vmin(3600,vl)); modif(); }
+	void setLimRetrQueueTm( uint32_t vl )	{ mLimRetrQueueTm = vmin(3600, vl); modif(); }
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
     protected:
 	//Methods
@@ -144,7 +144,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -188,11 +188,11 @@ class TProt: public TProtocol, public Server
 	void modStop( );
 
 	// Server's functions
-	void epList( vector<string> &ls )	{ chldList(mEndPnt,ls); }
-	bool epPresent( const string &id )	{ return chldPresent(mEndPnt,id); }
+	void epList( vector<string> &ls ) const			{ chldList(mEndPnt,ls); }
+	bool epPresent( const string &id ) const		{ return chldPresent(mEndPnt,id); }
 	void epAdd( const string &id, const string &db = "*.*" );
-	void epDel( const string &id )		{ chldDel(mEndPnt,id); }
-	AutoHD<OPCEndPoint> epAt( const string &id )	{ return chldAt(mEndPnt,id); }
+	void epDel( const string &id )				{ chldDel(mEndPnt,id); }
+	AutoHD<OPCEndPoint> epAt( const string &id ) const	{ return chldAt(mEndPnt,id); }
 
 	void discoveryUrls( vector<string> &ls );
 	bool inReq( string &request, const string &inPrtId, string *answ = NULL );

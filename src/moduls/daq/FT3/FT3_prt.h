@@ -66,7 +66,7 @@ namespace FT3
 
 	bool mess(const string &request, string &answer/*, const string &sender */);
 
-	TProt &owner();
+	TProt &owner( ) const;
 
     public:
 	//Attributes

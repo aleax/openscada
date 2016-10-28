@@ -142,11 +142,11 @@ class TSYS : public TCntrNode
 	string	user( )		{ return mUser; }	//Run user name
 	string	host( );
 
-	void	list( vector<string> &list )	{ chldList(mSubst, list); }
-	bool	present( const string &name )	{ return chldPresent(mSubst, name); }
-	void	add( TSubSYS *sub )		{ chldAdd(mSubst, sub); }
-	void	del( const string &name )	{ chldDel(mSubst, name); }
-	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst, name); }
+	void	list( vector<string> &list ) const	{ chldList(mSubst, list); }
+	bool	present( const string &name ) const	{ return chldPresent(mSubst, name); }
+	void	add( TSubSYS *sub )			{ chldAdd(mSubst, sub); }
+	void	del( const string &name )		{ chldDel(mSubst, name); }
+	AutoHD<TSubSYS> at( const string &name ) const	{ return chldAt(mSubst, name); }
 
 	AutoHD<TUIS>		ui( )		{ return at("UI"); }
 	AutoHD<TArchiveS>	archive( )	{ return at("Archive"); }
@@ -355,8 +355,8 @@ class TSYS : public TCntrNode
 	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10 };
 
 	//Private methods
-	const char *nodeName( )		{ return mId.c_str(); }
-	const char *nodeNameSYSM( )	{ return mName.c_str(); }
+	const char *nodeName( ) const		{ return mId.c_str(); }
+	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
 	bool cfgFileLoad( );
 	void cfgFileSave( );
 	void cfgPrmLoad( );

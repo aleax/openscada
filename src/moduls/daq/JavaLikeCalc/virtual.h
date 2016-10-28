@@ -87,7 +87,7 @@ class Prm : public TParamContr
 	void enable( );
 	void disable( );
 
-	Contr &owner( );
+	Contr &owner( ) const;
 
     protected:
 	//Protected methods
@@ -183,11 +183,11 @@ class TpContr : public TTypeDAQ
 	TElem &elFnc( )		{ return fnc_el; }
 	TElem &elFncIO( )	{ return fncio_el; }
 
-	void lbList( vector<string> &ls ) 	{ chldList(mLib,ls); }
-	bool lbPresent( const string &id )	{ return chldPresent(mLib,id); }
-	void lbReg( Lib *lib )       		{ chldAdd(mLib,lib); }
-	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(mLib,id,-1,flg); }
-	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(mLib,id); }
+	void lbList( vector<string> &ls ) const		{ chldList(mLib, ls); }
+	bool lbPresent( const string &id ) const	{ return chldPresent(mLib, id); }
+	void lbReg( Lib *lib )				{ chldAdd(mLib, lib); }
+	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(mLib, id, -1, flg); }
+	AutoHD<Lib> lbAt( const string &id ) const	{ return chldAt(mLib, id); }
 
 	ResRW &parseRes( )			{ return mParseRes; }
 

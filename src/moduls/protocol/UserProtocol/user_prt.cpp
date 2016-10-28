@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.3"
+#define MOD_VER		"0.8.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -234,7 +234,7 @@ TProtIn::~TProtIn( )
 
 }
 
-TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 unsigned TProtIn::waitReqTm( )	{ return !up.freeStat() ? up.at().waitReqTm() : 0; }
 
@@ -298,9 +298,9 @@ UserPrt::~UserPrt( )
     try { setEnable(false); } catch(...) { }
 }
 
-TCntrNode &UserPrt::operator=( TCntrNode &node )
+TCntrNode &UserPrt::operator=( const TCntrNode &node )
 {
-    UserPrt *src_n = dynamic_cast<UserPrt*>(&node);
+    const UserPrt *src_n = dynamic_cast<const UserPrt*>(&node);
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -317,7 +317,7 @@ void UserPrt::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
 }
 
-TProt &UserPrt::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &UserPrt::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 string UserPrt::name( )
 {
@@ -325,7 +325,7 @@ string UserPrt::name( )
     return tNm.size() ? tNm : id();
 }
 
-string UserPrt::tbl( )		{ return owner().modId()+"_uPrt"; }
+string UserPrt::tbl( ) const	{ return owner().modId()+"_uPrt"; }
 
 string UserPrt::inProgLang( )
 {

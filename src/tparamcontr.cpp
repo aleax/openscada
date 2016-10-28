@@ -70,9 +70,9 @@ string TParamContr::ownerPath( bool inclSelf )
     return rez;
 }
 
-TCntrNode &TParamContr::operator=( TCntrNode &node )
+TCntrNode &TParamContr::operator=( const TCntrNode &node )
 {
-    TParamContr *src_n = dynamic_cast<TParamContr*>(&node);
+    const TParamContr *src_n = dynamic_cast<const TParamContr*>(&node);
     if(!src_n) return *this;
 
     //Check for parameter type and change it if different and alow
@@ -114,7 +114,7 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     return *this;
 }
 
-TController &TParamContr::owner( )
+TController &TParamContr::owner( ) const
 {
     TCntrNode *own = nodePrev();
     while(!dynamic_cast<TController*>(own)) own = own->nodePrev();
@@ -132,13 +132,13 @@ bool TParamContr::dataActive( )			{ return owner().startStat(); }
 
 void TParamContr::setDescr( const string &idsc ){ cfg("DESCR").setS(idsc); }
 
-void TParamContr::list( vector<string> &list )
+void TParamContr::list( vector<string> &list ) const
 {
     if(mPrm < 0) return;
     chldList(mPrm, list);
 }
 
-bool TParamContr::present( const string &name )
+bool TParamContr::present( const string &name ) const
 {
     if(mPrm < 0) return false;
     return chldPresent(mPrm, name);
@@ -156,7 +156,7 @@ void TParamContr::del( const string &name, int full )
     chldDel(mPrm, name, -1, full);
 }
 
-AutoHD<TParamContr> TParamContr::at( const string &name, const string &who )
+AutoHD<TParamContr> TParamContr::at( const string &name, const string &who ) const
 {
     if(mPrm < 0) return AutoHD<TParamContr>();
     return chldAt(mPrm, name);
@@ -279,13 +279,6 @@ bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )
 {
     modif();
     return type().cfgChange(this, co);
-}
-
-TParamContr &TParamContr::operator=( TParamContr & PrmCntr )
-{
-    TConfig::operator=(PrmCntr);
-
-    return *this;
 }
 
 void TParamContr::enable( )

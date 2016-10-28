@@ -337,7 +337,7 @@ class ShapeDiagram : public WdgShape
 		TrendObj( WdgView *view );
 		~TrendObj( );
 
-		string	addr( )		{ return mAddr; }
+		string	addr( ) const	{ return mAddr; }
 		double	bordL( )	{ return mBordLow; }
 		double	bordU( )	{ return mBordUp; }
 		QColor	color( )	{ return mColor; }

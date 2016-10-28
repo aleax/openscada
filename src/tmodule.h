@@ -100,7 +100,7 @@ class TModule : public TCntrNode
 	// Translate functions
 	const char *I18N( const char *mess );
 
-	TSubSYS &owner( );
+	TSubSYS &owner( ) const;
 
     protected:
 	//Methods
@@ -125,8 +125,8 @@ class TModule : public TCntrNode
 
     private:
 	//Methods
-	const char *nodeName( )		{ return mModId.c_str(); }
-	const char *nodeNameSYSM( )	{ return mModId.c_str(); }
+	const char *nodeName( ) const		{ return mModId.c_str(); }
+	const char *nodeNameSYSM( ) const	{ return mModId.c_str(); }
 
 	//Attributes
 	const string	mModId;		// Identificator

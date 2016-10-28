@@ -59,7 +59,7 @@ class TMdPrm : public TParamContr
 	void disable( );
 
 	TElem &elem( )		{ return pEl; }
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	//Attributes
 	TElem	pEl;		//Work atribute elements
@@ -110,7 +110,7 @@ class TMdContr: public TController
 	double	period( )	{ return mPer; }
 	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
-	string	addr( )		{ return mAddr; }
+	string	addr( ) const	{ return mAddr; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

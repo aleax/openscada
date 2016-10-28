@@ -48,7 +48,7 @@ class TMdVl : public TVal
     public:
 	TMdVl( )	{ }
 
-	TMdPrm &owner( );
+	TMdPrm &owner( ) const;
 
     protected:
 	//Methods
@@ -80,7 +80,7 @@ class TMdPrm : public TParamContr
 	void disable( );
 
 	TElem &elem( )		{ return p_el; }
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	//Attributes
 	unsigned char isPrcOK	: 1;

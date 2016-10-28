@@ -113,7 +113,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	int lnkId( const string &id );
 	SLnk &lnk( int num );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods
@@ -165,7 +165,7 @@ class TMdContr: public TController
 
 	double period( )	{ return mPer; }
 	string cron( )		{ return cfg("SCHEDULE").getS(); }
-	string addr( )		{ return cfg("ADDR").getS(); }
+	string addr( ) const	{ return cfg("ADDR").getS(); }
 	string addrTr( )	{ return cfg("ADDR_TR").getS(); }
 	bool assincWrite( )	{ return mAssincWR; }
 	Type type( )		{ return (Type)mType; }
@@ -185,7 +185,7 @@ class TMdContr: public TController
 	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
 	void reset( );
 
-	TTpContr &owner( );
+	TTpContr &owner( ) const;
 
     protected:
 	//Methods

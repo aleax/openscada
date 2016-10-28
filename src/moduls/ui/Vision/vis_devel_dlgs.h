@@ -62,7 +62,7 @@ class LibProjProp: public QDialog
 
 	void showDlg( const string &iit, bool reload = false );
 
-	VisDevelop *owner();
+	VisDevelop *owner( ) const;
 
     protected:
 	//Protected methods
@@ -144,7 +144,7 @@ class VisItProp : public QDialog
 
 	void showDlg( const string &iit, bool reload = false );
 
-	VisDevelop *owner();
+	VisDevelop *owner( ) const;
 
     signals:
 	void apply( const string& );

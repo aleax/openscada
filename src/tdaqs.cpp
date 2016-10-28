@@ -86,7 +86,7 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 	at(mls[iM]).at().list(cls);
 	for(unsigned iC = 0; iC < cls.size(); iC++) {
 	    cntr = at(mls[iM]).at().at(cls[iC]);
-	    if(cntr.at().startStat() && (!isRun || (isRun && !cntr.at().redntUse(TController::Any))))
+	    if(cntr.at().startStat() && (!isRun || !cntr.at().redntUse(TController::Any)))
 		ls.push_back(cntr.at().workId());
 	}
     }
@@ -397,10 +397,10 @@ void TDAQS::subStop( )
     TSubSYS::subStop();
 }
 
-AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool waitForAttr )
+AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool waitForAttr ) const
 {
     string cEl;
-    AutoHD<TCntrNode> DAQnd = this;
+    AutoHD<TCntrNode> DAQnd = const_cast<TDAQS*>(this);
     const char *c_grp = "mod_";
     for(int c_off = 0, c_lv = 0; (sep && (cEl=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
 		   (!sep && (cEl=TSYS::pathLev(path,0,true,&c_off)).size()); ++c_lv)
@@ -408,7 +408,7 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
 	bool lastEl = (c_lv > 2 && c_off >= (int)path.size());
 	if(waitForAttr && lastEl) c_grp = "a_";
 	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+cEl, 0, sep, 0, true);
-	if(tNd.freeStat() && !(strcmp(c_grp,"a_") && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
+	if(tNd.freeStat() && !(strcmp(c_grp,"a_") != 0 && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
 	    else throw err_sys(_("No DAQ node present '%s'."), path.c_str());
 	}
@@ -419,7 +419,7 @@ AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool wa
     return DAQnd;
 }
 
-AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
+AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex ) const
 {
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex);
     if(DAQnd.freeStat() || !dynamic_cast<TValue*>(&DAQnd.at())) {
@@ -430,7 +430,7 @@ AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
     return DAQnd;
 }
 
-AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
+AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex ) const
 {
     AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true);
     if(DAQnd.freeStat() || !dynamic_cast<TVal*>(&DAQnd.at())) {

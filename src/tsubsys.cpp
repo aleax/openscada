@@ -46,7 +46,7 @@ TSubSYS::~TSubSYS( )
 
 string TSubSYS::objName( )	{ return TCntrNode::objName()+":TSubSYS"; }
 
-TSYS &TSubSYS::owner( )		{ return *(TSYS*)nodePrev(); }
+TSYS &TSubSYS::owner( ) const	{ return *(TSYS*)nodePrev(); }
 
 string TSubSYS::subName( )	{ return mName.size()?_(mName.c_str()):mId; }
 
@@ -83,7 +83,7 @@ void TSubSYS::modDel( const string &name )
     mess_sys(TMess::Info, _("Disconnect module '%s'!"), name.c_str());
 }
 
-AutoHD<TModule> TSubSYS::modAt( const string &name )
+AutoHD<TModule> TSubSYS::modAt( const string &name ) const
 {
     if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
     return chldAt(mMod,name);

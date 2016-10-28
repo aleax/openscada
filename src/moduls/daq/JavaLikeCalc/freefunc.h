@@ -167,11 +167,12 @@ class Reg
 	};
 
 	//Methods
-	Reg( ) : mPos(-1), mObjEl(false), mLock(false), mTp(Free) {  }
-	Reg( int ipos ) : mPos(ipos), mObjEl(false), mLock(false), mTp(Free) {  }
+	Reg( ) : mPos(-1), mObjEl(false), mLock(false), mTp(Free)		{  }
+	Reg( int ipos ) : mPos(ipos), mObjEl(false), mLock(false), mTp(Free)	{  }
+	Reg( const Reg &src ) : mPos(-1), mObjEl(false), mLock(false), mTp(Free){ operator=(src); }
 	~Reg( );
 
-	Reg &operator=( Reg &irg );
+	Reg &operator=( const Reg &irg );
 	void operator=( bool ivar )		{ setType(Bool);   el.b = ivar;  }
 	void operator=( char ivar )		{ setType(Bool);   el.b = ivar;  }
 	void operator=( int ivar )		{ setType(Int);	   el.i = ivar;  }
@@ -263,15 +264,16 @@ class Func : public TConfig, public TFunction
 
 	//Attributes
 	Func( const string &id, const string &name = "" );
+	Func( const Func &func );
 	~Func( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	Func &operator=( Func &func );
+	Func &operator=( const Func &func );
 
 	string	name( );
 	string	descr( )		{ return cfg("DESCR").getS(); }
-	string	stor( );
+	string	stor( ) const;
 	bool	toStart( )		{ return cfg("START"); }
 	int maxCalcTm( )		{ return mMaxCalcTm; }
 	bool	progTr( )		{ return cfg("PR_TR"); }
@@ -364,7 +366,7 @@ class Func : public TConfig, public TFunction
 	void ioDel( int pos );
 	void ioMove( int pos, int to );
 
-	Lib &owner( );
+	Lib &owner( ) const;
 
     protected:
 	//Data

@@ -46,9 +46,9 @@ WidgetLib::~WidgetLib( )
 
 }
 
-TCntrNode &WidgetLib::operator=( TCntrNode &node )
+TCntrNode &WidgetLib::operator=( const TCntrNode &node )
 {
-    WidgetLib *src_n = dynamic_cast<WidgetLib*>(&node);
+    const WidgetLib *src_n = dynamic_cast<const WidgetLib*>(&node);
     if(!src_n) return *this;
 
     //Copy generic configuration
@@ -113,7 +113,7 @@ void WidgetLib::postDisable( int flag )
     }
 }
 
-AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const string &user )
+AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const string &user ) const
 {
     AutoHD<TCntrNode> nd = TCntrNode::chldAt(igr, name, user);
     if(igr == mWdg && !nd.freeStat()) {
@@ -132,7 +132,7 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
     return nd;
 }
 
-string WidgetLib::name( )
+string WidgetLib::name( ) const
 {
     string tNm = cfg("NAME").getS();
     return tNm.size() ? tNm : mId;
@@ -224,7 +224,7 @@ void WidgetLib::setEnable( bool val, bool force )
     mEnable = val;
 }
 
-void WidgetLib::mimeDataList( vector<string> &list, const string &idb )
+void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
 {
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
@@ -237,7 +237,7 @@ void WidgetLib::mimeDataList( vector<string> &list, const string &idb )
 	list.push_back(cEl.cfg("ID").getS());
 }
 
-bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb )
+bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb ) const
 {
     bool is_file = (iid.compare(0,5,"file:")==0);
     bool is_res  = (iid.compare(0,4,"res:")==0);
@@ -313,7 +313,7 @@ void WidgetLib::add( LWidget *iwdg )
     else chldAdd(mWdg, iwdg);
 }
 
-AutoHD<LWidget> WidgetLib::at( const string &id )	{ return chldAt(mWdg, id); }
+AutoHD<LWidget> WidgetLib::at( const string &id ) const	{ return chldAt(mWdg, id); }
 
 void WidgetLib::cntrCmdProc( XMLNode *opt )
 {
@@ -471,7 +471,7 @@ LWidget::~LWidget( )
 
 }
 
-WidgetLib &LWidget::ownerLib( )	{ return *(WidgetLib*)nodePrev(); }
+WidgetLib &LWidget::ownerLib( ) const	{ return *(WidgetLib*)nodePrev(); }
 
 void LWidget::postDisable( int flag )
 {
@@ -499,9 +499,9 @@ void LWidget::postDisable( int flag )
     }
 }
 
-string LWidget::path( )		{ return "/wlb_"+ownerLib().id()+"/wdg_"+id(); }
+string LWidget::path( ) const	{ return "/wlb_"+ownerLib().id()+"/wdg_"+id(); }
 
-string LWidget::ico( )
+string LWidget::ico( ) const
 {
     string rIco = cfg("ICO").getS();
     if(rIco.size()) return rIco;
@@ -518,7 +518,7 @@ string LWidget::calcId( )
     return "L_"+ownerLib().id()+"_"+id();
 }
 
-string LWidget::calcLang( )
+string LWidget::calcLang( ) const
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcLang();
 
@@ -532,7 +532,7 @@ string LWidget::calcLang( )
 
 bool LWidget::calcProgTr( )	{ return (!proc().size() && !parent().freeStat()) ? parent().at().calcProgTr() : cfg("PR_TR"); }
 
-string LWidget::calcProg( )
+string LWidget::calcProg( ) const
 {
     if(!proc().size() && !parent().freeStat()) return parent().at().calcProg();
 
@@ -551,7 +551,7 @@ string LWidget::calcProgStors( const string &attr )
     return rez;
 }
 
-int LWidget::calcPer( )	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
+int LWidget::calcPer( ) const	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void LWidget::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
 
@@ -636,7 +636,7 @@ void LWidget::loadIO( )
     mod->attrsLoad(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", cfg("ATTRS").getS());
 
     //Force Active, not inherited and not modified attributes, mostly for init the primitives ones.
-    vector<string> aLs;
+    /*vector<string> aLs;
     map<string, bool> aPrc;
     for(bool act = true; parent().freeStat() && act; ) {
 	act = false;
@@ -648,7 +648,7 @@ void LWidget::loadIO( )
 		aPrc[aLs[iA]] = act = true;
 	    }
 	}
-    }
+    }*/
 
     //Load cotainer widgets
     if(!isContainer()) return;
@@ -742,7 +742,7 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	    mHerit[i_h].at().inheritIncl(wid);
 }
 
-AutoHD<CWidget> LWidget::wdgAt( const string &wdg )	{ return Widget::wdgAt(wdg); }
+AutoHD<CWidget> LWidget::wdgAt( const string &wdg ) const	{ return Widget::wdgAt(wdg); }
 
 void LWidget::resourceList( vector<string> &ls )
 {
@@ -816,9 +816,9 @@ CWidget::~CWidget( )
 
 }
 
-string CWidget::path( )		{ return "/wlb_"+ownerLWdg().ownerLib().id()+"/wdg_"+ownerLWdg().id()+"/wdg_"+id(); }
+string CWidget::path( ) const	{ return "/wlb_"+ownerLWdg().ownerLib().id()+"/wdg_"+ownerLWdg().id()+"/wdg_"+id(); }
 
-LWidget &CWidget::ownerLWdg()	{ return *(LWidget*)nodePrev(); }
+LWidget &CWidget::ownerLWdg( ) const	{ return *(LWidget*)nodePrev(); }
 
 void CWidget::postEnable( int flag )
 {
@@ -860,7 +860,7 @@ void CWidget::postDisable( int flag )
     }
 }
 
-string CWidget::ico( )	{ return parent().freeStat() ? "" : parent().at().ico(); }
+string CWidget::ico( ) const	{ return parent().freeStat() ? "" : parent().at().ico(); }
 
 void CWidget::setParentNm( const string &isw )
 {
@@ -885,13 +885,13 @@ void CWidget::setEnable( bool val, bool force )
 
 string CWidget::calcId( )	{ return parent().freeStat() ? "" : parent().at().calcId(); }
 
-string CWidget::calcLang( )	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
+string CWidget::calcLang( ) const	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
 
-string CWidget::calcProg( )	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
+string CWidget::calcProg( ) const	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
 string CWidget::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
 
-int CWidget::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
+int CWidget::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
 void CWidget::load_( TConfig *icfg )
 {

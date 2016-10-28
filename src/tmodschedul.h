@@ -55,9 +55,9 @@ class TModSchedul : public TSubSYS
 	TModSchedul( );
 	~TModSchedul( );
 
-	string allowList( )	{ return mAllow; }
-	string denyList( )	{ return mDeny; }
-	int chkPer( )		{ return mPer; }
+	string allowList( ) const	{ return mAllow; }
+	string denyList( )		{ return mDeny; }
+	int chkPer( )			{ return mPer; }
 
 	void setAllowList( const string &vl )	{ mAllow = vl; modif(); }
 	void setDenyList( const string &vl )	{ mDeny = vl; modif(); }

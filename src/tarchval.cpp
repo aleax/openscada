@@ -62,7 +62,8 @@ TValBuf::TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres )
     makeBuf(mValTp, mSize, mPer, mHrdGrd, mHgResTm);
 }
 
-TValBuf::TValBuf( const TValBuf &src )
+TValBuf::TValBuf( const TValBuf &src ) : mValTp(TFld::Integer),
+    mHgResTm(false), mHrdGrd(false), mFillLast(false), mEnd(0), mBeg(0), mPer(0), mSize(100)
 {
     buf.bl = NULL;
 
@@ -394,7 +395,7 @@ void TValBuf::getVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     }
 }
 
-void TValBuf::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )	{ buf.getVals(*this, ibeg, iend); }
+void TValBuf::setVals( TValBuf &ibuf, int64_t ibeg, int64_t iend )	{ ibuf.getVals(*this, ibeg, iend); }
 
 //*************************************************
 //* TValBuf::TBuf                                 *
@@ -833,7 +834,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    }
 	}
 	else {
-	    SLw b_el = { tm/1000000, value };
+	    SLw b_el = { (time_t)(tm/1000000ll), value };
 	    if(tm < beg && size && (int)buf.tmLow->size() >= size) throw TError("ValBuf", _("Set too old value to buffer."));
 	    int c_pos = 0;
 	    // Half divider
@@ -887,9 +888,9 @@ TVArchive::~TVArchive( )
 
 }
 
-TCntrNode &TVArchive::operator=( TCntrNode &node )
+TCntrNode &TVArchive::operator=( const TCntrNode &node )
 {
-    TVArchive *src_n = dynamic_cast<TVArchive*>(&node);
+    const TVArchive *src_n = dynamic_cast<const TVArchive*>(&node);
     if(!src_n) return *this;
 
     //Configuration copy
@@ -955,7 +956,7 @@ AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
     return attr;
 }
 
-TArchiveS &TVArchive::owner( )	{ return *(TArchiveS *)nodePrev(); }
+TArchiveS &TVArchive::owner( ) const	{ return *(TArchiveS *)nodePrev(); }
 
 string TVArchive::tbl( )	{ return owner().subId()+"_val"; }
 
@@ -1054,8 +1055,8 @@ void TVArchive::stop( bool full_del )
     //Detach all archivators
     vector<string> arch_ls;
     archivatorList(arch_ls);
-    for(unsigned i_l = 0; i_l < arch_ls.size(); i_l++)
-	archivatorDetach(arch_ls[i_l],full_del,false);
+    for(unsigned iL = 0; iL < arch_ls.size(); iL++)
+	archivatorDetach(arch_ls[iL],full_del,false);
 
     setSrcMode();
 }
@@ -1221,8 +1222,8 @@ void TVArchive::archivatorList( vector<string> &ls )
 {
     ResAlloc res(aRes, false);
     ls.clear();
-    for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
-	ls.push_back(archEl[i_l]->archivator().workId());
+    for(unsigned iL = 0; iL < archEl.size(); iL++)
+	ls.push_back(archEl[iL]->archivator().workId());
 }
 
 bool TVArchive::archivatorPresent( const string &arch )
@@ -1231,8 +1232,8 @@ bool TVArchive::archivatorPresent( const string &arch )
     try {
 	AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
 						valAt(TSYS::strSepParse(arch,1,'.'));
-	for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
-	    if(&archEl[i_l]->archivator() == &archivat.at())
+	for(unsigned iL = 0; iL < archEl.size(); iL++)
+	    if(&archEl[iL]->archivator() == &archivat.at())
 		return true;
     } catch(TError &err) { }
 
@@ -1248,12 +1249,12 @@ void TVArchive::archivatorAttach( const string &arch )
     if(!archivat.at().startStat()) return;	//throw err_sys(_("Archivator '%s' error or it is not started."), arch.c_str());
 
     if(startStat()) {	//Attach allow only to started archive
-	int i_l, i_ins = -1;
-	for(i_l = 0; i_l < (int)archEl.size(); i_l++) {
-	    if(&archEl[i_l]->archivator() == &archivat.at()) break;
-	    if(i_ins < 0 && archivat.at().valPeriod() <= archEl[i_l]->archivator().valPeriod()) i_ins = i_l;
+	int iL, i_ins = -1;
+	for(iL = 0; iL < (int)archEl.size(); iL++) {
+	    if(&archEl[iL]->archivator() == &archivat.at()) break;
+	    if(i_ins < 0 && archivat.at().valPeriod() <= archEl[iL]->archivator().valPeriod()) i_ins = iL;
 	}
-	if(i_l >= (int)archEl.size()) {
+	if(iL >= (int)archEl.size()) {
 	    if(i_ins < 0) archEl.push_back(archivat.at().archivePlace(*this));
 	    else archEl.insert(archEl.begin()+i_ins,archivat.at().archivePlace(*this));
 	}
@@ -1261,8 +1262,8 @@ void TVArchive::archivatorAttach( const string &arch )
 
     if(!TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS())) {
 	string als;
-	for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
-	    als += archEl[i_l]->archivator().workId()+";";
+	for(unsigned iL = 0; iL < archEl.size(); iL++)
+	    als += archEl[iL]->archivator().workId()+";";
 	cfg("ArchS").setS(als);
     }
 }
@@ -1274,36 +1275,36 @@ void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
     AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
 					    valAt(TSYS::strSepParse(arch,1,'.'));
     //Find archivator
-    for(unsigned i_l = 0; i_l < archEl.size(); )
-	if(&archEl[i_l]->archivator() == &archivat.at()) {
+    for(unsigned iL = 0; iL < archEl.size(); )
+	if(&archEl[iL]->archivator() == &archivat.at()) {
 	    archivat.at().archiveRemove(id(),full);
-	    archEl.erase(archEl.begin()+i_l);
-	} else i_l++;
+	    archEl.erase(archEl.begin()+iL);
+	} else iL++;
 
     if(toModify && TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS())) {
 	string als;
-	for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
-	    als += archEl[i_l]->archivator().workId()+";";
+	for(unsigned iL = 0; iL < archEl.size(); iL++)
+	    als += archEl[iL]->archivator().workId()+";";
 	cfg("ArchS").setS(als);
     }
 }
 
 void TVArchive::archivatorSort( )
 {
-    int rep_try;
+    bool repTry;
 
     ResAlloc res(aRes, true);
 
     do {
-	rep_try = false;
-	for(unsigned i_l = 1; i_l < archEl.size(); i_l++)
-	    if(archEl[i_l-1]->archivator().valPeriod() > archEl[i_l]->archivator().valPeriod()) {
-		TVArchEl *t_el = archEl[i_l-1];
-		archEl[i_l-1] = archEl[i_l];
-		archEl[i_l] = t_el;
-		rep_try = true;
+	repTry = false;
+	for(unsigned iL = 1; iL < archEl.size(); iL++)
+	    if(archEl[iL-1]->archivator().valPeriod() > archEl[iL]->archivator().valPeriod()) {
+		TVArchEl *t_el = archEl[iL-1];
+		archEl[iL-1] = archEl[iL];
+		archEl[iL] = t_el;
+		repTry = true;
 	    }
-    } while(rep_try);
+    } while(repTry);
 }
 
 string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch, int hsz, int vsz, double valmax, double valmin, string *tp )
@@ -2002,9 +2003,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    TVArchEl *a_el = NULL;
 		    //Find attached
 		    ResAlloc res(aRes, false);
-		    for(unsigned i_l = 0; i_l < archEl.size(); i_l++)
-			if(archEl[i_l]->archivator().owner().modId() == t_arch_ls[i_ta] && archEl[i_l]->archivator().id() == arch_ls[i_a])
-			    a_el = archEl[i_l];
+		    for(unsigned iL = 0; iL < archEl.size(); iL++)
+			if(archEl[iL]->archivator().owner().modId() == t_arch_ls[i_ta] && archEl[iL]->archivator().id() == arch_ls[i_a])
+			    a_el = archEl[iL];
 		    //Fill table element
 		    if(n_arch)	n_arch->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().workId());
 		    if(n_start)	n_start->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().startStat()?"1":"0");
@@ -2136,9 +2137,9 @@ TVArchivator::~TVArchivator( )
 
 }
 
-TCntrNode &TVArchivator::operator=( TCntrNode &node )
+TCntrNode &TVArchivator::operator=( const TCntrNode &node )
 {
-    TVArchivator *src_n = dynamic_cast<TVArchivator*>(&node);
+    const TVArchivator *src_n = dynamic_cast<const TVArchivator*>(&node);
     if(!src_n) return *this;
 
     //Configuration copy
@@ -2251,7 +2252,7 @@ void TVArchivator::archiveRemove( const string &iid, bool full )
 
 TVArchEl *TVArchivator::getArchEl( TVArchive &arch )	{ return new TVArchEl(arch, *this); }
 
-TTypeArchivator &TVArchivator::owner( )			{ return *(TTypeArchivator *)nodePrev(); }
+TTypeArchivator &TVArchivator::owner( ) const		{ return *(TTypeArchivator *)nodePrev(); }
 
 void TVArchivator::load_( TConfig *icfg )
 {
@@ -2630,7 +2631,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
     else setOK = setValsProc(ibuf, beg, end, toAccum);
 
     if(setOK) {
-	if(&archive() == &ibuf && (!mLastGet || (mLastGet && setOK > mLastGet))) mLastGet = setOK+1;
+	if(&archive() == &ibuf && (!mLastGet || setOK > mLastGet)) mLastGet = setOK+1;
 	if(&archive() == &ibuf || setOK > archive().end()) { prevTm = wPrevTm; prevVal = wPrevVal; }
     }
 }

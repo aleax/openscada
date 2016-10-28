@@ -64,7 +64,7 @@ class TMdPrm : public TParamContr
 	void getVals( );
 	void setEval( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     private:
 	//Methods
@@ -106,7 +106,7 @@ class TMdContr: public TController, public MMS::Client
 	int	prior( )	{ return mPrior; }
 	int	restTm( )	{ return mRestTm; }
 	int	syncPer( )	{ return mSync; }
-	string	addr( )		{ return mAddr; }
+	string	addr( ) const	{ return mAddr; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

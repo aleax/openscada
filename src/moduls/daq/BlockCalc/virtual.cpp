@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.8"
+#define MOD_VER		"1.7.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -163,10 +163,10 @@ Contr::~Contr( )
 
 }
 
-TCntrNode &Contr::operator=( TCntrNode &node )
+TCntrNode &Contr::operator=( const TCntrNode &node )
 {
     string storBlkShTbl = cfg("BLOCK_SH");
-    Contr *src_n = dynamic_cast<Contr*>(&node);
+    const Contr *src_n = dynamic_cast<const Contr*>(&node);
     if(src_n) {
 	//Blocks copy
 	if(src_n->enableStat()) {
@@ -222,7 +222,7 @@ void Contr::postDisable( int flag )
     TController::postDisable(flag);
 }
 
-TpContr &Contr::owner( )	{ return (TpContr&)TController::owner( ); }
+TpContr &Contr::owner( ) const	{ return (TpContr&)TController::owner( ); }
 
 void Contr::load_( )
 {
@@ -532,7 +532,7 @@ void Prm::postEnable( int flag )
     if(!vlElemPresent(&v_el))	vlElemAtt(&v_el);
 }
 
-Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
+Contr &Prm::owner( ) const	{ return (Contr&)TParamContr::owner(); }
 
 void Prm::enable( )
 {

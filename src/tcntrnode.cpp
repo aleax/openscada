@@ -50,6 +50,16 @@ TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL)
     if(SYS && this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
+TCntrNode::TCntrNode( const TCntrNode &src ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
+{
+    setNodeMode(Disabled);
+    prev.node = NULL;
+    prev.grp = -1;
+    modif();
+
+    operator=(src);
+}
+
 TCntrNode::~TCntrNode( )
 {
     nodeDelAll();
@@ -58,7 +68,7 @@ TCntrNode::~TCntrNode( )
     if(this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
-TCntrNode &TCntrNode::operator=( TCntrNode &node )	{ return *this; }
+TCntrNode &TCntrNode::operator=( const TCntrNode &node )	{ return *this; }
 
 void TCntrNode::mess_sys( int8_t level, const char *fmt,  ... )
 {
@@ -82,7 +92,7 @@ void TCntrNode::mess_sys( int8_t level, const char *fmt,  ... )
     Mess->put(nodePath().c_str(), level, "%s", mess.c_str());
 }
 
-TError TCntrNode::err_sys( const char *fmt,  ... )
+TError TCntrNode::err_sys( const char *fmt,  ... ) const
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -93,7 +103,7 @@ TError TCntrNode::err_sys( const char *fmt,  ... )
 
     string mess = str, tvl;
     bool first = true;
-    for(TCntrNode *cN = this; cN; cN = cN->nodePrev(true))
+    for(const TCntrNode *cN = this; cN; cN = cN->nodePrev(true))
 	if((tvl=cN->nodeNameSYSM()).size()) {
 	    mess = tvl + (first?": ":" > ") + mess;
 	    first = false;
@@ -102,7 +112,7 @@ TError TCntrNode::err_sys( const char *fmt,  ... )
     return TError(nodePath().c_str(), "%s", mess.c_str());
 }
 
-TError TCntrNode::err_sys( int cod, const char *fmt,  ... )
+TError TCntrNode::err_sys( int cod, const char *fmt,  ... ) const
 {
     char str[STR_BUF_LEN];
     va_list argptr;
@@ -113,7 +123,7 @@ TError TCntrNode::err_sys( int cod, const char *fmt,  ... )
 
     string mess = str, tvl;
     bool first = true;
-    for(TCntrNode *cN = this; cN; cN = cN->nodePrev(true))
+    for(const TCntrNode *cN = this; cN; cN = cN->nodePrev(true))
 	if((tvl=cN->nodeNameSYSM()).size()) {
 	    mess = tvl + (first?": ":" > ") + mess;
 	    first = false;
@@ -361,49 +371,49 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     if(src == dst) return;
 
     //Attach to source node
-    AutoHD<TCntrNode> src_n = SYS->nodeAt(src);
+    AutoHD<TCntrNode> srcN = SYS->nodeAt(src);
 
     //Parse destination node path
-    string d_elp, d_el, t_el;
-    int n_del = 0;
-    for(int off = 0; !(t_el=TSYS::pathLev(dst,0,true,&off)).empty(); n_del++)
-    { if(n_del) d_elp += ("/"+d_el); d_el = t_el; }
-    if(!n_del) throw src_n.at().err_sys(_("Copy from '%s' to '%s' impossible."), src.c_str(), dst.c_str());
+    string dElp, dEl, tEl;
+    int nDel = 0;
+    for(int off = 0; !(tEl=TSYS::pathLev(dst,0,true,&off)).empty(); nDel++)
+    { if(nDel) dElp += ("/"+dEl); dEl = tEl; }
+    if(!nDel) throw srcN.at().err_sys(_("Copy from '%s' to '%s' impossible."), src.c_str(), dst.c_str());
 
     //Connect to destination containers node
-    AutoHD<TCntrNode> dst_n = SYS->nodeAt(d_elp);
+    AutoHD<TCntrNode> dstN = SYS->nodeAt(dElp);
 
     //Get allow branches' containers and find want group
-    XMLNode br_req("info");
-    br_req.setAttr("user",user)->setAttr("path","/%2fbr");
-    dst_n.at().cntrCmd(&br_req);
-    if(s2i(br_req.attr("rez")) || !br_req.childGet(0,true))
-	throw src_n.at().err_sys(_("Destination node doesn't have branches."));
-    XMLNode *branch = br_req.childGet(0);
-    unsigned i_b;
-    for(i_b = 0; i_b < branch->childSize(); i_b++)
-	if(branch->childGet(i_b)->attr("id") == d_el.substr(0,branch->childGet(i_b)->attr("id").size()) &&
-		s2i(branch->childGet(i_b)->attr("acs"))&SEC_WR)
+    XMLNode brReq("info");
+    brReq.setAttr("user",user)->setAttr("path","/%2fbr");
+    dstN.at().cntrCmd(&brReq);
+    if(s2i(brReq.attr("rez")) || !brReq.childGet(0,true))
+	throw srcN.at().err_sys(_("Destination node doesn't have branches."));
+    XMLNode *branch = brReq.childGet(0);
+    int iB;
+    for(iB = 0; iB < (int)branch->childSize(); iB++)
+	if(branch->childGet(iB)->attr("id") == dEl.substr(0,branch->childGet(iB)->attr("id").size()) &&
+		s2i(branch->childGet(iB)->attr("acs"))&SEC_WR)
 	    break;
-    if(i_b >= branch->childSize())
-	throw src_n.at().err_sys(_("Destination node doesn't have necessary branche."));
-    bool idm = s2i(branch->childGet(i_b)->attr("idm"));
-    string n_grp = branch->childGet(i_b)->attr("id");
-    d_el = d_el.substr(n_grp.size());
-    i_b = dst_n.at().grpId(n_grp);
-    if(i_b < 0) throw src_n.at().err_sys(_("Destination node doesn't have necessary branche."));
+    if(iB >= (int)branch->childSize())
+	throw srcN.at().err_sys(_("Destination node doesn't have necessary branche."));
+    bool idm = s2i(branch->childGet(iB)->attr("idm"));
+    string nGrp = branch->childGet(iB)->attr("id");
+    dEl = dEl.substr(nGrp.size());
+    iB = dstN.at().grpId(nGrp);
+    if(iB < 0) throw srcN.at().err_sys(_("Destination node doesn't have necessary branche."));
 
     //Connect or create new destination node
-    if(!dst_n.at().chldPresent(i_b,d_el)) {
-	br_req.clear()->setName("add")->setAttr("user",user)->setAttr("path","/%2fbr%2f"+n_grp);
-	if(idm) br_req.setAttr("id", d_el);
-	else br_req.setText(d_el);
-	dst_n.at().cntrCmd(&br_req);
-	if(s2i(br_req.attr("rez")))	throw TError(br_req.attr("mcat").c_str(), br_req.text().c_str());
+    if(!dstN.at().chldPresent(iB,dEl)) {
+	brReq.clear()->setName("add")->setAttr("user",user)->setAttr("path","/%2fbr%2f"+nGrp);
+	if(idm) brReq.setAttr("id", dEl);
+	else brReq.setText(dEl);
+	dstN.at().cntrCmd(&brReq);
+	if(s2i(brReq.attr("rez")))	throw TError(brReq.attr("mcat").c_str(), brReq.text().c_str());
     }
 
     //Same copy call
-    dst_n.at().chldAt(i_b, d_el).at() = src_n.at();
+    dstN.at().chldAt(iB, dEl).at() = srcN.at();
 }
 
 unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
@@ -457,13 +467,13 @@ TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
     return (*chGrp)[iid];
 }
 
-void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex, bool onlyEn )
+void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex, bool onlyEn ) const
 {
     list.clear();
 
     if(nodeMode() == Disabled) { if(noex) return; else throw err_sys(_("Node is disabled!")); }
 
-    MtxAlloc res(mChM, true);
+    MtxAlloc res(const_cast<ResMtx&>(mChM), true);
     if(!chGrp || igr < 0 || igr >= (int)chGrp->size()) {
 	if(noex) return;
 	else throw err_sys(_("Group of childs %d error!"), igr);
@@ -486,9 +496,9 @@ void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex, bool only
     }
 }
 
-bool TCntrNode::chldPresent( int8_t igr, const string &name )
+bool TCntrNode::chldPresent( int8_t igr, const string &name ) const
 {
-    MtxAlloc res(mChM, true);
+    MtxAlloc res(const_cast<ResMtx&>(mChM), true);
     if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Group of childs %d error!"), igr);
     if(nodeMode() == Disabled)	throw err_sys(_("Node is disabled!"));
 
@@ -578,7 +588,7 @@ unsigned TCntrNode::nodeUse( bool selfOnly )
     return i_use;
 }
 
-string TCntrNode::nodePath( char sep, bool from_root )
+string TCntrNode::nodePath( char sep, bool from_root ) const
 {
     if(sep) {
 	if(prev.node) {
@@ -594,18 +604,18 @@ string TCntrNode::nodePath( char sep, bool from_root )
 			    (from_root?string("/"):(string("/")+nodeName()+"/"));
 }
 
-TCntrNode *TCntrNode::nodePrev( bool noex )
+TCntrNode *TCntrNode::nodePrev( bool noex ) const
 {
     if(prev.node) return prev.node;
     if(noex)	return NULL;
     throw err_sys(_("Node is the root or is not connected!"));
 }
 
-AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const string &user )
+AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const string &user ) const
 {
     if(nodeMode() == Disabled)	throw err_sys("Node is disabled!");
 
-    MtxAlloc res(mChM, true);
+    MtxAlloc res(const_cast<ResMtx&>(mChM), true);
     if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Group of childs %d error!"), igr);
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
     if(p == (*chGrp)[igr].elem.end()) throw err_sys(_("Element '%s' is not present!"), name.c_str());
@@ -802,8 +812,8 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     }
     // TCntrNodeObj nodePrev() - get previous node
     if(iid == "nodePrev") {
-	TCntrNode *prev = nodePrev(true);
-	if(prev) return new TCntrNodeObj(AutoHD<TCntrNode>(prev), user);
+	TCntrNode *tprv = nodePrev(true);
+	if(tprv) return new TCntrNodeObj(AutoHD<TCntrNode>(tprv), user);
 	return false;
     }
     // string nodePath(string sep = "", bool from_root = true) - get the node path into OpenSCADA objects tree
@@ -967,12 +977,12 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));
 	// Request node childs parameters
 	else if(ctrChkNode(opt,"chlds",R_R_R_,"root","root",SEC_RD)) {
-	    string chGrp = opt->attr("grp");
+	    string tchGrp = opt->attr("grp");
 	    bool icoCheck = s2i(opt->attr("icoCheck"));
 	    vector<string> ls;
-	    XMLNode req("get"); req.setAttr("path","/br/"+chGrp)->setAttr("user",opt->attr("user"));
+	    XMLNode req("get"); req.setAttr("path","/br/"+tchGrp)->setAttr("user",opt->attr("user"));
 	    cntrCmdProc(&req);
-	    int chGrpId = grpId(chGrp);
+	    int chGrpId = grpId(tchGrp);
 	    if(chGrpId >= 0)
 		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 		    XMLNode *chN = opt->childAdd();

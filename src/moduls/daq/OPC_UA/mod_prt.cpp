@@ -237,7 +237,7 @@ TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPoolTm(0
 
 TProtIn::~TProtIn( )		{ }
 
-TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 bool TProtIn::mess( const string &reqst, string &answ )
 {
@@ -266,9 +266,9 @@ OPCEndPoint::~OPCEndPoint( )
     try { setEnable(false); } catch(...) { }
 }
 
-TCntrNode &OPCEndPoint::operator=( TCntrNode &node )
+TCntrNode &OPCEndPoint::operator=( const TCntrNode &node )
 {
-    OPCEndPoint *src_n = dynamic_cast<OPCEndPoint*>(&node);
+    const OPCEndPoint *src_n = dynamic_cast<const OPCEndPoint*>(&node);
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -285,7 +285,7 @@ void OPCEndPoint::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
 }
 
-TProt &OPCEndPoint::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &OPCEndPoint::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 string OPCEndPoint::name( )
 {
@@ -293,7 +293,7 @@ string OPCEndPoint::name( )
     return tNm.size() ? tNm : id();
 }
 
-string OPCEndPoint::tbl( )	{ return owner().modId()+"_ep"; }
+string OPCEndPoint::tbl( ) const	{ return owner().modId()+"_ep"; }
 
 string OPCEndPoint::cert( )	{ return cfg("ServCert").getS(); }
 

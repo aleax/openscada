@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.5"
+#define MOD_VER		"1.0.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -492,7 +492,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

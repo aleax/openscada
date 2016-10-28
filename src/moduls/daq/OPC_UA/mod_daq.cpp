@@ -604,7 +604,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

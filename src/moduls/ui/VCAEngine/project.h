@@ -47,21 +47,21 @@ class Project : public TCntrNode, public TConfig
 	Project( const string &id, const string &name, const string &lib_db = "*.*" );
 	~Project( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }			//Identifier
-	string	name( );					//Name
-	string	descr( )	{ return cfg("DESCR").getS(); }	//Description
-	string	ico( )		{ return cfg("ICO").getS(); }	//Icon
-	string	owner( );					//Library owner
-	string	grp( );						//Library group
-	short	permit( )	{ return mPermit; }		//Permission for access to library
+	string	id( ) const	{ return mId; }			//Identifier
+	string	name( ) const;					//Name
+	string	descr( ) const	{ return cfg("DESCR").getS(); }	//Description
+	string	ico( ) const	{ return cfg("ICO").getS(); }	//Icon
+	string	owner( ) const;					//Library owner
+	string	grp( ) const;					//Library group
+	short	permit( ) const	{ return mPermit; }		//Permission for access to library
 	int	period( )	{ return mPer; }		//Project's session calculate period
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
 
-	string DB( )		{ return workPrjDB; }		//Current library DB
-	string tbl( )		{ return cfg("DB_TBL").getS(); }//Table of storing library data
-	string fullDB( )	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
+	string DB( ) const	{ return workPrjDB; }		//Current library DB
+	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
+	string fullDB( ) const	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
 	void setName( const string &it )	{ cfg("NAME").setS(it); }
 	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }
@@ -76,21 +76,21 @@ class Project : public TCntrNode, public TConfig
 	void setFullDB( const string &it );
 
 	// Enable stat
-	bool enable( )				{ return mEnable; }
+	bool enable( ) const			{ return mEnable; }
 	void setEnable( bool val );
 	void setEnableByNeed( )			{ enableByNeed = true; modifClr(); }
 
 	// Pages
-	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
-	bool present( const string &id )	{ return chldPresent(mPage,id); }
-	AutoHD<Page> at( const string &id );
+	void list( vector<string> &ls ) const		{ chldList(mPage,ls); }
+	bool present( const string &id ) const		{ return chldPresent(mPage,id); }
+	AutoHD<Page> at( const string &id ) const;
 	void add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
 	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 
 	// Mime data access
-	void mimeDataList( vector<string> &list, const string &idb = "" );
-	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" );
+	void mimeDataList( vector<string> &list, const string &idb = "" ) const;
+	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" ) const;
 	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
 	void mimeDataDel( const string &id, const string &idb = "" );
 
@@ -113,8 +113,8 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const char *nodeName( )		{ return mId.getSd(); }
-	const char *nodeNameSYSM( )	{ return mId.getSd(); }
+	const char *nodeName( ) const		{ return mId.getSd(); }
+	const char *nodeNameSYSM( ) const	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( TConfig *cfg );
@@ -164,21 +164,21 @@ class Page : public Widget, public TConfig
 	Page( const string &id, const string &isrcwdg = "" );
 	~Page( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	path( );
-	string	ico( );
-	string	type( )		{ return "ProjPage"; }
+	string	path( ) const;
+	string	ico( ) const;
+	string	type( )			{ return "ProjPage"; }
 	string	calcId( );
-	string	calcLang( );
+	string	calcLang( ) const;
 	bool	calcProgTr( );
-	string	calcProg( );
+	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
-	int	calcPer( );
-	string	ownerFullId( bool contr = false );
-	int	prjFlags( )	{ return mFlgs; }
-	string	parentNm( )	{ return cfg("PARENT").getS(); }
-	string	proc( )		{ return cfg("PROC").getS(); }
+	int	calcPer( ) const;
+	string	ownerFullId( bool contr = false ) const;
+	int	prjFlags( ) const	{ return mFlgs; }
+	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
+	string	proc( ) const	{ return cfg("PROC").getS(); }
 	int	timeStamp( );
 
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
@@ -197,12 +197,12 @@ class Page : public Widget, public TConfig
 
 	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
-	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	// Pages
-	void pageList( vector<string> &ls )	{ chldList(mPage,ls); }
-	bool pagePresent( const string &id )	{ return chldPresent(mPage,id); }
-	AutoHD<Page> pageAt( const string &id );
+	void pageList( vector<string> &ls ) const		{ chldList(mPage,ls); }
+	bool pagePresent( const string &id ) const		{ return chldPresent(mPage,id); }
+	AutoHD<Page> pageAt( const string &id ) const;
 	void pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
 	void pageDel( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
@@ -213,8 +213,8 @@ class Page : public Widget, public TConfig
 
 	void inheritAttr( const string &attr = "" );
 
-	Page	*ownerPage( );
-	Project	*ownerProj( );
+	Page	*ownerPage( ) const;
+	Project	*ownerProj( ) const;
 
     public:
 	//Attributes
@@ -258,18 +258,18 @@ class PageWdg : public Widget, public TConfig
 	PageWdg( const string &id, const string &isrcwdg = "" );
 	~PageWdg( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	// Main parameters
-	string	path( );
-	string	ico( );
+	string	path( ) const;
+	string	ico( ) const;
 	string	type( )		{ return "ProjLink"; }
 	string	calcId( );
-	string	calcLang( );
-	string	calcProg( );
+	string	calcLang( ) const;
+	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
-	int	calcPer( );
-	string	parentNm( )	{ return cfg("PARENT").getS(); }
+	int	calcPer( ) const;
+	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val, bool force = false );
 	void setParentNm( const string &isw );
@@ -282,11 +282,11 @@ class PageWdg : public Widget, public TConfig
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
-	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	void inheritAttr( const string &attr = "" );
 
-	Page &ownerPage( );
+	Page &ownerPage( ) const;
 
     protected:
 	//Methods

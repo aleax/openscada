@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logic level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.2"
+#define MOD_VER		"1.7.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -312,11 +312,11 @@ TMdPrm::~TMdPrm( )
     nodeDelAll();
 }
 
-TCntrNode &TMdPrm::operator=( TCntrNode &node )
+TCntrNode &TMdPrm::operator=( const TCntrNode &node )
 {
     TParamContr::operator=(node);
 
-    TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
+    const TMdPrm *src_n = dynamic_cast<const TMdPrm*>(&node);
     if(!src_n || !src_n->enableStat() || !enableStat() || !isStd() || !tmpl->val.func()) return *this;
 
     //IO values copy
@@ -331,9 +331,9 @@ TCntrNode &TMdPrm::operator=( TCntrNode &node )
     return *this;
 }
 
-bool TMdPrm::isStd( )	{ return (type().name == "std"); }
+bool TMdPrm::isStd( ) const	{ return (type().name == "std"); }
 
-bool TMdPrm::isPRefl( )	{ return (type().name == "pRefl"); }
+bool TMdPrm::isPRefl( ) const	{ return (type().name == "pRefl"); }
 
 void TMdPrm::postEnable( int flag )
 {
@@ -366,7 +366,7 @@ void TMdPrm::setType( const string &tpId )
     else if(isStd() && !tmpl)	tmpl = new STmpl;
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
@@ -709,13 +709,13 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     return TParamContr::objFuncCall(iid, prms, user);
 }
 
-int TMdPrm::lnkSize( )
+int TMdPrm::lnkSize( ) const
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     return tmpl->lnk.size();
 }
 
-int TMdPrm::lnkId( int id )
+int TMdPrm::lnkId( int id ) const
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     for(int i_l = 0; i_l < lnkSize(); i_l++)
@@ -724,7 +724,7 @@ int TMdPrm::lnkId( int id )
     return -1;
 }
 
-int TMdPrm::lnkId( const string &id )
+int TMdPrm::lnkId( const string &id ) const
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     for(int i_l = 0; i_l < lnkSize(); i_l++)
@@ -733,7 +733,7 @@ int TMdPrm::lnkId( const string &id )
     return -1;
 }
 
-TMdPrm::SLnk &TMdPrm::lnk( int num )
+TMdPrm::SLnk &TMdPrm::lnk( int num ) const
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     if(num < 0 || num >= (int)tmpl->lnk.size()) throw TError(nodePath().c_str(),_("Parameter id error."));

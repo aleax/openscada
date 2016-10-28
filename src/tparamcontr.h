@@ -56,13 +56,15 @@ class TParamContr : public TConfig, public TValue
 	string DAQPath( );
 	string ownerPath( bool inclSelf = false );	//Owner parameter path
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId.c_str(); }
+	bool operator==( TParamContr &PrmCntr )	{ return (id() == PrmCntr.id()); }
+
+	string	id( )			{ return mId.c_str(); }
 	string	name( );
 	string	descr( );
-	bool toEnable( )	{ return cfg("EN").getB(); }
-	bool enableStat( )	{ return mEn; }
+	bool toEnable( )		{ return cfg("EN").getB(); }
+	bool enableStat( ) const	{ return mEn; }
 	bool dataActive( );
 
 	void setName( const string &inm );
@@ -70,24 +72,20 @@ class TParamContr : public TConfig, public TValue
 	void setToEnable( bool vl )		{ cfg("EN").setB(vl); }
 
 	// Included parameters
-	void list( vector<string> &list );
-	bool present( const string &name );
+	void list( vector<string> &list ) const;
+	bool present( const string &name ) const;
 	void add( const string &name, unsigned type = 0 );
 	void del( const string &name, int full = RM_Exit );
-	AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" );
+	AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" ) const;
 
-	TTypeParam &type( )		{ return *tpParm; }
+	TTypeParam &type( ) const	{ return *tpParm; }
 
 	virtual TElem *dynElCntr( )	{ return NULL; }
 
 	virtual void enable( );			// Enable parameter and open access to value
 	virtual void disable( );		// Disable parameter and close access to value
 
-	bool operator==( TParamContr &PrmCntr )	{ return (id() == PrmCntr.id()); }
-
-	TParamContr &operator=( TParamContr &PrmCntr );
-
-	TController &owner( );
+	TController &owner( ) const;
 
 	//Attributes
 	time_t	mRdPrcTm;	//Redundancy processing time, mostly for the dynamic DAQ attributes
@@ -114,7 +112,7 @@ class TParamContr : public TConfig, public TValue
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
 
 	void LoadParmCfg( );
 

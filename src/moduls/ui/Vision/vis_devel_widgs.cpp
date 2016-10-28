@@ -921,7 +921,7 @@ InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(
 
 InspAttrDock::~InspAttrDock( )		{ }
 
-VisDevelop *InspAttrDock::owner( )	{ return (VisDevelop*)parentWidget(); }
+VisDevelop *InspAttrDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
 bool InspAttrDock::hasFocus( )		{ return ainsp_w->hasFocus(); }
 
@@ -1191,7 +1191,7 @@ InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidge
 
 InspLnkDock::~InspLnkDock( )		{ }
 
-VisDevelop *InspLnkDock::owner( )	{ return (VisDevelop*)parentWidget(); }
+VisDevelop *InspLnkDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
 void InspLnkDock::setWdg( const string &iwdg )
 {
@@ -1239,7 +1239,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
 
 WdgTree::~WdgTree( )		{ }
 
-VisDevelop *WdgTree::owner( )	{ return (VisDevelop*)parentWidget(); }
+VisDevelop *WdgTree::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
 bool WdgTree::hasFocus( )	{ return (QApplication::focusWidget() == treeW); }
 
@@ -1629,7 +1629,7 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
 
 ProjTree::~ProjTree( )	{ }
 
-VisDevelop *ProjTree::owner( )	{ return (VISION::VisDevelop*)parentWidget(); }
+VisDevelop *ProjTree::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }
 
 bool ProjTree::hasFocus( )	{ return (QApplication::focusWidget() == treeW); }
 

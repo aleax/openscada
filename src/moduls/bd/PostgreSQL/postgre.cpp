@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.6.0"
+#define MOD_VER		"1.6.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -102,16 +102,16 @@ void MBD::postDisable( int flag )
 
     if(flag && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
-	PGconn * connection = NULL;
+	PGconn *tcon = NULL;
 	PGresult *res;
 	try {
-	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
+	    if((tcon=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 		throw err_sys(_("Fatal error - unable to allocate connection."));
-	    if(PQstatus(connection) != CONNECTION_OK)
-		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
+	    if(PQstatus(tcon) != CONNECTION_OK)
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(tcon));
 	    string req = "DROP DATABASE \"" + db + "\"";
-	    if((res=PQexec(connection,req.c_str())) == NULL)
-		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
+	    if((res=PQexec(tcon,req.c_str())) == NULL)
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(tcon));
 	    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 		string err, err1;
 		err = PQresStatus(PQresultStatus(res));
@@ -120,9 +120,9 @@ void MBD::postDisable( int flag )
 		throw err_sys(_("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
 	    }
 	    else PQclear(res);
-	    PQfinish(connection);
+	    PQfinish(tcon);
 	} catch(...) {
-	    if(connection) PQfinish(connection);
+	    if(tcon) PQfinish(tcon);
 	    throw;
 	}
     }
@@ -198,7 +198,7 @@ void MBD::disable( )
     PQfinish(connection);
 }
 
-void MBD::allowList( vector<string> &list )
+void MBD::allowList( vector<string> &list ) const
 {
     if(!enableStat())  return;
     list.clear();
@@ -211,7 +211,7 @@ void MBD::allowList( vector<string> &list )
 		    "AND n.nspname !~ '^pg_toast' "
 		    "AND pg_catalog.pg_table_is_visible(c.oid)";
     vector< vector<string> > tbl;
-    sqlReq(req, &tbl, false);
+    const_cast<MBD*>(this)->sqlReq(req, &tbl, false);
     for(unsigned i_t = 1; i_t < tbl.size(); i_t++) list.push_back(tbl[i_t][0]);
 }
 
@@ -470,9 +470,7 @@ void MTable::postDisable( int flag )
     }
 }
 
-MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
-
-
+MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {

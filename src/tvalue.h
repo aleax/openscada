@@ -99,7 +99,7 @@ class TVal: public TCntrNode
 	void setResB1( bool vl )	{ mResB1 = vl; }
 	void setResB2( bool vl )	{ mResB2 = vl; }
 
-	TValue &owner( );
+	TValue &owner( ) const;
 	TFld &fld( );
 
     protected:
@@ -111,7 +111,7 @@ class TVal: public TCntrNode
 
     private:
 	//Methods
-	const char *nodeName( );
+	const char *nodeName( ) const;
 
 	//Attributes
 	union {
@@ -152,9 +152,9 @@ class TValue: public TCntrNode, public TValElem
 	virtual string DAQPath( );
 
 	// Atributes
-	void vlList( vector<string> &list )	{ chldList(mVl, list); }
-	bool vlPresent( const string &name )	{ return chldPresent(mVl, name); }
-	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(mVl, name); }
+	void vlList( vector<string> &list ) const	{ chldList(mVl, list); }
+	bool vlPresent( const string &name ) const	{ return chldPresent(mVl, name); }
+	AutoHD<TVal> vlAt( const string &name ) const	{ return chldAt(mVl, name); }
 
     protected:
 	//Methods

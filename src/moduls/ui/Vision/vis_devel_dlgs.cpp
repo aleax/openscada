@@ -324,7 +324,7 @@ LibProjProp::~LibProjProp( )
 
 }
 
-VisDevelop *LibProjProp::owner( )	{ return (VISION::VisDevelop*)parentWidget(); }
+VisDevelop *LibProjProp::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }
 
 void LibProjProp::showDlg( const string &iit, bool reload )
 {
@@ -1140,7 +1140,7 @@ VisItProp::~VisItProp( )
 
 }
 
-VisDevelop *VisItProp::owner( )	{ return (VISION::VisDevelop*)parentWidget(); }
+VisDevelop *VisItProp::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }
 
 void VisItProp::showDlg( const string &iit, bool reload )
 {

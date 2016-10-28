@@ -55,12 +55,12 @@ class TPrmTempl: public TFunction, public TConfig
 	TPrmTempl( const string &id, const string &name = "" );
 	~TPrmTempl( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	id( )		{ return mId; }
 	string	name( );
 	string	descr( );
-	string	stor( );
+	string	stor( ) const;
 	int	maxCalcTm( );
 	string	progLang( );
 	bool	progTr( )	{ return cfg("PR_TR"); }
@@ -77,7 +77,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	AutoHD<TFunction>	func( );	//Programming language attached function
 
-	TPrmTmplLib &owner( );
+	TPrmTmplLib &owner( ) const;
 
     protected:
 	//Methods
@@ -93,7 +93,7 @@ class TPrmTempl: public TFunction, public TConfig
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
 	TCfg	&mId;
@@ -112,7 +112,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	TPrmTmplLib( const string &id, const string &name, const string &lib_db );
 	~TPrmTmplLib( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	id( )		{ return mId; }
 	string	name( );
@@ -122,20 +122,20 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	string	tbl( )		{ return cfg("DB").getS(); }
 	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
-	bool startStat( )	{ return run_st; }
+	bool startStat( ) const	{ return run_st; }
 	void start( bool val );
 
 	void setName( const string &vl );
 	void setDescr( const string &vl );
 	void setFullDB( const string &vl );
 
-	void list( vector<string> &ls )		{ chldList(m_ptmpl,ls); }
-	bool present( const string &id )	{ return chldPresent(m_ptmpl,id); }
-	AutoHD<TPrmTempl> at( const string &id ){ return chldAt(m_ptmpl,id); }
+	void list( vector<string> &ls ) const		{ chldList(m_ptmpl,ls); }
+	bool present( const string &id ) const		{ return chldPresent(m_ptmpl,id); }
+	AutoHD<TPrmTempl> at( const string &id ) const	{ return chldAt(m_ptmpl,id); }
 	void add( const string &id, const string &name = "" );
 	void del( const string &id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
 
-	TDAQS &owner( );
+	TDAQS &owner( ) const;
 
     protected:
 	//Methods
@@ -152,7 +152,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
 	bool	run_st;

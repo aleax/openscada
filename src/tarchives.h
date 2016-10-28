@@ -53,16 +53,16 @@ class TMArchivator : public TCntrNode, public TConfig
 	//Public methods
 	TMArchivator( const string &id, const string &db, TElem *cf_el );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	workId( );
 	string	name( );
-	string	dscr( )		{ return cfg("DESCR").getS(); }
-	bool	toStart( )	{ return mStart; }
-	bool	startStat( )	{ return runSt; }
-	string	addr( )		{ return cfg("ADDR").getS(); }
-	int	level( )	{ return mLevel; }
+	string	dscr( )			{ return cfg("DESCR").getS(); }
+	bool	toStart( )		{ return mStart; }
+	bool	startStat( ) const	{ return runSt; }
+	string	addr( ) const		{ return cfg("ADDR").getS(); }
+	int	level( )		{ return mLevel; }
 	void	categ( vector<string> &list );
 
 	string	DB( )		{ return mDB; }
@@ -95,9 +95,10 @@ class TMArchivator : public TCntrNode, public TConfig
 	virtual time_t begin( )		{ return 0; }
 	virtual time_t end( )		{ return 0; }
 	virtual bool put( vector<TMess::SRec> &mess, bool force = false );	//<force> mostly used by redundancy to prevent cycling
-	virtual time_t get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
+	virtual time_t get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )
+					{ return 0; };
 
-	TTypeArchivator &owner( );
+	TTypeArchivator &owner( ) const;
 
     protected:
 	//Protected methods
@@ -121,7 +122,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Private attributes
 	TCfg	&mId,		//Mess arch id
@@ -152,20 +153,20 @@ class TTypeArchivator: public TModule
 	virtual ~TTypeArchivator( );
 
 	// Messages
-	void messList( vector<string> &list )	{ chldList(mMess,list); }
-	bool messPresent( const string &iid )	{ return chldPresent(mMess,iid); }
+	void messList( vector<string> &list ) const		{ chldList(mMess,list); }
+	bool messPresent( const string &iid ) const		{ return chldPresent(mMess,iid); }
 	void messAdd( const string &iid, const string &idb = "*.*" );
 	void messDel( const string &iid, bool full = false )	{ chldDel(mMess,iid,-1,full); }
-	AutoHD<TMArchivator> messAt( const string &iid )	{ return chldAt(mMess,iid); }
+	AutoHD<TMArchivator> messAt( const string &iid ) const	{ return chldAt(mMess,iid); }
 
 	// Values
-	void valList( vector<string> &list )	{ chldList(mVal,list); }
-	bool valPresent( const string &iid )	{ return chldPresent(mVal,iid); }
+	void valList( vector<string> &list ) const		{ chldList(mVal,list); }
+	bool valPresent( const string &iid ) const		{ return chldPresent(mVal,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
 	void valDel( const string &iid, bool full = false )	{ chldDel(mVal,iid,-1,full); }
-	AutoHD<TVArchivator> valAt( const string &iid )		{ return chldAt(mVal,iid); }
+	AutoHD<TVArchivator> valAt( const string &iid ) const	{ return chldAt(mVal,iid); }
 
-	TArchiveS &owner( );
+	TArchiveS &owner( ) const;
 
     protected:
 	//Protected methods
@@ -212,17 +213,17 @@ class TArchiveS : public TSubSYS
 	void perSYSCall( unsigned int cnt );
 
 	// Value archives functions
-	void valList( vector<string> &list )			{ chldList(mAval,list); }
-	bool valPresent( const string &iid )			{ return chldPresent(mAval,iid); }
+	void valList( vector<string> &list ) const		{ chldList(mAval,list); }
+	bool valPresent( const string &iid ) const		{ return chldPresent(mAval,iid); }
 	void valAdd( const string &iid, const string &idb = "*.*" );
 	void valDel( const string &iid, bool db = false )	{ chldDel(mAval,iid,-1,db); }
-	AutoHD<TVArchive> valAt( const string &iid )		{ return chldAt(mAval,iid); }
+	AutoHD<TVArchive> valAt( const string &iid ) const	{ return chldAt(mAval,iid); }
 
 	void setActMess( TMArchivator *a, bool val );
 	void setActVal( TVArchive *a, bool val );
 
 	// Archivators
-	AutoHD<TTypeArchivator> at( const string &name )		{ return modAt(name); }
+	AutoHD<TTypeArchivator> at( const string &name ) const		{ return modAt(name); }
 
 	// Message archive function
 	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "", bool force = false );

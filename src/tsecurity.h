@@ -44,7 +44,7 @@ class TUser : public TCntrNode, public TConfig
 	TUser( const string &name, const string &db, TElem *el );
 	~TUser( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	name( )		{ return mName; }
 	string	descr( )	{ return cfg("DESCR").getS(); }
@@ -74,13 +74,13 @@ class TUser : public TCntrNode, public TConfig
 	void load_( TConfig *cfg );
 	void save_( );
 
-	TSecurity &owner( );
+	TSecurity &owner( ) const;
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mName.getSd(); }
+	const char *nodeName( ) const	{ return mName.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
@@ -101,7 +101,7 @@ class TGroup : public TCntrNode, public TConfig
 	TGroup( const string &name, const string &db, TElem *el );
 	~TGroup( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	name( )		{ return mName; }
 	string	descr( )	{ return cfg("DESCR").getS(); }
@@ -129,13 +129,13 @@ class TGroup : public TCntrNode, public TConfig
 	void load_( TConfig *cfg );
 	void save_( );
 
-	TSecurity &owner( );
+	TSecurity &owner( ) const;
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mName.getSd(); }
+	const char *nodeName( ) const	{ return mName.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
@@ -158,19 +158,19 @@ class TSecurity : public TSubSYS
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
 
 	// Users
-	void usrList( vector<string> &list )		{ chldList(mUsr,list); }
+	void usrList( vector<string> &list ) const	{ chldList(mUsr,list); }
 	void usrGrpList( const string &name, vector<string> &list );
-	bool usrPresent( const string &name )		{ return chldPresent(mUsr,name); }
+	bool usrPresent( const string &name ) const	{ return chldPresent(mUsr,name); }
 	void usrAdd( const string &name, const string &db = "*.*" );
 	void usrDel( const string &name, bool complete = false );
-	AutoHD<TUser> usrAt( const string &name )	{ return chldAt(mUsr,name); }
+	AutoHD<TUser> usrAt( const string &name ) const	{ return chldAt(mUsr,name); }
 
 	// Groups
-	void grpList( vector<string> &list )		{ chldList(mGrp,list); }
-	bool grpPresent( const string &name )		{ return chldPresent(mGrp,name); }
+	void grpList( vector<string> &list ) const		{ chldList(mGrp,list); }
+	bool grpPresent( const string &name ) const		{ return chldPresent(mGrp,name); }
 	void grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
-	AutoHD<TGroup> grpAt( const string &name )	{ return chldAt(mGrp,name); }
+	AutoHD<TGroup> grpAt( const string &name ) const	{ return chldAt(mGrp,name); }
 
 	//Public attributes
 	static const string pHashMagic;

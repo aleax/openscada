@@ -56,7 +56,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	void setEval( );
 
@@ -94,7 +94,7 @@ class TMdContr: public TController
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int64_t	prior( )	{ return mPrior; }
-	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	addr( ) const	{ return cfg("ADDR").getS(); }
 	double	syncPer( )	{ return mSync; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }

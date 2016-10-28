@@ -546,7 +546,7 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
     return true;
 }
 
-string Kontar::tval::RC5Encr( const string &src, const string &key )
+string Kontar::tval::RC5Encr( const string &src, const string &ikey )
 {
     int nPad = 2;
     unsigned blocks = ((src.size() + nPad*4 - 1) / (nPad*4)) * nPad;
@@ -555,8 +555,8 @@ string Kontar::tval::RC5Encr( const string &src, const string &key )
     uint32_t cdata[blocks*2];
     for(unsigned i_s = 0; i_s < blocks; i_s++) cdata[i_s] = 0;
     memcpy(cdata, src.data(), src.size());
-    if(key.size() < 20*4) return src;
-    const uint32_t *keybuf = (const uint32_t *)key.data();
+    if(ikey.size() < 20*4) return src;
+    const uint32_t *keybuf = (const uint32_t *)ikey.data();
     int rounds = 10;
 
     unsigned	rc;
@@ -593,13 +593,13 @@ string Kontar::tval::RC5Encr( const string &src, const string &key )
     return string((char*)cdata, blocks*4);
 }
 
-string Kontar::tval::RC5Decr( const string &src, const string &key )
+string Kontar::tval::RC5Decr( const string &src, const string &ikey )
 {
     int blocks = src.size()/4 + ((src.size()%4)?1:0);
     uint32_t cdata[blocks*2];
     memcpy(cdata, src.data(), src.size());
-    if(key.size() < 20*4) return src;
-    const uint32_t *keybuf = (const uint32_t *)key.data();
+    if(ikey.size() < 20*4) return src;
+    const uint32_t *keybuf = (const uint32_t *)ikey.data();
     int rounds = 10;
 
     char tmp;
@@ -665,7 +665,7 @@ string Kontar::tval::RC5Key( const string &ikey )
 
     xk_len = rounds*2 + 2;
     pk_len = key.size()/4 + ((key.size()%4)?1:0);
-    pk[0] = pk[1] = 0;
+    //pk[0] = pk[1] = 0;
     K.c[3] = key[0];
     K.c[2] = key[1];
     K.c[1] = key[2];

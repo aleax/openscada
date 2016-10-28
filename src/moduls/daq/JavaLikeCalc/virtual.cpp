@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.2.8"
+#define MOD_VER		"3.2.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -146,8 +146,8 @@ void TpContr::postEnable( int flag )
 
     //Init named constant table
     double rvl;
-    rvl = 3.14159265358l; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
-    rvl = 2.71828182845l; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
+    rvl = M_PI /*3.14159265358l*/; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
+    rvl = M_E /*2.71828182845l*/; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
     rvl = EVAL_REAL;
     mConst.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
     mConst.push_back(NConst(TFld::Real,"EVAL",string((char*)&rvl,sizeof(rvl))));
@@ -391,7 +391,7 @@ BFunc *TpContr::bFuncGet( const char *nm )
 //*************************************************
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), call_st(false), endrun_req(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), tm_calc(0)
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), mPer(0), tm_calc(0)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
@@ -513,7 +513,7 @@ void Contr::save_( )
 	cfg.cfgViewAll(false);
 	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
-		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true, false, true);
+		if(!SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,true,false,true))	break;
 		if(full.empty()) fldCnt--;
 	    }
     }
@@ -831,7 +831,7 @@ void Prm::disable()
     TParamContr::disable();
 }
 
-Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner(); }
+Contr &Prm::owner( ) const	{ return (Contr&)TParamContr::owner(); }
 
 void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {

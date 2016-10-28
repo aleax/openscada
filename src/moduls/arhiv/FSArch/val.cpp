@@ -891,7 +891,6 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	mErr = true;
 	return;
     }
-    bool fOK = true;
 
     //Prepare and write the file archive header
     FHead head;
@@ -906,7 +905,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     head.hgrid = owner().archive().hardGrid();
     head.hres = owner().archive().highResTm();
     head.term = 0x55;
-    fOK = (write(hd,&head,sizeof(FHead)) == sizeof(FHead));
+    bool fOK = (write(hd,&head,sizeof(FHead)) == sizeof(FHead));
 
     //Create bit table and init first value
     mpos = (end()-begin())/period();

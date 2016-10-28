@@ -59,7 +59,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	//Attributes
 	TElem	els;		//Work atribute elements
@@ -121,7 +121,7 @@ class TMdContr: public TController
 	bool	prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
 
-	vector< AutoHD<TMdPrm> >  p_hd;
+	vector< AutoHD<TMdPrm> > p_hd;
 
 	double	tm_gath;	// Gathering time
 };
