@@ -1,3 +1,9 @@
+2016-10-29 Roman
+- FIX:Transport.SSL: TLSv1.1, TLSv1.2, DTLSv1 set to build for SSL version >= 0x1000114fL.
+- Transport.Serial: Char limit value expanded to 10000 ms, for output.
+- FIX:UI.QTStarter: Build for Qt5 fixed.
+
+
 2016-10-28 Roman
 - !!:FIX:DB.LibsDB.OscadaLibs: DevLib.IEC60870: Fix for the new behavior of attributes of Object free by EVAL set.
     !!:Self implementing for EMail sent by SMTP is added as an user protocol's function, implemented: pure, SSL/TLS, AUTH.

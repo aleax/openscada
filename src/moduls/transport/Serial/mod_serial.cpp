@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -812,7 +812,7 @@ bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
 void TTrOut::setTimings( const string &vl )
 {
     int wReqTm = vmax(1, vmin(10000,s2i(TSYS::strParse(vl,0,":"))));
-    float wCharTm = vmax(0.01, vmin(1e3,s2r(TSYS::strParse(vl,1,":"))));
+    float wCharTm = vmax(0.01, vmin(1e4,s2r(TSYS::strParse(vl,1,":"))));
     mTimings = TSYS::strMess("%d:%g", wReqTm, wCharTm);
 
     float wKeepAliveTm = vmax(0, vmin(1e3,s2r(TSYS::strParse(vl,2,":"))));

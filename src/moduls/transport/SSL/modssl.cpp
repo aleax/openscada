@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.4.0"
+#define MOD_VER		"1.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -292,10 +292,14 @@ void *TSocketIn::Task( void *sock_in )
 #endif
 	 if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
     else if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
-    else if(ssl_method == "TLSv1_1")	meth = TLSv1_1_server_method();
+    else
+#if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_server_method();
     else if(ssl_method == "TLSv1_2")	meth = TLSv1_2_server_method();
     else if(ssl_method == "DTLSv1")	meth = DTLSv1_server_method();
-    else meth = SSLv23_server_method();
+    else
+#endif
+	 meth = SSLv23_server_method();
 
     try {
 	s.ctx = SSL_CTX_new(meth);
@@ -762,10 +766,14 @@ void TSocketOut::start( int tmCon )
 #endif
 	 if(ssl_method == "SSLv3")	meth = SSLv3_client_method();
     else if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
-    else if(ssl_method == "TLSv1_1")	meth = TLSv1_1_client_method();
+    else
+#if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_client_method();
     else if(ssl_method == "TLSv1_2")	meth = TLSv1_2_client_method();
     else if(ssl_method == "DTLSv1")	meth = DTLSv1_client_method();
-    else meth = SSLv23_client_method();
+    else
+#endif
+	 meth = SSLv23_client_method();
 
     try {
 	//Connect to remote host try
