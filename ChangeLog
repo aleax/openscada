@@ -1,3 +1,10 @@
+2016-10-30 Roman
+- !!:FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher unified, stabilized and status is added for SMS and EMail sent by direct OpenSCADA functions.
+    !!:Self SMS send implementing unified and expanded for: disable ECHO, check/set PIN, TEST and PDU SMS mode.
+    FIX:Self SMTP implementing fixed for localized field "Date" by use an external call for utility "date".
+- FIX:UI.Vision: Wrong sometime set cursor to current is fixed for primitive "Diagram".
+
+
 2016-10-29 Roman
 - FIX:Transport.SSL: TLSv1.1, TLSv1.2, DTLSv1 set to build for SSL version >= 0x1000114fL.
 - Transport.Serial: Char limit value expanded to 10000 ms, for output.

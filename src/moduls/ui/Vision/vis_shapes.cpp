@@ -1903,7 +1903,8 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	case A_DiagramCurSek:
 	    if((shD->curTime/1000000) == s2i(val)) break;
 	    shD->curTime = s2ll(val)*1000000 + shD->curTime%1000000;
-	    shD->holdCur = (shD->curTime>=shD->tTime);
+	    shD->holdCur = (shD->curTime >= (shD->tTime-(shD->pictRect.width()?(int64_t)(3*1e6*shD->tSize)/shD->pictRect.width():0)));	//No more 3 pixels
+	    //shD->holdCur = (shD->curTime >= shD->tTime);
 	    up = true;
 	    break;
 	case A_DiagramCurUSek:
