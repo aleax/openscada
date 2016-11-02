@@ -4359,7 +4359,7 @@ if(itemsSet != itemsSet_) {
 			if(items[aId].isEVal()) { items[aId] = itW = new Object(); itW.descr = aDscr; itW.wr = aWr; itW.alarm = 0; }
 			if(iIt_flgs.indexOf("a") >= 0) {
 				this.attrAdd(aId, aDscr, iIt_vtp);
-				if(aWr)	oAVals[aId] = 0;	//EVAL_INT;
+				if(aWr)	oAVals[aId] = EVAL_INT;
 				this[aId].set(EVAL_INT, 0, 0, true);
 			}
 			iIt_IOA++;

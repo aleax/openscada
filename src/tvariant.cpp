@@ -407,8 +407,8 @@ TVariant TVarObj::propGet( const string &ids, char sep )
 void TVarObj::propSet( const string &id, TVariant val )
 {
     dataM.lock();
-    if(val.isEVal()) mProps.erase(id);
-    else mProps[id] = val;
+    //if(val.isEVal()) mProps.erase(id); else
+    mProps[id] = val;
     dataM.unlock();
 }
 
