@@ -1,4 +1,5 @@
 2016-11-02 Roman
+- FIX:Transport.Serial: Some flow control options wrong clear reverted.
 - FIX:SYS: Discard for attributes of object clear at EVAL assign.
 - DAQ.JavaLikeCalc: "in" and "var" as variables fixed.
 - !!:FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher expanded by the notify messages criteria of its category and level.

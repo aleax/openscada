@@ -354,7 +354,7 @@ void TTrIn::connect( )
 	// Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
 	mRTSfc = mRTSlvl = mRTSEcho = false;
-	tio.c_cflag &= ~(CRTSCTS|IXON|IXOFF|IXANY);	//Force hardware and software control clear
+	tio.c_cflag &= ~CRTSCTS;
 	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
 	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
@@ -926,7 +926,7 @@ void TTrOut::start( int tmCon )
 
 	    // Set flow control
 	    string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
-	    tio.c_cflag &= ~(CRTSCTS|IXON|IXOFF|IXANY);	//Force hardware and software control clear
+	    tio.c_cflag &= ~CRTSCTS;
 	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
 	    else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
