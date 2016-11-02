@@ -620,7 +620,7 @@ retry:
 	    return ERR;
 	}
 	//Check IO
-	//if((yylval.reg=pF->regAt(pF->ioGet(smb_nm)))) return VAR;
+	if((yylval.reg=pF->regAt(pF->ioGet(smb_nm)))) return VAR;
 
 	//Keywords
 	if(smb_nm == "in")	return IN;
