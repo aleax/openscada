@@ -24,7 +24,9 @@
 #include <QObject>
 #include <QTranslator>
 #include <QMainWindow>
+#include <QApplication>
 #include <QCloseEvent>
+#include <QSessionManager>
 
 #include <tuis.h>
 
@@ -101,6 +103,19 @@ private slots:
     void aboutQt( );
     void enterWhatsThis( );
     void enterManual( );
+};
+
+//*************************************************
+//* StApp                                         *
+//*************************************************
+class StApp : public QApplication
+{
+    Q_OBJECT
+
+    public:
+	StApp( int &argv, char **args ) : QApplication(argv, args) { }
+
+	void saveState( QSessionManager &manager )	{ manager.setRestartHint(QSessionManager::RestartNever); }
 };
 
 //*************************************************

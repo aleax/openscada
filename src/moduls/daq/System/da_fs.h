@@ -1,7 +1,7 @@
 
-//OpenSCADA system module DAQ.System file: da.h
+//OpenSCADA system module DAQ.System file: da_fs.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2016 by Roman Savochenko, <rom_as@oscada.org>           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,46 +18,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef DA_H
-#define DA_H
+#ifndef DA_FS_H
+#define DA_FS_H
 
-#include <tcontroller.h>
-
-using namespace OSCADA;
+#include "da.h"
 
 namespace SystemCntr
 {
 
 //*************************************************
-//* DA                                            *
+//* FS                                            *
 //*************************************************
-class TMdPrm;
-class TMdContr;
-
-class DA: public TElem
+class FS: public DA
 {
     public:
 	//Methods
-	DA( ) : TElem("da_el")	{ }
-	virtual ~DA( )		{ }
+	FS( );
+	~FS( );
 
-	virtual string id( ) = 0;
-	virtual string name( ) = 0;
+	string id( )	{ return "fs"; }
+	string name( )	{ return _("File Systems"); }
 
-	virtual bool isSlow( )	{ return false; }
+	void init( TMdPrm *prm );
+	void getVal( TMdPrm *prm );
 
-	virtual void init( TMdPrm *prm ) 	{ }
-	virtual void deInit( TMdPrm *prm )	{ }
+	void makeActiveDA( TMdContr *a_cntr );
 
-	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
-	virtual void cfgChange( TCfg &co, const TVariant &pc )	{ }
-
-	virtual void getVal( TMdPrm *prm )	{ }
-	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }
-
-	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
+    private:
+	//Methods
+	void mpList( vector<string> &list );
 };
 
 } //End namespace
 
-#endif //DA_H
+#endif //DA_FS_H

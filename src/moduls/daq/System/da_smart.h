@@ -50,6 +50,8 @@ class HddSmart: public DA
 	string id( )	{ return "hddsmart"; }
 	string name( )	{ return "HDD Smart"; }
 
+	bool isSlow( )	{ return true; }
+
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );

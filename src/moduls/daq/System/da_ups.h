@@ -50,6 +50,8 @@ class UPS: public DA
 	string id( )	{ return "ups"; }
 	string name( )	{ return _("UPS (NUT)"); }
 
+	bool isSlow( )	{ return true; }
+
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );
 

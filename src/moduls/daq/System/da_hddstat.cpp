@@ -54,7 +54,7 @@ void HddStat::init( TMdPrm *prm )
 {
     TCfg &c_subt = prm->cfg("SUBT");
 
-    //> Create Configuration
+    //Create Configuration
     c_subt.fld().setDescr(_("Disk(part)"));
 
     vector<string> list;
@@ -75,8 +75,7 @@ void HddStat::dList( vector<string> &list, bool part )
     char buf[256];
 
     FILE *f = fopen("/proc/partitions","r");
-    while(f && fgets(buf,sizeof(buf),f) != NULL)
-    {
+    while(f && fgets(buf,sizeof(buf),f) != NULL) {
 	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
 	if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
 	    continue;
@@ -94,14 +93,12 @@ void HddStat::getVal( TMdPrm *prm )
     bool devOK = false;
 
     string dev = prm->cfg("SUBT").getS();
-    if((f=fopen("/proc/diskstats","r")))
-    {
+    if((f=fopen("/proc/diskstats","r"))) {
 	//major minor name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
 	//--or for a partition--
 	//major minor name rio rsect wio wsect
 	snprintf(sc_pat, sizeof(sc_pat), "%%*d %%*d %s %%*d %%lu %%lu %%lu %%*d %%*d %%lu", dev.c_str());
-	for(int n; fgets(buf,sizeof(buf),f) != NULL; )
-	{
+	for(int n; fgets(buf,sizeof(buf),f) != NULL; ) {
 	    if(!(n=sscanf(buf,sc_pat,&rd,&rd1,&wr,&wr1))) continue;
 	    if(n == 4)	{ rd = rd1; wr = wr1; }
 	    rdVl = (double)rd*512;
@@ -111,13 +108,11 @@ void HddStat::getVal( TMdPrm *prm )
 	}
 	fclose(f);
     }
-    if(!devOK && (f=fopen("/proc/partitions","r")))
-    {
+    if(!devOK && (f=fopen("/proc/partitions","r"))) {
 	//major minor #blocks name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
 	snprintf(sc_pat,sizeof(sc_pat),"%%*d %%*d %%*d %s %%*d %%*d %%lu %%*d %%*d %%*d %%lu",dev.c_str());
 	while(fgets(buf,sizeof(buf),f) != NULL)
-	    if(sscanf(buf,sc_pat,&rd,&wr) == 2)
-	    {
+	    if(sscanf(buf,sc_pat,&rd,&wr) == 2) {
 		rdVl = (double)rd*512;
 		wrVl = (double)wr*512;
 		devOK = true;
@@ -126,8 +121,7 @@ void HddStat::getVal( TMdPrm *prm )
 	fclose(f);
     }
 
-    if(devOK)
-    {
+    if(devOK) {
 	prm->daErr = "";
 	double lstVl = prm->vlAt("rd").at().getR(0, true);
 	prm->vlAt("rdSp").at().setR((lstVl != EVAL_REAL && rdVl > lstVl) ?
@@ -139,8 +133,7 @@ void HddStat::getVal( TMdPrm *prm )
 	prm->vlAt("rd").at().setR(rdVl, 0, true);
 	prm->vlAt("wr").at().setR(wrVl, 0, true);
     }
-    else if(!prm->daErr.getVal().size())
-    {
+    else if(!prm->daErr.getVal().size()) {
 	prm->setEval();
 	prm->daErr = _("10:Device is not available.");
     }
@@ -152,15 +145,13 @@ void HddStat::makeActiveDA( TMdContr *aCntr )
 
     vector<string> list;
     dList(list,true);
-    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
-    {
+    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
 	vector<string> pLs;
-	// Find propper parameter's object
+	//Find propper parameter's object
 	aCntr->list(pLs);
 
 	unsigned i_p;
-	for(i_p = 0; i_p < pLs.size(); i_p++)
-	{
+	for(i_p = 0; i_p < pLs.size(); i_p++) {
 	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
 	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
 	}

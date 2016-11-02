@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,7 @@
 #include "da_hddstat.h"
 #include "da_netstat.h"
 #include "da_ups.h"
+#include "da_fs.h"
 #include "os_contr.h"
 
 //*************************************************
@@ -48,7 +49,7 @@
 #define MOD_NAME	_("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.8"
+#define MOD_VER		"2.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
@@ -94,7 +95,7 @@ TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 TTpContr::~TTpContr( )
 {
     nodeDelAll();
-    for(unsigned i_da = 0; i_da < mDA.size(); i_da++)	delete mDA[i_da];
+    for(unsigned iDA = 0; iDA < mDA.size(); iDA++)	delete mDA[iDA];
     mDA.clear();
 }
 
@@ -118,9 +119,10 @@ void TTpContr::postEnable( int flag )
     daReg(new HddStat());
     daReg(new NetStat());
     daReg(new UPS());
+    daReg(new FS());
 
     //Controler's bd structure
-    fldAdd(new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
     fldAdd(new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system"));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
@@ -131,12 +133,12 @@ void TTpContr::postEnable( int flag )
     string el_id,el_name,el_def;
     vector<string> list;
     daList(list);
-    for(unsigned i_ls = 0; i_ls < list.size(); i_ls++) {
-	if(i_ls == 0)	el_def = list[i_ls];
-	el_id += list[i_ls]+";";
-	el_name = el_name+_(daGet(list[i_ls])->name().c_str())+";";
+    for(unsigned iLs = 0; iLs < list.size(); iLs++) {
+	if(iLs == 0)	el_def = list[iLs];
+	el_id += list[iLs]+";";
+	el_name = el_name+_(daGet(list[iLs])->name().c_str())+";";
     }
-    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
     tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"255"));
     tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",_("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
@@ -147,16 +149,16 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 void TTpContr::daList( vector<string> &da )
 {
     da.clear();
-    for(unsigned i_da = 0; i_da < mDA.size(); i_da++)
-	da.push_back(mDA[i_da]->id());
+    for(unsigned iDA = 0; iDA < mDA.size(); iDA++)
+	da.push_back(mDA[iDA]->id());
 }
 
 void TTpContr::daReg( DA *da )	{ mDA.push_back(da); }
 
 DA *TTpContr::daGet( const string &da )
 {
-    for(unsigned i_da = 0; i_da < mDA.size(); i_da++)
-	if(mDA[i_da]->id() == da) return mDA[i_da];
+    for(unsigned iDA = 0; iDA < mDA.size(); iDA++)
+	if(mDA[iDA]->id() == da) return mDA[iDA];
 
     return NULL;
 }
@@ -166,8 +168,8 @@ void TTpContr::perSYSCall( unsigned int cnt )
     //Recheck auto-controllers to create parameters for new devices
     vector<string> clist;
     list(clist);
-    for(unsigned i_c = 0; i_c < clist.size(); i_c++)
-	at(clist[i_c]).at().devUpdate();
+    for(unsigned iC = 0; iC < clist.size(); iC++)
+	at(clist[iC]).at().devUpdate();
 }
 
 //*************************************************
@@ -175,7 +177,7 @@ void TTpContr::perSYSCall( unsigned int cnt )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem) : TController(name_c,daq_db,cfgelem),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
-    prcSt(false), callSt(false), endrunReq(false), mPer(1e9), tm_calc(0)
+    prcSt(false), callSt(false), endrunReq(false), mPer(1e9)
 {
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
@@ -192,18 +194,21 @@ string TMdContr::getStatus( )
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
 	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "), tm2s(1e-6*tm_calc).c_str());
+	rez += TSYS::strMess(_("Spent time: %s[%s]. "),
+		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
     return rez;
 }
 
 void TMdContr::devUpdate( )
 {
-    if(enableStat() && cfg("AUTO_FILL").getB()) {
+    int aFill = cfg("AUTO_FILL").getI();
+    if(enableStat() && aFill) {
 	vector<string> list;
 	mod->daList(list);
-	for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	    mod->daGet(list[i_l])->makeActiveDA(this);
+	for(unsigned iL = 0; iL < list.size(); iL++)
+	    if((mod->daGet(list[iL])->isSlow() && aFill&0x02) || (!mod->daGet(list[iL])->isSlow() && aFill&0x01))
+		mod->daGet(list[iL])->makeActiveDA(this);
     }
 }
 
@@ -241,19 +246,19 @@ void TMdContr::stop_( )
 
     //Set Eval for parameters
     ResAlloc res(enRes, true);
-    for(unsigned i_prm = 0; i_prm < pHd.size(); i_prm++)
-	pHd[i_prm].at().setEval();
+    for(unsigned iPrm = 0; iPrm < pHd.size(); iPrm++)
+	pHd[iPrm].at().setEval();
 }
 
 void TMdContr::prmEn( const string &id, bool val )
 {
     ResAlloc res(enRes, true);
-    unsigned i_prm;
-    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if(pHd[i_prm].at().id() == id) break;
+    unsigned iPrm;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(pHd[iPrm].at().id() == id) break;
 
-    if(val && i_prm >= pHd.size())	pHd.push_back(at(id));
-    if(!val && i_prm < pHd.size())	pHd.erase(pHd.begin()+i_prm);
+    if(val && iPrm >= pHd.size())	pHd.push_back(at(id));
+    if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -265,19 +270,14 @@ void *TMdContr::Task( void *icntr )
 
     while(!cntr.endrunReq) {
 	if(!cntr.redntUse()) {
-	    cntr.callSt = true;
 	    //Update controller's data
-	    try {
-		int64_t t_cnt = TSYS::curTime();
-
-		cntr.enRes.resRequestR();
-		for(unsigned i_p=0; i_p < cntr.pHd.size(); i_p++)
-		    cntr.pHd[i_p].at().getVal();
-		cntr.enRes.resRelease();
-
-		cntr.tm_calc = TSYS::curTime()-t_cnt;
-	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    cntr.enRes.resRequestR();
+	    cntr.callSt = true;
+	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		try { cntr.pHd[iP].at().getVal(); }
+		catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    cntr.callSt = false;
+	    cntr.enRes.resRelease();
 	}
 
 	TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
@@ -353,12 +353,12 @@ void TMdPrm::save_( )
 {
     if(!mAuto)	TParamContr::save_();
 
-    //> Save archives
-    vector<string> a_ls;
-    vlList(a_ls);
-    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-	if(!vlAt(a_ls[i_a]).at().arch().freeStat())
-	    vlAt(a_ls[i_a]).at().arch().at().save();
+    //Save archives
+    vector<string> aLs;
+    vlList(aLs);
+    for(unsigned iA = 0; iA < aLs.size(); iA++)
+	if(!vlAt(aLs[iA]).at().arch().freeStat())
+	    vlAt(aLs[iA]).at().arch().at().save();
 }
 
 void TMdPrm::vlGet( TVal &val )
@@ -404,15 +404,15 @@ void TMdPrm::setEval( )
     vector<string> als;
     mDA->fldList(als);
     if(als.size()) {
-	for(unsigned i_a = 0; i_a < als.size(); i_a++)
-	    if(vlPresent(als[i_a]))
-		vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
+	for(unsigned iA = 0; iA < als.size(); iA++)
+	    if(vlPresent(als[iA]))
+		vlAt(als[iA]).at().setS(EVAL_STR,0,true);
     }
     else {
 	vlList(als);
-	for(unsigned i_a = 0; i_a < als.size(); i_a++)
-	    if(!(als[i_a] == "SHIFR" || als[i_a] == "OWNER" || als[i_a] == "NAME" || als[i_a] == "DESCR" || als[i_a] == "err"))
-		vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
+	for(unsigned iA = 0; iA < als.size(); iA++)
+	    if(!(als[iA] == "SHIFR" || als[iA] == "OWNER" || als[iA] == "NAME" || als[iA] == "DESCR" || als[iA] == "err"))
+		vlAt(als[iA]).at().setS(EVAL_STR,0,true);
     }
 }
 

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:02+0300\n"
+"POT-Creation-Date: 2016-11-02 18:22+0200\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -38,6 +38,34 @@ msgstr "Общая нагрузка процессора"
 
 msgid "CPU Load: "
 msgstr "Нагрузка процессора: "
+
+msgid "Total (GB)"
+msgstr "Всего (ГБ)"
+
+msgid "Used (GB)"
+msgstr "Использовано (ГБ)"
+
+msgid "Free (GB)"
+msgstr "Свободно (ГБ)"
+
+msgid "Total file nodes"
+msgstr "Всего файловых узлов"
+
+msgid "Used file nodes"
+msgstr "Использовано файловых узлов"
+
+msgid "Free file nodes"
+msgstr "Свободно файловых узлов"
+
+msgid "Mount point"
+msgstr "Точка монтирования"
+
+msgid "10:Mountpoint isn't available."
+msgstr "10:Точка монтирования не доступна."
+
+#, c-format
+msgid "File system: '%s'"
+msgstr "Файловая система: '%s'"
 
 msgid "Read (B)"
 msgstr "Прочитано (Б)"
@@ -189,6 +217,9 @@ msgstr ""
 msgid "Auto create active DA"
 msgstr "Авт. создавать активные ист. данных"
 
+msgid "Manual;Fast sources;Slow sources;All sources"
+msgstr "Ручной;Быстрые источники;Медленные источники;Все источники"
+
 msgid "System parameters table"
 msgstr "Таблица системных параметров"
 
@@ -221,9 +252,8 @@ msgstr "Вызовы с периодом: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Затрачено времени: %s[%s]. "
 
 msgid "2:Controller stopped"
 msgstr "2:Контроллер остановлен"
@@ -237,6 +267,9 @@ msgstr "Ошибка записи значения в атрибут '%s': %s"
 
 msgid "CPU"
 msgstr "Процессор"
+
+msgid "File Systems"
+msgstr "Файловые Системы"
 
 msgid "HDD statistic"
 msgstr "Статистика HDD"

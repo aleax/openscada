@@ -1041,7 +1041,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			setAttr("modif",u2s(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
-		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"{owner}:{group}\"."));
+		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and groups(separated by ',') in form \"{owner}:{groups}\"."));
 		    else if(list_a[i_el] == "perm")
 			el->setAttr("help",_("Permission to the widget in form \"{user}{group}{other}\".\n"
 					     "Where \"user\", \"group\" and \"other\" is:\n"

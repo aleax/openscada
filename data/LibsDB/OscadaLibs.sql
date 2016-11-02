@@ -334,27 +334,29 @@ INSERT INTO "lib_Controllers_io" VALUES('prescr','f_frq','Function calculate fre
 INSERT INTO "lib_Controllers_io" VALUES('prescr','f_start','Function start flag',3,0,'0',0,1,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','this','This controller object link',4,0,'0',0,3,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_start','Function start flag',3,0,'',0,13,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailTopic','EMail topic',0,0,'Notification',0,6,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailMess','EMail message',0,0,'',0,7,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,15,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_stop','Function stop flag',3,0,'0',0,14,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','this','This controller object link',4,0,'0',0,16,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_start','Function start flag',3,0,'',0,15,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailTopic','EMail topic',0,0,'Notification',0,8,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailMess','EMail message',0,0,'',0,9,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,17,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','f_stop','Function stop flag',3,0,'0',0,16,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','this','This controller object link',4,0,'0',0,18,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','tmOut','Maximum notification timeout, seconds',1,0,'5',0,0,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTrId','SMS serial transport, empty for disable',0,0,'SMS',0,9,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSPin','SMS pin, empty for disable',0,0,'1111',0,10,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTrId','SMS serial transport, empty for disable',0,0,'SMS',0,11,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSPin','SMS pin, empty for disable',0,0,'1111',0,12,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('test','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('test','f_start','Function start flag',3,0,'0',0,1,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('test','f_stop','Function stop flag',3,0,'0',0,2,'','','','');
 INSERT INTO "lib_Controllers_io" VALUES('test','this','This controller object link',4,0,'0',0,3,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailServer','Output transport for SMTP connection, empty for disable',0,0,'Sockets.out_SMTP',0,2,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailAuth','Auth, empty for disable',0,0,'user:pass',0,3,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailSender','Sender',0,0,'noreply@oscada.org',0,4,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailReceiver','Destination receiver address',0,0,'test@oscada.org',0,5,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTel','SMS destination receiver, tel. number',0,0,'+380XXXXXXXXX',0,11,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailState','Email current state',0,1,'',0,1,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSState','SMS current state',0,1,'',0,8,'','','','');
-INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTextMd','SMS in text mode, else PDU',3,0,'0',0,12,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailServer','Output transport for SMTP connection, empty for disable',0,0,'Sockets.out_SMTP',0,4,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailAuth','Auth, empty for disable',0,0,'user:pass',0,5,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailSender','Sender',0,0,'noreply@oscada.org',0,6,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailReceiver','Destination receiver address',0,0,'test@oscada.org',0,7,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTel','SMS destination receiver, tel. number',0,0,'+380XXXXXXXXX',0,13,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','emailState','Email current state',0,1,'',0,3,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSState','SMS current state',0,1,'',0,10,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','SMSTextMd','SMS in text mode, else PDU',3,0,'0',0,14,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','messLev','Messages level, negative for alarms',1,0,'1',0,1,'','','','');
+INSERT INTO "lib_Controllers_io" VALUES('ntfDispatch','messCat','Messages category, template or regular expression',0,0,'al*:*',0,2,'','','','');
 CREATE TABLE 'lib_servProc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "lib_servProc_io" VALUES('procArh','fromarch','From archive',0,0,'Archive.va_ai3_code',0,0,'З архіву','','Из архива','');
 INSERT INTO "lib_servProc_io" VALUES('procArh','toarch','To archive',0,0,'Archive.va_ai3_dP',0,1,'У архів','','В архив','');
@@ -2874,6 +2876,29 @@ INSERT INTO "Trs" VALUES('ns','','');
 INSERT INTO "Trs" VALUES('Allowed variables','','');
 INSERT INTO "Trs" VALUES('No data','','');
 INSERT INTO "Trs" VALUES('No a data','','');
+INSERT INTO "Trs" VALUES('Disable ECHO error: %1','','');
+INSERT INTO "Trs" VALUES('Check for PIN-code error: %1','','');
+INSERT INTO "Trs" VALUES('Set PIN error: %1','','');
+INSERT INTO "Trs" VALUES('Set SMS Text mode error: %1','','');
+INSERT INTO "Trs" VALUES('Sent SMS error: %1','','');
+INSERT INTO "Trs" VALUES('Sent SMS PDU error: %1','','');
+INSERT INTO "Trs" VALUES('Set SMS PDU mode error: %1','','');
+INSERT INTO "Trs" VALUES('Impossible connect to the SMTP-server.','','');
+INSERT INTO "Trs" VALUES('No a response.','','');
+INSERT INTO "Trs" VALUES('HELLO error: %1.','','');
+INSERT INTO "Trs" VALUES('Unsupported auth methods: %1.','','');
+INSERT INTO "Trs" VALUES('Auth required: %1.','','');
+INSERT INTO "Trs" VALUES('AUTH error: %1.','','');
+INSERT INTO "Trs" VALUES('AUTH USER error: %1.','','');
+INSERT INTO "Trs" VALUES('AUTH PASS error: %1.','','');
+INSERT INTO "Trs" VALUES('MAIL FROM error: %1.','','');
+INSERT INTO "Trs" VALUES('RCPT TO error: %1.','','');
+INSERT INTO "Trs" VALUES('DATA error: %1.','','');
+INSERT INTO "Trs" VALUES('DATA send error: %1.','','');
+INSERT INTO "Trs" VALUES('Alarm','','');
+INSERT INTO "Trs" VALUES('Norm','','');
+INSERT INTO "Trs" VALUES('Sent %1. In queue %2.','','');
+INSERT INTO "Trs" VALUES('Error: %1.','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -7448,7 +7473,7 @@ INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',1,10,0,
 INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher','','','Notifications dispatcher by EMail and SMS for alarms.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
-Version: 1.2.0','','',1,10,0,'//Initial
+Version: 1.3.0','','',1,30,0,'//Initial
 if(f_start) {
 	queue = new Object();
 	queueSMS = new Object();
@@ -7462,7 +7487,7 @@ if(f_start) {
 }
 if(f_stop)	{ emailState = SMSState = ""; return; }
 if(emailServer_ != emailServer) {
-	SMTPTr = emailServer.length ? SYS.Transport.nodeAt(emailServer) : false;
+	SMTPTr = emailServer.length ? SYS.Transport.nodeAt(emailServer,".") : false;
 	emailServer_ = emailServer;
 }
 if(SMSTrId_ != SMSTrId)	{
@@ -7471,10 +7496,10 @@ if(SMSTrId_ != SMSTrId)	{
 }
 
 //Current alarms reading, and the queue of dispatching update
-mess = SYS.Archive.messGet(prTm, SYS.time(), "al*:*", 1, "<buffer>");
+mess = SYS.Archive.messGet(prTm, SYS.time(), messCat, abs(messLev), "<buffer>");
 for(iM = 0; iM < mess.length; iM++) {
 	oM = mess[iM];
-	if(oM.tm == prTm && oM.utm <= prTmU)	continue;
+	if((oM.tm == prTm && oM.utm <= prTmU) || (messLev < 0 && oM.level >= 0))	continue;
 
 	if(emailServer.length)	queue[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
 	if(SMSTr)	queueSMS[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
@@ -7547,11 +7572,11 @@ if(!SMSTr)	SMSState = "Disabled!";
 else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
-}','','',1477847685);
+}','','',1478107758);
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('SMS','','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 2.1.0','','',1,0,0,'','','JavaLikeCalc.JavaScript
+Version: 2.1.1','','',1,0,0,'','','JavaLikeCalc.JavaScript
 //Request form:
 //<{cmd} pin="1111" tel="+380XXXXXXXXX" text="{0|1}" err="1:Error">{SMSText}</cmd>
 //  cmd - command, for now only "send" allowed;
@@ -7562,7 +7587,7 @@ Version: 2.1.0','','',1,0,0,'','','JavaLikeCalc.JavaScript
 //  err - sets for the request result.
 
 //Transport''s timings check
-if(tr.timings() != "10000:100")	tr.timings("10000:100");
+if(tr.timings() != "5000:100")	tr.timings("5000:100");
 
 if(io.name() == "send") {
 	tel = io.attr("tel");
@@ -7633,7 +7658,7 @@ if(io.name() == "send") {
 		//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
 	}
 	io.setAttr("err", "0");
-}','',1477848479);
+}','',1478107736);
 INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Protocol level of typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vasiliy Grigoriev from "Vacuum technologies laboratory (http://e-beam.ru)".','','',1,0,0,'','','JavaLikeCalc.JavaScript

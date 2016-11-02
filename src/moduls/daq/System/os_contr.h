@@ -143,7 +143,7 @@ class TMdContr: public TController
 		endrunReq;	//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> > pHd;
 
-	double	mPer, tm_calc;	// Scheme's calc time
+	double	mPer;		//Calc time period
 };
 
 //*************************************************

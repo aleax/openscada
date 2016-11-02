@@ -21,8 +21,10 @@ WorkDir=$StartWorkDir
 DESKTOP_DIR=
 if [ -n "$(which xdg-user-dir)" ] && [ -n "$(xdg-user-dir DESKTOP)" ]; then DESKTOP_DIR="$(xdg-user-dir DESKTOP)"; fi
 
+# Get the project name from first argument
+ProjName=`echo $1 | sed -n "/--ProjName=\(.*\)/s//\1/p"`
 # Get the project name from filename openscada_{ProjName}
-ProjName=`echo $0 | sed -n "/.*openscada_\(.*\)/s//\1/p"`;
+if test "x$ProjName" = "x"; then ProjName=`echo $0 | sed -n "/.*openscada_\(.*\)/s//\1/p"`; else shift; fi
 # Get the project name from variable "OSCADA_ProjName"
 if test "x$ProjName" = "x" -o "$ProjName" = "start"; then ProjName=$OSCADA_ProjName; fi
 # Set the project name to default "start"

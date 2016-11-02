@@ -46,7 +46,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.8.6"
+#define MOD_VER		"1.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -253,7 +253,7 @@ void *TUIMod::Task( void * )
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
     //Qt application object init
-    QApplication *QtApp = new QApplication(mod->qtArgC, (char**)&mod->qtArgV);
+    StApp *QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
     QtApp->setApplicationName(PACKAGE_STRING);
     QtApp->setQuitOnLastWindowClosed(false);
     mod->runSt = true;

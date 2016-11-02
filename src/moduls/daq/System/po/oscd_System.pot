@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:02+0300\n"
+"POT-Creation-Date: 2016-11-02 18:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,34 @@ msgid "Full CPU Load"
 msgstr ""
 
 msgid "CPU Load: "
+msgstr ""
+
+msgid "Total (GB)"
+msgstr ""
+
+msgid "Used (GB)"
+msgstr ""
+
+msgid "Free (GB)"
+msgstr ""
+
+msgid "Total file nodes"
+msgstr ""
+
+msgid "Used file nodes"
+msgstr ""
+
+msgid "Free file nodes"
+msgstr ""
+
+msgid "Mount point"
+msgstr ""
+
+msgid "10:Mountpoint isn't available."
+msgstr ""
+
+#, c-format
+msgid "File system: '%s'"
 msgstr ""
 
 msgid "Read (B)"
@@ -187,6 +215,9 @@ msgstr ""
 msgid "Auto create active DA"
 msgstr ""
 
+msgid "Manual;Fast sources;Slow sources;All sources"
+msgstr ""
+
 msgid "System parameters table"
 msgstr ""
 
@@ -220,7 +251,7 @@ msgid "Call next by cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s. "
+msgid "Spent time: %s[%s]. "
 msgstr ""
 
 msgid "2:Controller stopped"
@@ -234,6 +265,9 @@ msgid "Write value to attribute '%s' error: %s"
 msgstr ""
 
 msgid "CPU"
+msgstr ""
+
+msgid "File Systems"
 msgstr ""
 
 msgid "HDD statistic"

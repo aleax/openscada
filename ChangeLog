@@ -1,3 +1,11 @@
+2016-11-02 Roman
+- !!:FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher expanded by the notify messages criteria of its category and level.
+- SYS: data/openscada_start.in: expanded by first argument --ProjName={PNm} project's selection.
+- !!:DAQ.System: Expanded by "FS" data source. Automatic creation of sources expanded to modes of sources "Fast" and "Slow".
+- FIX:Transport.Serial: Some flow control options clear added.
+- UI.QTStarter: X Session manager disabled from restart the closed at exit programms.
+
+
 2016-10-30 Roman
 - !!:FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher unified, stabilized and status is added for SMS and EMail sent by direct OpenSCADA functions.
     !!:Self SMS send implementing unified and expanded for: disable ECHO, check/set PIN, TEST and PDU SMS mode.

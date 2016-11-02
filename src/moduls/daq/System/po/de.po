@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 18:02+0300\n"
+"POT-Creation-Date: 2016-11-02 18:22+0200\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -43,6 +43,34 @@ msgstr "Auslastung des Prozessors"
 
 msgid "CPU Load: "
 msgstr "Auslastung des Prozessors: "
+
+msgid "Total (GB)"
+msgstr "Total (GB)"
+
+msgid "Used (GB)"
+msgstr "Verwendete (GB)"
+
+msgid "Free (GB)"
+msgstr "Frei (GB)"
+
+msgid "Total file nodes"
+msgstr "Gesamte Datei Knoten"
+
+msgid "Used file nodes"
+msgstr "Verwendete Datei-Knoten"
+
+msgid "Free file nodes"
+msgstr "Freie Datei Knoten"
+
+msgid "Mount point"
+msgstr "Einhängepunkt"
+
+msgid "10:Mountpoint isn't available."
+msgstr "10:Mountpoint ist nicht verfügbar."
+
+#, c-format
+msgid "File system: '%s'"
+msgstr "Dateisystem: '%s'"
 
 msgid "Read (B)"
 msgstr "Gelesen (B)"
@@ -194,6 +222,9 @@ msgstr ""
 msgid "Auto create active DA"
 msgstr "Automatisches Erstellen ist aktiv - DA"
 
+msgid "Manual;Fast sources;Slow sources;All sources"
+msgstr "Manuell;Schnelle Quellen;Langsame Quellen;Alle Quellen"
+
 msgid "System parameters table"
 msgstr "Tabelle der Systemparameter"
 
@@ -226,9 +257,8 @@ msgstr "Aufruf mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s. "
-msgstr "Verbrauchte Zeit: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Verbrauchte Zeit: %s[%s]. "
 
 msgid "2:Controller stopped"
 msgstr "2:Controller ist angehalten"
@@ -242,6 +272,9 @@ msgstr "Schreiben Sie Wert auf das Attribut '%s' Fehler: %s"
 
 msgid "CPU"
 msgstr "Prozessor"
+
+msgid "File Systems"
+msgstr "Dateisysteme"
 
 msgid "HDD statistic"
 msgstr "HDD Statistik"

@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.5.1"
+#define MOD_VER		"1.5.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -108,7 +108,7 @@ AutoHD<TTrOut> TTr::outAt( const string &name )	{ return TTypeTransport::outAt(n
 
 void TTr::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
 }
 
@@ -354,7 +354,7 @@ void TTrIn::connect( )
 	// Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
 	mRTSfc = mRTSlvl = mRTSEcho = false;
-	tio.c_cflag &= ~CRTSCTS;
+	tio.c_cflag &= ~(CRTSCTS|IXON|IXOFF|IXANY);	//Force hardware and software control clear
 	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
 	else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
@@ -926,7 +926,7 @@ void TTrOut::start( int tmCon )
 
 	    // Set flow control
 	    string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
-	    tio.c_cflag &= ~CRTSCTS;
+	    tio.c_cflag &= ~(CRTSCTS|IXON|IXOFF|IXANY);	//Force hardware and software control clear
 	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
 	    else if(strcasecmp(fc.c_str(),"rts") == 0)	{ mRTSfc = mRTSEcho = true; }
