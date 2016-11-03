@@ -54,7 +54,7 @@ INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><co
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','User interface''s main elements library.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.2.2','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
+Version: 1.3.0','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версія: 1.1.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
 Автор: Роман Савоченко <rom_as@oscada.org>
@@ -4390,7 +4390,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordColor','gray',32,'','','
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','bordStyle','6',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','name','',32,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','dscr','Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.1',42,'Parameter|DESCR','','','','','','','','');
+Version: 1.2.0',42,'Parameter|DESCR','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomY','13.376',32,'','','btPass','','','','','','');
@@ -17034,21 +17034,6 @@ INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so','0geomY','0');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_control/pg_graphSelPrm','0geomX','50');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_control/pg_graphSelPrm','0geomY','257');
 INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','log','val:0');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','addr','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','name','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','dscr','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','min','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','max','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','log','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','ed','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','prec','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','aMax','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','aMin','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','wMax','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','wMin','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','pModeA','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','pModeC','');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el2','color','orange');
 CREATE TABLE 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main" VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -18555,7 +18540,7 @@ if(allowSel && ((en && name.isEVal()) || !loadFromSess)) {
 	//Load stored session''s assignments
 	if(!loadFromSess) {
 		for(off = 0; (lnA="addr;name;dscr;min;max;ed;log;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; ) {
-			if(lnA != "color") this.linkSet(lnA, "");
+			if(!f_start && lnA != "color") this.linkSet(lnA, "");
 			if((wA=this.attr(user+lnA,true)).length) this.linkSet(lnA, wA);
 		}
 		//if((cVal=this.attr("color",true)).length) this.color = cVal;
@@ -18591,17 +18576,19 @@ if(!enMode.isEVal() && enMode) {
 else mode_en = false;
 
 //Events process
-evRez = "";
-for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+toSave = false;
+for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	//messPut("Trend en",0,"Event: "+evCur);
 	if(evCur == "key_mouseDblClick" || evCur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
 	//Store session''s assignments
-	else if(evCur == "usr_set")
-		for(off = 0; (lnA="addr;name;dscr;min;max;log;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
-			this.attrSet(user+lnA, this.link(lnA), true);
+	else if(evCur == "usr_set")	toSave = true;
 	else evRez += evCur+"\n";
 }
 event = evRez;
+
+if(toSave || (f_start && allowSel))
+	for(off = 0; (lnA="addr;name;dscr;min;max;log;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
+		this.attrSet(user+lnA, this.link(lnA), true);
 
 if(bordStyle == 1) color = "-";
 trClr_lineClr = color;
@@ -18614,7 +18601,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1477414088);
+}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1478204656);
 INSERT INTO "wlb_Main" VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka

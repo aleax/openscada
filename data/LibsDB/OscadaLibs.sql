@@ -7473,7 +7473,7 @@ INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',1,10,0,
 INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher','','','Notifications dispatcher by EMail and SMS for alarms.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
-Version: 1.3.0','','',1,30,0,'//Initial
+Version: 1.3.1','','',1,30,0,'//Initial
 if(f_start) {
 	queue = new Object();
 	queueSMS = new Object();
@@ -7525,7 +7525,7 @@ for(var nM in queue) {
 	req.setAttr("ProtIt", "SMTP").setAttr("auth", emailAuth).setAttr("from", emailSender).setAttr("to", emailReceiver).setAttr("topic", topic).setText(mess);
 	SMTPTr.messIO(req, "UserProtocol");
 	//SYS.messInfo("NTF", "Send error: "+req.attr("err"));
-	if(!req.attr("err").toInt()) { queue[nM] = EVAL; emailSentN++; }
+	if(!req.attr("err").toInt()) { delete queue[nM]; emailSentN++; }
 	else {
 		emailQueueN++;
 		if(!emailErr.length)	emailErr = req.attr("err");
@@ -7537,7 +7537,7 @@ for(var nM in queue) {
 	req += " -o tls=no -o message-charset=utf8";
 	//SYS.messInfo("NTF","Send mess: "+req);
 	rez = SYS.system(req, true);
-	if(!rez) { queue[nM] = EVAL; emailSentN++; }
+	if(!rez) { delete queue[nM]; emailSentN++; }
 	else {
 		emailQueueN++;
 		if(!emailErr.length)	emailErr = req.attr("err");
@@ -7562,7 +7562,7 @@ for(var nM in queueSMS) {
 	mess = oM.mess;
 	req = SYS.XMLNode("send"); req.setAttr("ProtIt", "SMS").setAttr("pin", SMSPin).setAttr("text",SMSTextMd).setAttr("tel", SMSTel).setText(mess);
 	SMSTr.messIO(req, "UserProtocol");
-	if(!req.attr("err").toInt()) { queueSMS[nM] = EVAL; SMSSentN++; }
+	if(!req.attr("err").toInt()) { delete queueSMS[nM]; SMSSentN++; }
 	else {
 		SMSQueueN++;
 		if(!SMSErr.length)	SMSErr = req.attr("err");
@@ -7572,7 +7572,7 @@ if(!SMSTr)	SMSState = "Disabled!";
 else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
-}','','',1478107758);
+}','','',1478202000);
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('SMS','','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
 Author: Roman Savochenko <rom_as@oscada.org>

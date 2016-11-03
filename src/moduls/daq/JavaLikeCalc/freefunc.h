@@ -95,6 +95,7 @@ class Reg
 	    MviFuncArg,	//[CRR]: Load the function arguments object.
 	    Ass,	//[CRRrr]: Assign from register to register.
 	    Mov,	//[CRRrr]: Move from register to register.
+	    Delete,	//[CRR]: Delete/free object into the register.
 	    OPrpSt,	//[CRRn_____]: Load string of object's properties len <n>  to register <R>.
 	    OPrpDin,	//[CRRrr]: Load register's value of object's properties to register <R>.
 	    Add, AddAss,//[CRRrrRR]: Real, string add.

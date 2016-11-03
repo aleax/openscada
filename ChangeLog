@@ -1,11 +1,15 @@
+2016-11-03 Roman
+- FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher adapted to object's attributes deletion by the operator "delete".
+- FIX:DB.LibsDB.vcaBase: Main.ElViewGraph: Adapted to store static parameters in the selection mode.
+- SYS: TVariant.propClear() expanded to single property clean.
+- !!!!:DAQ.JavaLikeCalc: Expanded by operator "delete" for objects or its properties free.
+
+
 2016-11-02 Roman
-- FIX:Transport.Serial: Some flow control options wrong clear reverted.
 - FIX:SYS: Discard for attributes of object clear at EVAL assign.
-- DAQ.JavaLikeCalc: "in" and "var" as variables fixed.
 - !!:FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher expanded by the notify messages criteria of its category and level.
 - SYS: data/openscada_start.in: expanded by first argument --ProjName={PNm} project's selection.
 - !!:DAQ.System: Expanded by "FS" data source. Automatic creation of sources expanded to modes of sources "Fast" and "Slow".
-- FIX:Transport.Serial: Some flow control options clear added.
 - UI.QTStarter: X Session manager disabled from restart the closed at exit programms.
 
 

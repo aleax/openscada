@@ -1908,6 +1908,30 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		}
 		cprg += sizeof(SCode); continue;
 	    }
+	    // Delete objects and its properties
+	    case Reg::Delete: {
+		struct SCode { uint8_t cod; uint16_t r; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#ifdef OSC_DEBUG
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: Delete %d.", cprg, ptr->r);
+#endif
+		if(reg[ptr->r].props().empty())
+		    switch(reg[ptr->r].type()) {
+			case Reg::Obj:
+			    if(!reg[ptr->r].vConst()) reg[ptr->r] = EVAL_REAL;
+			    break;
+			case Reg::Var:
+			    if(val->ioType(reg[ptr->r].val().io) == IO::Object)
+				setValO(val, reg[ptr->r], AutoHD<TVarObj>(new TVarObj()));
+			    break;
+			default: break;
+		    }
+		else {
+		    TVariant obj = getVal(val, reg[ptr->r], true);
+		    if(obj.type() == TVariant::Object) obj.getO().at().propClear(reg[ptr->r].props().back());
+		}
+		cprg += sizeof(SCode); continue;
+	    }
 	    // Load properties for object
 	    case Reg::OPrpSt: {
 		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; } __attribute__((packed));

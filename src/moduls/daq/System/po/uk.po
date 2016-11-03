@@ -28,7 +28,7 @@ msgid "Idle (%)"
 msgstr "Бездія (%)"
 
 msgid "General"
-msgstr "В загалі"
+msgstr "Взагалі"
 
 msgid "10:Device is not available."
 msgstr "10:Пристрій недоступний."

@@ -407,7 +407,6 @@ TVariant TVarObj::propGet( const string &ids, char sep )
 void TVarObj::propSet( const string &id, TVariant val )
 {
     dataM.lock();
-    //if(val.isEVal()) mProps.erase(id); else
     mProps[id] = val;
     dataM.unlock();
 }
@@ -424,10 +423,11 @@ void TVarObj::propSet( const string &ids, char sep, TVariant val )
     if(tid.size() && off >= (int)ids.size())	obj.getO().at().propSet(tid, val);
 }
 
-void TVarObj::propClear( )
+void TVarObj::propClear( const string &ids )
 {
     dataM.lock();
-    mProps.clear();
+    if(ids.size()) mProps.erase(ids);
+    else mProps.clear();
     dataM.unlock();
 }
 

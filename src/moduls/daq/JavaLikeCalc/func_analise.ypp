@@ -51,7 +51,7 @@ void sfErr( const string &mess, YYLTYPE *ps );
     char op[256];	//Object's properties, internal function
 }
 
-%token	ERR VAR_DIR IF ELSE WHILE FOR IN BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW OBJECT ARRAY REGEXP
+%token	ERR VAR_DIR IF ELSE WHILE FOR IN BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW DELETE OBJECT ARRAY REGEXP
 %token	<id>	FUNC INT_FUNC B_FUNC B_FUNC1 B_FUNC2
 %token	<reg>	VAR CONST
 %token	<op>	O_PRP_F FUNCTON
@@ -116,6 +116,11 @@ solve:  assign ';'
 			    break;
 			}
 		pF->prg += (char)Reg::EndFull;
+	    }
+	| DELETE var ';'	{
+		pF->prg += (uint8_t)Reg::Delete;
+		uint16_t addr = $2->pos();
+		pF->prg.append((char*)&addr, sizeof(uint16_t));
 	    }
 	| FUNC '(' prmlst ')' ';'
 	    { try{ pF->cdExtFnc($1,$3,true); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
@@ -492,6 +497,7 @@ retry:
 	if(smb_nm == "continue")return CONTINUE;
 	if(smb_nm == "return")	return RETURN;
 	if(smb_nm == "new")	return NEW;
+	if(smb_nm == "delete")	return DELETE;
 	if(smb_nm == "Object")	return OBJECT;
 	if(smb_nm == "Array")	return ARRAY;
 	if(smb_nm == "RegExp")	return REGEXP;
