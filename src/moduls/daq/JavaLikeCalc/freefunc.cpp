@@ -1481,7 +1481,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// int toInt(int base = 0) - convert this string to integer number
 		//  base - radix of subject sequence
 		if(prop == "toInt") return (int)strtol(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
-		// string parse(int pos, string sep = ".", int off = 0) - get token with numbet <pos> from the string when separated by <sep>
+		// string parse(int pos, string sep = ".", int off = 0) - get token with number <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
 		//  sep - items separator
@@ -1494,7 +1494,16 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
 		    return rez;
 		}
-		// string parsePath(int pos, int off = 0) - get path token with numbet <pos> from the string and from offset <off>
+		// string parseLine(int pos, int off = 0) - get line with number <pos> from the string and from offset <off>
+		//  pos - item position
+		//  off - start position
+		if(prop == "parseLine" && prms.size()) {
+		    int off = (prms.size() >= 2) ? prms[1].getI() : 0;
+		    string rez = TSYS::strLine(vl.getS(), prms[0].getI(), &off);
+		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
+		    return rez;
+		}
+		// string parsePath(int pos, int off = 0) - get path token with number <pos> from the string and from offset <off>
 		//  pos - item position
 		//  off - start position
 		if(prop == "parsePath" && prms.size()) {

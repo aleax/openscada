@@ -1,3 +1,8 @@
+2016-11-07 Roman
+- TSecurity: User API function User::groups() and Group::user() is added.
+- DAQ.JavaLikeCalc: "Program translation allow" disabled by default. String's user API function parseLine() is added.
+
+
 2016-11-03 Roman
 - FIX:DB.LibsDB.OscadaLibs: Notifications dispatcher adapted to object's attributes deletion by the operator "delete".
 - FIX:DB.LibsDB.vcaBase: Main.ElViewGraph: Adapted to store static parameters in the selection mode.

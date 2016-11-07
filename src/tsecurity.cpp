@@ -402,6 +402,20 @@ void TUser::save_( )
 
 TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // Array groups( ) - groups list of the user.
+    if(iid == "groups") {
+	TArrayObj *rez = new TArrayObj();
+	try {
+	    vector<string> ls;
+	    owner().grpList(ls);
+	    for(unsigned iG = 0, iGa = 0; iG < ls.size(); iG++)
+		if(owner().grpAt(ls[iG]).at().user(name()))
+		    rez->arSet(iGa++, ls[iG]);
+	} catch(...){ }
+
+	return rez;
+    }
+
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
@@ -454,9 +468,9 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    XMLNode *vl  = ctrMkNode("list",opt,-1,"/prm/grps/vl","",RWRWR_);
 	    vector<string> ls;
 	    owner().grpList(ls);
-	    for(unsigned i_g = 0; i_g < ls.size(); i_g++) {
-		if(grp)	grp->childAdd("el")->setText(ls[i_g]);
-		if(vl)	vl->childAdd("el")->setText(i2s(owner().grpAt(ls[i_g]).at().user(name())));
+	    for(unsigned iG = 0; iG < ls.size(); iG++) {
+		if(grp)	grp->childAdd("el")->setText(ls[iG]);
+		if(vl)	vl->childAdd("el")->setText(i2s(owner().grpAt(ls[iG]).at().user(name())));
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR)) {
@@ -541,13 +555,16 @@ void TGroup::userDel( const string &name )
     }
 }
 
-TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const string &iuser )
 {
+    // bool user( string nm ) - check for the user including to the group.
+    if(iid == "user" && prms.size())	return user(prms[0].getS());
+
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user);
+    TVariant cfRez = objFunc(iid, prms, iuser);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, iuser);
 }
 
 void TGroup::cntrCmdProc( XMLNode *opt )
