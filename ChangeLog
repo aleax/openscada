@@ -1,3 +1,7 @@
+2016-11-08 Roman
+- Transport.Serial: "No stop on proceed" option is added to output transports.
+
+
 2016-11-07 Roman
 - TSecurity: User API function User::groups() and Group::user() is added.
 - DAQ.JavaLikeCalc: "Program translation allow" disabled by default. String's user API function parseLine() is added.

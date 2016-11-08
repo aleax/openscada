@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.5.2"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -722,7 +722,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut                                   *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), mKeepAliveLstTm(0), trIn(0), trOut(0),
+    TTransportOut(name,idb,el), mNoStopOnProceed(false), fd(-1), mLstReqTm(0), mKeepAliveLstTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
     mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"),
@@ -743,6 +743,7 @@ void TTrOut::load_( )
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("NoStopOnProceed");	if(!vl.empty()) setNoStopOnProceed(s2i(vl));
 	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(s2i(vl));
 	vl = prmNd.attr("MdmLifeTime");	if(!vl.empty()) setMdmLifeTime(s2i(vl));
 	vl = prmNd.attr("MdmPreInit");	if(!vl.empty()) setMdmPreInit(s2r(vl));
@@ -765,6 +766,7 @@ void TTrOut::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("TMS", timings());
+    prmNd.setAttr("NoStopOnProceed", i2s(noStopOnProceed()));
     prmNd.setAttr("MdmTm", i2s(mdmTm()));
     prmNd.setAttr("MdmLifeTime", i2s(mdmLifeTime()));
     prmNd.setAttr("MdmPreInit", r2s(mdmPreInit()));
@@ -1080,7 +1082,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 
     float wRtsDelay2 = 1e-3*s2r(TSYS::strParse(timings(),0,":",&off));
 
-    if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
+    if(wKeepAliveTm && !noStopOnProceed() && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
 	mess_debug(nodePath().c_str(), _("Restart by KeepAliveTm %gs."), wKeepAliveTm);
 	stop();
 	start();
@@ -1119,7 +1121,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 		}
 		err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
 		mLstReqTm = TSYS::curTime();
-		stop();
+		if(!noStopOnProceed()) stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Write error: %s"), err.c_str());
 		throw TError(nodePath().c_str(), _("Write error: %s"), err.c_str());
 	    } else trOut += kz;
@@ -1163,7 +1165,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	else if(kz < 0) {
 	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);
 	    mLstReqTm = TSYS::curTime();
-	    stop();
+	    if(!noStopOnProceed()) stop();
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
 	    throw TError(nodePath().c_str(), _("Read (select) error: %s"), err.c_str());
 	}
@@ -1178,7 +1180,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time, 
 	    if(blen < 0 || (blen == 0 && oBuf && oLen > 0 && !noReq)) {
 		err = (blen < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno) : _("No data");
 		mLstReqTm = TSYS::curTime();
-		stop();
+		if(!noStopOnProceed()) stop();
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read error: %s"), err.c_str());
 		throw TError(nodePath().c_str(), _("Read error: %s"), err.c_str());
 	    }
@@ -1289,6 +1291,8 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    KeepAliveTm - keep alive timeout in seconds for restart transport;\n"
 	    "    rtsDelay1 - the delay from the transmitter enabling by the RTS signal and to same the transferring, in ms;\n"
 	    "    rtsDelay2 - the delay from the transferring finish and the transmitter disabling by the RTS signal, in ms."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/noStopOnProceed",_("No stop on proceed"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",
+	    _("Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you alowed to prevent it by that option."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
@@ -1322,6 +1326,10 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
+    }
+    else if(a_path == "/prm/cfg/noStopOnProceed") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(noStopOnProceed()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setNoStopOnProceed(s2i(opt->text()));
     }
     else if(a_path == "/mod/tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(mdmTm()));
