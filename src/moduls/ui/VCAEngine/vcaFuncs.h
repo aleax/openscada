@@ -40,8 +40,8 @@ class sesUser : public TFunction
 	    setStart(true);
 	}
 
-	string name( ) const	{ return _("Session user"); }
-	string descr( ) const	{ return _("Return session user by session's widget path."); }
+	string name( )	{ return _("Session user"); }
+	string descr( )	{ return _("Return session user by session's widget path."); }
 
 	void calc( TValFunc *val ) {
 	    try {
@@ -66,8 +66,8 @@ class wdgList : public TFunction
 	    setStart(true);
 	}
 
-	string name( ) const	{ return _("Widgets list"); }
-	string descr( ) const	{ return _("Return widgets list into widget container or child list. If set <pg> then return pages list for projects and sessions."); }
+	string name( )	{ return _("Widgets list"); }
+	string descr( )	{ return _("Return widgets list into widget container or child list. If set <pg> then return pages list for projects and sessions."); }
 
 	void calc( TValFunc *val ) {
 	    TArrayObj *rez = new TArrayObj();
@@ -101,8 +101,8 @@ class nodePresent : public TFunction
 	    setStart(true);
 	}
 
-	string name( ) const	{ return _("Node present"); }
-	string descr( ) const	{ return _("Checking for node, include widgets, attributes and other present."); }
+	string name( )	{ return _("Node present"); }
+	string descr( )	{ return _("Checking for node, include widgets, attributes and other present."); }
 
 	void calc( TValFunc *val ) {
 	    try {
@@ -126,8 +126,8 @@ class attrList : public TFunction
 	    setStart(true);
 	}
 
-	string name( ) const	{ return _("Attributes list"); }
-	string descr( ) const	{ return _("Return attributes list for widget. If set <noUser> then return only not user's attributes."); }
+	string name( )	{ return _("Attributes list"); }
+	string descr( )	{ return _("Return attributes list for widget. If set <noUser> then return only not user's attributes."); }
 
 	void calc( TValFunc *val ) {
 	    string sls;
@@ -159,8 +159,8 @@ class attrGet : public TFunction
 	    setStart(true);
 	}
 
-	string name( ) const	{ return _("Attribute get"); }
-	string descr( ) const	{ return _("Getting widget's attribute value."); }
+	string name( )	{ return _("Attribute get"); }
+	string descr( )	{ return _("Getting widget's attribute value."); }
 
 	void calc( TValFunc *val ) {
 	    string a = val->getS(2);
@@ -204,8 +204,8 @@ class attrSet : public TFunction
 	    setStart(true);
 	}
 
-	string name( ) const	{ return _("Attribute set"); }
-	string descr( ) const	{ return _("Setup widget's attribute to value."); }
+	string name( )	{ return _("Attribute set"); }
+	string descr( )	{ return _("Setup widget's attribute to value."); }
 
 	void calc( TValFunc *val ) {
 	    string a = val->getS(2);

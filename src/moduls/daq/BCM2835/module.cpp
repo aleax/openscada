@@ -38,7 +38,7 @@
 #define MOD_NAME	_("BCM 2835")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.2"
+#define MOD_VER		"1.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO and other. Mostly for and used in Raspberry Pi.")
 #define LICENSE		"GPL2"

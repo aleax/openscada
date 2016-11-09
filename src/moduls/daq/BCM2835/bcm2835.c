@@ -451,10 +451,26 @@ void bcm2835_delayMicroseconds(uint64_t micros)
 	return;
     }
 
+    if(micros < 450) {
+	struct timespec spTm;
+	int64_t stTm = 0, cTm, toTm = 1000ll*micros;
+	while(1) {
+	    clock_gettime(CLOCK_MONOTONIC, &spTm);
+	    cTm = 1000000000ll*spTm.tv_sec + spTm.tv_nsec;
+	    if(!stTm) stTm = cTm;
+	    else if((cTm-stTm) >= toTm) break;
+	}
+    }
+    else {
+	t1.tv_sec = 0;
+	t1.tv_nsec = 1000 * (long)(micros-100);
+	nanosleep(&t1, NULL);
+    }
+
     /* Calling nanosleep() takes at least 100-200 us, so use it for
     // long waits and use a busy wait on the System Timer for the rest.
     */
-    start =  bcm2835_st_read();
+    /*start =  bcm2835_st_read();
     
     if (micros > 450)
     {
@@ -463,7 +479,7 @@ void bcm2835_delayMicroseconds(uint64_t micros)
 	nanosleep(&t1, NULL);
     }    
   
-    bcm2835_st_delay(start, micros);
+    bcm2835_st_delay(start, micros);*/
 }
 
 /*
