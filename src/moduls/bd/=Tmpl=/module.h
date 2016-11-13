@@ -136,7 +136,7 @@ class MBD : public TBD
 	string	cdPg;
 
 	//!!! The database access resource
-	pthread_mutex_t	connRes;
+	ResMtx	connRes;
 };
 
 //!!! Root module object realisation define.

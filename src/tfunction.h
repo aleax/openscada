@@ -263,7 +263,7 @@ class TValFunc
 
 	TFunction	*mFunc;
 	map<int,TValFunc* >	vctx;
-	pthread_mutex_t mRes;
+	ResMtx mRes;
 };
 
 //***********************************************************

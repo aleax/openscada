@@ -1,3 +1,9 @@
+2016-11-13 Roman
+- DB.LibsDB.OscadaLibs: DAQ.JavaLikeCalc service procedures, controllers and regulators libraries were cleaned and unified.
+    Devices template library was appended by template of the pressure I2C sensor BMP180.
+- Function,UI.VCAEngine: pthread_mutex_t was replaced to ResMtx.
+
+
 2016-11-09 Roman
 - SYS: sysSleep() moved to clock_nanosleep(), CLOCK_MONOTONIC and clock_gettime() for short times lesser to 300us.
 - FIX:DAQ.BCM2835: Librarie's function bcm2835_delayMicroseconds() moved to clock_gettime() for prevent crashes into the not privileged mode.

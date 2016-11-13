@@ -264,7 +264,7 @@ class Widget : public TCntrNode
 	virtual void calc( Widget *base );
 	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
 
-	virtual pthread_mutex_t	&mtxAttr( )	{ return mtxAttrM; }
+	ResMtx	&mtxAttr( )	{ return mtxAttrM; }
 
 	//Attributes
 	// Generic data
@@ -281,8 +281,7 @@ class Widget : public TCntrNode
 	AutoHD<Widget>	mParent;		//Parent widget
 	vector< AutoHD<Widget> > mHerit;	//Heritators
 	map<string, Attr* >	mAttrs;
-	pthread_mutex_t	mtxAttrM;
-	static pthread_mutex_t	mtxAttrCon;
+	ResMtx	mtxAttrM;
 };
 
 }

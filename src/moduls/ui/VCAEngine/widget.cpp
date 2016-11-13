@@ -31,25 +31,16 @@ using namespace VCA;
 //************************************************
 //* Widget                                       *
 //************************************************
-pthread_mutex_t Widget::mtxAttrCon = PTHREAD_MUTEX_INITIALIZER;
-
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), mEnable(false), mLnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
+    mId(id), mEnable(false), mLnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg), mtxAttrM(true)
 {
     inclWdg = grpAdd("wdg_");
-
-    //Attributes mutex create
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mtxAttrM, &attrM);
-    pthread_mutexattr_destroy(&attrM);
 }
 
 Widget::~Widget( )
 {
     //Remove attributes
-    pthread_mutex_lock(&mtxAttr());
+    mtxAttr().lock();
     map<string,Attr*>::iterator p;
     while((p = mAttrs.begin()) != mAttrs.end()) {
 	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
@@ -57,10 +48,7 @@ Widget::~Widget( )
 	delete p->second;
 	mAttrs.erase(p);
     }
-    pthread_mutex_unlock(&mtxAttr());
-
-    //Attributes mutex destroy
-    pthread_mutex_destroy(&mtxAttrM);
+    mtxAttr().unlock();
 }
 
 TCntrNode &Widget::operator=( const TCntrNode &node )
@@ -533,14 +521,14 @@ string Widget::wChDown( const string &ia )
 
 void Widget::attrList( vector<string> &list ) const
 {
-    pthread_mutex_lock(&const_cast<Widget*>(this)->mtxAttr());
+    const_cast<Widget*>(this)->mtxAttr().lock();
     list.clear();
     list.reserve(mAttrs.size());
     for(map<string, Attr* >::const_iterator p = mAttrs.begin(); p != mAttrs.end(); ++p) {
 	while(p->second->mOi >= list.size())	list.push_back("");
 	list[p->second->mOi] = p->first;
     }
-    pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
+    const_cast<Widget*>(this)->mtxAttr().unlock();
 }
 
 void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allInher )
@@ -552,10 +540,10 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 	return;
     }
     try {
-	pthread_mutex_lock(&mtxAttr());
+	mtxAttr().lock();
 	if(mAttrs.size() >= ((1<<ATTR_OI_DEPTH)-1)) {
 	    if(!inher) delete attr;
-	    pthread_mutex_unlock(&mtxAttr());
+	    mtxAttr().unlock();
 	    mess_err(nodePath().c_str(),_("Adding a new attribute '%s' number more to %d!"),anm.c_str(),(1<<ATTR_OI_DEPTH)-1);
 	    return;
 	}
@@ -570,7 +558,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 	//Set modif for new attribute reload allow
 	if(forceMdf) a->setModif(modifVal(*a));
     } catch(...) { }
-    pthread_mutex_unlock(&mtxAttr());
+    mtxAttr().unlock();
 
     //Update heritors' attributes
     for(unsigned iH = 0; allInher && iH < mHerit.size(); iH++)
@@ -590,7 +578,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
 
     //Self delete
     try {
-	pthread_mutex_lock(&mtxAttr());
+	mtxAttr().lock();
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())	throw TError(nodePath().c_str(), _("Attribute '%s' is not present!"), attr.c_str());
 	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
@@ -602,14 +590,14 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	delete p->second;
 	mAttrs.erase(p);
     } catch(...) { }
-    pthread_mutex_unlock(&mtxAttr());
+    mtxAttr().unlock();
 }
 
 bool Widget::attrPresent( const string &attr ) const
 {
-    pthread_mutex_lock(&const_cast<Widget*>(this)->mtxAttr());
+    const_cast<Widget*>(this)->mtxAttr().lock();
     bool rez = (mAttrs.find(attr) != mAttrs.end());
-    pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
+    const_cast<Widget*>(this)->mtxAttr().unlock();
     return rez;
 }
 
@@ -617,14 +605,14 @@ AutoHD<Attr> Widget::attrAt( const string &attr, int lev ) const
 {
     //Local atribute request
     if(lev < 0) {
-	pthread_mutex_lock(&const_cast<Widget*>(this)->mtxAttr());
+	const_cast<Widget*>(this)->mtxAttr().lock();
 	map<string, Attr* >::const_iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end()) {
-	    pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
+	    const_cast<Widget*>(this)->mtxAttr().unlock();
 	    throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
 	}
 	AutoHD<Attr> rez(p->second);
-	pthread_mutex_unlock(&const_cast<Widget*>(this)->mtxAttr());
+	const_cast<Widget*>(this)->mtxAttr().unlock();
 	return rez;
     }
     //Process by full path
@@ -1642,7 +1630,7 @@ Attr::~Attr( )
 
 void Attr::setFld( TFld *fld, bool inher )
 {
-    if(owner()) pthread_mutex_lock(&owner()->mtxAttr());
+    if(owner()) owner()->mtxAttr().lock();
     //Free for previous type
     if(mFld && (!fld || fld->type() != mFld->type()))
 	switch(mFld->type()) {
@@ -1686,7 +1674,7 @@ void Attr::setFld( TFld *fld, bool inher )
     if(mFld && !inher)	mFld->setLen(1);
     else if(mFld && inher)	mFld->setLen(mFld->len()+1);
     mFlgSelf = inher ? mFlgSelf|Attr::IsInher : mFlgSelf & ~Attr::IsInher;
-    if(owner()) pthread_mutex_unlock(&owner()->mtxAttr());
+    if(owner()) owner()->mtxAttr().unlock();
 }
 
 const string &Attr::id( ) const	{ return fld().name(); }
@@ -1733,9 +1721,9 @@ string Attr::getS( bool sys )
 	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? i2s((bool)tvl) : EVAL_STR; }
 	case TFld::Object:	{ AutoHD<TVarObj> tvl = getO(sys); return (tvl.at().objName() != "EVAL") ? tvl.at().getStrXML() : EVAL_STR; }
 	case TFld::String: {
-	    pthread_mutex_lock(&owner()->mtxAttr());
+	    owner()->mtxAttr().lock();
 	    string tvl = *mVal.s;
-	    pthread_mutex_unlock(&owner()->mtxAttr());
+	    owner()->mtxAttr().unlock();
 	    return tvl;
 	}
 	default: break;
@@ -1794,9 +1782,9 @@ AutoHD<TVarObj> Attr::getO( bool sys )
     if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getO();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getO(true),false).getO();
     if(fld().type() != TFld::Object) return new TEValObj;
-    pthread_mutex_lock(&owner()->mtxAttr());
+    owner()->mtxAttr().lock();
     AutoHD<TVarObj> tvl = *mVal.o;
-    pthread_mutex_unlock(&owner()->mtxAttr());
+    owner()->mtxAttr().unlock();
 
     return tvl;
 }
@@ -1840,14 +1828,14 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	case TFld::String: {
 	    if((!strongPrev && *mVal.s == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
-	    pthread_mutex_lock(&owner()->mtxAttr());
+	    owner()->mtxAttr().lock();
 	    string t_str = *mVal.s;
 	    *mVal.s = val;
-	    pthread_mutex_unlock(&owner()->mtxAttr());
+	    owner()->mtxAttr().unlock();
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_str))) {
-		pthread_mutex_lock(&owner()->mtxAttr());
+		owner()->mtxAttr().lock();
 		*mVal.s = t_str;
-		pthread_mutex_unlock(&owner()->mtxAttr());
+		owner()->mtxAttr().unlock();
 	    }
 	    else {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1945,14 +1933,14 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 	case TFld::Object: {
 	    if((!strongPrev && *mVal.o == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
-	    pthread_mutex_lock(&owner()->mtxAttr());
+	    owner()->mtxAttr().lock();
 	    AutoHD<TVarObj> t_obj = *mVal.o;
 	    *mVal.o = val;
-	    pthread_mutex_unlock(&owner()->mtxAttr());
+	    owner()->mtxAttr().unlock();
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_obj))) {
-		pthread_mutex_lock(&owner()->mtxAttr());
+		owner()->mtxAttr().lock();
 		*mVal.o = t_obj;
-		pthread_mutex_unlock(&owner()->mtxAttr());
+		owner()->mtxAttr().unlock();
 	    }
 	    else {
 		unsigned imdf = owner()->modifVal(*this);
@@ -1967,18 +1955,18 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 
 string Attr::cfgTempl( )
 {
-    pthread_mutex_lock(&owner()->mtxAttr());
+    owner()->mtxAttr().lock();
     string tvl = cfg.substr(0,cfg.find("\n"));
-    pthread_mutex_unlock(&owner()->mtxAttr());
+    owner()->mtxAttr().unlock();
     return tvl;
 }
 
 string Attr::cfgVal( )
 {
-    pthread_mutex_lock(&owner()->mtxAttr());
+    owner()->mtxAttr().lock();
     size_t sepp = cfg.find("\n");
     string tvl = (sepp!=string::npos) ? cfg.substr(sepp+1) : "";
-    pthread_mutex_unlock(&owner()->mtxAttr());
+    owner()->mtxAttr().unlock();
     return tvl;
 }
 
@@ -1986,13 +1974,13 @@ void Attr::setCfgTempl( const string &vl )
 {
     string t_tmpl = cfgTempl();
     if(t_tmpl == vl) return;
-    pthread_mutex_lock(&owner()->mtxAttr());
+    owner()->mtxAttr().lock();
     cfg = vl+"\n"+cfgVal();
-    pthread_mutex_unlock(&owner()->mtxAttr());
+    owner()->mtxAttr().unlock();
     if(!owner()->attrChange(*this,TVariant())) {
-	pthread_mutex_lock(&owner()->mtxAttr());
+	owner()->mtxAttr().lock();
 	cfg = t_tmpl+"\n"+cfgVal();
-	pthread_mutex_unlock(&owner()->mtxAttr());
+	owner()->mtxAttr().unlock();
     }
     else {
 	unsigned imdf = owner()->modifVal(*this);
@@ -2004,13 +1992,13 @@ void Attr::setCfgVal( const string &vl )
 {
     string t_val = cfgVal();
     if(t_val == vl) return;
-    pthread_mutex_lock(&owner()->mtxAttr());
+    owner()->mtxAttr().lock();
     cfg = cfgTempl()+"\n"+vl;
-    pthread_mutex_unlock(&owner()->mtxAttr());
+    owner()->mtxAttr().unlock();
     if(!owner()->attrChange(*this,TVariant())) {
-	pthread_mutex_lock(&owner()->mtxAttr());
+	owner()->mtxAttr().lock();
 	cfg = cfgTempl()+"\n"+t_val;
-	pthread_mutex_unlock(&owner()->mtxAttr());
+	owner()->mtxAttr().unlock();
     }
     else {
 	unsigned imdf = owner()->modifVal(*this);
@@ -2033,17 +2021,17 @@ void Attr::setFlgSelf( SelfAttrFlgs flg, bool sys )
 
 void Attr::AHDConnect( )
 {
-    pthread_mutex_lock(&owner()->mtxAttrCon);
+    owner()->dataRes().lock();
     if(mConn < ((1<<ATTR_CON_DEPTH)-1)) mConn++;
     else mess_err(owner()->nodePath().c_str(),_("Connections to attribute '%s' more to %d!"),id().c_str(),(1<<ATTR_CON_DEPTH)-1);
-    pthread_mutex_unlock(&owner()->mtxAttrCon);
+    owner()->dataRes().unlock();
 }
 
 bool Attr::AHDDisConnect( )
 {
-    pthread_mutex_lock(&owner()->mtxAttrCon);
+    owner()->dataRes().lock();
     if(mConn > 0) mConn--;
     else mess_err(owner()->nodePath().c_str(),_("Disconnection from attribute '%s' more to connections!"),id().c_str());
-    pthread_mutex_unlock(&owner()->mtxAttrCon);
+    owner()->dataRes().unlock();
     return false;
 }

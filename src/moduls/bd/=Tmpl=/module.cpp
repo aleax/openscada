@@ -98,19 +98,15 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //************************************************
 //* BDTmpl::MBD				         *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), connRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&connRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 //!!! Destructor for a DB-subsystem database object.
 MBD::~MBD( )
 {
-    pthread_mutex_destroy(&connRes);
+
 }
 
 //!!! Post disable processing function
