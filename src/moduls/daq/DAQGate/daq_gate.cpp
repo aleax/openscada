@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.5.11"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -98,6 +98,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200"));
+    fldAdd(new TFld("ALLOW_DEL_PA",_("Allow automatic remove parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"), true);
@@ -116,8 +117,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), enRes(true),
     mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
-    mSync(cfg("SYNCPER").getId()), mPerOld(cfg("PERIOD").getId()), mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
-    prcSt(false), call_st(false), endrunReq(false), alSt(-1), mPer(1e9), tmGath(0)
+    mSync(cfg("SYNCPER").getId()), mPerOld(cfg("PERIOD").getId()), mRestTm(cfg("TM_REST").getId()),
+    mPrior(cfg("PRIOR").getId()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()),
+    prcSt(false), callSt(false), endrunReq(false), alSt(-1), mPer(1e9)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -132,16 +134,17 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
 
     if(startStat() && !redntUse()) {
-	if(call_st)	val += TSYS::strMess(_("Call now. "));
+	if(callSt)	val += TSYS::strMess(_("Call now. "));
 	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s. "),tm2s(1e-6*tmGath).c_str());
+	val += TSYS::strMess(_("Spent time: %s[%s]. "),
+		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
 	bool isWork = false;
-	for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
-	    if(mStatWork[i_st].second.cntr > -1)
-		val += TSYS::strMess(_("Station '%s' error, restoring in %.3g s."),mStatWork[i_st].first.c_str(),mStatWork[i_st].second.cntr);
+	for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
+	    if(mStatWork[iSt].second.cntr > -1)
+		val += TSYS::strMess(_("Station '%s' error, restoring in %.3g s."),mStatWork[iSt].first.c_str(),mStatWork[iSt].second.cntr);
 	    else {
-		val += TSYS::strMess(_("Requests to station '%s': %.6g."),mStatWork[i_st].first.c_str(),-mStatWork[i_st].second.cntr);
+		val += TSYS::strMess(_("Requests to station '%s': %.6g."),mStatWork[iSt].first.c_str(),-mStatWork[iSt].second.cntr);
 		isWork = true;
 	    }
 	if(!isWork) val.replace(0,1,"10");
@@ -168,7 +171,7 @@ void TMdContr::enable_( )
 
     //Clear present parameters configuration
     list(prmLs);
-    for(unsigned i_p = 0; i_p < prmLs.size(); i_p++) at(prmLs[i_p]).at().setStats("");
+    for(unsigned iP = 0; iP < prmLs.size(); iP++) at(prmLs[iP]).at().setStats("");
 
     //Stations list update
     if(!mStatWork.size())
@@ -179,7 +182,7 @@ void TMdContr::enable_( )
 	mess_debug_(nodePath().c_str(), _("Enable: current stations: %d; parameters: %d."), mStatWork.size(), prmLs.size());
 
     //Remote station scaning. Controllers and parameters scaning
-    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
+    for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
 	for(int cpOff = 0; (cpEl=TSYS::strSepParse(cfg("CNTRPRM").getS(),0,'\n',&cpOff)).size(); )
 	    try {
 		// Parse parameters list
@@ -198,7 +201,7 @@ void TMdContr::enable_( )
 		prmLs.clear();
 		if(!prmId.empty() && prmId != "*") prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+prmId);	//Concrete parameter to root
 		else {	//Parameters group to root
-		    req.clear()->setName("get")->setAttr("path", "/"+mStatWork[i_st].first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
+		    req.clear()->setName("get")->setAttr("path", "/"+mStatWork[iSt].first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
 		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), "%s", req.text().c_str());
 		    else for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 			prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+req.childGet(i_ch)->attr("id"));
@@ -206,12 +209,12 @@ void TMdContr::enable_( )
 
 		if(messLev() == TMess::Debug)
 		    mess_debug_(nodePath().c_str(), _("Enable: station '%s' processing item '%s' for parameters %d."),
-						mStatWork[i_st].first.c_str(), cpEl.c_str(), prmLs.size());
+						mStatWork[iSt].first.c_str(), cpEl.c_str(), prmLs.size());
 
 		// Process root parameters
-		for(unsigned i_p = 0; i_p < prmLs.size(); i_p++) {
+		for(unsigned iP = 0; iP < prmLs.size(); iP++) {
 		    //  The root parameter ID, NAME and included parameters list request
-		    XMLNode *nT = req.clear()->setName("CntrReqs")->setAttr("path","/"+mStatWork[i_st].first+"/DAQ/"+prmLs[i_p]);
+		    XMLNode *nT = req.clear()->setName("CntrReqs")->setAttr("path","/"+mStatWork[iSt].first+"/DAQ/"+prmLs[iP]);
 		    nT->childAdd("get")->setAttr("path","%2fprm%2fcfg%2fSHIFR");
 		    nT->childAdd("get")->setAttr("path","%2fprm%2fcfg%2fNAME");
 		    nT->childAdd("get")->setAttr("path","%2fbr%2fprm_")->setAttr("recurs","1");
@@ -223,25 +226,25 @@ void TMdContr::enable_( )
 
 		    //  Find for the parameter
 		    list(prmLs1);
-		    unsigned i_p1 = 0;
-		    while(i_p1 < prmLs1.size() && at(prmLs1[i_p1]).at().prmAddr() != prmLs[i_p]) i_p1++;
-		    if(i_p1 >= prmLs1.size()) {
+		    unsigned iP1 = 0;
+		    while(iP1 < prmLs1.size() && at(prmLs1[iP1]).at().prmAddr() != prmLs[iP]) iP1++;
+		    if(iP1 >= prmLs1.size()) {
 			while(present(prmId) && at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
 			if(!present(prmId)) add(prmId, owner().tpPrmToId("std"));
 			curP = at(prmId);
 			curP.at().setName(req.childGet(1)->text());
-			curP.at().setPrmAddr(prmLs[i_p]);
+			curP.at().setPrmAddr(prmLs[iP]);
 		    } else curP = at(prmId);
 
 		    if(!curP.at().enableStat()) {
 			curP.at().enable();
 			if(enableStat()) curP.at().load();
 		    }
-		    curP.at().setStats(mStatWork[i_st].first);
+		    curP.at().setStats(mStatWork[iSt].first);
 		    gPrmLs.push_back(curP.at().ownerPath(true));
 
 		    //  Process included parameters
-		    string prmPath = prmLs[i_p], prmPathW;//, iPrmLs;
+		    string prmPath = prmLs[iP], prmPathW;//, iPrmLs;
 		    XMLNode *prmN = req.childGet(2), *prmW;
 		    vector<SPrmsStack> stack;
 		    for(unsigned i_ip = 0; true; ) {
@@ -261,9 +264,9 @@ void TMdContr::enable_( )
 
 			//   Find for the parameter
 			curP.at().list(prmLs1);
-			unsigned i_p1 = 0;
-			while(i_p1 < prmLs1.size() && curP.at().at(prmLs1[i_p1]).at().prmAddr() != prmPathW) i_p1++;
-			if(i_p1 >= prmLs1.size()) {
+			unsigned iP1 = 0;
+			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW) iP1++;
+			if(iP1 >= prmLs1.size()) {
 			    while(curP.at().present(prmId)) prmId = TSYS::strLabEnum(prmId);
 			    curP.at().add(prmId, owner().tpPrmToId("std"));
 			    curW = curP.at().at(prmId);
@@ -275,7 +278,7 @@ void TMdContr::enable_( )
 			    curW.at().enable();
 			    if(enableStat()) curW.at().load();
 			}
-			curW.at().setStats(mStatWork[i_st].first);
+			curW.at().setStats(mStatWork[iSt].first);
 			gPrmLs.push_back(curW.at().ownerPath(true));
 
 			//   Next level process
@@ -288,27 +291,29 @@ void TMdContr::enable_( )
 	    } catch(TError &err) { if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str()); }
 
     //Removing remotely missed parameters in case all remote stations active status by the actual list
-    bool prmChkToDel = true;
-    for(unsigned i_st = 0; prmChkToDel && i_st < mStatWork.size(); i_st++)
-	if(mStatWork[i_st].second.cntr >= 0) prmChkToDel = false;
-    if(prmChkToDel && enableStat()) {
-	MtxAlloc res(enRes, true);
-	for(unsigned i_prm = 0, i_gPrm = 0; i_prm < pHd.size(); ) {
-	    for(i_gPrm = 0; i_gPrm < gPrmLs.size() && gPrmLs[i_gPrm] != pHd[i_prm].at().ownerPath(true); ) i_gPrm++;
-	    if(i_gPrm >= gPrmLs.size()) {
-		string pId = pHd[i_prm].at().id();
-		try {
-		    TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[i_prm].at().nodePrev());
-		    if(pCntr) pCntr->del(pId, TParamContr::RM_NoArch);
-		    else del(pId, TParamContr::RM_NoArch);
-		    continue;
-		} catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),
+    if(mAllowToDelPrmAttr) {
+	bool prmChkToDel = true;
+	for(unsigned iSt = 0; prmChkToDel && iSt < mStatWork.size(); iSt++)
+	    if(mStatWork[iSt].second.cntr >= 0) prmChkToDel = false;
+	if(prmChkToDel && enableStat()) {
+	    MtxAlloc res(enRes, true);
+	    for(unsigned iPrm = 0, iGPrm = 0; iPrm < pHd.size(); ) {
+		for(iGPrm = 0; iGPrm < gPrmLs.size() && gPrmLs[iGPrm] != pHd[iPrm].at().ownerPath(true); ) iGPrm++;
+		if(iGPrm >= gPrmLs.size()) {
+		    string pId = pHd[iPrm].at().id();
+		    try {
+			TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[iPrm].at().nodePrev());
+			if(pCntr) pCntr->del(pId, TParamContr::RM_NoArch);
+			else del(pId, TParamContr::RM_NoArch);
+			continue;
+		    } catch(TError &err) {
+			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+			if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),
 			    _("Deletion parameter '%s' is error but it no present on the configuration or remote station."),pId.c_str());
+		    }
 		}
+		iPrm++;
 	    }
-	    i_prm++;
 	}
     }
 }
@@ -331,7 +336,7 @@ void TMdContr::start_( )
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     //Clear stations request counter
-    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second.cntr = -1;
+    for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++) mStatWork[iSt].second.cntr = -1;
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -361,21 +366,21 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
-    unsigned i_prm;
+    unsigned iPrm;
 
     MtxAlloc res(enRes, true);
-    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if(&pHd[i_prm].at() == prm) break;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(&pHd[iPrm].at() == prm) break;
 
-    if(val && i_prm >= pHd.size())	pHd.push_back(prm);
-    if(!val && i_prm < pHd.size())	pHd.erase(pHd.begin()+i_prm);
+    if(val && iPrm >= pHd.size())	pHd.push_back(prm);
+    if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
 }
 
 void *TMdContr::Task( void *icntr )
 {
     map<string,float>::iterator sti;
     TMdContr &cntr = *(TMdContr *)icntr;
-    int64_t t_cnt, t_prev = TSYS::curTime();
+    int64_t tCnt, tPrev = TSYS::curTime();
     double syncCnt = 0;
     unsigned int div = 0;
 
@@ -383,7 +388,7 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
     bool firstCall = true;
 
-    for(unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++) {
+    for(unsigned int itCnt = 0; !cntr.endrunReq; itCnt++) {
 	if(cntr.redntUse()) {
 	    //Request to the redundant host by messages
 	    if(cntr.mMessLev.getI() >= 0) {
@@ -417,63 +422,63 @@ void *TMdContr::Task( void *icntr )
 	    continue;
 	}
 
-	cntr.call_st = true;
-	t_cnt = TSYS::curTime();
+	cntr.callSt = true;
+	tCnt = TSYS::curTime();
 
 	try {
 	    //Allow stations presenting
 	    bool isAccess = false, needEnable = false;
-	    for(unsigned i_st = 0; i_st < cntr.mStatWork.size(); i_st++) {
-		if(firstCall)	cntr.mStatWork[i_st].second.cntr = 0;	//Reset counter for connection alarm state update
-		if(cntr.mStatWork[i_st].second.cntr > 0)
-		    cntr.mStatWork[i_st].second.cntr = vmax(0,cntr.mStatWork[i_st].second.cntr-1e-6*(t_cnt-t_prev));
-		if(cntr.mStatWork[i_st].second.cntr <= 0)	isAccess = true;
-		if(cntr.mStatWork[i_st].second.cntr == 0)	needEnable = true;	//!!!! May be only for all == 0 stations
+	    for(unsigned iSt = 0; iSt < cntr.mStatWork.size(); iSt++) {
+		if(firstCall)	cntr.mStatWork[iSt].second.cntr = 0;	//Reset counter for connection alarm state update
+		if(cntr.mStatWork[iSt].second.cntr > 0)
+		    cntr.mStatWork[iSt].second.cntr = vmax(0,cntr.mStatWork[iSt].second.cntr-1e-6*(tCnt-tPrev));
+		if(cntr.mStatWork[iSt].second.cntr <= 0)	isAccess = true;
+		if(cntr.mStatWork[iSt].second.cntr == 0)	needEnable = true;	//!!!! May be only for all == 0 stations
 	    }
-	    if(!isAccess) { t_prev = t_cnt; TSYS::sysSleep(1); continue; }
+	    if(!isAccess) { tPrev = tCnt; TSYS::sysSleep(1); continue; }
 	    else {
 		if(cntr.syncPer()) {	//Enable sync
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
 		    if(syncCnt <= 0) syncCnt = cntr.syncPer();
-		    syncCnt = vmax(0, syncCnt-1e-6*(t_cnt-t_prev));
+		    syncCnt = vmax(0, syncCnt-1e-6*(tCnt-tPrev));
 		}
 		else { div = 0; syncCnt = 1; }	//Disable sync
 
 		//Parameters list update
-		if(firstCall || needEnable || (!div && syncCnt <= 0) || (div && it_cnt > div && (it_cnt%div) == 0))
+		if(firstCall || needEnable || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
 		    try { cntr.enable_(); } catch(TError &err) { }
 
 		MtxAlloc resPrm(cntr.enRes, true);
 
 		//Mark no process
-		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++) {
-		    TMdPrm &pO = cntr.pHd[i_p].at();
-		    if(!pO.isSynced || (!div && syncCnt <= 0) || (div && it_cnt > div && (((it_cnt+i_p)%div) == 0))) pO.sync();
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
+		    TMdPrm &pO = cntr.pHd[iP].at();
+		    if(!pO.isSynced || (!div && syncCnt <= 0) || (div && itCnt > div && (((itCnt+iP)%div) == 0))) pO.sync();
 		    pO.isPrcOK = false;
 		}
 
 		//Station's cycle
-		for(unsigned i_st = 0; i_st < cntr.mStatWork.size(); i_st++) {
-		    if(cntr.mStatWork[i_st].second.cntr > 0) continue;
-		    XMLNode req("CntrReqs"); req.setAttr("path", "/"+cntr.mStatWork[i_st].first+"/DAQ/");
+		for(unsigned iSt = 0; iSt < cntr.mStatWork.size(); iSt++) {
+		    if(cntr.mStatWork[iSt].second.cntr > 0) continue;
+		    XMLNode req("CntrReqs"); req.setAttr("path", "/"+cntr.mStatWork[iSt].first+"/DAQ/");
 		    map<string, bool> cntrLstMA;
 		    string scntr;
 
 		    //Put attributes requests
-		    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++) {
-			TMdPrm &prm = cntr.pHd[i_p].at();
+		    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
+			TMdPrm &prm = cntr.pHd[iP].at();
 			if(prm.isPrcOK) continue;
 			for(int c_off = 0; (scntr=TSYS::strSepParse(prm.stats(),0,';',&c_off)).size(); ) {
-			    if(scntr != cntr.mStatWork[i_st].first) continue;
+			    if(scntr != cntr.mStatWork[iSt].first) continue;
 			    string aMod	= TSYS::pathLev(prm.prmAddr(), 0);
 			    string aCntr = TSYS::pathLev(prm.prmAddr(), 1);
 			    cntrLstMA[aMod+"/"+aCntr] = true;
 
-			    XMLNode *prmNd = req.childAdd("get")->setAttr("lcPs",i2s(i_p))->setAttr("path",prm.prmAddr()+"/%2fserv%2fattr");
+			    XMLNode *prmNd = req.childAdd("get")->setAttr("lcPs",i2s(iP))->setAttr("path",prm.prmAddr()+"/%2fserv%2fattr");
 			    prmNd->setAttr("hostTm", !cntr.restDtTm() ? "1" : "0");
 
 			    // Prepare individual attributes list
-			    bool sepReq = !prm.isEVAL && ((!div && syncCnt > 0) || (div && ((it_cnt+i_p)%div)));
+			    bool sepReq = !prm.isEVAL && ((!div && syncCnt > 0) || (div && ((itCnt+iP)%div)));
 			    prmNd->setAttr("sepReq", sepReq ? "1" : "0");
 			    if(!cntr.restDtTm() && !sepReq) continue;
 
@@ -501,7 +506,7 @@ void *TMdContr::Task( void *icntr )
 		    //Requests to the controllers messages prepare
 		    if(cntr.mMessLev.getI() >= 0)	//Else disabled
 			for(map<string,bool>::iterator i_c = cntrLstMA.begin(); i_c != cntrLstMA.end(); ++i_c) {
-			    int tm_grnd = cntr.mStatWork[i_st].second.lstMess[i_c->first];
+			    int tm_grnd = cntr.mStatWork[iSt].second.lstMess[i_c->first];
 			    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/"+i_c->first+"/%2fserv%2fmess")->setAttr("tm_grnd", i2s(tm_grnd));
 			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)	//Alarms force request
 				reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
@@ -527,13 +532,13 @@ void *TMdContr::Task( void *icntr )
 			    for(unsigned i_m = 0; i_m < prmNd->childSize(); i_m++) {
 				XMLNode *m = prmNd->childGet(i_m);
 				SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")),
-				    cntr.mStatWork[i_st].first+":"+m->attr("cat"), s2i(m->attr("lev")), m->text());
+				    cntr.mStatWork[iSt].first+":"+m->attr("cat"), s2i(m->attr("lev")), m->text());
 			    }
-			    cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] =
-				cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm")) :
+			    cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
+				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm")) :
 										    SYS->sysTm()-3600*cntr.restDtTm();
-			    cntr.mStatWork[i_st].second.lstMess["<<redundant>>"] =
-				cntr.mStatWork[i_st].second.lstMess["<<redundant>>"] ? s2i(prmNd->attr("tm")) :
+			    cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] =
+				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] ? s2i(prmNd->attr("tm")) :
 										    SYS->sysTm()-3600*cntr.restDtTm();
 			}
 			else {
@@ -542,8 +547,8 @@ void *TMdContr::Task( void *icntr )
 			    prm.isPrcOK = true;
 			    prm.isEVAL = false;
 
-			    for(unsigned i_a = 0; i_a < prmNd->childSize(); i_a++) {
-				XMLNode *aNd = prmNd->childGet(i_a);
+			    for(unsigned iA = 0; iA < prmNd->childSize(); iA++) {
+				XMLNode *aNd = prmNd->childGet(iA);
 				if(!prm.vlPresent(aNd->attr("id"))) continue;
 				AutoHD<TVal> vl = prm.vlAt(aNd->attr("id"));
 
@@ -565,8 +570,8 @@ void *TMdContr::Task( void *icntr )
 		}
 
 		//Mark no processed parameters to EVAL
-		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++) {
-		    TMdPrm &prm = cntr.pHd[i_p].at();
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
+		    TMdPrm &prm = cntr.pHd[iP].at();
 		    if(prm.isPrcOK || prm.isEVAL) continue;
 		    vector<string> vLs;
 		    prm.elem().fldList(vLs);
@@ -587,9 +592,8 @@ void *TMdContr::Task( void *icntr )
 	} catch(TError &err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	//Calc acquisition process time
-	t_prev = t_cnt;
-	cntr.tmGath = TSYS::curTime()-t_cnt;
-	cntr.call_st = false;
+	tPrev = tCnt;
+	cntr.callSt = false;
 
 	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
@@ -614,9 +618,9 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 {
     string reqStat = TSYS::pathLev(node.attr("path"),0);
 
-    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
-	if(mStatWork[i_st].first == reqStat) {
-	    if(mStatWork[i_st].second.cntr > 0) break;
+    for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
+	if(mStatWork[iSt].first == reqStat) {
+	    if(mStatWork[iSt].second.cntr > 0) break;
 	    try {
 		node.setAttr("conTm", enableStat()?"": "1000");	//Set one second timeout to disabled controller for start procedure speed up.
 		int rez = SYS->transport().at().cntrIfCmd(node, MOD_ID+id());
@@ -624,15 +628,15 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		    alSt = 0;
 		    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("OK")), TMess::Info);
 		}
-		mStatWork[i_st].second.cntr -= 1;
+		mStatWork[iSt].second.cntr -= 1;
 		return rez;
 	    } catch(TError &err) {
 		if(alSt <= 0) {
 		    alSt = 1;
 		    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source '%s': %s."),owner().modId().c_str(),id().c_str(),
-						mStatWork[i_st].first.c_str(),TRegExp(":","g").replace(err.mess,"=").c_str()));
+						mStatWork[iSt].first.c_str(),TRegExp(":","g").replace(err.mess,"=").c_str()));
 		}
-		if(call_st) mStatWork[i_st].second.cntr = mRestTm;
+		if(callSt) mStatWork[iSt].second.cntr = mRestTm;
 		throw;
 	    }
 	}
@@ -697,10 +701,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/cntr/cfg/CPRM_lst" && ctrChkNode(opt))
-	for(unsigned i_st = 0; enableStat() && i_st < mStatWork.size(); i_st++) {
-	    if(mStatWork[i_st].second.cntr > 0) continue;
+	for(unsigned iSt = 0; enableStat() && iSt < mStatWork.size(); iSt++) {
+	    if(mStatWork[iSt].second.cntr > 0) continue;
 	    XMLNode req("list");
-	    req.setAttr("path", "/"+mStatWork[i_st].first+"/DAQ/%2fserv%2fPrmAttr")->
+	    req.setAttr("path", "/"+mStatWork[iSt].first+"/DAQ/%2fserv%2fPrmAttr")->
 		setAttr("base", TBDS::genDBGet(owner().nodePath()+"selCPRM","",opt->attr("user")))->
 		setAttr("toPrm","1")->setAttr("sep",".");
 	    if(cntrIfCmd(req) == 0) {
@@ -716,7 +720,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), isPrcOK(false), isEVAL(true), isSynced(false), p_el("w_attr"),
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), isPrcOK(false), isEVAL(true), isSynced(false), pEl("w_attr"),
     mPrmAddr(cfg("PRM_ADDR"))
 {
     setToEnable(true);
@@ -731,7 +735,7 @@ void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
     //if(vlCfg())	setVlCfg(NULL);		//!!!! For prevent SHIFR and other lost at the parameter restore, by lock, after it deletion try
-    if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
+    if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 
 TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
@@ -782,7 +786,7 @@ void TMdPrm::load_( )
 	for(unsigned i_el = 0; i_el < attrsNd.childSize(); i_el++) {
 	    XMLNode *aEl = attrsNd.childGet(i_el);
 	    if(vlPresent(aEl->attr("id"))) continue;
-	    p_el.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
+	    pEl.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
 		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
@@ -832,25 +836,25 @@ void TMdPrm::sync( )
 	    setDescr(req.childGet(1)->text());
 
 	    // Check and create new attributes
-	    for(unsigned i_a = 0; i_a < req.childGet(2)->childSize(); i_a++) {
-		XMLNode *ael = req.childGet(2)->childGet(i_a);
+	    for(unsigned iA = 0; iA < req.childGet(2)->childSize(); iA++) {
+		XMLNode *ael = req.childGet(2)->childGet(iA);
 		als.push_back(ael->attr("id"));
 		if(vlPresent(ael->attr("id")))	continue;
 		TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
-		p_el.fldAdd(new TFld(ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
+		pEl.fldAdd(new TFld(ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
 		    (s2i(ael->attr("flg"))&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
 		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()));
 		modif(true);
 	    }
 
 	    // Check for remove attributes
-	    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++) {
-		unsigned i_l;
-		for(i_l = 0; i_l < als.size(); i_l++)
-		    if(p_el.fldAt(i_p).name() == als[i_l])
+	    for(int iP = 0; owner().mAllowToDelPrmAttr && iP < (int)pEl.fldSize(); iP++) {
+		unsigned iL;
+		for(iL = 0; iL < als.size(); iL++)
+		    if(pEl.fldAt(iP).name() == als[iL])
 			break;
-		if(i_l >= als.size())
-		    try{ p_el.fldDel(i_p); i_p--; modif(true); }
+		if(iL >= als.size())
+		    try{ pEl.fldDel(iP); iP--; modif(true); }
 		    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	    }
 	    isSynced = true;

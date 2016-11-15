@@ -1,3 +1,10 @@
+2016-11-15 Roman
+- !!:DAQ.DAQGate: Control for automatic removing parameters and attributes is added by an option.
+    Spent time expanded by the maximum value.
+- FIX:UI.VCAEngine: Widgets list into the widget's parent field expanded and fixed for list all items of project tree to any depth.
+- UI.Vision: Expanded for authentication message error detailing.
+
+
 2016-11-13 Roman
 - DB.LibsDB.OscadaLibs: DAQ.JavaLikeCalc service procedures, controllers and regulators libraries were cleaned and unified.
     Devices template library was appended by template of the pressure I2C sensor BMP180.

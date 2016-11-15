@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 11:25+0300\n"
+"POT-Creation-Date: 2016-11-15 17:03+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -65,6 +65,9 @@ msgstr "Список удалённых станций"
 msgid "Remote cotrollers and parameters list"
 msgstr "Список удалённых контроллеров и параметров"
 
+msgid "Allow automatic remove parameters and attributes"
+msgstr "Разрешать автоматическое удаление параметров и атрибутов"
+
 msgid "Standard"
 msgstr "Стандарт"
 
@@ -85,9 +88,8 @@ msgstr "Вызовы с периодом: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Затрачено времени: %s[%s]. "
 
 #, c-format
 msgid "Station '%s' error, restoring in %.3g s."
@@ -105,13 +107,15 @@ msgstr "Включение: текущих станций: %d; параметр�
 msgid "Enable: station '%s' processing item '%s' for parameters %d."
 msgstr "Включение: станция '%s' обрабатывает элемент '%s' для параметров %d."
 
+#, c-format
 msgid ""
 "Deletion parameter '%s' is error but it no present on the configuration or "
 "remote station."
 msgstr ""
-"Ошибка удаления параметра '%s' поскольку он отсутствует в конфигурации или на "
-"удалённой станции."
+"Ошибка удаления параметра '%s' поскольку он отсутствует в конфигурации или "
+"на удалённой станции."
 
+#, c-format
 msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr "DAQ.%s.%s: подключение к источнику данных: %s."
 
@@ -124,6 +128,7 @@ msgstr "10:Данные не доступны."
 msgid "OK"
 msgstr "НОРМА"
 
+#, c-format
 msgid "DAQ.%s.%s: connect to data source '%s': %s."
 msgstr "DAQ.%s.%s: подключение к источнику данных '%s': %s."
 

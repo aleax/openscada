@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 11:25+0300\n"
+"POT-Creation-Date: 2016-11-15 17:03+0200\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -70,6 +70,9 @@ msgstr "Liste von entfernten Stationen"
 msgid "Remote cotrollers and parameters list"
 msgstr "Liste von entfernten Controllern und Parametern"
 
+msgid "Allow automatic remove parameters and attributes"
+msgstr "Automatische Entfernen von Parametern und Attributen zulassen"
+
 msgid "Standard"
 msgstr "Standard"
 
@@ -90,9 +93,8 @@ msgstr "Aufruf mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s. "
-msgstr "Verbrauchte Zeit: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Verbrauchte Zeit: %s[%s]. "
 
 #, c-format
 msgid "Station '%s' error, restoring in %.3g s."
@@ -110,12 +112,15 @@ msgstr "Enable: Strom-Stationen: %d; Parameter: %d."
 msgid "Enable: station '%s' processing item '%s' for parameters %d."
 msgstr "Enable: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
 
+#, c-format
 msgid ""
 "Deletion parameter '%s' is error but it no present on the configuration or "
 "remote station."
 msgstr ""
-"Löschen Parameter '%s' ist Fehler, aber es nicht, die auf der Konfiguration oder Remote-Station."
+"Löschen Parameter '%s' ist Fehler, aber es nicht, die auf der Konfiguration "
+"oder Remote-Station."
 
+#, c-format
 msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
 
@@ -128,6 +133,7 @@ msgstr "10:Daten nicht zulassen."
 msgid "OK"
 msgstr "OK"
 
+#, c-format
 msgid "DAQ.%s.%s: connect to data source '%s': %s."
 msgstr "DAQ.%s.%s: Verbindung zu Datenquelle '%s': %s."
 

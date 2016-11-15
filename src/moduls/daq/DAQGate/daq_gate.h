@@ -79,7 +79,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TElem &elem( )		{ return p_el; }
+	TElem &elem( )		{ return pEl; }
 	TMdContr &owner( ) const;
 
 	//Attributes
@@ -103,7 +103,7 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
 	//Attributes
-	TElem	p_el;				//Work atribute elements
+	TElem	pEl;				//Work atribute elements
 	string	mStats;				//Allowed stations list'
 	TCfg	&mPrmAddr;			//Interstation parameter's address
 };
@@ -179,16 +179,17 @@ class TMdContr: public TController
 		&mPerOld,			//Acquisition task (seconds)
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
+	char	&mAllowToDelPrmAttr;		//Allow automatic remove parameters and attributes
 
 	bool	prcSt,				//Process task active
-		call_st,			//Calc now stat
+		callSt,				//Calc now stat
 		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
 	vector< pair<string,StHd> > mStatWork;	//Work stations and it status
 
 	vector< AutoHD<TMdPrm> > pHd;
 
-	double	mPer, tmGath;			//Gathering time
+	double	mPer;
 };
 
 //******************************************************

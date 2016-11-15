@@ -386,7 +386,7 @@ bool UserStBar::userSel( )
 	return true;
     }
     else if(rez == DlgUser::SelErr)
-	mod->postMess(mod->nodePath().c_str(), _("Auth wrong!!!"), TVision::Warning, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Authentication error for user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
 
     return false;
 }

@@ -955,14 +955,15 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		    for(unsigned i_v = 0; i_v < tls.size(); i_v++) ls.push_back(tls[i_v]);
 		    //mod->nodeList(ls);
 		    break;
-		case 1:
-		    if(TSYS::pathLev(lnk,0) != "..")
-			mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeList(ls);
+		//case 1:
+		default:
+		    if(TSYS::pathLev(lnk,0) != "..") mod->nodeAt(lnk).at().nodeList(ls);
+			//mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeList(ls);
 		    break;
-		case 2:
+		/*case 2:
 		    if(TSYS::pathLev(lnk,0) != "..")
 			mod->nodeAt(TSYS::pathLev(lnk,0)).at().nodeAt(TSYS::pathLev(lnk,1)).at().nodeList(ls,"wdg_");
-		    break;
+		    break;*/
 	    }
 	    for(unsigned iL = 0; iL < ls.size(); iL++)
 		opt->childAdd("el")->setText(c_path+"/"+ls[iL]);

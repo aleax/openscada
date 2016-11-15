@@ -1433,7 +1433,6 @@ ModBus.testTCP.test');
 CREATE TABLE 'DAQGatePrm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM_ADDR" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "DAQGatePrm_test" VALUES('CPU0Load','','CPU Load: 0','Нагрузка процессора: 0','Навантаження CPU: 0','','','',1,'System/AutoDA/prm_CPU0Load','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="load" nm="Load (%)" tp="4" flg="772" />
@@ -1444,7 +1443,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('CPU0Load','','CPU Load: 0','Нагрузк
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('CPU1Load','','CPU Load: 1','Нагрузка процессора: 1','Навантаження CPU: 1','','','',1,'System/AutoDA/prm_CPU1Load','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="load" nm="Load (%)" tp="4" flg="772" />
@@ -1455,7 +1453,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('CPU1Load','','CPU Load: 1','Нагрузк
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('CPULoad','','Full CPU Load','Общая нагрузка процессора','Повне навантаження процесору','','','',1,'System/AutoDA/prm_CPULoad','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="load" nm="Load (%)" tp="4" flg="772" />
@@ -1466,7 +1463,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('CPULoad','','Full CPU Load','Общая н
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('Interface_eth0','','Interface statistic: eth0','Статистика интерфейсов: eth0','Статистика інтерфейсу: eth0','','','',1,'System/AutoDA/prm_Interface_eth0','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="rcv" nm="Receive (B)" tp="4" flg="772" />
@@ -1477,7 +1473,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('Interface_eth0','','Interface statistic: e
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('Interface_lo','','Interface statistic: lo','Статистика интерфейсов: lo','Статистика інтерфейсу: lo','','','',1,'System/AutoDA/prm_Interface_lo','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="rcv" nm="Receive (B)" tp="4" flg="772" />
@@ -1488,7 +1483,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('Interface_lo','','Interface statistic: lo'
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('Interface_wlan0','','Interface statistic: wlan0','Статистика интерфейсов: wlan0','Статистика інтерфейсу: wlan0','','','',1,'System/AutoDA/prm_Interface_wlan0','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="rcv" nm="Receive (B)" tp="4" flg="772" />
@@ -1499,7 +1493,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('Interface_wlan0','','Interface statistic: 
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('MemInfo','','Memory info','Информация про память','Інформація про пам''ять','','','',1,'System/AutoDA/prm_MemInfo','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="free" nm="Free (kB)" tp="1" flg="772" />
@@ -1514,7 +1507,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('MemInfo','','Memory info','Информа�
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('SensorsData','','Data sensors','Данные сенсоров','Дані сенсорів','','','',1,'System/AutoDA/prm_SensorsData','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="thinkpad_fan1" nm="thinkpad fan1" tp="4" flg="772" />
@@ -1534,7 +1526,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('SensorsData','','Data sensors','Данны
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda','','HDD statistic: sda','Статистика НЖМД: sda','Статистика НЖМД: sda','','','',1,'System/AutoDA/prm_Statistic_sda','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="rd" nm="Read (B)" tp="4" flg="772" />
@@ -1545,7 +1536,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda','','HDD statistic: sda','С
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HDD statistic: sda1','Статистика НЖМД: sda1','Статистика НЖМД: sda1','','','',1,'System/AutoDA/prm_Statistic_sda1','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="rd" nm="Read (B)" tp="4" flg="772" />
@@ -1556,7 +1546,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HDD statistic: sda1','
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HDD statistic: sda2','Статистика НЖМД: sda2','Статистика НЖМД: sda2','','','',1,'System/AutoDA/prm_Statistic_sda2','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="rd" nm="Read (B)" tp="4" flg="772" />
@@ -1567,7 +1556,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HDD statistic: sda2','
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('UpTimeStation','','Station up time','Время работы станции','Час роботи станції','','','',1,'System/AutoDA/prm_UpTimeStation','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="full" nm="Full seconds" tp="1" flg="772" />
@@ -1579,7 +1567,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('UpTimeStation','','Station up time','Вр�
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('UpTimeSystem','','System up time','Время работы системы','Час роботи системи','','','',1,'System/AutoDA/prm_UpTimeSystem','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="full" nm="Full seconds" tp="1" flg="772" />
@@ -1591,7 +1578,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('UpTimeSystem','','System up time','Вре�
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('test','','','','','','','',1,'ModBus/testTCP/prm_test','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="reg0" nm="Register 0" tp="1" flg="772" />
@@ -1604,7 +1590,6 @@ INSERT INTO "DAQGatePrm_test" VALUES('test','','','','','','','',1,'ModBus/testT
 ');
 INSERT INTO "DAQGatePrm_test" VALUES('test1','test','','','','','','',1,'ModBus/testTCP/prm_test/prm_test1','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
-<a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
 <a id="DESCR" nm="Description" tp="5" flg="776" />
 <a id="i6" nm="Integer32 [6,7]" tp="1" flg="768" />
