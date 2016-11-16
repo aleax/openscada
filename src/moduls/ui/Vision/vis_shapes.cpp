@@ -4661,6 +4661,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 		    runW->mainWin()->pgCacheAdd(shD->inclPg);
 		    shD->inclPg->setEnabled(false);
 		    shD->inclPg->setVisible(false);
+		    shD->inclPg->toPgCache();
 		    shD->inclScrl->takeWidget();
 		    shD->inclPg->setParent(NULL);
 		    shD->inclPg->wx_scale = shD->inclPg->mainWin()->xScale();

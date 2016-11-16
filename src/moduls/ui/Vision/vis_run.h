@@ -78,7 +78,7 @@ class VisRun : public QMainWindow
 		string ntfRes( string &mess, string &lang );	//The notification resource request
 
 		//Attributes
-		string	pgProps;			//Page-creator and it's properties
+		string	pgProps;			//Page-creator and its properties
 		vector<string> pgPropsQ;		//Page-creators queue
 
 	    private:
@@ -272,7 +272,7 @@ class VisRun : public QMainWindow
 	vector<string>	pgList;			//Pages list
 
 	// Page and resource cache
-	deque<RunPageView*>	cache_pg;	//Pages cache
+	deque<RunPageView*>	cachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 };
 

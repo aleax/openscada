@@ -670,11 +670,14 @@ void RunPageView::closeEvent( QCloseEvent *event )
 	    req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",((RunWdgView*)children().at(iCh))->pgOpenSrc());
 	    mainWin()->cntrIfCmd(req);
 	}*/
+
+    //Notificators configuration of the page free
+    for(unsigned iNtf = 0; iNtf < 7; iNtf++) mainWin()->ntfReg(iNtf, "", id());
 }
 
-void RunPageView::hideEvent( QHideEvent * event )
+void RunPageView::toPgCache( )
 {
-    //Free of the notificators configuration of the page
+    //Notificators configuration of the page free
     for(unsigned iNtf = 0; iNtf < 7; iNtf++) mainWin()->ntfReg(iNtf, "", id());
 }
 

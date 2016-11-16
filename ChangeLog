@@ -1,3 +1,10 @@
+2016-11-16 Roman
+- FIX:SYS: Main config property "ClockRT" fixed for load only from the config-file and in its description.
+    TValue::chldAdd() fixed for the Archive subsystem mark as setToUpdate() only for successful appending.
+- FIX.Archive.{FSArch,DBArch}: checkArchivator() prevented from exception at wrong archive starting else pass it.
+- FIX:UI.Vision: Events notify objects removing at the master window minimizing fix.
+
+
 2016-11-15 Roman
 - !!:DAQ.DAQGate: Control for automatic removing parameters and attributes is added by an option.
     Spent time expanded by the maximum value.

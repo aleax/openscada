@@ -1349,7 +1349,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     //Put to check for include
     else master_pg->callPage(pg_it, pgGrp, pgSrc);
 
-    //Get the notificators configuration and register thats
+    //Get the notificators configuration and register its
     for(unsigned iNtf = 0; iNtf < 7; iNtf++)
 	if(((chN=req.getElementBy("path","/%2fattr%2fnotifyVis"+mod->modId()+i2s(iNtf))) && !s2i(chN->attr("rez"))) ||
 		((chN=req.getElementBy("path","/%2fattr%2fnotify"+i2s(iNtf))) && !s2i(chN->attr("rez"))))
@@ -1358,19 +1358,19 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 
 void VisRun::pgCacheClear( )
 {
-    while(!cache_pg.empty()) {
-	delete cache_pg.front();
-	cache_pg.pop_front();
+    while(!cachePg.empty()) {
+	delete cachePg.front();
+	cachePg.pop_front();
     }
 }
 
 void VisRun::pgCacheAdd( RunPageView *wdg )
 {
     if(!wdg) return;
-    cache_pg.push_front(wdg);
-    while(cache_pg.size() > 100) {
-	delete cache_pg.back();
-	cache_pg.pop_back();
+    cachePg.push_front(wdg);
+    while(cachePg.size() > 100) {
+	delete cachePg.back();
+	cachePg.pop_back();
     }
 }
 
@@ -1378,10 +1378,10 @@ RunPageView *VisRun::pgCacheGet( const string &id )
 {
     RunPageView *pg = NULL;
 
-    for(unsigned i_pg = 0; i_pg < cache_pg.size(); i_pg++)
-	if(cache_pg[i_pg]->id() == id) {
-	    pg = cache_pg[i_pg];
-	    cache_pg.erase(cache_pg.begin()+i_pg);
+    for(unsigned i_pg = 0; i_pg < cachePg.size(); i_pg++)
+	if(cachePg[i_pg]->id() == id) {
+	    pg = cachePg[i_pg];
+	    cachePg.erase(cachePg.begin()+i_pg);
 	    break;
 	}
 
@@ -1516,8 +1516,6 @@ void VisRun::ntfReg( uint8_t tp, const string &props, const string &pgCrtor )
 	mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this);
 	mNotify[tp]->pgPropsQ = pgPropsQ;
 	ntfSet |= (1<<tp);
-
-
     }
     //Take and place a notificator from the queue
     else if(pgPropsQ.size()) {
@@ -1614,10 +1612,10 @@ void VisRun::updatePage( )
     }
 
     //Old pages from cache for close checking
-    for(unsigned i_pg = 0; i_pg < cache_pg.size(); )
-	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60)) {
-	    delete cache_pg[i_pg];
-	    cache_pg.erase(cache_pg.begin()+i_pg);
+    for(unsigned i_pg = 0; i_pg < cachePg.size(); )
+	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cachePg[i_pg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60)) {
+	    delete cachePg[i_pg];
+	    cachePg.erase(cachePg.begin()+i_pg);
 	}
 	else i_pg++;
 

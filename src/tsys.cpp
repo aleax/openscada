@@ -424,8 +424,8 @@ string TSYS::optDescr( )
 	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
-	"ClockRT    <false>	Set for use REALTIME (else MONOTONIC) clock, some problematic with the system clock modification.\n"
-	"SaveAtExit <true>	Save the system at exit.\n"
+	"ClockRT    <0|1>	Set for use REALTIME (else MONOTONIC) clock, some problematic with the system clock modification.\n"
+	"SaveAtExit <0|1>	Save the system at exit.\n"
 	"SavePeriod <sec>	Save the system period.\n"
 	"RdStLevel  <lev>	Level of redundancy current station.\n"
 	"RdTaskPer  <s>		Call period of the redundant task.\n"
@@ -547,6 +547,7 @@ void TSYS::cfgFileSave( )
 void TSYS::cfgPrmLoad( )
 {
     //System parameters
+    setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
@@ -554,7 +555,6 @@ void TSYS::cfgPrmLoad( )
     setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
     setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
     setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
-    setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()))));
     setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit","0")));
     setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod","0")));
 

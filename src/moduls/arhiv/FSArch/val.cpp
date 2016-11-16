@@ -104,7 +104,7 @@ void ModVArch::start( )
     TVArchivator::start();
 
     //First scan dir. Load and connect archive files
-    try { checkArchivator(true); } catch(TError &err) { stop(); throw; }
+    try { checkArchivator(true); } catch(TError&) { stop(); throw; }
 }
 
 void ModVArch::stop( bool full_del )
@@ -263,7 +263,8 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 		//varch.at().start();
 	    }
 	    //  Check for archive's start state and it starts early for propper redundancy sync
-	    if(!varch.at().startStat() && varch.at().toStart()) varch.at().start();
+	    if(!varch.at().startStat() && varch.at().toStart())
+		try { varch.at().start(); } catch(TError&) { continue; }	//!!!! Pass wrong archives
 	    //  Check for attached
 	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
 	    //  Try connect new file

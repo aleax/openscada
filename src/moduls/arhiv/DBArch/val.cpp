@@ -130,8 +130,11 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		varch = owner().owner().valAt(aNm);
 		varch.at().setToStart(true);
 		varch.at().setValType((TFld::Type)cfg.cfg("PRM2").getI());
-		varch.at().start();
+		//varch.at().start();
 	    }
+	    //  Check for archive's start state and its starts early for propper redundancy sync
+	    if(!varch.at().startStat() && varch.at().toStart())
+		try { varch.at().start(); } catch(TError&) { continue; }	//!!!! Pass wrong archives
 	    // Check for attached
 	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
 	    // Set the main parameters

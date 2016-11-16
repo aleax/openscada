@@ -135,8 +135,13 @@ TElem &TValue::vlElem( const string &name )
 
 void TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
-    TCntrNode::chldAdd(igr, node, pos, noExp);
-    if(igr == mVl) SYS->archive().at().setToUpdate();
+    try {
+	TCntrNode::chldAdd(igr, node, pos);
+	if(igr == mVl) SYS->archive().at().setToUpdate();
+    }
+    catch(TError&) {
+	if(!noExp) throw;
+    }
 }
 
 void TValue::cntrCmdProc( XMLNode *opt )
