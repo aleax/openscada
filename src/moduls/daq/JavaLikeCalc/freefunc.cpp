@@ -251,12 +251,14 @@ void Func::delIO( )
 void Func::valAtt( TValFunc *vfnc )
 {
     TFunction::valAtt(vfnc);
+    ResAlloc res1(fRes(), true);
     workRegControl(vfnc);
 }
 
 void Func::valDet( TValFunc *vfnc )
 {
     TFunction::valDet(vfnc);
+    ResAlloc res1(fRes(), true);
     workRegControl(vfnc, true);
 }
 

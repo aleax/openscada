@@ -402,7 +402,7 @@ class Func : public TConfig, public TFunction
 		&mTimeStamp;
 
 	// Parser's data
-	string		sprg, prg;	//Build prog
+	string		sprg, prg;	//Built program
 	unsigned	laPos;		//LA position
 	string		pErr;		//Parse error
 	string		mUsings,	//External functions usings namespaces

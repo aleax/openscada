@@ -1,3 +1,12 @@
+2016-11-27 Roman
+- !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by RTC chip on I2C DS3231 implementing.
+    DevLib.UPS: expanded for values in EVAL process.
+    DevLib.{1W_DS9097,W_DS9097U}: Expanded by support 1Wire chips: DS2408, DS2450, DS2438.
+    UserProtocol is appended by a memory chip AT24CXX access procedure.
+- !!:DAQ.DAQGate: Adapted to store parameters' assignment to stations for allow early restoring without need to sync.
+- FIX:DAQ.JavaLikeCalc: workRegControl() moved under function resource's locking.
+
+
 2016-11-16 Roman
 - FIX:SYS: Main config property "ClockRT" fixed for load only from the config-file and in its description.
     TValue::chldAdd() fixed for the Archive subsystem mark as setToUpdate() only for successful appending.

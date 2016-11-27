@@ -104,8 +104,8 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	pEl;				//Work atribute elements
-	string	mStats;				//Allowed stations list'
-	TCfg	&mPrmAddr;			//Interstation parameter's address
+	TCfg	&mPrmAddr,			//Interstation parameter's address
+		&mStats;			//Allowed stations list'
 };
 
 //******************************************************

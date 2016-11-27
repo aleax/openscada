@@ -262,7 +262,7 @@ string TArchiveS::optDescr(  )
 
 void TArchiveS::subStart( )
 {
-    mess_sys(TMess::Error, _("Start/update subsystem."));
+    mess_sys(TMess::Debug, _("Start/update subsystem."));
 
     subStarting = true;
     toUpdate = false;	//Moved to start for prevent possible changes the toUpdate at processing

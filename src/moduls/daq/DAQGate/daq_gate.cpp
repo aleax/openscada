@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.6.0"
+#define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -104,9 +104,10 @@ void TTpContr::postEnable( int flag )
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("PRM_ADDR",_("Remote parameter address"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
     tpPrmAt(t_prm).fldAdd(new TFld("ATTRS",_("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("STATS",_("Presenting for stations"),TFld::String,TCfg::NoVal,"10000",""));
     //Set to read only
-    for(unsigned i_sz = 0; i_sz < tpPrmAt(t_prm).fldSize(); i_sz++)
-	tpPrmAt(t_prm).fldAt(i_sz).setFlg(tpPrmAt(t_prm).fldAt(i_sz).flg()|TFld::NoWrite);
+    for(unsigned iSz = 0; iSz < tpPrmAt(t_prm).fldSize(); iSz++)
+	tpPrmAt(t_prm).fldAt(iSz).setFlg(tpPrmAt(t_prm).fldAt(iSz).flg()|TFld::NoWrite);
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) { return new TMdContr(name, daq_db, this); }
@@ -170,16 +171,14 @@ void TMdContr::enable_( )
     XMLNode req("list");
 
     //Clear present parameters configuration
-    list(prmLs);
-    for(unsigned iP = 0; iP < prmLs.size(); iP++) at(prmLs[iP]).at().setStats("");
+    //!!!! Disabled by store the station configuration and no actual more only for first level parameters
+    //list(prmLs);
+    //for(unsigned iP = 0; iP < prmLs.size(); iP++) at(prmLs[iP]).at().setStats("");
 
     //Stations list update
     if(!mStatWork.size())
 	for(int stOff = 0; (statV=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&stOff)).size(); )
 	    mStatWork.push_back(pair<string,StHd>(statV,StHd()));
-
-    if(messLev() == TMess::Debug)
-	mess_debug_(nodePath().c_str(), _("Enable: current stations: %d; parameters: %d."), mStatWork.size(), prmLs.size());
 
     //Remote station scaning. Controllers and parameters scaning
     for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
@@ -622,7 +621,7 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 	if(mStatWork[iSt].first == reqStat) {
 	    if(mStatWork[iSt].second.cntr > 0) break;
 	    try {
-		node.setAttr("conTm", enableStat()?"": "1000");	//Set one second timeout to disabled controller for start procedure speed up.
+		node.setAttr("conTm", enableStat()?"":"1000");	//Set one second timeout to disabled controller for start procedure speed up.
 		int rez = SYS->transport().at().cntrIfCmd(node, MOD_ID+id());
 		if(alSt != 0) {
 		    alSt = 0;
@@ -721,7 +720,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                             *
 //******************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), isPrcOK(false), isEVAL(true), isSynced(false), pEl("w_attr"),
-    mPrmAddr(cfg("PRM_ADDR"))
+    mPrmAddr(cfg("PRM_ADDR")), mStats(cfg("STATS"))
 {
     setToEnable(true);
 }
@@ -771,7 +770,7 @@ void TMdPrm::setStats( const string &vl )
     string scntr;
     for(int off = 0; (scntr=TSYS::strSepParse(mStats,0,';',&off)).size(); )
 	if(scntr == vl) return;
-    mStats += vl+";";
+    mStats.setS(mStats.getS()+vl+";");
 }
 
 void TMdPrm::load_( )
@@ -779,12 +778,12 @@ void TMdPrm::load_( )
     //Load from cache
     //TParamContr::load_();
 
-    //Restore attributes from cache
+    //Restore attributes from the cache
     try {
 	XMLNode attrsNd;
 	attrsNd.load(cfg("ATTRS").getS());
-	for(unsigned i_el = 0; i_el < attrsNd.childSize(); i_el++) {
-	    XMLNode *aEl = attrsNd.childGet(i_el);
+	for(unsigned iEl = 0; iEl < attrsNd.childSize(); iEl++) {
+	    XMLNode *aEl = attrsNd.childGet(iEl);
 	    if(vlPresent(aEl->attr("id"))) continue;
 	    pEl.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
 		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
@@ -802,9 +801,9 @@ void TMdPrm::save_( )
     XMLNode attrsNd("Attrs");
     vector<string> ls;
     elem().fldList(ls);
-    for(unsigned i_el = 0; i_el < ls.size(); i_el++) {
-	AutoHD<TVal> vl = vlAt(ls[i_el]);
-	attrsNd.childAdd("a")->setAttr("id", ls[i_el])->
+    for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
+	AutoHD<TVal> vl = vlAt(ls[iEl]);
+	attrsNd.childAdd("a")->setAttr("id", ls[iEl])->
 			       setAttr("nm", vl.at().fld().descr())->
 			       setAttr("tp", i2s(vl.at().fld().type()))->
 			       setAttr("flg", i2s(vl.at().fld().flg()))->
