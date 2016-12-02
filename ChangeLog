@@ -1,3 +1,9 @@
+2016-12-02 Roman (core_testing)
+- !!!!:FIX:SYS: TCfg was fixed to use TVariant string as a constant for STL string.
+    TVariant expanded for STL string using always except fields marked as "stdStringOmit", mostly for TCfg as string constants (DB table's keys).
+- !!!!:DAQ.JavaLikeCalc: Object's functions call was optimized for the name direct pass into the calling command.
+
+
 2016-11-27 Roman
 - !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by RTC chip on I2C DS3231 implementing.
     DevLib.UPS: expanded for values in EVAL process.

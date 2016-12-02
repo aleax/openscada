@@ -106,7 +106,7 @@ TVariant::~TVariant( )
     //if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
 
-void TVariant::setType( Type tp, bool fix )
+void TVariant::setType( Type tp, bool fix, bool stdStringOmit )
 {
     mFixedTp = fix;
     if(tp == type()) return;
@@ -131,7 +131,7 @@ void TVariant::setType( Type tp, bool fix )
 	/*case Boolean:	setB(EVAL_BOOL);	break;
 	case Integer:	setI(EVAL_INT);		break;
 	case Real:	setR(EVAL_REAL);	break;*/
-	case String:	mSize = 0; val.sMini[mSize] = 0; mStdString = false; /*setS(EVAL_STR);*/	break;
+	case String:	mSize = 0; val.sMini[mSize] = 0; mStdString = false; mStdStringOmit = stdStringOmit; /*setS(EVAL_STR);*/	break;
 	case Object:	val.o = new AutoHD<TVarObj>();	break;
 	default: break;
     }
@@ -164,9 +164,10 @@ TVariant &TVariant::operator=( const TVariant &vr )
 	case Boolean:	setB(vr.getB());	break;
 	case Integer:	setI(vr.getI());	break;
 	case Real:	setR(vr.getR());	break;
-	case String:	setS(vr.getS());	break;
+	case String:	setS(vr.getS()); mStdStringOmit = vr.mStdStringOmit;	break;
 	case Object:	setO(vr.getO());	break;
     }
+
     return *this;
 }
 
@@ -287,7 +288,6 @@ void TVariant::setS( const string &ivl )
     if(type() != String && !mFixedTp) setType(String);
     switch(type()) {
 	case String:
-	    //if(ivl.size() > 130000000)	throw TError("TVariant", _("Too big string length (> 130 MB)!"));
 	    if(ivl.size() < sizeof(val.sMini)) {	//Minimum fixed area
 		if(mStdString) { delete val.s; mStdString = false; }
 		else if(mSize >= sizeof(val.sMini)) free(val.sPtr);
@@ -295,7 +295,10 @@ void TVariant::setS( const string &ivl )
 		val.sMini[ivl.size()] = 0;
 		mSize = ivl.size();
 	    }
-	    else if(ivl.size() < STR_BUF_LEN) {		//For middle blocks up to STR_BUF_LEN
+	    //!!!! Direct memory allocation mostly used now for constant strings like to key TCfg for prevent its "const char *" pointer changing.
+	    //     Maybe further there has a sense to use STL string also but check it to equal for the assign and then the pointer changing omit.
+	    else if(mStdStringOmit) {		//For middle blocks up to STR_BUF_LEN
+		if(ivl.size() > 30000000)	throw TError("TVariant", _("Too big string forced to the not STL string (> 30 MB)!"));
 		if(mStdString) { delete val.s; mStdString = false; }
 		if(mSize < sizeof(val.sMini))	val.sPtr = (char*)malloc(ivl.size()+1);
 		else if(ivl.size() != mSize)	{

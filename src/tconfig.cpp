@@ -239,7 +239,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
     else mFld = &fld;
 
     switch(mFld->type()) {
-	case TFld::String:	setType(TVariant::String, true);  TVariant::setS(mFld->def());		break;
+	case TFld::String:	setType(TVariant::String, true, (fld.flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
 	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
 	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
 	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
@@ -258,7 +258,7 @@ TCfg::TCfg( const TCfg &src ) : mView(true), mKeyUse(false), mNoTransl(false), m
     else mFld = src.mFld;
 
     switch(mFld->type()) {
-	case TFld::String:	setType(TVariant::String, true);  TVariant::setS(mFld->def());		break;
+	case TFld::String:	setType(TVariant::String, true, (src.mFld->flg()&TCfg::Key)); TVariant::setS(mFld->def());	break;
 	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
 	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
 	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
@@ -342,7 +342,9 @@ string TCfg::getS( uint8_t RqFlg )
 const char *TCfg::getSd( )
 {
     if(type() != TVariant::String)	throw TError("Cfg", _("Element type is not string!"));
-    return (mSize < sizeof(val.sMini)) ? val.sMini : val.sPtr;
+    if(mStdString)	return val.s->c_str();
+    if(mSize < sizeof(val.sMini)) return val.sMini;
+    return val.sPtr;
 }
 
 double &TCfg::getRd( )

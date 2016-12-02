@@ -132,7 +132,7 @@ var:	VAR			{ $$ = $1; }
 	| var O_PRP_F		{ $$ = pF->cdProp($1,$2); }
 	| var '[' expr ']'	{ $$ = pF->cdProp($1,"",$3); }
 	| var O_PRP_F '(' prmlst ')'
-	    { try{ $$ = pF->cdObjFnc(pF->cdProp($1,$2),$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ $$ = pF->cdObjFnc($1,$2,$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 assign: assign ',' assign
 	| var '=' expr
 	    {
@@ -296,7 +296,7 @@ expr:	CONST	{ $$ = $1; }
 	| expr O_PRP_F		{ $$ = pF->cdProp($1,$2); }
 	| expr '[' expr ']'	{ $$ = pF->cdProp($1,"",$3); }
 	| expr O_PRP_F '(' prmlst ')'
-	    { try{ $$ = pF->cdObjFnc(pF->cdProp($1,$2),$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	    { try{ $$ = pF->cdObjFnc($1,$2,$4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 prmlst: /*empty*/		{ $$ = 0; }
 	| expr			{ $$ = 1; pF->fPrmst.push_front($1); }
 	| prmlst ',' prmlst	{ $$ = $1 + $3; }

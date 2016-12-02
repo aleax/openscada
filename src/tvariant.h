@@ -91,7 +91,7 @@ class TVariant
 	bool isNull( ) const	{ return (type()==Null); }
 	bool isEVal( ) const;
 	Type type( ) const	{ return (Type)mType; }
-	void setType( Type tp, bool fix = false );
+	void setType( Type tp, bool fix = false, bool stdStringOmit = false );
 	bool isModify( )	{ return mModify; }
 	void setModify( bool vl = true )	{ mModify = vl; }
 
@@ -129,7 +129,8 @@ class TVariant
 	} val;
 
 	//Attributes
-	unsigned mSize		: 26;
+	unsigned mSize		: 25;
+	unsigned mStdStringOmit	: 1;
 	unsigned mStdString	: 1;
 	unsigned mType		: 3;
 	unsigned mModify	: 1;

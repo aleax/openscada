@@ -151,7 +151,8 @@ class Reg
 	    FTr,	//[CRRrr]: Function for get translation of base message.
 	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
 	    CFunc,	//[CFnRR____]: Function.
-	    CFuncObj,	//[CRRnRR____]: Object's function
+	    CFuncObj,	//[COOlnRR____]: Object's function for <OO> object's register, function name <l> length, arguments number <n>, result <RR>
+			//		and first same name and arguments into {__}.
 	    IFuncDef,	//[CNNnRR____]: Internal function's header definition where:
 			//		{NN} - code size, {n} - arguments number, {__} - argument's variables, {RR} - return
 	    IFunc	//[CNNnRR____]: Internal function call into the absolute position {NN} and for {n} arguments {__} and return into {RR}.
@@ -339,7 +340,7 @@ class Func : public TConfig, public TFunction
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL );
 	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
 	Reg *cdIntFnc( int fOff, int pCnt, bool proc = false );
-	Reg *cdObjFnc( Reg *obj, int p_cnt );
+	Reg *cdObjFnc( Reg *obj, const string &fNm, int p_cnt );
 	Reg *cdProp( Reg *obj, const string &sprp, Reg *dprp = NULL );
 
 	// Properties and functions for base object's process
