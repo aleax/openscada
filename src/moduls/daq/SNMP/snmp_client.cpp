@@ -406,7 +406,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm(string name, TTypeParam *tp_prm) :
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr")
 {
 
@@ -729,8 +729,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     owner().str2oid(vo.name(), oidn, oidn_len);
 
     TVariant wVl = vl;
-    switch(s2i(vo.fld().reserve()))
-    {
+    switch(s2i(vo.fld().reserve())) {
 	case ASN_INTEGER:	vtp = 'i';	break;
 	case ASN_GAUGE:		vtp = 'u';	break;
 	case ASN_COUNTER:	vtp = 'c';	break;

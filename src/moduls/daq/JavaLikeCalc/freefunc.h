@@ -30,6 +30,9 @@
 #include <tfunction.h>
 #include <tconfig.h>
 
+#define EXT_F_LIM	128
+#define EXT_F_AS_PREF	"stFunc:"
+
 using std::string;
 using std::vector;
 using std::deque;
@@ -40,25 +43,6 @@ namespace JavaLikeCalc
 
 //Bison parse function
 int yyparse( );
-
-//*************************************************
-//* UFunc: Using func list element                *
-//*************************************************
-class UFunc
-{
-    public:
-	//Methods
-	UFunc( const string &path ) : mPath(path) {
-	    if(dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at())) mFunc = SYS->nodeAt(path,0,'.');
-	}
-	const string &path( )		{ return mPath; }
-	AutoHD<TFunction> &func( )	{ return mFunc; }
-
-    private:
-	//Attributes
-	string 		mPath;
-	AutoHD<TFunction> mFunc;
-};
 
 //*************************************************
 //* Reg: Compile register                         *
@@ -78,7 +62,8 @@ class Reg
 	    Dynamic,	//Dynamic type
 	    Obj,	//Object
 	    Var,	//IO variable
-	    PrmAttr	//Parameter attribute
+	    PrmAttr,	//Parameter attribute
+	    Function	//Assigned static function
 	};
 
 	enum Code {	//Byte codes
@@ -149,8 +134,8 @@ class Reg
 	    FFloor,	//[CRRrr]: Function floor.
 	    FTypeOf,	//[CRRrr]: Function for get type of value.
 	    FTr,	//[CRRrr]: Function for get translation of base message.
-	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
-	    CFunc,	//[CFnRR____]: Function.
+	    CProc,	//[CFnRRff____]: Procedure (RR - doesn't used). ff sets to register for for F < 0
+	    CFunc,	//[CFnRRff____]: Function. ff sets to register for for F < 0
 	    CFuncObj,	//[COOlnRR____]: Object's function for <OO> object's register, function name <l> length, arguments number <n>, result <RR>
 			//		and first same name and arguments into {__}.
 	    IFuncDef,	//[CNNnRR____]: Internal function's header definition where:
@@ -166,6 +151,7 @@ class Reg
 	    AutoHD<TVarObj>	*o;	//Object for constant and local variable
 	    int			io;	//IO id for IO variable
 	    AutoHD<TVal>	*pA;	//Parameter attribute
+	    AutoHD<TFunction>	*f;	//Dynamic linked external function
 	};
 
 	//Methods
@@ -302,8 +288,6 @@ class Func : public TConfig, public TFunction
 
 	// External functions
 	int funcGet( const string &path );
-	UFunc *funcAt( int id )	{ return mFncs.at(id); }
-	void funcClear( );
 
 	// Internal functions
 	int inFuncGet( const string &nm );
@@ -338,7 +322,7 @@ class Func : public TConfig, public TFunction
 	void cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter );
 	void cdCycleObj(int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var );
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL );
-	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
+	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false, Reg *f_r = NULL );
 	Reg *cdIntFnc( int fOff, int pCnt, bool proc = false );
 	Reg *cdObjFnc( Reg *obj, const string &fNm, int p_cnt );
 	Reg *cdProp( Reg *obj, const string &sprp, Reg *dprp = NULL );
@@ -408,7 +392,7 @@ class Func : public TConfig, public TFunction
 	string		pErr;		//Parse error
 	string		mUsings,	//External functions usings namespaces
 			mInFnc;		//Current internal function namespace
-	vector<UFunc*>	mFncs;		//External functions list in action
+	vector<AutoHD<TFunction> > mFncs;//Static external functions list in action
 	map<string, int> mInFncs;	//Internal functions list in compile
 	vector<Reg*>	mRegs;		//Registers list in action
 	vector<Reg*>	mTmpRegs;	//Constant temporary list

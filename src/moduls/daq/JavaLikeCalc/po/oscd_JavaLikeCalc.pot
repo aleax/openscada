@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-09 17:29+0300\n"
+"POT-Creation-Date: 2016-12-06 11:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,6 +74,10 @@ msgid "Don't support operation code %d."
 msgstr ""
 
 #, c-format
+msgid "External functions number exceeded limits to %d on function '%s'"
+msgstr ""
+
+#, c-format
 msgid "More than %d(%d) parameters are specified for function '%s'"
 msgstr ""
 
@@ -81,7 +85,7 @@ msgstr ""
 msgid "Function is requested '%s', but it doesn't have return of IO"
 msgstr ""
 
-msgid "No object variable for function"
+msgid "Function's name longer to 254."
 msgstr ""
 
 msgid "Object's function have more 255 parameters."
@@ -99,9 +103,6 @@ msgstr ""
 
 #, c-format
 msgid "Not supported type %d for operation 'Add'."
-msgstr ""
-
-msgid "Call object's function for no object or function name is empty."
 msgstr ""
 
 #, c-format

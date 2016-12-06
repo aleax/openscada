@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-09 17:29+0300\n"
+"POT-Creation-Date: 2016-12-06 11:21+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -73,6 +73,10 @@ msgid "Don't support operation code %d."
 msgstr "Код виконання %d не підтримується."
 
 #, c-format
+msgid "External functions number exceeded limits to %d on function '%s'"
+msgstr "Кількість зовнішніх функцій досягло ліміту у %d на функції '%s'"
+
+#, c-format
 msgid "More than %d(%d) parameters are specified for function '%s'"
 msgstr "Вказано більш %d(%d) параметрів для функції '%s'"
 
@@ -80,8 +84,8 @@ msgstr "Вказано більш %d(%d) параметрів для функц�
 msgid "Function is requested '%s', but it doesn't have return of IO"
 msgstr "Викликано функцію '%s', але вона не має IO-повернення"
 
-msgid "No object variable for function"
-msgstr "Не об'єктна змінна для функції"
+msgid "Function's name longer to 254."
+msgstr "Ім'я функції довше за 254."
 
 msgid "Object's function have more 255 parameters."
 msgstr "Функція об'єкту містить більш 255 параметрів."
@@ -99,9 +103,6 @@ msgstr "Перевищено час обчислення функції %d > %d+
 #, c-format
 msgid "Not supported type %d for operation 'Add'."
 msgstr "Тип %d, який не підтримується операцією 'Add'."
-
-msgid "Call object's function for no object or function name is empty."
-msgstr "Виклик об'єктної функції без об'єкту або ім'я функції порожнє."
 
 #, c-format
 msgid "Operation %c(%xh) error. Function '%s' is stopped."

@@ -53,7 +53,7 @@ void sfErr( const string &mess, YYLTYPE *ps );
 
 %token	ERR VAR_DIR IF ELSE WHILE FOR IN BREAK CONTINUE ADDEQ SUBEQ MULEQ DIVEQ BITSHLEFT BITSHRIGHT RETURN NEW DELETE OBJECT ARRAY REGEXP
 %token	<id>	FUNC INT_FUNC B_FUNC B_FUNC1 B_FUNC2
-%token	<reg>	VAR CONST
+%token	<reg>	VAR CONST FUNC_R
 %token	<op>	O_PRP_F FUNCTON
 %type	<reg>	var expr
 %type	<prg_cd>	if if_expr OR_expr AND_expr end cycl fnc_in
@@ -124,6 +124,8 @@ solve:  assign ';'
 	    }
 	| FUNC '(' prmlst ')' ';'
 	    { try{ pF->cdExtFnc($1,$3,true); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| FUNC_R '(' prmlst ')' ';'
+	    { try{ pF->cdExtFnc(-1,$3,true,$1); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| INT_FUNC '(' prmlst ')' ';'
 	    { try{ pF->cdIntFnc($1,$3,true); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| '{' solver '}'
@@ -263,6 +265,7 @@ expr:	CONST	{ $$ = $1; }
 	| B_FUNC1 '(' expr ')'		{ try{ $$ = pF->cdBldFnc($1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| B_FUNC2 '(' expr ',' expr ')'	{ try{ $$ = pF->cdBldFnc($1,$3,$5); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| FUNC '(' prmlst ')'		{ try{ $$ = pF->cdExtFnc($1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
+	| FUNC_R '(' prmlst ')'		{ try{ $$ = pF->cdExtFnc(-1,$3,false,$1); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| INT_FUNC '(' prmlst ')'	{ try{ $$ = pF->cdIntFnc($1,$3); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| NEW OBJECT '(' ')'		{ try{ $$ = pF->cdMviObject(); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
 	| NEW ARRAY '(' prmlst ')'	{ try{ $$ = pF->cdMviArray($4); } catch(TError &err){ sfErr(err.mess,&@1); YYABORT; } }
@@ -519,10 +522,22 @@ retry:
 	}
 	if(smb_nm == "function") {
 	    yylval.op[0] = 0;
-	    while(pos < prog.size() && prog[pos] != '(') pos++;
+	    while(pos < prog.size() && !(prog[pos] == '(' || prog[pos] == '=')) pos++;
 	    if(pos < prog.size())
 		sscanf(prog.substr(st_pos,pos-st_pos).c_str(),"function %254s",yylval.op);
 	    if(pos >= prog.size() || yylval.op[0] == 0) { yyerror(_("Internal function declaration error, ")); return ERR; }
+	    // Static function assign
+	    if(prog[pos] == '=') {
+		smb_nm = yylval.op;
+		if(!(yylval.reg=pF->regAt(pF->regGet(EXT_F_AS_PREF+smb_nm)))) {
+		    yylval.reg = pF->regAt(pF->regNew(true));
+		    yylval.reg->setName(EXT_F_AS_PREF+smb_nm);
+		    yylval.reg->setType(Reg::Function);
+		    yylval.reg->setLock(true);
+		}
+		return VAR;
+	    }
+	    // Internal function define
 	    if(pF->inFuncGet(yylval.op) >= 0) { yyerror(TSYS::strMess(_("Internal function '%s' defined early, "),yylval.op).c_str()); return ERR; }
 	    if(pF->mInFnc.size()) { yyerror(_("Do not include declaration of one internal function to other, ")); return ERR; }
 	    pF->inFuncDef(yylval.op, pF->prg.size());	//Early mark of the function context
@@ -581,7 +596,10 @@ retry:
 	    // Internal functions
 	    if((yylval.id=pF->inFuncGet(smb_nm)) >= 0) return INT_FUNC;
 
-	    // External functions
+	    // Static linked external functions
+	    if((yylval.reg=pF->regAt(pF->regGet(EXT_F_AS_PREF+smb_nm)))) return FUNC_R;
+
+	    // External/static functions
 	    if((yylval.id=pF->funcGet(smb_nm)) >= 0) return FUNC;
 
 	    // Check for object's functions and system object's function
@@ -598,6 +616,9 @@ retry:
 
 	//Check allowed registers
 	if((yylval.reg=pF->regAt(pF->regGet(smb_nm,true)))) return VAR;
+
+	//Check for register as dynamic linked external function, mostly for allow it check for connection
+	if((yylval.reg=pF->regAt(pF->regGet(EXT_F_AS_PREF+smb_nm)))) return VAR;
 
 	//Global attributes and object's parameters.
 	if(is_dot) {

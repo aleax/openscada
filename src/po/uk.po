@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-16 14:06+0200\n"
+"POT-Creation-Date: 2016-12-06 16:02+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1409,7 +1409,7 @@ msgstr "Бібліотека шаблонів параметрів: "
 msgid "Library"
 msgstr "Бібліотека"
 
-msgid "Library BD"
+msgid "Library DB"
 msgstr "БД бібліотеки"
 
 msgid ""
@@ -1620,6 +1620,7 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2377,6 +2378,9 @@ msgstr "Помилка запису значення до архіву: %s"
 msgid "Attribute doesn't have archive"
 msgstr "Атрибут не має архіву"
 
+msgid "Too big string forced to the not STL string (> 30 MB)!"
+msgstr "Дуже великий рядок для не STL рядку (> 30 МБ)!"
+
 #, c-format
 msgid "Memory alloc for big string length (%d) error!"
 msgstr "Помилка виділення пам'яті для рядка великого розміру (%d)!"
@@ -2512,6 +2516,3 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
-
-#~ msgid "Too big string length (> 130 MB)!"
-#~ msgstr "Дуже великий розмір рядка (> 130 MB)!"

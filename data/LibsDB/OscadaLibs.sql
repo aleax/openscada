@@ -1455,20 +1455,20 @@ INSERT INTO "tmplib_base_io" VALUES('anUnif','ed','Dimension',0,32,' ',3,'Од. 
 INSERT INTO "tmplib_base_io" VALUES('anUnif','min','Scale:minimum',2,32,'0',4,'Шкала:мінімум','','Шкала:минимум','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','max','Scale:maximum',2,32,'100',5,'Шкала:максимум','','Шкала:максимум','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','scSqr','Scale:square',3,32,'0',6,'Шкала:квадратична','','Шкала:квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','aMin','Border down alarm',2,32,'0',10,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','aMax','Border up alarm',2,32,'0',11,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'0',12,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',13,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',15,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',16,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time (s)',2,32,'0',18,'Час фільтру (с)','','Время фильтрации (с)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addon',2,64,'0',19,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',20,'Множник входу','','Множитель ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',21,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',22,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding (%)',2,64,'0',23,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImit','PLC imitation',3,64,'0',24,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',25,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня ав.','','Граница нижняя ав.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя ав.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя пред.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя пред.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','speed','Motion speed (%/cycle)',2,32,'0',16,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','prec','Precision (signs)',1,32,'2',17,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','Tf','Filter time, s',2,32,'0',19,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','iAdd','Input addon',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',22,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',23,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',24,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImit','PLC imitation',3,64,'0',25,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',26,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','close','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
 INSERT INTO "tmplib_base_io" VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','Кран|stop','Команда "Стоп"','Кран|stop');
@@ -1538,21 +1538,21 @@ INSERT INTO "tmplib_base_io" VALUES('anUnifSt','ed','Dimension',0,32,' ',8,'Од
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','min','Scale:minimum',2,32,'0',9,'Шкала:мінімум','','Шкала:минимум','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','max','Scale:maximum',2,32,'100',10,'Шкала:максимум','','Шкала:максимум','');
 INSERT INTO "tmplib_base_io" VALUES('anUnifSt','scSqr','Scale:square',3,32,'0',11,'Шкала:квадратична','','Шкала:квадратичная','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',15,'Границя нижня ав.','','Граница нижняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',16,'Границя верхня аварійна','','Граница верхняя ав.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMin','Border down warning',2,32,'0',17,'Границя нижня попереджув.','','Граница нижняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMax','Border up warning',2,32,'0',18,'Границя верхня попереджув.','','Граница верхняя пред.','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',19,'Гистерезис нарушений границ','','Гистерезиз наруш. границ','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','speed','Motion speed (%/cycle)',2,32,'0',20,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',21,'Точність (знаків)','','Точность (знаков)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time (s)',2,32,'0',23,'Час фільтру (с)','','Время фильтрации (с)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iAdd','Input addon',2,64,'0',24,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',25,'Множник входу','','Множитель ко входу','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',26,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',27,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcExcess','Allowed scale exceeding (%)',2,64,'0',28,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',29,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',30,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMin','Border down alarm',2,32,'0',16,'Границя нижня ав.','','Граница нижняя ав.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','aMax','Border up alarm',2,32,'0',17,'Границя верхня аварійна','','Граница верхняя ав.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMin','Border down warning',2,32,'0',18,'Границя нижня попереджув.','','Граница нижняя пред.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','wMax','Border up warning',2,32,'0',19,'Границя верхня попереджув.','','Граница верхняя пред.','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','HystBnd','Hysteresis of boders violation',2,32,'0',20,'Гистерезис нарушений границ','','Гистерезиз наруш. границ','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','speed','Motion speed (%/cycle)',2,32,'0',21,'Швидкість зміни (%/цикл)','','Скорость изменения (%/цикл)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','prec','Precision (signs)',1,32,'2',22,'Точність (знаків)','','Точность (знаков)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','Tf','Filter time, s',2,32,'0',24,'Час фільтру (с)','','Время фильтрации (с)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iAdd','Input addon',2,64,'0',25,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','iMult','Input multiplication',2,64,'1',26,'Множник входу','','Множитель ко входу','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMin','Minimum module scale',2,64,'1',27,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcMax','Maximum module scale',2,64,'5',28,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcExcess','Allowed scale exceeding, %',2,64,'0',29,'Дозволене перевищення шкали (%)','','Допустимое превышение шкалы модуля (%)','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImit','PLC imitation',3,64,'0',30,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','plcImitIn','PLC imitation input',2,128,'Imitation|var',31,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','in','Input',2,128,'Signal|in',0,'Вхід','','Вход','Signal|in');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','sp','Setpoint',2,160,'PID|sp',1,'Завдання','ПІД|sp','Задание','ПИД|sp');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','');
@@ -1599,22 +1599,22 @@ INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcImit','PLC imitation',3,64,'0'
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',43,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','varIn','Variable input',2,32,'0',2,'Введення змінної','','Ввод переменной','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','SHIFR','Code',0,0,'',45,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','this','Object',4,1,'',31,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','SHIFR','Code',0,0,'',32,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','NAME','Name',0,0,'',33,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','DESCR','Description',0,0,'',34,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','this','Object',4,1,'',26,'Об''єкт','','Объект','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','this','Object',4,1,'',32,'Об''єкт','','Объект','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','SHIFR','Code',0,0,'',33,'Шифр','','Шифр','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','NAME','Name',0,0,'',34,'Ім''я','','Имя','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','DESCR','Description',0,0,'',35,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','this','Object',4,1,'',27,'Об''єкт','','Объект','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','NAME','Name',0,0,'',46,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','this','Object',4,1,'',44,'Об''єкт','','Объект','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','SHIFR','Code',0,0,'',27,'Шифр','','Шифр','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','NAME','Name',0,0,'',28,'Ім''я','','Имя','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','DESCR','Description',0,0,'',29,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','SHIFR','Code',0,0,'',28,'Шифр','','Шифр','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','NAME','Name',0,0,'',29,'Ім''я','','Имя','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','DESCR','Description',0,0,'',30,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnif','DESCR','Description',0,0,'',47,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','this','Object',4,1,'',50,'Об''єкт','','Объект','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','SHIFR','Code',0,0,'',51,'Шифр','','Шифр','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','NAME','Name',0,0,'',52,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('pidUnifImp','DESCR','Description',0,0,'',53,'Опис','','Описание','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',14,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гістерезиз поруш. границь','','Гистерезиз наруш. границ','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Процедура обробки входу','','Процедура обработки входа','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','subMode','Substitute:mode (0-no; 1-last; 2-substitute)',1,32,'0',7,'Заміна:режим (0-немає; 1-останне; 2-заміна)','','Замена:режим (0-нет; 1-последний; 2-замена)','');
 INSERT INTO "tmplib_base_io" VALUES('anUnif','subVar','Substitute:variable',2,32,'0',8,'Заміна:змінна','','Замена:переменная','');
@@ -1638,17 +1638,19 @@ INSERT INTO "tmplib_base_io" VALUES('SNMP','SHIFR','Code',0,0,'',4,'Шифр',''
 INSERT INTO "tmplib_base_io" VALUES('SNMP','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','DESCR','Description',0,0,'',6,'Опис','','Описание','');
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,' ',0,'Сигнал "{st}:{lev}:{mess}"','','Сигнал "{st}:{lev}:{mess}"','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','SHIFR','Code',0,0,'',6,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','NAME','Name',0,0,'',7,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',8,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',9,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('anUnif','log','Logarithmic scale',3,32,'0',17,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','SHIFR','Code',0,0,'',6,'Шифр','','Шифр','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','NAME','Name',0,0,'',7,'Ім''я','','Имя','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',8,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',9,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','log','Logarithmic scale',3,32,'0',18,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','log','Logarithmic scale',3,32,'0',15,'Логарифмічна шкала','','Логарифмическая шкала','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','stInv','State inverse',3,64,'',1,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'',4,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',22,'','','','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','stInv','State inverse',3,64,'',1,'Інверсія стану','','Инверсия состояния','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_open','State "Opened"',3,16,'',4,'Стан "Відкрито"','','Состояние "Открыто"','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','st_close','State "Closed"',3,16,'',5,'Стан "Закрито"','','Состояние "Закрыто"','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','log','Logarithmic scale',3,32,'0',23,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','inProc','Input processing procedure',0,68,'',3,'Процедура обробки входу','','Процедура обработки входа','');
+INSERT INTO "tmplib_base_io" VALUES('anUnif','alDelay','Alarms delay, s',2,32,'0',10,'Затримка порушення, с','','Задержка нарушения, с','');
+INSERT INTO "tmplib_base_io" VALUES('anUnifSt','alDelay','Alarms delay, s',2,32,'',15,'Затримка порушення, с','','Задержка нарушения, с','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -6225,7 +6227,7 @@ levErr = 0;
 tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
-	if(Tf > 0 && conDelay_ < Tf && (conDelay_=conDelay_+1/f_frq) < Tf) return;
+	//if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
@@ -6271,6 +6273,9 @@ if(!tErr) {
 //Alarms forming
 if(alSup == 1)	f_err = "0";
 else {
+	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
@@ -6278,8 +6283,8 @@ else {
 	toSave = (alSup == 2 && f_err != tErr);
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
-}
-conDelay_ = 0;','','',1467708902);
+	conDelay_ = 0;
+}','','',1480875955);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
@@ -6380,7 +6385,7 @@ levErr = 0;
 tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
-	if(Tf > 0 && conDelay_ < Tf && (conDelay_=conDelay_+1/f_frq) < Tf) return;
+	//if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
@@ -6429,6 +6434,9 @@ else {
 //Alarms forming
 if(alSup == 1)	f_err = "0";
 else {
+	if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+	if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
+	if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
@@ -6436,8 +6444,8 @@ else {
 	toSave = (alSup == 2 && f_err != tErr);
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
-}
-conDelay_ = 0;','','',1467708877);
+	conDelay_ = 0;
+}','','',1480876320);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигнал (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
@@ -7143,6 +7151,7 @@ if(f_start) {
 	SMTPTr = emailServer.length ? SYS.Transport.nodeAt(emailServer,".") : false;
 	SMSTrId_ = SMSTrId;
 	SMSTr = SMSTrId.length ? SYS.Transport.Serial.nodeAt("out_"+SMSTrId) : false;
+	return;	//Don''t real process at start
 }
 if(f_stop)	{ emailState = SMSState = ""; return; }
 if(emailServer_ != emailServer) {
@@ -7231,7 +7240,7 @@ if(!SMSTr)	SMSState = "Disabled!";
 else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
-}','','',1479051264);
+}','','',1480872892);
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PR_TR" INTEGER DEFAULT '1' ,"WaitReqTm" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('SMS','','','','Provides operations with SMS by GSM-modem connected as serial device. For now supported only sending SMS messages to a number of remote cell phone or GSM modem.
 Author: Roman Savochenko <rom_as@oscada.org>

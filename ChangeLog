@@ -1,3 +1,13 @@
+2016-12-06 Roman (JavaLikeCalc_testing)
+- DB.LibsDB.OscadaLibs: Templates base.{anUnif,anUnifSt} expanded by attribute "alDelay" for split it from "Tf" for alarms delay and
+	propogate it for all alarm types.
+    Notifications dispatcher is pevented from early starting at "f_start".
+- DAQ: Program translation sign of templates set to disabled by default.
+- !!!!:DAQ.JavaLikeCalc: Dynamic linking to external functions support is added in way: function {nm} = "{addr}"; {nm}();.
+    External functions link and call optimized at all.
+- FIX:DAQ.LogicLev: User attributes removing prevented at the parameter's object enable, for passive ones.
+
+
 2016-12-02 Roman (core_testing)
 - !!!!:FIX:SYS: TCfg was fixed to use TVariant string as a constant for STL string.
     TVariant expanded for STL string using always except fields marked as "stdStringOmit", mostly for TCfg as string constants (DB table's keys).
