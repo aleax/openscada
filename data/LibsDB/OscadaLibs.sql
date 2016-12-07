@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.6.0','','tmplib_DevLib','Библиотека устройств','');
+Version: 1.7.0','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -57,7 +57,6 @@ INSERT INTO "UserFuncLibs" VALUES('web','XHTML-template','Pages processing funct
 Author: Roman Savochenko
 Version: 0.1.0
 License: GPL','flb_web','XHTML-шаблон','Бібліотека функцій обробки сторінок XHTML-шаблонів користувацткого Web-інтерфейсу.','XHTML-шаблон','Библиотека функций обработки страниц XHTML-шаблонов пользовательского Web-интерфейса.',0);
-INSERT INTO "UserFuncLibs" VALUES('lowLevDevs','Low level devices','Devices access like text displays by DIO, temporary.','flb_lowLevDevs','','','','','');
 CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.',10,'using Special.FLibSYS;
 srcTime = time;
@@ -1206,6 +1205,21 @@ INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','t','T, °С',2,16,'',4,'','','',
 INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','p32k','Enable 32768Hz',3,32,'',5,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','pSQW','Enable SQUARE-WAVE OUTPUT',3,32,'',6,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('DS3231','pSQWf','SQUARE-WAVE OUTPUT frequency: 0-1Hz, 1-1.024kHz, 2-4.096kHz, 3-8.192kHz',1,32,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DHT','addr','GPIO address with functions mode(), get() and put(), mostly it''s BCM2835',0,64,'DAQ.BCM2835.pi.pi',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DHT','pin','IO pin number of the GPIO',1,64,'17',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DHT','tries','Tries [1...5]',1,64,'2',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,64,'1',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DHT','t','T, °С',2,16,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('DHT','h','H, %',2,16,'',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','addr','GPIO address with function put(), mostly it''s BCM2835',0,64,'DAQ.BCM2835.pi.pi',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','RS','Pin: Reset',1,64,'7',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','E','Pin: Enable',1,64,'8',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D4','Pin: Data4',1,64,'25',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D5','Pin: Data5',1,64,'24',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D6','Pin: Data6',1,64,'23',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D7','Pin: Data7',1,64,'18',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',8,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2957,6 +2971,10 @@ INSERT INTO "Trs" VALUES('Enable Current Accumulator','','');
 INSERT INTO "Trs" VALUES('Enable Current Accumulator Shadow','','');
 INSERT INTO "Trs" VALUES('Disconnect time','','');
 INSERT INTO "Trs" VALUES('End of charge time','','');
+INSERT INTO "Trs" VALUES('No link to external functions on ''%1''.','','');
+INSERT INTO "Trs" VALUES('Unknown device %1 [0-DHT11, 1-DHT22].','','');
+INSERT INTO "Trs" VALUES('Tries number %1 out of range [1...5].','','');
+INSERT INTO "Trs" VALUES('Get data after %1 tries error.','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -4704,7 +4722,7 @@ f_err = t_err;','','',1478967014);
 INSERT INTO "tmplib_DevLib" VALUES('SSCP','Shark Slave Communication Protocol','Shark Slave Communication Protocol','','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)
-Version: 0.6.1','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
+Version: 0.6.2','Shark Slave Communication Protocol from EnergoCentrum PLUS, s.r.o.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Costumer Faster CZ (http://faster.cz)','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
@@ -4857,7 +4875,7 @@ else {
 				if(t_err.toInt()) tVl = EVAL;
 				else {
 					if(vO.Type.indexOf("bool") != -1 && vO.Length == 1)
-						tVl = io.read("char", 1).charCodeAt(0);
+						tVl = io.read("int8", 1);
 					else if(vO.Type.indexOf("real") != -1 && (vO.Length == 4 || vO.Length == 8))
 						tVl = io.read((vO.Length==8)?"double":"float", 1);
 					else if(vO.Type.indexOf("int") != -1 && (vO.Length == 2 || vO.Length == 4))
@@ -4890,7 +4908,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1476811531);
+f_err = t_err;','','',1481104555);
 INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097U','One Wire by DS9097U','One Wire by DS9097U','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -6016,6 +6034,137 @@ else {
 
 if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
 f_err = t_err;','','',1479651485);
+INSERT INTO "tmplib_DevLib" VALUES('DHT','GPIO: DHT11,22 (AM23XX)','','','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
+The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", addr_ = "";
+
+t_err = "0";
+
+//Check for the address change and link
+if(addr != addr_)	{
+	addr_ = addr;
+	function mode = addr+".fnc_mode";
+	function get = addr+".fnc_get";
+	function put = addr+".fnc_put";
+}
+
+//Read sensor''s data function declaration
+function read() {
+	vl = 0;						//Meassured value
+	cntHoldMax = 100;		//Maximum wait counter
+
+	//Call the device to a respond
+	mode(pin, 4); put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
+	put(pin, false); tmSleep(20e-3);							//Set output to false for 20ms
+	mode(pin, 2);														//Set pin to input mode
+
+	//Read
+	// Wait for pull pin low.
+	for(cntHold = 0; get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+
+	//Meassure the typical pulse length
+	for(cntHold = 0; !get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	for(cntHold = 0; get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	cntPulse = cntHold;
+
+	//Read meassured value
+	for(iB = 0; iB < 40; iB++) {
+		//stg = iB;
+		for(cntHold = 0; !get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		for(cntHold = 0; get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		vl = vl << 1;
+		if(cntHold > cntPulse/2)	vl = vl | 1;
+	}
+
+	return vl;
+}
+
+//Main processing
+if(!mode)	t_err = "1:"+tr("No link to external functions on ''%1''.").replace("%1",addr);
+else if(!(dev == 0 || dev == 1))	t_err = "2:"+tr("Unknown device %1 [0-DHT11, 1-DHT22].").replace("%1",dev.toString());
+else if(tries < 1 || tries > 5)	t_err = "3:"+tr("Tries number %1 out of range [1...5].").replace("%1",tries.toString());
+else {
+	for(i = 0; i < tries; i++) {
+		if(i) tmSleep(2);	//Retry after two seconds
+		if((vl=read()) && (vl&0xFF) == ((((vl>>8)&0xFF)+((vl>>16)&0xFF)+((vl>>24)&0xFF)+((vl>>32)&0xFF))&0xFF)) {
+			//SYS.messInfo("/DHT","vl="+vl.toString(16));
+			if(dev == 1) {
+				h = 0.1*(((vl>>32)&0xFF)*256+((vl>>24)&0xFF));
+				t = 0.1*(((vl>>16)&0xFF)*256+((vl>>8)&0xFF));
+				break;
+			}
+			h = ((vl>>32)&0xFF) + 20; t = (vl>>16)&0xFF;
+		}
+	}
+	if(i >= tries)	t_err = "10:"+tr("Get data after %1 tries error.").replace("%1",tries.toString());
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
+f_err = t_err;','','',1481127790);
+INSERT INTO "tmplib_DevLib" VALUES('1602A','GPIO: 1602A(HD44780)','','','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots
+The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+Conditions: Default planing policy but realtime one preferred.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", addr_ = ln1_ = ln2_ = "";
+
+t_err = "0";
+
+//Check for the address change and link
+if(addr != addr_)	{
+	addr_ = addr;
+	function put = addr+".fnc_put";
+}
+
+//Write a byte function declaration
+function byte(vl, md, dl) {
+	if(md == EVAL_BOOL) md = false;
+	if(dl == EVAL_BOOL) dl = 50e-6;
+	put(RS, md);
+	put(D4, vl&0x10); put(D5, vl&0x20); put(D6, vl&0x40); put(D7, vl&0x80);
+	tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+	put(D4, vl&0x01); put(D5, vl&0x02); put(D6, vl&0x04); put(D7, vl&0x08);
+	tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+}
+
+//Main processing
+if(!put)	t_err = "1:"+tr("No link to external functions on ''%1''.").replace("%1",addr);
+else if(ln1 != ln1_ || ln2 != ln2_) {
+	ln1_ = ln1; ln2_ = ln2;	
+
+	//Init
+	byte(0x33); byte(0x32); byte(0x28); byte(0x0C); byte(0x06); byte(0x01);
+	//Line 1
+	if(ln1.length) {
+		tmSleep(2e-3);
+		byte(0x80);
+		for(iC = 0; iC < min(16,ln1.length); iC++)
+			byte(ln1.charCodeAt(iC), true);
+	}
+	//Line 2
+	if(ln2.length) {
+		tmSleep(2e-3);
+		byte(0xC0);
+		for(iC = 0; iC < min(16,ln2.length); iC++)
+			byte(ln2.charCodeAt(iC), true);
+	}
+}
+
+f_err = t_err;','','',1481127568);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -6575,101 +6724,6 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1416765601);
-CREATE TABLE 'flb_lowLevDevs_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln1','Line 1',0,0,'',0,0);
-INSERT INTO "flb_lowLevDevs_io" VALUES('1602A','ln2','Line 2',0,0,'',0,1);
-INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','res','Result',0,2,'',0,0);
-INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','pin','GPIO Pin',1,0,'17',0,1);
-INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','tries','Tries',1,0,'3',0,2);
-INSERT INTO "flb_lowLevDevs_io" VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,0,'0',0,3);
-CREATE TABLE 'flb_lowLevDevs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_lowLevDevs" VALUES('1602A','Display 1602A','Description: LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots
-Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
-Connection: GPIO7(RS), GPIO8(E), GPIO25(D4), GPIO24(D5), GPIO23(D6), GPIO18(D7)
-Conditions: Default planing policy but realtime better.',0,10,0,'using DAQ.BCM2835.pi2.pi2;
-using Special.FLibSYS;
-
-function byte(vl, md, dl) {
-	if(md == EVAL_BOOL) md = false;
-	if(dl == EVAL_BOOL) dl = 50e-6;
-	RS = 7, E = 8, D4 = 25, D5 = 24, D6 = 23, D7 = 18;
-	fnc_put(RS, md);
-	fnc_put(D4, vl&0x10); fnc_put(D5, vl&0x20); fnc_put(D6, vl&0x40); fnc_put(D7, vl&0x80);
-	tmSleep(dl); fnc_put(E, true); tmSleep(dl); fnc_put(E, false); tmSleep(dl);
-	fnc_put(D4, vl&0x01); fnc_put(D5, vl&0x02); fnc_put(D6, vl&0x04); fnc_put(D7, vl&0x08);
-	tmSleep(dl); fnc_put(E, true); tmSleep(dl); fnc_put(E, false); tmSleep(dl);
-}
-
-//Init
-byte(0x33); byte(0x32); byte(0x28); byte(0x0C); byte(0x06); byte(0x01);
-//Line 1
-if(ln1.length) {
-	tmSleep(2e-3);
-	byte(0x80);
-	for(iC = 0; iC < min(16,ln1.length); iC++)
-		byte(ln1.charCodeAt(iC), true);
-}
-
-//Line 2
-if(ln2.length) {
-	tmSleep(2e-3);
-	byte(0xC0);
-	for(iC = 0; iC < min(16,ln2.length); iC++)
-		byte(ln2.charCodeAt(iC), true);
-}',1463511761);
-INSERT INTO "flb_lowLevDevs" VALUES('DHT','DHT (AOSONG)','Description: Reading temperature and humidity module DHT11, AM2320, DHT22 (AM2302)
-Depends: Raspbery Pi, DAQ.BCM2835.pi2.pi2, Special.FLibSYS
-Connection: GPIO (17 by default)
-Conditions: Exclusively realtime planing in the prioroty 199 (FIFO-99).
-Version: 1.1.0',0,10,0,'using DAQ.BCM2835.pi2.pi2;
-using Special.FLibSYS;
-
-function read() {
-	vl = 0;						//Meassured value
-	cntHoldMax = 100;		//Maximum wait counter
-
-	//Call the device to a respond
-	fnc_mode(pin, 4); fnc_put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
-	fnc_put(pin, false); tmSleep(20e-3);								//Set output to false for 20ms
-	fnc_mode(pin, 2);																//Set pin to input mode
-
-	//Read
-	// Wait for to pull pin low.
-	for(cntHold = 0; fnc_get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-
-	//Meassure the typical pulse length
-	for(cntHold = 0; !fnc_get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-	for(cntHold = 0; fnc_get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-	cntPulse = cntHold;
-
-	//Read meassured value
-	for(iB = 0; iB < 40; iB++) {
-		for(cntHold = 0; !fnc_get(pin); cntHold++)
-			if(cntHold > cntHoldMax) return 0;
-		for(cntHold = 0; fnc_get(pin); cntHold++)
-			if(cntHold > cntHoldMax) return 0;
-		vl = vl << 1;
-		if(cntHold > cntPulse/2)	vl = vl | 1;
-	}
-
-	return vl;
-}
-
-for(i = 0; i < tries; i++) {
-	if(i) tmSleep(2);	//Retry after two seconds
-	if((vl=read()) && (vl&0xFF) == ((((vl>>8)&0xFF)+((vl>>16)&0xFF)+((vl>>24)&0xFF)+((vl>>32)&0xFF))&0xFF)) {
-		if(dev == 1) {
-			hum = 0.1*(((vl>>32)&0xFF)*256+((vl>>24)&0xFF));
-			tmp = 0.1*(((vl>>16)&0xFF)*256+((vl>>8)&0xFF));
-			return hum.toFixed(1) + ":" + tmp.toFixed(1);
-		}
-		hum = (vl>>32)&0xFF; tmp = (vl>>16)&0xFF;
-		return (hum+20).toString() + ":" + tmp.toString();
-	}
-}',1472580871);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_Controllers" VALUES('prescr','Prescriptions manager','','','Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 Author: Roman Savochenko <rom_as@oscada.org>

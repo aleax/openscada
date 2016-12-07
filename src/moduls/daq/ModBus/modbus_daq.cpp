@@ -1150,11 +1150,11 @@ void TMdPrm::enable( )
 
     //Check for delete DAQ parameter's attributes
     for(int i_p = 0; i_p < (int)pEl.fldSize(); i_p++) {
-	unsigned i_l;
-	for(i_l = 0; i_l < als.size(); i_l++)
-	    if(pEl.fldAt(i_p).name() == als[i_l])
+	unsigned iL;
+	for(iL = 0; iL < als.size(); iL++)
+	    if(pEl.fldAt(i_p).name() == als[iL])
 		break;
-	if(i_l >= als.size())
+	if(iL >= als.size())
 	    try{ pEl.fldDel(i_p); i_p--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
@@ -1240,16 +1240,16 @@ void TMdPrm::initLnks( )
     int reg, off;
 
     //Init links
-    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++) {
-	lCtx->lnk(i_l).real.clear();
+    for(int iL = 0; iL < lCtx->lnkSize(); iL++) {
+	lCtx->lnk(iL).real.clear();
 	off = 0;
-	atp = TSYS::strParse(lCtx->lnk(i_l).addr, 0, ":", &off);
+	atp = TSYS::strParse(lCtx->lnk(iL).addr, 0, ":", &off);
 	if(atp.empty()) continue;
 	atp_m = TSYS::strParse(atp, 0, "_");
 	atp_sub = TSYS::strParse(atp, 1, "_");
-	ai  = TSYS::strParse(lCtx->lnk(i_l).addr, 0, ":", &off);
+	ai  = TSYS::strParse(lCtx->lnk(iL).addr, 0, ":", &off);
 	reg = strtol(ai.c_str(),NULL,0);
-	mode  = TSYS::strParse(lCtx->lnk(i_l).addr, 0, ":", &off);
+	mode  = TSYS::strParse(lCtx->lnk(iL).addr, 0, ":", &off);
 	if(mode != "w")	owner().regVal(reg, atp_m);
 	if(atp[0] == 'R') {
 	    if(atp_sub == "i4" || atp_sub == "u4" || atp_sub == "f") {
@@ -1271,7 +1271,7 @@ void TMdPrm::initLnks( )
 		ai = TSYS::strMess("%d,%d", reg, rN);
 	    }
 	}
-	lCtx->lnk(i_l).real = atp+":"+ai+":"+mode;
+	lCtx->lnk(iL).real = atp+":"+ai+":"+mode;
     }
 }
 
@@ -1283,9 +1283,9 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 
     if(isStd()) {
 	elem().fldList(ls);
-	for(unsigned i_el = 0; i_el < ls.size(); i_el++) {
-	    pVal = vlAt(ls[i_el]);
-	    if(!(pVal.at().fld().flg()&TVal::DirRead)) continue;
+	for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
+	    pVal = vlAt(ls[iEl]);
+	    if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic)) continue;
 	    pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err),0,true);
 	}
     }
@@ -1300,9 +1300,9 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	    if(lCtx->idDscr >= 0)	lCtx->setS(lCtx->idDscr, descr());
 
 	    //Get input links
-	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
-		if(TSYS::strParse(lCtx->lnk(i_l).real,2,":") != "w")	//No read try for only writible
-		    lCtx->set(lCtx->lnk(i_l).ioId, owner().getVal(lCtx->lnk(i_l).real,w_err));
+	    for(int iL = 0; iL < lCtx->lnkSize(); iL++)
+		if(TSYS::strParse(lCtx->lnk(iL).real,2,":") != "w")	//No read try for only writible
+		    lCtx->set(lCtx->lnk(iL).ioId, owner().getVal(lCtx->lnk(iL).real,w_err));
 
 	    //Calc template
 	    lCtx->setMdfChk(true);
@@ -1310,10 +1310,10 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	    modif();
 
 	    //Put output links
-	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
-		if(lCtx->ioMdf(lCtx->lnk(i_l).ioId))
-		    if(!owner().setVal(lCtx->get(lCtx->lnk(i_l).ioId), lCtx->lnk(i_l).real, w_err))
-			lCtx->setS(lCtx->lnk(i_l).ioId, EVAL_STR);
+	    for(int iL = 0; iL < lCtx->lnkSize(); iL++)
+		if(lCtx->ioMdf(lCtx->lnk(iL).ioId))
+		    if(!owner().setVal(lCtx->get(lCtx->lnk(iL).ioId), lCtx->lnk(iL).real, w_err))
+			lCtx->setS(lCtx->lnk(iL).ioId, EVAL_STR);
 
 	    //Put fixed system attributes
 	    if(lCtx->idNm >= 0)  setName(lCtx->getS(lCtx->idNm));
@@ -1321,11 +1321,12 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 
 	    //Attribute's values update
 	    elem().fldList(ls);
-	    for(unsigned i_el = 0; i_el < ls.size(); i_el++) {
-		int id_lnk = lCtx->lnkId(ls[i_el]);
+	    for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
+		int id_lnk = lCtx->lnkId(ls[iEl]);
 		if(id_lnk >= 0 && lCtx->lnk(id_lnk).real.empty()) id_lnk = -1;
-		pVal = vlAt(ls[i_el]);
-		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[i_el])), 0, true);
+		pVal = vlAt(ls[iEl]);
+		if(pVal.at().fld().flg()&TVal::Dynamic)	continue;
+		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[iEl])), 0, true);
 		else pVal.at().set(owner().getVal(lCtx->lnk(id_lnk).real,acqErr), 0, true);
 	    }
 	} catch(TError &err) {
@@ -1564,17 +1565,17 @@ TMdPrm::TLogCtx::TLogCtx( const string &name ) : TValFunc(name),
 
 int TMdPrm::TLogCtx::lnkId( int id )
 {
-    for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
-	if(lnk(i_l).ioId == id)
-	    return i_l;
+    for(unsigned iL = 0; iL < plnk.size(); iL++)
+	if(lnk(iL).ioId == id)
+	    return iL;
     return -1;
 }
 
 int TMdPrm::TLogCtx::lnkId( const string &id )
 {
-    for(unsigned i_l = 0; i_l < plnk.size(); i_l++)
-	if(func()->io(lnk(i_l).ioId)->id() == id)
-	    return i_l;
+    for(unsigned iL = 0; iL < plnk.size(); iL++)
+	if(func()->io(lnk(iL).ioId)->id() == id)
+	    return iL;
     return -1;
 }
 

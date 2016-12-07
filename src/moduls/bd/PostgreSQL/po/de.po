@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-21 08:34+0300\n"
+"POT-Creation-Date: 2016-12-07 17:10+0200\n"
 "PO-Revision-Date: 2010-08-03 19:12+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -43,6 +43,7 @@ msgstr "Fehler der Anfrage an die Datenbank: %s. %s"
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler der Öffnung der Tabelle '%s'. Datenbank ist abgeschaltet."
 
+#, c-format
 msgid "Table '%s' is not present!"
 msgstr "Die Tabelle '%s' ist nicht vorhanden!"
 
@@ -53,8 +54,24 @@ msgid "Stop transaction error!"
 msgstr "Stopp Transaktion Fehler!"
 
 #, c-format
+msgid "ERR CON for: %s"
+msgstr ""
+
+#, c-format
+msgid "ERR CON_st for: %s"
+msgstr ""
+
+#, c-format
 msgid "Connect to DB error: %s. %s"
 msgstr "Fehler des Anschlusses an die DB: %s. %s"
+
+#, c-format
+msgid "ERR QUERY (con=%d;res=%d;tr=%d) for: %s"
+msgstr ""
+
+#, c-format
+msgid "OK (tr=%d) for: %s"
+msgstr ""
 
 msgid ""
 "PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};"
@@ -95,5 +112,5 @@ msgid "Table is empty!"
 msgstr "Tabelle ist leer!"
 
 #, c-format
-msgid "Row \"%s\" is not present."
-msgstr "Die Zeile \"%s\" ist nicht vorhanden."
+msgid "Row \"%s\" is not present. Are you saved the object?"
+msgstr "Die Zeile \"%s\" ist nicht vorhanden. Sind Sie das Objekt gespeichert?"

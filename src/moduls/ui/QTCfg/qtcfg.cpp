@@ -594,7 +594,7 @@ void ConfApp::itDBLoad( )
 {
     XMLNode req("load"); req.setAttr("path",selPath+"/%2fobj");
     if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
-    else pageRefresh();
+    pageRefresh();	//Any time but warnings in the deep
 }
 
 void ConfApp::itDBSave( )

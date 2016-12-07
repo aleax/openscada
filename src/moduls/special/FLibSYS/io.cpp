@@ -110,7 +110,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(!cnt) return false;
 
 	//Char stream
-	if(tpD.szBt == 1) {
+	if(tpD.ch) {
 	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    if(!fhd) {
 		rez = str.substr(pos, vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
@@ -136,6 +136,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		if(cnt != 1) ao = new TArrayObj();
 		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && (pos+tpD.szBt) <= str.size(); i_cnt++) {
 		    switch(tpD.szBt) {
+			case 1:	rez = tpD.sign ? (int8_t)str[pos] : (uint8_t)str[pos];	break;
 			case 2: {
 			    uint16_t v = TSYS::getUnalign16(str.data()+pos);
 			    switch(mach[0]) {
@@ -178,6 +179,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    for(long r_cnt = 0, r_full = 0, i_cnt = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
 		for(unsigned iPos = 0; (iPos+tpD.szBt) <= r_cnt; iPos += tpD.szBt, i_cnt++) {
 		    switch(tpD.szBt) {
+			case 1:	rez = tpD.sign ? (int8_t)buf[iPos] : (uint8_t)buf[iPos];	break;
 			case 2: {
 			    uint16_t v = *(uint16_t*)(buf+iPos);
 			    switch(mach[0]) {
@@ -307,7 +309,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	//!!!! Check for real data type
 
 	//Char stream
-	if(tpD.szBt == 1 && vals.type() == TVariant::String) {
+	if(tpD.ch && vals.type() == TVariant::String) {
 	    string outCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    string sval = outCd.size() ? Mess->codeConvOut(outCd, prms[0].getS()) : prms[0].getS();
 	    if(!fhd) {
@@ -521,11 +523,14 @@ IOObj::TpDescr &IOObj::getTp( const string &dtT )
 {
     //Init data types
     if(dTPs.empty()) {
-	dTPs["uchar"] = dTPs["uint8"] = dTPs["unsigned char"] = TpDescr(1);
+	dTPs["uchar"] = dTPs["unsigned char"] = TpDescr(1, false, false, true);
+	dTPs["uint8"] = TpDescr(1);
 	dTPs["uint16"] = dTPs["ushort"] = TpDescr(2);
 	dTPs["uint32"] = dTPs["uint"] = dTPs["ulong"] = TpDescr(4);
 	dTPs["uint64"] = TpDescr(8);
-	dTPs["char"] = dTPs["int8"] = dTPs["schar"] = dTPs["signed char"] = dTPs["integer*1"] = TpDescr(1, false, true);
+
+	dTPs["char"] = dTPs["schar"] = dTPs["signed char"] = TpDescr(1, false, true, true);
+	dTPs["int8"] = dTPs["integer*1"] = TpDescr(1, false, true);
 	dTPs["int16"] = dTPs["short"] = dTPs["integer*2"] = TpDescr(2, false, true);
 	dTPs["int32"] = dTPs["int"] = dTPs["long"] = dTPs["integer*4"] = dTPs["integer"] = TpDescr(4, false, true);
 	dTPs["int64"] = dTPs["integer*8"] = TpDescr(8, false, true);

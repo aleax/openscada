@@ -366,7 +366,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present."), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
 
     //Processing of query
     for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++) {

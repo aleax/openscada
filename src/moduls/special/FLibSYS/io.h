@@ -60,12 +60,14 @@ class IOObj : public TVarObj
 	class TpDescr
 	{
 	    public:
-		TpDescr( ) : szBt(1), real(false), sign(true) { }
-		TpDescr( char iSzBt, bool iReal = false, bool iSign = false ) : szBt(iSzBt), real(iReal), sign(iSign) { }
+		TpDescr( ) : szBt(1), real(false), sign(true), ch(false) { }
+		TpDescr( char iSzBt, bool iReal = false, bool iSign = false, bool iChar = false ) :
+		    szBt(iSzBt), real(iReal), sign(iSign), ch(iChar) { }
 
-		unsigned szBt : 4;
-		unsigned real : 1;
-		unsigned sign : 1;
+		unsigned szBt : 4;	//value size in bytes
+		unsigned real : 1;	//real
+		unsigned sign : 1;	//signed
+		unsigned ch   : 1;	//char, process as string
 	};
 
 	//Methods

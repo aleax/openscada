@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-21 08:34+0300\n"
+"POT-Creation-Date: 2016-12-07 17:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,23 @@ msgid "Stop transaction error!"
 msgstr ""
 
 #, c-format
+msgid "ERR CON for: %s"
+msgstr ""
+
+#, c-format
+msgid "ERR CON_st for: %s"
+msgstr ""
+
+#, c-format
 msgid "Connect to DB error: %s. %s"
+msgstr ""
+
+#, c-format
+msgid "ERR QUERY (con=%d;res=%d;tr=%d) for: %s"
+msgstr ""
+
+#, c-format
+msgid "OK (tr=%d) for: %s"
 msgstr ""
 
 msgid ""
@@ -75,5 +91,5 @@ msgid "Table is empty!"
 msgstr ""
 
 #, c-format
-msgid "Row \"%s\" is not present."
+msgid "Row \"%s\" is not present. Are you saved the object?"
 msgstr ""
