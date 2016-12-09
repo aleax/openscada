@@ -2269,14 +2269,11 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
     bool flag_push_back;
     scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
-    if( xSc < ySc ) scale = xSc;
-    else scale = ySc;
-    if( scale != 1.0 )
-    {
-	for(unsigned i = 0; i < shapeItems.size(); i++)
-	{
-	    if( !shapeItems[i].flag_brd && shapeItems[i].border_width > 0 )
-	    {
+    if(scaleHeight < 0 || scaleHeight > 10000 || scaleWidth < 0 || scaleWidth > 10000)	return -1;
+    scale = vmin(xSc, ySc);
+    if(scale != 1) {
+	for(unsigned i = 0; i < shapeItems.size(); i++) {
+	    if(!shapeItems[i].flag_brd && shapeItems[i].border_width > 0) {
 		border_width = shapeItems[i].border_width;
 		border_width = border_width*scale;
 		shapeItems[i].border_width = (int)rRnd(border_width);

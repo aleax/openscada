@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-09 11:51+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "Broadcom BCM 2835 GPIO. Mostly for and used in Raspberry Pi."
+msgstr ""
+
+msgid "Parameteres table"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Module addition parameters"
+msgstr ""
+
+msgid "Init bcm2835 library error whether that is not bcm2835 or there is not access."
+msgstr ""
+
+msgid "1:Parameter is disabled."
+msgstr ""
+
+msgid "2:Acquisition/access is stopped."
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+#, c-format
+msgid "GPIO %d output and reverse"
+msgstr ""
+
+msgid "Disabled;Input;Input (pull up);Input (pull down);Output"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Pin"
+msgstr ""
+
+msgid "Force the input mode: 1-Input,2-Input (pull up),3-Input (pull down),4-Output"
+msgstr ""
+
+msgid "GPIO: Mode"
+msgstr ""
+
+msgid "GPIO mode, input or output."
+msgstr ""
+
+msgid "GPIO: Get"
+msgstr ""
+
+msgid "GPIO get pin level."
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "GPIO: Put"
+msgstr ""
+
+msgid "GPIO put pin level."
+msgstr ""

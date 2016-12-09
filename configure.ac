@@ -264,13 +264,6 @@ AX_MOD_DAQ_EN(Comedi,[enable build module DAQ.Comedi],enable,[],[
 	[AC_MSG_ERROR(Comedilib not found. Install or check Comedilib library package!)])
 ])
 AX_MOD_DAQ_EN(SMH2Gi,[enable build module DAQ.BFN],enable)
-AX_MOD_DAQ_EN(OneWire,[enable build module DAQ.OneWire],enable,incl,[
-    OneWire_CFLAGS="-I${oldincludedir}/owfs"
-    OneWire_LDLAGS="-lowcapi"
-    AC_SUBST(OneWire_CFLAGS)
-    AC_SUBST(OneWire_LDLAGS)
-    AC_CHECK_LIB([owcapi],[OW_init],[],[AC_MSG_ERROR(OWCAPI library is not usable!)])
-])
 AX_MOD_DAQ_EN(MMS,[enable build module DAQ.MMS],enable,[],[],
     [AC_CONFIG_FILES(src/moduls/daq/MMS/libMMS/Makefile)])
 AX_MOD_DAQ_EN(FT3,[enable build module DAQ.FT3],enable,[],[],[])

@@ -1,3 +1,12 @@
+2016-12-09 Roman (stable)
+- DB.LibsDB.OscadaLibs: The template DevLib.UPS exppanded by alarms' borders.
+    Templates base.{anUnif,anUnifSt} expanded by attribute "var" into the input processing procedure for allow stored counters implement and so on.
+- DB.{AGLKS,Boiler}.St: Main archivators' limits some changed and set all archives's size limit.
+- !!!!:DAQ.OneWire: Removed by replacing proper user protocol templates.
+- DAQ.BCM2835 is appended by translations.
+- UI.WebVision: Some changed in ElFigure implementing code for crashes in Post.
+
+
 2016-12-07 Roman (stable)
 - DB.LibsDB.OscadaLibs: DevLib is appended by GPIO devices' templates: Humidity Sensors DHT11, DHT12, AM2302, AM2320 and LCD Display Module 1602A.
     DevLib.SCU750 changed to IO fix for type "int8".

@@ -1,5 +1,4 @@
-EXTRA_DIST = *.h 
-# po/*
+EXTRA_DIST = *.h po/*
 
 oscd_modul_LTLIBRARIES = daq_BCM2835.la
 daq_BCM2835_la_CXXFLAGS =

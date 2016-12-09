@@ -124,15 +124,6 @@ INSERT INTO "Archive_val" VALUES('SurgeKM302_var','','',1,2,'BlockCalc.Anast1to2
 INSERT INTO "Archive_val" VALUES('SurgeKM302_out','','',1,2,'BlockCalc.Anast1to2node_cntr.SurgeKM302.out',4,1.0,100,1,0,'FSArch.1s;','','','','',0);
 INSERT INTO "Archive_val" VALUES('SurgeKM302_auto','','',1,2,'BlockCalc.Anast1to2node_cntr.SurgeKM302.auto',0,1.0,100,1,0,'FSArch.1s;','','','','',0);
 INSERT INTO "Archive_val" VALUES('test_t1_1','','',1,0,'',4,1.0,100,1,0,'FSArch.1h;','','','','',0);
-CREATE TABLE 'Archive_val_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"V_PER" DOUBLE DEFAULT '' ,"A_PER" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
-INSERT INTO "Archive_val_proc" VALUES('1m','FSArch','','Minute''s archive',1,'ARCHIVES/VAL/1m',60.0,60,'','Хвилинний архів','','Минутный архив','<prms TmSize="800" NFiles="100" MaxCapacity="0" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
-');
-INSERT INTO "Archive_val_proc" VALUES('1s','FSArch','','Second''s archive',1,'ARCHIVES/VAL/1s',1.0,60,'','Секундний архів','','Секундный архив','<prms TmSize="800" NFiles="100" MaxCapacity="0" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
-');
-INSERT INTO "Archive_val_proc" VALUES('1s','DBArch','','',0,'MySQL.arch',1.0,60,'','','','','<prms Size="25" />
-');
-INSERT INTO "Archive_val_proc" VALUES('1h','FSArch','','Hour''s archive',1,'ARCHIVES/VAL/1h',3600.0,60,'','Годинковий архів.','','Часовой архив.','<prms TmSize="800" NFiles="100" MaxCapacity="0" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
-');
 CREATE TABLE 'BFN_SymbAlarm' ("ID" INTEGER DEFAULT '' ,"CODE" INTEGER DEFAULT '' ,"TEXT" TEXT DEFAULT '' ,"ru#TEXT" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "BFN_SymbAlarm" VALUES(0,10,'Сбой датчика внутренней темп.','Сбой датчика внутренней темп.');
 INSERT INTO "BFN_SymbAlarm" VALUES(1,10,'Высокая темп., Лето','Высокая темп., Лето');
@@ -2067,4 +2058,13 @@ INSERT INTO "ModBus_node" VALUES('gate','','','','','','',0,2,'Sockets.testModBu
 CREATE TABLE 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
 INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AuthTime','10');
 INSERT INTO "SYS" VALUES('root','/sub_Protocol/mod_HTTP/AutoLogin','<aLog><it addrs="*" user="user" /></aLog>');
+CREATE TABLE 'Archive_val_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"V_PER" DOUBLE DEFAULT '1' ,"A_PER" INTEGER DEFAULT '60' ,"SEL_PR" INTEGER DEFAULT '10' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
+INSERT INTO "Archive_val_proc" VALUES('1m','FSArch','','','','Minute''s archive','Хвилинний архів','Минутный архив',1,'ARCHIVES/VAL/1m',60.0,60,10,'<prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
+');
+INSERT INTO "Archive_val_proc" VALUES('1s','FSArch','','','','Second''s archive','Секундний архів','Секундный архив',1,'ARCHIVES/VAL/1s',1.0,60,10,'<prms TmSize="720" NFiles="100" MaxCapacity="5000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
+');
+INSERT INTO "Archive_val_proc" VALUES('1s','DBArch','','','','','','',0,'MySQL.arch',1.0,60,10,'<prms Size="25" />
+');
+INSERT INTO "Archive_val_proc" VALUES('1h','FSArch','','','','Hour''s archive','Годинковий архів.','Часовой архив.',1,'ARCHIVES/VAL/1h',3600.0,60,10,'<prms TmSize="8600" NFiles="100" MaxCapacity="1000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
+');
 COMMIT;

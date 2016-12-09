@@ -1,5 +1,4 @@
 # OpenSCADA.DAQ.Comedi translate to Russian.
-# Copyright (C) 2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.Comedi package module.
 #
 # Roman Savochenko <rom_as@oscada.org>, 2012.

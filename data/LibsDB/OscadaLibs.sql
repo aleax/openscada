@@ -999,10 +999,10 @@ INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in7','Input 7',2,16,'',10,'Вх�
 INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in8','Input 8',2,16,'',11,'Вход 8','','Вхід 8','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','this','The object',4,0,'',2,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','SHIFR','Code',0,0,'',3,'Шифр','','Шифр','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','NAME','Name',0,0,'',4,'Имя','','Ім''я','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','DESCR','Description',0,0,'',5,'Описание','','Опис','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','this','The object',4,0,'',14,'Объект','','Об''єкт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','SHIFR','Code',0,0,'',15,'Шифр','','Шифр','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','NAME','Name',0,0,'',16,'Имя','','Ім''я','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','DESCR','Description',0,0,'',17,'Описание','','Опис','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','imit','Imitation drift % (0-disable)',2,64,'0',0,'Дрейф имитации % (0-отключен)','','Дрейф імітації % (0-відключено)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','trAddr','Transport',0,64,'Transport.Serial.out_VKT7',1,'Транспорт','','Транспорт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhH','Archiver: hours',0,64,'',2,'Архиватор: часы','','Архіватор: години','');
@@ -1220,6 +1220,18 @@ INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D6','Pin: Data6',1,64,'23',5,'','
 INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D7','Pin: Data7',1,64,'18',6,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',7,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadH','Load high',2,32,'80',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',13,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2975,6 +2987,7 @@ INSERT INTO "Trs" VALUES('No link to external functions on ''%1''.','','');
 INSERT INTO "Trs" VALUES('Unknown device %1 [0-DHT11, 1-DHT22].','','');
 INSERT INTO "Trs" VALUES('Tries number %1 out of range [1...5].','','');
 INSERT INTO "Trs" VALUES('Get data after %1 tries error.','','');
+INSERT INTO "Trs" VALUES('None of good battery present','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -3338,7 +3351,7 @@ else {
 f_err = t_err;','','',1424633101);
 INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 
 alLev = 0;
@@ -3381,13 +3394,13 @@ else {
 	}
 	varS = "battery_packs";
 	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toInt() == 0)	{ items[varS].alarm = 2; tErr += tr("None good battery present")+"; "; }
+		if(tVl.toInt() == 0)	{ items[varS].alarm = 2; tErr += tr("None of good battery present")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_charge";
 	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toReal() < 20) { items[varS].alarm = 1; tErr += tr("Battery charge low")+"; "; }
-		else if(tVl.toReal() < 5) { items[varS].alarm = 2; tErr += tr("Battery charge critical")+"; "; }
+		if(tVl.toReal() < bChL) { items[varS].alarm = 1; tErr += tr("Battery charge low")+"; "; }
+		else if(tVl.toReal() < bChLL) { items[varS].alarm = 2; tErr += tr("Battery charge critical")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_packs_bad";
@@ -3397,28 +3410,28 @@ else {
 	}
 	varS = "input_voltage";
 	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toReal() > 10 && tVl.toReal() < 210) { items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
-		else if(tVl.toReal() > 250) { items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
+		if(tVl.toReal() > 10 && tVl.toReal() < inVL) { items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
+		else if(tVl.toReal() > inVH) { items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "input_frequency";
 	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toReal() < 40) { items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
-		else if(tVl.toReal() > 60) { items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
-		else if(tVl.toReal() < 45) { items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
-		else if(tVl.toReal() > 55) { items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
+		if(tVl.toReal() < inFLL) { items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
+		else if(tVl.toReal() > inFHH)	{ items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
+		else if(tVl.toReal() < inFL) { items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
+		else if(tVl.toReal() > inFH) { items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "ups_load";
 	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toReal() > 100)			{ items[varS].alarm = 2; tErr += tr("UPS overloaded")+"; "; }
-		else if(tVl.toReal() > 80)	{ items[varS].alarm = 1; tErr += tr("UPS load high")+"; "; }
+		if(tVl.toReal() > loadHH)		{ items[varS].alarm = 2; tErr += tr("UPS overloaded")+"; "; }
+		else if(tVl.toReal() > loadH)	{ items[varS].alarm = 1; tErr += tr("UPS load high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "ups_temperature";
 	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toReal() > 70) { items[varS].alarm = 2; tErr += tr("UPS overheated")+"; "; }
-		else if(tVl.toReal() > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
+		if(tVl.toReal() > tHH) 		{ items[varS].alarm = 2; tErr += tr("UPS overheated")+"; "; }
+		else if(tVl.toReal() > tH)	{ items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 
@@ -3443,7 +3456,7 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1479370120);
+f_err = tErr;','','',1481291027);
 INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed. The template implement acquisition for all significant parameters, get history by hours, days and result months. Also you can simple enough append for process other left parameters.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vladislav Chubuk','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,0,'JavaLikeCalc.JavaScript
@@ -6365,7 +6378,7 @@ if(plcImit) {	//Data imitation
 //Call specific preprocessing procedure
 if(inProc.length)	{
 	inPrcArgs.f_frq = f_frq;
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
+	inPrcArgs.in = in; inPrcArgs.var = var; inPrcArgs.min = min; inPrcArgs.max = max;
 	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
 	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
 	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc, inPrcId);
@@ -6433,7 +6446,7 @@ else {
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1480875955);
+}','','',1481216651);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
 set = false;
 if(!com.isEVal() && com && last_cmd != 1)		last_cmd = 1, set = true;
@@ -6523,7 +6536,7 @@ if(plcImit) {	//Data imitation
 //Call specific preprocessing procedure
 if(inProc.length)	{
 	inPrcArgs.f_frq = f_frq;
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
+	inPrcArgs.in = in; inPrcArgs.var = var; inPrcArgs.min = min; inPrcArgs.max = max;
 	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
 	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
 	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc, inPrcId);
@@ -6594,7 +6607,7 @@ else {
 	f_err = tErr;
 	if(toSave) SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
 	conDelay_ = 0;
-}','','',1480876320);
+}','','',1481216725);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигнал (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,0,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 

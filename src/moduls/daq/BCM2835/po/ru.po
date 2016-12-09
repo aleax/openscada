@@ -1,0 +1,92 @@
+# OpenSCADA.DAQ.BCM2835 translate to Russian.
+# This file is distributed under the same license as the OpenSCADA.DAQ.BCM2835 package module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.BCM2835\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-09 11:51+0200\n"
+"PO-Revision-Date: 2016-12-09 10:20+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <ru@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid "Broadcom BCM 2835 GPIO. Mostly for and used in Raspberry Pi."
+msgstr "Broadcom BCM 2835 GPIO. В основном для и используется в Raspberry Pi."
+
+msgid "Parameteres table"
+msgstr "Таблица параметров"
+
+msgid "Standard"
+msgstr "Стандарт"
+
+msgid "Module addition parameters"
+msgstr "Дополнительные параметры модуля"
+
+msgid ""
+"Init bcm2835 library error whether that is not bcm2835 or there is not "
+"access."
+msgstr ""
+"Ошибка инициализации библиотеки bcm2835 или через отсутствие bcm2835 или "
+"доступа к нему."
+
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр отключен."
+
+msgid "2:Acquisition/access is stopped."
+msgstr "2:Сбор/доступ остановлен."
+
+msgid "Function"
+msgstr "Функция"
+
+msgid "Functions"
+msgstr "Функции"
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+#, c-format
+msgid "GPIO %d output and reverse"
+msgstr "Выход и инверсия GPIO %d"
+
+msgid "Disabled;Input;Input (pull up);Input (pull down);Output"
+msgstr "Отключен;Вход;Вход (pull up);Вход (pull down);Выход"
+
+msgid "Result"
+msgstr "Результат"
+
+msgid "Pin"
+msgstr "Штырь"
+
+msgid ""
+"Force the input mode: 1-Input,2-Input (pull up),3-Input (pull down),4-Output"
+msgstr ""
+"Установка режима входа: 1-Вход,2-Вход (pull up),3-Вход (pull down),4-Выход"
+
+msgid "GPIO: Mode"
+msgstr "GPIO: Режим"
+
+msgid "GPIO mode, input or output."
+msgstr "Режим GPIO, вход или выход."
+
+msgid "GPIO: Get"
+msgstr "GPIO: Получить"
+
+msgid "GPIO get pin level."
+msgstr "Получить уровень штыря GPIO."
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "GPIO: Put"
+msgstr "GPIO: Установить"
+
+msgid "GPIO put pin level."
+msgstr "Установить уровень штыря GPIO."

@@ -45,7 +45,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-LogicLev::TTpContr *LogicLev::mod;  //Pointer for direct access to the module
+LogicLev::TTpContr *LogicLev::mod;	//Pointer for direct access to the module
 
 extern "C"
 {
@@ -55,7 +55,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -193,12 +193,12 @@ void TMdContr::prmEn( TMdPrm *p, bool val )
 {
     MtxAlloc res(enRes, true);
 
-    unsigned i_prm;
-    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
-	if(&pHd[i_prm].at() == p) break;
+    unsigned iPrm;
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(&pHd[iPrm].at() == p) break;
 
-    if(val && i_prm >= pHd.size())	pHd.push_back(p);
-    if(!val && i_prm < pHd.size())	pHd.erase(pHd.begin()+i_prm);
+    if(val && iPrm >= pHd.size())	pHd.push_back(p);
+    if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
 }
 
 void *TMdContr::Task( void *icntr )
