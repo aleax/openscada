@@ -370,7 +370,7 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 		    trMessIdx[req.cfg("base").getS()]["db:"+ls[i_l]+"." mess_TrUApiTbl "#base"] = prms;
     }
     else {
-	if(TSYS::strNoSpace(mess).empty()) return;
+	if(sTrm(mess).empty()) return;
 	MtxAlloc res(mRes, true);
 	trMessIdx[mess][src] = prms;
     }

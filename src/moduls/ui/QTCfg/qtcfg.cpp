@@ -524,7 +524,7 @@ void ConfApp::treeSearch( )
 {
     if(!sender()) return;
     QLineEdit *sl = (QLineEdit*)sender();
-    QString wvl = TSYS::strNoSpace(sl->text().toStdString()).c_str();
+    QString wvl = sTrm(sl->text().toStdString()).c_str();
     bool fromCur = !sl->isModified();
     sl->setModified(false);
 

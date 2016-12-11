@@ -999,10 +999,10 @@ INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in7','Input 7',2,16,'',10,'Вх�
 INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in8','Input 8',2,16,'',11,'Вход 8','','Вхід 8','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'Адрес исходного объекта','','Адреса вихідного об''єкту','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','items','All items',4,33,'',1,'Все элементы','','Всі елементи','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','this','The object',4,0,'',14,'Объект','','Об''єкт','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','SHIFR','Code',0,0,'',15,'Шифр','','Шифр','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','NAME','Name',0,0,'',16,'Имя','','Ім''я','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','DESCR','Description',0,0,'',17,'Описание','','Опис','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','this','The object',4,0,'',15,'Объект','','Об''єкт','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','SHIFR','Code',0,0,'',16,'Шифр','','Шифр','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','NAME','Name',0,0,'',17,'Имя','','Ім''я','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','DESCR','Description',0,0,'',18,'Описание','','Опис','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','imit','Imitation drift % (0-disable)',2,64,'0',0,'Дрейф имитации % (0-отключен)','','Дрейф імітації % (0-відключено)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','trAddr','Transport',0,64,'Transport.Serial.out_VKT7',1,'Транспорт','','Транспорт','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhH','Archiver: hours',0,64,'',2,'Архиватор: часы','','Архіватор: години','');
@@ -1220,18 +1220,19 @@ INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D6','Pin: Data6',1,64,'23',5,'','
 INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D7','Pin: Data7',1,64,'18',6,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',7,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',8,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',9,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadH','Load high',2,32,'80',10,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',12,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVH','Input voltage high',2,32,'250',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFLL','Input frequency too low',2,32,'40',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFL','Input frequency low',2,32,'45',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFH','Input frequency high',2,32,'55',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inFHH','Input frequency too high',2,32,'60',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadH','Load high',2,32,'80',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Alarms delay, s',2,32,'0',2,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -3352,7 +3353,7 @@ f_err = t_err;','','',1424633101);
 INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','Uninterruptible power supply unifying data for provide all the data into single attribute of object type "All items" for next the control as the object with the data provide as table, alarming and allowing set writable attributes. The template aimed for using with module "System" data source as "UPS" and widget "Main.objProps" as the data presenter. The template also you can use as example for create like other data unification as complex object with properties, alarming and writing.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.2.0','','',10,0,'JavaLikeCalc.JavaScript
-if(f_start)	{ srcPrm = false; items = new Object(); }
+if(f_start)	{ srcPrm = false; items = new Object(); conDelay_ = 0; }
 
 alLev = 0;
 tErr = "";
@@ -3452,11 +3453,15 @@ else {
 tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 
 //Alarms forming
+if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
+if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
+if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1481291027);
+f_err = tErr;
+conDelay_ = 0;','','',1481351833);
 INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and the count. The device complex enough by provide more parameters, more history to its and access by nonlinear Serial-based protocol at low speed. The template implement acquisition for all significant parameters, get history by hours, days and result months. Also you can simple enough append for process other left parameters.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsored: Vladislav Chubuk','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,0,'JavaLikeCalc.JavaScript

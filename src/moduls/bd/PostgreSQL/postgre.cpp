@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.6.2"
+#define MOD_VER		"1.6.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -134,13 +134,13 @@ void MBD::enable( )
     if(enableStat())	return;
 
     int off = 0;
-    host = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    hostaddr = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    user = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    pass = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    db   = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    port = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    connect_timeout = (off < (int)addr().size()) ? TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off)) : "1";
+    host = sTrm(TSYS::strParse(addr(),0,";",&off));
+    hostaddr = sTrm(TSYS::strParse(addr(),0,";",&off));
+    user = sTrm(TSYS::strParse(addr(),0,";",&off));
+    pass = sTrm(TSYS::strParse(addr(),0,";",&off));
+    db   = sTrm(TSYS::strParse(addr(),0,";",&off));
+    port = sTrm(TSYS::strParse(addr(),0,";",&off));
+    connect_timeout = (off < (int)addr().size()) ? sTrm(TSYS::strParse(addr(),0,";",&off)) : "1";
 
     conninfo.clear();
     if(host.empty() && hostaddr.empty()) host = "localhost";

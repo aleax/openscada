@@ -342,7 +342,7 @@ nextTag:
     //Find for a tag start symbol
     for( ; pos < ctx.vl.size() && ctx.vl[pos] != '<'; pos++) {
 	if(initTag) continue;
-	if(ctx.flg&LD_Full || mText.size() || !isspace(ctx.vl[pos])) {
+	if((ctx.flg&(LD_Full|LD_NoTxtSpcRemEnBeg)) || mText.size() || !isspace(ctx.vl[pos])) {
 	    if(!mText.size())	mText.reserve(100);
 	    if(ctx.vl[pos] != '&') mText += ctx.vl[pos]; else parseEntity(ctx, pos, mText);
 	}
@@ -410,14 +410,14 @@ nextTag:
 		cpos += 2+mName.size();
 		while(isspace(ctx.vl[cpos])) cpos++;
 		if(ctx.vl[cpos] == '>') {
-		    if(mText.size() && ctx.flg&LD_Full) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
+		    if(mText.size() && (ctx.flg&LD_Full)) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc, mText); mText.clear(); }
 		    if(mText.size()) {
 			if(ctx.flg&LD_NoTxtSpcRemEnBeg) mText = Mess->codeConvIn(ctx.enc, mText);
 			else {
-			    //Remove spaces from end of text
+			    //Remove spaces from end of the text, trim
 			    int i_ch = mText.size()-1;
 			    while(i_ch >= 0 && isspace(mText[i_ch])) i_ch--;
-			    mText = Mess->codeConvIn(ctx.enc,mText.substr(0,i_ch+1));
+			    mText = Mess->codeConvIn(ctx.enc, mText.substr(0,i_ch+1));
 			}
 		    }
 		    return cpos+1;
@@ -426,15 +426,15 @@ nextTag:
 	    throw TError("XMLNode", _("Unexpected or error end tag. Pos: %d"), cpos);
     }
     //Process for standard XML node
-    // It is me node
+    // It's my node
     if(initTag) {
 	bpos = cpos+1;
-	//  Get tag name
+	//  Get the tag name
 	for(cpos = bpos; !isspace(ctx.vl[cpos]) && ctx.vl[cpos] != '>' && ctx.vl[cpos] != '/'; cpos++)
 	    if(cpos >= ctx.vl.size()) throw TError("XMLNode", _("Unexpected end. Pos: %d"), pos);
-	mName.assign(ctx.vl,bpos,cpos-bpos);
+	mName.assign(ctx.vl, bpos, cpos-bpos);
 	initTag = false;
-	//  Process tag attributes
+	//  Process the tag attributes
 	while(parseAttr(ctx,cpos))
 	    mAttr.push_back(pair<string,string>(ctx.aNm,ctx.aVl.size()?Mess->codeConvIn(ctx.enc,ctx.aVl):string("")));
 	//  Pass spaces
@@ -446,8 +446,8 @@ nextTag:
     }
     // New XML node create
     else {
-	if(mText.size() && ctx.flg&LD_Full) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
-	pos = childAdd()->loadNode(ctx,pos-1);
+	if(mText.size() && (ctx.flg&LD_Full)) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc, mText); mText.clear(); }
+	pos = childAdd()->loadNode(ctx, pos-1);
 	goto nextTag;
     }
 

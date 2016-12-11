@@ -338,8 +338,8 @@ void Func::progCompile( )
     //Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
 
-    pF  = this;	//Parse func
-    pErr  = "";	//Clear error messages
+    pF     = this;	//Parse func
+    pErr   = "";	//Clear error messages
     laPos  = 0;		//LA position
     sprg   = cfg("FORMULA").getS();
     prg.clear();	//Clear program
@@ -1518,6 +1518,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  sep - item separator
 		if(prop == "path2sep")
 		    return TSYS::path2sepstr(vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.');
+		// string trim(string cfg = " \n\t\r") - string trimming at begin and end for symbols <cfg>.
+		//  cfg - trimming symbols
+		if(prop == "trim") return sTrm(vl.getS(), prms.size() ? prms[0].getS() : " \n\t\r");
 
 		return false;
 		//throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());

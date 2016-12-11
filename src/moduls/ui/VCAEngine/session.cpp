@@ -1356,7 +1356,7 @@ TVariant SessPage::vlGet( Attr &a )
 TVariant SessPage::stlReq( Attr &a, const TVariant &vl, bool wr )
 {
     if(stlLock()) return vl;
-    string pid = TSYS::strNoSpace(a.cfgTempl());
+    string pid = sTrm(a.cfgTempl());
     if(pid.empty()) pid = a.id();
     if(!wr) return ownerSess()->stlPropGet(pid, vl.getS());
     if(ownerSess()->stlPropSet(pid,vl.getS())) return TVariant();
@@ -1490,7 +1490,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 
     //Prepare process function value level
     bool diff = (val!=process());
-    if(val && diff && !TSYS::strNoSpace(calcProg()).empty()) {
+    if(val && diff && !sTrm(calcProg()).empty()) {
 	// Prepare function io structure
 	TFunction fio(parent().at().calcId());
 	fio.setStor(calcProgStors());

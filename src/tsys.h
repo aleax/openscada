@@ -266,7 +266,7 @@ class TSYS : public TCntrNode
 	static void *str2addr( const string &str );
 
 	// Path and string parse
-	static string strNoSpace( const string &val );
+	static string strTrim( const string &val, const string &cfg = " \n\t\r" );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 	static string strLine( const string &str, int level, int *off = NULL );
@@ -434,6 +434,8 @@ inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }
 inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }
 inline double s2r( const string &val )		{ return atof(val.c_str()); }
+
+inline string sTrm( const string &val, const string &cfg = " \n\t\r") { return TSYS::strTrim(val, cfg); }
 
 extern TSYS *SYS;
 }

@@ -1493,7 +1493,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	iLang = xdoc.attr("docProcLang");
 	lstTime = s2i(xdoc.attr("docTime"));
     }
-    if(TSYS::strNoSpace(iLang).empty())	iLang = "JavaLikeCalc.JavaScript";
+    if(sTrm(iLang).empty())	iLang = "JavaLikeCalc.JavaScript";
     if(!lstTime) lstTime = wdg->attrAt("bTime").at().getI();
 
     // Add generic io

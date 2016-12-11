@@ -304,13 +304,13 @@ bool TModSchedul::chkAllowMod( const string &name )
     for(int off = 0; (sel=TSYS::pathLev(name,0,true,&off)).size(); path_els++) nmFile = sel;
 
     if(allowList().empty())	return false;
-    if(TSYS::strNoSpace(allowList()) != "*") {
+    if(sTrm(allowList()) != "*") {
 	for(int off = 0; (sel=TSYS::strSepParse(allowList(),0,';',&off)).size(); )
-	    if(TSYS::strNoSpace(sel) == name || TSYS::strNoSpace(sel) == nmFile) break;
+	    if(sTrm(sel) == name || sTrm(sel) == nmFile) break;
 	if(sel.empty()) return false;
     }
     for(int off = 0; (sel=TSYS::strSepParse(denyList(),0,';',&off)).size(); )
-	if(TSYS::strNoSpace(sel) == name || TSYS::strNoSpace(sel) == nmFile) return false;
+	if(sTrm(sel) == name || sTrm(sel) == nmFile) return false;
 
     return true;
 }

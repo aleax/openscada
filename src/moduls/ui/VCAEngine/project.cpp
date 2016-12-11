@@ -1278,7 +1278,7 @@ TVariant Page::vlGet( Attr &a )
 TVariant Page::stlReq( Attr &a, const TVariant &vl, bool wr )
 {
     if(stlLock()) return vl;
-    string pid = TSYS::strNoSpace(a.cfgTempl());
+    string pid = sTrm(a.cfgTempl());
     if(pid.empty()) pid = a.id();
     if(!wr) return ownerProj()->stlPropGet(pid, vl.getS());
     if(ownerProj()->stlPropSet(pid,vl.getS())) return TVariant();

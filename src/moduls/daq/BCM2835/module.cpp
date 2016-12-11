@@ -38,7 +38,7 @@
 #define MOD_NAME	"BCM 2835"
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.0"
+#define MOD_VER		"1.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO. Mostly for and used in Raspberry Pi.")
 #define LICENSE		"GPL2"
@@ -267,11 +267,11 @@ string TMdPrm::modPrm( const string &prm, const string &def )
     try {
 	prmNd.load(cfg("MOD_PRMS").getS());
 	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
-	if(!sa.size())	return (rez=prmNd.attr(prm)).empty()?def:rez;
+	if(!sa.size())	return (rez=prmNd.attr(prm)).empty() ? def : rez;
 	//Internal node
-	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
-	    if(prmNd.childGet(i_n)->name() == sobj)
-	return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
+	for(unsigned iN = 0; iN < prmNd.childSize(); iN++)
+	    if(prmNd.childGet(iN)->name() == sobj)
+		return (rez=prmNd.childGet(iN)->attr(sa)).empty() ? def : rez;
     } catch(...) { }
 
     return def;
@@ -287,11 +287,11 @@ void TMdPrm::setModPrm( const string &prm, const string &val )
     if(!sa.size()) prmNd.setAttr(prm,val);
     //Internal node
     else {
-	unsigned i_n;
-	for(i_n = 0; i_n < prmNd.childSize(); i_n++)
-	    if(prmNd.childGet(i_n)->name() == sobj)
-	    { prmNd.childGet(i_n)->setAttr(sa,val); break; }
-	if(i_n >= prmNd.childSize())
+	unsigned iN;
+	for(iN = 0; iN < prmNd.childSize(); iN++)
+	    if(prmNd.childGet(iN)->name() == sobj)
+	    { prmNd.childGet(iN)->setAttr(sa,val); break; }
+	if(iN >= prmNd.childSize())
 	    prmNd.childAdd(sobj)->setAttr(sa,val);
     }
 
@@ -330,7 +330,7 @@ void TMdPrm::vlArchMake( TVal &val )
 
     if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(1000000/*(int64_t)(owner().period()*1000000)*/);	//One second
+    val.arch().at().setPeriod(1000000);	//One second
     val.arch().at().setHardGrid(true);
     //val.arch().at().setHighResTm(true);
 }
@@ -343,7 +343,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),R_R_R_,"root",SDAQ_ID,1,"idm","1");
-	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),R_R_R_,"root",SDAQ_ID,3,"tp","br","idm","1","br_pref","fnc_");
+	ctrMkNode("list",opt,-1,"/prm/st/func",_("Functions"),R_R_R_,"root",SDAQ_ID,3,"tp","br","idm","1","br_pref","fnc_");
 	ctrRemoveNode(opt, "/prm/cfg/MOD_PRMS");
 	if(ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {
 	    vector<string> ls;
@@ -364,7 +364,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //Process commands to the page
     string a_path = opt->attr("path");
-    if((a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt)) {
+    if((a_path == "/br/fnc_" || a_path == "/prm/st/func") && ctrChkNode(opt)) {
 	vector<string> ls;
 	fList(ls);
 	for(unsigned iF = 0; iF < ls.size(); iF++)

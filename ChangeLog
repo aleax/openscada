@@ -1,5 +1,15 @@
+2016-12-11 Roman (stable)
+- DB.LibsDB.OscadaLibs: The template DevLib.UPS expanded by attribute "alDelay" for alarms delay control.
+- !:FIX:SYS: Function strNoSpace() expanded for processing symbols control and renamed to strTrim(). Default processing symbols set to " \n\t\r".
+	For function strTrim() created a short call sTrm() and it's used everywhere.
+    FIX:XMLNode's flag LD_NoTxtSpcRemEnBeg fixed for spaces in begin.
+- FIX:DAQ.BCM2835: Fixed for the static function place into the control interface.
+- DAQ.JavaLikeCalc: String functions list expanded by a function trim().
+- !!!:Protocol.SelfSystem: XML loading expanding by option LD_NoTxtSpcRemEnBeg using for allow spaces at begin and end of text items.
+
+
 2016-12-09 Roman (stable)
-- DB.LibsDB.OscadaLibs: The template DevLib.UPS exppanded by alarms' borders.
+- DB.LibsDB.OscadaLibs: The template DevLib.UPS expanded by alarms' borders.
     Templates base.{anUnif,anUnifSt} expanded by attribute "var" into the input processing procedure for allow stored counters implement and so on.
 - DB.{AGLKS,Boiler}.St: Main archivators' limits some changed and set all archives's size limit.
 - !!!!:DAQ.OneWire: Removed by replacing proper user protocol templates.

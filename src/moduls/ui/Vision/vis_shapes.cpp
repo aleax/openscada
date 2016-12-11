@@ -4373,7 +4373,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 	    shD->tmpl = true;
 	    break;
 	case A_DocDoc:
-	    if(TSYS::strNoSpace(val).empty() || shD->doc == val) break;
+	    if(sTrm(val).empty() || shD->doc == val) break;
 	    shD->doc = val;
 	    relDoc = true;
 	    shD->tmpl = false;

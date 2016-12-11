@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.6.0"
+#define MOD_VER		"1.6.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -298,7 +298,7 @@ void TTrIn::connect( )
 	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
 	tio.c_cc[VMIN] = 0;            ///< blocking read until 0 character arrives*/
 	// Set speed
-	string speed = TSYS::strNoSpace(TSYS::strParse(addr(),1,":"));
+	string speed = sTrm(TSYS::strParse(addr(),1,":"));
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
 	    switch(s2i(speed)) {
@@ -323,7 +323,7 @@ void TTrIn::connect( )
 	    cfsetospeed(&tio, tspd);
 	}
 	// Set asynchronous data format
-	string format = TSYS::strNoSpace(TSYS::strParse(addr(),2,":"));
+	string format = sTrm(TSYS::strParse(addr(),2,":"));
 	if(!format.empty()) {
 	    if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 	    //  Set byte length
@@ -352,7 +352,7 @@ void TTrIn::connect( )
 	}
 
 	// Set flow control
-	string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
+	string fc = sTrm(TSYS::strParse(addr(),3,":"));
 	mRTSfc = mRTSlvl = mRTSEcho = false;
 	tio.c_cflag &= ~CRTSCTS;
 	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
@@ -869,7 +869,7 @@ void TTrOut::start( int tmCon )
 	    tio.c_cc[VMIN] = 0;		//< blocking read until 0 character arrives
 
 	    // Set speed
-	    string speed = TSYS::strNoSpace(TSYS::strParse(addr(),1,":"));
+	    string speed = sTrm(TSYS::strParse(addr(),1,":"));
 	    if(!speed.empty()) {
 		speed_t tspd = B9600;
 		switch(s2i(speed)) {
@@ -895,7 +895,7 @@ void TTrOut::start( int tmCon )
 	    }
 
 	    // Set asynchronous data format
-	    string format = TSYS::strNoSpace(TSYS::strParse(addr(),2,":"));
+	    string format = sTrm(TSYS::strParse(addr(),2,":"));
 	    if(!format.empty()) {
 		if(format.size() != 3) throw TError(nodePath().c_str(),_("Asynchronous data format '%s' error."),format.c_str());
 
@@ -927,7 +927,7 @@ void TTrOut::start( int tmCon )
 	    }
 
 	    // Set flow control
-	    string fc = TSYS::strNoSpace(TSYS::strParse(addr(),3,":"));
+	    string fc = sTrm(TSYS::strParse(addr(),3,":"));
 	    tio.c_cflag &= ~CRTSCTS;
 	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
@@ -953,7 +953,7 @@ void TTrOut::start( int tmCon )
 #endif
 
 	    //Modem connection establish
-	    string telNumb = TSYS::strNoSpace(TSYS::strParse(addr(),4,":"));
+	    string telNumb = sTrm(TSYS::strParse(addr(),4,":"));
 	    if(!telNumb.empty()) {
 		// Resource to transfer function alloc
 		runSt = true;

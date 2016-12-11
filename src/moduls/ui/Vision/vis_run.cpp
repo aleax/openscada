@@ -941,7 +941,7 @@ void VisRun::exportDoc( const string &idoc )
 				    rowSpn[i_cl] = s2i(tblRow->childGet(i_c)->attr("rowspan",false));
 				    val = tblRow->childGet(i_c)->text(true,true);
 				    for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
-				    rez += "\""+TSYS::strNoSpace(val)+"\";";
+				    rez += "\""+sTrm(val)+"\";";
 				    //   Colspan process
 				    int colSpan = s2i(tblRow->childGet(i_c)->attr("colspan",false));
 				    for(int i_cs = 1; i_cs < colSpan; i_cs++) rez += ";";

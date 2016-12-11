@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.5"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
@@ -257,8 +257,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response full %d"), resp.size());
 
-	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)));
-	    else io.load(resp.substr(head_end));
+	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)), XMLNode::LD_NoTxtSpcRemEnBeg);
+	    else io.load(resp.substr(head_end), XMLNode::LD_NoTxtSpcRemEnBeg);
 
 	    return;
 	}
@@ -383,7 +383,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 	    //Process request
 	    XMLNode req_node;
-	    req_node.load(reqBuf.substr(req.size()+1));
+	    req_node.load(reqBuf.substr(req.size()+1), XMLNode::LD_NoTxtSpcRemEnBeg);
 
 	    // Check for reforward requests
 	    string host = req_node.attr("reforwardHost");

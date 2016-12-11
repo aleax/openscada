@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.6"
+#define MOD_VER		"1.6.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -284,7 +284,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(tw.empty()) break;
 	    size_t sepPos = tw.find(":", 0);
 	    if(sepPos == 0 || sepPos == string::npos) continue;
-	    nd = io.childAdd("prm")->setAttr("id",tw.substr(0,sepPos))->setText(TSYS::strNoSpace(tw.substr(sepPos+1)));
+	    nd = io.childAdd("prm")->setAttr("id",tw.substr(0,sepPos))->setText(sTrm(tw.substr(sepPos+1)));
 	    if(c_lng == -1 && strcasecmp(nd->attr("id").c_str(),"content-length") == 0) c_lng = s2i(nd->text());
 	    if(c_lng != -2 && strcasecmp(nd->attr("id").c_str(),"transfer-encoding") == 0 && nd->text() == "chunked") c_lng = -2;
 	}
@@ -456,10 +456,10 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    vars.push_back(req);
 
 	    if(strcasecmp(var.c_str(),"content-length") == 0)	c_lng = s2i(val);
-	    else if(strcasecmp(var.c_str(),"user-agent") == 0)	userAgent = TSYS::strNoSpace(val);
+	    else if(strcasecmp(var.c_str(),"user-agent") == 0)	userAgent = sTrm(val);
 	    else if(strcasecmp(var.c_str(),"connection") == 0) {
 		for(int off = 0; (sel=TSYS::strSepParse(val,0,',',&off)).size(); )
-		    if(strcasecmp(TSYS::strNoSpace(sel).c_str(),"keep-alive") == 0)
+		    if(strcasecmp(sTrm(sel).c_str(),"keep-alive") == 0)
 		    { KeepAlive = true; break; }
 	    }
 	    else if(strcasecmp(var.c_str(),"cookie") == 0) {

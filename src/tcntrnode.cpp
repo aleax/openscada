@@ -510,8 +510,8 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name ) const
 
 void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
-    if(nodeMode() != Enabled)			{ delete node; throw err_sys(_("Node is not enabled!")); }
-    if(TSYS::strNoSpace(node->nodeName()).empty()) { delete node; throw err_sys(_("Add child id is empty!")); }
+    if(nodeMode() != Enabled)		{ delete node; throw err_sys(_("Node is not enabled!")); }
+    if(sTrm(node->nodeName()).empty())	{ delete node; throw err_sys(_("Add child id is empty!")); }
 
     MtxAlloc res(mChM, true);
     if(!chGrp || igr >= (int)chGrp->size())	{ delete node; throw err_sys(_("Group of childs %d error!"), igr); }

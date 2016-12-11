@@ -6678,7 +6678,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 	if(req_el->name() != "el")	continue;
 	switch(s2i(req_el->attr("p"))) {
 	    case A_DocTmpl: case A_DocDoc: {
-		if(TSYS::strNoSpace(req_el->text()).empty())	break;
+		if(sTrm(req_el->text()).empty())	break;
 		const char *XHTML_entity =
 		    "<!DOCTYPE xhtml [\n"
 		    "  <!ENTITY nbsp \"&#160;\" >\n"

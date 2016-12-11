@@ -220,7 +220,7 @@ void Widget::setEnable( bool val, bool force )
     if(val) {
 	if(parentNm() != "root") {
 	    try {
-		if(TSYS::strNoSpace(parentNm()).empty() || parentNm() == path())
+		if(sTrm(parentNm()).empty() || parentNm() == path())
 		    throw TError(nodePath().c_str(),_("Empty parent or parent identical self!"));
 		if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
@@ -535,7 +535,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 {
     string anm = attr->name();
 
-    if(attrPresent(anm) || TSYS::strNoSpace(anm).empty()) {
+    if(attrPresent(anm) || sTrm(anm).empty()) {
 	if(!inher) delete attr;
 	return;
     }

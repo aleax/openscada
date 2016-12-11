@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.7.1"
+#define MOD_VER		"0.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -654,7 +654,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     //Variables parse
     for(size_t i_v = 0, spos = 0; i_v < ivars.size(); i_v++)
 	if((spos=ivars[i_v].find(":")) != string::npos)
-	    vars[TSYS::strNoSpace(ivars[i_v].substr(0,spos))] = TSYS::strNoSpace(ivars[i_v].substr(spos+1));
+	    vars[sTrm(ivars[i_v].substr(0,spos))] = sTrm(ivars[i_v].substr(spos+1));
 
     //Content parse
     size_t pos = 0, spos = 0;
@@ -680,7 +680,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	    pos += c_head.size()+strlen(c_term);
 	    if(c_head.empty()) break;
 	    if((spos=c_head.find(":")) == string::npos) return;
-	    cnt[cnt.size()-1].setAttr(TSYS::strNoSpace(c_head.substr(0,spos)),TSYS::strNoSpace(c_head.substr(spos+1)));
+	    cnt[cnt.size()-1].setAttr(sTrm(c_head.substr(0,spos)), sTrm(c_head.substr(spos+1)));
 	}
 
 	if(pos >= content.size()) return;
