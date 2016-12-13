@@ -26,7 +26,7 @@ msgstr ""
 msgid "Provides an implementation of the client of SNMP-service."
 msgstr ""
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr ""
 
 msgid "Acquisition schedule"

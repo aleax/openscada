@@ -77,7 +77,7 @@ msgstr "[0, 5]V;[0, 10]V;[-2.5, +2.5]V;[-5, +5]V;[-10, +10]V"
 msgid "dscInit error."
 msgstr "Fehler dscInit."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Tabelle von Parametern"
 
 msgid "Acquisition schedule"

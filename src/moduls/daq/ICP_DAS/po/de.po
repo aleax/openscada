@@ -239,7 +239,7 @@ msgstr ""
 "Unterstützung für grundlegende I-87xxx DCON Module, I-8xxx schnelle Module "
 "und Karten auf dem Bus ISA."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Tabelle der Parameter"
 
 msgid "Acquisition schedule"

@@ -38,7 +38,7 @@
 #define MOD_NAME	"BCM 2835"
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.1"
+#define MOD_VER		"1.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Broadcom BCM 2835 GPIO. Mostly for and used in Raspberry Pi.")
 #define LICENSE		"GPL2"
@@ -82,7 +82,7 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
 
     //Parameter types and it's bd structure form
     int tPrm = tpParmAdd("std", "PRM_BD", _("Standard")/*, true*/);

@@ -44,28 +44,28 @@ msgstr "Ошибка сканирования сети #%d"
 msgid "FBUS GetNodeDescription net #%d, #id%d  failed."
 msgstr "Ошибка FBUS GetNodeDescription net #%d, #id%d"
 
-msgid "DIM762 Parameteres table"
+msgid "DIM762 Parameters table"
 msgstr "Таблица параметров DIM762"
 
-msgid "DIM716 Parameteres table"
+msgid "DIM716 Parameters table"
 msgstr "Таблица параметров DIM716"
 
-msgid "DIM718 Parameteres table"
+msgid "DIM718 Parameters table"
 msgstr "Таблица параметров DIM718"
 
-msgid "AIM791 Parameteres table"
+msgid "AIM791 Parameters table"
 msgstr "Таблица параметров AIM791"
 
-msgid "AIM726 Parameteres table"
+msgid "AIM726 Parameters table"
 msgstr "Таблица параметров AIM726"
 
-msgid "AIM730 Parameteres table"
+msgid "AIM730 Parameters table"
 msgstr "Таблица параметров AIM730"
 
-msgid "AIM725 Parameteres table"
+msgid "AIM725 Parameters table"
 msgstr "Таблица параметров AIM725"
 
-msgid "DIM765 Parameteres table"
+msgid "DIM765 Parameters table"
 msgstr "Таблица параметров DIM765"
 
 msgid "Acquisition schedule"

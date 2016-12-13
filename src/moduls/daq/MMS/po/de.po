@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 11:22+0300\n"
+"POT-Creation-Date: 2016-12-13 18:45+0200\n"
 "PO-Revision-Date: 2013-10-20 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Roman Savotschenko"
 msgid "MMS(IEC-9506) client implementation."
 msgstr "MMS(IEC-9506) Client-Implementierung"
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Parametertabelle"
 
 msgid "Acquisition schedule"
@@ -84,6 +84,7 @@ msgstr "Remote-Host-Fehler"
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "MMS erstellt automatische Transport für '%s' Controller."
 
+#, c-format
 msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
 

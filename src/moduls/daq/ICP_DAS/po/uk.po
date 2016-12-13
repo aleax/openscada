@@ -232,7 +232,7 @@ msgstr ""
 "Надає реалізацію підтримки обладнання 'ICP DAS'. Включає підтримку основних "
 "I-87xxx DCON модулів, I-8xxx швидких модулів та плат на шині ISA."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Таблиця параметрів"
 
 msgid "Acquisition schedule"

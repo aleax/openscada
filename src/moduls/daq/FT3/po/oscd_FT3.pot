@@ -207,49 +207,49 @@ msgstr ""
 msgid "GRS;KA"
 msgstr ""
 
-msgid "BUC Parameteres table"
+msgid "BUC Parameters table"
 msgstr ""
 
-msgid "BVTS Parameteres table"
+msgid "BVTS Parameters table"
 msgstr ""
 
-msgid "BVT Parameteres table"
+msgid "BVT Parameters table"
 msgstr ""
 
-msgid "BVI Parameteres table"
+msgid "BVI Parameters table"
 msgstr ""
 
-msgid "BIP Parameteres table"
+msgid "BIP Parameters table"
 msgstr ""
 
-msgid "PAUK Parameteres table"
+msgid "PAUK Parameters table"
 msgstr ""
 
-msgid "BTU Parameteres table"
+msgid "BTU Parameters table"
 msgstr ""
 
-msgid "ACCOUNT Parameteres table"
+msgid "ACCOUNT Parameters table"
 msgstr ""
 
-msgid "BTR Parameteres table"
+msgid "BTR Parameters table"
 msgstr ""
 
-msgid "BTE Parameteres table"
+msgid "BTE Parameters table"
 msgstr ""
 
-msgid "ODOR Parameteres table"
+msgid "ODOR Parameters table"
 msgstr ""
 
-msgid "GZD Parameteres table"
+msgid "GZD Parameters table"
 msgstr ""
 
-msgid "GNS Parameteres table"
+msgid "GNS Parameters table"
 msgstr ""
 
-msgid "GKR Parameteres table"
+msgid "GKR Parameters table"
 msgstr ""
 
-msgid "TANK Parameteres table"
+msgid "TANK Parameters table"
 msgstr ""
 
 msgid "Acquisition schedule"

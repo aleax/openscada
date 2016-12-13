@@ -210,49 +210,49 @@ msgstr "Протокол"
 msgid "GRS;KA"
 msgstr "ГРС;КА"
 
-msgid "BUC Parameteres table"
+msgid "BUC Parameters table"
 msgstr "Таблица параметров БУЦ"
 
-msgid "BVTS Parameteres table"
+msgid "BVTS Parameters table"
 msgstr "Таблица параметров БВТС"
 
-msgid "BVT Parameteres table"
+msgid "BVT Parameters table"
 msgstr "Таблица параметров БВТ"
 
-msgid "BVI Parameteres table"
+msgid "BVI Parameters table"
 msgstr "Таблица параметров БВИ"
 
-msgid "BIP Parameteres table"
+msgid "BIP Parameters table"
 msgstr "Таблица параметров БИП"
 
-msgid "PAUK Parameteres table"
+msgid "PAUK Parameters table"
 msgstr "Таблица параметров ПАУК"
 
-msgid "BTU Parameteres table"
+msgid "BTU Parameters table"
 msgstr "Таблица параметров БТУ"
 
-msgid "ACCOUNT Parameteres table"
+msgid "ACCOUNT Parameters table"
 msgstr "Таблица параметров Узла учета"
 
-msgid "BTR Parameteres table"
+msgid "BTR Parameters table"
 msgstr "Таблица параметров БТР"
 
-msgid "BTE Parameteres table"
+msgid "BTE Parameters table"
 msgstr "Таблица параметров БТЭ"
 
-msgid "ODOR Parameteres table"
+msgid "ODOR Parameters table"
 msgstr "Таблица параметров ОДОРИЗАТОР"
 
-msgid "GZD Parameteres table"
+msgid "GZD Parameters table"
 msgstr "Таблица параметров ГЗД"
 
-msgid "GNS Parameteres table"
+msgid "GNS Parameters table"
 msgstr "Таблица параметров ГНС"
 
-msgid "GKR Parameteres table"
+msgid "GKR Parameters table"
 msgstr "Таблица параметров ГКР"
 
-msgid "TANK Parameteres table"
+msgid "TANK Parameters table"
 msgstr "Таблица параметров РЕЗЕРВУАР"
 
 msgid "Acquisition schedule"

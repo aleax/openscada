@@ -50,7 +50,7 @@ msgstr ""
 msgid "dscInit error."
 msgstr ""
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr ""
 
 msgid "Acquisition schedule"

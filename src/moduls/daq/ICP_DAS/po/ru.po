@@ -233,7 +233,7 @@ msgstr ""
 "поддержку основных I-87xxx DCON модулей, I-8xxx быстрых модулей и плат на "
 "шине ISA."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Таблица параметров"
 
 msgid "Acquisition schedule"

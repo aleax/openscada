@@ -209,7 +209,7 @@ msgstr ""
 msgid "Provides implementation for 'ICP DAS' hardware support. Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus."
 msgstr ""
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr ""
 
 msgid "Acquisition schedule"

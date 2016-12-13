@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 11:23+0300\n"
+"POT-Creation-Date: 2016-12-13 18:36+0200\n"
 "PO-Revision-Date: 2011-07-19 20:40+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -110,6 +110,7 @@ msgstr "Haus:\n"
 msgid "House computer:\n"
 msgstr "Haus-Computer:\n"
 
+#, c-format
 msgid "DAQ.%s.%s: connect to data source: %s."
 msgstr "DAQ.%s.%s: Anschluss an die Datenquelle: %s."
 

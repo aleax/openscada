@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.9"
+#define MOD_VER		"0.1.10"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -212,14 +212,14 @@ void TTpContr::postEnable(int flag)
     TTypeDAQ::postEnable(flag);
 
     //> Controler's bd structure
-    fldAdd(new TFld("PRM_BD_DIM762", _("DIM762 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_DIM716", _("DIM716 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_DIM718", _("DIM718 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM791", _("AIM791 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM726", _("AIM726 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM730", _("AIM730 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM725", _("AIM725 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_DIM765", _("DIM765 Parameteres table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_DIM762", _("DIM762 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_DIM716", _("DIM716 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_DIM718", _("DIM718 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_AIM791", _("AIM791 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_AIM726", _("AIM726 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_AIM730", _("AIM730 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_AIM725", _("AIM725 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_DIM765", _("DIM765 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
 
     fldAdd(new TFld("SCHEDULE", _("Acquisition schedule"), TFld::String, TFld::NoFlag, "100", "1"));
     fldAdd(new TFld("PRIOR", _("Gather task priority"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;199"));

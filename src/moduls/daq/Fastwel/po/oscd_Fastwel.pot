@@ -41,28 +41,28 @@ msgstr ""
 msgid "FBUS GetNodeDescription net #%d, #id%d  failed."
 msgstr ""
 
-msgid "DIM762 Parameteres table"
+msgid "DIM762 Parameters table"
 msgstr ""
 
-msgid "DIM716 Parameteres table"
+msgid "DIM716 Parameters table"
 msgstr ""
 
-msgid "DIM718 Parameteres table"
+msgid "DIM718 Parameters table"
 msgstr ""
 
-msgid "AIM791 Parameteres table"
+msgid "AIM791 Parameters table"
 msgstr ""
 
-msgid "AIM726 Parameteres table"
+msgid "AIM726 Parameters table"
 msgstr ""
 
-msgid "AIM730 Parameteres table"
+msgid "AIM730 Parameters table"
 msgstr ""
 
-msgid "AIM725 Parameteres table"
+msgid "AIM725 Parameters table"
 msgstr ""
 
-msgid "DIM765 Parameteres table"
+msgid "DIM765 Parameters table"
 msgstr ""
 
 msgid "Acquisition schedule"
