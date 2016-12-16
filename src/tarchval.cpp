@@ -265,8 +265,8 @@ double TValBuf::getR( int64_t *itm, bool up_ord )
 	case TFld::Int16: case TFld::Int32: case TFld::Int64:
 			    { int64_t vl = getI(itm, up_ord); return (vl==EVAL_INT) ? EVAL_REAL : (double)vl; }
 	case TFld::String:  { string vl = getS(itm, up_ord); return (vl==EVAL_STR) ? EVAL_REAL : s2r(vl); }
-	case TFld::Float:   { ResAlloc res(bRes, false); float vl = buf.rFlt->get(itm, up_ord); return (vl==EVAL_RFlt) ? EVAL_REAL : vl; }
-	case TFld::Double:  { ResAlloc res(bRes, false); double vl = buf.rDbl->get(itm, up_ord); return (vl==EVAL_RDbl) ? EVAL_REAL : vl; }
+	case TFld::Float:   { ResAlloc res(bRes, false); float vl = buf.rFlt->get(itm, up_ord); return (vl/EVAL_RFlt>=0.99999) ? EVAL_REAL : vl; }
+	case TFld::Double:  { ResAlloc res(bRes, false); double vl = buf.rDbl->get(itm, up_ord); return (vl/EVAL_RDbl>=0.99999) ? EVAL_REAL : vl; }
 	default: break;
     }
     return EVAL_REAL;

@@ -40,6 +40,7 @@
 #define BUF_ARCH_NM	"<buffer>"
 #define ALRM_ARCH_NM	"<alarms>"
 #define DB_CFG		"<cfg>"
+#define DB_NULL		"<NULL>"
 
 #include <signal.h>
 #include <unistd.h>

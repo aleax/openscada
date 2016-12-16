@@ -1,3 +1,11 @@
+2016-12-16 Roman (stable)
+- TArchive: EVAL_RFlt and EVAL_RDbl detection for values fix.
+- TConfig: EVAL forms conversion is added to TCfg::set{S,R,I,B}(). Integer conversion fix to 64bit.
+- !!!!:DB.{SQLite,MySQL,PostgreSQL,FireBird} : Expanded to NULL using for generic EVAL store/represent. getVal() was some expanded and unified.
+- !!:Archive.DBArch: Cleared and simplifyed for subtypes and its EVAL variants support.
+- DAQ.JavaLikeCalc: User API string's function toInt() is expanded to int64.
+
+
 2016-12-13 Roman (stable)
 - SYS: Debian packages building was appended by translation for module BCM2835.
 - DAQ.*: Wrong word "Parameteres" fixed.

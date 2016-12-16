@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.10"
+#define MOD_VER		"2.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -263,7 +263,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	    while((row=mysql_fetch_row(res))) {
 		fld.clear();
 		for(int i = 0; i < num_fields; i++)
-		    fld.push_back(row[i]?Mess->codeConvIn(cd_pg.c_str(),row[i]):"");
+		    fld.push_back(row[i]?Mess->codeConvIn(cd_pg.c_str(),row[i]):DB_NULL);
 		tbl->push_back(fld);
 	    }
 	}
@@ -439,7 +439,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	if(!u_cfg) continue;
 
 	if(u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`='" + TSYS::strEncode(getVal(*u_cfg),TSYS::SQL) + "' ";
+	    req_where += (next?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`=" + getVal(*u_cfg) + " ";
 	    next = true;
 	}
 	else if(u_cfg->isKey() || u_cfg->view()) {
@@ -497,7 +497,7 @@ void MTable::fieldGet( TConfig &cfg )
 	if(!u_cfg) continue;
 
 	if(u_cfg->isKey()) {
-	    req_where += (next_wr?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`='" + TSYS::strEncode(getVal(*u_cfg),TSYS::SQL) + "' ";
+	    req_where += (next_wr?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`=" + getVal(*u_cfg) + " ";
 	    if(first_key.empty()) first_key = TSYS::strEncode(sid, TSYS::SQL);
 	    next_wr = true;
 	}
@@ -558,8 +558,7 @@ void MTable::fieldSet( TConfig &cfg )
     for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!u_cfg.isKey()) continue;
-	req_where += (next?"AND `":"`") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "`='" +
-					  TSYS::strEncode(getVal(u_cfg,TCfg::ExtValTwo),TSYS::SQL) + "' ";
+	req_where += (next?"AND `":"`") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "`=" + getVal(u_cfg,TCfg::ExtValTwo) + " ";
 	next = true;
 
 	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
@@ -596,8 +595,7 @@ void MTable::fieldSet( TConfig &cfg )
 		ins_name += (next?",`":"`") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "` " +
 		    (isTransl ? (",`"+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL)+"` ") : "");
 		sval = getVal(u_cfg);
-		ins_value += (next?",'":"'") + TSYS::strEncode(sval,TSYS::SQL) + "' " +
-		    (isTransl ? (",'"+TSYS::strEncode(sval,TSYS::SQL)+"' ") : "");
+		ins_value += (next?",":"") + sval + " " + (isTransl?(","+sval+" "):"");
 		next = true;
 	    }
 	    req += "(" + ins_name + ") VALUES (" + ins_value + ")";
@@ -615,7 +613,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    sval = getVal(u_cfg);
-	    req += (next?",`":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`='" + TSYS::strEncode(sval,TSYS::SQL) + "' ";
+	    req += (next?",`":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`=" + sval + " ";
 	    next = true;
 	}
 	req += req_where;
@@ -641,7 +639,7 @@ void MTable::fieldDel( TConfig &cfg )
 	string sid = tblStrct[iFld][0];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg && u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`='" + TSYS::strEncode(getVal(*u_cfg),TSYS::SQL) + "' ";
+	    req_where += (next?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`=" + getVal(*u_cfg) + " ";
 	    next = true;
 	}
     }
@@ -772,23 +770,26 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 	case TFld::String:
 	    if((cfg.fld().len() && cfg.fld().len() < 256) || cfg.fld().flg()&TCfg::Key)
 		req += "varchar(" + i2s(vmax(1,vmin((cfg.fld().flg()&TCfg::Key)?(333/(2*keyCnt)):255,cfg.fld().len()))) + ") " +
-			((cfg.fld().flg()&TCfg::Key)?"BINARY":"") + " NOT NULL DEFAULT '" + cfg.fld().def() + "' ";
-	    else if(cfg.fld().len() < 65536) req += "text NOT NULL ";
-	    else req += "mediumtext NOT NULL ";
+			((cfg.fld().flg()&TCfg::Key)?"BINARY ":" ");
+	    else if(cfg.fld().len() < 65536) req += "text ";
+	    else req += "mediumtext ";
+	    req += ((cfg.fld().def() == EVAL_STR) ? "DEFAULT NULL " : "NOT NULL DEFAULT '"+TSYS::strEncode(cfg.fld().def(),TSYS::SQL)+"' ");
 	    break;
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec)
-		req += "datetime NOT NULL DEFAULT '" + UTCtoSQL(s2i(cfg.fld().def())) + "' ";
-	    else if(!cfg.fld().len()) req += "bigint NOT NULL DEFAULT '" + i2s(s2i(cfg.fld().def())) + "' ";
-	    else req += "int(" + i2s(vmax(1,cfg.fld().len())) + ") NOT NULL DEFAULT '" + i2s(s2i(cfg.fld().def())) + "' ";
+		req += "datetime " + ((s2ll(cfg.fld().def())==EVAL_INT)?"DEFAULT NULL ":"NOT NULL DEFAULT '"+UTCtoSQL(s2ll(cfg.fld().def()))+"' ");
+	    else if(!cfg.fld().len())
+		req += "bigint " + ((s2ll(cfg.fld().def())==EVAL_INT)?"DEFAULT NULL ":"NOT NULL DEFAULT '"+ll2s(s2ll(cfg.fld().def()))+"' ");
+	    else req += "int(" + i2s(vmax(1,cfg.fld().len())) + ") " +
+			((s2ll(cfg.fld().def())==EVAL_INT)?"DEFAULT NULL ":"NOT NULL DEFAULT '"+ll2s(s2ll(cfg.fld().def()))+"' ");
 	    break;
 	case TFld::Real:
-	    if(!cfg.fld().len()) req += "double NOT NULL DEFAULT '" + r2s(s2r(cfg.fld().def())) + "' ";
-	    else req += "double(" + i2s(vmax(3,cfg.fld().len())) + "," + i2s(vmax(2,cfg.fld().dec())) + ") NOT NULL DEFAULT '" +
-									 r2s(s2r(cfg.fld().def())) + "' ";
+	    if(!cfg.fld().len()) req += "double ";
+	    else req += "double(" + i2s(vmax(3,cfg.fld().len())) + "," + i2s(vmax(2,cfg.fld().dec())) + ") ";
+	    req += ((s2r(cfg.fld().def())==EVAL_REAL)?"DEFAULT NULL ":"NOT NULL DEFAULT '"+r2s(s2r(cfg.fld().def()))+"' ");
 	    break;
 	case TFld::Boolean:
-	    req += "tinyint(1) NOT NULL DEFAULT '" + i2s(s2i(cfg.fld().def())) + "' ";
+	    req += "tinyint(1) " + ((s2i(cfg.fld().def())==EVAL_BOOL)?"DEFAULT NULL ":"NOT NULL DEFAULT '"+i2s(s2i(cfg.fld().def()))+"' ");
 	    break;
 	default: break;
     }
@@ -798,30 +799,17 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 
 string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    string rez;
-    switch(cfg.fld().type()) {	//!! Different types for correct EVAL represent
-	case TFld::Boolean:	rez = i2s(cfg.getB());	break;
-	case TFld::Integer:	rez = (cfg.fld().flg()&TFld::DateTimeDec) ? UTCtoSQL(cfg.getI()) : i2s(cfg.getI());	break;
-	case TFld::Real:	rez = r2s(cfg.getR());	break;
-	default: rez = (cfg.fld().len() > 0) ? cfg.getS(RqFlg).substr(0,cfg.fld().len()) : cfg.getS(RqFlg);
-    }
-    return rez;
+    string rez = cfg.getS(RqFlg);
+    if(rez == EVAL_STR)	return "NULL";
+    if(cfg.fld().type() == TFld::String)	rez = TSYS::strEncode(((cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez), TSYS::SQL);
+    else if(cfg.fld().flg()&TFld::DateTimeDec)	rez = UTCtoSQL(s2i(rez));
 
-    /*string rez = cfg.getS(RqFlg);
-    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
-    return rez;*/
-
-    /*switch(cfg.fld().type()) {
-	case TFld::Integer:
-	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
-	    return cfg.getS();
-	default: return cfg.getS();
-    }
-    return "";*/
+    return "'" + rez + "'";
 }
 
-void MTable::setVal( TCfg &cf, const string &val, bool tr )
+void MTable::setVal( TCfg &cf, const string &ival, bool tr )
 {
+    string val = (ival==DB_NULL) ? EVAL_STR : ival;
     switch(cf.fld().type()) {
 	case TFld::Integer:
 	    if(cf.fld().flg()&TFld::DateTimeDec) cf.setI(SQLtoUTC(val));

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.2.10"
+#define MOD_VER		"2.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -190,13 +190,13 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
     if(tbl && ncol > 0) {
 	vector<string> row;
 	// Add head
-	for(int i = 0; i < ncol; i++) row.push_back(result[i]?result[i]:"");
+	for(int i = 0; i < ncol; i++) row.push_back(result[i]?result[i]:DB_NULL);
 	tbl->push_back(row);
 	// Add data
 	for(int i = 0; i < nrow; i++) {
 	    row.clear();
 	    for(int ii = 0; ii < ncol; ii++)
-		row.push_back(result[(i+1)*ncol+ii]?Mess->codeConvIn(cd_pg.c_str(),result[(i+1)*ncol+ii]):"");
+		row.push_back(result[(i+1)*ncol+ii]?Mess->codeConvIn(cd_pg.c_str(),result[(i+1)*ncol+ii]):DB_NULL);
 	    tbl->push_back(row);
 	}
     }
@@ -465,7 +465,7 @@ void MTable::fieldSet( TConfig &cfg )
     for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!u_cfg.isKey()) continue;
-	req_where += (next?" AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\"=" + getVal(u_cfg,true,TCfg::ExtValTwo);
+	req_where += (next?" AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\"=" + getVal(u_cfg,TCfg::ExtValTwo);
 	next = true;
 
 	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
@@ -581,7 +581,7 @@ void MTable::fieldFix( TConfig &cfg )
 	for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
 	    all_flds += (all_flds.size()?",\"":"\"") + TSYS::strEncode(tblStrct[iFld][1],TSYS::SQL,"\"") + "\"";
 	    crtReq += (next?",\"":"\"") + TSYS::strEncode(tblStrct[iFld][1],TSYS::SQL,"\"") + "\" "+
-		tblStrct[iFld][2]+" DEFAULT " + tblStrct[iFld][4] + " ";
+		tblStrct[iFld][2]+" DEFAULT " + ((tblStrct[iFld][4]==DB_NULL)?"NULL":tblStrct[iFld][4]) + " ";
 	    next = true;
 	    if(s2i(tblStrct[iFld][5])) {
 		pr_keys += (next_key?",\"":"\"") + TSYS::strEncode(tblStrct[iFld][1],TSYS::SQL,"\"") + "\"";
@@ -610,10 +610,18 @@ void MTable::fieldFix( TConfig &cfg )
 
 	// Type
 	switch(cf.fld().type()) {
-	    case TFld::String:	tpCfg = "TEXT DEFAULT '" + TSYS::strEncode(cf.fld().def(),TSYS::SQL,"'") + "' ";	break;
-	    case TFld::Integer: case TFld::Boolean:
-				tpCfg = "INTEGER DEFAULT '" + TSYS::strEncode(cf.fld().def(),TSYS::SQL,"'") + "' ";	break;
-	    case TFld::Real:	tpCfg = "DOUBLE DEFAULT '" + TSYS::strEncode(cf.fld().def(),TSYS::SQL,"'") + "' ";	break;
+	    case TFld::String:
+		tpCfg = "TEXT DEFAULT " + ((cf.fld().def()==EVAL_STR)?"NULL ":"'"+TSYS::strEncode(cf.fld().def(),TSYS::SQL,"'")+"' ");
+		break;
+	    case TFld::Boolean:
+		tpCfg = "INTEGER DEFAULT " + ((s2i(cf.fld().def())==EVAL_BOOL)?"NULL ":"'"+i2s(s2i(cf.fld().def()))+"' ");
+		break;
+	    case TFld::Integer:
+		tpCfg = "INTEGER DEFAULT " + ((s2ll(cf.fld().def())==EVAL_INT)?"NULL ":"'"+ll2s(s2ll(cf.fld().def()))+"' ");
+		break;
+	    case TFld::Real:
+		tpCfg = "DOUBLE DEFAULT " + ((s2r(cf.fld().def())==EVAL_REAL)?"NULL ":"'"+r2s(s2r(cf.fld().def()))+"' ");
+		break;
 	    default:	break;
 	}
 
@@ -680,32 +688,11 @@ void MTable::fieldFix( TConfig &cfg )
     owner().sqlReq(req, &tblStrct, false);
 }
 
-string MTable::getVal( TCfg &cfg, bool toEnc, uint8_t RqFlg )
+string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    string rez;
-    switch(cfg.fld().type()) {	//!! Different types for correct EVAL represent
-	case TFld::Boolean:	rez = i2s(cfg.getB());	break;
-	case TFld::Integer:	rez = i2s(cfg.getI());	break;
-	case TFld::Real:	rez = r2s(cfg.getR());	break;
-	default:
-	    rez = cfg.getS(RqFlg);
-	    if(toEnc) {
-		string prntRes = rez;
-		bool isBin = false;
-		for(unsigned iCh = 0; !isBin && iCh < prntRes.size(); ++iCh)
-		    switch(prntRes[iCh]) {
-			case 0: isBin = true; break;
-			case '\'': prntRes.insert(iCh, 1, prntRes[iCh]); ++iCh; break;
-		    }
-		return isBin ? "X'"+TSYS::strDecode(rez, TSYS::Bin)+"'" : "'"+prntRes+"'";
-	    }
-	    break;
-    }
-
-    return toEnc ? "'"+rez+"'" : rez;
-
-    /*string rez = cfg.getS(RqFlg);
-    if(cfg.fld().type() == TFld::String && toEnc) {
+    string rez = cfg.getS(RqFlg);
+    if(rez == EVAL_STR)	return "NULL";
+    if(cfg.fld().type() == TFld::String) {
 	string prntRes = rez;
 	bool isBin = false;
 	for(unsigned iCh = 0; !isBin && iCh < prntRes.size(); ++iCh)
@@ -716,29 +703,12 @@ string MTable::getVal( TCfg &cfg, bool toEnc, uint8_t RqFlg )
 	return isBin ? "X'"+TSYS::strDecode(rez, TSYS::Bin)+"'" : "'"+prntRes+"'";
     }
 
-    return toEnc ? "'"+rez+"'" : rez;*/
-
-    /*switch(cfg.fld().type()) {
-	case TFld::String: {
-	    if(!toEnc) return cfg.getS(RqFlg);
-	    string prntRes = cfg.getS(RqFlg);
-	    bool isBin = false;
-	    for(unsigned iCh = 0; !isBin && iCh < prntRes.size(); ++iCh)
-		switch(prntRes[iCh]) {
-		    case 0: isBin = true; break;
-		    case '\'':	prntRes.insert(iCh,1,prntRes[iCh]); ++iCh; break;
-		}
-	    return isBin ? "X'"+TSYS::strDecode(cfg.getS(RqFlg),TSYS::Bin)+"'" : "'"+prntRes+"'";
-	    break;
-	}
-	default: return toEnc ? "'"+cfg.getS(RqFlg)+"'" : cfg.getS(RqFlg);
-    }
-
-    return "";*/
+    return "'" + rez + "'";
 }
 
-void MTable::setVal( TCfg &cf, const string &val, bool tr )
+void MTable::setVal( TCfg &cf, const string &ival, bool tr )
 {
+    string val = (ival==DB_NULL) ? EVAL_STR : ival;
     if(!cf.extVal()) {
 	if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
 	if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());

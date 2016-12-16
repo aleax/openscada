@@ -137,34 +137,6 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		try { varch.at().start(); } catch(TError&) { continue; }	//!!!! Pass wrong archives
 	    // Check for attached
 	    if(!varch.at().archivatorPresent(workId()))	varch.at().archivatorAttach(workId());
-	    // Set the main parameters
-	    /*ResAlloc res1(archRes, false);
-	    map<string,TVArchEl*>::iterator iel = archEl.find(aNm);
-	    if(iel != archEl.end()) {
-		ModVArchEl *ael = (ModVArchEl*)iel->second;
-		ael->mBeg = s2ll(cfg.cfg("BEGIN").getS());
-		ael->mEnd = s2ll(cfg.cfg("END").getS());
-		ael->mPer = s2ll(cfg.cfg("PRM1").getS());
-		//  Check for delete the archive table
-		if(maxSize() && ael->mEnd <= (TSYS::curTime()-(int64_t)(maxSize()*86400e6))) {
-		    SYS->db().at().open(addr()+"."+ael->archTbl());
-		    SYS->db().at().close(addr()+"."+ael->archTbl(), true);
-		    ael->mBeg = ael->mEnd = ael->mPer = 0;
-		}
-		if(!ael->mPer) ael->mPer = (int64_t)(valPeriod()*1e6);
-
-		//  Read previous one
-		int64_t curTm = (TSYS::curTime()/vmax(1,ael->period()))*ael->period();
-		if(curTm >= ael->begin() && curTm <= ael->end() && ael->period() > 10000000 && ael->prevVal == EVAL_REAL) {
-		    ael->prevTm = curTm;
-		    switch(varch.at().valType()) {
-			case TFld::Int16: case TFld::Int32: case TFld::Int64: case TFld::Float: case TFld::Double:
-			    ael->prevVal = ael->getVal(&curTm, false).getR();
-			    break;
-			default: break;
-		    }
-		}
-	    }*/
 	}
 	//Single table per a parameters group mode
 	else {
@@ -222,9 +194,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		    if(curTm >= ael->begin() && curTm <= ael->end() && ael->period() > 10000000 && ael->prevVal == EVAL_REAL) {
 			ael->prevTm = curTm;
 			switch(varch.at().valType()) {
-			    case TFld::Int16: case TFld::Int32: case TFld::Int64: case TFld::Float: case TFld::Double:
-				ael->prevVal = ael->getVal(&curTm, false).getR();
-				break;
+			    case TFld::Integer: case TFld::Real: ael->prevVal = ael->getVal(&curTm, false).getR();	break;
 			    default: break;
 			}
 		    }
@@ -262,28 +232,11 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
 
     //Place the parameter to the selected group
     SGrp &gO = accm[prefGrpPos];
-    switch(tp) {
-	case TFld::Boolean:
-	    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));
-	    break;
-	case TFld::Int16:
-	    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"5",ll2s(EVAL_INT16).c_str()));
-	    break;
-	case TFld::Int32:
-	    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"10",ll2s(EVAL_INT32).c_str()));
-	    break;
-	case TFld::Int64:
-	    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT64).c_str()));
-	    break;
-	case TFld::Float:
-	    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Real,TFld::NoFlag,"",r2s(EVAL_RFlt).c_str()));
-	    break;
-	case TFld::Double:
-	    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Real,TFld::NoFlag,"",r2s(EVAL_RDbl).c_str()));
-	    break;
-	case TFld::String:
-	    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::String,TFld::NoFlag,"1000",EVAL_STR));
-	    break;
+    switch(tp&TFld::GenMask) {
+	case TFld::Boolean: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
+	case TFld::Integer: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));	break;
+	case TFld::Real:    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
+	case TFld::String:  gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
 	default: break;
     }
 
@@ -304,7 +257,7 @@ void ModVArch::accmUnreg( const string &aNm )
 
 	string	pLs;
 	for(iP = oG.els.begin(); iP != oG.els.end(); ++iP)
-	    pLs += i2s(iP->second.valType()) + ":" + iP->first + "\n";
+	    pLs += i2s(iP->second.valType(true)) + ":" + iP->first + "\n";
 
 	//Update the group meta info
 	try{ grpMetaUpd(oG, &pLs); } catch(TError&) { }
@@ -379,25 +332,10 @@ void ModVArch::pushAccumVals( )
 		    TValBuf &oP = iP->second;
 		    ctm = beg;
 		    bool noData = (ctm < oP.begin() || ctm > oP.end());
-		    switch(oP.valType(true)) {
+		    switch(oP.valType()) {
 			case TFld::Boolean:	cfg.cfg(iP->first).setI(noData?EVAL_BOOL:oP.getB(&ctm,true));	break;
-			case TFld::Int16: case TFld::Int32: case TFld::Int64: {
-			    int64_t bval = noData ? EVAL_INT : oP.getI(&ctm,true);
-			    switch(oP.valType(true)) {
-				case TFld::Int16: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT16 : (int16_t)bval);	break;
-				case TFld::Int32: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT32 : (int32_t)bval);	break;
-				case TFld::Int64: cfg.cfg(iP->first).setI((bval==EVAL_INT) ? EVAL_INT64 : bval);	break;
-			    }
-			    break;
-			}
-			case TFld::Float: case TFld::Double: {
-			    double bval = noData ? EVAL_REAL : oP.getR(&ctm, true);
-			    switch(oP.valType(true)) {
-				case TFld::Float:  cfg.cfg(iP->first).setR((bval==EVAL_REAL) ? EVAL_RFlt : (float)bval);	break;
-				case TFld::Double: cfg.cfg(iP->first).setR((bval==EVAL_REAL) ? EVAL_RDbl : bval);	break;
-			    }
-			    break;
-			}
+			case TFld::Integer:	cfg.cfg(iP->first).setI(noData?EVAL_INT:oP.getI(&ctm,true));	break;
+			case TFld::Real:	cfg.cfg(iP->first).setR(noData?EVAL_REAL:oP.getR(&ctm,true));	break;
 			case TFld::String:	cfg.cfg(iP->first).setS(noData?EVAL_STR:oP.getS(&ctm,true));	break;
 			default: break;
 		    }
@@ -506,28 +444,11 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 	reqEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
 	reqEl.fldAdd(new TFld("TM",_("Time (s)"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
 	//reqEl.fldAdd(new TFld("TMU",_("Time (us)"),TFld::Integer,TCfg::Key,"10"));
-	switch(archive().valType(true)) {
-	    case TFld::Boolean:
-		reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));
-		break;
-	    case TFld::Int16:
-		reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"5",ll2s(EVAL_INT16).c_str()));
-		break;
-	    case TFld::Int32:
-		reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"10",ll2s(EVAL_INT32).c_str()));
-		break;
-	    case TFld::Int64:
-		reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT64).c_str()));
-		break;
-	    case TFld::Float:
-		reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_RFlt).c_str()));
-		break;
-	    case TFld::Double:
-		reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_RDbl).c_str()));
-		break;
-	    case TFld::String:
-		reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000",EVAL_STR));
-		break;
+	switch(archive().valType()) {
+	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
+	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;
+	    case TFld::Real:    reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
+	    case TFld::String:  reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
 	    default: break;
 	}
     }
@@ -610,13 +531,10 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	for( ; SYS->db().at().dataSeek(tblAddr,"",eC++,cfg,false,&full); ) {
 	    cTm = 1000000ll * cfg.cfg("TM").getI();
 	    if(cTm < ibeg || cTm > iend) continue;
-	    switch(archive().valType(true)) {
+	    switch(archive().valType()) {
 		case TFld::Boolean:	buf.setB(cfg.cfg(vlFld).getB(), cTm);	break;
-		case TFld::Int16:	{ int16_t vl = cfg.cfg(vlFld).getI(); buf.setI((vl==EVAL_INT16)?EVAL_INT:vl, cTm); break; }
-		case TFld::Int32:	{ int32_t vl = cfg.cfg(vlFld).getI(); buf.setI((vl==EVAL_INT32)?EVAL_INT:vl, cTm); break; }
-		case TFld::Int64:	{ int64_t vl = cfg.cfg(vlFld).getI(); buf.setI((vl==EVAL_INT64)?EVAL_INT:vl, cTm); break; }
-		case TFld::Float:	{ float vl = cfg.cfg(vlFld).getR(); buf.setR((vl/EVAL_RFlt>=0.99999)?EVAL_REAL:vl, cTm); break; }
-		case TFld::Double:	{ double vl = cfg.cfg(vlFld).getR(); buf.setR((vl/EVAL_RDbl>=0.99999)?EVAL_REAL:vl, cTm); break; }
+		case TFld::Integer:	buf.setI(cfg.cfg(vlFld).getI(), cTm);	break;
+		case TFld::Real:	buf.setR(cfg.cfg(vlFld).getR(), cTm);	break;
 		case TFld::String:	buf.setS(cfg.cfg(vlFld).getS(), cTm);	break;
 		default:		buf.setR(EVAL_REAL, cTm);		break;
 	    }
@@ -624,22 +542,6 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	tC += 10*period();
     }
 
-    /*for(int64_t cTm = ibeg; cTm <= iend; cTm += period()) {
-	cfg.cfg("TM").setI(cTm/1000000);
-	//cfg.cfg("TMU").setI(cTm%1000000);
-	if(SYS->db().at().dataGet(tblAddr,"",cfg,false,true))
-	    switch(archive().valType(true)) {
-		case TFld::Boolean:	buf.setB(cfg.cfg(vlFld).getB(), cTm);	break;
-		case TFld::Int16:	{ int16_t vl = cfg.cfg(vlFld).getI(); buf.setI((vl==EVAL_INT16)?EVAL_INT:vl, cTm); break; }
-		case TFld::Int32:	{ int32_t vl = cfg.cfg(vlFld).getI(); buf.setI((vl==EVAL_INT32)?EVAL_INT:vl, cTm); break; }
-		case TFld::Int64:	{ int64_t vl = cfg.cfg(vlFld).getI(); buf.setI((vl==EVAL_INT64)?EVAL_INT:vl, cTm); break; }
-		case TFld::Float:	{ float vl = cfg.cfg(vlFld).getR(); buf.setR((vl/EVAL_RFlt>=0.99999)?EVAL_REAL:vl, cTm); break; }
-		case TFld::Double:	{ double vl = cfg.cfg(vlFld).getR(); buf.setR((vl/EVAL_RDbl>=0.99999)?EVAL_REAL:vl, cTm); break; }
-		case TFld::String:	buf.setS(cfg.cfg(vlFld).getS(), cTm);	break;
-		default:		buf.setR(EVAL_REAL, cTm);		break;
-	    }
-	else buf.setR(EVAL_REAL, cTm);
-    }*/
     res.unlock();
 
     // Fill by EVAL following range part without a real data
@@ -680,13 +582,10 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     //cf.cfg("TMU").setI(itm%1000000);
     if(SYS->db().at().dataGet(tblAddr,"",cf,false,true)) {
 	if(tm) *tm = itm;
-	switch(archive().valType(true)) {
+	switch(archive().valType()) {
 	    case TFld::Boolean:	return cf.cfg(vlFld).getB();
-	    case TFld::Int16:	{ int16_t vl = cf.cfg(vlFld).getI(); return (vl==EVAL_INT16) ? (int64_t)EVAL_INT : vl; }
-	    case TFld::Int32:	{ int32_t vl = cf.cfg(vlFld).getI(); return (vl==EVAL_INT32) ? (int64_t)EVAL_INT : vl; }
-	    case TFld::Int64:	{ int64_t vl = cf.cfg(vlFld).getI(); return (vl==EVAL_INT64) ? (int64_t)EVAL_INT : vl; }
-	    case TFld::Float:	{ float vl = cf.cfg(vlFld).getR(); return (vl<=EVAL_RFlt) ? EVAL_REAL : vl; }
-	    case TFld::Double:	{ double vl = cf.cfg(vlFld).getR(); return (vl<=EVAL_RDbl) ? EVAL_REAL : vl; }
+	    case TFld::Integer:	return cf.cfg(vlFld).getI();
+	    case TFld::Real:	return cf.cfg(vlFld).getR();
 	    case TFld::String:	return cf.cfg(vlFld).getS();
 	    default: break;
 	}
@@ -716,25 +615,10 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 
 	//Write data to the table
 	for(int64_t ctm; ibeg <= iend; ibeg++) {
-	    switch(archive().valType(true)) {
+	    switch(archive().valType()) {
 		case TFld::Boolean:	cfg.cfg("VAL").setI(buf.getB(&ibeg,true));	break;
-		case TFld::Int16: case TFld::Int32: case TFld::Int64: {
-		    int64_t bval = buf.getI(&ibeg, true);
-		    switch(archive().valType(true)) {
-			case TFld::Int16: cfg.cfg("VAL").setI((bval==EVAL_INT) ? EVAL_INT16 : bval);	break;
-			case TFld::Int32: cfg.cfg("VAL").setI((bval==EVAL_INT) ? EVAL_INT32 : bval);	break;
-			case TFld::Int64: cfg.cfg("VAL").setI((bval==EVAL_INT) ? EVAL_INT64 : bval);	break;
-		    }
-		    break;
-		}
-		case TFld::Float: case TFld::Double: {
-		    double bval = buf.getR(&ibeg, true);
-		    switch(archive().valType(true)) {
-			case TFld::Float:  cfg.cfg("VAL").setR((bval==EVAL_REAL) ? EVAL_RFlt : bval);	break;
-			case TFld::Double: cfg.cfg("VAL").setR((bval==EVAL_REAL) ? EVAL_RDbl : bval);	break;
-		    }
-		    break;
-		}
+		case TFld::Integer:	cfg.cfg("VAL").setI(buf.getI(&ibeg,true));	break;
+		case TFld::Real:	cfg.cfg("VAL").setR(buf.getR(&ibeg,true));	break;
 		case TFld::String:	cfg.cfg("VAL").setS(buf.getS(&ibeg,true));	break;
 		default: break;
 	    }
@@ -768,7 +652,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	cfg.cfg("BEGIN").setS(ll2s(mBeg), true);
 	cfg.cfg("END").setS(ll2s(mEnd), true);
 	cfg.cfg("PRM1").setS(ll2s(mPer), true);
-	cfg.cfg("PRM2").setS(i2s(archive().valType()), true);
+	cfg.cfg("PRM2").setS(i2s(archive().valType(true)), true);
 
 	return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true) ? iend : 0;
     }
@@ -797,25 +681,10 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     //Write data to the table
     int64_t lstWrTm = 0;
     for(int64_t ctm; ibeg <= iend; ibeg++) {
-	switch(archive().valType(true)) {
+	switch(archive().valType()) {
 	    case TFld::Boolean:	cfg.cfg(vlFld).setI(buf.getB(&ibeg,true));	break;
-	    case TFld::Int16: case TFld::Int32: case TFld::Int64: {
-		int64_t bval = buf.getI(&ibeg, true);
-		switch(archive().valType(true)) {
-		    case TFld::Int16: cfg.cfg(vlFld).setI((bval==EVAL_INT) ? EVAL_INT16 : (int16_t)bval);	break;
-		    case TFld::Int32: cfg.cfg(vlFld).setI((bval==EVAL_INT) ? EVAL_INT32 : (int32_t)bval);	break;
-		    case TFld::Int64: cfg.cfg(vlFld).setI((bval==EVAL_INT) ? EVAL_INT64 : bval);	break;
-		}
-		break;
-	    }
-	    case TFld::Float: case TFld::Double: {
-		double bval = buf.getR(&ibeg, true);
-		switch(archive().valType(true)) {
-		    case TFld::Float:  cfg.cfg(vlFld).setR((bval==EVAL_REAL) ? EVAL_RFlt : (float)bval);	break;
-		    case TFld::Double: cfg.cfg(vlFld).setR((bval==EVAL_REAL) ? EVAL_RDbl : bval);	break;
-		}
-		break;
-	    }
+	    case TFld::Integer:	cfg.cfg(vlFld).setI(buf.getI(&ibeg,true));	break;
+	    case TFld::Real:	cfg.cfg(vlFld).setR(buf.getR(&ibeg,true));	break;
 	    case TFld::String:	cfg.cfg(vlFld).setS(buf.getS(&ibeg,true));	break;
 	    default: break;
 	}
@@ -877,9 +746,7 @@ bool ModVArchEl::readMeta( )
 	if(cur_tm >= begin() && cur_tm <= end() && period() > 10000000 && prevVal == EVAL_REAL) {
 	    prevTm = cur_tm;
 	    switch(archive().valType()) {
-		case TFld::Int16: case TFld::Int32: case TFld::Int64: case TFld::Float: case TFld::Double:
-		    prevVal = getVal(&cur_tm, false).getR();
-		    break;
+		case TFld::Integer: case TFld::Real: prevVal = getVal(&cur_tm, false).getR();	break;
 		default: break;
 	    }
 	}

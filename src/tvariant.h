@@ -285,7 +285,7 @@ class XMLNodeObj : public TVarObj
 	XMLNodeObj( const string &name = "" );
 	~XMLNodeObj( );
 
-	string objName( )       { return "XMLNode"; }
+	string objName( )	{ return "XMLNode"; }
 
 	string name( );
 	string text( );

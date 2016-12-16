@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.3.10"
+#define MOD_VER		"1.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -342,8 +342,8 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 		for(int i = 0; i < out_sqlda->sqld; i++) {
 		    XSQLVAR &var = out_sqlda->sqlvar[i];
 		    // Null handling.  If the column is nullable and null
-		    if((var.sqltype&1) && (*var.sqlind < 0)) row.push_back("");
-		    switch(var.sqltype & (~1)) {
+		    if((var.sqltype&1) && (*var.sqlind < 0)) row.push_back(DB_NULL);
+		    else switch(var.sqltype&(~1)) {
 			case SQL_TEXT:
 			    row.push_back(Mess->codeConvIn(cd_pg.c_str(),clrEndSpace(string(var.sqldata,var.sqllen))));
 			    break;
@@ -547,7 +547,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	if(!u_cfg) continue;
 
 	if(u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
+	    req_where += (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"=" + getVal(*u_cfg) + " ";
 	    next = true;
 	}
 	else if(u_cfg->isKey() || u_cfg->view()) {
@@ -602,7 +602,7 @@ void MTable::fieldGet( TConfig &cfg )
 	if(!u_cfg) continue;
 
 	if(u_cfg->isKey()) {
-	    req_where += (next_wr?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
+	    req_where += (next_wr?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"=" + getVal(*u_cfg) + " ";
 	    if(first_key.empty()) first_key = mod->sqlReqCode(sid, '"');
 	    next_wr = true;
 	}
@@ -664,8 +664,7 @@ void MTable::fieldSet( TConfig &cfg )
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!u_cfg.isKey()) continue;
 	if(!next) next = true; else req_where = req_where + "AND ";
-	req_where += "\"" + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" +
-			    mod->sqlReqCode(getVal(u_cfg,TCfg::ExtValTwo)) + "' ";
+	req_where += "\"" + mod->sqlReqCode(cf_el[i_el],'"') + "\"=" + getVal(u_cfg,TCfg::ExtValTwo) + " ";
 
 	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
 
@@ -699,8 +698,7 @@ void MTable::fieldSet( TConfig &cfg )
 		ins_name += (next?",\"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\" " +
 			(isTransl ? (",\""+mod->sqlReqCode(Mess->lang2Code()+"#"+cf_el[i_el],'"')+"\" ") : "");
 		sval = getVal(u_cfg);
-		ins_value += (next?",'":"'") + mod->sqlReqCode(sval) + "' " +
-			(isTransl ? (",'"+mod->sqlReqCode(sval)+"' ") : "");
+		ins_value += (next?",":"") + sval + " " + (isTransl?(","+sval+" ") : "");
 		next = true;
 	    }
 	    req += "(" + ins_name + ") VALUES (" + ins_value + ")";
@@ -717,7 +715,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    sval = getVal(u_cfg);
-	    req += (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(sval) + "' ";
+	    req += (next?",\"":"\"") + mod->sqlReqCode(sid,'"') + "\"=" + sval + " ";
 	    next = true;
 	}
 	req += req_where;
@@ -740,7 +738,7 @@ void MTable::fieldDel( TConfig &cfg )
 	string sid = tblStrct[iFld][0];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg && u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
+	    req_where += (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"=" + getVal(*u_cfg) + " ";
 	    next = true;
 	}
     }
@@ -771,14 +769,14 @@ void MTable::fieldFix( TConfig &cfg )
 		    (cfg.cfg(cf_el[iCf]).fld().flg()&TCfg::TransltText && tblStrct[iFld][0].size() > 3 &&
 		    tblStrct[iFld][0].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
 	    {
-		TCfg &u_cfg = cfg.cfg(cf_el[iCf]);
+		TCfg &cf = cfg.cfg(cf_el[iCf]);
 		bool isEqual = false;
 		int rwTp = s2i(tblStrct[iFld][1]);
-		switch(u_cfg.fld().type()) {
+		switch(cf.fld().type()) {
 		    case TFld::String:
-			if(rwTp == blr_varying && ((u_cfg.fld().len() <= 255 && u_cfg.fld().len() == s2i(tblStrct[iFld][2])) || u_cfg.fld().flg()&TCfg::Key))
+			if(rwTp == blr_varying && ((cf.fld().len() <= 255 && cf.fld().len() == s2i(tblStrct[iFld][2])) || cf.fld().flg()&TCfg::Key))
 			    isEqual = true;
-			else if(rwTp == blr_blob && u_cfg.fld().len() > 255)	isEqual = true;
+			else if(rwTp == blr_blob && cf.fld().len() > 255)	isEqual = true;
 			break;
 		    case TFld::Integer:	if(rwTp == blr_int64)	isEqual = true;	break;
 		    case TFld::Real:	if(rwTp == blr_double)	isEqual = true;	break;
@@ -799,10 +797,10 @@ void MTable::fieldFix( TConfig &cfg )
     string pr_keys;
     //Add fields
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
-	TCfg &u_cfg = cfg.cfg(cf_el[iCf]);
+	TCfg &cf = cfg.cfg(cf_el[iCf]);
 	// Check primary key
-	if(u_cfg.fld().flg()&TCfg::Key && !appMode) {
-	    pr_keys += (next_key?",\"":"\"") + mod->sqlReqCode(u_cfg.name(),'"') + "\"";
+	if(cf.fld().flg()&TCfg::Key && !appMode) {
+	    pr_keys += (next_key?",\"":"\"") + mod->sqlReqCode(cf.name(),'"') + "\"";
 	    next_key = true;
 	}
 
@@ -810,15 +808,22 @@ void MTable::fieldFix( TConfig &cfg )
 	    if(cf_el[iCf] == tblStrct[iFld][0]) break;
 
 	string f_tp;
-	switch(u_cfg.fld().type()) {
+	switch(cf.fld().type()) {
 	    case TFld::String:
-		if((u_cfg.fld().len() && u_cfg.fld().len() <= 255) || u_cfg.fld().flg()&TCfg::Key)
-		    f_tp = "VARCHAR(" + i2s(vmax(10,vmin(255,u_cfg.fld().len()))) + ") DEFAULT '" + u_cfg.fld().def() + "' NOT NULL ";
-		else f_tp = "BLOB SUB_TYPE TEXT DEFAULT '" + u_cfg.fld().def() + "' NOT NULL ";
+		if((cf.fld().len() && cf.fld().len() <= 255) || cf.fld().flg()&TCfg::Key)
+		    f_tp = "VARCHAR(" + i2s(vmax(10,vmin(255,cf.fld().len()))) + ") ";
+		else f_tp = "BLOB SUB_TYPE TEXT ";
+		f_tp += "DEFAULT " + ((cf.fld().def()==EVAL_STR)?"NULL ":"'"+cf.fld().def()+"' NOT NULL ");
 		break;
-	    case TFld::Integer:	f_tp = "BIGINT DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' NOT NULL ";			break;
-	    case TFld::Real:	f_tp = "DOUBLE PRECISION DEFAULT '" + r2s(s2r(u_cfg.fld().def())) + "' NOT NULL ";	break;
-	    case TFld::Boolean:	f_tp = "SMALLINT DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' NOT NULL ";		break;
+	    case TFld::Integer:
+		f_tp = "BIGINT DEFAULT " + ((s2ll(cf.fld().def())==EVAL_INT)?"NULL ":"'"+ll2s(s2ll(cf.fld().def()))+"' NOT NULL ");
+		break;
+	    case TFld::Real:
+		f_tp = "DOUBLE PRECISION DEFAULT " + ((s2r(cf.fld().def())==EVAL_REAL)?"NULL ":"'"+r2s(s2r(cf.fld().def()))+"' NOT NULL ");
+		break;
+	    case TFld::Boolean:
+		f_tp = "SMALLINT DEFAULT " + ((s2i(cf.fld().def())==EVAL_BOOL)?"NULL ":"'"+i2s(s2i(cf.fld().def()))+"' NOT NULL ");
+		break;
 	    default: break;
 	}
 
@@ -828,7 +833,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    next = true;
 	}
 	//Check other languages
-	if(u_cfg.fld().flg()&TCfg::TransltText) {
+	if(cf.fld().flg()&TCfg::TransltText) {
 	    unsigned iC;
 	    for(iC = iFld; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC][0].size() > 3 && tblStrct[iC][0].substr(2) == ("#"+cf_el[iCf]) &&
@@ -851,20 +856,16 @@ void MTable::fieldFix( TConfig &cfg )
 
 string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    string rez;
-    switch(cfg.fld().type()) {	//!! Different types for correct EVAL represent
-	case TFld::Boolean:	rez = i2s(cfg.getB());	break;
-	case TFld::Integer:	rez = i2s(cfg.getI());	break;
-	case TFld::Real:	rez = r2s(cfg.getR());	break;
-	default: rez = (cfg.fld().len() > 0) ? cfg.getS(RqFlg).substr(0,cfg.fld().len()) : cfg.getS(RqFlg);
-    }
-    return rez;
+    string rez = cfg.getS(RqFlg);
+    if(rez == EVAL_STR)	return "NULL";
+    if(cfg.fld().type() == TFld::String) rez = mod->sqlReqCode((cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez);
 
-    //return cfg.getS(RqFlg);
+    return "'" + rez + "'";
 }
 
-void MTable::setVal( TCfg &cf, const string &val, bool tr )
+void MTable::setVal( TCfg &cf, const string &ival, bool tr )
 {
+    string val = (ival==DB_NULL) ? EVAL_STR : ival;
     if(!cf.extVal()) {
 	if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
 	if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());

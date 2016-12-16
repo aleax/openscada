@@ -1482,7 +1482,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "toReal") return s2r(vl.getS());
 		// int toInt(int base = 0) - convert this string to integer number
 		//  base - radix of subject sequence
-		if(prop == "toInt") return (int)strtol(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
+		if(prop == "toInt") return (int64_t)strtoll(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
 		// string parse(int pos, string sep = ".", int off = 0) - get token with number <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position

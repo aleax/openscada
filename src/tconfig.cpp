@@ -368,9 +368,9 @@ char &TCfg::getBd( )
 void TCfg::setS( const string &ival )
 {
     switch(type()) {
-	case TVariant::Integer:	setI(s2ll(ival));	break;
-	case TVariant::Real:	setR(s2r(ival));	break;
-	case TVariant::Boolean:	setB((bool)s2i(ival));	break;
+	case TVariant::Integer:	setI((ival==EVAL_STR) ? EVAL_INT : s2ll(ival));	break;
+	case TVariant::Real:	setR((ival==EVAL_STR) ? EVAL_REAL : s2r(ival));	break;
+	case TVariant::Boolean:	setB((ival==EVAL_STR) ? EVAL_BOOL : (bool)s2i(ival));	break;
 	case TVariant::String: {
 	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
@@ -401,9 +401,9 @@ void TCfg::setS( const string &ival )
 void TCfg::setR( double ival )
 {
     switch(type()) {
-	case TVariant::String:	setS(r2s(ival));	break;
-	case TVariant::Integer:	setI((int)ival);	break;
-	case TVariant::Boolean:	setB((bool)ival);	break;
+	case TVariant::String:	setS((ival==EVAL_REAL) ? EVAL_STR : r2s(ival));		break;
+	case TVariant::Integer:	setI((ival==EVAL_REAL) ? EVAL_INT : (int64_t)ival);	break;
+	case TVariant::Boolean:	setB((ival==EVAL_REAL) ? EVAL_BOOL : (bool)ival);	break;
 	case TVariant::Real: {
 	    if(!(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1])
 		ival = vmin(mFld->selValR()[1], vmax(mFld->selValR()[0],ival));
@@ -420,9 +420,9 @@ void TCfg::setR( double ival )
 void TCfg::setI( int64_t ival )
 {
     switch(type()) {
-	case TVariant::String:	setS(i2s(ival));	break;
-	case TVariant::Real:	setR(ival);		break;
-	case TVariant::Boolean:	setB((bool)ival);	break;
+	case TVariant::String:	setS((ival==EVAL_INT) ? EVAL_STR : ll2s(ival));	break;
+	case TVariant::Real:	setR((ival==EVAL_INT) ? EVAL_REAL : ival);	break;
+	case TVariant::Boolean:	setB((ival==EVAL_INT) ? EVAL_BOOL : (bool)ival);break;
 	case TVariant::Integer: {
 	    if(!(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1])
 		ival = vmin(mFld->selValI()[1], vmax(mFld->selValI()[0],ival));
@@ -439,9 +439,9 @@ void TCfg::setI( int64_t ival )
 void TCfg::setB( char ival )
 {
     switch(type()) {
-	case TVariant::String:	setS(i2s(ival));break;
-	case TVariant::Integer:	setI(ival);	break;
-	case TVariant::Real:	setR(ival);	break;
+	case TVariant::String:	setS((ival==EVAL_BOOL) ? EVAL_STR : i2s(ival));	break;
+	case TVariant::Integer:	setI((ival==EVAL_BOOL) ? EVAL_INT : ival);	break;
+	case TVariant::Real:	setR((ival==EVAL_BOOL) ? EVAL_REAL : ival);	break;
 	case TVariant::Boolean: {
 	    bool tVal = TVariant::getB();
 	    TVariant::setB(ival);
@@ -505,5 +505,3 @@ bool TCfg::operator==( TCfg &cfg )
 	}
     return false;
 }
-
-
