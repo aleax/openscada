@@ -109,7 +109,7 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 	bool tmToCall = (wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm();
 	if(tmToCall || ep.at().forceSubscrQueue) {
 	    if(tmToCall) ep.at().forceSubscrQueue = false;
-	    if(!ep.at().forceSubscrQueue && (++ip.at().mSubscrCntr) == 0) ip.at().mSubscrCntr = 1;
+	    if(!ep.at().forceSubscrQueue) ip.at().mSubscrCntr++;
 	    ip.at().mPrevTm = wTm;
 	    ip.at().mSubscrIn = true;
 	    epAt(ip.at().mEp).at().subScrCycle(ip.at().mSubscrCntr, answ, inPrtId);
