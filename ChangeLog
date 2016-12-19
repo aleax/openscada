@@ -1,3 +1,9 @@
+2016-12-19 Roman (stable)
+- DB.LibsDB.OscadaLibs: User protocol "DCON" in the input part was fixed for commands detect "#" and "@".
+- Protocol.OPC_UA.libOPC_UA: Expanded to early publish requests processing after requests of subscription and monitored items creation,
+    for the init publish requests.
+
+
 2016-12-16 Roman (stable)
 - TArchive: EVAL_RFlt and EVAL_RDbl detection for values fix.
 - TConfig: EVAL forms conversion is added to TCfg::set{S,R,I,B}(). Integer conversion fix to 64bit.

@@ -7543,11 +7543,12 @@ if(resp.charCodeAt(1)&0x80)
 { io.setAttr("err","7:"+resp.charCodeAt(2)+":"+tr("Request error.")); return; }
 io.setText(resp.slice(1,-2));','',1424879706);
 INSERT INTO "UserProtocol_uPrt" VALUES('DCON','DCON','','','Mostly aimed for example implement user protocols into OpenSCADA and contains only main functions into the protocol part.
-Author: Roman Savochenko <rom_as@oscada.org>','','',1,0,0,'JavaLikeCalc.JavaScript
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.1','','',1,0,0,'JavaLikeCalc.JavaScript
 //Processing: test implements only processing for requests ''#'' and ''@'' with fixed reply data.
 
 var enCRC = true;
-//SYS.messDebug("TEST REQ: ",request);
+//SYS.messDebug("/DCON/in","REQ: "+request);
 //Test request for full
 if(request.length < 4 || request[request.length-1] != "\r") {
   if(request.length > 10) request = "";
@@ -7560,8 +7561,8 @@ if(enCRC) {
 	if(CRC != request.slice(request.length-3,request.length-1).toInt(16) || request.slice(1,3).toInt(16) != 10) return false;
 }
 //Analysis of the request and response prepare
-if(request.charCodeAt(0) == "#") answer = ">+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234";
-else if(request.charCodeAt(0) == "@") answer = ">AB3C";
+if(request[0] == "#") answer = ">+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234";
+else if(request[0] == "@") answer = ">AB3C";
 else answer = "?";
 //Finish response
 if(enCRC) {
@@ -7569,7 +7570,7 @@ if(enCRC) {
 	for(i=0; i < answer.length; i++) CRC += answer.charCodeAt(i);
 	answer += (CRC&0xFF).toString(16)+"\r";
 }
-//SYS.messDebug("TEST ANSV: "+answer.charCodeAt(0),answer);
+//SYS.messDebug("/DCON/in","ANSV: "+answer[0]);
 return 0;','','JavaLikeCalc.JavaScript
 //Request form:
 //<ReqSymb addr="1" err="1:Error">{req}</ReqSymb> - message tag

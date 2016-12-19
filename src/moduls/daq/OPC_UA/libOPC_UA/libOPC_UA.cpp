@@ -3422,7 +3422,7 @@ SubScrSt Server::Subscr::setState( SubScrSt ist )
 //*************************************************
 //* Server::EP					  *
 //*************************************************
-Server::EP::EP( Server *iserv ) : mEn(false), cntReq(0), objTree("root"), serv(iserv)
+Server::EP::EP( Server *iserv ) : forceSubscrQueue(false), mEn(false), cntReq(0), objTree("root"), serv(iserv)
 {
     pthread_mutex_init(&mtxData, NULL);
 }
@@ -3535,15 +3535,15 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
     vector<int>	sls;
     Sess *s = NULL;
     int64_t vTm = 0;
-    for(unsigned i_sc = 0; i_sc < mSubScr.size(); i_sc++) {
-	Subscr &scr = mSubScr[i_sc];
+    for(unsigned iSc = 0; iSc < mSubScr.size(); iSc++) {
+	Subscr &scr = mSubScr[iSc];
 	if(scr.st == SS_CLOSED) continue;
 	if(!(s=sessGet_(scr.sess)) || !s->tAccess) { scr.setState(SS_CLOSED); continue; }
 	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
 	// Monitored items processing
 	bool hasData = false;
 	XML_N req("data");
-	for(unsigned iM = 0; iM < scr.mItems.size(); ++iM) {
+	for(unsigned iM = 0; !forceSubscrQueue && iM < scr.mItems.size(); ++iM) {
 	    Subscr::MonitItem &mIt = scr.mItems[iM];
 	    if(mIt.md == MM_DISABLED || (cntr%std::max(1u,(unsigned)(mIt.smplItv/subscrProcPer()))))	continue;
 	    //  Read data
@@ -3562,13 +3562,13 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
 	}
 	if(hasData) scr.setState(SS_LATE);
 	// Publish processing
-	if((cntr%std::max(1u,(unsigned)(scr.publInterv/subscrProcPer()))))	continue;
+	if(!forceSubscrQueue && (cntr%std::max(1u,(unsigned)(scr.publInterv/subscrProcPer()))))	continue;
 	if(s->publishReqs.size()) {
 	    scr.wLT = 0;
-	    if(scr.st == SS_LATE)			{ scr.wKA = 0; sls.push_back(scr.sess); }
-	    else if((++scr.wKA) >= scr.cntrKeepAlive)	{ scr.setState(SS_KEEPALIVE); sls.push_back(scr.sess); }
+	    if(scr.toInit || scr.st == SS_LATE) { scr.wKA = 0; sls.push_back(scr.sess); }
+	    else if(!forceSubscrQueue && (++scr.wKA) >= scr.cntrKeepAlive) { scr.setState(SS_KEEPALIVE); sls.push_back(scr.sess); }
 	}
-	else if((++scr.wLT) >= scr.cntrLifeTime) {
+	else if(!forceSubscrQueue && (++scr.wLT) >= scr.cntrLifeTime) {
 	    // Send StatusChangeNotification with Bad_Timeout
 	    //????
 	    scr.setState(SS_CLOSED);	//Free Subscription
@@ -3576,14 +3576,16 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
     }
 
     //Publish call
-    for(size_t i_s = 0; i_s < sls.size(); i_s++) {
-	if(!(s=sessGet_(sls[i_s])) || s->publishReqs.empty()) continue;
+    for(size_t iS = 0; iS < sls.size(); iS++) {
+	if(!(s=sessGet_(sls[iS])) || s->publishReqs.empty()) continue;
 	string req = s->publishReqs.front(), inPrt = s->inPrtId;
 	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
 	pthread_mutex_unlock(&mtxData);
 	serv->inReq(req, inPrt, answ);
 	pthread_mutex_lock(&mtxData);
     }
+
+    forceSubscrQueue = false;
 
     pthread_mutex_unlock(&mtxData);
 }
@@ -3718,6 +3720,7 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 	if(nSubScrPerSess >= limSubScr()) { pthread_mutex_unlock(&mtxData); return 0; }
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
 	mSubScr[ssId].toInit = true;
+	forceSubscrQueue = true;
     }
     else ssId--;
 
@@ -3770,6 +3773,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	    if(mIt.md == MM_DISABLED && aid == AId_Value) {	//Initiate the publisher by the InitialValue
 		mIt.vQueue.push_back(Subscr::MonitItem::Val("",(mIt.dtTm=curTime()),OpcUa_UncertainInitialValue));
 		ss.setState(SS_LATE);
+		forceSubscrQueue = true;
 	    }
 	    mIt.md = md;
 	}

@@ -96,13 +96,20 @@ Server::EP *TProt::epEnAt( const string &ep )
 
 bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 {
+    ResAlloc res(enRes, false);
+    bool rez = Server::inReq(request, inPrtId, answ);
+    res.unlock();
+
 #ifdef POOL_OF_TR
     //Pool for subscriptions process
     AutoHD<TProtIn> ip = at(inPrtId);
     if(ip.at().waitReqTm() && !ip.at().mSubscrIn && epPresent(ip.at().mEp)) {
 	int64_t wTm = SYS->curTime();
-	if((wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm()) {
-	    ip.at().mSubscrCntr++;
+	AutoHD<OPCEndPoint> ep = epAt(ip.at().mEp);
+	bool tmToCall = (wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm();
+	if(tmToCall || ep.at().forceSubscrQueue) {
+	    if(tmToCall) ep.at().forceSubscrQueue = false;
+	    if(!ep.at().forceSubscrQueue && (++ip.at().mSubscrCntr) == 0) ip.at().mSubscrCntr = 1;
 	    ip.at().mPrevTm = wTm;
 	    ip.at().mSubscrIn = true;
 	    epAt(ip.at().mEp).at().subScrCycle(ip.at().mSubscrCntr, answ, inPrtId);
@@ -111,8 +118,7 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
     }
 #endif
 
-    ResAlloc res(enRes, false);
-    return Server::inReq(request, inPrtId, answ);
+    return rez;
 }
 
 int TProt::writeToClient( const string &inPrtId, const string &data )	{ return at(inPrtId).at().writeTo(data); }
@@ -307,6 +313,7 @@ void *OPCEndPoint::Task( void *iep )
     OPCEndPoint &ep = *(OPCEndPoint *)iep;
 
     for(unsigned cntr = 0; !TSYS::taskEndRun(); cntr++) {
+	ep.forceSubscrQueue = false;	//Disable the forcing mechanism for the method
 	try { ep.subScrCycle(cntr); }
 	catch(OPCError &err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
 	catch(TError &err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
