@@ -1,4 +1,5 @@
 2016-12-19 Roman (stable)
+- Protocol.OPC_UA.libOPC_UA: Subscription cycle's counter restore.
 - DB.LibsDB.OscadaLibs: User protocol "DCON" in the input part was fixed for commands detect "#" and "@".
 - Protocol.OPC_UA.libOPC_UA: Expanded to early publish requests processing after requests of subscription and monitored items creation,
     for the init publish requests.
