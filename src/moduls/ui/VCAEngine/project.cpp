@@ -327,7 +327,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 	close(hd);
 
-	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+i2s(rez.size());
+	mimeType = TUIS::mimeGet(filepath, rez);
 	if(mimeData) *mimeData = TSYS::strEncode(rez,TSYS::base64);
 	return true;
     }
@@ -632,7 +632,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    }
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataSet("newMime","image/new;0","");
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataSet("newMime", "file/unknown;0", "");
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataDel(opt->attr("key_id"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    // Request data
@@ -640,7 +640,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		string mimeType, mimeData;
 		// Copy mime data to new record
 		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) {
-		    mimeDataSet(opt->text(), mimeType, mimeData);
+		    mimeDataSet(opt->text(), TUIS::mimeGet(idmime,mimeData,mimeType), mimeData);
 		    mimeDataDel(idmime);
 		}
 	    }
@@ -652,11 +652,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    }
 	    else if(idcol == "dt") {
 		string mimeType;
-		if(!mimeDataGet("res:"+idmime, mimeType)) {
-		    size_t extP = idmime.rfind(".");
-		    if(extP == string::npos || extP == 0 || extP == (idmime.size()-1)) mimeType = "media/unknown";
-		    else { mimeType = "media/"+idmime.substr(extP+1); idmime = idmime.substr(0,extP); }
-		}
+		if(!mimeDataGet("res:"+idmime, mimeType)) mimeType = TUIS::mimeGet(idmime, TSYS::strDecode(opt->text(),TSYS::base64));
 		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
 	    }
 	}

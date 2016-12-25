@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.7"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -408,11 +408,11 @@ TProtIn::~TProtIn( )
 
 string TProtIn::httpHead( const string &rcode, int cln, const string &addattr, bool defCtx )
 {
-    return "HTTP/1.0 "+rcode+"\x0D\x0A"
-	   "Server: "+PACKAGE_STRING+"\x0D\x0A"
+    return "HTTP/1.0 " + rcode + "\x0D\x0A"
+	   "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	   "Accept-Ranges: bytes\x0D\x0A"
-	   "Content-Length: "+i2s(cln)+"\x0D\x0A"+
-	   (defCtx?("Content-Type: text/html;charset="+Mess->charset()+"\x0D\x0A"):string(""))+addattr+"\x0D\x0A";
+	   "Content-Length: " + i2s(cln) + "\x0D\x0A"+
+	   (defCtx?("Content-Type: text/html;charset="+Mess->charset()+"\x0D\x0A"):string("")) + addattr + "\x0D\x0A";
 }
 
 bool TProtIn::mess( const string &reqst, string &answer )
@@ -489,7 +489,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	while(url_pos < (int)urls.size() && urls[url_pos] == '/') url_pos++;
 	url = "/"+urls.substr(url_pos);
 
-	//Process internal commands
+	//Process the internal commands
+	// Login
 	if(name_mod == "login") {
 	    if(method == "GET") {
 		if(sesId) mod->sesClose(sesId);
@@ -510,7 +511,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    {
 			mess_info(owner().nodePath().c_str(), _("Auth OK from user '%s'. Host: %s. User agent: %s."),
 			    user.c_str(), sender.c_str(), userAgent.c_str());
-			answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n",
+			answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),url.c_str())+"</h2>\n",
 			    "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>");
 			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;\x0D\x0A")+answer;
 			return mNoFull||KeepAlive;
@@ -520,38 +521,47 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		mess_warning(owner().nodePath().c_str(),_("Auth wrong from user '%s'. Host: %s. User agent: %s."),
 		    user.c_str(), sender.c_str(), userAgent.c_str());
 		answer = getAuth(url,_("<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"));
-		return mNoFull||KeepAlive;
+		return mNoFull || KeepAlive;
 	    }
 	}
+	// Logut
 	else if(name_mod == "logout" && method == "GET") {
 	    if(sesId) mod->sesClose(sesId);
-	    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),"/")+"</h2>\n",
+	    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),"/")+"</h2>\n",
 		"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
 	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
-	    return mNoFull||KeepAlive;
+	    return mNoFull || KeepAlive;
 	}
+	// robots.txt
 	else if(name_mod == "robots.txt" && method == "GET") {
 	    answer = "User-Agent: *\nDisallow: /";
-	    answer = httpHead("200 OK",answer.size(),"Content-Type: text/plain;charset=us-ascii\x0D\x0A",false)+answer;
-	    return mNoFull||KeepAlive;
+	    answer = httpHead("200 OK",answer.size(),"Content-Type: text/plain;charset=us-ascii\x0D\x0A",false) + answer;
+	    return mNoFull || KeepAlive;
+	}
+	// Module's icons and other root images
+	else if(name_mod.rfind(".") != string::npos) {
+	    string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
+	    if(ico.size()) answer = httpHead("200 OK",ico.size(),"Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp)+";\x0D\x0A",false) + ico;
+	    else answer = httpHead("404 Not Found");
+	    return mNoFull || KeepAlive;
 	}
 
-	//Send request to module
+	//Send request to the module
 	try {
 	    AutoHD<TModule> wwwmod = SYS->ui().at().modAt(name_mod);
-	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),_("Find no one WWW subtype module!"));
+	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),_("No one WWW subtype module was found!"));
 	    if(s2i(wwwmod.at().modInfo("Auth")) && user.empty()) {
 		// Check for auto-login
 		user = mod->autoLogGet(sender);
 		if(!user.empty()) {
 		    mess_info(owner().nodePath().c_str(), _("Auto auth from user '%s'. Host: %s. User agent: %s."),
 			user.c_str(), sender.c_str(), userAgent.c_str());
-		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),url.c_str())+"</h2>\n",
+		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),url.c_str())+"</h2>\n",
 			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>");
 		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;\x0D\x0A")+answer;
 		}
 		else {
-		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n",
+		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n",
 			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>");
 		    answer = httpHead("200 OK",answer.size())+answer;
 		}
@@ -579,8 +589,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    else {
 		answer = "<html>\n"
 			 " <body>\n"
-			 "  <h1>Method Not Implemented</h1>\n"
-			 "  <p>The method "+method+" is not implemented by this server.</p>\n"
+			 "  <h1>Method Isn't Implemented</h1>\n"
+			 "  <p>The method "+method+" isn't implemented by this server.</p>\n"
 			 " </body>\n"
 			 "</html>\n";
 		answer = httpHead("501 Method Not Implemented",answer.size())+answer;
@@ -634,7 +644,8 @@ string TProtIn::pgHead( const string &head_els )
 	"  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
 	"  table.work td { background-color:#cccccc; text-align: left; }\n"
 	"  table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-	"  table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
+	"  table.work td.content img { vertical-align: middle; }\n"
+	"  table.work ul { list-style-image: none; list-style-type: none; margin: 0px; padding: 0px; padding-left: 20px; }\n"
 	"</style>\n"
 	"</head>\n"
 	"<body>\n"
@@ -692,11 +703,11 @@ string TProtIn::getIndex( const string &user, const string &sender )
     if(!user.empty())
 	answer = answer +
 	    "<p style='color: green;'>"+TSYS::strMess(_("You are logged in as \"<b>%s</b>\"."),user.c_str())+"</p>"
-	    "<p>"+_("Select the necessary Web-module from the list below, press <a href='/logout'>here</a> to logout or <a href='/login'>here</a> to login as another user.")+"</p>";
+	    "<p>"+_("Select the necessary Web-module from the list below, <a href='/logout'>logout</a> or <a href='/login'>login as an another user</a>.")+"</p>";
     else {
 	answer = answer +
 	    "<p style='color: #CF8122;'>"+_("You are not logged in the system!")+"</p>"
-	    "<p>"+_("To use some modules you must be logged in. To login now click <a href='/login'>here</a>.")+"</p>";
+	    "<p>"+_("To use some modules you must be logged in. <a href='/login'>Login now</a>.")+"</p>";
 	string a_log = mod->autoLogGet(sender);
 	if(!a_log.empty())
 	    answer += "<p>"+TSYS::strMess(_("You can auto-login from user \"<b>%s</b>\" by simple selecting the module."),a_log.c_str())+"</p>";
@@ -710,8 +721,12 @@ string TProtIn::getIndex( const string &user, const string &sender )
     owner().owner().owner().ui().at().modList(list);
     for(unsigned i_l = 0; i_l < list.size(); i_l++) {
 	AutoHD<TModule> mod = owner().owner().owner().ui().at().modAt(list[i_l]);
-	if(mod.at().modInfo("SubType") == "WWW")
-	    answer = answer+"<li><a href='/"+list[i_l]+"/'>"+mod.at().modInfo("Name")+"</a></li>\n";
+	if(mod.at().modInfo("SubType") == "WWW") {
+	    string mIcoTp;
+	    TUIS::icoGet("UI."+list[i_l], &mIcoTp, true);
+	    answer = answer+"<li>"+(mIcoTp.size()?"<img  src='/UI."+list[i_l]+"."+mIcoTp+"' height='32' width='32'/> ":"")+
+		"<a href='/"+list[i_l]+"/'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
+	}
     }
     answer = pgTmpl(answer+"</ul></td></tr></table>\n");
 

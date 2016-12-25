@@ -33,7 +33,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.11"
+#define MOD_VER		"1.7.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -337,12 +337,12 @@ void TWEB::perSYSCall( unsigned int cnt )
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
 {
-    return "HTTP/1.0 "+rcode+"\x0D\x0A"
-	"Server: "+PACKAGE_STRING+"\x0D\x0A"
+    return "HTTP/1.0 " + rcode + "\x0D\x0A"
+	"Server: " + PACKAGE_STRING + "\x0D\x0A"
 	"Accept-Ranges: bytes\x0D\x0A"
-	"Content-Length: "+i2s(cln)+"\x0D\x0A"
+	"Content-Length: " + i2s(cln) + "\x0D\x0A"
 	"Connection: close\x0D\x0A"
-	"Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"+addattr+"\x0D\x0A";
+	"Content-Type: " + cnt_tp + "; charset=" + charset + "\x0D\x0A" + addattr + "\x0D\x0A";
 }
 
 string TWEB::pgHead( const string &head_els, const string &title, const string &charset )
@@ -634,8 +634,7 @@ void TWEB::imgConvert(SSess &ses)
     //if(sim) gdImageAlphaBlending(sim, 0);
 
     //Check for resize icon
-    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH)
-    {
+    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH) {
 	newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
 	gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
 	gdImageAlphaBlending(dim,0);
@@ -646,8 +645,7 @@ void TWEB::imgConvert(SSess &ses)
     }
 
     // Check for disable icon make
-    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact"))
-    {
+    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact")) {
 	gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
 	gdImageAlphaBlending(dim,0);
 	bool isUnAct = (prmEl->second == "unact");

@@ -56,7 +56,7 @@ class TProtIn: public TProtocolIn
 	string getAuth( const string& url = "/", const string &mess = "" );
 	void getCnt( const vector<string> &vars, const string &content, map<string,string> &cnt );
 
-	string httpHead( const string &rcode, int cln, const string &addattr = "", bool defCtx = true );
+	string httpHead( const string &rcode, int cln = 0, const string &addattr = "", bool defCtx = true );
 	string pgHead( const string &head_els = "" );
 	string pgTail( );
 	string pgTmpl( const string &cnt, const string &head_els = "" );

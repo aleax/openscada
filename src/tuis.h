@@ -72,6 +72,8 @@ class TUIS : public TSubSYS
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
 	static string docGet( const string &inm, string *tp = NULL, unsigned opt = GetFilePath );
 
+	static string mimeGet( const string &inm, const string &fDt, const string &orig = "" );
+
     protected:
 	void load_( );
 

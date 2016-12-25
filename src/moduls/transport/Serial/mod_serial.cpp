@@ -187,7 +187,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 }
 
 //************************************************
-//* TTrIn                                        *
+//* TTrIn					 *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), mTaskPrior(0),
@@ -295,8 +295,8 @@ void TTrIn::connect( )
 	tio.c_oflag = 0;
 	tio.c_cflag |= (CREAD|CLOCAL);
 	tio.c_lflag = 0;
-	tio.c_cc[VTIME] = 0;           ///< inter-character timer unused
-	tio.c_cc[VMIN] = 0;            ///< blocking read until 0 character arrives*/
+	tio.c_cc[VTIME] = 0;		//< inter-character timer unused
+	tio.c_cc[VMIN] = 0;		//< blocking read until 0 character arrives
 	// Set speed
 	string speed = sTrm(TSYS::strParse(addr(),1,":"));
 	if(!speed.empty()) {
@@ -719,7 +719,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 }
 
 //************************************************
-//* TTrOut                                   *
+//* TTrOut					 *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), mNoStopOnProceed(false), fd(-1), mLstReqTm(0), mKeepAliveLstTm(0), trIn(0), trOut(0),

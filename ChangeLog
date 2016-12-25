@@ -1,3 +1,17 @@
+2016-12-25 Roman (stable)
+- FIX:DB.LibsDB.vcaBase: Main.{grpGraph,grpGraph10} Trend's control panel open at the cadr open changed for work on UI.WebVision.
+- data/icons: Protocol.UserProtocol.png was changed and UI.WebUser.png was added.
+- UI.TUIS: expanded by function mimeGet() for mime type detect by the original info, file extension and tis content.
+- !:Protocol.HTTP: Expanded for the main selection dialog with images and context help for allowed WWW-modules.
+- !:UI.VCAEngine: Adapted to TUIS::mimeGet() using.
+- UI.Vision: Unloaded mimes' extension sets to stored with the resource before taken from the mime type.
+- !!!!:FIX:UI.WebVision: adapted to asynchronous calls for all regular updatings by servGet() and makeEl() adapting to it.
+    For primitive "Text" set "line-height" for prevent upper font's padding.
+    View "Button" of primitive "FormEl": fixed for next line processing, fixed for true text and image represent 
+    Generic views of primitive FormEl set for padding to "0".
+    SVG images show fixed by correct mime processing into UI.VCAEngine and using TUIS::mimeGet().
+
+
 2016-12-19 Roman (stable)
 - Protocol.OPC_UA.libOPC_UA: Subscription cycle's counter restore.
 - DB.LibsDB.OscadaLibs: User protocol "DCON" in the input part was fixed for commands detect "#" and "@".

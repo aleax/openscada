@@ -828,7 +828,8 @@ void LibProjProp::unloadMimeData( )
     int row = mimeDataTable->currentRow();
     if(row < 0) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
 
-    string fext = TSYS::pathLev(mimeDataTable->item(row,1)->text().toStdString(),1);
+    string fext = (mimeDataTable->item(row,0)->text().toStdString().rfind(".") == string::npos) ?
+		    TSYS::pathLev(mimeDataTable->item(row,1)->text().toStdString(),1) : "";
     QString fileName = owner()->getFileName(_("Save data"), mimeDataTable->item(row,0)->text()+(fext.size()?("."+fext).c_str():""),
 	_("All files (*.*)"), QFileDialog::AcceptSave);
     if(fileName.isEmpty())	return;
