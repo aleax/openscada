@@ -1371,7 +1371,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	unsigned aId = elem().fldId(prms[0].getS(), true);
 	if(aId < elem().fldSize()) {
 	    if(prms.size() >= 2 && prms[1].getS().size()) elem().fldAt(aId).setDescr(prms[1].getS());
-	    elem().fldAt(aId).setFlg(elem().fldAt(aId).flg()^((elem().fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit)));
+	    elem().fldAt(aId).setFlg(elem().fldAt(aId).flg()^((elem().fldAt(aId).flg()^flg)&(TFld::Selected|TFld::SelEdit|TFld::FullText|TFld::NoWrite)));
 	    elem().fldAt(aId).setValues(sVals);
 	    elem().fldAt(aId).setSelNames(sNms);
 	    elem().fldAt(aId).setLen(SYS->sysTm());

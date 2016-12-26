@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.8.0"
+#define MOD_VER		"1.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -538,13 +538,6 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    answer = httpHead("200 OK",answer.size(),"Content-Type: text/plain;charset=us-ascii\x0D\x0A",false) + answer;
 	    return mNoFull || KeepAlive;
 	}
-	// Module's icons and other root images
-	else if(name_mod.rfind(".") != string::npos) {
-	    string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
-	    if(ico.size()) answer = httpHead("200 OK",ico.size(),"Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp)+";\x0D\x0A",false) + ico;
-	    else answer = httpHead("404 Not Found");
-	    return mNoFull || KeepAlive;
-	}
 
 	//Send request to the module
 	try {
@@ -565,7 +558,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>");
 		    answer = httpHead("200 OK",answer.size())+answer;
 		}
-		return mNoFull||KeepAlive;
+		return mNoFull || KeepAlive;
 	    }
 
 	    // Check metods
@@ -601,8 +594,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		int hd = -1;
 		//Open file
 		size_t tmplDirPos = mod->tmpl().rfind("/");
-		if(tmplDirPos != string::npos && (hd=open((mod->tmpl().substr(0,tmplDirPos)+urls).c_str(),O_RDONLY)) != -1)
-		{
+		if(tmplDirPos != string::npos && (hd=open((mod->tmpl().substr(0,tmplDirPos)+urls).c_str(),O_RDONLY)) != -1) {
 		    answer.clear();
 		    char buf[STR_BUF_LEN];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
@@ -616,9 +608,18 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			answer = httpHead("200 OK",answer.size(),"Content-Type: text/"+fext+"\x0D\x0A",false)+answer;
 		    else if(fext == "js") answer = httpHead("200 OK",answer.size(),"Content-Type: text/javascript\x0D\x0A",false)+answer;
 		    else answer = httpHead("200 OK",answer.size())+answer;
-		    return mNoFull||KeepAlive;
+		    return mNoFull || KeepAlive;
 		}
 	    }
+	    //Check for module's icon and other images into folder "icons/"
+	    if(method == "GET" && name_mod.rfind(".") != string::npos) {
+		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
+		if(ico.size()) {
+		    answer = httpHead("200 OK",ico.size(),"Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp)+";\x0D\x0A",false) + ico;
+		    return mNoFull || KeepAlive;
+		}
+	    }
+
 	    answer = getIndex(user,sender);
 	}
     }

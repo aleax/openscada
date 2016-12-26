@@ -1,3 +1,8 @@
+2016-12-26 Roman (stable)
+- DAQ.{LogicLev,ModBus}: User API function attrAdd() expanded for flags "text" and "ro" apply to present attributes.
+- FIX:Protocol.HTTP: Check for module's icon and other images into folder "icons/" moved after the template's resources checking.
+
+
 2016-12-25 Roman (stable)
 - FIX:DB.LibsDB.vcaBase: Main.{grpGraph,grpGraph10} Trend's control panel open at the cadr open changed for work on UI.WebVision.
 - data/icons: Protocol.UserProtocol.png was changed and UI.WebUser.png was added.
