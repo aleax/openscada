@@ -3171,7 +3171,7 @@ nextReq:
 				    ss.setState(SS_NORMAL);
 
 				    int aSeqOff = respEp.size(), aSeqN = 1;
-				    oN(respEp, aSeqN, 4);	//<availableSequence Numbers [], reserve
+				    oN(respEp, aSeqN, 4);		//<availableSequence Numbers [], reserve
 				    for(deque<string>::iterator iRQ = ss.retrQueue.begin(); iRQ != ss.retrQueue.end(); ) {
 					int rOff = 0;
 					uint32_t rSeq = iNu(*iRQ, rOff, 4);	//>sequenceNumber
@@ -3231,6 +3231,9 @@ nextReq:
 
 				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
 				    ss.seqN++;
+				    if(maxNotPerPublLim) ss.setState(SS_LATE);	//Restore state to process into the next Publish request,
+										// !!!! maybe store the previous monitored item's position
+										//      and early call its into the subScrCycle()
 				}
 				s->publishReqs.erase(s->publishReqs.begin()+iP);	//Remove the publish request from the queue
 

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.4"
+#define MOD_VER		"1.7.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -151,7 +151,8 @@ string TWEB::pgHead( string head_els )
 	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	"  <meta http-equiv='Cache-Control' content='no-cache'/>\n"+
 	head_els+
-	"  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
+	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
+	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
 	"  <title>" PACKAGE_NAME ". " + _(MOD_NAME) + "</title>\n"
 	"  <style type='text/css'>\n" + mCSStables + "</style>\n"
 	"</head>\n"

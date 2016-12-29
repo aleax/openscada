@@ -639,10 +639,10 @@ int TCntrNode::isModify( int f )
 	    TMap::iterator p;
 	    chldList(iG, chLs, true, false);
 	    for(iN = 0; iG < chGrp->size() && iN < chLs.size(); iN++) {
-		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end()) continue;
+		if((p=(*chGrp)[iG].elem.find(chLs[iN].c_str())) == (*chGrp)[iG].elem.end() || p->second->nodeMode() == Disabled) continue;
 		AutoHD<TCntrNode> ndO(p->second);
 		res2.unlock();
-		int chRflg = p->second->isModify(Self|Child);
+		int chRflg = ndO.at().isModify(Self|Child);
 		res2.lock();
 		if(chRflg) { rflg |= Child; break; }
 	    }

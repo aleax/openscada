@@ -1,3 +1,11 @@
+2016-12-29 Roman (stable)
+- data/icons: Images Protocol.HTTP.png and Protocol.SelfSystem.png were updated.
+- SYS: Disabled nodes are prevented in processing into TCntrNode::isModify().
+- Protocol.OPC_UA.libOPC_UA: Maximim notifications per publish limit processing some improved.
+- UI.{WebCfg,WebCfgD,WebUser,WebVision}: Module's icon obtain machanism changed.
+- UI.WebVision: Icons to project's and session's items are added.
+
+
 2016-12-26 Roman (stable)
 - DAQ.{LogicLev,ModBus}: User API function attrAdd() expanded for flags "text" and "ro" apply to present attributes.
 - FIX:Protocol.HTTP: Check for module's icon and other images into folder "icons/" moved after the template's resources checking.

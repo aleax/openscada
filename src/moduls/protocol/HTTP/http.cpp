@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.8.1"
+#define MOD_VER		"1.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -632,26 +632,28 @@ string TProtIn::pgHead( const string &head_els )
     return
 	"<?xml version='1.0' ?>\n"
 	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
-	"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
-	"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"+
+	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+	" <head>\n"
+	"  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n"+
 	head_els+
-	"<title>"+PACKAGE_NAME+"!"+"</title>\n"
-	"<style type='text/css'>\n"
-	"  hr { width: 95%; }\n"
-	"  p { margin: 0px; text-indent: 15px; margin-bottom: 5px; }\n"
-	"  body { background-color: #818181; margin: 0px; }\n"
-	"  h1.head { text-align: center; color: #ffff00; }\n"
-	"  h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
-	"  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
-	"  table.work td { background-color:#cccccc; text-align: left; }\n"
-	"  table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-	"  table.work td.content img { vertical-align: middle; }\n"
-	"  table.work ul { list-style-image: none; list-style-type: none; margin: 0px; padding: 0px; padding-left: 20px; }\n"
-	"</style>\n"
-	"</head>\n"
-	"<body>\n"
-	"<h1 class='head'>"+PACKAGE_NAME+"</h1>\n"
-	"<hr/><br/>\n";
+	"  <title>" PACKAGE_NAME "!</title>\n"
+	"  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
+	"  <style type='text/css'>\n"
+	"   hr { width: 95%; }\n"
+	"   p { margin: 0px; text-indent: 15px; margin-bottom: 5px; }\n"
+	"   body { background-color: #818181; margin: 0px; }\n"
+	"   h1.head { text-align: center; color: #ffff00; }\n"
+	"   h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
+	"   table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
+	"   table.work td { background-color:#cccccc; text-align: left; }\n"
+	"   table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+	"   table.work td.content img { vertical-align: middle; }\n"
+	"   table.work ul { list-style-image: none; list-style-type: none; margin: 0px; padding: 0px; padding-left: 20px; }\n"
+	"  </style>\n"
+	" </head>\n"
+	" <body>\n"
+	"  <h1 class='head'>" PACKAGE_NAME "</h1>\n"
+	"  <hr/><br/>\n";
 }
 
 string TProtIn::pgTail( )
@@ -725,7 +727,7 @@ string TProtIn::getIndex( const string &user, const string &sender )
 	if(mod.at().modInfo("SubType") == "WWW") {
 	    string mIcoTp;
 	    TUIS::icoGet("UI."+list[i_l], &mIcoTp, true);
-	    answer = answer+"<li>"+(mIcoTp.size()?"<img  src='/UI."+list[i_l]+"."+mIcoTp+"' height='32' width='32'/> ":"")+
+	    answer = answer+"<li>"+(mIcoTp.size()?"<img src='/UI."+list[i_l]+"."+mIcoTp+"' height='32' width='32'/> ":"")+
 		"<a href='/"+list[i_l]+"/'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
 	}
     }

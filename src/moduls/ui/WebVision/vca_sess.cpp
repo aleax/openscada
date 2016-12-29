@@ -98,10 +98,10 @@ void VCASess::getReq( SSess &ses )
     //Session/projects icon
     else if(wp_com == "ico") {
 	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fico");
-	mod->cntrIfCmd(req,ses.user);
-	ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+	req.setAttr("path", ses.url+"/%2fico");
+	mod->cntrIfCmd(req, ses.user);
+	ses.page = TSYS::strDecode(req.text(), TSYS::base64);
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png") + ses.page;
     }
     //Get open pages list
     else if(wp_com == "pgOpenList" && first_lev.empty()) {

@@ -33,7 +33,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.7.1"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -243,6 +243,8 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
 	"table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }\n"
 	"table.work td { background-color:#cccccc; text-align: left; }\n"
 	"table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+	// "table.work td.content td { text-align: center; }\n"
+	"table.work td.content img { vertical-align: middle; padding-right: 5px; }\n"
 	"table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
 	".vertalign { display: table-cell; text-align: center; vertical-align: middle; }\n"
 	".vertalign * { vertical-align: middle; }\n"
@@ -357,7 +359,8 @@ string TWEB::pgHead( const string &head_els, const string &title, const string &
 	"  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"
 	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
 	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
-	"  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
+	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
+	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
 	"  <title>" + (title.empty()?(string(PACKAGE_NAME) + ". " + _(MOD_NAME)):title) + "</title>\n"
 	"  <style type='text/css'>\n" + mCSStables + "</style>\n"+
 	head_els+
@@ -375,18 +378,26 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
     ses.page = pgHead();
 
     try {
-	string zero_lev = TSYS::pathLev(ses.url,0);
+	string zero_lev = TSYS::pathLev(ses.url, 0);
 	//Get about module page
 	if(zero_lev == "about")	getAbout(ses);
 	//Get module icon and global image
 	else if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
-	    string itp;
-	    ses.page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
-	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
+	    string itp = "png";
+	    //Session's and project's icons request processing
+	    map<string,string>::iterator prmEl = ses.prm.find("it");
+	    if(prmEl != ses.prm.end()) {
+		XMLNode req("get");
+		req.setAttr("path", prmEl->second+"/%2fico");
+		mod->cntrIfCmd(req, ses.user);
+		ses.page = TSYS::strDecode(req.text(), TSYS::base64);
+	    }
+	    else ses.page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
+	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp) + ses.page;
 	    return;
 	}
 	else {
-	    //Session select or new session for project creation
+	    //Session selection or a new session for the project creation
 	    if(zero_lev.empty()) {
 		bool sesPrjOk = false;
 		ses.page = ses.page+
@@ -396,20 +407,20 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
-		cntrIfCmd(req,ses.user);
+		cntrIfCmd(req, ses.user);
 		ResAlloc sesRes(mSesRes, false);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
-			    (req.childGet(i_ch)->attr("user") != user ||
-			    (vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender)))
+			    (req.childGet(iCh)->attr("user") != user ||
+			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
 			continue;
-		    prjSesEls += "<tr><td style='text-align: center;'><a href='/" MOD_ID "/ses_" + req.childGet(i_ch)->text() + "/'>" +
-			req.childGet(i_ch)->text()+"</a>";
-		    if(req.childGet(i_ch)->attr("user") != user) prjSesEls += " - "+req.childGet(i_ch)->attr("user");
-		    if(vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender)
-			prjSesEls += " - "+vcaSesAt(req.childGet(i_ch)->text()).at().sender();
+		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/>"
+			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/'>" + req.childGet(iCh)->text()+"</a>";
+		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
+		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
+			prjSesEls += " - "+vcaSesAt(req.childGet(iCh)->text()).at().sender();
 		    prjSesEls += "</td></tr>";
-		    self_prjSess += req.childGet(i_ch)->attr("proj")+";";
+		    self_prjSess += req.childGet(iCh)->attr("proj")+";";
 		}
 		if(!prjSesEls.empty()) {
 		    ses.page = ses.page+
@@ -424,11 +435,12 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		prjSesEls = "";
 		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
-		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(i_ch)->attr("id")+";") != string::npos)
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
+		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)
 			continue;
-		    prjSesEls += "<tr><td style='text-align: center;'><a href='/" MOD_ID "/prj_" + req.childGet(i_ch)->attr("id") + "/'>" +
-			req.childGet(i_ch)->text()+"</a></td></tr>";
+		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/>"
+					 "<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/'>" +
+			req.childGet(iCh)->text()+"</a></td></tr>";
 		}
 		if(!prjSesEls.empty()) {
 		    ses.page = ses.page +
@@ -452,10 +464,10 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		cntrIfCmd(req, ses.user);
 		ResAlloc sesRes(mSesRes, false);
 		if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
-		    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-			if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
-			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
-			{ sName = req.childGet(i_ch)->text(); break; }
+		    for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
+			if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
+			    vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() == sender)
+			{ sName = req.childGet(iCh)->text(); break; }
 		if(sName.empty()) {
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
@@ -714,8 +726,7 @@ string TWEB::trMessReplace( const string &tsrc )
 
     unsigned txtBeg = 0, i_s, i_r;
     for(i_s = 0; i_s < tsrc.size(); i_s++)
-	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#')
-	{
+	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#') {
 	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
 	    if((tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n')
 		break;
@@ -758,8 +769,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_name = "name=\"";
 
     for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
-	{
+	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
 	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
 	}

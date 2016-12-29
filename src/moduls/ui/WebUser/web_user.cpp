@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.7.2"
+#define MOD_VER		"0.7.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -217,29 +217,31 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		page =	"<?xml version='1.0' ?>\n"
 			"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 			"'DTD/xhtml1-transitional.dtd'>\n"
-			"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
-			"<meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n"
-			"<title>" PACKAGE_NAME "!</title>\n"
-			"<style type='text/css'>\n"
-			"  hr { width: 95%; }\n"
-			"  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
-			"  body { background-color: #818181; margin: 0px; }\n"
-			"  h1.head { text-align: center; color: #ffff00; }\n"
-			"  h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
-			"  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
-			"  table.work td { background-color:#cccccc; text-align: left; }\n"
-			"  table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-			"  table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
-			"</style>\n"
-			"</head>\n"
-			"<body>\n"
-			"<h1 class='head'>" PACKAGE_NAME "</h1>\n"
-			"<hr/><br/>\n"
-			"<center><table class='work' width='50%'>\n"
-			"<tr><td class='content'>"
-			"<p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p>"
-			"<tr><th>"+_("Present web-users pages")+"</th></tr>\n"
-			"<tr><td class='content'><ul>\n";
+			"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+			" <head>\n"
+			"  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n"
+			"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
+			"  <title>" PACKAGE_NAME "!</title>\n"
+			"  <style type='text/css'>\n"
+			"   hr { width: 95%; }\n"
+			"   p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
+			"   body { background-color: #818181; margin: 0px; }\n"
+			"   h1.head { text-align: center; color: #ffff00; }\n"
+			"   h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
+			"   table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
+			"   table.work td { background-color:#cccccc; text-align: left; }\n"
+			"   table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+			"   table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
+			"  </style>\n"
+			" </head>\n"
+			" <body>\n"
+			"  <h1 class='head'>" PACKAGE_NAME "</h1>\n"
+			"  <hr/><br/>\n"
+			"  <center><table class='work' width='50%'>\n"
+			"  <tr><td class='content'>"
+			"  <p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p>"
+			"  <tr><th>"+_("Present web-users pages")+"</th></tr>\n"
+			"  <tr><td class='content'><ul>\n";
 		for(unsigned i_p = 0; i_p < upLs.size(); i_p++)
 		    if(uPgAt(upLs[i_p]).at().enableStat())
 			page += "<li><a href='"+upLs[i_p]+"/'>"+uPgAt(upLs[i_p]).at().name()+"</a></li>\n";

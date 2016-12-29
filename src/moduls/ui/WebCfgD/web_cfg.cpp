@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.9"
+#define MOD_VER		"0.9.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -175,7 +175,8 @@ string TWEB::pgHead( string head_els )
 	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
 	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"+
 	head_els+
-	"  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
+	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
+	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
 	"  <title>" PACKAGE_NAME ". " + _(MOD_NAME) + "</title>\n"
 	"  <style type='text/css'>\n"
 	"    hr { width: 95%; }\n"
@@ -208,8 +209,7 @@ void TWEB::imgConvert( SSess &ses )
     //if(sim) gdImageAlphaBlending(sim, 0);
 
     //Check for resize icon
-    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH)
-    {
+    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH) {
 	newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
 	gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
 	gdImageAlphaBlending(dim,0);
