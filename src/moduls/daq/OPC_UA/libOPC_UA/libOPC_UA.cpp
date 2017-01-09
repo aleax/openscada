@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -294,12 +294,7 @@ NodeId::NodeId( const string &istr, uint16_t ins, NodeId::Type tp ) : mNs(ins), 
 
 NodeId::~NodeId( )
 {
-    if(type() != NodeId::Numeric) {
-#ifdef DEBUG_SPEC
-	delete str;
-#endif
-	mTp = NodeId::Numeric;
-    }
+    //if(type() != NodeId::Numeric) mTp = NodeId::Numeric;
 }
 
 NodeId &NodeId::operator=( const NodeId &node )
@@ -317,50 +312,27 @@ NodeId &NodeId::operator=( const NodeId &node )
 uint32_t NodeId::numbVal( ) const
 {
     if(type() == NodeId::Numeric) return numb;
-#ifdef DEBUG_SPEC
-    return strtoul(str->c_str(), NULL, 0);
-#else
     return strtoul(str.c_str(), NULL, 0);
-#endif
 }
 
 string NodeId::strVal( ) const
 {
     if(type() == NodeId::Numeric) return uint2str(numb);
 
-#ifdef DEBUG_SPEC
-    return *str;
-#else
     return str;
-#endif
 }
 
 void NodeId::setNumbVal( uint32_t in )
 {
-    if(type() != NodeId::Numeric) {
-#ifdef DEBUG_SPEC
-	delete str;
-#endif
-	mTp = NodeId::Numeric;
-    }
+    if(type() != NodeId::Numeric) mTp = NodeId::Numeric;
     numb = in;
 }
 
 void NodeId::setStrVal( const string &istr, NodeId::Type tp )
 {
     if(tp == NodeId::Numeric) return;
-#ifdef DEBUG_SPEC
-    if(type() == NodeId::Numeric) {
-	str = new string;
-	//Strange allocing equal to previous NodeId object
-	printf("TEST 42: str='%s' > alloc=%ph(this=%ph)\n", istr.c_str(), str, this);
-    }
-    mTp = tp;
-    *str = istr;
-#else
     mTp = tp;
     str = istr;
-#endif
 }
 
 NodeId NodeId::fromAddr( const string &strAddr )
@@ -1183,10 +1155,10 @@ void Client::protIO( XML_N &io )
 		rez.reserve(50);
 		oNu(rez, 0, 4);				//Message size
 		oNu(rez, OpcUa_ProtocolVersion, 4);	//Protocol version
-		oNu(rez, OpcUa_ReciveBufferSize, 4);	//Recive buffer size
-		oNu(rez, OpcUa_SendBufferSize, 4);	//Send buffer size
-		oNu(rez, OpcUa_MaxMessageSize, 4);	//Max message size
-		oNu(rez, OpcUa_MaxChunkCount, 4);	//Max chunk count
+		oNu(rez, rcvBufSz(), 4);		//Recive buffer size
+		oNu(rez, sndBufSz(), 4);		//Send buffer size
+		oNu(rez, msgMaxSz(), 4);		//Max message size
+		oNu(rez, chunkMaxCnt(), 4);		//Max chunk count
 		oS(rez, io.attr("EndPoint"));		//EndpointURL
 		oNu(rez, rez.size(), 4, 4);		//Real message size
 
@@ -2049,10 +2021,10 @@ nextReq:
 
 	    off = 8;
 	    iNu(rb, off, 4);				//Protocol version
-	    iNu(rb, off, 4);				//Recive buffer size
-	    iNu(rb, off, 4);				//Send buffer size
-	    iNu(rb, off, 4);				//Max message size
-	    iNu(rb, off, 4);				//Max chunk count
+	    clientRcvBufSzSet(inPrtId, iNu(rb,off,4));	//Recive buffer size
+	    clientSndBufSzSet(inPrtId, iNu(rb,off,4));	//Send buffer size
+	    clientMsgMaxSzSet(inPrtId, iNu(rb,off,4));	//Max message size
+	    clientChunkMaxCntSet(inPrtId, iNu(rb,off,4)); //Max chunk count
 	    string EndpntURL = iS(rb, off);		//EndpointURL
 
 	    // Find accessable endpoint
@@ -2065,10 +2037,10 @@ nextReq:
 	    out.append("ACKF");				//Acknowledge message type
 	    oNu(out, 28, 4);				//Message size
 	    oNu(out, OpcUa_ProtocolVersion, 4);		//Protocol version
-	    oNu(out, OpcUa_ReciveBufferSize, 4);	//Recive buffer size
-	    oNu(out, OpcUa_SendBufferSize, 4);		//Send buffer size
-	    oNu(out, OpcUa_MaxMessageSize, 4);		//Max message size
-	    oNu(out, OpcUa_MaxChunkCount, 4);		//Max chunk count
+	    oNu(out, std::min(rcvBufSz(),clientRcvBufSz(inPrtId)), 4);	//Recive buffer size
+	    oNu(out, std::min(sndBufSz(),clientSndBufSz(inPrtId)), 4);	//Send buffer size
+	    oNu(out, msgMaxSz(), 4);			//Max message size
+	    oNu(out, chunkMaxCnt(), 4);			//Max chunk count
 
 	    if(dbg) debugMess("HELLO Resp");
 	}
@@ -2248,7 +2220,7 @@ nextReq:
 	    return false;	//Close socket
 	}
 	//Check for SecureChannel message type
-	else if(rb.compare(0,4,"MSGF") == 0) {
+	else if(rb.compare(0,3,"MSG") == 0 && (rb[3] == 'F' || rb[3] == 'C' || rb[3] == 'A' || rb[3] == 'Q')) {
 	    if(rb.size() < mSz) return holdConn;
 	    off = 8;
 	    uint32_t stCode = 0;
@@ -2264,21 +2236,64 @@ nextReq:
 	    EP *wep = epEnAt(scHd.endPoint);
 	    if(!wep) throw OPCError(OpcUa_BadTcpEndpointUrlInvalid, "No propper Endpoint present");
 	    // Decrypt message block and signature check
-	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt) {
+	    if(rb[3] != 'Q' && (scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)) {
 		if(scHd.secMessMode == MS_SignAndEncrypt)
 		    rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),scHd.servKey,scHd.secPolicy));
-		if(rb.substr(rb.size()-20) != symmetricSign(rb.substr(0,rb.size()-20),scHd.servKey,scHd.secPolicy))    //Check Signature
+		if(rb.substr(rb.size()-20) != symmetricSign(rb.substr(0,rb.size()-20),scHd.servKey,scHd.secPolicy))	//Check the signature
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
+		rb.erase(rb.size()-20);				//Remove the signature
+		if(scHd.secMessMode == MS_SignAndEncrypt)
+		    rb.erase(rb.size()-(rb[rb.size()-1]+1));	//Remove the padding by the last byte value
 	    }
+	    SecCnl &scHd_ = chnlGet_(secId);
 								//> Sequence header
-	    chnlGet_(secId).clSeqN = iNu(rb, off, 4);		//Sequence number
+	    uint32_t clSeqN = iNu(rb, off, 4);			//Sequence number
 	    uint32_t reqId = iNu(rb, off, 4);			//RequestId
+	    //Chunks processing
+	    if(rb[3] != 'Q') {
+		bool passMessPrc = false;
+		// Abort
+		if(rb[3] == 'A') { scHd_.chCnt = 0; scHd_.chB = ""; passMessPrc = true; }
+		else if(scHd.chCnt || rb[3] == 'C') {
+		    //Check for lost sequence
+		    // * Lost single 'C' before 'F': pass to processing but there is possible single 'F', it will be checked by correct request type.
+		    // * Lost intermediate 'F' ('C' both after and before): clean the chunks buffer and start it's filling from begin.
+		    // * Lost first 'C': clean the chunks buffer and start it's filling from next 'C' but there is possible this is first 'C' after
+		    //		single 'F' lost before, it will be checked by correct request type.
+		    // * Lost intermediate 'C': clean and mark the chunks buffer as some chunk into sequence lost and pass all next chunks up to 'F'.
+		    // * Lost intermediate 'C' just before 'F': clean the chunks buffer and 'F'.
+		    // * Lost 'F' after 'C' before 'F': clean the chunks buffer and pass current 'F' to process but there is possible that is single 'F'
+		    //		next, it will be checked by correct request type.
+		    //!!!! Maybe set a mark for errors generation pass after checking to correct request type or the message's sequence begin.
+		    if(scHd_.chCnt < 0 || (scHd_.chCnt && (clSeqN-scHd_.clSeqN) > 1)) {
+			scHd_.chB = "";
+			if(rb[3] == 'C' && reqId == scHd_.reqId) { scHd_.chCnt = -1; passMessPrc = true; }
+			else { scHd_.chCnt = 0; passMessPrc = (reqId == scHd_.reqId); }
+		    }
+		    if(!passMessPrc) {
+			scHd_.chB.append(rb, off, string::npos);
+			if(rb[3] == 'C') {
+			    // Checking for limits
+			    scHd_.chCnt++;
+			    if((chunkMaxCnt() && scHd_.chCnt > chunkMaxCnt()) || (msgMaxSz() && scHd_.chB.size() > msgMaxSz()))
+				throw OPCError(OpcUa_BadRequestTooLarge, "Request too large");
+			    passMessPrc = true;
+			}
+			else {
+			    rb.replace(off, string::npos, scHd_.chB);
+			    scHd_.chCnt = 0; scHd_.chB = "";
+			}
+		    }
+		}
+		scHd_.clSeqN = clSeqN; scHd_.reqId = reqId;
+		if(passMessPrc) { rba.erase(0, mSz); goto nextReq; }
+	    }
 								//> Extension body object
 	    int reqTp = iNodeId(rb,off).numbVal();		//TypeId request
 								//>> Request Header
 	    uint32_t sesTokId = iNodeId(rb, off).numbVal();	//Session AuthenticationToken
 
-	    if(dbg) debugMess(strMess("MSG Req: %d; seqN=%d",reqTp,chnlGet_(secId).clSeqN));
+	    if(dbg) debugMess(strMess("MSG Req: %d; seqN=%d",reqTp,scHd_.clSeqN));
 
 	    // Session check
 	    if(!(reqTp == OpcUa_CreateSessionRequest || reqTp == OpcUa_FindServersRequest || reqTp == OpcUa_GetEndpointsRequest ||
@@ -2544,13 +2559,12 @@ nextReq:
 		    bool subScrDel = iNu(rb, off, 1);		//deleteSubscriptions
 		    wep->sessClose(sesTokId);
 		    if(subScrDel) {
-			pthread_mutex_lock(&wep->mtxData);
+			OPCAlloc mtx(wep->mtxData, true);
 			for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
 			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == (int)sesTokId) {
 				wep->mSubScr[i_ss].setState(SS_CLOSED);
 				if(dbg) debugMess(strMess("EP: SubScription %d closed.",i_ss));
 			    }
-			pthread_mutex_unlock(&wep->mtxData);
 		    }
 
 		    //  Respond
@@ -3092,7 +3106,7 @@ nextReq:
 		    break;
 		}
 		case OpcUa_PublishRequest: {
-		    pthread_mutex_lock(&wep->mtxData);
+		    OPCAlloc mtx(wep->mtxData, true);
 
 		    //  The publish request queue and/or process
 		    Sess *s = wep->sessGet_(sesTokId);
@@ -3100,14 +3114,14 @@ nextReq:
 			unsigned iP = 0;
 			bool findOK = false;
 			for( ; iP < s->publishReqs.size(); ++iP)
-			    if((findOK=(rba.compare(0,mSz,s->publishReqs[iP])==0))) break;
+			    if((findOK=(rb==s->publishReqs[iP]))) break;
 			if(!findOK) {
 			    //   Early Acknowledgements processing and mark the results for this place on the entry's response
 			    int off1 = off;
-			    int32_t sa = iN(rba, off1, 4);			//>subscription Acknowledgements []
+			    int32_t sa = iN(rb, off1, 4);			//>subscription Acknowledgements []
 			    for(int iA = 0; iA < sa; iA++) {
-				uint32_t prSSAck = iNu(rba, off1, 4);		//> subscriptionId
-				uint32_t seqN = iNu(rba, off1, 4);		//> sequenceNumber
+				uint32_t prSSAck = iNu(rb, off1, 4);		//> subscriptionId
+				uint32_t seqN = iNu(rb, off1, 4);		//> sequenceNumber
 				uint32_t st = OpcUa_BadNoSubscription;
 				if(prSSAck >= 1 && prSSAck <= wep->mSubScr.size()) {
 				    prSSAck--;
@@ -3119,10 +3133,12 @@ nextReq:
 					if(iNu(*iRQ,rOff,4) == seqN) { wep->mSubScr[prSSAck].retrQueue.erase(iRQ); st = 0; break; }
 				    }
 				}
-				oNu(rba, 0, 4, off1-8); oNu(rba, st, 4, off1-4);
+				oNu(rb, 0, 4, off1-8); oNu(rb, st, 4, off1-4);
 			    }
 			    //   Queuing
-			    s->publishReqs.push_back(rba.substr(0,mSz));
+			    rb[3] = 'Q';
+			    oNu(rb, rb.size(), 4, 4);
+			    s->publishReqs.push_back(rb);
 			}
 			if(findOK || s->publishReqs.size() == 1) {
 			    unsigned prSS = wep->mSubScr.size();
@@ -3243,7 +3259,7 @@ nextReq:
 			    }
 			}
 		    }
-		    pthread_mutex_unlock(&wep->mtxData);
+		    mtx.unlock();
 
 		    if(respEp.empty())	throw OPCError(0, "", "");	//> No response now
 
@@ -3257,7 +3273,7 @@ nextReq:
 		    uint32_t seqN = iNu(rb, off, 4);			//> retransmitSequenceNumber
 		    if(wep->subscrGet(prSS).st == SS_CLOSED) { stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault; break; }
 
-		    pthread_mutex_lock(&wep->mtxData);
+		    OPCAlloc mtx(wep->mtxData, true);
 		    Subscr &ss = wep->mSubScr[prSS-1];
 		    deque<string>::iterator iRQ = ss.retrQueue.begin();
 		    for( ; iRQ != ss.retrQueue.end(); ++iRQ) {
@@ -3266,7 +3282,6 @@ nextReq:
 		    }
 		    if(iRQ == ss.retrQueue.end()) {
 			stCode = OpcUa_BadMessageNotAvailable; reqTp = OpcUa_ServiceFault;
-			pthread_mutex_unlock(&wep->mtxData);
 			break;
 		    }
 
@@ -3274,7 +3289,6 @@ nextReq:
 		    reqTp = OpcUa_RepublishResponse;
 		    respEp = *iRQ;
 
-		    pthread_mutex_unlock(&wep->mtxData);
 		    break;
 		}
 		case OpcUa_ServiceFault:	break;
@@ -3282,29 +3296,94 @@ nextReq:
 		    throw OPCError(OpcUa_BadNotSupported, "No supported request id '%d'.", reqTp);
 	    }
 
-	    out.reserve(200);
-	    out.append("MSGF");					//OpenSecureChannel message type
-	    oNu(out, 0, 4);					//Message size
-	    oNu(out, secId, 4);					//Secure channel identifier
-	    oNu(out, tokId, 4);					//Symmetric Algorithm Security Header : TokenId
+	    // Respond's extension object finalize
+	    string respBody; respBody.reserve(50);
+	    oNodeId(respBody, reqTp);			//TypeId
+							//>> Body
+							//>>> RespondHeader
+	    oTm(respBody, curTime());			//timestamp
+	    oN(respBody, reqHndl, 4);			//requestHandle
+	    oN(respBody, stCode, 4);			//StatusCode
+	    oN(respBody, 0, 1);				//serviceDiagnostics
+	    oNu(respBody, 0, 4);			//stringTable
+							//>>> Extensible parameter
+	    oNodeId(respBody, 0u);			//TypeId (0)
+	    oNu(respBody, 0, 1);			//Encoding
+	    respBody.append(respEp); respEp.clear();
+
+	    // Maximum chunk's body size calculation for client's recieve buffer size
+	    unsigned chnkBodySz = clientRcvBufSz(inPrtId) - 16;	// - {HeadSz}
+	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt) {
+		if(scHd.secMessMode == MS_SignAndEncrypt) {
+		    int kSz = scHd.servKey.size()/3;
+		    chnkBodySz = (chnkBodySz/kSz)*kSz - 1;	//Allign to the server key size and remove same padding size's byte
+		}
+		chnkBodySz -= 20;			//Remove the sign size
+	    }
+	    chnkBodySz -= 8;	//- {SeqSz}
+	    if((clientMsgMaxSz(inPrtId) && respBody.size() > clientMsgMaxSz(inPrtId)) ||
+		    clientChunkMaxCnt(inPrtId) && (respBody.size()/chnkBodySz + ((respBody.size()%chnkBodySz)?1:0)) > clientChunkMaxCnt(inPrtId))
+		throw OPCError(OpcUa_BadResponseTooLarge, "Respond too large");
+	    // Same chunks prepare.
+	    while(respBody.size()) {
+		string resp; resp.reserve(200);
+		resp.append("MSG");			//OpenSecureChannel message type
+		resp.append((respBody.size()<=chnkBodySz)?"F":"C");
+		oNu(resp, 0, 4);			//Message size
+		oNu(resp, secId, 4);			//Secure channel identifier
+		oNu(resp, tokId, 4);			//Symmetric Algorithm Security Header : TokenId
+		int begEncBlck = resp.size();
+							//> Sequence header
+		oNu(resp, scHd_.servSeqN++, 4);		//Sequence number
+		oNu(resp, reqId, 4);			//RequestId
+		resp.append(respBody,0,std::min(chnkBodySz,(unsigned)respBody.size()));
+		respBody.erase(0,std::min(chnkBodySz,(unsigned)respBody.size()));
+		oNu(resp, resp.size(), 4, 4);		//Real message size
+
+		if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt) {
+		    //Padding place
+		    if(scHd.secMessMode == MS_SignAndEncrypt) {
+			int kSz = scHd.clKey.size()/3;
+			int paddingSize = ((resp.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz - (resp.size()-begEncBlck+20);
+			resp += string(paddingSize, (char)(paddingSize-1));
+		    }
+		    //Real message size calc and place
+		    oNu(resp, resp.size()+20, 4, 4);
+
+		    //Signature
+		    resp += symmetricSign(resp, scHd.clKey, scHd.secPolicy);
+
+		    //Encoding
+		    if(scHd.secMessMode == MS_SignAndEncrypt)
+			resp.replace(begEncBlck, resp.size()-begEncBlck, symmetricEncrypt(resp.substr(begEncBlck),scHd.clKey,scHd.secPolicy));
+		}
+		if(answ) out += resp;
+		else writeToClient(inPrtId, resp);
+	    }
+
+	    /*out.reserve(200);
+	    out.append("MSGF");				//OpenSecureChannel message type
+	    oNu(out, 0, 4);				//Message size
+	    oNu(out, secId, 4);				//Secure channel identifier
+	    oNu(out, tokId, 4);				//Symmetric Algorithm Security Header : TokenId
 	    int begEncBlck = out.size();
-								//> Sequence header
-	    oNu(out, chnlGet_(secId).servSeqN++, 4);		//Sequence number
-	    oNu(out, reqId, 4);					//RequestId
-								//> Extension Object
-	    oNodeId(out, reqTp);				//TypeId
-								//>> Body
-								//>>> RespondHeader
-	    oTm(out, curTime());				//timestamp
-	    oN(out, reqHndl, 4);				//requestHandle
-	    oN(out, stCode, 4);					//StatusCode
-	    oN(out, 0, 1);					//serviceDiagnostics
-	    oNu(out, 0, 4);					//stringTable
-								//>>> Extensible parameter
-	    oNodeId(out, 0u);					//TypeId (0)
-	    oNu(out, 0, 1);					//Encoding
+							//> Sequence header
+	    oNu(out, scHd_.servSeqN++, 4);		//Sequence number
+	    oNu(out, reqId, 4);				//RequestId
+							//> Extension Object
+	    oNodeId(out, reqTp);			//TypeId
+							//>> Body
+							//>>> RespondHeader
+	    oTm(out, curTime());			//timestamp
+	    oN(out, reqHndl, 4);			//requestHandle
+	    oN(out, stCode, 4);				//StatusCode
+	    oN(out, 0, 1);				//serviceDiagnostics
+	    oNu(out, 0, 4);				//stringTable
+							//>>> Extensible parameter
+	    oNodeId(out, 0u);				//TypeId (0)
+	    oNu(out, 0, 1);				//Encoding
 	    out.append(respEp);
-	    oNu(out, out.size(), 4, 4);				//Real message size
+	    oNu(out, out.size(), 4, 4);			//Real message size
 
 	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt) {
 		//Padding place
@@ -3323,7 +3402,7 @@ nextReq:
 		//Encoding
 		if(scHd.secMessMode == MS_SignAndEncrypt)
 		    out.replace(begEncBlck, out.size()-begEncBlck, symmetricEncrypt(out.substr(begEncBlck),scHd.clKey,scHd.secPolicy));
-	    }
+	    }*/
 
 	    if(dbg) debugMess(strMess("MSG Resp: %d",reqTp));
 	}
@@ -3338,7 +3417,7 @@ nextReq:
     }
 
     if(answ) answ->append(out);
-    else writeToClient(inPrtId, out);
+    else if(out.size()) writeToClient(inPrtId, out);
 
     rba.erase(0, mSz);
     goto nextReq;
@@ -3353,7 +3432,7 @@ Server::SecCnl::SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm,
 	const string &iClCert, const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN ) :
     endPoint(iEp), secPolicy(iSecPolicy), secMessMode(iSecMessMode), tCreate(curTime()),
     tLife(std::max(600000,iLifeTm)), TokenId(iTokenId), TokenIdPrev(0), clCert(iClCert), clAddr(iclAddr),
-    servSeqN(isecN), clSeqN(isecN), startClSeqN(isecN)
+    servSeqN(isecN), clSeqN(isecN), startClSeqN(isecN), reqId(0), chCnt(0)
 {
 
 }
@@ -3532,7 +3611,7 @@ void Server::EP::setEnable( bool vl )
 
 void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId )
 {
-    pthread_mutex_lock(&mtxData);
+    OPCAlloc mtx(mtxData, true);
 
     //Subscription process
     vector<int>	sls;
@@ -3583,14 +3662,12 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
 	if(!(s=sessGet_(sls[iS])) || s->publishReqs.empty()) continue;
 	string req = s->publishReqs.front(), inPrt = s->inPrtId;
 	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
-	pthread_mutex_unlock(&mtxData);
+	mtx.unlock();
 	serv->inReq(req, inPrt, answ);
-	pthread_mutex_lock(&mtxData);
+	mtx.lock();
     }
 
     forceSubscrQueue = false;
-
-    pthread_mutex_unlock(&mtxData);
 }
 
 string Server::EP::secPolicy( int isec )
@@ -3615,14 +3692,13 @@ MessageSecurityMode Server::EP::secMessageMode( int isec )
 
 int Server::EP::sessCreate( const string &iName, double iTInact )
 {
+    OPCAlloc mtx(mtxData, true);
     int i_s;
-    pthread_mutex_lock(&mtxData);
     for(i_s = 0; i_s < (int)mSess.size(); i_s++)
 	if(!mSess[i_s].tAccess || 1e-3*(curTime()-mSess[i_s].tAccess) > mSess[i_s].tInact)
 	    break;
     if(i_s < (int)mSess.size()) mSess[i_s] = Sess(iName, iTInact);
     else mSess.push_back(Sess(iName,iTInact));
-    pthread_mutex_unlock(&mtxData);
 
     return i_s+1;
 }
@@ -3638,7 +3714,7 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
 {
     uint32_t rez = OpcUa_BadSessionIdInvalid;
 
-    pthread_mutex_lock(&mtxData);
+    OPCAlloc mtx(mtxData, true);
     //Check for target session present
     if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) {
 	mSess[sid-1].tAccess = curTime();
@@ -3652,7 +3728,6 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
 	    rez = 0;
 	}
     }
-    pthread_mutex_unlock(&mtxData);
 
     return rez;
 }
@@ -3709,7 +3784,7 @@ void Server::EP::sessCpSet( int sid, const string &cpId, const Server::Sess::Con
 uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, double publInterv,
     uint32_t cntrLifeTime, uint32_t cntrKeepAlive, uint32_t maxNotPerPubl, int pr )
 {
-    pthread_mutex_lock(&mtxData);
+    OPCAlloc mtx(mtxData, true);
 
     if(ssId == 0 || ssId > mSubScr.size()) {
 	uint32_t nSubScrPerSess = 0;
@@ -3720,7 +3795,7 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 	    if(ssId >= mSubScr.size() && mSubScr[iSs].st == SS_CLOSED) ssId = iSs;
 	    if(sess >= 0 && mSubScr[iSs].sess == sess) nSubScrPerSess++;
 	}
-	if(nSubScrPerSess >= limSubScr()) { pthread_mutex_unlock(&mtxData); return 0; }
+	if(nSubScrPerSess >= limSubScr())	return 0;
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
 	mSubScr[ssId].toInit = true;
 	forceSubscrQueue = true;
@@ -3738,8 +3813,6 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
     if(maxNotPerPubl != OpcUa_NPosID) ss.maxNotPerPubl = maxNotPerPubl;
     if(pr < 0) ss.pr = pr;
     ss.setState(st);
-
-    pthread_mutex_unlock(&mtxData);
 
     return ssId+1;
 }
@@ -3759,9 +3832,9 @@ Server::Subscr Server::EP::subscrGet( uint32_t ssId, bool noWorkData )
 uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, const NodeId &nd, uint32_t aid,
     TimestampsToReturn tmToRet, double smplItv, uint32_t qSz, int8_t dO, uint32_t cH, XML_N *ifltr )
 {
-    pthread_mutex_lock(&mtxData);
+    OPCAlloc mtx(mtxData, true);
 
-    if((--ssId) >= mSubScr.size()) { pthread_mutex_unlock(&mtxData); return 0; }
+    if((--ssId) >= mSubScr.size())	return 0;
     else {
 	Subscr &ss = mSubScr[ssId];
 	if((--mItId) >= ss.mItems.size()) {
@@ -3798,8 +3871,6 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	if(smplItv == -1) smplItv = ss.publInterv;
 	if(smplItv != -2) mIt.smplItv = ceil(std::max(smplItv,subscrProcPer())/subscrProcPer())*subscrProcPer();
     }
-
-    pthread_mutex_unlock(&mtxData);
 
     return mItId+1;
 }

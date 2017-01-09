@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.7.8"
+#define PRT_MVER	"1.8.0"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -79,6 +79,7 @@ class TProtIn: public TProtocolIn
 	unsigned mPoolTm, mSubscrCntr;
 	int64_t	mPrevTm;
 	string	mBuf, mEp;
+	uint32_t mRcvBufSz, mSndBufSz, mMsgMaxSz, mChunkMaxCnt;
 };
 
 //*************************************************
@@ -184,6 +185,16 @@ class TProt: public TProtocol, public Server
 	string productUri( );
 	string applicationName( );
 
+	uint32_t clientRcvBufSz( const string &inPrtId );
+	uint32_t clientSndBufSz( const string &inPrtId );
+	uint32_t clientMsgMaxSz( const string &inPrtId );
+	uint32_t clientChunkMaxCnt( const string &inPrtId );
+
+	void clientRcvBufSzSet( const string &inPrtId, uint32_t vl );
+	void clientSndBufSzSet( const string &inPrtId, uint32_t vl );
+	void clientMsgMaxSzSet( const string &inPrtId, uint32_t vl );
+	void clientChunkMaxCntSet( const string &inPrtId, uint32_t vl );
+
 	void modStart( );
 	void modStop( );
 
@@ -202,6 +213,8 @@ class TProt: public TProtocol, public Server
 	TElem &endPntEl( )			{ return mEndPntEl; }
 
 	//void outMess( XMLNode &io, TTransportOut &tro );	//!!!! Need for translate from XMLNode to XML_N
+
+	AutoHD<TProtIn> at( const string &id )	{ return TProtocol::at(id); }
 
 	ResRW &nodeRes( )	{ return nRes; }
 

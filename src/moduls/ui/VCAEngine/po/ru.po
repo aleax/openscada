@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-31 16:38+0200\n"
+"POT-Creation-Date: 2017-01-03 12:33+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1298,17 +1298,11 @@ msgstr "Нет стиля"
 msgid "Create new style"
 msgstr "Создать новый стиль"
 
-msgid "Page:open state"
-msgstr "Страница:открыта"
+msgid "Page: open state"
+msgstr "Страница: открыта"
 
-msgid "Page:process no opened"
-msgstr "Страница:обрабатывать закрытой"
-
-msgid "Page:group"
-msgstr "Страница:группа"
-
-msgid "Page:open source"
-msgstr "Страница:источник открытия"
+msgid "Page: process no opened"
+msgstr "Страница: обрабатывать закрытой"
 
 msgid "For page can use only Box-based widgets!"
 msgstr "Для страниц может быть использован только основанный на Боксе виджет!"
@@ -1847,7 +1841,8 @@ msgstr "Путь к родительскому виджету."
 
 msgid ""
 "The widget owner and groups(separated by ',') in form \"{owner}:{groups}\"."
-msgstr "Владелец и группы(разделённые ',') виджета в форме \"{владелец}:{группы}\"."
+msgstr ""
+"Владелец и группы(разделённые ',') виджета в форме \"{владелец}:{группы}\"."
 
 msgid ""
 "Permission to the widget in form \"{user}{group}{other}\".\n"
@@ -2067,15 +2062,3 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
-
-#~ msgid "Load module."
-#~ msgstr "Загрузка модуля."
-
-#~ msgid "Save module."
-#~ msgstr "Сохранение модуля."
-
-#~ msgid "Start module."
-#~ msgstr "Старт модуля."
-
-#~ msgid "Stop module."
-#~ msgstr "Останов модуля."

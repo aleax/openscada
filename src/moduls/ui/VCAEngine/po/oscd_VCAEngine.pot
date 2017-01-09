@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 19:46+0200\n"
+"POT-Creation-Date: 2017-01-03 12:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -988,16 +988,10 @@ msgstr ""
 msgid "Create new style"
 msgstr ""
 
-msgid "Page:open state"
+msgid "Page: open state"
 msgstr ""
 
-msgid "Page:process no opened"
-msgstr ""
-
-msgid "Page:group"
-msgstr ""
-
-msgid "Page:open source"
+msgid "Page: process no opened"
 msgstr ""
 
 msgid "For page can use only Box-based widgets!"

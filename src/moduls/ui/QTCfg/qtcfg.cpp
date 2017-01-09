@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -965,9 +965,11 @@ void ConfApp::selectItem( )
     if(sel_ls.size() == 1 && selPath != sel_ls.at(0)->text(2).toStdString()) {
 	selectPage(sel_ls.at(0)->text(2).toStdString());
 
-	int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
-	CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
-	if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
+	if((sel_ls=CtrTree->selectedItems()).size()) {	//Updating but it can be changed after "selectPage"
+	    int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
+	    CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
+	    if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
+	}
     }
 }
 
@@ -1932,7 +1934,7 @@ void ConfApp::pageDisplay( const string &path )
 	QList<TextEdit*> texts = tabs->findChildren<TextEdit*>();
 	for(int iIt = 0; iIt < texts.size(); ++iIt)
 	    if(texts[iIt]->isChanged()) prcW.push_back(texts[iIt]);
-	if(prcW.size() && QMessageBox::information(this,_("Changes apply"),_("Some changes you don't apply!\nApply now or lost the?"),
+	if(prcW.size() && QMessageBox::information(this,_("The changes apply"),_("You don't apply some changes!\nDo you want its apply now or lost?"),
 		QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
 	    for(vector<QWidget*>::iterator iW = prcW.begin(); iW != prcW.end(); ++iW) applyButton(*iW);
 
@@ -3016,7 +3018,7 @@ void ConfApp::applyButton( QWidget *src )
 	    sval = ll2s(vl);
 	}
 
-	mess_info(mod->nodePath().c_str(),_("%s| Change '%s' to: '%s'!"),
+	mess_info(mod->nodePath().c_str(), _("%s| Change '%s' to: '%s'!"),
 		wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
@@ -3024,8 +3026,8 @@ void ConfApp::applyButton( QWidget *src )
 	if(cntrIfCmd(n_el)) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    //Redraw
-    pageRefresh(true);
+    //Redraw only for changing into same this widget
+    if(!src) pageRefresh(true);
 }
 
 void ConfApp::cancelButton( )

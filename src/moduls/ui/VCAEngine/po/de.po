@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-31 16:38+0200\n"
+"POT-Creation-Date: 2017-01-03 12:33+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1297,17 +1297,11 @@ msgstr "Kein Stil"
 msgid "Create new style"
 msgstr "Neuen Stil schaffen"
 
-msgid "Page:open state"
-msgstr "Seite:Zustand beim Öffnen"
+msgid "Page: open state"
+msgstr "Seite: Zustand beim Öffnen"
 
-msgid "Page:process no opened"
-msgstr "Seite:Prozess nicht geöffnet"
-
-msgid "Page:group"
-msgstr "Seite:Gruppe"
-
-msgid "Page:open source"
-msgstr "Seite:Quelle Eröffnen"
+msgid "Page: process no opened"
+msgstr "Seite: Prozess nicht geöffnet"
 
 msgid "For page can use only Box-based widgets!"
 msgstr "Für Seiten kann nur das Box-basierte Widget benutzt werden!"
@@ -1846,7 +1840,9 @@ msgstr "Pfad zum übergeordneten Widget."
 
 msgid ""
 "The widget owner and groups(separated by ',') in form \"{owner}:{groups}\"."
-msgstr "Das Widget Eigentümer und die Gruppen (getrennt durch ',') in Form \"{owner}:{groups}\"."
+msgstr ""
+"Das Widget Eigentümer und die Gruppen (getrennt durch ',') in Form \"{owner}:"
+"{groups}\"."
 
 msgid ""
 "Permission to the widget in form \"{user}{group}{other}\".\n"
@@ -2066,15 +2062,3 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
-
-#~ msgid "Load module."
-#~ msgstr "Modul laden"
-
-#~ msgid "Save module."
-#~ msgstr "Modul speichern."
-
-#~ msgid "Start module."
-#~ msgstr "Modul starten."
-
-#~ msgid "Stop module."
-#~ msgstr "Modul anhalten."

@@ -1,8 +1,19 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /********************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>		*
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>		*
  *										*
+ *   Version: 1.2.0								*
+ *      * Hello/Acknowledge properties set configurable and client's ones	*
+ *	  also storing.								*
+ *	* New OPCAlloc object is added for mutex handle and its automatic free	*
+ *	  for exception. Some locks lost fix.					*
+ *	  A copy constructor was added for object NodeId and the strange	*
+ *	  problem here closed.							*
+ *	  Chunks support was added to server's part.				*
+ *	  Publish requests, and messages in general, queuing and next its	*
+ *	  processing fixed for secure connections and for Acknowledges		*
+ *	  for insecure ones in direct processing.				*
  *   Version: 1.1.7								*
  *	* Packages sequence number managing for server part is fixed by		*
  *	  separating from the value of input packages.				*
@@ -33,9 +44,6 @@
 #ifndef LIBOPC_UA_H
 #define LIBOPC_UA_H
 
-//Used for some specific problems reprodiction and debug
-//#define DEBUG_SPEC
-
 #include <stdint.h>
 
 #include <string>
@@ -55,10 +63,6 @@ namespace OPC
 
 //Constants
 #define OpcUa_ProtocolVersion	0
-#define OpcUa_ReciveBufferSize	0x10000
-#define OpcUa_SendBufferSize	0x10000
-#define OpcUa_MaxMessageSize	0x1000000
-#define OpcUa_MaxChunkCount	5000
 
 #define OpcUa_NPosID		0xFFFFFFFF
 
@@ -314,6 +318,42 @@ extern string strParse( const string &path, int level, const string &sep, int *o
 extern string strLine( const string &str, int level, int *off = NULL );
 extern string strMess( const char *fmt, ... );
 
+//***********************************************************
+//* Automatic POSIX mutex unlock object for OPC		    *
+//***********************************************************
+class OPCAlloc
+{
+    public:
+	//Methods
+	OPCAlloc( pthread_mutex_t &iM, bool ilock = false ) : m(iM), mLock(false)
+	{ if(ilock) lock(); }
+	~OPCAlloc( )	{ unlock(); }
+
+	int lock( ) {
+	    if(mLock) return 0;
+	    int rez = pthread_mutex_lock(&m);
+	    if(!rez) mLock = true;
+	    return rez;
+	}
+	int tryLock( ) {
+	    if(mLock) return 0;
+	    int rez = pthread_mutex_trylock(&m);
+	    if(!rez) mLock = true;
+	    return rez;
+	}
+	int unlock( ) {
+	    if(!mLock) return 0;
+	    int rez = pthread_mutex_unlock(&m);
+	    if(!rez) mLock = false;
+	    return rez;
+	}
+
+    private:
+	//Attributes
+	pthread_mutex_t	&m;
+	bool		mLock;
+};
+
 //*************************************************
 //* OPCError					  *
 //*************************************************
@@ -395,6 +435,7 @@ class NodeId
 	NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
 	NodeId( uint32_t in, uint16_t ins = 0 );
 	NodeId( const string &istr, uint16_t ins = 0, Type tp = String );
+	NodeId( const NodeId &node )	{ operator=(node); }
 	~NodeId( );
 
 	NodeId &operator=( const NodeId &node );
@@ -417,15 +458,8 @@ class NodeId
 	//Attributes
 	uint16_t mNs;
 	Type	mTp;
-#ifdef DEBUG_SPEC
-	union {
-	    uint32_t	numb;
-	    string	*str;
-	};
-#else
 	uint32_t numb;
 	string   str;
-#endif
 };
 
 //*************************************************
@@ -451,6 +485,12 @@ class UA
 
 	virtual string lang2CodeSYS( )	{ return "en"; }
 	virtual void debugMess( const string &mess ) { }
+
+	// Generic constants
+	virtual uint32_t rcvBufSz( )	{ return 0x10000; }	//Great for 8192
+	virtual uint32_t sndBufSz( )	{ return 0x10000; }	//Great for 8192
+	virtual uint32_t msgMaxSz( )	{ return 0x1000000; }	//Unlimited by default
+	virtual uint32_t chunkMaxCnt( )	{ return 5000; }	//Unlimited by default
 
 	// Protocol's data processing
 	//----------------------------------------------------
@@ -593,7 +633,10 @@ class Server: public UA
 	    uint32_t	TokenId, TokenIdPrev;
 	    string	clCert, clAddr;
 	    string	servKey, clKey;
-	    uint32_t	servSeqN, clSeqN, startClSeqN;
+	    uint32_t	servSeqN, clSeqN, startClSeqN, reqId;
+	    // Chunks accumulation
+	    int		chCnt;	//Negative for error chunks sequence
+	    string	chB;
 	};
 	//* Session
 	class Sess
@@ -789,16 +832,26 @@ class Server: public UA
 	~Server( );
 
 	// Generic variables
+	virtual bool debug( )	{ return false; }
+
 	virtual string applicationUri( ) = 0;
 	virtual string productUri( ) = 0;
 	virtual string applicationName( ) = 0;
 
-	virtual bool debug( )	{ return false; }
+	virtual uint32_t clientRcvBufSz( const string &inPrtId ) = 0;
+	virtual uint32_t clientSndBufSz( const string &inPrtId ) = 0;
+	virtual uint32_t clientMsgMaxSz( const string &inPrtId ) = 0;
+	virtual uint32_t clientChunkMaxCnt( const string &inPrtId ) = 0;
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
 	virtual bool inReq( string &request, const string &inPrtId, string *answ = NULL );
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 	virtual string clientAddr( const string &threadId ) = 0;
+
+	virtual void clientRcvBufSzSet( const string &inPrtId, uint32_t vl ) = 0;
+	virtual void clientSndBufSzSet( const string &inPrtId, uint32_t vl ) = 0;
+	virtual void clientMsgMaxSzSet( const string &inPrtId, uint32_t vl ) = 0;
+	virtual void clientChunkMaxCntSet( const string &inPrtId, uint32_t vl ) = 0;
 
 	// Channel manipulation functions
 	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,

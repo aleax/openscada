@@ -204,7 +204,7 @@ int CondVar::wakeAll( )	{ return pthread_cond_broadcast(&cnd); }
 //***********************************************************
 //* Automatic POSIX mutex allocator/deallocator		    *
 //***********************************************************
-MtxAlloc::MtxAlloc( ResMtx &iM, bool iLock ) : m(iM),  mLock(false){ if(iLock) lock(); }
+MtxAlloc::MtxAlloc( ResMtx &iM, bool iLock ) : m(iM), mLock(false) { if(iLock) lock(); }
 
 MtxAlloc::~MtxAlloc( )	{ unlock(); }
 

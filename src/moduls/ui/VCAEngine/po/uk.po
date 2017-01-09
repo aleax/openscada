@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-31 16:38+0200\n"
+"POT-Creation-Date: 2017-01-03 12:33+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1298,17 +1298,11 @@ msgstr "Немає стилю"
 msgid "Create new style"
 msgstr "Створити новий стиль"
 
-msgid "Page:open state"
-msgstr "Сторінка:відкрита"
+msgid "Page: open state"
+msgstr "Сторінка: відкрита"
 
-msgid "Page:process no opened"
-msgstr "Сторінка:обробляти закритою"
-
-msgid "Page:group"
-msgstr "Сторінка:група"
-
-msgid "Page:open source"
-msgstr "Сторінка:джерело відриття"
+msgid "Page: process no opened"
+msgstr "Сторінка: обробляти закритою"
 
 msgid "For page can use only Box-based widgets!"
 msgstr "Для сторінок може бути використано тільки віджет базований на боксі!"
@@ -2065,15 +2059,3 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
-
-#~ msgid "Load module."
-#~ msgstr "Завантаження модуля."
-
-#~ msgid "Save module."
-#~ msgstr "Збереження модуля."
-
-#~ msgid "Start module."
-#~ msgstr "Старт модуля."
-
-#~ msgid "Stop module."
-#~ msgstr "Зупинка модуля."

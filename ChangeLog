@@ -1,3 +1,15 @@
+2017-01-09 Roman (stable)
+- !!!!:Protocol.OPC_UA{*.libOPC_UA}: Hello/Acknowledge properties set configurable and client's ones also storing.
+    New OPCAlloc object is added for mutex handle and its automatic free for exception. Some locks lost fix.
+    A copy constructor was added for object NodeId and the strange problem here closed.
+    !!!!:Chunks support was added to server's part. Tested on chunks into input requests for insecure and secure connections.
+    FIX:!!:Publish requests, and messages in general, queuing and next its processing fixed for secure connections and for Acknowledges for insecure
+	ones after in direct processing.
+- !!:FIX:UI.QTCfg: Crashes into ConfApp::selectItem() were prevented after "selectPage()" call by possible items selection change.
+    Dangerous missed page refresh was prevented for apply changes on widgets of the replacing page, "Apply dialog for changes missing prevent".
+- FIX:UI.VCAEngine: Something prefixes ":" replecing to ": " fixed yet.
+
+
 2016-12-29 Roman (stable)
 - data/icons: Images Protocol.HTTP.png and Protocol.SelfSystem.png were updated.
 - SYS: Disabled nodes are prevented in processing into TCntrNode::isModify().
