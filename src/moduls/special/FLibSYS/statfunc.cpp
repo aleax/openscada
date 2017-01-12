@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.3.4"
+#define MOD_VER		"1.4.0"
 #define MOD_AUTOR	_("Roman Savochenko")
 #define MOD_DESCR	_("Provides the library of system API functions of user programming area.")
 #define MOD_LICENSE	"GPL2"
@@ -117,6 +117,7 @@ void Lib::postEnable( int flag )
 
     reg(new floatSplitWord());
     reg(new floatMergeWord());
+    reg(new floatExtract());
 
     reg(new CRC());
     reg(new MD5());

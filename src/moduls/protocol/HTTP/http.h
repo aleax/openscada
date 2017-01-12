@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,7 +59,7 @@ class TProtIn: public TProtocolIn
 	string httpHead( const string &rcode, int cln = 0, const string &addattr = "", bool defCtx = true );
 	string pgHead( const string &head_els = "" );
 	string pgTail( );
-	string pgTmpl( const string &cnt, const string &head_els = "" );
+	string pgTmpl( const string &cnt, const string &head_els = "", bool forceTmpl = false );
 
 	//Attributes
 	bool mNoFull;

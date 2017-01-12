@@ -1,3 +1,11 @@
+2017-01-12 Roman (stable)
+- FIX:Protocol.HTTP: Navigation by FS for the templalate file was fixed.
+    External template using expanded for main page without the Web-moduls index and allow redirect to other page there,
+    for Login/Logout using of internal templete continued in that case.
+- Special.FLibMath: The source code cleaned.
+- Special.FLibSYS: Appended by function floatExtract() for extract exponent and mantissa from that float value.
+
+
 2017-01-09 Roman (stable)
 - !!!!:Protocol.OPC_UA{*.libOPC_UA}: Hello/Acknowledge properties set configurable and client's ones also storing.
     New OPCAlloc object is added for mutex handle and its automatic free for exception. Some locks lost fix.

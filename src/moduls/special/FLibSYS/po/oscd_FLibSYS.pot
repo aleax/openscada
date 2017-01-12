@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 10:31+0300\n"
+"POT-Creation-Date: 2017-01-11 11:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -272,6 +272,18 @@ msgid "Float: Merge from words"
 msgstr ""
 
 msgid "Merge float (4 byte) from words (2 byte)."
+msgstr ""
+
+msgid "Magnitude"
+msgstr ""
+
+msgid "Exponent"
+msgstr ""
+
+msgid "Float: Extract"
+msgstr ""
+
+msgid "Extract mantissa and exponent from the float value."
 msgstr ""
 
 msgid "Data"

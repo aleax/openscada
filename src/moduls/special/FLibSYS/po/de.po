@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009 - 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2015-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2015-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 10:31+0300\n"
+"POT-Creation-Date: 2017-01-11 11:57+0200\n"
 "PO-Revision-Date: 2011-07-19 20:52+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -285,6 +285,18 @@ msgstr "Fliesskomma: Zusammenfügen"
 
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Zusammenfügen Fliesskomma (4 Bytes)  aus Wörtern (2 Bytes)."
+
+msgid "Magnitude"
+msgstr "Größe"
+
+msgid "Exponent"
+msgstr "Exponent"
+
+msgid "Float: Extract"
+msgstr "Fliesskomma: Extrakt"
+
+msgid "Extract mantissa and exponent from the float value."
+msgstr "Extrahiere Mantisse und Exponent aus dem Floatwert."
 
 msgid "Data"
 msgstr "Daten"

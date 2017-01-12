@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.8.2"
+#define MOD_VER		"1.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -328,7 +328,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/prm/st/auths",_("Active authentication sessions"),R_R_R_,"root",SPRT_ID);
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/prm/tmplList");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/tmplList");
 		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		    "help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 		{
@@ -664,7 +664,7 @@ string TProtIn::pgTail( )
 	"</html>\n";
 }
 
-string TProtIn::pgTmpl( const string &cnt, const string &head_els )
+string TProtIn::pgTmpl( const string &cnt, const string &head_els, bool forceTmpl )
 {
     string answer;
     int hd = open(mod->tmpl().c_str(),O_RDONLY);
@@ -672,7 +672,7 @@ string TProtIn::pgTmpl( const string &cnt, const string &head_els )
 	char buf[STR_BUF_LEN];
 	for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
 	close(hd);
-	if(answer.find("#####CONTEXT#####") == string::npos)	answer.clear();
+	if(answer.find("#####CONTEXT#####") == string::npos && !forceTmpl) answer.clear();
 	else {
 	    try {
 		XMLNode tree("");
@@ -691,10 +691,10 @@ string TProtIn::pgTmpl( const string &cnt, const string &head_els )
 	    }
 	}
     }
-    if(answer.empty())	answer = pgHead(head_els)+"<center>\n#####CONTEXT#####\n</center>\n"+pgTail();
+    if(answer.empty())	answer = pgHead(head_els) + "<center>\n#####CONTEXT#####\n</center>\n" + pgTail();
     size_t tmplPos = answer.find("#####CONTEXT#####");
 
-    return answer.replace(tmplPos,strlen("#####CONTEXT#####"),cnt);
+    return (tmplPos == string::npos) ? answer : answer.replace(tmplPos,strlen("#####CONTEXT#####"),cnt);
 }
 
 string TProtIn::getIndex( const string &user, const string &sender )
@@ -731,9 +731,9 @@ string TProtIn::getIndex( const string &user, const string &sender )
 		"<a href='/"+list[i_l]+"/'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
 	}
     }
-    answer = pgTmpl(answer+"</ul></td></tr></table>\n");
+    answer = pgTmpl(answer+"</ul></td></tr></table>\n", "", true);
 
-    return httpHead("200 OK",answer.size())+answer;
+    return httpHead("200 OK", answer.size()) + answer;
 }
 
 string TProtIn::getAuth( const string& url, const string &mess )
@@ -766,8 +766,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
     const char *c_name = "name=\"";
 
     for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
-	{
+	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
 	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
 	}

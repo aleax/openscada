@@ -1,13 +1,13 @@
 # OpenSCADA.Special.FLibSYS translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Special.FLibSYS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 10:31+0300\n"
+"POT-Creation-Date: 2017-01-11 11:57+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -282,6 +282,18 @@ msgstr "Float: Объединение из слов"
 
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Объединение float (4 байтов) из слов (2 байта)."
+
+msgid "Magnitude"
+msgstr "Размер"
+
+msgid "Exponent"
+msgstr "Экспонента"
+
+msgid "Float: Extract"
+msgstr "Float: Извлечение"
+
+msgid "Extract mantissa and exponent from the float value."
+msgstr "Извлечение мантисы и экспоненты из вещественного значения."
 
 msgid "Data"
 msgstr "Данные"

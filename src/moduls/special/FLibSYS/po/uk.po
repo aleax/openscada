@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 10:31+0300\n"
+"POT-Creation-Date: 2017-01-11 11:57+0200\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -282,6 +282,18 @@ msgstr "Float: Об'єднання зі слів"
 
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Об'єднання float (4 байтів) зі слів (2 байти)."
+
+msgid "Magnitude"
+msgstr "Розмір"
+
+msgid "Exponent"
+msgstr "Експонента"
+
+msgid "Float: Extract"
+msgstr "Float: Вилучення"
+
+msgid "Extract mantissa and exponent from the float value."
+msgstr "Вилучення мантіси та експоненти з реального значення."
 
 msgid "Data"
 msgstr "Дані"

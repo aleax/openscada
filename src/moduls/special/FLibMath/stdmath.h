@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibMath file: stdmath.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,19 +46,15 @@ namespace FLibMath
 class MathAcos : public TFunction
 {
     public:
-	MathAcos( ) : TFunction("acos",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathAcos( ) : TFunction("acos", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("ArcCos"); }
 	string descr( )	{ return _("Arc cosine math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,acos(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, acos(val->getR(1))); }
 };
 
 //*************************************************
@@ -68,19 +64,15 @@ class MathAcos : public TFunction
 class MathAsin : public TFunction
 {
     public:
-	MathAsin( ) : TFunction("asin",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathAsin( ) : TFunction("asin", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("ArcSin"); }
 	string descr( )	{ return _("Arc sine math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,asin(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, asin(val->getR(1))); }
 };
 
 //*************************************************
@@ -90,19 +82,15 @@ class MathAsin : public TFunction
 class MathAtan : public TFunction
 {
     public:
-	MathAtan( ) : TFunction("atan",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathAtan( ) : TFunction("atan", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("ArcTan"); }
 	string descr( )	{ return _("Arc tangent math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,atan(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, atan(val->getR(1))); }
 };
 
 //*************************************************
@@ -112,19 +100,15 @@ class MathAtan : public TFunction
 class MathCos : public TFunction
 {
     public:
-	MathCos( ) : TFunction("cos",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
+	MathCos( ) : TFunction("cos", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Cosine"); }
 	string descr( )	{ return _("Cosine math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,cos(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, cos(val->getR(1))); }
 };
 
 //*************************************************
@@ -134,19 +118,15 @@ class MathCos : public TFunction
 class MathCosh : public TFunction
 {
     public:
-	MathCosh( ) : TFunction("cosh",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathCosh( ) : TFunction("cosh", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Cosine hyperbolic"); }
 	string descr( )	{ return _("Cosine hyperbolic math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,cosh(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0,cosh(val->getR(1))); }
 };
 
 //*************************************************
@@ -156,19 +136,15 @@ class MathCosh : public TFunction
 class MathExp : public TFunction
 {
     public:
-	MathExp( ) : TFunction("exp",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathExp( ) : TFunction("exp", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Exponent"); }
 	string descr( )	{ return _("Exponent math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,exp(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, exp(val->getR(1))); }
 };
 
 //*************************************************
@@ -178,19 +154,15 @@ class MathExp : public TFunction
 class MathLn : public TFunction
 {
     public:
-	MathLn( ) : TFunction("ln",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathLn( ) : TFunction("ln", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Natural logarithm"); }
 	string descr( )	{ return _("Natural logarithm math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,log(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, log(val->getR(1))); }
 };
 
 //*************************************************
@@ -200,19 +172,15 @@ class MathLn : public TFunction
 class MathLg : public TFunction
 {
     public:
-	MathLg( ) : TFunction("lg",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathLg( ) : TFunction("lg", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Decimal logarithm"); }
 	string descr( )	{ return _("Decimal logarithm math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,log10(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, log10(val->getR(1))); }
 };
 
 //*************************************************
@@ -222,20 +190,16 @@ class MathLg : public TFunction
 class MathPow : public TFunction
 {
     public:
-	MathPow( ) : TFunction("pow",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("p",_("Power"),IO::Real,IO::Default,"0") );
+	MathPow( ) : TFunction("pow", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("p",_("Power"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Power"); }
 	string descr( )	{ return _("Power math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,pow(val->getR(1),val->getR(2)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, pow(val->getR(1),val->getR(2))); }
 };
 
 //*************************************************
@@ -245,19 +209,15 @@ class MathPow : public TFunction
 class MathSin : public TFunction
 {
     public:
-	MathSin( ) : TFunction("sin",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
+	MathSin( ) : TFunction("sin", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Sine"); }
 	string descr( )	{ return _("Sine math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,sin(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, sin(val->getR(1))); }
 };
 
 //*************************************************
@@ -267,19 +227,15 @@ class MathSin : public TFunction
 class MathSinh : public TFunction
 {
     public:
-	MathSinh( ) : TFunction("sinh",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathSinh( ) : TFunction("sinh", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Sine hyperbolic"); }
 	string descr( )	{ return _("Sine hyperbolic math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,sinh(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, sinh(val->getR(1))); }
 };
 
 //*************************************************
@@ -289,19 +245,15 @@ class MathSinh : public TFunction
 class MathSqrt : public TFunction
 {
     public:
-	MathSqrt( ) : TFunction("sqrt",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathSqrt( ) : TFunction("sqrt", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Square root"); }
 	string descr( )	{ return _("Square root math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,sqrt(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0,sqrt(val->getR(1))); }
 };
 
 //*************************************************
@@ -311,19 +263,15 @@ class MathSqrt : public TFunction
 class MathTan : public TFunction
 {
     public:
-	MathTan( ) : TFunction("tan",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0") );
+	MathTan( ) : TFunction("tan", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Tangent"); }
 	string descr( )	{ return _("Tangent math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,tan(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0,tan(val->getR(1))); }
 };
 
 //*************************************************
@@ -333,19 +281,15 @@ class MathTan : public TFunction
 class MathTanh : public TFunction
 {
     public:
-	MathTanh( ) : TFunction("tanh",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathTanh( ) : TFunction("tanh", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Tangent hyperbolic"); }
 	string descr( )	{ return _("Tangent hyperbolic math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,tanh(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, tanh(val->getR(1))); }
 };
 
 //*************************************************
@@ -355,19 +299,15 @@ class MathTanh : public TFunction
 class MathCeil : public TFunction
 {
     public:
-	MathCeil( ) : TFunction("ceil",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathCeil( ) : TFunction("ceil", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Ceil"); }
 	string descr( )	{ return _("Ceil math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,ceil(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0,ceil(val->getR(1))); }
 };
 
 //*************************************************
@@ -377,19 +317,15 @@ class MathCeil : public TFunction
 class MathAbs : public TFunction
 {
     public:
-	MathAbs( ) : TFunction("abs",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathAbs( ) : TFunction("abs", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Absolute"); }
 	string descr( )	{ return _("Absolute math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,fabs(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, fabs(val->getR(1))); }
 };
 
 //*************************************************
@@ -399,19 +335,15 @@ class MathAbs : public TFunction
 class MathFloor : public TFunction
 {
     public:
-	MathFloor( ) : TFunction("floor",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("x",_("X"),IO::Real,IO::Default,"0") );
+	MathFloor( ) : TFunction("floor", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Floor"); }
 	string descr( )	{ return _("Floor math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,floor(val->getR(1)));
-	}
+	void calc( TValFunc *val ) { val->setR(0, floor(val->getR(1))); }
 };
 
 //*************************************************
@@ -421,18 +353,14 @@ class MathFloor : public TFunction
 class MathRand : public TFunction
 {
     public:
-	MathRand( ) : TFunction("rand",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
+	MathRand( ) : TFunction("rand", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
 	}
 
 	string name( )	{ return _("Rand"); }
 	string descr( )	{ return _("Rand math function."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,100.*rand()/RAND_MAX);
-	}
+	void calc( TValFunc *val ) { val->setR(0, 100.*rand()/RAND_MAX); }
 };
 
 //*************************************************
@@ -442,21 +370,17 @@ class MathRand : public TFunction
 class MathIf : public TFunction
 {
     public:
-	MathIf( ) : TFunction("if",SSPC_ID)
-	{
-	    ioAdd( new IO("y",_("Y"),IO::Real,IO::Return,"0") );
-	    ioAdd( new IO("cond",_("Condition"),IO::Real,IO::Default,"1") );
-	    ioAdd( new IO("true",_("True value"),IO::Real,IO::Default,"0") );
-	    ioAdd( new IO("false",_("False value"),IO::Real,IO::Default,"0") );
+	MathIf( ) : TFunction("if", SSPC_ID) {
+	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("cond",_("Condition"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("true",_("True value"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("false",_("False value"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("IF condition"); }
 	string descr( )	{ return _("Function's type 'if'-condition."); }
 
-	void calc( TValFunc *val )
-	{
-	    val->setR(0,val->getR(1)?val->getR(2):val->getR(3));
-	}
+	void calc( TValFunc *val ) { val->setR(0,val->getR(1)?val->getR(2):val->getR(3)); }
 };
 
 }
