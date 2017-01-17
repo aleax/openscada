@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-25 16:13+0200\n"
+"POT-Creation-Date: 2017-01-17 18:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,10 @@ msgid ""
 "---------- Parameters of the module section '%s' in config-file ----------\n"
 "AuthTime <min>      Life time of the authentication, minutes (default 10).\n"
 "\n"
+msgstr ""
+
+#, c-format
+msgid "HTML template '%s' load error: %s"
 msgstr ""
 
 #, c-format
@@ -67,7 +71,10 @@ msgstr ""
 msgid "Life time of the authentication (min)"
 msgstr ""
 
-msgid "HTML-template"
+msgid "HTML template"
+msgstr ""
+
+msgid "HTML main page template"
 msgstr ""
 
 msgid "Auto login"
@@ -115,13 +122,14 @@ msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
 msgstr ""
 
 #, c-format
-msgid "HTML-template '%s' load error: %s"
+msgid "No a HTTP GET function present for module '%s'!"
+msgstr ""
+
+#, c-format
+msgid "No a HTTP POST function present for module '%s'!"
 msgstr ""
 
 msgid "Login"
-msgstr ""
-
-msgid "Welcome to the Web-interfaces of OpenSCADA system."
 msgstr ""
 
 #, c-format

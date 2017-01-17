@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-25 16:13+0200\n"
+"POT-Creation-Date: 2017-01-17 18:56+0200\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -42,6 +42,9 @@ msgstr ""
 "AuthTime <min>     Lebensdauer der Authentifizierung, Minuten (Standard "
 "10).\n"
 "\n"
+
+msgid "HTML template '%s' load error: %s"
+msgstr "HTML Template '%s' Last error: %s"
 
 #, c-format
 msgid "Auth exit from user '%s'."
@@ -76,8 +79,11 @@ msgstr "Moduloptionen"
 msgid "Life time of the authentication (min)"
 msgstr "Lebensdauer der Authentifizierung (Min)"
 
-msgid "HTML-template"
+msgid "HTML template"
 msgstr "HTML-Template"
+
+msgid "HTML main page template"
+msgstr "HTML-Hauptseitevorlage"
 
 msgid "Auto login"
 msgstr "Auto Login"
@@ -111,6 +117,7 @@ msgstr ""
 msgid "Auth OK from user '%s'. Host: %s. User agent: %s."
 msgstr "Auth OK vom Benutzer '%s'. Host: %s. User-Agent: %s."
 
+#, c-format
 msgid "Going to the page: <b>%s</b>"
 msgstr "Gehen zur Seite: <b>%s</b>"
 
@@ -131,14 +138,15 @@ msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
 msgstr "Auto auth von Benutzer '%s'. Host: %s. User-Agent: %s."
 
 #, c-format
-msgid "HTML-template '%s' load error: %s"
-msgstr "HTML-Template '%s' Last error: %s"
+msgid "No a HTTP GET function present for module '%s'!"
+msgstr "Keine HTTP-GET-Funktion für Modul '%s' vorhanden!"
+
+#, c-format
+msgid "No a HTTP POST function present for module '%s'!"
+msgstr "Keine HTTP-POST-Funktion für Modul '%s' vorhanden!"
 
 msgid "Login"
 msgstr "Einloggen"
-
-msgid "Welcome to the Web-interfaces of OpenSCADA system."
-msgstr "Willkommen in die Web-Schnittstellen des Systems OpenSCADA."
 
 #, c-format
 msgid "You are logged in as \"<b>%s</b>\"."
@@ -148,8 +156,8 @@ msgid ""
 "Select the necessary Web-module from the list below, <a href='/"
 "logout'>logout</a> or <a href='/login'>login as an another user</a>."
 msgstr ""
-"Wählen Sie den Web-Modul aus der Liste unten, <a href='/"
-"logout'>ausloggen</a> oder <a href='/login'>einloggen als anderer Benutzer</a>."
+"Wählen Sie den Web-Modul aus der Liste unten, <a href='/logout'>ausloggen</"
+"a> oder <a href='/login'>einloggen als anderer Benutzer</a>."
 
 msgid "You are not logged in the system!"
 msgstr "Sie sind nicht eingeloggt!"
@@ -157,7 +165,8 @@ msgstr "Sie sind nicht eingeloggt!"
 msgid ""
 "To use some modules you must be logged in. <a href='/login'>Login now</a>."
 msgstr ""
-"Zum Bedienen einiger Module müssen Sie sich einloggen. <a href='/login'>Jetzt einloggen</a>."
+"Zum Bedienen einiger Module müssen Sie sich einloggen. <a href='/"
+"login'>Jetzt einloggen</a>."
 
 #, c-format
 msgid ""

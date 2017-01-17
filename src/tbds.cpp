@@ -744,7 +744,7 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
     // Array SQLReq(string req, bool tr = EVAL_BOOL) - formation of the SQL-request to the DB.
     //  req - SQL-request text
     if(iid == "SQLReq" && prms.size() >= 1) {
-	TArrayObj *rez = new TArrayObj();
+	TArrayObj *rez = new TArrayObj(); rez->propSet("err", "");
 	try {
 	    vector< vector<string> > rtbl;
 	    sqlReq(prms[0].getS(), &rtbl, ((prms.size()>=2)?prms[1].getB():EVAL_BOOL));
@@ -756,7 +756,7 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 		}
 		rez->arSet(iR, row);
 	    }
-	} catch(...){ }
+	} catch(TError &err)	{ rez->propSet("err", err.cat+":"+err.mess); }
 
 	return rez;
     }

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebUser translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010, 2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:38+0300\n"
+"POT-Creation-Date: 2017-01-17 19:15+0200\n"
 "PO-Revision-Date: 2010-03-05 15:57+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -49,14 +49,11 @@ msgstr "Дата модификации"
 msgid "Search and create new user page error."
 msgstr "Ошибка поиска и создание новой страницы пользователя."
 
-msgid "Welcome to Web-users pages of OpenSCADA system."
-msgstr "Добро пожаловать на Web-страницы пользователей системы OpenSCADA."
+msgid "Presented user's WEB-pages. Select needed one!"
+msgstr "Присутствующие пользовательские WEB-страницы. Выберите нужную!"
 
-msgid "Present web-users pages"
-msgstr "Присутствующие Web-страницы пользователей"
-
-msgid "Page error"
-msgstr "Ошибка страницы"
+msgid "Page is missing"
+msgstr "Страница отсутствует"
 
 #, c-format
 msgid "Page '%s' error: %s"
@@ -104,6 +101,12 @@ msgstr "Параметры URL"
 msgid "Content items"
 msgstr "Элементы содержания"
 
+msgid "This object"
+msgstr "Этот объект"
+
+msgid "Protocol's object"
+msgstr "Объект протокола"
+
 msgid "Disabled. "
 msgstr "Отключен. "
 
@@ -145,7 +148,9 @@ msgid ""
 "   'user' - auth user;\n"
 "   'HTTPvars' - HTTP variables into Object;\n"
 "   'URLprms' - URL's parameters into Object;\n"
-"   'cnts' - content items for POST into Array<XMLNodeObj>."
+"   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
+"   'this' - pointer to this page's object;\n"
+"   'prt' - pointer to object of the input part of the HTTP protocol."
 msgstr ""
 "Следующие атрибуты определены для обработки запросов:\n"
 "   'rez' - результат обработки (по умолчанию - 200 OK);\n"
@@ -156,4 +161,6 @@ msgstr ""
 "   'user' - аутентифицированный пользователь;\n"
 "   'HTTPvars' - HTTP переменные в Object;\n"
 "   'URLprms' - параметры URL в Object;\n"
-"   'cnts' - элементы содержимого для POST в Array<XMLNodeObj>."
+"   'cnts' - элементы содержимого для POST в Array<XMLNodeObj>\n"
+"   'this' - указатель на объект этой страницы;\n"
+"   'prt' - указатель на объект входной части HTTP протокола."

@@ -95,7 +95,7 @@ class TModule : public TCntrNode
 	void modFuncList( vector<string> &list );
 	bool modFuncPresent( const string &prot );
 	ExpFunc &modFunc( const string &prot );
-	void modFunc( const string &prot, void (TModule::**offptr)() );
+	bool modFunc( const string &prot, void (TModule::**offptr)(), bool noex = false );
 
 	// Translate functions
 	const char *I18N( const char *mess );

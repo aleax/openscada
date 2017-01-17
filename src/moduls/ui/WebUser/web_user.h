@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebUser file: web_user.h
 /***************************************************************************
- *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,8 +73,8 @@ class UserPg : public TCntrNode, public TConfig
 	bool	enableStat( ) const	{ return mEn; }
 	string	progLang( );
 	string	prog( );
-	string	workProg( )	{ return mWorkProg; }
-	int	timeStamp( )	{ return mTimeStamp; }
+	string	workProg( )		{ return mWorkProg; }
+	int	timeStamp( )		{ return mTimeStamp; }
 
 	string	getStatus( );
 
@@ -134,7 +134,7 @@ class TWEB: public TUI
 	void modStart( );
 	void modStop( );
 
-	//> User page's functions
+	// User page's functions
 	void uPgList( vector<string> &ls ) const	{ chldList(mPgU,ls); }
 	bool uPgPresent( const string &id ) const	{ return chldPresent(mPgU,id); }
 	void uPgAdd( const string &id, const string &db = "*.*" );
@@ -154,8 +154,11 @@ class TWEB: public TUI
 
 	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
 
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
+	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
+		const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -330,6 +330,8 @@ function getFont( fStr, fSc, opt )
 	if(allFnt.length >= 2) rez += 'font-size: ' + (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0) + (opt==1?'pt; ':'px; ');
 	if(allFnt.length >= 3) rez += 'font-weight: ' + (parseInt(allFnt[2])?'bold':'normal') + '; ';
 	if(allFnt.length >= 4) rez += 'font-style: ' + (parseInt(allFnt[3])?'italic':'normal') + '; ';
+	if(allFnt.length >= 5 && parseInt(allFnt[4])) rez += 'text-decoration: underline; ';
+	else if(allFnt.length >= 6 && parseInt(allFnt[5])) rez += 'text-decoration: line-through; ';
     }
 
     return rez;
@@ -752,7 +754,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
-	    if(parseInt(this.attrs['orient']) == 0) {
+	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
 		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; ';
 		switch(txtAlign&0x3) {
@@ -766,6 +768,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    case 1: spanStyle += 'vertical-align: bottom; ';	break;
 		    case 2: spanStyle += 'vertical-align: middle; ';	break;
 		}
+		if(parseInt(this.attrs['orient']) != 0) spanStyle += "transform: rotate("+parseInt(this.attrs['orient'])+"deg); ";
 		spanStyle += getFont(this.attrs['font'], Math.min(xSc,ySc));
 		spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
 		var txtVal = this.attrs['text'];
@@ -798,9 +801,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		//txtVal.replace(/\n/g,'<br />');
 		//while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
-	    }
-	    else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
-					"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
+	    //}
+	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
+	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
 
 	    this.place.wdgLnk = this;
 	    if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.1"
+#define MOD_VER		"1.8.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -78,10 +78,10 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
     id_vcases	= grpAdd("ses_");
 
     //Reg export functions
-    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet));
-    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost));
+    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
+    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 
     gdFTUseFontConfig(1);
 
@@ -337,6 +337,15 @@ void TWEB::perSYSCall( unsigned int cnt )
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
+string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
+    const string &htmlHeadEls, const string &forceTmplFile )
+{
+    vector<TVariant> prms;
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
+
+    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
+}
+
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
 {
     return "HTTP/1.0 " + rcode + "\x0D\x0A"
@@ -372,17 +381,18 @@ string TWEB::pgHead( const string &head_els, const string &title, const string &
 
 string TWEB::pgTail( )	{ return "</body>\n</html>"; }
 
-void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
+    string sender = TSYS::strLine(iprt->srcAddr(), 0);
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, "");
-    ses.page = pgHead();
 
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
 	//Get about module page
-	if(zero_lev == "about")	getAbout(ses);
+	//if(zero_lev == "about")	getAbout(ses);
 	//Get module icon and global image
-	else if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
+	//else
+	if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
 	    string itp = "png";
 	    //Session's and project's icons request processing
 	    map<string,string>::iterator prmEl = ses.prm.find("it");
@@ -390,19 +400,16 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		XMLNode req("get");
 		req.setAttr("path", prmEl->second+"/%2fico");
 		mod->cntrIfCmd(req, ses.user);
-		ses.page = TSYS::strDecode(req.text(), TSYS::base64);
+		page = TSYS::strDecode(req.text(), TSYS::base64);
 	    }
-	    else ses.page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
-	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp) + ses.page;
-	    return;
+	    else page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
+	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
 	}
 	else {
 	    //Session selection or a new session for the project creation
 	    if(zero_lev.empty()) {
 		bool sesPrjOk = false;
-		ses.page = ses.page+
-		    "<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n"
-		    "<center><table class='work'>\n";
+		page = "<table class='work'>\n";
 		// Get present sessions list
 		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");
@@ -423,11 +430,11 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    self_prjSess += req.childGet(iCh)->attr("proj")+";";
 		}
 		if(!prjSesEls.empty()) {
-		    ses.page = ses.page+
-			"<tr><th>"+_("Connect to opened session")+"</th></tr>\n"
+		    page = page +
+			"<tr><th>" + _("Connect to opened session") + "</th></tr>\n"
 			"<tr><td class='content'>\n"
-			"<table border='0' cellspacing='3px' width='100%'>\n"+
-			prjSesEls+
+			"<table border='0' cellspacing='3px' width='100%'>\n" +
+			prjSesEls +
 			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
@@ -443,7 +450,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			req.childGet(iCh)->text()+"</a></td></tr>";
 		}
 		if(!prjSesEls.empty()) {
-		    ses.page = ses.page +
+		    page = page +
 			"<tr><th>"+_("Create new session for present project")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n"+
@@ -451,9 +458,10 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
-		ses.page += "</table></center>";
+		page += "</table>";
 
-		if(!sesPrjOk) messPost(ses.page,nodePath(),_("No one sessions and projects of VCA engine are present for user!"),TWEB::Warning);
+		if(!sesPrjOk) page = messPost(nodePath(), _("No one sessions and projects of VCA engine are present for user!"), TWEB::Warning);
+		page = pgCreator(iprt, page, "200 OK");
 	    }
 	    //New session create
 	    else if(zero_lev.compare(0,4,"prj_") == 0) {
@@ -472,12 +480,12 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
 		    if((int)vcaLs.size() >= mod->sessLimit())
-		        messPost(ses.page,nodePath(),_("Sorry, opened sessions number reach limit!"),TWEB::Warning);
+			page = messPost(nodePath(), _("Sorry, opened sessions number reach limit!"), TWEB::Warning);
 		    else {
 			sesRes.request(true);
 			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
 			if(cntrIfCmd(req,ses.user))
-			    messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
+			    page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 			else {
 			    sName = req.attr("sess");
 			    vcaSesAdd(sName,true);
@@ -486,8 +494,9 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    }
 		}
 		if(!sName.empty())
-		    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/ses_" + sName + "/'/>") +
-			"<center>Go to session '" + sName + "' for project: '" + zero_lev.substr(4) + "'</center>\n<br/>";
+		    page = pgCreator(iprt, TSYS::strMess(_("Go to session '%s' for project '%s' ..."),sName.c_str(),zero_lev.substr(4).c_str()),
+			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/ses_" + sName + "/'/>");
+		else page = pgCreator(iprt, page, "200 OK");
 	    }
 	    //Main session page data prepare
 	    else if(zero_lev.compare(0,4,"ses_") == 0) {
@@ -496,7 +505,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		// Check for session present
 		if(!ses.prm.size()) {
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HttpGet("", page, sender, vars, user); return; }
+		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
 		}
 		// Call to session
 		ResAlloc sesRes(mSesRes, false);
@@ -507,25 +516,22 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			vcaSesAdd(sesnm,false);
 			vcaSesAt(sesnm).at().senderSet(sender);
 			vcaSesAt(sesnm).at().getReq(ses);
-		    }
-		    else throw;
+		    } else throw;
 		}
 		page = ses.page;
-		return;
 	    }
-	    else mess_err(nodePath().c_str(),_("An inaccessible request is received: '%s'"),zero_lev.c_str());
+	    else {
+		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Pointed project/session '%s' is wrong!"),zero_lev.c_str())+"</div>\n",
+				       "404 Not Found");
+	    }
 	}
     } catch(TError &err) {
-	ses.page = "Page <" + ses.url + "> error: " + err.mess;
-	page = httpHead("404 Not Found",ses.page.size()) + ses.page;
-	return;
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
+			       "404 Not Found");
     }
-
-    ses.page += pgTail();
-    page = httpHead("200 OK", ses.page.size()) + ses.page;
 }
 
-void TWEB::getAbout( SSess &ses )
+/*void TWEB::getAbout( SSess &ses )
 {
     ses.page = ses.page + "<center><table class='page_auth'>\n"
 	"<TR><TD>" + PACKAGE + " " + VERSION + "</TD></TR>\n"
@@ -546,38 +552,44 @@ void TWEB::getAbout( SSess &ses )
 	"<TR><TD><font color='Blue'>" + _("Author: ") + "</font></TD><TD>" + _(AUTHORS) + "</TD></TR>"
 	"</table>\n"
 	"</TD></TR>\n</table><br/></center>\n";
-}
+}*/
 
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
 
     try {
 	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 	//To control interface request
 	if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com") {
-	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
-	    cntrIfCmd(req,ses.user,false);
+	    XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
+	    cntrIfCmd(req, ses.user, false);
 	    ses.page = req.save();
-	    page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	    page = httpHead("200 OK", ses.page.size(), "text/xml", "", "UTF-8") + ses.page;
 	    return;
 	}
 
-	//Post command to session
-	string sesnm = TSYS::pathLev(ses.url,0);
-	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0) page = httpHead("404 Not Found");
+	//Post command to the session
+	string sesnm = TSYS::pathLev(ses.url, 0);
+	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0)
+	    throw TError(nodePath().c_str(), "%s", TSYS::strMess(_("Wrong session '%s'."), sesnm.c_str()).c_str());
 	else {
 	    ResAlloc sesRes(mSesRes, false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);
 	    page = ses.page;
 	}
-    } catch(...) { page = httpHead("404 Not Found"); }
+    } catch(TError &err) {
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),url.c_str(),err.mess.c_str())+"</div>\n",
+	    "404 Not Found");
+    }
 }
 
-void TWEB::messPost( string &page, const string &cat, const string &mess, MessLev type )
+string TWEB::messPost( const string &cat, const string &mess, MessLev type )
 {
-    //Put system message.
+    string page;
+
+    //Put system message
     message(cat.c_str(), (type==Error) ? TMess::Error : (type==Warning) ? TMess::Warning : TMess::Info,"%s",mess.c_str());
 
     //Prepare HTML messages
@@ -587,6 +599,8 @@ void TWEB::messPost( string &page, const string &cat, const string &mess, MessLe
     else page += "<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n";
     page += "<tr bgcolor='#cccccc'> <td align='center'>"+TSYS::strEncode(mess,TSYS::Html)+"</td></tr>\n";
     page += "</tbody></table>\n";
+
+    return page;
 }
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user, bool VCA )

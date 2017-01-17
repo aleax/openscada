@@ -1,3 +1,19 @@
+2017-01-17 Roman (stable)
+- SYS.DB: Errors placing to result's Array attribute "err" from exceptions are added to user API function SQLReq().
+- SYS.Module: modFunc() of declared functions pointer getting was expanded by no exceptional calls and a result.
+- !!!!:Protocol.HTTP: Significant unified into service pages creation by single function pgCreator().
+    The function pgCreator() primarily implemented as an user API function of HTTP module's object for allow its using
+	into WEB-submodules for self but single-style service pages.
+    The main page's template splited from the generic template for allow absolutely custom main pages.
+    !!!:External calls to WEB submodules are expanded by functions HTTP_GET(), HTTP_POST() with an argument TProtocolIn *iprt,
+	but the old calls HttpGet(), HttpPost() also check and support.
+    Current folder force added to template's resources checking.
+- !!!!:UI.{WebUser,WebVision}: Expanded to using the unified service interface from Protocol.HTTP by pgCreator().
+- !:UI.WebUser: Semantics of the page's function expanded by two objects' arguments "This object" and "Protocol's object".
+- !!:UI.WebVision: Font's behaviour was expanded by support of text decorations "underline" and "line-through".
+    The primitive "Text" representing for rotated texts moved to using CSS property "transform: rotate({X}deg)".
+
+
 2017-01-12 Roman (stable)
 - FIX:Protocol.HTTP: Navigation by FS for the templalate file was fixed.
     External template using expanded for main page without the Web-moduls index and allow redirect to other page there,

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -97,14 +97,17 @@ class TWEB: public TUI
 	AutoHD<VCASess> vcaSesAt( const string &name ) const	{ return chldAt(id_vcases, name); }
 
 	// Web process methods
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
-	void getAbout( SSess &ses );
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
+	void getAbout( SSess &ses );
 
 	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+
+	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
+	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
 
 	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html",
 	    const string &addattr = "", const string &charset = Mess->charset() );
@@ -133,7 +136,7 @@ class TWEB: public TUI
     private:
 	//Methods
 	// Post message dialog
-	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
+	string messPost( const string &cat, const string &mess, MessLev type = Info );
 
 	//Attributes
 	int		mTSess;				//Time of sesion life (minutes)

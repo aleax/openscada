@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -71,7 +71,7 @@ using namespace PrHTTP;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), mTmpl(dataRes()), lstSesChk(0)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(10), mTmpl(dataRes()), mTmplMainPage(dataRes()), lstSesChk(0)
 {
     mod = this;
 
@@ -105,6 +105,7 @@ void TProt::load_( )
     //Load parameters from config-file
     setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
     setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
+    setTmplMainPage(TBDS::genDBGet(nodePath()+"TmplMainPage",tmplMainPage()));
     // Load auto-login config
     MtxAlloc res(dataRes(), true);
     XMLNode aLogNd("aLog");
@@ -122,6 +123,7 @@ void TProt::save_( )
 {
     TBDS::genDBSet(nodePath()+"AuthTime", i2s(authTime()));
     TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
+    TBDS::genDBSet(nodePath()+"TmplMainPage", tmplMainPage());
 
     //Save auto-login config
     MtxAlloc res(dataRes(), true);
@@ -129,6 +131,96 @@ void TProt::save_( )
     for(unsigned i_n = 0; i_n < mALog.size(); i_n++)
 	aLogNd.childAdd("it")->setAttr("addrs", mALog[i_n].addrs)->setAttr("user", mALog[i_n].user);
     TBDS::genDBSet(nodePath()+"AutoLogin", aLogNd.save());
+}
+
+TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}",
+    //		       string htmlHeadEls = "", string forceTmplFile = "" )
+    if(iid == "pgCreator" && prms.size()) {
+	bool isForceTmpl = (prms.size() >= 5 && prms[4].getS().size());
+
+	string httpattrs = (prms.size() >= 3) ? prms[2].getS() : "";
+	if(httpattrs.find("Content-Type") == string::npos)
+	    httpattrs = "Content-Type: text/html;charset="+ Mess->charset() + (httpattrs.size()?"\x0D\x0A":"") + httpattrs;
+
+	string answer;
+
+	if(httpattrs.find("Content-Type: text/html") != string::npos) {
+	    int hd = -1;
+	    if(isForceTmpl)			hd = ::open(prms[4].getS().c_str(), O_RDONLY);
+	    if(hd < 0 && mod->tmpl().size()) hd = ::open(tmpl().c_str(), O_RDONLY);
+	    if(hd >= 0) {
+		char buf[STR_BUF_LEN];
+		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf, len);
+		::close(hd);
+		if(answer.find("#####CONTEXT#####") == string::npos && !isForceTmpl) answer.clear();
+		else {
+		    try {
+			XMLNode tree("");
+			tree.load(answer, true);
+			if(prms.size() >= 4 && prms[3].getS().size()) {
+			    XMLNode *headEl = tree.childGet("head", 0, true);
+			    if(!headEl) headEl = tree.childGet("HEAD", 0, true);
+			    if(headEl) {
+				headEl->childAdd("META")->load(prms[3].getS());
+				answer = tree.save(XMLNode::XHTMLHeader);
+			    } else answer.clear();
+			}
+		    } catch(TError &err) {
+			mess_err(nodePath().c_str(), _("HTML template '%s' load error: %s"),
+				(isForceTmpl?prms[4].getS():mod->tmpl()).c_str(), err.mess.c_str());
+			answer.clear();
+		    }
+		}
+	    }
+	    if(answer.empty())
+		answer = "<?xml version='1.0' ?>\n"
+		    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
+		    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+		    " <head>\n"
+		    "  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n" +
+		    ((prms.size() >= 4) ? prms[3].getS() : "" ) +
+		    "  <title>" PACKAGE_NAME ": " + SYS->id() + "</title>\n"
+		    "  <link rel='shortcut icon' href='/" + SYS->id() + ".png' type='image' />\n"
+		//    "  <title>" PACKAGE_NAME "!</title>\n"
+		//    "  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
+		    "  <style type='text/css'>\n"
+		    "   hr { width: 95%; }\n"
+		    "   p { margin: 0px; text-indent: 15px; margin-bottom: 5px; }\n"
+		    "   body { background-color: #818181; margin: 0px; }\n"
+		    "   div.error { width: 60%; border: 4px outset #B0B0B0; color: red; background-color: #B0B0B0; font-size: 200%; padding: 10px; }\n"
+		    "   h1.head { text-align: center; color: #ffff00; }\n"
+		    "   h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
+		    "   table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
+		    "   table.work td { background-color:#cccccc; text-align: left; }\n"
+		    "   table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+		    "   table.work td.content img { vertical-align: middle; }\n"
+		    "   table.work ul { list-style-image: none; list-style-type: none; margin: 0px; padding: 0px; padding-left: 20px; }\n"
+		    "  </style>\n"
+		    " </head>\n"
+		    " <body>\n"
+		    "  <h1 class='head'>" PACKAGE_NAME ": " + SYS->id() + "</h1>\n"
+		    "  <hr/><br/>\n"
+		    "<center>\n" CtxTmplMark "</center>\n"
+		    "  <hr/>\n"
+		    " </body>\n"
+		    "</html>\n";
+
+	    size_t tmplPos = answer.find(CtxTmplMark);
+	    if(tmplPos != string::npos) answer = answer.replace(tmplPos, strlen(CtxTmplMark), prms[0].getS());
+	} else answer = prms[0].getS();
+
+	if(prms.size() < 2 || !prms[1].getS().size()) return answer;
+
+	return "HTTP/1.0 " + prms[1].getS() + "\x0D\x0A"
+	   "Server: " + PACKAGE_STRING + "\x0D\x0A"
+	   "Accept-Ranges: bytes\x0D\x0A"
+	   "Content-Length: " + i2s(answer.size()) + "\x0D\x0A" +
+	   httpattrs + "\x0D\x0A\x0D\x0A" + answer;
+    }
+
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
@@ -328,7 +420,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/prm/st/auths",_("Active authentication sessions"),R_R_R_,"root",SPRT_ID);
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/tmplList");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/tmpl",_("HTML template"),RWRWR_,"root",SPRT_ID,3,
+		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplList");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/tmplMainPage",_("HTML main page template"),RWRWR_,"root",SPRT_ID,3,
+		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplMainPageList");
 		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		    "help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 		{
@@ -383,6 +478,11 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setTmpl(opt->text());
     }
     else if(a_path == "/prm/cfg/tmplList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, tmpl(), "html;xhtml;xml;");
+    else if(a_path == "/prm/cfg/tmplMainPage") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(tmplMainPage());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setTmplMainPage(opt->text());
+    }
+    else if(a_path == "/prm/cfg/tmplMainPageList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, tmplMainPage(), "html;xhtml;xml;");
     else if(a_path == "/prm/cfg/usr_ls" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
@@ -391,7 +491,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
     }
     else TProtocol::cntrCmdProc(opt);
 }
-
 
 //*************************************************
 //* TProtIn                                       *
@@ -406,13 +505,12 @@ TProtIn::~TProtIn( )
 
 }
 
-string TProtIn::httpHead( const string &rcode, int cln, const string &addattr, bool defCtx )
+string TProtIn::pgCreator( const string &cnt, const string &rcode, const string &httpattrs, const string &htmlHeadEls, const string &forceTmplFile )
 {
-    return "HTTP/1.0 " + rcode + "\x0D\x0A"
-	   "Server: " + PACKAGE_STRING + "\x0D\x0A"
-	   "Accept-Ranges: bytes\x0D\x0A"
-	   "Content-Length: " + i2s(cln) + "\x0D\x0A"+
-	   (defCtx?("Content-Type: text/html;charset="+Mess->charset()+"\x0D\x0A"):string("")) + addattr + "\x0D\x0A";
+    vector<TVariant> prms;
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
+
+    return owner().objFuncCall("pgCreator", prms, "root").getS();
 }
 
 bool TProtIn::mess( const string &reqst, string &answer )
@@ -421,13 +519,13 @@ bool TProtIn::mess( const string &reqst, string &answer )
     string req, sel, userAgent;
     int sesId = 0;
     vector<string> vars;
-    string sender = TSYS::strLine(srcAddr(),0);
+    string sender = TSYS::strLine(srcAddr(), 0);
 
     //Continue for full reqst
     if(mNoFull) {
 	mBuf.append(reqst);
 	mNoFull = false;
-    }else mBuf = reqst;  //Save request to buffer
+    } else mBuf = reqst;	//Save request to buffer
 
     string request = mBuf;
 
@@ -474,20 +572,14 @@ bool TProtIn::mess( const string &reqst, string &answer )
 
 	//Check protocol version
 	if(protocol != "HTTP/1.0" && protocol != "HTTP/1.1") {
-	    answer = "<html>\n"
-		     " <body>\n"
-		     "  <h1>Bad Request</h1>\n"
-		     "  <p>This server did not undersand your request.</p>\n"
-		     " </body>\n"
-		     "</html>\n";
-	    answer = httpHead("400 Bad Request",answer.size())+answer;
-	    return mNoFull||KeepAlive;
+	    answer = pgCreator("<div class='error'>Bad Request<br/>This server doesn't undersand your request.</div>\n", "400 Bad Request");
+	    return mNoFull || KeepAlive;
 	}
 
 	int url_pos = 0;
 	string name_mod = TSYS::pathLev(urls,0,false,&url_pos);
 	while(url_pos < (int)urls.size() && urls[url_pos] == '/') url_pos++;
-	url = "/"+urls.substr(url_pos);
+	url = "/" + urls.substr(url_pos);
 
 	//Process the internal commands
 	// Login
@@ -495,7 +587,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    if(method == "GET") {
 		if(sesId) mod->sesClose(sesId);
 		answer = getAuth(url);
-		return mNoFull||KeepAlive;
+		return mNoFull || KeepAlive;
 	    }
 	    else if(method == "POST") {
 		map<string,string>	cnt;
@@ -511,31 +603,29 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    {
 			mess_info(owner().nodePath().c_str(), _("Auth OK from user '%s'. Host: %s. User agent: %s."),
 			    user.c_str(), sender.c_str(), userAgent.c_str());
-			answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),url.c_str())+"</h2>\n",
-			    "<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>");
-			answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;\x0D\x0A")+answer;
-			return mNoFull||KeepAlive;
+			answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),url.c_str())+"</h2>\n", "200 OK",
+				"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
+				"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+url+"'/>");
+			return mNoFull || KeepAlive;
 		    }
 		}
 
 		mess_warning(owner().nodePath().c_str(),_("Auth wrong from user '%s'. Host: %s. User agent: %s."),
 		    user.c_str(), sender.c_str(), userAgent.c_str());
-		answer = getAuth(url,_("<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"));
+		answer = getAuth(url, _("<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"));
 		return mNoFull || KeepAlive;
 	    }
 	}
 	// Logut
 	else if(name_mod == "logout" && method == "GET") {
 	    if(sesId) mod->sesClose(sesId);
-	    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),"/")+"</h2>\n",
-		"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
-	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
+	    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),"/")+"</h2>\n", "200 OK",
+		"Set-Cookie: oscd_u_id=0; path=/;", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
 	    return mNoFull || KeepAlive;
 	}
 	// robots.txt
 	else if(name_mod == "robots.txt" && method == "GET") {
-	    answer = "User-Agent: *\nDisallow: /";
-	    answer = httpHead("200 OK",answer.size(),"Content-Type: text/plain;charset=us-ascii\x0D\x0A",false) + answer;
+	    answer = pgCreator("User-Agent: *\nDisallow: /", "200 OK", "Content-Type: text/plain;charset=us-ascii");
 	    return mNoFull || KeepAlive;
 	}
 
@@ -549,52 +639,53 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		if(!user.empty()) {
 		    mess_info(owner().nodePath().c_str(), _("Auto auth from user '%s'. Host: %s. User agent: %s."),
 			user.c_str(), sender.c_str(), userAgent.c_str());
-		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),url.c_str())+"</h2>\n",
+		    answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),url.c_str())+"</h2>\n", "200 OK",
+			"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
 			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+urls+"'/>");
-		    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;\x0D\x0A")+answer;
 		}
-		else {
-		    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n",
-			"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>");
-		    answer = httpHead("200 OK",answer.size())+answer;
-		}
+		else answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),("/login/"+name_mod+url).c_str())+"</h2>\n",
+			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/login/"+(name_mod+url)+"'/>");
 		return mNoFull || KeepAlive;
 	    }
 
 	    // Check metods
 	    if(method == "GET") {
 		void(TModule::*HttpGet)(const string &url, string &page, const string &sender, vector<string> &vars, const string &user);
-		wwwmod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-		    (void (TModule::**)()) &HttpGet);
+		void(TModule::*HTTP_GET)(const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt);
 
-		((&wwwmod.at())->*HttpGet)(url,answer,sender,vars,user);
+		if(wwwmod.at().modFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+			(void (TModule::**)()) &HTTP_GET,true))
+		    ((&wwwmod.at())->*HTTP_GET)(url, answer, vars, user, this);
+		else if(wwwmod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
+			(void (TModule::**)()) &HttpGet,true))
+		    ((&wwwmod.at())->*HttpGet)(url, answer, sender, vars, user);
+		else throw TError(nodePath().c_str(), _("No a HTTP GET function present for module '%s'!"), name_mod.c_str());
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Get Content:\n%s", request.c_str());
 	    }
 	    else if(method == "POST") {
 		void(TModule::*HttpPost)(const string &url, string &page, const string &sender, vector<string> &vars, const string &user);
-		wwwmod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-		    (void (TModule::**)()) &HttpPost);
+		void(TModule::*HTTP_POST)(const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt);
 
 		answer = request.substr(pos);
-		((&wwwmod.at())->*HttpPost)(url,answer,sender,vars,user);
+		if(wwwmod.at().modFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+			(void (TModule::**)()) &HTTP_POST,true))
+		    ((&wwwmod.at())->*HTTP_POST)(url, answer, vars, user, this);
+		else if(wwwmod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
+			(void (TModule::**)()) &HttpPost,true))
+		    ((&wwwmod.at())->*HttpPost)(url, answer, sender, vars, user);
+		else throw TError(nodePath().c_str(), _("No a HTTP POST function present for module '%s'!"), name_mod.c_str());
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Post Content:\n%s", request.c_str());
 	    }
-	    else {
-		answer = "<html>\n"
-			 " <body>\n"
-			 "  <h1>Method Isn't Implemented</h1>\n"
-			 "  <p>The method "+method+" isn't implemented by this server.</p>\n"
-			 " </body>\n"
-			 "</html>\n";
-		answer = httpHead("501 Method Not Implemented",answer.size())+answer;
-	    }
+	    else answer = pgCreator("<div class='error'>Method '"+method+"' isn't implemented by this server!</div>\n",
+				    "501 Method Not Implemented");
 	} catch(TError &err) {
 	    //Check to direct file request for template
 	    if(method == "GET" && mod->tmpl().size() && urls != "/") {
 		int hd = -1;
 		//Open file
 		size_t tmplDirPos = mod->tmpl().rfind("/");
-		if(tmplDirPos != string::npos && (hd=open((mod->tmpl().substr(0,tmplDirPos)+urls).c_str(),O_RDONLY)) != -1) {
+		if((tmplDirPos != string::npos && (hd=open((mod->tmpl().substr(0,tmplDirPos)+urls).c_str(),O_RDONLY)) >= 0) ||
+			(hd=open(("./"+urls).c_str(),O_RDONLY)) >= 0) {	//From current folder
 		    answer.clear();
 		    char buf[STR_BUF_LEN];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
@@ -603,11 +694,13 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    size_t ext_pos = urls.rfind(".");
 		    string fext = (ext_pos != string::npos) ? urls.substr(ext_pos+1) : "";
 		    if(fext == "png" || fext == "jpg" || fext == "ico")
-			answer = httpHead("200 OK",answer.size(),"Content-Type: image/"+fext+"\x0D\x0A",false)+answer;
+			answer = pgCreator(answer, "200 OK", "Content-Type: image/"+fext+";");
 		    else if(fext == "css" || fext == "html" || fext == "xml")
-			answer = httpHead("200 OK",answer.size(),"Content-Type: text/"+fext+"\x0D\x0A",false)+answer;
-		    else if(fext == "js") answer = httpHead("200 OK",answer.size(),"Content-Type: text/javascript\x0D\x0A",false)+answer;
-		    else answer = httpHead("200 OK",answer.size())+answer;
+			answer = pgCreator(answer, "200 OK", "Content-Type: text/"+fext+";");
+		    else if(fext == "js")
+			answer = pgCreator(answer, "200 OK", "Content-Type: text/javascript;");
+		    else answer = pgCreator("<div class='error'>Bad Request!<br/>This server doesn't undersand your request.</div>\n",
+					    "400 Bad Request");
 		    return mNoFull || KeepAlive;
 		}
 	    }
@@ -615,7 +708,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    if(method == "GET" && name_mod.rfind(".") != string::npos) {
 		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
 		if(ico.size()) {
-		    answer = httpHead("200 OK",ico.size(),"Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp)+";\x0D\x0A",false) + ico;
+		    answer = pgCreator(ico, "200 OK", "Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp)+";");
 		    return mNoFull || KeepAlive;
 		}
 	    }
@@ -627,82 +720,12 @@ bool TProtIn::mess( const string &reqst, string &answer )
     return mNoFull || KeepAlive;
 }
 
-string TProtIn::pgHead( const string &head_els )
-{
-    return
-	"<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
-	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-	" <head>\n"
-	"  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n"+
-	head_els+
-	"  <title>" PACKAGE_NAME "!</title>\n"
-	"  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
-	"  <style type='text/css'>\n"
-	"   hr { width: 95%; }\n"
-	"   p { margin: 0px; text-indent: 15px; margin-bottom: 5px; }\n"
-	"   body { background-color: #818181; margin: 0px; }\n"
-	"   h1.head { text-align: center; color: #ffff00; }\n"
-	"   h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
-	"   table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
-	"   table.work td { background-color:#cccccc; text-align: left; }\n"
-	"   table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-	"   table.work td.content img { vertical-align: middle; }\n"
-	"   table.work ul { list-style-image: none; list-style-type: none; margin: 0px; padding: 0px; padding-left: 20px; }\n"
-	"  </style>\n"
-	" </head>\n"
-	" <body>\n"
-	"  <h1 class='head'>" PACKAGE_NAME "</h1>\n"
-	"  <hr/><br/>\n";
-}
-
-string TProtIn::pgTail( )
-{
-    return
-	"<hr/>\n"
-	"</body>\n"
-	"</html>\n";
-}
-
-string TProtIn::pgTmpl( const string &cnt, const string &head_els, bool forceTmpl )
-{
-    string answer;
-    int hd = open(mod->tmpl().c_str(),O_RDONLY);
-    if(hd != -1) {
-	char buf[STR_BUF_LEN];
-	for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
-	close(hd);
-	if(answer.find("#####CONTEXT#####") == string::npos && !forceTmpl) answer.clear();
-	else {
-	    try {
-		XMLNode tree("");
-		tree.load(answer, true);
-		if(head_els.size()) {
-		    XMLNode *headEl = tree.childGet("head");
-		    if(headEl) {
-			headEl->childAdd("META")->load(head_els);
-			answer = tree.save(XMLNode::XHTMLHeader);
-		    }
-		    else answer.clear();
-		}
-	    } catch(TError &err) {
-		mess_err(nodePath().c_str(),_("HTML-template '%s' load error: %s"),mod->tmpl().c_str(),err.mess.c_str());
-		answer.clear();
-	    }
-	}
-    }
-    if(answer.empty())	answer = pgHead(head_els) + "<center>\n#####CONTEXT#####\n</center>\n" + pgTail();
-    size_t tmplPos = answer.find("#####CONTEXT#####");
-
-    return (tmplPos == string::npos) ? answer : answer.replace(tmplPos,strlen("#####CONTEXT#####"),cnt);
-}
-
 string TProtIn::getIndex( const string &user, const string &sender )
 {
     string answer = string("<table class='work' width='50%'>\n")+
 	"<tr><th>"+_("Login")+"</th></tr>"
-	"<tr><td class='content'>"
-	"<p>"+_("Welcome to the Web-interfaces of OpenSCADA system.")+"</p>";
+	"<tr><td class='content'>";
+	// "<p>"+_("Welcome to the Web-interfaces of OpenSCADA system.")+"</p>";
     if(!user.empty())
 	answer = answer +
 	    "<p style='color: green;'>"+TSYS::strMess(_("You are logged in as \"<b>%s</b>\"."),user.c_str())+"</p>"
@@ -731,28 +754,25 @@ string TProtIn::getIndex( const string &user, const string &sender )
 		"<a href='/"+list[i_l]+"/'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
 	}
     }
-    answer = pgTmpl(answer+"</ul></td></tr></table>\n", "", true);
 
-    return httpHead("200 OK", answer.size()) + answer;
+    return pgCreator(answer+"</ul></td></tr></table>\n", "200 OK", "", "", mod->tmplMainPage());
 }
 
 string TProtIn::getAuth( const string& url, const string &mess )
 {
-    string answer = pgTmpl(string("<table class='work'>")+
-	"<tr><th>"+_("Login to system")+"</th></tr>\n"
+    return pgCreator(string("<table class='work'>") +
+	"<tr><th>" + _("Login to system") + "</th></tr>\n"
 	"<tr><td>\n"
-	"<form method='post' action='/login"+url+"' enctype='multipart/form-data'>\n"
+	"<form method='post' action='/login" + url + "' enctype='multipart/form-data'>\n"
 	"<table cellpadding='3px'>\n"
-	"<tr><td><b>"+_("User name")+"</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
-	"<tr><td><b>"+_("Password")+"</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
-	"<tr><td colspan='2' style='text-align: center'><input type='submit' name='auth_enter' value='"+_("Enter")+"'/>&nbsp;"
-	"<input type='reset' name='clean' value='"+_("Clean")+"'/></td></tr>"
+	"<tr><td><b>" + _("User name") + "</b></td><td><input type='text' name='user' size='20'/></td></tr>\n"
+	"<tr><td><b>" + _("Password") + "</b></td><td><input type='password' name='pass' size='20'/></td></tr>\n"
+	"<tr><td colspan='2' style='text-align: center'><input type='submit' name='auth_enter' value='" + _("Enter") + "'/>&nbsp;"
+	"<input type='reset' name='clean' value='" + _("Clean") + "'/></td></tr>"
 	"</table>\n</form>\n"
 	"</td></tr>"
-	"<tr><td>"+mess+"</td></tr>"
-	"</table>\n");
-
-    return httpHead("200 OK", answer.size())+answer;
+	"<tr><td>" + mess + "</td></tr>"
+	"</table>\n", "200 OK");
 }
 
 void TProtIn::getCnt( const vector<string> &vars, const string &content, map<string,string> &cnt )

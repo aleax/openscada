@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebVision translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-12 21:24+0300\n"
+"POT-Creation-Date: 2017-01-17 19:37+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -122,20 +122,19 @@ msgid "Sorry, opened sessions number reach limit!"
 msgstr "Извините, количество открытых сеансов достигло ограничения!"
 
 #, c-format
-msgid "An inaccessible request is received: '%s'"
-msgstr "Получен недопустимый запрос: '%s'"
+msgid "Go to session '%s' for project '%s' ..."
+msgstr "Переход к сеансу '%s' для проекта '%s' ..."
 
-msgid "Name: "
-msgstr "Имя: "
+#, c-format
+msgid "Pointed project/session '%s' is wrong!"
+msgstr "Указанный проект/сеанс '%s' ошибочный!"
 
-msgid "License: "
-msgstr "Лицензия: "
+msgid "Page '%s' error: %s"
+msgstr "Ошибка страницы '%s': %s"
 
-msgid "Author: "
-msgstr "Автор: "
-
-msgid "Description: "
-msgstr "Описание: "
+#, c-format
+msgid "Wrong session '%s'."
+msgstr "Ошибочный сеанс '%s'."
 
 msgid "Module options"
 msgstr "Опции модуля"
@@ -159,6 +158,21 @@ msgstr ""
 "  -1  - оптимальный, скорость-размер;\n"
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
+
+#~ msgid "An inaccessible request is received: '%s'"
+#~ msgstr "Получен недопустимый запрос: '%s'"
+
+#~ msgid "Name: "
+#~ msgstr "Имя: "
+
+#~ msgid "License: "
+#~ msgstr "Лицензия: "
+
+#~ msgid "Author: "
+#~ msgstr "Автор: "
+
+#~ msgid "Description: "
+#~ msgstr "Описание: "
 
 #~ msgid "Roman Savochenko"
 #~ msgstr "Роман Савоченко"

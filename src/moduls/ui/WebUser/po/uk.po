@@ -1,14 +1,13 @@
 # OpenSCADA.UI.WebUser translate to Ukrainian.
-# Copyright (C) 2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:38+0300\n"
+"POT-Creation-Date: 2017-01-17 19:15+0200\n"
 "PO-Revision-Date: 2010-03-16 16:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -49,14 +48,11 @@ msgstr "Дата модифікації"
 msgid "Search and create new user page error."
 msgstr "Помилка пошуку та створення нової сторінки користувача."
 
-msgid "Welcome to Web-users pages of OpenSCADA system."
-msgstr "Ласкаво просимо до Web-сторінок користувачів системи OpenSCADA."
+msgid "Presented user's WEB-pages. Select needed one!"
+msgstr "Наявні користувацькі WEB-сторінки. Оберіть потрібну!"
 
-msgid "Present web-users pages"
-msgstr "Наявні Web-сторінки користувачів"
-
-msgid "Page error"
-msgstr "Помилка сторінки"
+msgid "Page is missing"
+msgstr "Сторінка відсутня"
 
 #, c-format
 msgid "Page '%s' error: %s"
@@ -104,6 +100,12 @@ msgstr "Параметри URL"
 msgid "Content items"
 msgstr "Елементи вмісту"
 
+msgid "This object"
+msgstr "Цей об'єкт"
+
+msgid "Protocol's object"
+msgstr "Об'єкт протоколу"
+
 msgid "Disabled. "
 msgstr "Виключено. "
 
@@ -145,7 +147,9 @@ msgid ""
 "   'user' - auth user;\n"
 "   'HTTPvars' - HTTP variables into Object;\n"
 "   'URLprms' - URL's parameters into Object;\n"
-"   'cnts' - content items for POST into Array<XMLNodeObj>."
+"   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
+"   'this' - pointer to this page's object;\n"
+"   'prt' - pointer to object of the input part of the HTTP protocol."
 msgstr ""
 "Наступні атрибути визначено для обробки запитів:\n"
 "   'rez' - результат обробки (по замовченню - 200 OK);\n"
@@ -157,3 +161,15 @@ msgstr ""
 "   'HTTPvars' - змінні HTTP у Object;\n"
 "   'URLprms' - параметри URL у Object;\n"
 "   'cnts' - елементи вмісту у Array<XMLNodeObj>."
+"   'this' - вказівник на об'єкт цієї сторінки;\n"
+"   'prt' - вказівник на об'єкт вхідної частини HTTP протоколу."
+
+
+#~ msgid "Welcome to Web-users pages of OpenSCADA system."
+#~ msgstr "Ласкаво просимо до Web-сторінок користувачів системи OpenSCADA."
+
+#~ msgid "Present web-users pages"
+#~ msgstr "Наявні Web-сторінки користувачів"
+
+#~ msgid "Page error"
+#~ msgstr "Помилка сторінки"

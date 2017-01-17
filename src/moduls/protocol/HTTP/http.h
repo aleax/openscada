@@ -30,6 +30,7 @@
 #define _(mess) mod->I18N(mess)
 
 #define cntBnd "asdfeeeeqqwe34QWEasd4rserv$WERwar34q2fsdFWEra345tfSDFasefavt5rtaew@#"
+#define CtxTmplMark	"#####CONTEXT#####"
 
 using std::string;
 using std::map;
@@ -56,10 +57,8 @@ class TProtIn: public TProtocolIn
 	string getAuth( const string& url = "/", const string &mess = "" );
 	void getCnt( const vector<string> &vars, const string &content, map<string,string> &cnt );
 
-	string httpHead( const string &rcode, int cln = 0, const string &addattr = "", bool defCtx = true );
-	string pgHead( const string &head_els = "" );
-	string pgTail( );
-	string pgTmpl( const string &cnt, const string &head_els = "", bool forceTmpl = false );
+	string pgCreator( const string &cnt, const string &rcode = "",
+		const string &httpattrs = "", const string &htmlHeadEls = "", const string &forceTmplFile = "" );
 
 	//Attributes
 	bool mNoFull;
@@ -78,9 +77,11 @@ class TProt: public TProtocol
 
 	int authTime( )			{ return mTAuth; }
 	string tmpl( )			{ return mTmpl; }
+	string tmplMainPage( )		{ return mTmplMainPage; }
 
 	void setAuthTime( int vl )	{ mTAuth = vmax(1,vl); modif(); }
 	void setTmpl( const string &vl ){ mTmpl = vl; modif(); }
+	void setTmplMainPage( const string &vl ) { mTmplMainPage = vl; modif(); }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -96,6 +97,8 @@ class TProt: public TProtocol
 	//Methods
 	void load_( );
 	void save_( );
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Data
@@ -140,7 +143,7 @@ class TProt: public TProtocol
 	//Attributes
 	map<int, SAuth>	mAuth;
 	int		mTAuth;
-	MtxString	mTmpl;
+	MtxString	mTmpl, mTmplMainPage;
 	time_t		lstSesChk;
 
 	vector<SAutoLogin>	mALog;

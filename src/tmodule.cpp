@@ -116,9 +116,14 @@ TModule::ExpFunc &TModule::modFunc( const string &prot )
     throw err_sys(_("Function '%s' is not present in the module!"), prot.c_str());
 }
 
-void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
+bool TModule::modFunc( const string &prot, void (TModule::**offptr)(), bool noex )
 {
-    *offptr = modFunc(prot).ptr;
+    try {
+	*offptr = modFunc(prot).ptr;
+	return true;
+    } catch(TError &er) { if(!noex) throw; }
+
+    return false;
 }
 
 void TModule::modInfo( vector<string> &list )
