@@ -367,10 +367,12 @@ void TVarObj::AHDConnect( )
 bool TVarObj::AHDDisConnect( )
 {
     dataM.lock();
+    bool dblDscNct = (mUseCnt == 0);
     if(mUseCnt) mUseCnt--;
-    else mess_err("TVarObj", _("Double disconnection try: %d."), mUseCnt);
-    bool toFree = (mUseCnt == 0);
+    bool toFree = (mUseCnt == 0 && !dblDscNct);
     dataM.unlock();
+
+    if(dblDscNct) mess_err("TVarObj", _("Double disconnection try!"));
 
     return toFree;
 }

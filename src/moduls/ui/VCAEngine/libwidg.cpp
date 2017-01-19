@@ -452,8 +452,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* LWidget: Library stored widget               *
 //************************************************
-LWidget::LWidget( const string &iid, const string &isrcwdg ) :
-	Widget(iid), TConfig(&mod->elWdg()), enableByNeed(false), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
+LWidget::LWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elWdg()),
+    enableByNeed(false), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mFuncM(true)
 {
     cfg("ID").setS(id());
     cfg("PROC").setExtVal(true);

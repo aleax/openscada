@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.6.1"
+#define MOD_VER		"3.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -391,7 +391,7 @@ BFunc *TpContr::bFuncGet( const char *nm )
 //*************************************************
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), call_st(false), endrun_req(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), mPer(0), tm_calc(0)
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), mPer(0)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
@@ -423,7 +423,8 @@ string Contr::getStatus( )
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
 	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tm_calc).c_str());
+	val += TSYS::strMess(_("Spent time: %s[%s]."), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
+						       tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
 
     return val;
@@ -571,7 +572,6 @@ void *Contr::Task( void *icntr )
 		    mess_err(cntr.nodePath().c_str(),_("Calculation controller's function error."));
 		}
 	    t_prev = t_cnt;
-	    cntr.tm_calc = TSYS::curTime()-t_cnt;
 	    cntr.call_st = false;
 	}
 

@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -136,7 +136,15 @@ void TProt::save_( )
 TVariant TProt::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}",
-    //		       string htmlHeadEls = "", string forceTmplFile = "" )
+    //                 string htmlHeadEls = "", string forceTmplFile = "" ) -
+    //    Forming page or resource from content <cnt>, wrapped to HTTP result <rcode>, with HTTP additional attributes <httpattrs>,
+    //    HTML additional head's element <htmlHeadEls> and forced template file <forceTmplFile>.
+    //  cnt       - a page or a resource (images, XML, CSS, JavaScript, ...) content;
+    //  rcode     - HTTP result code, like to "200 OK"; empty value there disables addition of the HTTP header;
+    //  httpattrs - additional HTTP-attributes, mostly this is "Content-Type" which by default sets to "text/html;charset={SYS}";
+    //              only for "Content-Type: text/html" will do wrapping to internal/service or force <forceTmplFile> HTML-template;
+    //  htmlHeadEls   - an additional HTML-header's tag, it's mostly META with "Refresh" to pointed URL;
+    //  forceTmplFile - force template file for override the internal/service template by the main-page template or other.
     if(iid == "pgCreator" && prms.size()) {
 	bool isForceTmpl = (prms.size() >= 5 && prms[4].getS().size());
 

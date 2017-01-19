@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-07 17:10+0200\n"
+"POT-Creation-Date: 2017-01-19 17:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,9 @@ msgstr ""
 msgid "OK (tr=%d) for: %s"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid ""
 "PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db};{port}[;{connect_timeout}]\".\n"
 "Where:\n"
@@ -85,6 +88,20 @@ msgid ""
 "  connect_timeout - connection timeout\n"
 "For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
 "For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
+msgstr ""
+
+msgid "Enabled. "
+msgstr ""
+
+msgid "Disabled. "
+msgstr ""
+
+#, c-format
+msgid "Connect: %s. "
+msgstr ""
+
+#, c-format
+msgid "Requests: %g; Request time: %s[%s,%s,%s]"
 msgstr ""
 
 msgid "Table is empty!"

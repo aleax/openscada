@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -155,7 +155,6 @@ class Contr: public TController, public TValFunc
 	int	id_freq, id_start, id_stop;
 
 	int64_t	mPer;
-	double  tm_calc;
 };
 
 //*************************************************

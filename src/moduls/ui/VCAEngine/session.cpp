@@ -1023,7 +1023,7 @@ void *Session::Notify::Task( void *intf )
 //* SessPage: Page of Project's session          *
 //************************************************
 SessPage::SessPage( const string &iid, const string &ipage, Session *sess ) :
-    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false)
+    SessWdg(iid,ipage,sess), mClosePgCom(false), mDisMan(false), mFuncM(true)
 {
     mPage = grpAdd("pg_");
 }

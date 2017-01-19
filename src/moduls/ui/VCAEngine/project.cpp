@@ -35,7 +35,7 @@ using namespace VCA;
 Project::Project( const string &id, const string &name, const string &lib_db ) :
     TConfig(&mod->elProject()), enableByNeed(false), mId(cfg("ID")), workPrjDB(lib_db), mPermit(cfg("PERMIT").getId()),
     mPer(cfg("PER").getId())/*, mFlgs(cfg("FLGS").getId())*/, mStyleIdW(cfg("STYLE").getId()),
-    mEnable(false)
+    mEnable(false), mFuncM(true)
 {
     mId = id;
     cfg("NAME").setS(name);

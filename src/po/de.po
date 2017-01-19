@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-06 16:02+0200\n"
+"POT-Creation-Date: 2017-01-19 17:17+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -746,9 +746,8 @@ msgstr "Zu viele Benutzer für Knoten!!!"
 msgid "Function '%s' error or not enough parameters."
 msgstr "Fehler in der Funktion '%s' oder nicht genug Parameter."
 
-#, c-format
-msgid "Some tags on path '%s' are missed!"
-msgstr "Einige Namen im Pfad '%s' sind falsch!"
+msgid "Entry %d of the path '%s' is missed!"
+msgstr "Eintrag %d des Pfads '%s' wird verpasst!"
 
 #, c-format
 msgid "Error access to element '%s'!"
@@ -2401,9 +2400,8 @@ msgstr "Zu großer String gezwungen, die nicht STL-String (> 30 MB)!"
 msgid "Memory alloc for big string length (%d) error!"
 msgstr "Fehler Zuweisung von Speicher für eine Reihe von Großformat (%d)!"
 
-#, c-format
-msgid "Double disconnection try: %d."
-msgstr "Ein Versuch, verdoppeln sich aus: %d."
+msgid "Double disconnection try!"
+msgstr "Doppelte Trennung versuchen!"
 
 #, c-format
 msgid "Deletion child '%d' error."

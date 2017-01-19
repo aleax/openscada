@@ -1,3 +1,14 @@
+2017-01-19 Roman (stable)
+- FIX:SYS: The message "Some tags on path '%s' are missed!" was fixed for the argument and rewrote to "Entry %d of the path '%s' is missed!"
+- SYS: The function  was rewrote TVarObj::AHDDisConnect() for prevent a messages into the lock section.
+- !!:DB.PostgreSQL: DB object was expanded by a statistic to control the activity and lags.
+- DAQ.JavaLikeCalc: Controller's object status was expanded by the maximum time of execution.
+- Protocol.HTTP: Source codes were appended by the user API function pgCreator() description.
+- FIX:Special.FLibSYS: Translation was fixed something.
+- !!!:FIX:UI.VCAEngine: FuncM resources lock set to recursive for dead locks prevent.
+- FIX:UI.WebUser: Source code was cleaned some and the translation was corrected.
+
+
 2017-01-17 Roman (stable)
 - SYS.DB: Errors placing to result's Array attribute "err" from exceptions are added to user API function SQLReq().
 - SYS.Module: modFunc() of declared functions pointer getting was expanded by no exceptional calls and a result.

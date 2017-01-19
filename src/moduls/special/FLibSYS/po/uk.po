@@ -293,7 +293,7 @@ msgid "Float: Extract"
 msgstr "Float: Вилучення"
 
 msgid "Extract mantissa and exponent from the float value."
-msgstr "Вилучення мантіси та експоненти з реального значення."
+msgstr "Вилучення мантиси та експоненти з реального значення."
 
 msgid "Data"
 msgstr "Дані"

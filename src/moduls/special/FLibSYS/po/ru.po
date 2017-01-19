@@ -272,7 +272,7 @@ msgid "Word 2"
 msgstr "Слово 2"
 
 msgid "Float: Split to words"
-msgstr "Float: Резделение на слова"
+msgstr "Float: Разделение на слова"
 
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Разделение float (4 байтов) на слова (2 байта)."
@@ -293,7 +293,7 @@ msgid "Float: Extract"
 msgstr "Float: Извлечение"
 
 msgid "Extract mantissa and exponent from the float value."
-msgstr "Извлечение мантисы и экспоненты из вещественного значения."
+msgstr "Извлечение мантиссы и экспоненты из вещественного значения."
 
 msgid "Data"
 msgstr "Данные"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-06 16:02+0200\n"
+"POT-Creation-Date: 2017-01-19 17:17+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -735,9 +735,8 @@ msgstr "Дуже багато користувачів у вузла!!!"
 msgid "Function '%s' error or not enough parameters."
 msgstr "Помилка функції '%s' або недостатньо параметрів для неї."
 
-#, c-format
-msgid "Some tags on path '%s' are missed!"
-msgstr "Деякі теги у шляху '%s' помилкові!"
+msgid "Entry %d of the path '%s' is missed!"
+msgstr "Елемент %d шляху '%s' відсутній!"
 
 #, c-format
 msgid "Error access to element '%s'!"
@@ -2385,9 +2384,8 @@ msgstr "Дуже великий рядок для не STL рядку (> 30 МБ
 msgid "Memory alloc for big string length (%d) error!"
 msgstr "Помилка виділення пам'яті для рядка великого розміру (%d)!"
 
-#, c-format
-msgid "Double disconnection try: %d."
-msgstr "Спроба подвійного від'єднання: %d."
+msgid "Double disconnection try!"
+msgstr "Спроба подвійного від'єднання!"
 
 #, c-format
 msgid "Deletion child '%d' error."

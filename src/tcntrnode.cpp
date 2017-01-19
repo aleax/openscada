@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -854,12 +854,12 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
     }
 
     //Go to element
-    for( ;(reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1 = reqt) {
+    for(int itN = 0; (reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1 = reqt, itN++) {
 	XMLNode *obj1 = obj->childGet("id", reqt, true);
 	if(obj1) { obj = obj1; continue; }
 	//int wofft = woff;
 	if(TSYS::pathLev(path,0,true,&woff).size())
-	    throw TError("ContrItfc", _("Some tags on path '%s' are missed!"), req.c_str());
+	    throw TError("ContrItfc", _("Entry %d of the path '%s' is missed!"), itN, path);
 	if(pos == -1)	obj = obj->childAdd();
 	else obj = obj->childIns((pos<0)?pos+1:pos);
     }
