@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"1.6.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -551,7 +551,7 @@ void *TTrIn::Task( void *tr_in )
 	//Send respond
 	if(answ.size()) {
 	    if(mess_lev() == TMess::Debug)
-		mess_debug(tr->nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
+		mess_debug(tr->nodePath().c_str(), _("Serial is replied by message '%d'."), answ.size());
 	    // Pure RS-485 flow control: Clear RTS for transfer allow
 	    if(tr->mRTSfc) {
 		if(!tr->mRTSlvl) sec &= ~TIOCM_RTS;

@@ -121,6 +121,7 @@ class MBD : public TBD
 
 	// Statistic
 	float	nReq, rqTm, rqTmMin, rqTmMax, rqTmAll;
+	MtxString rqTmMaxVl;
 	time_t	conTm;
 };
 

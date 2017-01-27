@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Serial translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2009-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2009-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-08 11:26+0200\n"
+"POT-Creation-Date: 2017-01-27 17:23+0200\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -93,8 +93,7 @@ msgstr "Serial отримав повідомлення '%d'."
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
 
-#, c-format
-msgid "Serial replied message '%d'."
+msgid "Serial is replied by message '%d'."
 msgstr "Serial відповів повідомленням '%d'."
 
 msgid "Write: reply for zero bytes."
@@ -355,8 +354,8 @@ msgid ""
 "Sometime opened device closing can be breakage, on ICP-DAS LP PLC for "
 "example, then you alowed to prevent it by that option."
 msgstr ""
-"Інколи закриття відкритого пристрою може бути руйнівним, наприклад, "
-"на ПЛК LP від ICP-DAS, та Ви можете запобігти цьому даною опцією."
+"Інколи закриття відкритого пристрою може бути руйнівним, наприклад, на ПЛК "
+"LP від ICP-DAS, та Ви можете запобігти цьому даною опцією."
 
 msgid "Life time (sec)"
 msgstr "Час життя (с)"

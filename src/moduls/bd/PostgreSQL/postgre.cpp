@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.8.0"
+#define MOD_VER		"1.8.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -84,7 +84,7 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //* BDPostgreSQL::MBD				 *
 //************************************************
 MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true),
-    nReq(0), rqTm(0), rqTmMin(3600), rqTmMax(0), rqTmAll(0), conTm(0)
+    nReq(0), rqTm(0), rqTmMin(3600), rqTmMax(0), rqTmAll(0), rqTmMaxVl(dataRes()), conTm(0)
 {
     setAddr(";127.0.0.1;postgres;123456;NewDB");
 }
@@ -185,6 +185,7 @@ nextTry:
     }
 
     nReq = rqTm = rqTmMax = rqTmAll = 0;
+    rqTmMaxVl = "";
     rqTmMin = 3600;
     conTm = time(NULL);
 }
@@ -366,11 +367,11 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     MtxAlloc resource(connRes, true);	//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
 					//   request's sequence breakage on high concurrency access activity
 
-    int64_t tmBeg = SYS->curTime();
-
     if(reqCnt && PQtransactionStatus(connection) == PQTRANS_INERROR) transCommit();	//Close error transaction
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && reqCnt)		transCommit();
+
+    int64_t tmBeg = SYS->curTime();
 
     if((res=PQexec(connection,req.c_str())) == NULL) {
 	if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("ERR CON for: %s"), ireq.c_str());
@@ -425,7 +426,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     //Statistic update
     nReq++;
     rqTm = 1e-6*(SYS->curTime()-tmBeg); rqTmAll += rqTm;
+    if(rqTm > rqTmMax) rqTmMaxVl = req;
     rqTmMax = vmax(rqTmMax, rqTm); rqTmMin = vmin(rqTmMin, rqTm);
+
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -435,7 +438,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,0,"/prm/st/status",_("Status"),R_R_R_,"root",SDB_ID,1, "tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db};{port}[;{connect_timeout}]\".\n"
+	    _("PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db}[;{port}[;{connect_timeout}]]\".\n"
 	      "Where:\n"
 	      "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"
 	      "         it specifies Unix domain communication rather than TCP/IP communication;\n"
@@ -446,18 +449,20 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  db - DB name;\n"
 	      "  port - DB server port (default 5432);\n"
 	      "  connect_timeout - connection timeout\n"
-	      "For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
-	      "For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."));
+	      "For local DB: \";;roman;123456;OpenSCADA;5432;10\".\n"
+	      "For remote DB: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."));
 	return;
     }
 
     //Get page's info
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/status" && ctrChkNode(opt))
+    if(a_path == "/prm/st/status" && ctrChkNode(opt)) {
+	MtxAlloc resource(connRes, true);
 	opt->setText((enableStat()?_("Enabled. "):_("Disabled. ")) +
 	    TSYS::strMess(_("Connect: %s. "),atm2s(conTm,"%d-%m-%Y %H:%M:%S").c_str()) +
-	    (enableStat()?TSYS::strMess(_("Requests: %g; Request time: %s[%s,%s,%s]"),nReq,
-			tm2s(rqTm).c_str(),tm2s(rqTmMin).c_str(),tm2s(nReq?(rqTmAll/nReq):0).c_str(),tm2s(rqTmMax).c_str()):""));
+	    (enableStat()?TSYS::strMess(_("Requests: %g; Request time: %s[%s,%s,%s]; Max time request: '%s'"),nReq,
+			tm2s(rqTm).c_str(),tm2s(rqTmMin).c_str(),tm2s(nReq?(rqTmAll/nReq):0).c_str(),tm2s(rqTmMax).c_str(),rqTmMaxVl.getVal().c_str()):""));
+    }
     else TBD::cntrCmdProc(opt);
 }
 

@@ -81,7 +81,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     QImage ico_t;
     mod->regWin(this);
 
-    setWindowTitle(TSYS::strMess(_("OpenSCADA QTCfg: %s"),trU(SYS->name(),open_user).c_str()).c_str());
+    setWindowTitle((PACKAGE_NAME " "+mod->modId()+": "+trU(SYS->name(),open_user)).c_str());
     setWindowIcon(mod->icon());
 
     //Init centrall widget

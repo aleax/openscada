@@ -1,14 +1,13 @@
 # OpenSCADA.UI.WebCfgD translate to Russian.
-# Copyright (C) 2008-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2008-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2008-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:33+0300\n"
+"POT-Creation-Date: 2017-01-27 17:11+0200\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -29,11 +28,11 @@ msgstr ""
 "Предоставляет динамический WEB основанный конфигуратор. Использует XHTML, "
 "CSS и JavaScript технологии."
 
-msgid "OpenSCADA. Dynamic WEB configurator"
-msgstr "OpenSCADA. Динамический WEB конфигуратор"
-
 msgid "About"
 msgstr "Про..."
+
+msgid "Drag to resize the Menu"
+msgstr "Потяните для изменения размера меню"
 
 msgid "Load"
 msgstr "Загрузить"
@@ -182,10 +181,6 @@ msgstr "Добавление элемента"
 msgid "Move or copy node"
 msgstr "Перемещение или копирование узла"
 
-#, c-format
-msgid "Unknown command: %s."
-msgstr "Неизвестная команда: %s."
-
 msgid "Name: "
 msgstr "Имя: "
 
@@ -201,8 +196,26 @@ msgstr "Автор: "
 msgid "Web site: "
 msgstr "Web сайт: "
 
+#, c-format
+msgid "Unknown command: %s."
+msgstr "Неизвестная команда: %s."
+
+#, c-format
+msgid "Call page/widget '%s' command '%s'!"
+msgstr "Команда вызова страницы/виджета '%s': '%s'!"
+
+#, c-format
+msgid "Page '%s' error: %s"
+msgstr "Ошибка страницы '%s': %s"
+
+msgid "No a content."
+msgstr "Нет содержимого."
+
 msgid "Module options"
 msgstr "Опции модуля"
 
 msgid "Go to remote stations list configuration"
 msgstr "Перейти к конфигурации списка удалённых станций"
+
+#~ msgid "OpenSCADA. Dynamic WEB configurator"
+#~ msgstr "OpenSCADA. Динамический WEB конфигуратор"

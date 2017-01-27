@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: web_cfg.h
 /***************************************************************************
- *   Copyright (C) 2008-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -67,28 +67,16 @@ class TWEB: public TUI
 	TWEB( string name );
 	~TWEB( );
 
-	void modStart( );
-	void modStop( );
-
-    protected:
-	//Methods
-	void load_( );
+	void modStart( )	{ runSt = true; }
+	void modStop( )		{ runSt = false; }
 
     private:
 	//Methods
-	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html",
-	    const string &addattr = "", const string &charset = Mess->charset() );
-	string pgHead( string head_els = "" );
-	string pgTail( );
+	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
+	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
 
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
-	void getAbout( SSess &ses );
-	string getCookie( string name, vector<string> &vars );
-
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
-
-	// Get form content for name
-	string cntGet( SSess &ses, const string &nm );
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
 	// Controll system requests
 	int cntrIfCmd( XMLNode &node, const string &user );
@@ -97,7 +85,7 @@ class TWEB: public TUI
 	void   modInfo( vector<string> &list );
 	string trMessReplace( const string &tsrc );
 
-	void imgConvert( SSess &ses );
+	void imgConvert( SSess &ses, string &vl );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };

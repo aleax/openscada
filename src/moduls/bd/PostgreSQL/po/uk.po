@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-19 17:21+0200\n"
+"POT-Creation-Date: 2017-01-27 17:21+0200\n"
 "PO-Revision-Date: 2010-07-30 09:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -51,11 +51,11 @@ msgstr "Помилка зупинки транзакції!"
 
 #, c-format
 msgid "ERR CON for: %s"
-msgstr ""
+msgstr "ERR CON для: %s"
 
 #, c-format
 msgid "ERR CON_st for: %s"
-msgstr ""
+msgstr "ERR CON_st для: %s"
 
 #, c-format
 msgid "Connect to DB error: %s. %s"
@@ -63,18 +63,18 @@ msgstr "Помилка підключення до БД: %s. %s"
 
 #, c-format
 msgid "ERR QUERY (con=%d;res=%d;tr=%d) for: %s"
-msgstr ""
+msgstr "ERR ЗАПИТ (con=%d;res=%d;tr=%d) для: %s"
 
 #, c-format
 msgid "OK (tr=%d) for: %s"
-msgstr ""
+msgstr "OK (tr=%d) для: %s"
 
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 msgid ""
 "PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};"
-"{db};{port}[;{connect_timeout}]\".\n"
+"{db}[;{port}[;{connect_timeout}]]\".\n"
 "Where:\n"
 "  host - Name of the host (PostgreSQL server) to connect to. If this begins "
 "with a slash ('/'),\n"
@@ -88,11 +88,11 @@ msgid ""
 "  db - DB name;\n"
 "  port - DB server port (default 5432);\n"
 "  connect_timeout - connection timeout\n"
-"For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
-"For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
+"For local DB: \";;roman;123456;OpenSCADA;5432;10\".\n"
+"For remote DB: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."
 msgstr ""
 "Адреса PostgreSQL БД записується таким чином: \"{host};{hostaddr};{user};"
-"{pass};{db};{port}[;{connect_timeout}]\".\n"
+"{pass};{db}[;{port}[;{connect_timeout}]]\".\n"
 "Де:\n"
 "  host - ім'я хосту PostgreSQL сервера; Якщо починається зі слеша ('/'), то\n"
 "         використовується UNIX-сокет замість TCP,-\n"
@@ -103,8 +103,8 @@ msgstr ""
 "  port - порт серверу БД (по замовченню 5432);\n"
 "  db - ім'я БД;\n"
 "  connect_timeout - час очікування з'єднання;\n"
-"Для локальної БД: [;;roman;123456;OpenSCADA;5432;10].\n"
-"Для віддаленої БД: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
+"Для локальної БД: \";;roman;123456;OpenSCADA;5432;10\".\n"
+"Для віддаленої БД: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."
 
 msgid "Enabled. "
 msgstr "Включено. "
@@ -112,12 +112,13 @@ msgstr "Включено. "
 msgid "Disabled. "
 msgstr "Виключено. "
 
+#, c-format
 msgid "Connect: %s. "
 msgstr "Підключення: %s. "
 
 #, c-format
-msgid "Requests: %g; Request time: %s[%s,%s,%s]"
-msgstr "Запитів: %g; Час запиту: %s[%s,%s,%s]"
+msgid "Requests: %g; Request time: %s[%s,%s,%s]; Max time request: '%s'"
+msgstr "Запитів: %g; Час запиту: %s[%s,%s,%s]; Запит макс. часу: '%s'"
 
 msgid "Table is empty!"
 msgstr "Таблиця порожня!"

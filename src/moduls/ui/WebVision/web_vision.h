@@ -100,7 +100,7 @@ class TWEB: public TUI
 	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
-	void getAbout( SSess &ses );
+	//void getAbout( SSess &ses );
 
 	string optDescr( );
 	string modInfo( const string &name );

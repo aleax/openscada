@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.9.11"
+#define MOD_VER		"1.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -82,18 +82,18 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
-    //Reg export functions
-    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)()) &TWEB::HttpGet));
-    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)()) &TWEB::HttpPost));
+    //Export functions registration
+    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
+    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 
     gdFTUseFontConfig(1);
 
     //Massages not for compile but for indexing by gettext
 #if 0
     char mess[][100] = {
-	_("OpenSCADA. Dynamic WEB configurator"), _("About"),
+	_("About"), _("Drag to resize the Menu"),
 	_("Load"), _("Save"), _("Up"), _("Previous"), _("Next"), _("Add item"),_("Delete item"),
 	_("Copy item"), _("Cut item"), _("Paste item"),
 	_("Reload item and tree"), _("Start periodic update"), _("Stop periodic update"),
@@ -135,77 +135,27 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-void TWEB::load_( )
+string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
+    const string &htmlHeadEls, const string &forceTmplFile )
 {
-    //Load parameters from command line
+    vector<TVariant> prms;
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
-    //Load parameters from config-file
+    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
 }
 
-void TWEB::modStart( )
-{
-    runSt = true;
-}
-
-void TWEB::modStop( )
-{
-    runSt = false;
-}
-
-string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
-{
-    return  "HTTP/1.0 " + rcode + "\x0D\x0A"
-	    "Server: " PACKAGE_STRING "\x0D\x0A"
-	    "Accept-Ranges: bytes\x0D\x0A"
-	    "Content-Length: " + i2s(cln) + "\x0D\x0A"
-	    "Content-Type: " + cnt_tp + "; charset=" + charset + "\x0D\x0A"
-	    "Cache-Control: no-cache\x0D\x0A" + addattr + "\x0D\x0A";
-}
-
-string TWEB::pgHead( string head_els )
-{
-    return
-	"<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	"'DTD/xhtml1-transitional.dtd'>\n"
-	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-	"<head>\n"
-	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-	"  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"
-	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
-	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"+
-	head_els+
-	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
-	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
-	"  <title>" PACKAGE_NAME ". " + _(MOD_NAME) + "</title>\n"
-	"  <style type='text/css'>\n"
-	"    hr { width: 95%; }\n"
-	"    body { background-color: #818181; }\n"
-	"    h1.head { text-align: center; color:#ffff00; }\n"
-	"    h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
-	"    table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }\n"
-	"    table.work td { background-color:#cccccc; text-align: left; }\n"
-	"    table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-	"    table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
-	"  </style>\n"
-	"</head>\n"
-	"<body>\n";
-}
-
-string TWEB::pgTail( )	{ return "</body>\n</html>"; }
-
-void TWEB::imgConvert( SSess &ses )
+void TWEB::imgConvert( SSess &ses, string &vl )
 {
     map<string,string>::iterator prmEl;
     gdImagePtr sim = NULL;
     string itp;
     int newImgH = 0, newImgW = 0;
 
-    if(ses.page.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
+    if(vl.empty() || (ses.prm.find("size") == ses.prm.end() && ses.prm.find("filtr") == ses.prm.end()))	return;
 
-    if((sim=gdImageCreateFromPngPtr(ses.page.size(),(char*)ses.page.data())))		itp = "png";
-    else if((sim=gdImageCreateFromJpegPtr(ses.page.size(),(char*)ses.page.data())))	itp = "jpg";
-    else if((sim=gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data())))	itp = "gif";
+    if((sim=gdImageCreateFromPngPtr(vl.size(),(char*)vl.data())))		itp = "png";
+    else if((sim=gdImageCreateFromJpegPtr(vl.size(),(char*)vl.data())))	itp = "jpg";
+    else if((sim=gdImageCreateFromGifPtr(vl.size(),(char*)vl.data())))	itp = "gif";
     //if(sim) gdImageAlphaBlending(sim, 0);
 
     //Check for resize icon
@@ -219,8 +169,7 @@ void TWEB::imgConvert( SSess &ses )
 	sim = dim;
     }
     //Check for disable icon make
-    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact"))
-    {
+    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact")) {
         gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
 	gdImageAlphaBlending(dim,0);
 	bool isUnAct = (prmEl->second == "unact");
@@ -244,78 +193,100 @@ void TWEB::imgConvert( SSess &ses )
 	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim, &img_sz, -1);
 	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
 	if(img_ptr) {
-	    ses.page.assign(img_ptr,img_sz);
+	    vl.assign(img_ptr,img_sz);
 	    gdFree(img_ptr);
 	}
 	gdImageDestroy(sim);
     }
 }
 
-void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator prmEl;
-    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),sender,user,vars,"");
-    ses.page = pgHead();
+    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, "");
 
     try {
 	string zero_lev = TSYS::pathLev(ses.url,0);
 
 	//Get about module page
-	if(zero_lev == "about")	getAbout(ses);
+	if(zero_lev == "about")	{	//getAbout(ses);
+	    page = pgCreator(iprt, string("<table class='work'>\n")+
+		" <tr><th>" MOD_ID " v" MOD_VER "</th></tr>\n"
+		" <tr><td class='content'>\n"
+		"  <table border='0px' cellspacing='3px'>\n"
+		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(MOD_NAME) + "</TD></TR>\n"
+		"   <tr><td style='color: blue;'>" + _("Description: ") + "</td><td>" + _(DESCRIPTION) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" + _(LICENSE) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(AUTHORS) + "</td></tr>\n"
+		"  </table>\n"
+		" </td></tr>\n"
+		"</table><br/>\n"
+		"<table class='work'>\n"
+		" <tr><th>" PACKAGE " v" VERSION "</th></tr>\n"
+		" <tr><td class='content'>\n"
+		"  <table border='0' cellspacing='3px'>\n"
+		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(PACKAGE_DESCR) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" PACKAGE_LICENSE "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(PACKAGE_AUTHOR) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Web site: ") + "</td><td><a href='" PACKAGE_SITE "'>" PACKAGE_SITE "</a></td></tr>\n"
+		"  </table>\n"
+		" </td></tr>\n"
+		"</table><br/>\n", "200 OK");
+	}
 	//Get module icon and global image
 	else if(zero_lev == "ico" || zero_lev.substr(0,4) == "img_") {
 	    string itp;
-	    ses.page = TUIS::icoGet(((zero_lev == "ico")?"UI." MOD_ID:zero_lev.substr(4)), &itp);
-	    imgConvert(ses);
-	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
-	    return;
+	    page = TUIS::icoGet(((zero_lev == "ico")?"UI." MOD_ID:zero_lev.substr(4)), &itp);
+	    imgConvert(ses, page);
+	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
 	}
 	else {
 	    prmEl = ses.prm.find("com");
 	    int hd;
 	    string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
-	    ses.page = "";
+	    page = "";
 
 	    if(wp_com.empty() && zero_lev == "script.js") {
 		if((hd=open("WebCfgDVCA.js",O_RDONLY)) >= 0) {
 		    char buf[STR_BUF_LEN];
-		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
+		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
 		    close(hd);
-		    ses.page = trMessReplace(ses.page);
+		    page = trMessReplace(page);
 		}
-		else ses.page = trMessReplace(WebCfgDVCA_js);
-		page = httpHead("200 OK",ses.page.size(),"text/javascript")+ses.page;
-		return;
+		else page = trMessReplace(WebCfgDVCA_js);
+		page = pgCreator(iprt, page, "200 OK", "Content-Type: text/javascript;");
 	    }
 	    //Main work page create.
 	    else if(wp_com.empty()) {
 		if((hd=open("WebCfgDVCA.html",O_RDONLY)) >= 0) {
 		    char buf[STR_BUF_LEN];
-		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
+		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
 		    close(hd);
-		    ses.page = trMessReplace(ses.page);
+		    page = trMessReplace(page);
 		}
-		else ses.page = trMessReplace(WebCfgDVCA_html);
+		else page = trMessReplace(WebCfgDVCA_html);
 		// User replace
-		size_t varPos = ses.page.find("##USER##");
+		size_t varPos = page.find("##USER##");
 		if(varPos != string::npos)
-		    ses.page.replace(varPos,8,TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
+		    page.replace(varPos, 8, TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
 		// Charset replace
-		if((varPos=ses.page.find("##CHARSET##")) != string::npos) ses.page.replace(varPos,11,Mess->charset());
+		if((varPos=page.find("##CHARSET##")) != string::npos)
+		    page.replace(varPos, 11, Mess->charset());
+		// Title replace
+		if((varPos=page.find("##TITLE##")) != string::npos)
+		    page.replace(varPos, 9, PACKAGE_NAME " " MOD_ID ": "+SYS->name());
 
-		page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
-		return;
+		page = pgCreator(iprt, page, "200 OK", "Content-Type:text/html;charset=UTF-8");
 	    }
 	    //Get node icon
 	    else if(wp_com == "ico") {
 		string itp = "png";
 		XMLNode req("get"); req.setAttr("path",ses.url+"/%2fico");
 		if(!mod->cntrIfCmd(req,ses.user))
-		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-		else ses.page = TUIS::icoGet("disconnect",&itp);
-		imgConvert(ses);
-		page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
-		return;
+		    page = TSYS::strDecode(req.text(), TSYS::base64);
+		else page = TUIS::icoGet("disconnect", &itp);
+		imgConvert(ses, page);
+		page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
 	    }
 	    //Get node childs
 	    else if(wp_com == "chlds") {
@@ -346,101 +317,65 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		}
 		else {
 		    req.setAttr("path",ses.url+"/%2fobj")->setAttr("grp",gbr)->setAttr("icoCheck","1");
-		    mod->cntrIfCmd(req,ses.user);
+		    mod->cntrIfCmd(req, ses.user);
 		}
-		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
-		return;
+		page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    }
 	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify") {
 		XMLNode req(wp_com); req.setAttr("path", ses.url);
 		mod->cntrIfCmd(req, ses.user);
-		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
-		return;
+		page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    }
 	    else if(wp_com == "img") {
 		string itp = "png";
 		XMLNode req("get"); req.setAttr("path",ses.url);
 		if(mod->cntrIfCmd(req,ses.user) || s2i(req.attr("rez")) || req.text().empty())
-		    ses.page = TUIS::icoGet("stop",&itp);
+		    page = TUIS::icoGet("stop", &itp);
 		else {
-		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		    page = TSYS::strDecode(req.text(),TSYS::base64);
 		    if(req.attr("tp").size()) itp = req.attr("tp");
 		}
-		page = mod->httpHead("200 OK",ses.page.size(),"image/"+itp)+ses.page;
-		return;
+		page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
 	    }
 	    else {
-		mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
-		ses.page = ses.page+"<center>Call page/widget '"+ses.url+"' command: '"+wp_com+"'</center>\n<br/>";
+		mess_warning(nodePath().c_str(), _("Unknown command: %s."), wp_com.c_str());
+		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Call page/widget '%s' command '%s'!"),
+								ses.url.c_str(),wp_com.c_str())+"</div>\n",
+				       "200 OK");
 	    }
 	}
     } catch(TError &err) {
-	ses.page = "Page <"+ses.url+"> error: "+err.mess;
-	page = httpHead("404 Not Found",ses.page.size())+ses.page;
-	return;
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
+			       "404 Not Found");
     }
-
-    ses.page += pgTail();
-    page = httpHead("200 OK",ses.page.size())+ses.page;
 }
 
-void TWEB::getAbout( SSess &ses )
-{
-    ses.page = ses.page+"<center>\n"
-	"<table class='work'>\n"
-	"<TR><th>"+MOD_ID+" v"+MOD_VER+"</th></TR>\n"
-	"<TR><TD class='content'>\n"
-	"<table border='0px' cellspacing='3px'>\n"
-	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(MOD_NAME)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Description: ")+"</TD><TD>"+_(DESCRIPTION)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+_(LICENSE)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(AUTHORS)+"</TD></TR>\n"
-	"</table>\n"
-	"</TD></TR>\n</table><br/>\n"
-	"<table class='work'>\n"
-	"<TR><th>"+PACKAGE+" v"+VERSION+"</th></TR>\n"
-	"<TR><TD class='content'>\n"
-	"<table border='0' cellspacing='3px'>\n"
-	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(PACKAGE_DESCR)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+PACKAGE_LICENSE+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(PACKAGE_AUTHOR)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Web site: ")+"</TD><TD>"+PACKAGE_SITE+"</TD></TR>\n"
-	"</table>\n"
-	"</TD></TR></table><br/>\n"
-	"</center>\n";
-}
-
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
 
     //Commands process
     cntEl = ses.prm.find("com");
     string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : "";
     //Attributes set
     if(wp_com == "com") {
-	XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
-	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
+	mod->cntrIfCmd(req, ses.user);
+	page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Full request to control interface
     else if(wp_com == "req") {
 	XMLNode req(""); req.load(ses.content);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     else if(wp_com == "img") {
-	if((cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty())
-	{
+	if((cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty()) {
 	    XMLNode req("set"); req.setAttr("path",ses.url)->setText(TSYS::strEncode(ses.files[cntEl->second],TSYS::base64));
 	    mod->cntrIfCmd(req,ses.user);
 	}
-	page = httpHead("204 No Content",0,"");
+	page = pgCreator(iprt, string("<div class='error'>")+_("No a content.")+"</div>\n", "204 No Content");
     }
 }
 
@@ -450,8 +385,7 @@ string TWEB::trMessReplace( const string &tsrc )
 
     unsigned txtBeg = 0, i_s, i_r;
     for(i_s = 0; i_s < tsrc.size(); i_s++)
-	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3) < tsrc.size() && tsrc[i_s+3] != '#')
-	{
+	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3) < tsrc.size() && tsrc[i_s+3] != '#') {
 	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
 		if((tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) ||
 			tsrc[i_r] == '\n')
@@ -480,25 +414,6 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
     catch(TError &err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 
     return s2i(node.attr("rez"));
-}
-
-string TWEB::getCookie( string name, vector<string> &vars )
-{
-    for(unsigned i_var = 0; i_var < vars.size(); i_var++)
-	if(vars[i_var].substr(0, vars[i_var].find(":",0)) == "Cookie") {
-	    size_t i_beg = vars[i_var].find(name+"=",0);
-	    if(i_beg == string::npos) return "";
-	    i_beg += name.size() + 1;
-	    return vars[i_var].substr(i_beg,vars[i_var].find(";",i_beg)-i_beg);
-	}
-    return "";
-}
-
-string TWEB::cntGet( SSess &ses, const string &nm )
-{
-    map<string,string>::iterator prmEl = ses.cnt.find(nm);
-    if(prmEl != ses.cnt.end()) return prmEl->second;
-    return "<empty>";
 }
 
 void TWEB::cntrCmdProc( XMLNode *opt )
@@ -545,8 +460,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 
     for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
 	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 &&
-	    (pos=vars[i_vr].find(c_bound,0)) != string::npos)
-	{
+		(pos=vars[i_vr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
 	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
 	}

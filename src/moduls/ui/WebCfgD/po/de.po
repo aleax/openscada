@@ -1,15 +1,14 @@
 # OpenSCADA.UI.WebCfgD translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfgD package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2015.
+# Roman Savochenko <rom_as@oscada.org>, 2015-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:33+0300\n"
+"POT-Creation-Date: 2017-01-27 17:11+0200\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -30,11 +29,11 @@ msgstr ""
 "Gewährt den dynamischen WEB begründeten Configurator. Benutzt XHTML, CSS und "
 "JavaScript Technologien."
 
-msgid "OpenSCADA. Dynamic WEB configurator"
-msgstr "OpenSCADA. Dynamischer WEB Configurator"
-
 msgid "About"
 msgstr "Über..."
+
+msgid "Drag to resize the Menu"
+msgstr "Ziehen Sie, um die Größe des Menü"
 
 msgid "Load"
 msgstr "Laden"
@@ -183,10 +182,6 @@ msgstr "Knoten hinzufügen"
 msgid "Move or copy node"
 msgstr "Verschieben oder Kopieren des Knotens"
 
-#, c-format
-msgid "Unknown command: %s."
-msgstr "Unbekanntes Kommando: %s."
-
 msgid "Name: "
 msgstr "Name: "
 
@@ -202,8 +197,26 @@ msgstr "Autor: "
 msgid "Web site: "
 msgstr "Web Seite: "
 
+#, c-format
+msgid "Unknown command: %s."
+msgstr "Unbekanntes Kommando: %s."
+
+#, c-format
+msgid "Call page/widget '%s' command '%s'!"
+msgstr "Rufen Seite/Widget '%s' Befehl '%s'!"
+
+#, c-format
+msgid "Page '%s' error: %s"
+msgstr "Seite '%s' Fehler: %s"
+
+msgid "No a content."
+msgstr "Kein Inhalt."
+
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
 msgid "Go to remote stations list configuration"
 msgstr "Zur Konfiguration der Liste von entfernten Stationen übergehen"
+
+#~ msgid "OpenSCADA. Dynamic WEB configurator"
+#~ msgstr "OpenSCADA. Dynamischer WEB Configurator"

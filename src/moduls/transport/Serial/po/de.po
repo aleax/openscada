@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-08 11:26+0200\n"
+"POT-Creation-Date: 2017-01-27 17:23+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -96,8 +96,7 @@ msgstr "Die Serielle Schnittstelle hat eine Nachricht empfangen '%d'."
 msgid "Error request to protocol."
 msgstr "Fehler in der Protokollanfrage."
 
-#, c-format
-msgid "Serial replied message '%d'."
+msgid "Serial is replied by message '%d'."
 msgstr "Die Serielle Schnittstelle hat die Nachricht bestätigt '%d'."
 
 msgid "Write: reply for zero bytes."
@@ -360,8 +359,8 @@ msgid ""
 "Sometime opened device closing can be breakage, on ICP-DAS LP PLC for "
 "example, then you alowed to prevent it by that option."
 msgstr ""
-"Irgendwann geöffnet Gerät Schließung kann Bruch sein, auf ICP-DAS LP PLC zum Beispiel, "
-"dann können Sie es durch diese Option zu verhindern."
+"Irgendwann geöffnet Gerät Schließung kann Bruch sein, auf ICP-DAS LP PLC zum "
+"Beispiel, dann können Sie es durch diese Option zu verhindern."
 
 msgid "Life time (sec)"
 msgstr "Lebenszeit (sek)"

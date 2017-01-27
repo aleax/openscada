@@ -1,23 +1,19 @@
 # OpenSCADA.UI.QTCfg translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2004-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2004-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-04 11:15+0200\n"
+"POT-Creation-Date: 2017-01-27 17:25+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-
-#, c-format
-msgid "OpenSCADA QTCfg: %s"
-msgstr ""
 
 msgid "Name"
 msgstr "Имя"

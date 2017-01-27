@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-08 11:26+0200\n"
+"POT-Creation-Date: 2017-01-27 17:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgid "Error request to protocol."
 msgstr ""
 
 #, c-format
-msgid "Serial replied message '%d'."
+msgid "Serial is replied by message '%d'."
 msgstr ""
 
 msgid "Write: reply for zero bytes."

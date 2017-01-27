@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,6 @@ ndPrev = new Array();	//Previous nodes array
 ndNext = new Array();	//Next nodes array
 pgInfo = document.createElement('info');	//Curent page XML tree.
 root = document.createElement('oscada_cntr');	//Root page's node.
-selPath = '';		//Select item path
 SEC_XT = 0x01;		//Extended
 SEC_WR = 0x02;		//Write access
 SEC_RD = 0x04;		//Read access
@@ -839,6 +838,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		lab = document.createElement('span'); lab.className = 'label';
 		dBlk.appendChild(lab);
 		dBlk.appendChild(document.createElement('div')); dBlk.childNodes[1].className = 'table';
+		dBlk.childNodes[1].style.width = (document.getElementById('pgCont').clientWidth-20)+'px';
 		table = document.createElement('table'); table.className = 'elem'; table.cellPadding = 2; table.cellSpacing = 0;
 		table.itPath = selPath+'/'+brPath;
 		table.onmouseover = function() { setStatus(this.itPath,10000); }
@@ -2265,4 +2265,63 @@ if(actPaste) actPaste.onclick = function()	{ if(this.className=='active') itPast
 
 pageDisplay(hostsUpdate());
 
-setStatus('###Page loaded.###',5000);
+setStatus('###Page loaded.###', 5000);
+
+/**********************************************************
+ * Design specific part					  */
+function getSpareWidth( node ) {
+    compStl = getComputedStyle(node, null);
+    return parseInt(compStl.getPropertyValue('border-left-width')) + parseInt(compStl.getPropertyValue('padding-left')) +
+    parseInt(compStl.getPropertyValue('border-right-width')) + parseInt(compStl.getPropertyValue('padding-right'));
+}
+
+function getSpareHeight( node ) {
+    compStl = getComputedStyle(node, null);
+    return parseInt(compStl.getPropertyValue('border-top-width')) + parseInt(compStl.getPropertyValue('padding-top')) +
+    parseInt(compStl.getPropertyValue('border-bottom-width')) + parseInt(compStl.getPropertyValue('padding-bottom'));
+}
+
+//Reize processing
+function pageResize( horOnly ) {
+    var w = Math.max(600, window.innerWidth);
+    var h = Math.max(400, window.innerHeight);
+    genPnlUp = document.getElementById('gen-pnl-up');
+    genPnlLeft = document.getElementById('gen-pnl-left');
+    genPnlRight = document.getElementById('gen-pnl-right');
+    genPnlDown = document.getElementById('gen-pnl-down');
+    genPnlSplt = document.getElementById('gen-pnl-splt');
+
+    genPnlUp.style.width = (w-getSpareWidth(genPnlUp))+'px';
+    genPnlDown.style.width = (w-getSpareWidth(genPnlDown))+'px';
+    genPnlRight.style.width = (w-genPnlRight.offsetLeft-getSpareWidth(genPnlRight))+'px';
+    if(!horOnly) {
+	genPnlDown.style.top = (h-genPnlDown.clientHeight-1)+'px';
+	genPnlLeft.style.height = (genPnlDown.offsetTop-genPnlLeft.offsetTop-getSpareHeight(genPnlLeft))+'px';
+	genPnlRight.style.height = (genPnlDown.offsetTop-genPnlRight.offsetTop-getSpareHeight(genPnlRight))+'px';
+	genPnlSplt.style.height = (genPnlDown.offsetTop-genPnlSplt.offsetTop-getSpareHeight(genPnlSplt))+'px';
+   }
+}
+window.onresize = function( ) { pageResize(); }
+pageResize();
+
+//Split processing
+document.getElementById('gen-pnl-splt').onmousedown = function(e) {
+    e = e ? e : window.event;
+    if(e.preventDefault) e.preventDefault();
+    this.toMove = true;
+}
+window.onmouseup = function( ) { document.getElementById('gen-pnl-splt').toMove = false; }
+window.onmousemove = function( e ) {
+    e = e ? e : window.event;
+    genPnlSplt = document.getElementById('gen-pnl-splt');
+    if(genPnlSplt.toMove) {
+	genPnlLeft = document.getElementById('gen-pnl-left');
+	genPnlRight = document.getElementById('gen-pnl-right');
+
+	genPnlSplt.style.left = e.clientX+'px';// (e.clientX-genPnlSplt.clientWidth/2)+'px';
+	genPnlRight.style.left = e.clientX+'px';
+	genPnlLeft.style.width = (e.clientX-getSpareWidth(genPnlLeft))+'px';
+	pageResize(true);
+	return false;
+    }
+}
