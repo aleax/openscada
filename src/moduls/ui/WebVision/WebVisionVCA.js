@@ -756,7 +756,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
 	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
-		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; ';
+		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; white-space: pre-line; ';
 		switch(txtAlign&0x3) {
 		    case 0: spanStyle += 'text-align: left; ';		break;
 		    case 1: spanStyle += 'text-align: right; ';		break;
@@ -795,12 +795,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
 		}
-		var txtVal1 = '';
-		for(var j = 0; j < txtVal.length; j++)
-		    if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
-		//txtVal.replace(/\n/g,'<br />');
-		//while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
-		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
+		//var txtVal1 = '';
+		//for(var j = 0; j < txtVal.length; j++)
+		//    if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
+		// txtVal.replace(/\n/g,'<br />');
+		// while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+		//this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
+		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
 	    //}
 	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
 	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
@@ -1299,16 +1300,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
-			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; width: "+geomW+"px; ";
+			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; width: "+geomW+"px; ";
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
+			    spanObj.innerHTML = this.attrs['name'];
 			    //while(spanObj.childNodes.length) spanObj.removeChild(spanObj.childNodes[0]);
-			    txtVal1 = '';
+			    /*txtVal1 = '';
 			    for(var j = 0; j < this.attrs['name'].length; j++) {
 				if(this.attrs['name'].substr(j,2) == '\\n') { txtVal1 += "<br />"; j++; continue; }
 				txtVal1 += strEncode(this.attrs['name'][j]);
 			    }
-			    spanObj.innerHTML = txtVal1;
+			    spanObj.innerHTML = txtVal1;*/
 			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;

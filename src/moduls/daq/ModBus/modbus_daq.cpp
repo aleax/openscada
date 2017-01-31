@@ -187,7 +187,7 @@ void TMdContr::start_( )
 
     //Reenable parameters for data blocks structure update
     // Asynchronous writings queue clear
-    dataRes.lock(); asynchWrs.clear(); dataRes.unlock();
+    dataRes().lock(); asynchWrs.clear(); dataRes().unlock();
 
     // Clear data blocks
     reqRes.resRequestW(true);
@@ -203,8 +203,8 @@ void TMdContr::start_( )
 	list(pls);
 
 	isReload = true;
-	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
-	    if(at(pls[i_p]).at().enableStat()) at(pls[i_p]).at().enable();
+	for(unsigned iP = 0; iP < pls.size(); iP++)
+	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
 	isReload = false;
     } catch(TError&) { isReload = false; throw; }
 
@@ -323,7 +323,7 @@ void TMdContr::regVal( int reg, const string &dt )
     }
 }
 
-TVariant TMdContr::getVal( const string &addr, ResString &w_err )
+TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
 {
     if(tmDelay > 0) {
 	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
@@ -339,7 +339,7 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
     string mode = TSYS::strParse(addr, 0, ":", &off);
 
     if(tp.empty() || !(mode.empty() || mode == "r" || mode == "rw")) return (int64_t)EVAL_INT;
-    if(tp[0] == 'C') return getValC(aid,w_err,isInputs);
+    if(tp[0] == 'C') return getValC(aid, w_err, isInputs);
     if(tp[0] == 'R') {
 	int64_t vl = getValR(aid,w_err,isInputs);
 	atp_sub.resize(vmax(2,atp_sub.size()), 0);
@@ -410,7 +410,7 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
     return (int64_t)EVAL_INT;
 }
 
-int64_t TMdContr::getValR( int addr, ResString &err, bool in )
+int64_t TMdContr::getValR( int addr, MtxString &err, bool in )
 {
     int64_t rez = EVAL_INT;
     ResAlloc res(reqRes, false);
@@ -428,7 +428,7 @@ int64_t TMdContr::getValR( int addr, ResString &err, bool in )
     return rez;
 }
 
-char TMdContr::getValC( int addr, ResString &err, bool in )
+char TMdContr::getValC( int addr, MtxString &err, bool in )
 {
     char rez = EVAL_BOOL;
     ResAlloc res(reqRes, false);
@@ -444,14 +444,14 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
     return rez;
 }
 
-bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err, bool chkAssync )
+bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err, bool chkAssync )
 {
     if(tmDelay > 0) {
 	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
 	return false;
     }
 
-    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes, true); asynchWrs[addr] = val.getS(); return true; }
+    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes(), true); asynchWrs[addr] = val.getS(); return true; }
 
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
@@ -534,7 +534,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
     return wrRez;
 }
 
-bool TMdContr::setValR( int val, int addr, ResString &err )
+bool TMdContr::setValR( int val, int addr, MtxString &err )
 {
     //Encode request PDU (Protocol Data Units)
     string pdu, terr;
@@ -575,7 +575,7 @@ bool TMdContr::setValR( int val, int addr, ResString &err )
     return true;
 }
 
-bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
+bool TMdContr::setValRs( const map<int,int> &regs, MtxString &err )
 {
     int start = 0, prev = 0;
     string pdu, terr;
@@ -635,7 +635,7 @@ bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
     return true;
 }
 
-bool TMdContr::setValC( char val, int addr, ResString &err )
+bool TMdContr::setValC( char val, int addr, MtxString &err )
 {
     //Encode request PDU (Protocol Data Units)
     string pdu, terr;
@@ -714,8 +714,8 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0) {
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc prmRes(cntr.enRes, true);
-		for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
-		    cntr.pHd[i_p].at().upVal(isStart, isStop, cntr.period()?1:-1);
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		    cntr.pHd[iP].at().upVal(isStart, isStop, cntr.period()?1:-1);
 		prmRes.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-1);
@@ -733,14 +733,14 @@ void *TMdContr::Task( void *icntr )
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
-	    MtxAlloc resAsWr(cntr.dataRes, true);
+	    MtxAlloc resAsWr(cntr.dataRes(), true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
 	    resAsWr.unlock();
-	    ResString asWrErr;
+	    MtxString asWrErr(cntr.dataRes());
 	    for(map<string,string>::iterator iw = aWrs.begin(); !isStart && !isStop && iw != aWrs.end(); ++iw) {
 		if(asWrErr.size() && cntr.asynchWrs.find(iw->first) == cntr.asynchWrs.end()) cntr.asynchWrs[iw->first] = iw->second;
-		if(!asWrErr.size() && !cntr.setVal(iw->second, iw->first, asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.lock(); }
+		if(!asWrErr.size() && !cntr.setVal(iw->second,iw->first,asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.lock(); }
 	    }
 	    resAsWr.unlock();
 
@@ -856,8 +856,8 @@ void *TMdContr::Task( void *icntr )
 
 	    //Get data from blocks to parameters or calc for logical type parameters
 	    MtxAlloc prmRes(cntr.enRes, true);
-	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
-		cntr.pHd[i_p].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
+	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		cntr.pHd[iP].at().upVal(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    isStart = false;
 	    prmRes.unlock();
 
@@ -944,7 +944,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     else TController::cntrCmdProc(opt);
 }
 
-TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
+TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff), err(mod->dataRes())
 {
     val.assign(v_rez, 0);
     err.setVal(_("11:Value not gathered."));
@@ -953,7 +953,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), pEl("w_attr"), lCtx(NULL)
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), pEl("w_attr"), acqErr(dataRes()), lCtx(NULL)
 {
     acqErr.setVal("");
     if(isLogic()) lCtx = new TLogCtx(name+"_ModBusPrm");
@@ -991,10 +991,10 @@ TCntrNode &TMdPrm::operator=( const TCntrNode &node )
     if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx) return *this;
 
     //IO values copy
-    for(int i_io = 0; i_io < src_n->lCtx->ioSize(); i_io++)
-	if(src_n->lCtx->ioFlg(i_io)&TPrmTempl::CfgLink)
-	    lCtx->lnk(lCtx->lnkId(i_io)).addr = src_n->lCtx->lnk(src_n->lCtx->lnkId(i_io)).addr;
-    else lCtx->setS(i_io,src_n->lCtx->getS(i_io));
+    for(int iIO = 0; iIO < src_n->lCtx->ioSize(); iIO++)
+	if(src_n->lCtx->ioFlg(iIO)&TPrmTempl::CfgLink)
+	    lCtx->lnk(lCtx->lnkId(iIO)).addr = src_n->lCtx->lnk(src_n->lCtx->lnkId(iIO)).addr;
+    else lCtx->setS(iIO, src_n->lCtx->getS(iIO));
 
     return *this;
 }
@@ -1100,30 +1100,30 @@ void TMdPrm::enable( )
 		to_make = true;
 	    }
 	    // Init attrubutes
-	    for(int i_io = 0; i_io < lCtx->func()->ioSize(); i_io++) {
-		if((lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lCtx->lnkId(i_io) < 0)
-		    lCtx->plnk.push_back(TLogCtx::SLnk(i_io,lCtx->func()->io(i_io)->def()));
-		if((lCtx->func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull))) {
+	    for(int iIO = 0; iIO < lCtx->func()->ioSize(); iIO++) {
+		if((lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) && lCtx->lnkId(iIO) < 0)
+		    lCtx->plnk.push_back(TLogCtx::SLnk(iIO,lCtx->func()->io(iIO)->def()));
+		if((lCtx->func()->io(iIO)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull))) {
 		    unsigned flg = TVal::DirWrite|TVal::DirRead;
-		    if(lCtx->func()->io(i_io)->flg()&IO::FullText)		flg |= TFld::FullText;
-		    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
-		    TFld::Type tp = TFld::type(lCtx->ioType(i_io));
-		    if((fId=pEl.fldId(lCtx->func()->io(i_io)->id(),true)) < pEl.fldSize()) {
+		    if(lCtx->func()->io(iIO)->flg()&IO::FullText)		flg |= TFld::FullText;
+		    if(lCtx->func()->io(iIO)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
+		    TFld::Type tp = TFld::type(lCtx->ioType(iIO));
+		    if((fId=pEl.fldId(lCtx->func()->io(iIO)->id(),true)) < pEl.fldSize()) {
 			if(pEl.fldAt(fId).type() != tp)
 			    try{ pEl.fldDel(fId); }
 			    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 			else {
 			    pEl.fldAt(fId).setFlg(flg);
-			    pEl.fldAt(fId).setDescr(lCtx->func()->io(i_io)->name().c_str());
+			    pEl.fldAt(fId).setDescr(lCtx->func()->io(iIO)->name().c_str());
 			}
 		    }
 
-		    if(!vlPresent(lCtx->func()->io(i_io)->id()))
-			pEl.fldAdd(new TFld(lCtx->func()->io(i_io)->id().c_str(),lCtx->func()->io(i_io)->name().c_str(),tp,flg));
+		    if(!vlPresent(lCtx->func()->io(iIO)->id()))
+			pEl.fldAdd(new TFld(lCtx->func()->io(iIO)->id().c_str(),lCtx->func()->io(iIO)->name().c_str(),tp,flg));
 
-		    als.push_back(lCtx->func()->io(i_io)->id());
+		    als.push_back(lCtx->func()->io(iIO)->id());
 		}
-		if(to_make && (lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)) lCtx->setS(i_io,"0");
+		if(to_make && (lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)) lCtx->setS(iIO,"0");
 	    }
 
 	    // Load IO at enabling
@@ -1149,13 +1149,13 @@ void TMdPrm::enable( )
 	} catch(TError &err) { disable(); throw; }
 
     //Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < (int)pEl.fldSize(); i_p++) {
+    for(int iP = 0; iP < (int)pEl.fldSize(); iP++) {
 	unsigned iL;
 	for(iL = 0; iL < als.size(); iL++)
-	    if(pEl.fldAt(i_p).name() == als[iL])
+	    if(pEl.fldAt(iP).name() == als[iL])
 		break;
 	if(iL >= als.size())
-	    try{ pEl.fldDel(i_p); i_p--; }
+	    try{ pEl.fldDel(iP); iP--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
@@ -1201,11 +1201,11 @@ void TMdPrm::loadIO( bool force )
     cfg.cfg("PRM_ID").setS(ownerPath(true));
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
-    for(int i_io = 0; i_io < lCtx->ioSize(); i_io++) {
-	cfg.cfg("ID").setS(lCtx->func()->io(i_io)->id());
+    for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
+	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
-	if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) lCtx->lnk(lCtx->lnkId(i_io)).addr = cfg.cfg("VALUE").getS();
-	else lCtx->setS(i_io,cfg.cfg("VALUE").getS());
+	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) lCtx->lnk(lCtx->lnkId(iIO)).addr = cfg.cfg("VALUE").getS();
+	else lCtx->setS(iIO,cfg.cfg("VALUE").getS());
     }
     initLnks();
 }
@@ -1224,10 +1224,10 @@ void TMdPrm::saveIO( )
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(ownerPath(true));
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
-    for(int i_io = 0; i_io < lCtx->func()->ioSize(); i_io++) {
-	cfg.cfg("ID").setS(lCtx->func()->io(i_io)->id());
-	if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) cfg.cfg("VALUE").setS(lCtx->lnk(lCtx->lnkId(i_io)).addr);
-	else cfg.cfg("VALUE").setS(lCtx->getS(i_io));
+    for(int iIO = 0; iIO < lCtx->func()->ioSize(); iIO++) {
+	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
+	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) cfg.cfg("VALUE").setS(lCtx->lnk(lCtx->lnkId(iIO)).addr);
+	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
 	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
     }
 }
@@ -1241,7 +1241,7 @@ void TMdPrm::initLnks( )
 
     //Init links
     for(int iL = 0; iL < lCtx->lnkSize(); iL++) {
-	lCtx->lnk(iL).real.clear();
+	lCtx->lnk(iL).real = "";
 	off = 0;
 	atp = TSYS::strParse(lCtx->lnk(iL).addr, 0, ":", &off);
 	if(atp.empty()) continue;
@@ -1267,7 +1267,7 @@ void TMdPrm::initLnks( )
 	    else if(atp_sub == "s") {
 		int rN = vmax(0,vmin(100,strtol(TSYS::strParse(ai,1,",").c_str(), NULL, 0)));
 		if(rN == 0) rN = 10;
-		if(mode != "w") for(int i_r = reg; i_r < reg+rN; i_r++) owner().regVal(i_r, atp_m);
+		if(mode != "w") for(int iR = reg; iR < reg+rN; iR++) owner().regVal(iR, atp_m);
 		ai = TSYS::strMess("%d,%d", reg, rN);
 	    }
 	}
@@ -1277,7 +1277,7 @@ void TMdPrm::initLnks( )
 
 void TMdPrm::upVal( bool first, bool last, double frq )
 {
-    ResString w_err;
+    MtxString w_err(dataRes());
     AutoHD<TVal> pVal;
     vector<string> ls;
 
@@ -1482,11 +1482,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
 	    if(enableStat() && ctrMkNode("area",opt,-1,"/cfg",_("Template configuration"))) {
 		if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
-		for(int i_io = 0; i_io < lCtx->ioSize(); i_io++) {
-		    if(!(lCtx->func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst))) continue;
+		for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
+		    if(!(lCtx->func()->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst))) continue;
 		    // Check select param
-		    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)
-			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
+		    if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(iIO)).c_str(),lCtx->func()->io(iIO)->name(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
 			    "help",_("ModBus address in format: \"{dt}:{numb}:{rw}\".\n"
 				"Where:\n"
 				"  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
@@ -1504,17 +1504,17 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    else {
 			const char *tip = "str";
 			bool fullTxt = false;
-			switch(lCtx->ioType(i_io)) {
+			switch(lCtx->ioType(iIO)) {
 			    case IO::Integer:	tip = "dec";	break;
 			    case IO::Real:	tip = "real";	break;
 			    case IO::Boolean:	tip = "bool";	break;
 			    case IO::String:
-				if(lCtx->func()->io(i_io)->flg()&IO::FullText) fullTxt = true;
+				if(lCtx->func()->io(iIO)->flg()&IO::FullText) fullTxt = true;
 				break;
 			    case IO::Object:	fullTxt = true;	break;
 			}
-			XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(i_io)).c_str(),
-					lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+			XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(iIO)).c_str(),
+					lCtx->func()->io(iIO)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
 			if(wn && fullTxt) wn->setAttr("cols","100")->setAttr("rows","4");
 		    }
 		}
@@ -1537,18 +1537,19 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	modif();
     }
     else if(isLogic() && enableStat() && a_path.substr(0,12) == "/cfg/prm/el_") {
+	//????
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
-	    int i_io = s2i(a_path.substr(12));
-	    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) opt->setText(lCtx->lnk(lCtx->lnkId(i_io)).addr);
-	    else if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgConst) opt->setText(lCtx->getS(i_io));
+	    int iIO = s2i(a_path.substr(12));
+	    if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) opt->setText(lCtx->lnk(lCtx->lnkId(iIO)).addr);
+	    else if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgConst) opt->setText(lCtx->getS(iIO));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    int i_io = s2i(a_path.substr(12));
-	    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) {
-		lCtx->lnk(lCtx->lnkId(i_io)).addr = opt->text();
+	    int iIO = s2i(a_path.substr(12));
+	    if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
+		lCtx->lnk(lCtx->lnkId(iIO)).addr = opt->text();
 		initLnks();
 	    }
-	    else if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgConst) lCtx->setS(i_io,opt->text());
+	    else if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgConst) lCtx->setS(iIO,opt->text());
 	    modif();
 	}
     }
@@ -1583,4 +1584,16 @@ TMdPrm::TLogCtx::SLnk &TMdPrm::TLogCtx::lnk( int num )
 {
     if(num < 0 || num >= (int)plnk.size()) throw TError(mod->nodePath().c_str(),_("Parameter id error."));
     return plnk[num];
+}
+
+//*******************************************************
+//* Link object of the logical type parameter's context *
+TMdPrm::TLogCtx::SLnk::SLnk( ) : addr(mod->dataRes()), real(mod->dataRes())
+{
+
+}
+
+TMdPrm::TLogCtx::SLnk::SLnk( int iid, const string &iaddr ) : ioId(iid), addr(mod->dataRes()), real(mod->dataRes())
+{
+    addr = iaddr;
 }

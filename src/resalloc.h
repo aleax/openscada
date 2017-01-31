@@ -181,14 +181,16 @@ class MtxString
 	MtxString( ResMtx &iM );
 	~MtxString( );
 
+	MtxString &operator=( const OSCADA::MtxString &val );
 	MtxString &operator=( const string &val );
+
 	operator string( )	{ return getVal(); }
 
 	size_t size( );
 	bool   empty( );
 
 	void setVal( const string &vl );
-	string getVal( );
+	string getVal( ) const;
 	const string &getValRef( )	{ return str; }
 
     private:

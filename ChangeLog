@@ -1,3 +1,11 @@
+2017-01-31 Roman (stable)
+- SYS: MtxString expanded by the object's constructor.
+- !!:FIX:DAQ.ModBus: ResString in whole replaced to MtxString.
+    FIX:Attribute "addr" and "real" of the logic mode were placed to MtxString for prevent crashes on its modification at run.
+- UI.WebCfgD: New standard design some expanded and improved.
+- UI.WebVision: Primitive's "Text" and "FormEl.Button" set for "white-space: pre-line".
+
+
 2017-01-27 Roman (stable)
 - DB.PostgreSQL: Statistic of control the activity and lags expanded by the maximum time request.
 - UI.QTCfg: The window title forming some changed.

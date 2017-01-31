@@ -13,14 +13,15 @@
   <style type='text/css'>
     body { background-color: #E6E6E6; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 12px; }
 
-    #gen-pnl-up { position: absolute; left: 0px; top: 0px; width: 800px; height: 25px; padding-top: 1px; padding-left: 5px; font-size: 15px; }
+    #gen-pnl-up { position: absolute; left: 0px; top: 0px; width: 800px; height: 25px; padding-top: 1px; padding-left: 5px; font-size: 15px; overflow: hidden; }
+    #gen-pnl-up div { width: 300%; }
     #gen-pnl-up img { height: 22px; border: 0; float: left; padding-right: 5px; vertical-align: middle; }
     #gen-pnl-up span { display: table-cell; height: 22px; border: 0; vertical-align: middle; }
 
     #gen-pnl-left { position: absolute; left: 0px; top: 25px; width: 246px; height: 471px; background-color: #F7FFF6; border: 2px ridge #F7FFF6; overflow: auto; text-align: left; vertical-align: top; white-space: nowrap; color: black; }
     #gen-pnl-left ul { background-color: #F7FFF6; background-repeat: repeat-y; background-attachment: scroll; background-position: left top; }
     ul.tree ul { list-style-image: none; list-style-position: outside; list-style-type: none; margin: 0; padding: 0 0 0 17px; }
-    ul.tree li.select { background-color : #BDEBED; }
+    ul.tree li.select { background-color: #BDEBED; }
     ul.tree { clear: both; list-style-image: none; list-style-position: outside; list-style-type: none; margin: 0px; padding: 0px; white-space: nowrap; }
     ul.tree a { text-decoration:none; color: black; }
     ul.tree a.pm { cursor: pointer; }
@@ -29,6 +30,7 @@
     a.inactive img { cursor: default; }
 
     #gen-pnl-right { position: absolute; left: 250px; top: 25px; width: 546px; height: 471px; background-color: #F7F7F1; border: 2px outset #F7F7F1; overflow: auto; margin-left: 5px; padding-left: 1px; padding-right: 2px; }
+    #gen-pnl-right table.page { padding-top: 5px; }
     #gen-pnl-right td.title { color: black; font-family: Arial; font-size: 20px; font-style: italic; text-align: left; padding-bottom: 5px; }
     #gen-pnl-right td.title img { vertical-align: middle; height: 32px; }
     #gen-pnl-right td.tabs span { padding-left: 5px; padding-right: 5px; padding-bottom: 2px; padding-top: 2px; border: 1px solid gray; white-space: nowrap; background-color: #DEDED9; cursor: pointer; }
@@ -42,7 +44,7 @@
     #gen-pnl-right td.content div.table { width: 800px; border: 1px solid black; height: 200px; background-color: white; overflow: auto; padding: 2px; }
     #gen-pnl-right td.content table.elem { border: 1px solid black; border-collapse: collapse; empty-cells: show; }
     #gen-pnl-right td.content table.elem th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }
-    #gen-pnl-right td.content table.elem td { border: 1px solid black; white-space: nowrap; }
+    #gen-pnl-right td.content table.elem td { border: 1px solid black; white-space: pre-line; }
     #gen-pnl-right td.content table.elem td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }
     #gen-pnl-right td.content table.elem td input,select { vertical-align: middle; border: 1px solid gray; }
     #gen-pnl-right td.content table.elem td img { vertical-align: middle; height: 16px; cursor: pointer; }
@@ -55,7 +57,7 @@
     #gen-pnl-right td.content div.elem .line img { vertical-align: middle; height: 18px; cursor: pointer; }
     #gen-pnl-right td.content div.elem .number input { width: 20%; text-align: right; }
 
-    #gen-pnl-down { position: absolute; left: 0px; top: 500px; width: 800px; height: 25px; font-size: 15px; }
+    #gen-pnl-down { position: absolute; left: 0px; top: 500px; width: 800px; height: 25px; font-size: 15px; overflow: hidden; }
     #gen-pnl-splt { position: absolute; left: 250px; top: 25px; width: 2px; height: 550px; border: 0; cursor: col-resize; margin-left: 2px; border-left: 2px ridge #E6E6E6; }
     #st_user { border-left: 1px solid black; padding-left: 2px; white-space: nowrap; }
 
@@ -68,7 +70,7 @@
   </style>
 </head>
 <body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>
-<div id='gen-pnl-up'>
+<div id='gen-pnl-up'><div>
   <a id='actLoad' class='inactive' title='###Load###'><img src='/WebCfgD/img_load?filtr=unact&size=22' /></a>
   <a id='actSave' class='inactive' title='###Save###'><img src='/WebCfgD/img_save?filtr=unact&size=22' /></a>
   <img src='/WebCfgD/img_line' />
@@ -90,7 +92,7 @@
   <a id='actAbout' class='active' href='/WebCfgD/about' title='###About###'><img src='/WebCfgD/img_help?size=22' /></a>
   <img src='/WebCfgD/img_line' />
   <span id='selPath' />
-</div>
+</div></div>
 <div id='gen-pnl-left'>
   <div id='treeBlk'><ul id='treeRoot' class='tree'/></div>
 </div>

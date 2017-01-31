@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.18"
+#define DAQ_MVER	"1.8.19"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -98,7 +98,7 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem		pEl;		//Work atribute elements
-	ResString	acqErr;
+	MtxString	acqErr;
 
 	// Logical type by template
 	//Data
@@ -112,10 +112,11 @@ class TMdPrm : public TParamContr
 	    class SLnk
 	    {
 		public:
-		SLnk( int iid, const string &iaddr = "" ) : ioId(iid), addr(iaddr) { }
+		SLnk( );
+		SLnk( int iid, const string &iaddr = "" );
 
 		int	ioId;		//Template function io index
-		string	addr, real;	//Full item address: R:23
+		MtxString addr, real;	//Full item address: R:23
 	    };
 
 	    //Methods
@@ -162,13 +163,13 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void regVal( int reg, const string &dt = "R" );			//Register value for acquisition
-	TVariant getVal( const string &addr, ResString &err );		//Unified value request from string address
-	int64_t getValR( int addr, ResString &err, bool in = false );	//Get register value
-	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
-	bool setVal( const TVariant &val, const string &addr, ResString &err, bool chkAssync = false );	//Unified value set by string address
-	bool setValR( int val, int addr, ResString &err );		//Set register value
-	bool setValRs( const map<int,int> &regs, ResString &err );	//Set multiply registers
-	bool setValC( char val, int addr, ResString &err );		//Set coins value
+	TVariant getVal( const string &addr, MtxString &err );		//Unified value request from string address
+	int64_t getValR( int addr, MtxString &err, bool in = false );	//Get register value
+	char getValC( int addr, MtxString &err, bool in = false );	//Get coins value
+	bool setVal( const TVariant &val, const string &addr, MtxString &err, bool chkAssync = false );	//Unified value set by string address
+	bool setValR( int val, int addr, MtxString &err );		//Set register value
+	bool setValRs( const map<int,int> &regs, MtxString &err );	//Set multiply registers
+	bool setValC( char val, int addr, MtxString &err );		//Set coins value
 	string modBusReq( string &pdu );
 
     protected:
@@ -192,7 +193,7 @@ class TMdContr: public TController
 
 		int		off;		//Data block start offset
 		string		val;		//Data block values kadr
-		ResString	err;		//Acquisition error text
+		MtxString	err;		//Acquisition error text
 	};
 
 	//Methods
@@ -202,7 +203,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	ResMtx	enRes, dataRes;
+	ResMtx	enRes;
 	ResRW	reqRes;
 	int64_t	&mPrior,			//Process task priority
 		&mNode,				//Node

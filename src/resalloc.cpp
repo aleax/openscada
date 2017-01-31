@@ -253,12 +253,14 @@ void MtxString::setVal( const string &vl )
     m.unlock();
 }
 
-string MtxString::getVal( )
+string MtxString::getVal( ) const
 {
     m.lock();
     string rez(str.data(), str.size());	//Bypass for COW algorithm prevent
     m.unlock();
     return rez;
 }
+
+MtxString &MtxString::operator=( const OSCADA::MtxString &val )	{ setVal(val.getVal()); return *this; }
 
 MtxString &MtxString::operator=( const string &val )	{ setVal(val); return *this; }
