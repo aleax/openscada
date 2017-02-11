@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.AMRDevs file: da_Kontar.cpp
 /***************************************************************************
- *   Copyright (C) 2014 by Roman Savochenko, <rom_as@oscada.org>           *
+ *   Copyright (C) 2014,2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -298,7 +298,7 @@ bool Kontar::cfgChange( TParamContr *ip, TCfg &cfg )
 	int cf_sz = 0;
 	char *buf = NULL;
 	int hd = open(cfg.getS().c_str(), O_RDONLY);
-	if(hd >= 0 && (cf_sz=lseek(hd,0,SEEK_END)) > 0 && cf_sz < 100000) {
+	if(hd >= 0 && (cf_sz=lseek(hd,0,SEEK_END)) > 0 && cf_sz < USER_FILE_LIMIT) {
 	    lseek(hd, 0, SEEK_SET);
 	    buf = (char*)malloc(cf_sz+1);
 	    if(read(hd,buf,cf_sz) != cf_sz) cf_sz = 0;

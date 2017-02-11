@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-06 11:21+0200\n"
+"POT-Creation-Date: 2017-02-09 10:31+0200\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -78,7 +78,8 @@ msgstr "Operation %d wird nicht unterstützt."
 
 #, c-format
 msgid "External functions number exceeded limits to %d on function '%s'"
-msgstr "Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
+msgstr ""
+"Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
 
 #, c-format
 msgid "More than %d(%d) parameters are specified for function '%s'"
@@ -285,9 +286,8 @@ msgstr "Aufruf mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s."
-msgstr "Verbrauchte Zeit: %s."
+msgid "Spent time: %s[%s]."
+msgstr "Verbrauchte Zeit: %s[%s]."
 
 #, c-format
 msgid ""

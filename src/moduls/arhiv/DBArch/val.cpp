@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -479,8 +479,8 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 
     TValBuf buf(ibuf.valType(), ibuf.size(), ibuf.period(), ibuf.hardGrid(), ibuf.highResTm());
 
-    //Request by single values for most big buffer period
-    if(buf.period()/2 > period()) {
+    //Request by single values for most big buffer's period
+    if(buf.period()/10 > period()) {
 	ibegIn = (ibegIn/buf.period())*buf.period();
 	for(int64_t ctm; ibegIn <= iendIn; ibegIn += buf.period()) {
 	    ctm = ibegIn;
@@ -501,8 +501,11 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
     if(iend < ibeg)	return;
 
     //Get values
+    // Fill by EVAL the data full range
+    for(int64_t cTm = ibegIn; cTm <= iendIn; cTm += period()) buf.setR(EVAL_REAL, cTm);
+
     // Fill by EVAL previous range part without a real data
-    for(int64_t cTm = ibegIn; cTm < ibeg; cTm += period()) buf.setR(EVAL_REAL, cTm);
+    //for(int64_t cTm = ibegIn; cTm < ibeg; cTm += period()) buf.setR(EVAL_REAL, cTm);
 
     // Same data values get
     TConfig cfg(&reqEl);
@@ -545,7 +548,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
     res.unlock();
 
     // Fill by EVAL following range part without a real data
-    for(int64_t cTm = iend+period(); cTm <= iendIn; cTm += period()) buf.setR(EVAL_REAL, cTm);
+    //for(int64_t cTm = iend+period(); cTm <= iendIn; cTm += period()) buf.setR(EVAL_REAL, cTm);
 
     //Check for target DB enabled (disabled by the connection lost)
     string wDB = TBDS::realDBName(archivator().addr());

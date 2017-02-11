@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.4.0"
+#define MOD_VER		"1.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DB FireBird.")
 #define LICENSE		"GPL2"
@@ -866,15 +866,20 @@ string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 void MTable::setVal( TCfg &cf, const string &ival, bool tr )
 {
     string val = (ival==DB_NULL) ? EVAL_STR : ival;
-    if(!cf.extVal()) {
-	if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
-	if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
-    }
-    else {
-	if(!tr) {
-	    cf.setS(val, TCfg::ExtValOne);
-	    cf.setS("", TCfg::ExtValTwo);	//!! Sets for clean up from previous Two value
-	    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
-	} else cf.setS(val, TCfg::ExtValTwo);
+    switch(cf.fld().type()) {
+	case TFld::String:
+	    if(!cf.extVal()) {
+		if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
+		if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+	    }
+	    else {
+		if(!tr) {
+		    cf.setS(val, TCfg::ExtValOne);
+		    cf.setS("", TCfg::ExtValTwo);	//!! Sets for clean up from previous Two value
+		    cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
+		} else cf.setS(val, TCfg::ExtValTwo);
+	    }
+	    break;
+	default: cf.setS(val); break;
     }
 }

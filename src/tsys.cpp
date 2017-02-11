@@ -1254,25 +1254,6 @@ string TSYS::strCompr( const string &in, int lev )
     deflateEnd(&strm);
 
     return rez;
-
-    /*uLongf comprLen = deflateBound(&strm, in.size());
-    char out[comprLen];
-
-    strm.next_in = (Bytef*)in.data();
-    strm.avail_in = (uInt)in.size();
-    strm.next_out = (Bytef*)out;
-    strm.avail_out = comprLen;
-
-    if(deflate(&strm, Z_FINISH) != Z_STREAM_END) {
-	deflateEnd(&strm);
-	return "";
-    }
-
-    comprLen = strm.total_out;
-
-    deflateEnd(&strm);
-
-    return string(out, comprLen);*/
 }
 
 string TSYS::strUncompr( const string &in )

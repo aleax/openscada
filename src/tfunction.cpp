@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,10 +60,10 @@ TFunction &TFunction::operator=( const TFunction &func )
     for(int iIO = 0; iIO < func.ioSize(); iIO++) {
 	int dst_io = ioId(func.io(iIO)->id());
 	if(dst_io < 0)
-	    dst_io = ioIns( new IO( func.io(iIO)->id().c_str(), func.io(iIO)->name().c_str(), func.io(iIO)->type(), func.io(iIO)->flg(),
-		func.io(iIO)->def().c_str(), func.io(iIO)->hide(), func.io(iIO)->rez().c_str() ), iIO );
+	    dst_io = ioIns(new IO(func.io(iIO)->id().c_str(),func.io(iIO)->name().c_str(),func.io(iIO)->type(),func.io(iIO)->flg(),
+		func.io(iIO)->def().c_str(),func.io(iIO)->hide(),func.io(iIO)->rez().c_str()), iIO);
 	else *io(dst_io) = *func.io(iIO);
-	if(dst_io != iIO && !use()) ioMove(dst_io,iIO);
+	if(dst_io != iIO && !use()) ioMove(dst_io, iIO);
     }
 
     if(mId.empty()) mId = func.id();
@@ -152,7 +152,7 @@ void TFunction::ioDel( int pos )
 void TFunction::ioMove( int pos, int to )
 {
     if(pos < 0 || pos >= (int)mIO.size() || to < 0 || to >= (int)mIO.size())
-	throw err_sys(_("Move IO from %d to %d error."), pos,to);
+	throw err_sys(_("Move IO from %d to %d error."), pos, to);
 
     preIOCfgChange();
     IO *io = mIO[to];
@@ -373,10 +373,9 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	string wuser = opt->attr("user");
 	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM;
 	int64_t t_cnt = TSYS::curTime();
-	for(int i_c = 0; i_c < n_tcalc && SYS->sysTm() < tm_lim; i_c++)
+	for(int iC = 0; iC < n_tcalc && SYS->sysTm() < tm_lim; iC++)
 	    mTVal->calc(wuser);
-	t_cnt = TSYS::curTime()-t_cnt;
-	SYS->cntrSet(nodePath('.'), t_cnt);
+	SYS->cntrSet(nodePath('.'), TSYS::curTime()-t_cnt);
     }
     else TCntrNode::cntrCmdProc(opt);
 }

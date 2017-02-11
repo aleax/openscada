@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -258,7 +258,6 @@ class TValFunc
 	string	mName,			//Value name
 		mUser;			//Link to user
 	unsigned short	mBlk	:1;	//Blocked values screen
-	unsigned short	mDimens	:1;	//Make dimension of the calc time
 	unsigned short	mMdfChk	:1;	//Modify attributes check
 
 	TFunction	*mFunc;
@@ -284,7 +283,7 @@ class TFuncArgsObj : public TVarObj
 	string getStrXML( const string &oid = "" );
 
     private:
-        //Attributes
+	//Attributes
 	TValFunc &vf;
 };
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -137,14 +137,6 @@ void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
 	setS(io, cfg.cfg("VAL").getS());
 	setLink(io, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS());
     }
-
-    //IO values loading and links set, by direct request
-    /*for(int io = 0; io < ioSize(); io++) {
-	cfg.cfg("ID").setS(func()->io(io)->id());
-	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg,false,true)) continue;
-	setS(io,cfg.cfg("VAL").getS());
-	setLink(io, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS());
-    }*/
 }
 
 void Block::saveIO( )

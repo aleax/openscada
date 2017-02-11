@@ -1165,13 +1165,13 @@ INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','verPrt','Protocol version',1,16,''
 INSERT INTO "tmplib_DevLib_io" VALUES('SSCP','maxDtFrmServ','Server''s maximum data frame size',1,16,'',7,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','this','Object',4,0,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','this','Object',4,0,'',5,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','power','Power, for temperature',3,16,'',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','this','Object',4,0,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','mdPass','Passive mode, writing by an input protocol''s part',3,64,'0',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('IT3','this','Object',4,0,'',7,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('PCF8574','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','');
@@ -1233,6 +1233,8 @@ INSERT INTO "tmplib_DevLib_io" VALUES('UPS','loadHH','Load too high',2,32,'100',
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tH','Temperature high',2,32,'50',13,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'70',14,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Alarms delay, s',2,32,'0',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -4930,7 +4932,7 @@ f_err = t_err;','','',1481104555);
 INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097U','One Wire by DS9097U','One Wire by DS9097U','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','','',30,0,'JavaLikeCalc.JavaScript
+Version: 1.2.0','','',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
 	req = (isData?SYS.strFromCharCode(0xE3):"") +
@@ -5126,6 +5128,7 @@ else {
 				}
 				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
 				dO.tmSc = tmSc;
+				dO.try = tryEVAL;
 			}
 		}
 		//Check for removed devices
@@ -5182,8 +5185,9 @@ else {
 						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
 						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
 					}
+					dO.try = 0;
 				}
-				else {
+				else if((dO.try=dO.try+1) > tryEVAL) {
 					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
 					dO.m = dO.res = EVAL;
 				}
@@ -5395,11 +5399,11 @@ else {
 	}
 }
 
-f_err = t_err;','','',1480274878);
+f_err = t_err;','','',1486839523);
 INSERT INTO "tmplib_DevLib" VALUES('1W_DS9097','One Wire by DS9097','','','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.0','','',30,0,'JavaLikeCalc.JavaScript
+Version: 1.2.0','','',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function reset(tr) {
 	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
@@ -5565,6 +5569,7 @@ else {
 				}
 				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
 				dO.tmSc = tmSc;
+				dO.try = tryEVAL;
 			}
 		}
 		//Check for removed devices
@@ -5621,8 +5626,9 @@ else {
 						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
 						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
 					}
+					dO.try = 0;
 				}
-				else {
+				else if((dO.try=dO.try+1) > tryEVAL) {
 					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
 					dO.m = dO.res = EVAL;
 				}
@@ -5834,7 +5840,7 @@ else {
 	}
 }
 
-f_err = t_err;','','',1480274861);
+f_err = t_err;','','',1486839515);
 INSERT INTO "tmplib_DevLib" VALUES('PCF8574','I2C: PCF8574','','','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
@@ -7208,7 +7214,7 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','',1479056251);
+//p_tm=c_tm;','','',1484043975);
 INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher','','','Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>
