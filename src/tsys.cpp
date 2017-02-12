@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,7 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1), mainPthr(0)
+    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1), mainPthr(0), mClockRT(false)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -153,8 +153,8 @@ void TSYS::setWorkDir( const string &wdir, bool init )
 {
     if(wdir.empty() || workDir() == wdir) return;
     if(chdir(wdir.c_str()) != 0)
-	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
-	    wdir.c_str(),strerror(errno),workDir().c_str());
+	mess_sys(TMess::Warning, _("Changing work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
+	    wdir.c_str(), strerror(errno),workDir().c_str());
     else if(init) sysModifFlgs &= ~MDF_WorkDir;
     else { sysModifFlgs |= MDF_WorkDir; modif(); }
 }
@@ -213,7 +213,7 @@ void TSYS::modifCfg( bool chkPossibleWR )
     if(chkPossibleWR) {
 	//Check config file for readonly
 	if(access(mConfFile.c_str(),F_OK|W_OK) != 0)
-	    throw TError(nodePath().c_str(), _("Read only access to file '%s'."), mConfFile.c_str());
+	    throw err_sys(_("Read only access to file '%s'."), mConfFile.c_str());
     }
     else rootModifCnt++;
 }
@@ -267,23 +267,23 @@ string TSYS::real2str( double val, int prec, char tp )
     return buf;
 }
 
-string TSYS::time2str( time_t itm, const string &format )
+string TSYS::atime2str( time_t itm, const string &format )
 {
     struct tm tm_tm;
-    localtime_r(&itm,&tm_tm);
+    localtime_r(&itm, &tm_tm);
     char buf[100];
     int ret = strftime(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm);
     return (ret > 0) ? string(buf,ret) : string("");
 }
 
-string TSYS::time2str( double utm )
+string TSYS::time2str( double tm )
 {
-    if(utm < 1e-6) return "0";
+    if(tm < 1e-12) return "0";
     int lev = 0;
-    int days = (int)floor(utm/(24*60*60*1e6));
-    int hours = (int)floor(utm/(60*60*1e6))%24;
-    int mins = (int)floor(utm/(60*1e6))%60;
-    double usec = utm - 1e6*(days*24*60*60 + hours*60*60 + mins*60);
+    int days = (int)floor(tm/(24*60*60));
+    int hours = (int)floor(tm/(60*60))%24;
+    int mins = (int)floor(tm/(60))%60;
+    double usec = 1e6 * (tm - days*24*60*60 - hours*60*60 - mins*60);
 
     string rez;
     if(days)		{ rez += i2s(days)+_("day"); lev = vmax(lev,6); }
@@ -293,6 +293,7 @@ string TSYS::time2str( double utm )
     else if((1e-3*usec) > 0.5 && !lev)	{ rez += (rez.size()?" ":"")+r2s(1e-3*usec,4)+_("ms"); lev = vmax(lev,2); }
     else if(usec > 0.5 && !lev)		{ rez += (rez.size()?" ":"")+r2s(usec,4)+_("us"); lev = vmax(lev,1); }
     else if(!lev)	rez += (rez.size()?" ":"")+r2s(1e3*usec,4)+_("ns");
+
     return rez;
 }
 
@@ -319,17 +320,18 @@ string TSYS::addr2str( void *addr )
 
 void *TSYS::str2addr( const string &str )	{ return (void *)strtoul(str.c_str(),NULL,16); }
 
-string TSYS::strNoSpace( const string &val )
+string TSYS::strTrim( const string &val, const string &cfg )
 {
     int beg = -1, end = -1;
 
-    for(unsigned i_s = 0; i_s < val.size(); i_s++)
-	if(val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t') {
-	    if(beg < 0) beg = i_s;
-	    end = i_s;
-	}
+    for(unsigned iS = 0, iC = 0; iS < val.size(); iS++) {
+	for(iC = 0; iC < cfg.size() && val[iS] != cfg[iC]; iC++) ;
+	if(iC < cfg.size())	continue;
+	if(beg < 0) beg = iS;
+	end = iS;
+    }
 
-    return (beg>=0) ? val.substr(beg,end-beg+1) : "";
+    return (beg >= 0) ? val.substr(beg, end-beg+1) : "";
 }
 
 string TSYS::strMess( const char *fmt, ... )
@@ -416,7 +418,8 @@ string TSYS::optDescr( )
 	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"MainCPUs   <list>	Main used CPUs list (separated by ':').\n"
-	"SaveAtExit <true>	Save the system at exit.\n"
+	"ClockRT    <0|1>	Set for use REALTIME (else MONOTONIC) clock, some problematic with the system clock modification.\n"
+	"SaveAtExit <0|1>	Save the system at exit.\n"
 	"SavePeriod <sec>	Save the system period.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
@@ -473,7 +476,7 @@ bool TSYS::cfgFileLoad( )
 
     //Load config-file
     int hd = open(mConfFile.c_str(), O_RDONLY);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_sys(TMess::Error, _("Config-file '%s' error: %s"), mConfFile.c_str(), strerror(errno));
     else {
 	bool fOK = true;
 	string s_buf;
@@ -485,30 +488,30 @@ bool TSYS::cfgFileLoad( )
 	    fOK = s_buf.size();
 	}
 	close(hd);
-	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());
+	if(!fOK) mess_sys(TMess::Error, _("Config-file '%s' load error."), mConfFile.c_str());
 
 	try {
 	    ResAlloc res(cfgRes(), true);
-	    rootN.load(s_buf, true);
+	    rootN.load(s_buf, XMLNode::LD_Full);
 	    if(rootN.name() == "OpenSCADA") {
 		XMLNode *stat_n = NULL;
-		for(int i_st = rootN.childSize()-1; i_st >= 0; i_st--)
-		    if(rootN.childGet(i_st)->name() == "station") {
-			stat_n = rootN.childGet(i_st);
+		for(int iSt = rootN.childSize()-1; iSt >= 0; iSt--)
+		    if(rootN.childGet(iSt)->name() == "station") {
+			stat_n = rootN.childGet(iSt);
 			if(stat_n->attr("id") == mId) break;
 		    }
 		if(stat_n && stat_n->attr("id") != mId) {
 		    if(mId != "EmptySt")
-			mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
+			mess_sys(TMess::Warning, _("Station '%s' is not present in the config-file. Using configuration for station '%s'!"),
 			    mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
 	    }
 	    else rootN.clear();
-	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Configuration '%s' error!"),mConfFile.c_str());
+	    if(!rootN.childSize()) mess_sys(TMess::Error, _("Configuration '%s' error!"), mConfFile.c_str());
 	    rootModifCnt = 0;
-	} catch(TError &err) { mess_err(nodePath().c_str(),_("Load config-file error: %s"),err.mess.c_str() ); }
+	} catch(TError &err) { mess_sys(TMess::Error, _("Load config-file error: %s"), err.mess.c_str()); }
     }
 
     return cmd_help;
@@ -519,11 +522,11 @@ void TSYS::cfgFileSave( )
     ResAlloc res(cfgRes(), true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
-    if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
+    if(hd < 0) mess_sys(TMess::Error, _("Config-file '%s' error: %s"), mConfFile.c_str(), strerror(errno));
     else {
 	string rezFile = rootN.save(XMLNode::XMLHeader);
 	int rez = write(hd, rezFile.data(), rezFile.size());
-	if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
+	if(rez != (int)rezFile.size()) mess_sys(TMess::Error,_("Configuration '%s' write error. %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
 	rootModifCnt = 0;
 	rootFlTm = time(NULL);
 	close(hd);
@@ -533,14 +536,15 @@ void TSYS::cfgFileSave( )
 void TSYS::cfgPrmLoad( )
 {
     //System parameters
+    setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
     setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
     setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
+    setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
     setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit","0")));
     setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod","0")));
-    setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
 }
 
 void TSYS::load_( )
@@ -548,7 +552,7 @@ void TSYS::load_( )
     static bool first_load = true;
 
     bool cmd_help = cfgFileLoad();
-    mess_info(nodePath().c_str(),_("Load!"));
+    mess_sys(TMess::Info, _("Load!"));
     cfgPrmLoad();
     Mess->load();	//Messages load
 
@@ -568,7 +572,7 @@ void TSYS::load_( )
 	//Load modules
 	modSchedul().at().load();
 	if(!modSchedul().at().loadLibS()) {
-	    mess_err(nodePath().c_str(),_("No one module is loaded. Your configuration broken!"));
+	    mess_sys(TMess::Error, _("No one module is loaded. Your configuration is broken!"));
 	    stop();
 	}
 
@@ -587,8 +591,8 @@ void TSYS::load_( )
     for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().load(); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error load subsystem '%s'."),lst[i_a].c_str());
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	    mess_sys(TMess::Error, _("Error load subsystem '%s'."), lst[i_a].c_str());
 	}
 
     if(cmd_help) stop();
@@ -597,7 +601,7 @@ void TSYS::load_( )
 
 void TSYS::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save!"));
+    mess_sys(TMess::Info, _("Save!"));
 
     //System parameters
     TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
@@ -605,9 +609,10 @@ void TSYS::save_( )
     if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"MainCPUs", mainCPUs());
+    TBDS::genDBSet(nodePath()+"ClockRT", i2s(clockRT()));
     TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
-    TBDS::genDBSet(nodePath()+"MainCPUs", mainCPUs());
 
     Mess->save();	//Messages load
 }
@@ -617,17 +622,17 @@ int TSYS::start( )
     vector<string> lst;
     list(lst);
 
-    mess_info(nodePath().c_str(),_("Start!"));
+    mess_sys(TMess::Info, _("Start!"));
     for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().subStart(); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error start subsystem '%s'."),lst[i_a].c_str());
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	    mess_sys(TMess::Error, _("Error start subsystem '%s'."), lst[i_a].c_str());
 	}
 
     cfgFileScan( true );
 
-    mess_info(nodePath().c_str(),_("Final starting!"));
+    mess_sys(TMess::Info, _("Final starting!"));
 
     unsigned int i_cnt = 1;
     mStopSignal = 0;
@@ -652,20 +657,20 @@ int TSYS::start( )
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
 	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
-		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	sysSleep(STD_WAIT_DELAY*1e-3);
 	i_cnt++;
     }
 
-    mess_info(nodePath().c_str(),_("Stop!"));
+    mess_sys(TMess::Info, _("Stop!"));
     if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
     for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Error stop subsystem '%s'."),lst[i_a].c_str());
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	    mess_sys(TMess::Error, _("Error stop subsystem '%s'."), lst[i_a].c_str());
 	}
 
     return mStopSignal;
@@ -713,32 +718,32 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGTERM:
-	    mess_warning(SYS->nodePath().c_str(), _("The Terminate signal is received. Server is being stopped!"));
+	    SYS->mess_sys(TMess::Warning, _("Termination signal is received. Stop the station!"));
 	    SYS->mStopSignal = signal;
 	    break;
 	case SIGFPE:
-	    mess_warning(SYS->nodePath().c_str(), _("Floating point exception is caught!"));
+	    SYS->mess_sys(TMess::Warning, _("Floating point exception is caught!"));
 	    exit(1);
 	    break;
 	case SIGCHLD:
 	{
 	    int status;
 	    pid_t pid = wait(&status);
-	    if(!WIFEXITED(status) && pid > 0) mess_info(SYS->nodePath().c_str(), _("Free child process %d!"), pid);
+	    if(!WIFEXITED(status) && pid > 0) SYS->mess_sys(TMess::Info, _("Free child process %d!"), pid);
 	    break;
 	}
 	case SIGPIPE:
-	    //mess_warning(SYS->nodePath().c_str(),_("Broken PIPE signal!"));
+	    //mess_sys(TMess::Warning, _("Broken PIPE signal!"));
 	    break;
 	case SIGSEGV:
-	    mess_emerg(SYS->nodePath().c_str(), _("Segmentation fault signal!"));
+	    SYS->mess_sys(TMess::Emerg, _("Segmentation fault signal!"));
 	    break;
 	case SIGABRT:
-	    mess_emerg(SYS->nodePath().c_str(), _("OpenSCADA is aborted!"));
+	    SYS->mess_sys(TMess::Emerg, _("Program aborted!"));
 	    break;
 	case SIGALRM: case SIGUSR1: break;
 	default:
-	    mess_warning(SYS->nodePath().c_str(), _("Unknown signal %d!"), signal);
+	    SYS->mess_sys(TMess::Warning, _("Unknown signal %d!"), signal);
     }
 }
 
@@ -806,13 +811,13 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
 	time_t c_tm = time(NULL);
 	//Check timeout
 	if(tm && (c_tm > s_tm+tm)) {
-	    mess_crit(loc.c_str(),_("Timeouted !!!"));
+	    SYS->mess_sys(TMess::Crit, _("Timeouted !!!"));
 	    return true;
 	}
 	//Make messages
 	if(c_tm > t_tm+1) {	//1sec
 	    t_tm = c_tm;
-	    mess_info(loc.c_str(),_("Wait event..."));
+	    SYS->mess_sys(TMess::Crit, _("Wait event..."));
 	}
 	sysSleep(STD_WAIT_DELAY*1e-3);
     }
@@ -1015,14 +1020,14 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size()+10);
 	    char buf[4];
 	    for(iSz = 0; iSz < (int)in.size(); iSz++) {
-		unsigned i_smb;
-		for(i_smb = 0; i_smb < opt1.size(); i_smb++)
-		    if(in[iSz] == opt1[i_smb]) {
+		unsigned iSmb;
+		for(iSmb = 0; iSmb < opt1.size(); iSmb++)
+		    if(in[iSz] == opt1[iSmb]) {
 			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[iSz]);
 			sout += buf;
 			break;
 		    }
-		if(i_smb >= opt1.size()) sout += in[iSz];
+		if(iSmb >= opt1.size()) sout += in[iSz];
 	    }
 	    break;
 	}
@@ -1030,7 +1035,8 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	    for(iSz = 0; iSz < (int)in.size(); iSz += 3) {
-		if(iSz && !(iSz%57))	sout.push_back('\n');
+		//if(iSz && !(iSz%57))	sout.push_back('\n');
+		if(iSz && !(iSz%57) && opt1.size())	sout += opt1;
 		sout.push_back(base64alph[(unsigned char)in[iSz]>>2]);
 		if((iSz+1) >= (int)in.size()) {
 		    sout.push_back(base64alph[((unsigned char)in[iSz]&0x03)<<4]);
@@ -1073,9 +1079,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    string svl, evl;
 	    sout.reserve(in.size()/2);
 	    for(unsigned iCh = 0; iCh < in.size(); ++iCh)
-		if(isxdigit(in[iCh])) {
-		    sout += (char)strtol(in.substr(iCh,2).c_str(),NULL,16); iCh++;
-		}
+		if(isxdigit(in[iCh])) { sout += (char)strtol(in.substr(iCh,2).c_str(),NULL,16); iCh++; }
 	    break;
 	}
 	case TSYS::Reverse:
@@ -1149,7 +1153,8 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::base64:
 	    sout.reserve(in.size());
 	    for(iSz = 0; iSz < in.size(); ) {
-		if(in[iSz] == '\n')	iSz += sizeof('\n');
+		//if(in[iSz] == '\n') iSz += sizeof('\n');
+		if(isspace(in[iSz])) { iSz++; continue; }
 		if((iSz+3) < in.size())
 		    if(in[iSz+1] != '=') {
 			char w_code1 = TSYS::getBase64Code(in[iSz+1]);
@@ -1181,67 +1186,62 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 
 string TSYS::strCompr( const string &in, int lev )
 {
-    z_stream strm;
-
     if(in.empty())	return "";
 
+    string rez;
+    z_stream strm;
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
 
     if(deflateInit(&strm,lev) != Z_OK) return "";
 
-    uLongf comprLen = deflateBound(&strm,in.size());
-    char out[comprLen];
-
     strm.next_in = (Bytef*)in.data();
     strm.avail_in = (uInt)in.size();
-    strm.next_out = (Bytef*)out;
-    strm.avail_out = comprLen;
 
-    if(deflate(&strm, Z_FINISH) != Z_STREAM_END) {
-	deflateEnd(&strm);
-	return "";
-    }
+    unsigned char out[vmax(100,vmin((in.size()/10)*10,STR_BUF_LEN))];
 
-    comprLen = strm.total_out;
+    do {
+	strm.next_out = (Bytef*)out;
+	strm.avail_out = sizeof(out);
+	int ret = deflate(&strm, Z_FINISH);
+	if(ret == Z_STREAM_ERROR) { rez = ""; break; }
+	rez.append((char*)out, sizeof(out)-strm.avail_out);
+    } while(strm.avail_out == 0);
 
     deflateEnd(&strm);
 
-    return string(out,comprLen);
+    return rez;
 }
 
 string TSYS::strUncompr( const string &in )
 {
     int ret;
     z_stream strm;
-    unsigned char out[STR_BUF_LEN];
     string rez;
-
-    if(in.empty())	return "";
 
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
 
-    if(inflateInit(&strm) != Z_OK)	return "";
+    if(in.empty() || inflateInit(&strm) != Z_OK) return "";
+
+    unsigned char out[vmax(100,vmin(((in.size()*2)/10)*10,STR_BUF_LEN))];
 
     strm.avail_in = in.size();
     strm.next_in = (Bytef*)in.data();
     do {
 	strm.avail_out = sizeof(out);
 	strm.next_out = out;
-	ret = inflate(&strm,Z_NO_FLUSH);
-	if(ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR)
+	ret = inflate(&strm, Z_NO_FLUSH);
+	if(ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR || ret == Z_VERSION_ERROR)
 	    break;
-	rez.append((char*)out,sizeof(out)-strm.avail_out);
-    } while(strm.avail_out == 0);
+	rez.append((char*)out, sizeof(out)-strm.avail_out);
+    } while(strm.avail_out == 0 && ret != Z_STREAM_END);
 
     inflateEnd(&strm);
 
-    if(ret != Z_STREAM_END)	return "";
-
-    return rez;
+    return (ret == Z_STREAM_END) ? rez : "";
 }
 
 uint16_t TSYS::i16_LE( uint16_t in )
@@ -1556,7 +1556,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	res.release();
 	//Error by this active task present
-	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' already present!"),path.c_str());
+	if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Task '%s' already present!"), path.c_str());
 	sysSleep(0.01);
 	res.request(true);
     }
@@ -1585,7 +1585,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     if(priority > 0)	policy = SCHED_RR;
     if(priority >= 100)	policy = SCHED_FIFO;
     pthread_attr_setschedpolicy(pthr_attr, policy);
-    prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority%100));
+    prior.sched_priority = vmax(sched_get_priority_min(policy), vmin(sched_get_priority_max(policy),priority%100));
     pthread_attr_setschedparam(pthr_attr, &prior);
 
     try {
@@ -1593,7 +1593,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM) {
-	    mess_warning(nodePath().c_str(), _("No permission for create real-time policy for '%s'. Default thread is created!"), path.c_str());
+	    mess_sys(TMess::Warning, _("No permission for create a real-time policy for '%s'. Default thread is created!"), path.c_str());
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;
@@ -1602,13 +1602,13 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	if(!pAttr) pthread_attr_destroy(pthr_attr);
 
-	if(rez) throw TError(1, nodePath().c_str(), _("Task creation error %d."), rez);
+	if(rez) throw err_sys(1, _("Task creation error %d."), rez);
 
 	//Wait for thread structure initialization finish for not detachable tasks
 	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority
 	//Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); ) {
-	    if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' start timeouted!"),path.c_str());
+	    if(time(NULL) >= (c_tm+wtm)) throw err_sys(_("Task '%s' start timeouted!"), path.c_str());
 	    sysSleep(STD_WAIT_DELAY*1e-3);
 	}
     } catch(TError &err) {
@@ -1643,13 +1643,13 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 	time_t c_tm = time(NULL);
 	//Check timeout
 	if(wtm && (c_tm > (s_tm+wtm))) {
-	    mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
-	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
+	    mess_sys(TMess::Crit, _("Task '%s' timeouted !!!"), path.c_str());
+	    throw err_sys(_("Task '%s' is not stopped!"), path.c_str());
         }
 	//Make messages
-	if(c_tm > t_tm+1) {  //1sec
+	if(c_tm > t_tm+1) {	//1sec
 	    t_tm = c_tm;
-	    mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
+	    mess_sys(TMess::Info, _("Wait event of task '%s' ..."), path.c_str());
 	}
 	sysSleep(STD_WAIT_DELAY*1e-3);
 	first = false;
@@ -1661,18 +1661,19 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     }
 }
 
-double TSYS::taskUtilizTm( const string &path )
+double TSYS::taskUtilizTm( const string &path, bool max )
 {
     ResAlloc res(taskRes, false);
     map<string,STask>::iterator it = mTasks.find(path);
     if(it == mTasks.end()) return 0;
+    if(max) return 1e-9*it->second.consMax;
     int64_t tm_beg = 0, tm_end = 0, tm_per = 0;
     for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
 	tm_beg = it->second.tm_beg;
 	tm_end = it->second.tm_end;
 	tm_per = it->second.tm_per;
     }
-    if(tm_beg && tm_beg < tm_per) return 1e-3*(tm_end-tm_beg);
+    if(tm_beg && tm_beg < tm_per) return 1e-9*(tm_end-tm_beg);
 
     return 0;
 }
@@ -1681,6 +1682,13 @@ bool TSYS::taskEndRun( )
 {
     sigset_t sigset;
     return sigpending(&sigset) == 0 && sigismember(&sigset,SIGUSR1);
+}
+
+const TSYS::STask& TSYS::taskDescr( )
+{
+    STask *stsk = (STask*)pthread_getspecific(sTaskKey);
+    if(stsk) return *stsk;
+    throw SYS->err_sys(_("It isn't OpenSCADA task!"));
 }
 
 void *TSYS::taskWrap( void *stas )
@@ -1731,11 +1739,11 @@ void *TSYS::taskWrap( void *stas )
     void *rez = NULL;
     try { rez = wTask(wTaskArg); }
     catch(TError &err) {
-	mess_err(err.cat.c_str(),err.mess.c_str());
-	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exception."),tsk->thr);
+	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	SYS->mess_sys(TMess::Error, _("Task %u unexpected terminated by exception."), tsk->thr);
     }
     //???? The code cause: FATAL: exception not rethrown
-    //catch(...)	{ mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by unknown exception."),tsk->thr); }
+    //catch(...)	{ mess_sys(TMess::Error, _("Task %u unexpected terminated by unknown exception."), tsk->thr); }
 
     //Mark for task finish
     tsk->flgs |= STask::FinishTask;
@@ -1748,64 +1756,78 @@ void *TSYS::taskWrap( void *stas )
 
 int TSYS::sysSleep( float tm )
 {
-    struct timespec sp_tm;
-    sp_tm.tv_sec = (time_t)tm;
-    sp_tm.tv_nsec = (long int)(1e9*(tm-floorf(tm)));
-    return nanosleep(&sp_tm, NULL);
+    struct timespec spTm;
+    clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
+
+    if(tm < 300e-6) {	//Wait into the direct cycle
+	for(int64_t stTm = 0, cTm, toTm = 1000000000ll*tm; true; ) {
+	    clock_gettime(clkId, &spTm);
+	    cTm = 1000000000ll*spTm.tv_sec + spTm.tv_nsec;
+	    if(!stTm) stTm = cTm;
+	    else if((cTm-stTm) >= toTm) break;
+	}
+	return 0;
+    }
+
+    spTm.tv_sec = (time_t)tm;
+    spTm.tv_nsec = (long)(1e9*(tm-floorf(tm)));
+    return clock_nanosleep(clkId, 0, &spTm, NULL);
+
+    /*struct timespec spTm;
+    spTm.tv_sec = (time_t)tm;
+    spTm.tv_nsec = (long int)(1e9*(tm-floorf(tm)));
+    return nanosleep(&spTm, NULL);*/
 }
 
-void TSYS::taskSleep( int64_t per, time_t cron )
+void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 {
-    struct timespec sp_tm;
+    struct timespec spTm;
     STask *stsk = (STask*)pthread_getspecific(sTaskKey);
 
-    if(!cron) {
-	/*if(!per) per = 1000000000;
-	int64_t cur_tm = 1000*curTime();
-	int64_t pnt_tm = (cur_tm/per + 1)*per;
-	int64_t beg_tm = cur_tm;
-	do
-	{
-	    sp_tm.tv_sec = (pnt_tm-cur_tm)/1000000000; sp_tm.tv_nsec = (pnt_tm-cur_tm)%1000000000;
-	    if(nanosleep(&sp_tm,NULL))	return;
-	    cur_tm = 1000*curTime();
-	}while(cur_tm < pnt_tm);
-
-	if(stsk)
-	{
-	    stsk->tm_beg = stsk->tm_per;
-	    stsk->tm_end = beg_tm;
-	    stsk->tm_per = cur_tm;
-	}*/
-
-	if(!per) per = 1000000000;
-	clock_gettime(CLOCK_REALTIME,&sp_tm);
-	int64_t cur_tm = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
-	int64_t pnt_tm = (cur_tm/per + 1)*per;
+    if(icron.empty()) {
+	if(!per) per = 1000000000ll;
+	clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
+	clock_gettime(clkId, &spTm);
+	int64_t cur_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec,
+		pnt_tm = (cur_tm/per + 1)*per,
+		wake_tm = 0;
 	do {
-	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
-	    if(clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL))	return;
-	    clock_gettime(CLOCK_REALTIME,&sp_tm);
-	}while(((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm);
+	    spTm.tv_sec = pnt_tm/1000000000ll; spTm.tv_nsec = pnt_tm%1000000000ll;
+	    if(clock_nanosleep(clkId,TIMER_ABSTIME,&spTm,NULL)) return;
+	    clock_gettime(clkId, &spTm);
+	    wake_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec;
+	} while(wake_tm < pnt_tm);
 
 	if(stsk) {
 	    if(stsk->tm_pnt) stsk->cycleLost += vmax(0, pnt_tm/per-stsk->tm_pnt/per-1);
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = cur_tm;
-	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
+	    stsk->tm_per = (int64_t)spTm.tv_sec*1000000000 + spTm.tv_nsec;
 	    stsk->tm_pnt = pnt_tm;
 	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
 	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
 	}
     }
     else {
-	time_t end_tm = time(NULL);
-	while(time(NULL) < cron && sysSleep(10) == 0) ;
+	int64_t end_tm = curTime();
+	time_t cur_tm = end_tm/1000000,
+	       cron_tm = cron(icron, cur_tm);
+	while(time(NULL) < cron_tm && sysSleep(1) == 0) {
+	    time_t dt = time(NULL) - cur_tm;
+	    if(dt/60) {
+		dt = 60*(dt/60);
+		SYS->mess_sys(TMess::Debug, _("System clock changed to '%s'. Correction the cron '%s' target!"), tm2s(dt).c_str(), icron.c_str());
+		cron_tm += dt;
+		end_tm += 1000000ll*dt;
+		if(stsk) stsk->tm_per += 1000000000ll*dt;
+	    }
+	    cur_tm = time(NULL);
+	}
 	if(stsk) {
 	    stsk->tm_beg = stsk->tm_per;
-	    stsk->tm_end = 1000000000ll*end_tm;
-	    stsk->tm_per = 1000000000ll*time(NULL);
-	    stsk->tm_pnt = 1000000000ll*cron;
+	    stsk->tm_end = 1000ll*end_tm;
+	    stsk->tm_per = 1000ll*curTime();
+	    stsk->tm_pnt = 1000000000ll*cron_tm;
 	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
 	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
 	}
@@ -1833,11 +1855,11 @@ reload:
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=59; }
-	if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_min>=vbeg)?60:0));
+	if(vend < 0) vm = vmin(vm, vbeg+((ttm.tm_min>=vbeg)?60:0));
 	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(59,vend))) {
-	    if(ttm.tm_min < vbeg) vm = vmin(vm,vbeg);
+	    if(ttm.tm_min < vbeg) vm = vmin(vm, vbeg);
 	    else if((vstep>1 && ttm.tm_min >= (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_min >= vend))
-		vm = vmin(vm,vbeg+60);
+		vm = vmin(vm, vbeg+60);
 	    else if(vstep>1 ) vm = vmin(vm, vbeg + vstep*(((ttm.tm_min+1)-vbeg)/vstep + ((((ttm.tm_min+1)-vbeg)%vstep)?1:0)));
 	    else vm = vmin(vm, ttm.tm_min+1);
 	}
@@ -1854,12 +1876,12 @@ reload:
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=23; }
-	if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_hour>vbeg)?24:0));
+	if(vend < 0) vm = vmin(vm, vbeg+((ttm.tm_hour>vbeg)?24:0));
 	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(23,vend))) {
-	    if(ttm.tm_hour < vbeg) vm = vmin(vm,vbeg);
+	    if(ttm.tm_hour < vbeg) vm = vmin(vm, vbeg);
 	    else if((vstep>1 && ttm.tm_hour > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_hour > vend))
-		vm = vmin(vm,vbeg+24);
-	    else if(vstep>1 ) vm = vmin(vm, vbeg + vstep*((ttm.tm_hour-vbeg)/vstep + (((ttm.tm_hour-vbeg)%vstep)?1:0)));
+		vm = vmin(vm, vbeg+24);
+	    else if(vstep > 1) vm = vmin(vm, vbeg + vstep*((ttm.tm_hour-vbeg)/vstep + (((ttm.tm_hour-vbeg)%vstep)?1:0)));
 	    else vm = vmin(vm, ttm.tm_hour);
 	}
 	if(vm == ttm.tm_hour) break;
@@ -1879,12 +1901,12 @@ reload:
 	    vbeg = vend = -1; vstep = 0;
 	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	    if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=31; }
-	    if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_mday>vbeg)?31:0));
+	    if(vend < 0) vm = vmin(vm, vbeg+((ttm.tm_mday>vbeg)?31:0));
 	    else if((vbeg=vmax(1,vbeg)) < (vend=vmin(31,vend))) {
-		if(ttm.tm_mday < vbeg) vm = vmin(vm,vbeg);
+		if(ttm.tm_mday < vbeg) vm = vmin(vm, vbeg);
 		else if((vstep>1 && ttm.tm_mday > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_mday > vend))
-		    vm = vmin(vm,vbeg+31);
-		else if(vstep>1 ) vm = vmin(vm, vbeg + vstep*((ttm.tm_mday-vbeg)/vstep + (((ttm.tm_mday-vbeg)%vstep)?1:0)));
+		    vm = vmin(vm, vbeg+31);
+		else if(vstep > 1) vm = vmin(vm, vbeg + vstep*((ttm.tm_mday-vbeg)/vstep + (((ttm.tm_mday-vbeg)%vstep)?1:0)));
 		else vm = vmin(vm, ttm.tm_mday);
 	    }
 	    if(vm == ttm.tm_mday) break;
@@ -1919,12 +1941,12 @@ reload:
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=12; }
-	if(vend < 0) vm = vmin(vm,vbeg+(((ttm.tm_mon+1)>vbeg)?12:0));
+	if(vend < 0) vm = vmin(vm, vbeg+(((ttm.tm_mon+1)>vbeg)?12:0));
 	else if((vbeg=vmax(1,vbeg)) < (vend=vmin(12,vend))) {
-	    if((ttm.tm_mon+1) < vbeg) vm = vmin(vm,vbeg);
+	    if((ttm.tm_mon+1) < vbeg) vm = vmin(vm, vbeg);
 	    else if((vstep>1 && (ttm.tm_mon+1) > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && (ttm.tm_mon+1) > vend))
-		vm = vmin(vm,vbeg+12);
-	    else if(vstep>1) vm = vmin( vm, vbeg + vstep*(((ttm.tm_mon+1)-vbeg)/vstep + ((((ttm.tm_mon+1)-vbeg)%vstep)?1:0)));
+		vm = vmin(vm, vbeg+12);
+	    else if(vstep > 1) vm = vmin(vm, vbeg + vstep*(((ttm.tm_mon+1)-vbeg)/vstep + ((((ttm.tm_mon+1)-vbeg)%vstep)?1:0)));
 	    else vm = vmin(vm, ttm.tm_mon+1);
 	}
 	if(vm == (ttm.tm_mon+1)) break;
@@ -1957,7 +1979,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
-    // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
+    // {string|int} system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
     if(iid == "system" && prms.size() >= 1) {
@@ -1977,9 +1999,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "fileRead" && prms.size() >= 1) {
 	char buf[STR_BUF_LEN];
 	string rez;
-	int hd = open(prms[0].getS().c_str(),O_RDONLY);
+	int hd = open(prms[0].getS().c_str(), O_RDONLY);
 	if(hd >= 0) {
-	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf, len);
 	    close(hd);
 	}
 	return rez;
@@ -2028,11 +2050,14 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  tm - wait time in seconds (precised up to nanoseconds), up to STD_INTERF_TM(5 seconds)
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1) {
-	struct timespec sp_tm;
-	sp_tm.tv_sec = prms[0].getI();
-	sp_tm.tv_nsec = 1000000000l*(prms[0].getR()-sp_tm.tv_sec) + ((prms.size()>=2)?prms[1].getI():0);
-	sp_tm.tv_sec = vmin(STD_INTERF_TM, sp_tm.tv_sec);
-	return nanosleep(&sp_tm, NULL);
+	return sysSleep(fmin(prms[0].getR()+1e-9*((prms.size()>=2)?prms[1].getI():0),(double)STD_INTERF_TM));
+	/*struct timespec spTm;
+	spTm.tv_sec = prms[0].getI();
+	spTm.tv_nsec = 1000000000l*(prms[0].getR()-spTm.tv_sec) + ((prms.size()>=2)?prms[1].getI():0);
+	spTm.tv_sec = vmin(STD_INTERF_TM, spTm.tv_sec);
+	clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
+	return clock_nanosleep(clkId, 0, &spTm, NULL);*/
+	//return nanosleep(&spTm, NULL);
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
@@ -2272,7 +2297,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(nCPU() > 1)
 		ctrMkNode("fld",opt,-1,"/gen/mainCPUs",_("Main CPUs set"),RWRWR_,"root","root",2,"tp","str",
 		    "help",_("For using CPU set write processors numbers string separated by symbol ':'.\nCPU numbers started from 0."));
-	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/clk",_("Tasks planning clock"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
@@ -2364,10 +2389,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setMainCPUs(TSYS::strParse(opt->text(),0,"("));
     }
-    else if(a_path == "/gen/clk_res" && ctrChkNode(opt)) {
+    else if(a_path == "/gen/clk" && ctrChkNode(opt)) {
 	struct timespec tmval;
-	clock_getres(CLOCK_REALTIME,&tmval);
-	opt->setText(tm2s(1e-3*tmval.tv_nsec));
+	clock_getres(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &tmval);
+	opt->setText(TSYS::strMess(SYS->clockRT()?_("Real-time %s"):_("Monotonic %s"),tm2s(1e-9*tmval.tv_nsec).c_str()));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
     else if(a_path == "/gen/config") {
@@ -2470,9 +2495,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
 			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."),
-			    tm2s((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
-			    100*(double)consMax/(double)(tm_per-tm_beg), tm2s(1e-3*(tm_end-tm_beg)).c_str(), tm2s(1e-3*(tm_per-tm_beg)).c_str(),
-			    tm2s(1e-3*(tm_per-tm_pnt)).c_str(), tm2s(1e-3*lagMax).c_str(), (double)it->second.cycleLost));
+			    atm2s((time_t)(1e-9*tm_per),SYS->clockRT()?"%d-%m-%Y %H:%M:%S":"%d-%m %H:%M:%S").c_str(),
+			    100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
+			    100*(double)consMax/(double)(tm_per-tm_beg), tm2s(1e-9*(tm_end-tm_beg)).c_str(), tm2s(1e-9*(tm_per-tm_beg)).c_str(),
+			    tm2s(1e-9*(tm_per-tm_pnt)).c_str(), tm2s(1e-9*lagMax).c_str(), (double)it->second.cycleLost));
 		}
 		if(n_plc) {
 		    string plcVl = _("Standard");
@@ -2503,7 +2529,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(nCPU() > 1 && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
 	    ResAlloc res(taskRes, true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
-	    if(it == mTasks.end()) throw TError(nodePath().c_str(),_("No present task '%s'."));
+	    if(it == mTasks.end()) throw err_sys(_("No present task '%s'."));
 	    if(it->second.flgs & STask::Detached) return;
 
 	    it->second.cpuSet = TSYS::strParse(opt->text(),0,"(");
@@ -2524,8 +2550,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
 	    res.release();
 	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first, it->second.cpuSet);
-	    if(rez == EINVAL) throw TError(nodePath().c_str(),_("Set not allowed processors try."));
-	    if(rez) throw TError(nodePath().c_str(),_("CPUs set for the thread error."));
+	    if(rez == EINVAL) throw err_sys(_("Set not allowed processors try."));
+	    if(rez) throw err_sys(_("CPUs set for the thread error."));
 	}
 #endif
     }

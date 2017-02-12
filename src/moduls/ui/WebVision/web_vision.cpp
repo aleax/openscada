@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,9 +33,8 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.5"
-#define AUTHORS		_("Roman Savochenko")
-#define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
+#define MOD_VER		"1.8.1"
+#define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -80,10 +78,10 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
     id_vcases	= grpAdd("ses_");
 
     //Reg export functions
-    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet));
-    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost));
+    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
+    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 
     gdFTUseFontConfig(1);
 
@@ -245,6 +243,8 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
 	"table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }\n"
 	"table.work td { background-color:#cccccc; text-align: left; }\n"
 	"table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
+	// "table.work td.content td { text-align: center; }\n"
+	"table.work td.content img { vertical-align: middle; padding-right: 5px; }\n"
 	"table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
 	".vertalign { display: table-cell; text-align: center; vertical-align: middle; }\n"
 	".vertalign * { vertical-align: middle; }\n"
@@ -270,7 +270,6 @@ string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-    if(name == _("Developers"))	return DEVELOPERS;
     return TModule::modInfo(name);
 }
 
@@ -279,7 +278,6 @@ void TWEB::modInfo( vector<string> &list )
     TModule::modInfo(list);
     list.push_back("SubType");
     list.push_back("Auth");
-    list.push_back(_("Developers"));
 }
 
 void TWEB::vcaSesAdd( const string &name, bool isCreate )
@@ -339,14 +337,23 @@ void TWEB::perSYSCall( unsigned int cnt )
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
+string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
+    const string &htmlHeadEls, const string &forceTmplFile )
+{
+    vector<TVariant> prms;
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
+
+    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
+}
+
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
 {
-    return "HTTP/1.0 "+rcode+"\x0D\x0A"
-	"Server: "+PACKAGE_STRING+"\x0D\x0A"
+    return "HTTP/1.0 " + rcode + "\x0D\x0A"
+	"Server: " + PACKAGE_STRING + "\x0D\x0A"
 	"Accept-Ranges: bytes\x0D\x0A"
-	"Content-Length: "+i2s(cln)+"\x0D\x0A"
+	"Content-Length: " + i2s(cln) + "\x0D\x0A"
 	"Connection: close\x0D\x0A"
-	"Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"+addattr+"\x0D\x0A";
+	"Content-Type: " + cnt_tp + "; charset=" + charset + "\x0D\x0A" + addattr + "\x0D\x0A";
 }
 
 string TWEB::pgHead( const string &head_els, const string &title, const string &charset )
@@ -357,13 +364,14 @@ string TWEB::pgHead( const string &head_els, const string &title, const string &
 	"'DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	"<head>\n"
-	"  <meta http-equiv='Content-Type' content='text/html; charset="+charset+"'/>\n"
+	"  <meta http-equiv='Content-Type' content='text/html; charset=" + charset + "'/>\n"
 	"  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"
 	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
 	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
-	"  <link rel='shortcut icon' href='/"MOD_ID"/ico' type='image' />\n"
-	"  <title>"+(title.empty()?(string(PACKAGE_NAME)+". "+_(MOD_NAME)):title)+"</title>\n"
-	"  <style type='text/css'>\n"+mCSStables+"</style>\n"+
+	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
+	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
+	"  <title>" + (title.empty()?(string(PACKAGE_NAME) + ". " + _(MOD_NAME)):title) + "</title>\n"
+	"  <style type='text/css'>\n" + mCSStables + "</style>\n"+
 	head_els+
 	"</head>\n"
 	"<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n";
@@ -373,54 +381,60 @@ string TWEB::pgHead( const string &head_els, const string &title, const string &
 
 string TWEB::pgTail( )	{ return "</body>\n</html>"; }
 
-void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
+    string sender = TSYS::strLine(iprt->srcAddr(), 0);
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, "");
-    ses.page = pgHead();
 
     try {
-	string zero_lev = TSYS::pathLev(ses.url,0);
+	string zero_lev = TSYS::pathLev(ses.url, 0);
 	//Get about module page
-	if(zero_lev == "about")	getAbout(ses);
+	//if(zero_lev == "about")	getAbout(ses);
 	//Get module icon and global image
-	else if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
-	    string itp;
-	    ses.page = TUIS::icoGet(zero_lev=="ico"?"UI."MOD_ID:zero_lev.substr(4), &itp);
-	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
-	    return;
+	//else
+	if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
+	    string itp = "png";
+	    //Session's and project's icons request processing
+	    map<string,string>::iterator prmEl = ses.prm.find("it");
+	    if(prmEl != ses.prm.end()) {
+		XMLNode req("get");
+		req.setAttr("path", prmEl->second+"/%2fico");
+		mod->cntrIfCmd(req, ses.user);
+		page = TSYS::strDecode(req.text(), TSYS::base64);
+	    }
+	    else page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
+	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
 	}
 	else {
-	    //Session select or new session for project creation
+	    //Session selection or a new session for the project creation
 	    if(zero_lev.empty()) {
 		bool sesPrjOk = false;
-		ses.page = ses.page+
-		    "<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n"
-		    "<center><table class='work'>\n";
+		page = "<table class='work'>\n";
 		// Get present sessions list
 		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
-		cntrIfCmd(req,ses.user);
+		cntrIfCmd(req, ses.user);
 		ResAlloc sesRes(mSesRes, false);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
-			    (req.childGet(i_ch)->attr("user") != user ||
-			    (vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender)))
+			    (req.childGet(iCh)->attr("user") != user ||
+			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
 			continue;
-		    prjSesEls += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/ses_"+req.childGet(i_ch)->text()+"/'>"+
-			req.childGet(i_ch)->text()+"</a>";
-		    if(req.childGet(i_ch)->attr("user") != user) prjSesEls += " - "+req.childGet(i_ch)->attr("user");
-		    if(vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender)
-			prjSesEls += " - "+vcaSesAt(req.childGet(i_ch)->text()).at().sender();
+		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/>"
+			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/'>" + req.childGet(iCh)->text()+"</a>";
+		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
+		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
+			prjSesEls += " - "+vcaSesAt(req.childGet(iCh)->text()).at().sender();
 		    prjSesEls += "</td></tr>";
-		    self_prjSess += req.childGet(i_ch)->attr("proj")+";";
+		    self_prjSess += req.childGet(iCh)->attr("proj")+";";
 		}
 		if(!prjSesEls.empty()) {
-		    ses.page = ses.page+
-			"<tr><th>"+_("Connect to opened session")+"</th></tr>\n"
+		    page = page +
+			"<tr><th>" + _("Connect to opened session") + "</th></tr>\n"
 			"<tr><td class='content'>\n"
-			"<table border='0' cellspacing='3px' width='100%'>\n"+
-			prjSesEls+
+			"<table border='0' cellspacing='3px' width='100%'>\n" +
+			prjSesEls +
 			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
@@ -428,14 +442,15 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		prjSesEls = "";
 		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
-		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(i_ch)->attr("id")+";") != string::npos)
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
+		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)
 			continue;
-		    prjSesEls += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
-			req.childGet(i_ch)->text()+"</a></td></tr>";
+		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/>"
+					 "<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/'>" +
+			req.childGet(iCh)->text()+"</a></td></tr>";
 		}
 		if(!prjSesEls.empty()) {
-		    ses.page = ses.page +
+		    page = page +
 			"<tr><th>"+_("Create new session for present project")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
 			"<table border='0' cellspacing='3px' width='100%'>\n"+
@@ -443,9 +458,10 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
-		ses.page += "</table></center>";
+		page += "</table>";
 
-		if(!sesPrjOk) messPost(ses.page,nodePath(),_("No one sessions and projects of VCA engine are present for user!"),TWEB::Warning);
+		if(!sesPrjOk) page = messPost(nodePath(), _("No one sessions and projects of VCA engine are present for user!"), TWEB::Warning);
+		page = pgCreator(iprt, page, "200 OK");
 	    }
 	    //New session create
 	    else if(zero_lev.compare(0,4,"prj_") == 0) {
@@ -456,20 +472,20 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		cntrIfCmd(req, ses.user);
 		ResAlloc sesRes(mSesRes, false);
 		if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
-		    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-			if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
-			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
-			{ sName = req.childGet(i_ch)->text(); break; }
+		    for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
+			if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
+			    vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() == sender)
+			{ sName = req.childGet(iCh)->text(); break; }
 		if(sName.empty()) {
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
 		    if((int)vcaLs.size() >= mod->sessLimit())
-		        messPost(ses.page,nodePath(),_("Sorry, opened sessions number reach limit!"),TWEB::Warning);
+			page = messPost(nodePath(), _("Sorry, opened sessions number reach limit!"), TWEB::Warning);
 		    else {
 			sesRes.request(true);
 			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
 			if(cntrIfCmd(req,ses.user))
-			    messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
+			    page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 			else {
 			    sName = req.attr("sess");
 			    vcaSesAdd(sName,true);
@@ -478,8 +494,9 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    }
 		}
 		if(!sName.empty())
-		    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/ses_"+sName+"/'/>")+
-			"<center>Go to session '"+sName+"' for project: '"+zero_lev.substr(4)+"'</center>\n<br/>";
+		    page = pgCreator(iprt, TSYS::strMess(_("Go to session '%s' for project '%s' ..."),sName.c_str(),zero_lev.substr(4).c_str()),
+			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/ses_" + sName + "/'/>");
+		else page = pgCreator(iprt, page, "200 OK");
 	    }
 	    //Main session page data prepare
 	    else if(zero_lev.compare(0,4,"ses_") == 0) {
@@ -488,7 +505,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		// Check for session present
 		if(!ses.prm.size()) {
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HttpGet("", page, sender, vars, user); return; }
+		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HTTP_GET("", page, vars, user, iprt); return; }
 		}
 		// Call to session
 		ResAlloc sesRes(mSesRes, false);
@@ -499,77 +516,80 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			vcaSesAdd(sesnm,false);
 			vcaSesAt(sesnm).at().senderSet(sender);
 			vcaSesAt(sesnm).at().getReq(ses);
-		    }
-		    else throw;
+		    } else throw;
 		}
 		page = ses.page;
-		return;
 	    }
-	    else mess_err(nodePath().c_str(),_("An inaccessible request is received: '%s'"),zero_lev.c_str());
+	    else {
+		page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Pointed project/session '%s' is wrong!"),zero_lev.c_str())+"</div>\n",
+				       "404 Not Found");
+	    }
 	}
     } catch(TError &err) {
-	ses.page = "Page <" + ses.url + "> error: " + err.mess;
-	page = httpHead("404 Not Found",ses.page.size()) + ses.page;
-	return;
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
+			       "404 Not Found");
     }
-
-    ses.page += pgTail();
-    page = httpHead("200 OK", ses.page.size()) + ses.page;
 }
 
-void TWEB::getAbout( SSess &ses )
+/*void TWEB::getAbout( SSess &ses )
 {
-    ses.page = ses.page+"<center><table class='page_auth'>\n"
-	"<TR><TD>"+PACKAGE+" "+VERSION+"</TD></TR>\n"
+    ses.page = ses.page + "<center><table class='page_auth'>\n"
+	"<TR><TD>" + PACKAGE + " " + VERSION + "</TD></TR>\n"
 	"<TR class='content'><TD>\n"
 	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>OpenSCADA</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD>GPL</TD></TR>\n"
-	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>Roman Savochenko</TD></TR>\n"
+	"<TR><TD><font color='Blue'>" + _("Name: ") + "</font></TD><TD>OpenSCADA</TD></TR>\n"
+	"<TR><TD><font color='Blue'>" + _("License: ") + "</font></TD><TD>GPL</TD></TR>\n"
+	"<TR><TD><font color='Blue'>" + _("Author: ") + "</font></TD><TD>Roman Savochenko</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR></table><br/>\n"
 	"<table class='page_auth'>\n"
-	"<TR><TD>"MOD_ID" "MOD_VER"</TD></TR>\n"
+	"<TR><TD>" MOD_ID " " MOD_VER "</TD></TR>\n"
 	"<TR class='content'><TD>\n"
 	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>"+_("Name: ")+"</font></TD><TD>"+_(MOD_NAME)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Description: ")+"</font></TD><TD>"+_(DESCRIPTION)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("License: ")+"</font></TD><TD>"+_(LICENSE)+"</TD></TR>"
-	"<TR><TD><font color='Blue'>"+_("Author: ")+"</font></TD><TD>"+_(AUTHORS)+"</TD></TR>"
+	"<TR><TD><font color='Blue'>" + _("Name: ") + "</font></TD><TD>" + _(MOD_NAME) + "</TD></TR>"
+	"<TR><TD><font color='Blue'>" + _("Description: ") + "</font></TD><TD>" + _(DESCRIPTION) + "</TD></TR>"
+	"<TR><TD><font color='Blue'>" + _("License: ") + "</font></TD><TD>" + _(LICENSE) + "</TD></TR>"
+	"<TR><TD><font color='Blue'>" + _("Author: ") + "</font></TD><TD>" + _(AUTHORS) + "</TD></TR>"
 	"</table>\n"
 	"</TD></TR>\n</table><br/></center>\n";
-}
+}*/
 
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
 
     try {
 	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 	//To control interface request
 	if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com") {
-	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
-	    cntrIfCmd(req,ses.user,false);
+	    XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
+	    cntrIfCmd(req, ses.user, false);
 	    ses.page = req.save();
-	    page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	    page = httpHead("200 OK", ses.page.size(), "text/xml", "", "UTF-8") + ses.page;
 	    return;
 	}
 
-	//Post command to session
-	string sesnm = TSYS::pathLev(ses.url,0);
-	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0) page = httpHead("404 Not Found");
+	//Post command to the session
+	string sesnm = TSYS::pathLev(ses.url, 0);
+	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0)
+	    throw TError(nodePath().c_str(), "%s", TSYS::strMess(_("Wrong session '%s'."), sesnm.c_str()).c_str());
 	else {
 	    ResAlloc sesRes(mSesRes, false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);
 	    page = ses.page;
 	}
-    } catch(...) { page = httpHead("404 Not Found"); }
+    } catch(TError &err) {
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),url.c_str(),err.mess.c_str())+"</div>\n",
+	    "404 Not Found");
+    }
 }
 
-void TWEB::messPost( string &page, const string &cat, const string &mess, MessLev type )
+string TWEB::messPost( const string &cat, const string &mess, MessLev type )
 {
-    //Put system message.
+    string page;
+
+    //Put system message
     message(cat.c_str(), (type==Error) ? TMess::Error : (type==Warning) ? TMess::Warning : TMess::Info,"%s",mess.c_str());
 
     //Prepare HTML messages
@@ -579,6 +599,8 @@ void TWEB::messPost( string &page, const string &cat, const string &mess, MessLe
     else page += "<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n";
     page += "<tr bgcolor='#cccccc'> <td align='center'>"+TSYS::strEncode(mess,TSYS::Html)+"</td></tr>\n";
     page += "</tbody></table>\n";
+
+    return page;
 }
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user, bool VCA )
@@ -640,8 +662,7 @@ void TWEB::imgConvert(SSess &ses)
     //if(sim) gdImageAlphaBlending(sim, 0);
 
     //Check for resize icon
-    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH)
-    {
+    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH) {
 	newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
 	gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
 	gdImageAlphaBlending(dim,0);
@@ -652,8 +673,7 @@ void TWEB::imgConvert(SSess &ses)
     }
 
     // Check for disable icon make
-    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact"))
-    {
+    if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact")) {
 	gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
 	gdImageAlphaBlending(dim,0);
 	bool isUnAct = (prmEl->second == "unact");
@@ -722,8 +742,7 @@ string TWEB::trMessReplace( const string &tsrc )
 
     unsigned txtBeg = 0, i_s, i_r;
     for(i_s = 0; i_s < tsrc.size(); i_s++)
-	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#')
-	{
+	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#') {
 	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
 	    if((tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n')
 		break;
@@ -766,8 +785,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_name = "name=\"";
 
     for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
-	{
+	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
 	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
 	}

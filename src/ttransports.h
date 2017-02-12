@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		8		//TransportS type modules version
+#define STR_VER		9		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -45,19 +45,19 @@ class TTransportIn : public TCntrNode, public TConfig
 	TTransportIn( const string &id, const string &db, TElem *el );
 	virtual ~TTransportIn( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	id( )		{ return mId; }
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
-	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	addr( ) const	{ return cfg("ADDR").getS(); }
 	string	protocolFull( )	{ return cfg("PROT").getS(); }
 	string	protocol( );
 	virtual string getStatus( );
 
 	bool toStart( )		{ return mStart; }
-	bool startStat( )	{ return runSt; }
+	bool startStat( ) const	{ return runSt; }
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -74,7 +74,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual void start( )	{ }
 	virtual void stop( )	{ }
 
-	TTipTransport &owner( );
+	TTipTransport &owner( ) const;
 
     protected:
 	//Methods
@@ -82,9 +82,9 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -94,7 +94,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
 	TCfg	&mId;
@@ -112,19 +112,19 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	workId( );
 	string	name( );
-	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
-	string	addr( )		{ return cfg("ADDR").getS(); }
-	virtual string timings( ) { return ""; }
-	int	prm1( )		{ return mPrm1; }
-	int	prm2( )		{ return mPrm2; }
-	bool	toStart( )	{ return mStart; }
-	bool	startStat( )	{ return runSt; }
-	time_t	startTm( )	{ return mStartTm; }
+	string	dscr( )			{ return cfg("DESCRIPT").getS(); }
+	string	addr( ) const		{ return cfg("ADDR").getS(); }
+	virtual	string timings( )	{ return ""; }
+	int64_t	prm1( )			{ return mPrm1; }
+	int64_t	prm2( )			{ return mPrm2; }
+	bool	toStart( )		{ return mStart; }
+	bool	startStat( ) const	{ return runSt; }
+	time_t	startTm( )		{ return mStartTm; }
 	virtual	string getStatus( );
 
 	string DB( )		{ return mDB; }
@@ -149,9 +149,9 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void messProtIO( XMLNode &io, const string &prot );
 
-	TTipTransport &owner( );
+	TTipTransport &owner( ) const;
 
-	Res &nodeRes( )			{ return nRes; }
+	ResRW &nodeRes( )			{ return nRes; }
 
     protected:
 	//Methods
@@ -159,11 +159,11 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	//Attributes
@@ -171,7 +171,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Attributes
 	TCfg	&mId;
@@ -181,7 +181,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	// Reserve parameters
 	time_t	mStartTm;
 	int	mPrm1, mPrm2;
-	Res	nRes;
+	ResRW	nRes;
 };
 
 //************************************************
@@ -197,20 +197,20 @@ class TTipTransport: public TModule
 	virtual ~TTipTransport( );
 
 	//> Input transports
-	void inList( vector<string> &list )			{ chldList(mIn,list); }
-	bool inPresent( const string &name )			{ return chldPresent(mIn,name); }
+	void inList( vector<string> &list ) const		{ chldList(mIn,list); }
+	bool inPresent( const string &name ) const		{ return chldPresent(mIn,name); }
 	void inAdd( const string &name, const string &db = "*.*" );
 	void inDel( const string &name, bool complete = false )	{ chldDel(mIn,name,-1,complete); }
-	AutoHD<TTransportIn> inAt( const string &name )		{ return chldAt(mIn,name); }
+	AutoHD<TTransportIn> inAt( const string &name ) const	{ return chldAt(mIn,name); }
 
 	//> Output transports
-	void outList( vector<string> &list )			{ chldList(mOut,list); }
-	bool outPresent( const string &name )			{ return chldPresent(mOut,name); }
+	void outList( vector<string> &list ) const		{ chldList(mOut,list); }
+	bool outPresent( const string &name ) const		{ return chldPresent(mOut,name); }
 	void outAdd( const string &name, const string &idb = "*.*" );
 	void outDel( const string &name, bool complete = false ){ chldDel(mOut,name,-1,complete); }
-	AutoHD<TTransportOut> outAt( const string &name )	{ return chldAt(mOut,name); }
+	AutoHD<TTransportOut> outAt( const string &name ) const	{ return chldAt(mOut,name); }
 
-	TTransportS &owner( );
+	TTransportS &owner( ) const;
 
     protected:
 	//Methods
@@ -283,7 +283,7 @@ class TTransportS : public TSubSYS
 	TElem &inEl( )			{ return elIn; }
 	TElem &outEl( ) 		{ return elOut; }
 
-	AutoHD<TTipTransport> at( const string &iid )	{ return modAt(iid); }
+	AutoHD<TTipTransport> at( const string &iid ) const	{ return modAt(iid); }
 
     protected:
 	void load_( );
@@ -297,7 +297,7 @@ class TTransportS : public TSubSYS
 	//Attributes
 	TElem	elIn, elOut, elExt;
 
-	Res	extHostRes;             //External hosts resource
+	ResRW	extHostRes;             //External hosts resource
 	vector<ExtHost> extHostLs;      //External hosts list
 };
 

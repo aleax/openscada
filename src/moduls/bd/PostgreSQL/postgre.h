@@ -1,8 +1,8 @@
 
 //OpenSCADA system module BD.PostgreSQL file: postgre.h
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
- *                 2013-2016 by Roman Savochenko, rom_as@oscada.org        *
+ *   Copyright (C) 2013-2017 by Roman Savochenko, rom_as@oscada.org        *
+ *                 2010 by Maxim Lysenko, mlisenko@oscada.org              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,12 +49,12 @@ class MTable : public TTable
 
 	// Field's functions
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	MBD &owner( );
+	MBD &owner( ) const;
 
     private:
 	//Private methods
@@ -92,7 +92,7 @@ class MBD : public TBD
 	void enable( );
 	void disable( );
 
-	void allowList( vector<string> &list );
+	void allowList( vector<string> &list ) const;
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
 	void create( const string &nm, bool toCreate = false );
@@ -117,6 +117,11 @@ class MBD : public TBD
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;
 	ResMtx	connRes;
+
+	// Statistic
+	float	nReq, rqTm, rqTmMin, rqTmMax, rqTmAll;
+	MtxString rqTmMaxVl;
+	time_t	conTm;
 };
 
 //************************************************

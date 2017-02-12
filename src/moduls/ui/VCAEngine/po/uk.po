@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-03 16:52+0300\n"
+"POT-Creation-Date: 2017-02-09 15:32+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1166,17 +1166,11 @@ msgstr "Немає стилю"
 msgid "Create new style"
 msgstr "Створити новий стиль"
 
-msgid "Page:open state"
-msgstr "Сторінка:відкрита"
+msgid "Page: open state"
+msgstr "Сторінка: відкрита"
 
-msgid "Page:process no opened"
-msgstr "Сторінка:обробляти закритою"
-
-msgid "Page:group"
-msgstr "Сторінка:група"
-
-msgid "Page:open source"
-msgstr "Сторінка:джерело відриття"
+msgid "Page: process no opened"
+msgstr "Сторінка: обробляти закритою"
 
 msgid "For page can use only Box-based widgets!"
 msgstr "Для сторінок може бути використано тільки віджет базований на боксі!"
@@ -1260,6 +1254,10 @@ msgstr "Зупинка сеансу."
 msgid "Session '%s' calculate error."
 msgstr "Помилка обчислення сесії '%s'."
 
+#, c-format
+msgid "Unregistered connection %d on the session."
+msgstr ""
+
 msgid "Session: "
 msgstr "Сеанс: "
 
@@ -1317,6 +1315,12 @@ msgstr "Квітація"
 msgid "Type argument"
 msgstr "Аргумент типу"
 
+msgid "Enable page."
+msgstr "Включення сторінки."
+
+msgid "Disable page."
+msgstr "Вимкнення сторінки."
+
 msgid "Session page: "
 msgstr "Сторінки сеансу: "
 
@@ -1332,6 +1336,15 @@ msgstr "Помилка обчислення віджета. Обробку ви�
 
 msgid "Process"
 msgstr "Обробка"
+
+msgid "Spent time"
+msgstr "Використано часу"
+
+msgid "Subtree="
+msgstr "Піддерево="
+
+msgid "Item="
+msgstr "Елемент="
 
 msgid "Visual control area engine"
 msgstr "Рушій середовища візуалізації та керування"
@@ -1429,9 +1442,6 @@ msgstr "Значення 9"
 msgid "Original widgets"
 msgstr "Базові віджети"
 
-msgid "Load module."
-msgstr "Завантаження модуля."
-
 #, c-format
 msgid "Load library '%s' time: %f ms."
 msgstr "Час завантаження бібліотеки '%s': %f мс."
@@ -1453,15 +1463,6 @@ msgstr "Час включення бібліотеки '%s': %f мс."
 #, c-format
 msgid "Enable project '%s' time: %f ms."
 msgstr "Час включення проекту '%s': %f мс."
-
-msgid "Save module."
-msgstr "Збереження модуля."
-
-msgid "Start module."
-msgstr "Старт модуля."
-
-msgid "Stop module."
-msgstr "Зупинка модуля."
 
 #, c-format
 msgid "Connection to session is not permitted for '%s'."
@@ -1727,8 +1728,9 @@ msgstr "Шлях до цього віджету."
 msgid "Path to parent widget."
 msgstr "Шлях до батьківського віджету."
 
-msgid "The widget owner and group in form \"{owner}:{group}\"."
-msgstr "Власник та група віджету у формі \"{власник}:{група}\"."
+msgid ""
+"The widget owner and groups(separated by ',') in form \"{owner}:{groups}\"."
+msgstr "Власник та групи(поділені ',') віджету у формі \"{власник}:{групи}\"."
 
 msgid ""
 "Permission to the widget in form \"{user}{group}{other}\".\n"
@@ -1822,6 +1824,9 @@ msgstr "Помилка. Видалення елементу не користу�
 
 msgid "Changing of not user attribute is no permitted"
 msgstr "Модифікація атрибутів не користувача не дозволена"
+
+msgid "New attribute's ID is empty!"
+msgstr "Новий ID атрибуту порожній!"
 
 #, c-format
 msgid "New attribute's ID '%s' already present!"

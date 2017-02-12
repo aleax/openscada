@@ -50,11 +50,13 @@ class UPS: public DA
 	string id( )	{ return "ups"; }
 	string name( )	{ return _("UPS (NUT)"); }
 
+	bool isSlow( )	{ return true; }
+
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );
 
 	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
-	void cfgChange( TCfg &i_cfg );
+	void cfgChange( TCfg &co, const TVariant &pc );
 
 	void getVal( TMdPrm *prm );
 	void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );

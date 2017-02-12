@@ -113,7 +113,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	int lnkId( const string &id );
 	SLnk &lnk( int num );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods
@@ -165,7 +165,7 @@ class TMdContr: public TController
 
 	double period( )	{ return mPer; }
 	string cron( )		{ return cfg("SCHEDULE").getS(); }
-	string addr( )		{ return cfg("ADDR").getS(); }
+	string addr( ) const	{ return cfg("ADDR").getS(); }
 	string addrTr( )	{ return cfg("ADDR_TR").getS(); }
 	bool assincWrite( )	{ return mAssincWR; }
 	Type type( )		{ return (Type)mType; }
@@ -185,7 +185,7 @@ class TMdContr: public TController
 	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
 	void reset( );
 
-	TTpContr &owner( );
+	TTpContr &owner( ) const;
 
     protected:
 	//Methods
@@ -196,7 +196,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( const string &id, bool val );		//Enable parameter to process list
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
 	// Values process
@@ -273,7 +273,7 @@ class TMdContr: public TController
 
 	ResMtx	enRes,			//Access to pHd
 		reqAPIRes;		//Access to local connection's API data, like for LibnoDave
-	Res	reqDataRes,		//Access to generic request's data, mostly acqBlks
+	ResRW	reqDataRes,		//Access to generic request's data, mostly acqBlks
 		reqDataAsWrRes;		//Access to writeBlks
 
 	double	mPer, numR, numW, numErr;//Counters for read, wrote bytes and connection errors.
@@ -302,7 +302,7 @@ class TTpContr: public TTipDAQ
 	void getLifeListPB( unsigned board, string &buffer );
 
 	//Attributes
-	Res	resAPI;
+	ResRW	resAPI;
 
     protected:
 	//Methods
@@ -322,7 +322,7 @@ class TTpContr: public TTipDAQ
 	TElem	elCifDev, elPrmIO;
 
 	struct SCifDev {
-	    Res		res;		//Device resource
+	    ResRW	res;		//Device resource
 	    bool	present;	//Present flag
 	    int		board;		//Board number
 	    unsigned long phAddr;	//Physical address

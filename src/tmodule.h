@@ -83,8 +83,8 @@ class TModule : public TCntrNode
 	string	modId( )		{ return mModId.c_str(); }
 	string	modName( );
 
-	virtual void modStart( )	{ }
-	virtual void modStop( )		{ }
+	virtual void modStart( );
+	virtual void modStop( );
 
 	virtual void   modInfo( vector<string> &list );
 	virtual string modInfo( const string &name );
@@ -95,16 +95,17 @@ class TModule : public TCntrNode
 	void modFuncList( vector<string> &list );
 	bool modFuncPresent( const string &prot );
 	ExpFunc &modFunc( const string &prot );
-	void modFunc( const string &prot, void (TModule::**offptr)() );
+	bool modFunc( const string &prot, void (TModule::**offptr)(), bool noex = false );
 
 	// Translate functions
 	const char *I18N( const char *mess );
 
-	TSubSYS &owner( );
+	TSubSYS &owner( ) const;
 
     protected:
 	//Methods
 	void postEnable( int flag );
+	void postDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void modInfoMainSet( const string &name, const string &type, const string &vers, const string &author,
@@ -124,7 +125,8 @@ class TModule : public TCntrNode
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mModId.c_str(); }
+	const char *nodeName( ) const		{ return mModId.c_str(); }
+	const char *nodeNameSYSM( ) const	{ return mModId.c_str(); }
 
 	//Attributes
 	const string	mModId;		// Identificator

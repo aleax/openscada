@@ -61,7 +61,7 @@ class TMdPrm : public TParamContr
 	void saveExtPrms( );
 
 	TElem &elem( )		{ return p_el; }
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	//Attributes
 	TElem	p_el;		//Work atribute elements
@@ -72,7 +72,7 @@ class TMdPrm : public TParamContr
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Data
@@ -136,7 +136,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
@@ -144,7 +144,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res, reqRes, pBusRes;	//Resource for enable params, request values and parallel bus devices
+	ResRW	enRes, reqRes, pBusRes;		//Resource for enable params, request values and parallel bus devices
 	double	&mPer;				//Acquisition task (seconds)
 	int	&mPrior,			//Process task priority
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
@@ -152,11 +152,11 @@ class TMdContr: public TController
 		&connTry;			//Connections try
 
 	bool	prcSt,				//Process task active
-		call_st,        		//Calc now stat
+		callSt,				//Calc now stat
 		endRunReq;			//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	tm_gath;			//Gathering time
+	double	tmGath;				//Gathering time
 	int	mCurSlot;
 	float	numReq, numErr, numErrResp;
 

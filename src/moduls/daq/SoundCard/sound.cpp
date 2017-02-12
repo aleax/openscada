@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.9"
+#define MOD_VER		"0.7.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -117,7 +117,7 @@ TMdContr::~TMdContr( )
     nodeDelAll();
 }
 
-TTpContr &TMdContr::owner( )	{ return (TTpContr&)TController::owner(); }
+TTpContr &TMdContr::owner( ) const	{ return (TTpContr&)TController::owner(); }
 
 string TMdContr::getStatus( )
 {
@@ -171,16 +171,6 @@ string TMdContr::sampleRates( )
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new TMdPrm(name,&owner().tpPrmAt(type)); }
-
-void TMdContr::load_( )
-{
-    TController::load_( );
-}
-
-void TMdContr::save_( )
-{
-    TController::save_();
-}
 
 void TMdContr::start_( )
 {
@@ -362,11 +352,11 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     return cntr.endrunReq;
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    if(startStat() && (icfg.name() == "CARD" || icfg.name() == "SMPL_RATE" || icfg.name() == "SMPL_TYPE")) stop();
+    if(startStat() && (co.name() == "CARD" || co.name() == "SMPL_RATE" || co.name() == "SMPL_TYPE")) stop();
 
     return true;
 }
@@ -417,12 +407,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&owner().prmEL())) vlElemAtt(&owner().prmEL());
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
-
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {

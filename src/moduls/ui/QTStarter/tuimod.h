@@ -24,7 +24,9 @@
 #include <QObject>
 #include <QTranslator>
 #include <QMainWindow>
+#include <QApplication>
 #include <QCloseEvent>
+#include <QSessionManager>
 
 #include <tuis.h>
 
@@ -49,7 +51,11 @@ public:
 
     bool isEmpty( ) const;
 
+#if QT_VERSION < 0x050000
     QString translate( const char *context, const char *sourceText, const char *comment = 0 ) const;
+#else
+    QString translate( const char *context, const char *sourceText, const char *disambiguation = Q_NULLPTR, int n = -1 ) const;
+#endif
 };
 
 //*************************************************
@@ -89,6 +95,19 @@ public:
 protected:
     //Methods
     void closeEvent( QCloseEvent* );
+};
+
+//*************************************************
+//* StApp                                         *
+//*************************************************
+class StApp : public QApplication
+{
+    Q_OBJECT
+
+    public:
+	StApp( int &argv, char **args ) : QApplication(argv, args) { }
+
+	void saveState( QSessionManager &manager )	{ manager.setRestartHint(QSessionManager::RestartNever); }
 };
 
 //*************************************************

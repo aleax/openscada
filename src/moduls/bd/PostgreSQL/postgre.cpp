@@ -1,8 +1,8 @@
 // 
 //OpenSCADA system module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
- *                 2013-2016 by Roman Savochenko, rom_as@oscada.org        *
+ *   Copyright (C) 2013-2017 by Roman Savochenko, rom_as@oscada.org        *
+ *                 2010 by Maxim Lysenko, mlisenko@oscada.org              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.5.2"
+#define MOD_VER		"1.8.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -83,7 +83,8 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //************************************************
 //* BDPostgreSQL::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true),
+    nReq(0), rqTm(0), rqTmMin(3600), rqTmMax(0), rqTmAll(0), rqTmMaxVl(dataRes()), conTm(0)
 {
     setAddr(";127.0.0.1;postgres;123456;NewDB");
 }
@@ -102,28 +103,28 @@ void MBD::postDisable( int flag )
 
     if(flag && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
-	PGconn * connection = NULL;
+	PGconn *tcon = NULL;
 	PGresult *res;
 	try {
-	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
-		throw TError(nodePath().c_str(), _("Fatal error - unable to allocate connection."));
-	    if(PQstatus(connection) != CONNECTION_OK)
-		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+	    if((tcon=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
+		throw err_sys(_("Fatal error - unable to allocate connection."));
+	    if(PQstatus(tcon) != CONNECTION_OK)
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(tcon));
 	    string req = "DROP DATABASE \"" + db + "\"";
-	    if((res=PQexec(connection,req.c_str())) == NULL)
-		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+	    if((res=PQexec(tcon,req.c_str())) == NULL)
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(tcon));
 	    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK)
 	    {
 		string err, err1;
 		err = PQresStatus(PQresultStatus(res));
 		err1 = PQresultErrorMessage(res);
 		PQclear(res);
-		throw TError(nodePath().c_str(), _("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
+		throw err_sys(_("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
 	    }
 	    else PQclear(res);
-	    PQfinish(connection);
+	    PQfinish(tcon);
 	} catch(...) {
-	    if(connection) PQfinish(connection);
+	    if(tcon) PQfinish(tcon);
 	    throw;
 	}
     }
@@ -135,13 +136,13 @@ void MBD::enable( )
     if(enableStat())	return;
 
     int off = 0;
-    host = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    hostaddr = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    user = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    pass = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    db   = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    port = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    connect_timeout = (off < (int)addr().size()) ? TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off)) : "1";
+    host = sTrm(TSYS::strParse(addr(),0,";",&off));
+    hostaddr = sTrm(TSYS::strParse(addr(),0,";",&off));
+    user = sTrm(TSYS::strParse(addr(),0,";",&off));
+    pass = sTrm(TSYS::strParse(addr(),0,";",&off));
+    db   = sTrm(TSYS::strParse(addr(),0,";",&off));
+    port = sTrm(TSYS::strParse(addr(),0,";",&off));
+    connect_timeout = (off < (int)addr().size()) ? sTrm(TSYS::strParse(addr(),0,";",&off)) : "1";
 
     conninfo.clear();
     if(host.empty() && hostaddr.empty()) host = "localhost";
@@ -156,15 +157,15 @@ void MBD::enable( )
 	bool dbCreateTry = false;
 nextTry:
 	if((connection=PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
-	    throw TError(nodePath().c_str(), _("Fatal error - unable to allocate connection."));
+	    throw err_sys(_("Fatal error - unable to allocate connection."));
 	if(PQstatus(connection) != CONNECTION_OK) {
-	    if(dbCreateTry) throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+	    if(dbCreateTry) throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
 	    //Try for connect to system DB, check for need DB present and create otherwise
 	    PQfinish(connection);
 	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
-		throw TError(nodePath().c_str(), _("Fatal error - unable to allocate connection."));
+		throw err_sys(_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(connection) != CONNECTION_OK)
-		throw TError(nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+		throw err_sys(_("Connect to DB error: %s"), PQerrorMessage(connection));
 	    TBD::enable();
 
 	    vector< vector<string> > tbl;
@@ -183,6 +184,11 @@ nextTry:
 	TBD::disable();
 	throw;
     }
+
+    nReq = rqTm = rqTmMax = rqTmAll = 0;
+    rqTmMaxVl = "";
+    rqTmMin = 3600;
+    conTm = time(NULL);
 }
 
 void MBD::disable( )
@@ -199,7 +205,7 @@ void MBD::disable( )
     PQfinish(connection);
 }
 
-void MBD::allowList( vector<string> &list )
+void MBD::allowList( vector<string> &list ) const
 {
     if(!enableStat())  return;
     list.clear();
@@ -212,13 +218,13 @@ void MBD::allowList( vector<string> &list )
 		    "AND n.nspname !~ '^pg_toast' "
 		    "AND pg_catalog.pg_table_is_visible(c.oid)";
     vector< vector<string> > tbl;
-    sqlReq(req, &tbl, false);
+    const_cast<MBD*>(this)->sqlReq(req, &tbl, false);
     for(unsigned i_t = 1; i_t < tbl.size(); i_t++) list.push_back(tbl[i_t][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool icreate )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
 
     create(inm, icreate);
     vector< vector<string> > tblStrct;
@@ -274,7 +280,7 @@ void MBD::getStructDB( const string &nm, vector< vector<string> > &tblStrct )
 	    tblStrct[i_f].push_back((i_k<keyLst.size())?"PRI":"");
 	}
     }
-    else throw TError(nodePath().c_str(), _("Table '%s' is not present!"), nm.c_str());
+    else throw err_sys(_("Table '%s' is not present!"), nm.c_str());
 }
 
 void MBD::transOpen( )
@@ -302,9 +308,9 @@ void MBD::transOpen( )
 	res = PQexec(connection, "BEGIN");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
 	    PQclear(res);
-	    mess_warning(nodePath().c_str(), _("Start transaction error!"));
+	    mess_sys(TMess::Warning, _("Start transaction error!"));
 	    return;
-	    //throw TError(nodePath().c_str(),_("Start transaction error!"));
+	    //throw err_sys(_("Start transaction error!"));
 	}
 	PQclear(res);
 	trOpenTm = time(NULL);
@@ -333,9 +339,9 @@ void MBD::transCommit( )
 	res = PQexec(connection, "COMMIT");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
 	    PQclear(res);
-	    mess_warning(nodePath().c_str(), _("Stop transaction error!"));
+	    mess_sys(TMess::Warning, _("Stop transaction error!"));
 	    return;
-	    //throw TError(nodePath().c_str(),_("Stop transaction error!"));
+	    //throw err_sys(_("Stop transaction error!"));
 	}
 	PQclear(res);
     }
@@ -362,11 +368,14 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     MtxAlloc resource(connRes, true);	//!! Moved before the transaction checking for prevent the "BEGIN;" and "COMMIT;"
 					//   request's sequence breakage on high concurrency access activity
 
+    if(reqCnt && PQtransactionStatus(connection) == PQTRANS_INERROR) transCommit();	//Close error transaction
     if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
     else if(!intoTrans && reqCnt)		transCommit();
 
+    int64_t tmBeg = SYS->curTime();
+
     if((res=PQexec(connection,req.c_str())) == NULL)
-	throw TError(SQL_CONN, nodePath().c_str(), _("Connect to DB error: %s"), PQerrorMessage(connection));
+	throw err_sys(SQL_CONN, _("Connect to DB error: %s"), PQerrorMessage(connection));
     if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK) {
 	string  err = PQresStatus(PQresultStatus(res)),
 		err1 = PQresultErrorMessage(res);
@@ -375,9 +384,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	if(PQstatus(connection) != CONNECTION_OK) {
 	    resource.unlock();
 	    disable();
-	    throw TError(SQL_CONN, nodePath().c_str(), _("Connect to DB error: %s. %s"),err.c_str(),err1.c_str());
+	    throw err_sys(SQL_CONN, _("Connect to DB error: %s. %s"), err.c_str(), err1.c_str());
 	}
-	throw TError(SQL_QUERY, nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
+	throw err_sys(SQL_QUERY, _("Query to DB error: %s. %s"), err.c_str(), err1.c_str());
     }
 
     if(tbl) {
@@ -391,16 +400,15 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	for(row = 0; row < PQntuples(res); row++) {
 	    fld.clear();
 	    for(int i = 0; i < num_fields; i++) {
-		string val = "";
+		if(PQgetisnull(res,row,i)) fld.push_back(DB_NULL);
 		//Clear spaces at the end of the string
-		if(PQftype(res,i) == 1042) {
+		else if(PQftype(res,i) == 1042) {
 		    string tmp_val = PQgetvalue(res, row, i);
 		    char c;
-		    int len  = tmp_val.size(), spCol = 0, n = len;
+		    int len = tmp_val.size(), spCol = 0, n = len;
 		    while((c=tmp_val[n-1]) == ' ') { n--; spCol++; }
 		    int len_new = len - spCol;
-		    val = tmp_val.substr(0, len_new);
-		    fld.push_back(Mess->codeConvIn(cd_pg.c_str(),val));
+		    fld.push_back(Mess->codeConvIn(cd_pg.c_str(),tmp_val.substr(0,len_new)));
 		}
 		else fld.push_back(Mess->codeConvIn(cd_pg.c_str(),PQgetvalue(res,row,i)));
 	    }
@@ -408,6 +416,13 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 	}
     }
     PQclear(res);
+
+    //Statistic update
+    nReq++;
+    rqTm = 1e-6*(SYS->curTime()-tmBeg); rqTmAll += rqTm;
+    if(rqTm > rqTmMax) rqTmMaxVl = req;
+    rqTmMax = vmax(rqTmMax, rqTm); rqTmMin = vmin(rqTmMin, rqTm);
+
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -415,8 +430,9 @@ void MBD::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,0,"/prm/st/status",_("Status"),R_R_R_,"root",SDB_ID,1, "tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
-	    _("PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db};{port}[;{connect_timeout}]\".\n"
+	    _("PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db}[;{port}[;{connect_timeout}]]\".\n"
 	      "Where:\n"
 	      "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"
 	      "         it specifies Unix domain communication rather than TCP/IP communication;\n"
@@ -427,12 +443,21 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  db - DB name;\n"
 	      "  port - DB server port (default 5432);\n"
 	      "  connect_timeout - connection timeout\n"
-	      "For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
-	      "For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."));
+	      "For local DB: \";;roman;123456;OpenSCADA;5432;10\".\n"
+	      "For remote DB: \"server.nm.org;;roman;123456;OpenSCADA;5432;10\"."));
 	return;
     }
 
-    TBD::cntrCmdProc(opt);
+    //Get page's info
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/st/status" && ctrChkNode(opt)) {
+	MtxAlloc resource(connRes, true);
+	opt->setText((enableStat()?_("Enabled. "):_("Disabled. ")) +
+	    TSYS::strMess(_("Connect: %s. "),atm2s(conTm,"%d-%m-%Y %H:%M:%S").c_str()) +
+	    (enableStat()?TSYS::strMess(_("Requests: %g; Request time: %s[%s,%s,%s]; Max time request: '%s'"),nReq,
+			tm2s(rqTm).c_str(),tm2s(rqTmMin).c_str(),tm2s(nReq?(rqTmAll/nReq):0).c_str(),tm2s(rqTmMax).c_str(),rqTmMaxVl.getVal().c_str()):""));
+    }
+    else TBD::cntrCmdProc(opt);
 }
 
 //************************************************
@@ -463,19 +488,17 @@ void MTable::postDisable( int flag )
     }
 }
 
-MBD &MTable::owner()	{ return (MBD&)TTable::owner(); }
-
-
+MBD &MTable::owner( ) const	{ return (MBD&)TTable::owner(); }
 
 void MTable::fieldStruct( TConfig &cfg )
 {
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
-    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
+    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
 	int pr1;
-	string	sid = tblStrct[i_fld][0], rowTp = tblStrct[i_fld][1];
+	string	sid = tblStrct[iFld][0], rowTp = tblStrct[iFld][1];
 	if(cfg.cfgPresent(sid)) continue;
-	int flg = (tblStrct[i_fld][2]=="PRI") ? (int)TCfg::Key : (int)TFld::NoFlag;
+	int flg = (tblStrct[iFld][2]=="PRI") ? (int)TCfg::Key : (int)TFld::NoFlag;
 	if(rowTp == "text" || rowTp == "character varying")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
 	else if(sscanf(rowTp.c_str(),"character(%d)",&pr1) || sscanf(rowTp.c_str(),"character varying(%d)",&pr1))
@@ -489,24 +512,25 @@ void MTable::fieldStruct( TConfig &cfg )
     }
 }
 
-bool MTable::fieldSeek( int row, TConfig &cfg )
+bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 {
-    vector< vector<string> > tbl;
+    vector< vector<string> >	inTbl,
+				&tbl = full ? *full : inTbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
 
     //Check for no present and no empty keys allow
     if(row == 0) {
 	vector<string> cf_el;
 	cfg.cfgList(cf_el);
-	for(unsigned i_c = 0; i_c < cf_el.size(); i_c++) {
-	    TCfg &cf = cfg.cfg(cf_el[i_c]);
+	for(unsigned iC = 0; iC < cf_el.size(); iC++) {
+	    TCfg &cf = cfg.cfg(cf_el[iC]);
 	    if(!cf.isKey() || !cf.getS().size()) continue;
-	    unsigned i_fld = 1;
-	    for( ; i_fld < tblStrct.size(); i_fld++)
-		if(cf.name() == tblStrct[i_fld][0]) break;
-	    if(i_fld >= tblStrct.size()) return false;
+	    unsigned iFld = 1;
+	    for( ; iFld < tblStrct.size(); iFld++)
+		if(cf.name() == tblStrct[iFld][0]) break;
+	    if(iFld >= tblStrct.size()) return false;
 	}
     }
 
@@ -515,8 +539,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     string req_sel = "", req_where = "WHERE ";
     //Add use keys to list
     bool first_sel = true, next = false, trPresent = false;
-    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
-	sid = tblStrct[i_fld][0];
+    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
+	sid = tblStrct[iFld][0];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
@@ -526,7 +550,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 	if( !u_cfg ) continue;
 
 	if(u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(getVal(*u_cfg),TSYS::SQL,"'") + "' ";
+	    req_where += (next?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(*u_cfg) + " ";
 	    next = true;
 	}
 	else if(u_cfg->isKey() || u_cfg->view()) {
@@ -536,17 +560,27 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     }
 
     //Request
-    if( first_sel ) return false;
-    string req = "SELECT "+req_sel+" FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" "+(next?req_where:"")+" ORDER BY "+req_sel+" LIMIT 1 OFFSET "+i2s(row);
-    owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) return false;
-    for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++) {
-	sid = tbl[0][i_fld];
-	TCfg *u_cfg = cfg.at(sid,true);
-	if(u_cfg) setVal(*u_cfg, tbl[1][i_fld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][i_fld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
-	    setVal(*u_cfg, tbl[1][i_fld], true);
+    if(!full || !full->size() || row == 0) {
+	if(first_sel) return false;
+	string req = "SELECT "+req_sel+" FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" "+(next?req_where:"")+" ORDER BY "+req_sel;
+	if(!full) req += " LIMIT 1 OFFSET "+i2s(row);
+
+	tbl.clear();
+	owner().sqlReq(req, &tbl, false);
     }
+
+    if(tbl.size() < 2 || (full && (row+1) >= tbl.size())) return false;
+
+    //Processing of the query
+    row = full ? row+1 : 1;
+    for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
+	sid = tbl[0][iFld];
+	TCfg *u_cfg = cfg.at(sid, true);
+	if(u_cfg) setVal(*u_cfg, tbl[row][iFld]);
+	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	    setVal(*u_cfg, tbl[row][iFld], true);
+    }
+
     return true;
 }
 
@@ -554,7 +588,7 @@ void MTable::fieldGet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
     string sid;
     //Prepare request
@@ -562,8 +596,8 @@ void MTable::fieldGet( TConfig &cfg )
     string req_where, first_key;
     // Add fields list to queue
     bool first_sel = true, next_wr = false, trPresent = false;
-    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
-	sid = tblStrct[i_fld][0];
+    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
+	sid = tblStrct[iFld][0];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
@@ -573,7 +607,7 @@ void MTable::fieldGet( TConfig &cfg )
 	if(!u_cfg) continue;
 
 	if(u_cfg->isKey()) {
-	    req_where += (next_wr?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"='"  +TSYS::strEncode(getVal(*u_cfg),TSYS::SQL,"'") + "' ";
+	    req_where += (next_wr?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" +getVal(*u_cfg) + " ";
 	    if(first_key.empty()) first_key = TSYS::strEncode(sid,TSYS::SQL,"\"");
 	    next_wr = true;
 	}
@@ -587,15 +621,15 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw TError(nodePath().c_str(), _("Row \"%s\" is not present."), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
 
     //Processing of query
-    for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++) {
-	sid = tbl[0][i_fld];
+    for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
+	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) setVal(*u_cfg, tbl[1][i_fld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][i_fld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
-	    setVal(*u_cfg, tbl[1][i_fld], true);
+	if(u_cfg) setVal(*u_cfg, tbl[1][iFld]);
+	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	    setVal(*u_cfg, tbl[1][iFld], true);
     }
 }
 
@@ -603,7 +637,7 @@ void MTable::fieldSet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
@@ -613,9 +647,9 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Check for translation present
     bool trPresent = isVarTextTransl, trDblDef = false;
-    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
+    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
 	if(trPresent && (!isVarTextTransl || trDblDef)) break;
-	sid = tblStrct[i_fld][0];
+	sid = tblStrct[iFld][0];
 	if(sid.size() > 3) {
 	    if(!trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
 	    if(Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0)
@@ -631,16 +665,15 @@ void MTable::fieldSet( TConfig &cfg )
     for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!u_cfg.isKey()) continue;
-	req_where += (next?"AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\"='" +
-					    TSYS::strEncode(getVal(u_cfg),TSYS::SQL,"'") + "' ";
+	req_where += (next?"AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\"=" + getVal(u_cfg) + " ";
 	next = true;
 
 	// Check for no key fields
 	if(noKeyFld) continue;
-	unsigned i_fld = 1;
-	for( ; i_fld < tblStrct.size(); i_fld++)
-	    if(u_cfg.name() == tblStrct[i_fld][0]) break;
-	if(i_fld >= tblStrct.size()) noKeyFld = true;
+	unsigned iFld = 1;
+	for( ; iFld < tblStrct.size(); iFld++)
+	    if(u_cfg.name() == tblStrct[iFld][0]) break;
+	if(iFld >= tblStrct.size()) noKeyFld = true;
     }
     if(noKeyFld) fieldFix(cfg);
 
@@ -664,8 +697,7 @@ void MTable::fieldSet( TConfig &cfg )
 		ins_name = ins_name + (next?",\"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\" " +
 			(isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL,"\"")+"\" ") : "");
 		sval = getVal(u_cfg);
-		ins_value = ins_value + (next?",E'":"E'") + TSYS::strEncode(sval,TSYS::SQL,"'") + "' " +
-			(isTransl ? (",E'"+TSYS::strEncode(sval,TSYS::SQL,"'")+"' ") : "");
+		ins_value = ins_value + (next?",":"") + sval + " " + (isTransl?(","+sval+" "):"");	//???? E'{Val}'
 		next = true;
 	    }
 	    req += "(" + ins_name + ") VALUES (" + ins_value + ")";
@@ -682,7 +714,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    sval = getVal(u_cfg);
-	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=E'" + TSYS::strEncode(sval,TSYS::SQL,"'") + "' ";
+	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + sval + " ";	//???? E'{Val}'
 	    next = true;
 	}
 	req += req_where;
@@ -701,12 +733,11 @@ void MTable::fieldDel( TConfig &cfg )
     //Where prepare
     string req_where = "WHERE ";
     bool next = false;
-    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
-	string sid = tblStrct[i_fld][0];
+    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
+	string sid = tblStrct[iFld][0];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg && u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"='" +
-						TSYS::strEncode(getVal(*u_cfg),TSYS::SQL,"'") + "' ";
+	    req_where += (next?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(*u_cfg) + " ";
 	    next = true;
 	}
     }
@@ -725,7 +756,7 @@ void MTable::fieldDel( TConfig &cfg )
 void MTable::fieldFix( TConfig &cfg, bool recurse )
 {
     bool next = false, next_key = false;
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
 
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
     //Get config fields list
@@ -736,26 +767,26 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
     string req = "ALTER TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" DROP CONSTRAINT \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "_pkey\", ";
 
     //DROP fields
-    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size(); i_fld++) {
-	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
-	    if(cf_el[i_cf] == tblStrct[i_fld][0] ||
-		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][0].size() > 3 &&
-		    tblStrct[i_fld][0].substr(2) == ("#"+cf_el[i_cf]) && tblStrct[i_fld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
+    for(unsigned iFld = 1, iCf; iFld < tblStrct.size(); iFld++) {
+	for(iCf = 0; iCf < cf_el.size(); iCf++)
+	    if(cf_el[iCf] == tblStrct[iFld][0] ||
+		    (cfg.cfg(cf_el[iCf]).fld().flg()&TCfg::TransltText && tblStrct[iFld][0].size() > 3 &&
+		    tblStrct[iFld][0].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
 	    {
-		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+		TCfg &cf = cfg.cfg(cf_el[iCf]);
 		bool isEqual = false;
-		string rwTp = tblStrct[i_fld][1];
-		switch(u_cfg.fld().type()) {
+		string rwTp = tblStrct[iFld][1];
+		switch(cf.fld().type()) {
 		    case TFld::String: {
 			int pr1 = -1;
 			if(rwTp == "text" || rwTp == "character varying") isEqual = true;
 			else if((sscanf(rwTp.c_str(),"character(%d)",&pr1) || sscanf(rwTp.c_str(),"character varying(%d)",&pr1)) &&
-				(u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && pr1 > 0)
+				(cf.fld().len() <= 255 || cf.fld().flg()&TCfg::Key) && pr1 > 0)
 			    isEqual = true;
 			break;
 		    }
 		    case TFld::Integer:
-			if(u_cfg.fld().flg()&TFld::DateTimeDec)	isEqual = (rwTp=="timestamp with time zone");
+			if(cf.fld().flg()&TFld::DateTimeDec)	isEqual = (rwTp=="timestamp with time zone");
 			else if(rwTp == "integer") isEqual = true;
 			break;
 		    case TFld::Real:	if(rwTp == "double precision") isEqual = true;	break;
@@ -765,62 +796,63 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
 		if(isEqual) break;
 		continue;
 	    }
-	if(i_cf >= cf_el.size()) {
-	    req += (next?",DROP \"":"DROP \"") + TSYS::strEncode(tblStrct[i_fld][0],TSYS::SQL,"\"") + "\" ";
-	    tblStrct.erase(tblStrct.begin()+i_fld);
-	    i_fld--;
+	if(iCf >= cf_el.size()) {
+	    req += (next?",DROP \"":"DROP \"") + TSYS::strEncode(tblStrct[iFld][0],TSYS::SQL,"\"") + "\" ";
+	    tblStrct.erase(tblStrct.begin()+iFld);
+	    iFld--;
 	    next = true;
 	}
     }
 
     string pr_keys;
     //Add fields
-    for(unsigned i_cf = 0, i_fld; i_cf < cf_el.size(); i_cf++) {
-	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+    for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
+	TCfg &cf = cfg.cfg(cf_el[iCf]);
 	// Check primary key
-	if(u_cfg.fld().flg()&TCfg::Key) {
-	    pr_keys += (next_key?",\"":"\"") + TSYS::strEncode(u_cfg.name(),TSYS::SQL,"\"") + "\"";
+	if(cf.fld().flg()&TCfg::Key) {
+	    pr_keys += (next_key?",\"":"\"") + TSYS::strEncode(cf.name(),TSYS::SQL,"\"") + "\"";
 	    next_key = true;
 	}
 
-	for(i_fld = 1; i_fld < tblStrct.size(); i_fld++)
-	    if(cf_el[i_cf] == tblStrct[i_fld][0]) break;
+	for(iFld = 1; iFld < tblStrct.size(); iFld++)
+	    if(cf_el[iCf] == tblStrct[iFld][0]) break;
 
 	string f_tp;
-	switch(u_cfg.fld().type()) {
+	switch(cf.fld().type()) {
 	    case TFld::String:
-		if((u_cfg.fld().len() && u_cfg.fld().len() < 256) || u_cfg.fld().flg()&TCfg::Key)
-		    f_tp = "CHARACTER VARYING(" + i2s(vmax(10,vmin(255,u_cfg.fld().len()))) + ") DEFAULT '" + u_cfg.fld().def() + "' ";
-		else f_tp = "TEXT DEFAULT '" + u_cfg.fld().def() + "' ";
+		if((cf.fld().len() && cf.fld().len() < 256) || cf.fld().flg()&TCfg::Key)
+		    f_tp = "CHARACTER VARYING(" + i2s(vmax(10,vmin(255,cf.fld().len()))) + ") ";
+		else f_tp = "TEXT ";
+		f_tp += "DEFAULT " + ((cf.fld().def()==EVAL_STR)?"NULL ":"'"+cf.fld().def()+"' ");
 		break;
 	    case TFld::Integer:
-		if(u_cfg.fld().flg()&TFld::DateTimeDec)
-		    f_tp = "TIMESTAMP WITH TIME ZONE DEFAULT '" + UTCtoSQL(s2i(u_cfg.fld().def())) + "' ";
-		else f_tp = "INTEGER DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' ";
+		if(cf.fld().flg()&TFld::DateTimeDec)
+		    f_tp = "TIMESTAMP WITH TIME ZONE DEFAULT " + ((s2i(cf.fld().def())==EVAL_INT)?"NULL ":"'"+UTCtoSQL(s2i(cf.fld().def()))+"' ");
+		else f_tp = "INTEGER DEFAULT " + ((s2i(cf.fld().def())==EVAL_INT)?"NULL ":"'"+i2s(s2i(cf.fld().def()))+"' ");
 		break;
 	    case TFld::Real:
-		f_tp = "DOUBLE PRECISION DEFAULT '" + r2s(s2r(u_cfg.fld().def())) + "' ";
+		f_tp = "DOUBLE PRECISION DEFAULT " + ((s2r(cf.fld().def())==EVAL_REAL)?"NULL ":"'"+r2s(s2r(cf.fld().def()))+"' ");
 		break;
 	    case TFld::Boolean:
-		f_tp = "SMALLINT DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' ";
+		f_tp = "SMALLINT DEFAULT " + ((s2i(cf.fld().def())==EVAL_BOOL)?"NULL ":"'"+i2s(s2i(cf.fld().def()))+"' ");
 		break;
 	    default: break;
 	}
 
 	// Add field
-	if(i_fld >= tblStrct.size()) {
-	    req += (next?",ADD \"":"ADD \"") + TSYS::strEncode(cf_el[i_cf],TSYS::SQL,"\"") + "\" " + f_tp;
+	if(iFld >= tblStrct.size()) {
+	    req += (next?",ADD \"":"ADD \"") + TSYS::strEncode(cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
 	    next = true;
 	}
 	//Check other languages
-	if(u_cfg.fld().flg()&TCfg::TransltText) {
-	    unsigned i_c;
-	    for(i_c = i_fld; i_c < tblStrct.size(); i_c++)
-		if(tblStrct[i_c][0].size() > 3 && tblStrct[i_c][0].substr(2) == ("#"+cf_el[i_cf]) &&
-		   tblStrct[i_c][0].compare(0,2,Mess->lang2CodeBase()) != 0 &&
-		   tblStrct[i_c][0].compare(0,2,Mess->lang2Code()) == 0) break;
-	    if(i_c >= tblStrct.size() && isVarTextTransl) {
-		req += (next?",ADD \"":"ADD \"") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_cf],TSYS::SQL,"\"") + "\" " + f_tp;
+	if(cf.fld().flg()&TCfg::TransltText) {
+	    unsigned iC;
+	    for(iC = iFld; iC < tblStrct.size(); iC++)
+		if(tblStrct[iC][0].size() > 3 && tblStrct[iC][0].substr(2) == ("#"+cf_el[iCf]) &&
+		   tblStrct[iC][0].compare(0,2,Mess->lang2CodeBase()) != 0 &&
+		   tblStrct[iC][0].compare(0,2,Mess->lang2Code()) == 0) break;
+	    if(iC >= tblStrct.size() && isVarTextTransl) {
+		req += (next?",ADD \"":"ADD \"") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
 		next = true;
 	    }
 	}
@@ -846,30 +878,26 @@ void MTable::fieldFix( TConfig &cfg, bool recurse )
 string MTable::getVal( TCfg &cfg )
 {
     string rez = cfg.getS();
-    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
-    if(cfg.fld().type() == TFld::String && cfg.fld().len() > 0) return rez.substr(0,cfg.fld().len());
-    return rez;
+    if(rez == EVAL_STR)	return "NULL";
+    if(cfg.fld().type() == TFld::String) rez = TSYS::strEncode(((cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez), TSYS::SQL, "'");
+    else if(cfg.fld().flg()&TFld::DateTimeDec) rez = UTCtoSQL(s2i(rez));
 
-    /*switch(cfg.fld().type()) {
-	case TFld::String:	return (cfg.fld().len() > 0) ? cfg.getS().substr(0,cfg.fld().len()) : cfg.getS();
-	case TFld::Integer:
-	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
-	    else		return cfg.getS();
-	default: return cfg.getS();
-    }
-    return "";*/
+    return "'" + rez + "'";
 }
 
-void MTable::setVal( TCfg &cf, const string &val, bool tr )
+void MTable::setVal( TCfg &cf, const string &ival, bool tr )
 {
+    string val = (ival==DB_NULL) ? EVAL_STR : ival;
     switch(cf.fld().type()) {
 	case TFld::Integer:
 	    if(cf.fld().flg()&TFld::DateTimeDec) cf.setI(SQLtoUTC(val));
 	    else cf.setS(val);
 	    break;
-	default:
+	case TFld::String:
 	    if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
+	    //if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    break;
+	default: cf.setS(val); break;
     }
 }
 

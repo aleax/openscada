@@ -36,7 +36,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.2"
+#define MOD_VER		"0.8.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow realization of ICP DAS hardware support. Include I87000 and I-7000 DCON modules and I-8000 fast modules.")
 #define LICENSE		"GPL2"
@@ -81,7 +81,7 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable( flag );
 
-    //> Controler's bd structure
+    // Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
     fldAdd( new TFld("PERIOD",_("Gather data period (s)"),TFld::Real,TFld::NoFlag,"6.2","1","0.01;100") );
     fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
@@ -90,7 +90,7 @@ void TTpContr::postEnable( int flag )
     fldAdd( new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000") );
     fldAdd( new TFld("REQ_TRY",_("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10") );
 
-    //> Parameter type bd structure
+    // Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_TP",_("Module type"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","552985") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255") );
@@ -100,7 +100,7 @@ void TTpContr::postEnable( int flag )
 
 void TTpContr::load_( )
 {
-    //> Load parameters from command line
+    // Load parameters from command line
 
 }
 
@@ -122,7 +122,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPer(cfg("PERIOD").getRd()), mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()),
 	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()),
-	prcSt(false), call_st(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
+	prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
     cfg("BUS").setI(1);
@@ -137,10 +137,9 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if(startStat() && !redntUse())
-    {
-	if(call_st)	val += TSYS::strMess(_("Call now. "));
-	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), TSYS::time2str(tm_gath).c_str(), numReq, numErr);
+    if(startStat() && !redntUse()) {
+	if(callSt)	val += TSYS::strMess(_("Call now. "));
+	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), tm2s(1e-6*tmGath).c_str(), numReq, numErr);
     }
 
     return val;
@@ -206,16 +205,15 @@ void TMdContr::stop_( )
     if( mBus == 0 )	{ pBusRes.resRequestW(); Close_Slot(9); Close_SlotAll(); pBusRes.resRelease(); }
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    if( icfg.name() == "BUS" )
-    {
-	cfg("BAUD").setView( icfg.getI() != 0 );
-	if( startStat() ) stop();
+    if(co.name() == "BUS") {
+	cfg("BAUD").setView(co.getI() != 0);
+	if(startStat()) stop();
     }
-    else if( icfg.name() == "BAUD" && startStat( ) ) stop( );
+    else if(co.name() == "BAUD" && startStat()) stop();
 
     return true;
 }
@@ -239,7 +237,7 @@ void TMdContr::setPrmLP( const string &prm, const string &vl )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res( en_res, true );
+    ResAlloc res(enRes, true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -266,17 +264,17 @@ void *TMdContr::Task( void *icntr )
 	{
 	    if(!cntr.redntUse())
 	    {
-		cntr.call_st = true;
+		cntr.callSt = true;
 		int64_t t_cnt = TSYS::curTime();
 
 		//> Update controller's data
-		ResAlloc res( cntr.en_res, false );
+		ResAlloc res(cntr.enRes, false);
 		for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++) cntr.p_hd[i_p].at().getVals();
 		res.release();
 
 		//> Calc acquisition process time
-		cntr.tm_gath = TSYS::curTime()-t_cnt;
-		cntr.call_st = false;
+		cntr.tmGath = TSYS::curTime()-t_cnt;
+		cntr.callSt = false;
 	    }
 
 	    //Watchdog timer process
@@ -293,7 +291,7 @@ void *TMdContr::Task( void *icntr )
 
 	    cntr.prcSt = true;
 
-	    //> Calc next work time and sleep
+	    //Calc next work time and sleep
 	    TSYS::taskSleep((int64_t)(1e9*cntr.period()));
 	}
     } catch( TError &err ) { mess_err( err.cat.c_str(), err.mess.c_str() ); }
@@ -426,7 +424,7 @@ void TMdPrm::postEnable( int flag )
     if( !vlElemPresent(&p_el) )	vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
@@ -683,11 +681,11 @@ void TMdPrm::getVals( )
     }
 }
 
-bool TMdPrm::cfgChange( TCfg &icfg )
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TParamContr::cfgChange(icfg);
+    TParamContr::cfgChange(co, pc);
 
-    if( (icfg.name() == "MOD_TP" || icfg.name() == "MOD_ADDR" || icfg.name() == "MOD_SLOT") && enableStat() ) disable( );
+    if((co.name() == "MOD_TP" || co.name() == "MOD_ADDR" || co.name() == "MOD_SLOT") && enableStat()) disable();
 
     return true;
 }

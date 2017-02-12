@@ -55,32 +55,29 @@ class TParamContr : public TConfig, public TValue
 
 	string DAQPath( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId.c_str(); }
+	bool operator==( TParamContr &PrmCntr )	{ return (id() == PrmCntr.id()); }
+
+	string	id( )			{ return mId.c_str(); }
 	string	name( );
 	string	descr( );
-	bool toEnable( )	{ return cfg("EN").getB(); }
-	bool enableStat( )	{ return mEn; }
+	bool toEnable( )		{ return cfg("EN").getB(); }
+	bool enableStat( ) const	{ return mEn; }
 	bool dataActive( );
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
 	void setToEnable( bool vl )		{ cfg("EN").setB(vl); modif(); }
 
-	TTipParam &type( )	{ return *tpParm; }
+	TTipParam &type( ) const	{ return *tpParm; }
 
 	virtual TElem *dynElCntr( )	{ return NULL; }
 
 	virtual void enable( );			// Enable parameter and open access to value
 	virtual void disable( );		// Disable parameter and close access to value
 
-	bool operator==( TParamContr & PrmCntr )
-	{ if( id() == PrmCntr.id() ) return true; return false; };
-
-	TParamContr &operator=( TParamContr & PrmCntr );
-
-	TController &owner( );
+	TController &owner( ) const;
 
 	//Attributes
 	time_t	mRdPrcTm;	//Redundancy processing time, mostly for the dynamic DAQ attributes
@@ -89,13 +86,13 @@ class TParamContr : public TConfig, public TValue
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void vlGet( TVal &vo );
 	void vlArchMake( TVal &val );
@@ -106,7 +103,7 @@ class TParamContr : public TConfig, public TValue
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
 
 	//Attributes
 	bool	mEn;

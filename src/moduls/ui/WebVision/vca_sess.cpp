@@ -66,7 +66,7 @@ void VCASess::getReq( SSess &ses )
     lst_ses_req = time(NULL);
 
     map<string,string>::iterator prmEl = ses.prm.find("com"), prmEl1;
-    string first_lev = TSYS::pathLev(ses.url,1);
+    string first_lev = TSYS::pathLev(ses.url, 1);
     string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
     if(wp_com.empty()) {
 	string prjNm, extJS;
@@ -95,10 +95,10 @@ void VCASess::getReq( SSess &ses )
     //Session/projects icon
     else if(wp_com == "ico") {
 	XMLNode req("get");
-	req.setAttr("path",ses.url+"/%2fico");
-	mod->cntrIfCmd(req,ses.user);
-	ses.page = TSYS::strDecode(req.text(),TSYS::base64);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+	req.setAttr("path", ses.url+"/%2fico");
+	mod->cntrIfCmd(req, ses.user);
+	ses.page = TSYS::strDecode(req.text(), TSYS::base64);
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png") + ses.page;
     }
     //Get open pages list
     else if(wp_com == "pgOpenList" && first_lev.empty()) {
@@ -169,9 +169,9 @@ void VCASess::getReq( SSess &ses )
 	prmEl = ses.prm.find("val");
 	if(prmEl != ses.prm.end()) {
 	    string mime;
-	    ses.page = resGet(prmEl->second,ses.url,ses.user,&mime);
+	    ses.page = resGet(prmEl->second, ses.url, ses.user, &mime);
 	    mod->imgConvert(ses);
-	    ses.page = mod->httpHead("200 OK",ses.page.size(),mime)+ses.page;
+	    ses.page = mod->httpHead("200 OK", ses.page.size(), mime)+ses.page;
 	} else ses.page = mod->httpHead("404 Not Found");
     }
     //Request to primitive object. Used for data caching
@@ -231,11 +231,11 @@ string VCASess::resGet( const string &res, const string &path, const string &use
     string ret = cacheResGet(res, mime);
     if(ret.empty()) {
 	XMLNode req("get");
-	req.setAttr("path",path+"/%2fwdg%2fres")->setAttr("id",res);
-	mod->cntrIfCmd(req,user);
-	ret = TSYS::strDecode(req.text(),TSYS::base64);
+	req.setAttr("path", path+"/%2fwdg%2fres")->setAttr("id", res);
+	mod->cntrIfCmd(req, user);
+	ret = TSYS::strDecode(req.text(), TSYS::base64);
 	if(!ret.empty()) {
-	    if(mime) *mime = req.attr("mime");
+	    if(mime) *mime = TUIS::mimeGet(res, ret, req.attr("mime"));
 	    cacheResSet(res, ret, req.attr("mime"));
 	}
     }
@@ -275,7 +275,7 @@ VCAObj::VCAObj( const string &iid ) : mId(iid)
 
 }
 
-VCASess &VCAObj::owner( ) { return *(VCASess*)nodePrev(); }
+VCASess &VCAObj::owner( ) const	{ return *(VCASess*)nodePrev(); }
 
 
 //*************************************************
@@ -436,11 +436,11 @@ Point VCAElFigure::unscaleUnrotate( const Point point, double xScale, double ySc
 }
 
 //- Painting existing inundationItems -
-void VCAElFigure::paintFill( gdImagePtr im, Point pnt, InundationItem &in_item )
+void VCAElFigure::paintFill( gdImagePtr iim, Point pnt, InundationItem &in_item )
 {
-    int fill_clr = gdImageColorResolveAlpha( im, (uint8_t)(in_item.P_color>>16), (uint8_t)(in_item.P_color>>8), (uint8_t)in_item.P_color, 127 - (uint8_t)(in_item.P_color>>24) );
+    int fill_clr = gdImageColorResolveAlpha( iim, (uint8_t)(in_item.P_color>>16), (uint8_t)(in_item.P_color>>8), (uint8_t)in_item.P_color, 127 - (uint8_t)(in_item.P_color>>24) );
     in_item.index_color = fill_clr;
-    gdImageFill(im, (int)rRnd(pnt.x), (int)rRnd(pnt.y), fill_clr);
+    gdImageFill(iim, (int)rRnd(pnt.x), (int)rRnd(pnt.y), fill_clr);
 }
 
 //- Detecting if any point of the figure is out of the borders of the image -
@@ -491,7 +491,7 @@ void VCAElFigure::paintFill( gdImagePtr im, Point pnt, InundationItem &in_item )
 }*/
 
 //- Drawing of dashed or dotted borders of the figure -
-void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1, double xScale, double yScale  )
+void VCAElFigure::dashDotFigureBorders( gdImagePtr iim, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1, double xScale, double yScale  )
 {
     switch( type )
     {
@@ -511,14 +511,14 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
 		    el_pb1 = Point ( el_p1.x + rotate( un_p1, el_ang ).x,  el_p1.y - rotate( un_p1, el_ang ).y );
 		    el_pb2 = Point ( el_p1.x + rotate( Point( un_p1.x + wdt, un_p1.y ), el_ang ).x,
 				     el_p1.y - rotate( Point ( un_p1.x + wdt, un_p1.y ), el_ang ).y );
-		    paintFigureBorders( im, el_pb1, el_pb2, Point(0,0), Point(0,0),  Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, xScale, yScale  );
+		    paintFigureBorders( iim, el_pb1, el_pb2, Point(0,0), Point(0,0),  Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, xScale, yScale  );
 		    un_p1.x += wdt + 2*(el_width+2);
 		}
 		else
 		{
 		    el_pb1 = Point( el_p1.x + rotate( un_p1, el_ang ).x, el_p1.y - rotate( un_p1, el_ang ).y );
 		    el_pb2 = Point ( el_p1.x + rotate( un_p2, el_ang ).x, el_p1.y - rotate( un_p2, el_ang ).y );
-		    paintFigureBorders( im, el_pb1, el_pb2, Point(0,0), Point(0,0),  Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, xScale, yScale  );
+		    paintFigureBorders( iim, el_pb1, el_pb2, Point(0,0), Point(0,0),  Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, xScale, yScale  );
 		    break;
 		}
 	    }
@@ -550,7 +550,7 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
 		    el_pb1 = Point( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y  );
 		    el_pb2 = Point( el_p3.x + rotate( arc( t + 0.00277777777778*kol, arc_a, arc_b ), ang ).x, el_p3.y - rotate( arc( t + 0.00277777777778*kol, arc_a, arc_b ), ang ).y  );
 		    el_pb6 = Point ( t, t + 0.00277777777778*kol );
-		    paintFigureBorders( im, el_pb1, el_pb2, el_p3, el_p4,  el_p5, el_pb6, clr_el, clr_el_line, el_width, el_border_width, 2, xScale, yScale );
+		    paintFigureBorders( iim, el_pb1, el_pb2, el_p3, el_p4,  el_p5, el_pb6, clr_el, clr_el_line, el_width, el_border_width, 2, xScale, yScale );
 		    t += 0.00277777777778*kol + 0.00277777777778*kol_1;
 		}
 		else
@@ -558,7 +558,7 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
 		    el_pb1 = Point( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y  );
 		    el_pb2 = Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x, el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y  );
 		    el_pb6 = Point ( t, t_end );
-		    paintFigureBorders( im, el_pb1, el_pb2, el_p3, el_p4,  el_p5, el_pb6, clr_el, clr_el_line, el_width, el_border_width, 2, xScale, yScale  );
+		    paintFigureBorders( iim, el_pb1, el_pb2, el_p3, el_p4,  el_p5, el_pb6, clr_el, clr_el_line, el_width, el_border_width, 2, xScale, yScale  );
 		    break;
 		}
 	    }
@@ -582,12 +582,12 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
 	    {
 		if( t +  delta*kol + delta*kol_1 <= 1 )
 		{
-		    paintFigureBorders( im, el_p1, el_p2, el_p3, el_p4,  Point(t,t + delta*kol), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, xScale, yScale );
+		    paintFigureBorders( iim, el_p1, el_p2, el_p3, el_p4,  Point(t,t + delta*kol), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, xScale, yScale );
 		    t += delta*kol + delta*kol_1;
 		}
 		else
 		{
-		    paintFigureBorders( im, el_p1, el_p2, el_p3, el_p4,  Point(t,1.0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, xScale, yScale );
+		    paintFigureBorders( iim, el_p1, el_p2, el_p3, el_p4,  Point(t,1.0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, xScale, yScale );
 		    break;
 		}
 	    }
@@ -598,7 +598,7 @@ void VCAElFigure::dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2,
 }
 
 //- Drawing the borders of the figure -
-void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double xScale, double yScale )
+void VCAElFigure::paintFigureBorders( gdImagePtr iim, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double xScale, double yScale )
 {
     double el_ang, x_center, y_center, t, t_start, t_end, ang, arc_a, arc_b, arc_a_small, arc_b_small, delta ;
     Point p_center, p1, p2, p3, p4, pb1, pb2 ;
@@ -607,33 +607,33 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
     switch( type )
     {
 	case 1:
-	    gdImageSetThickness( im, (int)(el_border_width*2) );
+	    gdImageSetThickness( iim, (int)(el_border_width*2) );
 	    if( el_p1.y <= el_p2.y ) el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 	    else el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 
-	    gdImageLine( im, (int)rRnd(el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
+	    gdImageLine( iim, (int)rRnd(el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
 			     (int)rRnd(el_p1.y - rotate( Point( -el_border_width, - (el_width/2+el_border_width)), el_ang ).y, POS_PREC_DIG, true),
 			     (int)rRnd(el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
 			     (int)rRnd(el_p1.y - rotate( Point( length( el_p2, el_p1) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el);
-	    gdImageLine( im, (int)rRnd(el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
+	    gdImageLine( iim, (int)rRnd(el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true),
 			     (int)rRnd(el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true),
 			     (int)rRnd( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, ( el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
-	    gdImageLine( im, (int)rRnd( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
+	    gdImageLine( iim, (int)rRnd( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.x + rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.y - rotate( Point( -el_border_width, (el_width/2+el_border_width)), el_ang ).y, POS_PREC_DIG, true ), clr_el );
-	    gdImageLine( im, (int)rRnd( el_p1.x + rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
+	    gdImageLine( iim, (int)rRnd( el_p1.x + rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.y - rotate( Point( -el_border_width, (el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.x + rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.y - rotate( Point( -el_border_width, -(el_width/2+el_border_width) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
 	    x_center = (el_p1.x + el_p2.x)/2;
 	    y_center = (el_p1.y + el_p2.y)/2;
 	    if( (int)(x_center + 0.5) < s_width && (int)(y_center + 0.5) < s_height )
-		gdImageFillToBorder( im, (int)(x_center + 0.5), (int)(y_center + 0.5), clr_el, clr_el_line );
+		gdImageFillToBorder( iim, (int)(x_center + 0.5), (int)(y_center + 0.5), clr_el, clr_el_line );
 	    break;
 	case 3:
-	    gdImageSetThickness( im, (int)(el_border_width) );
+	    gdImageSetThickness( iim, (int)(el_border_width) );
 	    delta = bezierDeltaT( el_p1, el_p3, el_p4, el_p2 );
 	    if( el_p1.y <= el_p2.y )
 		el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
@@ -650,7 +650,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)rRnd(el_p1.x + rotate( bezier( t,
+		gdImageLine( iim, (int)rRnd(el_p1.x + rotate( bezier( t,
 				 Point( p1.x, p1.y+(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y+(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y+(el_width/2+el_border_width/2) ),
@@ -676,7 +676,7 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)rRnd( el_p1.x + rotate( bezier( t,
+		gdImageLine( iim, (int)rRnd( el_p1.x + rotate( bezier( t,
 				 Point( p1.x, p1.y-(el_width/2+el_border_width/2) ),
 				 Point( p2.x, p2.y-(el_width/2+el_border_width/2) ),
 				 Point( p3.x, p3.y-(el_width/2+el_border_width/2) ),
@@ -723,11 +723,11 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 		    Point( p3.x,p3.y+(el_width/2+el_border_width/2) ),
 		    Point( p4.x, p4.y+(el_width/2+el_border_width/2) ) ), el_ang ).y, POS_PREC_DIG, true )
 		  );
-	    gdImageLine( im, (int)pb1.x, (int)pb1.y, (int)pb2.x, (int)pb2.y, clr_el );
+	    gdImageLine( iim, (int)pb1.x, (int)pb1.y, (int)pb2.x, (int)pb2.y, clr_el );
 	    if( t_start > 0.0 || t_end < 1.0 )
 		p1 = Point( bezier( t_start, p1, p2, p3, p4 ).x,
 			    bezier( t_start, p1, p2, p3, p4 ).y );
-	    gdImageLine( im, (int)rRnd(el_p1.x +
+	    gdImageLine( iim, (int)rRnd(el_p1.x +
 			     rotate( Point( p1.x, p1.y+el_width/2+el_border_width/2 ), el_ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p1.y -
 			     rotate( Point( p1.x, p1.y+el_width/2+el_border_width/2 ), el_ang ).y, POS_PREC_DIG, true ),
@@ -736,10 +736,10 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 			     (int)rRnd( el_p1.y -
 			     rotate( Point( p1.x, p1.y - (el_width/2+el_border_width/2) ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
 	    if( (int)(p_center.x+0.5) < s_width && (int)(p_center.y+0.5) < s_height )
-		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el, clr_el_line );
+		gdImageFillToBorder( iim, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el, clr_el_line );
 	    break;
 	case 2:
-	    gdImageSetThickness( im, (int)(el_border_width) );
+	    gdImageSetThickness( iim, (int)(el_border_width) );
 	    arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width/2;
 	    arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width/2;
 	    arc_a_small = arc_a - el_width - el_border_width;
@@ -751,41 +751,41 @@ void VCAElFigure::paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, P
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 				 (int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 				 (int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 				 (int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
 		t += 0.00277777777778;
 	    }
 	    while( t < t_end );
-	    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+	    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p3.y - rotate( arc( t_end, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p3.x + rotate( arc( t_end, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p3.y - rotate( arc( t_end, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ), clr_el );
 	    t = t_start;
 	    do
 	    {
-		gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
 				 (int)rRnd( el_p3.y - rotate( arc( t, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ),
 				 (int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
 				 (int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ),clr_el );
 		t += 0.00277777777778;
 	    }
 	    while( t < t_end );
-	    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+	    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p3.x + rotate( arc( t_start, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
 			     (int)rRnd( el_p3.y - rotate( arc( t_start, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ), clr_el );
 	    p_center = Point( rRnd( el_p3.x +rotate( arc( (t_end + t_start)/2, arc_a - el_width/2-1, arc_b - el_width/2-1 ), ang ).x, POS_PREC_DIG, true ),
 			      rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a - el_width/2-1, arc_b - el_width/2-1 ), ang ).y, POS_PREC_DIG, true ) );
 	    if( (int)(p_center.x+0.5) < s_width && (int)(p_center.y+0.5) < s_height )
-		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el, clr_el_line );
+		gdImageFillToBorder( iim, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el, clr_el_line );
 	    break;
     }
 }
 
 //- Drawing the dashed or dotted figure without borders -
-void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style )
+void VCAElFigure::dashDot( gdImagePtr iim, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style )
 {
     switch( type )
     {
@@ -797,7 +797,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 	    else el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 	    un_p1 = unrotate( el_p1, el_ang, el_p1.x, el_p1.y );
 	    un_p2 = unrotate( el_p2, el_ang, el_p1.x, el_p1.y );
-	    gdImageSetThickness( im, (int)el_width );
+	    gdImageSetThickness( iim, (int)el_width );
 	    double wdt = 0, wdt_1 = 0;
 	    if( style == 1 )
 	    {
@@ -829,7 +829,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 	    {
 		if( un_p1.x + wdt + wdt_1 <= un_p2.x )
 		{
-		    gdImageLine( im, (int)rRnd( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p1.y - rotate( un_p1, el_ang ).y, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p1.x + rotate( Point( un_p1.x + wdt, un_p1.y ), el_ang ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p1.y - rotate( Point ( un_p1.x + wdt, un_p1.y ), el_ang ).y, POS_PREC_DIG, true ), clr_el );
@@ -837,7 +837,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 		}
 		else
 		{
-		    gdImageLine( im, (int)rRnd( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p1.x + rotate( un_p1, el_ang ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p1.y - rotate( un_p1, el_ang ).y, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p1.x + rotate( un_p2, el_ang ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p1.y - rotate( un_p2, el_ang ).y, POS_PREC_DIG, true ), clr_el );
@@ -856,7 +856,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 	    arc_b = length( el_p3, el_p4 );
 	    t_start = el_p6.x;
 	    t_end = el_p6.y;
-	    gdImageSetThickness( im, (int)el_width );
+	    gdImageSetThickness( iim, (int)el_width );
 	    Point un_p1, un_p2, un_p3, un_p4, un_p5;
 	    double wdt = 0, wdt_1 = 0;
 	    double len = length( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
@@ -900,7 +900,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 		if( calc_1 == kol_1 ) { calc = 0; calc_1=0; }
 		if( calc < kol )
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
@@ -940,13 +940,13 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 	    t = 0;
 	    int calc=0;
 	    int calc_1=0;
-	    gdImageSetThickness( im, (int)el_width );
+	    gdImageSetThickness( iim, (int)el_width );
 	    do
 	    {
 		if( calc_1 == kol_1 ) { calc = 0; calc_1=0; }
 		if( calc < kol )
 		{
-		    gdImageLine( im, (int)rRnd( bezier( t, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( bezier( t, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( bezier( t, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ),
 				     (int)rRnd( bezier( t+delta, el_p1, el_p3, el_p4, el_p2 ).x, POS_PREC_DIG, true ),
 				     (int)rRnd( bezier( t+delta, el_p1, el_p3, el_p4, el_p2 ).y, POS_PREC_DIG, true ), clr_el );
@@ -963,7 +963,7 @@ void VCAElFigure::dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3,
 }
 
 //- Painting existing figures -
-void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, double yScale, bool flag_allocate, bool flag_style )
+void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, double yScale, bool flag_allocate, bool flag_style )
 {
     int clr_el, clr_el_line;
     double t;
@@ -988,29 +988,29 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 	    t_start = item.ctrlPos4.x;
 	    t_end = item.ctrlPos4.y;
 	    if( flag_allocate )
-		clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
+		clr_el = gdImageColorResolveAlpha( iim, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
 	    else clr_el = item.lineColor;
 	    if( item.style != 0 && flag_style )//---- Drawing the dashed or dotted arc with borders' width == 0 ----
 	    {
-		gdImageAlphaBlending(im,0);
-		dashDot( im, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6, clr_el, item.width, 2, item.style );
-		gdImageAlphaBlending(im,1);
+		gdImageAlphaBlending(iim,0);
+		dashDot( iim, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6, clr_el, item.width, 2, item.style );
+		gdImageAlphaBlending(iim,1);
 	    }
 	    else//---- Drawing the solid arc with borders' width == 0 ----
 	    {
-		gdImageSetThickness( im, item.width );
-		gdImageAlphaBlending(im,0);
+		gdImageSetThickness( iim, item.width );
+		gdImageAlphaBlending(iim,0);
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el );
 		    t += 0.00277777777778;
 		}
 		while( t < t_end );
-		gdImageAlphaBlending(im,1);
+		gdImageAlphaBlending(iim,1);
 	    }
 	    (pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
 		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale, true, true );
@@ -1031,12 +1031,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 	    Point el_p6 = item.ctrlPos4;
 	    el_width = item.width;
 	    el_border_width = item.border_width;
-	    gdImageSetThickness( im, item.border_width );
+	    gdImageSetThickness( iim, item.border_width );
 	    if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
 	    else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
-	    clr_el_line = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
+	    clr_el_line = gdImageColorResolveAlpha( iim, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
 	    if( flag_allocate )
-		clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
+		clr_el = gdImageColorResolveAlpha( iim, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
 	    else
 	    {
 		clr_el = item.borderColor;
@@ -1056,9 +1056,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		    wdt = (item.width+2)-1;
 		    wdt_1 = 2*(item.width+2);
 		}
-		gdImageAlphaBlending(im,0);
-		dashDotFigureBorders( im, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6,  clr_el, clr_el_line, el_width, el_border_width, 2, wdt, wdt_1, xScale, yScale  );
-		gdImageAlphaBlending(im,1);
+		gdImageAlphaBlending(iim,0);
+		dashDotFigureBorders( iim, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6,  clr_el, clr_el_line, el_width, el_border_width, 2, wdt, wdt_1, xScale, yScale  );
+		gdImageAlphaBlending(iim,1);
 	    }
 	    //---- Drawing the dashed or dotted arc with borders' width < 4 and !flag_brd ----
 	    if( item.border_width < 4 && item.style != 0 && !item.flag_brd && flag_style )
@@ -1070,12 +1070,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "arc" -----
 		arc_a = length( el_p5, el_p3 )+el_width/2 + el_border_width/2;
 		arc_b = length( el_p3, el_p4 )+el_width/2 + el_border_width/2;
-		gdImageSetThickness(im,1);
-		gdImageAlphaBlending(im,0);
+		gdImageSetThickness(iim,1);
+		gdImageAlphaBlending(iim,0);
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1094,7 +1094,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1107,12 +1107,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb4 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
 
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb3.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
 
-		gdImageLine( im, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb4.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
@@ -1123,12 +1123,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 
 		Point p_center = Point( rRnd( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
+		gdImageFillToBorder( iim, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2,0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2,0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width - 2;
 		arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width - 2;
 		el_pb1 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
@@ -1137,7 +1137,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width + 2;
 		el_pb2 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
-		dashDot( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width - 2;
 		arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width - 2;
@@ -1147,7 +1147,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width + 2;
 		el_pb2 = Point( el_p3.x + rotate(  arc( t_start, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_start, arc_a, arc_b ), ang  ).y );
-		dashDot( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
 		arc_a = length( el_p5, el_p3 ) - el_width/2 - el_border_width/2;
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width/2;
@@ -1160,7 +1160,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang  ).y );
 		el_pb5 = Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang  ).y );
-		dashDot( im2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, item.ctrlPos4, clr_el, item.border_width, 2, item.style );
+		dashDot( iim2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, item.ctrlPos4, clr_el, item.border_width, 2, item.style );
 
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width/2;
 		arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width/2;
@@ -1173,22 +1173,22 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p3.y - rotate( arc( 0.25, arc_a, arc_b ), ang  ).y );
 		el_pb5 = Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang  ).y );
-		dashDot( im2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, item.ctrlPos4, clr_el, item.border_width, 2, item.style );
+		dashDot( iim2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, item.ctrlPos4, clr_el, item.border_width, 2, item.style );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 
 	    }
 	    //---- Drawing the solid arc with borders' width <4 ----
 	    if( item.border_width < 4 && (item.style == 0 || !flag_style) )
 	    {
-		gdImageAlphaBlending(im,0);
-		paintFigureBorders( im, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6, clr_el, clr_el_line, el_width, el_border_width, 2, xScale, yScale  );
-		gdImageAlphaBlending(im,1);
+		gdImageAlphaBlending(iim,0);
+		paintFigureBorders( iim, el_p1, el_p2, el_p3, el_p4, el_p5, el_p6, clr_el, clr_el_line, el_width, el_border_width, 2, xScale, yScale  );
+		gdImageAlphaBlending(iim,1);
 	    }
 	    //---- Drawing the dashed or dotted border of the arc with borders' width >= 4 ----
 	    if( item.border_width > 4 && item.style != 0 && flag_style )
@@ -1212,12 +1212,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "arc" -----
 		arc_a = length( el_p5, el_p3 )+el_width/2 + el_border_width/2;
 		arc_b = length( el_p3, el_p4 )+el_width/2 + el_border_width/2;
-		gdImageSetThickness(im,1);
-		gdImageAlphaBlending(im,0);
+		gdImageSetThickness(iim,1);
+		gdImageAlphaBlending(iim,0);
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1236,7 +1236,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1249,11 +1249,11 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb4 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
 
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb3.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
-		gdImageLine( im, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb4.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
@@ -1263,12 +1263,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 
 		Point p_center = Point( rRnd( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
+		gdImageFillToBorder( iim, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2,0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2,0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		//----- Drawing the first line connecting two arcs -----
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width - 2;
@@ -1279,7 +1279,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width + 2;
 		p2 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 			    el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
-		dashDotFigureBorders( im2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 		//----- Drawing the second line connecting two arcs -----
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width - 2;
 		arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width - 2;
@@ -1289,7 +1289,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width + 2;
 		p2 = Point( el_p3.x + rotate(  arc( t_start, arc_a, arc_b ), ang  ).x,
 			    el_p3.y - rotate(  arc( t_start, arc_a, arc_b ), ang  ).y );
-		dashDotFigureBorders( im2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 		//----- Drawing the big arc -----
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width/2;
 		arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width/2;
@@ -1303,7 +1303,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb5 = Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang  ).y );
 		el_pb6 = Point( t_start, t_end);
-		dashDotFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6,  clr_el, clr_el, el_border_width-2, 1, 2, wdt, wdt_1, xScale, yScale  );
+		dashDotFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6,  clr_el, clr_el, el_border_width-2, 1, 2, wdt, wdt_1, xScale, yScale  );
 		//----- Drawing the small arc -----
 		arc_a = length( el_p5, el_p3 ) - el_width/2 - el_border_width/2;
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width/2;
@@ -1317,14 +1317,14 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb5 = Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang  ).y );
 		el_pb6 = Point( t_start, t_end);
-		dashDotFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6,  clr_el, clr_el, el_border_width-2, 1, 2, wdt, wdt_1, xScale, yScale  );
+		dashDotFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6,  clr_el, clr_el, el_border_width-2, 1, 2, wdt, wdt_1, xScale, yScale  );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 	    }
 	    //---- Drawing the solid arc with borders' width >=4 ----
 	    if( item.border_width >= 4 && ( item.style == 0 || !flag_style ) )
@@ -1336,12 +1336,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "arc" -----
 		arc_a = length( el_p5, el_p3 )+el_width/2 + el_border_width/2;
 		arc_b = length( el_p3, el_p4 )+el_width/2 + el_border_width/2;
-		gdImageSetThickness(im,1);
-		gdImageAlphaBlending(im,0);
+		gdImageSetThickness(iim,1);
+		gdImageAlphaBlending(iim,0);
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1360,7 +1360,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( el_p3.x + rotate( arc( t, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.x + rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p3.y - rotate( arc( t+0.00277777777778, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1373,11 +1373,11 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb4 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
 
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb3.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb3.y, POS_PREC_DIG, true ), clr_el_line );
-		gdImageLine( im, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb4.x, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb4.y, POS_PREC_DIG, true ), clr_el_line );
@@ -1388,12 +1388,12 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 
 		Point p_center = Point( rRnd( el_p3.x + rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).x, POS_PREC_DIG, true ),
 					rRnd( el_p3.y - rotate( arc( (t_end + t_start)/2, arc_a, arc_b ), ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
+		gdImageFillToBorder( iim, (int)rRnd( p_center.x ), (int)rRnd( p_center.y ), clr_el_line, clr_el_line );
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2,0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2,0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		t_start = el_p6.x;
 		t_end = el_p6.y;
@@ -1405,7 +1405,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width + 2;
 		el_pb2 = Point( el_p3.x + rotate(  arc( t_end, arc_a, arc_b ), ang  ).x,
 					el_p3.y - rotate(  arc( t_end, arc_a, arc_b ), ang  ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0, 0), Point(0, 0), Point(0, 0), Point(0, 0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale  );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0, 0), Point(0, 0), Point(0, 0), Point(0, 0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale  );
 
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width - 2;
 		arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width - 2;
@@ -1415,7 +1415,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width + 2;
 		el_pb2 = Point( el_p3.x + rotate(  arc( t_start, arc_a, arc_b ), ang  ).x,
 				el_p3.y - rotate(  arc( t_start, arc_a, arc_b ), ang  ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0, 0), Point(0, 0), Point(0, 0), Point(0, 0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale  );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0, 0), Point(0, 0), Point(0, 0), Point(0, 0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale  );
 
 		arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width/2;
 		arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width/2;
@@ -1429,7 +1429,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb5 = Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang  ).x,
 					el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang  ).y );
 		el_pb6 = Point( t_start, t_end);
-		paintFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6, clr_el, clr_el, el_border_width-2, 1, 2, xScale, yScale  );
+		paintFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6, clr_el, clr_el, el_border_width-2, 1, 2, xScale, yScale  );
 
 		arc_a = length( el_p5, el_p3 ) - el_width/2 - el_border_width/2;
 		arc_b = length( el_p3, el_p4 ) - el_width/2 - el_border_width/2;
@@ -1443,17 +1443,17 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_pb5 = Point( el_p3.x + rotate( arc( 0, arc_a, arc_b ), ang  ).x,
 					el_p3.y - rotate( arc( 0, arc_a, arc_b ), ang  ).y );
 		el_pb6 = Point( t_start, t_end);
-		paintFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6, clr_el, clr_el, el_border_width-2, 1, 2, xScale, yScale  );
+		paintFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, el_pb5, el_pb6, clr_el, clr_el, el_border_width-2, 1, 2, xScale, yScale  );
 
 		arc_a = length( el_p5, el_p3 );
 		arc_b = length( el_p3, el_p4 );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 	    }
 	    //---- Recalculating the points of the arc to make them really belonging to the arc ----
 	    el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
@@ -1485,7 +1485,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 	if( item.border_width == 0 )//--- Drawing the bezier curve with borders' width == 0 ---
 	{
 	    if( flag_allocate )
-		clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
+		clr_el = gdImageColorResolveAlpha( iim, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
 	    else clr_el = item.lineColor;
 	    t_start = 0;
 	    t_end = 1;
@@ -1496,21 +1496,21 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		Point el_p2 = scaleRotate( (pnts)[item.n2], xScale, yScale, true, true );
 		Point el_p3 = scaleRotate( (pnts)[item.n3], xScale, yScale, true, true );
 		Point el_p4 = scaleRotate( (pnts)[item.n4], xScale, yScale, true, true );
-		gdImageAlphaBlending(im,0);
-		dashDot( im, el_p1, el_p2, el_p3, el_p4, Point(0,0), Point(0,0), clr_el, item.width, 3, item.style );
-		gdImageAlphaBlending(im,1);
+		gdImageAlphaBlending(iim,0);
+		dashDot( iim, el_p1, el_p2, el_p3, el_p4, Point(0,0), Point(0,0), clr_el, item.width, 3, item.style );
+		gdImageAlphaBlending(iim,1);
 	    }
 	    else//---- Drawing the solid bezier curve with borders' width == 0 ----
 	    {
-		gdImageAlphaBlending(im,0);
-		gdImageSetThickness( im, item.width );
+		gdImageAlphaBlending(iim,0);
+		gdImageSetThickness( iim, item.width );
 		double delta = bezierDeltaT( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ), scaleRotate( (pnts)[item.n3], xScale, yScale, true, true ),
 					    scaleRotate( (pnts)[item.n4], xScale, yScale, true, true ), scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ) );
 
 		t = t_start;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true),
+		    gdImageLine( iim, (int)rRnd( bezier(t,scaleRotate((pnts)[item.n1],xScale,yScale,true, true),
 		    scaleRotate((pnts)[item.n3],xScale,yScale,true, true ),
 		    scaleRotate((pnts)[item.n4],xScale,yScale,true, true),
 		    scaleRotate((pnts)[item.n2],xScale,yScale,true, true)).x, POS_PREC_DIG, true ),
@@ -1529,7 +1529,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		    t += delta;
 		}
 		while( t < t_end );
-		gdImageAlphaBlending(im,1);
+		gdImageAlphaBlending(iim,1);
 	    }
 	}
 	else//---- Drawing the bezier curve wit borders' width > 0 ----
@@ -1546,8 +1546,8 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		el_ang = 360 - angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 	    else
 		el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
-	    clr_el_line = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
-	    if( flag_allocate ) clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
+	    clr_el_line = gdImageColorResolveAlpha( iim, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
+	    if( flag_allocate ) clr_el = gdImageColorResolveAlpha( iim, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
 	    else
 	    {
 		clr_el = item.borderColor;
@@ -1566,9 +1566,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		    wdt = (item.width+2)-1;
 		    wdt_1 = 2*(item.width+2);
 		}
-		gdImageAlphaBlending(im, 0);
-		dashDotFigureBorders( im, el_p1, el_p2, el_p3, el_p4, Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, wdt, wdt_1, xScale, yScale  );
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 0);
+		dashDotFigureBorders( iim, el_p1, el_p2, el_p3, el_p4, Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, wdt, wdt_1, xScale, yScale  );
+		gdImageAlphaBlending(iim, 1);
 	    }
 	    if( item.border_width < 4 && item.style != 0 && !item.flag_brd && flag_style )//---- Drawing the dashed or dotted bezier curve with borders' width < 4 and without flag_brd ----
 	    {
@@ -1578,8 +1578,8 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		Point p4 = unrotate( el_p4, el_ang, el_p1.x, el_p1.y );
 		Point el_pb1, el_pb2, el_pb3, el_pb4;
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "bezier curve" -----
-		gdImageAlphaBlending(im, 0);
-		gdImageSetThickness( im, 1 );
+		gdImageAlphaBlending(iim, 0);
+		gdImageSetThickness( iim, 1 );
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
@@ -1594,7 +1594,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1613,7 +1613,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1625,24 +1625,24 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 1);
 		Point p_center = Point( (int)rRnd(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
+		gdImageFillToBorder( iim, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2,0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2,0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x, p1.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
@@ -1652,7 +1652,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( p3.x, p3.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p4.x, p4.y+(el_width/2+el_border_width/2) ), el_ang ).y );
-		dashDot( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, item.border_width, 3, item.style );
+		dashDot( iim2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, item.border_width, 3, item.style );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
@@ -1662,34 +1662,34 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( p3.x, p3.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
 		el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p4.x, p4.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		dashDot( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, item.border_width, 3, item.style );
+		dashDot( iim2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, item.border_width, 3, item.style );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( p1.x-el_border_width/2, p1.y+el_width/2+el_border_width-1 ), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x-el_border_width/2, p1.y+el_width/2+el_border_width-1 ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( p1.x-el_border_width/2, p1.y - (el_width/2+el_border_width-1 ) ), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x-el_border_width/2, p1.y - (el_width/2+el_border_width-1 ) ), el_ang ).y );
-		dashDot( im, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( p2.x+el_border_width/2, p2.y+el_width/2+el_border_width-1 ), el_ang ).x,
 				el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y+el_width/2+el_border_width-1 ), el_ang ).y );;
 		el_pb2 = Point( el_p1.x + rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).x,
 				el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).y );
-		dashDot( im, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 
 	    }
 	    //----- Drawing the solid bezier curve with borders' width < 4 -----
 	    if( item.border_width < 4 && ( item.style == 0 || !flag_style ) )
 	    {
-		gdImageAlphaBlending(im,0);
-		paintFigureBorders( im, el_p1, el_p2, el_p3, el_p4, Point(0.0,1.0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, xScale, yScale  );
-		gdImageAlphaBlending(im,1);
+		gdImageAlphaBlending(iim,0);
+		paintFigureBorders( iim, el_p1, el_p2, el_p3, el_p4, Point(0.0,1.0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 3, xScale, yScale  );
+		gdImageAlphaBlending(iim,1);
 	    }
 	    //----- Drawing the dashed or dotted bezier curve with borders' width >= 4 -----
 	    if( item.border_width >=4 && item.style != 0 && flag_style )
@@ -1711,8 +1711,8 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		    wdt_1 = 2*item.border_width;
 		}
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "bezier curve" -----
-		gdImageAlphaBlending(im, 0);
-		gdImageSetThickness( im, 1 );
+		gdImageAlphaBlending(iim, 0);
+		gdImageSetThickness( iim, 1 );
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
@@ -1727,7 +1727,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)rRnd( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd( bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1746,7 +1746,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1758,24 +1758,24 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 1);
 		Point p_center = Point( (int)rRnd(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
+		gdImageFillToBorder( iim, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2,0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2,0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x, p1.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
@@ -1785,7 +1785,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( p3.x, p3.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p4.x, p4.y+(el_width/2+el_border_width/2) ), el_ang ).y );
-		dashDotFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, wdt, wdt_1, xScale, yScale  );
+		dashDotFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, wdt, wdt_1, xScale, yScale  );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
@@ -1795,26 +1795,26 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( p3.x, p3.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
 		el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p4.x, p4.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		dashDotFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, wdt, wdt_1, xScale, yScale  );
+		dashDotFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, wdt, wdt_1, xScale, yScale  );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( p1.x-el_border_width/2, p1.y+el_width/2+el_border_width-1 ), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x-el_border_width/2, p1.y+el_width/2+el_border_width-1 ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( p1.x-el_border_width/2, p1.y - (el_width/2+el_border_width-1 ) ), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x-el_border_width/2, p1.y - (el_width/2+el_border_width-1 ) ), el_ang ).y );
-		dashDotFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( p2.x+el_border_width/2, p2.y+el_width/2+el_border_width-1 ), el_ang ).x,
 				el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y+el_width/2+el_border_width-1 ), el_ang ).y );;
 		el_pb2 = Point( el_p1.x + rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).x,
 				el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).y );
-		dashDotFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 
 	    }
 	    if( item.border_width >=4 && ( item.style == 0 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width >= 4 -----
@@ -1826,8 +1826,8 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		Point p3 = unrotate( el_p3, el_ang,el_p1.x, el_p1.y );
 		Point p4 = unrotate( el_p4, el_ang, el_p1.x, el_p1.y );
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "bezier curve" -----
-		gdImageAlphaBlending(im, 0);
-		gdImageSetThickness( im, 1 );
+		gdImageAlphaBlending(iim, 0);
+		gdImageSetThickness( iim, 1 );
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
@@ -1842,7 +1842,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1861,7 +1861,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		t = 0;
 		do
 		{
-		    gdImageLine( im, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
+		    gdImageLine( iim, (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).x, POS_PREC_DIG, true ),
 				    (int)rRnd(bezier(t+delta,el_pb1, el_pb3, el_pb4, el_pb2).y, POS_PREC_DIG, true ), clr_el_line );
@@ -1873,24 +1873,24 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p1.x - el_border_width/2, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point(p2.x + el_border_width/2, p2.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				(int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 1);
 		Point p_center = Point( (int)rRnd(el_p1.x + rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).x, POS_PREC_DIG, true ),
 					(int)rRnd( el_p1.y - rotate( bezier( 0.5, p1, p3, p4, p2 ), el_ang ).y, POS_PREC_DIG, true ) );
-		gdImageFillToBorder( im, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
+		gdImageFillToBorder( iim, (int)( p_center.x + 0.5 ), (int)( p_center.y + 0.5 ), clr_el_line, clr_el_line );
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2,0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2,0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x, p1.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x, p1.y+(el_width/2+el_border_width/2)), el_ang ).y );
@@ -1900,7 +1900,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( p3.x, p3.y+(el_width/2+el_border_width/2) ), el_ang ).y );
 		el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(el_width/2+el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p4.x, p4.y+(el_width/2+el_border_width/2) ), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0.0,1.0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0.0,1.0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, xScale, yScale );
 
 		el_pb1 = Point( el_p1.x + rotate( Point(p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x, p1.y+(-el_width/2-el_border_width/2)), el_ang ).y );
@@ -1910,26 +1910,26 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 				el_p1.y - rotate( Point( p3.x, p3.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
 		el_pb4 = Point( el_p1.x + rotate( Point(p4.x, p4.y+(-el_width/2-el_border_width/2)), el_ang ).x,
 				el_p1.y - rotate( Point( p4.x, p4.y+(-el_width/2-el_border_width/2) ), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0.0,1.0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, el_pb3, el_pb4, Point(0.0,1.0), Point(0,0), clr_el, clr_el, el_border_width-2, 1, 3, xScale, yScale );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( p1.x-el_border_width/2, p1.y+el_width/2+el_border_width-1 ), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x-el_border_width/2, p1.y+el_width/2+el_border_width-1 ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( p1.x-el_border_width/2, p1.y - (el_width/2+el_border_width-1 ) ), el_ang ).x,
 				el_p1.y - rotate( Point( p1.x-el_border_width/2, p1.y - (el_width/2+el_border_width-1 ) ), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( p2.x+el_border_width/2, p2.y+el_width/2+el_border_width-1 ), el_ang ).x,
 				el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y+el_width/2+el_border_width-1 ), el_ang ).y );;
 		el_pb2 = Point( el_p1.x + rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).x,
 				el_p1.y - rotate( Point( p2.x+el_border_width/2, p2.y-(el_width/2+el_border_width-1) ), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width-2, 0.5, 1, xScale, yScale );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 	    }
 	}
     }
@@ -1939,19 +1939,19 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 	if( item.border_width == 0 )//--- Drawing the line with borders' width == 0 ---
 	{
 	    if( flag_allocate )
-		clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
+		clr_el = gdImageColorResolveAlpha( iim, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
 	    else clr_el =item.lineColor;
-	    gdImageSetThickness( im, item.width );
+	    gdImageSetThickness( iim, item.width );
 	    //---- Drawing the dashed line with borders' width == 0 ----
 	    if( item.style != 0 && flag_style )
 	    {
 		Point el_p1 = Point( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ) );
 		Point el_p2 = Point( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ) );
-		dashDot( im, el_p1, el_p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.width, 1, item.style );
+		dashDot( iim, el_p1, el_p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.width, 1, item.style );
 	    }
 	    else//---- Drawing the solid line with borders' width == 0 ----
 	    {
-		gdImageLine( im, (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
 				    (int)rRnd( scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),
 				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x, POS_PREC_DIG, true ),
 				    (int)rRnd( scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y, POS_PREC_DIG, true ),  clr_el );
@@ -1959,9 +1959,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 	}
 	else//--- Drawing the line with borders' width > 0 ---
 	{
-	    clr_el_line = gdImageColorResolveAlpha( im, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
+	    clr_el_line = gdImageColorResolveAlpha( iim, (uint8_t)(item.lineColor>>16), (uint8_t)(item.lineColor>>8), (uint8_t)item.lineColor, 127 - (uint8_t)(item.lineColor>>24) );
 	    if( flag_allocate )
-		clr_el = gdImageColorResolveAlpha( im, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
+		clr_el = gdImageColorResolveAlpha( iim, (uint8_t)(item.borderColor>>16), (uint8_t)(item.borderColor>>8), (uint8_t)item.borderColor, 127 - (uint8_t)(item.borderColor>>24) );
 	    else
 	    {
 		clr_el = item.borderColor;
@@ -1977,9 +1977,9 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		double wdt = 0;
 		if( item.style == 1 ) wdt = 4*(item.width+2)-1;
 		else if( item.style == 2 ) wdt = item.width+1;
-		gdImageAlphaBlending(im, 0);
-		dashDotFigureBorders( im, el_p1, el_p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, wdt, 0.0, xScale, yScale  );
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 0);
+		dashDotFigureBorders( iim, el_p1, el_p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, wdt, 0.0, xScale, yScale  );
+		gdImageAlphaBlending(iim, 1);
 	    }
 	    //---- Drawing the dashed or dotted borders of the line (for borders with width < 4) ----
 	    if( item.border_width < 4 && item.style != 0 && !item.flag_brd  && flag_style)
@@ -1997,84 +1997,84 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "line" -----
 		el_border_width = el_border_width/2;
-		gdImageSetThickness( im, 1 );
-		gdImageAlphaBlending(im, 0);
+		gdImageSetThickness( iim, 1 );
+		gdImageAlphaBlending(iim, 0);
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 1);
 
 		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
 		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y)/2;
-		gdImageFillToBorder( im, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);
+		gdImageFillToBorder( iim, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2, 0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2, 0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -2*el_border_width+1, -(el_width/2+el_border_width) ), el_ang ).x,
 				el_p1.y - rotate( Point( -2*el_border_width+1, - (el_width/2+el_border_width)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).y );
 
-		dashDot( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1) + el_border_width, -el_width/2 ), el_ang ).y );;
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2 ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2 ), el_ang ).y );
-		dashDot( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, ( el_width/2+el_border_width) ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, (el_width/2+el_border_width) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -2*el_border_width+1, (el_width/2+el_border_width) ), el_ang).x,
 				el_p1.y - rotate( Point( -2*el_border_width+1, (el_width/2+el_border_width)), el_ang ).y );
-		dashDot( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2 ), el_ang).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2 ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, - el_width/2 ), el_ang ).y );
-		dashDot( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
+		dashDot( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, item.border_width, 1, item.style );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 
 	    }
 	    //----- Drawing the solid line with borders' width == 1(for lines with width > 3) -----
 	    if(  item.border_width < 4  && ( item.style == 0 || !flag_style ) )
 	    {
-		gdImageAlphaBlending(im, 0);
-		paintFigureBorders( im, el_p1, el_p2, Point(0,0), Point(0,0),  Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, xScale, yScale  );
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 0);
+		paintFigureBorders( iim, el_p1, el_p2, Point(0,0), Point(0,0),  Point(0,0), Point(0,0), clr_el, clr_el_line, el_width, el_border_width, 1, xScale, yScale  );
+		gdImageAlphaBlending(iim, 1);
 	    }
 	    //---- Drawing the dashed or dotted line with the borders' width >= 4 ----
 	    if( item.border_width >= 4 && item.style != 0 && flag_style )
@@ -2087,46 +2087,46 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		Point p1, p2, un_p1, un_p2,el_pb1,el_pb2;
 		el_width = el_width - 1;
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "line" -----
-		gdImageAlphaBlending(im, 0);
+		gdImageAlphaBlending(iim, 0);
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageSetThickness( im, 1 );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageSetThickness( iim, 1 );
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 1);
 		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
 		double y_center=(scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y)/2;
-		gdImageFillToBorder( im, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);
+		gdImageFillToBorder( iim, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);
 		el_width = el_width + 1;
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2, 0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2, 0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		p1 = Point( el_p1.x + rotate( Point( -2*el_border_width+1, -(el_width/2+el_border_width) ), el_ang ).x,
 			    el_p1.y - rotate( Point( -2*el_border_width+1, - (el_width/2+el_border_width)), el_ang ).y );
@@ -2135,32 +2135,32 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		double wdt = 0;
 		if( item.style == 1 ) wdt = 4*item.border_width-1;
 		else if( item.style == 2 ) wdt = item.border_width-1;
-		dashDotFigureBorders( im2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 
 		p1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, ( el_width/2+el_border_width) ), el_ang ).x,
 			    el_p1.y - rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, (el_width/2+el_border_width) ), el_ang ).y );
 		p2 = Point( el_p1.x + rotate( Point( -2*el_border_width+1, (el_width/2+el_border_width) ), el_ang).x,
 			    el_p1.y - rotate( Point( -2*el_border_width+1, (el_width/2+el_border_width)), el_ang ).y );
-		dashDotFigureBorders( im2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 
 		p1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2), el_ang ).x,
 			    el_p1.y - rotate( Point( length( el_p2, el_p1) + el_border_width, -el_width/2 ), el_ang ).y );;
 		p2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2 ), el_ang ).x,
 			    el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2 ), el_ang ).y );
 
-		dashDotFigureBorders( im2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 		p1 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2 ), el_ang).x,
 			    el_p1.y - rotate( Point( -el_border_width, el_width/2), el_ang ).y );
 		p2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2 ), el_ang ).x,
 			    el_p1.y - rotate( Point( -el_border_width, - el_width/2 ), el_ang ).y );
-		dashDotFigureBorders( im2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
+		dashDotFigureBorders( iim2, p1, p2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, 2*el_border_width-2, 0.5, 1, wdt, 0.0, xScale, yScale  );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 
 	    }
 	    //----- Drawing the solid borders of the line -----
@@ -2173,75 +2173,75 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		    el_ang = angle( el_p1, el_p2, el_p1, Point( el_p1.x+10, el_p1.y ) );
 		Point el_pb1, el_pb2;
 		//----- Drawing the lines with width = 1 instead their real width and filling the path with the color of the "line" -----
-		gdImageAlphaBlending(im, 0);
-		gdImageSetThickness( im, 1 );
+		gdImageAlphaBlending(iim, 0);
+		gdImageSetThickness( iim, 1 );
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2+el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, -el_width/2-el_border_width  ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2+el_border_width ), el_ang ).y );
-		gdImageLine( im, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
+		gdImageLine( iim, (int)rRnd( el_pb1.x, POS_PREC_DIG, true ),(int)rRnd( el_pb1.y, POS_PREC_DIG, true ),
 				    (int)rRnd( el_pb2.x, POS_PREC_DIG, true ),(int)rRnd( el_pb2.y, POS_PREC_DIG, true ),clr_el_line );
-		gdImageAlphaBlending(im, 1);
+		gdImageAlphaBlending(iim, 1);
 		double x_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).x + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).x)/2;
 		double y_center = (scaleRotate( (pnts)[item.n1], xScale, yScale, true, true ).y + scaleRotate( (pnts)[item.n2], xScale, yScale, true, true ).y)/2;
-		gdImageFillToBorder( im, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);\
+		gdImageFillToBorder( iim, (int)(x_center+0.5), (int)(y_center+0.5), clr_el_line, clr_el_line);\
 
 		//----- Drawing the lines with their real width on the other image and merging it with the previous one -----
-		gdImagePtr im2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-		gdImageAlphaBlending(im2, 0);
-		gdImageFilledRectangle( im2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im2,0,0,0,127) );
+		gdImagePtr iim2 = gdImageCreateTrueColor( scaleWidth, scaleHeight );
+		gdImageAlphaBlending(iim2, 0);
+		gdImageFilledRectangle( iim2, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(iim2,0,0,0,127) );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -2*el_border_width+1, -(el_width/2+el_border_width) ), el_ang ).x,
 				el_p1.y - rotate( Point( -2*el_border_width+1, - (el_width/2+el_border_width)), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1) + 2*el_border_width-1, -(el_width/2+el_border_width) ), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, -el_width/2), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1) + el_border_width, -el_width/2 ), el_ang ).y );;
 		el_pb2 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2 ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + el_border_width, el_width/2 ), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, ( el_width/2+el_border_width) ), el_ang ).x,
 				el_p1.y - rotate( Point( length( el_p2, el_p1 ) + 2*el_border_width-1, (el_width/2+el_border_width) ), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -2*el_border_width+1, (el_width/2+el_border_width) ), el_ang).x,
 				el_p1.y - rotate( Point( -2*el_border_width+1, (el_width/2+el_border_width)), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
 
 		el_pb1 = Point( el_p1.x + rotate( Point( -el_border_width, el_width/2 ), el_ang).x,
 				el_p1.y - rotate( Point( -el_border_width, el_width/2), el_ang ).y );
 		el_pb2 = Point( el_p1.x + rotate( Point( -el_border_width, -el_width/2 ), el_ang ).x,
 				el_p1.y - rotate( Point( -el_border_width, - el_width/2 ), el_ang ).y );
-		paintFigureBorders( im2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
+		paintFigureBorders( iim2, el_pb1, el_pb2, Point(0,0), Point(0,0), Point(0,0), Point(0,0), clr_el, clr_el, el_border_width*2-2, 0.5, 1, xScale, yScale );
 
-		gdImageAlphaBlending(im,1);
-		gdImageSaveAlpha(im, 1);
-		gdImageAlphaBlending(im2,1);
-		gdImageSaveAlpha(im2, 1);
-		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if(im2) { gdImageDestroy(im2); im2 = NULL; }
+		gdImageAlphaBlending(iim,1);
+		gdImageSaveAlpha(iim, 1);
+		gdImageAlphaBlending(iim2,1);
+		gdImageSaveAlpha(iim2, 1);
+		gdImageCopy(iim, iim2, 0, 0, 0, 0, scaleWidth, scaleHeight);
+		if(iim2) { gdImageDestroy(iim2); iim2 = NULL; }
 	    }
 	}
     }
@@ -2263,14 +2263,11 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
     bool flag_push_back;
     scaleHeight = (int)rRnd(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
-    if( xSc < ySc ) scale = xSc;
-    else scale = ySc;
-    if( scale != 1.0 )
-    {
-	for(unsigned i = 0; i < shapeItems.size(); i++)
-	{
-	    if( !shapeItems[i].flag_brd && shapeItems[i].border_width > 0 )
-	    {
+    if(scaleHeight < 0 || scaleHeight > 10000 || scaleWidth < 0 || scaleWidth > 10000)	return -1;
+    scale = vmin(xSc, ySc);
+    if(scale != 1) {
+	for(unsigned i = 0; i < shapeItems.size(); i++) {
+	    if(!shapeItems[i].flag_brd && shapeItems[i].border_width > 0) {
 		border_width = shapeItems[i].border_width;
 		border_width = border_width*scale;
 		shapeItems[i].border_width = (int)rRnd(border_width);
@@ -2837,7 +2834,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    }
 			    while ( ((delta_t<t_end) && (inc_delta>0)) || ((delta_t>t_start) && (inc_delta<0)) );
 			    if( inc_delta > 0 ) delta = (t_end - delta_t)/2 + scale;
-			    else delta =- ( (delta_t - t_start)/2 + scale );
+			    else delta = -( (delta_t - t_start)/2 + scale );
 			    delta_point_1 = Point( (int)rRnd( el_p3.x + rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
 						    (int)rRnd( el_p3.y - rotate( arc( delta_t + delta, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
 			}
@@ -6382,7 +6379,7 @@ VCADiagram::TrendObj::~TrendObj( )
 #endif
 }
 
-VCADiagram &VCADiagram::TrendObj::owner( )	{ return *m_owner; }
+VCADiagram &VCADiagram::TrendObj::owner( ) const { return *m_owner; }
 
 int64_t VCADiagram::TrendObj::valBeg( )		{ return vals.empty() ? 0 : vals[0].tm; }
 
@@ -6455,21 +6452,22 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
 	{
 	    XMLNode req("get");
-	    req.setAttr("path",addr()+"/%2fserv%2fval")->
-		setAttr("tm",ll2s(tTime))->
-		setAttr("tm_grnd","0");
+	    req.setAttr("path", addr()+"/%2fserv%2fval")->
+		setAttr("tm", ll2s(tTime))->
+		setAttr("tm_grnd", "0");
 	    if(mod->cntrIfCmd(req,user,false)) return;
 
-	    int64_t lst_tm = (s2ll(req.attr("tm"))/wantPer)*wantPer;
-	    if(lst_tm && lst_tm >= valEnd()) {
+	    int64_t lstTm = (s2ll(req.attr("tm"))/wantPer)*wantPer,
+		    valEnd_ = (valEnd()/wantPer)*wantPer;
+	    if(lstTm && lstTm >= valEnd_) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
-		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
-		else if((lst_tm == valEnd() && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));
+		else if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
+		else if((lstTm == valEnd_ && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL) {
-		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		    int s_k = lstTm-wantPer*(lstTm/wantPer), n_k = trcPer;
 		    vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
 		}
 		while(vals.size() > bufLim) vals.pop_front();
@@ -6656,7 +6654,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 	if(req_el->name() != "el")	continue;
 	switch(s2i(req_el->attr("p"))) {
 	    case A_DocTmpl: case A_DocDoc: {
-		if(TSYS::strNoSpace(req_el->text()).empty())	break;
+		if(sTrm(req_el->text()).empty())	break;
 		const char *XHTML_entity =
 		    "<!DOCTYPE xhtml [\n"
 		    "  <!ENTITY nbsp \"&#160;\" >\n"

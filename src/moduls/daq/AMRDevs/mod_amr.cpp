@@ -39,7 +39,7 @@
 #define MOD_NAME	_("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.0.2"
+#define MOD_VER		"0.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow access to automatic meter reading devices. Supported devices: ")
 #define LICENSE		"GPL2"
@@ -76,16 +76,6 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 }
 
 TTpContr::~TTpContr()
-{
-
-}
-
-void TTpContr::load_( )
-{
-
-}
-
-void TTpContr::save_( )
 {
 
 }
@@ -172,9 +162,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem),
-	mPrior(cfg("PRIOR").getId()), mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
-	prc_st(false), endrun_req(false), tm_gath(0)
+    ::TController(name_c, daq_db, cfgelem),
+    mPrior(cfg("PRIOR").getId()), mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
+    mPer(0), prc_st(false), endrun_req(false), tm_gath(0)
 {
     cfg("PRM_BD").setS("AMRDevsPrm_"+name_c);
 }
@@ -186,12 +176,11 @@ TMdContr::~TMdContr( )
 
 string TMdContr::getStatus( )
 {
-    string val = TController::getStatus( );
-    if( startStat() && !redntUse( ) )
-    {
-	if( period() ) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
+    string val = TController::getStatus();
+    if(startStat()) {
+	if(period()) val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	val += TSYS::strMess(_("Spent time: %s."), tm2s(1e-6*tm_gath).c_str());
     }
     return val;
 }
@@ -220,7 +209,7 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(en_res,true);
+    ResAlloc res(enRes, true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -242,15 +231,15 @@ void *TMdContr::Task( void *icntr )
 	int64_t t_cnt = TSYS::curTime();
 
 	//> Update controller's data
-	cntr.en_res.resRequestR( );
+	cntr.enRes.resRequestR( );
 	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
 	    try { cntr.p_hd[i_p].at().getVals( ); }
 	    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resRelease( );
+	cntr.enRes.resRelease( );
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;
 
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     cntr.prc_st = false;
@@ -293,7 +282,7 @@ void TMdPrm::postEnable( int flag )
     if( !vlElemPresent(&p_el) )	vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
@@ -375,21 +364,11 @@ void TMdPrm::getVals( )
     if( mDA ) mDA->getVals();
 }
 
-void TMdPrm::load_( )
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TParamContr::load_();
-}
+    TParamContr::cfgChange(co, pc);
 
-void TMdPrm::save_( )
-{
-    TParamContr::save_();
-}
-
-bool TMdPrm::cfgChange( TCfg &icfg )
-{
-    TParamContr::cfgChange(icfg);
-
-    if( icfg.name() == "DEV_TP" && enableStat() ) disable( );
+    if(co.name() == "DEV_TP" && enableStat()) disable();
 
     return true;
 }

@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,6 +89,7 @@ typedef hash_map<const char*, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 //* TCntrNode - Controll node					*
 //***************************************************************
 class TVariant;
+class TConfig;
 
 //#pragma pack(push,1)
 class TCntrNode
@@ -98,11 +98,12 @@ class TCntrNode
     public:
 	//Methods
 	TCntrNode( TCntrNode *prev = NULL );
+	TCntrNode( const TCntrNode &src );
 	virtual ~TCntrNode( );
 
 	virtual string objName( )	{ return "TCntrNode"; }
 
-	virtual TCntrNode &operator=( TCntrNode &node );
+	virtual TCntrNode &operator=( const TCntrNode &node );
 
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );
 
@@ -126,8 +127,7 @@ class TCntrNode
     //* Resource section *
     public:
 	//Data
-	enum Flag
-	{
+	enum Flag {
 	    // Modes
 	    DoDisable	= 0x00,		//Node do disable
 	    Disabled	= 0x01,		//Node disabled
@@ -135,10 +135,10 @@ class TCntrNode
 	    Enabled	= 0x03,		//Node enabled
 	    // Flags
 	    SelfModify	= 0x04,		//Self modify
-	    SelfModifyS	= 0x08		//Self modify store
+	    SelfModifyS	= 0x08,		//Self modify store
+	    SelfSaveForceOnChild = 0x10	//Save force on childs modify flag set
 	};
-	enum EnFlag
-	{
+	enum EnFlag {
 	    NodeConnect	= 0x01,		//Connect node to control tree
 	    NodeRestore	= 0x02		//Restore node enabling after broken disabling.
 	};
@@ -148,18 +148,19 @@ class TCntrNode
 	ResMtx &dataRes( ) { return mDataM; }	//Generic node's data mutex
 						//Allowed for using by heirs into data resources allocation
 						//  not for long-term functions-tasks resources allocation!
-	virtual Res &nodeRes( )		{ return hd_res; }
-	virtual const char *nodeName( ) = 0;
-	string nodePath( char sep = 0, bool from_root = false );
+	virtual const char *nodeName( ) const = 0;
+	virtual const char *nodeNameSYSM( ) const	{ return ""; }
+	string nodePath( char sep = 0, bool from_root = false ) const;
 
-	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
+	void nodeList( vector<string> &list, const string& gid = "" );	//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0, bool noex = false );	//Get node for full path
 	void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 
-	TCntrNode *nodePrev( bool noex = false );
+	TCntrNode *nodePrev( bool noex = false ) const;
 	char	 nodeFlg( )		{ return mFlg; }
-	char	 nodeMode( )		{ return mFlg&0x3; }
+	void	 setNodeFlg( char flg );
+	char	 nodeMode( ) const	{ return mFlg&0x3; }
 	unsigned nodeUse( bool selfOnly = false );
 	unsigned nodePos( )		{ return mOi; }
 
@@ -169,12 +170,16 @@ class TCntrNode
 	void modifG( );					//Set group modify
 	void modifClr( bool save = false );		//Clear modify
 	void modifGClr( );				//Modify group clear
-	void load( bool force = false, string *errs = NULL );	//Load node, if modified
-	void save( string *errs = NULL );		//Save node, if modified
+	void load( TConfig *cfg = NULL, string *errs = NULL );	//Load node, if modified
+	void save( unsigned lev = 0, string *errs = NULL );	//Save node, if modified
 
 	// Connections counter
 	virtual void AHDConnect( );
 	virtual bool AHDDisConnect( );
+
+	void mess_sys( int8_t level, const char *fmt,  ... );
+	TError err_sys( const char *fmt,  ... ) const;
+	TError err_sys( int cod, const char *fmt,  ... ) const;
 
 	// User object access
 	virtual TVariant objPropGet( const string &id );
@@ -184,14 +189,13 @@ class TCntrNode
 	// Childs
 	int8_t	grpSize( );
 	int8_t	grpId( const string &sid );
-	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-	void chldList( int8_t igr, vector<string> &list, bool noex = false );
-	bool chldPresent( int8_t igr, const string &name );
+	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
+	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
+	bool chldPresent( int8_t igr, const string &name ) const;
 
     protected:
 	//Data
-	struct GrpEl
-	{
+	struct GrpEl {
 	    string	id;
 	    bool	ordered;
 	    TMap	elem;
@@ -202,7 +206,7 @@ class TCntrNode
 	void nodeEn( int flag = 0 );
 	void nodeDis( long tm = 0, int flag = 0 );
 
-	void nodeDelAll( );	//For hard link objects
+	void nodeDelAll( );	//For hard link objects call from destructor
 
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
 	void setNodeMode( char mode );
@@ -210,6 +214,7 @@ class TCntrNode
 	// Childs and containers
 	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );
+	void	grpDel( int8_t id );
 	virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
 	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0 );
 
@@ -219,23 +224,22 @@ class TCntrNode
 	virtual void preDisable( int flag )	{ }
 	virtual void postDisable( int flag )	{ }
 
+	virtual void load_( TConfig *cfg )	{ }
 	virtual void load_( )			{ }
 	virtual void save_( )			{ }
 
     private:
 	//Data
-	struct
-	{
+	struct {
 	    TCntrNode	*node;
 	    int8_t	grp;
 	} prev;
 
 	//Attributes
-	// Childs
-	ResMtx	mDataM;			//Generic data mutexes
-	Res	hd_res;			//Resource HD
+	ResMtx	mChM, mDataM;		//Childs and generic data mutexes
 
-	vector<GrpEl>		*chGrp;	//Child groups
+	// Childs
+	vector<GrpEl>		*chGrp;	//Childs groups
 
 	// Curent node
 	unsigned short int	mUse;	//Use counter

@@ -49,19 +49,19 @@ class MTable : public TTable
 
 	// Field's operations
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	MBD &owner( );
+	MBD &owner( ) const;
 
     private:
 	//Private methods
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 
-	string	getVal( TCfg &cfg, bool toEnc = true );
+	string	getVal( TCfg &cfg );
 	void	setVal( TCfg &cf, const string &vl, bool tr = false );
 
 	//Private attributes
@@ -82,7 +82,7 @@ class MBD : public TBD
 	void enable( );
 	void disable( );
 
-	void allowList( vector<string> &list );
+	void allowList( vector<string> &list ) const;
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
 	void transOpen( );
@@ -122,7 +122,6 @@ class BDMod: public TTipBD
     protected:
 	//Methods
 	void modStop( );
-	void load_( );
 
     private:
 	//Private methods

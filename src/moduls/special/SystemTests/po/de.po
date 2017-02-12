@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.SystemTests 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-25 07:33+0300\n"
+"POT-Creation-Date: 2017-02-09 14:25+0200\n"
 "PO-Revision-Date: 2010-10-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -312,6 +312,10 @@ msgstr "Suche Aufzeichnungen."
 #, c-format
 msgid "Sought %d records for time %f sec."
 msgstr "Gesucht %d Aufzeichnungen für die Zeit %f sek."
+
+#, c-format
+msgid "Sought %d records in preload for time %f sec."
+msgstr "Gesucht %d Aufzeichnungen in Vorspannung für die Zeit %f sek."
 
 msgid "Change DB structure."
 msgstr "Veränderung der DB-Struktur."
@@ -697,17 +701,3 @@ msgstr "Lesen Datei '%s' nur %d von %d."
 #, c-format
 msgid "Test: Passed: %f ms."
 msgstr "Test: Gemacht: %f ms."
-
-#~ msgid "Update records, by request key, for %d records."
-#~ msgstr ""
-#~ "Aktualisieren Sie Datensätze, auf Anfrage Schlüssel für %d Datensätze."
-
-#~ msgid "Updated %d records, by request key, for time %f sec."
-#~ msgstr ""
-#~ "Aktualisiert %d Aufzeichnungen, auf Anfrage Schlüssel für Zeit %f sec."
-
-#~ msgid "Field <reqKey> '%s' != '%s' error."
-#~ msgstr "Fehler des Feldes <reqKey> '%s' != '%s'."
-
-#~ msgid "Field <reqVal> '%s' != '%s' error."
-#~ msgstr "Fehler des Feldes <reqVal> '%s' != '%s'."

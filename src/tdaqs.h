@@ -22,7 +22,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	8	//ControllerS type modules version
+#define SDAQ_VER	9	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>
@@ -55,19 +55,19 @@ class TDAQS : public TSubSYS
 	void subStart(  );
 	void subStop( );
 
-	AutoHD<TTipDAQ> at( const string &name )		{ return modAt(name); }
-	AutoHD<TCntrNode> daqAt( const string &path, char sep = 0, bool noex = false, bool waitForAttr = false );
-	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false );
-	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false );
+	AutoHD<TTipDAQ> at( const string &name ) const		{ return modAt(name); }
+	AutoHD<TCntrNode> daqAt( const string &path, char sep = 0, bool noex = false, bool waitForAttr = false ) const;
+	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false ) const;
+	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false ) const;
 	void ctrListPrmAttr( XMLNode *nd, const string &addrBase, bool toPrm = false, char sep = 0, const string &pref = "" );
 
 	//> Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }
-	void tmplLibList( vector<string> &list )		{ chldList(mTmpLib,list); }
-	bool tmplLibPresent( const string &id )			{ return chldPresent(mTmpLib,id); }
+	void tmplLibList( vector<string> &list ) const		{ chldList(mTmpLib,list); }
+	bool tmplLibPresent( const string &id ) const		{ return chldPresent(mTmpLib,id); }
 	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmpLib,lib); }
 	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmpLib,id,-1,flg); }
-	AutoHD<TPrmTmplLib> tmplLibAt( const string &id )	{ return chldAt(mTmpLib,id); }
+	AutoHD<TPrmTmplLib> tmplLibAt( const string &id ) const	{ return chldAt(mTmpLib,id); }
 
 	//> Redundancy
 	bool rdActive( );
@@ -118,7 +118,7 @@ class TDAQS : public TSubSYS
 	TElem	mElErr, mElLib, mElTmpl, mElTmplIO;
 	int	mTmpLib;
 
-	Res		mRdRes;
+	ResRW		mRdRes;
 	unsigned char	mRdStLevel,		//Current station level
 			mRdRestConnTm;		//Redundant restore connection to reserve stations timeout in seconds
 	float		mRdTaskPer,		//Redundant task period in seconds

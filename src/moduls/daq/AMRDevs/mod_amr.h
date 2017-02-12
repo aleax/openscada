@@ -70,7 +70,9 @@ class TMdPrm : public TParamContr
 
 	void getVals( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
+
+	ResRW &nodeRes( )	{ return nRes; }
 
 	//Attributes
 	TElem	p_el;		//Work atribute elements
@@ -80,9 +82,7 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	void load_( );
-	void save_( );
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
@@ -92,6 +92,7 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
 	DA	*mDA;
+	ResRW	nRes;
 };
 
 //*************************************************
@@ -130,7 +131,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
+	ResRW	enRes;		//Resource for enable params
 	int	&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s
 		&mConnTry;	//Connections try
@@ -139,7 +140,7 @@ class TMdContr: public TController
 	bool	prc_st,		// Process task active
 		endrun_req;	// Request to stop of the Process task
 
-	vector< AutoHD<TMdPrm> >  p_hd;
+	vector< AutoHD<TMdPrm> > p_hd;
 
 	double	tm_gath;	// Gathering time
 };
@@ -159,9 +160,6 @@ class TTpContr: public TTipDAQ
     protected:
 	//Methods
 	void postEnable( int flag );
-
-	void load_( );
-	void save_( );
 
 	bool redntAllow( )	{ return true; }
 

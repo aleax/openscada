@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-29 20:06+0300\n"
+"POT-Creation-Date: 2017-02-09 09:44+0200\n"
 "PO-Revision-Date: 2007-10-28 08:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -192,30 +192,16 @@ msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Затрачено времени: %s[%s]. "
 
 #, c-format
 msgid "Enable block '%s' error."
 msgstr "Ошибка включения блока '%s'."
 
-msgid "Start stage 1: set all blocks to process."
-msgstr "Этап запуска 1: установка всех блоков в обработку."
-
 #, c-format
 msgid "Process block '%s' error."
 msgstr "Ошибка обработки блока '%s'."
-
-msgid "Start stage 2: sort blocks for need sequence."
-msgstr "Этап запуска 2: сортировка блоков в нужной последовательности."
-
-#, c-format
-msgid "Reshuffle blocks '%s'(%d) <-> '%s'(%d)."
-msgstr "Перестановка блоков '%s'(%d) <-> '%s'(%d)."
-
-#, c-format
-msgid "Start stage 3: task create: prcSt=%d."
-msgstr "Этап запуска 3: создание задачи: prcSt=%d."
 
 #, c-format
 msgid "Block '%s' calc error."

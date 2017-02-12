@@ -53,11 +53,10 @@ class TMdPrm : public TParamContr
 	int iCnl( )			{ return mCnl; }
 	void setICnl( int val )		{ mCnl = val; modif(); }
 
-	void load_( );
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods
@@ -96,16 +95,14 @@ class TMdContr: public TController
 
 	TElem &prmEL( )		{ return pEl; }
 
-	void load_( );
-	void save_( );
 	void start_( );
 	void stop_( );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	TTpContr &owner( );
+	TTpContr &owner( ) const;
 
-	Res &nodeRes( )		{ return nRes; }
+	ResRW &nodeRes( )	{ return nRes; }
 
     protected:
 	//Methods
@@ -113,7 +110,7 @@ class TMdContr: public TController
 	static int recordCallback( const void *iBuf, void *oBuf, unsigned long framesPerBuffer,
 		const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void *userData );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
     private:
@@ -132,7 +129,7 @@ class TMdContr: public TController
 	double	inAdcTimePrev, inAdcTimeAdj, lostFrmsCntr;
 	unsigned long framesPerBufferMax;
 
-	Res	nRes;
+	ResRW	nRes;
 };
 
 //*************************************************

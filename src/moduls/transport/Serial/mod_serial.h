@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Transport.Serial file: mod_serial.h
 /***************************************************************************
- *   Copyright (C) 2009-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,7 +78,7 @@ class TTrIn: public TTransportIn
 	//Methods
 	void load_( );
 	void save_( );
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
@@ -106,6 +105,8 @@ class TTrIn: public TTransportIn
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
 	unsigned mRTSfc		:1;
+	unsigned mRTSlvl	:1;
+	unsigned mRTSEcho	:1;
 };
 
 //************************************************
@@ -120,8 +121,10 @@ class TTrOut: public TTransportOut
 	string getStatus( );
 
 	string timings( )			{ return mTimings; }
+	bool noStopOnProceed( )			{ return mNoStopOnProceed; }
 
 	void setTimings( const string &vl );
+	void setNoStopOnProceed( bool vl )	{ mNoStopOnProceed = vl; modif(); }
 
 	// Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
@@ -167,7 +170,7 @@ class TTrOut: public TTransportOut
 	//Methods
 	void load_( );
 	void save_( );
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -176,6 +179,7 @@ class TTrOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
+	bool	mNoStopOnProceed;
 	string	mDevPort, mTimings;
 	int	fd;
 	int64_t	mLstReqTm, mKeepAliveLstTm;
@@ -191,6 +195,9 @@ class TTrOut: public TTransportOut
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
 	unsigned mRTSfc		:1;		//Flow control by RTS signal for pure RS-485
+	unsigned mRTSlvl	:1;
+	unsigned mRTSEcho	:1;
+	unsigned mI2C		:1;
 };
 
 //************************************************

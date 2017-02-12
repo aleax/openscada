@@ -98,19 +98,15 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //************************************************
 //* BDTmpl::MBD				         *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), connRes(true)
 {
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&connRes, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+
 }
 
 //!!! Destructor for a DB-subsystem database object.
 MBD::~MBD( )
 {
-    pthread_mutex_destroy(&connRes);
+
 }
 
 //!!! Post disable processing function
@@ -160,7 +156,7 @@ void MBD::allowList( vector<string> &list )
 //!!! Open a table processing function, don't change it!
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), inm.c_str());
+    if(!enableStat()) throw err_sys(_("Error open table '%s'. DB is disabled."), inm.c_str());
 
     //!!! The code of the table creation in the database if it is not exist there and any exceptions place
 
@@ -256,7 +252,7 @@ void MTable::getStructDB( string name, vector< vector<string> > &tblStrct )
 //!!! Processing virtual function for getting the field's structure (value's type of the field and it's primary key flag)
 void MTable::fieldStruct( TConfig &cfg )
 {
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
     for(int i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 	//!!! The code to each field's type getting
@@ -264,12 +260,12 @@ void MTable::fieldStruct( TConfig &cfg )
 }
 
 //!!! Processing virtual functions for seeking, getting, setting and deleting a field
-bool MTable::fieldSeek( int row, TConfig &cfg )
+bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 {
     //!!! Check the syntax of the request's, it may differ in your database
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
 
     //Check for no present and no empty keys allow
@@ -336,7 +332,7 @@ void MTable::fieldGet( TConfig &cfg )
     //!!! Check the syntax of the request's, it may differ in your database
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
 
     string sid;
@@ -370,7 +366,7 @@ void MTable::fieldGet( TConfig &cfg )
 
     //Query
     owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw TError(nodePath().c_str(), _("Row \"%s\" is not present."), req_where.c_str());
+    if(tbl.size() < 2) throw err_sys(_("Row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
 
     //Processing of query
     for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++) {
@@ -388,7 +384,7 @@ void MTable::fieldSet( TConfig &cfg )
     //!!! Check the syntax of the request's, it may differ in your database
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
+    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = time(NULL);
 
     string sid, sval;
@@ -533,28 +529,26 @@ void MTable::fieldFix( TConfig &cfg )
 //!!! Get field item's value processing functions
 string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
 {
-    string rez = cfg.getS(RqFlg);
-    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(s2i(rez));
-    return rez;
+    string rez = cfg.getS();
+    if(rez == EVAL_STR)	return "NULL";
+    if(cfg.fld().type() == TFld::String)	rez = TSYS::strEncode(((cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez), TSYS::SQL);
+    else if(cfg.fld().flg()&TFld::DateTimeDec)	rez = UTCtoSQL(s2i(rez));
+
+    return "'" + rez + "'";
 }
 
 //!!! Processing the setVal function
 void MTable::setVal( TCfg &cf, const string &val, bool tr )
 {
+    string val = (ival==DB_NULL) ? EVAL_STR : ival;
     switch(cf.fld().type()) {
 	case TFld::Integer:
 	    if(cf.fld().flg()&TFld::DateTimeDec) cf.setI(SQLtoUTC(val));
 	    else cf.setS(val);
 	    break;
 	case TFld::String:
-	    if(!cf.extVal()) {
-		if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
-		if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
-	    }
-	    else {
-		cf.setS(val, (tr?TCfg::ExtValTwo:TCfg::ExtValOne));
-		if(!tr) cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
-	    }
+	    if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
+	    //if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    break;
 	default: cf.setS(val); break;
     }

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.6.8"
+#define MOD_VER		"0.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -51,7 +51,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -78,10 +78,10 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //Reg export functions
-    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet));
-    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost));
+    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
+    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 
     mPgU = grpAdd("up_");
 
@@ -122,49 +122,50 @@ void TWEB::load_( )
     //Load DB
     // Search and create new user protocols
     try {
-	TConfig g_cfg(&uPgEl());
-	g_cfg.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig gCfg(&uPgEl());
+	//gCfg.cfgViewAll(false);
+	vector<string> dbLs;
 	map<string, bool> itReg;
+	vector<vector<string> > full;
 
 	//  Search into DB
-	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fld_cnt++,g_cfg); )
-	    {
-		string id = g_cfg.cfg("ID").getS();
-		if(!uPgPresent(id)) uPgAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,false,&full); ) {
+		string id = gCfg.cfg("ID").getS();
+		if(!uPgPresent(id)) uPgAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		uPgAt(id).at().load(&gCfg);
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    uPgList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(uPgAt(db_ls[i_it]).at().DB()))
-		    uPgDel(db_ls[i_it]);
+	    uPgList(dbLs);
+	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(uPgAt(dbLs[i_it]).at().DB()))
+		    uPgDel(dbLs[i_it]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new user page error."));
     }
 
-    setDefPg( TBDS::genDBGet(nodePath()+"DefPg",defPg()) );
+    setDefPg(TBDS::genDBGet(nodePath()+"DefPg",defPg()));
 }
 
 void TWEB::save_( )
 {
-    TBDS::genDBSet(nodePath()+"DefPg",defPg());
+    TBDS::genDBSet(nodePath()+"DefPg", defPg());
 }
 
 void TWEB::modStart( )
 {
     vector<string> ls;
     uPgList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	if(uPgAt(ls[i_n]).at().toEnable())
-	    uPgAt(ls[i_n]).at().setEnable(true);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	if(uPgAt(ls[iN]).at().toEnable())
+	    uPgAt(ls[iN]).at().setEnable(true);
 
     runSt = true;
 }
@@ -173,82 +174,71 @@ void TWEB::modStop( )
 {
     vector<string> ls;
     uPgList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	uPgAt(ls[i_n]).at().setEnable(false);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	uPgAt(ls[iN]).at().setEnable(false);
 
     runSt = false;
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\x0D\x0A"
-	    "Date: "+tm2s(time(NULL),"%a, %d %b %Y %T %Z")+"\x0D\x0A"
-	    "Server: "+PACKAGE_STRING+"\x0D\x0A"
+    return  "HTTP/1.0 " + rcode + "\x0D\x0A"
+	    "Date: " + atm2s(time(NULL),"%a, %d %b %Y %T %Z") + "\x0D\x0A"
+	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
-	    "Content-Length: "+i2s(cln)+"\x0D\x0A"+
-	    (cnt_tp.empty()?string(""):("Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\x0D\x0A"))+
-	    addattr+"\x0D\x0A";
+	    "Content-Length: " + i2s(cln) + "\x0D\x0A" +
+	    (cnt_tp.empty()?string(""):("Content-Type: "+cnt_tp+";charset="+Mess->charset()+"\x0D\x0A")) +
+	    addattr + "\x0D\x0A";
 }
 
-void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars, const string &user )
+string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
+    const string &htmlHeadEls, const string &forceTmplFile )
 {
-    string rez, httpIt, tstr;
+    vector<TVariant> prms;
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
+
+    return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
+}
+
+void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
+{
+    string rez, httpIt, tstr, sender = TSYS::strLine(iprt->srcAddr(), 0);
     AutoHD<UserPg> up, tup;
     map<string,string>::iterator prmEl;
     vector<string> sls;
-    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),sender,user,vars,"");
+    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, "");
 
     try {
 	TValFunc funcV;
+
 	//Find user protocol for using
 	vector<string> upLs;
 	uPgList(upLs);
-	string uPg = TSYS::pathLev(ses.url,0);
+	string uPg = TSYS::pathLev(ses.url, 0);
 	if(uPg.empty()) uPg = defPg();
-	for(unsigned i_up = 0; i_up < upLs.size(); i_up++ ) {
-	    tup = uPgAt(upLs[i_up]);
+	for(unsigned iUp = 0; iUp < upLs.size(); iUp++) {
+	    tup = uPgAt(upLs[iUp]);
 	    if(!tup.at().enableStat() || tup.at().workProg().empty()) continue;
-	    if(uPg == upLs[i_up]) { up = tup; break; }
+	    if(uPg == upLs[iUp]) { up = tup; break; }
 	}
 	if(up.freeStat()) {
 	    if(uPg == "*") {
-		page =	"<?xml version='1.0' ?>\n"
-			"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-			"'DTD/xhtml1-transitional.dtd'>\n"
-			"<html xmlns='http://www.w3.org/1999/xhtml'>\n<head>\n"
-			"<meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-			"<title>"PACKAGE_NAME"!</title>\n"
-			"<style type='text/css'>\n"
-			"  hr { width: 95%; }\n"
-			"  p { margin: 0px; text-indent: 10px; margin-bottom: 5px; }\n"
-			"  body { background-color: #818181; margin: 0px; }\n"
-			"  h1.head { text-align: center; color: #ffff00; }\n"
-			"  h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0px; }\n"
-			"  table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px;  }\n"
-			"  table.work td { background-color:#cccccc; text-align: left; }\n"
-			"  table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-			"  table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
-			"</style>\n"
-			"</head>\n"
-			"<body>\n"
-			"<h1 class='head'>"PACKAGE_NAME"</h1>\n"
-			"<hr/><br/>\n"
-			"<center><table class='work' width='50%'>\n"
-			"<tr><td class='content'>"
-			"<p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p>"
-			"<tr><th>"+_("Present web-users pages")+"</th></tr>\n"
-			"<tr><td class='content'><ul>\n";
-		for(unsigned i_p = 0; i_p < upLs.size(); i_p++)
-		    if(uPgAt(upLs[i_p]).at().enableStat())
-			page += "<li><a href='"+upLs[i_p]+"/'>"+uPgAt(upLs[i_p]).at().name()+"</a></li>\n";
-		page += "</ul></td></tr></table></center>\n<hr/>\n</body>\n</html>\n";
+		page =	"<table class='work'>\n"
+			// " <tr><td class='content'><p>"+_("Welcome to Web-users pages of OpenSCADA system.")+"</p></td></tr>\n"
+			" <tr><th>"+string(_("Presented user's WEB-pages."))+"</th></tr>\n"
+			" <tr><td class='content'><ul>\n";
+		for(unsigned iP = 0; iP < upLs.size(); iP++)
+		    if(uPgAt(upLs[iP]).at().enableStat())
+			page += "   <li><a href='"+upLs[iP]+"/'>"+uPgAt(upLs[iP]).at().name()+"</a></li>\n";
+		page += "</ul></td></tr></table>\n";
 
-		page = httpHead("200 OK",page.size())+page;
+		page = pgCreator(iprt, page, "200 OK");
 		return;
 	    }
-	    else if(!(uPg=defPg()).empty()) up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(),_("Page error"));
+	    else if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
+	    else throw TError(nodePath().c_str(), _("Page is missing"));
 	}
+
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg())).at());
 
 	//Load inputs
@@ -269,9 +259,12 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    xo->fromXMLNode(ses.cnt[ic]);
 	    AutoHD<TArrayObj>(funcV.getO(8)).at().propSet(i2s(ic),xo);
 	}
+	funcV.setO(9, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+	funcV.setO(10, new TCntrNodeObj(AutoHD<TCntrNode>(iprt),"root"));
 
 	//Call processing
-	funcV.calc( );
+	funcV.calc();
+
 	//Get outputs
 	rez = funcV.getS(0);
 	page = funcV.getS(3);
@@ -280,74 +273,73 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	AutoHD<TVarObj> hVars = funcV.getO(6);
 	hVars.at().propList(sls);
 	bool cTp = false;
-	for(unsigned i_l = 0; i_l < sls.size(); i_l++) {
-	    tstr = hVars.at().propGet(sls[i_l]).getS();
-	    if(sls[i_l] == "Date" || sls[i_l] == "Server" || sls[i_l] == "Accept-Ranges" || sls[i_l] == "Content-Length" ||
-		((prmEl=ses.vars.find(sls[i_l])) != ses.vars.end() && prmEl->second == tstr)) continue;
-	    if(sls[i_l] == "Content-Type") cTp = true;
-	    httpIt += sls[i_l] + ": " + tstr + "\x0D\x0A";
+	for(unsigned iL = 0; iL < sls.size(); iL++) {
+	    tstr = hVars.at().propGet(sls[iL]).getS();
+	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
+		((prmEl=ses.vars.find(sls[iL])) != ses.vars.end() && prmEl->second == tstr)) continue;
+	    if(sls[iL] == "Content-Type") cTp = true;
+	    httpIt += sls[iL] + ": " + tstr + "\x0D\x0A";
 	}
 
-	page = httpHead(rez,page.size(),(cTp?"":"text/html"),httpIt)+page;
+	page = httpHead(rez, page.size(), (cTp?"":"text/html"), httpIt) + page;
 
 	up.at().cntReq++;
-	return;
     } catch(TError &err) {
-	page = TSYS::strMess(_("Page '%s' error: %s"),urli.c_str(),err.mess.c_str());
-	page = httpHead("404 Not Found",page.size())+page;
-	return;
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),urli.c_str(),err.mess.c_str())+"</div>\n",
+			       "404 Not Found");
     }
-
-    page = httpHead(rez,page.size())+page;
 }
 
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
-    string rez, httpIt, tstr;
+    string rez, httpIt, tstr, sender = TSYS::strLine(iprt->srcAddr(), 0);
     AutoHD<UserPg> up, tup;
     map<string,string>::iterator prmEl;
     vector<string> sls;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
     try {
 	TValFunc funcV;
 	//Find user protocol for using
 	vector<string> upLs;
 	uPgList(upLs);
-	string uPg = TSYS::pathLev(ses.url,0);
+	string uPg = TSYS::pathLev(ses.url, 0);
 	if(uPg.empty()) uPg = defPg();
-	for(unsigned i_up = 0; i_up < upLs.size(); i_up++) {
-	    tup = uPgAt(upLs[i_up]);
+	for(unsigned iUp = 0; iUp < upLs.size(); iUp++) {
+	    tup = uPgAt(upLs[iUp]);
 	    if(!tup.at().enableStat() || tup.at().workProg().empty()) continue;
-	    if(uPg == upLs[i_up]) { up = tup; break; }
+	    if(uPg == upLs[iUp]) { up = tup; break; }
 	}
 	if(up.freeStat()) {
-	    if(!(uPg=defPg()).empty()) up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(),_("Page error"));
+	    if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
+	    else throw TError(nodePath().c_str(), _("Page is missing"));
 	}
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workProg())).at());
 
 	//Load inputs
-	funcV.setS(1,"POST");
-	funcV.setS(2,ses.url);
-	funcV.setS(3,page);
-	funcV.setS(4,sender);
-	funcV.setS(5,user);
-	funcV.setO(6,new TVarObj());
+	funcV.setS(1, "POST");
+	funcV.setS(2, ses.url);
+	funcV.setS(3, page);
+	funcV.setS(4, sender);
+	funcV.setS(5, user);
+	funcV.setO(6, new TVarObj());
 	for(prmEl = ses.vars.begin(); prmEl != ses.vars.end(); prmEl++)
 	    funcV.getO(6).at().propSet(prmEl->first, prmEl->second);
 	funcV.setO(7,new TVarObj());
 	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
-	    funcV.getO(7).at().propSet(prmEl->first,prmEl->second);
+	    funcV.getO(7).at().propSet(prmEl->first, prmEl->second);
 	funcV.setO(8, new TArrayObj());
 	for(unsigned ic = 0; ic < ses.cnt.size(); ic++) {
 	    XMLNodeObj *xo = new XMLNodeObj();
 	    xo->fromXMLNode(ses.cnt[ic]);
-	    AutoHD<TArrayObj>(funcV.getO(8)).at().propSet(i2s(ic),xo);
+	    AutoHD<TArrayObj>(funcV.getO(8)).at().propSet(i2s(ic), xo);
 	}
+	funcV.setO(9, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+	funcV.setO(10, new TCntrNodeObj(AutoHD<TCntrNode>(iprt),"root"));
 
 	//Call processing
 	funcV.calc();
+
 	//Get outputs
 	rez = funcV.getS(0);
 	page = funcV.getS(3);
@@ -355,26 +347,21 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	//HTTP properties prepare
 	funcV.getO(6).at().propList(sls);
 	bool cTp = false;
-	for(unsigned i_l = 0; i_l < sls.size(); i_l++) {
-	    tstr = funcV.getO(6).at().propGet(sls[i_l]).getS();
-	    if(sls[i_l] == "Date" || sls[i_l] == "Server" || sls[i_l] == "Accept-Ranges" || sls[i_l] == "Content-Length" ||
-		((prmEl=ses.vars.find(sls[i_l])) != ses.vars.end() && prmEl->second == tstr)) continue;
-	    if(sls[i_l] == "Content-Type") cTp = true;
-	    httpIt += prmEl->first+": "+tstr+"\x0D\x0A";
+	for(unsigned iL = 0; iL < sls.size(); iL++) {
+	    tstr = funcV.getO(6).at().propGet(sls[iL]).getS();
+	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
+		((prmEl=ses.vars.find(sls[iL])) != ses.vars.end() && prmEl->second == tstr)) continue;
+	    if(sls[iL] == "Content-Type") cTp = true;
+	    httpIt += prmEl->first + ": " + tstr + "\x0D\x0A";
 	}
 
-	page = httpHead(rez,page.size(),(cTp?"":"text/html"),httpIt)+page;
+	page = httpHead(rez, page.size(), (cTp?"":"text/html"), httpIt) + page;
 
 	up.at().cntReq++;
-	return;
-
     } catch(TError &err) {
-	page = "Page '"+url+"' error: "+err.mess;
-	page = httpHead("404 Not Found",page.size())+page;
-	return;
+	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),url.c_str(),err.mess.c_str())+"</div>\n",
+			       "404 Not Found");
     }
-
-    page = httpHead(rez,page.size(),"text/html")+page;
 }
 
 void TWEB::cntrCmdProc( XMLNode *opt )
@@ -403,8 +390,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id","*")->setText(_("<Page index display>"));
 	    vector<string> lst;
 	    uPgList(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPgAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(uPgAt(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
@@ -429,9 +416,9 @@ UserPg::~UserPg( )
     try{ setEnable(false); } catch(...) { }
 }
 
-TCntrNode &UserPg::operator=( TCntrNode &node )
+TCntrNode &UserPg::operator=( const TCntrNode &node )
 {
-    UserPg *src_n = dynamic_cast<UserPg*>(&node);
+    const UserPg *src_n = dynamic_cast<const UserPg*>(&node);
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -445,10 +432,10 @@ TCntrNode &UserPg::operator=( TCntrNode &node )
 
 void UserPg::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
 }
 
-TWEB &UserPg::owner( )		{ return *(TWEB*)nodePrev(); }
+TWEB &UserPg::owner( ) const	{ return *(TWEB*)nodePrev(); }
 
 string UserPg::name( )
 {
@@ -456,51 +443,42 @@ string UserPg::name( )
     return rez.size() ? rez : id();
 }
 
-string UserPg::tbl( )		{ return owner().modId()+"_uPg"; }
+string UserPg::tbl( ) const	{ return owner().modId()+"_uPg"; }
 
 string UserPg::progLang( )
 {
     string mProg = cfg("PROG").getS();
-    return mProg.substr(0,mProg.find("\n"));
+    return mProg.substr(0, mProg.find("\n"));
 }
 
 string UserPg::prog( )
 {
     string mProg = cfg("PROG").getS();
     size_t lngEnd = mProg.find("\n");
-    return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
+    return mProg.substr((lngEnd==string::npos)?0:lngEnd+1);
 }
 
-void UserPg::setProgLang( const string &ilng )
-{
-    cfg("PROG").setS( ilng+"\n"+prog() );
-    modif();
-}
+void UserPg::setProgLang( const string &ilng )	{ cfg("PROG").setS(ilng+"\n"+prog()); modif(); }
 
-void UserPg::setProg( const string &iprg )
-{
-    cfg("PROG").setS( progLang()+"\n"+iprg );
-    modif();
-}
+void UserPg::setProg( const string &iprg )	{ cfg("PROG").setS(progLang()+"\n"+iprg); modif(); }
 
-void UserPg::load_( )
+void UserPg::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    cfgViewAll(true);
-    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else {
+	//cfgViewAll(true);
+	SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+    }
 }
 
 void UserPg::save_( )
 {
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 }
 
-bool UserPg::cfgChange( TCfg &cfg )
-{
-    modif( );
-
-    return true;
-}
+bool UserPg::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 void UserPg::setEnable( bool vl )
 {
@@ -521,6 +499,8 @@ void UserPg::setEnable( bool vl )
 	    funcIO.ioIns(new IO("HTTPvars",_("HTTP variables"),IO::Object,IO::Default), 6);
 	    funcIO.ioIns(new IO("URLprms",_("URL's parameters"),IO::Object,IO::Default), 7);
 	    funcIO.ioIns(new IO("cnts",_("Content items"),IO::Object,IO::Default), 8);
+	    funcIO.ioIns(new IO("this",_("This object"),IO::Object,IO::Default), 9);
+	    funcIO.ioIns(new IO("prt",_("Protocol's object"),IO::Object,IO::Default), 10);
 
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
@@ -535,7 +515,7 @@ string UserPg::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
-	rez += TSYS::strMess( _("Requests %.4g."), cntReq );
+	rez += TSYS::strMess(_("Requests %.4g."), cntReq);
     }
 
     return rez;
@@ -570,7 +550,9 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 			    "   'user' - auth user;\n"
 			    "   'HTTPvars' - HTTP variables into Object;\n"
 			    "   'URLprms' - URL's parameters into Object;\n"
-			    "   'cnts' - content items for POST into Array<XMLNodeObj>."));
+			    "   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
+			    "   'this' - pointer to this page's object;\n"
+			    "   'prt' - pointer to object of the input part of the HTTP protocol."));
 	    }
 	}
 	return;
@@ -600,17 +582,17 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	switch(c_lv) {
 	    case 0:
 		SYS->daq().at().modList(ls);
-		for(unsigned i_l = 0; i_l < ls.size(); )
-		    if(!SYS->daq().at().at(ls[i_l]).at().compileFuncLangs()) ls.erase(ls.begin()+i_l);
-		    else i_l++;
+		for(unsigned iL = 0; iL < ls.size(); )
+		    if(!SYS->daq().at().at(ls[iL]).at().compileFuncLangs()) ls.erase(ls.begin()+iL);
+		    else iL++;
 		break;
 	    case 1:
 		if(SYS->daq().at().modPresent(TSYS::strSepParse(tplng,0,'.')))
 		    SYS->daq().at().at(TSYS::strSepParse(tplng,0,'.')).at().compileFuncLangs(&ls);
 		break;
 	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    opt->childAdd("el")->setText(c_path+ls[iL]);
     }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
     else if(a_path == "/prgm/PROGLang") {
@@ -647,9 +629,9 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 
     //Variables parse
-    for(size_t i_v = 0, spos = 0; i_v < ivars.size(); i_v++)
-	if((spos=ivars[i_v].find(":")) != string::npos)
-	    vars[TSYS::strNoSpace(ivars[i_v].substr(0,spos))] = TSYS::strNoSpace(ivars[i_v].substr(spos+1));
+    for(size_t iV = 0, spos = 0; iV < ivars.size(); iV++)
+	if((spos=ivars[iV].find(":")) != string::npos)
+	    vars[sTrm(ivars[iV].substr(0,spos))] = sTrm(ivars[iV].substr(spos+1));
 
     //Content parse
     size_t pos = 0, spos = 0;
@@ -675,7 +657,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	    pos += c_head.size()+strlen(c_term);
 	    if(c_head.empty()) break;
 	    if((spos=c_head.find(":")) == string::npos) return;
-	    cnt[cnt.size()-1].setAttr(TSYS::strNoSpace(c_head.substr(0,spos)),TSYS::strNoSpace(c_head.substr(spos+1)));
+	    cnt[cnt.size()-1].setAttr(sTrm(c_head.substr(0,spos)), sTrm(c_head.substr(spos+1)));
 	}
 
 	if(pos >= content.size()) return;

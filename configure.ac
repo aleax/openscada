@@ -1,9 +1,9 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.16],[rom_as@oscada.org])
+AC_INIT([OpenSCADA],[0.8.17],[rom_as@oscada.org])
 AC_PREFIX_DEFAULT([/usr])
-oscd_LIBREVISION="2:4:0"
+oscd_LIBREVISION="2:5:0"
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
@@ -614,6 +614,7 @@ AX_MOD_EN(FLibSYS,[disable or enable[=incl] build module Special.FLibSYS],disabl
     fi
     #>> Modules checkings
     AX_LIB_FFTW3()
+    AX_LIB_OpenSSL()
 ])
 AC_MSG_RESULT(===========================================)
 

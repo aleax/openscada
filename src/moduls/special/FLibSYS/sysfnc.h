@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2009 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +25,7 @@
 #include <stdint.h>
 
 #include <tfunction.h>
+#include <openssl/md5.h>
 
 #include "statfunc.h"
 
@@ -271,10 +271,9 @@ class strParse : public TFunction
 	string descr( )	{ return _("Use for parse string on separator."); }
 
 	void calc( TValFunc *val ) {
-	    string sep = val->getS(3);
 	    int off = val->getI(4);
-	    val->setS(0,TSYS::strSepParse(val->getS(1),val->getI(2),sep.size()?sep[0]:' ',&off));
-	    val->setI(4,off);
+	    val->setS(0, TSYS::strParse(val->getS(1),val->getI(2),val->getS(3),&off));
+	    val->setI(4, off);
 	}
 };
 
@@ -500,8 +499,30 @@ class floatMergeWord : public TFunction
 	}
 };
 
+//*******************************************************
+//* Extract mantissa and exponent from the float value. *
+//*******************************************************
+class floatExtract : public TFunction
+{
+    public:
+	floatExtract( ) : TFunction("floatExtract", SSPC_ID) {
+	    ioAdd(new IO("magn",_("Magnitude"),IO::Real,IO::Return));
+	    ioAdd(new IO("val",_("Value"),IO::Real,IO::Default));
+	    ioAdd(new IO("exp",_("Exponent"),IO::Integer,IO::Output));
+	}
+
+	string name( )	{ return _("Float: Extract"); }
+	string descr( )	{ return _("Extract mantissa and exponent from the float value."); }
+
+	void calc( TValFunc *val ) {
+	    int exp = 0;
+	    val->setR(0, frexp(val->getR(1),&exp));
+	    val->setI(2, exp);
+	}
+};
+
 //*************************************************
-//* Merge float from words                        *
+//* Cyclic redundancy check                       *
 //*************************************************
 class CRC : public TFunction
 {
@@ -519,7 +540,7 @@ class CRC : public TFunction
 
 	void calc( TValFunc *val ) {
 	    int wdth = vmin(64, vmax(1,val->getI(3)));
-	    uint64_t mask = 0xFFFFFFFFFFFFFFFFll >> (64-wdth);
+	    uint64_t mask = 0xFFFFFFFFFFFFFFFFull >> (64-wdth);
 	    uint64_t CRC = val->getI(4) & mask;
 	    uint64_t pat = val->getI(2) & mask;
 	    string data = val->getS(1);
@@ -528,6 +549,28 @@ class CRC : public TFunction
 		for(char j = 0; j < 8; j++) CRC = (CRC&1) ? (CRC>>1)^pat : (CRC>>1);
 	    }
 	    val->setI(0, (int64_t)CRC);
+	}
+};
+
+//*************************************************
+//* Message Digest 5                              *
+//*************************************************
+class MD5 : public TFunction
+{
+    public:
+	MD5( ) : TFunction("MD5", SSPC_ID) {
+	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
+	    ioAdd(new IO("data",_("Data"),IO::String,IO::Default));
+	}
+
+	string name( )	{ return _("Message Digest 5 (MD5)"); }
+	string descr( )	{ return _("Message Digest 5 calculation."); }
+
+	void calc( TValFunc *val ) {
+	    string data = val->getS(1);
+	    unsigned char result[MD5_DIGEST_LENGTH];
+	    ::MD5((unsigned char*)data.data(), data.size(), result);
+	    val->setS(0, string((char*)result, MD5_DIGEST_LENGTH));
 	}
 };
 

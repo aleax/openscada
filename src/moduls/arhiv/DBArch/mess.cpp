@@ -32,7 +32,7 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid, idb, cf_el), tmProc(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false)
+    TMArchivator(iid, idb, cf_el), tmProc(0), mBeg(0), mEnd(0), mMaxSize(0), mTmAsStr(false), needMeta(true)
 {
     setAddr("*.*");
 }
@@ -60,7 +60,7 @@ void ModMArch::postDisable( int flag )
 
 void ModMArch::load_( )
 {
-    TMArchivator::load_();
+    //TMArchivator::load_();
 
     //Init address to DB
     if(addr().empty()) setAddr("*.*");
@@ -73,19 +73,7 @@ void ModMArch::load_( )
 	if(!(vl=prmNd.attr("TmAsStr")).empty())	setTmAsStr(s2i(vl));
     } catch(...) { }
 
-    //Load message archive parameters
-    TConfig wcfg(&mod->archEl());
-    wcfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,false,true)) {
-	mBeg = s2i(wcfg.cfg("BEGIN").getS());
-	mEnd = s2i(wcfg.cfg("END").getS());
-	// Check for delete archivator table
-	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
-	    SYS->db().at().open(addr()+"."+archTbl());
-	    SYS->db().at().close(addr()+"."+archTbl(), true);
-	    mBeg = mEnd = 0;
-	}
-    }
+    needMeta = !readMeta();
 }
 
 void ModMArch::save_( )
@@ -126,12 +114,12 @@ void ModMArch::stop( )
     reqEl.fldClear();
 }
 
-time_t ModMArch::begin( )	{ return mBeg; }
-
-time_t ModMArch::end( )		{ return mEnd; }
-
 bool ModMArch::put( vector<TMess::SRec> &mess )
 {
+    if(needMeta && (needMeta=!readMeta()))	return false;
+
+    //TMArchivator::put(mess, force);	//Allow redundancy
+
     if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
 
     AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(), true);
@@ -157,7 +145,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 
     //Archive size limit process
     if(maxSize() && (mEnd-mBeg) > (time_t)(maxSize()*86400)) {
-	time_t nEnd = (mEnd - (time_t)(maxSize()*86400));
+	time_t nEnd = mEnd - (time_t)(maxSize()*86400);
 	cfg.cfg("TM").setKeyUse(false);
 	for(int tC = mBeg/60; tC < nEnd/60; tC++) {
 	    cfg.cfg("MIN").setI(tC, true);
@@ -184,6 +172,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
     if(!runSt) throw TError(nodePath().c_str(), _("Archive is not started!"));
+    if(needMeta && (needMeta=!readMeta())) return eTm;
     if(!upTo) upTo = time(NULL) + STD_INTERF_TM;
 
     bTm = vmax(bTm, begin());
@@ -200,7 +189,8 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 	tC = (tC/60)*60;
 	cfg.cfg("MIN").setI(tC/60, true);
 	int eC = 0;
-	for( ; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",eC++,cfg) && time(NULL) < upTo; ) {
+	vector< vector<string> > full;
+	for( ; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",eC++,cfg,false,&full) && time(NULL) < upTo; ) {
 	    TMess::SRec rc(cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(),
 			    (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
 	    if(rc.time >= bTm && rc.time <= eTm && abs(rc.level) >= level && re.test(rc.categ)) {
@@ -223,6 +213,34 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
     }
 
     return result;
+}
+
+bool ModMArch::readMeta( )
+{
+    bool rez = true;
+
+    //Load message archive parameters
+    TConfig wcfg(&mod->archEl());
+    wcfg.cfg("TBL").setS(archTbl());
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,false,true)) {
+	mBeg = s2i(wcfg.cfg("BEGIN").getS());
+	mEnd = s2i(wcfg.cfg("END").getS());
+	// Check for delete archivator table
+	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
+	    SYS->db().at().open(addr()+"."+archTbl());
+	    SYS->db().at().close(addr()+"."+archTbl(), true);
+	    mBeg = mEnd = 0;
+	}
+    } else rez = false;
+
+    //Check for target DB enabled (disabled by the connection lost)
+    if(!rez) {
+	string wDB = TBDS::realDBName(addr());
+	rez = (TSYS::strParse(wDB,0,".") == DB_CFG ||
+	    SYS->db().at().at(TSYS::strParse(wDB,0,".")).at().at(TSYS::strParse(wDB,1,".")).at().enableStat());
+    }
+
+    return rez;
 }
 
 void ModMArch::cntrCmdProc( XMLNode *opt )

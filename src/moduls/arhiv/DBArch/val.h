@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,11 +21,8 @@
 #ifndef DB_VAL_H
 #define DB_VAL_H
 
-#include <string>
-
 #include <tarchives.h>
 
-using std::string;
 using namespace OSCADA;
 
 namespace DBArch
@@ -39,6 +35,7 @@ class ModVArch;
 
 class ModVArchEl: public TVArchEl
 {
+    friend class ModVArch;
     public:
 	//Methods
 	ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
@@ -58,7 +55,7 @@ class ModVArchEl: public TVArchEl
 	//Methods
 	TVariant getValProc( int64_t *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
-	bool setValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	int64_t setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool toAccum );
 
 	bool readMeta( );
 
@@ -76,18 +73,49 @@ class ModVArchEl: public TVArchEl
 class ModVArch: public TVArchivator
 {
     public:
+	//Data
+	class SGrp
+	{
+	    public:
+	    SGrp( ) : dbOK(true), pos(0), beg(0), end(0), per(0), accmBeg(0), accmEnd(0)	{ }
+	    SGrp( int ipos ) : dbOK(true), pos(ipos), beg(0), end(0), per(0), accmBeg(0), accmEnd(0)	{ }
+
+	    bool	dbOK;			//DB accessible and the group ready for next data
+	    int		pos;			//Position
+	    int64_t	beg, end, per,		//The grouped parameter's data range [beg:end] and period.
+			accmBeg, accmEnd;	//Accumulated range
+	    TElem	tblEl;			//Group's DB structure
+	    map<string, TValBuf> els;		//Elements
+	};
+
 	//Methods
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModVArch( );
 
 	double maxSize( )		{ return mMaxSize; }
 	bool tmAsStr( )			{ return mTmAsStr; }
+	int groupPrms( )		{ return mGroupPrms; }
 
 	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
 	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
+	void setGroupPrms( int vl )	{ mGroupPrms = vmax(0,vmin(10000,vl)); modif(); }
 
 	void start( );
-	void stop( );
+	void stop( bool full_del = false );
+
+	void checkArchivator( unsigned int cnt = 0 );
+
+	string archTbl( int iG = -1 );	// -1 - for preffix to the archivator tables
+
+	TValBuf &accmGetReg( const string &aNm, SGrp **grp = NULL, TFld::Type tp = TFld::Real, int prefGrpPos = -1 );
+	void accmUnreg( const string &aNm );
+	bool grpLimits( SGrp &oG, int64_t *beg = NULL, int64_t *end = NULL );
+	void grpMetaUpd( SGrp &oG, const string *aLs = NULL );
+
+	//Attributes
+	bool	needMeta,			//Need meta mark
+		needRePushGrps;			//Need to repush the groups, mostly at DB access errors
+	ResMtx	reqRes;				//Request functional resource allocator, mostly for the grouping mode
 
     protected:
 	//Methods
@@ -95,13 +123,19 @@ class ModVArch: public TVArchivator
 	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	TVArchEl *getArchEl( TVArchive &arch );
 
+	void pushAccumVals( );
+
     private:
 	//Attributes
-	double	mMaxSize;			//Maximum archive size (hours)
+	double	mMaxSize;			//Maximum archive size (days)
 	bool	mTmAsStr;			//Store time as pure integer
+	int	mGroupPrms;			//Grouping parameters into single table, 0 - table per parameter
+
+	vector<SGrp>	accm;
 };
 
 }

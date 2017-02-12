@@ -46,7 +46,7 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name );
 	~TProtIn( );
 
-	bool mess( const string &request, string &answer, const string &sender );
+	bool mess( const string &request, string &answer );
 
     private:
 	//Attributes

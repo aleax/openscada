@@ -43,50 +43,53 @@ TSubSYS::~TSubSYS( )
 
 string TSubSYS::objName( )	{ return TCntrNode::objName()+":TSubSYS"; }
 
-TSYS &TSubSYS::owner( )		{ return *(TSYS*)nodePrev(); }
+TSYS &TSubSYS::owner( ) const	{ return *(TSYS*)nodePrev(); }
 
 string TSubSYS::subName( )	{ return mName.size()?_(mName.c_str()):mId; }
 
 void TSubSYS::modList( vector<string> &list )
 {
-    if(!subModule()) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
     chldList(mMod,list);
 }
 
 bool TSubSYS::modPresent( const string &name )
 {
-    if(!subModule()) throw TError(nodePath().c_str(),_("The subsystem is not modular!")); 
+    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
     return chldPresent(mMod,name);
 }
 
 void TSubSYS::modAdd( TModule *modul )
 {
-    if(!subModule()) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
     if(chldPresent(mMod,modul->modId())) return;
+    mess_sys(TMess::Info, _("Connect module '%s'!"), modul->modId().c_str());
     chldAdd(mMod, modul, s2i(modul->modInfo("HighPriority"))?0:-1);
 #if OSC_DEBUG >= 1
-    vector<string> list;
-    modul->modInfo(list);
-    for(unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-	mess_info(nodePath().c_str(),"-> %s: %s",_(list[i_opt].c_str()),modul->modInfo(list[i_opt]).c_str());
+	vector<string> list;
+	modul->modInfo(list);
+	for(unsigned i_opt = 0; i_opt < list.size(); i_opt++)
+	    mess_sys(TMess::Debug, "-> %s: %s", _(list[i_opt].c_str()), modul->modInfo(list[i_opt]).c_str());
 #endif
 }
 
 void TSubSYS::modDel( const string &name )
 {
-    if(!subModule()) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
-    mess_info(nodePath().c_str(),_("Disconnect module '%s'!"),name.c_str());
+    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
     chldDel(mMod, name);
+    mess_sys(TMess::Info, _("Disconnect module '%s'!"), name.c_str());
 }
 
-AutoHD<TModule> TSubSYS::modAt( const string &name )
+AutoHD<TModule> TSubSYS::modAt( const string &name ) const
 {
-    if(!subModule()) throw TError(nodePath().c_str(),_("The subsystem is not modular!"));
+    if(!subModule()) throw err_sys(_("The subsystem is not modular!"));
     return chldAt(mMod,name);
 }
 
 void TSubSYS::subStart( )
 {
+    mess_sys(TMess::Debug, _("Start subsystem."));
+
     if(!SYS->security().at().grpPresent(subId())) {
 	SYS->security().at().grpAdd(subId());
 	SYS->security().at().grpAt(subId()).at().setDescr(subName());
@@ -100,8 +103,8 @@ void TSubSYS::subStart( )
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	try { modAt(list[i_m]).at().modStart(); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Start module '%s' error."),list[i_m].c_str());
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	    mess_sys(TMess::Error, _("Start module '%s' error."), list[i_m].c_str());
 	}
 
     mStart = true;
@@ -109,14 +112,16 @@ void TSubSYS::subStart( )
 
 void TSubSYS::subStop( )
 {
-    if( !subModule() )	return;
+    mess_sys(TMess::Debug, _("Stop subsystem."));
+
+    if(!subModule())	return;
     vector<string> list;
     modList(list);
     for(unsigned i_m=0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().modStop( ); }
 	catch(TError &err) {
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Stop module '%s' error."),list[i_m].c_str());
+	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+	    mess_sys(TMess::Error, _("Stop module '%s' error."), list[i_m].c_str());
 	}
 
     mStart = false;
@@ -129,7 +134,7 @@ void TSubSYS::perSYSCall( unsigned int cnt )
     modList(list);
     for(unsigned i_m = 0; i_m < list.size(); i_m++)
 	try{ modAt(list[i_m]).at().perSYSCall(cnt); }
-	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 void TSubSYS::cntrCmdProc( XMLNode *opt )

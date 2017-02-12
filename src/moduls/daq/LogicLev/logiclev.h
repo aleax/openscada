@@ -53,15 +53,18 @@ class TMdPrm : public TParamContr
 
 	TElem *dynElCntr( )	{ return &pEl; }
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	bool isStd( );
-        bool isPRefl( );
+	bool isStd( ) const;
+        bool isPRefl( ) const;
 
 	void enable( );
 	void disable( );
 
 	void calc( bool first, bool last, double frq );	//Calc template's algoritmes
+
+	//Attributes
+	//float tmCalc, tmCalcMax;
 
     protected:
 	//Methods
@@ -78,7 +81,7 @@ class TMdPrm : public TParamContr
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     private:
 	//Data
@@ -102,10 +105,10 @@ class TMdPrm : public TParamContr
 
 	//Methods
 	// Template link operations
-	int lnkSize( );
-	int lnkId( int id );
-	int lnkId( const string &id );
-	SLnk &lnk( int num );
+	int lnkSize( ) const;
+	int lnkId( int id ) const;
+	int lnkId( const string &id ) const;
+	SLnk &lnk( int num ) const;
 
 	void loadIO( bool force = false );
 	void saveIO( );
@@ -115,7 +118,7 @@ class TMdPrm : public TParamContr
 	TElem	pEl;				//Work atribute elements
 
 	bool	chkLnkNeed;			//Check lnk need flag
-	Res	calcRes;			//Resource
+	ResRW	calcRes;			//Resource
 	int	idFreq, idStart, idStop,
 		idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
 };
@@ -147,7 +150,7 @@ class TMdContr: public TController
 	void load_( );
 	void start_( );
 	void stop_( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
@@ -156,15 +159,15 @@ class TMdContr: public TController
 
 	//Attributes
 	ResMtx	enRes;				//Resource for enable params
-	int	&mPerOld,			// ms
-		&mPrior;			// Process task priority
+	int	&mPerOld,			//ms
+		&mPrior;			//Process task priority
 
-	bool	prcSt,				// Process task active
-		callSt,				// Calc now stat
-		endrunReq;			// Request to stop of the Process task
+	bool	prcSt,				//Process task active
+		callSt,				//Calc now stat
+		endrunReq;			//Request to stop of the Process task
 	vector< AutoHD<TMdPrm> > pHd;
 
-	double	mPer, tm_calc;			// Template functions calc time
+	double	mPer;
 };
 
 //*************************************************

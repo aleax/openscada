@@ -65,12 +65,12 @@ class MTable : public TTable
 	~MTable( );
 
 	// Field's operations
-	bool fieldSeek( int row, TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	MBD &owner( );
+	MBD &owner( ) const;
 
     private:
 	//Private methods
@@ -87,7 +87,7 @@ class MTable : public TTable
 	string codepage;
 	TBasaDBF *basa;
 
-	Res	mRes;
+	ResRW	mRes;
 	time_t	mModify;
 };
  
@@ -103,7 +103,7 @@ class MBD : public TBD
 	~MBD( );
 
 	void enable( );
-	void allowList( vector<string> &list );
+	void allowList( vector<string> &list ) const;
 	void transCloseCheck( );
 
     protected:

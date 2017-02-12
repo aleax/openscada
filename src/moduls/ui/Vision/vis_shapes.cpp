@@ -170,7 +170,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
     }
 }
 
-bool WdgShape::attrSet( WdgView *view, int uiPrmPos, const string &val )	{ return false; }
+bool WdgShape::attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr )	{ return false; }
 
 QFont WdgShape::getFont( const string &val, float fsc, bool pixSize, const QFont &defFnt )
 {
@@ -225,7 +225,7 @@ void ShapeFormEl::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
@@ -750,6 +750,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	case F_LIST: {
 	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
 	    QList<QListWidgetItem *> its = wdg->findItems(val.c_str(), Qt::MatchExactly);
+	    if(!its.size() && val.size()) { wdg->addItem(val.c_str()); its = wdg->findItems(val.c_str(), Qt::MatchExactly); }
 	    if(its.size()) {
 		wdg->setCurrentItem(its[0]);
 		wdg->scrollToItem(its[0]);
@@ -1072,7 +1073,7 @@ void ShapeText::init( WdgView *w )	{ w->shpData = new ShpDt(); }
 
 void ShapeText::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
-bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     bool up = true,		//Update view checking
 	 reform = false;	//Text reformation
@@ -1321,7 +1322,7 @@ void ShapeMedia::mediaFinished( )
 #endif
 }
 
-bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     QLabel *lab;
 #ifdef HAVE_PHONON
@@ -1688,6 +1689,13 @@ void ShapeDiagram::init( WdgView *w )
     //Init tracing timer
     ((ShpDt*)w->shpData)->trcTimer = new QTimer(w);
     connect(((ShpDt*)w->shpData)->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()));
+
+    //Activate vizualizer specific attributes
+    RunWdgView *rw = qobject_cast<RunWdgView*>(w);
+    if(rw) {
+	XMLNode reqSpc("activate"); reqSpc.setAttr("path", rw->id()+"/%2fserv%2fattr%2fsclWin");
+	rw->mainWin()->cntrIfCmd(reqSpc);
+    }
 }
 
 void ShapeDiagram::destroy( WdgView *w )
@@ -1697,7 +1705,7 @@ void ShapeDiagram::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     bool up = false,		//Repaint diagram picture
 	 make_pct = false;	//Remake diagram picture
@@ -1706,6 +1714,9 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     switch(uiPrmPos) {
+	case A_NO_ID:
+	    if(attr == "sclWin") shD->sclWin = s2i(val);
+	    break;
 	case A_COM_LOAD: up = make_pct = true; reld_tr_dt = 2;	break;
 	case A_COM_FOCUS: up = ((bool)s2i(val) != w->hasFocus()); break;
 	case A_EN:
@@ -1745,7 +1756,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
@@ -1772,7 +1783,8 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_DiagramCurSek:
 	    if((shD->curTime/1000000) == s2i(val)) break;
 	    shD->curTime = s2ll(val)*1000000 + shD->curTime%1000000;
-	    shD->holdCur = (shD->curTime>=shD->tTime);
+	    shD->holdCur = (shD->curTime >= (shD->tTime-(shD->pictRect.width()?(int64_t)(3*1e6*shD->tSize)/shD->pictRect.width():0)));	//No more 3 pixels
+	    //shD->holdCur = (shD->curTime >= shD->tTime);
 	    up = true;
 	    break;
 	case A_DiagramCurUSek:
@@ -1844,7 +1856,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	}
     }
 
-    return (reld_tr_dt|make_pct|up);
+    return (reld_tr_dt || make_pct || up);
 }
 
 void ShapeDiagram::loadData( WdgView *w, bool full )
@@ -2086,8 +2098,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    string labVal;
 	    pnt.setPen(grdPenT);
 	    pnt.drawLine(tAr.x()-1, tAr.y(), tAr.x()-1, tAr.height());
-	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv)
-	    {
+	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		int v_pos = tAr.y() + tAr.height() - (int)((double)tAr.height()*(iV-vsMinT)/(vsMaxT-vsMinT));
 		if(sclVerT&FD_GRD) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
 		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
@@ -2503,8 +2514,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	cP.isIndiv = false;
 	if(!cP.fftN || !cP.color().isValid() || !(cP.wScale&FD_GRD_MARKS)) continue;
 	// Check for include to present or create new group and exclude from individual
-	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
-	{
+	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))) {
 	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
 	    prmInGrp++; prmGrpLast = iP;
 	    continue;
@@ -3221,12 +3231,11 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 #endif
 	    QPainter pnt(w);
 
-	    // Decoration draw
-	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
+	    // Draw decoration
+	    QRect dA = w->rect().adjusted(0, 0, -2*shD->geomMargin, -2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
-	    // Draw decoration
 	    if(shD->backGrnd.color().isValid()) pnt.fillRect(dA,shD->backGrnd.color());
 	    if(!shD->backGrnd.textureImage().isNull()) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
@@ -3241,13 +3250,13 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 
 	    // Draw cursor
 	    int curPos = -1;
-	    if(shD->type == 0 && shD->active) {
+	    if(shD->type == FD_TRND && shD->active) {
 		int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
 		int64_t curTime = vmax(vmin(shD->curTime,shD->tPict), tTimeGrnd);
 		if(curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict))
 		    curPos = shD->pictRect.x() + shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
 	    }
-	    else if(shD->type == 1 && shD->active) {
+	    else if(shD->type == FD_SPECTR && shD->active) {
 		float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
 		curPos = shD->pictRect.x() + (int)(shD->pictRect.width()*(curFrq-shD->fftBeg)/(shD->fftEnd-shD->fftBeg));
 	    }
@@ -3258,10 +3267,17 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		pnt.drawLine(curPos, shD->pictRect.y(), curPos,shD->pictRect.y()+shD->pictRect.height());
 	    }
 
-#if OSC_DEBUG >= 3
-	    mess_debug("VCA DEBUG",_("Trend draw: %f ms."),1e-3*(TSYS::curTime()-t_cnt));
-#endif
+	    // Draw selection window
+	    if(shD->sclWin && shD->fMoveHold && shD->type == FD_TRND && shD->active) {
+		pnt.setPen("white");
+		pnt.drawRect(QRect(shD->startPnt,shD->holdPnt));
+		QPen pen(QColor("black")); pen.setStyle(Qt::DashLine); pnt.setPen(pen);
+		pnt.drawRect(QRect(shD->startPnt,shD->holdPnt));
+	    }
 
+#if OSC_DEBUG >= 3
+	    mess_debug(mod->nodePath().c_str(), _("Trend draw: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
+#endif
 	    return true;
 	}
 	case QEvent::KeyPress: {
@@ -3288,14 +3304,84 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if(!shD->active || !w->hasFocus()) break;
 	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
 	    if(curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width())) break;
-	    if(shD->type == 0) {
-		int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
-		setCursor(w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width());
-	    }
-	    else if(shD->type == 1)
-		setCursor(w, (int64_t)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())));
-	    w->update();
+
+	    //Hold processing
+	    if((static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton && shD->type == FD_TRND)
+		shD->holdPnt = shD->startPnt = curp;
+
 	    break;
+	}
+	case QEvent::MouseButtonRelease:
+	    if(shD->fMoveHold) {
+		shD->fMoveHold = false;
+		w->setCursor(Qt::ArrowCursor);
+		AttrValS attrs;
+		if(shD->sclWin) {
+		    //Calcullate the time scale
+		    int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
+		    int64_t tP1 = tTimeGrnd + (shD->tPict-tTimeGrnd)*(shD->startPnt.x()-shD->pictRect.x())/shD->pictRect.width();
+		    int64_t tP2 = tTimeGrnd + (shD->tPict-tTimeGrnd)*(shD->holdPnt.x()-shD->pictRect.x())/shD->pictRect.width();
+		    tTimeGrnd = vmin(tP1, tP2); tP1 = vmax(tP1, tP2);
+		    attrs.push_back(std::make_pair("tSek",i2s(tP1/1000000)));
+		    attrs.push_back(std::make_pair("tUSek",i2s(tP1%1000000)));
+		    attrs.push_back(std::make_pair("tSize",r2s(1e-6*(tP1-tTimeGrnd))));
+		    attrs.push_back(std::make_pair("trcPer","0"));
+
+		    //Calculate the vertical scale
+		    float vScl = fabs(shD->startPnt.y()-shD->holdPnt.y())/shD->pictRect.height();
+		    float vOff = ((float)vmin(shD->startPnt.y(),shD->holdPnt.y())/shD->pictRect.height() + vScl/2 - 0.5)*shD->sclVerScl;
+		    attrs.push_back(std::make_pair("sclVerScl",r2s(shD->sclVerScl*vScl)));
+		    attrs.push_back(std::make_pair("sclVerSclOff",r2s(shD->sclVerSclOff-vOff)));
+		    w->attrsSet(attrs);
+		}
+		else if(shD->fMoveTmCh) {
+		    attrs.push_back(std::make_pair("tSek",i2s(shD->tTime/1000000)));
+		    attrs.push_back(std::make_pair("tUSek",i2s(shD->tTime%1000000)));
+		    attrs.push_back(std::make_pair("trcPer","0"));
+		    w->attrsSet(attrs);
+		}
+	    }
+	    else {
+		//Cursor set
+		QPoint curp = w->mapFromGlobal(w->cursor().pos());
+		if(curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width())) break;
+		switch(shD->type) {
+		    case FD_TRND: {
+			int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
+			setCursor(w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width());
+			break;
+		    }
+		    case FD_SPECTR:
+			setCursor(w, (int64_t)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())));
+			break;
+		    default: break;
+		}
+		w->update();
+	    }
+	    break;
+	case QEvent::MouseMove: {
+	    if(shD->type != FD_TRND) break;
+	    QMouseEvent *mev = (QMouseEvent*)event;
+	    QPoint dP = mev->pos() - shD->holdPnt;
+	    if(shD->fMoveHold || ((mev->buttons()&Qt::LeftButton) && dP.manhattanLength() >= QApplication::startDragDistance())) {
+		if(!shD->fMoveHold) { w->setCursor(shD->sclWin?Qt::CrossCursor:Qt::ClosedHandCursor); shD->fMoveTmCh = false; }
+		shD->fMoveHold = true;
+		shD->holdPnt = mev->pos();
+		if(shD->sclWin) w->update();
+		else if(dP.x() > 0 || (dP.x() < 0 && !shD->tTimeCurent)) {
+		    if(shD->trcPer) w->attrSet("trcPer", "0", A_DiagramTrcPer);
+		    shD->tTimeCurent = false;
+
+		    int64_t toTm = vmax(0, vmin((int64_t)time(NULL)*1000000,shD->tTime-((int64_t)(1e6*shD->tSize)/shD->pictRect.width())*dP.x()));
+		    if(toTm != shD->tTime) {
+			shD->tTime = toTm; shD->fMoveTmCh = true;
+			//Load by parameters after moving drop.
+			makePicture(w);
+			w->update();
+		    }
+		}
+	    }
+	    if(shD->fMoveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton)) { shD->fMoveHold = false; w->setCursor(Qt::ArrowCursor); }
 	}
 	default: break;
     }
@@ -3309,7 +3395,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 
     if(shD->type == FD_TRND) {
 	int64_t tTimeGrnd = shD->tTime - (int64_t)(1e6*shD->tSize);
-	int64_t curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
+	int64_t curTime   = vmax(vmin(itm,shD->tTime), tTimeGrnd);
 
 	shD->curTime = curTime;
 	shD->holdCur = (curTime==shD->tTime);
@@ -3464,16 +3550,17 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		setAttr("tm_grnd", "0");
 	    if(view->cntrIfCmd(req,true))	return;
 
-	    int64_t lst_tm = (s2ll(req.attr("tm"))/wantPer)*wantPer;
-	    if(lst_tm && lst_tm >= valEnd()) {
+	    int64_t lstTm = (s2ll(req.attr("tm"))/wantPer)*wantPer,
+		    valEnd_ = (valEnd()/wantPer)*wantPer;
+	    if(lstTm && lstTm >= valEnd_) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
-		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
-		else if((lst_tm == valEnd() && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));
+		else if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
+		else if((lstTm == valEnd_ && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL) {
-		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		    int s_k = lstTm-wantPer*(lstTm/wantPer), n_k = trcPer;
 		    vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
 		}
 		while(vals.size() > bufLim)	vals.pop_front();
@@ -3649,11 +3736,13 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
 
 int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
 {
-    int64_t rez = 0;
-    for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP)
+    int64_t rez = 0, rez1 = 0;
+    for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP) {
 	rez = vmax(rez, iP->arhEnd());
+	rez1 = vmax(rez1, iP->arhEnd()+iP->arhPer());	//!!!! For allow curent values update on periodicity by minutes and hours.
+    }
 
-    return rez ? rez : def;
+    return (rez && rez1 < def) ? rez : def;
 }
 
 //************************************************
@@ -3693,7 +3782,7 @@ void ShapeProtocol::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     int	reld_dt = 0;	//Reload data ( 1-reload addons, 2-full reload )
 
@@ -4139,7 +4228,7 @@ void ShapeDocument::destroy( WdgView *w )
     delete (ShpDt*)w->shpData;
 }
 
-bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
     RunWdgView *runW = qobject_cast<RunWdgView*>(w);
@@ -4168,7 +4257,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    shD->tmpl = true;
 	    break;
 	case A_DocDoc:
-	    if(TSYS::strNoSpace(val).empty() || shD->doc == val) break;
+	    if(sTrm(val).empty() || shD->doc == val) break;
 	    shD->doc = val;
 	    relDoc = true;
 	    shD->tmpl = false;
@@ -4355,7 +4444,7 @@ void ShapeBox::init( WdgView *w )	{ w->shpData = new ShpDt(); }
 
 void ShapeBox::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
-bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
+bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     bool up = true;
     ShpDt *shD = (ShpDt*)w->shpData;
@@ -4436,6 +4525,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    runW->mainWin()->pgCacheAdd(shD->inclPg);
 		    shD->inclPg->setEnabled(false);
 		    shD->inclPg->setVisible(false);
+		    shD->inclPg->toPgCache();
 		    shD->inclScrl->takeWidget();
 		    shD->inclPg->setParent(NULL);
 		    shD->inclPg->wx_scale = shD->inclPg->mainWin()->xScale();

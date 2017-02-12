@@ -85,7 +85,7 @@ class WdgShape : public QObject
 	virtual void editExit( DevelWdgView *view )					{ }
 	virtual void wdgPopup( WdgView *view, QMenu &menu )				{ }
 
-	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val );
+	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ return false; }
@@ -120,7 +120,7 @@ class ShapeFormEl : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 	void setActive( WdgView *view, bool val );
@@ -194,7 +194,7 @@ class ShapeText : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 	bool event( WdgView *view, QEvent *event );
 
     private:
@@ -253,7 +253,7 @@ class ShapeMedia : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
@@ -331,7 +331,7 @@ class ShapeDiagram : public WdgShape
 		TrendObj( WdgView *view );
 		~TrendObj( );
 
-		string	addr( )		{ return mAddr; }
+		string	addr( ) const	{ return mAddr; }
 		double	bordL( )	{ return mBordLow; }
 		double	bordU( )	{ return mBordUp; }
 		QColor	color( )	{ return mColor; }
@@ -392,8 +392,10 @@ class ShapeDiagram : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), valsForPix(1), tTime(0),
-		    tPict(0), curTime(0), sclHorPer(0), trcPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
+		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false),
+		    sclWin(false), fMoveHold(false), fMoveTmCh(false),
+		    valsForPix(1), tTime(0), tPict(0), curTime(0), sclHorPer(0), trcPer(0), tSize(1),
+		    sclVerScl(100), sclVerSclOff(0), sclHorScl(100), sclHorSclOff(0)	{ }
 
 		int64_t	arhEnd( int64_t def = 0 );
 
@@ -409,6 +411,12 @@ class ShapeDiagram : public WdgShape
 		unsigned sclHor		:4;
 		unsigned sclVer		:4;
 		unsigned valsForPix	:4;
+
+		unsigned sclWin		:1;	//Scale by window
+
+		unsigned fMoveHold	:1;	//Mouse move hold state
+		unsigned fMoveTmCh	:1;	//Changed time on moving
+
 		QColor	curColor, sclColor, sclMarkColor;
 		QBrush	backGrnd;
 		QPen	border;
@@ -423,6 +431,8 @@ class ShapeDiagram : public WdgShape
 		float	fftBeg, fftEnd;
 		float	sclVerScl, sclVerSclOff, sclHorScl, sclHorSclOff;
 		string	valArch;
+
+		QPoint	holdPnt, startPnt;	//Hold move point and start point of selection by window
 	};
 
 	//Methods
@@ -430,7 +440,7 @@ class ShapeDiagram : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 	bool event( WdgView *view, QEvent *event );
 
     private slots:
@@ -461,7 +471,7 @@ class ShapeProtocol : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *w );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
@@ -546,7 +556,7 @@ class ShapeDocument : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *w );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
@@ -594,7 +604,7 @@ class ShapeBox : public WdgShape
 	void init( WdgView *view );
 	void destroy( WdgView *view );
 
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val, const string &attr = "" );
 	bool event( WdgView *view, QEvent *event );
 };
 

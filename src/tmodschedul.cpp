@@ -38,7 +38,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules scheduler"),false), mAllow("*"), mPer(10), schM(true)
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules Scheduler"),false), mAllow("*"), mPer(10), schM(true)
 {
 
 }
@@ -143,7 +143,7 @@ bool TModSchedul::CheckFile( const string &iname )
     /*void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_LOCAL);
     if( h_lib == NULL )
     {
-	//mess_warning(nodePath().c_str(),_("Module '%s' error: %s !"),iname.c_str(),dlerror());
+	//mess_sys(TMess::Warning, _("Module '%s' error: %s !"), iname.c_str(), dlerror());
 	return false;
     }
     else dlclose(h_lib);*/
@@ -184,7 +184,7 @@ void TModSchedul::libUnreg( const string &iname )
 	    schHD.erase(schHD.begin()+i_sh);
 	    return;
 	}
-    throw TError(nodePath().c_str(),_("SO '%s' is not present!"),iname.c_str());
+    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
 }
 
 void TModSchedul::libAtt( const string &iname, bool full )
@@ -193,12 +193,12 @@ void TModSchedul::libAtt( const string &iname, bool full )
     MtxAlloc res(schM, true);
     for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
 	if(schHD[i_sh].name == iname) {
-	    if(schHD[i_sh].hd) throw TError(nodePath().c_str(),_("SO '%s' is already attached!"),iname.c_str());
+	    if(schHD[i_sh].hd) throw err_sys(_("SO '%s' is already attached!"), iname.c_str());
 
 	    void *h_lib = dlopen((iname[0]!='*')?iname.c_str():NULL, RTLD_LAZY|RTLD_LOCAL);
 	    if(!h_lib) {
 		schHD[i_sh].err = dlerror();
-		throw TError(nodePath().c_str(),_("SO '%s' error: %s !"),iname.c_str(),schHD[i_sh].err.c_str());
+		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[i_sh].err.c_str());
 	    }
 
 	    //Connect to module function
@@ -207,7 +207,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[i_sh].err = dlErr;
 		dlclose(h_lib);
-		throw TError(nodePath().c_str(),_("SO '%s' error: %s !"),iname.c_str(),schHD[i_sh].err.c_str());
+		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[i_sh].err.c_str());
 	    }
 
 	    //Connect to attach function
@@ -216,7 +216,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[i_sh].err = dlErr;
 		dlclose(h_lib);
-		throw TError(nodePath().c_str(),_("SO '%s' error: %s !"),iname.c_str(),schHD[i_sh].err.c_str());
+		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[i_sh].err.c_str());
 	    }
 
 	    //Get allow modules from library and start it
@@ -229,25 +229,26 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		    if(owner().at(list[i_sub]).at().subModule() && AtMod.type == owner().at(list[i_sub]).at().subId()) {
 			// Check type module version
 			if(AtMod.tVer != owner().at(list[i_sub]).at().subVer()) {
-			    mess_warning(nodePath().c_str(),_("%s for type '%s' doesn't support module version: %d!"),
-				AtMod.id.c_str(),AtMod.type.c_str(),AtMod.tVer);
+			    mess_sys(TMess::Warning, _("%s for type '%s' doesn't support module version: %d!"),
+				AtMod.id.c_str(), AtMod.type.c_str(), AtMod.tVer);
 			    break;
 			}
 			// Check module present
 			if(owner().at(list[i_sub]).at().modPresent(AtMod.id))
-			    mess_warning(nodePath().c_str(),_("Module '%s' is already present!"),AtMod.id.c_str());
+			    mess_sys(TMess::Warning, _("Module '%s' is already present!"), AtMod.id.c_str());
 			else {
 			    // Attach new module
 			    TModule *LdMod = (attach)(AtMod, iname);
 			    if(LdMod == NULL) {
-				mess_warning(nodePath().c_str(),_("Attach module '%s' error!"),AtMod.id.c_str());
+				mess_sys(TMess::Warning, _("Attach module '%s' error!"), AtMod.id.c_str());
 				break;
 			    }
 			    // Add atached module
 			    owner().at(list[i_sub]).at().modAdd(LdMod);
 			    schHD[i_sh].use.push_back(list[i_sub]+"."+LdMod->modId());
 			    if(full) {
-				owner().at(list[i_sub]).at().load(true);
+				owner().at(list[i_sub]).at().modifG();
+				owner().at(list[i_sub]).at().load();
 				owner().at(list[i_sub]).at().subStart();
 			    }
 			    add_mod++;
@@ -260,7 +261,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 	    else schHD[i_sh].hd = h_lib;
 	    return;
 	}
-    throw TError(nodePath().c_str(),_("SO '%s' is not present!"),iname.c_str());
+    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
 }
 
 void TModSchedul::libDet( const string &iname )
@@ -292,7 +293,7 @@ void TModSchedul::libDet( const string &iname )
 	    schHD[i_sh].hd = NULL;
 	    return;
 	}
-    throw TError(nodePath().c_str(),_("SO '%s' is not present!"),iname.c_str());
+    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
 }
 
 bool TModSchedul::chkAllowMod( const string &name )
@@ -303,13 +304,13 @@ bool TModSchedul::chkAllowMod( const string &name )
     for(int off = 0; (sel=TSYS::pathLev(name,0,true,&off)).size(); path_els++) nmFile = sel;
 
     if(allowList().empty())	return false;
-    if(TSYS::strNoSpace(allowList()) != "*") {
+    if(sTrm(allowList()) != "*") {
 	for(int off = 0; (sel=TSYS::strSepParse(allowList(),0,';',&off)).size(); )
-	    if(TSYS::strNoSpace(sel) == name || TSYS::strNoSpace(sel) == nmFile) break;
+	    if(sTrm(sel) == name || sTrm(sel) == nmFile) break;
 	if(sel.empty()) return false;
     }
     for(int off = 0; (sel=TSYS::strSepParse(denyList(),0,';',&off)).size(); )
-	if(TSYS::strNoSpace(sel) == name || TSYS::strNoSpace(sel) == nmFile) return false;
+	if(sTrm(sel) == name || sTrm(sel) == nmFile) return false;
 
     return true;
 }
@@ -329,7 +330,7 @@ TModSchedul::SHD TModSchedul::lib( const string &iname )
     for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
 	if(schHD[i_sh].name == iname)
 	    return schHD[i_sh];
-    throw TError(nodePath().c_str(),_("SO '%s' is not present!"),iname.c_str());
+    throw err_sys(_("SO '%s' is not present!"), iname.c_str());
 }
 
 int TModSchedul::libLoad( const string &iname, bool full )
@@ -348,7 +349,7 @@ int TModSchedul::libLoad( const string &iname, bool full )
 	    res.unlock();
 	    libReg("*"+smod);
 	    try{ libAtt("*"+smod,full); ldCnt++; }
-	    catch(TError &err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 	}
     }
 
@@ -367,8 +368,8 @@ int TModSchedul::libLoad( const string &iname, bool full )
 		res.unlock();
 		if(st_auto) libDet(files[i_f]);
 	    } catch(TError &err) {
-		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Can't detach library '%s'."),files[i_f].c_str());
+		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Warning, _("Can't detach library '%s'."), files[i_f].c_str());
 		continue;
 	    }
 	}
@@ -378,7 +379,7 @@ int TModSchedul::libLoad( const string &iname, bool full )
 
 	if(st_auto) {
 	    try{ libAtt(files[i_f],full); ldCnt++; }
-	    catch(TError &err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 	}
     }
 

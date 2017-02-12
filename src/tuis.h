@@ -22,7 +22,7 @@
 #ifndef TUIS_H
 #define TUIS_H
 
-#define SUI_VER		7	//UIS type modules version
+#define SUI_VER		8	//UIS type modules version
 #define SUI_ID		"UI"
 
 #include <string>
@@ -42,7 +42,7 @@ class TUI : public TModule
     public:
 	TUI( const string &id );
 
-	bool startStat( )	{ return runSt; }
+	bool startStat( ) const	{ return runSt; }
 
     protected:
 	//Methods
@@ -61,15 +61,15 @@ class TUIS : public TSubSYS
 	TUIS( );
 
 	int subVer( )		{ return SUI_VER; }
-	void subStart( );
-	void subStop( );
 
-	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
+	AutoHD<TUI> at( const string &name ) const	{ return modAt(name); }
 
 	//- All system UI functions -
 	static bool icoPresent( const string &inm, string *tp = NULL );
 	static string icoGet( const string &inm, string *tp = NULL );
 	static string icoPath( const string &ico, const string &tp = "png" );
+
+	static string mimeGet( const string &inm, const string &fDt, const string &orig = "" );
 
     protected:
 	void load_( );

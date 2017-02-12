@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -66,6 +66,22 @@ string TProt::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;
 
 string TProt::applicationName( )	{ return "OpenSCADA.OPC-UA Server"; }
 
+uint32_t TProt::clientRcvBufSz( const string &inPrtId )	{ return at(inPrtId).at().mRcvBufSz; }
+
+uint32_t TProt::clientSndBufSz( const string &inPrtId )	{ return at(inPrtId).at().mSndBufSz; }
+
+uint32_t TProt::clientMsgMaxSz( const string &inPrtId )	{ return at(inPrtId).at().mMsgMaxSz; }
+
+uint32_t TProt::clientChunkMaxCnt( const string &inPrtId ) { return at(inPrtId).at().mChunkMaxCnt; }
+
+void TProt::clientRcvBufSzSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId).at().mRcvBufSz = vl; }
+
+void TProt::clientSndBufSzSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId).at().mSndBufSz = vl; }
+
+void TProt::clientMsgMaxSzSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId).at().mMsgMaxSz = vl; }
+
+void TProt::clientChunkMaxCntSet( const string &inPrtId, uint32_t vl )	{ at(inPrtId).at().mChunkMaxCnt = vl; }
+
 void TProt::epAdd( const string &iid, const string &db )
 {
     chldAdd(mEndPnt, new OPCEndPoint(iid,db,&endPntEl()));
@@ -96,13 +112,20 @@ Server::EP *TProt::epEnAt( const string &ep )
 
 bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 {
+    ResAlloc res(enRes, false);
+    bool rez = Server::inReq(request, inPrtId, answ);
+    res.unlock();
+
 #ifdef POOL_OF_TR
     //Pool for subscriptions process
     AutoHD<TProtIn> ip = at(inPrtId);
     if(ip.at().waitReqTm() && !ip.at().mSubscrIn && epPresent(ip.at().mEp)) {
 	int64_t wTm = SYS->curTime();
-	if((wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm()) {
-	    ip.at().mSubscrCntr++;
+	AutoHD<OPCEndPoint> ep = epAt(ip.at().mEp);
+	bool tmToCall = (wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm();
+	if(tmToCall || ep.at().forceSubscrQueue) {
+	    if(tmToCall) ep.at().forceSubscrQueue = false;
+	    if(!ep.at().forceSubscrQueue) ip.at().mSubscrCntr++;
 	    ip.at().mPrevTm = wTm;
 	    ip.at().mSubscrIn = true;
 	    epAt(ip.at().mEp).at().subScrCycle(ip.at().mSubscrCntr, answ, inPrtId);
@@ -111,11 +134,10 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
     }
 #endif
 
-    ResAlloc res(enRes, false);
-    return Server::inReq(request, inPrtId, answ);
+    return rez;
 }
 
-string TProt::clientAddr( const string &inPrtId )	{ return "EVAL";/*TSYS::strLine(at(inPrtId).at().srcAddr(), 0);*/ }
+string TProt::clientAddr( const string &inPrtId )	{ return TSYS::strLine(at(inPrtId).at().srcAddr(), 0); }
 
 void TProt::discoveryUrls( vector<string> &ls )
 {
@@ -147,27 +169,29 @@ void TProt::load_( )
 {
     //Load DB
     try {
-	TConfig g_cfg(&endPntEl());
-	g_cfg.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig gCfg(&endPntEl());
+	//gCfg.cfgViewAll(false);
+	vector<string> dbLs;
 	map<string, bool> itReg;
+	vector<vector<string> > full;
 
 	// Search into DB
-	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fld_cnt++,g_cfg); ) {
-		string id = g_cfg.cfg("ID").getS();
-		if(!epPresent(id)) epAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDb = 0; iDb < dbLs.size(); iDb++)
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,false,&full); ) {
+		string id = gCfg.cfg("ID").getS();
+		if(!epPresent(id)) epAdd(id,(dbLs[iDb]==SYS->workDB())?"*.*":dbLs[iDb]);
+		epAt(id).at().load(&gCfg);
 		itReg[id] = true;
 	    }
 
 	// Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    epList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(epAt(db_ls[i_it]).at().DB()))
-		    epDel(db_ls[i_it]);
+	    epList(dbLs);
+	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(epAt(dbLs[i_it]).at().DB()))
+		    epDel(dbLs[i_it]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -229,13 +253,14 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPoolTm(0), mSubscrCntr(0), mPrevTm(0)	{ }
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPoolTm(0), mSubscrCntr(0), mPrevTm(0),
+	mRcvBufSz(0), mSndBufSz(0), mMsgMaxSz(0), mChunkMaxCnt(0)	{ }
 
 TProtIn::~TProtIn( )		{ }
 
-TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 
-bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
+bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
     return owner().inReq(mBuf, name(), &answ);
@@ -258,9 +283,9 @@ OPCEndPoint::~OPCEndPoint( )
     try { setEnable(false); } catch(...) { }
 }
 
-TCntrNode &OPCEndPoint::operator=( TCntrNode &node )
+TCntrNode &OPCEndPoint::operator=( const TCntrNode &node )
 {
-    OPCEndPoint *src_n = dynamic_cast<OPCEndPoint*>(&node);
+    const OPCEndPoint *src_n = dynamic_cast<const OPCEndPoint*>(&node);
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -277,7 +302,7 @@ void OPCEndPoint::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
 }
 
-TProt &OPCEndPoint::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &OPCEndPoint::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 string OPCEndPoint::name( )
 {
@@ -285,19 +310,23 @@ string OPCEndPoint::name( )
     return tNm.size() ? tNm : id();
 }
 
-string OPCEndPoint::tbl( )	{ return owner().modId()+"_ep"; }
+string OPCEndPoint::tbl( ) const	{ return owner().modId()+"_ep"; }
 
 string OPCEndPoint::cert( )	{ return cfg("ServCert").getS(); }
 
 string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
-bool OPCEndPoint::cfgChange( TCfg &ce )	{ modif(); return true; }
+bool OPCEndPoint::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-void OPCEndPoint::load_( )
+void OPCEndPoint::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    cfgViewAll(true);
-    SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else {
+	//cfgViewAll(true);
+	SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+    }
 
     //Security policies parse
     string sp = cfg("SecPolicies").getS();

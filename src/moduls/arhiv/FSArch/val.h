@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,11 +64,11 @@ class VFileArch
 	void	getVals( TValBuf &buf, int64_t beg, int64_t end );
 	TVariant getVal( int pos );
 
-	ModVArchEl &owner()	{ return *mOwner; }
+	ModVArchEl &owner( ) const	{ return *mOwner; }
 
 	void check( );
 
-	int maxPos( )		{ return mpos; }
+	int maxPos( )			{ return mpos; }
 
 	//Attributes
 	static string afl_id;
@@ -112,7 +112,7 @@ class VFileArch
 	// State parameters
 	bool	mErr;		//Archive err
 	bool	mPack;		//Archive packed
-	Res	mRes;		//Resource to access
+	ResRW	mRes;		//Resource to access
 	time_t	mAcces;		//Last access time
 
 	// File access atributes
@@ -165,12 +165,12 @@ class ModVArchEl: public TVArchEl
 	//Methods
 	TVariant getValProc( int64_t *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
-	bool setValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	int64_t setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool toAccum );
 
     private:
 	//Attributes
 	bool	mChecked;	//The present archive files checked, for prevent doubles create at the new data place
-	Res	mRes;		//Resource to access;
+	ResRW	mRes;		//Resource to access;
 	deque<VFileArch*>	files;
 	int64_t	realEnd;
 };
@@ -196,15 +196,15 @@ class ModVArch: public TVArchivator
 	bool	packInfoFiles( ){ return mPackInfoFiles; }
 
 	void setFileTimeSize( double vl )	{ time_size = vmax(100*valPeriod()/3600,vl); modif(); }
-	void setNumbFiles( unsigned vl )	{ mNumbFiles = vmax(0,vl); modif(); }
+	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
 	void setMaxCapacity( double vl )	{ mMaxCapacity = vmax(0,vl); modif(); }
 	void setRoundProc( double vl )		{ round_proc = vmax(0,vmin(50,vl)); modif(); }
 	void setCheckTm( int vl )		{ mChkTm = vmax(0,vl); modif(); }
 	void setPackTm( int vl )		{ mPackTm = vmax(0,vl); modif(); }
 	void setPackInfoFiles( bool vl )	{ mPackInfoFiles = vl; modif(); }
 
-	void start();
-	void stop();
+	void start( );
+	void stop( bool full_del = false );
 
 	void checkArchivator( bool now = false, bool toLimits = false );
 
@@ -222,7 +222,7 @@ class ModVArch: public TVArchivator
 	//Methods
 	void load_( );
 	void save_( );
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods

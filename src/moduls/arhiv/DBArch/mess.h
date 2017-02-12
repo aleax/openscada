@@ -46,8 +46,8 @@ class ModMArch: public TMArchivator
 	void setMaxSize( double vl )	{ mMaxSize = (vl<0.1) ? 0 : vl; modif(); }
 	void setTmAsStr( bool vl )	{ mTmAsStr = vl; modif(); }
 
-	time_t begin( );
-	time_t end( );
+	time_t begin( )		{ return mBeg; }
+	time_t end( )		{ return mEnd; }
 
 	bool put( vector<TMess::SRec> &mess );
 	time_t get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
@@ -63,12 +63,15 @@ class ModMArch: public TMArchivator
 	void postDisable( int flag );		//Delete all DB if flag 1
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
+	bool readMeta( );
+
     private:
 	//Attributes
 	double	tmProc;				//Archiving/processing time
 	time_t	mBeg, mEnd;
 	double	mMaxSize;			//Maximum archive size (hours)
-	bool	mTmAsStr;			//Store time as pure integer
+	bool	mTmAsStr,			//Store time as pure integer
+		needMeta;
 
 	TElem	reqEl;				//Requests structure
 };

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"1.7.2"
+#define PRT_MVER	"1.8.0"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -70,15 +70,16 @@ class TProtIn: public TProtocolIn
 
 	unsigned waitReqTm( )	{ return mPoolTm; }
 
-	bool mess( const string &request, string &answer, const string &sender );
+	bool mess( const string &request, string &answer );
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
 	//Attributes
 	bool	mSubscrIn;
 	unsigned mPoolTm, mSubscrCntr;
 	int64_t	mPrevTm;
 	string	mBuf, mEp;
+	uint32_t mRcvBufSz, mSndBufSz, mMsgMaxSz, mChunkMaxCnt;
 };
 
 //*************************************************
@@ -91,7 +92,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	OPCEndPoint( const string &iid, const string &db, TElem *el );
 	~OPCEndPoint( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string id( )		{ return mId; }
 	string name( );
@@ -112,9 +113,9 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	string getStatus( );
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string DB( ) const	{ return mDB; }
+	string tbl( ) const;
+	string fullDB( ) const	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &name )	{ mName = name; }
 	void setDescr( const string &idsc )	{ mDescr = idsc; }
@@ -133,23 +134,23 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void setLimSubScr( uint32_t vl )	{ mLimSubScr = vmax(1,vmin(vl,1000)); modif(); }
 	void setLimMonitItms( uint32_t vl )	{ mLimMonitItms = vmax(10,vmin(1000000,vl)); modif(); }
-	void setLimRetrQueueTm( uint32_t vl )	{ mLimRetrQueueTm = vmax(0,vmin(3600,vl)); modif(); }
+	void setLimRetrQueueTm( uint32_t vl )	{ mLimRetrQueueTm = vmin(3600, vl); modif(); }
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
     protected:
 	//Methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	//Attributes
 	TCfg	&mId,
@@ -180,15 +181,25 @@ class TProt: public TProtocol, public Server
 	string productUri( );
 	string applicationName( );
 
+	uint32_t clientRcvBufSz( const string &inPrtId );
+	uint32_t clientSndBufSz( const string &inPrtId );
+	uint32_t clientMsgMaxSz( const string &inPrtId );
+	uint32_t clientChunkMaxCnt( const string &inPrtId );
+
+	void clientRcvBufSzSet( const string &inPrtId, uint32_t vl );
+	void clientSndBufSzSet( const string &inPrtId, uint32_t vl );
+	void clientMsgMaxSzSet( const string &inPrtId, uint32_t vl );
+	void clientChunkMaxCntSet( const string &inPrtId, uint32_t vl );
+
 	void modStart( );
 	void modStop( );
 
 	// Server's functions
-	void epList( vector<string> &ls )	{ chldList(mEndPnt,ls); }
-	bool epPresent( const string &id )	{ return chldPresent(mEndPnt,id); }
+	void epList( vector<string> &ls ) const			{ chldList(mEndPnt,ls); }
+	bool epPresent( const string &id ) const		{ return chldPresent(mEndPnt,id); }
 	void epAdd( const string &id, const string &db = "*.*" );
-	void epDel( const string &id )		{ chldDel(mEndPnt,id); }
-	AutoHD<OPCEndPoint> epAt( const string &id )	{ return chldAt(mEndPnt,id); }
+	void epDel( const string &id )				{ chldDel(mEndPnt,id); }
+	AutoHD<OPCEndPoint> epAt( const string &id ) const	{ return chldAt(mEndPnt,id); }
 
 	void discoveryUrls( vector<string> &ls );
 	bool inReq( string &request, const string &inPrtId, string *answ = NULL );
@@ -199,7 +210,9 @@ class TProt: public TProtocol, public Server
 
 	//void outMess( XMLNode &io, TTransportOut &tro );	//!!!! Need for translate from XMLNode to XML_N
 
-	Res &nodeRes( )		{ return nRes; }
+	AutoHD<TProtIn> at( const string &id )	{ return TProtocol::at(id); }
+
+	ResRW &nodeRes( )	{ return nRes; }
 
     protected:
 	//Methods
@@ -224,8 +237,8 @@ class TProt: public TProtocol, public Server
 	TElem	mEndPntEl;
 	vector< AutoHD<OPCEndPoint> > ep_hd;
 
-	Res	nRes;
-	Res	enRes;				//Resource for enable endpoints
+	ResRW	nRes,
+		enRes;				//Resource for enable endpoints
 };
 
 extern TProt *modPrt;

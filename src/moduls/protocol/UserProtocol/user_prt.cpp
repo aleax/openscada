@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.2"
+#define MOD_VER		"0.8.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -109,28 +108,29 @@ void TProt::load_( )
     //Load DB
     // Search and create new user protocols
     try {
-	TConfig g_cfg(&uPrtEl());
-	g_cfg.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig gCfg(&uPrtEl());
+	//gCfg.cfgViewAll(false);
+	vector<string> dbLs;
 	map<string, bool> itReg;
+	vector<vector<string> > full;
 
 	//  Search into DB
-	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(unsigned fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fld_cnt++,g_cfg); )
-	    {
-		string id = g_cfg.cfg("ID").getS();
-		if(!uPrtPresent(id)) uPrtAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(unsigned fldCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,false,&full); ) {
+		string id = gCfg.cfg("ID").getS();
+		if(!uPrtPresent(id)) uPrtAdd(id,(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]);
+		uPrtAt(id).at().load(&gCfg);
 		itReg[id] = true;
 	    }
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    uPrtList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(uPrtAt(db_ls[i_it]).at().DB()))
-		    uPrtDel(db_ls[i_it]);
+	    uPrtList(dbLs);
+	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(uPrtAt(dbLs[i_it]).at().DB()))
+		    uPrtDel(dbLs[i_it]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -232,7 +232,7 @@ TProtIn::~TProtIn( )
 
 }
 
-TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 unsigned TProtIn::waitReqTm( )	{ return !up.freeStat() ? up.at().waitReqTm() : 0; }
 
@@ -243,7 +243,7 @@ void TProtIn::setSrcTr( TTransportIn *vl )
     if(owner().uPrtPresent(selNode)) up = owner().uPrtAt(selNode);
 }
 
-bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
+bool TProtIn::mess( const string &reqst, string &answer )
 {
     try {
 	//Find user protocol for using
@@ -263,12 +263,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	funcV.setB(0, false);
 	funcV.setS(1, funcV.getS(1)+reqst);
 	funcV.setS(2, "");
-	funcV.setS(3, sender);
+	funcV.setS(3, srcAddr());
 	//Call processing
 	funcV.calc( );
 	//Get outputs
 	bool rez = funcV.getB(0);
-	if(!rez) funcV.setS(1,"");
+	if(!rez) funcV.setS(1, "");
 	answer = funcV.getS(2);
 
 	up.at().cntInReq++;
@@ -294,9 +294,9 @@ UserPrt::~UserPrt( )
     try { setEnable(false); } catch(...) { }
 }
 
-TCntrNode &UserPrt::operator=( TCntrNode &node )
+TCntrNode &UserPrt::operator=( const TCntrNode &node )
 {
-    UserPrt *src_n = dynamic_cast<UserPrt*>(&node);
+    const UserPrt *src_n = dynamic_cast<const UserPrt*>(&node);
     if(!src_n) return *this;
 
     if(enableStat())	setEnable(false);
@@ -313,7 +313,7 @@ void UserPrt::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
 }
 
-TProt &UserPrt::owner( )	{ return *(TProt*)nodePrev(); }
+TProt &UserPrt::owner( ) const	{ return *(TProt*)nodePrev(); }
 
 string UserPrt::name( )
 {
@@ -321,7 +321,7 @@ string UserPrt::name( )
     return tNm.size() ? tNm : id();
 }
 
-string UserPrt::tbl( )		{ return owner().modId()+"_uPrt"; }
+string UserPrt::tbl( ) const	{ return owner().modId()+"_uPrt"; }
 
 string UserPrt::inProgLang( )
 {
@@ -377,11 +377,15 @@ void UserPrt::setOutProg( const string &iprg )
     modif();
 }
 
-void UserPrt::load_( )
+void UserPrt::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-    cfgViewAll(true);
-    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+
+    if(icfg) *(TConfig*)this = *icfg;
+    else {
+	//cfgViewAll(true);
+	SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+    }
 }
 
 void UserPrt::save_( )
@@ -389,12 +393,7 @@ void UserPrt::save_( )
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
-bool UserPrt::cfgChange( TCfg &cfg )
-{
-    modif();
-
-    return true;
-}
+bool UserPrt::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 void UserPrt::setEnable( bool vl )
 {

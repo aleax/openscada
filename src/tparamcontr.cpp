@@ -56,9 +56,9 @@ string TParamContr::objName( )	{ return TValue::objName() + ":TParamContr"; }
 
 string TParamContr::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
 
-TCntrNode &TParamContr::operator=( TCntrNode &node )
+TCntrNode &TParamContr::operator=( const TCntrNode &node )
 {
-    TParamContr *src_n = dynamic_cast<TParamContr*>(&node);
+    const TParamContr *src_n = dynamic_cast<const TParamContr*>(&node);
     if(!src_n) return *this;
 
     //Check for parameter type and change it if different and alow
@@ -88,7 +88,7 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     return *this;
 }
 
-TController &TParamContr::owner( )	{ return *(TController*)nodePrev(); }
+TController &TParamContr::owner( ) const	{ return *(TController*)nodePrev(); }
 
 string TParamContr::name( )	{ string nm = cfg("NAME").getS(); return nm.size() ? nm : id(); }
 
@@ -132,13 +132,15 @@ void TParamContr::postDisable(int flag)
     }
 }
 
-void TParamContr::load_( )
+void TParamContr::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(owner().DB())) throw TError();
 
-    cfgViewAll(true);
-    SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),
-			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
+    if(icfg) *(TConfig*)this = *icfg;
+    else {
+	//cfgViewAll(true);
+	SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(), owner().owner().nodePath()+owner().cfg(type().db).getS(), *this);
+    }
 }
 
 void TParamContr::save_( )
@@ -154,16 +156,9 @@ void TParamContr::save_( )
 	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
-bool TParamContr::cfgChange( TCfg &cfg )	{ modif( ); return true; }
+bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
-{
-    TConfig::operator=(PrmCntr);
-
-    return *this;
-}
-
-void TParamContr::enable()
+void TParamContr::enable( )
 {
     mEn = true;
 }
@@ -263,7 +258,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    if(!owner().enableStat())	throw TError(nodePath().c_str(),_("Controller is not started!"));
+	    if(!owner().enableStat())	throw err_sys(_("Controller is not started!"));
 	    else s2i(opt->text()) ? enable() : disable();
 	}
     }
@@ -279,7 +274,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/prm/tpLst" && ctrChkNode(opt))
-	for(unsigned i_tp = 0; i_tp < owner().owner().tpPrmSize(); i_tp++)
-	    opt->childAdd("el")->setAttr("id",owner().owner().tpPrmAt(i_tp).name)->setText(owner().owner().tpPrmAt(i_tp).descr);
+	for(unsigned iTp = 0; iTp < owner().owner().tpPrmSize(); iTp++)
+	    opt->childAdd("el")->setAttr("id",owner().owner().tpPrmAt(iTp).name)->setText(owner().owner().tpPrmAt(iTp).descr);
     else TValue::cntrCmdProc(opt);
 }

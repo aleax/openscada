@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Special.FLibMath file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +31,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"0.6.1"
+#define MOD_VER		"0.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the library of standard mathematical functions.")
 #define LICENSE		"GPL2"

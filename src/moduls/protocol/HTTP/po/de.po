@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-22 13:21+0300\n"
+"POT-Creation-Date: 2017-02-09 14:01+0200\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -44,6 +44,10 @@ msgstr ""
 "\n"
 
 #, c-format
+msgid "HTML template '%s' load error: %s"
+msgstr "HTML Template '%s' Last error: %s"
+
+#, c-format
 msgid "Auth exit from user '%s'."
 msgstr "Auth Ausfahrt vom Benutzer '%s'."
 
@@ -76,8 +80,11 @@ msgstr "Moduloptionen"
 msgid "Life time of the authentication (min)"
 msgstr "Lebensdauer der Authentifizierung (Min)"
 
-msgid "HTML-template"
+msgid "HTML template"
 msgstr "HTML-Template"
+
+msgid "HTML main page template"
+msgstr "HTML-Hauptseitevorlage"
 
 msgid "Auto login"
 msgstr "Auto Login"
@@ -115,7 +122,7 @@ msgid "Auth OK from user '%s'. Host: %s. User agent: %s."
 msgstr "Auth OK vom Benutzer '%s'. Host: %s. User-Agent: %s."
 
 #, c-format
-msgid "Going to page: <b>%s</b>"
+msgid "Going to the page: <b>%s</b>"
 msgstr "Gehen zur Seite: <b>%s</b>"
 
 #, c-format
@@ -127,7 +134,7 @@ msgstr ""
 "<p style='color: #CF8122;'>Fehler in der Authentifizierung! Versuchen Sie "
 "noch einmal.</p>"
 
-msgid "Find no one WWW subtype module!"
+msgid "No one WWW subtype module was found!"
 msgstr "Keine Modul mit dem Subtyp WWW gefunden!"
 
 #, c-format
@@ -135,37 +142,35 @@ msgid "Auto auth from user '%s'. Host: %s. User agent: %s."
 msgstr "Auto auth von Benutzer '%s'. Host: %s. User-Agent: %s."
 
 #, c-format
-msgid "HTML-template '%s' load error: %s"
-msgstr "HTML-Template '%s' Last error: %s"
+msgid "No a HTTP GET function present for module '%s'!"
+msgstr "Keine HTTP-GET-Funktion für Modul '%s' vorhanden!"
+
+#, c-format
+msgid "No a HTTP POST function present for module '%s'!"
+msgstr "Keine HTTP-POST-Funktion für Modul '%s' vorhanden!"
 
 msgid "Login"
 msgstr "Einloggen"
-
-msgid "Welcome to the Web-interfaces of OpenSCADA system."
-msgstr "Willkommen in die Web-Schnittstellen des Systems OpenSCADA."
 
 #, c-format
 msgid "You are logged in as \"<b>%s</b>\"."
 msgstr "Sie sind eingeloggt als \"<b>%s</b>\"."
 
 msgid ""
-"Select the necessary Web-module from the list below, press <a href='/"
-"logout'>here</a> to logout or <a href='/login'>here</a> to login as another "
-"user."
+"Select the necessary Web-module from the list below, <a href='/"
+"logout'>logout</a> or <a href='/login'>login as an another user</a>."
 msgstr ""
-"Wählen Sie den Web-Modul aus der Liste unten oder betätigen Sie <a href='/"
-"logout'>hier</a> zum Ausloggen oder <a href='/login'>hier</a> zum einloggen "
-"als anderer Benutzer."
+"Wählen Sie den Web-Modul aus der Liste unten, <a href='/logout'>ausloggen</"
+"a> oder <a href='/login'>einloggen als anderer Benutzer</a>."
 
 msgid "You are not logged in the system!"
 msgstr "Sie sind nicht eingeloggt!"
 
 msgid ""
-"To use some modules you must be logged in. To login now click <a href='/"
-"login'>here</a>."
+"To use some modules you must be logged in. <a href='/login'>Login now</a>."
 msgstr ""
-"Zum Bedienen einiger Module müssen Sie sich einloggen. Zum Einloggen drücken "
-"Sie<a href='/login'>hier</a>."
+"Zum Bedienen einiger Module müssen Sie sich einloggen. <a href='/"
+"login'>Jetzt einloggen</a>."
 
 #, c-format
 msgid ""

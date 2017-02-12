@@ -51,9 +51,10 @@ class TValBuf
 	//Public methods
 	TValBuf( );
 	TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd = false, bool ihres = false );
+	TValBuf( const TValBuf &src );
 	virtual ~TValBuf( );
 
-	TValBuf &operator=( TValBuf &src );
+	TValBuf &operator=( const TValBuf &src );
 
 	void clear( );
 
@@ -138,7 +139,7 @@ class TValBuf
 		} buf;
 	};
 
-	Res		bRes;		//Access resource
+	ResRW		bRes;		//Access resource
 	TFld::Type	mValTp;		//Store values type
 	union {
 	    TBuf<char>	*bl;
@@ -174,17 +175,17 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TVArchive( const string &id, const string &db, TElem *cf_el );
 	~TVArchive( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	// Base functions
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	name( );
-	string	dscr( )		{ return cfg("DESCR").getS(); }
-	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode.getI(); }
-	string	srcData( )	{ return mSource; }
+	string	dscr( )			{ return cfg("DESCR").getS(); }
+	SrcMode	srcMode( )		{ return (TVArchive::SrcMode)mSrcMode.getI(); }
+	string	srcData( )		{ return mSource; }
 	AutoHD<TVal> srcPAttr( bool force = false, const string &ipath = "" );
-	bool	toStart( )  	{ return mStart; }
-	bool	startStat( )	{ return runSt; }
+	bool	toStart( )  		{ return mStart; }
+	bool	startStat( ) const	{ return runSt; }
 
 	string	DB( )		{ return mDB; }
 	string	tbl( );
@@ -236,7 +237,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string makeTrendImg( int64_t beg, int64_t end, const string &arch,
 	    int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0, string *tp = NULL );
 
-	TArchiveS &owner( );
+	TArchiveS &owner( ) const;
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
@@ -244,9 +245,9 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Protected methods
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -254,10 +255,10 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     private:
 	//Private methods
 	void setUpBuf( );
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	//Private attributes
-	Res	aRes;
+	ResRW	aRes;
 	bool	runSt;
 	string	mDB;
 	//> Base params
@@ -293,19 +294,19 @@ class TVArchivator : public TCntrNode, public TConfig
 	TVArchivator( const string &id, const string &db, TElem *cf_el );
 	~TVArchivator( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string	id( )		{ return mId; }
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
-	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	addr( ) const	{ return cfg("ADDR").getS(); }
 	double	valPeriod( )	{ return mVPer; }
 	int	archPeriod( )	{ return mAPer; }
 	int	selPrior( )	{ return mSelPrior; }
 
 	bool toStart( )		{ return mStart; }
-	bool startStat( )	{ return runSt; }
+	bool startStat( ) const	{ return runSt; }
 
 	string DB( )		{ return mDB; }
 	string tbl( );
@@ -330,7 +331,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void archiveList( vector<string> &ls );
 	bool archivePresent( const string &iid );
 
-	TTipArchivator &owner( );
+	TTipArchivator &owner( ) const;
 
     protected:
 	//Protected methods
@@ -340,24 +341,26 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	virtual TVArchEl *getArchEl( TVArchive &arch );
 
+	virtual void pushAccumVals( )	{ };
+
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	//Protected attributes
-	Res	archRes;
+	ResRW	archRes;
 	bool	runSt, endrunReq;
 	// Phisical elements storing
 	map<string,TVArchEl*> archEl;
 
     private:
 	//Private methods
-	const char *nodeName( )		{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 	static void *Task( void *param );	//Process task
 
 	//Private attributes
@@ -390,16 +393,19 @@ class TVArchEl
 
 	TVariant getVal( int64_t *tm, bool up_ord, bool onlyLocal = false );
 	void getVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0, bool onlyLocal = false );
-	void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
+	void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0, bool toAccum = false );
 
 	TVArchive &archive( );
 	TVArchivator &archivator( );
+
+	//Public attributes
+	int64_t	mLastGet;
 
     protected:
 	//Protected methods
 	virtual TVariant getValProc( int64_t *tm, bool up_ord );
 	virtual void getValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ }
-	virtual bool setValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ return false; }
+	virtual int64_t setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool toAccum )	{ return 0; }
 
 	// Previous averaging value
 	int64_t	prevTm;
@@ -409,8 +415,6 @@ class TVArchEl
 	//Private attributes
 	TVArchive	&mArchive;
 	TVArchivator	&mArchivator;
-
-	int64_t	mLastGet;
 };
 
 }

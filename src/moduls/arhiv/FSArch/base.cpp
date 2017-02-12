@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("File system archivator")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"2.8.0"
+#define MOD_VER		"2.8.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
 #define LICENSE		"GPL2"
@@ -115,7 +115,7 @@ string ModArch::packArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw TError(nodePath().c_str(),_("Compress error!"));
+	throw err_sys(_("Compress error!"));
     }
     if(replace) remove(anm.c_str());
 
@@ -131,7 +131,7 @@ string ModArch::unPackArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw TError(nodePath().c_str(),_("Decompress error: '%s'!"),anm.c_str());
+	throw err_sys(_("Decompress error: '%s'!"), anm.c_str());
     }
     if(replace) remove(anm.c_str());
 
@@ -167,33 +167,33 @@ void ModArch::perSYSCall( unsigned int cnt )
 	messList(a_list);
 	for(unsigned i_a = 0; time(NULL) < end_tm && i_a < a_list.size(); i_a++)
 	    if(messAt(a_list[i_a]).at().startStat())
-		try{ messAt(a_list[i_a]).at().checkArchivator(); }
+		try { messAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Check message archivator '%s' error."),a_list[i_a].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Check message archivator '%s' error."), a_list[i_a].c_str());
 		}
 
 	//Check value archivators
 	valList(a_list);
 	for(unsigned i_a = 0; time(NULL) < end_tm && i_a < a_list.size(); i_a++)
 	    if(valAt(a_list[i_a]).at().startStat())
-		try{ valAt(a_list[i_a]).at().checkArchivator(); }
+		try { valAt(a_list[i_a]).at().checkArchivator(); }
 		catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Check value archivator '%s' error."),a_list[i_a].c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Error, _("Check value archivator '%s' error."), a_list[i_a].c_str());
 		}
 
 	//Check to nopresent archive files
 	struct stat file_stat;
-	TConfig c_el(&mod->packFE());
-	c_el.cfgViewAll(false);
-	for(int fld_cnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fld_cnt++,c_el); )
-	    if(stat(c_el.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG)
-	    {
-		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",c_el,true,false,true))	break;
-		fld_cnt--;
+	vector<vector<string> > full;
+	TConfig cEl(&mod->packFE());
+	cEl.cfgViewAll(false);
+	for(int fldCnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fldCnt++,cEl,false,&full); )
+	    if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
+		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",cEl,true,false,true))	break;
+		if(full.empty()) fldCnt--;
 	    }
-    } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_sys(TMess::Error, "%s", err.mess.c_str()); }
 }
 
 TMArchivator *ModArch::AMess( const string &iid, const string &idb )	{ return new ModMArch(iid,idb,&owner().messE()); }

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2013 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +23,7 @@ var isNN = navigator.appName.indexOf('Netscape') != -1;
 var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
+var mainTmId = 0;
 
 /***************************************************
  * strEncode - String encoding.                    *
@@ -112,7 +112,7 @@ function nodeTextByTagId( node, tag, avl )
 /***************************************************
  * posGetX - Get absolute position                 *
  **************************************************/
-function posGetX(obj,noWScrl)
+function posGetX( obj, noWScrl )
 {
     var posX = 0;
     for( ; obj && obj.nodeName != 'BODY'; obj = obj.parentNode) {
@@ -121,13 +121,13 @@ function posGetX(obj,noWScrl)
 	    (obj.parentNode.style.marginLeft?parseInt(obj.parentNode.style.marginLeft):0);
 	if(obj.style.position == 'relative') posX += obj.offsetLeft;
     }
-    return posX+(!noWScrl?-window.pageXOffset:0);
+    return posX + (!noWScrl?-window.pageXOffset:0);
 }
 
 /***************************************************
  * posGetY - Get absolute position                 *
  **************************************************/
-function posGetY(obj,noWScrl)
+function posGetY( obj, noWScrl )
 {
     var posY = 0;
     for( ; obj && obj.nodeName != 'BODY'; obj = obj.parentNode) {
@@ -136,7 +136,7 @@ function posGetY(obj,noWScrl)
 	    (obj.parentNode.style.marginTop?parseInt(obj.parentNode.style.marginTop):0);
 	if(obj.style.position == 'relative') posY += obj.offsetTop;
     }
-    return posY+(!noWScrl?-window.pageYOffset:0);
+    return posY + (!noWScrl?-window.pageYOffset:0);
 }
 
 /***************************************************
@@ -246,21 +246,25 @@ function evKeyGet( e )
 /***************************************************
  * servGet - XML get request to server             *
  ***************************************************/
-function servGet( adr, prm, callBack )
+function servGet( adr, prm, callBack, callBackPrm )
 {
     var req = getXmlHttp();
     req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm), callBack ? true : false);
     if(callBack) {
 	req.callBack = callBack;
+	req.callBackPrm = callBackPrm;
 	req.onreadystatechange = function( ) {
 	    if(this.readyState != 4) return;
-	    if(this.status == 200 && this.responseXML.childNodes.length)
+	    if(this.status == 200 && this.responseXML.childNodes.length) {
+		this.responseXML.childNodes[0].callBackPrm = this.callBackPrm;
 		this.callBack(this.responseXML.childNodes[0]);
+	    }
 	    else this.callBack(-1);
 	};
 	req.send(null);
 	return null;
     }
+    //else console.log("TEST 00: Sync GET="+adr+'?'+prm);
     try {
 	req.send(null);
 	if(req.status == 200 && req.responseXML.childNodes.length)
@@ -281,8 +285,10 @@ function servSet( adr, prm, body, waitRez )
 	req.send(body);
 	if(waitRez && req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
-    }
-    catch(e) { window.location = '/'+MOD_ID; }
+	//if(mainTmId) clearTimeout(mainTmId);
+	//mainTmId = setTimeout(makeUI, 1000);
+	//console.log("TEST 01: SET="+body);
+    } catch(e) { window.location = '/'+MOD_ID; }
 
     return null;
 }
@@ -324,6 +330,8 @@ function getFont( fStr, fSc, opt )
 	if(allFnt.length >= 2) rez += 'font-size: ' + (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0) + (opt==1?'pt; ':'px; ');
 	if(allFnt.length >= 3) rez += 'font-weight: ' + (parseInt(allFnt[2])?'bold':'normal') + '; ';
 	if(allFnt.length >= 4) rez += 'font-style: ' + (parseInt(allFnt[3])?'italic':'normal') + '; ';
+	if(allFnt.length >= 5 && parseInt(allFnt[4])) rez += 'text-decoration: underline; ';
+	else if(allFnt.length >= 6 && parseInt(allFnt[5])) rez += 'text-decoration: line-through; ';
     }
 
     return rez;
@@ -397,8 +405,9 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     if(this == masterPage) {
 	var opPg = this.findOpenPage(pgId);
 	if(opPg) {
-	    if(!(prcCnt%5)) opPg.makeEl(servGet(pgId,'com=attrsBr&FullTree=1&tm='+tmCnt),false,false,true);
-	    else if(updWdg) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
+	    /*if(!(prcCnt%5)) opPg.makeEl(servGet(pgId,'com=attrsBr&FullTree=1&tm='+tmCnt),false,false,true);
+	    else*/ if(updWdg) servGet(pgId, 'com=attrsBr&tm='+tmCnt, makeEl, opPg);
+				//opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
 	    return true;
 	}
     }
@@ -430,7 +439,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible) {
 	    if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc']) {
 		this.wdgs[i].attrs['pgOpenSrc'] = pgId;
-		this.wdgs[i].makeEl(null,true);
+		this.wdgs[i].makeEl(null, true);
 		setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
 		return true;
 	    }
@@ -526,7 +535,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	}
 
 	this.pages[iPg.addr] = iPg;
-	iPg.makeEl(attrBrVal,false,true);
+	iPg.makeEl(attrBrVal, false, true);
 
 	return true;
     }
@@ -558,6 +567,17 @@ function findOpenPage( pgId )
 
 function makeEl( pgBr, inclPg, full, FullTree )
 {
+    //Callback processing
+    if(pgBr) {
+	if(pgBr == -1) return;
+	if(pgBr.callBackPrm) {
+	    elO = pgBr.callBackPrm; pgBr.callBackPrm = null;
+	    elO.makeEl(pgBr, inclPg, full, FullTree);
+	    return;
+	}
+    }
+
+    //Main processing
     var margBrdUpd = false; var newAttr = false;
     this.place.wdgLnk = this;
     if(!inclPg && pgBr) {
@@ -734,9 +754,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
-	    if(parseInt(this.attrs['orient']) == 0) {
+	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
-		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; ';
+		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; white-space: pre-line; ';
 		switch(txtAlign&0x3) {
 		    case 0: spanStyle += 'text-align: left; ';		break;
 		    case 1: spanStyle += 'text-align: right; ';		break;
@@ -748,7 +768,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    case 1: spanStyle += 'vertical-align: bottom; ';	break;
 		    case 2: spanStyle += 'vertical-align: middle; ';	break;
 		}
-		spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
+		if(parseInt(this.attrs['orient']) != 0) spanStyle += "transform: rotate("+parseInt(this.attrs['orient'])+"deg); ";
+		spanStyle += getFont(this.attrs['font'], Math.min(xSc,ySc));
 		spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
 		var txtVal = this.attrs['text'];
 		for(var i = 0; i < parseInt(this.attrs['numbArg']); i++) {
@@ -774,15 +795,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
 		}
-		var txtVal1 = '';
-		for(var j = 0; j < txtVal.length; j++)
-		    if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
-		//txtVal.replace(/\n/g,'<br />');
-		//while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
-		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
-	    }
-	    else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
-					"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
+		//var txtVal1 = '';
+		//for(var j = 0; j < txtVal.length; j++)
+		//    if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
+		// txtVal.replace(/\n/g,'<br />');
+		// while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+		//this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
+		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
+	    //}
+	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
+	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
 
 	    this.place.wdgLnk = this;
 	    if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
@@ -792,7 +814,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
+	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.childNodes.length <= 1) ||
 					  (!parseInt(this.attrs['areas']) && this.place.childNodes.length > 1))
@@ -800,20 +822,25 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	    var toInit = !this.place.childNodes.length;
 	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
-	    if(toInit || this.attrsMdf["src"]) {
-		medObj.src = this.attrs['src'].length ? '/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src'] : '';
+	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || !pgBr) {
+		medObj.src = this.attrs['src'].length ? "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'] : "";
 		medObj.hidden = !this.attrs['src'].length;
 	    }
-	    if(toInit || this.attrsMdf["fit"]) {
+	    if(toInit || this.attrsMdf["fit"] || !pgBr) {
 		if(this.attrs['fit'] == 1) {
 		    medObj.width = geomW; medObj.height = geomH;
 		    if(this.attrs['src'].length) medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}
-		else medObj.onload = function() {
-		    var cWdth = this.width; var cHeight = this.height;
-		    this.width = cWdth * this.wdgLnk.xScale(true);
-		    this.height = cHeight * this.wdgLnk.yScale(true);
+		else {
+		    src_ = medObj.src; medObj.src = '';	//For the image reload cause
+		    medObj.setAttribute('width',''); medObj.setAttribute('height','');
+		    medObj.onload = function() {
+			var cWdth = this.width; var cHeight = this.height;
+			this.width = cWdth * this.wdgLnk.xScale(true);
+			this.height = cHeight * this.wdgLnk.yScale(true);
+		    }
+		    medObj.src = src_;
 		}
 	    }
 	    if(elWr && (toInit || this.attrsMdf["areas"])) {
@@ -849,6 +876,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	else if(this.attrs['root'] == 'FormEl' && !this.place.isModify) {
+	    //this.place.className = "FormEl";	//Move to the proper style after HTML code moving to different file.
 	    var elTp = parseInt(this.attrs['elType']);
 	    if(this.attrsMdf['elType'] || this.place.elWr != elWr)
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
@@ -1272,25 +1300,28 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
+			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; width: "+geomW+"px; ";
+			if(toInit || this.attrsMdf['name']) {
+			    spanObj.disabled = !this.attrs['name'].length;
+			    spanObj.innerHTML = this.attrs['name'];
+			    //while(spanObj.childNodes.length) spanObj.removeChild(spanObj.childNodes[0]);
+			    /*txtVal1 = '';
+			    for(var j = 0; j < this.attrs['name'].length; j++) {
+				if(this.attrs['name'].substr(j,2) == '\\n') { txtVal1 += "<br />"; j++; continue; }
+				txtVal1 += strEncode(this.attrs['name'][j]);
+			    }
+			    spanObj.innerHTML = txtVal1;*/
+			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
 			    if(!imgObj.hidden) {
 				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW,geomH)+(!elWr?"&filtr=unact":"");
-				imgObj.width = Math.min(geomW, geomH);
+				//imgObj.width = Math.min(geomW, geomH);
 				imgObj.height = Math.min(geomW, geomH);
-				imgObj.float = 'left';
+				imgObj.style.float = spanObj.disabled ? null : 'left';
 				imgObj.style.marginRight = this.attrs['name'].length ? "2px" : "0px";
 			    }
 			}
-			if(toInit || this.attrsMdf['name']) {
-			    spanObj.disabled = !this.attrs['name'].length;
-			    //while(spanObj.childNodes.length) spanObj.removeChild(spanObj.childNodes[0]);
-			    txtVal1 = '';
-			    for(var j = 0; j < this.attrs['name'].length; j++)
-				txtVal1 += this.attrs['name'].substr(j,2) != '\\n' ? strEncode(this.attrs['name'][j]) : '<br />';
-			    spanObj.innerHTML = txtVal1;
-			}
-
 			geomW -= 4; geomH -= 4;
 
 			if(elWr) {
@@ -1350,6 +1381,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.type = 'button';
 			formObj.wdgLnk = this;
 			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
+			formObj.style.padding = "0";
 			this.place.appendChild(formObj);
 			formObj.value = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
 		    }
@@ -1361,7 +1393,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
 			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
 					    'height: '+((elTp==4)?fntSz:(geomH-4))+'px; width: '+geomW+'px; '+
-					    'border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px; ';
+					    'border: 1px solid black; font: '+this.place.fontCfg+'; padding: 0; ';
 		    if(this.attrsMdf['items'] || this.attrsMdf['value']) {
 			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
 			var selVal = this.attrs['value'];
@@ -1930,11 +1962,11 @@ function makeUI( callBackRez )
 
     //Get open pages list
     // Synchronous
-    var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
+    //var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
     // Asynchronous
-    //var pgNode = null;
-    //if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
-    //else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
+    var pgNode = null;
+    if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
+    else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
     if(pgNode) {
 	modelPer = parseInt(pgNode.getAttribute("per"));
 	// Check for delete pages
@@ -1954,7 +1986,7 @@ function makeUI( callBackRez )
 		if(opPg.parent)	delete opPg.parent.pages[pgList[i_p]];
 	    }
 	    else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p])
-	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null,true); }
+	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null, true); }
 	}
 	// Process opened pages
 	pgList = new Array();
@@ -1978,7 +2010,7 @@ function makeUI( callBackRez )
     //Update some widgets
     for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
 
-    //Elapsed time get and adjust for plane update period depends from network speed
+    //Elapsed time get and adjust for plane update period depends from the network speed
     var elTm = 1e-3*((new Date()).getTime()-stTmMain.getTime());
     if(!planePer) planePer = 1e-3*modelPer;
     planePer += (Math.max(1e-3*modelPer,elTm*3)-planePer)/100;
@@ -1986,6 +2018,8 @@ function makeUI( callBackRez )
     prcTm = elTm + sleepTm;
     //console.log("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.");
     setTimeout(makeUI,sleepTm*1e3);
+    //if(mainTmId) clearTimeout(mainTmId);
+    //mainTmId = setTimeout(makeUI, 1000);
 
     //prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTmMain.getTime())));
     //setTimeout(makeUI,prcTm*1e3);
@@ -2058,4 +2092,4 @@ var masterPage = new pwDescr('',true);	//Master page create
 var stTmID = null;			//Status line timer identifier
 var stTmMain = null;			//Main cycle start time
 
-setTimeout(makeUI,1000);		//First call init
+mainTmId = setTimeout(makeUI, 100);	//First call init

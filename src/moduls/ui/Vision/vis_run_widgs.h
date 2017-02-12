@@ -103,6 +103,8 @@ namespace VISION
 	    RunPageView *findOpenPage( const string &pg );
 	    bool callPage( const string &pg_it, const string &pgGrp, const string &pgSrc );
 
+	    void toPgCache( )	{ }
+
 	    RunPageView *parent( );
 
 	    //Public attributes
@@ -110,7 +112,7 @@ namespace VISION
 
 	protected:
 	    //Protected methods
-	    void closeEvent ( QCloseEvent *event );
+	    void closeEvent( QCloseEvent *event );
 
 	private:
 	    //Private attributes

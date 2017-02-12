@@ -4,7 +4,6 @@ extern "C" {
 #endif
 
 
-
 /*#ifdef _8014W_EXPORTS
 	#define I8014WAPI __declspec(dllexport) 
 #else
@@ -24,7 +23,7 @@ typedef int (CALLBACK * PAC_CALLBACK_FUNC)();
 #define TX_NOTREADY         -8
 #define MAX_FIFO		4096
 
-static int SlotAddr[9] ={0x1,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8};
+
 short i8014W_Init(int slot);
 short i8014W_GetLibVersion(void);
 void i8014W_GetLibDate(char libDate[]);
@@ -35,28 +34,23 @@ void i8014W_ReadGainOffset(int slot,short gain,unsigned short* gainValue, short*
 short i8014W_ReadAIHex(int slot,int ch,int gain, short* hVal);
 short i8014W_ReadAI(int slot,int ch,int gain, float* fVal);
 void i8014W_ClearFIFO(int slot);
-void  i8014W_UnLockFIFO(int slot);
-void i8014W_ConfigMagicScan(int slot,int chArr[],int gainArr[],int scanChCount,unsigned int sampleRate,int scanMode,int triggerSource,int triggerState, float* realSampleRate);
+void i8014W_UnLockFIFO(int slot);
+void i8014W_ConfigMagicScan(int slot,int chArr[],int gainArr[],int scanChCount, float sampleRate,int scanMode,int triggerSource,int triggerState, float* realSampleRate);
 
 short i8014W_StartMagicScan(int slot);
 short i8014W_StopMagicScan(int slot);
+short i8014W_ReadFIFO_BlockMode(int slot, short hexData[], long readCount ,long* dataCountFromFIFO);
 short i8014W_ReadFIFO(int slot, short hexData[], short readCount,short* dataCountFromFIFO);// <=== get data from FIFO ,long* dataCnt
-void i8014W_CalibrateDataHex(int slot, int iGain,short dataFromFIFO, short* calibratedAI);
+short i8014W_ReadFIFO_InISR(int slot, short hexData[], short triggerLevel,short* dataCountFromFIFO);
+
+void i8014W_CalibrateDataHex(int slot, short iGain,short dataFromFIFO, short* calibratedAI);
 void i8014W_CalibrateData(int slot, int iGain,short dataFromFIFO, float* calibratedAI);
 
 short i8014W_InstallMagicScanISR(int slot,void (*isr)(int slot),short triggerLevel); //<=== give a callback function for interrupt
-//short i8014W_InstallMagicScanISR(int slot,PAC_CALLBACK_FUNC isr,short triggerLevel); //<=== give a callback function for interrupt
-
 short i8014W_UnInstallMagicScanISR(int slot); //<=== give a callback function for interrupt 
 void i8014W_ClearInt(int slot);
 
-
-//I8014WAPI short i8014W_ReadEEP(int slot,short eepBlock, short eepAddr);
-
-
-
-
 #ifdef __cplusplus
- }
+}
 #endif
 

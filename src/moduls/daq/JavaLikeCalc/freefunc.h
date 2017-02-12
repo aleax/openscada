@@ -30,6 +30,9 @@
 #include <tfunction.h>
 #include <tconfig.h>
 
+#define EXT_F_LIM	128
+#define EXT_F_AS_PREF	"stFunc:"
+
 using std::string;
 using std::vector;
 using std::deque;
@@ -40,25 +43,6 @@ namespace JavaLikeCalc
 
 //Bison parse function
 int yyparse( );
-
-//*************************************************
-//* UFunc: Using func list element                *
-//*************************************************
-class UFunc
-{
-    public:
-	//Methods
-	UFunc( const string &path ) : mPath(path) {
-	    if(dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at())) mFunc = SYS->nodeAt(path,0,'.');
-	}
-	const string &path( )		{ return mPath; }
-	AutoHD<TFunction> &func( )	{ return mFunc; }
-
-    private:
-	//Attributes
-	string 		mPath;
-	AutoHD<TFunction> mFunc;
-};
 
 //*************************************************
 //* Reg: Compile register                         *
@@ -78,7 +62,8 @@ class Reg
 	    Dynamic,	//Dynamic type
 	    Obj,	//Object
 	    Var,	//IO variable
-	    PrmAttr	//Parameter attribute
+	    PrmAttr,	//Parameter attribute
+	    Function	//Assigned static function
 	};
 
 	enum Code {	//Byte codes
@@ -95,6 +80,7 @@ class Reg
 	    MviFuncArg,	//[CRR]: Load the function arguments object.
 	    Ass,	//[CRRrr]: Assign from register to register.
 	    Mov,	//[CRRrr]: Move from register to register.
+	    Delete,	//[CRR]: Delete/free object into the register.
 	    OPrpSt,	//[CRRn_____]: Load string of object's properties len <n>  to register <R>.
 	    OPrpDin,	//[CRRrr]: Load register's value of object's properties to register <R>.
 	    Add, AddAss,//[CRRrrRR]: Real, string add.
@@ -148,9 +134,10 @@ class Reg
 	    FFloor,	//[CRRrr]: Function floor.
 	    FTypeOf,	//[CRRrr]: Function for get type of value.
 	    FTr,	//[CRRrr]: Function for get translation of base message.
-	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
-	    CFunc,	//[CFnRR____]: Function.
-	    CFuncObj,	//[CRRnRR____]: Object's function
+	    CProc,	//[CFnRRff____]: Procedure (RR - doesn't used). ff sets to register for for F < 0
+	    CFunc,	//[CFnRRff____]: Function. ff sets to register for for F < 0
+	    CFuncObj,	//[COOlnRR____]: Object's function for <OO> object's register, function name <l> length, arguments number <n>, result <RR>
+			//		and first same name and arguments into {__}.
 	    IFuncDef,	//[CNNnRR____]: Internal function's header definition where:
 			//		{NN} - code size, {n} - arguments number, {__} - argument's variables, {RR} - return
 	    IFunc	//[CNNnRR____]: Internal function call into the absolute position {NN} and for {n} arguments {__} and return into {RR}.
@@ -164,14 +151,16 @@ class Reg
 	    AutoHD<TVarObj> *o;	//Object for constant and local variable
 	    int		io;	//IO id for IO variable
 	    AutoHD<TVal> *pA;	//Parameter attribute
+	    AutoHD<TFunction>	*f;	//Dynamic linked external function
 	};
 
 	//Methods
-	Reg( ) : mPos(-1), mObjEl(false), mLock(false), mTp(Free) {  }
-	Reg( int ipos ) : mPos(ipos), mObjEl(false), mLock(false), mTp(Free) {  }
+	Reg( ) : mPos(-1), mObjEl(false), mLock(false), mTp(Free)		{  }
+	Reg( int ipos ) : mPos(ipos), mObjEl(false), mLock(false), mTp(Free)	{  }
+	Reg( const Reg &src ) : mPos(-1), mObjEl(false), mLock(false), mTp(Free){ operator=(src); }
 	~Reg( );
 
-	Reg &operator=( Reg &irg );
+	Reg &operator=( const Reg &irg );
 	void operator=( bool ivar )		{ setType(Bool);	el.b = ivar; }
 	void operator=( char ivar )		{ setType(Bool);	el.b = ivar; }
 	void operator=( int ivar )		{ setType(Int);		el.i = ivar; }
@@ -180,6 +169,7 @@ class Reg
 	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);		*el.o = ivar;}
 
 	string name( ) const			{ return mNm; }
+	string inFnc( ) const			{ return mInFnc; }
 	Type type( ) const			{ return mTp; }
 	Type vType( Func *fnc );
 	int pos( )				{ return mPos; }
@@ -187,10 +177,11 @@ class Reg
 	bool objEl( )				{ return mObjEl; }
 
 	void setName( const string &nm )	{ mNm = nm; }
+	void setInFnc( const string &vl )	{ mInFnc = vl; }
 	void setType( Type tp );
 	void setLock( bool vl )			{ mLock = vl; }
 	void setObjEl( )			{ mObjEl = true; }
-	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
+	void setVar( int ivar )			{ setType(Var); el.io = ivar; }
 	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.pA = ivattr; }
 
 	void free( );
@@ -200,7 +191,8 @@ class Reg
     private:
 	//Attributes
 	int	mPos;
-	string	mNm;
+	string	mNm,
+		mInFnc;		//In internal function context
 	bool	mObjEl;		//Object's element
 	bool	mLock;		//Locked register
 	Type	mTp;
@@ -255,11 +247,12 @@ class Func : public TConfig, public TFunction
 
 	//Attributes
 	Func( const string &id, const string &name = "" );
+	Func( const Func &func );
 	~Func( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	Func &operator=( Func &func );
+	Func &operator=( const Func &func );
 
 	string	name( );
 	string	descr( )		{ return cfg("DESCR").getS(); }
@@ -282,8 +275,6 @@ class Func : public TConfig, public TFunction
 
 	// External functions
 	int funcGet( const string &path );
-	UFunc *funcAt( int id )	{ return mFncs.at(id); }
-	void funcClear( );
 
 	// Internal functions
 	int inFuncGet( const string &nm );
@@ -318,9 +309,9 @@ class Func : public TConfig, public TFunction
 	void cdCycle(int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter );
 	void cdCycleObj(int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var );
 	Reg *cdBldFnc( int f_id, Reg *prm1 = NULL, Reg *prm2 = NULL );
-	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false );
+	Reg *cdExtFnc( int f_id, int p_cnt, bool proc = false, Reg *f_r = NULL );
 	Reg *cdIntFnc( int fOff, int pCnt, bool proc = false );
-	Reg *cdObjFnc( Reg *obj, int p_cnt );
+	Reg *cdObjFnc( Reg *obj, const string &fNm, int p_cnt );
 	Reg *cdProp( Reg *obj, const string &sprp, Reg *dprp = NULL );
 
 	// Properties and functions for base object's process
@@ -348,7 +339,7 @@ class Func : public TConfig, public TFunction
 	void ioDel( int pos );
 	void ioMove( int pos, int to );
 
-	Lib &owner( );
+	Lib &owner( ) const;
 
     protected:
 	//Data
@@ -363,10 +354,10 @@ class Func : public TConfig, public TFunction
 	//Methods
 	void postEnable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg & )        { modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void loadIO( );
@@ -380,17 +371,17 @@ class Func : public TConfig, public TFunction
 	int	&mMaxCalcTm;
 
 	// Parser's data
-	string		sprg, prg;	//Build prog
+	string		sprg, prg;	//Built program
 	unsigned	laPos;		//LA position
 	string		pErr;		//Parse error
 	string		mUsings,	//External functions usings namespaces
 			mInFnc;		//Current internal function namespace
-	vector<UFunc*>	mFncs;		//External functions list in action
+	vector<AutoHD<TFunction> > mFncs;//Static external functions list in action
 	map<string, int> mInFncs;	//Internal functions list in compile
 	vector<Reg*>	mRegs;		//Registers list in action
 	vector<Reg*>	mTmpRegs;	//Constant temporary list
 	deque<Reg*>	fPrmst;		//Function's parameters stack
-	Res		&parseRes;
+	ResRW		&parseRes;
 };
 
 extern Func *pF;

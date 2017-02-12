@@ -23,13 +23,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <tsys.h>
-#include <tmess.h>
-
 #include <QDesktopWidget>
 #include <QIcon>
 #include <QMessageBox>
 #include <QErrorMessage>
+
+#include <tsys.h>
+#include <tmess.h>
 
 #include "vis_devel.h"
 #include "vis_run.h"
@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.9.1"
+#define MOD_VER		"4.2.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -250,7 +250,7 @@ QMainWindow *TVision::openWindow( )
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
 	    if(rez == DlgUser::SelErr) {
-		postMess(nodePath().c_str(),_("Auth wrong!!!"));
+		postMess(nodePath().c_str(), QString(_("Authentication error for user '%1'!!!")).arg(d_usr.user()));
 		continue;
 	    }
 	    user_open = d_usr.user().toStdString();

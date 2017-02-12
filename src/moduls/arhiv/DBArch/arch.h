@@ -53,6 +53,8 @@ class ModArch: public TTipArchivator
 
 	TElem &archEl( )	{ return elArch; }
 
+	void perSYSCall( unsigned int cnt );
+
     protected:
 	//Methods
 	void load_( );

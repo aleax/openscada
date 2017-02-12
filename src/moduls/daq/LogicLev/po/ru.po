@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 16:37+0300\n"
+"POT-Creation-Date: 2017-02-09 10:46+0200\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -72,8 +72,8 @@ msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Затрачено времени: %s[%s]. "
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
@@ -104,3 +104,6 @@ msgstr "Параметры"
 
 msgid "Self to self linking error."
 msgstr "Ошибка, подключение самого к себе."
+
+#~ msgid "Spent time %s[%s]"
+#~ msgstr "Затрачено времени: %s[%s]. "

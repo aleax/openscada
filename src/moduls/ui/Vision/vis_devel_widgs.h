@@ -80,7 +80,7 @@ class ModInspAttr: public QAbstractTableModel
 
 		string	id( )		{ return idItem; }
 		string	name( );
-		Type	type( )		{ return typeItem; }
+		Type	type( ) const	{ return typeItem; }
 		bool	edited( )	{ return edit_access; }
 		int	flag( )		{ return flag_item; }
 		bool	modify( )	{ return mModify; }
@@ -219,7 +219,7 @@ class InspAttrDock: public QDockWidget
 	InspAttrDock( VisDevelop * parent );
 	~InspAttrDock( );
 
-	VisDevelop *owner( );
+	VisDevelop *owner( ) const;
 
 	bool hasFocus( );
 
@@ -299,7 +299,7 @@ class InspLnkDock: public QDockWidget
 	InspLnkDock( VisDevelop * parent );
 	~InspLnkDock( );
 
-	VisDevelop *owner( );
+	VisDevelop *owner( ) const;
 
     public slots:
 	void setWdg( const string &iwdg );
@@ -323,7 +323,7 @@ class WdgTree: public QDockWidget
 	WdgTree( VisDevelop *parent = 0 );
 	~WdgTree( );
 
-	VisDevelop *owner( );
+	VisDevelop *owner( ) const;
 
 	bool hasFocus( );
 
@@ -363,7 +363,7 @@ class ProjTree: public QDockWidget
 
 	bool hasFocus( );
 
-	VisDevelop *owner( );
+	VisDevelop *owner( ) const;
 
     signals:
 	void selectItem( const string &idwdg, bool force = false );
@@ -400,7 +400,7 @@ class LineEditProp : public QWidget
 	//Methods
 	LineEditProp( QWidget *parent, DType tp = Font, bool m_toClose = true );
 
-	DType type( )	{ return m_tp; }
+	DType type( ) const	{ return m_tp; }
 	QString value( );
 
 	void setType( DType tp )	{ m_tp = tp; }

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,13 +36,13 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.3"
+#define MOD_VER		"0.6.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
 //*************************************************
 
-ModBFN::TTpContr *ModBFN::mod;  //Pointer for direct access to module
+ModBFN::TTpContr *ModBFN::mod;  //Pointer for direct access to the module
 
 extern "C"
 {
@@ -81,7 +81,7 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //Controler's bd structure
-    //fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
+    //fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
@@ -216,18 +216,17 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSymbDB(opt->text());
     }
     else if(a_path == "/symbs/codes") {
+	MtxAlloc res(dataRes(), true);
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/symbs/codes/id","");
 	    XMLNode *n_text	= ctrMkNode("list",opt,-1,"/symbs/codes/text","");
 
-	    MtxAlloc res(dataRes(), true);
 	    for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++) {
 		if(n_id)	n_id->childAdd("el")->setText(u2s(is->first));
 		if(n_text)	n_text->childAdd("el")->setText(is->second);
 	    }
 	    return;
 	}
-	ResAlloc res(nodeRes(), true);
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    if(!mSymbCode.size()) mSymbCode[1] = _("New symbol for code");
 	    else mSymbCode[mSymbCode.rbegin()->first+1] = _("New symbol for code");
@@ -244,12 +243,12 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	modif();
     }
     else if(a_path == "/symbs/alrms") {
+	MtxAlloc res(dataRes(), true);
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/symbs/alrms/id","");
 	    XMLNode *n_code	= ctrMkNode("list",opt,-1,"/symbs/alrms/code","");
 	    XMLNode *n_text	= ctrMkNode("list",opt,-1,"/symbs/alrms/text","");
 
-	    MtxAlloc res(dataRes(), true);
 	    for(map<unsigned,AlrmSymb>::iterator is = mSymbAlrm.begin(); is != mSymbAlrm.end(); is++) {
 		if(n_id)	n_id->childAdd("el")->setText(u2s(is->first));
 		if(n_code)	n_code->childAdd("el")->setText(u2s(is->second.code));
@@ -257,7 +256,6 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	    }
 	    return;
 	}
-	ResAlloc res(nodeRes(), true);
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    if(!mSymbAlrm.size()) mSymbAlrm[0] = AlrmSymb(_("New symbol for alarm"),0);
 	    else mSymbAlrm[mSymbAlrm.rbegin()->first+1] = AlrmSymb(_("New symbol for alarm"),0);
@@ -304,10 +302,10 @@ string TMdContr::getStatus( )
 	//Display processing
 	if(acq_st) rez += TSYS::strMess(_("Call now. "));
 	//Display schedule
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	//Display spent time
-	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),tm2s(tm_gath).c_str());
+	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tm_gath).c_str());
     }
 
     return rez;
@@ -391,7 +389,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear errors and set EVal
@@ -587,17 +585,19 @@ void *TMdContr::Task( void *icntr )
 	//Generic alarm generate
 	if(tErr.size() && cntr.alSt <= 0) {
 	    cntr.alSt = 1;
-	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),TRegExp(":","g").replace(tErr,"=").c_str()));
+	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
+						TRegExp(":","g").replace(tErr,"=").c_str()));
 	}
 	else if(!tErr.size() && cntr.alSt != 0) {
 	    cntr.alSt = 0;
-	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
+			    TMess::Info);
 	}
 	cntr.acq_err.setVal(tErr);
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;
 	cntr.acq_st = false;
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     cntr.prc_st = false;
@@ -673,7 +673,7 @@ void TMdPrm::postEnable(int flag)
     if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::setEval( )
 {
