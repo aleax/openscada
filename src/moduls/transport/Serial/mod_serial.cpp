@@ -22,7 +22,11 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <linux/serial.h>
+
+#if HAVE_LINUX_I2C_DEV_H
 #include <linux/i2c-dev.h>
+#endif
+
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>

@@ -1,3 +1,7 @@
+2016-02-13 Roman 0.8.17
+- Transport.Serial: Checking to present the header file linux/i2c-dev.h added to build on Linux distributives like SuSE.
+
+
 2016-02-12 Roman 0.8.17
 - API:
     !!!!:Changes:
