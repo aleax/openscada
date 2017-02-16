@@ -1,7 +1,16 @@
+2017-02-16 Roman (stable)
+- The ChangeLog significant cleared next.
+- FIX:Protocol.OPC_UA{*.libOPC_UA}: The resource "mtxData" added to object Server and used for the security channels container management.
+- Special.FLibSYS: The static function str2int() expanded for 64 bits.
+- Transport.Serial: Checking to present the header file linux/i2c-dev.h added to build on Linux distributives like SuSE.
+- FIX:UI.WebCfgD: List units expanded for commands for empty list.
+    Self dialogs expanded by the main space lock and a box shadow appended to them.
+
+
 2017-02-11 Roman (stable)
 - DB.LibsDB.OscadaLibs: DevLib.{1W_DS9097,W_DS9097U}: Expanded by configuration property "tryEVAL" to manage spuriously connections lost.
 - The ChangeLog significant cleared.
-- SYS.TFunction: Spare attribute "mDimens" is removed.
+- SYS.TFunction: Spare attribute "mDimens" removed.
 - FIX:Archive.DBArch: The requested values area set to fill by EVAL before the real data reading to set holes by EVAL.
     Direct requesting for values criterion set for the period of requesting data to archive's one bigger at 10 times.
 - DB.=Tmpl=: The functions getVal() and setVal() set to the unified view.
@@ -44,8 +53,8 @@
     The function pgCreator() primarily implemented as an user API function of HTTP module's object for allow its using
 	into WEB-submodules for self but single-style service pages.
     The main page's template splited from the generic template for allow absolutely custom main pages.
-    !!!: External calls to the WEB submodules are expanded by functions HTTP_GET(), HTTP_POST() with an argument TProtocolIn *iprt,
-	but the old calls HttpGet(), HttpPost() also check and support.
+    !!!: External calls to the WEB submodules expanded by functions HTTP_GET(), HTTP_POST() with an argument TProtocolIn *iprt,
+	but the old calls HttpGet(), HttpPost() also continued to check and support.
     Current folder force added to the template's resources checking.
 - !!!!:UI.{WebUser,WebVision}: Expanded to using the unified service interface from Protocol.HTTP by pgCreator().
 - !:UI.WebUser: Semantics of the page's function expanded by two objects' arguments "This object" and "Protocol's object".
@@ -95,7 +104,7 @@
 - UI.Vision: Unloaded mimes' extension sets to stored with the resource before taken from the mime type.
 - !!!!:FIX:UI.WebVision: adapted to asynchronous calls for all regular updatings by servGet() and makeEl() adapting to it.
     For primitive "Text" set "line-height" for prevent upper font's padding.
-    View "Button" of primitive "FormEl": fixed for next line processing, fixed for true text and image represent 
+    View "Button" of primitive "FormEl": fixed for next line processing, fixed for true text and image represent.
     Generic views of primitive FormEl set for padding to "0".
     SVG images show fixed by correct mime processing into UI.VCAEngine and TUIS::mimeGet() using.
 
@@ -154,7 +163,7 @@
 	propogate it for all alarm types.
     Notifications dispatcher is pevented from early starting at "f_start".
 - DAQ: Program translation sign of templates set to disabled by default.
-- !!!!:DAQ.JavaLikeCalc: Dynamic linking to external functions support is added in way: function {nm} = "{addr}"; {nm}();.
+- !!!!:DAQ.JavaLikeCalc: Support of the dynamic linking to external functions added in way: function {nm} = "{addr}"; {nm}();.
     External functions link and call optimized at all.
 - FIX:DAQ.LogicLev: User attributes removing prevented at the parameter's object enable, for passive ones.
 
@@ -170,7 +179,7 @@
     DevLib.UPS: expanded for values in EVAL process.
     DevLib.{1W_DS9097,W_DS9097U}: Expanded by support 1Wire chips: DS2408, DS2450, DS2438.
     UserProtocol is appended by a memory chip AT24CXX access procedure.
-- !!:DAQ.DAQGate: Adapted to store parameters' assignment to stations to allow for early restoring without need to sync.
+- !!:DAQ.DAQGate: Adapted to store parameters' assignment for stations to allow its for early restoring without need to sync.
 - FIX:DAQ.JavaLikeCalc: workRegControl() moved under function resource's locking.
 
 
@@ -182,7 +191,7 @@
 
 
 2016-11-15 Roman
-- !!:DAQ.DAQGate: Control for automatic removing parameters and attributes is added by an option.
+- !!:DAQ.DAQGate: Control for automatic removing parameters and attributes added by an option.
     Spent time expanded by the maximum value.
 - FIX:UI.VCAEngine: Widgets list into the widget's parent field expanded and fixed for list all items of project tree to any depth.
 - UI.Vision: Expanded for authentication message error detailing.
@@ -251,7 +260,7 @@
     !!: Adapted and some fixed to build by GCC v6 with C++11 by default.
 - DAQ.{Templates,JavaLikeCalc},Protocol.ModBus,UI.VCAEngine: Items deletion procedure termination at DB error added.
 - FIX:Special.FLibSYS: FFT buffers "free" using fix, instead "delete".
-- !:Transport.SSL: Expanded by the methods TLSv1.1, TLSv1.2, DTLSv1.
+- !:Transport.SSL: Expanded by the direct methods TLSv1.1, TLSv1.2, DTLSv1.
 - UI.QTStarter: Adapted to Qt5 specific method QTranslator::translate().
 - FIX:UI.VCAEngine: Virtual function PrWidget::setEnable() fixed for the second argument.
 
@@ -289,7 +298,7 @@
 
 2016-10-11 Roman
 - DB.LibsDB.OscadaLibs: DevLib.IEC60870: Expanded for single items description.
-- FIX:SYS: LibZ functions were rewrote for some unification and the used memory optimization.
+- !!:FIX:SYS: LibZ functions were rewrote for some unification and the used memory optimization.
 - FIX:DAQ.{BlockCalc,LogicLev}: Input links processing moved out of the attributes modifications detection into calc().
 
 
@@ -325,9 +334,10 @@
 - DB.LibsDB.vcaBase: Main.{grpGraph,grpGraph10}: Set to the trend's control panel open on it start.
 - FIX:DAQ,Archive: The redundant request procedure fix for prevent the object stop at scaning requests, by previous host.
 - FIX:Archive: getVal() fix for request to the current value but the buffer end() some lesser to it.
-- FIX:Archive.{*,FSArch,DBArch}: Exceptions into archivatorAttach() at the archivator's object stopping are prevented for allow the archive early start.
-    Archive.{FSArch,DBArch}: The modules adapted for early archivators init and archive's meta set from the physical archives.
-- !!!!:FIX:Archive.DBArch: Reading of value archives set optimal to the request time, up to ten times, through using "MARK" key and the seek request.
+- FIX:Archive.{*,FSArch,DBArch}: Exceptions into archivatorAttach() at the archivator's object stopping are prevented for allow the archive
+    early start. Archive.{FSArch,DBArch}: The modules adapted for early archivators init and archive's meta set from the physical archives.
+- !!!!:FIX:Archive.DBArch: Reading of the value archives set optimal for the request time, up to ten times,
+	through using the "MARK" key and the seek request.
     FIX: The end of pushing accumulated values set to minimum from the data block's end and the group end.
     Adapted to direct writing beyond the main accumulation process with limits and meta update.
     Adapted to redundancy.
@@ -335,7 +345,7 @@
 
 
 2016-09-16 Roman
-- !!:FIX:Archive.{*,FSArch}: Spare writings direct to the archivators are prevented for TVArchive::setVals().
+- !!:FIX:Archive.{*,FSArch}: Spare writings direct to the archivators prevented for TVArchive::setVals().
     !!:FIX:Last read buffer information is added and the property using fix.
 - DAQ: The value archive's part set firstly readed for redundancy processing.
 - FIX:Archive.DBArch: Set values processing mostly fixed to return the correct last time.
@@ -397,7 +407,7 @@
     FIX: User attribute ID prevented to set for empty.
     Visualizer specific atributes activation expanded for only present atributes activation, no creation.
 - !!:UI.Vision: Visualizer specific attributes are alowed for the primitives and an attribute "sclWin" added and used
-    to primitive "Diagram" for trends view in scale by window drawn by mouse.
+    for primitive "Diagram" for trends view in scale by window drawn by mouse.
 
 
 2016-08-25 fido_max
@@ -406,7 +416,7 @@
 
 
 2016-08-16 Roman
-- UI.Vision: To primitive "Diagram" of mode "Trend" the sliding by mouse is added in the time axis.
+- UI.Vision: For primitive "Diagram" of the mode "Trend" the sliding by mouse is added in the time axis.
 
 
 2016-08-15 Roman
@@ -462,10 +472,10 @@
 
 
 2016-07-23 Roman
-- !!!!:SYS: The system option clockRT is added for select the tasks planning clock as CLOCK_REALTIME but else it's CLOCK_MONOTONIC (default now).
+- !!!!:SYS: The system option "clockRT" is added for select the tasks planning clock as CLOCK_REALTIME but else it's CLOCK_MONOTONIC (default now).
     time2str() and tm2s() of the astronomic time were renamed to atime2str() and atm2s().
     time2str() and tm2s() of the relative time were moved from microseconds to seconds origin.
-    taskSleep() in the cron argument is moved to pure (string) representing for the origin point hold for
+    taskSleep() in the "cron" argument is moved to pure (string) representing for the origin point hold for
 	the astronomic clock changing detect and cron's target correction then and also for the consumption meassuring by the taskUtilizTm().
 - DAQ.{BlockCalc,DCON,LogicLev,Siemens}: The deprecated property "PERIOD" processing fix to allow it's replace next by
     the propery "SCHEDULE" forcing to rewrite and "PERIOD" to clean.
@@ -489,9 +499,9 @@
 2016-07-18 Roman
 - !!!:FIX:DB: DBs loading interruption is prevented after loading with the ready configuration and an error here.
 - !!:FIX:DAQ.BlockCalc: For IO presenting check there was used an uninterrupted ioId() of the function object.
-- !!:Transport.Serial: Output transport expanded for I2C check and use.
-- !!:Transport.Sockets: Output transport's reading reply after false FD_ISSET is expanded by socket's SO_ERROR reading and
-    the wait interruption on any socket error. Allow early broken pipe detection and like ones for sockets.
+- !!:Transport.Serial: Output transport expanded to check and use I2C.
+- !!:Transport.Sockets: Reading reply of the output transport after FD_ISSET is false expanded by reading socket's SO_ERROR and
+    waiting interruption on any socket error. Early broken pipe detection and like ones for sockets allowed.
 
 
 2016-07-17 Roman

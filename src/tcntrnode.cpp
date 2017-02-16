@@ -832,18 +832,21 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    //Check displaing node
-    int itbr = 0;
-    for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff = i_off)
-	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1))) {
+    //Check to display
+    bool itbr = false;
+    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff = iOff)
+	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&iOff1))) {
 	    if(!reqt1.empty()) return NULL;
-	    itbr = 1;
+	    itbr = true;
 	    break;
 	}
 
-    //Check permission
+    //Check for permission
     char n_acs = SYS->security().at().access(nd->attr("user"), SEC_RD|SEC_WR|SEC_XT, user, grp, perm);
-    if(!(n_acs&SEC_RD)) return NULL;
+    if(!(n_acs&SEC_RD)) {
+	if(nd->name() == "info") ctrRemoveNode(nd, path);	//To prevent the node's presence with changed here permission to RO.
+	return NULL;
+    }
     if(itbr)	return nd;
 
     XMLNode *obj = nd;
@@ -915,8 +918,8 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff=i_off)
-	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)))
+    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff=iOff)
+	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&iOff1)))
 	    return false;
 
     XMLNode *obj = nd;

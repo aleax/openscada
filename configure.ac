@@ -283,7 +283,9 @@ AX_MOD_Transport_EN(Sockets,[disable or enable[=incl] build module Transport.Soc
 AX_MOD_Transport_EN(SSL,[disable or enable[=incl] build module Transport.SSL],disable,incl,[
     AX_LIB_OpenSSL()
 ])
-AX_MOD_Transport_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl)
+AX_MOD_Transport_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl,[
+    AC_CHECK_HEADERS([linux/i2c-dev.h],[ ],[AC_MSG_NOTICE(linux/i2c-dev.h header not found. Using is disabled!)])
+])
 
 # Transport protocol modules
 AX_MOD_TrProt_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl)

@@ -632,24 +632,23 @@ function selectChildRecArea( node, aPath, cBlk )
 		val.srcNode = t_s;
 		val.itPath = selPath+'/'+brPath;
 		val.onmouseover = function() { setStatus(this.itPath,10000); }
-		val.onclick = function(e)
-		{
-		    if(!e) e = window.event;
+		val.onclick = function(e) {
+		    e = e ? e : window.event;
 		    var popUpMenu = getPopup();
 		    var optEl = '';
-		    if(this.srcNode.getAttribute('tp') == 'br' && this.selectedIndex >= 0)
+		    selOK = (this.selectedIndex >= 0 && this.options[this.selectedIndex].lsId);
+		    if(this.srcNode.getAttribute('tp') == 'br' && selOK)
 			optEl += "<option posId='go'>###Go###</option><option disabled='true'>------------</option>";
-		    if((parseInt(this.srcNode.getAttribute('acs'))&SEC_WR) && this.srcNode.getAttribute('s_com'))
-		    {
+		    if((parseInt(this.srcNode.getAttribute('acs'))&SEC_WR) && this.srcNode.getAttribute('s_com')) {
 			if(this.srcNode.getAttribute('s_com').search('add') != -1)
 			    optEl += "<option posId='add'>###Add###</option>";
-			if(this.srcNode.getAttribute('s_com').search('ins') != -1 && this.selectedIndex >= 0)
+			if(this.srcNode.getAttribute('s_com').search('ins') != -1 && selOK)
 			    optEl += "<option posId='ins'>###Insert###</option>";
-			if(this.srcNode.getAttribute('s_com').search('edit') != -1 && this.selectedIndex >= 0)
+			if(this.srcNode.getAttribute('s_com').search('edit') != -1 && selOK)
 			    optEl += "<option posId='edit'>###Edit###</option>";
-			if(this.srcNode.getAttribute('s_com').search('del') != -1 && this.selectedIndex >= 0)
+			if(this.srcNode.getAttribute('s_com').search('del') != -1 && selOK)
 			    optEl += "<option posId='del'>###Delete###</option>";
-			if(this.srcNode.getAttribute('s_com').search('move') != -1 && this.selectedIndex >= 0)
+			if(this.srcNode.getAttribute('s_com').search('move') != -1 && selOK)
 			    optEl += "<option disabled='true'>------------</option><option posId='up'>###Item up###</option><option posId='down'>###Item down###</option>";
 		    }
 		    popUpMenu.childNodes[0].innerHTML = optEl;
@@ -665,8 +664,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset)+'px; top: '+(e.clientY+window.pageYOffset)+'px;';
 			popUpMenu.childNodes[0].focus();
 			popUpMenu.childNodes[0].selectedIndex = -1;
-			popUpMenu.childNodes[0].onclick = function()
-			{
+			popUpMenu.childNodes[0].onclick = function() {
 			    this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 			    if(this.selectedIndex < 0 || !this.options[this.selectedIndex].getAttribute('posId')) return;
 			    var idm = parseInt(this.parentNode.srcNode.getAttribute('idm'));
@@ -689,8 +687,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				actOkFld.lsText = this.parentNode.lsText;
 				if(posId == 'add') {
 				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Add new element.###');
-				    actOkFld.onclick = function()
-				    {
+				    actOkFld.onclick = function() {
 					var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
@@ -704,8 +701,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				}
 				else if(posId == 'ins') {
 				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Insert new element.###');
-				    actOkFld.onclick = function()
-				    {
+				    actOkFld.onclick = function() {
 					var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
@@ -722,8 +718,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Rename element.###');
 				    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = idm ? this.parentNode.lsId : this.parentNode.lsText;
 				    if(idm) dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value = this.parentNode.lsText;
-				    actOkFld.onclick = function()
-				    {
+				    actOkFld.onclick = function() {
 					var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
@@ -779,7 +774,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		}
 	    while(val.childNodes.length < 4) {
 		var opt = document.createElement('option');
-		opt.disabled = true;
+		//opt.disabled = true;
 		val.appendChild(opt);
 	    }
 	    val.size = Math.min(10,Math.max(4,val.childNodes.length));
@@ -2177,24 +2172,22 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 {
     var dlgWin = document.body.dlgWin;
     if(!dlgWin) {
-	dlgWin = document.createElement('table');
+	dlgWin = document.createElement('div');
 	document.body.dlgWin = dlgWin;
 	dlgWin.close = function( ) { document.body.removeChild(this); this.isLoad = null; }
-	dlgWin.setAttribute('cellpadding','2');
-	dlgWin.setAttribute('cellspacing','0');
-	dlgWin.setAttribute('border','0');
-	dlgWin.setAttribute('style','position: absolute; font-size: 12px; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; '+
-	    'left: '+((window.innerWidth-400-5)/2)+'px; top: '+((this.window.innerHeight-200-18)/2)+'px; ');
     }
     if(dlgWin.isLoad) document.body.removeChild(this);
 
     dlgWin.innerHTML =
+	"<table cellpadding='2' cellspacing='0' border='0' "+
+	    "style='position: absolute; box-shadow: 10px 10px 5px grey; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; "+
+		"left: "+((window.innerWidth-400-5)/2)+"px; top: "+((this.window.innerHeight-200-18)/2)+"px;'>\n"+
 	"<tr style='cursor: move;' onmousedown='this.clX = event.clientX; this.clY = event.clientY; return false;' \n"+
 	"   onmouseup='this.clX = this.clY = null; return false;' \n"+
 	"   onmouseout='this.clX = this.clY = null; return false;' \n"+
 	"   onmousemove='if(this.clX != null) { "+
-	"     document.body.dlgWin.style.left = (parseInt(document.body.dlgWin.style.left)+event.clientX-this.clX)+\"px\"; "+
-	"     document.body.dlgWin.style.top  = (parseInt(document.body.dlgWin.style.top)+event.clientY-this.clY)+\"px\"; "+
+	"     this.offsetParent.style.left = (parseInt(this.offsetParent.style.left)+event.clientX-this.clX)+\"px\"; "+
+	"     this.offsetParent.style.top  = (parseInt(this.offsetParent.style.top)+event.clientY-this.clY)+\"px\"; "+
 	"     this.clX = event.clientX; this.clY = event.clientY; }'>"+
 	" <td id='wDlgHeader' style='padding-left: 5px; max-width: "+(400-10)+"px; width: "+(400-10)+"px; overflow: hidden; white-space: nowrap;'>###Node id and/or name select###</td>\n"+
 	" <td style='color: red; cursor: pointer; text-align: right;' onclick='document.body.dlgWin.close();'>X</td>\n"+
@@ -2213,7 +2206,8 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 	"   </table>\n"+
 	"  </form>\n"+
 	" </center>\n"+
-	"</td></tr>";
+	"</td></tr></table>"+
+	"<div style='position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0.1; background-color: #8F8F8F;'/>\n";
     document.body.appendChild(dlgWin);
     dlgWin.isLoad = true;
 

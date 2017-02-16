@@ -22,7 +22,11 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <linux/serial.h>
+
+#if HAVE_LINUX_I2C_DEV_H
 #include <linux/i2c-dev.h>
+#endif
+
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
@@ -44,7 +48,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.6.2"
+#define MOD_VER		"1.6.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
