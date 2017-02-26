@@ -119,6 +119,16 @@ function nodeTextByTagId( node, tag, avl )
 }
 
 /***************************************************
+ * i2s - integer to string                         *
+ ***************************************************/
+function i2s( vl, base, len )
+{
+    rez = vl.toString(base);
+    if(len) while(rez.length < len) rez = "0"+rez;
+    return rez;
+}
+
+/***************************************************
  * posGetX - Get absolute position                 *
  ***************************************************/
 function posGetX( obj, noWScrl )
@@ -229,7 +239,7 @@ function servGet( adr, prm )
     }
 
     var req = getXmlHttp();
-    req.open('GET',encodeURI('/'+MOD_ID+adr+'?'+prm),false);
+    req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm),false);
     //console.log("TEST 10: "+encodeURI('/'+MOD_ID+adr+'?'+prm));
 //    req.setRequestHeader('Content-Type','text/xml; charset=utf-8');
     try {
@@ -444,11 +454,11 @@ function pageDisplay( path )
     if(!path) return;
 
     //Chek Up
-    actEnable('actUp',path.lastIndexOf('/') != -1 && path.lastIndexOf('/') != 0);
+    actEnable('actUp', path.lastIndexOf('/') != -1 && path.lastIndexOf('/') != 0);
 
     //Check Prev and Next
-    actEnable('actPrevious',ndPrev.length);
-    actEnable('actNext',ndNext.length);
+    actEnable('actPrevious', ndPrev.length);
+    actEnable('actNext', ndNext.length);
 
     if(path != pgInfo.getAttribute('path')) {
 	// Stop refresh
@@ -459,9 +469,9 @@ function pageDisplay( path )
 	if(selPath.length && document.getElementById(selPath)) document.getElementById(selPath).className = 'select';
 	setNodeText(document.getElementById('selPath'),selPath);
 
-	pgInfo = servGet(selPath,'com=info');
+	pgInfo = servGet(selPath, 'com=info');
 	if(parseInt(pgInfo.getAttribute('rez')) != 0) { alert(nodeText(pgInfo)); return; }
-	pgInfo.setAttribute('path',selPath);
+	pgInfo.setAttribute('path', selPath);
 	root = pgInfo.childNodes[0];
     }
     else {
@@ -472,40 +482,44 @@ function pageDisplay( path )
 	{ pgInfo = iTree; pgInfo.setAttribute('path',selPath); root = pgInfo.childNodes[0]; }
     }
 
+    actEnable('actManual', root.getAttribute("doc"));
+    if(root.getAttribute("doc"))
+	actManual.setAttribute("href", nodeText(servGet("/doc/"+root.getAttribute("doc").split("|")[1])));
+
     //Complex request form and it result use
     genReqs = crDoc();
     genReqs.appendChild(genReqs.createElement('CntrReqs'));
-    genReqs.childNodes[0].setAttribute('path',selPath);
-    genReqs.childNodes[0].setAttribute('fillMode','1');
+    genReqs.childNodes[0].setAttribute('path', selPath);
+    genReqs.childNodes[0].setAttribute('fillMode', '1');
     for(var genReqPrc = 0; genReqPrc < 2; genReqPrc++) {
-	selectChildRecArea(root,'/',null);
+	selectChildRecArea(root, '/', null);
 
-	//Load and Save allow check
-	var reqModif = servGet('/%2fobj','com=modify');
-	actEnable('actLoad',parseInt(nodeText(reqModif)));
-	actEnable('actSave',parseInt(nodeText(reqModif)));
+	//Load and Save checking to allow
+	var reqModif = servGet('/%2fobj', 'com=modify');
+	actEnable('actLoad', parseInt(nodeText(reqModif)));
+	actEnable('actSave', parseInt(nodeText(reqModif)));
 
-	//Send prepared generic request
+	//Send for the prepared generic request
 	if(genReqPrc == 0) {
-	    genReqs.childNodes[0].setAttribute('fillMode','0');
+	    genReqs.childNodes[0].setAttribute('fillMode', '0');
 	    genReqs = servReq(genReqs);
 	}
     }
     genReqs = null;
 
     //The add and the delete access allow check
-    actEnable('actAddIt',false);
-    for(var i_ch = 0; i_ch < root.childNodes.length; i_ch++)
-	if(root.childNodes[i_ch].getAttribute('id') == 'br') {
-	    for(var i_g = 0; i_g < root.childNodes[i_ch].childNodes.length; i_g++)
-		if(parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEC_WR)
+    actEnable('actAddIt', false);
+    for(var iCh = 0; iCh < root.childNodes.length; iCh++)
+	if(root.childNodes[iCh].getAttribute('id') == 'br') {
+	    for(var i_g = 0; i_g < root.childNodes[iCh].childNodes.length; i_g++)
+		if(parseInt(root.childNodes[iCh].childNodes[i_g].getAttribute('acs'))&SEC_WR)
 		{ actEnable('actAddIt',true); break; }
 	break;
     }
     actEnable('actDelIt',parseInt(root.getAttribute('acs'))&SEC_WR)
 
     //Edit tools update
-    editToolUpdate( );
+    editToolUpdate();
 }
 
 /***************************************************
@@ -513,20 +527,20 @@ function pageDisplay( path )
  ***************************************************/
 function editToolUpdate( )
 {
-    actEnable('actCut',(selPath.length&&parseInt(root.getAttribute('acs'))&SEC_WR));
-    actEnable('actCopy',selPath.length);
-    actEnable('actPaste',false);
+    actEnable('actCut', (selPath.length && parseInt(root.getAttribute('acs'))&SEC_WR));
+    actEnable('actCopy', selPath.length);
+    actEnable('actPaste', false);
 
     //Src and destination elements calc
-    if(copyBuf.length <= 1 || copyBuf.substr(1) == selPath || pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)) return;
+    if(copyBuf.length <= 1 || /*copyBuf.substr(1) == selPath ||*/ pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)) return;
     var s_elp; var s_el; var t_el;
     pathLev.off = 0;
     while((t_el=pathLev(copyBuf.substr(1),0,true)).length) { s_elp += ('/'+s_el); s_el = t_el; }
 
-    for(var i_ch = 0; i_ch < root.childNodes.length; i_ch++)
-	if(root.childNodes[i_ch].getAttribute('id') == 'br') {
-	    for(var i_g = 0; i_g < root.childNodes[i_ch].childNodes.length; i_g++)
-		if(parseInt(root.childNodes[i_ch].childNodes[i_g].getAttribute('acs'))&SEC_WR)
+    for(var iCh = 0; iCh < root.childNodes.length; iCh++)
+	if(root.childNodes[iCh].getAttribute('id') == 'br') {
+	    for(var iG = 0; iG < root.childNodes[iCh].childNodes.length; iG++)
+		if(parseInt(root.childNodes[iCh].childNodes[iG].getAttribute('acs'))&SEC_WR)
 		{ actEnable('actPaste',true); break; }
 	    break;
 	}
@@ -636,7 +650,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    e = e ? e : window.event;
 		    var popUpMenu = getPopup();
 		    var optEl = '';
-		    selOK = (this.selectedIndex >= 0 && this.options[this.selectedIndex].lsId);
+		    selOK = (this.selectedIndex >= 0 && this.options[this.selectedIndex].label);
 		    if(this.srcNode.getAttribute('tp') == 'br' && selOK)
 			optEl += "<option posId='go'>###Go###</option><option disabled='true'>------------</option>";
 		    if((parseInt(this.srcNode.getAttribute('acs'))&SEC_WR) && this.srcNode.getAttribute('s_com')) {
@@ -833,7 +847,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		lab = document.createElement('span'); lab.className = 'label';
 		dBlk.appendChild(lab);
 		dBlk.appendChild(document.createElement('div')); dBlk.childNodes[1].className = 'table';
-		dBlk.childNodes[1].style.width = (document.getElementById('pgCont').clientWidth-20)+'px';
+		dBlk.childNodes[1].style.width = (document.getElementById('pgCont').clientWidth-40)+'px';
 		table = document.createElement('table'); table.className = 'elem'; table.cellPadding = 2; table.cellSpacing = 0;
 		table.itPath = selPath+'/'+brPath;
 		table.onmouseover = function() { setStatus(this.itPath,10000); }
@@ -861,8 +875,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		dBlk.childNodes[1].appendChild(table);
 		cBlk.appendChild(dBlk);
 
-		table.setElements = function()
-		{
+		table.setElements = function( ) {
 		    for(var i_col = 0; i_col < this.srcNode.childNodes.length; i_col++) {
 			var prcCol = this.srcNode.childNodes[i_col];
 			setNodeText(this.childNodes[0].childNodes[i_col+1],prcCol.getAttribute('dscr'));
@@ -905,8 +918,8 @@ function selectChildRecArea( node, aPath, cBlk )
 			    }
 			    else if(prcCol.getAttribute('tp') == 'time') {
 				var dt = new Date(parseInt(cval)*1000);
-				setNodeText(tblCell,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
-				    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
+				setNodeText(tblCell, i2s(dt.getDate(),10,2)+'.'+i2s(dt.getMonth()+1,10,2)+'.'+i2s(dt.getFullYear(),10,4)+
+				    ' '+i2s(dt.getHours(),10,2)+':'+i2s(dt.getMinutes(),10,2)+':'+i2s(dt.getSeconds(),10,2));
 			    }
 			    else {
 				if(prcCol.getAttribute('tp') == 'hex') cval = '0x'+parseInt(cval).toString(16);
@@ -923,14 +936,14 @@ function selectChildRecArea( node, aPath, cBlk )
 	    else { table = t_s.addr_tbl; lab = t_s.addr_lab; }
 
 	    //  Fill table
-	    if(lab) setNodeText(lab,t_s.getAttribute('dscr')+':');
+	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
 	    if(table) {
 		table.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 
 		var dataReq = servGet(brPath,'com=get');
-		if(dataReq && parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); continue; }
+		if(dataReq && parseInt(dataReq.getAttribute('rez')) != 0) { alert(nodeText(dataReq)); continue; }
 
-		//   Copy values to info tree
+		//   Copy values to the info tree
 		for(var i_cl = 0; dataReq && i_cl < dataReq.childNodes.length; i_cl++) {
 		    var i_cli;
 		    for(i_cli = 0; i_cli < t_s.childNodes.length; i_cli++)
@@ -944,7 +957,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    while(t_s.childNodes[i_cli].lastChild) t_s.childNodes[i_cli].removeChild(t_s.childNodes[i_cli].lastChild);
 		    for(var i_rw = 0; i_rw < dataReq.childNodes[i_cl].childNodes.length; i_rw++) {
 			var el = t_s.ownerDocument.createElement(dataReq.childNodes[i_cl].childNodes[i_rw].nodeName);
-			setNodeText(el,nodeText(dataReq.childNodes[i_cl].childNodes[i_rw]))
+			setNodeText(el, nodeText(dataReq.childNodes[i_cl].childNodes[i_rw]))
 			t_s.childNodes[i_cli].appendChild(el);
 		    }
 		}
@@ -967,8 +980,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			    if(wr && t_s.getAttribute('s_com')) {
 				cCell.style.cursor = 'pointer';
 				cCell.srcNode = t_s;
-				cCell.onclick = function(e)
-				{
+				cCell.onclick = function(e) {
 				    var rowP = parseInt(nodeText(this));
 				    if(!e) e = window.event;
 				    var popUpMenu = getPopup();
@@ -991,8 +1003,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset)+'px; top: '+(e.clientY+window.pageYOffset)+'px;';
 					popUpMenu.childNodes[0].focus();
 					popUpMenu.childNodes[0].selectedIndex = -1;
-					popUpMenu.childNodes[0].onclick = function( )
-					{
+					popUpMenu.childNodes[0].onclick = function( ) {
 					    this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 					    if(this.selectedIndex < 0 || !this.options[this.selectedIndex].getAttribute('posId')) return;
 					    var posId = this.options[this.selectedIndex].getAttribute('posId');
@@ -1032,8 +1043,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				return true;
 			    }
 			    if(i_rw && wr && parseInt(t_s.childNodes[table.childNodes[i_rw].childNodes.length-1].getAttribute('acs'))&SEC_WR)
-			    cCell.ondblclick = function( )
-			    {
+			    cCell.ondblclick = function( ) {
 				var cTbl = this.parentNode.parentNode;
 				if(cTbl.isEnter) cTbl.setElements();
 				this.isEnter = cTbl.isEnter = true;
@@ -1080,17 +1090,16 @@ function selectChildRecArea( node, aPath, cBlk )
 					{ this.parentNode.childNodes[7].onclick(); return true; }
 					if(this.parentNode.isEdited && e.keyCode == 27) {
 					    var val_w = this.parentNode;
-					    for(var i_ch = 0; i_ch < val_w.childNodes.length; i_ch++)
-						if(val_w.childNodes[i_ch].defaultValue)
-						    val_w.childNodes[i_ch].value = val_w.childNodes[i_ch].defaultValue;
+					    for(var iCh = 0; iCh < val_w.childNodes.length; iCh++)
+						if(val_w.childNodes[iCh].defaultValue)
+						    val_w.childNodes[iCh].value = val_w.childNodes[iCh].defaultValue;
 					    val_w.removeChild(this.parentNode.childNodes[7]);
 					    val_w.isEdited = false;
 					    return true;
 					}
 					if(this.parentNode.isEdited || this.value == this.defaultValue) return true;
 					var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
-					btOk.onclick = function( )
-					{
+					btOk.onclick = function( ) {
 					    var val_w = this.parentNode;
 					    var dt = new Date(0);
 					    dt.setDate(parseInt(val_w.childNodes[0].value));
@@ -1139,8 +1148,7 @@ function selectChildRecArea( node, aPath, cBlk )
 								     'top: '+(posGetY(edFld,true)+edFld.offsetHeight)+'px; '+
 								     'width: '+edFld.offsetWidth+'px';
 					    combMenu.childNodes[0].focus();
-					    combMenu.childNodes[0].onclick = function()
-					    {
+					    combMenu.childNodes[0].onclick = function() {
 						this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 						if(this.selectedIndex < 0) return;
 						this.edFld.value = nodeText(this.options[this.selectedIndex]);
@@ -1152,10 +1160,9 @@ function selectChildRecArea( node, aPath, cBlk )
 					tblCell.appendChild(cmbImg);
 				    }
 				    else if(tp == 'dec') {
-					this.className += ' number'; this.childNodes[0].size = 7;
+					this.className += ' number'; this.childNodes[0].size = 10;
 					var spinImg = document.createElement('img'); spinImg.src = '/'+MOD_ID+'/img_spinar';
-					spinImg.onclick = function(e)
-					{
+					spinImg.onclick = function(e) {
 					    if(!e) e = window.event;
 					    var val_w = this.parentNode.childNodes[0];
 					    val_w.value = parseInt(val_w.value)+(((e.clientY-posGetY(this))<10)?1:-1);
@@ -1165,22 +1172,20 @@ function selectChildRecArea( node, aPath, cBlk )
 					val_w.appendChild(spinImg);
 				    }
 				    else if(tp == 'hex' || tp == 'oct' || tp == 'real')
-				    { this.className += ' number'; this.childNodes[0].size = 7; }
+				    { this.className += ' number'; this.childNodes[0].size = 10; }
 				    else {
 					this.childNodes[0].size = 30;
 					this.childNodes[0].maxLength = prcCol.getAttribute('len');
 					if(!this.childNodes[0].maxLength) this.childNodes[0].maxLength = 1000;
 				    }
 				    this.prcCol = prcCol;
-				    this.childNodes[0].onkeyup = function(e)
-				    {
+				    this.childNodes[0].onkeyup = function(e) {
 					if(!e) e = window.event;
 					if(this.parentNode.isEdited && e.keyCode == 13) { this.parentNode.lastChild.onclick(); return true; }
 					if(this.parentNode.isEdited && e.keyCode == 27)	{ this.parentNode.parentNode.parentNode.setElements(); return true; }
 					if(this.parentNode.isEdited) return true;
 					var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
-					btOk.onclick = function( )
-					{
+					btOk.onclick = function( ) {
 					    var curVal = this.parentNode.childNodes[0].value;
 					    if(this.parentNode.prcCol.getAttribute('tp') == 'hex') curVal = parseInt(curVal,16);
 					    else if(this.parentNode.prcCol.getAttribute('tp') == 'oct') curVal = parseInt(curVal,8);
@@ -1210,7 +1215,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    }
 	}
 	//  View standard fields
-	else if(t_s.nodeName.toLowerCase() == 'fld') basicFields(t_s,aPath,cBlk,wr);
+	else if(t_s.nodeName.toLowerCase() == 'fld') basicFields(t_s, aPath, cBlk, wr);
 	else if(t_s.nodeName.toLowerCase() == 'comm') {
 	    var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
 	    var dBlk = null; var button = null;
@@ -1254,7 +1259,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    //  Update or create parameters
 	    for(var f_com = 0; f_com < t_s.childNodes.length; f_com++)
 		if(t_s.childNodes[f_com].nodeName.toLowerCase() == 'fld')
-		    basicFields(t_s.childNodes[f_com],aPath+t_s.getAttribute('id')+'/',dBlk,true,true);
+		    basicFields(t_s.childNodes[f_com], aPath+t_s.getAttribute('id')+'/', dBlk, true, true);
 
 	    //  Fill command
 	    button.value = t_s.getAttribute('dscr');
@@ -1488,56 +1493,45 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		    val_w.itPath = selPath+'/'+brPath;
 		    val_w.srcNode = t_s;
 		    val_w.itComm = comm;
-		    val_w.innerHTML = "<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='4' style='width: 60px;'/>"+
-			"&nbsp;<input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/><input size='2' style='width: 30px;'/>";
-		    val_w.childNodes[0].onkeyup = val_w.childNodes[1].onkeyup = val_w.childNodes[2].onkeyup =
-			val_w.childNodes[4].onkeyup = val_w.childNodes[5].onkeyup = val_w.childNodes[6].onkeyup = function(e)
-			{
-			    if(this.parentNode.itComm) {
-				var val_w = this.parentNode;
-				var dt = new Date(0);
-				dt.setDate(parseInt(val_w.childNodes[0].value));
-				dt.setMonth(parseInt(val_w.childNodes[1].value)-1);
-				dt.setFullYear(parseInt(val_w.childNodes[2].value));
-				dt.setHours(parseInt(val_w.childNodes[4].value));
-				dt.setMinutes(parseInt(val_w.childNodes[5].value));
-				dt.setSeconds(parseInt(val_w.childNodes[6].value));
-				setNodeText(val_w.srcNode,Math.floor(dt.getTime()/1000));
-				return true;
+		    val_w.innerHTML = "<input type='datetime-local' step='1'/>";
+		    val_w.childNodes[0].onkeyup = val_w.childNodes[0].onchange = function(e) {
+			if(this.parentNode.itComm) {
+			    var val_w = this.parentNode;
+			    if(val_w.childNodes[0].value) {
+				vD = val_w.childNodes[0].value.split("T")[0].split("-");
+				vT = val_w.childNodes[0].value.split("T")[1].split(":");
+				var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
+				setNodeText(val_w.srcNode, Math.floor(dt.getTime()/1000));
 			    }
-			    if(!e) e = window.event;
-			    if(this.parentNode.isEdited && e.keyCode == 13) { this.parentNode.childNodes[7].onclick(); return true; }
-			    if(this.parentNode.isEdited && e.keyCode == 27) {
-				var val_w = this.parentNode;
-				for(var i_ch = 0; i_ch < val_w.childNodes.length; i_ch++)
-				    if(val_w.childNodes[i_ch].defaultValue)
-					val_w.childNodes[i_ch].value = val_w.childNodes[i_ch].defaultValue;
-				val_w.removeChild(this.parentNode.childNodes[7]);
-				val_w.isEdited = false;
-				return true;
-			    }
-			    if(this.parentNode.isEdited || this.value == this.defaultValue) return true;
-			    var btOk = document.createElement('img'); btOk.src = '/' + MOD_ID + '/img_button_ok';
-			    btOk.onclick = function( ) {
-				var val_w = this.parentNode;
-				var dt = new Date(0);
-				dt.setDate(parseInt(val_w.childNodes[0].value));
-				dt.setMonth(parseInt(val_w.childNodes[1].value)-1);
-				dt.setFullYear(parseInt(val_w.childNodes[2].value));
-				dt.setHours(parseInt(val_w.childNodes[4].value));
-				dt.setMinutes(parseInt(val_w.childNodes[5].value));
-				dt.setSeconds(parseInt(val_w.childNodes[6].value));
-				var rez = servSet(val_w.itPath, 'com=com', '<set>'+Math.floor(dt.getTime()/1000)+'</set>', true);
-				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
-				setTimeout('pageRefresh()', 500);
-				val_w.removeChild(this);
-				val_w.isEdited = false;
-				return false;
-			    }
-			    this.parentNode.appendChild(btOk);
-			    this.parentNode.isEdited = true;
 			    return true;
 			}
+			e = e ? e : window.event;
+			if(this.parentNode.isEdited && e.keyCode == 13) { this.parentNode.childNodes[1].onclick(); return true; }
+			if(this.parentNode.isEdited && e.keyCode == 27) {
+			    var val_w = this.parentNode;
+			    if(val_w.childNodes[0].defaultValue) val_w.childNodes[0].value = val_w.childNodes[0].defaultValue;
+			    val_w.removeChild(this.parentNode.childNodes[1]);
+			    val_w.isEdited = false;
+			    return true;
+			}
+			if(this.parentNode.isEdited || this.value == this.defaultValue) return true;
+			var btOk = document.createElement('img'); btOk.src = '/' + MOD_ID + '/img_button_ok';
+			btOk.onclick = function( ) {
+			    var val_w = this.parentNode;
+			    vD = val_w.childNodes[0].value.split("T")[0].split("-");
+			    vT = val_w.childNodes[0].value.split("T")[1].split(":");
+			    var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
+			    var rez = servSet(val_w.itPath, 'com=com', '<set>'+Math.floor(dt.getTime()/1000)+'</set>', true);
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    setTimeout('pageRefresh()', 500);
+			    val_w.removeChild(this);
+			    val_w.isEdited = false;
+			    return false;
+			}
+			this.parentNode.appendChild(btOk);
+			this.parentNode.isEdited = true;
+			return true;
+		    }
 		    val_w.StatusTip = selPath+'/'+brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
 		}
 		// Check for the label using
@@ -1561,18 +1555,15 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		val_w.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		var dt_time_t = parseInt(nodeText(dataReq));
 		var dt = new Date(dt_time_t?(dt_time_t*1000):0);
-		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = dt.getDate();
-		val_w.childNodes[1].value = val_w.childNodes[1].defaultValue = dt.getMonth()+1;
-		val_w.childNodes[2].value = val_w.childNodes[2].defaultValue = dt.getFullYear();
-		val_w.childNodes[4].value = val_w.childNodes[4].defaultValue = dt.getHours();
-		val_w.childNodes[5].value = val_w.childNodes[5].defaultValue = dt.getMinutes();
-		val_w.childNodes[6].value = val_w.childNodes[6].defaultValue = dt.getSeconds();
+		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue =
+		    i2s(dt.getFullYear(),10,4)+"-"+i2s(dt.getMonth()+1,10,2)+"-"+i2s(dt.getDate(),10,2)+
+		    "T"+i2s(dt.getHours(),10,2)+":"+i2s(dt.getMinutes(),10,2)+":"+i2s(dt.getSeconds(),10,2);
 	    }
 	    if(val_r) {
 		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		var dt = new Date(parseInt(nodeText(dataReq))*1000);
-		setNodeText(val_r, dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
-		    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
+		setNodeText(val_r, i2s(dt.getDate(),10,2)+'.'+i2s(dt.getMonth()+1,10,2)+'.'+i2s(dt.getFullYear(),10,4)+
+		    ' '+i2s(dt.getHours(),10,2)+':'+i2s(dt.getMinutes(),10,2)+':'+i2s(dt.getSeconds(),10,2));
 	    }
 	}
 	//View other string and numberic fields
@@ -1629,7 +1620,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		    }
 		    else if(tp == 'dec') {
 			val_w.className += ' number';
-			val_w.childNodes[0].size = 7;
+			val_w.childNodes[0].size = 10;
 			var spinImg = document.createElement('img'); spinImg.src = '/'+MOD_ID+'/img_spinar';
 			spinImg.onclick = function(e) {
 			    if(!e) e = window.event;
@@ -1833,15 +1824,15 @@ function hostsUpdate( )
       liN.setAttribute('id','/'+hostN.childNodes[i].getAttribute('id'));
       //> Load groups
       liN.grps = new Array();
-      for( var i_grp = 0; i_grp < hostN.childNodes[i].childNodes.length; i_grp++ )
-	if( hostN.childNodes[i].childNodes[i_grp].nodeName.toLowerCase() == 'grp' )
-	  liN.grps.push(hostN.childNodes[i].childNodes[i_grp]);
+      for( var iGrp = 0; iGrp < hostN.childNodes[i].childNodes.length; iGrp++ )
+	if( hostN.childNodes[i].childNodes[iGrp].nodeName.toLowerCase() == 'grp' )
+	  liN.grps.push(hostN.childNodes[i].childNodes[iGrp]);
       //> Init links
       var treeIco = '/'+MOD_ID+'/img_tree'+(liN.isExpand?'Minus':'Plus')+((i!=0)?'Up':'')+((i!=(hostN.childNodes.length-1))?'Down':'');
       var liCont = "<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'><img src='"+treeIco+"'/></a>";
       if( parseInt(hostN.childNodes[i].getAttribute('icoSize')) )
 	liCont += "<span><img src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico&size=16'/></span>";
- 	//liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>"; 
+	//liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>"; 
       liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
 	"onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+nodeText(hostN.childNodes[i])+"</a></span>";
       liN.innerHTML = liCont;
@@ -1880,40 +1871,39 @@ function getPopup( )
  **************************************************/
 function getCombo( )
 {
-  var comboMenu = document.getElementById('combomenu');
-  if(!comboMenu)
-  {
-    comboMenu = document.createElement('div'); comboMenu.id = 'combomenu';
-    comboMenu.appendChild(document.createElement('select'));
-    comboMenu.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; }
-    document.body.appendChild(comboMenu);
-    comboMenu.style.visibility = 'hidden';
-  }
-  return comboMenu;
+    var comboMenu = document.getElementById('combomenu');
+    if(!comboMenu) {
+	comboMenu = document.createElement('div'); comboMenu.id = 'combomenu';
+	comboMenu.appendChild(document.createElement('select'));
+	comboMenu.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; }
+	document.body.appendChild(comboMenu);
+	comboMenu.style.visibility = 'hidden';
+    }
+    return comboMenu;
 }
 /**************************************************
  * pageRefresh - Curent page refrash call.        *
  **************************************************/
 function pageRefresh( )
 {
-  pageDisplay(selPath);
-  if( pgRefrTmID ) pgRefrTmID = setTimeout('pageRefresh();',5000);
+    pageDisplay(selPath);
+    if(pgRefrTmID) pgRefrTmID = setTimeout('pageRefresh();', 5000);
 }
 /********************************************************
  * pageCyclRefrStart - Start current page cyclic refrash.*
  ********************************************************/
 function pageCyclRefrStart( )
 {
-  if( !pgRefrTmID ) pgRefrTmID = setTimeout('pageRefresh();',5000);
-  actEnable('actUpdate',false); actEnable('actStart',false); actEnable('actStop',true);
+    if(!pgRefrTmID) pgRefrTmID = setTimeout('pageRefresh();',5000);
+    actEnable('actUpdate',false); actEnable('actStart',false); actEnable('actStop',true);
 }
 /********************************************************
  * pageCyclRefrStop - Stop current page cyclic refrash.  *
  ********************************************************/
 function pageCyclRefrStop( )
 {
-  if( pgRefrTmID ) { clearTimeout(pgRefrTmID); pgRefrTmID = null; }
-  actEnable('actUpdate',true); actEnable('actStart',true); actEnable('actStop',false);
+    if(pgRefrTmID) { clearTimeout(pgRefrTmID); pgRefrTmID = null; }
+    actEnable('actUpdate',true); actEnable('actStart',true); actEnable('actStop',false);
 }
 /**************************************************
  * itDBLoad - Load current page from DB.           *
@@ -1973,9 +1963,9 @@ function itAdd( )
 {
   if(!selPath.length) return;
   var branchS = null;
-  for(var i_ch = 0; i_ch < root.childNodes.length; i_ch++)
-    if(root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br')
-      branchS =  root.childNodes[i_ch];
+  for(var iCh = 0; iCh < root.childNodes.length; iCh++)
+    if(root.childNodes[iCh].nodeName.toLowerCase() == 'branches' && root.childNodes[iCh].getAttribute('id') == 'br')
+      branchS =  root.childNodes[iCh];
   if(!branchS) return;
 
   //> Load branches list
@@ -2069,101 +2059,115 @@ function itDel( iit )
  **************************************************/
 function itCut( )
 {
-  copyBuf = '1'+selPath;
-  editToolUpdate();
+    copyBuf = '1'+selPath;
+    editToolUpdate();
 }
 /**************************************************
  * itCopy - Copy selected item.                   *
  **************************************************/
 function itCopy( )
 {
-  copyBuf = '0'+selPath;
-  editToolUpdate();
+    copyBuf = '0'+selPath;
+    editToolUpdate();
 }
 /**************************************************
  * itPaste - Paste copy or cut item.              *
  **************************************************/
 function itPaste( )
 {
-  var typeCfg = '';
-  var itCnt = 0, defIt = 0;
-  var s_el, s_elp = '', t_el, b_grp = '';
-  var branchS = null;
+    var typeCfg = '';
+    var itCnt = 0, defIt = 0;
+    var sEl, sElp = '', tEl, bGrp = '';
+    var branchS = null;
 
-  //> Src elements calc
-  var n_sel = 0;
-  for( pathLev.off = 0; (t_el=pathLev(copyBuf.substr(1),0,true)).length; n_sel++ )
-  { if(n_sel) s_elp += ('/'+s_el); s_el = t_el; }
+    //Src elements calc
+    var nSel = 0;
+    for(pathLev.off = 0; (tEl=pathLev(copyBuf.substr(1),0,true)).length; nSel++)
+    { if(nSel) sElp += ('/'+sEl); sEl = tEl; }
 
-  if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('###Copy is impossible.###'); return; }
+    if(pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)) { alert('###Copy is impossible.###'); return; }
 
-  if(parseInt(root.getAttribute('acs'))&SEC_WR) { typeCfg += "<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
-  for(var i_ch = 0; i_ch < root.childNodes.length; i_ch++)
-    if(root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br')
-      branchS = root.childNodes[i_ch];
-  if( branchS )
-    for( var i_b = 0; i_b < branchS.childNodes.length; i_b++, itCnt++ )
-      if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR )
-      {
-	var gbrId = branchS.childNodes[i_b].getAttribute('id');
-	typeCfg+="<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+"' gid='"+gbrId+"'>"+branchS.childNodes[i_b].getAttribute('dscr')+"</option>";
-	if( s_el.substr(0,gbrId.length) == gbrId ) { defIt = itCnt; b_grp = gbrId; }
-      }
+    rootW = root;
+    toPath = selPath;
 
-  //> Make request dialog
-  dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
-  setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Move or copy node###');
-  if( copyBuf.charAt(0) == '1' )
-    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
-  else setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',selPath));
-  if( b_grp.length ) dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = s_el.substr(b_grp.length);
-  dlgWin.document.getElementById('wDlgName').style.display = 'none';
-  dlgWin.document.getElementById('wDlgType').style.display = '';
-  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
-  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( )
-  {
-    if(this.selectedIndex < 0) return;
-    var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
-    dlgWin.document.getElementById('wDlgId').style.display = (idSz >= 0) ? '' : 'none';
-    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = (idSz > 0) ? idSz : 1000;
-  }
-  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].selectedIndex = defIt;
-  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
-  dlgWin.document.getElementById('wDlgActOk').onclick = function()
-  {
-    var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
-    if( !tpSel || tpSel.selectedIndex < 0 ) { document.body.dlgWin.close(); return false; }
-    var idSz = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idSz'));
-    var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
-    var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
-
-    var statNm, srcNm;
-    pathLev.off = 1; statNm = pathLev(copyBuf,0,true); srcNm = copyBuf.substr(pathLev.off);
-    pathLev.off = 0; statNm = pathLev(selPath,0,true); dstNm = selPath.substr(pathLev.off);
-
-    if( idSz >= 0 )
-    {
-      dstNm+='/'+gbrId+inpId;
-      //> Check for already present node
-      var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
-      if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); document.body.dlgWin.close(); return false; }
-      for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
-	if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
-	    (!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
-	{
-	  if( confirm(("###Node '%1' already present. Continue?###").replace('%1',dstNm)) ) break;
-	  document.body.dlgWin.close(); return;
-	}
+    if(copyBuf.substr(1) == toPath) {	//For copy into the branch and no select direct the parent node
+	toPath = sElp;
+	pgInfo = servGet(toPath, 'com=info');
+	if(parseInt(pgInfo.getAttribute('rez')) != 0) return;
+	rootW = pgInfo.childNodes[0];
     }
-    //> Copy visual item
-    var rez = servSet('/'+statNm+'/%2fobj','com=com',"<copy src='"+srcNm+"' dst='"+dstNm+"'/>",true);
-    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.dlgWin.close(); return false; }
 
-    //> Remove source widget
-    if( copyBuf.charAt(0) == '1' ) { itDel(copyBuf.substr(1)); copyBuf = '0'; }
-    treeUpdate( ); pageRefresh( );
-    document.body.dlgWin.close(); return false;
-  }
+    if(parseInt(rootW.getAttribute('acs'))&SEC_WR) { typeCfg += "<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
+    for(var iCh = 0; iCh < rootW.childNodes.length; iCh++)
+	if(rootW.childNodes[iCh].nodeName.toLowerCase() == 'branches' && rootW.childNodes[iCh].getAttribute('id') == 'br')
+	    branchS = rootW.childNodes[iCh];
+    if(branchS)
+	for(var iB = 0; iB < branchS.childNodes.length; iB++, itCnt++)
+	    if(parseInt(branchS.childNodes[iB].getAttribute('acs'))&SEC_WR) {
+		var gbrId = branchS.childNodes[iB].getAttribute('id');
+		typeCfg += "<option idSz='" + branchS.childNodes[iB].getAttribute('idSz') + "' gid='" + gbrId + "'>" +
+				branchS.childNodes[iB].getAttribute('dscr') + "</option>";
+		if(sEl.substr(0,gbrId.length) == gbrId) { defIt = itCnt; bGrp = gbrId; }
+	    }
+
+    //Make a request dialog
+    dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
+    setNodeText(dlgWin.document.getElementById('wDlgHeader'), '###Move or copy node###');
+    if(copyBuf.charAt(0) == '1')
+	setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],
+	    ("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
+    else setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],
+	    ("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
+    if(bGrp.length) dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = sEl.substr(bGrp.length);
+    dlgWin.document.getElementById('wDlgName').style.display = 'none';
+    dlgWin.document.getElementById('wDlgType').style.display = '';
+    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
+    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( ) {
+	if(this.selectedIndex < 0) return;
+	var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
+	dlgWin.document.getElementById('wDlgId').style.display = (idSz >= 0) ? '' : 'none';
+	dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = (idSz > 0) ? idSz : 1000;
+    }
+    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].selectedIndex = defIt;
+    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
+    dlgWin.document.getElementById('wDlgActOk').onclick = function( ) {
+    var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
+	if(!tpSel || tpSel.selectedIndex < 0) { document.body.dlgWin.close(); return false; }
+	var idSz = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idSz'));
+	var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
+	var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
+
+	var statNm, srcNm;
+	pathLev.off = 1; statNm = pathLev(copyBuf, 0, true); srcNm = copyBuf.substr(pathLev.off);
+	pathLev.off = 0; statNm = pathLev(toPath, 0, true); dstNm = toPath.substr(pathLev.off);
+
+	if(idSz >= 0) {
+	    dstNm += '/'+gbrId+inpId;
+	    // Check for already present node
+	    var req = servSet(toPath+'/%2fbr%2f'+gbrId,'com=com','<get/>', true);
+	    if(!req || parseInt(req.getAttribute('rez')) != 0) { if(req) alert(nodeText(req)); document.body.dlgWin.close(); return false; }
+	    for(var i_lel = 0; i_lel < req.childNodes.length; i_lel++)
+		if((req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
+			(!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId)) {
+		    if(confirm(("###Node '%1' already present. Continue?###").replace('%1',dstNm))) break;
+		    document.body.dlgWin.close(); return;
+		}
+	}
+	// Copy visual item
+	var rez = servSet('/'+statNm+'/%2fobj','com=com',"<copy src='"+srcNm+"' dst='"+dstNm+"'/>", true);
+	if(!rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.dlgWin.close(); return false; }
+
+	// Remove source widget
+	if(copyBuf.charAt(0) == '1') {
+	    itDel(copyBuf.substr(1));
+	    if(selPath == copyBuf.substr(1)) selectPage("/"+statNm+dstNm);
+	    else pageRefresh();
+	    copyBuf = '0';
+	} else pageRefresh();
+	treeUpdate();
+	document.body.dlgWin.close();
+	return false;
+    }
 }
 /**********************************************************
  * ReqIdNameDlg - Get identifier and name request dialog. *
@@ -2173,6 +2177,7 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
     var dlgWin = document.body.dlgWin;
     if(!dlgWin) {
 	dlgWin = document.createElement('div');
+	dlgWin.setAttribute("id", 'gen-pnl-dlg');
 	document.body.dlgWin = dlgWin;
 	dlgWin.close = function( ) { document.body.removeChild(this); this.isLoad = null; }
     }
@@ -2180,8 +2185,7 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 
     dlgWin.innerHTML =
 	"<table cellpadding='2' cellspacing='0' border='0' "+
-	    "style='position: absolute; box-shadow: 10px 10px 5px grey; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; "+
-		"left: "+((window.innerWidth-400-5)/2)+"px; top: "+((this.window.innerHeight-200-18)/2)+"px;'>\n"+
+	    "style='left: "+((window.innerWidth-400-5)/2)+"px; top: "+((this.window.innerHeight-200-18)/2)+"px;'>\n"+
 	"<tr style='cursor: move;' onmousedown='this.clX = event.clientX; this.clY = event.clientY; return false;' \n"+
 	"   onmouseup='this.clX = this.clY = null; return false;' \n"+
 	"   onmouseout='this.clX = this.clY = null; return false;' \n"+
@@ -2192,11 +2196,11 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 	" <td id='wDlgHeader' style='padding-left: 5px; max-width: "+(400-10)+"px; width: "+(400-10)+"px; overflow: hidden; white-space: nowrap;'>###Node id and/or name select###</td>\n"+
 	" <td style='color: red; cursor: pointer; text-align: right;' onclick='document.body.dlgWin.close();'>X</td>\n"+
 	"</tr>\n"+
-	"<tr><td style='max-width: 400px;' colspan='2' align='center'>\n"+
+	"<tr><td colspan='2' style='max-width: 400px;'>\n"+
 	" <center>\n"+
 	"  <form id='wDlgFormBlk' action='"+actPath+"' method='post' enctype='multipart/form-data'>\n"+
 	"   <table border='0' cellspacing='3px' class='dlg'>\n"+
-	"    <tr><td id='wDlgTitle' colspan='2'><img src='' style='height: 32px; float: left;'/><span/></td></tr>\n"+
+	"    <tr><td id='wDlgTitle' colspan='2'><img src='' style='height: 32px; float: left; padding-right: 5px;'/><span style='word-wrap: break-word; word-break: break-all;'/></td></tr>\n"+
 	"    <tr id='wDlgType'><td>###Element type:###</td><td><select name='type'/></td></tr>\n"+
 	"    <tr id='wDlgId'><td>###ID:###</td><td><input name='id'/></td></tr>\n"+
 	"    <tr id='wDlgName'><td>###Name:###</td><td><input name='name' type='"+(nmFile?'file':'text')+"'/></td></tr>\n"+
@@ -2207,7 +2211,7 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 	"  </form>\n"+
 	" </center>\n"+
 	"</td></tr></table>"+
-	"<div style='position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0.1; background-color: #8F8F8F;'/>\n";
+	"<div/>\n";
     document.body.appendChild(dlgWin);
     dlgWin.isLoad = true;
 
@@ -2219,6 +2223,7 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 
 //First start data init
 // Tool bar init
+var actManual = document.getElementById('actManual');
 //  Tree update action
 var actTreeUpdt = document.getElementById('treeBlk');
 if(actTreeUpdt) {

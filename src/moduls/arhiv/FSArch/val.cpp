@@ -619,8 +619,8 @@ int ModVArchEl::size( )
 {
     int rez = 0;
     ResAlloc res(mRes, false);
-    for(unsigned i_arh = 0; i_arh < files.size(); i_arh++)
-	rez += files[i_arh]->size();
+    for(unsigned iArh = 0; iArh < files.size(); iArh++)
+	rez += files[iArh]->size();
 
     return rez;
 }
@@ -658,31 +658,31 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
     ResAlloc res(mRes, true);
     //Check file count for delete old files
     if(now && !mod->noArchLimit && ((((ModVArch &)archivator()).numbFiles() && files.size() > ((ModVArch &)archivator()).numbFiles()) || cpctLim))
-	for(int i_arh = 0; i_arh < (int)files.size()-1; ) {	//Up to last fresh
+	for(int iArh = 0; iArh < (int)files.size()-1; ) {	//Up to last fresh
 	    if(!(files.size() > ((ModVArch &)archivator()).numbFiles() || cpctLim))	break;
-	    else if(!files[i_arh]->err()) {
-		if(mess_lev() == TMess::Debug) archive().mess_sys(TMess::Debug, "Remove file '%s' by limit.", files[i_arh]->name().c_str());
-		files[i_arh]->delFile();
-		delete files[i_arh];
-		files.erase(files.begin() + i_arh);
+	    else if(!files[iArh]->err()) {
+		if(mess_lev() == TMess::Debug) archive().mess_sys(TMess::Debug, "Remove file '%s' by limit.", files[iArh]->name().c_str());
+		files[iArh]->delFile();
+		delete files[iArh];
+		files.erase(files.begin() + iArh);
 
 		if(cpctLim) break;
 		continue;
 	    }
-	    i_arh++;
+	    iArh++;
 	}
 
     //Check the archive's files for pack
     res.request(false);
-    for(unsigned i_arh = 0; i_arh < files.size(); i_arh++) files[i_arh]->check();
+    for(unsigned iArh = 0; iArh < files.size(); iArh++) files[iArh]->check();
 }
 
 void ModVArchEl::fileAdd( const string &file )
 {
     //Check to present archive files
     ResAlloc res(mRes, false);
-    for(unsigned i_arh = 0; i_arh < files.size(); i_arh++)
-	if(files[i_arh]->name() == file) return;
+    for(unsigned iArh = 0; iArh < files.size(); iArh++)
+	if(files[iArh]->name() == file) return;
     res.release();
 
     //Attach a new archive file
@@ -693,13 +693,13 @@ void ModVArchEl::fileAdd( const string &file )
     if(f_arh->err()) delete f_arh;
     else {
 	res.request(true);
-	int i_arh;
-	for(i_arh = (int)files.size()-1; i_arh >= 0; i_arh--)
-	    if(files[i_arh]->err() || f_arh->begin() >= files[i_arh]->begin()) {
-		files.insert(files.begin()+i_arh+1,f_arh);
+	int iArh;
+	for(iArh = (int)files.size()-1; iArh >= 0; iArh--)
+	    if(files[iArh]->err() || f_arh->begin() >= files[iArh]->begin()) {
+		files.insert(files.begin()+iArh+1,f_arh);
 		break;
 	    }
-	if(i_arh < 0) files.push_front(f_arh);
+	if(iArh < 0) files.push_front(f_arh);
 	realEnd = 0;	//Reset real end position
     }
 }
@@ -712,9 +712,9 @@ int64_t ModVArchEl::end( )
     ResAlloc res(mRes, false);
     int64_t curTm = TSYS::curTime();
     VFileArch *lstFile = NULL;
-    for(unsigned i_a = 0; i_a < files.size(); i_a++) {
-	if(files[i_a]->err()) continue;
-	lstFile = files[i_a];
+    for(unsigned iA = 0; iA < files.size(); iA++) {
+	if(files[iA]->err()) continue;
+	lstFile = files[iA];
 	if(curTm <= lstFile->end()) {
 	    if(!realEnd) realEnd = lstFile->endData();
 	    break;
@@ -728,9 +728,9 @@ int64_t ModVArchEl::end( )
 int64_t ModVArchEl::begin( )
 {
     ResAlloc res(mRes,false);
-    for(unsigned i_a = 0; i_a < files.size(); i_a++)
-	if(!files[i_a]->err())
-	    return files[i_a]->begin();
+    for(unsigned iA = 0; iA < files.size(); iA++)
+	if(!files[iA]->err())
+	    return files[iA]->begin();
 
     return 0;
 }
@@ -749,12 +749,12 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
     }
 
     ResAlloc res(mRes, false);
-    for(unsigned i_a = 0; i_a < files.size(); i_a++)
+    for(unsigned iA = 0; iA < files.size(); iA++)
 	if(ibeg > iend) break;
-	else if(!files[i_a]->err() && ibeg <= files[i_a]->end() && iend >= files[i_a]->begin()) {
-	    for( ; ibeg < files[i_a]->begin(); ibeg += files[i_a]->period()) buf.setI(EVAL_INT,ibeg);
-	    files[i_a]->getVals(buf, ibeg, vmin(iend,files[i_a]->end()));
-	    ibeg = files[i_a]->end()+files[i_a]->period();
+	else if(!files[iA]->err() && ibeg <= files[iA]->end() && iend >= files[iA]->begin()) {
+	    for( ; ibeg < files[iA]->begin(); ibeg += files[iA]->period()) buf.setI(EVAL_INT,ibeg);
+	    files[iA]->getVals(buf, ibeg, vmin(iend,files[iA]->end()));
+	    ibeg = files[iA]->end()+files[iA]->period();
 	}
     for( ; ibeg <= iend; ibeg += (int64_t)(archivator().valPeriod()*1e6)) buf.setI(EVAL_INT, ibeg);
 }
@@ -764,13 +764,13 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     int64_t itm = tm ? *tm : SYS->curTime();
     int64_t per;
     ResAlloc res(mRes, false);
-    for(unsigned i_a = 0; i_a < files.size(); i_a++)
-	if(!files[i_a]->err() && (
-		(up_ord && itm <= files[i_a]->end() && itm > files[i_a]->begin()-files[i_a]->period()) ||
-		(!up_ord && itm < files[i_a]->end()+files[i_a]->period() && itm >= files[i_a]->begin())))
+    for(unsigned iA = 0; iA < files.size(); iA++)
+	if(!files[iA]->err() && (
+		(up_ord && itm <= files[iA]->end() && itm > files[iA]->begin()-files[iA]->period()) ||
+		(!up_ord && itm < files[iA]->end()+files[iA]->period() && itm >= files[iA]->begin())))
 	{
-	    if(tm) { per = files[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
-	    return files[i_a]->getVal(up_ord?files[i_a]->maxPos()-(files[i_a]->end()-itm)/files[i_a]->period():(itm-files[i_a]->begin())/files[i_a]->period());
+	    if(tm) { per = files[iA]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
+	    return files[iA]->getVal(up_ord?files[iA]->maxPos()-(files[iA]->end()-itm)/files[iA]->period():(itm-files[iA]->begin())/files[iA]->period());
 	}
     if(tm) { per = (int64_t)(archivator().valPeriod()*1e6); *tm = (itm>=begin()||itm<=end()) ? (itm/per)*per+((up_ord&&itm%per)?per:0) : 0; }
     return EVAL_REAL;
@@ -791,16 +791,16 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
     //Put values to files
     ResAlloc res(mRes, true);
     bool wrOK = true, wrCurOK = false;	//check for all writes OK else repeate
-    for(unsigned i_a = 0; i_a < files.size(); i_a++)
-	if(!files[i_a]->err() && beg <= end) {
+    for(unsigned iA = 0; iA < files.size(); iA++)
+	if(!files[iA]->err() && beg <= end) {
 	    // Create new file for old data
-	    if(beg < files[i_a]->begin()) {
+	    if(beg < files[iA]->begin()) {
 		if(!mChecked)	return 0;	//Wait for checking
 
 		//  Calc file limits
 		int64_t n_end, n_beg;	//New file end position
-		if((files[i_a]->begin()-beg) > f_sz) n_end = beg+f_sz;
-		else n_end = files[i_a]->begin()-v_per;
+		if((files[iA]->begin()-beg) > f_sz) n_end = beg+f_sz;
+		else n_end = files[iA]->begin()-v_per;
 		n_beg = vmax(b_prev, n_end-f_sz);
 
 		//  Create file name
@@ -811,26 +811,26 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 		strftime(c_buf, sizeof(c_buf)," %F %T.val",&tm_tm);
 		string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
-		files.insert(files.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
+		files.insert(files.begin()+iA, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
 		//Remove new error created file mostly by store space lack
-		if(files[i_a]->err()) {
-		    files[i_a]->delFile();
-		    delete files[i_a];
-		    files.erase(files.begin()+i_a);
+		if(files[iA]->err()) {
+		    files[iA]->delFile();
+		    delete files[iA];
+		    files.erase(files.begin()+iA);
 		    return 0;
 		}
 	    }
 
 	    // Insert values to the archive
-	    if(beg <= files[i_a]->end() && end >= files[i_a]->begin()) {
-		int64_t n_end = (end > files[i_a]->end())?files[i_a]->end():end;
+	    if(beg <= files[iA]->end() && end >= files[iA]->begin()) {
+		int64_t n_end = (end > files[iA]->end())?files[iA]->end():end;
 		res.release();
-		if((wrCurOK=files[i_a]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
+		if((wrCurOK=files[iA]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
 		wrOK = wrOK && wrCurOK;
 		beg = n_end + v_per;
 		res.request(true);
 	    }
-	    b_prev = files[i_a]->end() + v_per;
+	    b_prev = files[iA]->end() + v_per;
 	}
     //Create new file for new data
     while(end >= beg) {

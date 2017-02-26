@@ -46,7 +46,7 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
 	rez=
 	if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --menu "$(GETTEXT "Select project for start.")" 20 60 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`;
 	elif test -n "$(which kdialog)"; then rez=`kdialog --title "$(GETTEXT "OpenSCADA start")" --menu "$(GETTEXT "Select project for start.")" "${prjList[@]}"`;
-	elif test -n "$(which zenity)"; then rez=`zenity --height=400 --width=300 --title "$(GETTEXT "OpenSCADA start")" --list --text="$(GETTEXT "Select project for start.")" --column="Tag" --column="Project" --hide-column=1 "${prjList[@]}"`;
+	elif test -n "$(which zenity)"; then rez=`zenity --height=400 --width=300 --title "$(GETTEXT "OpenSCADA start")" --list --text="$(GETTEXT "Select project for start.")" --column="Tag" --column="Project" --hide-column=1 "${prjList[@]}" | cut -d"|" -f1`;
 	elif test -n "$(which Xdialog)"; then Xdialog --title "$(GETTEXT "OpenSCADA start")" --no-tags --menubox "$(GETTEXT "Select project for start.")" 20 50 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`; fi
 	ProjName=$rez
 	if test "x$ProjName" = "x" -o "x$ProjName" = "x<*>"; then ProjName=;

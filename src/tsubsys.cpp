@@ -174,8 +174,8 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
     else if(subModule() && (a_path == "/br/mod_" || a_path == "/mod/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD)) {
 	vector<string> list;
 	modList(list);
-	for(unsigned i_a=0; i_a < list.size(); i_a++)
-	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
+	for(unsigned iA = 0; iA < list.size(); iA++)
+	    opt->childAdd("el")->setAttr("id",list[iA])->setText(modAt(list[iA]).at().modName());
     }
     else TCntrNode::cntrCmdProc(opt);
 }

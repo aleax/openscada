@@ -1321,7 +1321,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    const char *dsymb = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		    int n = 10, w = -1;
 		    int64_t val = vl.getI();
-		    if(prms.size()) n = vmax(2,vmin(36,prms[0].getI()));
+		    if(prms.size()) n = vmax(2, vmin(36,prms[0].getI()));
 		    bool sign = (n == 10 && (val < 0 || (prms.size() >= 3 && prms[2].getB())));
 		    if(prms.size() >= 2) w = vmin(100,prms[1].getI()) - (int)sign;
 		    string rez;

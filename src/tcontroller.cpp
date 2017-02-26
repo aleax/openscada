@@ -496,9 +496,9 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/mess",_("Diagnostics"))) {
-	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),RWRW__,"root",SDAQ_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),RWRW__,"root",SDAQ_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SDAQ_ID,5,"tp","dec","dest","select",
+	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time, size (s) and level"),RWRW__,"root",SDAQ_ID,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SDAQ_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mess/lvl","",RWRW__,"root",SDAQ_ID,5,"tp","dec","dest","select",
 		"sel_id","0;1;2;3;4;5;6;7",
 		"sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
 		"help",_("Get messages for level more and equal it.\n"

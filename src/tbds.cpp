@@ -793,7 +793,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/prm",_("Data base"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Enable"),RWRWR_,"root",SDB_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),RWRWR_,"root",SDB_ID,4,
+		ctrMkNode("list",opt,-1,"/prm/st/allow_tbls",_("Accessible tables"),RWRW__,"root",SDB_ID,4,
 		    "tp","br","br_pref","tbl_","s_com","del","help",_("Tables which are in the DB, tables which are not opened at that moment."));
 		ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the system from this DB"),RWRW__,"root","root");
 	    }
@@ -849,8 +849,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
-	    for(unsigned i_l=0; i_l < lst.size(); i_l++)
-		opt->childAdd("el")->setText(lst[i_l]);
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		opt->childAdd("el")->setText(lst[iL]);
 	}
 	if(ctrChkNode(opt,"add",RWRW__,"root",SDB_ID,SEC_WR))	open(opt->text(), true);
 	if(ctrChkNode(opt,"del",RWRW__,"root",SDB_ID,SEC_WR))	close(opt->text());

@@ -59,7 +59,7 @@ class TUIS : public TSubSYS
 {
     public:
 	//Data
-	enum GetOpts { GetContent = 0, GetFilePath = 1, GetExecCommand = 2 };
+	enum GetOpts { GetPathURL = 1, GetContent = 2 };
 
 	//Methods
 	TUIS( );
@@ -70,7 +70,8 @@ class TUIS : public TSubSYS
 
 	// All system UI functions
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
-	static string docGet( const string &inm, string *tp = NULL, unsigned opt = GetFilePath );
+	//  Return the EXEC command by default to open the document
+	static string docGet( const string &inm, string *tp = NULL, unsigned opt = 0 );
 
 	static string mimeGet( const string &inm, const string &fDt, const string &orig = "" );
 

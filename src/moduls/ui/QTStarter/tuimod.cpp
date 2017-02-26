@@ -46,7 +46,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.9.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -612,7 +612,7 @@ void StartDialog::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void StartDialog::enterManual( )
 {
-    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString(), NULL, TUIS::GetExecCommand);
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
 	QString(_("No the manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));

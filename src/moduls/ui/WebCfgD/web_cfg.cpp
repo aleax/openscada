@@ -22,7 +22,9 @@
 #include <time.h>
 #include <string.h>
 #include <string>
+#if HAVE_GD_CORE
 #include <gd.h>
+#endif
 
 #include <tsys.h>
 #include <tmess.h>
@@ -37,7 +39,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.0.2"
+#define MOD_VER		"1.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -88,12 +90,14 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
 	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 
+#if HAVE_GD_CORE
     gdFTUseFontConfig(1);
+#endif
 
     //Massages not for compile but for indexing by gettext
 #if 0
     char mess[][100] = {
-	_("About"), _("Drag to resize the Menu"),
+	_("Manual"), _("About"), _("Drag to resize the Menu"),
 	_("Load"), _("Save"), _("Up"), _("Previous"), _("Next"), _("Add item"),_("Delete item"),
 	_("Copy item"), _("Cut item"), _("Paste item"),
 	_("Reload item and tree"), _("Start periodic update"), _("Stop periodic update"),
@@ -146,6 +150,7 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
 
 void TWEB::imgConvert( SSess &ses, string &vl )
 {
+#if HAVE_GD_CORE
     map<string,string>::iterator prmEl;
     gdImagePtr sim = NULL;
     string itp;
@@ -198,6 +203,7 @@ void TWEB::imgConvert( SSess &ses, string &vl )
 	}
 	gdImageDestroy(sim);
     }
+#endif
 }
 
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
@@ -206,12 +212,12 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, "");
 
     try {
-	string zero_lev = TSYS::pathLev(ses.url,0);
+	string zero_lev = TSYS::pathLev(ses.url, 0);
 
 	//Get about module page
 	if(zero_lev == "about")	{	//getAbout(ses);
-	    page = pgCreator(iprt, string("<table class='work'>\n")+
-		" <tr><th>" MOD_ID " v" MOD_VER "</th></tr>\n"
+	    page = pgCreator(iprt, "<table class='work'>\n"
+		" <tr><th><a href='"+TUIS::docGet("|" MOD_ID,NULL,TUIS::GetPathURL)+"'>" MOD_ID " v" MOD_VER "</a></th></tr>\n"
 		" <tr><td class='content'>\n"
 		"  <table border='0px' cellspacing='3px'>\n"
 		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(MOD_NAME) + "</TD></TR>\n"
@@ -239,6 +245,10 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	    page = TUIS::icoGet(((zero_lev == "ico")?"UI." MOD_ID:zero_lev.substr(4)), &itp);
 	    imgConvert(ses, page);
 	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
+	}
+	else if(zero_lev == "doc") {
+	    XMLNode req(zero_lev); req.setText(TUIS::docGet("|"+TSYS::pathLev(ses.url,1),NULL,TUIS::GetPathURL));
+	    page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
 	else {
 	    prmEl = ses.prm.find("com");
@@ -288,7 +298,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		imgConvert(ses, page);
 		page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
 	    }
-	    //Get node childs
+	    //Get node's childs
 	    else if(wp_com == "chlds") {
 		XMLNode req("chlds");
 		prmEl = ses.prm.find("grp");
@@ -311,7 +321,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 			for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++) {
 			    XMLNode *chB = chN->childAdd();
 			    *chB = *brReq.childGet(0)->childGet(i_br);
-			    chB->setAttr("chPresent","1");
+			    chB->setAttr("chPresent", "1");
 			}
 		    }
 		}
@@ -328,7 +338,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	    }
 	    else if(wp_com == "img") {
 		string itp = "png";
-		XMLNode req("get"); req.setAttr("path",ses.url);
+		XMLNode req("get"); req.setAttr("path", ses.url);
 		if(mod->cntrIfCmd(req,ses.user) || s2i(req.attr("rez")) || req.text().empty())
 		    page = TUIS::icoGet("stop", &itp);
 		else {

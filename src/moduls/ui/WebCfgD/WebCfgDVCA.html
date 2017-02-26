@@ -25,9 +25,9 @@
     ul.tree { clear: both; list-style-image: none; list-style-position: outside; list-style-type: none; margin: 0px; padding: 0px; white-space: nowrap; }
     ul.tree a { text-decoration:none; color: black; }
     ul.tree a.pm { cursor: pointer; }
-    ul.tree img { vertical-align: middle; }
+    ul.tree img { vertical-align: middle; height: 16px; }
     a.active img {  cursor: pointer; }
-    a.inactive img { cursor: default; }
+    a.inactive img { cursor: default; filter: grayscale(100%) opacity(30%); }
 
     #gen-pnl-right { position: absolute; left: 250px; top: 25px; width: 546px; height: 471px; background-color: #F7F7F1; border: 2px outset #F7F7F1; overflow: auto; margin-left: 5px; padding-left: 1px; padding-right: 2px; }
     #gen-pnl-right table.page { padding-top: 5px; }
@@ -36,32 +36,34 @@
     #gen-pnl-right td.tabs span { padding-left: 5px; padding-right: 5px; padding-bottom: 2px; padding-top: 2px; border: 1px solid gray; white-space: nowrap; background-color: #DEDED9; cursor: pointer; }
     #gen-pnl-right td.tabs span.active { background-color: #F7F7F1; cursor: default; border-bottom: 0px none; border-top: 2px solid green; }
     #gen-pnl-right td.content { border-top: 2px ridge grey; text-align: left; vertical-align: top; padding: 5px; }
-    #gen-pnl-right td.content div.elem { margin-bottom: 2px; overflow: visible; width: auto; }
+    #gen-pnl-right td.content div.elem { margin-bottom: 2px; overflow: visible; width: auto; white-space: nowrap; padding-left: 10px; text-indent: -10px; }
     #gen-pnl-right td.content div.elem span.label { white-space: nowrap; padding-right: 3px; }
-    #gen-pnl-right td.content div.elem span.const { font-weight: bold; }
+    #gen-pnl-right td.content div.elem span.const { font-weight: bold; white-space: normal; }
     #gen-pnl-right td.content div.elem textarea { width: 98%; }
     #gen-pnl-right td.content fieldset.elem { margin : 0px; margin-bottom: 2px; padding: 3px; }
     #gen-pnl-right td.content div.table { width: 800px; border: 1px solid black; height: 200px; background-color: white; overflow: auto; padding: 2px; }
-    #gen-pnl-right td.content table.elem { border: 1px solid black; border-collapse: collapse; empty-cells: show; }
+    #gen-pnl-right td.content table.elem { border: 1px solid black; border-collapse: collapse; empty-cells: show; text-indent: 0px; }
     #gen-pnl-right td.content table.elem th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }
-    #gen-pnl-right td.content table.elem td { border: 1px solid black; white-space: pre-line; }
+    #gen-pnl-right td.content table.elem td { border: 1px solid black; white-space: pre-line; word-break: break-all; }
     #gen-pnl-right td.content table.elem td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }
     #gen-pnl-right td.content table.elem td input,select { vertical-align: middle; border: 1px solid gray; }
     #gen-pnl-right td.content table.elem td img { vertical-align: middle; height: 16px; cursor: pointer; }
     #gen-pnl-right td.content table.elem tr.select td { background-color: #00C8FF; }
-    #gen-pnl-right td.content .list { width: 100%; }
+    #gen-pnl-right td.content .list { width: 95%; }
     #gen-pnl-right td.content .picture { border: 1px solid blue; vertical-align: top; }
-    #gen-pnl-right td.content div.elem .line input[size="30"] { width: 50%; }
+    //#gen-pnl-right td.content div.elem .line input[size="30"] { width: 50%; }
     #gen-pnl-right td.content div.elem .line { padding-right: 3px; }
     #gen-pnl-right td.content div.elem .line input,select { vertical-align: middle; border: 1px solid black; }
     #gen-pnl-right td.content div.elem .line img { vertical-align: middle; height: 18px; cursor: pointer; }
-    #gen-pnl-right td.content div.elem .number input { width: 20%; text-align: right; }
+    #gen-pnl-right td.content div.elem .number input { /*width: 20%;*/ text-align: right; }
 
     #gen-pnl-down { position: absolute; left: 0px; top: 500px; width: 800px; height: 25px; font-size: 15px; overflow: hidden; }
     #gen-pnl-splt { position: absolute; left: 250px; top: 25px; width: 2px; height: 550px; border: 0; cursor: col-resize; margin-left: 2px; border-left: 2px ridge #E6E6E6; }
     #st_user { border-left: 1px solid black; padding-left: 2px; white-space: nowrap; }
 
-    table.dlg { width: 98%; border: 3px ridge #FF9253; background-color: #E6E6E6; padding: 5px; text-align: left; vertical-align: top; }
+    #gen-pnl-dlg > table { position: absolute; box-shadow: 10px 10px 5px grey; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; }
+    #gen-pnl-dlg > div { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0.1; background-color: #8F8F8F; }
+    #gen-pnl-dlg .dlg { width: 100%; border: 2px ridge #FF9253; background-color: #E6E6E6; padding: 5px; text-align: left; vertical-align: top; }
 
     #popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 10; }
     #popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }
@@ -89,6 +91,7 @@
   <a id='actStart' class='active' title='###Start periodic update###'><img src='/WebCfgD/img_start?filtr=none&size=22' /></a>
   <a id='actStop' class='inactive' title='###Stop periodic update###'><img src='/WebCfgD/img_stop?filtr=unact&size=22' /></a>
   <img src='/WebCfgD/img_line' />
+  <a id='actManual' class='inactive' title='###Manual###' target='_blank'><img src='/WebCfgD/img_manual?size=22' /></a>
   <a id='actAbout' class='active' href='/WebCfgD/about' title='###About###'><img src='/WebCfgD/img_help?size=22' /></a>
   <img src='/WebCfgD/img_line' />
   <span id='selPath' />

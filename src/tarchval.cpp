@@ -1680,8 +1680,27 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	prms[0].setI(tm); prms[0].setModify();
 	return rez;
     }
-    //!!!! getVals() - append after internal represent object to TValBuf append.
-    //!!!! setVals() - append after internal represent object to TValBuf append.
+    // bool setVal(int tm, VarType vl, string arch = "") - set one value to the archive for the time <tm> and the archiver <arch>.
+    //  tm - the time for requested value, in microseconds. Set to 0 for end().
+    //  vl - the value.
+    //  arch - the archiver for the request. Set to empty for buffer and all archivers try.
+    //         Set to "<buffer>" for the buffer only process.
+    if(iid == "setVal" && prms.size() >= 2) {
+	int64_t tm = prms[0].getI();
+	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
+	if(!tm) tm = end(arch);
+	TFld::Type tp = TFld::String;
+	switch(prms[1].type()) {
+	    case TVariant::Boolean:	tp = TFld::Boolean;	break;
+	    case TVariant::Integer:	tp = TFld::Integer;	break;
+	    case TVariant::Real:	tp = TFld::Real;	break;
+	}
+	TValBuf buf(tp, 10, period(), true, true); buf.set(prms[1], tm);
+	setVals(buf, buf.begin(), buf.end(), arch);
+	return true;
+    }
+    //!!!! getVals() - append after an internal represent object to TValBuf appending.
+    //!!!! setVals() - append after an internal represent object to TValBuf appending.
 
     //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
@@ -2561,7 +2580,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
     //Combining
     TVArchive::CombMode combM = archive().combMode();
     int64_t setOK = 0;
-    if(a_per > ibuf.period()) {
+    if(&archive() == &ibuf && a_per > ibuf.period()) {
 	TValBuf obuf(ibuf.valType(true), 0, a_per, true, true);
 	for(int64_t c_tm = beg; c_tm <= end; ) {
 	    switch(ibuf.valType()) {

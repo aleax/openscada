@@ -1034,7 +1034,7 @@ void VisRun::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void VisRun::enterManual( )
 {
-    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString(), NULL, TUIS::GetExecCommand);
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
 	QString(_("No the manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));

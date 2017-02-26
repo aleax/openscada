@@ -1,3 +1,23 @@
+2017-02-26 Roman (stable)
+- SYS: data/openscada_start.in: workarounded for bug into "zenity", for sending selection items as "{item}|{item}" (observed on Ubuntu 14.04).
+- Archive.Value: User API functions were appended by setVal().
+    Direct writing to archives expanded for all buffer's wich aren't the buffer of archive.
+- FIX:DB.{.,SQLite,MySQL}: Some control items were fixed for their permition.
+- DAQ: Some fields of the diagnostic request dialog are merged to single line, for controller object.
+- FIX:UI.{docGet(),QTCfg,QTStarter,Vision}: Force documents in background execution for online ones.
+    Checking for online documents is disabled by it's can be long and wrong, then there use only links to default language pages (EN).
+    Function rewrote for options as flags.
+- !!!:UI.WebCfgD: Library GD relaced by the CSS filters and set optional by --enable-LibGD.
+    FIX: Processing of list items fix for ones without ID.
+    Internal dialogs expanded by drop shadow and a transparent background for disable access to the main area.
+    Date fields were moved to a type "datetime-local" of the tag "input".
+    Online documentation call added.
+    Elements merging into single line fixed by CSS rule "white-space: nowrap;" but the constant set to "white-space: normal;".
+    Elements indent set to "padding-left: 10px; text-indent: -10px;".
+    Length of the number elements set to fixed by 10 symbols.
+    Item copy is expanded by copy to its root through self.
+
+
 2017-02-16 Roman (stable)
 - The ChangeLog significant cleared next.
 - FIX:Protocol.OPC_UA{*.libOPC_UA}: The resource "mtxData" added to object Server and used for the security channels container management.

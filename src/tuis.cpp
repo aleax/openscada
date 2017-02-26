@@ -82,29 +82,28 @@ string TUIS::icoGet( const string &inm, string *tp, bool retPath )
 
 string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 {
-    unsigned i_tr = 0, i_t = 0;
+    unsigned iTr = 0, iT = 0;
     string rez, pathi, nm = TSYS::strParse(inm, 0, "|");
     vector<string> transl;
 
-    //Find the offline document into filesystem
+    //Find the offline document on the filesystem
     int hd = -1;
     char types[][5] = {"pdf", "html", "odt"};
     transl.push_back(""); transl.push_back(Mess->lang2Code()); transl.push_back("en");
 
-    for(int off = 0; hd == -1 && (pathi=TSYS::strParse(SYS->docDir(),0,";",&off)).size(); )
-	for(i_tr = 0; i_tr < transl.size(); ++i_tr) {
-	    for(i_t = 0; i_t < sizeof(types)/5; ++i_t)
-		if((hd=open((pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t]).c_str(),O_RDONLY)) != -1) break;
+    for(int off = 0; nm.size() && hd == -1 && (pathi=TSYS::strParse(SYS->docDir(),0,";",&off)).size(); )
+	for(iTr = 0; iTr < transl.size(); ++iTr) {
+	    for(iT = 0; iT < sizeof(types)/5; ++iT)
+		if((hd=open((pathi+"/"+transl[iTr]+"/"+nm+"."+types[iT]).c_str(),O_RDONLY)) != -1) break;
 	    if(hd != -1) break;
 	}
     if(hd != -1) {
-	if(tp) *tp = types[i_t];
-	if(opt == GetFilePath) rez = pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t];
-	else if(opt == GetExecCommand) rez = "xdg-open "+pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t]+" &";
-	else {
+	if(tp) *tp = types[iT];
+	if(opt&GetPathURL) rez = pathi+"/"+transl[iTr]+"/"+nm+"."+types[iT];
+	else if(opt&GetContent) {
 	    char buf[STR_BUF_LEN];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
-	}
+	} else rez = "xdg-open "+pathi+"/"+transl[iTr]+"/"+nm+"."+types[iT]+" &";
 	close(hd);
     }
 
@@ -112,7 +111,14 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
     if(rez.empty() && (nm=TSYS::strParse(inm,1,"|")).size()) {
 	const char  *docHost = "wiki.oscada.org", *docURI = "/Doc",
 		    *tTr = "Sockets", *nTr = "docCheck";
-	transl.clear(); transl.push_back((Mess->lang2Code()=="ru")?"":Mess->lang2Code()); transl.push_back("en");
+
+	if(opt&GetPathURL) rez = string("http://") + docHost + "/HomePageEn" + transl[iTr] + docURI + "/" + nm;
+	else if(opt&GetContent) ;//rez = req.text();
+	else rez = string("xdg-open ") + "http://" + docHost + "/HomePageEn" + transl[iTr] + docURI + "/" + nm + " &";
+
+	//!!!!	Translation checking for presence disabled by that is sometimes long and wrong.
+	//	The manual sets to the default language but further the behaviour can be changed with the documenttion moving to MediaWiki.
+	/*transl.clear(); transl.push_back((Mess->lang2Code()=="ru")?"":Mess->lang2Code()); transl.push_back("en");
 
 	try {
 	    //Check connect and start
@@ -125,19 +131,19 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 	    else tr = SYS->transport().at().at(tTr).at().outAt(nTr);
 
 	    XMLNode req("GET");
-	    for(i_tr = 0; i_tr < transl.size(); ++i_tr) {
-		req.setAttr("URI", (transl[i_tr].size()?"/HomePage"+transl[i_tr]:"/")+docURI+"/"+nm+"?tm="+i2s(SYS->sysTm()))->
+	    for(iTr = 0; iTr < transl.size(); ++iTr) {
+		req.setAttr("URI", (transl[iTr].size()?"/HomePage"+transl[iTr]:"/")+docURI+"/"+nm+"?tm="+i2s(SYS->sysTm()))->
 		    setAttr("Host", string(docHost)+":80")->
-		    setAttr("onlyHeader", (opt!=GetContent)?"1":"0");
+		    setAttr("onlyHeader", (opt&GetContent) ? "0" : "1");
 		tr.at().messProtIO(req, "HTTP");
 		if(s2i(req.attr("RezCod")) == 200) {
-		    if(opt == GetFilePath) rez = string("http://")+docHost+TSYS::strParse(req.attr("URI"),0,"?");
-		    else if(opt == GetExecCommand) rez = string("xdg-open ")+"http://"+docHost+TSYS::strParse(req.attr("URI"),0,"?");
-		    else rez = req.text();
+		    if(opt&GetPathURL) rez = string("http://")+docHost+TSYS::strParse(req.attr("URI"),0,"?");
+		    else if(opt&GetContent) rez = req.text();
+		    else rez = string("xdg-open ")+"http://"+docHost+TSYS::strParse(req.attr("URI"),0,"?")+" &";
 		    break;
 		}
 	    }
-	} catch(TError&) { }
+	} catch(TError&) { }*/
     }
 
     return rez;
