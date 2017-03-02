@@ -45,11 +45,13 @@ class DA: public TElem
 	virtual string id( ) = 0;
 	virtual string name( ) = 0;
 
+	virtual bool isSlow( )	{ return false; }
+
 	virtual void init( TMdPrm *prm ) 	{ }
 	virtual void deInit( TMdPrm *prm )	{ }
 
 	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
-	virtual void cfgChange( TCfg &i_cfg )	{ }
+	virtual void cfgChange( TCfg &co, const TVariant &pc )	{ }
 
 	virtual void getVal( TMdPrm *prm )	{ }
 	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }

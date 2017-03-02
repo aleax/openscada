@@ -103,6 +103,7 @@ class TMess
 	void setMessLevel( int level );
 
 	void put( const char *categ, int8_t level, const char *fmt,  ... );
+	void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
 	//> Often used, generic text messages
@@ -112,9 +113,6 @@ class TMess
 	static const char *labTaskPrior( );
 
     private:
-	//Methods
-	void varTextActivate( );
-
 	//Attributes
 	string	IOCharSet;		//Internal charset
 	unsigned mMessLevel	:3;	//Work messages level

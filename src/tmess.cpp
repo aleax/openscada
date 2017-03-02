@@ -102,8 +102,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 
     if(mLogDir & DIR_SYSLOG) {
 	int level_sys;
-	switch(abs(level))
-	{
+	switch((int8_t)abs(level)) {
 	    case Debug:		level_sys = LOG_DEBUG;	break;
 	    case Info:		level_sys = LOG_INFO;	break;
 	    case Notice:	level_sys = LOG_NOTICE;	break;
@@ -116,8 +115,8 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 	}
 	syslog(level_sys, "%s", sMess.c_str());
     }
-    if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", tm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
-    if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", tm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
+    if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", atm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
+    if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", atm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
     if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
 	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
 }
@@ -169,7 +168,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if(hd == (iconv_t)(-1)) {
-	mess_crit("IConv",_("Error 'iconv' open: %s"),strerror(errno));
+	mess_crit("IConv", _("Error 'iconv' open: %s"), strerror(errno));
 	return mess;
     }
 
@@ -280,7 +279,7 @@ const char *TMess::labSecCRONsel( )	{ return "1;1e-3;* * * * *;10 * * * *;10-20 
 
 const char *TMess::labTaskPrior( )
 {
-    return _("Task priority level (-1...99), where:\n"
+    return _("Task priority level (-1...199), where:\n"
 	     "  -1        - lowest priority batch policy;\n"
 	     "  0         - standard userspace priority;\n"
 	     "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"

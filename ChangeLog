@@ -1,5 +1,233 @@
+2016-02-13 Roman 0.8.17
+- Transport.Serial: Checking to present the header file linux/i2c-dev.h added to build on Linux distributives like SuSE.
+
+
+2016-02-12 Roman 0.8.17
+- API:
+    !!!!:Changes:
+	SYS: More functions set to constant after some objects appending by a copy constructor.
+	    TConfig::cfgChange() expanded by previous configuration value argument "pc".
+	    TVariant: It's expanded in string type for STL-string using always except fields marked as "stdStringOmit", mostly for TCfg as a constant.
+	    Node's function load() and load_() expanded by argument TConfig *cfg for allow direct loading after the seeking request.
+		Argument "force" of node's function load() was removed and replaced by modifG() pre-call.
+	    The RW resources allocation object "Res" renamed to "ResRW".
+	    TModule::modFunc() of declared functions pointer getting was expanded by no exceptional calls and a result.
+	    Function strNoSpace() expanded for processing symbols control and renamed to strTrim(). Default processing symbols set to " \n\t\r".
+	    time2str() and tm2s() of the astronomic time were renamed to atime2str() and atm2s() and
+		the relative time were moved from microseconds to seconds origin.
+	    taskSleep() in the "cron" argument is moved to pure (string) representing for the origin point hold for
+		the astronomic clock changing detect and cron's target correction then and also for the consumption measuring by the taskUtilizTm().
+	    TVariant::propClear() expanded to single property clean.
+	    taskUtilizTm() expanded by the argument "max" to obtain the maximum value and the value changed to seconds.
+	    The function taskDescr() added to get a link to the current task description structure.
+	DAQ: Template's configure's field variant "Constant" renamed to "Variable" and "Public constant" to "Constant" respectively.
+	Archive: Value archivator is expanded for the accumulation mode support, mostly for Archive.DBArch.
+	    Attribute "tm" of the Array result of user API function "getMess" changed to type "int".
+	Protocol: Input part's API moved for the Work branch kind one by the functions srcAddr(), setSrcAddr() appending and mess() changing.
+    Appends:
+	SYS: The system option "clockRT" is added for select the tasks planning clock as CLOCK_REALTIME but else it's CLOCK_MONOTONIC (default now).
+	    Conditional variable management object "CondVar" is added.
+	    Function mess_sys() is added to the object TCntrNode to create system messages with the node path into the category
+		and the node's location into the message begin, by the new function nodeNameSYSM().
+	    Function err_sys() is added to object TCntrNode to create error objects with the node path and the node's location.
+	    The functional templates fmin() and fmax() added.
+	    For function strTrim() created a short call sTrm() and its used everywhere.
+	    TSecurity: User API function User::groups() and Group::user() added.
+	    New user API function TVal::isCfg() added.
+	DB: Errors placing to result's Array attribute "err" from exceptions are added for user API function SQLReq().
+	DAQ.JavaLikeCalc: String functions list expanded by a function trim().
+	Transport: User API function messIO() expanded by the input buffer size.
+	Transport.Serial: User API function sendbreak() is added to output transport.
+	UI: Expanded by function mimeGet() to detect mime type by the original info, file extension and this content.
+	Special.FLibSYS: Appended by function the Message Digest 5 (MD5) calculation function by OpenSSL and
+	    by function floatExtract() for extract exponent and mantissa from that float value.
+- SYS:
+    !!:FIX: LibZ functions were rewrote for some unification and the used memory optimization.
+    FIX: The message "Some tags on path '%s' are missed!" was fixed for the argument and rewrote to "Entry %d of the path '%s' is missed!"
+    FIX: TValue::chldAdd() fixed for the Archive subsystem mark as setToUpdate() only for successful appending.
+    FIX:TRegExp: Fix in function split(), for hang and crash prevent.
+    FIX: data/oscada_gentoo.init is some fixed by IrmIngeneer.
+    FIX:TConfig: Fix for the object copy by the copy constructor appending. EVAL forms conversion is added to TCfg::set{S,R,I,B}().
+    FIX:TElem: Fix for the object copy by the copy constructor appending and its reserved for full implementing further.
+    FIX:XML: XMLNode's flag LD_NoTxtSpcRemEnBeg fixed for spaces in begin. Crashes on empty string encoding try to fix.
+    !!!!: TCntrNode: Moved to the stabilized resources managing conception from the Work branch.
+    !!!!: More errors and warnings fix from PVS-Studio report, thanks to Maksim Kochetkov.
+    !!!!: All parts adapted to the new argument "cfg" of loading functions, preloaded dataSeek() and the direct loading after the seeking request.
+    !!!!: New TCntrNode object's functions mess_sys(), err_sys() have used everywhere into the OpenSCADA core and modules.
+    !!!: Modules version of the subsystem "DB", "DAQ", "Archive", "Transport" rose to 9 and the subsystem "Protocol", "UI" rose to 8.
+    !!!: Library version set to 2:5:0.
+    !!: Adapted and some fixed to build by GCC v6 with C++11 by default.
+    !: Minimal messages level for all configurations set to "Info(1)".
+    Some of the system messages and module ones moved to the debug category.
+    The function TVarObj::AHDDisConnect() rewrote to prevent a messages into the lock section.
+    data/icons: Images Protocol.HTTP.png and Protocol.SelfSystem.png, Protocol.UserProtocol.png updated and UI.WebUser.png added.
+    ResString,TVarObj,Function,UI.VCAEngine: pthread_mutex_t replaced by ResMtx.
+    sysSleep() moved to clock_nanosleep(), CLOCK_MONOTONIC and clock_gettime() for short times lesser to 300us.
+    DAQ.{Templates,JavaLikeCalc},Protocol.ModBus,UI.VCAEngine: Items deletion procedure termination at DB error added.
+    TSecurity::access() function expanded for allow groups list as a separated by ',' one.
+    Base64 encoding/decoding method some expanded for line separator point as an argument.
+    For user API TVal::set() there prevented writing to no writable values of the configurations.
+- DB:
+    !!!!:{.,FireBird,MySQL,PostgreSQL,SQLite}: Preloading scanning mode added for functions fieldSeek() and dataSeek()
+	for significant performance rise here.
+    !!!!:*: getVal() expanded and unified.
+    !!!!:{SQLite,MySQL,PostgreSQL,FireBird}: Expanded to NULL using for generic EVAL store/represent.
+	Message about rows missing at get some appended.
+    !!:PostgreSQL: DB object expanded by a statistic to control the activity and lags.
+- DAQ:
+    The value archive's part set firstly readed for redundancy processing.
+    !!!:FIX:*: Wrong word "Parameteres" fixed.
+	!!!: Tasks' execution status was expanded by the maximum consumption value.
+	Name of parameter of alarm messages expanded by the module name.
+    FIX:{BlockCalc,LogicLev}: Input links processing moved out of the attributes modifications detection into calc().
+    FIX:{BlockCalc,DCON,LogicLev,Siemens}: The deprecated property "PERIOD" processing fix to allow it's replace next by
+	the propery "SCHEDULE" forcing to rewrite and "PERIOD" to clean.
+    {LogicLev,ModBus}: User API function attrAdd() expanded to apply flags "text" and "ro" for present attributes.
+    !!:DAQGate: Adapted to store parameters' assignment for stations to allow its for early restoring without need to sync.
+	!!: Control for automatic removing parameters and attributes added by an option.
+    !!!:FIX:LogicLev: User attributes removing prevented at the parameter's object enable, for passive ones.
+	!!!: Moved for set the attribute "f_frq" to the real frequency, taken from the task description structure.
+	Expanded to allow writing from external to the RO attributes "err" and all other for the "f_err" EVAL.
+	The system IO "f_err" allowed for redundancy.
+	IO of parameters loading was moved to using the seek request.
+    !!!!:FIX:OPC_UA.{*.libOPC_UA}: Hello/Acknowledge properties set configurable and client's ones also storing.
+	!!!!:FIX:libOPC_UA: Publish requests, and messages in general, queuing and next its processing fixed for secure connections and
+		for Acknowledges for insecure ones after in direct processing.
+	    FIX: Some locks lost fix.
+	    !!!!: Chunks support was added to server's part. Tested on chunks into input requests for insecure and secure connections.
+	    A copy constructor was added for object NodeId and the strange problem here closed.
+	    New OPCAlloc object is added for mutex handle and its automatic free for exception.
+	    Maximim notifications per publish limit processing some improved.
+	    Expanded to early publish requests processing after requests of subscription and monitored items creation, for the init publish requests.
+    !!:FIX:BlockCalc: For IO presenting check there was used an uninterrupted ioId() of the function object.
+	IO of blocks loading was moved to using the seek request.
+    ICP_DAS: SDK was updated to the last version of "ICP DAS".
+    !!:FIX:JavaLikeCalc: Freeing of the function's test execution context is added on this function stop, for some crashes on exit prevent.
+	!:FIX: Return of the included functions fix for the string constant "" override.
+	!!!!: Support of the dynamic linking to external functions added in way: function {nm} = "{addr}"; {nm}();.
+	!!!!: Object's functions call was optimized for the name direct pass into the calling command.
+	!!!!: Expanded by operator "delete" for objects or its properties free.
+	FIX: Internal function's space splited for temporary registers.
+	FIX: The syntax highlight some fixed for strings and backslash '\' in variant "\\" and expanded to the command "~".
+	External functions link and call optimized at all.
+    !!: System: Expanded by "FS" data source. Automatic creation of sources expanded to modes of the sources "Fast" and "Slow".
+    FIX:DAQ.ModBus: Fixed and adapted to user attributes processing pass.
+- Archive:
+    !!:FIX: Spare writings direct to the archivators prevented for TVArchive::setVals().
+	FIX: getMess() fix for double call modules' function get(), by fmin() using.
+	FIX: getMess() fix for double call modules' function get(), by fmin() using.
+	FIX: getVal() fix for request to the current value but the buffer end() some lesser to it.
+	Some fields of the messages request dialogs are merged to single line.
+	messPut() expanded for alarms set and processing in first order.
+    !!:FIX:{.,FSArch}: Last read buffer information is added and the property using fix.
+	FIX: Exceptions into archivatorAttach() at the archivator's object stopping are prevented to allow the archive early start.
+    FIX:TValBuf: Fix for the object copy by the copy constructor appending and some fields lack.
+    !!!!:FIX:DBArch: Messages archivation part fixed for "needMeta" and to deny an access to the archivator before the successful meta get.
+	FIX: Set values processing mostly fixed to return the correct last time.
+	!!!!: Reading of the value archives made optimal for the request time, up to ten times, through using the "MARK" key and the seek request.
+	!!!!: The value archivation part expanded by the archives grouping into one group table, mostly for the archivation performance rise.
+	Values archivation period limited to the resolution in seconds.
+	Values archivation adapted to redundancy.
+	Checking of the module meta table is added for creation the lack value archives, like into Archive.FSArch.
+	Value archives limit is rose to days.
+	Messages get switched to use the preloading scanning mode.
+    FIX:FSArch: Adapted to values accumulation API. Values archivator fixed for the function stop() prototype.
+	The modules adapted for early archivators init and archive's meta set from the physical archives.
+- Transport:
+    !!: The input buffer size added to the manual request dialog of the output transports.
+    !!:Serial: Output transport expanded to check and use I2C.
+	!!: Appended by RTS toggle (true/false) flow control and echo filtering.
+	"No stop on proceed" option is added to output transports.
+	Char limit value expanded to 10000 ms, for output.
+	The timeout "symbol" was expanded by "the next request's multiplicator to the {symbol} time, 4 by default".
+    !!:Sockets: Reading reply of the output transport after FD_ISSET is false expanded by reading socket's SO_ERROR and
+	    waiting interruption on any socket error.
+	!!: Output transport's reading for reply in check to SO_ERROR moved to step 2 to take some time for delayed reading
+	    but same SO_ERROR reading sometime long.
+    !:SSL: Expanded by the direct methods: TLSv1.1, TLSv1.2, DTLSv1.
+- Protocol:
+    !!!:SelfSystem: XML loading expanded by option LD_NoTxtSpcRemEnBeg using to allow for spaces at begin and end of the text items.
+    !!!!:FIX:HTTP: Navigation by FS for the templalate file was fixed.
+	!!!!: Significant unified into service pages creation by the single function pgCreator().
+	    The function pgCreator() primarily implemented as an user API function of HTTP module's object for allow its using
+		into WEB-submodules for self but single-style service pages.
+	!!!: External calls to the WEB submodules expanded by functions HTTP_GET(), HTTP_POST() with an argument TProtocolIn *iprt,
+	    but the old calls HttpGet(), HttpPost() also continued to check and support.
+	!: The main page's template splited from the generic template for allow absolutely custom main pages.
+	!: Expanded for the main selection dialog with images and context help for allowing WWW-modules.
+	Current folder force added to the template's resources checking.
+	External template using expanded for main page without the Web-modules index and to allow for redirect to other page there,
+	    for Login/Logout using the internal templete continued in that case.
+- UI:
+    FIX:{Vision,WebVision}: Current values tracing of primitive "Diagram" for big periodics, in days, is fixed.
+    {WebCfg,WebVision}: Module's icon obtain machanism is changed.
+    {VCAEngine,Vision}: To the "connect" service there is added the checking of user for root by attribute "userIsRoot" and using it for menu visible.
+    !!!!:{WebUser,WebVision,WebCfgD}: Expanded to use the unified service interface from Protocol.HTTP by pgCreator() and
+	the new HTTP call functions HTTP_GET, HTTP_POST.
+    !: QTStarter: X Session manager disabled from restart the closed at exit programms.
+	FIX: Adapted to Qt5 specific method QTranslator::translate().
+	!: Expanded by a command line argument "--noX11" for allow the Qt disabling.
+    !!:FIX:QTCfg: Crashes into ConfApp::selectItem() prevented after "selectPage()" call by the possibility of the items selection changing.
+	!!:FIX: Dangerous missed page refreshing prevented into applying changes on widgets of the replacing page,
+	    "Apply dialog for changes missing prevent".
+	!!:FIX: Moved from QMutex and QWaitCondition to ResMtx and CondVar, mostly to prevent here hangs on the system time changing.
+	The window title forming some changed.
+	Allow page update after warnings at items loading.
+	Checking for integer input field's range is added.
+    !!!:FIX:VCAEngine: FuncM resources lock set for a recursive to prevent "dead" locks.
+	!!:FIX: Session calculation time expanded by its maximum value.
+	!!:FIX: Attribute addition expanded and used at manual creation by the attribute "allInher" for its creation inheritance.
+	FIX: Something prefixes ":" replecing to ": " fixed yet.
+	FIX: Widgets list into the widget's parent field expanded and fixed for list all items of project tree to any depth.
+	FIX: Static functions' name and description of the primitives are fixed.
+	FIX: Virtual function PrWidget::setEnable() fixed for the second argument and this one of widget
+	    and its succession expanded by the argument "force" like to pages.
+	FIX: Session's pages force enabling, at a request, prevented after its manual disable.
+	FIX: User attribute ID prevented to set for empty.
+	FIX: Visualiser specific attributes forced to modify at its activation, only for present atributes.
+	FIX: User attribute's value translation on load of the user attributes fixed.
+	!!: Session local dataMtx() is replaced by generic dataRes() of the node.
+	!: Adapted to TUIS::mimeGet() using.
+	New created attribute's ID ("newAttr") and NAME set for indexing.
+	To user's attributes loading used the preloaded seek.
+	Connections management added for its connection ID, mostly to detect remoted VCAServer changes and to re-iniate need then.
+    !!:FIX:Vision: Setting and updating of configuration of the status line fixed only for the master-page and its items immediately removing.
+	FIX: Cursor wrong setting sometime for current time position fix for primitive "Diagram".
+	!!: Visualizer specific attributes are alowed for the primitives and an attribute "sclWin" added and used
+	    for primitive "Diagram" for trends view in scale by window drawn by mouse.
+	!!: For primitive "Diagram" of the mode "Trend" the sliding by mouse is added in the time axis.
+	!!: Session restoring moved to the prior pages pre-removing but that is some faster, safer and cleaner then updating.
+	!!: "Developers" help field removed by merging it to the field "Author".
+	!: The view "List" of primitive "FormEl" expanded by appending the pointed but missed values to the list.
+	!: Widget's tooltip and statustip set to show at not full transparent widget's parts.
+	Unloaded mimes' extension sets to stored with the resource before taken from the mime type.
+	Expanded for authentication message error detailing.
+	Source code of primitive ElFigure some addition cleaned.
+	Using of the connection ID is added.
+	Force to widgets update and restoring openned pages at a reconnection is added.
+	Lock for the main window changing in run mode at the session update-reconnect.
+    !!!!:FIX:WebVision: SVG images show fixed by correct mime processing into UI.VCAEngine and TUIS::mimeGet() using.
+	FIX: View "Button" of primitive "FormEl": fixed for next line processing, fixed for true text and image represent.
+	FIX: For primitive "Text" set "line-height" for prevent upper font's padding and its representing for rotated texts moved
+	    to use CSS property "transform: rotate({X}deg)".
+	FIX: The prototype "Media" processing some fix for "fit" toggle and container's scale changing.
+	!!!!: Adapted to asynchronous calls for all regular updatings by servGet() and makeEl() adapting to it.
+	!!: Font's behaviour was expanded to support for text decorations "underline" and "line-through".
+	Icons to project's and session's items are added.
+	Generic views of primitive FormEl set for padding to "0".
+	Some changed in ElFigure implementing code for crashes in Post.
+    !:FIX:WebUser: Source code cleaned and the translation corrected.
+	!: Semantics of the page's function expanded by two objects' arguments "This object" and "Protocol's object".
+    !!!!:WebCfgD: A new design created.
+- Special:
+    !!:FIX:FLibSYS: FFT buffers "free" using fix, instead "delete". Translation was fixed something.
+	Function strParse() expanded for multisymbols separation.
+    SystemTests: A test of the preloading scanning mode added to the DB tests pool.
+    FLibMath: The source code cleaned.
+
+
 2016-07-14 Roman 0.8.16
-- FIX:!!:Archive: Old LTS problem with alarms is fixed, for the negative level read from the messages buffer and allow write to archives.
+- !!:FIX:Archive: Old LTS problem with alarms is fixed, for the negative level read from the messages buffer and allow write to archives.
 - !!!!:FIX:DAQ.JavaLikeCalc: Second argument's type changing at compile is fixed but it is dynamic now mostly,
     detected on problems with some string operations.
 - FIX:UI.Vision: Pages including into the pages container is fixed for adjust at it's scale change.

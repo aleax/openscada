@@ -166,7 +166,7 @@ TProtIn::~TProtIn()
 }
 
 //!!! The inherited (virtual) function of process input and preparint output data for called input transport
-bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
+bool TProtIn::mess( const string &reqst, string &answer )
 {
     //!!! Your code
 }

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 16:10+0300\n"
+"POT-Creation-Date: 2017-02-09 09:51+0200\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -29,7 +29,9 @@ msgstr "Roman Savotscheko"
 msgid ""
 "Allows you to perform the locking of the data sources of the remote "
 "OpenSCADA stations in the local ones."
-msgstr "Hier können Sie die Verriegelung der Datenquellen der Fern OpenSCADA Stationen in der lokalen diejenigen durchzuführen."
+msgstr ""
+"Hier können Sie die Verriegelung der Datenquellen der Fern OpenSCADA "
+"Stationen in der lokalen diejenigen durchzuführen."
 
 msgid "Parameters cache table"
 msgstr "Einflussgrößen Cache-Tabelle"
@@ -58,6 +60,9 @@ msgstr "Liste von entfernten Stationen"
 msgid "Remote cotrollers and parameters list"
 msgstr "Liste von entfernten Controllern und Parametern"
 
+msgid "Allow automatic remove parameters and attributes"
+msgstr "Automatische Entfernen von Parametern und Attributen zulassen"
+
 msgid "Standard"
 msgstr "Standard"
 
@@ -66,6 +71,9 @@ msgstr "Fernparameteradresse"
 
 msgid "Attributes configuration cache"
 msgstr "Attribute-Cache-Konfiguration"
+
+msgid "Presenting for stations"
+msgstr ""
 
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
@@ -79,8 +87,8 @@ msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Verbrauchte Zeit: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Verbrauchte Zeit: %s[%s]. "
 
 #, c-format
 msgid "Station '%s' error, restoring in %.3g s."
@@ -91,8 +99,8 @@ msgid "Requests to station '%s': %.6g."
 msgstr "Anfragen an die Station '%s': %.6g."
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
+msgid "DAQ.%s.%s: connect to data source: %s."
+msgstr "DAQ.%s.%s: Verbindung zu Datenquelle: %s."
 
 msgid "STOP"
 msgstr "STOP"
@@ -104,8 +112,8 @@ msgid "OK"
 msgstr "OK"
 
 #, c-format
-msgid "DAQ.%s: connect to data source '%s': %s."
-msgstr "DAQ.%s: Verbindung zu Datenquelle '%s': %s."
+msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgstr "DAQ.%s.%s: Verbindung zu Datenquelle '%s': %s."
 
 msgid "Zero for disable archive access."
 msgstr "Null für Behinderte Archiv zugreifen."
@@ -165,20 +173,3 @@ msgstr "Konfiguration einer entfernten Station"
 
 msgid "Controller is not started!"
 msgstr "Controller ist nicht gestartet!"
-
-#~ msgid "Gather messages level"
-#~ msgstr "Sammeln Meldungen Ebene"
-
-#~ msgid ""
-#~ "==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);"
-#~ "Critical (5);Alert (6);Emergency (7)"
-#~ msgstr ""
-#~ "==Deaktivieren==;Debuggen (0);Information (1);Bemerkung (2);Warnung (3);"
-#~ "Fehler (4);Kritisch (5);Wach (6);Notfall (7)"
-
-#~ msgid ""
-#~ "Deletion parameter '%s' is error but it no present on configuration or "
-#~ "remote station."
-#~ msgstr ""
-#~ "Löschen des Parameters '%s' ist falsch, er fehlt in der Konfiguration "
-#~ "oder in der entfernten Station."

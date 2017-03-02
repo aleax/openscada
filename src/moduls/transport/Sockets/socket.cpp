@@ -45,8 +45,8 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.2.5"
-#define AUTHORS		_("Roman Savochenko")
+#define MOD_VER		"2.3.3"
+#define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, and UDP protocols.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -131,7 +131,7 @@ string TSocketIn::getStatus( )
 
     if(startStat())
 	rez += TSYS::strMess(_("Connections %d, opened %d, last %s. Traffic in %s, out %s. Closed connections by limit %d."),
-				connNumb, clId.size(), tm2s(lastConn(),"").c_str(),
+				connNumb, clId.size(), atm2s(lastConn()).c_str(),
 				TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
 
     return rez;
@@ -139,7 +139,7 @@ string TSocketIn::getStatus( )
 
 void TSocketIn::load_( )
 {
-    TTransportIn::load_();
+    //TTransportIn::load_();
 
     try {
 	XMLNode prmNd;
@@ -531,7 +531,7 @@ bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &s
     try {
 	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
 	string n_pr = id() + i2s(sock);
-	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this);
+	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	prot_in = proto.at().at(n_pr);
 #if OSC_DEBUG >= 5
 	mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
@@ -550,7 +550,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, const string
     string n_pr;
     try {
 	prtInit(prot_in, sock, sender);
-	if(prot_in.at().mess(request,answer,sender)) return;
+	if(prot_in.at().mess(request,answer)) return;
 	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	n_pr = prot_in.at().name();
 	prot_in.free();
@@ -644,8 +644,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	MtxAlloc res(sockRes, true);
 	for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s."),
-		tm2s(iId->second->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),iId->first,iId->second->sender.c_str(),
-		tm2s(iId->second->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
+		atm2s(iId->second->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),iId->first,iId->second->sender.c_str(),
+		atm2s(iId->second->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
 		TSYS::cpct2str(iId->second->trIn).c_str(),TSYS::cpct2str(iId->second->trOut).c_str()));
     }
     else if(a_path == "/prm/cfg/MSS") {
@@ -717,7 +717,7 @@ string TSocketOut::getStatus( )
 
 void TSocketOut::load_( )
 {
-    TTransportOut::load_();
+    //TTransportOut::load_();
 
     try
     {
@@ -824,7 +824,7 @@ void TSocketOut::start( int itmCon )
 	    close(sockFd);
 	    sockFd = -1;
 #if OSC_DEBUG >= 5
-	    mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e3*itmCon).c_str(), strerror(errno), errno);
+	    mess_debug(nodePath().c_str(), _("Connect by timeout %s error: '%s (%d)'"), tm2s(1e-3*itmCon).c_str(), strerror(errno), errno);
 #endif
 	    throw TError(nodePath().c_str(), _("Connect to Internet socket error: '%s (%d)'!"), strerror(errno), errno);
 	}
@@ -967,8 +967,14 @@ repeate:
 		//!! Reading in that way but some time read() return 0 after the select() pass.
 		// * Force wait any data in the request mode or EAGAIN
 		// * No wait any data in the not request mode but it can get the data later
-		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr)
+		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !noReq) || (iB < 0 && errno == EAGAIN)) && iRtr < /*time*/mTmNext; ++iRtr) {
+		    if(iRtr == 1 && iB == 0) {	//Check for same socket's errors
+			int sockError = 0, sockLen = sizeof(sockError);
+			getsockopt(sockFd, SOL_SOCKET, SO_ERROR, (char*)&sockError, (socklen_t*)&sockLen);
+			if(sockError) { errno = sockError; break; }
+		    }
 		    TSYS::sysSleep(1e-3);
+		}
 		// * Force errors
 		// * Retry if any data was wrote but no a reply there into the request mode
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode

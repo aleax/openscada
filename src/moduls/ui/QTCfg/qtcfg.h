@@ -88,8 +88,8 @@ private:
     int cntrIfCmd( XMLNode &node, const QString &user );
 
     //Attributes
-    QMutex mtx;
-    QWaitCondition cond;
+    ResMtx	mtx;
+    CondVar	cond;
 
     QString	id, user;
     bool	isRemote, lnkOK, endRun, reqDone;

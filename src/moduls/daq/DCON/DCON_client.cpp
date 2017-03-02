@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.3"
+#define MOD_VER		"1.2.6"
 #define AUTHORS		_("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	_("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -164,9 +164,9 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(tmGath).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(1e-6*tmGath).c_str());
     }
 
     return rez;
@@ -179,10 +179,10 @@ void TMdContr::load_( )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    TController::load_( );
+    //TController::load_( );
 
     //Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(i2s(mPerOld)); mPerOld = 0; }
+    if(mPerOld) { cfg("SCHEDULE").setS(i2s(mPerOld)); mPerOld = 0; modif(true); }
 }
 
 void TMdContr::disable_( )
@@ -219,11 +219,7 @@ void TMdContr::stop_( )
     pHd.clear();
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
-{
-    TController::cfgChange(icfg);
-    return true;
-}
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )	{ TController::cfgChange(co, pc); return true; }
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
@@ -654,7 +650,7 @@ void *TMdContr::Task( void *icntr )
 
 	    if(isStop) break;
 
-	    TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	    TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
 
 	    if(cntr.endrunReq) isStop = true;
 	    isStart = false;
@@ -721,7 +717,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
 {
@@ -937,12 +933,12 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-bool TMdPrm::cfgChange( TCfg &icfg )
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TParamContr::cfgChange(icfg);
+    TParamContr::cfgChange(co, pc);
 
-    if(enableStat() && (icfg.fld().name() == "AI_METHOD" || icfg.fld().name() == "AO_METHOD" || 
-	    icfg.fld().name() == "DI_METHOD" || icfg.fld().name() == "DO_METHOD" || icfg.fld().name() == "CI_METHOD"))
+    if(enableStat() && (co.fld().name() == "AI_METHOD" || co.fld().name() == "AO_METHOD" ||
+	    co.fld().name() == "DI_METHOD" || co.fld().name() == "DO_METHOD" || co.fld().name() == "CI_METHOD"))
 	disable();
 
     return true;

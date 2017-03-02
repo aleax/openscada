@@ -28,7 +28,7 @@ using namespace OSCADA;
 //************************************************
 //* TProtocolS                                   *
 //************************************************
-TProtocolS::TProtocolS( ) : TSubSYS("Protocol", _("Transport protocols"), true)
+TProtocolS::TProtocolS( ) : TSubSYS("Protocol", _("Transport Protocols"), true)
 {
 
 }
@@ -83,10 +83,11 @@ TProtocol::~TProtocol( )
 
 }
 
-void TProtocol::open( const string &name, TTransportIn *tr )
+void TProtocol::open( const string &name, TTransportIn *tr, const string &sender )
 {
     chldAdd(m_pr,in_open(name));
     at(name).at().setSrcTr(tr);
+    at(name).at().setSrcAddr(sender);
 }
 
 void TProtocol::close( const string &name )
@@ -109,4 +110,4 @@ TProtocolIn::~TProtocolIn( )
 
 }
 
-TProtocol &TProtocolIn::owner( )	{ return *(TProtocol*)nodePrev(); }
+TProtocol &TProtocolIn::owner( ) const	{ return *(TProtocol*)nodePrev(); }

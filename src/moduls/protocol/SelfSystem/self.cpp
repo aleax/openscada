@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Self system OpenSCADA protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.1.2"
+#define MOD_VER		"1.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and one's control interface.")
 #define LICENSE		"GPL2"
@@ -259,8 +259,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    //if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response full %d"), resp.size());
 
-	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)));
-	    else io.load(resp.substr(head_end));
+	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)), XMLNode::LD_NoTxtSpcRemEnBeg);
+	    else io.load(resp.substr(head_end), XMLNode::LD_NoTxtSpcRemEnBeg);
 
 	    return;
 	}
@@ -302,7 +302,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	MtxAlloc res(dataRes(), true);
 	for(map<int,SAuth>::iterator authEl = mAuth.begin(); authEl != mAuth.end(); ++authEl)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s)"),
-		tm2s(authEl->second.tAuth,"").c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));
+		atm2s(authEl->second.tAuth).c_str(),authEl->second.name.c_str(),authEl->second.src.c_str()));
     }
     else if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
@@ -336,7 +336,7 @@ TProtIn::~TProtIn( )
 
 }
 
-bool TProtIn::mess( const string &request, string &answer, const string &sender )
+bool TProtIn::mess( const string &request, string &answer )
 {
     int ses_id = -1;
     int req_sz = 0;
@@ -351,9 +351,9 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     if(req.compare(0,8,"SES_OPEN") == 0)
     {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
-	if((ses_id=mod->sesOpen(user,pass,sender)) < 0)
-	    answer = "REZ "ERR_AUTH" Auth error. User or password error.\x0A";
-	else answer = "REZ "ERR_NO" " + i2s(ses_id) + "\x0A";
+	if((ses_id=mod->sesOpen(user,pass,TSYS::strLine(srcAddr(),0))) < 0)
+	    answer = "REZ " ERR_AUTH " Auth error. User or password error.\x0A";
+	else answer = "REZ " ERR_NO " " + i2s(ses_id) + "\x0A";
     }
     else if(req.compare(0,9,"SES_CLOSE") == 0)
     {
@@ -375,9 +375,9 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass,&auth.pHash))
 	    { auth.tAuth = 1; auth.name = user; }
 	}
-	else { answer = "REZ "ERR_CMD" Command format error.\x0A"; reqBuf.clear(); return false; }
+	else { answer = "REZ " ERR_CMD " Command format error.\x0A"; reqBuf.clear(); return false; }
 
-	if(!auth.tAuth) { answer = "REZ "ERR_AUTH" Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
+	if(!auth.tAuth) { answer = "REZ " ERR_AUTH " Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
 
 	try
 	{
@@ -388,7 +388,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 
 	    //Process request
 	    XMLNode req_node;
-	    req_node.load(reqBuf.substr(req.size()+1));
+	    req_node.load(reqBuf.substr(req.size()+1), XMLNode::LD_NoTxtSpcRemEnBeg);
 
 	    // Check for reforward requests
 	    string host = req_node.attr("reforwardHost");
@@ -414,7 +414,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 		d_tm = TSYS::curTime();
 #endif
 
-		req_node.setAttr("remoteSrcAddr", TSYS::strLine(sender,0));
+		req_node.setAttr("remoteSrcAddr", TSYS::strLine(srcAddr(),0));
 		SYS->cntrCmd(&req_node);
 		if(auth.pHash.size()) {
 		    req_node.setAttr("pHash", auth.pHash);
@@ -437,10 +437,10 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	    mess_debug(nodePath().c_str(),_("Save respond to stream and pack: '%s': %d, time: %f ms."),req.c_str(),resp.size(),1e-3*(TSYS::curTime()-w_tm));
 #endif
 
-	    answer = "REZ "ERR_NO" " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
-	} catch(TError &err) { answer = "REZ "ERR_PRC" " + err.cat + ":" + err.mess + "\x0A"; }
+	    answer = "REZ " ERR_NO " " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
+	} catch(TError &err) { answer = "REZ " ERR_PRC " " + err.cat + ":" + err.mess + "\x0A"; }
     }
-    else answer = "REZ "ERR_CMD" Command format error.\x0A";
+    else answer = "REZ " ERR_CMD " Command format error.\x0A";
 
     reqBuf.clear();
 

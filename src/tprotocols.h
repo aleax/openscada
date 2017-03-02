@@ -21,7 +21,7 @@
 #ifndef TPROTOCOLS_H
 #define TPROTOCOLS_H
 
-#define SPRT_VER	7		//ProtocolS type modules version
+#define SPRT_VER	8		//ProtocolS type modules version
 #define SPRT_ID		"Protocol"
 
 #include <string>
@@ -48,27 +48,29 @@ class TProtocolIn : public TCntrNode
 
 	string	name( )		{ return mName.c_str(); }
 	AutoHD<TTransportIn> &srcTr( )	{ return mSrcTr; }	//Source or return address
+	const string &srcAddr( )	{ return mSrcAddr; }
 	virtual unsigned waitReqTm( )	{ return 0; }		//Wait for the request timeout, miliseconds, after which call to
 								//the input protocol object with the empty message, for like to initiative poll allow.
 								//Value '0' used for disable the mechanism and waiting to any data
 
 	virtual void setSrcTr( TTransportIn *vl )	{ mSrcTr = vl; }
+	virtual void setSrcAddr( const string &vl )	{ mSrcAddr = vl; }
 
 	// Process input messages
 	//  * mess( ) - Send messages by it's point from the transports.
 	//              False - for full request came.
 	//              True  - for need tail or just wait.
-	virtual bool mess( const string &request, string &answer, const string &sender )
-	{ answer = ""; return false; }
+	virtual bool mess( const string &request, string &answer )	{ answer = ""; return false; }
 
-	TProtocol &owner( );
+	TProtocol &owner( ) const;
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mName.c_str(); }
+	const char *nodeName( ) const	{ return mName.c_str(); }
 
 	//Attributes
-	string	mName;
+	string	mName,
+		mSrcAddr;	//Source or return address into readable, first line, and service information, second line
 	AutoHD<TTransportIn>	mSrcTr;
 };
 
@@ -87,11 +89,11 @@ class TProtocol: public TModule
 	virtual void itemListIn( vector<string> &ls, const string &curIt = "" );
 
 	// Input protocol
-	void list( vector<string> &list )		{ chldList(m_pr,list); }
-	bool openStat( const string &name )		{ return chldPresent(m_pr,name); }
-	void open( const string &name, TTransportIn *tr = NULL );
+	void list( vector<string> &list ) const		{ chldList(m_pr,list); }
+	bool openStat( const string &name ) const	{ return chldPresent(m_pr,name); }
+	void open( const string &name, TTransportIn *tr = NULL, const string &sender = "" );
 	void close( const string &name );
-	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
+	AutoHD<TProtocolIn> at( const string &name ) const	{ return chldAt(m_pr,name); }
 
 	// Output protocol
 	virtual void outMess( XMLNode &io, TTransportOut &tro )
@@ -117,7 +119,7 @@ class TProtocolS : public TSubSYS
 
 	int subVer( )		{ return SPRT_VER; }
 
-	AutoHD<TProtocol> at( const string &iid )	{ return modAt(iid); }
+	AutoHD<TProtocol> at( const string &iid ) const	{ return modAt(iid); }
 
 	string optDescr( );
 

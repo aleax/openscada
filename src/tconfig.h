@@ -49,7 +49,7 @@ class TCfg : public TVariant
 	enum AttrFlg
 	{
 	    TransltText = 0x100,	//String value type: Use translation variable texts mechanism
-	    NoVal	= 0x200,	//No value mirrored
+	    NoVal	= 0x200,	//No mirrore to value
 	    Key		= 0x400,	//Primary key
 	    Hide	= 0x800		//Attribute hide
 	};
@@ -60,26 +60,27 @@ class TCfg : public TVariant
 
 	//Methods
 	TCfg( TFld &fld, TConfig &owner );
+	TCfg( const TCfg &cfg );
 	~TCfg( );
 
 	const string &name( );
 
 	bool	operator==( TCfg &cfg );
-	TCfg	&operator=( TCfg &cfg );
+	TCfg	&operator=( const TCfg &cfg );
 
-	bool	view( )			{ return mView; }
-	bool	keyUse( )		{ return mKeyUse; }
-	bool	noTransl( )		{ return mNoTransl; }
-	bool	isKey( );							//Whether real or request key test
+	bool	view( ) const		{ return mView; }
+	bool	keyUse( ) const		{ return mKeyUse; }
+	bool	noTransl( ) const	{ return mNoTransl; }
+	bool	isKey( ) const;						//Whether real or request key test
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if( fld().flg()&Key ) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 
-	TFld	&fld( )			{ return *mFld; }
+	TFld	&fld( ) const		{ return *mFld; }
 
 	//> Universal access
 	string	getSEL( );
-	string	getS( );
+	string	getS( ) const;
 	operator bool( )		{ return getB(); }
 
 	//> Direct access. Use only for readonly config-fields by no resourced!
@@ -104,6 +105,8 @@ class TCfg : public TVariant
 	TCfg	&operator=( int vl )	{ setI(vl); return *this; }
 	TCfg	&operator=( bool vl )	{ setB(vl); return *this; }
 
+	TConfig	&owner( ) const		{ return mOwner; }
+
     private:
 	//Attributes
 	uint8_t	mView		: 1;
@@ -127,15 +130,16 @@ class TConfig: public TValElem
     public:
 	//Methods
 	TConfig( TElem *Elements = NULL );
+	TConfig( const TConfig &src );
 	virtual ~TConfig( );
 
-	TConfig &operator=( TConfig &cfg );
-	TConfig &exclCopy( TConfig &cfg, const string &passCpLs = "" );
+	TConfig &operator=( const TConfig &cfg );
+	TConfig &exclCopy( const TConfig &cfg, const string &passCpLs = "", bool cpElsToSingle = false );
 
-	void cfgList( vector<string> &list );
-	bool cfgPresent( const string &n_val );
-	TCfg &cfg( const string &n_val );
-	TCfg *at( const string &n_val, bool noExpt = false );
+	void cfgList( vector<string> &list ) const;
+	bool cfgPresent( const string &n_val ) const;
+	TCfg &cfg( const string &n_val ) const;
+	TCfg *at( const string &n_val, bool noExpt = false ) const;
 	void cfgViewAll( bool val = true );	// Show/Hide all no key elements
 	void cfgKeyUseAll( bool val );
 
@@ -151,7 +155,7 @@ class TConfig: public TValElem
 
     protected:
 	//Methods
-	virtual bool cfgChange( TCfg &cfg )	{ return true; }
+	virtual bool cfgChange( TCfg &co, const TVariant &pc )	{ return true; }
 
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id );

@@ -922,7 +922,7 @@ InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(
 
 InspAttrDock::~InspAttrDock( )		{ }
 
-VisDevelop *InspAttrDock::owner( )	{ return (VisDevelop*)parentWidget(); }
+VisDevelop *InspAttrDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
 bool InspAttrDock::hasFocus( )		{ return ainsp_w->hasFocus(); }
 
@@ -1192,7 +1192,7 @@ InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidge
 
 InspLnkDock::~InspLnkDock( )		{ }
 
-VisDevelop *InspLnkDock::owner( )	{ return (VisDevelop*)parentWidget(); }
+VisDevelop *InspLnkDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
 void InspLnkDock::setWdg( const string &iwdg )
 {
@@ -1240,7 +1240,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
 
 WdgTree::~WdgTree( )		{ }
 
-VisDevelop *WdgTree::owner( )	{ return (VisDevelop*)parentWidget(); }
+VisDevelop *WdgTree::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
 bool WdgTree::hasFocus( )	{ return (QApplication::focusWidget() == treeW); }
 
@@ -1633,7 +1633,7 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
 
 ProjTree::~ProjTree( )	{ }
 
-VisDevelop *ProjTree::owner( )	{ return (VISION::VisDevelop*)parentWidget(); }
+VisDevelop *ProjTree::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }
 
 bool ProjTree::hasFocus( )	{ return (QApplication::focusWidget() == treeW); }
 
@@ -2196,8 +2196,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	QRectF selRect;
 	int sel_cnt = 0;
 	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
-	    {
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select()) {
 		selRect = selRect.united(cwdg->geometryF());
 		sel_cnt++;
 	    }
@@ -3086,7 +3085,7 @@ bool DevelWdgView::event( QEvent *event )
 		if(fMoveHold || cursor().shape() != Qt::ArrowCursor) {
 		    if(cursor().shape() != Qt::ArrowCursor) {
 			vector<DevelWdgView*> lswdgs;
-			selectChilds(NULL,&lswdgs);
+			selectChilds(NULL, &lswdgs);
 			if(fMoveHoldMove) {
 			    if(!lswdgs.size()) {
 				saveGeom(id().c_str());
@@ -3166,7 +3165,7 @@ bool DevelWdgView::event( QEvent *event )
 		upMouseCursors(curp);
 
 		// Move widgets control
-		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
+		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && (((QMouseEvent*)event)->buttons()&Qt::LeftButton) &&
 		    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance())
 		{
 		    dragStartPos = QPoint(-100,-100);
@@ -3302,8 +3301,7 @@ void SizePntWdg::apply( )
     if(mWSize.width() > 2 && mWSize.height() > 2) {
 	QRegion reg;
 	QRect   wrect, irect;
-	switch(view)
-	{
+	switch(view) {
 	    case SizeDots:
 		wrect = QRectF(mWPos,mWSize).adjusted(-3,-3,3,3).toRect();
 		irect = QRect(0,0,wrect.width(),wrect.height());
@@ -3334,16 +3332,14 @@ void SizePntWdg::apply( )
 
 bool SizePntWdg::event( QEvent *ev )
 {
-    switch(ev->type())
-    {
+    switch(ev->type()) {
 	case QEvent::Paint: {
 	    if(!rect().isValid()) break;
 
 	    QPainter pnt(this);
 	    pnt.setWindow(rect());
 
-	    switch(view)
-	    {
+	    switch(view) {
 		case SizeDots:
 		    pnt.setPen(QColor("black"));
 		    pnt.setBrush(QBrush(QColor("lightgreen")));

@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.HTTP translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.HTTP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-22 13:21+0300\n"
+"POT-Creation-Date: 2017-02-09 14:01+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -36,6 +36,10 @@ msgstr ""
 "------- Параметры модульной секции '%s' в конфигурационном файле ---------\n"
 "AuthTime <мин>     Время жизни аутентификации, минут (по умолчанию 10).\n"
 "\n"
+
+#, c-format
+msgid "HTML template '%s' load error: %s"
+msgstr "Ошибка загрузки HTML шаблона '%s': %s"
 
 #, c-format
 msgid "Auth exit from user '%s'."
@@ -70,8 +74,11 @@ msgstr "Опции модуля"
 msgid "Life time of the authentication (min)"
 msgstr "Время жизни аутентификации (мин)"
 
-msgid "HTML-template"
-msgstr "HTML-шаблон"
+msgid "HTML template"
+msgstr "HTML шаблон"
+
+msgid "HTML main page template"
+msgstr "HTML шаблон главной страницы"
 
 msgid "Auto login"
 msgstr "Автоматический вход"
@@ -110,7 +117,7 @@ msgstr ""
 "Успешная аутентификация пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
 #, c-format
-msgid "Going to page: <b>%s</b>"
+msgid "Going to the page: <b>%s</b>"
 msgstr "Переход к странице: <b>%s</b>"
 
 #, c-format
@@ -122,7 +129,7 @@ msgid "<p style='color: #CF8122;'>Auth is wrong! Retry please.</p>"
 msgstr ""
 "<p style='color: #CF8122;'>Ошибка аутентификации! Повторите пожалуйста.</p>"
 
-msgid "Find no one WWW subtype module!"
+msgid "No one WWW subtype module was found!"
 msgstr "Не найдено модулей с подтипом WWW!"
 
 #, c-format
@@ -132,37 +139,35 @@ msgstr ""
 "пользователя: %s."
 
 #, c-format
-msgid "HTML-template '%s' load error: %s"
-msgstr "Ошибка загрузки HTML-шаблона '%s': %s"
+msgid "No a HTTP GET function present for module '%s'!"
+msgstr "Нет HTTP GET функции у модуля '%s'!"
+
+#, c-format
+msgid "No a HTTP POST function present for module '%s'!"
+msgstr "Нет HTTP POST функции у модуля '%s'!"
 
 msgid "Login"
 msgstr "Вход"
-
-msgid "Welcome to the Web-interfaces of OpenSCADA system."
-msgstr "Добро пожаловать в Web-интерфейсы системы OpenSCADA."
 
 #, c-format
 msgid "You are logged in as \"<b>%s</b>\"."
 msgstr "Вы вошли как \"<b>%s</b>\"."
 
 msgid ""
-"Select the necessary Web-module from the list below, press <a href='/"
-"logout'>here</a> to logout or <a href='/login'>here</a> to login as another "
-"user."
+"Select the necessary Web-module from the list below, <a href='/"
+"logout'>logout</a> or <a href='/login'>login as an another user</a>."
 msgstr ""
-"Выберите нужный Web-модуль из списка ниже или нажмите <a href='/logout'>тут</"
-"a> для выхода или <a href='/login'>тут</a> для входа от имени другого "
-"пользователя."
+"Выберите нужный Web-модуль из списка ниже, <a href='/logout'>выйдите</a> или "
+"<a href='/login'>войдите от имени другого пользователя</a>."
 
 msgid "You are not logged in the system!"
 msgstr "Вы не вошли в систему!"
 
 msgid ""
-"To use some modules you must be logged in. To login now click <a href='/"
-"login'>here</a>."
+"To use some modules you must be logged in. <a href='/login'>Login now</a>."
 msgstr ""
-"Для использования некоторых модулей Вы должны войти в систему. Для входа "
-"сейчас нажмите <a href='/login'>здесь</a>."
+"Для использования некоторых модулей Вы должны войти в систему. <a href='/"
+"login'>Войти</a>."
 
 #, c-format
 msgid ""

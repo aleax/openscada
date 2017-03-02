@@ -35,13 +35,18 @@ Func *JavaLikeCalc::pF;
 //*************************************************
 //* Func: Function                                *
 //*************************************************
-Func::Func( const string &iid, const string &name ) :
-    TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
+Func::Func( const string &iid, const string &name ) : TConfig(&mod->elFnc()), TFunction(iid, SDAQ_ID),
     mMaxCalcTm(cfg("MAXCALCTM").getId()), parseRes(mod->parseRes())
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
     mMaxCalcTm = mod->safeTm();
+}
+
+Func::Func( const Func &ifunc ) : TConfig(&mod->elFnc()), TFunction(ifunc.id(), SDAQ_ID),
+    mMaxCalcTm(ifunc.mMaxCalcTm), parseRes(mod->parseRes())
+{
+    operator=(ifunc);
 }
 
 Func::~Func( )
@@ -62,7 +67,7 @@ void Func::postDisable( int flag )
 	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-Lib &Func::owner( )	{ return *((Lib*)nodePrev()); }
+Lib &Func::owner( ) const	{ return *((Lib*)nodePrev()); }
 
 string Func::name( )
 {
@@ -70,9 +75,9 @@ string Func::name( )
     return tNm.size() ? tNm : id();
 }
 
-TCntrNode &Func::operator=( TCntrNode &node )
+TCntrNode &Func::operator=( const TCntrNode &node )
 {
-    Func *src_n = dynamic_cast<Func*>(&node);
+    const Func *src_n = dynamic_cast<const Func*>(&node);
     if(!src_n) return *this;
 
     *(TConfig *)this = *(TConfig*)src_n;
@@ -86,7 +91,7 @@ TCntrNode &Func::operator=( TCntrNode &node )
     return *this;
 }
 
-Func &Func::operator=( Func &func )
+Func &Func::operator=( const Func &func )
 {
     *(TConfig*)this = (TConfig&)func;
     *(TFunction*)this = (TFunction&)func;
@@ -115,18 +120,19 @@ void Func::setMaxCalcTm( int vl )
     if(!owner().DB().empty()) modif();
 }
 
-void Func::setProg( const string &prg )
+void Func::setProg( const string &iprg )
 {
-    cfg("FORMULA").setS(prg);
+    cfg("FORMULA").setS(iprg);
     if(owner().DB().empty()) modifClr();
 }
 
-void Func::load_( )
+void Func::load_( TConfig *icfg )
 {
     if(owner().DB().empty() || (!SYS->chkSelDB(owner().DB())))	throw TError();
 
     cfg("FORMULA").setNoTransl(!owner().progTr());
-    SYS->db().at().dataGet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
+    if(icfg) *(TConfig*)this = *icfg;
+    else SYS->db().at().dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     loadIO();
 }
@@ -135,11 +141,11 @@ void Func::loadIO( )
 {
     if(startStat()) return;
     TConfig cfg(&mod->elFncIO());
+    vector<vector<string> > full;
 
     vector<string> u_pos;
-    cfg.cfg("F_ID").setS(id(),true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt,cfg); fld_cnt++)
-    {
+    cfg.cfg("F_ID").setS(id(), TCfg::ForceUse);
+    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,false,&full); fldCnt++) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -160,14 +166,14 @@ void Func::loadIO( )
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }
     //Remove holes
-    for(unsigned i_p = 0; i_p < u_pos.size(); ) {
-	if(u_pos[i_p].empty()) { u_pos.erase(u_pos.begin()+i_p); continue; }
-	i_p++;
+    for(unsigned iP = 0; iP < u_pos.size(); ) {
+	if(u_pos[iP].empty()) { u_pos.erase(u_pos.begin()+iP); continue; }
+	iP++;
     }
     //Position fixing
-    for(int i_p = 0; i_p < (int)u_pos.size(); i_p++) {
-	int iid = ioId(u_pos[i_p]);
-	if(iid != i_p) try{ ioMove(iid,i_p); } catch(...) { }
+    for(int iP = 0; iP < (int)u_pos.size(); iP++) {
+	int iid = ioId(u_pos[iP]);
+	if(iid != iP) try{ ioMove(iid,iP); } catch(...) { }
     }
 }
 
@@ -205,11 +211,12 @@ void Func::saveIO( )
     }
 
     //Clear IO
+    vector<vector<string> > full;
     cfg.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg); )
+    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg,false,&full); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
-	    SYS->db().at().dataDel(io_bd, io_cfgpath, cfg, true, false, true);
-	    fld_cnt--;
+	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true,false,true))	break;
+	    if(full.empty()) fldCnt--;
 	}
 }
 
@@ -234,19 +241,16 @@ void Func::setStart( bool val )
 {
     if(val == runSt) return;
     //Start calc
-    if(val) {
-	progCompile();
-	runSt = true;
-    }
+    if(val) progCompile();
     //Stop calc
     else {
 	ResAlloc res(fRes(), true);
-	prg = "";
+	prg = mUsings = "";
 	regClear();
-	regTmpClean( );
-	funcClear();
-	runSt = false;
+	regTmpClean();
+	mFncs.clear();
     }
+    TFunction::setStart(val);
 }
 
 void Func::ioAdd( IO *io )
@@ -281,14 +285,14 @@ void Func::progCompile( )
     //Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
 
-    pF  = this;	//Parse func
-    pErr  = "";	//Clear error messages
+    pF     = this;	//Parse func
+    pErr   = "";	//Clear error messages
     laPos  = 0;		//LA position
     sprg = cfg("FORMULA").getS();
     prg.clear();	//Clear program
     regClear();		//Clear registers list
-    regTmpClean( );	//Clear temporary registers list
-    funcClear();	//Clear functions list
+    regTmpClean();	//Clear temporary registers list
+    mFncs.clear();	//Clear static linked external functions list
     mInFnc = "";
     mInFncs.clear();
 
@@ -297,7 +301,7 @@ void Func::progCompile( )
 	sprg.clear();
 	regClear();
 	regTmpClean( );
-	funcClear();
+	mFncs.clear();
 	mInFncs.clear();
 	runSt = false;
 	throw TError(nodePath().c_str(), "%s", pErr.c_str());
@@ -309,36 +313,22 @@ void Func::progCompile( )
 
 int Func::funcGet( const string &path )
 {
-    string ns, f_path;
+    string ns, fPath;
 
     //Check to correct function's path
-    try {
-	if( dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()) )
-	    f_path = SYS->nodeAt(path,0,'.').at().nodePath();
-    } catch(...) { }
-
-    if(f_path.empty()) {
-	for( int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
-	    try{ if( dynamic_cast<TFunction*>(&SYS->nodeAt(ns+"."+path,0,'.').at()) ) break; }
-	    catch(...) { continue; }
-	if( ns.empty() ) return -1;
-	f_path = SYS->nodeAt(ns+"."+path,0,'.').at().nodePath();
-    }
+    AutoHD<TCntrNode> nd = SYS->nodeAt(path, 0, '.', 0, true);
+    for(int off = 0; (nd.freeStat() || !dynamic_cast<TFunction*>(&nd.at())) && (ns=TSYS::strParse(mUsings,0,";",&off)).size(); )
+	nd = SYS->nodeAt(ns+"."+path, 0, '.', 0, true);
+    if(nd.freeStat() || !dynamic_cast<TFunction*>(&nd.at())) return -1;
+    fPath = nd.at().nodePath();
 
     //Search for already registered function
-    for(int i_fnc = 0; i_fnc < (int)mFncs.size(); i_fnc++)
-	if(f_path == mFncs[i_fnc]->func().at().nodePath())
-	    return i_fnc;
-    mFncs.push_back(new UFunc(ns.empty()?path:ns+"."+path));
+    for(int iFnc = 0; iFnc < (int)mFncs.size(); iFnc++)
+	if(fPath == mFncs[iFnc].at().nodePath())
+	    return iFnc;
+    mFncs.push_back(nd);
 
     return mFncs.size()-1;
-}
-
-void Func::funcClear( )
-{
-    for(unsigned i_fnc = 0; i_fnc < mFncs.size(); i_fnc++)
-	delete mFncs[i_fnc];
-    mFncs.clear();
 }
 
 int Func::inFuncGet( const string &nm )
@@ -356,16 +346,19 @@ void Func::inFuncDef( const string &nm, int pos )
 int Func::regNew( bool sep, int recom )
 {
     //Get new register
-    unsigned i_rg = mRegs.size();
+    unsigned iRg = mRegs.size();
     if(!sep) {
-	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() && mRegs[recom]->type() == Reg::Free) i_rg = recom;
-	else for(i_rg = 0; i_rg < mRegs.size(); i_rg++)
-	    if(!mRegs[i_rg]->lock() && mRegs[i_rg]->type() == Reg::Free)
+	if(recom >= 0 && recom < (int)mRegs.size() && !mRegs[recom]->lock() &&
+		mRegs[recom]->type() == Reg::Free && mRegs[recom]->inFnc() == mInFnc)
+	    iRg = recom;
+	else for(iRg = 0; iRg < mRegs.size(); iRg++)
+	    if(!mRegs[iRg]->lock() && mRegs[iRg]->type() == Reg::Free && mRegs[iRg]->inFnc() == mInFnc)
 		break;
     }
-    if(i_rg >= mRegs.size()) mRegs.push_back(new Reg(i_rg));
+    if(iRg >= mRegs.size()) mRegs.push_back(new Reg(iRg));
+    mRegs[iRg]->setInFnc(mInFnc);
 
-    return i_rg;
+    return iRg;
 }
 
 int Func::regGet( const string &inm, bool inFncNS )
@@ -373,9 +366,9 @@ int Func::regGet( const string &inm, bool inFncNS )
     string nm = inm;
     if(inFncNS && mInFnc.size()) nm = mInFnc+":"+nm;
     //Check allow registers
-    for(int i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
-	if(mRegs[i_rg]->name() == nm)
-	    return i_rg;
+    for(int iRg = 0; iRg < (int)mRegs.size(); iRg++)
+	if(mRegs[iRg]->name() == nm)
+	    return iRg;
     return -1;
 }
 
@@ -397,25 +390,25 @@ int Func::ioGet( const string &nm )
 
 void Func::regClear( )
 {
-    for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
-        delete mRegs[i_rg];
+    for(unsigned iRg = 0; iRg < mRegs.size(); iRg++)
+	delete mRegs[iRg];
     mRegs.clear();
 }
 
 Reg *Func::regTmpNew( )
 {
-    unsigned i_rg;
-    for(i_rg = 0; i_rg < mTmpRegs.size(); i_rg++)
-	if(mTmpRegs[i_rg]->type() == Reg::Free)
+    unsigned iRg;
+    for(iRg = 0; iRg < mTmpRegs.size(); iRg++)
+	if(mTmpRegs[iRg]->type() == Reg::Free)
 	    break;
-    if(i_rg >= mTmpRegs.size()) mTmpRegs.push_back(new Reg());
-    return mTmpRegs[i_rg];
+    if(iRg >= mTmpRegs.size()) mTmpRegs.push_back(new Reg());
+    return mTmpRegs[iRg];
 }
 
 void Func::regTmpClean( )
 {
-    for(unsigned i_rg = 0; i_rg < mTmpRegs.size(); i_rg++)
-	delete mTmpRegs[i_rg];
+    for(unsigned iRg = 0; iRg < mTmpRegs.size(); iRg++)
+	delete mTmpRegs[iRg];
     mTmpRegs.clear();
 }
 
@@ -499,10 +492,10 @@ Reg *Func::cdMviArray( int p_cnt )
     deque<int> p_pos;
 
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++)
-	fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++)
+	fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
     //Get parameters.
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) {
 	p_pos.push_front(fPrmst.front()->pos());
 	fPrmst.front()->free();
 	fPrmst.pop_front();
@@ -516,8 +509,8 @@ Reg *Func::cdMviArray( int p_cnt )
     prg += (uint8_t)Reg::MviArray;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
     prg += (uint8_t)p_cnt;
-    for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+    for(unsigned iPrm = 0; iPrm < p_pos.size(); iPrm++)
+    { addr = p_pos[iPrm]; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
@@ -987,32 +980,37 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     return rez;
 }
 
-Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
+Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc, Reg *f_r )
 {
     int r_pos;	//Return function's position
     Reg *rez = NULL;
     deque<int> p_pos;
 
-    //Check return IO position
-    bool ret_ok = false;
-    for(r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++)
-	if((ret_ok=(bool)(funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return)))
-	    break;
+    if(!f_r) {
+	if(f_id >= EXT_F_LIM)
+	    throw TError(nodePath().c_str(), _("External functions number exceeded limits to %d on function '%s'"), f_id, mFncs[f_id].at().id().c_str());
 
-    //Check IO and parameters count
-    if(p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok)
-	throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for function '%s'"),
-	    (funcAt(f_id)->func().at().ioSize()-ret_ok), p_cnt, funcAt(f_id)->func().at().id().c_str());
+	//Check for return IO position
+	bool ret_ok = false;
+	for(r_pos = 0; r_pos < mFncs[f_id].at().ioSize(); r_pos++)
+	    if((ret_ok=(bool)(mFncs[f_id].at().io(r_pos)->flg()&IO::Return)))
+		break;
 
-    //Check the present return for fuction
-    if( !proc && !ret_ok )
-	throw TError(nodePath().c_str(),_("Function is requested '%s', but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
+	//Check IO and parameters count
+	if(p_cnt > mFncs[f_id].at().ioSize()-ret_ok)
+	    throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for function '%s'"),
+		(mFncs[f_id].at().ioSize()-ret_ok), p_cnt, mFncs[f_id].at().id().c_str());
+
+	//Check the present return for fuction
+	if(!proc && !ret_ok)
+	    throw TError(nodePath().c_str(), _("Function is requested '%s', but it doesn't have return of IO"), mFncs[f_id].at().id().c_str());
+    }
 
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
 
-    //Get parameters. Add check parameters type !!!!
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
+    //Get parameters. Add check parameters type
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) {
 	p_pos.push_front(fPrmst.front()->pos());
 	fPrmst.front()->free();
 	fPrmst.pop_front();
@@ -1021,23 +1019,26 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     //Make result
     if(!proc) {
 	rez = regAt(regNew());
-	switch(funcAt(f_id)->func().at().io(r_pos)->type()) {
-	    case IO::String:	rez->setType(Reg::String);	break;
-	    case IO::Integer:	rez->setType(Reg::Int);		break;
-	    case IO::Real:	rez->setType(Reg::Real);	break;
-	    case IO::Boolean:	rez->setType(Reg::Bool);	break;
-	    case IO::Object:	rez->setType(Reg::Obj);		break;
-	}
+	rez->setType(Reg::Real);
+	/*if(!f_r)
+	    switch(funcAt(f_id)->func().at().io(r_pos)->type()) {
+		case IO::String:	rez->setType(Reg::String);	break;
+		case IO::Integer:	rez->setType(Reg::Int);		break;
+		case IO::Real:		rez->setType(Reg::Real);	break;
+		case IO::Boolean:	rez->setType(Reg::Bool);	break;
+		case IO::Object:	rez->setType(Reg::Obj);		break;
+	    }*/
     }
 
     //Make code
     uint16_t addr;
     prg += proc ? (uint8_t)Reg::CProc : (uint8_t)Reg::CFunc;
-    prg += (uint8_t)f_id;
+    prg += (int8_t)f_id;
     prg += (uint8_t)p_cnt;
     addr = proc ? 0 : rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+    addr = f_r ? f_r->pos() : 0; prg.append((char*)&addr,sizeof(uint16_t));
+    for(unsigned iPrm = 0; iPrm < p_pos.size(); iPrm++)
+    { addr = p_pos[iPrm]; prg.append((char*)&addr,sizeof(uint16_t)); }
 
     return rez;
 }
@@ -1060,7 +1061,7 @@ Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
     //Make result
     if(!proc) (rez=regAt(regNew()))->setType(Reg::Real);
 
-    //Make code
+    //Make the code
     uint16_t addr;
     prg += (uint8_t)Reg::IFunc;
     addr = fOff; prg.append((char*)&addr, sizeof(uint16_t));
@@ -1072,19 +1073,20 @@ Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
     return rez;
 }
 
-Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
+Reg *Func::cdObjFnc( Reg *obj, const string &fNm, int p_cnt )
 {
-    if( !obj->objEl( ) )
-	throw TError(nodePath().c_str(),_("No object variable for function"));
-    if( p_cnt > 255 ) throw TError(nodePath().c_str(),_("Object's function have more 255 parameters."));
+    if(fNm.size() > 254)throw TError(nodePath().c_str(), _("Function's name longer to 254."));
+    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object's function have more 255 parameters."));
 
     Reg *rez = NULL;
     deque<int> p_pos;
 
+    obj = cdMvi(obj);
+
     //Mvi all parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) fPrmst[i_prm] = cdMvi(fPrmst[i_prm]);
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) fPrmst[iPrm] = cdMvi(fPrmst[iPrm]);
     //Get parameters
-    for(int i_prm = 0; i_prm < p_cnt; i_prm++) {
+    for(int iPrm = 0; iPrm < p_cnt; iPrm++) {
 	p_pos.push_front(fPrmst.front()->pos());
 	fPrmst.front()->free();
 	fPrmst.pop_front();
@@ -1093,15 +1095,18 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     rez = regAt(regNew());
     rez->setType(Reg::Dynamic);
 
-    //Make code
+    //Make the code
     uint16_t addr;
     prg += (uint8_t)Reg::CFuncObj;
     addr = obj->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    prg += (uint8_t)fNm.size();
     prg += (uint8_t)p_cnt;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
 
-    for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+    prg += fNm;
+
+    for(unsigned iPrm = 0; iPrm < p_pos.size(); iPrm++)
+    { addr = p_pos[iPrm]; prg.append((char*)&addr, sizeof(uint16_t)); }
 
     return rez;
 }
@@ -1250,8 +1255,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  val1, val2 - appended values
 		if(prop == "concat" && prms.size()) {
 		    string rez = vl.getS();
-		    for(unsigned i_p = 0; i_p < prms.size(); i_p++)
-			rez += prms[i_p].getS();
+		    for(unsigned iP = 0; iP < prms.size(); iP++)
+			rez += prms[iP].getS();
 		    return rez;
 		}
 		// int indexOf(string substr, int start) - returns the position of the required string <substr> in the original
@@ -1327,10 +1332,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 
 		    //  Use simple string separator
 		    TArrayObj *rez = new TArrayObj();
-		    for(size_t posB = 0, posC, i_p = 0; true; i_p++) {
+		    for(size_t posB = 0, posC, iP = 0; true; iP++) {
 			if(prms.size() > 1 && rez->size() >= prms[1].getI()) break;
 			posC = vl.getS().find(prms[0].getS(),posB);
-			if(posC != posB) rez->arSet(i_p, vl.getS().substr(posB,posC-posB));
+			if(posC != posB) rez->arSet(iP, vl.getS().substr(posB,posC-posB));
 			if(posC == string::npos) break;
 			posB = posC + prms[0].getS().size();
 		    }
@@ -1376,19 +1381,29 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// int toInt(int base = 0) - convert this string to integer number
 		//  base - radix of subject sequence
 		if(prop == "toInt") return (int)strtol(vl.getS().c_str(),NULL,(prms.size()>=1?prms[0].getI():0));
-		// string parse(int pos, string sep = ".", int off = 0) - get token with numbet <pos> from the string when separated by <sep>
+		// string parse(int pos, string sep = ".", int off = 0) - get token with number <pos> from the string when separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
 		//  sep - items separator
 		//  off - start position
 		if(prop == "parse" && prms.size()) {
 		    int off = (prms.size() >= 3) ? prms[2].getI() : 0;
-		    string rez = TSYS::strParse( vl.getS(), prms[0].getI(),
-			(prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4) ? prms[3].getB() : false );
-		    if( prms.size() >= 3 ) { prms[2].setI(off); prms[2].setModify(); }
+		    string rez = TSYS::strParse(vl.getS(), prms[0].getI(),
+						(prms.size()>=2) ? prms[1].getS() : ".", &off,
+						(prms.size()>=4) ? prms[3].getB() : false);
+		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
 		    return rez;
 		}
-		// string parsePath(int pos, int off = 0) - get path token with numbet <pos> from the string and from offset <off>
+		// string parseLine(int pos, int off = 0) - get line with number <pos> from the string and from offset <off>
+		//  pos - item position
+		//  off - start position
+		if(prop == "parseLine" && prms.size()) {
+		    int off = (prms.size() >= 2) ? prms[1].getI() : 0;
+		    string rez = TSYS::strLine(vl.getS(), prms[0].getI(), &off);
+		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
+		    return rez;
+		}
+		// string parsePath(int pos, int off = 0) - get path token with number <pos> from the string and from offset <off>
 		//  pos - item position
 		//  off - start position
 		if(prop == "parsePath" && prms.size()) {
@@ -1401,6 +1416,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  sep - item separator
 		if(prop == "path2sep")
 		    return TSYS::path2sepstr(vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.');
+		// string trim(string cfg = " \n\t\r") - string trimming at begin and end for symbols <cfg>.
+		//  cfg - trimming symbols
+		if(prop == "trim") return sTrm(vl.getS(), prms.size() ? prms[0].getS() : " \n\t\r");
 
 		return false;
 		//throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());
@@ -1447,10 +1465,10 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 	default: break;
     }
 
-    for(unsigned i_p = 0; i_p < rg.props().size(); i_p++) {
-	if(fObj && i_p == (rg.props().size()-1)) break;
+    for(unsigned iP = 0; iP < rg.props().size(); iP++) {
+	if(fObj && iP == (rg.props().size()-1)) break;
 	if(vl.isNull())	return TVariant();	//Null //return false;
-	vl = oPropGet(vl, rg.props()[i_p]);
+	vl = oPropGet(vl, rg.props()[iP]);
     }
 
     return vl;
@@ -1485,6 +1503,7 @@ int Func::getValI( TValFunc *io, RegW &rg )
 	    case Reg::Var:	return io->getI(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().pA->at().getI();
 	    case Reg::Obj:	return 1;
+	    case Reg::Function:	return rg.val().f->freeStat() ? 0 : 1;
 	    default:	break;
 	}
     else return getVal(io,rg).getI();
@@ -1503,6 +1522,7 @@ double Func::getValR( TValFunc *io, RegW &rg )
 	    case Reg::Var:	return io->getR(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().pA->at().getR();
 	    case Reg::Obj:	return 1;
+	    case Reg::Function:	return rg.val().f->freeStat() ? 0 : 1;
 	    default:	break;
 	}
     else return getVal(io,rg).getR();
@@ -1521,6 +1541,7 @@ char Func::getValB( TValFunc *io, RegW &rg )
 	    case Reg::Var:	return io->getB(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().pA->at().getB();
 	    case Reg::Obj:	return true;
+	    case Reg::Function:	return !rg.val().f->freeStat();
 	    default:	break;
 	}
     else return getVal(io,rg).getB();
@@ -1579,9 +1600,9 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 	}
     else if(rg.type() == Reg::Obj) {
 	TVariant vl(*rg.val().o);
-	for(unsigned i_p = 0; i_p < rg.props().size(); i_p++)
-	    if(i_p < (rg.props().size()-1)) vl = vl.getO().at().propGet(rg.props()[i_p]);
-	    else vl.getO().at().propSet(rg.props()[i_p], val);
+	for(unsigned iP = 0; iP < rg.props().size(); iP++)
+	    if(iP < (rg.props().size()-1)) vl = vl.getO().at().propGet(rg.props()[iP]);
+	    else vl.getO().at().propSet(rg.props()[iP], val);
     }
 }
 
@@ -1645,11 +1666,10 @@ void Func::calc( TValFunc *val )
     ResAlloc res(fRes(), false);
     if(!startStat()) return;
 
-    //> Init list of registers
+    //Init list of registers
     RegW reg[mRegs.size()];
     for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
-	switch(mRegs[i_rg]->type())
-	{
+	switch(mRegs[i_rg]->type()) {
 	    case Reg::Var:
 		reg[i_rg].setType(Reg::Var);
 		reg[i_rg].val().io = mRegs[i_rg]->val().io;
@@ -1658,10 +1678,13 @@ void Func::calc( TValFunc *val )
 		reg[i_rg].setType(Reg::PrmAttr);
 		*reg[i_rg].val().pA = *mRegs[i_rg]->val().pA;
 		break;
+	    case Reg::Function:
+		reg[i_rg].setType(Reg::Function);
+		break;
 	    default:	break;
 	}
 
-    //> Exec calc
+    //Exec calc
     ExecData dt = { 1, time(NULL), 0 };
     try{ exec(val,reg,(const uint8_t*)prg.c_str(),dt); }
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -1738,17 +1761,17 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		TArrayObj *ar = new TArrayObj();
 		//  Fill array by empty elements number
 		if(ptr->numb == 1)
-		    for(int i_p = 0; i_p < getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]); i_p++)
-			ar->arSet(i_p, EVAL_REAL);
+		    for(int iP = 0; iP < getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode))]); iP++)
+			ar->arSet(iP, EVAL_REAL);
 		//  Fill array by parameters
 		else
-		    for(int i_p = 0; i_p < ptr->numb; i_p++)
-			switch(reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].vType(this)) {
-			    case Reg::Bool:	ar->arSet(i_p, getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Int:	ar->arSet(i_p, getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Real:	ar->arSet(i_p, getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::String:	ar->arSet(i_p, getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Obj:	ar->arSet(i_p, getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
+		    for(int iP = 0; iP < ptr->numb; iP++)
+			switch(reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))].vType(this)) {
+			    case Reg::Bool:	ar->arSet(iP, getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::Int:	ar->arSet(iP, getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::Real:	ar->arSet(iP, getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::String:	ar->arSet(iP, getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
+			    case Reg::Obj:	ar->arSet(iP, getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))]));	break;
 			    default:	break;
 			}
 		reg[ptr->reg] = AutoHD<TVarObj>(ar);
@@ -1788,7 +1811,17 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("%ph: Assign from %d to %d.", cprg, ptr->fromR, ptr->toR);
 #endif
-		if(!reg[ptr->toR].props().size())
+		if(reg[ptr->toR].type() == Reg::Function) {
+		    val->ctxSet(EXT_F_LIM+ptr->toR, NULL);
+		    reg[ptr->toR].val().f->free();
+
+		    string path = getValS(val, reg[ptr->fromR]), ns;
+		    AutoHD<TCntrNode> nd = SYS->nodeAt(path, 0, '.', 0, true);
+		    for(int off = 0; (nd.freeStat() || !dynamic_cast<TFunction*>(&nd.at())) && (ns=TSYS::strParse(mUsings,0,";",&off)).size(); )
+			nd = SYS->nodeAt(ns+"."+path, 0, '.', 0, true);
+		    if(!nd.freeStat() && dynamic_cast<TFunction*>(&nd.at())) *reg[ptr->toR].val().f = nd;
+		}
+		else if(!reg[ptr->toR].props().size())
 		    switch(reg[ptr->fromR].vType(this)) {
 			case Reg::Bool:	  setValB(val, reg[ptr->toR], getValB(val,reg[ptr->fromR]));	break;
 			case Reg::Int:	  setValI(val, reg[ptr->toR], getValI(val,reg[ptr->fromR]));	break;
@@ -1813,6 +1846,35 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    case Reg::String:	reg[ptr->toR] = getValS(val,reg[ptr->fromR]);	break;
 		    case Reg::Obj:	reg[ptr->toR] = getVal(val,reg[ptr->fromR]);	break;
 		    default:	break;
+		}
+		cprg += sizeof(SCode); continue;
+	    }
+	    // Delete objects and its properties
+	    case Reg::Delete: {
+		struct SCode { uint8_t cod; uint16_t r; } __attribute__((packed));
+		const struct SCode *ptr = (const struct SCode *)cprg;
+#ifdef OSC_DEBUG
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: Delete %d.", cprg, ptr->r);
+#endif
+		if(reg[ptr->r].props().empty())
+		    switch(reg[ptr->r].type()) {
+			case Reg::Obj:
+			    //if(!reg[ptr->r].vConst())
+			    reg[ptr->r] = EVAL_REAL;
+			    break;
+			case Reg::Var:
+			    if(val->ioType(reg[ptr->r].val().io) == IO::Object)
+				setValO(val, reg[ptr->r], AutoHD<TVarObj>(new TVarObj()));
+			    break;
+			case Reg::Function:
+			    val->ctxSet(EXT_F_LIM+ptr->r, NULL);
+			    reg[ptr->r].val().f->free();
+			    break;
+			default: break;
+		    }
+		else {
+		    TVariant obj = getVal(val, reg[ptr->r], true);
+		    if(obj.type() == TVariant::Object) obj.getO().at().propClear(reg[ptr->r].props().back());
 		}
 		cprg += sizeof(SCode); continue;
 	    }
@@ -2193,12 +2255,12 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("%ph: CycleObj %d: %d|%d|%d.", cprg, ptr->obj, ptr->body, ptr->val, ptr->end);
 #endif
-		TVariant obj = getVal(val,reg[ptr->obj]);
+		TVariant obj = getVal(val, reg[ptr->obj]);
 		if(obj.type() == TVariant::Object) {
 		    vector<string> pLs;
 		    obj.getO().at().propList(pLs);
-		    for(unsigned i_l = 0; i_l < pLs.size() && !(dt.flg&0x01); i_l++) {
-			setValS(val,reg[ptr->val],pLs[i_l]);
+		    for(unsigned iL = 0; iL < pLs.size() && !(dt.flg&0x01); iL++) {
+			setValS(val, reg[ptr->val], pLs[iL]);
 			dt.flg &= ~0x06;
 			exec(val, reg, cprg + ptr->body, dt);
 			//Check break and continue operators
@@ -2431,90 +2493,92 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 	    }
 	    case Reg::CProc:
 	    case Reg::CFunc: {
-		struct SCode { uint8_t cod; uint8_t f; uint8_t n; uint16_t rez; } __attribute__((packed));
+		struct SCode { uint8_t cod; int8_t f; uint8_t n; uint16_t rez; uint16_t f_r; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 
-		TValFunc *vfnc = val->ctxGet(ptr->f);
-		if(!vfnc) {
-		    vfnc = new TValFunc("JavaLikeFuncCalc",&funcAt(ptr->f)->func().at());
-		    val->ctxSet(ptr->f, vfnc);
-		}
-#if OSC_DEBUG >= 5
-		printf("%ph: Call function/procedure %d = %s(%d).", cprg, ptr->rez, vfnc->func()->id().c_str(), ptr->n);
-#endif
-		//  Get return position
-		int r_pos, i_p, p_p;
-		for(r_pos = 0; r_pos < vfnc->func()->ioSize(); r_pos++)
-		    if(vfnc->ioFlg(r_pos)&IO::Return) break;
-		//  Process parameters
-		for(i_p = p_p = 0; true; i_p++) {
-		    p_p = (i_p>=r_pos)?i_p+1:i_p;
-		    if(p_p >= vfnc->func()->ioSize()) break;
-		    //   Set default value
-		    if(i_p >= ptr->n)	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
-		    switch(vfnc->ioType(p_p)) {
-			case IO::String: vfnc->setS(p_p,getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Integer:vfnc->setI(p_p,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Real:	 vfnc->setR(p_p,getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Boolean:vfnc->setB(p_p,getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
-			case IO::Object: vfnc->setO(p_p,getValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
+		bool fromR = (ptr->f < 0);
+		if(!fromR || (reg[ptr->f_r].type() == Reg::Function && !reg[ptr->f_r].val().f->freeStat())) {
+		    int ctxId = fromR ? EXT_F_LIM+ptr->f_r : ptr->f;
+		    TValFunc *vfnc = val->ctxGet(ctxId);
+		    if(!vfnc) {
+			vfnc = new TValFunc("JavaLikeFuncCalc", fromR ? &reg[ptr->f_r].val().f->at() : &mFncs[ptr->f].at());
+			val->ctxSet(ctxId, vfnc);
 		    }
-		}
-		//  Make calc
-		vfnc->calc(val->user());
-		//  Process outputs
-		for(i_p = 0; i_p < ptr->n; i_p++) {
-		    p_p = (i_p>=r_pos)?i_p+1:i_p;
-		    if(p_p >= vfnc->func()->ioSize()) break;
-		    if(vfnc->ioFlg(p_p)&IO::Output)
+#if OSC_DEBUG >= 5
+		    printf("%ph: Call function/procedure %d = %s(%d).", cprg, ptr->rez, vfnc->func()->id().c_str(), ptr->n);
+#endif
+		    //  Get return position
+		    int r_pos, iP, p_p;
+		    for(r_pos = 0; r_pos < vfnc->func()->ioSize(); r_pos++)
+			if(vfnc->ioFlg(r_pos)&IO::Return) break;
+		    //  Process parameters
+		    for(iP = p_p = 0; true; iP++) {
+			p_p = (iP>=r_pos)?iP+1:iP;
+			if(p_p >= vfnc->func()->ioSize()) break;
+			//   Set default value
+			if(iP >= ptr->n)	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
 			switch(vfnc->ioType(p_p)) {
-			    case IO::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getS(p_p)); break;
-			    case IO::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getI(p_p)); break;
-			    case IO::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getR(p_p)); break;
-			    case IO::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getB(p_p)); break;
-			    case IO::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getO(p_p)); break;
+			    case IO::String:	vfnc->setS(p_p,getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			    case IO::Integer:	vfnc->setI(p_p,getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			    case IO::Real:	vfnc->setR(p_p,getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			    case IO::Boolean:	vfnc->setB(p_p,getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			    case IO::Object:	vfnc->setO(p_p,getValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))])); break;
+			}
+		    }
+		    //  Make calc
+		    vfnc->calc(val->user());
+		    //  Process outputs
+		    for(iP = 0; iP < ptr->n; iP++) {
+			p_p = (iP>=r_pos)?iP+1:iP;
+			if(p_p >= vfnc->func()->ioSize()) break;
+			if(vfnc->ioFlg(p_p)&IO::Output)
+			    switch(vfnc->ioType(p_p)) {
+				case IO::String:  setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getS(p_p)); break;
+				case IO::Integer: setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getI(p_p)); break;
+				case IO::Real:	  setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getR(p_p)); break;
+				case IO::Boolean: setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getB(p_p)); break;
+				case IO::Object:  setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+iP*sizeof(uint16_t))],vfnc->getO(p_p)); break;
+			    }
+		    }
+		    //  Set return
+		    if(ptr->cod == Reg::CFunc)
+			switch(vfnc->ioType(r_pos)) {
+			    case IO::String:	reg[ptr->rez] = vfnc->getS(r_pos); break;
+			    case IO::Integer:	reg[ptr->rez] = vfnc->getI(r_pos); break;
+			    case IO::Real:	reg[ptr->rez] = vfnc->getR(r_pos); break;
+			    case IO::Boolean:	reg[ptr->rez] = vfnc->getB(r_pos); break;
+			    case IO::Object:	reg[ptr->rez] = vfnc->getO(r_pos); break;
 			}
 		}
-		//  Set return
-		if(ptr->cod == Reg::CFunc)
-		    switch(vfnc->ioType(r_pos)) {
-			case IO::String:	reg[ptr->rez] = vfnc->getS(r_pos); break;
-			case IO::Integer:	reg[ptr->rez] = vfnc->getI(r_pos); break;
-			case IO::Real:		reg[ptr->rez] = vfnc->getR(r_pos); break;
-			case IO::Boolean:	reg[ptr->rez] = vfnc->getB(r_pos); break;
-			case IO::Object:	reg[ptr->rez] = vfnc->getO(r_pos); break;
-		    }
 
 		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
 	    }
 	    case Reg::CFuncObj: {
-		struct SCode { uint8_t cod; uint16_t obj; uint8_t n; uint16_t rez; } __attribute__((packed));
+		struct SCode { uint8_t cod; uint16_t obj; uint8_t nmLn; uint8_t n; uint16_t rez; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #if OSC_DEBUG >= 5
-		printf("%ph: Call object's function %d = %d(%d).", cprg, ptr->rez, ptr->obj, ptr->n);
+		printf("%ph: Call object's function %d = %d.%s(%d).",
+		    cprg, ptr->rez, ptr->obj, string((const char*)(cprg+sizeof(SCode)),ptr->nmLn).c_str(), ptr->n);
 #endif
-		if(reg[ptr->obj].props().empty())
-		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));
-
-		TVariant obj = getVal(val,reg[ptr->obj],true);
+		TVariant obj = getVal(val, reg[ptr->obj]);
 
 		//Prepare inputs
-		vector<TVariant> prms;
-		for(int i_p = 0; i_p < ptr->n; i_p++)
-		    prms.push_back(getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));
+		vector<TVariant> prms; prms.reserve(ptr->n);
+		for(int iP = 0; iP < ptr->n; iP++)
+		    prms.push_back(getVal(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+ptr->nmLn+iP*sizeof(uint16_t))]));
 
 		//Call
-		TVariant rez = oFuncCall(obj, reg[ptr->obj].props().back(), prms);
+		TVariant rez = oFuncCall(obj, string((const char*)(cprg+sizeof(SCode)),ptr->nmLn), prms);
 		//if(obj.isModify()) setVal(val,reg[ptr->obj],obj,true);
 		//Process outputs
-		for(unsigned i_p = 0; i_p < prms.size(); i_p++)
-		    if(prms[i_p].isModify())
-			switch(prms[i_p].type()) {
-			    case TVariant::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getB());	break;
-			    case TVariant::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getI());	break;
-			    case TVariant::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getR());	break;
-			    case TVariant::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getS());	break;
-			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],prms[i_p].getO());	break;
+		for(unsigned iP = 0; iP < prms.size(); iP++)
+		    if(prms[iP].isModify())
+			switch(prms[iP].type()) {
+			    case TVariant::Boolean:	setValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+ptr->nmLn+iP*sizeof(uint16_t))],prms[iP].getB());	break;
+			    case TVariant::Integer:	setValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+ptr->nmLn+iP*sizeof(uint16_t))],prms[iP].getI());	break;
+			    case TVariant::Real:	setValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+ptr->nmLn+iP*sizeof(uint16_t))],prms[iP].getR());	break;
+			    case TVariant::String:	setValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+ptr->nmLn+iP*sizeof(uint16_t))],prms[iP].getS());	break;
+			    case TVariant::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+ptr->nmLn+iP*sizeof(uint16_t))],prms[iP].getO());	break;
 			    default:	break;
 			}
 		//Process return
@@ -2527,7 +2591,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    default:	break;
 		}
 
-		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
+		cprg += sizeof(SCode) + ptr->nmLn + ptr->n*sizeof(uint16_t); continue;
 	    }
 	    case Reg::IFuncDef: {
 		struct SCode { uint8_t cod; uint16_t sz; } __attribute__((packed));
@@ -2677,7 +2741,7 @@ Reg::~Reg( )
     setType(Free);
 }
 
-Reg &Reg::operator=( Reg &irg )
+Reg &Reg::operator=( const Reg &irg )
 {
     setType(irg.type());
     switch(type()) {
@@ -2740,7 +2804,7 @@ Reg::Type Reg::vType( Func *fnc )
     return type();
 }
 
-void Reg::free()
+void Reg::free( )
 {
     if(lock()) return;
 
@@ -2773,6 +2837,7 @@ void RegW::setType( Reg::Type tp )
 	case Reg::String:	delete el.s;	break;
 	case Reg::Obj:		delete el.o;	break;
 	case Reg::PrmAttr:	delete el.pA;	break;
+	case Reg::Function:	delete el.f;	break;
 	default:	break;
     }
     //Set new type
@@ -2780,6 +2845,7 @@ void RegW::setType( Reg::Type tp )
 	case Reg::String:	el.s = new string;	break;
 	case Reg::Obj:		el.o = new AutoHD<TVarObj>(new TVarObj()); break;
 	case Reg::PrmAttr:	el.pA = new AutoHD<TVal>;	break;
+	case Reg::Function:	el.f = new AutoHD<TFunction>;	break;
 	default:	break;
     }
     mTp = tp;

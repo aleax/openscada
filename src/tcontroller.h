@@ -56,7 +56,7 @@ class TController : public TCntrNode, public TConfig
 
 	string DAQPath( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string id( )		{ return mId; }
 	string workId( );
@@ -72,10 +72,10 @@ class TController : public TCntrNode, public TConfig
 	void setDescr( const string &dscr );
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
-	bool toEnable( )	{ return mAEn; }
-	bool toStart( )		{ return mAStart; }
-	bool enableStat( )	{ return enSt; }
-	bool startStat( )	{ return runSt; }
+	bool toEnable( )		{ return mAEn; }
+	bool toStart( )			{ return mAStart; }
+	bool enableStat( ) const	{ return enSt; }
+	bool startStat( ) const		{ return runSt; }
 
 	void start( );
 	void stop( );
@@ -83,11 +83,11 @@ class TController : public TCntrNode, public TConfig
 	void disable( );
 
 	// Parameters
-	void list( vector<string> &list )	{ chldList(mPrm,list); }
-	bool present( const string &name )	{ return chldPresent(mPrm,name); }
+	void list( vector<string> &list ) const		{ chldList(mPrm,list); }
+	bool present( const string &name ) const	{ return chldPresent(mPrm,name); }
 	void add( const string &name, unsigned type );
 	void del( const string &name, int full = TParamContr::RM_Exit )	{ chldDel(mPrm,name,-1,full); }
-	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" )	{ return chldAt(mPrm,name); }
+	AutoHD<TParamContr> at( const string &name, const string &who = "th_contr" ) const	{ return chldAt(mPrm,name); }
 
 	// Redundancy
 	bool redntUse( )			{ return mRedntUse; }
@@ -100,7 +100,7 @@ class TController : public TCntrNode, public TConfig
 
 	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "" );
 
-	TTipDAQ &owner( );
+	TTipDAQ &owner( ) const;
 
     protected:
 	//Protected attributes
@@ -108,7 +108,7 @@ class TController : public TCntrNode, public TConfig
 
 	//Methods
 	// User methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 	virtual void enable_( )		{ }
 	virtual void disable_( )	{ }
@@ -119,7 +119,7 @@ class TController : public TCntrNode, public TConfig
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	bool cfgChange( TCfg &cfg )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 	void preDisable( int flag );		//Disable if delete
 	void postDisable( int flag );		//Delete all DB if flag 1
@@ -128,7 +128,8 @@ class TController : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const		{ return mId.getSd(); }
+	const char *nodeNameSYSM( ) const	{ return mId.getSd(); }
 
 	void LoadParmCfg( );
 

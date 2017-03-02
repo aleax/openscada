@@ -48,7 +48,7 @@ class TMdVl : public TVal
     public:
 	TMdVl( )	{ }
 
-	TMdPrm &owner( );
+	TMdPrm &owner( ) const;
 
     protected:
 	//Methods
@@ -79,8 +79,8 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TElem &elem( )		{ return p_el; }
-	TMdContr &owner( );
+	TElem &elem( )		{ return pEl; }
+	TMdContr &owner( ) const;
 
 	//Attributes
 	unsigned char isPrcOK	: 1;
@@ -103,9 +103,9 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
 	//Attributes
-	TElem	p_el;				//Work atribute elements
-	string	mStats;				//Allowed stations list'
-	TCfg	&mPrmAddr;			//Interstation parameter's address
+	TElem	pEl;				//Work atribute elements
+	TCfg	&mPrmAddr,			//Interstation parameter's address
+		&mStats;			//Allowed stations list'
 };
 
 //******************************************************
@@ -142,7 +142,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	bool cfgChange( TCfg &co );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
 
     private:
@@ -179,16 +179,17 @@ class TMdContr: public TController
 		&mPerOld,			//Acquisition task (seconds)
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
+	char	&mAllowToDelPrmAttr;		//Allow automatic remove parameters and attributes
 
 	bool	prcSt,				//Process task active
-		call_st,			//Calc now stat
+		callSt,				//Calc now stat
 		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
 	vector< pair<string,StHd> > mStatWork;	//Work stations and it status
 
 	vector< AutoHD<TMdPrm> > pHd;
 
-	double	mPer, tmGath;			//Gathering time
+	double	mPer;
 };
 
 //******************************************************

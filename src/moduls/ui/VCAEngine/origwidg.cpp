@@ -42,7 +42,7 @@ void PrWidget::preDisable(int flag)
     Widget::preDisable(flag);
 }
 
-string PrWidget::ico( )
+string PrWidget::ico( ) const
 {
     if( LWidget::ico().size() )
 	return LWidget::ico();
@@ -52,7 +52,7 @@ string PrWidget::ico( )
     return "";
 }
 
-void PrWidget::setEnable( bool val )
+void PrWidget::setEnable( bool val, bool force )
 {
     if(enable() == val) return;
 
@@ -62,8 +62,8 @@ void PrWidget::setEnable( bool val )
     if(val) {
 	vector<string> ls;
 	attrList(ls);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++) {
-	    AutoHD<Attr> attr = attrAt(ls[i_l]);
+	for(unsigned iL = 0; iL < ls.size(); iL++) {
+	    AutoHD<Attr> attr = attrAt(ls[iL]);
 	    if(!(attr.at().flgGlob()&Attr::Active)) continue;
 	    attr.at().setS(attr.at().getS(),true);
 	    attr.at().setModif(0);
@@ -117,9 +117,9 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
 //*************************************************
 OrigElFigure::OrigElFigure( ) : PrWidget("ElFigure")	{ }
 
-string OrigElFigure::name( )	{ return _("Elementary figures"); }
+string OrigElFigure::name( ) const	{ return _("Elementary figures"); }
 
-string OrigElFigure::descr( )	{ return _("Elementary figures widget of the finite visualization."); }
+string OrigElFigure::descr( ) const	{ return _("Elementary figures widget of the finite visualization."); }
 
 void OrigElFigure::postEnable( int flag )
 {
@@ -312,9 +312,9 @@ bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 //*************************************************
 OrigFormEl::OrigFormEl( ) : PrWidget("FormEl")	{ }
 
-string OrigFormEl::name( )	{ return _("Form elements"); }
+string OrigFormEl::name( ) const	{ return _("Form elements"); }
 
-string OrigFormEl::descr( )	{ return _("Form elements widget of the finite visualization."); }
+string OrigFormEl::descr( ) const	{ return _("Form elements widget of the finite visualization."); }
 
 void OrigFormEl::postEnable( int flag )
 {
@@ -622,9 +622,9 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
 //************************************************
 OrigText::OrigText( ) : PrWidget("Text")	{ }
 
-string OrigText::name( )	{ return _("Text fields"); }
+string OrigText::name( ) const	{ return _("Text fields"); }
 
-string OrigText::descr( )	{ return _("Text fields widget of the finite visualization."); }
+string OrigText::descr( ) const	{ return _("Text fields widget of the finite visualization."); }
 
 void OrigText::postEnable( int flag )
 {
@@ -741,9 +741,9 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 //************************************************
 OrigMedia::OrigMedia( ) : PrWidget("Media")	{ }
 
-string OrigMedia::name( )	{ return _("Media"); }
+string OrigMedia::name( ) const	{ return _("Media"); }
 
-string OrigMedia::descr( )	{ return _("Media widget of the finite visualization."); }
+string OrigMedia::descr( ) const{ return _("Media widget of the finite visualization."); }
 
 void OrigMedia::postEnable( int flag )
 {
@@ -894,9 +894,9 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 //************************************************
 OrigDiagram::OrigDiagram( ) : PrWidget("Diagram")	{ }
 
-string OrigDiagram::name( )	{ return _("Diagram"); }
+string OrigDiagram::name( ) const	{ return _("Diagram"); }
 
-string OrigDiagram::descr( )	{ return _("Diagram widget of the finite visualization."); }
+string OrigDiagram::descr( ) const	{ return _("Diagram widget of the finite visualization."); }
 
 void OrigDiagram::postEnable( int flag )
 {
@@ -939,7 +939,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		if(!(cfg.getI() == FD_TRND))	cfg.owner()->attrDel("sclHorPer");
 	}
 
-	//> Create specific attributes
+	// Create specific attributes
 	switch(cfg.getI()) {
 	    case FD_TRND:
 		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale: horizontal grid size, seconds"),TFld::Real,Attr::Mutable,
@@ -1078,9 +1078,9 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 //************************************************
 OrigProtocol::OrigProtocol( ) : PrWidget("Protocol")	{ }
 
-string OrigProtocol::name( )	{ return _("Protocol"); }
+string OrigProtocol::name( ) const	{ return _("Protocol"); }
 
-string OrigProtocol::descr( )	{ return _("Protocol widget of the finite visualization."); }
+string OrigProtocol::descr( ) const	{ return _("Protocol widget of the finite visualization."); }
 
 void OrigProtocol::postEnable( int flag )
 {
@@ -1206,9 +1206,9 @@ const char *OrigDocument::XHTML_entity =
 
 OrigDocument::OrigDocument( ) : PrWidget("Document")	{ }
 
-string OrigDocument::name( )	{ return _("Document"); }
+string OrigDocument::name( ) const	{ return _("Document"); }
 
-string OrigDocument::descr( )	{ return _("Document widget of the finite visualization."); }
+string OrigDocument::descr( ) const	{ return _("Document widget of the finite visualization."); }
 
 void OrigDocument::postEnable( int flag )
 {
@@ -1227,21 +1227,18 @@ void OrigDocument::postEnable( int flag )
 
 void OrigDocument::calc( Widget *base )
 {
-    //> Make document after time set
-    if(base->attrAt("time").at().flgSelf()&0x100 && TSYS::strNoSpace(base->attrAt("tmpl").at().getS()).size())
-    {
+    //Make document after time set
+    if(base->attrAt("time").at().flgSelf()&0x100 && TSYS::strTrim(base->attrAt("tmpl").at().getS()).size()) {
 	base->attrAt("time").at().setFlgSelf((Attr::SelfAttrFlgs)(base->attrAt("time").at().flgSelf()&(~0x100)));
 	string mkDk;
 	int n = base->attrAt("n").at().getI();
-	if(!n)
-	{
+	if(!n) {
 	    mkDk = base->attrAt("doc").at().getS();
 	    if(mkDk.empty()) mkDk = base->attrAt("tmpl").at().getS();
 	    mkDk = makeDoc(mkDk,base);
 	    base->attrAt("doc").at().setS(mkDk);
 	}
-	else
-	{
+	else {
 	    int aCur = base->attrAt("aCur").at().getI();
 	    mkDk = base->attrAt("aDoc").at().getS();
 	    if(mkDk.empty()) mkDk = base->attrAt("tmpl").at().getS();
@@ -1479,7 +1476,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	iLang = xdoc.attr("docProcLang");
 	lstTime = s2i(xdoc.attr("docTime"));
     }
-    if(TSYS::strNoSpace(iLang).empty())	iLang = "JavaLikeCalc.JavaScript";
+    if(sTrm(iLang).empty())	iLang = "JavaLikeCalc.JavaScript";
     if(!lstTime) lstTime = wdg->attrAt("bTime").at().getI();
 
     // Add generic io
@@ -1662,18 +1659,18 @@ void OrigDocument::nodeClear( XMLNode *xcur )
 //************************************************
 OrigFunction::OrigFunction( ) : PrWidget("Function")	{ }
 
-string OrigFunction::name( )	{ return _("Built-in function"); }
+string OrigFunction::name( ) const	{ return _("Built-in function"); }
 
-string OrigFunction::descr( )	{ return _("Built-in function widget."); }
+string OrigFunction::descr( ) const	{ return _("Built-in function widget."); }
 
 //************************************************
 //* OrigBox: User element original widget        *
 //************************************************
 OrigBox::OrigBox( ) : PrWidget("Box")	{ }
 
-string OrigBox::name( )		{ return _("Elements box"); }
+string OrigBox::name( ) const	{ return _("Elements box"); }
 
-string OrigBox::descr( )	{ return _("Elements box widget of the finite visualization."); }
+string OrigBox::descr( ) const	{ return _("Elements box widget of the finite visualization."); }
 
 void OrigBox::postEnable( int flag )
 {

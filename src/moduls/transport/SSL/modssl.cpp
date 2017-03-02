@@ -41,9 +41,10 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.3.6"
+#define MOD_VER		"1.4.2"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv2, SSLv3 and TLSv1 are supported.")
+#define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
+ OpenSSL is used and SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -186,7 +187,7 @@ string TSocketIn::getStatus( )
 
 void TSocketIn::load_( )
 {
-    TTransportIn::load_();
+    //TTransportIn::load_();
 
     try {
 	XMLNode prmNd;
@@ -274,9 +275,9 @@ void *TSocketIn::Task( void *sock_in )
     pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
 
     //SSL context init
-    string ssl_host = TSYS::strSepParse(s.addr(), 0, ':');
-    string ssl_port = TSYS::strSepParse(s.addr(), 1, ':');
-    string ssl_method = TSYS::strSepParse(s.addr(), 2, ':');
+    string ssl_host = TSYS::strParse(s.addr(), 0, ":");
+    string ssl_port = TSYS::strParse(s.addr(), 1, ":");
+    string ssl_method = TSYS::strParse(s.addr(), 2, ":");
 
     // Set SSL method
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
@@ -284,13 +285,21 @@ void *TSocketIn::Task( void *sock_in )
 #else
     SSL_METHOD *meth;
 #endif
-    meth = SSLv23_server_method();
 
 #ifndef OPENSSL_NO_SSL2
-    if(ssl_method == "SSLv2")	meth = SSLv2_server_method();
+    if(ssl_method == "SSLv2")		meth = SSLv2_server_method();
+    else
 #endif
-    if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
-    if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
+	 if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
+    else if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
+    else
+#if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_server_method();
+    else if(ssl_method == "TLSv1_2")	meth = TLSv1_2_server_method();
+    else if(ssl_method == "DTLSv1")	meth = DTLSv1_server_method();
+    else
+#endif
+	 meth = SSLv23_server_method();
 
     try {
 	s.ctx = SSL_CTX_new(meth);
@@ -537,7 +546,7 @@ bool TSocketIn::prtInit( AutoHD<TProtocolIn> &prot_in, int sock, const string &s
     try {
 	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(protocol());
 	string n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
-	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this);
+	if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	prot_in = proto.at().at(n_pr);
 #if OSC_DEBUG >= 5
 	mess_debug(nodePath().c_str(), _("New input protocol's object '%s' created!"), n_pr.c_str());
@@ -556,7 +565,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
     string n_pr;
     try {
 	prtInit(prot_in, sock, sender);
-	if(prot_in.at().mess(request,answer,sender)) return;
+	if(prot_in.at().mess(request,answer)) return;
 	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	n_pr = prot_in.at().name();
 	prot_in.free();
@@ -615,7 +624,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
-	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
+	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
@@ -637,8 +646,8 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	MtxAlloc res(sockRes, true);
 	for(vector<SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s."),
-		tm2s((*iId)->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),(*iId)->sock,(*iId)->sender.c_str(),
-		tm2s((*iId)->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
+		atm2s((*iId)->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),(*iId)->sock,(*iId)->sender.c_str(),
+		atm2s((*iId)->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
 		TSYS::cpct2str((*iId)->trIn).c_str(),TSYS::cpct2str((*iId)->trOut).c_str()));
     }
     else if(a_path == "/prm/cfg/certKey") {
@@ -707,7 +716,7 @@ string TSocketOut::getStatus( )
 
 void TSocketOut::load_( )
 {
-    TTransportOut::load_();
+    //TTransportOut::load_();
 
     try {
 	XMLNode prmNd;
@@ -747,9 +756,9 @@ void TSocketOut::start( int tmCon )
     trIn = trOut = 0;
 
     //SSL context init
-    string ssl_host = TSYS::strSepParse(addr(), 0, ':');
-    string ssl_port = TSYS::strSepParse(addr(), 1, ':');
-    string ssl_method = TSYS::strSepParse(addr(), 2, ':');
+    string ssl_host = TSYS::strParse(addr(), 0, ":");
+    string ssl_port = TSYS::strParse(addr(), 1, ":");
+    string ssl_method = TSYS::strParse(addr(), 2, ":");
     if(!tmCon) tmCon = mTmCon;
 
     //Set SSL method
@@ -759,12 +768,20 @@ void TSocketOut::start( int tmCon )
     SSL_METHOD *meth;
 #endif
 
-    meth = SSLv23_client_method();
 #ifndef OPENSSL_NO_SSL2
-    if(ssl_method == "SSLv2")	meth = SSLv2_client_method();
+    if(ssl_method == "SSLv2")		meth = SSLv2_client_method();
+    else
 #endif
-    if(ssl_method == "SSLv3")	meth = SSLv3_client_method();
-    if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
+	 if(ssl_method == "SSLv3")	meth = SSLv3_client_method();
+    else if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
+    else
+#if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_client_method();
+    else if(ssl_method == "TLSv1_2")	meth = TLSv1_2_client_method();
+    else if(ssl_method == "DTLSv1")	meth = DTLSv1_client_method();
+    else
+#endif
+	 meth = SSLv23_client_method();
 
     try {
 	//Connect to remote host try
@@ -826,7 +843,7 @@ void TSocketOut::start( int tmCon )
 	}
 
 	//Certificates, private key and it password loading
-	if(!TSYS::strNoSpace(certKey()).empty()) {
+	if(!sTrm(certKey()).empty()) {
 	    // Write certificate and private key to temorary file
 	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
@@ -1044,7 +1061,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - remote SSL host address;\n"
 	    "    port - network port (/etc/services);\n"
-	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
+	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","7",
 	    "help",_("SSL PAM certificates chain and private key."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");

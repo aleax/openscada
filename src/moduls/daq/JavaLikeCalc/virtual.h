@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -87,7 +87,7 @@ class Prm : public TParamContr
 	void enable( );
 	void disable( );
 
-	Contr &owner( );
+	Contr &owner( ) const;
 
     protected:
 	//Protected methods
@@ -155,7 +155,6 @@ class Contr: public TController, public TValFunc
 	int	id_freq, id_start, id_stop;
 
 	int64_t	mPer;
-	double  tm_calc;
 };
 
 //*************************************************
@@ -183,13 +182,13 @@ class TpContr : public TTipDAQ
 	TElem &elFnc( )		{ return fnc_el; }
 	TElem &elFncIO( )	{ return fncio_el; }
 
-	void lbList( vector<string> &ls ) 	{ chldList(mLib,ls); }
-	bool lbPresent( const string &id )	{ return chldPresent(mLib,id); }
-	void lbReg( Lib *lib )       		{ chldAdd(mLib,lib); }
-	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(mLib,id,-1,flg); }
-	AutoHD<Lib> lbAt( const string &id )	{ return chldAt(mLib,id); }
+	void lbList( vector<string> &ls ) const		{ chldList(mLib, ls); }
+	bool lbPresent( const string &id ) const	{ return chldPresent(mLib, id); }
+	void lbReg( Lib *lib )				{ chldAdd(mLib, lib); }
+	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(mLib, id, -1, flg); }
+	AutoHD<Lib> lbAt( const string &id ) const	{ return chldAt(mLib, id); }
 
-	Res &parseRes( )			{ return parse_res; }
+	ResRW &parseRes( )			{ return mParseRes; }
 
 	// Named constant
 	NConst *constGet( const char *nm );
@@ -219,7 +218,7 @@ class TpContr : public TTipDAQ
 	TElem		val_el, lb_el, fnc_el, fncio_el;
 
 	// General parse data
-	Res		parse_res;	//Syntax analisator
+	ResRW		mParseRes;	//Syntax analisator
 	vector<NConst>	mConst;		//Name constant table
 	vector<BFunc>	mBFunc;		//Buildin functions
 };

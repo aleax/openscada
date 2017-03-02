@@ -173,7 +173,7 @@ class ShapeElFigure : public WdgShape
 	void editExit( DevelWdgView *w );
 	void wdgPopup( WdgView *w, QMenu &menu );
 
-	bool attrSet( WdgView *w, int uiPrmPos, const string &val );
+	bool attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr = "" );
 	void shapeSave( WdgView *w );				//Saving shapes' attributes to data model
 
 	bool event( WdgView *w, QEvent *event );

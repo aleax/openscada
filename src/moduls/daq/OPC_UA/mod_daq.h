@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.6.8"
+#define DAQ_MVER	"1.6.14"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -72,16 +72,9 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	string attrPrc( );
-
-	Res &nodeRes( )		{ return prmRes; }
-
-    protected:
-	//Methods
-	void load_( );
-	void save_( );
 
     private:
 	//Methods
@@ -92,7 +85,6 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &vo );
 
 	//Attributes
-	Res	prmRes;
 	TElem	pEl;			//Work atribute elements
 };
 
@@ -129,7 +121,7 @@ class TMdContr: public TController, public Client
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	Res &nodeRes( )		{ return cntrRes; }
+	ResRW &nodeRes( )	{ return cntrRes; }
 
 	// OPC_UA Client methods
 	string applicationUri( );
@@ -151,7 +143,7 @@ class TMdContr: public TController, public Client
 	void start_( );
 	void stop_( );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
@@ -161,7 +153,7 @@ class TMdContr: public TController, public Client
 
 	//Attributes
 	ResMtx	enRes;
-	Res	cntrRes;	//Resource for enable params
+	ResRW	cntrRes;	//Resource for enable params
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s

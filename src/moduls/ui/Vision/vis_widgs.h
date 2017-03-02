@@ -191,7 +191,7 @@ namespace VISION
 	    //Methods
 	    LineEdit( QWidget *parent, LType tp = Text, bool prev_dis = false, bool resApply = true );
 
-	    LType type( )	{ return m_tp; }
+	    LType type( ) const	{ return m_tp; }
 	    QString value( );
 	    bool isEdited( );
 

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -91,21 +90,24 @@ class TWEB: public TUI
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
 	// VCA sessions
-	void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
-	bool vcaSesPresent( const string &name )	{ return chldPresent(id_vcases,name); }
+	void vcaSesList( vector<string> &list ) const	{ chldList(id_vcases,list); }
+	bool vcaSesPresent( const string &name ) const	{ return chldPresent(id_vcases,name); }
 	void vcaSesAdd( const string &name, bool isCreate );
-	void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
-	AutoHD<VCASess> vcaSesAt( const string &name )	{ return chldAt(id_vcases,name); }
+	void vcaSesDel( const string &name )		{ chldDel(id_vcases, name); }
+	AutoHD<VCASess> vcaSesAt( const string &name ) const	{ return chldAt(id_vcases, name); }
 
 	// Web process methods
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
-	void getAbout( SSess &ses );
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
+	//void getAbout( SSess &ses );
 
 	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+
+	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
+	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
 
 	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html",
 	    const string &addattr = "", const string &charset = Mess->charset() );
@@ -134,7 +136,7 @@ class TWEB: public TUI
     private:
 	//Methods
 	// Post message dialog
-	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
+	string messPost( const string &cat, const string &mess, MessLev type = Info );
 
 	//Attributes
 	int		mTSess;				//Time of sesion life (minutes)
@@ -144,7 +146,7 @@ class TWEB: public TUI
 	string		mCSStables;			//CSS tables
 	map<string,int> colors;				//Named colors
 
-	Res		mSesRes;			//Sessions resource
+	ResRW		mSesRes;			//Sessions resource
 };
 
 extern TWEB *mod;

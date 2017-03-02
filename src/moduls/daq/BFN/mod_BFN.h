@@ -56,7 +56,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
 	void setEval( );
 
@@ -94,7 +94,7 @@ class TMdContr: public TController
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
-	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	addr( ) const	{ return cfg("ADDR").getS(); }
 	double	syncPer( )	{ return mSync; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -119,7 +119,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res, req_res;// Resource for enable params
+	ResRW	en_res, req_res;// Resource for enable params
 	int	&mPrior;	// Process task priority
 	double	&mSync;		// Synchronization inter remote station: attributes list update.
 	int64_t	mPer;

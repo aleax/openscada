@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"3.1.5"
+#define MOD_VER		"3.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides based on java like language calculator and engine of libraries. \
  The user can create and modify functions and libraries.")
@@ -145,8 +145,8 @@ void TpContr::postEnable( int flag )
 
     //Init named constant table
     double rvl;
-    rvl = 3.14159265358l; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
-    rvl = 2.71828182845l; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
+    rvl = M_PI /*3.14159265358l*/; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
+    rvl = M_E /*2.71828182845l*/; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
     rvl = EVAL_REAL;
     mConst.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
     mConst.push_back(NConst(TFld::Real,"EVAL",string((char*)&rvl,sizeof(rvl))));
@@ -198,15 +198,16 @@ void TpContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 {
     if(lang == "JavaScript") {
 	shgl.setAttr("font","Courier");
-	shgl.childAdd("rule")->setAttr("expr","(\"\"|\".*[^\\\\](|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\")")->setAttr("min","1")->setAttr("color","darkgreen")->
+	//shgl.childAdd("rule")->setAttr("expr","(\"\"|\".*[^\\\\](|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\")")->setAttr("min","1")->setAttr("color","darkgreen")->
+	shgl.childAdd("rule")->setAttr("expr","(\"(|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\"|\".*[^\\\\](|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\")")->setAttr("min","1")->setAttr("color","darkgreen")->
 	     childAdd("rule")->setAttr("expr","\\\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})")->setAttr("color","green")->setAttr("font_weight","1");
 	shgl.childAdd("blk")->setAttr("beg","/\\*")->setAttr("end","\\*/")->setAttr("color","gray")->setAttr("font_italic","1");
 	shgl.childAdd("rule")->setAttr("expr","//.*$")->setAttr("color","gray")->setAttr("font_italic","1");
-	shgl.childAdd("rule")->setAttr("expr","\\b(if|else|for|while|using|new|break|continue|return|function|Array|Object|RegExp)\\b")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","\\b(if|else|for|while|using|new|delete|break|continue|return|function|Array|Object|RegExp)\\b")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","\\b(var|in)(?=\\s+\\w)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","(\\?|\\:)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*\\.?[0-9]+|[0-9]*\\.?[0-9]+[eE][-+]?[0-9]*|true|false)\\b")->setAttr("color","darkorange");
-	shgl.childAdd("rule")->setAttr("expr","(\\=|\\!|\\+|\\-|\\>|\\<|\\*|\\/|\\%|\\||\\&|\\^)")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","(\\=|\\!|\\+|\\-|\\>|\\<|\\*|\\/|\\%|\\||\\&|\\^|\\~)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","(\\;|\\,|\\{|\\}|\\[|\\]|\\(|\\))")->setAttr("color","blue");
     }
 }
@@ -270,21 +271,22 @@ void TpContr::load_( )
     //Load function's libraries
     try {
 	// Search and create new libraries
-	TConfig c_el(&elLib());
-	c_el.cfgViewAll(false);
-	vector<string> db_ls;
+	TConfig cEl(&elLib());
+	//cEl.cfgViewAll(false);
+	vector<string> dbLs;
 	map<string, bool> itReg;
+	vector<vector<string> > full;
 
 	// Search into DB
-	SYS->db().at().dbList(db_ls, true);
-	db_ls.push_back(DB_CFG);
-	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),nodePath()+"lib",lib_cnt++,c_el); ) {
-		string l_id = c_el.cfg("ID").getS();
+	SYS->db().at().dbList(dbLs, true);
+	dbLs.push_back(DB_CFG);
+	for(unsigned iDB = 0; iDB < dbLs.size(); iDB++)
+	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,&full); ) {
+		string l_id = cEl.cfg("ID").getS();
 		if(!lbPresent(l_id)) {
-		    lbReg(new Lib(l_id.c_str(),"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]));
+		    lbReg(new Lib(l_id.c_str(),"",(dbLs[iDB]==SYS->workDB())?"*.*":dbLs[iDB]));
 		    try {
-			lbAt(l_id).at().load();
+			lbAt(l_id).at().load(&cEl);
 			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
 		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		}
@@ -293,10 +295,10 @@ void TpContr::load_( )
 
 	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty()) {
-	    lbList(db_ls);
-	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
-		    lbUnreg(db_ls[i_it]);
+	    lbList(dbLs);
+	    for(unsigned i_it = 0; i_it < dbLs.size(); i_it++)
+		if(itReg.find(dbLs[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(dbLs[i_it]).at().DB()))
+		    lbUnreg(dbLs[i_it]);
 	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -327,13 +329,13 @@ void TpContr::modStop( )
     //Stop and disable all JavaLike-controllers
     vector<string> lst;
     list(lst);
-    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-	at(lst[i_l]).at().disable();
+    for(unsigned iL = 0; iL < lst.size(); iL++)
+	at(lst[iL]).at().disable();
 
     //Stop functions
     lbList(lst);
-    for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
-	lbAt(lst[i_lb]).at().setStart(false);
+    for(unsigned iLb = 0; iLb < lst.size(); iLb++)
+	lbAt(lst[iLb]).at().setStart(false);
 }
 
 void TpContr::cntrCmdProc( XMLNode *opt )
@@ -388,7 +390,7 @@ BFunc *TpContr::bFuncGet( const char *nm )
 //*************************************************
 Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c, daq_db, cfgelem), TValFunc(name_c.c_str(),NULL,false), prc_st(false), call_st(false), endrun_req(false),
-    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), tm_calc(0)
+    mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), id_freq(-1), id_start(-1), id_stop(-1), mPer(0)
 {
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
@@ -418,9 +420,10 @@ string Contr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s."),tm2s(tm_calc).c_str());
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	val += TSYS::strMess(_("Spent time: %s[%s]."), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
+						       tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
 
     return val;
@@ -450,7 +453,7 @@ void Contr::disable_( )
 
 void Contr::load_( )
 {
-    TController::load_();
+    //TController::load_();
 
     loadFunc();
 }
@@ -470,11 +473,12 @@ void Contr::loadFunc( bool onlyVl )
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
+	vector<vector<string> > full;
 
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
 	    if(ioId < 0 || func()->io(ioId)->flg()&Func::SysAttr) continue;
-	    setS(ioId,cfg.cfg("VAL").getS());
+	    setS(ioId, cfg.cfg("VAL").getS());
 	}
     }
 }
@@ -505,11 +509,12 @@ void Contr::save_( )
 	}
 
 	//Clear VAL
+	vector<vector<string> > full;
 	cfg.cfgViewAll(false);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
+	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,&full); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
-		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true, false, true);
-		fld_cnt--;
+		if(!SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,true,false,true))	break;
+		if(full.empty()) fldCnt--;
 	    }
     }
 }
@@ -566,12 +571,11 @@ void *Contr::Task( void *icntr )
 		    mess_err(cntr.nodePath().c_str(),_("Calculation controller's function error."));
 		}
 	    t_prev = t_cnt;
-	    cntr.tm_calc = TSYS::curTime()-t_cnt;
 	    cntr.call_st = false;
 	}
 
 	if(is_stop) break;
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	if(cntr.endrun_req) is_stop = true;
 	is_start = false;
 	cntr.modif();
@@ -629,7 +633,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calculation"))) {
-	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","15")) {
+	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move"/*,"rows","15"*/)) {
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
@@ -649,10 +653,10 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if(a_path == "/cntr/flst" && ctrChkNode(opt)) {
 	vector<string> lst;
 	int c_lv = 0;
-	string c_path = "", c_el;
+	string c_path = "", cEl;
 	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(fnc(),0,'.',&c_off)).size(); c_lv++) {
-	    c_path += c_lv ? "."+c_el : c_el;
+	for(int c_off = 0; (cEl=TSYS::strSepParse(fnc(),0,'.',&c_off)).size(); c_lv++) {
+	    c_path += c_lv ? "."+cEl : cEl;
 	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
@@ -826,7 +830,7 @@ void Prm::disable()
     TParamContr::disable();
 }
 
-Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner(); }
+Contr &Prm::owner( ) const	{ return (Contr&)TParamContr::owner(); }
 
 void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {

@@ -78,10 +78,24 @@ void TModule::postEnable( int flag )
 {
     if(flag&TCntrNode::NodeRestore)	return;
 
-    mess_info(nodePath().c_str(),_("Connect module."));
+    mess_sys(TMess::Debug, _("Enable module."));
 }
 
-TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }
+void TModule::postDisable( int flag )
+{
+    mess_sys(TMess::Debug, _("Disable module."));
+}
+
+TSubSYS &TModule::owner( ) const	{ return *(TSubSYS*)nodePrev(); }
+
+void TModule::modStart( )
+{
+    mess_sys(TMess::Debug, _("Start module."));
+}
+void TModule::modStop( )
+{
+    mess_sys(TMess::Debug, _("Stop module."));
+}
 
 void TModule::modFuncList( vector<string> &list )
 {
@@ -102,12 +116,17 @@ TModule::ExpFunc &TModule::modFunc( const string &prot )
 {
     for(unsigned i = 0; i < mEfunc.size(); i++)
 	if(mEfunc[i]->prot == prot) return *mEfunc[i];
-    throw TError(nodePath().c_str(),_("Function '%s' is not present in the module!"),prot.c_str());
+    throw err_sys(_("Function '%s' is not present in the module!"), prot.c_str());
 }
 
-void TModule::modFunc( const string &prot, void (TModule::**offptr)() )
+bool TModule::modFunc( const string &prot, void (TModule::**offptr)(), bool noex )
 {
-    *offptr = modFunc(prot).ptr;
+    try {
+	*offptr = modFunc(prot).ptr;
+	return true;
+    } catch(TError &er) { if(!noex) throw; }
+
+    return false;
 }
 
 void TModule::modInfo( vector<string> &list )

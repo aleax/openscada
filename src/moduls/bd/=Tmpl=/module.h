@@ -59,13 +59,13 @@ class MTable : public TTable
 	//!!! Processing virtual function for getting the field's structure (value's type of the field and it's primary key flag)
 	void fieldStruct( TConfig &cfg );
 	//!!! Processing virtual functions for seeking, getting, setting and deleting a field
-	bool fieldSeek( int row, TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full = NULL );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
 	//!!! Back link to the table's owner database object
-	MBD &owner( );
+	MBD &owner( ) const;
 
     private:
 	//Private methods
@@ -110,7 +110,7 @@ class MBD : public TBD
 	void disable( );
 
 	//!!! Get the list of tables availabled in the database processing virtual function
-	void allowList( vector<string> &list );
+	void allowList( vector<string> &list ) const;
 	//!!! SQL request processing main virtual function
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
@@ -136,7 +136,7 @@ class MBD : public TBD
 	string	cdPg;
 
 	//!!! The database access resource
-	pthread_mutex_t	connRes;
+	ResMtx	connRes;
 };
 
 //!!! Root module object realisation define.

@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.2"
+#define MOD_VER		"1.7.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -163,10 +163,10 @@ Contr::~Contr( )
 
 }
 
-TCntrNode &Contr::operator=( TCntrNode &node )
+TCntrNode &Contr::operator=( const TCntrNode &node )
 {
     string storBlkShTbl = cfg("BLOCK_SH");
-    Contr *src_n = dynamic_cast<Contr*>(&node);
+    const Contr *src_n = dynamic_cast<const Contr*>(&node);
     if(src_n) {
 	//Blocks copy
 	if(src_n->enableStat()) {
@@ -195,9 +195,10 @@ string Contr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "), tm2s(tm_calc).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s[%s]. "),
+	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
     return rez;
 }
@@ -221,30 +222,31 @@ void Contr::postDisable( int flag )
     TController::postDisable(flag);
 }
 
-TpContr &Contr::owner( )	{ return (TpContr&)TController::owner( ); }
+TpContr &Contr::owner( ) const	{ return (TpContr&)TController::owner( ); }
 
 void Contr::load_( )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    TController::load_( );
+    //TController::load_( );
 
     //Check for get old period method value
-    if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
+    if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0;  modif(true); }
 
     //Load block's configuration
-    TConfig c_el(&mod->blockE());
-    c_el.cfgViewAll(false);
+    TConfig cEl(&mod->blockE());
+    //cEl.cfgViewAll(false);
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     map<string, bool>	itReg;
+    vector<vector<string> > full;
 
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fld_cnt++,c_el); ) {
-	string id = c_el.cfg("ID").getS();
+    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,false,&full); ) {
+	string id = cEl.cfg("ID").getS();
 	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);
-	    ((TConfig &)blkAt(id).at()) = c_el;
+	    //((TConfig &)blkAt(id).at()) = cEl;
 	}
-	blkAt(id).at().load();
+	blkAt(id).at().load(&cEl);
 	itReg[id] = true;
     }
 
@@ -388,7 +390,7 @@ void *Contr::Task( void *icontr )
 
 	if(is_stop) break;
 
-	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
 
 	if(cntr.endrunReq)	is_stop = true;
 	if(!cntr.redntUse())	is_start = false;
@@ -531,7 +533,7 @@ void Prm::postEnable( int flag )
     if(!vlElemPresent(&v_el))	vlElemAtt(&v_el);
 }
 
-Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
+Contr &Prm::owner( ) const	{ return (Contr&)TParamContr::owner(); }
 
 void Prm::enable( )
 {

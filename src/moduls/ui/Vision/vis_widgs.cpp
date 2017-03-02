@@ -192,7 +192,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget( but_box );
+    dlg_lay->addWidget(but_box);
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
@@ -386,7 +386,7 @@ bool UserStBar::userSel( )
 	return true;
     }
     else if(rez == DlgUser::SelErr)
-	mod->postMess(mod->nodePath().c_str(), _("Auth wrong!!!"), TVision::Warning, this);
+	mod->postMess(mod->nodePath().c_str(), QString(_("Authentication error for user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
 
     return false;
 }
@@ -1045,7 +1045,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
 
     switch(uiPrmPos) {
 	case A_COM_LOAD: up = true;	break;
-	case A_NO_ID:	return false;
+	//case A_NO_ID:	return false;
 	case A_ROOT:
 	    if(shape && shape->id() == val)	break;
 	    if(shape) shape->destroy(this);
@@ -1096,7 +1096,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
 		((WdgView*)children().at(i_c))->load("");
     }
 
-    if(shape)	return shape->attrSet(this, uiPrmPos, val);
+    if(shape)	return shape->attrSet(this, uiPrmPos, val, attr);
 
     return true;
 }

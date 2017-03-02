@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -80,7 +80,7 @@ ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
     QImage ico_t;
     mod->regWin(this);
 
-    setWindowTitle(TSYS::strMess(_("OpenSCADA QTCfg: %s"),SYS->name().c_str()).c_str());
+    setWindowTitle((PACKAGE_NAME " "+mod->modId()+": "+SYS->name()).c_str());
     setWindowIcon(mod->icon());
 
     //Init centrall widget
@@ -498,7 +498,7 @@ void ConfApp::treeSearch( )
 {
     if(!sender()) return;
     QLineEdit *sl = (QLineEdit*)sender();
-    QString wvl = TSYS::strNoSpace(sl->text().toStdString()).c_str();
+    QString wvl = sTrm(sl->text().toStdString()).c_str();
     bool fromCur = !sl->isModified();
     sl->setModified(false);
 
@@ -568,7 +568,7 @@ void ConfApp::itDBLoad( )
 {
     XMLNode req("load"); req.setAttr("path",selPath+"/%2fobj");
     if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
-    else pageRefresh();
+    pageRefresh();	//Any time but warnings in the deep
 }
 
 void ConfApp::itDBSave( )
@@ -932,9 +932,11 @@ void ConfApp::selectItem( )
     if(sel_ls.size() == 1 && selPath != sel_ls.at(0)->text(2).toStdString()) {
 	selectPage(sel_ls.at(0)->text(2).toStdString());
 
-	int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
-	CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
-	if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
+	if((sel_ls=CtrTree->selectedItems()).size()) {	//Updating but it can be changed after "selectPage"
+	    int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
+	    CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
+	    if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
+	}
     }
 }
 
@@ -1282,7 +1284,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    thd_it->setData(Qt::UserRole,elms);
 			}
 			else if(t_linf->attr("tp") == "time")
-			    thd_it->setData(Qt::DisplayRole, tm2s(s2i(t_linf->childGet(i_el)->text()),"%d-%m-%Y %H:%M:%S").c_str());
+			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(i_el)->text()),"%d-%m-%Y %H:%M:%S").c_str());
 			else thd_it->setData(Qt::DisplayRole, getPrintVal(t_linf->childGet(i_el)->text()).c_str());
 
 			//   Set access
@@ -1919,7 +1921,7 @@ void ConfApp::pageDisplay( const string &path )
 	QList<TextEdit*> texts = tabs->findChildren<TextEdit*>();
 	for(int iIt = 0; iIt < texts.size(); ++iIt)
 	    if(texts[iIt]->isChanged()) prcW.push_back(texts[iIt]);
-	if(prcW.size() && QMessageBox::information(this,_("Changes apply"),_("Some changes you don't apply!\nApply now or lost the?"),
+	if(prcW.size() && QMessageBox::information(this,_("The changes apply"),_("You don't apply some changes!\nDo you want its apply now or lost?"),
 		QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
 	    for(vector<QWidget*>::iterator iW = prcW.begin(); iW != prcW.end(); ++iW) applyButton(*iW);
 
@@ -2309,8 +2311,8 @@ int ConfApp::cntrIfCmdHosts( XMLNode &node )
 	//Wait for the request done
 	time_t stTm = time(NULL);
 	while(iHost->reqBusy()) {
-	    reqPrgrsSet(time(NULL)-stTm);
-	    if(reqPrgrs->wasCanceled()) iHost->sendSIGALRM();
+	    reqPrgrsSet(vmax(0,time(NULL)-stTm));
+	    if(reqPrgrs && reqPrgrs->wasCanceled()) iHost->sendSIGALRM();
 	    qApp->processEvents();
 	}
     }
@@ -2450,8 +2452,6 @@ void ConfApp::checkBoxStChange( int stat )
 void ConfApp::buttonClicked( )
 {
     QPushButton *button = (QPushButton *)sender();
-
-    XMLNode req();
 
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(button->objectName().toStdString(),TSYS::PathEl));
@@ -2992,19 +2992,20 @@ void ConfApp::applyButton( QWidget *src )
 	XMLNode *el = SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl));
 	string sval = el->text();
 	if(el->attr("tp") == "dec" || el->attr("tp") == "hex" || el->attr("tp") == "oct") {
-	    //Check and change decimal format
-	    if(sval.compare(0,2,"0x") == 0 || QString(sval.c_str()).contains(QRegExp("[abcdefABCDEF]"))) {
+	    //Check and change decimal format and the limits control
+	    if(sval.compare(0,2,"0x") == 0 || QString(sval.c_str()).contains(QRegExp("[abcdefABCDEF]")))
 		el->setAttr("tpCh", "hex");
-		sval = ll2s(QString(sval.c_str()).toLongLong(0,16));
-	    }
-	    else if(sval.size() > 1 && sval[0] == '0') {
+	    else if(sval.size() > 1 && sval[0] == '0')
 		el->setAttr("tpCh", "oct");
-		sval = ll2s(QString(sval.c_str()).toLongLong(0,8));
-	    }
 	    else el->setAttr("tpCh", "dec");
+
+	    long long vl = strtoll(sval.c_str(), NULL, 0), vlBrd;
+	    if(el->attr("min").size()) vl = vmax(s2ll(el->attr("min")), vl);
+	    if(el->attr("max").size()) vl = vmin(s2ll(el->attr("max")), vl);
+	    sval = ll2s(vl);
 	}
 
-	mess_info(mod->nodePath().c_str(),_("%s| Change '%s' to: '%s'!"),
+	mess_info(mod->nodePath().c_str(), _("%s| Change '%s' to: '%s'!"),
 		wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
@@ -3012,8 +3013,8 @@ void ConfApp::applyButton( QWidget *src )
 	if(cntrIfCmd(n_el)) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    //Redraw
-    pageRefresh(true);
+    //Redraw only for changing into same this widget
+    if(!src) pageRefresh(true);
 }
 
 void ConfApp::cancelButton( )
@@ -3062,7 +3063,7 @@ bool SCADAHost::reqDo( XMLNode &node )
     reqDone = false;
     req = &node;
     cond.wakeOne();
-    cond.wait(&mtx, 100);
+    cond.wait(mtx, 100);
     if(!reqDone) { mtx.unlock(); return false; }
     req = NULL;
     reqDone = false;
@@ -3144,7 +3145,7 @@ void SCADAHost::run( )
 
 	//Interface's requests processing
 	mtx.lock();
-	if(!req || (req && reqDone)) cond.wait(&mtx, 1000);
+	if(!req || reqDone) cond.wait(mtx, 1000);
 	if(req && !reqDone) {
 	    wuser = user;
 	    mtx.unlock();

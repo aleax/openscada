@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.WebUser file: web_user.h
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,22 +64,22 @@ class UserPg : public TCntrNode, public TConfig
 	UserPg( const string &iid, const string &db, TElem *el );
 	~UserPg( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( )			{ return mId; }
 	string	name( );
-	string	descr( )	{ return cfg("DESCR").getS(); }
-	bool	toEnable( )	{ return mAEn; }
-	bool	enableStat( )	{ return mEn; }
+	string	descr( )		{ return cfg("DESCR").getS(); }
+	bool	toEnable( )		{ return mAEn; }
+	bool	enableStat( ) const	{ return mEn; }
 	string	progLang( );
 	string	prog( );
-	string	workProg( )	{ return mWorkProg; }
+	string	workProg( )		{ return mWorkProg; }
 
 	string	getStatus( );
 
-	string	DB( )		{ return mDB; }
-	string	tbl( );
-	string	fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( ) const		{ return mDB; }
+	string	tbl( ) const;
+	string	fullDB( ) const	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
@@ -91,21 +90,21 @@ class UserPg : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	TWEB &owner( );
+	TWEB &owner( ) const;
 
 	//Attributes
 	float	cntReq;
 
     protected:
 	//Methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -133,12 +132,12 @@ class TWEB: public TUI
 	void modStart( );
 	void modStop( );
 
-	//> User page's functions
-	void uPgList( vector<string> &ls )	{ chldList(mPgU,ls); }
-	bool uPgPresent( const string &id )	{ return chldPresent(mPgU,id); }
+	// User page's functions
+	void uPgList( vector<string> &ls ) const	{ chldList(mPgU,ls); }
+	bool uPgPresent( const string &id ) const	{ return chldPresent(mPgU,id); }
 	void uPgAdd( const string &id, const string &db = "*.*" );
-	void uPgDel( const string &id )		{ chldDel(mPgU,id); }
-	AutoHD<UserPg> uPgAt( const string &id ){ return chldAt(mPgU,id); }
+	void uPgDel( const string &id )			{ chldDel(mPgU,id); }
+	AutoHD<UserPg> uPgAt( const string &id ) const	{ return chldAt(mPgU, id); }
 
 	TElem &uPgEl( )		{ return mUPgEl; }
 
@@ -153,8 +152,11 @@ class TWEB: public TUI
 
 	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
 
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
+	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
+		const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

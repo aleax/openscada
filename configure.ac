@@ -1,9 +1,9 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.16],[rom_as@oscada.org])
+AC_INIT([OpenSCADA],[0.8.17],[rom_as@oscada.org])
 AC_PREFIX_DEFAULT([/usr])
-oscd_LIBREVISION="2:4:0"
+oscd_LIBREVISION="2:5:0"
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
@@ -426,6 +426,7 @@ AX_MOD_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disabl
     AC_MSG_RESULT(Build module: Transport.Serial)
     AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
     TranspSub_mod="${TranspSub_mod}Serial "
+    AC_CHECK_HEADERS([linux/i2c-dev.h],[ ],[AC_MSG_NOTICE(linux/i2c-dev.h header not found. Using is disabled!)])
     if test $enable_Serial = incl; then
 	LIB_CORE="${LIB_CORE} moduls/transport/Serial/.libs/*.o "
 	ModsIncl="${ModsIncl}tr_Serial "
@@ -614,6 +615,7 @@ AX_MOD_EN(FLibSYS,[disable or enable[=incl] build module Special.FLibSYS],disabl
     fi
     #>> Modules checkings
     AX_LIB_FFTW3()
+    AX_LIB_OpenSSL()
 ])
 AC_MSG_RESULT(===========================================)
 

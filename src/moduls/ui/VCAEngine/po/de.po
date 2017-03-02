@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-03 16:52+0300\n"
+"POT-Creation-Date: 2017-02-09 15:32+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -1169,17 +1169,11 @@ msgstr "Kein Stil"
 msgid "Create new style"
 msgstr "Neuen Stil schaffen"
 
-msgid "Page:open state"
-msgstr "Seite:Zustand beim Öffnen"
+msgid "Page: open state"
+msgstr "Seite: Zustand beim Öffnen"
 
-msgid "Page:process no opened"
-msgstr "Seite:Prozess nicht geöffnet"
-
-msgid "Page:group"
-msgstr "Seite:Gruppe"
-
-msgid "Page:open source"
-msgstr "Seite:Quelle Eröffnen"
+msgid "Page: process no opened"
+msgstr "Seite: Prozess nicht geöffnet"
 
 msgid "For page can use only Box-based widgets!"
 msgstr "Für Seiten kann nur das Box-basierte Widget benutzt werden!"
@@ -1263,6 +1257,10 @@ msgstr "Session stoppen."
 msgid "Session '%s' calculate error."
 msgstr "Fehler der Berechnung der Sitzung '%s'."
 
+#, c-format
+msgid "Unregistered connection %d on the session."
+msgstr ""
+
 msgid "Session: "
 msgstr "Sitzung: "
 
@@ -1320,6 +1318,12 @@ msgstr "Quittung"
 msgid "Type argument"
 msgstr "Argument des Typs"
 
+msgid "Enable page."
+msgstr "Aktivieren Seite."
+
+msgid "Disable page."
+msgstr "Deaktivieren Seite."
+
 msgid "Session page: "
 msgstr "Sitzungsseite: "
 
@@ -1336,6 +1340,15 @@ msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 
 msgid "Process"
 msgstr "Bearbeitung"
+
+msgid "Spent time"
+msgstr "Verbrachte Zeit"
+
+msgid "Subtree="
+msgstr "Subtree="
+
+msgid "Item="
+msgstr "Punkt="
 
 msgid "Visual control area engine"
 msgstr "Visualisierungssteuerung"
@@ -1433,9 +1446,6 @@ msgstr "Wert 9"
 msgid "Original widgets"
 msgstr "Original Widgets"
 
-msgid "Load module."
-msgstr "Modul laden"
-
 #, c-format
 msgid "Load library '%s' time: %f ms."
 msgstr "Zeit Laden der Bibliothek '%s': %f msek."
@@ -1457,15 +1467,6 @@ msgstr "Zeit des Einschaltens der Bibliothek '%s': %f msek."
 #, c-format
 msgid "Enable project '%s' time: %f ms."
 msgstr "Zeit des Einschaltens des Projekts '%s': %f msek."
-
-msgid "Save module."
-msgstr "Modul speichern."
-
-msgid "Start module."
-msgstr "Modul starten."
-
-msgid "Stop module."
-msgstr "Modul anhalten."
 
 #, c-format
 msgid "Connection to session is not permitted for '%s'."
@@ -1625,7 +1626,9 @@ msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 msgid ""
 "Impossible to lower changes of the widget '%s' to '%s' but it has the cyclic "
 "inheritance!"
-msgstr "Unmöglich zu geringeren Veränderungen des Widgets '%s' zu '%s', aber es die zyklische Erbe hat!"
+msgstr ""
+"Unmöglich zu geringeren Veränderungen des Widgets '%s' zu '%s', aber es die "
+"zyklische Erbe hat!"
 
 #, c-format
 msgid "Adding a new attribute '%s' number more to %d!"
@@ -1730,8 +1733,11 @@ msgstr "Pfad zum Widget."
 msgid "Path to parent widget."
 msgstr "Pfad zum übergeordneten Widget."
 
-msgid "The widget owner and group in form \"{owner}:{group}\"."
-msgstr "Das Widget Eigentümer und die Gruppe in Form \"{owner}:{group}\"."
+msgid ""
+"The widget owner and groups(separated by ',') in form \"{owner}:{groups}\"."
+msgstr ""
+"Das Widget Eigentümer und die Gruppen (getrennt durch ',') in Form \"{owner}:"
+"{groups}\"."
 
 msgid ""
 "Permission to the widget in form \"{user}{group}{other}\".\n"
@@ -1825,6 +1831,9 @@ msgstr "Fehler beim Löschen des nicht benutzerdefinierten Elements."
 
 msgid "Changing of not user attribute is no permitted"
 msgstr "Ändern der nicht benutzerdefinierten Attribute ist nicht zulässig "
+
+msgid "New attribute's ID is empty!"
+msgstr "Neues Attribut ID ist leer!"
 
 #, c-format
 msgid "New attribute's ID '%s' already present!"

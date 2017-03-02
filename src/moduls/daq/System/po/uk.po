@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 17:05+0300\n"
+"POT-Creation-Date: 2017-02-09 11:43+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -28,7 +28,7 @@ msgid "Idle (%)"
 msgstr "Бездія (%)"
 
 msgid "General"
-msgstr "В загалі"
+msgstr "Взагалі"
 
 msgid "10:Device is not available."
 msgstr "10:Пристрій недоступний."
@@ -38,6 +38,34 @@ msgstr "Повне навантаження CPU"
 
 msgid "CPU Load: "
 msgstr "Навантаження CPU: "
+
+msgid "Total (GB)"
+msgstr "Разом (ГБ)"
+
+msgid "Used (GB)"
+msgstr "Використано (ГБ)"
+
+msgid "Free (GB)"
+msgstr "Вільно (ГБ)"
+
+msgid "Total file nodes"
+msgstr "Разом файлових вузлів"
+
+msgid "Used file nodes"
+msgstr "Використано файлових вузлів"
+
+msgid "Free file nodes"
+msgstr "Вільно файлових вузлів"
+
+msgid "Mount point"
+msgstr "Точка монтування"
+
+msgid "10:Mountpoint isn't available."
+msgstr "10:Точка монтування не доступна."
+
+#, c-format
+msgid "File system: '%s'"
+msgstr "Файлова система: '%s'"
 
 msgid "Read (B)"
 msgstr "Прочитано (Б)"
@@ -181,6 +209,9 @@ msgstr ""
 msgid "Auto create active DA"
 msgstr "Авт. створювати акт. джерела даних"
 
+msgid "Manual;Fast sources;Slow sources;All sources"
+msgstr "Ручний;Швидкі джерела;Повільні джерела;Всі джерела"
+
 msgid "System parameters table"
 msgstr "Таблиця системних параметрів"
 
@@ -214,8 +245,8 @@ msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Витрачено часу: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Витрачено часу: %s[%s]. "
 
 msgid "2:Controller stopped"
 msgstr "2:Контролер зупинено!"
@@ -229,6 +260,9 @@ msgstr "Помилка запису значення до атрибуту '%s':
 
 msgid "CPU"
 msgstr "Процесор"
+
+msgid "File Systems"
+msgstr "Файлові Системи"
 
 msgid "HDD statistic"
 msgstr "Статистика HDD"
@@ -250,9 +284,3 @@ msgstr "ДБЖ (NUT)"
 
 msgid "Up time"
 msgstr "Час роботи"
-
-#~ msgid "REQ -> '%s'"
-#~ msgstr "ЗАП. -> '%s'"
-
-#~ msgid "RESP -> '%s'"
-#~ msgstr "ВІДП -> '%s'"

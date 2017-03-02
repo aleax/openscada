@@ -59,14 +59,14 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	Block( const string &iid, Contr *iown );
 	~Block( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
 	// Block's parameters
-	string id( )		{ return mId; }
+	string id( ) const	{ return mId; }
 	string name( );
 	string descr( ) 	{ return cfg("DESCR").getS(); }
 	int    errCnt( )	{ return mErrCnt; }
-	bool   enable( )	{ return mEnable; }
+	bool   enable( ) const	{ return mEnable; }
 	bool   process( )	{ return mProcess; }
 	bool   toEnable( )	{ return mToEn; }
 	bool   toProcess( )	{ return mToPrc; }
@@ -92,22 +92,22 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	// Calc block
 	void calc( bool first, bool last, double frq );
 
-	Contr &owner( );
+	Contr &owner( ) const;
 
     protected:
 	//Attributes
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
 	void loadIO( const string &blk_db = "", const string &blk_id = "", bool force = false );
 	void saveIO( );
 
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preDisable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -141,7 +141,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	char		&mToEn, &mToPrc,
 			&mOutLnkWrChs;	//Write to output links only at changes
 
-	Res		lnkRes;		//Link resource
+	ResRW		lnkRes;		//Link resource
 	int		mErrCnt;
 	int		idFreq, idStart, idStop;	//Fixed system attributes identifiers
 };

@@ -38,7 +38,7 @@
 #define MOD_NAME	_("Diamond DA boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.6"
+#define MOD_VER		"1.2.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow access to Diamond systems DA boards. Include support of Athena board.")
 #define LICENSE		"GPL2"
@@ -221,27 +221,24 @@ void TMdContr::stop_( )
     if(!dataEmul()) dscFreeBoard(dscb);
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    if(icfg.fld().name() == "ADMODE")
-    {
-	if(icfg.getB())
-	{
+    if(co.fld().name() == "ADMODE") {
+	if(co.getB()) {
 	    cfg("INT").setView(true);
 	    cfg("ADCONVRATE").setView(true);
 	    cfg("ADGAIN").setView(true);
 	}
-	else
-	{
+	else {
 	    cfg("INT").setView(false);
 	    cfg("ADCONVRATE").setView(false);
 	    cfg("ADGAIN").setView(false);
 	}
 	if(startStat()) stop();
     }
-    else if(icfg.fld().name() == "DATA_EMUL" && startStat() )	stop();
+    else if(co.fld().name() == "DATA_EMUL" && startStat())	stop();
 
     return true;
 }
@@ -505,7 +502,7 @@ void TMdPrm::setType( const string &tpId )
     else if(TParamContr::type().name == "d_prm")	setType(DI);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::setType( TMdPrm::Type vtp )
 {
@@ -544,28 +541,26 @@ void TMdPrm::setType( TMdPrm::Type vtp )
     m_tp = vtp;
 }
 
-bool TMdPrm::cfgChange( TCfg &i_cfg )
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TParamContr::cfgChange(i_cfg);
+    TParamContr::cfgChange(co, pc);
 
-    //- Change TYPE parameter -
-    if( i_cfg.name() == "TYPE" )
-    {
-	if( i_cfg.getI() == 0 && type() == AO )		setType(AI);
-	else if( i_cfg.getI() == 0 && type() == DO )	setType(DI);
-	else if( i_cfg.getI() == 1 && type() == AI )	setType(AO);
-	else if( i_cfg.getI() == 1 && type() == DI )	setType(DO);
+    //Change TYPE parameter
+    if(co.name() == "TYPE") {
+	if(co.getI() == 0 && type() == AO)	setType(AI);
+	else if(co.getI() == 0 && type() == DO)	setType(DI);
+	else if(co.getI() == 1 && type() == AI)	setType(AO);
+	else if(co.getI() == 1 && type() == DI)	setType(DO);
 	else return false;
 	return true;
     }
-    switch( type() )
-    {
+    switch(type()) {
 	case AI:
-	    if( i_cfg.name() == "GAIN" ) m_gain = i_cfg.getI();
+	    if(co.name() == "GAIN")	m_gain = co.getI();
 	    break;
 	case DI: case DO:
-	    if( i_cfg.name() == "PORT" )	m_dio_port = (i_cfg.getI()<<4)+cfg("CNL").getI();
-	    else if( i_cfg.name() == "CNL" )	m_dio_port = (cfg("PORT").getI()<<4)+i_cfg.getI();
+	    if(co.name() == "PORT")	m_dio_port = (co.getI()<<4)+cfg("CNL").getI();
+	    else if(co.name() == "CNL")	m_dio_port = (cfg("PORT").getI()<<4)+co.getI();
 	    break;
 	default: break;
     }

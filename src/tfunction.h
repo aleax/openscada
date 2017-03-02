@@ -55,16 +55,17 @@ class IO
 	//Methods
 	IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "",
 		bool hide = false, const char *rez = "" );
+	IO( const IO &src );
 
-	IO &operator=( IO &iio );
+	IO &operator=( const IO &iio );
 
-	const string &id( )	{ return mId; }
-	const string &name( )	{ return mName; }
-	const Type &type( )	{ return mType; }
-	unsigned flg( )		{ return mFlg; }
-	const string &def( )	{ return mDef; }
-	bool  hide( )		{ return mHide; }
-	const string &rez( )	{ return mRez; }
+	const string &id( ) const	{ return mId; }
+	const string &name( ) const	{ return mName; }
+	const Type &type( ) const	{ return mType; }
+	unsigned flg( ) const		{ return mFlg; }
+	const string &def( ) const	{ return mDef; }
+	bool  hide( ) const		{ return mHide; }
+	const string &rez( ) const	{ return mRez; }
 
 	void setId( const string &val );
 	void setName( const string &val );
@@ -97,27 +98,28 @@ class TFunction : public TCntrNode
     public:
 	//Methods
 	TFunction( const string &id, const char *grp = "root" );
+	TFunction( const TFunction &src );
 	virtual ~TFunction( );
 
-	TFunction &operator=( TFunction &func );
+	TFunction &operator=( const TFunction &func );
 
-	string	id( )			{ return mId.c_str(); };
-	virtual string name( )		{ return ""; }
-	virtual string descr( )		{ return ""; }
-	virtual string prog( )		{ return ""; }
-	bool	startStat( )		{ return runSt; }
+	string	id( ) const		{ return mId.c_str(); };
+	virtual	string name( )		{ return ""; }
+	virtual	string descr( )		{ return ""; }
+	virtual	string prog( )		{ return ""; }
+	bool	startStat( ) const	{ return runSt; }
 	int	use( )			{ return used.size(); }
-	Res	&fRes( )		{ return mFRes; }
+	ResRW	&fRes( )		{ return mFRes; }
 
 	void setId( const string &vl );
 	virtual void setProg( const string &prg )	{ }
-	virtual void setStart( bool val )		{ runSt = val; }
+	virtual void setStart( bool val );
 
 	//> IO
 	void ioList( vector<string> &list );
-	int ioId( const string &id );
-	int ioSize( );
-	IO *io( int id );
+	int ioId( const string &id ) const;
+	int ioSize( ) const;
+	IO *io( int id ) const;
 	void ioAdd( IO *io );
 	int ioIns( IO *io, int pos );
 	void ioDel( int pos );
@@ -135,8 +137,8 @@ class TFunction : public TCntrNode
 
     protected:
 	//Methods
-	const char *nodeName( )	{ return mId.c_str(); }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	const char *nodeName( ) const	{ return mId.c_str(); }
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preDisable( int flag );
 
@@ -149,7 +151,7 @@ class TFunction : public TCntrNode
 
     private:
 	//Attributes
-	Res		mFRes;
+	ResRW		mFRes;
 	vector<IO*>	mIO;
 };
 
@@ -166,12 +168,10 @@ class TValFunc
 	string user( )				{ return mUser; }
 	const string &vfName( )			{ return mName; }
 	bool blk( )				{ return mBlk; }
-	bool dimens( )				{ return mDimens; }
 	bool mdfChk( )				{ return mMdfChk; }
 
 	void setUser( const string &iuser )	{ mUser = iuser; }
 	void setVfName( const string &inm )	{ mName = inm; }
-	void setDimens( bool set )		{ mDimens = set; }
 	void setMdfChk( bool set );
 
 	void ioList( vector<string> &list );
@@ -213,9 +213,6 @@ class TValFunc
 
 	// Calc function
 	virtual void calc( const string &user = "" );
-	//> Calc time function
-	double  calcTm( )		{ return tm_calc; }
-	void setCalcTm( double ivl )	{ tm_calc = ivl; }
 
 	// Attached function
 	TFunction *func( )		{ return mFunc; }
@@ -254,14 +251,11 @@ class TValFunc
 	string	mName,			//Value name
 		mUser;			//Link to user
 	unsigned short	mBlk	:1;	//Blocked values screen
-	unsigned short	mDimens	:1;	//Make dimension of the calc time
 	unsigned short	mMdfChk	:1;	//Modify attributes check
-
-	double tm_calc;		//Calc time in mikroseconds
 
 	TFunction	*mFunc;
 	map<int,TValFunc* >	vctx;
-	pthread_mutex_t mRes;
+	ResMtx mRes;
 };
 
 //***********************************************************

@@ -117,9 +117,9 @@ string TMdContr::getStatus( )
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(tmGath).c_str(),-tmDelay);
+	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(1e-6*tmGath).c_str(),-tmDelay);
 	    if(servSt) rez.replace(0, 1, TSYS::strMess("0x%x",servSt));
 	}
     }
@@ -198,7 +198,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
 
-    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
     alSt = -1;
 }
 
@@ -326,8 +326,8 @@ void *TMdContr::Task( void *icntr )
 		//mess_err(cntr.nodePath().c_str(), "%s", cntr.acqErr.getVal().c_str());
 		if(cntr.alSt <= 0) {
 		    cntr.alSt = 1;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
-			cntr.id().c_str(),TRegExp(":","g").replace(cntr.acqErr.getVal(),"=").c_str()));
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),
+								TRegExp(":","g").replace(cntr.acqErr.getVal(),"=").c_str()));
 		}
 		cntr.tmDelay = cntr.restTm();
 		continue;
@@ -336,7 +336,8 @@ void *TMdContr::Task( void *icntr )
 		cntr.acqErr.setVal("");
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
+				    TMess::Info);
 		}
 	    }
 	    res.unlock();
@@ -345,7 +346,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.tmGath = TSYS::curTime()-t_cnt;
 	    cntr.callSt = false;
 
-	    TSYS::taskSleep(cntr.period(), cntr.period() ? 0 : TSYS::cron(cntr.cron()));
+	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	}
     } catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
@@ -354,18 +355,16 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    try
-    {
-	if(icfg.name() == "EndPoint" && enableStat())
-	{
+    try {
+	if(co.name() == "EndPoint" && enableStat()) {
 	    tr.at().setAddr("TCP:"+epParse());
 	    ResAlloc res(nodeRes(), false);
 	    SecuritySetting ss("", -1);
-	    if(epLst.find(icfg.getS()) != epLst.end()) ss = epLst[icfg.getS()];
+	    if(epLst.find(co.getS()) != epLst.end()) ss = epLst[co.getS()];
 	    res.release();
 
 	    if(ss.policy.size() && mSecPol.fld().values().find(ss.policy) != string::npos) {
@@ -391,24 +390,21 @@ bool TMdContr::cfgChange( TCfg &icfg )
 	    reqService(req);
 
 	    res.request(true);
-	    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-	    {
+	    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 		XML_N *xep = req.childGet(i_ch);
 		string ep = xep->attr("endpointUrl");
 		if(epLst.find(ep) != epLst.end()) ep += "/"+TSYS::strParse(xep->attr("securityPolicyUri"),1,"#")+"/"+xep->attr("securityMode");
 		epLst[ep] = SecuritySetting(TSYS::strParse(xep->attr("securityPolicyUri"),1,"#"), s2i(xep->attr("securityMode")));
 	    }
 	}
-	else if(icfg.name() == "SecPolicy")
-	{
-	    if(icfg.getS() == "None" && secMessMode() != MS_None)	setSecMessMode(MS_None);
-	    if(icfg.getS() != "None" && secMessMode() == MS_None)	setSecMessMode(MS_Sign);
+	else if(co.name() == "SecPolicy") {
+	    if(co.getS() == "None" && secMessMode() != MS_None)	setSecMessMode(MS_None);
+	    if(co.getS() != "None" && secMessMode() == MS_None)	setSecMessMode(MS_Sign);
 	}
-	else if(icfg.name() == "SecMessMode" &&
-		((icfg.getI() != MS_None && secPolicy() == "None") || (icfg.getI() == MS_None && secPolicy() != "None")))
+	else if(co.name() == "SecMessMode" &&
+		((co.getI() != MS_None && secPolicy() == "None") || (co.getI() == MS_None && secPolicy() != "None")))
 	    return false;
-	else if(icfg.name() == "AuthUser" || icfg.name() == "AuthPass")
-	{
+	else if(co.name() == "AuthUser" || co.name() == "AuthPass") {
 	    XML_N req("opc.tcp");
 	    req.clear()->setAttr("id", "CloseSession");
 	    reqService(req);
@@ -608,7 +604,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
@@ -634,11 +630,6 @@ void TMdPrm::disable( )
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
-}
-
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
 }
 
 string TMdPrm::attrPrc( )
@@ -743,11 +734,6 @@ string TMdPrm::attrPrc( )
     }
 
     return "";
-}
-
-void TMdPrm::save_( )
-{
-    TParamContr::save_();
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )

@@ -81,7 +81,7 @@ class TVariant
 	bool isNull( ) const	{ return (type()==Null); }
 	bool isEVal( ) const;
 	Type type( ) const	{ return (Type)mType; }
-	void setType( Type tp, bool fix = false );
+	void setType( Type tp, bool fix = false, bool stdStringOmit = false );
 	bool isModify( )	{ return mModify; }
 	void setModify( bool vl = true )	{ mModify = vl; }
 
@@ -110,13 +110,17 @@ class TVariant
 	    char	b;
 	    int		i;
 	    double	r;
-	    char	*sPtr;
-	    char	sMini[8];
+	    // String variants
+	    string	*s;		//Standard string for too big
+	    char	*sPtr;		//Middle blocks up to STR_BUF_LEN
+	    char	sMini[8];	//Minimum fixed area
 	    AutoHD<TVarObj>	*o;
 	} val;
 
 	//Attributes
-	unsigned mSize		: 27;
+	unsigned mSize		: 25;
+	unsigned mStdStringOmit	: 1;
+	unsigned mStdString	: 1;
 	unsigned mType		: 3;
 	unsigned mModify	: 1;
 	unsigned mFixedTp	: 1;
@@ -143,7 +147,7 @@ class TVarObj
 	TVariant propGet( const string &ids, char sep );		//Get hierarchical by separator or path for <sep>=0
 	virtual void propSet( const string &id, TVariant val );
 	void propSet( const string &ids, char sep, TVariant val );	//Set hierarchical by separator or path for <sep>=0
-	void propClear( );
+	void propClear( const string &ids = "" );
 
 	virtual string getStrXML( const string &oid = "" );
 	static AutoHD<TVarObj> parseStrXML( const string &str, XMLNode *nd = NULL, AutoHD<TVarObj> prev = NULL );
@@ -154,7 +158,7 @@ class TVarObj
 	//Attributes
 	map<string, TVariant> mProps;
 	unsigned int mUseCnt;
-	pthread_mutex_t	dataM;
+	ResMtx	dataM;
 };
 
 //*****************************************************************
@@ -269,7 +273,7 @@ class XMLNodeObj : public TVarObj
 	XMLNodeObj( const string &name = "" );
 	~XMLNodeObj( );
 
-	string objName( )       { return "XMLNode"; }
+	string objName( )	{ return "XMLNode"; }
 
 	string name( );
 	string text( );

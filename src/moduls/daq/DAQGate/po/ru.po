@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2007-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 16:10+0300\n"
+"POT-Creation-Date: 2017-02-09 09:51+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -55,6 +55,9 @@ msgstr "Список удалённых станций"
 msgid "Remote cotrollers and parameters list"
 msgstr "Список удалённых контроллеров и параметров"
 
+msgid "Allow automatic remove parameters and attributes"
+msgstr "Разрешать автоматическое удаление параметров и атрибутов"
+
 msgid "Standard"
 msgstr "Стандарт"
 
@@ -63,6 +66,9 @@ msgstr "Адрес удалённого параметра"
 
 msgid "Attributes configuration cache"
 msgstr "Кеш конфигурации атрибутов"
+
+msgid "Presenting for stations"
+msgstr ""
 
 msgid "Call now. "
 msgstr "Вызов сейчас. "
@@ -76,8 +82,8 @@ msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time: %s[%s]. "
+msgstr "Затрачено времени: %s[%s]. "
 
 #, c-format
 msgid "Station '%s' error, restoring in %.3g s."
@@ -88,8 +94,8 @@ msgid "Requests to station '%s': %.6g."
 msgstr "Запросов к станции '%s': %.6g."
 
 #, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: подключение к источнику данных: %s."
+msgid "DAQ.%s.%s: connect to data source: %s."
+msgstr "DAQ.%s.%s: подключение к источнику данных: %s."
 
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
@@ -101,8 +107,8 @@ msgid "OK"
 msgstr "НОРМА"
 
 #, c-format
-msgid "DAQ.%s: connect to data source '%s': %s."
-msgstr "DAQ.%s: подключение к источнику данных '%s': %s."
+msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgstr "DAQ.%s.%s: подключение к источнику данных '%s': %s."
 
 msgid "Zero for disable archive access."
 msgstr "Ноль для отключения доступа к архивам."
@@ -164,20 +170,3 @@ msgstr "Конфигурация удалённой станции"
 
 msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"
-
-#~ msgid "Gather messages level"
-#~ msgstr "Уровень запрашиваемых сообщений"
-
-#~ msgid ""
-#~ "==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);"
-#~ "Critical (5);Alert (6);Emergency (7)"
-#~ msgstr ""
-#~ "==Отключить==;Отладка (0);Информация (1);Замечание (2);Предупреждение (3);"
-#~ "Ошибка (4);Критически (5);Тревога (6);Авария (7)"
-
-#~ msgid ""
-#~ "Deletion parameter '%s' is error but it no present on configuration or "
-#~ "remote station."
-#~ msgstr ""
-#~ "Ошибка удаления параметра '%s', однако он отсутствует в конфигурации или "
-#~ "на удалённой станции."

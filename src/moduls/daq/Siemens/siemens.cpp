@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.0.7"
+#define MOD_VER		"2.0.13"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a data source PLC Siemens by means of Hilscher CIF cards, by using the MPI protocol,\
  and Libnodave library, or self, for the rest.")
@@ -482,26 +482,27 @@ string TMdContr::getStatus( )
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. Read %s. Wrote %s. Connection errors %g. "),
-			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), TSYS::cpct2str(numR).c_str(), TSYS::cpct2str(numW).c_str(), numErr);
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s[%s]. Read %s. Wrote %s. Connection errors %g. "),
+			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
+			TSYS::cpct2str(numR).c_str(), TSYS::cpct2str(numW).c_str(), numErr);
 	}
     }
 
     return rez;
 }
 
-TTpContr &TMdContr::owner( )	{ return *(TTpContr*)nodePrev(); }
+TTpContr &TMdContr::owner( ) const	{ return *(TTpContr*)nodePrev(); }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new TMdPrm(name,&owner().tpPrmAt(type)); }
 
 void TMdContr::load_( )
 {
-    TController::load_();
+    //TController::load_();
 
     //Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; }
+    if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; modif(true); }
 }
 
 void TMdContr::save_( )
@@ -558,7 +559,7 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
-    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),_("STOP")), TMess::Info);
     alSt = -1;
 
     //Clear proccess parameters list
@@ -567,9 +568,9 @@ void TMdContr::stop_( )
     disconnectRemotePLC( );
 }
 
-bool TMdContr::cfgChange( TCfg &co )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(co);
+    TController::cfgChange(co, pc);
 
     if(co.fld().name() == "TYPE" && startStat()) stop();
 
@@ -1599,7 +1600,8 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay <= 0) {
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),cntr.owner().modId().c_str(),cntr.id().c_str(),_("OK")),
+				    TMess::Info);
 		}
 		cntr.tmDelay--;
 	    }
@@ -1609,7 +1611,7 @@ void *TMdContr::Task( void *icntr )
 
 	    if(isStop) break;
 
-	    TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+	    TSYS::taskSleep((int64_t)cntr.period(), cntr.period() ? "" : cntr.cron());
 
 	    if(cntr.endrunReq) isStop = true;
 	    isStart = false;
@@ -1625,7 +1627,8 @@ void TMdContr::setCntrDelay( const string &err )
 {
     if(alSt <= 0) {
 	alSt = 1;
-	alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),TRegExp(":","g").replace(err,"=").c_str()));
+	alarmSet(TSYS::strMess(_("DAQ.%s.%s: connect to data source: %s."),owner().modId().c_str(),id().c_str(),
+								TRegExp(":","g").replace(err,"=").c_str()));
 	reset();
 	numErr++;
     }
@@ -1729,7 +1732,7 @@ void TMdContr::oN( string &buf, uint32_t val, uint8_t sz, int off )
 {
     union { uint32_t v; char c[4]; } dt;
     dt.v = TSYS::i32_LE(val);
-    if(sz < 0 || sz > 4) for(sz = 4; sz > 1 && !dt.c[sz-1]; ) sz--;
+    if(/*sz < 0 || */sz > 4) for(sz = 4; sz > 1 && !dt.c[sz-1]; ) sz--;
     off = (off >= 0) ? std::min(off,(int)buf.size()) : buf.size();
     if((off+sz) > (int)buf.size()) buf.append(off+sz-buf.size(), char(0));
     while(sz) buf[off++] = dt.c[--sz];
@@ -1768,7 +1771,7 @@ void TMdPrm::postDisable( int flag )
     }
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
@@ -1864,7 +1867,7 @@ void TMdPrm::disable( )
 
 void TMdPrm::load_( )
 {
-    TParamContr::load_();
+    //TParamContr::load_();
     loadIO();
 }
 
@@ -2118,7 +2121,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/cfg/only_off",_("Only DB offsets are to be shown"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/cfg/prm",_("Parameters")))
 		for(int i_io = 0; i_io < ioSize(); i_io++) {
-		    if(!(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst)))
+		    if(!(func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))
 			continue;
 		    // Check select param
 		    bool is_lnk = func()->io(i_io)->flg()&TPrmTempl::CfgLink;
@@ -2198,7 +2201,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    int i_io = s2i(a_path.substr(12));
 	    if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)		opt->setText(lnk(lnkId(i_io)).dbAddr);
-	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgPublConst)	opt->setText(getS(i_io));
+	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgConst)	opt->setText(getS(i_io));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int i_io = s2i(a_path.substr(12));
@@ -2206,7 +2209,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		lnk(lnkId(i_io)).dbAddr = opt->text();
 		initLnks();
 	    }
-	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) setS(i_io, opt->text());
+	    else if(func()->io(i_io)->flg()&TPrmTempl::CfgConst) setS(i_io, opt->text());
 	    modif();
 	}
     }

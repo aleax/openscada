@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2015.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 20:51+0300\n"
+"POT-Creation-Date: 2017-02-09 17:26+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -61,25 +61,15 @@ msgid "Hz"
 msgstr "Hz"
 
 #, c-format
-msgid "Trend creation time %gms"
-msgstr "Trend Erstellungszeit %gms"
-
-#, c-format
-msgid "+ PNG-image(%d) creation time %gms"
-msgstr "+ PNG-Bild (%d) Erstellungszeit %gms"
-
-#, c-format
 msgid "Document '%s' parsing is error: %s"
 msgstr "Dokument '%s' ist Parsing-Fehler: %s"
 
 msgid "Operation user interface (WEB)"
 msgstr "Benutzerschnittstelle (WEB)"
 
-msgid "Roman Savochenko"
-msgstr "Roman Savotschenko"
-
-msgid "Roman Savochenko, Lysenko Maxim, Yashina Kseniya"
-msgstr "Roman Savotschenko, Maxim Lysjenko, Ksenija Jaschina"
+msgid "Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)"
+msgstr ""
+"Roman Savotschenko, Maxim Lysjenko (2008-2012), Ksenija Jaschina (2007)"
 
 msgid ""
 "Visual operation user interface, based on WEB - front-end to VCA engine."
@@ -104,9 +94,6 @@ msgstr "mcsek"
 
 msgid "Ready"
 msgstr "Fertig"
-
-msgid "Developers"
-msgstr "Entwickler"
 
 #, c-format
 msgid ""
@@ -135,20 +122,20 @@ msgid "Sorry, opened sessions number reach limit!"
 msgstr "Leider erreichen öffnen Sitzungen Anzahl unbegrenzt!"
 
 #, c-format
-msgid "An inaccessible request is received: '%s'"
-msgstr "Unzulässige Anfrage wird empfangen: '%s'"
+msgid "Go to session '%s' for project '%s' ..."
+msgstr "Gehen Sie zu Session '%s' für Projekt '%s' ..."
 
-msgid "Name: "
-msgstr "Name: "
+#, c-format
+msgid "Pointed project/session '%s' is wrong!"
+msgstr "Spitzes Projekt/Sitzung '%s' ist falsch!"
 
-msgid "License: "
-msgstr "Lizenz: "
+#, c-format
+msgid "Page '%s' error: %s"
+msgstr "Seite '%s' Fehler: %s"
 
-msgid "Author: "
-msgstr "Autor: "
-
-msgid "Description: "
-msgstr "Beschreibung: "
+#, c-format
+msgid "Wrong session '%s'."
+msgstr "Falsche Sitzung '%s'."
 
 msgid "Module options"
 msgstr "Optionen des Moduls"

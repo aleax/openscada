@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Protocol.UserProtocol file: user_prt.h
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2010-2016 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,9 +52,9 @@ class TProtIn: public TProtocolIn
 
 	void setSrcTr( TTransportIn *vl );
 
-	bool mess( const string &request, string &answer, const string &sender );
+	bool mess( const string &request, string &answer );
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
     private:
 	//Attributes
@@ -73,14 +72,14 @@ class UserPrt : public TCntrNode, public TConfig
 	UserPrt( const string &iid, const string &db, TElem *el );
 	~UserPrt( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )		{ return mId; }
+	string id( )			{ return mId; }
 	string name( );
-	string descr( )		{ return cfg("DESCR").getS(); }
-	bool toEnable( )	{ return mAEn; }
-	bool enableStat( )	{ return mEn; }
-	unsigned waitReqTm( )	{ return mWaitReqTm; }
+	string descr( )			{ return cfg("DESCR").getS(); }
+	bool toEnable( )		{ return mAEn; }
+	bool enableStat( ) const	{ return mEn; }
+	unsigned waitReqTm( )		{ return mWaitReqTm; }
 	string inProgLang( );
 	string inProg( );
 	string outProgLang( );
@@ -90,9 +89,9 @@ class UserPrt : public TCntrNode, public TConfig
 
 	string getStatus( );
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string DB( ) const		{ return mDB; }
+	string tbl( ) const;
+	string fullDB( ) const	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
@@ -106,21 +105,21 @@ class UserPrt : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	TProt &owner( );
+	TProt &owner( ) const;
 
 	//Attributes
 	float	cntInReq, cntOutReq;
 
     protected:
 	//Methods
-	void load_( );
+	void load_( TConfig *cfg );
 	void save_( );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
-	const char *nodeName( )	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -149,11 +148,11 @@ class TProt: public TProtocol
 	void itemListIn( vector<string> &ls, const string &curIt = "" );
 
 	// User protocol's functions
-	void uPrtList( vector<string> &ls )	{ chldList(mPrtU,ls); }
-	bool uPrtPresent( const string &id )	{ return chldPresent(mPrtU,id); }
+	void uPrtList( vector<string> &ls ) const		{ chldList(mPrtU, ls); }
+	bool uPrtPresent( const string &id ) const		{ return chldPresent(mPrtU, id); }
 	void uPrtAdd( const string &id, const string &db = "*.*" );
-	void uPrtDel( const string &id )	{ chldDel(mPrtU,id); }
-	AutoHD<UserPrt> uPrtAt( const string &id )	{ return chldAt(mPrtU,id); }
+	void uPrtDel( const string &id )			{ chldDel(mPrtU, id); }
+	AutoHD<UserPrt> uPrtAt( const string &id ) const	{ return chldAt(mPrtU, id); }
 
 	TElem &uPrtEl( )	{ return mUPrtEl; }
 

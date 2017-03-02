@@ -52,15 +52,15 @@ class TTipDAQ : public TModule, public TElem
 	void modStart( );
 	void modStop( );
 
-	//> Controllers
-	void list( vector<string> &list )	{ chldList(mCntr,list); }
-	bool present( const string &name )	{ return chldPresent(mCntr,name); }
+	// Controllers
+	void list( vector<string> &list ) const		{ chldList(mCntr,list); }
+	bool present( const string &name ) const	{ return chldPresent(mCntr,name); }
 	void add( const string &name, const string &daq_db = "*.*" );
-	void del( const string &name )		{ chldDel(mCntr,name); }
-	AutoHD<TController> at( const string &name, const string &who = "" )
+	void del( const string &name )			{ chldDel(mCntr,name); }
+	AutoHD<TController> at( const string &name, const string &who = "" ) const
 	{ return chldAt(mCntr,name); }
 
-	//> Parameter types (DB structure)
+	// Parameter types (DB structure)
 	bool tpPrmPresent( const string &name_t );
 	int tpPrmToId( const string &name_t );
 	int tpParmAdd( const char *id, const char *n_db, const char *name );
@@ -75,7 +75,7 @@ class TTipDAQ : public TModule, public TElem
 	//> Redundancy
 	virtual bool redntAllow( )		{ return false; }
 
-	TDAQS &owner( );
+	TDAQS &owner( ) const;
 
     protected:
 	//Protected methods

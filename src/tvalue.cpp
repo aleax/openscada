@@ -118,7 +118,7 @@ void TValue::vlElemDet( TElem *ValEl )
 	    elem.erase(elem.begin()+i_e);
 	    return;
 	}
-    //throw TError(nodePath().c_str(),"Element '%s' no present!",ValEl->elName().c_str());
+    //throw err_sys(_("Element '%s' no present!"), ValEl->elName().c_str());
 }
 
 TElem &TValue::vlElem( const string &name )
@@ -126,13 +126,18 @@ TElem &TValue::vlElem( const string &name )
     for(unsigned i_e = 0; i_e < elem.size(); i_e++)
 	if(elem[i_e]->elName() == name)
 	    return *elem[i_e];
-    throw TError(nodePath().c_str(), "Element '%s' is not present!", name.c_str());
+    throw err_sys(_("Element '%s' is not present!"), name.c_str());
 }
 
 void TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 {
-    TCntrNode::chldAdd(igr, node, pos, noExp);
-    if(igr == mVl) SYS->archive().at().setToUpdate();
+    try {
+	TCntrNode::chldAdd(igr, node, pos);
+	if(igr == mVl) SYS->archive().at().setToUpdate();
+    }
+    catch(TError&) {
+	if(!noExp) throw;
+    }
 }
 
 void TValue::cntrCmdProc( XMLNode *opt )
@@ -389,7 +394,7 @@ string TVal::objName( )	{ return TCntrNode::objName()+":TVal"; }
 
 string TVal::DAQPath( )	{ return owner().DAQPath()+"."+name(); }
 
-TValue &TVal::owner( )	{ return *(TValue*)nodePrev(); }
+TValue &TVal::owner( ) const	{ return *(TValue*)nodePrev(); }
 
 void TVal::setFld( TFld &fld )
 {
@@ -432,15 +437,15 @@ void TVal::setCfg( TCfg &cfg )
     mCfg = true;
 }
 
-string TVal::name( )		{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
+string TVal::name( )			{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
-bool TVal::dataActive( )	{ return owner().dataActive(); }
+bool TVal::dataActive( )		{ return owner().dataActive(); }
 
-const char *TVal::nodeName( )	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
+const char *TVal::nodeName( ) const	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
-TFld &TVal::fld( )		{ return mCfg ? src.cfg->fld() : *src.fld; }
+TFld &TVal::fld( )			{ return mCfg ? src.cfg->fld() : *src.fld; }
 
-AutoHD<TVArchive> TVal::arch( )	{ return mArch; }
+AutoHD<TVArchive> TVal::arch( )		{ return mArch; }
 
 void TVal::setArch( const AutoHD<TVArchive> &vl )	{ mArch = vl; }
 
@@ -633,7 +638,7 @@ AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
 
 void TVal::setSEL( const string &value, int64_t tm, bool sys )
 {
-    if(!(fld().flg()&TFld::Selected))	throw TError("Val",_("Not select type!"));
+    if(!(fld().flg()&TFld::Selected))	throw TError("Val", _("Not select type!"));
     switch(fld().type()) {
 	case TFld::String:	setS(fld().selNm2VlS(value), tm, sys);	break;
 	case TFld::Integer:	setI(fld().selNm2VlI(value), tm, sys);	break;
@@ -668,7 +673,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setS( value ); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
 	    //Set current value and time
 	    dataRes().lock();
 	    string pvl = *val.s;
@@ -680,7 +685,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setS(value,time()); }
-		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -698,10 +703,10 @@ void TVal::setI( int value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setI(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
-		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
+		value = vmin(fld().selValI()[1], vmax(fld().selValI()[0],value));
 	    int pvl = val.i; val.i = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
@@ -709,7 +714,7 @@ void TVal::setI( int value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setI(value,time()); }
-		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -727,10 +732,10 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setR(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val", _("Write access is denied!"));
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
-		value = vmin(fld().selValR()[1],vmax(fld().selValR()[0],value));
+		value = vmin(fld().selValR()[1], vmax(fld().selValR()[0],value));
 	    double pvl = val.r; val.r = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
@@ -738,7 +743,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setR(value, time()); }
-		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -765,7 +770,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    //Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setB(value,time()); }
-		catch(TError &err) { mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
+		catch(TError &err) { mess_sys(TMess::Error, _("Write value to archive error: %s"), err.mess.c_str()); }
 	    break;
 	}
 	default: break;
@@ -813,7 +818,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // bool set(ElTp val, int tm = 0, int utm = 0, bool sys = false) - write value <val> to attribute with time label <tm:utm> and system
     //       access flag <sys>
     //  tm, utm - time for set value
-    //  sys - system request, direct to object
+    //  sys - system request, direct to the object
     if(iid == "set" && prms.size() >= 1) {
 	try {
 	    int64_t tm = 0;
@@ -821,7 +826,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    if(prms.size() >= 3) tm += prms[2].getI();
 	    bool isSys = false;
 	    if(prms.size() >= 4) isSys = prms[3].getB();
-	    set(prms[0],tm,isSys);
+	    if(isSys && isCfg() && fld().flg()&TFld::NoWrite) return false;
+	    set(prms[0], tm, isSys);
 	    return false;
 	} catch(...){ }
 	return true;
@@ -853,6 +859,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "selNames")	return fld().selNames();
     // string reserve() - reserve string property value
     if(iid == "reserve")return fld().reserve();
+    // bool isCfg() - check to a configuration field
+    if(iid == "isCfg")	return isCfg();
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }
@@ -881,7 +889,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("tm", ll2s(tm));
 	    }
 	    else if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
-	    else throw TError(nodePath().c_str(), _("Attribute doesn't have archive"));
+	    else throw err_sys(_("Attribute doesn't have archive"));
 	}
 	else if(ctrChkNode(opt,"name",RWRWRW,"root",SDAQ_ID,SEC_RD)) {	//Archive name request
 	    if(owner().vlPresent("NAME") && owner().vlAt("NAME").at().getS().size())

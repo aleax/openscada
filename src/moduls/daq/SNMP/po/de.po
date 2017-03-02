@@ -29,7 +29,7 @@ msgstr "Roman Savotschenko"
 msgid "Provides an implementation of the client of SNMP-service."
 msgstr "Stellt eine Implementierung des Clients von SNMP-Dienst."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Tabelle der Parameter"
 
 msgid "Acquisition schedule"

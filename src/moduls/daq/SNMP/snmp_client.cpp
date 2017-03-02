@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.10"
+#define MOD_VER		"0.7.15"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -98,7 +98,7 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
@@ -139,9 +139,9 @@ string TMdContr::getStatus( )
 	if(!acqErr.getVal().empty())	rez = acqErr.getVal();
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s."),tm2s(tmGath).c_str());
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-9*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*tmGath).c_str());
 	}
     }
 
@@ -313,7 +313,7 @@ void *TMdContr::Task( void *icntr )
 
 	cntr.acqErr.setVal(daqerr);
 
-	TSYS::taskSleep(cntr.period(), cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     snmp_sess_close(ss);
@@ -406,7 +406,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name,tp_prm), p_el("w_attr")
 {
 
@@ -420,7 +420,7 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&p_el)) vlElemAtt(&p_el);
 }
 
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
@@ -626,8 +626,6 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
     }
 }
 
-void TMdPrm::load_( )	{ TParamContr::load_(); }
-
 void TMdPrm::parseOIDList(const string &ioid)
 {
     cfg("OID_LS").setS(ioid);
@@ -731,8 +729,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     owner().str2oid(vo.name(), oidn, oidn_len);
 
     TVariant wVl = vl;
-    switch(s2i(vo.fld().reserve()))
-    {
+    switch(s2i(vo.fld().reserve())) {
 	case ASN_INTEGER:	vtp = 'i';	break;
 	case ASN_GAUGE:		vtp = 'u';	break;
 	case ASN_COUNTER:	vtp = 'c';	break;

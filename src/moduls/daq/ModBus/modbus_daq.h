@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	_("ModBUS")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.8.10"
+#define DAQ_MVER	"1.8.19"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU and Modbus/ASCII protocols.")
 #define DAQ_LICENSE	"GPL2"
@@ -64,10 +64,10 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	TCntrNode &operator=( TCntrNode &node );
+	TCntrNode &operator=( const TCntrNode &node );
 
-	bool isStd( );
-	bool isLogic( );
+	bool isStd( ) const;
+	bool isLogic( ) const;
 
 	void enable( );
 	void disable( );
@@ -79,7 +79,7 @@ class TMdPrm : public TParamContr
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods
@@ -98,7 +98,7 @@ class TMdPrm : public TParamContr
 
         //Attributes
 	TElem		pEl;		//Work atribute elements
-	ResString	acqErr;
+	MtxString	acqErr;
 
 	// Logical type by template
         //Data
@@ -112,10 +112,11 @@ class TMdPrm : public TParamContr
 	    class SLnk
 	    {
 		public:
-		SLnk( int iid, const string &iaddr = "" ) : ioId(iid), addr(iaddr) { }
+		SLnk( );
+		SLnk( int iid, const string &iaddr = "" );
 
 		int	ioId;		//Template function io index
-		string	addr, real;	//Full item address: R:23
+		MtxString addr, real;	//Full item address: R:23
 	    };
 
 	    //Methods
@@ -156,19 +157,19 @@ class TMdContr: public TController
 
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
-	string	addr( )		{ return mAddr; }
+	string	addr( ) const	{ return mAddr; }
 	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void regVal( int reg, const string &dt = "R" );			//Register value for acquisition
-	TVariant getVal( const string &addr, ResString &err );		//Unified value request from string address
-	int  getValR( int addr, ResString &err, bool in = false );	//Get register value
-	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
-	bool setVal( const TVariant &val, const string &addr, ResString &err, bool chkAssync = false );	//Unified value set by string address
-	bool setValR( int val, int addr, ResString &err );		//Set register value
-	bool setValRs( const map<int,int> &regs, ResString &err );	//Set multiply registers
-	bool setValC( char val, int addr, ResString &err );		//Set coins value
+	TVariant getVal( const string &addr, MtxString &err );		//Unified value request from string address
+	int getValR( int addr, MtxString &err, bool in = false );	//Get register value
+	char getValC( int addr, MtxString &err, bool in = false );	//Get coins value
+	bool setVal( const TVariant &val, const string &addr, MtxString &err, bool chkAssync = false );	//Unified value set by string address
+	bool setValR( int val, int addr, MtxString &err );		//Set register value
+	bool setValRs( const map<int,int> &regs, MtxString &err );	//Set multiply registers
+	bool setValC( char val, int addr, MtxString &err );		//Set coins value
 	string modBusReq( string &pdu );
 
     protected:
@@ -178,7 +179,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -192,7 +193,7 @@ class TMdContr: public TController
 
 		int		off;		//Data block start offset
 		string		val;		//Data block values kadr
-		ResString	err;		//Acquisition error text
+		MtxString	err;		//Acquisition error text
 	};
 
 	//Methods
@@ -203,7 +204,7 @@ class TMdContr: public TController
 
 	//Attributes
 	ResMtx	enRes;
-	Res	reqRes;
+	ResRW	reqRes;
 	int	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size

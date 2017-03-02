@@ -57,10 +57,12 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), conErr(NULL),
-    crSessForce(icrSessForce), keepAspectRatio(false), prjSes_it(iprjSes_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1),
-    expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF)
+VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
+		bool icrSessForce, unsigned iScr ) :
+    QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL),
+    winClose(false), conErr(NULL), crSessForce(icrSessForce), keepAspectRatio(false), prjSes_it(iprjSes_it),
+    master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
+    mAlrmSt(0xFFFFFF)
 {
     QImage ico_t;
 
@@ -287,7 +289,6 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     alrmPlay = new SndPlay(this);
 
-    menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
     resize(600, 400);
 
@@ -322,7 +323,7 @@ VisRun::~VisRun( )
 
     //Disconnect/delete session
     XMLNode req("disconnect");
-    req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",work_sess);
+    req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", work_sess)->setAttr("conId", i2s(mConId));
     cntrIfCmd(req);
 
     //Unregister window
@@ -448,7 +449,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.02) y_scale = 1;
 	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
-	}else x_scale = y_scale = 1;
+	} else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
 	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
     }
@@ -808,7 +809,7 @@ void VisRun::exportDiag( const string &idg )
 		int64_t bTmVl = eTmVl - 1e6*dgDt->tSize;
 		for(unsigned i_v = 0; i_v < baseVls.size() && baseVls[i_v].tm <= eTmVl; i_v++) {
 		    if(baseVls[i_v].tm < bTmVl) continue;
-		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+i2s(baseVls[i_v].tm%1000000);
+		    CSVr += atm2s(baseVls[i_v].tm/1000000, "\"%d/%m/%Y %H:%M:%S\"") + ";" + i2s(baseVls[i_v].tm%1000000);
 		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++) {
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
 			if(cPrm.val().size() && cPrm.color().isValid()) {
@@ -938,7 +939,7 @@ void VisRun::exportDoc( const string &idoc )
 				    rowSpn[i_cl] = s2i(tblRow->childGet(i_c)->attr("rowspan",false));
 				    val = tblRow->childGet(i_c)->text(true,true);
 				    for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
-				    rez += "\""+TSYS::strNoSpace(val)+"\";";
+				    rez += "\""+sTrm(val)+"\";";
 				    //   Colspan process
 				    int colSpan = s2i(tblRow->childGet(i_c)->attr("colspan",false));
 				    for(int i_cs = 1; i_cs < colSpan; i_cs++) rez += ";";
@@ -987,13 +988,16 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	return;
     }
-    req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
+    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
+    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
+    int oldConId = mConId;
+    mConId = s2i(req.attr("conId"));
+    req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
     cntrIfCmd(req);
 
     //Update pages after an user change
     pgCacheClear();
     bool oldMenuVis = menuBar()->isVisible();
-    menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     QApplication::processEvents();
     if(master_pg) {
 	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)) {
@@ -1062,6 +1066,7 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 {
     UserItStBar *userSt;
     if(!pg) pg = masterPg();
+    if(!pg || pg != masterPg()) return;
 
     //Presence mark clean
     for(int iC = 0; iC < statusBar()->children().size(); iC++)
@@ -1108,7 +1113,9 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
     //Check for remove and order
     for(int iC = 0; iC < statusBar()->children().size(); iC++)
 	if((userSt=qobject_cast<UserItStBar*>(statusBar()->children().at(iC))) && userSt->objectName().indexOf("usr_") == 0) {
-	    if(!userSt->property("usrStPresent").toBool()) userSt->deleteLater();
+	    if(!userSt->property("usrStPresent").toBool())
+		delete userSt;
+		//userSt->deleteLater();
 	    /*else for(int iC1 = iC; iC1 > 0 ; iC1--) {
 		if(!(userSt1=qobject_cast<UserItStBar*>(statusBar()->children().at(iC1-1))) ||
 		    userSt1->objectName().indexOf("usr_") != 0) continue;
@@ -1117,13 +1124,16 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 	}
 }
 
-void VisRun::initSess( const string &prjSes_it, bool crSessForce )
+void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 {
     bool isSess = false;
     src_prj = work_sess = "";
+    string openPgs;
 
     //Connect/create session
-    if((src_prj=TSYS::pathLev(prjSes_it,0)).empty()) return;
+    int off = 0;
+    if((src_prj=TSYS::pathLev(iprjSes_it,0,true,&off)).empty()) return;
+    if(off > 0 && off < iprjSes_it.size()) openPgs = iprjSes_it.substr(off);
     // Check for ready session connection or project
     if(src_prj.compare(0,4,"ses_") == 0) { work_sess = src_prj.substr(4); src_prj = ""; isSess = true; }
     else if(src_prj.compare(0,4,"prj_") == 0) src_prj.erase(0,4);
@@ -1132,7 +1142,7 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     //Get opened sessions list for our page and put dialog for connection
     XMLNode req("list");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
-    if(!isSess && !crSessForce && !cntrIfCmd(req) && req.childSize()) {
+    if(!isSess && !icrSessForce && !cntrIfCmd(req) && req.childSize()) {
 	// Prepare and execute a session selection dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
@@ -1165,9 +1175,15 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	}
 	return;
     }
+    if(req.attr("userIsRoot").size()) menuBar()->setVisible(s2i(req.attr("userIsRoot")));
+    else menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
 
     if(work_sess.empty()) work_sess = req.attr("sess");
     if(src_prj.empty()) src_prj = req.attr("prj");
+
+    mConId = s2i(req.attr("conId"));
+    bool toRestore = master_pg;
+    if(openPgs.size()) openPgs = "/ses_"+work_sess+openPgs;
 
     //Prepare group for parameters request and apply
     setWindowTitle(QString(_("Running project: %1")).arg(src_prj.c_str()));	//Default title
@@ -1179,20 +1195,23 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
     req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
-    req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
+    req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("tm","0")->setAttr("conId", i2s(mConId));
     if(!cntrIfCmd(req)) {
 	// Title
 	XMLNode *pN = req.childGet(0);
 	setWindowTitle(pN->text().c_str());
+
 	// Icon
 	pN = req.childGet(1);
 	QImage img;
 	string simg = TSYS::strDecode(pN->text(),TSYS::base64);
 	if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 	    setWindowIcon(QPixmap::fromImage(img));
+
 	// Period
 	pN = req.childGet(2);
 	mPeriod = s2i(pN->text());
+
 	// Style
 	pN = req.childGet(3);
 	setStyle(s2i(pN->text()));
@@ -1204,30 +1223,40 @@ void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 	if(flgs&0x01)		setWindowState(Qt::WindowMaximized);
 	else if(flgs&0x02)	actFullScr->setChecked(true);
 	keepAspectRatio = flgs&0x04;
+
+	// Clean up the previous pages for clean reconnection
+	if(toRestore) {
+	    pgCacheClear();
+	    openPgs = "";
+	    for(unsigned iP = 0; iP < pgList.size(); iP++) {
+		RunPageView *pg = master_pg->findOpenPage(pgList[iP]);
+		if(pg) { pg->deleteLater(); openPgs += pgList[iP] + ";"; }
+	    }
+	    master_pg->deleteLater();
+	    master_pg = NULL;
+	    setXScale(1); setYScale(1);
+	}
+
 	// Open pages list
 	pN = req.childGet(6);
+	pgList.clear();
 	for(unsigned i_ch = 0; i_ch < pN->childSize(); i_ch++) {
 	    pgList.push_back(pN->childGet(i_ch)->text());
-	    callPage(pN->childGet(i_ch)->text());
+	    callPage(pN->childGet(i_ch)->text()/*, toRestore*/);
 	}
-	reqtm = strtoul(pN->attr("tm").c_str(),NULL,10);
+	reqtm = strtoul(pN->attr("tm").c_str(), NULL, 10);
     }
 
-    //Open direct-selected page
-    if(!TSYS::pathLev(prjSes_it,1).empty()) {
-	// Convert project path to session path
-	string prj_el;
-	string ses_it = "/ses_"+work_sess;
-	int i_el = 1;
-	while((prj_el=TSYS::pathLev(prjSes_it,i_el++)).size())
-	    if(prj_el.compare(0,3,"pg_") != 0) break;
-	    else ses_it += "/" + prj_el;
-
-	// Send open command
-	req.clear()->setName("open")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",ses_it);
+    //Open direct-selected page or openned before ones
+    if(openPgs.size()) {
+	req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
+	string pIt;
+	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
+	    req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
 	cntrIfCmd(req);
-
-	callPage(ses_it);
+	// Force call for blinks prevent
+	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
+	    callPage(pIt);
     }
 
     QCoreApplication::processEvents();
@@ -1295,19 +1324,19 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 
 void VisRun::pgCacheClear( )
 {
-    while(!cache_pg.empty()) {
-	delete cache_pg.front();
-	cache_pg.pop_front();
+    while(!cachePg.empty()) {
+	delete cachePg.front();
+	cachePg.pop_front();
     }
 }
 
 void VisRun::pgCacheAdd( RunPageView *wdg )
 {
     if(!wdg) return;
-    cache_pg.push_front(wdg);
-    while(cache_pg.size() > 100) {
-	delete cache_pg.back();
-	cache_pg.pop_back();
+    cachePg.push_front(wdg);
+    while(cachePg.size() > 100) {
+	delete cachePg.back();
+	cachePg.pop_back();
     }
 }
 
@@ -1315,10 +1344,10 @@ RunPageView *VisRun::pgCacheGet( const string &id )
 {
     RunPageView *pg = NULL;
 
-    for(unsigned i_pg = 0; i_pg < cache_pg.size(); i_pg++)
-	if(cache_pg[i_pg]->id() == id) {
-	    pg = cache_pg[i_pg];
-	    cache_pg.erase(cache_pg.begin()+i_pg);
+    for(unsigned i_pg = 0; i_pg < cachePg.size(); i_pg++)
+	if(cachePg[i_pg]->id() == id) {
+	    pg = cachePg[i_pg];
+	    cachePg.erase(cachePg.begin()+i_pg);
 	    break;
 	}
 
@@ -1369,13 +1398,13 @@ void VisRun::alarmSet( unsigned alarm )
 
     //Check for early this session running equalent project
     bool isMaster = true;
-    ResAlloc res(mod->nodeRes(), false);
+    MtxAlloc res(mod->dataRes(), true);
     for(unsigned i_w = 0; i_w < mod->mnWinds.size(); i_w++)
 	if(qobject_cast<VisRun*>(mod->mnWinds[i_w]) && ((VisRun*)mod->mnWinds[i_w])->srcProject() == srcProject()) {
 	    if(((VisRun*)mod->mnWinds[i_w])->workSess() != workSess()) isMaster = false;
 	    break;
 	}
-    res.release();
+    res.unlock();
 
     //Alarm types init
     // Set monotonic sound alarm
@@ -1468,7 +1497,7 @@ void VisRun::updatePage( )
 
     //Pages update
     XMLNode req("openlist");
-    req.setAttr("tm", u2s(reqtm))->
+    req.setAttr("tm", u2s(reqtm))->setAttr("conId", i2s(mConId))->
 	setAttr("path", "/ses_"+work_sess+"/%2fserv%2fpg");
 
     if(!(rez=cntrIfCmd(req,false,true))) {
@@ -1538,11 +1567,10 @@ void VisRun::updatePage( )
     }
 
     //Old pages from cache for close checking
-    for(unsigned i_pg = 0; i_pg < cache_pg.size(); )
-	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cache_pg[i_pg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60))
-	{
-	    delete cache_pg[i_pg];
-	    cache_pg.erase(cache_pg.begin()+i_pg);
+    for(unsigned i_pg = 0; i_pg < cachePg.size(); )
+	if(mod->cachePgLife() > 0.01 && (period()*(reqTm()-cachePg[i_pg]->reqTm())/1000) > (unsigned)(mod->cachePgLife()*60*60)) {
+	    delete cachePg[i_pg];
+	    cachePg.erase(cachePg.begin()+i_pg);
 	}
 	else i_pg++;
 

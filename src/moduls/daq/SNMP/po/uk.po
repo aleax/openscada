@@ -24,7 +24,7 @@ msgstr "Роман Савоченко"
 msgid "Provides an implementation of the client of SNMP-service."
 msgstr "Надає реалізацію клієнтського SNMP сервісу."
 
-msgid "Parameteres table"
+msgid "Parameters table"
 msgstr "Таблиця параметрів"
 
 msgid "Acquisition schedule"

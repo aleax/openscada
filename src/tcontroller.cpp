@@ -46,9 +46,9 @@ string TController::objName( )	{ return TCntrNode::objName()+":TController"; }
 
 string TController::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
 
-TCntrNode &TController::operator=( TCntrNode &node )
+TCntrNode &TController::operator=( const TCntrNode &node )
 {
-    TController *src_n = dynamic_cast<TController*>(&node);
+    const TController *src_n = dynamic_cast<const TController*>(&node);
     if(!src_n) return *this;
 
     //Individual DB names store
@@ -90,7 +90,7 @@ void TController::postDisable( int flag )
 {
     if(flag) {
 	//Delete DB record
-	SYS->db().at().dataDel(fullDB(),owner().nodePath()+"DAQ",*this,true);
+	SYS->db().at().dataDel(fullDB(), owner().nodePath()+"DAQ", *this, true);
 
 	//Delete parameter's tables
 	for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++) {
@@ -101,7 +101,7 @@ void TController::postDisable( int flag )
     }
 }
 
-TTipDAQ &TController::owner( )	{ return *(TTipDAQ*)nodePrev(); }
+TTipDAQ &TController::owner( ) const	{ return *(TTipDAQ*)nodePrev(); }
 
 string TController::workId( )	{ return owner().modId()+"."+id(); }
 
@@ -140,16 +140,18 @@ string TController::getStatus( )
     return rez;
 }
 
-void TController::load_( )
+void TController::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
-
-    mess_info(nodePath().c_str(),_("Load controller's configurations!"));
+    mess_sys(TMess::Info, _("Load controller's configurations!"));
 
     bool enSt_prev = enSt, runSt_prev = runSt;
 
-    cfgViewAll(true);
-    SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
+    if(icfg) *(TConfig*)this = *icfg;
+    else {
+	//cfgViewAll(true);
+	SYS->db().at().dataGet(fullDB(), owner().nodePath()+"DAQ", *this);
+    }
 
     LoadParmCfg();
 
@@ -159,7 +161,7 @@ void TController::load_( )
 
 void TController::save_( )
 {
-    mess_info(nodePath().c_str(),_("Save controller's configurations!"));
+    mess_sys(TMess::Info, _("Save controller's configurations!"));
 
     //Update type controller bd record
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
@@ -171,7 +173,7 @@ void TController::start( )
     if(runSt)	return;
     if(!enSt)	enable();
 
-    mess_info(nodePath().c_str(),_("Start controller!"));
+    mess_sys(TMess::Info, _("Start controller!"));
 
     //First archives synchronization
     if(owner().redntAllow() && redntMode()) redntDataUpdate();
@@ -186,7 +188,7 @@ void TController::stop( )
 {
     if(!runSt)	return;
 
-    mess_info(nodePath().c_str(),_("Stop controller!"));
+    mess_sys(TMess::Info, _("Stop controller!"));
 
     //Stop for children
     stop_();
@@ -197,7 +199,7 @@ void TController::stop( )
 void TController::enable( )
 {
     if(!enSt) {
-	mess_info(nodePath().c_str(),_("Enable controller!"));
+	mess_sys(TMess::Info, _("Enable controller!"));
 
 	//Enable for children
 	enable_();
@@ -213,15 +215,15 @@ void TController::enable( )
 	if(at(prm_list[i_prm]).at().toEnable())
 	    try{ at(prm_list[i_prm]).at().enable(); }
 	    catch(TError &err) {
-		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Enable parameter '%s' error."),prm_list[i_prm].c_str());
+		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Warning, _("Enable parameter '%s' error."), prm_list[i_prm].c_str());
 		enErr = true;
 	    }
 
     //Set enable stat flag
     enSt = true;
 
-    if(enErr) throw TError(nodePath().c_str(),_("Some parameters enable error."));
+    if(enErr) throw err_sys(_("Some parameters enable error."));
 }
 
 void TController::disable( )
@@ -231,7 +233,7 @@ void TController::disable( )
     //Stop if runed
     if(runSt) stop();
 
-    mess_info(nodePath().c_str(),_("Disable controller!"));
+    mess_sys(TMess::Info, _("Disable controller!"));
 
     //Disable parameters
     vector<string> prm_list;
@@ -240,8 +242,8 @@ void TController::disable( )
 	if(at(prm_list[i_prm]).at().enableStat())
 	    try{ at(prm_list[i_prm]).at().disable(); }
 	    catch(TError &err) {
-		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_warning(nodePath().c_str(),_("Disable parameter '%s' error."),prm_list[i_prm].c_str());
+		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Warning, _("Disable parameter '%s' error."), prm_list[i_prm].c_str());
 	    }
 
     //Disable for children
@@ -254,30 +256,32 @@ void TController::disable( )
 void TController::LoadParmCfg( )
 {
     map<string, bool>	itReg;
+    vector<vector<string> > full;
 
     //Search and create new parameters
-    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++) {
-	if(owner().tpPrmAt(i_tp).db.empty()) continue;
+    for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
+	if(owner().tpPrmAt(iTp).db.empty()) continue;
 	try {
-	    TConfig c_el(&owner().tpPrmAt(i_tp));
-	    c_el.cfgViewAll(false);
+	    TConfig cEl(&owner().tpPrmAt(iTp));
+	    cEl.cfgViewAll(false);
 
 	    // Search new into DB and Config-file
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),
-					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).db).getS(),fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(iTp).db).getS(),
+					   owner().nodePath()+cfg(owner().tpPrmAt(iTp).db).getS(),fld_cnt++,cEl,false,&full); )
 	    {
 		try {
-		    string shfr = c_el.cfg("SHIFR").getS();
-		    if(!present(shfr))	add(shfr, i_tp);
+		    string shfr = cEl.cfg("SHIFR").getS();
+		    if(!present(shfr))	add(shfr, iTp);
+		    at(shfr).at().load(&cEl);
 		    itReg[shfr] = true;
 		} catch(TError &err) {
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Add parameter '%s' error."),c_el.cfg("SHIFR").getS().c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_sys(TMess::Warning, _("Add parameter '%s' error."), cEl.cfg("SHIFR").getS().c_str());
 		}
 	    }
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Search and create new parameters error."));
+	    mess_sys(TMess::Error, _("Search and create new parameters error."));
 	}
     }
 
@@ -341,15 +345,12 @@ void TController::redntDataUpdate( )
 	unsigned rC = 0;
 	for(unsigned iV = 0; iV < listV.size(); iV++) {
 	    AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-	    if(!vl.at().arch().freeStat() || vl.at().reqFlg()) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 	    if(!vl.at().arch().freeStat())
 		prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",ll2s(vmax(vl.at().arch().at().end(""),
 						    TSYS::curTime()-(int64_t)(3.6e9*owner().owner().rdRestDtTm()))));
+	    if(!vl.at().arch().freeStat() || vl.at().reqFlg()) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 	}
-	if(rC > listV.size()/2) {
-	    prmNd->childClear("el");
-	    prmNd->setAttr("sepReq", "0");
-	}
+	if(rC > listV.size()/2) { prmNd->childClear("el"); prmNd->setAttr("sepReq", "0"); }
     }
 
     //Send request to first active station for this controller
@@ -373,7 +374,7 @@ void TController::redntDataUpdate( )
 		TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
 		for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
 		    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-		vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
+		vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
 	    }
 	    else if(aNd->name() == "del" && prm.at().dynElCntr()) {
 		MtxAlloc res(prm.at().dynElCntr()->resEl(), true);

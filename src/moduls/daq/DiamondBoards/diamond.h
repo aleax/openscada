@@ -61,11 +61,11 @@ class TMdPrm : public TParamContr
 	int	cnl( )		{ return cfg("CNL").getI(); }
 	void	setType( Type val );
 
-	TMdContr &owner( );
+	TMdContr &owner( ) const;
 
     protected:
 	//Methods
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlGet( TVal &vo );
 	void vlArchMake( TVal &vo );
@@ -109,7 +109,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
@@ -126,7 +126,7 @@ class TMdContr: public TController
 
 	bool	ad_dsc_st, endrun_req_ad_dsc;
 
-	Res	ai_res, ao_res, dio_res;
+	ResRW	ai_res, ao_res, dio_res;
 };
 
 //*************************************************
@@ -162,7 +162,7 @@ class TTpContr: public TTipDAQ
 	TElem	elem_di;
 	TElem	elem_do;
 
-	Res	drvRes;
+	ResRW	drvRes;
 };
 
 extern TTpContr *mod;
