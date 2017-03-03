@@ -596,7 +596,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    i_area++;
 	}
 	if(!activeTab && tabs.childNodes.length) { activeTab = tabs.childNodes[0]; activeTab.className = 'active'; }
-	// Prepare active tab
+	// Preparing of the active tab
 	for(var i_cf = 0; i_cf < node.childNodes.length; i_cf++)
 	    if(node.childNodes[i_cf].nodeName.toLowerCase() == 'area' &&
 		    nodeText(activeTab) == node.childNodes[i_cf].getAttribute('dscr'))
@@ -610,6 +610,23 @@ function selectChildRecArea( node, aPath, cBlk )
 		    node.childNodes[i_cf].setAttribute('qview','1');
 		}
 		else selectChildRecArea(node.childNodes[i_cf],aPath+node.childNodes[i_cf].getAttribute('id')+'/',null);
+
+		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
+		scrlArea = document.getElementById('gen-pnl-right');
+		sclIts = document.querySelectorAll(".elem textarea, .elem div.table, .elem select.list");
+		sclFitSz = scrlArea.clientHeight-scrlArea.children[0].offsetHeight;
+		for(fitStp = 5, iScN = 0; sclFitSz > fitStp; ) {
+		    sclIt = null;
+		    sclFromBeg = (iScN == 0);
+		    for( ; iScN < sclIts.length && !sclIt; iScN++) {
+			if(sclIts[iScN].scrollHeight <= sclIts[iScN].clientHeight) continue;
+			sclIt = sclIts[iScN];
+			sclIt.style.height = (sclIt.offsetHeight-((sclIt.nodeName=="SELECT")?0:getSpareHeight(sclIt))+fitStp)+'px';
+			sclFitSz -= fitStp;
+		    }
+		    if(!sclIt && sclFromBeg) break;
+		    if(iScN && iScN >= sclIts.length) iScN = 0;
+		}
 	    }
 	return;
     }
@@ -642,7 +659,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		dBlk.appendChild(lab);
 		dBlk.appendChild(document.createElement('br'));
 		val = document.createElement('select'); val.className = 'list';
-		val.size = 10;
+		val.size = 3;//10;
 		val.srcNode = t_s;
 		val.itPath = selPath+'/'+brPath;
 		val.onmouseover = function() { setStatus(this.itPath,10000); }
@@ -786,12 +803,12 @@ function selectChildRecArea( node, aPath, cBlk )
 		    setNodeText(opt,nodeText(dataReq.childNodes[i_el]));
 		    val.appendChild(opt);
 		}
-	    while(val.childNodes.length < 4) {
+	    while(val.childNodes.length < 3) {
 		var opt = document.createElement('option');
 		//opt.disabled = true;
 		val.appendChild(opt);
 	    }
-	    val.size = Math.min(10,Math.max(4,val.childNodes.length));
+	    val.size = 3; //Math.min(10,Math.max(4,val.childNodes.length));
 	}
 	// View images
 	else if(t_s.nodeName.toLowerCase() == "img") {
@@ -808,11 +825,10 @@ function selectChildRecArea( node, aPath, cBlk )
 		if(t_s.getAttribute('h_sz')) val.style.width = t_s.getAttribute('h_sz')+'px';
 		if(t_s.getAttribute("v_sz")) val.style.height = t_s.getAttribute("v_sz")+'px';
 		val.itPath = selPath+'/'+brPath;
-		val.onmouseover = function() { setStatus(this.itPath,10000); }
+		val.onmouseover = function( ) { setStatus(this.itPath,10000); }
 		if(wr) {
 		    val.style.cursor = 'pointer';
-		    val.onclick = function()
-		    {
+		    val.onclick = function( ) {
 			dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Select image file for download to picture field.###','/'+MOD_ID+this.itPath+'?com=img',true);
 			setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Image set###');
 			dlgWin.document.getElementById('wDlgType').style.display = 'none';
@@ -924,7 +940,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			    else {
 				if(prcCol.getAttribute('tp') == 'hex') cval = '0x'+parseInt(cval).toString(16);
 				else if(prcCol.getAttribute('tp') == 'oct') cval = '0'+parseInt(cval).toString(8);
-				setNodeText(tblCell,cval);
+				setNodeText(tblCell, cval);
 			    }
 			}
 		    }
@@ -1053,8 +1069,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				if(prcCol.getAttribute('tp') == 'bool') {
 				    this.innerHTML = "<input type='checkbox'/>";
 				    this.firstChild.checked = parseInt(cval);
-				    this.firstChild.onclick = function( )
-				    {
+				    this.firstChild.onclick = function( ) {
 					this.parentNode.parentNode.parentNode.comSet(this.parentNode.cRow,this.parentNode.cCol,this.checked?'1':'0');
 				    }
 				}
@@ -1083,8 +1098,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				    var dt = new Date(parseInt(cval)*1000);
 				    this.innerHTML = "<input size='2'/><input size='2'/><input size='4'/>&nbsp;<input size='2'/><input size='2'/><input size='2'/>";
 				    this.childNodes[0].onkeyup = this.childNodes[1].onkeyup = this.childNodes[2].onkeyup =
-				    this.childNodes[4].onkeyup = this.childNodes[5].onkeyup = this.childNodes[6].onkeyup = function(e)
-				    {
+				    this.childNodes[4].onkeyup = this.childNodes[5].onkeyup = this.childNodes[6].onkeyup = function(e) {
 					if(!e) e = window.event;
 					if(this.parentNode.isEdited && e.keyCode == 13)
 					{ this.parentNode.childNodes[7].onclick(); return true; }
@@ -1133,8 +1147,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				    if(prcCol.getAttribute('dest') == 'sel_ed') {
 					this.childNodes[0].size = 20;
 					var cmbImg = document.createElement('img'); cmbImg.src = '/'+MOD_ID+'/img_combar';
-					cmbImg.onclick = function( )
-					{
+					cmbImg.onclick = function( ) {
 					    if(!this.parentNode.val_ls || !this.parentNode.val_ls.length) return false;
 					    var combMenu = getCombo();
 					    var optHTML = '';
@@ -1211,7 +1224,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		}
 		table.srcNode = t_s;
 		table.setElements();
-		table.parentNode.style.height = Math.min(300,Math.max(100,table.clientHeight))+'px';
+		table.parentNode.style.height = "100px"; //Math.min(300,Math.max(100,table.clientHeight))+'px';
 	    }
 	}
 	//  View standard fields
@@ -1229,8 +1242,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		button = document.createElement('input'); button.type = 'button';
 		button.srcNode = t_s;
 		button.brPath = brPath;
-		button.onclick = function( )
-		{
+		button.onclick = function( ) {
 		    //Check link
 		    if(this.srcNode.getAttribute('tp') == 'lnk') {
 			var dataReq = servGet(selPath+'/'+this.brPath,'com=get');

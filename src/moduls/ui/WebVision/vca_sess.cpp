@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)	   *
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)	   *
- *		   2007-2016 by Roman Savochenko (rom_as@oscada.org)	   *
+ *		   2007-2017 by Roman Savochenko (rom_as@oscada.org)	   *
  *									   *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #include "web_vision.h"
 #include "vca_sess.h"
 
-extern char *WebVisionVCA_js;
+extern char *WebVisionVCA_html;
 
 using namespace WebVision;
 using namespace VCA;
@@ -72,8 +72,11 @@ void VCASess::getReq( SSess &ses )
     string first_lev = TSYS::pathLev(ses.url, 1);
     string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
     if(wp_com.empty()) {
-	string prjNm, extJS;
-	// Get project's name
+	int hd;
+	ses.page = "";
+
+	// Get the name of the project
+	string prjNm;
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/%2fobj%2fst%2fprj");
 	if(!mod->cntrIfCmd(req,ses.user)) {
@@ -81,18 +84,25 @@ void VCASess::getReq( SSess &ses )
 	    if(!mod->cntrIfCmd(req,ses.user))	prjNm = req.text();
 	}
 
-	// External JS file loading try
-	int hd = open("WebVisionVCA.js", O_RDONLY);
-	if(hd >= 0) {
+	//Check for the main work page
+	if((hd=open("WebVisionVCA.html",O_RDONLY)) >= 0) {
 	    char buf[STR_BUF_LEN];
-	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) extJS.append(buf, len);
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
 	    close(hd);
-	}
-	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->trMessReplace(extJS.size()?extJS.c_str():WebVisionVCA_js)+"\n</SCRIPT>\n"+mod->pgTail();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+	} else ses.page = WebVisionVCA_html;
+	ses.page = mod->trMessReplace(ses.page);
+	// User replace
+	size_t varPos = ses.page.find("##USER##");
+	if(varPos != string::npos)
+	    ses.page.replace(varPos, 8, TSYS::strMess("<span style=\"color: %s;\">%s</span>",((ses.user=="root")?"red":"green"),ses.user.c_str()));
+	// Charset replace
+	if((varPos=ses.page.find("##CHARSET##")) != string::npos)	ses.page.replace(varPos, 11, Mess->charset());
+	// Title replace
+	if((varPos=ses.page.find("##TITLE##")) != string::npos)	ses.page.replace(varPos, 9, prjNm);
+	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
 
 	// Cache clear
-	ResAlloc res(nodeRes(),true);
+	ResAlloc res(nodeRes(), true);
 	mCacheRes.clear();
     }
     //Session/projects icon
@@ -101,7 +111,7 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path", ses.url+"/%2fico");
 	mod->cntrIfCmd(req, ses.user);
 	ses.page = TSYS::strDecode(req.text(), TSYS::base64);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png") + ses.page;
+	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png;");
     }
     //Get open pages list
     else if(wp_com == "pgOpenList" && first_lev.empty()) {
@@ -113,9 +123,7 @@ void VCASess::getReq( SSess &ses )
 	req.childAdd("get")->setAttr("path","/%2fobj%2fcfg%2fper");
 	mod->cntrIfCmd(req,ses.user);
 	req.childGet(0)->setAttr("per",req.childGet(1)->text());
-
-	ses.page = req.childGet(0)->save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Attribute get
     else if(wp_com == "attr") {
@@ -124,8 +132,7 @@ void VCASess::getReq( SSess &ses )
 
 	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Widget's (page) full attributes branch request
     else if(wp_com == "attrsBr") {
@@ -163,9 +170,8 @@ void VCASess::getReq( SSess &ses )
 	    caddr = addr.back(); addr.pop_back();
 	}
 
-	// Send request to browser
-	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	// Send the respond to the browser
+	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Resources request (images and other files)
     else if(wp_com == "res") {
@@ -174,16 +180,12 @@ void VCASess::getReq( SSess &ses )
 	    string mime;
 	    ses.page = resGet(prmEl->second, ses.url, ses.user, &mime);
 	    mod->imgConvert(ses);
-	    ses.page = mod->httpHead("200 OK", ses.page.size(), mime)+ses.page;
-	} else ses.page = mod->httpHead("404 Not Found");
+	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+mime);
+	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource isn't found"))+"</div>\n", "404 Not Found");
     }
-    //Request to primitive object. Used for data caching
+    //Request to the primitive object. Used for data caching
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().getReq(ses);
-    else {
-	mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
-	ses.page = mod->pgHead()+"<center>Call page/widget '"+ses.url+"' command: '"+wp_com+"'</center>\n<br/>"+mod->pgTail();
-	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
-    }
+    else ses.page = mod->pgCreator(ses.prt, "<div class='warning'>"+TSYS::strMess(_("Unknown command: %s."),wp_com.c_str())+"</div>\n", "200 OK");
 
     //if(1e-3*(TSYS::curTime()-curTm) > 20)
     //	printf("TEST 00: %gms: '%s': '%s'\n",1e-3*(TSYS::curTime()-curTm),wp_com.c_str(),ses.url.c_str());
@@ -211,7 +213,7 @@ void VCASess::postReq( SSess &ses )
 	mod->cntrIfCmd(req,ses.user);
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
-    ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
 }
 
 void VCASess::objCheck( const string &rootId, const string &wPath )
@@ -3985,9 +3987,8 @@ void VCAElFigure::getReq( SSess &ses )
     //scaleWidth = (int)rRnd(width*xSc, POS_PREC_DIG, true);
     if(im) { gdImageDestroy(im); im = NULL; }
     im = gdImageCreateTrueColor(scaleWidth, scaleHeight);
-    if(!im) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-    else
-    {
+    if(!im) ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png");
+    else {
 	//> Draw image
 	gdImageAlphaBlending(im, 0);
 	gdImageFilledRectangle(im, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im,0,0,0,127));
@@ -3997,8 +3998,7 @@ void VCAElFigure::getReq( SSess &ses )
 	//> Get image and transfer it
 	int img_sz;
 	char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
-	ses.page.assign(img_ptr,img_sz);
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+	ses.page = mod->pgCreator(ses.prt, string(img_ptr,img_sz), "200 OK", "Content-Type: image/png");
 	gdFree(img_ptr);
     }
 }
@@ -4477,7 +4477,7 @@ void VCAText::getReq( SSess &ses )
     txtFontSize = (int)((float)textFontSize*vmin(xSc, ySc));
     if(im) gdImageDestroy(im);
     im = gdImageCreateTrueColor(scaleWidth, scaleHeight);
-    if(!im) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+    if(!im) ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png");
     else {
 	gdImageAlphaBlending(im, 0);
 	gdImageFilledRectangle(im, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im,0,0,0,127));
@@ -4677,8 +4677,7 @@ void VCAText::getReq( SSess &ses )
 	//Get image and transfer it
 	int img_sz;
 	char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
-	ses.page.assign(img_ptr, img_sz);
-	ses.page = mod->httpHead("200 OK", ses.page.size(), "image/png") + ses.page;
+	ses.page = mod->pgCreator(ses.prt, string(img_ptr,img_sz), "200 OK", "Content-Type: image/png");
 	gdFree(img_ptr);
     }
 }
@@ -4818,8 +4817,7 @@ void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
     gdImageSaveAlpha(im, 1);
     int img_sz;
     char *img_ptr = (char*)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
-    ses.page.assign(img_ptr, img_sz);
-    ses.page = mod->httpHead("200 OK", ses.page.size(), "image/png") + ses.page;
+    ses.page = mod->pgCreator(ses.prt, string(img_ptr,img_sz), "200 OK", "Content-Type: image/png");
     gdFree(img_ptr);
     gdImageDestroy(im);
 }
@@ -4866,7 +4864,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW,imH);
-    if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
+    if(!im) { ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png"); return; }
     gdImageAlphaBlending(im, 0);
     gdImageFilledRectangle(im, 0, 0, imW-1, imH-1, gdImageColorResolveAlpha(im,0,0,0,127));
     gdImageAlphaBlending(im, 1);
@@ -5336,7 +5334,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW, imH);
-    if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
+    if(!im) { ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png"); return; }
     gdImageAlphaBlending(im,0);
     gdImageFilledRectangle(im, 0, 0, imW-1, imH-1, gdImageColorResolveAlpha(im,0,0,0,127));
     gdImageAlphaBlending(im,1);
@@ -5683,7 +5681,7 @@ void VCADiagram::makeXYPicture( SSess &ses )
 
     //Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW, imH);
-    if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png") + ses.page; return; }
+    if(!im) { ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png"); return; }
     gdImageAlphaBlending(im, 0);
     gdImageFilledRectangle(im, 0, 0, imW-1, imH-1, gdImageColorResolveAlpha(im,0,0,0,127));
     gdImageAlphaBlending(im, 1);

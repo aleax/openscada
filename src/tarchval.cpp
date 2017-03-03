@@ -969,9 +969,9 @@ int64_t TVArchive::end( const string &arch )
     }
 
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
-	if((arch.empty() || arch == archEl[i_a]->archivator().workId()) && archEl[i_a]->end() > rez) {
-	    rez = archEl[i_a]->end();
+    for(unsigned iA = 0; iA < archEl.size(); iA++)
+	if((arch.empty() || arch == archEl[iA]->archivator().workId()) && archEl[iA]->end() > rez) {
+	    rez = archEl[iA]->end();
 	    if(!arch.empty())	break;
 	}
 
@@ -989,9 +989,9 @@ int64_t TVArchive::begin( const string &arch )
     if(!rez) rez = cTm;	//Empty buffer
 
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
-	if((arch.empty() || arch == archEl[i_a]->archivator().workId()) && archEl[i_a]->begin() < rez) {
-	    rez = archEl[i_a]->begin();
+    for(unsigned iA = 0; iA < archEl.size(); iA++)
+	if((arch.empty() || arch == archEl[iA]->archivator().workId()) && archEl[iA]->begin() < rez) {
+	    rez = archEl[iA]->begin();
 	    if(!arch.empty())	break;
 	}
 
@@ -1002,9 +1002,9 @@ int64_t TVArchive::period( const string &arch )
 {
     if(arch.empty() || arch == BUF_ARCH_NM) return TValBuf::period();
     ResAlloc res(aRes, false);
-    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
-	if(arch == archEl[i_a]->archivator().workId())
-	    return (int64_t)(1e6*archEl[i_a]->archivator().valPeriod());
+    for(unsigned iA = 0; iA < archEl.size(); iA++)
+	if(arch == archEl[iA]->archivator().workId())
+	    return (int64_t)(1e6*archEl[iA]->archivator().valPeriod());
     return 0;
 }
 
@@ -1132,13 +1132,13 @@ TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool o
     else {
 	ResAlloc res(aRes, false);
 	vector<pair<float,TVArchEl*> >	propArchs;
-	for(unsigned i_a = 0; i_a < archEl.size(); i_a++) {
-	    TVArchivator &archPr = archEl[i_a]->archivator();
+	for(unsigned iA = 0; iA < archEl.size(); iA++) {
+	    TVArchivator &archPr = archEl[iA]->archivator();
 	    if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&
 		    (!tm ||
-			(up_ord && *tm <= archEl[i_a]->end() && *tm > archEl[i_a]->begin()-(int64_t)(1e6*archPr.valPeriod())) ||
-			(!up_ord && *tm < archEl[i_a]->end()+(int64_t)(1e6*archPr.valPeriod()) && *tm >= archEl[i_a]->begin())))
-		propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), archEl[i_a]));
+			(up_ord && *tm <= archEl[iA]->end() && *tm > archEl[iA]->begin()-(int64_t)(1e6*archPr.valPeriod())) ||
+			(!up_ord && *tm < archEl[iA]->end()+(int64_t)(1e6*archPr.valPeriod()) && *tm >= archEl[iA]->begin())))
+		propArchs.push_back(pair<float,TVArchEl*>((float)archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), archEl[iA]));
 	}
 	std::sort(propArchs.begin(), propArchs.end());
 	TVariant rez;
@@ -1162,11 +1162,11 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     //Get priority archivators list for requested range
     ResAlloc res(aRes, false);
     vector<pair<float,TVArchEl*> >	propArchs;
-    for(unsigned i_a = 0; i_a < archEl.size(); i_a++) {
-	TVArchivator &archPr = archEl[i_a]->archivator();
-	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&		//!!!! iend >= archEl[i_a]->begin() need for request beside to the border
-		((!ibeg || ibeg <= archEl[i_a]->end()) && (!iend || iend >= archEl[i_a]->begin())) && ibeg <= iend)
-	    propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), archEl[i_a]));
+    for(unsigned iA = 0; iA < archEl.size(); iA++) {
+	TVArchivator &archPr = archEl[iA]->archivator();
+	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&		//!!!! iend >= archEl[iA]->begin() need for request beside to the border
+		((!ibeg || ibeg <= archEl[iA]->end()) && (!iend || iend >= archEl[iA]->begin())) && ibeg <= iend)
+	    propArchs.push_back(pair<float,TVArchEl*>((float)archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), archEl[iA]));
     }
     std::sort(propArchs.begin(), propArchs.end());
 
@@ -1200,8 +1200,8 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     ResAlloc res(aRes, false);
     for(unsigned iA = 0; iA < archEl.size(); iA++)
 	if((arch.empty() || arch == archEl[iA]->archivator().workId()))
-		//&& (!archEl[i_a]->lastGet() || ibeg < archEl[i_a]->lastGet()))	//!!!! Impossible write direct else
-	    archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[i_a]->lastGet())*/);
+		//&& (!archEl[iA]->lastGet() || ibeg < archEl[iA]->lastGet()))	//!!!! Impossible write direct else
+	    archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[iA]->lastGet())*/);
 }
 
 void TVArchive::getActiveData( const int64_t &tm )
@@ -1394,12 +1394,12 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	if(rarch.empty() && !vOK(ibeg,iend)) {
 	    double best_a_per = 0;
 	    ResAlloc res(aRes, false);
-	    for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
-		if(archEl[i_a]->archivator().valPeriod() > best_a_per &&
-		    archEl[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz))
+	    for(unsigned iA = 0; iA < archEl.size(); iA++)
+		if(archEl[iA]->archivator().valPeriod() > best_a_per &&
+		    archEl[iA]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz))
 		{
-		    best_a_per = archEl[i_a]->archivator().valPeriod();
-		    rarch = archEl[i_a]->archivator().workId();
+		    best_a_per = archEl[iA]->archivator().valPeriod();
+		    rarch = archEl[iA]->archivator().workId();
 		}
 	}
 
@@ -1722,9 +1722,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    if(arch.empty() || arch == BUF_ARCH_NM) opt->setAttr("per",ll2s(TValBuf::period()));
 	    else {
 		ResAlloc res(aRes, false);
-		for(unsigned i_a = 0; i_a < archEl.size(); i_a++)
-		    if(arch == archEl[i_a]->archivator().workId())
-		    { opt->setAttr("per",ll2s((int64_t)(1e6*archEl[i_a]->archivator().valPeriod()))); break; }
+		for(unsigned iA = 0; iA < archEl.size(); iA++)
+		    if(arch == archEl[iA]->archivator().workId())
+		    { opt->setAttr("per",ll2s((int64_t)(1e6*archEl[iA]->archivator().valPeriod()))); break; }
 	    }
 	}
 	else if(ctrChkNode(opt,"get",RWRWRW,"root","root",SEC_RD)) {	//Value's data request
@@ -1756,17 +1756,16 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ResAlloc res(aRes, false);
 		//Get priority archivators list for requested range
 		vector<pair<float,TVArchEl*> >	propArchs;
-		for(unsigned i_a = 0; i_a < archEl.size(); i_a++) {
-		    TVArchivator &archPr = archEl[i_a]->archivator();
+		for(unsigned iA = 0; iA < archEl.size(); iA++) {
+		    TVArchivator &archPr = archEl[iA]->archivator();
 		    if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&
-			    tm_grnd <= archEl[i_a]->end() && tm >= archEl[i_a]->begin())
-			propArchs.push_back(pair<float,TVArchEl*>(archPr.selPrior()/vmax(1,abs(archPr.valPeriod()-period/1e6)), archEl[i_a]));
+			    tm_grnd <= archEl[iA]->end() && tm >= archEl[iA]->begin())
+			propArchs.push_back(pair<float,TVArchEl*>((float)archPr.selPrior()/vmax(1,abs(archPr.valPeriod()-period/1e6)), archEl[iA]));
 		}
 		std::sort(propArchs.begin(), propArchs.end());
 
 		//Process the range by priority
-		for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA)
-		{
+		for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
 		    buf.setPeriod(vmax((int64_t)(1e6*iA->second->archivator().valPeriod()),period));
 		    iA->second->getVals(buf, vmax(tm_grnd,iA->second->begin()), tm, local);		//vmax for allow access to next level archive
 													//into single request, like from 1m to 10m
@@ -2018,17 +2017,17 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    owner().modList(t_arch_ls);
 	    for(unsigned i_ta = 0; i_ta < t_arch_ls.size(); i_ta++) {
 		owner().at(t_arch_ls[i_ta]).at().valList(arch_ls);
-		for(unsigned i_a = 0; i_a < arch_ls.size(); i_a++) {
+		for(unsigned iA = 0; iA < arch_ls.size(); iA++) {
 		    TVArchEl *a_el = NULL;
 		    //Find attached
 		    ResAlloc res(aRes, false);
 		    for(unsigned iL = 0; iL < archEl.size(); iL++)
-			if(archEl[iL]->archivator().owner().modId() == t_arch_ls[i_ta] && archEl[iL]->archivator().id() == arch_ls[i_a])
+			if(archEl[iL]->archivator().owner().modId() == t_arch_ls[i_ta] && archEl[iL]->archivator().id() == arch_ls[iA])
 			    a_el = archEl[iL];
 		    //Fill table element
-		    if(n_arch)	n_arch->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().workId());
-		    if(n_start)	n_start->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().startStat()?"1":"0");
-		    if(n_per)	n_per->childAdd("el")->setText(r2s(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[i_a]).at().valPeriod(),6));
+		    if(n_arch)	n_arch->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[iA]).at().workId());
+		    if(n_start)	n_start->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[iA]).at().startStat()?"1":"0");
+		    if(n_per)	n_per->childAdd("el")->setText(r2s(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[iA]).at().valPeriod(),6));
 		    if(a_el) {
 			if(n_prc) n_prc->childAdd("el")->setText("1");
 			if(n_end)
@@ -2098,8 +2097,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	owner().modList(lsm);
 	for(unsigned i_m = 0; i_m < lsm.size(); i_m++) {
 	    owner().at(lsm[i_m]).at().valList(lsa);
-	    for(unsigned i_a = 0; i_a < lsa.size(); i_a++)
-		opt->childAdd("el")->setText(lsm[i_m]+"."+lsa[i_a]);
+	    for(unsigned iA = 0; iA < lsa.size(); iA++)
+		opt->childAdd("el")->setText(lsm[i_m]+"."+lsa[iA]);
 	}
     }
     else if(a_path == "/val/val" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD)) {

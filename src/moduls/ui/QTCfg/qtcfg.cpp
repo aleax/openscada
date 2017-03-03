@@ -1065,7 +1065,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		}
 		else selectChildRecArea(t_s, a_path+t_s.attr("id")+"/");
 
-		// Get scalable by vertical elements and grow its up to scroll appear into the container
+		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
 		QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
 		QWidget *lstFitWdg = NULL;
 		QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();

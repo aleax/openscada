@@ -47,23 +47,22 @@ namespace WebVision
 //*************************************************
 //* SSess                                         *
 //*************************************************
-class SSess
+struct SSess
 {
-    public:
-	//Methods
-	SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
-	    const string &icontent );
+    SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
+	    const string &icontent, TProtocolIn *iprt );
 
-	//Attributes
-	string url;		//request URL
-	string page;
-	string sender;		//request sender
-	string user;		//sesion user
-	string content;		//Contain
+    //Attributes
+    TProtocolIn *prt;		//input protocol
+    string url;			//request URL
+    string page;
+    string sender;		//request sender
+    string user;		//sesion user
+    string content;		//Contains
 
-	vector<string>		vars;	//request vars
-	map<string,string>	cnt;	//Parsed contain
-	map<string,string>	prm;	//URL parameters
+    vector<string>	vars;	//request vars
+    map<string,string>	cnt;	//Parsed contain
+    map<string,string>	prm;	//URL parameters
 };
 
 //************************************************
@@ -82,12 +81,10 @@ class TWEB: public TUI
 	time_t	sessTime( )				{ return mTSess; }
 	int	sessLimit( )				{ return mSessLimit; }
 	int	PNGCompLev( )				{ return mPNGCompLev; }
-	string	CSStables( )				{ return mCSStables; }
 
 	void setSessTime( time_t vl )			{ mTSess = vmax(1,vmin(24*60,vl)); modif(); }
 	void setSessLimit( int vl )			{ mSessLimit = vmax(1,vmin(100,vl)); modif(); }
 	void setPNGCompLev( int vl )			{ mPNGCompLev = vmax(-1,vmin(9,vl)); modif(); }
-	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
 	// VCA sessions
 	void vcaSesList( vector<string> &list ) const	{ chldList(id_vcases,list); }
@@ -100,19 +97,12 @@ class TWEB: public TUI
 	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
-	//void getAbout( SSess &ses );
-
 	string optDescr( );
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
 
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
 	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
-
-	string httpHead( const string &rcode, int cln = 0, const string &cnt_tp = "text/html",
-	    const string &addattr = "", const string &charset = Mess->charset() );
-	string pgHead( const string &head_els = "", const string &title = "", const string &charset = Mess->charset() );
-	string pgTail( );
 
 	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );
 
@@ -143,7 +133,6 @@ class TWEB: public TUI
 	int		mSessLimit;			//Sessions limit
 	int		mPNGCompLev;			//PNG images compression level
 	int		id_vcases;			//VCA session's container identifier
-	string		mCSStables;			//CSS tables
 	map<string,int> colors;				//Named colors
 
 	ResRW		mSesRes;			//Sessions resource

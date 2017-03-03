@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +26,8 @@
 #include <errno.h>
 #include <math.h>
 #include <string.h>
+
+#include <algorithm>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -218,8 +220,16 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
     //Present files of attached archives check.
     //!!!! Moved to the top for early capacity limits check
     ResAlloc res(archRes, false);
-    for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
-	((ModVArchEl*)iel->second)->checkArchivator(now || isTm || toLimits, (maxCapacity() > 1) && (curCapacity()/1048576) > maxCapacity());
+    if(maxCapacity() > 1 && (curCapacity()/1048576) > maxCapacity()) {
+	vector< pair<int,ModVArchEl*> > sortEls;
+	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
+	    sortEls.push_back(pair<int,ModVArchEl*>(((ModVArchEl*)iel->second)->files.size(),(ModVArchEl*)iel->second));
+	sort(sortEls.begin(), sortEls.end());
+	for(vector< pair<int,ModVArchEl*> >::reverse_iterator iel = sortEls.rbegin(); iel != sortEls.rend(); ++iel)
+	    iel->second->checkArchivator(now || isTm || toLimits, maxCapacity() > 1 && (curCapacity()/1048576) > maxCapacity());
+    }
+    else for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
+	((ModVArchEl*)iel->second)->checkArchivator(now || isTm || toLimits, false /*maxCapacity() > 1 && (curCapacity()/1048576) > maxCapacity()*/);
     res.unlock();
 
     //Archivator's folder check for new files attach and present files pack needs

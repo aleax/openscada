@@ -2225,7 +2225,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return clock_nanosleep(clkId, 0, &spTm, NULL);*/
 	//return nanosleep(&spTm, NULL);
     }
-    // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
+    // int time(int usec) - returns absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
     if(iid == "time") {
 	if(prms.empty()) return (int64_t)time(NULL);
@@ -2233,6 +2233,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	prms[0].setI(tm%1000000); prms[0].setModify();
 	return (int64_t)(tm/1000000);
     }
+    // int utime(); int mtime(); - return absolute time in microseconds and milliseconds from the epoch of 1/1/1970
+    if(iid == "utime") return (int64_t)curTime();
+    if(iid == "mtime") return (int64_t)curTime()/1000;
     // int {localtime|gmtime}(int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst)
     //      - returns the full date based on the absolute time in seconds <fullsec> from the epoch 1.1.1970
     //  fullsec - source time ins seconds from the epoch 1.1.1970

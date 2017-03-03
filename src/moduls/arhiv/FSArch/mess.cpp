@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -875,7 +875,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	}
     }
     else {
-	char buf[STR_BUF_LEN];
+	char buf[102000];
 	//Open file
 	FILE *f = fopen(mName.c_str(), "r");
 	if(f == NULL) { mErr = true; return eTm; }
@@ -890,7 +890,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	time_t last_tm = 0;
 	while((rdOK=(fgets(buf,sizeof(buf),f)!=NULL)) && time(NULL) < upTo) {
 	    char stm[51]; int off = 0, bLev;
-	    sscanf(buf, "%50s %d", stm, &bLev);
+	    if(sscanf(buf,"%50s %d",stm,&bLev) != 2) continue;
 	    bRec.level = (TMess::Type)bLev;
 	    bRec.time = strtol(TSYS::strSepParse(stm,0,':',&off).c_str(),NULL,16);
 	    bRec.utime = s2i(TSYS::strSepParse(stm,0,':',&off));
@@ -899,7 +899,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		result = bRec.time;
 		if(abs(bRec.level) < level) continue;
 		char m_cat[1001], m_mess[100001];
-		sscanf(buf, "%*x:%*d %*d %1000s %100000s", m_cat, m_mess);
+		if(sscanf(buf,"%*x:%*d %*d %1000s %100000s",m_cat,m_mess) != 2) continue;
 		bRec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat), TSYS::HttpURL);
 		bRec.mess  = TSYS::strDecode(Mess->codeConvIn(mChars,m_mess), TSYS::HttpURL);
 		if(!re.test(bRec.categ)) continue;
@@ -915,7 +915,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 			break;
 		    }
 		    else if(FTM(mess[i_m]) < FTM(bRec)) break;
-		if(!equal) mess.insert(mess.begin()+i_p,bRec);
+		if(!equal) mess.insert(mess.begin()+i_p, bRec);
 	    }
 	    else if((pass_cnt++) > CACHE_POS && bRec.time != last_tm) {
 		cacheSet(FTM(bRec), ftell(f)-strlen(buf));

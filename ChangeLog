@@ -1,3 +1,18 @@
+2017-03-03 Roman (stable)
+- SYS: The user API functions are appended by function utime() and mtime().
+- !!:FIX:Archive: Fix for checking for a propper archivator by its periodicity,
+    which allow for correct selection archivators in periodicity more then one minute in graphics building.
+- !!:FIX:Archive.FSArch: Fix for too long messages back reading and wrong messages reading prevented at all.
+    Function of archivators checking is fixed for correct processing of the capacity limit of the values archiving
+    by the archives sorting to remove its files at its maximum quantity.
+- !!!:UI.WebCfgD: Fit to allowed space for scalable by vertical elements.
+    Border color of the input elements changed to "gray".
+    The structural class "SSess" moved to the strucure type.
+- !!:UI.WebVision: Moved the XHTML part of a page to an separated file like the JavaScript one. All generic CSS rules moved to the XHTML file.
+    Finish of moving to using pgCreator(). pgCreator() expanded for simple requests local processing.
+    The structural class "SSess" moved to the strucure type.
+
+
 2017-02-26 Roman (stable)
 - SYS: data/openscada_start.in: workarounded for bug into "zenity", for sending selection items as "{item}|{item}" (observed on Ubuntu 14.04).
 - Archive.Value: User API functions were appended by setVal().

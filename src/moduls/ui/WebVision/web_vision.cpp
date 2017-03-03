@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <fcntl.h>
 #include <signal.h>
 #include <string.h>
 
@@ -63,6 +64,8 @@ extern "C"
 	return NULL;
     }
 }
+
+extern char *WebVisionVCA_js;
 
 using namespace WebVision;
 
@@ -234,28 +237,6 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
     colors["yellow"]		= rgb(255, 255, 0);
     colors["yellowgreen"]	= rgb(154, 205, 50);
 
-    //Default CSS init
-    mCSStables =
-	"hr { width: 95%; }\n"
-	"body { background-color: #B0B0B0; margin: 0px; }\n"
-	"h1.head { text-align:center; color:#ffff00; }\n"
-	"h2.title { text-align:center; font-style: italic; margin: 0px; padding: 0px; border-width:0; }\n"
-	"table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }\n"
-	"table.work td { background-color:#cccccc; text-align: left; }\n"
-	"table.work td.content { padding: 5px; padding-bottom: 20px; }\n"
-	// "table.work td.content td { text-align: center; }\n"
-	"table.work td.content img { vertical-align: middle; padding-right: 5px; }\n"
-	"table.work ul { margin: 0px; padding: 0px; padding-left: 20px; }\n"
-	".vertalign { display: table-cell; text-align: center; vertical-align: middle; }\n"
-	".vertalign * { vertical-align: middle; }\n"
-	"table.prot { border: 1px solid black; border-collapse: collapse; empty-cells: show; }\n"
-	"table.prot th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }\n"
-	"table.prot td { border: 1px solid black; white-space: nowrap; }\n"
-	"table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }\n"
-	"#popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 1000; }\n"
-	"#popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }\n"
-	"input[type=\"checkbox\"] { margin: 0 4px 0 0; float: left; }\n";
-
 #if 0
     char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready") };
 #endif
@@ -340,58 +321,28 @@ void TWEB::perSYSCall( unsigned int cnt )
 string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
     const string &htmlHeadEls, const string &forceTmplFile )
 {
+    if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
+	return "HTTP/1.0 " + rcode + "\x0D\x0A"
+	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
+	    "Accept-Ranges: bytes\x0D\x0A"
+	    "Content-Length: " + i2s(cnt.size()) + "\x0D\x0A" +
+//	    "Connection: close\x0D\x0A" +
+	    httpattrs + "\x0D\x0A\x0D\x0A" + cnt;
+
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
     return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
 }
 
-string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
-{
-    return "HTTP/1.0 " + rcode + "\x0D\x0A"
-	"Server: " + PACKAGE_STRING + "\x0D\x0A"
-	"Accept-Ranges: bytes\x0D\x0A"
-	"Content-Length: " + i2s(cln) + "\x0D\x0A"
-	"Connection: close\x0D\x0A"
-	"Content-Type: " + cnt_tp + "; charset=" + charset + "\x0D\x0A" + addattr + "\x0D\x0A";
-}
-
-string TWEB::pgHead( const string &head_els, const string &title, const string &charset )
-{
-    string shead =
-	"<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	"'DTD/xhtml1-transitional.dtd'>\n"
-	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-	"<head>\n"
-	"  <meta http-equiv='Content-Type' content='text/html; charset=" + charset + "'/>\n"
-	"  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"
-	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
-	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
-	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
-	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
-	"  <title>" + (title.empty()?(string(PACKAGE_NAME) + ". " + _(MOD_NAME)):title) + "</title>\n"
-	"  <style type='text/css'>\n" + mCSStables + "</style>\n"+
-	head_els+
-	"</head>\n"
-	"<body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>\n";
-
-    return shead;
-}
-
-string TWEB::pgTail( )	{ return "</body>\n</html>"; }
-
 void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     string sender = TSYS::strLine(iprt->srcAddr(), 0);
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, "");
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, "", iprt);
 
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
-	//Get about module page
-	//if(zero_lev == "about")	getAbout(ses);
-	//Get module icon and global image
-	//else
+	//Get the icon and the global image of the module
 	if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
 	    string itp = "png";
 	    //Session's and project's icons request processing
@@ -404,6 +355,18 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    }
 	    else page = TUIS::icoGet(zero_lev=="ico"?"UI." MOD_ID:zero_lev.substr(4), &itp);
 	    page = pgCreator(iprt, page, "200 OK", "Content-Type: image/"+itp+";");
+	}
+	//Check for main JavaScript code
+	else if(zero_lev == "script.js") {
+	    int hd; page = "";
+	    if((hd=open("WebVisionVCA.js",O_RDONLY)) >= 0) {
+		char buf[STR_BUF_LEN];
+		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
+		close(hd);
+	    }
+	    else page = WebVisionVCA_js;
+	    page = trMessReplace(page);
+	    page = mod->pgCreator(iprt, page, "200 OK", "Content-Type: text/javascript;");
 	}
 	else {
 	    //Session selection or a new session for the project creation
@@ -488,7 +451,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 			else {
 			    sName = req.attr("sess");
-			    vcaSesAdd(sName,true);
+			    vcaSesAdd(sName, true);
 			    vcaSesAt(sName).at().senderSet(sender);
 			}
 		    }
@@ -513,7 +476,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		catch(...) {
 		    if(!vcaSesPresent(sesnm)) {
 			sesRes.request(true);
-			vcaSesAdd(sesnm,false);
+			vcaSesAdd(sesnm, false);
 			vcaSesAt(sesnm).at().senderSet(sender);
 			vcaSesAt(sesnm).at().getReq(ses);
 		    } else throw;
@@ -531,33 +494,10 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
     }
 }
 
-/*void TWEB::getAbout( SSess &ses )
-{
-    ses.page = ses.page + "<center><table class='page_auth'>\n"
-	"<TR><TD>" + PACKAGE + " " + VERSION + "</TD></TR>\n"
-	"<TR class='content'><TD>\n"
-	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>" + _("Name: ") + "</font></TD><TD>OpenSCADA</TD></TR>\n"
-	"<TR><TD><font color='Blue'>" + _("License: ") + "</font></TD><TD>GPL</TD></TR>\n"
-	"<TR><TD><font color='Blue'>" + _("Author: ") + "</font></TD><TD>Roman Savochenko</TD></TR>\n"
-	"</table>\n"
-	"</TD></TR></table><br/>\n"
-	"<table class='page_auth'>\n"
-	"<TR><TD>" MOD_ID " " MOD_VER "</TD></TR>\n"
-	"<TR class='content'><TD>\n"
-	"<table border='0'>\n"
-	"<TR><TD><font color='Blue'>" + _("Name: ") + "</font></TD><TD>" + _(MOD_NAME) + "</TD></TR>"
-	"<TR><TD><font color='Blue'>" + _("Description: ") + "</font></TD><TD>" + _(DESCRIPTION) + "</TD></TR>"
-	"<TR><TD><font color='Blue'>" + _("License: ") + "</font></TD><TD>" + _(LICENSE) + "</TD></TR>"
-	"<TR><TD><font color='Blue'>" + _("Author: ") + "</font></TD><TD>" + _(AUTHORS) + "</TD></TR>"
-	"</table>\n"
-	"</TD></TR>\n</table><br/></center>\n";
-}*/
-
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page, iprt);
 
     try {
 	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
@@ -565,8 +505,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com") {
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
 	    cntrIfCmd(req, ses.user, false);
-	    ses.page = req.save();
-	    page = httpHead("200 OK", ses.page.size(), "text/xml", "", "UTF-8") + ses.page;
+	    page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    return;
 	}
 
@@ -645,7 +584,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-void TWEB::imgConvert(SSess &ses)
+void TWEB::imgConvert( SSess &ses )
 {
     map<string,string>::iterator prmEl;
     gdImagePtr sim = NULL;
@@ -711,8 +650,7 @@ int TWEB::colorParse( const string &tclr )
     if(found != string::npos) {
 	clr = tclr.substr(0,found);
 	alpha =  s2i(tclr.substr(found+1));
-    }
-    else alpha = 255;
+    } else alpha = 255;
 
     if(clr.size() >= 4 && clr[0] == '#') {
 	int el_sz = clr.size()/3;
@@ -760,8 +698,9 @@ string TWEB::trMessReplace( const string &tsrc )
 //*************************************************
 //* SSess                                         *
 //*************************************************
-SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
+SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
+	const string &icontent, TProtocolIn *iprt ) :
+    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars), prt(iprt)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");
