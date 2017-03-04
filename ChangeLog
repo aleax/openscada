@@ -1,3 +1,7 @@
+2017-03-04 Roman (stable)
+- FIX:UI.WebVision: Miss file WebVisionVCA.html placed to the source tree.
+
+
 2017-03-03 Roman (stable)
 - SYS: The user API functions are appended by function utime() and mtime().
 - !!:FIX:Archive: Fix for checking for a propper archivator by its periodicity,
