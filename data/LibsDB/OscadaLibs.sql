@@ -10,7 +10,7 @@ Allow realisation of the main templates.','Автор: Роман Савочен
 Версия: 1.0.1
 Предоставляет реализацию базовых шаблонов.');
 INSERT INTO "ParamTemplLibs" VALUES('DevLib','Devices lib','Бібліотека пристроїв','The templates library provides common templates and related functions for custom access to wide range of devices'' data with simple protocol to implement into User Protocol module, present complex protocols (ModBus, OPC_UA, HTTP) or direct at internal language and also for some integration the devices data.
-Version: 1.7.0','','tmplib_DevLib','Библиотека устройств','');
+Version: 1.7.1','','tmplib_DevLib','Библиотека устройств','');
 INSERT INTO "ParamTemplLibs" VALUES('PrescrTempl','Prescription templates','Шаблони рецепту','','','tmplib_PrescrTempl','Шаблоны рецепта','');
 CREATE TABLE 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserFuncLibs" VALUES('techApp','Technological devices','The models of the technological process devices.
@@ -1211,15 +1211,15 @@ INSERT INTO "tmplib_DevLib_io" VALUES('DHT','tries','Tries [1...5]',1,64,'2',2,'
 INSERT INTO "tmplib_DevLib_io" VALUES('DHT','dev','Device (0-DHT11, 1-DHT22)',1,64,'1',3,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('DHT','t','T, °С',2,16,'',4,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('DHT','h','H, %',2,16,'',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','addr','GPIO address with function put(), mostly it''s BCM2835',0,64,'DAQ.BCM2835.pi.pi',0,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','RS','Pin: Reset',1,64,'7',1,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','E','Pin: Enable',1,64,'8',2,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D4','Pin: Data4',1,64,'25',3,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D5','Pin: Data5',1,64,'24',4,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D6','Pin: Data6',1,64,'23',5,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D7','Pin: Data7',1,64,'18',6,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',7,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','addr','I2C device address [0...119]',1,64,'39',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','RS','GPIO Pin: Reset',1,64,'7',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','E','GPIO Pin: Enable',1,64,'8',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D4','GPIO Pin: Data4',1,64,'25',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D5','GPIO Pin: Data5',1,64,'24',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D6','GPIO Pin: Data6',1,64,'23',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','D7','GPIO Pin: Data7',1,64,'18',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln1','Line 1',0,32,'',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','ln2','Line 2',0,32,'',9,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChL','Battery charge low',2,32,'20',3,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','bChLL','Battery charge critical',2,32,'5',4,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','inVL','Input voltage low',2,32,'210',5,'','','','');
@@ -1235,6 +1235,8 @@ INSERT INTO "tmplib_DevLib_io" VALUES('UPS','tHH','Temperature too high',2,32,'7
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','alDelay','Alarms delay, s',2,32,'0',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
+GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2991,6 +2993,7 @@ INSERT INTO "Trs" VALUES('Unknown device %1 [0-DHT11, 1-DHT22].','','');
 INSERT INTO "Trs" VALUES('Tries number %1 out of range [1...5].','','');
 INSERT INTO "Trs" VALUES('Get data after %1 tries error.','','');
 INSERT INTO "Trs" VALUES('None of good battery present','','');
+INSERT INTO "Trs" VALUES('Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.','','');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -6136,59 +6139,74 @@ else {
 
 if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
 f_err = t_err;','','',1481127790);
-INSERT INTO "tmplib_DevLib" VALUES('1602A','GPIO: 1602A(HD44780)','','','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots
-The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+INSERT INTO "tmplib_DevLib" VALUES('1602A','GPIO|I2C: 1602A(HD44780)','','','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
 Conditions: Default planing policy but realtime one preferred.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0','','',10,0,'JavaLikeCalc.JavaScript
+Version: 1.1.0','','',10,0,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
 //Set link to fast external functions
-if(f_start)	f_err = "0", addr_ = ln1_ = ln2_ = "";
+if(f_start)	f_err = "0", transport_ = ln1_ = ln2_ = "";
 
 t_err = "0";
 
-//Check for the address change and link
-if(addr != addr_)	{
-	addr_ = addr;
-	function put = addr+".fnc_put";
+//Check for the transport change and the link update
+if(transport != transport_)	{
+	transport_ = transport;
+	if(!(tr=SYS.Transport.Serial["out_"+transport]))
+		function put = transport+".fnc_put";
 }
 
 //Write a byte function declaration
-function byte(vl, md, dl) {
+function byte(tr, vl, md, dl) {
 	if(md == EVAL_BOOL) md = false;
 	if(dl == EVAL_BOOL) dl = 50e-6;
-	put(RS, md);
-	put(D4, vl&0x10); put(D5, vl&0x20); put(D6, vl&0x40); put(D7, vl&0x80);
-	tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
-	put(D4, vl&0x01); put(D5, vl&0x02); put(D6, vl&0x04); put(D7, vl&0x08);
-	tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+	if(tr) {
+		//RS(md) | RW(false) | E(false) | BackLight(true) | D4 | D5 | D6 | D7
+		com = (md?0x01:0) | 0x8 | (vl&0xF0);
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		//RS(md) | RW(false) | E(false) | BackLight(true) | D0 | D1 | D2 | D3
+		com = (md?0x01:0) | 0x8 | ((vl<<4)&0xF0);
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+	}
+	else if(put) {
+		put(RS, md);
+		put(D4, vl&0x10); put(D5, vl&0x20); put(D6, vl&0x40); put(D7, vl&0x80);
+		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+		put(D4, vl&0x01); put(D5, vl&0x02); put(D6, vl&0x04); put(D7, vl&0x08);
+		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+	}
 }
 
 //Main processing
-if(!put)	t_err = "1:"+tr("No link to external functions on ''%1''.").replace("%1",addr);
+if(!tr && !put)
+	t_err = "1:"+tr("Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.").replace("%1",transport);
 else if(ln1 != ln1_ || ln2 != ln2_) {
 	ln1_ = ln1; ln2_ = ln2;	
 
 	//Init
-	byte(0x33); byte(0x32); byte(0x28); byte(0x0C); byte(0x06); byte(0x01);
+	byte(tr, 0x33); byte(tr, 0x32); byte(tr, 0x28); byte(tr, 0x0C); byte(tr, 0x06); byte(tr, 0x01);
 	//Line 1
 	if(ln1.length) {
 		tmSleep(2e-3);
-		byte(0x80);
+		byte(tr, 0x80);
 		for(iC = 0; iC < min(16,ln1.length); iC++)
-			byte(ln1.charCodeAt(iC), true);
+			byte(tr, ln1.charCodeAt(iC), true);
 	}
 	//Line 2
 	if(ln2.length) {
 		tmSleep(2e-3);
-		byte(0xC0);
+		byte(tr, 0xC0);
 		for(iC = 0; iC < min(16,ln2.length); iC++)
-			byte(ln2.charCodeAt(iC), true);
+			byte(tr, ln2.charCodeAt(iC), true);
 	}
 }
 
-f_err = t_err;','','',1481127568);
+f_err = t_err;','','',1488701943);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
 //Reset to default
@@ -7214,7 +7232,7 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','',1484043975);
+//p_tm=c_tm;','','',1488128862);
 INSERT INTO "lib_Controllers" VALUES('ntfDispatch','Notifications dispatcher','','','Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
 Author: Roman Savochenko <rom_as@oscada.org>
 Sponsor: Oleksandr Knestyapin <olexanderrr@gmail.com>

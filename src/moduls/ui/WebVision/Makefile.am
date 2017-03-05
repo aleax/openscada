@@ -1,4 +1,4 @@
-EXTRA_DIST = WebVisionVCA.js *.h po/*
+EXTRA_DIST = WebVisionVCA.html WebVisionVCA.js *.h po/*
 
 if WebVisionIncl
 noinst_LTLIBRARIES = ui_WebVision.la

@@ -1,3 +1,10 @@
+2017-03-05 Roman (stable)
+- DB.LibsDB.OscadaLibs.db: DevLib.1602A expanded to connect by I2C (PCF8574).
+- DB.LibsDB.vcaBase: Main.ElViewGraph expanded to the name "<No selected>" blink prevent and
+    spare saving prevent once after the successful loading at start.
+- FIX:UI.WebVision: WebVisionVCA.html fix for its presence into EXTRA_DIST.
+
+
 2017-03-04 Roman (stable)
 - FIX:UI.WebVision: Miss file WebVisionVCA.html placed to the source tree.
 
