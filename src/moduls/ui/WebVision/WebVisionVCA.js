@@ -28,7 +28,7 @@ var mainTmId = 0;
 /***************************************************
  * strEncode - String encoding.                    *
  ***************************************************/
-function strEncode( vl, tp )
+/*function strEncode( vl, tp )
 {
     var encRez = '';
     if(!tp || tp == "html")
@@ -41,7 +41,7 @@ function strEncode( vl, tp )
 		default:  encRez += vl.charAt(i_enc);
 	    }
     return encRez;
-}
+}*/
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -65,7 +65,7 @@ function pathLev( path, level, scan )
 }
 
 /***************************************************
- * noSpace - Get no space string                   *
+ * noSpace - Get no space (trimmed) string         *
  ***************************************************/
 function noSpace( str )
 {
@@ -412,7 +412,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	}
     }
 
-    //Create or replace main page
+    //Create or replace the main page
     if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
     if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
     if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
@@ -423,8 +423,15 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	}
 	this.addr  = pgId;
 	this.place = document.createElement('div');
-	this.place.setAttribute('id','mainCntr');
-	this.makeEl(servGet(pgId,'com=attrsBr'),false,true);
+	this.place.setAttribute('id', 'mainCntr');
+
+	//Get and activate for specific attributes to the master-page
+	servSet("/UI/VCAEngine"+this.addr, 'com=com', "<CntrReqs>"+
+	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0'/>"+
+	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='No show status bar' aTp='0'/>"+
+	    "</CntrReqs>", true);
+
+	this.makeEl(servGet(pgId,'com=attrsBr'), false, true);
 	var centerTag = document.createElement('center');
 	centerTag.appendChild(this.place);
 	document.body.appendChild(centerTag);
@@ -614,6 +621,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
 
+	// Calculation of the main window/page scale
+	if(this == masterPage) {
+	    var geomW = parseFloat(this.attrs['geomW']);
+	    var geomH = parseFloat(this.attrs['geomH']);
+	    wx_scale = Math.max(1, window.innerWidth/geomW);
+	    wy_scale = Math.max(1, window.innerHeight/geomH);
+	    if(parseInt(this.attrs['keepAspectRatio']))
+		wx_scale = wy_scale = Math.min(wx_scale, wy_scale);
+	}
+
 	var xSc = this.xScale(true);
 	var ySc = this.yScale(true);
 	var geomW = parseFloat(this.attrs['geomW'])*xSc;
@@ -648,16 +665,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr,true);
 
+	var isPrim = true;
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
 	    if(this.pg) {
 		elStyle += 'background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
 		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is no permitted.</div>";
 	    }
+	    isPrim = false;
 	}
 	else if(this.attrs['root'] == 'ElFigure') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    //if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    var toInit = !this.place.childNodes.length;
 	    var figObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
 	    figObj.width = geomW; figObj.height = geomH;
@@ -695,12 +714,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Box') {
 	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
-	    backStyle = '';
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		backStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])   backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    if(this == masterPage) document.body.style.cssText = parseInt(this.attrs['bordWidth']) ? '' : backStyle;
-	    elStyle += backStyle;
+	    //backStyle = '';
+	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+	    //	backStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    //if(this.attrs['backImg'])   backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    //if(this == masterPage) document.body.style.cssText = parseInt(this.attrs['bordWidth']) ? '' : backStyle;
+	    //elStyle += backStyle;
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    switch(parseInt(this.attrs['bordStyle'])) {
@@ -748,9 +767,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return false; };
 	}
 	else if(this.attrs['root'] == 'Text') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    //if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
@@ -769,7 +788,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    case 2: spanStyle += 'vertical-align: middle; ';	break;
 		}
 		if(parseInt(this.attrs['orient']) != 0) spanStyle += "transform: rotate("+parseInt(this.attrs['orient'])+"deg); ";
-		spanStyle += getFont(this.attrs['font'], Math.min(xSc,ySc));
+		spanStyle += getFont(this.attrs['font'], Math.min(xSc, ySc));
 		spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
 		var txtVal = this.attrs['text'];
 		for(var i = 0; i < parseInt(this.attrs['numbArg']); i++) {
@@ -811,9 +830,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.place.onclick = '';
 	}
 	else if(this.attrs['root'] == 'Media') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    //if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.childNodes.length <= 1) ||
@@ -876,7 +895,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	else if(this.attrs['root'] == 'FormEl' && !this.place.isModify) {
-	    //this.place.className = "FormEl";	//Move to the proper style after HTML code moving to different file.
+	    this.place.className = "FormEl";	//Move to the proper style after HTML code moving to different file.
 	    var elTp = parseInt(this.attrs['elType']);
 	    if(this.attrsMdf['elType'] || this.place.elWr != elWr)
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
@@ -899,8 +918,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
 			var geomWint = geomW-4;
-			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
-						'height: '+(fntSz-2)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
+			formObj.className = "LineEd";
+			formObj.style.cssText = 'top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
+						'height: '+(fntSz-2)+'px; font: '+this.place.fontCfg+';';
 		    }
 		    if(formObj.valSet && this.attrsMdf['value']) formObj.valSet(this.attrs['value']);
 		    this.place.view = parseInt(this.attrs['view']);
@@ -976,6 +996,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				this.place.appendChild(spinImg);
 				break;
+			    case 4:	//Time
+				break;
+			    case 5:	//Date
+				break;
+			    case 6:	//Date and time
+				//formObj.type = 'datetime-local'; formObj.step = 1;
+				break;
 			}
 			formObj.onkeyup = function(e) {
 			    if(!e) e = window.event;
@@ -1010,16 +1037,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.valSet = function(val) {
 			switch(this.parentNode.view) {
 			    case 0: case 1: this.value = val; break;
-			    case 2:
+			    case 2:	//Integer
 				var argCfg = this.parentNode.cfg.split(':');
 				this.value = ((argCfg.length>3)?argCfg[3]:'')+
 				    Math.max((argCfg.length>1)?parseInt(argCfg[0]):0,Math.min((argCfg.length>1)?parseInt(argCfg[1]):100,parseInt(val)))+((argCfg.length>4)?argCfg[4]:'');
 				break;
-			    case 3:
+			    case 3:	//Real
 				var argCfg = this.parentNode.cfg.split(':');
 				this.value = ((argCfg.length>3)?argCfg[3]:'')+Math.max((argCfg.length>1)?parseFloat(argCfg[0]):0,Math.min((argCfg.length>1)?parseFloat(argCfg[1]):100,parseFloat(val))).toFixed((argCfg.length>5)?parseInt(argCfg[5]):2)+((argCfg.length>4)?argCfg[4]:'');
 				break;
-			    case 4:
+			    case 4:	//Time
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'hh:mm';
 				var v = (Math.floor(val/3600)%(ap?12:24)).toString(10); rez = rez.replace('hh',(v.length==1)?'0'+v:v); rez = rez.replace('h',v);
 				v = (Math.floor(val/60)%60).toString(10); rez = rez.replace('mm',(v.length==1)?'0'+v:v); rez = rez.replace('m',v);
@@ -1028,7 +1055,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(rez.indexOf('AP') >= 0) { rez = rez.replace('AP',(val>=43200)?'PM':'AM'); var ap = true; }
 				this.value = rez;
 				break;
-			    case 5:
+			    case 5:	//Date
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy';
 				var dt = new Date(parseInt(val)*1000);
 				var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v.length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);
@@ -1036,7 +1063,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez = rez.replace('yy',v.substr(2,2));
 				this.value = rez;
 				break;
-			    case 6:
+			    case 6:	//Date and time
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy hh:mm';
 				var dt = new Date(parseInt(val)*1000);
 				var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v.length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);
@@ -1435,9 +1462,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	else if(this.attrs['root'] == 'Diagram') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    //if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    var anchObj = this.place.childNodes[0];
@@ -1472,10 +1499,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    this.perUpdtEn(this.isEnabled() && parseInt(this.attrs['trcPer']));
 	}
 	else if(this.attrs['root'] == 'Protocol') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true)) ;
+	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    else elStyle += 'background-color: white; ';
-	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    //if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
 	    geomW -= 6; geomH -= 6;
 
@@ -1716,7 +1743,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		this.perUpdtEn(true);
 	    }
 	}
-	elStyle += 'width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';
+	elStyle += 'width: ' + geomW + 'px; height: ' + geomH + 'px; z-index: ' + this.attrs['geomZ'] + '; margin: ' + elMargin + 'px; ';
 	//Scroll for the included containers correct
 	if(this.inclOpen) {
 	    var geomWpar = parseFloat(this.attrs['geomW'])*this.xScale(true);
@@ -1725,6 +1752,27 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var geomHch = parseFloat(this.pages[this.inclOpen].attrs['geomH'])*this.pages[this.inclOpen].yScale(true);
 	    elStyle += "overflow: "+((geomWch > geomWpar || geomHch > geomHpar) ? 'scroll' : 'hidden')+"; ";
 	}
+	// Background processing in generic
+	else if(isPrim) {
+	    backStyle = "";
+	    if(this.attrs['backColor'] && (backOp=getColor(this.attrs['backColor'],true))) {
+		if(backOp == 1) {
+		    backStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+		    if(this.placeTr) this.placeTr.style.cssText = elStyle;
+		}
+		else {
+		    if(!this.placeTr) {
+			this.placeTr = this.place.ownerDocument.createElement('div');
+			this.place.parentNode.appendChild(this.placeTr);
+		    }
+		    this.placeTr.style.cssText = elStyle + 'background-color: '+getColor(this.attrs['backColor'])+'; opacity: '+backOp+"; z-index: -9999; ";
+		}
+	    }
+	    if(this.attrs['backImg'])	backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    elStyle += backStyle;
+	    if(this == masterPage) document.body.style.cssText = parseInt(this.attrs['bordWidth']) ? '' : backStyle;
+	}
+
 	if(elStyle != this.place.style.cssText)	this.place.style.cssText = elStyle;
 
 	//Generic mouse events process
@@ -1815,7 +1863,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var chEl = pgBr.childNodes[j].getAttribute('id');
 	    if(this.wdgs[chEl]) this.wdgs[chEl].makeEl(pgBr.childNodes[j], false, full, FullTree);
 	    else {
-		var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);
+		var wdgO = new pwDescr(this.addr+'/wdg_'+chEl, false, this);
 		wdgO.place = this.place.ownerDocument.createElement('div');
 		this.place.appendChild(wdgO.place);
 		this.wdgs[chEl] = wdgO;
@@ -1904,8 +1952,7 @@ function xScale( full )
     var rez = parseFloat(this.attrs['geomXsc'])
     if(!full) return rez;
     if(!this.pg) return rez*this.parent.xScale(full);
-    // if(this != masterPage) return masterPage.xScale()*rez;
-    return rez;
+    return rez * wx_scale;
 }
 
 function yScale( full )
@@ -1913,8 +1960,7 @@ function yScale( full )
     var rez = parseFloat(this.attrs['geomYsc'])
     if(!full) return rez;
     if(!this.pg) return rez*this.parent.yScale(full);
-    // if(this != masterPage) return masterPage.yScale()*rez;
-    return rez;
+    return rez * wy_scale;
 }
 
 function isEnabled( )
@@ -1981,7 +2027,7 @@ function makeUI( callBackRez )
 		else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
 		else {
 		    document.body.removeChild(opPg.window);
-		    masterPage = new pwDescr('',true)
+		    masterPage = new pwDescr('', true)
 		}
 		if(opPg.parent)	delete opPg.parent.pages[pgList[i_p]];
 	    }
@@ -2088,8 +2134,10 @@ var tmCnt = 0;				//Call counter
 var pgList = new Array();		//Opened pages list
 var pgCache = new Object();		//Cached pages' data
 var perUpdtWdgs = new Object();		//Periodic updated widgets register
-var masterPage = new pwDescr('',true);	//Master page create
+var masterPage = new pwDescr('', true);	//Master page create
 var stTmID = null;			//Status line timer identifier
 var stTmMain = null;			//Main cycle start time
+var wx_scale = 1;			//Main window scale for fit, X axis
+var wy_scale = 1;			//Main window scale for fit, Y axis
 
 mainTmId = setTimeout(makeUI, 100);	//First call init

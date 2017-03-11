@@ -1,3 +1,12 @@
+2017-03-11 Roman (stable)
+- UI.QTCfg: Fields "ID" and "NAME" of the node control dialog set to the unlimited size
+    for next these changing from inforamtion of the control interface.
+- !!:UI.WebVision: The visualizer specific attributes support added through its activation.
+    !!:Main page scaling to fit to window of the browser allowed space added, only to grow and with the aspect ratio control.
+    !: Background of the primitives processing moved to common and after the ones processing and
+	the background transparency-opaque support added by a separated block (div) creation with the opaque level.
+
+
 2017-03-05 Roman (stable)
 - DB.LibsDB.OscadaLibs.db: DevLib.1602A expanded to connect by I2C (PCF8574).
 - DB.LibsDB.vcaBase: Main.ElViewGraph expanded to the name "<No selected>" blink prevent and
