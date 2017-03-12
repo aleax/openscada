@@ -793,7 +793,7 @@ void InputDlg::showEvent( QShowEvent * event )
 //* ReqIdNameDlg: Request node identifier and/or name *
 //*****************************************************
 ReqIdNameDlg::ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg ) :
-    InputDlg(parent, icon, mess, ndlg, 0, 0)
+    InputDlg(parent, icon, mess, ndlg, 1000, 10000)
 {
     itTpLab = new QLabel(_("Item type:"), this);
     edLay->addWidget(itTpLab, 0, 0);

@@ -1,3 +1,7 @@
+2017-03-12 Roman (stable)
+- UI.QTCfg: InputDlg wrong initialization on the previous commit fixed.
+
+
 2017-03-11 Roman (stable)
 - UI.QTCfg: Fields "ID" and "NAME" of the node control dialog set to the unlimited size
     for next these changing from inforamtion of the control interface.
