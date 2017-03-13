@@ -112,9 +112,9 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 	const char  *docHost = "wiki.oscada.org", *docURI = "/Doc",
 		    *tTr = "Sockets", *nTr = "docCheck";
 
-	if(opt&GetPathURL) rez = string("http://") + docHost + "/HomePageEn" + transl[iTr] + docURI + "/" + nm;
+	if(opt&GetPathURL) rez = string("http://") + docHost + "/HomePageEn" + docURI + "/" + nm;
 	else if(opt&GetContent) ;//rez = req.text();
-	else rez = string("xdg-open ") + "http://" + docHost + "/HomePageEn" + transl[iTr] + docURI + "/" + nm + " &";
+	else rez = string("xdg-open ") + "http://" + docHost + "/HomePageEn" + docURI + "/" + nm + " &";
 
 	//!!!!	Translation checking for presence disabled by that is sometimes long and wrong.
 	//	The manual sets to the default language but further the behaviour can be changed with the documenttion moving to MediaWiki.

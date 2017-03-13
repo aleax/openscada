@@ -1,5 +1,11 @@
+2017-03-13 Roman (stable)
+- SYS:data/{debian,debian_mod}/rules: dh_compress is prevented from files of documentation in PDF compression,
+    to allow its using from UI.QTCfg mostly.
+- FIX:UI: docGet() is fixed at online documentation processing after the local one unsuccessful processing.
+
+
 2017-03-12 Roman (stable)
-- UI.QTCfg: InputDlg wrong initialization on the previous commit fixed.
+- FIX:UI.QTCfg: InputDlg wrong initialization on the previous commit fixed.
 
 
 2017-03-11 Roman (stable)
