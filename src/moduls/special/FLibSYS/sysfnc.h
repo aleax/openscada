@@ -86,13 +86,15 @@ class dbReqSQL : public TFunction
 		vector< vector<string> > rtbl;
 		AutoHD<TBD> db = SYS->db().at().nodeAt(sdb,0,'.');
 		db.at().sqlReq(val->getS(2), &rtbl, val->getB(3));
-		for(unsigned i_r = 0; i_r < rtbl.size(); i_r++) {
+		for(unsigned iR = 0; iR < rtbl.size(); iR++) {
 		    TArrayObj *row = new TArrayObj();
-		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++) row->arSet(i_c, rtbl[i_r][i_c]);
-		    rez->arSet(i_r, AutoHD<TVarObj>(row));
+		    for(unsigned iC = 0; iC < rtbl[iR].size(); iC++) {
+			row->arSet(iC, rtbl[iR][iC]);
+			if(iR) row->TVarObj::propSet(rtbl[0][iC], rtbl[iR][iC]);
+		    }
+		    rez->arSet(iR, row);
 		}
-	    }
-	    catch(...){ }
+	    } catch(TError &err)	{ rez->propSet("err", err.cat+":"+err.mess); }
 
 	    val->setO(0, rez);
 	}

@@ -110,6 +110,16 @@ function nodeTextByTagId( node, tag, avl )
 }
 
 /***************************************************
+ * i2s - integer to string                         *
+ ***************************************************/
+function i2s( vl, base, len )
+{
+    rez = vl.toString(base);
+    if(len) while(rez.length < len) rez = "0"+rez;
+    return rez;
+}
+
+/***************************************************
  * posGetX - Get absolute position                 *
  **************************************************/
 function posGetX( obj, noWScrl )
@@ -674,9 +684,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    isPrim = false;
 	}
 	else if(this.attrs['root'] == 'ElFigure') {
-	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    //if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    var toInit = !this.place.childNodes.length;
 	    var figObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
 	    figObj.width = geomW; figObj.height = geomH;
@@ -714,12 +721,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Box') {
 	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
-	    //backStyle = '';
-	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-	    //	backStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    //if(this.attrs['backImg'])   backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    //if(this == masterPage) document.body.style.cssText = parseInt(this.attrs['bordWidth']) ? '' : backStyle;
-	    //elStyle += backStyle;
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    switch(parseInt(this.attrs['bordStyle'])) {
@@ -767,9 +768,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return false; };
 	}
 	else if(this.attrs['root'] == 'Text') {
-	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    //if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
@@ -814,12 +812,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
 		}
-		//var txtVal1 = '';
-		//for(var j = 0; j < txtVal.length; j++)
-		//    if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
-		// txtVal.replace(/\n/g,'<br />');
-		// while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
-		//this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
 		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
 	    //}
 	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
@@ -830,9 +822,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.place.onclick = '';
 	}
 	else if(this.attrs['root'] == 'Media') {
-	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    //if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.childNodes.length <= 1) ||
@@ -933,27 +922,31 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			switch(this.place.view) {
 			    case 1:		//Combo
 				var combImg = this.place.ownerDocument.createElement('img');
-				combImg.src = '/'+MOD_ID+'/img_combar';
-				combImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
+				combImg.className = "cntr"; combImg.src = '/'+MOD_ID+'/img_combar';
+				combImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
 				this.place.appendChild(combImg);
 				formObj.style.width = (geomWint-16)+'px';
 				combImg.onclick = function( ) {
-				    var formObj = this.parentNode.childNodes[0];
-				    var combList = this.ownerDocument.getElementById('#combo');
+				    var formObj = this.parentNode.children[0];
+				    var combList = this.ownerDocument.getElementById('combomenu');
 				    if(!combList) {
 					combList = this.ownerDocument.createElement('div');
-					combList.id = '#combo';
+					combList.id = 'combomenu';
 					combList.appendChild(this.ownerDocument.createElement('select'));
 					combList.childNodes[0].size = '100';
-					combList.childNodes[0].onchange = function( ) {
-					    this.formObj.value = this.options[this.selectedIndex].value;
-					    this.formObj.setModify(true);
+					combList.childNodes[0].onclick = function( ) {
+					    //this.formObj.value = this.options[this.selectedIndex].value;
+					    //this.formObj.setModify(true);
+					    this.formObj.valSet(this.options[this.selectedIndex].value);
+					    this.formObj.chApply();
 					    this.parentNode.style.visibility = 'hidden';
+					    this.parentNode.style.top = "-100px";
 					}
 					combList.childNodes[0].onblur = function( ) {
 					    this.parentNode.style.visibility = 'hidden';
 					    this.parentNode.style.top = "-100px";
 					}
+					combList.onmouseleave = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }
 					this.ownerDocument.body.appendChild(combList);
 				    }
 				    while(combList.childNodes[0].childNodes.length)
@@ -966,11 +959,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					combList.childNodes[0].appendChild(optEl);
 				    }
 				    if(combList.childNodes[0].childNodes.length) {
-					combList.style.cssText = 'position: absolute; visibility : visible; left: '+posGetX(formObj,true)+'px; '+
-							         'top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; width: '+formObj.offsetWidth+'px; '+
-							         'height: '+Math.min(elLst.length*15,70)+'px; border: 0; ';
+					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
+								 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; ';
 					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; '+
-									       'border-width: 2px; font: '+formObj.parentNode.fontCfg+'; padding: 1px;';
+									       'font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
 					combList.childNodes[0].focus();
 				    }
@@ -980,8 +972,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 2: case 3:	//Integer, Real
 				if(this.place.childNodes.length >= 2) break;
 				var spinImg = this.place.ownerDocument.createElement('img');
-				spinImg.src = '/'+MOD_ID+'/img_spinar';
-				spinImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
+				spinImg.className = "cntr"; spinImg.src = '/'+MOD_ID+'/img_spinar';
+				spinImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
 				spinImg.border = '0';
 				formObj.style.width = (geomWint-16)+'px';
 				spinImg.onclick = function(e) {
@@ -996,12 +988,112 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				this.place.appendChild(spinImg);
 				break;
-			    case 4:	//Time
-				break;
+			    case 4:	break;	//Time
 			    case 5:	//Date
-				break;
 			    case 6:	//Date and time
-				//formObj.type = 'datetime-local'; formObj.step = 1;
+				formObj.onclick = function( ) {
+				    if((cldrDlg=this.ownerDocument.getElementById('clndrdlg'))) cldrDlg.style.visibility = 'hidden';
+				}
+				var cldrImg = this.place.ownerDocument.createElement('img');
+				cldrImg.className = "cntr"; cldrImg.src = '/'+MOD_ID+'/img_combar';
+				cldrImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
+				this.place.appendChild(cldrImg);
+				formObj.style.width = (geomWint-16)+'px';
+				cldrImg.onclick = function( ) {
+				    var formObj = this.parentNode.children[0];
+				    var cldrDlg = this.ownerDocument.getElementById('clndrdlg');
+				    if(!cldrDlg) {
+					cldrDlg = this.ownerDocument.createElement('div');
+					cldrDlg.id = 'clndrdlg';
+					cldrDlg.innerHTML = "<input type='button' value='###Today###'/><select></select><select></select>"+
+					    "<table><tr><th>###Mon###</th><th>###Tue###</th><th>###Wed###</th><th>###Thr###</th><th>###Fri###</th><th class='end'>###Sat###</th><th class='end'>###Sun###</th></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "</table>";
+					cldrDlg.children[0].onclick = function( ) {
+					    this.parentElement.formObj.valSet((new Date()).getTime()/1000);
+					    this.parentElement.formObj.chApply();
+					    this.parentElement.style.visibility = 'hidden';
+					    this.parentElement.style.top = "-100px";
+					}
+					cldrDlg.children[1].onchange = cldrDlg.children[2].onchange = function( ) {
+					    this.parentElement.tmSet((new Date(parseInt(this.parentElement.children[1].options[this.parentElement.children[1].selectedIndex].value),
+									this.parentElement.children[2].selectedIndex,1)).getTime()/1000);
+					}
+					cldrDlg.daySet = function() {
+					    dlgN = this.offsetParent.parentElement;
+					    dtSrc = new Date(dlgN.formObj.valGet()*1000);
+					    dtSrc.setFullYear(parseInt(dlgN.children[1].options[dlgN.children[1].selectedIndex].value));
+					    dtSrc.setMonth(dlgN.children[2].selectedIndex);
+					    dtSrc.setDate(parseInt(nodeText(this)));
+					    dlgN.formObj.valSet(dtSrc.getTime()/1000);
+					    dlgN.formObj.chApply();
+					    dlgN.style.visibility = 'hidden';
+					    dlgN.style.top = "-100px";
+					}
+					//Fill and activate the table
+					cldrDlg.tmSet = function(tm) {
+					    var dtCur = new Date();
+					    var dtSet = new Date(parseInt(tm)*1000);
+					    // Years fill
+					    var optLs = ""; hasCur = false;
+					    for(iY = 0; iY < 10; iY++) {
+						iY_ = (dtCur.getFullYear()-iY);
+						if(iY_ != dtSet.getFullYear()) optLs += "<option>"+iY_+"</option>";
+						else { optLs += "<option selected>"+iY_+"</option>"; hasCur = true; }
+					    }
+					    if(!hasCur) optLs += "<option selected>"+dtSet.getFullYear()+"</option>";
+					    this.children[1].innerHTML = optLs;
+					    // Months fill
+					    var optLs = "";
+					    for(iM = 0; iM < 12; iM++) {
+						var mNm = "";
+						if(iM == 0)		mNm = "###January###";
+						else if(iM == 1)	mNm = "###February###";
+						else if(iM == 2)	mNm = "###March###";
+						else if(iM == 3)	mNm = "###April###";
+						else if(iM == 4)	mNm = "###May###";
+						else if(iM == 5)	mNm = "###June###";
+						else if(iM == 6)	mNm = "###July###";
+						else if(iM == 7)	mNm = "###August###";
+						else if(iM == 8)	mNm = "###September###";
+						else if(iM == 9)	mNm = "###October###";
+						else if(iM == 10)	mNm = "###November###";
+						else if(iM == 11)	mNm = "###December###";
+						optLs += "<option"+((iM==dtSet.getMonth())?" selected":"")+">"+mNm+"</option>";
+					    }
+					    this.children[2].innerHTML = optLs;
+					    // Days fill
+					    dtSetMBeg = new Date(dtSet.getFullYear(), dtSet.getMonth(), 1);
+					    maxDayInMonth = 28;
+					    while((new Date(dtSet.getFullYear(),dtSet.getMonth(),maxDayInMonth+1)).getMonth() == dtSet.getMonth() && maxDayInMonth < 31)
+						maxDayInMonth++;
+					    for(iW = 0, iD = 1; iW < 6; iW++)
+						for(iWd = 0; iWd < 7; iWd++) {
+						    tdEl = this.children[3].rows[iW+1].cells[iWd];
+						    if((iW == 0 && iWd < (dtSetMBeg.getDay()-1)) || iD > maxDayInMonth)
+						    { tdEl.innerHTML = ""; tdEl.className = ""; tdEl.onclick = null; continue; }
+						    tdEl.innerHTML = iD;
+						    tdEl.className = "active";
+						    tdEl.onclick = this.daySet;
+						    if(iD == dtSet.getDate()) tdEl.className += " sel";
+						    if(iWd == 5 || iWd == 6) tdEl.className += " end";
+						    iD++;
+						}
+					}
+					this.ownerDocument.body.appendChild(cldrDlg);
+				    }
+				    cldrDlg.onmouseleave = formObj.onclick;
+				    cldrDlg.formObj = formObj;
+				    cldrDlg.tmSet(formObj.valGet());
+				    cldrDlg.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
+					'font: '+formObj.parentNode.fontCfg+'; ';
+				    return false;
+				}
 				break;
 			}
 			formObj.onkeyup = function(e) {
@@ -1011,23 +1103,23 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(this.saveVal != this.value) this.setModify(true);
 			}
 			formObj.modify = function( )
-			{ return (this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1].style.visibility == 'visible'); }
+			{ return (this.parentNode.children[this.parentNode.children.length-1].style.visibility == 'visible'); }
 			formObj.setModify = function(on) {
 			    if(on && this.clearTm) this.clearTm = 5;
 			    if(this.modify() == on) return;
-			    var posOkImg = (this.parentNode.view>=1&&this.parentNode.view<=3)?2:1;
-			    var okImg = this.parentNode.childNodes[posOkImg];
+			    var posOkImg = this.parentNode.children.length-1;
+			    var okImg = this.parentNode.children[posOkImg];
 			    if(on) {
 				this.style.width = (parseInt(this.style.width)-16)+'px';
 				if(posOkImg == 2)
-				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)-16)+'px';
+				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-16)+'px';
 				okImg.style.visibility = 'visible';
 				this.wdgLnk.perUpdtEn(true); this.clearTm = 5;
 			    }
 			    else {
 				this.style.width = (parseInt(this.style.width)+16)+'px';
 				if(posOkImg == 2)
-				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)+16)+'px';
+				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+16)+'px';
 				okImg.style.visibility = 'hidden';
 				this.wdgLnk.perUpdtEn(false); this.clearTm = 0;
 			    }
@@ -1048,9 +1140,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				break;
 			    case 4:	//Time
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'hh:mm';
-				var v = (Math.floor(val/3600)%(ap?12:24)).toString(10); rez = rez.replace('hh',(v.length==1)?'0'+v:v); rez = rez.replace('h',v);
-				v = (Math.floor(val/60)%60).toString(10); rez = rez.replace('mm',(v.length==1)?'0'+v:v); rez = rez.replace('m',v);
-				v = (val%60).toString(10); rez = rez.replace('ss',(v.length==1)?'0'+v:v); rez = rez.replace('s',v);
+				var v = (Math.floor(val/3600)%(ap?12:24)).toString(10); rez = rez.replace('hh',i2s(v,10,2)); rez = rez.replace('h',v);
+				v = (Math.floor(val/60)%60).toString(10); rez = rez.replace('mm',i2s(v,10,2)); rez = rez.replace('m',v);
+				v = (val%60).toString(10); rez = rez.replace('ss',i2s(v,10,2)); rez = rez.replace('s',v);
 				if(rez.indexOf('ap') >= 0) { rez = rez.replace('ap',(val>=43200)?'pm':'am'); var ap = true; }
 				if(rez.indexOf('AP') >= 0) { rez = rez.replace('AP',(val>=43200)?'PM':'AM'); var ap = true; }
 				this.value = rez;
@@ -1058,19 +1150,19 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 5:	//Date
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy';
 				var dt = new Date(parseInt(val)*1000);
-				var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v.length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);
-				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',(v.length==1)?'0'+v:v); rez = rez.replace('MMM',(v.length==1)?'0'+v:v); rez = rez.replace('MM',(v.length==1)?'0'+v:v); rez = rez.replace('M',v);
-				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez = rez.replace('yy',v.substr(2,2));
+				var v = dt.getDate().toString(10); rez = rez.replace('dddd',i2s(v,10,2)); rez = rez.replace('ddd',i2s(v,10,2)); rez = rez.replace('dd',i2s(v,10,2)); rez = rez.replace('d',v);
+				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',i2s(v,10,2)); rez = rez.replace('MMM',i2s(v,10,2)); rez = rez.replace('MM',i2s(v,10,2)); rez = rez.replace('M',v);
+				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',i2s(v,10,4)); rez = rez.replace('yy',i2s(v.substr(2,2),10,2));
 				this.value = rez;
 				break;
 			    case 6:	//Date and time
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy hh:mm';
 				var dt = new Date(parseInt(val)*1000);
-				var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v.length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);
-				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',(v.length==1)?'0'+v:v); rez = rez.replace('MMM',(v.length==1)?'0'+v:v); rez = rez.replace('MM',(v.length==1)?'0'+v:v); rez = rez.replace('M',v);
-				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez = rez.replace('yy',v.substr(2,2));
-				v = dt.getHours().toString(10); rez = rez.replace('hh',(v.length==1)?'0'+v:v); rez = rez.replace('h',v);
-				v = dt.getMinutes().toString(10); rez = rez.replace('mm',(v.length==1)?'0'+v:v); rez = rez.replace('m',v);
+				var v = dt.getDate().toString(10); rez = rez.replace('dddd',i2s(v,10,2)); rez = rez.replace('ddd',i2s(v,10,2)); rez = rez.replace('dd',i2s(v,10,2)); rez = rez.replace('d',v);
+				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',i2s(v,10,2)); rez = rez.replace('MMM',i2s(v,10,2)); rez = rez.replace('MM',i2s(v,10,2)); rez = rez.replace('M',v);
+				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',i2s(v,10,4)); rez = rez.replace('yy',i2s(v.substr(2,2),10,2));
+				v = dt.getHours().toString(10); rez = rez.replace('hh',i2s(v,10,2)); rez = rez.replace('h',v);
+				v = dt.getMinutes().toString(10); rez = rez.replace('mm',i2s(v,10,2)); rez = rez.replace('m',v);
 				v = dt.getSeconds().toString(10); rez = rez.replace('ss',(v.length==1)?'0'+v:v); rez = rez.replace('s',v);
 				if(rez.indexOf('ap') >= 0)	{ rez = rez.replace('ap',(val>=43200)?'pm':'am'); var ap = true; }
 				if(rez.indexOf('AP') >= 0)	{ rez = rez.replace('AP',(val>=43200)?'PM':'AM'); var ap = true; }
@@ -1217,19 +1309,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.chApply = function( ) {
 			var val = this.valGet();
 			this.valSet(val);
-			var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1];
 			this.setModify(false);
 			var attrs = new Object(); attrs.value = val; attrs.event = 'ws_LnAccept';
 			setWAttrs(this.wdgLnk.addr,attrs);
 		    }
 		    formObj.chEscape = function( ) {
 			this.value = this.saveVal;
-			var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1];
 			this.setModify(false);
 		    }
 		    var okImg = this.place.ownerDocument.createElement('img');
+		    okImg.className = "ok";
 		    okImg.src = '/'+MOD_ID+'/img_button_ok';
-		    okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-16)/2)+'px; width: 16px; height: 16px; cursor: pointer;';
+		    okImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-16)/2)+'px;';
 		    okImg.onclick = function() { this.parentNode.childNodes[0].chApply(); return false; };
 		    this.place.appendChild(okImg);
 		    formObj.valSet(this.attrs['value']);
@@ -1239,7 +1330,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = toInit ? this.place.ownerDocument.createElement('textarea') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
-			formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
+			formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; font: '+this.place.fontCfg+'; ';
 		    if(this.attrsMdf['value']) formObj.saveVal = formObj.value = this.attrs['value'];
 		    if(!toInit) break;
 		    formObj.disabled = !elWr;
@@ -1331,13 +1422,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
 			    spanObj.innerHTML = this.attrs['name'];
-			    //while(spanObj.childNodes.length) spanObj.removeChild(spanObj.childNodes[0]);
-			    /*txtVal1 = '';
-			    for(var j = 0; j < this.attrs['name'].length; j++) {
-				if(this.attrs['name'].substr(j,2) == '\\n') { txtVal1 += "<br />"; j++; continue; }
-				txtVal1 += strEncode(this.attrs['name'][j]);
-			    }
-			    spanObj.innerHTML = txtVal1;*/
 			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
@@ -1418,9 +1502,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
-			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
+			formObj.style.cssText = 'top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
 					    'height: '+((elTp==4)?fntSz:(geomH-4))+'px; width: '+geomW+'px; '+
-					    'border: 1px solid black; font: '+this.place.fontCfg+'; padding: 0; ';
+					    'font: '+this.place.fontCfg+'; ';
 		    if(this.attrsMdf['items'] || this.attrsMdf['value']) {
 			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
 			var selVal = this.attrs['value'];
@@ -1451,7 +1535,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 		    else {
 			formObj.size = 100;
-			formObj.onchange = function( ) {
+			formObj.onclick = function( ) {
 			    var attrs = new Object();
 			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange';
 			    setWAttrs(this.wdgLnk.addr,attrs);
@@ -1462,9 +1546,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	else if(this.attrs['root'] == 'Diagram') {
-	    //if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    //if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    var anchObj = this.place.childNodes[0];
@@ -1499,10 +1580,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    this.perUpdtEn(this.isEnabled() && parseInt(this.attrs['trcPer']));
 	}
 	else if(this.attrs['root'] == 'Protocol') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true)) ;
-	    //	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    else elStyle += 'background-color: white; ';
-	    //if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    if(!this.attrs['backColor'] || !getColor(this.attrs['backColor'],true)) elStyle += 'background-color: white; ';
 	    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
 	    geomW -= 6; geomH -= 6;
 

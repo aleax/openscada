@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.3"
+#define MOD_VER		"2.3.4"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -266,8 +266,13 @@ void TSocketIn::start( )
 	else nameIn.sin_addr.s_addr = INADDR_ANY;
 	if(type == SOCK_TCP) {
 	    //Get system port for "oscada" /etc/services
+#if defined(__ANDROID__)
+	    struct servent *sptr = getservbyname(port.c_str(), "tcp");
+	    if(sptr)				nameIn.sin_port = sptr->s_port;
+#else
 	    if(getservbyname_r(port.c_str(),"tcp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
 		nameIn.sin_port = sp->s_port;
+#endif
 	    else if(htons(s2i(port)) > 0)	nameIn.sin_port = htons(s2i(port));
 	    else nameIn.sin_port = 10005;
 
@@ -300,8 +305,13 @@ void TSocketIn::start( )
 	}
 	else if(type == SOCK_UDP) {
 	    //Get system port for "oscada" /etc/services
+#if defined(__ANDROID__)
+	    struct servent *sptr = getservbyname(port.c_str(), "udp");
+	    if(sptr)				nameIn.sin_port = sptr->s_port;
+#else
 	    if(getservbyname_r(port.c_str(),"udp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
 		nameIn.sin_port = sp->s_port;
+#endif
 	    else if(htons(s2i(port)) > 0)	nameIn.sin_port = htons(s2i(port));
 	    else nameIn.sin_port = 10005;
 
@@ -1001,8 +1011,13 @@ void TSocketOut::start( int itmCon )
 	else nameIn.sin_addr.s_addr = INADDR_ANY;
 
 	//Get system port for "oscada" /etc/services
+#if defined(__ANDROID__)
+	struct servent *sptr = getservbyname(port.c_str(), (type == SOCK_TCP)?"tcp":"udp");
+	if(sptr)			nameIn.sin_port = sptr->s_port;
+#else
 	if(getservbyname_r(port.c_str(),(type == SOCK_TCP)?"tcp":"udp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
 	    nameIn.sin_port = sp->s_port;
+#endif
 	else if(htons(s2i(port)) > 0)	nameIn.sin_port = htons(s2i(port));
 	else nameIn.sin_port = 10005;
 

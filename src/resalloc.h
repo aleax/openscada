@@ -26,6 +26,10 @@
 
 #include <string>
 
+#ifndef __GLIBC_PREREQ
+# define __GLIBC_PREREQ(maj, min)	1
+#endif
+
 using std::string;
 
 namespace OSCADA

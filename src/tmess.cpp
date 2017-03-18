@@ -66,7 +66,7 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
     else mLang2Code = mLang2Code.substr(0,2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    if(mLang2Code == "en" && (IOCharSet.compare(0,10,"ISO-8859-1")==0 || IOCharSet.compare(0,14,"ANSI_X3.4-1968")==0))
+    if(mLang2Code == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "US-ASCII"))
 	mConvCode = false;
 }
 

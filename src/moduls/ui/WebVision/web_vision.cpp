@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.10.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -238,7 +238,10 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
     colors["yellowgreen"]	= rgb(154, 205, 50);
 
 #if 0
-    char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready") };
+    char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready"),
+	_("Today"), _("Mon"), _("Tue"), _("Wed"), _("Thr"), _("Fri"), _("Sat"), _("Sun"),
+	_("January"), _("February"), _("March"), _("April"), _("May"), _("June"), _("July"),
+	_("August"), _("September"), _("October"), _("November"), _("December") };
 #endif
 }
 
@@ -384,7 +387,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    (req.childGet(iCh)->attr("user") != user ||
 			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
 			continue;
-		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/>"
+		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/> "
 			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/'>" + req.childGet(iCh)->text()+"</a>";
 		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
 		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
@@ -408,9 +411,8 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)
 			continue;
-		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/>"
-					 "<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/'>" +
-			req.childGet(iCh)->text()+"</a></td></tr>";
+		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/> "
+			"<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/'>" + req.childGet(iCh)->text() + "</a></td></tr>";
 		}
 		if(!prjSesEls.empty()) {
 		    page = page +

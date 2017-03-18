@@ -20,7 +20,6 @@
 
 #include <features.h>
 #include <byteswap.h>
-#include <ieee754.h>
 #include <syscall.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -74,7 +73,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //Init system clock
     clkCalc();
 
-#if __GLIBC_PREREQ(2,4)
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     //Multi CPU allow check
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
@@ -737,7 +736,7 @@ void TSYS::setMainCPUs( const string &vl )
 {
     mMainCPUs = vl;
 
-#if __GLIBC_PREREQ(2,4)
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     if(nCPU() > 1) {
 	cpu_set_t cpuset;
 	CPU_ZERO(&cpuset);
@@ -1343,7 +1342,15 @@ uint64_t TSYS::i64_BE( uint64_t in )
 float TSYS::floatLE( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_float ieee754_be;
+    union ieee754_be {
+	float f;
+	struct {
+	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int mantissa:23;
+	} ieee;
+    } ieee754_be;
+
     union ieee754_le {
 	float f;
 	struct {
@@ -1443,7 +1450,15 @@ double TSYS::doubleLErev( double in )
 float TSYS::floatBE( float in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    ieee754_float ieee754_le;
+    union ieee754_le {
+	float f;
+	struct {
+	    unsigned int mantissa:23;
+	    unsigned int exponent:8;
+	    unsigned int negative:1;
+	} ieee;
+    } ieee754_le;
+
     union ieee754_be {
 	float f;
 	struct {
@@ -1467,7 +1482,15 @@ float TSYS::floatBE( float in )
 float TSYS::floatBErev( float in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    ieee754_float ieee754_le;
+    union ieee754_le {
+	float f;
+	struct {
+	    unsigned int mantissa:23;
+	    unsigned int exponent:8;
+	    unsigned int negative:1;
+	} ieee;
+    } ieee754_le;
+
     union ieee754_be {
 	float f;
 	struct {
@@ -1491,7 +1514,23 @@ float TSYS::floatBErev( float in )
 double TSYS::doubleBE( double in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    ieee754_double ieee754_le;
+    union ieee754_le {
+	double d;
+	struct {
+# if __FLOAT_WORD_ORDER == __BIG_ENDIAN
+	    unsigned int mantissa0:20;
+	    unsigned int exponent:11;
+	    unsigned int negative:1;
+	    unsigned int mantissa1:32;
+# else
+	    unsigned int mantissa1:32;
+	    unsigned int mantissa0:20;
+	    unsigned int exponent:11;
+	    unsigned int negative:1;
+# endif
+	} ieee;
+    } ieee754_le;
+
     union ieee754_be {
 	double d;
 	struct {
@@ -1517,7 +1556,23 @@ double TSYS::doubleBE( double in )
 double TSYS::doubleBErev( double in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    ieee754_double ieee754_le;
+    union ieee754_le {
+	double d;
+	struct {
+# if __FLOAT_WORD_ORDER == __BIG_ENDIAN
+	    unsigned int mantissa0:20;
+	    unsigned int exponent:11;
+	    unsigned int negative:1;
+	    unsigned int mantissa1:32;
+# else
+	    unsigned int mantissa1:32;
+	    unsigned int mantissa0:20;
+	    unsigned int exponent:11;
+	    unsigned int negative:1;
+# endif
+	} ieee;
+    } ieee754_le;
+
     union ieee754_be {
 	double d;
 	struct {
@@ -1668,7 +1723,9 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	pthr_attr = &locPAttr;
 	pthread_attr_init(pthr_attr);
     }
+#if !defined(__ANDROID__)
     pthread_attr_setinheritsched(pthr_attr, PTHREAD_EXPLICIT_SCHED);
+#endif
     struct sched_param prior;
     prior.sched_priority = 0;
 
@@ -1803,7 +1860,7 @@ void *TSYS::taskWrap( void *stas )
     tsk->policy = policy;
     //tsk->prior = param.sched_priority;	//!!!! Commented for nice
 
-#if __GLIBC_PREREQ(2,4)
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     //Load and init CPU set
     if(SYS->nCPU() > 1 && !(tsk->flgs&STask::Detached)) {
 	tsk->cpuSet = TBDS::genDBGet(SYS->nodePath()+"CpuSet:"+tsk->path);
@@ -2597,7 +2654,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/mainCPUs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
 	    string vl = mainCPUs();
-#if __GLIBC_PREREQ(2,4)
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
 	    cpu_set_t cpuset;
 	    CPU_ZERO(&cpuset);
 	    pthread_getaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
@@ -2778,7 +2835,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_prior)	n_prior->childAdd("el")->setText(i2s(it->second.prior));
 		if(n_cpuSet) {
 		    string vl = it->second.cpuSet;
-#if __GLIBC_PREREQ(2,4)
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
 		    cpu_set_t cpuset;
 		    CPU_ZERO(&cpuset);
 		    pthread_getaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
@@ -2791,7 +2848,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	}
-#if __GLIBC_PREREQ(2,4)
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
 	if(nCPU() > 1 && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
 	    ResAlloc res(taskRes, true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));

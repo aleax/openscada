@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 19:37+0200\n"
+"POT-Creation-Date: 2017-03-16 12:25+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -19,6 +19,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Resource isn't found"
+msgstr "Ressource nicht gefunden wird"
 
 #, c-format
 msgid "Unknown command: %s."
@@ -103,6 +106,66 @@ msgstr "mcsek"
 msgid "Ready"
 msgstr "Fertig"
 
+msgid "Today"
+msgstr "Heute"
+
+msgid "Mon"
+msgstr "Mon"
+
+msgid "Tue"
+msgstr ""
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thr"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+msgid "Sat"
+msgstr ""
+
+msgid "Sun"
+msgstr ""
+
+msgid "January"
+msgstr "Januar"
+
+msgid "February"
+msgstr "Februar"
+
+msgid "March"
+msgstr "März"
+
+msgid "April"
+msgstr "April"
+
+msgid "May"
+msgstr "Mai"
+
+msgid "June"
+msgstr "Juni"
+
+msgid "July"
+msgstr "Juli"
+
+msgid "August"
+msgstr "August"
+
+msgid "September"
+msgstr "September"
+
+msgid "October"
+msgstr "Oktober"
+
+msgid "November"
+msgstr "November"
+
+msgid "December"
+msgstr "Dezember"
+
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -137,6 +200,7 @@ msgstr "Gehen Sie zu Session '%s' für Projekt '%s' ..."
 msgid "Pointed project/session '%s' is wrong!"
 msgstr "Spitzes Projekt/Sitzung '%s' ist falsch!"
 
+#, c-format
 msgid "Page '%s' error: %s"
 msgstr "Seite '%s' Fehler: %s"
 
@@ -166,24 +230,3 @@ msgstr ""
 "  -1  - optimale Geschwindigkeit-Grösse;\n"
 "  0   - abgeschaltet;\n"
 "  1-9 - direkte Stufe."
-
-#~ msgid "An inaccessible request is received: '%s'"
-#~ msgstr "Unzulässige Anfrage wird empfangen: '%s'"
-
-#~ msgid "Name: "
-#~ msgstr "Name: "
-
-#~ msgid "License: "
-#~ msgstr "Lizenz: "
-
-#~ msgid "Author: "
-#~ msgstr "Autor: "
-
-#~ msgid "Description: "
-#~ msgstr "Beschreibung: "
-
-#~ msgid "Roman Savochenko"
-#~ msgstr "Roman Savotschenko"
-
-#~ msgid "Developers"
-#~ msgstr "Entwickler"

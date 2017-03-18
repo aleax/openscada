@@ -11,10 +11,10 @@
   <style type='text/css'>
     hr { width: 95%; }
     body { background-color: #B0B0B0; margin: 0px; }
-    h1.head { text-align:center; color:#ffff00; }
-    h2.title { text-align:center; font-style: italic; margin: 0px; padding: 0px; border-width:0; }
+    h1.head { text-align: center; color: #ffff00; }
+    h2.title { text-align: center; font-style: italic; margin: 0px; padding: 0px; border-width: 0; }
     table.work { background-color: #9999ff; border: 3px ridge #a9a9a9; padding: 2px; }
-    table.work td { background-color:#cccccc; text-align: left; }
+    table.work td { background-color: #cccccc; text-align: left; }
     table.work td.content { padding: 5px; padding-bottom: 20px; }
     //table.work td.content td { text-align: center; }
     table.work td.content img { vertical-align: middle; padding-right: 5px; }
@@ -27,8 +27,20 @@
     table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }
     #popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 1000; }
     #popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }
+    #combomenu { position: absolute; visibility: visible; border: 0; }
+    #combomenu select { border-width: 2px; padding: 1px; }
+    #clndrdlg { position: absolute; visibility: visible; border: 0; background-color: white; border: 1px solid gray; padding: 1px; height: auto; width: auto; text-align: center; }
+    #clndrdlg input, select { width: 33%; font: inherit; }
+    #clndrdlg table { width: 100%; }
+    #clndrdlg table td.active { cursor: pointer; }
+    #clndrdlg table .end { color: red; }
+    #clndrdlg table td.sel { font-weight: bold; }
     input[type="checkbox"] { margin: 0 4px 0 0; float: left; }
-    .FormEl input.LineEd { position: absolute; left: 0px; border: 1px solid black; padding: 1px; }
+    .FormEl input.LineEd { position: absolute; left: 0px; border: 1px solid gray; padding: 1px; }
+    .FormEl img.ok { visibility: hidden; position: absolute; width: 16px; height: 16px; cursor: pointer; }
+    .FormEl select { position: absolute; left: 0px; border: 1px solid gray; padding: 0; line-height: 1; }
+    .FormEl textarea { border: 1px solid gray; padding: 1px; }
+    .FormEl .cntr { position: absolute; width: 16px; cursor: pointer; }
   </style>
 </head>
 <body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>

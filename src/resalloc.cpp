@@ -176,7 +176,7 @@ CondVar::CondVar( )
 {
     pthread_condattr_t attr;
     pthread_condattr_init(&attr);
-#if __GLIBC_PREREQ(2,4)
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     pthread_condattr_setclock(&attr, (SYS && SYS->clockRT()) ? CLOCK_REALTIME : CLOCK_MONOTONIC);
 #endif
     pthread_cond_init(&cnd, &attr);

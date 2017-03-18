@@ -1,18 +1,17 @@
 AC_PREREQ([2.50])
 
-# After LTS relese append third stabilisation level/number to the version
+# After any LTS release append there the third stabilisation level/number to the version
 AC_INIT([OpenSCADA],[0.9],[rom_as@oscada.org])
 
-# Increase major for next Work version.
-# Increase minor after significant changes into API of the Work version
-# Full freeze for LTS stabilisation levels/updates, after the release
+# Increase the major for next Work version.
+# Increase the minor after any significant changes into API of the Work/LTS version
 oscd_LIBREVISION="3:6:0"
 
 AC_PREFIX_DEFAULT([/usr])
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
+AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(src/config.h)
 
 AC_LANG(C++)
@@ -59,7 +58,7 @@ AC_CHECK_HEADERS([iconv.h],[ ],[AC_MSG_NOTICE(iconv.h header not found. Using is
 AC_CHECK_HEADERS([libintl.h],[ ],[AC_MSG_NOTICE(libintl.h header not found. Using is disabled!)])
 AC_CHECK_HEADERS([linux/can.h],[ ],[AC_MSG_NOTICE(linux/can.h header not found. Using is disabled!)])
 
-#Gettext utilites check
+#Check for the gettext utilites
 if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
     AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
@@ -94,7 +93,7 @@ fi
 
 AM_CONDITIONAL([ResourcesAllow],[test -d data])
 
-# Checks for library functions.
+# Checks for functions of libraries
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MKTIME
 AC_FUNC_SELECT_ARGTYPES
@@ -136,41 +135,40 @@ AC_ARG_ENABLE(AllModuls,AC_HELP_STRING([--enable-AllModuls], [all modules enable
 [ ],[ enable_AllModuls=individual; ])
 
 AC_MSG_RESULT(========== Core libraries check =============)
+AX_PTHREAD
 # Check for core-system libraries
 if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
 fi
-AC_CHECK_LIB([m],[sin],[AC_MSG_NOTICE([LibM: Pass global library using])],
-    [AC_MSG_ERROR(Math library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE([LibDl: Pass global library using])],
-    [AC_MSG_ERROR(Dynamik linking library not found. Install or check GLibC core package!)])
-#AC_CHECK_LIB([rt],[pthread_create],[AC_MSG_NOTICE(Pass global library using)],
-#    [AC_MSG_ERROR(Pthread library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE([LibCrypt: Pass global library using])],
-    [AC_MSG_ERROR(Crypt library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([z],[deflate],[AC_MSG_NOTICE([LibZ: Pass global library using])],
-    [AC_MSG_ERROR(Z library not found. Install or check libz package!)])
-
-# Check for GD library using in the OpenSCADA core
-if test $enable_LibGD = yes; then
-    AC_CHECK_HEADERS([gd.h],
-	[
-	    AC_CHECK_LIB([gd],[gdImageCreate],
-	    [
-		AC_DEFINE(HAVE_GD_CORE,1,[LibGD: Pass library using into core])
-		LIB_CORE="${LIB_CORE}-lgd "
-	    ],[AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
-	],
-	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
-fi
+AC_CHECK_LIB([m],[sin],[LIB_CORE="${LIB_CORE}-lm "],
+    [AC_MSG_ERROR(Mathematic library is not found. Install or check the GLibC core package!)])
+AC_CHECK_LIB([dl],[dlopen],[LIB_CORE="${LIB_CORE}-ldl "],
+    [AC_MSG_ERROR(Dynamik linking library is not found. Install or check the GLibC core package!)])
+AC_CHECK_HEADERS([crypt.h],
+    [AC_CHECK_LIB([crypt],[crypt_r],[LIB_CORE="${LIB_CORE}-lcrypt "],
+	[AC_MSG_NOTICE(Crypt library is not found, then it disabled!)])],
+    [AC_MSG_NOTICE(crypt.h header is not found. Using disabled!)])
+AC_CHECK_LIB([z],[deflate],[LIB_CORE="${LIB_CORE}-lz "],
+    [AC_MSG_ERROR(Z library is not found. Install or check the libz package!)])
 
 # Check for PCRE library using in the OpenSCADA core
 CXXFLAGS="$CXXFLAGS $($PKG_CONFIG --cflags libpcre)"
 AC_CHECK_HEADERS([pcre.h],[],
-    [AC_MSG_ERROR(PCRE header not found. Install or check PCRE developing package!)])
-AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library using])],
-    [AC_MSG_ERROR(PCRE library not found. Install or check PCRE package!)])
+    [AC_MSG_ERROR(PCRE header is not found. Install or check the PCRE developing package!)])
+AC_CHECK_LIB([pcre],[pcre_compile],
+    [LIB_CORE="${LIB_CORE}-lpcre "],
+    [AC_MSG_ERROR(PCRE library is not found. Install or check the PCRE package!)])
+
+# Check for GD library using in the OpenSCADA core
+if test $enable_LibGD = yes; then
+    AC_CHECK_HEADERS([gd.h],
+	[AC_CHECK_LIB([gd],[gdImageCreate],
+	    [AC_DEFINE(HAVE_GD_CORE,1,[LibGD: Pass library using into core])
+		LIB_CORE="${LIB_CORE}-lgd "],
+	    [AC_MSG_ERROR(GD library is not found. Install or check the GDlib package!)])],
+	[AC_MSG_ERROR(Headers of the GD library are not found. Install or check the GD developing package!)])
+fi
 
 AC_SUBST(BldMods)
 AC_SUBST(BldInclMods)
@@ -182,30 +180,30 @@ AC_SUBST(ProtSub_mod)
 AC_SUBST(UISub_mod)
 AC_SUBST(SpecSub_mod)
 
-AC_MSG_RESULT(========== Build modules check =============)
+AC_MSG_RESULT(========== Check for building modules =============)
 
 # DB modules
 AX_MOD_DB_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl)
 AX_MOD_DB_EN(MySQL,[disable or enable[=incl] build module DB.MySQL],disable,incl,[
     AX_LIB_MYSQL
-    if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB.MySQL: MySQL development resources not found. Install or check MySQL development package!); fi
+    if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB.MySQL: MySQL development resources are not found. Install or check the MySQL development package!); fi
 ])
 AX_MOD_DB_EN(SQLite,[disable or enable[=incl] build module DB.SQLite],disable,incl,[
     PKG_CHECK_MODULES([sqlite3],[sqlite3 > 3],
 	[AC_CHECK_LIB([sqlite3],[sqlite3_open],[],[AC_MSG_ERROR(SQLite3 library is not usable!)])],
-	[AC_MSG_ERROR(DB.SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!)])
+	[AC_MSG_ERROR(DB.SQLite: SQLite3 development resources is not found. Install or check the SQLite3 development package!)])
 ])
 AX_MOD_DB_EN(FireBird,[disable or enable[=incl] build module DB.FireBird],disable,incl,[
     AX_LIB_FIREBIRD([2.0.0])
-    if test "$success" != "yes"; then AC_MSG_ERROR(DB.FireBird: FireBird development resources not found. Install or check FireBird development package!); fi
+    if test "$success" != "yes"; then AC_MSG_ERROR(DB.FireBird: FireBird development resources are not found. Install or check the FireBird development package!); fi
 ])
 AX_MOD_DB_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],disable,incl,[
     AX_LIB_POSTGRESQL([8.3.0])
-    if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
+    if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources are not found. Install or check the PostgreSQL development package!); fi
 ])
 AX_MOD_DB_EN(ODBC,[disable or enable[=incl] build module DB.ODBC],enable,incl,[
     AX_LIB_IODBC([1])
-    if test "$found_iodbc" != "yes"; then AC_MSG_ERROR(DB.ODBC: iODBC development resources not found. Install or check iODBC development package!); fi
+    if test "$found_iodbc" != "yes"; then AC_MSG_ERROR(DB.ODBC: iODBC development resources are not found. Install or check the iODBC development package!); fi
 ])
 
 # DAQ modules
@@ -217,7 +215,7 @@ AX_MOD_DAQ_EN(JavaLikeCalc,[disable or enable[=incl] build module DAQ.BlockCalc]
     AC_PROG_YACC
     AC_CHECK_PROG(YACC_OK, bison, true, false)
     if test $YACC_OK = false; then
-	AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.])
+	AC_MSG_ERROR([No syntax generator present! Install a YACC program like to bison.])
     fi
 ])
 if test $ix86 != yes; then enable_DiamondBoards=no; fi

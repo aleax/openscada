@@ -19,13 +19,14 @@
  ***************************************************************************/
 
 #include <unistd.h>
-#ifdef __USE_GNU
-#include <crypt.h>
-#endif
 
 #include "tsys.h"
 #include "tmess.h"
 #include "tsecurity.h"
+
+#if defined(HAVE_CRYPT_H) && defined(__USE_GNU)
+# include <crypt.h>
+#endif
 
 using namespace OSCADA;
 
@@ -340,7 +341,7 @@ TCntrNode &TUser::operator=( const TCntrNode &node )
 
 void TUser::setPass( const string &n_pass )
 {
-#ifdef __USE_GNU
+#if defined(HAVE_CRYPT_H) && defined(__USE_GNU)
     crypt_data data;
     data.initialized = 0;
     string salt = "$1$"+name();		//Use MD5
@@ -352,7 +353,7 @@ void TUser::setPass( const string &n_pass )
 
 bool TUser::auth( const string &ipass, string *hash )
 {
-#ifdef __USE_GNU
+#if defined(HAVE_CRYPT_H) && defined(__USE_GNU)
     crypt_data data;
     data.initialized = 0;
     string pass = cfg("PASS").getS();

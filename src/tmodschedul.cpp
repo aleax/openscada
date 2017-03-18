@@ -189,7 +189,7 @@ void TModSchedul::libUnreg( const string &iname )
 
 void TModSchedul::libAtt( const string &iname, bool full )
 {
-    char *dlErr = NULL;
+    const char *dlErr = NULL;
     MtxAlloc res(schM, true);
     for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
 	if(schHD[i_sh].name == iname) {

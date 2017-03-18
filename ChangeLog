@@ -1,3 +1,22 @@
+2017-03-18 Roman (stable)
+- SYS:data/{debian,debian_mod}/rules: dh_compress is prevented from files of documentation in ODT compression also.
+- SYS: Some pre-adapting to Android by:
+    build: The macro AX_PTHREAD appending and using. AM_INIT_AUTOMAKE call set shorter.
+	Libraries moved from direct pointing into src/Makefile.am to its checking, for: -lpthread, -lm, -ldl, -lcrypt, -lz, -lpcre
+	Some messages into configure.ac fix.
+    ResAlloc: Check and define "__GLIBC_PREREQ" to 1. pthread_condattr_setclock() disabled for Android as it missed.
+    SYS: Needed parts from ieee754.h moved to the file. Multi CPU management and pthread_attr_setinheritsched() disabled for Android.
+    Mess: Messages encoding disabled for charset "US-ASCII", default one on Android.
+    Security: libcrypt checking expanded for crypt.h.
+    Transport.Sockets: The function getservbyname_r() switched to getservbyname() for Android.
+- DAQ.Siemens: "INCLUDES" was replaced by "daq_Siemens_la_CFLAGS" and "daq_Siemens_la_CXXFLAGS".
+- Special.FLibSYS: The user API function dbReqSQL() moved to the features of the function SYS.BD["TypeDB"]["DB"].SQLReq().
+- !!!:UI.WebVision: View "Line" of the primitive "FormEl": expanded by the callendar dialog for data variants.
+    Generic CSS properties moved to *.html file.
+    Processing event of the wide combobox (list) changed from "onchange" to "onclick" to the processing guaranty.
+    Generic improvement.
+
+
 2017-03-13 Roman (stable)
 - SYS:data/{debian,debian_mod}/rules: dh_compress is prevented from files of documentation in PDF compression,
     to allow its using from UI.QTCfg mostly.

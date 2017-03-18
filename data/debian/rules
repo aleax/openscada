@@ -80,7 +80,7 @@ binary-common:
 	dh_installman
 	dh_link
 	dh_strip --dbg-package=openscada-dbg
-	dh_compress -X.pdf
+	dh_compress -X.pdf -X.odt
 	dh_fixperms
 	dh_makeshlibs
 	dh_installdeb
