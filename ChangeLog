@@ -1,3 +1,7 @@
+2017-03-19 Roman (stable)
+- SYS:build: Into configure.ac the AC_CHECK_LIB replaced by AC_SEARCH_LIBS mostly and the library librt checking added.
+
+
 2017-03-18 Roman (stable)
 - SYS:data/{debian,debian_mod}/rules: dh_compress is prevented from files of documentation in ODT compression also.
 - SYS: Some pre-adapting to Android by:

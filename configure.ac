@@ -66,11 +66,11 @@ if test $ac_cv_header_libintl_h = yes; then
     if test $XGETTEXT = false -o $MSGMERGE = false -o $MSGFMT = false; then
 	AC_MSG_ERROR([Some gettext I18N utilite no present! Install gettext utilites package.]);
     fi
-    AC_CHECK_LIB([intl],[bindtextdomain],[LIB_CORE="${LIB_CORE}-lintl "])
+    AC_SEARCH_LIBS([bindtextdomain],[intl])
 fi
 
 if test $ac_cv_header_iconv_h = yes; then
-    AC_CHECK_LIB([iconv],[libiconv_open],[LIB_CORE="${LIB_CORE}-liconv "])
+    AC_SEARCH_LIBS([libiconv_open],[iconv])
 fi
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -141,34 +141,25 @@ if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
 fi
-AC_CHECK_LIB([m],[sin],[LIB_CORE="${LIB_CORE}-lm "],
-    [AC_MSG_ERROR(Mathematic library is not found. Install or check the GLibC core package!)])
-AC_CHECK_LIB([dl],[dlopen],[LIB_CORE="${LIB_CORE}-ldl "],
-    [AC_MSG_ERROR(Dynamik linking library is not found. Install or check the GLibC core package!)])
-AC_CHECK_HEADERS([crypt.h],
-    [AC_CHECK_LIB([crypt],[crypt_r],[LIB_CORE="${LIB_CORE}-lcrypt "],
-	[AC_MSG_NOTICE(Crypt library is not found, then it disabled!)])],
-    [AC_MSG_NOTICE(crypt.h header is not found. Using disabled!)])
-AC_CHECK_LIB([z],[deflate],[LIB_CORE="${LIB_CORE}-lz "],
-    [AC_MSG_ERROR(Z library is not found. Install or check the libz package!)])
+AC_SEARCH_LIBS([sin],[m],[],[AC_MSG_ERROR(Mathematic library is not found. Install or check the GLibC core package!)])
+AC_SEARCH_LIBS([dlopen],[dl],[],[AC_MSG_ERROR(Dynamik linking library is not found. Install or check the GLibC core package!)])
+AC_SEARCH_LIBS([clock_gettime],[rt])
+AC_CHECK_HEADERS([crypt.h],[AC_SEARCH_LIBS([crypt_r],[crypt])],[AC_MSG_NOTICE(crypt.h header is not found. Using disabled!)])
+AC_SEARCH_LIBS([deflate],[z],[],[AC_MSG_ERROR(Z library is not found. Install or check the libz package!)])
 
 # Check for PCRE library using in the OpenSCADA core
 CXXFLAGS="$CXXFLAGS $($PKG_CONFIG --cflags libpcre)"
-AC_CHECK_HEADERS([pcre.h],[],
-    [AC_MSG_ERROR(PCRE header is not found. Install or check the PCRE developing package!)])
-AC_CHECK_LIB([pcre],[pcre_compile],
-    [LIB_CORE="${LIB_CORE}-lpcre "],
-    [AC_MSG_ERROR(PCRE library is not found. Install or check the PCRE package!)])
+AC_CHECK_HEADERS([pcre.h],[],[AC_MSG_ERROR(PCRE header is not found. Install or check the PCRE developing package!)])
+AC_SEARCH_LIBS([pcre_compile],[pcre],[],[AC_MSG_ERROR(PCRE library is not found. Install or check the PCRE package!)])
 
-# Check for GD library using in the OpenSCADA core
+# Check for GD library using into the OpenSCADA core
 if test $enable_LibGD = yes; then
     AC_CHECK_HEADERS([gd.h],
-	[AC_CHECK_LIB([gd],[gdImageCreate],
-	    [AC_DEFINE(HAVE_GD_CORE,1,[LibGD: Pass library using into core])
-		LIB_CORE="${LIB_CORE}-lgd "],
+	[AC_SEARCH_LIBS([gdImageCreate],[gd],[AC_DEFINE(HAVE_GD_CORE,1,[LibGD: Pass library using into core])],
 	    [AC_MSG_ERROR(GD library is not found. Install or check the GDlib package!)])],
 	[AC_MSG_ERROR(Headers of the GD library are not found. Install or check the GD developing package!)])
 fi
+LIB_CORE=${LIBS}
 
 AC_SUBST(BldMods)
 AC_SUBST(BldInclMods)
