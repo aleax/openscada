@@ -36,7 +36,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <langinfo.h>
 #include <zlib.h>
 
 #include <algorithm>

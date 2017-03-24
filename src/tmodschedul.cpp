@@ -189,13 +189,19 @@ void TModSchedul::libUnreg( const string &iname )
 
 void TModSchedul::libAtt( const string &iname, bool full )
 {
-    const char *dlErr = NULL;
+    const char *dlErr = NULL, *dlNm = NULL;
     MtxAlloc res(schM, true);
     for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
 	if(schHD[i_sh].name == iname) {
 	    if(schHD[i_sh].hd) throw err_sys(_("SO '%s' is already attached!"), iname.c_str());
 
-	    void *h_lib = dlopen((iname[0]!='*')?iname.c_str():NULL, RTLD_LAZY|RTLD_LOCAL);
+	    if(iname[0] != '*')	dlNm = iname.c_str();
+#ifdef CoreLibNmToDlOpen
+	    else dlNm = CoreLibNmToDlOpen;
+#else
+	    else dlNm = NULL;
+#endif
+	    void *h_lib = dlopen(dlNm, RTLD_LAZY|RTLD_LOCAL);
 	    if(!h_lib) {
 		schHD[i_sh].err = dlerror();
 		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[i_sh].err.c_str());

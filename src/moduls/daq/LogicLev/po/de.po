@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-27 19:42+0300\n"
+"POT-Creation-Date: 2017-03-24 18:00+0200\n"
 "PO-Revision-Date: 2009-08-17 12:33+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -41,8 +41,8 @@ msgstr "Datenerfassungsperiode (msek)"
 msgid "Calculate schedule"
 msgstr "Berechnung Zeitplan"
 
-msgid "Request task priority"
-msgstr "Priorität der Anfrage"
+msgid "Priority of the acquisition task"
+msgstr "Priorität der Erwerbsaufgabe"
 
 msgid "Logical"
 msgstr "Logisch"
@@ -76,6 +76,7 @@ msgstr "Aufruf mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Verbrauchte Zeit: %s[%s]. "
 
@@ -85,6 +86,7 @@ msgstr "1:Parameter ist abgeschaltet."
 msgid "2:Controller is stopped."
 msgstr "2:Controller ist angehalten."
 
+#, c-format
 msgid "Spent time %s[%s]"
 msgstr "Verbrauchte Zeit: %s[%s]. "
 
@@ -111,9 +113,3 @@ msgstr "Optionen"
 
 msgid "Self to self linking error."
 msgstr "Fehler beim Anschluss an sich selbst."
-
-#~ msgid "Parameter has no one attribute!"
-#~ msgstr "Parameter hat kein Attribut!"
-
-#~ msgid "Parameter has not attributes: %s !"
-#~ msgstr "Parameter hat keine Attribute: %s !"

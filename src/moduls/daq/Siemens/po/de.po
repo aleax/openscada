@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-27 19:54+0300\n"
+"POT-Creation-Date: 2017-03-24 19:16+0200\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -42,8 +42,8 @@ msgstr "Datenerfassungsperiode (msek)"
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-msgid "Request task priority"
-msgstr "Priorität der Datenerfassung"
+msgid "Priority of the acquisition task"
+msgstr "Priorität der Erwerbsaufgabe"
 
 msgid "Restore timeout (s)"
 msgstr "Zeit der Wiederherstellung (sek)"
@@ -233,6 +233,7 @@ msgstr "Aufruf mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s[%s]. Read %s. Wrote %s. Connection errors %g. "
 msgstr "Verbrachte Zeit: %s[%s]. Lesen %s. Schrieb %s. Verbindungsfehler %g. "
 

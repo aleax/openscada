@@ -24,7 +24,7 @@
 #include "tmess.h"
 #include "tsecurity.h"
 
-#if defined(HAVE_CRYPT_H) && defined(__USE_GNU)
+#if defined(HAVE_CRYPT_H)
 # include <crypt.h>
 #endif
 
@@ -57,31 +57,6 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"), false)
 
 void TSecurity::postEnable( int flag )
 {
-    /*if(!(flag&TCntrNode::NodeRestore)) {
-	//Add surely users, groups and set their parameters
-	// Administrator
-	usrAdd("root");
-	usrAt("root").at().setDescr(_("Administrator (superuser)!!!"));
-	usrAt("root").at().setSysItem(true);
-	usrAt("root").at().setPass("openscada");
-	// Simple user
-	usrAdd("user");
-	usrAt("user").at().setDescr(_("Simple user."));
-	usrAt("user").at().setSysItem(true);
-	usrAt("user").at().setPass("user");
-	// Administrators group
-	grpAdd("root");
-	grpAt("root").at().setDescr(_("Administrators group."));
-	grpAt("root").at().setSysItem(true);
-	grpAt("root").at().userAdd("root");
-	// Simple users group
-	grpAdd("users");
-	grpAt("users").at().setDescr(_("Users group."));
-	grpAt("users").at().setSysItem(true);
-	grpAt("users").at().userAdd("user");
-	grpAt("users").at().userAdd("root");
-    }*/
-
     TSubSYS::postEnable(flag);
 }
 
@@ -341,27 +316,39 @@ TCntrNode &TUser::operator=( const TCntrNode &node )
 
 void TUser::setPass( const string &n_pass )
 {
-#if defined(HAVE_CRYPT_H) && defined(__USE_GNU)
+    string tPass = n_pass;
+#if defined(HAVE_CRYPT_H)
+    string salt = "$1$"+name();		//Use MD5
+# if defined(__USE_GNU)
     crypt_data data;
     data.initialized = 0;
-    string salt = "$1$"+name();		//Use MD5
-    cfg("PASS").setS(crypt_r(n_pass.c_str(),salt.c_str(),&data));
-#else
-    cfg("PASS").setS(n_pass);
+    tPass = crypt_r(n_pass.c_str(), salt.c_str(), &data);
+# else
+    dataRes().lock();
+    tPass = crypt(n_pass.c_str(), salt.c_str());
+    dataRes().unlock();
+# endif
 #endif
+    cfg("PASS").setS(tPass);
 }
 
 bool TUser::auth( const string &ipass, string *hash )
 {
-#if defined(HAVE_CRYPT_H) && defined(__USE_GNU)
-    crypt_data data;
-    data.initialized = 0;
+#if defined(HAVE_CRYPT_H)
     string pass = cfg("PASS").getS();
-    string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or old method
+    string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or the old method
     if(ipass.compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
 	return (ipass.compare(TSecurity::pHashMagic.size(),pass.size(),pass) == 0);
+# if defined(__USE_GNU)
+    crypt_data data;
+    data.initialized = 0;
     if(hash) *hash = crypt_r(ipass.c_str(),salt.c_str(),&data);
     return (pass == crypt_r(ipass.c_str(),salt.c_str(),&data));
+# else
+    MtxAlloc res(dataRes(), true);
+    if(hash) *hash = crypt(ipass.c_str(), salt.c_str());
+    return (pass == crypt(ipass.c_str(), salt.c_str()));
+# endif
 #else
     return (ipass == cfg("PASS").getS());
 #endif

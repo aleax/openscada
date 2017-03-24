@@ -54,7 +54,7 @@ INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><co
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','User interface''s main elements library.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.3.1','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
+Version: 1.3.2','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
 Автор: Роман Савоченко <rom_as@oscada.org>
 Версія: 1.1.1','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
 Автор: Роман Савоченко <rom_as@oscada.org>
@@ -6823,7 +6823,7 @@ INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','value','',8,'','','prmSearch',''
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','confirm','0',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','font','Arial 15',32,'','','prmSearch','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('graphSelPrm','dscr','Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.1.1',32,'','','','','','Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.2',32,'','','','','','Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.1','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','dscr','Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.1',32,'','','','','','','','','');
@@ -17518,12 +17518,12 @@ if(f_start) {
 				}
 			}
 			// Direct items list process by form "{path}:{name}:{min}:{max}:{dim}"
-			else if(pIt.search("/(sub_|)Archive") >= 0) {
+			else if(pIt.search("/(sub_|)Archive/") >= 0) {
 				if(!(itObj=SYS.nodeAt(pIt.parse(0,":")))) continue;
 				prm_items += tr("Archive")+" ''"+pIt.parse(1,":")+"'' ("+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
 			}
 			else {
-				pathAbs = pIt.search("/(sub_|)DAQ") >= 0;
+				pathAbs = pIt.search("/(sub_|)DAQ/") >= 0;
 				itObj = pathAbs ? SYS.nodeAt(pIt.parse(0,":")) : SYS.DAQ.nodeAt(pIt.parse(0,":"));
 				if(!itObj) continue;
 				itNm = pIt.parse(1,":");
@@ -17549,7 +17549,14 @@ if(f_start) {
 			if(lWdg.link("ed").search("prm:[^ ]+ \\(\\+\\)") >= 0) dim_value = lWdg.attr("ed");
 			else if((itTmp=lWdg.link("ed").match("val:(.+$)")).length == 2) dim_value = itTmp[1];
 			//Current prm name
-			if(itAddr[1] == "prm")	prm_value = "DAQ ''"+name_value+"'' (/DAQ"+(itAddr[2].replace(new RegExp("/var$"),"")+":"+val_min_value.toPrecision()+":"+val_max_value.toPrecision()+":"+dim_value).replace(new RegExp(":*$"),"")+")";
+			if(itAddr[1] == "prm") {
+				for(tAddr = "", off = 0, pos = 0; (tAddrEl=itAddr[2].parsePath(0,off)).length; pos++)
+					if(pos >= 3 && off < itAddr[2].length)	tAddr += "/prm_"+tAddrEl;
+					else if(tAddrEl == "var" && off >= itAddr[2].length)	continue;
+					else tAddr += "/"+tAddrEl;
+				prm_value = "DAQ ''"+name_value+"'' (/DAQ"+(tAddr+":"+val_min_value.toPrecision()+":"+val_max_value.toPrecision()+":"+dim_value).replace(new RegExp(":*$"),"")+")";
+				//prm_value = "DAQ ''"+name_value+"'' (/DAQ"+(itAddr[2].replace(new RegExp("/var$"),"")+":"+val_min_value.toPrecision()+":"+val_max_value.toPrecision()+":"+dim_value).replace(new RegExp(":*$"),"")+")";
+			}
 			else if(itAddr[1] == "arh") prm_value = tr("Archive")+" ''"+name_value+"'' (/Archive/va_"+(itAddr[2]+":"+val_min_value.toPrecision()+":"+val_max_value.toPrecision()+":"+dim_value).replace(new RegExp(":*$"),"")+")";
 			if(prm_value.length) name_active = val_min_active = val_max_active = log_active = dim_active = true;
 		}
@@ -17631,7 +17638,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1472664561);
+event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1490019462);
 INSERT INTO "wlb_Main" VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 aklEQVRYhe2WTU8TQRiA35nZbne7pdsWaGlrAVtEtBfxaGL8ZVz8DSZcjH+EkzEejHIhMWgQkK8G
 ast0l/2e2V0PTZqlxOBt2GSf45P3ME/mI4N2dj7peoVSms/nAUCW5UJBOzs7brcfA8BgcFUq6Yqi

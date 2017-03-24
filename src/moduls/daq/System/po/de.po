@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 18:22+0200\n"
+"POT-Creation-Date: 2017-03-24 19:17+0200\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -234,8 +234,8 @@ msgstr "Datenanfrageperiode (msek)"
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
-msgid "Request task priority"
-msgstr "Priorität der Anfrage"
+msgid "Priority of the acquisition task"
+msgstr "Priorität der Erwerbsaufgabe"
 
 msgid "Standard"
 msgstr "Standard"
@@ -257,6 +257,7 @@ msgstr "Aufruf mit einer Periode: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Verbrauchte Zeit: %s[%s]. "
 

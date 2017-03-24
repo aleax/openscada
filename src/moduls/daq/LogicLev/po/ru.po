@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-27 19:42+0300\n"
+"POT-Creation-Date: 2017-03-24 18:00+0200\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -36,8 +36,8 @@ msgstr "Период получения данных (мс)"
 msgid "Calculate schedule"
 msgstr "Планирование вычислений"
 
-msgid "Request task priority"
-msgstr "Уровень приоритета задачи получения данных"
+msgid "Priority of the acquisition task"
+msgstr "Приоритет задачи получения данных"
 
 msgid "Logical"
 msgstr "Логический"
@@ -71,6 +71,7 @@ msgstr "Вызовы с периодом: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Затрачено времени: %s[%s]. "
 
@@ -80,6 +81,7 @@ msgstr "1:Параметр отключен."
 msgid "2:Controller is stopped."
 msgstr "2:Контроллер остановлен."
 
+#, c-format
 msgid "Spent time %s[%s]"
 msgstr "Затрачено времени: %s[%s]. "
 
@@ -106,9 +108,3 @@ msgstr "Параметры"
 
 msgid "Self to self linking error."
 msgstr "Ошибка, подключение самого к себе."
-
-#~ msgid "Parameter has no one attribute!"
-#~ msgstr "Параметр не имеет ни одного атрибута!"
-
-#~ msgid "Parameter has not attributes: %s !"
-#~ msgstr "Параметр не имеет атрибутов: %s !"

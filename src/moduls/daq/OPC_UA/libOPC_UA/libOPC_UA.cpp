@@ -19,20 +19,20 @@
  ******************************************************************************/
 
 #include <sys/time.h>
-#include <ieee754.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
+#include <endian.h>
 
-#include "openssl/bio.h"
-#include "openssl/ssl.h"
-#include "openssl/aes.h"
-#include "openssl/err.h"
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/aes.h>
+#include <openssl/err.h>
 #include <openssl/rand.h>
-#include "openssl/hmac.h"
-#include "openssl/evp.h"
+#include <openssl/hmac.h>
+#include <openssl/evp.h>
 
 #include "libOPC_UA.h"
 
@@ -182,7 +182,15 @@ inline double getUnalignDbl( const void *p )
 float floatLE( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_float ieee754_be;
+    union ieee754_be {
+	float f;
+	struct {
+	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int mantissa:23;
+	} ieee;
+    } ieee754_be;
+
     union ieee754_le {
 	float f;
 	struct {

@@ -2,7 +2,7 @@ EXTRA_DIST = *.h po/*
 
 if DCONIncl
 noinst_LTLIBRARIES = daq_DCON.la
-daq_DAQGate_la_CXXFLAGS = -DMOD_INCL -fpic
+daq_DCON_la_CXXFLAGS = -DMOD_INCL -fpic
 daq_DCON_la_LIBTOOLFLAGS = --tag=disable-shared
 daq_DCON_la_LDFLAGS = -module
 else

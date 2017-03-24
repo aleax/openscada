@@ -822,14 +822,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.place.onclick = '';
 	}
 	else if(this.attrs['root'] == 'Media') {
-	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
+	    this.place.className = "Media";
+	    elStyle += 'border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
-	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.childNodes.length <= 1) ||
-					  (!parseInt(this.attrs['areas']) && this.place.childNodes.length > 1))
-		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.children.length <= 1) ||
+					  (!parseInt(this.attrs['areas']) && this.place.children.length > 1) ||
+					  ((this.attrsMdf["src"] || this.attrsMdf["fit"]) && this.attrs['fit'] != 1))
+		while(this.place.children.length) this.place.removeChild(this.place.children[0]);
 
-	    var toInit = !this.place.childNodes.length;
-	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
+	    var toInit = !this.place.children.length;
+	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.children[0];
 	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || !pgBr) {
 		medObj.src = this.attrs['src'].length ? "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'] : "";
 		medObj.hidden = !this.attrs['src'].length;
@@ -840,20 +842,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(this.attrs['src'].length) medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}
-		else {
-		    src_ = medObj.src; medObj.src = '';	//For the image reload cause
-		    medObj.setAttribute('width',''); medObj.setAttribute('height','');
-		    medObj.onload = function() {
-			var cWdth = this.width; var cHeight = this.height;
-			this.width = cWdth * this.wdgLnk.xScale(true);
-			this.height = cHeight * this.wdgLnk.yScale(true);
-		    }
-		    medObj.src = src_;
+		else medObj.onload = function() {
+		    cWdth = this.width;
+		    cHeight = this.height;
+		    this.width = cWdth * this.wdgLnk.xScale(true);
+		    this.height = cHeight * this.wdgLnk.yScale(true);
+		    //this.style.cssText = "top: "+((this.parentNode.height-this.height)/2)+"px; "+
+		    //				"left: "+((this.parentNode.width-this.width)/2)+"px; ";
 		}
 	    }
 	    if(elWr && (toInit || this.attrsMdf["areas"])) {
-		var mapObj = toInit ? this.place.ownerDocument.createElement('map') : this.place.childNodes[1];
-		while(mapObj.childNodes.length) mapObj.removeChild(mapObj.childNodes[0]);
+		var mapObj = toInit ? this.place.ownerDocument.createElement('map') : this.place.children[1];
+		while(mapObj.children.length) mapObj.removeChild(mapObj.children[0]);
 		for(var i = 0; i < parseInt(this.attrs['areas']); i++) {
 		    var arObj = this.place.ownerDocument.createElement('area');
 		    switch(parseInt(this.attrs['area'+i+'shp'])) {
@@ -1543,6 +1543,42 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    this.place.appendChild(formObj);
 		    break;
+		case 6: case 7:	//Slider and Scroll bar
+		    isProgr = false;	//(elTp == 7);
+		    var toInit = !this.place.children.length;
+		    var tblCell = toInit ? this.place.ownerDocument.createElement('div') : this.place.children[0];
+		    var formObj = tblCell.children.length ? tblCell.children[0] : this.place.ownerDocument.createElement('input');
+		    formObj.style.cssText = tblCell.style.cssText;
+		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'])
+			tblCell.style.cssText = 'width: '+geomW+'px; height: '+geomH+'px; ';
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['value']) formObj.value = parseInt(this.attrs['value']);
+		    formObj.vOr = false;
+		    if(toInit || this.attrsMdf['cfg']) {
+			cfgLst = this.attrs['cfg'].split(':');
+			formObj.vOr = (cfgLst.length && parseInt(cfgLst[0]));
+			formObj.setAttribute("orient", formObj.vOr?"vertical":"");
+			formObj.setAttribute("min", (cfgLst.length > 1)?parseInt(cfgLst[1]):0);
+			formObj.setAttribute("max", (cfgLst.length > 2)?parseInt(cfgLst[2]):100);
+			formObj.setAttribute("step", (cfgLst.length > 3)?parseInt(cfgLst[3]):1);
+		    }
+		    if(!toInit) break;
+		    formObj.type = 'range';
+		    formObj.disabled = !elWr;
+		    formObj.wdgLnk = this;
+		    formObj.style.cssText = "width: "+(formObj.vOr?16:(isProgr?geomW-2*16:geomW))+"px; "+
+		    	"height: "+(formObj.vOr?(isProgr?geomH-2*16:geomH):16)+"px; ";
+		    formObj.onclick = formObj.onkeyup = function( ) {
+			if(this.value == parseInt(this.wdgLnk.attrs['value']))	return;
+			var attrs = new Object();
+			attrs.value = this.value; attrs.event = 'ws_SliderChange';
+			setWAttrs(this.wdgLnk.addr, attrs);
+			this.defaultValue = this.value;
+			//return true;
+		    }
+		    tblCell.appendChild(formObj);
+		    this.place.appendChild(tblCell);
+		    break;
 	    }
 	}
 	else if(this.attrs['root'] == 'Diagram') {
@@ -2201,7 +2237,7 @@ document.body.onmouseup = function(e)
     if(evMouseGet(e) != 'Left') return true;
     var popUpMenu = document.getElementById('popupmenu');
     if(popUpMenu) popUpMenu.style.visibility = 'hidden';
-    return false;
+    //return false;	//!!!! It's buggy on <input type=range> for Chrome
 }
 
 var modelPer = 0;			//Model proc period

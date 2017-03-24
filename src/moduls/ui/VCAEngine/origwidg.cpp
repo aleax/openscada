@@ -146,8 +146,8 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
-		el = root->childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < root->childSize(); iCh++) {
+		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_ElFigLineClr: case A_ElFigBordClr: case A_ElFigFillClr: el->setAttr("help",Widget::helpColor());	break;
@@ -631,16 +631,16 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
 	    int row = s2i(TSYS::strParse(ev,3,"_"));
 	    XMLNode items("tbl");
 	    items.load(src->attrAt("items").at().getS(), XMLNode::LD_Full);
-	    for(int i_chR = 0, i_r = 0; i_chR < (int)items.childSize() && !setOK; i_chR++) {
-		XMLNode *chRN = items.childGet(i_chR);
+	    for(int iChR = 0, iR = 0; iChR < (int)items.childSize() && !setOK; iChR++) {
+		XMLNode *chRN = items.childGet(iChR);
 		if(chRN->name() != "r") continue;
-		for(int i_chC = 0, i_c = 0; i_chC < (int)chRN->childSize() && !setOK; i_chC++) {
-		    XMLNode *chCN = chRN->childGet(i_chC);
+		for(int iChC = 0, iC = 0; iChC < (int)chRN->childSize() && !setOK; iChC++) {
+		    XMLNode *chCN = chRN->childGet(iChC);
 		    if(!(chCN->name() == "s" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
-		    if(i_c == col && i_r == row) { chCN->setText(src->attrAt("set").at().getS(),true); setOK = true; }
-		    i_c++;
+		    if(iC == col && iR == row) { chCN->setText(src->attrAt("set").at().getS(),true); setOK = true; }
+		    iC++;
 		}
-		i_r++;
+		iR++;
 	    }
 	    if(setOK) src->attrAt("items").at().setS(items.save());
 	    break;
@@ -742,8 +742,8 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt, src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
-	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
-		el = root->childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < root->childSize(); iCh++) {
+		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_BackColor: case A_BordColor: case A_TextColor: el->setAttr("help",Widget::helpColor());	break;
@@ -878,8 +878,8 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
-	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
-		el = root->childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < root->childSize(); iCh++) {
+		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_BackColor: case A_BordColor: el->setAttr("help",Widget::helpColor());	break;
@@ -1060,8 +1060,8 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
-	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
-		el = root->childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < root->childSize(); iCh++) {
+		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_BackColor: case A_BordColor: case A_DiagramSclColor: case A_DiagramSclMarkColor:
@@ -1185,8 +1185,8 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes")))) {
-	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
-		el = root->childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < root->childSize(); iCh++) {
+		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_BackColor: el->setAttr("help",Widget::helpColor());	break;
@@ -1381,8 +1381,8 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
-		el = root->childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < root->childSize(); iCh++) {
+		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_DocStyle: el->setAttr("SnthHgl","1")->setAttr("help",
@@ -1598,8 +1598,8 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
     float dRpt = 1;
     string dAMess;
     //Go to include nodes
-    for(unsigned i_c = 0; i_c < xcur->childSize(); i_c++) {
-	XMLNode *reptN = xcur->childGet(i_c);
+    for(unsigned iC = 0; iC < xcur->childSize(); iC++) {
+	XMLNode *reptN = xcur->childGet(iC);
 	if(reptN->name().size() && reptN->name()[0] == '<') continue;
 	// Repeat tags
 	if(funcV.getI(A_DocCalcPrmBTime) && (dRpt=s2r(reptN->attr("docRept"))) > 1e-6) {
@@ -1625,23 +1625,23 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    while(rTime < wTime && !TSYS::taskEndRun()) {
 		//Drop current changes and continue
 		if(time(NULL) >= upTo) {
-		    upTo = time(NULL)+STD_INTERF_TM;
+		    upTo = time(NULL) + STD_INTERF_TM;
 		    if(!wdg->attrAt("n").at().getI() || wdg->attrAt("aCur").at().getI() == wdg->attrAt("vCur").at().getI()) {
 			progrNode->childGet(progrNode->childSize()-1)->
 			    setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)(rTime-bTime)/(float)(wTime-bTime)));
 			XMLNode *rootN = xcur->root();
-			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save(0, Mess->charset()));
+			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save(0,Mess->charset()));
 		    }
 		}
 		//Process
 		if(s2i(reptN->attr("docRptEnd"))) {
-		    int i_n = docRevers?(i_c+1):i_c;
-		    *(xcur->childIns(i_n)) = *reptN;
-		    OrigDocument::nodeClear(xcur->childGet(i_n));
-		    if(!docRevers) i_c++;
+		    int iN = docRevers?(iC+1):iC;
+		    *(xcur->childIns(iN)) = *reptN;
+		    OrigDocument::nodeClear(xcur->childGet(iN));
+		    if(!docRevers) iC++;
 		    rCnt++;
 		}
-		int64_t rTimeT = vmin(rTime+perRpt,wTime);
+		int64_t rTimeT = vmin(rTime+perRpt, wTime);
 		funcV.setI(A_DocCalcPrmRTime, rTimeT/1000000);
 		funcV.setI(A_DocCalcPrmRTimeU, rTimeT%1000000);
 		funcV.setR(A_DocCalcPrmRPer, (rTimeT-rTime)/1000000.0);
@@ -1652,16 +1652,16 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    funcV.setI(A_DocCalcPrmRTime, 0);
 	    funcV.setI(A_DocCalcPrmRTimeU, 0);
 	    funcV.setR(A_DocCalcPrmRPer, 0);
-	    if(docRevers) i_c += rCnt;
+	    if(docRevers) iC += rCnt;
 
 	    progrNode->childGet(progrNode->childSize()-1)->setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),100));
 	}
 	// Repeat messages
-	else if(!(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty()) {
+	else if(!(dAMess=xcur->childGet(iC)->attr("docAMess")).empty()) {
 	    int rCnt = 0;
-	    XMLNode *reptN = xcur->childGet(i_c);
-	    bool docRevers = s2i(xcur->childGet(i_c)->attr("docRevers"));
-	    string docAMessArchs = xcur->childGet(i_c)->attr("docAMessArchs");
+	    XMLNode *reptN = xcur->childGet(iC);
+	    bool docRevers = s2i(xcur->childGet(iC)->attr("docRevers"));
+	    string docAMessArchs = xcur->childGet(iC)->attr("docAMessArchs");
 
 	    int off = 0;
 	    int dACat = s2i(TSYS::strSepParse(dAMess,0,':',&off));
@@ -1678,30 +1678,30 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    }
 	    progrNode->childAdd("li")->setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),0));
 
-	    for(unsigned i_r = 0; i_r < mess.size() && !TSYS::taskEndRun(); i_r++) {
+	    for(unsigned iR = 0; iR < mess.size() && !TSYS::taskEndRun(); iR++) {
 		// Drop current changes and continue
 		if(time(NULL) >= upTo) {
 		    upTo = time(NULL)+STD_INTERF_TM;
 		    if(!wdg->attrAt("n").at().getI() || wdg->attrAt("aCur").at().getI() == wdg->attrAt("vCur").at().getI()) {
 			progrNode->childGet(progrNode->childSize()-1)->
-			    setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)i_r/(float)mess.size()));
+			    setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)iR/(float)mess.size()));
 			XMLNode *rootN = xcur->root();
 			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save(0, Mess->charset()));
 		    }
 		}
 
 		if(s2i(reptN->attr("docRptEnd"))) {
-		    unsigned i_n = (docRevers ? (i_c+1) : i_c);
-		    *(xcur->childIns(i_n)) = *reptN;
-		    nodeClear(xcur->childGet(i_n));
-		    if(!docRevers) i_c++;
+		    unsigned iN = (docRevers ? (iC+1) : iC);
+		    *(xcur->childIns(iN)) = *reptN;
+		    nodeClear(xcur->childGet(iN));
+		    if(!docRevers) iC++;
 		    rCnt++;
 		}
-		funcV.setI(A_DocCalcPrmMTime, mess[i_r].time);
-		funcV.setI(A_DocCalcPrmMTimeU, mess[i_r].utime);
-		funcV.setI(A_DocCalcPrmMLev, mess[i_r].level);
-		funcV.setS(A_DocCalcPrmMCat, mess[i_r].categ);
-		funcV.setS(A_DocCalcPrmMVal, mess[i_r].mess);
+		funcV.setI(A_DocCalcPrmMTime, mess[iR].time);
+		funcV.setI(A_DocCalcPrmMTimeU, mess[iR].utime);
+		funcV.setI(A_DocCalcPrmMLev, mess[iR].level);
+		funcV.setS(A_DocCalcPrmMCat, mess[iR].categ);
+		funcV.setS(A_DocCalcPrmMVal, mess[iR].mess);
 		nodeProcess(wdg, reptN, funcV, funcIO, iLang, false, upTo);
 		reptN->setAttr("docRptEnd", "1");
 	    }
@@ -1713,9 +1713,9 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    funcV.setI(A_DocCalcPrmMLev, 0);
 	    funcV.setS(A_DocCalcPrmMCat, "");
 	    funcV.setS(A_DocCalcPrmMVal, "");
-	    if(docRevers) i_c += rCnt;
+	    if(docRevers) iC += rCnt;
 	}
-	else nodeProcess(wdg,xcur->childGet(i_c),funcV,funcIO,iLang,instrDel,upTo);
+	else nodeProcess(wdg,xcur->childGet(iC),funcV,funcIO,iLang,instrDel,upTo);
     }
 }
 
@@ -1726,9 +1726,9 @@ void OrigDocument::nodeClear( XMLNode *xcur )
     xcur->attrDel("docRevers");
     xcur->attrDel("docAMess");
 
-    for(unsigned i_c = 0; i_c < xcur->childSize(); )
-	if(xcur->childGet(i_c)->name().compare(0,4,"<?dp") == 0) xcur->childDel(i_c);
-	else nodeClear(xcur->childGet(i_c++));
+    for(unsigned iC = 0; iC < xcur->childSize(); )
+	if(xcur->childGet(iC)->name().compare(0,4,"<?dp") == 0) xcur->childDel(iC);
+	else nodeClear(xcur->childGet(iC++));
 }
 
 void *OrigDocument::DocTask( void *param )
@@ -1801,8 +1801,8 @@ bool OrigBox::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++) {
-		el = root->childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < root->childSize(); iCh++) {
+		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
 		    case A_BackColor:

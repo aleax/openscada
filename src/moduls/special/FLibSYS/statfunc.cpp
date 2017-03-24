@@ -36,7 +36,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.4.3"
+#define MOD_VER		"1.4.4"
 #define MOD_AUTOR	_("Roman Savochenko")
 #define MOD_DESCR	_("Provides the library of system API functions of user programming area.")
 #define MOD_LICENSE	"GPL2"
@@ -120,7 +120,9 @@ void Lib::postEnable( int flag )
     reg(new floatExtract());
 
     reg(new CRC());
+#ifdef HAVE_OPENSSL_MD5_H
     reg(new MD5());
+#endif
 
     // Time functions
     reg(new tmFStr());

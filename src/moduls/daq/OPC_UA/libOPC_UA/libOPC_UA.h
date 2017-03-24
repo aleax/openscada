@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>		*
  *										*
- *   Version: 1.2.1								*
+ *   Version: 1.2.2								*
  *      * Hello/Acknowledge properties set configurable and client's ones	*
  *	  also storing.								*
  *	* New OPCAlloc object is added for mutex handle and its automatic free	*

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-27 19:42+0300\n"
+"POT-Creation-Date: 2017-03-24 18:00+0200\n"
 "PO-Revision-Date: 2004-03-20 10:37+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -36,8 +36,8 @@ msgstr "Період отримання даних (мс)"
 msgid "Calculate schedule"
 msgstr "Політика планування"
 
-msgid "Request task priority"
-msgstr "Рівень пріоритету задачі отримання даних"
+msgid "Priority of the acquisition task"
+msgstr "Пріоритет задачі отримання даних"
 
 msgid "Logical"
 msgstr "Логічний"
@@ -71,6 +71,7 @@ msgstr "Виклик за періодом: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Витрачено часу: %s[%s]. "
 
@@ -80,6 +81,7 @@ msgstr "1:Параметр вимкнено."
 msgid "2:Controller is stopped."
 msgstr "2:Контролер зупинено."
 
+#, c-format
 msgid "Spent time %s[%s]"
 msgstr "Витрачено часу: %s[%s]. "
 
@@ -106,9 +108,3 @@ msgstr "Параметри"
 
 msgid "Self to self linking error."
 msgstr "Помилка, рекурсивне підключення."
-
-#~ msgid "Parameter has no one attribute!"
-#~ msgstr "Параметр не має жодного атрибута!"
-
-#~ msgid "Parameter has not attributes: %s !"
-#~ msgstr "Параметр не має атрибутів: %s !"

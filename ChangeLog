@@ -1,3 +1,26 @@
+2017-03-24 Roman (stable)
+- FIX:DB.LibsDB.vcaBase: wlb_Main.graphSelPrm fixed for linking "/DAQGate/..." and for current item's address correct display into the "prm_" prefix.
+- SYS:configure.ac,acinclude.m4: The source text mostly cleaned for the formation style and messages.
+- SYS:acinclude.m4,Special.FLibSYS: OpenSSL checking macro expanded by the optional test "AX_LIB_OpenSSL_opt" and
+    the tests were appended by the libcrypto checking.
+- SYS:configure.ac: Checking for spare header files removed. Checking macro of OpenSCADA modules placed into the importance order.
+- SYS: Some spare headers removed from the source code.
+- SYS:TModSchedul: Adapted for optional pointing the core library name and path by the configure environment "CoreLibNmToDlOpen",
+    on LibC variant Bionic of Android.
+- SYS:TSecurity: Support of the hashed passwords expanded to use the locked function crypt() at crypt_r() miss.
+- FIX:DAQ.DCON: Include/builtin to the OpenSCADA core fixed.
+- FIX:DAQ.{LogicLev,Siemens,System}: Some originale messages fixed.
+- DAQ.OPC_UA: Adapted to include/builtin into the OpenSCADA core.
+    libOPC_UA: Needed parts from ieee754.h moved to the file.
+- Special.FLibSYS: The function dbReqSQL() description expanded.
+- Transport.SSL: The function getservbyname_r() switched to getservbyname(), for Android.
+    SSLv3_server_method() and SSLv3_client_method() functions set to disabled by OPENSSL_NO_SSL3 definition.
+- !!!:FIX:UI.WebVision: Width of the popupmenu fixed for context menus.
+    FIX: Primitive "Media" behavior for not "Fit" mode fixed to prevent the scale problems by full removing the tag <img>.
+	Vertical alignment added to images of the primitive.
+    !!!: The views "Spin bar" and "Scroll bar" implemented. The view "Scroll bar" is equal to "Spin bar" now.
+
+
 2017-03-19 Roman (stable)
 - SYS:build: Into configure.ac the AC_CHECK_LIB replaced by AC_SEARCH_LIBS mostly and the library librt checking added.
 

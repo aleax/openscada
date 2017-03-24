@@ -25,9 +25,12 @@
 #include <stdint.h>
 
 #include <tfunction.h>
-#include <openssl/md5.h>
 
 #include "statfunc.h"
+
+#ifdef HAVE_OPENSSL_MD5_H
+# include <openssl/md5.h>
+#endif
 
 namespace FLibSYS
 {
@@ -71,13 +74,15 @@ class dbReqSQL : public TFunction
     public:
 	dbReqSQL( ) : TFunction("dbReqSQL",SSPC_ID) {
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("addr",_("DB address"),IO::String,IO::Default));
+	    ioAdd(new IO("addr",_("DB address, \"{TypeDB}.{DB}\""),IO::String,IO::Default));
 	    ioAdd(new IO("req",_("SQL request"),IO::String,IO::Default));
 	    ioAdd(new IO("trans",_("Transaction"),IO::Boolean,IO::Default,i2s(EVAL_BOOL).c_str()));
 	}
 
 	string name( )	{ return _("DB: SQL request"); }
-	string descr( )	{ return _("Send SQL request to DB."); }
+	string descr( )	{ return _("Formation of the SQL-request <req> to the DB <addr>, "
+	    "inside (<trans>=true), outside (<trans>=false) or no matter (<trans>=EVAL) to a transaction. "
+	    "At an error the result's property \"err\" sets to the error value."); }
 
 	void calc( TValFunc *val ) {
 	    string sdb = TBDS::realDBName(val->getS(1));
@@ -554,6 +559,7 @@ class CRC : public TFunction
 	}
 };
 
+#ifdef HAVE_OPENSSL_MD5_H
 //*************************************************
 //* Message Digest 5                              *
 //*************************************************
@@ -575,6 +581,7 @@ class MD5 : public TFunction
 	    val->setS(0, string((char*)result, MD5_DIGEST_LENGTH));
 	}
 };
+#endif
 
 }
 

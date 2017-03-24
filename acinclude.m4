@@ -1288,12 +1288,12 @@ AC_DEFUN([AX_LIB_IODBC],
 #   warranty.
 AC_DEFUN([AX_LIB_SENSORS],
 [
-    AC_CHECK_HEADERS([sensors/sensors.h],
-	[
-	    AC_CHECK_LIB([sensors],[sensors_init],
-		[AC_MSG_NOTICE([LibSensors: Pass global library using])
-		LIB_SENSORS="-lsensors"],[AC_MSG_NOTICE(Libsensors library not found. Using is disabled!)])
-	],[AC_MSG_NOTICE(DAQ.System: Libsensors headers not found. Using is disabled!)])
+    AC_CHECK_HEADERS([sensors/sensors.h], [
+	AC_CHECK_LIB(sensors, sensors_init, [
+	    AC_MSG_NOTICE([LibSensors: Pass global library using])
+	    LIB_SENSORS="-lsensors"
+	], AC_MSG_NOTICE([Libsensors library not found. Using is disabled!]))
+    ], AC_MSG_NOTICE([DAQ.System: Libsensors headers not found. Using is disabled!]))
     AC_SUBST(LIB_SENSORS)
     SensorsUse=true
 ])
@@ -1348,6 +1348,7 @@ AC_DEFUN([AX_LIB_GD],
 # SYNOPSIS
 #
 #   AX_LIB_OpenSSL()
+#   AX_LIB_OpenSSL_opt()
 #
 # DESCRIPTION
 #
@@ -1356,7 +1357,7 @@ AC_DEFUN([AX_LIB_GD],
 #   This macro calls:
 #
 #     AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h])
-#     AC_CHECK_LIB([ssl])
+#     AC_CHECK_LIB(ssl)
 #     AC_SUBST(LIB_OpenSSL)
 #
 #   And sets:
@@ -1371,16 +1372,28 @@ AC_DEFUN([AX_LIB_GD],
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
-AC_DEFUN([AX_LIB_OpenSSL],
-[
+AC_DEFUN([AX_LIB_OpenSSL], [
     if test "x${OpenSSLuse}" = "x"; then
-	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
-	    [AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
-	AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE([LibSSL: Pass global library using])],
-	    [AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
+	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h openssl/md5.h], [],
+	    AC_MSG_ERROR([Some OpenSSL headers aren't found. Install or check the OpenSSL developing package!]))
+	AC_CHECK_LIB(crypto, MD5_Init, [],
+	    AC_MSG_ERROR([OpenSSL libcrypto isn't found. Install or check the OpenSSL installation!]))
+	AC_CHECK_LIB(ssl, SSL_library_init, [],
+	    AC_MSG_ERROR([OpenSSL libssl isn't found. Install or check the OpenSSL installation!]))
 	LIB_OpenSSL="-lssl -lcrypto"
 	AC_SUBST(LIB_OpenSSL)
 	OpenSSLuse=true
+    fi
+])
+AC_DEFUN([AX_LIB_OpenSSL_opt], [
+    if test "x${OpenSSLuse}" = "x"; then
+	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h openssl/md5.h],
+	    AC_CHECK_LIB(crypto, MD5_Init, [
+		LIB_OpenSSL="-lssl -lcrypto"
+		AC_SUBST(LIB_OpenSSL)
+		OpenSSLuse=true
+	    ], AC_MSG_NOTICE([OpenSSL library isn't found. Install or check the OpenSSL installation!])),
+	    AC_MSG_NOTICE([OpenSSL headers aren't found. Using disabled for the option!]))
     fi
 ])
 
@@ -1414,15 +1427,14 @@ AC_DEFUN([AX_LIB_OpenSSL],
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
-AC_DEFUN([AX_LIB_FFTW3],
-[
+AC_DEFUN([AX_LIB_FFTW3], [
     if test "x${FFTW3use}" = "x"; then
-	AC_CHECK_HEADERS([fftw3.h],
-        [
-            AC_CHECK_LIB([fftw3],[fftw_execute],
-                [AC_MSG_NOTICE([LibFFTW3: Pass global library using])
-                LIB_FFTW3="-lfftw3"],[AC_MSG_NOTICE(FFTW3 library not found. Using is disabled!)])
-        ],[AC_MSG_NOTICE(Some FFTW3 headers not found. Using is disabled!)])
+	AC_CHECK_HEADERS([fftw3.h], [
+	    AC_CHECK_LIB(fftw3, fftw_execute, [
+		AC_MSG_NOTICE([LibFFTW3: Pass global library using])
+		LIB_FFTW3="-lfftw3"
+	    ], AC_MSG_NOTICE([FFTW3 library not found. Using is disabled!]))
+	], AC_MSG_NOTICE([Some FFTW3 headers not found. Using is disabled!]))
 	AC_SUBST(LIB_FFTW3)
 	FFTW3use=true
     fi

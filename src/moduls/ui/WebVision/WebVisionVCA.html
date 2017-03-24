@@ -26,7 +26,7 @@
     table.prot td { border: 1px solid black; white-space: nowrap; }
     table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }
     #popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 1000; }
-    #popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; }
+    #popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; width: auto; }
     #combomenu { position: absolute; visibility: visible; border: 0; }
     #combomenu select { border-width: 2px; padding: 1px; }
     #clndrdlg { position: absolute; visibility: visible; border: 0; background-color: white; border: 1px solid gray; padding: 1px; height: auto; width: auto; text-align: center; }
@@ -36,11 +36,17 @@
     #clndrdlg table .end { color: red; }
     #clndrdlg table td.sel { font-weight: bold; }
     input[type="checkbox"] { margin: 0 4px 0 0; float: left; }
+    div.FormEl { position: absolute; }
     .FormEl input.LineEd { position: absolute; left: 0px; border: 1px solid gray; padding: 1px; }
     .FormEl img.ok { visibility: hidden; position: absolute; width: 16px; height: 16px; cursor: pointer; }
+    .FormEl .cntr { position: absolute; width: 16px; cursor: pointer; }
     .FormEl select { position: absolute; left: 0px; border: 1px solid gray; padding: 0; line-height: 1; }
     .FormEl textarea { border: 1px solid gray; padding: 1px; }
-    .FormEl .cntr { position: absolute; width: 16px; cursor: pointer; }
+    .FormEl input[type=range] { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
+    .FormEl input[type=range][orient=vertical] { writing-mode: bt-lr; -webkit-appearance: slider-vertical; }
+    div.Media { position: absolute; border-style: solid; overflow: hidden; }
+    div.Media img { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
+}
   </style>
 </head>
 <body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>
