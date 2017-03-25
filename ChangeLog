@@ -1,3 +1,7 @@
+2017-03-25 Roman (stable)
+- SYS:configure.ac: String [0.9] of the replacing version of the OpenSCADA building fix.
+
+
 2017-03-24 Roman (stable)
 - FIX:DB.LibsDB.vcaBase: wlb_Main.graphSelPrm fixed for linking "/DAQGate/..." and for current item's address correct display into the "prm_" prefix.
 - SYS:configure.ac,acinclude.m4: The source text mostly cleaned for the formation style and messages.
