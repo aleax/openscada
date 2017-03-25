@@ -1,7 +1,7 @@
 AC_PREREQ(2.50)
 
 # After any LTS release append there the third stabilisation level/number to the version
-#  Don't change the [0.9] but it uses in whole to replace by a real one into the automatic builder.
+#  Don't change the version string but it uses in whole to replace by a real one into the automatic builder.
 AC_INIT(OpenSCADA, [0.9], rom_as@oscada.org)
 
 # Increase the major for next Work version.
@@ -224,9 +224,9 @@ AX_MOD_DAQ_EN(System, [disable or enable[=incl] compilation module DAQ.System], 
 ])
 AX_MOD_DAQ_EN(ModBus, [disable or enable[=incl] compilation module DAQ.ModBus], disable, incl)
 AX_MOD_DAQ_EN(DCON, [disable or enable[=incl] compilation module DAQ.DCON], disable, incl)
-AX_MOD_DAQ_EN(OPC_UA, [disable compilation module DAQ.OPC_UA], disable, incl,
-    AX_LIB_OpenSSL(),
-    AC_CONFIG_FILES([src/moduls/daq/OPC_UA/libOPC_UA/Makefile]))
+AX_MOD_DAQ_EN(OPC_UA, [disable compilation module DAQ.OPC_UA], disable, incl, [
+    AX_LIB_OpenSSL()
+], AC_CONFIG_FILES([src/moduls/daq/OPC_UA/libOPC_UA/Makefile]))
 AX_MOD_DAQ_EN(MMS, [enable compilation module DAQ.MMS], enable, [], [], [
     AC_CONFIG_FILES([src/moduls/daq/MMS/libMMS/Makefile])
 ])
