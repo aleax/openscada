@@ -546,8 +546,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    if((wVl=tC->attr("width")).size()) {
 					int wdthCel = s2i(wVl);
 					if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
-				    }
-				    hit->setData(Qt::UserRole, s2i(wVl) ? s2i(wVl) : QVariant());
+					hit->setData(Qt::UserRole, wdthCel);
+				    } else hit->setData(Qt::UserRole, QVariant());
 				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
 				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
