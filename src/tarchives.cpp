@@ -973,7 +973,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",
 		    _("Messages category template or regular expression.\n"
-		      "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
+		      "Use template's symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
 		      "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivators"),RWRW__,"root",SARH_ID,4,"tp","str","dest","sel_ed","select","/m_arch/lstAMess",
 		    "help",_("Message archivators.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
@@ -1447,7 +1447,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/LEVEL",EVAL_STR,RWRWR_,"root",SARH_ID,1,"help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/CATEG",EVAL_STR,RWRWR_,"root",SARH_ID,1,
 		    "help",_("Messages category template or regular expression to processing by archivator, separated by symbol ';'.\n"
-			   "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
+			   "Use template's symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
 			   "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 	    }
 	}
@@ -1460,7 +1460,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		"help",_("Get messages for level more and equal it."));
 	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str", "help",
 		_("Messages category template or regular expression.\n"
-		  "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
+		  "Use template's symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
 		  "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SARH_ID)) {
 		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");

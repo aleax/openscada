@@ -511,7 +511,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		XMLNode tX("tbl");
 		bool hdrPresent = false, colsWdthFit = false;
 		int maxCols = 0, maxRows = 0;
-		string wVl, rClr, rClrTxt, rFnt;
 		try { tX.load(shD->items); } catch(...) { }
 		if(tX.name() != "tbl") {
 		    wdg->clear();
@@ -525,6 +524,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			//wdg->setColumnCount(0);
 			wdg->setRowCount(0);
 		    }
+		    string wVl, rClr, rClrTxt, rFnt;
 		    int sortCol = 0;
 		    // Items
 		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++) {
@@ -546,12 +546,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    if((wVl=tC->attr("width")).size()) {
 					int wdthCel = s2i(wVl);
 					if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
-					hit->setData(Qt::UserRole, wdthCel);
 				    }
-				    if(s2i(tC->attr("edit")))		hit->setData(Qt::UserRole+1, true);
-				    if((wVl=tC->attr("color")).size())	hit->setData(Qt::UserRole+2, QString::fromStdString(wVl));
-				    if((wVl=tC->attr("colorText")).size()) hit->setData(Qt::UserRole+3, QString::fromStdString(wVl));
-				    if((wVl=tC->attr("font")).size())	hit->setData(Qt::UserRole+4, QString::fromStdString(wVl));
+				    hit->setData(Qt::UserRole, s2i(wVl) ? s2i(wVl) : QVariant());
+				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
+				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
+				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
+				    hit->setData(Qt::UserRole+4, ((wVl=tC->attr("font")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    if((wVl=tC->attr("sort")).size())	{ sortCol = i_c+1; if(!s2i(wVl)) sortCol *= -1; }
 				}
 			    }

@@ -33,14 +33,14 @@ using namespace SystemCntr;
 Mem::Mem( )
 {
     //> Memory value structure
-    fldAdd(new TFld("free",_("Free (kB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("total",_("Total (kB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("use",_("Use (kB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("buff",_("Buffers (kB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("cache",_("Cached (kB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("sw_free",_("Swap free (kB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("sw_total",_("Swap total (kB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("sw_use",_("Swap use (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("free",_("Free (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("total",_("Total (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("use",_("Used (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("buff",_("Buffers (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("cache",_("Cached (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_free",_("Swap free (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_total",_("Swap total (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_use",_("Swap used (KiB)"),TFld::Integer,TFld::NoWrite));
 }
 
 Mem::~Mem( )

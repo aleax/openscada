@@ -51,13 +51,12 @@ AM_SANITY_CHECK
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h langinfo.h sys/types.h sys/stat.h sys/time.h sys/utsname.h pthread.h],[],
+AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h langinfo.h pthread.h sys/types.h sys/stat.h sys/time.h sys/utsname.h],[],
     AC_MSG_ERROR([Some GLibC headers are not found. Install or check the GLibC developing package!]))
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     AC_MSG_ERROR([Some STL headers are not found. Install or check the STL of StdC++ developing package!]))
 AC_CHECK_HEADERS([iconv.h], [], AC_MSG_NOTICE([iconv.h header is not found. Using disabled!]))
 AC_CHECK_HEADERS([libintl.h], [], AC_MSG_NOTICE(libintl.h header is not found. Using disabled!))
-AC_CHECK_HEADERS([linux/can.h], [], AC_MSG_NOTICE(linux/can.h header is not found. Using disabled!))
 
 #Check for the gettext utilites
 if test $ac_cv_header_libintl_h = yes; then
@@ -275,11 +274,12 @@ AX_MOD_Archive_EN(DBArch, [disable or enable[=incl] compilation module Archive.D
 
 # Transport modules
 AX_MOD_Transport_EN(Sockets, [disable or enable[=incl] compilation module Transport.Sockets], disable, incl, [
+    AC_CHECK_HEADERS([linux/can.h], [], AC_MSG_NOTICE([linux/can.h header isn't found. Using disabled!]))
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h], [],
 	AC_MSG_ERROR([Transport.Sockets: Some GLibC network headers aren't found. Install or check the GLibC development package!]))
 ])
 AX_MOD_Transport_EN(Serial, [disable or enable[=incl] compilation module Transport.Serial], disable, incl, [
-    AC_CHECK_HEADERS([linux/i2c-dev.h], [], AC_MSG_NOTICE([linux/i2c-dev.h header isn't found. Using disabled!]))
+    AC_CHECK_HEADERS([linux/serial.h linux/i2c-dev.h], [], AC_MSG_NOTICE([Some Linux headers aren't found. Using disabled!]))
 ])
 AX_MOD_Transport_EN(SSL, [disable or enable[=incl] compilation module Transport.SSL], disable, incl, [
     AX_LIB_OpenSSL()
@@ -337,9 +337,7 @@ AX_MOD_UI_EN(Vision, [disable or enable[=incl] compilation module UI.Vision], di
     ])
 ])
 AX_MOD_UI_EN(WebCfg, [disable or enable[=incl] compilation module UI.WebCfg], disable, incl)
-AX_MOD_UI_EN(WebCfgD, [disable or enable[=incl] compilation module UI.WebCfgD], disable, incl, [
-    AX_LIB_GD()
-])
+AX_MOD_UI_EN(WebCfgD, [disable or enable[=incl] compilation module UI.WebCfgD], disable, incl)
 AX_MOD_UI_EN(WebVision, [disable or enable[=incl] compilation module UI.WebVision], disable, incl, [
     AX_LIB_GD()
     AX_LIB_FFTW3()
@@ -347,13 +345,14 @@ AX_MOD_UI_EN(WebVision, [disable or enable[=incl] compilation module UI.WebVisio
 AX_MOD_UI_EN(WebUser, [disable or enable[=incl] compilation module UI.WebUser], disable, incl)
 
 # Special modules
-AX_MOD_Special_EN(SystemTests, [disable compilation module Special.SystemTests], disable)
-AX_MOD_Special_EN(FLibComplex1, [disable or enable[=incl] compilation module Special.FLibComplex1], disable, incl)
-AX_MOD_Special_EN(FLibMath, [disable or enable[=incl] compilation module Special.FLibMath], disable, incl)
 AX_MOD_Special_EN(FLibSYS, [disable or enable[=incl] compilation module Special.FLibSYS], disable, incl, [
     AX_LIB_FFTW3()
     AX_LIB_OpenSSL_opt()
 ])
+AX_MOD_Special_EN(SystemTests, [disable compilation module Special.SystemTests], disable)
+AX_MOD_Special_EN(FLibMath, [disable or enable[=incl] compilation module Special.FLibMath], disable, incl)
+AX_MOD_Special_EN(FLibComplex1, [disable or enable[=incl] compilation module Special.FLibComplex1], disable, incl)
+
 AC_MSG_RESULT(===========================================)
 
 AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}", [Modules list of included/builtin to the core.])

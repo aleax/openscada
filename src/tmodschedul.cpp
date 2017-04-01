@@ -72,7 +72,7 @@ string TModSchedul::optDescr( )
 	"------------ Parameters of section '%s' in config-file -----------\n"
 	"ModPath  <path>        Path to shared libraries(modules).\n"
 	"ModAllow <list>        List of shared libraries allowed for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
-	"                       Use '*' value for allow all modules.\n"
+	"                       Use '*' value to allow all modules.\n"
 	"ModDeny  <list>        List of shared libraries deny for automatic loading, attaching and starting (bd_DBF.so;daq_JavaLikeCalc.so).\n"
 	"ChkPer   <sec>         Period of checking at new shared libraries(modules).\n\n"
 	),nodePath().c_str());

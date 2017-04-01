@@ -651,7 +651,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly
 
     //Restore main window state
-    string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()),TSYS::base64);
+    string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()), TSYS::base64);
     restoreState(QByteArray(st.data(),st.size()));
     //Restore ToolBars icons size
     for(int i_ch = 0; i_ch < children().size(); i_ch++) {
@@ -674,7 +674,7 @@ VisDevelop::~VisDevelop( )
 
     //Save main window state
     QByteArray st = saveState();
-    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
+    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64), user());
 
     //Timers stop
     endRunTimer->stop();
@@ -1318,7 +1318,7 @@ void VisDevelop::visualItEdit( )
 	req.setAttr("path",ed_wdg+"/%2fico");
 	if(!cntrIfCmd(req)) {
 	    QImage ico_t;
-	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
+	    string simg = TSYS::strDecode(req.text(), TSYS::base64);
 	    if(ico_t.loadFromData((const uchar*)simg.data(),simg.size()))
 		scrl->parentWidget()->setWindowIcon(QPixmap::fromImage(ico_t));	//parentWidget is QMdiSubWindow
 	}

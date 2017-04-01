@@ -43,16 +43,16 @@
 #include "socket.h"
 
 #ifdef HAVE_LINUX_CAN_H
-#include <linux/can.h>
-#include <linux/can/raw.h>
+# include <linux/can.h>
+# include <linux/can/raw.h>
 
-#ifndef PF_CAN
-#define PF_CAN 29
-#endif
+# ifndef PF_CAN
+#  define PF_CAN 29
+# endif
 
-#ifndef AF_CAN
-#define AF_CAN PF_CAN
-#endif
+# ifndef AF_CAN
+#  define AF_CAN PF_CAN
+# endif
 #endif
 
 
@@ -62,7 +62,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.3.4"
+#define MOD_VER		"2.3.5"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support inet and unix sockets. Inet socket uses TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"

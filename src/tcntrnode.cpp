@@ -288,7 +288,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 
 	//Wait of free node
 	time_t t_cur = time(NULL);
-	MtxAlloc res1(dataRes(), true);		//!! Added for prevent possible attach and next disable and free the node, by mUse control
+	MtxAlloc res1(dataRes(), true);		//!! Added to prevent a possible attach and it next disable and free the node, by mUse control
 	while(mUse > 1) {
 	    mess_sys(TMess::Debug, _("Waiting for freeing by %d users!"), mUse-1);
 	    // Check timeout

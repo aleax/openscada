@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-24 19:17+0200\n"
+"POT-Creation-Date: 2017-04-01 20:14+0300\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -103,29 +103,29 @@ msgstr "Параметр Hddtemp"
 msgid "HD temperature: "
 msgstr "Температура НЖМД: "
 
-msgid "Free (kB)"
-msgstr "Вільно (кБ)"
+msgid "Free (KiB)"
+msgstr "Вільно (ГиБ)"
 
-msgid "Total (kB)"
-msgstr "Усього (кБ)"
+msgid "Total (KiB)"
+msgstr "Разом (ГиБ)"
 
-msgid "Use (kB)"
-msgstr "Використано (кБ)"
+msgid "Used (KiB)"
+msgstr "Використано (ГиБ)"
 
-msgid "Buffers (kB)"
-msgstr "Буфера (кБ)"
+msgid "Buffers (KiB)"
+msgstr "Буфера (КиБ)"
 
-msgid "Cached (kB)"
-msgstr "Кеші (кБ)"
+msgid "Cached (KiB)"
+msgstr "Кеші (КиБ)"
 
-msgid "Swap free (kB)"
-msgstr "Своп вільно (кБ)"
+msgid "Swap free (KiB)"
+msgstr "Своп вільно (КиБ)"
 
-msgid "Swap total (kB)"
-msgstr "Своп усього (кБ)"
+msgid "Swap total (KiB)"
+msgstr "Своп усього (КиБ)"
 
-msgid "Swap use (kB)"
-msgstr "Своп використано (кБ)"
+msgid "Swap used (KiB)"
+msgstr "Своп використано (КиБ)"
 
 msgid "Memory info"
 msgstr "Інформація про пам'ять"

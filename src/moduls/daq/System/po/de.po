@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-24 19:17+0200\n"
+"POT-Creation-Date: 2017-04-01 20:14+0300\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -108,29 +108,29 @@ msgstr "Parameter Hddtemp"
 msgid "HD temperature: "
 msgstr "HD-Temperatur: "
 
-msgid "Free (kB)"
-msgstr "Frei (kB)"
+msgid "Free (KiB)"
+msgstr "Frei (GiB)"
 
-msgid "Total (kB)"
-msgstr "Total (kB)"
+msgid "Total (KiB)"
+msgstr "Total (GiB)"
 
-msgid "Use (kB)"
-msgstr "Benutzung (kB)"
+msgid "Used (KiB)"
+msgstr "Verwendete (GiB)"
 
-msgid "Buffers (kB)"
-msgstr "Puffer (kB)"
+msgid "Buffers (KiB)"
+msgstr "Puffer (KiB)"
 
-msgid "Cached (kB)"
-msgstr "Cached (kB)"
+msgid "Cached (KiB)"
+msgstr "Cached (KiB)"
 
-msgid "Swap free (kB)"
-msgstr "Swap frei (kB)"
+msgid "Swap free (KiB)"
+msgstr "Swap frei (KiB)"
 
-msgid "Swap total (kB)"
-msgstr "Swap total (kB)"
+msgid "Swap total (KiB)"
+msgstr "Swap total (KiB)"
 
-msgid "Swap use (kB)"
-msgstr "Swap benutzt (kB)"
+msgid "Swap used (KiB)"
+msgstr "Swap benutzt (KiB)"
 
 msgid "Memory info"
 msgstr "Speicherinformation"

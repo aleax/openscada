@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-24 19:17+0200\n"
+"POT-Creation-Date: 2017-04-01 20:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,28 +105,28 @@ msgstr ""
 msgid "HD temperature: "
 msgstr ""
 
-msgid "Free (kB)"
+msgid "Free (KiB)"
 msgstr ""
 
-msgid "Total (kB)"
+msgid "Total (KiB)"
 msgstr ""
 
-msgid "Use (kB)"
+msgid "Used (KiB)"
 msgstr ""
 
-msgid "Buffers (kB)"
+msgid "Buffers (KiB)"
 msgstr ""
 
-msgid "Cached (kB)"
+msgid "Cached (KiB)"
 msgstr ""
 
-msgid "Swap free (kB)"
+msgid "Swap free (KiB)"
 msgstr ""
 
-msgid "Swap total (kB)"
+msgid "Swap total (KiB)"
 msgstr ""
 
-msgid "Swap use (kB)"
+msgid "Swap used (KiB)"
 msgstr ""
 
 msgid "Memory info"

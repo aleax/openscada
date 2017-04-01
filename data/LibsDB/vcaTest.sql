@@ -45,9 +45,9 @@ INSERT INTO "wlb_test_incl" VALUES('DiagramTest','tr1','/wlb_originals/wdg_Diagr
 INSERT INTO "wlb_test_incl" VALUES('DiagramTest','tr2','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;geomH;geomZ;trcPer;tSize;sclHor;sclVer;parNum;prm0addr;prm0bordU;prm0color;prm0prop;prm1addr;prm1color;prm1prop;prm2addr;prm2bordU;prm2color;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','lst1','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl1','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;',2);
-INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl2','/wlb_originals/wdg_FormEl','perm;geomX;geomY;geomW;geomH;geomZ;elType;value;',2);
-INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl3','/wlb_originals/wdg_FormEl','perm;geomX;geomY;geomW;geomH;geomZ;elType;cfg;',2);
-INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl4','/wlb_originals/wdg_FormEl','perm;geomX;geomY;geomW;geomH;geomZ;elType;cfg;',2);
+INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl2','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;',2);
+INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl3','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;cfg;',2);
+INSERT INTO "wlb_test_incl" VALUES('FormElTests','FormEl4','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;cfg;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','comb1','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','chk1','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','text1','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;',2);
@@ -57,7 +57,7 @@ INSERT INTO "wlb_test_incl" VALUES('FormElTests','line2','/wlb_originals/wdg_For
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','line3','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;view;cfg;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','line4','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','line5','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;',2);
-INSERT INTO "wlb_test_incl" VALUES('FormElTests','line6','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;',2);
+INSERT INTO "wlb_test_incl" VALUES('FormElTests','line6','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','line7','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;view;cfg;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','bt1','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;color;',2);
 INSERT INTO "wlb_test_incl" VALUES('FormElTests','bt2','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;mode;',2);
@@ -83,6 +83,8 @@ INSERT INTO "wlb_test_incl" VALUES('mn_gen','prescrRunSimple','/wlb_Main/wdg_pre
 INSERT INTO "wlb_test_incl" VALUES('ElFigureTests','ElFigure','/wlb_originals/wdg_ElFigure','geomX;geomY;geomW;geomH;lineWdth;elLst;','');
 INSERT INTO "wlb_test_incl" VALUES('mn_gen','ElFigureTests1','/wlb_test/wdg_ElFigureTests','geomX;geomY;geomW;','');
 INSERT INTO "wlb_test_incl" VALUES('mn_gen','prt','/wlb_originals/wdg_Protocol','name;geomX;geomY;geomW;geomH;geomZ;tSize;trcPer;viewOrd;col;itProp;it0lev;it0fnt;it0color;it1lev;it1fnt;it1color;','');
+INSERT INTO "wlb_test_incl" VALUES('FormElTests','tree','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;elType;items;','');
+INSERT INTO "wlb_test_incl" VALUES('FormElTests','tbl','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;elType;items;','');
 CREATE TABLE 'wlb_test_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_test_io" VALUES('kompr','geomW','584',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('kompr','geomH','341',32,'','','','','','','','','');
@@ -180,8 +182,8 @@ INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','105',32,'','','tr2','','
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomW','342',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomH','144',32,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1374518072',0,'','','tr1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','53.2663',32,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1491065516',0,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','7.69231',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','active','1',32,'','','tr1','','','','','','');
@@ -193,8 +195,8 @@ INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CP
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0bordU','100',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0color','lightgreen',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Tests "FormEl"',32,'','','','Тести "FormEl"','','Тесты "FormEl"','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','447',32,'','','','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','253',32,'','','','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','445',32,'','','','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','250',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','backColor','#EEEEFF',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','bordWidth','2',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','bordColor','blue',32,'','','','','','','','','');
@@ -205,23 +207,23 @@ INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','100',32,'','','text1',''
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','Text editor with words wrapping',0,'','','text1','Текстовий редактор з переносом за словами','','Текстовый редактор с переносом по словам','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','7',32,'','','FormEl2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','30',0,'','','FormEl2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','413',32,'','','FormEl3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','10',32,'','','FormEl3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','412',32,'','','FormEl3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','4',32,'','','FormEl3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','30',32,'','','FormEl3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','110',32,'','','FormEl3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','10',32,'','','FormEl3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','6',32,'','','FormEl3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','1:0:100:1:10',0,'','','FormEl3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','413',32,'','','FormEl4','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','132',32,'','','FormEl4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','412',32,'','','FormEl4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','126',32,'','','FormEl4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','30',32,'','','FormEl4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','109',32,'','','FormEl4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','16',32,'','','FormEl4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','7',32,'','','FormEl4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','1:0:100:1:10',0,'','','FormEl4','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','4',32,'','','comb1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','226',32,'','','comb1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','88',32,'','','comb1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','97.786',32,'','','comb1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','191.75',32,'','','comb1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','84.214',32,'','','comb1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','comb1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','17',32,'','','comb1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','comb1','','','','','','');
@@ -242,27 +244,27 @@ Value5',0,'','','comb1','Значення 1
 Значение5','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Flag',32,'','','chk1','Прапорець','','Флажок','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','4',32,'','','chk1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','161',32,'','','chk1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','107',32,'','','chk1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','191.75',32,'','','chk1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','90.914',32,'','','chk1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','chk1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','11',32,'','','chk1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','chk1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','2',32,'','','chk1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','4',32,'','','text1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','58',32,'','','text1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','47',32,'','','text1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','150',32,'','','text1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','19',32,'','','FormEl2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','FormEl2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','120',32,'','','FormEl2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','FormEl2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','226',32,'','','FormEl2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','98',32,'','','FormEl1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','226',32,'','','FormEl1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','FormEl1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','220',32,'','','FormEl2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','4',32,'','','FormEl1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','220',32,'','','FormEl1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','120',32,'','','FormEl1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','FormEl1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','18',32,'','','FormEl1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','6',32,'','','FormEl1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','50',0,'','','FormEl1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','205',32,'','','FormEl2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','132',32,'','','FormEl2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','items','Val1
 Val2
 Val3
@@ -276,22 +278,22 @@ Val4',0,'','','lst1','Знач1
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','5',32,'','','lst1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','Val2',0,'','','lst1','Знач2','','Знач2','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','lst1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','58',32,'','','lst1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','lst1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','100',32,'','','lst1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','4',32,'','','lst1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','105',32,'','','lst1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','55',32,'','','lst1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','9',32,'','','lst1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','309',32,'','','lst1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','110',32,'','','line6','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','306',32,'','','lst1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','130',32,'','','line6','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','line6','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','34',32,'','','line6','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','172',32,'','','line6','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','26',32,'','','line6','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','174',32,'','','line6','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','view','5',32,'','','line5','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','5',32,'','','line5','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','line5','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','line5','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','78',32,'','','line5','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','92',32,'','','line5','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','34',32,'','','line5','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','88',32,'','','line5','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','26',32,'','','line5','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','h:mm:ss',32,'','','line4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','675',0,'','','line4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','view','4',32,'','','line4','','','','','','');
@@ -300,27 +302,27 @@ INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','4',32,'','','line4','','
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','line4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','85',32,'','','line4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','4',32,'','','line4','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','34',32,'','','line4','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','1:500:0.5:: kgN/sm2:3',32,'','','line3','1:500:0.5:: кгс/см2:3','','1:500:0.5:: кгс/см2:3','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','26',32,'','','line4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','1:500:0.5:: kgN/sm2:2',32,'','','line3','1:500:0.5:: кгс/см2:3','','1:500:0.5:: кгс/см2:3','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','view','3',32,'','','line3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','0',8,'','','line3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','2',32,'','','line3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','line3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','line3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','110',32,'','','line3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','9',32,'','','line3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','10:120:1:: tone/hour',32,'','','line2','0:120:1:: т/год','','10:120:1:: т/ч','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','186',32,'','','line3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','line3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','4',32,'','','line3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','10:120:1:: t/h',32,'','','line2','0:120:1:: т/год','','10:120:1:: т/ч','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','140',32,'','','line3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','view','2',32,'','','line2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','0',14,'','wdg:../a_extValue','line2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','4',32,'','','line1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','9',32,'','','line1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','line1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','4',32,'','','line1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','70',32,'','','line1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','line1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','line1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','Edit line',0,'','','line1','Рядок редагування','','Строка редактирования','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','154',32,'','','text2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','58',32,'','','text2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','47',32,'','','text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','150',32,'','','text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','100',32,'','','text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','8',32,'','','text2','','','','','','');
@@ -328,9 +330,9 @@ INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','text2','',
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','1',32,'','','text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','Text editor without word wrapping',0,'','','text2','Текстовий редактор без переноса слів','','Текстовый редактор без переноса слов','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','wordWrap','0',0,'','','text2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','106',32,'','','line2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','9',32,'','','line2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','77',32,'','','line2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','74',32,'','','line2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','4',32,'','','line2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','67',32,'','','line2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','line2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','1',32,'','','line2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','line2','','','','','','');
@@ -400,32 +402,32 @@ INSERT INTO "wlb_test_io" VALUES('MediaTests','geomZ','3',32,'','','mov1','','',
 INSERT INTO "wlb_test_io" VALUES('MediaTests','backColor','',32,'','','mov1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('MediaTests','src','pump',40,'','','mov1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('MediaTests','type','1',32,'','','mov1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','name','Tests set',32,'','','','Збірка тестів','','Сборка тестов','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','dscr','Mnemo: "Tests set"',32,'','','','Мнемосхема: "Збірка тестів"','','Мнемосхема: "Сборка тестов"','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','name','Tests collection',32,'','','','Збірка тестів','','Сборка тестов','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','dscr','Mnemo: "Tests collection"',32,'','','','Мнемосхема: "Збірка тестів"','','Мнемосхема: "Сборка тестов"','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','0',40,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','630',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','backColor','#5A5A5A',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','bordColor','black',32,'','','','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','258',32,'','','media','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','253',32,'','','media','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomW','283',32,'','','media','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','227',32,'','','media','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','3',32,'','','diagTests','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','219',32,'','','media','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','2',32,'','','TextEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','449',32,'','','diagTests','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','202',32,'','','diagTests','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','197',32,'','','diagTests','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomW','461',32,'','','diagTests','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','170',32,'','','diagTests','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','450',32,'','','TextEl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','449',32,'','','TextEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomW','459',32,'','','FormEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','341',32,'','','FormEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','2',32,'','','FormEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','2',32,'','','FormEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','name','Pi_нд',32,'','','Pi_нд','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','451',32,'','','Pi_нд','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','113',32,'','','Pi_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','472',32,'','','Pi_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','111',32,'','','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','pName','',34,'Параметр|NAME','prm:/LogicLev/experiment/F3/NAME','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','pVal','0',34,'Параметр|var','prm:/LogicLev/experiment/F3/var','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','1182710881',0,'','','line5','','','','','','');
@@ -444,8 +446,8 @@ INSERT INTO "wlb_test_io" VALUES('protTest','geomW','735',32,'','','prt2','','',
 INSERT INTO "wlb_test_io" VALUES('protTest','geomH','237',32,'','','prt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('protTest','tSize','360',32,'','','prt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('protTest','trcPer','1',32,'','','prt2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','451',32,'','','Ti_нд','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','158',32,'','','Ti_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','472',32,'','','Ti_нд','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','152',32,'','','Ti_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','pName','',34,'Параметр|NAME','prm:/LogicLev/experiment/P3/NAME','Ti_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','pVal','0',34,'Параметр|var','prm:/LogicLev/experiment/P3/var','Ti_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','geomX','212',32,'','','Text2','','','','','','');
@@ -474,9 +476,9 @@ INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','6',32,'','','line6','','
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','line6','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','1182710881',0,'','','line6','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','view','6',32,'','','line6','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','299',32,'','','line7','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','9',32,'','','line7','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','line7','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','239',32,'','','line7','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','4',32,'','','line7','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','65',32,'','','line7','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','20',32,'','','line7','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','3',32,'','','line7','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','line7','','','','','','');
@@ -492,37 +494,37 @@ El 4','','El 1
 El 2
 El 3
 El 4','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Simple button',32,'','','bt1','Проста кнопка','','Простая кнопка','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Simple\nbutton',32,'','','bt1','Проста\nкнопка','','Простая\nкнопка','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','4',32,'','','bt1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','184',32,'','','bt1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','bt1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','150',32,'','','bt1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','58.066',32,'','','bt1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','35',32,'','','bt1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','12',32,'','','bt1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','bt1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','3',32,'','','bt1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','color','',8,'','','bt1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Fixed',32,'','','bt2','Фіксована','','Фиксированная','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','106',32,'','','bt2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','184',32,'','','bt2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','bt2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Fixed',32,'','','bt2','Фіксована','','Фиксиров.','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','64.968',32,'','','bt2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','150',32,'','','bt2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','58.066',32,'','','bt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','35',32,'','','bt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','13',32,'','','bt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','bt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','3',32,'','','bt2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','value','1',0,'','','bt2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Colored button',32,'','','bt3','Кольорова кнопка','','Цветная кнопка','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','208',32,'','','bt3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','184',32,'','','bt3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','bt3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','name','Colored\nbutton',32,'','','bt3','Кольорова\nкнопка','','Цветная\nкнопка','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','125.934',32,'','','bt3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','150',32,'','','bt3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','58.066',32,'','','bt3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','35',32,'','','bt3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','14',32,'','','bt3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','bt3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','3',32,'','','bt3','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','color','green',0,'','','bt3','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','310',32,'','','bt4','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','163',32,'','','bt4','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','100',32,'','','bt4','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','81',32,'','','bt4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','187',32,'','','bt4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','150',32,'','','bt4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','65',32,'','','bt4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','65',32,'','','bt4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','15',32,'','','bt4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','bt4','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','3',32,'','','bt4','','','','','','');
@@ -588,9 +590,9 @@ INSERT INTO "wlb_test_io" VALUES('TextEltests','alignment','10',32,'','','text7'
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','newText','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','FormEl1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1362235800:1374518072:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1362235800:1374518072:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1362235800:1374518072:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1415818374:1491065515:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1415818374:1491065515:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1415818374:1491065515:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','5',32,'','','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','4',32,'','','TextEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','6',32,'','','Ti_нд','','','','','','');
@@ -621,7 +623,7 @@ arc:(72.818|134.529):(87.182|134.529):(80|80):(25|80):(80|135):5:#ffff00:2:#0000
 arc:(74.773|119.657):(85.227|119.657):(80|80):(40|80):(80|120):5:#ffff00:2:#0000ff:2
 ',32,'','','ElFigure','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','4',32,'','','ElFigureTests1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','259',32,'','','ElFigureTests1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','254',32,'','','ElFigureTests1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','8',32,'','','ElFigureTests1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomH','143',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomZ','1',32,'','','tr2','','','','','','');
@@ -636,9 +638,9 @@ INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','304',32,'','','ElFigureTests1
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','2',32,'','','FormEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','name','',32,'','','prt','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','449',32,'','','prt','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','353',32,'','','prt','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomY','348',32,'','','prt','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomW','450',32,'','','prt','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','237',32,'','','prt','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','222',32,'','','prt','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','1',32,'','','prt','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','tSize','360',32,'','','prt','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','trcPer','1',32,'','','prt','','','','','','');
@@ -654,6 +656,37 @@ INSERT INTO "wlb_test_io" VALUES('mn_gen','it1color','red',0,'','','prt','','','
 INSERT INTO "wlb_test_io" VALUES('protTest','geomZ','0',32,'','','prt1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('ElFigureTests','name','Tests "ElFig"',32,'','','','Тести "ElFig"','','Тесты "ElFig"','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','mode','1',0,'','','bt2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','cfg','yyyy-MM-dd hh:mm:ss',32,'','','line6','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','FormEl2','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','FormEl3','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','FormEl4','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','306',32,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','62',32,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','85',32,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','20',32,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','8',32,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','items','/cat1/cat2/el1
+/cat1/el1
+/cat1/el2
+/el1',0,'','','tree','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomX','254',32,'','','tbl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomY','150',32,'','','tbl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','157',32,'','','tbl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomH','90',32,'','','tbl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomZ','21',32,'','','tbl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','elType','9',32,'','','tbl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','items','<tbl colsWdthFit="1">
+ <h><s>Header1</s><s>Header2</s></h>
+ <r><s>String</s><i>1234</i></r>
+ <r><b>1</b><r>3.14159265</r></r>
+</tbl>',0,'','','tbl','<tbl colsWdthFit="1">
+ <h><s>Заголовок1</s><s>Заголовок2</s></h>
+ <r><s>Рядок</s><i>1234</i></r>
+ <r><b>1</b><r>3.14159265</r></r>
+</tbl>','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','tbl','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('FormElTests','geomW','105',32,'','','tree','','','','','','');
 CREATE TABLE 'wlb_test_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_test_mime" VALUES('bake','image/png;9.79492','iVBORw0KGgoAAAANSUhEUgAAAKAAAADICAYAAABvaOoaAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI
 WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1wcEDiUDhclhJwAAAB10RVh0Q29tbWVudABDcmVhdGVk
@@ -1460,7 +1493,7 @@ QABAQAAQEADmfKIDcM4npp2dnZ1dOGEBUBEQAAQEAAEBQEAAEBAAEBAABASAOZ/oAJzziWlnZ2dn
 F05YAFQEBAABAUBAABAQAAQEAAQEAAEBYM4nOgDnfGLa2dnZ2YUTFgAVAQFAQAAQEAAEBAABAQAB
 AUBAAJjziQ7AOZ+YdnZ2dnbhhAVARUAAEBAABAQAAQFAQABAQAAQEADm/gBlUzvF+pHDNQAAAABJ
 RU5ErkJggg==');
-CREATE TABLE 'wlb_test' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+CREATE TABLE 'wlb_test' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_test" VALUES('kompr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAlCAIAAAB9MnhgAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 YklEQVRYhe1YsY7aQBAd48WLLIyQDMjQQEGBkEDwC/d3tHwTPcUVp6AUd5FOIVywA4ZdefHuXrEn
 gjjbIRCMiPyKwbwZiXnsG49BG4/HlFK4T2CMEaXUdd3pdBqGYT6f3+12hxEA0iERQpxzKWVCvW3b
@@ -1473,7 +1506,7 @@ EUIajYamaSr78vLddT3f/9nr9Siltm3vffz25j0/f3PdRRBc9NfyxwwsFgvlPymlEMI0ze12CwDF
 YrFSqeyr6/W6bduMseFwqBgp5eury1iQyzHHcSil/X5//9xLqdB1LAR1HIcQ0m6399/i09PXzSZY
 rZaXdA8A2mg0UuN7ChzHKZVKh4wQYrlcSSk1jVer1aN6z1sLITebX81m8yi1Xm84h+XyhxD87O5N
 04z4iZCA+Xw+n8/jsp7nxaVms9lffdDpuPu7UCbg1kCR+/lekM/n3wGfkdnEFEBCyQAAAABJRU5E
-rkJggg==','/wlb_originals/wdg_Box','','','',200,'geomW;geomH;backColor;bordWidth;','');
+rkJggg==','/wlb_originals/wdg_Box',0,'','','',200,'geomW;geomH;backColor;bordWidth;','');
 INSERT INTO "wlb_test" VALUES('protTest','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 DklEQVRoge2Yy07bQBSG/zNzbMfOxU5CUItCBFSK1BUPwRvyBjxMJZZds2u5iIoWx4mcKo7Hpwu3
 iBZXKiAYqOZbjOxzkc5nS2N5aDD4MJl00IQxRmvdFC+15sYW3/cbW54CERwff+eDg+jwcArg9PTT
@@ -1484,7 +1517,7 @@ J3J0tLQ9xkMwRgDNVZWVpWbm2SztdLrMHoD5fNZud+vzBZEKoMVi7vt+EAREv700pSSKIisCaVoC
 zFtb2Nm56nZ7ZUmLxQWzFwQtrSnPL5XSQRBkWTocjohUns/Lcr1c5mEYeZ5XFEUcJ+Px216v+VTm
 qbm8LIgyDkNvf/8dAGMM8wSAiNQnQkT1+cKkjjBznQXwK4VWKwgCFpGbyB/Xt4vr1N21sfg2jcVh
 qAFwGLY2NpJHPw76h+ub27trY/HfGn9GmBX+g13ICdjGCdjGCdjGCdjGCdjGCdjGCdiGReqfy9dH
-PTYRfVQqtj3MAzFm+QOTos0i34dDswAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','
+PTYRfVQqtj3MAzFm+QOTos0i34dDswAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'
 ','
 ','',-1,'name;geomW;geomH;backColor;bordWidth;','');
 INSERT INTO "wlb_test" VALUES('test1','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAAx1AAAMdQEteJR1AAAQ
@@ -1560,7 +1593,7 @@ HRvKOpiA/M7yznuqOjBQ3qbo2LlWL6AV1cjW7W7Q57ErVfzGnoZ1KkFdPqbdXa+vkbUJacU71+rb
 i/RsUL5F03l3ZQcCZIFnz/+QLRUBAHjVYKstzOYw4b4Fm0oiyRaiVxd9YjatJJszaU4RgL+qMNvg
 JL1RW11RvitELblW6otyEzg4ZrbVK7IRGBpYtFXlZwvYcP+CQyEUFIjpQ4YQm05U5AlmVvA47q6V
 55q9lC1grS/K98eAOcdKvSIXJ8Eho61ekc2kQX0L9spsqZSHDCy6c7nsIhlrzBSH4ai2QDJvJ4IJ
-e50i3xagzF5rXVF+NAm43e7/BY4saNTcWQ4yAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
+e50i3xagzF5rXVF+NAm43e7/BY4saNTcWQ4yAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 en=true;','JavaLikeCalc.JavaScript
 en=true;','',-1,'en;active;geomW;geomH;geomMargin;backColor;backImg;','');
 INSERT INTO "wlb_test" VALUES('DiagramTest','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAVCAIAAAB5SH/NAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
@@ -1583,62 +1616,63 @@ VuEcZAEovUkYP+ScjurhYC9pM3flyhXHGdx7v4IVWIE/IH5XnhcnmHwKjSR6KknfAcMwgiAwDKPX
 T08XCoXl5eXFxcW3ZoMguHHjxs7OzsLCwt7e3sAMs7OzUsrLly8/evSoVCoN5FiWdfv27Uqlsr+/
 v7m5+das4zjz8/NbW1tzc3Obuy3x/Y8/v/cfmfzt11/e0+q/i3w+f+3atXq9rpSK4zgIgu3t7SAI
 nJEJs2c5obBPCQ7DfYQNiLT92RdffSTJb8L3fX90VGeGfN9vNBrDw8NmbsT3/Z4w/gaGGJVZL2Zi
-hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1374518074);
-INSERT INTO "wlb_test" VALUES('FormElTests','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','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
+hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1491065530);
+INSERT INTO "wlb_test" VALUES('FormElTests','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 ev_cur = ev_rez = "";
 off=0;
 while(true)
@@ -1675,7 +1709,7 @@ while(true)
 }
 event=ev_rez;
 
-line3_value+=0.1;',1000,'name;geomW;geomH;backColor;bordWidth;bordColor;',1398169087);
+line3_value+=0.1;',1000,'name;geomW;geomH;backColor;bordWidth;bordColor;',1491065636);
 INSERT INTO "wlb_test" VALUES('TextEltests','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAsCAIAAABaPSmoAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAOmElEQVRogdVYeXRUZZb/va32PZVUtqpsRUISQnYSlkiAgAeEAC5oxL0d
 wTnqGc/0mR45itNnsHva7jPdzIw9PdougESUARFpBBUFAdkSErKQBLKnslZSlapK7e+9b/5IUELY
@@ -1743,7 +1777,7 @@ ay55ZNro441Bt3FVe4dt470PnLPPiKJVbh8vl3Iz4uQc+yOdq9kDgIjPKrl+F9Vqx33LhIceDikU
 uNF14zQI6BgQInREylJ5VpWEowFIlKaiXJMgkqMtsro+FrzOkqz4pD6UZiYMjXyrSsrd9DuExur1
 YQjYe4ABoFTe7L8sAEilkMvujD0D9NTsDnVJmUxld821dw0BH3yN8PvGPvko2N4IZxPHZCj6Lkyc
 2qlTpzZufPS6Prdsko64qYUPhKb+eg2m9Vrl/x05OSpKJhPT0qa82z8RtLTQ/wchCi3G/U9zOQAA
-AABJRU5ErkJggg==','/wlb_originals/wdg_Box','','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1374518075);
+AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1374518075);
 INSERT INTO "wlb_test" VALUES('MediaTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAAA4CAIAAADCemklAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAPn0lEQVRogdVaaWxc13W+9+3vzZs3O7chh0NS3ESK2mjJlC1ZkmE5cVMX
 TWGndtq0TZMWCBq0TlsYRfPHaIq2aV3kj+vaaBIgLdK6ieV4SbwFtRztkkVtpEhxX4fiDIec/e33
@@ -1815,7 +1849,7 @@ OXuKdIpOJJoImSz947Ecm7Xvc8qXFCsX5G2nKBlkQaUCtXI8a7ncYs6EXNLAy4IhtHI+hxFGCAyT
 MGs0uEoUY8zzfPfBvfd175ucmh0Znch7WrCmsqW5gVkpwOQbA8DBw4fVZ/72gw/ORmbnSpQZN2Mo
 aPAs9U4iSWHAc4XcBsEEKpwwrr7usKqcZc9nGGeH11uor2ysSlAUBQB1tTWhuhq06awzX6HIf+c4
 bu++vW6PN5FIblE1KwHQdV1VNcuyCqKt72HlGqyTHiGgKLqiwl9VVUnTNEIIHzhgHT9ufazB1w6y
-kut8kqcJ2b7+vLlnjBHGFMPQFEWdOcP8L7jtqEgbhA+xAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
+kut8kqcJ2b7+vLlnjBHGFMPQFEWdOcP8L7jtqEgbhA+xAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 ev_cur = ev_rez = "";
 off=0;
 while(true)
@@ -1828,69 +1862,81 @@ while(true)
 }
 event=ev_rez;','','',200,'name;geomW;geomH;backColor;bordWidth;bordColor;','');
 INSERT INTO "wlb_test" VALUES('mn_gen','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
-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
-RK5CYII=','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1374518075);
+AA7EAAAOxAGVKw4bAAAQTklEQVRogdVZSY8cyXV+seZWWXt1LV1cutnN4SaNZsShRtssFGRLtmEb
+0MGGDch/wIBuPhiGL4ZhwBbgkw3BJx8MrzAkQLBkj3TTMgvGM6I4Iw572Du7u7qqu6qyMrMyMyIj
+wodiU81NoyElwHqHqswXkfG+l++970Vmoq985d/bbcYYpZQihISQeZ5TSvtheuns+cP+9nQac8YA
+IWPMQSwuLJ873N8CAIwhMwSoDdORNlD0fTgmpVKDMX7jRvjMM36xaOARkiTom698/VSH5lrHOaq7
+NMpkNB6BVmmSJGlGCFZKGWMQQgAIIcAYzxASQggh9ETXrdWHtmN7nl8u+VLkYRgZBDXhffzpRu/2
+aDgUyTTGFFPC54j37KX69urufr8HgPzGfCLl7jBDAAc6O47sEx9ZqpdKeV4sldZtK1k+91StUvzv
+b72S56raaCycmt/vD1zXHY010fCJ5y5TSl997fWC5y0vtX+wlvrVE97uG4zjOI4woQhBLqRl29oY
+hJCUkhJKGU3DgEqZMYaQ0Vrn7+8OSqXGXLX23s3rUsq1FY0sZy+nL3z02e99/zvlYjHNhm++us85
+kyJh3EIUslSVsEyFXJzvHHfAoggAtNYEs8WlTq1S3O8Nmq1mHMVxGJaqNSllkmZaaYXpeBx4fmGc
+qYVa7XA8MW6nEKWiWC+e6NYAAGAahcHwMM9zpVW91fUK3szK/tp71C9W5uebs3O3YDjnlKDl5fMz
+jQZYqvE0Sy5deubBBMi1KdULgZlMM9Qpe8eHbM4AAGN8wbFqBwdwcFBmNK3PzXc5wggZ02icZBw6
+HVj4/gq3uBTys5c/plTueYUmUggj0HVAR1Gtcqi2jy1/R+/VPKrybG1t07boeDKZa8yNRqNiqSyz
+hFnOfKeNEDrc3xv0MqOEkKZaLR4cjFzPxcgojSjBNvdqjRNzBE+nU9t2KSVHNvAsAhtf+NLacHUE
+4F56rvfXf7+2M2p1ui9/lPR77jiAUwva4rxULD6qSH62xKFNtTGMkXEwYYxWqvVWq3XfpEqt3rbZ
+3dNms33vOBsOB9NpGE7C7slTlOCZtlZrAVgY4ynAPkAFwGDYnBQPx7crHf+ta9qmyGiw7cdD/lOh
+lLKFhYUnWcL3Pcfh1VqdUXpMjQDAGJMCnAKIAQyDcx2UH6RzfnZxngRDE4RwzxWPJU+8AACljDF2
+nzLP5fbhbYQK21f/cF8ESTI9sIvJd1+93Rsd7ry60XQxKvklvr0FhMgnsv4kF/8MsW37rF8J9vrf
+4reCJHhn5brrFaIf/ev29s5swtmzZy9fvgwAL7744pMY+mAHbu1PvEqVcI4BMEA+M18trO70xknW
+KJUb7kOuEkJ86+1rNTEPAOPxeHNzCwDOnT/fbpuzZ5c9zzX6kd3tQzpA3QzfYUCOcTiNZ8eM0lvJ
+j0M5ia1cx+aK8ymHWABgjJG5SjLteyXOpcVYpjQg/MDKxPMKIAAAir7f7XYRxlIIy7IG/X7PmFZz
+rgLVX4ADwzR7473bcRT5ldpCq71zeDA6PMQYz7c7X73xV2ubtwABuPAvv/WNdweLUpfCUDfMLcus
+bQyGYFSpWm+1O8Syd9bfl1ISyrsLZxBC5SyzjipUgzHG2NxKkmhnZw9jDADImPn57i/AgVwKk2XZ
+NHY8X+WSW3alVldKUcowEJQiQAAeIIMSU41lfX+iLbJZKvlWlUVJsnoQLxb70378qbN3qSwDAIuS
+yyeb10YpAERhtLOzAwAXLl3EmF28eN51XSmfqHZ/6sC5+fnnn79s2y4hGGOitQKA9V5Pg/nH7rfh
+i6C1xhh7WN3cHZtYWALZBekRnSFZ9nnDRpSSeq0ShoF9jNWN0QDIGE0cr3Xy9EueDwCE0g6AISSS
+2nML2HYBoD+e4LWNx0M/HA5pHE+Sqb+x/v65i89ySmdlff39G+sb647nt+a7eZ4ncfTUiROn3d4z
+T5/sDQ5u7IyLyORidOLECQAYjcdBkihjWq02wWi2tFLqrdUdkRa73S7OBSyevmvVtu3vv/Hm9uqt
+yWSytbX1eNABwAGY656ktVqr2eo2W12t1SgYu45DMPndFz8HL6JEiDiJLUrjXCElT83NxVFkSPnZ
+iydxOjx18k5LrtceUou2xfvBpKgLlFKC7iEczrlSamVlZTKZPB50H8AGiAACIWiapmEYAIBS+jCK
+qrkkGBsDCKEgTW/vbrcb9e0gbrhWu1IE8N7b2cFhuFQrYHx/8zoulLKPLJ3deS996Gie5wBgP+5G
+wgcYAgAA55weHgbvvutQyvJcUsqGJtHaEEJmp1i1BrvIQdXxREYHam9Pcf4cAKwFH2BjfR0AnJs3
+N/HDQDLGlFJp+nD3PhB9/6gdCSHohQvTcnlYLpdv3LhhzF6SYK11oQAA3eXls1EUWZbFGBuNRpVK
+ZX//9vOfkQAWJWQ4HpxfnrctCwBe/85/DrfeVdoobTjFyO9+/kt/RAh5/fXyf33nYSgQsm1bKfV4
+DsijBsw5p2EYGoNWV99USrXboyCIAAzGlTievv32bqOxzDljjAVBAADTaXL95u6F5QWM8XCSf+8H
+//v5q58CgOH2jXD9NSG1VNqz6VpUfum3/4AQ8igQUogoirIse9SEnyECg12E8RhgFgHf96No23W9
+UunHjnPiueekECiOC657azj8eJLsN5sfme3VKpUKY4HnuSXf54wVPPcglEeA7oGitTYPbhQwIAuZ
+xACAbdvFYjEMww+LfnnBiDEKEaQpnDplEsXp4eF0Mtk4cwYrxbT2+v3LUuacvwNQLZXWVlZwsXia
+czSLwKO6DzL3JAPGGKEH8BewEQYXMUiI43gwGHxY9ABQyOHVPahWgXMIAgAuaBjG5XKrWp0SMnSc
+F4UQUkrP+7Ug+FuAp2o1lKZWs+nBUQR+PkMPwAcACpDdGalWq2fOnDHG7O7u3h1vtVphGMZxfFfT
+6XTyPO/3+3c1A9OYm8sIEadP1w8Ps+5im2I8ZgxPJrJarR83Z1nFLMultI2ZANzZ7RkwcCw57oNJ
+CSL4/ryXSuVCAgAcIEQBclAGNjY2ZhE4TkTD4VBKeVwzGAzuI6teb2SMqVQqjNWaTRPHhqZpLYrW
+m00ZRTen01GeyzzPhciE2CXEApgKYY9Go1kK5Xk+mQRBGDLK9vsDkBIAttdWgt0VDoCP2rAL0cFg
+MN/tUkpQcQ4QMMYRQkrlGBNA6Au/9+XZli7Pc8b5cYeNUkobyh6+z5dZijCdjSopD3q7dHm5ur19
+czJxbfuTnc5/BMEXOE98/xv7+8+Nx0TrycJC4W4Ru0589ZML76/dDoLQxfKzn3/h1k9+9MN//ovx
+aDxLeoQQGGNT+e1/+LPf+eO/AfBazZZWatDbcTwfIyTTpHN6SeViMjqUMu90urZzz/OEFFl/ZztN
+00Kp0uzM3+dAHAbDQV/JXIiss7CkckWjKCyXL47HW46zjXGDkKEx2XDYyrKN6bTj+x8djUZ3aVRK
+WamUrny8NFvu9vrKD//pz8fCGRaex4QYA1KIjfd/hFT6ufN7X/+7P33q6l+ySa9SKlSbZYyxYxeS
+NCXi0HLcp87MO44dTMJSkd8LkkPrwkNvPwDsS+2XOMWo2T4bGxKMytT3/XK5PJ1Wer03+/1qqVRJ
+00zKqZSo3b5cLBZnjQzuFHFsjHn35nqv12fMSvZv2DhvLT3/mQufBso1mGK18dU/+bJC6DDSJN3e
+29vDlCJMmYWNzg1ChFJCqDYglcZCJmk6DgLbsqbTyBhsOXYSx5ZlgdEakNHa87xxMOaM1RtzlBBl
+jGU7yGiEkcmkjRSdkXGpVCoUnkUo6vdHSslare04i47jBEHAGDsegdfffu8b//PaeDw+d6p1dk4D
+wNpb3715azuOM46QXS5kiW7Y0nfsWAAA8gt+wS/kuSKEEIKV0sYYgzCjBAA45wgAY1wslhDCSinq
++4QQAAOAEMYYQblcNtrM2qLrelIIQrDWmhLsWoz6vr+6unr16tV33nlHKVUul42hu7s9xtjS0qcZ
+Y/dFYG1zLwwjSikQaNTKEcApK0r3fmhc3I9VSdLn27pVUAn3phIAYDQaghIi1xhjx+ZJmhGMueMy
+ShxG02Q6HI48zxPpVBlEGUunsWU7CLQ2yBjjFwrD4ZBz6heLlJJpHE0mIcWoNd+dccadZ9m33noL
+IVSr1RYXF+fn5zudDuf82rVrD2bh+TPznIJMoysfO5dlQmmTcavmOq0eXBqjM31z6gBiUZgRhZnJ
+0f/REQAAAkBHPMw4m2kJITN2gqNJnDNjDKUUAKGjd00GzF0Op2EYbm5uSinr9Xq3203TNM/zWq12
+cHAwGAw457Va7W4KDQZBFMx/7spvaqOVKAXSv5b/vkIaSgAlQEoLmRkwAAAjAwjpHqrPFYulklJa
+a00p5ZaFEAaEEca5Urbjznc9KUR9rokJBaM917VsWyuFEJo53Wy1KCXG6FyBZbtzlm2MpgRnUgMA
+9X0/z/Onn35aa12pVK5fv16pVGq1WqfTOXnyZK/XW1pauptCYfjNr33t3x5FEQ8hjTd+/Otf/I0s
+S5UCyiiAlrnCSCF655YLIcLJxPU8JUWuNCYklzJJU4JBGwQAtmWlaco58woIAPJcJEnKCLFsZ5Y+
+NAzDNE2jKBJC9Hq9jY2NxcVFz/MmkwnGOEmS4zQqhPj50c8kTRKHEyG1FBhsK0tTQoiFCUHI4gwZ
+necyl0KkU20wZSxNYtt2FShjsAFjMSKyNEumcRQ1W23QWmSpxoiS+sxD6vt+sVjc3983xkwmkytX
+rlSrVdd1Dw8Pt7a2Tpw4UalU7kaAc/5BgO8XTAggQjkzWhmEMKGEUm2MVAoLaQA5rmfZtlI5Nthy
+bK01syx0RKOEckQIt6z6XJMREkYRt2wEWhuTK30nAtVqdXNz8/bt2y+//HKaprMN1s2bN23bdl33
+CSPg+75f9KXMCaUEY8tWxhhAZPYmmFs2xhgQKpcqCGOlFCOEUjr7poQwRmAa9YaUghICAIVCQWQZ
+xhiMntUx9X1/9mR0/vx5IYQxxrKs1dVV27ZfeOEFIcRxGn2MCIxGI6OEzIEQZHGeZhnGmDsuJdix
+rWQaDYejQqGQpVOlgTKWpQnjFr5Lo34hiiJGqVcoMoqjKJxMQkpQq91FCAEA1Vq/9NJLKysrSZIM
+BoP19XWlVKVSKZVK169fb7fbtVpNa22Mmf1+WAcQAEYIgQaDMEIIAAPCCBGMCSYEY0Iw51ykU4Ix
+Y0yJjGCMwCCDDRjb4mlClNZbG2unFxfJ7FsfAME4zc1wEtP19fXBYOB5HgDU6/U8z5VSlmXFcWxZ
+1u7u7mAwIITEcex5XhRFH9YBr+AX/GKujVaKMkoYwxgbhAEhmefMdlptJ5eyWm9gQsEY27Js2zZG
+G0BgDCDUmJsTQiKEwCBm2fUGN1ojjKZpOg4j+sorr1iW9WFh/ZyCENre2jjoW0obSikjREiJECKM
+2dxijAZBMJlMHNdVUihtMCEqzzEhGIExCBBYjCVpShnTStXr9el0Gk+nnNJCsZQaLJL4l/V9YCYY
+4xs/+ckvb/0syx58Lf4rJr/yDtDHoPb/PyKE+D+7lpz88BufGQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1491065530);
 INSERT INTO "wlb_test" VALUES('ElFigureTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAKYElEQVRoge1ZfUxT5x4+XQsto6cfQIt2SAXWLqZoFb0i092NxbAYp5Fk
 ubLgcDNuC9NN4nbjvGjYBZxW9kFQwzIMMWombAvDXRwIZMgM9mO0tEA/aItSPgpt8bT09POUnt4/
@@ -1939,7 +1985,7 @@ uZNAIBQXF7/66qvV1dVZWVmZmZkgCJLJZARBJBLJnTt3WCxWVVWVRCJZ2OZWvI2GdKCnp6ezs7Oy
 slKtVsfHxwcUOnLkCBaLffDgQUtLy9jY2MaNG6lUanFxsVKplEgkq+VCU1tbe/To0d7e3qi86mN3
 lHC73RQKRSgUTk9Pl5SU+OOX5SsUOwdWSKHYORDAH3744dKlS48fP05OTvYjBEFUKtXj8bjdbhAE
 n/wqgAUFBWQy+S8HouFAdBX6y4G/HFjlDgTPB6Ke3/8J84Ho5vd/znwgivn9Ss8H/gvqvl5+zIak
-ZQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','','','',-1,'name;geomW;geomH;backImg;',1374518075);
-CREATE TABLE 'wlb_test_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO "wlb_test_uio" VALUES('FormElTests','extValue','','Ext. value','Зовнішне значення',131076,'0||','',6,'','','','','Внешнее значение');
+ZQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backImg;',1374518075);
+CREATE TABLE 'wlb_test_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
+INSERT INTO "wlb_test_uio" VALUES('FormElTests','extValue','','Ext. value','Зовнішне значення','Внешнее значение',131076,'0|','','',6,'','','','','','');
 COMMIT;

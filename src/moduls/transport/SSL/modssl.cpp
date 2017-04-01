@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.4.3"
+#define MOD_VER		"1.4.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -312,7 +312,11 @@ void *TSocketIn::Task( void *sock_in )
 	}
 
 	//Write certificate and private key to temorary file
+#if defined(__ANDROID__)
+	cfile = MOD_TYPE "_" MOD_ID "_" + s.id() + "_" + i2s(rand()) + ".tmp";
+#else
 	cfile = tmpnam(err);
+#endif
 	int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 	if(icfile < 0) throw TError(s.nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
 	bool fOK = (write(icfile,s.certKey().data(),s.certKey().size()) == (int)s.certKey().size());
@@ -848,7 +852,11 @@ void TSocketOut::start( int tmCon )
 	//Certificates, private key and it password loading
 	if(!sTrm(certKey()).empty()) {
 	    // Write certificate and private key to temorary file
+#if defined(__ANDROID__)
+	    cfile = MOD_TYPE "_" MOD_ID "_" + id() + "_" + i2s(rand()) + ".tmp";
+#else
 	    cfile = tmpnam(err);
+#endif
 	    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 	    if(icfile < 0) throw TError(nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
 	    bool fOK = (write(icfile,certKey().data(),certKey().size()) == (int)certKey().size());

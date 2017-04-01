@@ -1,3 +1,21 @@
+2017-04-01 Roman (stable)
+- DB.LibsDB.vcaTest.db: Tests collection cadre of primitive "FormEl" expanded for view "List" and "Table".
+- SYS:configure.ac: Checking for "linux/can.h" moved to same the module Transport.Sockets.
+    Checking for "inux/serial.h" was added to the module Transport.Serial.
+    Checking for GD2 was removed from the module UI.WebCfgD.
+    The order of modules of subsystem "Special" set to the priority one.
+- SYS:acinclude.m4: LibGD checking macro expanded for dependencies "-lpng -ljpeg -lfontconfig -lexpat -lfreetype"
+    to allow the libraries linking statically.
+- FIX:SYS,DAQ.System: Some original messages fixed.
+- Transport.SSL: Adpated to tmpnam() wrong placing into "/tmp/??" on Android.
+- FIX:Transport.Serial: There is checking for "linux/serial.h" added and for "linux/i2c-dev.h" fixed.
+- FIX:UI.Vision: The primitive "FormEl" in view "Table" fixed for properties of collumns.
+- !!!:FIX:UI.WebVision: Expanded for view "Table" of primitive "FormEl" initial implementation.
+    Internal functions nodeText() and setNodeText() replaced to "textContent".
+    FIX: The view "Button" of the primitive "FormEl" fixed for words wrap on Chrome browser.
+    View "Combo box" and "List" of the primitive "FormEl" made simplified.
+
+
 2017-03-25 Roman (stable)
 - SYS:configure.ac: Test AX_LIB_OpenSSL() call fix for DAQ.OPC_UA.
 - SYS:configure.ac: String [0.9] of the replacing version of the OpenSCADA building fix.

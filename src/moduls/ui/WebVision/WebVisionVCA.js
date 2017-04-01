@@ -26,24 +26,6 @@ var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 var mainTmId = 0;
 
 /***************************************************
- * strEncode - String encoding.                    *
- ***************************************************/
-/*function strEncode( vl, tp )
-{
-    var encRez = '';
-    if(!tp || tp == "html")
-	for(var i_enc = 0; i_enc < vl.length; i_enc++)
-	    switch(vl.charAt(i_enc)) {
-		case '&': encRez += '&amp;'; break;
-		case '>': encRez += '&gt;'; break;
-		case '<': encRez += '&lt;'; break;
-		case '"': encRez += '&quot;'; break;
-		default:  encRez += vl.charAt(i_enc);
-	    }
-    return encRez;
-}*/
-
-/***************************************************
  * pathLev - Path parsing function.                *
  ***************************************************/
 pathLev.off = 0;
@@ -73,40 +55,6 @@ function noSpace( str )
     for(var i = 0; i < str.length; i++)
 	if(str[i] != ' ') { if(posSt<0) posSt = i; posEnd = i; }
     return (posSt>=0) ? str.substr(posSt,posEnd-posSt+1) : '';
-}
-
-/***************************************************
- * nodeText - Get DOM node text                    *
- ***************************************************/
-function nodeText( node )
-{
-    var rez = '';
-    for(var i = 0; i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeType == 3) rez += node.childNodes[i].data;
-    return rez;
-}
-
-/***************************************************
- * setNodeText - Set DOM node text                 *
- ***************************************************/
-function setNodeText( node, val )
-{
-    if(!node) return;
-    for(var i = 0; i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeType == 3)
-	{ node.childNodes[i].data = val; return; }
-    node.appendChild(node.ownerDocument.createTextNode(val));
-}
-
-/*****************************************************
- * nodeTextByTagId - Get DOM node by tag name and id *
- *****************************************************/
-function nodeTextByTagId( node, tag, avl )
-{
-    for(var i = 0; i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeName == tag && node.childNodes[i].getAttribute('id') == avl)
-	    return nodeText(node.childNodes[i]);
-    return '';
 }
 
 /***************************************************
@@ -311,7 +259,7 @@ function getWAttr( wId, attr )
     var rNode = servGet(wId,'com=attr&attr='+attr);
     if(!rNode) return null;
 
-    return nodeText(rNode);
+    return rNode.textContent;
 }
 
 /***************************************************
@@ -345,6 +293,24 @@ function getFont( fStr, fSc, opt )
     }
 
     return rez;
+}
+
+/***************************************************
+ * getFontCond( fStr, fSc, opt ) - Parse font          *
+ *  opt - options: 1-punkts; 2-return size         *
+ ***************************************************/
+function getFontCond( fStr, fSc, opt )
+{
+    fontCfg = "";
+    if(fStr) {
+	allFnt = fStr.split(" ");
+	if(allFnt.length >= 3 && parseInt(allFnt[2])) fontCfg += "bold ";
+	if(allFnt.length >= 4 && parseInt(allFnt[3])) fontCfg += "italic ";
+	if(allFnt.length >= 2) fontCfg += (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0) + (opt==1?"pt ":"px ");
+	if(allFnt.length >= 1) fontCfg += allFnt[0].replace(/_/g," ") + " ";
+    }
+
+    return fontCfg;
 }
 
 /***************************************************
@@ -475,9 +441,9 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	var winHeight = 400;
 	for(var i_ch = 0; i_ch < attrBrVal.childNodes.length; i_ch++)
 	    if(attrBrVal.childNodes[i_ch].nodeName != 'el') continue;
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'name') winName = nodeText(attrBrVal.childNodes[i_ch]);
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
+	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'name') winName = attrBrVal.childNodes[i_ch].textContent;
+	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = parseInt(attrBrVal.childNodes[i_ch].textContent);
+	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = parseInt(attrBrVal.childNodes[i_ch].textContent);
 
 	//New external <div> window create
 	if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH'])) {
@@ -604,8 +570,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	for(var j = 0; j < pgBr.childNodes.length; j++) {
 	    if(pgBr.childNodes[j].nodeName != 'el') continue;
 	    var i = pgBr.childNodes[j].getAttribute('id');
-	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != nodeText(pgBr.childNodes[j]))) margBrdUpd = true;
-	    var curAttr = nodeText(pgBr.childNodes[j]);
+	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != pgBr.childNodes[j].textContent)) margBrdUpd = true;
+	    var curAttr = pgBr.childNodes[j].textContent;
 	    this.attrsMdf[i] = !this.attrs[i] || this.attrs[i] != curAttr;
 	    this.attrs[i] = curAttr;
 	    newAttr = true;
@@ -889,16 +855,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrsMdf['elType'] || this.place.elWr != elWr)
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 
-	    if(this.attrsMdf['font']) {
-		this.place.fontCfg = '';
-		if(this.attrs['font']) {
-		    var allFnt = this.attrs['font'].split(' ');
-		    if(allFnt.length >= 3 && parseInt(allFnt[2])) this.place.fontCfg += 'bold ';
-		    if(allFnt.length >= 4 && parseInt(allFnt[3])) this.place.fontCfg += 'italic ';
-		    if(allFnt.length >= 2) this.place.fontCfg += (parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px ';
-		    if(allFnt.length >= 1) this.place.fontCfg += allFnt[0].replace(/_/g,' ')+' ';
-		}
-	    }
+	    if(this.attrsMdf['font'])	this.place.fontCfg = getFontCond(this.attrs['font'], Math.min(xSc,ySc));
 	    var fntSz = Math.min(geomH,(getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0));
 	    switch(elTp) {
 		case 0:	//Line edit
@@ -1029,7 +986,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    dtSrc = new Date(dlgN.formObj.valGet()*1000);
 					    dtSrc.setFullYear(parseInt(dlgN.children[1].options[dlgN.children[1].selectedIndex].value));
 					    dtSrc.setMonth(dlgN.children[2].selectedIndex);
-					    dtSrc.setDate(parseInt(nodeText(this)));
+					    dtSrc.setDate(parseInt(this.textContent));
 					    dlgN.formObj.valSet(dtSrc.getTime()/1000);
 					    dlgN.formObj.chApply();
 					    dlgN.style.visibility = 'hidden';
@@ -1478,7 +1435,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.place.appendChild(formObj);
 		    }
 		    else {
-			formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
+			formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
 			if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 			if(toInit || this.attrsMdf['font'])	formObj.style.font = this.place.fontCfg;
 			if(toInit || this.attrsMdf['name'])	formObj.value = this.attrs['name'].replace('\\n','\n');
@@ -1489,12 +1446,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(!toInit) break;
 			formObj.style.cursor = elWr ? 'pointer' : '';
 			formObj.disabled = !elWr;
-			formObj.type = 'button';
+			//formObj.type = 'button';
 			formObj.wdgLnk = this;
 			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 			formObj.style.padding = "0";
 			this.place.appendChild(formObj);
-			formObj.value = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
+			formObj.innerText = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
 		    }
 		    break;
 		case 4: case 5:	//Combo box, List
@@ -1546,11 +1503,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		case 6: case 7:	//Slider and Scroll bar
 		    isProgr = false;	//(elTp == 7);
 		    var toInit = !this.place.children.length;
-		    var tblCell = toInit ? this.place.ownerDocument.createElement('div') : this.place.children[0];
-		    var formObj = tblCell.children.length ? tblCell.children[0] : this.place.ownerDocument.createElement('input');
-		    formObj.style.cssText = tblCell.style.cssText;
-		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'])
-			tblCell.style.cssText = 'width: '+geomW+'px; height: '+geomH+'px; ';
+		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.children[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['value']) formObj.value = parseInt(this.attrs['value']);
 		    formObj.vOr = false;
@@ -1567,7 +1520,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
 		    formObj.style.cssText = "width: "+(formObj.vOr?16:(isProgr?geomW-2*16:geomW))+"px; "+
-		    	"height: "+(formObj.vOr?(isProgr?geomH-2*16:geomH):16)+"px; ";
+			"height: "+(formObj.vOr?(isProgr?geomH-2*16:geomH):16)+"px; ";
 		    formObj.onclick = formObj.onkeyup = function( ) {
 			if(this.value == parseInt(this.wdgLnk.attrs['value']))	return;
 			var attrs = new Object();
@@ -1576,8 +1529,73 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.defaultValue = this.value;
 			//return true;
 		    }
-		    tblCell.appendChild(formObj);
-		    this.place.appendChild(tblCell);
+		    this.place.appendChild(formObj);
+		    break;
+		case 9:	//Table
+		    this.place.className += " Table";
+		    var toInit = !this.place.children.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('table') : this.place.children[0];
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
+		    // Processing for fill and changes
+		    if(toInit || this.attrsMdf['items']) {
+			if(toInit) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
+			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
+			rClr = null, rClrTxt = null, rFnt = null;
+			for(iR = 0, iRR = 0, iCh = 0; (items.children.length && iCh < items.children[0].children.length) || iR < formObj.tBodies[0].rows.length; iCh++)
+			{
+			    tR = (iCh < items.children[0].children.length) ? items.children[0].children[iCh] : null;
+			    isH = false, hit = null, tit = null;
+			    if(tR && !((isH=(tR.nodeName=="h")) || tR.nodeName == "r")) continue;
+			    if(!isH && iR >= formObj.tBodies[0].rows.length)
+				formObj.tBodies[0].appendChild(this.place.ownerDocument.createElement('tr'));
+			    if(!isH && tR) { rClr = tR.getAttribute("color"); rClrTxt = tR.getAttribute("colorText"); rFnt = tR.getAttribute("font"); }
+			    for(iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR.children.length) || iC < formObj.tHead.children.length; iCh1++)
+			    {
+				tC = (tR && iCh1 < tR.children.length) ? tR.children[iCh1] : null;
+				if(iC >= formObj.tHead.rows[0].cells.length)
+				    formObj.tHead.rows[0].appendChild(this.place.ownerDocument.createElement('th'));
+				hit = formObj.tHead.rows[0].cells[iC];
+				if(isH) {	//Header process
+				    hit.innerText = tC ? tC.textContent : "";
+				    if(tC) {
+					if((hit.outWidth=tC.getAttribute("width"))) {
+					    //if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
+					}
+					hit.outEdit = parseInt(tC.getAttribute("edit"));
+					hit.outColor = tC.getAttribute("color");
+					hit.outColorText = tC.getAttribute("colorText");
+					hit.outFont = tC.getAttribute("font");
+					//if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
+				    }
+				}
+				else {	//Rows content process
+				    if(iC >= formObj.tBodies[0].rows[iR].cells.length)
+					formObj.tBodies[0].rows[iR].appendChild(this.place.ownerDocument.createElement('td'));
+				    tit = formObj.tBodies[0].rows[iR].cells[iC];
+				    // Value
+				    if(tC) tit.innerText = tC.textContent;
+				    // Back color
+				    if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
+					tit.style.backgroundColor = getColor(wVl);
+				    else tit.style.backgroundColor = null;
+				    // Text font and color
+				    if((tC && (wVl=tC.getAttribute("colorText"))) || (wVl=hit.outColorText) || (wVl=rClrTxt))
+					tit.style.color = getColor(wVl);
+				    else tit.style.color = null;
+				    if((tC && (wVl=tC.getAttribute("font"))) || (wVl=hit.outFont) || (wVl=rFnt))
+					tit.style.font = getFontCond(wVl, Math.min(xSc,ySc));
+				    else tit.style.font = null;
+				}
+				iC++;
+			    }
+			    if(!isH) iR++;
+			}
+			//console.log("items="+items.children[0].nodeName);
+		    }
+		    if(!toInit) break;
+		    //???? Events and processings init
+		    this.place.appendChild(formObj);
 		    break;
 	    }
 	}
@@ -1727,7 +1745,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			for(var i_req = 0; i_req < rez.childNodes.length; i_req++) {
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
-						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
+						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), rcd.textContent);
 
 			    // Check for dublicates
 			    var isDbl = false;
@@ -1746,7 +1764,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			for(var i_req = rez.childNodes.length-1; i_req >= 0; i_req--) {
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
-						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
+						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), rcd.textContent);
 
 			    // Check for dublicates
 			    var isDbl = false;
@@ -1814,16 +1832,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			for(var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++) {
 			    var celEl = (i_cel>=rowEl.childNodes.length) ? document.createElement('td') : rowEl.childNodes[i_cel];
-			    if(this.col_pos == i_cel) { setNodeText(celEl,i_m); celEl.style.cssText += ' text-align: center; '; }
+			    if(this.col_pos == i_cel) { celEl.textContent = i_m; celEl.style.cssText += ' text-align: center; '; }
 			    else if(this.col_tm == i_cel) {
 				var dt = new Date(this.messList[elPos][0]*1000);
-				setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
-				    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
+				celEl.textContent = dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
+				    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds());
 			    }
-			    else if(this.col_utm == i_cel)	setNodeText(celEl,this.messList[elPos][1]);
-			    else if(this.col_lev == i_cel)	setNodeText(celEl,this.messList[elPos][2]);
-			    else if(this.col_cat == i_cel)	setNodeText(celEl,this.messList[elPos][3]);
-			    else if(this.col_mess == i_cel)	setNodeText(celEl,this.messList[elPos][4]);
+			    else if(this.col_utm == i_cel)	celEl.textContent = this.messList[elPos][1];
+			    else if(this.col_lev == i_cel)	celEl.textContent = this.messList[elPos][2];
+			    else if(this.col_cat == i_cel)	celEl.textContent = this.messList[elPos][3];
+			    else if(this.col_mess == i_cel)	celEl.textContent = this.messList[elPos][4];
 			    if(i_cel >= rowEl.childNodes.length) rowEl.appendChild(celEl);
 			}
 			if(i_m >= (tblB.childNodes.length-1)) tblB.appendChild(rowEl);
@@ -2133,7 +2151,7 @@ function makeUI( callBackRez )
 	for(var i_p = 0; i_p < pgList.length; i_p++) {
 	    var opPg; var i_ch;
 	    for(i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++)
-		if(pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode.childNodes[i_ch]) == pgList[i_p])
+		if(pgNode.childNodes[i_ch].nodeName == 'pg' && pgNode.childNodes[i_ch].textContent == pgList[i_p])
 		    break;
 	    if(i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[i_p]))) continue;
 	    if(opPg.window) {
@@ -2152,7 +2170,7 @@ function makeUI( callBackRez )
 	pgList = new Array();
 	for(var i = 0; i < pgNode.childNodes.length; i++)
 	    if(pgNode.childNodes[i].nodeName == 'pg') {
-	        var prPath = nodeText(pgNode.childNodes[i]);
+	        var prPath = pgNode.childNodes[i].textContent;
 		//  Check for closed window
 		var opPg = masterPage.findOpenPage(prPath);
 		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {

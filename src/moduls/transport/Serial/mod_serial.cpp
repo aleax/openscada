@@ -21,11 +21,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
-#include <linux/serial.h>
-
-#if HAVE_LINUX_I2C_DEV_H
-#include <linux/i2c-dev.h>
-#endif
 
 #include <fcntl.h>
 #include <termios.h>
@@ -42,13 +37,21 @@
 
 #include "mod_serial.h"
 
+#ifdef HAVE_LINUX_SERIAL_H
+# include <linux/serial.h>
+#endif
+
+#ifdef HAVE_LINUX_I2C_DEV_H
+# include <linux/i2c-dev.h>
+#endif
+
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Serial"
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.6.3"
+#define MOD_VER		"1.6.4"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides a serial interface. It is used to data exchange via the serial interfaces of type RS232, RS485, GSM and more.")
 #define LICENSE		"GPL2"
@@ -372,9 +375,9 @@ void TTrIn::connect( )
 	    throw TError(nodePath().c_str(), _("Serial port '%s' %s error: %s."), mDevPort.c_str(), "tcsetattr", strerror(errno));
 
 #ifdef SER_RS485_ENABLED
-#ifndef TIOCSRS485
-#define TIOCSRS485      0x542f
-#endif
+# ifndef TIOCSRS485
+#  define TIOCSRS485      0x542f
+# endif
 	// Standard RS-485 mode
 	serial_rs485 rs485conf;
 	memset(&rs485conf, 0, sizeof(serial_rs485));

@@ -1292,8 +1292,8 @@ AC_DEFUN([AX_LIB_SENSORS],
 	AC_CHECK_LIB(sensors, sensors_init, [
 	    AC_MSG_NOTICE([LibSensors: Pass global library using])
 	    LIB_SENSORS="-lsensors"
-	], AC_MSG_NOTICE([Libsensors library not found. Using is disabled!]))
-    ], AC_MSG_NOTICE([DAQ.System: Libsensors headers not found. Using is disabled!]))
+	], AC_MSG_NOTICE([Libsensors library isn't found. Using disabled!]))
+    ], AC_MSG_NOTICE([DAQ.System: Libsensors headers aren't found. Using disabled!]))
     AC_SUBST(LIB_SENSORS)
     SensorsUse=true
 ])
@@ -1335,7 +1335,7 @@ AC_DEFUN([AX_LIB_GD],
 	    [AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
 	AC_CHECK_LIB([gd],[gdImageCreate],[AC_MSG_NOTICE([LibGD: Pass global library using])],
 	    [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
-	LIB_GD="-lgd"
+	LIB_GD="-lgd -lpng -ljpeg -lfontconfig -lexpat -lfreetype"
 	AC_SUBST(LIB_GD)
 	GDuse=true
     fi
@@ -1433,8 +1433,8 @@ AC_DEFUN([AX_LIB_FFTW3], [
 	    AC_CHECK_LIB(fftw3, fftw_execute, [
 		AC_MSG_NOTICE([LibFFTW3: Pass global library using])
 		LIB_FFTW3="-lfftw3"
-	    ], AC_MSG_NOTICE([FFTW3 library not found. Using is disabled!]))
-	], AC_MSG_NOTICE([Some FFTW3 headers not found. Using is disabled!]))
+	    ], AC_MSG_NOTICE([FFTW3 library isn't found. Using disabled!]))
+	], AC_MSG_NOTICE([Some FFTW3 headers aren't found. Using disabled!]))
 	AC_SUBST(LIB_FFTW3)
 	FFTW3use=true
     fi
