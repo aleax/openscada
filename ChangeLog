@@ -1,3 +1,7 @@
+2017-04-02 Roman (stable)
+- FIX:UI.Vision: The primitive "FormEl" in view "Table" fixed for properties of collumns.
+
+
 2017-04-01 Roman (stable)
 - DB.LibsDB.vcaTest.db: Tests collection cadre of primitive "FormEl" expanded for view "List" and "Table".
 - SYS:configure.ac: Checking for "linux/can.h" moved to same the module Transport.Sockets.
