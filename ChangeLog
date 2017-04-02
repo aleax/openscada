@@ -1,4 +1,5 @@
 2017-04-02 Roman (stable)
+- SYS:configure.ac: Checking for LibGD set combined with and next without PKG_CHECK_MODULES(pkg-config).
 - SYS:configure.ac: Fix for Fedora 12
 - SYS:configure.ac: Checking for LibGD moved to PKG_CHECK_MODULES(pkg-config) for proper static linking.
 - SYS: The environment variable HAVE_GD_CORE renamed to HAVE_GD_FORCE. Checking for HAVE_CONFIG_H is added for "config.h".
