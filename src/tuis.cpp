@@ -25,8 +25,8 @@
 #include "tmess.h"
 #include "tuis.h"
 
-#if HAVE_GD_CORE
-#include <gd.h>
+#if HAVE_GD_FORCE
+# include <gd.h>
 #endif
 
 using namespace OSCADA;
@@ -36,7 +36,7 @@ using namespace OSCADA;
 //*************************************************
 TUIS::TUIS( ) : TSubSYS(SUI_ID,_("User Interfaces"), true)
 {
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
     gdFTUseFontConfig(1);
 #endif
 }

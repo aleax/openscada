@@ -13,9 +13,9 @@ ui_QTStarter_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.l
 endif
 
 ui_QTStarter_la_CXXFLAGS += $(QtGui_CFLAGS)
+ui_QTStarter_la_LDFLAGS += $(QtGui_LIBS)
 ui_QTStarter_la_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_la_DIST = tuimod.cpp qtstarter.qrc
-ui_QTStarter_la_LIBADD = $(QtGui_LIBS)
 
 
 qrc_qtstarter.cpp: qtstarter.qrc

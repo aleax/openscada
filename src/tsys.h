@@ -56,7 +56,9 @@
 #define vmin(a,b) ((a) < (b) ? (a) : (b))
 #define vmax(a,b) ((a) > (b) ? (a) : (b))
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 #include "tbds.h"
 #include "tuis.h"
 #include "tarchives.h"

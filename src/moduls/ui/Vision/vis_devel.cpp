@@ -35,7 +35,7 @@
 #include <QCheckBox>
 #include <QMdiSubWindow>
 
-#include <config.h>
+// #include <config.h>
 #include <tsys.h>
 #include "vis_shapes.h"
 #include "vis_devel_dlgs.h"

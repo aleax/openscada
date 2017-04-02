@@ -26,8 +26,6 @@
 #include <vector>
 #include <map>
 
-#include "config.h"
-
 using std::string;
 using std::vector;
 using std::map;

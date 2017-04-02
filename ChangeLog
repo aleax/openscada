@@ -1,4 +1,8 @@
 2017-04-02 Roman (stable)
+- SYS:configure.ac: Checking for LibGD moved to PKG_CHECK_MODULES(pkg-config) for proper static linking.
+- SYS: The environment variable HAVE_GD_CORE renamed to HAVE_GD_FORCE. Checking for HAVE_CONFIG_H is added for "config.h".
+- DAQ.ICP_DAS,UI.{QTStarter,QTCfg,Vision,WebCfgD,WebVision}: *_LIBADD replaced *_LDFLAGS.
+- FIX:UI.WebCfgD: Checking for "gd.h" fixed.
 - FIX:UI.Vision: The primitive "FormEl" in view "Table" fixed for properties of collumns.
 
 

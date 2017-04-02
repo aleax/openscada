@@ -7,13 +7,14 @@ ui_WebCfgD_la_LIBTOOLFLAGS = --tag=disable-shared
 ui_WebCfgD_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = ui_WebCfgD.la
+ui_WebCfgD_la_CXXFLAGS =
 ui_WebCfgD_la_LIBTOOLFLAGS = --tag=disable-static
 ui_WebCfgD_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
+ui_WebCfgD_la_CXXFLAGS += $(gdlib_CFLAGS)
+ui_WebCfgD_la_LDFLAGS += $(gdlib_LIBS)
 ui_WebCfgD_la_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
-ui_WebCfgD_la_LIBADD = $(LIB_GD)
-
 
 VCAjs.cpp: WebCfgDVCA.js
 	@lc=`cat $< | wc -l`; let lc=lc+1; \

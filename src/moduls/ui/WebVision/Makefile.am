@@ -7,13 +7,14 @@ ui_WebVision_la_LIBTOOLFLAGS = --tag=disable-shared
 ui_WebVision_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = ui_WebVision.la
+ui_WebVision_la_CXXFLAGS =
 ui_WebVision_la_LIBTOOLFLAGS = --tag=disable-static
 ui_WebVision_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
+ui_WebVision_la_CXXFLAGS += $(gdlib_CFLAGS)
+ui_WebVision_la_LDFLAGS += $(gdlib_LIBS) $(LIB_FFTW3)
 ui_WebVision_la_SOURCES = web_vision.cpp vca_sess.cpp VCAjs.cpp VCAhtml.cpp
-ui_WebVision_la_LIBADD = $(LIB_GD) $(LIB_FFTW3)
-
 
 VCAjs.cpp: WebVisionVCA.js
 	@lc=`cat $< | wc -l`; let lc=lc+1; \

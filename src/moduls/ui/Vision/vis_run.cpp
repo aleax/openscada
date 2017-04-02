@@ -49,7 +49,7 @@
 #include <QDateTime>
 #include <QTextStream>
 
-#include <config.h>
+// #include <config.h>
 #include <tsys.h>
 #include "tvision.h"
 #include "vis_run_widgs.h"

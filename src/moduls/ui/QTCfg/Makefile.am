@@ -13,9 +13,9 @@ ui_QTCfg_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
 ui_QTCfg_la_CXXFLAGS += $(QtGui_CFLAGS)
+ui_QTCfg_la_LDFLAGS += $(QtGui_LIBS)
 ui_QTCfg_la_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
 ui_QTCfg_la_DIST = tuimod.cpp qtcfg.cpp selfwidg.cpp qtcfg.qrc
-ui_QTCfg_la_LIBADD = $(QtGui_LIBS)
 
 
 qrc_qtcfg.cpp: qtcfg.qrc

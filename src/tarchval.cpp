@@ -32,8 +32,8 @@
 #include "tarchives.h"
 #include "tarchval.h"
 
-#if HAVE_GD_CORE
-#include <gd.h>
+#if HAVE_GD_FORCE
+# include <gd.h>
 #endif
 
 #define HalfDivMinWin	5
@@ -1334,7 +1334,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
     int mrkHeight = 0;
 
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
     int brect[8];
     char *gdR = gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000");
     if(gdR) mess_sys(TMess::Error, _("gdImageStringFT for font '%s' error: %s."), sclMarkFont.c_str(), gdR);
@@ -1405,7 +1405,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
 	getVals(buf, h_min, h_max, rarch, 600000);
 	if(!buf.end() || !buf.begin()) {
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
 	    gdImageDestroy(im);
 #endif
 	    return rez;
@@ -1420,7 +1420,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	    else if(iend%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d", ttm.tm_hour, ttm.tm_min, ttm.tm_sec);
 	    else lab_tm = TSYS::strMess("%d:%02d:%g", ttm.tm_hour, ttm.tm_min, (float)ttm.tm_sec+(float)(iend%1000000)/1e6);
 
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
 	    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str());
 	    int markBrd = h_w_start + h_w_size - (brect[2]-brect[6]);
 	    endMarkBrd = markBrd;
@@ -1445,7 +1445,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	for(int64_t i_h = h_min; true; ) {
 	    //  Draw grid
 	    int h_pos = h_w_start + h_w_size*(i_h-h_min)/(h_max-h_min);
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
 	    gdImageLine(im, h_pos, v_w_start, h_pos, v_w_start+v_w_size, clr_grid);
 #else
 	    im.childAdd("rect")->setAttr("x",i2s(h_pos))->setAttr("y",i2s(v_w_start))->
@@ -1481,7 +1481,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 			     (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 					  TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
 		int tpos;
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
 		int wdth, endPosTm = 0, endPosDt = 0;
 		if(lab_dt.size()) {
 		    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str());
@@ -1537,7 +1537,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	v_max = vmax(v_max, c_val);
     }
     if(v_max == -3e300) {
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
 	gdImageDestroy(im);
 #endif
 	return rez;
@@ -1564,7 +1564,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     //  Draw vertical grid and symbols
     for(double i_v = v_min; (v_max-i_v)/v_div > -0.1; i_v += v_div) {
 	int v_pos = v_w_start + v_w_size - (int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
 	gdImageLine(im, h_w_start, v_pos, h_w_start+h_w_size, v_pos, clr_grid);
 	if(mrkHeight)
 	    gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
@@ -1602,7 +1602,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	    continue;
 	}
 	//Write point and line
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
 	if(aver_vl != EVAL_REAL) {
 	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
 
@@ -1633,7 +1633,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     }
 
     //Get image and transfer it
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
     int img_sz;
     char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, 1);
     rez.assign(img_ptr, img_sz);

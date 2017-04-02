@@ -22,13 +22,14 @@
 #include <time.h>
 #include <string.h>
 #include <string>
-#if HAVE_GD_CORE
-#include <gd.h>
-#endif
 
 #include <tsys.h>
 #include <tmess.h>
 #include <tsecurity.h>
+
+#if HAVE_GD_FORCE
+# include <gd.h>
+#endif
 
 #include "web_cfg.h"
 
@@ -39,7 +40,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.2.0"
+#define MOD_VER		"1.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides dynamic WEB based configurator. Uses XHTML, CSS and JavaScript technology.")
 #define LICENSE		"GPL2"
@@ -90,7 +91,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
 	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
     gdFTUseFontConfig(1);
 #endif
 
@@ -150,7 +151,7 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
 
 void TWEB::imgConvert( SSess &ses, string &vl )
 {
-#if HAVE_GD_CORE
+#if HAVE_GD_FORCE
     map<string,string>::iterator prmEl;
     gdImagePtr sim = NULL;
     string itp;

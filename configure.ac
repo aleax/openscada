@@ -158,10 +158,9 @@ AC_SEARCH_LIBS(pcre_compile, [pcre], [], AC_MSG_ERROR([The PCRE library isn't fo
 
 # Check for the GD library using into the OpenSCADA core
 if test $enable_LibGD = yes; then
-    AC_CHECK_HEADERS([gd.h],
-	AC_SEARCH_LIBS(gdImageCreate,[gd], AC_DEFINE(HAVE_GD_CORE,1,[LibGD: Pass the library using into the core]),
-	    AC_MSG_ERROR([The GD library isn't found. Install or check the GDlib package!])),
-	AC_MSG_ERROR([The headers of the GD library aren't found. Install or check the GD developing package!]))
+    AX_LIB_GD
+    AC_DEFINE(HAVE_GD_FORCE, 1, [LibGD: Force the library using into the core and modules])
+    LIBS="${LIBS}${gdlib_LIBS} "
 fi
 LIB_CORE=${LIBS}
 
@@ -339,15 +338,15 @@ AX_MOD_UI_EN(Vision, [disable or enable[=incl] compilation module UI.Vision], di
 AX_MOD_UI_EN(WebCfg, [disable or enable[=incl] compilation module UI.WebCfg], disable, incl)
 AX_MOD_UI_EN(WebCfgD, [disable or enable[=incl] compilation module UI.WebCfgD], disable, incl)
 AX_MOD_UI_EN(WebVision, [disable or enable[=incl] compilation module UI.WebVision], disable, incl, [
-    AX_LIB_GD()
-    AX_LIB_FFTW3()
+    AX_LIB_GD
+    AX_LIB_FFTW3
 ])
 AX_MOD_UI_EN(WebUser, [disable or enable[=incl] compilation module UI.WebUser], disable, incl)
 
 # Special modules
 AX_MOD_Special_EN(FLibSYS, [disable or enable[=incl] compilation module Special.FLibSYS], disable, incl, [
-    AX_LIB_FFTW3()
-    AX_LIB_OpenSSL_opt()
+    AX_LIB_FFTW3
+    AX_LIB_OpenSSL_opt
 ])
 AX_MOD_Special_EN(SystemTests, [disable compilation module Special.SystemTests], disable)
 AX_MOD_Special_EN(FLibMath, [disable or enable[=incl] compilation module Special.FLibMath], disable, incl)
