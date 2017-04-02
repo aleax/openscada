@@ -1332,11 +1332,11 @@ AC_DEFUN([AX_LIB_GD],
 [
     if test "x${GDuse}" = "x"; then
 	save_LIBS="$LIBS"
-	PKG_CHECK_MODULES(gdlib, [gdlib > 2],
-	    AC_CHECK_HEADERS([gd.h],
-		AC_SEARCH_LIBS(gdImageCreate,[gd], [], AC_MSG_ERROR([The GD library isn't found. Install or check the GDlib package!])),
-		AC_MSG_ERROR([The headers of the GD library aren't found. Install or check the GD developing package!])),
-	    AC_MSG_ERROR([GD library isn't found. Install or check the GDlib package!]))
+	PKG_CHECK_MODULES(gdlib, [gdlib > 2], [
+	    AC_CHECK_HEADERS([gd.h], [
+		AC_SEARCH_LIBS(gdImageCreate,[gd], [], AC_MSG_ERROR([The GD library isn't found. Install or check the GDlib package!]))
+		], AC_MSG_ERROR([The headers of the GD library aren't found. Install or check the GD developing package!]))
+	    ], AC_MSG_ERROR([GD library isn't found. Install or check the GDlib package!]))
 	LIBS="$save_LIBS"
 	GDuse=true
     fi
