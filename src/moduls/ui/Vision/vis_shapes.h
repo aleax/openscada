@@ -266,13 +266,13 @@ class ShapeMedia : public WdgShape
 	void clear( WdgView *view );
 
     public slots:
-        //Public slots
-        //>> Media play events
-        void mediaFinished( );
+	//Public slots
+	// Media play events
+	void mediaFinished( );
 
     private:
 	//Data
-	//> Map areas structure
+	// Map areas structure
 	class MapArea
 	{
 	    public:
@@ -286,7 +286,7 @@ class ShapeMedia : public WdgShape
 		string	title;		//Area title
 		QVector<QPoint>	pnts;	//Area points
 	};
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:

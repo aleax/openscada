@@ -1539,59 +1539,92 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
 		    if(toInit || this.attrsMdf['items']) {
-			if(toInit) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
+			hdrPresent = false, maxCols = 0, maxRows = 0;
 			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
-			rClr = null, rClrTxt = null, rFnt = null;
-			for(iR = 0, iRR = 0, iCh = 0; (items.children.length && iCh < items.children[0].children.length) || iR < formObj.tBodies[0].rows.length; iCh++)
-			{
-			    tR = (iCh < items.children[0].children.length) ? items.children[0].children[iCh] : null;
-			    isH = false, hit = null, tit = null;
-			    if(tR && !((isH=(tR.nodeName=="h")) || tR.nodeName == "r")) continue;
-			    if(!isH && iR >= formObj.tBodies[0].rows.length)
-				formObj.tBodies[0].appendChild(this.place.ownerDocument.createElement('tr'));
-			    if(!isH && tR) { rClr = tR.getAttribute("color"); rClrTxt = tR.getAttribute("colorText"); rFnt = tR.getAttribute("font"); }
-			    for(iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR.children.length) || iC < formObj.tHead.children.length; iCh1++)
-			    {
-				tC = (tR && iCh1 < tR.children.length) ? tR.children[iCh1] : null;
-				if(iC >= formObj.tHead.rows[0].cells.length)
-				    formObj.tHead.rows[0].appendChild(this.place.ownerDocument.createElement('th'));
-				hit = formObj.tHead.rows[0].cells[iC];
-				if(isH) {	//Header process
-				    hit.innerText = tC ? tC.textContent : "";
-				    if(tC) {
-					if((hit.outWidth=tC.getAttribute("width"))) {
-					    //if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
+			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl") formObj.innerHTML = "";
+			else {
+			    if(toInit || !formObj.children.length) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
+			    rClr = null, rClrTxt = null, rFnt = null;
+			    for(iR = 0, iRR = 0, iCh = 0; iCh < tX.children.length || iR < formObj.tBodies[0].rows.length; iCh++) {
+				tR = (iCh < items.children[0].children.length) ? items.children[0].children[iCh] : null;
+				isH = false, hit = null, tit = null;
+				if(tR && !((isH=(tR.nodeName=="h")) || tR.nodeName == "r")) continue;
+				if(!isH && iR >= formObj.tBodies[0].rows.length)
+				    formObj.tBodies[0].appendChild(this.place.ownerDocument.createElement('tr'));
+				if(!isH && tR) { rClr = tR.getAttribute("color"); rClrTxt = tR.getAttribute("colorText"); rFnt = tR.getAttribute("font"); }
+				for(iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR.children.length) || iC < formObj.tHead.children.length; ) {
+				    tC = (tR && iCh1 < tR.children.length) ? tR.children[iCh1] : null;
+				    if(iC >= formObj.tHead.rows[0].cells.length)
+					formObj.tHead.rows[0].appendChild(this.place.ownerDocument.createElement('th'));
+				    hit = formObj.tHead.rows[0].cells[iC];
+				    if(isH) {	//Header process
+					if(iC == 0) { hit.innerText = '*'; iC++; continue; }
+					hit.innerText = tC ? tC.textContent : "";
+					if(tC) {
+					    if(!(wVl=tC.getAttribute("width"))) hit.style.width = ""
+					    else if(wVl.indexOf("%") >= 0)	hit.style.width = parseInt(wVl) + "%";
+					    else hit.style.width = (parseInt(wVl)*xSc) + "px";
+					    hit.outEdit = parseInt(tC.getAttribute("edit"));
+					    hit.outColor = tC.getAttribute("color");
+					    hit.outColorText = tC.getAttribute("colorText");
+					    hit.outFont = tC.getAttribute("font");
+					    //if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
 					}
-					hit.outEdit = parseInt(tC.getAttribute("edit"));
-					hit.outColor = tC.getAttribute("color");
-					hit.outColorText = tC.getAttribute("colorText");
-					hit.outFont = tC.getAttribute("font");
-					//if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
 				    }
+				    else {	//Rows content process
+					if(iC >= formObj.tBodies[0].rows[iR].cells.length)
+					    formObj.tBodies[0].rows[iR].appendChild(this.place.ownerDocument.createElement(iC==0?'th':'td'));
+					tit = formObj.tBodies[0].rows[iR].cells[iC];
+					if(iC == 0) { tit.innerText = iR+1; iC++; continue; }
+					// Value
+					if(tC) switch(tC.nodeName) {
+					    case 'b': tit.innerText = parseInt(tC.textContent)?"true":"false";	break;
+					    case 'i': tit.innerText = parseInt(tC.textContent);	break;
+					    case 'r': tit.innerText = parseFloat(tC.textContent);	break;
+					    default: tit.innerText = tC.textContent;
+					}
+					// Back color
+					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
+					    tit.style.backgroundColor = getColor(wVl);
+					else tit.style.backgroundColor = null;
+					// Text font and color
+					if((tC && (wVl=tC.getAttribute("colorText"))) || (wVl=hit.outColorText) || (wVl=rClrTxt))
+					    tit.style.color = getColor(wVl);
+					else tit.style.color = null;
+					if((tC && (wVl=tC.getAttribute("font"))) || (wVl=hit.outFont) || (wVl=rFnt))
+					    tit.style.font = getFontCond(wVl, Math.min(xSc,ySc));
+					else tit.style.font = null;
+					// Cell image
+					if(tC && (wVl=tC.getAttribute("img")))
+					    tit.innerHTML = "<img src='/"+MOD_ID+this.addr+"?com=res&val="+wVl+"'/> " + tit.innerText;
+				    }
+				    if(tC)	{ ++iCR; maxCols = Math.max(maxCols, iCR); }
+				    iC++; iCh1++;
 				}
-				else {	//Rows content process
-				    if(iC >= formObj.tBodies[0].rows[iR].cells.length)
-					formObj.tBodies[0].rows[iR].appendChild(this.place.ownerDocument.createElement('td'));
-				    tit = formObj.tBodies[0].rows[iR].cells[iC];
-				    // Value
-				    if(tC) tit.innerText = tC.textContent;
-				    // Back color
-				    if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
-					tit.style.backgroundColor = getColor(wVl);
-				    else tit.style.backgroundColor = null;
-				    // Text font and color
-				    if((tC && (wVl=tC.getAttribute("colorText"))) || (wVl=hit.outColorText) || (wVl=rClrTxt))
-					tit.style.color = getColor(wVl);
-				    else tit.style.color = null;
-				    if((tC && (wVl=tC.getAttribute("font"))) || (wVl=hit.outFont) || (wVl=rFnt))
-					tit.style.font = getFontCond(wVl, Math.min(xSc,ySc));
-				    else tit.style.font = null;
-				}
-				iC++;
+				if(!isH) {
+				    if(tR)	{ ++iRR; maxRows = Math.max(maxRows, iRR); }
+				    iR++;
+				} else hdrPresent = true;
 			    }
-			    if(!isH) iR++;
+			    // Remove spare rows and columns; Headers visibility process
+			    formObj.tHead.rows[0].style.display =
+				(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl)) ? "" : "none";
+			    while(formObj.tHead.rows[0].cells.length > (maxCols+1))
+				formObj.tHead.rows[0].removeChild(formObj.tHead.rows[0].lastChild);
+			    wVl = (wVl=tX.getAttribute("vHdrVis")) ? parseInt(wVl) : false;
+			    formObj.tHead.rows[0].cells[0].style.display = wVl ? "" : "none";
+			    for(iR = 0; iR < formObj.tBodies[0].rows.length; iR++) {
+				tR = formObj.tBodies[0].rows[iR];
+				if(tR.cells.length) tR.cells[0].style.display = wVl ? "" : "none";
+				while(tR.cells.length > (maxCols+1)) tR.removeChild(tR.lastChild);
+			    }
+			    while(formObj.tBodies[0].rows.length > maxRows)
+				formObj.tBodies[0].removeChild(formObj.tBodies[0].lastChild);
+
+			    formObj.style.width = ((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) ? "100%" : "";
+
+			    //console.log("maxCols="+maxCols+"("+formObj.tBodies[0].rows.length+"); maxRows="+maxRows);
 			}
-			//console.log("items="+items.children[0].nodeName);
 		    }
 		    if(!toInit) break;
 		    //???? Events and processings init

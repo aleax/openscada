@@ -59,6 +59,10 @@ AC_CHECK_HEADERS([iconv.h], [], AC_MSG_NOTICE([iconv.h header is not found. Usin
 AC_CHECK_HEADERS([libintl.h], [], AC_MSG_NOTICE(libintl.h header is not found. Using disabled!))
 
 #Check for the gettext utilites
+if test $ac_cv_header_iconv_h = yes; then
+    AC_SEARCH_LIBS(libiconv_open, [iconv])
+fi
+
 if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
     AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
@@ -66,11 +70,7 @@ if test $ac_cv_header_libintl_h = yes; then
     if test $XGETTEXT = false -o $MSGMERGE = false -o $MSGFMT = false; then
 	AC_MSG_ERROR([Some utilities of I18N gettext are not present! Install the gettext utilites package.]);
     fi
-    AC_SEARCH_LIBS(bindtextdomain, [intl])
-fi
-
-if test $ac_cv_header_iconv_h = yes; then
-    AC_SEARCH_LIBS(libiconv_open, [iconv])
+    AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
 fi
 
 # Check for typedefs, structures and the compiler characteristics.

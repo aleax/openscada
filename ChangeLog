@@ -1,3 +1,11 @@
+2017-04-07 Roman (stable)
+- SYS:configure.ac: Checking for "libintl" changed for function "libintl_bindtextdomain" and checking for libiconv moved before.
+- FIX:DB.LibsDB.vcaBase: Main.objProps fixed for checking to the write mode.
+- UI.Vision: X scaling used into result column width of the view "Table" of the primitive "FormEl".
+- UI.WebVision: Context display for view "Table" of the primitive "FormEl" mostly implemented.
+    Next tasks will be selection processing of items (cell, column, row)...
+
+
 2017-04-02 Roman (stable)
 - SYS:configure.ac: Checking for LibGD set combined with and next without PKG_CHECK_MODULES(pkg-config).
 - SYS:configure.ac: Fix for Fedora 12
