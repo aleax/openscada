@@ -1533,8 +1533,66 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 		case 9:	//Table
 		    this.place.className += " Table";
+		    if(elWr) this.place.className += " Active";
 		    var toInit = !this.place.children.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('table') : this.place.children[0];
+		    formObj.wdgLnk = this;
+		    formObj.elWr = elWr;
+		    //Events and the processings init
+		    if(toInit) {
+			formObj.onclick = function( ) {
+			    if(this.nodeName == "TABLE" || !(elTbl=this.offsetParent) || !elTbl.elWr) return true;
+			    attrs = null;
+			    if(elTbl.oSel == "row" && this.parentNode.rowIndex > 0) {
+				elTbl.selIt(this.parentNode.rowIndex);
+				attrs = new Object();
+				attrs.value = this.parentNode.cells[elTbl.oKeyID+1].textContent;
+				if(this.parentNode.cells[elTbl.oKeyID+1].outTp == "b")
+				    attrs.value = (attrs.value == "true") ? 1 : 0;
+			    }
+			    else if(elTbl.oSel == "col" && this.cellIndex > 0) {
+				elTbl.selIt(null, this.cellIndex);
+				attrs = new Object();
+				attrs.value = elTbl.tBodies[0].rows[elTbl.oKeyID].cells[this.cellIndex].textContent;
+				if(elTbl.tBodies[0].rows[elTbl.oKeyID].cells[this.cellIndex].outTp == "b")
+				    attrs.value = (attrs.value == "true") ? 1 : 0;
+			    }
+			    else if(this.parentNode.rowIndex > 0 && this.cellIndex > 0) {
+				elTbl.selIt(this.parentNode.rowIndex, this.cellIndex);
+				attrs = new Object();
+				if(elTbl.oSel == "cell") {
+				    attrs.value = this.textContent;
+				    if(this.outTp == "b") attrs.value = (attrs.value == "true") ? 1 : 0;
+				} else attrs.value = (this.parentNode.rowIndex-1) + ":" + (this.cellIndex-1);
+			    }
+			    if(attrs) { attrs.event = 'ws_TableChangeSel'; setWAttrs(elTbl.wdgLnk.addr, attrs); }
+			}
+			formObj.selIt = function( row, col ) {
+			    //Restore saved
+			    if(this.svRow || this.svCol) {
+				if(!this.svRow)
+				    this.tHead.rows[0].cells[this.svCol].style.backgroundColor =
+						this.tHead.rows[0].cells[this.svCol].svBackgroundColor;
+				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?this.svRow-1:this.tBodies[0].rows.length-1); iR++)
+				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++)
+					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor =
+						this.tBodies[0].rows[iR].cells[iC].svBackgroundColor;
+			    }
+			    //Set new
+			    if(row || col) {
+				if(!row) {
+				    this.tHead.rows[0].cells[col].svBackgroundColor = this.tHead.rows[0].cells[col].style.backgroundColor;
+				    this.tHead.rows[0].cells[col].style.backgroundColor = "LightBlue";
+				}
+				for(iR = (row?row-1:0); iR <= (row?row-1:this.tBodies[0].rows.length-1); iR++)
+				    for(iC = (col?col:0); iC <= (col?col:this.tBodies[0].rows[iR].cells.length-1); iC++) {
+					this.tBodies[0].rows[iR].cells[iC].svBackgroundColor = this.tBodies[0].rows[iR].cells[iC].style.backgroundColor;
+					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor = "LightBlue";
+				    }
+			    }
+			    this.svRow = row; this.svCol = col;
+			}
+		    }
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
@@ -1557,6 +1615,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    if(iC >= formObj.tHead.rows[0].cells.length)
 					formObj.tHead.rows[0].appendChild(this.place.ownerDocument.createElement('th'));
 				    hit = formObj.tHead.rows[0].cells[iC];
+				    hit.onclick = formObj.onclick;
 				    if(isH) {	//Header process
 					if(iC == 0) { hit.innerText = '*'; iC++; continue; }
 					hit.innerText = tC ? tC.textContent : "";
@@ -1575,13 +1634,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					if(iC >= formObj.tBodies[0].rows[iR].cells.length)
 					    formObj.tBodies[0].rows[iR].appendChild(this.place.ownerDocument.createElement(iC==0?'th':'td'));
 					tit = formObj.tBodies[0].rows[iR].cells[iC];
+					tit.onclick = formObj.onclick;
 					if(iC == 0) { tit.innerText = iR+1; iC++; continue; }
 					// Value
-					if(tC) switch(tC.nodeName) {
-					    case 'b': tit.innerText = parseInt(tC.textContent)?"true":"false";	break;
-					    case 'i': tit.innerText = parseInt(tC.textContent);	break;
-					    case 'r': tit.innerText = parseFloat(tC.textContent);	break;
-					    default: tit.innerText = tC.textContent;
+					if(tC) {
+					    tit.outTp = tC.nodeName;
+					    switch(tC.nodeName) {
+						case 'b': tit.innerText = parseInt(tC.textContent) ? "true" : "false";	break;
+						case 'i': tit.innerText = parseInt(tC.textContent);	break;
+						case 'r': tit.innerText = parseFloat(tC.textContent);	break;
+						default: tit.innerText = tC.textContent;
+					    }
 					}
 					// Back color
 					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
@@ -1606,6 +1669,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    iR++;
 				} else hdrPresent = true;
 			    }
+			    // Generic properties set
+			    formObj.oKeyID = (wVl=tX.getAttribute("keyID")) ? parseInt(wVl) : 0;
+			    formObj.oSel = tX.getAttribute("sel");
+			    if(formObj.oSel == "row" && formObj.oKeyID)		formObj.oKeyID = Math.min(formObj.oKeyID, maxCols-1);
+			    else if(formObj.oSel == "col" && formObj.oKeyID)	formObj.oKeyID = Math.min(formObj.oKeyID, maxRows-1);
+
 			    // Remove spare rows and columns; Headers visibility process
 			    formObj.tHead.rows[0].style.display =
 				(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl)) ? "" : "none";
@@ -1622,13 +1691,25 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				formObj.tBodies[0].removeChild(formObj.tBodies[0].lastChild);
 
 			    formObj.style.width = ((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) ? "100%" : "";
-
-			    //console.log("maxCols="+maxCols+"("+formObj.tBodies[0].rows.length+"); maxRows="+maxRows);
 			}
 		    }
-		    if(!toInit) break;
-		    //???? Events and processings init
-		    this.place.appendChild(formObj);
+		    if(toInit) this.place.appendChild(formObj);
+		    // Set the value
+		    if((toInit || this.attrsMdf['value']) && formObj.innerHTML.length) {
+			val = this.attrs['value'];
+			if(formObj.oSel == "row" || formObj.oSel == "col" || formObj.oSel == "cell") {
+			    findOK = false;
+			    for(iR = ((formObj.oSel=="col")?formObj.oKeyID:0);
+				    !findOK && iR <= ((formObj.oSel=="col")?formObj.oKeyID:formObj.tBodies[0].rows.length-1); iR++)
+				for(iC = ((formObj.oSel=="row")?formObj.oKeyID+1:1);
+					!findOK && iC <= ((formObj.oSel=="row")?formObj.oKeyID+1:(formObj.tBodies[0].rows[iR].cells.length-1)); iC++) {
+				    cO = formObj.tBodies[0].rows[iR].cells[iC];
+				    valc = (cO.outTp == "b") ? (cO.textContent=="true"?1:0) : cO.textContent;
+				    if((findOK=(valc==val))) formObj.selIt(((formObj.oSel=="col")?null:iR+1), ((formObj.oSel=="row")?null:iC));
+				}
+			    if(!findOK) formObj.selIt();
+			} else if((sepPos=val.indexOf(":")) > 0) formObj.selIt(parseInt(val.slice(0,sepPos))+1, parseInt(val.slice(sepPos+1))+1);
+		    }
 		    break;
 	    }
 	}

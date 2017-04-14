@@ -1037,7 +1037,7 @@ void TMdPrm::enable( )
 	    aid = TSYS::strSepParse(sel,3,':');
 	    if(aid.empty()) aid = ai;
 	    anm = TSYS::strSepParse(sel,4,':');
-	    if(anm.empty()) anm = ai;
+	    if(anm.empty()) anm = aid;
 
 	    if(vlPresent(aid) && !pEl.fldPresent(aid))	continue;
 
