@@ -1,3 +1,7 @@
+2017-04-21 Roman (stable)
+- UI.WebVision: Items edition implemented for the view "Table" of the primitive "FormEl".
+
+
 2017-04-14 Roman (stable)
 - DAQ.ModBus: Set for using ID at empty Name part of DAQ.
 - UI.WebVision: Active mode for selection for the view "Table" of the primitive "FormEl" implemented,

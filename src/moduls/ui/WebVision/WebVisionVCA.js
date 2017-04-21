@@ -1546,14 +1546,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(elTbl.oSel == "row" && this.parentNode.rowIndex > 0) {
 				elTbl.selIt(this.parentNode.rowIndex);
 				attrs = new Object();
-				attrs.value = this.parentNode.cells[elTbl.oKeyID+1].textContent;
+				attrs.value = elTbl.getVal(this.parentNode.rowIndex-1, elTbl.oKeyID);
 				if(this.parentNode.cells[elTbl.oKeyID+1].outTp == "b")
 				    attrs.value = (attrs.value == "true") ? 1 : 0;
 			    }
 			    else if(elTbl.oSel == "col" && this.cellIndex > 0) {
 				elTbl.selIt(null, this.cellIndex);
 				attrs = new Object();
-				attrs.value = elTbl.tBodies[0].rows[elTbl.oKeyID].cells[this.cellIndex].textContent;
+				attrs.value = elTbl.getVal(elTbl.oKeyID, this.cellIndex-1);
 				if(elTbl.tBodies[0].rows[elTbl.oKeyID].cells[this.cellIndex].outTp == "b")
 				    attrs.value = (attrs.value == "true") ? 1 : 0;
 			    }
@@ -1561,11 +1561,52 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				elTbl.selIt(this.parentNode.rowIndex, this.cellIndex);
 				attrs = new Object();
 				if(elTbl.oSel == "cell") {
-				    attrs.value = this.textContent;
+				    attrs.value = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
 				    if(this.outTp == "b") attrs.value = (attrs.value == "true") ? 1 : 0;
 				} else attrs.value = (this.parentNode.rowIndex-1) + ":" + (this.cellIndex-1);
 			    }
 			    if(attrs) { attrs.event = 'ws_TableChangeSel'; setWAttrs(elTbl.wdgLnk.addr, attrs); }
+			}
+			formObj.ondblclick = function( ) {
+			    if(this.nodeName == "TABLE" || !(elTbl=this.offsetParent) || !elTbl.elWr || !this.isEdit) return true;
+			    if(this.isEnter) {
+				this.innerHTML = this.svInnerHTML;
+				this.isEnter = false; elTbl.edIt = null;
+			    }
+			    else {
+				if(elTbl.edIt) { elTbl.edIt.innerHTML = elTbl.edIt.svInnerHTML; elTbl.edIt.isEnter = false; }
+				this.isEnter = true; elTbl.edIt = this;
+				this.svInnerHTML = this.innerHTML;
+
+				if(this.outTp == "b") {
+				    tVl = (elTbl.getVal(this.parentNode.rowIndex-1,this.cellIndex-1) == "true");
+				    this.innerHTML = "<input type='checkbox'/>";
+				    this.firstChild.checked = tVl;
+				    this.firstChild.onclick = function( ) {
+					this.parentNode.offsetParent.setVal((this.checked?1:0),
+					    this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+				    }
+				}
+				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s") {
+				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
+				    this.innerHTML = "<input/>";
+				    this.firstChild.value = tVl;
+				    this.firstChild.onkeyup = function(e) {
+					e = e ? e : window.event;
+					if(e.keyCode == 13)
+					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					if(e.keyCode == 27) {
+					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
+					    this.parentNode.innerHTML = this.parentNode.svInnerHTML;
+					}
+					return true;
+				    }
+				} else { this.isEnter = false; elTbl.edIt = null; }
+			    }
+			    //   Prevent for wrong selection
+			    if(window.getSelection) window.getSelection().removeAllRanges();
+			    else if(document.selection) document.selection.empty();
+			    return false;
 			}
 			formObj.selIt = function( row, col ) {
 			    //Restore saved
@@ -1591,6 +1632,27 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 			    }
 			    this.svRow = row; this.svCol = col;
+			}
+			formObj.getVal = function( row, col ) {
+			    tit = this.tBodies[0].rows[row].cells[col+1];
+			    return tit.children.length ? tit.innerText.slice(1) : tit.innerText;
+			}
+			formObj.setVal = function( val, row, col ) {
+			    tit = this.tBodies[0].rows[row].cells[col+1];
+			    if(tit.isEnter) {
+				tit.innerHTML = tit.svInnerHTML;
+				attrs = new Object(); attrs.set = val; attrs.event = "ws_TableEdit_"+col+"_"+row;
+				setWAttrs(this.wdgLnk.addr, attrs);
+				tit.isEnter = false; this.edIt = null;
+			    }
+			    else {
+				switch(tit.outTp) {
+				    case 'b': val = parseInt(val) ? "true" : "false";	break;
+				    case 'i': val = parseInt(val);	break;
+				    case 'r': val = parseFloat(val);	break;
+				}
+				tit.innerText = val;
+			    }
 			}
 		    }
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
@@ -1636,16 +1698,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					tit = formObj.tBodies[0].rows[iR].cells[iC];
 					tit.onclick = formObj.onclick;
 					if(iC == 0) { tit.innerText = iR+1; iC++; continue; }
+					else tit.ondblclick = formObj.ondblclick;
 					// Value
-					if(tC) {
-					    tit.outTp = tC.nodeName;
-					    switch(tC.nodeName) {
-						case 'b': tit.innerText = parseInt(tC.textContent) ? "true" : "false";	break;
-						case 'i': tit.innerText = parseInt(tC.textContent);	break;
-						case 'r': tit.innerText = parseFloat(tC.textContent);	break;
-						default: tit.innerText = tC.textContent;
-					    }
-					}
+					if(tC) { tit.outTp = tC.nodeName; formObj.setVal(tC.textContent, iR, iC-1); }
 					// Back color
 					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
 					    tit.style.backgroundColor = getColor(wVl);
@@ -1660,6 +1715,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					// Cell image
 					if(tC && (wVl=tC.getAttribute("img")))
 					    tit.innerHTML = "<img src='/"+MOD_ID+this.addr+"?com=res&val="+wVl+"'/> " + tit.innerText;
+					// Modify set
+					if(hit.outEdit || (tC && (wVl=tC.getAttribute("edit")) && parseInt(wVl))) tit.isEdit = true;
+					else tit.isEdit = false;
 				    }
 				    if(tC)	{ ++iCR; maxCols = Math.max(maxCols, iCR); }
 				    iC++; iCh1++;
@@ -1704,7 +1762,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				for(iC = ((formObj.oSel=="row")?formObj.oKeyID+1:1);
 					!findOK && iC <= ((formObj.oSel=="row")?formObj.oKeyID+1:(formObj.tBodies[0].rows[iR].cells.length-1)); iC++) {
 				    cO = formObj.tBodies[0].rows[iR].cells[iC];
-				    valc = (cO.outTp == "b") ? (cO.textContent=="true"?1:0) : cO.textContent;
+				    valc = formObj.getVal(iR, iC-1); if(cO.outTp == "b") valc = (valc=="true") ? 1 : 0;
 				    if((findOK=(valc==val))) formObj.selIt(((formObj.oSel=="col")?null:iR+1), ((formObj.oSel=="row")?null:iC));
 				}
 			    if(!findOK) formObj.selIt();

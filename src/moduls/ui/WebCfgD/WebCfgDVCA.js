@@ -951,7 +951,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    }
 	    else { table = t_s.addr_tbl; lab = t_s.addr_lab; }
 
-	    //  Fill table
+	    //  Fill the table
 	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
 	    if(table) {
 		table.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
@@ -1212,7 +1212,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				    this.firstChild.value = cval;
 				    this.isEdited = false;
 				}
-				//   Prevent broken selection
+				//   Prevent for wrong selection
 				if(window.getSelection) window.getSelection().removeAllRanges();
 				else if(document.selection) document.selection.empty();
 				return false;
