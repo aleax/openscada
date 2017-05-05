@@ -1,3 +1,10 @@
+2017-05-05 Roman (stable)
+- DB.LibsDB.vcaBase: Main.RootPgSo expanded by yet one pages navigation element that is combobox with the allowed for directly select pages.
+- SYS: The generic node was expanded by a user API function "messSys".
+- !!:FIX:Transport.SSL: Fix for SSL_free() missing and variables "ctx", "ssl", "conn" clean at second start, into the output part.
+- !!:FIX:UI.WebCfgD: The "Table" element processing for big content some improved and fixed for key items eddition.
+
+
 2017-04-21 Roman (stable)
 - UI.WebVision: Items edition implemented for the view "Table" of the primitive "FormEl".
 

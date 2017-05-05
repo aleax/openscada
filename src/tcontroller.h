@@ -113,7 +113,7 @@ class TController : public TCntrNode, public TConfig
 	void setRedntRun( const string &vl )	{ cfg("REDNT_RUN").setS(vl); }
 	virtual void redntDataUpdate( );
 
-	virtual string catsPat( );	//Individual the controller messages' categories pattern
+	virtual string catsPat( );	//Individual categories pattern for messages of the controller
 	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "" );
 
 	TTypeDAQ &owner( ) const;

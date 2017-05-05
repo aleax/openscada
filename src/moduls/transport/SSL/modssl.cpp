@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.4.4"
+#define MOD_VER		"1.4.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -742,14 +742,16 @@ void TSocketOut::save_( )
 void TSocketOut::start( int tmCon )
 {
     int sock_fd = -1;
-    conn = NULL;
-    ctx = NULL;
 
     string	cfile;
     char	err[255];
-    ResAlloc res(wres, true);
 
+    ResAlloc res(wres, true);
     if(runSt) return;
+
+    ctx = NULL;
+    ssl = NULL;
+    conn = NULL;
 
     //Status clear
     trIn = trOut = 0;
@@ -908,6 +910,7 @@ void TSocketOut::start( int tmCon )
     } catch(TError &err) {
 	if(sock_fd >= 0) close(sock_fd);
 	if(conn) { BIO_reset(conn); BIO_free(conn); }
+	if(ssl)	SSL_free(ssl);
 	if(ctx)	SSL_CTX_free(ctx);
 	if(!cfile.empty()) remove(cfile.c_str());
 	throw;
@@ -921,7 +924,6 @@ void TSocketOut::start( int tmCon )
 void TSocketOut::stop( )
 {
     ResAlloc res(wres, true);
-
     if(!runSt) return;
 
     //Status clear
@@ -932,7 +934,12 @@ void TSocketOut::stop( )
     BIO_reset(conn);
     close(BIO_get_fd(conn,NULL));
     BIO_free(conn);
+    SSL_free(ssl);
     SSL_CTX_free(ctx);
+
+    ctx = NULL;
+    ssl = NULL;
+    conn = NULL;
 
     runSt = false;
 
