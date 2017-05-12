@@ -2196,7 +2196,7 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
     if(dlgWin.isLoad) document.body.removeChild(this);
 
     dlgWin.innerHTML =
-	"<table cellpadding='2' cellspacing='0' border='0' "+
+	"<table cellspacing='0' "+
 	    "style='left: "+((window.innerWidth-400-5)/2)+"px; top: "+((this.window.innerHeight-200-18)/2)+"px;'>\n"+
 	"<tr style='cursor: move;' onmousedown='this.clX = event.clientX; this.clY = event.clientY; return false;' \n"+
 	"   onmouseup='this.clX = this.clY = null; return false;' \n"+
@@ -2205,8 +2205,8 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
 	"     this.offsetParent.style.left = (parseInt(this.offsetParent.style.left)+event.clientX-this.clX)+\"px\"; "+
 	"     this.offsetParent.style.top  = (parseInt(this.offsetParent.style.top)+event.clientY-this.clY)+\"px\"; "+
 	"     this.clX = event.clientX; this.clY = event.clientY; }'>"+
-	" <td id='wDlgHeader' style='padding-left: 5px; max-width: "+(400-10)+"px; width: "+(400-10)+"px; overflow: hidden; white-space: nowrap;'>###Node id and/or name select###</td>\n"+
-	" <td style='color: red; cursor: pointer; text-align: right;' onclick='document.body.dlgWin.close();'>X</td>\n"+
+	" <td id='wDlgHeader'>###Node id and/or name select###</td>\n"+
+	" <td style='color: red; cursor: pointer; text-align: right; width: 1px; ' onclick='document.body.dlgWin.close();'>X</td>\n"+
 	"</tr>\n"+
 	"<tr><td colspan='2' style='max-width: 400px;'>\n"+
 	" <center>\n"+

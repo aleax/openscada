@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -615,10 +615,12 @@ string TMdContr::catsPat( )
 
 int TMdContr::cntrIfCmd( XMLNode &node )
 {
-    string reqStat = TSYS::pathLev(node.attr("path"),0);
+    string reqStat = TSYS::pathLev(node.attr("path"), 0);
 
+    bool stPresent = false;
     for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
 	if(mStatWork[iSt].first == reqStat) {
+	    stPresent = true;
 	    if(mStatWork[iSt].second.cntr > 0) break;
 	    try {
 		node.setAttr("conTm", enableStat()?"":"1000");	//Set one second timeout to disabled controller for start procedure speed up.
@@ -639,6 +641,7 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		throw;
 	    }
 	}
+    if(!stPresent) node.setAttr("err", TSYS::strMess(_("11:Station missed '%s'."),reqStat.c_str()));
 
     return s2i(node.attr("err"));
 }

@@ -18,14 +18,14 @@
     #gen-pnl-up span { display: table-cell; height: 22px; border: 0; vertical-align: middle; }
 
     #gen-pnl-left { position: absolute; left: 0px; top: 25px; width: 246px; height: 471px; background-color: #F7FFF6; border: 2px ridge #F7FFF6; overflow: auto; text-align: left; vertical-align: top; white-space: nowrap; color: black; }
-    #gen-pnl-left ul { background-color: #F7FFF6; background-repeat: repeat-y; background-attachment: scroll; background-position: left top; }
-    ul.tree ul { list-style-image: none; list-style-position: outside; list-style-type: none; margin: 0; padding: 0 0 0 17px; }
+    #gen-pnl-left ul { list-style-image: none; list-style-position: outside; list-style-type: none; background-color: #F7FFF6; background-repeat: repeat-y; background-attachment: scroll; background-position: left top; margin: 0; white-space: nowrap; }
+    ul.tree { padding: 0; }
+    ul.tree ul { padding: 0 0 0 17px; }
     ul.tree li.select { background-color: #BDEBED; }
-    ul.tree { clear: both; list-style-image: none; list-style-position: outside; list-style-type: none; margin: 0px; padding: 0px; white-space: nowrap; }
     ul.tree a { text-decoration:none; color: black; }
     ul.tree a.pm { cursor: pointer; }
     ul.tree img { vertical-align: middle; height: 16px; }
-    a.active img {  cursor: pointer; }
+    a.active img { cursor: pointer; }
     a.inactive img { cursor: default; filter: grayscale(100%) opacity(30%); }
 
     #gen-pnl-right { position: absolute; left: 250px; top: 25px; width: 546px; height: 471px; background-color: #F7F7F1; border: 2px outset #F7F7F1; overflow: auto; margin-left: 5px; padding-left: 1px; padding-right: 2px; }
@@ -59,7 +59,8 @@
     #gen-pnl-splt { position: absolute; left: 250px; top: 25px; width: 2px; height: 550px; border: 0; cursor: col-resize; margin-left: 2px; border-left: 2px ridge #E6E6E6; }
     #st_user { border-left: 1px solid black; padding-left: 2px; white-space: nowrap; }
 
-    #gen-pnl-dlg > table { position: absolute; box-shadow: 10px 10px 5px grey; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; }
+    #gen-pnl-dlg > table { position: absolute; box-shadow: 10px 10px 5px rgba(68,68,68,0.6); z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; }
+    #gen-pnl-dlg #wDlgHeader { padding-left: 5px; overflow: hidden; white-space: nowrap; background: linear-gradient(#8FA9FF, #6F89DF, #8FA9FF); }
     #gen-pnl-dlg > div { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0.1; background-color: #8F8F8F; }
     #gen-pnl-dlg .dlg { width: 100%; border: 2px ridge #FF9253; background-color: #E6E6E6; padding: 5px; text-align: left; vertical-align: top; }
 

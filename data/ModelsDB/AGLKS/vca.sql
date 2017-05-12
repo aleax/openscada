@@ -2,87 +2,6 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('AGLKS','','Pages library for AGLKS','wlb_AGLKS','','','Бібліотека сторінок АГЛКС','','Библиотека страниц АГЛКС');
-CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT '' ,"GRP" TEXT DEFAULT '' ,"PERMIT" INTEGER DEFAULT '' ,"PER" INTEGER DEFAULT '' ,"FLGS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"STYLE" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "VCAPrjs" VALUES('AGLKS','','The project of visualisation AGLKS.','prj_AGLKS','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
-AAAAAElFTkSuQmCC','root','op',436,100,4,'','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.','','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.',-1);
 CREATE TABLE 'prj_AGLKS_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','so1','/wlb_Main/wdg_RootPgSo/wdg_so1','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','so2','/wlb_Main/wdg_RootPgSo/wdg_so2','',2);
@@ -130,7 +49,7 @@ INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el6'
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el7','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el7','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el8','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el8','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','ElFigure1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_ElFigure1','',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_trnd1','curSek;',2);
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','trnd1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_trnd1','curSek;sclWin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el3','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el3','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el2','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el2','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','el1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el1','name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
@@ -778,7 +697,6 @@ INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','downm','/
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','up','/wlb_Main/wdg_ElCadr/wdg_up','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','upm','/wlb_Main/wdg_ElCadr/wdg_upm','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','down','/wlb_Main/wdg_ElCadr/wdg_down','',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','doc','/wlb_Main/wdg_cntrPasp/wdg_doc','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','modCasc','/wlb_Main/wdg_ElCadr/wdg_modCasc','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','modMan','/wlb_Main/wdg_ElCadr/wdg_modMan','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrRegul','ti','/wlb_Main/wdg_cntrRegul/wdg_ti','value;',2);
@@ -1455,16 +1373,17 @@ INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_treeSelect','apply
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel','value;','');
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_treeSelect','select','/wlb_Main/wdg_treeSelect/wdg_select','','');
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','alarms','/wlb_originals/wdg_Protocol','geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0fnt;it0color;it1lev;it1color;it2lev;it2color;','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','frame','/wlb_Main/wdg_cntrPaspExt/wdg_frame','','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','value;','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','value;','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view','value;','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','trends','/wlb_Main/wdg_cntrPaspExt/wdg_trends','','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','trendsList','/wlb_Main/wdg_cntrPaspExt/wdg_trendsList','','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','view','/wlb_Main/wdg_cntrPaspExt/wdg_view','','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','','');
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','value;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','frame','/wlb_Main/wdg_cntrPaspExt/wdg_frame','owner;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view','owner;value;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','trends','/wlb_Main/wdg_cntrPaspExt/wdg_trends','owner;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','trendsList','/wlb_Main/wdg_cntrPaspExt/wdg_trendsList','owner;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','view','/wlb_Main/wdg_cntrPaspExt/wdg_view','owner;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','owner;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','owner;value;','');
+INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','doc','/wlb_Main/wdg_cntrPasp/wdg_doc','owner;','');
 CREATE TABLE 'prj_AGLKS_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -1518,8 +1437,7 @@ ws_FocusIn:/el7:open:/pg_control/pg_ElCadr
 ws_FocusIn:/el8:open:/pg_control/pg_ElCadr','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','curSek','1247474043',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Generic',40,'','','','Графіки 1','','','Графики 1','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','grpName','Generic',41,'','Generic','','Загальні','','Загальні','Общие','','Общие');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Generic',41,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP1/wMin','el2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/F_PP1/var','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/LogicLev/experiment/F_PP1/NAME','el8','Елемент групи графіків','','','Элемент группы графиков','','');
@@ -2629,7 +2547,6 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','pPrec'
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/KM102/TE1314_2','TAT101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM102/TE1314_2','TAT101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','pPrec','<EVAL>',34,'Parameter|prec','prm:/BlockCalc/KM102/TE1314_2/prec','TAT101_2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','pName','<EVAL>',42,'<page>|NAME','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','prmAMax','<EVAL>',42,'<page>|aMax','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','prmAMin','<EVAL>',42,'<page>|aMin','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_ElCadr','prmAnalog','<EVAL>',42,'<page>|analog','','','','','','','','');
@@ -4013,12 +3930,6 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pNameSz','
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','spName','Gas flow through the diaphragm one',33,'','Gas flow through the diaphragm one','F_PP1','Витрати газу через діафрагму один','','Витрати газу через діафрагму один','Расход газа через диафрагму один','','Расход газа через диафрагму один');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','spName','Gas flow through the diaphragm three',33,'','Gas flow through the diaphragm three','F_PP3','Витрати газу через діафрагму три','','Витрати газу через діафрагму три','Расход газа через диафрагму три','','Расход газа через диафрагму три');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','spName','Gas flow through the diaphragm five',33,'','Gas flow through the diaphragm five','F_PP5','Витрати газу через діафрагму п''ять','','Витрати газу через діафрагму п''ять','Расход газа через диафрагму пять','','Расход газа через диафрагму пять');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','geomZ','8',32,'','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','pName','<EVAL>',42,'<page>|NAME','','','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value','0',0,'','','sel_data','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value','0',0,'','','sel_trends','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value','1',0,'','','sel_view','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value','',8,'','','viewSet','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','Pages group: "Generic"',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','dscr','Pages group: "Temperatures"',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','Pages group: "KM101"',32,'','','','','','','','','');
@@ -4038,6 +3949,29 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','spName','G
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','spName','Gas pressure at the diaphragm five',33,'','Gas pressure at the diaphragm five','P_PP5','','','','Давление газа на диафрагме пять','','Давление газа на диафрагме пять');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','spName','Gas temperature at the diaphragm three',33,'','Gas temperature at the diaphragm three','T_PP3','','','','Температура газа на диафрагме три','','Температура газа на диафрагме три');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','spName','Gas temperature at the diaphragm five',33,'','Gas temperature at the diaphragm five','T_PP5','','','','Температура газа на диафрагме пять','','Температура газа на диафрагме пять');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','name','Pasport',32,'','','','Паспорт','','','Паспорт','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','geomZ','9',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','pName',NULL,42,'<page>|NAME','','','','<page>|NAME','','','<page>|NAME','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','data','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','frame','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','sel_data','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','value','0',0,'','','sel_data','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','sel_trends','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','value','0',0,'','','sel_trends','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','sel_view','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','value','1',0,'','','sel_view','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','trends','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','trendsList','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','view','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','viewLabSet','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','owner','root:op',32,'','','viewSet','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','value','',8,'','','viewSet','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','owner','root:op',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','geomZ','9',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','pName',NULL,42,'<page>|NAME','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspOld','owner','root:UI',32,'','','doc','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','sclWin','0',160,'','','trnd1','','','','','','');
 CREATE TABLE 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "prj_AGLKS_stl" VALUES('<Styles>','Default;root;UI;0444','Ivory','','','','','','','','');
 INSERT INTO "prj_AGLKS_stl" VALUES('backColor','gray','ivory','','','','','','','','');
@@ -6620,10 +6554,10 @@ else c1 = (pVar<1) ? "red" : "green";','JavaLikeCalc.JavaScript
 if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1;','');
 CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1456599642);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1435132568);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1414589842);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1494527301);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1494527301);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1494527301);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1494527301);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','doc','','root',1,'
 ','
@@ -6647,7 +6581,7 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','2','','root',1,'','','',-1,5,'name;d
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1415550170);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','mn','','root',1,'','','',-1,5,'name;dscr;',1397927358);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'pgGrp;',1397927358);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','control','','root',1,'','','',-1,5,'name;',1426000648);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','control','','root',1,'','','',-1,5,'name;',1494598746);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'','');
@@ -6666,7 +6600,6 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','mn','','root',1,'
 ',-1,5,'name;dscr;',1397926992);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/mn','KM101','','/wlb_AGLKS/wdg_KM101',1,'','','',-1,0,'name;pgGrp;',1397926992);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/ggraph','1','','..',1,'','','',-1,0,'name;dscr;grpName;',1415550170);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cntrPasp',1,'','','',-1,0,'pName;','');
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','4','','root',1,'
 ','
 ','
@@ -6714,11 +6647,99 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/mn','KM101','','/wlb_AGLKS/wdg_KM101
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','accept','','/wlb_Main/wdg_accept',1,'','','',-1,0,'','');
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','6','','/wlb_doc/wdg_docAlarmsRep',1,'','','',-1,0,'geomYsc;',1400852515);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','treeSelect','','/wlb_Main/wdg_treeSelect',1,'','','',-1,0,'',1383147124);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt',1,'','','',-1,0,'geomZ;pName;',1405531810);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;name;geomZ;pName;',1494598746);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;geomZ;pName;',1494521098);
 CREATE TABLE 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','stBarNoShow','','No show status bar',131072,'0',128,'','');
 INSERT INTO "prj_AGLKS_uio" VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
+CREATE TABLE 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
+INSERT INTO "VCAPrjs" VALUES('AGLKS','','','','The project of visualisation AGLKS.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.0','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.1.0','prj_AGLKS','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
+AAAAAElFTkSuQmCC','root','op',436,100,-1,1);
 COMMIT;

@@ -1,3 +1,22 @@
+2017-05-12 Roman (stable)
+- !!:FIX:DB.LibsDB.vcaBase: Main.RootPgSo some fixed for the combobox with the allowed for directly select pages.
+    FIX: Main page of the project "archBrowser" expanded for the combobox with the allowed for directly select pages.
+    !!:Projects "tmplSO" and "archBrowser" were switched to the extended pasport of the standard parameters.
+    The external pasport (Main.cntrPaspExt) adapted some to display by UI.WebVision.
+- !!:DB.ModelsDB.{AGLKS.vca.db,Boiler.St.db}: The Project was switched to the extended pasport of the standard parameters.
+- FIX:DAQ.DAQGate: Requests are fixed after moving to different station.
+- FIX:DAQ.System: Some warnings from Valgrind are fixed.
+- !!!!:FIX:Transport.SSL: Fixed into client's part for correct free wich caused for crashes and blockings.
+    !!!!: Wide tested on browsers Chrome, Firefox; for file handlers free and into Valgrind.
+- FIX:UI.VCAEngine: Some original messages fixed.
+- UI.Vision: The view "Table" of the primitive "FormEl" expanded for field "width" equal to 0 processing to hide the column.
+- UI.WebCfgD: The navigation tree and dialogs forming some improved.
+- !!!!:FIX:UI.WebVision: View "Tree" of the primitive "FormEl" implemented.
+    FIX: Dialogs, small built-in windows, forming some fixed and improved.
+    FIX: System context menu oppressed for active widgets.
+    FIX: View "Table" expanded for columns hide by field "width" equal to 0 and selection lost was prevented.
+
+
 2017-05-05 Roman (stable)
 - DB.LibsDB.vcaBase: Main.RootPgSo expanded by yet one pages navigation element that is combobox with the allowed for directly select pages.
 - SYS: The generic node was expanded by a user API function "messSys".

@@ -49,6 +49,7 @@ class CPU: public DA
 	//Attributes
 	struct tval
 	{
+	    tval( ) : user(0), nice(0), sys(0), idle(0) { }
 	    long user;
 	    long nice;
 	    long sys;

@@ -544,7 +544,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				hit->setText(tC?tC->text().c_str():"");
 				if(tC) {
 				    if((wVl=tC->attr("width")).size()) {
-					int wdthCel = s2i(wVl);
+					int wdthCel = fmax(1, s2i(wVl));
 					hit->setData(Qt::UserRole,
 					    (wVl.find("%") == wVl.size()-1) ? w->size().width()*wdthCel/100 : wdthCel*w->xScale(true));
 				    } else hit->setData(Qt::UserRole, QVariant());

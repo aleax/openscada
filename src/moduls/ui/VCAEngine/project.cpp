@@ -844,7 +844,7 @@ void Page::postEnable( int flag )
     //Add main attributes
     if(flag&TCntrNode::NodeConnect) {
 	attrAdd(new TFld("pgOpen",_("Page: open state"),TFld::Boolean,TFld::NoFlag));
-	attrAdd(new TFld("pgNoOpenProc",_("Page: process no opened"),TFld::Boolean,TFld::NoFlag));
+	attrAdd(new TFld("pgNoOpenProc",_("Page: process not opened"),TFld::Boolean,TFld::NoFlag));
 	attrAdd(new TFld("pgGrp",_("Page: group"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_GRP).c_str()));
 	attrAdd(new TFld("pgOpenSrc",_("Page: open source"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
     }
@@ -1125,7 +1125,7 @@ void Page::setEnable( bool val, bool force )
 
     if(val) {
 	attrAdd(new TFld("pgOpen",_("Page: open state"),TFld::Boolean,TFld::NoFlag));
-	attrAdd(new TFld("pgNoOpenProc",_("Page: process no opened"),TFld::Boolean,TFld::NoFlag));
+	attrAdd(new TFld("pgNoOpenProc",_("Page: process not opened"),TFld::Boolean,TFld::NoFlag));
     }
 
     //Enable/disable included pages

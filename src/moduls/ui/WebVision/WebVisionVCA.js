@@ -433,7 +433,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if(this.pages[i].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;
     //Check for open child page or for unknown and empty source pages open as master page child windows
     if((!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage) {
-	var iPg = new pwDescr(pgId,true,this);
+	var iPg = new pwDescr(pgId, true, this);
 	var attrBrVal = servGet(pgId,'com=attrsBr');
 
 	var winName = null;
@@ -448,60 +448,26 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	//New external <div> window create
 	if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH'])) {
 	    iPg.window = document.createElement('table');
-	    iPg.window.setAttribute('cellpadding','2');
-	    iPg.window.setAttribute('cellspacing','0');
-	    iPg.window.setAttribute('border','0');
-	    iPg.window.setAttribute('style','position: absolute; font-size: 12px; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; '+
-		'left: '+((parseInt(masterPage.attrs['geomW'])-winWidth-5)/2)+'px; '+
-		'top: '+((parseInt(masterPage.attrs['geomH'])-winHeight-18)/2)+'px; ');
-	    var wRow = document.createElement('tr');
-	    iPg.window.appendChild(wRow);
-	    wRow.setAttribute('style','cursor: move;');
-	    wRow.win = iPg.window;
-	    wRow.onmousedown = function(e) {
-		if(!e) e = window.event;
-		this.clX = e.clientX; this.clY = e.clientY;
-		return false;
-	    }
-	    wRow.onmouseup = function(e) {
-		if(!e) e = window.event;
-		this.clX = this.clY = null;
-		return false;
-	    }
-	    wRow.onmouseout = wRow.onmouseup;
-	    wRow.onmousemove = function(e) {
-		if(!e) e = window.event;
-		if(this.clX != null) {
-		    this.win.style.left = (parseInt(this.win.style.left)+e.clientX-this.clX)+"px";
-		    this.win.style.top  = (parseInt(this.win.style.top)+e.clientY-this.clY)+"px";
-		    this.clX = e.clientX; this.clY = e.clientY;
-		}
-	    }
-	    var titleBlk = document.createElement('td');
-	    wRow.appendChild(titleBlk);
-	    titleBlk.setAttribute('style','max-width: '+(winWidth-7)+'px; width: '+(winWidth-7)+'px; overflow: hidden; white-space: nowrap;');
-	    titleBlk.setAttribute('title',winName);
-	    titleBlk.appendChild(document.createTextNode(winName));
-	    var closeWin = document.createElement('td');
-	    wRow.appendChild(closeWin);
-	    closeWin.appendChild(document.createTextNode('X'));
-	    closeWin.setAttribute('style','color: red; cursor: pointer;');
-	    closeWin.onclick = function( ) {
-		servSet(this.iPg.addr,'com=pgClose','');
-		document.getElementById('mainCntr').removeChild(this.iPg.window);
-		this.iPg.pwClean();
-		delete this.iPg.parent.pages[this.iPg.addr];
-	    }
-	    closeWin.iPg = iPg;
-	    wRow = document.createElement('tr');
-	    iPg.window.appendChild(wRow);
-	    var wCntCell = document.createElement('td');
-	    wRow.appendChild(wCntCell);
-	    wCntCell.setAttribute('colspan','2');
-	    wCntCell.setAttribute('align','center');
-	    iPg.place = document.createElement('div');
-	    wCntCell.appendChild(iPg.place);
+	    iPg.window.iPg = iPg;
+	    iPg.window.id = "gen-pnl-dlg";
+	    iPg.window.setAttribute('cellspacing', '0');
+	    iPg.window.setAttribute('style','left: '+((parseInt(masterPage.attrs['geomW'])-winWidth-5)/2)+'px; '+
+					    'top: '+((parseInt(masterPage.attrs['geomH'])-winHeight-18)/2)+'px; ');
+	    iPg.window.innerHTML = "<tr class='hd' onmousedown='this.clX = event.clientX; this.clY = event.clientY; return false;' "+
+		"onmouseup='this.clX = this.clY = null; return false;' onmouseout='this.onmouseup()' "+
+		"onmousemove='if(this.clX != null) { "+
+		" this.offsetParent.style.left = (parseInt(this.offsetParent.style.left)+event.clientX-this.clX)+\"px\"; "+
+		" this.offsetParent.style.top  = (parseInt(this.offsetParent.style.top)+event.clientY-this.clY)+\"px\"; "+
+		" this.clX = event.clientX; this.clY = event.clientY; }'>"+
+		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
+		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
+		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose\",\"\"); "+
+		"   this.offsetParent.iPg.pwClean(); "+
+		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
+		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);'>X</td></tr>\n"+
+		"<tr><td colspan='2'><div/></td></tr>";
 	    document.getElementById('mainCntr').appendChild(iPg.window);
+	    iPg.place = iPg.window.rows[1].cells[0].children[0];
 	}
 	//New external window create
 	else {
@@ -1531,9 +1497,100 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    this.place.appendChild(formObj);
 		    break;
+		case 8:	//Tree
+		    this.place.className += " Tree";
+		    if(elWr) this.place.className += " active";
+		    var toInit = !this.place.children.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('ul') : this.place.children[0];
+		    formObj.wdgLnk = this;
+		    formObj.elWr = elWr;
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['font']) {
+			formObj.style.cssText = 'font: '+this.place.fontCfg+'; font-style: italic; ';
+			if(getFont(this.attrs['font'],Math.min(xSc,ySc),2) > 14) formObj.style.cssText += "font-size: 14px;"
+		    }
+		    //Events and the processings init
+		    if(toInit) {
+			formObj.finish = function( lit, selIt ) {
+			    if(selIt && !selIt.length) return false;
+			    var cnt = lit ? lit.children[2] : this;
+			    for(var iIt = cnt.children.length-1; iIt >= 0; iIt--) {
+				var oIt = cnt.children[iIt];
+				if(selIt) {
+				    if(selIt == oIt.itPath) { oIt.classList.add("select"); this.mSelIt = oIt; return true; }
+				    if(this.finish(oIt,selIt)) oIt.itExp = true;
+				}
+				else {
+				    if(oIt.itMdf != this.itMdf) { cnt.removeChild(oIt); continue; }
+				    this.finish(oIt);
+				    oIt.children[2].style.backgroundImage = (oIt!=cnt.lastChild?"url(/"+MOD_ID+"/img_treeLine)":"");
+				}
+				isExpandable = oIt.children[2].children.length;
+				oIt.children[0].src = "/"+MOD_ID+"/img_tree"+
+				    (isExpandable?(oIt.itExp?"Minus":"Plus"):"")+
+				    "Up"+(oIt!=cnt.lastChild?"Down":"");
+				if(isExpandable) oIt.children[2].style.display = oIt.itExp ? "" : "none";
+				if(isExpandable) oIt.classList.add("expandable"); else oIt.classList.remove("expandable");
+				if(selIt && this.mSelIt) return true;
+			    }
+			    return false;
+			}
+			formObj.expand = function( lit ) {
+			    if(!lit || !lit.children[2].children.length) return;
+			    lit.itExp = !lit.itExp;
+			    lit.children[2].style.display = lit.itExp ? "" : "none";
+			    lit.children[0].src = "/"+MOD_ID+"/img_tree"+(lit.itExp?"Minus":"Plus")+"Up"+(lit!=lit.parentNode.lastChild?"Down":"");
+			}
+			formObj.selIt = function( ipath, sendEv ) {
+			    if(sendEv) {
+				if(!ipath.length) return;
+				attrs = new Object();
+				attrs.value = ipath;
+				attrs.event = 'ws_TreeChange';
+				setWAttrs(this.wdgLnk.addr, attrs);
+			    }
+			    if(this.mSelIt) { this.mSelIt.classList.remove("select"); this.mSelIt = null; }
+			    this.finish(null, ipath);
+			}
+		    }
+		    //Processing for fill and changes
+		    if(toInit || this.attrsMdf['items']) {
+			formObj.itMdf = formObj.itMdf ? (formObj.itMdf+1) : 1;
+			var elLst = this.attrs['items'].split('\n');
+			var cur_it = null;
+			for(iEl = 0; iEl < elLst.length; iEl++) {
+			    ipath = elLst[iEl];
+			    for(lev = 0, pathLev.off = 0; (item=pathLev(ipath,0,true)).length; lev++) {
+				if(lev == 0) {
+				    for(cur_it = null, iR = 0; !cur_it && iR < formObj.children.length; iR++)
+					if(formObj.children[iR].children[1].innerText == item) cur_it = formObj.children[iR];
+				    if(!cur_it) formObj.appendChild((cur_it=this.place.ownerDocument.createElement('li')));
+				    cur_it.itMdf = formObj.itMdf;
+				}
+				else {
+				    for(t_it = null, iR = 0; !t_it && iR < cur_it.children[2].children.length; iR++)
+					if(cur_it.children[2].children[iR].children[1].innerText == item) t_it = cur_it.children[2].children[iR];
+				    if(!t_it) cur_it.children[2].appendChild((t_it=this.place.ownerDocument.createElement('li')));
+				    cur_it = t_it;
+				    cur_it.itMdf = formObj.itMdf;
+				}
+				if(!cur_it.children.length) {
+				    cur_it.innerHTML = "<img onclick='this.parentNode.formObj.expand(this.parentNode)'/>"+
+							"<span onclick='this.parentNode.formObj.selIt(this.parentNode.itPath,true)'>"+item+"</span><ul\>";
+				    cur_it.formObj = formObj;
+				}
+			    }
+			    cur_it.classList.add("selectable");
+			    cur_it.itPath = ipath;
+			}
+			formObj.finish();
+		    }
+		    if(toInit || this.attrsMdf['value'] || this.attrsMdf['items']) formObj.selIt(this.attrs['value']);
+		    if(toInit) this.place.appendChild(formObj);
+		    break;
 		case 9:	//Table
 		    this.place.className += " Table";
-		    if(elWr) this.place.className += " Active";
+		    if(elWr) this.place.className += " active";
 		    var toInit = !this.place.children.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('table') : this.place.children[0];
 		    formObj.wdgLnk = this;
@@ -1689,6 +1746,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    hit.outColor = tC.getAttribute("color");
 					    hit.outColorText = tC.getAttribute("colorText");
 					    hit.outFont = tC.getAttribute("font");
+					    hit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
 					    //if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
 					}
 				    }
@@ -1701,6 +1759,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					else tit.ondblclick = formObj.ondblclick;
 					// Value
 					if(tC) { tit.outTp = tC.nodeName; formObj.setVal(tC.textContent, iR, iC-1); }
+					// Visibility
+					tit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
 					// Back color
 					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
 					    tit.style.backgroundColor = getColor(wVl);
@@ -1753,7 +1813,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    if(toInit) this.place.appendChild(formObj);
 		    // Set the value
-		    if((toInit || this.attrsMdf['value']) && formObj.innerHTML.length) {
+		    if((toInit || this.attrsMdf['value'] || this.attrsMdf['items']) && formObj.innerHTML.length) {
 			val = this.attrs['value'];
 			if(formObj.oSel == "row" || formObj.oSel == "col" || formObj.oSel == "cell") {
 			    findOK = false;
@@ -2043,7 +2103,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.appendChild(ifrmObj);
 		}
 
-		ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)+'px; border-style: ridge; border-width: 2px; padding: 5px;';
+		ifrmObj.style.cssText = 'width: '+geomW+'px; height: '+geomH+'px; border-style: ridge; border-width: 0px; padding: 0px;';
+		//ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)+'px; border-style: ridge; border-width: 2px; padding: 5px;';
 		this.perUpdtEn(true);
 	    }
 	}
@@ -2091,8 +2152,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		setWAttrs(el.wdgLnk.addr,'event','key_mouseRels'+evMouseGet(e));
 	    }
 	    this.place.ondblclick = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_mouseDblClick'); return false; }
-	}
-	else this.place.ondblclick = '';
+	} else this.place.ondblclick = '';
 
 	//Context menu setup
 	if(elWr && this.attrs['contextMenu'].length) {
@@ -2123,6 +2183,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(isKonq || isOpera) this.mousedown[this.mousedown.length] = ctxEv;
 	    else this.place.oncontextmenu = ctxEv;
 	}
+	else if(elWr) this.place.oncontextmenu = function(e) { return false; };
 	else this.place.oncontextmenu = null;
 
 	//Common mouse events process

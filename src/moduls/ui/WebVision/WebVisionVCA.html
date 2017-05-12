@@ -25,6 +25,8 @@
     table.prot th { border: 1px solid black; background-color: #E6E6E6; text-align: center; white-space: nowrap; }
     table.prot td { border: 1px solid black; white-space: nowrap; }
     table.prot td.hd { background-color: #E6E6E6; font-weight: bold; text-align: center; }
+    #gen-pnl-dlg { position: absolute; font-size: 12px; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; box-shadow: 10px 10px 5px rgba(68,68,68,0.6); }
+    #gen-pnl-dlg tr.hd { cursor: move; background: linear-gradient(#8FA9FF, #6F89DF, #8FA9FF); }
     #popupmenu { position: absolute; border: 0; width: 150px; height: 150px; overflow : auto; z-index: 1000; }
     #popupmenu select { background-color: #E6E6E6; border: 1px solid black; padding: 1px; width: auto; }
     #combomenu { position: absolute; visibility: visible; border: 0; }
@@ -44,14 +46,23 @@
     .FormEl textarea { border: 1px solid gray; padding: 1px; }
     .FormEl input[type=range] { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
     .FormEl input[type=range][orient=vertical] { writing-mode: bt-lr; -webkit-appearance: slider-vertical; }
-    div.FormEl.Table { background-color: white; border: 1px solid gray; padding: 1px; overflow: auto; text-align: left; }
+    div.FormEl.Table, div.FormEl.Tree { background-color: white; border: 1px solid gray; padding: 1px; overflow: auto; text-align: left; }
     div.FormEl.Table table { border-collapse: collapse; }
     div.FormEl.Table table th { text-align: center; background-color: #e6e6e6; border: 1px solid black; white-space: pre-line; word-break: break-all; }
     div.FormEl.Table table td { border: 1px solid black; white-space: pre-line; word-break: break-all; vertical-align: middle; }
     div.FormEl.Table table td * { vertical-align: middle; }
     div.FormEl.Table table td input { font: inherit; }
-    div.FormEl.Table.Active th, div.FormEl.Table.Active td { cursor: pointer; }
+    div.FormEl.Table.active th, div.FormEl.Table.active td { cursor: pointer; }
     //div.FormEl.Table table td img { float: left; margin-right: 3px; }
+    div.FormEl.Tree ul { background-color: white; list-style-image: none; list-style-position: outside; list-style-type: none; background-repeat: repeat-y; background-attachment: scroll; background-position: left top; margin: 0; white-space: nowrap; }
+    div.FormEl.Tree > ul { padding: 0; }
+    div.FormEl.Tree > ul ul { padding: 0 0 0 17px; }
+    div.FormEl.Tree img { vertical-align: middle; height: 16px; }
+    div.FormEl.Tree span { line-height: 1; }
+    div.FormEl.Tree li.selectable { font-style: normal; }
+    div.FormEl.Tree li.select { background-color: #BDEBED; }
+    div.FormEl.Tree.active li.expandable img, div.FormEl.Tree.active li.selectable span { cursor: pointer; }
+    //div.FormEl.Tree li.select span { cursor: pointer; }
     div.Media { position: absolute; border-style: solid; overflow: hidden; }
     div.Media img { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; }
 }

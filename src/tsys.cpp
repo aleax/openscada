@@ -947,7 +947,7 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
     size_t t_dir;
 
     //First separators pass
-    while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
+    while(an_dir < (int)path.size() && path[an_dir] == '/') an_dir++;
     if(an_dir >= (int)path.size()) return "";
 
     //Path level process
