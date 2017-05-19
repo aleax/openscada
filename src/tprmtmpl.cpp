@@ -67,11 +67,11 @@ void TPrmTempl::postEnable( int flag )
 void TPrmTempl::postDisable(int flag)
 {
     if(flag) {
-	SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(), *this, true);
+	SYS->db().at().dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, true);
 
 	//Delete template's IO
 	TConfig cfg(&owner().owner().elTmplIO());
-	cfg.cfg("TMPL_ID").setS(id(),true);
+	cfg.cfg("TMPL_ID").setS(id(), true);
 	SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
     }
 }

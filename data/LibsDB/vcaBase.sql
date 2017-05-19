@@ -5673,7 +5673,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','350',40,'','','view','',
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','7',32,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','9',32,'','','view','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','items','',8,'','','view','<tbl sel=''row'' colsWdthFit=''1''><h><s width=''1px''>ID</s><s width=''50%''>Name</s><s width=''10%''>Value</s></h></tbl>','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','items','',8,'','','view','<tbl sel=''row'' colsWdthFit=''1''><h><s width=''0px''>ID</s><s width=''60%''>Name</s><s width=''40%''>Value</s></h></tbl>','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','perm','438',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','name','Object''s properties',32,'','','','Властивості об''єкту','','Свойства объекта','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','geomW','260',32,'','','','','','','','','');
@@ -6884,7 +6884,7 @@ Version: 1.1.1','','','');
 INSERT INTO "wlb_Main_io" VALUES('grph_panel','dscr','Author: Roman Savochenko <rom_as@oscada.org>
 Version: 1.1.1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('objProps','dscr','Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.1',32,'','','','','','','','','');
+Version: 1.0.2',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','78.1',32,'','','h_line','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','geomW','74.45',32,'','','h_line1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','perm','438',32,'','','pgSel','','','','','','');
@@ -19881,7 +19881,7 @@ else tittle_backColor = "gray";
 if(!objItems.isEVal()) {
 	//Load table with variables
 	tbl = "<tbl sel=''row'' colsWdthFit=''1''>\n"
-		"<h><s width=''1px''>"+tr("Property")+"</s><s width=''55%''>"+tr("Description")+"</s><s width=''30%''>"+tr("Value")+"</s></h>";
+		"<h><s width=''0px''>"+tr("Property")+"</s><s width=''55%''>"+tr("Description")+"</s><s width=''30%''>"+tr("Value")+"</s></h>";
 	for(var aIt in objItems) {
 		it = objItems[aIt];
 		if(it.alarm == 1)	tbl += "<r color=''yellow''>";

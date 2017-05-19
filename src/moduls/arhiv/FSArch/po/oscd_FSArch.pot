@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-03 21:10+0200\n"
+"POT-Creation-Date: 2017-05-19 11:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,15 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "File system archivator"
-msgstr ""
-
-msgid "Roman Savochenko"
-msgstr ""
-
-msgid "The archiver module. Provides functions for messages and values archiving to file system."
-msgstr ""
 
 msgid "Compress error!"
 msgstr ""
@@ -48,6 +39,14 @@ msgstr ""
 msgid "Check value archivator '%s' error."
 msgstr ""
 
+#, c-format
+msgid "%s: Mess: %s: information"
+msgstr ""
+
+#, c-format
+msgid "Local info DB for the messages archivator '%s'. Created automatically then don't modify, save and remove it!"
+msgstr ""
+
 msgid "Archive is not started!"
 msgstr ""
 
@@ -59,100 +58,93 @@ msgstr ""
 msgid "Can not create directory '%s'."
 msgstr ""
 
-msgid "Archivator files size"
+msgid "Overall size of archivator's files"
 msgstr ""
 
 msgid "Archiving time"
 msgstr ""
 
-msgid "Path to directory for archivator's of messages files."
+msgid "Path to a directory for files of messages of the archivator."
 msgstr ""
 
 msgid "Additional options"
 msgstr ""
 
-msgid "XML archive files"
+msgid "Files of the archive in XML"
 msgstr ""
 
 msgid ""
-"Enables archiving of messages in XML-format files, rather than plain text.\n"
-"The use of XML-format archiving requires more RAM because is needed full download file,\n"
-"XML-parsing and storing in memory at the time of use."
+"Enables archiving of messages by files in XML-format, rather than plain text.\n"
+"Use of archiving in XML-format requires more RAM because it needs for full downloading of the file, XML-parsing and storing the content into memory at the time of use."
 msgstr ""
 
-msgid "Maximum archive file size (kB)"
-msgstr ""
-
-msgid ""
-"Sets a limit on the size of one archive file.\n"
-"Disable the restriction can be by setting the parameter to zero."
-msgstr ""
-
-msgid "Maximum files number"
+msgid "Maximum size of archive's file (kB)"
 msgstr ""
 
 msgid ""
-"Limits the maximum number of archive files and share with the size of single file\n"
-"determines the size of archive on disk. Completely remove this restriction can be set to zero."
+"Sets limit on the size of one archive file.\n"
+"Disabling the restriction can be performed by setting the parameter to zero."
 msgstr ""
 
-msgid "File's time size (days)"
-msgstr ""
-
-msgid "Sets a limit on the size of a single archive file on time."
-msgstr ""
-
-msgid "Pack files timeout (min)"
+msgid "Maximum number of the files"
 msgstr ""
 
 msgid ""
-"Sets the time after which, in the absence of appeals, archive files will be packaged in gzip archiver.\n"
-"Set to zero for disable packing by gzip."
+"Limits the maximum number for files of the archive and additional with the size of single file it determines the size of archive on disk.\n"
+"Completely removing this restriction can be performed by setting the parameter to zero."
 msgstr ""
 
-msgid "Checking the archives period (min)"
+msgid "Time size of archive's file (days)"
 msgstr ""
 
-msgid ""
-"Sets the frequency of checking the archives for the emergence or delete new files\n"
-"in a directory of archives, as well as exceeding the limits and removing old archive files."
+msgid "Sets limit on the size of single archive file on time."
 msgstr ""
 
-msgid "Using info files for the packed archives"
-msgstr ""
-
-msgid ""
-"Specifies whether to create files with information about the packed archive files by gzip-archiver.\n"
-"When copying files of archive on another station, these info files can speed up the target station\n"
-"process of first run by eliminating the need to decompress by gzip-archives in order to obtain information."
-msgstr ""
-
-msgid "Prevent duplicates"
+msgid "Timeout to pack files of the archive (min)"
 msgstr ""
 
 msgid ""
-"Enables checks for duplicate messages at the time put a message in the archive.\n"
+"Sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive.\n"
+"Set to zero for disabling the packing by gzip."
+msgstr ""
+
+msgid "Period of the archives checking (min)"
+msgstr ""
+
+msgid "Sets for checking frequency of the archives for the files emergence or deletion into the directory of the archive, as well as exceeding the limits and removing for old files."
+msgstr ""
+
+msgid "Use an info file for the packed archives"
+msgstr ""
+
+msgid ""
+"Specifies whether to create a file with information about the packed archive files by gzip-archiver.\n"
+"When copying files of archive to another station, this info file can speed up the target station process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information."
+msgstr ""
+
+msgid "Prevent for duplicates"
+msgstr ""
+
+msgid ""
+"Enables checking for duplicate messages at the time of putting a message into the archive.\n"
 "If there is a duplicate the message does not fit into the archive.\n"
-"This feature some increases the recording time to archive, but in cases of\n"
-"placing messages in the archive by past time from external sources it allows to eliminate duplication."
+"This feature some increases the recording time to archive, but in cases of placing messages in the archive by past time from external sources it allows to eliminate the duplication."
 msgstr ""
 
-msgid "Mean as duplicates equal time, category, level and prevent its"
-msgstr ""
-
-msgid ""
-"Enables checks for duplicate messages at the time put a message in the archive.\n"
-"As duplicates mean messages equal to time, category and level.\n"
-"If there is a duplicate then the new message will replace the old into the archive.\n"
-"This feature mostly usable for messages record's text change in time, for alarm's state to example."
-msgstr ""
-
-msgid "Check archivator directory now"
+msgid "Mean as duplicates and prevent its for equal time, category, level"
 msgstr ""
 
 msgid ""
-"The command, which allows you to immediately start checking the archives,\n"
-"for example, after manual changes to the directory archiver."
+"Enables checking for duplicate messages at the time of putting a message into the archive.\n"
+"As duplicates there mean messages which equal to time, category and level.\n"
+"If there is a duplicate then the new message will replace the old one into the archive.\n"
+"This feature mostly usable for text of messages changing in time, for alarm's state to example."
+msgstr ""
+
+msgid "Check now for the directory of the archivator"
+msgstr ""
+
+msgid "The command, which allows you to immediately start for checking the archives, for example, after some manual changes into the directory of the archiver."
 msgstr ""
 
 msgid "Files"
@@ -220,54 +212,47 @@ msgid "Write to '%s' error!"
 msgstr ""
 
 #, c-format
+msgid "%s: Val: %s: information"
+msgstr ""
+
+#, c-format
+msgid "Local info DB for the values archivator '%s'. Created automatically then don't modify, save and remove it!"
+msgstr ""
+
+#, c-format
 msgid "Unpack '%s' for information get."
 msgstr ""
 
-msgid "Full archives size"
+msgid "Path to a directory for files of values of the archivator."
 msgstr ""
 
-msgid "Path to directory for archivator's of values files."
-msgstr ""
-
-msgid "Archive's file time size (hours)"
+msgid "Time size of archive's file (hours)"
 msgstr ""
 
 msgid ""
-"The parameter is set automatically when you change the values period by the archiver\n"
-"and generally proportional to the frequency values of the archiver.\n"
-"Attention! Large archive files will be processed long by long unpacking gzip-files\n"
-"and the primary indexing, when accessing to parts of deep in the archives of history."
+"The parameter is set automatically when you change the values period by the archiver and generally proportional to values frequency of the archiver.\n"
+"Attention! Large files of the archive will be processed long by there is long unpacking for gzip-files and the primary indexing, when accessing to parts of deep in the archives of history."
 msgstr ""
 
-msgid "Maximum files number for one archive"
+msgid "Maximum number of the files to one archive"
 msgstr ""
 
-msgid "Maximum capacity by all archives (MB)"
-msgstr ""
-
-msgid ""
-"Sets a limit on the maximum amount of disk space occupied by all archive files by archiver.\n"
-"Testing is done by periodicity checking the archives, which resulted in, on exceeding the limit,\n"
-"removes the oldest files of all archives. Completely remove this restriction can be set to < 1."
-msgstr ""
-
-msgid "Numeric values rounding (%)"
+msgid "Maximum capacity for all archives (MB)"
 msgstr ""
 
 msgid ""
-"Sets the percentage of boundary difference values of parameters integer and real types\n"
-"where they are considered identical and will be archived as a single value\n"
-"through sequential packaging. Allows well-packaged slightly changing parameters\n"
-"which outside certainty. Disable this property can be set to zero."
+"Sets limit to maximum amount of the disk space of all arhive's files of the archiver.\n"
+"The testing performs the periodically checking for the archives, which resulted in, on exceeding the limit, for the oldest files removing from all archives.\n"
+"To completely remove this restriction you can set it to value < 1."
 msgstr ""
 
-msgid "Packing files timeout (min)"
+msgid "Rounding for numeric values (%)"
 msgstr ""
 
-msgid "Checking archives period (min)"
-msgstr ""
-
-msgid "Using info files for packed archives"
+msgid ""
+"Sets the percentage of boundary for values' difference of parameters into integer and real types where they are considered as identical and will be archived as a single value through the sequential packaging.\n"
+"Allows for well-packaging of slightly changing parameters which are outside certainty.\n"
+"To disable this property you can it set to zero."
 msgstr ""
 
 msgid "Files size"
@@ -349,4 +334,13 @@ msgstr ""
 
 #, c-format
 msgid "Last value for actual archive file '%s' is not EVAL. Will try fix that!"
+msgstr ""
+
+msgid "Arhivator on the file system"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr ""
+
+msgid "The archiver module. Provides functions for messages and values archiving to file system."
 msgstr ""

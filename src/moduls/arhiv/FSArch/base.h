@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: base.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,18 @@
 #define _(mess) mod->I18N(mess)
 
 #define CHECK_ARH_PER 60
+
+//*************************************************
+//* Info of the module                            *
+#define MOD_ID		"FSArch"
+#define MOD_NAME	_("Arhivator on the file system")
+#define MOD_TYPE	SARH_ID
+#define VER_TYPE	SARH_VER
+#define MOD_VER		"2.10.0"
+#define AUTHORS		_("Roman Savochenko")
+#define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
+#define LICENSE		"GPL2"
+//*************************************************
 
 using namespace OSCADA;
 

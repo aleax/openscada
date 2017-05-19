@@ -312,7 +312,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
     if(tblStrct.empty()) throw err_sys(_("Table is empty."));
     mLstUse = SYS->sysTm();
 
-    //Check for no present and no empty keys allow
+    //Check for not present and not empty keys allow
     if(row == 0) {
 	vector<string> cf_el;
 	cfg.cfgList(cf_el);

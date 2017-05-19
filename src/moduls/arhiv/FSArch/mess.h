@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2003-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -110,6 +110,8 @@ class ModMArch: public TMArchivator
 	ModMArch( const string &iid, const string &idb, TElem *cf_el );
 	~ModMArch( );
 
+	string infoDBnm( );
+
 	time_t begin();
 	time_t end();
 	bool put( vector<TMess::SRec> &mess, bool force = false );
@@ -140,6 +142,9 @@ class ModMArch: public TMArchivator
 	void setPrevDblTmCatLev( bool vl ) { mPrevDblTmCatLev = vl; modif(); }
 
 	void checkArchivator( bool now = false );
+
+	//Attributes
+	MtxString	infoTbl;
 
     protected:
 	//Methods

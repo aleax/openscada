@@ -654,17 +654,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	else if(this.attrs['root'] == 'Box') {
 	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
-	    switch(parseInt(this.attrs['bordStyle'])) {
-		case 1: elStyle += 'border-style: dotted; '; break;
-		case 2: elStyle += 'border-style: dashed; '; break;
-		case 3: elStyle += 'border-style: solid; ';  break;
-		case 4: elStyle += 'border-style: double; '; break;
-		case 5: elStyle += 'border-style: groove; '; break;
-		case 6: elStyle += 'border-style: ridge; ';  break;
-		case 7: elStyle += 'border-style: inset; ';  break;
-		case 8: elStyle += 'border-style: outset; '; break;
-	    }
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
 	    {
@@ -701,11 +690,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Text') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
-	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
 	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
-		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; white-space: pre-line; ';
+		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; white-space: pre-wrap; ';
 		switch(txtAlign&0x3) {
 		    case 0: spanStyle += 'text-align: left; ';		break;
 		    case 1: spanStyle += 'text-align: right; ';		break;
@@ -756,7 +744,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	else if(this.attrs['root'] == 'Media') {
 	    this.place.className = "Media";
 	    elStyle += 'border-width: '+this.attrs['bordWidth']+'px; ';
-	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.children.length <= 1) ||
 					  (!parseInt(this.attrs['areas']) && this.place.children.length > 1) ||
 					  ((this.attrsMdf["src"] || this.attrsMdf["fit"]) && this.attrs['fit'] != 1))
@@ -1833,7 +1820,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Diagram') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    var anchObj = this.place.childNodes[0];
 	    if(!anchObj) {
 		anchObj = this.place.ownerDocument.createElement('a');
@@ -2117,8 +2103,20 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var geomHch = parseFloat(this.pages[this.inclOpen].attrs['geomH'])*this.pages[this.inclOpen].yScale(true);
 	    elStyle += "overflow: "+((geomWch > geomWpar || geomHch > geomHpar) ? 'scroll' : 'hidden')+"; ";
 	}
-	// Background processing in generic
 	else if(isPrim) {
+	    // Border processing in generic
+	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
+	    switch(parseInt(this.attrs['bordStyle'])) {
+		case 1: elStyle += 'border-style: dotted; '; break;
+		case 2: elStyle += 'border-style: dashed; '; break;
+		case 3: elStyle += 'border-style: solid; ';  break;
+		case 4: elStyle += 'border-style: double; '; break;
+		case 5: elStyle += 'border-style: groove; '; break;
+		case 6: elStyle += 'border-style: ridge; ';  break;
+		case 7: elStyle += 'border-style: inset; ';  break;
+		case 8: elStyle += 'border-style: outset; '; break;
+	    }
+	    // Background processing in generic
 	    backStyle = "";
 	    if(this.attrs['backColor'] && (backOp=getColor(this.attrs['backColor'],true))) {
 		if(backOp == 1) {
@@ -2130,7 +2128,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.placeTr = this.place.ownerDocument.createElement('div');
 			this.place.parentNode.appendChild(this.placeTr);
 		    }
-		    this.placeTr.style.cssText = elStyle + 'background-color: '+getColor(this.attrs['backColor'])+'; opacity: '+backOp+"; z-index: -9999; ";
+		    this.placeTr.style.cssText = elStyle + 'background-color: '+getColor(this.attrs['backColor'])+'; opacity: '+backOp+"; z-index: "+(parseInt(this.attrs['geomZ'])-1)+"; ";
 		}
 	    }
 	    if(this.attrs['backImg'])	backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';

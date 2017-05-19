@@ -36,10 +36,10 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"LogicLev"
-#define MOD_NAME	_("Logic level")
+#define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.6"
+#define MOD_VER		"1.7.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"

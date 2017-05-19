@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,18 +28,6 @@
 #include <tmess.h>
 
 #include "base.h"
-
-//*************************************************
-//* Modul info!                                   *
-#define MOD_ID		"FSArch"
-#define MOD_NAME	_("File system archivator")
-#define MOD_TYPE	SARH_ID
-#define VER_TYPE	SARH_VER
-#define MOD_VER		"2.9.0"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to file system.")
-#define LICENSE		"GPL2"
-//*************************************************
 
 FSArch::ModArch *FSArch::mod;
 
@@ -102,7 +90,7 @@ ModArch::~ModArch( )
     try { modStop(); } catch(...) { }
 }
 
-string ModArch::filesDB( )	{ return SYS->workDB()+"."+modId()+"_Pack"; }
+string ModArch::filesDB( )	{ return SYS->workDB()+"." MOD_ID "_Pack"; }
 
 bool ModArch::filePack( const string &anm )	{ return (anm.size() > 3 && anm.substr(anm.size()-3,3) == ".gz"); }
 
@@ -143,7 +131,7 @@ string ModArch::optDescr( )
     return TSYS::strMess(_(
 	"======================= The module <%s:%s> options =======================\n"
 	"    --noArchLimit        Disable archives limit to the file number. Use for see archives mode, not work.\n"
-	"\n"),MOD_TYPE,MOD_ID);
+	"\n"), MOD_TYPE,MOD_ID);
 }
 
 void ModArch::load_( )
@@ -183,7 +171,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 		    mess_sys(TMess::Error, _("Check value archivator '%s' error."), a_list[i_a].c_str());
 		}
 
-	//Check to nopresent archive files
+	//Check for not presented files of the archive
 	struct stat file_stat;
 	vector<vector<string> > full;
 	TConfig cEl(&mod->packFE());

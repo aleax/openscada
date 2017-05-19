@@ -1,3 +1,10 @@
+2017-05-19 Roman (stable)
+- DB.LibsDB.vcaBase: Main.objProps adapted to the first column hide.
+- Archive.{DBArch,FSArch},DAQ.LogicLev: Some original messages fixed.
+- !!!:Archive.FSArch: Expanded for INFO files store into a standalone DB file of SQLite into folder of the archivator.
+- FIX:UI.WebVision: Borders and transparent backgrounds processing fixed. Spaces processing for primitive "Text" set to "white-space: pre-wrap".
+
+
 2017-05-12 Roman (stable)
 - !!:FIX:DB.LibsDB.vcaBase: Main.RootPgSo some fixed for the combobox with the allowed for directly select pages.
     FIX: Main page of the project "archBrowser" expanded for the combobox with the allowed for directly select pages.
@@ -7,7 +14,7 @@
 - FIX:DAQ.DAQGate: Requests are fixed after moving to different station.
 - FIX:DAQ.System: Some warnings from Valgrind are fixed.
 - !!!!:FIX:Transport.SSL: Fixed into client's part for correct free wich caused for crashes and blockings.
-    !!!!: Wide tested on browsers Chrome, Firefox; for file handlers free and into Valgrind.
+    !!!!: Wide tested on browsers Chrome, FireFox; for file handlers free and into Valgrind.
 - FIX:UI.VCAEngine: Some original messages fixed.
 - UI.Vision: The view "Table" of the primitive "FormEl" expanded for field "width" equal to 0 processing to hide the column.
 - UI.WebCfgD: The navigation tree and dialogs forming some improved.
