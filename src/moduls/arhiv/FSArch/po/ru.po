@@ -435,7 +435,7 @@ msgstr ""
 "это!"
 
 msgid "Arhivator on the file system"
-msgstr "Размер файлов архиватора"
+msgstr "Архиватор на файловую систему"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"

@@ -430,7 +430,7 @@ msgstr ""
 "Останнє значення актуального файлу архіву '%s' не EVAL. Спробую виправити це!"
 
 msgid "Arhivator on the file system"
-msgstr "Розмір файлів архіватору"
+msgstr "Архіватор на файлову систему"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"

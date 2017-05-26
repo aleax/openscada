@@ -439,7 +439,7 @@ msgstr ""
 "Reparaturversuch!"
 
 msgid "Arhivator on the file system"
-msgstr "Größe der Archivardateien"
+msgstr "Arhivator auf dem Dateisystem"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"

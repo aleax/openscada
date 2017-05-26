@@ -1,3 +1,13 @@
+2017-05-26 Roman (stable)
+- DB.LibsDB.vcaBase: A new cadre "Main.alarmsAct" of table of active alarms is added and used into main page of the project AGLKS.
+    A new cadre "doc.docMessRep" of unified protocol of messages is added and used into the project "archBrowser".
+    The generic page implementing expanded by buttons of views hide at pages miss here.
+    The project "archBrowser" moved to an unmodified main page, graphics group "grpGraph10" using and a new cadre "doc.docMessRep" appending to generic messages observe.
+    Translation some updated.
+- FIX:Archive.FSArch: Fix for translation.
+- FIX:UI.Vision: Fix for opened to edition widgets size on big screens.
+
+
 2017-05-19 Roman (stable)
 - DB.LibsDB.vcaBase: Main.objProps adapted to the first column hide.
 - Archive.{DBArch,FSArch},DAQ.LogicLev: Some original messages fixed.
