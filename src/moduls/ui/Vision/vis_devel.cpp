@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1302,7 +1302,7 @@ void VisDevelop::visualItEdit( )
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
 
-	//Make and place view widget
+	//Make and place widget's view
 	DevelWdgView *vw = new DevelWdgView(ed_wdg, 0, this, 0, scrl);
 	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
@@ -1311,12 +1311,6 @@ void VisDevelop::visualItEdit( )
 
 	scrl->setWidget(vw);
 	work_space->addSubWindow(scrl);
-	scrl->show();
-
-	//scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+scrl->verticalScrollBar()->width())),
-	//			     fmax(200,fmin(work_space->height(),vw->size().height()+3*scrl->horizontalScrollBar()->height())));
-	scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+(scrl->parentWidget()->width()-scrl->width())+5)),
-				     fmax(200,fmin(work_space->height(),vw->size().height()+(scrl->parentWidget()->height()-scrl->height())+5)));
 
 	//Set window icon
 	XMLNode req("get");
@@ -1327,6 +1321,13 @@ void VisDevelop::visualItEdit( )
 	    if(ico_t.loadFromData((const uchar*)simg.data(),simg.size()))
 		scrl->parentWidget()->setWindowIcon(QPixmap::fromImage(ico_t));	//parentWidget is QMdiSubWindow
 	}
+
+	scrl->show();
+
+	//scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+scrl->verticalScrollBar()->width())),
+	//			     fmax(200,fmin(work_space->height(),vw->size().height()+3*scrl->horizontalScrollBar()->height())));
+	scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+(scrl->parentWidget()->width()-scrl->width())+5)),
+				     fmax(200,fmin(work_space->height(),vw->size().height()+(scrl->parentWidget()->height()-scrl->height())+5)));
     }
 }
 

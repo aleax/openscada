@@ -410,7 +410,7 @@ string TSYS::optDescr( )
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"WorkDir    <path>	Work directory.\n"
-	"ModDir     <path>	Modules directory.\n"
+	"ModDir     <path>	Directories with modules, separated by ',', they can include a files' template into the end.\n"
 	"IcoDir     <path>	Icons directory.\n"
 	"DocDir     <path>	Documents directory.\n"
 	"MessLev    <level>     Messages <level> (0-7).\n"
@@ -609,11 +609,11 @@ void TSYS::load_( )
     //Direct load subsystems and modules
     vector<string> lst;
     list(lst);
-    for(unsigned i_a = 0; i_a < lst.size(); i_a++)
-	try { at(lst[i_a]).at().load(); }
+    for(unsigned iA = 0; iA < lst.size(); iA++)
+	try { at(lst[iA]).at().load(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error load subsystem '%s'."), lst[i_a].c_str());
+	    mess_sys(TMess::Error, _("Error load subsystem '%s'."), lst[iA].c_str());
 	}
 
     if(cmd_help) stop();
@@ -653,20 +653,22 @@ void TSYS::save_( )
 
 int TSYS::start( )
 {
-    //High priority service task and redundancy start
-    taskCreate("SYS_HighPriority", 120, TSYS::HPrTask, this);
-    taskCreate("SYS_Redundancy", 5, TSYS::RdTask, this);
+    //Start for high priority service and redundancy tasks
+    taskCreate("SYS_HighPriority", 120, TSYS::HPrTask, NULL);
+    taskCreate("SYS_Redundancy", 5, TSYS::RdTask, NULL);
 
-    //Subsystems starting
+    //Start for subsystems
     vector<string> lst;
     list(lst);
 
-    mess_sys(TMess::Info, _("Start!"));
-    for(unsigned i_a = 0; i_a < lst.size(); i_a++)
-	try { at(lst[i_a]).at().subStart(); }
+    mess_sys(TMess::Info, _("Starting ..."));
+
+    mainThr.free();
+    for(unsigned iA = 0; iA < lst.size(); iA++)
+	try { at(lst[iA]).at().subStart(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error start subsystem '%s'."), lst[i_a].c_str());
+	    mess_sys(TMess::Error, _("Error start subsystem '%s'."), lst[iA].c_str());
 	}
 
     cfgFileScan(true);
@@ -674,48 +676,34 @@ int TSYS::start( )
     //Register user API translations into config
     Mess->translReg("", "uapi:" DB_CFG);
 
-    mess_sys(TMess::Info, _("Final starting!"));
-
-    unsigned int i_cnt = 1;
     mStopSignal = 0;
-    while(!mStopSignal) {
-	//CPU frequency calc (ten seconds)
-	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	clkCalc( );
 
-	//Config-file change periodic check (ten seconds)
-	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileScan( );
+    //Start for ordinal service task
+    taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
 
-	//Periodic shared libraries checking
-	if(modSchedul().at().chkPer() && !(i_cnt%(modSchedul().at().chkPer()*1000/STD_WAIT_DELAY)))
-	    modSchedul().at().libLoad(modDir(),true);
+    mess_sys(TMess::Info, _("Final of the starting!"));
 
-	//Periodic changes saving to DB
-	if(savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY))) save();
+    //Call in monopoly for main thread module or wait for a signal.
+    if(!mainThr.freeStat()) { mainThr.at().modStart(); mainThr.free(); }
+    while(!mStopSignal) sysSleep(STD_WAIT_DELAY*1e-3);
 
-	//Config-file save need check
-	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileSave();
+    mess_sys(TMess::Info, _("Stopping ..."));
 
-	//Call subsystems at 10s
-	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
-		catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+    //Stop for ordinal service task
+    taskDestroy("SYS_Service");
 
-	sysSleep(STD_WAIT_DELAY*1e-3);
-	i_cnt++;
-    }
-
-    mess_sys(TMess::Info, _("Stop!"));
     if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
-    for(int i_a = lst.size()-1; i_a >= 0; i_a--)
-	try { at(lst[i_a]).at().subStop(); }
+
+    //Stop for subsystems
+    for(int iA = lst.size()-1; iA >= 0; iA--)
+	try { at(lst[iA]).at().subStop(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error stop subsystem '%s'."), lst[i_a].c_str());
+	    mess_sys(TMess::Error, _("Error for subsystem '%s' stopping."), lst[iA].c_str());
 	}
 
-    //High priority service task and redundancy stop
+    //Stop for high priority service and redundancy tasks
     taskDestroy("SYS_Redundancy");
     taskDestroy("SYS_HighPriority");
 
@@ -1905,7 +1893,40 @@ void *TSYS::taskWrap( void *stas )
     return rez;
 }
 
-void *TSYS::HPrTask( void *icntr )
+void *TSYS::ServTask( void * )
+{
+    vector<string> lst;
+    SYS->list(lst);
+
+    for(unsigned int iCnt = 1; !TSYS::taskEndRun(); iCnt++) {
+	//CPU frequency calculation (per ten seconds)
+	if(!(iCnt%10))	SYS->clkCalc();
+
+	//Config-file checking for changes (per ten seconds)
+	if(!(iCnt%10))	SYS->cfgFileScan();
+
+	//Checking for shared libraries
+	if(SYS->modSchedul().at().chkPer() && !(iCnt%SYS->modSchedul().at().chkPer()))
+	    SYS->modSchedul().at().libLoad(SYS->modDir(), true);
+
+	//Changes saving
+	if(SYS->savePeriod() && !(iCnt%SYS->savePeriod())) SYS->save();
+
+	//Config-file checking for need to save
+	if(!(iCnt%10))	SYS->cfgFileSave();
+
+	//Subsystems calling (per 10s)
+	for(unsigned iA = 0; !(iCnt%10) && iA < lst.size(); iA++)
+	    try { SYS->at(lst[iA]).at().perSYSCall(iCnt); }
+	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
+	TSYS::taskSleep(1000000000);
+    }
+
+    return NULL;
+}
+
+void *TSYS::HPrTask( void * )
 {
     while(!TSYS::taskEndRun()) {
 	SYS->mSysTm = time(NULL);
@@ -1915,7 +1936,7 @@ void *TSYS::HPrTask( void *icntr )
     return NULL;
 }
 
-void *TSYS::RdTask( void *param )
+void *TSYS::RdTask( void * )
 {
     XMLNode req("CntrReqs");
     vector<string> subLs;
@@ -2735,8 +2756,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if((a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD)) {
 	vector<string> lst;
 	list(lst);
-	for(unsigned i_a = 0; i_a < lst.size(); i_a++)
-	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(at(lst[i_a]).at().subName());
+	for(unsigned iA = 0; iA < lst.size(); iA++)
+	    opt->childAdd("el")->setAttr("id",lst[iA])->setText(at(lst[iA]).at().subName());
     }
     else if(a_path == "/redund/status" && ctrChkNode(opt,"get",R_R_R_,"root","root"))
 	opt->setText(TSYS::strMess(_("Spent time: %s."),tm2s(1e-6*mRdPrcTm).c_str()));
@@ -3045,3 +3066,27 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/debug/mess" && ctrChkNode(opt,"get"))	opt->setText(archive().at().nodePath(0,true));
     else TCntrNode::cntrCmdProc(opt);
 }
+
+#if defined(__ANDROID__)
+int main( int argc, char *argv[], char *envp[] )
+{
+    int rez = 0;
+
+    //???? Maybe load assets before
+
+    //Same load and start the core object TSYS
+    SYS = new TSYS(argc, argv, envp);
+    try {
+	SYS->load();
+	//if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(),"Stop by signal %d on load.",rez);
+	rez = SYS->start();
+    } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
+    //Free OpenSCADA system's root object
+    if(SYS) delete SYS;
+
+    //printf("OpenSCADA system correct exit by code %d.\n", rez);
+
+    return rez;
+}
+#endif

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 20:12+0300\n"
+"POT-Creation-Date: 2017-06-02 17:09+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -556,6 +556,7 @@ msgstr "Запитаний запис відсутній."
 msgid "Write row to DB or config file error."
 msgstr "Помилка запису до БД або конфігураційного файлу."
 
+#, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "----------- The config-file station '%s' parameters -----------\n"
@@ -1190,6 +1191,7 @@ msgstr ""
 msgid "Modules Scheduler"
 msgstr "Керування Модулями"
 
+#, c-format
 msgid ""
 "=================== Subsystem \"Module scheduler\" options "
 "=================\n"
@@ -1371,7 +1373,7 @@ msgstr "Вхід;Вихід"
 msgid "Attribute"
 msgstr "Атрибут"
 
-msgid "No attribute;Read only;Full access"
+msgid "Not attribute;Read only;Full access"
 msgstr "Не атрибут;Тільки читання;Повний доступ"
 
 msgid "Configure"
@@ -1619,7 +1621,6 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
-#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1646,7 +1647,8 @@ msgid ""
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "WorkDir    <path>\tWork directory.\n"
-"ModDir     <path>\tModules directory.\n"
+"ModDir     <path>\tDirectories with modules, separated by ',', they can "
+"include a files' template into the end.\n"
 "IcoDir     <path>\tIcons directory.\n"
 "DocDir     <path>\tDocuments directory.\n"
 "MessLev    <level>     Messages <level> (0-7).\n"
@@ -1698,7 +1700,7 @@ msgstr ""
 "StName     <ім'я>\tІм'я станції.\n"
 "WorkDB     <Тип.Ім'я>\tРобоча БД (ім'я та тип).\n"
 "WorkDir    <шлях>\tРобоча тека.\n"
-"ModDir     <path>\tТека модулів.\n"
+"ModDir     <path>\tТеки модулів, поділені ',', та можуть містити у кінці шаблон файлів.\n"
 "IcoDir     <path>\tТека іконок.\n"
 "DocDir     <path>\tТека документів.\n"
 "MessLev    <рівень>\tОброблюваний <рівень> повідомлень (0-7).\n"
@@ -1768,21 +1770,20 @@ msgstr "Помилка завантаження підсистеми '%s'."
 msgid "Save!"
 msgstr "Збереження!"
 
-msgid "Start!"
-msgstr "Запущено!"
+msgid "Starting ..."
+msgstr "Запуск ..."
 
 #, c-format
 msgid "Error start subsystem '%s'."
 msgstr "Помилка старту підсистеми '%s'."
 
-msgid "Final starting!"
+msgid "Final of the starting!"
 msgstr "Запуск завершено!"
 
-msgid "Stop!"
-msgstr "Зупинка!"
+msgid "Stopping ..."
+msgstr "Зупинка ..."
 
-#, c-format
-msgid "Error stop subsystem '%s'."
+msgid "Error for subsystem '%s' stopping."
 msgstr "Помилка зупинки підсистеми '%s'."
 
 msgid "Termination signal is received. Stop the station!"
@@ -2511,6 +2512,12 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#~ msgid "Start!"
+#~ msgstr "Запущено!"
+
+#~ msgid "Stop!"
+#~ msgstr "Зупинка!"
 
 #~ msgid "Doc check"
 #~ msgstr "Перевірка документу"

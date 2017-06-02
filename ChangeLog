@@ -1,3 +1,21 @@
+2017-06-02 Roman (stable)
+- !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by implementing of electricity counters Mercury 200 and 230 from Arsen Zakojan <godzilla919@gmail.com>.
+- DB.Model.AGLKS.vca: Fixed for a spare horizontal line.
+- !!!:FIX:SYS.ModSchedule: Modules closing at exit set to all the modules closing firstly and next all the module's libraries unlinking. For fix like to WebKit crashes at exit.
+    !!!: Modules scanning procedure expanded by the module's name template into the end of the path, mostly for Android where all libraries place into one folder.
+    Function ScanDir() and CheckFile() renamed to dirScan() and fileCheck() respectively.
+- !!!!:FIX:SYS: Some original messages fixed.
+    !!!!: The system core in generic expanded for support main thread monopoly modules, like Qt GUI main thread into QtStarter.
+	Generic service calls moved to a different thread "SYS_Service".
+    The main function main() appended to OpenSCADA core library for builds for Android.
+- FIX:DAQ.ModBus: Managing of duplicate attributes of the standard parameter was fixed.
+- FIX:Special.FLibComplex1: The translation was some fixed.
+- !!!!: UI.QTStarter: Moved to Qt execution into the main thread by main thread monopoly modules mechanism of OpenSCADA core.
+- UI.VCAEngine: Links checking for activity is added to the dynamic linking mechanism.
+- FIX:UI.Vision: Icons setting of internal windows moved before the window show, for the development mode.
+- FIX:UI.WebVision: The property "wordWrap" of primitive "Text" support was added.
+
+
 2017-05-26 Roman (stable)
 - DB.LibsDB.vcaBase: A new cadre "Main.alarmsAct" of table of active alarms is added and used into main page of the project AGLKS.
     A new cadre "doc.docMessRep" of unified protocol of messages is added and used into the project "archBrowser".

@@ -303,7 +303,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 
     //Individual commands process
     try {
-	// Go to destination page
+	// Go to the destination page
 	string curPtEl;
 	AutoHD<SessPage> cpg;
 	for(unsigned iEl = 0; (curPtEl=TSYS::pathLev(prm,iEl++)).size(); ) {
@@ -344,7 +344,7 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	    cpg = cpg.freeStat() ? at(opPg) : cpg.at().pageAt(opPg);
 	}
 
-	//Open found page
+	//Open founded page
 	if(!cpg.freeStat()) {
 	    if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
 		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
@@ -1200,24 +1200,24 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		try {
 		    AutoHD<SessWdg> src = mod->nodeAt(cfg.getS());
 
-		    //Set interwidget's links for new page
+		    //Set interwidget's links for the new page
 		    bool emptyPresnt = false;
-		    string atr_id, prm_lnk, sCfgVal;
+		    string atrId, prmLnk, sCfgVal;
 		    vector<string> cAtrLs;
 		    attrList(cAtrLs);
-		    for(unsigned i_al = 0; i_al < cAtrLs.size(); i_al++) {
-			AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
+		    for(unsigned iAl = 0; iAl < cAtrLs.size(); iAl++) {
+			AutoHD<Attr> attr = attrAt(cAtrLs[iAl]);
 			if(!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 			      TSYS::strParse(attr.at().cfgTempl(),0,"|") == "<page>")) continue;
-			atr_id = TSYS::strParse(attr.at().cfgTempl(),1,"|");
-			if(src.at().attrPresent(atr_id)) {
-			    if((sCfgVal=src.at().attrAt(atr_id).at().cfgVal()).compare(0,4,"prm:") == 0 &&
+			atrId = TSYS::strParse(attr.at().cfgTempl(),1,"|");
+			if(src.at().attrPresent(atrId)) {
+			    if((sCfgVal=src.at().attrAt(atrId).at().cfgVal()).compare(0,4,"prm:") == 0 &&
 				!SYS->daq().at().attrAt(sCfgVal.substr(4),0,true).freeStat())
 			    {
-				if(prm_lnk.empty()) prm_lnk = sCfgVal.substr(4);
+				if(prmLnk.empty()) prmLnk = sCfgVal.substr(4);
 				attr.at().setCfgVal(sCfgVal);
 			    }
-			    else attr.at().setCfgVal("wdg:"+cfg.getS()+"/a_"+atr_id);
+			    else attr.at().setCfgVal("wdg:"+cfg.getS()+"/a_"+atrId);
 			}
 			else {
 			    attr.at().setCfgVal("");
@@ -1226,33 +1226,33 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			}
 		    }
 
-		    //Find links into source if no link found
-		    if(prm_lnk.empty()) {
+		    //Find links into the source if no link founded
+		    if(prmLnk.empty()) {
 			vector<string> sAtrLs;
 			src.at().attrList(sAtrLs);
-			for(unsigned i_al = 0; i_al < sAtrLs.size(); i_al++) {
-			    AutoHD<Attr> attr = src.at().attrAt(sAtrLs[i_al]);
+			for(unsigned iAl = 0; iAl < sAtrLs.size(); iAl++) {
+			    AutoHD<Attr> attr = src.at().attrAt(sAtrLs[iAl]);
 			    if(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-				attr.at().cfgVal().size() > 4 && attr.at().cfgVal().substr(0,4) == "prm:")
+				attr.at().cfgVal().size() > 4 && attr.at().cfgVal().substr(0,4) == "prm:" && !SYS->daq().at().attrAt(attr.at().cfgVal().substr(4),0,true).freeStat())
 			    {
-				prm_lnk = attr.at().cfgVal().substr(4);
+				prmLnk = attr.at().cfgVal().substr(4);
 				break;
 			    }
 			}
 		    }
 
 		    //Fill parameter's links for other attributes
-		    if(emptyPresnt && !prm_lnk.empty()) {
-			size_t aPos = prm_lnk.rfind("/");
-			if(aPos != string::npos) prm_lnk.erase(aPos);
-			AutoHD<TValue> prml = SYS->daq().at().prmAt(prm_lnk,0,true);
-			for(unsigned i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++) {
-			    AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
+		    if(emptyPresnt && !prmLnk.empty()) {
+			size_t aPos = prmLnk.rfind("/");
+			if(aPos != string::npos) prmLnk.erase(aPos);
+			AutoHD<TValue> prml = SYS->daq().at().prmAt(prmLnk,0,true);
+			for(unsigned iAl = 0; !prml.freeStat() && iAl < cAtrLs.size(); iAl++) {
+			    AutoHD<Attr> attr = attrAt(cAtrLs[iAl]);
 			    if(!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 				  TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
 				  (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address)))	continue;
-			    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-			    if(prml.at().vlPresent(atr_id))	attr.at().setCfgVal("prm:"+prm_lnk+"/"+atr_id);
+			    atrId = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
+			    if(prml.at().vlPresent(atrId))	attr.at().setCfgVal("prm:"+prmLnk+"/"+atrId);
 			}
 		    }
 		} catch(TError &err) { }

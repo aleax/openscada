@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-01 20:12+0300\n"
+"POT-Creation-Date: 2017-06-02 17:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1226,7 +1226,7 @@ msgstr ""
 msgid "Attribute"
 msgstr ""
 
-msgid "No attribute;Read only;Full access"
+msgid "Not attribute;Read only;Full access"
 msgstr ""
 
 msgid "Configure"
@@ -1488,7 +1488,7 @@ msgid ""
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "WorkDir    <path>\tWork directory.\n"
-"ModDir     <path>\tModules directory.\n"
+"ModDir     <path>\tDirectories with modules, separated by ',', they can include a files' template into the end.\n"
 "IcoDir     <path>\tIcons directory.\n"
 "DocDir     <path>\tDocuments directory.\n"
 "MessLev    <level>     Messages <level> (0-7).\n"
@@ -1549,21 +1549,21 @@ msgstr ""
 msgid "Save!"
 msgstr ""
 
-msgid "Start!"
+msgid "Starting ..."
 msgstr ""
 
 #, c-format
 msgid "Error start subsystem '%s'."
 msgstr ""
 
-msgid "Final starting!"
+msgid "Final of the starting!"
 msgstr ""
 
-msgid "Stop!"
+msgid "Stopping ..."
 msgstr ""
 
 #, c-format
-msgid "Error stop subsystem '%s'."
+msgid "Error for subsystem '%s' stopping."
 msgstr ""
 
 msgid "Termination signal is received. Stop the station!"

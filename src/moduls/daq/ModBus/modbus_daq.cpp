@@ -1020,7 +1020,7 @@ void TMdPrm::enable( )
 
     TParamContr::enable();
 
-    vector<string> als;
+    map<string, bool> als;
 
     //Parse ModBus attributes and convert to string list for standard type parameter
     if(isStd()) {
@@ -1039,7 +1039,7 @@ void TMdPrm::enable( )
 	    anm = TSYS::strSepParse(sel,4,':');
 	    if(anm.empty()) anm = aid;
 
-	    if(vlPresent(aid) && !pEl.fldPresent(aid))	continue;
+	    if((vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
 
 	    TFld::Type tp = TFld::Integer;
 	    if(atp[0] == 'C' || (atp_sub.size() && atp_sub[0] == 'b')) tp = TFld::Boolean;
@@ -1085,7 +1085,7 @@ void TMdPrm::enable( )
 	    }
 	    pEl.fldAt(el_id).setReserve(atp+":"+ai);
 
-	    als.push_back(aid);
+	    als[aid] = true;
 	}
     }
     //Template's function connect for logical type parameter
@@ -1121,7 +1121,7 @@ void TMdPrm::enable( )
 		    if(!vlPresent(lCtx->func()->io(iIO)->id()))
 			pEl.fldAdd(new TFld(lCtx->func()->io(iIO)->id().c_str(),lCtx->func()->io(iIO)->name().c_str(),tp,flg));
 
-		    als.push_back(lCtx->func()->io(iIO)->id());
+		    als[lCtx->func()->io(iIO)->id()] = true;
 		}
 		if(to_make && (lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)) lCtx->setS(iIO,"0");
 	    }
@@ -1149,15 +1149,10 @@ void TMdPrm::enable( )
 	} catch(TError &err) { disable(); throw; }
 
     //Check for delete DAQ parameter's attributes
-    for(int iP = 0; iP < (int)pEl.fldSize(); iP++) {
-	unsigned iL;
-	for(iL = 0; iL < als.size(); iL++)
-	    if(pEl.fldAt(iP).name() == als[iL])
-		break;
-	if(iL >= als.size())
+    for(int iP = 0; iP < (int)pEl.fldSize(); iP++)
+	if(als.find(pEl.fldAt(iP).name()) == als.end())
 	    try{ pEl.fldDel(iP); iP--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
-    }
 
     owner().prmEn(this, true);	//Put to process
 }

@@ -688,7 +688,6 @@ INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','cvt_sound','/wlb_Main/wd
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','cvt_alarm','/wlb_Main/wdg_RootPgSo/wdg_cvt_alarm','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','cvt_light','/wlb_Main/wdg_RootPgSo/wdg_cvt_light','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','h_line','/wlb_Main/wdg_RootPgSo/wdg_h_line','',2);
-INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_so','h_line1','/wlb_Main/wdg_RootPgSo/wdg_h_line1','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_terminator','Text1','/wlb_Main/wdg_terminator/wdg_Text1','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','tmTp','/wlb_Main/wdg_grph_panel/wdg_tmTp','',2);
 INSERT INTO "prj_AGLKS_incl" VALUES('/prj_AGLKS/pg_control/pg_grph_panel','next','/wlb_Main/wdg_grph_panel/wdg_next','',2);

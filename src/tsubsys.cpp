@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsubsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -103,11 +103,16 @@ void TSubSYS::subStart( )
     if(!subModule())	return;
     vector<string> list;
     modList(list);
-    for(unsigned i_m = 0; i_m < list.size(); i_m++)
-	try { modAt(list[i_m]).at().modStart(); }
+    AutoHD<TModule> mO;
+    for(unsigned iM = 0; iM < list.size(); iM++)
+	try {
+	    mO = modAt(list[iM]);
+	    if(mO.at().modInfo("SubType") != "MainThr") mO.at().modStart();
+	    else if(SYS->mainThr.freeStat()) SYS->mainThr = mO;
+	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Start module '%s' error."), list[i_m].c_str());
+	    mess_sys(TMess::Error, _("Start module '%s' error."), list[iM].c_str());
 	}
 
     mStart = true;
@@ -120,11 +125,15 @@ void TSubSYS::subStop( )
     if(!subModule())	return;
     vector<string> list;
     modList(list);
-    for(unsigned i_m=0; i_m < list.size(); i_m++)
-	try{ modAt(list[i_m]).at().modStop( ); }
+    AutoHD<TModule> mO;
+    for(unsigned iM = 0; iM < list.size(); iM++)
+	try {
+	    mO = modAt(list[iM]);
+	    if(mO.at().modInfo("SubType") != "MainThr") mO.at().modStop();
+	}
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Stop module '%s' error."), list[i_m].c_str());
+	    mess_sys(TMess::Error, _("Stop module '%s' error."), list[iM].c_str());
 	}
 
     mStart = false;
@@ -135,8 +144,8 @@ void TSubSYS::perSYSCall( unsigned int cnt )
     if(!subModule()) return;
     vector<string> list;
     modList(list);
-    for(unsigned i_m = 0; i_m < list.size(); i_m++)
-	try{ modAt(list[i_m]).at().perSYSCall(cnt); }
+    for(unsigned iM = 0; iM < list.size(); iM++)
+	try{ modAt(list[iM]).at().perSYSCall(cnt); }
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 

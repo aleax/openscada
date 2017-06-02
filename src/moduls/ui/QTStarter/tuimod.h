@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TUIMOD_H
 #define TUIMOD_H
 
-#include <QObject>
+
 #include <QTranslator>
 #include <QMainWindow>
 #include <QApplication>
@@ -34,6 +34,7 @@
 #define _(mess) mod->I18N(mess)
 
 class QTimer;
+class QSplashScreen;
 
 using namespace OSCADA;
 
@@ -124,18 +125,22 @@ class StApp : public QApplication
 class TUIMod: public TUI
 {
 public:
+    //Data
+    enum SplashFlag { SPLSH_NULL = 0, SPLSH_START, SPLSH_STOP };
+
     //Methods
     TUIMod( string name );
     ~TUIMod( );
 
-    bool endRun( )	{ return mEndRun; }
-    bool startCom( )	{ return mStartCom; }
+    // Module's info attributes
+    string modInfo( const string &name );
+    void   modInfo( vector<string> &list );
+
     string startMod( )	{ return mStartMod; }
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
 
     void modStart( );
-    void modStop( );
 
 protected:
     //Methods
@@ -147,18 +152,22 @@ protected:
 
 private:
     //Methods
-    static void *Task( void * );
+    static void *splashTask( void * );
     string	optDescr( );
     void	toQtArg( const char *nm, const char *arg = NULL );
+    void	splashSet( SplashFlag flg = SPLSH_NULL );
 
     //Attributes
-    bool	demonMode, mEndRun, mStartCom;
+    bool	hideMode;
     string	mStartMod;
 
     // Command line options binding to Qt
     int		qtArgC, qtArgEnd;		//Arguments counter and end position
     char	*qtArgV[10];			//Argument's values
     char	qtArgBuf[1000];			//Arguments' strings buffer
+
+    StApp	*QtApp;
+    QSplashScreen *splash;
 };
 
 extern TUIMod *mod;

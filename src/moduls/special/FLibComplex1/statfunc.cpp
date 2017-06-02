@@ -31,7 +31,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.1.3"
+#define MOD_VER		"1.1.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the library of functions compatible with SCADA Complex1 of the firm SIC \"DIYA\".")
 #define LICENSE		"GPL2"

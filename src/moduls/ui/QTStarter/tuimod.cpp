@@ -1,6 +1,6 @@
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2005-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,11 +30,11 @@
 #include <QVBoxLayout>
 #include <QTextCodec>
 #include <QTimer>
-#include <QSplashScreen>
 #include <QLocale>
 #include <QMessageBox>
 #include <QWhatsThis>
 #include <QLabel>
+#include <QSplashScreen>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -46,7 +46,8 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"1.9.2"
+#define SUB_TYPE	"MainThr"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -82,7 +83,7 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), demonMode(false), mEndRun(false), mStartCom(false), qtArgC(0), qtArgEnd(0)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), hideMode(false), qtArgC(0), qtArgEnd(0), QtApp(NULL), splash(NULL)
 {
     mod = this;
 
@@ -118,45 +119,70 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), demonMode(false), mEndRun(false), m
 
 TUIMod::~TUIMod( )
 {
-    if(runSt) modStop();
+
+}
+
+string TUIMod::modInfo( const string &name )
+{
+    if(name == "SubType") return SUB_TYPE;
+    return TModule::modInfo(name);
+}
+
+void TUIMod::modInfo( vector<string> &list )
+{
+    TModule::modInfo(list);
+    list.push_back("SubType");
 }
 
 void TUIMod::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
-    if(flag&TCntrNode::NodeConnect) {
-	//Set Qt environments
-	qtArgC = qtArgEnd = 0;
-	if(SYS->argc) toQtArg(SYS->argv[0]);
+    if(!(flag&TCntrNode::NodeConnect))	return;
+
+    //The Qt environment setting
+    qtArgC = qtArgEnd = 0;
+    if(SYS->argc) toQtArg(SYS->argv[0]);
 #if QT_VERSION < 0x050000
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());	//codepage for Qt across QString recode!
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());	//codepage for Qt across QString recode!
 #endif
 
-	//Check command line for options no help and no daemon
-	bool isHelp = false;
-	string argCom, argVl;
-	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-	    if(argCom == "h" || argCom == "help") isHelp = true;
-	    else if(argCom == "demon" || argCom == "daemon" || strcasecmp(argCom.c_str(),"nox11") == 0) demonMode = true;
-		    // Qt bind options (debug)
-	    else if(argCom == "sync" || argCom == "widgetcount" ||
-		    // Qt bind options
-		    argCom == "qws" || argCom == "style" || argCom == "stylesheet" || argCom == "session" ||
-		    argCom == "reverse" || argCom == "graphicssystem" || argCom == "display" || argCom == "geometry")
-		toQtArg(argCom.c_str(), argVl.c_str());
+    //Check command line for options no help and no daemon
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+	if(argCom == "h" || argCom == "help" || argCom == "demon" || argCom == "daemon" || strcasecmp(argCom.c_str(),"nox11") == 0) hideMode = true;
+	    // Qt bind options (debug)
+	else if(argCom == "sync" || argCom == "widgetcount" ||
+	    // Qt bind options
+	    argCom == "qws" || argCom == "style" || argCom == "stylesheet" || argCom == "session" ||
+	    argCom == "reverse" || argCom == "graphicssystem" || argCom == "display" || argCom == "geometry")
+	    toQtArg(argCom.c_str(), argVl.c_str());
 
-	//Start main Qt thread if no help and no daemon
-	if(!(runSt || demonMode || isHelp)) {
-	    mEndRun = false;
-	    SYS->taskCreate(nodePath('.',true), 0, Task, this);
-	}
-    }
+    if(hideMode) return;
+
+    //Init locale setLocale
+    QLocale::setDefault(QLocale(Mess->lang().c_str()));
+
+    //Qt application object init
+    QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
+    QtApp->setApplicationName(PACKAGE_STRING);
+    QtApp->setQuitOnLastWindowClosed(false);
+
+    //Create I18N translator
+    I18NTranslator translator;
+    QtApp->installTranslator(&translator);
+
+    splashSet(SPLSH_START);
 }
 
 void TUIMod::postDisable( int flag )
 {
-    if(runSt) SYS->taskDestroy(nodePath('.',true), &mEndRun, 10, true);
+    if(hideMode) return;
+
+    splashSet(SPLSH_NULL);
+
+    //Qt application object free
+    delete QtApp;
 }
 
 void TUIMod::load_( )
@@ -179,18 +205,88 @@ void TUIMod::save_( )
     TBDS::genDBSet(nodePath()+"StartMod", mStartMod);
 }
 
-void TUIMod::modStart()
+void TUIMod::modStart( )
 {
-    mess_debug(nodePath().c_str(),_("Start module."));
+    if(runSt || hideMode)	return;
+    mess_debug(nodePath().c_str(), _("Starting the module..."));
 
-    mStartCom = true;
+    runSt = true;
+
+    //Start external modules
+    WinControl *winCntr = new WinControl();
+
+    int op_wnd = 0;
+    vector<string> list;
+    mod->owner().modList(list);
+    for(unsigned iL = 0; iL < list.size(); iL++)
+	if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
+		mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
+	{
+	    // Search a module into the start list
+	    int i_off = 0;
+	    string s_el;
+	    while((s_el=TSYS::strSepParse(mod->mStartMod,0,';',&i_off)).size())
+		if(s_el == list[iL])	break;
+	    if(!s_el.empty() || !i_off)
+		if(winCntr->callQtModule(list[iL])) op_wnd++;
+	}
+    list.clear();
+
+    splashSet(SPLSH_NULL);
+
+    //Start call dialog
+    if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog();
+
+    QObject::connect(QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()));
+
+    QtApp->exec();
+
+    delete winCntr;
+
+    splashSet(SPLSH_STOP);
+
+    runSt = false;
 }
 
-void TUIMod::modStop()
+void TUIMod::splashSet( SplashFlag flg )
 {
-    mess_debug(nodePath().c_str(),_("Stop module."));
+    if(flg == SPLSH_NULL) {
+	SYS->taskDestroy(nodePath('.',true)+"/splash");
+	if(splash) delete splash;
+	splash = NULL;
+    }
+    else {
+	QImage ico_t;
+	if(!ico_t.load(TUIS::icoGet(SYS->id()+((flg==SPLSH_STOP)?"_splash_exit":"_splash"),NULL,true).c_str())) ico_t.load(":/images/splash.png");
+	if(splash) splashSet(SPLSH_NULL);
+	splash = new QSplashScreen(QPixmap::fromImage(ico_t));
+	splash->show();
+	QFont wFnt = splash->font();
+	wFnt.setPixelSize(10);
+	splash->setFont(wFnt);
+	QtApp->processEvents();
 
-    mStartCom = false;
+	SYS->taskCreate(nodePath('.',true)+"/splash", 0, splashTask, NULL);
+    }
+}
+
+void *TUIMod::splashTask( void * )
+{
+    time_t st_time = time(NULL);
+    vector<TMess::SRec> recs;
+
+    while(!TSYS::taskEndRun() && mod->splash) {
+	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
+	QString mess;
+	for(int iM = recs.size()-1; iM >= 0 && iM > ((int)recs.size()-10); iM--)
+	    mess += QString("\n%1").arg(recs[iM].mess.c_str());
+	recs.clear();
+	mod->splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
+	mod->QtApp->processEvents();
+	TSYS::sysSleep(0.1);
+    }
+
+    return NULL;
 }
 
 string TUIMod::optDescr( )
@@ -224,7 +320,7 @@ string TUIMod::optDescr( )
 void TUIMod::toQtArg( const char *nm, const char *arg )
 {
     string plStr = nm;
-    if(qtArgC) plStr.insert(0,"-");
+    if(qtArgC) plStr.insert(0, "-");
 
     //Name process
     if(qtArgC >= (int)(sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
@@ -240,102 +336,6 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
 	qtArgV[qtArgC++] = qtArgBuf+qtArgEnd;
 	qtArgEnd += plStr.size()+1;
     }
-}
-
-void *TUIMod::Task( void * )
-{
-    vector<string> list;
-    QImage ico_t;
-    time_t st_time = time(NULL);
-    vector<TMess::SRec> recs;
-
-    //Init locale setLocale
-    QLocale::setDefault(QLocale(Mess->lang().c_str()));
-
-    //Qt application object init
-    StApp *QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
-    QtApp->setApplicationName(PACKAGE_STRING);
-    QtApp->setQuitOnLastWindowClosed(false);
-    mod->runSt = true;
-
-    //Create I18N translator
-    I18NTranslator translator;
-    QtApp->installTranslator(&translator);
-
-    //Start splash create
-    if(!ico_t.load(TUIS::icoGet(SYS->id()+"_splash",NULL,true).c_str())) ico_t.load(":/images/splash.png");
-    QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
-    splash->show();
-    QFont wFnt = splash->font();
-    wFnt.setPixelSize(10);
-    splash->setFont(wFnt);
-
-    while(!mod->startCom() && !mod->endRun()) {
-	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
-	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
-	    //mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
-	recs.clear();
-	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
-	QtApp->processEvents();
-	TSYS::sysSleep(0.5);
-    }
-
-    //Start external modules
-    WinControl *winCntr = new WinControl();
-
-    int op_wnd = 0;
-    mod->owner().modList(list);
-    for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
-		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
-	{
-	    // Search module into start list
-	    int i_off = 0;
-	    string s_el;
-	    while((s_el=TSYS::strSepParse(mod->mStartMod,0,';',&i_off)).size())
-		if(s_el == list[i_l])	break;
-	    if(!s_el.empty() || !i_off)
-		if(winCntr->callQtModule(list[i_l])) op_wnd++;
-	}
-
-    delete splash;
-
-    //Start call dialog
-    if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog();
-
-    QObject::connect(QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()));
-
-    QtApp->exec();
-    delete winCntr;
-
-    //Stop splash create
-    if(!ico_t.load(TUIS::icoGet(SYS->id()+"_splash_exit",NULL,true).c_str())) ico_t.load(":/images/splash.png");
-    splash = new QSplashScreen(QPixmap::fromImage(ico_t));
-    splash->show();
-    splash->setFont(wFnt);
-
-    st_time = time(NULL);
-    while(!mod->endRun()) {
-	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
-	QString mess;
-	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
-	    mess += QString("\n%1").arg(recs[i_m].mess.c_str());
-	    //mess += QString("\n%1: %2").arg(recs[i_m].categ.c_str()).arg(recs[i_m].mess.c_str());
-	recs.clear();
-	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
-	QtApp->processEvents();
-	TSYS::sysSleep(0.5);
-    }
-    delete splash;
-
-    //Qt application object free
-    delete QtApp;
-
-    mod->runSt = false;
-
-    return NULL;
 }
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
@@ -357,10 +357,10 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/lsQtMod" && ctrChkNode(opt)) {
 	vector<string> list;
 	mod->owner().modList(list);
-	for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	    if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
-		    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
-		opt->childAdd("el")->setText(list[i_l]);
+	for(unsigned iL = 0; iL < list.size(); iL++)
+	    if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
+		    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
+		opt->childAdd("el")->setText(list[iL]);
     }
     else TUI::cntrCmdProc(opt);
 }
@@ -383,8 +383,7 @@ WinControl::~WinControl( )
 
 void WinControl::checkForEnd( )
 {
-    if(!mod->endRun() && mod->startCom()) return;
-    //tm->stop();
+    if(!SYS->stopSignal()) return;
     QWidgetList wl = qApp->topLevelWidgets();
     for(int iW = 0; iW < wl.size(); iW++) wl[iW]->setProperty("forceClose", true);
     qApp->closeAllWindows();
@@ -402,7 +401,7 @@ void WinControl::callQtModule( )
 
 void WinControl::lastWinClose( )
 {
-    if(!mod->startCom() || mod->endRun() || SYS->stopSignal())	qApp->quit();
+    if(SYS->stopSignal())	qApp->quit();
     else startDialog();
 }
 
@@ -429,21 +428,21 @@ bool WinControl::callQtModule( const string &nm )
 	menu = new_wnd->menuBar()->addMenu("QTStarter");
 
     mod->owner().modList(list);
-    for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
-	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
+    for(unsigned iL = 0; iL < list.size(); iL++)
+	if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
+	    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
     {
-	AutoHD<TModule> QtMod = mod->owner().modAt(list[i_l]);
+	AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
 
 	QIcon icon;
-	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();")) {
+	if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
 	    QIcon(TModule::*iconGet)();
-	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
-	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
+	    mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+	    icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
 	}
 	else icon = QIcon(":/images/oscada_qt.png");
 	QAction *act_1 = new QAction(icon,QtMod.at().modName().c_str(),new_wnd);
-	act_1->setObjectName(list[i_l].c_str());
+	act_1->setObjectName(list[iL].c_str());
 	//act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
 	act_1->setToolTip(QtMod.at().modName().c_str());
 	act_1->setWhatsThis(QtMod.at().modInfo("Description").c_str());
@@ -533,22 +532,22 @@ StartDialog::StartDialog( WinControl *wcntr )
 
     vector<string> list;
     mod->owner().modList(list);
-    for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
-	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
+    for(unsigned iL = 0; iL < list.size(); iL++)
+	if(mod->owner().modAt(list[iL]).at().modInfo("SubType") == "Qt" &&
+	    mod->owner().modAt(list[iL]).at().modFuncPresent("QMainWindow *openWindow();"))
     {
 	QIcon icon;
-	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();")) {
+	if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
 	    QIcon (TModule::*iconGet)();
-	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
-	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
+	    mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+	    icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
 	}
 	else icon = QIcon(":/images/oscada_qt.png");
 
-	AutoHD<TModule> QtMod = mod->owner().modAt(list[i_l]);
+	AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
 	QPushButton *butt = new QPushButton(icon,QtMod.at().modName().c_str(),centralWidget());
-	butt->setObjectName(list[i_l].c_str());
-	butt->setToolTip(QString(_("Call the Qt-based UI module '%1'")).arg(list[i_l].c_str()));
+	butt->setObjectName(list[iL].c_str());
+	butt->setToolTip(QString(_("Call the Qt-based UI module '%1'")).arg(list[iL].c_str()));
 	butt->setWhatsThis(QString(_("Module: %1\n"
 		"Name: %2\n"
 		"Source: %3\n"

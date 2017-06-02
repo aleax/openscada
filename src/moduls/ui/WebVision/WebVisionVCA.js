@@ -693,7 +693,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
 	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
-		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; white-space: pre-wrap; ';
+		var spanStyle = "display: table-cell; width: "+geomW+"px; height: "+geomH+"px; line-height: 1; white-space: "+(parseInt(this.attrs["wordWrap"])?"pre-wrap":"pre")+"; ";
 		switch(txtAlign&0x3) {
 		    case 0: spanStyle += 'text-align: left; ';		break;
 		    case 1: spanStyle += 'text-align: right; ';		break;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -348,6 +348,8 @@ class TSYS : public TCntrNode
 	const char **argv;	//Comand line seting buffer.
 	const char **envp;	//System environment.
 
+	AutoHD<TModule>	mainThr;	//A module to call into the main thread
+
     protected:
 	//Protected methods
 	void load_( );
@@ -372,8 +374,9 @@ class TSYS : public TCntrNode
 
 	static void *taskWrap( void *stas );
 
-	static void *HPrTask( void *isys );
-	static void *RdTask( void *param );
+	static void *ServTask( void * );
+	static void *HPrTask( void * );
+	static void *RdTask( void * );
 
 	//Private attributes
 	string	mUser,		// A owner user name!

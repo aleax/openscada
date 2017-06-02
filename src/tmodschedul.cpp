@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,19 +48,19 @@ TModSchedul::~TModSchedul( )
 
 }
 
-void TModSchedul::preDisable(int flag)
+void TModSchedul::preDisable( int flag )
 {
-    //Detach all shared libs
+    //All opened modules closing
     MtxAlloc res(schM, true);
-    for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
-	if(schHD[i_sh].hd) {
-	    while(schHD[i_sh].use.size()) {
-		owner().at(TSYS::strSepParse(schHD[i_sh].use[0],0,'.')).at().
-			modDel(TSYS::strSepParse(schHD[i_sh].use[0],1,'.'));
-		schHD[i_sh].use.erase(schHD[i_sh].use.begin());
-	    }
-	    dlclose(schHD[i_sh].hd);
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	while(schHD[iSh].hd && schHD[iSh].use.size()) {
+	    owner().at(TSYS::strSepParse(schHD[iSh].use[0],0,'.')).at().modDel(TSYS::strSepParse(schHD[iSh].use[0],1,'.'));
+	    schHD[iSh].use.erase(schHD[iSh].use.begin());
 	}
+
+    //All shared libraries detach
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].hd) { dlclose(schHD[iSh].hd); schHD[iSh].hd = NULL; }
 }
 
 string TModSchedul::optDescr( )
@@ -106,39 +106,46 @@ void TModSchedul::save_( )
     TBDS::genDBSet(nodePath()+"ModDeny", denyList(), "root", TBDS::OnlyCfg);
 }
 
-void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
+void TModSchedul::dirScan( const string &paths, vector<string> &files )
 {
-    string NameMod, Path;
+    string modNm, path;
+    TRegExp re;
 
     files.clear();
 
     //Check and append present files
-    dirent  *scan_rez = NULL,
-	    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-    for(int off = 0; (Path=TSYS::strParse(Paths,0,",",&off)).size(); ) {
-	DIR *IdDir = opendir(Path.c_str());
-	if(IdDir == NULL) continue;
+    dirent  *scanRez = NULL,
+	    *scanDirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+    for(int off = 0; (path=TSYS::strParse(paths,0,",",&off)).size(); ) {
+	DIR *dirId = opendir(path.c_str());
+	if(dirId == NULL) {
+	    //Try get a pattern of files of the modules
+	    size_t tPos = path.rfind("/");
+	    if(tPos == string::npos || tPos == (path.size()-1)) continue;
+	    re.setPattern(path.substr(tPos+1), "p"); path = path.substr(0, tPos);
+	    if(!(dirId=opendir(path.c_str()))) continue;
+	} else re.setPattern("", "p");
 
-	while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-	    if(strcmp("..",scan_rez->d_name) == 0 || strcmp(".",scan_rez->d_name) == 0) continue;
-	    NameMod = Path+"/"+scan_rez->d_name;
-	    if(CheckFile(NameMod)) files.push_back(NameMod);
+	while(readdir_r(dirId,scanDirent,&scanRez) == 0 && scanRez) {
+	    if(strcmp("..",scanRez->d_name) == 0 || strcmp(".",scanRez->d_name) == 0 || !re.test(scanRez->d_name)) continue;
+	    modNm = path+"/"+scanRez->d_name;
+	    if(fileCheck(modNm)) files.push_back(modNm);
 	}
-	closedir(IdDir);
+	closedir(dirId);
     }
-    free(scan_dirent);
+    free(scanDirent);
 }
 
-bool TModSchedul::CheckFile( const string &iname )
+bool TModSchedul::fileCheck( const string &iname )
 {
     struct stat file_stat;
-    string NameMod;
+    string modNm;
 
     stat(iname.c_str(),&file_stat);
 
     if(iname.size() <= 3 || iname.compare(iname.size()-3,3,".so") != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) return false;
     if(access(iname.c_str(),F_OK|R_OK) != 0)  return false;
-    NameMod = iname;
+    modNm = iname;
 
     /*void *h_lib = dlopen(iname.c_str(),RTLD_LAZY|RTLD_LOCAL);
     if( h_lib == NULL )
@@ -149,9 +156,9 @@ bool TModSchedul::CheckFile( const string &iname )
     else dlclose(h_lib);*/
 
     MtxAlloc res(schM, true);
-    for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
-	if(schHD[i_sh].name == iname) {
-	    if(file_stat.st_mtime > schHD[i_sh].tm) return true;
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].name == iname) {
+	    if(file_stat.st_mtime > schHD[iSh].tm) return true;
 	    else return false;
 	}
 
@@ -166,22 +173,22 @@ int TModSchedul::libReg( const string &name )
     if(name[0] == '*') file_stat.st_mtime = time(NULL);
     else stat(name.c_str(),&file_stat);
 
-    unsigned i_sh;
-    for(i_sh = 0; i_sh < schHD.size(); i_sh++)
-	if(schHD[i_sh].name == name) break;
-    if(i_sh >= schHD.size())	schHD.push_back(SHD(NULL,file_stat.st_mtime,name));
-    else schHD[i_sh].tm = file_stat.st_mtime;
+    unsigned iSh;
+    for(iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].name == name) break;
+    if(iSh >= schHD.size())	schHD.push_back(SHD(NULL,file_stat.st_mtime,name));
+    else schHD[iSh].tm = file_stat.st_mtime;
 
-    return i_sh;
+    return iSh;
 }
 
 void TModSchedul::libUnreg( const string &iname )
 {
     MtxAlloc res(schM, true);
-    for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
-	if(schHD[i_sh].name == iname) {
-	    if(schHD[i_sh].hd) libDet(iname);
-	    schHD.erase(schHD.begin()+i_sh);
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].name == iname) {
+	    if(schHD[iSh].hd) libDet(iname);
+	    schHD.erase(schHD.begin()+iSh);
 	    return;
 	}
     throw err_sys(_("SO '%s' is not present!"), iname.c_str());
@@ -191,9 +198,9 @@ void TModSchedul::libAtt( const string &iname, bool full )
 {
     const char *dlErr = NULL, *dlNm = NULL;
     MtxAlloc res(schM, true);
-    for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
-	if(schHD[i_sh].name == iname) {
-	    if(schHD[i_sh].hd) throw err_sys(_("SO '%s' is already attached!"), iname.c_str());
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].name == iname) {
+	    if(schHD[iSh].hd) throw err_sys(_("SO '%s' is already attached!"), iname.c_str());
 
 	    if(iname[0] != '*')	dlNm = iname.c_str();
 #ifdef CoreLibNmToDlOpen
@@ -203,26 +210,26 @@ void TModSchedul::libAtt( const string &iname, bool full )
 #endif
 	    void *h_lib = dlopen(dlNm, RTLD_LAZY|RTLD_LOCAL);
 	    if(!h_lib) {
-		schHD[i_sh].err = dlerror();
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[i_sh].err.c_str());
+		schHD[iSh].err = dlerror();
+		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to module function
 	    TModule::SAt (*module)( int );
 	    module = (TModule::SAt (*)(int)) dlsym(h_lib,(iname[0]!='*')?"module":(iname.substr(1)+"_module").c_str());
 	    if((dlErr=dlerror()) != NULL) {
-		schHD[i_sh].err = dlErr;
+		schHD[iSh].err = dlErr;
 		dlclose(h_lib);
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[i_sh].err.c_str());
+		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to attach function
 	    TModule *(*attach)( const TModule::SAt &, const string & );
 	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(h_lib,(iname[0]!='*')?"attach":(iname.substr(1)+"_attach").c_str());
 	    if((dlErr=dlerror()) != NULL) {
-		schHD[i_sh].err = dlErr;
+		schHD[iSh].err = dlErr;
 		dlclose(h_lib);
-		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[i_sh].err.c_str());
+		throw err_sys(_("SO '%s' error: %s !"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Get allow modules from library and start it
@@ -251,7 +258,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 			    }
 			    // Add atached module
 			    owner().at(list[i_sub]).at().modAdd(LdMod);
-			    schHD[i_sh].use.push_back(list[i_sub]+"."+LdMod->modId());
+			    schHD[iSh].use.push_back(list[i_sub]+"."+LdMod->modId());
 			    if(full) {
 				owner().at(list[i_sub]).at().modifG();
 				owner().at(list[i_sub]).at().load();
@@ -264,7 +271,7 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		}
 	    }
 	    if(add_mod == 0) dlclose(h_lib);
-	    else schHD[i_sh].hd = h_lib;
+	    else schHD[iSh].hd = h_lib;
 	    return;
 	}
     throw err_sys(_("SO '%s' is not present!"), iname.c_str());
@@ -273,30 +280,30 @@ void TModSchedul::libAtt( const string &iname, bool full )
 void TModSchedul::libDet( const string &iname )
 {
     MtxAlloc res(schM, true);
-    for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
-	if(schHD[i_sh].name == iname) {
-	    if(!schHD[i_sh].hd) return;
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].name == iname) {
+	    if(!schHD[iSh].hd) return;
 	    try {
 		//Stop all modules
-		for(unsigned i_m = 0; i_m < schHD[i_sh].use.size(); i_m++)
-		    owner().at(TSYS::strSepParse(schHD[i_sh].use[i_m],0,'.')).at().
-			modAt(TSYS::strSepParse(schHD[i_sh].use[i_m],1,'.')).at().modStop();
+		for(unsigned i_m = 0; i_m < schHD[iSh].use.size(); i_m++)
+		    owner().at(TSYS::strSepParse(schHD[iSh].use[i_m],0,'.')).at().
+			modAt(TSYS::strSepParse(schHD[iSh].use[i_m],1,'.')).at().modStop();
 		//Delete all modules
-		while(schHD[i_sh].use.size()) {
-		    owner().at(TSYS::strSepParse(schHD[i_sh].use[0],0,'.')).at().
-			modDel(TSYS::strSepParse(schHD[i_sh].use[0],1,'.'));
-		    schHD[i_sh].use.erase(schHD[i_sh].use.begin());
+		while(schHD[iSh].use.size()) {
+		    owner().at(TSYS::strSepParse(schHD[iSh].use[0],0,'.')).at().
+			modDel(TSYS::strSepParse(schHD[iSh].use[0],1,'.'));
+		    schHD[iSh].use.erase(schHD[iSh].use.begin());
 		}
 	    } catch(TError &err) {
-		//owner().at(schHD[i_sh]->use[0].mod_sub).at().modAt(schHD[i_sh]->use[0].n_mod).at().load();
+		//owner().at(schHD[iSh]->use[0].mod_sub).at().modAt(schHD[iSh]->use[0].n_mod).at().load();
 		//Start all modules
-		for(unsigned i_m = 0; i_m < schHD[i_sh].use.size(); i_m++)
-		    owner().at(TSYS::strSepParse(schHD[i_sh].use[i_m],0,'.')).at().
-			modAt(TSYS::strSepParse(schHD[i_sh].use[i_m],1,'.')).at().modStart();
+		for(unsigned i_m = 0; i_m < schHD[iSh].use.size(); i_m++)
+		    owner().at(TSYS::strSepParse(schHD[iSh].use[i_m],0,'.')).at().
+			modAt(TSYS::strSepParse(schHD[iSh].use[i_m],1,'.')).at().modStart();
 		throw;
 	    }
-	    dlclose(schHD[i_sh].hd);
-	    schHD[i_sh].hd = NULL;
+	    dlclose(schHD[iSh].hd);
+	    schHD[iSh].hd = NULL;
 	    return;
 	}
     throw err_sys(_("SO '%s' is not present!"), iname.c_str());
@@ -326,16 +333,16 @@ void TModSchedul::libList( vector<string> &list )
     list.clear();
 
     MtxAlloc res(schM, true);
-    for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
-	list.push_back(schHD[i_sh].name);
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	list.push_back(schHD[iSh].name);
 }
 
 TModSchedul::SHD TModSchedul::lib( const string &iname )
 {
     MtxAlloc res(schM, true);
-    for(unsigned i_sh = 0; i_sh < schHD.size(); i_sh++)
-	if(schHD[i_sh].name == iname)
-	    return schHD[i_sh];
+    for(unsigned iSh = 0; iSh < schHD.size(); iSh++)
+	if(schHD[iSh].name == iname)
+	    return schHD[iSh];
     throw err_sys(_("SO '%s' is not present!"), iname.c_str());
 }
 
@@ -347,11 +354,11 @@ int TModSchedul::libLoad( const string &iname, bool full )
     //Check and register builtin modules
     string smod;
     for(int off = 0; (smod=TSYS::strParse(MODS_INCL,0," ",&off)).size(); ) {
-	unsigned i_sh;
+	unsigned iSh;
 	MtxAlloc res(schM, true);
-	for(i_sh = 0; i_sh < schHD.size(); i_sh++)
-	    if(schHD[i_sh].name == ("*"+smod)) break;
-	if(i_sh >= schHD.size()) {
+	for(iSh = 0; iSh < schHD.size(); iSh++)
+	    if(schHD[iSh].name == ("*"+smod)) break;
+	if(iSh >= schHD.size()) {
 	    res.unlock();
 	    libReg("*"+smod);
 	    try{ libAtt("*"+smod,full); ldCnt++; }
@@ -360,16 +367,16 @@ int TModSchedul::libLoad( const string &iname, bool full )
     }
 
     //Get new or changed modules list
-    ScanDir(iname, files);
+    dirScan(iname, files);
 
     //Add and process allowed modules
     for(unsigned i_f = 0; i_f < files.size(); i_f++) {
-	unsigned i_sh;
+	unsigned iSh;
 	bool st_auto = chkAllowMod(files[i_f]);
 	MtxAlloc res(schM, true);
-	for(i_sh = 0; i_sh < schHD.size(); i_sh++)
-	    if(schHD[i_sh].name == files[i_f]) break;
-	if(i_sh < schHD.size()) {
+	for(iSh = 0; iSh < schHD.size(); iSh++)
+	    if(schHD[iSh].name == files[i_f]) break;
+	if(iSh < schHD.size()) {
 	    try {
 		res.unlock();
 		if(st_auto) libDet(files[i_f]);
