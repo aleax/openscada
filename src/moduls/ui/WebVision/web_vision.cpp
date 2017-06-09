@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.0.2"
+#define MOD_VER		"2.0.3"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -338,6 +338,12 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
     return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
 }
 
+bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
+{
+    vector<TVariant> prms; prms.push_back(URL);
+    return iprt->owner().objFuncCall("pgAccess", prms, "root").getB();
+}
+
 void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     string sender = TSYS::strLine(iprt->srcAddr(), 0);
@@ -383,6 +389,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		cntrIfCmd(req, ses.user);
 		ResAlloc sesRes(mSesRes, false);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
+		    if(!pgAccess(iprt,sender+"/" MOD_ID "/ses_"+req.childGet(iCh)->text()+"/"))	continue;
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
 			    (req.childGet(iCh)->attr("user") != user ||
 			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
@@ -409,6 +416,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
+		    if(!pgAccess(iprt,sender+"/" MOD_ID "/prj_"+req.childGet(iCh)->attr("id")+"/"))	continue;
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)
 			continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/> "

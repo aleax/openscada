@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.7"
+#define MOD_VER		"1.7.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -598,7 +598,7 @@ void TMdPrm::vlGet( TVal &val )
 	if(isStd() && tmpl->val.func() && idErr >= 0) {
 	    if(tmpl->val.getS(idErr) != EVAL_STR) val.setS(tmpl->val.getS(idErr), 0, true);
 	} else val.setS("0", 0, true);
-	if(owner().messLev() == TMess::Debug)
+	if(owner().messLev() == TMess::Debug && (idErr < 0 || tmpl->val.getS(idErr) != EVAL_STR))
 	    val.setS(val.getS(NULL,true)+": "+TSYS::strMess(_("Spent time %s[%s]"),tm2s(tmCalc).c_str(),tm2s(tmCalcMax).c_str()), 0, true);
     }
 }
@@ -611,8 +611,8 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(owner().redntUse()) {
 	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
+	req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
+	SYS->daq().at().rdStRequest(owner().workId(), req);
 	return;
     }
 

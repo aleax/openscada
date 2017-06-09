@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 18:56+0200\n"
+"POT-Creation-Date: 2017-06-09 15:44+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -37,6 +37,7 @@ msgstr ""
 "AuthTime <мин>     Время жизни аутентификации, минут (по умолчанию 10).\n"
 "\n"
 
+#, c-format
 msgid "HTML template '%s' load error: %s"
 msgstr "Ошибка загрузки HTML шаблона '%s': %s"
 
@@ -70,14 +71,20 @@ msgstr "Активные сеансы аутентификации"
 msgid "Module options"
 msgstr "Опции модуля"
 
-msgid "Life time of the authentication (min)"
-msgstr "Время жизни аутентификации (мин)"
+msgid "Deny"
+msgstr "Запрещено"
+
+msgid "Allow"
+msgstr "Разрешено"
 
 msgid "HTML template"
 msgstr "HTML шаблон"
 
 msgid "HTML main page template"
 msgstr "HTML шаблон главной страницы"
+
+msgid "Life time of the authentication (min)"
+msgstr "Время жизни аутентификации (мин)"
 
 msgid "Auto login"
 msgstr "Автоматический вход"

@@ -116,7 +116,7 @@ void TModSchedul::dirScan( const string &paths, vector<string> &files )
     //Check and append present files
     dirent  *scanRez = NULL,
 	    *scanDirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-    for(int off = 0; (path=TSYS::strParse(paths,0,",",&off)).size(); ) {
+    for(int off = 0; (path=TSYS::strParse(paths,0,";",&off)).size(); ) {
 	DIR *dirId = opendir(path.c_str());
 	if(dirId == NULL) {
 	    //Try get a pattern of files of the modules

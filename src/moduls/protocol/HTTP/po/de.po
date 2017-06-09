@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-17 18:56+0200\n"
+"POT-Creation-Date: 2017-06-09 15:44+0300\n"
 "PO-Revision-Date: 2009-08-19 09:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -43,6 +43,7 @@ msgstr ""
 "10).\n"
 "\n"
 
+#, c-format
 msgid "HTML template '%s' load error: %s"
 msgstr "HTML Template '%s' Last error: %s"
 
@@ -76,14 +77,20 @@ msgstr "Aktive Authentifizierung Sitzungen"
 msgid "Module options"
 msgstr "Moduloptionen"
 
-msgid "Life time of the authentication (min)"
-msgstr "Lebensdauer der Authentifizierung (Min)"
+msgid "Deny"
+msgstr "Verweigern"
+
+msgid "Allow"
+msgstr "Zulassen"
 
 msgid "HTML template"
 msgstr "HTML-Template"
 
 msgid "HTML main page template"
 msgstr "HTML-Hauptseitevorlage"
+
+msgid "Life time of the authentication (min)"
+msgstr "Lebensdauer der Authentifizierung (Min)"
 
 msgid "Auto login"
 msgstr "Auto Login"

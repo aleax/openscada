@@ -21,7 +21,6 @@
 #ifndef TUIMOD_H
 #define TUIMOD_H
 
-
 #include <QTranslator>
 #include <QMainWindow>
 #include <QApplication>
@@ -136,11 +135,14 @@ public:
     string modInfo( const string &name );
     void   modInfo( vector<string> &list );
 
+    bool endRun( )	{ return mEndRun; }
+    bool startCom( )	{ return mStartCom; }
     string startMod( )	{ return mStartMod; }
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
 
     void modStart( );
+    void modStop( );
 
 protected:
     //Methods
@@ -151,14 +153,18 @@ protected:
     void postDisable( int flag );
 
 private:
+#ifndef EN_QtMainThrd
     //Methods
-    static void *splashTask( void * );
+    static void *Task( void * );
+#endif
+
+    //Methods
     string	optDescr( );
     void	toQtArg( const char *nm, const char *arg = NULL );
     void	splashSet( SplashFlag flg = SPLSH_NULL );
 
     //Attributes
-    bool	hideMode;
+    bool	hideMode, mEndRun, mStartCom;
     string	mStartMod;
 
     // Command line options binding to Qt

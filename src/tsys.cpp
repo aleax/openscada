@@ -56,7 +56,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1),
-    mainPthr(0), mSysTm(time(NULL)), mClockRT(false), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
+    mainPthr(0), mSysTm(0), mClockRT(false), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -410,10 +410,10 @@ string TSYS::optDescr( )
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"WorkDir    <path>	Work directory.\n"
-	"ModDir     <path>	Directories with modules, separated by ',', they can include a files' template into the end.\n"
+	"ModDir     <path>	Directories with modules, separated by ';', they can include a files' template into the end.\n"
 	"IcoDir     <path>	Icons directory.\n"
 	"DocDir     <path>	Documents directory.\n"
-	"MessLev    <level>     Messages <level> (0-7).\n"
+	"MessLev    <level>	Messages <level> (0-7).\n"
 	"SelDebCats <list>	Debug categories list (separated by ';').\n"
 	"LogTarget  <direction> Direct messages to, by bitfield:\n"
 	"			  0x1 - syslogd;\n"

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-02 17:09+0300\n"
+"POT-Creation-Date: 2017-06-09 16:07+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1636,6 +1636,7 @@ msgstr ""
 msgid "B"
 msgstr ""
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1662,11 +1663,11 @@ msgid ""
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "WorkDir    <path>\tWork directory.\n"
-"ModDir     <path>\tDirectories with modules, separated by ',', they can "
+"ModDir     <path>\tDirectories with modules, separated by ';', they can "
 "include a files' template into the end.\n"
 "IcoDir     <path>\tIcons directory.\n"
 "DocDir     <path>\tDocuments directory.\n"
-"MessLev    <level>     Messages <level> (0-7).\n"
+"MessLev    <level>\tMessages <level> (0-7).\n"
 "SelDebCats <list>\tDebug categories list (separated by ';').\n"
 "LogTarget  <direction> Direct messages to, by bitfield:\n"
 "\t\t\t  0x1 - syslogd;\n"
@@ -1715,7 +1716,8 @@ msgstr ""
 "StName     <nm>\tStationsname.\n"
 "WorkDB     <Type.Name>\tArbeitsdatenbank (Typ und Name).\n"
 "WorkDir    <path>\tArbeitsverzeichnis.\n"
-"ModDir     <path>\tVerzeichnisse mit Modulen, getrennt durch ',', können sie eine Datei 'Vorlage in das Ende enthalten.\n"
+"ModDir     <path>\tVerzeichnisse mit Modulen, getrennt durch ';', können sie "
+"eine Datei 'Vorlage in das Ende enthalten.\n"
 "IcoDir     <path>\tSymbolverzeichnis.\n"
 "DocDir     <path>\tDocumenteverzeichnis.\n"
 "MessLev    <level>\tNachrichtenstufe <level> von Nachrichten (0-7).\n"
@@ -1797,6 +1799,7 @@ msgstr "Starten ist beendet"
 msgid "Stopping ..."
 msgstr "Stoppen ..."
 
+#, c-format
 msgid "Error for subsystem '%s' stopping."
 msgstr "Fehler beim Anhalten des Subsystems '%s'."
 

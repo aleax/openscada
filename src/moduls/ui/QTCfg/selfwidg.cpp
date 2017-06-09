@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -503,7 +503,12 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 
 QSize TextEdit::sizeHint( ) const
 {
-    return QSize(edFld->sizeHint().width(), 2*edFld->currentFont().pointSize()*mRowCol.height());
+    return QSize(edFld->sizeHint().width(), 3*edFld->currentFont().pointSize()*mRowCol.height());
+}
+
+QSize TextEdit::minimumSizeHint( ) const
+{
+    return QSize(edFld->minimumSizeHint().width(), 3*edFld->currentFont().pointSize()*mRowCol.height());
 }
 
 bool TextEdit::isChanged( )		{ return (butBox && butBox->isVisible()); }

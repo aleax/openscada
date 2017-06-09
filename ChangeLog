@@ -1,3 +1,18 @@
+2017-06-09 Roman (stable)
+- !!!:FIX:SYS: A new configure option --with-qt5 was added for Qt5 forcely checking and using.
+    A new configuration option --enable-QtMainThrd was added to switch the module UI.QTStarter for working in main thread of the program.
+    A new configuration option --disable-CoreLibVersion was added to disable version of the core library.
+    Android messages support was added.
+    Modules separator of option "ModDir" of OpenSCADA was changed to ';'.
+    FIX: The function TSYS::sysTm() was set adaptive one for the task "SYS_HighPriority" execution.
+- DAQ.JavaLikeCalc: Entry to procedures of the module set more optimal by direct locking the critical section.
+- FIX:DAQ.JavaLikeCalc: The parameter's debug mode was disabled for passive modes (f_err is EVAL) of the parameters but the debug message accumulates into the attribute "err".
+- !!!:Protocol.HTTP,UI.{WebUser,WebVision}: ACL support was added to control access and visibility of items of indexes of Web resources.
+- FIX:UI.QTCfg: sizeHint() and minimumSizeHint() procesing was fixed.
+- !!!!:FIX:UI.QTStarter: Two modes of execution Qt were added, first is old one into different thread (by default) and second is new one into main thread (by the configure option -enable-QtMainThrd).
+    FIX: Splash set to passive one for second mode.
+
+
 2017-06-02 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by implementing of electricity counters Mercury 200 and 230 from Arsen Zakojan <godzilla919@gmail.com>.
 - DB.Model.AGLKS.vca: Fixed for a spare horizontal line.

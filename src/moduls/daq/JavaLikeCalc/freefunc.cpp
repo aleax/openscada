@@ -1768,13 +1768,25 @@ void Func::setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val )
 
 void Func::calc( TValFunc *val )
 {
-    ResAlloc res(fRes(), false);
+    fRes().resRequestR();
+    if(!startStat()) return;
+
+    //Exec calc
+    try {
+	ExecData dt = { SYS->sysTm(), 0 };
+	exec(val, (const uint8_t*)prg.c_str(), dt);
+	if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function execution terminated by error"));
+    } catch(...) { fRes().resRelease(); throw; }
+    fRes().resRelease();
+
+    /*ResAlloc res(fRes(), false);
     if(!startStat()) return;
 
     //Exec calc
     ExecData dt = { SYS->sysTm(), 0 };
     exec(val, (const uint8_t*)prg.c_str(), dt);
-    if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function execution terminated by error"));
+    if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function execution terminated by error"));*/
+
 }
 
 void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )

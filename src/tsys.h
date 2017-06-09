@@ -211,7 +211,7 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
-	time_t	sysTm( ) volatile	{ return mSysTm; }	//System time fast access, from updated cell
+	time_t	sysTm( ) volatile	{ return mSysTm ? mSysTm : time(NULL); }	//System time fast access, from updated cell
 	static int64_t curTime( );	//Current system time (usec)
 
 	// Tasks control

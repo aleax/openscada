@@ -1465,7 +1465,7 @@ AC_DEFUN([AX_LIB_FFTW3], [
 #
 # LICENSE
 #
-#   Copyright (c) 2011-2014 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011-2017 Roman Savochenko <rom_as@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1473,17 +1473,20 @@ AC_DEFUN([AX_LIB_FFTW3], [
 #   warranty.
 AC_DEFUN([AX_LIB_Qt],
 [
+    AC_ARG_WITH([qt5],AS_HELP_STRING([--with-qt5=@<:@ARG@:>@],[Force check and use Qt5 @<:@default=no@:>@, else Qt4 will be checked firstly]), [], [withval="no"])
+
     if test "x${Qt_use}" = "x"; then
-	QtGui=QtGui
-	PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0],[],
-	[
-	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0],[],[AC_MSG_ERROR(QT4 or Qt5 library QtGui not found! Install Qt4 or Qt5 library development package.)])
-	    PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],[AC_MSG_ERROR(Qt5 library Qt5PrintSupport not found! Install Qt5 library development package.)])
+	if test "$withval" = "no"; then
+	    PKG_CHECK_MODULES([QtGui], [QtGui > 4.3.0], [Qt_use=true; QtGui=QtGui;], []);
+	fi
+	if test "x${Qt_use}" = "x"; then
+	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0],[],AC_MSG_ERROR([Neither QT4 or Qt5 library QtGui is not found! Install development packages of Qt4 or Qt5 library.]))
+	    PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],AC_MSG_ERROR([Library Qt5PrintSupport of Qt5 is not found! Install development packages of Qt5 library.]))
 	    QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS"
 	    QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
 	    QtGui=Qt5Widgets
 	    Qt5_use=true
-	])
+	fi
 	AC_SUBST(Qt_MOC)
 	AC_SUBST(Qt_RCC)
 	Qt_MOC="$($PKG_CONFIG --variable=moc_location ${QtGui})"
@@ -1491,6 +1494,11 @@ AC_DEFUN([AX_LIB_Qt],
 	if test "x${Qt_MOC}" = "x" -o ! -x "${Qt_MOC}"; then Qt_MOC="$($PKG_CONFIG --variable=prefix ${QtGui})/bin/moc"; fi
 	if test "x${Qt_RCC}" = "x" -o ! -x "${Qt_RCC}"; then Qt_RCC="$($PKG_CONFIG --variable=prefix ${QtGui})/bin/rcc"; fi
 	Qt_use=true
+    fi
+
+    AC_ARG_ENABLE(QtMainThrd, AC_HELP_STRING([--enable-QtMainThrd],[enable for using the main thread for Qt.]), [], [enable_QtMainThrd=no;])
+    if test $enable_QtMainThrd = yes; then
+	AC_DEFINE([EN_QtMainThrd], [1], [Define if Qt uses the main thread.])
     fi
 ])
 

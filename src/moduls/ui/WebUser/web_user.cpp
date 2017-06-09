@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.8.1"
+#define MOD_VER		"0.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -201,6 +201,12 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
     return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
 }
 
+bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
+{
+    vector<TVariant> prms; prms.push_back(URL);
+    return iprt->owner().objFuncCall("pgAccess", prms, "root").getB();
+}
+
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     string rez, httpIt, tstr, sender = TSYS::strLine(iprt->srcAddr(), 0);
@@ -229,7 +235,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 			" <tr><th>"+string(_("Presented user's WEB-pages."))+"</th></tr>\n"
 			" <tr><td class='content'><ul>\n";
 		for(unsigned iP = 0; iP < upLs.size(); iP++)
-		    if(uPgAt(upLs[iP]).at().enableStat())
+		    if(uPgAt(upLs[iP]).at().enableStat() && pgAccess(iprt,sender+"/" MOD_ID "/"+upLs[iP]+"/"))
 			page += "   <li><a href='"+upLs[iP]+"/'>"+uPgAt(upLs[iP]).at().name()+"</a></li>\n";
 		page += "</ul></td></tr></table>\n";
 

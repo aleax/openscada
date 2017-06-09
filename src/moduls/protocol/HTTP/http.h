@@ -59,6 +59,7 @@ class TProtIn: public TProtocolIn
 
 	string pgCreator( const string &cnt, const string &rcode = "",
 		const string &httpattrs = "", const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+	bool pgAccess( const string &URL );
 
 	//Attributes
 	bool mNoFull;
@@ -75,13 +76,17 @@ class TProt: public TProtocol
 	TProt( string name );
 	~TProt( );
 
-	int authTime( )			{ return mTAuth; }
+	string deny( )			{ return mDeny; }
+	string allow( )			{ return mAllow; }
 	string tmpl( )			{ return mTmpl; }
 	string tmplMainPage( )		{ return mTmplMainPage; }
+	int authTime( )			{ return mTAuth; }
 
-	void setAuthTime( int vl )	{ mTAuth = vmax(1,vl); modif(); }
-	void setTmpl( const string &vl ){ mTmpl = vl; modif(); }
-	void setTmplMainPage( const string &vl ) { mTmplMainPage = vl; modif(); }
+	void setDeny( const string &vl )	{ mDeny = vl; modif(); }
+	void setAllow( const string &vl )	{ mAllow = vl; modif(); }
+	void setTmpl( const string &vl )	{ mTmpl = vl; modif(); }
+	void setTmplMainPage( const string &vl ){ mTmplMainPage = vl; modif(); }
+	void setAuthTime( int vl )		{ mTAuth = vmax(1,vl); modif(); }
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -141,9 +146,9 @@ class TProt: public TProtocol
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
+	MtxString	mDeny, mAllow, mTmpl, mTmplMainPage;
 	map<int, SAuth>	mAuth;
 	int		mTAuth;
-	MtxString	mTmpl, mTmplMainPage;
 	time_t		lstSesChk;
 
 	vector<SAutoLogin>	mALog;

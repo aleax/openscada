@@ -103,6 +103,7 @@ class TWEB: public TUI
 
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
 	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+	bool pgAccess( TProtocolIn *iprt, const string &URL );
 
 	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );
 
