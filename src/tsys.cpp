@@ -3072,20 +3072,23 @@ int main( int argc, char *argv[], char *envp[] )
 {
     int rez = 0;
 
-    //???? Maybe load assets before
+    //Get current locale from Java and set its to the environment LANG
+    setenv("LANG", "uk_UA.UTF-8", 1);
 
     //Same load and start the core object TSYS
     SYS = new TSYS(argc, argv, envp);
     try {
+	//Print arguments and environments
+	mess_info("TEST_ARG", "Arguments %d, %p, %p", argc, argv, envp);
+
+
 	SYS->load();
-	//if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(),"Stop by signal %d on load.",rez);
+	if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(), "Stop by signal %d on load.", rez);
 	rez = SYS->start();
     } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Free OpenSCADA system's root object
     if(SYS) delete SYS;
-
-    //printf("OpenSCADA system correct exit by code %d.\n", rez);
 
     return rez;
 }

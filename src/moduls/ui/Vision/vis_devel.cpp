@@ -675,7 +675,7 @@ VisDevelop::~VisDevelop( )
 
     //Save main window state
     QByteArray st = saveState();
-    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64), user());
+    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"\n"), user());
 
     //Timers stop
     endRunTimer->stop();
@@ -1322,11 +1322,10 @@ void VisDevelop::visualItEdit( )
 		scrl->parentWidget()->setWindowIcon(QPixmap::fromImage(ico_t));	//parentWidget is QMdiSubWindow
 	}
 
-	scrl->show();
+	scrl->parentWidget()->show();
 
-	//scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+scrl->verticalScrollBar()->width())),
-	//			     fmax(200,fmin(work_space->height(),vw->size().height()+3*scrl->horizontalScrollBar()->height())));
-	scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+(scrl->parentWidget()->width()-scrl->width())+5)),
+	if(!(work_space->activeSubWindow() && work_space->activeSubWindow()->isMaximized()))
+	    scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+(scrl->parentWidget()->width()-scrl->width())+5)),
 				     fmax(200,fmin(work_space->height(),vw->size().height()+(scrl->parentWidget()->height()-scrl->height())+5)));
     }
 }

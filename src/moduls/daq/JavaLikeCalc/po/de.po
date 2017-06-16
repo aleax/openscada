@@ -240,8 +240,8 @@ msgstr ""
 msgid "Data base"
 msgstr "Datenbank"
 
-msgid "Program translation allow"
-msgstr "Programm Übersetzung ermöglichen"
+msgid "Allow program translation"
+msgstr "Programmübersetzung zulassen"
 
 msgid "Formula"
 msgstr "Formel"

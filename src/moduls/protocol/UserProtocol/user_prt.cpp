@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"0.8.4"
+#define MOD_VER		"0.8.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on any OpenSCADA's language.")
 #define LICENSE		"GPL2"
@@ -82,7 +82,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
     mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mUPrtEl.fldAdd(new TFld("PR_TR",_("Program translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    mUPrtEl.fldAdd(new TFld("PR_TR",_("Allow program translation"),TFld::Boolean,TFld::NoFlag,"1","1"));
     mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Wait request timeout, ms"),TFld::Integer,TFld::NoFlag,"6","0"));
     mUPrtEl.fldAdd(new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
@@ -276,7 +276,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	up.at().cntInReq++;
 
 	return rez;
-    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     return false;
 }
@@ -286,7 +286,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 //*************************************************
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false),
-    mWaitReqTm(cfg("WaitReqTm").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb)
+    mWaitReqTm(cfg("WaitReqTm").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb), prgChOnEn(false)
 {
     mId = iid;
     cfg("InPROG").setExtVal(true);
@@ -325,7 +325,7 @@ string UserPrt::name( )
     return tNm.size() ? tNm : id();
 }
 
-string UserPrt::tbl( ) const	{ return owner().modId()+"_uPrt"; }
+string UserPrt::tbl( ) const	{ return owner().modId() + "_uPrt"; }
 
 string UserPrt::inProgLang( )
 {
@@ -343,21 +343,21 @@ string UserPrt::inProg( )
 void UserPrt::setInProgLang( const string &ilng )
 {
     cfg("InPROG").setS(ilng+"\n"+inProg());
-    if(enableStat()) setEnable(false);
+    //if(enableStat()) setEnable(false);
     modif();
 }
 
 void UserPrt::setInProg( const string &iprg )
 {
     cfg("InPROG").setS(inProgLang()+"\n"+iprg);
-    if(enableStat()) setEnable(false);
+    //if(enableStat()) setEnable(false);
     modif();
 }
 
 string UserPrt::outProgLang( )
 {
     string mProg = cfg("OutPROG").getS();
-    return mProg.substr(0,mProg.find("\n"));
+    return mProg.substr(0, mProg.find("\n"));
 }
 
 string UserPrt::outProg( )
@@ -370,14 +370,14 @@ string UserPrt::outProg( )
 void UserPrt::setOutProgLang( const string &ilng )
 {
     cfg("OutPROG").setS(ilng+"\n"+outProg());
-    if(enableStat()) setEnable(false);
+    //if(enableStat()) setEnable(false);
     modif();
 }
 
 void UserPrt::setOutProg( const string &iprg )
 {
     cfg("OutPROG").setS(outProgLang()+"\n"+iprg);
-    if(enableStat()) setEnable(false);
+    //if(enableStat()) setEnable(false);
     modif();
 }
 
@@ -404,6 +404,7 @@ bool UserPrt::cfgChange( TCfg &co, const TVariant &pc )
 	cfg("InPROG").setNoTransl(!progTr());
 	cfg("OutPROG").setNoTransl(!progTr());
     }
+    else if((co.name() == "InPROG" || co.name() == "OutPROG") && enableStat())	prgChOnEn = true;
     modif();
     return true;
 }
@@ -440,7 +441,7 @@ void UserPrt::setEnable( bool vl )
 	} else mWorkOutProg = "";
     }
 
-    mEn = vl;
+    mEn = vl; prgChOnEn = false;
 }
 
 string UserPrt::getStatus( )
@@ -448,6 +449,7 @@ string UserPrt::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
+	if(prgChOnEn) rez += TSYS::strMess(_("Modified, re-enable to apply! "));
 	rez += TSYS::strMess( _("Requests input %.4g, output %.4g."), cntInReq, cntOutReq );
     }
 

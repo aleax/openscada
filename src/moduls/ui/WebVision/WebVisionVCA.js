@@ -1336,7 +1336,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
 			    if(!imgObj.hidden) {
-				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW,geomH)+(!elWr?"&filtr=unact":"");
+				imgObj.className = elWr ? 'active' : 'inactive';
+				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW,geomH);//+(!elWr?"&filtr=unact":"");
 				//imgObj.width = Math.min(geomW, geomH);
 				imgObj.height = Math.min(geomW, geomH);
 				imgObj.style.float = spanObj.disabled ? null : 'left';

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-19 08:26+0200\n"
+"POT-Creation-Date: 2017-06-16 11:25+0300\n"
 "PO-Revision-Date: 2010-10-25 09:57+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -114,6 +114,9 @@ msgstr "Ausgeschaltet. "
 
 msgid "Enabled. "
 msgstr "Eingeschaltet. "
+
+msgid "Modified, re-enable to apply! "
+msgstr "Geändert, wieder freigeben zu bewerben! "
 
 #, c-format
 msgid "Requests %.4g."

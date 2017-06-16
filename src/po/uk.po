@@ -886,7 +886,7 @@ msgstr "Збір Даних"
 msgid "Maximum calculate time (sec)"
 msgstr "Максимальний час обрахунку (сек)"
 
-msgid "Program translation allow"
+msgid "Allow program translation"
 msgstr "Перекладати програму"
 
 msgid "Program"

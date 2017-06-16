@@ -56,7 +56,7 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
     openlog(PACKAGE, 0, LOG_USER);
 
     setenv("LC_NUMERIC", "C", 1);
-    setlocale(LC_ALL,"");
+    setlocale(LC_ALL, "");
     IOCharSet = nl_langinfo(CODESET);
 
 #ifdef HAVE_LIBINTL_H

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-19 08:26+0200\n"
+"POT-Creation-Date: 2017-06-16 11:25+0300\n"
 "PO-Revision-Date: 2010-03-16 16:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -111,6 +111,9 @@ msgstr "Виключено. "
 
 msgid "Enabled. "
 msgstr "Включено. "
+
+msgid "Modified, re-enable to apply! "
+msgstr "Модифіковано, переувімкнути для застосування! "
 
 #, c-format
 msgid "Requests %.4g."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-13 11:11+0200\n"
+"POT-Creation-Date: 2017-06-16 11:25+0300\n"
 "PO-Revision-Date: 2010-09-07 19:16+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -40,8 +40,8 @@ msgstr "Beschreibung"
 msgid "To enable"
 msgstr "Aktivieren"
 
-msgid "Program translation allow"
-msgstr "Programm Übersetzung ermöglichen"
+msgid "Allow program translation"
+msgstr "Programmübersetzung zulassen"
 
 msgid "Wait request timeout, ms"
 msgstr "Warten Anforderungs Timeout, ms"
@@ -87,6 +87,9 @@ msgstr "Disaktiviert. "
 
 msgid "Enabled. "
 msgstr "Aktiviert. "
+
+msgid "Modified, re-enable to apply! "
+msgstr "Geändert, wieder freigeben zu bewerben! "
 
 #, c-format
 msgid "Requests input %.4g, output %.4g."

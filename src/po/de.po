@@ -896,8 +896,8 @@ msgstr "Datenerfassung"
 msgid "Maximum calculate time (sec)"
 msgstr "Maximale Zeit der Berechnung (sek)"
 
-msgid "Program translation allow"
-msgstr "Programm Übersetzung ermöglichen"
+msgid "Allow program translation"
+msgstr "Programmübersetzung zulassen"
 
 msgid "Program"
 msgstr "Programm"

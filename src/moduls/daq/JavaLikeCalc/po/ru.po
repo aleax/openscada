@@ -235,7 +235,7 @@ msgstr ""
 msgid "Data base"
 msgstr "База данных"
 
-msgid "Program translation allow"
+msgid "Allow program translation"
 msgstr "Переводить программу"
 
 msgid "Formula"

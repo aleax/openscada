@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-27 19:53+0300\n"
+"POT-Creation-Date: 2017-06-16 11:23+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,7 +222,7 @@ msgstr ""
 msgid "Calculate data period (s)"
 msgstr ""
 
-msgid "Program translation allow"
+msgid "Allow program translation"
 msgstr ""
 
 msgid "Program"
@@ -362,6 +362,9 @@ msgid "Disabled. "
 msgstr ""
 
 msgid "Enabled. "
+msgstr ""
+
+msgid "Modified, re-enable to apply! "
 msgstr ""
 
 #, c-format

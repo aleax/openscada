@@ -116,6 +116,7 @@ class UserPg : public TCntrNode, public TConfig
 	char	&mAEn, mEn;
 	int64_t	&mTimeStamp;
 	string	mDB, mWorkProg;
+	bool	prgChOnEn;
 };
 
 //*************************************************

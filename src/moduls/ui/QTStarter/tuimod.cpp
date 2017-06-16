@@ -52,7 +52,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"2.1.0"
+#define MOD_VER		"2.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -293,10 +293,12 @@ void TUIMod::splashSet( SplashFlag flg )
 	QFont wFnt = splash->font();
 	wFnt.setPixelSize(10);
 	splash->setFont(wFnt);
+#ifdef EN_QtMainThrd
 	for(int iTr = 0; iTr < 10; iTr++) {
 	    QtApp->processEvents();
 	    TSYS::sysSleep(0.1);
 	}
+#endif
     }
 }
 

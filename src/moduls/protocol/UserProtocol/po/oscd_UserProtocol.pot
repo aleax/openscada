@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-13 11:11+0200\n"
+"POT-Creation-Date: 2017-06-16 11:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 msgid "To enable"
 msgstr ""
 
-msgid "Program translation allow"
+msgid "Allow program translation"
 msgstr ""
 
 msgid "Wait request timeout, ms"
@@ -84,6 +84,9 @@ msgid "Disabled. "
 msgstr ""
 
 msgid "Enabled. "
+msgstr ""
+
+msgid "Modified, re-enable to apply! "
 msgstr ""
 
 #, c-format

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.8.2"
+#define MOD_VER		"0.8.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -413,7 +413,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* UserPrt                                       *
 //*************************************************
 UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb)
+    TConfig(el), cntReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
+    prgChOnEn(false)
 {
     mId = iid;
 }
@@ -486,7 +487,12 @@ void UserPg::save_( )
     SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 }
 
-bool UserPg::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+bool UserPg::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "PROG" && enableStat())	prgChOnEn = true;
+    modif();
+    return true;
+}
 
 void UserPg::setEnable( bool vl )
 {
@@ -515,7 +521,7 @@ void UserPg::setEnable( bool vl )
 	} else mWorkProg = "";
     }
 
-    mEn = vl;
+    mEn = vl; prgChOnEn = false;
 }
 
 string UserPg::getStatus( )
@@ -523,6 +529,7 @@ string UserPg::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
+	if(prgChOnEn) rez += TSYS::strMess(_("Modified, re-enable to apply! "));
 	rez += TSYS::strMess(_("Requests %.4g."), cntReq);
     }
 

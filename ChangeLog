@@ -1,3 +1,16 @@
+2017-06-16 Roman (stable)
+- DB.LibsDB.vcaBase: Icons of views of the main page were restored to opaque but not in full size, for buttons' background seeing.
+- DB.LibsDB.vcaElectroEls: Was appended by some new items.
+- FIX:SYS,DAQ.JavaLikeCalc,Protocol.{ModBus,UserProtocol}: Some original masseges were fixed.
+- Protocol.{ModBus,UserProtocol},UI.WebUser: Were expanded for tracing and notification for program's changing.
+- UI.QTCfg: Text items size was fixed.
+- UI.QTStarter: Splash ensuring was disabled for Qt starting not into main thread.
+- FIX:UI.Vision: Separator "\n" was set for encoding by TSYS::base64 to storages.
+    FIX:Opening to developing windows fitting was set conditional for an active and maximized window miss but there has a problem in Qt.
+- UI.WebCfgD: Acknowledgement buttons of text items moved to left, for big screens.
+- UI.WebVision: Switch to use filters for display inactive images into buttons.
+
+
 2017-06-09 Roman (stable)
 - !!!:FIX:SYS: A new configure option --with-qt5 was added for Qt5 forcely checking and using.
     A new configuration option --enable-QtMainThrd was added to switch the module UI.QTStarter for working in main thread of the program.
@@ -11,6 +24,7 @@
 - FIX:UI.QTCfg: sizeHint() and minimumSizeHint() procesing was fixed.
 - !!!!:FIX:UI.QTStarter: Two modes of execution Qt were added, first is old one into different thread (by default) and second is new one into main thread (by the configure option -enable-QtMainThrd).
     FIX: Splash set to passive one for second mode.
+- UI.WebVision: Font of the child's windows was set to 12pt.
 
 
 2017-06-02 Roman (stable)

@@ -1451,7 +1451,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		edit.onkeyup = function( ) {
 		    if(this.itComm) setNodeText(this.srcNode,this.value);
 		    else if(!this.isChanged && this.value != this.defaultValue) {
-			var btBlk = document.createElement('div'); btBlk.style.textAlign = 'right';
+			var btBlk = document.createElement('div'); //btBlk.style.textAlign = 'right';
 			var btApply = document.createElement('input'); btApply.type = 'button'; btApply.value = 'Apply';
 			btApply.onclick = function( ) {
 			    var wEl = this.parentNode.parentNode;

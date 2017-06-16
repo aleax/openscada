@@ -503,12 +503,12 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 
 QSize TextEdit::sizeHint( ) const
 {
-    return QSize(edFld->sizeHint().width(), 3*edFld->currentFont().pointSize()*mRowCol.height());
+    return QSize(edFld->sizeHint().width(), 2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
 }
 
 QSize TextEdit::minimumSizeHint( ) const
 {
-    return QSize(edFld->minimumSizeHint().width(), 3*edFld->currentFont().pointSize()*mRowCol.height());
+    return QSize(edFld->minimumSizeHint().width(), 2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
 }
 
 bool TextEdit::isChanged( )		{ return (butBox && butBox->isVisible()); }

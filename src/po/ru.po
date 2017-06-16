@@ -888,7 +888,7 @@ msgstr "Сбор Данных"
 msgid "Maximum calculate time (sec)"
 msgstr "Максимальное время вычисления (сек)"
 
-msgid "Program translation allow"
+msgid "Allow program translation"
 msgstr "Переводить программу"
 
 msgid "Program"
