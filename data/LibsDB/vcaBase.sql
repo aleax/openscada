@@ -54,11 +54,11 @@ INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><co
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','Main elements library of user interface.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.3.5','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
+Version: 1.3.6','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версія: 1.3.5','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
+Версія: 1.3.6','Основные элементы','Библиотека основных элементов пользовательского интерфейса.
 Автор: Роман Савоченко <rom_as@oscada.org>
-Версия: 1.3.5');
+Версия: 1.3.6');
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('doc','Documents','','wlb_doc','','Документи','','Документы','');
 CREATE TABLE 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
@@ -221,7 +221,6 @@ INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_grph_p
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','prmSearch','/wlb_Main/wdg_graphSelPrm/wdg_prmSearch','value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_so','pgSel','/wlb_Main/wdg_RootPgSo/wdg_pgSel','');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;perm;');
-INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','frame','/wlb_Main/wdg_cntrPaspExt/wdg_frame','owner;perm;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;');
 INSERT INTO "prj_archBrowser_incl" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view','owner;value;');
@@ -336,8 +335,6 @@ INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','pName','',NULL,42,'<page>|NAME','','','<page>|NAME','','','<page>|NAME','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','owner','data','root:op',32,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','perm','data','944',32,'','','','','','','','');
-INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','owner','frame','root:op',32,'','','','','','','','');
-INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','perm','frame','944',32,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','owner','sel_data','root:UI',32,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','value','sel_data','0',0,'','','','','','','','');
 INSERT INTO "prj_archBrowser_io" VALUES('/prj_archBrowser/pg_control/pg_cntrPasp','owner','sel_trends','root:UI',32,'','','','','','','','');
@@ -814,7 +811,6 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_grph_panel','sel
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_graphSelPrm','prmSearch','/wlb_Main/wdg_graphSelPrm/wdg_prmSearch','value;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so','pgSel','/wlb_Main/wdg_RootPgSo/wdg_pgSel','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;perm;','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','frame','/wlb_Main/wdg_cntrPaspExt/wdg_frame','owner;perm;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view','owner;value;','');
@@ -1433,8 +1429,6 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','geomZ',
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','pName',NULL,42,'<page>|NAME','','','','<page>|NAME','','','<page>|NAME','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','owner','root:op',32,'','','data','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','perm','944',32,'','','data','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','owner','root:op',32,'','','frame','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','perm','944',32,'','','frame','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','owner','root:UI',32,'','','sel_data','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','value','0',0,'','','sel_data','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','owner','root:UI',32,'','','sel_trends','','','','','','');
@@ -1753,7 +1747,6 @@ INSERT INTO "wlb_Main_incl" VALUES('treeSelect','apply','/wlb_originals/wdg_Form
 INSERT INTO "wlb_Main_incl" VALUES('treeSelect','cancel','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;elType;img;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('treeSelect','select','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','data','/wlb_originals/wdg_Document','name;en;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;font;','');
-INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','frame','/wlb_originals/wdg_Box','geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','trends','/wlb_originals/wdg_Diagram','en;geomX;geomY;geomW;geomH;geomZ;trcPer;sclHorPer;tSize;sclHor;sclVer;sclMarkFont;parNum;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','view','/wlb_originals/wdg_FormEl','en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;','');
 INSERT INTO "wlb_Main_incl" VALUES('objProps','labSet','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;font;alignment;text;','');
@@ -5685,34 +5678,25 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','bordColor','grey',32,'','','',''
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','bordStyle','0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','name','',32,'','','data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','en','0',40,'','','data','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','5',32,'','','data','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','29',32,'','','data','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','390',32,'','','data','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','366',32,'','','data','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','1',32,'','','data','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','25',32,'','','data','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','398',32,'','','data','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','370',32,'','','data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','4',32,'','','data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','tmpl','',40,'','','data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','font','Arial 9',32,'','','data','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','2',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','24',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','397',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','375',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','-1',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','backColor','',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','bordWidth','2',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','bordColor','gray',32,'','','frame','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','bordStyle','6',32,'','','frame','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','en','0',32,'','','trends','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','5',32,'','','trends','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','29',32,'','','trends','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','390',32,'','','trends','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','281',32,'','','trends','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','1',32,'','','trends','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','25',32,'','','trends','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','398',32,'','','trends','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','285',32,'','','trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','6',32,'','','trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','trcPer','1',32,'','','trends','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','5',32,'','','view','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','29',40,'','','view','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','390',32,'','','view','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','350',40,'','','view','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','1',32,'','','view','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','25',40,'','','view','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','398',32,'','','view','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','358',40,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','7',32,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','9',32,'','','view','','','','','','');
@@ -5778,8 +5762,8 @@ INSERT INTO "wlb_Main_io" VALUES('objProps','alignment','10',32,'','','tittle','
 INSERT INTO "wlb_Main_io" VALUES('objProps','text','Text',40,'','','tittle','Текст','','Текст','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','name','',32,'','','viewLabSet','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','5',32,'','','viewLabSet','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','379',32,'','','viewLabSet','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','1',32,'','','viewLabSet','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','382',32,'','','viewLabSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','45',32,'','','viewLabSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','18',32,'','','viewLabSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','6',32,'','','viewLabSet','','','','','','');
@@ -5787,9 +5771,9 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','font','Arial 14',32,'','','viewL
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','alignment','8',32,'','','viewLabSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','text','Set:',32,'','','viewLabSet','Вст:','','Уст:','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','name','',32,'','','viewSet','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','50',32,'','','viewSet','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','379',40,'','','viewSet','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','345',32,'','','viewSet','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','45',32,'','','viewSet','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','382',40,'','','viewSet','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','355',32,'','','viewSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','18',40,'','','viewSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','6',32,'','','viewSet','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','viewSet','','','','','','');
@@ -5805,7 +5789,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','165',32,'','','sel_data'
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','1',32,'','','sel_data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','80',32,'','','sel_data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','23',32,'','','sel_data','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','9',32,'','','sel_data','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','2',32,'','','sel_data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','sel_data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','3',32,'','','sel_data','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','0',0,'','','sel_data','','','','','','');
@@ -5817,7 +5801,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','83',32,'','','sel_trends
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','1',32,'','','sel_trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','80',32,'','','sel_trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','23',32,'','','sel_trends','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','9',32,'','','sel_trends','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','1',32,'','','sel_trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','sel_trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','3',32,'','','sel_trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','0',0,'','','sel_trends','','','','','','');
@@ -5825,10 +5809,10 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','color','#555555',0,'','','sel_tr
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','font','Arial 16 1',0,'','','sel_trends','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','name','View',32,'','','sel_view','Огляд','','Обзор','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','1',32,'','','sel_view','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','1',32,'','','sel_view','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','1',40,'','','sel_view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','80',32,'','','sel_view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','23',32,'','','sel_view','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','9',32,'','','sel_view','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','0',32,'','','sel_view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','sel_view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','3',32,'','','sel_view','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','1',0,'','','sel_view','','','','','','');
@@ -5841,10 +5825,10 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','sclVer','2',32,'','','trends',''
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','style','table.data { border: 1px solid black; border-collapse: collapse; border-spacing: 0px; border-collapse: collapse; border-spacing: 0px; }
 table.data th { background-color: #e6e6e6; border: 1px solid black; border-collapse: collapse; border-spacing: 0px; border-collapse: collapse; border-spacing: 0px; }
 table.data td { white-space: nowrap; border: 1px solid black; border-collapse: collapse; border-spacing: 0px; border-collapse: collapse; border-spacing: 0px; }',32,'','','data','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','5',32,'','','trendsList','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','313',32,'','','trendsList','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','390',32,'','','trendsList','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','85',32,'','','trendsList','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomX','1',32,'','','trendsList','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomY','310',32,'','','trendsList','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomW','398',32,'','','trendsList','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomH','90',32,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','geomZ','5',32,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','elType','9',32,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','items','',8,'','','trendsList','','','','','','');
@@ -6975,7 +6959,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','dscr','Extended pasport of the s
 - Trends for standard and key attributes: var, sp, out, auto, com, st_open, ...
 - Table of the current data.
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.1',32,'','','','','','','','','');
+Version: 1.1.0',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','en','1',40,'','','go_rg','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','owner','root:UI',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('alarmsAct','name','Alarms: active',32,'','','','Порушення: активні','','Нарушения: активные','','','');
@@ -9516,7 +9500,7 @@ INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNameSz','Short name size',131073,'
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErr','Error',131077,'',10,'Parameter|err','','','Помилка','||','Parameter|err','Ошибка','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pErrCode','Error code',131073,'0|',8,'','','','Error code','','','Код ошибки','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','spName','Speech message generation on reject',131077,'',9,'','','','Генерація мовного повідомлення у разі відмови','||','','Генерация речевого сообщения при отказе','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','pName','Parameter name',196613,NULL,10,'Parameter|NAME','','','Ім''я параметру','','Parameter|NAME','Имя параметра','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','pName','Parameter name',196613,NULL,10,'<page>|NAME','','','Ім''я параметру','','Parameter|NAME','Имя параметра','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objDescr','Object: description',131205,'',10,'Object|DESCR','','','Об''єкт: опис','','','Объект: описание','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objErr','Object: error',131077,'',10,'Object|err','','','Об''єкт: помилка','','','Объект: ошибка','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objItems','Object: items',131078,'<TVarObj>
@@ -9651,6 +9635,7 @@ INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','highLght','Highlight rules, {lev}
 4:red
 1:yellow',8,'','','','Правила підсвітлення, {lev}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}:{color}:{font}:{fontColor}','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показув. заголовок: вертикальний','','','Показыв. заголовок: вертикальный','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','hideAttrs','Attributes list of the pasport to hide',131077,'',10,'<page>|paspHideAttrs','','','','','','','','','','');
 CREATE TABLE 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeDayA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
 INSERT INTO "wlb_doc_incl" VALUES('docGasNodeMonthA','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;style;tmpl;bTime;time;process;n;aCur;',2);
@@ -20048,7 +20033,7 @@ if(f_start) {
 	selTab = "view";
 
 	//View mode clean up
-	view_value = ""; view_geomH = geomH-view_geomY-5;
+	view_value = ""; view_geomH = geomH-view_geomY-1;
 
 	//Standard parameters
 	stdPrms = "var;sp;out;auto;aMin;aMax;wMin;wMax;com;close;stop;st_open;st_close;";
@@ -20073,8 +20058,7 @@ if(f_start) {
 		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
 		trObj.attrSet("prm"+trN+"color", (trClr=pColors[trNClr])+(isBool?"-127":""));
 		trObj.attrSet("prm"+trN+"width", 1);
-		if((sP == "var" || sP == "sp" || sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax") && pObj.nodeAt("a_min"))
-		{
+		if((sP == "var" || sP == "sp" || sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax") && pObj.nodeAt("a_min")) {
 			trObj.attrSet("prm"+trN+"bordL", pObj.nodeAt("a_min").get()).attrSet("prm"+trN+"bordU", pObj.nodeAt("a_max").get()).attrSet("prm"+trN+"scl",0);
 			if(sP == "aMin" || sP == "aMax" || sP == "wMin" || sP == "wMax")
 				trObj.attrSet("prm"+trN+"addr","line:"+aObj.get()).attrSet("prm"+trN+"color",(trClr=(sP[0]=="a")?"red":"yellow"));
@@ -20115,22 +20099,23 @@ if(f_start) {
 		}
 	for(iA = 0; iA < aLst.length; iA++) {
 		aId = aLst[iA].slice(2);
-		if(stdPrms.indexOf(aId+";") == -1 && (aObj=pObj.nodeAt(aLst[iA])) && aObj.arch())
-		{
+		if(stdPrms.indexOf(aId+";") == -1 && (aObj=pObj.nodeAt(aLst[iA])) && aObj.arch()) {
 			dtALst.push(aObj);
 			dtPeriod = max(dtPeriod, ceil(aObj.cfg("BPER")));
 		}
 	}
 	sel_data_en = dtALst.length;
+	if(!sel_trends_en && !sel_data_en)	 { view_geomH += view_geomY-sel_view_geomY; view_geomY = sel_view_geomY; }
 }
 if(f_stop) viewSet_geomY = viewSet_geomY_, viewSet_geomH = viewSet_geomH_;
 
 //View update
 if(pObj && view_en) {
-	view_items = "<tbl sel=''row'' colsWdthFit=''1''><h><s width=''0px''>"+tr("ID")+"</s><s width=''60%''>"+tr("Name")+"</s><s width=''40%''>"+tr("Value")+"</s></h>";
-	for(i_a = 0; i_a < aLst.length; i_a++) {
-		aObj = pObj.nodeAt(aLst[i_a]);
-		view_items += "<r><s>"+aLst[i_a]+"</s>"
+	view_items = "<tbl sel=''row'' colsWdthFit=''1''><h><s width=''0px''>"+tr("ID")+"</s><s width=''60%''>"+tr("Name")+"</s><s width=''30%''>"+tr("Value")+"</s></h>";
+	for(iA = 0; iA < aLst.length; iA++) {
+		if(!hideAttrs.isEVal() && hideAttrs.match("(;|^)"+aLst[iA].slice(2)+"(;|$)").length)	continue;
+		aObj = pObj.nodeAt(aLst[iA]);
+		view_items += "<r><s>"+aLst[iA]+"</s>"
 									"<s>"+strEnc2HTML(aObj.descr())+"</s>"
 									"<s>"+strEnc2HTML(aObj.get())+"</s></r>";
 	}
@@ -20143,16 +20128,16 @@ if(pObj && data_en) {
 		"<table class=''data'' cellpadding=''2'' cellspacing=''0'' export=''1'' valign=''middle'' width=''100%''>\n";
 	// Header
 	data_tmpl += "<tr><th>Date</th>";
-	for(i_a = 0; i_a < dtALst.length; i_a++)
-		data_tmpl += "<th>"+strEnc2HTML(dtALst[i_a].descr())+"</th>";
+	for(iA = 0; iA < dtALst.length; iA++)
+		data_tmpl += "<th>"+strEnc2HTML(dtALst[iA].descr())+"</th>";
 	data_tmpl += "</tr>\n";
 
 	// Date
 	curTime = SYS.time();
 	for(i_rec = curTime; i_rec > (curTime-100*dtPeriod); i_rec-=dtPeriod) {
 		data_tmpl += "<tr><td>"+SYS.strftime(i_rec,"%d %m %H:%M:%S")+"</td>";
-		for(i_a = 0; i_a < dtALst.length; i_a++)
-			data_tmpl += "<td>"+strEnc2HTML(dtALst[i_a].get(i_rec))+"</td>";
+		for(iA = 0; iA < dtALst.length; iA++)
+			data_tmpl += "<td>"+strEnc2HTML(dtALst[iA].get(i_rec))+"</td>";
 		data_tmpl += "</tr>\n";
 	}
 	data_tmpl += "</table></body>\n";
@@ -20181,7 +20166,7 @@ for(off = 0; true; ) {
 			}
 			this.viewSet.attrSet("value",aObj.get());
 		}
-		else view_geomH = geomH-view_geomY-5;
+		else view_geomH = geomH-view_geomY-1;
 	}
 	else if((sval == "ws_LnAccept:/viewSet" || sval == "ws_TxtAccept:/viewSet") && (aObj=pObj.nodeAt(view_value))) aObj.set(this.viewSet.attr("value"));
 	else if(sval == "ws_TableChangeSel:/trendsList")
@@ -20204,7 +20189,7 @@ if(selTab != prevTab) {
 		else if(wId.indexOf(prevTab) != -1) wObj.attrSet("en",false);
 	}
 	prevTab = selTab;
-}','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1494599413);
+}','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1498028091);
 INSERT INTO "wlb_Main" VALUES('objProps','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABvUlEQVRoge3av0rDUBTH8V9ubpNqrVrS+BcKWtFFpYidXBycHbvqSwhd
 fAHHvoEv4CIOLnHQRQcFETpYEPG/VVNtaaw1iUNRHDrJ1YNwPtMlwzn3O2S72tLy0tnoGdR6AQ4B

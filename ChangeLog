@@ -1,3 +1,16 @@
+2017-06-16 Roman (test)
+- DB.LibsDB.vcaBase: Main_io.cntrPaspExt was expanded for: full-frame mode of "View" at other modes hide, hidden attributes list support into "hideAttrs", removing "frame".
+- FIX:SYS: Qt checking macro was fixed for Qt4 checking before.
+- SYS: TMess::getUTF8() function was added and used for UTF-8 symbols detect into XMLNode::encode().
+- FIX:Transport.out: User API function messIO() was expanded for return string everywhere.
+- !!!: XMLNode: User API finction text() was expanded by argument "full" for all child's texts combine.
+    Functions save() and saveNode() set to constant ones.
+    !!!: The serialiser was expanded to true check for UTF-8 symbols and "&nbsp;" processing in function encode().
+    !!: The parser was expanded for entity "&nbsp;" processing on UTF-8.
+- DAQ.DAQGate: Size of the configuration field STATIONS was decreased to two rows.
+- !!!:UI.QTCfg: Scalable vertically items were finished to implement their true fitting for: texts, tables and lists.
+
+
 2017-06-16 Roman (stable)
 - DB.LibsDB.vcaBase: Icons of views of the main page were restored to opaque but not in full size, for buttons' background seeing.
 - DB.LibsDB.vcaElectroEls: Was appended by some new items.

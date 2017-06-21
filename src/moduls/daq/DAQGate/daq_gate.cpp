@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.1"
+#define MOD_VER		"1.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -568,7 +568,7 @@ void *TMdContr::Task( void *icntr )
 		    }
 		}
 
-		//Mark no processed parameters to EVAL
+		//Mark not processed parameters to EVAL
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &prm = cntr.pHd[iP].at();
 		    if(prm.isPrcOK || prm.isEVAL) continue;
@@ -581,7 +581,7 @@ void *TMdContr::Task( void *icntr )
 			vl.at().setS(EVAL_STR, vl.at().arch().freeStat() ? 0 :
 			    vmin(TSYS::curTime(),vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))), true);
 		    }
-		    prm.vlAt("err").at().setS(_("10:Data not allow."),0,true);
+		    prm.vlAt("err").at().setS(_("10:Data are not allowed."),0,true);
 		    prm.isEVAL = true;
 		}
 
@@ -658,7 +658,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable archive access."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable periodic sync."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/STATIONS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
-	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."), NULL);
+	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."), "rows", "2", NULL);
 	ctrMkNode2("fld",opt,-2,"/cntr/cfg/SEL_STAT",_("Append station"),enableStat()?0:RWRW__,"root",SDAQ_ID,
 	    "dest","select", "select","/cntr/cfg/SEL_STAT_lst", NULL);
 	ctrMkNode2("comm",opt,-2,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),enableStat()?0:RWRW__,"root",SDAQ_ID,

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: xml.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,7 +79,7 @@ class XMLNode
 	XMLNode* setAttr( const string &name, const string &val );
 
 	void	load( const string &vl, unsigned flg = 0, const string &cp = "UTF-8" );
-	string	save( unsigned flg = 0, const string &cp = "UTF-8" );
+	string	save( unsigned flg = 0, const string &cp = "UTF-8" ) const;
 	XMLNode* clear( );
 
 	bool	childEmpty( ) const		{ return mChildren.empty(); }
@@ -101,7 +101,7 @@ class XMLNode
 
     private:
 	//Methods
-	void saveNode( unsigned flg, string &xml, const string &cp );
+	void saveNode( unsigned flg, string &xml, const string &cp ) const;
 	void encode( const string &s, string &rez, bool text = false ) const;
 
 	//Attributes

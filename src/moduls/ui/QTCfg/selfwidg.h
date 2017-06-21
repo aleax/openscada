@@ -130,7 +130,7 @@ class TextEdit : public QWidget
 
 	QSize sizeHint( ) const;
 	QSize minimumSizeHint( ) const;
-
+	QSize rowsCols( )	{ return mRowCol; }
 
 	QString text( );
 	bool hasFocus( ) const;
@@ -183,6 +183,7 @@ class ListView : public QListWidget
 	ListView( QWidget * parent = 0 );
 
 	QSize sizeHint( ) const;
+	QSize minimumSizeHint( ) const;
 };
 
 //************************************************

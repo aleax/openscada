@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2010-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -470,8 +470,8 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
     //Different objects process
     if(nd->name() == "TVarObj") {
 	TVarObj *rez = new TVarObj;
-	for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++) {
-	    XMLNode *cNd = nd->childGet(i_ch);
+	for(unsigned iCh = 0; iCh < nd->childSize(); iCh++) {
+	    XMLNode *cNd = nd->childGet(iCh);
 	    if(cNd->name() == "str")		rez->mProps[cNd->attr("p")] = cNd->text();
 	    else if(cNd->name() == "int")	rez->mProps[cNd->attr("p")] = (int64_t)s2ll(cNd->text());
 	    else if(cNd->name() == "real")	rez->mProps[cNd->attr("p")] = s2r(cNd->text());
@@ -595,8 +595,8 @@ string TArrayObj::getStrXML( const string &oid )
 AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
 {
     TArrayObj *rez = new TArrayObj;
-    for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++) {
-	XMLNode *cNd = nd->childGet(i_ch);
+    for(unsigned iCh = 0; iCh < nd->childSize(); iCh++) {
+	XMLNode *cNd = nd->childGet(iCh);
 	string p = cNd->attr("p");
 	TVariant vl;
 	if(cNd->name() == "str")		vl = cNd->text();
@@ -987,10 +987,12 @@ string XMLNodeObj::name( )
     return rez;
 }
 
-string XMLNodeObj::text( )
+string XMLNodeObj::text( bool full )
 {
     dataM.lock();
     string rez = mText;
+    for(unsigned iCh = 0; full && iCh < mChilds.size(); iCh++)
+	rez += mChilds[iCh].at().text(full);
     dataM.unlock();
     return rez;
 }
@@ -1051,9 +1053,9 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet( const string &name, unsigned num )
 {
     dataM.lock();
     AutoHD<XMLNodeObj> rez;
-    for(int i_ch = 0, iN = 0; i_ch < (int)mChilds.size(); i_ch++)
-	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && (iN++) == (int)num)
-	    rez = mChilds[i_ch];
+    for(int iCh = 0, iN = 0; iCh < (int)mChilds.size(); iCh++)
+	if(strcasecmp(mChilds[iCh].at().name().c_str(),name.c_str()) == 0 && (iN++) == (int)num)
+	    rez = mChilds[iCh];
     dataM.unlock();
     if(rez.freeStat()) throw TError("XMLNodeObj", _("Child %s:%d is not found!"), name.c_str(), num);
     return rez;
@@ -1067,8 +1069,8 @@ string XMLNodeObj::getStrXML( const string &oid )
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	nd += " "+ip->first+"=\""+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"\"";
     nd += ">"+TSYS::strEncode(text(),TSYS::Html)+"\n";
-    for(unsigned i_ch = 0; i_ch < mChilds.size(); i_ch++)
-	nd += mChilds[i_ch].at().getStrXML();
+    for(unsigned iCh = 0; iCh < mChilds.size(); iCh++)
+	nd += mChilds[iCh].at().getStrXML();
     dataM.unlock();
     nd += "</XMLNodeObj:"+name()+">\n";
 
@@ -1087,8 +1089,8 @@ AutoHD<TVarObj> XMLNodeObj::parseStrXML( XMLNode *nd )
 	rez->mProps[lst[i_l]] = nd->attr(lst[i_l]);
 
     //Child nodes process
-    for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++)
-	rez->mChilds.push_back(XMLNodeObj::parseStrXML(nd->childGet(i_ch)));
+    for(unsigned iCh = 0; iCh < nd->childSize(); iCh++)
+	rez->mChilds.push_back(XMLNodeObj::parseStrXML(nd->childGet(iCh)));
 
     return rez;
 }
@@ -1097,8 +1099,8 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     // string name( ) - node name
     if(id == "name")	return name();
-    // string text( ) - node text
-    if(id == "text")	return text();
+    // string text( bool full = false ) - node text
+    if(id == "text")	return text(prms.size()&&prms[0].getB());
     // string attr(string id) - get node attribute
     //  id - attribute identifier
     if(id == "attr" && prms.size()) {
@@ -1242,8 +1244,8 @@ void XMLNodeObj::toXMLNode( XMLNode &nd )
     dataM.lock();
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	nd.setAttr(ip->first,ip->second.getS());
-    for(unsigned i_ch = 0; i_ch < mChilds.size(); i_ch++)
-	mChilds[i_ch].at().toXMLNode(*nd.childAdd());
+    for(unsigned iCh = 0; iCh < mChilds.size(); iCh++)
+	mChilds[iCh].at().toXMLNode(*nd.childAdd());
     dataM.unlock();
 }
 
@@ -1259,10 +1261,10 @@ void XMLNodeObj::fromXMLNode( XMLNode &nd )
     for(unsigned i_a = 0; i_a < alst.size(); i_a++)
 	propSet(alst[i_a], nd.attr(alst[i_a]));
 
-    for(unsigned i_ch = 0; i_ch < nd.childSize(); i_ch++) {
+    for(unsigned iCh = 0; iCh < nd.childSize(); iCh++) {
 	XMLNodeObj *xn = new XMLNodeObj();
 	childAdd(xn);
-	xn->fromXMLNode(*nd.childGet(i_ch));
+	xn->fromXMLNode(*nd.childGet(iCh));
     }
 }
 
@@ -1271,8 +1273,8 @@ AutoHD<XMLNodeObj> XMLNodeObj::getElementBy( const string &attr, const string &v
     if(propGet(attr).getS() == val)	return this;
 
     AutoHD<XMLNodeObj> rez;
-    for(unsigned i_ch = 0; rez.freeStat() && i_ch < childSize(); i_ch++)
-	rez = childGet(i_ch).at().getElementBy(attr,val);
+    for(unsigned iCh = 0; rez.freeStat() && iCh < childSize(); iCh++)
+	rez = childGet(iCh).at().getElementBy(attr,val);
 
     return rez;
 }

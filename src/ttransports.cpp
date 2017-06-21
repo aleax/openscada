@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -961,7 +961,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 
 	return rez;
     }
-    // int messIO( XMLNodeObj req, string prt ) - sending the request <req> to the protocol <prt> for the implementation of a connection
+    // string messIO( XMLNodeObj req, string prt ) - sending the request <req> to the protocol <prt> for the implementation of a connection
     //      session through the transport by means of protocol.
     //  req - request into XML-tree
     //  prt - protocol name
@@ -973,7 +973,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
 	    messProtIO(req, prms[1].getS());
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().fromXMLNode(req);
 	} catch(TError &err) { return err.mess; }
-	return 0;
+	return "";
     }
     // string status( ) - the transport status
     if(iid == "status")	return getStatus();

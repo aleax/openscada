@@ -56,7 +56,9 @@ using namespace QTCFG;
 //************************************************
 ListView::ListView( QWidget * parent ) : QListWidget(parent)	{ }
 
-QSize ListView::sizeHint( ) const	{ return QSize(QListWidget::sizeHint().width(), QFontMetrics(font()).height()*5); }
+QSize ListView::sizeHint( ) const	{ return QSize(QListWidget::sizeHint().width(), QFontMetrics(font()).height()*4); }
+
+QSize ListView::minimumSizeHint( ) const	{ return QSize(QListWidget::minimumSizeHint().width(), QFontMetrics(font()).height()*4); }
 
 //*************************************************
 //* ImgView: Image view widget.                   *
@@ -503,12 +505,14 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 
 QSize TextEdit::sizeHint( ) const
 {
-    return QSize(edFld->sizeHint().width(), 2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
+    return QSize(edFld->sizeHint().width(), QFontMetrics(edFld->currentFont()).height()*(mRowCol.height()+2));
+					    //2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
 }
 
 QSize TextEdit::minimumSizeHint( ) const
 {
-    return QSize(edFld->minimumSizeHint().width(), 2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
+    return QSize(edFld->minimumSizeHint().width(), QFontMetrics(edFld->currentFont()).height()*(mRowCol.height()+2));
+						//2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
 }
 
 bool TextEdit::isChanged( )		{ return (butBox && butBox->isVisible()); }

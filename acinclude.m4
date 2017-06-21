@@ -1477,7 +1477,7 @@ AC_DEFUN([AX_LIB_Qt],
 
     if test "x${Qt_use}" = "x"; then
 	if test "$withval" = "no"; then
-	    PKG_CHECK_MODULES([QtGui], [QtGui > 4.3.0], [Qt_use=true; QtGui=QtGui;], []);
+	    PKG_CHECK_MODULES([QtGui], [QtGui > 4.3.0], [Qt_use=true; QtGui=QtGui;], AC_MSG_NOTICE([Qt4 isn't found.]));
 	fi
 	if test "x${Qt_use}" = "x"; then
 	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0],[],AC_MSG_ERROR([Neither QT4 or Qt5 library QtGui is not found! Install development packages of Qt4 or Qt5 library.]))

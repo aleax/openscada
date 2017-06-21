@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: xml.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,8 +38,8 @@ XMLNode &XMLNode::operator=( const XMLNode &prm )
 {
     //Delete self children and attributes
     mAttr.clear();
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	delete mChildren[i_ch];
+    for(unsigned iCh = 0; iCh < mChildren.size(); iCh++)
+	delete mChildren[iCh];
     mChildren.clear();
 
     //Copy params (name,text, attributes and instructions)
@@ -51,8 +51,8 @@ XMLNode &XMLNode::operator=( const XMLNode &prm )
 	setAttr(ls[i_a],prm.attr(ls[i_a]));
 
     //Recursive copy children
-    for(unsigned i_ch = 0; i_ch < prm.childSize(); i_ch++)
-	*childAdd() = *prm.childGet(i_ch);
+    for(unsigned iCh = 0; iCh < prm.childSize(); iCh++)
+	*childAdd() = *prm.childGet(iCh);
 
     return *this;
 }
@@ -82,19 +82,19 @@ void XMLNode::childDel( int id )
 
 void XMLNode::childDel( XMLNode *nd )
 {
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	if(mChildren[i_ch] == nd) {
-	    delete mChildren[i_ch];
-	    mChildren.erase(mChildren.begin()+i_ch);
+    for(unsigned iCh = 0; iCh < mChildren.size(); iCh++)
+	if(mChildren[iCh] == nd) {
+	    delete mChildren[iCh];
+	    mChildren.erase(mChildren.begin()+iCh);
 	    break;
 	}
 }
 
 void XMLNode::childClear( const string &name )
 {
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); )
-	if(name.empty() || mChildren[i_ch]->name() == name) childDel(i_ch);
-	else i_ch++;
+    for(unsigned iCh = 0; iCh < mChildren.size(); )
+	if(name.empty() || mChildren[iCh]->name() == name) childDel(iCh);
+	else iCh++;
 }
 
 int XMLNode::childIns( int id, XMLNode * n )
@@ -127,9 +127,9 @@ XMLNode* XMLNode::childGet( const int index, bool noex ) const
 
 XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) const
 {
-    for(int i_ch = 0, i_n = 0; i_ch < (int)childSize(); i_ch++)
-	if(strcasecmp(childGet(i_ch)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
-	    return childGet(i_ch);
+    for(int iCh = 0, i_n = 0; iCh < (int)childSize(); iCh++)
+	if(strcasecmp(childGet(iCh)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
+	    return childGet(iCh);
 
     if(noex) return NULL;
     throw TError("XMLNode", _("Child %s:%d is not found!"), name.c_str(), numb);
@@ -149,8 +149,8 @@ XMLNode* XMLNode::getElementBy( const string &iattr, const string &val )
     if(attr(iattr) == val)	return this;
 
     XMLNode* rez = NULL;
-    for(unsigned i_ch = 0; !rez && i_ch < childSize(); i_ch++)
-	rez = childGet(i_ch)->getElementBy(iattr,val);
+    for(unsigned iCh = 0; !rez && iCh < childSize(); iCh++)
+	rez = childGet(iCh)->getElementBy(iattr,val);
 
     return rez;
 }
@@ -178,14 +178,14 @@ XMLNode* XMLNode::setText( const string &s, bool childs )
 {
     if(!childs || mName == "<*>") { mText = s; return this; }
 
-    int i_ch = -1;
+    int iCh = -1;
     for(int i_f = 0; i_f < (int)childSize(); i_f++)
 	if(childGet(i_f)->name() == "<*>") {
-	    if(i_ch < 0) childGet(i_f)->mText = s;
+	    if(iCh < 0) childGet(i_f)->mText = s;
 	    else childDel(i_f--);
-	    i_ch = i_f;
+	    iCh = i_f;
 	}
-    if(i_ch < 0) childAdd("<*>")->mText = s;
+    if(iCh < 0) childAdd("<*>")->mText = s;
 
     return this;
 }
@@ -242,7 +242,7 @@ XMLNode* XMLNode::clear( )
     return this;
 }
 
-string XMLNode::save( unsigned flg, const string &cp )
+string XMLNode::save( unsigned flg, const string &cp ) const
 {
     string xml;
     xml.reserve(10000);
@@ -255,7 +255,7 @@ string XMLNode::save( unsigned flg, const string &cp )
     return xml;
 }
 
-void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
+void XMLNode::saveNode( unsigned flg, string &xml, const string &cp ) const
 {
     //Text block
     if(name() == "<*>")	{ encode(Mess->codeConvOut(cp,mText), xml, true); return; }
@@ -299,8 +299,13 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
 
 void XMLNode::encode( const string &s, string &rez, bool text ) const
 {
-    const char *replStr = NULL;
-    for(unsigned iSz = 0, fPos = 0; iSz < s.size(); ) {
+    int	len;
+    int32_t symb;
+
+    //Append UTF8 codes checking Mess->isUTF8(), at first it is for &nbsp; = \xC2\xA0"
+    rez.reserve(s.size());
+    for(unsigned iSz = 0; iSz < s.size(); iSz++) {
+	const char *replStr = NULL;
 	switch(s[iSz]) {
 	    case 0:	replStr = "\\000";	break;	//Bynary symbol but for next also problems possible and here needs check to Unicode
 	    case '>':	replStr = "&gt;";	break;
@@ -310,17 +315,16 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    case '\'':	replStr = "&#039;";	break;
 	    case '\n':	if(!text) replStr = "&#010;"; break;
 	}
-	iSz++;
-	if(replStr) {
-	    if((iSz-1) > fPos) rez.append(s, fPos, iSz-fPos-1);
-	    rez.append(replStr);
-	    replStr = NULL;
-	    fPos = iSz;
+	if(replStr) { rez += replStr; continue; }
+	else if((len=Mess->getUTF8(s,iSz,&symb)) >= 2) {
+	    switch(symb) {
+		case 0xA0: rez += "&nbsp;";	break;
+		default: rez.append(s,iSz,len);	break;
+	    }
+	    iSz += len-1;
+	    continue;
 	}
-	if(iSz >= s.size()) {
-	    if(iSz > fPos) rez.append(s, fPos, iSz-fPos);
-	    break;
-	}
+	rez += s[iSz];
     }
 }
 
@@ -415,9 +419,9 @@ nextTag:
 			if(ctx.flg&LD_NoTxtSpcRemEnBeg) mText = Mess->codeConvIn(ctx.enc, mText);
 			else {
 			    //Remove spaces from end of the text, trim
-			    int i_ch = mText.size()-1;
-			    while(i_ch >= 0 && isspace(mText[i_ch])) i_ch--;
-			    mText = Mess->codeConvIn(ctx.enc, mText.substr(0,i_ch+1));
+			    int iCh = mText.size()-1;
+			    while(iCh >= 0 && isspace(mText[iCh])) iCh--;
+			    mText = Mess->codeConvIn(ctx.enc, mText.substr(0,iCh+1));
 			}
 		    }
 		    return cpos+1;
@@ -492,11 +496,12 @@ bool XMLNode::parseAttr( LoadCtx &ctx, unsigned &pos, char sep )
 void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 {
     //Check for standard entities
-    if(ctx.vl.compare(rpos,5,"&amp;") == 0)	{ rpos += 4; rez += '&'; }
-    else if(ctx.vl.compare(rpos,4,"&lt;") == 0)	{ rpos += 3; rez += '<'; }
-    else if(ctx.vl.compare(rpos,4,"&gt;") == 0)	{ rpos += 3; rez += '>'; }
-    else if(ctx.vl.compare(rpos,6,"&apos;") == 0){ rpos += 5; rez += '\''; }
-    else if(ctx.vl.compare(rpos,6,"&quot;") == 0){ rpos += 5; rez += '"'; }
+    if(ctx.vl.compare(rpos,5,"&amp;") == 0)		{ rpos += 4; rez += '&'; }
+    else if(ctx.vl.compare(rpos,4,"&lt;") == 0)		{ rpos += 3; rez += '<'; }
+    else if(ctx.vl.compare(rpos,4,"&gt;") == 0)		{ rpos += 3; rez += '>'; }
+    else if(ctx.vl.compare(rpos,6,"&apos;") == 0)	{ rpos += 5; rez += '\''; }
+    else if(ctx.vl.compare(rpos,6,"&quot;") == 0)	{ rpos += 5; rez += '"'; }
+    else if(Mess->isUTF8() && ctx.vl.compare(rpos,6,"&nbsp;") == 0)	{ rpos += 5; rez += "\xC2\xA0"; }
     //Check for code entities
     else if((rpos+3) < ctx.vl.size() && ctx.vl[rpos+1] == '#') {
 	uint32_t eVal = 0;
@@ -514,13 +519,13 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	    if(ctx.vl[rpos] != ';') throw TError("XMLNode", _("Entity error. Pos: %d"), nBeg-2);
 	    eVal = strtoul(ctx.vl.data()+nBeg, NULL, 10);
 	}
-	//Value process
+	//Value process		!!!! Rewrote
 	if(eVal < 0x80)	rez += (char)eVal;
 	else if(Mess->isUTF8())
-	    for(int i_ch = 5, i_st = -1; i_ch >= 0; i_ch--) {
-		if(i_st < i_ch && (eVal>>(i_ch*6))) i_st = i_ch;
-		if(i_ch == i_st) rez += (char)(0xC0|(eVal>>(i_ch*6)));
-		else if(i_ch < i_st) rez += (char)(0x80|(0x3F&(eVal>>(i_ch*6))));
+	    for(int iCh = 5, i_st = -1; iCh >= 0; iCh--) {
+		if(i_st < iCh && (eVal>>(iCh*6))) i_st = iCh;
+		if(iCh == i_st) rez += (char)(0xC0|(eVal>>(iCh*6)));
+		else if(iCh < i_st) rez += (char)(0x80|(0x3F&(eVal>>(iCh*6))));
 	    }
     }
     //Check for loaded entities
@@ -533,7 +538,7 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	if(ient != ctx.ent.end()) rez += ient->second;
 	else {
 	    rez += '?';
-	    mess_warning("XMLNode", _("Unknown entity '%s'. Pos: %d"), ctx.vl.substr(nBeg,rpos-nBeg).c_str(), rpos);
+	    mess_debug("/XMLNode", _("Unknown entity '%s'. Pos: %d"), ctx.vl.substr(nBeg,rpos-nBeg).c_str(), rpos);
 	}
     }
 }

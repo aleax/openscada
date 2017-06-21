@@ -1066,54 +1066,43 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		else selectChildRecArea(t_s, a_path+t_s.attr("id")+"/");
 
 		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
-		QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
-		QWidget *lstFitWdg = NULL;
-		QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
-		//QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
-		//QList<QListWidget*> lsts = scrl->findChildren<QListWidget*>();
-		bool sclCnt = true;
-		for(int fitStp = 10, safeCntr = 0; safeCntr < scrl->maximumViewportSize().height() && sclCnt; safeCntr += fitStp) {
-		    QAbstractScrollArea *tEl = NULL;
-		    sclCnt = false;
-		    //  Texts
-		    for(int iEl = 0; iEl < texts.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
-			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(texts[iEl]->edit()))) break;
-			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
-			lstFitWdg = texts[iEl];
-			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
-			qApp->processEvents();
-			sclCnt = true;
+		if(!s2i(genReqs.attr("fillMode"))) {
+		    qApp->processEvents();
+		    QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
+		    QWidget *lastW = qobject_cast<QWidget*>(scrl->widget()->children().last());
+		    int sclFitSz = lastW ? (scrl->maximumViewportSize().height() - (lastW->y()+lastW->height()) - 10): 0;
+		    QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
+		    QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
+		    QList<ListView*> lsts = scrl->findChildren<ListView*>();
+		    for(int fitStp = 5, iScN = 0; sclFitSz > fitStp; ) {
+			QAbstractScrollArea *sclIt = NULL, *tEl = NULL;
+			bool sclFromBeg = (iScN == 0);
+			for( ; iScN < (texts.length()+tbls.length()+lsts.length()) && !sclIt; iScN++) {
+			    if(iScN < texts.length()) {
+				if(!(tEl=dynamic_cast<QAbstractScrollArea*>(texts[iScN]->edit()))) continue;
+				if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum())	continue;
+				texts[iScN]->setMinimumHeight(fmax(texts[iScN]->height(),texts[iScN]->minimumHeight())+fitStp);
+			    }
+			    else if(iScN < (texts.length()+tbls.length())) {
+				int iScN_ = iScN - texts.length();
+				if(!(tEl=dynamic_cast<QAbstractScrollArea*>(tbls[iScN_]))) continue;
+				if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum())	continue;
+				tbls[iScN_]->setMinimumHeight(fmax(tbls[iScN_]->height(),tbls[iScN_]->minimumHeight())+fitStp);
+			    }
+			    else if(iScN < (texts.length()+tbls.length()+lsts.length())) {
+				int iScN_ = iScN - texts.length() - tbls.length();
+				if(!(tEl=dynamic_cast<QAbstractScrollArea*>(lsts[iScN_]))) continue;
+				if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum())	continue;
+				lsts[iScN_]->setMinimumHeight(fmax(lsts[iScN_]->height(),lsts[iScN_]->minimumHeight())+fitStp);
+			    }
+
+			    sclIt = tEl;
+			    qApp->processEvents();
+			    sclFitSz -= fitStp;
+			}
+			if((!sclIt && sclFromBeg) || (scrl->verticalScrollBar() && scrl->verticalScrollBar()->maximum())) break;
+			if(iScN && iScN >= (texts.length()+tbls.length()+lsts.length())) iScN = 0;
 		    }
-		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
-			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
-			break;
-		    }
-		    //  Tables
-		    /*for(int iEl = 0; iEl < tbls.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
-			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(tbls[iEl]))) break;
-			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
-			lstFitWdg = tbls[iEl];
-			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
-			qApp->processEvents();
-			sclCnt = true;
-		    }
-		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
-			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
-			break;
-		    }
-		    //  Lists
-		    for(int iEl = 0; iEl < lsts.length() && scrl->widget()->height() <= scrl->maximumViewportSize().height(); iEl++) {
-			if(!(tEl=dynamic_cast<QAbstractScrollArea*>(lsts[iEl]))) break;
-			if(!tEl->verticalScrollBar() || !tEl->verticalScrollBar()->maximum()) continue;
-			lstFitWdg = lsts[iEl];
-			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()+fitStp);
-			qApp->processEvents();
-			sclCnt = true;
-		    }
-		    if(scrl->widget()->height() > scrl->maximumViewportSize().height() && lstFitWdg) {
-			lstFitWdg->setMinimumHeight(lstFitWdg->minimumHeight()-fitStp);
-			break;
-		    }*/
 		}
 	    }
 	    i_area++;
@@ -1159,7 +1148,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if(t_s.attr("tp") == "br")
 		    connect(lstbox, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(listBoxGo(QListWidgetItem*)));
 
-		lstbox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+		lstbox->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum/*Expanding*/));
 
 		QVBoxLayout *vbox = new QVBoxLayout;
 		vbox->setAlignment(Qt::AlignLeft);
@@ -1167,6 +1156,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		vbox->addWidget(lab);
 		vbox->addWidget(lstbox);
 		widget->layout()->addItem(vbox);
+
+		//lstbox->setMinimumHeight(QFontMetrics(lstbox->font()).height()*4);
 
 		t_s.setAttr("addr_lab", TSYS::addr2str(lab));
 		t_s.setAttr("addr_el", TSYS::addr2str(lstbox));
@@ -1176,6 +1167,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		lstbox	= (ListView*)TSYS::str2addr(t_s.attr("addr_el"));
 		lstbox->clear();
 	    }
+
+	    //lstbox->setMinimumHeight(0);	//Fit reset
+
 	    //  Fill list
 	    lab->setText((t_s.attr("dscr")+":").c_str());
 	    string helpVl = t_s.attr("help");
@@ -1204,13 +1198,14 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		//tbl->setTextElideMode(Qt::ElideNone);
 		tbl->setStatusTip((selPath+"/"+br_path).c_str());
 		tbl->setObjectName(br_path.c_str());
-		QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
+		QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Minimum/*Expanding*/);
 		sp.setVerticalStretch(1);
 		tbl->setSizePolicy(sp);
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
 		connect(tbl->horizontalHeader(), SIGNAL(sectionClicked(int)/*sectionResized(int,int,int)*/), tbl, SLOT(resizeRowsToContentsLim()));
+
 		tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
 
 		widget->layout()->addWidget(new QLabel((t_s.attr("dscr")+":").c_str(),widget));
@@ -1223,6 +1218,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		//lab = (QLabel *)TSYS::str2addr(t_s.attr("addr_lab"));
 		tbl = (CfgTable *)TSYS::str2addr(t_s.attr("addr_tbl"));
 	    }
+
+	    tbl->setMinimumHeight(0);	//Fit reset
+
 	    //  Fill the table
 	    string helpVl = t_s.attr("help");
 	    tbl->setToolTip(TSYS::strMess(TOOL_TIP_LIM,"%s",helpVl.c_str()).c_str());
@@ -1645,6 +1643,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		edit = new TextEdit(widget, br_path.c_str());
 		edit->setStatusTip((selPath+"/"+br_path).c_str());
 		edit->setRowsCols(s2i(t_s.attr("cols")), s2i(t_s.attr("rows")));
+		//edit->setMinimumHeight(QFontMetrics(edit->edit()->currentFont()).height()*(edit->rowsCols().height()+2));
+		    //2*edit->edit()->currentFont().pointSize()*(edit->rowsCols().height()+1));
 		widget->layout()->addWidget(edit);
 
 		if(!wr)	edit->edit()->setReadOnly(true);
@@ -1654,13 +1654,16 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect(edit, SIGNAL(cancel()), this, SLOT(cancelButton()));
 		}
 
-		t_s.setAttr("addr_lab",TSYS::addr2str(lab));
-		t_s.setAttr("addr_edit",TSYS::addr2str(edit));
+		t_s.setAttr("addr_lab", TSYS::addr2str(lab));
+		t_s.setAttr("addr_edit", TSYS::addr2str(edit));
 	    }
 	    else {
 		lab  = (QLabel*)TSYS::str2addr(t_s.attr("addr_lab"));
 		edit = (TextEdit*)TSYS::str2addr(t_s.attr("addr_edit"));
 	    }
+
+	    edit->setMinimumHeight(0);	//Fit reset
+
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    if(edit && !edit->isChanged()) {
