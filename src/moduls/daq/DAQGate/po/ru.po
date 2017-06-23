@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2007-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 17:03+0200\n"
+"POT-Creation-Date: 2017-06-23 16:59+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -77,6 +77,9 @@ msgstr "Адрес удалённого параметра"
 msgid "Attributes configuration cache"
 msgstr "Кеш конфигурации атрибутов"
 
+msgid "Presenting for stations"
+msgstr "Присутствие по станциям"
+
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
@@ -88,6 +91,7 @@ msgstr "Вызовы с периодом: %s. "
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
+#, c-format
 msgid "Spent time: %s[%s]. "
 msgstr "Затрачено времени: %s[%s]. "
 
@@ -98,10 +102,6 @@ msgstr "Ошибка станции '%s', восстановление чере�
 #, c-format
 msgid "Requests to station '%s': %.6g."
 msgstr "Запросов к станции '%s': %.6g."
-
-#, c-format
-msgid "Enable: current stations: %d; parameters: %d."
-msgstr "Включение: текущих станций: %d; параметров: %d."
 
 #, c-format
 msgid "Enable: station '%s' processing item '%s' for parameters %d."
@@ -122,7 +122,7 @@ msgstr "DAQ.%s.%s: подключение к источнику данных: %s
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
 
-msgid "10:Data not allow."
+msgid "10:Data is not allowed."
 msgstr "10:Данные не доступны."
 
 msgid "OK"
@@ -131,6 +131,10 @@ msgstr "НОРМА"
 #, c-format
 msgid "DAQ.%s.%s: connect to data source '%s': %s."
 msgstr "DAQ.%s.%s: подключение к источнику данных '%s': %s."
+
+#, c-format
+msgid "11:Station missed '%s'."
+msgstr "11:Станция отсутствует '%s'."
 
 msgid "Zero for disable archive access."
 msgstr "Ноль для отключения доступа к архивам."

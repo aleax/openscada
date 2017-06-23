@@ -435,8 +435,8 @@ void TMess::setLang( const string &lng, bool init )
 {
     char *prvLng = NULL;
     if((prvLng=getenv("LANGUAGE")) && strlen(prvLng)) setenv("LANGUAGE", lng.c_str(), 1);
-    else setenv("LC_MESSAGES", lng.c_str(), 1);
-    //setenv("LANG", lng.c_str(), 1);	//!!!! May be use further for the miss environment force set
+    //else setenv("LC_MESSAGES", lng.c_str(), 1);
+    else setenv("LANG", lng.c_str(), 1);	//!!!! May be use further for the miss environment force set
     setlocale(LC_ALL, "");
 
     IOCharSet = nl_langinfo(CODESET);
@@ -510,6 +510,7 @@ void TMess::load( )
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
 	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) return;
+	else if(strcasecmp(argCom.c_str(),"lang") == 0) setLang(argVl, true);
 	else if(strcasecmp(argCom.c_str(),"messlev") == 0) {
 	    int i = atoi(optarg);
 	    if(i >= Debug && i <= Emerg) setMessLevel(i);

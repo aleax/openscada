@@ -182,8 +182,8 @@ INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','105',32,'','','tr2','','
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomW','342',32,'','','tr2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomH','144',32,'','','tr2','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1491065516',0,'','','tr1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','7.69231',32,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','curSek','1498219481',0,'','','tr1','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0val','4.18848',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomX','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','geomY','3',32,'','','tr1','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('DiagramTest','active','1',32,'','','tr1','','','','','','');
@@ -406,7 +406,7 @@ INSERT INTO "wlb_test_io" VALUES('mn_gen','name','Tests collection',32,'','','',
 INSERT INTO "wlb_test_io" VALUES('mn_gen','dscr','Mnemo: "Tests collection"',32,'','','','Мнемосхема: "Збірка тестів"','','Мнемосхема: "Сборка тестов"','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomX','0',40,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomW','900',32,'','','','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','630',32,'','','','','','','','','');
+INSERT INTO "wlb_test_io" VALUES('mn_gen','geomH','570',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','backColor','#5A5A5A',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','bordColor','black',32,'','','','','','','','','');
@@ -590,9 +590,9 @@ INSERT INTO "wlb_test_io" VALUES('TextEltests','alignment','10',32,'','','text7'
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','Text2','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('test1','alignment','10',32,'','','newText','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('FormElTests','active','1',32,'','','FormEl1','','','','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1415818374:1491065515:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1415818374:1491065515:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
-INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1415818374:1491065515:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1498219480:1',32,'','','tr1','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm0prop','1421852989:1498219480:1',32,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
+INSERT INTO "wlb_test_io" VALUES('DiagramTest','prm1prop','1415818374:1498219480:1',0,'','','tr2','1362235800:1374517499:1','','1362235800:1374517910:1','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','5',32,'','','Pi_нд','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','4',32,'','','TextEl','','','','','','');
 INSERT INTO "wlb_test_io" VALUES('mn_gen','geomZ','6',32,'','','Ti_нд','','','','','','');
@@ -1616,7 +1616,7 @@ VuEcZAEovUkYP+ScjurhYC9pM3flyhXHGdx7v4IVWIE/IH5XnhcnmHwKjSR6KknfAcMwgiAwDKPX
 T08XCoXl5eXFxcW3ZoMguHHjxs7OzsLCwt7e3sAMs7OzUsrLly8/evSoVCoN5FiWdfv27Uqlsr+/
 v7m5+das4zjz8/NbW1tzc3Obuy3x/Y8/v/cfmfzt11/e0+q/i3w+f+3atXq9rpSK4zgIgu3t7SAI
 nJEJs2c5obBPCQ7DfYQNiLT92RdffSTJb8L3fX90VGeGfN9vNBrDw8NmbsT3/Z4w/gaGGJVZL2Zi
-hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1491065530);
+hgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backColor;bordWidth;bordColor;',1498220567);
 INSERT INTO "wlb_test" VALUES('FormElTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAjCAYAAAAkCQwqAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAADAdJREFUaIHlmdtvHEd2xn/VXd09PffhDC/Di3jThbKcdWRZWq1lC0gC
 Iw8BFlkjcRIkCBIgyfs+5jXIS178Euzmb1jsU5DFBog2wCZGAnlty5Yty7pRlCgNh+RcyLn2vSsP
@@ -1936,7 +1936,7 @@ Y0yJjGCMwCCDDRjb4mlClNZbG2unFxfJ7FsfAME4zc1wEtP19fXBYOB5HgDU6/U8z5VSlmXFcWxZ
 G0BgDCDUmJsTQiKEwCBm2fUGN1ojjKZpOg4j+sorr1iW9WFh/ZyCENre2jjoW0obSikjREiJECKM
 2dxijAZBMJlMHNdVUihtMCEqzzEhGIExCBBYjCVpShnTStXr9el0Gk+nnNJCsZQaLJL4l/V9YCYY
 4xs/+ckvb/0syx58Lf4rJr/yDtDHoPb/PyKE+D+7lpz88BufGQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1491065530);
+//if(geomX++ > 10) geomX=0;','','',-1,'name;dscr;geomX;geomW;geomH;backColor;bordWidth;bordColor;',1498219479);
 INSERT INTO "wlb_test" VALUES('ElFigureTests','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAKYElEQVRoge1ZfUxT5x4+XQsto6cfQIt2SAXWLqZoFb0i092NxbAYp5Fk
 ubLgcDNuC9NN4nbjvGjYBZxW9kFQwzIMMWombAvDXRwIZMgM9mO0tEA/aItSPgpt8bT09POUnt4/

@@ -394,6 +394,7 @@ string TSYS::optDescr( )
 	"==================== Generic options ======================================\n"
 	"===========================================================================\n"
 	"-h, --help		Info message about the system options.\n"
+	"    --lang=<LANG>	The station language, in view \"uk_UA.UTF-8\".\n"
 	"    --config=<file>	The station configuration file.\n"
 	"    --station=<id>	The station identifier.\n"
 	"    --statName=<name>	The station name.\n"
@@ -3068,20 +3069,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 }
 
 #if defined(__ANDROID__)
-int main( int argc, char *argv[], char *envp[] )
+int main( int argc, char *argv[] )
 {
     int rez = 0;
 
-    //Get current locale from Java and set its to the environment LANG
-    setenv("LANG", "uk_UA.UTF-8", 1);
-
     //Same load and start the core object TSYS
-    SYS = new TSYS(argc, argv, envp);
+    SYS = new TSYS(argc, argv, NULL);
     try {
-	//Print arguments and environments
-	mess_info("TEST_ARG", "Arguments %d, %p, %p", argc, argv, envp);
-
-
 	SYS->load();
 	if((rez=SYS->stopSignal()) > 0) throw TError(SYS->nodePath().c_str(), "Stop by signal %d on load.", rez);
 	rez = SYS->start();

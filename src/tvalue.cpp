@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,9 +76,9 @@ void TValue::setVlCfg( TConfig *cfg )
     //Detach old configurations
     if(mCfg) {
 	mCfg->cfgList(list);
-	for(unsigned i_cf = 0; i_cf < list.size(); i_cf++)
-	    if(!(mCfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && vlPresent(list[i_cf])) {
-		chldDel(mVl, list[i_cf]);
+	for(unsigned iCf = 0; iCf < list.size(); iCf++)
+	    if(!(mCfg->cfg(list[iCf]).fld().flg()&TCfg::NoVal) && vlPresent(list[iCf])) {
+		chldDel(mVl, list[iCf]);
 		lCfg--;
 	    }
 	mCfg = NULL;
@@ -86,10 +86,10 @@ void TValue::setVlCfg( TConfig *cfg )
     //Attach new config
     if(cfg) {
 	cfg->cfgList(list);
-	for(unsigned i_cf = 0; i_cf < list.size(); i_cf++)
-	    if(!(cfg->cfg(list[i_cf]).fld().flg()&TCfg::NoVal) && !vlPresent(list[i_cf])) {
+	for(unsigned iCf = 0; iCf < list.size(); iCf++)
+	    if(!(cfg->cfg(list[iCf]).fld().flg()&TCfg::NoVal) && !vlPresent(list[iCf])) {
 		TVal *vl = vlNew();
-		vl->setCfg(cfg->cfg(list[i_cf]));
+		vl->setCfg(cfg->cfg(list[iCf]));
 		chldAdd(mVl, vl, lCfg);
 		lCfg++;
 	    }
@@ -271,8 +271,9 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			TSYS::strMess(_("Parameter's attribute\n"
 			    "  ID: '%s'\n"
 			    "  Name: '%s'\n"
-			    "  Type: '%s'"),
-			    vl.at().fld().name().c_str(),vl.at().fld().descr().c_str(),sType.c_str()));
+			    "  Type: '%s'\n"
+			    "  Read only: %d"),
+			    vl.at().fld().name().c_str(),vl.at().fld().descr().c_str(),sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0));
 		    if(vl.at().fld().values().size())
 			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
 		    if(vl.at().fld().selNames().size())

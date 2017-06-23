@@ -1416,20 +1416,23 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.cssText = 'top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
 					    'height: '+((elTp==4)?fntSz:(geomH-4))+'px; width: '+geomW+'px; '+
 					    'font: '+this.place.fontCfg+'; ';
+		    formObj.multiple = parseInt(this.attrs['mult']) ? true : null;
 		    if(this.attrsMdf['items'] || this.attrsMdf['value']) {
 			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
-			var selVal = this.attrs['value'];
+			var selVal = this.attrs['value'].split('\n');
 			var elLst = this.attrs['items'].split('\n');
-			var selOk = false;
 			for(var i = 0; i < elLst.length; i++) {
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.appendChild(this.place.ownerDocument.createTextNode(elLst[i]));
-			    if(selVal == elLst[i]) selOk = optEl.defaultSelected=optEl.selected = true;
+			    if((selId=selVal.indexOf(elLst[i])) >= 0) {
+				optEl.defaultSelected = optEl.selected = true;
+				selVal.splice(selId,1);
+			    }
 			    formObj.appendChild(optEl);
 			}
-			if(!selOk && elTp == 4) {
+			for(i = 0; i < selVal.length; i++) {
 			    var optEl = this.place.ownerDocument.createElement('option');
-			    optEl.textContent = selVal;
+			    optEl.textContent = selVal[i];
 			    optEl.selected = optEl.defaultSelected = true;
 			    formObj.appendChild(optEl);
 			}
@@ -1437,7 +1440,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(!toInit) break;
 		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
-		    //f(elTp == 5) formObj.setAttribute('size',100);
 		    if(elTp == 4)
 			formObj.onchange = function( ) {
 			    var attrs = new Object();
@@ -1448,8 +1450,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.size = 100;
 			formObj.onclick = function( ) {
 			    var attrs = new Object();
-			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange';
-			    setWAttrs(this.wdgLnk.addr,attrs);
+			    if(this.selectedIndex) attrs.value = this.options[this.selectedIndex].value;
+			    else {
+				attrs.value = "";
+				for(iO = 0; iO < this.options.length; iO++)
+				    if(this.options[iO].selected) attrs.value += (attrs.value.length?"\n":"") + this.options[iO].value;
+			    }
+			    attrs.event = 'ws_ListChange';
+			    setWAttrs(this.wdgLnk.addr, attrs);
 			}
 		    }
 		    this.place.appendChild(formObj);

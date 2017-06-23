@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -142,7 +142,7 @@ class ShapeFormEl : public WdgShape
 	// Combo box and list events
 	void comboChange( const QString& );
 	// List events
-	void listChange( int );
+	void listChange( );
 	// Tree events
 	void treeChange( );
 	// Table events
@@ -163,7 +163,7 @@ class ShapeFormEl : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), setType(false), wordWrap(false), addrWdg(NULL) { }
+		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), setType(false), opt1(false), addrWdg(NULL) { }
 		//Attributes
 		short	en	:1;
 		short	active	:1;
@@ -171,7 +171,7 @@ class ShapeFormEl : public WdgShape
 		short	elType	:5;
 		short	setType	:1;
 		short	view	:4;
-		short	wordWrap:1;
+		short	opt1	:1;
 		short	mode	:5;
 		QWidget	*addrWdg;
 		QFont	font;

@@ -1,4 +1,17 @@
-2017-06-16 Roman (test)
+2017-06-23 Roman (stable)
+- DB.LibsDB.vcaBase: doc.docMessRep was fixed for filtering by level.
+- DB.LibsDB.vcaTest: test.gen was decreased to fit the cadre into project AGLKS.
+- FIX:DB.Model.AGLKS.vca: The project was fixed for "frame" removing from pasport's widget.
+- SYS: An command-line option "lang" was added, initially for Android. Generic integration to call from Android JNI finished.
+- SYS.SSL,Transport.SSL: Symbol for checking SSL library changed to "SSL_free" but SSL_library_init missed on OpenSSL 1.1.
+    The method "SSLv2" was removed (commented) but it is not secured and fully removed from OpenSSL 1.1.
+- SYS: Values' (attributes of parameters of DAQ) info were appended by state "Read only".
+- FIX:DAQ.DAQGate: Was fixed for hierarchical parameters processing for levels more to 2.
+    Was expanded for allow write to configure's attributes "NAME" and "DESCR".
+- UI.{VCAEngine,Vision,WebVision}: An attribute "mult" was added to view "List" of the primitive "FormEl" to able multiple lines selection.
+
+
+2017-06-21 Roman (test)
 - DB.LibsDB.vcaBase: Main_io.cntrPaspExt was expanded for: full-frame mode of "View" at other modes hide, hidden attributes list support into "hideAttrs", removing "frame".
 - FIX:SYS: Qt checking macro was fixed for Qt4 checking before.
 - SYS: TMess::getUTF8() function was added and used for UTF-8 symbols detect into XMLNode::encode().
@@ -42,7 +55,7 @@
 
 2017-06-02 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by implementing of electricity counters Mercury 200 and 230 from Arsen Zakojan <godzilla919@gmail.com>.
-- DB.Model.AGLKS.vca: Fixed for a spare horizontal line.
+- FIX:DB.Model.AGLKS.vca: Fixed for a spare horizontal line.
 - !!!:FIX:SYS.ModSchedule: Modules closing at exit set to all the modules closing firstly and next all the module's libraries unlinking. For fix like to WebKit crashes at exit.
     !!!: Modules scanning procedure expanded by the module's name template into the end of the path, mostly for Android where all libraries place into one folder.
     Function ScanDir() and CheckFile() renamed to dirScan() and fileCheck() respectively.

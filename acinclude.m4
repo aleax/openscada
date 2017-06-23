@@ -1377,7 +1377,7 @@ AC_DEFUN([AX_LIB_OpenSSL], [
 	    AC_MSG_ERROR([Some OpenSSL headers aren't found. Install or check the OpenSSL developing package!]))
 	AC_CHECK_LIB(crypto, MD5_Init, [],
 	    AC_MSG_ERROR([OpenSSL libcrypto isn't found. Install or check the OpenSSL installation!]))
-	AC_CHECK_LIB(ssl, SSL_library_init, [],
+	AC_CHECK_LIB(ssl, SSL_free, [],
 	    AC_MSG_ERROR([OpenSSL libssl isn't found. Install or check the OpenSSL installation!]))
 	LIB_OpenSSL="-lssl -lcrypto"
 	AC_SUBST(LIB_OpenSSL)

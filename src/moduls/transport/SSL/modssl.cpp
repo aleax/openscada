@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
@@ -286,10 +286,10 @@ void *TSocketIn::Task( void *sock_in )
     SSL_METHOD *meth;
 #endif
 
-#ifndef OPENSSL_NO_SSL2
+/*#ifndef OPENSSL_NO_SSL2
     if(ssl_method == "SSLv2")		meth = SSLv2_server_method();
     else
-#endif
+#endif*/
 #ifndef OPENSSL_NO_SSL3
 	if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
     else
@@ -773,10 +773,10 @@ void TSocketOut::start( int tmCon )
     SSL_METHOD *meth;
 #endif
 
-#ifndef OPENSSL_NO_SSL2
+/*#ifndef OPENSSL_NO_SSL2
     if(ssl_method == "SSLv2")		meth = SSLv2_client_method();
     else
-#endif
+#endif*/
 #ifndef OPENSSL_NO_SSL3
 	if(ssl_method == "SSLv3")	meth = SSLv3_client_method();
     else

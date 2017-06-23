@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-15 17:03+0200\n"
+"POT-Creation-Date: 2017-06-23 16:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,9 @@ msgstr ""
 msgid "Attributes configuration cache"
 msgstr ""
 
+msgid "Presenting for stations"
+msgstr ""
+
 msgid "Call now. "
 msgstr ""
 
@@ -95,10 +98,6 @@ msgid "Requests to station '%s': %.6g."
 msgstr ""
 
 #, c-format
-msgid "Enable: current stations: %d; parameters: %d."
-msgstr ""
-
-#, c-format
 msgid "Enable: station '%s' processing item '%s' for parameters %d."
 msgstr ""
 
@@ -113,7 +112,7 @@ msgstr ""
 msgid "STOP"
 msgstr ""
 
-msgid "10:Data not allow."
+msgid "10:Data is not allowed."
 msgstr ""
 
 msgid "OK"
@@ -121,6 +120,10 @@ msgstr ""
 
 #, c-format
 msgid "DAQ.%s.%s: connect to data source '%s': %s."
+msgstr ""
+
+#, c-format
+msgid "11:Station missed '%s'."
 msgstr ""
 
 msgid "Zero for disable archive access."

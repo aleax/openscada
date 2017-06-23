@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -93,6 +93,7 @@ class TMdPrm : public TParamContr
 	void save_( );				//Save parameter
 	void sync( );				//Synchronize parameter
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
@@ -158,11 +159,12 @@ class TMdContr: public TController
 	class SPrmsStack
 	{
 	    public:
-	    SPrmsStack( XMLNode	*ind, int ipos, const AutoHD<TMdPrm> &iprm ) : nd(ind), pos(ipos), prm(iprm) { }
+	    SPrmsStack( XMLNode	*ind, int ipos, const AutoHD<TMdPrm> &iprm, const string &ipath ) : nd(ind), pos(ipos), prm(iprm), path(ipath) { }
 
 	    XMLNode		*nd;
 	    int			pos;
 	    AutoHD<TMdPrm>	prm;
+	    string		path;
 	};
 
 	//Methods

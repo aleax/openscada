@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -279,7 +279,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    rel_cfg = true;
 	    switch(shD->elType) {
 		case F_LINE_ED:	shD->view = s2i(val);		break;
-		case F_TEXT_ED:	shD->wordWrap = s2i(val);	break;
+		case F_TEXT_ED:	shD->opt1 = s2i(val);	break;
 		case F_BUTTON:	shD->img = val;		break;
 		case F_COMBO: case F_LIST: case F_TREE: case F_TABLE: shD->items = val;	break;
 		case F_SLIDER: case F_SCROLL_BAR: shD->cfg = val;		break;
@@ -291,6 +291,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    switch(shD->elType) {
 		case F_LINE_ED:	shD->cfg = val;		break;
 		case F_BUTTON:	shD->color = val;	break;
+		case F_LIST:	shD->opt1 = s2i(val);	break;
 		default: rel_cfg = false;
 	    }
 	    break;
@@ -340,7 +341,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		}
 		wdg->setFont(elFnt);		//Font
 		setValue(w, shD->value, true);	//Value
-		wdg->workWdg()->setLineWrapMode(shD->wordWrap ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);	//WordWrap
+		wdg->workWdg()->setLineWrapMode(shD->opt1 ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);	//WordWrap
 		break;
 	    }
 	    case F_CHECK_BOX: {
@@ -418,9 +419,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QListWidget*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QListWidget(w);
-		    if(runW) connect(wdg, SIGNAL(currentRowChanged(int)), this, SLOT(listChange(int)));
+		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(listChange()));
 		    mk_new = true;
 		}
+		wdg->setSelectionMode(shD->opt1?QAbstractItemView::ExtendedSelection:QAbstractItemView::SingleSelection);
 		//Items
 		wdg->clear();
 		wdg->addItems(QString(shD->items.c_str()).split("\n"));
@@ -789,7 +791,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		}
 		case FBT_SAVE:
 		    if(!runW)	break;
-		    shD->wordWrap = true;
+		    shD->opt1 = true;
 		    QTimer::singleShot(100, wdg, SIGNAL(released()));
 		    break;
 	    }
@@ -802,13 +804,19 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    break;
 	case F_LIST: {
 	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
-	    QList<QListWidgetItem *> its = wdg->findItems(val.c_str(), Qt::MatchExactly);
-	    if(!its.size() && val.size()) { wdg->addItem(val.c_str()); its = wdg->findItems(val.c_str(), Qt::MatchExactly); }
-	    if(its.size()) {
-		wdg->setCurrentItem(its[0]);
-		wdg->scrollToItem(its[0]);
+
+	    while(wdg->selectedItems().size()) wdg->selectedItems()[0]->setSelected(false);
+
+	    string vl;
+	    for(int off = 0, cnt = 0; (vl=TSYS::strLine(val,0,&off)).size(); cnt++) {
+		QList<QListWidgetItem *> its = wdg->findItems(vl.c_str(), Qt::MatchExactly);
+		if(!its.size() && vl.size()) { wdg->addItem(vl.c_str()); its = wdg->findItems(vl.c_str(), Qt::MatchExactly); }
+		if(its.size()) {
+		    wdg->setCurrentItem(its[0], QItemSelectionModel::Select);
+		    if(cnt == 0) wdg->scrollToItem(its[0]);
+		}
 	    }
-	    else wdg->setCurrentItem(NULL);
+
 	    break;
 	}
 	case F_TREE: {
@@ -985,11 +993,11 @@ void ShapeFormEl::buttonReleased( )
     switch(shD->mode) {
 	case FBT_STD: w->attrSet("event", "ws_BtRelease", A_NO_ID, true);	break;
 	case FBT_SAVE: {
-	    if(!shD->wordWrap) {	//The event from timer
+	    if(!shD->opt1) {	//The event from timer
 		w->attrSet("event", "ws_BtRelease", A_NO_ID, true);
 		break;
 	    }
-	    shD->wordWrap = false;
+	    shD->opt1 = false;
 
 	    int off = 0;
 	    string  fHead	= TSYS::strLine(shD->value, 0, &off);
@@ -1075,14 +1083,19 @@ void ShapeFormEl::comboChange( const QString &val )
     w->attrsSet(attrs);
 }
 
-void ShapeFormEl::listChange( int row )
+void ShapeFormEl::listChange( )
 {
     QListWidget *el = (QListWidget*)sender();
     WdgView     *w  = (WdgView *)el->parentWidget();
 
-    if(row < 0 || ((ShpDt*)w->shpData)->evLock) return;
+    if(((ShpDt*)w->shpData)->evLock) return;
+
+    string vl = "";
+    for(int iS = 0; iS < el->selectedItems().size(); iS++)
+	vl += (vl.size()?"\n":"") + el->selectedItems()[iS]->text().toStdString();
+
     AttrValS attrs;
-    attrs.push_back(std::make_pair("value",el->item(row)->text().toStdString()));
+    attrs.push_back(std::make_pair("value",vl));
     attrs.push_back(std::make_pair("event","ws_ListChange"));
     w->attrsSet(attrs);
 }
