@@ -1616,7 +1616,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
 		    lab->setScaledContents(shD->mediaFit);
 		}
-		else lab->setText("");
+		else lab->setPixmap(QPixmap());
 		break;
 	    }
 	    case FM_ANIM: {

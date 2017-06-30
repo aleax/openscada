@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.0"
+#define MOD_VER		"1.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -243,7 +243,7 @@ void TMdContr::enable_( )
 		    gPrmLs.push_back(curP.at().ownerPath(true));
 
 		    //  Process included parameters
-		    string prmPath = prmLs[iP], prmPathW = prmPath;
+		    string prmPath = prmLs[iP], prmPathW = prmPath, prmPathW_;
 		    XMLNode *prmN = req.childGet(2), *prmW;
 		    vector<SPrmsStack> stack;
 		    for(unsigned i_ip = 0; true; ) {
@@ -259,18 +259,18 @@ void TMdContr::enable_( )
 
 			prmW = prmN->childGet(i_ip);
 			prmId = prmW->attr("id");
-			prmPathW += "/prm_"+prmId;
+			prmPathW_ = prmPathW + "/prm_" + prmId;
 
 			//   Find for the parameter
 			curP.at().list(prmLs1);
 			unsigned iP1 = 0;
-			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW) iP1++;
+			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW_) iP1++;
 			if(iP1 >= prmLs1.size()) {
 			    while(curP.at().present(prmId)) prmId = TSYS::strLabEnum(prmId);
 			    curP.at().add(prmId, owner().tpPrmToId("std"));
 			    curW = curP.at().at(prmId);
 			    curW.at().setName(prmW->text());
-			    curW.at().setPrmAddr(prmPathW);
+			    curW.at().setPrmAddr(prmPathW_);
 			} else curW = curP.at().at(prmId);
 
 			if(!curW.at().enableStat()) {
@@ -283,8 +283,8 @@ void TMdContr::enable_( )
 			//   Next level process
 			if(prmW->childSize()) {
 			    stack.push_back(SPrmsStack(prmN,i_ip,curP,prmPathW));
-			    prmN = prmW; i_ip = 0; curP = curW;
-			}else i_ip++;
+			    prmN = prmW; i_ip = 0; curP = curW; prmPathW = prmPathW_;
+			} else i_ip++;
 		    }
 		}
 	    } catch(TError &err) { if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str()); }

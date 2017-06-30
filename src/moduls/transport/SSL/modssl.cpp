@@ -44,7 +44,7 @@
 #define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
- OpenSSL is used and SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
+ OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1 are supported.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -286,12 +286,8 @@ void *TSocketIn::Task( void *sock_in )
     SSL_METHOD *meth;
 #endif
 
-/*#ifndef OPENSSL_NO_SSL2
-    if(ssl_method == "SSLv2")		meth = SSLv2_server_method();
-    else
-#endif*/
 #ifndef OPENSSL_NO_SSL3
-	if(ssl_method == "SSLv3")	meth = SSLv3_server_method();
+    if(ssl_method == "SSLv3")		meth = SSLv3_server_method();
     else
 #endif
 	if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
@@ -627,7 +623,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
-	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));
+	    "    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
@@ -773,12 +769,8 @@ void TSocketOut::start( int tmCon )
     SSL_METHOD *meth;
 #endif
 
-/*#ifndef OPENSSL_NO_SSL2
-    if(ssl_method == "SSLv2")		meth = SSLv2_client_method();
-    else
-#endif*/
 #ifndef OPENSSL_NO_SSL3
-	if(ssl_method == "SSLv3")	meth = SSLv3_client_method();
+    if(ssl_method == "SSLv3")		meth = SSLv3_client_method();
     else
 #endif
 	if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
@@ -1071,7 +1063,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - remote SSL host address;\n"
 	    "    port - network port (/etc/services);\n"
-	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));
+	    "    mode - SSL mode and version (SSLv3, SSLv23, TLSv1, TLSv1_1, TLSv1_2, DTLSv1)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","7",
 	    "help",_("SSL PAM certificates chain and private key."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");

@@ -1,3 +1,15 @@
+2017-06-30 Roman (stable)
+- SYS:data/{debian,debian_mod}/control: Build with MariaDB as a variant of MySQL was added.
+- SYS:Changelog: Significant cleaned in process of releasing 0.8.18 LTS.
+- FIX:DAQ.DAQGate: Was finally fixed and tested for hierarchical parameters processing for levels more at 2.
+- SYS.Transport.SSL: The method "SSLv2" was finally removed but it is not secured and fully removed from OpenSSL 1.1.
+- UI.QTStarter: A first module starting at empty list of tarted modules was disabled.
+- FIX:UI.VCAEngine: The translations were some fixed.
+- FIX:UI.Vision: Images of primitive Media clean at an empty string set was added.
+- FIX:UI.WebCfgD: Table of the table items wrong indent was fixed.
+- FIX:UI.WebVision: Scale dimension was increased to 3 digits after dot for correct scaling to big screen.
+
+
 2017-06-23 Roman (stable)
 - DB.LibsDB.vcaBase: doc.docMessRep was fixed for filtering by level.
 - DB.LibsDB.vcaTest: test.gen was decreased to fit the cadre into project AGLKS.
@@ -6,7 +18,7 @@
 - SYS.SSL,Transport.SSL: Symbol for checking SSL library changed to "SSL_free" but SSL_library_init missed on OpenSSL 1.1.
     The method "SSLv2" was removed (commented) but it is not secured and fully removed from OpenSSL 1.1.
 - SYS: Values' (attributes of parameters of DAQ) info were appended by state "Read only".
-- FIX:DAQ.DAQGate: Was fixed for hierarchical parameters processing for levels more to 2.
+- FIX:DAQ.DAQGate: Was fixed for hierarchical parameters processing for levels more at 2.
     Was expanded for allow write to configure's attributes "NAME" and "DESCR".
 - UI.{VCAEngine,Vision,WebVision}: An attribute "mult" was added to view "List" of the primitive "FormEl" to able multiple lines selection.
 
@@ -27,7 +39,7 @@
 2017-06-16 Roman (stable)
 - DB.LibsDB.vcaBase: Icons of views of the main page were restored to opaque but not in full size, for buttons' background seeing.
 - DB.LibsDB.vcaElectroEls: Was appended by some new items.
-- FIX:SYS,DAQ.JavaLikeCalc,Protocol.{ModBus,UserProtocol}: Some original masseges were fixed.
+- FIX:SYS,DAQ.JavaLikeCalc,Protocol.{ModBus,UserProtocol}: Some original massages were fixed.
 - Protocol.{ModBus,UserProtocol},UI.WebUser: Were expanded for tracing and notification for program's changing.
 - UI.QTCfg: Text items size was fixed.
 - UI.QTStarter: Splash ensuring was disabled for Qt starting not into main thread.
@@ -45,7 +57,7 @@
     Modules separator of option "ModDir" of OpenSCADA was changed to ';'.
     FIX: The function TSYS::sysTm() was set adaptive one for the task "SYS_HighPriority" execution.
 - DAQ.JavaLikeCalc: Entry to procedures of the module set more optimal by direct locking the critical section.
-- FIX:DAQ.JavaLikeCalc: The parameter's debug mode was disabled for passive modes (f_err is EVAL) of the parameters but the debug message accumulates into the attribute "err".
+- FIX:DAQ.LogicLev: The parameter's debug mode was disabled for passive modes (f_err is EVAL) of the parameters but the debug message accumulates into the attribute "err".
 - !!!:Protocol.HTTP,UI.{WebUser,WebVision}: ACL support was added to control access and visibility of items of indexes of Web resources.
 - FIX:UI.QTCfg: sizeHint() and minimumSizeHint() procesing was fixed.
 - !!!!:FIX:UI.QTStarter: Two modes of execution Qt were added, first is old one into different thread (by default) and second is new one into main thread (by the configure option -enable-QtMainThrd).
@@ -193,26 +205,26 @@
 
 
 2017-03-18 Roman (stable)
-- SYS:data/{debian,debian_mod}/rules: dh_compress is prevented from files of documentation in ODT compression also.
+- SYS:data/{debian,debian_mod}/rules: dh_compress prevented from files of documentation in ODT compression also.
 - SYS: Some pre-adapting to Android by:
-    build: The macro AX_PTHREAD appending and using. AM_INIT_AUTOMAKE call set shorter.
-	Libraries moved from direct pointing into src/Makefile.am to its checking, for: -lpthread, -lm, -ldl, -lcrypt, -lz, -lpcre
-	Some messages into configure.ac fix.
+    build: The macro AX_PTHREAD was appended and used. AM_INIT_AUTOMAKE call was set shorter.
+	Libraries were moved from their direct pointing into src/Makefile.am to checking, for: -lpthread, -lm, -ldl, -lcrypt, -lz, -lpcre
+	Some messages into configure.ac were fixed.
     ResAlloc: Check and define "__GLIBC_PREREQ" to 1. pthread_condattr_setclock() disabled for Android as it missed.
-    SYS: Needed parts from ieee754.h moved to the file. Multi CPU management and pthread_attr_setinheritsched() disabled for Android.
-    Mess: Messages encoding disabled for charset "US-ASCII", default one on Android.
-    Security: libcrypt checking expanded for crypt.h.
+    Needed parts from ieee754.h were moved to the file. Multi CPU management and pthread_attr_setinheritsched() were disabled for Android.
+    Mess: Messages encoding was disabled for charset "US-ASCII", it's default one on Android.
+    Security: libcrypt checking was expanded for crypt.h.
     Transport.Sockets: The function getservbyname_r() switched to getservbyname() for Android.
 - DAQ.Siemens: "INCLUDES" was replaced by "daq_Siemens_la_CFLAGS" and "daq_Siemens_la_CXXFLAGS".
-- Special.FLibSYS: The user API function dbReqSQL() moved to the features of the function SYS.BD["TypeDB"]["DB"].SQLReq().
+- Special.FLibSYS: The user API function dbReqSQL() was moved to the features of the function SYS.BD["TypeDB"]["DB"].SQLReq().
 - !!!:UI.WebVision: View "Line" of the primitive "FormEl": expanded by the callendar dialog for data variants.
     Generic CSS properties moved to *.html file.
-    Processing event of the wide combobox (list) changed from "onchange" to "onclick" to the processing guaranty.
+    Processing event of the wide combobox (list) was changed from "onchange" to "onclick" to the processing guaranty.
     Generic improvement.
 
 
 2017-03-13 Roman (stable)
-- SYS:data/{debian,debian_mod}/rules: dh_compress is prevented from files of documentation in PDF compression,
+- SYS:data/{debian,debian_mod}/rules: dh_compress prevented from files of documentation in PDF compression,
     to allow its using from UI.QTCfg mostly.
 - FIX:UI: docGet() is fixed at online documentation processing after the local one unsuccessful processing.
 
@@ -222,12 +234,12 @@
 
 
 2017-03-11 Roman (stable)
-- UI.QTCfg: Fields "ID" and "NAME" of the node control dialog set to the unlimited size
+- UI.QTCfg: Fields "ID" and "NAME" of the node control dialog were set to the unlimited size
     for next these changing from inforamtion of the control interface.
-- !!:UI.WebVision: The visualizer specific attributes support added through its activation.
-    !!:Main page scaling to fit to window of the browser allowed space added, only to grow and with the aspect ratio control.
-    !: Background of the primitives processing moved to common and after the ones processing and
-	the background transparency-opaque support added by a separated block (div) creation with the opaque level.
+- !!:UI.WebVision: The visualizer specific attributes support was added through its activation.
+    !!:Main page scaling to fit to the window of the browser allowed space was added, only to grow and with the aspect ratio control.
+    !: Background of the primitives processing was moved to common and after the ones processing and
+	the background transparency-opaque support was added by a separated block (div) creation with the opaque level.
 
 
 2017-03-05 Roman (stable)
@@ -243,37 +255,37 @@
 
 2017-03-03 Roman (stable)
 - SYS: The user API functions are appended by function utime() and mtime().
-- !!:FIX:Archive: Fix for checking for a propper archivator by its periodicity,
+- !!:FIX:Archive: Fixed for checking for a propper archivator by its periodicity,
     which allow for correct selection archivators in periodicity more then one minute in graphics building.
-- !!:FIX:Archive.FSArch: Fix for too long messages back reading and wrong messages reading prevented at all.
+- !!:FIX:Archive.FSArch: Fixed for too long messages back reading and wrong messages reading was prevented at all.
     Function of archivators checking is fixed for correct processing of the capacity limit of the values archiving
     by the archives sorting to remove its files at its maximum quantity.
-- !!!:UI.WebCfgD: Fit to allowed space for scalable by vertical elements.
-    Border color of the input elements changed to "gray".
-    The structural class "SSess" moved to the strucure type.
-- !!:UI.WebVision: Moved the XHTML part of a page to an separated file like the JavaScript one. All generic CSS rules moved to the XHTML file.
-    Finish of moving to using pgCreator(). pgCreator() expanded for simple requests local processing.
-    The structural class "SSess" moved to the strucure type.
+- !!!:UI.WebCfgD: Fitted to allowed space for scalable by vertical elements.
+    Border color of the input elements was changed to "gray".
+    The structural class "SSess" was moved to strucure type.
+- !!:UI.WebVision: The XHTML part of a page was moved to an separated file like the JavaScript one. All generic CSS rules were moved to the XHTML file.
+    Moving to using pgCreator() was finished. pgCreator() was expanded for simple requests processing in local.
+    The structural class "SSess" was moved to strucure type.
 
 
 2017-02-26 Roman (stable)
 - SYS: data/openscada_start.in: workarounded for bug into "zenity", for sending selection items as "{item}|{item}" (observed on Ubuntu 14.04).
 - Archive.Value: User API functions were appended by setVal().
-    Direct writing to archives expanded for all buffer's wich aren't the buffer of archive.
+    Direct writing to archives was expanded for all buffer's wich aren't the buffer of archive.
 - FIX:DB.{.,SQLite,MySQL}: Some control items were fixed for their permition.
 - DAQ: Some fields of the diagnostic request dialog are merged to single line, for controller object.
 - FIX:UI.{docGet(),QTCfg,QTStarter,Vision}: Force documents in background execution for online ones.
     Checking for online documents is disabled by it's can be long and wrong, then there use only links to default language pages (EN).
     Function rewrote for options as flags.
-- !!!:UI.WebCfgD: Library GD relaced by the CSS filters and set optional by --enable-LibGD.
-    FIX: Processing of list items fix for ones without ID.
-    Internal dialogs expanded by drop shadow and a transparent background for disable access to the main area.
+- !!!:UI.WebCfgD: GD library was relaced by the CSS filters and set optional by --enable-LibGD.
+    FIX: List items processing was fixed for ones without ID.
+    Internal dialogs were expanded by drop shadow and a transparent background for disable access to the main area.
     Date fields were moved to a type "datetime-local" of the tag "input".
-    Online documentation call added.
-    Elements merging into single line fixed by CSS rule "white-space: nowrap;" but the constant set to "white-space: normal;".
-    Elements indent set to "padding-left: 10px; text-indent: -10px;".
-    Length of the number elements set to fixed by 10 symbols.
-    Item copy is expanded by copy to its root through self.
+    Online documentation call was added.
+    Elements merging into single line was fixed by CSS rule "white-space: nowrap;" but the constant was set to "white-space: normal;".
+    Elements indent was set to "padding-left: 10px; text-indent: -10px;".
+    Length of the number elements was set to the fixed one by 10 symbols.
+    Item copy was expanded by it copy to its root through self.
 
 
 2017-02-16 Roman (stable)
@@ -281,8 +293,8 @@
 - FIX:Protocol.OPC_UA{*.libOPC_UA}: The resource "mtxData" added to object Server and used for the security channels container management.
 - Special.FLibSYS: The static function str2int() expanded for 64 bits.
 - Transport.Serial: Checking to present the header file linux/i2c-dev.h added to build on Linux distributives like SuSE.
-- FIX:UI.WebCfgD: List units expanded for commands for empty list.
-    Self dialogs expanded by the main space lock and a box shadow appended to them.
+- FIX:UI.WebCfgD: List units were expanded for commands to empty list.
+    Self dialogs were expanded for the main space locking and for a box shadow appendeding to them.
 
 
 2017-02-11 Roman (stable)

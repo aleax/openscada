@@ -735,7 +735,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
 	    //}
 	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
-	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
+	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(3)+"&ySc="+ySc.toFixed(3)+"'/>";
 
 	    this.place.wdgLnk = this;
 	    if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
@@ -1855,7 +1855,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var dgrObj = anchObj.childNodes[0];
 	    dgrObj.isLoad = false;
 	    dgrObj.onload = function( )	{ this.isLoad = true; }
-	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
+	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
 	    //Disable drag mostly for FireFox
 	    dgrObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 	    this.perUpdtEn(this.isEnabled() && parseInt(this.attrs['trcPer']));
@@ -2281,7 +2281,7 @@ function perUpdt( )
 	if(!dgrObj.stLoadTm) dgrObj.stLoadTm = (new Date()).getTime();
 	if(dgrObj && (dgrObj.isLoad || ((new Date()).getTime()-dgrObj.stLoadTm) > this.updCntr*3000)) {
 	    dgrObj.isLoad = false;
-	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
+	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(3)+'&ySc='+this.yScale(true).toFixed(3);
 	    dgrObj.stLoadTm = (new Date()).getTime();
 	}
     }
