@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,9 @@ using namespace QTCFG;
 //************************************************
 ListView::ListView( QWidget * parent ) : QListWidget(parent)	{ }
 
-QSize ListView::sizeHint( ) const	{ return QSize(QListWidget::sizeHint().width(), QFontMetrics(font()).height()*5); }
+QSize ListView::sizeHint( ) const	{ return QSize(QListWidget::sizeHint().width(), QFontMetrics(font()).height()*4); }
+
+QSize ListView::minimumSizeHint( ) const	{ return QSize(QListWidget::minimumSizeHint().width(), QFontMetrics(font()).height()*4); }
 
 //*************************************************
 //* ImgView: Image view widget.                   *
@@ -503,7 +505,14 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 
 QSize TextEdit::sizeHint( ) const
 {
-    return QSize(edFld->sizeHint().width(), 2*edFld->currentFont().pointSize()*mRowCol.height());
+    return QSize(edFld->sizeHint().width(), QFontMetrics(edFld->currentFont()).height()*(mRowCol.height()+2));
+					    //2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
+}
+
+QSize TextEdit::minimumSizeHint( ) const
+{
+    return QSize(edFld->minimumSizeHint().width(), QFontMetrics(edFld->currentFont()).height()*(mRowCol.height()+2));
+						//2*edFld->currentFont().pointSize()*(mRowCol.height()+1));
 }
 
 bool TextEdit::isChanged( )		{ return (butBox && butBox->isVisible()); }
@@ -627,20 +636,20 @@ void TextEdit::find( )
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',0,0).toInt();
     QString fstr = actFind->objectName().section(':',1);
     if(sender() == actFind) {
-	InputDlg dlg(this,actFind->icon(),QString(_("Enter text string for search:")),_("String search"),0,0);
-	QLineEdit *le = new QLineEdit(fstr,&dlg);
+	InputDlg dlg(this,actFind->icon(), QString(_("Enter text string for search:")), _("String search"), 0, 0);
+	QLineEdit *le = new QLineEdit(fstr, &dlg);
 	dlg.edLay->addWidget(le, 0, 0);
-	QCheckBox *bw = new QCheckBox(_("Backward"),&dlg);
+	QCheckBox *bw = new QCheckBox(_("Backward"), &dlg);
 	if(fopt & QTextDocument::FindBackward) bw->setCheckState(Qt::Checked);
 	dlg.edLay->addWidget(bw, 1, 0);
-	QCheckBox *cs = new QCheckBox(_("Case sensitively"),&dlg);
+	QCheckBox *cs = new QCheckBox(_("Case sensitively"), &dlg);
 	if(fopt & QTextDocument::FindCaseSensitively) cs->setCheckState(Qt::Checked);
 	dlg.edLay->addWidget(cs, 2, 0);
-	QCheckBox *ww = new QCheckBox(_("Whole words"),&dlg);
+	QCheckBox *ww = new QCheckBox(_("Whole words"), &dlg);
 	if(fopt & QTextDocument::FindWholeWords) ww->setCheckState(Qt::Checked);
 	dlg.edLay->addWidget(ww, 3, 0);
 	le->setFocus(Qt::OtherFocusReason);
-	dlg.resize(400,210);
+	dlg.resize(400, 210);
 	if(dlg.exec() == QDialog::Accepted && !le->text().isEmpty()) {
 	    fopt = (QTextDocument::FindFlag)0;
 	    if(bw->checkState() == Qt::Checked) fopt |= QTextDocument::FindBackward;
@@ -793,7 +802,7 @@ void InputDlg::showEvent( QShowEvent * event )
 //* ReqIdNameDlg: Request node identifier and/or name *
 //*****************************************************
 ReqIdNameDlg::ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg ) :
-    InputDlg(parent, icon, mess, ndlg, 20, 500)
+    InputDlg(parent, icon, mess, ndlg, 1000, 10000)
 {
     itTpLab = new QLabel(_("Item type:"), this);
     edLay->addWidget(itTpLab, 0, 0);

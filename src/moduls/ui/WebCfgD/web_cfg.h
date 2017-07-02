@@ -34,24 +34,23 @@ namespace WebCfgD
 //*************************************************
 //* SSess                                         *
 //*************************************************
-class SSess
+struct SSess
 {
-    public:
-	//Methods
-	SSess( const string &iurl, const string &isender, const string &iuser,
+    //Methods
+    SSess( const string &iurl, const string &isender, const string &iuser,
 		vector<string> &ivars, const string &icontent );
 
-	//Attributes
-	string	url;			//request URL
-	string	page;
-	string	sender;			//request sender
-	string	user;			//sesion user
-	string	content;		//Contain
+    //Attributes
+    string	url;		//request URL
+    string	page;
+    string	sender;		//request sender
+    string	user;		//sesion user
+    string	content;	//Contain
 
-	vector<string>		vars;	//request vars
-	map<string,string>	cnt;	//Parsed contain
-	map<string,string>	prm;	//URL parameters
-	map<string,string>	files;	//Post files
+    vector<string>	vars;	//request vars
+    map<string,string>	cnt;	//Parsed contain
+    map<string,string>	prm;	//URL parameters
+    map<string,string>	files;	//Post files
 };
 
 //*************************************************

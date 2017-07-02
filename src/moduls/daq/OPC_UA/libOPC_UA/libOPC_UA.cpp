@@ -19,20 +19,20 @@
  ******************************************************************************/
 
 #include <sys/time.h>
-#include <ieee754.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <math.h>
+#include <endian.h>
 
-#include "openssl/bio.h"
-#include "openssl/ssl.h"
-#include "openssl/aes.h"
-#include "openssl/err.h"
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/aes.h>
+#include <openssl/err.h>
 #include <openssl/rand.h>
-#include "openssl/hmac.h"
-#include "openssl/evp.h"
+#include <openssl/hmac.h>
+#include <openssl/evp.h>
 
 #include "libOPC_UA.h"
 
@@ -182,7 +182,15 @@ inline double getUnalignDbl( const void *p )
 float floatLE( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_float ieee754_be;
+    union ieee754_be {
+	float f;
+	struct {
+	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int mantissa:23;
+	} ieee;
+    } ieee754_be;
+
     union ieee754_le {
 	float f;
 	struct {
@@ -1927,13 +1935,26 @@ void Client::reqService( XML_N &io )
 //*************************************************
 //* Protocol OPC UA server part			  *
 //*************************************************
-Server::Server( ) : mSecCnlIdLast(1)	{ }
+Server::Server( ) : mSecCnlIdLast(1)
+{
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mtxData, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+}
 
-Server::~Server( )			{ }
+Server::~Server( )
+{
+    pthread_mutex_lock(&mtxData);
+    pthread_mutex_destroy(&mtxData);
+}
 
 int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& iClCert, const string &iSecPolicy, char iSecMessMode,
     const string &iclAddr, uint32_t iseqN )
 {
+    OPCAlloc res(mtxData, true);
+
     //Check for renew
     if(cid) {
 	if(mSecCnl.find(cid) != mSecCnl.end()) {
@@ -1965,18 +1986,27 @@ int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& i
     return mSecCnlIdLast;
 }
 
-void Server::chnlClose( int cid )	{ mSecCnl.erase(cid); }
+void Server::chnlClose( int cid )
+{
+    pthread_mutex_lock(&mtxData);
+    mSecCnl.erase(cid);
+    pthread_mutex_unlock(&mtxData);
+}
 
 Server::SecCnl Server::chnlGet( int cid )
 {
-    if(mSecCnl.find(cid) == mSecCnl.end()) return SecCnl();
-    return mSecCnl[cid];
-}
+    Server::SecCnl rez;
 
-Server::SecCnl &Server::chnlGet_( int cid )	{ return mSecCnl[cid]; }
+    pthread_mutex_lock(&mtxData);
+    if(mSecCnl.find(cid) != mSecCnl.end()) rez = mSecCnl[cid];
+    pthread_mutex_unlock(&mtxData);
+
+    return rez;
+}
 
 void Server::chnlSecSet( int cid, const string &iServKey, const string &iClKey )
 {
+    OPCAlloc res(mtxData, true);
     if(mSecCnl.find(cid) == mSecCnl.end()) return;
     mSecCnl[cid].servKey = iServKey;
     mSecCnl[cid].clKey = iClKey;
@@ -2128,7 +2158,9 @@ nextReq:
 	    oS(out, isSecNone?string(""):certPEM2DER(wep->cert()));	//ServerCertificate
 	    oS(out, isSecNone?string(""):certThumbprint(clntCert));	//ClientCertificateThumbprint
 	    int begEncBlck = out.size();
+	    OPCAlloc res(mtxData, true);
 	    oNu(out, chnlGet_(chnlId).servSeqN++, 4);		//Sequence number
+	    res.unlock();
 	    oNu(out, reqId, 4);					//RequestId
 								//> Extension Object
 	    oNodeId(out, NodeId(OpcUa_OpenSecureChannelResponse));	//TypeId
@@ -2245,6 +2277,7 @@ nextReq:
 		if(scHd.secMessMode == MS_SignAndEncrypt)
 		    rb.erase(rb.size()-(rb[rb.size()-1]+1));	//Remove the padding by the last byte value
 	    }
+	    OPCAlloc res(mtxData, true);
 	    SecCnl &scHd_ = chnlGet_(secId);
 								//> Sequence header
 	    uint32_t clSeqN = iNu(rb, off, 4);			//Sequence number

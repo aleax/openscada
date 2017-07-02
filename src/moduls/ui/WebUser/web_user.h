@@ -114,6 +114,7 @@ class UserPg : public TCntrNode, public TConfig
 	TCfg	&mId;
 	char	&mAEn, mEn;
 	string	mDB, mWorkProg;
+	bool	prgChOnEn;
 };
 
 //*************************************************
@@ -154,6 +155,7 @@ class TWEB: public TUI
 
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
 		const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+	bool pgAccess( TProtocolIn *iprt, const string &URL );
 
 	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );

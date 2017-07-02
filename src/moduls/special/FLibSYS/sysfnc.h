@@ -25,9 +25,12 @@
 #include <stdint.h>
 
 #include <tfunction.h>
-#include <openssl/md5.h>
 
 #include "statfunc.h"
+
+#ifdef HAVE_OPENSSL_MD5_H
+# include <openssl/md5.h>
+#endif
 
 namespace FLibSYS
 {
@@ -71,13 +74,15 @@ class dbReqSQL : public TFunction
     public:
 	dbReqSQL( ) : TFunction("dbReqSQL",SSPC_ID) {
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("addr",_("DB address"),IO::String,IO::Default));
+	    ioAdd(new IO("addr",_("DB address, \"{TypeDB}.{DB}\""),IO::String,IO::Default));
 	    ioAdd(new IO("req",_("SQL request"),IO::String,IO::Default));
 	    ioAdd(new IO("trans",_("Transaction"),IO::Boolean,IO::Default,i2s(EVAL_BOOL).c_str()));
 	}
 
 	string name( )	{ return _("DB: SQL request"); }
-	string descr( )	{ return _("Send SQL request to DB."); }
+	string descr( )	{ return _("Formation of the SQL-request <req> to the DB <addr>, "
+	    "inside (<trans>=true), outside (<trans>=false) or no matter (<trans>=EVAL) to a transaction. "
+	    "At an error the result's property \"err\" sets to the error value."); }
 
 	void calc( TValFunc *val ) {
 	    string sdb = TBDS::realDBName(val->getS(1));
@@ -86,13 +91,15 @@ class dbReqSQL : public TFunction
 		vector< vector<string> > rtbl;
 		AutoHD<TBD> db = SYS->db().at().nodeAt(sdb,0,'.');
 		db.at().sqlReq(val->getS(2), &rtbl, val->getB(3));
-		for(unsigned i_r = 0; i_r < rtbl.size(); i_r++) {
+		for(unsigned iR = 0; iR < rtbl.size(); iR++) {
 		    TArrayObj *row = new TArrayObj();
-		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++) row->arSet(i_c, rtbl[i_r][i_c]);
-		    rez->arSet(i_r, AutoHD<TVarObj>(row));
+		    for(unsigned iC = 0; iC < rtbl[iR].size(); iC++) {
+			row->arSet(iC, rtbl[iR][iC]);
+			if(iR) row->TVarObj::propSet(rtbl[0][iC], rtbl[iR][iC]);
+		    }
+		    rez->arSet(iR, row);
 		}
-	    }
-	    catch(...){ }
+	    } catch(TError &err)	{ rez->propSet("err", err.cat+":"+err.mess); }
 
 	    val->setO(0, rez);
 	}
@@ -552,6 +559,7 @@ class CRC : public TFunction
 	}
 };
 
+#ifdef HAVE_OPENSSL_MD5_H
 //*************************************************
 //* Message Digest 5                              *
 //*************************************************
@@ -573,6 +581,7 @@ class MD5 : public TFunction
 	    val->setS(0, string((char*)result, MD5_DIGEST_LENGTH));
 	}
 };
+#endif
 
 }
 

@@ -26,24 +26,6 @@ var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 var mainTmId = 0;
 
 /***************************************************
- * strEncode - String encoding.                    *
- ***************************************************/
-function strEncode( vl, tp )
-{
-    var encRez = '';
-    if(!tp || tp == "html")
-	for(var i_enc = 0; i_enc < vl.length; i_enc++)
-	    switch(vl.charAt(i_enc)) {
-		case '&': encRez += '&amp;'; break;
-		case '>': encRez += '&gt;'; break;
-		case '<': encRez += '&lt;'; break;
-		case '"': encRez += '&quot;'; break;
-		default:  encRez += vl.charAt(i_enc);
-	    }
-    return encRez;
-}
-
-/***************************************************
  * pathLev - Path parsing function.                *
  ***************************************************/
 pathLev.off = 0;
@@ -65,7 +47,7 @@ function pathLev( path, level, scan )
 }
 
 /***************************************************
- * noSpace - Get no space string                   *
+ * noSpace - Get no space (trimmed) string         *
  ***************************************************/
 function noSpace( str )
 {
@@ -76,37 +58,13 @@ function noSpace( str )
 }
 
 /***************************************************
- * nodeText - Get DOM node text                    *
+ * i2s - integer to string                         *
  ***************************************************/
-function nodeText( node )
+function i2s( vl, base, len )
 {
-    var rez = '';
-    for(var i = 0; i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeType == 3) rez += node.childNodes[i].data;
+    rez = vl.toString(base);
+    if(len) while(rez.length < len) rez = "0"+rez;
     return rez;
-}
-
-/***************************************************
- * setNodeText - Set DOM node text                 *
- ***************************************************/
-function setNodeText( node, val )
-{
-    if(!node) return;
-    for(var i = 0; i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeType == 3)
-	{ node.childNodes[i].data = val; return; }
-    node.appendChild(node.ownerDocument.createTextNode(val));
-}
-
-/*****************************************************
- * nodeTextByTagId - Get DOM node by tag name and id *
- *****************************************************/
-function nodeTextByTagId( node, tag, avl )
-{
-    for(var i = 0; i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeName == tag && node.childNodes[i].getAttribute('id') == avl)
-	    return nodeText(node.childNodes[i]);
-    return '';
 }
 
 /***************************************************
@@ -301,7 +259,7 @@ function getWAttr( wId, attr )
     var rNode = servGet(wId,'com=attr&attr='+attr);
     if(!rNode) return null;
 
-    return nodeText(rNode);
+    return rNode.textContent;
 }
 
 /***************************************************
@@ -335,6 +293,24 @@ function getFont( fStr, fSc, opt )
     }
 
     return rez;
+}
+
+/***************************************************
+ * getFontCond( fStr, fSc, opt ) - Parse font          *
+ *  opt - options: 1-punkts; 2-return size         *
+ ***************************************************/
+function getFontCond( fStr, fSc, opt )
+{
+    fontCfg = "";
+    if(fStr) {
+	allFnt = fStr.split(" ");
+	if(allFnt.length >= 3 && parseInt(allFnt[2])) fontCfg += "bold ";
+	if(allFnt.length >= 4 && parseInt(allFnt[3])) fontCfg += "italic ";
+	if(allFnt.length >= 2) fontCfg += (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0) + (opt==1?"pt ":"px ");
+	if(allFnt.length >= 1) fontCfg += allFnt[0].replace(/_/g," ") + " ";
+    }
+
+    return fontCfg;
 }
 
 /***************************************************
@@ -412,7 +388,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	}
     }
 
-    //Create or replace main page
+    //Create or replace the main page
     if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
     if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
     if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
@@ -423,8 +399,15 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	}
 	this.addr  = pgId;
 	this.place = document.createElement('div');
-	this.place.setAttribute('id','mainCntr');
-	this.makeEl(servGet(pgId,'com=attrsBr'),false,true);
+	this.place.setAttribute('id', 'mainCntr');
+
+	//Get and activate for specific attributes to the master-page
+	servSet("/UI/VCAEngine"+this.addr, 'com=com', "<CntrReqs>"+
+	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0'/>"+
+	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Not show status bar' aTp='0'/>"+
+	    "</CntrReqs>", true);
+
+	this.makeEl(servGet(pgId,'com=attrsBr'), false, true);
 	var centerTag = document.createElement('center');
 	centerTag.appendChild(this.place);
 	document.body.appendChild(centerTag);
@@ -450,7 +433,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if(this.pages[i].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;
     //Check for open child page or for unknown and empty source pages open as master page child windows
     if((!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage) {
-	var iPg = new pwDescr(pgId,true,this);
+	var iPg = new pwDescr(pgId, true, this);
 	var attrBrVal = servGet(pgId,'com=attrsBr');
 
 	var winName = null;
@@ -458,67 +441,33 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	var winHeight = 400;
 	for(var i_ch = 0; i_ch < attrBrVal.childNodes.length; i_ch++)
 	    if(attrBrVal.childNodes[i_ch].nodeName != 'el') continue;
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'name') winName = nodeText(attrBrVal.childNodes[i_ch]);
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
-	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
+	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'name') winName = attrBrVal.childNodes[i_ch].textContent;
+	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = parseInt(attrBrVal.childNodes[i_ch].textContent);
+	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = parseInt(attrBrVal.childNodes[i_ch].textContent);
 
 	//New external <div> window create
 	if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH'])) {
 	    iPg.window = document.createElement('table');
-	    iPg.window.setAttribute('cellpadding','2');
-	    iPg.window.setAttribute('cellspacing','0');
-	    iPg.window.setAttribute('border','0');
-	    iPg.window.setAttribute('style','position: absolute; font-size: 12px; z-index: 9999; background-color: #8FA9FF; border: 1px solid darkblue; '+
-		'left: '+((parseInt(masterPage.attrs['geomW'])-winWidth-5)/2)+'px; '+
-		'top: '+((parseInt(masterPage.attrs['geomH'])-winHeight-18)/2)+'px; ');
-	    var wRow = document.createElement('tr');
-	    iPg.window.appendChild(wRow);
-	    wRow.setAttribute('style','cursor: move;');
-	    wRow.win = iPg.window;
-	    wRow.onmousedown = function(e) {
-		if(!e) e = window.event;
-		this.clX = e.clientX; this.clY = e.clientY;
-		return false;
-	    }
-	    wRow.onmouseup = function(e) {
-		if(!e) e = window.event;
-		this.clX = this.clY = null;
-		return false;
-	    }
-	    wRow.onmouseout = wRow.onmouseup;
-	    wRow.onmousemove = function(e) {
-		if(!e) e = window.event;
-		if(this.clX != null) {
-		    this.win.style.left = (parseInt(this.win.style.left)+e.clientX-this.clX)+"px";
-		    this.win.style.top  = (parseInt(this.win.style.top)+e.clientY-this.clY)+"px";
-		    this.clX = e.clientX; this.clY = e.clientY;
-		}
-	    }
-	    var titleBlk = document.createElement('td');
-	    wRow.appendChild(titleBlk);
-	    titleBlk.setAttribute('style','max-width: '+(winWidth-7)+'px; width: '+(winWidth-7)+'px; overflow: hidden; white-space: nowrap;');
-	    titleBlk.setAttribute('title',winName);
-	    titleBlk.appendChild(document.createTextNode(winName));
-	    var closeWin = document.createElement('td');
-	    wRow.appendChild(closeWin);
-	    closeWin.appendChild(document.createTextNode('X'));
-	    closeWin.setAttribute('style','color: red; cursor: pointer;');
-	    closeWin.onclick = function( ) {
-		servSet(this.iPg.addr,'com=pgClose','');
-		document.getElementById('mainCntr').removeChild(this.iPg.window);
-		this.iPg.pwClean();
-		delete this.iPg.parent.pages[this.iPg.addr];
-	    }
-	    closeWin.iPg = iPg;
-	    wRow = document.createElement('tr');
-	    iPg.window.appendChild(wRow);
-	    var wCntCell = document.createElement('td');
-	    wRow.appendChild(wCntCell);
-	    wCntCell.setAttribute('colspan','2');
-	    wCntCell.setAttribute('align','center');
-	    iPg.place = document.createElement('div');
-	    wCntCell.appendChild(iPg.place);
+	    iPg.window.iPg = iPg;
+	    iPg.window.id = "gen-pnl-dlg";
+	    iPg.window.setAttribute('cellspacing', '0');
+	    iPg.window.setAttribute('style','left: '+((parseInt(masterPage.attrs['geomW'])-winWidth-5)/2)+'px; '+
+					    'top: '+((parseInt(masterPage.attrs['geomH'])-winHeight-18)/2)+'px; ');
+	    iPg.window.innerHTML = "<tr class='hd' onmousedown='this.clX = event.clientX; this.clY = event.clientY; return false;' "+
+		"onmouseup='this.clX = this.clY = null; return false;' onmouseout='this.onmouseup()' "+
+		"onmousemove='if(this.clX != null) { "+
+		" this.offsetParent.style.left = (parseInt(this.offsetParent.style.left)+event.clientX-this.clX)+\"px\"; "+
+		" this.offsetParent.style.top  = (parseInt(this.offsetParent.style.top)+event.clientY-this.clY)+\"px\"; "+
+		" this.clX = event.clientX; this.clY = event.clientY; }'>"+
+		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
+		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
+		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose\",\"\"); "+
+		"   this.offsetParent.iPg.pwClean(); "+
+		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
+		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);'>X</td></tr>\n"+
+		"<tr><td colspan='2'><div/></td></tr>";
 	    document.getElementById('mainCntr').appendChild(iPg.window);
+	    iPg.place = iPg.window.rows[1].cells[0].children[0];
 	}
 	//New external window create
 	else {
@@ -587,8 +536,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	for(var j = 0; j < pgBr.childNodes.length; j++) {
 	    if(pgBr.childNodes[j].nodeName != 'el') continue;
 	    var i = pgBr.childNodes[j].getAttribute('id');
-	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != nodeText(pgBr.childNodes[j]))) margBrdUpd = true;
-	    var curAttr = nodeText(pgBr.childNodes[j]);
+	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != pgBr.childNodes[j].textContent)) margBrdUpd = true;
+	    var curAttr = pgBr.childNodes[j].textContent;
 	    this.attrsMdf[i] = !this.attrs[i] || this.attrs[i] != curAttr;
 	    this.attrs[i] = curAttr;
 	    newAttr = true;
@@ -613,6 +562,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
 	}
 	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
+
+	// Calculation of the main window/page scale
+	if(this == masterPage) {
+	    var geomW = parseFloat(this.attrs['geomW']);
+	    var geomH = parseFloat(this.attrs['geomH']);
+	    wx_scale = Math.max(1, window.innerWidth/geomW);
+	    wy_scale = Math.max(1, window.innerHeight/geomH);
+	    if(parseInt(this.attrs['keepAspectRatio']))
+		wx_scale = wy_scale = Math.min(wx_scale, wy_scale);
+	}
 
 	var xSc = this.xScale(true);
 	var ySc = this.yScale(true);
@@ -648,16 +607,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr,true);
 
+	var isPrim = true;
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
 	    if(this.pg) {
 		elStyle += 'background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
 		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is no permitted.</div>";
 	    }
+	    isPrim = false;
 	}
 	else if(this.attrs['root'] == 'ElFigure') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    var toInit = !this.place.childNodes.length;
 	    var figObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
 	    figObj.width = geomW; figObj.height = geomH;
@@ -695,24 +653,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Box') {
 	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
-	    backStyle = '';
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		backStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])   backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    if(this == masterPage) document.body.style.cssText = parseInt(this.attrs['bordWidth']) ? '' : backStyle;
-	    elStyle += backStyle;
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
-	    switch(parseInt(this.attrs['bordStyle'])) {
-		case 1: elStyle += 'border-style: dotted; '; break;
-		case 2: elStyle += 'border-style: dashed; '; break;
-		case 3: elStyle += 'border-style: solid; ';  break;
-		case 4: elStyle += 'border-style: double; '; break;
-		case 5: elStyle += 'border-style: groove; '; break;
-		case 6: elStyle += 'border-style: ridge; ';  break;
-		case 7: elStyle += 'border-style: inset; ';  break;
-		case 8: elStyle += 'border-style: outset; '; break;
-	    }
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
 	    {
@@ -748,15 +689,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return false; };
 	}
 	else if(this.attrs['root'] == 'Text') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
-	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
 	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
-		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; line-height: 1; white-space: pre-line; ';
+		var spanStyle = "display: table-cell; width: "+geomW+"px; height: "+geomH+"px; line-height: 1; white-space: "+(parseInt(this.attrs["wordWrap"])?"pre-wrap":"pre")+"; ";
 		switch(txtAlign&0x3) {
 		    case 0: spanStyle += 'text-align: left; ';		break;
 		    case 1: spanStyle += 'text-align: right; ';		break;
@@ -769,7 +706,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    case 2: spanStyle += 'vertical-align: middle; ';	break;
 		}
 		if(parseInt(this.attrs['orient']) != 0) spanStyle += "transform: rotate("+parseInt(this.attrs['orient'])+"deg); ";
-		spanStyle += getFont(this.attrs['font'], Math.min(xSc,ySc));
+		spanStyle += getFont(this.attrs['font'], Math.min(xSc, ySc));
 		spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
 		var txtVal = this.attrs['text'];
 		for(var i = 0; i < parseInt(this.attrs['numbArg']); i++) {
@@ -795,33 +732,25 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
 		}
-		//var txtVal1 = '';
-		//for(var j = 0; j < txtVal.length; j++)
-		//    if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
-		// txtVal.replace(/\n/g,'<br />');
-		// while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
-		//this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
 		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal+"</span>";
 	    //}
 	    //else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
-	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
+	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(3)+"&ySc="+ySc.toFixed(3)+"'/>";
 
 	    this.place.wdgLnk = this;
 	    if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
 	    else this.place.onclick = '';
 	}
 	else if(this.attrs['root'] == 'Media') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
-	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
-	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.childNodes.length <= 1) ||
-					  (!parseInt(this.attrs['areas']) && this.place.childNodes.length > 1))
-		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+	    this.place.className = "Media";
+	    elStyle += 'border-width: '+this.attrs['bordWidth']+'px; ';
+	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.children.length <= 1) ||
+					  (!parseInt(this.attrs['areas']) && this.place.children.length > 1) ||
+					  ((this.attrsMdf["src"] || this.attrsMdf["fit"]) && this.attrs['fit'] != 1))
+		while(this.place.children.length) this.place.removeChild(this.place.children[0]);
 
-	    var toInit = !this.place.childNodes.length;
-	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
+	    var toInit = !this.place.children.length;
+	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.children[0];
 	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || !pgBr) {
 		medObj.src = this.attrs['src'].length ? "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'] : "";
 		medObj.hidden = !this.attrs['src'].length;
@@ -832,20 +761,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(this.attrs['src'].length) medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}
-		else {
-		    src_ = medObj.src; medObj.src = '';	//For the image reload cause
-		    medObj.setAttribute('width',''); medObj.setAttribute('height','');
-		    medObj.onload = function() {
-			var cWdth = this.width; var cHeight = this.height;
-			this.width = cWdth * this.wdgLnk.xScale(true);
-			this.height = cHeight * this.wdgLnk.yScale(true);
-		    }
-		    medObj.src = src_;
+		else medObj.onload = function() {
+		    cWdth = this.width;
+		    cHeight = this.height;
+		    this.width = cWdth * this.wdgLnk.xScale(true);
+		    this.height = cHeight * this.wdgLnk.yScale(true);
+		    //this.style.cssText = "top: "+((this.parentNode.height-this.height)/2)+"px; "+
+		    //				"left: "+((this.parentNode.width-this.width)/2)+"px; ";
 		}
 	    }
 	    if(elWr && (toInit || this.attrsMdf["areas"])) {
-		var mapObj = toInit ? this.place.ownerDocument.createElement('map') : this.place.childNodes[1];
-		while(mapObj.childNodes.length) mapObj.removeChild(mapObj.childNodes[0]);
+		var mapObj = toInit ? this.place.ownerDocument.createElement('map') : this.place.children[1];
+		while(mapObj.children.length) mapObj.removeChild(mapObj.children[0]);
 		for(var i = 0; i < parseInt(this.attrs['areas']); i++) {
 		    var arObj = this.place.ownerDocument.createElement('area');
 		    switch(parseInt(this.attrs['area'+i+'shp'])) {
@@ -876,21 +803,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	else if(this.attrs['root'] == 'FormEl' && !this.place.isModify) {
-	    //this.place.className = "FormEl";	//Move to the proper style after HTML code moving to different file.
+	    this.place.className = "FormEl";	//Move to the proper style after HTML code moving to different file.
 	    var elTp = parseInt(this.attrs['elType']);
 	    if(this.attrsMdf['elType'] || this.place.elWr != elWr)
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 
-	    if(this.attrsMdf['font']) {
-		this.place.fontCfg = '';
-		if(this.attrs['font']) {
-		    var allFnt = this.attrs['font'].split(' ');
-		    if(allFnt.length >= 3 && parseInt(allFnt[2])) this.place.fontCfg += 'bold ';
-		    if(allFnt.length >= 4 && parseInt(allFnt[3])) this.place.fontCfg += 'italic ';
-		    if(allFnt.length >= 2) this.place.fontCfg += (parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px ';
-		    if(allFnt.length >= 1) this.place.fontCfg += allFnt[0].replace(/_/g,' ')+' ';
-		}
-	    }
+	    if(this.attrsMdf['font'])	this.place.fontCfg = getFontCond(this.attrs['font'], Math.min(xSc,ySc));
 	    var fntSz = Math.min(geomH,(getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0));
 	    switch(elTp) {
 		case 0:	//Line edit
@@ -899,8 +817,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
 			var geomWint = geomW-4;
-			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
-						'height: '+(fntSz-2)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
+			formObj.className = "LineEd";
+			formObj.style.cssText = 'top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
+						'height: '+(fntSz-2)+'px; font: '+this.place.fontCfg+';';
 		    }
 		    if(formObj.valSet && this.attrsMdf['value']) formObj.valSet(this.attrs['value']);
 		    this.place.view = parseInt(this.attrs['view']);
@@ -913,27 +832,31 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			switch(this.place.view) {
 			    case 1:		//Combo
 				var combImg = this.place.ownerDocument.createElement('img');
-				combImg.src = '/'+MOD_ID+'/img_combar';
-				combImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
+				combImg.className = "cntr"; combImg.src = '/'+MOD_ID+'/img_combar';
+				combImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
 				this.place.appendChild(combImg);
 				formObj.style.width = (geomWint-16)+'px';
 				combImg.onclick = function( ) {
-				    var formObj = this.parentNode.childNodes[0];
-				    var combList = this.ownerDocument.getElementById('#combo');
+				    var formObj = this.parentNode.children[0];
+				    var combList = this.ownerDocument.getElementById('combomenu');
 				    if(!combList) {
 					combList = this.ownerDocument.createElement('div');
-					combList.id = '#combo';
+					combList.id = 'combomenu';
 					combList.appendChild(this.ownerDocument.createElement('select'));
 					combList.childNodes[0].size = '100';
-					combList.childNodes[0].onchange = function( ) {
-					    this.formObj.value = this.options[this.selectedIndex].value;
-					    this.formObj.setModify(true);
+					combList.childNodes[0].onclick = function( ) {
+					    //this.formObj.value = this.options[this.selectedIndex].value;
+					    //this.formObj.setModify(true);
+					    this.formObj.valSet(this.options[this.selectedIndex].value);
+					    this.formObj.chApply();
 					    this.parentNode.style.visibility = 'hidden';
+					    this.parentNode.style.top = "-100px";
 					}
 					combList.childNodes[0].onblur = function( ) {
 					    this.parentNode.style.visibility = 'hidden';
 					    this.parentNode.style.top = "-100px";
 					}
+					combList.onmouseleave = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }
 					this.ownerDocument.body.appendChild(combList);
 				    }
 				    while(combList.childNodes[0].childNodes.length)
@@ -946,11 +869,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					combList.childNodes[0].appendChild(optEl);
 				    }
 				    if(combList.childNodes[0].childNodes.length) {
-					combList.style.cssText = 'position: absolute; visibility : visible; left: '+posGetX(formObj,true)+'px; '+
-							         'top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; width: '+formObj.offsetWidth+'px; '+
-							         'height: '+Math.min(elLst.length*15,70)+'px; border: 0; ';
+					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
+								 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; ';
 					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; '+
-									       'border-width: 2px; font: '+formObj.parentNode.fontCfg+'; padding: 1px;';
+									       'font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
 					combList.childNodes[0].focus();
 				    }
@@ -960,8 +882,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 2: case 3:	//Integer, Real
 				if(this.place.childNodes.length >= 2) break;
 				var spinImg = this.place.ownerDocument.createElement('img');
-				spinImg.src = '/'+MOD_ID+'/img_spinar';
-				spinImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
+				spinImg.className = "cntr"; spinImg.src = '/'+MOD_ID+'/img_spinar';
+				spinImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
 				spinImg.border = '0';
 				formObj.style.width = (geomWint-16)+'px';
 				spinImg.onclick = function(e) {
@@ -976,6 +898,113 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				this.place.appendChild(spinImg);
 				break;
+			    case 4:	break;	//Time
+			    case 5:	//Date
+			    case 6:	//Date and time
+				formObj.onclick = function( ) {
+				    if((cldrDlg=this.ownerDocument.getElementById('clndrdlg'))) cldrDlg.style.visibility = 'hidden';
+				}
+				var cldrImg = this.place.ownerDocument.createElement('img');
+				cldrImg.className = "cntr"; cldrImg.src = '/'+MOD_ID+'/img_combar';
+				cldrImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
+				this.place.appendChild(cldrImg);
+				formObj.style.width = (geomWint-16)+'px';
+				cldrImg.onclick = function( ) {
+				    var formObj = this.parentNode.children[0];
+				    var cldrDlg = this.ownerDocument.getElementById('clndrdlg');
+				    if(!cldrDlg) {
+					cldrDlg = this.ownerDocument.createElement('div');
+					cldrDlg.id = 'clndrdlg';
+					cldrDlg.innerHTML = "<input type='button' value='###Today###'/><select></select><select></select>"+
+					    "<table><tr><th>###Mon###</th><th>###Tue###</th><th>###Wed###</th><th>###Thr###</th><th>###Fri###</th><th class='end'>###Sat###</th><th class='end'>###Sun###</th></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
+					    "</table>";
+					cldrDlg.children[0].onclick = function( ) {
+					    this.parentElement.formObj.valSet((new Date()).getTime()/1000);
+					    this.parentElement.formObj.chApply();
+					    this.parentElement.style.visibility = 'hidden';
+					    this.parentElement.style.top = "-100px";
+					}
+					cldrDlg.children[1].onchange = cldrDlg.children[2].onchange = function( ) {
+					    this.parentElement.tmSet((new Date(parseInt(this.parentElement.children[1].options[this.parentElement.children[1].selectedIndex].value),
+									this.parentElement.children[2].selectedIndex,1)).getTime()/1000);
+					}
+					cldrDlg.daySet = function() {
+					    dlgN = this.offsetParent.parentElement;
+					    dtSrc = new Date(dlgN.formObj.valGet()*1000);
+					    dtSrc.setFullYear(parseInt(dlgN.children[1].options[dlgN.children[1].selectedIndex].value));
+					    dtSrc.setMonth(dlgN.children[2].selectedIndex);
+					    dtSrc.setDate(parseInt(this.textContent));
+					    dlgN.formObj.valSet(dtSrc.getTime()/1000);
+					    dlgN.formObj.chApply();
+					    dlgN.style.visibility = 'hidden';
+					    dlgN.style.top = "-100px";
+					}
+					//Fill and activate the table
+					cldrDlg.tmSet = function(tm) {
+					    var dtCur = new Date();
+					    var dtSet = new Date(parseInt(tm)*1000);
+					    // Years fill
+					    var optLs = ""; hasCur = false;
+					    for(iY = 0; iY < 10; iY++) {
+						iY_ = (dtCur.getFullYear()-iY);
+						if(iY_ != dtSet.getFullYear()) optLs += "<option>"+iY_+"</option>";
+						else { optLs += "<option selected>"+iY_+"</option>"; hasCur = true; }
+					    }
+					    if(!hasCur) optLs += "<option selected>"+dtSet.getFullYear()+"</option>";
+					    this.children[1].innerHTML = optLs;
+					    // Months fill
+					    var optLs = "";
+					    for(iM = 0; iM < 12; iM++) {
+						var mNm = "";
+						if(iM == 0)		mNm = "###January###";
+						else if(iM == 1)	mNm = "###February###";
+						else if(iM == 2)	mNm = "###March###";
+						else if(iM == 3)	mNm = "###April###";
+						else if(iM == 4)	mNm = "###May###";
+						else if(iM == 5)	mNm = "###June###";
+						else if(iM == 6)	mNm = "###July###";
+						else if(iM == 7)	mNm = "###August###";
+						else if(iM == 8)	mNm = "###September###";
+						else if(iM == 9)	mNm = "###October###";
+						else if(iM == 10)	mNm = "###November###";
+						else if(iM == 11)	mNm = "###December###";
+						optLs += "<option"+((iM==dtSet.getMonth())?" selected":"")+">"+mNm+"</option>";
+					    }
+					    this.children[2].innerHTML = optLs;
+					    // Days fill
+					    dtSetMBeg = new Date(dtSet.getFullYear(), dtSet.getMonth(), 1);
+					    maxDayInMonth = 28;
+					    while((new Date(dtSet.getFullYear(),dtSet.getMonth(),maxDayInMonth+1)).getMonth() == dtSet.getMonth() && maxDayInMonth < 31)
+						maxDayInMonth++;
+					    for(iW = 0, iD = 1; iW < 6; iW++)
+						for(iWd = 0; iWd < 7; iWd++) {
+						    tdEl = this.children[3].rows[iW+1].cells[iWd];
+						    if((iW == 0 && iWd < (dtSetMBeg.getDay()-1)) || iD > maxDayInMonth)
+						    { tdEl.innerHTML = ""; tdEl.className = ""; tdEl.onclick = null; continue; }
+						    tdEl.innerHTML = iD;
+						    tdEl.className = "active";
+						    tdEl.onclick = this.daySet;
+						    if(iD == dtSet.getDate()) tdEl.className += " sel";
+						    if(iWd == 5 || iWd == 6) tdEl.className += " end";
+						    iD++;
+						}
+					}
+					this.ownerDocument.body.appendChild(cldrDlg);
+				    }
+				    cldrDlg.onmouseleave = formObj.onclick;
+				    cldrDlg.formObj = formObj;
+				    cldrDlg.tmSet(formObj.valGet());
+				    cldrDlg.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
+					'font: '+formObj.parentNode.fontCfg+'; ';
+				    return false;
+				}
+				break;
 			}
 			formObj.onkeyup = function(e) {
 			    if(!e) e = window.event;
@@ -984,23 +1013,23 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(this.saveVal != this.value) this.setModify(true);
 			}
 			formObj.modify = function( )
-			{ return (this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1].style.visibility == 'visible'); }
+			{ return (this.parentNode.children[this.parentNode.children.length-1].style.visibility == 'visible'); }
 			formObj.setModify = function(on) {
 			    if(on && this.clearTm) this.clearTm = 5;
 			    if(this.modify() == on) return;
-			    var posOkImg = (this.parentNode.view>=1&&this.parentNode.view<=3)?2:1;
-			    var okImg = this.parentNode.childNodes[posOkImg];
+			    var posOkImg = this.parentNode.children.length-1;
+			    var okImg = this.parentNode.children[posOkImg];
 			    if(on) {
 				this.style.width = (parseInt(this.style.width)-16)+'px';
 				if(posOkImg == 2)
-				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)-16)+'px';
+				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-16)+'px';
 				okImg.style.visibility = 'visible';
 				this.wdgLnk.perUpdtEn(true); this.clearTm = 5;
 			    }
 			    else {
 				this.style.width = (parseInt(this.style.width)+16)+'px';
 				if(posOkImg == 2)
-				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)+16)+'px';
+				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+16)+'px';
 				okImg.style.visibility = 'hidden';
 				this.wdgLnk.perUpdtEn(false); this.clearTm = 0;
 			    }
@@ -1010,40 +1039,40 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.valSet = function(val) {
 			switch(this.parentNode.view) {
 			    case 0: case 1: this.value = val; break;
-			    case 2:
+			    case 2:	//Integer
 				var argCfg = this.parentNode.cfg.split(':');
 				this.value = ((argCfg.length>3)?argCfg[3]:'')+
 				    Math.max((argCfg.length>1)?parseInt(argCfg[0]):0,Math.min((argCfg.length>1)?parseInt(argCfg[1]):100,parseInt(val)))+((argCfg.length>4)?argCfg[4]:'');
 				break;
-			    case 3:
+			    case 3:	//Real
 				var argCfg = this.parentNode.cfg.split(':');
 				this.value = ((argCfg.length>3)?argCfg[3]:'')+Math.max((argCfg.length>1)?parseFloat(argCfg[0]):0,Math.min((argCfg.length>1)?parseFloat(argCfg[1]):100,parseFloat(val))).toFixed((argCfg.length>5)?parseInt(argCfg[5]):2)+((argCfg.length>4)?argCfg[4]:'');
 				break;
-			    case 4:
+			    case 4:	//Time
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'hh:mm';
-				var v = (Math.floor(val/3600)%(ap?12:24)).toString(10); rez = rez.replace('hh',(v.length==1)?'0'+v:v); rez = rez.replace('h',v);
-				v = (Math.floor(val/60)%60).toString(10); rez = rez.replace('mm',(v.length==1)?'0'+v:v); rez = rez.replace('m',v);
-				v = (val%60).toString(10); rez = rez.replace('ss',(v.length==1)?'0'+v:v); rez = rez.replace('s',v);
+				var v = (Math.floor(val/3600)%(ap?12:24)).toString(10); rez = rez.replace('hh',i2s(v,10,2)); rez = rez.replace('h',v);
+				v = (Math.floor(val/60)%60).toString(10); rez = rez.replace('mm',i2s(v,10,2)); rez = rez.replace('m',v);
+				v = (val%60).toString(10); rez = rez.replace('ss',i2s(v,10,2)); rez = rez.replace('s',v);
 				if(rez.indexOf('ap') >= 0) { rez = rez.replace('ap',(val>=43200)?'pm':'am'); var ap = true; }
 				if(rez.indexOf('AP') >= 0) { rez = rez.replace('AP',(val>=43200)?'PM':'AM'); var ap = true; }
 				this.value = rez;
 				break;
-			    case 5:
+			    case 5:	//Date
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy';
 				var dt = new Date(parseInt(val)*1000);
-				var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v.length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);
-				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',(v.length==1)?'0'+v:v); rez = rez.replace('MMM',(v.length==1)?'0'+v:v); rez = rez.replace('MM',(v.length==1)?'0'+v:v); rez = rez.replace('M',v);
-				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez = rez.replace('yy',v.substr(2,2));
+				var v = dt.getDate().toString(10); rez = rez.replace('dddd',i2s(v,10,2)); rez = rez.replace('ddd',i2s(v,10,2)); rez = rez.replace('dd',i2s(v,10,2)); rez = rez.replace('d',v);
+				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',i2s(v,10,2)); rez = rez.replace('MMM',i2s(v,10,2)); rez = rez.replace('MM',i2s(v,10,2)); rez = rez.replace('M',v);
+				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',i2s(v,10,4)); rez = rez.replace('yy',i2s(v.substr(2,2),10,2));
 				this.value = rez;
 				break;
-			    case 6:
+			    case 6:	//Date and time
 				var rez = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy hh:mm';
 				var dt = new Date(parseInt(val)*1000);
-				var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v.length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);
-				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',(v.length==1)?'0'+v:v); rez = rez.replace('MMM',(v.length==1)?'0'+v:v); rez = rez.replace('MM',(v.length==1)?'0'+v:v); rez = rez.replace('M',v);
-				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez = rez.replace('yy',v.substr(2,2));
-				v = dt.getHours().toString(10); rez = rez.replace('hh',(v.length==1)?'0'+v:v); rez = rez.replace('h',v);
-				v = dt.getMinutes().toString(10); rez = rez.replace('mm',(v.length==1)?'0'+v:v); rez = rez.replace('m',v);
+				var v = dt.getDate().toString(10); rez = rez.replace('dddd',i2s(v,10,2)); rez = rez.replace('ddd',i2s(v,10,2)); rez = rez.replace('dd',i2s(v,10,2)); rez = rez.replace('d',v);
+				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',i2s(v,10,2)); rez = rez.replace('MMM',i2s(v,10,2)); rez = rez.replace('MM',i2s(v,10,2)); rez = rez.replace('M',v);
+				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',i2s(v,10,4)); rez = rez.replace('yy',i2s(v.substr(2,2),10,2));
+				v = dt.getHours().toString(10); rez = rez.replace('hh',i2s(v,10,2)); rez = rez.replace('h',v);
+				v = dt.getMinutes().toString(10); rez = rez.replace('mm',i2s(v,10,2)); rez = rez.replace('m',v);
 				v = dt.getSeconds().toString(10); rez = rez.replace('ss',(v.length==1)?'0'+v:v); rez = rez.replace('s',v);
 				if(rez.indexOf('ap') >= 0)	{ rez = rez.replace('ap',(val>=43200)?'pm':'am'); var ap = true; }
 				if(rez.indexOf('AP') >= 0)	{ rez = rez.replace('AP',(val>=43200)?'PM':'AM'); var ap = true; }
@@ -1190,19 +1219,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.chApply = function( ) {
 			var val = this.valGet();
 			this.valSet(val);
-			var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1];
 			this.setModify(false);
 			var attrs = new Object(); attrs.value = val; attrs.event = 'ws_LnAccept';
 			setWAttrs(this.wdgLnk.addr,attrs);
 		    }
 		    formObj.chEscape = function( ) {
 			this.value = this.saveVal;
-			var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1];
 			this.setModify(false);
 		    }
 		    var okImg = this.place.ownerDocument.createElement('img');
+		    okImg.className = "ok";
 		    okImg.src = '/'+MOD_ID+'/img_button_ok';
-		    okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-16)/2)+'px; width: 16px; height: 16px; cursor: pointer;';
+		    okImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-16)/2)+'px;';
 		    okImg.onclick = function() { this.parentNode.childNodes[0].chApply(); return false; };
 		    this.place.appendChild(okImg);
 		    formObj.valSet(this.attrs['value']);
@@ -1212,7 +1240,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = toInit ? this.place.ownerDocument.createElement('textarea') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
-			formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
+			formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; font: '+this.place.fontCfg+'; ';
 		    if(this.attrsMdf['value']) formObj.saveVal = formObj.value = this.attrs['value'];
 		    if(!toInit) break;
 		    formObj.disabled = !elWr;
@@ -1304,18 +1332,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
 			    spanObj.innerHTML = this.attrs['name'];
-			    //while(spanObj.childNodes.length) spanObj.removeChild(spanObj.childNodes[0]);
-			    /*txtVal1 = '';
-			    for(var j = 0; j < this.attrs['name'].length; j++) {
-				if(this.attrs['name'].substr(j,2) == '\\n') { txtVal1 += "<br />"; j++; continue; }
-				txtVal1 += strEncode(this.attrs['name'][j]);
-			    }
-			    spanObj.innerHTML = txtVal1;*/
 			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
 			    if(!imgObj.hidden) {
-				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW,geomH)+(!elWr?"&filtr=unact":"");
+				imgObj.className = elWr ? 'active' : 'inactive';
+				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW,geomH);//+(!elWr?"&filtr=unact":"");
 				//imgObj.width = Math.min(geomW, geomH);
 				imgObj.height = Math.min(geomW, geomH);
 				imgObj.style.float = spanObj.disabled ? null : 'left';
@@ -1367,7 +1389,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.place.appendChild(formObj);
 		    }
 		    else {
-			formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
+			formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
 			if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 			if(toInit || this.attrsMdf['font'])	formObj.style.font = this.place.fontCfg;
 			if(toInit || this.attrsMdf['name'])	formObj.value = this.attrs['name'].replace('\\n','\n');
@@ -1378,12 +1400,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(!toInit) break;
 			formObj.style.cursor = elWr ? 'pointer' : '';
 			formObj.disabled = !elWr;
-			formObj.type = 'button';
+			//formObj.type = 'button';
 			formObj.wdgLnk = this;
 			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 			formObj.style.padding = "0";
 			this.place.appendChild(formObj);
-			formObj.value = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
+			formObj.innerText = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
 		    }
 		    break;
 		case 4: case 5:	//Combo box, List
@@ -1391,23 +1413,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
-			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
+			formObj.style.cssText = 'top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
 					    'height: '+((elTp==4)?fntSz:(geomH-4))+'px; width: '+geomW+'px; '+
-					    'border: 1px solid black; font: '+this.place.fontCfg+'; padding: 0; ';
+					    'font: '+this.place.fontCfg+'; ';
+		    formObj.multiple = parseInt(this.attrs['mult']) ? true : null;
 		    if(this.attrsMdf['items'] || this.attrsMdf['value']) {
 			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
-			var selVal = this.attrs['value'];
+			var selVal = this.attrs['value'].split('\n');
 			var elLst = this.attrs['items'].split('\n');
-			var selOk = false;
 			for(var i = 0; i < elLst.length; i++) {
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.appendChild(this.place.ownerDocument.createTextNode(elLst[i]));
-			    if(selVal == elLst[i]) selOk = optEl.defaultSelected=optEl.selected = true;
+			    if((selId=selVal.indexOf(elLst[i])) >= 0) {
+				optEl.defaultSelected = optEl.selected = true;
+				selVal.splice(selId,1);
+			    }
 			    formObj.appendChild(optEl);
 			}
-			if(!selOk && elTp == 4) {
+			for(i = 0; i < selVal.length; i++) {
 			    var optEl = this.place.ownerDocument.createElement('option');
-			    optEl.textContent = selVal;
+			    optEl.textContent = selVal[i];
 			    optEl.selected = optEl.defaultSelected = true;
 			    formObj.appendChild(optEl);
 			}
@@ -1415,7 +1440,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(!toInit) break;
 		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
-		    //f(elTp == 5) formObj.setAttribute('size',100);
 		    if(elTp == 4)
 			formObj.onchange = function( ) {
 			    var attrs = new Object();
@@ -1424,22 +1448,387 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 		    else {
 			formObj.size = 100;
-			formObj.onchange = function( ) {
+			formObj.onclick = function( ) {
 			    var attrs = new Object();
-			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange';
-			    setWAttrs(this.wdgLnk.addr,attrs);
+			    if(this.selectedIndex) attrs.value = this.options[this.selectedIndex].value;
+			    else {
+				attrs.value = "";
+				for(iO = 0; iO < this.options.length; iO++)
+				    if(this.options[iO].selected) attrs.value += (attrs.value.length?"\n":"") + this.options[iO].value;
+			    }
+			    attrs.event = 'ws_ListChange';
+			    setWAttrs(this.wdgLnk.addr, attrs);
 			}
 		    }
 		    this.place.appendChild(formObj);
 		    break;
+		case 6: case 7:	//Slider and Scroll bar
+		    isProgr = false;	//(elTp == 7);
+		    var toInit = !this.place.children.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.children[0];
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['value']) formObj.value = parseInt(this.attrs['value']);
+		    formObj.vOr = false;
+		    if(toInit || this.attrsMdf['cfg']) {
+			cfgLst = this.attrs['cfg'].split(':');
+			formObj.vOr = (cfgLst.length && parseInt(cfgLst[0]));
+			formObj.setAttribute("orient", formObj.vOr?"vertical":"");
+			formObj.setAttribute("min", (cfgLst.length > 1)?parseInt(cfgLst[1]):0);
+			formObj.setAttribute("max", (cfgLst.length > 2)?parseInt(cfgLst[2]):100);
+			formObj.setAttribute("step", (cfgLst.length > 3)?parseInt(cfgLst[3]):1);
+		    }
+		    if(!toInit) break;
+		    formObj.type = 'range';
+		    formObj.disabled = !elWr;
+		    formObj.wdgLnk = this;
+		    formObj.style.cssText = "width: "+(formObj.vOr?16:(isProgr?geomW-2*16:geomW))+"px; "+
+			"height: "+(formObj.vOr?(isProgr?geomH-2*16:geomH):16)+"px; ";
+		    formObj.onclick = formObj.onkeyup = function( ) {
+			if(this.value == parseInt(this.wdgLnk.attrs['value']))	return;
+			var attrs = new Object();
+			attrs.value = this.value; attrs.event = 'ws_SliderChange';
+			setWAttrs(this.wdgLnk.addr, attrs);
+			this.defaultValue = this.value;
+			//return true;
+		    }
+		    this.place.appendChild(formObj);
+		    break;
+		case 8:	//Tree
+		    this.place.className += " Tree";
+		    if(elWr) this.place.className += " active";
+		    var toInit = !this.place.children.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('ul') : this.place.children[0];
+		    formObj.wdgLnk = this;
+		    formObj.elWr = elWr;
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['font']) {
+			formObj.style.cssText = 'font: '+this.place.fontCfg+'; font-style: italic; ';
+			if(getFont(this.attrs['font'],Math.min(xSc,ySc),2) > 14) formObj.style.cssText += "font-size: 14px;"
+		    }
+		    //Events and the processings init
+		    if(toInit) {
+			formObj.finish = function( lit, selIt ) {
+			    if(selIt && !selIt.length) return false;
+			    var cnt = lit ? lit.children[2] : this;
+			    for(var iIt = cnt.children.length-1; iIt >= 0; iIt--) {
+				var oIt = cnt.children[iIt];
+				if(selIt) {
+				    if(selIt == oIt.itPath) { oIt.classList.add("select"); this.mSelIt = oIt; return true; }
+				    if(this.finish(oIt,selIt)) oIt.itExp = true;
+				}
+				else {
+				    if(oIt.itMdf != this.itMdf) { cnt.removeChild(oIt); continue; }
+				    this.finish(oIt);
+				    oIt.children[2].style.backgroundImage = (oIt!=cnt.lastChild?"url(/"+MOD_ID+"/img_treeLine)":"");
+				}
+				isExpandable = oIt.children[2].children.length;
+				oIt.children[0].src = "/"+MOD_ID+"/img_tree"+
+				    (isExpandable?(oIt.itExp?"Minus":"Plus"):"")+
+				    "Up"+(oIt!=cnt.lastChild?"Down":"");
+				if(isExpandable) oIt.children[2].style.display = oIt.itExp ? "" : "none";
+				if(isExpandable) oIt.classList.add("expandable"); else oIt.classList.remove("expandable");
+				if(selIt && this.mSelIt) return true;
+			    }
+			    return false;
+			}
+			formObj.expand = function( lit ) {
+			    if(!lit || !lit.children[2].children.length) return;
+			    lit.itExp = !lit.itExp;
+			    lit.children[2].style.display = lit.itExp ? "" : "none";
+			    lit.children[0].src = "/"+MOD_ID+"/img_tree"+(lit.itExp?"Minus":"Plus")+"Up"+(lit!=lit.parentNode.lastChild?"Down":"");
+			}
+			formObj.selIt = function( ipath, sendEv ) {
+			    if(sendEv) {
+				if(!ipath.length) return;
+				attrs = new Object();
+				attrs.value = ipath;
+				attrs.event = 'ws_TreeChange';
+				setWAttrs(this.wdgLnk.addr, attrs);
+			    }
+			    if(this.mSelIt) { this.mSelIt.classList.remove("select"); this.mSelIt = null; }
+			    this.finish(null, ipath);
+			}
+		    }
+		    //Processing for fill and changes
+		    if(toInit || this.attrsMdf['items']) {
+			formObj.itMdf = formObj.itMdf ? (formObj.itMdf+1) : 1;
+			var elLst = this.attrs['items'].split('\n');
+			var cur_it = null;
+			for(iEl = 0; iEl < elLst.length; iEl++) {
+			    ipath = elLst[iEl];
+			    for(lev = 0, pathLev.off = 0; (item=pathLev(ipath,0,true)).length; lev++) {
+				if(lev == 0) {
+				    for(cur_it = null, iR = 0; !cur_it && iR < formObj.children.length; iR++)
+					if(formObj.children[iR].children[1].innerText == item) cur_it = formObj.children[iR];
+				    if(!cur_it) formObj.appendChild((cur_it=this.place.ownerDocument.createElement('li')));
+				    cur_it.itMdf = formObj.itMdf;
+				}
+				else {
+				    for(t_it = null, iR = 0; !t_it && iR < cur_it.children[2].children.length; iR++)
+					if(cur_it.children[2].children[iR].children[1].innerText == item) t_it = cur_it.children[2].children[iR];
+				    if(!t_it) cur_it.children[2].appendChild((t_it=this.place.ownerDocument.createElement('li')));
+				    cur_it = t_it;
+				    cur_it.itMdf = formObj.itMdf;
+				}
+				if(!cur_it.children.length) {
+				    cur_it.innerHTML = "<img onclick='this.parentNode.formObj.expand(this.parentNode)'/>"+
+							"<span onclick='this.parentNode.formObj.selIt(this.parentNode.itPath,true)'>"+item+"</span><ul\>";
+				    cur_it.formObj = formObj;
+				}
+			    }
+			    cur_it.classList.add("selectable");
+			    cur_it.itPath = ipath;
+			}
+			formObj.finish();
+		    }
+		    if(toInit || this.attrsMdf['value'] || this.attrsMdf['items']) formObj.selIt(this.attrs['value']);
+		    if(toInit) this.place.appendChild(formObj);
+		    break;
+		case 9:	//Table
+		    this.place.className += " Table";
+		    if(elWr) this.place.className += " active";
+		    var toInit = !this.place.children.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('table') : this.place.children[0];
+		    formObj.wdgLnk = this;
+		    formObj.elWr = elWr;
+		    //Events and the processings init
+		    if(toInit) {
+			formObj.onclick = function( ) {
+			    if(this.nodeName == "TABLE" || !(elTbl=this.offsetParent) || !elTbl.elWr) return true;
+			    attrs = null;
+			    if(elTbl.oSel == "row" && this.parentNode.rowIndex > 0) {
+				elTbl.selIt(this.parentNode.rowIndex);
+				attrs = new Object();
+				attrs.value = elTbl.getVal(this.parentNode.rowIndex-1, elTbl.oKeyID);
+				if(this.parentNode.cells[elTbl.oKeyID+1].outTp == "b")
+				    attrs.value = (attrs.value == "true") ? 1 : 0;
+			    }
+			    else if(elTbl.oSel == "col" && this.cellIndex > 0) {
+				elTbl.selIt(null, this.cellIndex);
+				attrs = new Object();
+				attrs.value = elTbl.getVal(elTbl.oKeyID, this.cellIndex-1);
+				if(elTbl.tBodies[0].rows[elTbl.oKeyID].cells[this.cellIndex].outTp == "b")
+				    attrs.value = (attrs.value == "true") ? 1 : 0;
+			    }
+			    else if(this.parentNode.rowIndex > 0 && this.cellIndex > 0) {
+				elTbl.selIt(this.parentNode.rowIndex, this.cellIndex);
+				attrs = new Object();
+				if(elTbl.oSel == "cell") {
+				    attrs.value = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
+				    if(this.outTp == "b") attrs.value = (attrs.value == "true") ? 1 : 0;
+				} else attrs.value = (this.parentNode.rowIndex-1) + ":" + (this.cellIndex-1);
+			    }
+			    if(attrs) { attrs.event = 'ws_TableChangeSel'; setWAttrs(elTbl.wdgLnk.addr, attrs); }
+			}
+			formObj.ondblclick = function( ) {
+			    if(this.nodeName == "TABLE" || !(elTbl=this.offsetParent) || !elTbl.elWr || !this.isEdit) return true;
+			    if(this.isEnter) {
+				this.innerHTML = this.svInnerHTML;
+				this.isEnter = false; elTbl.edIt = null;
+			    }
+			    else {
+				if(elTbl.edIt) { elTbl.edIt.innerHTML = elTbl.edIt.svInnerHTML; elTbl.edIt.isEnter = false; }
+				this.isEnter = true; elTbl.edIt = this;
+				this.svInnerHTML = this.innerHTML;
+
+				if(this.outTp == "b") {
+				    tVl = (elTbl.getVal(this.parentNode.rowIndex-1,this.cellIndex-1) == "true");
+				    this.innerHTML = "<input type='checkbox'/>";
+				    this.firstChild.checked = tVl;
+				    this.firstChild.onclick = function( ) {
+					this.parentNode.offsetParent.setVal((this.checked?1:0),
+					    this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+				    }
+				}
+				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s") {
+				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
+				    this.innerHTML = "<input/>";
+				    this.firstChild.value = tVl;
+				    this.firstChild.onkeyup = function(e) {
+					e = e ? e : window.event;
+					if(e.keyCode == 13)
+					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					if(e.keyCode == 27) {
+					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
+					    this.parentNode.innerHTML = this.parentNode.svInnerHTML;
+					}
+					return true;
+				    }
+				} else { this.isEnter = false; elTbl.edIt = null; }
+			    }
+			    //   Prevent for wrong selection
+			    if(window.getSelection) window.getSelection().removeAllRanges();
+			    else if(document.selection) document.selection.empty();
+			    return false;
+			}
+			formObj.selIt = function( row, col ) {
+			    //Restore saved
+			    if(this.svRow || this.svCol) {
+				if(!this.svRow)
+				    this.tHead.rows[0].cells[this.svCol].style.backgroundColor =
+						this.tHead.rows[0].cells[this.svCol].svBackgroundColor;
+				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?this.svRow-1:this.tBodies[0].rows.length-1); iR++)
+				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++)
+					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor =
+						this.tBodies[0].rows[iR].cells[iC].svBackgroundColor;
+			    }
+			    //Set new
+			    if(row || col) {
+				if(!row) {
+				    this.tHead.rows[0].cells[col].svBackgroundColor = this.tHead.rows[0].cells[col].style.backgroundColor;
+				    this.tHead.rows[0].cells[col].style.backgroundColor = "LightBlue";
+				}
+				for(iR = (row?row-1:0); iR <= (row?row-1:this.tBodies[0].rows.length-1); iR++)
+				    for(iC = (col?col:0); iC <= (col?col:this.tBodies[0].rows[iR].cells.length-1); iC++) {
+					this.tBodies[0].rows[iR].cells[iC].svBackgroundColor = this.tBodies[0].rows[iR].cells[iC].style.backgroundColor;
+					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor = "LightBlue";
+				    }
+			    }
+			    this.svRow = row; this.svCol = col;
+			}
+			formObj.getVal = function( row, col ) {
+			    tit = this.tBodies[0].rows[row].cells[col+1];
+			    return tit.children.length ? tit.innerText.slice(1) : tit.innerText;
+			}
+			formObj.setVal = function( val, row, col ) {
+			    tit = this.tBodies[0].rows[row].cells[col+1];
+			    if(tit.isEnter) {
+				tit.innerHTML = tit.svInnerHTML;
+				attrs = new Object(); attrs.set = val; attrs.event = "ws_TableEdit_"+col+"_"+row;
+				setWAttrs(this.wdgLnk.addr, attrs);
+				tit.isEnter = false; this.edIt = null;
+			    }
+			    else {
+				switch(tit.outTp) {
+				    case 'b': val = parseInt(val) ? "true" : "false";	break;
+				    case 'i': val = parseInt(val);	break;
+				    case 'r': val = parseFloat(val);	break;
+				}
+				tit.innerText = val;
+			    }
+			}
+		    }
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
+		    // Processing for fill and changes
+		    if(toInit || this.attrsMdf['items']) {
+			hdrPresent = false, maxCols = 0, maxRows = 0;
+			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
+			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl") formObj.innerHTML = "";
+			else {
+			    if(toInit || !formObj.children.length) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
+			    rClr = null, rClrTxt = null, rFnt = null;
+			    for(iR = 0, iRR = 0, iCh = 0; iCh < tX.children.length || iR < formObj.tBodies[0].rows.length; iCh++) {
+				tR = (iCh < items.children[0].children.length) ? items.children[0].children[iCh] : null;
+				isH = false, hit = null, tit = null;
+				if(tR && !((isH=(tR.nodeName=="h")) || tR.nodeName == "r")) continue;
+				if(!isH && iR >= formObj.tBodies[0].rows.length)
+				    formObj.tBodies[0].appendChild(this.place.ownerDocument.createElement('tr'));
+				if(!isH && tR) { rClr = tR.getAttribute("color"); rClrTxt = tR.getAttribute("colorText"); rFnt = tR.getAttribute("font"); }
+				for(iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR.children.length) || iC < formObj.tHead.children.length; ) {
+				    tC = (tR && iCh1 < tR.children.length) ? tR.children[iCh1] : null;
+				    if(iC >= formObj.tHead.rows[0].cells.length)
+					formObj.tHead.rows[0].appendChild(this.place.ownerDocument.createElement('th'));
+				    hit = formObj.tHead.rows[0].cells[iC];
+				    hit.onclick = formObj.onclick;
+				    if(isH) {	//Header process
+					if(iC == 0) { hit.innerText = '*'; iC++; continue; }
+					hit.innerText = tC ? tC.textContent : "";
+					if(tC) {
+					    if(!(wVl=tC.getAttribute("width"))) hit.style.width = ""
+					    else if(wVl.indexOf("%") >= 0)	hit.style.width = parseInt(wVl) + "%";
+					    else hit.style.width = (parseInt(wVl)*xSc) + "px";
+					    hit.outEdit = parseInt(tC.getAttribute("edit"));
+					    hit.outColor = tC.getAttribute("color");
+					    hit.outColorText = tC.getAttribute("colorText");
+					    hit.outFont = tC.getAttribute("font");
+					    hit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
+					    //if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
+					}
+				    }
+				    else {	//Rows content process
+					if(iC >= formObj.tBodies[0].rows[iR].cells.length)
+					    formObj.tBodies[0].rows[iR].appendChild(this.place.ownerDocument.createElement(iC==0?'th':'td'));
+					tit = formObj.tBodies[0].rows[iR].cells[iC];
+					tit.onclick = formObj.onclick;
+					if(iC == 0) { tit.innerText = iR+1; iC++; continue; }
+					else tit.ondblclick = formObj.ondblclick;
+					// Value
+					if(tC) { tit.outTp = tC.nodeName; formObj.setVal(tC.textContent, iR, iC-1); }
+					// Visibility
+					tit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
+					// Back color
+					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
+					    tit.style.backgroundColor = getColor(wVl);
+					else tit.style.backgroundColor = null;
+					// Text font and color
+					if((tC && (wVl=tC.getAttribute("colorText"))) || (wVl=hit.outColorText) || (wVl=rClrTxt))
+					    tit.style.color = getColor(wVl);
+					else tit.style.color = null;
+					if((tC && (wVl=tC.getAttribute("font"))) || (wVl=hit.outFont) || (wVl=rFnt))
+					    tit.style.font = getFontCond(wVl, Math.min(xSc,ySc));
+					else tit.style.font = null;
+					// Cell image
+					if(tC && (wVl=tC.getAttribute("img")))
+					    tit.innerHTML = "<img src='/"+MOD_ID+this.addr+"?com=res&val="+wVl+"'/> " + tit.innerText;
+					// Modify set
+					if(hit.outEdit || (tC && (wVl=tC.getAttribute("edit")) && parseInt(wVl))) tit.isEdit = true;
+					else tit.isEdit = false;
+				    }
+				    if(tC)	{ ++iCR; maxCols = Math.max(maxCols, iCR); }
+				    iC++; iCh1++;
+				}
+				if(!isH) {
+				    if(tR)	{ ++iRR; maxRows = Math.max(maxRows, iRR); }
+				    iR++;
+				} else hdrPresent = true;
+			    }
+			    // Generic properties set
+			    formObj.oKeyID = (wVl=tX.getAttribute("keyID")) ? parseInt(wVl) : 0;
+			    formObj.oSel = tX.getAttribute("sel");
+			    if(formObj.oSel == "row" && formObj.oKeyID)		formObj.oKeyID = Math.min(formObj.oKeyID, maxCols-1);
+			    else if(formObj.oSel == "col" && formObj.oKeyID)	formObj.oKeyID = Math.min(formObj.oKeyID, maxRows-1);
+
+			    // Remove spare rows and columns; Headers visibility process
+			    formObj.tHead.rows[0].style.display =
+				(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl)) ? "" : "none";
+			    while(formObj.tHead.rows[0].cells.length > (maxCols+1))
+				formObj.tHead.rows[0].removeChild(formObj.tHead.rows[0].lastChild);
+			    wVl = (wVl=tX.getAttribute("vHdrVis")) ? parseInt(wVl) : false;
+			    formObj.tHead.rows[0].cells[0].style.display = wVl ? "" : "none";
+			    for(iR = 0; iR < formObj.tBodies[0].rows.length; iR++) {
+				tR = formObj.tBodies[0].rows[iR];
+				if(tR.cells.length) tR.cells[0].style.display = wVl ? "" : "none";
+				while(tR.cells.length > (maxCols+1)) tR.removeChild(tR.lastChild);
+			    }
+			    while(formObj.tBodies[0].rows.length > maxRows)
+				formObj.tBodies[0].removeChild(formObj.tBodies[0].lastChild);
+
+			    formObj.style.width = ((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) ? "100%" : "";
+			}
+		    }
+		    if(toInit) this.place.appendChild(formObj);
+		    // Set the value
+		    if((toInit || this.attrsMdf['value'] || this.attrsMdf['items']) && formObj.innerHTML.length) {
+			val = this.attrs['value'];
+			if(formObj.oSel == "row" || formObj.oSel == "col" || formObj.oSel == "cell") {
+			    findOK = false;
+			    for(iR = ((formObj.oSel=="col")?formObj.oKeyID:0);
+				    !findOK && iR <= ((formObj.oSel=="col")?formObj.oKeyID:formObj.tBodies[0].rows.length-1); iR++)
+				for(iC = ((formObj.oSel=="row")?formObj.oKeyID+1:1);
+					!findOK && iC <= ((formObj.oSel=="row")?formObj.oKeyID+1:(formObj.tBodies[0].rows[iR].cells.length-1)); iC++) {
+				    cO = formObj.tBodies[0].rows[iR].cells[iC];
+				    valc = formObj.getVal(iR, iC-1); if(cO.outTp == "b") valc = (valc=="true") ? 1 : 0;
+				    if((findOK=(valc==val))) formObj.selIt(((formObj.oSel=="col")?null:iR+1), ((formObj.oSel=="row")?null:iC));
+				}
+			    if(!findOK) formObj.selIt();
+			} else if((sepPos=val.indexOf(":")) > 0) formObj.selIt(parseInt(val.slice(0,sepPos))+1, parseInt(val.slice(sepPos+1))+1);
+		    }
+		    break;
 	    }
 	}
 	else if(this.attrs['root'] == 'Diagram') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    var anchObj = this.place.childNodes[0];
 	    if(!anchObj) {
 		anchObj = this.place.ownerDocument.createElement('a');
@@ -1466,16 +1855,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var dgrObj = anchObj.childNodes[0];
 	    dgrObj.isLoad = false;
 	    dgrObj.onload = function( )	{ this.isLoad = true; }
-	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
+	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
 	    //Disable drag mostly for FireFox
 	    dgrObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 	    this.perUpdtEn(this.isEnabled() && parseInt(this.attrs['trcPer']));
 	}
 	else if(this.attrs['root'] == 'Protocol') {
-	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    else elStyle += 'background-color: white; ';
-	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    if(!this.attrs['backColor'] || !getColor(this.attrs['backColor'],true)) elStyle += 'background-color: white; ';
 	    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
 	    geomW -= 6; geomH -= 6;
 
@@ -1586,7 +1972,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			for(var i_req = 0; i_req < rez.childNodes.length; i_req++) {
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
-						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
+						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), rcd.textContent);
 
 			    // Check for dublicates
 			    var isDbl = false;
@@ -1605,7 +1991,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			for(var i_req = rez.childNodes.length-1; i_req >= 0; i_req--) {
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
-						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
+						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), rcd.textContent);
 
 			    // Check for dublicates
 			    var isDbl = false;
@@ -1673,16 +2059,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			for(var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++) {
 			    var celEl = (i_cel>=rowEl.childNodes.length) ? document.createElement('td') : rowEl.childNodes[i_cel];
-			    if(this.col_pos == i_cel) { setNodeText(celEl,i_m); celEl.style.cssText += ' text-align: center; '; }
+			    if(this.col_pos == i_cel) { celEl.textContent = i_m; celEl.style.cssText += ' text-align: center; '; }
 			    else if(this.col_tm == i_cel) {
 				var dt = new Date(this.messList[elPos][0]*1000);
-				setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
-				    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
+				celEl.textContent = dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
+				    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds());
 			    }
-			    else if(this.col_utm == i_cel)	setNodeText(celEl,this.messList[elPos][1]);
-			    else if(this.col_lev == i_cel)	setNodeText(celEl,this.messList[elPos][2]);
-			    else if(this.col_cat == i_cel)	setNodeText(celEl,this.messList[elPos][3]);
-			    else if(this.col_mess == i_cel)	setNodeText(celEl,this.messList[elPos][4]);
+			    else if(this.col_utm == i_cel)	celEl.textContent = this.messList[elPos][1];
+			    else if(this.col_lev == i_cel)	celEl.textContent = this.messList[elPos][2];
+			    else if(this.col_cat == i_cel)	celEl.textContent = this.messList[elPos][3];
+			    else if(this.col_mess == i_cel)	celEl.textContent = this.messList[elPos][4];
 			    if(i_cel >= rowEl.childNodes.length) rowEl.appendChild(celEl);
 			}
 			if(i_m >= (tblB.childNodes.length-1)) tblB.appendChild(rowEl);
@@ -1712,11 +2098,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.appendChild(ifrmObj);
 		}
 
-		ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)+'px; border-style: ridge; border-width: 2px; padding: 5px;';
+		ifrmObj.style.cssText = 'width: '+geomW+'px; height: '+geomH+'px; border-style: ridge; border-width: 0px; padding: 0px;';
+		//ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)+'px; border-style: ridge; border-width: 2px; padding: 5px;';
 		this.perUpdtEn(true);
 	    }
 	}
-	elStyle += 'width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';
+	elStyle += 'width: ' + geomW + 'px; height: ' + geomH + 'px; z-index: ' + this.attrs['geomZ'] + '; margin: ' + elMargin + 'px; ';
 	//Scroll for the included containers correct
 	if(this.inclOpen) {
 	    var geomWpar = parseFloat(this.attrs['geomW'])*this.xScale(true);
@@ -1725,6 +2112,39 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var geomHch = parseFloat(this.pages[this.inclOpen].attrs['geomH'])*this.pages[this.inclOpen].yScale(true);
 	    elStyle += "overflow: "+((geomWch > geomWpar || geomHch > geomHpar) ? 'scroll' : 'hidden')+"; ";
 	}
+	else if(isPrim) {
+	    // Border processing in generic
+	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
+	    switch(parseInt(this.attrs['bordStyle'])) {
+		case 1: elStyle += 'border-style: dotted; '; break;
+		case 2: elStyle += 'border-style: dashed; '; break;
+		case 3: elStyle += 'border-style: solid; ';  break;
+		case 4: elStyle += 'border-style: double; '; break;
+		case 5: elStyle += 'border-style: groove; '; break;
+		case 6: elStyle += 'border-style: ridge; ';  break;
+		case 7: elStyle += 'border-style: inset; ';  break;
+		case 8: elStyle += 'border-style: outset; '; break;
+	    }
+	    // Background processing in generic
+	    backStyle = "";
+	    if(this.attrs['backColor'] && (backOp=getColor(this.attrs['backColor'],true))) {
+		if(backOp == 1) {
+		    backStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+		    if(this.placeTr) this.placeTr.style.cssText = elStyle;
+		}
+		else {
+		    if(!this.placeTr) {
+			this.placeTr = this.place.ownerDocument.createElement('div');
+			this.place.parentNode.appendChild(this.placeTr);
+		    }
+		    this.placeTr.style.cssText = elStyle + 'background-color: '+getColor(this.attrs['backColor'])+'; opacity: '+backOp+"; z-index: "+(parseInt(this.attrs['geomZ'])-1)+"; ";
+		}
+	    }
+	    if(this.attrs['backImg'])	backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    elStyle += backStyle;
+	    if(this == masterPage) document.body.style.cssText = parseInt(this.attrs['bordWidth']) ? '' : backStyle;
+	}
+
 	if(elStyle != this.place.style.cssText)	this.place.style.cssText = elStyle;
 
 	//Generic mouse events process
@@ -1739,8 +2159,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		setWAttrs(el.wdgLnk.addr,'event','key_mouseRels'+evMouseGet(e));
 	    }
 	    this.place.ondblclick = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_mouseDblClick'); return false; }
-	}
-	else this.place.ondblclick = '';
+	} else this.place.ondblclick = '';
 
 	//Context menu setup
 	if(elWr && this.attrs['contextMenu'].length) {
@@ -1771,6 +2190,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(isKonq || isOpera) this.mousedown[this.mousedown.length] = ctxEv;
 	    else this.place.oncontextmenu = ctxEv;
 	}
+	else if(elWr) this.place.oncontextmenu = function(e) { return false; };
 	else this.place.oncontextmenu = null;
 
 	//Common mouse events process
@@ -1815,7 +2235,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    var chEl = pgBr.childNodes[j].getAttribute('id');
 	    if(this.wdgs[chEl]) this.wdgs[chEl].makeEl(pgBr.childNodes[j], false, full, FullTree);
 	    else {
-		var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);
+		var wdgO = new pwDescr(this.addr+'/wdg_'+chEl, false, this);
 		wdgO.place = this.place.ownerDocument.createElement('div');
 		this.place.appendChild(wdgO.place);
 		this.wdgs[chEl] = wdgO;
@@ -1861,7 +2281,7 @@ function perUpdt( )
 	if(!dgrObj.stLoadTm) dgrObj.stLoadTm = (new Date()).getTime();
 	if(dgrObj && (dgrObj.isLoad || ((new Date()).getTime()-dgrObj.stLoadTm) > this.updCntr*3000)) {
 	    dgrObj.isLoad = false;
-	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
+	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(3)+'&ySc='+this.yScale(true).toFixed(3);
 	    dgrObj.stLoadTm = (new Date()).getTime();
 	}
     }
@@ -1904,8 +2324,7 @@ function xScale( full )
     var rez = parseFloat(this.attrs['geomXsc'])
     if(!full) return rez;
     if(!this.pg) return rez*this.parent.xScale(full);
-    // if(this != masterPage) return masterPage.xScale()*rez;
-    return rez;
+    return rez * wx_scale;
 }
 
 function yScale( full )
@@ -1913,8 +2332,7 @@ function yScale( full )
     var rez = parseFloat(this.attrs['geomYsc'])
     if(!full) return rez;
     if(!this.pg) return rez*this.parent.yScale(full);
-    // if(this != masterPage) return masterPage.yScale()*rez;
-    return rez;
+    return rez * wy_scale;
 }
 
 function isEnabled( )
@@ -1973,7 +2391,7 @@ function makeUI( callBackRez )
 	for(var i_p = 0; i_p < pgList.length; i_p++) {
 	    var opPg; var i_ch;
 	    for(i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++)
-		if(pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode.childNodes[i_ch]) == pgList[i_p])
+		if(pgNode.childNodes[i_ch].nodeName == 'pg' && pgNode.childNodes[i_ch].textContent == pgList[i_p])
 		    break;
 	    if(i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[i_p]))) continue;
 	    if(opPg.window) {
@@ -1981,7 +2399,7 @@ function makeUI( callBackRez )
 		else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
 		else {
 		    document.body.removeChild(opPg.window);
-		    masterPage = new pwDescr('',true)
+		    masterPage = new pwDescr('', true)
 		}
 		if(opPg.parent)	delete opPg.parent.pages[pgList[i_p]];
 	    }
@@ -1992,7 +2410,7 @@ function makeUI( callBackRez )
 	pgList = new Array();
 	for(var i = 0; i < pgNode.childNodes.length; i++)
 	    if(pgNode.childNodes[i].nodeName == 'pg') {
-	        var prPath = nodeText(pgNode.childNodes[i]);
+	        var prPath = pgNode.childNodes[i].textContent;
 		//  Check for closed window
 		var opPg = masterPage.findOpenPage(prPath);
 		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
@@ -2077,7 +2495,7 @@ document.body.onmouseup = function(e)
     if(evMouseGet(e) != 'Left') return true;
     var popUpMenu = document.getElementById('popupmenu');
     if(popUpMenu) popUpMenu.style.visibility = 'hidden';
-    return false;
+    //return false;	//!!!! It's buggy on <input type=range> for Chrome
 }
 
 var modelPer = 0;			//Model proc period
@@ -2088,8 +2506,10 @@ var tmCnt = 0;				//Call counter
 var pgList = new Array();		//Opened pages list
 var pgCache = new Object();		//Cached pages' data
 var perUpdtWdgs = new Object();		//Periodic updated widgets register
-var masterPage = new pwDescr('',true);	//Master page create
+var masterPage = new pwDescr('', true);	//Master page create
 var stTmID = null;			//Status line timer identifier
 var stTmMain = null;			//Main cycle start time
+var wx_scale = 1;			//Main window scale for fit, X axis
+var wy_scale = 1;			//Main window scale for fit, Y axis
 
 mainTmId = setTimeout(makeUI, 100);	//First call init

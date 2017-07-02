@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,7 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
     openlog(PACKAGE, 0, LOG_USER);
 
     setenv("LC_NUMERIC", "C", 1);
-    setlocale(LC_ALL,"");
+    setlocale(LC_ALL, "");
     IOCharSet = nl_langinfo(CODESET);
 
 #ifdef HAVE_LIBINTL_H
@@ -63,7 +63,7 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
     else mLang2Code = mLang2Code.substr(0,2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    if(mLang2Code == "en" && (IOCharSet.compare(0,10,"ISO-8859-1")==0 || IOCharSet.compare(0,14,"ANSI_X3.4-1968")==0))
+    if(mLang2Code == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "US-ASCII"))
 	mConvCode = false;
 }
 
@@ -100,7 +100,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     //string sMess = i2s(level) + "|" + categ + " | " + mess;
     string sMess = i2s(level) + "[" + categ + "] " + mess;
 
-    if(mLogDir & DIR_SYSLOG) {
+    if(mLogDir&DIR_SYSLOG) {
 	int level_sys;
 	switch((int8_t)abs(level)) {
 	    case Debug:		level_sys = LOG_DEBUG;	break;
@@ -117,6 +117,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     }
     if(mLogDir&DIR_STDOUT)	fprintf(stdout, "%s %s\n", atm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
     if(mLogDir&DIR_STDERR)	fprintf(stderr, "%s %s\n", atm2s(time(NULL),"%Y-%m-%dT%H:%M:%S").c_str(), sMess.c_str());
+
     if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
 	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
 }
@@ -140,7 +141,8 @@ void TMess::setLang( const string &lng, bool init )
 {
     char *prvLng = NULL;
     if((prvLng=getenv("LANGUAGE")) && strlen(prvLng)) setenv("LANGUAGE", lng.c_str(), 1);
-    else setenv("LC_MESSAGES", lng.c_str(), 1);
+    //else setenv("LC_MESSAGES", lng.c_str(), 1);
+    else setenv("LANG", lng.c_str(), 1);	//!!!! May be use further for the miss environment force set
     setlocale(LC_ALL, "");
 
     IOCharSet = nl_langinfo(CODESET);
@@ -224,6 +226,7 @@ void TMess::load( )
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
 	if(strcasecmp(argCom.c_str(),"h") == 0 || strcasecmp(argCom.c_str(),"help") == 0) return;
+	else if(strcasecmp(argCom.c_str(),"lang") == 0) setLang(argVl, true);
 	else if(strcasecmp(argCom.c_str(),"messlev") == 0) {
 	    int i = atoi(optarg);
 	    if(i >= Debug && i <= Emerg) setMessLevel(i);
@@ -284,4 +287,24 @@ const char *TMess::labTaskPrior( )
 	     "  0         - standard userspace priority;\n"
 	     "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"
 	     "  100...199 - realtime priority level (FIFO), often allowed only for \"root\".");
+}
+
+int TMess::getUTF8( const string &str, int off, int32_t *symb )
+{
+    if(off < 0 || off >= str.size())	return 0;
+    if(!isUTF8() || !(str[off]&0x80)) {
+	if(symb) *symb = (uint8_t)str[off];
+	return 1;
+    }
+    int len = 0;
+    int32_t rez = 0;
+    if((str[off]&0xE0) == 0xC0)		{ len = 2; rez = str[off]&0x1F; }
+    else if((str[off]&0xF0) == 0xE0)	{ len = 3; rez = str[off]&0x0F; }
+    else if((str[off]&0xF8) == 0xF0)	{ len = 4; rez = str[off]&0x07; }
+    if((off+len) > str.size())	return 0;
+    for(int iSmb = 1; iSmb < len; iSmb++)
+	if((str[off+iSmb]&0xC0) != 0x80) return 0;
+	else rez = (rez<<6) | (str[off+iSmb]&0x3F);
+    if(symb) *symb = rez;
+    return len;
 }

@@ -575,7 +575,7 @@ void LibProjProp::selectIco( )
 
     XMLNode req("set");
     req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
-	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64));
+	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
     if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     is_modif = true;
@@ -706,7 +706,7 @@ void LibProjProp::loadMimeData( )
 	setAttr("key_id", mimeDataTable->selectedItems().empty() ?
 	    QFileInfo(fileName).fileName().toStdString() :
 	    mimeDataTable->selectedItems()[0]->text().toStdString())->
-		setText(TSYS::strEncode(string(data.data(),data.size()),TSYS::base64));
+		setText(TSYS::strEncode(string(data.data(),data.size()),TSYS::base64,"\n"));
     if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     tabChanged(1);
@@ -1339,7 +1339,7 @@ void VisItProp::selectIco( )
 
     XMLNode req("set");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
-	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64));
+	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
     if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     is_modif = true;

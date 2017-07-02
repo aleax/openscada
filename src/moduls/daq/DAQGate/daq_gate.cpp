@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.0"
+#define MOD_VER		"1.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to perform the locking of the data sources of the remote OpenSCADA stations in the local ones.")
 #define LICENSE		"GPL2"
@@ -101,13 +101,13 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("ALLOW_DEL_PA",_("Allow automatic remove parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //Parameter type bd structure
-    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("PRM_ADDR",_("Remote parameter address"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
     tpPrmAt(t_prm).fldAdd(new TFld("ATTRS",_("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
     tpPrmAt(t_prm).fldAdd(new TFld("STATS",_("Presenting for stations"),TFld::String,TCfg::NoVal,"10000",""));
     //Set to read only
-    for(unsigned iSz = 0; iSz < tpPrmAt(t_prm).fldSize(); iSz++)
-	tpPrmAt(t_prm).fldAt(iSz).setFlg(tpPrmAt(t_prm).fldAt(iSz).flg()|TFld::NoWrite);
+    //for(unsigned iSz = 0; iSz < tpPrmAt(t_prm).fldSize(); iSz++)
+    //	tpPrmAt(t_prm).fldAt(iSz).setFlg(tpPrmAt(t_prm).fldAt(iSz).flg()|TFld::NoWrite);
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) { return new TMdContr(name, daq_db, this); }
@@ -240,14 +240,14 @@ void TMdContr::enable_( )
 		    /*gPrmLs.push_back(curP.at().ownerPath(true));
 
 		    //  Process included parameters
-		    string prmPath = prmLs[iP], prmPathW;//, iPrmLs;
+		    string prmPath = prmLs[iP], prmPathW = prmPath, prmPathW_;
 		    XMLNode *prmN = req.childGet(2), *prmW;
 		    vector<SPrmsStack> stack;
 		    for(unsigned i_ip = 0; true; ) {
 			if(i_ip >= prmN->childSize()) {
 			    //   Pop from the stack
 			    if(stack.size()) {
-				prmN = stack.back().nd; i_ip = stack.back().pos+1; curP = stack.back().prm;
+				prmN = stack.back().nd; i_ip = stack.back().pos+1; curP = stack.back().prm; prmPathW = stack.back().path;
 				stack.pop_back();
 				continue;
 			    }
@@ -256,18 +256,18 @@ void TMdContr::enable_( )
 
 			prmW = prmN->childGet(i_ip);
 			prmId = prmW->attr("id");
-			prmPathW = prmPath+"/prm_"+prmId;
+			prmPathW_ = prmPathW + "/prm_" + prmId;
 
 			//   Find for the parameter
 			curP.at().list(prmLs1);
 			unsigned iP1 = 0;
-			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW) iP1++;
+			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW_) iP1++;
 			if(iP1 >= prmLs1.size()) {
 			    while(curP.at().present(prmId)) prmId = TSYS::strLabEnum(prmId);
 			    curP.at().add(prmId, owner().tpPrmToId("std"));
 			    curW = curP.at().at(prmId);
 			    curW.at().setName(prmW->text());
-			    curW.at().setPrmAddr(prmPathW);
+			    curW.at().setPrmAddr(prmPathW_);
 			} else curW = curP.at().at(prmId);
 
 			if(!curW.at().enableStat()) {
@@ -279,9 +279,9 @@ void TMdContr::enable_( )
 
 			//   Next level process
 			if(prmW->childSize()) {
-			    stack.push_back(SPrmsStack(prmN,i_ip,curP));
-			    prmN = prmW; i_ip = 0; curP = curW;
-			}else i_ip++;
+			    stack.push_back(SPrmsStack(prmN,i_ip,curP,prmPathW));
+			    prmN = prmW; i_ip = 0; curP = curW; prmPathW = prmPathW_;
+			} else i_ip++;
 		    }*/
 		}
 	    } catch(TError &err) { /*if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str());*/ }
@@ -565,7 +565,7 @@ void *TMdContr::Task( void *icntr )
 		    }
 		}
 
-		//Mark no processed parameters to EVAL
+		//Mark not processed parameters to EVAL
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &prm = cntr.pHd[iP].at();
 		    if(prm.isPrcOK || prm.isEVAL) continue;
@@ -578,7 +578,7 @@ void *TMdContr::Task( void *icntr )
 			vl.at().setS(EVAL_STR, vl.at().arch().freeStat() ? 0 :
 			    vmin(TSYS::curTime(),vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))), true);
 		    }
-		    prm.vlAt("err").at().setS(_("10:Data not allow."),0,true);
+		    prm.vlAt("err").at().setS(_("10:Data is not allowed."),0,true);
 		    prm.isEVAL = true;
 		}
 
@@ -612,10 +612,12 @@ void *TMdContr::Task( void *icntr )
 
 int TMdContr::cntrIfCmd( XMLNode &node )
 {
-    string reqStat = TSYS::pathLev(node.attr("path"),0);
+    string reqStat = TSYS::pathLev(node.attr("path"), 0);
 
+    bool stPresent = false;
     for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
 	if(mStatWork[iSt].first == reqStat) {
+	    stPresent = true;
 	    if(mStatWork[iSt].second.cntr > 0) break;
 	    try {
 		node.setAttr("conTm", enableStat()?"":"1000");	//Set one second timeout to disabled controller for start procedure speed up.
@@ -636,6 +638,7 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		throw;
 	    }
 	}
+    if(!stPresent) node.setAttr("err", TSYS::strMess(_("11:Station missed '%s'."),reqStat.c_str()));
 
     return s2i(node.attr("err"));
 }
@@ -652,7 +655,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable archive access."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable periodic sync."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/STATIONS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
-	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."), NULL);
+	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."), "rows", "2", NULL);
 	ctrMkNode2("fld",opt,-2,"/cntr/cfg/SEL_STAT",_("Append station"),enableStat()?0:RWRW__,"root",SDAQ_ID,
 	    "dest","select", "select","/cntr/cfg/SEL_STAT_lst", NULL);
 	ctrMkNode2("comm",opt,-2,"/cntr/cfg/host_lnk",_("Go to remote stations list configuration"),enableStat()?0:RWRW__,"root",SDAQ_ID,
@@ -835,6 +838,7 @@ void TMdPrm::sync( )
 	    for(unsigned iA = 0; iA < req.childGet(2)->childSize(); iA++) {
 		XMLNode *ael = req.childGet(2)->childGet(iA);
 		als.push_back(ael->attr("id"));
+
 		if(vlPresent(ael->attr("id")))	continue;
 		TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
 		pEl.fldAdd(new TFld(ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
@@ -887,6 +891,33 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	} catch(TError &err) { continue; }
 }
 
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
+{
+    TParamContr::cfgChange(co, pc);
+
+    if(enableStat() && owner().startStat() && co.getS() != pc.getS() && (co.fld().name() == "NAME" || co.fld().name() == "DESCR")) {
+	XMLNode req("set");
+
+	//Send to active reserve station
+	if(owner().redntUse()) {
+	    req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",co.fld().name())->setText(co.getS());
+	    SYS->daq().at().rdStRequest(owner().workId(), req);
+	}
+	//Direct write
+	else {
+	    string scntr;
+	    for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
+		try {
+		    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fserv%2fattr")->
+			childAdd("el")->setAttr("id",co.fld().name())->setText(co.getS());
+		    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(), req.text().c_str());
+		} catch(TError &err) { continue; }
+	}
+    }
+
+    return true;
+}
+
 void TMdPrm::vlArchMake( TVal &val )
 {
     TParamContr::vlArchMake(val);
@@ -927,7 +958,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		XMLNode req("info");
 		for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
 		    try {
-			req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fprm%2fcfg");
+			req.clear()->setAttr("path", scntr+"/DAQ/"+prmAddr()+"/%2fprm%2fcfg");
 			if(owner().cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),req.text().c_str());
 			break;
 		    } catch(TError &err) { continue; }
@@ -962,6 +993,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else TParamContr::cntrCmdProc(opt);
 }
+
+
 
 //******************************************************
 //* TMdVl                                              *

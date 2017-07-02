@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2003-2016 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2003-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -80,15 +80,13 @@ class TModSchedul : public TSubSYS
     private:
 	//Methods
 	string optDescr( );				// Description of config help
-	void ScanDir( const string &Paths, vector<string> &files );//Scan directory for OpenSCADA share libs
-	bool CheckFile( const string &name );		//Check file to OpenSCADA share libs
+	void dirScan( const string &Paths, vector<string> &files );//Scan directory for OpenSCADA share libs
+	bool fileCheck( const string &name );		//Check file to OpenSCADA share libs
 	int  libReg( const string &name );		//Registre present share lib
 	void libUnreg( const string &name );		//Unreg deleted share lib
 	bool chkAllowMod( const string &name );		//Check for allow file to attaching
 
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
-
-	static void SchedTask( union sigval obj );
 
 	//Attributes
 	string	mAllow, mDeny;

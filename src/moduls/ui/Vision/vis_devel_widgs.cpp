@@ -1399,7 +1399,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 
 	// Update libraries data
 	img = QImage();
-	simg = TSYS::strDecode(wlbN->childGet("ico")->text(),TSYS::base64);
+	simg = TSYS::strDecode(wlbN->childGet("ico")->text(), TSYS::base64);
 	img.loadFromData((const uchar*)simg.c_str(),simg.size());
 	if(!img.isNull()) nit->setIcon(0,QPixmap::fromImage(img));
 	nit->setText(0,wlbN->text().c_str());
@@ -1475,7 +1475,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 
 	    //  Update widget's data
 	    img = QImage();
-	    simg = TSYS::strDecode(wdgN->childGet("ico")->text(),TSYS::base64);
+	    simg = TSYS::strDecode(wdgN->childGet("ico")->text(), TSYS::base64);
 	    img.loadFromData((const uchar*)simg.c_str(),simg.size());
 	    if(!img.isNull()) nit_w->setIcon(0,QPixmap::fromImage(img));
 	    nit_w->setText(0,wdgN->text().c_str());
@@ -1546,7 +1546,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		nit_cw = (i_topcwl >= nit_w->childCount()) ? new QTreeWidgetItem(nit_w) : nit_w->child(i_topcwl);
 		//   Update widget's data
 		img = QImage();
-		simg = TSYS::strDecode(cwdgN->childGet("ico")->text(),TSYS::base64);
+		simg = TSYS::strDecode(cwdgN->childGet("ico")->text(), TSYS::base64);
 		img.loadFromData((const uchar*)simg.c_str(),simg.size());
 		if(!img.isNull()) nit_cw->setIcon(0,QPixmap::fromImage(img));
 		nit_cw->setText(0,cwdgN->text().c_str());
@@ -1727,7 +1727,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initi
 	    // Update projects data
 	    req.clear()->setAttr("path","/prj_"+list_pr[i_l]+"/%2fico");
 	    if(!owner()->cntrIfCmd(req)) {
-		simg = TSYS::strDecode(req.text(),TSYS::base64);
+		simg = TSYS::strDecode(req.text(), TSYS::base64);
 		if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		    nit->setIcon(0,QPixmap::fromImage(img));
 	    }
@@ -1793,7 +1793,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initi
 	//   Update page's data
 	req.clear()->setAttr("path",work_wdg+"/pg_"+list_pg[i_p]+"/%2fico");
 	if(!owner()->cntrIfCmd(req)) {
-	    simg = TSYS::strDecode(req.text(),TSYS::base64);
+	    simg = TSYS::strDecode(req.text(), TSYS::base64);
 	    if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 		nit_pg->setIcon(0,QPixmap::fromImage(img));
 	}
@@ -2402,7 +2402,7 @@ void DevelWdgView::makeIcon( )
 
     XMLNode req("set");
     req.setAttr("path",id()+"/%2fwdg%2fcfg%2fico")->
-	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64));
+	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
     if(mainWin()->cntrIfCmd(req))
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
     else emit apply(id());

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 15:32+0200\n"
+"POT-Creation-Date: 2017-07-02 17:54+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -293,11 +293,14 @@ msgstr "Цвет: текст"
 msgid "Checkable"
 msgstr "Переключатель"
 
+msgid "Items"
+msgstr "Элементы"
+
 msgid "Set value"
 msgstr "Установл. значение"
 
-msgid "Items"
-msgstr "Элементы"
+msgid "Multiple selection"
+msgstr "Множественный выбор"
 
 msgid ""
 "Enter text line by template with the char items:\n"
@@ -1078,10 +1081,10 @@ msgid "Elements box widget of the finite visualization."
 msgstr "Виджет группы элементов конечной визуализации."
 
 msgid "Page: open source"
-msgstr "Страница: источник открытия"
+msgstr "Стр.: источник открытия"
 
 msgid "Page: group"
-msgstr "Страница: группа"
+msgstr "Стр.: группа"
 
 msgid "Load project."
 msgstr "Загрузка проекта."
@@ -1167,10 +1170,10 @@ msgid "Create new style"
 msgstr "Создать новый стиль"
 
 msgid "Page: open state"
-msgstr "Страница: открыта"
+msgstr "Стр.: открыта"
 
-msgid "Page: process no opened"
-msgstr "Страница: обрабатывать закрытой"
+msgid "Page: process not opened"
+msgstr "Стр.: обрабатывать не открытой"
 
 msgid "For page can use only Box-based widgets!"
 msgstr "Для страниц может быть использован только основанный на Боксе виджет!"
@@ -1337,15 +1340,6 @@ msgstr "Ошибка вычисления виджета. Обработка о�
 msgid "Process"
 msgstr "Обработка"
 
-msgid "Spent time"
-msgstr "Использовано время"
-
-msgid "Subtree="
-msgstr "Поддерево="
-
-msgid "Item="
-msgstr "Элемент="
-
 msgid "Visual control area engine"
 msgstr "Движок среды визуализации и управления"
 
@@ -1442,16 +1436,8 @@ msgstr "Значение 9"
 msgid "Original widgets"
 msgstr "Базовые виджеты"
 
-#, c-format
-msgid "Load library '%s' time: %f ms."
-msgstr "Время загрузки библиотеки '%s': %f мс."
-
 msgid "Load widgets libraries error."
 msgstr "Ошибка загрузки библиотеки виджетов."
-
-#, c-format
-msgid "Load project '%s' time: %f ms."
-msgstr "Время загрузки проекта '%s': %f мс."
 
 msgid "Load projects error."
 msgstr "Ошибка загрузки проектов."

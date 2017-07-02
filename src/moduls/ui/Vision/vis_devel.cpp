@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org                                                     *
+ *   Copyright (C) 2006-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,10 +32,11 @@
 #include <QWhatsThis>
 #include <QTimer>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QCheckBox>
 #include <QMdiSubWindow>
 
-#include <config.h>
+// #include <config.h>
 #include <tsys.h>
 #include "vis_shapes.h"
 #include "vis_devel_dlgs.h"
@@ -631,7 +631,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     prjTree->updateTree("", NULL, true);//Initial for allow the projects loading on the server side mostly
 
     //Restore main window state
-    string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()),TSYS::base64);
+    string st = TSYS::strDecode(mod->uiPropGet("devWinState",user()), TSYS::base64);
     restoreState(QByteArray(st.data(),st.size()));
     //Restore ToolBars icons size
     for(int i_ch = 0; i_ch < children().size(); i_ch++) {
@@ -654,7 +654,7 @@ VisDevelop::~VisDevelop( )
 
     //Save main window state
     QByteArray st = saveState();
-    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
+    mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,"\n"), user());
 
     //Timers stop
     endRunTimer->stop();
@@ -1262,33 +1262,37 @@ void VisDevelop::visualItEdit( )
 	scrl->setAlignment(Qt::AlignCenter);
 #endif
 	QPalette plt = scrl->palette();
-        plt.setBrush(QPalette::Window,QBrush("grey",Qt::Dense7Pattern));
+        plt.setBrush(QPalette::Window,QBrush("grey", Qt::Dense7Pattern));
 	scrl->setPalette(plt);
 	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
 
-	//Make and place view widget
-	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this,0,scrl);
+	//Make and place widget's view
+	DevelWdgView *vw = new DevelWdgView(ed_wdg, 0, this, 0, scrl);
 	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
 	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string&)));
 
 	scrl->setWidget(vw);
-	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
 	work_space->addSubWindow(scrl);
-	scrl->show();
 
 	//Set window icon
 	XMLNode req("get");
 	req.setAttr("path",ed_wdg+"/%2fico");
 	if(!cntrIfCmd(req)) {
 	    QImage ico_t;
-	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
+	    string simg = TSYS::strDecode(req.text(), TSYS::base64);
 	    if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
 		scrl->parentWidget()->setWindowIcon(QPixmap::fromImage(ico_t));	//parentWidget is QMdiSubWindow
 	}
+
+	scrl->parentWidget()->show();
+
+	if(!(work_space->activeSubWindow() && work_space->activeSubWindow()->isMaximized()))
+	    scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+(scrl->parentWidget()->width()-scrl->width())+5)),
+				     fmax(200,fmin(work_space->height(),vw->size().height()+(scrl->parentWidget()->height()-scrl->height())+5)));
     }
 }
 

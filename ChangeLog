@@ -1,8 +1,137 @@
-2016-02-13 Roman 0.8.17
+2017-07-02 Roman 0.8.18
+- API:
+    !!!!:Changes:
+	SYS:
+	    XMLNode: Functions save() and saveNode() set to constant ones.
+	    XMLNodeObj: User API function text() was expanded by argument "full" for all child's texts combine.
+	    ModSchedule: Function ScanDir() and CheckFile() were renamed to dirScan() and fileCheck() respectively.
+	Transport.out: User API function messIO() was expanded for return string type everywhere.
+	Special.FLibSYS: The user API function dbReqSQL() was moved to the features of the function SYS.BD["TypeDB"]["DB"].SQLReq().
+    Appends:
+	SYS: TMess::getUTF8() function was added and used for UTF-8 symbols detect into XMLNode::encode().
+	    TCntrNode: Expanded by a user API function "messSys".
+	Archive.Value: User API functions were appended by setVal().
+- SYS:
+    !!!!:FIX: More original messages were fixed.
+    !!!:FIX:ModSchedule: Modules closing at exit was set to all the modules closing firstly and next all the module's libraries unlinking.
+	!!: Modules scanning procedure was expanded by the module's name template into the end of the path.
+	Modules separator of option "ModDir" of OpenSCADA was changed to ';'.
+    !!!!:build: Significant changes into the build system:
+	FIX:configure.ac,acinclude.m4: The source texts were mostly cleaned for the formation style and messages.
+	    The macro AX_PTHREAD was appended and used.
+	The environment variable HAVE_GD_CORE was renamed to HAVE_GD_FORCE.
+	Libraries were moved from their direct pointing into src/Makefile.am to checking, for: -lpthread, -lm, -ldl, -lcrypt, -lz, -lpcre
+	debian/control: Build with MariaDB as a variant of MySQL was added.
+	debian/rules: dh_compress was prevented from files of documentation in PDF and ODT compression.
+	acinclude.m4: SSL: Symbol for checking SSL library changed to "SSL_free" but SSL_library_init missed on OpenSSL 1.1.
+	    OpenSSL checking macro was expanded by the optional test "AX_LIB_OpenSSL_opt" and the tests were appended by the libcrypto checking.
+	    A new configure option --with-qt5 was added for Qt5 forcely checking and using.
+	    Checking for LibGD was set combined with and next without PKG_CHECK_MODULES(pkg-config) and removed from the module UI.WebCfgD.
+	configure.ac: A new configuration option --disable-CoreLibVersion was added to disable version of the core library.
+	    Checking for "libintl" was changed for function "libintl_bindtextdomain" and checking for libiconv was moved before.
+	    Checking for "inux/serial.h" was added for the module Transport.Serial.
+	    Special.FLibSYS was appended by the checking macro "AX_LIB_OpenSSL_opt" using.
+	    Checking for spare header's files was removed.
+	    AC_CHECK_LIB was replaced by AC_SEARCH_LIBS mostly and the library "librt" checking was added.
+	    AM_INIT_AUTOMAKE call was set shorter.
+    !!!:XMLNode: The serializer was expanded to true check for UTF-8 symbols and "&nbsp;" processing in function encode() and the parser, for entity "&nbsp;".
+    !!!:Protocol.HTTP,UI.{WebUser,WebVision}: ACL support was added to control access and visibility of items of indexes of Web resources.
+    Protocol.{ModBus,UserProtocol},UI.WebUser: Expanded for tracing and notification for program's changing.
+    DAQ.ICP_DAS,UI.{QTStarter,QTCfg,Vision,WebCfgD,WebVision}:Makefile.am: *_LIBADD was replaced to *_LDFLAGS.
+    An command-line option "lang" was added.
+    Values' (attributes of parameters of DAQ) info were appended by state "Read only".
+    Checking for HAVE_CONFIG_H was added for "config.h".
+    Some spare headers were removed from the source code.
+    Needed parts of ieee754.h were moved to the file directly.
+    Security: Support of the hashed passwords was expanded to use the locked function crypt() on crypt_r() miss. libcrypt checking was expanded for crypt.h.
+    Mess: Messages encoding was disabled for a charset "US-ASCII".
+- FIX:DB:{.,SQLite,MySQL}: Some control items of OpenSCADA control interface were fixed for their permition.
+- DAQ:
+    FIX:ModBus: Managing of duplicate attributes of the standard parameter was fixed.
+	Set for using ID at empty Name part of DAQ.
+    OPC_UA.libOPC_UA: Needed parts of ieee754.h were moved to the file directly.
+    FIX:System: Some warnings from Valgrind were fixed.
+    FIX:DAQGate: Requests were fixed after moving to different station.
+	Expanded for allow write to configure's attributes "NAME" and "DESCR".
+	Size of the configuration field STATIONS was decreased to two rows.
+    Siemens.build: "INCLUDES" was replaced by "daq_Siemens_la_CFLAGS" and "daq_Siemens_la_CXXFLAGS".
+- Archive:
+    !!:FIX: Fixed for checking for a proper archivator by its periodicity,
+	allow for correct selection archivators in periodicity more then one minute in graphics building.
+    Value: Direct writing to archives was expanded for all buffer's which aren't the buffer of archive.
+    !!!:FIX:FSArch: Function of archivators checking is fixed for correct processing of the capacity limit of the values archiving
+	    by the archives sorting to remove its files at maximum quantity.
+	!!:FIX: Fixed for too long messages back reading and wrong messages reading was prevented at all.
+	!!!: Expanded for INFO files store into a standalone DB file of SQLite into the archivator's folder.
+- Transport:
+    FIX:Serial: Checking for "linux/serial.h" was added and for "linux/i2c-dev.h" was fixed.
+    !!!!:FIX:SSL: Fixed into client's part for correct free which caused for crashes and blockings,
+	    for SSL_free() missing and variables "ctx", "ssl", "conn" clean at second start, into the output part.
+	    Wide tested on browsers Chrome, Firefox; for file handlers free and into Valgrind.
+	The method "SSLv2" was finally removed but it is not secured and fully removed from OpenSSL 1.1.
+	SSLv3_server_method() and SSLv3_client_method() functions were set to disabled by OPENSSL_NO_SSL3 definition.
+- FIX:Protocol:OPC_UA{*.libOPC_UA}: The resource "mtxData" added to object Server and used for the security channels container management.
+- UI:
+    !!:{VCAEngine,Vision,WebVision}: An attribute "mult" was added to view "List" of the primitive "FormEl" to able multiple lines selection.
+    !!!!:QTStarter: Fully merged from the Work branch.
+	A first module starting at empty list of started modules was disabled.
+    !!!:FIX:QTCfg: sizeHint() and minimumSizeHint() processing was fixed for "Text" and "List" items.
+	!!!: Scalable vertically items were finished to implement their true fitting for: texts, tables and lists.
+	Fields "ID" and "NAME" of the node control dialog were set to the unlimited size for next these changing from inforamtion of the control interface.
+    VCAEngine: Links checking for activity was added to the dynamic linking mechanism.
+    FIX:Vision: Images of primitive "Media" clean at an empty string set was added.
+	FIX: Separator "\n" was set for encoding by TSYS::base64 to storages.
+	FIX: Fixed for opened to edition widgets size on big screens, the fitting was set conditional for
+	    an active and maximized window miss but there has a problem in Qt.
+	FIX:FormEl.Table: Fixed for properties of columns.
+	    Expanded for field "width" equal to 0 processing to hide the column.
+	    X scaling used into result column width.
+    !!!:FIX:WebCfgD:
+	!!:FIX: The "Table" element processing for big content was some improved and fixed for key items edition.
+	FIX: Checking for "gd.h" was fixed.
+	FIX: List items processing was fixed for ones without ID.
+	FIX: Elements merging into single line was fixed by CSS rule "white-space: nowrap;" but the constant was set to "white-space: normal;".
+	!!!: Fitted to allowed space for scalable by vertical elements: texts, tables, lists.
+	!!!: GD library was replaced by the CSS filters and set optional by --enable-LibGD.
+	!!: The navigation tree and dialogs forming were some improved, by drop shadow and a transparent background for disable access to the main area.
+	!: Item copy was expanded by it copy to its root through self.
+	Acknowledgement buttons of text items moved to left, for big screens.
+	Border color of the input elements was changed to "gray".
+	The structural class "SSess" was moved to strucure type.
+	Date fields were moved to a type "datetime-local" of the tag "input".
+	Elements indent was set to "padding-left: 10px; text-indent: -10px;".
+	Length of the number elements was set to the fixed one by 10 symbols.
+	List items were expanded for commands to empty list.
+    WebVision:
+	!!!:FIX: Width of the popupmenu was fixed for context menus.
+	!!!:FIX: Behavior of the primitive "Media" for not "Fit" mode was fixed to prevent the scale problems in way of full removing the tag <img>.
+	    Vertical alignment was added to images of the primitive.
+	!!:FIX: Dialogs, small built-in windows, forming was some fixed and improved, font of title was set to 12pt.
+	!!:FIX: System context menu oppressed for active widgets.
+	FIX: Scale dimension was increased to 3 digits after dot for correct scaling to big screen.
+	FIX: Borders and transparent backgrounds processing was fixed. Background of the primitives processing was moved to common and after
+	    the ones processing and the background transparency-opaque support was added by a separated block (div) creation with the opaque level.
+	FIX: Primitive "Text": spaces processing was set to "white-space: pre-wrap", the property "wordWrap" support was added.
+	FIX: The view "Button" of the primitive "FormEl": was fixed for words wrap on Chrome browser, switched to use filters for display inactive images.
+	!!!!: The views "Spin bar", "Scroll bar", "Table", "Tree" were implemented. The view "Scroll bar" is equal to "Spin bar" now.
+	!!!: View "Line" of the primitive "FormEl" was expanded by the calendar dialog for date variants.
+	!!: The visualizer specific attributes support was added through its activation.
+	!!: Main page scaling to fit to the window of the browser allowed space was added, only to grow and with the aspect ratio control.
+	!!: The XHTML part of page was moved to an separated file like the JavaScript one. All generic CSS rules were moved to the XHTML file.
+	Views of "Combo box" and "List" of the primitive "FormEl" were made simplified.
+	Internal functions nodeText() and setNodeText() were replaced to "textContent".
+	Processing event of the wide combobox (list) was changed from "onchange" to "onclick" to the processing guaranty.
+	Moving to using pgCreator() was finished. pgCreator() was expanded for simple requests processing in local.
+	The structural class "SSess" was moved to strucure type.
+	Generic improvement.
+- Special.FLibSYS: Description of the function dbReqSQL() was expanded.
+
+
+2017-02-13 Roman 0.8.17
 - Transport.Serial: Checking to present the header file linux/i2c-dev.h added to build on Linux distributives like SuSE.
 
 
-2016-02-12 Roman 0.8.17
+2017-02-12 Roman 0.8.17
 - API:
     !!!!:Changes:
 	SYS: More functions set to constant after some objects appending by a copy constructor.
@@ -259,9 +388,9 @@
 	    included the widget path as the category.
 	Special.FLibSYS: The time functions are appended by tmSleep() for faster access to the short sleeping provides.
 - SYS:
-    FIX:User's space flags to generic nodes (TCntrNode) processing fixed, mostly for "RM_Full" flag and DAQ paramter's archives propper removing.
+    FIX:User's space flags to generic nodes (TCntrNode) processing fixed, mostly for "RM_Full" flag and DAQ paramter's archives proper removing.
     !!!!: CoreLib version rise to 2.4. DB,DAQ,Archive,Transport: Module's subsystems' version set to 8.
-    !!!!:TCntrNode: Free of locked nodes and attach to disabled ones are prevented by propper resource locking to mUse.
+    !!!!:TCntrNode: Free of locked nodes and attach to disabled ones are prevented by proper resource locking to mUse.
     !!!!: For some productivity rise the exceptions catch moved from the object copy to it's reference.
     !!:{DAQ,Transport}.*: Tasks priorities range expanded up to 199 where 100-199 used for SCHED_FIFO tasks planing policy.
     !!:All key warnings next resolved. Include some controversial ones:
@@ -822,7 +951,7 @@
 	    Double call the pages to first execution from processing procedure and cascade from the top-level page is prevented.
 	FIX: Mime download expanded and fixed for projects.
 	FIX: More fields set to notranslated.
-	FIX: Unpropper syntax highlighting rules apply into primitive "FormEl" fixed.
+	FIX: Unproper syntax highlighting rules apply into primitive "FormEl" fixed.
 	!!!:Access to project's session time table unified by append the session attributes access functions sessAttr(), sessAttrSet().
 	    The functions used to: primitive "Document", session's Style, edited resources by user's API functions "mime()" and "mimeSet()",
 		"fromSess" and "toSess" user's API functions "attr()" and "attrSet()".
@@ -6160,7 +6289,7 @@ Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
 
 2008-12-11 Maxim
 - FIX:/UI/Vision: A lot of little fixes is done for primitive ElFigure.
-- !!!/UI/Vision: Conception of painting is changed for primitive ElFigure, by means of wich performance is greatly improved in both: the runtime and the devel modes.
+- !!!/UI/Vision: Conception of painting is changed for primitive ElFigure, by means of which performance is greatly improved in both: the runtime and the devel modes.
 
 
 2008-12-04 Maxim
