@@ -1,3 +1,7 @@
+2017-07-03 Roman 0.8.18
+- SYS.build: AX_PTHREAD macro was disabled and "-lpthread" was set directly but some old Linux distributives like Mandriva broke here.
+
+
 2017-07-02 Roman 0.8.18
 - API:
     !!!!:Changes:

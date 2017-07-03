@@ -115,7 +115,9 @@ AC_ARG_ENABLE(AllModuls,
     AC_HELP_STRING([--enable-AllModuls],[all modules enable/disable for their separated selection]), [ ], [enable_AllModuls=individual;])
 
 AC_MSG_RESULT([========== Check for libraries of the core =============])
-AX_PTHREAD
+# AX_PTHREAD
+PTHREAD_LIBS="-lpthread";
+AC_SUBST(PTHREAD_LIBS)
 if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
