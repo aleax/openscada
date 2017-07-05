@@ -11070,7 +11070,7 @@ else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
 if(fltr.length && !fltrCol.isEVal() && (
 	(fltrCol == "dttm" && SYS.strftime(mTime,"%d %m %H:%M:%S").indexOf(fltr) < 0) ||
 	//(fltrCol == "lev" && abs(mLev).toString().indexOf(fltr) < 0) ||
-	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) < fltr.toInt()) || (fltr.toInt() < 0 &&  mLev < fltr.toInt()))) ||
+	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) < fltr.toInt()) || (fltr.toInt() < 0 &&  mLev > fltr.toInt()))) ||
 	(fltrCol == "prm" && mValPrm.indexOf(fltr) < 0) ||
 	(fltrCol == "dscr" && mValDscr.indexOf(fltr) < 0) ||
 	(fltrCol == "alrm" && mValVal.indexOf(fltr) < 0))) return "";
@@ -11102,7 +11102,7 @@ else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
 if(fltr.length && !fltrCol.isEVal() && (
 	(fltrCol == "dttm" && SYS.strftime(mTime,"%d %m %H:%M:%S").indexOf(fltr) < 0) ||
 	//(fltrCol == "lev" && abs(mLev).toString().indexOf(fltr) < 0) ||
-	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) >= fltr.toInt()) || (fltr.toInt() < 0 &&  mLev <= fltr.toInt()))) ||
+	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) < fltr.toInt()) || (fltr.toInt() < 0 &&  mLev > fltr.toInt()))) ||
 	(fltrCol == "prm" && mValPrm.indexOf(fltr) < 0) ||
 	(fltrCol == "dscr" && mValDscr.indexOf(fltr) < 0) ||
 	(fltrCol == "alrm" && mValVal.indexOf(fltr) < 0))) return "";
@@ -11134,7 +11134,7 @@ else if(mCat[0] == "/")	mValDscr = mVal, mValPrm = mCat;
 if(fltr.length && !fltrCol.isEVal() && (
 	(fltrCol == "dttm" && SYS.strftime(mTime,"%d %m %H:%M:%S").indexOf(fltr) < 0) ||
 	//(fltrCol == "lev" && abs(mLev).toString().indexOf(fltr) < 0) ||
-	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) >= fltr.toInt()) || (fltr.toInt() < 0 &&  mLev <= fltr.toInt()))) ||
+	(fltrCol == "lev" && ((fltr.toInt() > 0 && abs(mLev) < fltr.toInt()) || (fltr.toInt() < 0 &&  mLev > fltr.toInt()))) ||
 	(fltrCol == "prm" && mValPrm.indexOf(fltr) < 0) ||
 	(fltrCol == "dscr" && mValDscr.indexOf(fltr) < 0) ||
 	(fltrCol == "alrm" && mValVal.indexOf(fltr) < 0))) return "";

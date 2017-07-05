@@ -1,11 +1,26 @@
+2017-07-05 Roman (stable)
+- FIX:DB.LibsDB.vcaBase: doc.docMessRep was final fixed for filtering by level, for all languages.
+- FIX:DB.LibsDB.vcaElectroEls: Fixed for procedures of the last items: "stGen", "stGen1", "conBus".
+- SYS.acinclude.m4: Macro AX_PTHREAD was updated to last version.
+- SYS:Changelog: Significant cleaned in process of releasing 0.8.18 LTS.
+- SYS,DAQ.OPC_UA.libOPC_UA: ieee754.h included to adapt for float point in IEEE754.
+- DAQ.{LogicLev,ModBus}: Values size of stored attributes of logical parameters expanded from 200 to 1000000.
+- FIX:DAQ.LogicLev: Fixed for uninitiated access to "err(f_err)" attribute into debug mode.
+- FIX:{DAQ,Protocol}.ModBus: The extended type "String" was fixed to ModBus register's natural order in "BigEndian", seen on Sycon Instruments STM-3.
+    FIX:Syntax highlighting was fixed for four digits-registers for extended types "_u4", "_d".
+- UI.QTCfg: Binary data representation changed to view "B[{ByteStream}]".
+- FIX:UI.{Vision,WebVision}: Some original messages were fixed.
+- UI.Vision: Items visibility were restored for editing widget and for: "VisItClear", "VisItChDown", "VisItProp".
+
+
 2017-06-30 Roman (stable)
 - SYS:data/{debian,debian_mod}/control: Build with MariaDB as a variant of MySQL was added.
 - SYS:Changelog: Significant cleaned in process of releasing 0.8.18 LTS.
 - FIX:DAQ.DAQGate: Was finally fixed and tested for hierarchical parameters processing for levels more at 2.
 - SYS.Transport.SSL: The method "SSLv2" was finally removed but it is not secured and fully removed from OpenSSL 1.1.
-- UI.QTStarter: A first module starting at empty list of tarted modules was disabled.
+- UI.QTStarter: A first module starting at empty list of started modules was disabled.
 - FIX:UI.VCAEngine: The translations were some fixed.
-- FIX:UI.Vision: Images of primitive Media clean at an empty string set was added.
+- FIX:UI.Vision: Images of primitive "Media" clean at an empty string set was added.
 - FIX:UI.WebCfgD: Table of the table items wrong indent was fixed.
 - FIX:UI.WebVision: Scale dimension was increased to 3 digits after dot for correct scaling to big screen.
 
@@ -19,7 +34,7 @@
     The method "SSLv2" was removed (commented) but it is not secured and fully removed from OpenSSL 1.1.
 - SYS: Values' (attributes of parameters of DAQ) info were appended by state "Read only".
 - FIX:DAQ.DAQGate: Was fixed for hierarchical parameters processing for levels more at 2.
-    Was expanded for allow write to configure's attributes "NAME" and "DESCR".
+    Expanded for allow write to configure's attributes "NAME" and "DESCR".
 - UI.{VCAEngine,Vision,WebVision}: An attribute "mult" was added to view "List" of the primitive "FormEl" to able multiple lines selection.
 
 
@@ -27,10 +42,10 @@
 - DB.LibsDB.vcaBase: Main_io.cntrPaspExt was expanded for: full-frame mode of "View" at other modes hide, hidden attributes list support into "hideAttrs", removing "frame".
 - FIX:SYS: Qt checking macro was fixed for Qt4 checking before.
 - SYS: TMess::getUTF8() function was added and used for UTF-8 symbols detect into XMLNode::encode().
-- FIX:Transport.out: User API function messIO() was expanded for return string everywhere.
-- !!!: XMLNode: User API finction text() was expanded by argument "full" for all child's texts combine.
+- FIX:Transport.out: User API function messIO() was expanded for return string type everywhere.
+- !!!:XMLNode: User API function text() was expanded by argument "full" for all child's texts combine.
     Functions save() and saveNode() set to constant ones.
-    !!!: The serialiser was expanded to true check for UTF-8 symbols and "&nbsp;" processing in function encode().
+    !!!: The serializer was expanded to true check for UTF-8 symbols and "&nbsp;" processing in function encode().
     !!: The parser was expanded for entity "&nbsp;" processing on UTF-8.
 - DAQ.DAQGate: Size of the configuration field STATIONS was decreased to two rows.
 - !!!:UI.QTCfg: Scalable vertically items were finished to implement their true fitting for: texts, tables and lists.
@@ -40,13 +55,13 @@
 - DB.LibsDB.vcaBase: Icons of views of the main page were restored to opaque but not in full size, for buttons' background seeing.
 - DB.LibsDB.vcaElectroEls: Was appended by some new items.
 - FIX:SYS,DAQ.JavaLikeCalc,Protocol.{ModBus,UserProtocol}: Some original massages were fixed.
-- Protocol.{ModBus,UserProtocol},UI.WebUser: Were expanded for tracing and notification for program's changing.
+- Protocol.{ModBus,UserProtocol},UI.WebUser: Expanded for tracing and notification for program's changing.
 - UI.QTCfg: Text items size was fixed.
 - UI.QTStarter: Splash ensuring was disabled for Qt starting not into main thread.
 - FIX:UI.Vision: Separator "\n" was set for encoding by TSYS::base64 to storages.
     FIX:Opening to developing windows fitting was set conditional for an active and maximized window miss but there has a problem in Qt.
 - UI.WebCfgD: Acknowledgement buttons of text items moved to left, for big screens.
-- UI.WebVision: Switch to use filters for display inactive images into buttons.
+- UI.WebVision: Switched to use filters for display inactive images into buttons.
 
 
 2017-06-09 Roman (stable)
@@ -59,26 +74,26 @@
 - DAQ.JavaLikeCalc: Entry to procedures of the module set more optimal by direct locking the critical section.
 - FIX:DAQ.LogicLev: The parameter's debug mode was disabled for passive modes (f_err is EVAL) of the parameters but the debug message accumulates into the attribute "err".
 - !!!:Protocol.HTTP,UI.{WebUser,WebVision}: ACL support was added to control access and visibility of items of indexes of Web resources.
-- FIX:UI.QTCfg: sizeHint() and minimumSizeHint() procesing was fixed.
+- FIX:UI.QTCfg: sizeHint() and minimumSizeHint() processing was fixed.
 - !!!!:FIX:UI.QTStarter: Two modes of execution Qt were added, first is old one into different thread (by default) and second is new one into main thread (by the configure option -enable-QtMainThrd).
     FIX: Splash set to passive one for second mode.
-- UI.WebVision: Font of the child's windows was set to 12pt.
+- UI.WebVision: Font of title of the child's windows was set to 12pt.
 
 
 2017-06-02 Roman (stable)
 - !!!!:DB.LibsDB.OscadaLibs: DevLib is appended by implementing of electricity counters Mercury 200 and 230 from Arsen Zakojan <godzilla919@gmail.com>.
 - FIX:DB.Model.AGLKS.vca: Fixed for a spare horizontal line.
-- !!!:FIX:SYS.ModSchedule: Modules closing at exit set to all the modules closing firstly and next all the module's libraries unlinking. For fix like to WebKit crashes at exit.
-    !!!: Modules scanning procedure expanded by the module's name template into the end of the path, mostly for Android where all libraries place into one folder.
-    Function ScanDir() and CheckFile() renamed to dirScan() and fileCheck() respectively.
-- !!!!:FIX:SYS: Some original messages fixed.
+- !!!:FIX:SYS.ModSchedule: Modules closing at exit was set to all the modules closing firstly and next all the module's libraries unlinking. For fix like to WebKit crashes at exit.
+    !!!: Modules scanning procedure was expanded by the module's name template into the end of the path, mostly for Android where all libraries place into one folder.
+    Function ScanDir() and CheckFile() were renamed to dirScan() and fileCheck() respectively.
+- !!!!:FIX:SYS: Some original messages were fixed.
     !!!!: The system core in generic expanded for support main thread monopoly modules, like Qt GUI main thread into QtStarter.
 	Generic service calls moved to a different thread "SYS_Service".
     The main function main() appended to OpenSCADA core library for builds for Android.
 - FIX:DAQ.ModBus: Managing of duplicate attributes of the standard parameter was fixed.
 - FIX:Special.FLibComplex1: The translation was some fixed.
 - !!!!: UI.QTStarter: Moved to Qt execution into the main thread by main thread monopoly modules mechanism of OpenSCADA core.
-- UI.VCAEngine: Links checking for activity is added to the dynamic linking mechanism.
+- UI.VCAEngine: Links checking for activity was added to the dynamic linking mechanism.
 - FIX:UI.Vision: Icons setting of internal windows moved before the window show, for the development mode.
 - FIX:UI.WebVision: The property "wordWrap" of primitive "Text" support was added.
 
@@ -90,14 +105,14 @@
     The project "archBrowser" moved to an unmodified main page, graphics group "grpGraph10" using and a new cadre "doc.docMessRep" appending to generic messages observe.
     Translation some updated.
 - FIX:Archive.FSArch: Fix for translation.
-- FIX:UI.Vision: Fix for opened to edition widgets size on big screens.
+- FIX:UI.Vision: Fixed for opened to edition widgets size on big screens.
 
 
 2017-05-19 Roman (stable)
 - DB.LibsDB.vcaBase: Main.objProps adapted to the first column hide.
-- Archive.{DBArch,FSArch},DAQ.LogicLev: Some original messages fixed.
-- !!!:Archive.FSArch: Expanded for INFO files store into a standalone DB file of SQLite into folder of the archivator.
-- FIX:UI.WebVision: Borders and transparent backgrounds processing fixed. Spaces processing for primitive "Text" set to "white-space: pre-wrap".
+- Archive.{DBArch,FSArch},DAQ.LogicLev: Some original messages were fixed.
+- !!!:Archive.FSArch: Expanded for INFO files store into a standalone DB file of SQLite into the archivator's folder.
+- FIX:UI.WebVision: Borders and transparent backgrounds processing was fixed. Spaces processing for primitive "Text" was set to "white-space: pre-wrap".
 
 
 2017-05-12 Roman (stable)
@@ -106,15 +121,15 @@
     !!:Projects "tmplSO" and "archBrowser" were switched to the extended pasport of the standard parameters.
     The external pasport (Main.cntrPaspExt) adapted some to display by UI.WebVision.
 - !!:DB.ModelsDB.{AGLKS.vca.db,Boiler.St.db}: The Project was switched to the extended pasport of the standard parameters.
-- FIX:DAQ.DAQGate: Requests are fixed after moving to different station.
-- FIX:DAQ.System: Some warnings from Valgrind are fixed.
-- !!!!:FIX:Transport.SSL: Fixed into client's part for correct free wich caused for crashes and blockings.
+- FIX:DAQ.DAQGate: Requests were fixed after moving to different station.
+- FIX:DAQ.System: Some warnings from Valgrind were fixed.
+- !!!!:FIX:Transport.SSL: Fixed into client's part for correct free which caused for crashes and blockings.
     !!!!: Wide tested on browsers Chrome, FireFox; for file handlers free and into Valgrind.
-- FIX:UI.VCAEngine: Some original messages fixed.
-- UI.Vision: The view "Table" of the primitive "FormEl" expanded for field "width" equal to 0 processing to hide the column.
-- UI.WebCfgD: The navigation tree and dialogs forming some improved.
+- FIX:UI.VCAEngine: Some original messages were fixed.
+- UI.Vision: The view "Table" of the primitive "FormEl" was expanded for field "width" equal to 0 processing to hide the column.
+- UI.WebCfgD: The navigation tree and dialogs forming were some improved.
 - !!!!:FIX:UI.WebVision: View "Tree" of the primitive "FormEl" implemented.
-    FIX: Dialogs, small built-in windows, forming some fixed and improved.
+    FIX: Dialogs, small built-in windows, forming was some fixed and improved.
     FIX: System context menu oppressed for active widgets.
     FIX: View "Table" expanded for columns hide by field "width" equal to 0 and selection lost was prevented.
 
@@ -122,8 +137,8 @@
 2017-05-05 Roman (stable)
 - DB.LibsDB.vcaBase: Main.RootPgSo expanded by yet one pages navigation element that is combobox with the allowed for directly select pages.
 - SYS: The generic node was expanded by a user API function "messSys".
-- !!:FIX:Transport.SSL: Fix for SSL_free() missing and variables "ctx", "ssl", "conn" clean at second start, into the output part.
-- !!:FIX:UI.WebCfgD: The "Table" element processing for big content some improved and fixed for key items eddition.
+- !!:FIX:Transport.SSL: Fixed for SSL_free() missing and variables "ctx", "ssl", "conn" clean at second start, into the output part.
+- !!:FIX:UI.WebCfgD: The "Table" element processing for big content was some improved and fixed for key items edition.
 
 
 2017-04-21 Roman (stable)
@@ -137,7 +152,7 @@
 
 
 2017-04-07 Roman (stable)
-- SYS:configure.ac: Checking for "libintl" changed for function "libintl_bindtextdomain" and checking for libiconv moved before.
+- SYS:configure.ac: Checking for "libintl" was changed for function "libintl_bindtextdomain" and checking for libiconv was moved before.
 - FIX:DB.LibsDB.vcaBase: Main.objProps fixed for checking to the write mode.
 - UI.Vision: X scaling used into result column width of the view "Table" of the primitive "FormEl".
 - UI.WebVision: Context display for view "Table" of the primitive "FormEl" mostly implemented.
@@ -145,31 +160,31 @@
 
 
 2017-04-02 Roman (stable)
-- SYS:configure.ac: Checking for LibGD set combined with and next without PKG_CHECK_MODULES(pkg-config).
+- SYS:configure.ac: Checking for LibGD was set combined with and next without PKG_CHECK_MODULES(pkg-config).
 - SYS:configure.ac: Fix for Fedora 12
-- SYS:configure.ac: Checking for LibGD moved to PKG_CHECK_MODULES(pkg-config) for proper static linking.
-- SYS: The environment variable HAVE_GD_CORE renamed to HAVE_GD_FORCE. Checking for HAVE_CONFIG_H is added for "config.h".
-- DAQ.ICP_DAS,UI.{QTStarter,QTCfg,Vision,WebCfgD,WebVision}: *_LIBADD replaced *_LDFLAGS.
-- FIX:UI.WebCfgD: Checking for "gd.h" fixed.
-- FIX:UI.Vision: The primitive "FormEl" in view "Table" fixed for properties of collumns.
+- SYS:configure.ac: Checking for LibGD was moved to PKG_CHECK_MODULES(pkg-config) for proper static linking.
+- SYS: The environment variable HAVE_GD_CORE was renamed to HAVE_GD_FORCE. Checking for HAVE_CONFIG_H was added for "config.h".
+- DAQ.ICP_DAS,UI.{QTStarter,QTCfg,Vision,WebCfgD,WebVision}:Makefile.am: *_LIBADD was replaced to *_LDFLAGS.
+- FIX:UI.WebCfgD: Checking for "gd.h" was fixed.
+- FIX:UI.Vision: The primitive "FormEl" in view "Table" was fixed for properties of columns.
 
 
 2017-04-01 Roman (stable)
 - DB.LibsDB.vcaTest.db: Tests collection cadre of primitive "FormEl" expanded for view "List" and "Table".
 - SYS:configure.ac: Checking for "linux/can.h" moved to same the module Transport.Sockets.
-    Checking for "inux/serial.h" was added to the module Transport.Serial.
-    Checking for GD2 was removed from the module UI.WebCfgD.
-    The order of modules of subsystem "Special" set to the priority one.
-- SYS:acinclude.m4: LibGD checking macro expanded for dependencies "-lpng -ljpeg -lfontconfig -lexpat -lfreetype"
+    Checking for "inux/serial.h" was added for the module Transport.Serial.
+    Checking for LibGD was removed from the module UI.WebCfgD.
+    The order of modules of the subsystem "Special" was set to the priority one.
+- SYS:acinclude.m4: LibGD checking macro was expanded for dependencies "-lpng -ljpeg -lfontconfig -lexpat -lfreetype"
     to allow the libraries linking statically.
-- FIX:SYS,DAQ.System: Some original messages fixed.
+- FIX:SYS,DAQ.System: Some original messages were fixed.
 - Transport.SSL: Adpated to tmpnam() wrong placing into "/tmp/??" on Android.
-- FIX:Transport.Serial: There is checking for "linux/serial.h" added and for "linux/i2c-dev.h" fixed.
-- FIX:UI.Vision: The primitive "FormEl" in view "Table" fixed for properties of collumns.
-- !!!:FIX:UI.WebVision: Expanded for view "Table" of primitive "FormEl" initial implementation.
-    Internal functions nodeText() and setNodeText() replaced to "textContent".
-    FIX: The view "Button" of the primitive "FormEl" fixed for words wrap on Chrome browser.
-    View "Combo box" and "List" of the primitive "FormEl" made simplified.
+- FIX:Transport.Serial: Checking for "linux/serial.h" was added and for "linux/i2c-dev.h" was fixed.
+- FIX:UI.Vision: The primitive "FormEl" in view "Table" was fixed for properties of columns.
+- !!!:FIX:UI.WebVision: Expanded for view "Table" of the primitive "FormEl" initial implementation.
+    Internal functions nodeText() and setNodeText() were replaced to "textContent".
+    FIX: The view "Button" of the primitive "FormEl" was fixed for words wrap on Chrome browser.
+    Views of "Combo box" and "List" of the primitive "FormEl" were made simplified.
 
 
 2017-03-25 Roman (stable)
@@ -179,45 +194,45 @@
 
 2017-03-24 Roman (stable)
 - FIX:DB.LibsDB.vcaBase: wlb_Main.graphSelPrm fixed for linking "/DAQGate/..." and for current item's address correct display into the "prm_" prefix.
-- SYS:configure.ac,acinclude.m4: The source text mostly cleaned for the formation style and messages.
-- SYS:acinclude.m4,Special.FLibSYS: OpenSSL checking macro expanded by the optional test "AX_LIB_OpenSSL_opt" and
+- SYS:configure.ac,acinclude.m4: The source texts were mostly cleaned for the formation style and messages.
+- SYS:acinclude.m4,Special.FLibSYS: OpenSSL checking macro was expanded by the optional test "AX_LIB_OpenSSL_opt" and
     the tests were appended by the libcrypto checking.
-- SYS:configure.ac: Checking for spare header files removed. Checking macro of OpenSCADA modules placed into the importance order.
-- SYS: Some spare headers removed from the source code.
+- SYS:configure.ac: Checking for spare header's files was removed. Checking macros of the modules OpenSCADA was placed into the importance order.
+- SYS: Some spare headers were removed from the source code.
 - SYS:TModSchedul: Adapted for optional pointing the core library name and path by the configure environment "CoreLibNmToDlOpen",
     on LibC variant Bionic of Android.
-- SYS:TSecurity: Support of the hashed passwords expanded to use the locked function crypt() at crypt_r() miss.
+- SYS:TSecurity: Support of the hashed passwords was expanded to use the locked function crypt() on crypt_r() miss.
 - FIX:DAQ.DCON: Include/builtin to the OpenSCADA core fixed.
-- FIX:DAQ.{LogicLev,Siemens,System}: Some originale messages fixed.
+- FIX:DAQ.{LogicLev,Siemens,System}: Some originale messages were fixed.
 - DAQ.OPC_UA: Adapted to include/builtin into the OpenSCADA core.
-    libOPC_UA: Needed parts from ieee754.h moved to the file.
-- Special.FLibSYS: The function dbReqSQL() description expanded.
-- Transport.SSL: The function getservbyname_r() switched to getservbyname(), for Android.
-    SSLv3_server_method() and SSLv3_client_method() functions set to disabled by OPENSSL_NO_SSL3 definition.
-- !!!:FIX:UI.WebVision: Width of the popupmenu fixed for context menus.
-    FIX: Primitive "Media" behavior for not "Fit" mode fixed to prevent the scale problems by full removing the tag <img>.
-	Vertical alignment added to images of the primitive.
-    !!!: The views "Spin bar" and "Scroll bar" implemented. The view "Scroll bar" is equal to "Spin bar" now.
+    libOPC_UA: Needed parts of ieee754.h were moved to the file directly.
+- Special.FLibSYS: Description of the function dbReqSQL() was expanded.
+- Transport.SSL: The function getservbyname_r() was switched to getservbyname(), for Android.
+    SSLv3_server_method() and SSLv3_client_method() functions were set to disabled by OPENSSL_NO_SSL3 definition.
+- !!!:FIX:UI.WebVision: Width of the popupmenu was fixed for context menus.
+    FIX: Behavior of the primitive "Media" for not "Fit" mode was fixed to prevent the scale problems in way of full removing the tag <img>.
+	Vertical alignment was added to images of the primitive.
+    !!!: The views "Spin bar" and "Scroll bar" were implemented. The view "Scroll bar" is equal to "Spin bar" now.
 
 
 2017-03-19 Roman (stable)
-- SYS:build: Into configure.ac the AC_CHECK_LIB replaced by AC_SEARCH_LIBS mostly and the library librt checking added.
+- SYS:build: Into configure.ac the AC_CHECK_LIB was replaced by AC_SEARCH_LIBS mostly and the library "librt" checking was added.
 
 
 2017-03-18 Roman (stable)
-- SYS:data/{debian,debian_mod}/rules: dh_compress prevented from files of documentation in ODT compression also.
+- SYS:data/{debian,debian_mod}/rules: dh_compress was prevented from files of documentation in ODT compression also.
 - SYS: Some pre-adapting to Android by:
     build: The macro AX_PTHREAD was appended and used. AM_INIT_AUTOMAKE call was set shorter.
 	Libraries were moved from their direct pointing into src/Makefile.am to checking, for: -lpthread, -lm, -ldl, -lcrypt, -lz, -lpcre
 	Some messages into configure.ac were fixed.
     ResAlloc: Check and define "__GLIBC_PREREQ" to 1. pthread_condattr_setclock() disabled for Android as it missed.
-    Needed parts from ieee754.h were moved to the file. Multi CPU management and pthread_attr_setinheritsched() were disabled for Android.
-    Mess: Messages encoding was disabled for charset "US-ASCII", it's default one on Android.
+    Needed parts of ieee754.h were moved to the file. Multi CPU management and pthread_attr_setinheritsched() were disabled for Android.
+    Mess: Messages encoding was disabled for a charset "US-ASCII", it's default one on Android.
     Security: libcrypt checking was expanded for crypt.h.
     Transport.Sockets: The function getservbyname_r() switched to getservbyname() for Android.
 - DAQ.Siemens: "INCLUDES" was replaced by "daq_Siemens_la_CFLAGS" and "daq_Siemens_la_CXXFLAGS".
 - Special.FLibSYS: The user API function dbReqSQL() was moved to the features of the function SYS.BD["TypeDB"]["DB"].SQLReq().
-- !!!:UI.WebVision: View "Line" of the primitive "FormEl": expanded by the callendar dialog for data variants.
+- !!!:UI.WebVision: View "Line" of the primitive "FormEl" was expanded by the calendar dialog for date variants.
     Generic CSS properties moved to *.html file.
     Processing event of the wide combobox (list) was changed from "onchange" to "onclick" to the processing guaranty.
     Generic improvement.
@@ -255,15 +270,15 @@
 
 2017-03-03 Roman (stable)
 - SYS: The user API functions are appended by function utime() and mtime().
-- !!:FIX:Archive: Fixed for checking for a propper archivator by its periodicity,
+- !!:FIX:Archive: Fixed for checking for a proper archivator by its periodicity,
     which allow for correct selection archivators in periodicity more then one minute in graphics building.
 - !!:FIX:Archive.FSArch: Fixed for too long messages back reading and wrong messages reading was prevented at all.
     Function of archivators checking is fixed for correct processing of the capacity limit of the values archiving
-    by the archives sorting to remove its files at its maximum quantity.
-- !!!:UI.WebCfgD: Fitted to allowed space for scalable by vertical elements.
+    by the archives sorting to remove its files at maximum quantity.
+- !!!:UI.WebCfgD: Fitted to allowed space for scalable by vertical elements: texts, tables, lists.
     Border color of the input elements was changed to "gray".
     The structural class "SSess" was moved to strucure type.
-- !!:UI.WebVision: The XHTML part of a page was moved to an separated file like the JavaScript one. All generic CSS rules were moved to the XHTML file.
+- !!:UI.WebVision: The XHTML part of page was moved to an separated file like the JavaScript one. All generic CSS rules were moved to the XHTML file.
     Moving to using pgCreator() was finished. pgCreator() was expanded for simple requests processing in local.
     The structural class "SSess" was moved to strucure type.
 
@@ -271,18 +286,18 @@
 2017-02-26 Roman (stable)
 - SYS: data/openscada_start.in: workarounded for bug into "zenity", for sending selection items as "{item}|{item}" (observed on Ubuntu 14.04).
 - Archive.Value: User API functions were appended by setVal().
-    Direct writing to archives was expanded for all buffer's wich aren't the buffer of archive.
-- FIX:DB.{.,SQLite,MySQL}: Some control items were fixed for their permition.
+    Direct writing to archives was expanded for all buffer's which aren't the buffer of archive.
+- FIX:DB.{.,SQLite,MySQL}: Some control items of OpenSCADA control interface were fixed for their permition.
 - DAQ: Some fields of the diagnostic request dialog are merged to single line, for controller object.
 - FIX:UI.{docGet(),QTCfg,QTStarter,Vision}: Force documents in background execution for online ones.
     Checking for online documents is disabled by it's can be long and wrong, then there use only links to default language pages (EN).
     Function rewrote for options as flags.
-- !!!:UI.WebCfgD: GD library was relaced by the CSS filters and set optional by --enable-LibGD.
+- !!!:UI.WebCfgD: GD library was replaced by the CSS filters and set optional by --enable-LibGD.
     FIX: List items processing was fixed for ones without ID.
     Internal dialogs were expanded by drop shadow and a transparent background for disable access to the main area.
     Date fields were moved to a type "datetime-local" of the tag "input".
     Online documentation call was added.
-    Elements merging into single line was fixed by CSS rule "white-space: nowrap;" but the constant was set to "white-space: normal;".
+    FIX: Elements merging into single line was fixed by CSS rule "white-space: nowrap;" but the constant was set to "white-space: normal;".
     Elements indent was set to "padding-left: 10px; text-indent: -10px;".
     Length of the number elements was set to the fixed one by 10 symbols.
     Item copy was expanded by it copy to its root through self.
@@ -293,7 +308,7 @@
 - FIX:Protocol.OPC_UA{*.libOPC_UA}: The resource "mtxData" added to object Server and used for the security channels container management.
 - Special.FLibSYS: The static function str2int() expanded for 64 bits.
 - Transport.Serial: Checking to present the header file linux/i2c-dev.h added to build on Linux distributives like SuSE.
-- FIX:UI.WebCfgD: List units were expanded for commands to empty list.
+- FIX:UI.WebCfgD: List items were expanded for commands to empty list.
     Self dialogs were expanded for the main space locking and for a box shadow appendeding to them.
 
 
@@ -809,7 +824,7 @@
 - !!!!:SYS: Node's function load() and load_() expanded by argument TConfig *cfg for allow direct loading after the seeking request.
     All parts adapted to the new argument "cfg" of loading functions, preloaded dataSeek() and the direct loading after the seeking request.
     Overall loading time decresed from 36% (Core) to 15% (VCAEngine) and some parts down to 80%.
-    Argument "force" of node's function load() was removed and relaced by modifG() pre-call.
+    Argument "force" of node's function load() was removed and replaced by modifG() pre-call.
     Modules version of the subsystem "DB", "DAQ", "Archive", "Protocol", "UI" rose to 12.
     Modules version of the subsystem "Transport" rose to 13.
     Primary commands transmission by "rdStRequest()" prevented from exceptions.
@@ -891,7 +906,7 @@
 
 
 2016-06-20 Roman
-- !!!!:FIX:SYS.TCntrNode: Free of locked nodes and attach to disabled ones are prevented by propper resource locking to mUse.
+- !!!!:FIX:SYS.TCntrNode: Free of locked nodes and attach to disabled ones are prevented by proper resource locking to mUse.
 - SYS:data/openscada_start.in is adapted to working without "gettext", mostly for N800.
     data/{debian,debian_mod}/changelog: Author set to OpenSCADA <oscada@oscada.org>, mostly for allow the sign after build by that key.
 - DB: Resource's of the DB allocation TBD::resTbls is added. For now that is experimental and used in generic functions of the tables open(), close().
@@ -1209,7 +1224,7 @@
 
 2016-02-28 Roman
 - DB.Model.{AGLKS.vca.db,Boiler.St.db}: Visualizer's UI.Vision specific attributes moved to the project's root-page.
-- FIX:SYS: User's space flags to generic nodes (TCntrNode) processing fixed, mostly for "RM_Full" flag and DAQ paramter's archives propper removing.
+- FIX:SYS: User's space flags to generic nodes (TCntrNode) processing fixed, mostly for "RM_Full" flag and DAQ paramter's archives proper removing.
 - UI.Vision: Global modification mark processing moved to different function modifyGlbStUpdate() and some changed.
 - FIX:UI.Vision: Included to container's pages align processing rewrote to trace on the widget's geometry update and
     to the misaligned scroll-bars appearing sometime prevent.
@@ -1965,7 +1980,7 @@
 - DB: LibsDB.vcaBase.db: Main.{ElCadr,TextLab}: expanded by free commands into "digComs" and writing to "com_text".
     For Main.ElCadr also appened "st_text" for current state.
 - DAQ.DAQGate: Configuration "SYNCPER" type changed from real to int.
-- !!!!:DAQ.ICP_DAS: libi8k.a and the headers updated to one wich I-8014 support and for all.
+- !!!!:DAQ.ICP_DAS: libi8k.a and the headers updated to one which I-8014 support and for all.
     Watchdog for I-8x81 by EnableWDT() replaced by EnableSysWDT().
 - !!:DAQ.MMS: Expanded for prevent requests to no connOK(), getNameList service caching.
     Configuration "SYNCPER" type changed from real to int.
@@ -2161,7 +2176,7 @@
     Main.anShow1 fixed for the selection blink by it's control panel set.
 - FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Fixed for prevent load translation from no empty translation's DB field
     but disabled to translation.
-- FIX:UI.VCAEngine: Unpropper syntax highlighting rules apply into primitive "FormEl" fixed.
+- FIX:UI.VCAEngine: Unproper syntax highlighting rules apply into primitive "FormEl" fixed.
 - FIX:UI.Vision: Changes update after that apply into attributes manager of the widgets into group mode fixed
     to update different widget's attributes into the group and on the contrary for first widget into the group.
 
@@ -8835,7 +8850,7 @@
 
 2008-12-11 Maxim
 - FIX:/UI/Vision: A lot of little fixes is done for primitive ElFigure.
-- !!!/UI/Vision: Conception of painting is changed for primitive ElFigure, by means of wich performance is greatly improved in both: the runtime and the devel modes.
+- !!!/UI/Vision: Conception of painting is changed for primitive ElFigure, by means of which performance is greatly improved in both: the runtime and the devel modes.
 
 
 2008-12-04 Maxim
@@ -9739,7 +9754,7 @@
 2008-03-16 Roman
 - !!:/SYS: Resource files (icons and menu links) for menu OpenSCADA execution is added.
 - /SYS: RPM spec file is updated for new resources file support.
-- !!:/SYS/Node: TCntrNode::nodeDel() finction is added.
+- !!:/SYS/Node: TCntrNode::nodeDel() function is added.
 - FIX:/UI/VCAEngine: Self widget attributes deletion on object destroy is fixed.
 - FIX:/UI/VCAEngine: No deletion inheritor widgets on time of parent widget deletion is fixed
 - /UI/Vision: Widget's level icons is changed.
@@ -10559,7 +10574,7 @@ archive access (UI trend access).
 - !!:/SYS/TCntrNode: The subtree request identification support is added to control interface build function ctrMkNode().
     All system use the subtree request identification is made.
 - /SYS/TCntrNode: String aliases to permition codes is added.
-- /SYS/TCntrNode: Finctions connect() and disConnect() is renamed to AHDConnect() and AHDDisConnect().
+- /SYS/TCntrNode: Functions connect() and disConnect() is renamed to AHDConnect() and AHDDisConnect().
 - FIX:/SYS/TCntrNode: Child ordering is fixed.
 - FIX:/SYS/TCntrNode: Dead locking into functions AHDConnect() and AHDDisConnect() is fixed.
 - /SYS/XMLNode: Clear attributes function (attrClear()) is added.
@@ -11367,7 +11382,7 @@ TContrNode::pre[post]Disable().
 - SYS: Use environment: LANGUAGE, LANG and LC_MESSAGES for full language controll.
 - SYS: Add short time dimension functions: sysClk() and shrtCnt().
 - TModSchedul: Change Module's links storing.
-- TModule: Change acces to export finctions. Change function modGetFunc() and
+- TModule: Change acces to export functions. Change function modGetFunc() and
 modFreeFunc() to modFunc().
 - TModule: Add register function modFuncReg();
 - XML: Add copying operator: operator=();

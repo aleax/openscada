@@ -2297,10 +2297,10 @@ void DevelWdgView::wdgPopup( )
 	    popup.addAction(mainWin()->actVisItDel);
 	    popup.addAction(mainWin()->actVisItClear);
 	    popup.addAction(mainWin()->actVisItChDown);
-	    if(sel_cnt == 1) {
+	    /*if(sel_cnt == 1) {	//!!!! For what?
 		popup.addAction(mainWin()->actVisItProp);
 		popup.addAction(mainWin()->actVisItEdit);
-	    }
+	    }*/
 	    popup.addSeparator();
 	    popup.addAction(mainWin()->actDBLoad);
 	    popup.addAction(mainWin()->actDBSave);
@@ -2309,11 +2309,15 @@ void DevelWdgView::wdgPopup( )
 	    //   Insert item actions
 	    popup.addMenu(mainWin()->mn_widg_fnc);
 	}
+	else {
+	    popup.addAction(mainWin()->actVisItClear);
+	    popup.addAction(mainWin()->actVisItChDown);
+	    popup.addAction(mainWin()->actVisItProp);
+	}
 
 	// Make edit enter action
 	popup.addSeparator();
-	if((sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()))
-	{
+	if((sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable())) {
 	    QAction *actEnterEdit = new QAction(_("Enter for the widget editing"),this);
 	    actEnterEdit->setStatusTip(_("Press to enter for the widget editing."));
 	    connect(actEnterEdit, SIGNAL(triggered()), this, SLOT(editEnter()));

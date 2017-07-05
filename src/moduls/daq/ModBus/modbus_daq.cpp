@@ -82,7 +82,7 @@ void TTpContr::postEnable( int flag )
     //  Parameter template IO DB structure
     elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(atoi(OBJ_ID_SZ)*6).c_str()));
     elPrmIO.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
+    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"1000000"));
 }
 
 void TTpContr::load_( )
@@ -397,8 +397,8 @@ TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
 	    case 's': {
 		int rSz = strtol(TSYS::strParse(aids,1,",").c_str(), NULL, 0);
 		string rez;
-		for(int i_r = aid; i_r < (aid+rSz); i_r++) {
-		    vl = getValR(i_r, w_err, isInputs);
+		for(int iR = aid; iR < (aid+rSz); iR++) {
+		    vl = TSYS::i16_BE(getValR(iR, w_err, isInputs));
 		    if(vl == EVAL_INT) return EVAL_STR;
 		    rez.append((char*)&vl, 2);
 		}
@@ -522,8 +522,8 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
 		string vl = val.getS();
 		vl.resize(strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)*2);
 		map<int,int> regs;
-		for(int i_r = aid; i_r < (aid+(int)vl.size()/2); i_r++)
-		    regs[i_r] = TSYS::getUnalign16(vl.data()+(i_r-aid)*2);
+		for(int iR = aid; iR < (aid+(int)vl.size()/2); iR++)
+		    regs[iR] = TSYS::i16_BE(TSYS::getUnalign16(vl.data()+(iR-aid)*2));
 		wrRez = setValRs(regs, w_err);
 		break;
 	    }
@@ -582,14 +582,14 @@ bool TMdContr::setValRs( const map<int,int> &regs, MtxString &err )
 
     //Write by single register
     if(!mMltWr) {
-	for(map<int,int>::const_iterator i_r = regs.begin(); i_r != regs.end(); i_r++)
-	    if(!setValR(i_r->second, i_r->first, err)) return false;
+	for(map<int,int>::const_iterator iR = regs.begin(); iR != regs.end(); iR++)
+	    if(!setValR(iR->second, iR->first, err)) return false;
 	return true;
     }
 
     //Write by multiply registers
-    for(map<int,int>::const_iterator i_r = regs.begin(); true; i_r++) {
-	if(i_r == regs.end() || (pdu.length() && (((i_r->first-prev) > 1) || (prev-start) > 122)))
+    for(map<int,int>::const_iterator iR = regs.begin(); true; iR++) {
+	if(iR == regs.end() || (pdu.length() && (((iR->first-prev) > 1) || (prev-start) > 122)))
 	{
 	    if(pdu.empty()) break;
 	    // Finish and send request
@@ -604,30 +604,30 @@ bool TMdContr::setValRs( const map<int,int> &regs, MtxString &err )
 	    }
 
 	    pdu = "";
-	    if(i_r == regs.end()) break;
+	    if(iR == regs.end()) break;
 	}
 
 	//Start request prepare
 	if(pdu.empty()) {
 	    pdu = (char)0x10;			//Function, preset multiple registers
-	    pdu += (char)(i_r->first>>8);	//Address MSB
-	    pdu += (char)i_r->first;		//Address LSB
+	    pdu += (char)(iR->first>>8);	//Address MSB
+	    pdu += (char)iR->first;		//Address LSB
 	    pdu += (char)0x00;			//Quantity MSB
 	    pdu += (char)0x01;			//Quantity LSB
 	    pdu += (char)0x02;			//Byte Count
-	    start = i_r->first;
+	    start = iR->first;
 	}
-	pdu += (char)(i_r->second>>8);		//Data MSB
-	pdu += (char)i_r->second;		//Data LSB
-	prev = i_r->first;
+	pdu += (char)(iR->second>>8);		//Data MSB
+	pdu += (char)iR->second;		//Data LSB
+	prev = iR->first;
 
 	//Set to acquisition block
 	ResAlloc res(reqRes, false);
 	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
-	    if((i_r->first*2) >= acqBlks[i_b].off && (i_r->first*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
+	    if((iR->first*2) >= acqBlks[i_b].off && (iR->first*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    {
-		acqBlks[i_b].val[i_r->first*2-acqBlks[i_b].off]   = (char)(i_r->second>>8);
-		acqBlks[i_b].val[i_r->first*2-acqBlks[i_b].off+1] = (char)i_r->second;
+		acqBlks[i_b].val[iR->first*2-acqBlks[i_b].off]   = (char)(iR->second>>8);
+		acqBlks[i_b].val[iR->first*2-acqBlks[i_b].off+1] = (char)iR->second;
 		break;
 	    }
     }
@@ -1078,7 +1078,7 @@ void TMdPrm::enable( )
 		    else if(atp_sub == "s") {
 			int rN = vmax(0,vmin(100,strtol(TSYS::strParse(ai,1,",").c_str(), NULL, 0)));
 			if(rN == 0) rN = 10;
-			if(flg&TVal::DirRead) for(int i_r = reg; i_r < (reg+rN); i_r++) owner().regVal(i_r, atp_m);
+			if(flg&TVal::DirRead) for(int iR = reg; iR < (reg+rN); iR++) owner().regVal(iR, atp_m);
 			ai = TSYS::strMess("%d,%d", reg, rN);
 		    }
 		}
@@ -1522,7 +1522,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(isStd() && a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr",":(r|w|rw):")->setAttr("color","red");
-	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
 	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[iubfds]\\d*)")->setAttr("color","darkorange");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }

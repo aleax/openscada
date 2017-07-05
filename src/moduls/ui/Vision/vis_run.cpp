@@ -1327,7 +1327,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 				     setAttr("aNm", _("Keep aspect ratio on scale"))->
 				     setAttr("aTp", i2s(TFld::Boolean));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstBarNoShow")->
-				     setAttr("aNm", _("No show status bar"))->
+				     setAttr("aNm", _("Not show status bar"))->
 				     setAttr("aTp", i2s(TFld::Boolean));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fwinPosCntrSave")->
 				     setAttr("aNm", _("Windows position control and save"))->

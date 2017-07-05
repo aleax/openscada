@@ -2370,7 +2370,7 @@ string ConfApp::getPrintVal( const string &vl )
 	    case 0: isBool = true; break;
 	}
 
-    return isBool ? TSYS::strDecode(vl, TSYS::Bin, " ") : vl;
+    return isBool ? "B["+TSYS::strDecode(vl,TSYS::Bin)+"]" : vl;
 }
 
 void ConfApp::initHosts( )

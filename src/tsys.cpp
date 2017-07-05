@@ -40,6 +40,7 @@
 
 #include <algorithm>
 
+#include "ieee754.h"
 #include "terror.h"
 #include "tmess.h"
 #include "tsys.h"
@@ -1330,15 +1331,7 @@ uint64_t TSYS::i64_BE( uint64_t in )
 float TSYS::floatLE( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    union ieee754_be {
-	float f;
-	struct {
-	    unsigned int negative:1;
-	    unsigned int exponent:8;
-	    unsigned int mantissa:23;
-	} ieee;
-    } ieee754_be;
-
+    ieee754_float ieee754_be;
     union ieee754_le {
 	float f;
 	struct {
@@ -1438,15 +1431,7 @@ double TSYS::doubleLErev( double in )
 float TSYS::floatBE( float in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    union ieee754_le {
-	float f;
-	struct {
-	    unsigned int mantissa:23;
-	    unsigned int exponent:8;
-	    unsigned int negative:1;
-	} ieee;
-    } ieee754_le;
-
+    ieee754_float ieee754_le;
     union ieee754_be {
 	float f;
 	struct {
@@ -1470,15 +1455,7 @@ float TSYS::floatBE( float in )
 float TSYS::floatBErev( float in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    union ieee754_le {
-	float f;
-	struct {
-	    unsigned int mantissa:23;
-	    unsigned int exponent:8;
-	    unsigned int negative:1;
-	} ieee;
-    } ieee754_le;
-
+    ieee754_float ieee754_le;
     union ieee754_be {
 	float f;
 	struct {
@@ -1502,23 +1479,7 @@ float TSYS::floatBErev( float in )
 double TSYS::doubleBE( double in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    union ieee754_le {
-	double d;
-	struct {
-# if __FLOAT_WORD_ORDER == __BIG_ENDIAN
-	    unsigned int mantissa0:20;
-	    unsigned int exponent:11;
-	    unsigned int negative:1;
-	    unsigned int mantissa1:32;
-# else
-	    unsigned int mantissa1:32;
-	    unsigned int mantissa0:20;
-	    unsigned int exponent:11;
-	    unsigned int negative:1;
-# endif
-	} ieee;
-    } ieee754_le;
-
+    ieee754_double ieee754_le;
     union ieee754_be {
 	double d;
 	struct {
@@ -1544,23 +1505,7 @@ double TSYS::doubleBE( double in )
 double TSYS::doubleBErev( double in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-    union ieee754_le {
-	double d;
-	struct {
-# if __FLOAT_WORD_ORDER == __BIG_ENDIAN
-	    unsigned int mantissa0:20;
-	    unsigned int exponent:11;
-	    unsigned int negative:1;
-	    unsigned int mantissa1:32;
-# else
-	    unsigned int mantissa1:32;
-	    unsigned int mantissa0:20;
-	    unsigned int exponent:11;
-	    unsigned int negative:1;
-# endif
-	} ieee;
-    } ieee754_le;
-
+    ieee754_double ieee754_le;
     union ieee754_be {
 	double d;
 	struct {

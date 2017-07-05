@@ -1010,7 +1010,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 				if(grpValIt != grpVals.end())	valIO = grpValIt->second.getS();
 				else { valIO = data->val.getS(itr->second.id); grpVals[itr->second.id] = valIO; }
 				valIO.resize(vmax(0,(itr->second.pos+1)*2), 0);
-				val = TSYS::getUnalign16(valIO.data()+itr->second.pos*2);
+				val = TSYS::i16_BE(TSYS::getUnalign16(valIO.data()+itr->second.pos*2));
 				break;
 			    }
 			    default:	val = data->val.getI(itr->second.id);	break;
@@ -1076,9 +1076,10 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			    break;
 			}
 			case 's': {
+			    val = TSYS::i16_BE(val);
 			    string valIO = data->val.getS(ir->second.id);
 			    valIO.resize(vmax((int)valIO.size(),(ir->second.pos+1)*2), 0);
-			    valIO.replace(ir->second.pos*2,2,(char*)&val,2);
+			    valIO.replace(ir->second.pos*2, 2, (char*)&val, 2);
 			    data->val.setS(ir->second.id, valIO);
 			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setS(valIO);
 			    break;
@@ -1158,10 +1159,11 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 				break;
 			    }
 			    case 's': {
+				val = TSYS::i16_BE(val);
 				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
 				string valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getS() : data->val.getS(ir->second.id);
 				valIO.resize(vmax((int)valIO.size(),(ir->second.pos+1)*2), 0);
-				valIO.replace(ir->second.pos*2,2,(char*)&val,2);
+				valIO.replace(ir->second.pos*2, 2, (char*)&val, 2);
 				grpVals[ir->second.id] = valIO;
 				break;
 			    }

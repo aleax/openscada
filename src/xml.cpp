@@ -307,7 +307,8 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
     for(unsigned iSz = 0; iSz < s.size(); iSz++) {
 	const char *replStr = NULL;
 	switch(s[iSz]) {
-	    case 0:	replStr = "\\000";	break;	//Bynary symbol but for next also problems possible and here needs check to Unicode
+	    case 0:	replStr = "\\000";	break;	//Bynary symbol but for next problems are possible also and here needs check to Unicode
+	    //case 0:	replStr = "&#000;";	break;
 	    case '>':	replStr = "&gt;";	break;
 	    case '<':	replStr = "&lt;";	break;
 	    case '"':	replStr = "&quot;";	break;

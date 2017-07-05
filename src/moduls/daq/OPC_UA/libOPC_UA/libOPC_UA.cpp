@@ -34,6 +34,7 @@
 #include <openssl/hmac.h>
 #include <openssl/evp.h>
 
+#include "ieee754.h"
 #include "libOPC_UA.h"
 
 namespace OPC
@@ -182,15 +183,7 @@ inline double getUnalignDbl( const void *p )
 float floatLE( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    union ieee754_be {
-	float f;
-	struct {
-	    unsigned int negative:1;
-	    unsigned int exponent:8;
-	    unsigned int mantissa:23;
-	} ieee;
-    } ieee754_be;
-
+    ieee754_float ieee754_be;
     union ieee754_le {
 	float f;
 	struct {

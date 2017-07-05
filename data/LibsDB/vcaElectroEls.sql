@@ -2775,9 +2775,7 @@ NAPQA2gGoAfQDEAPoBmAHkAzAD2AZgB6AM0A9ACaAegBNAPQA2gGoAfQDEAPoBmAHkAzAD2AZgB6
 AM0A9ACaAegBNAPQA2gGoAfQDEAPoBmAHkAzAD2AZgB6AK26LzB2WfFfq/9QBWjetDgKL01J0pl9
 AK7hPS0VI6B9AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
 if(st.isEVal())	c1 = "#000000-0";
-else c1 = st ? "red"; "lime";','','JavaLikeCalc.JavaScript
-if(st.isEVal())	c1 = "#000000-0";
-else c1 = st ? "red"; "lime";','',-1,'owner;name;lineWdth;lineClr;elLst;c1;',1497253454);
+else c1 = st ? "red" : "lime";','','','',-1,'owner;name;lineWdth;lineClr;elLst;c1;',1497253454);
 INSERT INTO "wlb_ElectroEls" VALUES('stGen1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAi1JREFUeJzt2y9o1VEYxvHPzoUJwk0u3TRBWHIgbCAzbQiaZjI5ixq2
 Bf+EuXI1qGUapmUzbJaryTSTFk0mTQZhQWwGmSAIgkEwnKM3Lr6w12+48HLfy+8J5z6c3znPO4IZ
@@ -2791,17 +2789,11 @@ ZGW8qDM6WZkq8u4CyZ2NQPOArWgVgYwWdS4vK4tFHUrMynRRJzKzskfu1+H0x+JrRR1Ezkqvg8P4
 Gq0kiGMj+IRXYsbXu2pk/Vmr4Xl7fr/Vj1rf30DTKmYNww0X1Qn4yaZpVZ2GHVPP/R9ju/Xu4L12
 EoTNP/ULaGtRSJXgAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 if(st.isEVal())	bordColor = "black";
-else bordColor = st ? "red"; "lime";','','JavaLikeCalc.JavaScript
-if(st.isEVal())	bordColor = "black";
-else bordColor = st ? "red"; "lime";','',-1,'owner;name;backColor;bordWidth;bordColor;bordStyle;',1497253454);
+else bordColor = st ? "red" : "lime";','','','',-1,'owner;name;backColor;bordWidth;bordColor;bordStyle;',1497253454);
 INSERT INTO "wlb_ElectroEls" VALUES('conBus','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAIRJREFUeJzt1LENwkAMBdAPYoIbkJKaMiOkzAwMmBkoCNKFAc4ReU+y
 dL7q24UTAAAAAAAA4Awu3fueZKoKMtic5JUkt+6zbTVXJBpoymfOJPsFJMmaZBkaZ7xH31yrUhyF
-BVQHqPZ7A1qSZ0WQgVrf9AtYt9odiT/0nRMAAAAAAAA4kTebsQnkLLRE0QAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if(st.isEVal())	c1 = "#000000-0";
-else c1 = st ? "red"; "lime";','','JavaLikeCalc.JavaScript
-if(st.isEVal())	c1 = "#000000-0";
-else c1 = st ? "red"; "lime";','',-1,'owner;name;lineWdth;lineClr;elLst;',1497253454);
+BVQHqPZ7A1qSZ0WQgVrf9AtYt9odiT/0nRMAAAAAAAA4kTebsQnkLLRE0QAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;lineWdth;lineClr;elLst;',1497253454);
 INSERT INTO "wlb_ElectroEls" VALUES('trStarTriangl','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABixJREFUeJzt23uMXGUZx/FPb7SsFCklRaoLRKuFikZFIUisoiWN1fgH
 ikIrJDUGGzVV0XghEpAYIkFRUQx4SQirmHi/gKKpQbSGaECRVGIbJFoVb1iN1Au1Uv/4zWZnp+fM
