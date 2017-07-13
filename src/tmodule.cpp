@@ -22,7 +22,6 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <unistd.h>
-#include <dlfcn.h>
 #include <string.h>
 
 #include "tsys.h"

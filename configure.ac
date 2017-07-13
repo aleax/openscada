@@ -1,18 +1,17 @@
+AC_PREREQ(2.50)
 
-AC_PREREQ([2.50])
-
-AC_INIT([OpenSCADA],[0.8.17],[rom_as@oscada.org])
-AC_PREFIX_DEFAULT([/usr])
+AC_INIT(OpenSCADA, 0.8.18, rom_as@oscada.org)
+AC_PREFIX_DEFAULT(/usr)
 oscd_LIBREVISION="2:5:0"
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
+AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(src/config.h)
 
 AC_LANG(C++)
 
-# Perform program name transformation
+# Perform the program name transformation
 #AC_ARG_PROGRAM
 
 # Enable options
@@ -22,7 +21,7 @@ AC_LIBTOOL_DLOPEN
 
 # AM_GNU_GETTEXT
 
-# Checks for programs.
+# Check for the needed programs.
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -31,43 +30,43 @@ AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
 if test "$ac_cv_prog_cc_g" = "no" -o "$ac_cv_prog_cxx_g" = "no"; then
-    AC_MSG_ERROR([No C or C++ compiler present. Install GCC and G++.]);
+    AC_MSG_ERROR([No C/C++ compiler present. Install GCC and G++.]);
 fi
 
 PKG_PROG_PKG_CONFIG
 if test "x$PKG_CONFIG" = "x"; then
-    AC_MSG_ERROR(pkg-config is required to configure this program)
+    AC_MSG_ERROR([pkg-config is required to configure this program])
 fi
 
 AM_SANITY_CHECK
 
-# Checks for header files.
+# Check for the header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([time.h signal.h semaphore.h fcntl.h math.h errno.h syslog.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h langinfo.h sys/types.h sys/stat.h sys/time.h sys/utsname.h pthread.h],[],
-    [AC_MSG_ERROR(Some GLibC headers not found. Install or check GLibC developing package!)])
+AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h langinfo.h pthread.h sys/types.h sys/stat.h sys/time.h sys/utsname.h],[],
+    AC_MSG_ERROR([Some GLibC headers are not found. Install or check the GLibC developing package!]))
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
-    [AC_MSG_ERROR([Some standard template libs' STL headers not found. Install or check STL-StdC++ developing package!])])
-AC_CHECK_HEADERS([iconv.h],[ ],[AC_MSG_NOTICE(iconv.h header not found. Using is disabled!)])
-AC_CHECK_HEADERS([libintl.h],[ ],[AC_MSG_NOTICE(libintl.h header not found. Using is disabled!)])
+    AC_MSG_ERROR([Some STL headers are not found. Install or check the STL of StdC++ developing package!]))
+AC_CHECK_HEADERS([iconv.h], [], AC_MSG_NOTICE([iconv.h header is not found. Using disabled!]))
+AC_CHECK_HEADERS([libintl.h], [], AC_MSG_NOTICE(libintl.h header is not found. Using disabled!))
 
-#Gettext utilites check
+# Checks for functions of libraries
+if test $ac_cv_header_iconv_h = yes; then
+    AC_SEARCH_LIBS(libiconv_open, [iconv])
+fi
+
 if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
     AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
     AC_CHECK_PROG(MSGFMT, msgfmt, msgfmt, false)
     if test $XGETTEXT = false -o $MSGMERGE = false -o $MSGFMT = false; then
-	AC_MSG_ERROR([Some gettext I18N utilite no present! Install gettext utilites package.]);
+	AC_MSG_ERROR([Some utilities of I18N gettext are not present! Install the gettext utilites package.]);
     fi
-    AC_CHECK_LIB([intl],[bindtextdomain],[LIB_CORE="${LIB_CORE}-lintl "])
+    AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
 fi
 
-if test $ac_cv_header_iconv_h = yes; then
-    AC_CHECK_LIB([iconv],[libiconv_open],[LIB_CORE="${LIB_CORE}-liconv "])
-fi
-
-# Checks for typedefs, structures, and compiler characteristics.
+# Check for typedefs, structures and the compiler characteristics.
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
@@ -84,7 +83,7 @@ if test $target_cpu = "i386" -o $target_cpu = "i486" -o $target_cpu = "i586" -o 
     $target_cpu = "k6" -o $target_cpu = "athlon" -o $target_cpu = "pentium2" -o $target_cpu = "pentium3" -o \
     $target_cpu = "pentium4"; then ix86=yes; fi
 
-# Checks for library functions.
+# Check for functions of libraries
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MKTIME
 AC_FUNC_SELECT_ARGTYPES
@@ -104,52 +103,46 @@ AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/ui/Makefile)
 
 #====== Generic functions enable/disable ======
-AC_ARG_ENABLE(CrossCompile,AC_HELP_STRING([--enable-CrossCompile], [enable crosscompile build]),[ ],
-[ if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
-AC_ARG_ENABLE(CoreLibStatic,AC_HELP_STRING([--enable-CoreLibStatic], [enable OpenSCADA core lib no shared, only static.]),
-[ liboscada_la_LIBTOOLFLAGS="--tag=disable-shared"; AC_SUBST(liboscada_la_LIBTOOLFLAGS) ],[ enable_CoreLibStatic=no; ])
-AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--enable-LibGD], [enable using library LibGD into core]),[ ],[ enable_LibGD=no; ])
-AC_ARG_ENABLE(AllModuls,AC_HELP_STRING([--enable-AllModuls], [all modules enable/disable for separated modules select]),[ ],[ enable_AllModuls=individual; ])
+AC_ARG_ENABLE(CrossCompile, AC_HELP_STRING([--enable-CrossCompile],[enable the crosscompile build]), [],
+    [if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
+AC_ARG_ENABLE(CoreLibStatic, AC_HELP_STRING([--enable-CoreLibStatic],[enable OpenSCADA core library to build only in static, without the shared one.]),
+    [liboscada_la_LIBTOOLFLAGS="--tag=disable-shared"; AC_SUBST(liboscada_la_LIBTOOLFLAGS)], [enable_CoreLibStatic=no;])
+AC_ARG_ENABLE(CoreLibVersion, AC_HELP_STRING([--disable-CoreLibVersion],[disable version for OpenSCADA core library.]), [], [enable_CoreLibVersion=yes;])
+if test $enable_CoreLibVersion = yes; then liboscada_la_LDFLAGS="-version-info ${oscd_LIBREVISION}"; else liboscada_la_LDFLAGS="-avoid-version"; fi
+AC_SUBST(liboscada_la_LDFLAGS)
+AC_ARG_ENABLE(LibGD, AC_HELP_STRING([--enable-LibGD], [enable/force of using the library LibGD into the core or the modules]), [], [enable_LibGD=no;])
+AC_ARG_ENABLE(AllModuls,
+    AC_HELP_STRING([--enable-AllModuls],[all modules enable/disable for their separated selection]), [ ], [enable_AllModuls=individual;])
 
-AC_MSG_RESULT(========== Core libraries check =============)
-# Check for libraries
+AC_MSG_RESULT([========== Check for libraries of the core =============])
+# AX_PTHREAD
+PTHREAD_LIBS="-lpthread";
+AC_SUBST(PTHREAD_LIBS)
 if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
 fi
-AC_CHECK_LIB([m],[sin],[AC_MSG_NOTICE([LibM: Pass global library using])],
-    [AC_MSG_ERROR(Math library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([dl],[dlopen],[AC_MSG_NOTICE([LibDl: Pass global library using])],
-    [AC_MSG_ERROR(Dynamik linking library not found. Install or check GLibC core package!)])
-#AC_CHECK_LIB([rt],[pthread_create],[AC_MSG_NOTICE(Pass global library using)],
-#    [AC_MSG_ERROR(Pthread library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([crypt],[crypt],[AC_MSG_NOTICE([LibCrypt: Pass global library using])],
-    [AC_MSG_ERROR(Crypt library not found. Install or check GLibC core package!)])
-AC_CHECK_LIB([z],[deflate],[AC_MSG_NOTICE([LibZ: Pass global library using])],
-    [AC_MSG_ERROR(Z library not found. Install or check libz package!)])
+AC_SEARCH_LIBS(sin, [m], [], AC_MSG_ERROR([The mathematic library isn't found. Install or check the GLibC core package!]))
+AC_SEARCH_LIBS(dlopen, [dl], [], AC_MSG_ERROR([The dynamic linking library isn't found. Install or check the GLibC core package!]))
+AC_SEARCH_LIBS(clock_gettime, [rt])
+AC_CHECK_HEADERS([crypt.h], AC_SEARCH_LIBS(crypt_r,[crypt]), AC_MSG_NOTICE([crypt.h header isn't found. Using disabled!]))
+AC_SEARCH_LIBS(deflate, [z], [], AC_MSG_ERROR([Z library isn't found. Install or check the libz package!]))
 
-#> Check for GD library use in OpenSCADA core
-if test $enable_LibGD = yes; then
-    AC_CHECK_HEADERS([gd.h],
-	[
-	    AC_CHECK_LIB([gd],[gdImageCreate],
-	    [
-		AC_DEFINE(HAVE_GD_CORE,1,[LibGD: Pass library using into core])
-		LIB_CORE="${LIB_CORE}-lgd "
-	    ],[AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
-	],
-	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
-fi
-
-#> Check for PCRE library use in OpenSCADA core
+# Check for the PCRE library using in the OpenSCADA core
 CXXFLAGS="$CXXFLAGS $($PKG_CONFIG --cflags libpcre)"
-AC_CHECK_HEADERS([pcre.h],[],
-    [AC_MSG_ERROR(PCRE header not found. Install or check PCRE developing package!)])
-AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library using])],
-    [AC_MSG_ERROR(PCRE library not found. Install or check PCRE package!)])
+AC_CHECK_HEADERS([pcre.h], [], AC_MSG_ERROR([The PCRE header isn't found. Install or check the PCRE developing package!]))
+AC_SEARCH_LIBS(pcre_compile, [pcre], [], AC_MSG_ERROR([The PCRE library isn't found. Install or check the PCRE package!]))
 
-AC_MSG_RESULT(========== Build modules check =============)
-#> DB modules
+# Check for the GD library using into the OpenSCADA core
+if test $enable_LibGD = yes; then
+    AX_LIB_GD
+    AC_DEFINE(HAVE_GD_FORCE, 1, [LibGD: Force the library using into the core and modules])
+    LIBS="${LIBS}${gdlib_LIBS} "
+fi
+LIB_CORE=${LIBS}
+
+AC_MSG_RESULT([========== Check for building modules =============])
+# DB modules
 AC_SUBST(DBSub_mod)
 AX_MOD_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl,
 [
@@ -166,9 +159,9 @@ AX_MOD_EN(MySQL,[disable or enable[=incl] build module DB.MySQL],disable,incl,
     AC_MSG_RESULT(Build module: DB.MySQL)
     AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile)
     DBSub_mod="${DBSub_mod}MySQL "
-    #>> Modules checkings
+    #  Module's checkings
     AX_LIB_MYSQL
-    if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB.MySQL: MySQL development resources not found. Install or check MySQL development package!); fi
+    if test "$found_mysql" != "yes"; then AC_MSG_ERROR([DB.MySQL: MySQL developing resources aren't found. Install or check the MySQL development package!]); fi
     if test $enable_MySQL = incl; then
 	LIB_CORE="${LIB_CORE} moduls/bd/MySQL/.libs/*.o ${MYSQL_LDFLAGS} "
 	ModsIncl="${ModsIncl}bd_MySQL "
@@ -179,10 +172,10 @@ AX_MOD_EN(SQLite,[disable or enable[=incl] build module DB.SQLite],disable,incl,
     AC_MSG_RESULT(Build module: DB.SQLite)
     AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile)
     DBSub_mod="${DBSub_mod}SQLite "
-    #>> Modules checkings
-    PKG_CHECK_MODULES([sqlite3],[sqlite3 > 3],
-	[AC_CHECK_LIB([sqlite3],[sqlite3_open],[],[AC_MSG_ERROR(SQLite3 library is not usable!)])],
-	[AC_MSG_ERROR(DB.SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!)])
+    #  Module's checkings
+    PKG_CHECK_MODULES(sqlite3, [sqlite3 > 3],
+	AC_CHECK_LIB(sqlite3, sqlite3_open, [], AC_MSG_ERROR([SQLite3 library isn't usable!])),
+	AC_MSG_ERROR([DB.SQLite: SQLite3 developing resources aren't found. Install or check the SQLite3 development package!]))
     if test $enable_SQLite = incl; then
 	LIB_CORE="${LIB_CORE} moduls/bd/SQLite/.libs/*.o ${sqlite3_LIBS} "
 	ModsIncl="${ModsIncl}bd_SQLite "
@@ -193,9 +186,11 @@ AX_MOD_EN(FireBird,[disable or enable[=incl] build module DB.FireBird],disable,i
     AC_MSG_RESULT(Build module: DB.FireBird)
     AC_CONFIG_FILES(src/moduls/bd/FireBird/Makefile)
     DBSub_mod="${DBSub_mod}FireBird "
-    #>> Modules checkings
-    AX_LIB_FIREBIRD([2.0.0])
-    if test "$success" != "yes"; then AC_MSG_ERROR(DB.FireBird: FireBird development resources not found. Install or check FireBird development package!); fi
+    #  Module's checkings
+    AX_LIB_FIREBIRD(2.0.0)
+    if test "$success" != "yes"; then
+        AC_MSG_ERROR([DB.FireBird: FireBird developing resources aren't found. Install or check the FireBird development package!]);
+    fi
     if test $enable_FireBird = incl; then
 	LIB_CORE="${LIB_CORE} moduls/bd/FireBird/.libs/*.o ${FIREBIRD_LDFLAGS} "
 	ModsIncl="${ModsIncl}bd_FireBird "
@@ -206,28 +201,29 @@ AX_MOD_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],disab
     AC_MSG_RESULT(Build module: DB.PostgreSQL)
     AC_CONFIG_FILES(src/moduls/bd/PostgreSQL/Makefile)
     DBSub_mod="${DBSub_mod}PostgreSQL "
-    #>> Modules checkings
-    AX_LIB_POSTGRESQL([8.3.0])
-    if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
+    #  Module's checkings
+    AX_LIB_POSTGRESQL(8.3.0)
+    if test "$found_postgresql" != "yes"; then
+	AC_MSG_ERROR([DB.PostgreSQL: PostgreSQL developing resources aren't found. Install or check the PostgreSQL development package!]);
+    fi
     if test $enable_PostgreSQL = incl; then
 	LIB_CORE="${LIB_CORE} moduls/bd/PostgreSQL/.libs/*.o ${POSTGRESQL_LDFLAGS} "
 	ModsIncl="${ModsIncl}bd_PostgreSQL "
     fi
 ])
-#> DAQ modules
+# DAQ modules
 AC_SUBST(DAQSub_mod)
 AX_MOD_EN(System,[disable or enable[=incl] build module DAQ.System],disable,incl,
 [
     AC_MSG_RESULT(Build module: DAQ.System)
     AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
     DAQSub_mod="${DAQSub_mod}System "
-    #>> Modules checkings
+    #  Modules checkings
     AX_LIB_SENSORS()
     if test $enable_System = incl; then
 	LIB_CORE="${LIB_CORE} moduls/daq/System/.libs/*.o ${LIB_SENSORS} "
 	ModsIncl="${ModsIncl}daq_System "
     fi
-
 ])
 AX_MOD_EN(BlockCalc,[disable or enable[=incl] build module DAQ.BlockCalc],disable,incl,
 [
@@ -244,11 +240,11 @@ AX_MOD_EN(JavaLikeCalc,[disable or enable[=incl] build module DAQ.BlockCalc],dis
     AC_MSG_RESULT(Build module: DAQ.JavaLikeCalc)
     AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
-    #>> Modules checkings
+    #  Modules checkings
     AC_PROG_YACC
     AC_CHECK_PROG(YACC_OK, bison, true, false)
     if test $YACC_OK = false; then
-	AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.])
+	AC_MSG_ERROR([No syntax generator present! Install a YACC program like to bison.])
     fi
     if test $enable_JavaLikeCalc = incl; then
 	LIB_CORE="${LIB_CORE} moduls/daq/JavaLikeCalc/.libs/*.o "
@@ -278,23 +274,20 @@ AX_MOD_EN(SNMP,[disable build module DAQ.SNMP],disable,[],
     AC_MSG_RESULT(Build module: DAQ.SNMP)
     AC_CONFIG_FILES(src/moduls/daq/SNMP/Makefile)
     DAQSub_mod="${DAQSub_mod}SNMP "
-    #>> Modules checkings
-    AC_CHECK_HEADERS([net-snmp/net-snmp-config.h],[],
-	[AC_MSG_ERROR(DAQ.SNMP: Net SNMP library headers not found. Install or check of Net SNMP developing package!)])
-#    AC_CHECK_LIB([netsnmp],[snmp_sess_init],[AC_MSG_NOTICE(Pass global library using)],
-#	[AC_MSG_ERROR(DAQ.SNMP: Net SNMP API library not found. Install or check Net SNMP library package!)],
-#	[crypto])
+    #  Module's checkings
+    AC_CHECK_HEADERS([net-snmp/net-snmp-config.h], [],
+	AC_MSG_ERROR([DAQ.SNMP: The Net SNMP library headers aren't found. Install or check the Net SNMP development package!]))
 ])
 AX_MOD_EN(Siemens,[disable build module DAQ.Siemens],disable,[],
 [
     AC_MSG_RESULT(Build module: DAQ.Siemens)
     AC_CONFIG_FILES(src/moduls/daq/Siemens/Makefile)
     DAQSub_mod="${DAQSub_mod}Siemens "
-    #>> Modules checkings
-    AC_CHECK_HEADERS([ctype.h],[],
-	[AC_MSG_ERROR(DAQ.Siemens: Some GLibC network headers not found. Install or check GLibC developing package!)])
-    AC_CHECK_HEADERS([linux/kd.h],[],
-	[AC_MSG_ERROR(DAQ.Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!)])
+    #  Modules checkings
+    AC_CHECK_HEADERS([ctype.h], [],
+	AC_MSG_ERROR([DAQ.Siemens: Some GLibC network headers aren't found. Install or check the GLibC development package!]))
+    AC_CHECK_HEADERS([linux/kd.h], [],
+	AC_MSG_ERROR([DAQ.Siemens: The Linux kernel headers aren't found. Install or check the Linux kernel headers package!]))
 ])
 AX_MOD_EN(ModBus,[disable or enable[=incl] build module DAQ.ModBus],disable,incl,
 [
@@ -331,11 +324,10 @@ AX_MOD_EN(SoundCard,[disable build module DAQ.SoundCard],disable,[],
     AC_MSG_RESULT(Build module: DAQ.SoundCard)
     AC_CONFIG_FILES(src/moduls/daq/SoundCard/Makefile)
     DAQSub_mod="${DAQSub_mod}SoundCard "
-    #>> Modules checkings
-    AC_CHECK_HEADERS([portaudio.h],[],
-	[AC_MSG_ERROR(DAQ.SoundCard: Some Portaudio headers not found. Install or check Portaudio developing package!)])
-    AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE([LibPortaudio: Pass global library using])],
-	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
+    #  Module's checkings
+    AC_CHECK_HEADERS([portaudio.h], [],
+	AC_MSG_ERROR([DAQ.SoundCard: Some Portaudio headers aren't found. Install or check the Portaudio developing package!]))
+    AC_CHECK_LIB(portaudio, Pa_Initialize, [], AC_MSG_ERROR([The Portaudio library isn't found. Install or check the Portaudio library package!]))
 ])
 AX_MOD_EN(ICP_DAS,[enable build module DAQ.ICP_DAS],enable,[],
 [
@@ -357,7 +349,7 @@ AX_MOD_EN(OPC_UA,[disable build module DAQ.OPC_UA],disable,[],
     AC_CONFIG_FILES(src/moduls/daq/OPC_UA/Makefile)
     AC_CONFIG_FILES(src/moduls/daq/OPC_UA/libOPC_UA/Makefile)
     DAQSub_mod="${DAQSub_mod}OPC_UA "
-    #>> Modules checkings
+    #  Modules checkings
     AX_LIB_OpenSSL()
 ])
 AX_MOD_EN(AMRDevs,[enable build module DAQ.AMRDevs],enable,[],
@@ -372,7 +364,7 @@ AX_MOD_EN(BFN,[enable build module DAQ.BFN],enable,[],
     AC_CONFIG_FILES(src/moduls/daq/BFN/Makefile)
     DAQSub_mod="${DAQSub_mod}BFN "
 ])
-#> Archive modules
+# Archive modules
 AC_SUBST(ArchSub_mod)
 AX_MOD_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl,
 [
@@ -394,14 +386,14 @@ AX_MOD_EN(DBArch,[disable or enable[=incl] build module Archive.DBArch],disable,
 	ModsIncl="${ModsIncl}arh_DBArch "
     fi
 ])
-#> Transport modules
+# Transport modules
 AC_SUBST(TranspSub_mod)
 AX_MOD_EN(Sockets,[disable or enable[=incl] build module Transport.Sockets],disable,incl,
 [
     AC_MSG_RESULT(Build module: Transport.Sockets)
     AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
     TranspSub_mod="${TranspSub_mod}Sockets "
-    #>> Modules checkings
+    #  Modules checkings
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
 	[AC_MSG_ERROR(Transport.Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
     if test $enable_Sockets = incl; then
@@ -414,7 +406,7 @@ AX_MOD_EN(SSL,[disable or enable[=incl] build module Transport.SSL],disable,incl
     AC_MSG_RESULT(Build module: Transport.SSL)
     AC_CONFIG_FILES(src/moduls/transport/SSL/Makefile)
     TranspSub_mod="${TranspSub_mod}SSL "
-    #>> Modules checkings
+    #  Modules checkings
     AX_LIB_OpenSSL()
     if test $enable_SSL = incl; then
 	LIB_CORE="${LIB_CORE} moduls/transport/SSL/.libs/*.o ${LIB_OpenSSL} "
@@ -426,13 +418,13 @@ AX_MOD_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disabl
     AC_MSG_RESULT(Build module: Transport.Serial)
     AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
     TranspSub_mod="${TranspSub_mod}Serial "
-    AC_CHECK_HEADERS([linux/i2c-dev.h],[ ],[AC_MSG_NOTICE(linux/i2c-dev.h header not found. Using is disabled!)])
+    AC_CHECK_HEADERS([linux/serial.h linux/i2c-dev.h], [], AC_MSG_NOTICE([Some Linux headers aren't found. Using disabled!]))
     if test $enable_Serial = incl; then
 	LIB_CORE="${LIB_CORE} moduls/transport/Serial/.libs/*.o "
 	ModsIncl="${ModsIncl}tr_Serial "
     fi
 ])
-#> Transport protocol modules
+# Transport protocol modules
 AC_SUBST(ProtSub_mod)
 AX_MOD_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl,
 [
@@ -464,7 +456,7 @@ AX_MOD_EN(UserProtocol,[disable or enable[=incl] build module Protocol.UserProto
 	ModsIncl="${ModsIncl}prt_UserProtocol "
     fi
 ])
-#> UI modules
+# UI modules
 AC_SUBST(UISub_mod)
 AX_MOD_EN(VCAEngine,[disable or enable[=incl] build module UI.VCAEngine],disable,incl,
 [
@@ -481,24 +473,23 @@ AX_MOD_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,
     AC_MSG_RESULT(Build module: UI.Vision)
     AC_CONFIG_FILES(src/moduls/ui/Vision/Makefile)
     UISub_mod="${UISub_mod}Vision "
-    #>> Modules checkings
+    #  Modules checkings
     AX_LIB_FFTW3()
     AX_LIB_Qt()
-    AC_ARG_ENABLE(Phonon,AC_HELP_STRING([--disable-Phonon], [disable using Phonon library]),[ ],[
-	AS_IF([test "x${Qt5_use}" = "x"],[
-	    PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
-		[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
-		[AC_MSG_NOTICE(Phonon media player engine is not found. Using disabled!)])
-	],[
-	    PKG_CHECK_MODULES([phonon4qt5],[phonon4qt5 > 4.3.0],
-		[
-		    AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])
-		    phonon_CFLAGS=$phonon4qt5_CFLAGS
-		    phonon_LIBS=$phonon4qt5_LIBS
-		],
-		[AC_MSG_NOTICE(Phonon media player engine is not found. Using disabled!)])
+
+    AC_ARG_ENABLE(Phonon, AC_HELP_STRING([--disable-Phonon], [disable the Phonon library using]), [], [
+	AS_IF([test "x${Qt5_use}" = "x"], [
+	    PKG_CHECK_MODULES(phonon, [phonon > 4.3.0],
+		AC_DEFINE(HAVE_PHONON, 1, [The Phonon media player engine is allowed.]),
+		AC_MSG_NOTICE([The Phonon media player engine isn't found. Using disabled!]))
+	], [
+	    PKG_CHECK_MODULES(phonon4qt5, [phonon4qt5 > 4.3.0], [
+		AC_DEFINE(HAVE_PHONON, 1, [The Phonon media player engine is allowed.])
+		phonon_CFLAGS=$phonon4qt5_CFLAGS
+		phonon_LIBS=$phonon4qt5_LIBS
+	    ], AC_MSG_NOTICE([The Phonon media player engine isn't found. Using disabled!]))
 	])
-	AS_IF([test "x${phonon_CFLAGS}" = "x"],[],[
+	AS_IF([test "x${phonon_CFLAGS}" = "x"], [], [
 	    SAVE_CXXFLAGS="$CXXFLAGS"
 	    CXXFLAGS="$CXXFLAGS -fpic $QtGui_CFLAGS $phonon_CFLAGS"
 	    AC_CHECK_HEADERS([phonon/VideoPlayer],[],[])
@@ -547,7 +538,6 @@ AX_MOD_EN(WebCfgD,[disable or enable[=incl] build module UI.WebCfgD],disable,inc
     AC_MSG_RESULT(Build module: UI.WebCfgD)
     AC_CONFIG_FILES(src/moduls/ui/WebCfgD/Makefile)
     UISub_mod="${UISub_mod}WebCfgD "
-    AX_LIB_GD()
     if test $enable_WebCfgD = incl; then
 	LIB_CORE="${LIB_CORE} moduls/ui/WebCfgD/.libs/*.o ${LIB_GD} "
 	ModsIncl="${ModsIncl}ui_WebCfgD "
@@ -558,9 +548,9 @@ AX_MOD_EN(WebVision,[disable or enable[=incl] build module UI.WebVision],disable
     AC_MSG_RESULT(Build module: UI.WebVision)
     AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
     UISub_mod="${UISub_mod}WebVision "
-    #>> Modules checkings
-    AX_LIB_GD()
-    AX_LIB_FFTW3()
+    #  Modules checkings
+    AX_LIB_GD
+    AX_LIB_FFTW3
     if test $enable_WebVision = incl; then
 	LIB_CORE="${LIB_CORE} moduls/ui/WebVision/.libs/*.o ${LIB_GD} ${LIB_FFTW3} "
 	ModsIncl="${ModsIncl}ui_WebVision "
@@ -576,7 +566,7 @@ AX_MOD_EN(WebUser,[disable or enable[=incl] build module UI.WebUser],disable,inc
 	ModsIncl="${ModsIncl}ui_WebUser "
     fi
 ])
-#> Special modules
+# Special modules
 AC_SUBST(SpecSub_mod)
 AX_MOD_EN(SystemTests,[disable build module Special.SystemTests],disable,[],
 [
@@ -613,13 +603,14 @@ AX_MOD_EN(FLibSYS,[disable or enable[=incl] build module Special.FLibSYS],disabl
 	LIB_CORE="${LIB_CORE} moduls/special/FLibSYS/.libs/*.o "
 	ModsIncl="${ModsIncl}spec_FLibSYS "
     fi
-    #>> Modules checkings
-    AX_LIB_FFTW3()
-    AX_LIB_OpenSSL()
+    #  Modules checkings
+    AX_LIB_FFTW3
+    AX_LIB_OpenSSL_opt
 ])
+
 AC_MSG_RESULT(===========================================)
 
-AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}",[Included to core modules list.])
+AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}", [Modules list of included/builtin to the core.])
 
 # Clear libs list after PKG_CHECK_MODULES
 LIBS=""
@@ -629,13 +620,13 @@ AC_OUTPUT
 AC_MSG_RESULT([============ Final configuration results ==============])
 AC_MSG_RESULT([* Status:])
 AC_MSG_RESULT([  - Enable(yes)/disable(no) all modules                         = $enable_AllModuls])
-AC_MSG_RESULT([  - Crosscompile build                                          = $enable_CrossCompile])
-AC_MSG_RESULT([  - Core lib build only static                                  = $enable_CoreLibStatic])
+AC_MSG_RESULT([  - Crosscompile compilation                                    = $enable_CrossCompile])
+AC_MSG_RESULT([  - The core library compilation only in static                 = $enable_CoreLibStatic])
 AC_MSG_RESULT([* Generic features:])
 AC_MSG_RESULT([  - Strings charset encode support (by iconv)                   = $ac_cv_header_iconv_h])
 AC_MSG_RESULT([  - Interfaces internationalisation (I18N) support (by LibIntl) = $ac_cv_header_libintl_h])
-AC_MSG_RESULT([  - Graphical library (LibGD2) use by core                      = $enable_LibGD])
-AC_MSG_RESULT([  - Subsystem modules build:])
+AC_MSG_RESULT([  - LibGD forcing for the core and the modules                  = $enable_LibGD])
+AC_MSG_RESULT([  - Compilation modules of the sunsystems:])
 AC_MSG_RESULT([    "DB":                   $DBSub_mod])
 AC_MSG_RESULT([    "DAQ":                  $DAQSub_mod])
 AC_MSG_RESULT([    "Archive":              $ArchSub_mod])
@@ -643,8 +634,8 @@ AC_MSG_RESULT([    "Transport":            $TranspSub_mod])
 AC_MSG_RESULT([    "Transport's protocol": $ProtSub_mod])
 AC_MSG_RESULT([    "UI":                   $UISub_mod])
 AC_MSG_RESULT([    "Special":              $SpecSub_mod])
-AC_MSG_RESULT([  - Modules included to OpenSCADA core: $ModsIncl])
-AC_MSG_RESULT([* Modules' features:])
-AC_MSG_RESULT([  - FFTW3 for signal spectrum purchase: $LIB_FFTW3])
-AC_MSG_RESULT([  - Linux sensors library use:          $LIB_SENSORS])
-AC_MSG_RESULT([  - Media play engine:                  $phonon_LIBS])
+AC_MSG_RESULT([  - Including/builtin modules to the OpenSCADA core: $ModsIncl])
+AC_MSG_RESULT([* Features of some specific modules:])
+AC_MSG_RESULT([  - FFTW3 to obtain spectrum of signal: $LIB_FFTW3])
+AC_MSG_RESULT([  - Library of the Linux sensors:       $LIB_SENSORS])
+AC_MSG_RESULT([  - Media player's engine:              $phonon_LIBS])

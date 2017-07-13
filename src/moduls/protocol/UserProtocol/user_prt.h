@@ -130,6 +130,7 @@ class UserPrt : public TCntrNode, public TConfig
 	char	&mAEn, mEn;
 	int	&mWaitReqTm;
 	string	mDB, mWorkInProg, mWorkOutProg;
+	bool	prgChOnEn;
 };
 
 //*************************************************

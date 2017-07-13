@@ -36,10 +36,10 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"LogicLev"
-#define MOD_NAME	_("Logic level")
+#define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.5"
+#define MOD_VER		"1.7.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -50,12 +50,12 @@ LogicLev::TTpContr *LogicLev::mod;	//Pointer for direct access to the module
 extern "C"
 {
 #ifdef MOD_INCL
-    TModule::SAt daq_LogicLev_module( int n_mod )
+    TModule::SAt daq_LogicLev_module( int nMod )
 #else
-    TModule::SAt module( int n_mod )
+    TModule::SAt module( int nMod )
 #endif
     {
-	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
+	if(nMod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -102,7 +102,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"50",""));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100", "1"));
-    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     // Standard parameter type by template
@@ -584,7 +584,7 @@ void TMdPrm::vlGet( TVal &val )
 	if(isStd() && tmpl->val.func() && idErr >= 0) {
 	    if(tmpl->val.getS(idErr) != EVAL_STR) val.setS(tmpl->val.getS(idErr), 0, true);
 	} else val.setS("0", 0, true);
-	//if(owner().messLev() == TMess::Debug)
+	//if(owner().messLev() == TMess::Debug && (idErr < 0 || tmpl->val.getS(idErr) != EVAL_STR))
 	//    val.setS(val.getS(NULL,true)+": "+TSYS::strMess(_("Spent time %s[%s]"),tm2s(tmCalc).c_str(),tm2s(tmCalcMax).c_str()), 0, true);
     }
 }
@@ -597,8 +597,8 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(owner().redntUse()) {
 	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	SYS->daq().at().rdStRequest(owner().workId(),req);
+	req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
+	SYS->daq().at().rdStRequest(owner().workId(), req);
 	return;
     }
 

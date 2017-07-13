@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 11:15+0200\n"
+"POT-Creation-Date: 2017-06-16 11:13+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -427,6 +427,9 @@ msgstr "Виключено. "
 
 msgid "Enabled. "
 msgstr "Включено. "
+
+msgid "Modified, re-enable to apply! "
+msgstr "Модифіковано, переувімкнути для застосування! "
 
 #, c-format
 msgid ""

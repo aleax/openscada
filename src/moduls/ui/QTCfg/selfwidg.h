@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,6 +129,8 @@ class TextEdit : public QWidget
 	TextEdit( QWidget *parent, const char * name = 0, bool prev_dis = false );
 
 	QSize sizeHint( ) const;
+	QSize minimumSizeHint( ) const;
+	QSize rowsCols( )	{ return mRowCol; }
 
 	QString text( );
 	bool hasFocus( ) const;
@@ -181,6 +183,7 @@ class ListView : public QListWidget
 	ListView( QWidget * parent = 0 );
 
 	QSize sizeHint( ) const;
+	QSize minimumSizeHint( ) const;
 };
 
 //************************************************

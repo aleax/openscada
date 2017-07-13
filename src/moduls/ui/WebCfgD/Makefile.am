@@ -1,18 +1,18 @@
 EXTRA_DIST = WebCfgDVCA.js WebCfgDVCA.html *.h po/*
 
 oscd_modul_LTLIBRARIES = ui_WebCfgD.la
-ui_WebCfgD_la_LDFLAGS = -module -avoid-version -no-undefined
+ui_WebCfgD_la_CXXFLAGS = $(gdlib_CFLAGS)
+ui_WebCfgD_la_LDFLAGS = -module -avoid-version -no-undefined $(gdlib_LIBS)
 ui_WebCfgD_la_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
-ui_WebCfgD_la_LIBADD = $(LIB_GD)
 ui_WebCfgD_la_LIBTOOLFLAGS = --tag=disable-static
 
 if WebCfgDIncl
-ui_WebCfgD_la_CXXFLAGS = -DMOD_INCL
+ui_WebCfgD_la_CXXFLAGS += -DMOD_INCL
 install:
 endif
 
 VCAjs.cpp: WebCfgDVCA.js
-	@lc=`cat $< | wc -l` ; \
+	@lc=`cat $< | wc -l`; let lc=lc+1; \
 	il=1 ; \
 	echo "const char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
 	while [ $$il -le $$lc ] ; do \
@@ -23,7 +23,7 @@ VCAjs.cpp: WebCfgDVCA.js
 	done
 
 VCAhtml.cpp: WebCfgDVCA.html
-	@lc=`cat $< | wc -l` ; \
+	@lc=`cat $< | wc -l`; let lc=lc+1; \
 	il=1 ; \
 	echo "const char *`echo "$<" | sed 's/\./_/g'`=" > $@ ; \
 	while [ $$il -le $$lc ] ; do \

@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2017 by Roman Savochenko, <rom_as@oscada.org>		*
  *										*
- *   Version: 1.2.0								*
+ *   Version: 1.2.2								*
  *      * Hello/Acknowledge properties set configurable and client's ones	*
  *	  also storing.								*
  *	* New OPCAlloc object is added for mutex handle and its automatic free	*
@@ -456,10 +456,10 @@ class NodeId
 
     private:
 	//Attributes
-	uint16_t mNs;
-	Type	mTp;
-	uint32_t numb;
-	string   str;
+	uint16_t	mNs;
+	Type		mTp;
+	uint32_t	numb;
+	string		str;
 };
 
 //*************************************************
@@ -858,7 +858,7 @@ class Server: public UA
 	    const string &iclAddr = "", uint32_t iseqN = 1 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
-	SecCnl &chnlGet_( int cid );
+	SecCnl &chnlGet_( int cid )	{ return mSecCnl[cid]; }	//Unsafe direct link. Use "mtxData" to manage!
 	void chnlSecSet( int cid, const string &servKey, const string &clKey );
 
 	static string mkError( uint32_t errId, const string &err = "" );
@@ -868,6 +868,9 @@ class Server: public UA
 	// Request to EndPoints
 	virtual void epEnList( vector<string> &ls ) = 0;
 	virtual EP *epEnAt( const string &ep ) = 0;
+
+	//Attributed
+	pthread_mutex_t		mtxData;
 
     private:
 	//Attributes

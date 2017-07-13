@@ -1,3 +1,9 @@
+openscada (0.8.18-1) experimental; urgency=low
+
+  * The build of 0.8.18 update to the production release.
+
+ -- OpenSCADA <oscada@oscada.org>  Sun, 2 Jul 2017 20:00:00 +0200
+
 openscada (0.8.17-1) experimental; urgency=low
 
   * The build of 0.8.17 update to the production release.

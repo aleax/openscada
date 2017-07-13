@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -279,7 +279,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    rel_cfg = true;
 	    switch(shD->elType) {
 		case F_LINE_ED:	shD->view = s2i(val);		break;
-		case F_TEXT_ED:	shD->wordWrap = s2i(val);	break;
+		case F_TEXT_ED:	shD->opt1 = s2i(val);	break;
 		case F_BUTTON:	shD->img = val;		break;
 		case F_COMBO: case F_LIST: case F_TREE: case F_TABLE: shD->items = val;	break;
 		case F_SLIDER: case F_SCROLL_BAR: shD->cfg = val;		break;
@@ -291,6 +291,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    switch(shD->elType) {
 		case F_LINE_ED:	shD->cfg = val;		break;
 		case F_BUTTON:	shD->color = val;	break;
+		case F_LIST:	shD->opt1 = s2i(val);	break;
 		default: rel_cfg = false;
 	    }
 	    break;
@@ -340,7 +341,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		}
 		wdg->setFont(elFnt);		//Font
 		setValue(w, shD->value, true);	//Value
-		wdg->workWdg()->setLineWrapMode(shD->wordWrap ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);	//WordWrap
+		wdg->workWdg()->setLineWrapMode(shD->opt1 ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);	//WordWrap
 		break;
 	    }
 	    case F_CHECK_BOX: {
@@ -418,9 +419,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QListWidget*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QListWidget(w);
-		    if(runW) connect(wdg, SIGNAL(currentRowChanged(int)), this, SLOT(listChange(int)));
+		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(listChange()));
 		    mk_new = true;
 		}
+		wdg->setSelectionMode(shD->opt1?QAbstractItemView::ExtendedSelection:QAbstractItemView::SingleSelection);
 		//Items
 		wdg->clear();
 		wdg->addItems(QString(shD->items.c_str()).split("\n"));
@@ -454,8 +456,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,true,&off1)).size(); lev++)
 			if(lev == 0) {
 			    cur_it = NULL;
-			    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
-				if(wdg->topLevelItem(i_r)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(i_r);
+			    for(int iR = 0; !cur_it && iR < wdg->topLevelItemCount(); iR++)
+				if(wdg->topLevelItem(iR)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(iR);
 			    if(!cur_it) {
 				cur_it = new QTreeWidgetItem(0);
 				cur_it->setText(0, item.c_str());
@@ -466,8 +468,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			}
 			else {
 			    t_it = NULL;
-			    for(int i_r = 0; !t_it && i_r < cur_it->childCount(); i_r++)
-				if(cur_it->child(i_r)->text(0) == item.c_str())	t_it = cur_it->child(i_r);
+			    for(int iR = 0; !t_it && iR < cur_it->childCount(); iR++)
+				if(cur_it->child(iR)->text(0) == item.c_str())	t_it = cur_it->child(iR);
 			    if(!t_it) {
 				t_it = new QTreeWidgetItem(cur_it);
 				t_it->setText(0, item.c_str());
@@ -511,7 +513,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		XMLNode tX("tbl");
 		bool hdrPresent = false, colsWdthFit = false;
 		int maxCols = 0, maxRows = 0;
-		string wVl, rClr, rClrTxt, rFnt;
 		try { tX.load(shD->items); } catch(...) { }
 		if(tX.name() != "tbl") {
 		    wdg->clear();
@@ -525,38 +526,39 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			//wdg->setColumnCount(0);
 			wdg->setRowCount(0);
 		    }
+		    string wVl, rClr, rClrTxt, rFnt;
 		    int sortCol = 0;
 		    // Items
-		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++) {
-			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
+		    for(unsigned iR = 0, iRR = 0, iCh = 0; iCh < tX.childSize() || (int)iR < wdg->rowCount(); iCh++) {
+			XMLNode *tR = (iCh < tX.childSize()) ? tX.childGet(iCh) : NULL;
 			bool isH = false;
 			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
-			if(!isH && (int)i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
+			if(!isH && (int)iR >= wdg->rowCount()) wdg->setRowCount(iR+1);
 			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); }
-			for(unsigned i_c = 0, i_cR = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) ||
-								    (int)i_c < wdg->columnCount(); i_ch1++)
+			for(unsigned iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR->childSize()) ||
+								    (int)iC < wdg->columnCount(); iCh1++)
 			{
-			    XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;
-			    if(tC && (int)i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
-			    if(!(hit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (hit=new QTableWidgetItem()));
+			    XMLNode *tC = (tR && iCh1 < tR->childSize()) ? tR->childGet(iCh1) : NULL;
+			    if(tC && (int)iC >= wdg->columnCount()) wdg->setColumnCount(iC+1);
+			    if(!(hit=wdg->horizontalHeaderItem(iC))) wdg->setHorizontalHeaderItem(iC, (hit=new QTableWidgetItem()));
 			    if(isH) {	//Header process
 				hit->setText(tC?tC->text().c_str():"");
 				if(tC) {
 				    if((wVl=tC->attr("width")).size()) {
-					int wdthCel = s2i(wVl);
-					if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
-					hit->setData(Qt::UserRole, wdthCel);
-				    }
-				    if(s2i(tC->attr("edit")))		hit->setData(Qt::UserRole+1, true);
-				    if((wVl=tC->attr("color")).size())	hit->setData(Qt::UserRole+2, QString::fromStdString(wVl));
-				    if((wVl=tC->attr("colorText")).size()) hit->setData(Qt::UserRole+3, QString::fromStdString(wVl));
-				    if((wVl=tC->attr("font")).size())	hit->setData(Qt::UserRole+4, QString::fromStdString(wVl));
-				    if((wVl=tC->attr("sort")).size())	{ sortCol = i_c+1; if(!s2i(wVl)) sortCol *= -1; }
+					int wdthCel = fmax(1, s2i(wVl));
+					hit->setData(Qt::UserRole,
+					    (wVl.find("%") == wVl.size()-1) ? w->size().width()*wdthCel/100 : wdthCel*w->xScale(true));
+				    } else hit->setData(Qt::UserRole, QVariant());
+				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
+				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
+				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
+				    hit->setData(Qt::UserRole+4, ((wVl=tC->attr("font")).size()) ? QString::fromStdString(wVl) : QVariant());
+				    if((wVl=tC->attr("sort")).size())	{ sortCol = iC+1; if(!s2i(wVl)) sortCol *= -1; }
 				}
 			    }
 			    else {	//Rows content process
-				if(!(tit=wdg->item(i_r,i_c))) wdg->setItem(i_r, i_c, (tit=new QTableWidgetItem()));
+				if(!(tit=wdg->item(iR,iC))) wdg->setItem(iR, iC, (tit=new QTableWidgetItem()));
 				// Value
 				QVariant v;
 				if(tC)
@@ -590,15 +592,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				// Modify set
 				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
-				tit->setData(Qt::UserRole+1, i_c);
-				tit->setData(Qt::UserRole+2, i_r);
+				tit->setData(Qt::UserRole+1, iC);
+				tit->setData(Qt::UserRole+2, iR);
 			    }
-			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, (int)i_cR); }
-			    i_c++;
+			    if(tC)	{ ++iCR; maxCols = vmax(maxCols, (int)iCR); }
+			    iC++;
 			}
 			if(!isH) {
-			    if(tR)	{ ++i_rR; maxRows = vmax(maxRows, (int)i_rR); }
-			    i_r++;
+			    if(tR)	{ ++iRR; maxRows = vmax(maxRows, (int)iRR); }
+			    iR++;
 			}
 			else hdrPresent = true;
 		    }
@@ -633,21 +635,21 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    int averWdth = w->size().width()/maxCols;
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
 		    //Count width params
-		    for(int i_c = 0; i_c < wdg->columnCount(); i_c++) {
-			fullColsWdth += wdg->columnWidth(i_c);
-			if(wdg->horizontalHeaderItem(i_c) && (tVl=wdg->horizontalHeaderItem(i_c)->data(Qt::UserRole).toInt())) {
+		    for(int iC = 0; iC < wdg->columnCount(); iC++) {
+			fullColsWdth += wdg->columnWidth(iC);
+			if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
 			    niceForceColsWdth += tVl;
-			    wdg->setColumnWidth(i_c, tVl);
+			    wdg->setColumnWidth(iC, tVl);
 			}
-			else if(wdg->columnWidth(i_c) <= averWdth)	niceForceColsWdth += wdg->columnWidth(i_c);
+			else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
 			else busyCols++;
 		    }
 		    //Set busyCols
 		    if(fullColsWdth > w->size().width() && busyCols) {
 			int busyColsWdth = (w->size().width()-niceForceColsWdth)/busyCols;
-			for(int i_c = 0; i_c < wdg->columnCount(); i_c++)
-			    if(wdg->columnWidth(i_c) > averWdth && wdg->columnWidth(i_c) > busyColsWdth)
-				wdg->setColumnWidth(i_c, busyColsWdth);
+			for(int iC = 0; iC < wdg->columnCount(); iC++)
+			    if(wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
+				wdg->setColumnWidth(iC, busyColsWdth);
 		    }
 		    wdg->resizeRowsToContents();
 		}
@@ -749,13 +751,19 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    break;
 	case F_LIST: {
 	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
-	    QList<QListWidgetItem *> its = wdg->findItems(val.c_str(), Qt::MatchExactly);
-	    if(!its.size() && val.size()) { wdg->addItem(val.c_str()); its = wdg->findItems(val.c_str(), Qt::MatchExactly); }
-	    if(its.size()) {
-		wdg->setCurrentItem(its[0]);
-		wdg->scrollToItem(its[0]);
+
+	    while(wdg->selectedItems().size()) wdg->selectedItems()[0]->setSelected(false);
+
+	    string vl;
+	    for(int off = 0, cnt = 0; (vl=TSYS::strLine(val,0,&off)).size(); cnt++) {
+		QList<QListWidgetItem *> its = wdg->findItems(vl.c_str(), Qt::MatchExactly);
+		if(!its.size() && vl.size()) { wdg->addItem(vl.c_str()); its = wdg->findItems(vl.c_str(), Qt::MatchExactly); }
+		if(its.size()) {
+		    wdg->setCurrentItem(its[0], QItemSelectionModel::Select);
+		    if(cnt == 0) wdg->scrollToItem(its[0]);
+		}
 	    }
-	    else wdg->setCurrentItem(NULL);
+
 	    break;
 	}
 	case F_TREE: {
@@ -764,14 +772,14 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    string item;
 	    for(int off = 0, lev = 0; (item=TSYS::pathLev(val,0,true,&off)).size(); lev++)
 		if(lev == 0) {
-		    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
-			if(wdg->topLevelItem(i_r)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(i_r);
+		    for(int iR = 0; !cur_it && iR < wdg->topLevelItemCount(); iR++)
+			if(wdg->topLevelItem(iR)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(iR);
 		    if(!cur_it)	break;
 		}
 		else {
 		    bool findOK = false;
-		    for(int i_r = 0; !findOK && i_r < cur_it->childCount(); i_r++)
-			if(cur_it->child(i_r)->text(0) == item.c_str())	{ cur_it = cur_it->child(i_r); findOK = true; }
+		    for(int iR = 0; !findOK && iR < cur_it->childCount(); iR++)
+			if(cur_it->child(iR)->text(0) == item.c_str())	{ cur_it = cur_it->child(iR); findOK = true; }
 		    if(!findOK)	{ cur_it = NULL; break; }
 		}
 	    while(wdg->selectedItems().size())	wdg->selectedItems()[0]->setSelected(false);
@@ -948,14 +956,19 @@ void ShapeFormEl::comboChange( const QString &val )
     w->attrsSet(attrs);
 }
 
-void ShapeFormEl::listChange( int row )
+void ShapeFormEl::listChange( )
 {
     QListWidget *el = (QListWidget*)sender();
     WdgView     *w  = (WdgView *)el->parentWidget();
 
-    if(row < 0 || ((ShpDt*)w->shpData)->evLock) return;
+    if(((ShpDt*)w->shpData)->evLock) return;
+
+    string vl = "";
+    for(int iS = 0; iS < el->selectedItems().size(); iS++)
+	vl += (vl.size()?"\n":"") + el->selectedItems()[iS]->text().toStdString();
+
     AttrValS attrs;
-    attrs.push_back(std::make_pair("value",el->item(row)->text().toStdString()));
+    attrs.push_back(std::make_pair("value",vl));
     attrs.push_back(std::make_pair("event","ws_ListChange"));
     w->attrsSet(attrs);
 }
@@ -1037,9 +1050,9 @@ void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
     else   wdg->removeEventFilter(view);
 
     //Process childs
-    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
-	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
-	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
+    for(int iC = 0; iC < wdg->children().size(); iC++)
+	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
+	    eventFilterSet(view,(QWidget*)wdg->children().at(iC),en);
 }
 
 void ShapeFormEl::setFocus( WdgView *w, QWidget *wdg, bool en, bool devel )
@@ -1059,9 +1072,9 @@ void ShapeFormEl::setFocus( WdgView *w, QWidget *wdg, bool en, bool devel )
     }
 
     //Process childs
-    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
-	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
-	    setFocus(w,(QWidget*)wdg->children().at(i_c),en,devel);
+    for(int iC = 0; iC < wdg->children().size(); iC++)
+	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
+	    setFocus(w,(QWidget*)wdg->children().at(iC),en,devel);
 }
 
 //************************************************
@@ -1483,7 +1496,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
 		    lab->setScaledContents(shD->mediaFit);
 		}
-		else lab->setText("");
+		else lab->setPixmap(QPixmap());
 		break;
 	    }
 	    case FM_ANIM: {
@@ -3996,8 +4009,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     if(w->cntrIfCmd(req,true))	return;
 
     if(toUp)
-	for(unsigned i_req = 0; i_req < req.childSize(); i_req++) {
-	    XMLNode *rcd = req.childGet(i_req);
+	for(unsigned iReq = 0; iReq < req.childSize(); iReq++) {
+	    XMLNode *rcd = req.childGet(iReq);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10), s2i(rcd->attr("utime")),
 		rcd->attr("cat"), (TMess::Type)abs(s2i(rcd->attr("lev"))), rcd->text());
 
@@ -4015,8 +4028,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    isDtChang = true;
 	}
     else
-	for(int i_req = req.childSize()-1; i_req >= 0; i_req--) {
-	    XMLNode *rcd = req.childGet(i_req);
+	for(int iReq = req.childSize()-1; iReq >= 0; iReq--) {
+	    XMLNode *rcd = req.childGet(iReq);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10), s2i(rcd->attr("utime")),
 		rcd->attr("cat"), (TMess::Type)abs(s2i(rcd->attr("lev"))), rcd->text());
 
@@ -4078,20 +4091,20 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	if(clr.isValid())
 	    fclr = ((0.3*clr.red()+0.59*clr.green()+0.11*clr.blue()) > 128) ? Qt::black : Qt::white;
 
-	for(int i_cl = 0; i_cl < shD->addrWdg->columnCount(); i_cl++) {
+	for(int iCl = 0; iCl < shD->addrWdg->columnCount(); iCl++) {
 	    tit = NULL;
-	    if(i_cl == c_tm) {
+	    if(iCl == c_tm) {
 		QDateTime	dtm;
 		dtm.setTime_t(shD->messList[sortIts[i_m].second].time);
 		shD->addrWdg->setItem(i_m, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
 	    }
-	    else if(i_cl == c_tmu)
+	    else if(iCl == c_tmu)
 		shD->addrWdg->setItem(i_m, c_tmu, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].utime)));
-	    else if(i_cl == c_lev)
+	    else if(iCl == c_lev)
 		shD->addrWdg->setItem(i_m, c_lev, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].level)));
-	    else if(i_cl == c_cat)
+	    else if(iCl == c_cat)
 		shD->addrWdg->setItem(i_m, c_cat, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].categ.c_str()));
-	    else if(i_cl == c_mess)
+	    else if(iCl == c_mess)
 		shD->addrWdg->setItem(i_m, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].mess.c_str()));
 	    else continue;
 	    tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
@@ -4105,8 +4118,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	shD->addrWdg->resizeColumnsToContents();
 	//Resize too long columns
 	int max_col_sz = vmax(w->size().width()/2, 40);
-	for(int i_c = 0; i_c < shD->addrWdg->columnCount(); i_c++)
-	    shD->addrWdg->setColumnWidth(i_c,vmin(max_col_sz,shD->addrWdg->columnWidth(i_c)));
+	for(int iC = 0; iC < shD->addrWdg->columnCount(); iC++)
+	    shD->addrWdg->setColumnWidth(iC,vmin(max_col_sz,shD->addrWdg->columnWidth(iC)));
 	shD->addrWdg->horizontalHeader()->setStretchLastSection(true);
     }
     shD->addrWdg->resizeRowsToContents();
@@ -4165,10 +4178,10 @@ void ShapeProtocol::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
     if(en)	wdg->installEventFilter(view);
     else	wdg->removeEventFilter(view);
     //Process childs
-    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
-	if(qobject_cast<QWidget*>(wdg->children().at(i_c))) {
-	    eventFilterSet(view, (QWidget*)wdg->children().at(i_c), en);
-	    if(en) ((QWidget*)wdg->children().at(i_c))->setMouseTracking(true);
+    for(int iC = 0; iC < wdg->children().size(); iC++)
+	if(qobject_cast<QWidget*>(wdg->children().at(iC))) {
+	    eventFilterSet(view, (QWidget*)wdg->children().at(iC), en);
+	    if(en) ((QWidget*)wdg->children().at(iC))->setMouseTracking(true);
 	}
 }
 
@@ -4188,9 +4201,9 @@ void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
     }
 
     //Process childs
-    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
-	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
-	    setFocus(view, (QWidget*)wdg->children().at(i_c), en, devel);
+    for(int iC = 0; iC < wdg->children().size(); iC++)
+	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
+	    setFocus(view, (QWidget*)wdg->children().at(iC), en, devel);
 }
 
 //************************************************
@@ -4317,9 +4330,9 @@ void ShapeDocument::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
     if(en) wdg->installEventFilter(view);
     else   wdg->removeEventFilter(view);
     //Process childs
-    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
-	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
-	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
+    for(int iC = 0; iC < wdg->children().size(); iC++)
+	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
+	    eventFilterSet(view,(QWidget*)wdg->children().at(iC),en);
 }
 
 void ShapeDocument::custContextMenu( )
@@ -4357,9 +4370,9 @@ void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
     }
 
     //Process childs
-    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
-	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
-	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
+    for(int iC = 0; iC < wdg->children().size(); iC++)
+	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
+	    setFocus(view,(QWidget*)wdg->children().at(iC),en,devel);
 }
 
 //Shape node date
@@ -4409,11 +4422,11 @@ void ShapeDocument::ShpDt::nodeProcess( XMLNode *xcur )
     //xcur->prcInstrClear();
 
     //Go to include nodes
-    for(unsigned i_c = 0; i_c < xcur->childSize(); ) {
+    for(unsigned iC = 0; iC < xcur->childSize(); ) {
 	// Check for special tags
-	if(xcur->childGet(i_c)->name().compare(0,3,"doc") == 0) { xcur->childDel(i_c); continue; }
-	nodeProcess(xcur->childGet(i_c));
-	i_c++;
+	if(xcur->childGet(iC)->name().compare(0,3,"doc") == 0) { xcur->childDel(iC); continue; }
+	nodeProcess(xcur->childGet(iC));
+	iC++;
     }
 }
 

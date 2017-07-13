@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 14:01+0200\n"
+"POT-Creation-Date: 2017-06-09 15:44+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -70,14 +70,20 @@ msgstr "Активні сеанси аутентифікації"
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "Life time of the authentication (min)"
-msgstr "Час життя аутентифікації (хвил)"
+msgid "Deny"
+msgstr "Заборонено"
+
+msgid "Allow"
+msgstr "Дозволено"
 
 msgid "HTML template"
 msgstr "HTML шаблон"
 
 msgid "HTML main page template"
 msgstr "HTML шаблон головної сторінки"
+
+msgid "Life time of the authentication (min)"
+msgstr "Час життя аутентифікації (хвил)"
 
 msgid "Auto login"
 msgstr "Автоматичний вхід"

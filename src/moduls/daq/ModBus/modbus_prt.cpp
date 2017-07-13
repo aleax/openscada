@@ -1,8 +1,7 @@
 
 //OpenSCADA system module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2008-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -574,7 +573,7 @@ retry:
 Node::Node( const string &iid, const string &idb, TElem *el ) :
     TFunction("ModBusNode_"+iid), TConfig(el), data(NULL),
     mId(cfg("ID")), mName(cfg("NAME")), mDscr(cfg("DESCR")), mPer(cfg("DT_PER").getRd()), mAEn(cfg("EN").getBd()),
-    mEn(false), mDB(idb), prcSt(false), endrunRun(false), cntReq(0)
+    mEn(false), mDB(idb), prcSt(false), endRun(false), prgChOnEn(false), cntReq(0)
 {
     mId = iid;
 
@@ -601,7 +600,6 @@ TCntrNode &Node::operator=( const TCntrNode &node )
 
     return *this;
 }
-
 
 void Node::postEnable( int flag )
 {
@@ -668,7 +666,8 @@ void Node::setProg( const string &iprg )
 
 bool Node::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "MODE") {
+    if(co.name() == "DT_PROG" && enableStat())	prgChOnEn = true;
+    else if(co.name() == "MODE") {
 	setEnable(false);
 	//Hide all specific
 	cfg("ADDR").setView(false); cfg("DT_PER").setView(false); cfg("DT_PROG").setView(false);
@@ -890,13 +889,13 @@ void Node::setEnable( bool vl )
     //Disable node
     if(!vl) {
 	// Stop the calc data task
-	if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunRun);
+	if(prcSt) SYS->taskDestroy(nodePath('.',true), &endRun);
 
 	// Data structure delete
 	if(data) { delete data; data = NULL; }
     }
 
-    mEn = vl;
+    mEn = vl; prgChOnEn = false;
 }
 
 string Node::getStatus( )
@@ -904,8 +903,8 @@ string Node::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
-	switch(mode())
-	{
+	if(prgChOnEn) rez += TSYS::strMess(_("Modified, re-enable to apply! "));
+	switch(mode()) {
 	    case MD_DATA:
 		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
 					"Writed registers %.4g, coils %.4g."),
@@ -1216,7 +1215,7 @@ void *Node::Task( void *ind )
 {
     Node &nd = *(Node*)ind;
 
-    nd.endrunRun = false;
+    nd.endRun = false;
     nd.prcSt = true;
 
     bool isStart = true;
@@ -1278,7 +1277,7 @@ void *Node::Task( void *ind )
 
 	if(isStop) break;
 	TSYS::taskSleep((int64_t)(1e9*nd.period()));
-	if(nd.endrunRun) isStop = true;
+	if(nd.endRun) isStop = true;
 	isStart = false;
 	nd.modif();
     }

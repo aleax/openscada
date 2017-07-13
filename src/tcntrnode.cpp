@@ -276,7 +276,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 
 	//Wait of free node
 	time_t t_cur = time(NULL);
-	MtxAlloc res1(dataRes(), true);		//!! Added for prevent possible attach and next disable and free the node, by mUse control
+	MtxAlloc res1(dataRes(), true);		//!! Added to prevent a possible attach and it next disable and free the node, by mUse control
 	while(mUse > 1) {
 	    mess_sys(TMess::Debug, _("Waiting for freeing by %d users!"), mUse-1);
 	    // Check timeout
@@ -805,10 +805,15 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	return false;
     }
     // string nodePath(string sep = "", bool from_root = true) - get the node path into OpenSCADA objects tree
-    //  sep - Separator symbol for separated path
+    //  sep - Separator symbol for separated path;
     //  from_root - path forming from root tree and do not include station ID.
     if(iid == "nodePath")
 	return nodePath(((prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : 0), ((prms.size() >= 2) ? prms[1].getB() : true));
+    // int messSys(int level, string mess) - formation of the system message <mess> with the <level>
+    //		with the node path as a category and with the human readable path before the message.
+    //  level - message level;
+    //  mess - message text.
+    if(iid == "messSys" && prms.size() >= 2) { mess_sys(prms[0].getI(), "%s", prms[1].getS().c_str()); return 0; }
 
     throw err_sys(_("Function '%s' error or not enough parameters."), iid.c_str());
 }
@@ -820,18 +825,21 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    //Check displaing node
-    int itbr = 0;
-    for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff = i_off)
-	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1))) {
+    //Check to display
+    bool itbr = false;
+    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff = iOff)
+	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&iOff1))) {
 	    if(!reqt1.empty()) return NULL;
-	    itbr = 1;
+	    itbr = true;
 	    break;
 	}
 
-    //Check permission
+    //Check for permission
     char n_acs = SYS->security().at().access(nd->attr("user"), SEC_RD|SEC_WR|SEC_XT, user, grp, perm);
-    if(!(n_acs&SEC_RD)) return NULL;
+    if(!(n_acs&SEC_RD)) {
+	if(nd->name() == "info") ctrRemoveNode(nd, path);	//To prevent the node's presence with changed here permission to RO.
+	return NULL;
+    }
     if(itbr)	return nd;
 
     XMLNode *obj = nd;
@@ -903,8 +911,8 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff=i_off)
-	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)))
+    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff=iOff)
+	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&iOff1)))
 	    return false;
 
     XMLNode *obj = nd;

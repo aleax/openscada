@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-09 15:32+0200\n"
+"POT-Creation-Date: 2017-07-02 17:54+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -296,11 +296,14 @@ msgstr "Farbe: Text"
 msgid "Checkable"
 msgstr "Umschaltbar"
 
+msgid "Items"
+msgstr "Elemente"
+
 msgid "Set value"
 msgstr "Sollwert"
 
-msgid "Items"
-msgstr "Elemente"
+msgid "Multiple selection"
+msgstr ""
 
 msgid ""
 "Enter text line by template with the char items:\n"
@@ -1172,7 +1175,7 @@ msgstr "Neuen Stil schaffen"
 msgid "Page: open state"
 msgstr "Seite: Zustand beim Öffnen"
 
-msgid "Page: process no opened"
+msgid "Page: process not opened"
 msgstr "Seite: Prozess nicht geöffnet"
 
 msgid "For page can use only Box-based widgets!"
@@ -1341,15 +1344,6 @@ msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 msgid "Process"
 msgstr "Bearbeitung"
 
-msgid "Spent time"
-msgstr "Verbrachte Zeit"
-
-msgid "Subtree="
-msgstr "Subtree="
-
-msgid "Item="
-msgstr "Punkt="
-
 msgid "Visual control area engine"
 msgstr "Visualisierungssteuerung"
 
@@ -1446,16 +1440,8 @@ msgstr "Wert 9"
 msgid "Original widgets"
 msgstr "Original Widgets"
 
-#, c-format
-msgid "Load library '%s' time: %f ms."
-msgstr "Zeit Laden der Bibliothek '%s': %f msek."
-
 msgid "Load widgets libraries error."
 msgstr "Fehler beim Laden der Widgetsbibliothek."
-
-#, c-format
-msgid "Load project '%s' time: %f ms."
-msgstr "Zeit Laden des Projekts '%s': %f msek."
 
 msgid "Load projects error."
 msgstr "Fehler beim Laden der Projekte."

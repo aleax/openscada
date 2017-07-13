@@ -20,7 +20,6 @@
 
 #include <features.h>
 #include <byteswap.h>
-#include <ieee754.h>
 #include <syscall.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -37,11 +36,11 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <langinfo.h>
 #include <zlib.h>
 
 #include <algorithm>
 
+#include "ieee754.h"
 #include "terror.h"
 #include "tmess.h"
 #include "tsys.h"
@@ -391,6 +390,7 @@ string TSYS::optDescr( )
 	"==================== Generic options ======================================\n"
 	"===========================================================================\n"
 	"-h, --help		Info message about the system options.\n"
+	"    --lang=<LANG>	The station language, in view \"uk_UA.UTF-8\".\n"
 	"    --config=<file>	The station configuration file.\n"
 	"    --station=<id>	The station identifier.\n"
 	"    --statName=<name>	The station name.\n"
@@ -408,8 +408,8 @@ string TSYS::optDescr( )
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"WorkDir    <path>	Work directory.\n"
 	"IcoDir     <path>	Icons directory.\n"
-	"ModDir     <path>	Modules directory.\n"
-	"MessLev    <level>     Messages <level> (0-7).\n"
+	"ModDir     <path>	Directories with modules, separated by ';', they can include a files' template into the end.\n"
+	"MessLev    <level>	Messages <level> (0-7).\n"
 	"LogTarget  <direction> Direct messages to, by bitfield:\n"
 	"			  0x1 - syslogd;\n"
 	"			  0x2 - stdout;\n"
@@ -588,11 +588,11 @@ void TSYS::load_( )
     //Direct load subsystems and modules
     vector<string> lst;
     list(lst);
-    for(unsigned i_a = 0; i_a < lst.size(); i_a++)
-	try { at(lst[i_a]).at().load(); }
+    for(unsigned iA = 0; iA < lst.size(); iA++)
+	try { at(lst[iA]).at().load(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error load subsystem '%s'."), lst[i_a].c_str());
+	    mess_sys(TMess::Error, _("Error load subsystem '%s'."), lst[iA].c_str());
 	}
 
     if(cmd_help) stop();
@@ -622,12 +622,12 @@ int TSYS::start( )
     vector<string> lst;
     list(lst);
 
-    mess_sys(TMess::Info, _("Start!"));
-    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-	try { at(lst[i_a]).at().subStart(); }
+    mess_sys(TMess::Info, _("Starting ..."));
+    for(unsigned iA = 0; iA < lst.size(); iA++)
+	try { at(lst[iA]).at().subStart(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error start subsystem '%s'."), lst[i_a].c_str());
+	    mess_sys(TMess::Error, _("Error start subsystem '%s'."), lst[iA].c_str());
 	}
 
     cfgFileScan( true );
@@ -635,6 +635,7 @@ int TSYS::start( )
     mess_sys(TMess::Info, _("Final starting!"));
 
     unsigned int i_cnt = 1;
+
     mStopSignal = 0;
     while(!mStopSignal) {
 	//CPU frequency calc (ten seconds)
@@ -655,22 +656,25 @@ int TSYS::start( )
 
 	//Call subsystems at 10s
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
+	    for(unsigned iA = 0; iA < lst.size(); iA++)
+		try { at(lst[iA]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
 		catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	sysSleep(STD_WAIT_DELAY*1e-3);
 	i_cnt++;
     }
 
-    mess_sys(TMess::Info, _("Stop!"));
+    mess_sys(TMess::Info, _("Stopping ..."));
+
     if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
-    for(int i_a = lst.size()-1; i_a >= 0; i_a--)
-	try { at(lst[i_a]).at().subStop(); }
+
+    //Stop for subsystems
+    for(int iA = lst.size()-1; iA >= 0; iA--)
+	try { at(lst[iA]).at().subStop(); }
 	catch(TError &err) {
 	    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-	    mess_sys(TMess::Error, _("Error stop subsystem '%s'."), lst[i_a].c_str());
+	    mess_sys(TMess::Error, _("Error for subsystem '%s' stopping."), lst[iA].c_str());
 	}
 
     return mStopSignal;
@@ -904,7 +908,7 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
     size_t t_dir;
 
     //First separators pass
-    while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
+    while(an_dir < (int)path.size() && path[an_dir] == '/') an_dir++;
     if(an_dir >= (int)path.size()) return "";
 
     //Path level process
@@ -1302,11 +1306,9 @@ float TSYS::floatLE(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
     ieee754_float ieee754_be;
-    union ieee754_le
-    {
+    union ieee754_le {
 	float f;
-	struct
-	{
+	struct {
 	    unsigned int mantissa:23;
 	    unsigned int exponent:8;
 	    unsigned int negative:1;
@@ -1328,11 +1330,9 @@ float TSYS::floatLErev(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
     ieee754_float ieee754_be;
-    union ieee754_le
-    {
+    union ieee754_le {
 	float f;
-	struct
-	{
+	struct {
 	    unsigned int mantissa:23;
 	    unsigned int exponent:8;
 	    unsigned int negative:1;
@@ -2059,7 +2059,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return clock_nanosleep(clkId, 0, &spTm, NULL);*/
 	//return nanosleep(&spTm, NULL);
     }
-    // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
+    // int time(int usec) - returns absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
     if(iid == "time") {
 	if(prms.empty()) return (int)time(NULL);
@@ -2465,8 +2465,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> lst;
 	list(lst);
-	for(unsigned i_a=0; i_a < lst.size(); i_a++)
-	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(at(lst[i_a]).at().subName());
+	for(unsigned iA = 0; iA < lst.size(); iA++)
+	    opt->childAdd("el")->setAttr("id",lst[iA])->setText(at(lst[iA]).at().subName());
     }
     else if(a_path == "/tasks/tasks") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root")) {
