@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QComboBox>
 #include <QStatusBar>
+#include <QDesktopWidget>
 
 #include <tsys.h>
 
@@ -205,14 +206,20 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    setPermView(s2i(val)&SEC_RD);
 	    return true;
 	case A_NO_ID:
-	    //User's status line items
+	    // User's status line items
 	    if(attr == "statLine")		mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this));
-	    else if(attr == "runWin") {
-		if(mainWin()->isResizeManual) return true;
+	    else if(attr == "runWin" && !mainWin()->isResizeManual && (!mainWin()->masterPg() || this == mainWin()->masterPg())) {
 		switch(s2i(val)) {
-		    case 0: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowNoState);	break;
+		    case 0: {
+			mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowNoState);
+			// Fit to the master page size
+			QRect ws = QApplication::desktop()->availableGeometry(mainWin());
+			mainWin()->resize(fmin(ws.width()-10,size().width()+(mainWin()->centralWidget()->parentWidget()->width()-mainWin()->centralWidget()->width())+5),
+				fmin(ws.height()-10,size().height()+(mainWin()->centralWidget()->parentWidget()->height()-mainWin()->centralWidget()->height())+5));
+			break;
+		    }
 		    case 1: mainWin()->aFullScr()->setChecked(false); mainWin()->setWindowState(Qt::WindowMaximized);	break;
-		    case 2: mainWin()->aFullScr()->setChecked(true);	break;
+		    case 2: mainWin()->aFullScr()->setChecked(true);							break;
 		}
 	    }
 	    else if(attr == "keepAspectRatio")	mainWin()->setKeepAspectRatio(s2i(val));

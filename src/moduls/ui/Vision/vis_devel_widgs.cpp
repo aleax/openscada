@@ -305,10 +305,10 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		    req1.setAttr("path", itId+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 		    if(!mainWin()->cntrIfCmd(req1)) {
 			bool ind_ok = s2i(gnd->attr("idm"));
-			for(unsigned i_ch = 0; i_ch < req1.childSize(); i_ch++) {
-			    if(!i_ch) ind_ok = req1.childGet(i_ch)->attr("id").size();
-			    if(ind_ok) selIds << req1.childGet(i_ch)->attr("id").c_str();
-			    selLs << req1.childGet(i_ch)->text().c_str();
+			for(unsigned iCh = 0; iCh < req1.childSize(); iCh++) {
+			    if(!iCh) ind_ok = req1.childGet(iCh)->attr("id").size();
+			    if(ind_ok) selIds << req1.childGet(iCh)->attr("id").c_str();
+			    selLs << req1.childGet(iCh)->text().c_str();
 			}
 		    }
 		}
@@ -573,9 +573,9 @@ ModInspAttr::Item *ModInspAttr::Item::child(int row) const	{ return childItems.v
 
 int ModInspAttr::Item::childGet( const string &iid ) const
 {
-    for(int i_c = 0; i_c < childCount(); i_c++)
-	if(child(i_c)->id() == iid)
-	    return i_c;
+    for(int iC = 0; iC < childCount(); iC++)
+	if(child(iC)->id() == iid)
+	    return iC;
 
     return -1;
 }
@@ -601,9 +601,9 @@ QVariant ModInspAttr::Item::data( )
 {
     if(type() == AttrGrp) {
 	QString dtv;
-	for(int i_c = 0; i_c < childCount(); i_c++)
-	    if(i_c == 0)  dtv = child(i_c)->data().toString();
-	    else dtv = dtv+", "+child(i_c)->data().toString();
+	for(int iC = 0; iC < childCount(); iC++)
+	    if(iC == 0)  dtv = child(iC)->data().toString();
+	    else dtv = dtv+", "+child(iC)->data().toString();
 	return QString("[%1]").arg(dtv);
     }
     else return dataItem;
@@ -1319,7 +1319,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     bool is_create = false, root_allow = false;
-    unsigned i_l, i_w, i_cw;
+    unsigned i_l, i_w, iCw;
     int i_top, i_topwl, i_topcwl, i_m = 0, i_a, i_t = 0;
     QTreeWidgetItem *nit, *nit_w, *nit_cw;
     vector<string> list_wl;
@@ -1517,20 +1517,20 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	    //  Remove no present widgets
 	    for(i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++) {
 		nit_cw = nit_w->child(i_topcwl);
-		if(upd_wdgi.empty()) i_cw = wdgN->childSize();
+		if(upd_wdgi.empty()) iCw = wdgN->childSize();
 		else {
 		    if(upd_wdgi != nit_cw->text(2).toStdString()) continue;
-		    for(i_cw = 0; i_cw < wdgN->childSize(); i_cw++)
-			if(wdgN->childGet(i_cw)->name() == "cw" && wdgN->childGet(i_cw)->attr("id") == nit_cw->text(2).toStdString())
+		    for(iCw = 0; iCw < wdgN->childSize(); iCw++)
+			if(wdgN->childGet(iCw)->name() == "cw" && wdgN->childGet(iCw)->attr("id") == nit_cw->text(2).toStdString())
 			    break;
 		}
-		if(i_cw < wdgN->childSize())	continue;
+		if(iCw < wdgN->childSize())	continue;
 		delete nit_w->takeChild(i_topcwl);
 		i_topcwl--;
 	    }
 	    //  Add new widgets
-	    for(i_cw = 0; i_cw < wdgN->childSize(); i_cw++) {
-		XMLNode *cwdgN = wdgN->childGet(i_cw);
+	    for(iCw = 0; iCw < wdgN->childSize(); iCw++) {
+		XMLNode *cwdgN = wdgN->childGet(iCw);
 		if(cwdgN->name() != "cw") continue;
 		string cwdgId = cwdgN->attr("id");
 		if(upd_wdgi.empty()) i_topcwl = nit_w->childCount();
@@ -1694,8 +1694,8 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initi
 	    mod->postMess(prj_req.attr("mcat").c_str(), prj_req.text().c_str(), TVision::Error, this);
 	    return;
 	}
-	for(unsigned i_ch = 0; i_ch < prj_req.childSize(); i_ch++)
-	    list_pr.push_back(prj_req.childGet(i_ch)->attr("id"));
+	for(unsigned iCh = 0; iCh < prj_req.childSize(); iCh++)
+	    list_pr.push_back(prj_req.childGet(iCh)->attr("id"));
 
 	// Remove no present project
 	for(int i_top = 0; i_top < treeW->topLevelItemCount(); i_top++) {
@@ -1757,8 +1757,8 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it, bool initi
 	mod->postMess(pg_req.attr("mcat").c_str(), pg_req.text().c_str(), TVision::Error, this);
 	return;
     }
-    for(unsigned i_ch = 0; i_ch < pg_req.childSize(); i_ch++)
-	list_pg.push_back(pg_req.childGet(i_ch)->attr("id"));
+    for(unsigned iCh = 0; iCh < pg_req.childSize(); iCh++)
+	list_pg.push_back(pg_req.childGet(iCh)->attr("id"));
 
     //  Remove no present pages
     for(int i_pit = 0; i_pit < nit->childCount(); i_pit++) {
@@ -1949,9 +1949,9 @@ DevelWdgView::~DevelWdgView( )
     //Selection clear
     if(select() && !mod->endRun()) {
 	setSelect(false);
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if(qobject_cast<DevelWdgView*>(children().at(i_c)))
-		((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);
+	for(int iC = 0; iC < children().size(); iC++)
+	    if(qobject_cast<DevelWdgView*>(children().at(iC)))
+		((DevelWdgView*)children().at(iC))->setSelect(false,PrcChilds);
     }
 
     //Child widgets remove before
@@ -2027,9 +2027,9 @@ void DevelWdgView::saveGeom( const string& item )
     }
 
     if(item != id() && wLevel() == 0)
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if(qobject_cast<DevelWdgView*>(children().at(i_c)))
-		((DevelWdgView*)children().at(i_c))->saveGeom(item);
+	for(int iC = 0; iC < children().size(); iC++)
+	    if(qobject_cast<DevelWdgView*>(children().at(iC)))
+		((DevelWdgView*)children().at(iC))->saveGeom(item);
 
     //For top items (like inspector) data update
     if(wLevel() == 0)	setSelect(true,PrcChilds);
@@ -2051,9 +2051,9 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
     }
     if(!vl) {
 	if(flgs&PrcChilds)
-	    for(int i_c = 0; i_c < children().size(); i_c++)
-		if(qobject_cast<DevelWdgView*>(children().at(i_c)))
-		    qobject_cast<DevelWdgView*>(children().at(i_c))->setSelect(false,flgs|OnlyFlag);
+	    for(int iC = 0; iC < children().size(); iC++)
+		if(qobject_cast<DevelWdgView*>(children().at(iC)))
+		    qobject_cast<DevelWdgView*>(children().at(iC))->setSelect(false,flgs|OnlyFlag);
 	if(!(flgs&OnlyFlag)) emit selected("");
     }
 
@@ -2087,10 +2087,10 @@ void DevelWdgView::setEdit( bool vl )
 
 	//Raise top included editable widget
 	if(wLevel() == 0)
-	    for(int i_c = 0; i_c < children().size(); i_c++)
-		if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
-			((DevelWdgView*)children().at(i_c))->edit()) {
-		    editWdg = (DevelWdgView*)children().at(i_c);
+	    for(int iC = 0; iC < children().size(); iC++)
+		if(qobject_cast<DevelWdgView*>(children().at(iC)) &&
+			((DevelWdgView*)children().at(iC))->edit()) {
+		    editWdg = (DevelWdgView*)children().at(iC);
 		    editWdg->raise();
 		    pntView->raise();
 		    break;
@@ -2116,8 +2116,8 @@ string DevelWdgView::selectChilds( int *cnt, vector<DevelWdgView*> *wdgs )
     string sel_chlds;
 
     if(cnt) *cnt = 0;
-    for(int i_c = 0; i_c < children().size(); i_c++) {
-	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+    for(int iC = 0; iC < children().size(); iC++) {
+	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(iC));
 	if(!curw) continue;
 	if(curw->select()) {
 	    sel_chlds = sel_chlds+curw->id()+";";
@@ -2143,9 +2143,9 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 
     //Check child's anchor selection and widget's geometry
     QRectF selRect;
-    for(int i_c = children().size()-1; i_c >= 0; i_c--)
-	if(qobject_cast<DevelWdgView*>(children().at(i_c)) && ((DevelWdgView*)children().at(i_c))->select())
-	    selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF());
+    for(int iC = children().size()-1; iC >= 0; iC--)
+	if(qobject_cast<DevelWdgView*>(children().at(iC)) && ((DevelWdgView*)children().at(iC))->select())
+	    selRect = selRect.united(((DevelWdgView*)children().at(iC))->geometryF());
 
     //Widget geometry
     if(selRect.isNull()) {
@@ -2185,8 +2185,8 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	//Get selected rect
 	QRectF selRect;
 	int sel_cnt = 0;
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select()) {
+	for(int iC = 0; iC < children().size(); iC++)
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(iC))) && cwdg->select()) {
 		selRect = selRect.united(cwdg->geometryF());
 		sel_cnt++;
 	    }
@@ -2194,8 +2194,8 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	if(sel_cnt == 1) selRect = selRect.united(QRectF(QPointF(0,0),sizeF()));
 
 	//Update selected widgets position
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select()) {
+	for(int iC = 0; iC < children().size(); iC++)
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(iC))) && cwdg->select()) {
 		QPointF toPnt = cwdg->posF();
 		if(sact.at(1) == "left")	toPnt = QPointF(selRect.x(),cwdg->posF().y());
 		else if(sact.at(1) == "right")	toPnt = QPointF(selRect.x()+selRect.width()-cwdg->sizeF().width(),cwdg->posF().y());
@@ -2219,9 +2219,9 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); ) {
 		bool is_move = false;
 		cwdg = ewdg = NULL;
-		for(int i_c = 0; i_c < children().size(); i_c++) {
-		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
-		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+		for(int iC = 0; iC < children().size(); iC++) {
+		    if(!qobject_cast<DevelWdgView*>(children().at(iC)))   continue;
+		    ewdg = qobject_cast<DevelWdgView*>(children().at(iC));
 		    if(ewdg->id() == sel_w.c_str()) cwdg = ewdg;
 		    else if(is_rise && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF()))
 		    {
@@ -2244,9 +2244,9 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); ) {
 		bool is_move = false;
 		cwdg = ewdg = NULL;
-		for(int i_c = children().size()-1; i_c >= 0; i_c--) {
-		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
-		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+		for(int iC = children().size()-1; iC >= 0; iC--) {
+		    if(!qobject_cast<DevelWdgView*>(children().at(iC)))   continue;
+		    ewdg = qobject_cast<DevelWdgView*>(children().at(iC));
 		    if(ewdg->id() == sel_w.c_str())   cwdg = ewdg;
 		    else if(is_lower && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF())) {
 			cwdg->stackUnder(ewdg);
@@ -2438,9 +2438,9 @@ void DevelWdgView::editEnter( )
 
 void DevelWdgView::editExit( )
 {
-    for(int i_c = 0; i_c < children().size(); i_c++)
-	if(qobject_cast<DevelWdgView*>(children().at(i_c)))
-	    ((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);
+    for(int iC = 0; iC < children().size(); iC++)
+	if(qobject_cast<DevelWdgView*>(children().at(iC)))
+	    ((DevelWdgView*)children().at(iC))->setSelect(false,PrcChilds);
     setEdit(false);
     update();
 }
@@ -2453,11 +2453,11 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 
     if(fHoldChild) {
 	QRectF bsRct = pntView->geometryF();
-	float xSc = (float)dP.x()/(float)bsRct.width();
-	float ySc = (float)dP.y()/(float)bsRct.height();
+	float xSc = dP.x()/bsRct.width();
+	float ySc = dP.y()/bsRct.height();
 	//Update selected widgets geometry
-	for(int i_c = 0; i_c < children().size(); i_c++) {
-	    DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+	for(int iC = 0; iC < children().size(); iC++) {
+	    DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(iC));
 	    if(!curw || !curw->select()) continue;
 	    QRectF  geom = curw->geometryF();
 	    switch(cursor().shape()) {
@@ -2468,11 +2468,11 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		    }
 		    if(fLeftTop) {
 			curw->moveF(QPointF(geom.x()+xSc*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+ySc*(bsRct.y()+bsRct.height()-geom.y())));
-			curw->resizeF(QSizeF((float)geom.width()*(1.0-xSc), (float)geom.height()*(1.0-ySc)));
+			curw->resizeF(QSizeF(geom.width()*(1.0-xSc), geom.height()*(1.0-ySc)));
 		    }
 		    else {
 		        curw->moveF(QPointF(geom.x()+xSc*(geom.x()-bsRct.x()),geom.y()+ySc*(geom.y()-bsRct.y())));
-			curw->resizeF(QSizeF((float)geom.width()*(1.0+xSc), (float)geom.height()*(1.0+ySc)));
+			curw->resizeF(QSizeF(geom.width()*(1.0+xSc), geom.height()*(1.0+ySc)));
 		    }
 		    break;
 		case Qt::SizeBDiagCursor:
@@ -2482,11 +2482,11 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		    }
 		    if(fLeftTop) {
 			curw->moveF(QPointF(geom.x()+xSc*(bsRct.x()+bsRct.width()-geom.x()),geom.y()+ySc*(geom.y()-bsRct.y())));
-			curw->resizeF(QSizeF((float)geom.width()*(1.0-xSc), (float)geom.height()*(1.0+ySc)));
+			curw->resizeF(QSizeF(geom.width()*(1.0-xSc), geom.height()*(1.0+ySc)));
 		    }
 		    else {
 			curw->moveF(QPointF(geom.x()+xSc*(geom.x()-bsRct.x()),geom.y()+ySc*(bsRct.y()+bsRct.height()-geom.y())));
-			curw->resizeF(QSizeF((float)geom.width()*(1.0+xSc), (float)geom.height()*(1.0-ySc)));
+			curw->resizeF(QSizeF(geom.width()*(1.0+xSc), geom.height()*(1.0-ySc)));
 		    }
 		    break;
 		case Qt::SizeVerCursor:
@@ -2494,11 +2494,11 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 			curw->y_scale *= 1+((fLeftTop)?-1:1)*ySc;
 		    if(fLeftTop) {
 			curw->moveF(QPointF(geom.x(), geom.y()+ySc*(bsRct.y()+bsRct.height()-geom.y())));
-			curw->resizeF(QSizeF(geom.width(), (float)geom.height()*(1.0-ySc)));
+			curw->resizeF(QSizeF(geom.width(), geom.height()*(1.0-ySc)));
 		    }
 		    else {
 			curw->moveF(QPointF(geom.x(), geom.y()+ySc*(geom.y()-bsRct.y())));
-			curw->resizeF(QSizeF(geom.width(), (float)geom.height()*(1.0+ySc)));
+			curw->resizeF(QSizeF(geom.width(), geom.height()*(1.0+ySc)));
 		    }
 		    break;
 		case Qt::SizeHorCursor:
@@ -2506,11 +2506,11 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 			curw->x_scale *= 1+((fLeftTop)?-1:1)*xSc;
 		    if(fLeftTop) {
 			curw->moveF(QPointF(geom.x()+xSc*(bsRct.x()+bsRct.width()-geom.x()),geom.y()));
-			curw->resizeF(QSizeF((float)geom.width()*(1.0-xSc), geom.height()));
+			curw->resizeF(QSizeF(geom.width()*(1.0-xSc),geom.height()));
 		    }
 		    else {
 			curw->moveF(QPointF(geom.x()+xSc*(geom.x()-bsRct.x()),geom.y()));
-			curw->resizeF(QSizeF((float)geom.width()*(1.0+xSc),geom.height()));
+			curw->resizeF(QSizeF(geom.width()*(1.0+xSc),geom.height()));
 		    }
 		    break;
 		case Qt::PointingHandCursor:
@@ -2524,10 +2524,10 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 	}
 	//Set status bar
 	QRectF srect;
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
-		    ((DevelWdgView*)children().at(i_c))->select())
-		srect = srect.united(((DevelWdgView*)children().at(i_c))->geometryF());
+	for(int iC = 0; iC < children().size(); iC++)
+	    if(qobject_cast<DevelWdgView*>(children().at(iC)) &&
+		    ((DevelWdgView*)children().at(iC))->select())
+		srect = srect.united(((DevelWdgView*)children().at(iC))->geometryF());
 	mainWin()->statusBar()->showMessage(
 	    QString(_("Selected elements --- xy(%2:%3) wh[%4:%5]"))
 		.arg(srect.x()/xScale(true)).arg(srect.y()/yScale(true))
@@ -2667,8 +2667,8 @@ void DevelWdgView::chUnDo( )
 	rlW->attrsSet(attrs);
     }
     else if(rlW && rule->name() == "attr") {
-	for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-	    attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->attr("prev")));
+	for(unsigned iCh = 0; iCh < rule->childSize(); iCh++)
+	    attrs.push_back(std::make_pair(rule->childGet(iCh)->attr("id"),rule->childGet(iCh)->attr("prev")));
 	if(attrs.size()) rlW->attrsSet(attrs);
 	if(rule->attr("id").size()) {
 	    rlW->attrSet(rule->attr("id"), rule->attr("prev"));
@@ -2715,8 +2715,8 @@ void DevelWdgView::chReDo( )
 	}
 	else if(rule->name() == "attr") {
 	    if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
-	    for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-	        attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->text()));
+	    for(unsigned iCh = 0; iCh < rule->childSize(); iCh++)
+	        attrs.push_back(std::make_pair(rule->childGet(iCh)->attr("id"),rule->childGet(iCh)->text()));
 	    if(attrs.size()) rlW->attrsSet(attrs);
 	}
 	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
@@ -2864,8 +2864,8 @@ void DevelWdgView::selAreaUpdate( QRectF rsel )
     if(!pntView) return;
     if(rsel.isNull()) {
 	DevelWdgView *chW = NULL;
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if((chW=qobject_cast<DevelWdgView*>(children().at(i_c))) && chW->select())
+	for(int iC = 0; iC < children().size(); iC++)
+	    if((chW=qobject_cast<DevelWdgView*>(children().at(iC))) && chW->select())
 		rsel = rsel.united(chW->geometryF());
     }
 
@@ -2894,9 +2894,9 @@ bool DevelWdgView::event( QEvent *event )
 	else if(levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove) {
 	    if(!fHideChilds) {
 		fHideChilds = true;
-		for(int i_c = 0; i_c < children().size(); i_c++)
-		    if(qobject_cast<QWidget*>(children().at(i_c)))
-			((QWidget*)children().at(i_c))->setEnabled(false);//hide();
+		for(int iC = 0; iC < children().size(); iC++)
+		    if(qobject_cast<QWidget*>(children().at(iC)))
+			((QWidget*)children().at(iC))->setEnabled(false);//hide();
 	    }
 	    pnt.setPen("white");
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
@@ -2908,9 +2908,9 @@ bool DevelWdgView::event( QEvent *event )
 	}
 	else if(fHideChilds) {
 	    fHideChilds = false;
-	    for(int i_c = 0; i_c < children().size(); i_c++)
-		if(qobject_cast<QWidget*>(children().at(i_c)))
-		    ((QWidget*)children().at(i_c))->setEnabled(true);//show();
+	    for(int iC = 0; iC < children().size(); iC++)
+		if(qobject_cast<QWidget*>(children().at(iC)))
+		    ((QWidget*)children().at(iC))->setEnabled(true);//show();
 	}
 	// Check widget
 	if(!shape) {
@@ -2980,8 +2980,8 @@ bool DevelWdgView::event( QEvent *event )
 			bool sel_modif = false;
 			bool chld_sel = false;
 			DevelWdgView *cwdg = NULL;
-			for(int i_c = children().size()-1; i_c >= 0; i_c--) {
-			    cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+			for(int iC = children().size()-1; iC >= 0; iC--) {
+			    cwdg = qobject_cast<DevelWdgView*>(children().at(iC));
 			    if(!cwdg) continue;
 			    if(cwdg->geometryF().contains(curp)) {
 				if(!cwdg->select())	{ cwdg->setSelect(true,PrcChilds|OnlyFlag);  sel_modif = true; }
@@ -2992,8 +2992,8 @@ bool DevelWdgView::event( QEvent *event )
 			}
 			//  Select clean for childs
 			if(!sh_hold)
-			    for(int i_c = 0; i_c < children().size(); i_c++) {
-				DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+			    for(int iC = 0; iC < children().size(); iC++) {
+				DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(iC));
 				if(!curw || (chld_sel && (curw == cwdg)))	continue;
 				if(curw->select())	{ curw->setSelect(false,PrcChilds|OnlyFlag); sel_modif = true; }
 			    }
@@ -3028,8 +3028,8 @@ bool DevelWdgView::event( QEvent *event )
 		QPoint curp = mapFromGlobal(cursor().pos());
 
 		if(fHoldSelRect) {
-		    for(int i_c = children().size()-1; i_c >= 0; i_c--) {
-			DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+		    for(int iC = children().size()-1; iC >= 0; iC--) {
+			DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(iC));
 			if(!cwdg || !QRect(holdPnt,curp).contains(cwdg->geometryF().toRect())) continue;
 			cwdg->setSelect(true,PrcChilds|OnlyFlag);
 		    }
@@ -3047,9 +3047,9 @@ bool DevelWdgView::event( QEvent *event )
 		// Check for select next underly widget
 		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && !fSelChange && !fMoveHoldMove) {
 		    DevelWdgView *fsel = NULL, *nsel = NULL;
-		    int i_c;
-		    for(i_c = children().size()-1; i_c >= 0; i_c--) {
-			DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+		    int iC;
+		    for(iC = children().size()-1; iC >= 0; iC--) {
+			DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(iC));
 			if(!curw) continue;
 			if(!fsel && curw->select()) fsel = curw;
 			else if(fsel && curw->geometryF().contains(curp)) { nsel = curw; break; }
@@ -3104,8 +3104,8 @@ bool DevelWdgView::event( QEvent *event )
 		//Enter to Edit mode
 		QPoint curp = mapFromGlobal(cursor().pos());
 		DevelWdgView *edwdg = NULL;
-		for(int i_c = children().size()-1; i_c >= 0; i_c--) {
-		    DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
+		for(int iC = children().size()-1; iC >= 0; iC--) {
+		    DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(iC));
 		    if(!cwdg) continue;
 		    if(cwdg->geometryF().contains(curp) && !edwdg) {
 			if(!cwdg->shape || !cwdg->shape->isEditable())	continue;
@@ -3185,13 +3185,13 @@ bool DevelWdgView::event( QEvent *event )
 		    switch(key->key()) {
 			case Qt::Key_A:
 			    if(!(QApplication::keyboardModifiers()&Qt::ControlModifier))	break;
-			    for(int i_c = children().size()-1; i_c >= 0; i_c--)
-				if(qobject_cast<DevelWdgView*>(children().at(i_c)))
-				    ((DevelWdgView*)children().at(i_c))->setSelect(true, PrcChilds);
+			    for(int iC = children().size()-1; iC >= 0; iC--)
+				if(qobject_cast<DevelWdgView*>(children().at(iC)))
+				    ((DevelWdgView*)children().at(iC))->setSelect(true, PrcChilds);
 			    setSelect(true, PrcChilds);
 			    break;
 			case Qt::Key_Left: case Qt::Key_Right: case Qt::Key_Up: case Qt::Key_Down: {
-			    QPointF dP(0,0);
+			    QPointF dP(0, 0);
 			    switch(key->key()) {
 				case Qt::Key_Left:	dP.setX(-1/xScale(true));	break;
 				case Qt::Key_Right:	dP.setX(1/xScale(true));	break;
@@ -3200,15 +3200,16 @@ bool DevelWdgView::event( QEvent *event )
 			    }
 			    if(dP.isNull())	break;
 			    dP *= ((QApplication::keyboardModifiers()&Qt::ShiftModifier) ? 1 : 5);
+			    QRect selRctBefore = pntView->geometry();
 			    wdgsMoveResize(dP);
-			    //> Save geometry
+			    // Save geometry
 			    bool isSel = false;
-			    for(int i_c = 0; i_c < children().size(); i_c++)
-				if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
-					((DevelWdgView*)children().at(i_c))->select())
+			    for(int iC = 0; iC < children().size(); iC++)
+				if(qobject_cast<DevelWdgView*>(children().at(iC)) &&
+					((DevelWdgView*)children().at(iC))->select())
 				{
-				    saveGeom(((DevelWdgView*)children().at(i_c))->id());
-				    if(fMakeScale) ((DevelWdgView*)children().at(i_c))->load("");
+				    saveGeom(((DevelWdgView*)children().at(iC))->id());
+				    if(fMakeScale) ((DevelWdgView*)children().at(iC))->load("");
 				    isSel = true;
 				}
 			    if(!isSel) {
@@ -3216,7 +3217,14 @@ bool DevelWdgView::event( QEvent *event )
 				saveGeom(id());
 				if(fMakeScale) load("");
 			    }
-			    if(cursor().shape() != Qt::ArrowCursor) QCursor::setPos((QCursor::pos()+(dP/=(isSel?1:2))).toPoint());
+			    if(cursor().shape() != Qt::ArrowCursor) {
+				if(isSel) {
+				    dP = pntView->geometry().topLeft() - selRctBefore.topLeft();
+				    if(!dP.x())	dP.setX((pntView->geometry().bottomRight()-selRctBefore.bottomRight()).x());
+				    if(!dP.y())	dP.setY((pntView->geometry().bottomRight()-selRctBefore.bottomRight()).y());
+				    QCursor::setPos((QCursor::pos()+dP).toPoint());
+				} else QCursor::setPos((QCursor::pos()+(dP/2)).toPoint());
+			    }
 			    fMakeScale = false;
 			    return true;
 			}
@@ -3258,9 +3266,9 @@ void DevelWdgView::nextUnderlWdgWait( )
     QPoint curp = mapFromGlobal(cursor().pos());
 
     DevelWdgView *fsel = NULL, *nsel = NULL;
-    int i_c;
-    for(i_c = children().size()-1; i_c >= 0; i_c--) {
-	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
+    int iC;
+    for(iC = children().size()-1; iC >= 0; iC--) {
+	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(iC));
 	if(!curw) continue;
 	if(!fsel && curw->select()) fsel = curw;
 	else if(fsel && curw->geometryF().contains(curp)) { nsel = curw; break; }

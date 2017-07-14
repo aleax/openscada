@@ -1,75 +1,19 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "VCALibs" VALUES('ElectroEls','','','','','wlb_ElectroEls','');
-CREATE TABLE 'wlb_ElectroEls_io' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"en#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"en#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"en#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Accu','','name','Battery','Battery','Батарея','Батарея',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Accu','','geomW','90','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Accu','','geomH','30','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Accu','','elLst','line:(10|5):(10|25):::::
-line:(8|10):(8|20):::::
-line:(10|15):(18|15):::::
-line:(20|5):(20|25):::::
-line:(18|10):(18|20):::::
-line:(20|15):(33|15):::::2
-line:(35|5):(35|25):::::
-line:(33|10):(33|20):::::
-line:(35|15):(53|15):::::
-line:(55|5):(55|25):::::
-line:(53|10):(53|20):::::
-line:(55|15):(68|15):::::2
-line:(70|5):(70|25):::::
-line:(68|10):(68|20):::::
-line:(70|15):(78|15):::::
-line:(80|5):(80|25):::::
-line:(78|10):(78|20):::::','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter','','name','Direct current converter','Direct current converter','Преобразователь постоянного тока','Перетворювач постійного струму',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter','','geomW','30','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter','','geomH','30','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter','','elLst','line:(5|5):(25|5):::::
-line:(25|5):(25|25):::::
-line:(25|25):(5|25):::::
-line:(5|25):(5|5):::::
-line:(5|25):(25|5):::::
-line:(15|18):(22|18):::::
-line:(15|21):(22|21):::::
-line:(8|9):(15|9):::::
-line:(8|12):(15|12):::::','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter_1','','name','Rectifier','Rectifier','Выпрямитель','Випрямляч',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter_1','','geomW','30','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter_1','','geomH','30','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter_1','','elLst','line:(5|5):(25|5):::::
-line:(25|5):(25|25):::::
-line:(25|25):(5|25):::::
-line:(5|25):(5|5):::::
-line:(5|25):(25|5):::::
-line:(15|18):(22|18):::::
-line:(15|21):(22|21):::::
-bezier:(7|11):(16|11):(9|5):(11|17):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duga_edv','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duga_edv','','name','Reactor','Reactor','Реактор','Реактор',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duga_edv','','geomW','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duga_edv','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duga_edv','','lineClr','black','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duga_edv','','elLst','arc:(50|80):(80|50):(50|50):(20|50):(50|80):::::
-line:(50|80):(50|50):::::
-line:(50|50):(5|50):::::
-line:(80|50):(95|50):::::','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duo','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duo','','name','Transformer','Transformer','Трансформатор','Трансформатор',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duo','','geomW','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duo','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duo','','lineClr','black','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duo','','elLst','arc:(25|70):(25|70):(50|70):(50|45):(25|70):::::
-arc:(25|30):(25|30):(50|30):(50|5):(25|30):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','name','Switch plank','Switch plank','Рубильник однополосный','Рубильник односмуговий',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','lineClr','#000000','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','fillColor','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','elLst','line:(7|7):(143|7):2:c1:::s1
+INSERT INTO "VCALibs" VALUES('ElectroEls','Elements of the electric','Элементы электрики','Library of elements of the electic schemes of the user interface.
+Author: Roman Savochenko <rom_as@oscada.org>, Maksim Lisenko (2010)
+Version: 1.0.0','Библиотека элементов электрических схем пользовательского интерфейса.
+Автор: Роман Савоченко <rom_as@oscada.org>, Максим Лысенко (2010)
+Версия: 1.0.0','wlb_ElectroEls','');
+CREATE TABLE 'wlb_ElectroEls_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','name','','Single-side switch','Рубильник однополосный',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','lineClr','','#000000','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','fillColor','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','elLst','','line:(7|7):(143|7):2:c1:::s1
 line:(143|143):(7|143):2:c1:::s1
 line:(143|7):(143|143):2:c1:::s1
 line:(7|143):(7|7):2:c1:::s1
@@ -98,22 +42,23 @@ fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
 fill:1:2:3:4::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p1x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p2x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p3x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p3y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p4x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','p4y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','c1','#000000','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','name','El_KeySqr_1_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','elLst','line:1:2:::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p1x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p2x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p3x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p3y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p4x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','p4y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','c1','','#000000','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','name','','El_KeySqr_1_tst','El_KeySqr_1_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','elLst','','line:1:2:::::
 line:2:3:::::
 line:3:4:::::
 line:4:1:::::
@@ -142,23 +87,24 @@ fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
 fill:1:2:3:4::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p1x','76','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p1y','46','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p2x','86','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p3x','126','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p3y','76','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p4x','116','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','p4y','86','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','name','Fuse-switch','Fuse-switch','Выключатель-предохранитель','Вимикач-запобіжник',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','lineClr','#000000','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','fillColor','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','elLst','line:(7|143):(7|7):2:c1:::s1
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p1x','','76','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p1y','','46','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p2x','','86','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p3x','','126','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p3y','','76','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p4x','','116','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','p4y','','86','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','name','','Safety switch','Выключатель-предохранитель',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','dscr','','Safety switch','Предохранитель-выключатель',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','lineClr','','#000000','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','fillColor','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','elLst','','line:(7|143):(7|7):2:c1:::s1
 line:(143|143):(7|143):2:c1:::s1
 line:(7|7):(143|7):2:c1:::s1
 line:(143|7):(143|143):2:c1:::s1
@@ -187,22 +133,22 @@ fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
 fill:1:2:3:4::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p1x','60','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p2x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p3x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p3y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p4x','60','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','p4y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','c1','#000000','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','name','El_KeySqr_2_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','elLst','line:1:2:::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p1x','','60','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p2x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p3x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p3y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p4x','','60','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','p4y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','c1','','#000000','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','name','','El_KeySqr_2_tst','El_KeySqr_2_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','elLst','','line:1:2:::::
 line:2:3:::::
 line:3:4:::::
 line:4:1:::::
@@ -230,23 +176,24 @@ fill:(70|1):(70|23):(80|23):(80|1)::
 fill:(70|127):(70|149):(80|149):(80|127)::
 fill:1:2:3:4::
 fill:(65|24):(85|24):(85|44):(65|44)::
-fill:(65|106):(85|106):(85|126):(65|126)::','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p1x','72','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p1y','55','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p2x','91','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p3x','135','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p3y','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p4x','116','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','p4y','99','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','name','Automatic switch plank','Automatic switch plank','Рубильник однополосный автоматический','Рубильник односмуговий автоматичний',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','lineClr','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','fillColor','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','elLst','line:(7|143):(7|7):2:c1:::s1
+fill:(65|106):(85|106):(85|126):(65|126)::','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p1x','','72','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p1y','','55','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p2x','','91','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p3x','','135','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p3y','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p4x','','116','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','p4y','','99','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','name','','Circuit-breaker automatic','Рубильник однополосный автоматический',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','lineClr','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','fillColor','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','elLst','','line:(7|143):(7|7):2:c1:::s1
 line:(143|143):(7|143):2:c1:::s1
 line:(7|7):(143|7):2:c1:::s1
 line:(143|7):(143|143):2:c1:::s1
@@ -279,30 +226,31 @@ fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
 fill:1:2:3:4:5:6:7:8::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p1x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p2x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p3x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p3y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p4x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p4y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p5x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p5y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p6x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p6y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p7x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p7y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p8x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','p8y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','c1','#000000','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','name','El_KeySqr_3_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','elLst','line:1:2:::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p1x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p2x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p3x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p3y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p4x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p4y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p5x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p5y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p6x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p6y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p7x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p7y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p8x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','p8y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','c1','','#000000','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','name','','El_KeySqr_3_tst','El_KeySqr_3_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','elLst','','line:1:2:::::
 line:2:3:::::
 line:3:4:::::
 line:4:5:::::
@@ -335,31 +283,32 @@ fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
 fill:1:2:3:4:5:6:7:8::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p1x','76','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p1y','46','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p2x','86','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p3x','99','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p3y','49','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p4x','108','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p4y','40','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p5x','124','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p5y','56','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p6x','115','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p6y','65','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p7x','129','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p7y','79','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p8x','119','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','p8y','89','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','name','Automatic dual band switch','Automatic dual band switch','Рубильник двухполосный автоматический','Рубильник двохсмуговий автоматичний',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','geomW','300','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','lineClr','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','fillColor','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','elLst','line:(7|143):(7|7):2:c1:::s1
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p1x','','76','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p1y','','46','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p2x','','86','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p3x','','99','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p3y','','49','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p4x','','108','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p4y','','40','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p5x','','124','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p5y','','56','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p6x','','115','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p6y','','65','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p7x','','129','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p7y','','79','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p8x','','119','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','p8y','','89','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','name','','Two-way automatic switch','Рубильник двухполосный автоматический',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','geomW','','300','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','lineClr','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','fillColor','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','elLst','','line:(7|143):(7|7):2:c1:::s1
 line:(293|143):(7|143):2:c1:::s1
 line:(293|7):(293|143):2:c1:::s1
 line:(7|7):(293|7):2:c1:::s1
@@ -420,46 +369,47 @@ fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
 fill:9:10:11:17:1:2:3:4:5:6:7:8:18:14:15:16::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p1x','220','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p2x','230','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p3x','230','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p3y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p4x','240','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p4y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p5x','240','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p5y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p6x','230','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p6y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p7x','230','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p7y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p8x','220','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p8y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p9x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p9y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p10x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p10y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p11x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p11y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p14x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p14y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p15x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p15y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p16x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p16y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p17x','220','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p17y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p18x','220','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','p18y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','c1','#000000','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','name','El_KeySqr_4_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','geomW','300','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','elLst','line:(7|7):(293|7):2:c1:::s1
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p1x','','220','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p2x','','230','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p3x','','230','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p3y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p4x','','240','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p4y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p5x','','240','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p5y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p6x','','230','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p6y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p7x','','230','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p7y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p8x','','220','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p8y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p9x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p9y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p10x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p10y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p11x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p11y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p14x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p14y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p15x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p15y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p16x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p16y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p17x','','220','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p17y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p18x','','220','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','p18y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','c1','','#000000','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','name','','El_KeySqr_4_tst','El_KeySqr_4_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','geomW','','300','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','elLst','','line:(7|7):(293|7):2:c1:::s1
 line:(293|7):(293|143):2:c1:::s1
 line:(7|143):(7|7):2:c1:::s1
 line:(293|143):(7|143):2:c1:::s1
@@ -520,46 +470,47 @@ fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
 fill:9:10:11:17:1:2:3:4:5:6:7:8:18:14:15:16::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p1x','226','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p1y','46','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p2x','236','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p3x','249','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p3y','49','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p4x','259','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p4y','39','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p5x','276','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p5y','56','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p6x','266','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p6y','66','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p7x','279','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p7y','79','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p8x','269','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p8y','89','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p9x','76','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p9y','46','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p10x','86','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p10y','36','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p11x','108','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p11y','58','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p14x','120','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p14y','70','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p15x','129','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p15y','79','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p16x','119','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p16y','89','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p17x','238','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p17y','58','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p18x','250','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','p18y','70','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','name','Switch with the neutral central position','Switch with the neutral central position','Переключатель с нейтральным центральным положением','Перемикач з нейтральним центральним положенням',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','lineClr','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','fillColor','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','elLst','line:(7|143):(7|7):2:c1:::s1
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p1x','','226','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p1y','','46','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p2x','','236','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p3x','','249','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p3y','','49','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p4x','','259','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p4y','','39','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p5x','','276','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p5y','','56','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p6x','','266','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p6y','','66','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p7x','','279','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p7y','','79','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p8x','','269','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p8y','','89','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p9x','','76','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p9y','','46','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p10x','','86','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p10y','','36','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p11x','','108','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p11y','','58','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p14x','','120','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p14y','','70','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p15x','','129','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p15y','','79','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p16x','','119','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p16y','','89','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p17x','','238','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p17y','','58','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p18x','','250','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','p18y','','70','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','name','','Переключатель с нейтральным центральным положением','Переключатель с нейтральным центральным положением',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','dscr','','Переключатель с нейтральным центральным положением','Переключатель с нейтральным центральным положением',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','lineClr','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','fillColor','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','elLst','','line:(7|143):(7|7):2:c1:::s1
 line:(143|143):(7|143):2:c1:::s1
 line:(7|7):(143|7):2:c1:::s1
 line:(143|7):(143|143):2:c1:::s1
@@ -598,22 +549,22 @@ fill:(110|76):(130|76):(130|96):(110|96)::
 fill:1:2:3:4::
 fill:(25|95):(25|149):(35|149):(35|95)::
 fill:(20|76):(40|76):(40|96):(20|96)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p1x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p2x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p3x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p3y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p4x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','p4y','85','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','c1','','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','name','El_KeySqr_5_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','elLst','line:1:2:::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p1x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p2x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p3x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p3y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p4x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','p4y','','85','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','c1','','','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','name','','El_KeySqr_5_tst','El_KeySqr_5_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','elLst','','line:1:2:::::
 line:2:3:::::
 line:3:4:::::
 line:4:1:::::
@@ -652,349 +603,24 @@ fill:(110|76):(130|76):(130|96):(110|96)::
 fill:1:2:3:4::
 fill:(25|95):(25|149):(35|149):(35|95)::
 fill:(20|76):(40|76):(40|96):(20|96)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p1x','64','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p1y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p2x','74','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p2y','46','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p3x','34','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p3y','86','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p4x','24','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','p4y','76','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','name','Switch plank(circle)','Switch plank(circle)','Рубильник однополосный(круг)','Рубильник односмуговий (коло)',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','elLst','line:1:2:::::
-line:2:3:::::
-line:3:4:::::
-line:4:1:::::
-arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
-arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
-line:(70|1):(70|23):::::
-line:(70|1):(80|1):::::
-line:(80|1):(80|23):::::
-line:(70|23):(80|23):::::
-line:(80|127):(80|149):::::
-line:(70|127):(80|127):::::
-line:(70|149):(80|149):::::
-line:(70|127):(70|149):::::
-line:(7|143):(7|7):2:c1:::s1
-line:(7|7):(143|7):2:c1:::s1
-line:(143|143):(7|143):2:c1:::s1
-line:(143|7):(143|143):2:c1:::s1
-fill:1:2:3:4::
-fill:(70|1):(70|23):(80|23):(80|1)::
-fill:(70|127):(70|149):(80|149):(80|127)::
-fill:(65|34):(65|34)::
-fill:(65|116):(65|116)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p1x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p2x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p3x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p3y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p4x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','p4y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','name','El_KeyRnd_1_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','elLst','line:1:2:::::
-line:2:3:::::
-line:3:4:::::
-line:4:1:::::
-arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
-arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
-line:(70|1):(70|23):::::
-line:(70|1):(80|1):::::
-line:(80|1):(80|23):::::
-line:(70|23):(80|23):::::
-line:(80|127):(80|149):::::
-line:(70|127):(80|127):::::
-line:(70|149):(80|149):::::
-line:(70|127):(70|149):::::
-line:(7|143):(7|7):2:c1:::s1
-line:(7|7):(143|7):2:c1:::s1
-line:(143|143):(7|143):2:c1:::s1
-line:(143|7):(143|143):2:c1:::s1
-fill:1:2:3:4::
-fill:(70|1):(70|23):(80|23):(80|1)::
-fill:(70|127):(70|149):(80|149):(80|127)::
-fill:(65|34):(65|34)::
-fill:(65|116):(65|116)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p1x','76','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p1y','46','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p2x','86','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p3x','126','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p3y','76','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p4x','116','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','p4y','86','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','name','Fuse-switch(circle)','Fuse-switch(circle)','Выключатель-предохранитель(круг)','Вимикач-запобіжник (коло)',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','elLst','line:1:2:::::
-line:2:3:::::
-line:3:4:::::
-line:4:1:::::
-arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
-arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
-line:(70|1):(70|23):::::
-line:(70|1):(80|1):::::
-line:(80|1):(80|23):::::
-line:(70|23):(80|23):::::
-line:(80|127):(80|149):::::
-line:(70|127):(80|127):::::
-line:(70|149):(80|149):::::
-line:(70|127):(70|149):::::
-line:(7|143):(7|7):2:c1:::s1
-line:(7|7):(143|7):2:c1:::s1
-line:(143|143):(7|143):2:c1:::s1
-line:(143|7):(143|143):2:c1:::s1
-fill:1:2:3:4::
-fill:(70|1):(70|23):(80|23):(80|1)::
-fill:(70|127):(70|149):(80|149):(80|127)::
-fill:(65|34):(65|34)::
-fill:(65|116):(65|116)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p1x','60','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p2x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p3x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p3y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p4x','60','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','p4y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','name','El_KeyRnd_2_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','elLst','line:1:2:::::
-line:2:3:::::
-line:3:4:::::
-line:4:1:::::
-arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
-arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
-line:(70|1):(70|23):::::
-line:(70|1):(80|1):::::
-line:(80|1):(80|23):::::
-line:(70|23):(80|23):::::
-line:(80|127):(80|149):::::
-line:(70|127):(80|127):::::
-line:(70|149):(80|149):::::
-line:(70|127):(70|149):::::
-line:(7|143):(7|7):2:c1:::s1
-line:(7|7):(143|7):2:c1:::s1
-line:(143|143):(7|143):2:c1:::s1
-line:(143|7):(143|143):2:c1:::s1
-fill:1:2:3:4::
-fill:(70|1):(70|23):(80|23):(80|1)::
-fill:(70|127):(70|149):(80|149):(80|127)::
-fill:(65|34):(65|34)::
-fill:(65|116):(65|116)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p1x','72','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p1y','55','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p2x','91','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p3x','135','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p3y','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p4x','116','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','p4y','99','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','name','Automatic switch plank(circle)','Automatic switch plank(circle)','Рубильник однополосный автоматический(круг)','Рубильник односмуговий автоматичний (коло)',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','elLst','line:1:2:::::
-line:2:3:::::
-line:3:4:::::
-line:4:5:::::
-line:5:6:::::
-line:6:7:::::
-line:7:8:::::
-line:8:1:::::
-arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
-arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
-line:(70|1):(70|23):::::
-line:(70|1):(80|1):::::
-line:(80|1):(80|23):::::
-line:(70|23):(80|23):::::
-line:(80|127):(80|149):::::
-line:(70|127):(80|127):::::
-line:(70|149):(80|149):::::
-line:(70|127):(70|149):::::
-line:(7|143):(7|7):2:c1:::s1
-line:(7|7):(143|7):2:c1:::s1
-line:(143|143):(7|143):2:c1:::s1
-line:(143|7):(143|143):2:c1:::s1
-fill:1:2:3:4:5:6:7:8::
-fill:(70|1):(70|23):(80|23):(80|1)::
-fill:(70|127):(70|149):(80|149):(80|127)::
-fill:(65|34):(65|34)::
-fill:(65|116):(65|116)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p1x','70','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p2x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p3x','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p3y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p4x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p4y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p5x','90','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p5y','85','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p6x','80','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p6y','85','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p7x','80','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p7y','105','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p8x','70','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','p8y','105','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','name','Switch','Switch','Выключатель','Вимикач',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','lineWdth','0','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','elLst','line:1:2:::::
-line:2:3:::::
-line:3:4:::::
-line:4:1:::::
-arc:(20|35):(20|35):(20|50):(35|50):(20|35):::::
-arc:(130|35):(130|35):(130|50):(145|50):(130|35):::::
-fill:1:2:3:4::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p1x','40','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p1y','35','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p2x','40','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p2y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p3x','110','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p3y','65','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p4x','110','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','p4y','35','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Trio','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Trio','','name','Transformer with two secondary windings','Transformer with two secondary windings','Трансформатор с двумя вторичными обмотками','Трансформатор з двома вторинними обмотками',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Trio','','geomW','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Trio','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Trio','','lineClr','black','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Trio','','elLst','arc:(5|65):(5|65):(30|65):(30|40):(5|65):::::
-arc:(25|30):(25|30):(50|30):(50|5):(25|30):::::
-arc:(45|65):(45|65):(70|65):(70|40):(45|65):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','name','Ground','Ground','Заземление','Заземлення',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','geomW','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','lineClr','black','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','fillColor','black','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','elLst','line:(16|50):(31|50):::::
-line:(31|15):(41|25):::::
-line:(41|25):(41|75):::::
-line:(41|75):(31|85):::::
-line:(31|85):(31|15):::::
-line:(51|30):(61|40):::::
-line:(61|40):(61|60):::::
-line:(61|60):(51|70):::::
-line:(51|70):(51|30):::::
-line:(71|45):(71|55):::::
-line:(71|55):(81|50):::::
-line:(71|45):(81|50):::::
-line:(72|46):(72|54):::::
-line:(73|47):(73|53):::::
-line:(74|48):(74|52):::::
-line:(75|48):(75|52):::::
-line:(76|49):(76|51):::::
-line:(77|49):(77|51):::::
-line:(81|50):(71|50):::::
-fill:(31|15):(41|25):(41|75):(31|85)::
-fill:(51|30):(61|40):(61|60):(51|70)::','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','name','Coil','Coil','Индуктивность','Індуктивність',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','geomW','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','geomXsc','1','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','geomYsc','1','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','lineWdth','5','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','elLst','arc:(50|35):(50|5):(50|20):(50|5):(35|20)
-arc:(50|95):(50|65):(50|80):(50|65):(35|80)
-arc:(50|65):(50|35):(50|50):(50|35):(35|50)
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','','name','El_Krug','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','','geomW','30','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','','geomH','30','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','','lineWdth','2','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','','elLst','arc:(5|15):(5|15):(15|15):(15|5):(5|15):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','','name','El_lhor','','El_lhor','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','','lineWdth','0','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','','elLst','line:(0|45):(100|45):::::
-line:(100|45):(100|55):::::
-line:(100|55):(0|55):::::
-line:(0|55):(0|45):::::
-fill:(0|45):(100|45):(100|55):(0|55)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','','name','El_lvert','','El_lvert','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','','geomW','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','','lineWdth','0','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','','elLst','line:(45|0):(55|0):::::
-line:(55|0):(55|100):::::
-line:(55|100):(45|100):::::
-line:(45|100):(45|0):::::
-fill:(45|0):(55|0):(55|100):(45|100)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','name','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','geomX','827','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','geomY','412','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','geomW','50','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','geomH','50','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','geomZ','7','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','lineWdth','4','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','','elLst','line:(19|9):(40|30):::::
-line:(14|14):(35|35):::::
-line:(9|19):(30|40):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Trio','','dscr','Transformer with two secondary windings','Transformer with two secondary windings','ГОСТ 2.723-68','ГОСТ 2.723-68',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duga_edv','','dscr','Reactor','Reactor','ГОСТ 2.723-68','ГОСТ 2.723-68',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Duo','','dscr','Transformer','Transformer','ГОСТ 2.723-68','ГОСТ 2.723-68',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','','dscr','Ground','Ground','ГОСТ 2.721-74','ГОСТ 2.721-74',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','','dscr','Coil','Coil','ГОСТ 2.723-68','ГОСТ 2.723-68',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','','dscr','Switch plank
-','Switch plank
-','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1_tst','','dscr','','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3','','dscr','Automatic switch plank','Automatic switch plank','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_3_tst','','dscr','','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4','','dscr','Automatic dual band switch','Automatic dual band switch','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_4_tst','','dscr','','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','','dscr','Switch plank(circle)','Switch plank(circle)','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','','dscr','','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','','dscr','Automatic switch plank(circle)','Automatic switch plank(circle)','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter','','dscr','Direct current converter','Direct current converter','ГОСТ 2.737-68','ГОСТ 2.737-68',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Converter_1','','dscr','Rectifier','Rectifier','ГОСТ 2.737-68','ГОСТ 2.737-68',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','name','Fuse-switch 2','Fuse-switch 2','Предохранитель-выключатель 2','Запобіжник-вимикач 2',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','lineClr','#000000','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','fillColor','','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','elLst','line:(7|143):(7|7):2:c1:::s1
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p1x','','64','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p1y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p2x','','74','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p2y','','46','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p3x','','34','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p3y','','86','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p4x','','24','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p4y','','76','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','name','','Предохранитель-выключатель 2','Предохранитель-выключатель 2',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','lineClr','','#000000','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','fillColor','','','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','elLst','','line:(7|143):(7|7):2:c1:::s1
 line:(143|143):(7|143):2:c1:::s1
 line:(7|7):(143|7):2:c1:::s1
 line:(143|7):(143|143):2:c1:::s1
@@ -1023,26 +649,27 @@ fill:(70|1):(70|23):(80|23):(80|1)::
 fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p1x','60','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p1y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p2x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p2y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p3x','90','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p3y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p4x','60','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p4y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p5x','75','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p5y','45','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p6x','75','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','p6y','105','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','c1','#000000','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','name','El_KeySqr_6_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','elLst','line:1:2:3::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p1x','','60','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p2x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p3x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p3y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p4x','','60','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p4y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p5x','','75','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p5y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p6x','','75','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','p6y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','c1','','#000000','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','name','','El_KeySqr_6_tst','El_KeySqr_6_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','elLst','','line:1:2:3::::
 line:2:3:3::::
 line:3:4:3::::
 line:4:1:3::::
@@ -1071,29 +698,182 @@ fill:(70|1):(70|23):(80|23):(80|1)::
 fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|24):(85|24):(85|44):(65|44)::
 fill:(65|106):(85|106):(85|126):(65|126)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p1x','72','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p1y','55','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p2x','91','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p3x','135','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p3y','80','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p4x','116','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p4y','99','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p7x','81','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p7y','46','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p8x','125','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','p8y','90','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','','dscr','','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','','dscr','Fuse-switch 2','Fuse-switch 2','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','name','El_KeyRnd_3_tst','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','dscr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','geomW','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','geomH','150','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','elLst','line:1:2:::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p1x','','72','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p1y','','55','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p2x','','91','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p3x','','135','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p3y','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p4x','','116','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p4y','','99','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p7x','','81','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p7y','','46','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p8x','','125','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','p8y','','90','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','name','','Рубильник однополосный(круг)','Рубильник однополосный(круг)',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','elLst','','line:1:2:::::
+line:2:3:::::
+line:3:4:::::
+line:4:1:::::
+arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
+arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
+line:(70|1):(70|23):::::
+line:(70|1):(80|1):::::
+line:(80|1):(80|23):::::
+line:(70|23):(80|23):::::
+line:(80|127):(80|149):::::
+line:(70|127):(80|127):::::
+line:(70|149):(80|149):::::
+line:(70|127):(70|149):::::
+line:(7|143):(7|7):2:c1:::s1
+line:(7|7):(143|7):2:c1:::s1
+line:(143|143):(7|143):2:c1:::s1
+line:(143|7):(143|143):2:c1:::s1
+fill:1:2:3:4::
+fill:(70|1):(70|23):(80|23):(80|1)::
+fill:(70|127):(70|149):(80|149):(80|127)::
+fill:(65|34):(65|34)::
+fill:(65|116):(65|116)::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p1x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p2x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p3x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p3y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p4x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','p4y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','name','','El_KeyRnd_1_tst','El_KeyRnd_1_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','elLst','','line:1:2:::::
+line:2:3:::::
+line:3:4:::::
+line:4:1:::::
+arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
+arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
+line:(70|1):(70|23):::::
+line:(70|1):(80|1):::::
+line:(80|1):(80|23):::::
+line:(70|23):(80|23):::::
+line:(80|127):(80|149):::::
+line:(70|127):(80|127):::::
+line:(70|149):(80|149):::::
+line:(70|127):(70|149):::::
+line:(7|143):(7|7):2:c1:::s1
+line:(7|7):(143|7):2:c1:::s1
+line:(143|143):(7|143):2:c1:::s1
+line:(143|7):(143|143):2:c1:::s1
+fill:1:2:3:4::
+fill:(70|1):(70|23):(80|23):(80|1)::
+fill:(70|127):(70|149):(80|149):(80|127)::
+fill:(65|34):(65|34)::
+fill:(65|116):(65|116)::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p1x','','76','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p1y','','46','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p2x','','86','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p3x','','126','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p3y','','76','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p4x','','116','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','p4y','','86','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_1_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','name','','Выключатель-предохранитель(круг)','Выключатель-предохранитель(круг)',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','dscr','','Предохранитель-выключатель(круг)','Предохранитель-выключатель(круг)',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','elLst','','line:1:2:::::
+line:2:3:::::
+line:3:4:::::
+line:4:1:::::
+arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
+arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
+line:(70|1):(70|23):::::
+line:(70|1):(80|1):::::
+line:(80|1):(80|23):::::
+line:(70|23):(80|23):::::
+line:(80|127):(80|149):::::
+line:(70|127):(80|127):::::
+line:(70|149):(80|149):::::
+line:(70|127):(70|149):::::
+line:(7|143):(7|7):2:c1:::s1
+line:(7|7):(143|7):2:c1:::s1
+line:(143|143):(7|143):2:c1:::s1
+line:(143|7):(143|143):2:c1:::s1
+fill:1:2:3:4::
+fill:(70|1):(70|23):(80|23):(80|1)::
+fill:(70|127):(70|149):(80|149):(80|127)::
+fill:(65|34):(65|34)::
+fill:(65|116):(65|116)::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p1x','','60','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p2x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p3x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p3y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p4x','','60','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','p4y','','105','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','name','','El_KeyRnd_2_tst','El_KeyRnd_2_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','elLst','','line:1:2:::::
+line:2:3:::::
+line:3:4:::::
+line:4:1:::::
+arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
+arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
+line:(70|1):(70|23):::::
+line:(70|1):(80|1):::::
+line:(80|1):(80|23):::::
+line:(70|23):(80|23):::::
+line:(80|127):(80|149):::::
+line:(70|127):(80|127):::::
+line:(70|149):(80|149):::::
+line:(70|127):(70|149):::::
+line:(7|143):(7|7):2:c1:::s1
+line:(7|7):(143|7):2:c1:::s1
+line:(143|143):(7|143):2:c1:::s1
+line:(143|7):(143|143):2:c1:::s1
+fill:1:2:3:4::
+fill:(70|1):(70|23):(80|23):(80|1)::
+fill:(70|127):(70|149):(80|149):(80|127)::
+fill:(65|34):(65|34)::
+fill:(65|116):(65|116)::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p1x','','72','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p1y','','55','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p2x','','91','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p3x','','135','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p3y','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p4x','','116','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','p4y','','99','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','name','','Рубильник однополосный автоматический(круг)','Рубильник однополосный автоматический(круг)',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','dscr','','ГОСТ 2.755-87','ГОСТ 2.755-87',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','elLst','','line:1:2:::::
 line:2:3:::::
 line:3:4:::::
 line:4:5:::::
@@ -1120,227 +900,570 @@ fill:(70|1):(70|23):(80|23):(80|1)::
 fill:(70|127):(70|149):(80|149):(80|127)::
 fill:(65|34):(65|34)::
 fill:(65|116):(65|116)::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p1x','76','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p1y','46','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p2x','86','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p2y','36','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p3x','99','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p3y','49','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p4x','108','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p4y','40','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p5x','124','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p5y','56','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p6x','115','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p6y','65','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p7x','129','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p7y','79','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p8x','119','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','p8y','89','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','c1','#000000','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','','s1','1','','','',0,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_2','','dscr','Fuse-switch','Fuse-switch','Предохранитель-выключатель','Вимикач-запобіжник',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5','','dscr','Switch with the neutral central position','Switch with the neutral central position','Переключатель с нейтральным центральным положением','Перемикач з нейтральним центральним становищем',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_2','','dscr','Fuse-switch(circle)','Fuse-switch(circle)','Предохранитель-выключатель(круг)','Вимикач-запобіжник (коло)',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','','dscr','Switch','Switch','Выключатель','Вимикач',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','','name','El_Krug','','Источник Переменный Ток','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','','geomW','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','','geomH','100','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','','lineWdth','2','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','','elLst','arc:(5|50):(5|50):(50|50):(50|5):(5|50):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p1x','','70','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p1y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p2x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p2y','','45','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p3x','','80','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p3y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p4x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p4y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p5x','','90','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p5y','','85','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p6x','','80','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p6y','','85','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p7x','','80','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p7y','','105','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p8x','','70','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','p8y','','105','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','name','','El_KeyRnd_3_tst','El_KeyRnd_3_tst',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','dscr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','geomH','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','elLst','','line:1:2:::::
+line:2:3:::::
+line:3:4:::::
+line:4:5:::::
+line:5:6:::::
+line:6:7:::::
+line:7:8:::::
+line:8:1:::::
+arc:(65|34):(65|34):(75|34):(85|34):(75|24):::::
+arc:(65|116):(65|116):(75|116):(75|106):(65|116):::::
+line:(70|1):(70|23):::::
+line:(70|1):(80|1):::::
+line:(80|1):(80|23):::::
+line:(70|23):(80|23):::::
+line:(80|127):(80|149):::::
+line:(70|127):(80|127):::::
+line:(70|149):(80|149):::::
+line:(70|127):(70|149):::::
+line:(7|143):(7|7):2:c1:::s1
+line:(7|7):(143|7):2:c1:::s1
+line:(143|143):(7|143):2:c1:::s1
+line:(143|7):(143|143):2:c1:::s1
+fill:1:2:3:4:5:6:7:8::
+fill:(70|1):(70|23):(80|23):(80|1)::
+fill:(70|127):(70|149):(80|149):(80|127)::
+fill:(65|34):(65|34)::
+fill:(65|116):(65|116)::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p1x','','76','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p1y','','46','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p2x','','86','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p2y','','36','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p3x','','99','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p3y','','49','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p4x','','108','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p4y','','40','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p5x','','124','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p5y','','56','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p6x','','115','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p6y','','65','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p7x','','129','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p7y','','79','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p8x','','119','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','p8y','','89','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','c1','','#000000','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_3_tst','s1','','1','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','name','','Выключатель','Выключатель',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','dscr','','Выключатель','Выключатель',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','geomW','','150','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','lineWdth','','0','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','elLst','','line:1:2:::::
+line:2:3:::::
+line:3:4:::::
+line:4:1:::::
+arc:(20|35):(20|35):(20|50):(35|50):(20|35):::::
+arc:(130|35):(130|35):(130|50):(145|50):(130|35):::::
+fill:1:2:3:4::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p1x','','40','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p1y','','35','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p2x','','40','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p2y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p3x','','110','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p3y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p4x','','110','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Key_h','p4y','','35','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','name','','Окружность','Окружность',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','dscr','','Окружность
+Автор: Максим Лысенко
+Версия: 1.0.0','Окружность
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','lineWdth','','4','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Krug','elLst','','arc:(5|50):(5|50):(50|50):(50|5):(5|50):::::','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','name','','Заземление','Заземление',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','dscr','','Заземление, по ГОСТ 2.721-74
+Автор: Максим Лысенко
+Версия: 1.0.0','Заземление, по ГОСТ 2.721-74
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','fillColor','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_Zemlia','elLst','','line:(31|15):(39.214|21.428):::::
+line:(39.214|21.428):(39.214|78.571):::::
+line:(39.214|78.571):(31|85):::::
+line:(31|85):(31|15):::::
+line:(51|30):(59.214|36.429):::::
+line:(59.214|36.429):(59.214|63.571):::::
+line:(59.214|63.571):(51|70):::::
+line:(51|70):(51|30):::::
+line:(71|45):(71|55):::::
+line:(71|55):(79.214|50):::::
+line:(71|45):(79.214|50):::::
+line:(72|46):(72|54):::::
+line:(73|47):(73|53):::::
+line:(74|48):(74|52):::::
+line:(75|48):(75|52):::::
+line:(76|49):(76|51):::::
+line:(77|49):(77|51):::::
+line:(79.214|50):(71|50):::::
+fill:(31|15):(39.214|21.428):(39.214|78.571):(31|85)::
+fill:(51|30):(59.214|36.429):(59.214|63.571):(51|70)::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','name','','El_lhor','El_lhor',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','dscr','','Токопроводящая связь, линия или шина, горизонтальная, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Токопроводящая связь, линия или шина, горизонтальная, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','lineWdth','','1','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lhor','elLst','','line:(0|45):(100|45):::::
+line:(100|45):(100|55):::::
+line:(100|55):(0|55):::::
+line:(0|55):(0|45):::::
+fill:(0|45):(100|45):(100|55):(0|55)::','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','name','','El_lvert','El_lvert',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','dscr','','Токопроводящая связь, линия или шина, вертикальная, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Токопроводящая связь, линия или шина, вертикальная, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','lineWdth','','1','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_lvert','elLst','','line:(45|0):(55|0):::::
+line:(55|0):(55|100):::::
+line:(55|100):(45|100):::::
+line:(45|100):(45|0):::::
+fill:(45|0):(55|0):(55|100):(45|100)::','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','name','','Индуктивность','Индуктивность',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','dscr','','Индуктивность, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Индуктивность, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','geomXsc','','1','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','geomYsc','','1','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','lineWdth','','5','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Induct','elLst','','arc:(50|35):(50|5):(50|20):(50|5):(35|20)
+arc:(50|95):(50|65):(50|80):(50|65):(35|80)
+arc:(50|65):(50|35):(50|50):(50|35):(35|50)
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','name','','Три полосы','Три полосы',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','dscr','','Три полосы, обозначение трёхфазной линии электропередачи
+Автор: Максим Лысенко
+Версия: 1.0.0','Три полосы, обозначение трёхфазной линии электропередачи
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','geomX','','827','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','geomY','','412','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','geomZ','','7','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','lineWdth','','4','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('Sharp','elLst','','line:(28|0):(100|72):::::
+line:(14|14):(86|86):::::
+line:(0|29):(72|100):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','name','','Двойная стрелка','Двойная стрелка',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','dscr','','Двойная стрелка, обозначение выездного оборудования
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Двойная стрелка, обозначение выездного оборудования
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','geomX','','827','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','geomY','','412','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','geomZ','','7','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','lineWdth','','4','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('arrowSharp','elLst','','line:(50|5):(95|50):::::
+line:(50|5):(5|50):::::
+line:(50|20):(95|65):::::
+line:(50|20):(5|65):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('battery','name','','Батарея','Батарея',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('battery','dscr','','Батарея
+Автор: Максим Лысенко
+Версия: 1.0.0','Батарея
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('battery','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('battery','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('battery','lineWdth','','1','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('battery','elLst','','line:(15|40):(15|60):::::
+line:(13|45):(13|55):::::
+line:(15|50):(23|50):::::
+line:(25|40):(25|60):::::
+line:(23|45):(23|55):::::
+line:(25|50):(38|50):::::2
+line:(40|40):(40|60):::::
+line:(38|45):(38|55):::::
+line:(40|50):(58|50):::::
+line:(60|40):(60|60):::::
+line:(58|45):(58|55):::::
+line:(60|50):(73|50):::::2
+line:(75|40):(75|60):::::
+line:(73|45):(73|55):::::
+line:(75|50):(83|50):::::
+line:(85|40):(85|60):::::
+line:(83|45):(83|55):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','name','','Распределительная шина','Распределительная шина',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','dscr','','Распределительная шина
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Распределительная шина
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','elLst','','line:(5|45):(95|45):::::
+line:(95|45):(95|55):::::
+line:(95|55):(5|55):::::
+line:(5|55):(5|45):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterAC_DC','name','','Преобр.: переменный в постоянный','Преобр.: переменный в постоянный',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterAC_DC','dscr','','Преобразователь переменного тока в постоянный, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Преобразователь переменного тока в постоянный, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterAC_DC','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterAC_DC','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterAC_DC','lineWdth','','3','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterAC_DC','elLst','','line:(5|5):(95|5):::::
+line:(95|5):(95|95):::::
+line:(95|95):(5|95):::::
+line:(5|95):(5|5):::::
+line:(5|95):(95|5):::::
+line:(50|68):(81|68):::::
+line:(50|81):(81|81):::::
+bezier:(14|30):(50|30):(30|10):(30|50):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterDC_DC','name','','Преобр.: постоянный в постоянный','Преобр.: постоянный в постоянный',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterDC_DC','dscr','','Преобразователь постоянного тока в постоянный ток другого уровня напряжения, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Преобразователь постоянного тока в постоянный ток другого уровня напряжения, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterDC_DC','lineWdth','','3','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('converterDC_DC','elLst','','line:(5|5):(95|5):::::
+line:(95|5):(95|95):::::
+line:(95|95):(5|95):::::
+line:(5|95):(5|5):::::
+line:(5|95):(95|5):::::
+line:(50|68):(81|68):::::
+line:(50|81):(81|81):::::
+line:(15|18):(46|18):::::
+line:(15|31):(46|31):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','name','','Предохранитель','Предохранитель',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','dscr','','Предохранитель
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Предохранитель
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('fuse1','elLst','','line:(15|35):(15|65):::::
+line:(15|65):(85|65):::::
+line:(85|65):(85|35):::::
+line:(85|35):(15|35):::::
+line:(15|50):(84|50):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','name','','Ключ','Ключ',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','dscr','','Простой ключ.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0
+Свойства:
+- var=true - замыкание;
+- var=false - размыкание;
+- var=EVAL - ключ пунктирный;
+- рамка конфигурируется.','Простой ключ.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0
+Свойства:
+- var=true - замыкание;
+- var=false - размыкание;
+- var=EVAL - ключ пунктирный;
+- рамка конфигурируется.',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','elLst','','line:(42|8):(58|8):::::
+line:(58|8):(58|23):::::
+line:(58|23):(42|23):::::
+line:(42|23):(42|8):::::
+line:(42|77):(58|77):::::
+line:(58|77):(58|92):::::
+line:(58|92):(42|92):::::
+line:(42|92):(42|77):::::
+line:(50|15):1:8::::s1
+line:(5|5):(95|5):2:c1:::s2
+line:(95|95):(5|95):2:c1:::s2
+line:(95|5):(95|95):2:c1:::s2
+line:(5|95):(5|5):2:c1:::s2
+fill:(42|8):(58|8):(58|23):(42|23)::
+fill:(42|77):(58|77):(58|92):(42|92)::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','p1x','','90','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','p1y','','65','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','c1','','#808080','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','s1','','0','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('key','s2','','2','',0,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('limU','name','','Огранич. напряжения','Огранич. напряжения',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('limU','dscr','','Ограничитель напряжения
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Ограничитель напряжения
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('limU','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('limU','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('limU','elLst','','line:(15|35):(15|65):::::
+line:(15|65):(85|65):::::
+line:(85|65):(85|35):::::
+line:(85|35):(15|35):::::
+line:(60|23):(84|23):::::
+line:(17|86):(60|23):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load1','name','','Нагрузка 1','Нагрузка 1',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load1','dscr','','Нагрузка 1
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Нагрузка 1
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load1','geomX','','827','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load1','geomY','','412','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load1','geomZ','','7','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load1','lineWdth','','3','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load1','elLst','','line:(50|5):(95|83):::::
+line:(50|5):(5|83):::::
+line:(5|83):(95|83):::::
+line:(79|38):(65|47):::::
+line:(82|43):(68|52):::::
+line:(37|46):(21|36):::::
+line:(34|51):(18|41):::::
+line:(48|90):(48|75):::::
+line:(54|90):(54|75):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load2','name','','Нагрузка 2','Нагрузка 2',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load2','dscr','','Нагрузка 2
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Нагрузка 2
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load2','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load2','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('load2','elLst','','arc:(5|70):(5|70):(30|70):(30|45):(5|70):::::
+arc:(5|30):(5|30):(30|30):(30|5):(5|30):::::
+line:(70|29.063):(52.5|60.938):::::
+line:(52.5|60.938):(88.125|60.625):::::
+line:(70|29.063):(88.125|60.625):::::
+line:(30|70.312):(12.5|84.375):::::
+line:(30|47.5):(30|70.312):::::
+line:(46.875|84.375):(30|70.312):::::
+arc:(45|50):(45|50):(70|50):(70|25):(45|50):::::
+line:(51|70):(30|70.312):::::
+line:(30|7.5):(30|30.312):::::
+line:(30|30.312):(12.5|44.375):::::
+line:(46.875|44.375):(30|30.312):::::
+line:(51|30):(30|30.312):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('reactor','name','','Реактор','Реактор',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('reactor','dscr','','Реактор, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Реактор, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('reactor','lineWdth','','3','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('reactor','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('reactor','elLst','','arc:(50|80):(80|50):(50|50):(20|50):(50|80):::::
+line:(50|80):(50|50):::::
+line:(50|50):(5|50):::::
+line:(80|50):(95|50):::::','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','name','','Источник: переменный ток','Источник: переменный ток',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','dscr','','Источник переменного тока, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Источник переменного тока, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','geomW','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','geomH','','100','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','lineWdth','','3','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('srcAC','elLst','','arc:(5|50):(5|50):(50|50):(50|5):(5|50):::::
 arc:(10|50):(50|50):(30|50):(30|30):(10|50):::::
 arc:(90|50):(50|50):(70|50):(70|70):(90|50):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','','name','State generic','','Состояние общее','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','','lineWdth','2','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','','elLst','line:(10|10):(90|10):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','name','','Состояние общее','Состояние общее',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','dscr','','Общее состояние, обычно для контакторов
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0
+Свойства:
+- var=true - заполнение красным
+- var=false - заполнение зелёным
+- var=EVAL - заполнение прозрачным','Общее состояние, обычно для контакторов
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0
+Свойства:
+- var=true - заполнение красным
+- var=false - заполнение зелёным
+- var=EVAL - заполнение прозрачным',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','lineClr','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','elLst','','line:(10|10):(90|10):::::
 line:(90|10):(90|90):::::
 line:(90|90):(10|90):::::
 line:(10|90):(10|10):::::
 fill:(10|90):(10|10):(90|10):(90|90):c1:
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','','c1','#000000-127','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','','backColor','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','','bordWidth','1','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','','bordColor','#000000','','','',40,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','','bordStyle','2','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','','name','Шина подключения','','Шина подключения','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','','lineWdth','2','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','','lineClr','','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('conBus','','elLst','line:(5|45):(95|45):::::
-line:(95|45):(95|55):::::
-line:(95|55):(5|55):::::
-line:(5|55):(5|45):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','','name','Состояние общее 1','','Состояние общее 1','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','','name','Тр. звезда в треуг.','','Тр. звезда в треуг.','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','','dscr','ГОСТ 2.723-68','','ГОСТ 2.723-68','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','','lineClr','black','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','','elLst','arc:(25|70):(25|70):(50|70):(50|45):(25|70):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen','c1','','#000000-127','',8,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','name','','Состояние общее 1','Состояние общее 1',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','dscr','','Общее состояние группы, для включенных в бокс элементов
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0
+Свойства:
+- var=true - цвет бордюра красный
+- var=false - цвет бордюра зелёный
+- var=EVAL - цвет бордюра чёрный','Общее состояние группы, для включенных в бокс элементов
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0
+Свойства:
+- var=true - цвет бордюра красный
+- var=false - цвет бордюра зелёный
+- var=EVAL - цвет бордюра чёрный',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','backColor','','','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','bordWidth','','1','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','bordColor','','#000000','',40,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('stGen1','bordStyle','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trDuo','name','','Тр.: одна вторичная обмотка','Тр.: одна вторичная обмотка',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trDuo','dscr','','Трансформатор с одной вторичной обмоткой, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Трансформатор с одной вторичной обмоткой, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trDuo','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trDuo','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trDuo','elLst','','arc:(25|70):(25|70):(50|70):(50|45):(25|70):::::
+arc:(25|30):(25|30):(50|30):(50|5):(25|30):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','name','','Тр.: звезда в треуг.','Тр.: звезда в треуг.',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','dscr','','Трансформатор трёхфазный, звезда в треугольник
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Трансформатор трёхфазный, звезда в треугольник
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trStarTriangl','elLst','','arc:(25|70):(25|70):(50|70):(50|45):(25|70):::::
 arc:(25|30):(25|30):(50|30):(50|5):(25|30):::::
 line:(50|49.063):(32.5|80.938):::::
 line:(32.5|81):(68.125|81):::::
 line:(50|49.063):(68.125|80.625):::::
 line:(50|30.312):(32.5|44.375):::::
-line:(49.688|7.5):(50|30.312):::::
+line:(50|7.5):(50|30.312):::::
 line:(66.875|44.375):(50|30.312):::::
 line:(18.125|43.438):(84.375|9.688):::::
 line:(80.313|15.625):(84.375|9.688):::::
 line:(77.188|10.313):(84.375|9.688):::::
-','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','','owner','root:UI','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','','name','Тр. треуг. в звезда','','Тр. треуг. в звезда','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','','dscr','ГОСТ 2.723-68','','ГОСТ 2.723-68','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','','lineClr','black','','','',32,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','','elLst','arc:(25|70):(25|70):(50|70):(50|45):(25|70):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','owner','','root:UI','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','name','','Тр.: треуг. в звезда','Тр.: треуг. в звезда',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','dscr','','Трансформатор трёхфазный, треугольник в звезду
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Трансформатор трёхфазный, треугольник в звезду
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStar','elLst','','arc:(25|70):(25|70):(50|70):(50|45):(25|70):::::
 arc:(25|30):(25|30):(50|30):(50|5):(25|30):::::
 line:(50|9.063):(32.5|40.938):::::
 line:(32.5|41):(68.125|41):::::
 line:(50|9.063):(68.125|40.625):::::
 line:(50|70.312):(32.5|84.375):::::
-line:(49.688|47.5):(50|70.312):::::
+line:(50|47.5):(50|70.312):::::
 line:(66.875|84.375):(50|70.312):::::
-','','','',32,'','','','','','','','');
-CREATE TABLE 'wlb_ElectroEls_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"en#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"en#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"en#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"en#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','','st','Error state','Error state','Статус ошибки','Статус помилки',131072,'<EVAL>||','','','',10,'Parameter|st','Parameter|st','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','','val','Value','Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|var','Parameter|var','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','','st','Error state','Error state','Статус ошибки','Статус помилки',131072,'<EVAL>||','','','',10,'Parameter|st','Parameter|st','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','','val','Value','Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|var','Parameter|var','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','','st','Error state','Error state','Статус ошибки','Статус помилки',131072,'<EVAL>||','','','',10,'Parameter|st','Parameter|st','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','','val','Value','Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|var','Parameter|var','Parameter|var','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','','st','Error state','Error state','Статус ошибки','Статус помилки',131072,'<EVAL>||','','','',10,'Parameter|st','Parameter|st','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','','val','Value','Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|var','Parameter|var','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5','','st','Error state','Error state','Статус ошибки','Статус помилки',131072,'<EVAL>||','','','',10,'Parameter|st','Parameter|st','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5','','val','Value','Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|var','Parameter|var','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_1','','val',' Value',' Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|val','Parameter|val','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_1_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_2','','val',' Value',' Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|val','Parameter|val','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_2_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_3','','val',' Value',' Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|val','Parameter|val','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_h','','val',' Value',' Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|val','Parameter|val','','Parameter|val','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','','DESCR','Description','Description','Описание','Опис',131077,'<EVAL>||','<EVAL>||','','',10,'Parameter|DESCR','Parameter|DESCR','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','','errPresent','Error presence','Error presence','Наличие ошибки','Наявність помилки',131072,'<EVAL>||','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','','DESCR','Description','Description','Описание','Опис',131077,'<EVAL>||','<EVAL>||','','',10,'Parameter|DESCR','Parameter|DESCR','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','','errPresent','Error presence','Error presence','Наличие ошибки','Наявність помилки',131072,'<EVAL>||','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','','DESCR','Description','Description','Описание','Опис',131077,'<EVAL>||','<EVAL>||','','',10,'Parameter|DESCR','Parameter|DESCR','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','','errPresent','Error presence','Error presence','Наличие ошибки','Наявність помилки',131072,'<EVAL>||','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','','DESCR','Description','Description','Описание','Опис',131077,'<EVAL>||','<EVAL>||','','',10,'Parameter|DESCR','Parameter|DESCR','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','','errPresent','Error presence','Error presence','Наличие ошибки','Наявність помилки',131072,'<EVAL>||','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5','','val1','Value 1','Value 1','Значение 1','Значення 1',131072,'<EVAL>||','','','',10,'Parameter1|var','Parameter1|var','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','','DESCR','Description','Description','Описание','Опис',131077,'<EVAL>||','<EVAL>||','','',10,'Parameter|DESCR','Parameter|DESCR','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','','errPresent','Error presence','Error presence','Наличие ошибки','Наявність помилки',131072,'<EVAL>||','','','',8,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','','st','Error state','Error state','Статус ошибки','Статус помилки',131072,'<EVAL>||','','','',10,'Parameter|st','Parameter|st','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','','val','Value','Value','Значение','Значення',131072,'<EVAL>||','','','',10,'Parameter|var','Parameter|var','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_3_tst','','val','�������','','','',131072,'<EVAL>||','','','',10,'��������|val','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('stGen','','st','Состояние','','Состояние','',131072,'0','','','',10,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('stGen1','','st','Состояние','','Состояние','',131072,'0','','','',10,'','','','','','','','');
-INSERT INTO "wlb_ElectroEls_uio" VALUES('conBus','','st','Состояние','','Состояние','',131072,'0','','','',10,'','','','','','','','');
-CREATE TABLE 'wlb_ElectroEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"PROC" TEXT DEFAULT '' ,"en#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "wlb_ElectroEls" VALUES('El_Accu','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAVCAIAAAB5SH/NAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAC
-IklEQVRIid2XvYrqQBSAz6opBA0haAj+ISpGS1HESkEsHPEJ1MKHsLD0ZSwFg5aCKAgipLJQ0iio
-CNOIWqiFZIuAhGw2d/beC0v8isCcnPnOHOakyAfHcdlsFqzJYrFwpNPpwWDw2yf5SyqViu23z/Cv
-GDfQ7XYJgy/O5zP5TZqrdrvdZDIh9P+3Bi6Xy3A4NEkgV+33++l0Suh/0xGyEA7dut/vY4x1QUmS
-RFE0sbTb7Xw+T1LP0K+l0WjUajVyP9ENKIqiKIp5AomHsNaP/G83QioY406n81oej0eO4+73e6/X
-A4DT6RSJRCRJKpVKoijW6/XZbFYoFCRJ0u4yZL1eF4tFjPFoNNrtdi6Xi6IojLEgCPP5HCG0XC4B
-YDweP5/P1y7V/4MG3G53tVp9LVerlSzLFEWlUikAeDweNE2zLBsIBKrVKsdx0WgUAEKhkHbXd2b1
-mUgkgsGgw+Gw2Wy3241hGJqm/X6/3+8HgHg8rlVtNpvvhMYNOJ3OTCajjciybLfbI5HIK6JW8ng8
-AMDzPAB4vV7drq/s93uMsdPpDAQCulc+nw8AWJZV5VqV6jfE8t+AvgGe50OhkC7IMIwgCCaWZDKp
-zsYfMfRrSaVSFEWR+/UN5HK5crmsC8ZisUajYVK12WyGw2GTBHO/llar5XK5yP1vN0LWAyGkfEGW
-ZcLgi8fjsd1uTRLIVdfr9XA4kPgRQsYNWAWE0IfV/4k/AVDqMy0I1X7BAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'name;geomW;geomH;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Converter','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAC
-hklEQVRogdWaMY7CMBBFzYILGlqEqFJScIEUUCHR5QAggYSIBLeg5BqIjgYaakA4B6CKopyChnK3
-yCq76zWxx7Ed+3UkTjLDnxl/BWqe5/m+j9wkiiI0mUw+3eR+v3ue16j6S5Tker0mSeL7/kfVkchA
-CEmSZD6fI4TcU+ByuaRpulwus4+OKUAISdN0NpvlR1xS4Ha7xXEchuHvg84oQAiJ43ixWFDH3UiA
-EPJ4PMIwrNfr1CkHSiirnNVqxTxruwLvKifHagWyiUl1LYW9CvyfmEwsVSBzCvluVYCNCvx2Clys
-UyCbmO9mzn/4CZxOp8PhAApiu912u13QJRnQ6JFIAkEQBEEgEQ0UieiRPSWUdS00emRJE4O6lqJ6
-BSh/D6ViBQR3qwL4CpzP5+PxCLrpZrPpdDrcZUx/D4WfwGg0Gg6HoJs2m03uGq5LE4SfAMYYY1zy
-MRRyE5NJBU1c7O+hmG5iVZWTY1QBEX8PxZwC5ScmE0MKiPt7KCYUKOMUuGhXQOHEZKJXAd3RI60J
-GIge6SshaX8PRYsCWruWQr0CJf09FMUKaNqtClCpgBJ/D0WZAspdmiBqEih4f68bBSXE9fev12u3
-24Hu2e/3BX9+L5uASOU0Go1erwe6bbvdFlxZKgFBf48xHgwGZR5UgHwPmJ+YTCQV0OfvocgoYNIp
-cAErYMZjigNLQC765/O5Xq9Bl4zH4+l0KrISkID0d99qtfb7PfQqQUQTMObvoQg1sVVdS8FXwLC/
-h8JRwJLdqoAiBSrx91DeKlCVv4fCTqBCfw+FUUJq39/rhlbAlcrJ+aOAjvf3uvlRwP6JyeRbAXv8
-PZQPZLdT4FLzPA8h5Og/8KMo+gIgvk7LK0/PowAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'name;dscr;geomW;geomH;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Converter_1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAD
-fElEQVRogdWav2vyQBjH07exFofSISKlQ3EqDu0fYEsFp0xC1xpQUE/8QSkUundsh06F0sFFXNSh
-Q/cShauLk2ANIq4lW6miZLJDQPvGNLlLcvnxmWJyF5/H73PPfYnZCIfD0WiU8ibv7+90NBqt1WpO
-R2IQjuP+OR2DWejlUSaTkSTJwVDQGY/H5XL54uKC+p2AJEmeqCWe5+v1uiiK8kePlRCEcDQapVKp
-5RkvJdBut/v9fjabpelV4XgmAQihIAiZTEZx3hsJQAh7vR4AYHNzU3GJVp3gKtrttiAIhUJB9arb
-Ffircpa4WgGe50ejEQBAY4x7FVjvmKq4VIFWqzUcDnO5nO5INyoAIRwOh+l0GmWw6xSQO+ZfPWcd
-jASazaYkSeFw+OTkxFBs+uBGT6GU0Gw2AwBwHLe1tcUwTLFYTCaT0+nURJzqGIie0lWg0WgMBoPD
-w8Pr62v5DMuyz8/P9/f3pVIpFAoZDHYNedXiRk9pJ/D29ra9vZ3NZvf393+fz+fzoihWKhUAAMMw
-6xMhhJPJhGVZxCCwVq0CrRKKx+OJREIRvUwoFAIAPD4+fn19rV99enpCj57n+cFgkMvlfD4f4pTf
-GG+jDMNcXV1dXl7e3t5+fHxQFPX5+fny8nJ6enpzc4N4E8TdSgNTbXR3d/fu7u719fX8/DwWiwWD
-wYODg4eHh+PjY5TpskvTdgq6mN0H9vb25B61WCxomvb7/YgTdV0aItZsZIFAAGu8sY6pigM7sba/
-x8VuL2RV5SyxVQEUf4+LfQqY75iq2KQAur/HxQ4FzDgFXYgrYGHHVIWsAqSjp4gmYEP0FLkSMuzv
-cSGiANFVq8B6BeTdikTHVMViBQjtVhpYqYAl/h4XyxSw3KUhYk0CGs/vSWNBCen6+/l8Xq1Wse55
-dHSE+Pe72QRQKoem6UgkgnVb9CdOphJA9Pc+n+/s7MzMF2lgfA3Y3zFVMagAOX+PixEF7HQKumAr
-YI/HRAcvAWPRf39/F4tFrCksy3IchzISIwHDv/3Ozg6510hQE7DN3+OCtIhdtWoV6Ctgs7/HRUcB
-l+xWGmgp4Ii/x+VPBZzy97ioJ+Cgv8dFpYSsfX5PGqUCXqmcJf8pQOL5PWlWCYzH43q9nkqlut2u
-gwGhIAjC8niVQLlcFkWx0+k4ERI2sVhMPlglIL/J6zk2vP76/Q9XUeETTlMz6QAAAABJRU5ErkJg
-gg==','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'name;dscr;geomW;geomH;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Duga_edv','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA06AAANOgEDIh6FAAAD
-z0lEQVRoge2az0sqXRjHzxV/MLRoomAkMGaaoGD+gGAQBlrFbMSFko6zKVrFkES2anBRRLSoTHIR
-NosYXNimaOk+iiiEEJHQqBZhRBEoLhx438WF94Vu93LOcYZJrp+VOOeZ8/04Z9Tn6A+GYXieB93J
-+fm5k+d5XdftToJJLBZz2J2hU3oCdtMTsJuegN30BOym6wWcVpy02WyWy+VPTxIEwXGc6XOZLJBO
-p2u1mtvt9nq9nw612+1sNgsACIVCJn59NEegUCikUimSJBVFmZmZcTqdAwMDn8YYhvH+/g4AyOfz
-yWRSEIRgMGjCNZEk6Z/OODw8nJyczOVy8CUPDw/ZbHZsbKxcLncytSRJHd3ExWJxfn6epumLi4tI
-JAJfODIyMjc3d3d3d3x8nEwmPz4+sDNgLqFWq5VIJGia3tvbIwgCe3pVVavV6srKit/vlyTJ4UB+
-QXEEWq1WJBJhGGZ5eRmj/BMsy66urgYCAQCALMuo5TgCiUSCYZj19XWM2i/x+Xynp6fhcHhwcFAU
-RaRa5EtWLBZpmt7Z2enr60Ot/QM+n0/X9cvLS9RCZIH9/f2FhQXUKhhYllUUJR6PI1WhCWiaFolE
-Orlr/8zQ0BBFUaVSCb4EQaBQKBwcHExNTaEHQ4DneaRbGUEglUotLi6iR0JDEASWZTVNgxyPIECS
-JNKnFTaZTOb29hZyMKxAOp1WFAU3EhokSVIUValUYAbDCtRqtdHR0Q5SIeByuTweT6PRgBkMJdBs
-Nt1ut9NpSfPwJRRF1et1mJFQAuVy2ev1/voN2Tqi0Wgul4MZ2fUtZdcL/L+sVVW9v7//ctDb29vL
-y8v19TXeHHjb9wzDxGKx3x2NxWLT09MAwHVkV1dX29vb2E0TXiHkybt+CUEJEATRbrcNw7A6DQZQ
-AhzHPT8//9xT+G78HUsIABAKhfL5vKVR8IAV4Hn+5OTk8fHR0jQYICwhQRAKhYJ1UfBAEAgGg5ub
-m9ZFwQNBgOO4s7OztbU169JggPYuNDExYRhGtVq1KA0GyG+jS0tLW1tbT09PVqTBAFmgv7/f7/cH
-AoFv4oDTZEmSBAAIh8O6rrMsa3YkNHA+iR0OhyzLqqoeHR29vr6angkJ/DZXFEVRFOPxOEVRPM8L
-gmBiLHg67dN3d3dLpZIsyyzLZjIZkiRdLpcpySAxYaOB47ibmxtN0zY2NiiK8ng8FEVFo9HOzwyD
-aTsls7OzAIBKpdJoNOr1+n/d4PDwsFlTfInJWz3j4+M/H6D+ToHNX9MPfFt6AnbTE7CbnoDd9ATs
-5ke3//3+Xynjc8QP+iJXAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;dscr;geomW;geomH;lineClr;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Duo','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','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;dscr;geomW;geomH;lineClr;elLst;',0);
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','name','','Тр.: треуг. в звезда, гор.','Тр.: треуг. в звезда, гор.',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','dscr','','Трансформатор трёхфазный, треугольник в звезду, горизонтальный
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Трансформатор трёхфазный, треугольник в звезду, горизонтальный
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrianglStarH','elLst','','arc:(45|50):(45|50):(70|50):(70|25):(45|50):::::
+arc:(5|50):(5|50):(30|50):(30|25):(5|50):::::
+line:(30|29.063):(12.5|60.938):::::
+line:(12.5|61):(48.125|61):::::
+line:(30|29.063):(48.125|60.625):::::
+line:(70|50.312):(52.5|64.375):::::
+line:(70|27.5):(70|50.312):::::
+line:(86.875|64.375):(70|50.312):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrio','name','','Тр.: две вторичные обмотками','Тр.: две вторичные обмотками',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrio','dscr','','Трансформатор с двумя вторичными обмотками, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0','Трансформатор с двумя вторичными обмотками, по ГОСТ 2.723-68
+Автор: Максим Лысенко
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrio','lineWdth','','2','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrio','lineClr','','black','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('trTrio','elLst','','arc:(5|65):(5|65):(30|65):(30|40):(5|65):::::
+arc:(25|30):(25|30):(50|30):(50|5):(25|30):::::
+arc:(45|65):(45|65):(70|65):(70|40):(45|65):::::
+','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','name','','Треугольник','Треугольник',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','dscr','','Равносторонний треугольник
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0','Равносторонний треугольник
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','geomX','','827','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','geomY','','412','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','geomZ','','7','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','lineWdth','','4','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','fillColor','','white','',32,'','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('triangle','elLst','','line:(50|10):(95|88):::::
+line:(50|10):(5|88):::::
+line:(5|88):(95|88):::::
+fill:(5|88):(95|88):(50|10)::
+','',32,'','','','');
+CREATE TABLE 'wlb_ElectroEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAC
 F0lEQVRoge2asariUBCGz66ilUGF4GMYQjCQ4sQXEEQRFN/ASkUQK0GwFiL4DvoWJxYikagPYCpN
 mghaKshuEclmvcVl2bkcvMxXZQaZP5+cEAjzo1qt6rpOoPF9fzQahWWxWKxUKuApjDFiGMavL+Bw
@@ -1378,34 +1501,7 @@ else if( val && !val.isEVal() )
 }
 else if( val.isEVal() )
 { c1 = fillColor = lineClr = "darkgrey"; }
-','JavaLikeCalc.JavaScript
-if( st && !st.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=126; p3y=76;
-  p4x=116; p4y=86;
-  c1 = "red"; fillColor = lineClr = "black";
-}
-else if( !val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=126; p3y=76;
-  p4x=116; p4y=86;
-  c1 = "white"; fillColor = lineClr = "black";
-}
-else if( val && !val.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=105;
-  p4x=70; p4y=105;
-  c1 = "lime"; fillColor = lineClr = "black";
-}
-else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }
-','','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
+','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037082);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_1_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAG
 LUlEQVRogdVaS0wTXRS+HaZDlEgiaZ2pMQoYDWLQAoZqEHlGhhAaggSlsOjajYQtK9gQN5hg2Hdh
 amiIMTWFQpRSwCAipYRXojGCfQRD42OhsUOZ/ot7//vPP62ltlPa+Vbn3Ne5X+459624c+dOdXU1
@@ -1449,7 +1545,7 @@ else if( val && !val.isEVal() )
   p2x=65; p2y=40;
   p3x=65; p3y=110;
   p4x=35; p4y=110;
-}','','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_2','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAE
 rklEQVRogd1azUsyXRS/juMVkoJEyWUlCAWCVDz2YdkiwogkLBSshetW0Z/Qpp1F4V4oDEUkjEgi
 CCspo1EjaFFE1CKKhj4WRY7T+CzucJ957e0hbHrtvr/VOdc7c87Pe87MvXOOYmRkxG63A7nBsuz0
@@ -1499,34 +1595,7 @@ else if( val && !val.isEVal() )
 }
 else if( val.isEVal() )
 { c1 = fillColor = lineClr = "darkgrey"; }
-','JavaLikeCalc.JavaScript
-if( st && !st.isEVal() )
-{
-  p1x=72; p1y=55;
-  p2x=91; p2y=36;
-  p3x=135; p3y=80;
-  p4x=116; p4y=99;
-  c1 = "red"; fillColor = lineClr = "black";
-}
-else if( !val && !val.isEVal() )
-{
-  p1x=72; p1y=55;
-  p2x=91; p2y=36;
-  p3x=135; p3y=80;
-  p4x=116; p4y=99;
-  c1 = "white"; fillColor = lineClr = "black";
-}
-else if( val && !val.isEVal() )
-{
-  p1x=60; p1y=45;
-  p2x=90; p2y=45;
-  p3x=90; p3y=105;
-  p4x=60; p4y=105;
-  c1 = "lime"; fillColor = lineClr = "black";
-}
-else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }
-','','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
+','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_2_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAG
 uElEQVRogdVaT0wTzxefXbZLIoFEbJWT+CchkYTYaGU1paJJ0bZKLSvBpHro0XjxTyyx6MlEDRww
 wXDnYDAQYmTBtDEkWEQBKaWmwRiMUTwQlQaKtsYuy/Z7mM389teWsmy3Lf2c5k1n5r1P572Z2XmD
@@ -1572,7 +1641,7 @@ else if( val && !val.isEVal() )
   p2x=65; p2y=40;
   p3x=65; p3y=110;
   p4x=35; p4y=110;
-}','','','',-1,'name;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
+}','',-1,'name;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_3','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAE
 8klEQVRogd1aS0hyTRgeT8cRkqJEsVWUgVAoSEWntLJFhBGJlBVZC9etok37Nu0MDPctojBCwogk
 hLALXcxLBC2KiIKsSLosijza8VvMYf7z27/4sOPnN/+zet/xnHnex5l3ztwkg4ODZrMZiI1kMjkz
@@ -1634,83 +1703,7 @@ else if( val && !val.isEVal() )
   c1 = "lime"; fillColor = lineClr = "black";
 }
 else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }','JavaLikeCalc.JavaScript
-if( st && !st.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=99; p3y=49;
-  p4x=108; p4y=40;
-  p5x=124; p5y=56;
-  p6x=115; p6y=65;
-  p7x=129; p7y=79;
-  p8x=119; p8y=89;
-  c1 = "red"; fillColor = lineClr = "black";
-}
-else if( !val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=99; p3y=49;
-  p4x=108; p4y=40;
-  p5x=124; p5y=56;
-  p6x=115; p6y=65;
-  p7x=129; p7y=79;
-  p8x=119; p8y=89;
-  c1 = "white"; fillColor = lineClr = "black";
-}
-else if( val && !val.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=165;
-  p4x=90; p4y=65;
-  p5x=90; p5y=85;
-  p6x=80; p6y=85;
-  p7x=80; p7y=105;
-  p8x=70; p8y=105;
-  c1 = "lime"; fillColor = lineClr = "black";
-}
-else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }','JavaLikeCalc.JavaScript
-if( st && !st.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=99; p3y=49;
-  p4x=108; p4y=40;
-  p5x=124; p5y=56;
-  p6x=115; p6y=65;
-  p7x=129; p7y=79;
-  p8x=119; p8y=89;
-  c1 = "red"; fillColor = lineClr = "black";
-}
-else if( !val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=99; p3y=49;
-  p4x=108; p4y=40;
-  p5x=124; p5y=56;
-  p6x=115; p6y=65;
-  p7x=129; p7y=79;
-  p8x=119; p8y=89;
-  c1 = "white"; fillColor = lineClr = "black";
-}
-else if( val && !val.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=165;
-  p4x=90; p4y=65;
-  p5x=90; p5y=85;
-  p6x=80; p6y=85;
-  p7x=80; p7y=105;
-  p8x=70; p8y=105;
-  c1 = "lime"; fillColor = lineClr = "black";
-}
-else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',0);
+{ c1 = fillColor = lineClr = "darkgrey"; }','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_3_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAG
 kklEQVRogdVa3U8TSxSfbrdLItEEbN2tEj8TomC1YqQYRTASqVEbAwTIWpM++6LxTzAxxhdMMLzz
 YFAIMVgsXY1aiygWSqlB0GgMKqVqbMSPiHYp2/swc8e9u/26sKXd39M5Mztzzm/nnNnZmdE0NjbW
@@ -1755,7 +1748,7 @@ else if( val && !val.isEVal() )
   p2x=80; p2y=45;
   p3x=80; p3y=105;
   p4x=70; p4y=105;
-}','','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',0);
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_4','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAC
 yUlEQVRYhe1YvWoqQRQ+2V2MkoiIiiIYiH+IC6ZJYWkjxM43sPIZfI1gSCPYiQ9gI1pZLpbC+osJ
 qIh/RIxZkeCaW5xkvVjI7LBEvdyvOkfnfPud2Tkzs+cim83yPA8EWC6X0WgUAB4fH8PhMEmIKlDw
@@ -1831,69 +1824,7 @@ else if( val && !val.isEVal() )
   c1 = "lime"; fillColor = lineClr = "black";
 }
 else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }','JavaLikeCalc.JavaScript
-if( st && !st.isEVal() )
-{
-  p1x=226; p1y=46;
-  p2x=236; p2y=36;
-  p3x=249; p3y=49;
-  p4x=259; p4y=39;
-  p5x=276; p5y=56;
-  p6x=266; p6y=66;
-  p7x=279; p7y=79;
-  p8x=269; p8y=89;
-  p9x=76; p9y=46;
-  p10x=86; p10y=36;
-  p11x=108; p11y=58;
-  p14x=120; p14y=70;
-  p15x=129; p15y=79;
-  p16x=119; p16y=89;
-  p17x=238; p17y=58;
-  p18x=250; p18y=70;
-  c1 = "red"; fillColor = lineClr = "black";
-}
-else if( !val && !val.isEVal() )
-{
-  p1x=226; p1y=46;
-  p2x=236; p2y=36;
-  p3x=249; p3y=49;
-  p4x=259; p4y=39;
-  p5x=276; p5y=56;
-  p6x=266; p6y=66;
-  p7x=279; p7y=79;
-  p8x=269; p8y=89;
-  p9x=76; p9y=46;
-  p10x=86; p10y=36;
-  p11x=108; p11y=58;
-  p14x=120; p14y=70;
-  p15x=129; p15y=79;
-  p16x=119; p16y=89;
-  p17x=238; p17y=58;
-  p18x=250; p18y=70;
-  c1 = "white"; fillColor = lineClr = "black";
-}
-else if( val && !val.isEVal() )
-{
-  p1x=220; p1y=45;
-  p2x=230; p2y=45;
-  p3x=230; p3y=65;
-  p4x=240; p4y=65;
-  p5x=240; p5y=85;
-  p6x=230; p6y=85;
-  p7x=230; p7y=105;
-  p8x=220; p8y=105;
-  p9x=70; p9y=45;
-  p10x=80; p10y=45;
-  p11x=80; p11y=65;
-  p14x=80; p14y=85;
-  p15x=80; p15y=105;
-  p16x=70; p16y=105;
-  p17x=220; p17y=65;
-  p18x=220; p18y=85;
-  c1 = "lime"; fillColor = lineClr = "black";
-}
-else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }','','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;p9x;p9y;p10x;p10y;p11x;p11y;p14x;p14y;p15x;p15y;p16x;p16y;p17x;p17y;p18x;p18y;c1;s1;',0);
+{ c1 = fillColor = lineClr = "darkgrey"; }','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;p9x;p9y;p10x;p10y;p11x;p11y;p14x;p14y;p15x;p15y;p16x;p16y;p17x;p17y;p18x;p18y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_4_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAD
 y0lEQVRYhdVYzUsqbRQ/d2bQQiMELTEKtC9JsEVQLnURRLqoReEm2vgvVP9FhEG0aevCKGgMhBZm
 u4eWkuUHWmRUpqRo2gcz897F6U4X75uM48S9/VbPmXnO7znnzJlzHs6PnZ0dm80GElCtVqenpwFg
@@ -1934,7 +1865,7 @@ else if( val && !val.isEVal() )
   p4x=80; p4y=85;
   p4x=80; p4y=105;
   p4x=70; p4y=105;
-}','','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;p9x;p9y;p10x;p10y;p11x;p11y;p14x;p14y;p15x;p15y;p16x;p16y;p17x;p17y;p18x;p18y;s1;',0);
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;p9x;p9y;p10x;p10y;p11x;p11y;p14x;p14y;p15x;p15y;p16x;p16y;p17x;p17y;p18x;p18y;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_5','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAF
 FklEQVRoge1aTUhySxgeT8cRDCJFUQj6paBCkJLsz2oVWSRhYSQtXLRqEdGmfS3aFVhGixZCECgW
 /ZJUEPZDv1YQtChaFCRFUm2SPOrxLuYw91z7uZe+02fzcZ/V+8w5Z973aea1mXlH1NraWltbC4RG
@@ -1985,33 +1916,7 @@ else if( val && !val.isEVal() )
   c1 = "lime"; fillColor = lineClr = "black";
 }
 else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }','JavaLikeCalc.JavaScript
-if( st && !st.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=85;
-  p4x=70; p4y=85;
-  c1 = "red"; fillColor = lineClr = "black";
-}
-else if( !val && !val.isEVal() )
-{
-  p1x=64; p1y=36;
-  p2x=74; p2y=46;
-  p3x=34; p3y=86;
-  p4x=24; p4y=76;
-  c1 = "white"; fillColor = lineClr = "black";
-}
-else if( val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=126; p3y=76;
-  p4x=116; p4y=86;
-  c1 = "lime"; fillColor = lineClr = "black";
-}
-else if( val.isEVal() )
-{ c1 = fillColor = lineClr = "darkgrey"; }','','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
+{ c1 = fillColor = lineClr = "darkgrey"; }','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_5_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAF
 4UlEQVRoge1aS0gbXRS+GWfuhLioSqSC4KNSoUIkVDG+dSVKqQsrCqmFLHTTWBFB3NtFdxbiA18B
 QREUFYktDbVQoi3VYqwgdFF1oYtQMdRuFOeRSRf3cv/54yTaZBKdn/9b3XNn5p7zzT3nvs7VPXny
@@ -2053,481 +1958,7 @@ else if( val && !val.isEVal() )
   p2x=86; p2y=36;
   p3x=126; p3y=76;
   p4x=116; p4y=86;
-}','','','',-1,'name;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Key_1','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=126; p3y=76;
-  p4x=116; p4y=86;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=105;
-  p4x=70; p4y=105;
-}','JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=126; p3y=76;
-  p4x=116; p4y=86;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=105;
-  p4x=70; p4y=105;
-}','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Key_1_tst','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=85; p1y=60;
-  p2x=85; p2y=90;
-  p3x=15; p3y=90;
-  p4x=15; p4y=60;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=35; p1y=40;
-  p2x=65; p2y=40;
-  p3x=65; p3y=110;
-  p4x=35; p4y=110;
-}','','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Key_2','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=72; p1y=55;
-  p2x=91; p2y=36;
-  p3x=135; p3y=80;
-  p4x=116; p4y=99;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=60; p1y=45;
-  p2x=90; p2y=45;
-  p3x=90; p3y=105;
-  p4x=60; p4y=105;
-}','JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=72; p1y=55;
-  p2x=91; p2y=36;
-  p3x=135; p3y=80;
-  p4x=116; p4y=99;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=60; p1y=45;
-  p2x=90; p2y=45;
-  p3x=90; p3y=105;
-  p4x=60; p4y=105;
-}','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Key_2_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAH
-nUlEQVRogdVaS0wTXRQe2s5g6ANBVDZKfQQjBq1SKPIQH0Af0FoKtkmDSVckGGNckZAYF0YXbtDU
-EOOOBSkUG5QWAhISLKIFLE1NxYXGBy4MSqX0hbSU9l/cyf0nbeWfv84IfKtz7tyeR++5r3NuWmNj
-Y1VVFUI13G73rVu3IHv27FmVSkW5FqvViuj1+hgN+PjxI1HT9evX6dCi1+tZQIHD4bBarYDOyck5
-ffq0xWIBLIZhTU1NBoMBWqPT6bq6uiDb3NxsNBrX1tYAq1AoJicnP3z4QHTA4XDcu3cPQZCioqJw
-OOxyuUB7fn7+7t27X758Cdjc3FyBQDAyMgJYNptdV1fX19eXqLqqqurUqVMIgrDgWExPT585cwZB
-EBRFGQxGeno6dCAtLQ2yCIIkshiGMRgMwDIYDAzDMAwjOsBkMsFPWCxWNBqFP2exWPAT0BXHJlU9
-MTGBIAhwAA+hjo6Ozs5OCgeX1hDq7Ozs6OiIEUNIp9OlpaUh2xD4uHd1dRGjfIsjOzs7JycH0KzN
-NSU1lJSURKNRQDM215TUMDIyAhfJbekAEXgIqdVqaicxj8dTKBRmsxlBkLy8vMrKSgqFE4GPwNDQ
-0OjoKFVCZ2dnjx07BqxHEGR+fv7y5ctXr16lSj5xn8EdCAaDKysrVCm4c+fOjx8/iC0rKyvd3d1z
-c3OUyFcoFE1NTYCmfg68fv0angWI8Hq9er2eEhUmkwku+tQ74PV6f/36lfTTwsIC5erwSSyRSJhM
-JuXSk8Jut/v9/nPnzlEiDR8Bp9MJT4h/iOLiYj6fn/TTpUuXXC6XTCZrbGx88eIFJepwBxYWFr5/
-/06JxMzMzLa2tsT248ePHzlypLq6enFx0ePxyGQyeIr+v9BqtTqdDtC0bGStra2PHj06evQoYHfu
-3Nna2tre3i6Xy+HqFAgE6uvrx8fHU5BvMBjghYSus1BLS4tGowHXmszMzFAodP78+cXFRWKf5eVl
-lUplsVgqKipSVoSPQHl5uUgk+hOLE5GZmSkUCoVCod/vv3DhQpz1AMvLy1KpdHJyMmUtuAOLi4tu
-tztlKRvAbrfLZLK4fY2IQCAgl8tTiyUEhtD79++JNzeqMDc3J5VK//OvAbE0ODhYXl5ORqxarY7F
-YoCm9zSan59/8uRJMj2Xl5clEgnJtbW/v99oNAKaXgdQFO3v76+vryfTORAIXLx4kUwsRSIRmATB
-HSgsLCwoKEjZ0A3A4XAMBoNYLCbT2ePxNDQ0vHr1irx83IHERAiF4HK5FoultraWTGev1ysWi0Hi
-hAxwB2ZnZ51OZ4oGkgCKoiaTiXwsKZXKDWJJKpUqFApA/70rJZfLNRgMJMcBxJLNZkv6dWpqCm4d
-f/VOzOVyBwcHSc4Hr9dbU1MDE55EeDyepaUlQOMO8Pn8/fv3U2XoBkBR9PHjxyRjKRgMNjQ0bLwu
-4Q4cOHAgLy+PAgNJgMvl9vT01NTUkOns8XiUSuXU1NTvOuAOjI+PU3VAJwMOhzM0NCSRSMh09vl8
-1dXVxFiqrKyE96FNywuhKGo0Guvq6sh0DgaDKpXq+fPngJ2fn//8+TOgNzOxxePxent7ScbS0tLS
-jRs31tfXEQT5+vXrly9fQDvuQHZ2dlZWFj12bgQOhzM4OCiVSv+zp0gkGhgYSLy44w5UVFSUlpZS
-byAJYBjW29u7cSwVFxebzeZdu3YlfsIdMJvNw8PDtBhIAjwez2g0/m6PO3HixPDw8J49e2CLQCAo
-KioC9FZJ7rLZbLPZnBhLIpFobGws7r8Ph8PhcBjQW8UBBEHS09PjYkkoFJrNZljLgHj37h1MAuEO
-oCjKYm1+sYPH4/X19YFYAuVKYuQkBW60RqPZIjWyjIyMgYGBtra2mzdvJp21ccAd6O7uTk9Pv3Ll
-Cs3mkcKOHTs2TgMfOnQoEokAevPDJgXk5OSAHQ3ZUpOYPKanp2Faki4HAoHA3bt3y8rKysrKtFqt
-w+GgSREthW673S6RSH7+/AlYm8325MkTnU738OFDqlRA0FLovn37NrQeYHV11WAwvH37lhL5e/fu
-zc3NBTT1ITQzM/Ps2bPEdp/PR1WJqbCwUCAQAJr6Vcjn862urib9RFUJYmxsLBQKgfT9tlyFiMBH
-QKvVUjWJS0pK+Hw+vHAQodFoKFFBBD4CJpMJ1qX/EDwer729PbFdIBCo1WpKVGRkZLDZbEDjIxAO
-hylcRltaWphM5v3798Gyk5WV1dzcfO3aNarOi7W1tbSn18ViMSz9RyKRffv2HT58mCrhT58+hQ/p
-6HIgHA5/+vQJ0H6//9u3bzQpwsdULpfDV3vbC7gDNpsNRdGDBw9urjUpAHfA7XbTUSOjCVqt9i/V
-yGhC8kI3KIpotVriqU6pVI6OjsL1pLq62uVywROBSCRyu93wiWhBQQGGYaBQEleZfPPmTU9PT2lp
-KUzesFgslUpFfJUbp7qpqclsNsPsg0QimZmZAVn1iYkJWNXGHQDvv0OhUCwWC4VCUEosFguHw7Bl
-fX09jo1EIpCNRCIMBgOwUDHxh9FoFHaORqOJuhJZKCcaja6trYEOIpHo3wfr2/7xd9ISyJ8jLoSc
-TueDBw8o12K1Wv8BVjAgNCpeXpYAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=85; p1y=60;
-  p2x=85; p2y=90;
-  p3x=15; p3y=90;
-  p4x=15; p4y=60;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=35; p1y=40;
-  p2x=65; p2y=40;
-  p3x=65; p3y=110;
-  p4x=35; p4y=110;
-}','','','',-1,'name;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Key_3','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=126; p3y=76;
-  p4x=116; p4y=86;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=105;
-  p4x=70; p4y=105;
-}','JavaLikeCalc.JavaScript
-if( !val && !val.isEVal() )
-{
-  p1x=76; p1y=46;
-  p2x=86; p2y=36;
-  p3x=126; p3y=76;
-  p4x=116; p4y=86;
-}
-else if( val && !val.isEVal() )
-{
-  p1x=70; p1y=45;
-  p2x=80; p2y=45;
-  p3x=80; p3y=105;
-  p4x=70; p4y=105;
-}','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Key_h','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA06AAANOgEDIh6FAAAC
-/klEQVRYhe2Wz0vycBzHv2rNiBFSXpR+XLp4ySxSkEhjURQdIioxUoiGIkieBMH/wKNI0G1pkAhe
-9JCElwk2O3QbneowgiGiIOVhWrTnMFlWtqfnSRvGXqfvPn4+H94v8Msm29raslgsoDfBcbxvYWHB
-6/WKneQ/YVlWLnaG7yIJiI0kIDaSgNhIAmIjCYhNzwv0fSw9PDzgOM6dtVrt7Ozsu4ZMJvP09NSN
-NAaDYXR0tLVSqVQuLy+588TExNTU1LuRNwLPz88Yhj0+PhqNRm5RJpMhCGJ+fn56eppvs9vt1Wq1
-GwKxWGxvb48Pc3x8zDCM1WpVq9UAgHQ6jeP40tKSTqdrI0DT9OnpqdVqNRqNfNHtdjcajWg0SpIk
-v/oHuL29TaVSCILo9Xq+6PV6a7VaPB4nSXJ7e5srNu/Ay8vL0dGRy+VqTc8BQRCKoizLXl1d/Ux6
-hmGi0ajL5WpNzwHDMIqipVLp5uaGqzQFCIJYW1tTqVSfLbXZbIVCoUuJ35HP5zc2NmAY/qwBRdFs
-NsudmwIYhpnNZoGlEAQNDw/zl7urxOPxmZkZgQalUglB0PX1NeAFPt7uj6yvr9/f33ckojBfCbO8
-vFwsFsEveA80Be7u7v7a+pWejvBPYZoC4+Pj9XpdeCafz29ubn4z3FcYGxtrNBrCPSRJIggCeAGf
-z+fz+QQGCIKAYXhwcLBTKQU4ODgIBoMCDdlsVqPRDAwMAF5AoVDs7+9jGNZ2oFwuX1xcOJ3OTkdt
-j0qlWllZSSaTbX+labpQKNhsNu7x9RLPzc2ZTCaPx0NRFMMwXLFYLJ6fn0cikUAg0N/f3+3oPIuL
-i5OTk4eHhxRF8X8nmqYTicTZ2Znf75fJZFzx9VNCLpfrdLpIJBKLxSiKGhkZAQCUSqXd3d3V1dXW
-7QiC1Gq1buTWaDTcQaFQ6PX6UCh0cnJSqVSGhoYAAOVy2eFw7OzsvJkJh8NszxIOh3/Le6B3kQTE
-RhIQG0lAbCQBsZEExKYvl8vJ5b2qkcvl/gBF1skqfQ6NXAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if( !val )
-{
-  p1x=90; p1y=15;
-  p2x=60; p2y=15;
-  p3x=60; p3y=85;
-  p4x=90; p4y=85;
-}
-else
-{
-  p1x=40; p1y=35;
-  p2x=40; p2y=65;
-  p3x=110; p3y=65;
-  p4x=110; p4y=35;
-}','JavaLikeCalc.JavaScript
-if( !val )
-{
-  p1x=90; p1y=15;
-  p2x=60; p2y=15;
-  p3x=60; p3y=85;
-  p4x=90; p4y=85;
-}
-else
-{
-  p1x=40; p1y=35;
-  p2x=40; p2y=65;
-  p3x=110; p3y=65;
-  p4x=110; p4y=35;
-}','','JavaLikeCalc.JavaScript
-if( !val )
-{
-  p1x=90; p1y=15;
-  p2x=60; p2y=15;
-  p3x=60; p3y=85;
-  p4x=90; p4y=85;
-}
-else
-{
-  p1x=40; p1y=35;
-  p2x=40; p2y=65;
-  p3x=110; p3y=65;
-  p4x=110; p4y=35;
-}',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Trio','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
-7cfv/wMBpyH3FPzQ8AAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;dscr;geomW;geomH;lineClr;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Zemlia','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA06AAANOgEDIh6FAAAD
-/0lEQVRoge2aXSh7YRzHz/+MsItZQiJtkpeMC3nLlptFbWu4OBEZxQoXy4atIfKS3GwXViLjjiVW
-S1pJKUOtxkqx2s1KJDNNVou2kP+F2pZs9nKePUftc7Wd8zzf8/v0nD3nt7Z/BQUFTCYT+ZsYjcYk
-JpO5ubkJu5IoEQgEKOwaYiUhAJuEAGwSArDBU8BqtdrtdhwDwwFPgZOTEw6Ho1Qq397ecIwNDc63
-0OXlpUwmk8lkZ2dn+CYHA8hnQKVSNTc3Hx0dPT09gcgPBNSH+PHxkc1md3V1Acr3AXYXOjg4yMrK
-WlxcBHcJ4Nuo0+kcGxsTCATX19cg8uPxHPB6vRqNhsfjgQiH8CBzu92fn594pUEQGB0dVSgUNpsN
-lzQ4rYRcLm9pabFara+vrzFGQeuFrFZrWVmZXC6PMQdyM7eyskKj0fR6fdQJkAU+Pj5ub297e3v7
-+/vdbncUCYRop51O59raWlNTk06ni3QuIQS+MJlMGIapVKqIZhFI4Ivz8/OIxhNOwMf09PTNzc37
-+3voYcQV0Ov1dDp9fHz84uIixLDvAldXV2az2Ww2Pz8/gywvXJRKJY/HMxqNwerxCzgcjuHh4e7u
-7tPT0+Xl5Z6enp2dnXjVGYqHhwcWixWsniTfK4PBQCaTDQYDlUr1er0Oh2NwcLCxsTEjIyOO1QZF
-r9cfHh7a7XYul1tcXOw77l8BjUbT0dFBpVIRBElJScnNzc3JybFYLBCKDYLH45FIJBiGTU1N+Q76
-V4BCoVRUVPhPJCXV1dXNz89nZ2eHeQG8GszQWCyW+/t7FovF4XCQQAGXy7W1tdXZ2fn11uPxqNXq
-paWl+vr6MKNXV1dNJhPuFQeSnp6OYZhQKPT9KOMXUCgUUqmURCK1t7fbbDadTlddXR1+9XGgvLx8
-d3e3sLAw8KBfgE6nz83NTU5O7u3tuVwuPp8/MTER9yJ/pqSkRCKRcLlcGo327ZRfIC0traqqan9/
-P761/U5ra6tWq01OTv7xLHGfxGQyuaGhwWw2b2xsBKseCVwBojE7O8tms38dRtwVCKd6hFArgKJo
-amqqWCyObBagaqJgYWHh5eWlpqYmolmEEGAymcfHxyMjI1HMhXwLUSgUkUgkFovDb1i+AU0ARdHK
-ysqZmRk+nx9LDjQBoVCoVqtjz4EgwGAw7u7uMjMzcUmDIBDpRhma+O1CLBYLRGw8ViAvL299fR1Q
-Zw5cQCKRDAwMlJaWAsoHKFBUVCQSiYaGhsBdAgEnwOPxtFotmUwGlO8Df4H8/Pzt7W0GgxGH6hHc
-BaRSaVtbW21tLb6xIcBToK+vD0VREomEY+av4CkQ4osfOAjRTsdCQgA2CQHY/HmBf3/97/f/ATsh
-O/ND++OYAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;dscr;geomW;geomH;lineClr;fillColor;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('Induct','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAE
-dElEQVRoge2aT0gibxjHZ0VkVu1Q1BIVVhIEgVAUQUYDEV1UhDT7g1anRDKhDEIQOwRBIXWSJMIS
-TIKMgkgKhLBDIQUhJdZJyqLonwaViYn9DrMrsvzWHN4Hl2A/p+f18OH5Wu8784zzrby8nM/nY1+T
-/f19Op/PX1pagvW+v78/PT2RdUFBAaw8FYVCQQOXHhwc6HS6H78A9/8GHdAVDocHBwfdbvf19TWg
-Nj1gAex2u91u39raghJmCEyA7e3t/v7+t7c3cslms2tqang83ujoKIg/DTABTCZTsnsMwyYnJ9Vq
-NYj5UwACaDQap9NJ1m1tbTab7fv37+jaDEEN4Pf7Nzc3f7ro9JGRERaLhdwVBVCPUYfDcX5+jmEY
-nU5fXFxsbGwEaIoKqAEWFhbIgsFgKBQK5H4oA3YhE4vFUCpKgAWQyWRQKkrA30pkGbAAx8fHUCpK
-gAUwGo1QKkqgBkiem/F43OPxIPdDGdQAGo0Gx3EMw2KxmEwmOzk5geiKAqgBGhoaenp6yPrq6mp5
-eRm5JWoA7AG9Xs/lcsl6enq6trZ2b28PXZshAAFKS0uTOzgWix0dHbW3t+v1eqvVii7/HLlc/oHM
-6+vr8PBwRUVFqhnHcQ6Hgy5Pg1wuhzlGmUzmzMzMxsZGaoZoNBoMBkH8aQAbKT0ej91uDwQCUMIM
-gQng8XikUmlylqfRaDiOf6WR0m63pz6J0Gq1WbswAwQwGo2zs7NkXVVVZTab6+rq0LUZghogGAw6
-HI5EIkEuzWYzQRDIXVEANYDb7T48PMQwjEajabXabH73JKgBDAYDWeA4/lduSMFup3k8HpSKEmAB
-snBi/i//RspfPD8/Q6koARZgYGAASkUJ1ABFRUVkkUgkbm5ukPuhDGqAqakpsohGowKBgHzMmE1Q
-A9TX13d3d5O11+t1uVzILVEDNQCO4yqVisFgkEutVqtUKrP5vwSwiQmCSE6PLy8v8/PzLS0ta2tr
-2ZmMYU4hgiAIgkj+HU5PT6VSqUQikUgkIP40wAQoLi7e3d11uVyFhYXJD+/u7tbX10H8aQC7Dtzf
-3wcCgUgkAiXMEJiJ7OzsTCqV+v3+1A+5XG5XVxeIPw0wAZxOZ2r3QqHQaDSyWCwOhwPiTwNAgJWV
-FZ1OR9a5ubkGg6Gvry8vLw/dnAmoAUKhkNVqjcfj5NJmswmFQuSuKIC6iX0+X/L1gubm5q83UiYf
-TTOZzJ2dHeR+KAN2jObk5ECpKAEWIPloKMv8Gyn/NmABhoaGoFSUAAvw+PgIpaIEagCLxUIWkUhE
-JBI9PDwgt0QN1ADV1dWtra1k7XQ6vV4vckvUQA2Qn5/f29tLp/+8IHZ2ds7NzYXDYeTGMgVgDygU
-ivHxcbIOhUIqlUqpVF5cXNze3qLLPwVmE4vF4srKyuRydXW1rKysqalpYmICxJ8OkJ9ZPz4+Li8v
-TSYTm83+zQ8i/xNgP7NiGFZSUqJWqy0Wi0AggHJmAuSrxxiGdXR0iEQin883NjYGa/4T37766/f/
-AfiLqHTo2SlUAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;dscr;geomW;geomH;geomXsc;geomYsc;lineWdth;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_Krug','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA06AAANOgEDIh6FAAAF
-GUlEQVRoge2aS0gyXRzGJ3slLQoMwqiQimAQKTDMhS0qRZIWQRfLGEOEJLpsoyhq0yKoEEPJIBKM
-JqhILMhVF6EMrKBapBC0iEoC0RSm6SLyfYvgW3SZOTNO+fXibyX6/GeeZ+Z45sw5J62kpEQmk0G/
-k8PDwz8ymWxpaSnZTmii1WpZyfaQKKkAySYVINmkAiSbP99x0GAw6HA43n3J4/Ha2toYPxczAXAc
-DwaDe3t7W1tbGRkZeXl5TU1N7zSRSESr1UIQFA6HTSYTh8MRCASJn5qBAC6XC0XRl5cXGIanpqaK
-i4u/UjY2NkIQ5HQ67Xb75uamRqPp7OxMNAaCIP/QAsfx4+NjlUqlUChOT0+j0Sil8pubG4vF0tzc
-PDMz4/P56HlAEIR+gOHh4YaGhpWVFXrl/+H1esvLy91uN41aBEHo9EKhUEgikbS2tq6trSX+v5RK
-pW63+/LyUqVSBQIBquWUA3g8noGBgbm5ObFYnJmZSbX8U3Jzcw0GQ1VVlVqtplxMqQkdHByUlJSc
-n5/TuN0gzM7OymSyu7s7QD21JhQKhRYWFpxOZ0VFBeXrBEZPT49cLvd6vRiGAZZQCFBfX9/b2/t9
-7t8YHx+/vr4eHR0F1AMFeHp6GhkZmZ+fl0gkCXgDpa+vLz8/f2dnB0QMFODi4uLs7AyG4cSMgcJm
-s+vq6iYmJkDEQAFGR0d1Oh1TfQ4IUqm0qKjIYrGQKskDuFyuWCz2HeMwYgYHBxcXF0OhELGMJACO
-4yiKTk9PM2cMFBiGa2tr3W43sYwkQDAYfHl5KS0tZcwXMCwWS6fTLS8vk8iIf97b24NhOCcnhzlj
-FBCJRNFo1O/3E2hIAmxtbRkMBkZdUaO9vX1/f59AQBIgIyODYHz/A5D23UQBgsFgXl4eo34ok52d
-/fj4GI/HvxIQBXA4HB/fDH8YsVjs9/ufn5+/Evz6WYlUgGSTCpBsiALweLxIJPJjVj4Fx3Eul8ti
-femTKEBbW9vq6uo3uKLAycmJSCTicrlfCf7qJgRBUDgcdjqdP2PlU2w2G7GAJIDJZDo+PmbOD2Ve
-X1/1ej2BgCQAh8PZ3Ny8vb1l1BUoKIpiGMZmswk0JAEEAoFGo9nY2GDUGBAPDw8oiprNZmIZ+Z+4
-s7Nzd3eXIVcUuL+/Lyws5PP5xDLyAAKBoKam5ujoiCFjoHg8HgRBOBwOsQyoG1UqlV1dXeFwmAlj
-QNjtdpfLVVtbS6oECiAUCs1m8/r6eqK+wMAw7Orqymq1gohBH2Q1NTXr6+vgU5a0CQQCLS0tIK3/
-DQpPYpvNtru7C3hhaKNWq6VSaXd3N6CewiJfQUGBx+Oprq4OBALj4+O07BERCATUarVWq+3p6QGv
-ojwWWltbq6ysNJlMsViMai0BGIbp9Xq5XE7JPUQjQEFBgVKpvL6+NhqNTPWtdrt9cnKyubmZzo2l
-vUq5vb2tUCh0Op3P54vH4zSOEA6HfT7f/Px8U1PT/f09jSPQXKV8Q6FQbG9vSyQSnU43NDR0cXFB
-qRxFUQRBjEZjWVmZw+EA7HM+kuhKfX9/f0dHh9vtHhsbi0aj7e3tMAxnZ2eLxeJ3ShzHT05OIAiy
-2Wyvr68YhlmtVj6fT/qsJSYNQRCmNv35/f63eczHx8ePM7JcLlckEr191uv1xGNMQLRaLZO7VYRC
-oVAohCAoHo9/nEtjsVgEb4a0+ZbtNunp6VlZWd9x5I/87e/E/39SAZJNKkCySfvt2+//BUIQVkGk
-skutAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'name;geomW;geomH;lineWdth;lineClr;elLst;',0);
-INSERT INTO "wlb_ElectroEls" VALUES('El_lhor','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAAOxAAADsQBlSsOGwAAAEtJREFUeJzt0EENw0AAxEBfFEblj6NwUhTVPjKDwHIBAAAAAAAAb3Cq
-zzpi6VTPOmLpWgesGbAOWDNgHbB2V991BAAAAAAAAMC//QDfdwIa5LCYSwAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'name;geomH;lineWdth;lineClr;elLst;',1497255047);
-INSERT INTO "wlb_ElectroEls" VALUES('El_lvert','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAAOxAAADsQBlSsOGwAAAKZJREFUeJzt0LENgEAQxMATLdF/G98OVEB6Q2BLG6/lmX3umXk+drZl
-ru3Dv1EALaApgBbQFEALaAqgBTQF0AKaAmgBTQG0gKYAWkBTAC2gKYAW0BRAC2gKoAU0BdACmgJo
-AU0BtICmAFpAUwAtoCmAFtAUQAtoCqAFNAXQApoCaAFNAbSApgBaQFMALaApgBbQFEALaAqgBTQF
-0AKaAmgBTQG0gOYFE3EHgsZqNckAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'name;geomW;lineWdth;lineClr;elLst;',1497255047);
-INSERT INTO "wlb_ElectroEls" VALUES('Sharp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAAOxAAADsQBlSsOGwAABypJREFUeJztmjlvG1cUhT8uEimLtqIllihZtiV5jxw4iKu4SZcucJvK
-CGAgfyA/yICRIilcpXLjdIGRKkCAFAEMLxJN0dxEifuiFOc9PFJyIi4zpGHMBQbUMsN599xzzzvv
-zUAQQQQRRBBBBBGEvxEGpiY9iPdFeEz3mQMujOleA0VkDPe4BzwA7gN5oADUx3DfvsJPAKLAXeA7
-4FvgNrAA5IAiUPXx3n2HXwBEgCXgB5T8FWAGuAV0EBOyfEBM8DoSwFfA30ADJX1kjhbwE/A142nB
-/w2/BtACSsA+sAYkgZD5XwgJ4jKQBt4CbZ/GcWp4DcCS+c46qnzG/HwWWDfnhIA40oOkOacI1Dwe
-S1/hFQBxYBv4BlhECR0iFrxDjFjEMSEEzCImxNHMkGcCwugFAHEkcg/NcREl9AYlXkBUPwA+Q2IY
-RSBMI+DaaHbYA5oejKnv8AKAbZT496jKlxDdd8zRREx4Y36/bc7r1oSbSDh3gVcejKnvGBWAJUT7
-hyipsPnOT4BrqKpZoIy0IIWYsIDEMYwAsNPmKmJLDmmI7zEqABGU+EVU+QhKKAZ8ihI9RCCUEBBZ
-1BrHhXEWgXDenFNgDJowDAARNNgWqmoRDXYdVT6GEooCm6jPD1FlK+b8DKrwGgLJAncGuI78QhEB
-4evsMCgAUVSlm6iiDZSc7e9rqPJW5MJIIOeRwL1EgldA/Z4D7qD+D3dd87n5ec98b2e49E6PQQG4
-i+ztj8jkZBAQLTTQHKroJm6lGUKmZwuZngyqatVck0Hts0KvMF5CYKcRWL6AMAgA93ALm8uIvnU0
-zxeQ2mcRI6ZR5e2cP4XaYxPN93kEXA0lWAPOoTayTIjRa5YK+NAO/QAQRoN/gFvYhM3AzqLqp+kV
-uUNE+2WUvJ3z15EPKCPgDsxhzdI8AhacMK6aT1/MUj8ARJEy30dz+AyusutoFjhAOlBHQKRR/24h
-8Kbp1YQ4aqEdpCMFc34FuIHE0OpIDGeW8uY8z6bIfgDoIEXOI0reoncnKYkc3g6a58sokZeo5zdx
-1AYltYUq/QbnGPeB1+Z7vkBs6NaEbQT+Dh6apUE0oIBEroOYEOo6ZszfDlALFFHFMgi4GXo1IYQz
-S1lzVHBmqYgEsNsshRETVxELsnhgmwcBwM75eURPu5Cxc/4iYkiLXtHKI1bEUeUtADFzzXnUNnnE
-AqsPTU6apTPmmmVzzsg7S4NOg1WEfMoMYgEJlE1qzQy6gaauKm5FaPcGus3SFLBhfj/E6cA+DoQk
-YoNlwiwOyCJi5dCzwzBOsI76Nm0GdwGJHGaQ6yjRHOrXGmqNHXPdNVRFOztYYZxDSb+k1ywVkDGa
-xTnGiPkbiG0phtxUGXYtcIQzNXYvwLIAxIw75v92KdxAAGQR7TfoFcak+VsKMaGO2GDB3kKs6xbG
-DXOvt+a8o0ETGWUx1MatA9rIHndXKIHcXA1nllq4hVGMk2ZpDriK2JNDwNURAFVOmqVpBIBdRQ68
-5T7qatCKXA4lvITThDCyt+dQ4nuotyvmmkOUcBLXDjHUPrM4U1XCzS5tpCHHzdKK+a6Bt9y92BCp
-ouR2USWWkFp3m6V5lPhrVKF9c807ROM5nDCGEDNiKPmUucaapSpqhwTOLMWRF+kgJvStCV7tCTaR
-OUmj/r6O6+8wqtgN3m+WUoj2azgArDCu4IxPC1X3Ner5LxFwx81SEfgLgXdqeL0rbHeAjnBLWjvA
-M8jhFXHTYhtVNYeobNcZmOsWEDgZTpqlHBLF1a57/Ao8Af6kz9Wj1wBYX1/ELWm7N0jmUYs0ccJY
-R8mUOSmM3SJXMueVEBDvzP0SSBeeAY+B5wjcvsKPByPWLO2hZP/LLDWRblRwIldCtF/ALaCm0PI7
-hkDaM5/WLJXN8TPwG2JL3+HXk6Ea6l1rllZRAuDMUhK3fW5XkSlz3VUEwnGzlEAzyCucWfoH+B1V
-vjLoQP18NtdBFc4gBhw3S0tIJ9I4s1RHyWUQaJfp1YQLqK12EVgNcxwwhAkC/x9OdlCVrFnapnd1
-Z329bZvTzFIUKf8VpPR5BMBQycN4ns5as2SXxedxPiGClPwcbkYoIipbYUygykfN91WAF8BTxJTW
-KIMb1+Npa5Z2ELUX6RVGu6VexZmlkrkmj2g/h5L/A3hkPsujDmycz+cbqL/3cLvE9v7WLNmd4xRK
-tmyu2UW0f4GS/wWPXq6YxAsKWTR9hThplhLI4eXoNUsp1PNPUeU9e7NkEgA0UZ8Xze8buDnfitwy
-Yow1Sw3UChk8oH13TOoVlSqqcgbN98fN0ipiQxnN83a6G0nw3heTfEenhqj9FiW8glZ14DZNy8jk
-DD3PnxaTfkmpjdvxmUNLWqsHz5C9fY5PycPkAQAl173lvo1WdY+Rtx/Y3g4SHwIA4Lbc0+bzCar8
-QAubjyHs88MP8sXqIIIIIogggggiiCA+pvgXPT4jxJfeNF8AAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'name;geomX;geomY;geomW;geomH;geomZ;lineWdth;elLst;',1497260480);
+}','',-1,'name;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_6','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAF
 KklEQVRogdVaXyh0TRifPc7OiijajVLClqK2tpcs1r8ikUhs1HKx167k1h0XygW12juJkm2FtBJJ
 sf6T/SP/iqR1ocUJbyJ77J79Lmaa77Te70v2rH3nd/U8s+fM7/ntzHPOnHlG1traWllZCaQGx3F9
@@ -2590,45 +2021,7 @@ else
   }
   else if( val.isEVal() ) c1 = fillColor = lineClr = "darkgrey";
 }
-','JavaLikeCalc.JavaScript
-if( f_start ) errPresent=false;
-if( st && !st.isEVal() )
-{
-  p1x=72; p1y=55;
-  p2x=91; p2y=36;
-  p3x=135; p3y=80;
-  p4x=116; p4y=99;
-  p5x=81; p5y=46;
-  p6x=125; p6y=90;
-  c1 = "red"; fillColor = lineClr = "black";
-  if( !errPresent.isEVal() && !errPresent ) { Special.FLibSYS.messPut("Alarm_"+id,-4, id+" : "+DESCR+" неисправен!"); errPresent=true; }
-}
-else
-{
-  if( !errPresent.isEVal() && errPresent && !val.isEVal() ) { Special.FLibSYS.messPut("Alarm_"+id,2, id+" : "+DESCR+" :  "+" исправен."); errPresent=false; }
-  if( !val && !val.isEVal() )
-  {
-    p1x=72; p1y=55;
-    p2x=91; p2y=36;
-    p3x=135; p3y=80;
-    p4x=116; p4y=99;
-    p5x=81; p5y=46;
-    p6x=125; p6y=90;
-    c1 = "white"; fillColor = lineClr = "black";
-  }
-  else if( val && !val.isEVal() )
-  {
-    p1x=60; p1y=45;
-    p2x=90; p2y=45;
-    p3x=90; p3y=105;
-    p4x=60; p4y=105;
-    p5x=75; p5y=45;
-    p6x=75; p6y=105;
-    c1 = "lime"; fillColor = lineClr = "black";
-  }
-  else if( val.isEVal() ) c1 = fillColor = lineClr = "darkgrey";
-}
-','','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;c1;s1;',0);
+','',-1,'name;dscr;geomW;geomH;lineClr;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_6_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAI
 6UlEQVRogdVaWUxTzRef3i60gEQIFRIjLp8hAoIFCRUJm0BbgtSylUWE0hcTXyQ+K0trYnzBBC0K
 kYAGaahADNqwKMQiBAGBIoJEECMCESmKINKN3v/DNPPVgv75oKXye5pz7txz5tc5Zzp3zhCSkpLC
@@ -2684,7 +2077,230 @@ else if( val && !val.isEVal() )
   p2x=65; p2y=40;
   p3x=65; p3y=110;
   p4x=35; p4y=110;
-}','','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p7x;p7y;p8x;p8y;c1;s1;',0);
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p7x;p7y;p8x;p8y;c1;s1;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Key_1','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if( !val && !val.isEVal() )
+{
+  p1x=76; p1y=46;
+  p2x=86; p2y=36;
+  p3x=126; p3y=76;
+  p4x=116; p4y=86;
+}
+else if( val && !val.isEVal() )
+{
+  p1x=70; p1y=45;
+  p2x=80; p2y=45;
+  p3x=80; p3y=105;
+  p4x=70; p4y=105;
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Key_1_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAH
+MElEQVRogdVaS0xTTRQe+sKAoYLV3poo9YFRTLEKUkQRMIZegjYItU2amnRFglHjysStwUQ3aGqI
+cSWLpgbS+KgpFqLWIoaH0tSgaDA+0Jag1gcUkV5K+y/m/vPfvy212rlQvtU5M/fOOV/mnHmn1dfX
+l5eXA9zw+Xxnz55FakVFRV1dHXYrTqcTGI3GMAt48+YN09KpU6fYsGI0GnnQgMvlcjqdUBaJRLt3
+775z5w5UBQKBWq02m83IG4PB0NrailS9Xt/W1jY7OwtVlUrV09Pz+vVrJgGXy3Xx4kUAQGFhIUVR
+Q0NDsHzz5s2rVq16/PgxVAmCkMvldrsdqpmZmTU1Ne3t7dGmy8vLd+7cCQDgob7o7+/ft28fAIDP
+53M4nPT0dEQgLS0NqQCAaFUgEHA4HKhyOByBQCAQCJgEuFwu/IXH44VCIfQ7j8dDVdBWhBrTdHd3
+NwAAEqBDqLm5uaWlBWPnshpCLS0tzc3NYWYIGQyGtLQ0sARB93trayszylMcOTk5IpEIyrzFdeXv
+UFxcHAqFoMxZXFf+Dna7HQ2SS5IAE3QIaTQavEmclZWlUqmsVisAIDc3t6ysDGPjTNA9YLPZurq6
+cDU6ODi4bds26D0AYHR09OjRo8ePH8fVPnOeoQn8/Plzenoal4Fz5859/vyZWTI9PW0ymV68eIGl
+fZVKpVaroYw/B548eYLWAkxMTEwYjUYsJiwWCxr08ROYmJj49etXzKrx8XHs5ugkJkmSy+Vib30B
+QPeA2+1GK8QksWvXLqlUGrPqyJEjWEwwQRMYHx//9OkTlhaFQuHp06ejywsKCrRard/vr62tHR4e
+TsaETqczGAxQZmUia2xsvHr16tatW6G6YsWKxsZGi8Xi9/trampu376tVCqTGZHMZjPakLC1Fmpo
+aNBqtXBbIxQK8/Lyfvz4cfjw4UePHgEAPB4PSZIPHjzIy8tL0hBNYM+ePdiTWCgUFhUVQXlqaqq6
+urqvrw/Vejye/fv3d3Z25ufnJ2OFDqEvX774fL5kGoqPEydOML2H8Hg8SqUyyXygCYyMjETsofDi
+/PnzW7ZsiS6HHCI20L+FRqPR6/VQXqDVqFgsdjgc27dvj66CsfRHOX3jxo22tjYoL9xymiCIjo4O
+uVweXQVzOvFYCgaD6BCEJiCTyZJMpkSwZs0au90+XyyRJPmnsQQQgeiDEJYgFosfPnwYsx8+fvxY
+WVn5p/MDTWBwcNDtdmNwMAGIxWKbzRYzH7xeL0mSL1++jN9CdXW1SqWC8uJsKePH0m/Hpb6+vp6e
+Higv2p6YIIg4sVRRUfH8+fP5/v3+/fu3b9+gTBOQSqXr1q1jw9E4EIvFHR0dMWNpbGwskVgCiMD6
+9etzc3MxO5gAJBLJfLHk9XoTmeNoAg6HAy6zFh4EQTidzh07dkRXzRdLZWVllZWVUE6Jc6HVq1fb
+bLaCgoLoKhhLr169YhaOjo6+e/cOyilBAPwbS2gLwYTX662qqhoZGUElHz58eP/+PZRpAjk5OdnZ
+2ez7GQ8SicThcMwXSwcPHvz69Wt0FU1g7969JSUl7DqYAOAcJ5PJIsqXLVvW1NS0cuXK6F9oAlar
+9e7du6w7mAAkEknELofD4ZhMJo1Gg0rkcnlhYSFdu9AOJgCJRHL//n0YSxkZGe3t7fX19cwPKIqi
+KArKqUgAAEAQhM1mKyoqunbtWoT3AIDh4WF0CETvifl8Po+XWpcdMKeXL18e/zPaaa1Wm4J3ZL/1
+HiACJpMpPT392LFjLLuEBxs3bgwGg1BOrbBJECKRaG5uDsopmsTx0d/fjy732SIwNTV14cKF0tLS
+0tJSnU7ncrlYMsTKRffTp09JkkQzf29v782bNw0Gw5UrV3CZQGDlorupqSli3TIzM2M2m+Nssv4I
+YrGYIAgo4w+hgYGBzs7O6PLJyUlcV0wymQztRfGPQpOTkzMzMzGrcF1B3Lt3LxAIwLX3khyFmKB7
+QKfT4Uri4uJiqVSKNhxMaLVaLCaYoHvAYrGge+kkkZWVdebMmehyuVzOXBIng4yMjMzMTCjTPUBR
+FMZhtKGhgcvlXrp0CQ472dnZer3+5MmTuNaLVVVV4XAYymzlgFKpRFf/wWBw7dq1mzZtwtX4rVu3
+0EM6tghQFPX27Vso+/3+sbExlgzRfXro0CH0am9pgSbQ29vL5/M3bNiwuN78BWgCPp+P+boxxaHT
+6VhPYlYR+6IbvibV6XTMVV1tbW1XVxcaTw4cODA0NIRWBAqFwufzoevN/Px8gUAAL0oiLm2fPXt2
+/fr1kpISdHjD4/Hq6uqYr3IjTKvVaqvVik4fSJIcGBiAp+rd3d0KheJ/BOD770AgEA6HA4EAaiUc
+DlMUhUrm5uYi1GAwiNRgMMjhcKCKDDN/DIVC6ONQKBRtK1pF7YRCodnZWfiBQqH478H6kn/8jd58
+40VECLnd7suXL2O34nQ6/wFMIQIbtmNz7gAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if( !val && !val.isEVal() )
+{
+  p1x=85; p1y=60;
+  p2x=85; p2y=90;
+  p3x=15; p3y=90;
+  p4x=15; p4y=60;
+}
+else if( val && !val.isEVal() )
+{
+  p1x=35; p1y=40;
+  p2x=65; p2y=40;
+  p3x=65; p3y=110;
+  p4x=35; p4y=110;
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Key_2','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if( !val && !val.isEVal() )
+{
+  p1x=72; p1y=55;
+  p2x=91; p2y=36;
+  p3x=135; p3y=80;
+  p4x=116; p4y=99;
+}
+else if( val && !val.isEVal() )
+{
+  p1x=60; p1y=45;
+  p2x=90; p2y=45;
+  p3x=90; p3y=105;
+  p4x=60; p4y=105;
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Key_2_tst','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if( !val && !val.isEVal() )
+{
+  p1x=85; p1y=60;
+  p2x=85; p2y=90;
+  p3x=15; p3y=90;
+  p4x=15; p4y=60;
+}
+else if( val && !val.isEVal() )
+{
+  p1x=35; p1y=40;
+  p2x=65; p2y=40;
+  p3x=65; p3y=110;
+  p4x=35; p4y=110;
+}','',-1,'name;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Key_3','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if( !val && !val.isEVal() )
+{
+  p1x=76; p1y=46;
+  p2x=86; p2y=36;
+  p3x=126; p3y=76;
+  p4x=116; p4y=86;
+}
+else if( val && !val.isEVal() )
+{
+  p1x=70; p1y=45;
+  p2x=80; p2y=45;
+  p3x=80; p3y=105;
+  p4x=70; p4y=105;
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('El_Key_3_tst','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAH
 VUlEQVRogdVaXUwTSxRe2m1JJIEUi936R/0JUWq1olBEEVRCa4yNgaYlm5I0PpBojPHJxFcjD76g
 qSHGNx5ITQ1RKJYWotYiWinQ1CBoNIpIIahVQlGkS2nvw+wdN/2jV2Yv5Xs6Z2Z3zvl2zszOzJmM
@@ -2733,49 +2349,405 @@ else if( val && !val.isEVal() )
   p2x=80; p2y=45;
   p3x=80; p3y=105;
   p4x=70; p4y=105;
-}','','','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',0);
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;c1;s1;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Key_h','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA06AAANOgEDIh6FAAAC
+/klEQVRYhe2Wz0vycBzHv2rNiBFSXpR+XLp4ySxSkEhjURQdIioxUoiGIkieBMH/wKNI0G1pkAhe
+9JCElwk2O3QbneowgiGiIOVhWrTnMFlWtqfnSRvGXqfvPn4+H94v8Msm29raslgsoDfBcbxvYWHB
+6/WKneQ/YVlWLnaG7yIJiI0kIDaSgNhIAmIjCYhNzwv0fSw9PDzgOM6dtVrt7Ozsu4ZMJvP09NSN
+NAaDYXR0tLVSqVQuLy+588TExNTU1LuRNwLPz88Yhj0+PhqNRm5RJpMhCGJ+fn56eppvs9vt1Wq1
+GwKxWGxvb48Pc3x8zDCM1WpVq9UAgHQ6jeP40tKSTqdrI0DT9OnpqdVqNRqNfNHtdjcajWg0SpIk
+v/oHuL29TaVSCILo9Xq+6PV6a7VaPB4nSXJ7e5srNu/Ay8vL0dGRy+VqTc8BQRCKoizLXl1d/Ux6
+hmGi0ajL5WpNzwHDMIqipVLp5uaGqzQFCIJYW1tTqVSfLbXZbIVCoUuJ35HP5zc2NmAY/qwBRdFs
+NsudmwIYhpnNZoGlEAQNDw/zl7urxOPxmZkZgQalUglB0PX1NeAFPt7uj6yvr9/f33ckojBfCbO8
+vFwsFsEveA80Be7u7v7a+pWejvBPYZoC4+Pj9XpdeCafz29ubn4z3FcYGxtrNBrCPSRJIggCeAGf
+z+fz+QQGCIKAYXhwcLBTKQU4ODgIBoMCDdlsVqPRDAwMAF5AoVDs7+9jGNZ2oFwuX1xcOJ3OTkdt
+j0qlWllZSSaTbX+labpQKNhsNu7x9RLPzc2ZTCaPx0NRFMMwXLFYLJ6fn0cikUAg0N/f3+3oPIuL
+i5OTk4eHhxRF8X8nmqYTicTZ2Znf75fJZFzx9VNCLpfrdLpIJBKLxSiKGhkZAQCUSqXd3d3V1dXW
+7QiC1Gq1buTWaDTcQaFQ6PX6UCh0cnJSqVSGhoYAAOVy2eFw7OzsvJkJh8NszxIOh3/Le6B3kQTE
+RhIQG0lAbCQBsZEExKYvl8vJ5b2qkcvl/gBF1skqfQ6NXAAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if( !val )
+{
+  p1x=90; p1y=15;
+  p2x=60; p2y=15;
+  p3x=60; p3y=85;
+  p4x=90; p4y=85;
+}
+else
+{
+  p1x=40; p1y=35;
+  p2x=40; p2y=65;
+  p3x=110; p3y=65;
+  p4x=110; p4y=35;
+}','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Krug','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','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomW;geomH;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_Zemlia','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAbJJREFUeJzt2q+rFFEYxvGPv7BcRbSJmDcKgs0gt2gTQRAMYhDMtgv+
+A6Imm/+BSdBiElEMBhUs2lyTqMmqYQ3HBVm4yt0d3veM+35h4pzn4TvDOXMOQ1EURVEURTEIh3Ai
+u0QmE3zEfWwkd0lhgtnv6yH25taJ508BM7zHtdRGwSwKmOEHLmaW+hu7AzL2YTMgZykiBHRNCcgu
+kM3aC+hhnT6HA3iGr9HhPbwBh/EAj3E0OrwHAXNO4RFOY39UaE8C4CSeYysqsDcBc27iakRQrwL2
+CJqgexUQRgnILpDNWAUcM9AcMVYBN3BPWzZXYqwC4DqeakdvR5YdZMwC4CDOa5/Sl5cZoIfN0BBs
+avuIl5ju5Mb/QcA33Nb2EdOd3jx2AU+07fTSjFXAF5zBu1UHGquAW0MNNPZVYGVKQHaBbEpAdoFt
++IwPEUG9CfiJOziLFxGBvS2DdwUeiNKPgDfaZmYaHdyDgNe4gE8Z4T0ICJnstqO3STCcEpBdIJu1
+FzA0i3+JfcdbHM8sFcmigEu5deKZC3iFK9iVWyeeiXZOv5b/CdOeeA8fV0VRFEVRFP/kF2ajOWl2
+YyV/AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','',-1,'owner;name;dscr;geomW;geomH;lineClr;fillColor;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_lhor','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAEtJREFUeJzt0EENw0AAxEBfFEblj6NwUhTVPjKDwHIBAAAAAAAAb3Cq
+zzpi6VTPOmLpWgesGbAOWDNgHbB2V991BAAAAAAAAMC//QDfdwIa5LCYSwAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomH;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('El_lvert','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAKZJREFUeJzt0LENgEAQxMATLdF/G98OVEB6Q2BLG6/lmX3umXk+drZl
+ru3Dv1EALaApgBbQFEALaAqgBTQF0AKaAmgBTQG0gKYAWkBTAC2gKYAW0BRAC2gKoAU0BdACmgJo
+AU0BtICmAFpAUwAtoCmAFtAUQAtoCqAFNAXQApoCaAFNAbSApgBaQFMALaApgBbQFEALaAqgBTQF
+0AKaAmgBTQG0gOYFE3EHgsZqNckAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomW;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('Induct','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAA6JJREFUeJzt281rXUUYx/FP05fENFYSjRSt1Yq4qApioytREBUXigpa
+Uap20X+ggojoTtzZtYigUMGNbusfYH1BoepCrW/VFkFbG5O0akybNNfFcw7TNvVuvHPmcK9fOORc
+uLnzm+c8c+Z5nplhwFnVcHtDWI9J3IDL8GbDGoqxBc/hE5xGB0tFFTXECJ7G51LH62u5oK5GGMML
+WHBuxzs4hgPlpOVnNV7GvNTpabyNO3AFLi2mrgHuw59S53/BQ1hXUlRTbMJHYox38AOmiipqmMdx
+SnT+VPV5qKiihnlPcv33C2tpnAkcEZ0/g11l5XQnh1tuEdEenBDjv7XkMMAGMQXCyepqLTkMsCTc
+v/791V2+W5wcBjiGxep+EpdnaKNn5DDAEcxV9yO4JUMbrecV54a/k2Xl/Du5xucCHsRFwgvWYr80
+NFpDLgMcx5XYJobZVNXWByI2GAg24xspH/hbVH9uFF7RCnJOUSdwELeL6HANbsYjuB5bq8+fZtRQ
+nNr9D1hZDVoSiVLfswqP4Xcrq0KdLv/XFwxjh4gL6ndBfc1jppy0YE3m338Ue3BJ9XkJ3+N1fCte
+jH3LreLJ1098BrtFbND3TOBdye1n8JSWJ0a95H78JTq/KJ78wHQe3pJc/2sD4vY1YzgkGWB3WTnd
+yZEOXyuqQkQ16MsMbfSMHAYYl6bXOcxmaKNnDFSt/kLkMMCMlPePV1dryWGAH/FHdX8xbsrQRuvZ
+K80CB7V4GswVnJwWK8FrxRCYE3l/32d/NeN4RwqFZ7HTgEWD20TH66Ewi2cwWlLU+eR8Ir/iZ1ES
+GxN1wLuxXdQJJnAVfsqooTjDeEI8/fMLIgvSAkrfs10skAxcSWxIFEY+s7Iouii8oCi5S2J34TWR
+INUcxT5RGmv10vl/5WpR96vH/jzeEFtkhwvqaoRRvCqWwTrC/V8yIFvk4E5pHeCMWC1ubTicgz3S
+y+64Fi+P52AE30kGeLGsnO7kSIc3SwshC2KXeGvJYYCNIgsk3P+3DG30jBwGGJJOoixr+YaIHAY4
+KXV6g1QhbiU5DHBYrAoR74LrMrTRevZJs8D+wlq6kqsesIwHRK6xUeT8XxmA7K9mEz6U8oBDuK2o
+ogLcK8rj9VA4ioe1LB/IWRI7LOL/KREXjOEesTNsWiRI6/T5LpH1eN6Fj81N44ty0ppjGE+KqlB9
+jmhgDk6ezTV4Fh9Lhih+dLbE4elRcWh6a/V3b8Ma/uds/gH4H+3N1tSFQwAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'owner;name;dscr;geomW;geomH;geomXsc;geomYsc;lineWdth;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('Sharp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAABHpJREFUeJzl20toXVUUBuAvvY+kValWrVShVUFFQUEUcaSoOKkKFqrS
+WmksSH1NBFEnUlARRZzoTBRxJuIDEZ35qOBAFAfqwCdIn0nTV/ry0SZxsM7hROlk79zksOkPGdzA
+/s/ea/17rXX+mzB39PACZjCBu9EZAG8x6GIzjmIaO7Aai9rc1EKjg4ewXyhhl1DCUJubWmgM4xEc
+FEoYE0rotrmphUYfD+OQUMJ2rG11Ry2gJ5SwTyhhD+6ofn/KYETUhL9FELaJIBSLnvTWtkgEYa9G
+CWsVWBOG8Yy8qv5/JWwXhbGY7tATh5/BJEal3+VaCfsqnjERzCLmhI7Y7KTI4DjWS5fxiCiMhyqe
+XUIJRUyMQyLz45pxd1T65nuiRR6seHaI4BaBnsj8hMjg/upzP5GnL5Swv+KZUNCw1BWZr8fdMWzM
+4BkWNeFoxbMNawazxflHR2R+TGTwCNZJV0JHXIfZLXKNQpTQF5k/IjK4WwQhFSN4EFOaYWn1gPa4
+IFgnDj8jgrFRuhKIIOzVop+wAssy1vVFEI5o3v7WS9/8iLgOrfkJ3+NDLM9cv1EcfkYUyFHpd7lV
+P2Eax/E2Vmas74vMz25t66VPjK35CV9WD5zGe+JKpKIjMj8hMjhefU7NYCt+wsX4QFTj4/gIF2bw
+dEXmx0UwJ+UNS634CSvxqUYJ7+L8DJ6eyPykpkVuyOBpxU9YIQ4+Vf18Ia8mDInM79YMSxukK6EV
+P+EifIITmpqwKoOnLw5dt8jdIihF+Alni4PXQfhKXhCIINTDUlF+wiq8I4IwhY9xaQZP3SKL9BPO
+Et3hhIj8VtExUlG0n3AB3hJBOIHPcXkGT9F+wjK8r1HCZ7gkg6doP+EcvC4GpSl8gysyeIr2E5Zr
+CuOMGJxylFC0n3AaXsM/YvM/4bJMrmL9hPPwpiYIW3FVBk/RfsISvCEmtBnhKVyZyVWsn3AuXtUU
+xq9xbQZP0X7CiLgOtRK+w9UZPEX7CWfiZRGEKfyI6zJ4ivYTzhDdoVbCt7gmg6doP2ExXsSf1UP/
+EEpIlXHRfsJSvIK/NDXh+gyeov2ErlBCPatvF0HIeWixfsJSPK+5Dj/gRnlVvVg/oYOXNEr4HTfI
+qwmjCvUTTsfTOCYi/ytukS6/+fQT5h09/60Jv+Am6UqYDz9hOmN9FobxFA5XD92JW6UrYZB+wmY8
+l7huTlhcPfCYyODPuDmDZ1B+QlcLf706hMc1k96kUEJONR6Un7DgWCKuQ53B33CbvBY5CD+hNTyB
+AyIIe3C7vM0Pwk9oBYvxqCaDtbubGoRB+Qmt4UmNEnbiTnndYdTc/YRW0Bct6YDmre0u6TI+mZ9Q
+zD9wdfGYpjvsEK+uqRmc7SdMY4uCrsIibNK8vx/GPdIPMCQyv0UhbXE2ak+vNjZ3ilaXqoSOgjJ/
+Moxq7vJR3KvAbM4Fw7hPUxjHFNTfB4lNmiHnIO5XuLRT0RMtsS6M+/CAU+w6DIlxt3aE9oogFNHf
+B4WOmBB3aQrjKReEetKrv/F51gDqwb+eXuvCL9Ux+gAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomX;geomY;geomW;geomH;geomZ;lineWdth;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('arrowSharp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAA/JJREFUeJztmc1OE1EUx38zEVrabt3jI4gEDIRPg+DGGOMj6F5XpAgh
+CjyJ8R2MS58CKODahSaAhIQE6uLMcT5b77QzvQXvP2nSzNzO3HvO/3z8T+E/hzdE727b2MQ9Gy8N
+MA/cRwzxA/hmcS8DhQ/MAS3gV/A5BGaDe3cei8iBbxKfA2DB3rbKhw88ITz8KfAB2AHOgmuHwDJ3
+lAmPCQ9/DWwBjeCzHVxTI0xb2mMp8IA14Bg54BmwAVQiayrAJiETjoBV7FapQuABk4SHvwI+AvWM
+tQ0kHK4IjfCIW24E9XwbuADWgWqX9VWgGaxtEzLh1sFHYl49f4F4vmbw2xqwG/xGmTDNLUuM0Wx/
+hXg+efhRJPYrwfcoaggTNBy0Ogw9fOJ1/gzxfJL2NSTePwGfgzVjiTVV0iVygSFnwhzxUrdBOuHV
+gPfAJRLn7eB7k7QRGkh10BJ5gHSMQwcfeIq0t9rkbBEvdSAH2kMOfAOcAN+D75dI7CcNVkH6hCgT
+Vhiy6jBJePhrpMNrJNaMIoz4jXj9GMnwa4gh2sA5woRkTtASqUxoARMlnKMnPEO8qAdYJ/sAu8Sp
+/DByf4K4AXfINmAzeEcbMdpagefIDR/xfJTCWU1OBWGEUvgAqRJRCnsIraPJc5t0CNURQ0ZDaAJL
+4aAxr0lsnewktkXo+X1gpsszZxEDKRM2STNhDGGCJtEWYryBIarnbxBKdipje8F99fw83cuYj5S6
+KBN2SJfRMYQJ+uyBzhMWiZe6ddK0ryMJTxuZfWApxzuWiTdSTdKNVD24Hs0rpc4TOun5ZMKrI57X
+VrYFTJHPOz7S/h4RttK7ZHeTA5sndNLzUVQRz6uY6Tc+VxEjqJhqkg6H0ucJJnpeN7JHSPsWUur6
+ydAeIomVCVdkl8jS5gmmer6CMEKTknq+iPLkETJBHbBJtgMKnyeY6PkGkguipW6qn5d2wDTxENwm
+OwQLmSeY6vlRJDlFm5wlyklCPvHqoCUyS0r3PU8w0fMNJBdEPT+f5yU9YoF4s9QkW3H2NE/Io+f3
+EGGjnp9hMI2IjzQ9usdzxOOFzBN60fPa2w8aK8Rb8b7mCR5inbx6/pj+S12v8BAhdEL+eUIqVD3g
+FfI/XV49bxt55wk/gZd0cNoL4G2HB3TT87ZhOk94Bzzv9iAPGElcM9HztmE6Txgh577z6nnbMJkn
+GKMXPW8bpvOEf6JfPW8bJvOEjihCz9uG6TwhhaL1vG2YzBP+ogw9bxum8wR84A1hqStSz9tGcp5w
+CrwmI6QfAF8pT8/bhs4TvgDjnRY9QCZAtynhmUL/yBm3vA8HBwcHBwcHBwcHBwcHBwcHBwcHB3v4
+AyDam/oBGHDXAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomX;geomY;geomW;geomH;geomZ;lineWdth;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('battery','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAASZJREFUeJzt1zFKA0EYhuEXCSkEbWzUykbwADYKClZi4wW0shAPYecl
+TGWR1jtYeIpcIEVKFWsLV4iQ/98fp3Pfp8nu7Hz5wjBDWJAkSZIkSZIkSdIvB8B28OysMR85AUaF
+eVF/Kb9W/DGnwH7w7KYxH7kGxoV5UX8pX12Af6uyxfaC8c3GfGsm6y93VnbAQzB+BFw05FszWX+5
+c/BHYPALUDnDP+6BxdL9DvDUXW8Al8ALcAjMgF3gvbt/XZHPbAGf3fUd8Bh8PgPHwDTJN5sCt3z/
+ry47B65WlFfzfZkJsJ7MyforecAjUFqAeTD+Abw15FszWf9fOlPZFu47An35SGkLJ/0egYrBL0DV
+iHixKi8sWT5S+d5sXjUvSZIkSZIkSZIG4gvGZClP5o30+QAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomW;geomH;lineWdth;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('conBus','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAIRJREFUeJzt1LENwkAMBdAPYoIbkJKaMiOkzAwMmBkoCNKFAc4ReU+y
+dL7q24UTAAAAAAAA4Awu3fueZKoKMtic5JUkt+6zbTVXJBpoymfOJPsFJMmaZBkaZ7xH31yrUhyF
+BVQHqPZ7A1qSZ0WQgVrf9AtYt9odiT/0nRMAAAAAAAA4kTebsQnkLLRE0QAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'owner;name;dscr;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('converterAC_DC','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAABHNJREFUeJzl21uoVFUcx/GPdgzTJ8NCyM7MiBIFFSVkiEYSQRTRQz1E
+9VAPBWHaWxL2EAQ+dIWMoIeC6KG7dLG0EpOMoscyEpPAisguiEVeysv08J/RYXs8s+8zzvnCYdic
+vdas/2/91+W39h6mONMS1zMxfRANqZHjONy9SArwLBbV2pz62Y3V3YuxzudMPI57cBRH6m9X5czG
+LCzvXD+Ew10BpoueP4pH8HXtzauWBViDS4QQi3SG+ljixiMi+M/rbF3FNLAOC7FDiHGCUZ/wxrFe
+pP0XYpgf7L0hmQGjxDhew1V4R0x8jeRNo5oBDTwngv9SBP/zRDeOogAtvIKb8T7ucJrgGT0BWnge
+S7DNJD3fZZQEaOEF3IBPcLc+wTM6k2ATL2IpNuMB/Jim4ChkQFNMeCuwHfdjT9rCWTNgDBfhUszF
+T/gKv2Wspyzm41UsxntizKfq+SSzsAm/Y9kk96zFLrFlbuNffIRr8nxpQeaL9b0ten48RZllIsZN
+Ip4T9BNgkQi0jZ3CNT6KjfgPf+MunJ05jHw0xfrextu4IGW5XALMxVbR2x/jSpzV+d8cPIb92Ivb
+VD+vNJ0Ufrv0wZNDgGnCRbXxIc6foNIxrMQhIcKN0olwnuxDpyU6o413pUv7XnJlwDw8LKzk6ThH
+ZMI/+KFTx2QizBP79L24LmXjWyIDD4t1/pR9fQpyzwFpmI1ncAzfi61o8sSJWKu3du77Vqwo/Wh1
+2tfufDZztrFSAYg54UmRCfvxFK7FZZ3P9fhVDJc3cHGKOhv4TMxBG+UPnhoEIDJhDf4QPXZABH2w
+c/2LGFJzUtQ1Ltb3Nj6VL+17OUWAKrbCB/AEXsd9uEKcOe4Tqf+WEOd4n3om8vN99/Z5KTMDkszG
+uZiRoUxD9PxRsdRdWFJbasmAJAc6f2lp4WVxjFV5zw+bGcrs54syTALk8vNFGZbzgKacfr4ow5AB
+TQX8fFEGnQGl+fm8DDID5ouev1ocqqxSc/AMToAm3sQt2IDbxelS7QxCgKbo+cXiGeRqsT0eCHUL
+0MJLuEnsxu40wOCpV4DuOr8UW0TPDyTte6lLgO4O73rh6u41gAlvIupYBhtib78EH4hNzp4avjcV
+VWdA8vn8SkMUPNVmQK1+Pi9VZUDq5/ODpgoBMj2fHzRlD4E8fv7BEr9/nxA/M2UciXXP7dvi9Dbt
+AWa7xL/v+nxXZUdiTfn9/NqS2gB/Zi1QhgBNJ/38Ftn9/LoS2pCbogIM3M8XpcgqMBR+vih5BWga
+Ej9flDwCNA2Rny9K1jmgJWb7FWLMr1I8+CUFy/dyCN9kKZBFgKr8/IYS6uiyWzyFTk1aAXr9/Gax
+1JU14e0sqR5ydEgaAar287eWWNexrAX6CdDr57cJP1/2UvdXyfVlYjIBzgg/X5TTLYNnjJ8vykQC
+LHAG+fmiJIdA9/2ehWp6Pj9okgLMEu8D7hAbnobiLyYNE5dLvKrTFeC42EQsF1mwAE/X2rR6mCFi
+3q3zktaU/+nslP/x9JTnf0hsOGCVcGQMAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomW;geomH;lineWdth;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('converterDC_DC','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAA6RJREFUeJzt2z2IHVUYxvGfIYGw6a1C7twlaUSwCKiEBAyyIIhY2Ig2
+WliEmBUbLRTsLCxEVARBBUkRQQiihogKBj/Rxo+AFtskiiAiQRsTTEws3h1zud7Nzsw583F3/cOw
+zHLOmfM+5/O5Z4ZNznVT99uxpY+KdMhlXChvpgV4Hns6rU73rGC5vNm6+nc7nsGDuISL3derdXZg
+AQdW7x/DhVKALaLlL+FJfNt59dplEY/jBiHEHqtDfetUwosi+E+7rF3LjPA0duO0EONfNvqEtwsv
+iG7/uRjmf04mmO4BG4ldeAM34y0x8Y2mE23UHjDCiyL4L0TwP81KuBEFGOMo7sI7uM8awVN9CNyI
+25OrdpWP8XXG8krGeAm34JRrtHxJVQH24bmUmk3xqPwCjPEylnACh60TPNUF+ApPNK7af/ksY1lQ
+4FXRUO/hYZytkrGqAN+sXkOkEBPeQXyIQzhTNfO8L4M7cQx78bYY85VavmSeV4GdouVvxZc4ombw
+zK8ABd7E3TiOe/Fjk4LmUYBCtPxe4VmW8XPTwqrOAdeLZSYXZ/FLg3xjMdsfFGP+iITgqS7AkjAS
+uXgKr9TMU67z+8Rsv6xht5+kqgC/44fUh01wrmb6coe3JNb5QxpMeLOoKsAH8v5GcL5G2hFeF9vb
+E2KTcyZXRaoK8Nfq1TWTfv6U2N5mafmSIW+EZvn5dff2dRnqMljZz6cyRAFq+flUhiZAbT+fypAE
+KNf5O8Sq84CWg2c4k2ChoZ9PZQg9oHDVz3+ipp9Ppe8ekOznU+mzB2Tx86n0JUAhk59PpQ8BChn9
+fCpdCzDGa7gTJ3G/HoOnWwFa8fOpdCXApJ//CA/pYcKbRRfLYKt+PpW2e8D0+fxhAwqedntAJ34+
+lbZ6QGd+PpU2BOjUz6eSewg08fOPZHz+OSF+bRbExuRX7G/48DHexxW8a8b7OGtwJeP1/TrP2i9i
+PCliztYDCs39fM73Dn6rmyGHAIWE83nxDl9vpArQu59PJWUVGISfT6WpAIWB+PlUmghQGJCfT6Xu
+HJD9fF7sGXJxHt/VyVBHgLb8/PEMZZSs4LY6GaoK0Nr5vLzvHdRukCoCtO3n78lY1t91M6wnQOvn
+8/gjc3m1uJYAc+HnU1lrGZwbP5/KLAEWzZGfT2V6COwQX1ft1tH5fN9MC7AgPi07LTY8I9V9/Txw
+E7ZN/qMU4LLYRBwQvWARz3ZatW7YJmJeETH//+nspv94etPzD+Br71UEFxUSAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('fuse1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAMpJREFUeJzt2DEKwkAURdGrCIHYuxgldu7KnVnrYuwVbdTCXv9gkh+Z
+e+rH8HgMTAhIkiRJkiRJUkVmgcwc2AxdZCBH4PEpEBmgBS691BnfErh+CiwKDtsBp5/qjGcNHCLB
+kgHufFlzQu7R4HzIFv/AAbILZHOA7ALZqh+g5BncA+ehivRsFQ1WfwMiWuAJdNlFCnS8O7ffgtXf
+AAfILpDNAbILZKt+gJIPoYbAszIRTTToL7HAITdg20ud8d2yC0iSJEmSJEnSpLwAvZARaHejt+wA
+AAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('key','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
+mcn/AQiUmKNwBpD0AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if(var.isEVal())	s1 = 1;
+else {
+	s1 = 0;
+	if(var)	p1x=85; p1y=60;
+  p2x=85; p2y=90;
+  p3x=15; p3y=90;
+  p4x=15; p4y=60;
+}
+else if( val && !val.isEVal() )
+{
+  p1x=35; p1y=40;
+  p2x=65; p2y=40;
+  p3x=65; p3y=110;
+  p4x=35; p4y=110;
+}','',-1,'name;dscr;lineClr;elLst;p1x;p1y;c1;s1;s2;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('limU','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAn9JREFUeJzt2kuIjVEcAPCfOxO5yiOvPEJeibKwIcxsZGGjLCShLFiM
+QpLXKBQLlLKjrDwiKUlZYKcolKwUobyirJQ3YXHMkvvdme9859ac3+ZuTuf/v2f+5zvf/9why7Is
+y7Isy7IsaxntqFcVqBWtwAn86sMc23G20aABfQgQyyhcw2tc0ftFuIunZSVVlbrwl7+DKWlTSWM5
+3glboN+Zjgc4hkGJc6ncYJwSSn9i4lySWCmU/rKqAxc5BmtYFDGHMdiH+/iBjhLnvq3BKVLkGKzj
+UynpVG8IPv9vQDMvQkuFPVqWNqzHLqwTzu2yLMTNIgObWYBvGqxmk+aiCyeFUv1e4tzfig5M9Spc
+x2G8//v5M1EeSRagp/SnChWQ7MsXVcdv5T2d5+MFNovXi3QIOTfsKGuREviXEcKR9xBnhCSTqnIL
+tGMjpmEtPlQYu0/K2gKLhRZ3g/hteMttgZHoxj1c0gKl36OKLVDDHkwW2t2WKv0qKmAB1uA4nlUQ
+rymxF2ASjuAqLkSO1SsxF6AN24Q7vkP4GDFWr8V8BizBKuzAq4hx+iRWBczEQVzE5UgxShFjAQZg
+C4biKL5EiFGasrdADauFq62teFvy/KVrZgEGafxmNQE7hcuIOwXGx1L4VjlfiRWY5Cs6G4ypCU/8
+5TiAxwXmrcLXqgLNwHPhyd/vDMM5XMf4xLkksQkvhZvYfmcW3mC31vypParhOC+U/tjEuSTRLbzo
+TE+dSArzhN5+d+pEUhiNG0J/PyxxLpVrw17hzJ+dOJckOoXS71L9bwrJjcMtnJauyUmmhv14gjmJ
+cylV0TIeKHSE3XgUL53WVtO6/1maZVmWZVnz/gA8iGIALsNG5AAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('load1','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
+rkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomX;geomY;geomZ;lineWdth;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('load2','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','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('reactor','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAA9VJREFUeJzt2t2LVlUUx/GPOs1I2iSlaVlpCb3q4EUlCV3UEPTiRaQJ
+XfQHFJQ31V8gXdVlUATepRSBF0FXWmBlDWSUJUKQI2U0ZVChE804znTxOwPxWI+eZ848Z2Y836vn
+OZy999rrrL32WmtvGhoaGhoaGhoaGi5LFtUwZh/WYBVuxxS+w2mMYKybwnRDActxK7ZgEBuLZ324
+qnjnjEz8DL7FQQxhGGe7IOOs0IOd2ItfMSlf+xx+lAmelEkOFc/OFe9MFm324qmir3nDUmzDR/gL
+4ziKPdiBdVghVrACV//r93qZ8J6izXjRx4d4XKxmTtOPV/CbfMljeF6WwOIS/Swp2ryA40Vfp7G7
+GGNOMoCPRdgTeBG9FfTbi5dkqUzhEDZV0G+l3I0vxWQ/wf3yFatiCbbicDHGEdxVYf8zYkAmP4l9
+uG4Wx1qNd4qxjpgDltAvZj8uk7+hC2OuFSWMy3KozScsFYc3JWY/m1++ldWyHKbEMdayO2wTb39C
+1ny32SqO8TQe6/bgPbLPT4m3r9LhlZHh5UKGg7ocLO2UAOWYara6TumVOGEU2zvpoExwMs1yPCEa
+f0OcUV2MFzJcgSdFtllnQOL0oxKt1c0GfINfJNEqRScWsAUr8YUkM3VzUuKQVbivbONOFDAoafQH
+EpDUzXmRZZHINqv0Sb5+TrK6ucItmJBlWcopl7WANeJoRvBnybazye/iA/olSLpkWvfOG7WPqjbi
+SvyMm3FtmcH+h+8r6OO8yHQTNmtvBWM4Nf2ntSS2D3e2abxMihZ/SxRWhQ/YXEEfy/A+HhCnONrm
+3eN4evpPJ06wKvpwG76SrWwmjOIhvKf95C+g1QIuZQm8Jeb2TNnBWliH18Ukt6tmKVxMflqWQKsP
+OKU9ExICX4Mf8EdJAf9LmCq5mPwXUHYJjEjpeo0UMec9ZRUwJnFAD+6tXpzu04kTPCgp6KPqSYMr
+pRMFDEkh5B5zKxrsiE4UMIwDuEOqQvOaThRwFvtlR3hWvQWRGdNpILQfn4sV7DKPfUGnCpjAa+IL
+npMawbxkJqHwAbwpucGrSmZhC4V+OZwYl8OKtSXabpA8oIpcoFY2yTHVpCjhUi1hwSiAHFQeEUs4
+LIcWF6vTLygFEEs4JFHisBxatNsiF5wCiE/YLcdVU1J82CUTbN0q54QCqt6/x/Apvsb1cm/gETws
+Jes+SafJYeoOUdS7UtdbUPRIoeNtKVhOX5KawE+SVZ5VswV065rcerGAQfEV/eIfFuNBOWHu6v3A
+aeq4KNkrW+VKuWPwWQ0yNDQ0NDQ0NDQ0NFzu/AOlStFDLDObwgAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;lineClr;elLst;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('srcAC','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
-AAAOxAAADsQBlSsOGwAABv5JREFUeJzt21uMnVUVB/DfzNChY4W2lJleoKO9WEkFfFJsK9aOGIOA
-l0QFWyLK5cUXEw2aEDRGxEcljfEBrcVLNF7iWy1Gi5e2oEUqRixoWqBACzK1tTYqbYHx4f8d58x4
-5nQ6833fDIF/Mplzvv2dfVl777X+a629eQUvb3TU2E4v+rEAc3EWZhTlJ3EMR/AM9uMQhuroWBXo
-wjlYjkuxTgbehc6mdhv/h0b9vSCCuAc7sBeHi+elomwBdOJCfBADuAh/xb14WAZyAIM4KjNPVsJs
-WSXnYxlWYhVejz+KMH6Mh/BiWR0uSwA9uAQ3Yg0OYht+WHw+Zniw48UM2SaLcLUIdBF24uv4HZ4r
-oe+TxnJ8VWZ1G9bLTJaNvqLue4q2NmJpBe2MG3Nwk8zwdlwuK6Fq9ODdohsO4oaiL7WiD9+WmbgF
-i+vugFiUW4s+fEs1q64l1uAB2Yvr6mq0DQZEyd6P1VU21Fk09gdsweuqbOw0sQJbsVsmpbOKRgaE
-oGzCuVU0MEn0YjMeU8HKXCMzv0n2/3TFfBHCbuEQpaBP9vwW03PmR6NXtsP9SlCMc0Tb7zS99vyp
-sAL34S5hmBPGTWJmpoO2Px104B3iUF0/0UqWC9G4paROTQU+K77HaTPGHqG3200NySkL/cIYN2Jm
-qxfGcobejh/hI6JQxkKveHyLxMfvxL/xNPaJJ1i6C3uauEIswwfwm9GFrQTQKYpvIa7Ef0aVzxKX
-93q8CWe2qKvh1z8uHuFWNQU4WqAHP8WT+KhxuNIXC5lY36LsAuECh/Ez3Cz0c6EEOzpwtqyK9fim
-BDZ2iEtbCUMbB66VMV10qhe7cJuYvWYb2o334xH8WlbGbKeOJ8wUZfqNogNfMTVEqk/8hc/LGMdE
-rwz+C03POrBBaPCdOG8CHZhZ1PGUCGNStnmCuF2Uelsytwr/lD1OBv8uPCtCOWMSHeiQ+OAeEUId
-sYNmXCxju6TdS5/G7yWgSZZvg1GVFXS4WgR6dUn1jRfzxEf41FgvdIi23mg4XP01/EVMXFnoxhfx
-oHrpdbdwmy2adFezVu6V0PXDEsB8Ld4niutIiR05IYI9WxRrXTghY1soqwEjBdAvGnJv8f3DeEIk
-VjYO4nsSz6vTNO4TPdbfeNDc+ILi+wFZ8m/Fb0VzV4Gfi0ZeWVH9rfCULP8FjQfNAphbFA7Kdlgu
-Nr8q9rZfuMFbKqq/FQZljA0lP0IAZxX/j4qdXigZmSo7c1DYZV04KgJ4deNBswBmFIUnhd/Pkk5W
-hefwL00KqSJ04zuSYjshY+xuFI6lgA7huzheYcdeKOrvVm2W+lW4xhgMsFkAJ2W/zxDOf51IrEoc
-luVYJSvslZV2XFb2kKZxNQvgWFFYJ09/RGIJVWZ13ijxiYZuG5KxYqQAjhSFtaWYxMwuwWsqqr8T
-a4XbDMo2GNJE7JoF8ExReH5FnWmFh2QbvLOi+heL87Md/5CxDclYMVIA+0UxLauoM63wogRYNojZ
-LRtXyqC/X3xfhueF4WKkAA6JZFYadobqwE9kT35ck3kqAfPwCTlV8mRR90rRB38f60c3G+kO14Vr
-lOsizxXbv8NwSHyepPc+2e6Hq2Q2Lmz3UgXokSDJHrzN5HjBDHxJBHpZ0/NGQOTN7X7cK1K7bRId
-mChmixAOSBCzZRz/FFgsOuVxWVXNgrxdwuJtQ2JdEvraaeqCl18WJ2mTBExOJYgOiVa9Vwa4B+8x
-Uo/NN86gKO3D4nWgEx8S0/U3SWpsEEIzWwbQLcHZS/EZ/ELM6Z1aR5muxaNabO12iZFFklUZnRip
-Ax2itC4XYSwx9uHK40Ko7sKfJTPVjB4J9e3Hx4xKjIylbNaK+bhOsipTiS6Z1WUSyJglfOWIuNN/
-0sas4SrZTi1TY2NhpgRHd3jpJ0d34g4TUKpLRcK3ltypOvE5sSpLJlrBDeJEDJTVo5rQIRxgUPb9
-hDFHDiHeK8dOXiq4QBTjZiW4971y4Girel3liaIPd2OXEg91rZa00mYhFdMV82XFPqCCaPM6oZib
-Tc+V0CeDf0zMeOnoFCHslu2wQn1XbtqhQ/b83TLza1WcbVolOuE+OYo21bhMFN4uNSZZeoV6HpKj
-aP1t364G/WLnB2Vb1n6KdbYclDogjPEK9V2YuEoY3gGx81Nx4uR/WCq0+Vn8UjyvKlzp+UXdvyra
-usMkGF4DZSmxmRJpuVFc1KdFGD+QWTrm9JMs3ZKvPE9CZY2rd9vFudmlhEtTVVybe4N4XgPiw+81
-fG1un6SoG9fmGkI5U5bxuUZem1tdfH7Q8LW5PabhtbnR6JLA5DI5ZzAgYe8zijab//j/i5PPyyra
-JvrlUXF/p/3FyXbtzDN8dfYcyQk2wuAnjLw6+4T4+FNxsvQVvKzwXy+servgoAGLAAAAAElFTkSu
-QmCC','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;geomW;geomH;lineWdth;lineClr;elLst;',1497253454);
+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','/wlb_originals/wdg_ElFigure',0,'','',-1,'owner;name;dscr;geomW;geomH;lineWdth;lineClr;elLst;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('stGen','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAANRJREFUeJzt27sRgkAYReGLI6mtWAFtWYTd0YopgTbg8pu4h8f5Zkhg
 g8vJN5GkExsa729J7j2HdDAnef16eEryPtgzffvRaxHimWQpzmzdmOTR+lgFWLL/AKsu9ACaAegB
 NAPQA2gGoAfQDEAPoBmAHkAzAD2AZgB6AM0A9ACaAegBNAPQA2gGoAfQDEAPoBmAHkAzAD2AZgB6
 AM0A9ACaAegBNAPQA2gGoAfQDEAPoBmAHkAzAD2AZgB6AK26LzB2WfFfq/9QBWjetDgKL01J0pl9
 AK7hPS0VI6B9AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-if(st.isEVal())	c1 = "#000000-0";
-else c1 = st ? "red" : "lime";','','','',-1,'owner;name;lineWdth;lineClr;elLst;c1;',1497253454);
+if(var.isEVal())	c1 = "#000000-0";
+else c1 = var ? "red" : "lime";','',-1,'owner;name;dscr;lineWdth;lineClr;elLst;c1;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('stGen1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAi1JREFUeJzt2y9o1VEYxvHPzoUJwk0u3TRBWHIgbCAzbQiaZjI5ixq2
 Bf+EuXI1qGUapmUzbJaryTSTFk0mTQZhQWwGmSAIgkEwnKM3Lr6w12+48HLfy+8J5z6c3znPO4IZ
@@ -2788,66 +2760,246 @@ ZSMye8Bodg/YLmoiMy0dNaq6Gy0kiA65PWA8uwfchW60ikAG1Dh8VmaKaoJpyb4TXNq/5WAzoI6p
 ZGW8qDM6WZkq8u4CyZ2NQPOArWgVgYwWdS4vK4tFHUrMynRRJzKzskfu1+H0x+JrRR1Ezkqvg8P4
 Gq0kiGMj+IRXYsbXu2pk/Vmr4Xl7fr/Vj1rf30DTKmYNww0X1Qn4yaZpVZ2GHVPP/R9ju/Xu4L12
 EoTNP/ULaGtRSJXgAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-if(st.isEVal())	bordColor = "black";
-else bordColor = st ? "red" : "lime";','','','',-1,'owner;name;backColor;bordWidth;bordColor;bordStyle;',1497253454);
-INSERT INTO "wlb_ElectroEls" VALUES('conBus','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAAOxAAADsQBlSsOGwAAAIRJREFUeJzt1LENwkAMBdAPYoIbkJKaMiOkzAwMmBkoCNKFAc4ReU+y
-dL7q24UTAAAAAAAA4Awu3fueZKoKMtic5JUkt+6zbTVXJBpoymfOJPsFJMmaZBkaZ7xH31yrUhyF
-BVQHqPZ7A1qSZ0WQgVrf9AtYt9odiT/0nRMAAAAAAAA4kTebsQnkLLRE0QAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;lineWdth;lineClr;elLst;',1497253454);
+if(var.isEVal())	bordColor = "black";
+else bordColor = var ? "red" : "lime";','',-1,'owner;name;dscr;backColor;bordWidth;bordColor;bordStyle;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('trDuo','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAABUhJREFUeJzt223MlmMYB/Df81QS6hn1sEilIg35QE/IW2NKL8PYzIYP
+lhLzMsPGNJ+8zfhCZpMxCWEzfDDT8jaUly8lqdATZaSMCmPEh+O8Vc8j9TzndV333fTf7g/3fV/X
+/39ex3We53Eex3Ge7MX/G00V6+2HIzEEB6fv8AvWYw1Wpe+VoAoD9MEoTMUE9E26tQ/8td1nM17D
+y/gMv5bZuLIN0IZpuBCr8So+xgqsw5Z03QE4DCNxAs7FEXgBc/Bhye0sHANwC9rxBial33rsxr09
+0rWT8WbiuAn9i29mOWjF02JMXyuv4QNwXeJ6Kn1vaAzHQryPUxQzxJowDouwAMMK4CwFLXgGS3Fi
+CfxjsAzz0K8E/iz0wn1ichtTok5b0rg3aTYMxolxOk25nqUJ05PWySXqdAn98BLmq6ZrtuB5vCjW
+FHXHVOGqTq9Q88ykOblCzZ3iCeHrmyvUbMbbeKxCzX9FH2zEFXXQnobvsW8OSe5bG43fheurGkux
+FcfmkOQaoA1finV91ViLLzA2hyTXAEOwAT9l8nQHP4nhNziHJNcA/UVEV1n8vh1+EaFzVnyQa4Ae
+tsXxVaOmuzsR5k6Ra4At6I19Mnm6g32EB9icQ5JrgLU4SH2Ck35Je20OSa4BluNQ9YnTW5P28jpo
+/4ODRRecWgft8zTAJLhexOgTMnm6g4lYItxwXXGVGIeDKtQcLBZf03OJighgFuBbEQ/0LIBvV+iV
+tNYl7YbA1fhaudmgGsaKHjejCLKisjcH4lkRnFym87jsiUMwQmRyjsNQkdwglrXtYkwvwuf4Dn90
+4GnFXLEAugQ/5ja8yPTVGNG4hSKPX1seD8OVOEtUiFaKSK4dm9I1LSKuGC1KZ8tF935UFFRgfzyA
+M3ApPiqw7YWgSczM7ZiN40Xysh3v4lbxcH3FKm77+ac5/dY3XXNbumc17klcj6Tv56i+prnb6IkL
+xAS1WozVmzCwG1wDcXPiqHGdr+CJtow0Vo1zq3hTzbr+xmqF09q9W7f7vWHRJIqa7XhITHR3ibf3
+Hm7HUaKb99Z5CPRO/43ELFFdWo07E9fsxD1RgYYo0qJtYhJcILpubRIcKvJ3Z+MYkcVZIvYC1BIp
+Lem640R5bVnimSMemthLcD/GC09TSMW4SDc4X7ity3V2gz2EGxyOk8RsP0RnN7hUuMEvhBv8swNP
+K54UPeZiBbjBonANvlJOTbAj2sSEOLMCrd3CCOGTZ6lmKdwTd4ghMLwCvV1iplgGH1ah5uGiF2QH
+Q0VgMR6sg+7DwrvUFf/7hMg40RVXZfJ0ByvxTWpDt5FrgFGpEfXIymwQS+6jc0hyDTAIP9gW1VWJ
+TUk7KxOVa4AD8JsokFaN35N21iaJXAP8accdn1WiOX06rha7TJKDjeIN7LerC0tAH9EDs+afXAOs
+EQXSll1dWAJahAtck0OSa4DFYjla5SqwhkEi3bY4hyTXAEvE2nx0Jk93MFq0/5M6aO+Ax8Wm5qo3
+Sb0j8gV1xxTVb5MbnzQnVai5U9Q2Sj6nmsmwRZwjaJiNksTO8PUiPC17q+wMkS06qUSdLqOXqAGs
+EBmbsjBWBEF3a7DN0sRQmCcSmmXUCNvwqTg40XDb5WsYJrK5i3GqYoZDM07DB3hdnCVqaAwQb+l7
+XC8vYdGKGxLXXHvQuaH+oiTWLtYIU3Tt0FSryDK9lThuVNLDlx3FnSiKIheJtHnHY3O1LW59dT42
+N1icC5iT7ikFVR2cHCne6EQxgf3XwclNwlCviBl/jz442RF9RB1hqB2Pzv5s29HZz5X80HuxF9vw
+N//VD9fPmVdiAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;lineClr;elLst;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('trStarTriangl','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
-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
-Aec6FfthsYL/AAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;dscr;lineClr;elLst;',1497255047);
+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','/wlb_originals/wdg_ElFigure',0,'','',-1,'owner;name;dscr;lineWdth;lineClr;elLst;',1500037083);
 INSERT INTO "wlb_ElectroEls" VALUES('trTrianglStar','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
-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','/wlb_originals/wdg_ElFigure',0,'','','','',-1,'owner;name;dscr;lineClr;elLst;',1497259681);
+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','/wlb_originals/wdg_ElFigure',0,'','',-1,'owner;name;dscr;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('trTrianglStarH','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
+rkJggg==','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('trTrio','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','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;lineClr;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('triangle','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','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomX;geomY;geomZ;lineWdth;fillColor;elLst;',1500037083);
+CREATE TABLE 'wlb_ElectroEls_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','DESCR','','Описание','Описание',131077,NULL,NULL,10,'Parameter|DESCR','Parameter|DESCR','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','errPresent','','Наличие ошибки','Наличие ошибки',131072,NULL,'',8,'','','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','st','','Статус ошибки','Статус ошибки',131072,NULL,'',10,'Parameter|st','Parameter|st','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','val','','Значение','Значение',131072,NULL,'',10,'Parameter|var','Parameter|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','DESCR','','Описание','Описание',131077,NULL,NULL,10,'Parameter|DESCR','Parameter|DESCR','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','errPresent','','Наличие ошибки','Наличие ошибки',131072,NULL,'',8,'','','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','st','','Статус ошибки','Статус ошибки',131072,NULL,'',10,'Parameter|st','Parameter|st','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2','val','','Значение','Значение',131072,NULL,'',10,'Parameter|var','Parameter|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_2_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','DESCR','','Описание','Описание',131077,NULL,NULL,10,'Parameter|DESCR','Parameter|DESCR','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','errPresent','','Наличие ошибки','Наличие ошибки',131072,NULL,'',8,'','','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','st','','Статус ошибки','Статус ошибки',131072,NULL,'',10,'Parameter|st','Parameter|st','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3','val','','Значение','Значение',131072,NULL,'',10,'Parameter|var','Parameter|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_3_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','DESCR','','Описание','Описание',131077,NULL,NULL,10,'Parameter|DESCR','Parameter|DESCR','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','errPresent','','Наличие ошибки','Наличие ошибки',131072,NULL,'',8,'','','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','st','','Статус ошибки','Статус ошибки',131072,NULL,'',10,'Parameter|st','Parameter|st','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4','val','','Значение','Значение',131072,NULL,'',10,'Parameter|var','Parameter|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_4_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5','st','','Статус ошибки','Статус ошибки',131072,NULL,'',10,'Parameter|st','Parameter|st','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5','val','','Значение','Значение',131072,NULL,'',10,'Parameter|var','Parameter|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5','val1','','Значение 1','Значение 1',131072,NULL,'',10,'Parameter1|var','Parameter1|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_5_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','DESCR','','Описание','Описание',131077,NULL,NULL,10,'Parameter|DESCR','Parameter|DESCR','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','errPresent','','Наличие ошибки','Наличие ошибки',131072,NULL,'',8,'','','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','st','','Статус ошибки','Статус ошибки',131072,NULL,'',10,'Parameter|st','Parameter|st','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6','val','','Значение','Значение',131072,NULL,'',10,'Parameter|var','Parameter|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_6_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_1','val','','Значение','Значение',131072,NULL,'',10,'Parameter|val','Parameter|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_1_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_2','val','','Значение','Значение',131072,NULL,'',10,'Parameter|val','Parameter|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_2_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_3','val','','Значение','Значение',131072,NULL,'',10,'Parameter|val','Parameter|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_3_tst','val','','�������','�������',131072,NULL,'',10,'��������|val','��������|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('El_Key_h','val','','Значение','Значение',131072,NULL,'',10,'Parameter|val','Parameter|val','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('key','var','','Переменная','Переменная',131072,NULL,'',10,'Параметр|var','Параметр|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('stGen','var','','Состояние','Состояние',131072,'0','',10,'Parameter|var','Parameter|var','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('stGen1','var','','Состояние','Состояние',131072,'0','',10,'Parameter|var','Parameter|var','','');
 COMMIT;

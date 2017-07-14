@@ -1027,7 +1027,7 @@ void WdgView::resizeF( const QSizeF &isz )
     mWSize.setWidth(vmax(mWSize.width(),3));
     mWSize.setHeight(vmax(mWSize.height(),3));
     resize(rRnd(posF().x()+sizeF().width()-xScale(true))-rRnd(posF().x())+1,
-	   rRnd(posF().y()+sizeF().height()-yScale(true))-rRnd(posF().y())+1);
+	rRnd(posF().y()+sizeF().height()-yScale(true))-rRnd(posF().y())+1);
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )	{ return new WdgView(iwid,wLevel()+1,mainWin(),this); }

@@ -1507,6 +1507,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    dlg.edLay()->addWidget(wInher, 2, 1);
 	}
 	if(!wsrc.empty() || dlg.exec() == QDialog::Accepted) {
+	    dlg.setId(TSYS::strEncode(dlg.id().toStdString(),TSYS::oscdID).c_str());
 	    if(wdst.empty() && dlg.id().toStdString() != t1_el) {
 		unsigned i_w = 0;
 		for( ; i_w < req.childSize() && req.childGet(i_w)->attr("id") != dlg.id().toStdString(); i_w++) ;
@@ -1536,7 +1537,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
 		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
 		if(cntrIfCmd(req))
-		    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+		    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 		else {
 		    if(it_nm.size()) {
 			req.clear()->setName("set")->setText(it_nm);

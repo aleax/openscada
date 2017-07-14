@@ -1328,10 +1328,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
-			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; width: "+geomW+"px; ";
+			spanObj.style.cssText = "display: table-cell; height: "+geomH+"px; line-height: 1; text-align: center; white-space: pre-line; word-break: break-word; width: "+geomW+"px; ";
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
-			    spanObj.innerHTML = this.attrs['name'];
+			    spanObj.innerText = this.attrs['name'].replace('\\n','\n');
 			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2007-2017 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -451,8 +451,18 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	if(x_scale_old != x_scale || y_scale_old != y_scale) {
 	    isResizeManual = true;
 	    fullUpdatePgs();
+
+	    // Fit to the master page size
+	    if(!(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
+		QRect ws = QApplication::desktop()->availableGeometry(this);
+		resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
+		       fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
+	    }
+
 	    isResizeManual = false;
 	}
+
+
 	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
@@ -1342,6 +1352,8 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	((QScrollArea *)centralWidget())->setWidget(master_pg);
 	if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))) {
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
+	    //resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
+	    //	   fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
 	    resize(vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10));
 	}
 	else x_scale = y_scale = 1.0;
