@@ -544,7 +544,9 @@ class ShapeDocument : public WdgShape
 
 		string	toHtml( );
 		void	nodeProcess( XMLNode *xcur );
+#ifndef QT_NO_PRINTER
 		void	print( QPrinter * printer );
+#endif
 
 		//Attributes
 		short	en	:1;

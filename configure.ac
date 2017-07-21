@@ -51,12 +51,11 @@ AM_SANITY_CHECK
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h langinfo.h pthread.h sys/types.h sys/stat.h sys/time.h sys/utsname.h],[],
+AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h pthread.h sys/types.h sys/stat.h sys/time.h sys/utsname.h],[],
     AC_MSG_ERROR([Some GLibC headers are not found. Install or check the GLibC developing package!]))
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     AC_MSG_ERROR([Some STL headers are not found. Install or check the STL of StdC++ developing package!]))
-AC_CHECK_HEADERS([iconv.h], [], AC_MSG_NOTICE([iconv.h header is not found. Using disabled!]))
-AC_CHECK_HEADERS([libintl.h], [], AC_MSG_NOTICE(libintl.h header is not found. Using disabled!))
+AC_CHECK_HEADERS([langinfo.h syscall.h iconv.h libintl.h], [], AC_MSG_NOTICE([Some system headers aren't found. Using disabled!]))
 
 #Check for the gettext utilites
 if test $ac_cv_header_iconv_h = yes; then

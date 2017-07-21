@@ -240,7 +240,9 @@ class VisRun : public QMainWindow
 
 	// Main components
 	QTimer		*endRunTimer, *updateTimer;
+#ifndef QT_NO_PRINTER
 	QPrinter	*prPg, *prDiag, *prDoc;
+#endif
 	QFileDialog	*fileDlg;
 	bool		winClose;		//Close window flag
 	UserStBar	*mWUser;		//User status widget

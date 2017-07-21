@@ -4562,14 +4562,16 @@ void ShapeDocument::ShpDt::nodeProcess( XMLNode *xcur )
     }
 }
 
+#ifndef QT_NO_PRINTER
 void ShapeDocument::ShpDt::print( QPrinter * printer )
 {
-#ifdef HAVE_WEBKIT
+# ifdef HAVE_WEBKIT
     web->print(printer);
-#else
+# else
     web->document()->print(printer);
-#endif
+# endif
 }
+#endif
 
 //************************************************
 //* User function shape widget                   *

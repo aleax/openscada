@@ -23,7 +23,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <langinfo.h>
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
@@ -38,6 +37,9 @@
 #include "resalloc.h"
 #include "tmess.h"
 
+#ifdef HAVE_LANGINFO_H
+# include <langinfo.h>
+#endif
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
 #endif
@@ -57,7 +59,9 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
 
     setenv("LC_NUMERIC", "C", 1);
     setlocale(LC_ALL, "");
+#ifdef HAVE_LANGINFO_H
     IOCharSet = nl_langinfo(CODESET);
+#endif
 
 #ifdef HAVE_LIBINTL_H
     bindtextdomain(PACKAGE, localedir_full);
@@ -439,7 +443,9 @@ void TMess::setLang( const string &lng, bool init )
     else setenv("LANG", lng.c_str(), 1);	//!!!! May be use further for the miss environment force set
     setlocale(LC_ALL, "");
 
+#ifdef HAVE_LANGINFO_H
     IOCharSet = nl_langinfo(CODESET);
+#endif
 
     mLang2Code = lang();
     if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";

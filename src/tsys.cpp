@@ -20,7 +20,6 @@
 
 #include <features.h>
 #include <byteswap.h>
-#include <syscall.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -44,6 +43,10 @@
 #include "terror.h"
 #include "tmess.h"
 #include "tsys.h"
+
+#ifdef HAVE_SYSCALL_H
+# include <syscall.h>
+#endif
 
 using namespace OSCADA;
 
@@ -78,9 +81,9 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     pthread_getaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
-#if __GLIBC_PREREQ(2,6)
+# if __GLIBC_PREREQ(2,6)
     mN_CPU = CPU_COUNT(&cpuset);
-#endif
+# endif
 #endif
 
     //Set signal handlers
@@ -1809,7 +1812,9 @@ void *TSYS::taskWrap( void *stas )
 #endif
 
     //Final set for init finish indicate
+#ifdef HAVE_SYSCALL_H
     tsk->tid = syscall(SYS_gettid);
+#endif
     // Set nice level without realtime if it no permitted
     if(tsk->policy != SCHED_RR && tsk->prior > 0 && setpriority(PRIO_PROCESS,tsk->tid,-tsk->prior/5) != 0) tsk->prior = 0;
     tsk->thr = pthread_self();		//Task creation finish

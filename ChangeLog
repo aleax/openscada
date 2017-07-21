@@ -1,9 +1,15 @@
+2017-07-21 Roman (stable)
+- SYS: "langinfo.h" and "syscall.h" were set for conditional one, initially for Android original NDK.
+    __ANDROID_API__ getting was added to deep control for conditions of Android, initially it is for pthread_condattr_setclock().
+- !:UI.Vision: Working without printers by QT_NO_PRINTER was added, initially it is for Qt 5.8 on CrystaxNDKr10.
+
+
 2017-07-14 Roman (stable)
 - !!!!:DB.LibsDB.vcaElectroEls: Significant cleared and expanded. Will be continued to finish the cleaning and translation.
 - UI.VCAEngine: Limit of the generic attributes "geomXsc" and "geomYsc" was expanded from [0.1:100] to [0.01:100].
 - FIX:UI.Vision: ID of copying and moving widgets was set to encode for TSYS::oscdID to prevent errors here for wrong symbols.
     FIX:Included widgets resizing and moving in the developing mode by keyboard were fixed for mouse cursor position changing even to the widget's changes.
-    !!!!:FIX: Main window maximizing and opening to full-screen were fixed to prevent the operations by the visualizer specific attribute "runWin"
+    !!!:FIX: Main window maximizing and opening to full-screen were fixed to prevent the operations by the visualizer specific attribute "runWin"
 	working only from the master page. The main window size was set to fit the master page size after return from maximizing and opening to full-screen and
 	starting in original size.
 - FIX:UI.WebVision: Text of buttons into the custom mode was fixed for next line symbol "\n" and words breaking at overflow by CSS property "word-break".

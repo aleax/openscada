@@ -60,7 +60,11 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
 		bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), isResizeManual(false), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL),
+    QMainWindow(QDesktopWidget().screen(iScr)), isResizeManual(false),
+#ifndef QT_NO_PRINTER
+    prPg(NULL), prDiag(NULL), prDoc(NULL),
+#endif
+    fileDlg(NULL),
     winClose(false), conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
     master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
     mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0)
@@ -330,11 +334,13 @@ VisRun::~VisRun( )
     //Clear cache
     pgCacheClear();
 
+#ifndef QT_NO_PRINTER
     //Print objects free
     if(prPg)	delete prPg;
     if(prDiag)	delete prDiag;
     if(prDoc)	delete prDoc;
     if(fileDlg)	delete fileDlg;
+#endif
 }
 
 string VisRun::user( )		{ return mWUser->user(); }
@@ -498,6 +504,7 @@ void VisRun::print( )
 
 void VisRun::printPg( const string &ipg )
 {
+#ifndef QT_NO_PRINTER
     RunPageView *rpg;
     string pg = ipg;
 
@@ -539,11 +546,11 @@ void VisRun::printPg( const string &ipg )
 	painter.setViewport(prPg->paperRect());
 
 	//Draw image
-#if QT_VERSION >= 0x050000
+# if QT_VERSION >= 0x050000
 	QImage im = rpg->grab().toImage();
-#else
+# else
 	QImage im = QPixmap::grabWidget(rpg).toImage();
-#endif
+# endif
 	im = im.scaled(QSize(vmin(im.width()*4,pagl.width()),vmin(im.height()*4,pagl.height()-2*fntSize)),Qt::KeepAspectRatio/*,Qt::SmoothTransformation*/);
 	painter.drawImage((pagl.width()-im.width())/2,fntSize,im);
 
@@ -561,10 +568,12 @@ void VisRun::printPg( const string &ipg )
 
 	painter.end();
     }
+#endif
 }
 
 void VisRun::printDiag( const string &idg )
 {
+#ifndef QT_NO_PRINTER
     RunWdgView *rwdg;
     string dg = idg;
 
@@ -614,11 +623,11 @@ void VisRun::printDiag( const string &idg )
 	painter.setViewport(prDiag->paperRect());
 
 	//Draw image
-#if QT_VERSION >= 0x050000
+# if QT_VERSION >= 0x050000
 	QImage im = rwdg->grab().toImage();
-#else
+# else
 	QImage im = QPixmap::grabWidget(rwdg).toImage();
-#endif
+# endif
 	im = im.scaled(QSize(vmin(im.width()*4,pagl.width()),vmin(im.height()*4,pagl.height()-(2+elLine)*fntSize)),Qt::KeepAspectRatio/*,Qt::SmoothTransformation*/);
 	painter.drawImage((pagl.width()-im.width())/2,fntSize*2,im);
 
@@ -649,10 +658,12 @@ void VisRun::printDiag( const string &idg )
 
 	painter.end();
     }
+#endif
 }
 
 void VisRun::printDoc( const string &idoc )
 {
+#ifndef QT_NO_PRINTER
     RunWdgView *rwdg;
     string doc = idoc;
 
@@ -689,6 +700,7 @@ void VisRun::printDoc( const string &idoc )
     QPrintDialog dlg(prDoc, this);
     dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
     if(dlg.exec() == QDialog::Accepted) ((ShapeDocument::ShpDt*)rwdg->shpData)->print(prDoc);
+#endif
 }
 
 void VisRun::exportDef( )
