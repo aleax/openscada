@@ -33,17 +33,17 @@ License: GPL','lib_servProc','Сервісні процедури','Бібліо
 INSERT INTO "UserFuncLibs" VALUES('doc','Report''s documents','Library of functions to facilitate the implementation of typical computations the primitive form of reporting documentation VCA "Document".
 Founded: January 2008
 Author: Roman Savochenko <rom_as@oscada.org>
-Version: 1.0.0
+Version: 1.1.0
 License: GPL','flb_doc','Звітна документація','Бібліотека функцій для полегшення виконання типових обчислень примітиву формування звітної документації СВК "Документ".
-
 Засновано: січень 2008р
-Автор: Роман Савоченко
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.0
 Ліцензія: GPL','Отчётная документация','Библиотека функций для облегчения выполнения типовых
 вычислений примитива формирования отчётной документации
 СВУ "Документ".
-
-Основан: январь 2008г
-Автор: Роман Савоченко
+Основана: январь 2008г
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.1.0
 Лицензия: GPL',1);
 INSERT INTO "UserFuncLibs" VALUES('regEl','Regulation elements','Regulation elements library.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -57,115 +57,6 @@ INSERT INTO "UserFuncLibs" VALUES('web','XHTML-template','Pages processing funct
 Author: Roman Savochenko
 Version: 0.1.0
 License: GPL','flb_web','XHTML-шаблон','Бібліотека функцій обробки сторінок XHTML-шаблонів користувацткого Web-інтерфейсу.','XHTML-шаблон','Библиотека функций обработки страниц XHTML-шаблонов пользовательского Web-интерфейса.',0);
-CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.',10,'using Special.FLibSYS;
-srcTime = time;
-val = vArh(strPath2Sep(addr)).get(time,uTime,0,archtor);
-return (val.isEVal() || (strong && srcTime != time)) ? "Empty" : real2str(val,prec);','Запит значення архіву','Запит значення на визначений час з вказаного архіву та видача результату з вказаною кількістю знаків після точки.','using Special.FLibSYS;
-srcTime = time;
-val = vArh(strPath2Sep(addr)).get(time,uTime,0,archtor);
-return (val.isEVal() || (strong && srcTime != time)) ? "Порожньо" : real2str(val,prec);','Запрос знач. архива','Запрос значения на указанное время из установленного архива и выдача результата с указанным количеством знаков после точки.','using Special.FLibSYS;
-srcTime = time;
-val = vArh(strPath2Sep(addr)).get(time,uTime,0,archtor);
-return (val.isEVal() || (strong && srcTime != time)) ? "Пусто" : real2str(val,prec);');
-INSERT INTO "flb_doc" VALUES('sumVal','Sum values of archive','Calculating the sum of values ​​for a specified period of time an archive and issuing results with the specified number of decimal points.',10,'using Special.FLibSYS;
-
-a_src = vArh(strPath2Sep(addr));
-
-vl=0.0; buf_beg_u=buf_end_u=0;
-buf_beg=max(a_src.begin(0,archtor),bTime);
-buf_end=min(a_src.end(0,archtor),eTime);
-while( true )
-{
-  r_val = a_src.get(buf_beg,buf_beg_u,true,archtor);
-  if(r_val != EVAL_REAL) vl+=r_val;
-  if( !buf_beg || buf_beg>=buf_end ) break;
-  buf_beg_u++;
-}
-
-return (vl==EVAL_REAL) ? "Empty" : real2str(vl,prec);','Сума значень архіву','Обчислення суми значень за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.','using Special.FLibSYS;
-
-a_src = vArh(strPath2Sep(addr));
-
-tvar=0.0; buf_beg_u=buf_end_u=0;
-buf_beg=max(a_src.begin(0,archtor),bTime);
-buf_end=min(a_src.end(0,archtor),eTime);
-while( true )
-{
-  r_val = a_src.get(buf_beg,buf_beg_u,true,archtor);
-  if(r_val != EVAL_REAL) tvar+=r_val;
-  if( !buf_beg || buf_beg>=buf_end ) break;
-  buf_beg_u++;
-}
-
-return (tvar==EVAL_REAL) ? "Порожньо" : real2str(tvar,prec);','Сумма знач. архива','Вычисление суммы значений за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.','using Special.FLibSYS;
-
-a_src = vArh(strPath2Sep(addr));
-
-vl=0.0; buf_beg_u=buf_end_u=0;
-buf_beg=max(a_src.begin(0,archtor),bTime);
-buf_end=min(a_src.end(0,archtor),eTime);
-while( true )
-{
-  r_val = a_src.get(buf_beg,buf_beg_u,true,archtor);
-  if(r_val != EVAL_REAL) vl+=r_val;
-  if( !buf_beg || buf_beg>=buf_end ) break;
-  buf_beg_u++;
-}
-
-return (vl==EVAL_REAL) ? "Пусто" : real2str(vl,prec);');
-INSERT INTO "flb_doc" VALUES('averVal','Average value of archive','Calculate the average value over a specified period of time an archive and issuing results with the specified number of decimal points.',10,'using Special.FLibSYS;
-a_src = vArh(strPath2Sep(addr));
-
-vl=EVAL_REAL;
-buf_beg=max(a_src.begin(0,archtor),bTime);
-buf_end=min(a_src.end(0,archtor),eTime);
-while( true )
-{
-  buf_beg1=buf_beg;
-  r_val = a_src.get(buf_beg,0,true,archtor);
-  if(vl ==  EVAL_REAL) vl = r_val; 
-  else if(r_val != EVAL_REAL)
-    vl=(vl*(buf_beg-bTime)+r_val*(buf_beg-buf_beg1))/(buf_beg-bTime+buf_beg-buf_beg1);
-  if( buf_beg == 0 || buf_beg>=buf_end ) break;
-  buf_beg++;
-}
-
-return (vl==EVAL_REAL) ? "Empty" : real2str(vl,prec);','Середнє значення архіву','Обчислення середнього значення за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.','using Special.FLibSYS;
-a_src = vArh(strPath2Sep(addr));
-
-tvar=EVAL_REAL;
-buf_beg=max(a_src.begin(0,archtor),bTime);
-buf_end=min(a_src.end(0,archtor),eTime);
-while( true )
-{
-  buf_beg1=buf_beg;
-  r_val = a_src.get(buf_beg,0,true,archtor);
-  if(tvar ==  EVAL_REAL) tvar = r_val; 
-  else if(r_val != EVAL_REAL)
-    tvar=(tvar*(buf_beg-bTime)+r_val*(buf_beg-buf_beg1))/(buf_beg-bTime+buf_beg-buf_beg1);
-  if( buf_beg == 0 || buf_beg>=buf_end ) break;
-  buf_beg++;
-}
-
-return (tvar==EVAL_REAL) ? "Порожньо" : real2str(tvar,prec);','Среднее знач. архива','Вычисление среднего значения за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.','using Special.FLibSYS;
-a_src = vArh(strPath2Sep(addr));
-
-vl=EVAL_REAL;
-buf_beg=max(a_src.begin(0,archtor),bTime);
-buf_end=min(a_src.end(0,archtor),eTime);
-while( true )
-{
-  buf_beg1=buf_beg;
-  r_val = a_src.get(buf_beg,0,true,archtor);
-  if(vl ==  EVAL_REAL) vl = r_val; 
-  else if(r_val != EVAL_REAL)
-    vl=(vl*(buf_beg-bTime)+r_val*(buf_beg-buf_beg1))/(buf_beg-bTime+buf_beg-buf_beg1);
-  if( buf_beg == 0 || buf_beg>=buf_end ) break;
-  buf_beg++;
-}
-
-return (vl==EVAL_REAL) ? "Пусто" : real2str(vl,prec);');
 CREATE TABLE 'flb_doc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "flb_doc_io" VALUES('getVal','rez','Result',0,2,'',0,0,'Результат','','Результат','');
 INSERT INTO "flb_doc_io" VALUES('getVal','addr','Address',0,0,'',0,1,'Адреса','','Адрес','');
@@ -186,6 +77,8 @@ INSERT INTO "flb_doc_io" VALUES('averVal','eTime','End time (s)',1,0,'',0,3,'Ч�
 INSERT INTO "flb_doc_io" VALUES('averVal','prec','Signs after dot',1,0,'3',0,4,'Знаків після коми','','Знаков после запятой','');
 INSERT INTO "flb_doc_io" VALUES('averVal','archtor','Archiver',0,0,'',0,5,'Архіватор','','Архиватор','');
 INSERT INTO "flb_doc_io" VALUES('getVal','strong','Precisely',3,0,'0',0,6,'Точно','','Точно','');
+INSERT INTO "flb_doc_io" VALUES('getVal','tryTo','Пробовать значение до {микросек}',1,0,'0',0,7,'','','Пробовать значение до {микросек}','');
+INSERT INTO "flb_doc_io" VALUES('averVal','actPerc','Процент активных значений',2,1,'',0,6,'','','Процент активных значений','');
 CREATE TABLE 'flb_regEl_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','');
 INSERT INTO "flb_regEl_io" VALUES('pidUnif','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','');
@@ -3070,6 +2963,7 @@ INSERT INTO "Trs" VALUES('Tries number %1 out of range [1...5].','','');
 INSERT INTO "Trs" VALUES('Get data after %1 tries error.','','');
 INSERT INTO "Trs" VALUES('None of good battery present','','');
 INSERT INTO "Trs" VALUES('Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.','','');
+INSERT INTO "Trs" VALUES('Empty','Порожньо','Пусто');
 CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_DevLib" VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data request by SCU750 Cotrol Unit protocol.
 Author: Roman Savochenko <rom_as@oscada.org>
@@ -9476,4 +9370,84 @@ else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x16)&&(request.c
 else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x00)&&(answer.length==8))
  io.setText(b1.toInt(16).toString(10,2,)+b2.toInt(16).toString(10,2,)+b3.toInt(16).toString(10,2,)+b4.toInt(16).toString(10,2,));
 ;}',1496394962);
+CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Запит значення архіву','Запрос знач. архива','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','Запит значення на визначений час з вказаного архіву та видача результату з вказаною кількістю знаків після точки.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.0','Запрос значения на указанное время из установленного архива и выдача результата с указанным количеством знаков после точки.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.1.0',1,10,0,'srcTime = time*1e6 + uTime;
+aO = SYS.nodeAt(addr).arch();
+if(aO) {
+	if(!tryTo || tryTo == srcTime)	val = aO.getVal(srcTime, false, archtor);
+	else {
+		aPer = aO.period(archtor);
+		if(srcTime < tryTo)
+			for(srcTime1 = srcTime; srcTime < tryTo && (val=aO.getVal(srcTime1,false,archtor)).isEVal(); )
+			{ srcTime += aPer; srcTime1 = srcTime; }
+		else
+			for(srcTime1 = srcTime; srcTime > tryTo && (val=aO.getVal(srcTime1,false,archtor)).isEVal(); )
+			{ srcTime -= aPer; srcTime1 = srcTime; }
+	}
+	if(strong && (srcTime*1e-6) != time)	val = EVAL;
+} else val = EVAL;
+if(prec < 0)	return val;
+if(val.isEVal())	return tr("Empty");
+if(typeof(val) == "real")	return val.toFixed(prec);
+return val;','','',1501145635);
+INSERT INTO "flb_doc" VALUES('sumVal','Sum values of archive','Сума значень архіву','Сумма знач. архива','Calculating the sum of values ​​for a specified period of time an archive and issuing results with the specified number of decimal points.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','Обчислення суми значень за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.0','Вычисление суммы значений за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.1.0',1,10,0,'val = 0;
+aO = SYS.nodeAt(addr).arch();
+if(aO) {
+	bTime = bTime*1e6; eTime = eTime*1e6;
+	buf_beg = max(aO.begin(archtor), bTime); buf_end = min(aO.end(archtor), eTime);
+	while(true) {
+		r_val = aO.getVal(buf_beg, true, archtor);
+		if(buf_beg > buf_end)	break;
+		if(!r_val.isEVal())	val += r_val;
+		if(buf_beg == 0 || buf_beg >= buf_end) break;
+		buf_beg++;
+	}
+}
+if(prec < 0)	return val;
+if(val.isEVal())	return tr("Empty");
+if(typeof(val) == "real")	return val.toFixed(prec);
+return val;','','',1501231568);
+INSERT INTO "flb_doc" VALUES('averVal','Average value of archive','Середнє значення архіву','Среднее знач. архива','Calculate the average value over a specified period of time an archive and issuing results with the specified number of decimal points.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.1.0','Обчислення середнього значення за проміжок часу визначеного архіву та видача результату з вказаною кількістю знаків після точки.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.1.0','Вычисление среднего значения за промежуток времени указанного архива и выдача результата с указанным количеством знаков после точки.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.1.0',1,10,0,'val = EVAL;
+actPerc = 0;
+aO = SYS.nodeAt(addr).arch();
+if(aO) {
+	bTime = bTime*1e6; eTime = eTime*1e6;
+	vCnt = (eTime-bTime)/aO.period(archtor)+1;
+	buf_beg = max(aO.begin(archtor), bTime); buf_end = min(aO.end(archtor), eTime);
+	for(vCntA = 0; true; ) {
+  		buf_beg1 = buf_beg;
+		r_val = aO.getVal(buf_beg, true, archtor);
+		if(buf_beg > buf_end)	break;
+		if(!r_val.isEVal())	vCntA++;
+		if(val.isEVal())	val = r_val;
+		else if(!r_val.isEVal())
+			val = (val*(buf_beg-bTime) + r_val*(buf_beg-buf_beg1))/(buf_beg - bTime + buf_beg - buf_beg1);
+		if(buf_beg == 0 || buf_beg >= buf_end) break;
+		buf_beg++;
+	}
+	//SYS.messInfo("averVal", "vCntA="+vCntA+"("+vCnt+"); archtor="+archtor); 
+	actPerc = vCntA ? min(100,100*vCntA/vCnt) : 0;
+}
+if(prec < 0)	return val;
+if(val.isEVal())	return tr("Empty");
+if(typeof(val) == "real")	return val.toFixed(prec);
+return val;','','',1501228052);
 COMMIT;

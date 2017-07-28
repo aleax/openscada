@@ -1769,7 +1769,7 @@ void Func::setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val )
 void Func::calc( TValFunc *val )
 {
     fRes().resRequestR();
-    if(!startStat()) return;
+    if(!startStat()) { fRes().resRelease(); return; }
 
     //Exec calc
     try {

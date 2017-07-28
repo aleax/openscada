@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.3"
+#define MOD_VER		"2.1.4"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on WEB - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -686,21 +686,21 @@ string TWEB::trMessReplace( const string &tsrc )
 {
     string trez; trez.reserve(tsrc.size());
 
-    unsigned txtBeg = 0, i_s, i_r;
-    for(i_s = 0; i_s < tsrc.size(); i_s++)
-	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#') {
-	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
-	    if((tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n')
+    unsigned txtBeg = 0, iS, iR;
+    for(iS = 0; iS < tsrc.size(); iS++)
+	if(tsrc[iS] == '#' && tsrc.substr(iS,3) == "###" && (iS+3)<tsrc.size() && tsrc[iS+3] != '#') {
+	    for(iR = iS+3; iR < tsrc.size(); iR++)
+	    if((tsrc[iR] == '#' && tsrc.substr(iR,3) == "###" && ((iR+3)>=tsrc.size() || tsrc[iR+3] != '#')) || tsrc[iR] == '\n')
 		break;
-	    if(i_r < tsrc.size() && tsrc[i_r] != '\n') {
-		trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
-		trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
-		i_s = i_r+2;
-		txtBeg = i_r+3;
+	    if(iR < tsrc.size() && tsrc[iR] != '\n') {
+		trez.append(tsrc.substr(txtBeg,iS-txtBeg));
+		trez.append(_(tsrc.substr(iS+3,iR-iS-3).c_str()));
+		iS = iR+2;
+		txtBeg = iR+3;
 		continue;
 	    }
 	}
-    if(txtBeg < i_s) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+    if(txtBeg < iS) trez.append(tsrc.substr(txtBeg,iS-txtBeg));
 
     return trez;
 }

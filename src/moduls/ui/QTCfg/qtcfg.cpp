@@ -74,7 +74,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) : reqPrgrs(NULL),
-    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false)
+    pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
 {
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -1918,6 +1918,10 @@ void ConfApp::viewChild( QTreeWidgetItem * i )
 
 void ConfApp::pageDisplay( const string &path )
 {
+    if(pgDisplay) return;
+    pgDisplay = true;
+
+    try {
     //Chek Up
     actUp->setEnabled(path.rfind("/") != string::npos && path.rfind("/") != 0);
 
@@ -1996,6 +2000,7 @@ loadGenReqDate:
 	if(cntrIfCmd(genReqs)) {
 	    mod->postMess(genReqs.attr("mcat"), genReqs.text(), TUIMod::Error, this);
 	    genReqs.clear();
+	    pgDisplay = false;
 	    return;
 	}
 	goto loadGenReqDate;
@@ -2009,6 +2014,9 @@ loadGenReqDate:
 
     //Edit tools update
     editToolUpdate();
+
+    pgDisplay = false;
+    } catch(TError) { pgDisplay = false; throw; }
 }
 
 bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )

@@ -1,3 +1,12 @@
+2017-07-28 Roman (stable)
+- !!:DB.LibsDB.OscadaLibs: flb_doc.{getVal,sumVal,averVal} were significant cleaned, rewrote and expanded but with back compatibility saving.
+- !!:FIX:DB.LibsDB.vcaElectroEls: Significant clearing and full translation were finished. Procedure of the item "Key" was fixed.
+- Archives: Tabs "Messages archive" and "Value archives" of the control page were renamed to "Messages" and "Values" respectively.
+- !!!!:FIX:DAQ.JavaLikeCalc: The resource fRes() dead locking was prevented after the wrong optimization.
+- FIX:UI.QTCfg: Function ConfApp::pageDisplay() double call sometime was prevented.
+- UI.WebVision: The source code was some cleared.
+
+
 2017-07-21 Roman (stable)
 - SYS: "langinfo.h" and "syscall.h" were set for conditional one, initially for Android original NDK.
     __ANDROID_API__ getting was added to deep control for conditions of Android, initially it is for pthread_condattr_setclock().
@@ -5,7 +14,7 @@
 
 
 2017-07-14 Roman (stable)
-- !!!!:DB.LibsDB.vcaElectroEls: Significant cleared and expanded. Will be continued to finish the cleaning and translation.
+- !!:DB.LibsDB.vcaElectroEls: Significant cleared and expanded. Will be continued to finish the cleaning and translation.
 - UI.VCAEngine: Limit of the generic attributes "geomXsc" and "geomYsc" was expanded from [0.1:100] to [0.01:100].
 - FIX:UI.Vision: ID of copying and moving widgets was set to encode for TSYS::oscdID to prevent errors here for wrong symbols.
     FIX:Included widgets resizing and moving in the developing mode by keyboard were fixed for mouse cursor position changing even to the widget's changes.

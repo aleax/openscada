@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 16:30+0300\n"
+"POT-Creation-Date: 2017-07-28 16:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,7 +189,7 @@ msgstr ""
 msgid "Remote"
 msgstr ""
 
-msgid "Messages archive"
+msgid "Messages"
 msgstr ""
 
 msgid "Messages buffer size"
@@ -230,9 +230,6 @@ msgid ""
 "Set '<buffer>' for process by buffer."
 msgstr ""
 
-msgid "Messages"
-msgstr ""
-
 msgid "Time"
 msgstr ""
 
@@ -248,7 +245,7 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-msgid "Value archives"
+msgid "Values"
 msgstr ""
 
 msgid "Get data period (ms)"
@@ -261,6 +258,9 @@ msgid "Variable timestamp force to current time"
 msgstr ""
 
 msgid "Number"
+msgstr ""
+
+msgid "Value archives"
 msgstr ""
 
 #, c-format
@@ -406,9 +406,6 @@ msgid "Process"
 msgstr ""
 
 msgid "Period (s)"
-msgstr ""
-
-msgid "Values"
 msgstr ""
 
 msgid "Microseconds"

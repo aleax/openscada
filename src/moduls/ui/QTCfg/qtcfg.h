@@ -234,7 +234,7 @@ private:
     int		inHostReq;
     map<string, SCADAHost*> hosts;
 
-    bool	tblInit;
+    bool	tblInit, pgDisplay;
 };
 
 }

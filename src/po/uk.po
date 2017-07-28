@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2016.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 16:30+0300\n"
+"POT-Creation-Date: 2017-07-28 16:55+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -204,8 +204,8 @@ msgstr "Уподоб. вик."
 msgid "Remote"
 msgstr "Віддалений"
 
-msgid "Messages archive"
-msgstr "Архів повідомлень"
+msgid "Messages"
+msgstr "Повідомлення"
 
 msgid "Messages buffer size"
 msgstr "Розмір буферу повідомлень"
@@ -261,9 +261,6 @@ msgstr ""
 "Не встановлюйте поле для обробки запиту буфером та всіма архіваторами.\n"
 "Встановіть '<buffer>' для обробки запиту буфером."
 
-msgid "Messages"
-msgstr "Повідомлення"
-
 msgid "Time"
 msgstr "Час"
 
@@ -279,8 +276,8 @@ msgstr "Рів."
 msgid "Message"
 msgstr "Повідомлення"
 
-msgid "Value archives"
-msgstr "Архіви значень"
+msgid "Values"
+msgstr "Значення"
 
 msgid "Get data period (ms)"
 msgstr "Період отримання даних (мс)"
@@ -293,6 +290,9 @@ msgstr "Примусово встановлювати мітку часу у п�
 
 msgid "Number"
 msgstr "Кількість"
+
+msgid "Value archives"
+msgstr "Архіви значень"
 
 #, c-format
 msgid "All: %d; Enabled: %d"
@@ -456,9 +456,6 @@ msgstr "Обробка"
 
 msgid "Period (s)"
 msgstr "Період (с)"
-
-msgid "Values"
-msgstr "Значення"
 
 msgid "Microseconds"
 msgstr "Мікросекунди"
@@ -1621,6 +1618,7 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2340,6 +2338,7 @@ msgstr "Логічний"
 msgid "-select"
 msgstr "-вибір"
 
+#, c-format
 msgid ""
 "Parameter's attribute\n"
 "  ID: '%s'\n"
@@ -2517,12 +2516,3 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
-
-#~ msgid "Start!"
-#~ msgstr "Запущено!"
-
-#~ msgid "Stop!"
-#~ msgstr "Зупинка!"
-
-#~ msgid "Doc check"
-#~ msgstr "Перевірка документу"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 16:30+0300\n"
+"POT-Creation-Date: 2017-07-28 16:55+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -210,8 +210,8 @@ msgstr "Prior. Stufe"
 msgid "Remote"
 msgstr "Gelöscht"
 
-msgid "Messages archive"
-msgstr "Nachrichtarchiv"
+msgid "Messages"
+msgstr "Nachrichten"
 
 msgid "Messages buffer size"
 msgstr "Größe des Nachrichtenspeichers"
@@ -268,9 +268,6 @@ msgstr ""
 "von allen Archivatoren.\n"
 "Installieren Sie '<buffer>' für die Bearbeitung der Anfrage vom Puffer."
 
-msgid "Messages"
-msgstr "Nachrichten"
-
 msgid "Time"
 msgstr "Zeit"
 
@@ -286,8 +283,8 @@ msgstr "St."
 msgid "Message"
 msgstr "Nachricht"
 
-msgid "Value archives"
-msgstr "Wertearchive"
+msgid "Values"
+msgstr "Werte"
 
 msgid "Get data period (ms)"
 msgstr "Zeitintervall für Datenempfang (ms)"
@@ -300,6 +297,9 @@ msgstr "Variable Zeitstempel Kraft zu aktuellen Zeit"
 
 msgid "Number"
 msgstr "Anzahl"
+
+msgid "Value archives"
+msgstr "Wertearchive"
 
 #, c-format
 msgid "All: %d; Enabled: %d"
@@ -460,9 +460,6 @@ msgstr "Bearbeitung"
 
 msgid "Period (s)"
 msgstr "Intervall (sek)"
-
-msgid "Values"
-msgstr "Werte"
 
 msgid "Microseconds"
 msgstr "Mikrosekunden"
@@ -1636,6 +1633,7 @@ msgstr ""
 msgid "B"
 msgstr ""
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2356,6 +2354,7 @@ msgstr "Logisch"
 msgid "-select"
 msgstr "-Wahl"
 
+#, c-format
 msgid ""
 "Parameter's attribute\n"
 "  ID: '%s'\n"
