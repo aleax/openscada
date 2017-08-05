@@ -9491,8 +9491,8 @@ INSERT INTO "wlb_Main_uio" VALUES('TextLab','close','Parameter: close',131072,'0
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','com','Parameter: command',131072,'0',14,'Parameter|com','','','Параметр: команда','','','Параметр: команда','','Parameter|com','','');
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','digComs','Commands',131077,'',10,'Parameter|digComs','','','Команди','','','Команды','','Parameter|digComs','','');
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','Parameter|digStts','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','Parameter|st_close','','');
-INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','Parameter|st_open','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','st_text','Parameter: status (text)',131077,'',10,'Parameter|st_text','','','Параметр: статус (текст)','','','Параметр: статус (текст)','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('TextLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: стоп','','','Параметр: стоп','','Parameter|stop','','');
 INSERT INTO "wlb_Main_uio" VALUES('anShow1','pNAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','||','Parameter|NAME','Параметр: имя','','','','');
@@ -9657,66 +9657,90 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','tmpl','<body docProcLang="Java
 <h1>Table of average over hour values</h1>
 
 <TABLE class="data" width="100%">
-  <TR align="left" valign="center"><TH colspan="7">The operation date over XXX Calculator # Pipeline #.<?dp return "The operation date over "+Special.FLibSYS.tmFStr(time,"%d %m %Y")+" Calculator # Pipeline #.";?>
-  </TH></TR>
-  <TR><TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
-  <TR><TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>1000x m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
-  <TR docRept="3600">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m")+"</TD>"+
-			"<TD>"+Special.FLibSYS.tmFStr(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+Special.FLibSYS.tmFStr(rTime,"%H:%M")+"</TD>"+
-			"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pQ,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-			"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDP,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-			"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pP,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-			"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pT,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-			"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDS,rTime-1,0,2,"FSArch.1h")+"</TD>";?>
-  </TR>
-  <TR><TD colspan="2">All</TD>
-  <TD>XXX.XXX (1000x m3)<?dp return DAQ.JavaLikeCalc.lib_doc.sumVal(pQ,bTime,time,2,"FSArch.1h")+" (1000x m3)";?></TD>
-  <TD colspan="4">&nbsp;</TD></TR>
+	<TR align="left" valign="center"><TH colspan="7">The operation date over XXX Calculator # Pipeline #.<?dp return "The operation date over "+SYS.strftime(time,"%d %m %Y")+" Calculator # Pipeline #.";?>
+	</TH></TR>
+	<TR><TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
+	<TR><TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>1000x m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
+	<TR docRept="3600">
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
+		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
+		"<TD>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
+		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
+	</TR>
+	<TR><TD colspan="2">Summary</TD>
+	<TD>XXX.XXX (1000x m3)
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+	return ((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3));?>
+</TD>
+	<TD colspan="4">&nbsp;</TD></TR>
 </TABLE>
 </body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблиця усереднених за годину значень</h1>
 
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="left" valign="center"><TH colspan="7">
-Оперативні дані за XXX Обчислювач # Трубопровід #.<?dp return "Оперативні дані за "+Special.FLibSYS.tmFStr(time,"%d %m %Y")+" Обчислювач # Трубопровід #.";?>
-  </TH></TR>
-  <TR><TH>Дата</TH><TH>Час</TH><TH>Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
-  <TR><TH>&nbsp;</TH><TH>поч.&nbsp;&nbsp;кін.</TH><TH>Тис. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-  <TR docRept="3600">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+Special.FLibSYS.tmFStr(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pQ,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDP,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pP,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pT,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDS,rTime-1,0,2,"FSArch.1h")+"</TD>";?>
-  </TR>
-  <TR><TD colspan="2">Разом</TD>
-  <TD>XXX.XXX (тис. м3)<?dp return DAQ.JavaLikeCalc.lib_doc.sumVal(pQ,bTime,time,2,"FSArch.1h")+" (тис. м3)";?></TD>
-  <TD colspan="4">&nbsp;</TD></TR>
+<TABLE class="data" width="100%">
+	<TR align="left" valign="center"><TH colspan="7">Оперативні дані за XXX Обчислювач # Трубопровід #.
+<?dp return "Оперативні дані за "+SYS.strftime(time,"%d %m %Y")+" Обчислювач # Трубопровід #.";?>
+	</TH></TR>
+	<TR><TH>Дата</TH><TH>Час</TH><TH>Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
+	<TR><TH>&nbsp;</TH><TH>поч.&nbsp;&nbsp;кін.</TH><TH>Тис. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
+	<TR docRept="3600">
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
+		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
+		"<TD>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
+		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
+	</TR>
+	<TR><TD colspan="2">Разом</TD>
+	<TD>XXX.XXX (1000x м3)
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+	return ((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3));?>
+</TD>
+	<TD colspan="4">&nbsp;</TD></TR>
 </TABLE>
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблица среднечасовых значений</h1>
 
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="left" valign="center"><TH colspan="7">
-Оперативные данные за XXX Вычислитель # Трубопровод #.<?dp return "Оперативные данные за "+Special.FLibSYS.tmFStr(time,"%d %m %Y")+" Вычислитель # Трубопровод #.";?>
-  </TH></TR>
-  <TR><TH>Дата</TH><TH>Время</TH><TH>Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
-  <TR><TH>&nbsp;</TH><TH>нач.&nbsp;&nbsp;кон.</TH><TH>Тыс. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-  <TR docRept="3600">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime,"%d %m")+"</TD>"+
-		"<TD>"+Special.FLibSYS.tmFStr(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+Special.FLibSYS.tmFStr(rTime,"%H:%M")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pQ,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDP,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pP,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pT,rTime-1,0,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.getVal(pDS,rTime-1,0,2,"FSArch.1h")+"</TD>";?>
-  </TR>
-  <TR><TD colspan="2">Всего</TD>
-  <TD>XXX.XXX (тыс. м3)<?dp return DAQ.JavaLikeCalc.lib_doc.sumVal(pQ,bTime,time,2,"FSArch.1h")+" (тыс. м3)";?></TD>
-  <TD colspan="4">&nbsp;</TD></TR>
+<TABLE class="data" width="100%">
+	<TR align="left" valign="center"><TH colspan="7">Оперативные данные за XXX Вычислитель # Трубопровод #.
+<?dp return "Оперативные данные за "+SYS.strftime(time,"%d %m %Y")+" Вычислитель # Трубопровод #.";?>
+	</TH></TR>
+	<TR><TH>Дата</TH><TH>Время</TH><TH>Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
+	<TR><TH>&nbsp;</TH><TH>нач.&nbsp;&nbsp;кон.</TH><TH>Тыс. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
+	<TR docRept="3600">
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+	return "<TD>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
+		"<TD>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>"+
+		"<TD>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
+		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
+	</TR>
+	<TR><TD colspan="2">Всего</TD>
+	<TD>XXX.XXX (1000x м3)
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+	return ((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3));?>
+</TD>
+	<TD colspan="4">&nbsp;</TD></TR>
 </TABLE>
 </body>','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeDayA','bTime','0',40,'','','doc','','','','','','');
@@ -9729,67 +9753,87 @@ INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','tmpl','<body docProcLang="Ja
 <h1>Table of average over day values</h1>
 
 <TABLE class="data" width="100%">
-  <TR align="left" valign="center"><TH colspan="7">
-Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+Special.FLibSYS.tmFStr(time,"%m %Y")+" Calculator # Pipeline #.";?>
+	<TR align="left" valign="center"><TH colspan="7">Days data over XXXXX Calculator # Pipeline #.<?dp return "Day data over "+SYS.strftime(time,"%m %Y")+" Calculator # Pipeline #.";?>
   </TH></TR>
-  <TR><TH>Date</TH><TH colspan="2">Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
-  <TR><TH>&nbsp;</TH><TH colspan="2">1000x m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
-  <TR docRept="86400">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime-rPer,"%d %m %Y")+"</TD>"+
-		"<TD colspan=''2''>"+DAQ.JavaLikeCalc.lib_doc.averVal(pQ,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pDP,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pP,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pT,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pDS,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>";?>
-  </TR>
-  <TR><TD>All</TD>
-    <TD colspan="2">XXX.XXX (1000x m3)<?dp return DAQ.JavaLikeCalc.lib_doc.sumVal(pQ,bTime,time,2,"FSArch.1h")+" (1000x m3)";?></TD>
-    <TD colspan="4">&nbsp;</TD>
-  </TR>
+	<TR><TH>Date</TH><TH colspan="2">Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
+  	<TR><TH>&nbsp;</TH><TH colspan="2">1000x m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
+	<TR docRept="86400">
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
+		"<TD colspan=''2''>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
+		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
+	</TR>
+	<TR><TD colspan="2">Summary</TD>
+	<TD>XXX.XXX (1000x m3)
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+	return ((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3));?>
+</TD>
+	<TD colspan="4">&nbsp;</TD></TR>
 </TABLE>
 </body>',32,'','','doc','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблиця середньодобових значень</h1>
 
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="left" valign="center"><TH colspan="7">
-Добові дані за XXXXX Обчислювач # Трубопровід #.<?dp return "Добові дані за "+Special.FLibSYS.tmFStr(time,"%m %Y")+" Обчислювач # Трубопровід #.";?>
+<TABLE class="data" width="100%">
+	<TR align="left" valign="center"><TH colspan="7">Добові дані за XXXXX Обчислювач # Трубопровід #.
+<?dp return "Добові дані за "+SYS.strftime(time,"%m %Y")+" Обчислювач # Трубопровід #.";?>
   </TH></TR>
-  <TR><TH>Дата</TH><TH colspan="2">Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
-  <TR><TH>&nbsp;</TH><TH colspan="2">Тис. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-  <TR docRept="86400">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime-rPer,"%d %m %Y")+"</TD>"+
-		"<TD colspan=''2''>"+DAQ.JavaLikeCalc.lib_doc.averVal(pQ,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pDP,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pP,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pT,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pDS,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>";?>
-  </TR>
-  <TR><TD>Разом</TD>
-    <TD colspan="2">XXX.XXX (тис. м3)<?dp return DAQ.JavaLikeCalc.lib_doc.sumVal(pQ,bTime,time,2,"FSArch.1h")+" (тис. м3)";?></TD>
-    <TD colspan="4">&nbsp;</TD>
-  </TR>
+	<TR><TH>Дата</TH><TH colspan="2">Об''єм</TH><TH>Сер. переп.</TH><TH>Ст. тиск</TH><TH>Сер. темп.</TH><TH>Щільність</TH></TR>
+	<TR><TH>&nbsp;</TH><TH colspan="2">Тис. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
+	<TR docRept="86400">
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
+		"<TD colspan=''2''>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
+		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
+	</TR>
+	<TR><TD colspan="2">Разом</TD>
+	<TD>XXX.XXX (1000x м3)
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+	return ((V1.isEVal() || V2.isEVal())?"Порожньо":abs(V2-V1).toFixed(3));?>
+</TD>
+	<TD colspan="4">&nbsp;</TD></TR>
 </TABLE>
 </body>','','<body docProcLang="JavaLikeCalc.JavaScript">
 <h1>Таблица среднесуточных значений</h1>
 
-<TABLE border="1" cellpadding="2" cellspacing="0" width="100%">
-  <TR align="left" valign="center"><TH colspan="7">
-Суточные данные за XXXXX Вычислитель # Трубопровод #.<?dp return "Суточные данные за "+Special.FLibSYS.tmFStr(time,"%m %Y")+" Вычислитель # Трубопровод #.";?>
+<TABLE class="data" width="100%">
+	<TR align="left" valign="center"><TH colspan="7">Суточные данные за XXXXX Вычислитель # Трубопровод #.
+<?dp return "Суточные данные за "+SYS.strftime(time,"%m %Y")+" Вычислитель # Трубопровод #.";?>
   </TH></TR>
-  <TR><TH>Дата</TH><TH colspan="2">Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
-  <TR><TH>&nbsp;</TH><TH colspan="2">Тыс. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
-  <TR docRept="86400">
-	<?dp return "<TD>"+Special.FLibSYS.tmFStr(rTime-rPer,"%d %m %Y")+"</TD>"+
-		"<TD colspan=''2''>"+DAQ.JavaLikeCalc.lib_doc.averVal(pQ,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pDP,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pP,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pT,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>"+
-		"<TD>"+DAQ.JavaLikeCalc.lib_doc.averVal(pDS,rTime-rPer,rTime,2,"FSArch.1h")+"</TD>";?>
-  </TR>
-  <TR><TD>Всего</TD>
-    <TD colspan="2">XXX.XXX (тыс. м3)<?dp return DAQ.JavaLikeCalc.lib_doc.sumVal(pQ,bTime,time,2,"FSArch.1h")+" (тыс. м3)";?></TD>
-    <TD colspan="4">&nbsp;</TD>
-  </TR>
+	<TR><TH>Дата</TH><TH colspan="2">Объём</TH><TH>Ср. переп.</TH><TH>Ст. давл.</TH><TH>Ср. темп.</TH><TH>Плотность</TH></TR>
+	<TR><TH>&nbsp;</TH><TH colspan="2">Тыс. м3</TH><TH>кГс/м2</TH><TH>кГс/см</TH><TH>град.С</TH><TH>кг/м3</TH></TR>
+	<TR docRept="86400">
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+	return "<TD>"+SYS.strftime(rTime-rPer,"%d %m %Y")+"</TD>"+
+		"<TD colspan=''2''>"+((V1.isEVal() || V2.isEVal())?"Empty":abs(V2-V1).toFixed(3))+"</TD>"+
+		"<TD>"+averVal(pDP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pP,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pT,rTime-rPer,rTime,2,arch)+"</TD>"+
+		"<TD>"+averVal(pDS,rTime-rPer,rTime,2,arch)+"</TD>";?>
+	</TR>
+	<TR><TD colspan="2">Всего</TD>
+	<TD>XXX.XXX (1000x м3)
+<?dp using DAQ.JavaLikeCalc.lib_doc;
+	if(!(V1=getVal(pQ,bTime,0,-1,arch,false,time*1e6)).isEVal())	V1 = V1.toReal();
+	if(!(V2=getVal(pQ,time,0,-1,arch,false,bTime*1e6)).isEVal())	V2 = V2.toReal();
+	return ((V1.isEVal() || V2.isEVal())?"Пусто":abs(V2-V1).toFixed(3));?>
+</TD>
+	<TD colspan="4">&nbsp;</TD></TR>
 </TABLE>
 </body>','','','');
 INSERT INTO "wlb_doc_io" VALUES('docGasNodeMonthA','bTime','0',40,'','','doc','','','','','','');
@@ -11205,23 +11249,23 @@ INSERT INTO "wlb_doc_io" VALUES('docMessRep','font','Arial 15',32,'','','lab_flt
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','alignment','8',32,'','','lab_fltr','','','','','','');
 INSERT INTO "wlb_doc_io" VALUES('docMessRep','text','Filter:',32,'','','lab_fltr','Фільтр:','','Фильтр:','','','');
 CREATE TABLE 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastDay','Last day',131073,'-1||',8,'','','','Останній день','','','Последний день','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastHour','Last hour',131073,'-1||',8,'','','','Остання година','','','Последний час','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastMin','Last minute',131073,'-1||',8,'','','','Остання хвилина','','','Последняя минута','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pT','Point: temperature',196613,'<EVAL>||',2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pQ','Point: volume',196613,'<EVAL>||',2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pP','Point: pressure',196613,'<EVAL>||',2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pDS','Point: density',196613,'<EVAL>||',2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pDP','Point: pressure diff.',196613,'<EVAL>||',2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastDay','Last day',131073,'-1||',8,'','','','Останній день','','','Последний день','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastHour','Last hour',131073,'-1||',8,'','','','Остання година','','','Последний час','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastMin','Last minute',131073,'-1||',8,'','','','Остання хвилина','','','Последняя минута','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastMonth','Last month',131073,'-1||',8,'','','','Останній місяць','','','Последний месяц','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pT','Point: temperature',196613,'<EVAL>||',2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pQ','Point: volume',196613,'<EVAL>||',2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pP','Point: pressure',196613,'<EVAL>||',2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pDS','Point: density',196613,'<EVAL>||',2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pDP','Point: pressure diff.',196613,'<EVAL>||',2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','lastMin','Last minute',131073,'-1|',8,'','','','Остання хвилина','','','Последняя минута','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastMin','Last minute',131073,'-1|',8,'','','','Остання хвилина','','','Последняя минута','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','lastMonth','Last month',131073,'-1|',8,'','','','Останній місяць','','','Последний месяц','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pT','Point: temperature',196613,NULL,2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pQ','Point: volume',196613,NULL,2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pP','Point: pressure',196613,NULL,2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pDS','Point: density',196613,NULL,2,'Point|DS','','doc','Вузол: щільність','','','Узел: плотность','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','pDP','Point: pressure diff.',196613,NULL,2,'Point|dP','','doc','Вузол: перепад','','','Узел: перепад','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docUsersSet','pT','Point: temperature',196613,'<EVAL>',2,'Point|T','','doc','Вузол: температура','','','Узел: температура','','Point|T','','');
 INSERT INTO "wlb_doc_uio" VALUES('docUsersSet','pQ','Point: volume',196613,'<EVAL>',2,'Point|Q','','doc','Вузол: об''єм','','','Узел: объём','','Point|Q','','');
 INSERT INTO "wlb_doc_uio" VALUES('docUsersSet','pP','Point: pressure',196613,'<EVAL>',2,'Point|P','','doc','Вузол: тиск','','','Узел: давление','','Point|P','','');
@@ -11254,8 +11298,8 @@ INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','cKL','Point: coefficient 
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','cKsh','Point: coefficient of harshness',131076,'<EVAL>||',1,'','','doc','Вузол: коефіцієнт шорсткості','','','Узел: коэффициент шерохов.','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','cKtup','Point: coefficient of blunting',131076,'<EVAL>||',1,'','','doc','Вузол: коефіцієнт притупл.','','','Узел: коэффициент притупл.','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','cMoldN','Point: molar part of N',131076,'<EVAL>||',1,'','','doc','Вузол: молярна доля N2','','','Узел: молярная доля N2','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','closeDoc','Close document',131072,'0||',8,'','','','Закриття документа','','','Закрывать документ','','','','');
-INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','closeDoc','Close document',131072,'0||',8,'','','','Закриття документа','','','Закрытие документа','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрывать документ','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','closeDoc','Close document',131072,'0',8,'','','','Закриття документа','','','Закрытие документа','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayOrder','closeDoc','Close document',131072,'<EVAL>||',8,'','','','Закриття документа','','','Закрытие документа','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docRepSm2','p1_ed','Parameter1: dimens',131077,'<EVAL>||',2,'Parameter 1|ed','','doc','Параметр1: од.виміру','','','Параметр1: ед.изм.','<EVAL>','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docRepSm2','p2_ed','Parameter2: dimens',131077,'<EVAL>||',2,'Parameter 2|ed','','doc','Параметр2: од.виміру','','','Параметр2: ед.изм.','<EVAL>','','','');
@@ -11316,6 +11360,10 @@ INSERT INTO "wlb_doc_uio" VALUES('docMessRep','archLs','Archivers list, "{ArhMod
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','messCat','Messages category',131077,'1:/^(al|OP|/sub_UI/mod_VCAEngine)/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','fltr','Filter: value',131077,NULL,2,'','wdg:../wdg_fltr/a_value','doc','Фільтр: значення','','','Фільтр: значение','','','','');
 INSERT INTO "wlb_doc_uio" VALUES('docMessRep','fltrCol','Filter: by column',131077,NULL,8,'','','doc','Фільтр: за стовпчиками','','','Фильтр: по колонкам','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','repHour','Report hour',131073,'9|',9,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeDayA','arch','Archiver',131077,'FSArch.1m',1,'','','doc','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','repHour','Report hour',131073,'9|',9,'','','','','','','','','','','');
+INSERT INTO "wlb_doc_uio" VALUES('docGasNodeMonthA','arch','Archiver',131077,'FSArch.1m',1,'','','doc','','','','','','','','');
 CREATE TABLE 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO "wlb_mnEls_incl" VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -19913,7 +19961,7 @@ OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
 KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
 1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
 sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text',0,'JavaLikeCalc.JavaScript
-if(f_start)	isErr = false, alBlnk = false, cnt = 0;
+if(f_start)	isErr = false, alBlnk = false, cnt = 0, fixText = (text != "---");
 
 //Prepare/update the context menu
 if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
@@ -19933,7 +19981,7 @@ if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
 //Display label from st_text
 stCur = -1;
 if(!st_text.isEVal() && st_text.length) {
-	text = st_text.parse(0,":");
+	if(!fixText)	text = st_text.parse(0,":");
 	blink = st_text.parse(2,":").toInt();
 	backClr = st_text.parse(1,":").parse(0,"-");
 	if(blink) {
@@ -19946,15 +19994,21 @@ if(!st_text.isEVal() && st_text.length) {
 //Display typical for st_open
 else if(st_open == true || st_close == false) {
 	backColor = (stVal=digStts.parse(0,";").parse(1,"-")).length ? stVal : "green";
-	text = (!digStts.isEVal() && (stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : tr("Enable");
+	if(!fixText)
+		text = (!digStts.isEVal() && (stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : tr("Enable");
 	stCur = 1;
 }
 else if(st_open == false || st_close == true) {
 	backColor = (stVal=digStts.parse(1,";").parse(1,"-")).length ? stVal : "blue";
-	text = (!digStts.isEVal() && (stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : tr("Disable");
+	if(!fixText)
+		text = (!digStts.isEVal() && (stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : tr("Disable");
 	stCur = 0;
 }
-else { backColor = "grey"; text = "---"; return; }
+else {
+	backColor = "grey";
+	if(!fixText) text = "---";
+	return;
+}
 
 //Blink linked with ElCadr
 if(this.attr("focus") ||
@@ -20003,7 +20057,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1450089249);
+event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1501828986);
 INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -22116,269 +22170,79 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPaspExt',0,'','','',-1,0,'owner;perm;name;geomZ;pName;',1494598746);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_cntrPasp',0,'','','',-1,0,'owner;perm;geomZ;pName;',1494596514);
 CREATE TABLE 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc',1,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
+INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
+//Document generation one per hour 
+curMin = curHour = curDay = curMonth = curYear = 0;
+SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
+if(!doc_bTime) {
+  doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+  if(curHour < repHour)	doc_bTime -= 24*60*60;
+}
+if(lastHour < 0 || lastDay < 0 || lastMin < 0) SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay);
 
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
+//Archive last not closed document
+if(closeDoc == true) { if(!doc_process) doc_aCur = -1, closeDoc = false; }
+else if(doc_time && doc_time < doc_bTime) {
+	closeDoc = true;  
+	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
+	doc_time = doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	if(curHour >= repHour) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
 }
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
+//Archive the document
+else if(curDay != lastDay && curHour == repHour && curMin >= 3) {
+	closeDoc = true;
+	doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	lastDay = curDay;
+}
+//Periodic notfull update
+else if(curMin != lastMin && !(curMin%5)) {
+	lastMin = curMin;
+	doc_time = SYS.time() - 5*60;
+	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
+	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	if(curHour < repHour) doc_bTime -= 24*60*60;
+}','','',1000,'name;',1501836780);
+INSERT INTO "wlb_doc" VALUES('docGasNodeMonthA','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
+//Document generation one per hour 
+curMin = curHour = curDay = curMonth = curYear = 0;
+SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
+if(!doc_bTime) {
+	if(curDay == 1 && curHour < repHour)
+		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+}
+if(lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0)
+	SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay, lastMonth);
 
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-//  messPut("Average for hour",1,"The no closed document is closing "+doc_bTime+":"+doc_time);
-  closeDoc = true;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+//Archive last not closed document
+if(closeDoc == true) { if(!doc_process)	doc_aCur = -1, closeDoc = false; }
+else if(doc_time && doc_time < doc_bTime)	{
+	closeDoc = true;
+	SYS.localtime(doc_time, 0, 0, 0, curDay, curMonth, curYear);
+	if(curDay == 1 && curHour < repHour) {
+		doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+	}
+	else {
+		doc_time = SYS.strptime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+		doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	}
 }
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-//  messPut("Agerage for hour",1,"The finished document is closing");
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
+// Archive the document
+else if(curMonth != lastMonth && curDay >= 1 && curHour >= repHour && curMin >= 3)	{
+	closeDoc = true;
+	doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+	lastMonth = curMonth;
 }
-//> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-  //messPut("Agerage for hour",1,"Document generation ("+doc_bTime+":"+doc_time+")");
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  //messPut("Середній за годину",1,"Закриття не закритого документа "+doc_bTime+":"+doc_time);
-  closeDoc = true;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-  //messPut("Середній за годину",1,"Закриття завершеного документа");
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-  //messPut("Середній за годину",1,"Генерація документа ("+doc_bTime+":"+doc_time+")");
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  //messPut("Среднечасовой",1,"Закрытие не закрытого документа "+doc_bTime+":"+doc_time);
-  closeDoc = true;  
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_time = doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour >= 9 ) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//> Archive document
-else if( curDay != lastDay && curHour==9 && curMin >= 3 )
-{
-  //messPut("Среднечасовой",1,"Закрытие законченного документа");
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastDay = curDay;
-}
-//> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" 9:0:0","%Y-%m-%d %H:%M:%S");
-  if( curHour < 9 ) doc_bTime -= 24*60*60;
-  //messPut("Среднечасовой",1,"Генерация документа ("+doc_bTime+":"+doc_time+")");
-}
-//messPut("Среднечасовой",1,"doc_aCur: "+doc_aCur);',1000,'name;',1429384724);
-INSERT INTO "wlb_doc" VALUES('docGasNodeMonthA','','/wlb_doc/wdg_doc',1,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-  {
-    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-  else
-  {
-    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-}
-//>> Archive document
-else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastMonth = curMonth;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-  {
-    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-  else
-  {
-    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-}
-//>> Archive document
-else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastMonth = curMonth;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//> Document generation one in hour
-curMin=curHour=curDay=curMonth=curYear=0;
-tmDate(tmTime(),0,curMin,curHour,curDay,curMonth,curYear);
-if( !doc_bTime )
-{
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}
-if( lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0 ) tmDate(doc_bTime,0,lastMin,lastHour,lastDay,lastMonth);
-
-//> Archive last no closed document
-if( closeDoc == true ) { if(!doc_process) {doc_aCur = -1; closeDoc = false;} }
-else if( doc_time && doc_time < doc_bTime )
-{
-  closeDoc = true;
-  tmDate(doc_time,0,0,0,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-  {
-    doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-  else
-  {
-    doc_time = tmStrPTime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-    doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  }
-}
-//>> Archive document
-else if( curMonth != lastMonth && curDay >= 1 && curHour >= 9 && curMin >= 3 )
-{
-  closeDoc = true;
-  doc_time = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  lastMonth = curMonth;
-}
-//>> Periodic notfull update
-else if( curMin != lastMin && !(curMin%5) )
-{
-  lastMin = curMin;
-  doc_time = tmTime()-5*60;
-  tmDate(doc_time,0,0,curHour,curDay,curMonth,curYear);
-  if( curDay == 1 && curHour < 9 )
-    doc_bTime = tmStrPTime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-  else doc_bTime = tmStrPTime(""+curYear+"-"+(curMonth+1)+"-1 9:0:0","%Y-%m-%d %H:%M:%S");
-}',1000,'name;',1429384724);
+// Periodic not full update
+else if(curMin != lastMin && !(curMin%5))	{
+	lastMin = curMin;
+	doc_time = SYS.time() - 5*60;
+	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
+	if(curDay == 1 && curHour < repHour)
+		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+}','','',1000,'name;',1501836780);
 INSERT INTO "wlb_doc" VALUES('docUsersSet','','/wlb_doc/wdg_docDin',1,'JavaLikeCalc.JavaScript
 if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript
 if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','JavaLikeCalc.JavaScript

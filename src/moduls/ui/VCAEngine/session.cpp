@@ -346,8 +346,9 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 
 	//Open founded page
 	if(!cpg.freeStat()) {
-	    if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
-		((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
+	    //!!!! <oppg> here mostly wrong for multiple container pages
+	    //if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
+	    //	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
 	    cpg.at().attrAt("pgOpenSrc").at().setS(src->path());
 	}
     }

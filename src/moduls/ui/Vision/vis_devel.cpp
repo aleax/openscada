@@ -1324,7 +1324,7 @@ void VisDevelop::visualItEdit( )
 
 	scrl->parentWidget()->show();
 
-	if(!(work_space->activeSubWindow() && work_space->activeSubWindow()->isMaximized()))
+	if(/*work_space->subWindowList().length() <= 1*/ !(work_space->activeSubWindow() && work_space->activeSubWindow()->isMaximized()))
 	    scrl->parentWidget()->resize(fmax(300,fmin(work_space->width(),vw->size().width()+(scrl->parentWidget()->width()-scrl->width())+5)),
 				     fmax(200,fmin(work_space->height(),vw->size().height()+(scrl->parentWidget()->height()-scrl->height())+5)));
     }

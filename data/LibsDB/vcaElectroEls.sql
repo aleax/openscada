@@ -450,7 +450,7 @@ else if( val && !val.isEVal() )
   p2x=86; p2y=36;
   p3x=126; p3y=76;
   p4x=116; p4y=86;
-}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1501241980);
+}','',-1,'name;dscr;geomW;geomH;lineClr;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;c1;s1;',1501769313);
 INSERT INTO "wlb_ElectroEls" VALUES('El_KeySqr_6','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAA/BJREFUeJzl29+LFlUYB/DPvrvtRgZZGf0CI6KCKLKsNDIljDD6QYRY
 iZR1J93YbTf9B91F3WUhC4mUGJFEEZZi2w/cUCKKNLrIUjGIDFxX6+LM2z4z7+x2NTPLni8M78xz
@@ -1370,14 +1370,130 @@ c/HiRX37TICLwCN3i737nM0PbAZmW5bFli1bmDt37nAyZ0wRDofZvHkzlmUBzMU9txz03lEhcB2Q
 BQsW3PM213gjGo1KYWGhzoJruEv7PQkCHwAqJydHTpw4MS6WvaFQSklVVZVunykGOVVagVs5yZo1
 a4y0uZJFLBaTkpISnQXf417gAH4tEALAG7jjP+Dz+QgEjHSak0ZfXx+2bYPbOXob+Fv89x0eI97t
 ecCfBvpduuo/I14FjgEzErJ0/HIN+M50EGnSpEmTZizwCyo7DkKehJ9GAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;geomX;geomY;geomZ;lineWdth;fillColor;elLst;',1500037083);
+INSERT INTO "wlb_ElectroEls" VALUES('tr','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
+AAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;elLst;',1501680517);
+INSERT INTO "wlb_ElectroEls" VALUES('tr1','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','/wlb_originals/wdg_ElFigure',0,'','',-1,'name;dscr;lineWdth;elLst;',1501682380);
+INSERT INTO "wlb_ElectroEls" VALUES('sw','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','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+if(var.isEVal())	s1 = 1;
+else {
+	s1 = 0;
+	if(var)	p1x = 90;
+	else p1x = 10;
+}
+','JavaLikeCalc.JavaScript
+if(var.isEVal())	s1 = 1;
+else {
+	s1 = 0;
+	if(var)	p1x = 90;
+	else p1x = 10;
+}
+',-1,'name;dscr;lineClr;elLst;p1x;p1y;c1;s1;s2;',1501767258);
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('ElectroEls','Elements of the electric','Элементы электрики','Елементи електрики','Library of elements of the electic schemes of the user interface.
 Author: Roman Savochenko <rom_as@oscada.org>, Maksim Lisenko (2010)
-Version: 1.1.0','Библиотека элементов электрических схем пользовательского интерфейса.
+Version: 1.2.0','Библиотека элементов электрических схем пользовательского интерфейса.
 Автор: Роман Савоченко <rom_as@oscada.org>, Максим Лысенко (2010)
-Версия: 1.1.0','Бібліотека елементів електричних схем інтерфейсу користувача.
+Версия: 1.2.0','Бібліотека елементів електричних схем інтерфейсу користувача.
 Автор: Роман Савоченко <rom_as@oscada.org>, Максим Лисенко (2010)
-Версія: 1.1.0','wlb_ElectroEls','');
+Версія: 1.2.0','wlb_ElectroEls','');
 CREATE TABLE 'wlb_ElectroEls_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','name','','One-way key','Ключ однополосный','Ключ однополосний',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_1','dscr','','One-way key, according to GOST 2.755-87
@@ -2032,7 +2148,7 @@ INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p3x','','34','','',8,'
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p3y','','86','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p4x','','24','','',8,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','p4y','','76','','',8,'','','','','','');
-INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','c1','','#000000','','',0,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','c1','','#808080','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_5_tst','s1','','1','','',0,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','name','','Key-protection 2','Ключ-предохр. 2','Ключ-запобіжн. 2',32,'','','','','','');
 INSERT INTO "wlb_ElectroEls_io" VALUES('El_KeySqr_6','dscr','','Key-protection 2, according to GOST 2.755-87
@@ -3017,6 +3133,88 @@ Version: 1.0.0','Ключ-предохранитель, круг, разомкн
 Версия: 1.0.0','Ключ-запобіжник, коло
 Автор: Максим Лисенко
 Версія: 1.0.0',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr','name','','Transformer','Трансформатор','Трансформатор',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr','dscr','','Transformer
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','Трансформатор
+Автор: Роман Савоченко
+Версия: 1.0.0','Трансформатор
+Автор: Роман Савоченко
+Версія: 1.0.0',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr','lineWdth','','5','','',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr','elLst','','arc:(75|35):(75|5):(75|20):(75|5):(60|20):::::
+arc:(75|95):(75|65):(75|80):(75|65):(60|80):::::
+arc:(75|65):(75|35):(75|50):(75|35):(60|50):::::
+arc:(25|5):(25|35):(25|20):(25|5):(10|20):::::
+arc:(25|35):(25|65):(25|50):(25|35):(10|50):::::
+arc:(25|65):(25|95):(25|80):(25|65):(10|80):::::
+line:(50|4):(50|96):::::
+','','',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr1','name','','Transformer 1','Трансформатор 1','Трансформатор 1',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr1','dscr','','Transformer 1
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0','Трансформатор 1
+Автор: Роман Савоченко
+Версия: 1.0.0','Трансформатор 1
+Автор: Роман Савоченко
+Версія: 1.0.0',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr1','lineWdth','','5','','',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('tr1','elLst','','arc:(15|5):(15|50):(15|27.5):(40.125|27.5):(15|5):::::
+line:(50|4):(50|96):::::
+arc:(15|50):(15|95):(15|72.5):(40.125|72.5):(15|50):::::
+arc:(85|50):(85|5):(85|27.5):(110|27.5):(85|5):::::
+arc:(85|95):(85|50):(85|72.5):(110|72.5):(85|50):::::
+','','',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','name','','Switch','Переключатель','Перемикач',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','dscr','','A simple switch.
+Author: Roman Savochenko <rom_as@oscada.org>
+Version: 1.0.0
+Properties:
+- var = true - closure;
+- var = false - opening;
+- var = EVAL - the key is dotted;
+- the frame is configured.','Простой переключатель.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версия: 1.0.0
+Свойства:
+- var=true - замыкание;
+- var=false - размыкание;
+- var=EVAL - ключ пунктирный;
+- рамка конфигурируется.','Простий перемикач.
+Автор: Роман Савоченко <rom_as@oscada.org>
+Версія: 1.0.0
+Властивості:
+- var=true - замкнення;
+- var=false - розімкнення;
+- var=EVAL - ключ пунктирний;
+- рамка конфігурується.',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','lineClr','','','','',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','elLst','','line:(42|8):(58|8):::::
+line:(58|8):(58|23):::::
+line:(58|23):(42|23):::::
+line:(42|23):(42|8):::::
+line:(77|57):(93|57):::::
+line:(93|57):(93|72):::::
+line:(93|72):(77|72):::::
+line:(77|72):(77|57):::::
+line:(50|15):1:8::::s1
+line:(5|5):(95|5):2:c1:::s2
+line:(95|95):(5|95):2:c1:::s2
+line:(95|5):(95|95):2:c1:::s2
+line:(5|95):(5|5):2:c1:::s2
+line:(23|72):(7|72):::::
+line:(23|57):(23|72):::::
+line:(7|72):(7|57):::::
+line:(7|57):(23|57):::::
+fill:(42|8):(58|8):(58|23):(42|23)::
+fill:(77|57):(93|57):(93|72):(77|72)::
+fill:(7|57):(23|57):(23|72):(7|72)::
+','','',32,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','p1x','','90','','',8,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','p1y','','65','','',8,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','c1','','#808080','','',0,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','s1','','0','','',8,'','','','','','');
+INSERT INTO "wlb_ElectroEls_io" VALUES('sw','s2','','2','','',0,'','','','','','');
 CREATE TABLE 'wlb_ElectroEls_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','DESCR','','Description','Описание','Опис',131077,NULL,'','',10,'Parameter|DESCR','','','','','');
 INSERT INTO "wlb_ElectroEls_uio" VALUES('El_KeySqr_1','errPresent','','Error presenting','Наличие ошибки','Наявність помилки',131072,NULL,'','',8,'','','','','','');
@@ -3058,4 +3256,5 @@ INSERT INTO "wlb_ElectroEls_uio" VALUES('key','var','','Variable','Переме�
 INSERT INTO "wlb_ElectroEls_uio" VALUES('stGen','var','','Variable','Переменная','Змінна',131072,'0','','',10,'Parameter|var','
 ','','','','');
 INSERT INTO "wlb_ElectroEls_uio" VALUES('stGen1','var','','Variable','Переменная','Змінна',131072,'0','','',10,'Parameter|var','','','','','');
+INSERT INTO "wlb_ElectroEls_uio" VALUES('sw','var','','Variable','Переменная','Змінна',131072,NULL,'','',10,'Parameter|var','','','','','');
 COMMIT;

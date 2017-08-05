@@ -1,3 +1,11 @@
+2017-08-05 Roman (stable)
+- DB.LibsDB.vcaBase: Main.TextLab adapted for only color dynamic control.
+    doc.{docGasNodeDayA,docGasNodeMonthA} significant expanded for new methods, to control archivator and the report hour.
+- DB.LibsDB.vcaElectroEls: Expanded by new widgets: Transformer (tr), Transformer (tr1), Switch (sw).
+- FIX:DB.Model.AGLKS.vca: Signal objects KM102, KM201, KM202, KM301, KM302 name translation was fixed.
+- FIX:UI.VCAEngine: Improper pages closing was fixed for multiple container pages.
+
+
 2017-07-28 Roman (stable)
 - !!:DB.LibsDB.OscadaLibs: flb_doc.{getVal,sumVal,averVal} were significant cleaned, rewrote and expanded but with back compatibility saving.
 - !!:FIX:DB.LibsDB.vcaElectroEls: Significant clearing and full translation were finished. Procedure of the item "Key" was fixed.
