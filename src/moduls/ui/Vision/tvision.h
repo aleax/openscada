@@ -80,8 +80,8 @@ class TVision : public TUI
 	void modStart( );
 	void modStop( );
 
-	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
 
 	void regWin( QMainWindow *mwd );
 	void unregWin( QMainWindow *mwd );

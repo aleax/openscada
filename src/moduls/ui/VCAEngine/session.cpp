@@ -2184,7 +2184,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 
 bool SessWdg::cntrCmdServ( XMLNode *opt )
 {
-    string a_path = opt->attr("path"), u = opt->attr("user");
+    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path == "/serv/attr") {	//Attribute's value operations
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
 	    unsigned tm = s2ll(opt->attr("tm"));
@@ -2203,7 +2203,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 			    modifChk(tm,attr.at().modif()))
 			opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
-					     setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
+					     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 		}
 	    }
 	}
@@ -2237,7 +2237,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 			modifChk(tm,attr.at().modif()))
 		    opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
-				     setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
+				     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 	    }
 	}
 
@@ -2249,7 +2249,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
 		AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
 		XMLNode *wn = new XMLNode("get");
-		wn->setAttr("path", a_path)->setAttr("user", u)->setAttr("tm", opt->attr("tm"))->setAttr("FullTree", opt->attr("FullTree"));
+		wn->setAttr("path", a_path)->setAttr("user", u)->setAttr("lang", l)->setAttr("tm", opt->attr("tm"))->setAttr("FullTree", opt->attr("FullTree"));
 		iwdg.at().cntrCmdServ(wn);
 		if(wn->childSize() || fullTree) {
 		    wn->setName("w")->attrDel("path")->attrDel("user")->
@@ -2331,7 +2331,7 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
-	    opt->setText(attr.at().isTransl()?trU(attr.at().getS(),opt->attr("user")):attr.at().getS());
+	    opt->setText(attr.at().isTransl()?trLU(attr.at().getS(),opt->attr("lang"),opt->attr("user")):attr.at().getS());
 	else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
 	{
 	    if(attr.at().id() == "event")	eventAdd(opt->text()+"\n");

@@ -46,6 +46,7 @@ class SSess
 	string	sender;			//request sender
 	string	user;			//sesion user
 	string	content;		//Contain
+	string	lang;			//Language
 
 	vector<XMLNode>		cnt;	//Parsed contain
 	map<string,string>	vars;	//request vars
@@ -156,7 +157,7 @@ class TWEB: public TUI
 	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
 
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
-		const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+		const string &htmlHeadEls = "", const string &forceTmplFile = "", const string &lang = "" );
 	bool pgAccess( TProtocolIn *iprt, const string &URL );
 
 	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
@@ -164,8 +165,8 @@ class TWEB: public TUI
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
 
 	//Attributes
 	string	mDefPg;

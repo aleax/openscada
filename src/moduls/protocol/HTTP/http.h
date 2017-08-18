@@ -51,6 +51,8 @@ class TProtIn: public TProtocolIn
 
 	bool mess( const string &request, string &answer );
 
+	string lang( );
+
     private:
 	//Methods
 	string getIndex( const string &user, const string &sender );
@@ -62,8 +64,9 @@ class TProtIn: public TProtocolIn
 	bool pgAccess( const string &URL );
 
 	//Attributes
-	bool mNoFull;
-	string mBuf;
+	bool	mNoFull;
+	string	mBuf,
+		prms, user, prmLang, brLang;
 };
 
 //*************************************************

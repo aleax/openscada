@@ -63,7 +63,7 @@ namespace VISION
     {
 	public:
 	    InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
-		    const QString &ndlg = _("Vision dialog"), bool with_id = false, bool with_nm = true );
+		    const QString &ndlg = _("Vision dialog"), bool with_id = false, bool with_nm = true, const string &lang = "" );
 
 	    QString id( );
 	    QString name( );
@@ -97,7 +97,7 @@ namespace VISION
 	    enum Results { SelCancel, SelOK, SelErr };
 
 	    //Methods
-	    DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0 );
+	    DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent = 0, const string &lang = "" );
 
 	    QString user();
 	    QString password();
@@ -260,6 +260,8 @@ namespace VISION
 	    void setSnthHgl( XMLNode nd );
 
 	    QTextEdit *workWdg( )	{ return ed_fld; }
+
+	    string		lang;
 
 	signals:
 	    void apply( );

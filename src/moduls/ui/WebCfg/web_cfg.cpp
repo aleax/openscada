@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.7.5"
+#define MOD_VER		"1.7.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -104,20 +104,6 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 TWEB::~TWEB()
 {
 
-}
-
-string TWEB::modInfo( const string &name )
-{
-    if(name == "SubType")	return SUB_TYPE;
-    if(name == "Auth")		return "1";
-    return TModule::modInfo(name);
-}
-
-void TWEB::modInfo( vector<string> &list )
-{
-    TModule::modInfo(list);
-    list.push_back("SubType");
-    list.push_back("Auth");
 }
 
 void TWEB::load_( )
@@ -1178,4 +1164,31 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	if(pos >= content.size()) return;
 	if(!p_name.empty()) cnt[p_name] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
     }
+}
+
+#undef _
+#define _(mess) mod->I18N(mess, lang.c_str())
+
+void TWEB::modInfo( vector<string> &list )
+{
+    TModule::modInfo(list);
+    list.push_back("SubType");
+    list.push_back("Auth");
+}
+
+string TWEB::modInfo( const string &iname )
+{
+    string  name = TSYS::strParse(iname, 0, ":"),
+	    lang = TSYS::strParse(iname, 1, ":");
+
+    if(name == "SubType")	return SUB_TYPE;
+    if(name == "Auth")		return "1";
+
+    if(lang.size()) {
+	if(name == "Name")	return _("System configurator (WEB)");
+	if(name == "Author")	return _("Roman Savochenko");
+	if(name == "Description") return _("Provides the WEB-based configurator of the OpenSCADA system.");
+    }
+
+    return TModule::modInfo(name);
 }

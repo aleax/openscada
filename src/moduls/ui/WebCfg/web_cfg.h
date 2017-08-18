@@ -109,8 +109,8 @@ class TWEB: public TUI
 	// Controll system requests
 	int cntrIfCmd( XMLNode &node );
 
-	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
 
 	//Attributes
 	string		mCSStables;		//CSS tables

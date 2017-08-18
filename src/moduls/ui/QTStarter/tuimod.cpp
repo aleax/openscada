@@ -52,7 +52,7 @@
 #else
 #define SUB_TYPE	""
 #endif
-#define MOD_VER		"2.1.2"
+#define MOD_VER		"2.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -127,9 +127,12 @@ TUIMod::~TUIMod( )
     if(runSt) modStop();
 }
 
-string TUIMod::modInfo( const string &name )
+string TUIMod::modInfo( const string &iname )
 {
+    string name = TSYS::strParse(iname, 0, ":");
+
     if(name == "SubType") return SUB_TYPE;
+
     return TModule::modInfo(name);
 }
 

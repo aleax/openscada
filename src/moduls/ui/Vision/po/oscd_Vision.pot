@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-02 17:06+0300\n"
+"POT-Creation-Date: 2017-08-11 11:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1283,7 +1283,180 @@ msgstr ""
 msgid "Cursor --- xy(%1:%2)"
 msgstr ""
 
+msgid ""
+"Connection to visualization server '%1' error: %2.\n"
+"Will restore try after %3s!"
+msgstr ""
+
+#, c-format
+msgid "Root page scale [%f:%f]."
+msgstr ""
+
+msgid "Print page"
+msgstr ""
+
+msgid "No one page for print is present!"
+msgstr ""
+
+msgid "Select a page for print."
+msgstr ""
+
+msgid "Page print."
+msgstr ""
+
+msgid "Pages:"
+msgstr ""
+
+msgid "Print page: \"%1\" (%2)"
+msgstr ""
+
+msgid "OpenSCADA project: \"%1\""
+msgstr ""
+
+msgid "User: \"%1\""
+msgstr ""
+
+msgid "Print diagram"
+msgstr ""
+
+msgid "No one page is present!"
+msgstr ""
+
+msgid "No one diagram is present!"
+msgstr ""
+
+msgid "Select diagram for print."
+msgstr ""
+
+msgid "Diagram print."
+msgstr ""
+
+msgid "Diagrams:"
+msgstr ""
+
+msgid "Print diagram: \"%1\" (%2)"
+msgstr ""
+
+msgid ""
+"OpenSCADA project: \"%1\"\n"
+"%2 (%3)"
+msgstr ""
+
+msgid ""
+"User: \"%1\"\n"
+"%2"
+msgstr ""
+
+msgid "Print document"
+msgstr ""
+
+msgid "No one document is present!"
+msgstr ""
+
+msgid "Select document for print."
+msgstr ""
+
+msgid "Document print."
+msgstr ""
+
+msgid "Document:"
+msgstr ""
+
+msgid "Print document: \"%1\" (%2)"
+msgstr ""
+
+msgid "Export page"
+msgstr ""
+
+msgid "No one page for export is present!"
+msgstr ""
+
+msgid "Select a page for export."
+msgstr ""
+
+msgid "Page export."
+msgstr ""
+
+msgid "Save page's image"
+msgstr ""
+
+msgid "Export diagram"
+msgstr ""
+
+msgid "Select diagram for export."
+msgstr ""
+
+msgid "Diagram export."
+msgstr ""
+
+msgid "Save diagram"
+msgstr ""
+
+#, c-format
+msgid "Trend %1.png"
+msgstr ""
+
+msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
+msgstr ""
+
+msgid "\"Date and time\";\"us\""
+msgstr ""
+
+msgid "\"Frequency (Hz)\""
+msgstr ""
+
+msgid "Error write to: %1."
+msgstr ""
+
+msgid "Export document"
+msgstr ""
+
+msgid "Select document for export."
+msgstr ""
+
+msgid "Document export."
+msgstr ""
+
+msgid "Save document"
+msgstr ""
+
+#, c-format
+msgid "Document %1.html"
+msgstr ""
+
+msgid "XHTML (*.html);;CSV file (*.csv)"
+msgstr ""
+
+msgid "No data for export."
+msgstr ""
+
+msgid ""
+"Several sessions are already opened on the project \"%1\".\n"
+"You can create new or connect to present session. Please, select needed or press \"Cancel\"."
+msgstr ""
+
+msgid "Select session for connection or new creation"
+msgstr ""
+
+msgid "<Create new session>"
+msgstr ""
+
+msgid "Running project: %1"
+msgstr ""
+
 msgid "Vision runtime"
+msgstr ""
+
+msgid "The button for closing Vision runtime window"
+msgstr ""
+
+msgid "Press to close of the current Vision runtime window."
+msgstr ""
+
+msgid "Press for display the program and OpenSCADA information."
+msgstr ""
+
+msgid "&Alarm"
 msgstr ""
 
 msgid "&Print"
@@ -1370,13 +1543,13 @@ msgstr ""
 msgid "Press for exporting of the selected document."
 msgstr ""
 
-msgid "The button for closing Vision runtime window"
+msgid "Project '%1' manual"
 msgstr ""
 
-msgid "Press to close of the current Vision runtime window."
+msgid "The button for getting the using project '%1' manual"
 msgstr ""
 
-msgid "Press for display the program and OpenSCADA information."
+msgid "Press to get the using project '%1' manual."
 msgstr ""
 
 msgid "'%1' manual"
@@ -1395,9 +1568,6 @@ msgid "The button for all alarms quittance"
 msgstr ""
 
 msgid "Press for all alarms quittance."
-msgstr ""
-
-msgid "&Alarm"
 msgstr ""
 
 msgid "Generic (status)"
@@ -1422,176 +1592,6 @@ msgid "Field for display the used interface style."
 msgstr ""
 
 msgid "Double click for style change."
-msgstr ""
-
-msgid "Project '%1' manual"
-msgstr ""
-
-msgid "The button for getting the using project '%1' manual"
-msgstr ""
-
-msgid "Press to get the using project '%1' manual."
-msgstr ""
-
-msgid ""
-"Connection to visualization server '%1' error: %2.\n"
-"Will restore try after %3s!"
-msgstr ""
-
-#, c-format
-msgid "Root page scale [%f:%f]."
-msgstr ""
-
-msgid "Print page"
-msgstr ""
-
-msgid "No one page for print is present!"
-msgstr ""
-
-msgid "Select page for print."
-msgstr ""
-
-msgid "Page print."
-msgstr ""
-
-msgid "Pages:"
-msgstr ""
-
-msgid "Print page: \"%1\" (%2)"
-msgstr ""
-
-msgid "OpenSCADA project: \"%1\""
-msgstr ""
-
-msgid "User: \"%1\""
-msgstr ""
-
-msgid "Print diagram"
-msgstr ""
-
-msgid "No one page is present!"
-msgstr ""
-
-msgid "No one diagram is present!"
-msgstr ""
-
-msgid "Select diagram for print."
-msgstr ""
-
-msgid "Diagram print."
-msgstr ""
-
-msgid "Diagrams:"
-msgstr ""
-
-msgid "Print diagram: \"%1\" (%2)"
-msgstr ""
-
-msgid ""
-"OpenSCADA project: \"%1\"\n"
-"%2 (%3)"
-msgstr ""
-
-msgid ""
-"User: \"%1\"\n"
-"%2"
-msgstr ""
-
-msgid "Print document"
-msgstr ""
-
-msgid "No one document is present!"
-msgstr ""
-
-msgid "Select document for print."
-msgstr ""
-
-msgid "Document print."
-msgstr ""
-
-msgid "Document:"
-msgstr ""
-
-msgid "Print document: \"%1\" (%2)"
-msgstr ""
-
-msgid "Export page"
-msgstr ""
-
-msgid "No one page for export is present!"
-msgstr ""
-
-msgid "Select page for export."
-msgstr ""
-
-msgid "Page export."
-msgstr ""
-
-msgid "Save page's image"
-msgstr ""
-
-msgid "Export diagram"
-msgstr ""
-
-msgid "Select diagram for export."
-msgstr ""
-
-msgid "Diagram export."
-msgstr ""
-
-msgid "Save diagram"
-msgstr ""
-
-#, c-format
-msgid "Trend %1.png"
-msgstr ""
-
-msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
-msgstr ""
-
-msgid "\"Date and time\";\"us\""
-msgstr ""
-
-msgid "\"Frequency (Hz)\""
-msgstr ""
-
-msgid "Error write to: %1."
-msgstr ""
-
-msgid "Export document"
-msgstr ""
-
-msgid "Select document for export."
-msgstr ""
-
-msgid "Document export."
-msgstr ""
-
-msgid "Save document"
-msgstr ""
-
-#, c-format
-msgid "Document %1.html"
-msgstr ""
-
-msgid "XHTML (*.html);;CSV file (*.csv)"
-msgstr ""
-
-msgid "No data for export."
-msgstr ""
-
-msgid ""
-"Several sessions are already opened on the project \"%1\".\n"
-"You can create new or connect to present session. Please, select needed or press \"Cancel\"."
-msgstr ""
-
-msgid "Select session for connection or new creation"
-msgstr ""
-
-msgid "<Create new session>"
-msgstr ""
-
-msgid "Running project: %1"
 msgstr ""
 
 msgid "Status line items"

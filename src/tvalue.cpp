@@ -147,7 +147,7 @@ void TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 void TValue::cntrCmdProc( XMLNode *opt )
 {
     vector<string> vLs;
-    string a_path = opt->attr("path"), u = opt->attr("user");
+    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     //Service commands process
     if(a_path == "/serv/attr") {	//Attributes access
 	vlList(vLs);
@@ -311,10 +311,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText((vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : r2s(vl.at().getR(),6)) :
-		    ((Mess->translDyn() && vl.at().fld().type()==TFld::String) ? trU(vl.at().getS(),u) :
+		    ((Mess->translDyn() && vl.at().fld().type()==TFld::String) ? trLU(vl.at().getS(),l,u) :
 		    vl.at().getS()));
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR))
-	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trSetU(vl.at().getS(),u,opt->text()) : opt->text());
+	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trSetLU(vl.at().getS(),l,u,opt->text()) : opt->text());
     }
     else if(a_path == "/arch/arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {

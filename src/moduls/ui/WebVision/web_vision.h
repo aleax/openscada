@@ -49,16 +49,19 @@ namespace WebVision
 //*************************************************
 struct SSess
 {
+    SSess( const string &iuser ) : user(iuser)	{ }
     SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
 	    const string &icontent, TProtocolIn *iprt );
 
     //Attributes
-    TProtocolIn *prt;		//input protocol
-    string url;			//request URL
-    string page;
-    string sender;		//request sender
-    string user;		//sesion user
-    string content;		//Contains
+    TProtocolIn	*prt;		//input protocol
+    string	url,		//request URL
+		page,
+		sender,		//request sender
+		user,		//sesion user
+		content,	//Contains
+		gPrms,		//Global parameters
+		lang;		//Language
 
     vector<string>	vars;	//request vars
     map<string,string>	cnt;	//Parsed contain
@@ -98,14 +101,14 @@ class TWEB: public TUI
 	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
 	string optDescr( );
-	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
 
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
-	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+	    const string &htmlHeadEls = "", const string &forceTmplFile = "", const string &lang = "" );
 	bool pgAccess( TProtocolIn *iprt, const string &URL );
 
-	int cntrIfCmd( XMLNode &node, const string &user, bool VCA = true );
+	int cntrIfCmd( XMLNode &node, const SSess &ses, bool VCA = true );
 
 	void imgConvert(SSess &ses);
 	int colorParse( const string &clr );

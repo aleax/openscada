@@ -87,7 +87,7 @@ class TModule : public TCntrNode
 	virtual void modStop( );
 
 	virtual void   modInfo( vector<string> &list );
-	virtual string modInfo( const string &name );
+	virtual string modInfo( const string &name );	//Name form: {NAME}[:{lng}]
 
 	virtual void perSYSCall( unsigned int cnt )	{ }
 
@@ -98,7 +98,7 @@ class TModule : public TCntrNode
 	bool modFunc( const string &prot, void (TModule::**offptr)(), bool noex = false );
 
 	// Translate functions
-	const char *I18N( const char *mess );
+	const char *I18N( const char *mess, const char *mLang = NULL );
 
 	TSubSYS &owner( ) const;
 

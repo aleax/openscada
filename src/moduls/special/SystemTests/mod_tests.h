@@ -65,8 +65,8 @@ class TTest: public TSpecial
 	void postEnable( int flag );
 
 	string optDescr( );
-	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
 
 	static void *Task(void *);
 

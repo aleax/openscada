@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-02 17:06+0300\n"
+"POT-Creation-Date: 2017-08-11 11:13+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1355,8 +1355,191 @@ msgstr "Выбраны элементы: '%1'"
 msgid "Cursor --- xy(%1:%2)"
 msgstr "Курсор --- xy(%1:%2)"
 
+msgid ""
+"Connection to visualization server '%1' error: %2.\n"
+"Will restore try after %3s!"
+msgstr ""
+"Ошибка подключения к серверу визуализации '%1': %2.\n"
+"Следующая попытка восстановления после %3с!"
+
+#, c-format
+msgid "Root page scale [%f:%f]."
+msgstr "Масштаб корневой страницы [%f:%f]."
+
+msgid "Print page"
+msgstr "Печать страницы"
+
+msgid "No one page for print is present!"
+msgstr "Нет ни одной страницы для печати!"
+
+msgid "Select a page for print."
+msgstr "Выбор страницы для печати."
+
+msgid "Page print."
+msgstr "Печать страницы."
+
+msgid "Pages:"
+msgstr "Страницы: "
+
+msgid "Print page: \"%1\" (%2)"
+msgstr "Печать страницы \"%1\" (%2)"
+
+msgid "OpenSCADA project: \"%1\""
+msgstr "Проект OpenSCADA: \"%1\""
+
+msgid "User: \"%1\""
+msgstr "Пользователь: \"%1\""
+
+msgid "Print diagram"
+msgstr "Печать диаграммы"
+
+msgid "No one page is present!"
+msgstr "Нет ни одной страницы."
+
+msgid "No one diagram is present!"
+msgstr "Нет ни одной диаграммы!"
+
+msgid "Select diagram for print."
+msgstr "Выбор диаграммы для печати."
+
+msgid "Diagram print."
+msgstr "Печать диаграммы."
+
+msgid "Diagrams:"
+msgstr "Диаграммы:"
+
+msgid "Print diagram: \"%1\" (%2)"
+msgstr "Печать диаграммы: \"%1\" (%2)"
+
+msgid ""
+"OpenSCADA project: \"%1\"\n"
+"%2 (%3)"
+msgstr ""
+"Проект OpenSCADA: \"%1\"\n"
+"%2 (%3)"
+
+msgid ""
+"User: \"%1\"\n"
+"%2"
+msgstr ""
+"Пользователь: \"%1\"\n"
+"%2"
+
+msgid "Print document"
+msgstr "Печать документа"
+
+msgid "No one document is present!"
+msgstr "Нет ни одного документа для печати!"
+
+msgid "Select document for print."
+msgstr "Выбор документа для печати."
+
+msgid "Document print."
+msgstr "Печать документа."
+
+msgid "Document:"
+msgstr "Документ:"
+
+msgid "Print document: \"%1\" (%2)"
+msgstr "Печать документа: \"%1\" (%2)"
+
+msgid "Export page"
+msgstr "Экспорт страницы"
+
+msgid "No one page for export is present!"
+msgstr "Нет ни одной страницы для экспорта!"
+
+msgid "Select a page for export."
+msgstr "Выбор страницы для экспорта."
+
+msgid "Page export."
+msgstr "Экспорт страницы."
+
+msgid "Save page's image"
+msgstr "Сохранение изображения страницы"
+
+msgid "Export diagram"
+msgstr "Экспорт диаграммы"
+
+msgid "Select diagram for export."
+msgstr "Выбор диаграммы для экспорта."
+
+msgid "Diagram export."
+msgstr "Экспорт диаграммы."
+
+msgid "Save diagram"
+msgstr "Сохранить диаграмму"
+
+#, c-format
+msgid "Trend %1.png"
+msgstr "Тренд %1.png"
+
+msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
+msgstr "Изображения (*.png *.xpm *.jpg);;CSV файл (*.csv)"
+
+msgid "\"Date and time\";\"us\""
+msgstr "\"Дата и время\";\"мкс\""
+
+msgid "\"Frequency (Hz)\""
+msgstr "\"Частота (Гц)\""
+
+msgid "Error write to: %1."
+msgstr "Ошибка записи в: %1."
+
+msgid "Export document"
+msgstr "Экспорт документа"
+
+msgid "Select document for export."
+msgstr "Выбор документа для экспорта."
+
+msgid "Document export."
+msgstr "Экспорт документа."
+
+msgid "Save document"
+msgstr "Сохранение документа"
+
+#, c-format
+msgid "Document %1.html"
+msgstr "Документ %1.html"
+
+msgid "XHTML (*.html);;CSV file (*.csv)"
+msgstr "XHTML (*.html);;CSV файл (*.csv)"
+
+msgid "No data for export."
+msgstr "Нет данных для экспорта."
+
+msgid ""
+"Several sessions are already opened on the project \"%1\".\n"
+"You can create new or connect to present session. Please, select needed or "
+"press \"Cancel\"."
+msgstr ""
+"Уже открыто несколько сеансов для проекта \"%1\".\n"
+"Вы можете создать новый сеанс или подключиться к существующему. Пожалуйста, "
+"выберите нужное или нажмите \"Отмена\"."
+
+msgid "Select session for connection or new creation"
+msgstr "Выбор сеанса для подключения или создание нового"
+
+msgid "<Create new session>"
+msgstr "<Создать новый сеанс>"
+
+msgid "Running project: %1"
+msgstr "Исполнение проекта: %1"
+
 msgid "Vision runtime"
 msgstr "Vision-исполнение"
+
+msgid "The button for closing Vision runtime window"
+msgstr "Кнопка для закрытия окна исполнения Vision"
+
+msgid "Press to close of the current Vision runtime window."
+msgstr "Нажать для закрытия текущего окна исполнения Vision."
+
+msgid "Press for display the program and OpenSCADA information."
+msgstr "Нажать для получения информации о программе и OpenSCADA."
+
+msgid "&Alarm"
+msgstr "Н&арушение"
 
 msgid "&Print"
 msgstr "&Печать"
@@ -1442,14 +1625,14 @@ msgstr "Кнопка для экспорта выбранного докумен
 msgid "Press for exporting of the selected document."
 msgstr "Нажать для экспорта выбранного документа."
 
-msgid "The button for closing Vision runtime window"
-msgstr "Кнопка для закрытия окна исполнения Vision"
+msgid "Project '%1' manual"
+msgstr "Руководство проекта '%1'"
 
-msgid "Press to close of the current Vision runtime window."
-msgstr "Нажать для закрытия текущего окна исполнения Vision."
+msgid "The button for getting the using project '%1' manual"
+msgstr "Кнопка для получения руководства проекта '%1'"
 
-msgid "Press for display the program and OpenSCADA information."
-msgstr "Нажать для получения информации о программе и OpenSCADA."
+msgid "Press to get the using project '%1' manual."
+msgstr "Нажать для получения руководства проекта '%1'."
 
 msgid "'%1' manual"
 msgstr "'%1' руководство"
@@ -1468,9 +1651,6 @@ msgstr "Кнопка для квитации всех нарушений"
 
 msgid "Press for all alarms quittance."
 msgstr "Нажать для квитации всех нарушений."
-
-msgid "&Alarm"
-msgstr "Н&арушение"
 
 msgid "Generic (status)"
 msgstr "Общие (статус)"
@@ -1495,186 +1675,6 @@ msgstr "Поле для отображения используемого сти
 
 msgid "Double click for style change."
 msgstr "Дважды кликнуть для смены стиля."
-
-msgid "Project '%1' manual"
-msgstr "Руководство проекта '%1'"
-
-msgid "The button for getting the using project '%1' manual"
-msgstr "Кнопка для получения руководства проекта '%1'"
-
-msgid "Press to get the using project '%1' manual."
-msgstr "Нажать для получения руководства проекта '%1'."
-
-msgid ""
-"Connection to visualization server '%1' error: %2.\n"
-"Will restore try after %3s!"
-msgstr ""
-"Ошибка подключения к серверу визуализации '%1': %2.\n"
-"Следующая попытка восстановления после %3с!"
-
-#, c-format
-msgid "Root page scale [%f:%f]."
-msgstr "Масштаб корневой страницы [%f:%f]."
-
-msgid "Print page"
-msgstr "Печать страницы"
-
-msgid "No one page for print is present!"
-msgstr "Нет ни одной страницы для печати!"
-
-msgid "Select page for print."
-msgstr "Выбор страницы для печати."
-
-msgid "Page print."
-msgstr "Печать страницы."
-
-msgid "Pages:"
-msgstr "Страницы: "
-
-msgid "Print page: \"%1\" (%2)"
-msgstr "Печать страницы \"%1\" (%2)"
-
-msgid "OpenSCADA project: \"%1\""
-msgstr "Проект OpenSCADA: \"%1\""
-
-msgid "User: \"%1\""
-msgstr "Пользователь: \"%1\""
-
-msgid "Print diagram"
-msgstr "Печать диаграммы"
-
-msgid "No one page is present!"
-msgstr "Нет ни одной страницы."
-
-msgid "No one diagram is present!"
-msgstr "Нет ни одной диаграммы!"
-
-msgid "Select diagram for print."
-msgstr "Выбор диаграммы для печати."
-
-msgid "Diagram print."
-msgstr "Печать диаграммы."
-
-msgid "Diagrams:"
-msgstr "Диаграммы:"
-
-msgid "Print diagram: \"%1\" (%2)"
-msgstr "Печать диаграммы: \"%1\" (%2)"
-
-msgid ""
-"OpenSCADA project: \"%1\"\n"
-"%2 (%3)"
-msgstr ""
-"Проект OpenSCADA: \"%1\"\n"
-"%2 (%3)"
-
-msgid ""
-"User: \"%1\"\n"
-"%2"
-msgstr ""
-"Пользователь: \"%1\"\n"
-"%2"
-
-msgid "Print document"
-msgstr "Печать документа"
-
-msgid "No one document is present!"
-msgstr "Нет ни одного документа для печати!"
-
-msgid "Select document for print."
-msgstr "Выбор документа для печати."
-
-msgid "Document print."
-msgstr "Печать документа."
-
-msgid "Document:"
-msgstr "Документ:"
-
-msgid "Print document: \"%1\" (%2)"
-msgstr "Печать документа: \"%1\" (%2)"
-
-msgid "Export page"
-msgstr "Экспорт страницы"
-
-msgid "No one page for export is present!"
-msgstr "Нет ни одной страницы для экспорта!"
-
-msgid "Select page for export."
-msgstr "Выбор страницы для экспорта."
-
-msgid "Page export."
-msgstr "Экспорт страницы."
-
-msgid "Save page's image"
-msgstr "Сохранение изображения страницы"
-
-msgid "Export diagram"
-msgstr "Экспорт диаграммы"
-
-msgid "Select diagram for export."
-msgstr "Выбор диаграммы для экспорта."
-
-msgid "Diagram export."
-msgstr "Экспорт диаграммы."
-
-msgid "Save diagram"
-msgstr "Сохранить диаграмму"
-
-#, c-format
-msgid "Trend %1.png"
-msgstr "Тренд %1.png"
-
-msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
-msgstr "Изображения (*.png *.xpm *.jpg);;CSV файл (*.csv)"
-
-msgid "\"Date and time\";\"us\""
-msgstr "\"Дата и время\";\"мкс\""
-
-msgid "\"Frequency (Hz)\""
-msgstr "\"Частота (Гц)\""
-
-msgid "Error write to: %1."
-msgstr "Ошибка записи в: %1."
-
-msgid "Export document"
-msgstr "Экспорт документа"
-
-msgid "Select document for export."
-msgstr "Выбор документа для экспорта."
-
-msgid "Document export."
-msgstr "Экспорт документа."
-
-msgid "Save document"
-msgstr "Сохранение документа"
-
-#, c-format
-msgid "Document %1.html"
-msgstr "Документ %1.html"
-
-msgid "XHTML (*.html);;CSV file (*.csv)"
-msgstr "XHTML (*.html);;CSV файл (*.csv)"
-
-msgid "No data for export."
-msgstr "Нет данных для экспорта."
-
-msgid ""
-"Several sessions are already opened on the project \"%1\".\n"
-"You can create new or connect to present session. Please, select needed or "
-"press \"Cancel\"."
-msgstr ""
-"Уже открыто несколько сеансов для проекта \"%1\".\n"
-"Вы можете создать новый сеанс или подключиться к существующему. Пожалуйста, "
-"выберите нужное или нажмите \"Отмена\"."
-
-msgid "Select session for connection or new creation"
-msgstr "Выбор сеанса для подключения или создание нового"
-
-msgid "<Create new session>"
-msgstr "<Создать новый сеанс>"
-
-msgid "Running project: %1"
-msgstr "Исполнение проекта: %1"
 
 msgid "Status line items"
 msgstr "Элементы строки статусов"

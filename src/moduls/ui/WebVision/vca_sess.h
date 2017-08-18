@@ -78,7 +78,7 @@ class VCAObj : public TCntrNode
 
 	virtual void getReq( SSess &ses ) = 0;
 	virtual void postReq( SSess &ses ) = 0;
-	virtual void setAttrs( XMLNode &node, const string &user ) = 0;
+	virtual void setAttrs( XMLNode &node, const SSess &ses ) = 0;
 
 	VCASess &owner( ) const;
 
@@ -145,7 +145,7 @@ class VCAElFigure : public VCAObj
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
-	void setAttrs( XMLNode &node, const string &user );
+	void setAttrs( XMLNode &node, const SSess &ses );
 
 	bool lineIntersect( double x1, double y1, double x2, double y2,
 			    double x3, double y3, double x4, double y4 );
@@ -235,7 +235,7 @@ class VCAText : public VCAObj
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses )  { }
-	void setAttrs( XMLNode &node, const string &user );
+	void setAttrs( XMLNode &node, const SSess &ses );
 	Point rot( const Point pnt, double alpha, const Point center );
 	vector<int> textRotate( double ang, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4 );
 
@@ -275,7 +275,7 @@ class VCADiagram : public VCAObj
 
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
-	void setAttrs( XMLNode &node, const string &user );
+	void setAttrs( XMLNode &node, const SSess &ses );
 	void makeImgPng( SSess &ses, gdImagePtr im );
 
 	void makeTrendsPicture( SSess &ses );
@@ -402,7 +402,7 @@ class VCADocument : public VCAObj
 
 	void getReq( SSess &ses )	{ }
 	void postReq( SSess &ses )	{ }
-	void setAttrs( XMLNode &node, const string &user );
+	void setAttrs( XMLNode &node, const SSess &ses );
 };
 
 //*************************************************
@@ -431,7 +431,7 @@ class VCASess : public TCntrNode
 	void objDel( const string &name )			{ chldDel(id_objs, name); }
 	AutoHD<VCAObj> objAt( const string &name ) const	{ return chldAt(id_objs,name); }
 
-	string resGet( const string &res, const string &path, const string &user, string *mime = NULL );
+	string resGet( const string &res, const string &path, const SSess &ses, string *mime = NULL );
 
 	string cacheResGet( const string &res, string *mime = NULL );
 	void cacheResSet( const string &res, const string &val, const string &mime );

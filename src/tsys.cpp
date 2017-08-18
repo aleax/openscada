@@ -57,19 +57,21 @@ bool TSYS::finalKill = false;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
-    mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
+    mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrcTm(0), mRdPrimCmdTr(false)
 {
+    Mess = new TMess();
+
+    mName = _("Empty Station");
+
     finalKill = false;
     SYS = this;		//Init global access value
-    mSubst = grpAdd("sub_",true);
+    mSubst = grpAdd("sub_", true);
     nodeEn();
     mainPthr = pthread_self();
     pthread_key_create(&sTaskKey, NULL);
-
-    Mess = new TMess();
 
     if(getenv("USER")) mUser = getenv("USER");
 
@@ -2472,7 +2474,7 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
     char buf[STR_BUF_LEN];
-    string u = opt->attr("user");
+    string u = opt->attr("user"), l = opt->attr("lang");
     string a_path = opt->attr("path");
 
     //Service commands process
@@ -2486,7 +2488,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trU(name(),u).c_str());
+	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trLU(name(),l,u).c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","AboutOpenSCADA|ProgrammManual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
@@ -2618,8 +2620,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
     else if(a_path == "/gen/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/gen/stat") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trU(name(),u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trSetU(name(),u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trLU(name(),l,u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
     }
     else if(a_path == "/gen/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
     else if(a_path == "/gen/mainCPUs") {

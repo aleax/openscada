@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"0.8.3"
+#define MOD_VER		"0.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user web-interfaces in any language of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -87,30 +87,16 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
 
     //User page DB structure
     mUPgEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd(new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
+    mUPgEl.fldAdd(new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
     mUPgEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 }
 
 TWEB::~TWEB( )
 {
     nodeDelAll();
-}
-
-string TWEB::modInfo( const string &name )
-{
-    if(name == "SubType")	return SUB_TYPE;
-    if(name == "Auth")		return "0";
-    return TModule::modInfo(name);
-}
-
-void TWEB::modInfo( vector<string> &list )
-{
-    TModule::modInfo(list);
-    list.push_back("SubType");
-    list.push_back("Auth");
 }
 
 void TWEB::uPgAdd( const string &iid, const string &db )
@@ -193,10 +179,10 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
 }
 
 string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
-    const string &htmlHeadEls, const string &forceTmplFile )
+    const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
     vector<TVariant> prms;
-    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang);
 
     return iprt->owner().objFuncCall("pgCreator", prms, "root").getS();
 }
@@ -206,6 +192,9 @@ bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
     vector<TVariant> prms; prms.push_back(URL);
     return iprt->owner().objFuncCall("pgAccess", prms, "root").getB();
 }
+
+#undef _
+#define _(mess) mod->I18N(mess, ses.lang.c_str())
 
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
@@ -239,7 +228,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 			page += "   <li><a href='"+upLs[iP]+"/'>"+uPgAt(upLs[iP]).at().name()+"</a></li>\n";
 		page += "</ul></td></tr></table>\n";
 
-		page = pgCreator(iprt, page, "200 OK");
+		page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
 		return;
 	    }
 	    else if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
@@ -293,7 +282,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	up.at().cntReq++;
     } catch(TError &err) {
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),urli.c_str(),err.mess.c_str())+"</div>\n",
-			       "404 Not Found");
+			       "404 Not Found", "", "", "", ses.lang);
     }
 }
 
@@ -367,9 +356,12 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	up.at().cntReq++;
     } catch(TError &err) {
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Page '%s' error: %s"),url.c_str(),err.mess.c_str())+"</div>\n",
-			       "404 Not Found");
+			       "404 Not Found", "", "", "", ses.lang);
     }
 }
+
+#undef _
+#define _(mess) mod->I18N(mess)
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
@@ -641,15 +633,20 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	url = iurl.substr(0,prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
-	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
+	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); ) {
 	    if((prmSep=sprm.find("=")) == string::npos) prm[sprm] = "true";
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
+	}
     }
 
     //Variables parse
     for(size_t iV = 0, spos = 0; iV < ivars.size(); iV++)
-	if((spos=ivars[iV].find(":")) != string::npos)
-	    vars[sTrm(ivars[iV].substr(0,spos))] = sTrm(ivars[iV].substr(spos+1));
+	if((spos=ivars[iV].find(":")) != string::npos) {
+	    string  var = sTrm(ivars[iV].substr(0,spos)),
+		    val = sTrm(ivars[iV].substr(spos+1));
+	    vars[var] = val;
+	    if(var == "oscd_lang") lang = val;
+	}
 
     //Content parse
     size_t pos = 0, spos = 0;
@@ -681,4 +678,31 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	if(pos >= content.size()) return;
 	cnt[cnt.size()-1].setText(content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos));
     }
+}
+
+#undef _
+#define _(mess) mod->I18N(mess, lang.c_str())
+
+void TWEB::modInfo( vector<string> &list )
+{
+    TModule::modInfo(list);
+    list.push_back("SubType");
+    list.push_back("Auth");
+}
+
+string TWEB::modInfo( const string &iname )
+{
+    string  name = TSYS::strParse(iname, 0, ":"),
+	    lang = TSYS::strParse(iname, 1, ":");
+
+    if(name == "SubType")	return SUB_TYPE;
+    if(name == "Auth")		return "0";
+
+    if(lang.size()) {
+	if(name == "Name")	return _("Web interface from user");
+	if(name == "Author")	return _("Roman Savochenko");
+	if(name == "Description") return _("Allows you to create your own user web-interfaces in any language of OpenSCADA.");
+    }
+
+    return TModule::modInfo(name);
 }

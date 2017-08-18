@@ -193,13 +193,13 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     }
     TCfg &cel = cfg(elem);
     if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD)) {
-	if(Mess->translDyn() && cel.fld().type() == TFld::String && !(cel.fld().flg()&TFld::NoStrTransl))
-	    opt->setText(trU(cel.getS(),opt->attr("user")));
+	if(Mess->translDyn() && cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
+	    opt->setText(trLU(cel.getS(),opt->attr("lang"),opt->attr("user")));
 	else opt->setText(cel.getS());
     }
     if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR)) {
-	if(Mess->translDyn() && cel.fld().type() == TFld::String && !(cel.fld().flg()&TFld::NoStrTransl))
-	    cel.setS(trSetU(cel.getS(),opt->attr("user"),opt->text()));
+	if(Mess->translDyn() && cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
+	    cel.setS(trSetLU(cel.getS(),opt->attr("lang"),opt->attr("user"),opt->text()));
 	else cel.setS(opt->text());
     }
 }
@@ -317,7 +317,7 @@ string TCfg::getS( ) const
     mOwner.mRes.unlock();
     if(!extVal()) return rez;
     else {
-	if(fld().flg()&TransltText && !noTransl()) {
+	if((fld().flg()&TFld::TransltText) && !noTransl()) {
 	    string rezT = TSYS::strSepParse(rez, 1, 0), rezSrc = TSYS::strSepParse(rez, 2, 0);
 	    rez = TSYS::strSepParse(rez, 0, 0);
 	    if(rez.size() && rezSrc.size()) Mess->translReg(rez, rezSrc);	//!!!! May be too busy
@@ -374,7 +374,7 @@ void TCfg::setS( const string &ival )
 	case TVariant::String: {
 	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
-	    if(extVal() && (fld().flg()&TransltText) && !noTransl() && ival.find(char(0)) == string::npos) {
+	    if(extVal() && (fld().flg()&TFld::TransltText) && !noTransl() && ival.find(char(0)) == string::npos) {
 		if(Mess->lang2Code()==Mess->lang2CodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
 		else TVariant::setS(getS(ExtValOne)+string(1,0)+ival+string(1,0)+getS(ExtValThree));
 	    }

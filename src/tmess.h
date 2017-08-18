@@ -34,8 +34,10 @@
 #define _(mess) Mess->I18N(mess)
 #define trL(base,lng) Mess->translGet(base, lng)
 #define trU(base,usr) Mess->translGetU(base, usr)
+#define trLU(base,lng,usr) Mess->translGetLU(base, lng, usr)
 #define trSetL(base,lng,mess) Mess->translSet(base, lng, mess)
 #define trSetU(base,usr,mess) Mess->translSetU(base, usr, mess)
+#define trSetLU(base,lng,usr,mess) Mess->translSetLU(base, lng, usr, mess)
 #define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
 #define FTM2(tm, utm) ((int64_t)tm*1000000 + utm)
 #define mess_TrUApiTbl	"Trs"
@@ -106,8 +108,9 @@ class TMess
 	string codeConvIn( const string &fromCH, const string &mess )	{ return codeConv(fromCH, IOCharSet, mess); }
 	string codeConvOut( const string &toCH, const string &mess )	{ return codeConv(IOCharSet, toCH, mess); }
 
-	static const char *I18N( const char *mess, const char *d_name = NULL );
-	static string I18Ns( const string &mess, const char *d_name = NULL )	{ return I18N((char*)mess.c_str(), d_name); }
+	const char *I18N( const char *mess, const char *d_name = NULL, const char *mLang = NULL );
+	string I18Ns( const string &mess, const char *d_name = NULL, const char *mLang =NULL )
+	{ return I18N((char*)mess.c_str(), d_name, mLang); }
 
 	string lang( );
 	string lang2Code( )	{ return mLang2Code; }
@@ -141,9 +144,11 @@ class TMess
 	//  Translation request for <base>, <lang> | <user> and <src> (direct source mostly for "uapi:").
 	string translGet( const string &base, const string &lang, const string &src = "" );
 	string translGetU( const string &base, const string &user, const string &src = "" );
+	string translGetLU( const string &base, const string &lang, const string &user, const string &src = "" );
 	//  Translation set for <base>, <lang> | <user> and <mess>. Return base or the changed.
 	string translSet( const string &base, const string &lang, const string &mess, bool *needReload = NULL );
 	string translSetU( const string &base, const string &user, const string &mess, bool *needReload = NULL );
+	string translSetLU( const string &base, const string &lang, const string &user, const string &mess, bool *needReload = NULL );
 	//  Register translations. Source format:
 	//    for DB: "db:{MDB}.{DB}.{TBL}#{TrFld}"
 	//    for <cfg>: "cfg:{ObjPath}/{TBL}#{TrFld}"
@@ -181,6 +186,8 @@ class TMess
 
 	string	mLang2CodeBase, mLang2Code;
 
+	ResMtx	mRes;
+
 	map<string, bool>	debugCats;
 	vector<string>		selectDebugCats;
 
@@ -188,7 +195,8 @@ class TMess
 	map<string, map<string,string> > trMessIdx;
 	map<string, CacheEl>	trMessCache;
 
-	ResMtx	mRes;
+	ResMtx	getMessRes;
+	string	getMessLng;
 };
 
 extern TMess *Mess;

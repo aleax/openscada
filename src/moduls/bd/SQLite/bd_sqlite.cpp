@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.3.2"
+#define MOD_VER		"2.3.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -337,7 +337,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg, vector< vector<string> > *full )
 	TCfg *u_cfg = cfg.at(sid,true);
 	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if(u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText)) continue;
+	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
 	if(!u_cfg) continue;
@@ -396,7 +396,7 @@ void MTable::fieldGet( TConfig &cfg )
 	TCfg *u_cfg = cfg.at(sid,true);
 	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
-	    if(u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText)) continue;
+	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
 	if(!u_cfg) continue;
@@ -496,7 +496,7 @@ void MTable::fieldSet( TConfig &cfg )
 		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 		if(!u_cfg.isKey() && !u_cfg.view()) continue;
 
-		bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
+		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
 		ins_name += (next?",\"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\" " +
 		    (isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL,"\"")+"\" ") : "");
 		sval = getVal(u_cfg);
@@ -515,7 +515,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	    if((u_cfg.isKey() && !u_cfg.extVal()) || !u_cfg.view()) continue;
 
-	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
+	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(u_cfg) + " ";
 	    next = true;
@@ -633,7 +633,7 @@ void MTable::fieldFix( TConfig &cfg )
 	}
 
 	// Other languages for translation process
-	if(cf.fld().flg()&TCfg::TransltText) {
+	if(cf.fld().flg()&TFld::TransltText) {
 	    bool col_cur = false;
 	    for(unsigned iC = 1; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC][1].size() > 3 && tblStrct[iC][1].substr(2) == ("#"+cf_el[iCf])) {
@@ -656,7 +656,7 @@ void MTable::fieldFix( TConfig &cfg )
     for(unsigned iFld = 1, iCf; iFld < tblStrct.size() && !toUpdate && !appMode; iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld][1] ||
-		    (cfg.cfg(cf_el[iCf]).fld().flg()&TCfg::TransltText && tblStrct[iFld][1].size() > 3 &&
+		    (cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText && tblStrct[iFld][1].size() > 3 &&
 		    tblStrct[iFld][1].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][1].compare(0,2,Mess->lang2Code()) != 0))
 		break;
 	if(iCf >= cf_el.size()) toUpdate = true;
@@ -693,6 +693,7 @@ string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
     string rez = cfg.getS(RqFlg);
     if(rez == EVAL_STR)	return "NULL";
     if(cfg.fld().type() == TFld::String) {
+	if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->lang2Code());
 	string prntRes = rez;
 	bool isBin = false;
 	for(unsigned iCh = 0; !isBin && iCh < prntRes.size(); ++iCh)
@@ -712,8 +713,8 @@ void MTable::setVal( TCfg &cf, const string &ival, bool tr )
     switch(cf.fld().type()) {
 	case TFld::String:
 	    if(!cf.extVal()) {
-		if(!tr || (cf.fld().flg()&TCfg::TransltText && !cf.noTransl())) cf.setS(val);
-		if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+		if(!tr || (cf.fld().flg()&TFld::TransltText && !cf.noTransl())) cf.setS(val);
+		if(!tr && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
 	    else {
 		if(!tr) {

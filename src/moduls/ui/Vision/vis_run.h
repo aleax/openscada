@@ -119,6 +119,7 @@ class VisRun : public QMainWindow
 	~VisRun( );
 
 	string	user( );
+	string	lang( );
 	string	password( );
 	string	VCAStation( );
 	int	period( )	{ return mPeriod; }
@@ -141,6 +142,7 @@ class VisRun : public QMainWindow
 	void setReqTm( unsigned rt )	{ reqtm = rt; }
 	void setStyle( int istl );
 
+	void messUpd( );
 	void initSess( const string &prjSes_it, bool crSessForce = false );	//Init session for project's item path
 	void callPage( const string &ses_it, bool updWdg = false );		//Call session page
 	void fullUpdatePgs( );
@@ -228,14 +230,29 @@ class VisRun : public QMainWindow
 	QMenu	*menuFile,			//Menu "File"
 		*menuAlarm,			//Menu "Alarm"
 		*menuView,			//Menu "View"
-		*menuHelp;			//Menu "Help"
+		*menuHelp,			//Menu "Help"
+		*menuPrint,			//Menu "Print"
+		*menuExport;			//Menu "Export"
 
 	// Tool bars
 	QToolBar	*toolBarStatus;		//Status toolbar
 
 	// Actions
-	QAction *actFullScr,			//Full screen action
-	//  Alarms actions
+	QAction	*actClose,			//Close
+		*actQuit,			//Quit
+		*actFullScr,			//Full screen
+		*actPrintPg,			//Print the selected page
+		*actPrintDiag,			//Print the selected diagram
+		*actPrintDoc,			//Print the selected document
+		*actExpPg,			//Export the selected page
+		*actExpDiag,			//Export the selected diagram
+		*actExpDoc,			//Export the selected document
+		*actAbout,			//About
+		*actQtAbout,			//About Qt
+		*actProjManual,			//The project manual
+		*actManual,			//The module manual
+		*actManualSYS,			//OpenSCADA manual
+		*actWhatIs,			//What is
 		*actAlrmLev;			//Alarm level
 
 	// Main components

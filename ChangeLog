@@ -1,3 +1,25 @@
+2017-08-18 Roman (stable)
+- FIX:DB.Model.AGLKS.vca: Signal objects KM101 name translation was also fixed.
+- !!!!:SYS,DB.*,DAQ.{BFN,BlockCalc,JavaLikeCalc,LogicLev,ModBus},Protocol.{ModBus,OPC_UA,UserProtocol},UI.VCAEngine:
+    The flag TCfg::TransltText was moved to TFld::TransltText and used instead TFld::NoStrTransl also.
+- !!!!:FIX:SYS,*: The dynamic messages translation mostly finished and expanded after gettext adaption to the dynamic messages translation:
+    !!: Gettext translation was expanded by language selection different from system one into functions
+	TMess::I18N(), TMess::I18Ns() and their moving to not static ones, TModule::I18N().
+    !!:*,UI.VCAEngine: Functions set of the dynamic translation was expanded for complex translation by pointed language and user next; by functions:
+	trLU(), TMess::translGetLU(), trSetLU(), TMess::translSetLU().
+    !!: The OpenSCADA control interface was expanded by generic attribute "lang" additional to "user" one for
+	the dynamic messages language checking firstly.
+    FIX: The config file accessing functions were fixed and closely adaptred to the dynamic messages translation.
+    !!:TModule,DAQ.JavaLikeCalc,Special.SystemTests,UI.{QTCfg,QTStarter,VCAEngine,Vision,WebCfg,WebCfgD,WebUser,WebVision}:
+	modInfo(): expanded for name syntax "{NAME}[:{lng}]" and request for information translation in pointed language.
+    TModule: Twice translation try was disabled for modules - first is self and second is from core.
+    FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Dynamic messages translation saving was fixed for not base languages.
+    !!!!:Protocol.HTTP,UI.{WebUser,WebVision}: Expanded for multi-languages interface by: URL parameter "lang", auth user's language, Web browser's language.
+	Templates also set to support multilanguage.
+    !!!!:UI.Vision: Mostly adapted to system menus and dialogs dynamic messages translation of the run-time interface.
+	Left untranslated only Qt-internal messages which unalowed to dynamic translation and without all system locale changing!
+
+
 2017-08-05 Roman (stable)
 - DB.LibsDB.vcaBase: Main.TextLab adapted for only color dynamic control.
     doc.{docGasNodeDayA,docGasNodeMonthA} significant expanded for new methods, to control archivator and the report hour.

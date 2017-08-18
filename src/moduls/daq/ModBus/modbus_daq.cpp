@@ -75,7 +75,7 @@ void TTpContr::postEnable( int flag )
     //Parameter type bd structure
     // Standard parameter type by symple attributes list
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
     // Extended logical parameter type by DAQ parameter's template
     t_prm = tpParmAdd("logic","PRM_BD_L",_("Logical"));
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));

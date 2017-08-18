@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-09 15:44+0300\n"
+"POT-Creation-Date: 2017-08-15 12:08+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -37,9 +37,8 @@ msgstr ""
 "AuthTime <мин>     Время жизни аутентификации, минут (по умолчанию 10).\n"
 "\n"
 
-#, c-format
-msgid "HTML template '%s' load error: %s"
-msgstr "Ошибка загрузки HTML шаблона '%s': %s"
+msgid "HTML template '%s' for language '%s' load error: %s"
+msgstr "Ошибка загрузки HTML шаблона '%s' для языка '%s': %s"
 
 #, c-format
 msgid "Auth exit from user '%s'."
@@ -157,20 +156,17 @@ msgid "You are logged in as \"<b>%s</b>\"."
 msgstr "Вы вошли как \"<b>%s</b>\"."
 
 msgid ""
-"Select the necessary Web-module from the list below, <a href='/"
-"logout'>logout</a> or <a href='/login'>login as an another user</a>."
+"Select the necessary Web-module from the list below, <a href='%s'>logout</a> "
+"or <a href='%s'>login as an another user</a>."
 msgstr ""
-"Выберите нужный Web-модуль из списка ниже, <a href='/logout'>выйдите</a> или "
-"<a href='/login'>войдите от имени другого пользователя</a>."
+"Выберите нужный Web-модуль из списка ниже, <a href='%s'>выйдите</a> или "
+"<a href='%s'>войдите от имени другого пользователя</a>."
 
 msgid "You are not logged in the system!"
 msgstr "Вы не вошли в систему!"
 
-msgid ""
-"To use some modules you must be logged in. <a href='/login'>Login now</a>."
-msgstr ""
-"Для использования некоторых модулей Вы должны войти в систему. <a href='/"
-"login'>Войти</a>."
+msgid "To use some modules you must be logged in. <a href='%s'>Login now</a>."
+msgstr "Для использования некоторых модулей Вы должны войти в систему. <a href='%s'>Войти</a>."
 
 #, c-format
 msgid ""

@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"3.3.2"
+#define MOD_VER		"3.3.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of the OpenSCADA system.")
 #define LICENSE		"GPL2"
@@ -91,16 +91,19 @@ TUIMod::~TUIMod( )
     if(runSt) modStop();
 }
 
-string TUIMod::modInfo( const string &name )
-{
-    if(name == "SubType") return SUB_TYPE;
-    return TModule::modInfo(name);
-}
-
 void TUIMod::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
+}
+
+string TUIMod::modInfo( const string &iname )
+{
+    string name = TSYS::strParse(iname, 0, ":");
+
+    if(name == "SubType") return SUB_TYPE;
+
+    return TModule::modInfo(name);
 }
 
 string TUIMod::optDescr( )

@@ -36,8 +36,8 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true)
     //Input transport BD structure
     elIn.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
+    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
     elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(s2i(OBJ_ID_SZ)*3).c_str()));
     elIn.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
@@ -45,15 +45,15 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true)
     //Output transport BD structure
     elOut.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
-    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
+    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elOut.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
     elOut.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //External hosts' connection DB struct
     elExt.fldAdd(new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     elExt.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
     elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,OBJ_ID_SZ));
     elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
     elExt.fldAdd(new TFld("USER",_("Request user"),TFld::String,0,OBJ_ID_SZ));
@@ -478,7 +478,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user");
+    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path == "/sub/transps" && ctrChkNode(opt)) {
 	vector<string>  list;
 	modList(list);
@@ -504,7 +504,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iH = 0; iH < list.size(); iH++) {
 		ExtHost &host = list[iH];
 		if(nId)		nId->childAdd("el")->setText(host.id);
-		if(nNm)		nNm->childAdd("el")->setText(trU(host.name,u));
+		if(nNm)		nNm->childAdd("el")->setText(trLU(host.name,l,u));
 		if(nTr)		nTr->childAdd("el")->setText(host.transp);
 		if(nAddr)	nAddr->childAdd("el")->setText(host.addr);
 		if(nUser)	nUser->childAdd("el")->setText(host.user);
@@ -528,7 +528,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		host.id = opt->text();
 		extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	    }
-	    else if(col == "name")	host.name = trSetU(host.name,u,opt->text());
+	    else if(col == "name")	host.name = trSetLU(host.name,l,u,opt->text());
 	    else if(col == "transp")	host.transp = opt->text();
 	    else if(col == "addr")	host.addr = opt->text();
 	    else if(col == "user")	host.user = opt->text();

@@ -34,6 +34,9 @@
 #include "vis_run.h"
 #include "vis_run_widgs.h"
 
+#undef _
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str())
+
 using namespace VISION;
 
 //*************************************************
@@ -722,16 +725,16 @@ bool StylesStBar::styleSel( )
 
     if(req.childSize() <= 1) return false;
 
-    InputDlg dlg(this, mainWin()->windowIcon(), _("Select your style from list."), _("Style select"), false, false);
+    InputDlg dlg(this, mainWin()->windowIcon(), _("Select your style from list."), _("Style select"), false, false, mainWin()->lang());
     QLabel *lab = new QLabel(_("Style:"),&dlg);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
     dlg.edLay()->addWidget(lab, 0, 0);
     QComboBox *stls = new QComboBox(&dlg);
     dlg.edLay()->addWidget(stls, 0, 1);
-    for(unsigned i_s = 0; i_s < req.childSize(); i_s++) {
-	stls->addItem(req.childGet(i_s)->text().c_str(),s2i(req.childGet(i_s)->attr("id")));
-	if(s2i(req.childGet(i_s)->attr("id")) == style())
-	    stls->setCurrentIndex(i_s);
+    for(unsigned iS = 0; iS < req.childSize(); iS++) {
+	stls->addItem(req.childGet(iS)->text().c_str(),s2i(req.childGet(iS)->attr("id")));
+	if(s2i(req.childGet(iS)->attr("id")) == style())
+	    stls->setCurrentIndex(iS);
     }
     dlg.resize(300, 120);
     if(dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0) {

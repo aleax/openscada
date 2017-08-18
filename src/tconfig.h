@@ -46,10 +46,9 @@ class TCfg : public TVariant
     public:
 	//Data
 	enum AttrFlg {
-	    TransltText	= 0x100,	//String value type: Use translation variable texts mechanism
-	    NoVal	= 0x200,	//No mirrore to value
-	    Key		= 0x400,	//Primary key
-	    Hide	= 0x800		//Attribute hide
+	    NoVal	= 0x100,	//Do not mirrore to value
+	    Key		= 0x200,	//Primary key
+	    Hide	= 0x400		//Hide attribute
 	};
 	enum ReqFlg {
 	    ForceUse	= 0x01,		//Force use flag

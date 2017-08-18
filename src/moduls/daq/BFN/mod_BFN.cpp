@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.7"
+#define MOD_VER		"0.6.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Big Farm Net (BFN) modules support for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -99,12 +99,12 @@ void TTpContr::postEnable( int flag )
 
     //Make Symbols of codes container structure
     symbCode_el.fldAdd(new TFld("ID","ID",TFld::Integer,TCfg::Key));
-    symbCode_el.fldAdd(new TFld("TEXT","Text",TFld::String,TCfg::TransltText,"100"));
+    symbCode_el.fldAdd(new TFld("TEXT","Text",TFld::String,TFld::TransltText,"100"));
 
     //Make Symbols of alarms container structure
     symbAlrm_el.fldAdd(new TFld("ID","ID",TFld::Integer,TCfg::Key));
     symbAlrm_el.fldAdd(new TFld("CODE","Code",TFld::Integer,TFld::NoFlag));
-    symbAlrm_el.fldAdd(new TFld("TEXT","Text",TFld::String,TCfg::TransltText,"100"));
+    symbAlrm_el.fldAdd(new TFld("TEXT","Text",TFld::String,TFld::TransltText,"100"));
 }
 
 string TTpContr::symbDB( )	{ return TBDS::genDBGet(nodePath()+"symbDB","*.*"); }

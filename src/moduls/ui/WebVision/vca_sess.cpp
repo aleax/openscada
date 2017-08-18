@@ -55,8 +55,8 @@ void VCASess::postDisable( int flag )
     // Disconnect/delete session
     if(mIsCreate) {
 	XMLNode req("disconnect");
-	req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",id());
-	mod->cntrIfCmd(req,"root");
+	req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", id());
+	mod->cntrIfCmd(req, SSess("root"));
     }
 }
 
@@ -79,9 +79,9 @@ void VCASess::getReq( SSess &ses )
 	string prjNm;
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/%2fobj%2fst%2fprj");
-	if(!mod->cntrIfCmd(req,ses.user)) {
+	if(!mod->cntrIfCmd(req,ses)) {
 	    req.setAttr("path","/prj_"+req.text()+"/%2fobj%2fcfg%2fname");
-	    if(!mod->cntrIfCmd(req,ses.user))	prjNm = req.text();
+	    if(!mod->cntrIfCmd(req,ses))	prjNm = req.text();
 	}
 
 	//Check for the main work page
@@ -109,7 +109,7 @@ void VCASess::getReq( SSess &ses )
     else if(wp_com == "ico") {
 	XMLNode req("get");
 	req.setAttr("path", ses.url+"/%2fico");
-	mod->cntrIfCmd(req, ses.user);
+	mod->cntrIfCmd(req, ses);
 	ses.page = TSYS::strDecode(req.text(), TSYS::base64);
 	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png;");
     }
@@ -121,7 +121,7 @@ void VCASess::getReq( SSess &ses )
 	req.setAttr("path",ses.url);
 	req.childAdd("openlist")->setAttr("path","/%2fserv%2fpg")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	req.childAdd("get")->setAttr("path","/%2fobj%2fcfg%2fper");
-	mod->cntrIfCmd(req,ses.user);
+	mod->cntrIfCmd(req, ses);
 	req.childGet(0)->setAttr("per",req.childGet(1)->text());
 	ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
@@ -131,7 +131,7 @@ void VCASess::getReq( SSess &ses )
 	string attr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 
 	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
-	mod->cntrIfCmd(req,ses.user);
+	mod->cntrIfCmd(req, ses);
 	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Widget's (page) full attributes branch request
@@ -141,7 +141,7 @@ void VCASess::getReq( SSess &ses )
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/%2fserv%2fattrBr")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0")->
 	    setAttr("FullTree",(prmEl1!=ses.prm.end())?prmEl1->second:"0");
-	mod->cntrIfCmd(req, ses.user);
+	mod->cntrIfCmd(req, ses);
 
 	// Backend objects' attributes set
 	vector<int> pos;	unsigned cpos = 0;
@@ -163,7 +163,7 @@ void VCASess::getReq( SSess &ses )
 	    XMLNode *rootId = cn->getElementBy("id", "root");
 	    oAddr = TSYS::path2sepstr(caddr);
 	    if(rootId) objCheck(rootId->text(), oAddr);
-	    if(objPresent(oAddr)) objAt(oAddr).at().setAttrs(*cn, ses.user);
+	    if(objPresent(oAddr)) objAt(oAddr).at().setAttrs(*cn, ses);
 	    if(!cn->parent())	break;
 	    cn = cn->parent();
 	    cpos = pos.back();	pos.pop_back();
@@ -178,7 +178,7 @@ void VCASess::getReq( SSess &ses )
 	prmEl = ses.prm.find("val");
 	if(prmEl != ses.prm.end()) {
 	    string mime;
-	    ses.page = resGet(prmEl->second, ses.url, ses.user, &mime);
+	    ses.page = resGet(prmEl->second, ses.url, ses, &mime);
 	    mod->imgConvert(ses);
 	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+mime);
 	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource isn't found"))+"</div>\n", "404 Not Found");
@@ -204,13 +204,13 @@ void VCASess::postReq( SSess &ses )
 	XMLNode req("set");
 	req.load(ses.content);
 	req.setAttr("path",ses.url+"/%2fserv%2fattr");
-	mod->cntrIfCmd(req,ses.user);
+	mod->cntrIfCmd(req, ses);
     }
     //Open page command
     else if(wp_com == "pgClose" || wp_com == "pgOpen") {
 	XMLNode req((wp_com=="pgOpen")?"open":"close");
 	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
-	mod->cntrIfCmd(req,ses.user);
+	mod->cntrIfCmd(req, ses);
     }
     else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
     ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
@@ -232,7 +232,7 @@ void VCASess::objAdd( VCAObj *obj )
     else chldAdd(id_objs, obj);
 }
 
-string VCASess::resGet( const string &res, const string &path, const string &user, string *mime )
+string VCASess::resGet( const string &res, const string &path, const SSess &ses, string *mime )
 {
     if(res.empty()) return "";
 
@@ -240,7 +240,7 @@ string VCASess::resGet( const string &res, const string &path, const string &use
     if(ret.empty()) {
 	XMLNode req("get");
 	req.setAttr("path", path+"/%2fwdg%2fres")->setAttr("id", res);
-	mod->cntrIfCmd(req, user);
+	mod->cntrIfCmd(req, ses);
 	ret = TSYS::strDecode(req.text(), TSYS::base64);
 	if(!ret.empty()) {
 	    if(mime) *mime = TUIS::mimeGet(res, ret, req.attr("mime"));
@@ -3815,7 +3815,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    yMax = (int)rRnd( yMax, POS_PREC_DIG, true );
 
 			    gdImagePtr im_fill_in = NULL;
-			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill,path(),ses.user);
+			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill, path(), ses);
 			    if( !(im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromGifPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) )
@@ -4029,12 +4029,12 @@ void VCAElFigure::postReq( SSess &ses )
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+i2s(clickFillNum)+key);
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
 	    req.childAdd("el")->setAttr("id","focus")->setText("1");
-	    mod->cntrIfCmd(req,ses.user);
+	    mod->cntrIfCmd(req, ses.user);
 	}
     }
 }
 
-void VCAElFigure::setAttrs( XMLNode &node, const string &user )
+void VCAElFigure::setAttrs( XMLNode &node, const SSess &ses )
 {
     MtxAlloc res(mRes, true);
     XMLNode *req_el;
@@ -4272,7 +4272,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"i%d",&w_s) == 1) img = images[w_s];
 		    else if(!(img=TSYS::strDecode(el_s)).size()) img = imgDef;
-		    if(owner().resGet(img,path(),user) == "") img = "";
+		    if(owner().resGet(img,path(),ses) == "") img = "";
 
 		    inundationItems.push_back(InundationItem(p,fl_color,-1,img));
 		    break;
@@ -4682,7 +4682,7 @@ void VCAText::getReq( SSess &ses )
     }
 }
 
-void VCAText::setAttrs( XMLNode &node, const string &user )
+void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 {
     MtxAlloc res(mRes, true);
     XMLNode *req_el;
@@ -6214,7 +6214,7 @@ void VCADiagram::postReq( SSess &ses )
     }
 }
 
-void VCADiagram::setAttrs( XMLNode &node, const string &user )
+void VCADiagram::setAttrs( XMLNode &node, const SSess &ses )
 {
     MtxAlloc res(mRes, true);
 
@@ -6252,13 +6252,13 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		if((curTime/1000000) == s2i(req_el->text())) break;
 		curTime = s2ll(req_el->text())*1000000 + curTime%1000000;
 		holdCur = (curTime>=tTime);
-		setCursor(curTime, user);
+		setCursor(curTime, ses.user);
 		break;
 	    case A_DiagramCurUSek:
 		if((curTime%1000000) == s2i(req_el->text())) break;
 		curTime = 1000000ll*(curTime/1000000)+s2ll(req_el->text());
 		holdCur = (curTime>=tTime);
-		setCursor(curTime, user);
+		setCursor(curTime, ses.user);
 		break;
 	    case A_DiagramCurColor: curColor = mod->colorParse(req_el->text());		break;
 	    case A_DiagramSclColor: sclColor = mod->colorParse(req_el->text());		break;
@@ -6318,13 +6318,13 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 	XMLNode req("set");
 	req.setAttr("path", path()+"/%2fserv%2fattr");
 	for(unsigned iP = 0; iP < trnds.size(); iP++) {
-	    trnds[iP].loadData(user, reld_tr_dt==2);
+	    trnds[iP].loadData(ses.user, reld_tr_dt==2);
 	    if(trnds[iP].arh_beg && trnds[iP].arh_end)
 		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dprop",iP))->
 		    setText(TSYS::strMess("%.15g:%.15g:%.15g",
 			(double)trnds[iP].arh_beg*1e-6,(double)trnds[iP].arh_end*1e-6,(double)trnds[iP].arh_per*1e-6));
 	}
-	if(req.childSize()) mod->cntrIfCmd(req,user);
+	if(req.childSize()) mod->cntrIfCmd(req, ses);
     }
 }
 
@@ -6355,7 +6355,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	    if(val != trnds[iP].curVal())
 		req.childAdd("el")->setAttr("id","prm"+i2s(iP)+"val")->setText(r2s(val,6));
 	}
-	mod->cntrIfCmd(req,user);
+	mod->cntrIfCmd(req, user);
     }
     else if(type == FD_SPECTR) {
 	float curFrq = vmax(vmin(1e6/(float)itm,fftEnd),fftBeg);
@@ -6378,7 +6378,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",iP))->setText(r2s(val,6));
 	}
 #endif
-	mod->cntrIfCmd(req,user);
+	mod->cntrIfCmd(req, user);
     }
 }
 
@@ -6669,7 +6669,7 @@ VCADocument::VCADocument( const string &iid ) : VCAObj(iid)
 
 }
 
-void VCADocument::setAttrs( XMLNode &node, const string &user )
+void VCADocument::setAttrs( XMLNode &node, const SSess &ses )
 {
     for(unsigned i_a = 0; i_a < node.childSize(); i_a++) {
 	XMLNode *req_el = node.childGet(i_a);

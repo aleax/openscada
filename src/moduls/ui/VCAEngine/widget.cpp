@@ -121,7 +121,7 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
-	attrAdd(new TFld("owner",_("Owner"),TFld::String,TFld::NoStrTransl|Attr::Generic|Attr::PreRead,"","root:UI"));
+	attrAdd(new TFld("owner",_("Owner"),TFld::String,Attr::Generic|Attr::PreRead,"","root:UI"));
 	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic|Attr::PreRead,"","01000",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666;"
 	    "01000;01400;01440;01444;01600;01640;01644;01660;01664;01666",
@@ -129,8 +129,8 @@ void Widget::postEnable( int flag )
 	      "Inheritance;Inherit.(R_____);Inherit.(R_R___);Inherit.(R_R_R_);Inherit.(RW____);"
 	      "Inherit.(RWR___);Inherit.(RWR_R_);Inherit.(RWRW__);Inherit.(RWRWR_);Inherit.(RWRWRW)")));
 	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
-	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic));
-	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
+	attrAdd(new TFld("name",_("Name"),TFld::String,TFld::TransltText|Attr::Generic));
+	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic));
 	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
 	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
 	attrAdd(new TFld("geomX",_("Geometry: x"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_X).c_str()));
@@ -141,10 +141,10 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("geomYsc",_("Geometry: y scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_Y_SC).c_str()));
 	attrAdd(new TFld("geomZ",_("Geometry: z"),TFld::Integer,Attr::Generic,"","0","-1000000;1000000","",i2s(A_GEOM_Z).c_str()));
 	attrAdd(new TFld("geomMargin",_("Geometry: margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",i2s(A_GEOM_MARGIN).c_str()));
-	attrAdd(new TFld("tipTool",_("Tip: tool"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
-	attrAdd(new TFld("tipStatus",_("Tip: status"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
-	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
-	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText|TFld::NoStrTransl,"200"));
+	attrAdd(new TFld("tipTool",_("Tip: tool"),TFld::String,TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
+	attrAdd(new TFld("tipStatus",_("Tip: status"),TFld::String,TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
+	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
+	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200"));
     }
 }
 
@@ -776,7 +776,7 @@ bool Widget::eventProc( const string &ev, Widget *src )
 bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string tNm;
-    string a_path = opt->attr("path"), u = opt->attr("user");
+    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     //Service commands process
     if(a_path == "/serv/attr") {	//Attribute's access
 	if(ctrChkNode(opt,"get",RWRWRW,"root",SUI_ID,SEC_RD)) {		//Get values
@@ -789,7 +789,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		    if(attr.at().flgGlob()&Attr::IsUser) continue;
 		    opt->childAdd("el")->setAttr("id",ls[iL].c_str())->
 					 setAttr("p",attr.at().fld().reserve())->
-					 setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
+					 setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 		}
 	    }
 	    else
@@ -798,7 +798,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 			attr = attrAt(tNm);
 			opt->childGet(iL)->setAttr("p",attr.at().fld().reserve())->
 					    setAttr("act",(attr.at().flgGlob()&Attr::Active)?"1":"0")->
-					    setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
+					    setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 		    }
 	}
 	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
@@ -816,7 +816,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	    if(attr.at().flgGlob()&Attr::IsUser) continue;
 	    opt->childAdd("el")->setAttr("id",ls[iL].c_str())->
 			     setAttr("p",attr.at().fld().reserve())->
-			     setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
+			     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 	}
 	// Child widgets process
 	if(enable()) {
@@ -878,7 +878,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user");
+    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path == "/wdg/res" && ctrChkNode(opt)) {	//Service command for resources request
 	string mime;
 	opt->setText(resourceGet(opt->attr("id"),&mime));
@@ -905,12 +905,12 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/cfg/path" && ctrChkNode(opt))
 	opt->setText((isLink()&&s2i(opt->attr("resLink"))) ? parentNoLink().at().path() : path());
     else if(a_path == "/wdg/cfg/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trU(name(),u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetU(name(),u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(name(),l,u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
     }
     else if(a_path == "/wdg/cfg/descr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trU(descr(),u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trSetU(descr(),u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(descr(),l,u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trSetLU(descr(),l,u,opt->text()));
     }
     else if(a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID)) {
 	if(opt->attr("attr").empty()) wClear();
@@ -979,7 +979,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		    AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
 		    if(chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEC_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()))
 			continue;
-		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trU(iwdg.at().name(),u));
+		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(iwdg.at().name(),l,u));
 		}
 	    }
 	}
@@ -1075,14 +1075,14 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
     }
 
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user");
+    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
-	    opt->setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
+	    opt->setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 	else if(ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    attr.at().setS(attr.at().isTransl()?trSetU(attr.at().getS(),u,opt->text()):opt->text());
-	    opt->setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
+	    attr.at().setS(attr.at().isTransl()?trSetLU(attr.at().getS(),l,u,opt->text()):opt->text());
+	    opt->setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
 	}
 	else if(attr.at().id() == "contextMenu" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    opt->childAdd("rule")->setAttr("expr", ":.*$")->setAttr("color", "darkorange");

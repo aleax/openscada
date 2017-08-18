@@ -63,8 +63,8 @@ class TUIMod: public TUI
 	void modStop( );
 
 	// Module's info attributes
-	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
 
 	// Windows registering
 	void regWin( QMainWindow *win );

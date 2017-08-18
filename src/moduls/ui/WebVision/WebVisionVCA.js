@@ -24,6 +24,7 @@ var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 var mainTmId = 0;
+var gPrms = window.location.search || '';
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -207,7 +208,7 @@ function evKeyGet( e )
 function servGet( adr, prm, callBack, callBackPrm )
 {
     var req = getXmlHttp();
-    req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm), callBack ? true : false);
+    req.open('GET', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), callBack ? true : false);
     if(callBack) {
 	req.callBack = callBack;
 	req.callBackPrm = callBackPrm;
@@ -238,7 +239,7 @@ function servGet( adr, prm, callBack, callBackPrm )
 function servSet( adr, prm, body, waitRez )
 {
     var req = getXmlHttp();
-    req.open('POST', encodeURI('/'+MOD_ID+adr+'?'+prm), !waitRez);
+    req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), !waitRez);
     try {
 	req.send(body);
 	if(waitRez && req.status == 200 && req.responseXML.childNodes.length)

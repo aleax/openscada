@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.7.9"
+#define MOD_VER		"1.7.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the logical level of parameters.")
 #define LICENSE		"GPL2"
@@ -111,7 +111,7 @@ void TTpContr::postEnable( int flag )
     //  Logical level parameter IO BD structure
     elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(atoi(OBJ_ID_SZ)*6).c_str()));
     elPrmIO.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"1000000"));
+    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"1000000"));
 
     // A parameter direct reflection
     t_prm = tpParmAdd("pRefl", "PRM_BD_REFL", _("Parameter reflection"), true);

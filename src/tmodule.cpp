@@ -127,13 +127,14 @@ bool TModule::modFunc( const string &prot, void (TModule::**offptr)(), bool noex
 
 void TModule::modInfo( vector<string> &list )
 {
-    for(unsigned i_opt = 0; i_opt < sizeof(lInfo)/sizeof(char *); i_opt++)
-	list.push_back(lInfo[i_opt]);
+    for(unsigned iOpt = 0; iOpt < sizeof(lInfo)/sizeof(char *); iOpt++)
+	list.push_back(lInfo[iOpt]);
 }
 
-string TModule::modInfo( const string &name )
+string TModule::modInfo( const string &iname )
 {
-    string info;
+    string  name = TSYS::strParse(iname, 0, ":"),
+	    info;
 
     if(name == lInfo[0])	info = mModId;
     else if(name == lInfo[1])	info = mModName;
@@ -189,11 +190,11 @@ void TModule::modInfoMainSet( const string &name, const string &type, const stri
     mModSource	= source;
 }
 
-const char *TModule::I18N( const char *mess )
+const char *TModule::I18N( const char *mess, const char *mLang )
 {
 #ifdef HAVE_LIBINTL_H
-    const char *rez = Mess->I18N(mess, lcId.c_str());
-    if(!strcmp(mess,rez)) rez = _(mess);
+    const char *rez = Mess->I18N(mess, lcId.c_str(), mLang);
+    //if(!strcmp(mess,rez)) rez = Mess->I18N(mess, NULL, mLang);	//_(mess);
     return rez;
 #else
     return mess;

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"3.10.3"
+#define MOD_VER		"4.0.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main visual control area engine.")
 #define LICENSE		"GPL2"
@@ -94,7 +94,14 @@ void Engine::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-string Engine::modInfo( const string &name )	{ return (name=="SubType") ? MOD_SUBTYPE : TModule::modInfo(name); }
+string Engine::modInfo( const string &iname )
+{
+    string name = TSYS::strParse(iname, 0, ":");
+
+    if(name == "SubType")	return MOD_SUBTYPE;
+
+    return TModule::modInfo(name);
+}
 
 void Engine::postEnable( int flag )
 {
@@ -104,8 +111,8 @@ void Engine::postEnable( int flag )
 
     //Make lib's DB structure: Libs(__ID__, NAME, DSCR, DB_TBL, ICO)
     lbwdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
-    lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    lbwdg_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    lbwdg_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     lbwdg_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
     lbwdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
 
@@ -119,7 +126,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     wdg_el.fldAdd(new TFld("PR_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
+    wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
     wdg_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
     wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
     wdg_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
@@ -134,26 +141,26 @@ void Engine::postEnable( int flag )
     wdgio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
     wdgio_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61"));
     wdgio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
-    wdgio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000"));
+    wdgio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::TransltText,"100000"));
     wdgio_el.fldAdd(new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5"));
-    wdgio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30"));
-    wdgio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000"));
+    wdgio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::TransltText,"30"));
+    wdgio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::TransltText,"1000"));
 
     //Make widget's user IO DB structure: {ProjPageUserIO,LibWidgetUserIO}(__IDW__, __ID__, __IDC__, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
     wdguio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
     wdguio_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61"));
     wdguio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
-    wdguio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"100"));
+    wdguio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,"100"));
     wdguio_el.fldAdd(new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10"));
-    wdguio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000"));
+    wdguio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::TransltText,"100000"));
     wdguio_el.fldAdd(new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5"));
-    wdguio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30"));
-    wdguio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000"));
+    wdguio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::TransltText,"30"));
+    wdguio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::TransltText,"1000"));
 
     //Make project's DB structure: Projs(__ID__, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)
     prj_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
-    prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,OBJ_NM_SZ));
+    prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     prj_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
     prj_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"root"));
@@ -169,7 +176,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     page_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     page_el.fldAdd(new TFld("PR_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
+    page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
     page_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
     page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
@@ -616,7 +623,7 @@ void Engine::perSYSCall( unsigned int cnt )
 
 void Engine::cntrCmdProc( XMLNode *opt )
 {
-    string a_path = opt->attr("path"), u = opt->attr("user");
+    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
 
     //Service commands process
     if(a_path == "/serv/sess") {	//Session operation
@@ -689,7 +696,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_wlb = 0; i_wlb < ls.size(); i_wlb++) {
 	    if(!upd_lb.empty() && upd_lb != ls[i_wlb]) continue;
 	    AutoHD<WidgetLib> wlb = wlbAt(ls[i_wlb]);
-	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(trU(wlb.at().name(),u));
+	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(trLU(wlb.at().name(),l,u));
 	    wlbN->childAdd("ico")->setText(wlb.at().ico());
 
 	    //  Widgets
@@ -698,7 +705,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_w = 0; i_w < wls.size(); i_w++) {
 		if(!upd_wdg.empty() && upd_wdg != wls[i_w])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
-		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentNm())->setText(trU(w.at().name(),u));
+		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentNm())->setText(trLU(w.at().name(),l,u));
 		wN->childAdd("ico")->setText(w.at().ico());
 
 		//  Child widgets
@@ -708,7 +715,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    for(unsigned i_c = 0; i_c < cwls.size(); i_c++) {
 			if(!upd_wdgi.empty() && upd_wdgi != cwls[i_c])	continue;
 			AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
-			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(trU(cw.at().name(),u))->
+			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(trLU(cw.at().name(),l,u))->
 			    childAdd("ico")->setText((cwls.size()>=100)?"":cw.at().ico());
 		    }
 	    }
@@ -753,7 +760,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			continue;
 		}
-		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(trU(prjAt(lst[i_a]).at().name(),u));
+		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(trLU(prjAt(lst[i_a]).at().name(),l,u));
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
@@ -769,7 +776,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    wlbList(lst);
 	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(trU(wlbAt(lst[i_a]).at().name(),u));
+		opt->childAdd("el")->setAttr("id",lst[i_a])->setText(trLU(wlbAt(lst[i_a]).at().name(),l,u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"), TSYS::oscdID);

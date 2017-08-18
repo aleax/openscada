@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-02 17:06+0300\n"
+"POT-Creation-Date: 2017-08-11 11:13+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1365,8 +1365,192 @@ msgstr "Ausgewählt sind die Elemente: '%1'"
 msgid "Cursor --- xy(%1:%2)"
 msgstr "Cursor --- xy(%1:%2)"
 
+msgid ""
+"Connection to visualization server '%1' error: %2.\n"
+"Will restore try after %3s!"
+msgstr ""
+"Der Anschluss an Visualisierungs-Server '%1' Fehler: %2.\n"
+"Wird wiederherzustellen versuchen nach %3s!"
+
+#, c-format
+msgid "Root page scale [%f:%f]."
+msgstr ""
+
+msgid "Print page"
+msgstr "Seite drucken"
+
+msgid "No one page for print is present!"
+msgstr "Keine Seite zum Drucken ist vorhanden!"
+
+msgid "Select a page for print."
+msgstr "Seite zum Drucken auswählen."
+
+msgid "Page print."
+msgstr "Seite drucken."
+
+msgid "Pages:"
+msgstr "Seiten:"
+
+msgid "Print page: \"%1\" (%2)"
+msgstr "Drucken von Seiten \"%1\" (%2)"
+
+msgid "OpenSCADA project: \"%1\""
+msgstr "Projekt OpenSCADA: \"%1\""
+
+msgid "User: \"%1\""
+msgstr "Benutzer: \"%1\""
+
+msgid "Print diagram"
+msgstr "Diagramm drucken"
+
+msgid "No one page is present!"
+msgstr "Keine Seite ist vorhanden."
+
+msgid "No one diagram is present!"
+msgstr "Kein Diagramm ist vorhanden!"
+
+msgid "Select diagram for print."
+msgstr "Diagramm zum Drucken auswählen."
+
+msgid "Diagram print."
+msgstr "Diagramm drucken."
+
+msgid "Diagrams:"
+msgstr "Diagramme:"
+
+msgid "Print diagram: \"%1\" (%2)"
+msgstr "Diagramme drucken: \"%1\" (%2)"
+
+msgid ""
+"OpenSCADA project: \"%1\"\n"
+"%2 (%3)"
+msgstr ""
+"Projekt OpenSCADA: \"%1\"\n"
+"%2 (%3)"
+
+msgid ""
+"User: \"%1\"\n"
+"%2"
+msgstr ""
+"Benutzer: \"%1\"\n"
+"%2"
+
+msgid "Print document"
+msgstr "Dokument drucken"
+
+msgid "No one document is present!"
+msgstr "Kein Dokument ist vorhanden!"
+
+msgid "Select document for print."
+msgstr "Dokument zum Drucken auswählen."
+
+msgid "Document print."
+msgstr "Dokument drucken."
+
+msgid "Document:"
+msgstr "Dokument:"
+
+msgid "Print document: \"%1\" (%2)"
+msgstr "Dokument drucken: \"%1\" (%2)"
+
+msgid "Export page"
+msgstr "Export der Seite"
+
+msgid "No one page for export is present!"
+msgstr "Keine Seite für den Export ist vorhanden!"
+
+msgid "Select a page for export."
+msgstr "Seite für den Export auswählen."
+
+msgid "Page export."
+msgstr "Export der Seite."
+
+msgid "Save page's image"
+msgstr "Speicherung des Bildes der Seite"
+
+msgid "Export diagram"
+msgstr "Export-Chart"
+
+msgid "Select diagram for export."
+msgstr "Chart für den Export auswählen."
+
+msgid "Diagram export."
+msgstr "Export-Chart."
+
+msgid "Save diagram"
+msgstr "Chart speichern"
+
+#, c-format
+msgid "Trend %1.png"
+msgstr "Trend %1.png"
+
+msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
+msgstr "Bilder (*.png *.xpm *.jpg);;CSV-Datei (*.csv)"
+
+msgid "\"Date and time\";\"us\""
+msgstr "\"Datum und Uhrzeit\";\"us\""
+
+msgid "\"Frequency (Hz)\""
+msgstr "\"Frequenz (Hz)\""
+
+msgid "Error write to: %1."
+msgstr "Fehler schreiben Sie an: %1."
+
+msgid "Export document"
+msgstr "Export des Dokuments"
+
+msgid "Select document for export."
+msgstr "Dokument für den Export auswählen."
+
+msgid "Document export."
+msgstr "Export des Dokumentes."
+
+msgid "Save document"
+msgstr "Speicherung des Dokumentes"
+
+#, c-format
+msgid "Document %1.html"
+msgstr "Dokument %1.html"
+
+msgid "XHTML (*.html);;CSV file (*.csv)"
+msgstr "XHTML (*.html);;CSV File (*.csv)"
+
+msgid "No data for export."
+msgstr "Keine Daten für Export."
+
+msgid ""
+"Several sessions are already opened on the project \"%1\".\n"
+"You can create new or connect to present session. Please, select needed or "
+"press \"Cancel\"."
+msgstr ""
+"Bereits mehrere offene Sessions für das Projekt \"%1\".\n"
+"Sie können eine neue Sitzung erstellen oder sich an eine existierende "
+"Sitzung verbinden. Bitte wählen Sie die richtige oder klicken Sie \"Abbrechen"
+"\"."
+
+msgid "Select session for connection or new creation"
+msgstr "Sitzung für die Verbindung auswählen oder eine neue"
+
+msgid "<Create new session>"
+msgstr "<Erstellen Sie eine neue Sitzung>"
+
+msgid "Running project: %1"
+msgstr "Ausführen Projekt: %1"
+
 msgid "Vision runtime"
 msgstr "Vision-Ausführungszeit"
+
+msgid "The button for closing Vision runtime window"
+msgstr "Schaltfläche zum Schliessen des Ausführungsfenster Vision"
+
+msgid "Press to close of the current Vision runtime window."
+msgstr "Betätigen zum Schliessen des Ausführungsfensters Vision."
+
+msgid "Press for display the program and OpenSCADA information."
+msgstr "Betätigen für Informationen über das Programm und OpenSCADA."
+
+msgid "&Alarm"
+msgstr "Stö&rung"
 
 msgid "&Print"
 msgstr "&Drucken"
@@ -1452,14 +1636,14 @@ msgstr "Schaltfläche für den Export des ausgewählten Dokuments"
 msgid "Press for exporting of the selected document."
 msgstr "Betätigen für den Export des ausgewählten Dokuments."
 
-msgid "The button for closing Vision runtime window"
-msgstr "Schaltfläche zum Schliessen des Ausführungsfenster Vision"
+msgid "Project '%1' manual"
+msgstr "Handbuch von Projekt '%1'"
 
-msgid "Press to close of the current Vision runtime window."
-msgstr "Betätigen zum Schliessen des Ausführungsfensters Vision."
+msgid "The button for getting the using project '%1' manual"
+msgstr "Schaltfläche für Projekt '%1' Handbuch"
 
-msgid "Press for display the program and OpenSCADA information."
-msgstr "Betätigen für Informationen über das Programm und OpenSCADA."
+msgid "Press to get the using project '%1' manual."
+msgstr "Betätigen um Projekt '%1' Handbuch."
 
 msgid "'%1' manual"
 msgstr "'%1' Handbuch"
@@ -1478,9 +1662,6 @@ msgstr "Schaltfläche für die Quittierung aller Störungen"
 
 msgid "Press for all alarms quittance."
 msgstr "Betätigen für die Quittierung aller Störungen."
-
-msgid "&Alarm"
-msgstr "Stö&rung"
 
 msgid "Generic (status)"
 msgstr "Generisches (Status)"
@@ -1505,187 +1686,6 @@ msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 
 msgid "Double click for style change."
 msgstr "Zweimal klicken für Stil zu ändern."
-
-msgid "Project '%1' manual"
-msgstr "Handbuch von Projekt '%1'"
-
-msgid "The button for getting the using project '%1' manual"
-msgstr "Schaltfläche für Projekt '%1' Handbuch"
-
-msgid "Press to get the using project '%1' manual."
-msgstr "Betätigen um Projekt '%1' Handbuch."
-
-msgid ""
-"Connection to visualization server '%1' error: %2.\n"
-"Will restore try after %3s!"
-msgstr ""
-"Der Anschluss an Visualisierungs-Server '%1' Fehler: %2.\n"
-"Wird wiederherzustellen versuchen nach %3s!"
-
-#, c-format
-msgid "Root page scale [%f:%f]."
-msgstr ""
-
-msgid "Print page"
-msgstr "Seite drucken"
-
-msgid "No one page for print is present!"
-msgstr "Keine Seite zum Drucken ist vorhanden!"
-
-msgid "Select page for print."
-msgstr "Seite zum Drucken auswählen."
-
-msgid "Page print."
-msgstr "Seite drucken."
-
-msgid "Pages:"
-msgstr "Seiten:"
-
-msgid "Print page: \"%1\" (%2)"
-msgstr "Drucken von Seiten \"%1\" (%2)"
-
-msgid "OpenSCADA project: \"%1\""
-msgstr "Projekt OpenSCADA: \"%1\""
-
-msgid "User: \"%1\""
-msgstr "Benutzer: \"%1\""
-
-msgid "Print diagram"
-msgstr "Diagramm drucken"
-
-msgid "No one page is present!"
-msgstr "Keine Seite ist vorhanden."
-
-msgid "No one diagram is present!"
-msgstr "Kein Diagramm ist vorhanden!"
-
-msgid "Select diagram for print."
-msgstr "Diagramm zum Drucken auswählen."
-
-msgid "Diagram print."
-msgstr "Diagramm drucken."
-
-msgid "Diagrams:"
-msgstr "Diagramme:"
-
-msgid "Print diagram: \"%1\" (%2)"
-msgstr "Diagramme drucken: \"%1\" (%2)"
-
-msgid ""
-"OpenSCADA project: \"%1\"\n"
-"%2 (%3)"
-msgstr ""
-"Projekt OpenSCADA: \"%1\"\n"
-"%2 (%3)"
-
-msgid ""
-"User: \"%1\"\n"
-"%2"
-msgstr ""
-"Benutzer: \"%1\"\n"
-"%2"
-
-msgid "Print document"
-msgstr "Dokument drucken"
-
-msgid "No one document is present!"
-msgstr "Kein Dokument ist vorhanden!"
-
-msgid "Select document for print."
-msgstr "Dokument zum Drucken auswählen."
-
-msgid "Document print."
-msgstr "Dokument drucken."
-
-msgid "Document:"
-msgstr "Dokument:"
-
-msgid "Print document: \"%1\" (%2)"
-msgstr "Dokument drucken: \"%1\" (%2)"
-
-msgid "Export page"
-msgstr "Export der Seite"
-
-msgid "No one page for export is present!"
-msgstr "Keine Seite für den Export ist vorhanden!"
-
-msgid "Select page for export."
-msgstr "Seite für den Export auswählen."
-
-msgid "Page export."
-msgstr "Export der Seite."
-
-msgid "Save page's image"
-msgstr "Speicherung des Bildes der Seite"
-
-msgid "Export diagram"
-msgstr "Export-Chart"
-
-msgid "Select diagram for export."
-msgstr "Chart für den Export auswählen."
-
-msgid "Diagram export."
-msgstr "Export-Chart."
-
-msgid "Save diagram"
-msgstr "Chart speichern"
-
-#, c-format
-msgid "Trend %1.png"
-msgstr "Trend %1.png"
-
-msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
-msgstr "Bilder (*.png *.xpm *.jpg);;CSV-Datei (*.csv)"
-
-msgid "\"Date and time\";\"us\""
-msgstr "\"Datum und Uhrzeit\";\"us\""
-
-msgid "\"Frequency (Hz)\""
-msgstr "\"Frequenz (Hz)\""
-
-msgid "Error write to: %1."
-msgstr "Fehler schreiben Sie an: %1."
-
-msgid "Export document"
-msgstr "Export des Dokuments"
-
-msgid "Select document for export."
-msgstr "Dokument für den Export auswählen."
-
-msgid "Document export."
-msgstr "Export des Dokumentes."
-
-msgid "Save document"
-msgstr "Speicherung des Dokumentes"
-
-#, c-format
-msgid "Document %1.html"
-msgstr "Dokument %1.html"
-
-msgid "XHTML (*.html);;CSV file (*.csv)"
-msgstr "XHTML (*.html);;CSV File (*.csv)"
-
-msgid "No data for export."
-msgstr "Keine Daten für Export."
-
-msgid ""
-"Several sessions are already opened on the project \"%1\".\n"
-"You can create new or connect to present session. Please, select needed or "
-"press \"Cancel\"."
-msgstr ""
-"Bereits mehrere offene Sessions für das Projekt \"%1\".\n"
-"Sie können eine neue Sitzung erstellen oder sich an eine existierende "
-"Sitzung verbinden. Bitte wählen Sie die richtige oder klicken Sie \"Abbrechen"
-"\"."
-
-msgid "Select session for connection or new creation"
-msgstr "Sitzung für die Verbindung auswählen oder eine neue"
-
-msgid "<Create new session>"
-msgstr "<Erstellen Sie eine neue Sitzung>"
-
-msgid "Running project: %1"
-msgstr "Ausführen Projekt: %1"
 
 msgid "Status line items"
 msgstr "Statuszeile Elemente"
@@ -2213,6 +2213,3 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
-
-#~ msgid "Auth wrong!!!"
-#~ msgstr "Authentifizierungsfehler!!!"

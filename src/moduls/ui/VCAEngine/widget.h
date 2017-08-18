@@ -90,9 +90,9 @@ class Attr
 	string cfgTempl( );
 	string cfgVal( );
 	static bool isTransl( TFld::Type tp, int flgGlb, int flgSelf = -1 ) {
-	    return (tp == TFld::String &&
-		!(flgGlb&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-		(flgSelf == -1 || flgSelf&(Attr::CfgConst|Attr::CfgLnkIn)));
+	    return (tp == TFld::String && (flgGlb&TFld::TransltText) &&
+		!(flgGlb&(Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		(flgSelf == -1 || (flgSelf&(Attr::CfgConst|Attr::CfgLnkIn))));
 	}
 	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 

@@ -70,7 +70,7 @@ class TFld
 	    OctDec	= 0x10,		//Decimal value type: octal view prefer
 	    DateTimeDec	= 0x20,		//Decimal value type: UTC date seconds counter
 	    FullText	= 0x08,		//String value type: full, multiline text
-	    NoStrTransl	= 0x10		//No traslated string's value
+	    TransltText	= 0x10		//String value type: use translation and the variable texts mechanism for configs
 	};
 
 	//Methods

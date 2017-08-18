@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"4.4.1"
+#define MOD_VER		"4.5.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on Qt library - front-end to VCA engine.")
 #define LICENSE		"GPL2"
@@ -100,18 +100,6 @@ TVision::~TVision( )
     //Free widget's shapes
     for(unsigned i_sw = 0; i_sw < shapesWdg.size(); i_sw++) delete shapesWdg[i_sw];
     shapesWdg.clear();
-}
-
-void TVision::modInfo( vector<string> &list )
-{
-    TModule::modInfo(list);
-    list.push_back("SubType");
-}
-
-string TVision::modInfo( const string &name )
-{
-    if(name == "SubType")	return SUB_TYPE;
-    return TModule::modInfo(name);
 }
 
 string TVision::optDescr( )
@@ -490,4 +478,29 @@ QWidget *TVision::getFocusedWdg( QWidget *wcntr )
     while(wcntr->focusProxy()) wcntr = wcntr->focusProxy();
 
     return wcntr;
+}
+
+#undef _
+#define _(mess) mod->I18N(mess, lang.c_str())
+
+void TVision::modInfo( vector<string> &list )
+{
+    TModule::modInfo(list);
+    list.push_back("SubType");
+}
+
+string TVision::modInfo( const string &iname )
+{
+    string  name = TSYS::strParse(iname, 0, ":"),
+	    lang = TSYS::strParse(iname, 1, ":");
+
+    if(name == "SubType")	return SUB_TYPE;
+
+    if(lang.size()) {
+	if(name == "Name")	return _("Operation user interface (Qt)");
+	if(name == "Author")	return _("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)");
+	if(name == "Description") return _("Visual operation user interface, based on Qt library - front-end to VCA engine.");
+    }
+
+    return TModule::modInfo(name);
 }
