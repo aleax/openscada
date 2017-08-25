@@ -1,4 +1,7 @@
 2017-08-25 Roman (stable)
+- !!!!:SYS.Transports,Transports.*,DAQ.{AMRDevs,DCON,MMS,OPC_UA,SMH2Gi,Siemens,ICP_DAS,FT3},Protocol.{ModBus,HTTP,SelfSystem,UserProtocol}:
+    The generic accessing resource was moved to mutex and an argument "noRes" was removed from function messIO()
+    to prevent from unexpected outcomes from the requesting critical section.
 - DB.LibsDB.OscadaLibs: The template base.gasPoint was expanded for connection to a real diaphragm.
 - !!:DB.LibsDB.vcaBase: doc.{docGasNodeDayA,docGasNodeMgn,docGasNodeDayOrder} was adapted to generic nodes link as a template and
     the translations were fixed.
@@ -7,9 +10,6 @@
     for the DAQ object and its documents.
 - SYS.TFunction: Expanded by a field language for functions lang(), setLang().
     OpenSCADA control items from "/tr/langs" of the tab "Translation" of the main page were moved to permition RWRW__.
-- !!!!:SYS.Transports,Transports.*,DAQ.{AMRDevs,DCON,MMS,OPC_UA,SMH2Gi,Siemens},Protocol.{ModBus,HTTP,SelfSystem,UserProtocol}:
-    The generic accessing resource was moved to mutex and an argument "noRes" was removed from function messIO()
-    to prevent from unexpected outcomes from the requesting critical section.
 - DAQ.JavaLikeCalc: Expanded in translation command tr() for set and use force language.
 - !:Protocol.HTTP: Expanded by a list of users allowed for auth.
 - !!!!:Transport.{SSL,Sockets}.out: The widget's functional resource was merged with reqRes().

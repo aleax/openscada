@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	_("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.8.3"
+#define MOD_VER		"1.8.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -366,14 +366,14 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 	    req += "\r";
 	    char buf[1000];
 
-	    ResAlloc resN(tr.at().nodeRes(), true);
+	    MtxAlloc resN(tr.at().reqRes(), true);
 	    for(int i_tr = 0, resp_len = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++) {
 		try {
-		    resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf), 0, true);
+		    resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf));
 		    rez.assign(buf, resp_len);
 		    // Wait tail
 		    while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
-			try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError &er) { break; }
+			try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &er) { break; }
 			rez.append(buf, resp_len);
 		    }
 		} catch(TError &er) {	//By possible the send request breakdown and no response

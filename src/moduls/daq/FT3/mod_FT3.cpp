@@ -700,7 +700,7 @@ bool TMdContr::Transact(tagMsg * pMsg)
 	    if(!tr.at().startStat()) tr.at().start();
 	    //> Send request
 	    bool errPresent = true;
-	    ResAlloc resN(tr.at().nodeRes(), true);
+	    MtxAlloc resN(tr.at().reqRes(), true);
 	    pMsg->L = 0;
 
 	    data_s = "";
@@ -709,11 +709,11 @@ bool TMdContr::Transact(tagMsg * pMsg)
 	    }
 	    if(mess_lev() == TMess::Debug) mess_sys(TMess::Debug, _("request: %s"), data_s.c_str());
 
-	    int resp_len = tr.at().messIO(msg.data(), msg.length(), io_buf, 8, 0, true);
+	    int resp_len = tr.at().messIO(msg.data(), msg.length(), io_buf, 8);
 	    l = resp_len;
 	    while(resp_len) {
 		try {
-		    resp_len = tr.at().messIO(NULL, 0, io_buf + l, 8 - l, 0, true);
+		    resp_len = tr.at().messIO(NULL, 0, io_buf + l, 8 - l);
 		} catch (TError er) {
 		    resp_len = 0;
 		}
@@ -730,7 +730,7 @@ bool TMdContr::Transact(tagMsg * pMsg)
 		if(y) {
 		    do {
 			try {
-			    resp_len = tr.at().messIO(NULL, 0, io_buf + l, y, 0, true);
+			    resp_len = tr.at().messIO(NULL, 0, io_buf + l, y);
 			} catch (TError er) {
 			    resp_len = 0;
 			}

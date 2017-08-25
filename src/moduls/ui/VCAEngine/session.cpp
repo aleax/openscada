@@ -557,13 +557,13 @@ TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	return 0;
     }
     // int reqTm( ) - Last request time
-    if(iid == "reqTm")		return reqTm();
+    if(iid == "reqTm")		return (int64_t)reqTm();
     // string reqUser( ) - Last request user
     if(iid == "reqUser")	return reqUser();
     // string reqLang( ) - Last request language
     if(iid == "reqLang")	return reqLang();
     // int userActTm( ) - Last user action time
-    if(iid == "userActTm")	return userActTm();
+    if(iid == "userActTm")	return (int64_t)userActTm();
 
     return TCntrNode::objFuncCall(iid,prms,cuser);
 }
